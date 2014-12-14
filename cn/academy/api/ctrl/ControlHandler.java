@@ -1,7 +1,8 @@
 package cn.academy.api.ctrl;
 
-import cn.academy.api.ability.Category;
 import cn.academy.api.ability.SkillBase;
+import cn.academy.api.data.AbilityData;
+import cn.academy.api.data.AbilityDataMain;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,13 +26,21 @@ public class ControlHandler {
 	/**
 	 * Category of this player. Used to get skill-key binding.
 	 */
-	Category skillCategory;
+	AbilityData abilityData;
 
-	public ControlHandler() {
+	public ControlHandler(EntityPlayer player) {
+		abilityData = AbilityDataMain.getData(player);
 	}
 	
+	/**
+	 * Receive event from EventHandler (server or client).
+	 * @param skillId
+	 * @param type
+	 */
 	public void onEvent(int skillId, SkillEventType type) {
-		SkillBase skill = skillCategory.getSkill(skillId);
+		SkillBase skill = abilityData.getSkill(skillId);
 		//TODO notice skill according to type. 
 	}
+	
+	
 }

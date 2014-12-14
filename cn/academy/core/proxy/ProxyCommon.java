@@ -6,12 +6,11 @@ import net.minecraft.command.CommandHandler;
 
 public class ProxyCommon {
 	
-	public void preInit() {
-		EventHandlerServer.init();
-	}
+	public void preInit() {}
 	
 	public void init() {
 		AcademyCraftMod.INSTANCE.log.info("Loading common proxy of Academy Craft.");
+		EventHandlerServer.init();
 	}
 	
 	public void postInit() {}

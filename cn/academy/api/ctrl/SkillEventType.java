@@ -20,6 +20,22 @@ public enum SkillEventType {
 	KEY_UP,
 	
 	/**
+	 * Client side periodically sends KEY_PRESS to server.
+	 */
+	KEY_PRESS,
+	
+	/**
+	 * When a key is double clicked.
+	 */
+	KEY_DBLCLK,
+	
+	/**
+	 * When a double click failed.
+	 * Will have small delay compared with KEY_UP.
+	 */
+	KEY_CLICK,
+	
+	/**
 	 * Start of a skill. 
 	 * Usually right after KEY_DOWN.
 	 */
@@ -27,7 +43,7 @@ public enum SkillEventType {
 	
 	/**
 	 * End of a skill.
-	 * Usually after KEY_UP, but can also have a delay.
+	 * Usually after KEY_UP, but may also have a delay.
 	 */
 	SKILL_END,
 	

@@ -16,9 +16,8 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void init() {
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
+		EventHandlerClient.init();
+		EventHandlerServer.init();
 	}
 	
-//	public void test() {
-//		MinecraftForgeClient.getItemRenderer(item, type)
-//	}
 }
