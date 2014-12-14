@@ -1,7 +1,8 @@
 package cn.academy.api.ctrl;
 
 /**
- * 单个的能力预设，在KeyboardHandler里被加载和存储
+ * A set of key-skill binding. Manipulated by EventHandlerClient.
+ * @author acaly
  */
 public class Preset {
 

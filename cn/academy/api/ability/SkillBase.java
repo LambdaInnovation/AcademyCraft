@@ -4,6 +4,7 @@
 package cn.academy.api.ability;
 
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.data.AbilityData;
 
 /**
@@ -19,8 +20,6 @@ public abstract class SkillBase {
 	}
 	
 	//Prototype, may need to add parameters
-	public abstract void onKeyDown(EntityPlayer player, AbilityData data);
-	public abstract void onKeyUp(EntityPlayer player, AbilityData data);
-	public abstract void onKeyTick(EntityPlayer player, AbilityData data);
+	public abstract void onSkillEvent(EntityPlayer player, SkillEventType type, AbilityData data);
 
 }

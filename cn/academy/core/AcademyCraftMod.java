@@ -2,6 +2,7 @@ package cn.academy.core;
 
 import org.apache.logging.log4j.Logger;
 
+import cn.academy.api.ctrl.ControlMessage;
 import cn.academy.core.proxy.ProxyCommon;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -67,5 +68,13 @@ public class AcademyCraftMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+	}
+	
+	private static int nextNetID = 0;
+	/**
+	 * 获取下一个空闲的网络channelID。
+	 */
+	public static int getNextChannelID() {
+		return nextNetID++;
 	}
 }
