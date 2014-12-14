@@ -10,14 +10,14 @@ import net.minecraft.util.IIcon;
  *
  */
 public abstract class Category {
+	
+	protected int catid;
 
 	public Category() {
 		
 	}
 	
-	public int getMaxLevels() {
-		return 0;
-	}
+	public abstract int getMaxLevels();
 	
 	public Level getLevel(int lid) {
 		return null;
