@@ -7,5 +7,9 @@ public class Level {
 	public Level(Category cat) {
 		parent = cat;
 	}
+	
+	void test() {
+		System.out.println("b");
+	}
 
 }

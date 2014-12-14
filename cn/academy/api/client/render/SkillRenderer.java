@@ -13,7 +13,6 @@ public class SkillRenderer {
 	 * 
 	 */
 	public SkillRenderer() {
-		// TODO Auto-generated constructor stub
 	}
 
 }
