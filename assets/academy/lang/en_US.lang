@@ -1,0 +1,71 @@
+#English Language File 2014/8/5 for debugging
+#Items
+item.ability_void.name=
+item.ap_logo.name=AcademyCraft Logo
+item.ap_record1.name=Railgun Record - Only My Railgun
+item.ap_record2.name=Railgun Record - Sister's Noise
+item.ap_record3.name=Railgun Record - LEVEL5 -Judgelight-
+item.ap_coin.name=Game Coin
+item.ability_capsule1.name=Mind Induction Capsule
+item.ability_capsule2.name=AIM Activation Capsule
+item.ability_capsule3.name=Personal Reality Enhancing Capsule
+item.ability_tablet1.name=Mind Induction Tablet
+item.ability_tablet2.name=AIM Activation Tablet
+item.ability_tablet3.name=Personal Reality Enhancing Tablet
+item.ap_needle.name=Needle
+item.ap_energycrystal.name=Energy Crystal
+item.ad_card.name=Ability Developer Electricity Card
+item.ap_aluminumingot=Aluminum Ingot
+item.ap_copperingot.name=Copper Ingot
+item.ap_steelingot.name=Steel Ingot
+item.ap_tiningot.name=Tin Ingot
+item.ap_siliconrod.name=Silicon Rod
+item.ap_coppercoil.name=Copper Coil
+item.ap_corebearing.name=Core Bearing
+
+
+#Blocks
+tile.ability_developer.name=Ability Developer
+tile.fieldincr.name=Field Increase Module
+tile.copperore.name=Copper Ore
+tile.tinore.name=Tin Ore
+tile.aluninumore.name=Aluminum Ore
+
+#CreativeTabs
+itemGroup.AcademyCraft=AcademyCraft
+
+#Electro Master
+category.elecmaster=Electro Master
+skill.elec.arcgen=Arc Generation
+skill.elec.attract=Electric Attraction
+skill.elec.attack=Elecric Beam Attack
+skill.elec.itemchg=Item Charging
+skill.elec.mineinf=MagField Detection
+skill.elec.moving=Electric Moving
+skill.elec.railgun=Railgun
+skill.elec.swordgen=Sword Generation
+
+#Melt Downer
+category.meltdowner=Melt Downer
+
+#Commands
+aimctrl.presetinf=Preset %s : %s
+aimctrl.curpreset=Current Preset ID: %s
+aimctrl.classinit=Player Ability class uninitialized.
+setting.successful=Setting successful.
+setting.outofbounds=Input out of bounds.
+
+#GUI?
+gui.remaining.energy=Remaining Energy
+gui.energy.unit=EU
+page.adlearning=Ability Learning
+page.adskill=Skill Aquiring
+page.adlevel=Level Upgrading
+admain.undev=Ability not detected
+admain.level=Level
+admain.cp=CP.
+admain.prog=PRG.
+admain.estm=Estm. Consumption
+adskill.learned=Already Aquired
+curenergy.name=Current Energy
+transspd.name=Transfer Speed

@@ -1,0 +1,21 @@
+#简体中文语言文件 2014/8/5 for debugging
+#物品
+item.ability_void.name=
+item.ap_logo.name=AcademyCraft标志
+item.ap_record1.name=超电磁炮唱片-Only My Railgun
+item.ap_record2.name=超电磁炮唱片-Sister's Noise
+item.ap_record3.name=超电磁炮唱片-LEVEL5 -Judgelight-
+item.ap_coin.name=游戏币
+item.ability_capsule1.name=精神诱导剂(胶囊)
+item.ability_capsule2.name=AIM活化剂(胶囊)
+item.ability_capsule3.name=个人现实增强剂(胶囊)
+item.ability_tablet1.name=精神诱导剂(片剂)
+item.ability_tablet2.name=AIM活化剂(片剂)
+item.ability_tablet3.name=个人现实增强剂(片剂)
+item.ap_needle.name=钢针
+
+#方块
+tile.ability_developer.name=能力开发机
+
+#创造模式物品栏
+itemGroup.AcademyCraft=AcademyCraft

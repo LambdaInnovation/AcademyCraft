@@ -1,0 +1,5 @@
+{
+"records.ac1": {"category": "record", "sounds": [{"name": "records/ac1", "stream": true}]},
+"records.ac2": {"category": "record", "sounds": [{"name": "records/ac2", "stream": true}]},
+"records.ac3": {"category": "record", "sounds": [{"name": "records/ac3", "stream": true}]}
+}
