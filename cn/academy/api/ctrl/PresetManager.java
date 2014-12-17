@@ -8,7 +8,7 @@ package cn.academy.api.ctrl;
 public class PresetManager {
 	
 	public int getSkillMapping(int keyId) {
-		return 0; //TODO
+		return keyId; //TODO
 	}
 	
 }

@@ -15,17 +15,28 @@ public class ControlMessage implements IMessage {
 	
 	public int skillId;
 	public SkillEventType eventType;
+	public int time;
+	
+	public ControlMessage() {}
+	
+	public ControlMessage(int skillId, SkillEventType eventType, int time) {
+		this.skillId = skillId;
+		this.eventType = eventType;
+		this.time = time;
+	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		skillId = buf.readInt();
 		eventType = SkillEventType.values()[buf.readInt()];
+		time = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(skillId);
 		buf.writeInt(eventType.ordinal());
+		buf.writeInt(time);
 	}
 
 }

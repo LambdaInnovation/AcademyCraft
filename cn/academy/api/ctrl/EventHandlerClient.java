@@ -1,12 +1,23 @@
 package cn.academy.api.ctrl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.api.ability.Category;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.client.key.IKeyHandler;
 import cn.liutils.api.util.GenericUtils;
 import cn.liutils.core.client.register.LIKeyProcess;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -34,16 +45,14 @@ public class EventHandlerClient {
 		
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame())
-				return;
-			onKeyHandlerDown(id);
+			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
 		public void onKeyUp(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame())
-				return;
-			onKeyHandlerUp(id);
+			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
 		@Override
@@ -60,10 +69,71 @@ public class EventHandlerClient {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
-			INSTANCE.onNetworkMessage(msg.skillId, msg.eventType);
+			if (msg.eventType != SkillEventType.RAW_CANCEL) {
+				AcademyCraftMod.log.error("An unexpected packet is received from server.");
+			} else {
+				INSTANCE.onEvent(msg.skillId, msg.eventType);	
+			}
 			return null;
 		}
 		
+	}
+	
+	private static class SkillKeepAlive {
+		
+		private int skillId;
+		private RawEventHandler reh;
+		
+		private int tickToKeepAlive = 0;
+		private int tickToFinishClick = 0;
+		
+		public SkillKeepAlive(int skillId) {
+			this.skillId = skillId;
+			this.reh = INSTANCE.rehMap.get(skillId);
+		}
+		
+		public boolean onEvent(SkillEventType type) {
+			switch (type) {
+			case RAW_DOWN:
+				toServer(type);
+				reh.onEvent(type, reh.getTime());
+				tickToKeepAlive = RawEventHandler.KA_INTERVAL;
+				return true;
+			case RAW_UP:
+				toServer(type);
+				reh.onEvent(type, reh.getTime());
+				tickToFinishClick = RawEventHandler.DBL_DELAY;
+				return true;
+			case RAW_TICK:
+				if (tickToKeepAlive == 1) {
+					tickToKeepAlive = RawEventHandler.KA_INTERVAL;
+					toServer(SkillEventType.RAW_CLIENT_DOWN);
+					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
+				} else if (tickToKeepAlive > 1) {
+					--tickToKeepAlive;
+					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
+				}
+				if (tickToFinishClick == 1) {
+					tickToFinishClick = 0;
+					toServer(SkillEventType.RAW_CLIENT_UP);
+					reh.onEvent(SkillEventType.RAW_CLIENT_UP, reh.getTime());
+				} else if (tickToFinishClick > 1) {
+					--tickToFinishClick;
+				}
+				return tickToKeepAlive > 0 || tickToFinishClick > 0;
+			case RAW_CANCEL:
+				AcademyCraftMod.log.warn("Skill cancelled by server.");
+				reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
+				return false;
+			default:
+				AcademyCraftMod.log.error("Unexpected event in EventHandlerClient.");
+				return false;
+			}
+		}
+		
+		private void toServer(SkillEventType type) {
+			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(skillId, type, reh.getTime()));
+		}
 	}
 
 	private static final int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
@@ -74,12 +144,7 @@ public class EventHandlerClient {
 	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
 	/**
-	 * The ControlHandler instance in client side.
-	 */
-	private ControlHandler controlHandler; //null
-	
-	/**
-	 * 
+	 * Handles presets
 	 */
 	private PresetManager presets;
 
@@ -93,43 +158,62 @@ public class EventHandlerClient {
 		LIKeyProcess.instance.addKey("Skill 4", DEFAULT_KEY_S4, false, INSTANCE.new KeyHandler(3));
 		
 		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+	
+		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 	
 	/**
 	 * Called by the data part on client side, after the ability data is prepared.
 	 */
-	public static void onPlayerJoinWorld() {
-		//Create the ControlHandler
-		if (INSTANCE.controlHandler != null) {
-			//Error!
+	public static void resetPlayerSkillData(Category cat) {
+		Map<Integer, RawEventHandler> rehMap = new HashMap();
+		for (int i = 0; i < cat.getMaxSkills(); ++i) { //TODO < or <=
+			rehMap.put(i, new RawEventHandler()); //TODO init
 		}
-		//TODO make sure Minecraft.getMinecraft().thePlayer is not null
-		INSTANCE.controlHandler = new ControlHandler(Minecraft.getMinecraft().thePlayer);
-	}
-	
-	/**
-	 * Called by the data part on client side, after the player leaves the world.
-	 */
-	public static void onPlayerLeaveWorld() {
 		
-	}
-	
-	/**
-	 * Called by the KeyHandler.
-	 */
-	private void onKeyHandlerDown(int id) {
-		controlHandler.onEvent(presets.getSkillMapping(id), SkillEventType.KEY_DOWN);
-		//TODO begin send KEY_PRESS
-	}
-	
-	private void onKeyHandlerUp(int id) {
-		controlHandler.onEvent(presets.getSkillMapping(id), SkillEventType.KEY_UP);
-	}
-	
-	/**
-	 * Called by the NetworkHandler
-	 */
-	private void onNetworkMessage(int id, SkillEventType event) {
+		INSTANCE.rehMap = rehMap;
+		INSTANCE.kaMap = new HashMap();
 		
+		//TODO reset PresetManager
+		INSTANCE.presets = new PresetManager();
 	}
+
+	//TODO onPlayerLoggedOut
+	
+	public void onEvent(int skillId, SkillEventType type) {
+		skillKAEvent(skillId, type);
+	}
+	
+	@SubscribeEvent
+	public void onClientTick(ClientTickEvent event) {
+		skillKAEventAll(SkillEventType.RAW_TICK);
+	}
+	
+	/*
+	 * Internal use.
+	 */
+	private Map<Integer, RawEventHandler> rehMap;
+	private Map<Integer, SkillKeepAlive> kaMap;
+	
+	private void skillKAEvent(int skillId, SkillEventType type) {
+		SkillKeepAlive ka = kaMap.get(skillId);
+		if (ka == null) {
+			ka = new SkillKeepAlive(skillId);
+			kaMap.put(skillId, ka);
+		}
+		
+		if (ka.onEvent(type) == false) {
+			kaMap.remove(skillId);
+		}
+	}
+	
+	private void skillKAEventAll(SkillEventType type) {
+		Iterator<SkillKeepAlive> itor = kaMap.values().iterator();
+		while (itor.hasNext()) {
+			if (itor.next().onEvent(type) == false) {
+				itor.remove();
+			}
+		}		
+	}
+	
 }

@@ -9,8 +9,6 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void preInit() {
-		EventHandlerClient.init();
-		EventHandlerServer.init();
 	}
 	
 	@Override

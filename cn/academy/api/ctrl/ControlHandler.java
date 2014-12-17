@@ -37,9 +37,17 @@ public class ControlHandler {
 	 * @param skillId
 	 * @param type
 	 */
-	public void onEvent(int skillId, SkillEventType type) {
+	public void onEvent(int skillId, SkillEventType type, int time) {
 		SkillBase skill = abilityData.getSkill(skillId);
 		//TODO notice skill according to type. 
+		switch (type) {
+		case RAW_DOWN:
+		case RAW_UP:
+		//case RAW_TICK_UP:
+		case RAW_TICK_DOWN:
+		default:
+			break;
+		}
 	}
 	
 	
