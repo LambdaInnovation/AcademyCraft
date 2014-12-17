@@ -29,7 +29,6 @@ public class EventHandlerServer {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
-			//TODO check time with time in reh
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 			switch (msg.eventType) {
 			case RAW_DOWN:
@@ -85,6 +84,7 @@ public class EventHandlerServer {
 					setDead();
 				} else if (tickToFinishClick > 1) {
 					--tickToFinishClick;
+					reh.onEvent(SkillEventType.RAW_TICK_UP, time);
 				}
 				return tickToSetDead > 0 || tickToFinishClick > 0;
 			case RAW_DOWN:
@@ -95,8 +95,13 @@ public class EventHandlerServer {
 				}
 				reh.onEvent(type, time);
 				tickToSetDead = RawEventHandler.KA_INTERVAL + RawEventHandler.KA_DELAY;
+				if (tickToFinishClick > 0) {
+					tickToFinishClick = 0;
+					reh.onEvent(SkillEventType.RAW_DBLCLK, time);
+				}
 				return true;
 			case RAW_UP:
+				//TODO check time
 				if (tickToFinishClick > 0) {
 					//Already up?
 					setDead();
@@ -109,17 +114,23 @@ public class EventHandlerServer {
 				}
 				tickToSetDead = 0; //Stop waiting for CLIENT_DOWN
 				tickToFinishClick = RawEventHandler.DBL_DELAY + RawEventHandler.KA_DELAY;
-				reh.onEvent(type, time);
+				if (time > reh.getTime()) {
+					//Need an adjust event
+					reh.onEvent(SkillEventType.RAW_ADJUST, time);
+					reh.onEvent(SkillEventType.RAW_UP, time);
+				} else {
+					reh.onEvent(SkillEventType.RAW_UP, reh.getTime());
+				}
 				return true;
 			case RAW_CLIENT_DOWN:
+				//TODO check time
 				if (tickToSetDead == 0) {
 					//Already timeout
 					//Do nothing
 					return false;
 				}
 				tickToSetDead = RawEventHandler.KA_INTERVAL;
-				//Send to RawEventHandler adjusted time from client
-				reh.onEvent(type, time);
+				//TODO consider adjust server skill time
 				return true;
 			case RAW_CLIENT_UP:
 				if (tickToFinishClick == 0) {
@@ -167,7 +178,7 @@ public class EventHandlerServer {
 	public static void resetPlayerSkillData(EntityPlayer player, Category cat) {
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
 		for (int i = 0; i < cat.getMaxSkills(); ++i) {
-			rehMap.put(i, new RawEventHandler());//TODO init
+			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap.put(player, rehMap);

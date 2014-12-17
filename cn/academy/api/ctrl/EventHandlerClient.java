@@ -98,6 +98,10 @@ public class EventHandlerClient {
 				toServer(type);
 				reh.onEvent(type, reh.getTime());
 				tickToKeepAlive = RawEventHandler.KA_INTERVAL;
+				if (tickToFinishClick > 0) {
+					tickToFinishClick = 0;
+					reh.onEvent(SkillEventType.RAW_DBLCLK, reh.getTime());
+				}
 				return true;
 			case RAW_UP:
 				toServer(type);
@@ -116,9 +120,10 @@ public class EventHandlerClient {
 				if (tickToFinishClick == 1) {
 					tickToFinishClick = 0;
 					toServer(SkillEventType.RAW_CLIENT_UP);
-					reh.onEvent(SkillEventType.RAW_CLIENT_UP, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
 				} else if (tickToFinishClick > 1) {
 					--tickToFinishClick;
+					reh.onEvent(SkillEventType.RAW_TICK_UP, reh.getTime());
 				}
 				return tickToKeepAlive > 0 || tickToFinishClick > 0;
 			case RAW_CANCEL:
@@ -168,7 +173,7 @@ public class EventHandlerClient {
 	public static void resetPlayerSkillData(Category cat) {
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
 		for (int i = 0; i < cat.getMaxSkills(); ++i) { //TODO < or <=
-			rehMap.put(i, new RawEventHandler()); //TODO init
+			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap = rehMap;

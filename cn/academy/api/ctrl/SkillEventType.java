@@ -39,6 +39,11 @@ public enum SkillEventType {
 	 * Raw Event. Don't use it in skill class directly.
 	 */
 	RAW_TICK_DOWN,
+	
+	/**
+	 * Tick in both sides after key up but before finish click.
+	 */
+	RAW_TICK_UP,
 
 	/**
 	 * Server send RAW_CANCEL to client when there's an error,
@@ -61,6 +66,12 @@ public enum SkillEventType {
 	 * Will have small delay compared with KEY_UP.
 	 */
 	RAW_CLICK,
+	
+	/**
+	 * Adjust server skill time when RAW_UP.
+	 * Determine hold event with this event.
+	 */
+	RAW_ADJUST,
 	
 	/**
 	 * Start of a skill. 
