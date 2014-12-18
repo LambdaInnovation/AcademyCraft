@@ -18,13 +18,18 @@ import cpw.mods.fml.relauncher.Side;
 
 /**
  * The event handler in server side. It's actually a network handler.
- * Interact with EventHandlerClient through network and sent events to the player's ControlHandler.
- * Note that unlike ControlHandler, this class only has one instance on the server side.
+ * Interact with EventHandlerClient through network and sent events to the RawEventHandler.
+ * This class only has one instance on the server side.
  * @author acaly
  *
  */
 public class EventHandlerServer {
 	
+	/**
+	 * The network handler used to handle client messages.
+	 * @author acaly
+	 *
+	 */
 	private static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
 
 		@Override
@@ -35,6 +40,7 @@ public class EventHandlerServer {
 			case RAW_UP:
 			case RAW_CLIENT_DOWN:
 			case RAW_CLIENT_UP:
+				//These are valid messages.
 				INSTANCE.onEvent(player, msg.skillId, msg.eventType, msg.time);
 				break;
 			default:
@@ -45,8 +51,17 @@ public class EventHandlerServer {
 		
 	}
 	
-	private static class SkillKeepAlive {
+	/**
+	 * Class used to handle per skill state.
+	 * This is where every event on server side is processed.
+	 * @author acaly
+	 *
+	 */
+	private static class SingleSkill {
 		
+		/*
+		 * Information used to find the skill.
+		 */
 		private EntityPlayerMP player;
 		private int skillId;
 		private RawEventHandler reh;
@@ -55,47 +70,74 @@ public class EventHandlerServer {
 		 * Internal state
 		 */
 		
+		/**
+		 * How many ticks before a RAW_CLIENT_DOWN message must be received.
+		 */
 		private int tickToSetDead = 0;
+		
+		/**
+		 * How many ticks before a RAW_CLIENT_UP or RAW_DOWN message must be received.
+		 */
 		private int tickToFinishClick = 0;
 		
-		public SkillKeepAlive(EntityPlayer player, int skillId) {
+		public SingleSkill(EntityPlayer player, int skillId) {
 			this.player = (EntityPlayerMP) player;
 			this.skillId = skillId;
 			this.reh = INSTANCE.rehMap.get(player).get(skillId);
 		}
 		
+		/**
+		 * On event without a client time.
+		 * @param type The event type.
+		 * @return Same as boolean onEvent(SkillEventType type, int time).
+		 */
 		public boolean onEvent(SkillEventType type) {
+			//Use server time as client time if not provided.
 			return onEvent(type, reh.getTime());
 		}
 		
+		/**
+		 * On event provided a client time.
+		 * @param type The event type.
+		 * @param time The client time.
+		 * @return True if a RAW_TICK is needed next time.
+		 */
 		public boolean onEvent(SkillEventType type, int time) {
 			switch (type) {
 			case RAW_TICK:
 				if (tickToSetDead == 1) {
+					//Reset counter.
 					tickToSetDead = 0;
-					//set dead
+					//Time out. Set dead (to client and server).
 					setDead();
 				} else if (tickToSetDead > 1) {
 					--tickToSetDead; 
+					//Send tick event to server.
 					reh.onEvent(SkillEventType.RAW_TICK_DOWN, time);
 				}
 				if (tickToFinishClick == 1) {
+					//Reset counter.
 					tickToFinishClick = 0;
+					//Time out. Set dead.
 					setDead();
 				} else if (tickToFinishClick > 1) {
 					--tickToFinishClick;
+					//Send tick to server.
+					//TODO needed?
 					reh.onEvent(SkillEventType.RAW_TICK_UP, time);
 				}
 				return tickToSetDead > 0 || tickToFinishClick > 0;
 			case RAW_DOWN:
 				if (tickToSetDead > 0) {
-					//Already down
+					//Already down? Abort.
 					AcademyCraftMod.log.error("Unexpected RAW_DOWN event.");
 					setDead();
+					return false;
 				}
 				reh.onEvent(type, time);
 				tickToSetDead = RawEventHandler.KA_INTERVAL + RawEventHandler.KA_DELAY;
 				if (tickToFinishClick > 0) {
+					//Still waiting for CLIENT_UP, so that's a double click.
 					tickToFinishClick = 0;
 					reh.onEvent(SkillEventType.RAW_DBLCLK, time);
 				}
@@ -108,14 +150,15 @@ public class EventHandlerServer {
 					return false;
 				}
 				if (tickToSetDead == 0) {
-					//Not in the down state
-					//Do nothing
+					//Not in the down state (maybe due to network timeout).
+					//Do nothing.
 					return false;
 				}
-				tickToSetDead = 0; //Stop waiting for CLIENT_DOWN
+				//Stop waiting for CLIENT_DOWN and start waiting for CLIENT_UP (or DOWN).
+				tickToSetDead = 0;
 				tickToFinishClick = RawEventHandler.DBL_DELAY + RawEventHandler.KA_DELAY;
 				if (time > reh.getTime()) {
-					//Need an adjust event
+					//Client time is greater. Need an adjust event.
 					reh.onEvent(SkillEventType.RAW_ADJUST, time);
 					reh.onEvent(SkillEventType.RAW_UP, time);
 				} else {
@@ -125,20 +168,20 @@ public class EventHandlerServer {
 			case RAW_CLIENT_DOWN:
 				//TODO check time
 				if (tickToSetDead == 0) {
-					//Already timeout
-					//Do nothing
+					//Already timeout. Do nothing (setDead has been called).
 					return false;
 				}
+				//Reset counter.
 				tickToSetDead = RawEventHandler.KA_INTERVAL;
-				//TODO consider adjust server skill time
 				return true;
 			case RAW_CLIENT_UP:
 				if (tickToFinishClick == 0) {
-					//Already timeout
-					//Do nothing (setDead has been called).
+					//Already timeout. Do nothing (setDead has been called).
 					return false;
 				}
+				//Reset counter.
 				tickToFinishClick = 0;
+				//Invoke CLICK on server.
 				reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
 				return false;
 			default:
@@ -147,6 +190,9 @@ public class EventHandlerServer {
 			}
 		}
 		
+		/**
+		 * Send RAW_CANCEL to server and client to abort current skill.
+		 */
 		private void setDead() {
 			AcademyCraftMod.log.warn("Delay in client side. Skill cancelled.");
 			int time = reh.getTime();
@@ -161,6 +207,11 @@ public class EventHandlerServer {
 	private static final EventHandlerServer INSTANCE = new EventHandlerServer();
 
 	/**
+	 * Make it private.
+	 */
+	private EventHandlerServer() {}
+	
+	/**
 	 * Setup the key bindings and network.
 	 */
 	public static void init() {
@@ -173,11 +224,12 @@ public class EventHandlerServer {
 	
 	/**
 	 * Called by data part on server side, after the ability data is changed.
-	 * @param name The name of player joined
+	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player, Category cat) {
+		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
-		for (int i = 0; i < cat.getMaxSkills(); ++i) {
+		for (int i = 0; i < cat.getSkillCount(); ++i) {
 			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
 		}
 		
@@ -187,26 +239,36 @@ public class EventHandlerServer {
 	
 	//TODO onPlayerLoggedOut
 
-	public void onEvent(EntityPlayer player, int skillId, SkillEventType type, int timeForSkill) {
-		skillKAEvent(player, skillId, type, timeForSkill);
+	private void onEvent(EntityPlayer player, int skillId, SkillEventType type, int timeForSkill) {
+		skillEvent(player, skillId, type, timeForSkill);
 	}
 	
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
-		skillKAEventAll(SkillEventType.RAW_TICK);
+		skillEventAll(SkillEventType.RAW_TICK);
 	}
-	
-	/*
-	 * Internal use only.
+
+	/**
+	 * Raw event handlers. (All created in resetPlayerSkillData.)
 	 */
 	private Map<EntityPlayer, Map<Integer, RawEventHandler>> rehMap = new HashMap();
-	private Map<EntityPlayer, Map<Integer, SkillKeepAlive>> kaMap = new HashMap();
+	/**
+	 * Active skills.
+	 */
+	private Map<EntityPlayer, Map<Integer, SingleSkill>> kaMap = new HashMap();
 	
-	private void skillKAEvent(EntityPlayer player, int skillId, SkillEventType type, int time) {
-		Map<Integer, SkillKeepAlive> playerMap = kaMap.get(player);
-		SkillKeepAlive ka = playerMap.get(skillId);
+	/**
+	 * Send an event to a single skill.
+	 * @param player The player.
+	 * @param skillId The skill.
+	 * @param type The event type.
+	 * @param time The client time (if available).
+	 */
+	private void skillEvent(EntityPlayer player, int skillId, SkillEventType type, int time) {
+		Map<Integer, SingleSkill> playerMap = kaMap.get(player);
+		SingleSkill ka = playerMap.get(skillId);
 		if (ka == null) {
-			ka = new SkillKeepAlive(player, skillId);
+			ka = new SingleSkill(player, skillId);
 			playerMap.put(skillId, ka);
 		}
 		
@@ -215,9 +277,14 @@ public class EventHandlerServer {
 		}
 	}
 
-	private void skillKAEventAll(EntityPlayer player, SkillEventType type) {
-		Map<Integer, SkillKeepAlive> playerMap = kaMap.get(player);
-		Iterator<SkillKeepAlive> itor = playerMap.values().iterator();
+	/**
+	 * Send an event to all skills of the given player.
+	 * @param player The player.
+	 * @param type The event type.
+	 */
+	private void skillEventAll(EntityPlayer player, SkillEventType type) {
+		Map<Integer, SingleSkill> playerMap = kaMap.get(player);
+		Iterator<SingleSkill> itor = playerMap.values().iterator();
 		while (itor.hasNext()) {
 			if (itor.next().onEvent(type) == false) {
 				itor.remove();
@@ -225,9 +292,13 @@ public class EventHandlerServer {
 		}
 	}
 	
-	private void skillKAEventAll(SkillEventType type) {
-		for (Map<Integer, SkillKeepAlive> playerMap : kaMap.values()) {
-			Iterator<SkillKeepAlive> itor = playerMap.values().iterator();
+	/**
+	 * Send an event to all skills of every player on the server.
+	 * @param type The event type.
+	 */
+	private void skillEventAll(SkillEventType type) {
+		for (Map<Integer, SingleSkill> playerMap : kaMap.values()) {
+			Iterator<SingleSkill> itor = playerMap.values().iterator();
 			while (itor.hasNext()) {
 				if (itor.next().onEvent(type) == false) {
 					itor.remove();

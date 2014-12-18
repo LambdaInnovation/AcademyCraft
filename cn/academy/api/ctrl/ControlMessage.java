@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 /**
  * The network message used by EventHandlerClient and EventHandlerServer.
+ * No handler in this class. Client and server use different handlers. 
  * @author acaly
  *
  */

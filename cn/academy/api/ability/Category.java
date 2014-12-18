@@ -17,13 +17,13 @@ public abstract class Category {
 		
 	}
 	
-	public abstract int getMaxLevels();
+	public abstract int getLevelCount();
 	
 	public Level getLevel(int lid) {
 		return null;
 	}
 	
-	public int getMaxSkills() {
+	public int getSkillCount() {
 		return 0;
 	}
 	

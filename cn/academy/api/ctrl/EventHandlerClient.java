@@ -38,7 +38,8 @@ public class EventHandlerClient {
 	 */
 	private class KeyHandler implements IKeyHandler {
 		
-		public int id;
+		private int id;
+		
 		public KeyHandler(int id) {
 			this.id = id;
 		}
@@ -69,6 +70,7 @@ public class EventHandlerClient {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
+			//Client side only receives RAW_CANCEL.
 			if (msg.eventType != SkillEventType.RAW_CANCEL) {
 				AcademyCraftMod.log.error("An unexpected packet is received from server.");
 			} else {
@@ -78,57 +80,98 @@ public class EventHandlerClient {
 		}
 		
 	}
-	
-	private static class SkillKeepAlive {
+
+	/**
+	 * Class used to handle per skill state.
+	 * This is where every event on client side is processed.
+	 * @author acaly
+	 *
+	 */
+	private static class SingleSkill {
 		
 		private int skillId;
 		private RawEventHandler reh;
 		
+		/**
+		 * How many ticks before sending a keep-alive message to server.
+		 * 0 means not counting.
+		 */
 		private int tickToKeepAlive = 0;
+		
+		/**
+		 * How many ticks before finish a single click (when double click fails).
+		 */
 		private int tickToFinishClick = 0;
 		
-		public SkillKeepAlive(int skillId) {
+		public SingleSkill(int skillId) {
 			this.skillId = skillId;
+			//Get the raw handler from INSTANCE.
 			this.reh = INSTANCE.rehMap.get(skillId);
 		}
 		
+		/**
+		 * Process a skill event.
+		 * @param type The event type.
+		 * @return True if RAW_TICK is needed after this call.
+		 */
 		public boolean onEvent(SkillEventType type) {
 			switch (type) {
 			case RAW_DOWN:
+				//Send RAW_DOWN to server and client.
 				toServer(type);
 				reh.onEvent(type, reh.getTime());
+				//Start to count down tickToKeepAlive.
 				tickToKeepAlive = RawEventHandler.KA_INTERVAL;
+				//Is a double click still possible?
 				if (tickToFinishClick > 0) {
 					tickToFinishClick = 0;
+					//Only inform client side.
+					//On server side RAW_DBLCLK is invoked by EventHandlerServer.
 					reh.onEvent(SkillEventType.RAW_DBLCLK, reh.getTime());
 				}
 				return true;
 			case RAW_UP:
+				//Send RAW_UP to server and client.
 				toServer(type);
 				reh.onEvent(type, reh.getTime());
+				//Start to wait for a double click.
 				tickToFinishClick = RawEventHandler.DBL_DELAY;
 				return true;
 			case RAW_TICK:
 				if (tickToKeepAlive == 1) {
+					//Reset counter.
 					tickToKeepAlive = RawEventHandler.KA_INTERVAL;
+					//Send keep-alive message.
 					toServer(SkillEventType.RAW_CLIENT_DOWN);
+					//Client still need RAW_TICK_DOWN in this time.
 					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
 				} else if (tickToKeepAlive > 1) {
 					--tickToKeepAlive;
+					//Send RAW_TICK_DOWN to client.
 					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
 				}
 				if (tickToFinishClick == 1) {
+					//Reset counter.
 					tickToFinishClick = 0;
+					//Inform the server that a double click is failed.
+					//This RAW_CLIENT_UP will be converted into RAW_CLICK by EventHandlerServer.
 					toServer(SkillEventType.RAW_CLIENT_UP);
+					//Also inform the client side.
 					reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
 				} else if (tickToFinishClick > 1) {
 					--tickToFinishClick;
+					//Send a tick to client.
+					//TODO is this really needed?
 					reh.onEvent(SkillEventType.RAW_TICK_UP, reh.getTime());
 				}
+				//If either counter is not 0, we still need RAW_TICK next time.
 				return tickToKeepAlive > 0 || tickToFinishClick > 0;
 			case RAW_CANCEL:
+				//Skill is cancelled. Just log it and inform the client.
 				AcademyCraftMod.log.warn("Skill cancelled by server.");
 				reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
+				//Reset both counters.
+				tickToKeepAlive = tickToFinishClick = 0;
 				return false;
 			default:
 				AcademyCraftMod.log.error("Unexpected event in EventHandlerClient.");
@@ -136,11 +179,18 @@ public class EventHandlerClient {
 			}
 		}
 		
+		/**
+		 * Helper function to sent a message to server.
+		 * @param type
+		 */
 		private void toServer(SkillEventType type) {
 			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(skillId, type, reh.getTime()));
 		}
 	}
 
+	/**
+	 * Default key bindings.
+	 */
 	private static final int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
 							DEFAULT_KEY_S2 = LIKeyProcess.MOUSE_RIGHT,
 							DEFAULT_KEY_S3 = Keyboard.KEY_R,
@@ -152,6 +202,11 @@ public class EventHandlerClient {
 	 * Handles presets
 	 */
 	private PresetManager presets;
+	
+	/**
+	 * Make it private.
+	 */
+	private EventHandlerClient() {}
 
 	/**
 	 * Setup the key bindings and network.
@@ -166,27 +221,34 @@ public class EventHandlerClient {
 	
 		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
-	
+
 	/**
 	 * Called by the data part on client side, after the ability data is prepared.
+	 * The client side also uses an id to identify which world it is.
+	 * At the first time this player enters this world, pass 0 to id, and this function will return a new
+	 * id. Pass the same id to this function to allow the player uses a same set of presets next time. 
+	 * @param cat The skill data of this player.
+	 * @param id A number used by the client side to identify the world. If unknown, use 0.
+	 * @return A number used to identify the world. Should be passed to this function next time.
 	 */
-	public static void resetPlayerSkillData(Category cat) {
+	public static int resetPlayerSkillData(Category cat, int id) {
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
-		for (int i = 0; i < cat.getMaxSkills(); ++i) { //TODO < or <=
+		for (int i = 0; i < cat.getSkillCount(); ++i) {
 			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap = rehMap;
 		INSTANCE.kaMap = new HashMap();
 		
-		//TODO reset PresetManager
-		INSTANCE.presets = new PresetManager();
+		INSTANCE.presets = new PresetManager(cat, id);
+		
+		return INSTANCE.presets.getWorldId();
 	}
 
 	//TODO onPlayerLoggedOut
 	
-	public void onEvent(int skillId, SkillEventType type) {
-		skillKAEvent(skillId, type);
+	private void onEvent(int skillId, SkillEventType type) {
+		skillEvent(skillId, type);
 	}
 	
 	@SubscribeEvent
@@ -194,28 +256,44 @@ public class EventHandlerClient {
 		skillKAEventAll(SkillEventType.RAW_TICK);
 	}
 	
-	/*
-	 * Internal use.
+	/**
+	 * Raw event handlers. (All created in resetPlayerSkillData.)
 	 */
 	private Map<Integer, RawEventHandler> rehMap;
-	private Map<Integer, SkillKeepAlive> kaMap;
+	/**
+	 * Active skills.
+	 */
+	private Map<Integer, SingleSkill> kaMap;
 	
-	private void skillKAEvent(int skillId, SkillEventType type) {
-		SkillKeepAlive ka = kaMap.get(skillId);
+	/**
+	 * Pass the event to the single skill.
+	 * @param skillId The skill.
+	 * @param type The event type.
+	 */
+	private void skillEvent(int skillId, SkillEventType type) {
+		SingleSkill ka = kaMap.get(skillId);
 		if (ka == null) {
-			ka = new SkillKeepAlive(skillId);
+			//If the SingleSkill does not exists, create it first.
+			ka = new SingleSkill(skillId);
 			kaMap.put(skillId, ka);
 		}
 		
 		if (ka.onEvent(type) == false) {
+			//The skill is not active. Remove it so that it will not receive RAW_TICK.
 			kaMap.remove(skillId);
 		}
 	}
 	
+	/**
+	 * Pass the event to all active skills.
+	 * Used only with RAW_TICK and RAW_CANCEL (when log out, not implemented).
+	 * @param type The event type
+	 */
 	private void skillKAEventAll(SkillEventType type) {
-		Iterator<SkillKeepAlive> itor = kaMap.values().iterator();
+		Iterator<SingleSkill> itor = kaMap.values().iterator();
 		while (itor.hasNext()) {
 			if (itor.next().onEvent(type) == false) {
+				//Remove inactive skills.
 				itor.remove();
 			}
 		}		

@@ -5,12 +5,13 @@ import cn.academy.api.ctrl.SkillEventType;
 public abstract class PatternDown implements IPattern {
 
 	@Override
-	public void onRawEvent(SkillEventType type, int rawTime, int time) {
+	public boolean onRawEvent(SkillEventType type, int rawTime, int time) {
 		if (type == SkillEventType.RAW_DOWN) {
-			onKeyDown();
+			return onKeyDown();
 		}
+		return false;
 	}
 
-	public abstract void onKeyDown();
+	public abstract boolean onKeyDown();
 	
 }

@@ -9,10 +9,11 @@ import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.data.AbilityData;
 
 /**
- * @author WeathFolD
+ * An empty skill and also the base class of all skills.
+ * @author WeathFolD, acaly
  *
  */
-public abstract class SkillBase {
+public class SkillBase {
 	
 	Category parent;
 
@@ -20,13 +21,12 @@ public abstract class SkillBase {
 		parent = cat;
 	}
 	
-	//Prototype, may need to add parameters
-	public abstract void onSkillEvent(EntityPlayer player, SkillEventType type, AbilityData data);
-
 	/**
 	 * Called by RawEventHandler when the skill is reset.
 	 * Add patterns to the RawEventHandler instance in this function.
+	 * Override this function to add pattern to your skill.
 	 * @param reh The handler instance to add pattern into.
 	 */
-	public abstract void initPattern(RawEventHandler reh);
+	public void initPattern(RawEventHandler reh) {}
+	
 }
