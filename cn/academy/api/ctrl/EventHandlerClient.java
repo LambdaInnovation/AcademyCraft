@@ -267,11 +267,15 @@ public class EventHandlerClient {
 		INSTANCE.rehMap = rehMap;
 		INSTANCE.kaMap = new HashMap();
 		
-		INSTANCE.presets = new PresetManager(category, id);
+		INSTANCE.presets = new PresetManager(id);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
+		//First save preset data
+		presets.save();
+		
+		//Clear in-game objects
 		skillEventAll(SkillEventType.RAW_CANCEL);
 		INSTANCE.kaMap.clear();
 		INSTANCE.rehMap.clear();

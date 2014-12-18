@@ -1,5 +1,7 @@
 package cn.academy.core;
 
+import net.minecraftforge.common.config.Configuration;
+
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.ctrl.ControlMessage;
@@ -50,6 +52,8 @@ public class AcademyCraftMod {
 	 */
 	public static Logger log = FMLLog.getLogger();
 	
+	public static Configuration config;
+	
 	/**
 	 * 网络发包处理实例
 	 */
@@ -57,6 +61,8 @@ public class AcademyCraftMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		config = new Configuration(event.getSuggestedConfigurationFile());
+		
 		proxy.preInit();
 	}
 
