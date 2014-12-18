@@ -72,4 +72,9 @@ public enum SkillEventType {
 	 */
 	RAW_ADJUST,
 	
+	/**
+	 * This is only used by EventHandlerClient to get world id.
+	 */
+	INIT_QUERY_WORLD_ID,
+	
 }

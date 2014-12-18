@@ -6,10 +6,12 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
 import cn.academy.core.AcademyCraftMod;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -25,6 +27,8 @@ import cpw.mods.fml.relauncher.Side;
  */
 public class EventHandlerServer {
 	
+	private static final String NBT_PLAYER_WORLD_ID = "ap_mod_ctrl_player_world_id";
+	
 	/**
 	 * The network handler used to handle client messages.
 	 * @author acaly
@@ -34,7 +38,7 @@ public class EventHandlerServer {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
+			EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 			switch (msg.eventType) {
 			case RAW_DOWN:
 			case RAW_UP:
@@ -43,6 +47,20 @@ public class EventHandlerServer {
 				//These are valid messages.
 				INSTANCE.onEvent(player, msg.skillId, msg.eventType, msg.time);
 				break;
+			case INIT_QUERY_WORLD_ID:
+				//Client is querying world id.
+				NBTTagCompound tag = player.getEntityData();
+				int worldId = msg.time;
+				if (tag.hasKey(NBT_PLAYER_WORLD_ID)) {
+					//id found.
+					worldId = tag.getInteger(NBT_PLAYER_WORLD_ID);
+				} else {
+					//Not found. Use default value provided by client and store it in NBT.
+					tag.setInteger(NBT_PLAYER_WORLD_ID, worldId);
+				}
+				//Send the id back to client.
+				AcademyCraftMod.netHandler.sendTo(
+						new ControlMessage(0, msg.eventType, worldId), player);
 			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from client.");
 			}
@@ -236,8 +254,6 @@ public class EventHandlerServer {
 		INSTANCE.rehMap.put(player, rehMap);
 		INSTANCE.kaMap.put(player, new HashMap());
 	}
-	
-	//TODO onPlayerLoggedOut
 
 	private void onEvent(EntityPlayer player, int skillId, SkillEventType type, int timeForSkill) {
 		skillEvent(player, skillId, type, timeForSkill);
@@ -246,6 +262,18 @@ public class EventHandlerServer {
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
 		skillEventAll(SkillEventType.RAW_TICK);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerLoggedOut(PlayerLoggedOutEvent event) {
+		EntityPlayer player = event.player;
+		
+		//Cancel all skills.
+		skillEventAll(player, SkillEventType.RAW_CANCEL);
+		
+		//Remove this player.
+		rehMap.remove(player);
+		kaMap.remove(player);
 	}
 
 	/**

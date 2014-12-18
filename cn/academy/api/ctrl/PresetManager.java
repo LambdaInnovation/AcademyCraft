@@ -21,4 +21,7 @@ public class PresetManager {
 		return keyId; //TODO
 	}
 	
+	public static int getNextWorldId() {
+		return 0;
+	}
 }

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -47,12 +48,14 @@ public class EventHandlerClient {
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
 		public void onKeyUp(int keyCode, boolean tickEnd) {
 			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
@@ -71,10 +74,17 @@ public class EventHandlerClient {
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
 			//Client side only receives RAW_CANCEL.
-			if (msg.eventType != SkillEventType.RAW_CANCEL) {
+			switch (msg.eventType) {
+			case RAW_CANCEL:
+				INSTANCE.onEvent(msg.skillId, msg.eventType);
+				break;
+			case INIT_QUERY_WORLD_ID:
+				//Get the worldId.
+				//There's a hack that we store the id in time.
+				INSTANCE.reallyResetPlayerSkillData(msg.time);
+				break;
+			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from server.");
-			} else {
-				INSTANCE.onEvent(msg.skillId, msg.eventType);	
 			}
 			return null;
 		}
@@ -198,6 +208,9 @@ public class EventHandlerClient {
 	
 	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
+	
+	private Category category;
+	
 	/**
 	 * Handles presets
 	 */
@@ -217,43 +230,57 @@ public class EventHandlerClient {
 		LIKeyProcess.instance.addKey("Skill 3", DEFAULT_KEY_S3, false, INSTANCE.new KeyHandler(2));
 		LIKeyProcess.instance.addKey("Skill 4", DEFAULT_KEY_S4, false, INSTANCE.new KeyHandler(3));
 		
-		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
+				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	
 		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 
 	/**
 	 * Called by the data part on client side, after the ability data is prepared.
-	 * The client side also uses an id to identify which world it is.
-	 * At the first time this player enters this world, pass 0 to id, and this function will return a new
-	 * id. Pass the same id to this function to allow the player uses a same set of presets next time. 
-	 * @param cat The skill data of this player.
-	 * @param id A number used by the client side to identify the world. If unknown, use 0.
-	 * @return A number used to identify the world. Should be passed to this function next time.
+	 * @param cat The skill data of the player.
 	 */
-	public static int resetPlayerSkillData(Category cat, int id) {
+	public static void resetPlayerSkillData(Category cat) {
+		//Store category.
+		INSTANCE.category = cat;
+		
+		INSTANCE.presets = null;
+		
+		//Send a message to server to get the world id.
+		AcademyCraftMod.netHandler.sendToServer(
+				new ControlMessage(0, SkillEventType.INIT_QUERY_WORLD_ID, PresetManager.getNextWorldId()));
+	}
+	
+	/**
+	 * Get the world id from server. Use this id to initialize PresetManager.
+	 * @param id
+	 */
+	private void reallyResetPlayerSkillData(int id) {
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
-		for (int i = 0; i < cat.getSkillCount(); ++i) {
-			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
+		for (int i = 0; i < category.getSkillCount(); ++i) {
+			rehMap.put(i, new RawEventHandler(category.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap = rehMap;
 		INSTANCE.kaMap = new HashMap();
 		
-		INSTANCE.presets = new PresetManager(cat, id);
-		
-		return INSTANCE.presets.getWorldId();
+		INSTANCE.presets = new PresetManager(category, id);
 	}
-
-	//TODO onPlayerLoggedOut
 	
-	private void onEvent(int skillId, SkillEventType type) {
-		skillEvent(skillId, type);
+	@SubscribeEvent
+	public void onPlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
+		skillEventAll(SkillEventType.RAW_CANCEL);
+		INSTANCE.kaMap.clear();
+		INSTANCE.rehMap.clear();
 	}
 	
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
-		skillKAEventAll(SkillEventType.RAW_TICK);
+		skillEventAll(SkillEventType.RAW_TICK);
+	}
+	
+	private void onEvent(int skillId, SkillEventType type) {
+		skillEvent(skillId, type);
 	}
 	
 	/**
@@ -286,10 +313,10 @@ public class EventHandlerClient {
 	
 	/**
 	 * Pass the event to all active skills.
-	 * Used only with RAW_TICK and RAW_CANCEL (when log out, not implemented).
+	 * Used only with RAW_TICK and RAW_CANCEL (when log out).
 	 * @param type The event type
 	 */
-	private void skillKAEventAll(SkillEventType type) {
+	private void skillEventAll(SkillEventType type) {
 		Iterator<SingleSkill> itor = kaMap.values().iterator();
 		while (itor.hasNext()) {
 			if (itor.next().onEvent(type) == false) {
