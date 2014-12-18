@@ -9,6 +9,7 @@ import java.util.Map;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.client.key.IKeyHandler;
 import cn.liutils.api.util.GenericUtils;
@@ -240,7 +241,9 @@ public class EventHandlerClient {
 	 * Called by the data part on client side, after the ability data is prepared.
 	 * @param cat The skill data of the player.
 	 */
-	public static void resetPlayerSkillData(Category cat) {
+	public static void resetPlayerSkillData() {
+		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
+		
 		//Store category.
 		INSTANCE.category = cat;
 		

@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -244,7 +245,8 @@ public class EventHandlerServer {
 	 * Called by data part on server side, after the ability data is changed.
 	 * @param name The name of player joined.
 	 */
-	public static void resetPlayerSkillData(EntityPlayer player, Category cat) {
+	public static void resetPlayerSkillData(EntityPlayer player) {
+		Category cat = AbilityDataMain.getData(player).getCategory();
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
 		for (int i = 0; i < cat.getSkillCount(); ++i) {
