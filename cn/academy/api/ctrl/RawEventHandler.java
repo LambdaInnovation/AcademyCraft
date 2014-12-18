@@ -48,6 +48,7 @@ public class RawEventHandler {
 			resetFlag = pattern.onRawEvent(player, type, time, this.getTime()) || resetFlag;
 		}
 		if (resetFlag) {
+			patterns.clear();
 			skill.initPattern(this);
 		}
 		
