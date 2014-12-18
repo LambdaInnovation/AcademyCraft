@@ -1,5 +1,6 @@
 package cn.academy.api.ctrl.pattern;
 
+import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 
 public interface IPattern {
@@ -11,6 +12,6 @@ public interface IPattern {
 	 * @param time The time of RawEventHandler of this side. Use this time to trigger skill event.
 	 * @return Return true to indicate that the skill needs to reset patterns. 
 	 */
-	boolean onRawEvent(SkillEventType type, int rawTime, int time);
+	boolean onRawEvent(EntityPlayer player, SkillEventType type, int rawTime, int time);
 	
 }

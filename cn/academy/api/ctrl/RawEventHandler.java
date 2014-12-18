@@ -3,6 +3,7 @@ package cn.academy.api.ctrl;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.pattern.IPattern;
 
@@ -16,10 +17,12 @@ import cn.academy.api.ctrl.pattern.IPattern;
 public class RawEventHandler {
 	
 	private SkillBase skill;
+	private EntityPlayer player;
 	
-	RawEventHandler(SkillBase skill) {
+	RawEventHandler(EntityPlayer player, SkillBase skill) {
 		skill.initPattern(this);
 		this.skill = skill;
+		this.player = player;
 	}
 	
 	/**
@@ -42,7 +45,7 @@ public class RawEventHandler {
 		 */
 		boolean resetFlag = false;
 		for (IPattern pattern : patterns) {
-			resetFlag = pattern.onRawEvent(type, time, this.getTime()) || resetFlag;
+			resetFlag = pattern.onRawEvent(player, type, time, this.getTime()) || resetFlag;
 		}
 		if (resetFlag) {
 			skill.initPattern(this);

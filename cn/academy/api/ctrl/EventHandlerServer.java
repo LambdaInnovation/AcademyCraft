@@ -251,7 +251,7 @@ public class EventHandlerServer {
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
 		for (int i = 0; i < cat.getSkillCount(); ++i) {
-			rehMap.put(i, new RawEventHandler(cat.getSkill(i)));
+			rehMap.put(i, new RawEventHandler(player, cat.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap.put(player, rehMap);

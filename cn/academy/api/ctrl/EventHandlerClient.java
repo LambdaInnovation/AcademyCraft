@@ -259,9 +259,11 @@ public class EventHandlerClient {
 	 * @param id
 	 */
 	private void reallyResetPlayerSkillData(int id) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
 		for (int i = 0; i < category.getSkillCount(); ++i) {
-			rehMap.put(i, new RawEventHandler(category.getSkill(i)));
+			rehMap.put(i, new RawEventHandler(player, category.getSkill(i)));
 		}
 		
 		INSTANCE.rehMap = rehMap;
