@@ -1,5 +1,6 @@
 package cn.academy.api.data;
 
+import cn.academy.api.ctrl.EventHandlerClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,18 +16,16 @@ public class MsgSyncAbilityData implements IMessage {
 	
 	private NBTTagCompound data;
 	
-	 public MsgSyncAbilityData(EntityPlayer player) {
-	      data = new NBTTagCompound();
-	      AbilityDataMain.getData(player).saveNBTData(data);
-	  }
-	 
-	 //Reciver-Side
-	 public MsgSyncAbilityData() {}
+	public MsgSyncAbilityData(EntityPlayer player) {
+		data = new NBTTagCompound();
+		AbilityDataMain.getData(player).saveNBTData(data);
+	}
+
+	public MsgSyncAbilityData() {}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		data = ByteBufUtils.readTag(buf);
-
 	}
 
 	@Override
@@ -35,14 +34,17 @@ public class MsgSyncAbilityData implements IMessage {
 
 	}
 	
-	 public static class Handler implements IMessageHandler<MsgSyncAbilityData, IMessage> {
-	      @Override
-	      @SideOnly(Side.CLIENT)
-	      public IMessage onMessage(MsgSyncAbilityData message, MessageContext ctx) {
-	          EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-	          AbilityDataMain.getData(player).loadNBTData(message.data);
-	          return null;
-	      }
-	  }
+	//TODO check if loading this class (containing Minecraft class and EventHandlerClient) on server will cause an error
+	public static class Handler implements IMessageHandler<MsgSyncAbilityData, IMessage> {
+		@Override
+		//@SideOnly(Side.CLIENT)
+		public IMessage onMessage(MsgSyncAbilityData message, MessageContext ctx) {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			AbilityDataMain.getData(player).loadNBTData(message.data);
+			//Call client side ctrl api.
+			EventHandlerClient.resetPlayerSkillData();
+			return null;
+		}
+	}
 
 }

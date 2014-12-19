@@ -243,6 +243,11 @@ public class EventHandlerClient {
 	 */
 	public static void resetPlayerSkillData() {
 		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
+
+		if(cat == null) {
+			AcademyCraftMod.log.fatal("Get empty category for player on client.");
+			return;
+		}
 		
 		//Store category.
 		INSTANCE.category = cat;

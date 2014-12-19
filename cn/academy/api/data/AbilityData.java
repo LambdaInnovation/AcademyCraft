@@ -31,10 +31,35 @@ public class AbilityData implements IExtendedEntityProperties {
 	private float skillExps[];
 	private boolean skillOpens[];
 
-	public AbilityData(EntityPlayer _player) {
-		player = _player;
+	/**
+	 * Create an AbilityData for the player with the empty category
+	 * @param player
+	 */
+	public AbilityData(EntityPlayer player) {
+		this(player, Abilities.catEmpty);
+	}
+
+	/**
+	 * Create an AbilityData for the player with the given category
+	 * @param player
+	 * @param category
+	 */
+	public AbilityData(EntityPlayer player, Category category) {
+		this.player = player;
+		
+		currentCP = maxCP = 0;
+		
+		catID = category.getCategoryId();
+		level = category.getInitialLevel();
+		
+		skillExps = category.getInitialSkillExp();
+		skillOpens = category.getInitialSkillOpen();
 	}
 	
+	/**
+	 * Register empty ability data for the player
+	 * @param player
+	 */
 	public static final void register(EntityPlayer player) {
 	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player));
 	}

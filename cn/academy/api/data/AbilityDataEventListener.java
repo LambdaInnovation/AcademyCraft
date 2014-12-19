@@ -15,20 +15,25 @@ public class AbilityDataEventListener {
 		
 		@SubscribeEvent
 	    public void onEntityConstructing(EntityConstructing event) {
-	        if (event.entity instanceof EntityPlayer 
-	        		&& AbilityDataMain.getData((EntityPlayer) event.entity) == null) {
-	            	AbilityDataMain.register((EntityPlayer) event.entity);
+	        if (event.entity instanceof EntityPlayer &&
+	        		!AbilityDataMain.hasData((EntityPlayer) event.entity)) {
+	        	//AbilityDataMain.register((EntityPlayer) event.entity);
 	        }
 	    }
 
 	    @SubscribeEvent
 	    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 	    	if (event.entity instanceof EntityPlayer) {
+	    		EntityPlayer player = (EntityPlayer) event.entity;
 	    		if (!event.entity.worldObj.isRemote) {
-	    			EventHandlerServer.resetPlayerSkillData((EntityPlayer) event.entity);
-	    			AbilityDataMain.sync((EntityPlayer) event.entity);
-	    		} else { //FIXME: may be some problem
-	    			EventHandlerClient.resetPlayerSkillData();
+	    			if (!AbilityDataMain.hasData(player)) {
+	    				AbilityDataMain.register(player);
+	    			}
+	    			EventHandlerServer.resetPlayerSkillData(player);
+	    			AbilityDataMain.sync(player);
+	    		} else {
+	    			//Do nothing. On client side call resetPlayerSkillData only
+	    			//after receiving data from server.
 	    		}
 	    	}
 	    }

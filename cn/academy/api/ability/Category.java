@@ -3,40 +3,68 @@
  */
 package cn.academy.api.ability;
 
+import java.util.List;
+
+import cn.liutils.api.util.GenericUtils;
 import net.minecraft.util.IIcon;
 
 /**
  * @author WeathFolD
  *
  */
-public abstract class Category {
+public class Category {
 	
-	protected int catid;
+	int catId;
+	
+	private List<Level> levels;
+	private List<SkillBase> skills;
+	private String name;
+	private IIcon icon;
 
-	public Category() {
-		
+	public Category(List<Level> levels, List<SkillBase> skills, String name, IIcon icon) {
+		this.levels = levels;
+		this.skills = skills;
+		this.name = name;
+		this.icon = icon;
 	}
 	
-	public abstract int getLevelCount();
+	public int getLevelCount() {
+		return levels.size();
+	}
 	
 	public Level getLevel(int lid) {
-		return null;
+		return GenericUtils.safeFetchFrom(levels, lid);
 	}
 	
 	public int getSkillCount() {
-		return 0;
+		return skills.size();
 	}
 	
 	public SkillBase getSkill(int sid) {
-		return null;
+		return GenericUtils.safeFetchFrom(skills, sid);
 	}
 	
 	public String getName() {
-		return "_init_";
+		return name;
 	}
 	
 	public IIcon getIcon() {
-		return null;
+		return icon;
+	}
+	
+	public int getCategoryId() {
+		return catId;
 	}
 
+	public int getInitialLevel() {
+		return 0;
+	}
+	
+	public float[] getInitialSkillExp() {
+		return new float[skills.size()];
+	}
+	
+	public boolean[] getInitialSkillOpen() {
+		return new boolean[skills.size()];
+	}
 }
