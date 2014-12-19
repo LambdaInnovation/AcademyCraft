@@ -19,6 +19,9 @@ public class MsgSyncAbilityData implements IMessage {
 	      data = new NBTTagCompound();
 	      AbilityDataMain.getData(player).saveNBTData(data);
 	  }
+	 
+	 //Reciver-Side
+	 public MsgSyncAbilityData() {}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {

@@ -37,7 +37,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public static final void register(EntityPlayer player) {
 	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player));
-	  }
+	}
 	
 	public Category getCategory() {
 		return Abilities.getCategory(catID);

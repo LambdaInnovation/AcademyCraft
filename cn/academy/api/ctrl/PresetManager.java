@@ -32,6 +32,7 @@ public class PresetManager {
 	 * The next available world id. Updated and saved to config file when exiting a server.
 	 */
 	private static int nextWorldId;
+	
 	/**
 	 * The world id of current PresetManager.
 	 */
@@ -41,10 +42,12 @@ public class PresetManager {
 	 * Preset data
 	 */
 	private Preset[] presets;
+	
 	/**
 	 * Current preset.
 	 */
 	private Preset current;
+	
 	/**
 	 * Index of current preset;
 	 */

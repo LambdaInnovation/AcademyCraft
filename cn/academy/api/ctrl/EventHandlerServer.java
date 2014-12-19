@@ -247,6 +247,9 @@ public class EventHandlerServer {
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
 		Category cat = AbilityDataMain.getData(player).getCategory();
+		//temp
+		if(cat == null)
+			return;
 		
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
