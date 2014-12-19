@@ -2,8 +2,11 @@ package cn.academy.api.data;
 
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import cn.academy.core.AcademyCraftMod;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
 public class AbilityDataMain {
 
@@ -19,6 +22,12 @@ public class AbilityDataMain {
 	}
 	
 	private AbilityDataMain() {}
+	
+	public static final void init() {
+		MinecraftForge.EVENT_BUS.register(new AbilityDataEventListener().new ForgeEventListener());
+		FMLCommonHandler.instance().bus().register(new AbilityDataEventListener().new FMLEventListener());
+		AcademyCraftMod.netHandler.registerMessage(MsgSyncAbilityData.Handler.class, MsgSyncAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.SERVER);
+	}
 	
 	public static final void register(EntityPlayer player) {
 		AbilityData.register(player);

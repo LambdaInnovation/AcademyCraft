@@ -1,10 +1,7 @@
-package cn.academy.core.events;
+package cn.academy.api.data;
 
-import cn.academy.api.ability.Abilities;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.EventHandlerServer;
-import cn.academy.api.data.AbilityData;
-import cn.academy.api.data.AbilityDataMain;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -12,7 +9,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 
-public class ACEventListener {
+public class AbilityDataEventListener {
 	
 	public class ForgeEventListener {
 		
@@ -26,15 +23,14 @@ public class ACEventListener {
 
 	    @SubscribeEvent
 	    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-	    	if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) {
-	    		AbilityDataMain.getData((EntityPlayer) event.entity).sync();
+	    	if (event.entity instanceof EntityPlayer) {
+	    		if (!event.entity.worldObj.isRemote) {
+	    			EventHandlerServer.resetPlayerSkillData((EntityPlayer) event.entity);
+	    			AbilityDataMain.sync((EntityPlayer) event.entity);
+	    		} else { //FIXME: may be some problem
+	    			EventHandlerClient.resetPlayerSkillData();
 	    		}
-	    	
-	    	if (!event.entity.worldObj.isRemote) {
-				EventHandlerServer.resetPlayerSkillData((EntityPlayer) event.entity);	
-			} else { //FIXME: may be some problem
-				EventHandlerClient.resetPlayerSkillData();
-			}
+	    	}
 	    }
 	    
 	    @SubscribeEvent
