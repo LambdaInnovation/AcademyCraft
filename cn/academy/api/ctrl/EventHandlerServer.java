@@ -35,7 +35,7 @@ public class EventHandlerServer {
 	 * @author acaly
 	 *
 	 */
-	private static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
+	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {

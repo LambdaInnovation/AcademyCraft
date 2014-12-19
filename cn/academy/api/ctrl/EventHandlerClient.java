@@ -70,8 +70,8 @@ public class EventHandlerClient {
 	 * @author acaly
 	 *
 	 */
-	private static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
-
+	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
+		
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
 			//Client side only receives RAW_CANCEL.
@@ -279,8 +279,8 @@ public class EventHandlerClient {
 		
 		//Clear in-game objects
 		skillEventAll(SkillEventType.RAW_CANCEL);
-		INSTANCE.kaMap.clear();
-		INSTANCE.rehMap.clear();
+		INSTANCE.kaMap = null;
+		INSTANCE.rehMap = null;
 	}
 	
 	@SubscribeEvent
@@ -307,6 +307,7 @@ public class EventHandlerClient {
 	 * @param type The event type.
 	 */
 	private void skillEvent(int skillId, SkillEventType type) {
+		if (kaMap == null) return; //Not in game
 		SingleSkill ka = kaMap.get(skillId);
 		if (ka == null) {
 			//If the SingleSkill does not exists, create it first.
@@ -326,6 +327,7 @@ public class EventHandlerClient {
 	 * @param type The event type
 	 */
 	private void skillEventAll(SkillEventType type) {
+		if (kaMap == null) return; //Not in game
 		Iterator<SingleSkill> itor = kaMap.values().iterator();
 		while (itor.hasNext()) {
 			if (itor.next().onEvent(type) == false) {
