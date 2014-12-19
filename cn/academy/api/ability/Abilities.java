@@ -43,9 +43,11 @@ public class Abilities {
 	 */
 
 	public static final SkillBase skillEmpty = new SkillBase();
+	public static final SkillDebug skillDebug = new SkillDebug();
+	
 	public static final Category catEmpty = new Category(
-			Arrays.asList(new Level()),
-			Arrays.asList(skillEmpty),
+			Arrays.<Level>asList(new Level()),
+			Arrays.<SkillBase>asList(skillDebug), //Change this to skillEmpty to avoid debug features.
 			"empty_category", null
 			);
 	

@@ -96,9 +96,8 @@ public class PresetManager {
 		
 		presets = new Preset[PRESET_COUNT];
 		for (int i = 0; i < PRESET_COUNT; ++i) {
-			//Use 0 as default value
 			presets[i] = new Preset(AcademyCraftMod.config.get(
-					worldIdStr, PRESET_CONFIG_NAME[i], 0));
+					worldIdStr, PRESET_CONFIG_NAME[i], new int[] {0, 0, 0, 0}));
 		}
 		
 		int def = AcademyCraftMod.config.get(worldIdStr, PRESET_CONFIG_DEFAULT, 0).getInt();

@@ -2,6 +2,7 @@ package cn.academy.core;
 
 import net.minecraftforge.common.config.Configuration;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.data.AbilityDataMain;
@@ -50,7 +51,7 @@ public class AcademyCraftMod {
 	/**
 	 * 日志
 	 */
-	public static Logger log = FMLLog.getLogger();
+	public static Logger log = LogManager.getLogger("AcademyCraft");
 	
 	public static Configuration config;
 	
