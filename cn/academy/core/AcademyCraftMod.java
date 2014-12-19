@@ -1,11 +1,15 @@
 package cn.academy.core;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.ctrl.ControlMessage;
+import cn.academy.api.data.MsgSyncAbilityData;
 import cn.academy.core.proxy.ProxyCommon;
+import cn.academy.core.events.ACEventListener;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -16,6 +20,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.relauncher.Side;
 
 
 /**
@@ -61,13 +66,20 @@ public class AcademyCraftMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+
 		config = new Configuration(event.getSuggestedConfigurationFile());
+		
+		MinecraftForge.EVENT_BUS.register(new ACEventListener().new ForgeEventListener());
+		FMLCommonHandler.instance().bus().register(new ACEventListener().new FMLEventListener());
 		
 		proxy.preInit();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		
+		netHandler.registerMessage(MsgSyncAbilityData.Handler.class, MsgSyncAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.SERVER);
+		
 		proxy.init();
 	}
 

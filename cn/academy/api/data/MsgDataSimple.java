@@ -47,12 +47,13 @@ public class MsgDataSimple implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(MsgDataSimple message, MessageContext ctx) { //placeholder, things done when decoding
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			AbilityData data = AbilityDataMain.getData(player);
-			data.catID = catID;
-			data.level = levelID;
-			data.currentCP = curCP;
-			data.maxCP = maxCP;
+			new Exception("Unable Right Now !!!!");
+			//EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			//AbilityData data = AbilityDataMain.getData(player);
+			//data.catID = catID;
+			//data.level = levelID;
+			//data.currentCP = curCP;
+			//data.maxCP = maxCP;
 			return null;
 		}
 		
