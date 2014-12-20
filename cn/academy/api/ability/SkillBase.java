@@ -15,11 +15,13 @@ import cn.academy.api.data.AbilityData;
  */
 public class SkillBase {
 	
+	/*
 	Category parent;
 
 	public SkillBase(Category cat) {
 		parent = cat;
 	}
+	*/
 	
 	/**
 	 * Called by RawEventHandler when the skill is reset.

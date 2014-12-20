@@ -5,6 +5,7 @@ package cn.academy.api.data;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -12,6 +13,7 @@ import cn.academy.api.ability.Abilities;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
+import cn.academy.core.AcademyCraftMod;
 
 /**
  * @author WeathFolD
@@ -21,16 +23,45 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public static final String IDENTIFIER = "ac_ability";
 	
-	private EntityPlayer player;
+	private final EntityPlayer player;
 	
-	protected int catID, level;
-	protected float currentCP;
-	protected float maxCP;
-	protected float skillExps[];
-	protected boolean skillOpens[];
+	private int catID, level;
+	private float currentCP;
+	private float maxCP;
+	private float skillExps[];
+	private boolean skillOpens[];
 
-	public AbilityData(EntityPlayer _player) {
-		player = _player;
+	/**
+	 * Create an AbilityData for the player with the empty category
+	 * @param player
+	 */
+	public AbilityData(EntityPlayer player) {
+		this(player, Abilities.catEmpty);
+	}
+
+	/**
+	 * Create an AbilityData for the player with the given category
+	 * @param player
+	 * @param category
+	 */
+	public AbilityData(EntityPlayer player, Category category) {
+		this.player = player;
+		
+		currentCP = maxCP = 0;
+		
+		catID = category.getCategoryId();
+		level = category.getInitialLevel();
+		
+		skillExps = category.getInitialSkillExp();
+		skillOpens = category.getInitialSkillOpen();
+	}
+	
+	/**
+	 * Register empty ability data for the player
+	 * @param player
+	 */
+	public static final void register(EntityPlayer player) {
+	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player));
 	}
 	
 	public Category getCategory() {
@@ -53,9 +84,9 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getCategory().getSkill(sid);
 	}
 	
-	public int getMaxSkills() {
+	public int getSkillCount() {
 		Category cat = getCategory();
-		return cat == null ? -1 : cat.getMaxSkills();
+		return cat == null ? -1 : cat.getSkillCount();
 	}
 	
 	public float getSkillExp(int sid) {
@@ -86,7 +117,7 @@ public class AbilityData implements IExtendedEntityProperties {
 			//Store exps and activate stats
 			nbt.setFloat("ccp", currentCP);
 			nbt.setFloat("mcp", maxCP);
-			int ms = getMaxSkills();
+			int ms = getSkillCount();
 			for(int i = 0; i < ms; ++i) {
 				nbt.setFloat("exp_" + i, skillExps[i]);
 				nbt.setBoolean("open_" + i, skillOpens[i]);
@@ -101,7 +132,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		if(getCategory() != null) {
 			currentCP = nbt.getFloat("ccp");
 			maxCP = nbt.getFloat("mcp");
-			int ms = getMaxSkills();
+			int ms = getSkillCount();
 			skillExps = new float[ms];
 			skillOpens = new boolean[ms];
 			for(int i = 0; i < ms; ++i) {
@@ -113,7 +144,11 @@ public class AbilityData implements IExtendedEntityProperties {
 
 	@Override
 	public void init(Entity entity, World world) {
-		this.player = (EntityPlayer) entity;
+		//this.player = (EntityPlayer) entity;
+	}
+	
+	public final void sync() {
+		AcademyCraftMod.netHandler.sendTo(new MsgSyncAbilityData(player), (EntityPlayerMP) player);
 	}
 
 }

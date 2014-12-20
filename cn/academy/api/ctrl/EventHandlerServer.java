@@ -35,7 +35,7 @@ public class EventHandlerServer {
 	 * @author acaly
 	 *
 	 */
-	private static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
+	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
 
 		@Override
 		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
@@ -247,6 +247,11 @@ public class EventHandlerServer {
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
 		Category cat = AbilityDataMain.getData(player).getCategory();
+
+		if(cat == null) {
+			AcademyCraftMod.log.fatal("Get empty category for player on server.");
+			return;
+		}
 		
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();

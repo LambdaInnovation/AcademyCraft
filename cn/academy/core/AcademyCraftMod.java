@@ -2,9 +2,10 @@ package cn.academy.core;
 
 import net.minecraftforge.common.config.Configuration;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cn.academy.api.ctrl.ControlMessage;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ProxyCommon;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -50,7 +51,7 @@ public class AcademyCraftMod {
 	/**
 	 * 日志
 	 */
-	public static Logger log = FMLLog.getLogger();
+	public static Logger log = LogManager.getLogger("AcademyCraft");
 	
 	public static Configuration config;
 	
@@ -61,13 +62,17 @@ public class AcademyCraftMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+
 		config = new Configuration(event.getSuggestedConfigurationFile());
+		
+		AbilityDataMain.init();
 		
 		proxy.preInit();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		
 		proxy.init();
 	}
 
