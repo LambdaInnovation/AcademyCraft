@@ -1,6 +1,7 @@
 package cn.academy.core.proxy;
 
 import net.minecraftforge.client.MinecraftForgeClient;
+import cn.academy.api.client.SkillRenderingHandler;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.api.ctrl.PresetManager;
@@ -18,6 +19,7 @@ public class ProxyClient extends ProxyCommon {
 		EventHandlerClient.init();
 		EventHandlerServer.init();
 		PresetManager.init();
+		SkillRenderingHandler.init();
 	}
 	
 }

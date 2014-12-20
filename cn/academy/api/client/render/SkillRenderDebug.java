@@ -1,51 +1,39 @@
 /**
  * 
  */
-package cn.academy.api.client;
+package cn.academy.api.client.render;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cn.academy.api.ctrl.pattern.IPattern;
+import cn.liutils.api.client.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.core.client.render.PRHSkillRender;
-import cn.liutils.api.client.LIClientRegistry;
-import cn.liutils.api.client.util.RenderUtils;
 
 /**
  * @author WeathFolD
  *
  */
-public class SkillRenderingHandler {
+public class SkillRenderDebug extends SkillRenderer {
 	
-	public static void init() {
-		LIClientRegistry.addPlayerRenderingHelper(new PRHSkillRender());
+	public static SkillRenderDebug instance = new SkillRenderDebug();
+
+	private SkillRenderDebug() {
 	}
 	
-	public static void doRender(AbstractClientPlayer player) {
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void renderHandEffect(EntityPlayer player, IPattern pattern, HandRenderType type) {
 		GL11.glPushMatrix(); {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			//GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glCullFace(GL11.GL_FRONT);
-			//GL11.glDepthFunc(GL11.GL_ALWAYS);
 			
-			//GL11.glTranslated(0.22, 1, -0.48);
-			GL11.glTranslated(-0.5, 0.3, 0);
+			GL11.glTranslated(0.22, -.35, -0.48);
 			GL11.glColor4f(1F, 1F, 1F, .5F);
 			Vec3 vs[] = {
 				vec(0, 0, 0), 
@@ -57,10 +45,9 @@ public class SkillRenderingHandler {
 				vec(1, 1, 1),
 				vec(0, 1, 1)
 			};
-			//RenderUtils.loadTexture(TEXTURE);
 			//MDL_SOLAR.renderAll();
 			
-			//GL11.glRotated(35, -1, 0, 0);
+			GL11.glRotated(45, -1, 0, 0);
 			int arr[] = {
 				4, 3, 2, 1,
 				5, 6, 7, 8,
@@ -71,7 +58,6 @@ public class SkillRenderingHandler {
 			};
 			float scale = 1F;
 			GL11.glScalef(scale, scale, -scale);
-			
 			if(true) {
 				Tessellator t = Tessellator.instance;
 				t.startDrawingQuads();
@@ -95,25 +81,24 @@ public class SkillRenderingHandler {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glCullFace(GL11.GL_BACK);
-			//GL11.glDepthFunc(GL11.GL_LEQUAL);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 		} GL11.glPopMatrix();
-		//System.out.println(type);
 	}
 	
-	/**
-	 * 插入ItemRenderer的渲染路径
-	 */
-	public static void renderFirstPerson() {
-		//ItemRenderer a;
-		//System.out.println("draw");
-
-		//ItemRenderer
+	@SideOnly(Side.CLIENT)
+	public void renderSurroundings(EntityPlayer player, IPattern pattern) {
+		GL11.glPushMatrix(); {
+			GL11.glTranslated(-.5, 0, -.5);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(1, 1, 1, 0.3F);
+			RenderUtils.drawCube(1, 1, 2);
+			GL11.glDisable(GL11.GL_BLEND);
+		} GL11.glPopMatrix();
 	}
 	
 	private static Vec3 vec(double x, double y, double z) {
 		return Vec3.createVectorHelper(x, y, z);
 	}
-	
+
 }

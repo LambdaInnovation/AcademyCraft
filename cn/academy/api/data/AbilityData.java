@@ -36,7 +36,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	 * @param player
 	 */
 	public AbilityData(EntityPlayer player) {
-		this(player, Abilities.catEmpty);
+		this(player, 0);
+	}
+	
+	public AbilityData(EntityPlayer player, int cid) {
+		this(player, Abilities.getCategory(cid));
 	}
 
 	/**
@@ -50,7 +54,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		currentCP = maxCP = 0;
 		
 		catID = category.getCategoryId();
-		level = category.getInitialLevel();
+		level = category.getInitialLevelId();
 		
 		skillExps = category.getInitialSkillExp();
 		skillOpens = category.getInitialSkillOpen();
