@@ -1,21 +1,22 @@
 package cn.academy.api.ctrl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
+import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
+import cn.liutils.api.register.Configurable;
 import cn.liutils.api.util.GenericUtils;
 import cn.liutils.core.client.register.LIKeyProcess;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -24,7 +25,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Event handler class in client side. Setup key bindings and sync with server.
@@ -204,13 +204,24 @@ public class EventHandlerClient {
 	/**
 	 * Default key bindings.
 	 */
-	private static final int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
+	private static int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
 							DEFAULT_KEY_S2 = LIKeyProcess.MOUSE_RIGHT,
 							DEFAULT_KEY_S3 = Keyboard.KEY_R,
 							DEFAULT_KEY_S4 = Keyboard.KEY_F;
 	
-	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
+	@Configurable(category = "Control", key = "KEY_S1", defValue = "-100") //ML
+	public static int KEY_S1;
+	 
+	@Configurable(category = "Control", key = "KEY_S2", defValue = "-99") //MR
+	public static int KEY_S2;
 	
+	@Configurable(category = "Control", key = "KEY_S3", defValue = "19") //R
+	public static int KEY_S3;
+	
+	@Configurable(category = "Control", key = "KEY_S4", defValue = "33") //F
+	public static int KEY_S4;
+	
+	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
 	private Category category;
 	
@@ -228,17 +239,70 @@ public class EventHandlerClient {
 	 * Setup the key bindings and network.
 	 */
 	public static void init() {
-		LIKeyProcess.instance.addKey("Skill 1", DEFAULT_KEY_S1, false, INSTANCE.new KeyHandler(0));
-		LIKeyProcess.instance.addKey("Skill 2", DEFAULT_KEY_S2, false, INSTANCE.new KeyHandler(1));
-		LIKeyProcess.instance.addKey("Skill 3", DEFAULT_KEY_S3, false, INSTANCE.new KeyHandler(2));
-		LIKeyProcess.instance.addKey("Skill 4", DEFAULT_KEY_S4, false, INSTANCE.new KeyHandler(3));
+		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, EventHandlerClient.class);
+		
+		LIKeyProcess.instance.addKey("Skill 1", KEY_S1, false, INSTANCE.new KeyHandler(0));
+		LIKeyProcess.instance.addKey("Skill 2", KEY_S2, false, INSTANCE.new KeyHandler(1));
+		LIKeyProcess.instance.addKey("Skill 3", KEY_S3, false, INSTANCE.new KeyHandler(2));
+		LIKeyProcess.instance.addKey("Skill 4", KEY_S4, false, INSTANCE.new KeyHandler(3));
 		
 		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
 				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	
 		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
+	
+	public static PresetManager getPresetManager() {
+		return INSTANCE.presets;
+	}
+	
+	public static Preset getPreset(int id) {
+		return getPresetManager().getPreset(id);
+	}
+	
+	public static int getCurrentPresetId() {
+		return getPresetManager().getCurrentPresetId();
+	}
+	
+	public static Preset getCurrentPreset() {
+		return getPresetManager().getPreset(getCurrentPresetId());
+	}
+	
+	public static void setPreset(int id, Preset preset) {
+		getPresetManager().setPreset(id, preset);
+	}
+	
+	public static void setCurrentPreset(int id) {
+		getPresetManager().setCurrentPreset(id);
+	}
 
+	private static void storePresets() {
+		LIGeneralRegistry.storeConfigurableClass(AcademyCraftMod.config, EventHandlerClient.class);
+	}
+	
+	public static int getKeyId(int i) {
+		switch(i) {
+		case 1: return KEY_S1;
+		case 2: return KEY_S2;
+		case 3: return KEY_S3;
+		case 4: return KEY_S4;
+		default:
+			throw new RuntimeException("Unsupported Key");
+		}
+	}
+	
+	public static void setKey(int i, int keyid) {
+		switch(i) {
+		case 1: KEY_S1 = keyid; break;
+		case 2: KEY_S2 = keyid; break;
+		case 3: KEY_S3 = keyid; break;
+		case 4: KEY_S4 = keyid; break;
+		default:
+			throw new RuntimeException("Unsupported Key");
+		}
+		storePresets();
+	}
+	
 	/**
 	 * Called by the data part on client side, after the ability data is prepared.
 	 * @param cat The skill data of the player.

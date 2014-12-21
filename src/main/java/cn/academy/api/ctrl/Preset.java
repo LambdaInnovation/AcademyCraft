@@ -14,7 +14,19 @@ public class Preset {
 	 * Also used in PresetManager to save presets.
 	 */
 	int[] data;
+	
+	Preset(Preset another) {
+		data = new int[4];
+		for(int i = 0; i < 4; ++i) {
+			data[i] = another.data[i];
+		}
+	}
 
+	@Override
+	public Preset clone() {
+		return new Preset(this);
+	}
+	
 	/**
 	 * Create a new preset with given property containing an int array.
 	 * @param prop
@@ -30,6 +42,8 @@ public class Preset {
 			data = new int[] {0, 0, 0, 0};
 		}
 	}
+	
+	private Preset() {}
 	
 	/**
 	 * Get the skill id binded to the given key (0-3).
