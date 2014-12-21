@@ -48,19 +48,37 @@ public class SkillStateMessage implements IMessage {
 
 		@Override
 		public IMessage onMessage(SkillStateMessage msg, MessageContext ctx) {
+			SkillState ss = null;
 			try {
 				Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(msg.playerEntityId);
 				if (entity == null) return null;
+				if (entity == Minecraft.getMinecraft().thePlayer) return null;
 				
 				Class<?> clazz = Class.forName(msg.className);
-				Constructor ctor = clazz.getConstructor(EntityPlayer.class);
-				SkillState ss = (SkillState) ctor.newInstance((EntityPlayer) entity);
+				//FIXME
 				
-				ss.startSkill();
+				for (Constructor ctor : clazz.getDeclaredConstructors()) {
+					if (ctor.getParameterTypes().length == 1) { 
+						if (ctor.getParameterTypes()[0].isAssignableFrom(EntityPlayer.class)) {
+							ctor.setAccessible(true);
+							ss = (SkillState) ctor.newInstance(entity);
+							break;
+						}
+					} /*else if (ctor.getParameterTypes().length == 2){
+						if (ctor.getParameterTypes()[1].isAssignableFrom(EntityPlayer.class)) {
+							ctor.setAccessible(true);
+							ss = (SkillState) ctor.newInstance(null, (EntityPlayer) entity);
+							break;
+						}
+					}*/
+				}
 			} catch (Exception e) {
-				AcademyCraftMod.log.error("Error on creating SkillState. Check the implementation of your SkillState.");
+				AcademyCraftMod.log.error("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
 				throw new RuntimeException(e);
 			}
+			if (ss == null)
+				throw new RuntimeException("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
+			ss.startSkill();
 			return null;
 		}
 		

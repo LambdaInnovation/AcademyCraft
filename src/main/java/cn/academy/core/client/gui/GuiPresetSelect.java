@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.Preset;
+import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
@@ -72,7 +73,7 @@ public class GuiPresetSelect extends AuxGui {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
 				if(!tickEnd) {
-					EventHandlerClient.setCurrentPreset(curSelection);
+					PresetManager.setCurrentPreset(curSelection);
 					closeGui();
 				}
 			}
@@ -83,7 +84,7 @@ public class GuiPresetSelect extends AuxGui {
 	
 	public void openGui() {
 		isOpen = true;
-		curSelection = EventHandlerClient.getCurrentPresetId();
+		curSelection = PresetManager.getCurrentPresetId();
 		lastOpenTime = Minecraft.getSystemTime();
 	}
 	

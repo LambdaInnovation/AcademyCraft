@@ -28,6 +28,7 @@ public class PresetManager {
 	private static final String PRESET_CONFIG_GLOBAL_OTHER = "preset_global";
 	private static final String PRESET_CONFIG_ID = "world_id";
 	
+	
 	/**
 	 * The next available world id. Updated and saved to config file when exiting a server.
 	 */
@@ -129,8 +130,8 @@ public class PresetManager {
 	 * @param keyId Key id (0-3)
 	 * @return Skill id.
 	 */
-	public int getSkillMapping(int keyId) {
-		return current.getSkillMapping(keyId);
+	public static int getSkillMapping(int keyId) {
+		return getInstance().current.getSkillMapping(keyId);
 	}
 	
 	/**
@@ -138,29 +139,44 @@ public class PresetManager {
 	 * @param presetId
 	 * @return
 	 */
-	public Preset getPreset(int presetId) {
-		return presets[presetId];
+	public static Preset getPreset(int presetId) {
+		return getInstance().presets[presetId];
 	}
 	
-	public void setPreset(int pid, Preset pr) {
+	public static void setPreset(int pid, Preset pr) {
 		if(pr != null) return;
-		presets[pid] = pr;
+		getInstance().presets[pid] = pr;
 	}
 	
 	/**
 	 * Get the id of current preset.
 	 * @return
 	 */
-	public int getCurrentPresetId() {
-		return currentId;
+	public static int getCurrentPresetId() {
+		return getInstance().currentId;
 	}
 	
 	/**
 	 * Set the id of current preset.
 	 * @param presetId
 	 */
-	public void setCurrentPreset(int presetId) {
-		current = presets[presetId];
-		currentId = presetId;
+	public static void setCurrentPreset(int presetId) {
+		PresetManager presets = getInstance();
+		presets.current = presets.presets[presetId];
+		presets.currentId = presetId;
+	}
+	
+	public static Preset getCurrentPreset() {
+		PresetManager presets = getInstance();
+		return presets.presets[presets.currentId];
+	}
+	
+	private static PresetManager getInstance() {
+		PresetManager presets = EventHandlerClient.getPresetManager();
+		if (presets == null) {
+			AcademyCraftMod.log.fatal("Cannot get the PresetManager instance.");
+			throw new RuntimeException("Cannot get the PresetManager instance.");
+		}
+		return presets;
 	}
 }

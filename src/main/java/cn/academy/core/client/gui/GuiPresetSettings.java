@@ -47,7 +47,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 	
 	public GuiPresetSettings() {
 		super(720, 360);
-		tempPreset = EventHandlerClient.getCurrentPreset().clone();
+		tempPreset = PresetManager.getCurrentPreset().clone();
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 				HudUtils.drawRectOutline(tx, ty, LOGO_SIZE, LOGO_SIZE, 2);
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				AbilityData data = AbilityDataMain.getData(player);
-				Preset prs = EventHandlerClient.getPreset(currentPage);
+				Preset prs = PresetManager.getPreset(currentPage);
 				ResourceLocation logo = data.getSkill(prs.getSkillMapping(id)).getLogo();
 				if(logo != null) {
 					RenderUtils.loadTexture(logo);
@@ -230,7 +230,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 			if(part.name.contains("sel")) {
 				int i = Integer.parseInt(part.name.substring(3));
 				if(i == currentPage) return;
-				tempPreset = EventHandlerClient.getPreset(i).clone();
+				tempPreset = PresetManager.getPreset(i).clone();
 				currentPage = i;
 			}
 			if(part instanceof PartKeyInfo) {
