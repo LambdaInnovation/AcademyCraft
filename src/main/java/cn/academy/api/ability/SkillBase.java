@@ -8,6 +8,8 @@ import net.minecraft.util.StatCollector;
 import cn.academy.api.client.render.SkillRenderDebug;
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
+import cn.academy.api.ctrl.SkillState;
+import cn.academy.core.AcademyCraftMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -57,5 +59,9 @@ public class SkillBase {
 	@SideOnly(Side.CLIENT)
 	public final String getDisplayName() {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
+	}
+	
+	protected void startSkill(SkillState state) {
+		state.onStart();
 	}
 }
