@@ -1,5 +1,7 @@
 package cn.academy.core;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ProxyCommon;
+import cn.academy.core.register.ACBlocks;
+import cn.academy.core.register.ACItems;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -60,6 +64,16 @@ public class AcademyCraftMod {
 	 */
 	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraftMod.NET_CHANNEL);
 	
+	/**
+	 * 创造栏
+	 */
+	public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
+		@Override
+		public Item getTabIconItem() {
+			return ACItems.logo;
+		}
+	};
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
@@ -72,6 +86,9 @@ public class AcademyCraftMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		
+		ACItems.init(config);
+		ACBlocks.init(config);
 		
 		proxy.init();
 	}

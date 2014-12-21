@@ -72,7 +72,7 @@ public class GuiPresetSelect extends AuxGui {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
 				if(!tickEnd) {
-					EventHandlerClient.setPresetID(curSelection);
+					EventHandlerClient.setCurrentPreset(curSelection);
 					closeGui();
 				}
 			}
@@ -83,7 +83,7 @@ public class GuiPresetSelect extends AuxGui {
 	
 	public void openGui() {
 		isOpen = true;
-		curSelection = EventHandlerClient.getCurrentPresetID();
+		curSelection = EventHandlerClient.getCurrentPresetId();
 		lastOpenTime = Minecraft.getSystemTime();
 	}
 	
@@ -146,7 +146,7 @@ public class GuiPresetSelect extends AuxGui {
 			
 			//Front Drawing
 			float step = 23F;
-			Preset preset = EventHandlerClient.getPreset(curSelection);
+			Preset preset = EventHandlerClient.getPresetManager().getPreset(curSelection);
 			float cx = 0F;
 			GL11.glDepthFunc(GL11.GL_GEQUAL);
 			GL11.glColor4d(1, 1, 1, prog * 0.5);
@@ -178,9 +178,6 @@ public class GuiPresetSelect extends AuxGui {
 						if(logo != null) {
 							RenderUtils.loadTexture(logo);
 							HudUtils.drawTexturedModalRect(rx + 1, ry + 1, rectSize - 2, rectSize - 2);
-							//SkillKeyID
-							TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.valueOf(sk.second), 
-									rx + rectSize - 4.7, ry + rectSize - 7.2, 8);
 						}
 					}
 					
@@ -210,7 +207,7 @@ public class GuiPresetSelect extends AuxGui {
 			if(curSelection == i) {
 				rect(x0 + tx, y0 + ty + ny, mw, y_step, 0.6F, 0.6F);
 			}
-			Preset pr = EventHandlerClient.getPreset(i);
+			Preset pr = EventHandlerClient.getPresetManager().getPreset(i);
 			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.9); //Linear brightening effect
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 7);

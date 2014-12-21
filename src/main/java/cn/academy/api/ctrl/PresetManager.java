@@ -142,6 +142,11 @@ public class PresetManager {
 		return presets[presetId];
 	}
 	
+	public void setPreset(int pid, Preset pr) {
+		if(pr != null) return;
+		presets[pid] = pr;
+	}
+	
 	/**
 	 * Get the id of current preset.
 	 * @return
