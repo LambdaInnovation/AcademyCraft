@@ -16,10 +16,7 @@ public class Preset {
 	int[] data;
 	
 	Preset(Preset another) {
-		data = new int[4];
-		for(int i = 0; i < 4; ++i) {
-			data[i] = another.data[i];
-		}
+		data = another.data.clone();
 	}
 
 	@Override
