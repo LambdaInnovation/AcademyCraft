@@ -1,5 +1,8 @@
 package cn.academy.core.register;
 
+import net.minecraft.item.Item;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
@@ -9,12 +12,10 @@ import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ACItems {
+	
+	//Misc
 	public static Item 
 		logo,
 		record0,
@@ -40,6 +41,7 @@ public class ACItems {
 		CoreBearing;
 	
 	public static void init(Configuration conf) {
+		
 		logo = new Item().setUnlocalizedName("ac_logo").setTextureName("academy:logo");
 		record0 = new ACRecord("ac1", 0).setUnlocalizedName("ac_record1");
 		record1 = new ACRecord("ac2", 1).setUnlocalizedName("ac_record2");

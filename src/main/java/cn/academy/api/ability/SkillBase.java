@@ -5,11 +5,11 @@ package cn.academy.api.ability;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.api.client.render.SkillRenderDebug;
-import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.client.render.SkillRenderDebug;
+import cn.academy.core.client.render.SkillRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

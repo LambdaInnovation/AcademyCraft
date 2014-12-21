@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.api.client.render;
+package cn.academy.core.client.render;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.pattern.IPattern;

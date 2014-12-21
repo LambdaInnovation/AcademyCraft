@@ -21,9 +21,6 @@ public class APITransformerClient implements IClassTransformer {
 	public APITransformerClient() {
 	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.launchwrapper.IClassTransformer#transform(java.lang.String, java.lang.String, byte[])
-	 */
 	@Override
 	public byte[] transform(String n1, String n2, byte[] data) {
 		
@@ -31,7 +28,6 @@ public class APITransformerClient implements IClassTransformer {
 			System.out.println("Transforming " + n1 + ", " + n2);
 			ClassReader cr = new ClassReader(data);
 			ClassWriter cw = new ClassWriter(Opcodes.ASM4);
-			
 			ClassVisitor cv = new ClassVisitor(Opcodes.ASM4, cw) {
 				
 				@Override
@@ -40,36 +36,13 @@ public class APITransformerClient implements IClassTransformer {
 			    	MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 			    	if(name.equals("renderItemInFirstPerson")) {
 			    		return new FPSkillEffect(mv);
-			    	} 
-//			    	else if(name.equals("renderItem") && 
-//			    			desc.equals("(Lnet/minecraft/entity/EntityLivingBase;"
-//			    					+ "Lnet/minecraft/item/ItemStack;"
-//			    					+ "ILnet/minecraftforge/client/IItemRenderer$ItemRenderType;"
-//			    					+ ")V")) {
-//			    		return new TPSkillEffect(mv);
-//			    	}
-			    	return mv;
-			    }
-				
-			};
-			
-			cr.accept(cv, 0);
-			return cw.toByteArray();
-		}
-		else if(n1.equals("net.minecraft.client.renderer.entity.RenderPlayer")) {
-			System.out.println("Transforming " + n1 + ", " + n2);
-			ClassReader cr = new ClassReader(data);
-			ClassWriter cw = new ClassWriter(Opcodes.ASM4);
-			
-			ClassVisitor cv = new ClassVisitor(Opcodes.ASM4, cw) {
-				
-				@Override
-			    public MethodVisitor visitMethod(int access, String name, String desc,
-			            String signature, String[] exceptions) {
-			    	MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-			    	if(name.equals("renderEquippedItems")) {
+			    	} else if(name.equals("renderItem") && 
+			    			desc.equals("(Lnet/minecraft/entity/EntityLivingBase;"
+			    					+ "Lnet/minecraft/item/ItemStack;"
+			    					+ "ILnet/minecraftforge/client/IItemRenderer$ItemRenderType;)V")) {
+			    		System.out.println("Injecting renderItem");
 			    		return new TPSkillEffect(mv);
-			    	} 
+			    	}
 			    	return mv;
 			    }
 				
@@ -83,8 +56,8 @@ public class APITransformerClient implements IClassTransformer {
 	
 	private static class TPSkillEffect extends MethodVisitor {
 		
-		int visitTime = 0;
-
+		int visTime = 0;
+		
 		public TPSkillEffect(MethodVisitor mv) {
 			super(Opcodes.ASM4, mv);
 		}
@@ -92,29 +65,23 @@ public class APITransformerClient implements IClassTransformer {
 		@Override
 	    public void visitMethodInsn(int opcode, String owner, String name,
 	            String desc) {
-			mv.visitMethodInsn(opcode, owner, name, desc);
-			if(Opcodes.INVOKEVIRTUAL == opcode && 
-				owner.equals("net/minecraft/client/model/ModelRenderer") &&
-				name.equals("postRender") &&
-				(++visitTime == 2)) {
-				//visited = true;
-				System.out.println("injected renderItems");
-				
-				// SkillRenderingHandler.doRender(EntityLivingBase, ItemStack, int, ItemRenderType)
+			if(Opcodes.INVOKESTATIC == opcode && name.equals("glPopMatrix") && (++visTime == 4)) { //Before the last glPopMatrix() call
+				System.out.println("Injected renderItem");
 				mv.visitVarInsn(Opcodes.ALOAD, 1);
-				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/api/client/SkillRenderingHandler", 
-					"doRender", "(Lnet/minecraft/client/entity/AbstractClientPlayer;)V");
+				mv.visitVarInsn(Opcodes.ALOAD, 2);
+				mv.visitVarInsn(Opcodes.ALOAD, 4);
+				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderingHandler", "renderThirdPerson", 
+						"(Lnet/minecraft/entity/EntityLivingBase;"
+						+ "Lnet/minecraft/item/ItemStack;"
+						+ "Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;)V");
 			}
-		}
+			mv.visitMethodInsn(opcode, owner, name, desc);
+	    }
 	}
 	
 	private static class FPSkillEffect extends MethodVisitor {
 		
-//		public AddSkillEffect() {
-//			super(Opcodes.ASM4);
-//		}
-		
-		boolean visited = false;
+		int visTime = 0;
 
 		public FPSkillEffect(MethodVisitor mv) {
 			super(Opcodes.ASM4, mv);
@@ -128,15 +95,11 @@ public class APITransformerClient implements IClassTransformer {
 		@Override
 	    public void visitMethodInsn(int opcode, String owner, String name,
 	            String desc) {
-			mv.visitMethodInsn(opcode, owner, name, desc);
-			if(!visited && Opcodes.INVOKESTATIC == opcode && name.equals("glPopMatrix")) {
-				visited = true;
-//				mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-//				mv.visitLdcInsn("Called");
-//				mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+			if(Opcodes.INVOKESTATIC == opcode && name.equals("glDisable") && (++visTime == 2)) { //Before the glDisable(GL_RESCALE_NORMAL) call
 				System.out.println("Injected renderInFirstPerson");
-				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/api/client/SkillRenderingHandler", "renderFirstPerson", "()V");
+				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderingHandler", "renderFirstPerson", "()V");
 			}
+			mv.visitMethodInsn(opcode, owner, name, desc);
 	    }
 		
 		@Override

@@ -326,10 +326,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 		public void addElements(Set<LIGuiPart> set) {}
 
 		@Override
-		public void onPartClicked(LIGuiPart part, float subX, float subY) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void onPartClicked(LIGuiPart part, float subX, float subY) {}
 		
 	}
 	

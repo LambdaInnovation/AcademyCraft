@@ -265,10 +265,10 @@ public class EventHandlerClient {
 	
 	public static int getKeyId(int i) {
 		switch(i) {
-		case 1: return KEY_S1;
-		case 2: return KEY_S2;
-		case 3: return KEY_S3;
-		case 4: return KEY_S4;
+		case 0: return KEY_S1;
+		case 1: return KEY_S2;
+		case 2: return KEY_S3;
+		case 3: return KEY_S4;
 		default:
 			throw new RuntimeException("Unsupported Key");
 		}
@@ -276,10 +276,10 @@ public class EventHandlerClient {
 	
 	public static void setKey(int i, int keyid) {
 		switch(i) {
-		case 1: KEY_S1 = keyid; break;
-		case 2: KEY_S2 = keyid; break;
-		case 3: KEY_S3 = keyid; break;
-		case 4: KEY_S4 = keyid; break;
+		case 0: KEY_S1 = keyid; break;
+		case 1: KEY_S2 = keyid; break;
+		case 2: KEY_S3 = keyid; break;
+		case 3: KEY_S4 = keyid; break;
 		default:
 			throw new RuntimeException("Unsupported Key");
 		}

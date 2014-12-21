@@ -11,16 +11,16 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ProxyCommon;
 import cn.academy.core.register.ACBlocks;
 import cn.academy.core.register.ACItems;
-import cpw.mods.fml.common.FMLLog;
+import cn.liutils.api.register.LIGuiHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.SidedProxy;
 
 
 /**
@@ -65,6 +65,11 @@ public class AcademyCraftMod {
 	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraftMod.NET_CHANNEL);
 	
 	/**
+	 * GUI处理器
+	 */
+	public static LIGuiHandler guiHandler = new LIGuiHandler();
+	
+	/**
 	 * 创造栏
 	 */
 	public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
@@ -80,6 +85,7 @@ public class AcademyCraftMod {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		
 		AbilityDataMain.init();
+		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
 		
 		proxy.preInit();
 	}
