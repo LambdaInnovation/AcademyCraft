@@ -18,7 +18,8 @@ public class ControlMessage implements IMessage {
 	public SkillEventType eventType;
 	public int time;
 	
-	public ControlMessage() {}
+	public ControlMessage() {
+	}
 	
 	public ControlMessage(int skillId, SkillEventType eventType, int time) {
 		this.skillId = skillId;

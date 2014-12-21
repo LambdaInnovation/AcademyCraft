@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.api.ability.SkillBase;
-import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.pattern.IPattern;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
