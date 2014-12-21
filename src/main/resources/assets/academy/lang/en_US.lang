@@ -1,27 +1,27 @@
 #English Language File 2014/8/5 for debugging
 #Items
 item.ability_void.name=
-item.ap_logo.name=AcademyCraft Logo
-item.ap_record1.name=Railgun Record - Only My Railgun
-item.ap_record2.name=Railgun Record - Sister's Noise
-item.ap_record3.name=Railgun Record - LEVEL5 -Judgelight-
-item.ap_coin.name=Game Coin
-item.ability_capsule1.name=Mind Induction Capsule
-item.ability_capsule2.name=AIM Activation Capsule
-item.ability_capsule3.name=Personal Reality Enhancing Capsule
+item.ac_logo.name=AcademyCraft Logo
+item.ac_record1.name=Railgun Record - Only My Railgun
+item.ac_record2.name=Railgun Record - Sister's Noise
+item.ac_record3.name=Railgun Record - LEVEL5 -Judgelight-
+item.ac_coin.name=Game Coin
+item.ability_cacsule1.name=Mind Induction Capsule
+item.ability_cacsule2.name=AIM Activation Capsule
+item.ability_cacsule3.name=Personal Reality Enhancing Capsule
 item.ability_tablet1.name=Mind Induction Tablet
 item.ability_tablet2.name=AIM Activation Tablet
 item.ability_tablet3.name=Personal Reality Enhancing Tablet
-item.ap_needle.name=Needle
-item.ap_energycrystal.name=Energy Crystal
+item.ac_needle.name=Needle
+item.ac_energycrystal.name=Energy Crystal
 item.ad_card.name=Ability Developer Electricity Card
-item.ap_aluminumingot=Aluminum Ingot
-item.ap_copperingot.name=Copper Ingot
-item.ap_steelingot.name=Steel Ingot
-item.ap_tiningot.name=Tin Ingot
-item.ap_siliconrod.name=Silicon Rod
-item.ap_coppercoil.name=Copper Coil
-item.ap_corebearing.name=Core Bearing
+item.ac_aluminumingot=Aluminum Ingot
+item.ac_copperingot.name=Copper Ingot
+item.ac_steelingot.name=Steel Ingot
+item.ac_tiningot.name=Tin Ingot
+item.ac_siliconrod.name=Silicon Rod
+item.ac_coppercoil.name=Copper Coil
+item.ac_corebearing.name=Core Bearing
 
 
 #Blocks
