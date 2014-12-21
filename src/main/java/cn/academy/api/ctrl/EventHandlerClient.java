@@ -198,6 +198,8 @@ public class EventHandlerClient {
 			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(skillId, type, reh.getTime()));
 		}
 	}
+	
+	public static final int MAX_KEYS = 4;
 
 	/**
 	 * Default key bindings.
