@@ -86,6 +86,7 @@ public class GuiPresetSelect extends AuxGui {
 		isOpen = true;
 		curSelection = PresetManager.getCurrentPresetId();
 		lastOpenTime = Minecraft.getSystemTime();
+		System.out.println("Open");
 	}
 	
 	public void closeGui() {
@@ -93,7 +94,7 @@ public class GuiPresetSelect extends AuxGui {
 	}
 
 	@Override
-	public boolean doesEnable() {
+	public boolean isOpen() {
 		return isOpen;
 	}
 

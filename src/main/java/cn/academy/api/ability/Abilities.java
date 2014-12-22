@@ -5,6 +5,7 @@ package cn.academy.api.ability;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,12 @@ public class Abilities {
 	
 	public static SkillBase getSkill(String name) {
 		return skillMap.get(name);
+	}
+	
+	public static void registerSkill(Collection<SkillBase> skls) {
+		for(SkillBase skl : skls) {
+			registerSkill(skl);
+		}
 	}
 	
 	/**

@@ -95,14 +95,14 @@ public class ACClientProps {
 	//Railgun
 	public static final ResourceLocation
 		ELEC_LOGO = src("academy:textures/abilities/electromaster/main.png"),
-		ELEC_ATTACK = src("academy:textures/abilities/electromaster/attack_large.png"),
+		ELEC_ARC = src("academy:textures/abilities/electromaster/attack_large.png"),
 		ELEC_ATTRACT = src("academy:textures/abilities/electromaster/attraction.png"),
 		ELEC_CHARGE = src("academy:textures/abilities/electromaster/itemcharge.png"),
 		ELEC_VIEWMINE = src("academy:textures/abilities/electromaster/mineview.png"),
 		ELEC_MOVE = src("academy:textures/abilities/electromaster/moving.png"),
 		ELEC_RAILGUN = src("academy:textures/abilities/electromaster/railgun.png"),
 		ELEC_SWORD = src("academy:textures/abilities/electromaster/sword.png"),
-		ELEC_ARC = src("academy:textures/abilities/electromaster/arc.png");
+		ELEC_ARC_STRONG = src("academy:textures/abilities/electromaster/arc.png");
 	
 	//Meltdowner
 	public static final ResourceLocation 
