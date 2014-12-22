@@ -25,22 +25,21 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	private final EntityPlayer player;
 	
-	private int catID, level;
-	private float currentCP;
-	private float maxCP;
-	private float skillExps[];
-	private boolean skillOpens[];
+	/*
+	 * These fields may be used by Messages.
+	 */
+	int catID, level;
+	float currentCP;
+	float maxCP;
+	float skillExps[];
+	boolean skillOpens[];
 
 	/**
 	 * Create an AbilityData for the player with the empty category
 	 * @param player
 	 */
 	public AbilityData(EntityPlayer player) {
-		this(player, 0);
-	}
-	
-	public AbilityData(EntityPlayer player, int cid) {
-		this(player, Abilities.getCategory(cid));
+		this(player, Abilities.catEmpty);
 	}
 
 	/**
@@ -50,14 +49,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	public AbilityData(EntityPlayer player, Category category) {
 		this.player = player;
-		
-		currentCP = maxCP = 0;
-		
-		catID = category.getCategoryId();
-		level = category.getInitialLevelId();
-		
-		skillExps = category.getInitialSkillExp();
-		skillOpens = category.getInitialSkillOpen();
+		setInitial(category);
 	}
 	
 	/**
@@ -89,16 +81,15 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public int getSkillCount() {
-		Category cat = getCategory();
-		return cat == null ? -1 : cat.getSkillCount();
+		return getCategory().getSkillCount();
 	}
 	
 	public float getSkillExp(int sid) {
-		return skillExps == null ? -1 : skillExps[sid];
+		return skillExps[sid];
 	}
 	
 	public boolean isSkillLearned(int sid) {
-		return skillOpens == null ? false : skillOpens[sid];
+		return skillOpens[sid];
 	}
 	
 	public float getCurrentCP() {
@@ -133,16 +124,14 @@ public class AbilityData implements IExtendedEntityProperties {
 	public void loadNBTData(NBTTagCompound nbt) {
 		catID = nbt.getInteger("catid");
 		level = nbt.getInteger("level");
-		if(getCategory() != null) {
-			currentCP = nbt.getFloat("ccp");
-			maxCP = nbt.getFloat("mcp");
-			int ms = getSkillCount();
-			skillExps = new float[ms];
-			skillOpens = new boolean[ms];
-			for(int i = 0; i < ms; ++i) {
-				skillExps[i] = nbt.getFloat("exp_" + i);
-				skillOpens[i] = nbt.getBoolean("open_" + i);
-			}
+		currentCP = nbt.getFloat("ccp");
+		maxCP = nbt.getFloat("mcp");
+		int ms = getSkillCount();
+		skillExps = new float[ms];
+		skillOpens = new boolean[ms];
+		for(int i = 0; i < ms; ++i) {
+			skillExps[i] = nbt.getFloat("exp_" + i);
+			skillOpens[i] = nbt.getBoolean("open_" + i);
 		}
 	}
 
@@ -150,9 +139,113 @@ public class AbilityData implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 		//this.player = (EntityPlayer) entity;
 	}
-	
-	public final void sync() {
-		AcademyCraftMod.netHandler.sendTo(new MsgSyncAbilityData(player), (EntityPlayerMP) player);
-	}
 
+	/*
+	 * Set API
+	 */
+	
+	public void setCategoryID(int value) {
+		if (!player.worldObj.isRemote) {
+			setInitial(Abilities.getCategory(value));
+			//Force reset
+			AbilityDataMain.resetPlayer(player);
+		}
+	}
+	
+	public void setCurrentCP(float value) {
+		currentCP = value;
+		
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
+	}
+	
+	public void setMaxCP(float value) {
+		maxCP = value;
+		
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
+	}
+	
+	public boolean decreaseCP(float need) {
+		if (currentCP < need) return false;
+		setCurrentCP(currentCP - need);
+		return true;
+	}
+	
+	public void setLevelID(int value) {
+		if (!player.worldObj.isRemote) {
+			level = value;
+			
+			this.isInSetup = true;
+			getLevel().enterLevel(this);
+			this.isInSetup = false;
+			
+			syncAll();
+		}
+	}
+	
+	public void setSkillExp(int skillID, float value) {
+		if (!player.worldObj.isRemote) {
+			float oldValue = skillExps[skillID];
+			skillExps[skillID] = value;
+			
+			this.isInSetup = true;
+			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
+			this.isInSetup = false;
+			
+			syncSimple();
+		}
+	}
+	
+	public void setSkillOpen(int skillID, boolean isOpen) {
+		if (!player.worldObj.isRemote) {
+			skillOpens[skillID] = isOpen;
+			syncAll();
+		}
+	}
+	
+	public void incrSkillExp(int skillID, float value) {
+		setSkillExp(skillID, getSkillExp(skillID) + value);
+	}
+	
+	public void openSkill(int skillID) {
+		setSkillOpen(skillID, true);
+	}
+	
+	private void syncSimple() {
+		if (!isInSetup) {
+			if (needToReset) {
+				AbilityDataMain.resetPlayer(player);
+			} else {
+				//TODO send to all clients?
+				AcademyCraftMod.netHandler.sendTo(new MsgSimpleChange(this), (EntityPlayerMP) player);
+			}
+		}
+	}
+	
+	private void syncAll() {
+		if (!isInSetup) {
+			AbilityDataMain.resetPlayer(player);
+			needToReset = false;
+		} else {
+			needToReset = true;
+		}
+	}
+	
+	/**
+	 * Set the AbilityData to the initial value of the given category.
+	 * @param category
+	 */
+	private void setInitial(Category category) {
+		catID = category.getCategoryId();
+		level = category.getInitialLevelId();
+		skillExps = category.getInitialSkillExp();
+		currentCP = maxCP = category.getInitialMaxCP();
+		skillOpens = category.getInitialSkillOpen();
+	}
+	
+	private boolean isInSetup = false;
+	private boolean needToReset = false;
 }

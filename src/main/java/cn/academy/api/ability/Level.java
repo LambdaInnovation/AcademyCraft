@@ -1,15 +1,9 @@
 package cn.academy.api.ability;
 
+import cn.academy.api.data.AbilityData;
 import net.minecraft.util.StatCollector;
 
 public class Level {
-	/*
-	Category parent;
-
-	public Level(Category cat) {
-		parent = cat;
-	}
-	*/
 	
 	Category parent;
 	public int id;
@@ -32,5 +26,8 @@ public class Level {
 	
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("level_" + parent.getCategoryId() + "_" + getID());
+	}
+	
+	public void enterLevel(AbilityData abilityData) {
 	}
 }

@@ -12,16 +12,16 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class MsgSyncAbilityData implements IMessage {
+public class MsgResetAbilityData implements IMessage {
 	
 	private NBTTagCompound data;
 	
-	public MsgSyncAbilityData(EntityPlayer player) {
+	public MsgResetAbilityData(EntityPlayer player) {
 		data = new NBTTagCompound();
 		AbilityDataMain.getData(player).saveNBTData(data);
 	}
 
-	public MsgSyncAbilityData() {}
+	public MsgResetAbilityData() {}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
@@ -35,10 +35,10 @@ public class MsgSyncAbilityData implements IMessage {
 	}
 	
 	//TODO check if loading this class (containing Minecraft class and EventHandlerClient) on server will cause an error
-	public static class Handler implements IMessageHandler<MsgSyncAbilityData, IMessage> {
+	public static class Handler implements IMessageHandler<MsgResetAbilityData, IMessage> {
 		@Override
 		//@SideOnly(Side.CLIENT)
-		public IMessage onMessage(MsgSyncAbilityData message, MessageContext ctx) {
+		public IMessage onMessage(MsgResetAbilityData message, MessageContext ctx) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityDataMain.getData(player).loadNBTData(message.data);
 			//Call client side ctrl api.

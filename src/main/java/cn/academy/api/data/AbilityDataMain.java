@@ -4,8 +4,10 @@ import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 
 public class AbilityDataMain {
@@ -31,16 +33,28 @@ public class AbilityDataMain {
 	public static final void init() {
 		MinecraftForge.EVENT_BUS.register(new AbilityDataEventListener().new ForgeEventListener());
 		FMLCommonHandler.instance().bus().register(new AbilityDataEventListener().new FMLEventListener());
-		AcademyCraftMod.netHandler.registerMessage(MsgSyncAbilityData.Handler.class, MsgSyncAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+		AcademyCraftMod.netHandler.registerMessage(MsgResetAbilityData.Handler.class, 
+				MsgResetAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+		AcademyCraftMod.netHandler.registerMessage(MsgSimpleChange.Handler.class, 
+				MsgSimpleChange.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	}
 	
 	public static final void register(EntityPlayer player) {
 		AbilityData.register(player);
 	}
 	
-	public static void sync(EntityPlayer player) {
-		AbilityData data = (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
-		data.sync();
+	public static void resetPlayer(EntityPlayer player) {
+		if (player.worldObj.isRemote) {
+			//Only accessible on server
+			AcademyCraftMod.log.warn("Try to reset ability data on client.");
+			return;
+		}
+		
+		//Reset server
+		EventHandlerServer.resetPlayerSkillData(player);
+		
+		//Reset client
+		AcademyCraftMod.netHandler.sendTo(new MsgResetAbilityData(player), (EntityPlayerMP) player);
 	}
 
 }

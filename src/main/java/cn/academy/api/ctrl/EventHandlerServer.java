@@ -147,6 +147,11 @@ public class EventHandlerServer {
 				}
 				return tickToSetDead > 0 || tickToFinishClick > 0;
 			case RAW_DOWN:
+				//First check if the skill is open.
+				if (!AbilityDataMain.getData(player).isSkillLearned(skillId)) {
+					AcademyCraftMod.log.warn("Player is trying to use a skill that has not been learnt.");
+					return false;
+				}
 				if (tickToSetDead > 0) {
 					//Already down? Abort.
 					AcademyCraftMod.log.error("Unexpected RAW_DOWN event.");

@@ -45,7 +45,7 @@ public class Abilities {
 	public static final SkillDebug skillDebug = new SkillDebug();
 	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
 	
-	private static final Category catEmpty = 
+	public static final Category catEmpty = 
 			new Category(Arrays.<SkillBase>asList(skillEmpty, skillDebug, skillHoldTest))
 			{
 				{

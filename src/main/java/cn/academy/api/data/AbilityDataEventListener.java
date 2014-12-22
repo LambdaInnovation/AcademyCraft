@@ -29,11 +29,7 @@ public class AbilityDataEventListener {
 	    			if (!AbilityDataMain.hasData(player)) {
 	    				AbilityDataMain.register(player);
 	    			}
-	    			EventHandlerServer.resetPlayerSkillData(player);
-	    			AbilityDataMain.sync(player);
-	    		} else {
-	    			//Do nothing. On client side call resetPlayerSkillData only
-	    			//after receiving data from server.
+	    			AbilityDataMain.resetPlayer(player);
 	    		}
 	    	}
 	    }
