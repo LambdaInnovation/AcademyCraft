@@ -61,7 +61,4 @@ public class SkillBase {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
 	}
 	
-	protected void startSkill(SkillState state) {
-		state.onStart();
-	}
 }

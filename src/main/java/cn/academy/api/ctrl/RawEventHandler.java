@@ -28,8 +28,8 @@ public class RawEventHandler {
 	/**
 	 * Network constants used by EventHandlers
 	 */
-	static final int KA_INTERVAL = 20,
-						KA_DELAY = 10,
+	static final int KA_INTERVAL = 50,
+						KA_DELAY = 50,
 						DBL_DELAY = 10;
 	
 	/**

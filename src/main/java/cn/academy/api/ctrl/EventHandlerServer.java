@@ -126,7 +126,7 @@ public class EventHandlerServer {
 			case RAW_TICK:
 				if (tickToSetDead == 1) {
 					//Reset counter.
-					tickToSetDead = 0;
+					tickToSetDead = 1;
 					//Time out. Set dead (to client and server).
 					setDead();
 				} else if (tickToSetDead > 1) {
@@ -191,7 +191,7 @@ public class EventHandlerServer {
 					return false;
 				}
 				//Reset counter.
-				tickToSetDead = RawEventHandler.KA_INTERVAL;
+				tickToSetDead = RawEventHandler.KA_INTERVAL + RawEventHandler.KA_DELAY;
 				return true;
 			case RAW_CLIENT_UP:
 				if (tickToFinishClick == 0) {
@@ -282,6 +282,10 @@ public class EventHandlerServer {
 		//Remove this player.
 		rehMap.remove(player);
 		kaMap.remove(player);
+		
+		SkillStateManager.removePlayer(player);
+		//TODO IMPORTANT:
+		//Should inform all other clients to remove skill states of the player who has left.
 	}
 
 	/**

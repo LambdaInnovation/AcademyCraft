@@ -147,6 +147,7 @@ public class EventHandlerClient {
 				reh.onEvent(type, reh.getTime());
 				//Start to wait for a double click.
 				tickToFinishClick = RawEventHandler.DBL_DELAY;
+				tickToKeepAlive = 0;
 				return true;
 			case RAW_TICK:
 				if (tickToKeepAlive == 1) {
@@ -204,21 +205,21 @@ public class EventHandlerClient {
 	/**
 	 * Default key bindings.
 	 */
-	private static int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
+	private static final int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
 							DEFAULT_KEY_S2 = LIKeyProcess.MOUSE_RIGHT,
 							DEFAULT_KEY_S3 = Keyboard.KEY_R,
 							DEFAULT_KEY_S4 = Keyboard.KEY_F;
 	
-	@Configurable(category = "Control", key = "KEY_S1", defValue = "-100") //ML
+	@Configurable(category = "Control", key = "KEY_S1", defValueInt = DEFAULT_KEY_S1)
 	public static int KEY_S1;
 	 
-	@Configurable(category = "Control", key = "KEY_S2", defValue = "-99") //MR
+	@Configurable(category = "Control", key = "KEY_S2", defValueInt = DEFAULT_KEY_S2)
 	public static int KEY_S2;
 	
-	@Configurable(category = "Control", key = "KEY_S3", defValue = "19") //R
+	@Configurable(category = "Control", key = "KEY_S3", defValueInt = DEFAULT_KEY_S3)
 	public static int KEY_S3;
 	
-	@Configurable(category = "Control", key = "KEY_S4", defValue = "33") //F
+	@Configurable(category = "Control", key = "KEY_S4", defValueInt = DEFAULT_KEY_S4)
 	public static int KEY_S4;
 	
 	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
@@ -248,32 +249,14 @@ public class EventHandlerClient {
 		
 		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
 				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+		AcademyCraftMod.netHandler.registerMessage(SkillStateMessage.Handler.class, SkillStateMessage.class, 
+				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	
 		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 	
 	public static PresetManager getPresetManager() {
 		return INSTANCE.presets;
-	}
-	
-	public static Preset getPreset(int id) {
-		return getPresetManager().getPreset(id);
-	}
-	
-	public static int getCurrentPresetId() {
-		return getPresetManager().getCurrentPresetId();
-	}
-	
-	public static Preset getCurrentPreset() {
-		return getPresetManager().getPreset(getCurrentPresetId());
-	}
-	
-	public static void setPreset(int id, Preset preset) {
-		getPresetManager().setPreset(id, preset);
-	}
-	
-	public static void setCurrentPreset(int id) {
-		getPresetManager().setCurrentPreset(id);
 	}
 
 	private static void storePresets() {
@@ -344,7 +327,7 @@ public class EventHandlerClient {
 	}
 	
 	@SubscribeEvent
-	public void onPlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
+	public void onThePlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
 		//First save preset data
 		presets.save();
 		
@@ -360,6 +343,8 @@ public class EventHandlerClient {
 	}
 	
 	private void onEvent(int skillId, SkillEventType type) {
+		//If it's the empty skill, do nothing.
+		if (skillId == 0) return;
 		skillEvent(skillId, type);
 	}
 	
