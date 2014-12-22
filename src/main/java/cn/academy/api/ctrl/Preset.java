@@ -31,12 +31,12 @@ public class Preset {
 	Preset(Property prop) {
 		if (!prop.isIntList()) {
 			AcademyCraftMod.log.error("Invalid preset in config file.");
-			data = new int[] {0, 0, 0, 0};
+			data = new int[EventHandlerClient.MAX_KEYS];
 		}
 		data = prop.getIntList();
 		if (data.length != 4) {
 			AcademyCraftMod.log.error("Invalid size of preset in config file.");
-			data = new int[] {0, 0, 0, 0};
+			data = new int[EventHandlerClient.MAX_KEYS];
 		}
 	}
 	
@@ -66,6 +66,19 @@ public class Preset {
 		} else {
 			data[keyId] = skillId;
 		}
+		validateMapping();
 	}
 
+	private void validateMapping() {
+		for (int i = 0; i < EventHandlerClient.MAX_KEYS; ++i) {
+			if (data[i] == 0) continue;
+			for (int j = i + 1; j < EventHandlerClient.MAX_KEYS; ++j) {
+				if (data[j] == 0) continue;
+				if (data[i] == data[j]) {
+					AcademyCraftMod.log.error("Invalid skill mapping. Reset to default preset.");
+					data = new int[EventHandlerClient.MAX_KEYS];
+				}
+			}
+		}
+	}
 }

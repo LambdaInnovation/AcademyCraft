@@ -282,6 +282,10 @@ public class EventHandlerServer {
 		//Remove this player.
 		rehMap.remove(player);
 		kaMap.remove(player);
+		
+		SkillStateManager.removePlayer(player);
+		//TODO IMPORTANT:
+		//Should inform all other clients to remove skill states of the player who has left.
 	}
 
 	/**

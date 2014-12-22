@@ -7,8 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * The state of an active skill.
- * This class is the base class of all states, and also used by SkillEmpty
- * as an empty implementation that does nothing when started.
+ * This class is the base class of all states.
  * Used both on client and server.
  * On client, although ctrl only handles thePlayer, SkillState contains
  * skills of all players. This allows rendering of other players' skills.

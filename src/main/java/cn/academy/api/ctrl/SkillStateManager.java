@@ -8,6 +8,11 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+/**
+ * This class manages all SkillStates, both on client and on server.
+ * @author acaly
+ *
+ */
 public class SkillStateManager {
 	
 	private static Map<EntityPlayer, List<SkillState>> stateMap = new HashMap(); 
@@ -22,6 +27,10 @@ public class SkillStateManager {
 		}
 	}
 	
+	/**
+	 * Add a new state. Called by SkillState.
+	 * @param state
+	 */
 	static void addState(SkillState state) {
 		if (stateMap.containsKey(state.player)) {
 			stateMap.get(state.player).add(state);
@@ -31,13 +40,22 @@ public class SkillStateManager {
 			stateMap.put(state.player, list);
 		}
 	}
-	
+
+	/**
+	 * Remove a finished state. Called by SkillState.
+	 * @param state
+	 */
 	static void removeState(SkillState state) {
 		if (stateMap.containsKey(state.player)) {
 			stateMap.get(state.player).remove(state);
 		}
 	}
 	
+	/**
+	 * Get all skill states of the given player. The result can not be modified.
+	 * @param player
+	 * @return
+	 */
 	public static List<SkillState> getStateForPlayer(EntityPlayer player) {
 		if (stateMap.containsKey(player)) {
 			return Collections.unmodifiableList(stateMap.get(player));

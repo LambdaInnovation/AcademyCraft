@@ -14,10 +14,27 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
+/**
+ * The message sent from server to client to synchronize the SkillStates of other players.
+ * Those SkillStates are mainly used to render the skill effects.
+ * @author acaly
+ *
+ */
 public class SkillStateMessage implements IMessage {
 	
+	/**
+	 * The player this skill belongs to.
+	 */
 	private int playerEntityId;
+	
+	/**
+	 * The name of the SkillState class. Used to initialize the instance on client.
+	 */
 	private String className;
+	
+	/**
+	 * NBT data, if any, used by the SkillState.
+	 */
 	private NBTTagCompound nbt;
 	
 	public SkillStateMessage() {}
@@ -51,11 +68,13 @@ public class SkillStateMessage implements IMessage {
 			SkillState ss = null;
 			try {
 				Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(msg.playerEntityId);
+				
+				//If the player is not in the same dimension.
 				if (entity == null) return null;
+				//If the player is thePlayer. These skills are directly handled by EventHandlerClient.
 				if (entity == Minecraft.getMinecraft().thePlayer) return null;
 				
 				Class<?> clazz = Class.forName(msg.className);
-				//FIXME
 				
 				for (Constructor ctor : clazz.getDeclaredConstructors()) {
 					if (ctor.getParameterTypes().length == 1) { 
@@ -64,13 +83,7 @@ public class SkillStateMessage implements IMessage {
 							ss = (SkillState) ctor.newInstance(entity);
 							break;
 						}
-					} /*else if (ctor.getParameterTypes().length == 2){
-						if (ctor.getParameterTypes()[1].isAssignableFrom(EntityPlayer.class)) {
-							ctor.setAccessible(true);
-							ss = (SkillState) ctor.newInstance(null, (EntityPlayer) entity);
-							break;
-						}
-					}*/
+					}
 				}
 			} catch (Exception e) {
 				AcademyCraftMod.log.error("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
@@ -78,6 +91,8 @@ public class SkillStateMessage implements IMessage {
 			}
 			if (ss == null)
 				throw new RuntimeException("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
+			
+			//Start the skill.
 			ss.startSkill();
 			return null;
 		}

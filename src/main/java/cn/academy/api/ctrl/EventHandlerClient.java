@@ -327,7 +327,7 @@ public class EventHandlerClient {
 	}
 	
 	@SubscribeEvent
-	public void onPlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
+	public void onThePlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
 		//First save preset data
 		presets.save();
 		
