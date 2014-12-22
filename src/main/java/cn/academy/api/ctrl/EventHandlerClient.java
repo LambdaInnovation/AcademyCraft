@@ -205,21 +205,21 @@ public class EventHandlerClient {
 	/**
 	 * Default key bindings.
 	 */
-	private static int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
+	private static final int DEFAULT_KEY_S1 = LIKeyProcess.MOUSE_LEFT,
 							DEFAULT_KEY_S2 = LIKeyProcess.MOUSE_RIGHT,
 							DEFAULT_KEY_S3 = Keyboard.KEY_R,
 							DEFAULT_KEY_S4 = Keyboard.KEY_F;
 	
-	@Configurable(category = "Control", key = "KEY_S1", defValue = "-100") //ML
+	@Configurable(category = "Control", key = "KEY_S1", defValueInt = DEFAULT_KEY_S1)
 	public static int KEY_S1;
 	 
-	@Configurable(category = "Control", key = "KEY_S2", defValue = "-99") //MR
+	@Configurable(category = "Control", key = "KEY_S2", defValueInt = DEFAULT_KEY_S2)
 	public static int KEY_S2;
 	
-	@Configurable(category = "Control", key = "KEY_S3", defValue = "19") //R
+	@Configurable(category = "Control", key = "KEY_S3", defValueInt = DEFAULT_KEY_S3)
 	public static int KEY_S3;
 	
-	@Configurable(category = "Control", key = "KEY_S4", defValue = "33") //F
+	@Configurable(category = "Control", key = "KEY_S4", defValueInt = DEFAULT_KEY_S4)
 	public static int KEY_S4;
 	
 	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
@@ -343,6 +343,8 @@ public class EventHandlerClient {
 	}
 	
 	private void onEvent(int skillId, SkillEventType type) {
+		//If it's the empty skill, do nothing.
+		if (skillId == 0) return;
 		skillEvent(skillId, type);
 	}
 	

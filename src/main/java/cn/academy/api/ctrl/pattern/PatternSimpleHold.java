@@ -12,11 +12,15 @@ public abstract class PatternSimpleHold implements IPattern {
 	public boolean onRawEvent(EntityPlayer player, SkillEventType type, int rawTime, int time) {
 		switch (type) {
 		case RAW_DOWN:
-			if (state != null) return false;
+			if (state != null) {
+				state = null;
+				return false;
+			}
 			state = createSkill(player);
 			state.startSkill();
 			return false;
 		case RAW_UP:
+		case RAW_CANCEL:
 			if (state == null) return false;
 			state.finishSkill();
 			state = null;

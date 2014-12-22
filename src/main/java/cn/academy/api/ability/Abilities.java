@@ -43,11 +43,15 @@ public class Abilities {
 	 */
 	public static final SkillBase skillEmpty = new SkillBase();
 	public static final SkillDebug skillDebug = new SkillDebug();
-	private static final Category catEmpty = new Category(Arrays.<SkillBase>asList(skillDebug)) { //Change this to skillEmpty to avoid debug features.
-		{
-			this.addLevel(new Level(this));
-		}
-	};
+	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
+	
+	private static final Category catEmpty = 
+			new Category(Arrays.<SkillBase>asList(skillEmpty, skillDebug, skillHoldTest))
+			{
+				{
+					this.addLevel(new Level(this));
+				}
+			};
 	
 	static {
 		register(catEmpty);
