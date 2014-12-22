@@ -94,12 +94,8 @@ public class Category {
 	 * @param skillID 
 	 * @param oldValue 
 	 * @param newValue 
-	 * @return Return true if extra reset is applied on data (typically due to level changes),
-	 * in which cases no simple sync is needed. 
 	 */
-	public boolean onSkillExpChanged(AbilityData data, int skillID, float oldValue, float newValue) {
-		return false;
-	}
+	public void onSkillExpChanged(AbilityData data, int skillID, float oldValue, float newValue) {}
 	
 	@SideOnly(Side.CLIENT)
 	public final String getDisplayName() {
