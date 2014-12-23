@@ -130,7 +130,7 @@ public class GuiPresetSelect extends AuxGui {
 			//text
 			GL11.glDepthFunc(GL11.GL_GEQUAL);
 			GL11.glColor4d(1, 1, 1, prog);
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, "preset selection", x0 + tx + 5, y0 + ty + 1.7, 10);
+			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, "Preset Selection", x0 + tx + 5, y0 + ty + 1.7, 10);
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 		} GL11.glPopMatrix();
 	}
@@ -157,10 +157,10 @@ public class GuiPresetSelect extends AuxGui {
 			AbilityData data = AbilityDataMain.getData(player);
 			for(int i = 0; i < SELECTION_MAX; ++i) {
 				//Text
-				String name = "Key";//LIKeyProcess.getKeyName(APClientProxy.key_ability[i]);
+				String name = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(i));
 				float font_size = 10F;
 				double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, name, font_size);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, name.toLowerCase(), 
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, name, 
 						x0 + tx + cx + step / 2 - len / 2 + 3, y0 + ty + 4, font_size);
 				
 				//Ability Logo

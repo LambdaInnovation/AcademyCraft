@@ -32,7 +32,6 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  * @author acaly
  *
  */
-
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraftMod.VERSION)
 public class AcademyCraftMod {
 

@@ -144,7 +144,7 @@ public class PresetManager {
 	}
 	
 	public static void setPreset(int pid, Preset pr) {
-		if(pr != null) return;
+		if(pr == null) return;
 		getInstance().presets[pid] = pr;
 	}
 	

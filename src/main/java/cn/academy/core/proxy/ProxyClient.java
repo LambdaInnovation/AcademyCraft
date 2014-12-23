@@ -48,7 +48,6 @@ public class ProxyClient extends ProxyCommon {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
 				if(tickEnd) return;
-				System.out.println("w");
 				if(GuiPresetSelect.instance.isOpen())
 					GuiPresetSelect.instance.closeGui();
 				else if(GenericUtils.isPlayerInGame()) {

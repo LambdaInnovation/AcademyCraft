@@ -43,5 +43,10 @@ public class CatElectro extends Category {
 	public ResourceLocation getLogo() {
 		return ACClientProps.ELEC_LOGO;
 	}
+	
+	@Override
+	public String getInternalName() {
+		return "elecmaster";
+	}
 
 }

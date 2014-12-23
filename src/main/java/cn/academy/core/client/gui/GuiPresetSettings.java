@@ -125,15 +125,14 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 				double tx = WIDTH / 2, ty = 4;
 				float c = 0.8F;
 				GL11.glColor4f(c, c, c, .8F);
-				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id)).toLowerCase();
+				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
 				tx = 2.5;
 				ty = 20;
 				HudUtils.drawRectOutline(tx, ty, LOGO_SIZE, LOGO_SIZE, 2);
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				AbilityData data = AbilityDataMain.getData(player);
-				Preset prs = PresetManager.getPreset(currentPage);
-				ResourceLocation logo = data.getSkill(prs.getSkillMapping(id)).getLogo();
+				ResourceLocation logo = data.getSkill(tempPreset.getSkillMapping(id)).getLogo();
 				if(logo != null) {
 					RenderUtils.loadTexture(logo);
 					HudUtils.drawTexturedModalRect(tx, ty, LOGO_SIZE, LOGO_SIZE);
@@ -190,10 +189,10 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 			for(int i = 0; i < EventHandlerClient.MAX_KEYS; ++i) {
 				guiParts.add(new PartKeyInfo(i));
 			}
-			guiParts.add(new ButtonGeneric("accept", 71, 67.5F));
-			guiParts.add(new ButtonGeneric("restore", 107.5F, 67.5F));
+			guiParts.add(new ButtonGeneric("Accept", 71, 67.5F));
+			guiParts.add(new ButtonGeneric("Restore", 107.5F, 67.5F));
 			float size = HEIGHT / 11;
-			guiParts.add(new LIGuiPart("close", WIDTH - size - 3, HEIGHT / 12 - size / 2, size, size)
+			guiParts.add(new LIGuiPart("Close", WIDTH - size - 3, HEIGHT / 12 - size / 2, size, size)
 				.setTextureOverride(ACClientProps.TEX_GUI_CLOSE)
 				.setTextureCoords(0, 0)
 				.setTexSize(1, 1));
@@ -232,6 +231,12 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 				if(i == currentPage) return;
 				tempPreset = PresetManager.getPreset(i).clone();
 				currentPage = i;
+			} else if(part.name.equals("Accept")) {
+				PresetManager.setPreset(currentPage, tempPreset);
+			} else if(part.name.equals("Restore")) {
+				tempPreset = PresetManager.getPreset(currentPage).clone();
+			} else if(part.name.equals("Close")) {
+				Minecraft.getMinecraft().thePlayer.closeScreen();
 			}
 			if(part instanceof PartKeyInfo) {
 				PartKeyInfo ki = (PartKeyInfo) part;
@@ -248,6 +253,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 		private class PartSkillInfo extends LIGuiPart {
 			
 			SkillBase skill;
+			public final int id;
 
 			public PartSkillInfo(SkillBase _skill, int i) {
 				super("sklmod", 
@@ -255,6 +261,7 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 						, PageModify.this.height / 2 - WIDTH / 2, WIDTH, WIDTH);
 				this.posY = PageModify.this.height / 2 - WIDTH / 2;
 				skill = _skill;
+				this.id = i;
 				this.doesDraw = true;
 			}
 			
@@ -326,7 +333,11 @@ public class GuiPresetSettings extends GuiScreenLIAdaptor {
 		public void addElements(Set<LIGuiPart> set) {}
 
 		@Override
-		public void onPartClicked(LIGuiPart part, float subX, float subY) {}
+		public void onPartClicked(LIGuiPart part, float subX, float subY) {
+			PartSkillInfo psi = (PartSkillInfo) part;
+			tempPreset.setSkillMapping(modKey, psi.id);
+			isModifying = false;
+		}
 		
 	}
 	
