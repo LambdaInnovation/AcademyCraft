@@ -1,6 +1,7 @@
 package cn.academy.api.data;
 
 import cn.academy.api.ctrl.EventHandlerClient;
+import cn.academy.core.AcademyCraftMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,8 +42,8 @@ public class MsgResetAbilityData implements IMessage {
 		public IMessage onMessage(MsgResetAbilityData message, MessageContext ctx) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (!AbilityDataMain.hasData(player)) {
-				//Create a new AbilityData with message.data
-				AbilityDataMain.register(player, message.data);
+				//register is done in onEntityConstructing, so here the data should exist.
+				AcademyCraftMod.log.fatal("Error on setting AbilityData on client.");
 			} else {
 				AbilityDataMain.getData(player).loadNBTData(message.data);
 			}
