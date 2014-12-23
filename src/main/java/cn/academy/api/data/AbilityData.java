@@ -218,6 +218,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!isInSetup) {
 			if (needToReset) {
 				AbilityDataMain.resetPlayer(player);
+				needToReset = false;
 			} else {
 				//TODO send to all clients?
 				AcademyCraftMod.netHandler.sendTo(new MsgSimpleChange(this), (EntityPlayerMP) player);
