@@ -52,12 +52,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		setInitial(category);
 	}
 	
-	/**
-	 * Register empty ability data for the player
-	 * @param player
-	 */
-	public static final void register(EntityPlayer player) {
-	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player));
+	public AbilityData(EntityPlayer player, NBTTagCompound nbt) {
+		this.player = player;
+		
+		this.loadNBTData(nbt);
 	}
 	
 	public Category getCategory() {

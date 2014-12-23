@@ -40,7 +40,12 @@ public class MsgResetAbilityData implements IMessage {
 		//@SideOnly(Side.CLIENT)
 		public IMessage onMessage(MsgResetAbilityData message, MessageContext ctx) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			AbilityDataMain.getData(player).loadNBTData(message.data);
+			if (!AbilityDataMain.hasData(player)) {
+				//Create a new AbilityData with message.data
+				AbilityDataMain.register(player, message.data);
+			} else {
+				AbilityDataMain.getData(player).loadNBTData(message.data);
+			}
 			//Call client side ctrl api.
 			EventHandlerClient.resetPlayerSkillData();
 			return null;

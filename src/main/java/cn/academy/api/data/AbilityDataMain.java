@@ -8,6 +8,7 @@ import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
 public class AbilityDataMain {
@@ -40,7 +41,11 @@ public class AbilityDataMain {
 	}
 	
 	public static final void register(EntityPlayer player) {
-		AbilityData.register(player);
+	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player));
+	}
+	
+	public static void register(EntityPlayer player, NBTTagCompound nbt) {
+	    player.registerExtendedProperties(AbilityData.IDENTIFIER, new AbilityData(player, nbt));
 	}
 	
 	public static void resetPlayer(EntityPlayer player) {

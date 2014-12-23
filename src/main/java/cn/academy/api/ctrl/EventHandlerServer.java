@@ -62,6 +62,7 @@ public class EventHandlerServer {
 				//Send the id back to client.
 				AcademyCraftMod.netHandler.sendTo(
 						new ControlMessage(0, msg.eventType, worldId), player);
+				break;
 			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from client.");
 			}
