@@ -20,19 +20,19 @@ import cn.liutils.api.command.LICommandBase;
  * @author WeathFolD
  *
  */
-public class CommandData extends LICommandBase {
+public class CmdDataSet extends LICommandBase {
 
-	public CommandData() {
+	public CmdDataSet() {
 	}
 
 	@Override
 	public String getCommandName() {
-		return "adata";
+		return "aset";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/adata [cat][level][cp][maxcp][exp][open] <index> [value]";
+		return "/aset [cat][level][cp][maxcp][exp][open] <index> [value]";
 	}
 
 	@Override
@@ -101,6 +101,7 @@ public class CommandData extends LICommandBase {
 			
 		} else {
 			this.sendError(ics, "Invalid argument size");
+			this.sendChat(ics, getCommandUsage(ics));
 		}
 	}
 

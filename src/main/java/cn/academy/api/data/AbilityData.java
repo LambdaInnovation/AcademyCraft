@@ -16,7 +16,7 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraftMod;
 
 /**
- * @author WeathFolD
+ * @author WeathFolD, acaly
  *
  */
 public class AbilityData implements IExtendedEntityProperties {

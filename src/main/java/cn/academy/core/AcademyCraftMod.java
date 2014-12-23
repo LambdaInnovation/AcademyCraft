@@ -9,8 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.command.CommandData;
-import cn.academy.core.command.CommandInfo;
+import cn.academy.core.command.CmdDataSet;
+import cn.academy.core.command.CmdDataView;
 import cn.academy.core.proxy.ProxyCommon;
 import cn.academy.core.register.ACBlocks;
 import cn.academy.core.register.ACItems;
@@ -112,8 +112,8 @@ public class AcademyCraftMod {
 	public void serverStarting(FMLServerStartingEvent event) {
 		CommandHandler cm = (CommandHandler) event.getServer()
 				.getCommandManager();
-		cm.registerCommand(new CommandData());
-		cm.registerCommand(new CommandInfo());
+		cm.registerCommand(new CmdDataSet());
+		cm.registerCommand(new CmdDataView());
 	}
 	
 	private static int nextNetID = 0;

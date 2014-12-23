@@ -13,22 +13,22 @@ import cn.liutils.api.command.LICommandBase;
 import cn.liutils.api.util.DebugUtils;
 
 /**
- * 显示玩家当期的能力信息（服务端）
+ * 显示玩家当前的能力信息（服务端）
  * @author WeathFolD
  */
-public class CommandInfo extends LICommandBase {
+public class CmdDataView extends LICommandBase {
 
-	public CommandInfo() {
+	public CmdDataView() {
 	}
 
 	@Override
 	public String getCommandName() {
-		return "ainfo";
+		return "aview";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/ainfo <full>";
+		return "/aview <full>";
 	}
 
 	@Override
@@ -36,21 +36,17 @@ public class CommandInfo extends LICommandBase {
 		EntityPlayer player = this.getCommandSenderAsPlayer(ics);
 		if(player == null) return;
 		AbilityData data = AbilityDataMain.getData(player);
-		StringBuilder sb = new StringBuilder(player.getCommandSenderName()).append("Ability Data\n");
 		Category cat = data.getCategory();
 		Level lv = data.getLevel();
-		sb.append("cat: ").append(data.getCategoryID()).append(" (").append(cat.getInternalName()).append(")\n");
-		sb.append("lv : ").append(data.getLevelID()).append("\n");
-		sb.append("cp : ").append(data.getCurrentCP()).append("/").append(data.getMaxCP());
 		
-		if(args.length == 0 || !args[0].equalsIgnoreCase("full")) {
-			//Nope
-		} else {
-			sb.append("\n");
-			sb.append("opn: ").append(DebugUtils.formatArray(data.getSkillOpenArray())).append("\n");
-			sb.append("exp: ").append(DebugUtils.formatArray(data.getSkillExpArray()));
+		sendChat(ics, player.getCommandSenderName() + " Ability Data:");
+		sendChat(ics, "cat: " + data.getCategoryID() + " (" + cat.getInternalName() + ")");
+		sendChat(ics, "lv : " + data.getLevelID());
+		sendChat(ics, "cp : " + data.getCurrentCP() + "/" + data.getMaxCP());
+		if(args.length >= 1 && args[0].equalsIgnoreCase("full")) {
+			sendChat(ics, "opn: " + DebugUtils.formatArray(data.getSkillOpenArray()));
+			sendChat(ics, "exp: " + DebugUtils.formatArray(data.getSkillExpArray()));
 		}
-		this.sendChat(ics, sb.toString());
 	}
 
 }
