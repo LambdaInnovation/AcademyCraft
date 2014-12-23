@@ -113,8 +113,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	@Override
 	public void saveNBTData(NBTTagCompound playerNBT) {
 		//Create a separated tag node.
-	    NBTTagCompound nbt = new NBTTagCompound();
-	    playerNBT.setTag(IDENTIFIER, nbt);
+		NBTTagCompound nbt = new NBTTagCompound();
 
 		nbt.setInteger("catid", catID);
 		nbt.setInteger("level", level);
@@ -128,6 +127,8 @@ public class AbilityData implements IExtendedEntityProperties {
 				nbt.setBoolean("open_" + i, skillOpens[i]);
 			}
 		}
+
+		playerNBT.setTag(IDENTIFIER, nbt);
 	}
 
 	@Override
