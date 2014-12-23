@@ -6,9 +6,9 @@ item.ac_record1.name=Railgun Record - Only My Railgun
 item.ac_record2.name=Railgun Record - Sister's Noise
 item.ac_record3.name=Railgun Record - LEVEL5 -Judgelight-
 item.ac_coin.name=Game Coin
-item.ability_cacsule1.name=Mind Induction Capsule
-item.ability_cacsule2.name=AIM Activation Capsule
-item.ability_cacsule3.name=Personal Reality Enhancing Capsule
+item.ability_capsule1.name=Mind Induction Capsule
+item.ability_capsule2.name=AIM Activation Capsule
+item.ability_capsule3.name=Personal Reality Enhancing Capsule
 item.ability_tablet1.name=Mind Induction Tablet
 item.ability_tablet2.name=AIM Activation Tablet
 item.ability_tablet3.name=Personal Reality Enhancing Tablet
@@ -29,7 +29,7 @@ tile.ability_developer.name=Ability Developer
 tile.fieldincr.name=Field Increase Module
 tile.copperore.name=Copper Ore
 tile.tinore.name=Tin Ore
-tile.aluninumore.name=Aluminum Ore
+tile.aluminumore.name=Aluminum Ore
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
