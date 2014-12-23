@@ -1,5 +1,6 @@
 package cn.academy.core;
 
+import net.minecraft.command.CommandHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.core.command.CommandData;
+import cn.academy.core.command.CommandInfo;
 import cn.academy.core.proxy.ProxyCommon;
 import cn.academy.core.register.ACBlocks;
 import cn.academy.core.register.ACItems;
@@ -19,6 +22,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
@@ -102,6 +106,14 @@ public class AcademyCraftMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+	}
+	
+	@EventHandler()
+	public void serverStarting(FMLServerStartingEvent event) {
+		CommandHandler cm = (CommandHandler) event.getServer()
+				.getCommandManager();
+		cm.registerCommand(new CommandData());
+		cm.registerCommand(new CommandInfo());
 	}
 	
 	private static int nextNetID = 0;

@@ -100,6 +100,14 @@ public class AbilityData implements IExtendedEntityProperties {
 		return maxCP;
 	}
 	
+	public float[] getSkillExpArray() {
+		return skillExps;
+	}
+	
+	public boolean[] getSkillOpenArray() {
+		return skillOpens;
+	}
+	
 	public EntityPlayer getPlayer() {
 		return player;
 	}
@@ -162,6 +170,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public void setMaxCP(float value) {
 		maxCP = value;
+		currentCP = Math.min(currentCP, maxCP);
 		
 		if (!player.worldObj.isRemote) {
 			syncSimple();
