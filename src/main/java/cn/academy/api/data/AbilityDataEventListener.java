@@ -2,6 +2,7 @@ package cn.academy.api.data;
 
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.EventHandlerServer;
+import cn.academy.core.AcademyCraftMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -17,7 +18,7 @@ public class AbilityDataEventListener {
 	    public void onEntityConstructing(EntityConstructing event) {
 	        if (event.entity instanceof EntityPlayer &&
 	        		!AbilityDataMain.hasData((EntityPlayer) event.entity)) {
-	        	//AbilityDataMain.register((EntityPlayer) event.entity);
+	        	AbilityDataMain.register((EntityPlayer) event.entity);
 	        }
 	    }
 
@@ -27,7 +28,8 @@ public class AbilityDataEventListener {
 	    		EntityPlayer player = (EntityPlayer) event.entity;
 	    		if (!event.entity.worldObj.isRemote) {
 	    			if (!AbilityDataMain.hasData(player)) {
-	    				AbilityDataMain.register(player);
+	    				//register is done in onEntityConstructing, so here the data should exist.
+	    				AcademyCraftMod.log.fatal("Error on getting AbilityData on server.");
 	    			}
 	    			AbilityDataMain.resetPlayer(player);
 	    		}
