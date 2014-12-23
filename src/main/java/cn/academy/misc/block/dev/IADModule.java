@@ -8,20 +8,13 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.abilityd;
-
-import cn.misaka.support.block.ad.IADModule;
-import net.minecraft.item.ItemStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+package cn.academy.misc.block.dev;
 
 /**
- * 需要显式连接到AD上，让AD接管渲染的子模块类型。
+ * 代表能力开发机附件的抽象接口
  * @author WeAthFolD
  */
-public interface IADModuleAttached extends IADModule {
-	@SideOnly(Side.CLIENT)
-	void renderAtOrigin();
-	
-	ItemStack getDrop();
+public interface IADModule {
+	String getModifyAttribute();
+	String getModifyValue();
 }

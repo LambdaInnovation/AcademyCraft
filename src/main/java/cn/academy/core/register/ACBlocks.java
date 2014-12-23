@@ -1,10 +1,10 @@
 package cn.academy.core.register;
 
 import cn.academy.misc.block.ACBlockOre;
-import cn.academy.misc.block.abilityd.BlockAbilityDeveloper;
-import cn.academy.misc.block.abilityd.BlockFieldIncrease;
-import cn.academy.misc.block.abilityd.TileAbilityDeveloper;
-import cn.academy.misc.block.abilityd.TileFieldIncrease;
+import cn.academy.misc.block.dev.BlockAbilityDeveloper;
+import cn.academy.misc.block.dev.BlockFieldIncrease;
+import cn.academy.misc.block.dev.TileAbilityDeveloper;
+import cn.academy.misc.block.dev.TileFieldIncrease;
 import cn.academy.misc.block.elec.BlockSolarGenerator;
 import cn.academy.misc.block.elec.BlockWindGenerator;
 import cn.academy.misc.block.elec.TileSolarGenerator;
