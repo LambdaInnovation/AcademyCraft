@@ -35,10 +35,11 @@ public class ProxyClient extends ProxyCommon {
 	
 	@Override
 	public void init() {
+		super.init();
+
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
 		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
 		EventHandlerClient.init();
-		EventHandlerServer.init();
 		PresetManager.init();
 		SkillRenderingHandler.init();
 		
