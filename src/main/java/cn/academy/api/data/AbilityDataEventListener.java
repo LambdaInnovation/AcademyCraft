@@ -17,7 +17,7 @@ public class AbilityDataEventListener {
 	    public void onEntityConstructing(EntityConstructing event) {
 	        if (event.entity instanceof EntityPlayer &&
 	        		!AbilityDataMain.hasData((EntityPlayer) event.entity)) {
-	        	//AbilityDataMain.register((EntityPlayer) event.entity);
+	        	AbilityDataMain.register((EntityPlayer) event.entity);
 	        }
 	    }
 
