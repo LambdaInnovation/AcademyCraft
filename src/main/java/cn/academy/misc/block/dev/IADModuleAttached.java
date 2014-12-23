@@ -10,7 +10,6 @@
  */
 package cn.academy.misc.block.dev;
 
-import cn.misaka.support.block.ad.IADModule;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
