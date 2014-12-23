@@ -111,7 +111,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound nbt) {
+	public void saveNBTData(NBTTagCompound playerNBT) {
+		//Create a separated tag node.
+	    NBTTagCompound nbt = new NBTTagCompound();
+	    playerNBT.setTag(IDENTIFIER, nbt);
+
 		nbt.setInteger("catid", catID);
 		nbt.setInteger("level", level);
 		if(getCategory() != null) {
@@ -127,7 +131,14 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 
 	@Override
-	public void loadNBTData(NBTTagCompound nbt) {
+	public void loadNBTData(NBTTagCompound playerNBT) {
+		if (!playerNBT.hasKey(IDENTIFIER)) {
+			//No data in player's nbt. As this instance is 
+			//created as default AbilityData, do nothing.
+			return;
+		}
+		NBTTagCompound nbt = playerNBT.getCompoundTag(IDENTIFIER);
+		
 		catID = nbt.getInteger("catid");
 		level = nbt.getInteger("level");
 		currentCP = nbt.getFloat("ccp");
