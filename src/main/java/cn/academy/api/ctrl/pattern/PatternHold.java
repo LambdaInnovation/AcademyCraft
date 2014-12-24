@@ -13,6 +13,9 @@ public abstract class PatternHold implements IPattern {
 		public abstract void onStart();
 		public abstract void onFinish();
 		public abstract void onHold();
+		public final boolean isRemote() {
+			return player.worldObj.isRemote;
+		}
 	}
 	
 	State state;

@@ -4,8 +4,9 @@ import net.minecraft.client.Minecraft;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.electro.client.render.RenderElecArc;
+import cn.academy.ability.electro.entity.EntityElecArcFX;
 import cn.academy.api.ctrl.EventHandlerClient;
-import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.GuiPresetSelect;
@@ -17,6 +18,7 @@ import cn.liutils.api.register.Configurable;
 import cn.liutils.api.util.GenericUtils;
 import cn.liutils.core.client.register.LIKeyProcess;
 import cn.liutils.core.event.LIClientEvents;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ProxyClient extends ProxyCommon {
 	
@@ -71,6 +73,8 @@ public class ProxyClient extends ProxyCommon {
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
 		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityElecArcFX.class, new RenderElecArc());
 	}
 	
 }

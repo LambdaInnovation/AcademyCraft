@@ -21,6 +21,10 @@ public class EntityRayFX extends Entity {
 	
 	double MAX_LENGTH = 50.0;
 	double length;
+	protected boolean followPlayer = false; //是否跟随玩家运动
+	protected final EntityPlayer player;
+	protected int lifeTime = -1;
+	private Motion3D motion;
 	
 	public EntityRayFX(World world, EntityPlayer player) {
 		this(world, new Motion3D(player, true));
@@ -35,17 +39,37 @@ public class EntityRayFX extends Entity {
 		} else {
 			length = motion.getPosVec(world).distanceTo(mop.hitVec);
 		}
+		this.motion = new Motion3D(motion);
+		this.player = null;
 	}
 	
 	public EntityRayFX(World world, Motion3D motion, double len) {
 		super(world);
 		motion.applyToEntity(this);
+		this.motion = new Motion3D(motion);
 		length = len;
+		this.player = null;
+	}
+	
+	public EntityRayFX setFollowPlayer(boolean b) {
+		followPlayer = b;
+		return this;
+	}
+	
+	public EntityRayFX setLifetime(int i) {
+		lifeTime = i;
+		return this;
 	}
 	
 	@Override
 	public void onUpdate() {
-		//Do Nothing
+		if(followPlayer && player != null) {
+			motion.init(player, 0, true);
+			motion.applyToEntity(this);
+		}
+		if(lifeTime > 0 && ticksExisted > lifeTime) {
+			setDead();
+		}
 	}
 	
 	public double getLength() {
