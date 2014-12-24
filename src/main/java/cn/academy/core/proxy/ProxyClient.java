@@ -9,8 +9,10 @@ import cn.academy.ability.electro.entity.EntityElecArcFX;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.block.TileDeveloper;
 import cn.academy.core.client.gui.GuiPresetSelect;
 import cn.academy.core.client.gui.GuiPresetSettings;
+import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.client.render.SkillRenderingHandler;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
@@ -18,6 +20,7 @@ import cn.liutils.api.register.Configurable;
 import cn.liutils.api.util.GenericUtils;
 import cn.liutils.core.client.register.LIKeyProcess;
 import cn.liutils.core.event.LIClientEvents;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ProxyClient extends ProxyCommon {
@@ -74,6 +77,8 @@ public class ProxyClient extends ProxyCommon {
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
 		});
 		
+		//Rendering
+		ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElecArcFX.class, new RenderElecArc());
 	}
 	

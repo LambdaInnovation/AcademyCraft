@@ -27,6 +27,7 @@ public class CatElectro extends Category {
 	
 	private static List<SkillBase> skills = new ArrayList<SkillBase>();
 	static {
+		skills.add(new SkillBase());
 		skills.add(new SkillElecArc());
 		skills.add(new SkillItemCharge());
 		skills.add(new SkillStrongArc());
