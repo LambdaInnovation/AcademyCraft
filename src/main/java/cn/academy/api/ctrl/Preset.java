@@ -77,6 +77,7 @@ public class Preset {
 				if (data[i] == data[j]) {
 					AcademyCraftMod.log.error("Invalid skill mapping. Reset to default preset.");
 					data = new int[EventHandlerClient.MAX_KEYS];
+					return;
 				}
 			}
 		}
