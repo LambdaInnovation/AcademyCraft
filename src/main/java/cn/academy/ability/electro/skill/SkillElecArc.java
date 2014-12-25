@@ -3,16 +3,18 @@
  */
 package cn.academy.ability.electro.skill;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.entity.EntityArcBullet;
 import cn.academy.ability.electro.entity.EntityElecArcFX;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.core.proxy.ACClientProps;
+import cn.weaponmod.api.damage.RayDamageApplier;
+import cn.weaponmod.api.damage.RayDamageFactory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -54,7 +56,7 @@ public class SkillElecArc extends SkillBase {
 		int tick;
 		static final int SINGLE_DT = 2; //判定为单点的最长允许按键tick
 		static final int BULLET_RATE = 4;
-		EntityElecArcFX arc;
+		Entity arc;
 		
 		public StateArc(EntityPlayer player) {
 			super(player);
@@ -63,39 +65,43 @@ public class SkillElecArc extends SkillBase {
 		@Override
 		public void onStart() {
 			//N/A
-			System.out.println("Start " + isRemote());
+			System.out.println("OnStart");
 		}
 
 		@Override
 		public void onFinish() {
 			World world = player.worldObj;
-			if(tick <= SINGLE_DT) {
+			if(tick <= SINGLE_DT) { //Single click
 				if(isRemote()) {
-					world.spawnEntityInWorld(new EntityElecArcFX(world, player));
+					world.spawnEntityInWorld(new EntityElecArcFX(world, player).setLifetime(3));
 				} else  {
 					float dmg = 5F;
 					//TODO calculate damage
-					world.spawnEntityInWorld(new EntityArcBullet(world, player, dmg));
+					System.out.println("Sent");
+					new RayDamageApplier(player, 5).attempt();
 				}
-			} else {
-				if(isRemote()) {
-					arc.setDead();
-				}
+				
+			} else { //Hold
+				arc.setDead();
 			}
-			System.out.println("End " + isRemote());
+			System.out.println("OnEnd");
 		}
 
 		@Override
 		public void onHold() {
 			++tick;
 			World world = player.worldObj;
-			float perdmg = 3F;
-			if(tick >= SINGLE_DT + 1) {
-				if(isRemote() && tick == SINGLE_DT + 1) {
+			
+			System.out.println("OnHold");
+			if(tick == SINGLE_DT + 1) { //Start hold
+				System.out.println("Start hold");
+				if(isRemote()) {
 					arc = (EntityElecArcFX) new EntityElecArcFX(world, player).setFollowPlayer(true);
-				}
-				if(!isRemote() && (tick - SINGLE_DT - 1) % BULLET_RATE == 0) {
-					world.spawnEntityInWorld(new EntityArcBullet(world, player, perdmg));
+					world.spawnEntityInWorld(arc);
+				} else {
+					float perdmg = 3F;
+					arc = new RayDamageFactory.Periodic(player, perdmg, 3);
+					world.spawnEntityInWorld(arc);
 				}
 			}
 		}

@@ -14,10 +14,12 @@ import cn.academy.misc.client.render.RendererRay;
  */
 public class RenderElecArc extends RendererRay {
 
-	static final double WIDTH = 0.6;
+	static final double WIDTH = 0.4;
 	
 	public RenderElecArc() {
 		super(WIDTH, ACClientProps.ANIM_ARC_LONG);
+		this.setRatio(4);
+		this.enableLight = false;
 	}
 
 }

@@ -73,7 +73,7 @@ public class RendererRay extends Render {
 				new Vertex(0, -hw, 0, 0, 1.0),
 				new Vertex(0, -hw, len, umax, 1.0),
 				new Vertex(0, hw, len, umax, 0.0),
-				new Vertex(-hw, 0, 0, 0, 0),
+				new Vertex(hw, 0, 0, 0, 0),
 				new Vertex(-hw, 0, 0, 0, 1.0),
 				new Vertex(-hw, 0, len, umax, 1.0),
 				new Vertex(hw, 0, len, umax, 0.0)
@@ -81,7 +81,7 @@ public class RendererRay extends Render {
 			
 			GL11.glTranslated(x, y, z);
 			GL11.glRotated(ray.rotationYaw, 0, 1, 0);
-			GL11.glRotated(ray.rotationPitch, 1, 0, 0);
+			GL11.glRotated(ray.rotationPitch, -1, 0, 0);
 			
 			RenderUtils.loadTexture(getTexture(ray));
 			GL11.glColor4d(1.0, 1.0, 1.0, alpha);
