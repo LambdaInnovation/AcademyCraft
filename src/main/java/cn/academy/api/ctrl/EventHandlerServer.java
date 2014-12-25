@@ -63,6 +63,9 @@ public class EventHandlerServer {
 				AcademyCraftMod.netHandler.sendTo(
 						new ControlMessage(0, msg.eventType, worldId), player);
 				break;
+			case CLIENT_STOP_ALL:
+				INSTANCE.skillEventAll(player, SkillEventType.RAW_CANCEL);
+				break;
 			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from client.");
 			}
@@ -276,6 +279,7 @@ public class EventHandlerServer {
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
 		skillEventAll(SkillEventType.RAW_TICK);
+		SkillStateManager.tickServer();
 	}
 	
 	@SubscribeEvent

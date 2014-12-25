@@ -31,7 +31,7 @@ import cpw.mods.fml.relauncher.Side;
  * @author acaly
  *
  */
-public class EventHandlerClient {
+public class EventHandlerClient implements IKeyHandler {
 	
 	/**
 	 * The key handler. Use this class in order to store id when creating.
@@ -209,6 +209,7 @@ public class EventHandlerClient {
 							DEFAULT_KEY_S2 = LIKeyProcess.MOUSE_RIGHT,
 							DEFAULT_KEY_S3 = Keyboard.KEY_R,
 							DEFAULT_KEY_S4 = Keyboard.KEY_F;
+	private static final int DEFAULT_KEY_DISABLE = Keyboard.KEY_V;
 	
 	@Configurable(category = "Control", key = "KEY_S1", defValueInt = DEFAULT_KEY_S1)
 	public static int KEY_S1;
@@ -221,6 +222,9 @@ public class EventHandlerClient {
 	
 	@Configurable(category = "Control", key = "KEY_S4", defValueInt = DEFAULT_KEY_S4)
 	public static int KEY_S4;
+	
+	@Configurable(category = "Control", key = "KEY_DISABLE", defValueInt = DEFAULT_KEY_DISABLE)
+	public static int KEY_DISABLE;
 	
 	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
@@ -340,6 +344,7 @@ public class EventHandlerClient {
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
 		skillEventAll(SkillEventType.RAW_TICK);
+		SkillStateManager.tickClient();
 	}
 	
 	private void onEvent(int skillId, SkillEventType type) {
@@ -379,7 +384,7 @@ public class EventHandlerClient {
 	
 	/**
 	 * Pass the event to all active skills.
-	 * Used only with RAW_TICK and RAW_CANCEL (when log out).
+	 * Used only with RAW_TICK and RAW_CANCEL (when log out and disabled).
 	 * @param type The event type
 	 */
 	private void skillEventAll(SkillEventType type) {
@@ -392,5 +397,32 @@ public class EventHandlerClient {
 			}
 		}		
 	}
+
+	/*
+	 * EventHandlerClient as a IKeyHandler, handling KEY_DISABLE.
+	 */
+	
+	public boolean skillEnabled = true;
+	
+	@Override
+	public void onKeyDown(int keyCode, boolean tickEnd) {
+		if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+		if (presets == null) return;
+		
+		skillEnabled = !skillEnabled;
+		if (skillEnabled) {
+			AcademyCraftMod.log.info("Player skill is enabled.");
+		} else {
+			AcademyCraftMod.log.info("Player skill is disabled.");
+			INSTANCE.skillEventAll(SkillEventType.RAW_CANCEL);
+			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
+		}
+	}
+
+	@Override
+	public void onKeyUp(int keyCode, boolean tickEnd) {}
+
+	@Override
+	public void onKeyTick(int keyCode, boolean tickEnd) {}
 	
 }

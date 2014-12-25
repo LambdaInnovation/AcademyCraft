@@ -3,6 +3,7 @@ package cn.academy.api.ctrl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,22 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class SkillStateManager {
 	
-	private static Map<EntityPlayer, List<SkillState>> stateMap = new HashMap(); 
+	private static Map<String, List<SkillState>> client = new HashMap();
+	private static Map<String, List<SkillState>> server = new HashMap();
 
+	private static final Map<String, List<SkillState>> getMapForSide(EntityPlayer player) {
+		if (player.worldObj.isRemote) {
+			return client;
+		} else {
+			return server;
+		}
+	}
 	/**
 	 * Called by EventHandler.
 	 * @param player
 	 */
 	static void removePlayer(EntityPlayer player) {
+		Map<String, List<SkillState>> stateMap = getMapForSide(player);
 		if (stateMap.containsKey(player)) {
 			stateMap.remove(player);
 		}
@@ -32,12 +42,14 @@ public class SkillStateManager {
 	 * @param state
 	 */
 	static void addState(SkillState state) {
+		Map<String, List<SkillState>> stateMap = getMapForSide(state.player);
+		
 		if (stateMap.containsKey(state.player)) {
 			stateMap.get(state.player).add(state);
 		} else {
 			List<SkillState> list = new ArrayList();
 			list.add(state);
-			stateMap.put(state.player, list);
+			stateMap.put(state.player.getCommandSenderName(), list);
 		}
 	}
 
@@ -46,6 +58,8 @@ public class SkillStateManager {
 	 * @param state
 	 */
 	static void removeState(SkillState state) {
+		Map<String, List<SkillState>> stateMap = getMapForSide(state.player);
+		
 		if (stateMap.containsKey(state.player)) {
 			stateMap.get(state.player).remove(state);
 		}
@@ -57,10 +71,43 @@ public class SkillStateManager {
 	 * @return
 	 */
 	public static List<SkillState> getStateForPlayer(EntityPlayer player) {
+		Map<String, List<SkillState>> stateMap = getMapForSide(player);
 		if (stateMap.containsKey(player)) {
 			return Collections.unmodifiableList(stateMap.get(player));
 		} else {
 			return Collections.unmodifiableList(new ArrayList<SkillState>());
+		}
+	}
+	
+	/**
+	 * Send tick event to all active State in the server map. Called by EventHandlerServer.
+	 */
+	static void tickServer() {
+		for (List<SkillState> playerList : client.values()) {
+			Iterator<SkillState> itor = playerList.iterator();
+			while (itor.hasNext()) {
+				SkillState state = itor.next();
+				if (state.onTick()) {
+					state.onFinish();
+					itor.remove();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Send tick event to all active State in the client map. Called by EventHandlerClient.
+	 */
+	static void tickClient() {
+		for (List<SkillState> playerList : server.values()) {
+			Iterator<SkillState> itor = playerList.iterator();
+			while (itor.hasNext()) {
+				SkillState state = itor.next();
+				if (state.onTick()) {
+					state.onFinish();
+					itor.remove();
+				}
+			}
 		}
 	}
 }

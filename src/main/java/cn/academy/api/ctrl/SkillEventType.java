@@ -77,4 +77,9 @@ public enum SkillEventType {
 	 */
 	INIT_QUERY_WORLD_ID,
 	
+	/**
+	 * Sent from client to server when skill system is disabled.
+	 * On receiving this message, server should cancel all skills.
+	 */
+	CLIENT_STOP_ALL,
 }

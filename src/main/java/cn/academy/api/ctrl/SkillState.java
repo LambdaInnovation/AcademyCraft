@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
  *
  */
 public class SkillState {
+	private int tickToFinish = 0;
 	
 	public SkillState(EntityPlayer player) {
 		this.player = player;
@@ -35,15 +36,43 @@ public class SkillState {
 	
 	public final void finishSkill() {
 		onFinish();
-		
 		SkillStateManager.removeState(this);
 	}
 	
-	public void fromNBT(NBTTagCompound nbt) {}
+	public final void finishSkillAfter(int ticks) {
+		if (tickToFinish != 0) {
+			AcademyCraftMod.log.warn("Call finishSkillAfter more than once. Overwritten.");
+		}
+		tickToFinish = ticks;
+	}
 	
-	public void toNBT(NBTTagCompound nbt) {}
+	protected void fromNBT(NBTTagCompound nbt) {}
 	
-	public void onStart() {}
+	protected void toNBT(NBTTagCompound nbt) {}
 	
-	public void onFinish() {}
+	protected void onStart() {}
+	
+	protected void onFinish() {}
+	
+	/**
+	 * Will be called every tick while this state is active.
+	 * @return Return true if you want to finish this state.
+	 */
+	protected boolean onTick() {
+		return false;
+	}
+	
+	/**
+	 * Called by SkillStateManager. Handle tick events in SkillState.
+	 * @return Return true to indicate that this State is finished.
+	 *          As this is called during iteration, we can't directly remove it.
+	 */
+	final boolean tickSkill() {
+		if (tickToFinish != 0) {
+			if (--tickToFinish == 0) {
+				return true;
+			}
+		}
+		return onTick();
+	}
 }
