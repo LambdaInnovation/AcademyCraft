@@ -69,8 +69,9 @@ public class CubePointFactory implements IPointFactory {
 		double curArea = 0;
 		for(int a : available) {
 			probList.add(new Pair<Double, Integer>(curArea, a));
-			curArea += getArea(a);
+			curArea += getArea(a) / totalArea;
 		}
+		//System.out.println("BakedList: " + probList);
 	}
 	
 	private double getArea(int f) {

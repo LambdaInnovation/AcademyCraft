@@ -30,7 +30,7 @@ public class RenderSmallArc {
 	public boolean showing = true;
 	public int itensity = 8, iten_off = 5;
 	public int showFrom = 300, showTo = 500;
-	public int hideFrom = 200, hideTo = 350;
+	public int hideFrom = 300, hideTo = 600;
 	public double sizeFrom = 0.5, sizeTo = 0.9;
 	
 	/**

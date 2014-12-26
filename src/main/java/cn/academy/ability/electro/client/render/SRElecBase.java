@@ -24,7 +24,7 @@ public class SRElecBase extends SkillRenderer {
 	
 	public static class PlayerGen extends RenderSmallArc {
 		public PlayerGen() {
-			super(new CubePointFactory(1, 2, 1), .7);
+			super(new CubePointFactory(1.2, 2.1, 0.9), .7);
 		}
 	}
 	
@@ -36,12 +36,12 @@ public class SRElecBase extends SkillRenderer {
 	@SideOnly(Side.CLIENT)
 	public void renderSurroundings(EntityPlayer player, IPattern pattern) {
 		GL11.glPushMatrix(); {
-			GL11.glTranslated(-.5, 0, -.5);
+			GL11.glTranslated(-.6, 0, -.45);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			getRenderer(player).draw();
 			GL11.glColor4f(1, 1, 1, 0.3F);
-			//RenderUtils.drawCube(1, 1, 2);
+			//RenderUtils.drawCube(1.2, 0.9, 2.1);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glColor4f(1, 1, 1, 1);
 		} GL11.glPopMatrix();

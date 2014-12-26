@@ -89,7 +89,6 @@ public class AcademyCraftMod {
 		
 		AbilityDataMain.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
-		
 		proxy.preInit();
 	}
 
