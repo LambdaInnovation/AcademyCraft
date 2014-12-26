@@ -36,13 +36,14 @@ public class PRHSkillRender implements PlayerRenderHandler {
 		AbilityData data = AbilityDataMain.getData(player);
 		GL11.glPushMatrix();
 		//TODO iterate each active skill
-		processSkill(player, data.getCategory().getSkill(0), null);
+		processSkill(player, data.getCategory().getSkill(1), null);
 		GL11.glPopMatrix();
 	}
 	
 	private void processSkill(EntityPlayer player, SkillBase skill, IPattern pattern) {
 		//System.out.println("Rendering " + skill.getInternalName());
 		SkillRenderer render = skill.getRenderer();
+		//System.out.println(render);
 		GL11.glPushMatrix(); {
 			render.renderSurroundings(player, pattern);
 		}; GL11.glPopMatrix();

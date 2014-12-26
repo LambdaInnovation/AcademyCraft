@@ -22,33 +22,25 @@ public class PieceSmallArc extends Piece {
 	private int changeWait;
 	private int curIndex;
 	
-	private int showFrom = 100, showTo = 500; //The random showing(also hiding) time length interval
-	private int showTime;
-	private long lastShowTime;
-	private boolean isShowing;
+	public double offArea, rotArea;
 	
-	private double offArea, rotArea;
-	private double offTolerance;
-	
-	private Vec3 origPos = vec(), origRot = vec();
+	private Vec3 origPos = vec();
+	private double origPitch, origYaw;
 
 	public PieceSmallArc(double size) {
 		super(size, size);
 		randomWaitTime();
-		randomShowTime();
-		offArea = size * 0.8;
-		rotArea = 30;
-		offTolerance = size * 1.2;
-		isShowing = true;
+		offArea = size * .7;
+		rotArea = 140;
+		this.hasLight = false;
 	}
 	
-	public void setup(double px, double py, double pz, double rx, double ry, double rz) {
+	public void setup(double px, double py, double pz, double yaw, double pitch) {
 		offset.xCoord = origPos.xCoord = px;
 		offset.yCoord = origPos.yCoord = py;
 		offset.zCoord = origPos.zCoord = pz;
-		rotation.xCoord = origRot.xCoord = rx;
-		rotation.yCoord = origRot.yCoord = ry;
-		rotation.zCoord = origRot.zCoord = rz;
+		origPitch = rotPitch = pitch;
+		origYaw = rotYaw = yaw;
 	}
 	
 	@Override
@@ -62,16 +54,9 @@ public class PieceSmallArc extends Piece {
 			randomWaitTime();
 			lastChangeTime = time;
 			curIndex = RNG.nextInt(ANIM.length);
+			randomTransform();
 		}
 		
-		//Random show/hide
-		if(lastShowTime == 0) lastShowTime = time;
-		if(time - lastShowTime > showTime) {
-			randomShowTime();
-			randomTransform();
-			lastShowTime = time;
-			isShowing = !isShowing;
-		}
 	}
 
 	@Override
@@ -83,33 +68,17 @@ public class PieceSmallArc extends Piece {
 		changeWait = rangeRand(waitFrom, waitTo);
 	}
 	
-	private void randomShowTime() {
-		showTime = rangeRand(showFrom, showTo);
-	}
-	
 	private void randomTransform() {
-		randVec(offset, offArea, origPos, offTolerance);
-		randVec(rotation, rotArea);
+		if(RNG.nextDouble() > 0.7)
+			randVec(offset, origPos, offArea);
+		rotPitch = origPitch + midRand(rotArea);
+		rotYaw = origYaw + 2 * midRand(rotArea);
 	}
 	
-	private void randVec(Vec3 vec, double area) {
-		vec.xCoord += midRand(area);
-		vec.yCoord += midRand(area);
-		vec.zCoord += midRand(area);
-	}
-	
-	private void randVec(Vec3 vec, double area, Vec3 orig, double cst) {
-		randVec(vec, area);
-		if(Math.abs(orig.xCoord - vec.xCoord) < cst) 
-			vec.xCoord = orig.xCoord;
-		if(Math.abs(orig.yCoord - vec.yCoord) < cst) 
-			vec.yCoord = orig.yCoord;
-		if(Math.abs(orig.zCoord - vec.zCoord) < cst) 
-			vec.zCoord = orig.zCoord;
-	}
-	
-	public boolean doesDraw() {
-		return isShowing;
+	private void randVec(Vec3 vec, Vec3 orig, double area) {
+		vec.xCoord = orig.xCoord + midRand(area);
+		vec.yCoord = orig.yCoord + midRand(area);
+		vec.zCoord = orig.zCoord + midRand(area);
 	}
 	
 	private static int rangeRand(int from, int to) {

@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillBase {
 	
-	SkillRenderer render = SkillRenderDebug.instance;
+	protected SkillRenderer render = SkillRenderDebug.instance;
 
 	/**
 	 * Called by RawEventHandler when the skill is reset.

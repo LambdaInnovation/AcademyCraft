@@ -4,9 +4,6 @@
 package cn.academy.core.client.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -17,15 +14,11 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.core.register.ACItems;
 import cn.liutils.api.client.LIClientRegistry;
 import cn.liutils.api.client.util.RenderUtils;
-import cn.liutils.api.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 /**
  * @author WeathFolD
@@ -70,6 +63,9 @@ public class SkillRenderingHandler {
 			//TODO Replace with skill renderer
 			RenderUtils.loadTexture(ACClientProps.TEX_ARC_SHELL[0]);
 			RenderUtils.drawCube(1, 1, 1, false);
+			for(SkillState state : SkillStateManager.getStateForPlayer(player)) {
+				//state.
+			}
 			
 		} GL11.glPopMatrix();
 	}

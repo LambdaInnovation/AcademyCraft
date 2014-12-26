@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.SRElecBase;
 import cn.academy.ability.electro.entity.EntityElecArcFX;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -28,6 +29,7 @@ public class SkillElecArc extends SkillBase {
 	static final int MAX_HOLD_TIME = 200;
 
 	public SkillElecArc() {
+		this.render = new SRElecBase();
 	}
 	
 	@Override

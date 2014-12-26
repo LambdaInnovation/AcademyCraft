@@ -25,12 +25,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public abstract class Piece {
 
 	protected Vec3 offset = vec();
-	protected Vec3 rotation = vec();
 	private double width, height;
 	protected double alpha = 1.0;
 	protected boolean hasLight = true;
 	protected Vertex[] verts;
 	protected static final Random RNG = new Random();
+	protected double rotYaw, rotPitch;
 	
 	public Piece(double w, double h) {
 		setSize(w, h);
@@ -58,7 +58,6 @@ public abstract class Piece {
 	
 	public void draw() {
 		onUpdate();
-		if(!doesDraw()) return;
 		Tessellator t = Tessellator.instance;
 		//if(!hasLight)
 		//	GL11.glDisable(GL11.GL_LIGHTING);
@@ -69,14 +68,13 @@ public abstract class Piece {
 			if(!hasLight) 
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 			GL11.glTranslated(offset.xCoord, offset.yCoord, offset.zCoord);
-			GL11.glRotated(rotation.zCoord, 0, 0, 1);
-			GL11.glRotated(rotation.yCoord, 0, 1, 0);
-			GL11.glRotated(rotation.xCoord, 1, 0, 0);
+			GL11.glRotated(rotYaw, 0, 1, 0);
+			GL11.glRotated(rotPitch, 0, 0, 1);
 			RenderUtils.loadTexture(getTexture());
 			t.startDrawingQuads(); {
 				t.setNormal(0, 1, 0);
 				if(!hasLight) 
-					t.setBrightness(1572880);
+					t.setBrightness(15728880);
 				for(Vertex v : verts)
 					v.addTo(t);
 			} t.draw();
@@ -87,8 +85,5 @@ public abstract class Piece {
 	
 	public abstract ResourceLocation getTexture();
 	protected void onUpdate() {}
-	public boolean doesDraw() {
-		return true;
-	}
 	
 }
