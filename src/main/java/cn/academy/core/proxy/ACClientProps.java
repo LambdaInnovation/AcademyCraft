@@ -92,6 +92,14 @@ public class ACClientProps {
 	}
 	;
 	
+	public static ResourceLocation ANIM_SMALL_ARC[];
+	static {
+		ANIM_SMALL_ARC = new ResourceLocation[10];
+		for(int i = 0; i < 10; ++i) {
+			ANIM_SMALL_ARC[i] = src("academy:textures/effects/arcS_0" + i + ".png");
+		}
+	}
+	
 	//Railgun
 	public static final ResourceLocation
 		ELEC_LOGO = src("academy:textures/abilities/electromaster/main.png"),

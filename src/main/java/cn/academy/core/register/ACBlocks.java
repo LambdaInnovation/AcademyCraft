@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.block.BlockDeveloper;
+import cn.academy.core.block.TileDeveloper;
 import cn.academy.misc.block.ACBlockOre;
 import cn.academy.misc.block.elec.BlockSolarGenerator;
 import cn.academy.misc.block.elec.BlockWindGenerator;
@@ -34,6 +35,7 @@ public class ACBlocks {
 		GameRegistry.registerBlock(windGen, "ac_windgen");
 		GameRegistry.registerBlock(solarGen, "ac_solargen");
 
+		GameRegistry.registerTileEntity(TileDeveloper.class, "tile_acdev");
 		GameRegistry.registerTileEntity(TileWindGenerator.class, "tile_windGen");
 		GameRegistry.registerTileEntity(TileSolarGenerator.class, "tile_solarGen");
 		
