@@ -23,7 +23,6 @@ public class ACItems {
 		record0,
 		record1,
 		record2,
-		coin,
 		capsuleH,
 		capsuleM,
 		capsuleL,
@@ -42,6 +41,8 @@ public class ACItems {
 		CopperCoil,
 		CoreBearing,
 		ivoid;
+	
+	public static ItemCoin coin;
 	
 	public static void init(Configuration conf) {
 		

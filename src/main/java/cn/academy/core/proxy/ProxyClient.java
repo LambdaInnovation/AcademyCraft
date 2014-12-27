@@ -17,6 +17,8 @@ import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.client.render.SkillRenderingHandler;
 import cn.academy.core.register.ACItems;
+import cn.academy.misc.client.render.RendererCoin;
+import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
 import cn.liutils.api.register.Configurable;
@@ -83,7 +85,9 @@ public class ProxyClient extends ProxyCommon {
 		//Rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElecArcFX.class, new RenderElecArc());
+		RenderingRegistry.registerEntityRenderingHandler(EntityThrowingCoin.class, new RendererCoin());
 		MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
+		MinecraftForgeClient.registerItemRenderer(ACItems.coin, new RendererCoin.ItemRender());
 	}
 	
 }

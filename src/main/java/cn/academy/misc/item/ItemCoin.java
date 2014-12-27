@@ -10,17 +10,16 @@
  */
 package cn.academy.misc.item;
 
-import cn.academy.ability.electro.IShootable;
-import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.api.util.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.IShootable;
+import cn.academy.core.AcademyCraftMod;
+import cn.academy.misc.entity.EntityThrowingCoin;
+import cn.liutils.api.util.GenericUtils;
 
 /**
  * The coin from the game genter which is used by Misaka Mikoto for her prouding Railgun skill!
@@ -47,11 +46,12 @@ public class ItemCoin extends Item implements IShootable {
     	if(!nbt.getBoolean("throwing"))
     		return;
     	int prog = nbt.getInteger("prog") + 1;
-    	System.out.println("prg: " + prog);
+    	//System.out.println("prg: " + prog);
     	if(prog > THROWING_TIME) {
     		reset(nbt);
     		return;
     	}
+    	((EntityPlayer)entity).isSwingInProgress = false;
     	nbt.setInteger("prog", prog);
     }
 
@@ -59,10 +59,13 @@ public class ItemCoin extends Item implements IShootable {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
     {
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
+    	if(nbt.getBoolean("throwing")) return stack;
     	nbt.setBoolean("throwing", true);
     	nbt.setInteger("prog", 0);
     	
     	nbt.setLong("startTime", GenericUtils.getSystemTime());
+    	if(world.isRemote)
+    		world.spawnEntityInWorld(new EntityThrowingCoin(player, stack));
         return stack;
     }
 
