@@ -10,9 +10,11 @@
  */
 package cn.academy.misc.item;
 
+import cn.academy.ability.electro.IShootable;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.util.GenericUtils;
 import cn.liutils.api.util.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,10 +23,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
- * @author KSkun
- * 硬币什么的功能之后再加吧
+ * The coin from the game genter which is used by Misaka Mikoto for her prouding Railgun skill!
+ * ~\(≧▽≦)/~
+ * @author KSkun, WeAthFolD
  */
-public class ItemCoin extends Item /*implements IRailgunQTE*/ {
+public class ItemCoin extends Item implements IShootable {
 	
 	public static final int THROWING_TIME = 40;
 	
@@ -35,52 +38,52 @@ public class ItemCoin extends Item /*implements IRailgunQTE*/ {
 	}
 	
     @Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-    	if(!par5) {
-    		nbt.setBoolean("isThrowing", false);
+    	if(!(entity instanceof EntityPlayer) || !equipped) {
+    		reset(nbt);
     		return;
     	}
-    	
-    	boolean b = nbt.getBoolean("isThrowing");
-    	if(b) {
-    		((EntityPlayer)entity).isSwingInProgress = false;
-    		int ticks = nbt.getInteger("throwTick");
-    		if(++ticks >= THROWING_TIME) {
-    			nbt.setBoolean("isThrowing", false);
-    			nbt.setInteger("throwTick", 0);
-    		} else nbt.setInteger("throwTick", ticks);
+    	if(!nbt.getBoolean("throwing"))
+    		return;
+    	int prog = nbt.getInteger("prog") + 1;
+    	System.out.println("prg: " + prog);
+    	if(prog > THROWING_TIME) {
+    		reset(nbt);
+    		return;
     	}
+    	nbt.setInteger("prog", prog);
     }
-
 
     @Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
     {
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-    	if(nbt.getBoolean("isThrowing")) return stack;
+    	nbt.setBoolean("throwing", true);
+    	nbt.setInteger("prog", 0);
     	
-    	nbt.setBoolean("isThrowing", true);
-		nbt.setInteger("throwTick", 0);
+    	nbt.setLong("startTime", GenericUtils.getSystemTime());
         return stack;
     }
 
-/*	@Override
-	public boolean isQTEinProgress(ItemStack stack) {
-		NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-		return nbt.getBoolean("isThrowing");
+	@Override
+	public boolean inProgress(ItemStack stack) {
+		return GenericUtils.loadCompound(stack).getBoolean("throwing");
 	}
 
 	@Override
-	public float getQTEProgress(ItemStack stack) {
-		NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-		return ((float)nbt.getInteger("throwTick")) / THROWING_TIME;
+	public double getProgress(ItemStack stack) {
+		return (double)GenericUtils.loadCompound(stack).getInteger("prog") / THROWING_TIME;
+	}
+	
+	private void reset(NBTTagCompound nbt) {
+		nbt.setBoolean("throwing", false);
+    	nbt.setInteger("prog", 0);
 	}
 
-	Pair<Float, Float> range = new Pair<Float, Float>(0.7F, 0.9F);
 	@Override
-	public Pair<Float, Float> getAcceptedRange() {
-		return range;
-	}*/
+	public boolean isAcceptable(double prog) {
+		return prog >= 0.75 && prog <= 0.95;
+	}
 
 }
