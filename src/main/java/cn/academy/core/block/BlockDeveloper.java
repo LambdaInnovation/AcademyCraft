@@ -33,7 +33,6 @@ public class BlockDeveloper extends BlockDirectionedMulti {
     {
 		TileDeveloper te = safecast(world.getTileEntity(x, y, z));
 		if(te == null) return false;
-		System.out.println("At " + player.worldObj.isRemote);
 		EntityPlayer user = te.getUser();
 		if(user == null) {
 			te.use(player);

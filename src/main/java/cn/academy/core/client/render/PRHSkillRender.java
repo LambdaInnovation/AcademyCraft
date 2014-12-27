@@ -3,12 +3,18 @@
  */
 package cn.academy.core.client.render;
 
+import java.lang.annotation.Inherited;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.api.ability.SkillBase;
+import cn.academy.api.client.render.SkillRenderer;
+import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.ctrl.pattern.IPattern;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
@@ -34,18 +40,18 @@ public class PRHSkillRender implements PlayerRenderHandler {
 	@Override
 	public void renderBody(EntityPlayer player, World world) {
 		AbilityData data = AbilityDataMain.getData(player);
-		GL11.glPushMatrix();
-		//TODO iterate each active skill
-		processSkill(player, data.getCategory().getSkill(1), null);
-		GL11.glPopMatrix();
+		GL11.glPushMatrix(); {
+			List<SkillState> states = SkillStateManager.getStateForPlayer(player);
+			for(SkillState s : states) {
+				processSkill(player, s);
+			}
+		} GL11.glPopMatrix();
 	}
 	
-	private void processSkill(EntityPlayer player, SkillBase skill, IPattern pattern) {
-		//System.out.println("Rendering " + skill.getInternalName());
-		SkillRenderer render = skill.getRenderer();
-		//System.out.println(render);
+	private void processSkill(EntityPlayer player, SkillState state) {
+		SkillRenderer render = state.getRender();
 		GL11.glPushMatrix(); {
-			render.renderSurroundings(player, pattern);
+			render.renderSurroundings(player, state);
 		}; GL11.glPopMatrix();
 	}
 

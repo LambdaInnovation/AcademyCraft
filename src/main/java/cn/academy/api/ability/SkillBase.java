@@ -5,11 +5,11 @@ package cn.academy.api.ability;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.render.SkillRenderDebug;
-import cn.academy.core.client.render.SkillRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,8 +19,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 public class SkillBase {
-	
-	protected SkillRenderer render = SkillRenderDebug.instance;
 
 	/**
 	 * Called by RawEventHandler when the skill is reset.
@@ -36,11 +34,6 @@ public class SkillBase {
 	 */
 	public String getInternalName() {
 		return "null";
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public SkillRenderer getRenderer() {
-		return render;
 	}
 	
 	/**

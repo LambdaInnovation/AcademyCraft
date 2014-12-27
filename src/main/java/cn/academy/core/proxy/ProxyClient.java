@@ -1,6 +1,7 @@
 package cn.academy.core.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.input.Keyboard;
 
@@ -13,7 +14,9 @@ import cn.academy.core.block.TileDeveloper;
 import cn.academy.core.client.gui.GuiPresetSelect;
 import cn.academy.core.client.gui.GuiPresetSettings;
 import cn.academy.core.client.render.RenderDeveloper;
+import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.client.render.SkillRenderingHandler;
+import cn.academy.core.register.ACItems;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
 import cn.liutils.api.register.Configurable;
@@ -80,6 +83,7 @@ public class ProxyClient extends ProxyCommon {
 		//Rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElecArcFX.class, new RenderElecArc());
+		MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
 	}
 	
 }

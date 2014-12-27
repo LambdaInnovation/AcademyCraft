@@ -29,7 +29,6 @@ public class SkillElecArc extends SkillBase {
 	static final int MAX_HOLD_TIME = 200;
 
 	public SkillElecArc() {
-		this.render = new SRElecBase();
 	}
 	
 	@Override

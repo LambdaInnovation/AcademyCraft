@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.pattern.IPattern;
-import cn.academy.core.client.render.SkillRenderer;
 import cn.liutils.api.client.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

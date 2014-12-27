@@ -1,9 +1,11 @@
 package cn.academy.api.ctrl;
 
-import cn.academy.core.AcademyCraftMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.api.client.render.SkillRenderer;
+import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.client.render.SkillRenderDebug;
 
 /**
  * The state of an active skill.
@@ -11,14 +13,23 @@ import net.minecraft.nbt.NBTTagCompound;
  * Used both on client and server.
  * On client, although ctrl only handles thePlayer, SkillState contains
  * skills of all players. This allows rendering of other players' skills.
+ * 
+ * The render is provided directly inside the SkillState.
  * @author acaly
- *
  */
 public class SkillState {
 	private int tickToFinish = 0;
 	
+	/**
+	 * The per-state render
+	 */
+	private SkillRenderer render;
+	
 	public SkillState(EntityPlayer player) {
 		this.player = player;
+		if(player.worldObj.isRemote) {
+			render = createRenderer();
+		}
 	}
 	
 	public final EntityPlayer player;
@@ -60,6 +71,26 @@ public class SkillState {
 	 */
 	protected boolean onTick() {
 		return false;
+	}
+	
+	/**
+	 * Called at the initialization of SkillState. 
+	 * Return a instance that can handle this state.
+	 * You could create a new instance for each SkillState, 
+	 * or you can use one instance for many SkillStates 
+	 * (When no per-state data needs to be handled, this is more efficient)
+	 * @return a SkillRender instance
+	 */
+	protected SkillRenderer createRenderer() {
+		return SkillRenderer.EMPTY;
+	}
+	
+	/**
+	 * Get the SkillRender for this SkillState instance.
+	 * @return the SkillRender instance
+	 */
+	public SkillRenderer getRender() {
+		return render;
 	}
 	
 	/**

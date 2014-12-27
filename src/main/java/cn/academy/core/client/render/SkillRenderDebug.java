@@ -3,13 +3,13 @@
  */
 package cn.academy.core.client.render;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.api.ctrl.pattern.IPattern;
+import cn.academy.api.client.render.SkillRenderer;
+import cn.academy.api.ctrl.SkillState;
 import cn.liutils.api.client.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,11 +27,12 @@ public class SkillRenderDebug extends SkillRenderer {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderHandEffect(EntityPlayer player, IPattern pattern, HandRenderType type) {
+	public void renderHandEffect(EntityPlayer player, SkillState state, HandRenderType type) {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void renderSurroundings(EntityPlayer player, IPattern pattern) {
+	@Override
+	public void renderSurroundings(EntityPlayer player, SkillState state) {
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(-.5, 0, -.5);
 			GL11.glEnable(GL11.GL_BLEND);

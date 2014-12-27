@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.item.ItemVoid;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
 import cn.academy.misc.item.ItemCoin;
@@ -11,6 +12,7 @@ import cn.academy.misc.item.ItemEnergyCrystal;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
+import cn.liutils.api.util.RegUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ACItems {
@@ -38,10 +40,14 @@ public class ACItems {
 		TinIngot,
 		SiliconRod,
 		CopperCoil,
-		CoreBearing;
+		CoreBearing,
+		ivoid;
 	
 	public static void init(Configuration conf) {
 		
+		ivoid = RegUtils.reg(ItemVoid.class, "ac_void");
+		
+		//TODO: (Suggestion) Switch all simple registration to RegUtils.reg() with template arg
 		logo = new Item().setUnlocalizedName("ac_logo").setTextureName("academy:logo");
 		record0 = new ACRecord("ac1", 0).setUnlocalizedName("ac_record1");
 		record1 = new ACRecord("ac2", 1).setUnlocalizedName("ac_record2");

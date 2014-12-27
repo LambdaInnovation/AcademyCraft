@@ -250,6 +250,7 @@ public class EventHandlerClient implements IKeyHandler {
 		LIKeyProcess.instance.addKey("Skill 2", KEY_S2, false, INSTANCE.new KeyHandler(1));
 		LIKeyProcess.instance.addKey("Skill 3", KEY_S3, false, INSTANCE.new KeyHandler(2));
 		LIKeyProcess.instance.addKey("Skill 4", KEY_S4, false, INSTANCE.new KeyHandler(3));
+		LIKeyProcess.instance.addKey("Ability activation", KEY_DISABLE, false, INSTANCE);
 		
 		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
 				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
@@ -403,6 +404,10 @@ public class EventHandlerClient implements IKeyHandler {
 	 */
 	
 	public boolean skillEnabled = true;
+	
+	public static boolean isSkillEnabled() {
+		return INSTANCE.skillEnabled;
+	}
 	
 	@Override
 	public void onKeyDown(int keyCode, boolean tickEnd) {
