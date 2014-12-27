@@ -3,6 +3,7 @@
  */
 package cn.academy.api.data;
 
+import scala.annotation.varargs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,7 +29,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	/*
 	 * These fields may be used by Messages.
 	 */
-	int catID, level;
+	int catID, levelId;
 	float currentCP;
 	float maxCP;
 	float skillExps[];
@@ -67,11 +68,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public Level getLevel() {
-		return getCategory().getLevel(level);
+		return getCategory().getLevel(levelId);
 	}
 	
 	public int getLevelID() {
-		return level;
+		return levelId;
 	}
 	
 	public SkillBase getSkill(int sid) {
@@ -116,7 +117,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		NBTTagCompound nbt = new NBTTagCompound();
 
 		nbt.setInteger("catid", catID);
-		nbt.setInteger("level", level);
+		nbt.setInteger("levelid", levelId);
 		if(getCategory() != null) {
 			//Store exps and activate stats
 			nbt.setFloat("ccp", currentCP);
@@ -141,7 +142,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		NBTTagCompound nbt = playerNBT.getCompoundTag(IDENTIFIER);
 		
 		catID = nbt.getInteger("catid");
-		level = nbt.getInteger("level");
+		levelId = nbt.getInteger("levelid");
 		currentCP = nbt.getFloat("ccp");
 		maxCP = nbt.getFloat("mcp");
 		int ms = getSkillCount();
@@ -193,9 +194,27 @@ public class AbilityData implements IExtendedEntityProperties {
 		return true;
 	}
 	
+	public boolean recoverCP() {
+		if (currentCP < maxCP) {
+			Level lv = Abilities.getCategory(this.catID).getLevel(this.levelId);
+			if (lv == null) {
+				AcademyCraftMod.log.error("level " + levelId + " not found in category " + catID);
+				return false;
+			}
+			float recoverRate = lv.getInitRecoverCPRate() + 
+					(((this.maxCP - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
+							(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
+			
+			float newCP = currentCP + recoverRate;
+			newCP = Math.min(newCP, maxCP);
+			setCurrentCP(newCP);
+		}
+		return true;
+	}
+	
 	public void setLevelID(int value) {
 		if (!player.worldObj.isRemote) {
-			level = value;
+			levelId = value;
 			
 			this.isInSetup = true;
 			getLevel().enterLevel(this);
@@ -209,6 +228,16 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!player.worldObj.isRemote) {
 			float oldValue = skillExps[skillID];
 			skillExps[skillID] = value;
+			
+			//increase max CP
+			Level lv = Abilities.getCategory(this.catID).getLevel(this.levelId);
+			if (lv != null){
+				float newMaxCP = this.maxCP + (value - oldValue) * 0.1f * lv.getInitialCP();
+				newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
+				this.maxCP = newMaxCP;
+			} else {
+				AcademyCraftMod.log.error("level " + levelId + " not found in category " + catID);
+			}
 			
 			this.isInSetup = true;
 			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
@@ -231,6 +260,10 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public void openSkill(int skillID) {
 		setSkillOpen(skillID, true);
+	}
+	
+	public void onPlayerTick() {
+		recoverCP();
 	}
 	
 	private void syncSimple() {
@@ -260,7 +293,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	private void setInitial(Category category) {
 		catID = category.getCategoryId();
-		level = category.getInitialLevelId();
+		levelId = category.getInitialLevelId();
 		skillExps = category.getInitialSkillExp();
 		currentCP = maxCP = category.getInitialMaxCP();
 		skillOpens = category.getInitialSkillOpen();

@@ -9,6 +9,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class AbilityDataEventListener {
 	
@@ -35,6 +36,9 @@ public class AbilityDataEventListener {
 	    		}
 	    	}
 	    }
+	    
+	    
+	   
 	    
 	    @SubscribeEvent
 	    public void onLivingFallEvent(LivingFallEvent event) {
@@ -66,7 +70,11 @@ public class AbilityDataEventListener {
 		{
 		}
 		
-		
+		@SubscribeEvent
+		public void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
+			EntityPlayer player = event.player;
+			AbilityDataMain.getData(player).onPlayerTick();
+		}
 	}
 
 }

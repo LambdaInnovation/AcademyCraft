@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import scala.reflect.internal.Trees.This;
+import cn.academy.api.ability.levels.LevelBase0;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.util.GenericUtils;
 
@@ -68,10 +70,14 @@ public class Abilities {
 	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
 	
 	public static final Category catEmpty = 
-			new Category(Arrays.<SkillBase>asList(skillEmpty, skillDebug, skillHoldTest))
+			new Category()
 			{
 				{
-					this.addLevel(new Level(this));
+					Level lv = new LevelBase0(this);
+					lv.addCanLearnSkill(this.addSkill(skillEmpty));
+					lv.addCanLearnSkill(this.addSkill(skillDebug));
+					lv.addCanLearnSkill(this.addSkill(skillHoldTest));
+					this.addLevel(lv);
 				}
 			};
 	
