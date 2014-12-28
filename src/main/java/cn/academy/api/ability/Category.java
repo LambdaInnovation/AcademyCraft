@@ -37,7 +37,7 @@ public class Category {
 	}
 	
 	public final Level getLevel(int lid) {
-		return GenericUtils.safeFetchFrom(levels, lid);
+		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(levels, lid));
 	}
 	
 	public final int addLevel(Level lv) {
@@ -86,7 +86,7 @@ public class Category {
 	}
 	
 	public final SkillBase getSkill(int sid) {
-		return GenericUtils.safeFetchFrom(skills, sid);
+		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(skills, sid));
 	}
 	
 	public String getInternalName() {
@@ -108,26 +108,11 @@ public class Category {
 	 */
 	public void onSkillExpChanged(AbilityData data, int skillID, float oldValue, float newValue) {
 		//increase max CP
-		Level lv = this.getLevel(data.getLevelID());
-		if (lv != null){
-			float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
-			newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
-			data.setMaxCP(newMaxCP);
-		} else {
-			AcademyCraftMod.log.error("level " + data.getLevelID() + " not found in category " + catId);
-		}
-	}
-	
-	public float getRecoverRate(AbilityData data) {
-		Level lv = getLevel(data.getLevelID());
-		if (lv == null) {
-			AcademyCraftMod.log.error("level " + data.getLevelID() + " not found in category " + catId);
-			return 0;
-		}
-		float recoverRate = lv.getInitRecoverCPRate() + 
-				(((data.getMaxCP() - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
-						(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
-		return recoverRate;
+		Level lv = GenericUtils.assertObj(getLevel(data.getLevelID()));
+		
+		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
+		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
+		data.setMaxCP(newMaxCP);
 	}
 	
 	public List<Integer> getCanLearnSkillIdList(AbilityData data) {

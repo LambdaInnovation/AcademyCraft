@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
+import cn.liutils.api.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -255,12 +256,7 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
-		Category cat = AbilityDataMain.getData(player).getCategory();
-
-		if(cat == null) {
-			AcademyCraftMod.log.fatal("Get empty category for player on server.");
-			return;
-		}
+		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();

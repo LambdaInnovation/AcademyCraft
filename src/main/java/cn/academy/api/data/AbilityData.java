@@ -15,6 +15,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraftMod;
+import cn.liutils.api.util.GenericUtils;
 
 /**
  * @author WeathFolD, acaly
@@ -156,7 +157,6 @@ public class AbilityData implements IExtendedEntityProperties {
 
 	@Override
 	public void init(Entity entity, World world) {
-		//this.player = (EntityPlayer) entity;
 	}
 
 	/*
@@ -164,6 +164,9 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	
 	public void setCategoryID(int value) {
+		if (this.isInSetup) {
+			throw new RuntimeException("Cannot modify category during setup api.");
+		}
 		if (!player.worldObj.isRemote) {
 			setInitial(Abilities.getCategory(value));
 			//Force reset
@@ -193,10 +196,18 @@ public class AbilityData implements IExtendedEntityProperties {
 		setCurrentCP(currentCP - need);
 		return true;
 	}
+
+	private float getRecoverRate() {
+		Level lv = GenericUtils.assertObj(getCategory().getLevel(getLevelID()));
+
+		return lv.getInitRecoverCPRate() + 
+				(((this.getMaxCP() - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
+				(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
+	}
 	
 	public boolean recoverCP() {
 		if (currentCP < maxCP) {
-			float recoverRate = getCategory().getRecoverRate(this);
+			float recoverRate = this.getRecoverRate();
 			
 			float newCP = currentCP + recoverRate;
 			newCP = Math.min(newCP, maxCP);

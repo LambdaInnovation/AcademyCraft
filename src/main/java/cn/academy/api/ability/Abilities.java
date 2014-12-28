@@ -26,12 +26,7 @@ public class Abilities {
 	}
 	
 	public static Category getCategory(int caid) {
-		Category cat = GenericUtils.safeFetchFrom(catList, caid);
-		if (cat == null) {
-			AcademyCraftMod.log.error("Trying to get a category that does not exist.");
-			return catList.get(0);
-		}
-		return cat;
+		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(catList, caid));
 	}
 	
 	public static SkillBase getSkill(String name) {
