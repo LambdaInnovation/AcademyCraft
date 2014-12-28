@@ -4,14 +4,11 @@
 package cn.academy.api.ability;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import scala.reflect.internal.Trees.This;
-import cn.academy.api.ability.levels.LevelBase0;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.util.GenericUtils;
 
@@ -73,7 +70,7 @@ public class Abilities {
 			new Category()
 			{
 				{
-					Level lv = new LevelBase0(this);
+					Level lv = new Level(this, 0, 0, 0, 0, 0);
 					lv.addCanLearnSkill(this.addSkill(skillEmpty));
 					lv.addCanLearnSkill(this.addSkill(skillDebug));
 					lv.addCanLearnSkill(this.addSkill(skillHoldTest));

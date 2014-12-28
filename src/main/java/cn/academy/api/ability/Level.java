@@ -8,17 +8,48 @@ import java.util.Map;
 import cn.academy.api.data.AbilityData;
 import net.minecraft.util.StatCollector;
 
-public abstract class Level {
+public class Level {
 	
 	private Category parent;
 	protected int id;
 	
+	private int levelNum;
+	private float initialCP;
+	private float maxCP;
+	private float initRecoverCPRate;
+	private float maxRecoverCPRate;
+	
 	private Map<Integer, Boolean> canLeranSkillMap = new HashMap<Integer, Boolean>();
 	
-	public Level(Category cat) {
-		parent = cat;
+	public Level(Category cat, int levelNum, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate) {
+		this.parent = cat;
+		this.levelNum = levelNum;
+		this.initialCP = initialCP;
+		this.maxCP = maxCP;
+		this.initRecoverCPRate = initRecoverCPRate;
+		this.maxRecoverCPRate = maxRecoverCPRate;
 	}
 	
+	public int getLevelNum() {
+		return levelNum;
+	}
+
+	public float getInitialCP() {
+		return initialCP;
+	}
+
+	public float getMaxCP() {
+		return maxCP;
+	}
+
+	public float getInitRecoverCPRate() {
+		return initRecoverCPRate;
+	}
+
+	public float getMaxRecoverCPRate() {
+		return maxRecoverCPRate;
+	}
+
 	public final boolean addCanLearnSkill(int skillId) {
 		canLeranSkillMap.put(skillId, true);
 		return true;
@@ -36,15 +67,6 @@ public abstract class Level {
 	public int getID() {
 		return id;
 	}
-	public abstract int getLevelNum();
-	
-	public abstract float getInitialCP();
-	
-	public abstract float getMaxCP();
-	
-	public abstract float getInitRecoverCPRate();
-	
-	public abstract float getMaxRecoverCPRate();
 	
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("level_" + parent.getCategoryId() + "_" + getID());

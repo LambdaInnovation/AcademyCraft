@@ -196,18 +196,15 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public boolean recoverCP() {
 		if (currentCP < maxCP) {
-			Level lv = Abilities.getCategory(this.catID).getLevel(this.levelId);
-			if (lv == null) {
-				AcademyCraftMod.log.error("level " + levelId + " not found in category " + catID);
-				return false;
-			}
-			float recoverRate = lv.getInitRecoverCPRate() + 
-					(((this.maxCP - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
-							(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
+			float recoverRate = getCategory().getRecoverRate(this);
 			
 			float newCP = currentCP + recoverRate;
 			newCP = Math.min(newCP, maxCP);
-			setCurrentCP(newCP);
+			if (newCP == maxCP || tickCount % 20 == 0) {
+				setCurrentCP(newCP);
+			} else {
+				maxCP = newCP;
+			}
 		}
 		return true;
 	}
@@ -228,16 +225,6 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!player.worldObj.isRemote) {
 			float oldValue = skillExps[skillID];
 			skillExps[skillID] = value;
-			
-			//increase max CP
-			Level lv = Abilities.getCategory(this.catID).getLevel(this.levelId);
-			if (lv != null){
-				float newMaxCP = this.maxCP + (value - oldValue) * 0.1f * lv.getInitialCP();
-				newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
-				this.maxCP = newMaxCP;
-			} else {
-				AcademyCraftMod.log.error("level " + levelId + " not found in category " + catID);
-			}
 			
 			this.isInSetup = true;
 			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
@@ -263,6 +250,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void onPlayerTick() {
+		if (tickCount == Integer.MAX_VALUE) {
+			tickCount = 0;
+		} else {
+			tickCount++;
+		}
 		recoverCP();
 	}
 	
@@ -301,4 +293,6 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	private boolean isInSetup = false;
 	private boolean needToReset = false;
+	
+	private int tickCount = 0;
 }
