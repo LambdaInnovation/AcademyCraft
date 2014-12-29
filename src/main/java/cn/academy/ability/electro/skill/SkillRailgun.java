@@ -5,12 +5,13 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternDown;
 import cn.academy.core.proxy.ACClientProps;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 传说中的超电磁炮~~！
@@ -28,7 +29,11 @@ public class SkillRailgun extends SkillBase {
 
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
-				return false;
+				if(!player.worldObj.isRemote) {
+					System.out.println("Entity spawned");
+					player.worldObj.spawnEntityInWorld(new EntityRailgun(player, 10));
+				}
+				return true;
 			}
 			
 		});

@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * 
+ * A single billboard renderer. Designed for high customization.
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)
