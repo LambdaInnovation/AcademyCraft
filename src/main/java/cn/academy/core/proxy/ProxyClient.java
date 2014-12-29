@@ -14,6 +14,7 @@ import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.block.TileDeveloper;
 import cn.academy.core.client.gui.GuiPresetSelect;
 import cn.academy.core.client.gui.GuiPresetSettings;
+import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.client.render.SkillRenderingHandler;
@@ -44,6 +45,7 @@ public class ProxyClient extends ProxyCommon {
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
 		LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
 		MinecraftForge.EVENT_BUS.register(new ClientEvents());
+		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
 	}
 	
 	@Override

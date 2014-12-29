@@ -121,12 +121,7 @@ public class ACClientProps {
 		MD_SHELL = src("academy:textures/abilities/meltdowner/shell.png"),
 		MD_MINING = src("academy:textures/abilities/meltdowner/mining.png"),
 		MD_EXPLOSION = src("academy:textures/abilities/meltdowner/explosion.png");
-	
-	//GUI IDs
-	public static final int
-		GUI_ID_ABILITY_DEV = 0,
-		GUI_ID_PRESET_SETTINGS = 1;
-	
+
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);
 	}
