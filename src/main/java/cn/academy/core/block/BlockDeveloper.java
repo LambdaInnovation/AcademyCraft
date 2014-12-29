@@ -22,15 +22,23 @@ public class BlockDeveloper extends BlockDirectionedMulti {
 		super(Material.anvil);
 		this.useRotation = true;
 		setBlockName("ac_developer");
-		setBlockTextureName("academy:developer");
+		setBlockTextureName("academy:bed");
 		setCreativeTab(AcademyCraftMod.cct);
 		
 		this.addSubBlock(1, 0, 0);
 	}
 	
 	@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float px, float py, float pz)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz)
     {
+		{ //Transform to head block
+			int meta = world.getBlockMetadata(x, y, z);
+			int[] coords = this.getOrigin(world, x, y, z, meta);
+			System.out.println(meta >> 2);
+			x = coords[0];
+			y = coords[1];
+			z = coords[2];
+		}
 		TileDeveloper te = safecast(world.getTileEntity(x, y, z));
 		if(te == null) return false;
 		EntityPlayer user = te.getUser();

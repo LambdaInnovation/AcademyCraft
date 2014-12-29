@@ -2,11 +2,12 @@ package cn.academy.core.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.electro.client.render.RenderElecArc;
-import cn.academy.ability.electro.entity.EntityElecArcFX;
+import cn.academy.ability.electro.client.render.RenderRailgun;
+import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.core.AcademyCraftMod;
@@ -16,6 +17,7 @@ import cn.academy.core.client.gui.GuiPresetSettings;
 import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.client.render.SkillRenderingHandler;
+import cn.academy.core.event.ClientEvents;
 import cn.academy.core.register.ACItems;
 import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.entity.EntityThrowingCoin;
@@ -41,6 +43,7 @@ public class ProxyClient extends ProxyCommon {
 		AcademyCraftMod.guiHandler.addGuiElement(
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
 		LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
+		MinecraftForge.EVENT_BUS.register(new ClientEvents());
 	}
 	
 	@Override
@@ -84,8 +87,8 @@ public class ProxyClient extends ProxyCommon {
 		
 		//Rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
-		RenderingRegistry.registerEntityRenderingHandler(EntityElecArcFX.class, new RenderElecArc());
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrowingCoin.class, new RendererCoin());
+		RenderingRegistry.registerEntityRenderingHandler(EntityRailgun.class, new RenderRailgun());
 		MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
 		MinecraftForgeClient.registerItemRenderer(ACItems.coin, new RendererCoin.ItemRender());
 	}
