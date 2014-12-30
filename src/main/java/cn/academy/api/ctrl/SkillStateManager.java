@@ -91,8 +91,7 @@ public class SkillStateManager {
 	 */
 	public static SkillState getStateWithClass(EntityPlayer player, 
 			Class<? extends SkillState> clazz) {
-		List<SkillState> playerList = getState(player);
-		for (SkillState state : playerList) {
+		for (SkillState state : getState(player)) {
 			if (state.getClass().equals(clazz)) {
 				return state;
 			}
