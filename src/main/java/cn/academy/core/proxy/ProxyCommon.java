@@ -7,7 +7,9 @@ import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.block.MsgDeveloper;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ProxyCommon {
 	
@@ -16,6 +18,8 @@ public class ProxyCommon {
 	public void init() {
 		AcademyCraftMod.INSTANCE.log.info("Loading common proxy of Academy Craft.");
 		EventHandlerServer.init();
+		AcademyCraftMod.netHandler.registerMessage(MsgDeveloper.Handler.class, 
+				MsgDeveloper.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		
 		//Entity Registry
 		registerEntity(EntityRailgun.class, "ac_railgun", nextEntityId());

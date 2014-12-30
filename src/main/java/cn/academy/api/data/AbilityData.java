@@ -65,6 +65,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		this.loadNBTData(nbt);
 	}
 	
+	public boolean hasLearned() {
+		return catID != 0;
+	}
+	
 	public Category getCategory() {
 		return Abilities.getCategory(catID);
 	}

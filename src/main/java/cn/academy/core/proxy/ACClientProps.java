@@ -37,7 +37,8 @@ public class ACClientProps {
 		TEX_MDL_SOLAR = src("academy:textures/models/solar.png"),
 		TEX_ELECARC = src("academy:textures/effects/arc.png"),
 		TEX_GUI_CLOSE = src("academy:textures/guis/close.png"),
-		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png");
+		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png"),
+		TEX_QUESTION_MARK = src("academy:textures/guis/question.png");
 	
 	//Ability Textures
 	public static final ResourceLocation
@@ -121,12 +122,7 @@ public class ACClientProps {
 		MD_SHELL = src("academy:textures/abilities/meltdowner/shell.png"),
 		MD_MINING = src("academy:textures/abilities/meltdowner/mining.png"),
 		MD_EXPLOSION = src("academy:textures/abilities/meltdowner/explosion.png");
-	
-	//GUI IDs
-	public static final int
-		GUI_ID_ABILITY_DEV = 0,
-		GUI_ID_PRESET_SETTINGS = 1;
-	
+
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);
 	}
