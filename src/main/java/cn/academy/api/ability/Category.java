@@ -115,19 +115,22 @@ public class Category {
 		data.setMaxCP(newMaxCP);
 	}
 	
+	public void onInitCategory(AbilityData data) {
+		data.setLevelID(getInitialLevelId());
+		data.setSkillExp(getInitialSkillExp());
+		data.setCurrentCP(getInitialMaxCP());
+		data.setMaxCP(getInitialMaxCP());
+		data.setSkillOpen(getInitialSkillOpen());
+	}
+	
+	public void onEnterCategory(AbilityData data) {
+	}
+	public void onLeaveCategory(AbilityData data) {
+	}
+	
+	@Deprecated
 	public List<Integer> getCanLearnSkillIdList(AbilityData data) {
-		List<Integer> canLearnSkillIdList = new ArrayList<Integer>();
-		boolean[] learnedSkillBooleans = data.getSkillOpenArray();
-		for (int i = 0; i < data.getLevelID(); i++) {
-			Level lv = levels.get(i);
-			List<Integer> canLearnList = lv.getCanLearnSkillIdList();
-			for (int skillId : canLearnList) {
-				if (learnedSkillBooleans[skillId] != true) {
-					canLearnSkillIdList.add(skillId);
-				}
-			}
-		}
-		return canLearnSkillIdList;
+		return data.getCanLearnSkillIdList();
 	}
 	
 	@SideOnly(Side.CLIENT)

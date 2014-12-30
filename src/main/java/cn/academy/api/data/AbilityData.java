@@ -3,6 +3,11 @@
  */
 package cn.academy.api.data;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import scala.annotation.varargs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +60,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public AbilityData(EntityPlayer player, NBTTagCompound nbt) {
-		this.player = player;
+		this(player);
 		
 		this.loadNBTData(nbt);
 	}
@@ -135,6 +140,8 @@ public class AbilityData implements IExtendedEntityProperties {
 
 	@Override
 	public void loadNBTData(NBTTagCompound playerNBT) {
+		int oldCat = catID;
+		
 		if (!playerNBT.hasKey(IDENTIFIER)) {
 			//No data in player's nbt. As this instance is 
 			//created as default AbilityData, do nothing.
@@ -153,25 +160,46 @@ public class AbilityData implements IExtendedEntityProperties {
 			skillExps[i] = nbt.getFloat("exp_" + i);
 			skillOpens[i] = nbt.getBoolean("open_" + i);
 		}
+		
+		if (oldCat != catID) {
+			Abilities.getCategory(oldCat).onLeaveCategory(this);
+			getCategory().onEnterCategory(this);
+		}
 	}
 
 	@Override
 	public void init(Entity entity, World world) {
 	}
 
+	public List<Integer> getCanLearnSkillIdList() {
+		Set<Integer> resultSet = new HashSet();
+		Category cat = this.getCategory();
+		for (int i = 0; i < getLevelID(); i++) {
+			Level lv = cat.getLevel(i);
+			resultSet.addAll(lv.getCanLearnSkillIdList());
+		}
+		ArrayList<Integer> resultList = new ArrayList();
+		resultList.addAll(resultSet);
+		return resultList;
+	}
+	
 	/*
 	 * Set API
 	 */
 	
-	public void setCategoryID(int value) {
+	public void setCategory(Category cat) {
 		if (this.isInSetup) {
 			throw new RuntimeException("Cannot modify category during setup api.");
 		}
 		if (!player.worldObj.isRemote) {
-			setInitial(Abilities.getCategory(value));
+			setInitial(cat);
 			//Force reset
 			AbilityDataMain.resetPlayer(player);
 		}
+	}
+	
+	public void setCategoryID(int value) {
+		setCategory(Abilities.getCategory(value));
 	}
 	
 	public void setCurrentCP(float value) {
@@ -232,6 +260,12 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
+	/**
+	 * Use incrSkillExp instead.
+	 * @param skillID
+	 * @param value
+	 */
+	@Deprecated
 	public void setSkillExp(int skillID, float value) {
 		if (!player.worldObj.isRemote) {
 			float oldValue = skillExps[skillID];
@@ -244,10 +278,38 @@ public class AbilityData implements IExtendedEntityProperties {
 			syncSimple();
 		}
 	}
+
+	/**
+	 * Used by Category to initialize AbilityData.
+	 * @param values
+	 */
+	public void setSkillExp(float[] values) {
+		this.skillExps = values;
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
+	}
 	
+	/**
+	 * Use openSkill instead.
+	 * @param skillID
+	 * @param isOpen
+	 */
+	@Deprecated
 	public void setSkillOpen(int skillID, boolean isOpen) {
 		if (!player.worldObj.isRemote) {
 			skillOpens[skillID] = isOpen;
+			syncAll();
+		}
+	}
+	
+	/**
+	 * Used by Category to initialize AbilityData.
+	 * @param values
+	 */
+	public void setSkillOpen(boolean[] values) {
+		this.skillOpens = values;
+		if (!player.worldObj.isRemote) {
 			syncAll();
 		}
 	}
@@ -296,10 +358,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	private void setInitial(Category category) {
 		catID = category.getCategoryId();
-		levelId = category.getInitialLevelId();
-		skillExps = category.getInitialSkillExp();
-		currentCP = maxCP = category.getInitialMaxCP();
-		skillOpens = category.getInitialSkillOpen();
+		
+		isInSetup = true;
+		category.onInitCategory(this);
+		isInSetup = false;
+		//Sync is not triggered here.
 	}
 	
 	private boolean isInSetup = false;
