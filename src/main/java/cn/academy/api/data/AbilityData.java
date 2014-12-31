@@ -175,15 +175,17 @@ public class AbilityData implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 	}
 
-	public List<Integer> getCanLearnSkillIdList() {
+	public List<SkillBase> getCanLearnSkillList() {
 		Set<Integer> resultSet = new HashSet();
 		Category cat = this.getCategory();
 		for (int i = 0; i < getLevelID(); i++) {
 			Level lv = cat.getLevel(i);
 			resultSet.addAll(lv.getCanLearnSkillIdList());
 		}
-		ArrayList<Integer> resultList = new ArrayList();
-		resultList.addAll(resultSet);
+		ArrayList<SkillBase> resultList = new ArrayList();
+		for (int i : resultSet) {
+			resultList.add(cat.getSkill(i));
+		}
 		return resultList;
 	}
 	
