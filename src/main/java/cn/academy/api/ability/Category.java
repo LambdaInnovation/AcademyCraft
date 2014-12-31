@@ -30,6 +30,15 @@ public class Category {
 	private List<SkillBase> skills = new ArrayList<SkillBase>();
 
 	public Category() {
+		register();
+	}
+	
+	protected void register() {
+		this.addLevel(new Level(this, 0.0f, 0.0f, 0.0f, 0.0f));
+		
+		this.addSkill(Abilities.skillEmpty, 0);
+		this.addSkill(Abilities.skillDebug, 0);
+		this.addSkill(Abilities.skillHoldTest, 0);
 	}
 	
 	public final int getLevelCount() {
@@ -40,14 +49,12 @@ public class Category {
 		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(levels, lid));
 	}
 	
-	public final int addLevel(Level lv) {
-		int ret = levels.size();
-		if (lv.getLevelNum() != ret) {
-			AcademyCraftMod.log.warn("level id and level num mismatch.");
+	public final void addLevel(Level lv) {
+		if (lv.getID() != levels.size()) {
+			AcademyCraftMod.log.fatal("level id and level num mismatch.");
+			throw new RuntimeException();
 		}
 		levels.add(lv);
-		lv.id = ret;
-		return ret;
 	}
 	
 	public int getInitialLevelId() {
@@ -75,12 +82,14 @@ public class Category {
 		return 100.0f;
 	}
 
-	public final int addSkill(SkillBase skill) {
+	public final int addSkill(SkillBase skill, int minLevel) {
 		int ret = skills.size();
 		skills.add(skill);
 		Abilities.registerSkill(skill);
+		getLevel(minLevel).addCanLearnSkill(ret);
 		return ret;
 	}
+	
 	public final int getSkillCount() {
 		return skills.size();
 	}
