@@ -23,6 +23,10 @@ public class ACLangs {
 		return local("ac.syncrate");
 	}
 	
+	public static String learnAbility() {
+		return local("ac.learnability");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}
