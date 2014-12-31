@@ -255,14 +255,18 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setLevelID(int value) {
-		if (!player.worldObj.isRemote) {
-			levelId = value;
-			
-			this.isInSetup = true;
+		levelId = value;
+		if (isInSetup) {
 			getLevel().enterLevel(this);
-			this.isInSetup = false;
-			
-			syncAll();
+		} else {
+			if (!player.worldObj.isRemote) {
+				
+				this.isInSetup = true;
+				getLevel().enterLevel(this);
+				this.isInSetup = false;
+				
+				syncAll();
+			}
 		}
 	}
 	
@@ -273,15 +277,22 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	@Deprecated
 	public void setSkillExp(int skillID, float value) {
-		if (!player.worldObj.isRemote) {
+		if (isInSetup) {
 			float oldValue = skillExps[skillID];
 			skillExps[skillID] = value;
 			
-			this.isInSetup = true;
 			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
-			this.isInSetup = false;
-			
-			syncSimple();
+		} else {
+			if (!player.worldObj.isRemote) {
+				float oldValue = skillExps[skillID];
+				skillExps[skillID] = value;
+				
+				this.isInSetup = true;
+				getCategory().onSkillExpChanged(this, skillID, oldValue, value);
+				this.isInSetup = false;
+				
+				syncSimple();
+			}
 		}
 	}
 
