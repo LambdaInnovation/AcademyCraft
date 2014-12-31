@@ -138,8 +138,8 @@ public class Category {
 	}
 	
 	@Deprecated
-	public List<Integer> getCanLearnSkillIdList(AbilityData data) {
-		return data.getCanLearnSkillIdList();
+	public List<SkillBase> getCanLearnSkillIdList(AbilityData data) {
+		return data.getCanLearnSkillList();
 	}
 	
 	@SideOnly(Side.CLIENT)
