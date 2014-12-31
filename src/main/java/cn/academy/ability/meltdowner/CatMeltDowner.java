@@ -1,4 +1,4 @@
-package cn.academy.ability.atom;
+package cn.academy.ability.meltdowner;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
@@ -7,7 +7,7 @@ import cn.academy.api.ability.Level;
  * @author acaly
  *
  */
-public class CatAtom extends Category {
+public class CatMeltDowner extends Category {
 
 	@Override
 	protected void register() {

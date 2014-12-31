@@ -8,6 +8,8 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.electro.client.render.RenderRailgun;
 import cn.academy.ability.electro.entity.EntityRailgun;
+import cn.academy.ability.meltdowner.client.render.RenderElecDart;
+import cn.academy.ability.meltdowner.entity.EntityElecDart;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.core.AcademyCraftMod;
@@ -89,8 +91,11 @@ public class ProxyClient extends ProxyCommon {
 		
 		//Rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrowingCoin.class, new RendererCoin());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRailgun.class, new RenderRailgun());
+		RenderingRegistry.registerEntityRenderingHandler(EntityElecDart.class, new RenderElecDart());
+		
 		MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
 		MinecraftForgeClient.registerItemRenderer(ACItems.coin, new RendererCoin.ItemRender());
 	}

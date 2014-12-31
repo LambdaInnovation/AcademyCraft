@@ -4,6 +4,8 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.entity.Entity;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.entity.EntityRailgun;
+import cn.academy.ability.meltdowner.CatMeltDowner;
+import cn.academy.ability.meltdowner.entity.EntityElecDart;
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
@@ -23,11 +25,13 @@ public class ProxyCommon {
 		
 		//Entity Registry
 		registerEntity(EntityRailgun.class, "ac_railgun", nextEntityId());
+		registerEntity(EntityElecDart.class, "ac_elecdart", nextEntityId());
 		
 		//----------
 		//Abilities registry
 		
 		Abilities.registerCat(new CatElectro());
+		Abilities.registerCat(new CatMeltDowner());
 		
 		//----------
 	}

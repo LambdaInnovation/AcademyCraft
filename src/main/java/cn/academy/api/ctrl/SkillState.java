@@ -18,6 +18,9 @@ import cn.academy.core.client.render.SkillRenderDebug;
  * @author acaly
  */
 public class SkillState {
+	
+	public final boolean isRemote;
+	
 	private int tickToFinish = 0;
 	
 	/**
@@ -27,7 +30,9 @@ public class SkillState {
 	
 	public SkillState(EntityPlayer player) {
 		this.player = player;
-		if(player.worldObj.isRemote) {
+		
+		isRemote = player.worldObj.isRemote;
+		if(isRemote) {
 			render = createRenderer();
 		}
 	}

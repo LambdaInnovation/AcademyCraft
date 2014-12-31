@@ -1,7 +1,8 @@
-package cn.academy.api.ctrl.pattern;
+package cn.academy.api.ctrl.pattern.internal;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
+import cn.academy.api.ctrl.pattern.IPattern;
 
 public abstract class PatternUp implements IPattern {
 

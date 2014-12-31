@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
-import cn.academy.api.ctrl.pattern.PatternDown;
+import cn.academy.api.ctrl.pattern.internal.PatternDown;
 import cn.academy.core.proxy.ACClientProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
