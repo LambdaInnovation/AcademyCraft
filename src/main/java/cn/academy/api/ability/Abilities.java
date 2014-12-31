@@ -61,17 +61,7 @@ public class Abilities {
 	public static final SkillDebug skillDebug = new SkillDebug();
 	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
 	
-	public static final Category catEmpty = 
-			new Category()
-			{
-				{
-					Level lv = new Level(this, 0, 0, 0, 0, 0);
-					lv.addCanLearnSkill(this.addSkill(skillEmpty));
-					lv.addCanLearnSkill(this.addSkill(skillDebug));
-					lv.addCanLearnSkill(this.addSkill(skillHoldTest));
-					this.addLevel(lv);
-				}
-			};
+	public static final Category catEmpty = new Category();
 	
 	static {
 		registerCat(catEmpty);

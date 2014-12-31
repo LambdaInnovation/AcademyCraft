@@ -13,7 +13,6 @@ public class Level {
 	private Category parent;
 	protected int id;
 	
-	private int levelNum;
 	private float initialCP;
 	private float maxCP;
 	private float initRecoverCPRate;
@@ -21,17 +20,13 @@ public class Level {
 	
 	private Map<Integer, Boolean> canLeranSkillMap = new HashMap<Integer, Boolean>();
 	
-	public Level(Category cat, int levelNum, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate) {
+	public Level(Category cat, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate) {
 		this.parent = cat;
-		this.levelNum = levelNum;
+		this.id = cat.getLevelCount();
 		this.initialCP = initialCP;
 		this.maxCP = maxCP;
 		this.initRecoverCPRate = initRecoverCPRate;
 		this.maxRecoverCPRate = maxRecoverCPRate;
-	}
-	
-	public int getLevelNum() {
-		return levelNum;
 	}
 
 	public float getInitialCP() {
@@ -50,9 +45,9 @@ public class Level {
 		return maxRecoverCPRate;
 	}
 
-	public final boolean addCanLearnSkill(int skillId) {
+	@Deprecated
+	public final void addCanLearnSkill(int skillId) {
 		canLeranSkillMap.put(skillId, true);
-		return true;
 	}
 	
 	public final boolean canLearnSkill(int skillId) {

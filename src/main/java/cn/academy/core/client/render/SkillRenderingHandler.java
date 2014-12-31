@@ -45,7 +45,7 @@ public class SkillRenderingHandler {
 	public void renderHudEvent(RenderGameOverlayEvent e) {
 		ScaledResolution sr = e.resolution;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		for(SkillState ss : SkillStateManager.getStateForPlayer(player)) {
+		for(SkillState ss : SkillStateManager.getState(player)) {
 			ss.getRender().renderHud(player, ss, sr);
 		}
 	}
@@ -102,7 +102,7 @@ public class SkillRenderingHandler {
 	}
 	
 	private static void traverseHandRender(EntityPlayer player, HandRenderType type) {
-		List<SkillState> states = SkillStateManager.getStateForPlayer(player);
+		List<SkillState> states = SkillStateManager.getState(player);
 		for(SkillState s : states) {
 			s.getRender().renderHandEffect(player, s, type);
 		}

@@ -30,6 +30,15 @@ public class Category {
 	private List<SkillBase> skills = new ArrayList<SkillBase>();
 
 	public Category() {
+		register();
+	}
+	
+	protected void register() {
+		this.addLevel(new Level(this, 0.0f, 0.0f, 0.0f, 0.0f));
+		
+		this.addSkill(Abilities.skillEmpty, 0);
+		this.addSkill(Abilities.skillDebug, 0);
+		this.addSkill(Abilities.skillHoldTest, 0);
 	}
 	
 	public final int getLevelCount() {
@@ -40,14 +49,12 @@ public class Category {
 		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(levels, lid));
 	}
 	
-	public final int addLevel(Level lv) {
-		int ret = levels.size();
-		if (lv.getLevelNum() != ret) {
-			AcademyCraftMod.log.warn("level id and level num mismatch.");
+	public final void addLevel(Level lv) {
+		if (lv.getID() != levels.size()) {
+			AcademyCraftMod.log.fatal("level id and level num mismatch.");
+			throw new RuntimeException();
 		}
 		levels.add(lv);
-		lv.id = ret;
-		return ret;
 	}
 	
 	public int getInitialLevelId() {
@@ -75,12 +82,14 @@ public class Category {
 		return 100.0f;
 	}
 
-	public final int addSkill(SkillBase skill) {
+	public final int addSkill(SkillBase skill, int minLevel) {
 		int ret = skills.size();
 		skills.add(skill);
 		Abilities.registerSkill(skill);
+		getLevel(minLevel).addCanLearnSkill(ret);
 		return ret;
 	}
+	
 	public final int getSkillCount() {
 		return skills.size();
 	}
@@ -115,19 +124,22 @@ public class Category {
 		data.setMaxCP(newMaxCP);
 	}
 	
-	public List<Integer> getCanLearnSkillIdList(AbilityData data) {
-		List<Integer> canLearnSkillIdList = new ArrayList<Integer>();
-		boolean[] learnedSkillBooleans = data.getSkillOpenArray();
-		for (int i = 0; i < data.getLevelID(); i++) {
-			Level lv = levels.get(i);
-			List<Integer> canLearnList = lv.getCanLearnSkillIdList();
-			for (int skillId : canLearnList) {
-				if (learnedSkillBooleans[skillId] != true) {
-					canLearnSkillIdList.add(skillId);
-				}
-			}
-		}
-		return canLearnSkillIdList;
+	public void onInitCategory(AbilityData data) {
+		data.setLevelID(getInitialLevelId());
+		data.setSkillExp(getInitialSkillExp());
+		data.setCurrentCP(getInitialMaxCP());
+		data.setMaxCP(getInitialMaxCP());
+		data.setSkillOpen(getInitialSkillOpen());
+	}
+	
+	public void onEnterCategory(AbilityData data) {
+	}
+	public void onLeaveCategory(AbilityData data) {
+	}
+	
+	@Deprecated
+	public List<SkillBase> getCanLearnSkillIdList(AbilityData data) {
+		return data.getCanLearnSkillList();
 	}
 	
 	@SideOnly(Side.CLIENT)

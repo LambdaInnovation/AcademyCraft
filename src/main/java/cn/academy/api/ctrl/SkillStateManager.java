@@ -7,7 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 /**
  * This class manages all SkillStates, both on client and on server.
@@ -26,6 +28,7 @@ public class SkillStateManager {
 			return server;
 		}
 	}
+	
 	/**
 	 * Called by EventHandler.
 	 * @param player
@@ -66,11 +69,44 @@ public class SkillStateManager {
 	}
 	
 	/**
+	 * Internal use only. Use SkillState.removeState instead.
+	 * @param player
+	 * @param clazz
+	 */
+	public static void removeStateWithClass(EntityPlayer player, Class<? extends SkillState> clazz) {
+		List<SkillState> playerList = getState(player);
+		Iterator<SkillState> itor = playerList.iterator();
+		while (itor.hasNext()) {
+			SkillState state = itor.next();
+			if (state.getClass().equals(clazz)) {
+				state.onFinish();
+				itor.remove();
+			}
+		}
+	}
+
+	/**
+	 * Get the first state with class of clazz for player.
+	 * @param player
+	 * @param clazz
+	 * @return
+	 */
+	public static SkillState getStateWithClass(EntityPlayer player, 
+			Class<? extends SkillState> clazz) {
+		for (SkillState state : getState(player)) {
+			if (state.getClass().equals(clazz)) {
+				return state;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Get all skill states of the given player. The result can not be modified.
 	 * @param player
 	 * @return
 	 */
-	public static List<SkillState> getStateForPlayer(EntityPlayer player) {
+	public static List<SkillState> getState(EntityPlayer player) {
 		Map<String, List<SkillState>> stateMap = getMapForSide(player);
 		if (stateMap.containsKey(player)) {
 			return Collections.unmodifiableList(stateMap.get(player));
@@ -83,7 +119,7 @@ public class SkillStateManager {
 	 * Send tick event to all active State in the server map. Called by EventHandlerServer.
 	 */
 	static void tickServer() {
-		for (List<SkillState> playerList : client.values()) {
+		for (List<SkillState> playerList : server.values()) {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
@@ -99,11 +135,30 @@ public class SkillStateManager {
 	 * Send tick event to all active State in the client map. Called by EventHandlerClient.
 	 */
 	static void tickClient() {
-		for (List<SkillState> playerList : server.values()) {
+		for (List<SkillState> playerList : client.values()) {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.onTick()) {
+					state.onFinish();
+					itor.remove();
+				}
+			}
+		}
+		if (++clientTickRemovePlayer == 5000) {
+			removePlayerOnClient();
+		}
+	}
+	
+	static int clientTickRemovePlayer = 0;
+	
+	private static void removePlayerOnClient() {
+		World world = Minecraft.getMinecraft().theWorld;
+		for (List<SkillState> playerList : client.values()) {
+			Iterator<SkillState> itor = playerList.iterator();
+			while (itor.hasNext()) {
+				SkillState state = itor.next();
+				if (world.getEntityByID(state.player.getEntityId()) != state.player) {
 					state.onFinish();
 					itor.remove();
 				}

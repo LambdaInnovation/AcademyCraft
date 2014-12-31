@@ -46,12 +46,13 @@ public class SkillState {
 	}
 	
 	public final void finishSkill() {
-		onFinish();
-		SkillStateManager.removeState(this);
+		//Finish the state next tick.
+		//This can avoid modification of the player state list while iterating.
+		finishSkillAfter(1);
 	}
 	
 	public final void finishSkillAfter(int ticks) {
-		if (tickToFinish != 0) {
+		if (ticks != 1 && tickToFinish != 0) {
 			AcademyCraftMod.log.warn("Call finishSkillAfter more than once. Overwritten.");
 		}
 		tickToFinish = ticks;
@@ -106,4 +107,5 @@ public class SkillState {
 		}
 		return onTick();
 	}
+	
 }

@@ -41,8 +41,7 @@ public class PRHSkillRender implements PlayerRenderHandler {
 	public void renderBody(EntityPlayer player, World world) {
 		AbilityData data = AbilityDataMain.getData(player);
 		GL11.glPushMatrix(); {
-			List<SkillState> states = SkillStateManager.getStateForPlayer(player);
-			for(SkillState s : states) {
+			for(SkillState s : SkillStateManager.getState(player)) {
 				processSkill(player, s);
 			}
 		} GL11.glPopMatrix();
