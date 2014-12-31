@@ -3,6 +3,7 @@
  */
 package cn.academy.core.client.gui.dev;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,9 +27,7 @@ import cn.liutils.api.register.IGuiElement;
  */
 public class GuiDeveloper extends GuiScreenLIAdaptor {
 	
-	//Constants
-
-	
+	//Constants 
 	protected static final int
 		WIDTH = 228,
 		HEIGHT = 185;
@@ -55,7 +54,11 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
     public void drawScreen(int par1, int par2, float par3)
     {
     	update();
+    	this.drawDefaultBackground();
+    	GL11.glPushMatrix(); {
+    	GL11.glTranslated(0, 0, 100);
     	drawElements(par1, par2);
+    	} GL11.glPopMatrix();
     }
   
     

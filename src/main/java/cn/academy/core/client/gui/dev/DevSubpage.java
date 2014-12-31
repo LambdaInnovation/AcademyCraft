@@ -25,11 +25,13 @@ public abstract class DevSubpage extends LIGuiPage {
 	
 	private String name;
 	private final ResourceLocation back;
+	protected final GuiDeveloper dev;
 
-	public DevSubpage(GuiScreen parent, String s, ResourceLocation back) {
+	public DevSubpage(GuiDeveloper parent, String s, ResourceLocation back) {
 		super(parent, s, PG_OFFSET_X, PG_OFFSET_Y);
 		name = s;
 		this.back = back;
+		this.dev = parent;
 	}
 	
 	@Override

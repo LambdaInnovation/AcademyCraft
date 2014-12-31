@@ -18,6 +18,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.client.TextUtils;
+import cn.liutils.api.client.TrueTypeFont;
 import cn.liutils.api.client.gui.LIGuiPage;
 import cn.liutils.api.client.gui.part.LIGuiPart;
 import cn.liutils.api.client.util.HudUtils;
@@ -25,7 +26,7 @@ import cn.liutils.api.client.util.RenderUtils;
 
 public class PageMainBase extends LIGuiPage {
 
-	public static final float TITLE_CENTER_X = 165.75F, TITLE_CENTER_Y = 10.5F;
+	public static final float TITLE_CENTER_X = 165.75F, TITLE_CENTER_Y = 4.5F;
 
 	ModelBiped model;
 	GuiDeveloper dev;
@@ -49,8 +50,8 @@ public class PageMainBase extends LIGuiPage {
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
 		dev.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawAtCenter(TextUtils.FONT_CONSOLAS_64, pname,
-				TITLE_CENTER_X, TITLE_CENTER_Y, 12);
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, pname,
+				TITLE_CENTER_X, TITLE_CENTER_Y, 12, TrueTypeFont.ALIGN_CENTER);
 		
 		//Titles
 		String str = "Holographic View"; //TODO localization
@@ -118,7 +119,7 @@ public class PageMainBase extends LIGuiPage {
 		
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix(); {
-			GL11.glTranslatef(183, 58, 0F);
+			GL11.glTranslatef(183, 58, 100F);
 			GL11.glScalef((float) (-scale), (float) scale, (float) scale);
 			GL11.glRotated(-25, 1, 0, 0);
 			RenderHelper.enableStandardItemLighting();

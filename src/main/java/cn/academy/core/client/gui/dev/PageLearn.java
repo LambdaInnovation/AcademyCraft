@@ -5,10 +5,16 @@ package cn.academy.core.client.gui.dev;
 
 import java.util.Set;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.api.client.TextUtils;
+import cn.liutils.api.client.TrueTypeFont;
+import cn.liutils.api.client.gui.part.LIGuiButton;
 import cn.liutils.api.client.gui.part.LIGuiPart;
+import cn.liutils.api.client.util.HudUtils;
+import cn.liutils.api.client.util.RenderUtils;
 
 /**
  * @author WeathFolD
@@ -16,12 +22,44 @@ import cn.liutils.api.client.gui.part.LIGuiPart;
  */
 public class PageLearn extends DevSubpage {
 
-	public PageLearn(GuiScreen parent) {
+	public PageLearn(GuiDeveloper parent) {
 		super(parent, "adsp_learn", ACClientProps.TEX_GUI_AD_LEARNING);
 	}
 
 	@Override
 	public void addElements(Set<LIGuiPart> set) {
+		LIGuiButton btn = new LIGuiButton("btn_learn", 34F, 26F, 61.5F, 13.5F) {
+
+			@Override
+			public void drawAtOrigin(float mx, float my, boolean mouseHovering) {
+				int texU = 0, texV = 0;
+	
+				if (isInvalid) {
+					texU = this.invaildTexU;
+					texV = this.invaildTexV;
+				} else if (mouseHovering) {
+					texU = this.downTexU;
+					texV = this.downTexV;
+				} else {
+					texU = this.texU;
+					texV = this.texV;
+				}
+				if (this.hasTexOverride())
+					RenderUtils.loadTexture(texOverride);
+				HudUtils.drawTexturedModalRect(0F, 0F, texU, texV, width,
+						height, texWidth, texHeight);
+
+				String str = ACLangs.learnAbility();
+				dev.bindColor(dev.DEFAULT_COLOR);
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 31F, 3F, 8, TrueTypeFont.ALIGN_CENTER);
+				GL11.glColor4f(1, 1, 1, 1);
+			}
+		};
+		btn.setDownCoords(1, 419).setInvaildCoords(1, 477)
+				.setTexSize(123F, 27F).setTextureCoords(1, 448)
+				.setTextureOverride(ACClientProps.TEX_GUI_AD_LEARNING);
+		set.add(btn);
+
 	}
 
 	@Override

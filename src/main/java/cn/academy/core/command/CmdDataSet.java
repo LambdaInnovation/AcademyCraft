@@ -32,7 +32,7 @@ public class CmdDataSet extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/aset [cat][level][cp][maxcp][exp][open] <index> [value]";
+		return "/aset [cat][level][cp][maxcp][exp][open][god] <index> <value>";
 	}
 
 	@Override
@@ -99,6 +99,14 @@ public class CmdDataSet extends LICommandBase {
 				sendError(ics, "Array key doesnt exist.");
 			}
 			
+		} else if(args.length == 1) { 
+			if(args[0].equalsIgnoreCase("god")) {
+				//Enter god mode
+				for(int i = 0; i < data.getSkillCount(); ++i) {
+					data.setSkillOpen(i, true);
+				}
+				sendChat(ics, "Entered god mode");
+			}
 		} else {
 			this.sendError(ics, "Invalid argument size");
 			this.sendChat(ics, getCommandUsage(ics));
