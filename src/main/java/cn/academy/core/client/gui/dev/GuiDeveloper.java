@@ -3,7 +3,6 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +14,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.data.AbilityData;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.block.TileDeveloper;
 import cn.liutils.api.client.gui.GuiScreenLIAdaptor;
@@ -37,8 +38,9 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 	int pageID;
 	
 	LIGuiPage pageMain;
-	List<DevSubpage> subs = new ArrayList<DevSubpage>();
+	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
+	AbilityData data;
 	TileDeveloper dev;
 	EntityPlayer user;
 	
@@ -46,9 +48,11 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 		super(WIDTH, HEIGHT);
 		user = dev.getUser();
 		this.dev = dev;
+		data = AbilityDataMain.getData(user);
 		
 		subs.add(new PageLearn(this));
-		pageMain = new PageMainBase(this);
+		subs.add(new PageSkills(this));
+		pageMain = new PageMainOrdinary(this);
 	}
 	
     public void drawScreen(int par1, int par2, float par3)
@@ -56,8 +60,8 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
     	update();
     	this.drawDefaultBackground();
     	GL11.glPushMatrix(); {
-    	GL11.glTranslated(0, 0, 100);
-    	drawElements(par1, par2);
+	    	GL11.glTranslated(0, 0, 100);
+	    	drawElements(par1, par2);
     	} GL11.glPopMatrix();
     }
   
@@ -104,5 +108,11 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 		pages.add(pageMain);
 		pages.add(subs.get(pageID));
 	}
+	
+	@Override
+    public boolean doesGuiPauseGame()
+    {
+        return false;
+    }
 	
 }

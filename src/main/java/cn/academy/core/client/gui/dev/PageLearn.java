@@ -29,15 +29,18 @@ public class PageLearn extends DevSubpage {
 	public void drawPage() {
 		super.drawPage();
 		GL11.glPushMatrix(); {
-			dev.bindColor(dev.DEFAULT_COLOR);
+			//Energy bar
 			double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
-			HudUtils.drawTexturedModalRect(8.5, 112.5, 17, 293, 122 * prog, 11, 244 * prog, 11);
+			HudUtils.drawTexturedModalRect(8.5, 112.5, 17, 293, 122 * prog, 5.5, 244 * prog, 11);
+			
+			dev.bindColor(dev.DEFAULT_COLOR);
+			//Machine stat
 			String str = ACLangs.machineStat();
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 100.5, 9);
-			
+			//Current Energy
 			str = String.format("%s: %.0f/%.0f EU", ACLangs.curEnergy(), dev.dev.curEnergy, dev.dev.getMaxEnergy());
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 121, 8);
-			
+			//Sync Rate
 			str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 129, 8);
 			GL11.glColor4f(1, 1, 1, 1);

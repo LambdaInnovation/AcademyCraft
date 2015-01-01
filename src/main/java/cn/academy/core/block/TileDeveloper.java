@@ -3,6 +3,7 @@
  */
 package cn.academy.core.block;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
@@ -30,7 +32,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	public double curEnergy;
 	private EntityPlayer user;
 	private int updateCount;
-	
+	private boolean init;
 
 	public TileDeveloper() { }
 	
@@ -41,11 +43,14 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		if(gs == null || !(gs instanceof GuiDeveloper)) {
 			userQuit();
 		}
+		if(!worldObj.isRemote && !init) {
+			init = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
 		
 		++updateCount;
-		if(!worldObj.isRemote) {
+		if(!worldObj.isRemote && user != null) {
 			//HeartBeat update
-			if(user != null && updateCount >= UPDATE_RATE) {
+			if(updateCount >= UPDATE_RATE) {
 				updateCount = 0;
 				AcademyCraftMod.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
 			}

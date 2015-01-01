@@ -38,7 +38,9 @@ public class ACClientProps {
 		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png"),
 		TEX_QUESTION_MARK = src("academy:textures/guis/question.png"),
 		TEX_LOGO_RAYS = src("academy:textures/guis/logo_rays.png"),
-		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png");
+		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png"),
+		TEX_LOGO_GEOM = src("academy:textures/guis/logo_geom.png"),
+		TEX_LOGO_BACK = src("academy:textures/guis/logo_back.png");
 	
 	//Ability Textures
 	public static final ResourceLocation
