@@ -49,7 +49,7 @@ public abstract class PatternHold implements IPattern {
 		case RAW_ADJUST:
 			if (!holdCalled && rawTime >= this.time) {
 				holdCalled = true;
-				state.onHold();
+				state.onHold(); //TODO: Crashed multiple times here because of NullPointerException
 			}
 		default:
 			return false;
