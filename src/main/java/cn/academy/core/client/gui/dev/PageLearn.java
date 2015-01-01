@@ -14,7 +14,6 @@ import cn.liutils.api.client.TrueTypeFont;
 import cn.liutils.api.client.gui.part.LIGuiButton;
 import cn.liutils.api.client.gui.part.LIGuiPart;
 import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
 
 /**
  * @author WeathFolD
@@ -27,28 +26,34 @@ public class PageLearn extends DevSubpage {
 	}
 
 	@Override
+	public void drawPage() {
+		super.drawPage();
+		GL11.glPushMatrix(); {
+			//Energy bar
+			double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
+			HudUtils.drawTexturedModalRect(8.5, 112.5, 17, 293, 122 * prog, 5.5, 244 * prog, 11);
+			
+			dev.bindColor(dev.DEFAULT_COLOR);
+			//Machine stat
+			String str = ACLangs.machineStat();
+			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 100.5, 9);
+			//Current Energy
+			str = String.format("%s: %.0f/%.0f EU", ACLangs.curEnergy(), dev.dev.curEnergy, dev.dev.getMaxEnergy());
+			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 121, 8);
+			//Sync Rate
+			str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
+			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 129, 8);
+			GL11.glColor4f(1, 1, 1, 1);
+		} GL11.glPopMatrix();
+	}
+	
+	static final int[] BUTTON_COLOR = {120, 206, 255};
+	@Override
 	public void addElements(Set<LIGuiPart> set) {
 		LIGuiButton btn = new LIGuiButton("btn_learn", 34F, 26F, 61.5F, 13.5F) {
-
 			@Override
 			public void drawAtOrigin(float mx, float my, boolean mouseHovering) {
-				int texU = 0, texV = 0;
-	
-				if (isInvalid) {
-					texU = this.invaildTexU;
-					texV = this.invaildTexV;
-				} else if (mouseHovering) {
-					texU = this.downTexU;
-					texV = this.downTexV;
-				} else {
-					texU = this.texU;
-					texV = this.texV;
-				}
-				if (this.hasTexOverride())
-					RenderUtils.loadTexture(texOverride);
-				HudUtils.drawTexturedModalRect(0F, 0F, texU, texV, width,
-						height, texWidth, texHeight);
-
+				super.drawAtOrigin(mx, my, mouseHovering);
 				String str = ACLangs.learnAbility();
 				dev.bindColor(dev.DEFAULT_COLOR);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 31F, 3F, 8, TrueTypeFont.ALIGN_CENTER);

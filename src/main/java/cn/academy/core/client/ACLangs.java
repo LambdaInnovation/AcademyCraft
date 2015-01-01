@@ -27,6 +27,14 @@ public class ACLangs {
 		return local("ac.learnability");
 	}
 	
+	public static String machineStat() {
+		return local("ac.machinestat");
+	}
+	
+	public static String curEnergy() {
+		return local("ac.curenergy");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

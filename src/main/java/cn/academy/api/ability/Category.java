@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -149,6 +150,6 @@ public class Category {
 	
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLogo() {
-		return null;
+		return ACClientProps.TEX_QUESTION_MARK;
 	}
 }

@@ -38,6 +38,7 @@ public abstract class DevSubpage extends LIGuiPage {
 	public void drawPage() {
 		RenderUtils.loadTexture(back);
 		GL11.glEnable(GL11.GL_BLEND);
+		HudUtils.setTextureResolution(512, 512);
 		HudUtils.drawTexturedModalRect(0, 0, 0, 0, PG_WIDTH, PG_HEIGHT, 273, 293);
 	}
 	
