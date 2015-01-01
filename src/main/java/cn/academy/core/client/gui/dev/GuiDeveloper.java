@@ -32,7 +32,7 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 		WIDTH = 228,
 		HEIGHT = 185;
 	
-	public final Vec3 DEFAULT_COLOR = Vec3.createVectorHelper(46D / 255 , 192D / 255, 240D / 255);
+	public final int[] DEFAULT_COLOR = {48, 155, 190};
 
 	int pageID;
 	
@@ -85,6 +85,14 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
     
     public static void bindColor(Vec3 cv) {
     	GL11.glColor3d(cv.xCoord, cv.yCoord, cv.zCoord);
+    }
+    
+    public static void bindColor(int[] arr) {
+    	bindColor(arr[0], arr[1], arr[2]);
+    }
+    
+    public static void bindColor(int r, int g, int b) {
+    	GL11.glColor3ub((byte)r, (byte)g, (byte)b);
     }
     
     protected DevSubpage getCurPage() {

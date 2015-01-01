@@ -23,11 +23,11 @@ import cn.liutils.api.client.util.RenderUtils;
  * @author WeathFolD
  *
  */
-public class GuiCatLogo extends AuxGui {
+public class GuiMainScreen extends AuxGui {
 	
-	public static GuiCatLogo INSTANCE = new GuiCatLogo();
+	public static GuiMainScreen INSTANCE = new GuiMainScreen();
 	
-	private GuiCatLogo() {}
+	private GuiMainScreen() {}
 
 	@Override
 	public boolean isOpen() {

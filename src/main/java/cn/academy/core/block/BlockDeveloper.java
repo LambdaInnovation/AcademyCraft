@@ -62,12 +62,6 @@ public class BlockDeveloper extends BlockDirectionedMulti {
 		return Vec3.createVectorHelper(1, 0, 0.5);
 	}
 	
-	@Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
-    {
-    	return null;
-    }
-	
 	private TileDeveloper safecast(TileEntity te) {
 		return te == null ? null : (te instanceof TileDeveloper ? (TileDeveloper) te : null);
 	}

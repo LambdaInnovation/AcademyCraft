@@ -41,11 +41,18 @@ public class PageMainBase extends LIGuiPage {
 	@Override
 	public void drawPage() {
 		
+		// Background
+		GL11.glEnable(GL11.GL_BLEND);
+		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
+		GL11.glColor4f(1F, 1F, 1, 1);
+		HudUtils.setTextureResolution(512, 512);
+		HudUtils.drawTexturedModalRect(0, 0, 0, 0, dev.WIDTH, dev.HEIGHT, 456, 369);
 		
 		//Player
 		GL11.glPushMatrix(); {
 			drawPlayer(100, 100, 2.1F);
 		} GL11.glPopMatrix();
+		GL11.glColor4f(1, 1, 1, 1);
 		
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
@@ -63,13 +70,6 @@ public class PageMainBase extends LIGuiPage {
 		//Misc
 		drawUserInfo();
 
-		// Background
-		GL11.glEnable(GL11.GL_BLEND);
-		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
-		GL11.glColor4f(1F, 1F, 1, 1);
-		HudUtils.setTextureResolution(512, 512);
-		HudUtils.drawTexturedModalRect(0, 0, 0, 0, 
-				dev.WIDTH, dev.HEIGHT, 456, 369);
 	}
 	
 	private void drawUserInfo() {
