@@ -19,12 +19,11 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.client.TextUtils;
 import cn.liutils.api.client.TrueTypeFont;
-import cn.liutils.api.client.gui.LIGuiPage;
-import cn.liutils.api.client.gui.part.LIGuiPart;
+import cn.liutils.api.client.gui.Widget;
 import cn.liutils.api.client.util.HudUtils;
 import cn.liutils.api.client.util.RenderUtils;
 
-public class PageMainBase extends LIGuiPage {
+public class PageMainBase extends Widget {
 
 	public static final float TITLE_CENTER_X = 165.75F, TITLE_CENTER_Y = 4.5F;
 
@@ -32,31 +31,29 @@ public class PageMainBase extends LIGuiPage {
 	GuiDeveloper dev;
 
 	public PageMainBase(GuiDeveloper gd) {
-		super(gd, "main", 0, 0);
+		super("main", gd.getGui(),  0, 0, gd.WIDTH, gd.HEIGHT);
+		this.setTexMapping(0, 0, 456, 369);
+		this.setTexture(ACClientProps.TEX_GUI_AD_MAIN, 512, 512);
 		dev = gd;
 		model = new ModelBiped();
 		model.isChild = false;
 	}
 
 	@Override
-	public void drawPage() {
-		
+	public void draw(double mx, double my, boolean mouseHovering) {
 		// Background
 		GL11.glEnable(GL11.GL_BLEND);
-		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
-		GL11.glColor4f(1F, 1F, 1, 1);
-		HudUtils.setTextureResolution(512, 512);
-		HudUtils.drawTexturedModalRect(0, 0, 0, 0, dev.WIDTH, dev.HEIGHT, 456, 369);
+		super.draw(mx, my, mouseHovering);
 		
 		//Player
 		GL11.glPushMatrix(); {
-			drawPlayer(100, 100, 2.1F);
+			drawPlayer();
 		} GL11.glPopMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
-		dev.bindColor(dev.DEFAULT_COLOR);
+		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, pname,
 				TITLE_CENTER_X, TITLE_CENTER_Y, 12, TrueTypeFont.ALIGN_CENTER);
 		
@@ -81,14 +78,11 @@ public class PageMainBase extends LIGuiPage {
 		if(data.hasLearned()) {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
+			//Cat and level
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, cat.getDisplayName(), 167.5, 130, 11);
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, data.getLevel().getDisplayName(), 167.5, 140, 8);
 			//Progress Bar
-			//163 154.5/168
-			//58.5 5.5 (117 11)
-			//3 372(387)
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
-			
 			//CP
 			GL11.glColor4f(1, 1, 1, 1);
 			double prog = data.getCurrentCP() / data.getMaxCP();
@@ -96,7 +90,6 @@ public class PageMainBase extends LIGuiPage {
 			//Update prog
 			prog = 0.5;
 			HudUtils.drawTexturedModalRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
-			
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.notLearned(), 167.5, 130, 10);
@@ -105,18 +98,10 @@ public class PageMainBase extends LIGuiPage {
 		HudUtils.drawTexturedModalRect(148.5, 130.5, 15.5, 15.5);
 	}
 
-	@Override
-	public void addElements(Set<LIGuiPart> set) {
-	}
-
-	@Override
-	public void onPartClicked(LIGuiPart part, float subX, float subY) {
-	}
-
-	private void drawPlayer(float x, float y, float scale) {
+	private void drawPlayer() {
 		EntityPlayer player = dev.user;
 		RenderUtils.loadTexture(RenderUtils.STEVE_TEXTURE);
-		
+		float x = 100, y = 100, scale = 2.1F;
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix(); {
 			GL11.glTranslatef(183, 58, 100F);

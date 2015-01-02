@@ -16,6 +16,7 @@ import cn.academy.api.data.AbilityData;
  * The synchronization is automatically handled.
  * @author WeathFolD
  */
+@Deprecated
 public abstract class IAction {
 	private List<IAction> dependencies = new ArrayList<IAction>();
 	
