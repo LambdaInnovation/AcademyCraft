@@ -10,6 +10,8 @@
  */
 package cn.academy.misc.block.elec;
 
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -17,6 +19,8 @@ import net.minecraft.tileentity.TileEntity;
  * @author WeAthFolD
  *
  */
+@RegistrationClass
+@RegTileEntity
 public class TileSolarGenerator extends TileEntity {
 
 	/**

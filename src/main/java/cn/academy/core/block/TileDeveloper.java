@@ -16,6 +16,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.proxy.ACCommonProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.api.util.EntityManipHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,6 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 能力开发机的TE
  * @author WeathFolD
  */
+@RegistrationClass
+@RegTileEntity
 public class TileDeveloper extends TileEntity implements IEnergySink {
 	
 	public static final double INIT_MAX_ENERGY = 80000.0;

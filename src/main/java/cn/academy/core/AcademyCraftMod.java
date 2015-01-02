@@ -98,9 +98,9 @@ public class AcademyCraftMod {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		
-		ACBlocks.init(config);
         RegistrationManager.INSTANCE.registerAll(this, "Block");
         RegistrationManager.INSTANCE.registerAll(this, "Item");
+        RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
 		
 		proxy.init();
 	}

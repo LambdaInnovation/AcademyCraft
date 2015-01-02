@@ -10,6 +10,8 @@
  */
 package cn.academy.misc.block.elec;
 
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +22,8 @@ import net.minecraft.util.AxisAlignedBB;
  * @author WeAthFolD
  *
  */
+@RegistrationClass
+@RegTileEntity
 public class TileWindGenerator extends TileEntity {
 
 	/**
