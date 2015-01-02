@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +22,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
  * @author acaly
  *
  */
+@RegistrationClass
 public class SkillStateMessage implements IMessage {
 	
 	/**
@@ -61,6 +64,7 @@ public class SkillStateMessage implements IMessage {
 		ByteBufUtils.writeTag(buf, nbt);
 	}
 
+	@RegMessageHandler(msg = SkillStateMessage.class, side = RegMessageHandler.Side.CLIENT)
 	public static class Handler implements IMessageHandler<SkillStateMessage, IMessage> {
 
 		@Override

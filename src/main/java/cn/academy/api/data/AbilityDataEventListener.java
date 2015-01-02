@@ -17,11 +17,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 public class AbilityDataEventListener {
 	
 	@RegEventHandler(RegEventHandler.Bus.Forge)
-	public static ForgeEventListener forge;
-	
-	@RegEventHandler(RegEventHandler.Bus.FML)
-	public static FMLEventListener fml;
-	
 	public static class ForgeEventListener {
 		
 		@SubscribeEvent
@@ -53,6 +48,7 @@ public class AbilityDataEventListener {
 		
 	}
 
+	@RegEventHandler(RegEventHandler.Bus.FML)
 	public static class FMLEventListener {
 		
 		@SubscribeEvent

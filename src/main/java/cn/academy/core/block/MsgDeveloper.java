@@ -4,6 +4,8 @@
 package cn.academy.core.block;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Server->Client
  * @author WeathFolD
  */
+@RegistrationClass
 public class MsgDeveloper implements IMessage {
 	
 	int x, y, z;
@@ -46,6 +49,7 @@ public class MsgDeveloper implements IMessage {
 			.writeInt(energy);
 	}
 	
+	@RegMessageHandler(msg = MsgDeveloper.class, side = RegMessageHandler.Side.CLIENT)
 	public static class Handler implements IMessageHandler<MsgDeveloper, IMessage> {
 
 		@Override

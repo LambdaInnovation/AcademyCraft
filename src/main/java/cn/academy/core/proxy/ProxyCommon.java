@@ -20,8 +20,8 @@ public class ProxyCommon {
 	public void init() {
 		AcademyCraftMod.INSTANCE.log.info("Loading common proxy of Academy Craft.");
 
-		AcademyCraftMod.netHandler.registerMessage(MsgDeveloper.Handler.class, 
-				MsgDeveloper.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
+		//AcademyCraftMod.netHandler.registerMessage(MsgDeveloper.Handler.class, 
+		//		MsgDeveloper.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		
 		//----------
 		//Abilities registry

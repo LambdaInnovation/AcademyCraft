@@ -36,10 +36,6 @@ public class AbilityDataMain {
 	private AbilityDataMain() {}
 	
 	public static final void init() {
-		AcademyCraftMod.netHandler.registerMessage(MsgResetAbilityData.Handler.class, 
-				MsgResetAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
-		AcademyCraftMod.netHandler.registerMessage(MsgSimpleChange.Handler.class, 
-				MsgSimpleChange.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	}
 	
 	public static final void register(EntityPlayer player) {

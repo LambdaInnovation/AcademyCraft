@@ -16,6 +16,7 @@ import cn.academy.core.register.ACBlocks;
 import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
+import cn.annoreg.mc.RegMessageHandler;
 import cn.liutils.api.register.LIGuiHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -68,6 +69,7 @@ public class AcademyCraftMod {
 	/**
 	 * 网络发包处理实例
 	 */
+	@RegMessageHandler.WrapperInstance
 	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraftMod.NET_CHANNEL);
 	
 	/**
@@ -103,6 +105,7 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "Entity");
         RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
         RegistrationManager.INSTANCE.registerAll(this, "EventHandler");
+        RegistrationManager.INSTANCE.registerAll(this, "MessageHandler");
         
 		proxy.init();
 	}

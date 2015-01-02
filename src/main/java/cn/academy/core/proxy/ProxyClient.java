@@ -46,10 +46,9 @@ public class ProxyClient extends ProxyCommon {
 	public void preInit() {
 		AcademyCraftMod.guiHandler.addGuiElement(
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
+		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
 		LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
 		LIClientEvents.registerAuxGui(GuiMainScreen.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(new ClientEvents());
-		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
 	}
 	
 	@Override

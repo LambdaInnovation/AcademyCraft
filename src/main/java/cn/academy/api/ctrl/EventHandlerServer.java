@@ -12,6 +12,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -41,6 +42,7 @@ public class EventHandlerServer {
 	 * @author acaly
 	 *
 	 */
+	@RegMessageHandler(msg = ControlMessage.class, side = RegMessageHandler.Side.SERVER)
 	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
 
 		@Override
@@ -250,9 +252,6 @@ public class EventHandlerServer {
 	 * Setup the key bindings and network.
 	 */
 	public static void init() {
-		//Network registry
-		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
-				AcademyCraftMod.getNextChannelID(), Side.SERVER);
 	}
 	
 	/**

@@ -14,6 +14,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
@@ -75,6 +76,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * @author acaly
 	 *
 	 */
+	@RegMessageHandler(msg = ControlMessage.class, side = RegMessageHandler.Side.CLIENT)
 	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
 		
 		@Override
@@ -257,11 +259,6 @@ public class EventHandlerClient implements IKeyHandler {
 		LIKeyProcess.instance.addKey("Skill 3", KEY_S3, false, INSTANCE.new KeyHandler(2));
 		LIKeyProcess.instance.addKey("Skill 4", KEY_S4, false, INSTANCE.new KeyHandler(3));
 		LIKeyProcess.instance.addKey("Ability activation", KEY_DISABLE, false, INSTANCE);
-		
-		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
-				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
-		AcademyCraftMod.netHandler.registerMessage(SkillStateMessage.Handler.class, SkillStateMessage.class, 
-				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	}
 	
 	public static PresetManager getPresetManager() {
