@@ -11,6 +11,7 @@
 package cn.academy.misc.item;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.ctor.Constructible;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
@@ -21,6 +22,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Tablet
  */
 public class ItemTablet extends Item {
+	
+	private static final String[] unames = {"", "ability_tablet1", "ability_tablet2", "ability_tablet3"};
 
 	int tabletID;
 	
@@ -32,9 +35,11 @@ public class ItemTablet extends Item {
 	 * @param capsuleID
 	 *		metadata2
 	 */
+	@Constructible
 	public ItemTablet(int subID) {
 		setCreativeTab(AcademyCraftMod.cct);
 		tabletID = subID;
+		this.setUnlocalizedName(unames[subID]);
 	}
 	
 	@Override

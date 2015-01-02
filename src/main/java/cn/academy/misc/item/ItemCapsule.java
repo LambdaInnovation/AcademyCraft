@@ -11,6 +11,7 @@
 package cn.academy.misc.item;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.ctor.Constructible;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,19 +23,24 @@ import net.minecraft.item.Item;
  */
 public class ItemCapsule extends Item {
 	
+	private static String[] uname = {"", "ability_capsule1", "ability_capsule2", "ability_capsule3"};
+	
 	int capsuleID;
 	
 	/**
 	 * 
 	 * @param subID
 	 * metadata
+	 * TODO START FROM 1!
 	 * 
 	 * @param capsuleID
 	 * metadata2
 	 */
+	@Constructible
 	public ItemCapsule(int subID) {
 		setCreativeTab(AcademyCraftMod.cct);
 		capsuleID = subID;
+		this.setUnlocalizedName(uname[subID]);
 	}
 	
 	@Override

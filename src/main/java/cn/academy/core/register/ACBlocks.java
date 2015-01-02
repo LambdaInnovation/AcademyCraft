@@ -28,26 +28,26 @@ public class ACBlocks {
 		//tinore,
 		//aluminumore;
 	
-	@RegBlock(name = "ac_developer")
+	@RegBlock
 	public static BlockDeveloper developer;
 	
-	@RegBlock(name = "ac_windgen")
+	@RegBlock
 	public static BlockWindGenerator windGen;
 	
-	@RegBlock(name = "ac_solargen")
+	@RegBlock
 	public static BlockSolarGenerator solarGen;
 	
-	@RegBlock(name = "copper_ore")
+	@RegBlock
 	@RegBlock.OreDict("oreCopper")
 	@Ctor({@Arg(Str = "copperore"), @Arg(Int = 1)})
 	public static ACBlockOre copperore;
 	
-	@RegBlock(name = "tin_ore")
+	@RegBlock
 	@RegBlock.OreDict("oreTin")
 	@Ctor({@Arg(Str = "tinore"), @Arg(Int = 1)})
 	public static ACBlockOre tinore;
 	
-	@RegBlock(name = "aluminumore")
+	@RegBlock
 	@RegBlock.OreDict("oreAluminum")
 	@Ctor({@Arg(Str = "aluminumore"), @Arg(Int = 1)})
 	public static ACBlockOre aluminumore;
