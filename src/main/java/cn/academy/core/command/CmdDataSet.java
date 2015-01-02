@@ -14,12 +14,16 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegCommand;
 import cn.liutils.api.command.LICommandBase;
 
 /**
  * @author WeathFolD
  *
  */
+@RegistrationClass
+@RegCommand
 public class CmdDataSet extends LICommandBase {
 
 	public CmdDataSet() {

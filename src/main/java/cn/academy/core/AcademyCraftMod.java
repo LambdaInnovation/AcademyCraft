@@ -112,10 +112,11 @@ public class AcademyCraftMod {
 	
 	@EventHandler()
 	public void serverStarting(FMLServerStartingEvent event) {
-		CommandHandler cm = (CommandHandler) event.getServer()
-				.getCommandManager();
-		cm.registerCommand(new CmdDataSet());
-		cm.registerCommand(new CmdDataView());
+		RegistrationManager.INSTANCE.registerAll(this, "Command");
+		//CommandHandler cm = (CommandHandler) event.getServer()
+		//		.getCommandManager();
+		//cm.registerCommand(new CmdDataSet());
+		//cm.registerCommand(new CmdDataView());
 	}
 	
 	private static int nextNetID = 0;
