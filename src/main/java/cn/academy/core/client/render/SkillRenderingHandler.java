@@ -23,6 +23,8 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.client.render.SkillRenderer.HandRenderType;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.client.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -32,6 +34,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  * while multiple rendering routines sharing same util/drawing functions.
  * @author WeathFolD
  */
+@RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillRenderingHandler {
 	
 	private static SkillRenderingHandler instance = new SkillRenderingHandler();

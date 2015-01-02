@@ -12,6 +12,8 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
 import cn.liutils.api.register.Configurable;
@@ -31,6 +33,8 @@ import cpw.mods.fml.relauncher.Side;
  * @author acaly
  *
  */
+@RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class EventHandlerClient implements IKeyHandler {
 	
 	/**

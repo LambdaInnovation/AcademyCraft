@@ -58,11 +58,7 @@ public class ProxyClient extends ProxyCommon {
 
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
 		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
-		EventHandlerClient.init();
-		PresetManager.init();
-		SkillRenderingHandler.init();
 		
-		System.out.println("Preset key: " + KEY_ID_PRESET_SELECT);
 		LIKeyProcess.instance.addKey("preset_select", KEY_ID_PRESET_SELECT, false, new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {

@@ -90,7 +90,6 @@ public class AcademyCraftMod {
 
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		
-		AbilityDataMain.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
 		proxy.preInit();
 	}
@@ -102,6 +101,7 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "Item");
         RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
         RegistrationManager.INSTANCE.registerAll(this, "Entity");
+        RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
         
 		proxy.init();
 	}

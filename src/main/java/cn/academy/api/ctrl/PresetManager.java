@@ -4,12 +4,16 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.api.ability.Category;
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
 
 /**
  * Used by EventHandlerClient to store, find, switch, and modify presets.
  * @author acaly
  *
  */
+@RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class PresetManager {
 	
 	/**
