@@ -13,6 +13,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.client.key.IKeyHandler;
@@ -230,7 +231,8 @@ public class EventHandlerClient implements IKeyHandler {
 	@Configurable(category = "Control", key = "KEY_DISABLE", defValueInt = DEFAULT_KEY_DISABLE)
 	public static int KEY_DISABLE;
 	
-	private static final EventHandlerClient INSTANCE = new EventHandlerClient();
+	@RegEventHandler(RegEventHandler.Bus.FML)
+	public static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
 	private Category category;
 	
@@ -260,8 +262,6 @@ public class EventHandlerClient implements IKeyHandler {
 				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		AcademyCraftMod.netHandler.registerMessage(SkillStateMessage.Handler.class, SkillStateMessage.class, 
 				AcademyCraftMod.getNextChannelID(), Side.CLIENT);
-	
-		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 	
 	public static PresetManager getPresetManager() {

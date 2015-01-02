@@ -36,8 +36,6 @@ public class AbilityDataMain {
 	private AbilityDataMain() {}
 	
 	public static final void init() {
-		MinecraftForge.EVENT_BUS.register(new AbilityDataEventListener().new ForgeEventListener());
-		FMLCommonHandler.instance().bus().register(new AbilityDataEventListener().new FMLEventListener());
 		AcademyCraftMod.netHandler.registerMessage(MsgResetAbilityData.Handler.class, 
 				MsgResetAbilityData.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		AcademyCraftMod.netHandler.registerMessage(MsgSimpleChange.Handler.class, 

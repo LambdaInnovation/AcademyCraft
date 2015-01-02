@@ -11,6 +11,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -237,7 +238,8 @@ public class EventHandlerServer {
 		
 	}
 	
-	private static final EventHandlerServer INSTANCE = new EventHandlerServer();
+	@RegEventHandler(RegEventHandler.Bus.FML)
+	public static final EventHandlerServer INSTANCE = new EventHandlerServer();
 
 	/**
 	 * Make it private.
@@ -251,8 +253,6 @@ public class EventHandlerServer {
 		//Network registry
 		AcademyCraftMod.netHandler.registerMessage(NetworkHandler.class, ControlMessage.class, 
 				AcademyCraftMod.getNextChannelID(), Side.SERVER);
-		//Server tick event
-		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 	
 	/**

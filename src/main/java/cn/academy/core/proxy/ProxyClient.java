@@ -55,8 +55,8 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void init() {
 		super.init();
-
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
+		
 		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
 		
 		LIKeyProcess.instance.addKey("preset_select", KEY_ID_PRESET_SELECT, false, new IKeyHandler() {

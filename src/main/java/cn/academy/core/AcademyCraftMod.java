@@ -102,6 +102,7 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
         RegistrationManager.INSTANCE.registerAll(this, "Entity");
         RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
+        RegistrationManager.INSTANCE.registerAll(this, "EventHandler");
         
 		proxy.init();
 	}
