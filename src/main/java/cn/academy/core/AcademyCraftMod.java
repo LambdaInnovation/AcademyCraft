@@ -101,7 +101,8 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "Block");
         RegistrationManager.INSTANCE.registerAll(this, "Item");
         RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
-		
+        RegistrationManager.INSTANCE.registerAll(this, "Entity");
+        
 		proxy.init();
 	}
 
@@ -113,10 +114,6 @@ public class AcademyCraftMod {
 	@EventHandler()
 	public void serverStarting(FMLServerStartingEvent event) {
 		RegistrationManager.INSTANCE.registerAll(this, "Command");
-		//CommandHandler cm = (CommandHandler) event.getServer()
-		//		.getCommandManager();
-		//cm.registerCommand(new CmdDataSet());
-		//cm.registerCommand(new CmdDataView());
 	}
 	
 	private static int nextNetID = 0;

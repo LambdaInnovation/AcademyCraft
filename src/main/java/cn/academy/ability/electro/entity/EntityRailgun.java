@@ -9,12 +9,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import cn.academy.misc.entity.EntityRay;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cn.weaponmod.api.damage.Damage;
 
 /**
  * The railgun ray entity, alive on both client and server side.
  * @author WeathFolD
  */
+@RegistrationClass
+@RegEntity
 public class EntityRailgun extends EntityRay {
 
 	private class RailgunDamage extends Damage {

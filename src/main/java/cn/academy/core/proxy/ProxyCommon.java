@@ -24,8 +24,10 @@ public class ProxyCommon {
 				MsgDeveloper.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		
 		//Entity Registry
+		/*
 		registerEntity(EntityRailgun.class, "ac_railgun", nextEntityId());
 		registerEntity(EntityElecDart.class, "ac_elecdart", nextEntityId());
+		*/
 		
 		//----------
 		//Abilities registry
@@ -39,7 +41,7 @@ public class ProxyCommon {
 	public void postInit() {}
 	
 	public void commandInit(CommandHandler cm) {}
-	
+	/*
 	int nextEntityId = 0;
 	private int nextEntityId() {
 		return nextEntityId++;
@@ -52,5 +54,5 @@ public class ProxyCommon {
 	private void registerEntity(Class<? extends Entity> cl, String name, int id, int trackRange, int freq, boolean updateVel) {
 		EntityRegistry.registerModEntity(cl, name, id, AcademyCraftMod.INSTANCE, trackRange, freq, updateVel);
 	}
-	
+	*/
 }
