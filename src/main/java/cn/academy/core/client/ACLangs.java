@@ -35,6 +35,10 @@ public class ACLangs {
 		return local("ac.curenergy");
 	}
 	
+	public static String pgLearn() {
+		return local("page.adlearning");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

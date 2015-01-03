@@ -1,4 +1,4 @@
-#English Language File 2014/8/5 for debugging
+#English Language File 2015/1/3 Happy New Year~~~
 #Items
 item.ability_void.name=
 item.ac_logo.name=AcademyCraft Logo
@@ -23,9 +23,10 @@ item.ac_siliconrod.name=Silicon Rod
 item.ac_coppercoil.name=Copper Coil
 item.ac_corebearing.name=Core Bearing
 
-
 #Blocks
-tile.ability_developer.name=Ability Developer
+tile.ac_developer.name=Ability Developer
+tile.null.name=
+tile.windgen.name=Wind Generator
 tile.fieldincr.name=Field Increase Module
 tile.copperore.name=Copper Ore
 tile.tinore.name=Tin Ore
@@ -55,7 +56,7 @@ aimctrl.classinit=Player Ability class uninitialized.
 setting.successful=Setting successful.
 setting.outofbounds=Input out of bounds.
 
-#GUI?
+#GUI
 gui.remaining.energy=Remaining Energy
 gui.energy.unit=EU
 page.adlearning=Ability Learning
@@ -69,3 +70,8 @@ admain.estm=Estm. Consumption
 adskill.learned=Already Aquired
 curenergy.name=Current Energy
 transspd.name=Transfer Speed
+ac.notlearned=Not Learned
+ac.machinestat=Stat
+ac.curenergy=Current Energy
+ac.syncrate=Rate
+ac.learnability=Learn Ability
