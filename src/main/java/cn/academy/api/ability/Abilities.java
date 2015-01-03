@@ -4,7 +4,6 @@
 package cn.academy.api.ability;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +26,7 @@ public class Abilities {
 	}
 	
 	public static Category getCategory(int caid) {
-		Category cat = GenericUtils.safeFetchFrom(catList, caid);
-		if (cat == null) {
-			AcademyCraftMod.log.error("Trying to get a category that does not exist.");
-			return catList.get(0);
-		}
-		return cat;
+		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(catList, caid));
 	}
 	
 	public static SkillBase getSkill(String name) {
@@ -67,13 +61,7 @@ public class Abilities {
 	public static final SkillDebug skillDebug = new SkillDebug();
 	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
 	
-	public static final Category catEmpty = 
-			new Category(Arrays.<SkillBase>asList(skillEmpty, skillDebug, skillHoldTest))
-			{
-				{
-					this.addLevel(new Level(this));
-				}
-			};
+	public static final Category catEmpty = new Category();
 	
 	static {
 		registerCat(catEmpty);

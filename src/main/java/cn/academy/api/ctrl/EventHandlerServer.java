@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
+import cn.liutils.api.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -62,6 +63,9 @@ public class EventHandlerServer {
 				//Send the id back to client.
 				AcademyCraftMod.netHandler.sendTo(
 						new ControlMessage(0, msg.eventType, worldId), player);
+				break;
+			case CLIENT_STOP_ALL:
+				INSTANCE.skillEventAll(player, SkillEventType.RAW_CANCEL);
 				break;
 			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from client.");
@@ -252,12 +256,7 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
-		Category cat = AbilityDataMain.getData(player).getCategory();
-
-		if(cat == null) {
-			AcademyCraftMod.log.fatal("Get empty category for player on server.");
-			return;
-		}
+		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		
 		//Create every raw event handler for this player.
 		Map<Integer, RawEventHandler> rehMap = new HashMap();
@@ -276,6 +275,7 @@ public class EventHandlerServer {
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
 		skillEventAll(SkillEventType.RAW_TICK);
+		SkillStateManager.tickServer();
 	}
 	
 	@SubscribeEvent
@@ -290,8 +290,6 @@ public class EventHandlerServer {
 		kaMap.remove(player);
 		
 		SkillStateManager.removePlayer(player);
-		//TODO IMPORTANT:
-		//Should inform all other clients to remove skill states of the player who has left.
 	}
 
 	/**

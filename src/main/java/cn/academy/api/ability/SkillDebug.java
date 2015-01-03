@@ -5,8 +5,6 @@ import net.minecraft.util.ChatComponentText;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
-import cn.academy.api.ctrl.pattern.PatternSimpleHold;
-import cn.academy.api.ctrl.pattern.PatternUp;
 
 public class SkillDebug extends SkillBase {
 	
@@ -38,7 +36,7 @@ public class SkillDebug extends SkillBase {
 	@Override
 	public void initPattern(RawEventHandler reh) {
 		
-		reh.addPattern(new PatternSimpleHold() {
+		reh.addPattern(new PatternDown() {
 
 			@Override
 			public SkillState createSkill(EntityPlayer player) {

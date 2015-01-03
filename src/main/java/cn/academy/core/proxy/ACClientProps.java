@@ -15,18 +15,16 @@ public class ACClientProps {
 
 	//Textures
 	public static final ResourceLocation
-		TEX_MDL_ABILITY_DEVELOPER = src("academy:textures/models/ability_developer.png"),
+		TEX_MDL_DEVELOPER = src("academy:textures/models/ability_developer.png"),
 		TEX_MDL_ELEC_CARD = src("academy:textures/models/card.png"),
 		TEX_MDL_MAGNET_MODULE = src("academy:textures/models/magincr.png"),
-		TEX_HUD_CPBAR = src("academy:textures/guis/cpbar.png"),
-		TEX_HUD_LOGO = src("academy:textures/guis/logo.png"),
+		TEX_HUD_BAR = src("academy:textures/guis/bar.png"),
 		TEX_COIN_FRONT = src("academy:textures/items/coin-front.png"),
 		TEX_COIN_BACK = src("academy:textures/items/coin-back.png"),
 		TEX_EFF_RAILGUN = src("academy:textures/effects/railgun.png"),
 		TEX_GUI_RAILGUN = src("academy:textures/guis/railgun.png"),
 		TEX_GUI_RAILGUN_PRG = src("academy:textures/guis/railgun_prog.png"),
 		TEX_GUI_RAILGUN_DEC = src("academy:textures/guis/dec_railgun.png"),
-		TEX_GUI_LOGO_DMASK = src("academy:textures/guis/logo_depth_mask.png"),
 		TEX_GUI_AD_MAIN = src("academy:textures/guis/ad_main.png"),
 		TEX_GUI_AD_LEARNING = src("academy:textures/guis/ad_learning.png"),
 		TEX_GUI_AD_SKILL = src("academy:textures/guis/ad_skill.png"),
@@ -37,7 +35,12 @@ public class ACClientProps {
 		TEX_MDL_SOLAR = src("academy:textures/models/solar.png"),
 		TEX_ELECARC = src("academy:textures/effects/arc.png"),
 		TEX_GUI_CLOSE = src("academy:textures/guis/close.png"),
-		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png");
+		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png"),
+		TEX_QUESTION_MARK = src("academy:textures/guis/question.png"),
+		TEX_LOGO_RAYS = src("academy:textures/guis/logo_rays.png"),
+		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png"),
+		TEX_LOGO_GEOM = src("academy:textures/guis/logo_geom.png"),
+		TEX_LOGO_BACK = src("academy:textures/guis/logo_back.png");
 	
 	//Ability Textures
 	public static final ResourceLocation
@@ -92,6 +95,14 @@ public class ACClientProps {
 	}
 	;
 	
+	public static ResourceLocation ANIM_SMALL_ARC[];
+	static {
+		ANIM_SMALL_ARC = new ResourceLocation[10];
+		for(int i = 0; i < 10; ++i) {
+			ANIM_SMALL_ARC[i] = src("academy:textures/effects/arcS_0" + i + ".png");
+		}
+	}
+	
 	//Railgun
 	public static final ResourceLocation
 		ELEC_LOGO = src("academy:textures/abilities/electromaster/main.png"),
@@ -113,12 +124,7 @@ public class ACClientProps {
 		MD_SHELL = src("academy:textures/abilities/meltdowner/shell.png"),
 		MD_MINING = src("academy:textures/abilities/meltdowner/mining.png"),
 		MD_EXPLOSION = src("academy:textures/abilities/meltdowner/explosion.png");
-	
-	//GUI IDs
-	public static final int
-		GUI_ID_ABILITY_DEV = 0,
-		GUI_ID_PRESET_SETTINGS = 1;
-	
+
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);
 	}

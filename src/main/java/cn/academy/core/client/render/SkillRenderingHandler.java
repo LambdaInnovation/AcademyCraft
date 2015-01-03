@@ -3,10 +3,11 @@
  */
 package cn.academy.core.client.render;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,22 +15,22 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.proxy.ACClientProps;
-import cn.academy.core.register.ACItems;
+import cn.academy.api.client.render.SkillRenderer.HandRenderType;
+import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.liutils.api.client.LIClientRegistry;
-import cn.liutils.api.client.util.RenderUtils;
-import cn.liutils.api.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 /**
+ * The generic render pipeline of SkillRender. 
+ * Multiple events are handled here, 
+ * while multiple rendering routines sharing same util/drawing functions.
  * @author WeathFolD
- *
  */
 public class SkillRenderingHandler {
 	
@@ -37,6 +38,16 @@ public class SkillRenderingHandler {
 	
 	public static void init() {
 		LIClientRegistry.addPlayerRenderingHelper(new PRHSkillRender());
+		MinecraftForge.EVENT_BUS.register(instance);
+	}
+	
+	@SubscribeEvent
+	public void renderHudEvent(RenderGameOverlayEvent e) {
+		ScaledResolution sr = e.resolution;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		for(SkillState ss : SkillStateManager.getState(player)) {
+			ss.getRender().renderHud(player, ss, sr);
+		}
 	}
 	
 	public static void renderThirdPerson(EntityLivingBase ent, ItemStack stack, ItemRenderType type) {
@@ -67,17 +78,13 @@ public class SkillRenderingHandler {
 				GL11.glScalef(1.5F, 1.5F, 1.5F);
 			}
 			
-			//TODO Replace with skill renderer
-			RenderUtils.loadTexture(ACClientProps.TEX_ARC_SHELL[0]);
-			RenderUtils.drawCube(1, 1, 1, false);
+			traverseHandRender(player, HandRenderType.EQUIPPED);
 			
 		} GL11.glPopMatrix();
 	}
 	
-	/**
-	 * 插入ItemRenderer的渲染路径
-	 */
 	public static void renderFirstPerson() {
+		//System.out.println("rfp");
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -86,12 +93,19 @@ public class SkillRenderingHandler {
 			GL11.glColor4d(1, 0.6, 0.6, 0.55);
 			GL11.glScalef(0.66F, 0.66F, 0.66F);
 			GL11.glRotatef(20, 1, 0, 0);
-			
-			//TODO Replace
-			RenderUtils.loadTexture(ACClientProps.TEX_ARC_SHELL[0]);
-			RenderUtils.drawCube(1, 1, 1, false);
+
+			//RenderUtils.loadTexture(ACClientProps.TEX_ARC_SHELL[0]);
+			//RenderUtils.drawCube(1, 1, 1, false);
+			traverseHandRender(Minecraft.getMinecraft().thePlayer, HandRenderType.FIRSTPERSON);
 			
 		} GL11.glPopMatrix();
+	}
+	
+	private static void traverseHandRender(EntityPlayer player, HandRenderType type) {
+		List<SkillState> states = SkillStateManager.getState(player);
+		for(SkillState s : states) {
+			s.getRender().renderHandEffect(player, s, type);
+		}
 	}
 	
 	private static Vec3 vec(double x, double y, double z) {
