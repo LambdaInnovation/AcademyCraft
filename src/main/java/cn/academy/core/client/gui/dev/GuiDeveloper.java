@@ -37,7 +37,7 @@ public class GuiDeveloper extends LIGuiScreen {
 	//States
 	int pageID;
 	
-	private Widget pageMain;
+	protected PageMainBase pageMain;
 	private List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
 	AbilityData data;
@@ -45,14 +45,13 @@ public class GuiDeveloper extends LIGuiScreen {
 	EntityPlayer user;
 	
 	public GuiDeveloper(TileDeveloper dev) {
-		super(WIDTH, HEIGHT);
 		this.user = dev.getUser();
 		this.dev = dev;
 		this.data = AbilityDataMain.getData(user);
 		
-		subs.add(new PageLearn(this));
-		subs.add(new PageSkills(this));
 		pageMain = new PageMainOrdinary(this);
+		subs.add(new PageLearn(pageMain));
+		subs.add(new PageSkills(pageMain));
 		
 		updateVisiblility();
 	}

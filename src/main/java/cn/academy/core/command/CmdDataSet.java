@@ -103,7 +103,7 @@ public class CmdDataSet extends LICommandBase {
 			if(args[0].equalsIgnoreCase("god")) {
 				//Enter god mode
 				for(int i = 0; i < data.getSkillCount(); ++i) {
-					data.setSkillOpen(i, true);
+					data.openSkill(i);
 				}
 				sendChat(ics, "Entered god mode");
 			}

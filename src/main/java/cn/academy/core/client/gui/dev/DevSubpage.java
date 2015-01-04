@@ -24,9 +24,9 @@ public abstract class DevSubpage extends Widget {
 	
 	protected final GuiDeveloper dev;
 
-	public DevSubpage(GuiDeveloper parent, String s, ResourceLocation back) {
-		super(s, parent.getGui(), PG_OFFSET_X, PG_OFFSET_Y, PG_WIDTH, PG_HEIGHT);
-		this.dev = parent;
+	public DevSubpage(PageMainBase parent, String s, ResourceLocation back) {
+		super(s, parent, PG_OFFSET_X, PG_OFFSET_Y, PG_WIDTH, PG_HEIGHT);
+		this.dev = parent.dev;
 		this.setTexture(back, 512, 512);
 		this.setTexMapping(0, 0, 273, 293);
 		visible = false;

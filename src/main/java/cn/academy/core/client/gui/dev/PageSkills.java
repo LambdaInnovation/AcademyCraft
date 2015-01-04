@@ -11,7 +11,7 @@ import cn.academy.core.proxy.ACClientProps;
  */
 public class PageSkills extends DevSubpage {
 
-	public PageSkills(GuiDeveloper parent) {
+	public PageSkills(PageMainBase parent) {
 		super(parent, "skills", ACClientProps.TEX_GUI_AD_SKILL);
 	}
 

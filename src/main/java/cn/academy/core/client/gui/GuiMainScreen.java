@@ -84,14 +84,12 @@ public class GuiMainScreen extends AuxGui {
 			} else {
 				lastInactiveTime = time;
 			}
-//			double masterAlpha = Math.max(Math.min((time - lastInactiveTime) / 300D, 1.0),
-//					Math.min((time - lastActiveTime) / 300D, 1.0));
-			double masterAlpha = active ? 
+			double mAlpha = active ? 
 					Math.min((time - lastInactiveTime) / 300D, 1.0) : 
 					Math.max((300 + lastActiveTime - time) / 300D, 0.0);
 			
-			if(masterAlpha > 0) {
-				GL11.glColor4d(1, 1, 1, masterAlpha * 0.6);
+			if(mAlpha > 0) {
+				GL11.glColor4d(1, 1, 1, mAlpha * 0.6);
 				RenderUtils.loadTexture(ACClientProps.TEX_HUD_BAR);
 				HudUtils.setTextureResolution(512, 200);
 				double scale = .4;
@@ -103,21 +101,21 @@ public class GuiMainScreen extends AuxGui {
 				//CPBar
 				double prog = data.getCurrentCP() / data.getMaxCP();
 				prog = .8;
-				GL11.glColor4d(33 / 255D, 111 / 255D, 137 / 255D, masterAlpha);
+				GL11.glColor4d(33 / 255D, 111 / 255D, 137 / 255D, mAlpha);
 				HudUtils.drawTexturedModalRect(439 - 436 * prog, 3, 439 - 436 * prog, 4, 436 * prog, 28, 436 * prog, 28);
 				//CPBar glow
 				double alpha = Math.max(0, (prog - 0.6) / 0.4);
-				GL11.glColor4d(1, 1, 1, alpha * masterAlpha);
+				GL11.glColor4d(1, 1, 1, alpha * mAlpha);
 				HudUtils.drawTexturedModalRect(3, 3, 3, 42, 436, 28, 436, 28);
 				
 				//Chip
 				HudUtils.drawTexturedModalRect(269, 46, 478, 40, 26, 26, 26, 26);
 				alpha =  0.5 + 0.5 * Math.sin(Minecraft.getSystemTime() / 500D);
-				GL11.glColor4d(1, 1, 1, alpha * masterAlpha); //Chip glow light
+				GL11.glColor4d(1, 1, 1, alpha * mAlpha); //Chip glow light
 				HudUtils.drawTexturedModalRect(266, 46, 474, 5, 32, 32, 32, 32);
 				
 				//Level
-				GL11.glColor4d(1, 1, 1, masterAlpha * .6);
+				GL11.glColor4d(1, 1, 1, mAlpha * .6);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, data.getLevel().getDisplayName(), 184, 60, 21);
 				
 				//Numeric CP

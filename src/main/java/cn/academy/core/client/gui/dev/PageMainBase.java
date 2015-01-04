@@ -20,6 +20,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.client.TextUtils;
 import cn.liutils.api.client.TrueTypeFont;
 import cn.liutils.api.client.gui.Widget;
+import cn.liutils.api.client.gui.Widget.Alignment;
 import cn.liutils.api.client.util.HudUtils;
 import cn.liutils.api.client.util.RenderUtils;
 
@@ -32,6 +33,7 @@ public class PageMainBase extends Widget {
 
 	public PageMainBase(GuiDeveloper gd) {
 		super("main", gd.getGui(),  0, 0, gd.WIDTH, gd.HEIGHT);
+		this.setAlignStyle(Alignment.CENTER);
 		this.setTexMapping(0, 0, 456, 369);
 		this.setTexture(ACClientProps.TEX_GUI_AD_MAIN, 512, 512);
 		dev = gd;

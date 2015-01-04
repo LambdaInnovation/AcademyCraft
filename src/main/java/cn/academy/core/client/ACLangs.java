@@ -35,6 +35,10 @@ public class ACLangs {
 		return local("ac.curenergy");
 	}
 	
+	public static String presetSettings() {
+		return local("ac.presset");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

@@ -62,7 +62,6 @@ public class ProxyClient extends ProxyCommon {
 		PresetManager.init();
 		SkillRenderingHandler.init();
 		
-		System.out.println("Preset key: " + KEY_ID_PRESET_SELECT);
 		LIKeyProcess.instance.addKey("preset_select", KEY_ID_PRESET_SELECT, false, new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
