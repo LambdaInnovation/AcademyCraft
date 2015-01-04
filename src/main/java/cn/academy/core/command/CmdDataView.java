@@ -47,6 +47,11 @@ public class CmdDataView extends LICommandBase {
 			sendChat(ics, "opn: " + DebugUtils.formatArray(data.getSkillOpenArray()));
 			sendChat(ics, "exp: " + DebugUtils.formatArray(data.getSkillExpArray()));
 		}
+		String open = "open: ";
+		for(int i = 0; i < data.getSkillCount(); ++i) {
+			open += data.isSkillLearned(i) ? "1" : "0";
+		}
+		sendChat(ics, open);
 	}
 
 }

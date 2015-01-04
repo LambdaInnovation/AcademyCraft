@@ -73,5 +73,5 @@ transspd.name=Transfer Speed
 ac.notlearned=Not Learned
 ac.machinestat=Stat
 ac.curenergy=Current Energy
-ac.syncrate=Rate
+ac.syncrate=Synchronization Rate
 ac.learnability=Learn Ability

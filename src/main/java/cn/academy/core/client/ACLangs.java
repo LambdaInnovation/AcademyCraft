@@ -43,6 +43,10 @@ public class ACLangs {
 		return local("page.adlearning");
 	}
 	
+	public static String pgSkills() {
+		return local("page.adskills");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

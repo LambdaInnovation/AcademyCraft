@@ -69,7 +69,7 @@ public class ProxyClient extends ProxyCommon {
 				if(tickEnd) return;
 				if(GuiPresetSelect.instance.isOpen())
 					GuiPresetSelect.instance.closeGui();
-				else if(!ClientUtils.isPlayerInGame()) {
+				else if(ClientUtils.isPlayerInGame()) {
 					GuiPresetSelect.instance.openGui();
 				}
 			}

@@ -38,7 +38,7 @@ public class GuiDeveloper extends LIGuiScreen {
 	int pageID;
 	
 	protected PageMainBase pageMain;
-	private List<DevSubpage> subs = new ArrayList<DevSubpage>();
+	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
 	AbilityData data;
 	TileDeveloper dev;
@@ -56,7 +56,7 @@ public class GuiDeveloper extends LIGuiScreen {
 		updateVisiblility();
 	}
     
-    private void updateVisiblility() {
+    protected void updateVisiblility() {
     	for(int i = 0; i < subs.size(); ++i) {
     		subs.get(i).visible = i == pageID;
     	}

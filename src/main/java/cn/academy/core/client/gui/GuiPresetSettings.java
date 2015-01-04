@@ -46,7 +46,6 @@ public class GuiPresetSettings extends LIGuiScreen {
 		super();
 		tempPreset = PresetManager.getCurrentPreset().clone();
 		pageMain = new PageMain();
-		System.out.println("Mew");
 	}
 	
 	private class PageMain extends Widget {
@@ -63,6 +62,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			public PartPageSel(int _id, float x) {
 				super("sel" + _id, PageMain.this, x, 0, PAGE_STEP, HEIGHT / 6);
 				id = _id;
+				draw = true;
 			}
 			
 			@Override
@@ -102,6 +102,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			public PartKeyInfo(int _id) {
 				super("ki" + _id, PageMain.this, 5 + WIDTH * _id, 18.5F, STEP, HEIGHT);
 				id = _id;
+				draw = true;
 			}
 			
 			@Override
@@ -149,6 +150,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 
 			public ButtonGeneric(String name, float x, float y) {
 				super(name, PageMain.this, x, y, WIDTH, HEIGHT);
+				draw = true;
 			}
 			
 			@Override
@@ -173,7 +175,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 		
 		public PageMain() {
 			super("main", gui, 0, 0, WIDTH, HEIGHT);
-			this.visible = true;
+			draw = true;
 			
 			for(int i = 0; i < MAX_PAGE; ++i) {
 				new PartPageSel(i, PAGE_STEP * i);
@@ -232,6 +234,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				super("sklmod" + i, PageModify.this, 
 					beg + STEP * (i - 1) , HEIGHT / 2 - WIDTH / 2,
 					WIDTH, WIDTH);
+				draw = true;
 				skill = _skill;
 				this.id = i;
 			}
@@ -280,6 +283,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			for(int i = 1; i < ct.getSkillCount(); ++i) {
 				new PartSkillInfo(ct.getSkill(i), i, beg);
 			}
+			draw = true;
 		}
 		
 		@Override
