@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import cn.liutils.api.util.Pair;
+import cn.liutils.util.misc.Pair;
 
 /**
  * Randomly gens a point on face of a cube with size(w, h, l). (placed at 0, 0, 0)

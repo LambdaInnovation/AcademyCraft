@@ -12,8 +12,8 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.liutils.api.client.render.Vertex;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.Vertex;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

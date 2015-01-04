@@ -2,9 +2,9 @@ package cn.academy.api.player;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.liutils.api.client.key.IKeyHandler;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.core.client.register.LIKeyProcess;
+import cn.liutils.api.key.IKeyHandler;
+import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;

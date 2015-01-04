@@ -20,7 +20,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD, acaly

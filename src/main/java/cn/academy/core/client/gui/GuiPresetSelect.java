@@ -18,12 +18,12 @@ import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
-import cn.liutils.api.client.TextUtils;
-import cn.liutils.api.client.gui.AuxGui;
-import cn.liutils.api.client.key.IKeyHandler;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
-import cn.liutils.core.client.register.LIKeyProcess;
+import cn.liutils.api.gui.AuxGui;
+import cn.liutils.api.key.IKeyHandler;
+import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -179,7 +179,7 @@ public class GuiPresetSelect extends AuxGui {
 						ResourceLocation logo = skl.getLogo();
 						if(logo != null) {
 							RenderUtils.loadTexture(logo);
-							HudUtils.drawTexturedModalRect(rx + 1, ry + 1, rectSize - 2, rectSize - 2);
+							HudUtils.drawRect(rx + 1, ry + 1, rectSize - 2, rectSize - 2);
 						}
 					}
 					

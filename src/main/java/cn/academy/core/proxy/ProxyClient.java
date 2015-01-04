@@ -26,11 +26,12 @@ import cn.academy.core.register.ACItems;
 import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.api.LIGeneralRegistry;
-import cn.liutils.api.client.key.IKeyHandler;
+import cn.liutils.api.key.IKeyHandler;
+import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.core.client.register.LIKeyProcess;
 import cn.liutils.core.event.LIClientEvents;
+import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -68,7 +69,7 @@ public class ProxyClient extends ProxyCommon {
 				if(tickEnd) return;
 				if(GuiPresetSelect.instance.isOpen())
 					GuiPresetSelect.instance.closeGui();
-				else if(GenericUtils.isPlayerInGame()) {
+				else if(!ClientUtils.isPlayerInGame()) {
 					GuiPresetSelect.instance.openGui();
 				}
 			}
@@ -79,7 +80,7 @@ public class ProxyClient extends ProxyCommon {
 		LIKeyProcess.instance.addKey("preset_settings", KEY_ID_PRESET_SETTINGS, false, new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+				if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 				Minecraft mc = Minecraft.getMinecraft();
 				mc.thePlayer.openGui(
 						AcademyCraftMod.INSTANCE, 

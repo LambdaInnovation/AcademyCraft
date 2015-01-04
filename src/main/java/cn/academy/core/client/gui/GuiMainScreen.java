@@ -13,11 +13,11 @@ import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.client.TextUtils;
-import cn.liutils.api.client.TrueTypeFont;
-import cn.liutils.api.client.gui.AuxGui;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.api.gui.AuxGui;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeathFolD
@@ -55,26 +55,26 @@ public class GuiMainScreen extends AuxGui {
 				GL11.glTranslated(w - 80, h - 70, 0);
 				GL11.glScaled(scale, scale, 1);
 				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_BACK);
-				HudUtils.drawTexturedModalRect(0, 0, 256, 256);
+				HudUtils.drawRect(0, 0, 256, 256);
 				
 				GL11.glColor4d(1, 1, 1, mAlpha * 0.5 * (0.3 + Math.sin(time / 900D) * 0.7));
 				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_RAYS);
-				HudUtils.drawTexturedModalRect(0, 0, 256, 256);
+				HudUtils.drawRect(0, 0, 256, 256);
 				
 				GL11.glColor4d(1, 1, 1, mAlpha);
 				HudUtils.setTextureResolution(256, 256);
 				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_FRAME);
-				HudUtils.drawTexturedModalRect(0, 0, 256, 256);
+				HudUtils.drawRect(0, 0, 256, 256);
 				
 				RenderUtils.loadTexture(data.getCategory().getLogo());
-				HudUtils.drawTexturedModalRect(63, 63, 129, 129);
+				HudUtils.drawRect(63, 63, 129, 129);
 				
 				GL11.glPushMatrix(); { //Rotating ray
 					GL11.glTranslated(128, 128, 0);
 					GL11.glRotated(time / 1000D, 0, 0, 1);
 					GL11.glTranslated(-128, -128, 0);
 					RenderUtils.loadTexture(ACClientProps.TEX_LOGO_GEOM);
-					HudUtils.drawTexturedModalRect(0, 0, 256, 256);
+					HudUtils.drawRect(0, 0, 256, 256);
 				} GL11.glPopMatrix();
 			} GL11.glPopMatrix();
 			GL11.glColor4d(1, 1, 1, 1);
@@ -96,23 +96,23 @@ public class GuiMainScreen extends AuxGui {
 				GL11.glTranslated(w - 193, 17, 0);
 				GL11.glScaled(scale, scale, 0);
 				//Back
-				HudUtils.drawTexturedModalRect(0, 0, 0, 73, 455, 127, 455, 127);
+				HudUtils.drawRect(0, 0, 0, 73, 455, 127, 455, 127);
 				
 				//CPBar
 				double prog = data.getCurrentCP() / data.getMaxCP();
 				prog = .8;
 				GL11.glColor4d(33 / 255D, 111 / 255D, 137 / 255D, mAlpha);
-				HudUtils.drawTexturedModalRect(439 - 436 * prog, 3, 439 - 436 * prog, 4, 436 * prog, 28, 436 * prog, 28);
+				HudUtils.drawRect(439 - 436 * prog, 3, 439 - 436 * prog, 4, 436 * prog, 28, 436 * prog, 28);
 				//CPBar glow
 				double alpha = Math.max(0, (prog - 0.6) / 0.4);
 				GL11.glColor4d(1, 1, 1, alpha * mAlpha);
-				HudUtils.drawTexturedModalRect(3, 3, 3, 42, 436, 28, 436, 28);
+				HudUtils.drawRect(3, 3, 3, 42, 436, 28, 436, 28);
 				
 				//Chip
-				HudUtils.drawTexturedModalRect(269, 46, 478, 40, 26, 26, 26, 26);
+				HudUtils.drawRect(269, 46, 478, 40, 26, 26, 26, 26);
 				alpha =  0.5 + 0.5 * Math.sin(Minecraft.getSystemTime() / 500D);
 				GL11.glColor4d(1, 1, 1, alpha * mAlpha); //Chip glow light
-				HudUtils.drawTexturedModalRect(266, 46, 474, 5, 32, 32, 32, 32);
+				HudUtils.drawRect(266, 46, 474, 5, 32, 32, 32, 32);
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);

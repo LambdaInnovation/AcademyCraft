@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.client.render.SkillRenderer.HandRenderType;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
-import cn.liutils.api.client.LIClientRegistry;
+import cn.liutils.template.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

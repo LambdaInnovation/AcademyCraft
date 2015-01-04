@@ -18,8 +18,8 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.block.TileDeveloper;
-import cn.liutils.api.client.gui.LIGuiScreen;
-import cn.liutils.api.client.gui.Widget;
+import cn.liutils.api.gui.LIGuiScreen;
+import cn.liutils.api.gui.Widget;
 import cn.liutils.api.register.IGuiElement;
 
 /**

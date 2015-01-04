@@ -10,13 +10,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.block.BlockDirectionedMulti;
+import cn.liutils.template.block.BlockDirectionalMulti;
 
 /**
  * @author WeathFolD
  *
  */
-public class BlockDeveloper extends BlockDirectionedMulti {
+public class BlockDeveloper extends BlockDirectionalMulti {
 
 	public BlockDeveloper() {
 		super(Material.anvil);

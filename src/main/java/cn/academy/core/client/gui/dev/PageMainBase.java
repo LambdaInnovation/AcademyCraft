@@ -17,12 +17,12 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.client.TextUtils;
-import cn.liutils.api.client.TrueTypeFont;
-import cn.liutils.api.client.gui.Widget;
-import cn.liutils.api.client.gui.Widget.Alignment;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.api.gui.Widget;
+import cn.liutils.api.gui.Widget.Alignment;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.TrueTypeFont;
 
 public class PageMainBase extends Widget {
 
@@ -88,16 +88,16 @@ public class PageMainBase extends Widget {
 			//CP
 			GL11.glColor4f(1, 1, 1, 1);
 			double prog = data.getCurrentCP() / data.getMaxCP();
-			HudUtils.drawTexturedModalRect(163, 155F, 3, 372, prog * 58.5, 5.5, prog * 117, 11);
+			HudUtils.drawRect(163, 155F, 3, 372, prog * 58.5, 5.5, prog * 117, 11);
 			//Update prog
 			prog = 0.5;
-			HudUtils.drawTexturedModalRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
+			HudUtils.drawRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.notLearned(), 167.5, 130, 10);
 		}
 		RenderUtils.loadTexture(logo);
-		HudUtils.drawTexturedModalRect(148.5, 130.5, 15.5, 15.5);
+		HudUtils.drawRect(148.5, 130.5, 15.5, 15.5);
 	}
 
 	private void drawPlayer() {

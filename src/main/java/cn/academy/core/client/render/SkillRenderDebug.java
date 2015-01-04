@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.SkillState;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

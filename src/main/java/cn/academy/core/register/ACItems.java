@@ -12,7 +12,7 @@ import cn.academy.misc.item.ItemEnergyCrystal;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
-import cn.liutils.api.util.RegUtils;
+import cn.liutils.util.RegUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ACItems {

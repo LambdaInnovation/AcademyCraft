@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.misc.entity.EntityRay;
-import cn.liutils.api.client.render.Vertex;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.Vertex;
 
 /**
  * 一般光线效果的渲染器，需要提供贴图。

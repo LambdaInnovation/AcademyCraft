@@ -17,8 +17,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.block.TileDeveloper;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.client.model.TileEntityModelCustom;
-import cn.liutils.api.client.render.RenderDirMultiModelled;
+import cn.liutils.api.render.model.TileEntityModelCustom;
+import cn.liutils.template.client.render.block.RenderDirMultiModelled;
 
 /**
  * @author WeathFolD

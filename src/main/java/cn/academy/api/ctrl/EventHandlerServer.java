@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;

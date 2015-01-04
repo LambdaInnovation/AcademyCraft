@@ -14,7 +14,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.liutils.api.command.LICommandBase;
+import cn.liutils.template.command.LICommandBase;
 
 /**
  * @author WeathFolD

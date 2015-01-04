@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -41,7 +42,7 @@ public class ControlManager {
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
 		if (event.phase == Phase.START) {
-			if (GenericUtils.isPlayerInGame())
+			if (ClientUtils.isPlayerInGame())
 				onTick(Minecraft.getMinecraft().thePlayer, event.side);
 		}
 	}

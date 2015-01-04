@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.proxy.ACCommonProps;
-import cn.liutils.api.util.EntityManipHandler;
+import cn.liutils.api.EntityManipHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

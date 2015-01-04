@@ -18,13 +18,13 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.client.TextUtils;
-import cn.liutils.api.client.gui.LIGuiScreen;
-import cn.liutils.api.client.gui.Widget;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.api.gui.LIGuiScreen;
+import cn.liutils.api.gui.Widget;
+import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.IGuiElement;
-import cn.liutils.core.client.register.LIKeyProcess;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
 
 /**
  * @author WeAthFolD
@@ -119,7 +119,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				ResourceLocation logo = data.getSkill(tempPreset.getSkillMapping(id)).getLogo();
 				if(logo != null) {
 					RenderUtils.loadTexture(logo);
-					HudUtils.drawTexturedModalRect(tx, ty, LOGO_SIZE, LOGO_SIZE);
+					HudUtils.drawRect(tx, ty, LOGO_SIZE, LOGO_SIZE);
 				}
 				if(mouseHovering) {
 					c = 0.6F;
@@ -248,7 +248,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				if(logo != null) {
 					GL11.glColor4f(1, 1, 1, 1);
 					RenderUtils.loadTexture(logo);
-					HudUtils.drawTexturedModalRect(tx, tx, lsize, lsize);
+					HudUtils.drawRect(tx, tx, lsize, lsize);
 				}
 				
 				if(mouseHovering) {
@@ -293,7 +293,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				GL11.glColor4f(c, c, c, .6F);
 				
 				RenderUtils.loadTexture(ACClientProps.TEX_GUI_KS_MASK);
-				HudUtils.drawTexturedModalRect(0, 0, width, HEIGHT);
+				HudUtils.drawRect(0, 0, width, HEIGHT);
 				
 			} GL11.glPopMatrix();
 			GL11.glDepthFunc(GL11.GL_LEQUAL);

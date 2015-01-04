@@ -9,11 +9,11 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.client.TextUtils;
-import cn.liutils.api.client.TrueTypeFont;
-import cn.liutils.api.client.gui.widget.TextButton;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.api.gui.widget.TextButton;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeathFolD
@@ -36,7 +36,7 @@ public class PageLearn extends DevSubpage {
 		GL11.glPushMatrix(); {
 			//Energy bar
 			double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
-			HudUtils.drawTexturedModalRect(8.5, 112.5, 17, 293, 122 * prog, 5.5, 244 * prog, 11);
+			HudUtils.drawRect(8.5, 112.5, 17, 293, 122 * prog, 5.5, 244 * prog, 11);
 			
 			RenderUtils.bindColor(dev.DEFAULT_COLOR);
 			//Machine stat

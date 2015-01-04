@@ -8,9 +8,9 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.liutils.api.client.gui.Widget;
-import cn.liutils.api.client.util.HudUtils;
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.api.gui.Widget;
+import cn.liutils.util.HudUtils;
+import cn.liutils.util.RenderUtils;
 
 /**
  * Base class of any subpage

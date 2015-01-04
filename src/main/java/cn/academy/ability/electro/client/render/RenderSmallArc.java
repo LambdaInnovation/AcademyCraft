@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.electro.client.render.IPointFactory.NormalVert;
 import cn.academy.misc.client.render.eff.Piece;
-import cn.liutils.api.util.Interval;
 
 /**
  * Small arc effect renderer. This baseclass is usually used on surroundings rendering and skill prepration. <br/>

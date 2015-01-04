@@ -13,10 +13,11 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.api.LIGeneralRegistry;
-import cn.liutils.api.client.key.IKeyHandler;
+import cn.liutils.api.key.IKeyHandler;
+import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.core.client.register.LIKeyProcess;
+import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -48,14 +49,14 @@ public class EventHandlerClient implements IKeyHandler {
 		
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
 		public void onKeyUp(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
@@ -411,7 +412,7 @@ public class EventHandlerClient implements IKeyHandler {
 	
 	@Override
 	public void onKeyDown(int keyCode, boolean tickEnd) {
-		if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+		if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 		if (presets == null) return;
 		
 		skillEnabled = !skillEnabled;

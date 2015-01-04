@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.register.ACItems;
 import cn.academy.misc.entity.EntityThrowingCoin;
-import cn.liutils.api.client.util.RenderUtils;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
+import cn.liutils.util.RenderUtils;
 
 /**
  * @author WeathFolD
