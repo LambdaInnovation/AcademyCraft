@@ -10,10 +10,18 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
+/**
+ * TODO: Who wrote this? finish it or remove it.
+ */
 public class MsgControlSync implements IMessage {
+	
+	NBTTagCompound tag;
 
 	public MsgControlSync(ControlData data) {
+		
 	}
+	
+	public MsgControlSync() {}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {

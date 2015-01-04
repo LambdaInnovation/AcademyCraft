@@ -21,7 +21,7 @@ import cn.liutils.api.client.util.RenderUtils;
  */
 public class PageLearn extends DevSubpage {
 
-	public PageLearn(GuiDeveloper parent) {
+	public PageLearn(PageMainBase parent) {
 		super(parent, ACLangs.pgLearn(), ACClientProps.TEX_GUI_AD_LEARNING);
 		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F);
 		btn.setTexMapping(1, 448, 123, 27);
