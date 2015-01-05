@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
-import cn.academy.core.block.TileDeveloper;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.register.IGuiElement;

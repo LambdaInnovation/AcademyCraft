@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.core.block;
+package cn.academy.core.block.dev;
 
 import cn.academy.core.AcademyCraftMod;
 import io.netty.buffer.ByteBuf;
@@ -23,11 +23,24 @@ public class MsgDeveloper implements IMessage {
 	int x, y, z;
 	int energy;
 	
+	boolean isStimulating;
+	int maxStimTimes;
+	int stimActionID;
+	
+	int stimSuccess;
+	int stimFailure;
+	
 	public MsgDeveloper(TileDeveloper dev) {
 		x = dev.xCoord;
 		y = dev.yCoord;
 		z = dev.zCoord;
 		energy = (int) dev.curEnergy;
+		isStimulating = dev.isStimulating;
+		if(isStimulating) {
+			stimActionID = dev.stimActionID;
+			stimSuccess = dev.stimSuccess;
+			stimFailure = dev.stimFailure;
+		}
 	}
 	
 	public MsgDeveloper() {}
@@ -38,12 +51,28 @@ public class MsgDeveloper implements IMessage {
 		y = buf.readShort();
 		z = buf.readInt();
 		energy = buf.readInt();
+		isStimulating = buf.readBoolean();
+		if(isStimulating) {
+			maxStimTimes = buf.readByte();
+			stimActionID = buf.readByte();
+			stimSuccess = buf.readByte();
+			stimFailure = buf.readByte();
+		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(x).writeShort(y).writeInt(z)
+		buf.writeInt(x)
+			.writeShort(y)
+			.writeInt(z)
 			.writeInt(energy);
+		buf.writeBoolean(isStimulating);
+		if(isStimulating) {
+			buf.writeByte(maxStimTimes)
+				.writeByte(stimActionID)
+				.writeByte(stimSuccess)
+				.writeByte(stimFailure);
+		}
 	}
 	
 	public static class Handler implements IMessageHandler<MsgDeveloper, IMessage> {
@@ -59,6 +88,13 @@ public class MsgDeveloper implements IMessage {
 			}
 			TileDeveloper dev = (TileDeveloper) te;
 			dev.curEnergy = msg.energy;
+			dev.isStimulating = msg.isStimulating;
+			if(msg.isStimulating) {
+				dev.maxStimTimes = msg.maxStimTimes;
+				dev.stimActionID = msg.stimActionID;
+				dev.stimSuccess = msg.stimSuccess;
+				dev.stimFailure = msg.stimFailure;
+			}
 			return null;
 		}
 		

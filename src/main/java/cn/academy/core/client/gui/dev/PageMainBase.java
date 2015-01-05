@@ -101,6 +101,7 @@ public class PageMainBase extends Widget {
 	}
 
 	private void drawPlayer() {
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		EntityPlayer player = dev.user;
 		RenderUtils.loadTexture(RenderUtils.STEVE_TEXTURE);
 		float x = 100, y = 100, scale = 2.1F;
@@ -118,5 +119,6 @@ public class PageMainBase extends Widget {
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 	}
 }

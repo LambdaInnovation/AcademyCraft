@@ -28,6 +28,7 @@ public class ACClientProps {
 		TEX_GUI_AD_MAIN = src("academy:textures/guis/ad_main.png"),
 		TEX_GUI_AD_LEARNING = src("academy:textures/guis/ad_learning.png"),
 		TEX_GUI_AD_SKILL = src("academy:textures/guis/ad_skill.png"),
+		TEX_GUI_AD_DIAG = src("academy:textures/guis/ad_dialogue.png"),
 		TEX_DBG_STD = src("academy:textures/debug/11.png"),
 		TEX_DBG_31 = src("academy:textures/debug/31.png"),
 		TEX_MDL_WINDGEN = src("academy:textures/models/windgen.png"),

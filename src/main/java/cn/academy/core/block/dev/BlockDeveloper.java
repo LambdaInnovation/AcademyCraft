@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.core.block;
+package cn.academy.core.block.dev;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;

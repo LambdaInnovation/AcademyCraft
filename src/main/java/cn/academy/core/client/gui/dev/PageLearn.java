@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.widget.TextButton;
@@ -23,11 +24,20 @@ public class PageLearn extends DevSubpage {
 
 	public PageLearn(PageMainBase parent) {
 		super(parent, "page.adlearning", ACClientProps.TEX_GUI_AD_LEARNING);
-		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F);
-		btn.setTexMapping(1, 448, 123, 27);
-		btn.setDownMapping(1, 419);
-		btn.setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
-		btn.setTextProps(ACLangs.learnAbility(), 8);
+		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F) {
+			{
+				setTexMapping(1, 448, 123, 27);
+				setDownMapping(1, 419);
+				setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
+				setTextProps(ACLangs.learnAbility(), 8);
+			}
+			
+			@Override
+			public void onMouseDown(double mx, double my) {
+				new DiagActionConfirm(dev, TileDeveloper.getAction(TileDeveloper.ID_LEVEL_UPGRADE, 1));
+			}
+		};
+		
 	}
 
 	@Override

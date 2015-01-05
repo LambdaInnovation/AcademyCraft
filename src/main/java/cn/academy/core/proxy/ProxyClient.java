@@ -13,7 +13,7 @@ import cn.academy.ability.meltdowner.entity.EntityElecDart;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.core.AcademyCraftMod;
-import cn.academy.core.block.TileDeveloper;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.gui.GuiMainScreen;
 import cn.academy.core.client.gui.GuiPresetSelect;
 import cn.academy.core.client.gui.GuiPresetSettings;

@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.block.TileDeveloper;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.render.model.TileEntityModelCustom;
 import cn.liutils.template.client.render.block.RenderDirMultiModelled;

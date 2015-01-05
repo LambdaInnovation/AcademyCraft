@@ -8,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.api.ability.SkillBase;
+import cn.academy.core.block.dev.TileDeveloper;
+import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.ListVertical;
@@ -29,6 +31,7 @@ public class PageSkills extends DevSubpage {
 		
 		private class SkillElement extends Widget {
 			
+			final int skillID;
 			final SkillBase skill;
 			final boolean learned;
 
@@ -36,6 +39,7 @@ public class PageSkills extends DevSubpage {
 				super("skill_" + id, SkillList.this, 0, 0, 110.5, 33.5);
 				this.setTexMapping(291, 0, 221, 67);
 				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
+				skillID = id;
 				skill = dev.data.getSkill(id);
 				learned = dev.data.isSkillLearned(id);
 			}
@@ -49,7 +53,6 @@ public class PageSkills extends DevSubpage {
 				} else {
 					area.v = 70;
 				}
-				//System.out.println(skill);
 				super.draw(mx, my, mouseHovering);
 				
 				//Logo
@@ -60,12 +63,15 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(dev.DEFAULT_COLOR);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5, 11);
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 10);
 				GL11.glColor4d(1, 1, 1, 1);
 			}
 			
 			public void onMouseDown(double mx, double my) {
 				System.out.println("learn " + skill.getDisplayName());
+				if(!learned) {
+					new DiagActionConfirm(dev, TileDeveloper.getAction(TileDeveloper.ID_SKILL_ACQUIRE, skillID));
+				}
 			}
 			
 		}
@@ -113,6 +119,20 @@ public class PageSkills extends DevSubpage {
 				bar.setProgress(sl.getRelativeProgress());
 			}
 		};
+	}
+	
+	@Override
+	public void draw(double mx, double my, boolean hover) {
+		super.draw(mx, my, hover);
+		//energy bar
+		double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
+		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
+		HudUtils.drawRect(7, 124.5, 14, 293, 122 * prog, 5.5, 244 * prog, 11);
+		//sync rate
+		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRate());
+		RenderUtils.bindColor(dev.DEFAULT_COLOR);
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 5, 135, 8);
+		GL11.glColor4d(1, 1, 1, 1);
 	}
 
 }
