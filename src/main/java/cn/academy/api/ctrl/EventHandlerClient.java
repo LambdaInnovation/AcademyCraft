@@ -118,7 +118,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public SingleSkill(int skillId) {
 			this.skillId = skillId;
 			//Get the raw handler from INSTANCE.
-			this.reh = INSTANCE.rehMap.get(skillId);
+			this.reh = GenericUtils.assertObj(INSTANCE.rehMap.get(skillId));
 		}
 		
 		/**
@@ -297,6 +297,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * @param cat The skill data of the player.
 	 */
 	public static void resetPlayerSkillData() {
+		AcademyCraftMod.log.info("EventHandlerClient: Reset player.");
 		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
 
 		if(cat == null) {

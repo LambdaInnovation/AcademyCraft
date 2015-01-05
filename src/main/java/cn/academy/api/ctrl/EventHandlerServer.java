@@ -107,7 +107,7 @@ public class EventHandlerServer {
 		public SingleSkill(EntityPlayer player, int skillId) {
 			this.player = (EntityPlayerMP) player;
 			this.skillId = skillId;
-			this.reh = INSTANCE.rehMap.get(player).get(skillId);
+			this.reh = GenericUtils.assertObj(INSTANCE.rehMap.get(player).get(skillId));
 		}
 		
 		/**
@@ -256,6 +256,8 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
+		AcademyCraftMod.log.info("EventHandlerServer: Reset player.");
+		
 		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		
 		//Create every raw event handler for this player.
