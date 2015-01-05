@@ -75,6 +75,10 @@ public class ACLangs {
 		return local("ac.learnskill");
 	}
 	
+	public static String stimProg() {
+		return local("ac.stimprog");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

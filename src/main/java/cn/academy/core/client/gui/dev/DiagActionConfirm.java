@@ -5,7 +5,10 @@ package cn.academy.core.client.gui.dev;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.block.dev.IDevelopAction;
+import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.block.dev.IDevAction;
+import cn.academy.core.block.dev.MsgActionStart;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -17,12 +20,15 @@ import cn.liutils.util.render.TrueTypeFont;
  */
 public class DiagActionConfirm extends DialogueBase {
 	
-	final IDevelopAction devAction;
+	final IDevAction devAction;
 	public boolean result;
+	final int id, par;
 
-	public DiagActionConfirm(GuiDeveloper dev, IDevelopAction act) {
+	public DiagActionConfirm(GuiDeveloper dev, int id, int par) {
 		super("confirm", dev, 5);
-		devAction = act;
+		devAction = TileDeveloper.getAction(id, par);
+		this.id = id;
+		this.par = par;
 		this.setTitle(ACLangs.actionConfirm());
 		
 		//Init widgets
@@ -73,8 +79,12 @@ public class DiagActionConfirm extends DialogueBase {
 	 * Called when we confirm the dialogue action.
 	 */
 	public void onConfirm() {
-		//Open the progress gui
 		//Sync to the server
+		dev.dev.startStimulating(id, par);
+		AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
+		
+		//Open the progress gui
+		new DiagStimulate(dev);
 	}
 
 }

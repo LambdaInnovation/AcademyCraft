@@ -11,7 +11,7 @@ import cn.academy.core.client.ACLangs;
  * @author WeathFolD
  *
  */
-public class DevActionLevel implements IDevelopAction {
+public class DevActionLevel implements IDevAction {
 	
 	final int toLevel;
 

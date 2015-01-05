@@ -34,7 +34,7 @@ public class PageLearn extends DevSubpage {
 			
 			@Override
 			public void onMouseDown(double mx, double my) {
-				new DiagActionConfirm(dev, TileDeveloper.getAction(TileDeveloper.ID_LEVEL_UPGRADE, 1));
+				new DiagActionConfirm(dev, TileDeveloper.ID_LEVEL_UPGRADE, 1);
 			}
 		};
 		

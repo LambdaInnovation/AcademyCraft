@@ -70,7 +70,7 @@ public class PageSkills extends DevSubpage {
 			public void onMouseDown(double mx, double my) {
 				System.out.println("learn " + skill.getDisplayName());
 				if(!learned) {
-					new DiagActionConfirm(dev, TileDeveloper.getAction(TileDeveloper.ID_SKILL_ACQUIRE, skillID));
+					new DiagActionConfirm(dev, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
 				}
 			}
 			

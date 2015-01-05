@@ -10,7 +10,7 @@ import cn.academy.core.client.ACLangs;
  * @author WeathFolD
  *
  */
-public class DevActionSkill implements IDevelopAction {
+public class DevActionSkill implements IDevAction {
 	
 	int skillID;
 

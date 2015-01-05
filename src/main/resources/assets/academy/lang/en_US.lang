@@ -82,3 +82,4 @@ ac.confirm.head=You are about to peform the following action
 ac.confirm.tail=Continue?
 ac.upgradeto=Elevate player level to 
 ac.learnskill=Learn skill 
+ac.stimprog=Stimulation Progress

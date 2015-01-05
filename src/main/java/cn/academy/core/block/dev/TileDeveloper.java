@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergySink;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,7 +38,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
 	
-	private static final List<Constructor<? extends IDevelopAction>> devActions = new ArrayList<Constructor<? extends IDevelopAction>>();
+	//Stimulation
+	public static final int PER_STIM_TIME = 10;
+	
+	private static final List<Constructor<? extends IDevAction>> devActions = new ArrayList<Constructor<? extends IDevAction>>();
 	static {
 		//Add actions
 		try {
@@ -55,7 +59,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	public boolean isStimulating;
 	public int maxStimTimes;
 	
-	public IDevelopAction action;
+	public IDevAction action;
 	public int stimActionID;
 	public int stimSuccess;
 	public int stimFailure;
@@ -64,11 +68,13 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	private EntityPlayer user;
 	private int updateCount;
 	private boolean init;
+	private int stimTicker;
+	private static final Random RNG = new Random();
 
 	public TileDeveloper() { }
 	
-	public static IDevelopAction getAction(int i, int par) {
-		IDevelopAction res = null;
+	public static IDevAction getAction(int i, int par) {
+		IDevAction res = null;
 		try {
 			res = devActions.get(i).newInstance(par);
 		} catch(Exception e) {
@@ -88,6 +94,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		if(!isHead())
 			return;
 		
+//		if(this.isStimulating) {
+//			System.out.println("Stimulating " + worldObj.isRemote);
+//		}
+		
 		//TODO: Move to GUI event listening
 		GuiScreen gs = Minecraft.getMinecraft().currentScreen;
 		if(gs == null || !(gs instanceof GuiDeveloper)) {
@@ -97,11 +107,55 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		++updateCount;
 		if(!worldObj.isRemote && user != null) {
 			//HeartBeat update
+			if(isStimulating) {
+				updateStimulate();
+			}
+			
 			if(updateCount >= UPDATE_RATE) {
 				updateCount = 0;
 				sync();
 			}
 		}
+	}
+	
+	private void updateStimulate() {
+		if(user == null) {
+			isStimulating = false;
+			return;
+		}
+		++stimTicker;
+		if(stimTicker == PER_STIM_TIME) {
+			stimTicker = 0;
+			if(!perConsume()) {
+				isStimulating = false;
+				return;
+			}
+			if(RNG.nextDouble() < getSuccessProb()) {
+				++stimSuccess;
+				if(stimSuccess == maxStimTimes) {
+					action.onActionFinished(AbilityDataMain.getData(user));
+					isStimulating = false;
+				}
+			} else {
+				++stimFailure;
+			}
+		}
+	}
+	
+	private boolean perConsume() {
+		return true;
+	}
+	
+	private double getEUConsume() {
+		return 0;
+	}
+	
+	private float getExpConsume() {
+		return 0F;
+	}
+	
+	public double getSuccessProb() {
+		return 0.7;
 	}
 	
 	private TileDeveloper getHead() {
@@ -128,10 +182,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		if(user == null) {
 			throw new RuntimeException("Developing without user");
 		}
-		IDevelopAction ida = getAction(id, par);
+		action = getAction(id, par);
 		AbilityData data = AbilityDataMain.getData(user);
 		isStimulating = true;
-		maxStimTimes = ida.getExpectedStims(data);
+		maxStimTimes = action.getExpectedStims(data);
 		stimSuccess = stimFailure = 0;
 		sync(); //Force update if server
 	}

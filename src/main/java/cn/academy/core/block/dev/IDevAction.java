@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Defines an AbilityDeveloper action. The initialization and judgement are done in server side.
  * @author WeathFolD
  */
-public interface IDevelopAction {
+public interface IDevAction {
 	/**
 	 * Get the expected stimulation times.
 	 */
