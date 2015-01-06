@@ -42,7 +42,7 @@ public class MsgResetAbilityData implements IMessage {
 	@RegMessageHandler(msg = MsgResetAbilityData.class, side = RegMessageHandler.Side.CLIENT)
 	public static class Handler implements IMessageHandler<MsgResetAbilityData, IMessage> {
 		@Override
-		//@SideOnly(Side.CLIENT)
+		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(MsgResetAbilityData message, MessageContext ctx) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (!AbilityDataMain.hasData(player)) {

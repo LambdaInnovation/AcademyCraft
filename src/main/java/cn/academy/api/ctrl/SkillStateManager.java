@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -152,6 +154,7 @@ public class SkillStateManager {
 	
 	static int clientTickRemovePlayer = 0;
 	
+	@SideOnly(Side.CLIENT)
 	private static void removePlayerOnClient() {
 		World world = Minecraft.getMinecraft().theWorld;
 		for (List<SkillState> playerList : client.values()) {

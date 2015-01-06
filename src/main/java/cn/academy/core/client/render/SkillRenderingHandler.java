@@ -27,6 +27,8 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.template.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The generic render pipeline of SkillRender. 
@@ -36,12 +38,13 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 @RegistrationClass
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@SideOnly(Side.CLIENT)
 public class SkillRenderingHandler {
 	
 	private static SkillRenderingHandler instance = new SkillRenderingHandler();
 	
 	public static void init() {
-		LIClientRegistry.addPlayerRenderingHelper(new PRHSkillRender());
+		LIClientRegistry.addPlayerRenderingHook(new PRHSkillRender());
 		MinecraftForge.EVENT_BUS.register(instance);
 	}
 	

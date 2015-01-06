@@ -31,6 +31,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Event handler class in client side. Setup key bindings and sync with server.
@@ -39,6 +40,7 @@ import cpw.mods.fml.relauncher.Side;
  */
 @RegistrationClass
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@SideOnly(Side.CLIENT)
 public class EventHandlerClient implements IKeyHandler {
 	
 	/**

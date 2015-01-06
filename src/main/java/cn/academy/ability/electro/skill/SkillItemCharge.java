@@ -30,7 +30,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
+		//don't put reg here!
+		//RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
 	}
 	
 	@Override
