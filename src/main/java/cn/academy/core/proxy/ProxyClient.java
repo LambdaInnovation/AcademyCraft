@@ -40,12 +40,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 @RegistrationClass
 @RegConfigurable
 public class ProxyClient extends ProxyCommon {
-	
-	@Configurable(category = "Control", key = "keyPresetSelect", defValueInt = Keyboard.KEY_C)
-	public static int KEY_ID_PRESET_SELECT = Keyboard.KEY_C;
-	
-	@Configurable(category = "Control", key = "keyPresetSettings", defValueInt = Keyboard.KEY_N)
-	public static int KEY_ID_PRESET_SETTINGS = Keyboard.KEY_N;
 
 	@Override
 	public void preInit() {
@@ -59,45 +53,6 @@ public class ProxyClient extends ProxyCommon {
 		super.init();
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
 		
-		//LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
-		
-		LIKeyProcess.instance.addKey("preset_select", KEY_ID_PRESET_SELECT, false, new IKeyHandler() {
-			@Override
-			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(tickEnd) return;
-				if(GuiPresetSelect.instance.isOpen())
-					GuiPresetSelect.instance.closeGui();
-				else if(ClientUtils.isPlayerInGame()) {
-					GuiPresetSelect.instance.openGui();
-				}
-			}
-			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
-			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
-		});
-		
-		LIKeyProcess.instance.addKey("preset_settings", KEY_ID_PRESET_SETTINGS, false, new IKeyHandler() {
-			@Override
-			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(tickEnd || !ClientUtils.isPlayerInGame()) return;
-				Minecraft mc = Minecraft.getMinecraft();
-				mc.thePlayer.openGui(
-						AcademyCraftMod.INSTANCE, 
-						ACCommonProps.GUI_ID_PRESET_SETTINGS, 
-						mc.theWorld, 0, 0, 0);
-			}
-			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
-			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
-		});
-		
-		//Rendering
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileDeveloper.class, new RenderDeveloper());
-		
-		//RenderingRegistry.registerEntityRenderingHandler(EntityThrowingCoin.class, new RendererCoin());
-		//RenderingRegistry.registerEntityRenderingHandler(EntityRailgun.class, new RenderRailgun());
-		//RenderingRegistry.registerEntityRenderingHandler(EntityElecDart.class, new RenderElecDart());
-		
-		//MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
-		//MinecraftForgeClient.registerItemRenderer(ACItems.coin, new RendererCoin.ItemRender());
 	}
 	
 }

@@ -7,8 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.EventHandlerClient;
@@ -16,12 +19,20 @@ import cn.academy.api.ctrl.Preset;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACCommonProps;
+import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
+import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.api.register.Configurable;
 import cn.liutils.api.register.IGuiElement;
+import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
+import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
+import cn.liutils.util.ClientUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -30,7 +41,28 @@ import cn.liutils.util.render.TextUtils;
  * @author WeAthFolD
  *
  */
+@RegistrationClass
+@RegConfigurable
+@SideOnly(Side.CLIENT)
 public class GuiPresetSettings extends LIGuiScreen {
+
+	@Configurable(category = "Control", key = "keyPresetSettings", defValueInt = Keyboard.KEY_N)
+	@RegAttachKeyHandler(clazz = KeyHandler.class)
+	public static int KEY_ID_PRESET_SETTINGS;
+	
+	public static class KeyHandler implements IKeyHandler {
+		@Override
+		public void onKeyDown(int keyCode, boolean tickEnd) {
+			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
+			Minecraft mc = Minecraft.getMinecraft();
+			mc.thePlayer.openGui(
+					AcademyCraftMod.INSTANCE, 
+					ACCommonProps.GUI_ID_PRESET_SETTINGS, 
+					mc.theWorld, 0, 0, 0);
+		}
+		@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
+		@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
+	}
 	
 	private boolean isSetting;
 
