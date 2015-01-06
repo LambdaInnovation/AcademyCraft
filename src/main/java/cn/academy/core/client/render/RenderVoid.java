@@ -11,7 +11,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.liutils.api.client.util.RenderUtils;
+import cn.liutils.util.RenderUtils;
 
 public class RenderVoid implements IItemRenderer {
 	

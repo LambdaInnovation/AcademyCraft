@@ -40,7 +40,12 @@ public class Preset {
 		}
 	}
 	
-	private Preset() {}
+	/**
+	 * Create a new empty preset.
+	 */
+	Preset() {
+		data = new int[EventHandlerClient.MAX_KEYS];
+	}
 	
 	/**
 	 * Get the skill id binded to the given key (0-3).

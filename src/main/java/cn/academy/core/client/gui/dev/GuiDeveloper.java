@@ -17,27 +17,27 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
-import cn.academy.core.block.TileDeveloper;
-import cn.liutils.api.client.gui.GuiScreenLIAdaptor;
-import cn.liutils.api.client.gui.LIGuiPage;
+import cn.academy.core.block.dev.TileDeveloper;
+import cn.liutils.api.gui.LIGuiScreen;
+import cn.liutils.api.gui.Widget;
 import cn.liutils.api.register.IGuiElement;
 
 /**
+ * Main class of Developer GUI.
  * @author WeathFolD
- *
  */
-public class GuiDeveloper extends GuiScreenLIAdaptor {
+public class GuiDeveloper extends LIGuiScreen {
 	
 	//Constants 
 	protected static final int
 		WIDTH = 228,
 		HEIGHT = 185;
-	
 	public final int[] DEFAULT_COLOR = {48, 155, 190};
 
+	//States
 	int pageID;
 	
-	LIGuiPage pageMain;
+	protected PageMainBase pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
 	AbilityData data;
@@ -45,27 +45,33 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 	EntityPlayer user;
 	
 	public GuiDeveloper(TileDeveloper dev) {
-		super(WIDTH, HEIGHT);
-		user = dev.getUser();
+		this.user = dev.getUser();
 		this.dev = dev;
-		data = AbilityDataMain.getData(user);
+		this.data = AbilityDataMain.getData(user);
 		
-		subs.add(new PageLearn(this));
-		subs.add(new PageSkills(this));
 		pageMain = new PageMainOrdinary(this);
+		subs.add(new PageLearn(pageMain));
+		subs.add(new PageSkills(pageMain));
+		
+		updateVisiblility();
 	}
-	
-    public void drawScreen(int par1, int par2, float par3)
-    {
-    	update();
-    	this.drawDefaultBackground();
-    	GL11.glPushMatrix(); {
-	    	GL11.glTranslated(0, 0, 100);
-	    	drawElements(par1, par2);
-    	} GL11.glPopMatrix();
-    }
-  
     
+    protected void updateVisiblility() {
+    	for(int i = 0; i < subs.size(); ++i) {
+    		subs.get(i).visible = i == pageID;
+    	}
+    }
+    
+    protected DevSubpage getCurPage() {
+    	return subs.get(pageID);
+    }
+	
+	@Override
+    public boolean doesGuiPauseGame()
+    {
+        return false;
+    }
+	
     public static class Element implements IGuiElement {
 
 		@Override
@@ -85,34 +91,6 @@ public class GuiDeveloper extends GuiScreenLIAdaptor {
 			return new GuiDeveloper((TileDeveloper) te);
 		}
     	
-    }
-    
-    public static void bindColor(Vec3 cv) {
-    	GL11.glColor3d(cv.xCoord, cv.yCoord, cv.zCoord);
-    }
-    
-    public static void bindColor(int[] arr) {
-    	bindColor(arr[0], arr[1], arr[2]);
-    }
-    
-    public static void bindColor(int r, int g, int b) {
-    	GL11.glColor3ub((byte)r, (byte)g, (byte)b);
-    }
-    
-    protected DevSubpage getCurPage() {
-    	return subs.get(pageID);
-    }
-
-	@Override
-	public void updateActivedPages(Set<LIGuiPage> pages) {
-		pages.add(pageMain);
-		pages.add(subs.get(pageID));
-	}
-	
-	@Override
-    public boolean doesGuiPauseGame()
-    {
-        return false;
     }
 	
 }

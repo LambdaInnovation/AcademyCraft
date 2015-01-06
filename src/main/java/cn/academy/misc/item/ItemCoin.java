@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import cn.academy.ability.electro.IShootable;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.misc.entity.EntityThrowingCoin;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 
 /**
  * The coin from the game genter which is used by Misaka Mikoto for her prouding Railgun skill!

@@ -14,7 +14,7 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -114,7 +114,7 @@ public class EventHandlerServer {
 		public SingleSkill(EntityPlayer player, int skillId) {
 			this.player = (EntityPlayerMP) player;
 			this.skillId = skillId;
-			this.reh = INSTANCE.rehMap.get(player).get(skillId);
+			this.reh = GenericUtils.assertObj(INSTANCE.rehMap.get(player).get(skillId));
 		}
 		
 		/**
@@ -259,6 +259,8 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
+		AcademyCraftMod.log.info("EventHandlerServer: Reset player.");
+		
 		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		
 		//Create every raw event handler for this player.

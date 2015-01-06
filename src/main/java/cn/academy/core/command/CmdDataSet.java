@@ -16,7 +16,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegCommand;
-import cn.liutils.api.command.LICommandBase;
+import cn.liutils.template.command.LICommandBase;
 
 /**
  * @author WeathFolD
@@ -107,7 +107,7 @@ public class CmdDataSet extends LICommandBase {
 			if(args[0].equalsIgnoreCase("god")) {
 				//Enter god mode
 				for(int i = 0; i < data.getSkillCount(); ++i) {
-					data.setSkillOpen(i, true);
+					data.openSkill(i);
 				}
 				sendChat(ics, "Entered god mode");
 			}

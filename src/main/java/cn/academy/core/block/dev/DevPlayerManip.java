@@ -1,12 +1,12 @@
 /**
  * 
  */
-package cn.academy.core.block;
+package cn.academy.core.block.dev;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
-import cn.liutils.api.util.EntityManipHandler;
-import cn.liutils.api.util.EntityManipHandler.EntityManip;
+import cn.liutils.api.EntityManipHandler;
+import cn.liutils.api.EntityManipHandler.EntityManip;
 
 /**
  * Player position manipulation of ability developer

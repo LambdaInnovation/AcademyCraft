@@ -35,6 +35,50 @@ public class ACLangs {
 		return local("ac.curenergy");
 	}
 	
+	public static String presetSettings() {
+		return local("ac.presset");
+	}
+	
+	public static String pgLearn() {
+		return local("page.adlearning");
+	}
+	
+	public static String pgSkills() {
+		return local("page.adskills");
+	}
+	
+	public static String actionConfirm() {
+		return local("page.adconfirm");
+	}
+	
+	public static String confirm() {
+		return local("ac.btnconfirm");
+	}
+	
+	public static String cancel() {
+		return local("ac.btncancel");
+	}
+	
+	public static String upgradeTo() {
+		return local("ac.upgradeto");
+	}
+	
+	public static String confirmHead() {
+		return local("ac.confirm.head");
+	}
+	
+	public static String confirmTail() {
+		return local("ac.confirm.tail");
+	}
+	
+	public static String learnSkill() {
+		return local("ac.learnskill");
+	}
+	
+	public static String stimProg() {
+		return local("ac.stimprog");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

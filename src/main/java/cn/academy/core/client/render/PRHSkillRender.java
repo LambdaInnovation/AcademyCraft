@@ -18,13 +18,13 @@ import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.ctrl.pattern.IPattern;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.liutils.api.client.render.PlayerRenderHandler;
+import cn.liutils.api.render.IPlayerRenderListener;
 
 /**
  * @author WeathFolD
  *
  */
-public class PRHSkillRender implements PlayerRenderHandler {
+public class PRHSkillRender implements IPlayerRenderListener {
 
 	public PRHSkillRender() {
 	}

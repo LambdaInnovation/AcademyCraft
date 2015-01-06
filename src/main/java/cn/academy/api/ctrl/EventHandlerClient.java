@@ -1,5 +1,6 @@
 package cn.academy.api.ctrl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,10 +18,11 @@ import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.LIGeneralRegistry;
-import cn.liutils.api.client.key.IKeyHandler;
+import cn.liutils.api.key.IKeyHandler;
+import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.core.client.register.LIKeyProcess;
+import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -54,14 +56,14 @@ public class EventHandlerClient implements IKeyHandler {
 		
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
 		public void onKeyUp(int keyCode, boolean tickEnd) {
-			if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
@@ -89,7 +91,7 @@ public class EventHandlerClient implements IKeyHandler {
 			case INIT_QUERY_WORLD_ID:
 				//Get the worldId.
 				//There's a hack that we store the id in time.
-				INSTANCE.reallyResetPlayerSkillData(msg.time);
+				INSTANCE.loadPresetManager(msg.time);
 				break;
 			default:
 				AcademyCraftMod.log.error("An unexpected packet is received from server.");
@@ -124,7 +126,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public SingleSkill(int skillId) {
 			this.skillId = skillId;
 			//Get the raw handler from INSTANCE.
-			this.reh = INSTANCE.rehMap.get(skillId);
+			this.reh = GenericUtils.assertObj(INSTANCE.rehMap.get(skillId));
 		}
 		
 		/**
@@ -297,6 +299,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * @param cat The skill data of the player.
 	 */
 	public static void resetPlayerSkillData() {
+		AcademyCraftMod.log.info("EventHandlerClient: Reset player.");
 		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
 
 		if(cat == null) {
@@ -304,31 +307,33 @@ public class EventHandlerClient implements IKeyHandler {
 			return;
 		}
 		
-		//Store category.
+		if (INSTANCE.presets == null) {
+			//First reset in this world. Send a message to server to get the world id before loading the preset.
+			AcademyCraftMod.netHandler.sendToServer(
+					new ControlMessage(0, SkillEventType.INIT_QUERY_WORLD_ID, PresetManager.getNextWorldId()));
+		} else if (INSTANCE.category != cat) {
+			//Category changed! We need to reset PresetManager. Set it null.
+			INSTANCE.presets.reset();
+		}
+		
 		INSTANCE.category = cat;
+
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		
-		INSTANCE.presets = null;
+		Map<Integer, RawEventHandler> rehMap = new HashMap();
+		for (int i = 0; i < cat.getSkillCount(); ++i) {
+			rehMap.put(i, new RawEventHandler(player, cat.getSkill(i)));
+		}
 		
-		//Send a message to server to get the world id.
-		AcademyCraftMod.netHandler.sendToServer(
-				new ControlMessage(0, SkillEventType.INIT_QUERY_WORLD_ID, PresetManager.getNextWorldId()));
+		INSTANCE.rehMap = rehMap;
+		INSTANCE.kaMap = new HashMap();
 	}
 	
 	/**
 	 * Get the world id from server. Use this id to initialize PresetManager.
 	 * @param id
 	 */
-	private void reallyResetPlayerSkillData(int id) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		
-		Map<Integer, RawEventHandler> rehMap = new HashMap();
-		for (int i = 0; i < category.getSkillCount(); ++i) {
-			rehMap.put(i, new RawEventHandler(player, category.getSkill(i)));
-		}
-		
-		INSTANCE.rehMap = rehMap;
-		INSTANCE.kaMap = new HashMap();
-		
+	private void loadPresetManager(int id) {
 		INSTANCE.presets = new PresetManager(id);
 	}
 	
@@ -336,11 +341,13 @@ public class EventHandlerClient implements IKeyHandler {
 	public void onThePlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
 		//First save preset data
 		presets.save();
+		presets = null;
 		
 		//Clear in-game objects
 		skillEventAll(SkillEventType.RAW_CANCEL);
-		INSTANCE.kaMap = null;
-		INSTANCE.rehMap = null;
+		kaMap = null;
+		rehMap = null;
+		category = null;
 	}
 	
 	@SubscribeEvent
@@ -412,7 +419,7 @@ public class EventHandlerClient implements IKeyHandler {
 	
 	@Override
 	public void onKeyDown(int keyCode, boolean tickEnd) {
-		if(tickEnd || !GenericUtils.isPlayerInGame()) return;
+		if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 		if (presets == null) return;
 		
 		skillEnabled = !skillEnabled;

@@ -12,9 +12,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.liutils.api.util.DebugUtils;
-import cn.liutils.api.util.GenericUtils;
-import cn.liutils.api.util.Motion3D;
+import cn.liutils.util.DebugUtils;
+import cn.liutils.util.GenericUtils;
+import cn.liutils.util.space.Motion3D;
 import cn.weaponmod.api.damage.Damage;
 import cn.weaponmod.api.damage.DmgSimple;
 

@@ -49,11 +49,6 @@ public class PresetManager {
 	private Preset[] presets;
 	
 	/**
-	 * Current preset.
-	 */
-	private Preset current;
-	
-	/**
 	 * Index of current preset;
 	 */
 	private int currentId;
@@ -64,6 +59,13 @@ public class PresetManager {
 	 */
 	public static void init() {
 		nextWorldId = AcademyCraftMod.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).getInt();
+	}
+	
+	void reset() {
+		for (int i = 0; i < PRESET_COUNT; ++i) {
+			presets[i] = new Preset();
+		}
+		save();
 	}
 	
 	/**
@@ -109,7 +111,6 @@ public class PresetManager {
 		if (def < 0 || def >= PRESET_COUNT) {
 			def = 0;
 		}
-		current = presets[def];
 		currentId = def;
 	}
 	
@@ -135,7 +136,12 @@ public class PresetManager {
 	 * @return Skill id.
 	 */
 	public static int getSkillMapping(int keyId) {
-		return getInstance().current.getSkillMapping(keyId);
+		PresetManager pm = getInstance();
+		if (pm == null) {
+			AcademyCraftMod.log.error("Try to get Skill Mapping when PresetManager is not initialized.");
+			return 0;
+		}
+		return pm.presets[pm.currentId].getSkillMapping(keyId);
 	}
 	
 	/**
@@ -151,9 +157,6 @@ public class PresetManager {
 		if(pr == null) return;
 		PresetManager presets = getInstance();
 		presets.presets[pid] = pr;
-		if (pid == presets.currentId) {
-			presets.current = pr;
-		}
 	}
 	
 	/**
@@ -169,9 +172,7 @@ public class PresetManager {
 	 * @param presetId
 	 */
 	public static void setCurrentPreset(int presetId) {
-		PresetManager presets = getInstance();
-		presets.current = presets.presets[presetId];
-		presets.currentId = presetId;
+		getInstance().currentId = presetId;
 	}
 	
 	public static Preset getCurrentPreset() {

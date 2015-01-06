@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 
 /**
  * Static ability&skill data management. All the handling class are stored and queried here.

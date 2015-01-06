@@ -4,7 +4,9 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
+import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
 import cn.academy.misc.item.ItemCoin;
@@ -16,8 +18,9 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.core.ctor.Arg;
 import cn.annoreg.core.ctor.Ctor;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.api.util.RegUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @RegistrationClass
 public class ACItems {
@@ -36,9 +39,11 @@ public class ACItems {
 	@Ctor(@Arg(Int = 2))
 	public static ACRecord record2;
 	
-	@RegItem
+	@RegItem(renderName = "renderCoin")
 	public static ItemCoin coin;
 	
+	@SideOnly(Side.CLIENT)
+	public static RendererCoin.ItemRender renderCoin;
 
 	@RegItem
 	@Ctor(@Arg(Int = 1))
@@ -101,7 +106,10 @@ public class ACItems {
 	@RegItem.UTName("corebearing")
 	public static Item CoreBearing;
 	
-	@RegItem(name = "void")
+	@RegItem(name = "void", renderName = "renderVoid")
 	public static ItemVoid ivoid;
+	
+	@SideOnly(Side.CLIENT)
+	public static RenderVoid renderVoid;
 	
 }

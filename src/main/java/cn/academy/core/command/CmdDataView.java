@@ -11,8 +11,8 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegCommand;
-import cn.liutils.api.command.LICommandBase;
-import cn.liutils.api.util.DebugUtils;
+import cn.liutils.template.command.LICommandBase;
+import cn.liutils.util.DebugUtils;
 
 /**
  * 显示玩家当前的能力信息（服务端）
@@ -51,6 +51,11 @@ public class CmdDataView extends LICommandBase {
 			sendChat(ics, "opn: " + DebugUtils.formatArray(data.getSkillOpenArray()));
 			sendChat(ics, "exp: " + DebugUtils.formatArray(data.getSkillExpArray()));
 		}
+		String open = "open: ";
+		for(int i = 0; i < data.getSkillCount(); ++i) {
+			open += data.isSkillLearned(i) ? "1" : "0";
+		}
+		sendChat(ics, open);
 	}
 
 }

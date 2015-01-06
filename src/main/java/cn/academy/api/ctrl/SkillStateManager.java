@@ -123,7 +123,7 @@ public class SkillStateManager {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
-				if (state.onTick()) {
+				if (state.tickSkill()) {
 					state.onFinish();
 					itor.remove();
 				}
@@ -139,7 +139,7 @@ public class SkillStateManager {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
-				if (state.onTick()) {
+				if (state.tickSkill()) {
 					state.onFinish();
 					itor.remove();
 				}

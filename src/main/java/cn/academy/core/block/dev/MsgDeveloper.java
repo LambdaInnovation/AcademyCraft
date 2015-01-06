@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.core.block;
+package cn.academy.core.block.dev;
 
 import cn.academy.core.AcademyCraftMod;
 import cn.annoreg.core.RegistrationClass;
@@ -26,11 +26,20 @@ public class MsgDeveloper implements IMessage {
 	int x, y, z;
 	int energy;
 	
-	public MsgDeveloper(TileDeveloper dev) {
-		x = dev.xCoord;
-		y = dev.yCoord;
-		z = dev.zCoord;
-		energy = (int) dev.curEnergy;
+	boolean isStimulating;
+	int maxStimTimes;
+	
+	int stimSuccess;
+	int stimFailure;
+	
+	public MsgDeveloper(TileDeveloper tileDeveloper) {
+		x = tileDeveloper.xCoord;
+		y = tileDeveloper.yCoord;
+		z = tileDeveloper.zCoord;
+		energy = (int) tileDeveloper.curEnergy;
+		isStimulating = tileDeveloper.isStimulating;
+		stimSuccess = tileDeveloper.stimSuccess;
+		stimFailure = tileDeveloper.stimFailure;
 	}
 	
 	public MsgDeveloper() {}
@@ -41,12 +50,20 @@ public class MsgDeveloper implements IMessage {
 		y = buf.readShort();
 		z = buf.readInt();
 		energy = buf.readInt();
+		isStimulating = buf.readBoolean();
+		stimSuccess = buf.readByte();
+		stimFailure = buf.readByte();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(x).writeShort(y).writeInt(z)
+		buf.writeInt(x)
+			.writeShort(y)
+			.writeInt(z)
 			.writeInt(energy);
+		buf.writeBoolean(isStimulating)
+			.writeByte(stimSuccess)
+			.writeByte(stimFailure);
 	}
 	
 	@RegMessageHandler(msg = MsgDeveloper.class, side = RegMessageHandler.Side.CLIENT)
@@ -63,6 +80,9 @@ public class MsgDeveloper implements IMessage {
 			}
 			TileDeveloper dev = (TileDeveloper) te;
 			dev.curEnergy = msg.energy;
+			dev.isStimulating = msg.isStimulating;
+			dev.stimSuccess = msg.stimSuccess;
+			dev.stimFailure = msg.stimFailure;
 			return null;
 		}
 		

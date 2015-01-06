@@ -20,7 +20,7 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD, acaly
@@ -308,9 +308,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	/**
-	 * Use openSkill instead.
+	 * 
 	 * @param skillID
 	 * @param isOpen
+	 * @deprecated The skill should not be closed, which is an assumption of the ctrl part.
+	 * Use openSkill to open a skill.
 	 */
 	@Deprecated
 	public void setSkillOpen(int skillID, boolean isOpen) {

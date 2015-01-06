@@ -25,7 +25,7 @@ import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.api.client.LIClientRegistry;
+import cn.liutils.template.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

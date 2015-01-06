@@ -15,7 +15,7 @@ import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.util.GenericUtils;
+import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

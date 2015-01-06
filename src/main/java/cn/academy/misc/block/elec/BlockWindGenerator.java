@@ -15,7 +15,7 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.AcademyCraftMod;
-import cn.liutils.api.block.BlockDirectionedMulti;
+import cn.liutils.template.block.BlockDirectionalMulti;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +28,7 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  *
  */
-public class BlockWindGenerator extends BlockDirectionedMulti {
+public class BlockWindGenerator extends BlockDirectionalMulti {
 
 	public BlockWindGenerator() {
 		super(Material.rock);

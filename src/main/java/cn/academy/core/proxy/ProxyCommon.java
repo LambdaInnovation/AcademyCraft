@@ -9,7 +9,8 @@ import cn.academy.ability.meltdowner.entity.EntityElecDart;
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
-import cn.academy.core.block.MsgDeveloper;
+import cn.academy.core.block.dev.MsgActionStart;
+import cn.academy.core.block.dev.MsgDeveloper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -19,9 +20,6 @@ public class ProxyCommon {
 	
 	public void init() {
 		AcademyCraftMod.INSTANCE.log.info("Loading common proxy of Academy Craft.");
-
-		//AcademyCraftMod.netHandler.registerMessage(MsgDeveloper.Handler.class, 
-		//		MsgDeveloper.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 		
 		//----------
 		//Abilities registry
