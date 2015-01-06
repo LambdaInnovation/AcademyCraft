@@ -9,11 +9,15 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
+import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -23,8 +27,11 @@ import cn.liutils.util.render.TrueTypeFont;
  * @author WeathFolD
  *
  */
+@RegistrationClass
+@SideOnly(Side.CLIENT)
 public class GuiMainScreen extends AuxGui {
 	
+	@RegAuxGui
 	public static GuiMainScreen INSTANCE = new GuiMainScreen();
 	private long lastInactiveTime, lastActiveTime;
 	

@@ -24,8 +24,9 @@ public class ProxyCommon {
 		//----------
 		//Abilities registry
 		
-		Abilities.registerCat(new CatElectro());
-		Abilities.registerCat(new CatMeltDowner());
+		//Abilities.registerCat(new CatElectro());
+		//Abilities.registerCat(new CatMeltDowner());
+		//Use @RegAbility to register a category.
 		
 		//----------
 	}

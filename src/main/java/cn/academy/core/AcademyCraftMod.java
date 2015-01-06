@@ -18,6 +18,7 @@ import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.liutils.api.register.LIGuiHandler;
+import cn.liutils.core.LIUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -91,6 +92,7 @@ public class AcademyCraftMod {
 	public void preInit(FMLPreInitializationEvent event) {
 
 		config = new Configuration(event.getSuggestedConfigurationFile());
+        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
 		proxy.preInit();
@@ -106,6 +108,10 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
         RegistrationManager.INSTANCE.registerAll(this, "EventHandler");
         RegistrationManager.INSTANCE.registerAll(this, "MessageHandler");
+        
+        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_AUXGUI);
+        
+        RegistrationManager.INSTANCE.registerAll(this, "Ability");
         
 		proxy.init();
 	}

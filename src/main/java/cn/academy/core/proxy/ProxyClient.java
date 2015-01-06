@@ -25,16 +25,20 @@ import cn.academy.core.event.ClientEvents;
 import cn.academy.core.register.ACItems;
 import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.entity.EntityThrowingCoin;
+import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
 import cn.liutils.core.event.LIClientEvents;
+import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
+@RegistrationClass
+@RegConfigurable
 public class ProxyClient extends ProxyCommon {
 	
 	@Configurable(category = "Control", key = "keyPresetSelect", defValueInt = Keyboard.KEY_C)
@@ -48,8 +52,6 @@ public class ProxyClient extends ProxyCommon {
 		AcademyCraftMod.guiHandler.addGuiElement(
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
 		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
-		LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
-		LIClientEvents.registerAuxGui(GuiMainScreen.INSTANCE);
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class ProxyClient extends ProxyCommon {
 		super.init();
 		AcademyCraftMod.INSTANCE.log.info("Loading client proxy of Academy Craft.");
 		
-		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
+		//LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, ProxyClient.class);
 		
 		LIKeyProcess.instance.addKey("preset_select", KEY_ID_PRESET_SELECT, false, new IKeyHandler() {
 			@Override

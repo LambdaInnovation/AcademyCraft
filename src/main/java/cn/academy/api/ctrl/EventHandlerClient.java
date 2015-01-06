@@ -21,6 +21,7 @@ import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
+import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -40,6 +41,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@RegConfigurable
 @SideOnly(Side.CLIENT)
 public class EventHandlerClient implements IKeyHandler {
 	
@@ -256,7 +258,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * Setup the key bindings and network.
 	 */
 	public static void init() {
-		LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, EventHandlerClient.class);
+		//LIGeneralRegistry.loadConfigurableClass(AcademyCraftMod.config, EventHandlerClient.class);
 		
 		LIKeyProcess.instance.addKey("Skill 1", KEY_S1, false, INSTANCE.new KeyHandler(0));
 		LIKeyProcess.instance.addKey("Skill 2", KEY_S2, false, INSTANCE.new KeyHandler(1));
