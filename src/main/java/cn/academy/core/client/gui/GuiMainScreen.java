@@ -13,7 +13,9 @@ import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
+import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -23,10 +25,14 @@ import cn.liutils.util.render.TrueTypeFont;
  * @author WeathFolD
  *
  */
+@RegistrationClass
 public class GuiMainScreen extends AuxGui {
 	
-	public static GuiMainScreen INSTANCE = new GuiMainScreen();
+	//public static GuiMainScreen INSTANCE = new GuiMainScreen();
 	private long lastInactiveTime, lastActiveTime;
+	
+	@RegAuxGui
+	public static final GuiMainScreen instance = new GuiMainScreen();
 	
 	private GuiMainScreen() {}
 

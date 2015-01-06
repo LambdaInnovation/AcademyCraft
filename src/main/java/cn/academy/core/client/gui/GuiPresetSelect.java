@@ -18,9 +18,11 @@ import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
+import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -34,8 +36,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)
+@RegistrationClass
 public class GuiPresetSelect extends AuxGui {
-
+	
+	@RegAuxGui
 	public static final GuiPresetSelect instance = new GuiPresetSelect();
 	
 	//Constants

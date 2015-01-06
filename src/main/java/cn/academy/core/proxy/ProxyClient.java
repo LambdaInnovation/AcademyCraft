@@ -25,10 +25,12 @@ import cn.academy.core.event.ClientEvents;
 import cn.academy.core.register.ACItems;
 import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.entity.EntityThrowingCoin;
+import cn.annoreg.core.RegistrationManager;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
+import cn.liutils.core.LIUtils;
 import cn.liutils.core.event.LIClientEvents;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
@@ -47,9 +49,10 @@ public class ProxyClient extends ProxyCommon {
 	public void preInit() {
 		AcademyCraftMod.guiHandler.addGuiElement(
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
-		LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
-		LIClientEvents.registerAuxGui(GuiMainScreen.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(new ClientEvents());
+		//LIClientEvents.registerAuxGui(GuiPresetSelect.instance);
+		//LIClientEvents.registerAuxGui(GuiMainScreen.instance);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
+		//MinecraftForge.EVENT_BUS.register(new ClientEvents());
 		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
 	}
 	
@@ -100,6 +103,11 @@ public class ProxyClient extends ProxyCommon {
 		
 		MinecraftForgeClient.registerItemRenderer(ACItems.ivoid, new RenderVoid());
 		MinecraftForgeClient.registerItemRenderer(ACItems.coin, new RendererCoin.ItemRender());
+	}
+	
+	@Override
+	public void postInit() {
+		
 	}
 	
 }

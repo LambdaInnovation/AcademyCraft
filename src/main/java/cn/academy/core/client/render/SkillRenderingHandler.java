@@ -37,7 +37,7 @@ public class SkillRenderingHandler {
 	private static SkillRenderingHandler instance = new SkillRenderingHandler();
 	
 	public static void init() {
-		LIClientRegistry.addPlayerRenderingHelper(new PRHSkillRender());
+		LIClientRegistry.addPlayerRenderingHook(new PRHSkillRender());
 		MinecraftForge.EVENT_BUS.register(instance);
 	}
 	

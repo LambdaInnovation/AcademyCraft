@@ -14,6 +14,7 @@ import cn.academy.core.command.CmdDataView;
 import cn.academy.core.proxy.ProxyCommon;
 import cn.academy.core.register.ACBlocks;
 import cn.academy.core.register.ACItems;
+import cn.annoreg.core.RegistrationMod;
 import cn.liutils.api.register.LIGuiHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -33,6 +34,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  *
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraftMod.VERSION)
+@RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "academy_")
 public class AcademyCraftMod {
 
 	/**
@@ -104,6 +106,7 @@ public class AcademyCraftMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+		
 	}
 	
 	@EventHandler()
