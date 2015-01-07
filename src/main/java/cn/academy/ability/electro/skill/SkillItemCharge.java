@@ -6,7 +6,6 @@ package cn.academy.ability.electro.skill;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -17,8 +16,13 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
+import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.api.entityx.EntityX;
+import cn.liutils.api.entityx.motion.GravityApply;
+import cn.liutils.util.space.Motion3D;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,6 +35,8 @@ public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
+		EntityRegistry.registerModEntity(EntityTest.class, "aaa", 3, 
+				AcademyCraftMod.INSTANCE, 60, 2, true);
 	}
 	
 	@Override
@@ -54,7 +60,7 @@ public class SkillItemCharge extends SkillBase {
 		return ACClientProps.ELEC_CHARGE;
 	}
 	
-	public static class RenderTest extends Render {
+	private static class RenderTest extends Render {
 		
 		private PieceSmallArc piece;
 		
@@ -78,33 +84,33 @@ public class SkillItemCharge extends SkillBase {
 		
 	}
 	
-	public static class EntityTest extends Entity {
+	public static class EntityTest extends EntityX {
 		
-		public EntityTest(World world, double x, double y, double z) {
+		public EntityTest(EntityPlayer ep) {
+			super(ep.worldObj);
+			new Motion3D(ep, true).applyToEntity(this);
+			double sc = 1.5;
+			motionX *= sc;
+			motionY *= sc;
+			motionZ *= sc;
+			//this.addDaemonHandler(new GravityApply(this, 0.05));
+		}
+		
+		public EntityTest(World world) {
 			super(world);
-			setPosition(x, y, z);
 		}
 		
 		@Override
 		public void onUpdate() {
-			if(++ticksExisted > 300) {
+			super.onUpdate();
+			if(ticksExisted > 300) {
 				setDead();
 			}
-			//N/A
 		}
-
-		@Override
-		protected void entityInit() {}
-
-		@Override
-		protected void readEntityFromNBT(NBTTagCompound var1) {}
-
-		@Override
-		protected void writeEntityToNBT(NBTTagCompound var1) {}
 		
 	}
 	
-	private static class StateHold extends State {
+	public static class StateHold extends State {
 
 		public StateHold(EntityPlayer player) {
 			super(player);
@@ -113,8 +119,8 @@ public class SkillItemCharge extends SkillBase {
 		@Override
 		public void onStart() { 
 			World world = player.worldObj;
-			if(world.isRemote) {
-				world.spawnEntityInWorld(new EntityTest(world, player.posX, player.posY, player.posZ));
+			if(!world.isRemote) {
+				world.spawnEntityInWorld(new EntityTest(player));
 			}
 		}
 
