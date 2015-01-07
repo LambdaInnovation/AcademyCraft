@@ -81,7 +81,7 @@ public class SkillStateManager {
 		while (itor.hasNext()) {
 			SkillState state = itor.next();
 			if (state.getClass().equals(clazz)) {
-				state.onFinish();
+				state.reallyFinishSkill();
 				itor.remove();
 			}
 		}
@@ -126,7 +126,7 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.tickSkill()) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
@@ -142,7 +142,7 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.tickSkill()) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
@@ -162,10 +162,19 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (world.getEntityByID(state.player.getEntityId()) != state.player) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
 		}
+	}
+	
+	public static SkillState getStateById(EntityPlayer player, int id) {
+		List<SkillState> playerList = client.get(player);
+		if (playerList == null) return null;
+		for (SkillState s : playerList) {
+			if (s.stateID == id) return s;
+		}
+		return null;
 	}
 }

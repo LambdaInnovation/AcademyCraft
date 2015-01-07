@@ -19,6 +19,19 @@ import cn.academy.core.client.render.SkillRenderDebug;
  */
 public class SkillState {
 	
+	/**
+	 * Set on server. Used in sync.
+	 * Note that for `the_player`, stateID is not valid,
+	 * because states on the_player is not synchronized with server
+	 * but is handled by client itself.
+	 */
+	public int stateID;
+	
+	/**
+	 * Used on server. The next state id.
+	 */
+	public static int nextID;
+	
 	public final boolean isRemote;
 	
 	private int tickToFinish = 0;
@@ -45,8 +58,8 @@ public class SkillState {
 		onStart();
 		if (!player.worldObj.isRemote) {
 			//sync to client
-			AcademyCraftMod.netHandler.sendTo(new SkillStateMessage(this), 
-					(EntityPlayerMP) player);
+			this.stateID = nextID++;
+			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
 		}
 	}
 	
@@ -56,11 +69,24 @@ public class SkillState {
 		finishSkillAfter(1);
 	}
 	
+	public final void updateSkill() {
+		if (!player.worldObj.isRemote) {
+			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
+		}
+	}
+	
 	public final void finishSkillAfter(int ticks) {
 		if (ticks != 1 && tickToFinish != 0) {
 			AcademyCraftMod.log.warn("Call finishSkillAfter more than once. Overwritten.");
 		}
 		tickToFinish = ticks;
+	}
+	
+	public final void reallyFinishSkill() {
+		onFinish();
+		if (!player.worldObj.isRemote) {
+			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
+		}
 	}
 	
 	protected void fromNBT(NBTTagCompound nbt) {}
@@ -70,6 +96,15 @@ public class SkillState {
 	protected void onStart() {}
 	
 	protected void onFinish() {}
+	
+	/**
+	 * Called when client receives an update message.
+	 * Note that the player who is the owner of this state, will not receive update.
+	 * @param nbt
+	 */
+	public void onUpdate(NBTTagCompound nbt) {
+		fromNBT(nbt);
+	}
 	
 	/**
 	 * Will be called every tick while this state is active.
