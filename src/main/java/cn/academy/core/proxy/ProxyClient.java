@@ -17,6 +17,7 @@ public class ProxyClient extends ProxyCommon {
 		AcademyCraftMod.guiHandler.addGuiElement(
 			ACCommonProps.GUI_ID_PRESET_SETTINGS, GuiPresetSettings.element);
 		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_KEYHANDLER);
 		AcademyCraftMod.guiHandler.addGuiElement(ACCommonProps.GUI_ID_ABILITY_DEV, new GuiDeveloper.Element());
 	}
 	
