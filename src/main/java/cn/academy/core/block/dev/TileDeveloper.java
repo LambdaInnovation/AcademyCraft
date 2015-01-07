@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -187,7 +188,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	}
 	
 	private TileDeveloper getHead() {
-		BlockDeveloper bd = (BlockDeveloper) getBlockType();
+		Block b = getBlockType();
+		if(!(b instanceof BlockDeveloper))
+			return null;
+		BlockDeveloper bd = (BlockDeveloper) b;
 		if(!isHead()) {
 			int[] coords = bd.getOrigin(worldObj, xCoord, yCoord, zCoord, getBlockMetadata());
 			TileEntity td = worldObj.getTileEntity(xCoord, yCoord, zCoord);

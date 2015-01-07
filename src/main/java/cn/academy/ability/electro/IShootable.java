@@ -3,6 +3,7 @@
  */
 package cn.academy.ability.electro;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -15,12 +16,12 @@ public interface IShootable {
 	/**
 	 * Return if the item is being thrown up.
 	 */
-	boolean inProgress(ItemStack stack);
+	boolean inProgress(EntityPlayer ep, ItemStack stack);
 	
 	/**
 	 * Return the current throwing progress. range(0, 1)
 	 */
-	double getProgress(ItemStack stack);
+	double getProgress(EntityPlayer ep, ItemStack stack);
 	
 	/**
 	 * Return if we treat a specific tick progress as successful.
