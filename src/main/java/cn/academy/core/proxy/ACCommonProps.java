@@ -10,8 +10,8 @@ package cn.academy.core.proxy;
  */
 public class ACCommonProps {
 
-	public static int
-		GUI_ID_PRESET_SETTINGS = 0,
-		GUI_ID_ABILITY_DEV = 1;
+	//public static int
+	//	GUI_ID_PRESET_SETTINGS = 0,
+	//	GUI_ID_ABILITY_DEV = 1;
 
 }

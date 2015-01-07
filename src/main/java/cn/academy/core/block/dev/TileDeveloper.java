@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.api.data.AbilityData;
@@ -27,6 +28,8 @@ import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.proxy.ACCommonProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.api.EntityManipHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,7 +44,24 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	
 	@SideOnly(Side.CLIENT)
 	public static RenderDeveloper renderer;
-		
+	
+    @RegGuiHandler
+    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+    	@SideOnly(Side.CLIENT)
+    	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if(te == null || !(te instanceof TileDeveloper)) {
+				AcademyCraftMod.log.error("Failed opening developer gui: no TileDeveloper found");
+				return null;
+			}
+			return new GuiDeveloper((TileDeveloper) te);
+    	}
+    	
+    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+    		return null;
+    	}
+    };
+
 	public static final int ID_LEVEL_UPGRADE = 0, ID_SKILL_ACQUIRE = 1, ID_DEVELOP = 2;
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
@@ -207,8 +227,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		if(user != null) return false;
 		user = player;
 		EntityManipHandler.addEntityManip(new DevPlayerManip(user, this), true);
-		player.openGui(AcademyCraftMod.INSTANCE, ACCommonProps.GUI_ID_ABILITY_DEV,
-				player.worldObj, xCoord, yCoord, zCoord);
+		guiHandler.openGuiContainer(player, worldObj, xCoord, yCoord, zCoord);
 		return true;
 	}
 	
