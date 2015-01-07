@@ -8,6 +8,7 @@ import net.minecraft.util.StatCollector;
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.data.AbilityData;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.render.SkillRenderDebug;
 import cpw.mods.fml.relauncher.Side;
@@ -56,5 +57,8 @@ public class SkillBase {
 	
 	public int getMaxSkillLevel() {
 		return 1;
+	}
+	
+	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {
 	}
 }

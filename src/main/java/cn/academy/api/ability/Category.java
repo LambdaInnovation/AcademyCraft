@@ -118,6 +118,8 @@ public class Category {
 		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
 		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
 		data.setMaxCP(newMaxCP);
+		
+		data.getSkill(skillID).onSkillExpChange(data, skillID, oldValue, newValue);
 	}
 	
 	public void onInitCategory(AbilityData data) {
