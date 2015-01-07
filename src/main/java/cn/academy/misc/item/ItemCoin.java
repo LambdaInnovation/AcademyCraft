@@ -22,13 +22,11 @@ import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.util.GenericUtils;
 
 /**
- * The coin from the game genter which is used by Misaka Mikoto for her prouding Railgun skill!
+ * The coin from the game center which is used by Misaka Mikoto for her proud Railgun skill!
  * ~\(≧▽≦)/~
  * @author KSkun, WeAthFolD
  */
 public class ItemCoin extends Item implements IShootable {
-	
-	public static final int THROWING_TIME = 40;
 	
 	public ItemCoin() {
 		setUnlocalizedName("ac_coin");
@@ -45,14 +43,12 @@ public class ItemCoin extends Item implements IShootable {
     	}
     	if(!nbt.getBoolean("throwing"))
     		return;
-    	int prog = nbt.getInteger("prog") + 1;
-    	//System.out.println("prg: " + prog);
-    	if(prog > THROWING_TIME) {
+    	EntityThrowingCoin etc = getThrowingEntity(world, stack);
+    	if(etc == null || etc.isDead) {
     		reset(nbt);
     		return;
     	}
     	((EntityPlayer)entity).isSwingInProgress = false;
-    	nbt.setInteger("prog", prog);
     }
 
     @Override
@@ -60,28 +56,37 @@ public class ItemCoin extends Item implements IShootable {
     {
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
     	if(nbt.getBoolean("throwing")) return stack;
+    	//System.out.println("Spawn");
+    	EntityThrowingCoin etc = world.isRemote ? 
+    		new EntityThrowingCoin.AvoidSync(player, stack) :
+    		new EntityThrowingCoin(player, stack);
+    	world.spawnEntityInWorld(etc);
+    	nbt.setInteger("entID", etc.getEntityId());
     	nbt.setBoolean("throwing", true);
-    	nbt.setInteger("prog", 0);
-    	
-    	nbt.setLong("startTime", GenericUtils.getSystemTime());
-    	if(world.isRemote)
-    		world.spawnEntityInWorld(new EntityThrowingCoin(player, stack));
         return stack;
     }
 
-	@Override
-	public boolean inProgress(ItemStack stack) {
-		return GenericUtils.loadCompound(stack).getBoolean("throwing");
-	}
-
-	@Override
-	public double getProgress(ItemStack stack) {
-		return (double)GenericUtils.loadCompound(stack).getInteger("prog") / THROWING_TIME;
-	}
-	
 	private void reset(NBTTagCompound nbt) {
 		nbt.setBoolean("throwing", false);
-    	nbt.setInteger("prog", 0);
+	}
+	
+	private EntityThrowingCoin getThrowingEntity(World world, ItemStack is) {
+		NBTTagCompound nbt = is.getTagCompound();
+		Entity e = world.getEntityByID(nbt.getInteger("entID"));
+		if(e == null || !(e instanceof EntityThrowingCoin))
+			return null;
+		return (EntityThrowingCoin) e;
+	}
+	
+	@Override
+	public boolean inProgress(EntityPlayer ep, ItemStack stack) {
+		return GenericUtils.loadCompound(stack).getBoolean("throwing");
+	}
+	
+	@Override
+	public double getProgress(EntityPlayer ep, ItemStack stack) {
+		EntityThrowingCoin etc = getThrowingEntity(ep.worldObj, stack);
+		return etc == null ? 0.0 : etc.getProgress();
 	}
 
 	@Override

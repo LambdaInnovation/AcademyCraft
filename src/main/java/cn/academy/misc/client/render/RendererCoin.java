@@ -6,6 +6,7 @@ package cn.academy.misc.client.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -32,9 +33,11 @@ public class RendererCoin extends Render {
 			float var8, float var9) {
 		EntityThrowingCoin etc = (EntityThrowingCoin) var1;
 		EntityPlayer player = etc.player;
+		if(etc.isSync)
+			return;
 		boolean fp = player == Minecraft.getMinecraft().thePlayer 
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
-		double dt = Minecraft.getSystemTime() - GenericUtils.loadCompound(etc.stack).getLong("startTime");
+		double dt = Minecraft.getSystemTime() - etc.getEntityData().getLong("startTime");
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
 			if(fp) {
@@ -70,7 +73,10 @@ public class RendererCoin extends Render {
 		@Override
 		public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 			final float sc = 0.7F;
-			if(!ACItems.coin.inProgress(item)) {
+			EntityLivingBase elb = (EntityLivingBase) data[1];
+			if(!(elb instanceof EntityPlayer)) return;
+			EntityPlayer player = (EntityPlayer) elb;
+			if(!ACItems.coin.inProgress(player, item)) {
 				GL11.glScalef(sc, sc, sc);
 				RenderUtils.renderItemIn2d(0.0625, ACClientProps.TEX_COIN_FRONT, ACClientProps.TEX_COIN_BACK);
 				return;
