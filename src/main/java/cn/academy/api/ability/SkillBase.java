@@ -54,4 +54,7 @@ public class SkillBase {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
 	}
 	
+	public int getMaxSkillLevel() {
+		return 1;
+	}
 }

@@ -91,12 +91,12 @@ public class CmdDataSet extends LICommandBase {
 					} else sendError(ics, "Invalid exp");
 				} else sendError(ics, "Invalid skill id.");
 				
-			} else if(args[0].equalsIgnoreCase("open")){
+			} else if(args[0].equalsIgnoreCase("skilllevel")){
 				int ind = Integer.parseInt(args[1]);
 				Category cat = data.getCategory();
 				if(ind >= 0 && ind < cat.getSkillCount()) {
 					int i = Integer.parseInt(args[2]);
-					data.setSkillOpen(ind, i != 0);
+					data.setSkillLevel(ind, i);
 				} else sendError(ics, "Invalid skill id.");
 				
 			} else {
@@ -107,7 +107,7 @@ public class CmdDataSet extends LICommandBase {
 			if(args[0].equalsIgnoreCase("god")) {
 				//Enter god mode
 				for(int i = 0; i < data.getSkillCount(); ++i) {
-					data.openSkill(i);
+					data.setSkillLevel(i, data.getMaxSkillLevel(i));
 				}
 				sendChat(ics, "Entered god mode");
 			}
