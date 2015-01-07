@@ -9,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
@@ -26,13 +28,12 @@ import cn.liutils.util.render.TrueTypeFont;
  *
  */
 @RegistrationClass
+@SideOnly(Side.CLIENT)
 public class GuiMainScreen extends AuxGui {
 	
-	//public static GuiMainScreen INSTANCE = new GuiMainScreen();
-	private long lastInactiveTime, lastActiveTime;
-	
 	@RegAuxGui
-	public static final GuiMainScreen instance = new GuiMainScreen();
+	public static GuiMainScreen INSTANCE = new GuiMainScreen();
+	private long lastInactiveTime, lastActiveTime;
 	
 	private GuiMainScreen() {}
 

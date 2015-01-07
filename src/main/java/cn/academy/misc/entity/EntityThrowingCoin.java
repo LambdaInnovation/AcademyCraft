@@ -10,6 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import cn.academy.core.register.ACItems;
+import cn.academy.misc.client.render.RendererCoin;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,7 +22,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
+@RegistrationClass
+@RegEntity(renderName = "renderer")
 public class EntityThrowingCoin extends Entity {
+	
+	@SideOnly(Side.CLIENT)
+	public static RendererCoin renderer;
 	
 	public static final double MAXHEIGHT = 2;
 	private static final int MAXLIFE = 100;

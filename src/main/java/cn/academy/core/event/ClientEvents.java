@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import cn.academy.core.block.dev.DevPlayerManip;
 import cn.academy.core.client.render.ACModelBiped;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,6 +21,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)
+@RegistrationClass
+@RegEventHandler(RegEventHandler.Bus.Forge)
 public class ClientEvents {
 	
 	ModelBiped hackMain, hackArmor, hackChestplate, hackModel;

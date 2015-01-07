@@ -23,7 +23,10 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
+import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.proxy.ACCommonProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.api.EntityManipHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +35,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 能力开发机的TE
  * @author WeathFolD
  */
+@RegistrationClass
+@RegTileEntity(renderName = "renderer")
 public class TileDeveloper extends TileEntity implements IEnergySink {
+	
+	@SideOnly(Side.CLIENT)
+	public static RenderDeveloper renderer;
 		
 	public static final int ID_LEVEL_UPGRADE = 0, ID_SKILL_ACQUIRE = 1, ID_DEVELOP = 2;
 	public static final double INIT_MAX_ENERGY = 80000.0;

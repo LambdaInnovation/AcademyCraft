@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -79,7 +81,7 @@ public class SkillStateManager {
 		while (itor.hasNext()) {
 			SkillState state = itor.next();
 			if (state.getClass().equals(clazz)) {
-				state.onFinish();
+				state.reallyFinishSkill();
 				itor.remove();
 			}
 		}
@@ -124,7 +126,7 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.tickSkill()) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
@@ -140,7 +142,7 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.tickSkill()) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
@@ -152,6 +154,7 @@ public class SkillStateManager {
 	
 	static int clientTickRemovePlayer = 0;
 	
+	@SideOnly(Side.CLIENT)
 	private static void removePlayerOnClient() {
 		World world = Minecraft.getMinecraft().theWorld;
 		for (List<SkillState> playerList : client.values()) {
@@ -159,10 +162,19 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (world.getEntityByID(state.player.getEntityId()) != state.player) {
-					state.onFinish();
+					state.reallyFinishSkill();
 					itor.remove();
 				}
 			}
 		}
+	}
+	
+	public static SkillState getStateById(EntityPlayer player, int id) {
+		List<SkillState> playerList = client.get(player);
+		if (playerList == null) return null;
+		for (SkillState s : playerList) {
+			if (s.stateID == id) return s;
+		}
+		return null;
 	}
 }

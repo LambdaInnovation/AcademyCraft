@@ -4,6 +4,8 @@
 package cn.academy.core.block.dev;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -16,6 +18,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
  * if id == -1, abort the dev action
  * @author WeathFolD
  */
+@RegistrationClass
 public class MsgActionStart implements IMessage {
 	
 	int x, y, z;
@@ -46,6 +49,7 @@ public class MsgActionStart implements IMessage {
 			.writeByte(id).writeByte(par);
 	}
 	
+	@RegMessageHandler(msg = MsgActionStart.class, side = RegMessageHandler.Side.SERVER)
 	public static class Handler implements IMessageHandler<MsgActionStart, IMessage> {
 
 		@Override

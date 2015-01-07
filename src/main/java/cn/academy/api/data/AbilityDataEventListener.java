@@ -3,6 +3,8 @@ package cn.academy.api.data;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -11,9 +13,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
+@RegistrationClass
 public class AbilityDataEventListener {
 	
-	public class ForgeEventListener {
+	@RegEventHandler(RegEventHandler.Bus.Forge)
+	public static class ForgeEventListener {
 		
 		@SubscribeEvent
 	    public void onEntityConstructing(EntityConstructing event) {
@@ -37,17 +41,15 @@ public class AbilityDataEventListener {
 	    	}
 	    }
 	    
-	    
-	   
-	    
 	    @SubscribeEvent
 	    public void onLivingFallEvent(LivingFallEvent event) {
 
 	    }
 		
 	}
-	
-	public class FMLEventListener {
+
+	@RegEventHandler(RegEventHandler.Bus.FML)
+	public static class FMLEventListener {
 		
 		@SubscribeEvent
 		public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)

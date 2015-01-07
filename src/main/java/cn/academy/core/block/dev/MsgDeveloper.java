@@ -4,6 +4,8 @@
 package cn.academy.core.block.dev;
 
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Server->Client
  * @author WeathFolD
  */
+@RegistrationClass
 public class MsgDeveloper implements IMessage {
 	
 	int x, y, z;
@@ -29,14 +32,14 @@ public class MsgDeveloper implements IMessage {
 	int stimSuccess;
 	int stimFailure;
 	
-	public MsgDeveloper(TileDeveloper dev) {
-		x = dev.xCoord;
-		y = dev.yCoord;
-		z = dev.zCoord;
-		energy = (int) dev.curEnergy;
-		isStimulating = dev.isStimulating;
-		stimSuccess = dev.stimSuccess;
-		stimFailure = dev.stimFailure;
+	public MsgDeveloper(TileDeveloper tileDeveloper) {
+		x = tileDeveloper.xCoord;
+		y = tileDeveloper.yCoord;
+		z = tileDeveloper.zCoord;
+		energy = (int) tileDeveloper.curEnergy;
+		isStimulating = tileDeveloper.isStimulating;
+		stimSuccess = tileDeveloper.stimSuccess;
+		stimFailure = tileDeveloper.stimFailure;
 	}
 	
 	public MsgDeveloper() {}
@@ -63,6 +66,7 @@ public class MsgDeveloper implements IMessage {
 			.writeByte(stimFailure);
 	}
 	
+	@RegMessageHandler(msg = MsgDeveloper.class, side = RegMessageHandler.Side.CLIENT)
 	public static class Handler implements IMessageHandler<MsgDeveloper, IMessage> {
 
 		@Override

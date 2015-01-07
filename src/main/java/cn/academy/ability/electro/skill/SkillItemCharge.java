@@ -37,6 +37,9 @@ public class SkillItemCharge extends SkillBase {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
 		EntityRegistry.registerModEntity(EntityTest.class, "aaa", 3, 
 				AcademyCraftMod.INSTANCE, 60, 2, true);
+
+		//don't put reg here!
+		//REPLY: Just for temp testing purpose, will remove later
 	}
 	
 	@Override

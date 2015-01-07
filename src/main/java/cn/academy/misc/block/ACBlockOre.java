@@ -1,7 +1,9 @@
 package cn.academy.misc.block;
 
 import java.util.Random;
+
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.ctor.Constructible;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -14,6 +16,8 @@ import net.minecraft.item.Item;
 public class ACBlockOre extends Block{
 	
 	String BName;
+	
+	@Constructible
 	public ACBlockOre(String Blockname,int HarvestLevel){
 		super(Material.rock);
 		setCreativeTab(AcademyCraftMod.cct);

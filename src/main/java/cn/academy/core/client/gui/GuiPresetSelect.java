@@ -23,6 +23,10 @@ import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
+import cn.liutils.api.register.Configurable;
+import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
+import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
+import cn.liutils.util.ClientUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -35,12 +39,31 @@ import cpw.mods.fml.relauncher.SideOnly;
  * May consider adding mouse-wheel and mouse-click action.
  * @author WeathFolD
  */
-@SideOnly(Side.CLIENT)
 @RegistrationClass
+@RegConfigurable
+@SideOnly(Side.CLIENT)
 public class GuiPresetSelect extends AuxGui {
-	
+
 	@RegAuxGui
 	public static final GuiPresetSelect instance = new GuiPresetSelect();
+	
+	@Configurable(category = "Control", key = "keyPresetSelect", defValueInt = Keyboard.KEY_C)
+	@RegAttachKeyHandler(clazz = KeyHandler.class)
+	public static int KEY_ID_PRESET_SELECT;
+	
+	public static class KeyHandler implements IKeyHandler {
+		@Override
+		public void onKeyDown(int keyCode, boolean tickEnd) {
+			if(tickEnd) return;
+			if(GuiPresetSelect.instance.isOpen())
+				GuiPresetSelect.instance.closeGui();
+			else if(ClientUtils.isPlayerInGame()) {
+				GuiPresetSelect.instance.openGui();
+			}
+		}
+		@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
+		@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
+	}
 	
 	//Constants
 	private static final float ALPHA = 0.6F;

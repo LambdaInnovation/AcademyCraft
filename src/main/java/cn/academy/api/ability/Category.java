@@ -70,13 +70,8 @@ public class Category {
 		return new float[skills.size()];
 	}
 	
-	public boolean[] getInitialSkillOpen() {
-		boolean[] ret = new boolean[skills.size()];
-		//Return true in development.
-		for (int i = 0; i < ret.length; ++i) {
-			ret[i] = true;
-		}
-		return ret;
+	public int[] getInitialSkillLevel() {
+		return new int[skills.size()];
 	}
 	
 	public float getInitialMaxCP() {
@@ -123,6 +118,8 @@ public class Category {
 		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
 		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
 		data.setMaxCP(newMaxCP);
+		
+		data.getSkill(skillID).onSkillExpChange(data, skillID, oldValue, newValue);
 	}
 	
 	public void onInitCategory(AbilityData data) {
@@ -130,7 +127,7 @@ public class Category {
 		data.setSkillExp(getInitialSkillExp());
 		data.setCurrentCP(getInitialMaxCP());
 		data.setMaxCP(getInitialMaxCP());
-		data.setSkillOpen(getInitialSkillOpen());
+		data.setSkillLevel(getInitialSkillLevel());
 	}
 	
 	public void onEnterCategory(AbilityData data) {

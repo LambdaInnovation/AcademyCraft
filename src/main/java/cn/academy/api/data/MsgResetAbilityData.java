@@ -2,6 +2,8 @@ package cn.academy.api.data;
 
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.core.AcademyCraftMod;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +15,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@RegistrationClass
 public class MsgResetAbilityData implements IMessage {
 	
 	private NBTTagCompound data;
@@ -36,9 +39,10 @@ public class MsgResetAbilityData implements IMessage {
 	}
 	
 	//TODO check if loading this class (containing Minecraft class and EventHandlerClient) on server will cause an error
+	@RegMessageHandler(msg = MsgResetAbilityData.class, side = RegMessageHandler.Side.CLIENT)
 	public static class Handler implements IMessageHandler<MsgResetAbilityData, IMessage> {
 		@Override
-		//@SideOnly(Side.CLIENT)
+		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(MsgResetAbilityData message, MessageContext ctx) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (!AbilityDataMain.hasData(player)) {

@@ -1,12 +1,16 @@
 package cn.academy.ability.meltdowner;
 
+import cn.academy.api.ability.AbilityRegistration.RegAbility;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
+import cn.annoreg.core.RegistrationClass;
 
 /**
  * @author acaly
  *
  */
+@RegistrationClass
+@RegAbility
 public class CatMeltDowner extends Category {
 
 	@Override

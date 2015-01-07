@@ -3,19 +3,29 @@
  */
 package cn.academy.ability.electro.entity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.RenderRailgun;
 import cn.academy.misc.entity.EntityRay;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cn.weaponmod.api.damage.Damage;
 
 /**
  * The railgun ray entity, alive on both client and server side.
  * @author WeathFolD
  */
+@RegistrationClass
+@RegEntity(renderName = "renderer")
 public class EntityRailgun extends EntityRay {
+	
+	@SideOnly(Side.CLIENT)
+	public static RenderRailgun renderer;
 
 	private class RailgunDamage extends Damage {
 		
