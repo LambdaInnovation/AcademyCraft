@@ -18,6 +18,7 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.motion.GravityApply;
 import cn.liutils.util.space.Motion3D;
@@ -34,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
+		//RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
 		EntityRegistry.registerModEntity(EntityTest.class, "aaa", 3, 
 				AcademyCraftMod.INSTANCE, 60, 2, true);
 
@@ -63,6 +64,7 @@ public class SkillItemCharge extends SkillBase {
 		return ACClientProps.ELEC_CHARGE;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	private static class RenderTest extends Render {
 		
 		private PieceSmallArc piece;
@@ -87,7 +89,11 @@ public class SkillItemCharge extends SkillBase {
 		
 	}
 	
+	@RegEntity(clientOnly = true, renderName = "renderer")
 	public static class EntityTest extends EntityX {
+		
+		@SideOnly(Side.CLIENT)
+		public static RenderTest renderer;
 		
 		public EntityTest(EntityPlayer ep) {
 			super(ep.worldObj);

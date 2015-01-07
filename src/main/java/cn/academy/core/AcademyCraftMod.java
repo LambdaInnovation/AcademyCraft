@@ -7,7 +7,6 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cn.academy.core.proxy.ProxyCommon;
 import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
@@ -47,13 +46,6 @@ public class AcademyCraftMod {
 	 */
 	@Instance("academy-craft")
 	public static AcademyCraftMod INSTANCE;
-	
-
-	@SidedProxy(clientSide = "cn.academy.core.proxy.ProxyClient", serverSide = "cn.academy.core.proxy.ProxyCommon")
-	/**
-	 * 加载代理
-	 */
-	public static ProxyCommon proxy;
 
 	/**
 	 * 日志
@@ -69,11 +61,6 @@ public class AcademyCraftMod {
 	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraftMod.NET_CHANNEL);
 	
 	/**
-	 * GUI处理器
-	 */
-	//public static LIGuiHandler guiHandler = new LIGuiHandler();
-	
-	/**
 	 * 创造栏
 	 */
 	public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
@@ -85,17 +72,15 @@ public class AcademyCraftMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-
 		config = new Configuration(event.getSuggestedConfigurationFile());
-        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		
-		//NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
-		proxy.preInit();
+        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_KEYHANDLER);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		
         RegistrationManager.INSTANCE.registerAll(this, "Block");
         RegistrationManager.INSTANCE.registerAll(this, "Item");
         RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
@@ -108,14 +93,10 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_AUXGUI);
         
         RegistrationManager.INSTANCE.registerAll(this, "Ability");
-        
-		proxy.init();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit();
-		
 	}
 	
 	@EventHandler()
