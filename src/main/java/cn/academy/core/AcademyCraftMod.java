@@ -71,7 +71,7 @@ public class AcademyCraftMod {
 	/**
 	 * GUI处理器
 	 */
-	public static LIGuiHandler guiHandler = new LIGuiHandler();
+	//public static LIGuiHandler guiHandler = new LIGuiHandler();
 	
 	/**
 	 * 创造栏
@@ -89,7 +89,7 @@ public class AcademyCraftMod {
 		config = new Configuration(event.getSuggestedConfigurationFile());
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		
-		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
+		//NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, guiHandler);
 		proxy.preInit();
 	}
 
@@ -103,6 +103,7 @@ public class AcademyCraftMod {
         RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
         RegistrationManager.INSTANCE.registerAll(this, "EventHandler");
         RegistrationManager.INSTANCE.registerAll(this, "MessageHandler");
+        RegistrationManager.INSTANCE.registerAll(this, "GuiHandler");
         
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_AUXGUI);
         

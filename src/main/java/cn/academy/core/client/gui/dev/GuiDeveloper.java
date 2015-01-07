@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
@@ -27,7 +29,7 @@ import cn.liutils.api.register.IGuiElement;
  * @author WeathFolD
  */
 public class GuiDeveloper extends LIGuiScreen {
-	
+    
 	//Constants 
 	protected static final int
 		WIDTH = 228,
@@ -70,27 +72,6 @@ public class GuiDeveloper extends LIGuiScreen {
     public boolean doesGuiPauseGame()
     {
         return false;
-    }
-	
-    public static class Element implements IGuiElement {
-
-		@Override
-		public Object getServerContainer(EntityPlayer player, World world,
-				int x, int y, int z) {
-			return null;
-		}
-
-		@Override
-		public Object getClientGui(EntityPlayer player, World world, int x,
-				int y, int z) {
-			TileEntity te = world.getTileEntity(x, y, z);
-			if(te == null || !(te instanceof TileDeveloper)) {
-				AcademyCraftMod.log.error("Failed opening developer gui: no TileDeveloper found");
-				return null;
-			}
-			return new GuiDeveloper((TileDeveloper) te);
-		}
-    	
     }
 	
 }

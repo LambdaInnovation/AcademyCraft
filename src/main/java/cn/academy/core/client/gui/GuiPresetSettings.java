@@ -3,6 +3,7 @@ package cn.academy.core.client.gui;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -24,12 +25,13 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACCommonProps;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
 import cn.liutils.api.register.Configurable;
-import cn.liutils.api.register.IGuiElement;
 import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
 import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
@@ -55,14 +57,19 @@ public class GuiPresetSettings extends LIGuiScreen {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			Minecraft mc = Minecraft.getMinecraft();
-			mc.thePlayer.openGui(
-					AcademyCraftMod.INSTANCE, 
-					ACCommonProps.GUI_ID_PRESET_SETTINGS, 
-					mc.theWorld, 0, 0, 0);
+			guiHandler.openClientGui();
 		}
 		@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 		@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
 	}
+	
+	@RegGuiHandler
+	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+		@SideOnly(Side.CLIENT)
+		protected GuiScreen getClientGui() {
+			return new GuiPresetSettings();
+		}
+	};
 	
 	private boolean isSetting;
 
@@ -336,21 +343,5 @@ public class GuiPresetSettings extends LIGuiScreen {
 		}
 		
 	}
-	
-	public static final IGuiElement element = new IGuiElement() {
-
-		@Override
-		public Object getServerContainer(EntityPlayer player, World world,
-				int x, int y, int z) {
-			return null;
-		}
-
-		@Override
-		public Object getClientGui(EntityPlayer player, World world, int x,
-				int y, int z) {
-			return new GuiPresetSettings();
-		}
-		
-	};
 	
 }
