@@ -185,11 +185,11 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		return true;
 	}
 	
-	private double getEUConsume() {
-		return 0;
+	public double getEUConsume() {
+		return 4000;
 	}
 	
-	private int getExpConsume() {
+	public int getExpConsume() {
 		return 100;
 	}
 	

@@ -99,6 +99,10 @@ public class ACLangs {
 		return local("ac.successful");
 	}
 	
+	public static String expConsumption() {
+		return local("ac.expconsumption");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

@@ -3,10 +3,9 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import java.util.Set;
-
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
@@ -14,25 +13,30 @@ import cn.liutils.api.gui.widget.TextButton;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeathFolD
  *
  */
 public class PageLearn extends DevSubpage {
+	
+	boolean isFirst, isMaxLevel;
+	IDevAction ida;
 
 	public PageLearn(PageMainBase parent) {
 		super(parent, "page.adlearning", ACClientProps.TEX_GUI_AD_LEARNING);
+		isFirst = dev.data.getCategoryID() == 0;
+		isMaxLevel = dev.data.getLevelID() == dev.data.getLevelCount() - 1;
+		ida = TileDeveloper.getAction(isFirst ? TileDeveloper.ID_DEVELOP : TileDeveloper.ID_LEVEL_UPGRADE, dev.data.getLevelID() + 1);
+		
 		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F) {
-			boolean isFirst;
 			
 			{
 				setTexMapping(1, 448, 123, 27);
 				setDownMapping(1, 419);
 				setInvalidMapping(1, 477);
-				isFirst = dev.data.getCategoryID() == 0;
-				if(!isFirst && dev.data.getLevelID() == dev.data.getLevelCount() - 1) {
+				
+				if(!isFirst && isMaxLevel) {
 					this.receiveEvent = false; //Unable to upgrade
 				}
 				setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
@@ -71,6 +75,31 @@ public class PageLearn extends DevSubpage {
 			str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 129, 8);
 			GL11.glColor4f(1, 1, 1, 1);
+			
+			//Numeric indication
+			
+			if(isFirst || !isMaxLevel) {
+				RenderUtils.bindColor(dev.DEFAULT_COLOR);
+				str = ACLangs.expConsumption();
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 55, 50, 9);
+				
+				int eexp = dev.dev.getExpConsume() * ida.getExpectedStims(dev.data);
+				double eene = dev.dev.getEUConsume() * ida.getExpectedStims(dev.data);
+				dev.dev.action = ida;
+				double prob = dev.dev.getSuccessProb(dev.data);
+				eexp = (int) (eexp / prob);
+				eene /= prob;
+				
+				RenderUtils.bindColor(234, 84, 44);
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.format("%.0f", eene), 70, 67, 7.5F);
+				
+				RenderUtils.bindColor(161, 199, 152);
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.format("%d", eexp), 70, 59, 7.5F);
+				
+				RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_LEARNING);
+				GL11.glColor4f(1, 1, 1, 1);
+				HudUtils.drawRect(57, 61, 374, 26, 8.5, 12, 17, 24);
+			}
 		} GL11.glPopMatrix();
 	}
 	
