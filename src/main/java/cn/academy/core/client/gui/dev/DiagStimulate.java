@@ -3,12 +3,15 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.block.dev.IDevAction;
+import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.client.ACLangs;
-import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
+import cn.liutils.util.render.TextUtils;
 
 /**
  * @author WeathFolD
@@ -29,10 +32,13 @@ public class DiagStimulate extends DialogueBase {
 		}
 		
 	}
+	
+	final IDevAction devAction;
 
-	public DiagStimulate(final GuiDeveloper dev) {
+	public DiagStimulate(final GuiDeveloper dev, IDevAction ida) {
 		super("stimulate", dev, 9); //⑨
 		this.setTitle(ACLangs.stimProg());
+		this.devAction = ida;
 		
 		new ButtonWarning("abort", 46, 45.5) {
 			{
@@ -47,9 +53,16 @@ public class DiagStimulate extends DialogueBase {
 					dispose();
 				}
 			}
+			
+			@Override
+			public void onMouseDown(double mx, double my) {
+				dev.dev.isStimulating = false;
+				AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, -1, 0));
+			}
 		};
 	}
 	
+	final int[] ERROR_COLOR = {213, 45, 6};
 	@Override
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
@@ -57,6 +70,27 @@ public class DiagStimulate extends DialogueBase {
 		HudUtils.drawRect(6, 15.5, 12, 121, 104, 6.5, 208, 13);
 		double prog = (double) dev.dev.stimSuccess / dev.dev.maxStimTimes;
 		HudUtils.drawRect(6.5, 16, 13, 137, 103 * prog, 5.5, 206 * prog, 11);
+		RenderUtils.bindColor(dev.DEFAULT_COLOR);
+		//CurAction
+		String text = String.format("%s: %s", ACLangs.curAction(),  devAction.getActionInfo(dev.data));
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 23, 7);
+		//StimTimes
+		text = String.format("%s: %d/%d", ACLangs.attemptes(), dev.dev.stimSuccess, dev.dev.maxStimTimes);
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 31, 6);
+		
+		//StimFails
+		RenderUtils.bindColor(ERROR_COLOR);
+		double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, text, 6);
+		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6 + len, 31, 6);
+		
+		RenderUtils.bindColor(dev.DEFAULT_COLOR);
+		//SyncRate
+		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 38.5, 6);
+		
+		GL11.glColor4d(1, 1, 1, 1);
+		
 	}
 	
 	@Override

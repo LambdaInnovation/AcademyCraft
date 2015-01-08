@@ -4,6 +4,7 @@
 package cn.academy.core.block.dev;
 
 import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 
 import java.lang.reflect.Constructor;
@@ -12,8 +13,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,12 +25,13 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
-import cn.academy.core.proxy.ACCommonProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.api.EntityManipHandler;
+import cn.liutils.util.DebugUtils;
+import cn.liutils.util.ExpUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -112,6 +112,18 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		return res;
 	}
 	
+	@Override
+    public void invalidate() {
+		super.invalidate();
+    	onChunkUnload();
+    }
+	
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(!worldObj.isRemote)
+    		MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -122,10 +134,6 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		
 		if(!isHead())
 			return;
-		
-//		if(this.isStimulating) {
-//			System.out.println("Stimulating " + worldObj.isRemote);
-//		}
 		
 		++updateCount;
 		if(!worldObj.isRemote && user != null) {
@@ -166,6 +174,12 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	}
 	
 	private boolean perConsume() {
+		double ceu = getEUConsume();
+		int cexp = getExpConsume();
+		if(curEnergy < ceu || !ExpUtils.consumeExp(user, cexp))
+			return false;
+		
+		curEnergy -= ceu;
 		return true;
 	}
 	
@@ -173,8 +187,8 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		return 0;
 	}
 	
-	private float getExpConsume() {
-		return 0F;
+	private int getExpConsume() {
+		return 100;
 	}
 	
 	public double getSuccessProb() {
@@ -188,8 +202,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		BlockDeveloper bd = (BlockDeveloper) b;
 		if(!isHead()) {
 			int[] coords = bd.getOrigin(worldObj, xCoord, yCoord, zCoord, getBlockMetadata());
-			TileEntity td = worldObj.getTileEntity(xCoord, yCoord, zCoord);
+			TileEntity td = worldObj.getTileEntity(coords[0], coords[1], coords[2]);
 			if(td == null || !(td instanceof TileDeveloper)) { //Silent error processing (Is it good?)
+				AcademyCraftMod.log.error("Didn't find the corresponding head for developer at " 
+						+ DebugUtils.formatArray(xCoord, yCoord, zCoord) + " " + worldObj.isRemote);
 				return this;
 			}
 			return (TileDeveloper) td;
@@ -243,7 +259,6 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	
 	private void sync() {
 		if(!worldObj.isRemote) {
-			//System.out.println("sync");
 			AcademyCraftMod.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
 		}
 	}

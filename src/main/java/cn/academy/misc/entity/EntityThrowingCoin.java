@@ -29,12 +29,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity(renderName = "renderer")
 public class EntityThrowingCoin extends EntityX {
 	
-//	public static class AvoidSync extends EntityThrowingCoin { //user client-side generate
-//		public AvoidSync(EntityPlayer player, ItemStack is) {
-//			super(player, is);
-//		}
-//	}
-	
 	double yOffset = 0.6;
 	
 	private class KeepPosition extends MotionHandler<EntityThrowingCoin> {

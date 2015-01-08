@@ -30,6 +30,7 @@ public class PageLearn extends DevSubpage {
 				setDownMapping(1, 419);
 				setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
 				setTextProps(ACLangs.learnAbility(), 8);
+				this.setTextColor(dev.DEFAULT_COLOR);
 			}
 			
 			@Override

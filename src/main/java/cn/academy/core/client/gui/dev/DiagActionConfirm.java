@@ -84,7 +84,7 @@ public class DiagActionConfirm extends DialogueBase {
 		AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
 		
 		//Open the progress gui
-		new DiagStimulate(dev);
+		new DiagStimulate(dev, devAction);
 	}
 
 }

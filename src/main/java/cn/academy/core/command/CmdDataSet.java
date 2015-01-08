@@ -110,6 +110,9 @@ public class CmdDataSet extends LICommandBase {
 					data.setSkillLevel(i, data.getMaxSkillLevel(i));
 				}
 				sendChat(ics, "Entered god mode");
+			} else if(args[0].equalsIgnoreCase("sexp")) { //give player some experience.
+				player.addExperienceLevel(30);
+				player.experience = 0;
 			}
 		} else {
 			this.sendError(ics, "Invalid argument size");

@@ -79,6 +79,18 @@ public class ACLangs {
 		return local("ac.stimprog");
 	}
 	
+	public static String curAction() {
+		return local("ac.curaction");
+	}
+	
+	public static String attemptes() {
+		return local("ac.attempts");
+	}
+	
+	public static String fails() {
+		return local("ac.fails");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

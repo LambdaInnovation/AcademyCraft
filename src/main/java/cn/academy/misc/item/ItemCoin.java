@@ -32,7 +32,7 @@ public class ItemCoin extends Item {
 		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin-front");
 		setCreativeTab(AcademyCraftMod.cct);
-		setMaxDamage(0);
+		//setMaxDamage(0);
 	}
 	
     @Override
