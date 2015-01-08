@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -20,15 +21,23 @@ import cn.liutils.util.render.TextUtils;
 public class DiagStimulate extends DialogueBase {
 	
 	private class ButtonConfirm extends ButtonNormal {
+		
+		final boolean reopen;
 
-		public ButtonConfirm() {
+		public ButtonConfirm(boolean r) {
 			super("confirm", 46, 45.5);
 			this.setTextProps(ACLangs.confirm(), 6);
+			reopen = r;
 		}
 		
 		@Override
 		public void onMouseDown(double mx, double my) {
-			DiagStimulate.this.dispose();
+			//Action successfully peformed, which means current GUI data no more fresh.
+			//Let user reopen once.
+			if(reopen) {
+				dev.dev.userQuit();
+				dev.user.closeScreen();
+			} else DiagStimulate.this.dispose();
 		}
 		
 	}
@@ -49,7 +58,7 @@ public class DiagStimulate extends DialogueBase {
 			public void draw(double mx, double my, boolean hover) {
 				super.draw(mx, my, hover);
 				if(!dev.dev.isStimulating) {
-					new ButtonConfirm();
+					new ButtonConfirm(dev.dev.isStimSuccessful());
 					dispose();
 				}
 			}
@@ -71,9 +80,15 @@ public class DiagStimulate extends DialogueBase {
 		double prog = (double) dev.dev.stimSuccess / dev.dev.maxStimTimes;
 		HudUtils.drawRect(6.5, 16, 13, 137, 103 * prog, 5.5, 206 * prog, 11);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
+		if(!dev.dev.isStimulating && !dev.dev.isStimSuccessful()) {
+			RenderUtils.bindColor(ERROR_COLOR);
+		}
 		//CurAction
-		String text = String.format("%s: %s", ACLangs.curAction(),  devAction.getActionInfo(dev.data));
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 23, 7);
+		String text = String.format("%s: %s", 
+				dev.dev.isStimulating ? ACLangs.curAction() : (dev.dev.isStimSuccessful() ? ACLangs.successful() : ACLangs.aborted()),  
+				devAction.getActionInfo(dev.data));
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 24, 7);
+		
 		//StimTimes
 		text = String.format("%s: %d/%d", ACLangs.attemptes(), dev.dev.stimSuccess, dev.dev.maxStimTimes);
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 31, 6);

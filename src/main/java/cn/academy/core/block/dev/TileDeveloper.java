@@ -76,6 +76,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		try {
 			devActions.add(DevActionLevel.class.getConstructor(Integer.TYPE));
 			devActions.add(DevActionSkill.class.getConstructor(Integer.TYPE));
+			devActions.add(DevActionDevelop.class.getConstructor(Integer.TYPE));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -161,7 +162,8 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 				isStimulating = false;
 				return;
 			}
-			if(RNG.nextDouble() < getSuccessProb()) {
+			AbilityData data = AbilityDataMain.getData(user);
+			if(RNG.nextDouble() < getSuccessProb(data)) {
 				++stimSuccess;
 				if(stimSuccess == maxStimTimes) {
 					action.onActionFinished(AbilityDataMain.getData(user));
@@ -191,8 +193,12 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		return 100;
 	}
 	
-	public double getSuccessProb() {
-		return 0.7;
+	public double getSuccessProb(AbilityData data) {
+		return getSyncRate() * action.getSuccessfulRate(data);
+	}
+	
+	public boolean isStimSuccessful() {
+		return this.stimSuccess == this.maxStimTimes;
 	}
 	
 	private TileDeveloper getHead() {
@@ -306,11 +312,11 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	}
 	
 	public float syncRateDisplay() {
-		return 27.1828F;
+		return (float)getSyncRate() * 100F;
 	}
 	
 	public double getSyncRate() {
-		return 100;
+		return 1.0;
 	}
 	
 	//Save and load

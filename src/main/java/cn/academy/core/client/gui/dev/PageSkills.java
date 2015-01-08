@@ -17,6 +17,7 @@ import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
+import cn.liutils.util.misc.Pair;
 import cn.liutils.util.render.TextUtils;
 
 /**
@@ -34,7 +35,7 @@ public class PageSkills extends DevSubpage {
 			
 			final int skillID;
 			final SkillBase skill;
-			final boolean learned;
+			final boolean fullyLearned;
 
 			public SkillElement(int id) {
 				super("skill_" + id, SkillList.this, 0, 0, 110.5, 33.5);
@@ -42,12 +43,12 @@ public class PageSkills extends DevSubpage {
 				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
 				skillID = id;
 				skill = dev.data.getSkill(id);
-				learned = dev.data.isSkillLearned(id);
+				fullyLearned = dev.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
 			}
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
-				if(learned) {
+				if(fullyLearned) {
 					area.v = 139;
 				} else if(mouseHovering) {
 					area.v = 1;
@@ -70,8 +71,8 @@ public class PageSkills extends DevSubpage {
 			}
 			
 			public void onMouseDown(double mx, double my) {
-				System.out.println("learn " + skill.getDisplayName());
-				if(!learned) {
+				//System.out.println("learn " + skill.getDisplayName());
+				if(!fullyLearned) {
 					new DiagActionConfirm(dev, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
 				}
 			}
@@ -80,9 +81,8 @@ public class PageSkills extends DevSubpage {
 
 		public SkillList() {
 			super("list", PageSkills.this, 9.5, 9, 110.5, 101.5);
-			int max = dev.data.getSkillCount();
-			for(int i = 1; i < max; ++i) {
-				new SkillElement(i);
+			for(Pair<Integer, SkillBase> sk : dev.data.getCanLearnSkillList()) {
+				new SkillElement(sk.first);
 			}
 			this.setDragBar(bar);
 		}
@@ -132,7 +132,7 @@ public class PageSkills extends DevSubpage {
 		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
 		HudUtils.drawRect(7, 124.5, 14, 293, 122 * prog, 5.5, 244 * prog, 11);
 		//sync rate
-		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRate());
+		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 5, 135, 8);
 		GL11.glColor4d(1, 1, 1, 1);

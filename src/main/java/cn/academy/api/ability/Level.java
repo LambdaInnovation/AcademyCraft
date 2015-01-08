@@ -44,6 +44,13 @@ public class Level {
 	public float getMaxRecoverCPRate() {
 		return maxRecoverCPRate;
 	}
+	
+	/**
+	 * Get the successful probability for each stimulation in AbilityDeveloper when updating to this level.
+	 */
+	public double getStimulationProb() {
+		return 0.9;
+	}
 
 	@Deprecated
 	public final void addCanLearnSkill(int skillId) {

@@ -25,9 +25,16 @@ public class PageLearn extends DevSubpage {
 	public PageLearn(PageMainBase parent) {
 		super(parent, "page.adlearning", ACClientProps.TEX_GUI_AD_LEARNING);
 		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F) {
+			boolean isFirst;
+			
 			{
 				setTexMapping(1, 448, 123, 27);
 				setDownMapping(1, 419);
+				setInvalidMapping(1, 477);
+				isFirst = dev.data.getCategoryID() == 0;
+				if(!isFirst && dev.data.getLevelID() == dev.data.getLevelCount() - 1) {
+					this.receiveEvent = false; //Unable to upgrade
+				}
 				setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
 				setTextProps(ACLangs.learnAbility(), 8);
 				this.setTextColor(dev.DEFAULT_COLOR);
@@ -35,7 +42,11 @@ public class PageLearn extends DevSubpage {
 			
 			@Override
 			public void onMouseDown(double mx, double my) {
-				new DiagActionConfirm(dev, TileDeveloper.ID_LEVEL_UPGRADE, 1);
+				if(isFirst) {
+					new DiagActionConfirm(dev, TileDeveloper.ID_DEVELOP, 0);
+				} else {
+					new DiagActionConfirm(dev, TileDeveloper.ID_LEVEL_UPGRADE, dev.data.getLevelID() + 1);
+				}
 			}
 		};
 		

@@ -91,6 +91,14 @@ public class ACLangs {
 		return local("ac.fails");
 	}
 	
+	public static String aborted() {
+		return local("ac.aborted");
+	}
+	
+	public static String successful() {
+		return local("ac.successful");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

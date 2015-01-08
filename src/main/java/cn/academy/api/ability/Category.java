@@ -135,11 +135,6 @@ public class Category {
 	public void onLeaveCategory(AbilityData data) {
 	}
 	
-	@Deprecated
-	public List<SkillBase> getCanLearnSkillIdList(AbilityData data) {
-		return data.getCanLearnSkillList();
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public final String getDisplayName() {
 		return StatCollector.translateToLocal("cat_" + getInternalName());

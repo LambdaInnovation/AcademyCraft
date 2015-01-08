@@ -86,3 +86,5 @@ ac.stimprog=Stimulation Progress
 ac.curaction=Current Action
 ac.attempts=Attempts
 ac.fails=fails
+ac.aborted=Aborted
+ac.successful=Successful

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import scala.annotation.varargs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +20,7 @@ import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraftMod;
 import cn.liutils.util.GenericUtils;
+import cn.liutils.util.misc.Pair;
 
 /**
  * @author WeathFolD, acaly
@@ -83,6 +83,10 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public int getLevelID() {
 		return levelId;
+	}
+	
+	public int getLevelCount() {
+		return getCategory().getLevelCount();
 	}
 	
 	public SkillBase getSkill(int sid) {
@@ -175,16 +179,16 @@ public class AbilityData implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 	}
 
-	public List<SkillBase> getCanLearnSkillList() {
+	public List<Pair<Integer, SkillBase>> getCanLearnSkillList() {
 		Set<Integer> resultSet = new HashSet();
 		Category cat = this.getCategory();
 		for (int i = 0; i < getLevelID(); i++) {
 			Level lv = cat.getLevel(i);
 			resultSet.addAll(lv.getCanLearnSkillIdList());
 		}
-		ArrayList<SkillBase> resultList = new ArrayList();
+		ArrayList<Pair<Integer, SkillBase>> resultList = new ArrayList();
 		for (int i : resultSet) {
-			resultList.add(cat.getSkill(i));
+			resultList.add(new Pair(i, cat.getSkill(i)));
 		}
 		return resultList;
 	}
