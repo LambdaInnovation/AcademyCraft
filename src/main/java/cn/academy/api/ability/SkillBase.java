@@ -11,6 +11,7 @@ import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.AcademyCraftMod;
 import cn.academy.core.client.render.SkillRenderDebug;
+import cn.academy.core.proxy.ACClientProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,7 +44,7 @@ public class SkillBase {
 	 */
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLogo() {
-		return null;
+		return ACClientProps.TEX_QUESTION_MARK;
 	}
 	
 	/**

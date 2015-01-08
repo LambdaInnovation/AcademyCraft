@@ -12,8 +12,9 @@ import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
-import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.api.gui.widget.DragBar;
+import cn.liutils.api.gui.widget.ListVertical;
+import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -57,6 +58,7 @@ public class PageSkills extends DevSubpage {
 				
 				//Logo
 				ResourceLocation logo = skill.getLogo();
+				GenericUtils.assertObj(logo);
 				RenderUtils.loadTexture(logo);
 				HudUtils.drawRect(6, 8, 16.5, 16.5);
 				

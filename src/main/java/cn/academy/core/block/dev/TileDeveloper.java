@@ -127,12 +127,6 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 //			System.out.println("Stimulating " + worldObj.isRemote);
 //		}
 		
-		//TODO: Move to GUI event listening
-		GuiScreen gs = Minecraft.getMinecraft().currentScreen;
-		if(gs == null || !(gs instanceof GuiDeveloper)) {
-			userQuit();
-		}
-		
 		++updateCount;
 		if(!worldObj.isRemote && user != null) {
 			//HeartBeat update
@@ -213,6 +207,10 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	public void startStimulating(int id, int par) {
 		if(user == null) {
 			throw new RuntimeException("Developing without user");
+		}
+		if(id == -1) {
+			isStimulating = false;
+			return;
 		}
 		action = getAction(id, par);
 		AbilityData data = AbilityDataMain.getData(user);
