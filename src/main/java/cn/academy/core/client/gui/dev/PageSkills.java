@@ -13,7 +13,7 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.ListVertical;
-import cn.liutils.api.gui.widget.ProgressBar;
+import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -82,11 +82,12 @@ public class PageSkills extends DevSubpage {
 			for(int i = 1; i < max; ++i) {
 				new SkillElement(i);
 			}
+			this.setDragBar(bar);
 		}
 		
 	}
 
-	private class Bar extends ProgressBar {
+	private class Bar extends DragBar {
 
 		public Bar() {
 			super("bar", PageSkills.this, 120.5, 13, 5.5, 93.5, 12);
@@ -103,8 +104,8 @@ public class PageSkills extends DevSubpage {
 	
 	public PageSkills(PageMainBase parent) {
 		super(parent, "page.adskill", ACClientProps.TEX_GUI_AD_SKILL);
-		sl = new SkillList();
 		bar = new Bar();
+		sl = new SkillList();
 		new Widget("up", this, 120.5, 7, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {

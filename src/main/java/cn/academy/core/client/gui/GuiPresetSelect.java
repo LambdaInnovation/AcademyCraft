@@ -78,25 +78,29 @@ public class GuiPresetSelect extends AuxGui {
 	
 	private GuiPresetSelect() {
 		//Key Registration
-		this.addKeyHandler("up", Keyboard.KEY_UP, false, new IKeyHandler() {
+		IKeyHandler up = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(!tickEnd && curSelection > 0) curSelection--;
+				if(tickEnd && curSelection > 0) curSelection--;
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
-		});
+		};
+		this.addKeyHandler("up", Keyboard.KEY_UP, false, up);
+		this.addKeyHandler("mwup", LIKeyProcess.MWHEELUP, false, up);
 		
-		addKeyHandler("down", Keyboard.KEY_DOWN, false, new IKeyHandler() {
+		IKeyHandler down = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(!tickEnd && curSelection < SELECTION_MAX - 1) curSelection++;
+				if(tickEnd && curSelection < SELECTION_MAX - 1) curSelection++;
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
-		});
+		};
+		addKeyHandler("down", Keyboard.KEY_DOWN, false, down);
+		addKeyHandler("mwdown", LIKeyProcess.MWHEELDOWN, false, down);
 		
-		addKeyHandler("confirm", Keyboard.KEY_RETURN, false, new IKeyHandler() {
+		IKeyHandler confirm = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
 				if(!tickEnd) {
@@ -106,7 +110,9 @@ public class GuiPresetSelect extends AuxGui {
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
-		});
+		};
+		addKeyHandler("confirm", Keyboard.KEY_RETURN, false, confirm);
+		addKeyHandler("mconfirm", LIKeyProcess.MOUSE_LEFT, false, confirm);
 	}
 	
 	public void openGui() {
@@ -252,6 +258,11 @@ public class GuiPresetSelect extends AuxGui {
 		HudUtils.drawModalRect(x, y, width, height);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
+	}
+	
+	@Override
+	protected boolean overrideMouse() {
+		return true;
 	}
 	
 }
