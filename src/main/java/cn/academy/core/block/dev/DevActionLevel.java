@@ -31,7 +31,7 @@ public class DevActionLevel implements IDevAction {
 
 	@Override
 	public String getActionInfo(AbilityData data) {
-		return ACLangs.upgradeTo() + data.getCategory().getLevel(data.getLevelID() + 1).getDisplayName();
+		return ACLangs.upgradeTo() + data.getCategory().getLevel(toLevel).getDisplayName();
 	}
 
 	@Override

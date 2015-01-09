@@ -269,14 +269,24 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			SkillBase skill;
 			public final int id;
+			final boolean used; //If this skill already have a mapping
 
-			public PartSkillInfo(SkillBase _skill, int i, double beg) {
+			public PartSkillInfo(SkillBase _skill, int i, int j, double beg) {
 				super("sklmod" + i, PageModify.this, 
-					beg + STEP * i , HEIGHT / 2 - WIDTH / 2,
+					beg + STEP * j , HEIGHT / 2 - WIDTH / 2,
 					WIDTH, WIDTH);
 				draw = true;
 				skill = _skill;
 				this.id = i;
+				
+				boolean u = false;
+				if(i != 0) {
+					for(int k = 0; k < 4; ++k) {
+						if(tempPreset.getSkillMapping(k) == i) 
+							u = true;
+					}
+				}
+				used = u;
 			}
 			
 			@Override
@@ -294,7 +304,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 					HudUtils.drawRect(tx, tx, lsize, lsize);
 				}
 				
-				if(mouseHovering) {
+				if(mouseHovering && !used) {
 					c = .4F;
 					GL11.glColor4f(c, c, c, .5F);
 					HudUtils.drawModalRect(0, 0, WIDTH, WIDTH);
@@ -303,6 +313,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			@Override
 			public void onMouseDown(double mx, double my) {
+				if(used) return;
 				tempPreset.setSkillMapping(modKey, id);
 				isModifying = false;
 				pageMain.visible = true;
@@ -320,8 +331,9 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			List<Integer> learnedSkills = data.getLearnedSkillList();
 			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
+			int j = 0;
 			for(int i : learnedSkills) {
-				new PartSkillInfo(data.getSkill(i), i, beg);
+				new PartSkillInfo(data.getSkill(i), i, j++,  beg);
 			}
 			draw = true;
 		}

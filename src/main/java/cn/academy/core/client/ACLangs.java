@@ -103,6 +103,10 @@ public class ACLangs {
 		return local("ac.expconsumption");
 	}
 	
+	public static String fullyLearned() {
+		return local("ac.fullylearned");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

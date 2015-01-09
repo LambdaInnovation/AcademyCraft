@@ -42,6 +42,8 @@ public class PageLearn extends DevSubpage {
 				setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
 				setTextProps(ACLangs.learnAbility(), 8);
 				this.setTextColor(dev.DEFAULT_COLOR);
+				this.setActiveColor(dev.DEFAULT_COLOR);
+				this.setInactiveColor(150, 150, 150, 255);
 			}
 			
 			@Override

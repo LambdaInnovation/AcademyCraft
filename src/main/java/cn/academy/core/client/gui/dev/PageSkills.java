@@ -35,7 +35,9 @@ public class PageSkills extends DevSubpage {
 			
 			final int skillID;
 			final SkillBase skill;
+			final boolean learned;
 			final boolean fullyLearned;
+			final int level;
 			final int expectedExp;
 			final int expectedEnergy;
 
@@ -45,6 +47,8 @@ public class PageSkills extends DevSubpage {
 				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
 				skillID = id;
 				skill = dev.data.getSkill(id);
+				level = dev.data.getSkillLevel(skillID);
+				learned = dev.data.isSkillLearned(skillID);
 				fullyLearned = dev.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
 				Pair<Integer, Double> exp = 
 					dev.dev.getExpectation(dev.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), dev.data);
@@ -58,8 +62,10 @@ public class PageSkills extends DevSubpage {
 					area.v = 139;
 				} else if(mouseHovering) {
 					area.v = 1;
-				} else {
+				} else if(!learned){
 					area.v = 70;
+				} else {
+					area.v = 207;
 				}
 				super.draw(mx, my, mouseHovering);
 				
@@ -75,17 +81,26 @@ public class PageSkills extends DevSubpage {
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 10);
 				GL11.glColor4d(1, 1, 1, 1);
 				
+				if(learned) {
+					//level
+					RenderUtils.bindColor(dev.DEFAULT_COLOR);
+					text = String.format("Lv%d", level);
+					dev.drawText(text, 94, 5.5, 7);
+				}
+				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(dev.EXP_INDI_COLOR);
 					dev.drawText(String.valueOf(expectedExp), 37, 19, 8);
 					
 					RenderUtils.bindColor(dev.EU_INDI_COLOR);
 					dev.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
+				} else {
+					RenderUtils.bindColor(59, 177, 43);
+					dev.drawText(ACLangs.fullyLearned(), 30, 17.5, 8);
 				}
 			}
 			
 			public void onMouseDown(double mx, double my) {
-				//System.out.println("learn " + skill.getDisplayName());
 				if(!fullyLearned) {
 					new DiagActionConfirm(dev, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
 				}
@@ -96,7 +111,8 @@ public class PageSkills extends DevSubpage {
 		public SkillList() {
 			super("list", PageSkills.this, 9.5, 9, 110.5, 101.5);
 			for(Pair<Integer, SkillBase> sk : dev.data.getCanLearnSkillList()) {
-				new SkillElement(sk.first);
+				if(sk.first != 0)
+					new SkillElement(sk.first);
 			}
 			this.setDragBar(bar);
 		}
