@@ -6,7 +6,9 @@ package cn.academy.ability.electro.client.render;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.particle.EntityCloudFX;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 

@@ -18,7 +18,7 @@ import cn.academy.api.ability.Abilities;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
 
@@ -102,7 +102,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public boolean isSkillLearned(int sid) {
-		return skillLevels[sid] > 0;
+		return sid == 0 || skillLevels[sid] > 0;
 	}
 	
 	public float getCurrentCP() {
@@ -191,6 +191,16 @@ public class AbilityData implements IExtendedEntityProperties {
 			resultList.add(new Pair(i, cat.getSkill(i)));
 		}
 		return resultList;
+	}
+	
+	public List<Integer> getLearnedSkillList() {
+		List<Integer> res = new ArrayList<Integer>();
+		for(int i = 0; i < getSkillCount(); ++i) {
+			if(isSkillLearned(i)) {
+				res.add(i);
+			}
+		}
+		return res;
 	}
 	
 	/*
@@ -356,7 +366,7 @@ public class AbilityData implements IExtendedEntityProperties {
 				AbilityDataMain.resetPlayer(player);
 				needToReset = false;
 			} else {
-				AcademyCraftMod.netHandler.sendTo(new MsgSimpleChange(this), (EntityPlayerMP) player);
+				AcademyCraft.netHandler.sendTo(new MsgSimpleChange(this), (EntityPlayerMP) player);
 			}
 		}
 	}

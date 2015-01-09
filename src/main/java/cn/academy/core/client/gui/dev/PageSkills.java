@@ -36,6 +36,8 @@ public class PageSkills extends DevSubpage {
 			final int skillID;
 			final SkillBase skill;
 			final boolean fullyLearned;
+			final int expectedExp;
+			final int expectedEnergy;
 
 			public SkillElement(int id) {
 				super("skill_" + id, SkillList.this, 0, 0, 110.5, 33.5);
@@ -44,6 +46,10 @@ public class PageSkills extends DevSubpage {
 				skillID = id;
 				skill = dev.data.getSkill(id);
 				fullyLearned = dev.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
+				Pair<Integer, Double> exp = 
+					dev.dev.getExpectation(dev.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), dev.data);
+				expectedExp = exp.first;
+				expectedEnergy = exp.second.intValue();
 			}
 			
 			@Override
@@ -68,6 +74,14 @@ public class PageSkills extends DevSubpage {
 				RenderUtils.bindColor(dev.DEFAULT_COLOR);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 10);
 				GL11.glColor4d(1, 1, 1, 1);
+				
+				if(!fullyLearned) {
+					RenderUtils.bindColor(dev.EXP_INDI_COLOR);
+					dev.drawText(String.valueOf(expectedExp), 37, 19, 8);
+					
+					RenderUtils.bindColor(dev.EU_INDI_COLOR);
+					dev.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
+				}
 			}
 			
 			public void onMouseDown(double mx, double my) {
@@ -132,7 +146,7 @@ public class PageSkills extends DevSubpage {
 		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
 		HudUtils.drawRect(7, 124.5, 14, 293, 122 * prog, 5.5, 244 * prog, 11);
 		//sync rate
-		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
+		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 5, 135, 8);
 		GL11.glColor4d(1, 1, 1, 1);

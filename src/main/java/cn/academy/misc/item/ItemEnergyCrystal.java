@@ -2,7 +2,7 @@ package cn.academy.misc.item;
 
 import java.util.List;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +30,7 @@ public class ItemEnergyCrystal extends Item implements ISpecialElectricItem{
 
 	public ItemEnergyCrystal(){
 		setUnlocalizedName("ac_energycrystal");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 	}
 	
 	@Override

@@ -16,7 +16,7 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -35,12 +35,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
-		//RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
-		EntityRegistry.registerModEntity(EntityTest.class, "aaa", 3, 
-				AcademyCraftMod.INSTANCE, 60, 2, true);
-
-		//don't put reg here!
-		//REPLY: Just for temp testing purpose, will remove later
 	}
 	
 	@Override
@@ -89,7 +83,8 @@ public class SkillItemCharge extends SkillBase {
 		
 	}
 	
-	@RegEntity(clientOnly = true, renderName = "renderer")
+	@RegEntity(renderName = "renderer")
+	@RegistrationClass
 	public static class EntityTest extends EntityX {
 		
 		@SideOnly(Side.CLIENT)

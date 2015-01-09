@@ -72,7 +72,7 @@ public class PageLearn extends DevSubpage {
 			str = String.format("%s: %.0f/%.0f EU", ACLangs.curEnergy(), dev.dev.curEnergy, dev.dev.getMaxEnergy());
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 121, 8);
 			//Sync Rate
-			str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
+			str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
 			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 6, 129, 8);
 			GL11.glColor4f(1, 1, 1, 1);
 			
@@ -90,10 +90,10 @@ public class PageLearn extends DevSubpage {
 				eexp = (int) (eexp / prob);
 				eene /= prob;
 				
-				RenderUtils.bindColor(234, 84, 44);
+				RenderUtils.bindColor(dev.EU_INDI_COLOR);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.format("%.0f", eene), 70, 67, 7.5F);
 				
-				RenderUtils.bindColor(161, 199, 152);
+				RenderUtils.bindColor(dev.EXP_INDI_COLOR);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.format("%d", eexp), 70, 59, 7.5F);
 				
 				RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_LEARNING);

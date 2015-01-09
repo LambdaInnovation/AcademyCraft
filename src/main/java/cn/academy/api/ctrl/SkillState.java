@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.client.render.SkillRenderer;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.SkillRenderDebug;
 
 /**
@@ -59,7 +59,7 @@ public class SkillState {
 		if (!player.worldObj.isRemote) {
 			//sync to client
 			this.stateID = nextID++;
-			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
+			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
 		}
 	}
 	
@@ -71,13 +71,13 @@ public class SkillState {
 	
 	public final void updateSkill() {
 		if (!player.worldObj.isRemote) {
-			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
+			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
 		}
 	}
 	
 	public final void finishSkillAfter(int ticks) {
 		if (ticks != 1 && tickToFinish != 0) {
-			AcademyCraftMod.log.warn("Call finishSkillAfter more than once. Overwritten.");
+			AcademyCraft.log.warn("Call finishSkillAfter more than once. Overwritten.");
 		}
 		tickToFinish = ticks;
 	}
@@ -85,7 +85,7 @@ public class SkillState {
 	public final void reallyFinishSkill() {
 		onFinish();
 		if (!player.worldObj.isRemote) {
-			AcademyCraftMod.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
+			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
 		}
 	}
 	

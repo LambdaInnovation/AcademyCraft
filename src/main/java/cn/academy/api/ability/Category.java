@@ -13,7 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -35,7 +35,7 @@ public class Category {
 	}
 	
 	protected void register() {
-		this.addLevel(new Level(this, 0.0f, 0.0f, 0.0f, 0.0f));
+		this.addLevel(new Level(this, 0.0f, 0.0f, 0.0f, 0.0f, .5));
 		
 		this.addSkill(Abilities.skillEmpty, 0);
 		this.addSkill(Abilities.skillDebug, 0);
@@ -52,7 +52,7 @@ public class Category {
 	
 	public final void addLevel(Level lv) {
 		if (lv.getID() != levels.size()) {
-			AcademyCraftMod.log.fatal("level id and level num mismatch.");
+			AcademyCraft.log.fatal("level id and level num mismatch.");
 			throw new RuntimeException();
 		}
 		levels.add(lv);

@@ -30,9 +30,9 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  * @author acaly
  *
  */
-@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraftMod.VERSION)
+@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION)
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
-public class AcademyCraftMod {
+public class AcademyCraft {
 
 	/**
 	 * 当前版本
@@ -45,7 +45,7 @@ public class AcademyCraftMod {
 	 * 主类实例
 	 */
 	@Instance("academy-craft")
-	public static AcademyCraftMod INSTANCE;
+	public static AcademyCraft INSTANCE;
 
 	/**
 	 * 日志
@@ -58,7 +58,7 @@ public class AcademyCraftMod {
 	 * 网络发包处理实例
 	 */
 	@RegMessageHandler.WrapperInstance
-	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraftMod.NET_CHANNEL);
+	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel(AcademyCraft.NET_CHANNEL);
 	
 	/**
 	 * 创造栏
@@ -75,8 +75,8 @@ public class AcademyCraftMod {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
-		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
-		RegistrationManager.INSTANCE.registerAll(AcademyCraftMod.INSTANCE, LIUtils.REGISTER_TYPE_KEYHANDLER);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraft.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
+		RegistrationManager.INSTANCE.registerAll(AcademyCraft.INSTANCE, LIUtils.REGISTER_TYPE_KEYHANDLER);
 	}
 
 	@EventHandler
@@ -102,13 +102,5 @@ public class AcademyCraftMod {
 	@EventHandler()
 	public void serverStarting(FMLServerStartingEvent event) {
 		RegistrationManager.INSTANCE.registerAll(this, "Command");
-	}
-	
-	private static int nextNetID = 0;
-	/**
-	 * 获取下一个空闲的网络channelID。
-	 */
-	public static int getNextChannelID() {
-		return nextNetID++;
 	}
 }

@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.template.block.BlockDirectionalMulti;
 
 /**
@@ -23,7 +23,7 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		this.useRotation = true;
 		setBlockName("ac_developer");
 		setBlockTextureName("academy:bed");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		
 		this.addSubBlock(1, 0, 0);
 	}

@@ -17,16 +17,19 @@ public class Level {
 	private float maxCP;
 	private float initRecoverCPRate;
 	private float maxRecoverCPRate;
+	private double stimProb;
 	
-	private Map<Integer, Boolean> canLeranSkillMap = new HashMap<Integer, Boolean>();
+	private Map<Integer, Boolean> canLearnSkillMap = new HashMap<Integer, Boolean>();
 	
-	public Level(Category cat, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate) {
+	public Level(Category cat, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate,
+			double learnProb) {
 		this.parent = cat;
 		this.id = cat.getLevelCount();
 		this.initialCP = initialCP;
 		this.maxCP = maxCP;
 		this.initRecoverCPRate = initRecoverCPRate;
 		this.maxRecoverCPRate = maxRecoverCPRate;
+		stimProb = learnProb;
 	}
 
 	public float getInitialCP() {
@@ -49,21 +52,21 @@ public class Level {
 	 * Get the successful probability for each stimulation in AbilityDeveloper when updating to this level.
 	 */
 	public double getStimulationProb() {
-		return 0.9;
+		return stimProb;
 	}
 
 	@Deprecated
 	public final void addCanLearnSkill(int skillId) {
-		canLeranSkillMap.put(skillId, true);
+		canLearnSkillMap.put(skillId, true);
 	}
 	
 	public final boolean canLearnSkill(int skillId) {
-		Boolean canLearn = canLeranSkillMap.get(skillId);
+		Boolean canLearn = canLearnSkillMap.get(skillId);
 		return canLearn != null ? canLearn : false;
 	}
 	
 	public final List<Integer> getCanLearnSkillIdList() {
-		return new ArrayList<Integer>(canLeranSkillMap.keySet());
+		return new ArrayList<Integer>(canLearnSkillMap.keySet());
 	}
 	
 	public int getID() {

@@ -81,7 +81,7 @@ public class GuiPresetSelect extends AuxGui {
 		IKeyHandler up = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(tickEnd && curSelection > 0) curSelection--;
+				if(curSelection > 0) curSelection--;
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
@@ -92,7 +92,7 @@ public class GuiPresetSelect extends AuxGui {
 		IKeyHandler down = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(tickEnd && curSelection < SELECTION_MAX - 1) curSelection++;
+				if(curSelection < SELECTION_MAX - 1) curSelection++;
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
@@ -103,10 +103,8 @@ public class GuiPresetSelect extends AuxGui {
 		IKeyHandler confirm = new IKeyHandler() {
 			@Override
 			public void onKeyDown(int keyCode, boolean tickEnd) {
-				if(!tickEnd) {
-					PresetManager.setCurrentPreset(curSelection);
-					closeGui();
-				}
+				PresetManager.setCurrentPreset(curSelection);
+				closeGui();
 			}
 			@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 			@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
@@ -119,7 +117,6 @@ public class GuiPresetSelect extends AuxGui {
 		isOpen = true;
 		curSelection = PresetManager.getCurrentPresetId();
 		lastOpenTime = Minecraft.getSystemTime();
-		System.out.println("Open");
 	}
 	
 	public void closeGui() {

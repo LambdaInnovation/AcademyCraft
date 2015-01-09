@@ -3,7 +3,7 @@ package cn.academy.api.ctrl;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.api.ability.Category;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 
@@ -58,7 +58,7 @@ public class PresetManager {
 	 * Called by Proxy when loading.
 	 */
 	public static void init() {
-		nextWorldId = AcademyCraftMod.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).getInt();
+		nextWorldId = AcademyCraft.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).getInt();
 	}
 	
 	void reset() {
@@ -76,20 +76,20 @@ public class PresetManager {
 		//First check the nextWorldId
 		if (worldId <= nextWorldId) {
 			++nextWorldId;
-			AcademyCraftMod.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).set(nextWorldId);
+			AcademyCraft.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).set(nextWorldId);
 		}
 
 		String worldIdStr = PRESET_CONFIG_GLOBAL_WORLD + worldId;
-		ConfigCategory cat = AcademyCraftMod.config.getCategory(worldIdStr);
+		ConfigCategory cat = AcademyCraft.config.getCategory(worldIdStr);
 		//Remove existing data
 		cat.clear();
 		//Add new data
 		for (int i = 0; i < PRESET_COUNT; ++i) {
 			//Use get to save integer array
-			AcademyCraftMod.config.get(worldIdStr, PRESET_CONFIG_NAME[i], presets[i].data);
+			AcademyCraft.config.get(worldIdStr, PRESET_CONFIG_NAME[i], presets[i].data);
 		}
 		
-		AcademyCraftMod.config.save();
+		AcademyCraft.config.save();
 	}
 	
 	/**
@@ -103,11 +103,11 @@ public class PresetManager {
 		
 		presets = new Preset[PRESET_COUNT];
 		for (int i = 0; i < PRESET_COUNT; ++i) {
-			presets[i] = new Preset(AcademyCraftMod.config.get(
+			presets[i] = new Preset(AcademyCraft.config.get(
 					worldIdStr, PRESET_CONFIG_NAME[i], new int[] {0, 0, 0, 0}));
 		}
 		
-		int def = AcademyCraftMod.config.get(worldIdStr, PRESET_CONFIG_DEFAULT, 0).getInt();
+		int def = AcademyCraft.config.get(worldIdStr, PRESET_CONFIG_DEFAULT, 0).getInt();
 		if (def < 0 || def >= PRESET_COUNT) {
 			def = 0;
 		}
@@ -138,7 +138,7 @@ public class PresetManager {
 	public static int getSkillMapping(int keyId) {
 		PresetManager pm = getInstance();
 		if (pm == null) {
-			AcademyCraftMod.log.error("Try to get Skill Mapping when PresetManager is not initialized.");
+			AcademyCraft.log.error("Try to get Skill Mapping when PresetManager is not initialized.");
 			return 0;
 		}
 		return pm.presets[pm.currentId].getSkillMapping(keyId);
@@ -183,7 +183,7 @@ public class PresetManager {
 	private static PresetManager getInstance() {
 		PresetManager presets = EventHandlerClient.getPresetManager();
 		if (presets == null) {
-			AcademyCraftMod.log.fatal("Cannot get the PresetManager instance.");
+			AcademyCraft.log.fatal("Cannot get the PresetManager instance.");
 			throw new RuntimeException("Cannot get the PresetManager instance.");
 		}
 		return presets;

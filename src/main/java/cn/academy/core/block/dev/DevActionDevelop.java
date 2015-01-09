@@ -17,7 +17,7 @@ public class DevActionDevelop implements IDevAction {
 
 	@Override
 	public int getExpectedStims(AbilityData data) {
-		return 7 + RNG.nextInt(5);
+		return 9;
 	}
 
 	@Override
@@ -28,9 +28,8 @@ public class DevActionDevelop implements IDevAction {
 
 	@Override
 	public double getSuccessfulRate(AbilityData data) {
-		return 0.5 + RNG.nextDouble() * 0.5;
+		return 0.67;
 	}
-
 
 	@Override
 	public String getActionInfo(AbilityData data) {

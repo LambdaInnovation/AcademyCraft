@@ -6,7 +6,7 @@ package cn.academy.core.block.dev;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -50,7 +50,7 @@ public class MsgDismount implements IMessage {
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 			TileEntity te = player.worldObj.getTileEntity(msg.x, msg.y, msg.z);
 			if(te == null || !(te instanceof TileDeveloper)) {
-				AcademyCraftMod.log.error("ERR: Didn't find TileDeveloper instance");
+				AcademyCraft.log.error("ERR: Didn't find TileDeveloper instance");
 				return null;
 			}
 			((TileDeveloper)te).userQuit();

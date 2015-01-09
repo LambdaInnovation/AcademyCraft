@@ -5,7 +5,7 @@ package cn.academy.core.client.gui.dev;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
@@ -66,7 +66,7 @@ public class DiagStimulate extends DialogueBase {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				dev.dev.isStimulating = false;
-				AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, -1, 0));
+				AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, -1, 0));
 			}
 		};
 	}
@@ -101,7 +101,7 @@ public class DiagStimulate extends DialogueBase {
 		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		//SyncRate
-		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.syncRateDisplay());
+		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6, 38.5, 6);
 		
 		GL11.glColor4d(1, 1, 1, 1);

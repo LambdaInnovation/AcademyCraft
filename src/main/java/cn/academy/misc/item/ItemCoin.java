@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.IShootable;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.util.GenericUtils;
 
@@ -31,7 +31,7 @@ public class ItemCoin extends Item {
 	public ItemCoin() {
 		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin-front");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		//setMaxDamage(0);
 	}
 	

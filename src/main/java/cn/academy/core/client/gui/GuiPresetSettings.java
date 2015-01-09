@@ -1,5 +1,6 @@
 package cn.academy.core.client.gui;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,7 @@ import cn.academy.api.ctrl.Preset;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACCommonProps;
@@ -271,7 +272,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 
 			public PartSkillInfo(SkillBase _skill, int i, double beg) {
 				super("sklmod" + i, PageModify.this, 
-					beg + STEP * (i - 1) , HEIGHT / 2 - WIDTH / 2,
+					beg + STEP * i , HEIGHT / 2 - WIDTH / 2,
 					WIDTH, WIDTH);
 				draw = true;
 				skill = _skill;
@@ -316,11 +317,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 			super("modify", gui, 0, 0, width, HEIGHT);
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
-			Category ct = data.getCategory();
-			int n = ct.getSkillCount() - 1;
-			double beg = width / 2 - ((n - 1) * STEP + WIDTH) / 2;
-			for(int i = 1; i < ct.getSkillCount(); ++i) {
-				new PartSkillInfo(ct.getSkill(i), i, beg);
+			
+			List<Integer> learnedSkills = data.getLearnedSkillList();
+			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
+			for(int i : learnedSkills) {
+				new PartSkillInfo(data.getSkill(i), i, beg);
 			}
 			draw = true;
 		}

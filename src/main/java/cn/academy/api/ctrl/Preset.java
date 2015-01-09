@@ -1,7 +1,7 @@
 package cn.academy.api.ctrl;
 
 import net.minecraftforge.common.config.Property;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 
 /**
  * A set of key-skill binding. Manipulated by EventHandlerClient.
@@ -30,12 +30,12 @@ public class Preset {
 	 */
 	Preset(Property prop) {
 		if (!prop.isIntList()) {
-			AcademyCraftMod.log.error("Invalid preset in config file.");
+			AcademyCraft.log.error("Invalid preset in config file.");
 			data = new int[EventHandlerClient.MAX_KEYS];
 		}
 		data = prop.getIntList();
 		if (data.length != 4) {
-			AcademyCraftMod.log.error("Invalid size of preset in config file.");
+			AcademyCraft.log.error("Invalid size of preset in config file.");
 			data = new int[EventHandlerClient.MAX_KEYS];
 		}
 	}
@@ -54,7 +54,7 @@ public class Preset {
 	 */
 	public int getSkillMapping(int keyId) {
 		if (keyId >= data.length || keyId < 0) {
-			AcademyCraftMod.log.warn("Index overflow in Preset.");
+			AcademyCraft.log.warn("Index overflow in Preset.");
 			return 0;
 		}
 		return data[keyId];
@@ -67,7 +67,7 @@ public class Preset {
 	 */
 	public void setSkillMapping(int keyId, int skillId) {
 		if (keyId >= data.length || keyId < 0) {
-			AcademyCraftMod.log.warn("Index overflow in Preset.");
+			AcademyCraft.log.warn("Index overflow in Preset.");
 		} else {
 			data[keyId] = skillId;
 		}
@@ -80,7 +80,7 @@ public class Preset {
 			for (int j = i + 1; j < EventHandlerClient.MAX_KEYS; ++j) {
 				if (data[j] == 0) continue;
 				if (data[i] == data[j]) {
-					AcademyCraftMod.log.error("Invalid skill mapping. Reset to default preset.");
+					AcademyCraft.log.error("Invalid skill mapping. Reset to default preset.");
 					data = new int[EventHandlerClient.MAX_KEYS];
 					return;
 				}

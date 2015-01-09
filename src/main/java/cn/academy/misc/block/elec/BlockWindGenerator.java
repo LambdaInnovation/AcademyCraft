@@ -14,7 +14,7 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.template.block.BlockDirectionalMulti;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,7 +34,7 @@ public class BlockWindGenerator extends BlockDirectionalMulti {
 		super(Material.rock);
 		setBlockName("windgen");
 		setBlockTextureName("academy:windgen");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 	}
 
 	@Override

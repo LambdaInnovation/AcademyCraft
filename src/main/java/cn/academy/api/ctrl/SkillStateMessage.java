@@ -3,7 +3,7 @@ package cn.academy.api.ctrl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import net.minecraft.client.Minecraft;
@@ -111,7 +111,7 @@ public class SkillStateMessage implements IMessage {
 						}
 					}
 				} catch (Exception e) {
-					AcademyCraftMod.log.error("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
+					AcademyCraft.log.error("Cannot find constructor for SKillState. Check the implementation of your SkillState.");
 					throw new RuntimeException(e);
 				}
 				if (ss == null)

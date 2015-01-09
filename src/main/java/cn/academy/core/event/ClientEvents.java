@@ -54,7 +54,6 @@ public class ClientEvents {
 			realChestplate = render.modelArmorChestplate;
 			realModel = getMainModel(render);
 		}
-		//System.out.println(realMain);
 		
 		//Replace
 		if(DevPlayerManip.isDeveloping(event.entityPlayer)) {
@@ -63,13 +62,11 @@ public class ClientEvents {
 			render.modelArmorChestplate = hackChestplate;
 			setMainModel(render, hackModel);
 		}
-		//System.out.println("start");
 	}
 	
 	@SubscribeEvent
 	public void endRender(RenderPlayerEvent.Post event) {
 		//Restore last models
-		//System.out.println("end");
 		RenderPlayer render = event.renderer;
 		render.modelBipedMain = realMain;
 		render.modelArmor = realArmor;

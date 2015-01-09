@@ -5,7 +5,7 @@ package cn.academy.core.client.gui.dev;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
@@ -40,7 +40,6 @@ public class DiagActionConfirm extends DialogueBase {
 			public void onMouseDown(double mx, double my) {
 				result = true;
 				onConfirm();
-				System.out.println("Mew");
 				DiagActionConfirm.this.dispose();
 			}
 		};
@@ -81,7 +80,7 @@ public class DiagActionConfirm extends DialogueBase {
 	public void onConfirm() {
 		//Sync to the server
 		dev.dev.startStimulating(id, par);
-		AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
+		AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
 		
 		//Open the progress gui
 		new DiagStimulate(dev, devAction);

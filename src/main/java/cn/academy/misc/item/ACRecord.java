@@ -12,7 +12,7 @@ package cn.academy.misc.item;
 
 import java.util.List;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.ctor.Constructible;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,7 +54,7 @@ public class ACRecord extends ItemRecord {
 	public ACRecord(String rname, int subID) {
 		super(rname);
 		setUnlocalizedName("ACRecord");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		recID = subID;
 	}
 	

@@ -1,6 +1,6 @@
 package cn.academy.api.data;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import net.minecraft.client.Minecraft;
@@ -69,7 +69,7 @@ public class MsgSimpleChange implements IMessage {
 				data.currentCP = msg.cp;
 				
 				if (msg.skillCount != data.getSkillCount()) {
-					AcademyCraftMod.log.fatal("Invalid ability data message.");
+					AcademyCraft.log.fatal("Invalid ability data message.");
 				}
 				data.skillExps = msg.skillExp;
 			}

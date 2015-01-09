@@ -10,7 +10,7 @@
  */
 package cn.academy.misc.item;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.ctor.Constructible;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,7 +38,7 @@ public class ItemCapsule extends Item {
 	 */
 	@Constructible
 	public ItemCapsule(int subID) {
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		capsuleID = subID;
 		this.setUnlocalizedName(uname[subID]);
 	}

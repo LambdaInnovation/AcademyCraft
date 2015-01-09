@@ -12,7 +12,7 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
@@ -98,7 +98,7 @@ public class EventHandlerClient implements IKeyHandler {
 				INSTANCE.loadPresetManager(msg.time);
 				break;
 			default:
-				AcademyCraftMod.log.error("An unexpected packet is received from server.");
+				AcademyCraft.log.error("An unexpected packet is received from server.");
 			}
 			return null;
 		}
@@ -193,13 +193,13 @@ public class EventHandlerClient implements IKeyHandler {
 				return tickToKeepAlive > 0 || tickToFinishClick > 0;
 			case RAW_CANCEL:
 				//Skill is cancelled. Just log it and inform the client.
-				AcademyCraftMod.log.warn("Skill cancelled by server.");
+				AcademyCraft.log.warn("Skill cancelled by server.");
 				reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
 				//Reset both counters.
 				tickToKeepAlive = tickToFinishClick = 0;
 				return false;
 			default:
-				AcademyCraftMod.log.error("Unexpected event in EventHandlerClient.");
+				AcademyCraft.log.error("Unexpected event in EventHandlerClient.");
 				return false;
 			}
 		}
@@ -209,7 +209,7 @@ public class EventHandlerClient implements IKeyHandler {
 		 * @param type
 		 */
 		private void toServer(SkillEventType type) {
-			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(skillId, type, reh.getTime()));
+			AcademyCraft.netHandler.sendToServer(new ControlMessage(skillId, type, reh.getTime()));
 		}
 	}
 	
@@ -272,7 +272,7 @@ public class EventHandlerClient implements IKeyHandler {
 	}
 
 	private static void storePresets() {
-		LIGeneralRegistry.storeConfigurableClass(AcademyCraftMod.config, EventHandlerClient.class);
+		LIGeneralRegistry.storeConfigurableClass(AcademyCraft.config, EventHandlerClient.class);
 	}
 	
 	public static int getKeyId(int i) {
@@ -303,17 +303,17 @@ public class EventHandlerClient implements IKeyHandler {
 	 * @param cat The skill data of the player.
 	 */
 	public static void resetPlayerSkillData() {
-		AcademyCraftMod.log.info("EventHandlerClient: Reset player.");
+		AcademyCraft.log.info("EventHandlerClient: Reset player.");
 		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
 
 		if(cat == null) {
-			AcademyCraftMod.log.fatal("Get empty category for player on client.");
+			AcademyCraft.log.fatal("Get empty category for player on client.");
 			return;
 		}
 		
 		if (INSTANCE.presets == null) {
 			//First reset in this world. Send a message to server to get the world id before loading the preset.
-			AcademyCraftMod.netHandler.sendToServer(
+			AcademyCraft.netHandler.sendToServer(
 					new ControlMessage(0, SkillEventType.INIT_QUERY_WORLD_ID, PresetManager.getNextWorldId()));
 		} else if (INSTANCE.category != cat) {
 			//Category changed! We need to reset PresetManager. Set it null.
@@ -428,11 +428,11 @@ public class EventHandlerClient implements IKeyHandler {
 		
 		skillEnabled = !skillEnabled;
 		if (skillEnabled) {
-			AcademyCraftMod.log.info("Player skill is enabled.");
+			AcademyCraft.log.info("Player skill is enabled.");
 		} else {
-			AcademyCraftMod.log.info("Player skill is disabled.");
+			AcademyCraft.log.info("Player skill is disabled.");
 			INSTANCE.skillEventAll(SkillEventType.RAW_CANCEL);
-			AcademyCraftMod.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
+			AcademyCraft.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
 		}
 	}
 
