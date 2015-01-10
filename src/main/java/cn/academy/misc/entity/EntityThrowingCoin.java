@@ -69,7 +69,7 @@ public class EntityThrowingCoin extends EntityX {
 	public static RendererCoin renderer;
 	
 	private static final int MAXLIFE = 120;
-	private static final double INITVEL = 0.7;
+	private static final double INITVEL = 0.95;
 	
 	private float initHt;
 	private double maxHt;
