@@ -118,7 +118,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				}
 				if(draw) {
 					GL11.glColor4f(color, color, color, 0.6F);
-					HudUtils.drawModalRect(0, 0, getArea().width, getArea().height);
+					HudUtils.drawModalRect(0, 0, area.width, area.height);
 				}
 				color = .8F;
 				GL11.glColor4f(color, color, color, .8F);

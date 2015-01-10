@@ -60,13 +60,13 @@ public class PageSkills extends DevSubpage {
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
 				if(fullyLearned) {
-					getArea().v = 139;
+					area.v = 139;
 				} else if(mouseHovering) {
-					getArea().v = 1;
+					area.v = 1;
 				} else if(!learned){
-					getArea().v = 70;
+					area.v = 70;
 				} else {
-					getArea().v = 208;
+					area.v = 208;
 				}
 				super.draw(mx, my, mouseHovering);
 				
