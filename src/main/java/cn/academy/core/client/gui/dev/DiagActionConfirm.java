@@ -30,6 +30,7 @@ public class DiagActionConfirm extends DialogueBase {
 		this.id = id;
 		this.par = par;
 		this.setTitle(ACLangs.actionConfirm());
+		this.setScale(1.2D);
 		
 		//Init widgets
 		new ButtonNormal("confirm", 25, 48) {
