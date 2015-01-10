@@ -25,14 +25,12 @@ public class DevActionSkill implements IDevAction {
 
 	@Override
 	public void onActionFinished(AbilityData data) {
-		if(!data.isSkillLearned(skillID)) {
-			data.setSkillLevel(skillID, data.getSkillLevel(skillID) + 1);
-		}
+		data.setSkillLevel(skillID, data.getSkillLevel(skillID) + 1);
 	}
 
 	@Override
 	public String getActionInfo(AbilityData data) {
-		return ACLangs.learnSkill() + data.getSkill(skillID).getDisplayName();
+		return (data.isSkillLearned(skillID) ? ACLangs.upgradeSkill() : ACLangs.learnSkill()) + data.getSkill(skillID).getDisplayName();
 	}
 
 	@Override

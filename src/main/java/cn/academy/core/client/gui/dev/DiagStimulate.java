@@ -10,6 +10,7 @@ import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
+import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -43,6 +44,7 @@ public class DiagStimulate extends DialogueBase {
 	}
 	
 	final IDevAction devAction;
+	final RandBufProgressBar progress;
 
 	public DiagStimulate(final GuiDeveloper dev, IDevAction ida) {
 		super("stimulate", dev, 9); //⑨
@@ -59,7 +61,8 @@ public class DiagStimulate extends DialogueBase {
 				super.draw(mx, my, hover);
 				if(!dev.dev.isStimulating) {
 					new ButtonConfirm(dev.dev.isStimSuccessful());
-					dispose();
+					progress.fluctRegion = 0;
+					this.dispose();
 				}
 			}
 			
@@ -67,6 +70,18 @@ public class DiagStimulate extends DialogueBase {
 			public void onMouseDown(double mx, double my) {
 				dev.dev.isStimulating = false;
 				AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, -1, 0));
+			}
+		};
+		
+		progress = new RandBufProgressBar("progress", this, 6.5, 16, 103, 5.5) {
+			{
+				this.setTexMapping(13, 137, 206, 11);
+				this.setTexture(TEXTURE, 512, 512);
+			}
+			@Override
+			public double getProgress() {
+				//System.out.println(dev.dev.stimSuccess + "/" + dev.dev.maxStimTimes + ":" + ((double)dev.dev.stimSuccess) / dev.dev.maxStimTimes);
+				return ((double)dev.dev.stimSuccess) / dev.dev.maxStimTimes;
 			}
 		};
 	}
@@ -77,8 +92,7 @@ public class DiagStimulate extends DialogueBase {
 		super.draw(mx, my, hover);
 		RenderUtils.loadTexture(TEXTURE);
 		HudUtils.drawRect(6, 15.5, 12, 121, 104, 6.5, 208, 13);
-		double prog = (double) dev.dev.stimSuccess / dev.dev.maxStimTimes;
-		HudUtils.drawRect(6.5, 16, 13, 137, 103 * prog, 5.5, 206 * prog, 11);
+		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		if(!dev.dev.isStimulating && !dev.dev.isStimSuccessful()) {
 			RenderUtils.bindColor(ERROR_COLOR);

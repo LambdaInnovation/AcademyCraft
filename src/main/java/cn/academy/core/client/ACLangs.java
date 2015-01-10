@@ -75,6 +75,10 @@ public class ACLangs {
 		return local("ac.learnskill");
 	}
 	
+	public static String upgradeSkill() {
+		return local("ac.upgradeskill");
+	}
+	
 	public static String stimProg() {
 		return local("ac.stimprog");
 	}

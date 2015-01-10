@@ -14,6 +14,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
+import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -65,7 +66,7 @@ public class PageSkills extends DevSubpage {
 				} else if(!learned){
 					area.v = 70;
 				} else {
-					area.v = 207;
+					area.v = 208;
 				}
 				super.draw(mx, my, mouseHovering);
 				
@@ -85,7 +86,7 @@ public class PageSkills extends DevSubpage {
 					//level
 					RenderUtils.bindColor(dev.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					dev.drawText(text, 94, 5.5, 7);
+					dev.drawText(text, 97.5, 5.5, 7);
 				}
 				
 				if(!fullyLearned) {
@@ -152,15 +153,23 @@ public class PageSkills extends DevSubpage {
 				bar.setProgress(sl.getRelativeProgress());
 			}
 		};
+		
+		new RandBufProgressBar("energybar", this, 7, 124.5, 122, 5.5) {
+			{
+				this.setTexMapping(14, 293, 244, 11);
+				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
+				this.fluctRegion = 0;
+			}
+			@Override
+			public double getProgress() {
+				return dev.dev.curEnergy / dev.dev.getMaxEnergy();
+			}
+		};
 	}
 	
 	@Override
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
-		//energy bar
-		double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
-		RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
-		HudUtils.drawRect(7, 124.5, 14, 293, 122 * prog, 5.5, 244 * prog, 11);
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);

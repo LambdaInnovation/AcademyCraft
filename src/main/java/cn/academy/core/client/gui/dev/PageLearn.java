@@ -9,6 +9,7 @@ import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.api.gui.widget.TextButton;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -30,12 +31,10 @@ public class PageLearn extends DevSubpage {
 		ida = TileDeveloper.getAction(isFirst ? TileDeveloper.ID_DEVELOP : TileDeveloper.ID_LEVEL_UPGRADE, dev.data.getLevelID() + 1);
 		
 		TextButton btn = new TextButton("btn_learn", this, 34F, 26F, 61.5F, 13.5F) {
-			
 			{
 				setTexMapping(1, 448, 123, 27);
 				setDownMapping(1, 419);
 				setInvalidMapping(1, 477);
-				
 				if(!isFirst && isMaxLevel) {
 					this.receiveEvent = false; //Unable to upgrade
 				}
@@ -56,16 +55,24 @@ public class PageLearn extends DevSubpage {
 			}
 		};
 		
+		new RandBufProgressBar("energybar", this, 8.5, 112.5, 122, 5.5) {
+			{
+				this.setTexture(ACClientProps.TEX_GUI_AD_LEARNING, 512, 512);
+				this.setTexMapping(17, 293, 244, 11);
+				this.fluctRegion = 0;
+			}
+			@Override
+			public double getProgress() {
+				return dev.dev.curEnergy / dev.dev.getMaxEnergy();
+			}
+		};
+		
 	}
 
 	@Override
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		GL11.glPushMatrix(); {
-			//Energy bar
-			double prog = dev.dev.curEnergy / dev.dev.getMaxEnergy();
-			HudUtils.drawRect(8.5, 112.5, 17, 293, 122 * prog, 5.5, 244 * prog, 11);
-			
 			RenderUtils.bindColor(dev.DEFAULT_COLOR);
 			//Machine stat
 			String str = ACLangs.machineStat();
