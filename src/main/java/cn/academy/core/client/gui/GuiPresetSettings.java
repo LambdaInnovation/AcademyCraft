@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -95,11 +96,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 			WIDTH = HEIGHT * RATIO,
 			PAGE_STEP = 16;
 		
-		private class PartPageSel extends Widget {
+		private class SelectPage extends Widget {
 			
 			int id;
 
-			public PartPageSel(int _id, float x) {
+			public SelectPage(int _id, float x) {
 				super("sel" + _id, PageMain.this, x, 0, PAGE_STEP, HEIGHT / 6);
 				id = _id;
 				draw = true;
@@ -117,12 +118,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 					color = 0.5F;
 				}
 				if(draw) {
-					GL11.glColor4f(color, color, color, 0.6F);
+					RenderUtils.bindGray(color, .6);
 					HudUtils.drawModalRect(0, 0, area.width, area.height);
 				}
-				color = .8F;
-				GL11.glColor4f(color, color, color, .8F);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.valueOf(id), 6, 2.5, 8);
+				RenderUtils.bindGray(.8, .8);
+				drawText(String.valueOf(id), 6, 2.5, 8);
 			}
 			
 			@Override
@@ -148,10 +148,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
 				double tx = WIDTH / 2, ty = 4;
-				float c = 0.8F;
-				GL11.glColor4f(c, c, c, .8F);
+				RenderUtils.bindGray(.8, .8);
 				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
+				drawText(str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
+				
 				tx = 2.5;
 				ty = 20;
 				HudUtils.drawRectOutline(tx, ty, LOGO_SIZE, LOGO_SIZE, 2);
@@ -163,8 +163,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 					HudUtils.drawRect(tx, ty, LOGO_SIZE, LOGO_SIZE);
 				}
 				if(mouseHovering) {
-					c = 0.6F;
-					GL11.glColor4f(c, c, c, 0.6F);
+					RenderUtils.bindGray(.6, .6);
 					HudUtils.drawModalRect(0, 0, STEP, HEIGHT);
 				}
 			}
@@ -200,14 +199,15 @@ public class GuiPresetSettings extends LIGuiScreen {
 					color = HOVERING_COLOR;
 				} else color = ORDINARY_COLOR;
 				GL11.glDepthFunc(GL11.GL_ALWAYS);
-				GL11.glColor4f(color, color, color, 0.6F);
+				RenderUtils.bindGray(color, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
+				
 				float fsize = 5F;
 				color = TEXT_COLOR;
 				GL11.glColor4f(color, color, color, 0.9F);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ID, 
+				drawText(StatCollector.translateToLocal(ID), 
 						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2, fsize);
+						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2, 5F);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
@@ -218,20 +218,20 @@ public class GuiPresetSettings extends LIGuiScreen {
 			draw = true;
 			
 			for(int i = 0; i < MAX_PAGE; ++i) {
-				new PartPageSel(i, PAGE_STEP * i);
+				new SelectPage(i, PAGE_STEP * i);
 			}
 			for(int i = 0; i < EventHandlerClient.MAX_KEYS; ++i) {
 				new PartKeyInfo(i);
 			}
 			
-			new ButtonGeneric("Accept", 71, 67.5F) {
+			new ButtonGeneric("ac.accept", 71, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					PresetManager.setPreset(currentPage, tempPreset);
 				}
 			};
 			
-			new ButtonGeneric("Restore", 107.5F, 67.5F) {
+			new ButtonGeneric("ac.restore", 107.5F, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					tempPreset = PresetManager.getPreset(currentPage).clone();
@@ -355,6 +355,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 		}
 		
+	}
+	
+	private void drawText(String text, double x, double y, float size) {
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, x, y, size);
 	}
 	
 }
