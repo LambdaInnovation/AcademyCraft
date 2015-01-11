@@ -24,14 +24,14 @@ import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
 import cn.liutils.util.render.TrueTypeFont;
 
-public class PageMainBase extends Widget {
+public class PageMain extends Widget {
 
 	public static final float TITLE_CENTER_X = 165.75F, TITLE_CENTER_Y = 4.5F;
 
 	ModelBiped model;
 	GuiDeveloper dev;
 
-	public PageMainBase(GuiDeveloper gd) {
+	public PageMain(GuiDeveloper gd) {
 		super("main", gd.getGui(),  0, 0, gd.WIDTH, gd.HEIGHT);
 		this.setAlignStyle(Alignment.CENTER);
 		this.setTexMapping(0, 0, 456, 369);
@@ -39,6 +39,22 @@ public class PageMainBase extends Widget {
 		dev = gd;
 		model = new ModelBiped();
 		model.isChild = false;
+		
+		new Widget("last", this, 88.5, 6.5, 8.5, 7.5) {
+			@Override
+			public void onMouseDown(double mx, double my) {
+				dev.pageID = Math.max(dev.pageID - 1, 0);
+				dev.updateVisiblility();
+			}
+		};
+		
+		new Widget("next", this, 215.5, 6.5, 8.5, 7.5) {
+			@Override
+			public void onMouseDown(double mx, double my) {
+				dev.pageID = Math.min(dev.pageID + 1, dev.subs.size() - 1);
+				dev.updateVisiblility();
+			}
+		};
 	}
 
 	@Override
@@ -60,24 +76,21 @@ public class PageMainBase extends Widget {
 				TITLE_CENTER_X, TITLE_CENTER_Y, 12, TrueTypeFont.ALIGN_CENTER);
 		
 		//Titles
-		String str = "Holographic View"; //TODO localization
-		TextUtils.drawText(TextUtils.FONT_YAHEI_64, str, 147, 20.5, 10);
+		dev.drawText(ACLangs.holoView(), 147, 20.5, 10);
 		
-		str = "User Info";
-		TextUtils.drawText(TextUtils.FONT_YAHEI_64, str, 147, 119, 10);
+		dev.drawText(ACLangs.ad_UserInfo(), 147, 119, 10);
 		
 		//Misc
 		drawUserInfo();
-
 	}
 	
 	private void drawUserInfo() {
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, "CP.", 148, 153, 8);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, "PRG.", 148, 167.5, 8);
+		dev.drawText("CP.", 148, 153, 8);
+		dev.drawText("PRG.", 148, 167.5, 8);
 		
 		AbilityData data = AbilityDataMain.getData(dev.user);
 		ResourceLocation logo = null;
-		if(data.hasLearned()) {
+		if(data.hasAbility()) {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
 			//Cat and level

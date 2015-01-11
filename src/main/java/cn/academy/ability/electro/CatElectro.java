@@ -12,8 +12,8 @@ import cn.academy.ability.electro.skill.SkillStrongArc;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.api.ability.AbilityRegistration.RegAbility;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.register.AbilityRegistration.RegAbility;
 import cn.annoreg.core.RegistrationClass;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,6 +40,8 @@ public class CatElectro extends Category {
 		this.addSkill(new SkillStrongArc(), 0);
 		this.addSkill(new SkillMagneticMovement(), 0);
 		this.addSkill(new SkillRailgun(), 0);
+		
+		this.setColorStyle(26, 143, 218);
 	}
 	
 	@SideOnly(Side.CLIENT)

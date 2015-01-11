@@ -47,7 +47,7 @@ public class ACItems {
 
 	@RegItem
 	@Ctor(@Arg(Int = 1))
-	public static ItemCapsule capsuleH;
+	public static ItemCapsule capsuleA;
 	@RegItem
 	@Ctor(@Arg(Int = 2))
 	public static ItemCapsule capsuleM;
@@ -57,7 +57,7 @@ public class ACItems {
 
 	@RegItem
 	@Ctor(@Arg(Int = 1))
-	public static ItemTablet tabletH;
+	public static ItemTablet tabletA;
 	@RegItem
 	@Ctor(@Arg(Int = 2))
 	public static ItemTablet tabletM;
@@ -69,7 +69,7 @@ public class ACItems {
 	public static ItemNeedle needle;
 
 	@RegItem
-	public static ItemEnergyCrystal EnergyCrystal;
+	public static ItemEnergyCrystal energyCrystal;
 	
 	@RegItem
 	public static ItemModuleAttached adEnergyCard;
@@ -77,34 +77,34 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("aluminumingot")
 	@RegItem.OreDict("ingotAluminum")
-	public static Item AluminumIngot;
+	public static Item ingotAl;
 	
 	@RegItem
 	@RegItem.UTName("copperingot")
 	@RegItem.OreDict("ingotCopper")
-	public static Item CopperIngot;
+	public static Item ingotCu;
 	
 	@RegItem
 	@RegItem.UTName("steelingot")
 	@RegItem.OreDict("ingotRefinedIron")
-	public static Item SteelIngot;
+	public static Item ingotSteel;
 	
 	@RegItem
 	@RegItem.UTName("tiningot")
 	@RegItem.OreDict("ingotTin")
-	public static Item TinIngot;
+	public static Item ingotTin;
 	
 	@RegItem
 	@RegItem.UTName("siliconrod")
-	public static Item SiliconRod;
+	public static Item siliconRod;
 	
 	@RegItem
 	@RegItem.UTName("coppercoil")
-	public static Item CopperCoil;
+	public static Item copperCoil;
 	
 	@RegItem
 	@RegItem.UTName("corebearing")
-	public static Item CoreBearing;
+	public static Item coreBearing;
 	
 	@RegItem(name = "void", renderName = "renderVoid")
 	public static ItemVoid ivoid;

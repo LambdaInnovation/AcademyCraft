@@ -153,24 +153,18 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 	 * Get the basic EU consume per stimulation.
 	 */
 	public double getEUConsume() {
-		return 2000;
+		return 2718;
 	}
 	
 	/**
 	 * Get the basic EXP consume per stimulation.
 	 */
 	public int getExpConsume() {
-		return 20;
+		return 18;
 	}
 	
 	public double getSuccessProb(AbilityData data) {
 		return getSuccessfulProb(action, data);
-	}
-	
-	public Pair<Integer, Double> getExpectation(IDevAction act, AbilityData data) {
-		double prob = getSuccessfulProb(act, data);
-		int times = act.getExpectedStims(data);
-		return new Pair<Integer, Double>((int) (times * getExpConsume() / prob), times * getEUConsume() / prob);
 	}
 	
 	public double getSuccessfulProb(IDevAction action, AbilityData data) {
@@ -179,6 +173,12 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 	
 	public boolean isStimSuccessful() {
 		return this.stimSuccess == this.maxStimTimes;
+	}
+	
+	public Pair<Integer, Double> getExpectation(IDevAction act, AbilityData data) {
+		double prob = getSuccessfulProb(act, data);
+		int times = act.getExpectedStims(data);
+		return new Pair<Integer, Double>((int) (times * getExpConsume() / prob), times * getEUConsume() / prob);
 	}
 	
 	/**

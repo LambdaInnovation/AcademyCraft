@@ -25,14 +25,16 @@ public class GuiDeveloper extends LIGuiScreen {
 	protected static final int
 		WIDTH = 228,
 		HEIGHT = 185;
-	public final int[] DEFAULT_COLOR = {48, 155, 190},
-			EXP_INDI_COLOR = { 161, 199, 152 },
-			EU_INDI_COLOR = { 234, 84, 44 };
+	
+	public final int[] 
+		DEFAULT_COLOR = {48, 155, 190},
+		EXP_INDI_COLOR = { 161, 199, 152 },
+		EU_INDI_COLOR = { 234, 84, 44 };
 
 	//States
 	int pageID;
 	
-	protected PageMainBase pageMain;
+	protected PageMain pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
 	AbilityData data;
@@ -44,7 +46,7 @@ public class GuiDeveloper extends LIGuiScreen {
 		this.dev = dev;
 		this.data = AbilityDataMain.getData(user);
 		
-		pageMain = new PageMainOrdinary(this);
+		pageMain = new PageMain(this);
 		subs.add(new PageLearn(pageMain));
 		subs.add(new PageSkills(pageMain));
 		

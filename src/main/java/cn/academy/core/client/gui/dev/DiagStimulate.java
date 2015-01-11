@@ -80,7 +80,6 @@ public class DiagStimulate extends DialogueBase {
 			}
 			@Override
 			public double getProgress() {
-				//System.out.println(dev.dev.stimSuccess + "/" + dev.dev.maxStimTimes + ":" + ((double)dev.dev.stimSuccess) / dev.dev.maxStimTimes);
 				return ((double)dev.dev.stimSuccess) / dev.dev.maxStimTimes;
 			}
 		};
@@ -101,25 +100,25 @@ public class DiagStimulate extends DialogueBase {
 		String text = String.format("%s: %s", 
 				dev.dev.isStimulating ? ACLangs.curAction() : (dev.dev.isStimSuccessful() ? ACLangs.successful() : ACLangs.aborted()),  
 				devAction.getActionInfo(dev.data));
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE, 24 * SCALE, 7 * SCALE);
+		dev.drawText(text, 6 * SCALE, 24 * SCALE, 7 * SCALE);
 		
 		//StimTimes
+		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		text = String.format("%s: %d/%d", ACLangs.attemptes(), dev.dev.stimSuccess, dev.dev.maxStimTimes);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE, 31 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6 * SCALE, 31 * SCALE, 6 * SCALE);
 		
 		//StimFails
 		RenderUtils.bindColor(ERROR_COLOR);
 		double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE);
 		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE + len, 31 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6 * SCALE + len, 31 * SCALE, 6 * SCALE);
 		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		//SyncRate
 		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE, 38.5 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6 * SCALE, 38.5 * SCALE, 6 * SCALE);
 		
-		GL11.glColor4d(1, 1, 1, 1);
-		
+		RenderUtils.bindIdentity();
 	}
 	
 	@Override

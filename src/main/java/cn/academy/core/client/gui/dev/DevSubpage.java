@@ -22,11 +22,11 @@ public abstract class DevSubpage extends Widget {
 		PG_OFFSET_X = 3.5F, PG_OFFSET_Y = 34.6F,
 		PG_WIDTH = 136.5F, PG_HEIGHT = 146.5F;
 	
-	protected final GuiDeveloper dev;
+	protected final GuiDeveloper base;
 
-	public DevSubpage(PageMainBase parent, String s, ResourceLocation back) {
+	public DevSubpage(PageMain parent, String s, ResourceLocation back) {
 		super(s, parent, PG_OFFSET_X, PG_OFFSET_Y, PG_WIDTH, PG_HEIGHT);
-		this.dev = parent.dev;
+		this.base = parent.dev;
 		this.setTexture(back, 512, 512);
 		this.setTexMapping(0, 0, 273, 293);
 		visible = false;

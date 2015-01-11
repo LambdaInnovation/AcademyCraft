@@ -2,12 +2,19 @@ package cn.academy.api.ability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import cn.academy.api.data.AbilityData;
 import net.minecraft.util.StatCollector;
+import cn.academy.api.data.AbilityData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * Ability level providing skill learn info
+ */
 public class Level {
 	
 	private Category parent;
@@ -19,7 +26,7 @@ public class Level {
 	private float maxRecoverCPRate;
 	private double stimProb;
 	
-	private Map<Integer, Boolean> canLearnSkillMap = new HashMap<Integer, Boolean>();
+	private Set<Integer> canLearnSkills = new HashSet<Integer>();
 	
 	public Level(Category cat, float initialCP, float maxCP, float initRecoverCPRate, float maxRecoverCPRate,
 			double learnProb) {
@@ -30,6 +37,10 @@ public class Level {
 		this.initRecoverCPRate = initRecoverCPRate;
 		this.maxRecoverCPRate = maxRecoverCPRate;
 		stimProb = learnProb;
+	}
+	
+	public int getID() {
+		return id;
 	}
 
 	public float getInitialCP() {
@@ -55,28 +66,22 @@ public class Level {
 		return stimProb;
 	}
 
-	@Deprecated
 	public final void addCanLearnSkill(int skillId) {
-		canLearnSkillMap.put(skillId, true);
+		canLearnSkills.add(skillId);
 	}
 	
 	public final boolean canLearnSkill(int skillId) {
-		Boolean canLearn = canLearnSkillMap.get(skillId);
-		return canLearn != null ? canLearn : false;
+		return canLearnSkills.contains(skillId);
 	}
 	
-	public final List<Integer> getCanLearnSkillIdList() {
-		return new ArrayList<Integer>(canLearnSkillMap.keySet());
+	public final List<Integer> getCanLearnSkillList() {
+		return new ArrayList<Integer>(canLearnSkills);
 	}
 	
-	public int getID() {
-		return id;
-	}
-	
+	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("level_" + parent.getCategoryId() + "_" + getID());
 	}
 	
-	public void enterLevel(AbilityData abilityData) {
-	}
+	public void enterLevel(AbilityData abilityData) {}
 }

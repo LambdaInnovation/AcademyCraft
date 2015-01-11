@@ -27,6 +27,10 @@ public class ACLangs {
 		return local("ac.learnability");
 	}
 	
+	public static String upgradeLevel() {
+		return local("ac.upgradelv");
+	}
+	
 	public static String machineStat() {
 		return local("ac.machinestat");
 	}
@@ -109,6 +113,14 @@ public class ACLangs {
 	
 	public static String fullyLearned() {
 		return local("ac.fullylearned");
+	}
+	
+	public static String holoView() {
+		return local("adev.holoview");
+	}
+	
+	public static String ad_UserInfo() {
+		return local("adev.userinfo");
 	}
 	
 	private static String local(String str) {

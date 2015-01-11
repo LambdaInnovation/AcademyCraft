@@ -36,7 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * The preset selection GUI. Currently activated by C key.
  * Use Keyboard UP and DOWN to select, and ENTER to confirm.
- * May consider adding mouse-wheel and mouse-click action.
+ * Also supports mouse-wheel and mouse-click action.
  * @author WeathFolD
  */
 @RegistrationClass
@@ -250,7 +250,7 @@ public class GuiPresetSelect extends AuxGui {
 	
 	//Fast rect drawing routine (grayscale)
 	private void rect(float x, float y, double width, double height, float lum, float alpha) {
-		GL11.glColor4f(lum, lum, lum, alpha);
+		RenderUtils.bindGray(lum, alpha);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		HudUtils.drawModalRect(x, y, width, height);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

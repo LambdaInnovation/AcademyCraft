@@ -20,8 +20,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Ability Category.
  * @author WeathFolD
- *
  */
 public class Category {
 	
@@ -29,11 +29,17 @@ public class Category {
 	
 	private List<Level> levels = new ArrayList<Level>();
 	private List<SkillBase> skills = new ArrayList<SkillBase>();
+	
+	protected int colorStyle[] = { 255, 255, 255 };
 
 	public Category() {
 		register();
 	}
 	
+	/**
+	 * WARNING: this method is called in base Ctor, so don't use ready-to-init fields in your class.
+	 * Level initialization must be put before skill initialization.
+	 */
 	protected void register() {
 		this.addLevel(new Level(this, 0.0f, 0.0f, 0.0f, 0.0f, .5));
 		
@@ -42,6 +48,15 @@ public class Category {
 		this.addSkill(Abilities.skillHoldTest, 0);
 	}
 	
+	public String getInternalName() {
+		return "none";
+	}
+	
+	public int getCategoryId() {
+		return catId;
+	}
+	
+	//-----LEVEL-----
 	public final int getLevelCount() {
 		return levels.size();
 	}
@@ -66,6 +81,24 @@ public class Category {
 		return getLevel(getInitialLevelId());
 	}
 
+	//-----SKILL-----
+	public final int addSkill(SkillBase skill, int minLevel) {
+		int ret = skills.size();
+		skills.add(skill);
+		Abilities.registerSkill(skill);
+		for(int i = minLevel; i < getLevelCount(); ++i)
+			getLevel(i).addCanLearnSkill(ret);
+		return ret;
+	}
+	
+	public final SkillBase getSkill(int sid) {
+		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(skills, sid));
+	}
+	
+	public final int getSkillCount() {
+		return skills.size();
+	}
+	
 	public float[] getInitialSkillExp() {
 		return new float[skills.size()];
 	}
@@ -74,35 +107,12 @@ public class Category {
 		return new int[skills.size()];
 	}
 	
+	//-----CP-----
 	public float getInitialMaxCP() {
 		return 100.0f;
 	}
-
-	public final int addSkill(SkillBase skill, int minLevel) {
-		int ret = skills.size();
-		skills.add(skill);
-		Abilities.registerSkill(skill);
-		getLevel(minLevel).addCanLearnSkill(ret);
-		return ret;
-	}
 	
-	public final int getSkillCount() {
-		return skills.size();
-	}
-	
-	public final SkillBase getSkill(int sid) {
-		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(skills, sid));
-	}
-	
-	public String getInternalName() {
-		return "none";
-	}
-	
-	public int getCategoryId() {
-		return catId;
-	}
-	
-	
+	//-----EVENT-----
 	/**
 	 * Called by AbilityData when the SkillExp is increased.
 	 * Change max CP and other data, and test if the player should get to the next level.
@@ -130,9 +140,23 @@ public class Category {
 		data.setSkillLevel(getInitialSkillLevel());
 	}
 	
-	public void onEnterCategory(AbilityData data) {
+	public void onEnterCategory(AbilityData data) {}
+	
+	public void onLeaveCategory(AbilityData data) {}
+	
+	//-----CLIENT-----
+	/**
+	 * Set the color preference for rendering.
+	 */
+	public final void setColorStyle(int r, int g, int b) {
+		colorStyle[0] = r;
+		colorStyle[1] = g;
+		colorStyle[2] = b;
 	}
-	public void onLeaveCategory(AbilityData data) {
+	
+	@SideOnly(Side.CLIENT)
+	public int[] getColorStyle() {
+		return colorStyle;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -144,4 +168,5 @@ public class Category {
 	public ResourceLocation getLogo() {
 		return ACClientProps.TEX_QUESTION_MARK;
 	}
+
 }

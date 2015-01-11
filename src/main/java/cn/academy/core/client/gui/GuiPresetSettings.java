@@ -244,21 +244,19 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			HudUtils.setZLevel(zLevel);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glPushMatrix(); {
-				float color = 0.15F;
-				GL11.glColor4f(color, color, color, 0.6F);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				RenderUtils.bindGray(.15, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
 				
-				color = 0.25F;
-				GL11.glColor4f(color, color, color, 0.5F);
+				RenderUtils.bindGray(.25, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT / 6);
 			} GL11.glPopMatrix(); 
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
-			//page text and page selection
-			GL11.glColor4f(1, 1, 1, 0.8F);
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.presetSettings(), 73, 3, 7);
+			//page text
+			RenderUtils.bindGray(1, .8);
+			drawText(ACLangs.presetSettings(), 80, 3, 7);
 		}
 		
 	}
@@ -293,20 +291,18 @@ public class GuiPresetSettings extends LIGuiScreen {
 			public void draw(double mx, double my, boolean mouseHovering) {
 				final float lsize = 24;
 			
-				float c = .8F;
-				GL11.glColor4f(c, c, c, .8F);
 				float tx = WIDTH / 2 - lsize / 2;
+				RenderUtils.bindGray(.8, .8);
 				HudUtils.drawRectOutline(tx, tx, lsize, lsize, 2);
 				ResourceLocation logo = skill.getLogo();
 				if(logo != null) {
-					GL11.glColor4f(1, 1, 1, 1);
+					RenderUtils.bindIdentity();
 					RenderUtils.loadTexture(logo);
 					HudUtils.drawRect(tx, tx, lsize, lsize);
 				}
 				
 				if(mouseHovering && !used) {
-					c = .4F;
-					GL11.glColor4f(c, c, c, .5F);
+					RenderUtils.bindGray(.4, .5);
 					HudUtils.drawModalRect(0, 0, WIDTH, WIDTH);
 				}
 			}

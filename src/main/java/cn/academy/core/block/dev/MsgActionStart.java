@@ -58,7 +58,6 @@ public class MsgActionStart implements IMessage {
 			TileEntity td = world.getTileEntity(msg.x, msg.y, msg.z);
 			if(td == null || !(td instanceof TileDeveloper)) {
 				AcademyCraft.log.error("Didn't find developer while starting developement");
-				//TODO: Do we need retry?
 			}
 			TileDeveloper dev = (TileDeveloper) td;
 			dev.startStimulating(msg.id, msg.par);

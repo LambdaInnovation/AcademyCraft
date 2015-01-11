@@ -24,7 +24,6 @@ import cn.liutils.util.misc.Pair;
 
 /**
  * @author WeathFolD, acaly
- *
  */
 public class AbilityData implements IExtendedEntityProperties {
 	
@@ -42,30 +41,34 @@ public class AbilityData implements IExtendedEntityProperties {
 	int skillLevels[];
 
 	/**
-	 * Create an AbilityData for the player with the empty category
-	 * @param player
+	 * Create an AbilityData for the player with the empty category.
 	 */
 	public AbilityData(EntityPlayer player) {
 		this(player, Abilities.catEmpty);
 	}
 
 	/**
-	 * Create an AbilityData for the player with the given category
-	 * @param player
-	 * @param category
+	 * Create an AbilityData for the player with the given category.
 	 */
 	public AbilityData(EntityPlayer player, Category category) {
 		this.player = player;
 		setInitial(category);
 	}
 	
+	/**
+	 * Load the player data from stored NBT.
+	 */
 	public AbilityData(EntityPlayer player, NBTTagCompound nbt) {
 		this(player);
-		
 		this.loadNBTData(nbt);
 	}
 	
-	public boolean hasLearned() {
+	public EntityPlayer getPlayer() {
+		return player;
+	}
+	
+	//-----Category-----
+	public boolean hasAbility() {
 		return catID != 0;
 	}
 	
@@ -77,6 +80,29 @@ public class AbilityData implements IExtendedEntityProperties {
 		return catID;
 	}
 	
+	/**
+	 * Get the size of skills in player's category.
+	 */
+	public int getSkillCount() {
+		return getCategory().getSkillCount();
+	}
+	
+	public void setCategory(Category cat) {
+		if (this.isInSetup) {
+			throw new RuntimeException("Cannot modify category during setup api.");
+		}
+		if (!player.worldObj.isRemote) {
+			setInitial(cat);
+			//Force reset
+			AbilityDataMain.resetPlayer(player);
+		}
+	}
+	
+	public void setCategoryID(int value) {
+		setCategory(Abilities.getCategory(value));
+	}
+	
+	//-----Level-----
 	public Level getLevel() {
 		return getCategory().getLevel(levelId);
 	}
@@ -89,12 +115,25 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getCategory().getLevelCount();
 	}
 	
-	public SkillBase getSkill(int sid) {
-		return getCategory().getSkill(sid);
+	public void setLevelID(int value) {
+		levelId = value;
+		if (isInSetup) {
+			getLevel().enterLevel(this);
+		} else {
+			if (!player.worldObj.isRemote) {
+				
+				this.isInSetup = true;
+				getLevel().enterLevel(this);
+				this.isInSetup = false;
+				
+				syncAll();
+			}
+		}
 	}
 	
-	public int getSkillCount() {
-		return getCategory().getSkillCount();
+	//-----Skill-----
+	public SkillBase getSkill(int sid) {
+		return getCategory().getSkill(sid);
 	}
 	
 	public float getSkillExp(int sid) {
@@ -105,6 +144,110 @@ public class AbilityData implements IExtendedEntityProperties {
 		return sid == 0 || skillLevels[sid] > 0;
 	}
 	
+	/**
+	 * Return a list containing all skills' ID that the player can learn.
+	 */
+	public List<Integer> getCanLearnSkillList() {
+		return getLevel().getCanLearnSkillList();
+	}
+	
+	/**
+	 * Return a list containing all learned skills' ID.
+	 */
+	public List<Integer> getLearnedSkillList() {
+		List<Integer> res = new ArrayList<Integer>();
+		for(int i = 0; i < getSkillCount(); ++i) {
+			if(isSkillLearned(i)) {
+				res.add(i);
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Used by Category to initialize AbilityData.
+	 * @param values
+	 */
+	public void setSkillExp(float[] values) {
+		this.skillExps = values;
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
+	}
+	
+	public void incrSkillExp(int skillID, float value) {
+		setSkillExp(skillID, getSkillExp(skillID) + value);
+	}
+	
+	public int getMaxSkillLevel(int skillID) {
+		return getSkill(skillID).getMaxSkillLevel();
+	}
+	
+	public int getSkillLevel(int skillID) {
+		return skillLevels[skillID];
+	}
+	
+	public void setSkillLevel(int skillID, int level) {
+		skillLevels[skillID] = level;
+		if (!player.worldObj.isRemote) {
+			syncAll();
+		}
+	}
+	
+	/**
+	 * Used by Category to initialize AbilityData.
+	 * DONT use it in your skill.
+	 */
+	public void setSkillLevel(int[] values) {
+		this.skillLevels = values;
+		if (!player.worldObj.isRemote) {
+			syncAll();
+		}
+	}
+	
+	/**
+	 * Only preserved for INTERNAL usage, DONT use it in your skill.
+	 */
+	@Deprecated
+	public float[] getSkillExpArray() {
+		return skillExps;
+	}
+	
+	/**
+	 * Only preserved for INTERNAL usage, DONT use it in your skill.
+	 */
+	@Deprecated
+	public int[] getSkillLevelArray() {
+		return skillLevels;
+	}
+	
+	/**
+	 * Use incrSkillExp instead.
+	 * @param skillID
+	 * @param value
+	 */
+	@Deprecated
+	public void setSkillExp(int skillID, float value) {
+		if (isInSetup) {
+			float oldValue = skillExps[skillID];
+			skillExps[skillID] = value;
+			
+			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
+		} else {
+			if (!player.worldObj.isRemote) {
+				float oldValue = skillExps[skillID];
+				skillExps[skillID] = value;
+				
+				this.isInSetup = true;
+				getCategory().onSkillExpChanged(this, skillID, oldValue, value);
+				this.isInSetup = false;
+				
+				syncSimple();
+			}
+		}
+	}
+	
+	//-----CP-----
 	public float getCurrentCP() {
 		return currentCP;
 	}
@@ -113,18 +256,53 @@ public class AbilityData implements IExtendedEntityProperties {
 		return maxCP;
 	}
 	
-	public float[] getSkillExpArray() {
-		return skillExps;
+	public void setCurrentCP(float value) {
+		currentCP = value;
+		
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
 	}
 	
-	public int[] getSkillLevelArray() {
-		return skillLevels;
+	public void setMaxCP(float value) {
+		maxCP = value;
+		currentCP = Math.min(currentCP, maxCP);
+		
+		if (!player.worldObj.isRemote) {
+			syncSimple();
+		}
 	}
 	
-	public EntityPlayer getPlayer() {
-		return player;
+	public boolean decreaseCP(float need) {
+		if (currentCP < need) return false;
+		setCurrentCP(currentCP - need);
+		return true;
 	}
 
+	private float getRecoverRate() {
+		Level lv = GenericUtils.assertObj(getCategory().getLevel(getLevelID()));
+
+		return lv.getInitRecoverCPRate() + 
+				(((this.getMaxCP() - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
+				(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
+	}
+	
+	public boolean recoverCP() {
+		if (currentCP < maxCP) {
+			float recoverRate = this.getRecoverRate();
+			
+			float newCP = currentCP + recoverRate;
+			newCP = Math.min(newCP, maxCP);
+			if (newCP == maxCP || tickCount % 20 == 0) {
+				setCurrentCP(newCP);
+			} else {
+				maxCP = newCP;
+			}
+		}
+		return true;
+	}
+	
+	//-----INTERNAL PROCESSING-----
 	@Override
 	public void saveNBTData(NBTTagCompound playerNBT) {
 		//Create a separated tag node.
@@ -174,182 +352,6 @@ public class AbilityData implements IExtendedEntityProperties {
 			getCategory().onEnterCategory(this);
 		}
 	}
-
-	@Override
-	public void init(Entity entity, World world) {
-	}
-
-	public List<Pair<Integer, SkillBase>> getCanLearnSkillList() {
-		Set<Integer> resultSet = new HashSet();
-		Category cat = this.getCategory();
-		for (int i = 0; i < getLevelID(); i++) {
-			Level lv = cat.getLevel(i);
-			resultSet.addAll(lv.getCanLearnSkillIdList());
-		}
-		ArrayList<Pair<Integer, SkillBase>> resultList = new ArrayList();
-		for (int i : resultSet) {
-			resultList.add(new Pair(i, cat.getSkill(i)));
-		}
-		return resultList;
-	}
-	
-	public List<Integer> getLearnedSkillList() {
-		List<Integer> res = new ArrayList<Integer>();
-		for(int i = 0; i < getSkillCount(); ++i) {
-			if(isSkillLearned(i)) {
-				res.add(i);
-			}
-		}
-		return res;
-	}
-	
-	/*
-	 * Set API
-	 */
-	
-	public void setCategory(Category cat) {
-		if (this.isInSetup) {
-			throw new RuntimeException("Cannot modify category during setup api.");
-		}
-		if (!player.worldObj.isRemote) {
-			setInitial(cat);
-			//Force reset
-			AbilityDataMain.resetPlayer(player);
-		}
-	}
-	
-	public void setCategoryID(int value) {
-		setCategory(Abilities.getCategory(value));
-	}
-	
-	public void setCurrentCP(float value) {
-		currentCP = value;
-		
-		if (!player.worldObj.isRemote) {
-			syncSimple();
-		}
-	}
-	
-	public void setMaxCP(float value) {
-		maxCP = value;
-		currentCP = Math.min(currentCP, maxCP);
-		
-		if (!player.worldObj.isRemote) {
-			syncSimple();
-		}
-	}
-	
-	public boolean decreaseCP(float need) {
-		if (currentCP < need) return false;
-		setCurrentCP(currentCP - need);
-		return true;
-	}
-
-	private float getRecoverRate() {
-		Level lv = GenericUtils.assertObj(getCategory().getLevel(getLevelID()));
-
-		return lv.getInitRecoverCPRate() + 
-				(((this.getMaxCP() - lv.getInitialCP()) / (lv.getMaxCP() - lv.getInitialCP())) * 
-				(lv.getMaxRecoverCPRate() - lv.getInitRecoverCPRate()));
-	}
-	
-	public boolean recoverCP() {
-		if (currentCP < maxCP) {
-			float recoverRate = this.getRecoverRate();
-			
-			float newCP = currentCP + recoverRate;
-			newCP = Math.min(newCP, maxCP);
-			if (newCP == maxCP || tickCount % 20 == 0) {
-				setCurrentCP(newCP);
-			} else {
-				maxCP = newCP;
-			}
-		}
-		return true;
-	}
-	
-	public void setLevelID(int value) {
-		levelId = value;
-		if (isInSetup) {
-			getLevel().enterLevel(this);
-		} else {
-			if (!player.worldObj.isRemote) {
-				
-				this.isInSetup = true;
-				getLevel().enterLevel(this);
-				this.isInSetup = false;
-				
-				syncAll();
-			}
-		}
-	}
-	
-	/**
-	 * Use incrSkillExp instead.
-	 * @param skillID
-	 * @param value
-	 */
-	@Deprecated
-	public void setSkillExp(int skillID, float value) {
-		if (isInSetup) {
-			float oldValue = skillExps[skillID];
-			skillExps[skillID] = value;
-			
-			getCategory().onSkillExpChanged(this, skillID, oldValue, value);
-		} else {
-			if (!player.worldObj.isRemote) {
-				float oldValue = skillExps[skillID];
-				skillExps[skillID] = value;
-				
-				this.isInSetup = true;
-				getCategory().onSkillExpChanged(this, skillID, oldValue, value);
-				this.isInSetup = false;
-				
-				syncSimple();
-			}
-		}
-	}
-
-	/**
-	 * Used by Category to initialize AbilityData.
-	 * @param values
-	 */
-	public void setSkillExp(float[] values) {
-		this.skillExps = values;
-		if (!player.worldObj.isRemote) {
-			syncSimple();
-		}
-	}
-	
-	/**
-	 * Used by Category to initialize AbilityData.
-	 * @param values
-	 */
-	public void setSkillLevel(int[] values) {
-		this.skillLevels = values;
-		if (!player.worldObj.isRemote) {
-			syncAll();
-		}
-	}
-	
-	public void incrSkillExp(int skillID, float value) {
-		setSkillExp(skillID, getSkillExp(skillID) + value);
-	}
-	
-	public int getSkillLevel(int skillID) {
-		return skillLevels[skillID];
-	}
-	
-	public void setSkillLevel(int skillID, int level) {
-		skillLevels[skillID] = level;
-		if (!player.worldObj.isRemote) {
-			syncAll();
-		}
-	}
-	
-	public int getMaxSkillLevel(int skillID) {
-		return getSkill(skillID).getMaxSkillLevel();
-	}
 	
 	public void onPlayerTick() {
 		if (tickCount == Integer.MAX_VALUE) {
@@ -392,6 +394,9 @@ public class AbilityData implements IExtendedEntityProperties {
 		isInSetup = false;
 		//Sync is not triggered here.
 	}
+	
+	@Override
+	public void init(Entity entity, World world) {}
 	
 	private boolean isInSetup = false;
 	private boolean needToReset = false;

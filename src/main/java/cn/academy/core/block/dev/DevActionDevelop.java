@@ -22,7 +22,7 @@ public class DevActionDevelop implements IDevAction {
 
 	@Override
 	public void onActionFinished(AbilityData data) {
-		int cat = 1 + RNG.nextInt(Abilities.getCategories() - 1);
+		int cat = 1 + RNG.nextInt(Abilities.getCategoryCount() - 1);
 		data.setCategoryID(cat);
 	}
 

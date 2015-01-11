@@ -1,8 +1,8 @@
 package cn.academy.ability.meltdowner;
 
-import cn.academy.api.ability.AbilityRegistration.RegAbility;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
+import cn.academy.core.register.AbilityRegistration.RegAbility;
 import cn.annoreg.core.RegistrationClass;
 
 /**

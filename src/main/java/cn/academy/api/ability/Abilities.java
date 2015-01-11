@@ -21,16 +21,17 @@ public class Abilities {
 	private static List<Category> catList = new ArrayList<Category>();
 	private static Map<String, SkillBase> skillMap = new HashMap<String, SkillBase>();
 	
-	public static int getCategories() {
-		return catList.size();
+	public static void registerCat(Category cat) {
+		cat.catId = catList.size();
+		catList.add(cat);
 	}
 	
 	public static Category getCategory(int caid) {
 		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(catList, caid));
 	}
 	
-	public static SkillBase getSkill(String name) {
-		return skillMap.get(name);
+	public static int getCategoryCount() {
+		return catList.size();
 	}
 	
 	public static void registerSkill(Collection<SkillBase> skls) {
@@ -42,22 +43,19 @@ public class Abilities {
 	/**
 	 * Register a skill into global list. This should be
 	 * done for all normal skills (In case of cross-ability skill accessing)
-	 * @param skill
 	 */
 	public static void registerSkill(SkillBase skill) {
 		skillMap.put(skill.getInternalName(), skill);
 	}
 	
-	public static void registerCat(Category cat) {
-		cat.catId = catList.size();
-		catList.add(cat);
+	public static SkillBase getSkill(String name) {
+		return skillMap.get(name);
 	}
-
 	
 	/*
 	 * Registry Part 
 	 */
-	public static final SkillBase skillEmpty = new SkillBase(); //Don't register because we don't want to query it again.
+	public static final SkillBase skillEmpty = new SkillBase();
 	public static final SkillDebug skillDebug = new SkillDebug();
 	public static final SkillHoldTest skillHoldTest = new SkillHoldTest();
 	

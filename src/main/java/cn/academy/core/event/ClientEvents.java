@@ -18,6 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * TODO: Rewrite to adapt to obfuscation, or completely find a new method
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)

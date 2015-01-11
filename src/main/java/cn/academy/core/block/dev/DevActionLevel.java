@@ -21,7 +21,7 @@ public class DevActionLevel implements IDevAction {
 
 	@Override
 	public int getExpectedStims(AbilityData data) {
-		return 10;
+		return 2 * toLevel * toLevel + 3;
 	}
 
 	@Override

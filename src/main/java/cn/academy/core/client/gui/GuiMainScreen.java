@@ -33,6 +33,7 @@ public class GuiMainScreen extends AuxGui {
 	
 	@RegAuxGui
 	public static GuiMainScreen INSTANCE = new GuiMainScreen();
+	
 	private long lastInactiveTime, lastActiveTime;
 	
 	private GuiMainScreen() {}
@@ -40,7 +41,7 @@ public class GuiMainScreen extends AuxGui {
 	@Override
 	public boolean isOpen() {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		return player != null && AbilityDataMain.getData(player).hasLearned();
+		return player != null && AbilityDataMain.getData(player).hasAbility();
 	}
 
 	@Override
@@ -58,35 +59,37 @@ public class GuiMainScreen extends AuxGui {
 			GL11.glPushMatrix(); { //Logo rendering
 				double scale = .25;
 				double mAlpha = active ? 0.8 : 0.4;
+				
+				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_BACK);
 				GL11.glColor4d(1, 1, 1, mAlpha);
 				GL11.glTranslated(w - 80, h - 70, 0);
 				GL11.glScaled(scale, scale, 1);
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_BACK);
 				HudUtils.drawRect(0, 0, 256, 256);
 				
-				GL11.glColor4d(1, 1, 1, mAlpha * 0.5 * (0.3 + Math.sin(time / 900D) * 0.7));
 				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_RAYS);
+				GL11.glColor4d(1, 1, 1, mAlpha * 0.5 * (0.3 + Math.sin(time / 900D) * 0.7));
 				HudUtils.drawRect(0, 0, 256, 256);
 				
+				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_FRAME);
 				GL11.glColor4d(1, 1, 1, mAlpha);
 				HudUtils.setTextureResolution(256, 256);
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_FRAME);
 				HudUtils.drawRect(0, 0, 256, 256);
 				
 				RenderUtils.loadTexture(data.getCategory().getLogo());
 				HudUtils.drawRect(63, 63, 129, 129);
 				
-				GL11.glPushMatrix(); { //Rotating ray
+				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_GEOM);
+				GL11.glPushMatrix(); { //Rotating ray effect
 					GL11.glTranslated(128, 128, 0);
 					GL11.glRotated(time / 1000D, 0, 0, 1);
 					GL11.glTranslated(-128, -128, 0);
-					RenderUtils.loadTexture(ACClientProps.TEX_LOGO_GEOM);
 					HudUtils.drawRect(0, 0, 256, 256);
 				} GL11.glPopMatrix();
 			} GL11.glPopMatrix();
-			GL11.glColor4d(1, 1, 1, 1);
+			RenderUtils.bindIdentity();
 			
-			if(active) { //cpbar rendering
+			//CPBar rendering
+			if(active) { 
 				lastActiveTime = time;
 			} else {
 				lastInactiveTime = time;
@@ -107,9 +110,10 @@ public class GuiMainScreen extends AuxGui {
 				
 				//CPBar
 				double prog = data.getCurrentCP() / data.getMaxCP();
-				prog = .8;
-				GL11.glColor4d(33 / 255D, 111 / 255D, 137 / 255D, mAlpha);
+				int[] cs = data.getCategory().getColorStyle();
+				RenderUtils.bindColor(cs[0], cs[1], cs[2], (int) (mAlpha * 255));
 				HudUtils.drawRect(439 - 436 * prog, 3, 439 - 436 * prog, 4, 436 * prog, 28, 436 * prog, 28);
+				
 				//CPBar glow
 				double alpha = Math.max(0, (prog - 0.6) / 0.4);
 				GL11.glColor4d(1, 1, 1, alpha * mAlpha);
@@ -118,8 +122,8 @@ public class GuiMainScreen extends AuxGui {
 				//Chip
 				HudUtils.drawRect(269, 46, 478, 40, 26, 26, 26, 26);
 				alpha =  0.5 + 0.5 * Math.sin(Minecraft.getSystemTime() / 500D);
-				GL11.glColor4d(1, 1, 1, alpha * mAlpha); //Chip glow light
-				HudUtils.drawRect(266, 46, 474, 5, 32, 32, 32, 32);
+				RenderUtils.bindColor(cs[0], cs[1], cs[2], (int) (alpha * mAlpha * 255)); //Chip glow light
+				HudUtils.drawRect(266, 45, 474, 5, 32, 32, 32, 32);
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);
@@ -130,7 +134,7 @@ public class GuiMainScreen extends AuxGui {
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 316, 88, 25, TrueTypeFont.ALIGN_CENTER);
 			}
 		} GL11.glPopMatrix();
-		GL11.glColor4d(1, 1, 1, 1);
+		RenderUtils.bindIdentity();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 

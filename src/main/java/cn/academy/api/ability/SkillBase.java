@@ -17,8 +17,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * An empty skill and also the base class of all skills.
+ * Skill is stored in Abilities class, and handled by category, but not necessarily by one cat
+ * (This may be a feature in further updates). One skill can currently only specify ONE key to operate on.
+ * see {@link #initPattern(RawEventHandler)} to know how to set up a skill's control listening.
+ * You must also specify this skill's logo and name to be drawn in various GUIs.
  * @author WeathFolD, acaly
- *
  */
 public class SkillBase {
 
@@ -38,6 +41,12 @@ public class SkillBase {
 		return "null";
 	}
 	
+	public int getMaxSkillLevel() {
+		return 1;
+	}
+	
+	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {}
+	
 	/**
 	 * Get the logo of the skill to be displayed in GUIs.
 	 * @return the logo
@@ -56,10 +65,4 @@ public class SkillBase {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
 	}
 	
-	public int getMaxSkillLevel() {
-		return 1;
-	}
-	
-	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {
-	}
 }

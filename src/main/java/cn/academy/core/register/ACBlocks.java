@@ -31,16 +31,16 @@ public class ACBlocks {
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")
 	@Ctor({@Arg(Str = "copperore"), @Arg(Int = 1)})
-	public static ACBlockOre copperore;
+	public static ACBlockOre oreCopper;
 	
 	@RegBlock
 	@RegBlock.OreDict("oreTin")
 	@Ctor({@Arg(Str = "tinore"), @Arg(Int = 1)})
-	public static ACBlockOre tinore;
+	public static ACBlockOre oreTin;
 	
 	@RegBlock
 	@RegBlock.OreDict("oreAluminum")
 	@Ctor({@Arg(Str = "aluminumore"), @Arg(Int = 1)})
-	public static ACBlockOre aluminumore;
+	public static ACBlockOre oreAl;
 	
 }

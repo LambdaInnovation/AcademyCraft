@@ -34,11 +34,11 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		{ //Transform to head block
 			int meta = world.getBlockMetadata(x, y, z);
 			int[] coords = this.getOrigin(world, x, y, z, meta);
-			System.out.println(meta >> 2);
 			x = coords[0];
 			y = coords[1];
 			z = coords[2];
 		}
+		
 		TileDeveloper te = safecast(world.getTileEntity(x, y, z));
 		if(te == null) return false;
 		EntityPlayer user = te.getUser();

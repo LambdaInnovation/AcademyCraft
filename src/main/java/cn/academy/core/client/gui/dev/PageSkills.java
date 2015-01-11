@@ -47,14 +47,15 @@ public class PageSkills extends DevSubpage {
 				this.setTexMapping(291, 0, 221, 67);
 				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
 				skillID = id;
-				skill = dev.data.getSkill(id);
-				level = dev.data.getSkillLevel(skillID);
-				learned = dev.data.isSkillLearned(skillID);
-				fullyLearned = dev.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
+				skill = base.data.getSkill(id);
+				level = base.data.getSkillLevel(skillID);
+				learned = base.data.isSkillLearned(skillID);
+				fullyLearned = base.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
 				Pair<Integer, Double> exp = 
-					dev.dev.getExpectation(dev.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), dev.data);
+					base.dev.getExpectation(base.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
 				expectedEnergy = exp.second.intValue();
+				this.receiveEvent = !fullyLearned;
 			}
 			
 			@Override
@@ -78,42 +79,40 @@ public class PageSkills extends DevSubpage {
 				
 				//Skill Name
 				String text = skill.getDisplayName();
-				RenderUtils.bindColor(dev.DEFAULT_COLOR);
+				RenderUtils.bindColor(base.DEFAULT_COLOR);
 				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 10);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
 					//level
-					RenderUtils.bindColor(dev.DEFAULT_COLOR);
+					RenderUtils.bindColor(base.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					dev.drawText(text, 97.5, 5.5, 7);
+					base.drawText(text, 97.5, 5.5, 7);
 				}
 				
 				if(!fullyLearned) {
-					RenderUtils.bindColor(dev.EXP_INDI_COLOR);
-					dev.drawText(String.valueOf(expectedExp), 37, 19, 8);
+					RenderUtils.bindColor(base.EXP_INDI_COLOR);
+					base.drawText(String.valueOf(expectedExp), 37, 19, 8);
 					
-					RenderUtils.bindColor(dev.EU_INDI_COLOR);
-					dev.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
+					RenderUtils.bindColor(base.EU_INDI_COLOR);
+					base.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
 				} else {
 					RenderUtils.bindColor(59, 177, 43);
-					dev.drawText(ACLangs.fullyLearned(), 30, 17.5, 8);
+					base.drawText(ACLangs.fullyLearned(), 30, 17.5, 8);
 				}
 			}
 			
 			public void onMouseDown(double mx, double my) {
-				if(!fullyLearned) {
-					new DiagActionConfirm(dev, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
-				}
+				new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
 			}
 			
 		}
 
 		public SkillList() {
 			super("list", PageSkills.this, 9.5, 9, 110.5, 101.5);
-			for(Pair<Integer, SkillBase> sk : dev.data.getCanLearnSkillList()) {
-				if(sk.first != 0)
-					new SkillElement(sk.first);
+			for(Integer sk : base.data.getCanLearnSkillList()) {
+				if(sk != 0)
+					new SkillElement(sk);
 			}
 			this.setDragBar(bar);
 		}
@@ -135,7 +134,7 @@ public class PageSkills extends DevSubpage {
 		}
 	}
 	
-	public PageSkills(PageMainBase parent) {
+	public PageSkills(PageMain parent) {
 		super(parent, "page.adskill", ACClientProps.TEX_GUI_AD_SKILL);
 		bar = new Bar();
 		sl = new SkillList();
@@ -162,7 +161,7 @@ public class PageSkills extends DevSubpage {
 			}
 			@Override
 			public double getProgress() {
-				return dev.dev.curEnergy / dev.dev.getMaxEnergy();
+				return base.dev.curEnergy / base.dev.getMaxEnergy();
 			}
 		};
 	}
@@ -171,8 +170,8 @@ public class PageSkills extends DevSubpage {
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		//sync rate
-		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
-		RenderUtils.bindColor(dev.DEFAULT_COLOR);
+		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
+		RenderUtils.bindColor(base.DEFAULT_COLOR);
 		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 5, 135, 8);
 		GL11.glColor4d(1, 1, 1, 1);
 	}

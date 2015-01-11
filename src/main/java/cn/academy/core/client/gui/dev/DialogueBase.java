@@ -31,6 +31,8 @@ public class DialogueBase extends Widget {
 			super(id, x, y);
 			this.setTexMapping(465, 0, 47, 15);
 			this.setDownMapping(465, 15);
+			this.setTextColor(210, 97, 97, 255);
+			this.setActiveColor(210, 97, 97, 255);
 		}
 	}
 	
