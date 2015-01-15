@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.ability.Category;
+import cn.annoreg.base.RegistrationClassSimple;
 import cn.annoreg.core.AnnotationData;
-import cn.annoreg.core.RegistryType;
 import cn.annoreg.core.RegistryTypeDecl;
 
 @RegistryTypeDecl
-public class AbilityRegistration extends RegistryType {
+public class AbilityRegistration extends RegistrationClassSimple<AbilityRegistration.RegAbility, Category> {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
@@ -25,15 +25,8 @@ public class AbilityRegistration extends RegistryType {
 	}
 
 	@Override
-	public boolean registerClass(AnnotationData data) throws Exception {
-		Class<? extends Category> clazz = (Class<? extends Category>) data.getTheClass();
-		Abilities.registerCat((Category) clazz.newInstance());
-		return true;
-	}
-
-	@Override
-	public boolean registerField(AnnotationData data) {
-		return false;
+	protected void register(Class<? extends Category> theClass, RegAbility anno) throws Exception {
+		Abilities.registerCat(theClass.newInstance());	
 	}
 
 }
