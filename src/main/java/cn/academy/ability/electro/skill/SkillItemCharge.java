@@ -89,7 +89,7 @@ public class SkillItemCharge extends SkillBase {
 		
 		@SideOnly(Side.CLIENT)
 		@RegEntity.Render
-		public static RenderTest renderer;
+		public static RenderTest renderer = new RenderTest();
 		
 		public EntityTest(EntityPlayer ep) {
 			super(ep.worldObj);

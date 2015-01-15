@@ -10,6 +10,7 @@ import cn.academy.api.ability.Abilities;
 import cn.academy.api.ability.Category;
 import cn.annoreg.base.RegistrationClassSimple;
 import cn.annoreg.core.AnnotationData;
+import cn.annoreg.core.LoadStage;
 import cn.annoreg.core.RegistryTypeDecl;
 
 @RegistryTypeDecl
@@ -22,6 +23,7 @@ public class AbilityRegistration extends RegistrationClassSimple<AbilityRegistra
 
 	public AbilityRegistration() {
 		super(RegAbility.class, "Ability");
+		this.setLoadStage(LoadStage.INIT);
 	}
 
 	@Override
