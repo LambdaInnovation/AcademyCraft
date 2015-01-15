@@ -10,7 +10,7 @@
  */
 package cn.academy.misc.item;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -36,7 +36,7 @@ public class ItemCapsule extends Item {
 	 * metadata2
 	 */
 	public ItemCapsule(int subID) {
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		capsuleID = subID;
 		this.setUnlocalizedName(uname[subID]);
 	}

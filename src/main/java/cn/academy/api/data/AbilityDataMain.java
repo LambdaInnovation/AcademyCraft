@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Level;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cn.academy.api.ctrl.EventHandlerServer;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +21,7 @@ public class AbilityDataMain {
 		AbilityData data = (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
 		if(data == null) {
 			//This function is used to get the AbilityData. Never throw an exception or return null.
-			AcademyCraftMod.log.warn("Player Ability Data is null. Creating a new one.");
+			AcademyCraft.log.warn("Player Ability Data is null. Creating a new one.");
 			register(player);
 			//Try again.
 			return (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
@@ -49,7 +49,7 @@ public class AbilityDataMain {
 	public static void resetPlayer(EntityPlayer player) {
 		if (player.worldObj.isRemote) {
 			//Only accessible on server
-			AcademyCraftMod.log.warn("Try to reset ability data on client.");
+			AcademyCraft.log.warn("Try to reset ability data on client.");
 			return;
 		}
 		
@@ -57,7 +57,7 @@ public class AbilityDataMain {
 		EventHandlerServer.resetPlayerSkillData(player);
 		
 		//Reset client
-		AcademyCraftMod.netHandler.sendTo(new MsgResetAbilityData(player), (EntityPlayerMP) player);
+		AcademyCraft.netHandler.sendTo(new MsgResetAbilityData(player), (EntityPlayerMP) player);
 	}
 
 }

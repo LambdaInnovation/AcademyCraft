@@ -3,7 +3,7 @@
  */
 package cn.academy.core.block.dev;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import io.netty.buffer.ByteBuf;
@@ -54,16 +54,13 @@ public class MsgActionStart implements IMessage {
 
 		@Override
 		public IMessage onMessage(MsgActionStart msg, MessageContext ctx) {
-			System.out.println("Ha");
 			World world = ctx.getServerHandler().playerEntity.worldObj;
 			TileEntity td = world.getTileEntity(msg.x, msg.y, msg.z);
 			if(td == null || !(td instanceof TileDeveloper)) {
-				AcademyCraftMod.log.error("Didn't find developer while starting developement");
-				//TODO: Do we need retry?
+				AcademyCraft.log.error("Didn't find developer while starting developement");
 			}
 			TileDeveloper dev = (TileDeveloper) td;
 			dev.startStimulating(msg.id, msg.par);
-			System.out.println("Synced");
 			return null;
 		}
 		

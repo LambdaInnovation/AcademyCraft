@@ -5,24 +5,15 @@ package cn.academy.core.client.gui.dev;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.block.dev.MsgDismount;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.liutils.api.gui.LIGuiScreen;
-import cn.liutils.api.gui.Widget;
-import cn.liutils.api.register.IGuiElement;
+import cn.liutils.util.render.TextUtils;
 
 /**
  * Main class of Developer GUI.
@@ -34,12 +25,16 @@ public class GuiDeveloper extends LIGuiScreen {
 	protected static final int
 		WIDTH = 228,
 		HEIGHT = 185;
-	public final int[] DEFAULT_COLOR = {48, 155, 190};
+	
+	public final int[] 
+		DEFAULT_COLOR = {48, 155, 190},
+		EXP_INDI_COLOR = { 161, 199, 152 },
+		EU_INDI_COLOR = { 234, 84, 44 };
 
 	//States
 	int pageID;
 	
-	protected PageMainBase pageMain;
+	protected PageMain pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
 	AbilityData data;
@@ -51,7 +46,7 @@ public class GuiDeveloper extends LIGuiScreen {
 		this.dev = dev;
 		this.data = AbilityDataMain.getData(user);
 		
-		pageMain = new PageMainOrdinary(this);
+		pageMain = new PageMain(this);
 		subs.add(new PageLearn(pageMain));
 		subs.add(new PageSkills(pageMain));
 		
@@ -64,14 +59,23 @@ public class GuiDeveloper extends LIGuiScreen {
     	}
     }
     
+    public void onGuiClosed() {
+    	super.onGuiClosed();
+    	dev.userQuit();
+    	AcademyCraft.netHandler.sendToServer(new MsgDismount(this.dev));
+    }
+    
     protected DevSubpage getCurPage() {
     	return subs.get(pageID);
     }
 	
 	@Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
+	
+	public static void drawText(String text, double x, double y, float size) {
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, x, y, size);
+	}
 	
 }

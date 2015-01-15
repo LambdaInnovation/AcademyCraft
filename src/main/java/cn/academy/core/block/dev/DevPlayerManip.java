@@ -32,7 +32,6 @@ public class DevPlayerManip extends EntityManip<EntityPlayer> {
 
 	@Override
 	public void onTick() {
-		//System.out.println("Running in " + isRemote());
 		//Validate
 		if(dev.getUser() != entity || dev.isInvalid()) {
 			setDead();
@@ -48,8 +47,8 @@ public class DevPlayerManip extends EntityManip<EntityPlayer> {
 	private final int dirMap[] = {
 		90, 180, -90, 0
 	};
+	
 	private void setRot() {
-		//System.out.println(dev.getBlockMetadata() & 3);
 		entity.rotationYaw = dirMap[dev.getBlockMetadata() & 3];
 	}
 

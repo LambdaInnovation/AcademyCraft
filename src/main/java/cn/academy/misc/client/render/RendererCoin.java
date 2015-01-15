@@ -33,11 +33,11 @@ public class RendererCoin extends Render {
 			float var8, float var9) {
 		EntityThrowingCoin etc = (EntityThrowingCoin) var1;
 		EntityPlayer player = etc.player;
-		if(etc.isSync)
-			return;
 		boolean fp = player == Minecraft.getMinecraft().thePlayer 
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
 		double dt = Minecraft.getSystemTime() - etc.getEntityData().getLong("startTime");
+		if(etc.isSync)
+			return;
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
 			if(fp) {
@@ -76,7 +76,7 @@ public class RendererCoin extends Render {
 			EntityLivingBase elb = (EntityLivingBase) data[1];
 			if(!(elb instanceof EntityPlayer)) return;
 			EntityPlayer player = (EntityPlayer) elb;
-			if(!ACItems.coin.inProgress(player, item)) {
+			if(!ACItems.coin.inProgress(item)) {
 				GL11.glScalef(sc, sc, sc);
 				RenderUtils.renderItemIn2d(0.0625, ACClientProps.TEX_COIN_FRONT, ACClientProps.TEX_COIN_BACK);
 				return;

@@ -3,7 +3,7 @@
  */
 package cn.academy.core.block.dev;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import io.netty.buffer.ByteBuf;
@@ -75,7 +75,7 @@ public class MsgDeveloper implements IMessage {
 			World world = Minecraft.getMinecraft().theWorld;
 			TileEntity te = world.getTileEntity(msg.x, msg.y, msg.z);
 			if(te == null || !(te instanceof TileDeveloper)) {
-				AcademyCraftMod.log.error("Didn't find the right instance while synchronizing AbilityDeveloper");
+				AcademyCraft.log.error("Didn't find the right instance while synchronizing AbilityDeveloper");
 				return null;
 			}
 			TileDeveloper dev = (TileDeveloper) te;

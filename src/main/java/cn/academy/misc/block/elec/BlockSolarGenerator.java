@@ -12,7 +12,7 @@ package cn.academy.misc.block.elec;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.core.proxy.LIClientProps;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -30,7 +30,7 @@ public class BlockSolarGenerator extends Block implements ITileEntityProvider {
 
 	public BlockSolarGenerator() {
 		super(Material.iron);
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		setHardness(2.0F);
 	}
 	

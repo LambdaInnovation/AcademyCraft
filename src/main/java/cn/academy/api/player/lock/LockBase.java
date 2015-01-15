@@ -1,6 +1,6 @@
 package cn.academy.api.player.lock;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;

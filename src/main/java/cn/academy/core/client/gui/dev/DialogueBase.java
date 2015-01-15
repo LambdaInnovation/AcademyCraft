@@ -23,6 +23,7 @@ import cn.liutils.util.render.TextUtils;
 public class DialogueBase extends Widget {
 	
 	public static final ResourceLocation TEXTURE = ACClientProps.TEX_GUI_AD_DIAG;
+	public static final float SCALE = 1.3F;
 	
 	public class ButtonWarning extends Button {
 		
@@ -30,6 +31,8 @@ public class DialogueBase extends Widget {
 			super(id, x, y);
 			this.setTexMapping(465, 0, 47, 15);
 			this.setDownMapping(465, 15);
+			this.setTextColor(210, 97, 97, 255);
+			this.setActiveColor(210, 97, 97, 255);
 		}
 	}
 	
@@ -39,7 +42,9 @@ public class DialogueBase extends Widget {
 			super(id, x, y);
 			this.setTexMapping(465, 30, 47, 15);
 			this.setDownMapping(465, 45);
-			this.setTextColor(dev.DEFAULT_COLOR[0] / 350.0, dev.DEFAULT_COLOR[1] / 350.0, dev.DEFAULT_COLOR[2] / 350.0, 1);
+			this.setTextColor(dev.DEFAULT_COLOR);
+			this.setActiveColor(dev.DEFAULT_COLOR);
+			this.setInactiveColor(150, 150, 150, 255);
 		}
 		
 	}
@@ -47,7 +52,7 @@ public class DialogueBase extends Widget {
 	private class Button extends TextButton {
 
 		public Button(String id, double x, double y) {
-			super(id, DialogueBase.this, x, y, 23.5, 7.5);
+			super(id, DialogueBase.this, x, y, 23.5 * SCALE, 7.5 * SCALE);
 			this.setTexture(TEXTURE, 512, 512);
 		}
 		
@@ -67,7 +72,7 @@ public class DialogueBase extends Widget {
 	String title = "";
 
 	public DialogueBase(String id, GuiDeveloper dev, int prio) {
-		super(id, dev.getGui(), 0, 0, 115, 59);
+		super(id, dev.getGui(), 0, 0, 115 * SCALE, 59 * SCALE);
 		this.setTexture(TEXTURE, 512, 512);
 		this.setTexMapping(0, 0, 230, 118);
 		this.dev = dev;
@@ -88,7 +93,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, title, 2.5, 1.5, 9);
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, title, 2.5 * SCALE, 1.5 * SCALE, 9 * SCALE);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

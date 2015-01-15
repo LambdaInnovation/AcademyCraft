@@ -15,8 +15,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
  */
 public class ACCorePlugin implements IFMLLoadingPlugin {
 
-	public ACCorePlugin() {
-	}
+	public ACCorePlugin() { }
 
 	@Override
 	public String[] getASMTransformerClass() {
@@ -36,8 +35,7 @@ public class ACCorePlugin implements IFMLLoadingPlugin {
 	}
 
 	@Override
-	public void injectData(Map<String, Object> data) {
-	}
+	public void injectData(Map<String, Object> data) {}
 
 	@Override
 	public String getAccessTransformerClass() {

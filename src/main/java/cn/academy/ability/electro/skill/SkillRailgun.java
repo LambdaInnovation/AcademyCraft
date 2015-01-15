@@ -43,6 +43,10 @@ public class SkillRailgun extends SkillBase {
 		return "em_railgun";
 	}
 	
+	public int getMaxSkillLevel() {
+		return 200;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLogo() {
 		return ACClientProps.ELEC_RAILGUN;

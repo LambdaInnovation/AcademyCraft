@@ -10,7 +10,7 @@
  */
 package cn.academy.misc.item;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
@@ -33,7 +33,7 @@ public class ItemTablet extends Item {
 	 * 
 	 */
 	public ItemTablet(int subID) {
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		tabletID = subID;
 		this.setUnlocalizedName(unames[subID]);
 	}

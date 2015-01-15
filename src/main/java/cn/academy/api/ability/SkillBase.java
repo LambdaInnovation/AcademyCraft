@@ -9,15 +9,19 @@ import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.data.AbilityData;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.SkillRenderDebug;
+import cn.academy.core.proxy.ACClientProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * An empty skill and also the base class of all skills.
+ * Skill is stored in Abilities class, and handled by category, but not necessarily by one cat
+ * (This may be a feature in further updates). One skill can currently only specify ONE key to operate on.
+ * see {@link #initPattern(RawEventHandler)} to know how to set up a skill's control listening.
+ * You must also specify this skill's logo and name to be drawn in various GUIs.
  * @author WeathFolD, acaly
- *
  */
 public class SkillBase {
 
@@ -37,13 +41,19 @@ public class SkillBase {
 		return "null";
 	}
 	
+	public int getMaxSkillLevel() {
+		return 1;
+	}
+	
+	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {}
+	
 	/**
 	 * Get the logo of the skill to be displayed in GUIs.
 	 * @return the logo
 	 */
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLogo() {
-		return null;
+		return ACClientProps.TEX_QUESTION_MARK;
 	}
 	
 	/**
@@ -55,10 +65,4 @@ public class SkillBase {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
 	}
 	
-	public int getMaxSkillLevel() {
-		return 1;
-	}
-	
-	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {
-	}
 }

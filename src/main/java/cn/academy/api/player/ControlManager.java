@@ -3,7 +3,7 @@ package cn.academy.api.player;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -36,7 +36,6 @@ public class ControlManager {
 		if (INSTANCE == null)
 			INSTANCE = new ControlManager();
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
-		AcademyCraftMod.netHandler.registerMessage(MsgControlSync.Handler.class, MsgControlSync.class, AcademyCraftMod.getNextChannelID(), Side.CLIENT);
 	}
 	
 	@SubscribeEvent
@@ -63,7 +62,7 @@ public class ControlManager {
 	public void onTick(EntityPlayer player, Side side) {
 		ControlData data = ControlData.get(player);
 		if (data == null) {
-			AcademyCraftMod.log.error("No ControlData for " + player.getDisplayName());
+			AcademyCraft.log.error("No ControlData for " + player.getDisplayName());
 			return;
 		}
 		data.onTick(player, side, true);//ticker == 0);

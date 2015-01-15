@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
@@ -68,14 +68,14 @@ public class EventHandlerServer {
 					tag.setInteger(NBT_PLAYER_WORLD_ID, worldId);
 				}
 				//Send the id back to client.
-				AcademyCraftMod.netHandler.sendTo(
+				AcademyCraft.netHandler.sendTo(
 						new ControlMessage(0, msg.eventType, worldId), player);
 				break;
 			case CLIENT_STOP_ALL:
 				INSTANCE.skillEventAll(player, SkillEventType.RAW_CANCEL);
 				break;
 			default:
-				AcademyCraftMod.log.error("An unexpected packet is received from client.");
+				AcademyCraft.log.error("An unexpected packet is received from client.");
 			}
 			return null;
 		}
@@ -161,12 +161,12 @@ public class EventHandlerServer {
 			case RAW_DOWN:
 				//First check if the skill is open.
 				if (!AbilityDataMain.getData(player).isSkillLearned(skillId)) {
-					AcademyCraftMod.log.warn("Player is trying to use a skill that has not been learnt.");
+					AcademyCraft.log.warn("Player is trying to use a skill that has not been learnt.");
 					return false;
 				}
 				if (tickToSetDead > 0) {
 					//Already down? Abort.
-					AcademyCraftMod.log.error("Unexpected RAW_DOWN event.");
+					AcademyCraft.log.error("Unexpected RAW_DOWN event.");
 					setDead();
 					return false;
 				}
@@ -221,7 +221,7 @@ public class EventHandlerServer {
 				reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
 				return false;
 			default:
-				AcademyCraftMod.log.error("Unexpcected event in EventHandlerServer.");
+				AcademyCraft.log.error("Unexpcected event in EventHandlerServer.");
 				return false;
 			}
 		}
@@ -230,10 +230,10 @@ public class EventHandlerServer {
 		 * Send RAW_CANCEL to server and client to abort current skill.
 		 */
 		private void setDead() {
-			AcademyCraftMod.log.warn("Delay in client side. Skill cancelled.");
+			AcademyCraft.log.warn("Delay in client side. Skill cancelled.");
 			int time = reh.getTime();
 			reh.onEvent(SkillEventType.RAW_CANCEL, time);
-			AcademyCraftMod.netHandler.sendTo(
+			AcademyCraft.netHandler.sendTo(
 					new ControlMessage(skillId, SkillEventType.RAW_CANCEL, time),
 					player);
 		}
@@ -259,7 +259,7 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
-		AcademyCraftMod.log.info("EventHandlerServer: Reset player.");
+		AcademyCraft.log.info("EventHandlerServer: Reset player.");
 		
 		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		

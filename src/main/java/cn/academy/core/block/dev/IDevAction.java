@@ -3,6 +3,8 @@
  */
 package cn.academy.core.block.dev;
 
+import java.util.Random;
+
 import cn.academy.api.data.AbilityData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,6 +14,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 public interface IDevAction {
+	
+	Random RNG = new Random();
+	
 	/**
 	 * Get the expected stimulation times.
 	 */
@@ -20,6 +25,10 @@ public interface IDevAction {
 	 * Do something when the consumption is finished.
 	 */
 	void onActionFinished(AbilityData data);
+	/**
+	 * Base successful probability.
+	 */
+	double getSuccessfulRate(AbilityData data);
 	
 	/**
 	 * Get a human readable information about this action. Typically used in GUIs.

@@ -21,17 +21,22 @@ public class DevActionLevel implements IDevAction {
 
 	@Override
 	public int getExpectedStims(AbilityData data) {
-		return 10;
+		return 2 * toLevel * toLevel + 3;
 	}
 
 	@Override
 	public void onActionFinished(AbilityData data) {
-		//TODO
+		data.setLevelID(toLevel);
 	}
 
 	@Override
 	public String getActionInfo(AbilityData data) {
-		return ACLangs.upgradeTo() + data.getCategory().getLevel(data.getLevelID() + 1).getDisplayName();
+		return ACLangs.upgradeTo() + data.getCategory().getLevel(toLevel).getDisplayName();
+	}
+
+	@Override
+	public double getSuccessfulRate(AbilityData data) {
+		return data.getLevel().getStimulationProb();
 	}
 	
 }

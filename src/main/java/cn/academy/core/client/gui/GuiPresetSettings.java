@@ -1,11 +1,13 @@
 package cn.academy.core.client.gui;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -20,7 +22,7 @@ import cn.academy.api.ctrl.Preset;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACCommonProps;
@@ -94,11 +96,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 			WIDTH = HEIGHT * RATIO,
 			PAGE_STEP = 16;
 		
-		private class PartPageSel extends Widget {
+		private class SelectPage extends Widget {
 			
 			int id;
 
-			public PartPageSel(int _id, float x) {
+			public SelectPage(int _id, float x) {
 				super("sel" + _id, PageMain.this, x, 0, PAGE_STEP, HEIGHT / 6);
 				id = _id;
 				draw = true;
@@ -116,12 +118,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 					color = 0.5F;
 				}
 				if(draw) {
-					GL11.glColor4f(color, color, color, 0.6F);
+					RenderUtils.bindGray(color, .6);
 					HudUtils.drawModalRect(0, 0, area.width, area.height);
 				}
-				color = .8F;
-				GL11.glColor4f(color, color, color, .8F);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, String.valueOf(id), 6, 2.5, 8);
+				RenderUtils.bindGray(.8, .8);
+				drawText(String.valueOf(id), 6, 2.5, 8);
 			}
 			
 			@Override
@@ -147,10 +148,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
 				double tx = WIDTH / 2, ty = 4;
-				float c = 0.8F;
-				GL11.glColor4f(c, c, c, .8F);
+				RenderUtils.bindGray(.8, .8);
 				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
+				drawText(str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
+				
 				tx = 2.5;
 				ty = 20;
 				HudUtils.drawRectOutline(tx, ty, LOGO_SIZE, LOGO_SIZE, 2);
@@ -162,8 +163,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 					HudUtils.drawRect(tx, ty, LOGO_SIZE, LOGO_SIZE);
 				}
 				if(mouseHovering) {
-					c = 0.6F;
-					GL11.glColor4f(c, c, c, 0.6F);
+					RenderUtils.bindGray(.6, .6);
 					HudUtils.drawModalRect(0, 0, STEP, HEIGHT);
 				}
 			}
@@ -199,14 +199,15 @@ public class GuiPresetSettings extends LIGuiScreen {
 					color = HOVERING_COLOR;
 				} else color = ORDINARY_COLOR;
 				GL11.glDepthFunc(GL11.GL_ALWAYS);
-				GL11.glColor4f(color, color, color, 0.6F);
+				RenderUtils.bindGray(color, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
+				
 				float fsize = 5F;
 				color = TEXT_COLOR;
 				GL11.glColor4f(color, color, color, 0.9F);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ID, 
+				drawText(StatCollector.translateToLocal(ID), 
 						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2, fsize);
+						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2, 5F);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
@@ -217,20 +218,20 @@ public class GuiPresetSettings extends LIGuiScreen {
 			draw = true;
 			
 			for(int i = 0; i < MAX_PAGE; ++i) {
-				new PartPageSel(i, PAGE_STEP * i);
+				new SelectPage(i, PAGE_STEP * i);
 			}
 			for(int i = 0; i < EventHandlerClient.MAX_KEYS; ++i) {
 				new PartKeyInfo(i);
 			}
 			
-			new ButtonGeneric("Accept", 71, 67.5F) {
+			new ButtonGeneric("ac.accept", 71, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					PresetManager.setPreset(currentPage, tempPreset);
 				}
 			};
 			
-			new ButtonGeneric("Restore", 107.5F, 67.5F) {
+			new ButtonGeneric("ac.restore", 107.5F, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					tempPreset = PresetManager.getPreset(currentPage).clone();
@@ -243,21 +244,19 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			HudUtils.setZLevel(zLevel);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glPushMatrix(); {
-				float color = 0.15F;
-				GL11.glColor4f(color, color, color, 0.6F);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				RenderUtils.bindGray(.15, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
 				
-				color = 0.25F;
-				GL11.glColor4f(color, color, color, 0.5F);
+				RenderUtils.bindGray(.25, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT / 6);
 			} GL11.glPopMatrix(); 
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
-			//page text and page selection
-			GL11.glColor4f(1, 1, 1, 0.8F);
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.presetSettings(), 73, 3, 7);
+			//page text
+			RenderUtils.bindGray(1, .8);
+			drawText(ACLangs.presetSettings(), 80, 3, 7);
 		}
 		
 	}
@@ -268,40 +267,49 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			SkillBase skill;
 			public final int id;
+			final boolean used; //If this skill already have a mapping
 
-			public PartSkillInfo(SkillBase _skill, int i, double beg) {
+			public PartSkillInfo(SkillBase _skill, int i, int j, double beg) {
 				super("sklmod" + i, PageModify.this, 
-					beg + STEP * (i - 1) , HEIGHT / 2 - WIDTH / 2,
+					beg + STEP * j , HEIGHT / 2 - WIDTH / 2,
 					WIDTH, WIDTH);
 				draw = true;
 				skill = _skill;
 				this.id = i;
+				
+				boolean u = false;
+				if(i != 0) {
+					for(int k = 0; k < 4; ++k) {
+						if(tempPreset.getSkillMapping(k) == i) 
+							u = true;
+					}
+				}
+				used = u;
 			}
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
 				final float lsize = 24;
 			
-				float c = .8F;
-				GL11.glColor4f(c, c, c, .8F);
 				float tx = WIDTH / 2 - lsize / 2;
+				RenderUtils.bindGray(.8, .8);
 				HudUtils.drawRectOutline(tx, tx, lsize, lsize, 2);
 				ResourceLocation logo = skill.getLogo();
 				if(logo != null) {
-					GL11.glColor4f(1, 1, 1, 1);
+					RenderUtils.bindIdentity();
 					RenderUtils.loadTexture(logo);
 					HudUtils.drawRect(tx, tx, lsize, lsize);
 				}
 				
-				if(mouseHovering) {
-					c = .4F;
-					GL11.glColor4f(c, c, c, .5F);
+				if(mouseHovering && !used) {
+					RenderUtils.bindGray(.4, .5);
 					HudUtils.drawModalRect(0, 0, WIDTH, WIDTH);
 				}
 			}
 			
 			@Override
 			public void onMouseDown(double mx, double my) {
+				if(used) return;
 				tempPreset.setSkillMapping(modKey, id);
 				isModifying = false;
 				pageMain.visible = true;
@@ -316,11 +324,12 @@ public class GuiPresetSettings extends LIGuiScreen {
 			super("modify", gui, 0, 0, width, HEIGHT);
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
-			Category ct = data.getCategory();
-			int n = ct.getSkillCount() - 1;
-			double beg = width / 2 - ((n - 1) * STEP + WIDTH) / 2;
-			for(int i = 1; i < ct.getSkillCount(); ++i) {
-				new PartSkillInfo(ct.getSkill(i), i, beg);
+			
+			List<Integer> learnedSkills = data.getLearnedSkillList();
+			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
+			int j = 0;
+			for(int i : learnedSkills) {
+				new PartSkillInfo(data.getSkill(i), i, j++,  beg);
 			}
 			draw = true;
 		}
@@ -342,6 +351,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 		}
 		
+	}
+	
+	private void drawText(String text, double x, double y, float size) {
+		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, x, y, size);
 	}
 	
 }

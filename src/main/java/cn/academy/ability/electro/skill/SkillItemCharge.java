@@ -16,13 +16,12 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
-import cn.liutils.api.entityx.motion.GravityApply;
 import cn.liutils.util.space.Motion3D;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,15 +31,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * TODO 施工中 现在是实验场
  * @author WeathFolD
  */
+@RegistrationClass
 public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
-		//RenderingRegistry.registerEntityRenderingHandler(EntityTest.class, new RenderTest());
-		EntityRegistry.registerModEntity(EntityTest.class, "aaa", 3, 
-				AcademyCraftMod.INSTANCE, 60, 2, true);
-
-		//don't put reg here!
-		//REPLY: Just for temp testing purpose, will remove later
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ package cn.academy.core.client.gui.dev;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
@@ -32,22 +32,21 @@ public class DiagActionConfirm extends DialogueBase {
 		this.setTitle(ACLangs.actionConfirm());
 		
 		//Init widgets
-		new ButtonNormal("confirm", 25, 48) {
+		new ButtonNormal("confirm", 25 * SCALE, 48 * SCALE) {
 			{
-				this.setTextProps(ACLangs.confirm(), 6);
+				this.setTextProps(ACLangs.confirm(), 6 * SCALE);
 			}
 			@Override
 			public void onMouseDown(double mx, double my) {
 				result = true;
 				onConfirm();
-				System.out.println("Mew");
 				DiagActionConfirm.this.dispose();
 			}
 		};
 		
-		new ButtonNormal("cancel", 65, 48) {
+		new ButtonNormal("cancel", 65 * SCALE, 48 * SCALE) {
 			{
-				this.setTextProps(ACLangs.cancel(), 6);
+				this.setTextProps(ACLangs.cancel(), 6 * SCALE);
 			}
 			@Override
 			public void onMouseDown(double mx, double my) {
@@ -67,10 +66,10 @@ public class DiagActionConfirm extends DialogueBase {
 		super.draw(mx, my, hover);
 		TrueTypeFont font = TextUtils.FONT_CONSOLAS_64;
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5, 15, 7, TrueTypeFont.ALIGN_CENTER);
-		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5, 35.5, 7, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5 * SCALE, 15 * SCALE, 7 * SCALE, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5 * SCALE, 35.5 * SCALE, 7 * SCALE, TrueTypeFont.ALIGN_CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		TextUtils.drawText(font, devAction.getActionInfo(dev.data), 57.5, 24, 9, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, devAction.getActionInfo(dev.data), 57.5 * SCALE, 24 * SCALE, 9 * SCALE, TrueTypeFont.ALIGN_CENTER);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	
@@ -81,10 +80,10 @@ public class DiagActionConfirm extends DialogueBase {
 	public void onConfirm() {
 		//Sync to the server
 		dev.dev.startStimulating(id, par);
-		AcademyCraftMod.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
+		AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
 		
 		//Open the progress gui
-		new DiagStimulate(dev);
+		new DiagStimulate(dev, devAction);
 	}
 
 }

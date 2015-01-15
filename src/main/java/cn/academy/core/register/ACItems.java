@@ -3,7 +3,7 @@ package cn.academy.core.register;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.misc.client.render.RendererCoin;
@@ -44,14 +44,14 @@ public class ACItems {
 	};
 
 	@RegItem
-	public static ItemCapsule capsuleH = new ItemCapsule(1);
+	public static ItemCapsule capsuleA = new ItemCapsule(1);
 	@RegItem
 	public static ItemCapsule capsuleM = new ItemCapsule(2);
 	@RegItem
 	public static ItemCapsule capsuleL = new ItemCapsule(3);
 
 	@RegItem
-	public static ItemTablet tabletH = new ItemTablet(1);
+	public static ItemTablet tabletA = new ItemTablet(1);
 	@RegItem
 	public static ItemTablet tabletM = new ItemTablet(2);
 	@RegItem
@@ -61,7 +61,7 @@ public class ACItems {
 	public static ItemNeedle needle;
 
 	@RegItem
-	public static ItemEnergyCrystal EnergyCrystal;
+	public static ItemEnergyCrystal energyCrystal;
 	
 	@RegItem
 	public static ItemModuleAttached adEnergyCard;
@@ -69,34 +69,34 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("aluminumingot")
 	@RegItem.OreDict("ingotAluminum")
-	public static Item AluminumIngot;
+	public static Item ingotAl;
 	
 	@RegItem
 	@RegItem.UTName("copperingot")
 	@RegItem.OreDict("ingotCopper")
-	public static Item CopperIngot;
+	public static Item ingotCu;
 	
 	@RegItem
 	@RegItem.UTName("steelingot")
 	@RegItem.OreDict("ingotRefinedIron")
-	public static Item SteelIngot;
+	public static Item ingotSteel;
 	
 	@RegItem
 	@RegItem.UTName("tiningot")
 	@RegItem.OreDict("ingotTin")
-	public static Item TinIngot;
+	public static Item ingotTin;
 	
 	@RegItem
 	@RegItem.UTName("siliconrod")
-	public static Item SiliconRod;
+	public static Item siliconRod;
 	
 	@RegItem
 	@RegItem.UTName("coppercoil")
-	public static Item CopperCoil;
+	public static Item copperCoil;
 	
 	@RegItem
 	@RegItem.UTName("corebearing")
-	public static Item CoreBearing;
+	public static Item coreBearing;
 	
 	@RegItem()
 	@RegItem.HasRender

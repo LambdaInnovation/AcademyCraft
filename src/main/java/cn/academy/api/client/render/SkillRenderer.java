@@ -39,6 +39,7 @@ public class SkillRenderer {
 	/**
 	 * Draw the effect of player surroundings. The origin point is player's center(at feet pos),
 	 * a ideal render range would be (-0.5, 0, -0.5) to (0.5, 1, 0.5).
+	 * The region is automatically rotated so the player facing direction is always (0, 0, 1).
 	 */
 	@SideOnly(Side.CLIENT)
 	public void renderSurroundings(EntityPlayer player, SkillState state) {

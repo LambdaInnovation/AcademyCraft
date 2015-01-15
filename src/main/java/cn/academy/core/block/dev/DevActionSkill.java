@@ -25,13 +25,21 @@ public class DevActionSkill implements IDevAction {
 
 	@Override
 	public void onActionFinished(AbilityData data) {
-		// TODO Auto-generated method stub
-
+		data.setSkillLevel(skillID, data.getSkillLevel(skillID) + 1);
 	}
 
 	@Override
 	public String getActionInfo(AbilityData data) {
-		return ACLangs.learnSkill() + data.getSkill(skillID).getDisplayName();
+		return (data.isSkillLearned(skillID) ? ACLangs.upgradeSkill() : ACLangs.learnSkill()) + data.getSkill(skillID).getDisplayName();
+	}
+
+	@Override
+	public double getSuccessfulRate(AbilityData data) {
+		return Math.max(0.15, (0.8 - 0.15 * data.getLevelID())) * Math.pow(1 - dropRate(data.getLevelID()), data.getSkillLevel(skillID));
+	}
+	
+	private double dropRate(int lvid) {
+		return Math.min(0.06, 0.01 + lvid * 0.01);
 	}
 
 }

@@ -1,4 +1,4 @@
-package cn.academy.api.ability;
+package cn.academy.core.register;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import cn.academy.api.ability.Abilities;
+import cn.academy.api.ability.Category;
 import cn.annoreg.core.AnnotationData;
 import cn.annoreg.core.RegistryType;
 import cn.annoreg.core.RegistryTypeDecl;
@@ -31,7 +33,6 @@ public class AbilityRegistration extends RegistryType {
 
 	@Override
 	public boolean registerField(AnnotationData data) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

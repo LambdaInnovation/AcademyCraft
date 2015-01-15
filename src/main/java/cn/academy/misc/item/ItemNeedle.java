@@ -10,7 +10,7 @@
  */
 package cn.academy.misc.item;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.item.Item;
 
 /**
@@ -21,7 +21,7 @@ public class ItemNeedle extends Item {
 
 	public ItemNeedle() {
 		setUnlocalizedName("ac_needle");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		setTextureName("academy:needle");
 	}
 	

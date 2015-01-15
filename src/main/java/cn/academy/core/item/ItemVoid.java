@@ -21,8 +21,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The 'void' item. This hacking item replaces player's inventory when and only when
- * player is using ability and inventory is empty, in client side. The hacking is then
- * used in RenderVoid to support hand motion and ability effect rendering.
+ * player is using ability and inventory is empty, on client side. The hacking is then
+ * used by RenderVoid to support hand motion and ability effect rendering.
  * @author WeathFolD
  */
 public class ItemVoid extends Item {

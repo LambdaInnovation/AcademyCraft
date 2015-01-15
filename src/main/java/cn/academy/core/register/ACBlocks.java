@@ -28,14 +28,14 @@ public class ACBlocks {
 	
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")
-	public static ACBlockOre copperore = new ACBlockOre("copperore", 1);
+	public static ACBlockOre oreCopper = new ACBlockOre("copperore", 1);
 	
 	@RegBlock
 	@RegBlock.OreDict("oreTin")
-	public static ACBlockOre tinore = new ACBlockOre("tinore", 1);
+	public static ACBlockOre oreTin = new ACBlockOre("tinore", 1);
 	
 	@RegBlock
 	@RegBlock.OreDict("oreAluminum")
-	public static ACBlockOre aluminumore = new ACBlockOre("aluminumore", 1);
+	public static ACBlockOre oreAl = new ACBlockOre("aluminumore", 1);
 	
 }

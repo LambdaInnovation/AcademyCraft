@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.IShootable;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.util.GenericUtils;
 
@@ -26,12 +26,13 @@ import cn.liutils.util.GenericUtils;
  * ~\(≧▽≦)/~
  * @author KSkun, WeAthFolD
  */
-public class ItemCoin extends Item implements IShootable {
+public class ItemCoin extends Item {
 	
 	public ItemCoin() {
 		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin-front");
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
+		//setMaxDamage(0);
 	}
 	
     @Override
@@ -56,13 +57,14 @@ public class ItemCoin extends Item implements IShootable {
     {
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
     	if(nbt.getBoolean("throwing")) return stack;
-    	//System.out.println("Spawn");
-    	EntityThrowingCoin etc = world.isRemote ? 
-    		new EntityThrowingCoin.AvoidSync(player, stack) :
-    		new EntityThrowingCoin(player, stack);
+    	//Spawn at both side, not syncing for render effect purpose
+    	EntityThrowingCoin etc = new EntityThrowingCoin(player, stack);
     	world.spawnEntityInWorld(etc);
     	nbt.setInteger("entID", etc.getEntityId());
     	nbt.setBoolean("throwing", true);
+    	if(!player.capabilities.isCreativeMode) {
+    		--stack.stackSize;
+    	}
         return stack;
     }
 
@@ -73,25 +75,14 @@ public class ItemCoin extends Item implements IShootable {
 	private EntityThrowingCoin getThrowingEntity(World world, ItemStack is) {
 		NBTTagCompound nbt = is.getTagCompound();
 		Entity e = world.getEntityByID(nbt.getInteger("entID"));
+		
 		if(e == null || !(e instanceof EntityThrowingCoin))
 			return null;
 		return (EntityThrowingCoin) e;
 	}
 	
-	@Override
-	public boolean inProgress(EntityPlayer ep, ItemStack stack) {
-		return GenericUtils.loadCompound(stack).getBoolean("throwing");
-	}
-	
-	@Override
-	public double getProgress(EntityPlayer ep, ItemStack stack) {
-		EntityThrowingCoin etc = getThrowingEntity(ep.worldObj, stack);
-		return etc == null ? 0.0 : etc.getProgress();
-	}
-
-	@Override
-	public boolean isAcceptable(double prog) {
-		return prog >= 0.75 && prog <= 0.95;
+	public boolean inProgress(ItemStack is) {
+		return GenericUtils.loadCompound(is).getBoolean("throwing");
 	}
 
 }

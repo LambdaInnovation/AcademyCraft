@@ -2,7 +2,7 @@ package cn.academy.misc.block;
 
 import java.util.Random;
 
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -18,7 +18,7 @@ public class ACBlockOre extends Block{
 	
 	public ACBlockOre(String Blockname,int HarvestLevel){
 		super(Material.rock);
-		setCreativeTab(AcademyCraftMod.cct);
+		setCreativeTab(AcademyCraft.cct);
 		this.setHarvestLevel("pickaxe", HarvestLevel);
 		setHardness(4.0F);
 		setBlockName(Blockname);

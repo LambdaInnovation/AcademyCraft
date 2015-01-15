@@ -3,7 +3,6 @@
  */
 package cn.academy.core.block.dev;
 
-import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.tile.IEnergySink;
 
 import java.lang.reflect.Constructor;
@@ -12,26 +11,25 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
-import cn.academy.core.proxy.ACCommonProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.api.EntityManipHandler;
+import cn.liutils.template.block.TileGenericSink;
+import cn.liutils.util.DebugUtils;
+import cn.liutils.util.ExpUtils;
+import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,34 +40,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends TileEntity implements IEnergySink {
-	
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderDeveloper renderer;
-	
-    @RegGuiHandler
-    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-    	@SideOnly(Side.CLIENT)
-    	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
-			TileEntity te = world.getTileEntity(x, y, z);
-			if(te == null || !(te instanceof TileDeveloper)) {
-				AcademyCraftMod.log.error("Failed opening developer gui: no TileDeveloper found");
-				return null;
-			}
-			return new GuiDeveloper((TileDeveloper) te);
-    	}
-    	
-    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-    		return null;
-    	}
-    };
+public class TileDeveloper extends TileGenericSink implements IEnergySink {
 
-	public static final int ID_LEVEL_UPGRADE = 0, ID_SKILL_ACQUIRE = 1, ID_DEVELOP = 2;
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
 	
 	//Stimulation
+	public static final int ID_LEVEL_UPGRADE = 0, ID_SKILL_ACQUIRE = 1, ID_DEVELOP = 2;
 	public static final int PER_STIM_TIME = 10;
 	
 	private static final List<Constructor<? extends IDevAction>> devActions = new ArrayList<Constructor<? extends IDevAction>>();
@@ -78,6 +55,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		try {
 			devActions.add(DevActionLevel.class.getConstructor(Integer.TYPE));
 			devActions.add(DevActionSkill.class.getConstructor(Integer.TYPE));
+			devActions.add(DevActionDevelop.class.getConstructor(Integer.TYPE));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -85,8 +63,6 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	
 	//State for synchronization
 	//Action done all in server, syncs to client
-	public double curEnergy;
-	
 	public boolean isStimulating;
 	public int maxStimTimes;
 	
@@ -98,135 +74,14 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	//Internal States
 	private EntityPlayer user;
 	private int updateCount;
-	private boolean init;
 	private int stimTicker;
 	private static final Random RNG = new Random();
 
-	public TileDeveloper() { }
+	public TileDeveloper() {}
 	
-	public static IDevAction getAction(int i, int par) {
-		IDevAction res = null;
-		try {
-			res = devActions.get(i).newInstance(par);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-	
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void updateEntity() {
-		if(!worldObj.isRemote && !init) {
-			init = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-		}
-		
-		if(!isHead())
-			return;
-		
-//		if(this.isStimulating) {
-//			System.out.println("Stimulating " + worldObj.isRemote);
-//		}
-		
-		//TODO: Move to GUI event listening
-		GuiScreen gs = Minecraft.getMinecraft().currentScreen;
-		if(gs == null || !(gs instanceof GuiDeveloper)) {
-			userQuit();
-		}
-		
-		++updateCount;
-		if(!worldObj.isRemote && user != null) {
-			//HeartBeat update
-			if(isStimulating) {
-				updateStimulate();
-			}
-			
-			if(updateCount >= UPDATE_RATE) {
-				updateCount = 0;
-				sync();
-			}
-		}
-	}
-	
-	private void updateStimulate() {
-		if(user == null) {
-			isStimulating = false;
-			return;
-		}
-		++stimTicker;
-		if(stimTicker == PER_STIM_TIME) {
-			stimTicker = 0;
-			if(!perConsume()) {
-				isStimulating = false;
-				return;
-			}
-			if(RNG.nextDouble() < getSuccessProb()) {
-				++stimSuccess;
-				if(stimSuccess == maxStimTimes) {
-					action.onActionFinished(AbilityDataMain.getData(user));
-					isStimulating = false;
-				}
-			} else {
-				++stimFailure;
-			}
-		}
-	}
-	
-	private boolean perConsume() {
-		return true;
-	}
-	
-	private double getEUConsume() {
-		return 0;
-	}
-	
-	private float getExpConsume() {
-		return 0F;
-	}
-	
-	public double getSuccessProb() {
-		return 0.7;
-	}
-	
-	private TileDeveloper getHead() {
-		Block b = getBlockType();
-		if(!(b instanceof BlockDeveloper))
-			return null;
-		BlockDeveloper bd = (BlockDeveloper) b;
-		if(!isHead()) {
-			int[] coords = bd.getOrigin(worldObj, xCoord, yCoord, zCoord, getBlockMetadata());
-			TileEntity td = worldObj.getTileEntity(xCoord, yCoord, zCoord);
-			if(td == null || !(td instanceof TileDeveloper)) { //Silent error processing (Is it good?)
-				return this;
-			}
-			return (TileDeveloper) td;
-		}
-		return this;
-	}
-	
-	private boolean isHead() {
-		return getBlockMetadata() >> 2 == 0;
-	}
-	
+	//Sit and use API
 	/**
-	 * Start stimulating at server with the given action ID.
-	 */
-	public void startStimulating(int id, int par) {
-		if(user == null) {
-			throw new RuntimeException("Developing without user");
-		}
-		action = getAction(id, par);
-		AbilityData data = AbilityDataMain.getData(user);
-		isStimulating = true;
-		maxStimTimes = action.getExpectedStims(data);
-		stimSuccess = stimFailure = 0;
-		sync(); //Force update if server
-	}
-	
-	/**
-	 * 尝试让某个玩家使用开发机
-	 * @param player
+	 * Let a player use this ability dev.
 	 * @return if attempt successful
 	 */
 	public boolean use(EntityPlayer player) {
@@ -245,23 +100,164 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 		return user;
 	}
 	
-	private void sync() {
-		if(!worldObj.isRemote) {
-			//System.out.println("sync");
-			AcademyCraftMod.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
+	//Stimulation API
+	public static IDevAction getAction(int i, int par) {
+		IDevAction res = null;
+		try {
+			res = devActions.get(i).newInstance(par);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	private void updateStimulate() {
+		if(user == null) {
+			isStimulating = false;
+			return;
+		}
+		++stimTicker;
+		if(stimTicker == PER_STIM_TIME) {
+			stimTicker = 0;
+			if(!doConsume()) {
+				isStimulating = false;
+				return;
+			}
+			AbilityData data = AbilityDataMain.getData(user);
+			if(RNG.nextDouble() < getSuccessProb(data)) {
+				++stimSuccess;
+				if(stimSuccess == maxStimTimes) {
+					action.onActionFinished(AbilityDataMain.getData(user));
+					isStimulating = false;
+				}
+			} else {
+				++stimFailure;
+			}
 		}
 	}
 	
-	//Energy
+	/**
+	 * Handle the consumption of a single stimulation.
+	 * @return if consumed successfully
+	 */
+	private boolean doConsume() {
+		double ceu = getEUConsume();
+		int cexp = getExpConsume();
+		if(curEnergy < ceu || !ExpUtils.consumeExp(user, cexp))
+			return false;
+		
+		curEnergy -= ceu;
+		return true;
+	}
 	
+	/**
+	 * Get the basic EU consume per stimulation.
+	 */
+	public double getEUConsume() {
+		return 2718;
+	}
+	
+	/**
+	 * Get the basic EXP consume per stimulation.
+	 */
+	public int getExpConsume() {
+		return 18;
+	}
+	
+	public double getSuccessProb(AbilityData data) {
+		return getSuccessfulProb(action, data);
+	}
+	
+	public double getSuccessfulProb(IDevAction action, AbilityData data) {
+		return getSyncRate() * action.getSuccessfulRate(data);
+	}
+	
+	public boolean isStimSuccessful() {
+		return this.stimSuccess == this.maxStimTimes;
+	}
+	
+	public Pair<Integer, Double> getExpectation(IDevAction act, AbilityData data) {
+		double prob = getSuccessfulProb(act, data);
+		int times = act.getExpectedStims(data);
+		return new Pair<Integer, Double>((int) (times * getExpConsume() / prob), times * getEUConsume() / prob);
+	}
+	
+	/**
+	 * Start stimulating at server with the given action ID.
+	 */
+	public void startStimulating(int id, int par) {
+		if(user == null) {
+			throw new RuntimeException("Developing without user");
+		}
+		if(id == -1) {
+			isStimulating = false;
+			return;
+		}
+		action = getAction(id, par);
+		AbilityData data = AbilityDataMain.getData(user);
+		isStimulating = true;
+		maxStimTimes = action.getExpectedStims(data);
+		stimSuccess = stimFailure = 0;
+		sync(); //Force update if server
+	}
+	
+	public float getSyncRateForDisplay() {
+		return (float)getSyncRate() * 100F;
+	}
+	
+	public double getSyncRate() {
+		return 1.0;
+	}
+	
+	//Internal update
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void updateEntity() {
+		super.updateEntity();
+		if(!isHead())
+			return;
+		
+		++updateCount;
+		if(!worldObj.isRemote && user != null) {
+			//HeartBeat update
+			if(isStimulating) {
+				updateStimulate();
+			}
+			
+			if(updateCount >= UPDATE_RATE) {
+				updateCount = 0;
+				sync();
+			}
+		}
+	}
+	
+	private void sync() {
+		if(!worldObj.isRemote) {
+			AcademyCraft.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
+		}
+	}
+	
+	private TileDeveloper getHead() {
+		Block b = getBlockType();
+		if(!(b instanceof BlockDeveloper))
+			return this;
+		BlockDeveloper bd = (BlockDeveloper) b;
+		TileEntity res = bd.getOriginTileEntity(getWorldObj(), xCoord, yCoord, zCoord, getBlockMetadata());
+		if(res == null || !(res instanceof TileDeveloper)) {
+			AcademyCraft.log.error("Didn't find the corresponding head for developer at " 
+					+ DebugUtils.formatArray(xCoord, yCoord, zCoord) + " " + worldObj.isRemote);
+			return this;
+		}
+		return (TileDeveloper) res;
+	}
+	
+	private boolean isHead() {
+		return getBlockMetadata() >> 2 == 0;
+	}
+	
+	//Energy
 	public double getMaxEnergy() {
 		return INIT_MAX_ENERGY;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter,
-			ForgeDirection direction) {
-		return true;
 	}
 
 	@Override
@@ -270,7 +266,7 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	}
 	
 	private double realDEU() {
-		return getMaxEnergy() - curEnergy;
+		return super.demandedEnergyUnits();
 	}
 
 	@Override
@@ -279,37 +275,28 @@ public class TileDeveloper extends TileEntity implements IEnergySink {
 	}
 	
 	private double realIEU(ForgeDirection directionFrom, double amount) {
-		curEnergy += amount;
-		double max = getMaxEnergy();
-		double lo = curEnergy - max;
-		if(lo > 0) {
-			curEnergy = max;
-			return lo;
-		}
-		return 0;
-	}
-
-	@Override
-	public int getMaxSafeInput() {
-		return 512;
+		return super.injectEnergyUnits(directionFrom, amount);
 	}
 	
-	public float syncRateDisplay() {
-		return 27.1828F;
-	}
+	//Registry
+	@SideOnly(Side.CLIENT)
+	@RegTileEntity.Render
+	public static RenderDeveloper renderer;
 	
-	public double getSyncRate() {
-		return 100;
-	}
-	
-	//Save and load
-    public void readFromNBT(NBTTagCompound nbt) {
-    	super.readFromNBT(nbt);
-    	curEnergy = nbt.getDouble("energy");
-    }
-    
-    public void writeToNBT(NBTTagCompound nbt) {
-    	super.writeToNBT(nbt);
-    	nbt.setDouble("energy", curEnergy);
-    }
+    @RegGuiHandler
+    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+    	@SideOnly(Side.CLIENT)
+    	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if(te == null || !(te instanceof TileDeveloper)) {
+				AcademyCraft.log.error("Failed opening developer gui: no TileDeveloper found");
+				return null;
+			}
+			return new GuiDeveloper((TileDeveloper) te);
+    	}
+    	
+    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+    		return null;
+    	}
+    };
 }

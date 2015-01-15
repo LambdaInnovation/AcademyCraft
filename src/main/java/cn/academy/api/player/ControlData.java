@@ -11,7 +11,7 @@ import cn.academy.api.player.lock.LockBase;
 import cn.academy.api.player.lock.LockBase;
 import cn.academy.api.player.lock.LockBase.LockType;
 import cn.academy.api.player.lock.LockPosition;
-import cn.academy.core.AcademyCraftMod;
+import cn.academy.core.AcademyCraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -115,7 +115,7 @@ public class ControlData implements IExtendedEntityProperties {
 			case CONTROL_JUMP:
 				break;
 			default:
-				AcademyCraftMod.log.warn("Not supported yet: " + lt);
+				AcademyCraft.log.warn("Not supported yet: " + lt);
 			}
 		}
 		else
@@ -135,7 +135,7 @@ public class ControlData implements IExtendedEntityProperties {
 	public void saveNBTData(NBTTagCompound tag) {
 		for (Entry<LockType, LockBase> e : lock.entrySet())
 			e.getValue().saveNBTData(tag);
-		AcademyCraftMod.log.info("nbtsave");
+		AcademyCraft.log.info("nbtsave");
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class ControlData implements IExtendedEntityProperties {
 	@Override
 	public void init(Entity entity, World world) {
 		if (!(entity instanceof EntityPlayer)) {
-			AcademyCraftMod.log.warn("Registering ControlData for a(n)" + entity.getClass().getName());
+			AcademyCraft.log.warn("Registering ControlData for a(n)" + entity.getClass().getName());
 			return;
 		}
 		player = (EntityPlayer) entity;
