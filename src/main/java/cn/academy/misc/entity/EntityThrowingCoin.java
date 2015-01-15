@@ -22,7 +22,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEntity(renderName = "renderer")
+@RegEntity
+@RegEntity.HasRender
 public class EntityThrowingCoin extends EntityX {
 	
 	public static class AvoidSync extends EntityThrowingCoin { //user client-side generate
@@ -66,6 +67,7 @@ public class EntityThrowingCoin extends EntityX {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@RegEntity.Render
 	public static RendererCoin renderer;
 	
 	private static final int MAXLIFE = 120;

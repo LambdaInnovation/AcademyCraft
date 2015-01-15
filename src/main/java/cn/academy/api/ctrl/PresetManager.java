@@ -74,7 +74,7 @@ public class PresetManager {
 	 */
 	void save() {
 		//First check the nextWorldId
-		if (worldId <= nextWorldId) {
+		if (worldId == nextWorldId) {
 			++nextWorldId;
 			AcademyCraftMod.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).set(nextWorldId);
 		}

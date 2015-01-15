@@ -11,8 +11,6 @@ import cn.academy.misc.block.elec.BlockWindGenerator;
 import cn.academy.misc.block.elec.TileSolarGenerator;
 import cn.academy.misc.block.elec.TileWindGenerator;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.core.ctor.Arg;
-import cn.annoreg.core.ctor.Ctor;
 import cn.annoreg.mc.RegBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -30,17 +28,14 @@ public class ACBlocks {
 	
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")
-	@Ctor({@Arg(Str = "copperore"), @Arg(Int = 1)})
-	public static ACBlockOre copperore;
+	public static ACBlockOre copperore = new ACBlockOre("copperore", 1);
 	
 	@RegBlock
 	@RegBlock.OreDict("oreTin")
-	@Ctor({@Arg(Str = "tinore"), @Arg(Int = 1)})
-	public static ACBlockOre tinore;
+	public static ACBlockOre tinore = new ACBlockOre("tinore", 1);
 	
 	@RegBlock
 	@RegBlock.OreDict("oreAluminum")
-	@Ctor({@Arg(Str = "aluminumore"), @Arg(Int = 1)})
-	public static ACBlockOre aluminumore;
+	public static ACBlockOre aluminumore = new ACBlockOre("aluminumore", 1);
 	
 }

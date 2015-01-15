@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 import cn.annoreg.core.AnnotationData;
 import cn.annoreg.core.RegistryType;
 import cn.annoreg.core.RegistryTypeDecl;
-import cn.annoreg.core.ctor.ConstructorUtils;
 
 @RegistryTypeDecl
 public class AbilityRegistration extends RegistryType {
@@ -24,9 +23,9 @@ public class AbilityRegistration extends RegistryType {
 	}
 
 	@Override
-	public boolean registerClass(AnnotationData data) {
+	public boolean registerClass(AnnotationData data) throws Exception {
 		Class<? extends Category> clazz = (Class<? extends Category>) data.getTheClass();
-		Abilities.registerCat((Category) ConstructorUtils.newInstance(clazz));
+		Abilities.registerCat((Category) clazz.newInstance());
 		return true;
 	}
 

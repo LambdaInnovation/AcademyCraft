@@ -14,9 +14,8 @@ import cn.academy.misc.item.ItemEnergyCrystal;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
+import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.core.ctor.Arg;
-import cn.annoreg.core.ctor.Ctor;
 import cn.annoreg.mc.RegItem;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -26,44 +25,37 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ACItems {
 	
 	@RegItem
-	@RegItem.UTName
+	@RegItem.UTName("logo")
 	public static Item logo;
 	
 	@RegItem
-	@Ctor(@Arg(Int = 0))
-	public static ACRecord record0;
+	public static ACRecord record0 = new ACRecord(0);
 	@RegItem
-	@Ctor(@Arg(Int = 1))
-	public static ACRecord record1;
+	public static ACRecord record1 = new ACRecord(1);
 	@RegItem
-	@Ctor(@Arg(Int = 2))
-	public static ACRecord record2;
+	public static ACRecord record2 = new ACRecord(2);
 	
-	@RegItem(renderName = "renderCoin")
-	public static ItemCoin coin;
-	
-	@SideOnly(Side.CLIENT)
-	public static RendererCoin.ItemRender renderCoin;
+	@RegItem
+	@RegItem.HasRender
+	public static ItemCoin coin = new ItemCoin() {
+		@RegItem.Render
+		@SideOnly(Side.CLIENT)
+		public RendererCoin.ItemRender renderCoin;
+	};
 
 	@RegItem
-	@Ctor(@Arg(Int = 1))
-	public static ItemCapsule capsuleH;
+	public static ItemCapsule capsuleH = new ItemCapsule(1);
 	@RegItem
-	@Ctor(@Arg(Int = 2))
-	public static ItemCapsule capsuleM;
+	public static ItemCapsule capsuleM = new ItemCapsule(2);
 	@RegItem
-	@Ctor(@Arg(Int = 3))
-	public static ItemCapsule capsuleL;
+	public static ItemCapsule capsuleL = new ItemCapsule(3);
 
 	@RegItem
-	@Ctor(@Arg(Int = 1))
-	public static ItemTablet tabletH;
+	public static ItemTablet tabletH = new ItemTablet(1);
 	@RegItem
-	@Ctor(@Arg(Int = 2))
-	public static ItemTablet tabletM;
+	public static ItemTablet tabletM = new ItemTablet(2);
 	@RegItem
-	@Ctor(@Arg(Int = 3))
-	public static ItemTablet tabletL;
+	public static ItemTablet tabletL = new ItemTablet(3);
 	
 	@RegItem
 	public static ItemNeedle needle;
@@ -106,10 +98,14 @@ public class ACItems {
 	@RegItem.UTName("corebearing")
 	public static Item CoreBearing;
 	
-	@RegItem(name = "void", renderName = "renderVoid")
-	public static ItemVoid ivoid;
+	@RegItem()
+	@RegItem.HasRender
+	@RegWithName("void")
+	public static ItemVoid ivoid = new ItemVoid() {
+		@SideOnly(Side.CLIENT)
+		@RegItem.Render
+		public RenderVoid renderVoid;
+	};
 	
-	@SideOnly(Side.CLIENT)
-	public static RenderVoid renderVoid;
 	
 }

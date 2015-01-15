@@ -40,10 +40,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegTileEntity(renderName = "renderer")
+@RegTileEntity
+@RegTileEntity.HasRender
 public class TileDeveloper extends TileEntity implements IEnergySink {
 	
 	@SideOnly(Side.CLIENT)
+	@RegTileEntity.Render
 	public static RenderDeveloper renderer;
 	
     @RegGuiHandler

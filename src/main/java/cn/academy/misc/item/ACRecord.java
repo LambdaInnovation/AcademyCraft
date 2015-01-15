@@ -13,7 +13,6 @@ package cn.academy.misc.item;
 import java.util.List;
 
 import cn.academy.core.AcademyCraftMod;
-import cn.annoreg.core.ctor.Constructible;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -35,7 +34,6 @@ public class ACRecord extends ItemRecord {
 	private static final String[] rnames = {"ac1", "ac2", "ac3"};
 	private static final String[] unames = {"ac_record1", "ac_record2", "ac_record3"};
 	
-	@Constructible
 	public ACRecord(int subID) {
 		this(rnames[subID], subID);
 		this.setUnlocalizedName(unames[subID]);
