@@ -11,7 +11,6 @@ import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
-import cn.liutils.api.register.LIGuiHandler;
 import cn.liutils.core.LIUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -74,33 +73,24 @@ public class AcademyCraft {
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		
+		RegistrationManager.INSTANCE.registerAll(this, "PreInit");
+		
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
-		RegistrationManager.INSTANCE.registerAll(AcademyCraft.INSTANCE, LIUtils.REGISTER_TYPE_AUXGUI);
-		RegistrationManager.INSTANCE.registerAll(AcademyCraft.INSTANCE, LIUtils.REGISTER_TYPE_KEYHANDLER);
+		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-        RegistrationManager.INSTANCE.registerAll(this, "Block");
-        RegistrationManager.INSTANCE.registerAll(this, "Item");
-        RegistrationManager.INSTANCE.registerAll(this, "TileEntity");
-        RegistrationManager.INSTANCE.registerAll(this, "Entity");
-        RegistrationManager.INSTANCE.registerAll(this, "SubmoduleInit");
-        RegistrationManager.INSTANCE.registerAll(this, "EventHandler");
-        RegistrationManager.INSTANCE.registerAll(this, "MessageHandler");
-        RegistrationManager.INSTANCE.registerAll(this, "GuiHandler");
-        
-        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_AUXGUI);
-        
-        RegistrationManager.INSTANCE.registerAll(this, "Ability");
+        RegistrationManager.INSTANCE.registerAll(this, "Init");
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+        RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 	}
 	
 	@EventHandler()
 	public void serverStarting(FMLServerStartingEvent event) {
-		RegistrationManager.INSTANCE.registerAll(this, "Command");
+        RegistrationManager.INSTANCE.registerAll(this, "StartServer");
 	}
 }

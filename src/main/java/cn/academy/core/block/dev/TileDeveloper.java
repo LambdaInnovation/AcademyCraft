@@ -38,9 +38,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegTileEntity(renderName = "renderer")
+@RegTileEntity
+@RegTileEntity.HasRender
 public class TileDeveloper extends TileGenericSink implements IEnergySink {
-	
+
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
 	
@@ -279,6 +280,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 	
 	//Registry
 	@SideOnly(Side.CLIENT)
+	@RegTileEntity.Render
 	public static RenderDeveloper renderer;
 	
     @RegGuiHandler

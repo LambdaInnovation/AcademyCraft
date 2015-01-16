@@ -11,7 +11,6 @@
 package cn.academy.misc.item;
 
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.ctor.Constructible;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
@@ -32,10 +31,7 @@ public class ItemTablet extends Item {
 	 * @param subID
 	 * 		metadata
 	 * 
-	 * @param capsuleID
-	 *		metadata2
 	 */
-	@Constructible
 	public ItemTablet(int subID) {
 		setCreativeTab(AcademyCraft.cct);
 		tabletID = subID;

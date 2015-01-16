@@ -21,10 +21,12 @@ import cn.weaponmod.api.damage.Damage;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEntity(renderName = "renderer")
+@RegEntity
+@RegEntity.HasRender
 public class EntityRailgun extends EntityRay {
 	
 	@SideOnly(Side.CLIENT)
+	@RegEntity.Render
 	public static RenderRailgun renderer;
 
 	private class RailgunDamage extends Damage {

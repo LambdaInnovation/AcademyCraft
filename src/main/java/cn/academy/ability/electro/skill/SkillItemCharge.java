@@ -83,12 +83,13 @@ public class SkillItemCharge extends SkillBase {
 		
 	}
 	
-	@RegEntity(renderName = "renderer")
-	@RegistrationClass
+	@RegEntity(clientOnly = true)
+	@RegEntity.HasRender
 	public static class EntityTest extends EntityX {
 		
 		@SideOnly(Side.CLIENT)
-		public static RenderTest renderer;
+		@RegEntity.Render
+		public static RenderTest renderer = new RenderTest();
 		
 		public EntityTest(EntityPlayer ep) {
 			super(ep.worldObj);

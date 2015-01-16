@@ -1,11 +1,15 @@
 package cn.academy.ability.meltdowner.skill;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.meltdowner.entity.EntityElecDart;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
+import cn.academy.core.proxy.ACClientProps;
 
 public class SkillElecDart extends SkillBase {
 	
@@ -46,4 +50,13 @@ public class SkillElecDart extends SkillBase {
 		});
 	}
 	
+	public String getInternalName() {
+		return "md_elecdart";
+	}
+
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getLogo() {
+		return ACClientProps.MD_LOGO;//TODO skill logo
+	}
+
 }
