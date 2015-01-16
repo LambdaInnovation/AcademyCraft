@@ -17,7 +17,7 @@ public class PieceSmallArc extends Piece {
 	
 	private static final ResourceLocation[] ANIM = ACClientProps.ANIM_SMALL_ARC;
 	
-	private int waitFrom = 100, waitTo = 150; //The random waiting time interval.
+	private int waitFrom = 50, waitTo = 120; //The random waiting time interval.
 	private long lastChangeTime;
 	private int changeWait;
 	private int curIndex;
