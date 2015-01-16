@@ -3,136 +3,153 @@
  */
 package cn.academy.misc.entity;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.liutils.util.DebugUtils;
+import cn.liutils.api.entityx.EntityX;
+import cn.liutils.api.entityx.MotionHandler;
+import cn.liutils.api.entityx.motion.CollisionCheck;
+import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
-import cn.weaponmod.api.damage.Damage;
-import cn.weaponmod.api.damage.DmgSimple;
 
 /**
+ * EntityRay is a entity class representing 'ray' like entities. You can specify the position, length, facing direction of
+ * the ray. Also you can make the ray follow a creator EntityLivingBase(usually EntityPlayer)'s position and orientation.
+ * For its associated renderer, see RenderRay.
  * @author WeathFolD
  */
-public abstract class EntityRay extends Entity {
+public class EntityRay extends EntityX {
 	
-	int HIT_WAIT = 30;
-	protected Damage damage;
-	public double curX, curY, curZ;
-	public boolean hit = false;
-	public int tickAfterHit = 0;
-
-	EntityLivingBase thrower; // thrower, if any
+	Motion3D motion;
 	
-	public EntityRay(World world, Motion3D pos, Damage dmg) {
-		super(world);
-		pos.applyToEntity(this);
-		damage = dmg;
-		curX = posX;
-		curY = posY;
-		curZ = posZ;
-		setVelocity(3.0F);
+	EntityLivingBase thrower;
+	boolean follow = false;
+	
+	boolean peformTrace = false;
+	double traceDist;
+	
+	public EntityRay(EntityLivingBase creator) {
+		this(creator, true);
+	}
+	
+	/**
+	 * Use this ctor if the ray has a creator.
+	 * @param world
+	 * @param creator
+	 * @param follow If the ray's position and heading will be calculate every tick according to the player.
+	 */
+	public EntityRay(EntityLivingBase creator, boolean follow) {
+		this(creator.worldObj, new Motion3D(creator, true));
+		thrower = creator;
+		this.follow = follow;
+	}
+	
+	/**
+	 * Init an ray with fixed position and facing direction.
+	 */
+	public EntityRay(World world, Motion3D pos) {
+		this(world);
+		motion = pos;
+		motion.applyToEntity(this);
+		this.setCurMotion(new RayUpdate());
 	}
 
-	public EntityRay(EntityLivingBase elb, Damage dmg) {
-		this(elb.worldObj, new Motion3D(elb, true), dmg);
-		thrower = elb;
-	}
-	
-	public EntityRay(World world, Motion3D pos, EntityLivingBase elb, float dmg) {
-		this(world, pos, new DmgSimple(DamageSource.causeMobDamage(elb), dmg));
-		thrower = elb;
-	}
-	
-	public EntityRay(EntityLivingBase elb, float dmg) {
-		this(elb, new DmgSimple(DamageSource.causeMobDamage(elb), dmg));
-	}
-	
+	/**
+	 * Client-side ctor.
+	 */
 	public EntityRay(World world) {
 		super(world);
+		this.removeDaemonHandler(VelocityUpdate.ID);
+		this.removeDaemonHandler(CollisionCheck.ID);
+		this.addDaemonHandler(new Sync());
+		this.ignoreFrustumCheck = true;
+		traceDist = getMaxDistance();
 	}
 	
 	@Override
 	public void entityInit() {
-		this.ignoreFrustumCheck = true;
+		super.entityInit();
 		dataWatcher.addObject(10, Float.valueOf(0));
-		dataWatcher.addObject(11, Float.valueOf(0));
-		dataWatcher.addObject(12, Float.valueOf(0));
 	}
 	
-	public void setVelocity(float f) {
-		motionX *= f;
-		motionY *= f;
-		motionZ *= f;
+	public double getMaxDistance() {
+		return 100.0;
 	}
 	
-	@Override
-	public void onUpdate() {
-		//super.onUpdate();
-		//Update motion
-		
-		if(worldObj.isRemote) {
-			curX = dataWatcher.getWatchableObjectFloat(10);
-			curY = dataWatcher.getWatchableObjectFloat(11);
-			curZ = dataWatcher.getWatchableObjectFloat(12);
-		} else {
-			if(curX == 0 && curY == 0 && curZ == 0) {
-				curX = posX;
-				curY = posY;
-				curZ = posZ;
-			}
-			Vec3 now = worldObj.getWorldVec3Pool().getVecFromPool(curX, curY, curZ);
-			curX += motionX;
-			curY += motionY;
-			curZ += motionZ;
-			Vec3 after = worldObj.getWorldVec3Pool().getVecFromPool(curX, curY, curZ);
-			MovingObjectPosition mop = GenericUtils.rayTraceBlocksAndEntities(null, worldObj, now, after, thrower);
-			if(mop != null) {
-				onImpact(mop);
-			}
-			dataWatcher.updateObject(10, Float.valueOf((float) curX));
-			dataWatcher.updateObject(11, Float.valueOf((float) curY));
-			dataWatcher.updateObject(12, Float.valueOf((float) curZ));
+	public double getTraceDistance() {
+		return traceDist;
+	}
+	
+	public void setPeformTrace(boolean is) {
+		peformTrace = is;
+	}
+	
+	private MovingObjectPosition peformTrace() {
+		Motion3D tmp = motion.clone();
+		Vec3 v1 = tmp.getPosVec(worldObj), v2 = tmp.move(getMaxDistance()).getPosVec(worldObj);
+		return GenericUtils.rayTraceBlocksAndEntities(null, worldObj, v1, v2, this);
+	}
+	
+	private class Sync extends MotionHandler<EntityRay> {
+
+		public Sync() {
+			super(EntityRay.this);
 		}
-		
-		if(hit) {
-			++tickAfterHit;
-			if(tickAfterHit > HIT_WAIT) {
-				this.setDead();
+
+		@Override
+		public void onSpawnedInWorld() {}
+
+		@Override
+		public void onUpdate() {
+			if(!worldObj.isRemote) {
+				dataWatcher.updateObject(10, Float.valueOf((float)traceDist));
+			} else {
+				traceDist = dataWatcher.getWatchableObjectFloat(10);
 			}
 		}
-		if(ticksExisted > 30) setDead();
-	}
 
-	protected void onImpact(MovingObjectPosition res) {
-		if(worldObj.isRemote || hit) return;
-		if(res.typeOfHit == MovingObjectType.ENTITY) {
-			onEntityHit(res.entityHit);
-		} else {
-			onBlockHit(res.blockX, res.blockY, res.blockZ);
+		@Override
+		public String getID() {
+			return "sync";
 		}
-		hit = true;
+		
 	}
 	
-	protected void onEntityHit(Entity e) {
-		if(damage != null)
-			damage.damageEntity(e);
-	}
-	
-	protected void onBlockHit(int x, int y, int z) {
+	private class RayUpdate extends MotionHandler<EntityRay> {
+
+		public RayUpdate() {
+			super(EntityRay.this);
+		}
+
+		@Override
+		public void onSpawnedInWorld() {}
+
+		@Override
+		public void onUpdate() {
+			if(worldObj.isRemote) return;
+			if(follow)
+				motion.init(thrower, 0, true);
+			motion.applyToEntity(EntityRay.this);
+			
+			if(peformTrace) {
+				MovingObjectPosition mop = peformTrace();
+				if(mop != null) {
+					traceDist = mop.hitVec.distanceTo(motion.getPosVec(worldObj));
+				} else {
+					traceDist = getMaxDistance();
+				}
+			} else {
+				traceDist = getMaxDistance();
+			}
+		}
+
+		@Override
+		public String getID() {
+			return "posmanip";
+		}
 		
 	}
 
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound var1) {}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound var1) {}
 }

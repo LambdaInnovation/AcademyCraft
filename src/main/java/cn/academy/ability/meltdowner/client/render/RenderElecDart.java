@@ -52,7 +52,7 @@ public class RenderElecDart extends RenderIcon {
 			double par6, float par8, float par9) {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			//GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             

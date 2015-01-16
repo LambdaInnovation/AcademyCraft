@@ -5,7 +5,6 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.internal.PatternDown;
@@ -30,8 +29,7 @@ public class SkillRailgun extends SkillBase {
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
 				if(!player.worldObj.isRemote) {
-					System.out.println("Entity spawned");
-					player.worldObj.spawnEntityInWorld(new EntityRailgun(player, 10));
+					player.worldObj.spawnEntityInWorld(new EntityRailgun(player));
 				}
 				return true;
 			}
