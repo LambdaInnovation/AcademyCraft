@@ -19,7 +19,7 @@ import cn.academy.misc.entity.EntityRay;
  * This only peforms correct translation.
  * @author WeathFolD
  */
-public abstract class RendererRayBase extends Render {
+public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	
 
 	protected boolean 
@@ -48,8 +48,8 @@ public abstract class RendererRayBase extends Render {
 	@Override
 	public final void doRender(Entity var1, double x, double y, double z,
 			float h, float a) {
-		EntityRay er = (EntityRay) var1;
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		T er = (T) var1;
+		//GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_CULL_FACE);
@@ -58,7 +58,6 @@ public abstract class RendererRayBase extends Render {
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotated(er.rotationYaw, 0, 1, 0);
-			GL11.glRotated(er.rotationPitch, -1, 0, 0);
 			if(this.viewOptimize) {
 				boolean firstPerson = Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
 				if(firstPerson) {
@@ -67,6 +66,7 @@ public abstract class RendererRayBase extends Render {
 					GL11.glTranslated(tpOffsetX, tpOffsetY, tpOffsetZ);
 				}
 			}
+			GL11.glRotated(er.rotationPitch, -1, 0, 0);
 			if(disableLight) {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 				Tessellator.instance.setBrightness(15728880);
@@ -78,7 +78,7 @@ public abstract class RendererRayBase extends Render {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 	
-	protected abstract void drawAtOrigin(EntityRay ent);
+	protected abstract void drawAtOrigin(T ent);
 	
 	protected void sv(Vec3 v, double x, double y, double z) {
 		v.xCoord = x;

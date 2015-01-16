@@ -6,6 +6,7 @@ package cn.academy.ability.electro.skill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayTiling;
 import cn.academy.misc.entity.EntityRay;

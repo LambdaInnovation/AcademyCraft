@@ -3,6 +3,8 @@
  */
 package cn.academy.misc.entity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -50,22 +52,22 @@ public class EntityRay extends EntityX {
 	 * Init an ray with fixed position and facing direction.
 	 */
 	public EntityRay(World world, Motion3D pos) {
-		this(world);
+		super(world);
 		motion = pos;
 		motion.applyToEntity(this);
 		this.setCurMotion(new RayUpdate());
+		setup();
 	}
 
 	/**
 	 * Client-side ctor.
 	 */
+	@SideOnly(Side.CLIENT)
 	public EntityRay(World world) {
 		super(world);
-		this.removeDaemonHandler(VelocityUpdate.ID);
-		this.removeDaemonHandler(CollisionCheck.ID);
-		this.addDaemonHandler(new Sync());
 		this.ignoreFrustumCheck = true;
 		traceDist = getMaxDistance();
+		setup();
 	}
 	
 	@Override
@@ -74,8 +76,14 @@ public class EntityRay extends EntityX {
 		dataWatcher.addObject(10, Float.valueOf(0));
 	}
 	
+	private void setup() {
+		this.removeDaemonHandler(VelocityUpdate.ID);
+		this.removeDaemonHandler(CollisionCheck.ID);
+		this.addDaemonHandler(new Sync());
+	}
+	
 	public double getMaxDistance() {
-		return 100.0;
+		return 20.0;
 	}
 	
 	public double getTraceDistance() {

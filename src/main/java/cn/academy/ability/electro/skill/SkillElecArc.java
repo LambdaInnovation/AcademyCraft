@@ -6,6 +6,7 @@ package cn.academy.ability.electro.skill;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import cn.academy.ability.electro.entity.EntityElecArc;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
@@ -60,6 +61,9 @@ public class SkillElecArc extends SkillBase {
 
 		@Override
 		public void onStart() {
+			if(!player.worldObj.isRemote) {
+				player.worldObj.spawnEntityInWorld(new EntityElecArc(player));
+			}
 		}
 
 		@Override
