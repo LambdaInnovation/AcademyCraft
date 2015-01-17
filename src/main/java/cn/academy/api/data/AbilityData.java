@@ -132,6 +132,10 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	//-----Skill-----
+	public int getSkillID(SkillBase skill) {
+		return skill.getIndexInCategory(getCategory());
+	}
+	
 	public SkillBase getSkill(int sid) {
 		return getCategory().getSkill(sid);
 	}

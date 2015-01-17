@@ -3,6 +3,7 @@
  */
 package cn.academy.api.ability;
 
+import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.client.render.SkillRenderer;
@@ -24,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD, acaly
  */
 public class SkillBase {
-
+	
 	/**
 	 * Called by RawEventHandler when the skill is reset.
 	 * Add patterns to the RawEventHandler instance in this function.
@@ -43,6 +44,17 @@ public class SkillBase {
 	
 	public int getMaxSkillLevel() {
 		return 1;
+	}
+	
+	/**
+	 * Return the index of the skill in some category. Ret -1 if skill is not in the cat.
+	 */
+	public int getIndexInCategory(Category cat) {
+		for(int i = 0; i < cat.getSkillCount(); ++i) {
+			if(cat.getSkill(i) == this)
+				return i;
+		}
+		return -1;
 	}
 	
 	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {}

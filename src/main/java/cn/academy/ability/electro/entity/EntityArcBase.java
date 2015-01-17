@@ -13,7 +13,8 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegEntity.HasRender;
 import cn.liutils.api.entityx.MotionHandler;
-import cn.liutils.util.misc.RandomSequence;
+import cn.liutils.util.misc.DoubleRandomSequence;
+import cn.liutils.util.misc.IntRandomSequence;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegEntity
 @HasRender
-public class EntityElecArc extends EntityRay {
+public class EntityArcBase extends EntityRay {
 	
 	@SideOnly(Side.CLIENT)
 	ResourceLocation TEXS[] = ACClientProps.ANIM_ELEC_ARC;
@@ -33,21 +34,25 @@ public class EntityElecArc extends EntityRay {
 	static final int SEQ_SIZE = 20;
 	
 	@SideOnly(Side.CLIENT)
-	public RandomSequence indSeq = new RandomSequence(SEQ_SIZE, TEXS.length);
+	public IntRandomSequence indSeq = new IntRandomSequence(SEQ_SIZE, TEXS.length);
+	
+	@SideOnly(Side.CLIENT)
+	public DoubleRandomSequence rotSeq = new DoubleRandomSequence(SEQ_SIZE, -30, 30);
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static RenderElecArc renderer;
 	
-	public boolean isDrawing;
+	public boolean randomDraw = true;
+	public boolean isDrawing = true;
 	int lastTick, tickWait;
 
-	public EntityElecArc(EntityLivingBase creator) {
+	public EntityArcBase(EntityLivingBase creator) {
 		super(creator);
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public EntityElecArc(World world) {
+	public EntityArcBase(World world) {
 		super(world);
 		this.addDaemonHandler(new MotionHandler(this) {
 			@Override public void onSpawnedInWorld() {}
@@ -55,10 +60,11 @@ public class EntityElecArc extends EntityRay {
 			@Override
 			public void onUpdate() {
 				indSeq.rebuild();
-				if(ticksExisted - lastTick > tickWait) {
+				if(randomDraw && ticksExisted - lastTick > tickWait) {
 					tickWait = isDrawing ? (5 + rand.nextInt(5)) : (8 + rand.nextInt(5));
 					lastTick = ticksExisted;
 					isDrawing = !isDrawing;
+					rotSeq.rebuild();
 				}
 			}
 
@@ -72,6 +78,11 @@ public class EntityElecArc extends EntityRay {
 	@SideOnly(Side.CLIENT)
 	public int getIndex(int i) {
 		return indSeq.get(i % SEQ_SIZE);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public double getRotation(int i) {
+		return rotSeq.get(i % SEQ_SIZE);
 	}
 
 }

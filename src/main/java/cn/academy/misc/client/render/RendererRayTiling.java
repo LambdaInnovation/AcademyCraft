@@ -59,26 +59,22 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 			RenderUtils.loadTexture(nextTexture(ent, i));
 			int rotation = i % 2 == 0 ? 30 : 0;
 			GL11.glPushMatrix(); {
-				GL11.glRotated(15, 0, 0, 1);
 				double u0 = 0.0, u1 = Math.min(1.0, (dist - cur) / forw), v0 = 0.0, v1 = 1.0;
 				double z0 = cur, z1 = Math.min(dist, cur + forw);
-				sv(verts[0], -0.5 * width, 0, z0);
-				sv(verts[1], 0.5 * width, 0, z0);
-				sv(verts[2], 0.5 * width, 0, z1);
-				sv(verts[3], -0.5 * width, 0, z1);
-				//billboard(u0, v0, u1, v1);
-				
 				sv(verts[0], 0, -0.5 * width, z0);
 				sv(verts[1], 0, 0.5 * width, z0);
 				sv(verts[2], 0, 0.5 * width, z1);
 				sv(verts[3], 0, -0.5 * width, z1);
+				drawPerBillboard(ent, i);
 				billboard(u0, v0, u1, v1);
 				i++;
 			} GL11.glPopMatrix();
 		}
 	}
 	
-	private void billboard(double u0, double v0, double u1, double v1) {
+	protected void drawPerBillboard(T ent, int i) {}
+	
+	protected void billboard(double u0, double v0, double u1, double v1) {
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
 		if(disableLight) t.setBrightness(15728880);
