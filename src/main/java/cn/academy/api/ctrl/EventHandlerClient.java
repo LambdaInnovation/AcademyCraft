@@ -62,6 +62,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
+			if (!skillEnabled) return;
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
@@ -69,6 +70,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public void onKeyUp(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
+            if (!skillEnabled) return;
 			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
