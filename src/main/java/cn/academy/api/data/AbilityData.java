@@ -296,7 +296,7 @@ public class AbilityData implements IExtendedEntityProperties {
 			if (newCP == maxCP || tickCount % 20 == 0) {
 				setCurrentCP(newCP);
 			} else {
-				maxCP = newCP;
+			    currentCP = newCP;
 			}
 		}
 		return true;
