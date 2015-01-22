@@ -109,7 +109,7 @@ public class Category {
 	
 	//-----CP-----
 	public float getInitialMaxCP() {
-		return 100.0f;
+		return getLevel(getInitialLevelId()).getInitialCP();
 	}
 	
 	//-----EVENT-----

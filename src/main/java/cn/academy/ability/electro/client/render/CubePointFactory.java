@@ -102,19 +102,19 @@ public class CubePointFactory implements IPointFactory {
 			a = RNG.nextDouble() * w;
 			b = RNG.nextDouble() * l;
 			return new NormalVert(a, face == 0 ? 0 : h, b, 
-				NORMALS[face][0], NORMALS[face][1], NORMALS[face][1]);
+				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		case 2:
 		case 3:
 			a = RNG.nextDouble() * h;
 			b = RNG.nextDouble() * w;
 			return new NormalVert(b, a, face == 2 ? 0 : l, 
-				NORMALS[face][0], NORMALS[face][1], NORMALS[face][1]);
+				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		case 4:
 		case 5:
 			a = RNG.nextDouble() * h;
 			b = RNG.nextDouble() * l;
 			return new NormalVert(face == 4 ? 0 : w, a, b,
-				NORMALS[face][0], NORMALS[face][1], NORMALS[face][1]);
+				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		}
 		return null; //Not supposed to happen
 	}

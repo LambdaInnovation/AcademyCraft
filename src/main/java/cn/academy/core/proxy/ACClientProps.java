@@ -93,6 +93,11 @@ public class ACClientProps {
 		src("academy:textures/effects/mdball_arc/1.png"),
 		src("academy:textures/effects/mdball_arc/2.png"),
 		src("academy:textures/effects/mdball_arc/3.png"),
+	},
+	ANIM_ELEC_ARC[] = {
+		src("academy:textures/effects/elec_arc/0.png"),
+		src("academy:textures/effects/elec_arc/1.png"),
+		src("academy:textures/effects/elec_arc/2.png"),
 	}
 	;
 	
