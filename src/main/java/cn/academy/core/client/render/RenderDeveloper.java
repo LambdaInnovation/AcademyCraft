@@ -38,7 +38,6 @@ public class RenderDeveloper extends RenderDirMultiModelled {
 			double var6, float var8) {
 		TileDeveloper td = (TileDeveloper) var1;
 		super.renderTileEntityAt(var1, var2, var4, var6, var8);
-		//Additional rendering
 	}
 
 }

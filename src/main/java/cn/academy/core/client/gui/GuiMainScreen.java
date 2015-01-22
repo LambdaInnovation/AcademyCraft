@@ -81,7 +81,7 @@ public class GuiMainScreen extends AuxGui {
 				logoBack.setAlphad(mAlpha);
 				logoBack.draw();
 				
-				logoRays.setAlphad(mAlpha * (0.6 + Math.sin(time / 900D) * 0.3));
+				logoRays.setAlphad((mAlpha * 1.25) * (0.7 + Math.sin(time / 900D) * 0.3));
 				logoRays.draw();
 				
 				logoBack.setAlphad(mAlpha);
