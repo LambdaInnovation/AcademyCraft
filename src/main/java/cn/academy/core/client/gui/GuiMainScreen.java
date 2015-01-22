@@ -9,19 +9,22 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
+import cn.liutils.api.render.piece.GUIPiece;
+import cn.liutils.api.render.piece.GUIPiece.Textured;
+import cn.liutils.api.render.piece.property.AssignColor;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
 import cn.liutils.util.render.TrueTypeFont;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -36,7 +39,15 @@ public class GuiMainScreen extends AuxGui {
 	
 	private long lastInactiveTime, lastActiveTime;
 	
-	private GuiMainScreen() {}
+	GUIPiece.Textured logoBack, logoRays, logoFrame, logoGeom;
+	
+	private GuiMainScreen() {
+		logoBack = new GUIPiece.Textured(ACClientProps.TEX_LOGO_BACK, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoRays = new GUIPiece.Textured(ACClientProps.TEX_LOGO_RAYS, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoFrame = new GUIPiece.Textured(ACClientProps.TEX_LOGO_FRAME, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoGeom = new GUIPiece.Textured(ACClientProps.TEX_LOGO_GEOM, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoGeom.getTransform().setPivotPoint(128, 128);
+	}
 
 	@Override
 	public boolean isOpen() {
@@ -44,6 +55,9 @@ public class GuiMainScreen extends AuxGui {
 		return player != null && AbilityDataMain.getData(player).hasAbility();
 	}
 
+	/* (non-Javadoc)
+	 * @see cn.liutils.api.gui.AuxGui#draw(net.minecraft.client.gui.ScaledResolution)
+	 */
 	@Override
 	public void draw(ScaledResolution sr) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -59,32 +73,29 @@ public class GuiMainScreen extends AuxGui {
 			GL11.glPushMatrix(); { //Logo rendering
 				double scale = .25;
 				double mAlpha = active ? 0.8 : 0.4;
+				HudUtils.setTextureResolution(256, 256);
 				
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_BACK);
-				GL11.glColor4d(1, 1, 1, mAlpha);
 				GL11.glTranslated(w - 80, h - 70, 0);
 				GL11.glScaled(scale, scale, 1);
-				HudUtils.drawRect(0, 0, 256, 256);
 				
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_RAYS);
-				GL11.glColor4d(1, 1, 1, mAlpha * 0.5 * (0.3 + Math.sin(time / 900D) * 0.7));
-				HudUtils.drawRect(0, 0, 256, 256);
+				logoBack.setAlphad(mAlpha);
+				logoBack.draw();
 				
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_FRAME);
-				GL11.glColor4d(1, 1, 1, mAlpha);
-				HudUtils.setTextureResolution(256, 256);
-				HudUtils.drawRect(0, 0, 256, 256);
+				logoRays.setAlphad(mAlpha * (0.6 + Math.sin(time / 900D) * 0.3));
+				logoRays.draw();
+				
+				logoBack.setAlphad(mAlpha);
+				logoBack.draw();
+				
+				logoFrame.setAlphad(mAlpha);
+				logoFrame.draw();
 				
 				RenderUtils.loadTexture(data.getCategory().getLogo());
 				HudUtils.drawRect(63, 63, 129, 129);
 				
-				RenderUtils.loadTexture(ACClientProps.TEX_LOGO_GEOM);
-				GL11.glPushMatrix(); { //Rotating ray effect
-					GL11.glTranslated(128, 128, 0);
-					GL11.glRotated(time / 1000D, 0, 0, 1);
-					GL11.glTranslated(-128, -128, 0);
-					HudUtils.drawRect(0, 0, 256, 256);
-				} GL11.glPopMatrix();
+				logoGeom.setAlphad(mAlpha);
+				logoGeom.getTransform().rotation = time / 1000D;
+				logoGeom.draw();
 			} GL11.glPopMatrix();
 			RenderUtils.bindIdentity();
 			
