@@ -49,7 +49,7 @@ public class SkillBase {
 	/**
 	 * Return the index of the skill in some category. Ret -1 if skill is not in the cat.
 	 */
-	public int getIndexInCategory(Category cat) {
+	public final int getIndexInCategory(Category cat) {
 		for(int i = 0; i < cat.getSkillCount(); ++i) {
 			if(cat.getSkill(i) == this)
 				return i;

@@ -35,7 +35,7 @@ public class EntityAttackingArc extends EntityArcBase {
 		igniteProb = 0.1 + 0.03 * data.getSkillLevel(skillID) + data.getLevelID() * 0.05;
 		this.addDaemonHandler(new MotionHandler(this) {
 			@Override
-			public void onSpawnedInWorld() {
+			public void onCreated() {
 				MovingObjectPosition mop = peformTrace();
 				if(mop == null) return;
 				if(mop.typeOfHit == MovingObjectType.BLOCK) {

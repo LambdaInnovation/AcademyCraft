@@ -123,7 +123,7 @@ public class EntityRay extends EntityX {
 		}
 
 		@Override
-		public void onSpawnedInWorld() {}
+		public void onCreated() {}
 
 		@Override
 		public void onUpdate() {
@@ -154,7 +154,7 @@ public class EntityRay extends EntityX {
 		}
 
 		@Override
-		public void onSpawnedInWorld() {}
+		public void onCreated() {}
 
 		@Override
 		public void onUpdate() {

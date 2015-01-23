@@ -81,7 +81,7 @@ public class EntityElecDart extends EntityX {
 		}
 
 		@Override
-		public void onSpawnedInWorld() {}
+		public void onCreated() {}
 
 		@Override
 		public void onUpdate() {

@@ -119,7 +119,8 @@ public class ACClientProps {
 		ELEC_MOVE = src("academy:textures/abilities/electromaster/moving.png"),
 		ELEC_RAILGUN = src("academy:textures/abilities/electromaster/railgun.png"),
 		ELEC_SWORD = src("academy:textures/abilities/electromaster/sword.png"),
-		ELEC_ARC_STRONG = src("academy:textures/abilities/electromaster/arc.png");
+		ELEC_ARC_STRONG = src("academy:textures/abilities/electromaster/arc.png"),
+		EFF_MV_TEST = src("academy:textures/effects/mineview_test.png");
 	
 	//Meltdowner
 	public static final ResourceLocation 

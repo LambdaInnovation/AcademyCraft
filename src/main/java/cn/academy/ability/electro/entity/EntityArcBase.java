@@ -55,7 +55,7 @@ public class EntityArcBase extends EntityRay {
 	public EntityArcBase(World world) {
 		super(world);
 		this.addDaemonHandler(new MotionHandler(this) {
-			@Override public void onSpawnedInWorld() {}
+			@Override public void onCreated() {}
 
 			@Override
 			public void onUpdate() {

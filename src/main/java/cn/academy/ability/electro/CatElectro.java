@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.skill.SkillArcGen;
 import cn.academy.ability.electro.skill.SkillItemCharge;
 import cn.academy.ability.electro.skill.SkillMagneticMovement;
+import cn.academy.ability.electro.skill.SkillMineDetect;
 import cn.academy.ability.electro.skill.SkillRailgun;
 import cn.academy.ability.electro.skill.SkillStrongArc;
 import cn.academy.api.ability.Category;
@@ -43,6 +44,7 @@ public class CatElectro extends Category {
 		this.addSkill(new SkillStrongArc(), 0);
 		this.addSkill(new SkillMagneticMovement(), 0);
 		this.addSkill(new SkillRailgun(), 0);
+		this.addSkill(new SkillMineDetect(), 0);
 		
 		this.setColorStyle(26, 143, 218);
 	}
