@@ -31,7 +31,6 @@ public class RenderElecDart extends RenderIcon {
 		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		//RenderUtils.drawCube(1, 1, 1, true);
         //GL11.glPopMatrix();
-
 		this.alpha = .8F;
 		this.hasLight = false;
 		ResourceLocation[] anim = ACClientProps.ANIM_MDBALL_STB;
@@ -58,8 +57,6 @@ public class RenderElecDart extends RenderIcon {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-			GL20.glBlendEquationSeparate(GL14.GL_FUNC_ADD, GL14.GL_FUNC_ADD);
-			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			GL11.glPushMatrix(); {
 				GL11.glTranslatef((float) par2, (float) par4, (float) par6);
 				GL11.glScalef(1.0f, 1.0f, 1.0f);

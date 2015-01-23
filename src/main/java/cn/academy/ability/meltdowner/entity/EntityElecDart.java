@@ -124,4 +124,9 @@ public class EntityElecDart extends EntityX {
 		}
 		
 	}
+	
+	@Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 1;
+    }
 }

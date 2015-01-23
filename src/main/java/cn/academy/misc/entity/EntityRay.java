@@ -86,6 +86,14 @@ public class EntityRay extends EntityX {
 		this.ignoreFrustumCheck = true;
 	}
 	
+	/**
+	 * This kind of entities are typically transparent, so we set the render pass in advance
+	 */
+	@Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 1;
+    }
+	
 	public double getMaxDistance() {
 		return 20.0;
 	}
