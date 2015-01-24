@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.misc.entity.EntityBlockSimulator;
+import cn.liutils.util.GenericUtils;
 import cn.liutils.util.RenderUtils;
 
 /**
@@ -29,18 +30,24 @@ public class RenderBlockSimulator extends Render {
 			GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glPushMatrix(); {
 			RenderUtils.loadTexture(ebs.texture);
 			GL11.glTranslated(x + .05, y + .05, z + .05);
+			GL11.glColor4d(1, 1, 1, calcAlpha(x, y, z, ebs.getParent().range));
 			RenderUtils.drawCube(.9, .9, .9, true);
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+	
+	private float calcAlpha(double x, double y, double z, double range) {
+		double jdg = 1 - GenericUtils.distance(x, y, z) / range * 2.2;
+		return 0.3f + (float) (jdg * 0.7);
 	}
 
 	@Override

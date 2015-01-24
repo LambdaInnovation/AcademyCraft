@@ -40,6 +40,9 @@ public class EntityRailgun extends EntityRay {
 	
 	public EntityRailgun(EntityLivingBase creator) {
 		super(creator);
+		this.lifeTime = 30;
+		this.follow = false;
+		this.peformTrace = true;
 	}
 	
 	public EntityRailgun(World world) {

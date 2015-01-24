@@ -28,9 +28,9 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		viewOptimize = true;
 	
 	protected double 
-		fpOffsetX = 1.0,
-		fpOffsetY = 0.5,
-		fpOffsetZ = 0.25;
+		fpOffsetX = -0.2,
+		fpOffsetY = -0.3,
+		fpOffsetZ = -0.1;
 
 	protected double 
 		tpOffsetX = 0.0,
@@ -71,6 +71,8 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 				transformThirdPerson(er, x, y, z);
 			}
 			
+			optimizeView(er, x, y, z);
+			
 			if(disableLight) {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 				Tessellator.instance.setBrightness(15728880);
@@ -90,6 +92,9 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	protected void transformThirdPerson(T ent, double x, double y, double z) {
 		if(this.viewOptimize)
 			GL11.glTranslated(tpOffsetX, tpOffsetY, tpOffsetZ);
+	}
+	
+	protected void optimizeView(T ent, double x, double y, double z) {
 		{ //View-orientation fixing
 			double 
 				tanα = Math.tan(Math.atan2(y, Math.sqrt(x * x + z * z)) - ent.rotationPitch * Math.PI / 180),

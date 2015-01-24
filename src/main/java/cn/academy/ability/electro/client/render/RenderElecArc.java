@@ -30,9 +30,6 @@ public class RenderElecArc extends RendererRayTiling<EntityArcBase> {
 	
 	@Override
 	protected ResourceLocation nextTexture(EntityArcBase ent, int i) {
-		this.fpOffsetZ = -0.2;
-		this.fpOffsetX = -0.3;
-		this.fpOffsetY = -0.1;
 		return ACClientProps.ANIM_ELEC_ARC[ent.getIndex(i)];
 	}
 	

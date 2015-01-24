@@ -28,9 +28,9 @@ public class EntityRay extends EntityX {
 	Motion3D motion;
 	
 	EntityLivingBase thrower;
-	boolean follow = false;
+	protected boolean follow = false;
 	
-	boolean peformTrace = false;
+	protected boolean peformTrace = false;
 	double traceDist;
 	
 	public int lifeTime = Integer.MAX_VALUE; //How long this entity exists

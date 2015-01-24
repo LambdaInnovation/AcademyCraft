@@ -23,8 +23,14 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.api.client.render.SkillRenderer.HandRenderType;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
+import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.api.render.piece.Piece;
+import cn.liutils.api.render.piece.property.AssignTexture;
+import cn.liutils.api.render.piece.property.DisableCullFace;
+import cn.liutils.api.render.piece.property.DisableLight;
+import cn.liutils.api.render.piece.property.Transform;
 import cn.liutils.template.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -108,11 +114,67 @@ public class SkillRenderingHandler {
 		} GL11.glPopMatrix();
 	}
 	
+	private static Piece piece, piece2;
+	private static Transform tt, tt2;
+	static {
+		piece = new Piece(2.0, 2.0);
+		piece.setMapping(0, 0, 1, 0.853333333);
+		tt = new Transform(piece);
+		tt.setRotation(90, 0, 0);
+		new AssignTexture(piece, ACClientProps.EFF_RAILGUN_PREP_CC);
+		new DisableLight(piece);
+		
+		piece2 = new Piece(28, 0.2);
+		piece2.setMapping(0, 0.9, 1, 1.0);
+		tt2 = new Transform(piece2, 0, 0, 0, 0, 0, 0);
+		new DisableCullFace(piece2);
+		new DisableLight(piece2);
+		new AssignTexture(piece2, ACClientProps.EFF_RAILGUN_PREP_CC);
+	}
+	
 	private static void traverseHandRender(EntityPlayer player, HandRenderType type) {
 		List<SkillState> states = SkillStateManager.getState(player);
 		for(SkillState s : states) {
 			s.getRender().renderHandEffect(player, s, type);
 		}
+		if(true) return;
+		//Debug use
+		GL11.glColor4d(1, 1, 1, .6);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
+		GL11.glPushMatrix(); {
+			GL11.glTranslated(.8, 0.85, 0);
+			GL11.glRotated(-20.4, 1, 0, 0);
+			
+			piece.setSize(1.7, 1.7);
+			piece2.setSize(44, 0.2);
+			tt2.tx = 0;
+			tt2.tz = -18;
+			tt.roll = 0;
+			
+			piece2.draw();
+			for(int i = 6; i >= 0; --i) {
+				double z = (4 + 6 * i * i) / 12d;
+				GL11.glPushMatrix();
+				GL11.glTranslated(0, 0, -z);
+				piece.draw();
+				GL11.glPopMatrix();
+			}
+			
+			GL11.glPushMatrix(); {
+				GL11.glTranslated(-2.40, 0, 0);
+				piece2.draw();
+				for(int i = 6; i >= 0; --i) {
+					double z = (4 + 6 * i * i) / 12d;
+					GL11.glPushMatrix();
+					GL11.glTranslated(0, 0, -z);
+					piece.draw();
+					GL11.glPopMatrix();
+				}
+			}GL11.glPopMatrix();
+		} GL11.glPopMatrix();
+		
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 	}
 	
 	private static Vec3 vec(double x, double y, double z) {

@@ -67,7 +67,7 @@ public final class SkillArcGen extends SkillBase {
 				AbilityData data = AbilityDataMain.getData(player);
 				int id = data.getSkillID(instance), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 				float need = 250 - lv * (21 - lv) + 10 * clv * (15 - clv);
-				if(data.decreaseCP(need)){
+				if(data.decreaseCP(0)){
 					arc = new EntityAttackingArc(player, instance);
 					player.worldObj.spawnEntityInWorld(arc);
 				}

@@ -4,16 +4,14 @@
 package cn.academy.ability.electro.skill;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -40,20 +38,21 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillMineDetect extends SkillBase {
 
-	private static Set<Block> acceptBlocks = new HashSet<Block>();
-	static {
-		Block arr[] = new Block[] {
-			Blocks.iron_ore,
-			Blocks.gold_ore,
-			Blocks.emerald_ore,
-		};
-		acceptBlocks.addAll(Arrays.asList(arr));
-	}
-	
+//	private static Set<Block> acceptBlocks = new HashSet<Block>();
+//	static {
+//		Block arr[] = new Block[] {
+//			Blocks.iron_ore,
+//			Blocks.gold_ore,
+//			Blocks.emerald_ore,
+//		};
+//		acceptBlocks.addAll(Arrays.asList(arr));
+//	}
+//	
+	//TODO: Maybe we need more flitering?
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
 		public boolean accepts(Block block) {
-			return acceptBlocks.contains(block);
+			return block instanceof BlockOre;
 		}
 	};
 	
@@ -92,21 +91,29 @@ public class SkillMineDetect extends SkillBase {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private static final class HandlerEntity extends FakeEntity {
-		
-		private static final int UPDATE_RATE = 5;
+	public static final class HandlerEntity extends FakeEntity {
 		
 		//Serve as a pool.
 		final List<EntityBlockSimulator> aliveSims = new ArrayList<EntityBlockSimulator>();
 		
 		final int lifeTime;
-		final double range;
+		public final double range;
+		private double safeDistSq; //How many blocks until we peform an update
+		
+		private double lastX, lastY, lastZ;
+		
+		private EntityPlayer target;
 
 		public HandlerEntity(EntityPlayer target, int time, double range) {
 			super(target);
 			this.lifeTime = time;
 			this.range = range;
-			target.addPotionEffect(new PotionEffect(Potion.blindness.id, time));
+			this.target = target;
+			
+			double tmp = range * 0.2;
+			safeDistSq = tmp * tmp;
+			
+			target.addPotionEffect(new PotionEffect(Potion.blindness.id, 10000));
 			this.setCurMotion(new Ticker());
 		}
 		
@@ -125,8 +132,9 @@ public class SkillMineDetect extends SkillBase {
 
 			@Override
 			public void onUpdate() {
-				if(++ticksUntilUpdate == UPDATE_RATE) {
-					ticksUntilUpdate = 0;
+				
+				double distSq = GenericUtils.distanceSq(posX, posY, posZ, lastX, lastY, lastZ);
+				if(distSq > safeDistSq) {
 					updateBlocks();
 				}
 				
@@ -136,10 +144,17 @@ public class SkillMineDetect extends SkillBase {
 					}
 					aliveSims.clear();
 					setDead();
+					target.removePotionEffect(Potion.blindness.id);
 				}
 			}
 			
 			private void updateBlocks() {
+				Iterator<EntityBlockSimulator> iter = aliveSims.iterator();
+				while(iter.hasNext()) {
+					EntityBlockSimulator ebs = iter.next();
+					if(ebs.isDead) iter.remove();
+				}
+				
 				AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(
 						posX - range * 0.5, posY - range * 0.5, posZ - range * 0.5,
 						posX + range * 0.5, posY + range * 0.5, posZ + range * 0.5);
@@ -154,7 +169,7 @@ public class SkillMineDetect extends SkillBase {
 						ebs = aliveSims.get(ind);
 						ind += 1;
 					} else {
-						ebs = new EntityBlockSimulator(worldObj, bp.x, bp.y, bp.z, getTexture(bp.block));
+						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, getTexture(bp.block));
 						worldObj.spawnEntityInWorld(ebs);
 					}
 					toRetain.add(ebs);
@@ -167,6 +182,10 @@ public class SkillMineDetect extends SkillBase {
 				aliveSims.clear();
 				
 				aliveSims.addAll(toRetain);
+				
+				lastX = posX;
+				lastY = posY;
+				lastZ = posZ;
 			}
 
 			@Override
@@ -188,7 +207,7 @@ public class SkillMineDetect extends SkillBase {
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
 			if(player.worldObj.isRemote) {
-				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 20));
+				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 30));
 				System.out.println("Spawned entity");
 			} else {
 				//consume CPs, etc
