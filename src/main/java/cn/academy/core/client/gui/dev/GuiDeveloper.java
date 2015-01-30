@@ -46,21 +46,26 @@ public class GuiDeveloper extends LIGuiScreen {
 		this.dev = dev;
 		this.data = AbilityDataMain.getData(user);
 		
-		pageMain = new PageMain(this);
-		subs.add(new PageLearn(pageMain));
-		subs.add(new PageSkills(pageMain));
+		gui.addWidget(pageMain = new PageMain(this));
+		subs.add(new PageLearn(this));
+		subs.add(new PageSkills(this));
 		
+		for(final DevSubpage sp : subs) {
+			gui.addWidget(sp);
+		}
+		 
 		updateVisiblility();
 	}
     
     protected void updateVisiblility() {
     	for(int i = 0; i < subs.size(); ++i) {
-    		subs.get(i).visible = i == pageID;
+    		subs.get(i).doesDraw = (i == pageID);
     	}
     }
     
     public void onGuiClosed() {
     	super.onGuiClosed();
+    	//TODO: State checking and doesn't userQuit when re-constructing
     	dev.userQuit();
     	AcademyCraft.netHandler.sendToServer(new MsgDismount(this.dev));
     }

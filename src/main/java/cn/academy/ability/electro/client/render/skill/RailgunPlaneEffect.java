@@ -12,11 +12,14 @@ import org.lwjgl.util.glu.GLU;
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.core.proxy.ACClientProps;
-import cn.liutils.api.render.piece.Piece;
-import cn.liutils.api.render.piece.property.AssignTexture;
-import cn.liutils.api.render.piece.property.DisableCullFace;
-import cn.liutils.api.render.piece.property.DisableLight;
-import cn.liutils.api.render.piece.property.Transform;
+import cn.liutils.api.draw.DrawObject;
+import cn.liutils.api.draw.DrawObject.EventType;
+import cn.liutils.api.draw.prop.AssignTexture;
+import cn.liutils.api.draw.prop.DisableCullFace;
+import cn.liutils.api.draw.prop.DisableLight;
+import cn.liutils.api.draw.prop.Offset;
+import cn.liutils.api.draw.tess.Rect;
+import cn.liutils.api.draw.tess.Transform;
 import cn.liutils.util.HudUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,22 +34,42 @@ public class RailgunPlaneEffect extends SkillRenderer {
 	static final long DELAY = 100;
 	final long time;
 	
-	private static Piece circle, line;
+	private static DrawObject circle, line;
 	static {
 		//Setup pieces
-		//TODO Maybe we should explicity load those for efficiency reason?
-		circle = new Piece(1.7, 1.7);
-		circle.setMapping(0, 0, 1, 0.853333333);
-		new Transform(circle).setRotation(90, 0, 0);
-		new AssignTexture(circle, ACClientProps.EFF_RAILGUN_PREP_CC);
-		new DisableLight(circle);
-				
-		line = new Piece(44, 0.2);
-		line.setMapping(0, 0.9, 1, 1.0);
-		new Transform(line, 0, 0, -18, 0, 0, 0);
-		new DisableCullFace(line);
-		new DisableLight(line);
-		new AssignTexture(line, ACClientProps.EFF_RAILGUN_PREP_CC);
+		{
+			circle = new DrawObject();
+			
+			Rect rect = new Rect(1.7, 1.7);
+			rect.setCentered();
+			rect.map.set(0, 0, 1, 0.8533333333);
+			
+			Transform trans = new Transform().setRotation(90, 0, 0);
+			
+			circle.addHandlers(
+				new AssignTexture(ACClientProps.EFF_RAILGUN_PREP_CC),
+				DisableLight.instance(),
+				rect,
+				trans);
+		}
+		
+		{
+			line = new DrawObject();
+			
+			Rect rect = new Rect(44, 0.2);
+			rect.map.set(0, .9, 1, 1.0);
+			
+			Offset off = new Offset(EventType.PRE_TESS);
+			off.set(0, 0, -31);
+			
+			line.addHandlers(
+				rect,
+				off,
+				DisableCullFace.instance(),
+				DisableLight.instance(),
+				new AssignTexture(ACClientProps.EFF_RAILGUN_PREP_CC)
+			);
+		}
 	}
 
 	public RailgunPlaneEffect(long beginTime) {

@@ -11,6 +11,9 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.api.draw.prop.AssignTexture;
+import cn.liutils.api.draw.tess.GUIRect;
+import cn.liutils.api.draw.tess.RectMapping;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
@@ -36,6 +39,8 @@ public class PageSkills extends DevSubpage {
 			
 			final int skillID;
 			final SkillBase skill;
+			
+			//Inferred data
 			final boolean learned;
 			final boolean fullyLearned;
 			final int level;
@@ -43,9 +48,8 @@ public class PageSkills extends DevSubpage {
 			final int expectedEnergy;
 
 			public SkillElement(int id) {
-				super("skill_" + id, SkillList.this, 0, 0, 110.5, 33.5);
-				this.setTexMapping(291, 0, 221, 67);
-				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
+				super(0, 0, 110.5, 33.5);
+				this.initTexDraw(ACClientProps.TEX_GUI_AD_SKILL, 291, 0, 221, 67);
 				skillID = id;
 				skill = base.data.getSkill(id);
 				level = base.data.getSkillLevel(skillID);
@@ -55,19 +59,21 @@ public class PageSkills extends DevSubpage {
 					base.dev.getExpectation(base.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
 				expectedEnergy = exp.second.intValue();
-				this.receiveEvent = !fullyLearned;
+				this.doesListenKey = !fullyLearned;
 			}
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
+				RectMapping map = ((GUIRect)this.drawer.getHandler("rect_2d")).getMap();
+				
 				if(fullyLearned) {
-					area.v = 139;
+					map.v0 = 139;
 				} else if(mouseHovering) {
-					area.v = 1;
+					map.v0 = 1;
 				} else if(!learned){
-					area.v = 70;
+					map.v0 = 70;
 				} else {
-					area.v = 208;
+					map.v0 = 208;
 				}
 				super.draw(mx, my, mouseHovering);
 				
@@ -109,12 +115,16 @@ public class PageSkills extends DevSubpage {
 		}
 
 		public SkillList() {
-			super("list", PageSkills.this, 9.5, 9, 110.5, 101.5);
+			super("list", 9.5, 9, 110.5, 101.5);
+			this.setDragBar(bar);
+		}
+		
+		@Override
+		public void onAdded() {
 			for(Integer sk : base.data.getCanLearnSkillList()) {
 				if(sk != 0)
-					new SkillElement(sk);
+					this.addWidget(new SkillElement(sk));
 			}
-			this.setDragBar(bar);
 		}
 		
 	}
@@ -122,10 +132,9 @@ public class PageSkills extends DevSubpage {
 	private class Bar extends DragBar {
 
 		public Bar() {
-			super("bar", PageSkills.this, 120.5, 13, 5.5, 93.5, 12);
+			super(120.5, 13, 5.5, 93.5, 12);
 			this.enableDragging = true;
-			this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
-			this.setTexMapping(280, 0, 11, 24);
+			this.initTexDraw(ACClientProps.TEX_GUI_AD_SKILL, 280, 0, 11, 24);
 		}
 		
 		@Override
@@ -134,18 +143,19 @@ public class PageSkills extends DevSubpage {
 		}
 	}
 	
-	public PageSkills(PageMain parent) {
+	public PageSkills(GuiDeveloper parent) {
 		super(parent, "page.adskill", ACClientProps.TEX_GUI_AD_SKILL);
 		bar = new Bar();
 		sl = new SkillList();
-		new Widget("up", this, 120.5, 7, 5.5, 5.5) {
+		
+		new Widget(120.5, 7, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressLast();
 				bar.setProgress(sl.getRelativeProgress());
 			}
 		};
-		new Widget("down", this, 120.5, 107, 5.5, 5.5) {
+		new Widget(120.5, 107, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressNext();
@@ -153,10 +163,9 @@ public class PageSkills extends DevSubpage {
 			}
 		};
 		
-		new RandBufProgressBar("energybar", this, 7, 124.5, 122, 5.5) {
+		new RandBufProgressBar(7, 124.5, 14, 293, 122, 5.5, 244, 11) {
 			{
-				this.setTexMapping(14, 293, 244, 11);
-				this.setTexture(ACClientProps.TEX_GUI_AD_SKILL, 512, 512);
+				drawer.addHandler(new AssignTexture(ACClientProps.TEX_GUI_AD_SKILL));
 				this.fluctRegion = 0;
 			}
 			@Override

@@ -23,17 +23,18 @@ public abstract class DevSubpage extends Widget {
 		PG_WIDTH = 136.5F, PG_HEIGHT = 146.5F;
 	
 	protected final GuiDeveloper base;
+	protected final String name;
 
-	public DevSubpage(PageMain parent, String s, ResourceLocation back) {
-		super(s, parent, PG_OFFSET_X, PG_OFFSET_Y, PG_WIDTH, PG_HEIGHT);
-		this.base = parent.dev;
-		this.setTexture(back, 512, 512);
-		this.setTexMapping(0, 0, 273, 293);
-		visible = false;
+	public DevSubpage(GuiDeveloper gd, String name, ResourceLocation back) {
+		super(PG_OFFSET_X, PG_OFFSET_Y, PG_WIDTH, PG_HEIGHT);
+		this.base = gd;
+		this.name = name;
+		this.initTexDraw(back, 0, 0, 273, 293);
+		doesDraw = false;
 	}
 	
 	public String getDisplayName() {
-		return StatCollector.translateToLocal(ID);
+		return StatCollector.translateToLocal(name);
 	}
 
 }

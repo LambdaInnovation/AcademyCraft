@@ -1,7 +1,5 @@
 package cn.academy.core.client.gui.dev;
 
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,7 +16,6 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
-import cn.liutils.api.gui.Widget.Alignment;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
@@ -32,15 +29,14 @@ public class PageMain extends Widget {
 	GuiDeveloper dev;
 
 	public PageMain(GuiDeveloper gd) {
-		super("main", gd.getGui(),  0, 0, gd.WIDTH, gd.HEIGHT);
-		this.setAlignStyle(Alignment.CENTER);
-		this.setTexMapping(0, 0, 456, 369);
-		this.setTexture(ACClientProps.TEX_GUI_AD_MAIN, 512, 512);
+		super(0, 0, gd.WIDTH, gd.HEIGHT);
+		this.alignStyle = AlignStyle.CENTER;
+		this.initTexDraw(ACClientProps.TEX_GUI_AD_MAIN, 0, 0, 456, 369);
 		dev = gd;
 		model = new ModelBiped();
 		model.isChild = false;
 		
-		new Widget("last", this, 88.5, 6.5, 8.5, 7.5) {
+		new Widget(88.5, 6.5, 8.5, 7.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				dev.pageID = Math.max(dev.pageID - 1, 0);
@@ -48,7 +44,7 @@ public class PageMain extends Widget {
 			}
 		};
 		
-		new Widget("next", this, 215.5, 6.5, 8.5, 7.5) {
+		new Widget(215.5, 6.5, 8.5, 7.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				dev.pageID = Math.min(dev.pageID + 1, dev.subs.size() - 1);

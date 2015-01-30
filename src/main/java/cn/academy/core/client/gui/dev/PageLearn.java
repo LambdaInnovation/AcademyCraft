@@ -25,7 +25,7 @@ public class PageLearn extends DevSubpage {
 	boolean isFirst, isMaxLevel;
 	IDevAction ida;
 
-	public PageLearn(PageMain parent) {
+	public PageLearn(GuiDeveloper parent) {
 		super(parent, "page.adlearning", ACClientProps.TEX_GUI_AD_LEARNING);
 		isFirst = base.data.getCategoryID() == 0;
 		isMaxLevel = base.data.getLevelID() == base.data.getLevelCount() - 1;

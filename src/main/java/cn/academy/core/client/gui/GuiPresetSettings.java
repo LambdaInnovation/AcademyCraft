@@ -86,7 +86,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 	public GuiPresetSettings() {
 		super();
 		tempPreset = PresetManager.getCurrentPreset().clone();
-		pageMain = new PageMain();
+		gui.addWidget(pageMain = new PageMain());
 	}
 	
 	private class PageMain extends Widget {
@@ -101,9 +101,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 			int id;
 
 			public SelectPage(int _id, float x) {
-				super("sel" + _id, PageMain.this, x, 0, PAGE_STEP, HEIGHT / 6);
+				super(x, 0, PAGE_STEP, HEIGHT / 6);
 				id = _id;
-				draw = true;
 			}
 			
 			@Override
@@ -119,7 +118,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				}
 				if(draw) {
 					RenderUtils.bindGray(color, .6);
-					HudUtils.drawModalRect(0, 0, area.width, area.height);
+					HudUtils.drawModalRect(0, 0, width, height);
 				}
 				RenderUtils.bindGray(.8, .8);
 				drawText(String.valueOf(id), 6, 2.5, 8);
@@ -140,9 +139,9 @@ public class GuiPresetSettings extends LIGuiScreen {
 			static final float STEP = 28.67F, WIDTH = STEP + 5.3F, LOGO_SIZE = 23.3F, HEIGHT = 46.7F;
 
 			public PartKeyInfo(int _id) {
-				super("ki" + _id, PageMain.this, 5 + WIDTH * _id, 18.5F, STEP, HEIGHT);
+				super(5 + WIDTH * _id, 18.5F, STEP, HEIGHT);
 				id = _id;
-				draw = true;
+				doesDraw = true;
 			}
 			
 			@Override
@@ -172,8 +171,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 			public void onMouseDown(double mx, double my) {
 				modKey = id;
 				isModifying = true;
-				PageMain.this.visible = false;
-				new PageModify();
+				PageMain.this.doesDraw = false;
+				gui.addWidget(new PageModify());
 			}
 			
 		}
@@ -187,9 +186,12 @@ public class GuiPresetSettings extends LIGuiScreen {
 				TEXT_COLOR = 0.9F,
 				TEXT_DISABLE_COLOR = 0.7F;
 
+			private final String name;
+			
 			public ButtonGeneric(String name, float x, float y) {
-				super(name, PageMain.this, x, y, WIDTH, HEIGHT);
-				draw = true;
+				super(x, y, WIDTH, HEIGHT);
+				doesDraw = true;
+				this.name = name;
 			}
 			
 			@Override
@@ -205,38 +207,42 @@ public class GuiPresetSettings extends LIGuiScreen {
 				float fsize = 5F;
 				color = TEXT_COLOR;
 				GL11.glColor4f(color, color, color, 0.9F);
-				drawText(StatCollector.translateToLocal(ID), 
-						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, ID, fsize) / 2, 5F);
+				String translated = StatCollector.translateToLocal(name);
+				drawText(translated, 
+						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, translated, fsize) / 2,
+						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, translated, fsize) / 2, 5F);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
 		}
 		
 		public PageMain() {
-			super("main", gui, 0, 0, WIDTH, HEIGHT);
-			draw = true;
-			
+			super(0, 0, WIDTH, HEIGHT);
+			this.alignStyle = AlignStyle.CENTER;
+		}
+		
+		@Override
+		public void onAdded() {
 			for(int i = 0; i < MAX_PAGE; ++i) {
-				new SelectPage(i, PAGE_STEP * i);
+				addWidget(new SelectPage(i, PAGE_STEP * i));
 			}
 			for(int i = 0; i < EventHandlerClient.MAX_KEYS; ++i) {
-				new PartKeyInfo(i);
+				addWidget(new PartKeyInfo(i));
 			}
 			
+			addWidgets(
 			new ButtonGeneric("ac.accept", 71, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					PresetManager.setPreset(currentPage, tempPreset);
 				}
-			};
-			
+			},
 			new ButtonGeneric("ac.restore", 107.5F, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					tempPreset = PresetManager.getPreset(currentPage).clone();
 				}
-			};
+			});
 		}
 
 		@Override
@@ -270,10 +276,9 @@ public class GuiPresetSettings extends LIGuiScreen {
 			final boolean used; //If this skill already have a mapping
 
 			public PartSkillInfo(SkillBase _skill, int i, int j, double beg) {
-				super("sklmod" + i, PageModify.this, 
-					beg + STEP * j , HEIGHT / 2 - WIDTH / 2,
+				super(beg + STEP * j , HEIGHT / 2 - WIDTH / 2,
 					WIDTH, WIDTH);
-				draw = true;
+				doesDraw = true;
 				skill = _skill;
 				this.id = i;
 				
@@ -312,7 +317,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				if(used) return;
 				tempPreset.setSkillMapping(modKey, id);
 				isModifying = false;
-				pageMain.visible = true;
+				pageMain.doesDraw = true;
 				PageModify.this.dispose();
 			}
 			
@@ -321,7 +326,12 @@ public class GuiPresetSettings extends LIGuiScreen {
 		static final float HEIGHT = 50, WIDTH = 30, STEP = WIDTH + 10;
 
 		public PageModify() {
-			super("modify", gui, 0, 0, width, HEIGHT);
+			super(0, 0, GuiPresetSettings.this.width, HEIGHT);
+			this.alignStyle = AlignStyle.CENTER;
+		}
+		
+		@Override
+		public void onAdded() {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
 			
@@ -329,9 +339,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
 			int j = 0;
 			for(int i : learnedSkills) {
-				new PartSkillInfo(data.getSkill(i), i, j++,  beg);
+				addWidget(new PartSkillInfo(data.getSkill(i), i, j++,  beg));
 			}
-			draw = true;
 		}
 		
 		@Override

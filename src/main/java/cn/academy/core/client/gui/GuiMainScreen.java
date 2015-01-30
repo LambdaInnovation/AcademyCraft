@@ -14,10 +14,9 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
+import cn.liutils.api.draw.GUIObject;
+import cn.liutils.api.draw.tess.Transform;
 import cn.liutils.api.gui.AuxGui;
-import cn.liutils.api.render.piece.GUIPiece;
-import cn.liutils.api.render.piece.GUIPiece.Textured;
-import cn.liutils.api.render.piece.property.AssignColor;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -39,14 +38,14 @@ public class GuiMainScreen extends AuxGui {
 	
 	private long lastInactiveTime, lastActiveTime;
 	
-	GUIPiece.Textured logoBack, logoRays, logoFrame, logoGeom;
+	GUIObject.Tex logoBack, logoRays, logoFrame, logoGeom;
 	
 	private GuiMainScreen() {
-		logoBack = new GUIPiece.Textured(ACClientProps.TEX_LOGO_BACK, 0, 0, 256, 256, 0, 0, 256, 256);
-		logoRays = new GUIPiece.Textured(ACClientProps.TEX_LOGO_RAYS, 0, 0, 256, 256, 0, 0, 256, 256);
-		logoFrame = new GUIPiece.Textured(ACClientProps.TEX_LOGO_FRAME, 0, 0, 256, 256, 0, 0, 256, 256);
-		logoGeom = new GUIPiece.Textured(ACClientProps.TEX_LOGO_GEOM, 0, 0, 256, 256, 0, 0, 256, 256);
-		logoGeom.getTransform().setPivotPoint(128, 128);
+		logoBack = new GUIObject.Tex(ACClientProps.TEX_LOGO_BACK, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoRays = new GUIObject.Tex(ACClientProps.TEX_LOGO_RAYS, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoFrame = new GUIObject.Tex(ACClientProps.TEX_LOGO_FRAME, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoGeom = new GUIObject.Tex(ACClientProps.TEX_LOGO_GEOM, 0, 0, 256, 256, 0, 0, 256, 256);
+		logoGeom.getTransform().setPivotPt(128, 128, 0);
 	}
 
 	@Override
@@ -78,23 +77,20 @@ public class GuiMainScreen extends AuxGui {
 				GL11.glTranslated(w - 80, h - 70, 0);
 				GL11.glScaled(scale, scale, 1);
 				
-				logoBack.setAlphad(mAlpha);
+				GL11.glColor4d(1, 1, 1, mAlpha);
 				logoBack.draw();
 				
-				logoRays.setAlphad((mAlpha * 1.25) * (0.7 + Math.sin(time / 900D) * 0.3));
+				GL11.glColor4d(1, 1, 1, (mAlpha * 1.25) * (0.7 + Math.sin(time / 900D) * 0.3));
 				logoRays.draw();
 				
-				logoBack.setAlphad(mAlpha);
+				GL11.glColor4d(1, 1, 1, mAlpha);
 				logoBack.draw();
-				
-				logoFrame.setAlphad(mAlpha);
 				logoFrame.draw();
 				
 				RenderUtils.loadTexture(data.getCategory().getLogo());
 				HudUtils.drawRect(63, 63, 129, 129);
 				
-				logoGeom.setAlphad(mAlpha);
-				logoGeom.getTransform().rotation = time / 1000D;
+				logoGeom.getTransform().setRoll(time / 1000D);
 				logoGeom.draw();
 			} GL11.glPopMatrix();
 			RenderUtils.bindIdentity();
