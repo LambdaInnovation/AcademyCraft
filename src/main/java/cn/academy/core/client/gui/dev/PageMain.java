@@ -35,22 +35,24 @@ public class PageMain extends Widget {
 		dev = gd;
 		model = new ModelBiped();
 		model.isChild = false;
-		
-		new Widget(88.5, 6.5, 8.5, 7.5) {
+	}
+	
+	@Override
+	public void onAdded() {
+		addWidgets(new Widget(88.5, 6.5, 8.5, 7.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				dev.pageID = Math.max(dev.pageID - 1, 0);
 				dev.updateVisiblility();
 			}
-		};
-		
+		},
 		new Widget(215.5, 6.5, 8.5, 7.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				dev.pageID = Math.min(dev.pageID + 1, dev.subs.size() - 1);
 				dev.updateVisiblility();
 			}
-		};
+		});
 	}
 
 	@Override

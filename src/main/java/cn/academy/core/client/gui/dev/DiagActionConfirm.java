@@ -30,30 +30,25 @@ public class DiagActionConfirm extends DialogueBase {
 		this.id = id;
 		this.par = par;
 		this.setTitle(ACLangs.actionConfirm());
-		
-		//Init widgets
-		new ButtonNormal("confirm", 25 * SCALE, 48 * SCALE) {
-			{
-				this.setTextProps(ACLangs.confirm(), 6 * SCALE);
-			}
+		this.alignStyle = AlignStyle.CENTER;
+	}
+	
+	@Override
+	public void onAdded() {
+		addWidgets(new ButtonNormal(ACLangs.confirm(), 25, 48) {
 			@Override
-			public void onMouseDown(double mx, double my) {
+			public void buttonPressed(double mx, double my) {
 				result = true;
 				onConfirm();
 				DiagActionConfirm.this.dispose();
 			}
-		};
-		
-		new ButtonNormal("cancel", 65 * SCALE, 48 * SCALE) {
-			{
-				this.setTextProps(ACLangs.cancel(), 6 * SCALE);
-			}
+		},new ButtonNormal(ACLangs.cancel(), 65, 48) {
 			@Override
-			public void onMouseDown(double mx, double my) {
+			public void buttonPressed(double mx, double my) {
 				result = false;
 				DiagActionConfirm.this.dispose();
 			}
-		};
+		});
 	}
 	
 	@Override
@@ -66,10 +61,10 @@ public class DiagActionConfirm extends DialogueBase {
 		super.draw(mx, my, hover);
 		TrueTypeFont font = TextUtils.FONT_CONSOLAS_64;
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5 * SCALE, 15 * SCALE, 7 * SCALE, TrueTypeFont.ALIGN_CENTER);
-		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5 * SCALE, 35.5 * SCALE, 7 * SCALE, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5, 15, 7, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5, 35.5, 7, TrueTypeFont.ALIGN_CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		TextUtils.drawText(font, devAction.getActionInfo(dev.data), 57.5 * SCALE, 24 * SCALE, 9 * SCALE, TrueTypeFont.ALIGN_CENTER);
+		TextUtils.drawText(font, devAction.getActionInfo(dev.data), 57.5, 24, 9, TrueTypeFont.ALIGN_CENTER);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	
@@ -83,7 +78,7 @@ public class DiagActionConfirm extends DialogueBase {
 		AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
 		
 		//Open the progress gui
-		new DiagStimulate(dev, devAction);
+		dev.getGui().addWidget(new DiagStimulate(dev, devAction));
 	}
 
 }

@@ -11,6 +11,7 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.api.draw.prop.AssignColor;
 import cn.liutils.api.draw.prop.AssignTexture;
 import cn.liutils.api.draw.tess.GUIRect;
 import cn.liutils.api.draw.tess.RectMapping;
@@ -46,10 +47,12 @@ public class PageSkills extends DevSubpage {
 			final int level;
 			final int expectedExp;
 			final int expectedEnergy;
+			
 
 			public SkillElement(int id) {
 				super(0, 0, 110.5, 33.5);
 				this.initTexDraw(ACClientProps.TEX_GUI_AD_SKILL, 291, 0, 221, 67);
+				
 				skillID = id;
 				skill = base.data.getSkill(id);
 				level = base.data.getSkillLevel(skillID);
@@ -64,18 +67,22 @@ public class PageSkills extends DevSubpage {
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
-				RectMapping map = ((GUIRect)this.drawer.getHandler("rect_2d")).getMap();
+				HudUtils.setTextureResolution(512, 512);
 				
+				double v0;
 				if(fullyLearned) {
-					map.v0 = 139;
+					v0 = 139;
 				} else if(mouseHovering) {
-					map.v0 = 1;
+					v0 = 1;
 				} else if(!learned){
-					map.v0 = 70;
+					v0 = 70;
 				} else {
-					map.v0 = 208;
+					v0 = 208;
 				}
-				super.draw(mx, my, mouseHovering);
+				
+				RenderUtils.bindIdentity();
+				RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
+				HudUtils.drawRect(0, 0, 291, v0, 110.5, 33.5, 221, 67);
 				
 				//Logo
 				ResourceLocation logo = skill.getLogo();
@@ -122,8 +129,10 @@ public class PageSkills extends DevSubpage {
 		@Override
 		public void onAdded() {
 			for(Integer sk : base.data.getCanLearnSkillList()) {
-				if(sk != 0)
+				if(sk != 0) {
+					System.out.println("Adding " + sk);
 					this.addWidget(new SkillElement(sk));
+				}
 			}
 		}
 		
@@ -134,7 +143,13 @@ public class PageSkills extends DevSubpage {
 		public Bar() {
 			super(120.5, 13, 5.5, 93.5, 12);
 			this.enableDragging = true;
-			this.initTexDraw(ACClientProps.TEX_GUI_AD_SKILL, 280, 0, 11, 24);
+		}
+		
+		@Override
+		public void onAdded() {
+			super.onAdded();
+			this.setTexMapping(280, 0, 11, 24);
+			this.addSetTexture(ACClientProps.TEX_GUI_AD_SKILL);
 		}
 		
 		@Override
@@ -145,34 +160,39 @@ public class PageSkills extends DevSubpage {
 	
 	public PageSkills(GuiDeveloper parent) {
 		super(parent, "page.adskill", ACClientProps.TEX_GUI_AD_SKILL);
-		bar = new Bar();
-		sl = new SkillList();
+	}
+	
+	@Override
+	public void onAdded() {
+		addWidget(bar = new Bar());
+		addWidget(sl = new SkillList());
 		
-		new Widget(120.5, 7, 5.5, 5.5) {
+		addWidgets(new Widget(120.5, 7, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressLast();
 				bar.setProgress(sl.getRelativeProgress());
 			}
-		};
+		},
 		new Widget(120.5, 107, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressNext();
 				bar.setProgress(sl.getRelativeProgress());
 			}
-		};
-		
-		new RandBufProgressBar(7, 124.5, 14, 293, 122, 5.5, 244, 11) {
+		},
+		new RandBufProgressBar(7, 124.5, 122, 5.5, 14, 293, 244, 11) {
 			{
-				drawer.addHandler(new AssignTexture(ACClientProps.TEX_GUI_AD_SKILL));
+				drawer.addHandlers(
+					new AssignTexture(ACClientProps.TEX_GUI_AD_SKILL),
+					new AssignColor());
 				this.fluctRegion = 0;
 			}
 			@Override
 			public double getProgress() {
 				return base.dev.curEnergy / base.dev.getMaxEnergy();
 			}
-		};
+		});
 	}
 	
 	@Override

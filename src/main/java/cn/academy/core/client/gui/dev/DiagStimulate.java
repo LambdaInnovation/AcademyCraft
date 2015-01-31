@@ -26,13 +26,12 @@ public class DiagStimulate extends DialogueBase {
 		final boolean reopen;
 
 		public ButtonConfirm(boolean r) {
-			super("confirm", 46 * SCALE, 45.5 * SCALE);
-			this.setTextProps(ACLangs.confirm(), 6 * SCALE);
+			super(ACLangs.confirm(), 46, 45.5);
 			reopen = r;
 		}
-		
+
 		@Override
-		public void onMouseDown(double mx, double my) {
+		public void buttonPressed(double mx, double my) {
 			//Action successfully peformed, which means current GUI data no more fresh.
 			//Let user reopen once.
 			if(reopen) {
@@ -44,45 +43,44 @@ public class DiagStimulate extends DialogueBase {
 	}
 	
 	final IDevAction devAction;
-	final RandBufProgressBar progress;
+	RandBufProgressBar progress;
 
 	public DiagStimulate(final GuiDeveloper dev, IDevAction ida) {
 		super("stimulate", dev, 9); //⑨
 		this.setTitle(ACLangs.stimProg());
+		this.alignStyle = AlignStyle.CENTER;
 		this.devAction = ida;
-		
-		new ButtonWarning("abort", 46 * SCALE, 45.5 * SCALE) {
-			{
-				this.setTextProps(ACLangs.cancel(), 6 * SCALE);
-			}
-			
+	}
+	
+	@Override
+	public void onAdded() {
+		addWidget(new ButtonWarning(ACLangs.cancel(), 46, 45.5) {
 			@Override
 			public void draw(double mx, double my, boolean hover) {
 				super.draw(mx, my, hover);
 				if(!dev.dev.isStimulating) {
-					new ButtonConfirm(dev.dev.isStimSuccessful());
+					DiagStimulate.this.addWidget(new ButtonConfirm(dev.dev.isStimSuccessful()));
 					progress.fluctRegion = 0;
 					this.dispose();
 				}
 			}
-			
+
 			@Override
-			public void onMouseDown(double mx, double my) {
+			public void buttonPressed(double mx, double my) {
 				dev.dev.isStimulating = false;
 				AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, -1, 0));
 			}
-		};
+		});
 		
-		progress = new RandBufProgressBar("progress", this, 6.5 * SCALE, 16 * SCALE, 103 * SCALE, 5.5 * SCALE) {
+		addWidget(progress = new RandBufProgressBar(6.5, 16, 103, 5.5, 13, 137, 206, 11) {
 			{
-				this.setTexMapping(13, 137, 206, 11);
-				this.setTexture(TEXTURE, 512, 512);
+				this.addSetTexture(TEXTURE);
 			}
 			@Override
 			public double getProgress() {
-				return ((double)dev.dev.stimSuccess) / dev.dev.maxStimTimes;
+				return (double)dev.dev.stimSuccess / dev.dev.maxStimTimes;
 			}
-		};
+		});
 	}
 	
 	final int[] ERROR_COLOR = {213, 45, 6};
@@ -90,7 +88,7 @@ public class DiagStimulate extends DialogueBase {
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		RenderUtils.loadTexture(TEXTURE);
-		HudUtils.drawRect(6 * SCALE, 15.5 * SCALE, 12, 121, 104 * SCALE, 6.5 * SCALE, 208, 13);
+		HudUtils.drawRect(6, 15.5, 12, 121, 104, 6.5, 208, 13);
 		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		if(!dev.dev.isStimulating && !dev.dev.isStimSuccessful()) {
@@ -100,23 +98,23 @@ public class DiagStimulate extends DialogueBase {
 		String text = String.format("%s: %s", 
 				dev.dev.isStimulating ? ACLangs.curAction() : (dev.dev.isStimSuccessful() ? ACLangs.successful() : ACLangs.aborted()),  
 				devAction.getActionInfo(dev.data));
-		dev.drawText(text, 6 * SCALE, 24 * SCALE, 7 * SCALE);
+		dev.drawText(text, 6, 24, 7);
 		
 		//StimTimes
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		text = String.format("%s: %d/%d", ACLangs.attemptes(), dev.dev.stimSuccess, dev.dev.maxStimTimes);
-		dev.drawText(text, 6 * SCALE, 31 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6, 31, 6);
 		
 		//StimFails
 		RenderUtils.bindColor(ERROR_COLOR);
-		double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, text, 6 * SCALE);
+		double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, text, 6);
 		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
-		dev.drawText(text, 6 * SCALE + len, 31 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6 + len, 31, 6);
 		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		//SyncRate
 		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
-		dev.drawText(text, 6 * SCALE, 38.5 * SCALE, 6 * SCALE);
+		dev.drawText(text, 6, 38.5, 6);
 		
 		RenderUtils.bindIdentity();
 	}

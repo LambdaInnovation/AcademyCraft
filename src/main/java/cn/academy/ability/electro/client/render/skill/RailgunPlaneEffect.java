@@ -42,7 +42,7 @@ public class RailgunPlaneEffect extends SkillRenderer {
 			
 			Rect rect = new Rect(1.7, 1.7);
 			rect.setCentered();
-			rect.map.set(0, 0, 1, 0.8533333333);
+			rect.map.setAbs(0, 0, 1, 0.8533333333);
 			
 			Transform trans = new Transform().setRotation(90, 0, 0);
 			
@@ -57,7 +57,7 @@ public class RailgunPlaneEffect extends SkillRenderer {
 			line = new DrawObject();
 			
 			Rect rect = new Rect(44, 0.2);
-			rect.map.set(0, .9, 1, 1.0);
+			rect.map.setAbs(0, .9, 1, 1.0);
 			
 			Offset off = new Offset(EventType.PRE_TESS);
 			off.set(0, 0, -31);
