@@ -33,10 +33,8 @@ public class DiagStimulate extends DialogueBase {
 		@Override
 		public void buttonPressed(double mx, double my) {
 			//Action successfully peformed, which means current GUI data no more fresh.
-			//Let user reopen once.
 			if(reopen) {
-				dev.dev.userQuit();
-				dev.user.closeScreen();
+				dev.reload(); //drop all the cur instance and creat new one
 			} else DiagStimulate.this.dispose();
 		}
 		

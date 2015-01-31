@@ -88,7 +88,7 @@ public class DialogueBase extends Widget {
 		super(0, 0, 115, 59);
 		this.initTexDraw(TEXTURE, 0, 0, 230, 117);
 		this.dev = dev;
-		blackout = new Blackout("black_" + id);
+		dev.getGui().addWidget(blackout = new Blackout("black_" + id));
 	}
 	
 	public void setTitle(String str) {

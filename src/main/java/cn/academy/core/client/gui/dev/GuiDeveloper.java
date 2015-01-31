@@ -16,6 +16,7 @@ import cn.academy.core.block.dev.MsgDismount;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.liutils.api.draw.tess.GUIRect;
 import cn.liutils.api.draw.tess.RectMapping;
+import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.util.HudUtils;
@@ -56,11 +57,17 @@ public class GuiDeveloper extends LIGuiScreen {
 		this.dev = dev;
 		this.data = AbilityDataMain.getData(user);
 		
+		reload();
+	}
+	
+	void reload() {
+		gui = new LIGui();
 		gui.addWidget(pageMain = new PageMain(this));
+		subs.clear();
 		subs.add(new PageLearn(this));
 		subs.add(new PageSkills(this));
 		
-		for(final DevSubpage sp : subs) {
+		for(DevSubpage sp : subs) {
 			pageMain.addWidget(sp);
 		}
 		 
