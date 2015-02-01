@@ -10,9 +10,9 @@ public interface IWirelessGenerator extends IWirelessTile {
 	
 	/**
 	 * Get the energy output current tick
-	 * @param required the energy required
-	 * @return The energy generated, which should never be larger than required
+	 * @param req The energy required
+	 * @return The energy generated
 	 */
-	int getOutput(int required);
+	double getOutput(double req);
 	
 }

@@ -38,16 +38,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillMineDetect extends SkillBase {
 
-//	private static Set<Block> acceptBlocks = new HashSet<Block>();
-//	static {
-//		Block arr[] = new Block[] {
-//			Blocks.iron_ore,
-//			Blocks.gold_ore,
-//			Blocks.emerald_ore,
-//		};
-//		acceptBlocks.addAll(Arrays.asList(arr));
-//	}
-//	
 	//TODO: Maybe we need more flitering?
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
