@@ -3,7 +3,10 @@
  */
 package cn.academy.core.client.render;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -14,20 +17,26 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.electro.client.render.skill.RailgunPlaneEffect;
+import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.client.render.SkillRenderer.HandRenderType;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
+import cn.academy.api.data.AbilityData;
+import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.api.render.IPlayerRenderHook;
 import cn.liutils.template.LIClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,22 +48,66 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@RegEventHandler({Bus.Forge, Bus.FML})
 @SideOnly(Side.CLIENT)
-public class SkillRenderingHandler {
+public class SkillRenderManager {
 	
-	private static SkillRenderingHandler instance = new SkillRenderingHandler();
+	private static SkillRenderManager instance = new SkillRenderManager();
+	
+	/**
+	 * Current alive renderers.
+	 */
+	private static Set<RenderNode> renderers = new HashSet();
+	
+	private static class RenderNode {
+		public final SkillRenderer render;
+		public final long createTime;
+		public final long lifeTime;
+		public RenderNode(SkillRenderer sr, long _lifeTime) {
+			render = sr;
+			createTime = Minecraft.getSystemTime();
+			lifeTime = _lifeTime;
+		}
+	}
+	
+	public static void addEffect(SkillRenderer renderer, long time) {
+		renderers.add(new RenderNode(renderer, time));
+	}
+	
+	public static void addEffect(SkillRenderer renderer) {
+		addEffect(renderer, Long.MAX_VALUE);
+	}
 	
 	public static void init() {
 		LIClientRegistry.addPlayerRenderingHook(new PRHSkillRender());
-		MinecraftForge.EVENT_BUS.register(instance);
+	}
+	
+	@SubscribeEvent
+	public void clientTick(ClientTickEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(player == null) return;
+		
+		Iterator<RenderNode> iter = renderers.iterator();
+		while(iter.hasNext()) {
+			RenderNode node = iter.next();
+			long dt = Minecraft.getSystemTime() - node.createTime;
+			if(dt > node.lifeTime) {
+				iter.remove();
+				continue;
+			}
+			if(node.render.tickUpdate(player, dt)) {
+				iter.remove();
+			}
+		}
 	}
 	
 	@SubscribeEvent
 	public void renderHudEvent(RenderGameOverlayEvent e) {
 		ScaledResolution sr = e.resolution;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		for(SkillState ss : SkillStateManager.getState(player)) {
-			ss.getRender().renderHud(player, ss, sr);
+		long time = Minecraft.getSystemTime();
+		for(RenderNode node : renderers) {
+			node.render.renderHud(player, sr, time - node.createTime);
 		}
 	}
 	
@@ -105,19 +158,46 @@ public class SkillRenderingHandler {
 			//RenderUtils.loadTexture(ACClientProps.TEX_ARC_SHELL[0]);
 			//RenderUtils.drawCube(1, 1, 1, false);
 			traverseHandRender(Minecraft.getMinecraft().thePlayer, HandRenderType.FIRSTPERSON);
-			rpe.renderHandEffect(Minecraft.getMinecraft().thePlayer, null, HandRenderType.FIRSTPERSON);
+			//rpe.renderHandEffect(Minecraft.getMinecraft().thePlayer, null, HandRenderType.FIRSTPERSON);
 			
 		} GL11.glPopMatrix();
 	}
 	
-	private static RailgunPlaneEffect rpe = new RailgunPlaneEffect(0);
+	//private static RailgunPlaneEffect rpe = new RailgunPlaneEffect(0);
 	
 	private static void traverseHandRender(EntityPlayer player, HandRenderType type) {
-		List<SkillState> states = SkillStateManager.getState(player);
-		for(SkillState s : states) {
-			s.getRender().renderHandEffect(player, s, type);
+		long time = Minecraft.getSystemTime();
+		for(RenderNode node : renderers) {
+			node.render.renderHandEffect(player, type, time - node.createTime);
 		}
 	}
+	
+	private static class PRHSkillRender implements IPlayerRenderHook {
+
+		public PRHSkillRender() {
+		}
+
+		@Override
+		public boolean isActivated(EntityPlayer player, World world) {
+			return true;
+		}
+
+		@Override
+		public void renderHead(EntityPlayer player, World world) {}
+
+		@Override
+		public void renderBody(EntityPlayer player, World world) {
+			AbilityData data = AbilityDataMain.getData(player);
+			long time = Minecraft.getSystemTime();
+			for(RenderNode node : renderers) {
+				GL11.glPushMatrix();
+				node.render.renderSurroundings(player, time - node.createTime);
+				GL11.glPopMatrix();
+			}
+		}
+
+	}
+
 	
 	private static Vec3 vec(double x, double y, double z) {
 		return Vec3.createVectorHelper(x, y, z);

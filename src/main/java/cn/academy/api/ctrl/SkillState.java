@@ -36,6 +36,8 @@ public class SkillState {
 	
 	private int tickToFinish = 0;
 	
+	private boolean alive = false;
+	
 	/**
 	 * The per-state render
 	 */
@@ -45,9 +47,6 @@ public class SkillState {
 		this.player = player;
 		
 		isRemote = player.worldObj.isRemote;
-		if(isRemote) {
-			render = createRenderer();
-		}
 	}
 	
 	public final EntityPlayer player;
@@ -56,6 +55,7 @@ public class SkillState {
 		SkillStateManager.addState(this);
 		
 		onStart();
+		alive = true;
 		if (!player.worldObj.isRemote) {
 			//sync to client
 			this.stateID = nextID++;
@@ -84,9 +84,17 @@ public class SkillState {
 	
 	public final void reallyFinishSkill() {
 		onFinish();
+		alive = false;
 		if (!player.worldObj.isRemote) {
 			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
 		}
+	}
+	
+	/**
+	 * Return if this SkillState is in the executing queue.
+	 */
+	public final boolean isAlive() {
+		return alive;
 	}
 	
 	protected void fromNBT(NBTTagCompound nbt) {}
@@ -98,15 +106,6 @@ public class SkillState {
 	protected void onFinish() {}
 	
 	/**
-	 * Called when client receives an update message.
-	 * Note that the player who is the owner of this state, will not receive update.
-	 * @param nbt
-	 */
-	public void onUpdate(NBTTagCompound nbt) {
-		fromNBT(nbt);
-	}
-	
-	/**
 	 * Will be called every tick while this state is active.
 	 * @return Return true if you want to finish this state.
 	 */
@@ -115,23 +114,12 @@ public class SkillState {
 	}
 	
 	/**
-	 * Called at the initialization of SkillState. 
-	 * Return a instance that can handle this state.
-	 * You could create a new instance for each SkillState, 
-	 * or you can use one instance for many SkillStates 
-	 * (When no per-state data needs to be handled, this is more efficient)
-	 * @return a SkillRender instance
+	 * Called when client receives an update message.
+	 * Note that the player who is the owner of this state, will not receive update.
+	 * @param nbt
 	 */
-	protected SkillRenderer createRenderer() {
-		return SkillRenderer.EMPTY;
-	}
-	
-	/**
-	 * Get the SkillRender for this SkillState instance.
-	 * @return the SkillRender instance
-	 */
-	public SkillRenderer getRender() {
-		return render;
+	public void onUpdate(NBTTagCompound nbt) {
+		fromNBT(nbt);
 	}
 	
 	/**

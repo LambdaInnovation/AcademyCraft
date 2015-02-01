@@ -10,11 +10,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * The render effect handler of skill. (More precisely, <code>SkillState</code>)
- * All rendering method takes <code>EntityPlayer</code> and <code>SkillState</code> as arguments, 
- * and you are expected to do the render according to <code>SkillState</code>'s state.
+ * The render effect handler of skill.
+ * This class works independently and can be added any time into SkillRenderManager.
+ * You can either specify a life time and let the manager handle the renderer, or you
+ * can handle yourself by calling setDead().
+ * For efficiency reason, you can add one SkillRenderer many time simultaneously.
+ * That is, you can use only one instance for stateless render effects.
  * @author WeathFolD
- * @see cn.academy.api.ctrl.SkillState
+ * @see cn.academy.core.client.render.SkillRenderManager
  */
 public class SkillRenderer {
 	
@@ -28,21 +31,28 @@ public class SkillRenderer {
 	public SkillRenderer() {}
 	
 	/**
+	 * Return true if you want to end this effect.
+	 */
+	public boolean tickUpdate(EntityPlayer player, long time) {
+		return false;
+	}
+	
+	/**
 	 * Draw the effect on the hand. ideal drawing range (0, 0, 0) to (1, 1, 1)
 	 * @param type Which type of render routine are we in?
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderHandEffect(EntityPlayer player, SkillState state, HandRenderType type) {
+	public void renderHandEffect(EntityPlayer player, HandRenderType type, long time) {
 		
 	}
 	
 	/**
 	 * Draw the effect of player surroundings. The origin point is player's center(at feet pos),
-	 * a ideal render range would be (-0.5, 0, -0.5) to (0.5, 1, 0.5).
+	 * a ideal rendering range would be (-0.5, 0, -0.5) to (0.5, 1, 0.5).
 	 * The region is automatically rotated so the player facing direction is always (0, 0, 1).
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderSurroundings(EntityPlayer player, SkillState state) {
+	public void renderSurroundings(EntityPlayer player, long time) {
 		
 	}
 	
@@ -50,7 +60,7 @@ public class SkillRenderer {
 	 * Draw the effect on the screen.
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderHud(EntityPlayer player, SkillState state, ScaledResolution sr) {
+	public void renderHud(EntityPlayer player, ScaledResolution sr, long time) {
 		
 	}
 

@@ -27,12 +27,12 @@ public class SkillRenderDebug extends SkillRenderer {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderHandEffect(EntityPlayer player, SkillState state, HandRenderType type) {
+	public void renderHandEffect(EntityPlayer player, HandRenderType type, long time) {
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderSurroundings(EntityPlayer player, SkillState state) {
+	public void renderSurroundings(EntityPlayer player, long time) {
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(-.5, 0, -.5);
 			GL11.glEnable(GL11.GL_BLEND);

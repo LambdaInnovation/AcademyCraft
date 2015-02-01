@@ -32,7 +32,6 @@ public class RailgunPlaneEffect extends SkillRenderer {
 	
 	static final long ANIM_LEN = 1200; //animation length in milliseconds
 	static final long DELAY = 100;
-	final long time;
 	
 	private static DrawObject circle, line;
 	static {
@@ -72,14 +71,12 @@ public class RailgunPlaneEffect extends SkillRenderer {
 		}
 	}
 
-	public RailgunPlaneEffect(long beginTime) {
-		time = beginTime;
-	}
+	public RailgunPlaneEffect() {}
 	
 	@SideOnly(Side.CLIENT)
-	public void renderHandEffect(EntityPlayer player, SkillState state, HandRenderType type) {
+	@Override
+	public void renderHandEffect(EntityPlayer player, HandRenderType type, long dt) {
 		if(type == HandRenderType.EQUIPPED) return;
-		double dt = (Minecraft.getSystemTime() - time) % (DELAY + ANIM_LEN);
 		if(dt < DELAY) return;
 		dt -= DELAY;
 		
