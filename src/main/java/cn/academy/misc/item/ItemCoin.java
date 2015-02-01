@@ -16,7 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.IShootable;
+import net.minecraftforge.common.MinecraftForge;
+import cn.academy.api.event.ThrowCoinEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.liutils.util.GenericUtils;
@@ -60,6 +61,7 @@ public class ItemCoin extends Item {
     	//Spawn at both side, not syncing for render effect purpose
     	EntityThrowingCoin etc = new EntityThrowingCoin(player, stack);
     	world.spawnEntityInWorld(etc);
+    	MinecraftForge.EVENT_BUS.post(new ThrowCoinEvent(player, etc));
     	nbt.setInteger("entID", etc.getEntityId());
     	nbt.setBoolean("throwing", true);
     	if(!player.capabilities.isCreativeMode) {

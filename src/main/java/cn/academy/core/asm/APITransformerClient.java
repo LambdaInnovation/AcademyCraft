@@ -70,7 +70,7 @@ public class APITransformerClient implements IClassTransformer {
 				mv.visitVarInsn(Opcodes.ALOAD, 1);
 				mv.visitVarInsn(Opcodes.ALOAD, 2);
 				mv.visitVarInsn(Opcodes.ALOAD, 4);
-				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderingHandler", "renderThirdPerson", 
+				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderManager", "renderThirdPerson", 
 						"(Lnet/minecraft/entity/EntityLivingBase;"
 						+ "Lnet/minecraft/item/ItemStack;"
 						+ "Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;)V");
@@ -97,7 +97,7 @@ public class APITransformerClient implements IClassTransformer {
 	            String desc) {
 			if(Opcodes.INVOKESTATIC == opcode && name.equals("glDisable") && (++visTime == 2)) { //Before the glDisable(GL_RESCALE_NORMAL) call
 				System.out.println("Injected renderInFirstPerson");
-				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderingHandler", "renderFirstPerson", "()V");
+				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderManager", "renderFirstPerson", "()V");
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc);
 	    }

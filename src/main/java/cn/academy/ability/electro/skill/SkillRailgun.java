@@ -3,25 +3,20 @@
  */
 package cn.academy.ability.electro.skill;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.culling.Frustrum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Project;
-
+import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.skill.RailgunPlaneEffect;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.internal.PatternDown;
+import cn.academy.api.event.ThrowCoinEvent;
+import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
-import cn.liutils.api.gui.AuxGui;
-import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,6 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
+@RegEventHandler(Bus.Forge)
 public class SkillRailgun extends SkillBase {
 
 	public SkillRailgun() {
@@ -43,12 +39,22 @@ public class SkillRailgun extends SkillBase {
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
 				if(!player.worldObj.isRemote) {
-					player.worldObj.spawnEntityInWorld(new EntityRailgun(player));
+					//player.worldObj.spawnEntityInWorld(new EntityRailgun(player));
 				}
 				return true;
 			}
 			
 		});
+	}
+	
+	@SubscribeEvent
+	public void onThrowCoin(ThrowCoinEvent event) {
+		World world = event.entityPlayer.worldObj;
+		System.out.println("OnThrowCoin");
+		if(world.isRemote) {
+			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
+					RailgunPlaneEffect.getAnimLength());
+		}
 	}
 	
 	public String getInternalName() {

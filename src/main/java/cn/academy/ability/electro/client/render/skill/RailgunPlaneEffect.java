@@ -33,6 +33,12 @@ public class RailgunPlaneEffect extends SkillRenderer {
 	static final long ANIM_LEN = 1200; //animation length in milliseconds
 	static final long DELAY = 100;
 	
+	public static RailgunPlaneEffect instance = new RailgunPlaneEffect();
+	
+	public static long getAnimLength() {
+		return ANIM_LEN + DELAY;
+	}
+	
 	private static DrawObject circle, line;
 	static {
 		//Setup pieces
