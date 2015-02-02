@@ -12,11 +12,11 @@ import net.minecraft.item.Item;
  * 矿物方块类
  * @author Lyt99
  */
-public class ACBlockOre extends Block{
+public class ACOre extends Block{
 	
 	String BName;
 	
-	public ACBlockOre(String Blockname,int HarvestLevel){
+	public ACOre(String Blockname,int HarvestLevel){
 		super(Material.rock);
 		setCreativeTab(AcademyCraft.cct);
 		this.setHarvestLevel("pickaxe", HarvestLevel);
