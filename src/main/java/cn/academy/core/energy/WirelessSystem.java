@@ -80,8 +80,6 @@ public class WirelessSystem {
 		return INSTANCE;
 	}
 	
-	private WirelessSystem() {}
-	
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
 		for(WiWorldData data : worldData.values()) {

@@ -5,7 +5,6 @@ package cn.academy.core.client.render;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -25,8 +24,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.client.render.SkillRenderer.HandRenderType;
-import cn.academy.api.ctrl.SkillState;
-import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
@@ -34,7 +31,8 @@ import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.render.IPlayerRenderHook;
-import cn.liutils.template.LIClientRegistry;
+import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook;
+import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook.Pass;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -79,7 +77,6 @@ public class SkillRenderManager {
 	}
 	
 	public static void init() {
-		LIClientRegistry.addPlayerRenderingHook(new PRHSkillRender());
 	}
 	
 	@SubscribeEvent
@@ -172,10 +169,10 @@ public class SkillRenderManager {
 		}
 	}
 	
-	private static class PRHSkillRender implements IPlayerRenderHook {
+	@RegPlayerRenderHook(Pass.ALPHA)
+	public static class PRHSkillRender implements IPlayerRenderHook {
 
-		public PRHSkillRender() {
-		}
+		public PRHSkillRender() {}
 
 		@Override
 		public boolean isActivated(EntityPlayer player, World world) {
