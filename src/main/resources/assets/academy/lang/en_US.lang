@@ -15,13 +15,16 @@ item.ability_tablet3.name=Personal Reality Enhancing Tablet
 item.ac_needle.name=Needle
 item.ac_energycrystal.name=Energy Crystal
 item.ad_card.name=Ability Developer Electricity Card
-item.ac_aluminumingot=Aluminum Ingot
-item.ac_copperingot.name=Copper Ingot
-item.ac_steelingot.name=Steel Ingot
-item.ac_tiningot.name=Tin Ingot
-item.ac_siliconrod.name=Silicon Rod
-item.ac_coppercoil.name=Copper Coil
-item.ac_corebearing.name=Core Bearing
+item.aluminumingot=Aluminum Ingot
+item.copperingot.name=Copper Ingot
+item.steelingot.name=Steel Ingot
+item.tiningot.name=Tin Ingot
+item.siliconrod.name=Silicon Rod
+item.coppercoil.name=Copper Coil
+item.corebearing.name=Core Bearing
+item.ni_ingot.name=Nickel Ingot
+item.mg_plate.name=Magnesium Plate
+item.mg_ingot.name=Magnesium Ingot
 
 #Blocks
 tile.ac_developer.name=Ability Developer
@@ -31,6 +34,9 @@ tile.fieldincr.name=Field Increase Module
 tile.copperore.name=Copper Ore
 tile.tinore.name=Tin Ore
 tile.aluminumore.name=Aluminum Ore
+tile.crystal_ore.name=Crystal Ore
+tile.ni_ore.name=Nickel Ore
+tile.mg_ore.name=Magnesium Ore
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft

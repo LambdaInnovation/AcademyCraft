@@ -7,6 +7,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.misc.client.render.RendererCoin;
+import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
 import cn.academy.misc.item.ItemCoin;
@@ -69,34 +70,48 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("aluminumingot")
 	@RegItem.OreDict("ingotAluminum")
-	public static Item ingotAl;
+	public static ACSimpleItem ingotAl;
 	
 	@RegItem
 	@RegItem.UTName("copperingot")
 	@RegItem.OreDict("ingotCopper")
-	public static Item ingotCu;
+	public static ACSimpleItem ingotCu;
 	
 	@RegItem
 	@RegItem.UTName("steelingot")
 	@RegItem.OreDict("ingotRefinedIron")
-	public static Item ingotSteel;
+	public static ACSimpleItem ingotSteel;
 	
 	@RegItem
 	@RegItem.UTName("tiningot")
 	@RegItem.OreDict("ingotTin")
-	public static Item ingotTin;
+	public static ACSimpleItem ingotTin;
+	
+	@RegItem
+	@RegItem.UTName("mg_ingot")
+	@RegItem.OreDict("ingotMg")
+	public static ACSimpleItem ingotMg;
+	
+	@RegItem
+	@RegItem.UTName("ni_ingot")
+	@RegItem.OreDict("ingotNi")
+	public static ACSimpleItem ingotNi;
+	
+	@RegItem
+	@RegItem.UTName("mg_plate")
+	public static ACSimpleItem mgPlate;
 	
 	@RegItem
 	@RegItem.UTName("siliconrod")
-	public static Item siliconRod;
+	public static ACSimpleItem siliconRod;
 	
 	@RegItem
 	@RegItem.UTName("coppercoil")
-	public static Item copperCoil;
+	public static ACSimpleItem copperCoil;
 	
 	@RegItem
 	@RegItem.UTName("corebearing")
-	public static Item coreBearing;
+	public static ACSimpleItem coreBearing;
 	
 	@RegItem()
 	@RegItem.HasRender
