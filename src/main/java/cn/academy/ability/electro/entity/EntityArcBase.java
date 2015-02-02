@@ -54,6 +54,21 @@ public class EntityArcBase extends EntityRay {
 	@SideOnly(Side.CLIENT)
 	public EntityArcBase(World world) {
 		super(world);
+		addEffectUpdate();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public int getIndex(int i) {
+		return indSeq.get(i % SEQ_SIZE);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public double getRotation(int i) {
+		return rotSeq.get(i % SEQ_SIZE);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void addEffectUpdate() {
 		this.addDaemonHandler(new MotionHandler(this) {
 			@Override public void onCreated() {}
 
@@ -73,16 +88,6 @@ public class EntityArcBase extends EntityRay {
 				return "perm";
 			}
 		});
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public int getIndex(int i) {
-		return indSeq.get(i % SEQ_SIZE);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public double getRotation(int i) {
-		return rotSeq.get(i % SEQ_SIZE);
 	}
 
 }

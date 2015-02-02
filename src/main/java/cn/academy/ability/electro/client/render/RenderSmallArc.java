@@ -26,7 +26,7 @@ public class RenderSmallArc {
 	private List<Piece> alivePieces = new ArrayList<Piece>();
 	long lastRefTime;
 	int refWait;
-	public boolean showing = true;
+	public boolean showing = false;
 	public int itensity = 8, iten_off = 5;
 	public int showFrom = 300, showTo = 500;
 	public int hideFrom = 300, hideTo = 600;
@@ -35,10 +35,13 @@ public class RenderSmallArc {
 	/**
 	 * Initialize a smallArc render with given point generator.
 	 */
-	public RenderSmallArc(IPointFactory fac, double size) {
+	public RenderSmallArc(IPointFactory fac, double size, int _itensity) {
 		factory = fac;
 		sizeFrom = size * 0.8;
 		sizeTo = size * 1.2;
+		itensity = _itensity;
+		iten_off = (int) (itensity * 0.6);
+		update();
 	}
 	
 	public void draw() {

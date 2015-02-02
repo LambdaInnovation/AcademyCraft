@@ -15,6 +15,7 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.misc.entity.EntityRay;
+import cn.liutils.util.GenericUtils;
 
 /**
  * This only peforms correct translation.
@@ -29,13 +30,13 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	
 	protected double 
 		fpOffsetX = -0.2,
-		fpOffsetY = -0.3,
+		fpOffsetY = -0.2,
 		fpOffsetZ = -0.1;
 
 	protected double 
-		tpOffsetX = 0.0,
-		tpOffsetY = -0.2,
-		tpOffsetZ = -0.4;
+		tpOffsetX = -0.3,
+		tpOffsetY = -0.6,
+		tpOffsetZ = -0.2;
 	
 	protected double alpha = 1.0;
 
@@ -60,18 +61,26 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		if(disableLight)
 			GL11.glDisable(GL11.GL_LIGHTING);
+		
+		if(er.isSync && clientPlayer.equals(er.getThrower())) {
+			return;
+		}
+		//System.out.println(clientPlayer.rotationYaw + " " + clientPlayer.rotationPitch);
+		//System.out.println(var1 + " " + er.getTraceDistance());
+		
+		
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
-			GL11.glRotated(er.rotationYaw, 0, 1, 0);
-			GL11.glRotated(er.rotationPitch, -1, 0, 0);
+			GL11.glRotated(er.rotationYaw, 0, -1, 0);
+			GL11.glRotated(er.rotationPitch, 1, 0, 0);
 			
 			if(firstPerson) {
 				transformFirstPerson(er, x, y, z);
 			} else {
 				transformThirdPerson(er, x, y, z);
+				optimizeView(er, x, y, z);
 			}
-			
-			optimizeView(er, x, y, z);
+				
 			
 			if(disableLight) {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);

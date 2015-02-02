@@ -34,6 +34,7 @@ public class EntityRailgun extends EntityRay {
 
 		public Render() {
 			super(ACClientProps.TEX_EFF_RAILGUN);
+			width = 0.2;
 		}
 		
 	}

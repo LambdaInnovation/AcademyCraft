@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * This class works independently and can be added any time into SkillRenderManager.
  * You can either specify a life time and let the manager handle the renderer, or you
  * can handle yourself by calling setDead().
- * For efficiency reason, you can add one SkillRenderer many time simultaneously.
+ * For efficiency reason, you can add one instance multiple times simultaneously.
  * That is, you can use only one instance for stateless render effects.
  * @author WeathFolD
  * @see cn.academy.core.client.render.SkillRenderManager

@@ -15,6 +15,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.MotionHandler;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD
@@ -23,6 +24,15 @@ import cn.liutils.api.entityx.MotionHandler;
 @RegistrationClass
 @RegEntity
 public class EntityAttackingArc extends EntityArcBase {
+	
+	public static class OffSync extends EntityAttackingArc {
+
+		public OffSync(EntityPlayer creator, SkillArcGen sag) {
+			super(creator, sag);
+			addEffectUpdate();
+		}
+		
+	}
 	
 	float dmg;
 	double igniteProb;
@@ -33,29 +43,31 @@ public class EntityAttackingArc extends EntityArcBase {
 		int skillID = data.getSkillID(sag);
 		dmg = 3 + data.getSkillLevel(skillID) * 0.5F + data.getLevelID() + 1;
 		igniteProb = 0.1 + 0.03 * data.getSkillLevel(skillID) + data.getLevelID() * 0.05;
-		this.addDaemonHandler(new MotionHandler(this) {
-			@Override
-			public void onCreated() {
-				MovingObjectPosition mop = peformTrace();
-				if(mop == null) return;
-				if(mop.typeOfHit == MovingObjectType.BLOCK) {
-					if(rand.nextDouble() < igniteProb) {
-						if(worldObj.isAirBlock(mop.blockX, mop.blockY + 1, mop.blockZ)) {
-							worldObj.setBlock(mop.blockX, mop.blockY + 1, mop.blockZ, Blocks.fire);
+		if(isSync) {
+			this.addDaemonHandler(new MotionHandler(this) {
+				@Override
+				public void onCreated() {
+					MovingObjectPosition mop = peformTrace(GenericUtils.selectorLiving);
+					if(mop == null) return;
+					if(mop.typeOfHit == MovingObjectType.BLOCK) {
+						if(rand.nextDouble() < igniteProb) {
+							if(worldObj.isAirBlock(mop.blockX, mop.blockY + 1, mop.blockZ)) {
+								worldObj.setBlock(mop.blockX, mop.blockY + 1, mop.blockZ, Blocks.fire);
+							}
 						}
+					} else {
+						mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), dmg);
 					}
-				} else {
-					mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), dmg);
 				}
-			}
-			@Override
-			public void onUpdate() {}
-			@Override
-			public String getID() {
-				return "Attack";
-			}
-			
-		});
+				@Override
+				public void onUpdate() {}
+				@Override
+				public String getID() {
+					return "Attack";
+				}
+				
+			});
+		}
 		lifeTime = 8;
 	}
 

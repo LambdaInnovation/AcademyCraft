@@ -3,11 +3,13 @@
  */
 package cn.academy.misc.entity;
 
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.entity.EntityAttackingArc.OffSync;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.api.entityx.motion.CollisionCheck;
@@ -35,6 +37,8 @@ public class EntityRay extends EntityX {
 	
 	public int lifeTime = Integer.MAX_VALUE; //How long this entity exists
 	
+	public final boolean isSync;
+	
 	public EntityRay(EntityLivingBase creator) {
 		this(creator, true);
 	}
@@ -60,6 +64,7 @@ public class EntityRay extends EntityX {
 		motion.applyToEntity(this);
 		this.setCurMotion(new RayUpdate());
 		setup();
+		isSync = !worldObj.isRemote;
 	}
 
 	/**
@@ -69,7 +74,9 @@ public class EntityRay extends EntityX {
 	public EntityRay(World world) {
 		super(world);
 		traceDist = getMaxDistance();
+		//this.setCurMotion(new RayUpdate());
 		setup();
+		isSync = true;
 	}
 	
 	@Override
@@ -111,9 +118,13 @@ public class EntityRay extends EntityX {
 	}
 	
 	public MovingObjectPosition peformTrace() {
+		return peformTrace(null);
+	}
+	
+	public MovingObjectPosition peformTrace(IEntitySelector sel) {
 		Motion3D tmp = motion.clone();
 		Vec3 v1 = tmp.getPosVec(worldObj), v2 = tmp.move(getMaxDistance()).getPosVec(worldObj);
-		return GenericUtils.rayTraceBlocksAndEntities(null, worldObj, v1, v2, this, thrower);
+		return GenericUtils.rayTraceBlocksAndEntities(sel, worldObj, v1, v2, this, thrower);
 	}
 	
 	private class Sync extends MotionHandler<EntityRay> {
@@ -130,7 +141,7 @@ public class EntityRay extends EntityX {
 			if(!worldObj.isRemote) {
 				dataWatcher.updateObject(10, Float.valueOf((float)traceDist));
 				dataWatcher.updateObject(11, thrower == null ? 0 : Integer.valueOf(thrower.getEntityId()));
-			} else {
+			} else if(isSync) {
 				traceDist = dataWatcher.getWatchableObjectFloat(10);
 				int id = dataWatcher.getWatchableObjectInt(11);
 				Entity e = worldObj.getEntityByID(id);
@@ -158,15 +169,22 @@ public class EntityRay extends EntityX {
 
 		@Override
 		public void onUpdate() {
-			if(thrower == null) return;
 			if(motion == null) motion = new Motion3D(EntityRay.this, false);
-			if(follow)
-				motion.init(thrower, 0, true);
-			motion.applyToEntity(EntityRay.this);
+			if(thrower != null) {
+				if(follow) {
+					motion.init(thrower, 0, true);
+					motion.applyToEntity(EntityRay.this);
+					rotationYaw = thrower.rotationYaw;
+					rotationPitch = thrower.rotationPitch;
+				}
+			}
 			
 			if(peformTrace) {
 				MovingObjectPosition mop = peformTrace();
 				if(mop != null) {
+					if(EntityRay.this instanceof OffSync) {
+						System.out.println(mop);
+					}
 					traceDist = mop.hitVec.distanceTo(motion.getPosVec(worldObj));
 				} else {
 					traceDist = getMaxDistance();
@@ -174,6 +192,7 @@ public class EntityRay extends EntityX {
 			} else {
 				traceDist = getMaxDistance();
 			}
+			//System.out.println(EntityRay.this + " " + traceDist);
 			
 			if(ticksExisted > lifeTime)
 				setDead();

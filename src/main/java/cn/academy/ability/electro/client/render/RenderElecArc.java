@@ -20,12 +20,13 @@ public class RenderElecArc extends RendererRayTiling<EntityArcBase> {
 	public RenderElecArc() {
 		super(null);
 		this.ratio = 6;
-		this.width = 0.9;
+		this.width = 0.5;
+		this.alpha = 1.0;
 	}
 	
 	@Override
 	protected void drawAtOrigin(EntityArcBase ent) {
-			super.drawAtOrigin(ent);
+		super.drawAtOrigin(ent);
 	}
 	
 	@Override
