@@ -4,10 +4,12 @@
 package cn.academy.core.energy;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.world.World;
 import cn.academy.api.energy.IWirelessGenerator;
@@ -21,14 +23,14 @@ import cn.academy.api.energy.IWirelessTile;
  */
 public class WirelessNetwork {
 	
-	static final int MAX_LAG = 5000;
+	static final int MAX_LAG = 2000;
 	
 	double energyLag = 0.0; //Previous unprocessed energy for balancing, absval < MAX_LAG
 	
 	final String channel;
 	final World world;
 	
-	List<IWirelessNode> nodes = new LinkedList();
+	Set<IWirelessNode> nodes = new HashSet();
 	
 	Map<IWirelessNode, NodeConns> conns = new HashMap();
 	Map<IWirelessTile, IWirelessNode> lookup = new HashMap();
@@ -40,6 +42,23 @@ public class WirelessNetwork {
 	
 	public boolean isAlive() {
 		return !nodes.isEmpty();
+	}
+	
+	public boolean hasNode(IWirelessNode node) {
+		return nodes.contains(node);
+	}
+	
+	public boolean hasUser(IWirelessTile tile) {
+		IWirelessNode attach = lookup.get(tile);
+		if(attach == null)
+			return false;
+		NodeConns conns = this.getConns(attach);
+		if(tile instanceof IWirelessGenerator) {
+			return conns.generators.contains(tile);
+		} else if(tile instanceof IWirelessReceiver) {
+			return conns.receivers.contains(tile);
+		}
+		return false;
 	}
 	
 	public void registerNode(IWirelessNode node) {
@@ -168,8 +187,8 @@ public class WirelessNetwork {
 	}
 	
 	static class NodeConns {
-		public static List<IWirelessGenerator> generators = new LinkedList();
-		public static List<IWirelessReceiver> receivers = new LinkedList();
+		public static Set<IWirelessGenerator> generators = new HashSet();
+		public static Set<IWirelessReceiver> receivers = new HashSet();
 	}
 
 }

@@ -16,6 +16,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
@@ -41,7 +42,7 @@ public class SkillMineDetect extends SkillBase {
 	//TODO: Maybe we need more flitering?
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
-		public boolean accepts(Block block) {
+		public boolean accepts(World world, Block block, int x, int y, int z) {
 			return block instanceof BlockOre;
 		}
 	};

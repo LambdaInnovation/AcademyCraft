@@ -4,6 +4,7 @@
 package cn.academy.core.energy;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
@@ -52,6 +53,18 @@ public class WirelessSystem {
 	public static void unregisterTile(IWirelessTile tile) {
 		assert(tile instanceof TileEntity);
 		instance().getData(((TileEntity) tile).getWorldObj()).unregister(tile);
+	}
+	
+	public static boolean isTileIn(IWirelessTile tile, String channel) {
+		return getData(((TileEntity)tile).getWorldObj()).isInChannel(tile, channel);
+	}
+	
+	public static IWirelessNode getNearestNode(World world, int x, int y, int z) {
+		return getData(world).getNearestNode(x, y, z);
+	}
+	
+	public static List<IWirelessNode> getAvailableNodes(World world, int x, int y, int z, double range, int max) {
+		return getData(world).getNodesIn(x, y, z, range, max);
 	}
 	
 	private static WiWorldData getData(World world) {
