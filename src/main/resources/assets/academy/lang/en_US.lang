@@ -2,9 +2,9 @@
 #Items
 item.void.name=
 item.ac_logo.name=AcademyCraft Logo
-item.ac_record1.name=Railgun Record - Only My Railgun
-item.ac_record2.name=Railgun Record - Sister's Noise
-item.ac_record3.name=Railgun Record - LEVEL5 -Judgelight-
+item.ac_record1.name=Railgun Record #0
+item.ac_record2.name=Railgun Record #1
+item.ac_record3.name=Railgun Record #2
 item.ac_coin.name=Game Coin
 item.ability_capsule1.name=Mind Induction Capsule
 item.ability_capsule2.name=AIM Activation Capsule
