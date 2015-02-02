@@ -160,7 +160,7 @@ public class SkillMineDetect extends SkillBase {
 						ebs = aliveSims.get(ind);
 						ind += 1;
 					} else {
-						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, getTexture(bp.block));
+						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, true);
 						worldObj.spawnEntityInWorld(ebs);
 					}
 					toRetain.add(ebs);

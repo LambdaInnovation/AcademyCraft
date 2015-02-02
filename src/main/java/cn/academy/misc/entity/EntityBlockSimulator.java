@@ -4,6 +4,7 @@
 package cn.academy.misc.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.skill.SkillMineDetect.HandlerEntity;
@@ -18,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Currently used solely for MineView skill, so none of the hierarchy optimization is done.
+ * Used solely for MineView skill, so none of the hierarchy optimization is done.
  * @author WeathFolD
  */
 @RegistrationClass
@@ -31,7 +32,18 @@ public class EntityBlockSimulator extends EntityX {
 	@RegEntity.Render
 	public static RenderBlockSimulator renderer;
 	
-	public ResourceLocation texture;
+	static final int colors[][] = {
+		{161, 181, 188},
+		{87, 231, 248},
+		{97, 204, 94},
+		{235, 109, 84}
+	};
+	
+	static final int defColor[] = {
+		115, 200, 227
+	};
+	
+	public int[] color;
 	
 	public boolean hasDepth = false;
 	public boolean hasLight = false;
@@ -41,9 +53,14 @@ public class EntityBlockSimulator extends EntityX {
 	
 	HandlerEntity parent;
 
-	public EntityBlockSimulator(HandlerEntity parent, BlockPos bp, ResourceLocation blockTex) {
+	public EntityBlockSimulator(HandlerEntity parent, BlockPos bp, boolean diff) {
 		super(parent.worldObj);
-		texture = blockTex;
+		Block block = bp.block;
+		if(diff) {
+			color = colors[block.getHarvestLevel(0)];
+		} else {
+			color = defColor;
+		}
 		blockPos = bp.copy();
 		this.parent = parent;
 		
@@ -89,10 +106,6 @@ public class EntityBlockSimulator extends EntityX {
 			return "ej";
 		}
 		
-	}
-	
-	public void resetTexture(ResourceLocation texture) {
-		this.texture = texture;
 	}
 	
 	public HandlerEntity getParent() {

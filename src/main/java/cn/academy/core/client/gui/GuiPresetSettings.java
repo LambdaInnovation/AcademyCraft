@@ -269,6 +269,9 @@ public class GuiPresetSettings extends LIGuiScreen {
 	
 	private class PageModify extends Widget {
 		
+		double mAlpha = 0.0;
+		long createTime;
+		
 		private class PartSkillInfo extends Widget {
 			
 			SkillBase skill;
@@ -297,17 +300,15 @@ public class GuiPresetSettings extends LIGuiScreen {
 				final float lsize = 24;
 			
 				float tx = WIDTH / 2 - lsize / 2;
-				RenderUtils.bindGray(.8, .8);
+				RenderUtils.bindGray(.8, .8 * mAlpha);
 				HudUtils.drawRectOutline(tx, tx, lsize, lsize, 2);
 				ResourceLocation logo = skill.getLogo();
-				if(logo != null) {
-					RenderUtils.bindIdentity();
-					RenderUtils.loadTexture(logo);
-					HudUtils.drawRect(tx, tx, lsize, lsize);
-				}
+				RenderUtils.bindGray(1, mAlpha);
+				RenderUtils.loadTexture(logo);
+				HudUtils.drawRect(tx, tx, lsize, lsize);
 				
-				if(mouseHovering && !used) {
-					RenderUtils.bindGray(.4, .5);
+				if(mouseHovering || used) {
+					RenderUtils.bindGray(used ? .1 : .4, .5 * mAlpha);
 					HudUtils.drawModalRect(0, 0, WIDTH, WIDTH);
 				}
 			}
@@ -328,6 +329,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 		public PageModify() {
 			super(0, 0, GuiPresetSettings.this.width, HEIGHT);
 			this.alignStyle = AlignStyle.CENTER;
+			createTime = Minecraft.getSystemTime();
 		}
 		
 		@Override
@@ -345,13 +347,14 @@ public class GuiPresetSettings extends LIGuiScreen {
 		
 		@Override
 		public void draw(double mx, double my, boolean hover) {
+			mAlpha = Math.min(1.0, (Minecraft.getSystemTime() - createTime) / 300D);
+			
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			HudUtils.setZLevel(zLevel);
 			GL11.glDepthFunc(GL11.GL_ALWAYS);
 			GL11.glPushMatrix(); {
-				float c = .3F;
-				GL11.glColor4f(c, c, c, .6F);
+				RenderUtils.bindGray(.1f, .6f * mAlpha);
 				
 				RenderUtils.loadTexture(ACClientProps.TEX_GUI_KS_MASK);
 				HudUtils.drawRect(0, 0, width, HEIGHT);
