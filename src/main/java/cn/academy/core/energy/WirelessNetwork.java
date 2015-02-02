@@ -21,7 +21,9 @@ import cn.academy.api.energy.IWirelessTile;
  */
 public class WirelessNetwork {
 	
-	static final int BUFFER_SIZE = 5000;
+	static final int MAX_LAG = 5000;
+	
+	double energyLag = 0.0; //Previous unprocessed energy for balancing, absval < MAX_LAG
 	
 	final String channel;
 	final World world;
@@ -131,25 +133,29 @@ public class WirelessNetwork {
 		for(IWirelessNode node : nodes) {
 			sum += node.getEnergy();
 		}
-		
+		sum += energyLag; //Also account unprocessed energy
+		sum = Math.max(sum, 0);
 		sum /= nodes.size();
 		
-		//Second pass: use buf as middle to balance
-		Iterator<IWirelessNode> iter = nodes.iterator();
-		IWirelessNode buf = iter.next();
-		while(iter.hasNext()) {
-			IWirelessNode node = iter.next();
-			double delta = sum - node.getEnergy();
-			delta = Math.signum(delta) * Math.min(Math.abs(delta), node.getLatency());
-			if(delta > 0 && buf.getEnergy() - delta < 0) {
-				delta = buf.getEnergy();
-			}
-			if(delta < 0 && buf.getEnergy() + delta < buf.getMaxEnergy()) {
-				delta = buf.getEnergy() - buf.getMaxEnergy();
-			}
-			node.setEnergy(buf.getEnergy() + delta);
-			buf.setEnergy(buf.getEnergy() - delta);
+		//Second pass: do the balance, use energyLag as middle buffer
+		for(IWirelessNode node : nodes) {
+			double delta = Math.min(sum, node.getMaxEnergy()) - node.getEnergy();
+			delta = queryLag(Math.signum(delta) * Math.min(delta, node.getLatency()));
+			node.setEnergy(delta + node.getEnergy());
 		}
+	}
+	
+	private double queryLag(double need) {
+		if(energyLag + need > MAX_LAG) {
+			energyLag = MAX_LAG;
+			return MAX_LAG - energyLag;
+		}
+		if(energyLag + need < -MAX_LAG) {
+			energyLag = -MAX_LAG;
+			return -energyLag - MAX_LAG;
+		}
+		energyLag += need;
+		return need;
 	}
 	
 	private NodeConns getConns(IWirelessNode node) {
