@@ -70,8 +70,6 @@ public final class SkillArcGen extends SkillBase {
 				if(consumeCP()) {
 					player.worldObj.spawnEntityInWorld(
 						new EntityAttackingArc.OffSync(player, instance));
-					player.worldObj.spawnEntityInWorld(
-							new ChargeEffectS(player, 12, 4));
 				}
 			}
 		}
@@ -80,7 +78,6 @@ public final class SkillArcGen extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			int id = data.getSkillID(instance), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 			float need = 250 - lv * (21 - lv) + 10 * clv * (15 - clv);
-			System.out.println("Consume: " + need);
 			return data.decreaseCP(need);
 		}
 

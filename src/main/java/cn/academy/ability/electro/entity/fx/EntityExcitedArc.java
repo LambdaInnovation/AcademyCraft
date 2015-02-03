@@ -31,10 +31,16 @@ public class EntityExcitedArc extends EntityArcBase {
 	public EntityExcitedArc(World world, Vec3 begin, Vec3 end, int life) {
 		super(world);
 		this.clearDaemonHandlers();
+		addEffectUpdate();
 		addDaemonHandler(new LifeTime(this, life));
 		setPosition(begin.xCoord, begin.yCoord, begin.zCoord);
-		len = begin.distanceTo(end);
-		System.out.println(DebugUtils.formatArray(posX, posY, posZ) + " " + traceDist);
+		Vec3 dv = begin.subtract(end);
+		rotationYaw = -(float) (Math.atan2(dv.xCoord, dv.zCoord) * 180 / Math.PI);
+		double tmp = dv.xCoord * dv.xCoord + dv.zCoord * dv.zCoord;
+		rotationPitch = (float) (Math.atan2(dv.yCoord, Math.sqrt(tmp)) * 180 / Math.PI);
+		
+		len = Math.sqrt(tmp + dv.yCoord * dv.yCoord);
+		//System.out.println(DebugUtils.formatArray(posX, posY, posZ) + " " + traceDist);
 		this.ignoreFrustumCheck = true;
 		this.isSync = false;
 	}
