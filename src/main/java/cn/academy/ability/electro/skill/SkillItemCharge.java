@@ -6,11 +6,13 @@ package cn.academy.ability.electro.skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
+import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cpw.mods.fml.relauncher.Side;
@@ -62,6 +64,7 @@ public class SkillItemCharge extends SkillBase {
 //				arc.setPosition(player.posX, player.posY, player.posZ);
 //				arc.addDaemonHandler(new LifeTime(arc, 30));
 				world.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+				SkillRenderManager.addEffect(new SRSmallCharge(5, 0.8), 1000);
 			}
 		}
 

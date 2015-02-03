@@ -40,7 +40,6 @@ public class EntityExcitedArc extends EntityArcBase {
 		rotationPitch = (float) (Math.atan2(dv.yCoord, Math.sqrt(tmp)) * 180 / Math.PI);
 		
 		len = Math.sqrt(tmp + dv.yCoord * dv.yCoord);
-		//System.out.println(DebugUtils.formatArray(posX, posY, posZ) + " " + traceDist);
 		this.ignoreFrustumCheck = true;
 		this.isSync = false;
 	}
@@ -48,7 +47,6 @@ public class EntityExcitedArc extends EntityArcBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		//System.out.println("upd " + worldObj.isRemote + " " + this.traceDist);
 	}
 	
 	public static final class ThinArcRender extends RenderElecArc {
@@ -60,7 +58,6 @@ public class EntityExcitedArc extends EntityArcBase {
 		protected void drawAtOrigin(EntityArcBase ent) {
 			EntityExcitedArc arc = (EntityExcitedArc) ent;
 			arc.traceDist = arc.len;
-			//System.out.println("Drawing " + arc.traceDist);
 			super.drawAtOrigin(ent);
 		}
 	}
