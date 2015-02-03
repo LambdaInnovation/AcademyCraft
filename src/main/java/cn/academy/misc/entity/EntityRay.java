@@ -33,11 +33,11 @@ public class EntityRay extends EntityX {
 	protected boolean follow = false;
 	
 	protected boolean peformTrace = false;
-	double traceDist;
+	protected double traceDist;
 	
 	public int lifeTime = Integer.MAX_VALUE; //How long this entity exists
 	
-	public final boolean isSync;
+	public boolean isSync;
 	
 	public EntityRay(EntityLivingBase creator) {
 		this(creator, true);
@@ -87,8 +87,6 @@ public class EntityRay extends EntityX {
 	}
 	
 	private void setup() {
-		this.removeDaemonHandler(VelocityUpdate.ID);
-		this.removeDaemonHandler(CollisionCheck.ID);
 		this.addDaemonHandler(new Sync());
 		this.ignoreFrustumCheck = true;
 	}

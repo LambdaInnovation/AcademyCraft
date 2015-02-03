@@ -5,6 +5,7 @@ package cn.academy.ability.electro.entity;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.core.proxy.ACClientProps;
@@ -49,6 +50,10 @@ public class EntityArcBase extends EntityRay {
 
 	public EntityArcBase(EntityLivingBase creator) {
 		super(creator);
+	}
+	
+	public EntityArcBase(EntityLivingBase creator, boolean follow) {
+		super(creator, follow);
 	}
 	
 	@SideOnly(Side.CLIENT)

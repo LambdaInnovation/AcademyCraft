@@ -3,26 +3,16 @@
  */
 package cn.academy.ability.electro.skill;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.ability.electro.client.render.PieceSmallArc;
+import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.api.entityx.EntityX;
-import cn.liutils.util.space.Motion3D;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -58,63 +48,6 @@ public class SkillItemCharge extends SkillBase {
 		return ACClientProps.ELEC_CHARGE;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	private static class RenderTest extends Render {
-		
-		private PieceSmallArc piece;
-		
-		public RenderTest() {
-			piece = new PieceSmallArc(1.0);
-		}
-
-		@Override
-		public void doRender(Entity var1, double x, double y,
-				double z, float var8, float var9) {
-			GL11.glPushMatrix(); {
-				GL11.glTranslated(x, y, z);
-				piece.draw();
-			} GL11.glPopMatrix();
-		}
-
-		@Override
-		protected ResourceLocation getEntityTexture(Entity var1) {
-			return null;
-		}
-		
-	}
-	
-	@RegEntity(clientOnly = true)
-	@RegEntity.HasRender
-	public static class EntityTest extends EntityX {
-		
-		@SideOnly(Side.CLIENT)
-		@RegEntity.Render
-		public static RenderTest renderer = new RenderTest();
-		
-		public EntityTest(EntityPlayer ep) {
-			super(ep.worldObj);
-			new Motion3D(ep, true).applyToEntity(this);
-			double sc = 1.5;
-			motionX *= sc;
-			motionY *= sc;
-			motionZ *= sc;
-			//this.addDaemonHandler(new GravityApply(this, 0.05));
-		}
-		
-		public EntityTest(World world) {
-			super(world);
-		}
-		
-		@Override
-		public void onUpdate() {
-			super.onUpdate();
-			if(ticksExisted > 300) {
-				setDead();
-			}
-		}
-		
-	}
-	
 	public static class StateHold extends State {
 
 		public StateHold(EntityPlayer player) {
@@ -124,8 +57,11 @@ public class SkillItemCharge extends SkillBase {
 		@Override
 		public void onStart() { 
 			World world = player.worldObj;
-			if(!world.isRemote) {
-				world.spawnEntityInWorld(new EntityTest(player));
+			if(world.isRemote) {
+//				EntityArcS arc = EntityArcS.get(world);
+//				arc.setPosition(player.posX, player.posY, player.posZ);
+//				arc.addDaemonHandler(new LifeTime(arc, 30));
+				world.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 			}
 		}
 

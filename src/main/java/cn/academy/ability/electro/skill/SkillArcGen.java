@@ -5,16 +5,14 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import cn.academy.ability.electro.client.render.skill.NormalChargeEffect;
-import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.academy.ability.electro.entity.EntityAttackingArc;
+import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -72,7 +70,8 @@ public final class SkillArcGen extends SkillBase {
 				if(consumeCP()) {
 					player.worldObj.spawnEntityInWorld(
 						new EntityAttackingArc.OffSync(player, instance));
-					SkillRenderManager.addEffect(new NormalChargeEffect(4), 500);
+					player.worldObj.spawnEntityInWorld(
+							new ChargeEffectS(player, 12, 4));
 				}
 			}
 		}

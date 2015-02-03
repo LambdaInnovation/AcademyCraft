@@ -55,6 +55,7 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 		dist = Math.min(dist, 20.0);
 		double forw = width * ratio; //per billboard forward in distance.
 		int i = 0;
+		System.out.println("d-" + dist);
 		for(double cur = 0.0; cur < dist; cur += forw) {
 			RenderUtils.loadTexture(nextTexture(ent, i));
 			int rotation = i % 2 == 0 ? 30 : 0;

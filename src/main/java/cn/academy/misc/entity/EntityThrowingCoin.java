@@ -17,6 +17,7 @@ import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.api.entityx.motion.CollisionCheck;
 import cn.liutils.api.entityx.motion.GravityApply;
+import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -107,6 +108,7 @@ public class EntityThrowingCoin extends EntityX {
 				}
 			}
 		});
+		this.addDaemonHandler(new VelocityUpdate(this));
 		this.ignoreFrustumCheck = true;
 	}
 	
