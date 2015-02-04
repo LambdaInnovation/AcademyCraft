@@ -38,8 +38,9 @@ public class SkillRailgun extends SkillBase {
 
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
-				if(!player.worldObj.isRemote) {
-					//player.worldObj.spawnEntityInWorld(new EntityRailgun(player));
+				if(player.worldObj.isRemote) {
+					System.out.println("fffr");
+					player.worldObj.spawnEntityInWorld(new EntityRailgun(player));
 				}
 				return true;
 			}
@@ -52,8 +53,8 @@ public class SkillRailgun extends SkillBase {
 		World world = event.entityPlayer.worldObj;
 		System.out.println("OnThrowCoin");
 		if(world.isRemote) {
-			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
-					RailgunPlaneEffect.getAnimLength());
+//			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
+//					RailgunPlaneEffect.getAnimLength());
 		}
 	}
 	
