@@ -50,29 +50,34 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	@Override
 	public final void doRender(Entity var1, double x, double y, double z,
 			float h, float a) {
+		long time = Minecraft.getSystemTime();
+		
 		T er = (T) var1;
 		EntityPlayer clientPlayer = Minecraft.getMinecraft().thePlayer;
 		boolean firstPerson = 
 				Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 
 				&& clientPlayer.equals(er.getThrower());
+		
+		if((er.syncTrick && er.isSync) && clientPlayer.equals(er.getThrower())) {
+			return;
+		}
+		
+		long dt = time - er.creationTime;
+		double ratio = dt < er.unfoldTime ? ((double)dt / er.unfoldTime) : 1.0;
+		double len = ratio * er.getTraceDistance();
+		
+		double alpha = er.fading ? 1 - (double)er.tickFadeout / er.fadeoutTime : 1.0;
+		
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		if(disableLight)
-			GL11.glDisable(GL11.GL_LIGHTING);
-		
-		if(er.isSync && clientPlayer.equals(er.getThrower())) {
-			return;
-		}
-		//System.out.println(clientPlayer.rotationYaw + " " + clientPlayer.rotationPitch);
-		//System.out.println(var1 + " " + er.getTraceDistance());
-		
-		
+		if(disableLight) GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotated(er.rotationYaw, 0, -1, 0);
 			GL11.glRotated(er.rotationPitch, 1, 0, 0);
+			GL11.glColor4d(1, 1, 1, alpha);
 			
 			if(firstPerson) {
 				transformFirstPerson(er, x, y, z);
@@ -80,13 +85,12 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 				transformThirdPerson(er, x, y, z);
 				optimizeView(er, x, y, z);
 			}
-				
 			
 			if(disableLight) {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 				Tessellator.instance.setBrightness(15728880);
 			}
-			drawAtOrigin(er);
+			drawAtOrigin(er, len);
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -119,7 +123,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		}
 	}
 	
-	protected abstract void drawAtOrigin(T ent);
+	protected abstract void drawAtOrigin(T ent, double len);
 	
 	protected void sv(Vec3 v, double x, double y, double z) {
 		v.xCoord = x;

@@ -187,6 +187,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getSkill(skillID).getMaxSkillLevel();
 	}
 	
+	public int getSkillLevel(SkillBase skill) {
+		return getSkillLevel(getSkillID(skill));
+	}
+	
 	public int getSkillLevel(int skillID) {
 		return skillLevels[skillID];
 	}

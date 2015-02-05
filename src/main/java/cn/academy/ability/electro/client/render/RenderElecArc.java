@@ -25,8 +25,8 @@ public class RenderElecArc extends RendererRayTiling<EntityArcBase> {
 	}
 	
 	@Override
-	protected void drawAtOrigin(EntityArcBase ent) {
-		super.drawAtOrigin(ent);
+	protected void drawAtOrigin(EntityArcBase ent, double d) {
+		super.drawAtOrigin(ent, d);
 	}
 	
 	@Override

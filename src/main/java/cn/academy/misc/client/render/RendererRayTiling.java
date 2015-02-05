@@ -21,6 +21,8 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	//buffer for current draw call
 	protected Vec3 verts[] = new Vec3[4];
 	
+	protected boolean crossed = false;
+	
 	ResourceLocation texture;
 	
 	public double width = 0.2;
@@ -50,24 +52,27 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent) {
-		double dist = ent.getTraceDistance();
-		dist = Math.min(dist, 20.0);
+	protected void drawAtOrigin(T ent, double len) {
+		//len = Math.min(len, 20.0);
 		double forw = width * ratio; //per billboard forward in distance.
 		int i = 0;
 		//System.out.println("d-" + dist);
-		for(double cur = 0.0; cur < dist; cur += forw) {
+		for(double cur = 0.0; cur < len; cur += forw) {
 			RenderUtils.loadTexture(nextTexture(ent, i));
 			int rotation = i % 2 == 0 ? 30 : 0;
 			GL11.glPushMatrix(); {
-				double u0 = 0.0, u1 = Math.min(1.0, (dist - cur) / forw), v0 = 0.0, v1 = 1.0;
-				double z0 = cur, z1 = Math.min(dist, cur + forw);
+				double u0 = 0.0, u1 = Math.min(1.0, (len - cur) / forw), v0 = 0.0, v1 = 1.0;
+				double z0 = cur, z1 = Math.min(len, cur + forw);
 				sv(verts[0], 0, -0.5 * width, z0);
 				sv(verts[1], 0, 0.5 * width, z0);
 				sv(verts[2], 0, 0.5 * width, z1);
 				sv(verts[3], 0, -0.5 * width, z1);
 				drawPerBillboard(ent, i);
 				billboard(u0, v0, u1, v1);
+				if(crossed) {
+					GL11.glRotated(90, 0, 0, 1);
+					billboard(u0, v0, u1, v1);
+				}
 				i++;
 			} GL11.glPopMatrix();
 		}

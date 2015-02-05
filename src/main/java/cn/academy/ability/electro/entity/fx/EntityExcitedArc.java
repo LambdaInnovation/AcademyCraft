@@ -53,13 +53,6 @@ public class EntityExcitedArc extends EntityArcBase {
 		public ThinArcRender() {
 			width = 0.3;
 		}
-		
-		@Override
-		protected void drawAtOrigin(EntityArcBase ent) {
-			EntityExcitedArc arc = (EntityExcitedArc) ent;
-			arc.traceDist = arc.len;
-			super.drawAtOrigin(ent);
-		}
 	}
 	
 }

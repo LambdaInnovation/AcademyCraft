@@ -20,6 +20,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.MotionHandler;
+import cn.liutils.api.entityx.motion.LifeTime;
 import cn.liutils.util.EntityUtils;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
@@ -132,7 +133,8 @@ public class EntityAttackingArc extends EntityArcBase {
 				
 			});
 		}
-		lifeTime = 8;
+		
+		this.addDaemonHandler(new LifeTime(this, 8));
 	}
 
 	public EntityAttackingArc(World world) {

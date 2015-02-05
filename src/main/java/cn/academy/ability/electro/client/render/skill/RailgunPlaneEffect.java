@@ -105,7 +105,7 @@ public class RailgunPlaneEffect extends SkillRenderer {
 		GL11.glLoadIdentity();
 		{
 			GL11.glTranslated(0, 0, 0);
-			GL11.glColor4d(0, 0, 0, 0.4 * alpha);
+			GL11.glColor4d(0, 0, 0, 0.2 * alpha);
 			HudUtils.setZLevel(1);
 			HudUtils.drawModalRect(0, 0, 255, 255);
 			HudUtils.setZLevel(-90);

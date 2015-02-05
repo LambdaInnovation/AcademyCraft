@@ -23,6 +23,7 @@ import cn.liutils.api.draw.prop.AssignTexture;
 import cn.liutils.api.draw.prop.DisableLight;
 import cn.liutils.api.draw.tess.Rect;
 import cn.liutils.api.draw.tess.Transform;
+import cn.liutils.api.render.IDrawable;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.relauncher.Side;
@@ -32,9 +33,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
-public class SRSmallCharge extends SkillRenderer {
+public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
-	IPointFactory poi = new CubePointFactory(1, 2, 1);
+	IPointFactory poi;
 	
 	static final ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
 	
@@ -67,7 +68,7 @@ public class SRSmallCharge extends SkillRenderer {
 			
 			Pair<Double, Double> angles = vt.getNormalAngles();
 			addHandler(new Transform().setOffset(vt.vert.xCoord, vt.vert.yCoord, vt.vert.zCoord)
-					.setRotation(angles.first, angles.second, 0));
+					.setRotation(angles.first + (RNG.nextDouble() - .5) * 60, angles.second + (RNG.nextDouble() - .5) * 60, 0));
 			
 			addHandler(DisableLight.instance());
 		}
@@ -76,6 +77,11 @@ public class SRSmallCharge extends SkillRenderer {
 	List<ArcObject> arcs = new ArrayList();
 	
 	public SRSmallCharge(int iten, double size) {
+		this(iten, size, 1, 2, 1);
+	}
+	
+	public SRSmallCharge(int iten, double size, double sx, double sy, double sz) {
+		poi = new CubePointFactory(sx, sy, sz);
 		int n = iten + RNG.nextInt((int)(iten * .4));
 		for(int i = 0; i < n; ++i) {
 			arcs.add(new ArcObject(poi.next(), size));
@@ -86,6 +92,11 @@ public class SRSmallCharge extends SkillRenderer {
 	public void renderHandEffect(EntityPlayer player, HandRenderType type, long time) {
 		if(type == HandRenderType.EQUIPPED)
 			return;
+		draw();
+	}
+
+	@Override
+	public void draw() {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDepthMask(false);
 		GL11.glPushMatrix(); 

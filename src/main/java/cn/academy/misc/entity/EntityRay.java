@@ -35,9 +35,17 @@ public class EntityRay extends EntityX {
 	protected boolean peformTrace = false;
 	protected double traceDist;
 	
-	public int lifeTime = Integer.MAX_VALUE; //How long this entity exists
+	public boolean syncTrick = true; //if we will spawn at both client and server manually, for better effects
+	public boolean isSync; //If this entity is being synced by MC mechanics(Currently derived, may not always be correct)
 	
-	public boolean isSync;
+	@SideOnly(Side.CLIENT)
+	public long unfoldTime = 0;
+	
+	public final long creationTime;
+	
+	public int fadeoutTime, tickFadeout;
+	
+	public boolean fading;
 	
 	public EntityRay(EntityLivingBase creator) {
 		this(creator, true);
@@ -65,6 +73,7 @@ public class EntityRay extends EntityX {
 		this.setCurMotion(new RayUpdate());
 		setup();
 		isSync = !worldObj.isRemote;
+		creationTime = GenericUtils.getSystemTime();
 	}
 
 	/**
@@ -76,14 +85,20 @@ public class EntityRay extends EntityX {
 		traceDist = getMaxDistance();
 		//this.setCurMotion(new RayUpdate());
 		setup();
-		isSync = true;
+		isSync = worldObj.isRemote;
+		creationTime = GenericUtils.getSystemTime();
 	}
 	
 	@Override
 	public void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(10, Float.valueOf(0));
 		dataWatcher.addObject(11, Integer.valueOf(0));
+	}
+	
+	public void setFadeout(int tick) {
+		fading = true;
+		fadeoutTime = tick;
+		tickFadeout = 0;
 	}
 	
 	private void setup() {
@@ -101,6 +116,10 @@ public class EntityRay extends EntityX {
 	
 	public double getMaxDistance() {
 		return 20.0;
+	}
+	
+	public double getMinDistance() {
+		return 0.0;
 	}
 	
 	public double getTraceDistance() {
@@ -137,10 +156,8 @@ public class EntityRay extends EntityX {
 		@Override
 		public void onUpdate() {
 			if(!worldObj.isRemote) {
-				dataWatcher.updateObject(10, Float.valueOf((float)traceDist));
 				dataWatcher.updateObject(11, thrower == null ? 0 : Integer.valueOf(thrower.getEntityId()));
 			} else if(isSync) {
-				traceDist = dataWatcher.getWatchableObjectFloat(10);
 				int id = dataWatcher.getWatchableObjectInt(11);
 				Entity e = worldObj.getEntityByID(id);
 				if(e != null && e instanceof EntityLivingBase) {
@@ -180,20 +197,19 @@ public class EntityRay extends EntityX {
 			if(peformTrace) {
 				MovingObjectPosition mop = peformTrace();
 				if(mop != null) {
-					if(EntityRay.this instanceof OffSync) {
-						System.out.println(mop);
-					}
-					traceDist = mop.hitVec.distanceTo(motion.getPosVec(worldObj));
+					traceDist = Math.max(getMinDistance(), mop.hitVec.distanceTo(motion.getPosVec(worldObj)));
 				} else {
 					traceDist = getMaxDistance();
 				}
 			} else {
 				traceDist = getMaxDistance();
 			}
-			//System.out.println(EntityRay.this + " " + traceDist);
 			
-			if(ticksExisted > lifeTime)
-				setDead();
+			if(fading) {
+				if(++tickFadeout > fadeoutTime) {
+					setDead();
+				}
+			}
 		}
 
 		@Override
