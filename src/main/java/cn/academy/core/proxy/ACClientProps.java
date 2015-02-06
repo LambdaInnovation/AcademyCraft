@@ -98,8 +98,14 @@ public class ACClientProps {
 		src("academy:textures/effects/elec_arc/0.png"),
 		src("academy:textures/effects/elec_arc/1.png"),
 		src("academy:textures/effects/elec_arc/2.png"),
-	}
-	;
+	},
+	ANIM_ELEC_ARC_STRONG[] = {
+		src("academy:textures/effects/elec_arc_l/0.png"),
+		src("academy:textures/effects/elec_arc_l/1.png"),
+		src("academy:textures/effects/elec_arc_l/2.png"),
+		src("academy:textures/effects/elec_arc_l/3.png"),
+		src("academy:textures/effects/elec_arc_l/4.png"),
+	};
 	
 	public static ResourceLocation ANIM_SMALL_ARC[];
 	static {

@@ -29,9 +29,9 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		viewOptimize = true;
 	
 	protected double 
-		fpOffsetX = -0.2,
-		fpOffsetY = -0.2,
-		fpOffsetZ = -0.1;
+		fpOffsetX = -0.09,
+		fpOffsetY = -0.15,
+		fpOffsetZ = -0.02;
 
 	protected double 
 		tpOffsetX = -0.3,

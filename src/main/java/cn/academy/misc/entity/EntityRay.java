@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.entity.EntityAttackingArc.OffSync;
+import cn.academy.ability.electro.entity.EntityWeakArc.OffSync;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.api.entityx.motion.CollisionCheck;

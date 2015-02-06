@@ -14,9 +14,10 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
-import cn.academy.ability.electro.skill.SkillArcGen;
+import cn.academy.api.ability.SkillBase;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.MotionHandler;
@@ -33,11 +34,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegEntity
-public class EntityAttackingArc extends EntityArcBase {
+public class EntityWeakArc extends EntityArcBase {
 	
-	public static class OffSync extends EntityAttackingArc {
+	public static class OffSync extends EntityWeakArc {
 
-		public OffSync(EntityPlayer creator, SkillArcGen sag) {
+		public OffSync(EntityPlayer creator, SkillBase sag) {
 			super(creator, sag);
 			addEffectUpdate();
 			
@@ -88,7 +89,7 @@ public class EntityAttackingArc extends EntityArcBase {
 	double igniteProb;
 	double aoeRange;
 
-	public EntityAttackingArc(final EntityPlayer creator, SkillArcGen sag) {
+	public EntityWeakArc(final EntityPlayer creator, SkillBase sag) {
 		super(creator);
 		AbilityData data = AbilityDataMain.getData(creator);
 		int skillID = data.getSkillID(sag);
@@ -114,7 +115,7 @@ public class EntityAttackingArc extends EntityArcBase {
 					}
 					
 					List<Entity> list = EntityUtils.getEntitiesAround(worldObj, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, aoeRange, 
-							GenericUtils.selectorLiving, EntityAttackingArc.this, getThrower(), mop.entityHit);
+							GenericUtils.selectorLiving, EntityWeakArc.this, getThrower(), mop.entityHit);
 					for(Entity e : list) {
 						e.attackEntityFrom(DamageSource.causePlayerDamage(creator), dmg * 0.3F);
 					}
@@ -137,7 +138,7 @@ public class EntityAttackingArc extends EntityArcBase {
 		this.addDaemonHandler(new LifeTime(this, 8));
 	}
 
-	public EntityAttackingArc(World world) {
+	public EntityWeakArc(World world) {
 		super(world);
 		randomDraw = false;
 	}

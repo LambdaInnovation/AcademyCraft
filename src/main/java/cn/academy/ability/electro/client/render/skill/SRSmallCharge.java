@@ -102,7 +102,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 		GL11.glPushMatrix(); 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		RenderUtils.bindIdentity();
+		GL11.glColor4d(1, 1, 1, 0.7);
 		
 		GL11.glTranslated(0, 0.9, 0.2);
 		GL11.glRotated(120, 1, 0, 0);

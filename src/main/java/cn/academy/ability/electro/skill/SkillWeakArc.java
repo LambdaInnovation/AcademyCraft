@@ -6,9 +6,10 @@ package cn.academy.ability.electro.skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
-import cn.academy.ability.electro.entity.EntityAttackingArc;
+import cn.academy.ability.electro.entity.EntityWeakArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
+import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
@@ -24,13 +25,16 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
-public final class SkillArcGen extends SkillBase {
+public class SkillWeakArc extends SkillBase {
 	
 	static final int MAX_HOLD_TIME = 200;
 	
-	public static SkillArcGen instance;
-
-	public SkillArcGen() {
+	public static SkillWeakArc instance;
+	
+	@SideOnly(Side.CLIENT)
+	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
+	
+	public SkillWeakArc() {
 		instance = this;
 	}
 	
@@ -66,13 +70,14 @@ public final class SkillArcGen extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(
-						new EntityAttackingArc(player, instance));
+						new EntityWeakArc(player, instance));
 				}
 			} else {
 				if(consumeCP()) {
 					player.worldObj.spawnEntityInWorld(
-						new EntityAttackingArc.OffSync(player, instance));
-					SkillRenderManager.addEffect(new SRSmallCharge(5, 0.8), 500);
+						new EntityWeakArc.OffSync(player, instance));
+					SkillRenderManager.addEffect(charge, 500);
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 				}
 			}
 		}

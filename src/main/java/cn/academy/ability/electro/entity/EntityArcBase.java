@@ -5,7 +5,6 @@ package cn.academy.ability.electro.entity;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.core.proxy.ACClientProps;
@@ -29,13 +28,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EntityArcBase extends EntityRay {
 	
 	@SideOnly(Side.CLIENT)
-	ResourceLocation TEXS[] = ACClientProps.ANIM_ELEC_ARC;
-	
-	@SideOnly(Side.CLIENT)
 	static final int SEQ_SIZE = 20;
 	
 	@SideOnly(Side.CLIENT)
-	public IntRandomSequence indSeq = new IntRandomSequence(SEQ_SIZE, TEXS.length);
+	public IntRandomSequence indSeq = new IntRandomSequence(SEQ_SIZE, getTexs().length);
 	
 	@SideOnly(Side.CLIENT)
 	public DoubleRandomSequence rotSeq = new DoubleRandomSequence(SEQ_SIZE, -30, 30);
@@ -59,6 +55,7 @@ public class EntityArcBase extends EntityRay {
 	@SideOnly(Side.CLIENT)
 	public EntityArcBase(World world) {
 		super(world);
+		this.peformTrace = true;
 		addEffectUpdate();
 	}
 	
@@ -93,6 +90,11 @@ public class EntityArcBase extends EntityRay {
 				return "perm";
 			}
 		});
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation[] getTexs() {
+		return ACClientProps.ANIM_ELEC_ARC;
 	}
 
 }

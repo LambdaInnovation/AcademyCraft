@@ -4,7 +4,7 @@
 package cn.academy.ability.electro;
 
 import net.minecraft.util.ResourceLocation;
-import cn.academy.ability.electro.skill.SkillArcGen;
+import cn.academy.ability.electro.skill.SkillWeakArc;
 import cn.academy.ability.electro.skill.SkillItemCharge;
 import cn.academy.ability.electro.skill.SkillMagneticMovement;
 import cn.academy.ability.electro.skill.SkillMineDetect;
@@ -39,7 +39,7 @@ public class CatElectro extends Category {
 		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .3));
 		
 		this.addSkill(new SkillBase(), 0);
-		this.addSkill(new SkillArcGen(), 0);
+		this.addSkill(new SkillWeakArc(), 0);
 		this.addSkill(new SkillItemCharge(), 0);
 		this.addSkill(new SkillStrongArc(), 0);
 		this.addSkill(new SkillMagneticMovement(), 0);

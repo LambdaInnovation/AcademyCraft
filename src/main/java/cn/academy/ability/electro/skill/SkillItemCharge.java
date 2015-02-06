@@ -4,16 +4,23 @@
 package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
+import cn.academy.ability.electro.entity.EntityChargingArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
+import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
+import cn.academy.api.data.AbilityData;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.register.ACItems;
+import cn.academy.core.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,8 +32,14 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 public class SkillItemCharge extends SkillBase {
+	
+	public static SkillItemCharge instance;
+	
+	@SideOnly(Side.CLIENT)
+	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 
 	public SkillItemCharge() {
+		instance = this;
 	}
 	
 	@Override
@@ -50,7 +63,20 @@ public class SkillItemCharge extends SkillBase {
 		return ACClientProps.ELEC_CHARGE;
 	}
 	
+	public static float getCPT(AbilityData data) {
+		return 35 - data.getSkillLevel(SkillItemCharge.instance)* 0.6F + data.getLevelID() * 1.8F;
+	}
+	
+	public static int getEPT(AbilityData data) {
+		return 7 * (data.getLevelID() + 1) * (data.getSkillLevel(SkillItemCharge.instance) + 1);
+	}
+	
 	public static class StateHold extends State {
+		
+		ItemStack stack;
+		boolean isItem;
+		
+		EntityChargingArc arc;
 
 		public StateHold(EntityPlayer player) {
 			super(player);
@@ -58,22 +84,54 @@ public class SkillItemCharge extends SkillBase {
 
 		@Override
 		public void onStart() { 
+			ItemStack stack = player.getCurrentEquippedItem();
+			if(stack != null && !(stack.getItem() == ACItems.ivoid)) {
+				isItem = true;
+				System.out.println("a");
+				if(!EnergyUtils.isElecItem(stack)) {
+					System.out.println("b");
+					this.finishSkill();
+				} else {
+					System.out.println("c");
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					SkillRenderManager.addEffect(charge, 200);
+				}
+				return;
+			}
+			
 			World world = player.worldObj;
+			System.out.println("d");
+			world.spawnEntityInWorld(arc = new EntityChargingArc(AbilityDataMain.getData(player)));
 			if(world.isRemote) {
-//				EntityArcS arc = EntityArcS.get(world);
-//				arc.setPosition(player.posX, player.posY, player.posZ);
-//				arc.addDaemonHandler(new LifeTime(arc, 30));
 				world.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
-				SkillRenderManager.addEffect(new SRSmallCharge(5, 0.8), 1000);
+				SkillRenderManager.addEffect(charge, 200);
 			}
 		}
 
 		@Override
-		public void onFinish() { }
+		public void onFinish() {
+			if(arc != null) {
+				arc.setDead();
+			}
+		}
 
 		@Override
-		public void onHold() {
-			//this.player.xxxxxx
+		public void onHold() {}
+		
+		protected boolean onTick() {
+			AbilityData data = AbilityDataMain.getData(player);
+			if(isItem) {
+				ItemStack stack = player.getCurrentEquippedItem();
+				if(stack == null) {
+					return true;
+				} else {
+					EnergyUtils.tryCharge(stack, getEPT(data));
+				}
+			}
+			if(!data.decreaseCP(getCPT(data))) {
+				return true;
+			}
+			return false;
 		}
 		
 	}

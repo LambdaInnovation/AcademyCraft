@@ -31,7 +31,7 @@ public class RenderElecArc extends RendererRayTiling<EntityArcBase> {
 	
 	@Override
 	protected ResourceLocation nextTexture(EntityArcBase ent, int i) {
-		return ACClientProps.ANIM_ELEC_ARC[ent.getIndex(i)];
+		return ent.getTexs()[ent.getIndex(i)];
 	}
 	
 	@Override
