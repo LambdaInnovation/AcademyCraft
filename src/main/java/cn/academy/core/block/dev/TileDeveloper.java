@@ -27,6 +27,8 @@ import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.api.EntityManipHandler;
 import cn.liutils.template.block.TileGenericSink;
+import cn.liutils.template.entity.EntitySittable;
+import cn.liutils.template.entity.EntitySittable.ISittable;
 import cn.liutils.util.DebugUtils;
 import cn.liutils.util.ExpUtils;
 import cn.liutils.util.misc.Pair;
@@ -40,7 +42,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends TileGenericSink implements IEnergySink {
+public class TileDeveloper extends TileGenericSink implements IEnergySink, ISittable {
 
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
@@ -80,6 +82,9 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 	public TileDeveloper() {}
 	
 	//Sit and use API
+	
+	EntitySittable es;
+	
 	/**
 	 * Let a player use this ability dev.
 	 * @return if attempt successful
@@ -87,12 +92,19 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 	public boolean use(EntityPlayer player) {
 		if(user != null) return false;
 		user = player;
-		EntityManipHandler.addEntityManip(new DevPlayerManip(user, this), true);
+		user.getEntityData().setBoolean("developing", true);
+		if(!worldObj.isRemote)
+			es.mount(user);
 		guiHandler.openGuiContainer(player, worldObj, xCoord, yCoord, zCoord);
 		return true;
 	}
 	
 	public void userQuit() {
+		if(user == null)
+			return;
+		if(!worldObj.isRemote)
+			es.disMount();
+		user.getEntityData().setBoolean("developing", false);
 		user = null;
 	}
 	
@@ -216,6 +228,11 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink {
 		super.updateEntity();
 		if(!isHead())
 			return;
+		
+		if(!worldObj.isRemote && this.es == null) {
+			worldObj.spawnEntityInWorld(es 
+				= new EntitySittable(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
+		}
 		
 		++updateCount;
 		if(!worldObj.isRemote && user != null) {

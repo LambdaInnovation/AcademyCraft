@@ -8,13 +8,14 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.elec;
+package cn.academy.misc.block.energy;
 
 import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.AcademyCraft;
+import cn.academy.misc.block.energy.tile.impl.TileWindGenerator;
 import cn.liutils.template.block.BlockDirectionalMulti;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

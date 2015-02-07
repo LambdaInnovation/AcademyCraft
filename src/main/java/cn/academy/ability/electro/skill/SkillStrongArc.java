@@ -78,7 +78,7 @@ public class SkillStrongArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = data.getSkillID(CatElectro.strongArc), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
+			int id = 1, lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 			float need = 340+ lv *25 + clv *30;
 			return data.decreaseCP(need);
 		}

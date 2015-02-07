@@ -9,7 +9,6 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import cn.academy.core.block.dev.DevPlayerManip;
 import cn.academy.core.client.render.ACModelBiped;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
@@ -57,7 +56,7 @@ public class ClientEvents {
 		}
 		
 		//Replace
-		if(DevPlayerManip.isDeveloping(event.entityPlayer)) {
+		if(event.entityPlayer.getEntityData().getBoolean("developing")) {
 			render.modelBipedMain = hackMain;
 			render.modelArmor = hackArmor;
 			render.modelArmorChestplate = hackChestplate;

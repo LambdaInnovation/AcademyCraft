@@ -8,11 +8,12 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.elec;
+package cn.academy.misc.block.energy;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.AcademyCraft;
+import cn.academy.misc.block.energy.tile.impl.TileSolarGenerator;
 import cn.liutils.core.proxy.LIClientProps;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -31,18 +32,18 @@ public class BlockSolarGenerator extends Block implements ITileEntityProvider {
 	public BlockSolarGenerator() {
 		super(Material.iron);
 		setCreativeTab(AcademyCraft.cct);
+		setBlockName("ac_solar");
+		setBlockTextureName("academy:solar"); //TODO:Texture required
 		setHardness(2.0F);
 	}
 	
 	@Override
-    public boolean isOpaqueCube()
-    {
+    public boolean isOpaqueCube() {
 		return false;
     }
 	
 	@Override
-    public boolean renderAsNormalBlock()
-    {
+    public boolean renderAsNormalBlock() {
         return false;
     }
 	

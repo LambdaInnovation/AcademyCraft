@@ -8,7 +8,7 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.elec;
+package cn.academy.misc.block.energy.tile.impl;
 
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;

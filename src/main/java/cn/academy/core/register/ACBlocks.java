@@ -6,10 +6,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.block.dev.BlockDeveloper;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.misc.block.ACOre;
-import cn.academy.misc.block.elec.BlockSolarGenerator;
-import cn.academy.misc.block.elec.BlockWindGenerator;
-import cn.academy.misc.block.elec.TileSolarGenerator;
-import cn.academy.misc.block.elec.TileWindGenerator;
+import cn.academy.misc.block.energy.BlockGrid;
+import cn.academy.misc.block.energy.BlockSolarGenerator;
+import cn.academy.misc.block.energy.BlockWindGenerator;
+import cn.academy.misc.block.energy.tile.impl.TileSolarGenerator;
+import cn.academy.misc.block.energy.tile.impl.TileWindGenerator;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -25,6 +26,9 @@ public class ACBlocks {
 	
 	@RegBlock
 	public static BlockSolarGenerator solarGen;
+	
+	@RegBlock
+	public static BlockGrid grid;
 	
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")

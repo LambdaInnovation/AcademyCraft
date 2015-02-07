@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.misc.block.energy;
+package cn.academy.misc.block.energy.tile.impl;
 
 import java.util.List;
 

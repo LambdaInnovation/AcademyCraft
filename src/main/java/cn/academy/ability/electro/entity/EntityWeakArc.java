@@ -13,6 +13,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.data.AbilityData;
@@ -34,7 +35,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegEntity
+@RegEntity.HasRender
 public class EntityWeakArc extends EntityArcBase {
+	
+	public static WARender render;
 	
 	public static class OffSync extends EntityWeakArc {
 
@@ -141,6 +145,12 @@ public class EntityWeakArc extends EntityArcBase {
 	public EntityWeakArc(World world) {
 		super(world);
 		randomDraw = false;
+	}
+	
+	public static class WARender extends RenderElecArc {
+		public WARender() {
+			this.alpha = 0.6;
+		}
 	}
 
 }

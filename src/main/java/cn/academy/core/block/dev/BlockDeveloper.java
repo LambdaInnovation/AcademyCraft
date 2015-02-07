@@ -14,7 +14,6 @@ import cn.liutils.template.block.BlockDirectionalMulti;
 
 /**
  * @author WeathFolD
- *
  */
 public class BlockDeveloper extends BlockDirectionalMulti {
 
@@ -26,6 +25,7 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		setCreativeTab(AcademyCraft.cct);
 		
 		this.addSubBlock(1, 0, 0);
+		this.setBlockBounds(0, 0, 0, 1, 0.5F, 1);
 	}
 	
 	@Override

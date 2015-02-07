@@ -54,7 +54,12 @@ public class ACClientProps {
 		MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj")),
 		MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj")),
 		MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj")),
-		MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj"));
+		MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj")),
+		MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj"));
+	
+	public static final ResourceLocation
+		TEX_MDL_GRID = src("academy:textures/models/grid.png"),
+		TEX_MDL_GRID_BLOCK = src("academy:textures/models/grid_block.png");
 	
 	//Animations
 	public static final ResourceLocation
