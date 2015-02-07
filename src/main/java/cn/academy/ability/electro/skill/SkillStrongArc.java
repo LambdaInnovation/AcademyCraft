@@ -5,6 +5,7 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
 import cn.academy.ability.electro.entity.EntityStrongArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
@@ -26,14 +27,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillStrongArc extends SkillBase {
 	
-	public static SkillStrongArc instance;
-	
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 	
-	public SkillStrongArc() {
-		instance = this;
-	}
+	public SkillStrongArc() {}
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -67,12 +64,12 @@ public class SkillStrongArc extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(
-						new EntityStrongArc(player, instance));
+						new EntityStrongArc(player, CatElectro.strongArc));
 				}
 			} else {
 				if(consumeCP()) {
 					player.worldObj.spawnEntityInWorld(
-						new EntityStrongArc.OffSync(player, instance));
+						new EntityStrongArc.OffSync(player, CatElectro.strongArc));
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 				}
@@ -81,7 +78,7 @@ public class SkillStrongArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = data.getSkillID(instance), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
+			int id = data.getSkillID(CatElectro.strongArc), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 			float need = 340+ lv *25 + clv *30;
 			return data.decreaseCP(need);
 		}

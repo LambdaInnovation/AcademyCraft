@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
 import cn.academy.ability.electro.entity.EntityChargingArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
@@ -33,13 +34,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class SkillItemCharge extends SkillBase {
 	
-	public static SkillItemCharge instance;
-	
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 
 	public SkillItemCharge() {
-		instance = this;
 	}
 	
 	@Override
@@ -63,12 +61,12 @@ public class SkillItemCharge extends SkillBase {
 		return ACClientProps.ELEC_CHARGE;
 	}
 	
-	public static float getCPT(AbilityData data) {
-		return 35 - data.getSkillLevel(SkillItemCharge.instance)* 0.6F + data.getLevelID() * 1.8F;
+	public float getCPT(AbilityData data) {
+		return 35 - data.getSkillLevel(this)* 0.6F + data.getLevelID() * 1.8F;
 	}
 	
-	public static int getEPT(AbilityData data) {
-		return 7 * (data.getLevelID() + 1) * (data.getSkillLevel(SkillItemCharge.instance) + 1);
+	public int getEPT(AbilityData data) {
+		return 7 * (data.getLevelID() + 1) * (data.getSkillLevel(this) + 1);
 	}
 	
 	public static class StateHold extends State {
@@ -125,10 +123,10 @@ public class SkillItemCharge extends SkillBase {
 				if(stack == null) {
 					return true;
 				} else {
-					EnergyUtils.tryCharge(stack, getEPT(data));
+					EnergyUtils.tryCharge(stack, CatElectro.itemCharge.getEPT(data));
 				}
 			}
-			if(!data.decreaseCP(getCPT(data))) {
+			if(!data.decreaseCP(CatElectro.itemCharge.getCPT(data))) {
 				return true;
 			}
 			return false;

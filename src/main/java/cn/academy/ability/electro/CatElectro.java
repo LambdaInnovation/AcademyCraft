@@ -4,6 +4,7 @@
 package cn.academy.ability.electro;
 
 import net.minecraft.util.ResourceLocation;
+import cn.academy.ability.electro.skill.SkillLightningFlash;
 import cn.academy.ability.electro.skill.SkillWeakArc;
 import cn.academy.ability.electro.skill.SkillItemCharge;
 import cn.academy.ability.electro.skill.SkillMagneticMovement;
@@ -27,11 +28,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegAbility
 public class CatElectro extends Category {
 	
-	CatElectro INSTANCE;
+	public static CatElectro INSTANCE;
+	
+	public static SkillWeakArc weakArc;
+	public static SkillItemCharge itemCharge;
+	public static SkillStrongArc strongArc;
+	public static SkillMagneticMovement magMovement;
+	public static SkillRailgun railgun;
+	public static SkillMineDetect mineDetect;
+	public static SkillLightningFlash lightningFlash;
 
 	@Override
 	protected void register() {
 		INSTANCE = this;
+		
 		this.addLevel(new Level(this, 800.0f, 1800.0f, 0.5f, 1.0f, .8));
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .7));
 		this.addLevel(new Level(this, 3500.0f, 5500.0f, 2.2f, 2.6f, .6));
@@ -39,12 +49,13 @@ public class CatElectro extends Category {
 		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .3));
 		
 		this.addSkill(new SkillBase(), 0);
-		this.addSkill(new SkillWeakArc(), 0);
-		this.addSkill(new SkillItemCharge(), 0);
-		this.addSkill(new SkillStrongArc(), 0);
-		this.addSkill(new SkillMagneticMovement(), 0);
-		this.addSkill(new SkillRailgun(), 0);
-		this.addSkill(new SkillMineDetect(), 0);
+		this.addSkill(weakArc = new SkillWeakArc(), 0);
+		this.addSkill(itemCharge = new SkillItemCharge(), 0);
+		this.addSkill(strongArc = new SkillStrongArc(), 0);
+		this.addSkill(magMovement = new SkillMagneticMovement(), 0);
+		this.addSkill(railgun = new SkillRailgun(), 0);
+		this.addSkill(mineDetect = new SkillMineDetect(), 0);
+		this.addSkill(lightningFlash = new SkillLightningFlash(), 0);
 		
 		this.setColorStyle(26, 143, 218);
 	}

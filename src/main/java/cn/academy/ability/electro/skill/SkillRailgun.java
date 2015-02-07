@@ -38,7 +38,6 @@ public class SkillRailgun extends SkillBase {
 	public static SkillRailgun instance;
 
 	public SkillRailgun() {
-		instance = this;
 	}
 	
 	private static Map<EntityPlayer, Integer> etcData = new HashMap();

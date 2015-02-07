@@ -5,6 +5,7 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
 import cn.academy.ability.electro.entity.EntityWeakArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
@@ -29,14 +30,10 @@ public class SkillWeakArc extends SkillBase {
 	
 	static final int MAX_HOLD_TIME = 200;
 	
-	public static SkillWeakArc instance;
-	
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 	
-	public SkillWeakArc() {
-		instance = this;
-	}
+	public SkillWeakArc() {}
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -70,12 +67,12 @@ public class SkillWeakArc extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(
-						new EntityWeakArc(player, instance));
+						new EntityWeakArc(player, CatElectro.weakArc));
 				}
 			} else {
 				if(consumeCP()) {
 					player.worldObj.spawnEntityInWorld(
-						new EntityWeakArc.OffSync(player, instance));
+						new EntityWeakArc.OffSync(player, CatElectro.weakArc));
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 				}
@@ -84,7 +81,7 @@ public class SkillWeakArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = data.getSkillID(instance), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
+			int id = data.getSkillID(CatElectro.weakArc), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 			float need = 250 - lv * (21 - lv) + 10 * clv * (15 - clv);
 			return data.decreaseCP(need);
 		}

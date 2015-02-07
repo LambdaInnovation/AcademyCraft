@@ -57,6 +57,7 @@ public class SkillBase {
 		return -1;
 	}
 	
+	@Deprecated
 	public void onSkillExpChange(AbilityData data, int skillID, float oldValue, float newValue) {}
 	
 	/**

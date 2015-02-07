@@ -6,6 +6,7 @@ package cn.academy.ability.electro.entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.ability.electro.skill.SkillItemCharge;
@@ -41,7 +42,7 @@ public class EntityChargingArc extends EntityArcBase {
 			@SideOnly(Side.CLIENT)
 			ChargeEffectS ces = null;
 			
-			double upt = SkillItemCharge.getEPT(data);
+			double upt = CatElectro.itemCharge.getEPT(data);
 			@Override public void onCreated() {}
 			@Override public void onUpdate() {
 				MovingObjectPosition mop = GenericUtils.tracePlayer(data.getPlayer(), 6.0);
