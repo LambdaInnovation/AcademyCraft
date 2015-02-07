@@ -21,7 +21,7 @@ public class DevPlayerManip extends EntityManip<EntityPlayer> {
 	public DevPlayerManip(EntityPlayer ent, TileDeveloper _dev) {
 		super(ent);
 		dev = _dev;
-		pos = Vec3.createVectorHelper(dev.xCoord + .5, dev.yCoord + .9, dev.zCoord + .5);
+		pos = Vec3.createVectorHelper(dev.xCoord + .5, dev.yCoord + 2.2, dev.zCoord + .5);
 		setRot();
 	}
 
@@ -37,6 +37,7 @@ public class DevPlayerManip extends EntityManip<EntityPlayer> {
 			setDead();
 			return;
 		}
+		entity.onGround = false;
 		//Set
 		entity.posX = pos.xCoord;
 		entity.posY = pos.yCoord;
