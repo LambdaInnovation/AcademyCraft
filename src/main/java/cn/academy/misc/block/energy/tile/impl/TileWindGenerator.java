@@ -29,8 +29,8 @@ import net.minecraft.world.World;
 public class TileWindGenerator extends TileEntity implements IWirelessNode {
     
     /* Const Declaration for This General Generator. */
-    private double CurrentEU = 0;
-    private int Until = 0;
+    private double currentEU = 0;
+    private int until = 0;
     
     private final double MAX_EU = 25000.0;
     private final double LATENCY = 200.0;
@@ -46,7 +46,7 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
     
     @Override
     public void setEnergy(double value) {
-        this.CurrentEU = value;
+        this.currentEU = value;
         
     }
     
@@ -57,7 +57,7 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
     
     @Override
     public double getEnergy() {
-        return CurrentEU;
+        return currentEU;
     }
     
     @Override
@@ -71,10 +71,10 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
     }
     
     public void addEnergy(double toAdd) {
-        if(this.CurrentEU + toAdd < MAX_EU)
-            this.CurrentEU += toAdd;
+        if(this.currentEU + toAdd < MAX_EU)
+            this.currentEU += toAdd;
         else
-            this.CurrentEU = MAX_EU;
+            this.currentEU = MAX_EU;
     }
     
     @SideOnly(Side.CLIENT)
@@ -97,29 +97,29 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
     public void updateEntity() {
         super.updateEntity();
         
-        if(--Until != 0)
+        if(--until != 0)
             return;
         else
-            Until = RATE;
+            until = RATE;
         
         World theWorld = this.getWorldObj();
         int h = theWorld.getHeight();
-        int TotalFree = 0;
+        int totalFree = 0;
         for(int i=-3; i<=3; i++)
             for(int j=-3; j<=3; j++)
                 for(int k=-3; k<=3; k++) {
                     boolean hasBlock = theWorld.blockExists(xCoord+i, yCoord+j, zCoord+k);
-                    if(!hasBlock) TotalFree++;
+                    if(!hasBlock) totalFree++;
                 }
         double EUToAdd = 0;
         /* Free blocks ranged from 0 ~ 216 */
-        if(TotalFree <= 30) // Lots of blocks nearby
+        if(totalFree <= 30) // Lots of blocks nearby
             EUToAdd = 40;
-        if(TotalFree <= 60) // Many blocks nearby
+        if(totalFree <= 60) // Many blocks nearby
             EUToAdd = 80;
-        if(TotalFree <= 120) // Much free blocks nearby
+        if(totalFree <= 120) // Much free blocks nearby
             EUToAdd = 100;
-        if(TotalFree <= 216) // Free blocks
+        if(totalFree <= 216) // Free blocks
             EUToAdd = 180;
         
         float weatherPower = this.getWeather(theWorld);
