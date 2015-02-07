@@ -13,10 +13,13 @@ package cn.academy.misc.block.energy.tile.impl;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.energy.IWirelessNode;
+import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
@@ -32,12 +35,73 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileSolarGenerator extends TileEntity {
+public class TileSolarGenerator extends TileEntity implements IWirelessNode {
 	
+    /* Const Declaration for This General Generator. */
+    private double CurrentEU = 0;
+    
+    private final double MAX_EU = 30000.0;
+    private final double LATENCY = 400.0;
+    private final double MAX_DISTANCE = 8; /* Unit: Block */
+    
+    
+    /**
+     * Those API stuff.
+     */
+    public TileSolarGenerator() {
+        super();
+    }
+    
+    @Override
+    public void setEnergy(double value) {
+        this.CurrentEU = value;
+        
+    }
+    
+    @Override
+    public double getMaxEnergy() {
+        return MAX_EU;
+    }
+    
+    @Override
+    public double getEnergy() {
+        return CurrentEU;
+    }
+    
+    @Override
+    public double getLatency() {
+        return LATENCY;
+    }
+    
+    @Override
+    public double getTransDistance() {
+        return MAX_DISTANCE;
+    }
+    
+    public void addEnergy(double toAdd) {
+        if(this.CurrentEU + toAdd < MAX_EU)
+            this.CurrentEU += toAdd;
+        else
+            this.CurrentEU = MAX_EU;
+    }
+    
+    /**
+     * Add energy to self on tick update.
+     */
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        /* Judge the state to determine how much Energy should offer */
+        World theWorld = this.getWorldObj();
+        double brightLev = theWorld.getSunBrightness(this.yCoord);
+        int EUToAdd = (int) brightLev * 200;
+        addEnergy(EUToAdd);
+    }
+    
+    
 	@RegTileEntity.Render
 	public static SGRender render;
 
-	public TileSolarGenerator() {}
 
 	@SideOnly(Side.CLIENT)
 	public static class SGRender extends TileEntitySpecialRenderer {

@@ -10,12 +10,14 @@
  */
 package cn.academy.misc.block.energy.tile.impl;
 
+import cn.academy.api.energy.IWirelessNode;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 /**
  * 风能发电机TileEntity
@@ -24,18 +26,107 @@ import net.minecraft.util.AxisAlignedBB;
  */
 @RegistrationClass
 @RegTileEntity
-public class TileWindGenerator extends TileEntity {
-
-	/**
-	 * 
-	 */
-	public TileWindGenerator() {
-	}
-	
+public class TileWindGenerator extends TileEntity implements IWirelessNode {
+    
+    /* Const Declaration for This General Generator. */
+    private double CurrentEU = 0;
+    private int Until = 0;
+    
+    private final double MAX_EU = 25000.0;
+    private final double LATENCY = 200.0;
+    private final double MAX_DISTANCE = 6; /* Unit: Block */
+    private final int RATE = 128; /* Ticks */
+    
+    /**
+     * Those API stuff.
+     */
+    public TileWindGenerator() {
+        super();
+    }
+    
+    @Override
+    public void setEnergy(double value) {
+        this.CurrentEU = value;
+        
+    }
+    
+    @Override
+    public double getMaxEnergy() {
+        return MAX_EU;
+    }
+    
+    @Override
+    public double getEnergy() {
+        return CurrentEU;
+    }
+    
+    @Override
+    public double getLatency() {
+        return LATENCY;
+    }
+    
+    @Override
+    public double getTransDistance() {
+        return MAX_DISTANCE;
+    }
+    
+    public void addEnergy(double toAdd) {
+        if(this.CurrentEU + toAdd < MAX_EU)
+            this.CurrentEU += toAdd;
+        else
+            this.CurrentEU = MAX_EU;
+    }
+    
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-    	return INFINITE_EXTENT_AABB;
+        return INFINITE_EXTENT_AABB;
     }
+    
+    private static float getWeather(World world) {
+        if (world.isThundering()) {
+            return 1.5F;
+        }
+        if (world.isRaining()) {
+            return 1.2F;
+        }
+        return 1.0F;
+    }
+    
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        
+        if(--Until != 0)
+            return;
+        else
+            Until = RATE;
+        
+        World theWorld = this.getWorldObj();
+        int h = theWorld.getHeight();
+        int TotalFree = 0;
+        for(int i=-3; i<=3; i++)
+            for(int j=-3; j<=3; j++)
+                for(int k=-3; k<=3; k++) {
+                    boolean hasBlock = theWorld.blockExists(xCoord+i, yCoord+j, zCoord+k);
+                    if(!hasBlock) TotalFree++;
+                }
+        double EUToAdd = 0;
+        /* Free blocks ranged from 0 ~ 216 */
+        if(TotalFree <= 30) // Lots of blocks nearby
+            EUToAdd = 40;
+        if(TotalFree <= 60) // Many blocks nearby
+            EUToAdd = 80;
+        if(TotalFree <= 120) // Much free blocks nearby
+            EUToAdd = 100;
+        if(TotalFree <= 216) // Free blocks
+            EUToAdd = 180;
+        
+        float weatherPower = this.getWeather(theWorld);
+        this.addEnergy(EUToAdd * weatherPower);
+    				
+        
+    }
+    
 
 }
