@@ -3,6 +3,9 @@
  */
 package cn.academy.core.client.gui.dev;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -13,8 +16,7 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.draw.prop.AssignColor;
 import cn.liutils.api.draw.prop.AssignTexture;
-import cn.liutils.api.draw.tess.GUIRect;
-import cn.liutils.api.draw.tess.RectMapping;
+import cn.liutils.api.gui.LIGui.WidgetNode;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
@@ -24,6 +26,7 @@ import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
 import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeathFolD
@@ -34,9 +37,66 @@ public class PageSkills extends DevSubpage {
 	SkillList sl;
 	Bar bar;
 	
-	private class SkillList extends ListVertical {
+	private static class HoverEffect extends Widget {
+		static final int MAXCHARS = 60;
+		static final float LW = 1;
+		static final int ALPHA = 200;
+		static final int[] COLOR = new int[] { 28, 28, 28 , ALPHA};
+		static final float FONT_SIZE = 8F;
 		
-		private class SkillElement extends Widget {
+		@Override
+		public void draw(double mx, double my, boolean hovering) {
+			mx = getGui().mouseX;
+			my = getGui().mouseY;
+			this.posX = mx + 12;
+			this.posY = my + 5;
+			this.updatePos();
+			
+			
+			WidgetNode top = getGui().getTopNode(mx, my);
+			TrueTypeFont font = GuiDeveloper.FONT;
+			if(top != null && top.widget instanceof SkillList.SkillElement) {
+				String str = ((SkillList.SkillElement)top.widget).skill.getDescription();
+				List<String> todraw = new ArrayList();
+				
+				final float font_step = 9F;
+				double slen = 0.0;
+				int cur = 0;
+				while(cur < str.length()) {
+					String tmp = str.substring(cur, Math.min(cur + MAXCHARS, str.length()));
+					todraw.add(tmp);
+					slen = Math.max(slen, TextUtils.getWidth(TextUtils.FONT_YAHEI_64, tmp, FONT_SIZE) * .65);
+					cur += MAXCHARS;
+				}
+				
+				final double SIDE = 10, TOP = 5;
+				float ht = font_step * todraw.size();
+				
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				//rect
+				double w = slen + SIDE * 2, h = ht + TOP * 2;
+				RenderUtils.bindColor(COLOR);
+				HudUtils.drawModalRect(0, 0, w, h);
+				//outline
+				RenderUtils.bindColor(65, 163, 220, ALPHA);
+				HudUtils.drawRectOutline(0, 0, w, h, LW);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				
+				//description
+				for(int i = 0; i < todraw.size(); ++i) {
+					TextUtils.drawText(font, todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
+				}
+			}
+		}
+		
+		public int getDrawPriority() {
+			return 5;
+		}
+	}
+	
+	class SkillList extends ListVertical {
+		
+		class SkillElement extends Widget {
 			
 			final int skillID;
 			final SkillBase skill;
@@ -62,7 +122,6 @@ public class PageSkills extends DevSubpage {
 					base.dev.getExpectation(base.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
 				expectedEnergy = exp.second.intValue();
-				this.doesListenKey = !fullyLearned;
 			}
 			
 			@Override
@@ -116,7 +175,8 @@ public class PageSkills extends DevSubpage {
 			}
 			
 			public void onMouseDown(double mx, double my) {
-				new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
+				if(!this.fullyLearned)
+					new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
 			}
 			
 		}
@@ -166,6 +226,7 @@ public class PageSkills extends DevSubpage {
 	public void onAdded() {
 		addWidget(bar = new Bar());
 		addWidget(sl = new SkillList());
+		getGui().addWidget(new HoverEffect());
 		
 		addWidgets(new Widget(120.5, 7, 5.5, 5.5) {
 			@Override

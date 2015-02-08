@@ -47,6 +47,13 @@ public class SkillBase {
 	}
 	
 	/**
+	 * Return the translated skill description(hint).
+	 */
+	public final String getDescription() {
+		return StatCollector.translateToLocal(getInternalName() + ".desc");
+	}
+	
+	/**
 	 * Return the index of the skill in some category. Ret -1 if skill is not in the cat.
 	 */
 	public final int getIndexInCategory(Category cat) {

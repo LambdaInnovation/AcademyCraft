@@ -52,6 +52,8 @@ skill.elec.moving=Electric Moving
 skill.elec.railgun=Railgun
 skill.elec.swordgen=Sword Generation
 
+em_arc.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
+
 #Melt Downer
 category.meltdowner=Melt Downer
 

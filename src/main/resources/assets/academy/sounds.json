@@ -1,5 +1,7 @@
 {
 "records.omr": {"category": "record", "sounds": [{"name": "records/only_my_railgun", "stream": true}]},
 "records.sn": {"category": "record", "sounds": [{"name": "records/sister's_noise", "stream": true}]},
-"records.lv5": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]}
+"records.lv5": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]},
+
+"elec.weak": {"category": "master", "sounds": [{"name": "elec/arc_weak", "stream": false}]}
 }
