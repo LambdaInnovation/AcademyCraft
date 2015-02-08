@@ -128,22 +128,22 @@ public class RailgunPlaneEffect extends SkillRenderer {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 		GL11.glPushMatrix(); {
-			GL11.glTranslated(0.8, 0.85 + tz * 0.37, tz);
+			GL11.glTranslated(-.4, 0.85 + tz * 0.37, tz);
 			GL11.glRotated(-20.4, 1, 0, 0);
 			
 			drawSingleSide(7);
 			
-			GL11.glPushMatrix(); {
-				GL11.glTranslated(-2.3, 0, 0);
-				drawSingleSide(7);
-			} GL11.glPopMatrix();
+//			GL11.glPushMatrix(); {
+//				GL11.glTranslated(-2.3, 0, 0);
+//				drawSingleSide(7);
+//			} GL11.glPopMatrix();
 		} GL11.glPopMatrix();
 		
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 	}
 	
 	private void drawSingleSide(int n) {
-		line.draw();
+		//line.draw();
 		for(int i = n; i >= 0; --i) {
 			double z = (4 + 6 * i * i) / 12d;
 			GL11.glPushMatrix();

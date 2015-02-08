@@ -199,9 +199,7 @@ public class EntityRay extends EntityX {
 	@SideOnly(Side.CLIENT)
 	public void beforeRender() { //Called by render to update position&rotation, for better viewing effects.
 		if(doesFollowSpawner()) {
-			setPosition(spawner.posX, spawner.posY, spawner.posZ);
-			rotationPitch = spawner.rotationPitch;
-			rotationYaw = spawner.rotationYaw;
+			setBySpawner();
 		}
 	}
 	

@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEntity(clientOnly = true)
+@RegEntity
 @RegEntity.HasRender
 public class EntityExcitedArc extends EntityArcBase {
 	

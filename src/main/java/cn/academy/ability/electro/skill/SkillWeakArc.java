@@ -5,9 +5,10 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
-import cn.academy.ability.electro.entity.EntityWeakArc;
+import cn.academy.ability.electro.entity.AttackingArcBase;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.client.render.SkillRenderer;
@@ -18,6 +19,8 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,6 +29,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
+@RegistrationClass
 public class SkillWeakArc extends SkillBase {
 	
 	static final int MAX_HOLD_TIME = 200;
@@ -67,12 +71,10 @@ public class SkillWeakArc extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(
-						new EntityWeakArc(player, CatElectro.weakArc));
+						new WeakArc(player));
 				}
 			} else {
 				if(consumeCP()) {
-					player.worldObj.spawnEntityInWorld(
-						new EntityWeakArc.OffSync(player, CatElectro.weakArc));
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 				}
@@ -88,6 +90,49 @@ public class SkillWeakArc extends SkillBase {
 
 		@Override
 		public void onFinish() {}
+		
+	}
+	
+	@RegEntity
+	public static class WeakArc extends AttackingArcBase {
+
+		public WeakArc(EntityPlayer creator) {
+			super(creator);
+		}
+		
+		public WeakArc(World world) {
+			super(world);
+		}
+
+		@Override
+		protected SkillBase getSkill() {
+			return CatElectro.weakArc;
+		}
+
+		@Override
+		protected float getDamage(int slv, int lv) {
+			return lv + slv * 0.5f;
+		}
+
+		@Override
+		protected double getAOERange(int slv, int lv) {
+			return 3 + lv * 0.3 + slv * 0.5;
+		}
+		
+		@Override
+		protected double getIgniteProb(int slv, int lv) {
+			return 0.2 + slv * 0.05;
+		}
+
+		@Override
+		public ResourceLocation[] getTexs() {
+			return ACClientProps.ANIM_ELEC_ARC;
+		}
+
+		@Override
+		protected int getLifetime() {
+			return 7;
+		}
 		
 	}
 }

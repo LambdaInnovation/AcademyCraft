@@ -5,9 +5,10 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
-import cn.academy.ability.electro.entity.EntityStrongArc;
+import cn.academy.ability.electro.entity.AttackingArcBase;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.client.render.SkillRenderer;
@@ -18,6 +19,8 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,6 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 强电弧（电弧束）攻击
  * @author WeathFolD
  */
+@RegistrationClass
 public class SkillStrongArc extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
@@ -63,13 +67,10 @@ public class SkillStrongArc extends SkillBase {
 		public void onStart() {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
-					player.worldObj.spawnEntityInWorld(
-						new EntityStrongArc(player, CatElectro.strongArc));
+					player.worldObj.spawnEntityInWorld(new WeakArc(player));
 				}
 			} else {
 				if(consumeCP()) {
-					player.worldObj.spawnEntityInWorld(
-						new EntityStrongArc.OffSync(player, CatElectro.strongArc));
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
 				}
@@ -79,7 +80,7 @@ public class SkillStrongArc extends SkillBase {
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
 			int id = 1, lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
-			float need = 340+ lv *25 + clv *30;
+			float need = 340 + lv * 25 + clv * 30;
 			return data.decreaseCP(need);
 		}
 
@@ -87,5 +88,51 @@ public class SkillStrongArc extends SkillBase {
 		public void onFinish() {}
 		
 	}
+	
+	@RegEntity
+	public static class WeakArc extends AttackingArcBase {
+
+		public WeakArc(EntityPlayer creator) {
+			super(creator);
+		}
+		
+		public WeakArc(World world) {
+			super(world);
+		}
+
+		@Override
+		protected SkillBase getSkill() {
+			return CatElectro.weakArc;
+		}
+
+		@Override
+		protected float getDamage(int slv, int lv) {
+			return 16 + slv * 0.8F + lv * 1.2F;
+		}
+
+		@Override
+		protected double getAOERange(int slv, int lv) {
+			return 7 + lv * 0.6 + slv * 1;
+		}
+		
+		@Override
+		protected double getIgniteProb(int slv, int lv) {
+			return 0.3 + slv * 0.08;
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ResourceLocation[] getTexs() {
+			return ACClientProps.ANIM_ELEC_ARC_STRONG;
+		}
+
+		@Override
+		protected int getLifetime() {
+			return 11;
+		}
+		
+	}
+	
+
 
 }

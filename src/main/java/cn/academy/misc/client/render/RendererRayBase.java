@@ -30,7 +30,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	
 	protected double 
 		fpOffsetX = -0.09,
-		fpOffsetY = -0.15,
+		fpOffsetY = -0.02,
 		fpOffsetZ = -0.02;
 
 	protected double 
@@ -65,7 +65,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		
 		double len = er.getDisplayRayLen();
 		
-		System.out.println(firstPerson);
+		//System.out.println(firstPerson);
 		if(firstPerson && er.doesFollowSpawner()) {
 			//Pos injection, for better viewing effect
 			x = 0;
