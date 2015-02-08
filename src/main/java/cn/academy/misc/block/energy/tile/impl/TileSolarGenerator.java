@@ -38,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileSolarGenerator extends TileEntity implements IWirelessNode {
 	
     /* Const Declaration for This General Generator. */
-    private double CurrentEU = 0;
+    private double currentEU = 0;
     
     private final double MAX_EU = 30000.0;
     private final double LATENCY = 400.0;
@@ -54,7 +54,7 @@ public class TileSolarGenerator extends TileEntity implements IWirelessNode {
     
     @Override
     public void setEnergy(double value) {
-        this.CurrentEU = value;
+        this.currentEU = value;
         
     }
     
@@ -65,7 +65,7 @@ public class TileSolarGenerator extends TileEntity implements IWirelessNode {
     
     @Override
     public double getEnergy() {
-        return CurrentEU;
+        return currentEU;
     }
     
     @Override
@@ -79,10 +79,10 @@ public class TileSolarGenerator extends TileEntity implements IWirelessNode {
     }
     
     public void addEnergy(double toAdd) {
-        if(this.CurrentEU + toAdd < MAX_EU)
-            this.CurrentEU += toAdd;
+        if(this.currentEU + toAdd < MAX_EU)
+            this.currentEU += toAdd;
         else
-            this.CurrentEU = MAX_EU;
+            this.currentEU = MAX_EU;
     }
     
     /**
