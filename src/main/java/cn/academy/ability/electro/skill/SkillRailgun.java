@@ -34,11 +34,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegEventHandler(Bus.Forge)
 public class SkillRailgun extends SkillBase {
-	
-	public static SkillRailgun instance;
 
-	public SkillRailgun() {
-	}
+	public SkillRailgun() {}
 	
 	private static Map<EntityPlayer, Integer> etcData = new HashMap();
 	

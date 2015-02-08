@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.academy.api.ability.SkillBase;
@@ -121,38 +122,66 @@ public class SkillMagneticMovement extends SkillBase {
 		
 	}
 	
-	@RegEntity(clientOnly = true)
+	@RegEntity
 	@RegEntity.HasRender
-	@SideOnly(Side.CLIENT)
 	public static class Ray extends EntityArcBase {
 		
-		final double x, y, z;
+		float x, y, z;
 		
 		@RegEntity.Render
 		@SideOnly(Side.CLIENT)
 		public static Render renderer;
-		
-		final HandleVel parent;
 
 		public Ray(HandleVel ent) {
-			super(ent.player, true);
-			x = ent.tx;
-			y = ent.ty;
-			z = ent.tz;
-			parent = ent;
-			this.addEffectUpdate();
+			super(ent.player);
+			x = (float) ent.tx;
+			y = (float) ent.ty;
+			z = (float) ent.tz;
+		}
+		
+		@SideOnly(Side.CLIENT)
+		public Ray(World world) {
+			super(world);
+		}
+		
+		@Override
+		public void entityInit() {
+			super.entityInit();
+			dataWatcher.addObject(13, Float.valueOf(0));
+			dataWatcher.addObject(14, Float.valueOf(0));
+			dataWatcher.addObject(15, Float.valueOf(0));
+		}
+		
+		@Override
+		protected void syncServer() {
+			super.syncServer();
+			dataWatcher.updateObject(13, Float.valueOf(x));
+			dataWatcher.updateObject(14, Float.valueOf(y));
+			dataWatcher.updateObject(15, Float.valueOf(z));
+		}
+		
+		@Override
+		protected void syncClient() {
+			super.syncClient();
+			x = dataWatcher.getWatchableObjectFloat(13);
+			y = dataWatcher.getWatchableObjectFloat(14);
+			z = dataWatcher.getWatchableObjectFloat(15);
 		}
 		
 		@Override
 		public void onUpdate() {
 			super.onUpdate();
-			
-			double dx = x - posX, dy = y - posY, dz = z - posZ;
-			this.traceDist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-			this.setHeading(dx, dy, dz, 1);
-			
-			if(parent.isDead)
-				setDead();
+			this.setByPoint(posX, posY, posZ, x, y, z);
+		}
+		
+		@SideOnly(Side.CLIENT)
+		public void beforeRender() {
+			this.setByPoint(posX, posY, posZ, x, y, z);
+		}
+		
+		@Override
+		public boolean doesFollowSpawner() {
+			return true;
 		}
 		
 	}
@@ -160,7 +189,7 @@ public class SkillMagneticMovement extends SkillBase {
 	public static class Render extends RenderElecArc {
 		
 		public Render() {
-			this.width = 0.2F;
+			this.width = 0.5F;
 		}
 		
 	}
@@ -168,6 +197,7 @@ public class SkillMagneticMovement extends SkillBase {
 	private static class MagState extends PatternHold.State {
 		
 		HandleVel handler;
+		Ray ray;
 
 		public MagState(EntityPlayer player) {
 			super(player);
@@ -183,8 +213,8 @@ public class SkillMagneticMovement extends SkillBase {
 				//player.worldObj.spawnEntityInWorld(new EntityBlockSimulator)
 				player.worldObj.spawnEntityInWorld
 				(handler = new HandleVel(player, mop.hitVec.xCoord, mop.hitVec.yCoord + 0.8, mop.hitVec.zCoord, 3));
-				if(this.isRemote()) {
-					player.worldObj.spawnEntityInWorld(new Ray(handler));
+				if(!isRemote()) {
+					player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
 				}
 			}
 		}
@@ -193,6 +223,8 @@ public class SkillMagneticMovement extends SkillBase {
 		public void onFinish() {
 			if(handler != null)
 				handler.setDead();
+			if(ray != null)
+				ray.setDead();
 		}
 
 		@Override

@@ -53,20 +53,25 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		long time = Minecraft.getSystemTime();
 		
 		T er = (T) var1;
+		if(!er.isLoaded()) {
+			return;
+		}
+		er.beforeRender();
+		
 		EntityPlayer clientPlayer = Minecraft.getMinecraft().thePlayer;
 		boolean firstPerson = 
 				Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 
-				&& clientPlayer.equals(er.getThrower());
+				&& clientPlayer.equals(er.getSpawner());
 		
-		if((er.syncTrick && er.isSync) && clientPlayer.equals(er.getThrower())) {
-			return;
+		double len = er.getDisplayRayLen();
+		
+		System.out.println(firstPerson);
+		if(firstPerson && er.doesFollowSpawner()) {
+			//Pos injection, for better viewing effect
+			x = 0;
+			y = 0;
+			z = 0;
 		}
-		
-		long dt = time - er.creationTime;
-		double ratio = dt < er.unfoldTime ? ((double)dt / er.unfoldTime) : 1.0;
-		double len = ratio * er.getTraceDistance();
-		
-		double alpha = er.fading ? 1 - (double)er.tickFadeout / er.fadeoutTime : 1.0;
 		
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -77,7 +82,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotated(er.rotationYaw, 0, -1, 0);
 			GL11.glRotated(er.rotationPitch, 1, 0, 0);
-			GL11.glColor4d(1, 1, 1, alpha);
+			GL11.glColor4d(1, 1, 1, alpha * er.getAlpha());
 			
 			if(firstPerson) {
 				transformFirstPerson(er, x, y, z);

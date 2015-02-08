@@ -114,9 +114,12 @@ public class ACClientProps {
 	
 	public static ResourceLocation ANIM_SMALL_ARC[];
 	static {
-		ANIM_SMALL_ARC = new ResourceLocation[10];
-		for(int i = 0; i < 10; ++i) {
-			ANIM_SMALL_ARC[i] = src("academy:textures/effects/arcS_0" + i + ".png");
+		ANIM_SMALL_ARC = new ResourceLocation[20];
+		for(int i = 1; i < 10; ++i) {
+			ANIM_SMALL_ARC[i - 1] = src("academy:textures/effects/arcs/arcS_0" + i + ".png");
+		}
+		for(int i = 10; i <= 20; ++i) {
+			ANIM_SMALL_ARC[i - 1] = src("academy:textures/effects/arcs/arcS_" + i + ".png");
 		}
 	}
 	

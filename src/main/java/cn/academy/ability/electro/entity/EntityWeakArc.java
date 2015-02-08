@@ -49,12 +49,12 @@ public class EntityWeakArc extends EntityArcBase {
 			this.addDaemonHandler(new MotionHandler(this) {
 				@Override
 				public void onCreated() {
-					MovingObjectPosition mop = peformTrace(GenericUtils.selectorLiving);
+					MovingObjectPosition mop = performTrace();
 					//System.out.println(mop);
 					if(mop == null) return;
 					List<Entity> list = EntityUtils.getEntitiesAround(worldObj, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, aoeRange, 
-							GenericUtils.selectorLiving, OffSync.this, getThrower(), mop.entityHit);
-					Motion3D mo = new Motion3D(getThrower(), true);
+							GenericUtils.selectorLiving, OffSync.this, getSpawner(), mop.entityHit);
+					Motion3D mo = new Motion3D(getSpawner(), true);
 					Vec3 hitVec = mop.hitVec;
 					if(mop.typeOfHit == MovingObjectType.BLOCK) {
 						hitVec.xCoord += 0.5;
@@ -105,7 +105,7 @@ public class EntityWeakArc extends EntityArcBase {
 			this.addDaemonHandler(new MotionHandler(this) {
 				@Override
 				public void onCreated() {
-					MovingObjectPosition mop = peformTrace(GenericUtils.selectorLiving);
+					MovingObjectPosition mop = performTrace(GenericUtils.selectorLiving);
 					if(mop == null) return;
 					
 					if(mop.typeOfHit == MovingObjectType.BLOCK) {

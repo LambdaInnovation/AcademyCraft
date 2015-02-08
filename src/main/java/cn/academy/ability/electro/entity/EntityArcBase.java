@@ -34,7 +34,7 @@ public class EntityArcBase extends EntityRay {
 	public IntRandomSequence indSeq = new IntRandomSequence(SEQ_SIZE, getTexs().length);
 	
 	@SideOnly(Side.CLIENT)
-	public DoubleRandomSequence rotSeq = new DoubleRandomSequence(SEQ_SIZE, -30, 30);
+	public DoubleRandomSequence rotSeq = new DoubleRandomSequence(SEQ_SIZE, -5, 40);
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -48,14 +48,9 @@ public class EntityArcBase extends EntityRay {
 		super(creator);
 	}
 	
-	public EntityArcBase(EntityLivingBase creator, boolean follow) {
-		super(creator, follow);
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public EntityArcBase(World world) {
 		super(world);
-		this.peformTrace = true;
 		addEffectUpdate();
 	}
 	

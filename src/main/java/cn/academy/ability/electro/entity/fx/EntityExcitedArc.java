@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author WeathFolD
  */
-@SideOnly(Side.CLIENT)
 @RegistrationClass
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
@@ -25,28 +24,26 @@ public class EntityExcitedArc extends EntityArcBase {
 	
 	@RegEntity.Render
 	public static ThinArcRender render;
-	
-	public final double len;
 
 	public EntityExcitedArc(World world, Vec3 begin, Vec3 end, int life) {
 		super(world);
 		this.clearDaemonHandlers();
-		addEffectUpdate();
 		addDaemonHandler(new LifeTime(this, life));
-		setPosition(begin.xCoord, begin.yCoord, begin.zCoord);
-		Vec3 dv = begin.subtract(end);
-		rotationYaw = -(float) (Math.atan2(dv.xCoord, dv.zCoord) * 180 / Math.PI);
-		double tmp = dv.xCoord * dv.xCoord + dv.zCoord * dv.zCoord;
-		rotationPitch = (float) (Math.atan2(dv.yCoord, Math.sqrt(tmp)) * 180 / Math.PI);
-		
-		len = Math.sqrt(tmp + dv.yCoord * dv.yCoord);
-		this.ignoreFrustumCheck = true;
-		this.isSync = false;
+		this.setByPoint(begin.xCoord, begin.yCoord, begin.zCoord, end.xCoord, end.yCoord, end.zCoord);
+	}
+	
+	public EntityExcitedArc(World world) {
+		super(world);
 	}
 	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+	}
+	
+	@Override
+	protected boolean doesPerformTrace() {
+		return false;
 	}
 	
 	public static final class ThinArcRender extends RenderElecArc {

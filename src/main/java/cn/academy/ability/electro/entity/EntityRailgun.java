@@ -3,11 +3,12 @@
  */
 package cn.academy.ability.electro.entity;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.entity.fx.EntityArcS;
-import cn.academy.ability.electro.skill.SkillRailgun;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayTiling;
@@ -44,7 +45,6 @@ public class EntityRailgun extends EntityRay {
 		
 		@Override
 		protected void drawAtOrigin(EntityRailgun ent, double len) {
-			System.out.println("rl" + len);
 			super.drawAtOrigin(ent, len);
 		}
 		
@@ -57,18 +57,13 @@ public class EntityRailgun extends EntityRay {
 	
 	public EntityRailgun(AbilityData data) {
 		super(data.getPlayer());
-		this.follow = false;
-		this.unfoldTime = 200;
 		
-		int sid = data.getSkillID(SkillRailgun.instance);
+		int sid = data.getSkillID(CatElectro.railgun);
 		damage = 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F;
 		explRadius = (int) (damage * 0.04);
 		
-		if(!worldObj.isRemote) {
-			MovingObjectPosition ret = this.peformTrace(GenericUtils.selectorLiving);
-			if(ret != null) onCollide(ret);
-		}
-		this.syncTrick = false;
+		MovingObjectPosition ret = this.performTrace();
+		if(ret != null) onCollide(ret);
 	}
 	
 	private void genArcs() {
@@ -78,7 +73,7 @@ public class EntityRailgun extends EntityRay {
 		
 		final double rfr = -0.2, rto = 0.2;
 		
-		Motion3D mo = new Motion3D(this, false);
+		Motion3D mo = new Motion3D(this, true);
 		for(int i = 0; i < n; ++i) {
 			double x = mo.posX + GenericUtils.randIntv(rfr, rto), 
 					y = mo.posY + GenericUtils.randIntv(rfr, rto) - 0.3, 
@@ -94,40 +89,47 @@ public class EntityRailgun extends EntityRay {
 	@SideOnly(Side.CLIENT)
 	public EntityRailgun(World world) {
 		super(world);
-		syncTrick = false;
-		peformTrace = true;
 	}
 	
 	private void onCollide(MovingObjectPosition trace) {
-		Explosion exp = worldObj.createExplosion(this.getThrower(), trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, explRadius, true);
+		Explosion exp = worldObj.createExplosion(this.getSpawner(), trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, explRadius, true);
 		exp.doExplosionA();
 		exp.doExplosionB(false);
 	}
 	
 	@Override
+	public boolean doesFollowSpawner() {
+		return false;
+	}
+	
+	@Override
 	public void onUpdate() {
+		super.onUpdate();
 		if(ticksExisted == 8) {
 			this.setFadeout(4);
 		}
-		
-		if(worldObj.isRemote && !gened) {
+		if(worldObj.isRemote && !gened && isLoaded()) {
 			gened = true;
 			genArcs();
 		}
-		
-		//System.out.println(worldObj.isRemote + " " + traceDist);
-		
-		super.onUpdate();
 	}
 	
 	@Override
-	public double getMaxDistance() {
-		return 100.0;
+	public float getDefaultRayLen() {
+		return 50.0f;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void beforeRender() { 
+		//EntityLivingBase spawner = getSpawner();
+		//setPosition(spawner.posX, spawner.posY, spawner.posZ);
 	}
 	
 	@Override
-	public double getMinDistance() {
-		return 30.0;
+	public float getDisplayRayLen() {
+		float ratio = Math.min(1.0f, ticksExisted / 3.0f);
+		float len = Math.max(getRayLength(), 12.0f);
+		return ratio * len;
 	}
 	
 }

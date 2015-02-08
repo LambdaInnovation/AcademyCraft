@@ -83,8 +83,10 @@ public class TileGrid extends TileNodeBase {
 			GL11.glRotated(Minecraft.getSystemTime() / 50D, 2, 0, 1);
 			final double size = 3.2, hs = size * 0.5;
 			GL11.glTranslated(-hs, -hs, -hs);
+			GL11.glColor4d(1, 1, 1, 0.7);
 			RenderUtils.loadTexture(ACClientProps.TEX_MDL_GRID_BLOCK);
 			RenderUtils.drawCube(size, size, size);
+			GL11.glColor4d(1, 1, 1, 1);
 		}
 		
 	}
