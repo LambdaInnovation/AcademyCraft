@@ -80,7 +80,7 @@ public class Level {
 	
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
-		return StatCollector.translateToLocal("level_" + parent.getCategoryId() + "_" + getID());
+		return StatCollector.translateToLocal("level_" + getID());
 	}
 	
 	public void enterLevel(AbilityData abilityData) {}

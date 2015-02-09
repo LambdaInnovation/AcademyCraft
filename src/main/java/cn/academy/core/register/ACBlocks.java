@@ -7,6 +7,7 @@ import cn.academy.core.block.dev.BlockDeveloper;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.misc.block.ACOre;
 import cn.academy.misc.block.energy.BlockGrid;
+import cn.academy.misc.block.energy.BlockNode;
 import cn.academy.misc.block.energy.BlockSolarGenerator;
 import cn.academy.misc.block.energy.BlockWindGenerator;
 import cn.academy.misc.block.energy.tile.impl.TileSolarGenerator;
@@ -29,6 +30,9 @@ public class ACBlocks {
 	
 	@RegBlock
 	public static BlockGrid grid;
+	
+	@RegBlock
+	public static BlockNode node;
 	
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")
