@@ -36,6 +36,11 @@ public class TileNode extends TileNodeBase {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	/**
+	 * Not using utils because we almost don't render anything this way.
+	 * if we (in the future) have just make this a base class
+	 * @author WeathFolD
+	 */
 	public static class NodeRender extends TileEntitySpecialRenderer {
 		
 		static final ResourceLocation 
@@ -51,12 +56,9 @@ public class TileNode extends TileNodeBase {
 			piece.addHandler(rect);
 		}
 		
-		final int[] rots = { 0, 90, 180, 270 };
+		final int[] rots = { 0, 90, -90, 180 };
 		final int[][] offsets = {
-			{0, 0}, {0, 0}, {1, 1}, {1, 1}
-		};
-		final int[] modes = {
-			GL11.GL_BACK, GL11.GL_FRONT, GL11.GL_BACK, GL11.GL_FRONT
+			{0, 0}, {0, 1}, {1, 0}, {1, 1}
 		};
 
 		@Override
@@ -66,8 +68,8 @@ public class TileNode extends TileNodeBase {
 			RenderUtils.loadTexture(TEX);
 			GL11.glPushMatrix(); {
 				GL11.glTranslated(x, y, z);
+				
 				for(int i = 0; i < 4; ++i) {
-					GL11.glCullFace(modes[i]);
 					GL11.glPushMatrix();
 					GL11.glTranslated(offsets[i][0], 0, offsets[i][1]);
 					GL11.glRotated(rots[i], 0, 1, 0);
@@ -78,9 +80,11 @@ public class TileNode extends TileNodeBase {
 					piece.draw();
 					
 					//energy bar
-					double cur = 0.5;
-					rect.map.set(32.0 / 34.0, 0, 1 - 32.0 / 34.0, cur);
-					rect.setSize(1, cur);
+					GL11.glTranslated(-0.001, 4 / 32.0, 21.0 / 32.0);
+					double cur = node.getEnergy() / node.getMaxEnergy();
+					rect.map.set(32.0 / 34.0, 0, 2.0 / 34.0, cur * (15.0 / 32.0));
+					rect.setSize(2.0 / 34.0, cur * (15.0 / 32.0));
+					piece.draw();
 					
 					GL11.glPopMatrix();
 				}
@@ -88,8 +92,8 @@ public class TileNode extends TileNodeBase {
 				
 				RenderUtils.loadTexture(TEX_BTM);
 				GL11.glPushMatrix();
-				GL11.glRotated(-90, 0, 0, 1);
-				GL11.glCullFace(GL11.GL_FRONT);
+				GL11.glTranslated(1, 0, 0);
+				GL11.glRotated(90, 0, 0, 1);
 				rect.map.set(0, 0, 1, 1);
 				piece.draw();
 				GL11.glPopMatrix();
@@ -97,12 +101,10 @@ public class TileNode extends TileNodeBase {
 				GL11.glPushMatrix();
 				GL11.glTranslated(0, 1, 0);
 				GL11.glRotated(-90, 0, 0, 1);
-				GL11.glCullFace(GL11.GL_BACK);
 				piece.draw();
 				GL11.glPopMatrix();
 				
 			} GL11.glPopMatrix();
-			GL11.glCullFace(GL11.GL_BACK);
 		}
 		
 	}
