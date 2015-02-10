@@ -67,6 +67,7 @@ public class MsgSimpleChange implements IMessage {
 				//Only sync cp of thePlayer
 				AbilityData data = AbilityDataMain.getData(thePlayer);
 				data.currentCP = msg.cp;
+				data.maxCP = msg.maxCP;
 				
 				if (msg.skillCount != data.getSkillCount()) {
 					AcademyCraft.log.fatal("Invalid ability data message.");
