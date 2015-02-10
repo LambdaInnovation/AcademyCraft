@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.core.register.ACItems;
+import cn.academy.core.register.ACRecipes;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
@@ -83,6 +84,9 @@ public class AcademyCraft {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
+        
+        ACRecipes.regRecipe();
+        ACRecipes.regSmelting();
 	}
 
 	@EventHandler
