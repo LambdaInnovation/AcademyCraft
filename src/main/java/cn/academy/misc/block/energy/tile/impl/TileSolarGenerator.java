@@ -18,9 +18,11 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.energy.IWirelessGenerator;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.block.energy.tile.base.TileUserBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.util.RenderUtils;
@@ -35,54 +37,21 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileSolarGenerator extends TileEntity implements IWirelessNode {
+public class TileSolarGenerator extends TileUserBase implements IWirelessGenerator {
 	
     /* Const Declaration for This General Generator. */
     private double currentEU = 0;
     
-    private final double MAX_EU = 30000.0;
+    private final double MAX_EU = 2000.0;
     private final double LATENCY = 400.0;
     private final double MAX_DISTANCE = 8; /* Unit: Block */
     
+    @RegTileEntity.Render
+	@SideOnly(Side.CLIENT)
+	public static SGRender render;
     
-    /**
-     * Those API stuff.
-     */
     public TileSolarGenerator() {
         super();
-    }
-    
-    @Override
-    public void setEnergy(double value) {
-        this.currentEU = value;
-        
-    }
-    
-    @Override
-    public double getMaxEnergy() {
-        return MAX_EU;
-    }
-    
-    @Override
-    public double getEnergy() {
-        return currentEU;
-    }
-    
-    @Override
-    public double getLatency() {
-        return LATENCY;
-    }
-    
-    @Override
-    public double getTransDistance() {
-        return MAX_DISTANCE;
-    }
-    
-    public void addEnergy(double toAdd) {
-        if(this.currentEU + toAdd < MAX_EU)
-            this.currentEU += toAdd;
-        else
-            this.currentEU = MAX_EU;
     }
     
     /**
@@ -98,11 +67,6 @@ public class TileSolarGenerator extends TileEntity implements IWirelessNode {
         addEnergy(EUToAdd);
     }
     
-    
-	@RegTileEntity.Render
-	public static SGRender render;
-
-
 	@SideOnly(Side.CLIENT)
 	public static class SGRender extends TileEntitySpecialRenderer {
 
@@ -121,6 +85,19 @@ public class TileSolarGenerator extends TileEntity implements IWirelessNode {
 			GL11.glPopMatrix();
 		}
 		
+	}
+	
+    public void addEnergy(double toAdd) {
+    	double req = MAX_EU - toAdd;
+    	double real = Math.min(req, toAdd);
+        currentEU += real;
+    }
+
+	@Override
+	public double getOutput(double req) {
+		double csm = Math.min(req, Math.min(128, currentEU));
+		currentEU -= csm;
+		return csm;
 	}
 	
 }
