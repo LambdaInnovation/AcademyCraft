@@ -44,8 +44,8 @@ public class TileNode extends TileNodeBase {
 	public static class NodeRender extends TileEntitySpecialRenderer {
 		
 		static final ResourceLocation 
-		TEX = new ResourceLocation("academy:textures/blocks/nodes_tex.png"),
-				TEX_BTM = new ResourceLocation("academy:textures/blocks/nodes_main.png");
+			TEX = new ResourceLocation("academy:textures/blocks/nodes_tex.png"),
+			TEX_BTM = new ResourceLocation("academy:textures/blocks/nodes_main.png");
 		
 		DrawObject piece;
 		Rect rect;

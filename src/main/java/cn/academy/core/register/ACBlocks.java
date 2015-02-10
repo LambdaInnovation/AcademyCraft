@@ -22,8 +22,9 @@ public class ACBlocks {
 	@RegBlock
 	public static BlockDeveloper developer;
 	
-	@RegBlock
-	public static BlockWindGenerator windGen;
+	//@RegBlock
+	//TODO: Wait until formal version
+	//public static BlockWindGenerator windGen;
 	
 	@RegBlock
 	public static BlockSolarGenerator solarGen;
