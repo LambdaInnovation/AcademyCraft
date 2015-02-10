@@ -25,6 +25,12 @@ item.corebearing.name=Core Bearing
 item.ni_ingot.name=Nickel Ingot
 item.mg_plate.name=Magnesium Plate
 item.mg_ingot.name=Magnesium Ingot
+item.pcbn.name=PCB
+item.human_machine.name=Body State Detector
+item.io.name=I/O Port
+item.brainbeta.name=Brainwave Resonator β
+item.crystal.name=Crystal Rock
+item.shadow_ingot.name=Shadow Metal Ingot
 
 #Blocks
 tile.ac_developer.name=Ability Developer
@@ -37,6 +43,7 @@ tile.aluminumore.name=Aluminum Ore
 tile.crystal_ore.name=Crystal Ore
 tile.ni_ore.name=Nickel Ore
 tile.mg_ore.name=Magnesium Ore
+tile.ac_solar.name=Solar Generator
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
