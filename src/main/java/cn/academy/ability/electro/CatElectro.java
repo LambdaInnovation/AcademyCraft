@@ -40,7 +40,7 @@ public class CatElectro extends Category {
 
 	@Override
 	protected void register() {
-		INSTANCE = this;
+		INSTANCE = this; //TODO: Add this support in AnnoReg?
 		
 		this.addLevel(new Level(this, 800.0f, 1800.0f, 0.5f, 1.0f, .8));
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .7));

@@ -103,7 +103,7 @@ public class GuiDeveloper extends LIGuiScreen {
     }
 	
 	public static void drawText(String text, double x, double y, float size) {
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, x, y, size);
+		TextUtils.drawText(FONT, text, x, y, size);
 	}
 	
 	

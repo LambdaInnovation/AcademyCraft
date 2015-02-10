@@ -6,6 +6,7 @@ package cn.academy.core.client.gui.dev;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -40,33 +41,36 @@ public class PageSkills extends DevSubpage {
 	private static class HoverEffect extends Widget {
 		static final int MAXCHARS = 60;
 		static final float LW = 1;
-		static final int ALPHA = 200;
-		static final int[] COLOR = new int[] { 28, 28, 28 , ALPHA};
+		int[] color = new int[] { 28, 28, 28 , 255};
 		static final float FONT_SIZE = 8F;
+		
+		long lastDeac = 0;
 		
 		@Override
 		public void draw(double mx, double my, boolean hovering) {
 			mx = getGui().mouseX;
 			my = getGui().mouseY;
-			this.posX = mx + 12;
+			this.posX = mx + 5;
 			this.posY = my + 5;
 			this.updatePos();
 			
+			long time = Minecraft.getSystemTime();
 			
 			WidgetNode top = getGui().getTopNode(mx, my);
 			TrueTypeFont font = GuiDeveloper.FONT;
 			if(top != null && top.widget instanceof SkillList.SkillElement) {
 				String str = ((SkillList.SkillElement)top.widget).skill.getDescription();
-				List<String> todraw = new ArrayList();
+				List<String> todraw = GenericUtils.chopString(str, MAXCHARS);
 				
+				int alpha = (int) (200 * Math.min((time - lastDeac) / 400.0, 1.0));
+				color[3] = alpha;
+				
+				//Calc the maxium window length.
 				final float font_step = 9F;
 				double slen = 0.0;
-				int cur = 0;
-				while(cur < str.length()) {
-					String tmp = str.substring(cur, Math.min(cur + MAXCHARS, str.length()));
-					todraw.add(tmp);
-					slen = Math.max(slen, TextUtils.getWidth(TextUtils.FONT_YAHEI_64, tmp, FONT_SIZE) * .65);
-					cur += MAXCHARS;
+				for(int i = 0; i < todraw.size(); ++i) {
+					String tmp = todraw.get(i);
+					slen = Math.max(slen, TextUtils.getWidth(font, tmp, FONT_SIZE) * .65);
 				}
 				
 				final double SIDE = 10, TOP = 5;
@@ -75,10 +79,10 @@ public class PageSkills extends DevSubpage {
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				//rect
 				double w = slen + SIDE * 2, h = ht + TOP * 2;
-				RenderUtils.bindColor(COLOR);
+				RenderUtils.bindColor(color);
 				HudUtils.drawModalRect(0, 0, w, h);
 				//outline
-				RenderUtils.bindColor(65, 163, 220, ALPHA);
+				RenderUtils.bindColor(65, 163, 220, alpha);
 				HudUtils.drawRectOutline(0, 0, w, h, LW);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				
@@ -86,6 +90,8 @@ public class PageSkills extends DevSubpage {
 				for(int i = 0; i < todraw.size(); ++i) {
 					TextUtils.drawText(font, todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
 				}
+			} else{
+				lastDeac = time;
 			}
 		}
 		
@@ -152,7 +158,7 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 10);
+				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 9);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
