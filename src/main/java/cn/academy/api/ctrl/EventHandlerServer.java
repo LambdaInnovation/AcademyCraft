@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
@@ -240,7 +241,7 @@ public class EventHandlerServer {
 		
 	}
 	
-	@RegEventHandler(RegEventHandler.Bus.FML)
+	@RegEventHandler
 	public static final EventHandlerServer INSTANCE = new EventHandlerServer();
 
 	/**
@@ -295,6 +296,25 @@ public class EventHandlerServer {
 		kaMap.remove(player);
 		
 		SkillStateManager.removePlayer(player);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerCloned(PlayerEvent.Clone event) {
+	    //Dead or to another dimension
+	    
+	    //Copy data to the new instance.
+	    NBTTagCompound abilityData = new NBTTagCompound();
+	    AbilityDataMain.getData(event.original).saveNBTData(abilityData);
+	    AbilityDataMain.getData(event.entityPlayer).loadNBTData(abilityData);
+	    
+	    //Update both maps.
+	    if (kaMap.containsKey(event.original)) {
+	        kaMap.remove(event.original);
+	    }
+	    if (rehMap.containsKey(event.original)) {
+	        rehMap.remove(event.original);
+	        resetPlayerSkillData(event.entityPlayer);
+	    }
 	}
 
 	/**
