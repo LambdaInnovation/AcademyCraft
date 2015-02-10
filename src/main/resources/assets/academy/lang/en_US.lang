@@ -43,24 +43,33 @@ itemGroup.AcademyCraft=AcademyCraft
 
 #Electro Master
 cat_elecmaster=Electro Master
+
 skl_em_arc=Arc Generation
-#skl_em_attract=Electric Attraction
-#skl_em_attack=Elecric Beam Attack
 skl_em_itemcharge=Item Charging
-#skl_em_mineinf=MagField Detection
-skl_em_move=Electric Moving
+skl_em_move=Magnetic Movement
 skl_em_railgun=Railgun
-skl_em_mine=Mineral Exploration
-skl_em_arc_strong=The Spear of Lighting
+skl_em_mine=Mineral Detect
+skl_em_arc_strong=The Spear of Lightning
 #skl_em_swordgen=Sword Generation
+#skl_em_biostreng=Bioelectrical Improvement
+skl_em_lf=Lightning Flash
 
 em_arc.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
-em_itemcharge.desc=As a electro master, you can never worry about that the small sppliances with you run out of power. And charging to all kinds of small things is a good exercise of high-efficency using the skills of electro.
+em_itemcharge.desc=As a electro master, you can charge to all kinds of small things ,and it is a good exercise of high-efficency using the skills of electro.
 em_move.desc=Generate magnetic to a fixed magnetizable substance to pull yourself close to.
-em_railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Because of using the electromagnetic force itself to correct flight path and accelerate coin, it's different from the normal bullet, railgun is keeping accelerating before hitting the target. So it has a very high accuracy and destructive power.
+em_railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Because of using the electromagnetic force itself to correct flight path and accelerate coin, railgun is keeping accelerating before hitting the target.
+em_mine.desc=You can find the mineral around yourself with changes in the magnetic field with great electromagnetic operational capability.
+em_arc_strong.desc=Generate lots of electricity, and make it into a cylindrical to shoot. After hitting an entity the huge currents will erupt out and make second damage.
+#em_biostreng.desc=When you be in level 3, you can try fine-tuning your bioelectrical to improve your physical fitness because of better electromagnetic control capability.
+#em_swordgen.desc=You can use iron sand to attack skillfully with your powerful agnetic control capability and computing capability.
+em_lf.desc=Use strong currents to get awful athletic ability, and you can direct damage enemy with it.
 
 #Melt Downer
-category.meltdowner=Melt Downer
+cat_meltdowner=Melt Downer
+
+skl_md_elecdart=Electronic Dart
+
+md_elecdart.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 
 #Commands
 aimctrl.presetinf=Preset %s : %s
@@ -112,3 +121,8 @@ adev.userinfo=User Info
 ac.presset=Preset Settings
 ac.preset=Preset #
 level_0=Level 1
+level_1=Level 2
+level_2=Level 3
+level_3=Level 4
+level_4=Level 5
+#level_5=Level 6
