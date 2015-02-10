@@ -57,7 +57,7 @@ public class AbilityDataMain {
 		EventHandlerServer.resetPlayerSkillData(player);
 		
 		//Reset client
-		AcademyCraft.netHandler.sendTo(new MsgResetAbilityData(player), (EntityPlayerMP) player);
+		AcademyCraft.netHandler.sendToAll(new MsgResetAbilityData(player));
 	}
 
 }

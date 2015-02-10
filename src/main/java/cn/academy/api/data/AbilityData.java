@@ -376,7 +376,7 @@ public class AbilityData implements IExtendedEntityProperties {
 				AbilityDataMain.resetPlayer(player);
 				needToReset = false;
 			} else {
-				AcademyCraft.netHandler.sendTo(new MsgSimpleChange(this), (EntityPlayerMP) player);
+				AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
 			}
 		}
 	}
