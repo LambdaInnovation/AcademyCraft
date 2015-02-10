@@ -101,17 +101,18 @@ public class ACItems {
 	@RegItem.UTName("mg_plate")
 	public static ACSimpleItem mgPlate;
 	
-	@RegItem
-	@RegItem.UTName("siliconrod")
-	public static ACSimpleItem siliconRod;
+	//TODO: If these items is unnecessary, delete them.
+//	@RegItem
+//	@RegItem.UTName("siliconrod")
+//	public static ACSimpleItem siliconRod;
 	
-	@RegItem
-	@RegItem.UTName("coppercoil")
-	public static ACSimpleItem copperCoil;
+//	@RegItem
+//	@RegItem.UTName("coppercoil")
+//	public static ACSimpleItem copperCoil;
 	
-	@RegItem
-	@RegItem.UTName("corebearing")
-	public static ACSimpleItem coreBearing;
+//	@RegItem
+//	@RegItem.UTName("corebearing")
+//	public static ACSimpleItem coreBearing;
 	
 	@RegItem()
 	@RegItem.HasRender
