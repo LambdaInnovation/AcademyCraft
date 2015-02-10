@@ -59,7 +59,7 @@ public class DiagActionConfirm extends DialogueBase {
 	@Override
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
-		TrueTypeFont font = TextUtils.FONT_CONSOLAS_64;
+		TrueTypeFont font = GuiDeveloper.FONT;
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5, 15, 7, TrueTypeFont.ALIGN_CENTER);
 		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5, 35.5, 7, TrueTypeFont.ALIGN_CENTER);

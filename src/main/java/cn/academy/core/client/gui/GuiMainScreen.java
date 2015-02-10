@@ -134,11 +134,11 @@ public class GuiMainScreen extends AuxGui {
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, data.getLevel().getDisplayName(), 184, 60, 21);
+				TextUtils.drawText(TextUtils.FONT_YAHEI_32, data.getLevel().getDisplayName(), 184, 60, 21);
 				
 				//Numeric CP
 				String str = String.format("%.0f/%.0f", data.getCurrentCP(), data.getMaxCP());
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 316, 88, 25, TrueTypeFont.ALIGN_CENTER);
+				TextUtils.drawText(TextUtils.FONT_YAHEI_32, str, 316, 88, 25, TrueTypeFont.ALIGN_CENTER);
 			}
 		} GL11.glPopMatrix();
 		RenderUtils.bindIdentity();

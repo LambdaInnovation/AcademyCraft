@@ -70,7 +70,7 @@ public class PageMain extends Widget {
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, pname,
+		TextUtils.drawText(GuiDeveloper.FONT, pname,
 				TITLE_CENTER_X, TITLE_CENTER_Y, 12, TrueTypeFont.ALIGN_CENTER);
 		
 		//Titles
@@ -92,8 +92,8 @@ public class PageMain extends Widget {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
 			//Cat and level
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, cat.getDisplayName(), 167.5, 130, 11);
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, data.getLevel().getDisplayName(), 167.5, 140, 8);
+			TextUtils.drawText(GuiDeveloper.FONT, cat.getDisplayName(), 167.5, 130, 11);
+			TextUtils.drawText(GuiDeveloper.FONT, data.getLevel().getDisplayName(), 167.5, 140, 8);
 			//Progress Bar
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
 			//CP
@@ -105,7 +105,7 @@ public class PageMain extends Widget {
 			HudUtils.drawRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
-			TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, ACLangs.notLearned(), 167.5, 130, 10);
+			TextUtils.drawText(GuiDeveloper.FONT, ACLangs.notLearned(), 167.5, 130, 10);
 		}
 		RenderUtils.loadTexture(logo);
 		HudUtils.drawRect(148.5, 130.5, 15.5, 15.5);

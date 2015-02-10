@@ -149,7 +149,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				double tx = WIDTH / 2, ty = 4;
 				RenderUtils.bindGray(.8, .8);
 				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
-				drawText(str, tx - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, str, 8), ty, 8);
+				drawText(str, tx - TextUtils.getWidth(TextUtils.FONT_YAHEI_32, str, 8), ty, 8);
 				
 				tx = 2.5;
 				ty = 20;
@@ -209,8 +209,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 				GL11.glColor4f(color, color, color, 0.9F);
 				String translated = StatCollector.translateToLocal(name);
 				drawText(translated, 
-						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, translated, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_CONSOLAS_64, translated, fsize) / 2, 5F);
+						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_YAHEI_32, translated, fsize) / 2,
+						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_YAHEI_32, translated, fsize) / 2, 5F);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
@@ -366,7 +366,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 	}
 	
 	private void drawText(String text, double x, double y, float size) {
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, x, y, size);
+		TextUtils.drawText(TextUtils.FONT_YAHEI_32, text, x, y, size);
 	}
 	
 }

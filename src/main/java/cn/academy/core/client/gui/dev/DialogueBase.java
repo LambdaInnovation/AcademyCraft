@@ -105,7 +105,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, title, 2.5, 1.5, 9);
+		TextUtils.drawText(GuiDeveloper.FONT, title, 2.5, 1.5, 9);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

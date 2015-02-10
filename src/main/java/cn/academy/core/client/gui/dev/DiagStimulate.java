@@ -105,7 +105,7 @@ public class DiagStimulate extends DialogueBase {
 		
 		//StimFails
 		RenderUtils.bindColor(ERROR_COLOR);
-		double len = TextUtils.getWidth(TextUtils.FONT_CONSOLAS_64, text, 6);
+		double len = TextUtils.getWidth(GuiDeveloper.FONT, text, 6);
 		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
 		dev.drawText(text, 6 + len, 31, 6);
 		

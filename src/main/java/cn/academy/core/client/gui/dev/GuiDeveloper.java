@@ -40,7 +40,7 @@ public class GuiDeveloper extends LIGuiScreen {
 		EXP_INDI_COLOR = { 161, 199, 152 },
 		EU_INDI_COLOR = { 234, 84, 44 };
 	
-	public static final TrueTypeFont FONT = TextUtils.FONT_YAHEI_64;
+	public static final TrueTypeFont FONT = TextUtils.FONT_YAHEI_32;
 
 	//States
 	int pageID;

@@ -70,7 +70,7 @@ public class PageSkills extends DevSubpage {
 				double slen = 0.0;
 				for(int i = 0; i < todraw.size(); ++i) {
 					String tmp = todraw.get(i);
-					slen = Math.max(slen, TextUtils.getWidth(font, tmp, FONT_SIZE) * .65);
+					slen = Math.max(slen, TextUtils.getWidth(font, tmp, FONT_SIZE));
 				}
 				
 				final double SIDE = 10, TOP = 5;
@@ -158,7 +158,7 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, text, 30, 5.5, 9);
+				TextUtils.drawText(GuiDeveloper.FONT, text, 30, 5.5, 9);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
@@ -268,7 +268,7 @@ public class PageSkills extends DevSubpage {
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(base.DEFAULT_COLOR);
-		TextUtils.drawText(TextUtils.FONT_CONSOLAS_64, str, 5, 135, 8);
+		TextUtils.drawText(GuiDeveloper.FONT, str, 5, 135, 8);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 
