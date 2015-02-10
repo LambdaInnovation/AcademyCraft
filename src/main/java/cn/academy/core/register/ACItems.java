@@ -98,14 +98,24 @@ public class ACItems {
 	public static ACSimpleItem ingotNi;
 	
 	@RegItem
+	@RegItem.UTName("crystal")
+	@RegItem.OreDict("crystal")
+	public static ACSimpleItem crystal;
+	
+	@RegItem
+	@RegItem.UTName("shadow_ingot")
+	@RegItem.OreDict("ingotShadow")
+	public static ACSimpleItem ingotShadow;
+	
+	@RegItem
 	@RegItem.UTName("mg_plate")
 	public static ACSimpleItem mgPlate;
 	
-	//TODO: If these items is unnecessary, delete them.
-//	@RegItem
-//	@RegItem.UTName("siliconrod")
-//	public static ACSimpleItem siliconRod;
+	@RegItem
+	@RegItem.UTName("siliconrod")
+	public static ACSimpleItem siliconRod;
 	
+	//TODO: If these items is unnecessary, delete them.
 //	@RegItem
 //	@RegItem.UTName("coppercoil")
 //	public static ACSimpleItem copperCoil;
@@ -113,6 +123,22 @@ public class ACItems {
 //	@RegItem
 //	@RegItem.UTName("corebearing")
 //	public static ACSimpleItem coreBearing;
+	
+	@RegItem
+	@RegItem.UTName("human_machine")
+	public static ACSimpleItem humanMachine;
+	
+	@RegItem
+	@RegItem.UTName("io")
+	public static ACSimpleItem ioPort;
+	
+	@RegItem
+	@RegItem.UTName("brainbeta")
+	public static ACSimpleItem brainBeta;
+	
+	@RegItem
+	@RegItem.UTName("pcbn")
+	public static ACSimpleItem pcb;
 	
 	@RegItem()
 	@RegItem.HasRender

@@ -25,6 +25,12 @@ item.corebearing.name=Core Bearing
 item.ni_ingot.name=Nickel Ingot
 item.mg_plate.name=Magnesium Plate
 item.mg_ingot.name=Magnesium Ingot
+item.pcbn.name=PCB
+item.human_machine.name=Body State Detector
+item.io.name=I/O Port
+item.brainbeta.name=Brainwave Resonator β
+item.crystal.name=Crystal Rock
+item.shadow_ingot.name=Shadow Metal Ingot
 
 #Blocks
 tile.ac_developer.name=Ability Developer
@@ -37,6 +43,7 @@ tile.aluminumore.name=Aluminum Ore
 tile.crystal_ore.name=Crystal Ore
 tile.ni_ore.name=Nickel Ore
 tile.mg_ore.name=Magnesium Ore
+tile.ac_solar.name=Solar Generator
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
@@ -55,14 +62,14 @@ skl_em_arc_strong=The Spear of Lightning
 skl_em_lf=Lightning Flash
 
 em_arc.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
-em_itemcharge.desc=As a electro master, you can charge to all kinds of small things ,and it is a good exercise of high-efficency using the skills of electro.
-em_move.desc=Generate magnetic to a fixed magnetizable substance to pull yourself close to.
-em_railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Because of using the electromagnetic force itself to correct flight path and accelerate coin, railgun is keeping accelerating before hitting the target.
-em_mine.desc=You can find the mineral around yourself with changes in the magnetic field with great electromagnetic operational capability.
-em_arc_strong.desc=Generate lots of electricity, and make it into a cylindrical to shoot. After hitting an entity the huge currents will erupt out and make second damage.
-#em_biostreng.desc=When you be in level 3, you can try fine-tuning your bioelectrical to improve your physical fitness because of better electromagnetic control capability.
-#em_swordgen.desc=You can use iron sand to attack skillfully with your powerful agnetic control capability and computing capability.
-em_lf.desc=Use strong currents to get awful athletic ability, and you can direct damage enemy with it.
+em_itemcharge.desc=Make full use of your ability and transfer energy into electrical items and blocks, at the same time strengthen your skill on electricity manipulation.
+em_move.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
+em_railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
+em_mine.desc=Close your eyes and feel the flowing of magnetic line, and you will be able to see a hint of precious mineral resources around you.
+em_arc_strong.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and damage every enemy near it.
+em_buff.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
+#em_ironsand.desc=You can use iron sand to attack skillfully with your powerful agnetic control capability and computing capability.
+em_lf.desc=Overclock your body with high-voltage currents and acquire incredible body strengh. Struck like a lightning and destroy every enemy in your path.
 
 #Melt Downer
 cat_meltdowner=Melt Downer

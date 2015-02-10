@@ -14,6 +14,7 @@ import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.internal.PatternDown;
+import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.ThrowCoinEvent;
 import cn.academy.core.client.render.SkillRenderManager;
@@ -67,11 +68,14 @@ public class SkillRailgun extends SkillBase {
 	
 	@SubscribeEvent
 	public void onThrowCoin(ThrowCoinEvent event) {
+		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
+		//if(data.isSkillActive(this) {
 		etcData.put(event.entityPlayer, event.coin.getEntityId());
 		if(event.entityPlayer.worldObj.isRemote) {
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}
+		//}
 	}
 	
 	public String getInternalName() {
