@@ -11,7 +11,7 @@ import cn.academy.ability.teleport.skill.SkillMarkTele;
 import cn.academy.ability.teleport.skill.SkillPenetrateTele;
 import cn.academy.ability.teleport.skill.SkillSpiritTrainingCourse;
 import cn.academy.ability.teleport.skill.SkillStringTheory;
-import cn.academy.ability.teleport.skill.SkillThreatingTele;
+import cn.academy.ability.teleport.skill.SkillThreateningTele;
 import cn.academy.ability.teleport.skill.SkillViscusStripping;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
@@ -30,7 +30,7 @@ import cn.annoreg.core.RegistrationClass;
 public class CatTeleport extends Category {
 	public static CatTeleport INSTANCE;
 
-	public static SkillThreatingTele skillThreateningTele;
+	public static SkillThreateningTele skillThreateningTele;
 	public static SkillStringTheory skillStringTheory;
 	public static SkillPenetrateTele skillPenetrateTele;
 	public static SkillMarkTele skillMarkedTele;
@@ -59,7 +59,7 @@ public class CatTeleport extends Category {
 		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .2));
 
 		this.addSkill(new SkillBase(), 0);
-		this.addSkill(skillThreateningTele = new SkillThreatingTele(), 0);
+		this.addSkill(skillThreateningTele = new SkillThreateningTele(), 0);
 		this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
 		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 0);
 		this.addSkill(skillMarkedTele = new SkillMarkTele(), 0);
