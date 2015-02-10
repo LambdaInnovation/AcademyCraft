@@ -7,17 +7,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cn.academy.core.AcademyCraft;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 /**
  * This class manages all SkillStates, both on client and on server.
  * @author acaly
  *
  */
+@RegistrationClass
+@RegEventHandler
 public class SkillStateManager {
 	
 	private static Map<String, List<SkillState>> client = new HashMap();
@@ -169,7 +177,9 @@ public class SkillStateManager {
 		}
 	}
 	
-	public static SkillState getStateById(EntityPlayer player, int id) {
+	//Only used by SkillStateMessage.
+	//Should NEVER be called on server.
+	static SkillState getStateById(EntityPlayer player, int id) {
 		List<SkillState> playerList = client.get(player);
 		if (playerList == null) return null;
 		for (SkillState s : playerList) {
@@ -177,4 +187,28 @@ public class SkillStateManager {
 		}
 		return null;
 	}
+	
+	static DimensionSkillStateMessage constructDimensionMessage(int dimension) {
+	    DimensionSkillStateMessage ret = new DimensionSkillStateMessage();
+	    ret.dimension = dimension;
+
+        for (List<SkillState> playerList : server.values()) {
+            for (SkillState state : playerList) {
+                if (state.player.worldObj.provider.dimensionId != dimension) {
+                    break;
+                }
+                ret.states.add(new SkillStateMessage(state, SkillStateMessage.Action.SYNC));
+            }
+        }
+	    
+	    return ret;
+	}
+
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.entity instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) event.entity;
+            AcademyCraft.netHandler.sendTo(constructDimensionMessage(event.world.provider.dimensionId), player);
+        }
+    }
 }

@@ -30,6 +30,9 @@ public class SkillStateMessage implements IMessage {
 		START,
 		UPDATE,
 		FINISH,
+		
+		//used by DimensionSkillStateMessage
+		SYNC,
 	}
 	
 	private Action action;
@@ -96,6 +99,12 @@ public class SkillStateMessage implements IMessage {
 			
 			SkillState ss = null;
 			switch (msg.action) {
+            
+            case SYNC:
+                ss = SkillStateManager.getStateById((EntityPlayer) entity, msg.stateID);
+                if (ss != null) break;
+                //fall through
+                
 			case START:
 				try {
 					
@@ -106,6 +115,7 @@ public class SkillStateMessage implements IMessage {
 							if (ctor.getParameterTypes()[0].isAssignableFrom(EntityPlayer.class)) {
 								ctor.setAccessible(true);
 								ss = (SkillState) ctor.newInstance(entity);
+				                ss.onUpdate(msg.nbt);
 								break;
 							}
 						}
@@ -133,6 +143,7 @@ public class SkillStateMessage implements IMessage {
 				if (ss == null) break;
 				ss.finishSkill();
 				break;
+			    
 			}
 			return null;
 		}
