@@ -27,33 +27,24 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * @author KSkun
- * AcademyCraft Record
+ * AcademyCraft Records
  */
 public class ACRecord extends ItemRecord {
 	
 	private static final String[] rnames = {"ac1", "ac2", "ac3"};
 	private static final String[] unames = {"ac_record1", "ac_record2", "ac_record3"};
 	
-	public ACRecord(int subID) {
-		this(rnames[subID], subID);
-		this.setUnlocalizedName(unames[subID]);
+	private int recId;
+	
+	public ACRecord(int subId) {
+		this(rnames[subId]);
+		this.setUnlocalizedName(unames[subId]);
+		setCreativeTab(AcademyCraft.cct);
+		recId = subId;
 	}
 	
-	private int recID;
-
-	/**
-	 * 
-	 * @param rname
-	 * 				Record's Name
-	 * 
-	 * @param subID
-	 * 				Record's ID
-	 */
-	public ACRecord(String rname, int subID) {
+	public ACRecord(String rname) {
 		super(rname);
-		setUnlocalizedName("ACRecord");
-		setCreativeTab(AcademyCraft.cct);
-		recID = subID;
 	}
 	
 	@Override
@@ -73,19 +64,19 @@ public class ACRecord extends ItemRecord {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		String des[] = new String[] {"Only My Railgun by FripSide", 
-				"Sister's Noise by FripSide",
-				"LEVEL5 -Judgelight- by FripSide"};
-		par3List.add(des[recID]);
+		String des[] = new String[] {"Only My Railgun by fripSide", 
+				"Sister's Noise by fripSide",
+				"LEVEL5 -Judgelight- by fripSide"};
+		par3List.add(des[recId]);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getRecordNameLocal() {
-		String rname[] = new String[] {"FripSide - Only My Railgun",
-				"FripSide - Sister's Noise",
-				"FripSide - LEVEL5 -Judgelight-"};
-		return rname[recID];
+		String rname[] = new String[] {"fripSide - Only My Railgun",
+				"fripSide - Sister's Noise",
+				"fripSide - LEVEL5 -Judgelight-"};
+		return rname[recId];
 	}
 	
 	@Override
@@ -98,7 +89,7 @@ public class ACRecord extends ItemRecord {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon("academy:record" + recID);
+		this.itemIcon = par1IconRegister.registerIcon("academy:record" + recId);
 	}
 	
 	private static final ResourceLocation sources[] = new ResourceLocation[] {
@@ -110,7 +101,7 @@ public class ACRecord extends ItemRecord {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getRecordResource(String par1) {
-		return sources[recID];
+		return sources[recId];
 	}
 	
 }
