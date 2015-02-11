@@ -7,10 +7,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.core.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.space.Motion3D;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The arc that automatically charges the rayTraced block each tick, if fail, (possibly) damage the player
@@ -21,6 +24,9 @@ import cn.liutils.util.space.Motion3D;
 public class EntityChargingArc extends EntityArcBase {
 	
 	final int ept; //charge per tick
+	
+	@SideOnly(Side.CLIENT)
+	ChargeEffectS eff;
 
 	public EntityChargingArc(EntityLivingBase creator, int _ept) {
 		super(creator);
@@ -40,13 +46,29 @@ public class EntityChargingArc extends EntityArcBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(!worldObj.isRemote) {
-			MovingObjectPosition res = performTrace();
-			if(res != null) {
+		MovingObjectPosition res = performTrace();
+		if(res != null) {
+			if(!worldObj.isRemote) {
 				if(EnergyUtils.isElecBlock(worldObj, res.blockX, res.blockY, res.blockZ)) {
 					EnergyUtils.tryCharge(worldObj, res.blockX, res.blockY, res.blockZ, ept);
 				}
+			} else {
+				if(eff == null) {
+					worldObj.spawnEntityInWorld(eff = new ChargeEffectS(worldObj, res.blockX + .5, res.blockY + 2, res.blockZ + .5, 10000, 6, 1));
+				}
+				if(EnergyUtils.isElecBlock(worldObj, res.blockX, res.blockY, res.blockZ)) {
+					eff.setPosition(res.blockX + .5, res.blockY + 2, res.blockZ + .5);
+					eff.draw = true;
+				} else eff.draw = false;
 			}
+		}
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		if(worldObj.isRemote && eff != null) {
+			eff.setDead();
 		}
 	}
 	
