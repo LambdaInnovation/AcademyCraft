@@ -57,23 +57,31 @@ public class SkillRenderManager {
 	 */
 	private static Set<RenderNode> renderers = new HashSet();
 	
-	private static class RenderNode {
+	public static class RenderNode {
 		public final SkillRenderer render;
 		public final long createTime;
 		public final long lifeTime;
+		public boolean dead;
+		
 		public RenderNode(SkillRenderer sr, long _lifeTime) {
 			render = sr;
 			createTime = Minecraft.getSystemTime();
 			lifeTime = _lifeTime;
 		}
+		
+		public void setDead() {
+			dead = true;
+		}
 	}
 	
-	public static void addEffect(SkillRenderer renderer, long time) {
-		renderers.add(new RenderNode(renderer, time));
+	public static RenderNode addEffect(SkillRenderer renderer, long time) {
+		RenderNode ret = new RenderNode(renderer, time);
+		renderers.add(ret);
+		return ret;
 	}
 	
-	public static void addEffect(SkillRenderer renderer) {
-		addEffect(renderer, Long.MAX_VALUE);
+	public static RenderNode addEffect(SkillRenderer renderer) {
+		return addEffect(renderer, Long.MAX_VALUE);
 	}
 	
 	public static void init() {
@@ -92,7 +100,7 @@ public class SkillRenderManager {
 				iter.remove();
 				continue;
 			}
-			if(node.render.tickUpdate(player, dt)) {
+			if(node.dead || node.render.tickUpdate(player, dt)) {
 				iter.remove();
 			}
 		}

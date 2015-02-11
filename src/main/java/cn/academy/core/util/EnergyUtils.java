@@ -5,7 +5,8 @@ package cn.academy.core.util;
 
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
-import ic2.api.item.ISpecialElectricItem;
+import ic2.api.item.ElectricItem;
+import ic2.api.item.IElectricItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -45,13 +46,13 @@ public class EnergyUtils {
 	}
 	
 	public static boolean isElecItem(ItemStack stack) {
-		return stack.getItem() instanceof ISpecialElectricItem;
+		return stack.getItem() instanceof IElectricItem;
 	}
 	
 	public static void tryCharge(ItemStack stack, int amt) {
-		if(stack.getItem() instanceof ISpecialElectricItem) {
-			ISpecialElectricItem iei = (ISpecialElectricItem) stack.getItem();
-			iei.getManager(stack).charge(stack, amt, 3, true, false);
+		if(stack.getItem() instanceof IElectricItem) {
+			IElectricItem iei = (IElectricItem) stack.getItem();
+			ElectricItem.manager.charge(stack, amt, Integer.MAX_VALUE, true, false);
 		}
 	}
 
