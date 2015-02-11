@@ -167,6 +167,16 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 		return res;
 	}
+	
+	public List<Integer> getControlSkillList() {
+		List<Integer> res = new ArrayList<Integer>();
+		for(int i = 0; i < getSkillCount(); ++i) {
+			if(isSkillLearned(i) && !getSkill(i).isDummy()) {
+				res.add(i);
+			}
+		}
+		return res;
+	}
 
 	/**
 	 * Used by Category to initialize AbilityData.
@@ -281,7 +291,14 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
+	/**
+	 * @return if decrease action is successful
+	 */
 	public boolean decreaseCP(float need) {
+		if(player.capabilities.isCreativeMode) {
+			return true;
+		}
+		
 		if (currentCP < need) return false;
 		setCurrentCP(currentCP - need);
 		return true;

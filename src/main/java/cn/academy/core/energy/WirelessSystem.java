@@ -46,6 +46,14 @@ public class WirelessSystem {
 		instance().getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
 	}
 	
+	public static String getPassword(World world, String channel) {
+		return getData(world).getPassword(channel);
+	}
+	
+	public static void setPassword(World world, String channel, String pwd) {
+		getData(world).setPassword(channel, pwd);
+	}
+	
 	/**
 	 * Unregister an user tile from the current channel it is in.
 	 * @param tile

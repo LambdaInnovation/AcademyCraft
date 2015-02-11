@@ -3,100 +3,80 @@
  */
 package cn.academy.ability.electro.entity;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.CatElectro;
-import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
-import cn.academy.ability.electro.skill.SkillItemCharge;
-import cn.academy.api.data.AbilityData;
 import cn.academy.core.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.api.entityx.MotionHandler;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util.space.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * The arc that automatically charges the rayTraced block each tick, if fail, (possibly) damage the player
  * @author WeathFolD
  */
 @RegistrationClass
 @RegEntity
-@RegEntity.HasRender
 public class EntityChargingArc extends EntityArcBase {
 	
-	@RegEntity.Render
+	final int ept; //charge per tick
+	
 	@SideOnly(Side.CLIENT)
-	public static CARender renderer;
+	ChargeEffectS eff;
 
-	public EntityChargingArc(final AbilityData data) {
-		super(data.getPlayer());
-		System.out.println("owwwe");
-		this.setCurMotion(new MotionHandler(this) {
-			
-			int lastX, lastY, lastZ;
-			boolean last = false;
-			
-			@SideOnly(Side.CLIENT)
-			ChargeEffectS ces = null;
-			
-			double upt = CatElectro.itemCharge.getEPT(data);
-			@Override public void onCreated() {}
-			@Override public void onUpdate() {
-				MovingObjectPosition mop = GenericUtils.tracePlayer(data.getPlayer(), 6.0);
-				boolean b = false;
-				if(mop != null && mop.typeOfHit == MovingObjectType.BLOCK && 
-						(b = EnergyUtils.isReceiver(worldObj, mop.blockX, mop.blockY, mop.blockZ))) {
-					EnergyUtils.tryCharge(worldObj, mop.blockX, mop.blockY, mop.blockZ, upt);
-				} else {
-					//TODO Hurt player?
-				}
-				System.out.println("drrrrrrr");
-				if(worldObj.isRemote) {
-					updateRenderEff(mop, b);
-				}
-			}
-			@Override public String getID() {
-				return "main";
-			}
-			
-			@SideOnly(Side.CLIENT)
-			private void updateRenderEff(MovingObjectPosition mop, boolean b) {
-				if(b) {
-					if(last && (lastX != mop.blockX || lastY != mop.blockY || lastZ != mop.blockZ)) {
-						lastX = mop.blockX;
-						lastY = mop.blockY;
-						lastZ = mop.blockZ;
-						ces.setDead();
-						ces = null;
-					}
-					if(ces == null) {
-						ces = new ChargeEffectS(worldObj, 
-								mop.blockX + .5, mop.blockY + 2, mop.blockZ + .5, 1000, 5, 1);
-						worldObj.spawnEntityInWorld(ces);
-					}
-				} else {
-					if(ces != null) {
-						ces.setDead();
-						ces = null;
-					}
-				}
-				last = b;
-			}
-			
-		});
+	public EntityChargingArc(EntityLivingBase creator, int _ept) {
+		super(creator);
+		ept = _ept;
 	}
 
 	public EntityChargingArc(World world) {
 		super(world);
+		ept = 0;
 	}
 	
-	public static class CARender extends RenderElecArc {
-		{
-			this.width = 0.25F;
+	@Override
+	public boolean doesFollowSpawner() {
+		return true;
+	}
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		MovingObjectPosition res = performTrace();
+		if(res != null) {
+			if(!worldObj.isRemote) {
+				if(EnergyUtils.isElecBlock(worldObj, res.blockX, res.blockY, res.blockZ)) {
+					EnergyUtils.tryCharge(worldObj, res.blockX, res.blockY, res.blockZ, ept);
+				}
+			} else {
+				if(eff == null) {
+					worldObj.spawnEntityInWorld(eff = new ChargeEffectS(worldObj, res.blockX + .5, res.blockY + 2, res.blockZ + .5, 10000, 6, 1));
+				}
+				if(EnergyUtils.isElecBlock(worldObj, res.blockX, res.blockY, res.blockZ)) {
+					eff.setPosition(res.blockX + .5, res.blockY + 2, res.blockZ + .5);
+					eff.draw = true;
+				} else eff.draw = false;
+			}
 		}
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		if(worldObj.isRemote && eff != null) {
+			eff.setDead();
+		}
+	}
+	
+	@Override
+	public MovingObjectPosition performTrace() {
+		Motion3D mo = new Motion3D(this, true);
+		Vec3 v1 = mo.getPosVec(worldObj), v2 = mo.move(getDefaultRayLen()).getPosVec(worldObj);
+		return worldObj.rayTraceBlocks(v1, v2);
 	}
 
 }

@@ -20,6 +20,7 @@ import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessReceiver;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.energy.WirelessNetwork.NodeConns;
 import cn.liutils.util.GenericUtils;
 
 /**
@@ -68,6 +69,15 @@ public class WiWorldData {
 			}
 		}
 		return ret;
+	}
+	
+	public String getPassword(String chan) {
+		WirelessNetwork wn = netMap.get(chan);
+		return wn == null ? null : wn.getPassword();
+	}
+	
+	public void setPassword(String chan, String pwd) {
+		netMap.get(chan).setPassword(pwd);
 	}
 	
 	public List<IWirelessNode> getNodesIn(int x, int y, int z, double range, int max) {
@@ -173,6 +183,10 @@ public class WiWorldData {
 		return res;
 	}
 	
+	private List<IWirelessNode> getNodeList(TileEntity te) {
+		return getNodeList(te.xCoord, te.zCoord);
+	}
+	
 	private long getChunkKey(int x, int z) {
 		return x >> 4 + (((long)z) >> 4) << 28;
 	}
@@ -181,8 +195,20 @@ public class WiWorldData {
 		Iterator<Map.Entry<String, WirelessNetwork>> iter = netMap.entrySet().iterator();
 		while(iter.hasNext()) {
 			WirelessNetwork net = iter.next().getValue();
-			if(net.isAlive()) {
+			if(net.dead) {
 				net.onTick();
+				for(NodeConns conn : net.conns.values()) {
+					for(IWirelessGenerator gen : conn.generators) {
+						lookup.remove(gen);
+					}
+					for(IWirelessReceiver rec : conn.receivers) {
+						lookup.remove(rec);
+					}
+				}
+				for(IWirelessNode node : net.nodes) {
+					getNodeList((TileEntity) node).remove(node);
+				}
+				iter.remove();
 			} else {
 				iter.remove();
 			}

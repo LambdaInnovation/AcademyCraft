@@ -123,6 +123,10 @@ public class ACLangs {
 		return local("adev.userinfo");
 	}
 	
+	public static String chooseSkill() {
+		return local("prs.chooseskl");
+	}
+	
 	private static String local(String str) {
 		return StatCollector.translateToLocal(str);
 	}

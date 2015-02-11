@@ -85,4 +85,11 @@ public class SkillBase {
 		return StatCollector.translateToLocal("skl_" + getInternalName());
 	}
 	
+	/**
+	 * @return If this skill is a 'dummy' skill (Skill that can't be controlled, only receive other events)
+	 */
+	public boolean isDummy() {
+		return false;
+	}
+	
 }

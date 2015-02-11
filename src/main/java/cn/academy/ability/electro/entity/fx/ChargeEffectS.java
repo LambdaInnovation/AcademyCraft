@@ -29,6 +29,8 @@ public class ChargeEffectS extends FakeEntity {
 	int itensity;
 	CubePointFactory factory;
 	
+	public boolean draw = true;
+	
 	public ChargeEffectS(Entity target, int lifeTime, int _itensity) {
 		this(target, lifeTime, _itensity, 2.0);
 	}
@@ -98,7 +100,7 @@ public class ChargeEffectS extends FakeEntity {
 					checkTime = GenericUtils.randIntv(hideFrom, hideTo);
 				}
 				for(EntityArcS arc : ents) {
-					arc.show = show;
+					arc.show = show && draw;
 				}
 			}
 		}

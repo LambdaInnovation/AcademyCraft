@@ -40,6 +40,7 @@ import cn.liutils.util.ClientUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeAthFolD
@@ -93,7 +94,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 		private static final float 
 			RATIO = 1.75F, 
 			HEIGHT = 80, 
-			WIDTH = HEIGHT * RATIO,
+			WIDTH = 140,
 			PAGE_STEP = 16;
 		
 		private class SelectPage extends Widget {
@@ -149,7 +150,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				double tx = WIDTH / 2, ty = 4;
 				RenderUtils.bindGray(.8, .8);
 				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
-				drawText(str, tx - TextUtils.getWidth(TextUtils.FONT_YAHEI_32, str, 8), ty, 8);
+				drawText(str, STEP / 2, ty, 8, TrueTypeFont.ALIGN_CENTER);
 				
 				tx = 2.5;
 				ty = 20;
@@ -183,9 +184,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 			static final float 
 				HOVERING_COLOR = 0.6F,
 				ORDINARY_COLOR = 0.3F,
-				TEXT_COLOR = 0.9F,
-				TEXT_DISABLE_COLOR = 0.7F;
+				DISABLED_COLOR = 0.2F,
+				TEXT_COLOR = 0.6F,
+				TEXT_DISABLE_COLOR = 0.4F;
 
+			protected boolean disabled = false;
 			private final String name;
 			
 			public ButtonGeneric(String name, float x, float y) {
@@ -196,21 +199,25 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
+				disabled = PresetManager.getPreset(currentPage).equals(tempPreset);
+				
 				float color;
-				if(mouseHovering) {
+				if(disabled) {
+					color = DISABLED_COLOR;
+				} else if(mouseHovering) {
 					color = HOVERING_COLOR;
 				} else color = ORDINARY_COLOR;
 				GL11.glDepthFunc(GL11.GL_ALWAYS);
 				RenderUtils.bindGray(color, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
 				
-				float fsize = 5F;
-				color = TEXT_COLOR;
+				float fsize = 7F;
+				color = disabled ? TEXT_DISABLE_COLOR : TEXT_COLOR;
 				GL11.glColor4f(color, color, color, 0.9F);
 				String translated = StatCollector.translateToLocal(name);
-				drawText(translated, 
+				drawText(translated,
 						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_YAHEI_32, translated, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_YAHEI_32, translated, fsize) / 2, 5F);
+						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_YAHEI_32, translated, fsize) / 2, fsize);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
@@ -231,13 +238,13 @@ public class GuiPresetSettings extends LIGuiScreen {
 			}
 			
 			addWidgets(
-			new ButtonGeneric("ac.accept", 71, 67.5F) {
+			new ButtonGeneric("ac.accept", 70, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
-					PresetManager.setPreset(currentPage, tempPreset);
+					PresetManager.setPreset(currentPage, tempPreset.clone());
 				}
 			},
-			new ButtonGeneric("ac.restore", 107.5F, 67.5F) {
+			new ButtonGeneric("ac.restore", 105.5F, 67.5F) {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					tempPreset = PresetManager.getPreset(currentPage).clone();
@@ -253,7 +260,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glPushMatrix(); {
 				RenderUtils.bindGray(.15, .6);
-				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT);
+				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT + 2);
 				
 				RenderUtils.bindGray(.25, .6);
 				HudUtils.drawModalRect(0, 0, WIDTH, HEIGHT / 6);
@@ -261,8 +268,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			
 			//page text
-			RenderUtils.bindGray(1, .8);
-			drawText(ACLangs.presetSettings(), 80, 3, 7);
+			RenderUtils.bindGray(.8, .8);
+			drawText(ACLangs.presetSettings(), 130, 2.8, 7.5F, TrueTypeFont.ALIGN_RIGHT);
 		}
 		
 	}
@@ -311,6 +318,12 @@ public class GuiPresetSettings extends LIGuiScreen {
 					RenderUtils.bindGray(used ? .1 : .4, .5 * mAlpha);
 					HudUtils.drawModalRect(0, 0, WIDTH, WIDTH);
 				}
+				
+				if(mouseHovering) {
+					String tit = skill.getDisplayName();
+					RenderUtils.bindGray(.7, .8);
+					drawText(tit, WIDTH / 2, 32, 8, TrueTypeFont.ALIGN_CENTER);
+				}
 			}
 			
 			@Override
@@ -337,7 +350,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
 			
-			List<Integer> learnedSkills = data.getLearnedSkillList();
+			List<Integer> learnedSkills = data.getControlSkillList();
 			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
 			int j = 0;
 			for(int i : learnedSkills) {
@@ -360,13 +373,21 @@ public class GuiPresetSettings extends LIGuiScreen {
 				HudUtils.drawRect(0, 0, width, HEIGHT);
 				
 			} GL11.glPopMatrix();
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
+			GL11.glDepthFunc(GL11.GL_ALWAYS);
+			
+			String str = ACLangs.chooseSkill();
+			RenderUtils.bindGray(.8, .8 * mAlpha);
+			drawText(str, 5, 2, 10);
 		}
 		
 	}
 	
 	private void drawText(String text, double x, double y, float size) {
 		TextUtils.drawText(TextUtils.FONT_YAHEI_32, text, x, y, size);
+	}
+	
+	private void drawText(String text, double x, double y, float size, int format) {
+		TextUtils.drawText(TextUtils.FONT_YAHEI_32, text, x, y, size, format);
 	}
 	
 }

@@ -49,6 +49,9 @@ tile.shadow_ore.name=Shadow Metal Ore
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
 
+#Generic Ability
+skl_null=None
+
 #Electro Master
 cat_elecmaster=Electro Master
 
@@ -128,6 +131,7 @@ adev.holoview=Holographic View
 adev.userinfo=User Info
 ac.presset=Preset Settings
 ac.preset=Preset #
+prs.chooseskl=Select Skill
 level_0=Level 1
 level_1=Level 2
 level_2=Level 3

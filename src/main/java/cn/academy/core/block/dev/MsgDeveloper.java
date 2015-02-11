@@ -32,6 +32,8 @@ public class MsgDeveloper implements IMessage {
 	int stimSuccess;
 	int stimFailure;
 	
+	int nMagIncr;
+	
 	public MsgDeveloper(TileDeveloper tileDeveloper) {
 		x = tileDeveloper.xCoord;
 		y = tileDeveloper.yCoord;
@@ -40,6 +42,7 @@ public class MsgDeveloper implements IMessage {
 		isStimulating = tileDeveloper.isStimulating;
 		stimSuccess = tileDeveloper.stimSuccess;
 		stimFailure = tileDeveloper.stimFailure;
+		nMagIncr = tileDeveloper.nMagIncr;
 	}
 	
 	public MsgDeveloper() {}
@@ -53,6 +56,7 @@ public class MsgDeveloper implements IMessage {
 		isStimulating = buf.readBoolean();
 		stimSuccess = buf.readByte();
 		stimFailure = buf.readByte();
+		nMagIncr = buf.readByte();
 	}
 
 	@Override
@@ -64,6 +68,7 @@ public class MsgDeveloper implements IMessage {
 		buf.writeBoolean(isStimulating)
 			.writeByte(stimSuccess)
 			.writeByte(stimFailure);
+		buf.writeByte(nMagIncr);
 	}
 	
 	@RegMessageHandler(msg = MsgDeveloper.class, side = RegMessageHandler.Side.CLIENT)
@@ -83,6 +88,7 @@ public class MsgDeveloper implements IMessage {
 			dev.isStimulating = msg.isStimulating;
 			dev.stimSuccess = msg.stimSuccess;
 			dev.stimFailure = msg.stimFailure;
+			dev.nMagIncr = msg.nMagIncr;
 			return null;
 		}
 		

@@ -9,11 +9,13 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.api.data.AbilityData;
@@ -21,17 +23,20 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
+import cn.academy.core.register.ACBlocks;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.api.EntityManipHandler;
 import cn.liutils.template.block.TileGenericSink;
 import cn.liutils.template.entity.EntitySittable;
 import cn.liutils.template.entity.EntitySittable.ISittable;
 import cn.liutils.util.DebugUtils;
 import cn.liutils.util.ExpUtils;
+import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
+import cn.liutils.util.space.BlockPos;
+import cn.liutils.util.space.IBlockFilter;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -50,6 +55,9 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	//Stimulation
 	public static final int ID_LEVEL_UPGRADE = 0, ID_SKILL_ACQUIRE = 1, ID_DEVELOP = 2;
 	public static final int PER_STIM_TIME = 10;
+	
+	//Module search
+	public static final double MODULE_SEARCH_RANGE = 8;
 	
 	private static final List<Constructor<? extends IDevAction>> devActions = new ArrayList<Constructor<? extends IDevAction>>();
 	static {
@@ -72,6 +80,9 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	public int stimActionID;
 	public int stimSuccess;
 	public int stimFailure;
+	
+	//brief info of components, need synchronizing
+	int nMagIncr;
 	
 	//Internal States
 	private EntityPlayer user;
@@ -218,7 +229,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	}
 	
 	public double getSyncRate() {
-		return 1.0;
+		return 0.421 + nMagIncr * 0.12;
 	}
 	
 	//Internal update
@@ -234,18 +245,38 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 				= new EntitySittable(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
 		}
 		
-		++updateCount;
+		boolean update = false;
+		if(++updateCount >= UPDATE_RATE) {
+			updateCount = 0;
+			update = true;
+		}
+		
+		if(!worldObj.isRemote && update) {
+			updateModules();
+		}
+		
 		if(!worldObj.isRemote && user != null) {
 			//HeartBeat update
 			if(isStimulating) {
 				updateStimulate();
 			}
 			
-			if(updateCount >= UPDATE_RATE) {
-				updateCount = 0;
+			if(update) {
 				sync();
 			}
 		}
+	}
+	
+	private void updateModules() {
+		final double r = MODULE_SEARCH_RANGE;
+		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord - r, yCoord - r, zCoord - r, xCoord + r, yCoord + r, zCoord + r);
+		Set<BlockPos> set = GenericUtils.getBlocksWithinAABB(worldObj, bb, new IBlockFilter() {
+			@Override
+			public boolean accepts(World world, Block block, int x, int y, int z) {
+				return block == ACBlocks.magInducer;
+			}
+		});
+		this.nMagIncr = set.size();
 	}
 	
 	private void sync() {

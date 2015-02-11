@@ -76,8 +76,8 @@ public class SkillWeakArc extends SkillBase {
 				}
 			} else {
 				if(consumeCP()) {
-					SkillRenderManager.addEffect(charge, 500);
-					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					SkillRenderManager.addEffect(charge, 600);
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 15, 5));
 					player.playSound("academy:elec.weak", 0.5F, 1.0F);
 				}
 			}
