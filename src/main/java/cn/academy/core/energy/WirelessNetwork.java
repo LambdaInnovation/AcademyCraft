@@ -25,10 +25,14 @@ public class WirelessNetwork {
 	
 	static final int MAX_LAG = 2000;
 	
+	boolean dead = false;
+	
 	double energyLag = 0.0; //Previous unprocessed energy for balancing, absval < MAX_LAG
 	
 	final String channel;
 	final World world;
+	
+	String password;
 	
 	Set<IWirelessNode> nodes = new HashSet();
 	
@@ -40,8 +44,12 @@ public class WirelessNetwork {
 		world = _world;
 	}
 	
-	public boolean isAlive() {
-		return !nodes.isEmpty();
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String np) {
+		password = np;
 	}
 	
 	public boolean hasNode(IWirelessNode node) {
@@ -94,6 +102,10 @@ public class WirelessNetwork {
 				conns.receivers.remove(tile);
 			}
 		}
+	}
+	
+	public void destroy() {
+		dead = true;
 	}
 	
 	public void registerReceiver(IWirelessReceiver rec, IWirelessNode node) {
@@ -152,28 +164,30 @@ public class WirelessNetwork {
 		for(IWirelessNode node : nodes) {
 			sum += node.getEnergy();
 		}
-		sum += energyLag; //Also account unprocessed energy
+		sum += energyLag; //Also account for unprocessed energy
 		sum = Math.max(sum, 0);
 		sum /= nodes.size();
 		
 		//Second pass: do the balance, use energyLag as middle buffer
 		for(IWirelessNode node : nodes) {
 			double delta = Math.min(sum, node.getMaxEnergy()) - node.getEnergy();
-			delta = queryLag(Math.signum(delta) * Math.min(delta, node.getLatency()));
+			delta = queryLag(Math.signum(delta) * Math.min(Math.abs(delta), node.getLatency()));
 			node.setEnergy(delta + node.getEnergy());
 		}
 	}
 	
 	private double queryLag(double need) {
-		if(energyLag + need > MAX_LAG) {
+		if(energyLag - need > MAX_LAG) {
+			double preLag = energyLag;
 			energyLag = MAX_LAG;
-			return MAX_LAG - energyLag;
+			return preLag - MAX_LAG;
 		}
-		if(energyLag + need < -MAX_LAG) {
+		if(energyLag - need < -MAX_LAG) {
+			double preLag = energyLag;
 			energyLag = -MAX_LAG;
-			return -energyLag - MAX_LAG;
+			return preLag + MAX_LAG;
 		}
-		energyLag += need;
+		energyLag -= need;
 		return need;
 	}
 	
