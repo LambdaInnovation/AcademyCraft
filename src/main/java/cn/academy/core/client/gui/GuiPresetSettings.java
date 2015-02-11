@@ -350,7 +350,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
 			
-			List<Integer> learnedSkills = data.getLearnedSkillList();
+			List<Integer> learnedSkills = data.getControlSkillList();
 			double beg = width / 2 - ((learnedSkills.size() - 1) * STEP + WIDTH) / 2;
 			int j = 0;
 			for(int i : learnedSkills) {

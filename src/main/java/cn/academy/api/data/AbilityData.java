@@ -167,6 +167,16 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 		return res;
 	}
+	
+	public List<Integer> getControlSkillList() {
+		List<Integer> res = new ArrayList<Integer>();
+		for(int i = 0; i < getSkillCount(); ++i) {
+			if(isSkillLearned(i) && !getSkill(i).isDummy()) {
+				res.add(i);
+			}
+		}
+		return res;
+	}
 
 	/**
 	 * Used by Category to initialize AbilityData.
