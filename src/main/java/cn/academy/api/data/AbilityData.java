@@ -281,7 +281,14 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
+	/**
+	 * @return if decrease action is successful
+	 */
 	public boolean decreaseCP(float need) {
+		if(player.capabilities.isCreativeMode) {
+			return true;
+		}
+		
 		if (currentCP < need) return false;
 		setCurrentCP(currentCP - need);
 		return true;
