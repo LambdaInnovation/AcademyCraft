@@ -87,4 +87,16 @@ public class Preset {
 			}
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Preset))
+			return false;
+		Preset p = (Preset) obj;
+		for(int i = 0; i < 4; ++i) {
+			if(data[i] != p.data[i])
+				return false;
+		}
+		return true;
+	}
 }
