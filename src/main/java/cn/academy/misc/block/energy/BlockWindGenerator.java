@@ -26,8 +26,8 @@ import net.minecraft.world.World;
 
 /**
  * 风能发电机Block类
+ * TODO: Not added in β
  * @author WeAthFolD
- *
  */
 public class BlockWindGenerator extends BlockDirectionalMulti {
 

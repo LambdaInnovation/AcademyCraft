@@ -17,7 +17,6 @@ public class ACClientProps {
 	public static final ResourceLocation
 		TEX_MDL_DEVELOPER = src("academy:textures/models/ability_developer.png"),
 		TEX_MDL_ELEC_CARD = src("academy:textures/models/card.png"),
-		TEX_MDL_MAGNET_MODULE = src("academy:textures/models/magincr.png"),
 		TEX_HUD_BAR = src("academy:textures/guis/bar.png"),
 		TEX_COIN_FRONT = src("academy:textures/items/coin-front.png"),
 		TEX_COIN_BACK = src("academy:textures/items/coin-back.png"),

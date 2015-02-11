@@ -1,20 +1,13 @@
 package cn.academy.core.register;
 
-import net.minecraft.block.Block;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.core.block.dev.BlockDeveloper;
-import cn.academy.core.block.dev.TileDeveloper;
+import cn.academy.core.block.dev.BlockMagInducer;
 import cn.academy.misc.block.ACOre;
 import cn.academy.misc.block.energy.BlockGrid;
 import cn.academy.misc.block.energy.BlockNode;
 import cn.academy.misc.block.energy.BlockSolarGenerator;
-import cn.academy.misc.block.energy.BlockWindGenerator;
-import cn.academy.misc.block.energy.tile.impl.TileSolarGenerator;
-import cn.academy.misc.block.energy.tile.impl.TileWindGenerator;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 @RegistrationClass
 public class ACBlocks {
@@ -34,6 +27,9 @@ public class ACBlocks {
 	
 	@RegBlock
 	public static BlockNode node;
+	
+	@RegBlock
+	public static BlockMagInducer magInducer;
 	
 	@RegBlock
 	@RegBlock.OreDict("oreCopper")
