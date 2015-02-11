@@ -10,10 +10,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.CatElectro;
+import cn.academy.ability.electro.entity.EntityLF;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
-import cn.academy.api.ctrl.SkillState;
-import cn.academy.api.ctrl.pattern.PatternDown;
+import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
@@ -41,24 +41,24 @@ public class SkillLightningFlash extends SkillBase {
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
-		reh.addPattern(new PatternDown() {
+		reh.addPattern(new PatternHold(1) {
 
 			@Override
-			public SkillState createSkill(EntityPlayer player) {
+			public State createSkill(EntityPlayer player) {
 				return new LFState(player);
 			}
 			
 		});
 	}
 	
-	public static class LFState extends SkillState {
+	public static class LFState extends PatternHold.State {
 
 		public LFState(EntityPlayer player) {
 			super(player);
 		}
 		
 		@Override
-		protected void onStart() {
+		public void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
 			
 			int slv = data.getSkillLevel(CatElectro.lightningFlash);
@@ -70,8 +70,15 @@ public class SkillLightningFlash extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, time, 4));
 				player.addPotionEffect(new PotionEffect(Potion.jump.id, time, 4));
+				player.worldObj.spawnEntityInWorld(new EntityLF(data, time));
 			}
 		}
+
+		@Override
+		public void onFinish() {}
+
+		@Override
+		public void onHold() {}
 		
 	}
 
