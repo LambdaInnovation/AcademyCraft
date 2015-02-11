@@ -55,4 +55,8 @@ public class ACBlocks {
 	@RegBlock.OreDict("oreCrystal")
 	public static ACOre oreCrystal = new ACOre("crystal_ore", 1);
 	
+	@RegBlock
+	@RegBlock.OreDict("oreShadow")
+	public static ACOre oreShadow = new ACOre("shadow_ore", 1);
+	
 }
