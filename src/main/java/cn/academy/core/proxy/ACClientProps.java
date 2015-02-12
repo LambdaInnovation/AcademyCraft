@@ -124,27 +124,9 @@ public class ACClientProps {
 	
 	//Railgun
 	public static final ResourceLocation
-		ELEC_LOGO = src("academy:textures/abilities/electromaster/main.png"),
-		ELEC_ARC = src("academy:textures/abilities/electromaster/attack_large.png"),
-		ELEC_ATTRACT = src("academy:textures/abilities/electromaster/attraction.png"),
-		ELEC_CHARGE = src("academy:textures/abilities/electromaster/itemcharge.png"),
-		ELEC_VIEWMINE = src("academy:textures/abilities/electromaster/mineview.png"),
-		ELEC_MOVE = src("academy:textures/abilities/electromaster/moving.png"),
-		ELEC_RAILGUN = src("academy:textures/abilities/electromaster/railgun.png"),
-		ELEC_SWORD = src("academy:textures/abilities/electromaster/sword.png"),
-		ELEC_ARC_STRONG = src("academy:textures/abilities/electromaster/arc.png"),
+		ELEC_LOGO = src("academy:textures/abilities/electro/main.png"),
 		EFF_MV_TEST = src("academy:textures/effects/mineview_test.png"),
 		EFF_RAILGUN_PREP_CC = src("academy:textures/effects/railgun_prepare.png");
-	
-	//Meltdowner
-	public static final ResourceLocation 
-		MD_LOGO = src("academy:textures/abilities/meltdowner/main.png"),
-		MD_GENERATE = src("academy:textures/abilities/meltdowner/generate.png"),
-		MD_SINGLE = src("academy:textures/abilities/meltdowner/single.png"),
-		MD_MULTIPLE = src("academy:textures/abilities/meltdowner/multiple.png"),
-		MD_SHELL = src("academy:textures/abilities/meltdowner/shell.png"),
-		MD_MINING = src("academy:textures/abilities/meltdowner/mining.png"),
-		MD_EXPLOSION = src("academy:textures/abilities/meltdowner/explosion.png");
 
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);

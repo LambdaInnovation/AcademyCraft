@@ -26,6 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillBase {
 	
+	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	
 	/**
 	 * Called by RawEventHandler when the skill is reset.
 	 * Add patterns to the RawEventHandler instance in this function.
@@ -72,8 +74,15 @@ public class SkillBase {
 	 * @return the logo
 	 */
 	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.TEX_QUESTION_MARK;
+	public final ResourceLocation getLogo() {
+		return logo;
+	}
+	
+	/**
+	 * Just specify the path after "/textures/abilities/".
+	 */
+	protected void setLogo(String name) {
+		logo = new ResourceLocation("academy:textures/abilities/" + name);
 	}
 	
 	/**

@@ -35,7 +35,9 @@ public class SkillItemCharge extends SkillBase {
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 
-	public SkillItemCharge() {}
+	public SkillItemCharge() {
+		this.setLogo("electro/itemcharge.png");
+	}
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -49,11 +51,6 @@ public class SkillItemCharge extends SkillBase {
 	
 	public String getInternalName() {
 		return "em_itemcharge";
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_CHARGE;
 	}
 	
 	public static float getConsume(AbilityData data) {

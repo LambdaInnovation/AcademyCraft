@@ -186,7 +186,7 @@ public class PageSkills extends DevSubpage {
 			
 			public void onMouseDown(double mx, double my) {
 				if(!this.fullyLearned)
-					new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID);
+					getGui().addWidget(new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID));
 			}
 			
 		}

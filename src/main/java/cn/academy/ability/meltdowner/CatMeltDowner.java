@@ -39,7 +39,7 @@ public class CatMeltDowner extends Category {
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLogo() {
-		return ACClientProps.MD_LOGO;
+		return ACClientProps.TEX_QUESTION_MARK;
 	}
 	
 	@Override

@@ -34,7 +34,9 @@ public class SkillStrongArc extends SkillBase {
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 	
-	public SkillStrongArc() {}
+	public SkillStrongArc() {
+		setLogo("electro/arc_strong.png");
+	}
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -50,11 +52,6 @@ public class SkillStrongArc extends SkillBase {
 	
 	public String getInternalName() {
 		return "em_arc_strong";
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_ARC_STRONG;
 	}
 
 	public static class StateArc extends SkillState {

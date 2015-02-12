@@ -36,7 +36,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEventHandler(Bus.Forge)
 public class SkillRailgun extends SkillBase {
 
-	public SkillRailgun() {}
+	public SkillRailgun() {
+		setLogo("electro/railgun.png");
+	}
 	
 	private static Map<EntityPlayer, Integer> etcData = new HashMap();
 	
@@ -84,11 +86,6 @@ public class SkillRailgun extends SkillBase {
 	
 	public int getMaxSkillLevel() {
 		return 200;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_RAILGUN;
 	}
 
 }

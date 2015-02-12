@@ -28,15 +28,12 @@ public class SkillLightningFlash extends SkillBase {
 	Random rand = new Random();
 
 	public SkillLightningFlash() {
+		this.setLogo("electro/lf.png");
 	}
 	
 	@Override
 	public String getInternalName() {
 		return "em_lf";
-	}
-	
-	public ResourceLocation getLogo() {
-		return ACClientProps.TEX_DBG_STD;
 	}
 	
 	@Override

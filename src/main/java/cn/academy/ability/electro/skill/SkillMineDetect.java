@@ -49,6 +49,7 @@ public class SkillMineDetect extends SkillBase {
 	
 
 	public SkillMineDetect() {
+		setLogo("electro/mineview.png");
 	}
 	
 	@Override
@@ -66,11 +67,6 @@ public class SkillMineDetect extends SkillBase {
 	@SideOnly(Side.CLIENT)
 	private static ResourceLocation getTexture(Block block) {
 		return ACClientProps.EFF_MV_TEST;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_VIEWMINE;
 	}
 	
 	public String getInternalName() {
