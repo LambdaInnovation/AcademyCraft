@@ -124,7 +124,6 @@ public class ACClientProps {
 	
 	//Railgun
 	public static final ResourceLocation
-		ELEC_LOGO = src("academy:textures/abilities/electro/main.png"),
 		EFF_MV_TEST = src("academy:textures/effects/mineview_test.png"),
 		EFF_RAILGUN_PREP_CC = src("academy:textures/effects/railgun_prepare.png");
 

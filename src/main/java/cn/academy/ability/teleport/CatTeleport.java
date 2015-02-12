@@ -44,7 +44,6 @@ public class CatTeleport extends Category {
 
 	// public final static ResourceLocation TELE_LOGO = new
 	// ResourceLocation("academy:textures/abilities/teleport/main.png");
-	public final static ResourceLocation TELE_LOGO = ACClientProps.TEX_QUESTION_MARK;
 
 	@Override
 	protected void register() {
@@ -74,11 +73,6 @@ public class CatTeleport extends Category {
 				skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
 		// this.addSkill(skillDangerTele = new SkillDangerTele(), 0);
 		// this.addSkill(skill, 0);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return TELE_LOGO;
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public class SkillRailgun extends SkillBase {
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
 				if(player.worldObj.isRemote) return false;
-				
+				player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
 				
 				Integer eid = etcData.get(player);
 				if(eid == null) return false;
@@ -58,7 +58,7 @@ public class SkillRailgun extends SkillBase {
 				if(ent != null && ent instanceof EntityThrowingCoin) {
 					EntityThrowingCoin etc = (EntityThrowingCoin) ent;
 					if(!etc.isDead && etc.getProgress() > 0.8) {
-						player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
+						//player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
 						etc.setDead();
 					}
 				}
@@ -74,8 +74,8 @@ public class SkillRailgun extends SkillBase {
 		//if(data.isSkillActive(this) {
 		etcData.put(event.entityPlayer, event.coin.getEntityId());
 		if(event.entityPlayer.worldObj.isRemote) {
-			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
-					RailgunPlaneEffect.getAnimLength());
+//			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
+//					RailgunPlaneEffect.getAnimLength());
 		}
 		//}
 	}

@@ -43,6 +43,10 @@ public class WiWorldData {
 		}
 	}
 	
+	public boolean hasChannel(String channel) {
+		return netMap.containsKey(channel);
+	}
+	
 	public boolean isInChannel(IWirelessTile tile, String channel) {
 		WirelessNetwork net = netMap.get(channel);
 		if(net == null)

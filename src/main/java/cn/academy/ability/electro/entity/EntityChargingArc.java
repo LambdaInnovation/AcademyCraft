@@ -8,7 +8,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
-import cn.academy.core.util.EnergyUtils;
+import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.space.Motion3D;

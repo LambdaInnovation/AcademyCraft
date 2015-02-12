@@ -58,11 +58,7 @@ public class CatElectro extends Category {
 		this.addSkill(lightningFlash = new SkillLightningFlash(), 0);
 		
 		this.setColorStyle(26, 143, 218);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_LOGO;
+		this.setLogo("electro/main.png");
 	}
 	
 	@Override

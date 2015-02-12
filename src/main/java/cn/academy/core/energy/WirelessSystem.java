@@ -29,6 +29,10 @@ public class WirelessSystem {
 	
 	static Map<Integer, WiWorldData> worldData = new HashMap<Integer, WiWorldData>();
 	
+	public static boolean hasNetwork(World world, String id) {
+		return getData(world).hasChannel(id);
+	}
+	
 	/**
 	 * Link a IWirelessGenerator or IWirelessReceiver to a (usually nearest) node.
 	 * @param tile

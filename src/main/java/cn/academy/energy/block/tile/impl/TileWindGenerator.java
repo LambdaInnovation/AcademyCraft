@@ -8,7 +8,7 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.energy.tile.impl;
+package cn.academy.energy.block.tile.impl;
 
 import cn.academy.api.energy.IWirelessNode;
 import cn.annoreg.core.RegistrationClass;

@@ -1,4 +1,4 @@
-package cn.academy.misc.item;
+package cn.academy.energy.item;
 
 import java.util.List;
 
@@ -15,15 +15,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
 
-/*
+/**
  * 能量水晶
  * @author Lyt99
  */
-
-public class ItemEnergyCrystal extends Item implements ISpecialElectricItem{
+public class ItemEnergyCrystal extends Item implements ISpecialElectricItem {
 			
 	protected IIcon[] textures;
 	protected int maxCharge = 500000, tier = 2, transferLimit = 128;
@@ -153,8 +153,7 @@ public class ItemEnergyCrystal extends Item implements ISpecialElectricItem{
 
 	@Override
 	public IElectricItemManager getManager(ItemStack itemStack) {
-		return null;
-//		return APElectricManager.INSTANCE;
+		return ElectricItem.manager;
 	}
 		
 }

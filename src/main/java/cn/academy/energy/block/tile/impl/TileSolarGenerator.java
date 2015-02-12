@@ -8,7 +8,7 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.energy.tile.impl;
+package cn.academy.energy.block.tile.impl;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +22,7 @@ import cn.academy.api.energy.IWirelessGenerator;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.block.energy.tile.base.TileUserBase;
+import cn.academy.energy.block.tile.base.TileUserBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.util.RenderUtils;

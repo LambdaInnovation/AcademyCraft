@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.misc.block.energy;
+package cn.academy.energy.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.academy.misc.block.energy.tile.impl.TileGrid;
+import cn.academy.energy.block.tile.impl.TileGrid;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
 import cn.liutils.template.block.BlockDirectionalMulti;

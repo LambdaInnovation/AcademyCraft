@@ -65,11 +65,13 @@ public class SkillStrongArc extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(new WeakArc(player));
+					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			}
 		}

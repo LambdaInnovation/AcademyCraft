@@ -105,8 +105,8 @@ public class EntityRailgun extends EntityRay {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(ticksExisted == 8) {
-			this.setFadeout(4);
+		if(ticksExisted == 18) {
+			this.setFadeout(8);
 		}
 		if(worldObj.isRemote && !gened && isLoaded()) {
 			gened = true;

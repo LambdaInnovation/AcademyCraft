@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.core.util;
+package cn.academy.energy.util;
 
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;

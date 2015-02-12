@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.misc.block.energy;
+package cn.academy.energy.block;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -12,9 +12,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.academy.misc.block.energy.container.ContainerNode;
-import cn.academy.misc.block.energy.tile.impl.TileNode;
-import cn.academy.misc.client.gui.GuiNode;
+import cn.academy.energy.block.container.ContainerNode;
+import cn.academy.energy.block.tile.impl.TileNode;
+import cn.academy.energy.client.gui.GuiNode;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;

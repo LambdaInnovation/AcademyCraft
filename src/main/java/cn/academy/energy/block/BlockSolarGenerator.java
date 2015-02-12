@@ -8,50 +8,55 @@
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
  */
-package cn.academy.misc.block.energy;
-
-import java.util.List;
+package cn.academy.energy.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.AcademyCraft;
-import cn.academy.misc.block.energy.tile.impl.TileWindGenerator;
-import cn.liutils.template.block.BlockDirectionalMulti;
+import cn.academy.energy.block.tile.impl.TileSolarGenerator;
+import cn.liutils.core.proxy.LIClientProps;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 
 /**
- * 风能发电机Block类
- * TODO: Not added in β
+ * 太阳能发电机Block类
  * @author WeAthFolD
+ *
  */
-public class BlockWindGenerator extends BlockDirectionalMulti {
+public class BlockSolarGenerator extends Block implements ITileEntityProvider {
 
-	public BlockWindGenerator() {
-		super(Material.rock);
-		setBlockName("windgen");
-		setBlockTextureName("academy:windgen");
+	public BlockSolarGenerator() {
+		super(Material.iron);
 		setCreativeTab(AcademyCraft.cct);
+		setBlockName("ac_solar");
+		setBlockTextureName("academy:solar"); //TODO:Texture required
+		setHardness(2.0F);
+	}
+	
+	@Override
+    public boolean isOpaqueCube() {
+		return false;
+    }
+	
+	@Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderType() {
+		return LIClientProps.RENDER_TYPE_EMPTY;
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileWindGenerator();
+		return new TileSolarGenerator();
 	}
-
-	@Override
-	public Vec3 getRenderOffset() {
-		return null;
-	}
-	
-    @SideOnly(Side.CLIENT)
-    public Vec3 getOffsetRotated(int dir) {
-    	return Vec3.createVectorHelper(0.5D, 0D, 0.5D);
-    }
 
 
 }

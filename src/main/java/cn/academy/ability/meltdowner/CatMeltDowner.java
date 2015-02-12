@@ -36,11 +36,6 @@ public class CatMeltDowner extends Category {
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(new SkillElecDart(), 0);
 	}
-
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.TEX_QUESTION_MARK;
-	}
 	
 	@Override
 	public String getInternalName() {

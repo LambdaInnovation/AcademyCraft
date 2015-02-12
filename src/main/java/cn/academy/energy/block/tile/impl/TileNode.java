@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.misc.block.energy.tile.impl;
+package cn.academy.energy.block.tile.impl;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.util.EnergyUtils;
-import cn.academy.misc.block.energy.tile.base.TileNodeBase;
+import cn.academy.energy.block.tile.base.TileNodeBase;
+import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.api.draw.DrawObject;

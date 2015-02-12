@@ -20,7 +20,7 @@ import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.client.render.SkillRenderManager.RenderNode;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.register.ACItems;
-import cn.academy.core.util.EnergyUtils;
+import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
