@@ -3,22 +3,19 @@
  */
 package cn.academy.ability.electro;
 
-import net.minecraft.util.ResourceLocation;
-import cn.academy.ability.electro.skill.SkillLightningFlash;
-import cn.academy.ability.electro.skill.SkillWeakArc;
+import cn.academy.ability.electro.skill.SkillBuff;
 import cn.academy.ability.electro.skill.SkillItemCharge;
+import cn.academy.ability.electro.skill.SkillLightningFlash;
 import cn.academy.ability.electro.skill.SkillMagneticMovement;
 import cn.academy.ability.electro.skill.SkillMineDetect;
 import cn.academy.ability.electro.skill.SkillRailgun;
 import cn.academy.ability.electro.skill.SkillStrongArc;
+import cn.academy.ability.electro.skill.SkillWeakArc;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.register.AbilityRegistration.RegAbility;
 import cn.annoreg.core.RegistrationClass;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -37,6 +34,7 @@ public class CatElectro extends Category {
 	public static SkillRailgun railgun;
 	public static SkillMineDetect mineDetect;
 	public static SkillLightningFlash lightningFlash;
+	public static SkillBuff buff;
 
 	@Override
 	protected void register() {
@@ -51,6 +49,7 @@ public class CatElectro extends Category {
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(weakArc = new SkillWeakArc(), 0);
 		this.addSkill(itemCharge = new SkillItemCharge(), 0);
+		this.addSkill(buff = new SkillBuff(), 0);
 		this.addSkill(strongArc = new SkillStrongArc(), 0);
 		this.addSkill(magMovement = new SkillMagneticMovement(), 0);
 		this.addSkill(railgun = new SkillRailgun(), 0);
