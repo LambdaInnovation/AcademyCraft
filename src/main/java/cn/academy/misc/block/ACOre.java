@@ -32,7 +32,6 @@ public class ACOre extends Block{
 	public Item getItemDropped(int metadata, Random random, int fortune){
 		return getDrop(this, BName);
 	}
-
 	
 	public Item getDrop(Block block, String blockname){
 		//暂时用不到就不写了

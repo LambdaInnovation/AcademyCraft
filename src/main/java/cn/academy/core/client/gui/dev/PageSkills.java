@@ -121,6 +121,8 @@ public class PageSkills extends DevSubpage {
 				
 				skillID = id;
 				skill = base.data.getSkill(id);
+				System.out.println("Adding " + skill);
+				
 				level = base.data.getSkillLevel(skillID);
 				learned = base.data.isSkillLearned(skillID);
 				fullyLearned = base.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
@@ -145,6 +147,8 @@ public class PageSkills extends DevSubpage {
 					v0 = 208;
 				}
 				
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				RenderUtils.bindIdentity();
 				RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_SKILL);
 				HudUtils.drawRect(0, 0, 291, v0, 110.5, 33.5, 221, 67);
@@ -196,7 +200,6 @@ public class PageSkills extends DevSubpage {
 		public void onAdded() {
 			for(Integer sk : base.data.getCanLearnSkillList()) {
 				if(sk != 0) {
-					System.out.println("Adding " + sk);
 					this.addWidget(new SkillElement(sk));
 				}
 			}
