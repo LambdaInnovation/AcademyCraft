@@ -11,12 +11,15 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockStone;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
@@ -39,11 +42,20 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillMineDetect extends SkillBase {
 
-	//TODO: Maybe we need more flitering?
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
 		public boolean accepts(World world, Block block, int x, int y, int z) {
-			return block instanceof BlockOre;
+			if(block instanceof BlockOre) {
+				return true;
+			}
+			
+			ItemStack stack = new ItemStack(block);
+			int[] val = OreDictionary.getOreIDs(stack);
+			for(int i : val) {
+				if(OreDictionary.getOreName(i).contains("ore"))
+					return true;
+			}
+			return false;
 		}
 	};
 	
@@ -193,12 +205,13 @@ public class SkillMineDetect extends SkillBase {
 		@Override
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
+			
 			if(player.worldObj.isRemote) {
 				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 30));
-				System.out.println("Spawned entity");
 			} else {
 				//consume CPs, etc
 			}
+			this.finishSkill();
 		}
 		
 	}
