@@ -1,20 +1,13 @@
 package cn.academy.ability.meltdowner;
 
-import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.ability.meltdowner.skill.SkillElecDart;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.core.proxy.ACClientProps;
-import cn.academy.api.ability.Category;
-import cn.academy.api.ability.Level;
 import cn.academy.core.register.AbilityRegistration.RegAbility;
 import cn.annoreg.core.RegistrationClass;
 
 /**
- * @author acaly
+ * @author acaly, WeAthFolD
  *
  */
 @RegistrationClass
@@ -34,7 +27,9 @@ public class CatMeltDowner extends Category {
 		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .2));
 		
 		this.addSkill(new SkillBase(), 0);
-		this.addSkill(new SkillElecDart(), 0);
+		
+		
+		this.setColorStyle(72, 214, 79);
 	}
 	
 	@Override

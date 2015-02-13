@@ -37,6 +37,7 @@ public class SkillItemCharge extends SkillBase {
 
 	public SkillItemCharge() {
 		this.setLogo("electro/itemcharge.png");
+		setName("em_itemcharge");
 	}
 	
 	@Override
@@ -47,10 +48,6 @@ public class SkillItemCharge extends SkillBase {
 				return new ChargeState(player);
 			}
 		});
-	}
-	
-	public String getInternalName() {
-		return "em_itemcharge";
 	}
 	
 	public static float getConsume(AbilityData data) {

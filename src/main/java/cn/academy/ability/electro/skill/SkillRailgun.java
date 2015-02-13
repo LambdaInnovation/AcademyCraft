@@ -38,6 +38,7 @@ public class SkillRailgun extends SkillBase {
 
 	public SkillRailgun() {
 		setLogo("electro/railgun.png");
+		setName("em_railgun");
 	}
 	
 	private static Map<EntityPlayer, Integer> etcData = new HashMap();
@@ -77,10 +78,6 @@ public class SkillRailgun extends SkillBase {
 					RailgunPlaneEffect.getAnimLength());
 		}
 		//}
-	}
-	
-	public String getInternalName() {
-		return "em_railgun";
 	}
 	
 	public int getMaxSkillLevel() {

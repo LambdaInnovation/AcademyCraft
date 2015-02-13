@@ -39,6 +39,7 @@ public class SkillMagneticMovement extends SkillBase {
 	public SkillMagneticMovement() {
 		instance = this;
 		this.setLogo("electro/moving.png");
+		setName("em_move");
 	}
 	
 	@Override
@@ -51,10 +52,6 @@ public class SkillMagneticMovement extends SkillBase {
 			}
 			
 		});
-	}
-	
-	public String getInternalName() {
-		return "em_move";
 	}
 	
 	private static class HandleVel extends FakeEntity {

@@ -39,6 +39,7 @@ public class SkillWeakArc extends SkillBase {
 	
 	public SkillWeakArc() {
 		setLogo("electro/arc.png");
+		setName("em_arc");
 	}
 	
 	@Override
@@ -51,10 +52,6 @@ public class SkillWeakArc extends SkillBase {
 			}
 			
 		});
-	}
-	
-	public String getInternalName() {
-		return "em_arc";
 	}
 
 	public static class StateArc extends SkillState {

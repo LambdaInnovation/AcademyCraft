@@ -26,6 +26,7 @@ public class SkillThreateningTele extends SkillBase {
 	public SkillThreateningTele() {
 		instance = this;
 		setLogo("teleport/threatening.png");
+		setName("tp_threatening");
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class SkillThreateningTele extends SkillBase {
 				return;
 			}
 			//TODO: How to cancel the skill?
+			//Wea: this.finishSkill(); is fine
 		}
 
 		@Override
@@ -104,10 +106,6 @@ public class SkillThreateningTele extends SkillBase {
 
 		}
 
-	}
-
-	public String getInternalName() {
-		return "tp_threatening";
 	}
 
 	public int getMaxSkillLevel() {

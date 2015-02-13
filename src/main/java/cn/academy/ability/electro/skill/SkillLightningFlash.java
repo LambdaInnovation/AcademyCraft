@@ -29,11 +29,7 @@ public class SkillLightningFlash extends SkillBase {
 
 	public SkillLightningFlash() {
 		this.setLogo("electro/lf.png");
-	}
-	
-	@Override
-	public String getInternalName() {
-		return "em_lf";
+		setName("em_lf");
 	}
 	
 	@Override

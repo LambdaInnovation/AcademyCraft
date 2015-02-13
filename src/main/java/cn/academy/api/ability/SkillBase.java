@@ -27,6 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SkillBase {
 	
 	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	String name = "null";
 	
 	/**
 	 * Called by RawEventHandler when the skill is reset.
@@ -40,8 +41,12 @@ public class SkillBase {
 	 * Get the internal identifier of the skill.
 	 * @return skill name(identifier)
 	 */
-	public String getInternalName() {
-		return "null";
+	public final String getInternalName() {
+		return name;
+	}
+	
+	public void setName(String _name) {
+		name = _name;
 	}
 	
 	public int getMaxSkillLevel() {

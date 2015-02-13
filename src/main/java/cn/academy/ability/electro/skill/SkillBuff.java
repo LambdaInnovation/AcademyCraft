@@ -37,10 +37,7 @@ public class SkillBuff extends SkillBase {
 
 	public SkillBuff() {
 		this.setLogo("electro/buff.png");
-	}
-	
-	public String getInternalName() {
-		return "em_buff";
+		setName("em_buff");
 	}
 	
 	public void initPattern(RawEventHandler reh) {

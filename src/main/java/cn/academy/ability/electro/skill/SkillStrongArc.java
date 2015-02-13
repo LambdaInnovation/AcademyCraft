@@ -36,6 +36,7 @@ public class SkillStrongArc extends SkillBase {
 	
 	public SkillStrongArc() {
 		setLogo("electro/arc_strong.png");
+		setName("em_arc_strong");
 	}
 	
 	@Override
@@ -48,10 +49,6 @@ public class SkillStrongArc extends SkillBase {
 			}
 			
 		});
-	}
-	
-	public String getInternalName() {
-		return "em_arc_strong";
 	}
 
 	public static class StateArc extends SkillState {
