@@ -23,7 +23,17 @@ import cn.annoreg.core.RegistrationClass;
 @RegAbility
 public class CatMeltDowner extends Category {
 	
-	CatMeltDowner INSTANCE;
+	public static CatMeltDowner INSTANCE;
+	
+	public static SkillBomb bomb;
+	public static SkillMiningBasic mineBasic;
+	public static SkillScatterBomb scatterBomb;
+	public static SkillLightShield shield;
+	public static SkillMeltDowner meltDowner;
+	public static SkillMiningExpert mineExpert;
+	public static SkillRayBarrage rayBarrage;
+	public static SkillMiningLuck mineLuck;
+	public static SkillMiningAcc mineAcc;
 
 	@Override
 	protected void register() {
@@ -37,15 +47,15 @@ public class CatMeltDowner extends Category {
 		
 		this.addSkill(new SkillBase(), 0);
 		//TODO: Correct levels
-		this.addSkill(new SkillBomb(), 0);
-		this.addSkill(new SkillMiningBasic(), 0);
-		this.addSkill(new SkillScatterBomb(), 0);
-		this.addSkill(new SkillLightShield(), 0);
-		this.addSkill(new SkillMeltDowner(), 0);
-		this.addSkill(new SkillMiningExpert(), 0);
-		this.addSkill(new SkillRayBarrage(), 0);
-		this.addSkill(new SkillMiningLuck(), 0);
-		this.addSkill(new SkillMiningAcc(), 0);
+		this.addSkill(bomb = new SkillBomb(), 0);
+		this.addSkill(mineBasic = new SkillMiningBasic(), 0);
+		this.addSkill(scatterBomb = new SkillScatterBomb(), 0);
+		this.addSkill(shield = new SkillLightShield(), 0);
+		this.addSkill(meltDowner = new SkillMeltDowner(), 0);
+		this.addSkill(mineExpert = new SkillMiningExpert(), 0);
+		this.addSkill(rayBarrage = new SkillRayBarrage(), 0);
+		this.addSkill(mineLuck = new SkillMiningLuck(), 0);
+		this.addSkill(mineAcc = new SkillMiningAcc(), 0);
 		
 		this.setLogo("meltdowner/main.png");
 		this.setColorStyle(72, 214, 79);

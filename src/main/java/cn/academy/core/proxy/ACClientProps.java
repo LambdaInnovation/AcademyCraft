@@ -85,13 +85,6 @@ public class ACClientProps {
 		src("academy:textures/effects/eles4.png"),
 		src("academy:textures/effects/eles5.png"),
 	},
-	ANIM_MDBALL_STB[] = {
-		src("academy:textures/effects/mdball/0.png"),
-		src("academy:textures/effects/mdball/1.png"),
-		src("academy:textures/effects/mdball/2.png"),
-		src("academy:textures/effects/mdball/3.png"),
-		src("academy:textures/effects/mdball/4.png"),
-	},
 	ANIM_MDBALL_ARC[] = {
 		src("academy:textures/effects/mdball_arc/0.png"),
 		src("academy:textures/effects/mdball_arc/1.png"),

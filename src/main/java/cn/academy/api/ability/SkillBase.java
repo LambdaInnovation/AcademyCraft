@@ -3,15 +3,12 @@
  */
 package cn.academy.api.ability;
 
-import net.minecraft.init.Items;
+import java.util.Random;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.api.ctrl.RawEventHandler;
-import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.data.AbilityData;
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.render.SkillRenderDebug;
 import cn.academy.core.proxy.ACClientProps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,6 +25,8 @@ public class SkillBase {
 	
 	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
 	String name = "null";
+	
+	protected static final Random rand = new Random();
 	
 	/**
 	 * Called by RawEventHandler when the skill is reset.
