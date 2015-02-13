@@ -23,9 +23,33 @@ public class ACRecipes {
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.solarGen), "aaa", "bcb", "ded",
 				'a', ACItems.siliconRod, 'b', ACItems.ingotMg, 'c', ACItems.pcb, 'd', ACItems.ingotAl,
 				'e', ACItems.ingotNi);
+		GameRegistry.addRecipe(new ItemStack(ACItems.alPlate, 3), "aaa", "   ", "   ",
+				'a', ACItems.ingotAl);
+		GameRegistry.addRecipe(new ItemStack(ACItems.alPlate, 3), "   ", "aaa", "   ",
+				'a', ACItems.ingotAl);
+		GameRegistry.addRecipe(new ItemStack(ACItems.alPlate, 3), "   ", "   ", "aaa",
+				'a', ACItems.ingotAl);
+		GameRegistry.addRecipe(new ItemStack(ACItems.mgPlate, 3), "aaa", "   ", "   ",
+				'a', ACItems.ingotMg);
+		GameRegistry.addRecipe(new ItemStack(ACItems.mgPlate, 3), "   ", "aaa", "   ",
+				'a', ACItems.ingotMg);
+		GameRegistry.addRecipe(new ItemStack(ACItems.mgPlate, 3), "   ", "   ", "aaa",
+				'a', ACItems.ingotMg);	
+		GameRegistry.addShapelessRecipe(new ItemStack(ACItems.almgPlate, 2), 
+				ACItems.alPlate, ACItems.mgPlate);
+		GameRegistry.addRecipe(new ItemStack(ACBlocks.node), "aaa", "bcb", "ded",
+				'a', ACItems.siliconRod, 'b', ACItems.ingotMg, 'c', ACItems.pcb, 'd', ACItems.ingotAl,
+				'e', ACItems.ingotNi);
+		GameRegistry.addRecipe(new ItemStack(ACItems.copperCoil, 6), "aba", "b a", "aba",
+				'a', Items.iron_ingot, 'b', ACItems.ingotNi);
+		GameRegistry.addRecipe(new ItemStack(ACBlocks.magInducer), " a ", "aba", " a ",
+				'a', ACItems.copperCoil, 'b', ACItems.pcb);
+		GameRegistry.addRecipe(new ItemStack(ACBlocks.grid), "aba", "cdc", "aba",
+				'a', Blocks.glass_pane, 'b', ACItems.pcb, 'c', ACItems.almgPlate, 'd', ACItems.energyCrystal);
 	}
 	
 	public static void regSmelting() {
+		GameRegistry.addSmelting(new ItemStack(Blocks.glass, 3), new ItemStack(ACItems.siliconRod), 0f);
 		//Ore Smelting
 		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);

@@ -112,14 +112,27 @@ public class ACItems {
 	public static ACSimpleItem mgPlate;
 	
 	@RegItem
+	@RegItem.UTName("al_plate")
+	public static ACSimpleItem alPlate;
+	
+	@RegItem
+	@RegItem.UTName("almg_plate")
+	public static ACSimpleItem almgPlate;
+	
+	@RegItem
 	@RegItem.UTName("siliconrod")
 	public static ACSimpleItem siliconRod;
 	
-	//TODO: If these items is unnecessary, delete them.
+	//TODO: This is not available in the beta version, remove the annotation when in a release version.
 //	@RegItem
-//	@RegItem.UTName("coppercoil")
-//	public static ACSimpleItem copperCoil;
+//	@RegItem.UTName("iron_dust")
+//	public static ACSimpleItem ironDust;
+
+	@RegItem
+	@RegItem.UTName("coppercoil")
+	public static ACSimpleItem copperCoil;
 	
+	//TODO: If these items is unnecessary, delete them.
 //	@RegItem
 //	@RegItem.UTName("corebearing")
 //	public static ACSimpleItem coreBearing;
@@ -131,6 +144,11 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("io")
 	public static ACSimpleItem ioPort;
+	
+	//TODO: This is not available in the beta version, remove the annotation when in a release version.
+//	@RegItem
+//	@RegItem.UTName("brainalpha")
+//	public static ACSimpleItem brainAlpha;
 	
 	@RegItem
 	@RegItem.UTName("brainbeta")

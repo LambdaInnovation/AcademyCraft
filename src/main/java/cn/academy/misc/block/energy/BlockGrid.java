@@ -25,7 +25,7 @@ public class BlockGrid extends BlockDirectionalMulti {
 	public BlockGrid() {
 		super(Material.anvil);
 		setBlockName("ac_grid");
-		setBlockTextureName("academy:grid");
+		setBlockTextureName("academy:matrix");
 		setCreativeTab(AcademyCraft.cct);
 		setLightLevel(2.0F);
 		
