@@ -64,7 +64,7 @@ skl_em_railgun=Railgun
 skl_em_mine=Mineral Detect
 skl_em_arc_strong=The Spear of Lightning
 #skl_em_swordgen=Sword Generation
-#skl_em_biostreng=Bioelectrical Improvement
+skl_em_buff=Bioelectrical Improvement
 skl_em_lf=Lightning Flash
 
 em_arc.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
