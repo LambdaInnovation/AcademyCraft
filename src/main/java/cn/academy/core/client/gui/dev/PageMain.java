@@ -112,11 +112,13 @@ public class PageMain extends Widget {
 	}
 
 	private void drawPlayer() {
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		EntityPlayer player = dev.user;
 		RenderUtils.loadTexture(RenderUtils.STEVE_TEXTURE);
 		float x = 100, y = 100, scale = 2.1F;
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(true);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glPushMatrix(); {
 			GL11.glTranslatef(183, 58, 100F);
 			GL11.glScalef((float) (-scale), (float) scale, (float) scale);

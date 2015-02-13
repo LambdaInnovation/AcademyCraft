@@ -203,6 +203,8 @@ public class PageSkills extends DevSubpage {
 					this.addWidget(new SkillElement(sk));
 				}
 			}
+			
+			super.onAdded();
 		}
 		
 	}
