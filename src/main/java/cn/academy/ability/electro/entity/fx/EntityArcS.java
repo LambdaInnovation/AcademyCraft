@@ -39,6 +39,8 @@ public class EntityArcS extends EntityX {
 	int texIndex;
 	long lastChangeTime;
 	
+	public final int roll = rand.nextInt(360);
+	
 	@RegEntity.Render
 	public static ArcRender render;
 	
@@ -115,6 +117,12 @@ public class EntityArcS extends EntityX {
 			}
 			
 			this.icon = TEX[arc.texIndex];
+		}
+		
+		@Override
+		protected void firstTranslate(Entity ent) {
+			EntityArcS arc = (EntityArcS) ent;
+			GL11.glRotated(arc.roll, 0, 0, 1);
 		}
 		
 	}

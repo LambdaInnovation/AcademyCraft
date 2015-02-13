@@ -64,6 +64,7 @@ public class ItemCoin extends Item {
     	MinecraftForge.EVENT_BUS.post(new ThrowCoinEvent(player, etc));
     	nbt.setInteger("entID", etc.getEntityId());
     	nbt.setBoolean("throwing", true);
+    	player.playSound("academy:flipcoin", 0.5F, 1.0F);
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;
     	}

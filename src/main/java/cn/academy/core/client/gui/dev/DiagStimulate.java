@@ -42,12 +42,15 @@ public class DiagStimulate extends DialogueBase {
 	
 	final IDevAction devAction;
 	RandBufProgressBar progress;
+	
+	final String info;
 
 	public DiagStimulate(final GuiDeveloper dev, IDevAction ida) {
 		super("stimulate", dev, 9); //⑨
 		this.setTitle(ACLangs.stimProg());
 		this.alignStyle = AlignStyle.CENTER;
 		this.devAction = ida;
+		info = devAction.getActionInfo(dev.data);
 	}
 	
 	@Override
@@ -95,7 +98,7 @@ public class DiagStimulate extends DialogueBase {
 		//CurAction
 		String text = String.format("%s: %s", 
 				dev.dev.isStimulating ? ACLangs.curAction() : (dev.dev.isStimSuccessful() ? ACLangs.successful() : ACLangs.aborted()),  
-				devAction.getActionInfo(dev.data));
+				info);
 		dev.drawText(text, 6, 24, 7);
 		
 		//StimTimes

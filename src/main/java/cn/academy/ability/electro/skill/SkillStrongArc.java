@@ -34,7 +34,9 @@ public class SkillStrongArc extends SkillBase {
 	@SideOnly(Side.CLIENT)
 	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
 	
-	public SkillStrongArc() {}
+	public SkillStrongArc() {
+		setLogo("electro/arc_strong.png");
+	}
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -51,11 +53,6 @@ public class SkillStrongArc extends SkillBase {
 	public String getInternalName() {
 		return "em_arc_strong";
 	}
-	
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.ELEC_ARC_STRONG;
-	}
 
 	public static class StateArc extends SkillState {
 		
@@ -68,11 +65,13 @@ public class SkillStrongArc extends SkillBase {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(new WeakArc(player));
+					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			}
 		}

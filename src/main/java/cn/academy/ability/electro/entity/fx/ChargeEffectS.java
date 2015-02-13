@@ -98,6 +98,12 @@ public class ChargeEffectS extends FakeEntity {
 					checkTime = GenericUtils.randIntv(showFrom, showTo);
 				} else {
 					checkTime = GenericUtils.randIntv(hideFrom, hideTo);
+					for(EntityArcS ent : ents) {
+						FollowEntity fe = (FollowEntity) ent.getDaemonHandler("followent");
+						
+						NormalVert vt = factory.next();
+						fe.setOffset(vt.vert.xCoord - .6, vt.vert.yCoord - 2, vt.vert.zCoord - .6);
+					}
 				}
 				for(EntityArcS arc : ents) {
 					arc.show = show && draw;

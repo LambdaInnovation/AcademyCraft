@@ -2,10 +2,10 @@ package cn.academy.core.register;
 
 import cn.academy.core.block.dev.BlockDeveloper;
 import cn.academy.core.block.dev.BlockMagInducer;
+import cn.academy.energy.block.BlockGrid;
+import cn.academy.energy.block.BlockNode;
+import cn.academy.energy.block.BlockSolarGenerator;
 import cn.academy.misc.block.ACOre;
-import cn.academy.misc.block.energy.BlockGrid;
-import cn.academy.misc.block.energy.BlockNode;
-import cn.academy.misc.block.energy.BlockSolarGenerator;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
 

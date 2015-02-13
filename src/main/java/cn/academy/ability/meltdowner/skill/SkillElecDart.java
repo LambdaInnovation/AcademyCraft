@@ -54,9 +54,4 @@ public class SkillElecDart extends SkillBase {
 		return "md_elecdart";
 	}
 
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLogo() {
-		return ACClientProps.MD_LOGO;//TODO skill logo
-	}
-
 }
