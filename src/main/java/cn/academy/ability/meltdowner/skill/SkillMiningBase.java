@@ -15,7 +15,6 @@ public abstract class SkillMiningBase extends SkillBase {
 	 * 
 	 */
 	public SkillMiningBase() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

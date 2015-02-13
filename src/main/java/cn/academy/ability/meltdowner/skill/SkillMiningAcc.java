@@ -15,7 +15,8 @@ public class SkillMiningAcc extends SkillMiningBase {
 	 * 
 	 */
 	public SkillMiningAcc() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/mine_acc.png");
+		this.setName("md_mineacc");
 	}
 
 }

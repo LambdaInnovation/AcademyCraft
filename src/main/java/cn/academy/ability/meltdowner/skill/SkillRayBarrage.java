@@ -11,11 +11,9 @@ import cn.academy.api.ability.SkillBase;
  */
 public class SkillRayBarrage extends SkillBase {
 
-	/**
-	 * 
-	 */
 	public SkillRayBarrage() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/barrage.png");
+		this.setName("md_barrage");
 	}
 
 }

@@ -15,7 +15,8 @@ public class SkillScatterBomb extends SkillBase {
 	 * 
 	 */
 	public SkillScatterBomb() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/scatter.png");
+		this.setName("md_scatter");
 	}
 
 }

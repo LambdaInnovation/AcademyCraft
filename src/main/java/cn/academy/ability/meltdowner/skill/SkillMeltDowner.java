@@ -15,7 +15,8 @@ public class SkillMeltDowner extends SkillBase {
 	 * 
 	 */
 	public SkillMeltDowner() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/meltdown.png");
+		this.setName("md_meltdown");
 	}
 
 }

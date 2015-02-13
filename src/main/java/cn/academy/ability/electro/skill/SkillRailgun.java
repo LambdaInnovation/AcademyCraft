@@ -50,6 +50,7 @@ public class SkillRailgun extends SkillBase {
 			@Override
 			public boolean onKeyDown(EntityPlayer player) {
 				if(player.worldObj.isRemote) return false;
+				player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
 				
 				Integer eid = etcData.get(player);
 				if(eid == null) return false;

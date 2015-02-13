@@ -3,7 +3,6 @@
  */
 package cn.academy.ability.electro.entity;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -11,7 +10,7 @@ import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.entity.fx.EntityArcS;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.client.render.RendererRayTiling;
+import cn.academy.misc.client.render.RendererRaySimple;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -36,16 +35,11 @@ public class EntityRailgun extends EntityRay {
 	public static Render renderer;
 	
 	@SideOnly(Side.CLIENT)
-	public static class Render extends RendererRayTiling<EntityRailgun> {
+	public static class Render extends RendererRaySimple<EntityRailgun> {
 		
 		public Render() {
-			super(ACClientProps.TEX_EFF_RAILGUN);
-			width = 0.12;
-		}
-		
-		@Override
-		protected void drawAtOrigin(EntityRailgun ent, double len) {
-			super.drawAtOrigin(ent, len);
+			super(ACClientProps.TEX_EFF_RAILGUN, 4);
+			this.setWidth(0.12);
 		}
 		
 	}

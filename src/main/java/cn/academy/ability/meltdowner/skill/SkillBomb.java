@@ -12,7 +12,8 @@ import cn.academy.api.ability.SkillBase;
 public class SkillBomb extends SkillBase {
 
 	public SkillBomb() {
-		this.setLogo("meltdowner/.png");
+		this.setLogo("meltdowner/bomb.png");
+		this.setName("md_bomb");
 	}
 
 }

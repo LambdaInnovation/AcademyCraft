@@ -9,11 +9,9 @@ package cn.academy.ability.meltdowner.skill;
  */
 public class SkillMiningLuck extends SkillMiningBase {
 
-	/**
-	 * 
-	 */
 	public SkillMiningLuck() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/mine_luck.png");
+		this.setName("md_mineluck");
 	}
 
 }

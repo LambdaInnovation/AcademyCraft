@@ -13,7 +13,8 @@ public class SkillMiningExpert extends SkillMiningBase {
 	 * 
 	 */
 	public SkillMiningExpert() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/mine_expert.png");
+		this.setName("md_mineexpert");
 	}
 
 }

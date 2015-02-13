@@ -1,5 +1,14 @@
 package cn.academy.ability.meltdowner;
 
+import cn.academy.ability.meltdowner.skill.SkillBomb;
+import cn.academy.ability.meltdowner.skill.SkillLightShield;
+import cn.academy.ability.meltdowner.skill.SkillMeltDowner;
+import cn.academy.ability.meltdowner.skill.SkillMiningAcc;
+import cn.academy.ability.meltdowner.skill.SkillMiningBasic;
+import cn.academy.ability.meltdowner.skill.SkillMiningExpert;
+import cn.academy.ability.meltdowner.skill.SkillMiningLuck;
+import cn.academy.ability.meltdowner.skill.SkillRayBarrage;
+import cn.academy.ability.meltdowner.skill.SkillScatterBomb;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
@@ -27,8 +36,18 @@ public class CatMeltDowner extends Category {
 		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .2));
 		
 		this.addSkill(new SkillBase(), 0);
+		//TODO: Correct levels
+		this.addSkill(new SkillBomb(), 0);
+		this.addSkill(new SkillMiningBasic(), 0);
+		this.addSkill(new SkillScatterBomb(), 0);
+		this.addSkill(new SkillLightShield(), 0);
+		this.addSkill(new SkillMeltDowner(), 0);
+		this.addSkill(new SkillMiningExpert(), 0);
+		this.addSkill(new SkillRayBarrage(), 0);
+		this.addSkill(new SkillMiningLuck(), 0);
+		this.addSkill(new SkillMiningAcc(), 0);
 		
-		
+		this.setLogo("meltdowner/main.png");
 		this.setColorStyle(72, 214, 79);
 	}
 	

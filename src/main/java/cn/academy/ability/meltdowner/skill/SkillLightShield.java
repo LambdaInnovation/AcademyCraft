@@ -15,7 +15,8 @@ public class SkillLightShield extends SkillBase {
 	 * 
 	 */
 	public SkillLightShield() {
-		// TODO Auto-generated constructor stub
+		this.setLogo("meltdowner/shield.png");
+		this.setName("md_shield");
 	}
 
 }
