@@ -78,9 +78,25 @@ em_lf.desc=Overclock your body with high-voltage currents and acquire incredible
 #Melt Downer
 cat_meltdowner=Melt Downer
 
-skl_md_elecdart=Electron Bomb
+skl_md_bomb=Electron Bomb
+skl_md_minebasic=Basic Mining Ray
+skl_md_scatter=Scattering Electron Bomb
+skl_md_shield=Light Shield
+skl_md_meltdown=Melt Downer
+skl_md_mineexpert=Expert Mining Ray
+skl_md_barrage=Scattered Ray Barrage
+skl_md_mineluck=Expert Mining Ray - Luck
+skl_md_mineacc=Expert Mining Ray - Accuracy
 
-md_elecdart.desc=Generate a ball with a small number of electrons, and shoot it directionally.
+md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
+md_minebasic.desc=Generate a weak electron current to help you mine.
+md_scatter.desc=Make a electron group radiate to attack, as the cost, you can't control the impact point accurately.
+md_shield.desc=Make a electron group into a shield, electrons' high-speed movement will damage anything touching you.
+md_meltdown.desc=Generate a special electron beam like lightning, it can destroy enemy with the obstacle. But because of the unstable energy, it can also damage yourself.
+md_mineexpert.desc=After practicing basic mining, you can control your electron current butter and mine better.
+md_barrage.desc=With the scattering semiconductor, you can make electron current like barrage and damage everything around you.
+md_mineluck.desc=Keeping mining or lumbering with your ability can make you do better in destroying the impurities without damaging mineral.
+md_mineacc.desc=Some time destroying lots of impurities will also destroy rare things in the ore. After learning this, you can cut ores accurately and get useful material in them.
 
 #Commands
 aimctrl.presetinf=Preset %s : %s
@@ -90,19 +106,6 @@ setting.successful=Setting successful.
 setting.outofbounds=Input out of bounds.
 
 #GUI
-gui.remaining.energy=Remaining Energy
-gui.energy.unit=EU
-page.adlearning=Ability Learning
-page.adskill=Skill Acquiring
-page.adlevel=Level Upgrading
-admain.undev=Ability not detected
-admain.level=Level
-admain.cp=CP.
-admain.prog=PRG.
-admain.estm=Estm. Consumption
-adskill.learned=Already Acquired
-curenergy.name=Current Energy
-transspd.name=Transfer Speed
 ac.notlearned=Not Learned
 ac.machinestat=Stat
 ac.curenergy=Current Energy

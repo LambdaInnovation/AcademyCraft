@@ -90,19 +90,6 @@ setting.successful=设置成功。
 setting.outofbounds=输入信息溢出。
 
 #GUI
-gui.remaining.energy=剩余电力
-gui.energy.unit=EU
-page.adlearning=能力学习
-page.adskill=技能学习
-page.adlevel=等级提升
-admain.undev=未检测到能力
-admain.level=等级
-admain.cp=CP.
-admain.prog=PRG.
-admain.estm=预计消费
-adskill.learned=已习得
-curenergy.name=当前电力
-transspd.name=开发速率
 ac.notlearned=未习得
 ac.machinestat=状态
 ac.curenergy=当前电力
