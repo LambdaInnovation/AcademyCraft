@@ -6,6 +6,7 @@ import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -36,7 +37,11 @@ public class AbilityDataEventListener {
 	    				//register is done in onEntityConstructing, so here the data should exist.
 	    				AcademyCraft.log.fatal("Error on getting AbilityData on server.");
 	    			}
-	    			AbilityDataMain.resetPlayer(player);
+	    	        AbilityDataMain.resetPlayer(player);
+
+	    	        //Due to a bug of MinecraftForge, we need to send this message
+	    	        //again to the player.
+	    	        AcademyCraft.netHandler.sendTo(new MsgResetAbilityData(player), (EntityPlayerMP) player);
 	    		}
 	    	}
 	    }

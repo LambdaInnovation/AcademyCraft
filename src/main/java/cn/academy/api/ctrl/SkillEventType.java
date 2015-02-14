@@ -45,6 +45,8 @@ public enum SkillEventType {
 	/**
 	 * Server send RAW_CANCEL to client when there's an error,
 	 * typically caused by increasing network latency.
+	 * Both server and client will receive RAW_CANCEL when the player
+	 * dies.
 	 */
 	RAW_CANCEL,
 	

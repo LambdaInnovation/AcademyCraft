@@ -42,7 +42,7 @@ public class SkillStateMessage implements IMessage {
 	/**
 	 * The player this skill belongs to.
 	 */
-	private int playerEntityId;
+	private String playerName;
 	
 	/**
 	 * The name of the SkillState class. Used to initialize the instance on client.
@@ -59,7 +59,7 @@ public class SkillStateMessage implements IMessage {
 	public SkillStateMessage(SkillState state, Action action) {
 		this.action = action;
 		this.stateID = state.stateID;
-		this.playerEntityId = state.player.getEntityId();
+		this.playerName = state.player.getCommandSenderName();
 		Class<? extends SkillState> clazz = state.getClass();
 		this.className = clazz.getName();
 		this.nbt = new NBTTagCompound();
@@ -70,7 +70,7 @@ public class SkillStateMessage implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		action = Action.values()[buf.readInt()];
 		stateID = buf.readInt();
-		playerEntityId = buf.readInt();
+		playerName = ByteBufUtils.readUTF8String(buf);
 		className = ByteBufUtils.readUTF8String(buf);
 		nbt = ByteBufUtils.readTag(buf);
 	}
@@ -79,7 +79,7 @@ public class SkillStateMessage implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(action.ordinal());
 		buf.writeInt(stateID);
-		buf.writeInt(playerEntityId);
+        ByteBufUtils.writeUTF8String(buf, playerName);
 		ByteBufUtils.writeUTF8String(buf, className);
 		ByteBufUtils.writeTag(buf, nbt);
 	}
@@ -90,26 +90,25 @@ public class SkillStateMessage implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(SkillStateMessage msg, MessageContext ctx) {
-			Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(msg.playerEntityId);
-			
-			//If the player is not in the same dimension.
-			if (entity == null) return null;
-			//If the player is thePlayer. These skills are directly handled by EventHandlerClient.
-			if (entity == Minecraft.getMinecraft().thePlayer) return null;
+			Entity entity = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(msg.playerName);
+
 			
 			SkillState ss = null;
 			switch (msg.action) {
             
             case SYNC:
-                ss = SkillStateManager.getStateById((EntityPlayer) entity, msg.stateID);
+                ss = SkillStateManager.getStateById(msg.playerName, msg.stateID);
                 if (ss != null) break;
                 //fall through
                 
 			case START:
+	            //If the player is not in the same dimension.
+	            if (entity == null) return null;
+	            //If the player is thePlayer. These skills are directly handled by EventHandlerClient.
+	            if (entity == Minecraft.getMinecraft().thePlayer) return null;
+	            
 				try {
-					
 					Class<?> clazz = Class.forName(msg.className);
-					
 					for (Constructor ctor : clazz.getDeclaredConstructors()) {
 						if (ctor.getParameterTypes().length == 1) { 
 							if (ctor.getParameterTypes()[0].isAssignableFrom(EntityPlayer.class)) {
@@ -133,13 +132,13 @@ public class SkillStateMessage implements IMessage {
 				break;
 				
 			case UPDATE:
-				ss = SkillStateManager.getStateById((EntityPlayer) entity, msg.stateID);
+				ss = SkillStateManager.getStateById(msg.playerName, msg.stateID);
 				if (ss == null) break;
 				ss.onUpdate(msg.nbt);
 				break;
 				
 			case FINISH:
-				ss = SkillStateManager.getStateById((EntityPlayer) entity, msg.stateID);
+				ss = SkillStateManager.getStateById(msg.playerName, msg.stateID);
 				if (ss == null) break;
 				ss.finishSkill();
 				break;

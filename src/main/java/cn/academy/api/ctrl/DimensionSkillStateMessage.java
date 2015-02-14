@@ -45,10 +45,15 @@ public class DimensionSkillStateMessage implements IMessage {
 
     @RegMessageHandler(msg = DimensionSkillStateMessage.class, side = RegMessageHandler.Side.CLIENT)
     public static class Handler implements IMessageHandler<DimensionSkillStateMessage, IMessage> {
-
+        @SideOnly(Side.CLIENT)
+        SkillStateMessage.Handler stateHandler;
+        
         @Override
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(DimensionSkillStateMessage msg, MessageContext ctx) {
+            for (SkillStateMessage sm : msg.states) {
+                stateHandler.onMessage(sm, ctx);
+            }
             return null;
         }
     }

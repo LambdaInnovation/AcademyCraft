@@ -221,6 +221,12 @@ public class EventHandlerServer {
 				//Invoke CLICK on server.
 				reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
 				return false;
+			case RAW_CANCEL:
+                reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
+                AcademyCraft.netHandler.sendTo(
+                        new ControlMessage(skillId, SkillEventType.RAW_CANCEL, time),
+                        player);
+			    return false;
 			default:
 				AcademyCraft.log.error("Unexpcected event in EventHandlerServer.");
 				return false;
@@ -262,6 +268,13 @@ public class EventHandlerServer {
 	public static void resetPlayerSkillData(EntityPlayer player) {
 		AcademyCraft.log.info("EventHandlerServer: Reset player.");
 		
+        //Cancel all skills.
+        INSTANCE.skillEventAll(player, SkillEventType.RAW_CANCEL);
+        //Remove this player.
+        INSTANCE.rehMap.remove(player);
+        INSTANCE.kaMap.remove(player);
+        SkillStateManager.removePlayerFromServer(player);
+		
 		Category cat = GenericUtils.assertObj(AbilityDataMain.getData(player).getCategory());
 		
 		//Create every raw event handler for this player.
@@ -295,25 +308,26 @@ public class EventHandlerServer {
 		rehMap.remove(player);
 		kaMap.remove(player);
 		
-		SkillStateManager.removePlayer(player);
+		SkillStateManager.removePlayerFromServer(player);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerCloned(PlayerEvent.Clone event) {
 	    //Dead or to another dimension
+        //Cancel all skills.
+        skillEventAll(event.original, SkillEventType.RAW_CANCEL);
 	    
 	    //Copy data to the new instance.
 	    NBTTagCompound abilityData = new NBTTagCompound();
 	    AbilityDataMain.getData(event.original).saveNBTData(abilityData);
 	    AbilityDataMain.getData(event.entityPlayer).loadNBTData(abilityData);
-	    
+
 	    //Update both maps.
 	    if (kaMap.containsKey(event.original)) {
 	        kaMap.remove(event.original);
 	    }
 	    if (rehMap.containsKey(event.original)) {
 	        rehMap.remove(event.original);
-	        resetPlayerSkillData(event.entityPlayer);
 	    }
 	}
 
@@ -353,6 +367,7 @@ public class EventHandlerServer {
 	 */
 	private void skillEventAll(EntityPlayer player, SkillEventType type) {
 		Map<Integer, SingleSkill> playerMap = kaMap.get(player);
+		if (playerMap == null) return;
 		Iterator<SingleSkill> itor = playerMap.values().iterator();
 		while (itor.hasNext()) {
 			if (itor.next().onEvent(type) == false) {
