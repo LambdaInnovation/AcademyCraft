@@ -1,17 +1,11 @@
-#English Language File 2015/1/9
+#English Language File 2015/2/14 Debug Ver.
 #Items
 item.void.name=
-item.ac_logo.name=AcademyCraft Logo
+item.ac_logo.name=
 item.ac_record1.name=Railgun Record #1
 item.ac_record2.name=Railgun Record #2
 item.ac_record3.name=Railgun Record #3
 item.ac_coin.name=Game Coin
-item.ability_capsule1.name=Mind Induction Capsule
-item.ability_capsule2.name=AIM Activation Capsule
-item.ability_capsule3.name=Personal Reality Enhancing Capsule
-item.ability_tablet1.name=Mind Induction Tablet
-item.ability_tablet2.name=AIM Activation Tablet
-item.ability_tablet3.name=Personal Reality Enhancing Tablet
 item.ac_needle.name=Needle
 item.ac_energycrystal.name=Energy Crystal
 item.ad_card.name=Ability Developer Electricity Card
@@ -21,7 +15,6 @@ item.steelingot.name=Steel Ingot
 item.tiningot.name=Tin Ingot
 item.siliconrod.name=Silicon Rod
 item.coppercoil.name=Copper Coil
-item.corebearing.name=Core Bearing
 item.ni_ingot.name=Nickel Ingot
 item.mg_plate.name=Magnesium Plate
 item.almg_plate.name=Magnalium Plate
@@ -35,13 +28,12 @@ item.crystal.name=Crystal Rock
 item.shadow_ingot.name=Shadow Metal Ingot
 item.cwood.name=Composite Wood Planks
 item.exp_nail.name=Expansion Nail
-item.dev_module=Development Module
+item.dev_module.name=AIM Dormancy Cell
 
 #Blocks
 tile.ac_developer.name=Ability Developer
 tile.null.name=
 tile.windgen.name=Wind Generator
-tile.fieldincr.name=Field Increase Module
 tile.copperore.name=Copper Ore
 tile.tinore.name=Tin Ore
 tile.aluminumore.name=Aluminum Ore
@@ -86,7 +78,7 @@ em_lf.desc=Overclock your body with high-voltage currents and acquire incredible
 #Melt Downer
 cat_meltdowner=Melt Downer
 
-skl_md_elecdart=Electronic Dart
+skl_md_elecdart=Electron Bomb
 
 md_elecdart.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 
@@ -101,14 +93,14 @@ setting.outofbounds=Input out of bounds.
 gui.remaining.energy=Remaining Energy
 gui.energy.unit=EU
 page.adlearning=Ability Learning
-page.adskill=Skill Aquiring
+page.adskill=Skill Acquiring
 page.adlevel=Level Upgrading
 admain.undev=Ability not detected
 admain.level=Level
 admain.cp=CP.
 admain.prog=PRG.
 admain.estm=Estm. Consumption
-adskill.learned=Already Aquired
+adskill.learned=Already Acquired
 curenergy.name=Current Energy
 transspd.name=Transfer Speed
 ac.notlearned=Not Learned
@@ -119,7 +111,7 @@ ac.learnability=Learn Ability
 ac.btnconfirm=Confirm
 ac.btncancel=Cancel
 page.adconfirm=Action Confirm
-ac.confirm.head=You are about to peform the following action
+ac.confirm.head=You are about to perform the following action
 ac.confirm.tail=Continue?
 ac.upgradeto=Elevate player level to 
 ac.learnskill=Learn skill 

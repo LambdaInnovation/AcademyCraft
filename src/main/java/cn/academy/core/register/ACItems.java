@@ -45,7 +45,8 @@ public class ACItems {
 		public RendererCoin.ItemRender renderCoin;
 	};
 
-	@RegItem
+	//TODO: Reconfiguration the medicine system.
+/*	@RegItem
 	public static ItemCapsule capsuleA = new ItemCapsule(1);
 	@RegItem
 	public static ItemCapsule capsuleM = new ItemCapsule(2);
@@ -57,7 +58,7 @@ public class ACItems {
 	@RegItem
 	public static ItemTablet tabletM = new ItemTablet(2);
 	@RegItem
-	public static ItemTablet tabletL = new ItemTablet(3);
+	public static ItemTablet tabletL = new ItemTablet(3);*/
 	
 	@RegItem
 	public static ItemNeedle needle;
