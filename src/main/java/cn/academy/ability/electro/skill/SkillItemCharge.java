@@ -113,7 +113,7 @@ public class SkillItemCharge extends SkillBase {
 		}
 		
 		@Override
-		protected boolean onTick() {
+		protected boolean onTick(int time) {
 			return cb.tick();
 		}
 

@@ -38,6 +38,8 @@ public class SkillState {
 	
 	private boolean alive = false;
 	
+	private int tickTime = 0;
+	
 	/**
 	 * The per-state render
 	 */
@@ -107,9 +109,10 @@ public class SkillState {
 	
 	/**
 	 * Will be called every tick while this state is active.
+	 * @param time Ticks from the start of this State.
 	 * @return Return true if you want to finish this state.
 	 */
-	protected boolean onTick() {
+	protected boolean onTick(int time) {
 		return false;
 	}
 	
@@ -133,7 +136,6 @@ public class SkillState {
 				return true;
 			}
 		}
-		return onTick();
+		return onTick(++tickTime);
 	}
-	
 }

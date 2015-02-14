@@ -84,7 +84,7 @@ public class SkillBuff extends SkillBase {
 		}
 		
 		@Override
-		protected boolean onTick() {
+		protected boolean onTick(int time) {
 			boolean b = data.decreaseCP(consume);
 			good = good && b;
 			return !b;
