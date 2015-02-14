@@ -33,6 +33,9 @@ item.io.name=I/O Port
 item.brainbeta.name=Brainwave Resonator β
 item.crystal.name=Crystal Rock
 item.shadow_ingot.name=Shadow Metal Ingot
+item.cwood.name=Composite Wood Planks
+item.exp_nail.name=Expansion Nail
+item.dev_module=Development Module
 
 #Blocks
 tile.ac_developer.name=Ability Developer
@@ -47,6 +50,9 @@ tile.ni_ore.name=Nickel Ore
 tile.mg_ore.name=Magnesium Ore
 tile.ac_solar.name=Solar Generator
 tile.shadow_ore.name=Shadow Metal Ore
+tile.ac_magindc.name=Magnetic Inducer
+tile.ac_node.name=Wireless Power Node
+tile.ac_grid.name=Wireless Power Grid
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft

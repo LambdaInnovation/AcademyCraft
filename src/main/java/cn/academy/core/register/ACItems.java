@@ -12,6 +12,7 @@ import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
 import cn.academy.misc.item.ItemCoin;
+import cn.academy.misc.item.ItemExpNail;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
@@ -157,6 +158,18 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("pcbn")
 	public static ACSimpleItem pcb;
+	
+	@RegItem
+	@RegItem.UTName("cwood")
+	public static ACSimpleItem compWood;
+	
+	@RegItem
+	@RegItem.UTName("exp_nail")
+	public static ItemExpNail expNail;
+	
+	@RegItem
+	@RegItem.UTName("dev_module")
+	public static ACSimpleItem devModule;
 	
 	@RegItem()
 	@RegItem.HasRender

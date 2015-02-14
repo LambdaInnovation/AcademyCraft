@@ -4,12 +4,12 @@ import cn.academy.core.AcademyCraft;
 import net.minecraft.item.Item;
 
 /**
- * Simple Items
- * @author KSkun
+ * @author WeAthFolD, KSkun
+ * TODO: Finish the function
  */
-public class ACSimpleItem extends Item {
+public class ItemExpNail extends Item {
 	
-	public ACSimpleItem() {
+	public ItemExpNail() {
 		setCreativeTab(AcademyCraft.cct);
 	}
 
