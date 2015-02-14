@@ -82,7 +82,6 @@ public class EntityBomb extends EntityMdBall {
 	}
 	
 	private void init() {
-		this.addDaemonHandler(new VelocityUpdate(this, 1));
 		this.fadeTime = 13;
 	}
 	

@@ -18,6 +18,7 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.motion.FollowEntity;
+import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.template.client.render.entity.RenderIcon;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -83,10 +84,12 @@ public class EntityMdBall extends EntityX {
 		addDaemonHandler(new FollowEntity(this, player).setOffset(
 				offx, offy, offz));
 		setPosition(player.posX + offx, player.posY + offy, player.posZ + offz);
+		addDaemonHandler(new VelocityUpdate(this, 1));
 	}
 
 	public EntityMdBall(World world) {
 		super(world);
+		addDaemonHandler(new VelocityUpdate(this, 1));
 		ignoreFrustumCheck = true;
 	}
 	
@@ -111,6 +114,12 @@ public class EntityMdBall extends EntityX {
 	
 	@Override
 	public void onUpdate() {
+		if(spawner != null && doesFollow()) {
+			motionX = spawner.motionX;
+			motionY = spawner.motionY;
+			motionZ = spawner.motionZ;
+		}
+		
 		super.onUpdate();
 		//System.out.println(posX + " " + worldObj.isRemote);
 		//System.out.println(offy + " " + worldObj.isRemote);
@@ -121,7 +130,6 @@ public class EntityMdBall extends EntityX {
 		}
 		
 		texID = rand.nextInt(state.texs.length);
-		
 		sync();
 	}
 	
