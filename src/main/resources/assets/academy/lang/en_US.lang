@@ -91,12 +91,12 @@ skl_md_mineacc=Expert Mining Ray - Accuracy
 md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 md_minebasic.desc=Generate a weak electron current to help you mine.
 md_scatter.desc=Make a electron group radiate to attack, as the cost, you can't control the impact point accurately.
-md_shield.desc=Make a electron group into a shield, electrons' high-speed movement will damage anything touching you.
-md_meltdown.desc=Generate a special electron beam like lightning, it can destroy enemy with the obstacle. But because of the unstable energy, it can also damage yourself.
-md_mineexpert.desc=After practicing basic mining, you can control your electron current butter and mine better.
-md_barrage.desc=With the scattering semiconductor, you can make electron current like barrage and damage everything around you.
-md_mineluck.desc=Keeping mining or lumbering with your ability can make you do better in destroying the impurities without damaging mineral.
-md_mineacc.desc=Some time destroying lots of impurities will also destroy rare things in the ore. After learning this, you can cut ores accurately and get useful material in them.
+md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
+md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
+md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
+md_barrage.desc=With the supportive semiconductor, you can split your electron current into thousands of rays, and destroy everything in front of you.
+md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
+md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
 #Commands
 aimctrl.presetinf=Preset %s : %s
