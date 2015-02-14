@@ -90,7 +90,7 @@ skl_md_mineacc=Expert Mining Ray - Accuracy
 
 md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 md_minebasic.desc=Generate a weak electron current to help you mine.
-md_scatter.desc=Make a electron group radiate to attack, as the cost, you can't control the impact point accurately.
+md_scatter.desc=Generate multiple electron balls simultaneously. However, the accuracy of aiming will go down.
 md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
 md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
 md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
