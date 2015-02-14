@@ -5,7 +5,7 @@ package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.meltdowner.CatMeltDowner;
-import cn.academy.ability.meltdowner.entity.EntityMdBall;
+import cn.academy.ability.meltdowner.entity.EntityBomb;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
@@ -56,7 +56,7 @@ public class SkillBomb extends SkillBase {
 			if(data.decreaseCP(getConsume(slv, lv))) {
 			
 				if(!isRemote()) {
-					player.worldObj.spawnEntityInWorld(new EntityMdBall(player));
+					player.worldObj.spawnEntityInWorld(new EntityBomb(player, getDamage(slv, lv)));
 				}
 			}
 		}

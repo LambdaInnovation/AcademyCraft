@@ -25,11 +25,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Basic ball class. Implemented a very simple ticked event system.
- * It will automatically follow the player and float around.
+ * It will automatically follow the player and float around.</br>
+ * For better render effects, this class used hacking on positions. Use getPosition() to get real coordinates.
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEntity
+@RegEntity(freq = 2)
 @RegEntity.HasRender
 public class EntityMdBall extends EntityX {
 	
@@ -51,6 +52,10 @@ public class EntityMdBall extends EntityX {
 	boolean load = false;
 	EntityPlayer spawner;
 	double offx, offy, offz;
+	
+	final int timeOffset = rand.nextInt(233333);
+	
+	protected int fadeTime = 10;
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -77,7 +82,7 @@ public class EntityMdBall extends EntityX {
 		offz = (rand.nextBoolean() ? 1 : -1) * GenericUtils.randIntv(0.5, 0.8);
 		addDaemonHandler(new FollowEntity(this, player).setOffset(
 				offx, offy, offz));
-		setPosition(player.posX, player.posY, player.posZ);
+		setPosition(player.posX + offx, player.posY + offy, player.posZ + offz);
 	}
 
 	public EntityMdBall(World world) {
@@ -107,6 +112,7 @@ public class EntityMdBall extends EntityX {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		//System.out.println(posX + " " + worldObj.isRemote);
 		//System.out.println(offy + " " + worldObj.isRemote);
 		List<Callback> res = events.get(ticksExisted);
 		if(res != null) {
@@ -143,8 +149,22 @@ public class EntityMdBall extends EntityX {
 		}
 	}
 	
+	/**
+	 * Get real position for this md ball.
+	 */
+	public double[] getPosition() {
+		if(spawner == null) {
+			return new double[] { posX, posY, posZ };
+		}
+		return new double[] {
+			spawner.posX + offx,
+			spawner.posY + (worldObj.isRemote ? 0 : 1.6) + offy,
+			spawner.posZ + offz
+		};
+	}
+	
 	public ResourceLocation getTexture() {
-		return state.texs[texID];
+		return state.texs[texID % state.texs.length];
 	}
 	
 	public void setState(BallState ns) {
@@ -162,11 +182,23 @@ public class EntityMdBall extends EntityX {
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}
+
+	protected boolean doesFloat() { return true; }
+	
+	protected boolean doesFollow() {
+		return true;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected double getAlpha() {
+		return Math.min(1.0, (double)ticksExisted / fadeTime);
+	}
 	
 	public static interface Callback {
 		void action(EntityMdBall ball);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static class BallRender extends RenderIcon {
 
 		public BallRender() {
@@ -187,17 +219,21 @@ public class EntityMdBall extends EntityX {
 			boolean firstPerson = 
 					Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 
 					&& clientPlayer.equals(ball.spawner);
-			x = ball.offx + (ball.spawner.posX - clientPlayer.posX);
-			y = ball.offy - 1.6  + (ball.spawner.posY - clientPlayer.posY);
-			z = ball.offz  + (ball.spawner.posZ - clientPlayer.posZ);
+			long time = Minecraft.getSystemTime();
+			
+			//position hack
+			if(ball.doesFollow()) {
+				x = ball.offx + (ball.spawner.posX - clientPlayer.posX);
+				y = ball.offy - 1.6  + (ball.spawner.posY - clientPlayer.posY);
+				z = ball.offz  + (ball.spawner.posZ - clientPlayer.posZ);
+			}
+			if(ball.doesFloat()) 
+				y += 0.1 * Math.sin((time - ball.timeOffset) / 700D);
+			
+			icon = ball.getTexture();
+			this.alpha = 0.8 * ball.getAlpha();
 			
 			super.doRender(ent, x, y, z, f, g);
-		}
-		
-		@Override
-		protected void postTranslate(Entity ent) {
-			EntityMdBall ball = (EntityMdBall) ent;
-			this.icon = ball.getTexture();
 		}
 		
 	}
