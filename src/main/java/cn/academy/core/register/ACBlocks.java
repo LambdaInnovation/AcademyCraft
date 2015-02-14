@@ -2,7 +2,7 @@ package cn.academy.core.register;
 
 import cn.academy.core.block.dev.BlockDeveloper;
 import cn.academy.core.block.dev.BlockMagInducer;
-import cn.academy.energy.block.BlockGrid;
+import cn.academy.energy.block.BlockMat;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockSolarGenerator;
 import cn.academy.misc.block.ACOre;
@@ -23,7 +23,7 @@ public class ACBlocks {
 	public static BlockSolarGenerator solarGen;
 	
 	@RegBlock
-	public static BlockGrid grid;
+	public static BlockMat grid;
 	
 	@RegBlock
 	public static BlockNode node;

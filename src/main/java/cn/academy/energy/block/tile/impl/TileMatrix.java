@@ -28,13 +28,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileGrid extends TileNodeBase {
+public class TileMatrix extends TileNodeBase {
 	
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static GridRender render;
 	
-	public TileGrid() {
+	public TileMatrix() {
 		super(100000, 512, 30);
 	}
 	
