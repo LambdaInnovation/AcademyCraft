@@ -46,6 +46,14 @@ public class ACRecipes {
 				'a', ACItems.copperCoil, 'b', ACItems.pcb);
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.grid), "aba", "cdc", "aba",
 				'a', Blocks.glass_pane, 'b', ACItems.pcb, 'c', ACItems.almgPlate, 'd', ACItems.energyCrystal);
+		GameRegistry.addShapelessRecipe(new ItemStack(ACItems.compWood), new ItemStack(Blocks.planks, 3));
+		GameRegistry.addRecipe(new ItemStack(ACItems.expNail, 8), "aba", "bcb", "dad",
+				'a', Items.iron_ingot, 'b', ACItems.compWood, 'c', Items.gunpowder, 'd', Items.slime_ball);
+		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
+				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);
+		GameRegistry.addRecipe(new ItemStack(ACItems.devModule), "aba", "cdc", "efe",
+				'a', ACItems.ioPort, 'b', ACItems.humanMachine, 'c', ACItems.brainBeta, 'd', ACItems.pcb,
+				'e', ACBlocks.node, 'f', ACItems.almgPlate);
 	}
 	
 	public static void regSmelting() {

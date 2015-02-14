@@ -14,23 +14,22 @@ import net.minecraft.item.Item;
  */
 public class ACOre extends Block{
 	
-	String BName;
+	private String bName;
 	
-	public ACOre(String Blockname,int HarvestLevel){
+	public ACOre(String blockName, int harvestLevel) {
 		super(Material.rock);
 		setCreativeTab(AcademyCraft.cct);
-		this.setHarvestLevel("pickaxe", HarvestLevel);
+		this.setHarvestLevel("pickaxe", harvestLevel);
 		setHardness(4.0F);
-		setBlockName(Blockname);
-		setBlockTextureName("academy:" + Blockname);
+		setBlockName(blockName);
+		setBlockTextureName("academy:" + blockName);
 		setStepSound(Block.soundTypePiston);
-		BName = Blockname;
-		
+		bName = blockName;
 	}
 	
 	@Override
 	public Item getItemDropped(int metadata, Random random, int fortune){
-		return getDrop(this, BName);
+		return getDrop(this, bName);
 	}
 	
 	public Item getDrop(Block block, String blockname){

@@ -12,6 +12,7 @@ import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ItemCapsule;
 import cn.academy.misc.item.ItemCoin;
+import cn.academy.misc.item.ItemExpNail;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemTablet;
@@ -44,7 +45,8 @@ public class ACItems {
 		public RendererCoin.ItemRender renderCoin;
 	};
 
-	@RegItem
+	//TODO: Reconfiguration the medicine system.
+/*	@RegItem
 	public static ItemCapsule capsuleA = new ItemCapsule(1);
 	@RegItem
 	public static ItemCapsule capsuleM = new ItemCapsule(2);
@@ -56,7 +58,7 @@ public class ACItems {
 	@RegItem
 	public static ItemTablet tabletM = new ItemTablet(2);
 	@RegItem
-	public static ItemTablet tabletL = new ItemTablet(3);
+	public static ItemTablet tabletL = new ItemTablet(3);*/
 	
 	@RegItem
 	public static ItemNeedle needle;
@@ -157,6 +159,18 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("pcbn")
 	public static ACSimpleItem pcb;
+	
+	@RegItem
+	@RegItem.UTName("cwood")
+	public static ACSimpleItem compWood;
+	
+	@RegItem
+	@RegItem.UTName("exp_nail")
+	public static ItemExpNail expNail;
+	
+	@RegItem
+	@RegItem.UTName("dev_module")
+	public static ACSimpleItem devModule;
 	
 	@RegItem()
 	@RegItem.HasRender
