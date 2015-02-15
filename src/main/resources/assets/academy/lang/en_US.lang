@@ -106,6 +106,8 @@ setting.successful=Setting successful.
 setting.outofbounds=Input out of bounds.
 
 #GUI
+page.adskill=Skill Acquiring
+page.adlevel=Level Upgrading
 page.adlearning=Ability Learning
 ac.notlearned=Not Learned
 ac.machinestat=Stat
