@@ -3,7 +3,7 @@ package cn.academy.api.ench;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Timing-enchantment Parameter
+ * Timing-enchantment Data
  * @author KSkun
  */
 public class EnchData {
@@ -12,7 +12,7 @@ public class EnchData {
 	public int fire;
 	
 	/** Vanish Level (Not in use) */
-	public float vanish;
+//	public float vanish;
 	
 	/** Durability Improvement Level */
 	public float durability;
