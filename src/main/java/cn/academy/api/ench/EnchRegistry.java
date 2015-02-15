@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class EnchRegistry {
 	
-	public static boolean regEnch(EntityPlayer player, int time, EnchData ench) {
+	public static boolean addEnch(EntityPlayer player, int time, EnchData ench) {
 		EnchStatus status = new EnchStatus(player, ench, time);
 		status.lastStack = player.getCurrentEquippedItem();
 		Enchant.client.put(player, status);
@@ -19,7 +19,7 @@ public class EnchRegistry {
 		return true;
 	}
 	
-	public static boolean deleteEnch(EntityPlayer player) {
+	public static boolean stopEnch(EntityPlayer player) {
 		Enchant.client.remove(player);
 		Enchant.server.remove(player);
 		return true;

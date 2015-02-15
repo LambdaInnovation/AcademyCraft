@@ -17,12 +17,12 @@ public class Enchant {
 	public static void ticking(boolean isRemote) {
 		if(isRemote) {
 			for(EnchStatus ench : client.values()) {
-				if(ench.time == 0) EnchRegistry.deleteEnch(ench.player);
+				if(ench.time == 0) EnchRegistry.stopEnch(ench.player);
 				--ench.time;
 			}
 		} else {
 			for(EnchStatus ench : server.values()) {
-				if(ench.time == 0) EnchRegistry.deleteEnch(ench.player);
+				if(ench.time == 0) EnchRegistry.stopEnch(ench.player);
 				--ench.time;
 			}
 		}
