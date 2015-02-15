@@ -10,13 +10,13 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.TileMatrix;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont.Align;
 
 /**
  * The awesome wireless matrix
@@ -61,7 +61,7 @@ public class GuiMatrix extends LIGuiScreen {
 			
 			RenderUtils.bindColor(108, 236, 236);
 			String pct = String.format("%.2f%%", prog * 100);
-			TextUtils.drawText(TextUtils.FONT_YAHEI_32, pct, 52, 122, 7.2f, TrueTypeFont.ALIGN_CENTER);
+			drawText(pct, 52, 122, 7.2f, Align.CENTER);
 		}
 	}
 	
@@ -78,6 +78,14 @@ public class GuiMatrix extends LIGuiScreen {
 		public void execute(GuiMatrix mat) {
 			// TODO Open GUI
 		}
+	}
+	
+	private static void drawText(String text, double x, double y, float size) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
+	}
+	
+	private static void drawText(String text, double x, double y, float size, Align align) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
 	}
 
 }

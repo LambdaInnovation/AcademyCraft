@@ -12,7 +12,6 @@ import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.StateButton;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
 
 /**
  * Generic dialogue window.
@@ -37,7 +36,7 @@ public class DialogueBase extends Widget {
 				dev.DEFAULT_COLOR,
 				{150, 150, 150, 255}
 			});
-			setFont(GuiDeveloper.FONT);
+			setFont(ACClientProps.FONT_YAHEI_32);
 		}
 		
 		@Override
@@ -62,7 +61,7 @@ public class DialogueBase extends Widget {
 				dev.DEFAULT_COLOR,
 				{150, 150, 150, 255}
 			});
-			setFont(GuiDeveloper.FONT);
+			setFont(ACClientProps.FONT_YAHEI_32);
 		}
 		
 		@Override
@@ -105,7 +104,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(GuiDeveloper.FONT, title, 2.5, 1.5, 9);
+		GuiDeveloper.drawText(title, 2.5, 1.5, 9);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

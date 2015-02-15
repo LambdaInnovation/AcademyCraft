@@ -15,13 +15,12 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.draw.GUIObject;
-import cn.liutils.api.draw.tess.Transform;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont;
+import cn.liutils.util.render.LambdaFont.Align;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,6 +38,8 @@ public class GuiMainScreen extends AuxGui {
 	private long lastInactiveTime, lastActiveTime;
 	
 	GUIObject.Tex logoBack, logoRays, logoFrame, logoGeom;
+	
+	private static LambdaFont font = ACClientProps.FONT_YAHEI_32;
 	
 	private GuiMainScreen() {
 		logoBack = new GUIObject.Tex(ACClientProps.TEX_LOGO_BACK, 0, 0, 256, 256, 0, 0, 256, 256);
@@ -134,15 +135,17 @@ public class GuiMainScreen extends AuxGui {
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);
-				TextUtils.drawText(TextUtils.FONT_YAHEI_32, data.getLevel().getDisplayName(), 184, 60, 21);
+				ACClientProps.FONT_YAHEI_32.draw(data.getLevel().getDisplayName(), 184, 60, 21);
 				
 				//Numeric CP
 				String str = String.format("%.0f/%.0f", data.getCurrentCP(), data.getMaxCP());
-				TextUtils.drawText(TextUtils.FONT_YAHEI_32, str, 316, 88, 25, TrueTypeFont.ALIGN_CENTER);
+				font.draw(str, 316, 88, 25, Align.CENTER);
 			}
 		} GL11.glPopMatrix();
 		RenderUtils.bindIdentity();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
+	
+	
 
 }

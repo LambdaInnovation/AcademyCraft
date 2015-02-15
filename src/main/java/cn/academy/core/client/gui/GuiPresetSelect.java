@@ -18,18 +18,19 @@ import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
+import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
-import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.api.register.Configurable;
 import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
+import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
+import cn.liutils.util.render.LambdaFont.Align;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -160,7 +161,7 @@ public class GuiPresetSelect extends AuxGui {
 			//text
 			GL11.glDepthFunc(GL11.GL_GEQUAL);
 			GL11.glColor4d(1, 1, 1, prog);
-			TextUtils.drawText(TextUtils.FONT_YAHEI_32, "Preset Selection", x0 + tx + 5, y0 + ty + 1.7, 10);
+			drawText("Preset Selection", x0 + tx + 5, y0 + ty + 1.7, 10);
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 		} GL11.glPopMatrix();
 	}
@@ -189,9 +190,7 @@ public class GuiPresetSelect extends AuxGui {
 				//Text
 				String name = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(i));
 				float font_size = 10F;
-				double len = TextUtils.getWidth(TextUtils.FONT_YAHEI_32, name, font_size);
-				TextUtils.drawText(TextUtils.FONT_YAHEI_32, name, 
-						x0 + tx + cx + step / 2 - len / 2 + 3, y0 + ty + 4, font_size);
+				drawText(name, x0 + tx + cx + step / 2 + 3, y0 + ty + 4, font_size, Align.CENTER);
 				
 				//Ability Logo
 				{
@@ -242,7 +241,7 @@ public class GuiPresetSelect extends AuxGui {
 			Preset pr = EventHandlerClient.getPresetManager().getPreset(i);
 			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.9); //Linear brightening effect
 			GL11.glDisable(GL11.GL_CULL_FACE);
-			TextUtils.drawText(TextUtils.FONT_YAHEI_32, ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 7);
+			drawText(ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 7);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -262,4 +261,11 @@ public class GuiPresetSelect extends AuxGui {
 		return true;
 	}
 	
+	private void drawText(String text, double x, double y, float size) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
+	}
+	
+	private void drawText(String text, double x, double y, float size, Align align) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+	}
 }

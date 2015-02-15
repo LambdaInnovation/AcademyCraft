@@ -48,7 +48,7 @@ public class PageLearn extends DevSubpage {
 				if(!isFirst && isMaxLevel) {
 					this.setInvalid(true); //Unable to upgrade
 				}
-				this.setFont(GuiDeveloper.FONT);
+				this.setFont(ACClientProps.FONT_YAHEI_32);
 				this.setText(isFirst ? ACLangs.learnAbility() : ACLangs.upgradeLevel());
 				this.setTextData(8, new int[][] {
 					base.DEFAULT_COLOR,

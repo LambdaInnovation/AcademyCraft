@@ -3,17 +3,13 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
-import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
 
 /**
  * @author WeathFolD
@@ -108,7 +104,7 @@ public class DiagStimulate extends DialogueBase {
 		
 		//StimFails
 		RenderUtils.bindColor(ERROR_COLOR);
-		double len = TextUtils.getWidth(GuiDeveloper.FONT, text, 6);
+		double len = GuiDeveloper.strLen(text, 6);
 		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
 		dev.drawText(text, 6 + len, 31, 6);
 		

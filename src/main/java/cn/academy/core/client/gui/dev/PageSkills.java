@@ -3,7 +3,6 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -26,8 +25,6 @@ import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
 
 /**
  * @author WeathFolD
@@ -57,7 +54,6 @@ public class PageSkills extends DevSubpage {
 			long time = Minecraft.getSystemTime();
 			
 			WidgetNode top = getGui().getTopNode(mx, my);
-			TrueTypeFont font = GuiDeveloper.FONT;
 			if(top != null && top.widget instanceof SkillList.SkillElement) {
 				String str = ((SkillList.SkillElement)top.widget).skill.getDescription();
 				List<String> todraw = GenericUtils.chopString(str, MAXCHARS);
@@ -70,7 +66,7 @@ public class PageSkills extends DevSubpage {
 				double slen = 0.0;
 				for(int i = 0; i < todraw.size(); ++i) {
 					String tmp = todraw.get(i);
-					slen = Math.max(slen, TextUtils.getWidth(font, tmp, FONT_SIZE));
+					slen = Math.max(slen, GuiDeveloper.strLen(tmp, FONT_SIZE));
 				}
 				
 				final double SIDE = 10, TOP = 5;
@@ -88,7 +84,7 @@ public class PageSkills extends DevSubpage {
 				
 				//description
 				for(int i = 0; i < todraw.size(); ++i) {
-					TextUtils.drawText(font, todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
+					GuiDeveloper.drawText(todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
 				}
 			} else{
 				lastDeac = time;
@@ -162,7 +158,7 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				TextUtils.drawText(GuiDeveloper.FONT, text, 30, 5.5, 9);
+				GuiDeveloper.drawText(text, 30, 5.5, 9);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
@@ -273,7 +269,7 @@ public class PageSkills extends DevSubpage {
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(base.DEFAULT_COLOR);
-		TextUtils.drawText(GuiDeveloper.FONT, str, 5, 135, 8);
+		GuiDeveloper.drawText(str, 5, 135, 8);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 

@@ -11,8 +11,7 @@ import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont.Align;
 
 /**
  * @author WeathFolD
@@ -59,12 +58,11 @@ public class DiagActionConfirm extends DialogueBase {
 	@Override
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
-		TrueTypeFont font = GuiDeveloper.FONT;
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(font, ACLangs.confirmHead(), 57.5, 15, 7, TrueTypeFont.ALIGN_CENTER);
-		TextUtils.drawText(font, ACLangs.confirmTail(), 57.5, 35.5, 7, TrueTypeFont.ALIGN_CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 7, Align.CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 7, Align.CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		TextUtils.drawText(font, devAction.getActionInfo(dev.data), 57.5, 24, 9, TrueTypeFont.ALIGN_CENTER);
+		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 9, Align.CENTER);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	
