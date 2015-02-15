@@ -3,10 +3,10 @@ package cn.academy.api.ench;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Timing-enchantment Data
+ * Timing-enchantment Parameter
  * @author KSkun
  */
-public abstract class IEnch {
+public class EnchData {
 	
 	/** Fire Level */
 	public int fire;
