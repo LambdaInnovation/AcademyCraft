@@ -107,7 +107,7 @@ public class EntityThrowingCoin extends EntityX {
 						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
 				}
 			}
-		});
+		}.addExclusion(player));
 		this.addDaemonHandler(new VelocityUpdate(this));
 		this.ignoreFrustumCheck = true;
 	}
