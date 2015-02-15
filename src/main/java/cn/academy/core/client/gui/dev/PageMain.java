@@ -18,8 +18,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont.Align;
 
 public class PageMain extends Widget {
 
@@ -70,8 +69,8 @@ public class PageMain extends Widget {
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		TextUtils.drawText(GuiDeveloper.FONT, pname,
-				TITLE_CENTER_X, TITLE_CENTER_Y, 12, TrueTypeFont.ALIGN_CENTER);
+		GuiDeveloper.drawText(pname,
+				TITLE_CENTER_X, TITLE_CENTER_Y, 12, Align.CENTER);
 		
 		//Titles
 		dev.drawText(ACLangs.holoView(), 147, 20.5, 10);
@@ -92,8 +91,8 @@ public class PageMain extends Widget {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
 			//Cat and level
-			TextUtils.drawText(GuiDeveloper.FONT, cat.getDisplayName(), 167.5, 130, 11);
-			TextUtils.drawText(GuiDeveloper.FONT, data.getLevel().getDisplayName(), 167.5, 140, 8);
+			GuiDeveloper.drawText(cat.getDisplayName(), 167.5, 130, 11);
+			GuiDeveloper.drawText(data.getLevel().getDisplayName(), 167.5, 140, 8);
 			//Progress Bar
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
 			//CP
@@ -105,7 +104,7 @@ public class PageMain extends Widget {
 			HudUtils.drawRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
-			TextUtils.drawText(GuiDeveloper.FONT, ACLangs.notLearned(), 167.5, 130, 10);
+			GuiDeveloper.drawText(ACLangs.notLearned(), 167.5, 130, 10);
 		}
 		RenderUtils.loadTexture(logo);
 		HudUtils.drawRect(148.5, 130.5, 15.5, 15.5);

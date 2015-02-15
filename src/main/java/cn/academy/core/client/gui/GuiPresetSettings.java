@@ -39,8 +39,7 @@ import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont.Align;
 
 /**
  * @author WeAthFolD
@@ -150,7 +149,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				double tx = WIDTH / 2, ty = 4;
 				RenderUtils.bindGray(.8, .8);
 				String str = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(id));
-				drawText(str, STEP / 2, ty, 8, TrueTypeFont.ALIGN_CENTER);
+				drawText(str, STEP / 2, ty, 8, Align.CENTER);
 				
 				tx = 2.5;
 				ty = 20;
@@ -216,8 +215,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 				GL11.glColor4f(color, color, color, 0.9F);
 				String translated = StatCollector.translateToLocal(name);
 				drawText(translated,
-						WIDTH / 2 - TextUtils.getWidth(TextUtils.FONT_YAHEI_32, translated, fsize) / 2,
-						HEIGHT / 2 - TextUtils.getHeight(TextUtils.FONT_YAHEI_32, translated, fsize) / 2, fsize);
+						WIDTH / 2,
+						HEIGHT / 2, 
+						fsize, 
+						Align.CENTER);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			
@@ -269,7 +270,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 			
 			//page text
 			RenderUtils.bindGray(.8, .8);
-			drawText(ACLangs.presetSettings(), 130, 2.8, 7.5F, TrueTypeFont.ALIGN_RIGHT);
+			drawText(ACLangs.presetSettings(), 130, 2.8, 7.5F, Align.RIGHT);
 		}
 		
 	}
@@ -322,7 +323,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				if(mouseHovering) {
 					String tit = skill.getDisplayName();
 					RenderUtils.bindGray(.7, .8);
-					drawText(tit, WIDTH / 2, 32, 8, TrueTypeFont.ALIGN_CENTER);
+					drawText(tit, WIDTH / 2, 32, 8, Align.CENTER);
 				}
 			}
 			
@@ -383,11 +384,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 	}
 	
 	private void drawText(String text, double x, double y, float size) {
-		TextUtils.drawText(TextUtils.FONT_YAHEI_32, text, x, y, size);
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
 	}
 	
-	private void drawText(String text, double x, double y, float size, int format) {
-		TextUtils.drawText(TextUtils.FONT_YAHEI_32, text, x, y, size, format);
+	private void drawText(String text, double x, double y, float size, Align align) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
 	}
 	
 }

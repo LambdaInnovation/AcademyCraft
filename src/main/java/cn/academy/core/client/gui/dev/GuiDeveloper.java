@@ -7,22 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.dev.MsgDismount;
 import cn.academy.core.block.dev.TileDeveloper;
-import cn.liutils.api.draw.tess.GUIRect;
-import cn.liutils.api.draw.tess.RectMapping;
+import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
-import cn.liutils.api.gui.Widget;
 import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.TextUtils;
-import cn.liutils.util.render.TrueTypeFont;
+import cn.liutils.util.render.LambdaFont.Align;
 
 /**
  * Main class of Developer GUI.
@@ -39,8 +33,6 @@ public class GuiDeveloper extends LIGuiScreen {
 		DEFAULT_COLOR = {48, 155, 190},
 		EXP_INDI_COLOR = { 161, 199, 152 },
 		EU_INDI_COLOR = { 234, 84, 44 };
-	
-	public static final TrueTypeFont FONT = TextUtils.FONT_YAHEI_32;
 
 	//States
 	int pageID;
@@ -103,8 +95,15 @@ public class GuiDeveloper extends LIGuiScreen {
     }
 	
 	public static void drawText(String text, double x, double y, float size) {
-		TextUtils.drawText(FONT, text, x, y, size);
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
 	}
 	
+	public static void drawText(String text, double x, double y, float size, Align align) {
+		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+	}
+	
+	public static double strLen(String text, double size) {
+		return ACClientProps.FONT_YAHEI_32.getWidth(text, size);
+	}
 	
 }

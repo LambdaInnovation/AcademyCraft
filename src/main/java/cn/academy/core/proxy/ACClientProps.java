@@ -3,6 +3,7 @@
  */
 package cn.academy.core.proxy;
 
+import cn.liutils.util.render.LambdaFont;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
@@ -41,6 +42,8 @@ public class ACClientProps {
 		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png"),
 		TEX_LOGO_GEOM = src("academy:textures/guis/logo_geom.png"),
 		TEX_LOGO_BACK = src("academy:textures/guis/logo_back.png");
+	
+	public static final LambdaFont FONT_YAHEI_32 = new LambdaFont(src("academy:fonts/yahei.png"), "/assets/academy/fonts/yahei.lf");
 	
 	//Ability Textures
 	public static final ResourceLocation
