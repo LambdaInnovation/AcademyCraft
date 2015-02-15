@@ -10,6 +10,10 @@ import net.minecraft.util.StatCollector;
  * @author WeathFolD
  */
 public class ACLangs {
+	
+	public static String notConnected() {
+		return local("ac.notconnected");
+	}
 
 	public static String presetPrefix() {
 		return local("ac.preset");
