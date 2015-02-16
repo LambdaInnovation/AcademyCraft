@@ -11,6 +11,10 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String loading() {
+		return local("ac.loading");
+	}
+	
 	public static String notConnected() {
 		return local("ac.notconnected");
 	}
@@ -129,6 +133,10 @@ public class ACLangs {
 	
 	public static String chooseSkill() {
 		return local("prs.chooseskl");
+	}
+	
+	public static String matInit() {
+		return local("ac.matinit");
 	}
 	
 	private static String local(String str) {

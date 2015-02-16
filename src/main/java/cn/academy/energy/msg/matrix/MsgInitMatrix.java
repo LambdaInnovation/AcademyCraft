@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.energy.msg.node;
+package cn.academy.energy.msg.matrix;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -105,7 +105,7 @@ public class MsgInitMatrix implements IMessage {
 				GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 				if(gui instanceof GuiMatrix) {
 					GuiMatrix mat = (GuiMatrix) gui;
-					mat.events.add(new GuiMatrix.InitReply(msg.successful));
+					//mat.events.add(new GuiMatrix.InitReply(msg.successful));
 				} else {
 					//Possibly closed by player, ignore
 				}

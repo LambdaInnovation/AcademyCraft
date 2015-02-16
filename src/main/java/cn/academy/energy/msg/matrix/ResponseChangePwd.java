@@ -1,4 +1,4 @@
-package cn.academy.energy.msg.node;
+package cn.academy.energy.msg.matrix;
 
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
