@@ -302,7 +302,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		if(player.capabilities.isCreativeMode) {
 			return true;
 		}
-		boolean ret = currentCP < need;
+		boolean ret = currentCP >= need;
 		if(!force && !ret)
 			return false;
 		setCurrentCP(ret ? currentCP - need : 0);

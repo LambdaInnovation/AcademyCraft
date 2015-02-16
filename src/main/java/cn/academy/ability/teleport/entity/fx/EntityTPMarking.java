@@ -49,6 +49,7 @@ public abstract class EntityTPMarking extends EntityX {
 		data = AbilityDataMain.getData(player);
 		this.player = player;
 		updatePos();
+		this.ignoreFrustumCheck = true;
 	}
 	
 	@Override

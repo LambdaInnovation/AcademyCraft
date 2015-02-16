@@ -1,6 +1,7 @@
 package cn.academy.ability.teleport.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cn.academy.ability.teleport.CatTeleport;
 import cn.academy.ability.teleport.entity.fx.EntityTPMarking;
 import cn.academy.api.ability.SkillBase;
@@ -9,8 +10,6 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Marked tele skill
@@ -78,10 +77,16 @@ public class SkillMarkTele extends SkillBase {
 
 		@Override
 		public void onFinish() {
-			player.setPosition(mark.posX, mark.posY, mark.posZ);
-			player.motionX = player.motionZ = player.motionY = 0;
+			//player.motionX = player.motionZ = player.motionY = 0;
 			double dist = mark.getDist();
 			//Here we ignore the slight variation and believe that we will always success
+			if(player instanceof EntityPlayerMP) {
+				((EntityPlayerMP)player).setPositionAndUpdate(mark.posX, mark.posY, mark.posZ);
+			} else {
+				player.setPosition(mark.posX, mark.posY, mark.posZ);
+			}
+			player.fallDistance = 0.0f;
+			
 			data.decreaseCP((float) 
 				(dist * getConsumePerBlock(
 				data.getSkillLevel(CatTeleport.skillMarkedTele), 
