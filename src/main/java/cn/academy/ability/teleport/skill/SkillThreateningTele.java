@@ -25,7 +25,7 @@ public class SkillThreateningTele extends SkillBase {
 
 	public SkillThreateningTele() {
 		instance = this;
-		setLogo("teleport/threatening.png");
+		setLogo("tp/threatening.png");
 		setName("tp_threatening");
 	}
 

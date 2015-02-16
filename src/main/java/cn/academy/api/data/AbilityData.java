@@ -295,13 +295,18 @@ public class AbilityData implements IExtendedEntityProperties {
 	 * @return if decrease action is successful
 	 */
 	public boolean decreaseCP(float need) {
+		return decreaseCP(need, false);
+	}
+	
+	public boolean decreaseCP(float need, boolean force) {
 		if(player.capabilities.isCreativeMode) {
 			return true;
 		}
-		
-		if (currentCP < need) return false;
-		setCurrentCP(currentCP - need);
-		return true;
+		boolean ret = currentCP < need;
+		if(!force && !ret)
+			return false;
+		setCurrentCP(ret ? currentCP - need : 0);
+		return ret;
 	}
 
 	private float getRecoverRate() {
