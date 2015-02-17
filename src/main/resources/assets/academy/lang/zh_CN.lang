@@ -1,4 +1,4 @@
-#中文语言文件 2015/2/14 调试版本
+#中文语言文件 调试版本
 #Items
 item.void.name=
 item.ac_logo.name=
@@ -9,26 +9,26 @@ item.ac_coin.name=游戏币
 item.ac_needle.name=钢针
 item.ac_energycrystal.name=能源水晶
 item.ad_card.name=电力扩展卡
-item.aluminumingot=铝锭
-item.copperingot.name=铜锭
+item.al_ingot.name=铝锭
+item.cu_ingot.name=铜锭
 item.steelingot.name=钢锭
 item.tiningot.name=锡锭
-item.siliconrod.name=硅锭
-item.coppercoil.name=线圈
+item.ac_siliconrod.name=硅锭
+item.ac_coppercoil.name=线圈
 item.ni_ingot.name=镍锭
 item.mg_plate.name=镁锭
 item.almg_plate.name=铝镁合金板
 item.al_plate.name=铝板
 item.mg_ingot.name=镁板
-item.pcbn.name=初级电路板
-item.human_machine.name=人体状态探测器
-item.io.name=I/O接口
-item.brainbeta.name=脑波谐振装置β
-item.crystal.name=晶化岩
+item.ac_pcbn.name=初级电路板
+item.ac_bodydet.name=人体状态探测器
+item.ac_io.name=I/O接口
+item.ac_brainbeta.name=脑波谐振装置β
+item.ac_crystal.name=晶化岩
 item.shadow_ingot.name=影子金属锭
-item.cwood.name=复合木板
-item.exp_nail.name=粘性膨胀钉
-item.dev_module.name=开发休眠舱
+item.ac_cplank.name=复合木板
+item.ac_exp_nail.name=粘性膨胀钉
+item.ac_aimcell.name=开发休眠舱
 
 #Blocks
 tile.ac_developer.name=能力开发机
@@ -90,6 +90,9 @@ setting.successful=设置成功。
 setting.outofbounds=输入信息溢出。
 
 #GUI
+page.adskill=技能学习
+page.adlevel=等级提升
+page.adlearning=能力学习
 ac.notlearned=未习得
 ac.machinestat=状态
 ac.curenergy=当前电力
