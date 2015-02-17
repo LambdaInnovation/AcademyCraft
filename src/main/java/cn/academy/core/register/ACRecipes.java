@@ -55,7 +55,7 @@ public class ACRecipes {
 				'a', Items.iron_ingot, 'b', ACItems.compPlank, 'c', Items.gunpowder, 'd', Items.slime_ball);
 		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
 				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);
-		GameRegistry.addRecipe(new ItemStack(ACItems.aimCell), "aba", "cdc", "efe",
+		GameRegistry.addRecipe(new ItemStack(ACBlocks.developer), "aba", "cdc", "efe",
 				'a', ACItems.ioPort, 'b', ACItems.bodyDet, 'c', ACItems.brainBeta, 'd', ACItems.pcb,
 				'e', ACBlocks.node, 'f', ACItems.almgPlate);
 	}

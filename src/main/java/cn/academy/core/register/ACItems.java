@@ -168,10 +168,6 @@ public class ACItems {
 	@RegItem.UTName("ac_exp_nail")
 	public static ItemExpNail expNail;
 	
-	@RegItem
-	@RegItem.UTName("ac_aimcell")
-	public static ACSimpleItem aimCell;
-	
 	@RegItem()
 	@RegItem.HasRender
 	@RegWithName("ac_void")

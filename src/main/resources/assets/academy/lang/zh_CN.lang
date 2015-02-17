@@ -28,7 +28,6 @@ item.ac_crystal.name=晶化岩
 item.shadow_ingot.name=影子金属锭
 item.ac_cplank.name=复合木板
 item.ac_exp_nail.name=粘性膨胀钉
-item.ac_aimcell.name=开发休眠舱
 
 #Blocks
 tile.ac_developer.name=能力开发机
