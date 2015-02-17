@@ -51,7 +51,7 @@ public abstract class TileWirelessBase extends TileEntity implements
     }
     
     public boolean isConnected() {
-    	return connected;
+    	return channel != null && WirelessSystem.isTileIn(this, channel);
     }
     
     protected void setConnected(String _channel) {

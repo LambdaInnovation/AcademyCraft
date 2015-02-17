@@ -3,7 +3,7 @@ package cn.academy.ability.teleport.skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import cn.academy.ability.teleport.CatTeleport;
-import cn.academy.ability.teleport.entity.fx.EntityTPMarking;
+import cn.academy.ability.teleport.entity.EntityTPMarking;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
@@ -86,6 +86,7 @@ public class SkillMarkTele extends SkillBase {
 				player.setPosition(mark.posX, mark.posY, mark.posZ);
 			}
 			player.fallDistance = 0.0f;
+			player.playSound("academy:tp.tp", 1.0f, 1.0f);
 			
 			data.decreaseCP((float) 
 				(dist * getConsumePerBlock(

@@ -29,14 +29,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class MsgInitMatrix implements IMessage {
 
 	int x, y, z;
-	String channel;
+	String channel, pwd;
 	
-	public MsgInitMatrix(IWirelessNode mat, String chan) {
+	public MsgInitMatrix(IWirelessNode mat, String chan, String _pwd) {
 		TileEntity te = (TileEntity) mat;
 		x = te.xCoord;
 		y = te.yCoord;
 		z = te.zCoord;
 		channel = chan;
+		pwd = _pwd;
 	}
 	
 	public MsgInitMatrix() {}
@@ -67,6 +68,7 @@ public class MsgInitMatrix implements IMessage {
 					return new Reply(false);
 				}
 				WirelessSystem.registerNode((IWirelessNode) te, msg.channel);
+				WirelessSystem.setPassword(world, msg.channel, msg.pwd);
 				return new Reply(true);
 			}
 			AcademyCraft.log.error("Invalid node position while init matrix");
@@ -101,11 +103,10 @@ public class MsgInitMatrix implements IMessage {
 			@Override
 			@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
 			public IMessage onMessage(Reply msg, MessageContext ctx) {
-				//TODO: Check the gui and set the state.
 				GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 				if(gui instanceof GuiMatrix) {
 					GuiMatrix mat = (GuiMatrix) gui;
-					//mat.events.add(new GuiMatrix.InitReply(msg.successful));
+					mat.executeEvent(new GuiMatrix.InitReply(msg.successful));
 				} else {
 					//Possibly closed by player, ignore
 				}

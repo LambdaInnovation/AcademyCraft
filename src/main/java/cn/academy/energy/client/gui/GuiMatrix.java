@@ -1,4 +1,5 @@
 /**
+
  * 
  */
 package cn.academy.energy.client.gui;
@@ -13,6 +14,7 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.TileMatrix;
 import cn.academy.energy.msg.matrix.MsgGuiLoadQuery;
+import cn.academy.energy.msg.matrix.MsgInitMatrix;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.InputBox;
@@ -30,9 +32,21 @@ public class GuiMatrix extends LIGuiScreen {
 		TEX = new ResourceLocation("academy:textures/guis/wireless_mat.png"),
 		TEX_DIAG = new ResourceLocation("academy:textures/guis/wireless_dialogue.png");
 	
+	enum DiagState { 
+		LOADING(279, 95), FAIL(253, 95), SUCCESS(220, 95);
+		DiagState(int _u, int _v) {
+			u = _u;
+			v = _v;
+		}
+		public final int u, v;
+	};
+	
 	PageMain pageMain;
+	StateDiag stateDiag; //Current state dialogue, not necessarily alive all the time
+	final TileMatrix mat;
 
-	public GuiMatrix(TileMatrix mat) {
+	public GuiMatrix(TileMatrix _mat) {
+		mat = _mat;
 		AcademyCraft.netHandler.sendToServer(new MsgGuiLoadQuery(mat));
 	}
 	
@@ -118,25 +132,33 @@ public class GuiMatrix extends LIGuiScreen {
 		}
 		
 		@Override
-		public void onAdded() {
-			mat.pageMain.doesListenKey = false;
-		}
-		
-		public void dispose() {
-			mat.pageMain.doesListenKey = true;
-			super.dispose();
-		}
-		
-		@Override
 		public void draw(double mx, double my, boolean b) {
 			drawBlackout();
 			super.draw(mx, my, b);
 		}
 	}
 	
+	static class WigOK extends Widget {
+		{
+			setSize(10.5, 10.5);
+			initTexDraw(TEX_DIAG, 220, 95, 21, 21);
+		}
+	}
+	
+	static class WigBad extends Widget {
+		{
+			setSize(10.5, 10.5);
+			initTexDraw(TEX_DIAG, 253, 95, 21, 21);
+		}
+	}
+	
 	static class PageInit extends Dialogue {
 		
 		InputBox ssid, pwd, pwd2;
+		
+		static final long TIME_WAIT = 1500;
+		String errStr;
+		long lastTime;
 
 		public PageInit(GuiMatrix _mat) {
 			super(_mat);
@@ -145,27 +167,29 @@ public class GuiMatrix extends LIGuiScreen {
 		@Override
 		public void onAdded() {
 			//Confirm button
-			addWidget(new Widget() {
+			addWidget(new WigOK() {
 				{
-					setSize(10.5, 10.5);
 					setPos(26, 73);
-					initTexDraw(TEX_DIAG, 220, 95, 21, 21);
 				}
-				
 				@Override
 				public void onMouseDown(double mx, double my) {
 					//VALIDATION
-					
-					//Close or continue
+					if(!pwd.getContent().equals(pwd2.getContent())) {
+						setErrMessage(ACLangs.inconsistentPass());
+						return;
+					}
+					AcademyCraft.netHandler.sendToServer(
+						new MsgInitMatrix(mat.mat, 
+						ssid.getContent(), pwd.getContent()));
+					PageInit.this.dispose();
+					mat.gui.addWidget(mat.stateDiag = new StateDiag(mat));
 				}
 			});
 			
 			//Abort button
-			addWidget(new Widget() {
+			addWidget(new WigBad() {
 				{
-					setSize(10.5, 10.5);
 					setPos(69, 73);
-					initTexDraw(TEX_DIAG, 253, 95, 21, 21);
 				}
 				
 				@Override
@@ -194,6 +218,70 @@ public class GuiMatrix extends LIGuiScreen {
 			//input elements
 			RenderUtils.loadTexture(TEX_DIAG);
 			HudUtils.drawRect(11, 24, 23, 202, 86, 38.5, 172, 77);
+			
+			if(errStr != null) {
+				long time = Minecraft.getSystemTime();
+				GL11.glColor4d(1, 0.2, 0.2, 0.8);
+				drawText(errStr, 12, 63, 5.5);
+				if(time - lastTime > TIME_WAIT) {
+					errStr = null;
+				}
+			}
+			RenderUtils.bindIdentity();
+		}
+		
+		private void setErrMessage(String msg) {
+			this.errStr = msg;
+			this.lastTime = Minecraft.getSystemTime();
+		}
+		
+	}
+	
+	static class StateDiag extends Dialogue {
+		
+		private DiagState state = DiagState.LOADING;
+		public String msg = ACLangs.transmitting();
+
+		public StateDiag(GuiMatrix _mat) {
+			super(_mat);
+		}
+		
+		@Override
+		public void draw(double mx, double my, boolean h) {
+			super.draw(mx, my, h);
+			
+			GL11.glColor4d(0.3, 1, 1, 0.8);
+			drawText(ACLangs.opStatus(), 54, 10, 7.5, Align.CENTER);
+			
+			GL11.glColor4d(1, 1, 1, 1);
+			RenderUtils.loadTexture(TEX_DIAG);
+			
+			HudUtils.drawRect(49, 36, state.u, state.v, 10.5, 10.5, 21, 21);
+			
+			GL11.glColor4d(1, 1, 1, 0.5);
+			GL11.glPushMatrix(); {
+				GL11.glTranslated(54, 41, 0);
+				GL11.glRotated(Minecraft.getSystemTime() / 200D, 0, 0, 1);
+				//GL11.glRotated(0, 0, 0, 1);
+				final double wid = 24.5, hi = 28.5;
+				HudUtils.drawRect(-wid / 2, -hi / 2, 226, 36, wid, hi, wid * 2, hi * 2);
+			} GL11.glPopMatrix();
+			
+			GL11.glColor4d(0, 1, 1, 0.8);
+			drawText(msg, 53, 60, 6, Align.CENTER);
+			RenderUtils.bindIdentity();
+		}
+		
+		public void initCancel() {
+			addWidget(new WigOK() {
+				{
+					setPos(49, 72);
+				}
+				@Override
+				public void onMouseDown(double mx, double my) {
+					Minecraft.getMinecraft().thePlayer.closeScreen();
+				}
+			});
 		}
 		
 	}
@@ -213,7 +301,14 @@ public class GuiMatrix extends LIGuiScreen {
 		}
 		@Override
 		public void execute(GuiMatrix mat) {
-			// TODO Open GUI
+			if(successful) {
+				mat.stateDiag.msg = ACLangs.opSuccessful();
+				mat.stateDiag.state = DiagState.SUCCESS;
+			} else {
+				mat.stateDiag.msg = ACLangs.channelExists();
+				mat.stateDiag.state = DiagState.FAIL;
+			}
+			mat.stateDiag.initCancel();
 		}
 	}
 	
@@ -238,11 +333,11 @@ public class GuiMatrix extends LIGuiScreen {
 		
 	}
 	
-	private static void drawText(String text, double x, double y, float size) {
+	private static void drawText(String text, double x, double y, double size) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
 	}
 	
-	private static void drawText(String text, double x, double y, float size, Align align) {
+	private static void drawText(String text, double x, double y, double size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
 	}
 

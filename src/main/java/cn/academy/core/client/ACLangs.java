@@ -11,6 +11,26 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String opSuccessful() {
+		return local("ac.opsuc");
+	}
+	
+	public static String channelExists() {
+		return local("ac.cnnexist");
+	}
+	
+	public static String opStatus() {
+		return local("ac.opstat");
+	}
+	
+	public static String transmitting() {
+		return local("ac.transmitting");
+	}
+	
+	public static String inconsistentPass() {
+		return local("ac.inconsistentpass");
+	}
+	
 	public static String loading() {
 		return local("ac.loading");
 	}

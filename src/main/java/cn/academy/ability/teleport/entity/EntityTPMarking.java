@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.ability.teleport.entity.fx;
+package cn.academy.ability.teleport.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.OpenGlHelper;

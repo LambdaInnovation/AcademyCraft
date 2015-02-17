@@ -167,6 +167,7 @@ public class WiWorldData {
 		String chan = lookup.remove(tile);
 		if(chan == null) {
 			AcademyCraft.log.error("Trying to unregister a non-present tile " + tile);
+			return;
 		}
 		WirelessNetwork net = netMap.get(chan);
 		net.unregister(tile);
@@ -197,8 +198,10 @@ public class WiWorldData {
 	
 	public void onTick() {
 		Iterator<Map.Entry<String, WirelessNetwork>> iter = netMap.entrySet().iterator();
+		//System.out.println("---");
 		while(iter.hasNext()) {
 			WirelessNetwork net = iter.next().getValue();
+			System.out.println(net.channel);
 			if(net.dead) {
 				net.onTick();
 				for(NodeConns conn : net.conns.values()) {
@@ -217,6 +220,7 @@ public class WiWorldData {
 				iter.remove();
 			}
 		}
+		//System.out.println("---");
 	}
 
 }
