@@ -61,7 +61,7 @@ public class ACRecipes {
 	}
 	
 	public static void regSmelting() {
-//		GameRegistry.addSmelting(new ItemStack(Blocks.glass, 3), new ItemStack(ACItems.siliconRod), 0f);
+		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.siliconRod), 0f);
 		//Ore Smelting
 		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
