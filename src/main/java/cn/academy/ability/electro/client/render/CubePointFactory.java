@@ -44,10 +44,7 @@ public class CubePointFactory implements IPointFactory {
 	private static final Random RNG = new Random();
 
 	public CubePointFactory(double _w, double _h, double _l) {
-		w = _w;
-		h = _h;
-		l = _l;
-		bake();
+		setSize(_w, _h, _l);
 	}
 	
 	public void setEnableFaces(Integer... faces) {
@@ -55,6 +52,13 @@ public class CubePointFactory implements IPointFactory {
 			throw new RuntimeException("No face to generate");
 		available.clear();
 		available.addAll(Arrays.asList(faces));
+		bake();
+	}
+	
+	public void setSize(double _w, double _h, double _l) {
+		w = _w;
+		h = _h;
+		l = _l;
 		bake();
 	}
 	

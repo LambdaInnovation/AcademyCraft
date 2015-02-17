@@ -33,7 +33,7 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 
 	@Override
 	public void setEnergy(double value) {
-		energy = value;
+		energy = Math.max(0, Math.min(maxEnergy, value));
 	}
 
 	@Override

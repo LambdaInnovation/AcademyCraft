@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.academy.energy.block.container.ContainerNode;
+import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.client.gui.GuiNode;
 import cn.annoreg.core.RegistrationClass;

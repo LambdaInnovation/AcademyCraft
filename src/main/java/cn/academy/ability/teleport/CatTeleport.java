@@ -1,22 +1,19 @@
 package cn.academy.ability.teleport;
 
-import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.ability.teleport.skill.SkillBrainTrainingCourse;
-import cn.academy.ability.teleport.skill.SkillBrainTrainingCourse2;
+import cn.academy.ability.generic.skill.SkillBrainTrainingCourse;
+import cn.academy.ability.generic.skill.SkillBrainTrainingCourse2;
+import cn.academy.ability.generic.skill.SkillSpiritTrainingCourse;
 import cn.academy.ability.teleport.skill.SkillHighSpeedTele;
 import cn.academy.ability.teleport.skill.SkillLocatingTele;
 import cn.academy.ability.teleport.skill.SkillMarkTele;
 import cn.academy.ability.teleport.skill.SkillPenetrateTele;
-import cn.academy.ability.teleport.skill.SkillSpiritTrainingCourse;
 import cn.academy.ability.teleport.skill.SkillStringTheory;
 import cn.academy.ability.teleport.skill.SkillThreateningTele;
 import cn.academy.ability.teleport.skill.SkillViscusStripping;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.core.proxy.ACClientProps;
+import cn.academy.api.data.AbilityData;
 import cn.academy.core.register.AbilityRegistration.RegAbility;
 import cn.annoreg.core.RegistrationClass;
 
@@ -71,12 +68,27 @@ public class CatTeleport extends Category {
 				skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
 		this.addSkill(
 				skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
-		// this.addSkill(skillDangerTele = new SkillDangerTele(), 0);
-		// this.addSkill(skill, 0);
+		
+		this.setLogo("tp/main.png");
 	}
 
 	@Override
 	public String getInternalName() {
 		return "teleport";
+	}
+	
+	//Static util functions
+	/**
+	 * Get the level of two string theorys' sum. Used in both error calculation and CP consumption.
+	 */
+	public static int getStringTheoryLevel(AbilityData data) {
+		return data.getSkillLevel(skillStringTheory);
+	}
+	
+	/**
+	 * Return the position or error modifier determined by buff skills.
+	 */
+	public static double getErrorModifier(AbilityData data) {
+		return 0.5 * (1.0 - getStringTheoryLevel(data) * 0.053);
 	}
 }

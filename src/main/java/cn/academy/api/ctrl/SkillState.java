@@ -116,6 +116,10 @@ public class SkillState {
 		return false;
 	}
 	
+	protected int getTickTime() {
+		return tickTime;
+	}
+	
 	/**
 	 * Called when client receives an update message.
 	 * Note that the player who is the owner of this state, will not receive update.

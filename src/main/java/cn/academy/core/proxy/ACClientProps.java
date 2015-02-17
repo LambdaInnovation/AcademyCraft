@@ -118,6 +118,14 @@ public class ACClientProps {
 		}
 	}
 	
+	public static ResourceLocation ANIM_BLOOD_SPLASH[];
+	static {
+		ANIM_BLOOD_SPLASH = new ResourceLocation[10];
+		for(int i = 0; i < 10; ++i) {
+			ANIM_BLOOD_SPLASH[i] = src("academy:textures/effects/blood_splash/" + i + ".png");
+		}
+	}
+	
 	//Railgun
 	public static final ResourceLocation
 		EFF_MV_TEST = src("academy:textures/effects/mineview_test.png"),

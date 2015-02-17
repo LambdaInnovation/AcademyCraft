@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.energy.msg.node;
+package cn.academy.energy.msg.matrix;
 
 import net.minecraft.world.World;
 import io.netty.buffer.ByteBuf;

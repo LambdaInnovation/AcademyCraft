@@ -20,6 +20,7 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 
 	public RendererRayBlended(ResourceLocation _tex, ResourceLocation _blend, double _ratio) {
 		super(_tex, _ratio);
+		blendTex = _blend;
 	}
 
 	@Override
@@ -31,8 +32,7 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 			
 			GL11.glTranslated(0, -width * 0.5, 0);
 			
-			RenderUtils.loadTexture(tex);
-			
+			RenderUtils.loadTexture(blendTex);
 			//Beginning blend
 			GL11.glPushMatrix();
 			rect.map.set(0, 0, 1, 1);
@@ -42,11 +42,13 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 			
 			//Ending blend
 			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, len - forw);
-			rect.map.set(1, 1, 0, 0);
+			GL11.glTranslated(0, 0, len);
+			GL11.glScaled(1, 1, -1);
+			rect.map.set(0, 0, 1, 1);
 			drawer.draw();
 			GL11.glPopMatrix();
 			
+			RenderUtils.loadTexture(tex);
 			//Real ray
 			RenderUtils.loadTexture(tex);
 			GL11.glTranslated(0, 0, forw);

@@ -9,6 +9,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.RenderElecArc;
 import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.academy.api.ability.SkillBase;
@@ -33,11 +34,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 public class SkillMagneticMovement extends SkillBase {
-	
-	private static SkillMagneticMovement instance;
 
 	public SkillMagneticMovement() {
-		instance = this;
 		this.setLogo("electro/moving.png");
 		setName("em_move");
 	}
@@ -191,15 +189,22 @@ public class SkillMagneticMovement extends SkillBase {
 		
 		HandleVel handler;
 		Ray ray;
+		final float csm;
+		final double dist;
+		
+		final AbilityData data;
 
 		public MagState(EntityPlayer player) {
 			super(player);
+			data = AbilityDataMain.getData(player);
+			int slv = data.getSkillLevel(CatElectro.magMovement), lv = data.getLevelID() + 1;
+			dist = 18 + lv * 3 + slv * 1.2;
+			csm = 20 - slv * 0.5f - lv;
 		}
 
 		@Override
 		public void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
-			double dist = 30 + data.getLevelID() * 2.5 + data.getSkillLevel(data.getSkillID(instance)) * 0.6;
 			
 			MovingObjectPosition mop = GenericUtils.tracePlayer(player, dist);
 			if(mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
@@ -210,6 +215,11 @@ public class SkillMagneticMovement extends SkillBase {
 					player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
 				}
 			}
+		}
+		
+		@Override
+		public boolean onTick(int tick) {
+			return !data.decreaseCP(csm);
 		}
 
 		@Override

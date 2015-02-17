@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockStone;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -49,6 +50,8 @@ public class SkillMineDetect extends SkillBase {
 				return true;
 			}
 			
+			if(Item.getItemFromBlock(block) == null)
+				return false;
 			ItemStack stack = new ItemStack(block);
 			int[] val = OreDictionary.getOreIDs(stack);
 			for(int i : val) {

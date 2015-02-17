@@ -5,5 +5,6 @@
 
 "elec.weak": {"category": "master", "sounds": [{"name": "elec/arc_weak", "stream": false}]},
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
-"flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]}
+"flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
+"tp.tp": {"category": "master", "sounds": [{"name": "tp/tp", "stream": false}]}
 }
