@@ -33,6 +33,7 @@ public class BlockNode extends BlockContainer {
 		super(Material.rock);
 		setBlockName("ac_node");
 		setCreativeTab(AcademyCraft.cct);
+		setHardness(2.0f);
 	}
 	
     @SideOnly(Side.CLIENT)
