@@ -86,6 +86,8 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 			
 			if(firstPerson) {
 				transformFirstPerson(er, x, y, z);
+				if(!er.doesFollowSpawner())
+					optimizeView(er, x, y, z);
 			} else {
 				transformThirdPerson(er, x, y, z);
 				optimizeView(er, x, y, z);

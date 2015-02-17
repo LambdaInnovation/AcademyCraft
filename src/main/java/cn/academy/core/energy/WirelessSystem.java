@@ -47,6 +47,7 @@ public class WirelessSystem {
 	 */
 	public static void registerNode(IWirelessNode node, String channel) {
 		assert(node instanceof TileEntity);
+		//System.out.println("RegNode " + channel);
 		instance().getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
 	}
 	
@@ -96,6 +97,7 @@ public class WirelessSystem {
 	public void onServerTick(ServerTickEvent event) {
 		for(WiWorldData data : worldData.values()) {
 			data.onTick();
+			//System.out.println(data);
 		}
 	}
 

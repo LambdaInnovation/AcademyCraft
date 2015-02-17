@@ -29,12 +29,15 @@ public abstract class TileWirelessBase extends TileEntity implements
 	
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote) {
-			if(++updateTicker == UPDATE_RATE) {
-				updateTicker = 0;
-				
+		++updateTicker;
+		
+		
+		if(updateTicker >= UPDATE_RATE) {
+			updateTicker = 0;
+			if(!worldObj.isRemote) {
 				checkValid();
 			}
+			this.markDirty();
 		}
 	}
 	
@@ -48,13 +51,17 @@ public abstract class TileWirelessBase extends TileEntity implements
     }
     
     public boolean isConnected() {
-    	return connected;
+    	return channel != null && WirelessSystem.isTileIn(this, channel);
     }
     
     protected void setConnected(String _channel) {
     	channel = _channel;
     	connected = true;
     	checkValid();
+    }
+    
+    public String getChannel() {
+    	return channel;
     }
     
     protected void onUnload() {

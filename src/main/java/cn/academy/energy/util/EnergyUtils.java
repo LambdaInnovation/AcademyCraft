@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessReceiver;
 import cn.academy.api.energy.IWirelessTile;
 
@@ -39,6 +40,10 @@ public class EnergyUtils {
 		} else if(te instanceof IWirelessReceiver) {
 			IWirelessReceiver iwr = (IWirelessReceiver) te;
 			iwr.injectEnergy(amt);
+			return true;
+		} else if(te instanceof IWirelessNode) {
+			IWirelessNode iwn = (IWirelessNode) te;
+			iwn.setEnergy(iwn.getEnergy() + amt);
 			return true;
 		} else {
 			return false;

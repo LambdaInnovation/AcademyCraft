@@ -114,6 +114,12 @@ public class TileNode extends TileNodeBase implements IInventory {
 		
 	}
 
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		//System.out.println(energy);
+	}
+	
 	
 	//---Inventory part
 	ItemStack battery; //battery slot
