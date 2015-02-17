@@ -5,6 +5,8 @@ package cn.academy.core.client.gui.dev;
 
 import java.util.List;
 
+import javax.vecmath.Vector2d;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -56,25 +58,21 @@ public class PageSkills extends DevSubpage {
 			WidgetNode top = getGui().getTopNode(mx, my);
 			if(top != null && top.widget instanceof SkillList.SkillElement) {
 				String str = ((SkillList.SkillElement)top.widget).skill.getDescription();
-				List<String> todraw = GenericUtils.chopString(str, MAXCHARS);
 				
 				int alpha = (int) (200 * Math.min((time - lastDeac) / 400.0, 1.0));
 				color[3] = alpha;
 				
+				GL11.glDepthFunc(GL11.GL_LEQUAL);
 				//Calc the maxium window length.
-				final float font_step = 9F;
-				double slen = 0.0;
-				for(int i = 0; i < todraw.size(); ++i) {
-					String tmp = todraw.get(i);
-					slen = Math.max(slen, GuiDeveloper.strLen(tmp, FONT_SIZE));
-				}
-				
 				final double SIDE = 10, TOP = 5;
-				float ht = font_step * todraw.size();
+				RenderUtils.bindColor(65, 163, 220, alpha);
+				HudUtils.setZLevel(201);
+				Vector2d rect = GuiDeveloper.FONT.drawLinebreak(str, SIDE, TOP, 6, 140);
 				
+				HudUtils.setZLevel(200);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				//rect
-				double w = slen + SIDE * 2, h = ht + TOP * 2;
+				double w = rect.x + SIDE * 2, h = rect.y + TOP * 2;
 				RenderUtils.bindColor(color);
 				HudUtils.drawModalRect(0, 0, w, h);
 				//outline
@@ -82,10 +80,10 @@ public class PageSkills extends DevSubpage {
 				HudUtils.drawRectOutline(0, 0, w, h, LW);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				
+				HudUtils.setZLevel(-90);
+				GL11.glDepthFunc(GL11.GL_ALWAYS);
+				
 				//description
-				for(int i = 0; i < todraw.size(); ++i) {
-					GuiDeveloper.drawText(todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
-				}
 			} else{
 				lastDeac = time;
 			}

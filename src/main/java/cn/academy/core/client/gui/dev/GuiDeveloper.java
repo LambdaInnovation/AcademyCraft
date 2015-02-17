@@ -16,6 +16,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.util.HudUtils;
+import cn.liutils.util.render.LambdaFont;
 import cn.liutils.util.render.LambdaFont.Align;
 
 /**
@@ -39,6 +40,8 @@ public class GuiDeveloper extends LIGuiScreen {
 	
 	protected PageMain pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
+	
+	public static LambdaFont FONT = ACClientProps.FONT_YAHEI_32;
 	
 	AbilityData data;
 	TileDeveloper dev;
