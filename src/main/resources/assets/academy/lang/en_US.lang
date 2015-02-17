@@ -35,9 +35,9 @@ item.ecrystal.energy=Current Energy
 tile.ac_developer.name=Ability Developer
 tile.null.name=
 tile.windgen.name=Wind Generator
-tile.copperore.name=Copper Ore
-tile.tinore.name=Tin Ore
-tile.aluminumore.name=Aluminum Ore
+tile.cu_ore.name=Copper Ore
+tile.tin_ore.name=Tin Ore
+tile.al_ore.name=Aluminum Ore
 tile.crystal_ore.name=Crystal Ore
 tile.ni_ore.name=Nickel Ore
 tile.mg_ore.name=Magnesium Ore
@@ -98,6 +98,9 @@ md_mineexpert.desc=With continious practicing on mining basics, you can mine fas
 md_barrage.desc=With the supportive semiconductor, you can split your electron current into thousands of rays, and destroy everything in front of you.
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
+
+#Teleporter
+cat_teleporter=Teleporter
 
 #Commands
 aimctrl.presetinf=Preset %s : %s
