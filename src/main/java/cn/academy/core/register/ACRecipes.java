@@ -55,13 +55,13 @@ public class ACRecipes {
 				'a', Items.iron_ingot, 'b', ACItems.compPlank, 'c', Items.gunpowder, 'd', Items.slime_ball);
 		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
 				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);
-		GameRegistry.addRecipe(new ItemStack(ACItems.aimCell), "aba", "cdc", "efe",
+		GameRegistry.addRecipe(new ItemStack(ACBlocks.developer), "aba", "cdc", "efe",
 				'a', ACItems.ioPort, 'b', ACItems.bodyDet, 'c', ACItems.brainBeta, 'd', ACItems.pcb,
 				'e', ACBlocks.node, 'f', ACItems.almgPlate);
 	}
 	
 	public static void regSmelting() {
-//		GameRegistry.addSmelting(new ItemStack(Blocks.glass, 3), new ItemStack(ACItems.siliconRod), 0f);
+		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.siliconRod), 0f);
 		//Ore Smelting
 		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
