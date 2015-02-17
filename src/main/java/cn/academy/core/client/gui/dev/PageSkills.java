@@ -39,7 +39,7 @@ public class PageSkills extends DevSubpage {
 		static final int MAXCHARS = 60;
 		static final float LW = 1;
 		int[] color = new int[] { 28, 28, 28 , 255};
-		static final float FONT_SIZE = 8F;
+		static final float FONT_SIZE = 5F;
 		
 		long lastDeac = 0;
 		
@@ -117,7 +117,6 @@ public class PageSkills extends DevSubpage {
 				
 				skillID = id;
 				skill = base.data.getSkill(id);
-				System.out.println("Adding " + skill);
 				
 				level = base.data.getSkillLevel(skillID);
 				learned = base.data.isSkillLearned(skillID);
@@ -158,25 +157,25 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				GuiDeveloper.drawText(text, 30, 5.5, 9);
+				GuiDeveloper.drawText(text, 30, 6, 6, 63);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
 					//level
 					RenderUtils.bindColor(base.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					base.drawText(text, 97.5, 5.5, 7);
+					base.drawText(text, 97.5, 5.5, 4.8);
 				}
 				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(base.EXP_INDI_COLOR);
-					base.drawText(String.valueOf(expectedExp), 37, 19, 8);
+					base.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
 					
 					RenderUtils.bindColor(base.EU_INDI_COLOR);
-					base.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
+					base.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
 				} else {
 					RenderUtils.bindColor(59, 177, 43);
-					base.drawText(ACLangs.fullyLearned(), 30, 17.5, 8);
+					base.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
 				}
 			}
 			
@@ -269,7 +268,7 @@ public class PageSkills extends DevSubpage {
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(base.DEFAULT_COLOR);
-		GuiDeveloper.drawText(str, 5, 135, 8);
+		GuiDeveloper.drawText(str, 5, 135, 5.5);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 

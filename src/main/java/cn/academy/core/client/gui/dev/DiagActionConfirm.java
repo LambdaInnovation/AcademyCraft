@@ -59,10 +59,10 @@ public class DiagActionConfirm extends DialogueBase {
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 7, Align.CENTER);
-		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 7, Align.CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 4.5, Align.CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 5.5, Align.CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 9, Align.CENTER);
+		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 6, Align.CENTER, 102);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

@@ -160,8 +160,8 @@ public class GuiPresetSelect extends AuxGui {
 			rect(x0 + tx, y0 + ty, vw * prog, vh, 0.12F, 0.6F);
 			//text
 			GL11.glDepthFunc(GL11.GL_GEQUAL);
-			GL11.glColor4d(1, 1, 1, prog);
-			drawText("Preset Selection", x0 + tx + 5, y0 + ty + 1.7, 10);
+			GL11.glColor4d(1, 1, 1, prog * .7);
+			drawText(ACLangs.presetSelect(), x0 + tx + 5, y0 + ty + 1.7, 7);
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 		} GL11.glPopMatrix();
 	}
@@ -189,7 +189,7 @@ public class GuiPresetSelect extends AuxGui {
 			for(int i = 0; i < SELECTION_MAX; ++i) {
 				//Text
 				String name = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(i));
-				float font_size = 10F;
+				float font_size = 7F;
 				drawText(name, x0 + tx + cx + step / 2 + 3, y0 + ty + 4, font_size, Align.CENTER);
 				
 				//Ability Logo
@@ -239,10 +239,8 @@ public class GuiPresetSelect extends AuxGui {
 				rect(x0 + tx, y0 + ty + ny, mw, y_step, 0.6F, 0.6F);
 			}
 			Preset pr = EventHandlerClient.getPresetManager().getPreset(i);
-			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.9); //Linear brightening effect
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			drawText(ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 7);
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.7); //Linear brightening effect
+			drawText(ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 5);
 		}
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}

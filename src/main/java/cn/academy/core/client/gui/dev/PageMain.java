@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cn.academy.api.ability.Category;
+import cn.academy.api.ability.Level;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
@@ -21,8 +22,6 @@ import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.LambdaFont.Align;
 
 public class PageMain extends Widget {
-
-	public static final float TITLE_CENTER_X = 165.75F, TITLE_CENTER_Y = 4.5F;
 
 	ModelBiped model;
 	GuiDeveloper dev;
@@ -70,20 +69,20 @@ public class PageMain extends Widget {
 		String pname = dev.getCurPage().getDisplayName();
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		GuiDeveloper.drawText(pname,
-				TITLE_CENTER_X, TITLE_CENTER_Y, 12, Align.CENTER);
+				156, 4.5, 8.5, Align.CENTER);
 		
 		//Titles
-		dev.drawText(ACLangs.holoView(), 147, 20.5, 10);
+		dev.drawText(ACLangs.holoView(), 147, 20.5, 7.5);
 		
-		dev.drawText(ACLangs.ad_UserInfo(), 147, 119, 10);
+		dev.drawText(ACLangs.ad_UserInfo(), 147.5, 119, 7.5);
 		
 		//Misc
 		drawUserInfo();
 	}
 	
 	private void drawUserInfo() {
-		dev.drawText("CP.", 148, 153, 8);
-		dev.drawText("PRG.", 148, 167.5, 8);
+		dev.drawText("CP.", 148, 153, 6);
+		dev.drawText("PRG.", 148, 167.5, 6);
 		
 		AbilityData data = AbilityDataMain.getData(dev.user);
 		ResourceLocation logo = null;
@@ -91,20 +90,26 @@ public class PageMain extends Widget {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
 			//Cat and level
-			GuiDeveloper.drawText(cat.getDisplayName(), 167.5, 130, 11);
-			GuiDeveloper.drawText(data.getLevel().getDisplayName(), 167.5, 140, 8);
+			GuiDeveloper.drawText(cat.getDisplayName(), 167.5, 130, 7.5);
+			GuiDeveloper.drawText(data.getLevel().getDisplayName(), 167.5, 140, 5.5);
 			//Progress Bar
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
 			//CP
 			GL11.glColor4f(1, 1, 1, 1);
 			double prog = data.getCurrentCP() / data.getMaxCP();
 			HudUtils.drawRect(163, 155F, 3, 372, prog * 58.5, 5.5, prog * 117, 11);
+			
 			//Update prog
-			prog = 0.5;
+			if(data.canUpdateLevel()) {
+				Level curLv = data.getLevel();
+				prog = (data.getCurrentCP() - curLv.getInitialCP()) / (curLv.getMaxCP() - curLv.getInitialCP());
+			} else {
+				prog = 1.0;
+			}
 			HudUtils.drawRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
-			GuiDeveloper.drawText(ACLangs.notLearned(), 167.5, 130, 10);
+			GuiDeveloper.drawText(ACLangs.notLearned(), 167.5, 130, 7);
 		}
 		RenderUtils.loadTexture(logo);
 		HudUtils.drawRect(148.5, 130.5, 15.5, 15.5);

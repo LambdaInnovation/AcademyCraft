@@ -22,7 +22,7 @@ public class DiagStimulate extends DialogueBase {
 		final boolean reopen;
 
 		public ButtonConfirm(boolean r) {
-			super(ACLangs.confirm(), 46, 45.5);
+			super(ACLangs.confirm(), 46, 46.5);
 			reopen = r;
 		}
 
@@ -51,7 +51,7 @@ public class DiagStimulate extends DialogueBase {
 	
 	@Override
 	public void onAdded() {
-		addWidget(new ButtonWarning(ACLangs.cancel(), 46, 45.5) {
+		addWidget(new ButtonWarning(ACLangs.cancel(), 46, 46.5) {
 			@Override
 			public void draw(double mx, double my, boolean hover) {
 				super.draw(mx, my, hover);
@@ -95,23 +95,23 @@ public class DiagStimulate extends DialogueBase {
 		String text = String.format("%s: %s", 
 				dev.dev.isStimulating ? ACLangs.curAction() : (dev.dev.isStimSuccessful() ? ACLangs.successful() : ACLangs.aborted()),  
 				info);
-		dev.drawText(text, 6, 24, 7);
+		dev.drawText(text, 6, 24, 5, 104);
 		
 		//StimTimes
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		text = String.format("%s: %d/%d", ACLangs.attemptes(), dev.dev.stimSuccess, dev.dev.maxStimTimes);
-		dev.drawText(text, 6, 31, 6);
+		dev.drawText(text, 6, 31, 4.5);
 		
 		//StimFails
 		RenderUtils.bindColor(ERROR_COLOR);
-		double len = GuiDeveloper.strLen(text, 6);
+		double len = GuiDeveloper.strLen(text, 4.5);
 		text = String.format("(%d %s)", dev.dev.stimFailure, ACLangs.fails());
-		dev.drawText(text, 6 + len, 31, 6);
+		dev.drawText(text, 15 + len, 31, 4.5, 104 - 7 - len);
 		
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
 		//SyncRate
 		text = String.format("%s: %.2f%%", ACLangs.devSyncRate(), dev.dev.getSyncRateForDisplay());
-		dev.drawText(text, 6, 38.5, 6);
+		dev.drawText(text, 6, 38.5, 4.5);
 		
 		RenderUtils.bindIdentity();
 	}

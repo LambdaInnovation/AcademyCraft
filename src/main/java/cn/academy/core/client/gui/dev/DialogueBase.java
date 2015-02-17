@@ -31,9 +31,9 @@ public class DialogueBase extends Widget {
 					{465, 0}
 				});
 			this.setText(id);
-			this.setTextData(6, new int[][] {
-				dev.DEFAULT_COLOR,
-				dev.DEFAULT_COLOR,
+			this.setTextData(4, new int[][] {
+				{255, 95, 95, 255},
+				{255, 95, 95, 255},
 				{150, 150, 150, 255}
 			});
 			setFont(ACClientProps.FONT_YAHEI_32);
@@ -56,7 +56,7 @@ public class DialogueBase extends Widget {
 					{465, 30}
 				});
 			this.setText(id);
-			this.setTextData(6, new int[][] {
+			this.setTextData(4, new int[][] {
 				dev.DEFAULT_COLOR,
 				dev.DEFAULT_COLOR,
 				{150, 150, 150, 255}
@@ -104,7 +104,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(title, 2.5, 1.5, 9);
+		GuiDeveloper.drawText(title, 2.5, 2.4, 6);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

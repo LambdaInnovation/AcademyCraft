@@ -107,6 +107,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getCategory().getLevel(levelId);
 	}
 	
+	public boolean canUpdateLevel() {
+		return getLevelID() < getLevelCount() - 1;
+	}
+	
 	public int getLevelID() {
 		return levelId;
 	}

@@ -50,7 +50,7 @@ public class PageLearn extends DevSubpage {
 				}
 				this.setFont(ACClientProps.FONT_YAHEI_32);
 				this.setText(isFirst ? ACLangs.learnAbility() : ACLangs.upgradeLevel());
-				this.setTextData(8, new int[][] {
+				this.setTextData(6, new int[][] {
 					base.DEFAULT_COLOR,
 					base.DEFAULT_COLOR,
 					{150, 150, 150, 255}
@@ -85,29 +85,29 @@ public class PageLearn extends DevSubpage {
 		GL11.glPushMatrix(); {
 			RenderUtils.bindColor(base.DEFAULT_COLOR);
 			//Machine stat
-			base.drawText(ACLangs.machineStat(), 6, 100.5, 9);
+			base.drawText(ACLangs.machineStat(), 6, 100.5, 7.5);
 			
 			//Current Energy
 			base.drawText(
 				String.format("%s: %.0f/%.0f EU", ACLangs.curEnergy(), base.dev.curEnergy, base.dev.getMaxEnergy()), 
-				6, 121, 8);
+				6, 121, 6);
 			//Sync Rate
 			base.drawText(String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay()), 
-				6, 129, 8);
+				6, 130, 6);
 			RenderUtils.bindIdentity();
 			
 			//Numeric indication
 			if(isFirst || !isMaxLevel) {
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				base.drawText(ACLangs.expConsumption(), 55, 50, 9);
+				base.drawText(ACLangs.expConsumption(), 56, 50, 5.6);
 				
 				Pair<Integer, Double> exp = base.dev.getExpectation(ida, base.data);
 				
 				RenderUtils.bindColor(base.EXP_INDI_COLOR);
-				base.drawText(String.format("%d", exp.first), 70, 59, 7.5F);
+				base.drawText(String.format("%d", exp.first), 70, 59, 5.8F);
 				
 				RenderUtils.bindColor(base.EU_INDI_COLOR);
-				base.drawText(String.format("%.0f", exp.second), 70, 67, 7.5F);
+				base.drawText(String.format("%.0f", exp.second), 70, 67, 5.8F);
 				
 				RenderUtils.loadTexture(TEXTURE);
 				RenderUtils.bindIdentity();
