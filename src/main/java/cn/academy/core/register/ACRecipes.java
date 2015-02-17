@@ -45,7 +45,12 @@ public class ACRecipes {
 				'a', ACItems.copperCoil, 'b', ACItems.pcb);
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.grid), "aba", "cdc", "aba",
 				'a', Blocks.glass_pane, 'b', ACItems.pcb, 'c', ACItems.almgPlate, 'd', ACItems.energyCrystal);
-//		GameRegistry.addShapelessRecipe(new ItemStack(ACItems.compPlank), new ItemStack(Blocks.planks, 3));
+		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), "a  ", "a  ", "a  ",
+				'a', Blocks.log);
+		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), " a ", " a ", " a ",
+				'a', Blocks.log);
+		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), "  a", "  a", "  a",
+				'a', Blocks.log);
 		GameRegistry.addRecipe(new ItemStack(ACItems.expNail, 8), "aba", "bcb", "dad",
 				'a', Items.iron_ingot, 'b', ACItems.compPlank, 'c', Items.gunpowder, 'd', Items.slime_ball);
 		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
