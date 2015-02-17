@@ -99,6 +99,9 @@ md_barrage.desc=With the supportive semiconductor, you can split your electron c
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
+#Teleporter
+cat_teleporter=Teleporter
+
 #Commands
 aimctrl.presetinf=Preset %s : %s
 aimctrl.curpreset=Current Preset ID: %s

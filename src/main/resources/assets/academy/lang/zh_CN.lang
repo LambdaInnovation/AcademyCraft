@@ -29,13 +29,15 @@ item.shadow_ingot.name=影子金属锭
 item.ac_cplank.name=复合木板
 item.ac_exp_nail.name=粘性膨胀钉
 
+item.ecrystal.energy=剩余能量
+
 #Blocks
 tile.ac_developer.name=能力开发机
 tile.null.name=
 tile.windgen.name=风力发电机
-tile.copperore.name=铜矿
-tile.tinore.name=锡矿
-tile.aluminumore.name=铝矿
+tile.cu_ore.name=铜矿
+tile.tin_ore.name=锡矿
+tile.al_ore.name=铝矿
 tile.crystal_ore.name=晶化岩石
 tile.ni_ore.name=镍矿
 tile.mg_ore.name=镁矿
@@ -77,9 +79,28 @@ em_lf.desc=用强烈的电流支配自己的身体，获得可怕的运动力和
 #Melt Downer
 cat_meltdowner=原子崩坏
 
-skl_md_elecdart=电子飞弹
+skl_md_bomb=电子飞弹
+skl_md_minebasic=基础采集光束
+skl_md_scatter=电子弹散射
+skl_md_shield=光盾
+skl_md_meltdown=原子崩坏
+skl_md_mineexpert=采集光束精修
+skl_md_barrage=散射光束雨
+skl_md_mineluck=采集光束精修-时运
+skl_md_mineacc=采集光束精修-精准
 
-md_elecdart.desc=聚集少量电子形成球形，发射出去并对生物造成微弱的伤害。
+md_bomb.desc=聚集少量电子形成球形，发射出去并对生物造成微弱的伤害。
+md_minebasic.desc=发射微弱的电子射流，将破坏力压制在较低的程度来帮助矿物的采集工作。
+md_scatter.desc=复数的操控电子团放射来进行攻击，作为复数操控的代价，你无法精准的控制落点.
+md_shield.desc=将电子团横截面扩大形成护盾，高速运动的电子将会摧毁来犯物质，并伤害任何用近距离接触来伤害自己的东西.
+md_meltdown.desc=以雷击之势所放出的特殊电子线，可以将金属像纸屑般吹散，厚实的墙壁溶解，连同障碍物与敌人一起贯穿。然而由于能力过于强大与不稳定，高出力的原子崩坏可能会伤害自己.
+md_mineexpert.desc=经过基础采集的锻炼，你能更好的控制自己的电子射流，从而采掘更加坚硬的矿物.
+md_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但是电子弹无法形成弹幕，难以应对全方位的饱和攻击，因此通过“扩散支援半导体”来应对能力无法大规模攻击的缺点.
+md_mineluck.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的破坏矿物周边的杂质而不损伤矿物.
+md_mineacc.desc=有时候将大量杂质破坏是无意义的，反而会让某些矿石附带的稀少素材也惨遭破坏，所以你开始去学习用电子束来完美的切割各种矿物.
+
+#Teleporter
+cat_teleporter=空间移动
 
 #Commands
 aimctrl.presetinf=预设%s：%s
