@@ -70,13 +70,13 @@ public class ACItems {
 	public static ItemModuleAttached adEnergyCard;
 	
 	@RegItem
-	@RegItem.UTName("aluminumingot")
-	@RegItem.OreDict("ingotAluminum")
+	@RegItem.UTName("al_ingot")
+	@RegItem.OreDict("ingotAl")
 	public static ACSimpleItem ingotAl;
 	
 	@RegItem
-	@RegItem.UTName("copperingot")
-	@RegItem.OreDict("ingotCopper")
+	@RegItem.UTName("cu_ingot")
+	@RegItem.OreDict("ingotCu")
 	public static ACSimpleItem ingotCu;
 	
 	@RegItem
@@ -100,7 +100,7 @@ public class ACItems {
 	public static ACSimpleItem ingotNi;
 	
 	@RegItem
-	@RegItem.UTName("crystal")
+	@RegItem.UTName("ac_crystal")
 	@RegItem.OreDict("crystal")
 	public static ACSimpleItem crystal;
 	
@@ -122,7 +122,7 @@ public class ACItems {
 	public static ACSimpleItem almgPlate;
 	
 	@RegItem
-	@RegItem.UTName("siliconrod")
+	@RegItem.UTName("ac_siliconrod")
 	public static ACSimpleItem siliconRod;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
@@ -131,7 +131,7 @@ public class ACItems {
 //	public static ACSimpleItem ironDust;
 
 	@RegItem
-	@RegItem.UTName("coppercoil")
+	@RegItem.UTName("ac_coppercoil")
 	public static ACSimpleItem copperCoil;
 	
 	//TODO: If these items is unnecessary, delete them.
@@ -140,11 +140,11 @@ public class ACItems {
 //	public static ACSimpleItem coreBearing;
 	
 	@RegItem
-	@RegItem.UTName("human_machine")
-	public static ACSimpleItem humanMachine;
+	@RegItem.UTName("ac_bodydet")
+	public static ACSimpleItem bodyDet;
 	
 	@RegItem
-	@RegItem.UTName("io")
+	@RegItem.UTName("ac_io")
 	public static ACSimpleItem ioPort;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
@@ -153,28 +153,28 @@ public class ACItems {
 //	public static ACSimpleItem brainAlpha;
 	
 	@RegItem
-	@RegItem.UTName("brainbeta")
+	@RegItem.UTName("ac_brainbeta")
 	public static ACSimpleItem brainBeta;
 	
 	@RegItem
-	@RegItem.UTName("pcbn")
+	@RegItem.UTName("ac_pcbn")
 	public static ACSimpleItem pcb;
 	
 	@RegItem
-	@RegItem.UTName("cwood")
-	public static ACSimpleItem compWood;
+	@RegItem.UTName("ac_cplank")
+	public static ACSimpleItem compPlank;
 	
 	@RegItem
-	@RegItem.UTName("exp_nail")
+	@RegItem.UTName("ac_exp_nail")
 	public static ItemExpNail expNail;
 	
 	@RegItem
-	@RegItem.UTName("dev_module")
-	public static ACSimpleItem devModule;
+	@RegItem.UTName("ac_aimcell")
+	public static ACSimpleItem aimCell;
 	
 	@RegItem()
 	@RegItem.HasRender
-	@RegWithName("void")
+	@RegWithName("ac_void")
 	public static ItemVoid ivoid = new ItemVoid() {
 		@SideOnly(Side.CLIENT)
 		@RegItem.Render

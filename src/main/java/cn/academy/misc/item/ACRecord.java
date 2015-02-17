@@ -89,7 +89,7 @@ public class ACRecord extends ItemRecord {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon("academy:record" + recId);
+		this.itemIcon = par1IconRegister.registerIcon("academy:ac_record" + recId);
 	}
 	
 	private static final ResourceLocation sources[] = new ResourceLocation[] {

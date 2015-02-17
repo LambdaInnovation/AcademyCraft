@@ -31,6 +31,7 @@ public class ItemEnergyCrystal extends Item implements ISpecialElectricItem {
 	public ItemEnergyCrystal(){
 		setUnlocalizedName("ac_energycrystal");
 		setCreativeTab(AcademyCraft.cct);
+		setMaxStackSize(6);
 	}
 	
 	@Override
@@ -79,7 +80,7 @@ public class ItemEnergyCrystal extends Item implements ISpecialElectricItem {
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4){
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
-			par3List.add(StatCollector.translateToLocal("gui.remaining.energy")+ ": " + getItemCharge(par1ItemStack) + "/" + this.maxCharge + " " + StatCollector.translateToLocal("gui.energy.unit"));
+			par3List.add(StatCollector.translateToLocal("item.ecrystal.energy")+ ": " + getItemCharge(par1ItemStack) + "/" + this.maxCharge + " " + StatCollector.translateToLocal("EU"));
 	}
 	
 	@Override
