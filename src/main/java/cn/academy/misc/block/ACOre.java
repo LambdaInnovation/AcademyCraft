@@ -7,33 +7,44 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
-
 /**
- * 矿物方块类
- * @author Lyt99
+ * AcademyCraft Ore
+ * @author KSkun
  */
-public class ACOre extends Block{
+public class ACOre extends Block {
 	
-	private String bName;
+	private Item itemDropped;
+	private float lightLevel;
+	private float hardness = 3.0f;
 	
-	public ACOre(String blockName, int harvestLevel) {
+	public ACOre(int harvest) {
 		super(Material.rock);
+		setHarvestLevel("pickaxe", harvest);
 		setCreativeTab(AcademyCraft.cct);
-		this.setHarvestLevel("pickaxe", harvestLevel);
-		setHardness(4.0F);
-		setBlockName(blockName);
-		setBlockTextureName("academy:" + blockName);
 		setStepSound(Block.soundTypePiston);
-		bName = blockName;
+		setHardness(hardness);
+		setResistance(5.0F);
 	}
 	
 	@Override
-	public Item getItemDropped(int metadata, Random random, int fortune){
-		return getDrop(this, bName);
+	public Item getItemDropped(int par1, Random par2Rand, int par3) {
+		if(itemDropped == null) return Item.getItemById(Block.getIdFromBlock(this));
+		return itemDropped;
 	}
 	
-	public Item getDrop(Block block, String blockname){
-		//暂时用不到就不写了
-		return Item.getItemFromBlock(block);
+	public ACOre getItemDropped(Item itemDropped) {
+		this.itemDropped = itemDropped;
+		return this;
 	}
+	
+    public ACOre setLightLevel(float light) {
+        super.setLightLevel(light);
+        return this;
+    }
+    
+    public ACOre setOreHardness(float hardness) {
+    	this.hardness = hardness;
+    	return this;
+    }
+
 }

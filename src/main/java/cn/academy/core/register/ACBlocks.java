@@ -32,31 +32,38 @@ public class ACBlocks {
 	public static BlockMagInducer magInducer;
 	
 	@RegBlock
+	@RegBlock.BTName("cu_ore")
 	@RegBlock.OreDict("oreCopper")
-	public static ACOre oreCopper = new ACOre("copperore", 1);
+	public static ACOre oreCopper = new ACOre(1);
 	
 	@RegBlock
+	@RegBlock.BTName("tin_ore")
 	@RegBlock.OreDict("oreTin")
-	public static ACOre oreTin = new ACOre("tinore", 1);
+	public static ACOre oreTin = new ACOre(1);
 	
 	@RegBlock
-	@RegBlock.OreDict("oreAluminum")
-	public static ACOre oreAl = new ACOre("aluminumore", 1);
+	@RegBlock.BTName("al_ore")
+	@RegBlock.OreDict("oreAluminium")
+	public static ACOre oreAl = new ACOre(1);
 	
 	@RegBlock
-	@RegBlock.OreDict("oreMg")
-	public static ACOre oreMg = new ACOre("mg_ore", 1);
+	@RegBlock.BTName("mg_ore")
+	@RegBlock.OreDict("oreMagnesium")
+	public static ACOre oreMg = new ACOre(1);
 	
 	@RegBlock
-	@RegBlock.OreDict("oreNi")
-	public static ACOre oreNi = new ACOre("ni_ore", 1);
+	@RegBlock.BTName("ni_ore")
+	@RegBlock.OreDict("oreNickel")
+	public static ACOre oreNi = new ACOre(1);
 	
 	@RegBlock
+	@RegBlock.BTName("crystal_ore")
 	@RegBlock.OreDict("oreCrystal")
-	public static ACOre oreCrystal = new ACOre("crystal_ore", 1);
+	public static ACOre oreCrystal = new ACOre(2).setOreHardness(3.5f);
 	
 	@RegBlock
+	@RegBlock.BTName("shadow_ore")
 	@RegBlock.OreDict("oreShadow")
-	public static ACOre oreShadow = new ACOre("shadow_ore", 1);
+	public static ACOre oreShadow = new ACOre(2).setLightLevel(0.9375f);
 	
 }
