@@ -72,6 +72,7 @@ public class SkillMarkTele extends SkillBase {
 				}
 				
 			};
+			player.playSound("academy:tp.tp_pre", 0.5F, 1.0F);
 			player.worldObj.spawnEntityInWorld(mark);
 		}
 

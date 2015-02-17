@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -53,6 +54,14 @@ public class WiWorldData {
 			return false;
 		return tile instanceof IWirelessNode ? 
 			net.hasNode((IWirelessNode) tile) : net.hasUser(tile);
+	}
+	
+	public boolean isRegistered(IWirelessTile tile) {
+		return lookup.containsKey(tile);
+	}
+	
+	public String getChannel(IWirelessTile tile) {
+		return lookup.get(tile);
 	}
 	
 	public IWirelessNode getNearestNode(int x, int y, int z) {
@@ -161,10 +170,12 @@ public class WiWorldData {
 		net.registerNode(node);
 		lookup.put(node, channel);
 		getNodeList(tile.xCoord, tile.zCoord).add(node);
+		System.out.println("Registered " + node + " in " + channel);
 	}
 	
 	public void unregister(IWirelessTile tile) {
 		String chan = lookup.remove(tile);
+		System.out.println("unreg " + tile);
 		if(chan == null) {
 			AcademyCraft.log.error("Trying to unregister a non-present tile " + tile);
 			return;
@@ -198,12 +209,12 @@ public class WiWorldData {
 	
 	public void onTick() {
 		Iterator<Map.Entry<String, WirelessNetwork>> iter = netMap.entrySet().iterator();
-		//System.out.println("---");
+		
 		while(iter.hasNext()) {
 			WirelessNetwork net = iter.next().getValue();
-			System.out.println(net.channel);
+			//System.out.print("---");
+			//System.out.println(net.channel);
 			if(net.dead) {
-				net.onTick();
 				for(NodeConns conn : net.conns.values()) {
 					for(IWirelessGenerator gen : conn.generators) {
 						lookup.remove(gen);
@@ -217,10 +228,12 @@ public class WiWorldData {
 				}
 				iter.remove();
 			} else {
-				iter.remove();
+				net.onTick();
 			}
+			//System.out.println(net.getPassword());
+			//System.out.println("---");
 		}
-		//System.out.println("---");
+		
 	}
 
 }

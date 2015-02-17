@@ -101,7 +101,7 @@ public class GuiMatrix extends LIGuiScreen {
 			
 			RenderUtils.bindColor(108, 236, 236);
 			String pct = String.format("%.2f%%", prog * 100);
-			drawText(pct, 52, 122, 7.2f, Align.CENTER);
+			drawText(pct, 52, 122, 6.2f, Align.CENTER);
 			
 			drawText(channelName, 52, 25, 7f, Align.CENTER);
 			drawText("******", 52, 55, 7f, Align.CENTER);
@@ -141,7 +141,7 @@ public class GuiMatrix extends LIGuiScreen {
 	static class WigOK extends Widget {
 		{
 			setSize(10.5, 10.5);
-			initTexDraw(TEX_DIAG, 220, 95, 21, 21);
+			initTexDraw(TEX_DIAG, 220, 121, 21, 21);
 		}
 	}
 	

@@ -19,11 +19,12 @@ import cn.liutils.util.space.IBlockFilter;
 public abstract class TileWirelessBase extends TileEntity implements
 		IWirelessTile {
 	
-	private boolean connected = false; //If this tile was connected into an wireless net
-	protected String channel; //cur channel
-	
 	private static final int UPDATE_RATE = 5;
 	private int updateTicker;
+	
+	//Those are just for loading purpose.
+	boolean loaded;
+	String channelToLoad;
 
 	public TileWirelessBase() {}
 	
@@ -34,9 +35,6 @@ public abstract class TileWirelessBase extends TileEntity implements
 		
 		if(updateTicker >= UPDATE_RATE) {
 			updateTicker = 0;
-			if(!worldObj.isRemote) {
-				checkValid();
-			}
 			this.markDirty();
 		}
 	}
@@ -51,32 +49,16 @@ public abstract class TileWirelessBase extends TileEntity implements
     }
     
     public boolean isConnected() {
-    	return channel != null && WirelessSystem.isTileIn(this, channel);
-    }
-    
-    protected void setConnected(String _channel) {
-    	channel = _channel;
-    	connected = true;
-    	checkValid();
+    	return WirelessSystem.isTileRegistered(this);
     }
     
     public String getChannel() {
-    	return channel;
+    	return WirelessSystem.getTileChannel(this);
     }
     
     protected void onUnload() {
     	if(!worldObj.isRemote) {
-    		checkValid();
-    		if(connected) {
-    			WirelessSystem.unregisterTile(this);
-    		}
-    	}
-    }
-    
-    protected void checkValid() {
-    	if(connected) {
-    		if(!WirelessSystem.isTileIn(this, channel))
-    			connected = false;
+    		WirelessSystem.unregisterTile(this);
     	}
     }
 	

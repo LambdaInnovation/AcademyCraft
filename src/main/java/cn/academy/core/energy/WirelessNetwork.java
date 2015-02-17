@@ -49,6 +49,7 @@ public class WirelessNetwork {
 	}
 	
 	public void setPassword(String np) {
+		System.out.println(channel + "- setpw: " + np);
 		password = np;
 	}
 	
@@ -121,6 +122,7 @@ public class WirelessNetwork {
 	private void calcNodes() {
 		for(Map.Entry<IWirelessNode, NodeConns> ent : conns.entrySet()) {
 			calcNode(ent.getKey(), ent.getValue());
+			System.out.println(ent.getKey());
 		}
 	}
 	

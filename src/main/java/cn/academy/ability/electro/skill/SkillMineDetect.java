@@ -205,7 +205,10 @@ public class SkillMineDetect extends SkillBase {
 		@Override
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
-			
+			if(!data.decreaseCP(0)) {
+				return;
+			}
+			player.playSound("academy:elec.mineview", 0.5f, 1.0f);
 			if(player.worldObj.isRemote) {
 				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 30));
 			} else {

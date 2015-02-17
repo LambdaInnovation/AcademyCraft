@@ -48,12 +48,14 @@ public class MsgInitMatrix implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		channel = ByteBufUtils.readUTF8String(buf);
+		pwd = ByteBufUtils.readUTF8String(buf);
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(x).writeInt(y).writeInt(z);
 		ByteBufUtils.writeUTF8String(buf, channel);
+		ByteBufUtils.writeUTF8String(buf, pwd);
 	}
 
 	@RegMessageHandler(msg = MsgInitMatrix.class, side = Side.SERVER)
