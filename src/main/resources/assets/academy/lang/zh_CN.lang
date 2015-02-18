@@ -164,12 +164,12 @@ adev.userinfo=能力者信息
 ac.presset=预设设置
 ac.preset=预设#
 prs.chooseskl=选择能力
-level_0=Level 1
-level_1=Level 2
-level_2=Level 3
-level_3=Level 4
-level_4=Level 5
-#level_5=Level 6
+level_0=低能力者
+level_1=异能力者
+level_2=强能力者
+level_3=大能力者
+level_4=超能力者
+#level_5=绝对能力者
 
 
 #WEN
@@ -179,7 +179,7 @@ ac.opstat=WEN状态
 ac.opsuc=开启成功
 ac.opfail=开启失败
 ac.cnnexist=频道存在
-ac.transmitting=广播中
+ac.transmitting=连接中
 ac.inconsistentpass=两次输入的密码必须一致！
 ac.loading=加载中
 ac.wllogin=WEN登录
