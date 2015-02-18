@@ -15,9 +15,12 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.msg.node.MsgInitNode;
+import cn.academy.energy.msg.node.MsgNodeGuiLoad;
+import cn.academy.energy.msg.node.MsgNodeLoadList;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiContainer;
 import cn.liutils.api.gui.Widget;
+import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -39,7 +42,10 @@ public class GuiNode extends LIGuiContainer {
 	final TileNode tile;
 	
 	public boolean synced; //flag set by Messages indicating the packet was sent
+	public boolean listSynced; //whether channel list was synced.
+	
 	//Sync data
+	public String curChannel;
 	public List<String> channels;
 	public int nNodes;
 	public int nGens;
@@ -51,7 +57,8 @@ public class GuiNode extends LIGuiContainer {
 		super(c);
 		node = c;
 		tile = c.node;
-		
+		AcademyCraft.netHandler.sendToServer(new MsgNodeGuiLoad.Request(tile));
+		AcademyCraft.netHandler.sendToServer(new MsgNodeLoadList.Request(tile));
 		reinit();
 	}
 	
@@ -87,8 +94,8 @@ public class GuiNode extends LIGuiContainer {
 			GL11.glPopMatrix();
 			
 			RenderUtils.bindColor(COLOR);
-			String channel = tile.isConnected() ? tile.getChannel() : ACLangs.notConnected();
-			drawText(channel, 81, 14.5, 7, Align.LEFT);
+			String cn = synced ? (curChannel == null ? ACLangs.notConnected() : curChannel) : ACLangs.loading();
+			drawText(cn, 81, 14.5, 7, Align.LEFT);
 			
 			RenderUtils.bindIdentity();
 		}
@@ -109,7 +116,7 @@ public class GuiNode extends LIGuiContainer {
 		public void draw(double mx, double my, boolean hov) {
 			final double tw = 18, th = 24;
 			RenderUtils.loadTexture(TEX);
-			if(tile.isConnected()) {
+			if(isConnected()) {
 				HudUtils.drawRect(0, 0, 315, 64, tw / 1.5, th / 1.5, tw, th);
 			} else {
 				HudUtils.drawRect(0, 0, 315, 22, tw / 1.5, th / 1.5, tw, th);
@@ -136,7 +143,9 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onAdded() {
-			addWidget(new ChannelList());
+			ChannelList list;
+			addWidget(list = new ChannelList());
+			list.setDragBar(new ChooseDB());
 		}
 		
 		public void draw(double mx, double my, boolean hover) {
@@ -156,6 +165,15 @@ public class GuiNode extends LIGuiContainer {
 		}
 	}
 	
+	private class ChooseDB extends DragBar {
+
+		public ChooseDB() {
+			super(270, 76, 16, 172.5, 16);
+			this.initTexDraw(TEX_SELECT, 304, 0, 32, 32);
+		}
+		
+	}
+	
 	private class ChannelList extends ListVertical {
 		
 		boolean loaded;
@@ -167,7 +185,7 @@ public class GuiNode extends LIGuiContainer {
 		@Override
 		public void draw(double mx, double my, boolean h) {
 			super.draw(mx, my, h);
-			if(!loaded && synced) {
+			if(!loaded && listSynced) {
 				loaded = true;
 				init();
 			}
@@ -175,7 +193,7 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onAdded() {
-			if(synced) {
+			if(listSynced) {
 				loaded = true;
 				init();
 			}
@@ -215,6 +233,10 @@ public class GuiNode extends LIGuiContainer {
 			AcademyCraft.netHandler.sendToServer(new MsgInitNode(GuiNode.this.tile, channel));
 			choosePage.dispose();
 		}
+	}
+	
+	private boolean isConnected() {
+		return curChannel != null;
 	}
 	
 	private static void drawText(String str, double x, double y, double size) {

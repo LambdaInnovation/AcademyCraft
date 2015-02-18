@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -93,9 +92,9 @@ public class WiWorldData {
 		netMap.get(chan).setPassword(pwd);
 	}
 	
-	public List<IWirelessNode> getNodesIn(int x, int y, int z, double range, int max) {
+	public List<String> getChannelsIn(int x, int y, int z, double range, int max) {
 		Set<String> excl = new HashSet();
-		List<IWirelessNode> ret = new ArrayList();
+		Set<String> ret = new HashSet();
 		range *= range;
 		for(int i = x - 1; i <= x + 1; ++i) {
 			for(int j = z - 1; j <= z + 1; ++j) {
@@ -103,12 +102,12 @@ public class WiWorldData {
 				ret.addAll(getNodesInChunk(excl, i, j, x, y, z, range, max - ret.size()));
 			}
 		}
-		return ret;
+		return new ArrayList<String>(ret);
 	}
 	
-	private Set<IWirelessNode> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
+	private Set<String> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
 		List<IWirelessNode> nodes = getNodeList(cx, cz);
-		Set<IWirelessNode> ret = new HashSet();
+		Set<String> ret = new HashSet();
 		for(IWirelessNode node : nodes) {
 			String chan = lookup.get(node);
 			if(excl.contains(chan))
@@ -117,7 +116,7 @@ public class WiWorldData {
 			double td = GenericUtils.distanceSq(tile.xCoord, tile.yCoord, tile.zCoord, x, y, z);
 			if(td < rsq) {
 				excl.add(chan);
-				ret.add(node);
+				ret.add(lookup.get(node));
 				if(max == ret.size())
 					break;
 			}

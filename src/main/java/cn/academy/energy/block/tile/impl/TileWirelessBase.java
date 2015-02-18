@@ -67,8 +67,8 @@ public abstract class TileWirelessBase extends TileEntity implements
 		return WirelessSystem.getNearestNode(getWorldObj(), xCoord, yCoord, zCoord);
 	}
 	
-	public List<IWirelessNode> getAvailableNodes(double range, int max) {
-		return WirelessSystem.getAvailableNodes(getWorldObj(), xCoord, yCoord, zCoord, range, max);
+	public List<String> getAvailableChannels(double range, int max) {
+		return WirelessSystem.getAvailableChannels(getWorldObj(), xCoord, yCoord, zCoord, range, max);
 	}
 
 }
