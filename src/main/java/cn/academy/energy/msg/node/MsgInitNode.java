@@ -67,11 +67,11 @@ public class MsgInitNode implements IMessage {
 			}
 			TileNode node = (TileNode) te;
 			//pass validation
-			if(!msg.pwd.equals(WirelessSystem.getPassword(world, msg.pwd))) {
+			if(!msg.pwd.equals(WirelessSystem.getPassword(world, msg.ssid))) {
 				return new MsgInitNodeReply(false);
 			};
 			WirelessSystem.registerNode(node, msg.ssid);
-			return null;
+			return new MsgInitNodeReply(true);
 		}
 	}
 

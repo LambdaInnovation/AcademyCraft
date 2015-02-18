@@ -17,6 +17,7 @@ import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.client.gui.Dialogues.DiagState;
 import cn.academy.energy.client.gui.Dialogues.Dialogue;
 import cn.academy.energy.client.gui.Dialogues.StateDiag;
+import cn.academy.energy.msg.node.MsgInitNode;
 import cn.academy.energy.msg.node.MsgNodeGuiLoad;
 import cn.academy.energy.msg.node.MsgNodeLoadList;
 import cn.liutils.api.gui.LIGui;
@@ -124,7 +125,7 @@ public class GuiNode extends LIGuiContainer {
 			final double tw = 18, th = 24;
 			RenderUtils.loadTexture(TEX);
 			if(isConnected()) {
-				HudUtils.drawRect(0, 0, 315, 64, tw / 1.5, th / 1.5, tw, th);
+				HudUtils.drawRect(0, 0, 315, 62, tw / 1.5, th / 1.5, tw, th);
 			} else {
 				HudUtils.drawRect(0, 0, 315, 22, tw / 1.5, th / 1.5, tw, th);
 			}
@@ -264,6 +265,7 @@ public class GuiNode extends LIGuiContainer {
 				@Override
 				public void onMouseDown(double mx, double my) {
 					gui.addWidget(stateDiag = new StateDiag());
+					AcademyCraft.netHandler.sendToServer(new MsgInitNode(tile, cn, box.getContent()));
 					InputPassword.this.dispose();
 				}
 			});
