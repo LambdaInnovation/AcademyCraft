@@ -11,6 +11,14 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String matChangePwd() {
+		return local("ac.matpwd");
+	}
+	
+	public static String wirelessLogin() {
+		return local("ac.wllogin");
+	}
+	
 	public static String opFailed() {
 		return local("ac.opfail");
 	}
