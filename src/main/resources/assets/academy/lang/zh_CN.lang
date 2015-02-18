@@ -1,5 +1,5 @@
 #中文语言文件 调试版本
-#Items
+#物品
 item.void.name=
 item.ac_logo.name=
 item.ac_record1.name=超电磁炮唱片#1
@@ -31,7 +31,7 @@ item.ac_exp_nail.name=粘性膨胀钉
 
 item.ecrystal.energy=剩余能量
 
-#Blocks
+#方块
 tile.ac_developer.name=能力开发机
 tile.null.name=
 tile.windgen.name=风力发电机
@@ -47,13 +47,13 @@ tile.ac_magindc.name=磁场增幅装置
 tile.ac_node.name=无线能源节点
 tile.ac_grid.name=无线能源矩阵
 
-#CreativeTabs
-itemGroup.AcademyCraft=AcademyCraft
+#创造栏
+itemGroup.AcademyCraft=异能时代
 
-#Generic Ability
+#其他能力
 skl_null=无
 
-#Electro Master
+#电气使
 cat_elecmaster=电气使
 
 skl_em_arc=电弧激发
@@ -76,7 +76,7 @@ em_buff.desc=成为强能力者后，对于电磁能力有更深理解的你开�
 #em_swordgen.desc=强力的磁力控制与计算力储备让你能熟练的使用铁砂来帮助自己进行攻击。
 em_lf.desc=用强烈的电流支配自己的身体，获得可怕的运动力和攻击能力，扫平你眼前的一切敌人。
 
-#Melt Downer
+#原子崩坏
 cat_meltdowner=原子崩坏
 
 skl_md_bomb=电子飞弹
@@ -99,10 +99,32 @@ md_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但�
 md_mineluck.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的破坏矿物周边的杂质而不损伤矿物.
 md_mineacc.desc=有时候将大量杂质破坏是无意义的，反而会让某些矿石附带的稀少素材也惨遭破坏，所以你开始去学习用电子束来完美的切割各种矿物.
 
-#Teleporter
-cat_teleporter=空间移动
+#空间移动
+cat_teleport=空间移动
 
-#Commands
+skl_tp_threatening=危险传送
+skl_tp_string=弦理论概论
+skl_tp_penetrate=穿透传送
+skl_tp_mark=标记传送
+skl_tp_visc=内脏剥离
+skl_tp_loc=定位传送
+skl_gn_btc=大脑锻炼课程
+skl_tp_hst=高速闪现
+skl_gn_btc2=大脑锻炼课程Ⅱ
+skl_gn_spirit=思维修养课程
+
+tp_threatening.desc=等级尚低的你无法移动质量较高或体积较大的东西，但是一个小小的碎片有时候就足以对别人造成巨大的伤害。
+tp_string.desc=所有的空间能力者们都需要学习弦理论来确保自己移动的精确性，你也不例外。
+tp_penetrate.desc=对于空间的奇妙感觉能让你知道眼前的障碍物大概的厚度，虽然感觉不是十分可靠，多多学习弦理论能进行更精确的传送。
+tp_mark.desc=以肉眼确认一个实体，确认实体某个面为自己的传送坐标。
+tp_visc.desc=近距离触摸某个生物，将其内脏直接传送出体外，但是因为过于血腥的杀伤效果，让你不敢传送太多内脏，并且可能在使用技能之后产生反胃。
+tp_loc.desc=记忆下当前的坐标，如有必要可发动超远程范围传送来到该坐标，可将较近距离的生物一起传送，计算力消耗极大。
+gn_btc.desc=对于弦理论的基础研究已经精通，你开始学习更深入的部分.
+tp_hst.desc=远超标记传送机动性的新传送方式，虽然单次传送距离不如标记传送，但是极高的传送速度与惯性消除能让你实现空中机动.
+gn_btc2.desc=更好的锻炼，让你的计算力的上限能够得到更好的强化.
+gn_spirit.desc=为了让计算力的恢复速度加快，要让自己使用过度的大脑得到好的修养.
+
+#信息
 aimctrl.presetinf=预设%s：%s
 aimctrl.curpreset=当前预设编号：%s
 aimctrl.classinit=能力信息未初始化。

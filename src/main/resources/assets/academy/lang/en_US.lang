@@ -100,7 +100,29 @@ md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
 #Teleporter
-cat_teleporter=Teleporter
+cat_teleport=Teleporter
+
+skl_tp_threatening=Threatening Teleporting
+skl_tp_string=String Theory
+skl_tp_penetrate=Penetrate Teleporting
+skl_tp_mark=Marked Teleporting
+skl_tp_visc=Viscus Stripping
+skl_tp_loc=Locating Teleporting
+skl_gn_btc=Brain Training Course
+skl_tp_hst=High Speed Teleporting
+skl_gn_btc2=Brain Training Course Ⅱ
+skl_gn_spirit=Spirit Training Course
+
+tp_threatening.desc=Although you can't teleport too heavy and too big things, you can teleport a small thing and it will make a big damage in others.
+tp_string.desc=All the teleporters need to learn string theory to make sure you can teleport accurately, and you also need to learn.
+tp_penetrate.desc=You can know how thick the thing in front of you is. Though it may be not so reliable, learning string theory more is good for teleporting accuracy.
+tp_mark.desc=Select an entity with your eyes, choose a side of the entity as teleporting position.
+tp_visc.desc=Touch a living thing and teleport its viscus out. Because it's so bloody that you can't teleport too much viscus, and it may cause a nausea.
+tp_loc.desc=Memorize the position here, and teleport to an other position. You can teleport with other things, but it will cost much CP.
+gn_btc.desc=Ability begins to take more CP, you need train your brain to use your ability more durably.
+tp_hst.desc=A new way of long-distance teleporting, the high speed and inertia disabling make you be able to maneuver in the air.
+gn_btc2.desc=Better training makes your max CP bigger.
+gn_spirit.desc=Let your brain have a rest and CP recovering will be faster.
 
 #Commands
 aimctrl.presetinf=Preset %s : %s
