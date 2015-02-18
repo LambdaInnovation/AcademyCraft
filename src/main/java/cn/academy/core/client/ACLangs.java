@@ -11,6 +11,10 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String opFailed() {
+		return local("ac.opfail");
+	}
+	
 	public static String presetSelect() {
 		return local("ac.presselect");
 	}

@@ -13,6 +13,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.TileMatrix;
+import cn.academy.energy.msg.matrix.MsgChangePwd;
 import cn.academy.energy.msg.matrix.MsgGuiLoadQuery;
 import cn.academy.energy.msg.matrix.MsgInitMatrix;
 import cn.liutils.api.gui.LIGuiScreen;
@@ -75,7 +76,7 @@ public class GuiMatrix extends LIGuiScreen {
 			SB pwd = new SB() {
 				@Override
 				public void onMouseDown(double mx, double my) {
-					mat.gui.addWidget(new Dialogue(mat) {});
+					mat.gui.addWidget(new PwdWindow(mat));
 				}
 			};
 			pwd.setPos(15.5, 52);
@@ -91,7 +92,7 @@ public class GuiMatrix extends LIGuiScreen {
 			} GL11.glPopMatrix();
 			
 			//Progress bar
-			double prog = .3;
+			double prog = mat.mat.getEnergy() / mat.mat.getMaxEnergy();
 			//h = 129
 			GL11.glPushMatrix(); {
 				double len = prog * 129;
@@ -120,7 +121,7 @@ public class GuiMatrix extends LIGuiScreen {
 		}
 	}
 	
-	static abstract class Dialogue extends Widget {
+	public static abstract class Dialogue extends Widget {
 		final GuiMatrix mat;
 		
 		public Dialogue(GuiMatrix _mat) {
@@ -286,6 +287,92 @@ public class GuiMatrix extends LIGuiScreen {
 		
 	}
 	
+	static class PwdWindow extends Dialogue {
+		
+		InputBox opw, pwd, pwd2;
+		
+		static final long TIME_WAIT = 1500;
+		String errStr;
+		long lastTime;
+
+		public PwdWindow(GuiMatrix _mat) {
+			super(_mat);
+		}
+		
+		@Override
+		public void onAdded() {
+			//Confirm button
+			addWidget(new WigOK() {
+				{
+					setPos(26, 73);
+				}
+				@Override
+				public void onMouseDown(double mx, double my) {
+					//VALIDATION
+					if(!pwd.getContent().equals(pwd2.getContent())) {
+						setErrMessage(ACLangs.inconsistentPass());
+						return;
+					}
+					AcademyCraft.netHandler.sendToServer(
+						new MsgChangePwd(mat.pageMain.channelName, 
+						opw.getContent(), pwd.getContent()));
+					PwdWindow.this.dispose();
+					mat.gui.addWidget(mat.stateDiag = new StateDiag(mat));
+				}
+			});
+			
+			//Abort button
+			addWidget(new WigBad() {
+				{
+					setPos(69, 73);
+				}
+				
+				@Override
+				public void onMouseDown(double mx, double my) {
+					//Close
+					Minecraft.getMinecraft().thePlayer.closeScreen();
+				}
+			});
+			
+			addWidget(opw = new InputBox(48, 25, 46, 8.5, 6, 1, 12)
+				.setFont(ACClientProps.FONT_YAHEI_32).setTextColor(0, 255, 255, 255));
+			
+			addWidget(pwd = new InputBox(48, 39, 46, 8.5, 6, 1, 12)
+				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+			
+			addWidget(pwd2 = new InputBox(48, 53, 46, 8.5, 6, 1, 12)
+				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+		}
+		
+		@Override
+		public void draw(double mx, double my, boolean h) {
+			super.draw(mx, my, h);
+			RenderUtils.bindColor(0, 255, 255, 255);
+			drawText(ACLangs.matInit(), 54, 8.5, 7, Align.CENTER);
+			
+			//input elements
+			RenderUtils.loadTexture(TEX_DIAG);
+			HudUtils.drawRect(11, 24, 23, 202, 86, 38.5, 172, 77);
+			
+			if(errStr != null) {
+				long time = Minecraft.getSystemTime();
+				GL11.glColor4d(1, 0.2, 0.2, 0.8);
+				drawText(errStr, 12, 63, 5.5);
+				if(time - lastTime > TIME_WAIT) {
+					errStr = null;
+				}
+			}
+			RenderUtils.bindIdentity();
+		}
+		
+		private void setErrMessage(String msg) {
+			this.errStr = msg;
+			this.lastTime = Minecraft.getSystemTime();
+		}
+		
+		
+	}
+	
 	public static interface Event {
 		void execute(GuiMatrix mat);
 	}
@@ -301,6 +388,8 @@ public class GuiMatrix extends LIGuiScreen {
 		}
 		@Override
 		public void execute(GuiMatrix mat) {
+			if(mat.stateDiag == null)
+				return;
 			if(successful) {
 				mat.stateDiag.msg = ACLangs.opSuccessful();
 				mat.stateDiag.state = DiagState.SUCCESS;
@@ -325,10 +414,34 @@ public class GuiMatrix extends LIGuiScreen {
 		@Override
 		public void execute(GuiMatrix mat) {
 			if(load) {
-				mat.getGui().addWidget(new PageMain(mat, cn));
+				mat.getGui().addWidget(mat.pageMain = new PageMain(mat, cn));
 			} else {
 				mat.getGui().addWidget(new PageInit(mat));
 			}
+		}
+		
+	}
+	
+	public static class PwdResponse implements Event {
+		
+		final boolean successful;
+		
+		public PwdResponse(boolean _suc) {
+			successful = _suc;
+		}
+
+		@Override
+		public void execute(GuiMatrix mat) {
+			if(mat.stateDiag == null)
+				return;
+			if(successful) {
+				mat.stateDiag.msg = ACLangs.opSuccessful();
+				mat.stateDiag.state = DiagState.SUCCESS;
+			} else {
+				mat.stateDiag.msg = ACLangs.opFailed();
+				mat.stateDiag.state = DiagState.FAIL;
+			}
+			mat.stateDiag.initCancel();
 		}
 		
 	}

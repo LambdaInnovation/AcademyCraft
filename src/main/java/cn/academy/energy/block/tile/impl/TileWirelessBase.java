@@ -35,9 +35,12 @@ public abstract class TileWirelessBase extends TileEntity implements
 		
 		if(updateTicker >= UPDATE_RATE) {
 			updateTicker = 0;
+			onUpdate();
 			this.markDirty();
 		}
 	}
+	
+	protected void onUpdate() {}
 	
     public void onChunkUnload() {
     	onUnload();

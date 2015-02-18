@@ -96,27 +96,24 @@ public class EntityThrowingCoin extends EntityX {
 		this.motionY = player.motionY;
 		setup();
 		dataWatcher.updateObject(10, Float.valueOf(initHt));
-		this.addDaemonHandler(new CollisionCheck(this) {
-			@Override
-			protected void onCollided(MovingObjectPosition res) {
-				if(posY > EntityThrowingCoin.this.player.posY + yOffset) {
-					System.out.println(res);
-					setDead();
-					if(!worldObj.isRemote && 
-						!EntityThrowingCoin.this.player.capabilities.isCreativeMode)
-						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
-				}
-			}
-		}.addExclusion(player));
+//		this.addDaemonHandler(new CollisionCheck(this) {
+//			@Override
+//			protected void onCollided(MovingObjectPosition res) {
+//				if(posY > EntityThrowingCoin.this.player.posY + yOffset) {
+//					setDead();
+//					if(!worldObj.isRemote && 
+//						!EntityThrowingCoin.this.player.capabilities.isCreativeMode)
+//						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
+//				}
+//			}
+//		}.addExclusion(player));
 		this.addDaemonHandler(new VelocityUpdate(this));
 		this.ignoreFrustumCheck = true;
 	}
 	
 	private void setup() {
-		this.removeDaemonHandler("collision");
 		this.addDaemonHandler(new GravityApply(this, 0.06));
 		this.setCurMotion(new KeepPosition());
-		this.handleClient = true;
 		this.motionY += INITVEL;
 		axis = Vec3.createVectorHelper(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
 		this.getEntityData().setLong("startTime", GenericUtils.getSystemTime());

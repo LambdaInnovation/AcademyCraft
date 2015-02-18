@@ -3,32 +3,66 @@
  */
 package cn.academy.energy.msg.matrix;
 
-import net.minecraft.world.World;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.world.World;
+import cn.academy.core.energy.WirelessSystem;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
+import cn.annoreg.mc.RegMessageHandler.Side;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 /**
  * @author WeathFolD
  *
  */
+@RegistrationClass
 public class MsgChangePwd implements IMessage {
+	
+	String channel;
+	String opw, npw;
 
-	public MsgChangePwd(World world, String _channel, String oldPwd, String newPwd) {
+	public MsgChangePwd(String _channel, String oldPwd, String newPwd) {
+		channel = _channel;
+		opw = oldPwd;
+		npw = newPwd;
 	}
 
+	public MsgChangePwd() {}
+	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		// TODO Auto-generated method stub
-
+		channel = ByteBufUtils.readUTF8String(buf);
+		opw = ByteBufUtils.readUTF8String(buf);
+		npw = ByteBufUtils.readUTF8String(buf);
 	}
 
-	/* (non-Javadoc)
-	 * @see cpw.mods.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
-	 */
 	@Override
 	public void toBytes(ByteBuf buf) {
-		// TODO Auto-generated method stub
+		ByteBufUtils.writeUTF8String(buf, channel);
+		ByteBufUtils.writeUTF8String(buf, opw);
+		ByteBufUtils.writeUTF8String(buf, npw);
+	}
+	
+	@RegMessageHandler(msg = MsgChangePwd.class, side = Side.SERVER)
+	public static class Handler implements IMessageHandler<MsgChangePwd, ResponseChangePwd> {
 
+		@Override
+		public ResponseChangePwd onMessage(MsgChangePwd msg, MessageContext ctx) {
+			World world = ctx.getServerHandler().playerEntity.worldObj;
+			if(!WirelessSystem.hasNetwork(world, msg.channel)) {
+				return new ResponseChangePwd(false);
+			}
+			//Pass validation
+			if(!WirelessSystem.getPassword(world, msg.channel).equals(msg.opw)) {
+				return new ResponseChangePwd(false);
+			}
+			WirelessSystem.setPassword(world, msg.channel, msg.npw);
+			return new ResponseChangePwd(true);
+		}
+		
 	}
 
 }

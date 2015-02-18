@@ -145,7 +145,9 @@ public class GuiNode extends LIGuiContainer {
 		public void onAdded() {
 			ChannelList list;
 			addWidget(list = new ChannelList());
-			list.setDragBar(new ChooseDB());
+			ChooseDB db = new ChooseDB();
+			addWidget(db);
+			list.setDragBar(db);
 		}
 		
 		public void draw(double mx, double my, boolean hover) {
@@ -168,7 +170,7 @@ public class GuiNode extends LIGuiContainer {
 	private class ChooseDB extends DragBar {
 
 		public ChooseDB() {
-			super(270, 76, 16, 172.5, 16);
+			super(135, 38, 16, 172.5, 16);
 			this.initTexDraw(TEX_SELECT, 304, 0, 32, 32);
 		}
 		
@@ -225,7 +227,8 @@ public class GuiNode extends LIGuiContainer {
 				RenderUtils.bindColor(ACTIVE_COLOR);
 				HudUtils.drawModalRect(0, 0, width, height);
 			}
-			drawText(channel, 5, 4, 5);
+			RenderUtils.bindColor(100, 255, 255);
+			drawText(channel, 5, 4, 7);
 		}
 		
 		@Override
