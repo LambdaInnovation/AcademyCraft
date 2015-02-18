@@ -56,8 +56,6 @@ public class MsgMatGuiLoad implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(MsgMatGuiLoad msg, MessageContext ctx) {
-			System.out.println("received msg");
-			
 			GuiScreen scr = Minecraft.getMinecraft().currentScreen;
 			if(scr == null || !(scr instanceof GuiMatrix)) {
 				return null;

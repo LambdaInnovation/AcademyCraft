@@ -14,13 +14,16 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
-import cn.academy.energy.msg.node.MsgInitNode;
+import cn.academy.energy.client.gui.Dialogues.DiagState;
+import cn.academy.energy.client.gui.Dialogues.Dialogue;
+import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.node.MsgNodeGuiLoad;
 import cn.academy.energy.msg.node.MsgNodeLoadList;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiContainer;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
+import cn.liutils.api.gui.widget.InputBox;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -38,9 +41,11 @@ public class GuiNode extends LIGuiContainer {
 	
 	static final int[] COLOR = { 133, 240, 240 };
 	
+	//Parents/Associations
 	final ContainerNode node;
 	final TileNode tile;
 	
+	//Sync flags
 	public boolean synced; //flag set by Messages indicating the packet was sent
 	public boolean listSynced; //whether channel list was synced.
 	
@@ -50,7 +55,9 @@ public class GuiNode extends LIGuiContainer {
 	public int nNodes;
 	public int nGens;
 
+	//pages
 	Page mainPage;
+	StateDiag stateDiag;
 	Choose choosePage;
 	
 	public GuiNode(ContainerNode c) {
@@ -233,8 +240,60 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onMouseDown(double mx, double my) {
-			AcademyCraft.netHandler.sendToServer(new MsgInitNode(GuiNode.this.tile, channel));
+			gui.addWidget(new InputPassword(channel));
 			choosePage.dispose();
+		}
+	}
+	
+	private class InputPassword extends Dialogue {
+		
+		final String cn;
+		InputBox box;
+
+		public InputPassword(String _cn) {
+			cn = _cn;
+		}
+		
+		@Override
+		public void onAdded() {
+			addWidget(new Dialogues.WigOK() {
+				{
+					setPos(50, 75);
+				}
+				
+				@Override
+				public void onMouseDown(double mx, double my) {
+					gui.addWidget(stateDiag = new StateDiag());
+					InputPassword.this.dispose();
+				}
+			});
+			
+			addWidget(box = new InputBox(46, 51, 46, 8.5, 6, 1, 12)
+				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255)); 
+		}
+		
+		@Override
+		public void draw(double mx, double my, boolean b) {
+			super.draw(mx, my, b);
+			RenderUtils.bindColor(100, 255, 255);
+			drawText(ACLangs.wirelessLogin(), 54, 10, 7, Align.CENTER);
+			
+			//23 202 172 21
+			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
+			HudUtils.drawRect(9, 30, 23, 202, 86, 10.5, 172, 21);
+			HudUtils.drawRect(9, 50, 23, 230, 86, 10.5, 172, 21);
+			
+			drawAdjusted(cn, 68, 31, 6, Align.CENTER, 48);
+		}
+		
+	}
+	
+	public void finishInit(boolean suc) {
+		if(stateDiag != null) {
+			stateDiag.state = suc ? DiagState.SUCCESS : DiagState.FAIL;
+			stateDiag.initCancel();
+		} else {
+			AcademyCraft.log.error("WTF");
 		}
 	}
 	
@@ -248,6 +307,10 @@ public class GuiNode extends LIGuiContainer {
 	
 	private static void drawText(String str, double x, double y, double size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(str, x, y, size, align);
+	}
+	
+	private static void drawAdjusted(String str, double x, double y, double size, Align align, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(str, x, y, size, align, cst);
 	}
 	
 }
