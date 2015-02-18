@@ -16,10 +16,10 @@ item.tiningot.name=锡锭
 item.ac_siliconrod.name=硅锭
 item.ac_coppercoil.name=线圈
 item.ni_ingot.name=镍锭
-item.mg_plate.name=镁锭
+item.mg_plate.name=镁板
 item.almg_plate.name=铝镁合金板
 item.al_plate.name=铝板
-item.mg_ingot.name=镁板
+item.mg_ingot.name=镁锭
 item.ac_pcbn.name=初级电路板
 item.ac_bodydet.name=人体状态探测器
 item.ac_io.name=I/O接口
@@ -28,8 +28,6 @@ item.ac_crystal.name=晶化岩
 item.shadow_ingot.name=影子金属锭
 item.ac_cplank.name=复合木板
 item.ac_exp_nail.name=粘性膨胀钉
-
-item.ecrystal.energy=剩余能量
 
 #方块
 tile.ac_developer.name=能力开发机
