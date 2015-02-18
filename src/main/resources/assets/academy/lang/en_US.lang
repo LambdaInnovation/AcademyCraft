@@ -136,7 +136,7 @@ page.adskill=Skill Acquiring
 page.adlevel=Level Upgrading
 page.adlearning=Ability Learning
 ac.notlearned=Not Learned
-ac.machinestat=Stat
+ac.machinestat=Status
 ac.curenergy=Current Energy
 ac.syncrate=Synchronization Rate
 ac.learnability=Learn Ability
@@ -170,3 +170,14 @@ level_2=Level 3
 level_3=Level 4
 level_4=Level 5
 #level_5=Level 6
+
+#WEN
+ac.notconnected=Not Connected
+ac.matinit=Initialization
+ac.opstat=WEN Status
+ac.opsuc=Open Successful
+ac.opfail=Open Failed
+ac.cnnexist=Channel Exists
+ac.transmitting=Transmitting
+ac.inconsistentpass=The passwords you entered must be the same!
+ac.loading=Loading

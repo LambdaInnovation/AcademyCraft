@@ -170,3 +170,15 @@ level_2=Level 3
 level_3=Level 4
 level_4=Level 5
 #level_5=Level 6
+
+
+#WEN
+ac.notconnected=未连接
+ac.matinit=初始化
+ac.opstat=WEN状态
+ac.opsuc=开启成功
+ac.opfail=开启失败
+ac.cnnexist=频道存在
+ac.transmitting=广播中
+ac.inconsistentpass=两次输入的密码必须一致！
+ac.loading=加载中
