@@ -60,7 +60,8 @@ public class GuiDeveloper extends LIGuiScreen {
 		gui.addWidget(pageMain = new PageMain(this));
 		subs.clear();
 		subs.add(new PageLearn(this));
-		subs.add(new PageSkills(this));
+		if(data.hasAbility())
+			subs.add(new PageSkills(this));
 		
 		for(DevSubpage sp : subs) {
 			pageMain.addWidget(sp);
