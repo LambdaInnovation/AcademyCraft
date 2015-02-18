@@ -181,3 +181,5 @@ ac.cnnexist=Channel Exists
 ac.transmitting=Transmitting
 ac.inconsistentpass=The passwords you entered must be the same!
 ac.loading=Loading
+ac.wllogin=WEN Login
+ac.matpwd=Change Password

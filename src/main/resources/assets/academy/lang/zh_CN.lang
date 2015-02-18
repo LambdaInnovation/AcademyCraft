@@ -182,3 +182,5 @@ ac.cnnexist=频道存在
 ac.transmitting=广播中
 ac.inconsistentpass=两次输入的密码必须一致！
 ac.loading=加载中
+ac.wllogin=WEN登录
+ac.matpwd=更改密码
