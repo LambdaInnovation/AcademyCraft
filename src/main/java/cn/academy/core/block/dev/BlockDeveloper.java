@@ -30,7 +30,6 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 	
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz) {
-		System.out.println("oba0 " + world.isRemote);
 		{ //Transform to head block
 			int meta = world.getBlockMetadata(x, y, z);
 			int[] coords = this.getOrigin(world, x, y, z, meta);
@@ -42,7 +41,6 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		TileDeveloper te = safecast(world.getTileEntity(x, y, z));
 		if(te == null) return false;
 		EntityPlayer user = te.getUser();
-		System.out.println("oba " + world.isRemote);
 		if(user == null) {
 			te.use(player);
 			return true;

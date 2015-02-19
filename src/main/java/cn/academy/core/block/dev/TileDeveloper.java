@@ -104,7 +104,6 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	public boolean use(EntityPlayer player) {
 		if(user != null) return false;
 		user = player;
-		user.getEntityData().setBoolean("developing", true);
 		if(!worldObj.isRemote)
 			es.mount(user);
 		guiHandler.openGuiContainer(player, worldObj, xCoord, yCoord, zCoord);
@@ -116,7 +115,6 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 			return;
 		if(!worldObj.isRemote)
 			es.disMount();
-		user.getEntityData().setBoolean("developing", false);
 		user = null;
 	}
 	
