@@ -1,6 +1,6 @@
 #中文语言文件 调试版本
 #物品
-item.void.name=
+item.null.name=
 item.ac_logo.name=
 item.ac_record1.name=超电磁炮唱片#1
 item.ac_record2.name=超电磁炮唱片#2
@@ -28,6 +28,7 @@ item.ac_crystal.name=晶化岩
 item.shadow_ingot.name=影子金属锭
 item.ac_cplank.name=复合木板
 item.ac_exp_nail.name=粘性膨胀钉
+item.ac_smallsi.name=小块硅
 
 #方块
 tile.ac_developer.name=能力开发机
@@ -155,8 +156,8 @@ ac.expconsumption=期望消耗
 ac.fullylearned=完全习得
 ac.upgradeskill=能力提升
 ac.upgradelv=等级提升
-ac.accept=接受
-ac.restore=复原
+ac.accept=完成
+ac.restore=取消
 adev.holoview=全息视图
 adev.userinfo=能力者信息
 ac.presset=预设设置

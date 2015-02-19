@@ -58,10 +58,12 @@ public class ACRecipes {
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.developer), "aba", "cdc", "efe",
 				'a', ACItems.ioPort, 'b', ACItems.bodyDet, 'c', ACItems.brainBeta, 'd', ACItems.pcb,
 				'e', ACBlocks.node, 'f', ACItems.almgPlate);
+		GameRegistry.addRecipe(new ItemStack(ACItems.siliconRod), "aaa", "a a", "aaa",
+				'a', ACItems.smallSi);
 	}
 	
 	public static void regSmelting() {
-		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.siliconRod), 0f);
+		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.smallSi), 0f);
 		//Ore Smelting
 		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
