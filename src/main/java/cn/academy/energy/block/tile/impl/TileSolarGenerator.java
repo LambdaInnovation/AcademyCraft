@@ -22,6 +22,7 @@ import cn.academy.api.energy.IWirelessGenerator;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.energy.block.tile.base.ACGeneratorBase;
 import cn.academy.energy.block.tile.base.TileUserBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
@@ -31,20 +32,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 太阳能发电机TileEntity
- * @author WeAthFolD
- *
+ * @author WeAthFolD, Jiangyue
  */
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileSolarGenerator extends TileUserBase implements IWirelessGenerator {
-	
-    /* Const Declaration for This General Generator. */
-    private double currentEU = 0;
+public class TileSolarGenerator extends ACGeneratorBase {
     
     private final double MAX_EU = 2000.0;
     private final double LATENCY = 400.0;
-    private final double MAX_DISTANCE = 8; /* Unit: Block */
     
     @RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -52,6 +48,7 @@ public class TileSolarGenerator extends TileUserBase implements IWirelessGenerat
     
     public TileSolarGenerator() {
         super();
+        this.setMaxEnergy(MAX_EU);
     }
     
     /**
@@ -62,9 +59,9 @@ public class TileSolarGenerator extends TileUserBase implements IWirelessGenerat
         super.updateEntity();
         /* Judge the state to determine how much Energy should offer */
         World theWorld = this.getWorldObj();
-        double brightLev = theWorld.getSunBrightness(this.yCoord);
-        int EUToAdd = (int) brightLev * 200;
-        addEnergy(EUToAdd);
+        double brightLev = theWorld.isDaytime() && theWorld.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord) ? 1.0 : 0.0;
+        int euToAdd = (int) brightLev * 5;
+        addEnergy(euToAdd);
     }
     
 	@SideOnly(Side.CLIENT)
@@ -85,19 +82,6 @@ public class TileSolarGenerator extends TileUserBase implements IWirelessGenerat
 			GL11.glPopMatrix();
 		}
 		
-	}
-	
-    public void addEnergy(double toAdd) {
-    	double req = MAX_EU - toAdd;
-    	double real = Math.min(req, toAdd);
-        currentEU += real;
-    }
-
-	@Override
-	public double getOutput(double req) {
-		double csm = Math.min(req, Math.min(128, currentEU));
-		currentEU -= csm;
-		return csm;
 	}
 
 	@Override

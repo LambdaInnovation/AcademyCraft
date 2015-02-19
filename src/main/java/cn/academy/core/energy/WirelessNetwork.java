@@ -70,6 +70,10 @@ public class WirelessNetwork {
 		return false;
 	}
 	
+	public IWirelessNode getConn(IWirelessTile tile) {
+		return lookup.get(tile);
+	}
+	
 	public void registerNode(IWirelessNode node) {
 		nodes.add(node);
 	}

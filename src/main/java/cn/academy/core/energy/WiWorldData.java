@@ -60,28 +60,16 @@ public class WiWorldData {
 		return lookup.containsKey(tile);
 	}
 	
-	public String getChannel(IWirelessTile tile) {
-		return lookup.get(tile);
+	public IWirelessNode getConnectedNode(IWirelessTile tile) {
+		String cn = lookup.get(tile);
+		if(cn == null)
+			return null;
+		WirelessNetwork net = netMap.get(cn);
+		return net.getConn(tile);
 	}
 	
-	public IWirelessNode getNearestNode(int x, int y, int z) {
-		IWirelessNode ret = null;
-		double minDist = Double.MAX_VALUE;
-		for(int i = x - 1; i <= x + 1; ++i) {
-			for(int j = z - 1; j <= z + 1; ++j) {
-				
-				IWirelessNode node = getNearestNodeInChunk(i, j, x, y, z);
-				if(node == null) continue;
-				TileEntity te = (TileEntity) node;
-				double dsq = GenericUtils.distanceSq(x, y, z, te.xCoord, te.yCoord, te.zCoord);
-				if(dsq < minDist) {
-					minDist = dsq;
-					ret = node;
-				}
-				
-			}
-		}
-		return ret;
+	public String getChannel(IWirelessTile tile) {
+		return lookup.get(tile);
 	}
 	
 	public String getPassword(String chan) {
@@ -97,8 +85,10 @@ public class WiWorldData {
 		Set<String> excl = new HashSet();
 		Set<String> ret = new HashSet();
 		range *= range;
-		for(int i = x - 1; i <= x + 1; ++i) {
-			for(int j = z - 1; j <= z + 1; ++j) {
+		
+		int cx = x >> 4, cz = z >> 4;
+		for(int i = cx - 1; i <= cx + 1; ++i) {
+			for(int j = cz - 1; j <= cz + 1; ++j) {
 				if(ret.size() == max) break;
 				ret.addAll(getChannelsInChunk(excl, i, j, x, y, z, range, max - ret.size()));
 			}
@@ -110,8 +100,10 @@ public class WiWorldData {
 		Set<String> excl = new HashSet();
 		Set<Pair<IWirelessNode, String>> ret = new HashSet();
 		range *= range;
-		for(int i = x - 1; i <= x + 1; ++i) {
-			for(int j = z - 1; j <= z + 1; ++j) {
+		
+		int cx = x >> 4, cz = z >> 4;
+		for(int i = cx - 1; i <= cx + 1; ++i) {
+			for(int j = cz - 1; j <= cz + 1; ++j) {
 				if(ret.size() == max) break;
 				ret.addAll(getNodesInChunk(excl, i, j, x, y, z, range, max - ret.size()));
 			}
@@ -120,7 +112,7 @@ public class WiWorldData {
 	}
 	
 	private Set<String> getChannelsInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
-		List<IWirelessNode> nodes = getNodeList(cx, cz);
+		List<IWirelessNode> nodes = getNodeList(rawGetChunkKey(cx, cz));
 		Set<String> ret = new HashSet();
 		for(IWirelessNode node : nodes) {
 			String chan = lookup.get(node);
@@ -128,6 +120,7 @@ public class WiWorldData {
 				continue;
 			TileEntity tile = (TileEntity) node;
 			double td = GenericUtils.distanceSq(tile.xCoord, tile.yCoord, tile.zCoord, x, y, z);
+			System.out.println(tile);
 			if(td < rsq) {
 				excl.add(chan);
 				ret.add(lookup.get(node));
@@ -139,7 +132,7 @@ public class WiWorldData {
 	}
 	
 	private Set<Pair<IWirelessNode, String>> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
-		List<IWirelessNode> nodes = getNodeList(cx, cz);
+		List<IWirelessNode> nodes = getNodeList(rawGetChunkKey(cx, cz));
 		Set<Pair<IWirelessNode, String>> ret = new HashSet();
 		for(IWirelessNode node : nodes) {
 			String chan = lookup.get(node);
@@ -155,21 +148,6 @@ public class WiWorldData {
 			}
 		}
 		return ret;
-	}
-	
-	private IWirelessNode getNearestNodeInChunk(int cx, int cz, int x, int y, int z) {
-		List<IWirelessNode> nodes = getNodeList(cx, cz);
-		double minDist = Double.MAX_VALUE;
-		IWirelessNode res = null;
-		for(IWirelessNode node : nodes) {
-			TileEntity te = (TileEntity) node;
-			double dsq = GenericUtils.distanceSq(x, y, z, te.xCoord, te.yCoord, te.zCoord);
-			if(dsq < minDist) {
-				minDist = dsq;
-				res = node;
-			}
-		}
-		return res;
 	}
 	
 	public void registerUser(IWirelessTile tile, IWirelessNode node) {
@@ -201,15 +179,13 @@ public class WiWorldData {
 		TileEntity tile = (TileEntity) node;
 		net.registerNode(node);
 		lookup.put(node, channel);
-		getNodeList(tile.xCoord, tile.zCoord).add(node);
-		System.out.println("Registered " + node + " in " + channel);
+		getNodeList(getChunkKey(tile.xCoord, tile.zCoord)).add(node);
 	}
 	
 	public void unregister(IWirelessTile tile) {
 		String chan = lookup.remove(tile);
-		System.out.println("unreg " + tile);
 		if(chan == null) {
-			AcademyCraft.log.error("Trying to unregister a non-present tile " + tile);
+			//AcademyCraft.log.error("Trying to unregister a non-present tile " + tile);
 			return;
 		}
 		WirelessNetwork net = netMap.get(chan);
@@ -217,12 +193,11 @@ public class WiWorldData {
 		
 		if(tile instanceof IWirelessNode) {
 			TileEntity t = (TileEntity) tile;
-			getNodeList(t.xCoord, t.zCoord).remove(tile);
+			getNodeList(getChunkKey(t.xCoord, t.zCoord)).remove(tile);
 		}
 	}
 	
-	private List<IWirelessNode> getNodeList(int x, int z) {
-		long key = getChunkKey(x, z);
+	private List<IWirelessNode> getNodeList(long key) {
 		List<IWirelessNode> res = chunkPos.get(key);
 		if(res == null) {
 			res = new LinkedList<IWirelessNode>();
@@ -232,11 +207,15 @@ public class WiWorldData {
 	}
 	
 	private List<IWirelessNode> getNodeList(TileEntity te) {
-		return getNodeList(te.xCoord, te.zCoord);
+		return getNodeList(getChunkKey(te.xCoord, te.zCoord));
 	}
 	
 	private long getChunkKey(int x, int z) {
-		return x >> 4 + (((long)z) >> 4) << 28;
+		return rawGetChunkKey(x >> 4, z >> 4);
+	}
+	
+	private long rawGetChunkKey(int x, int z) {
+		return x + ((long)z << 28);
 	}
 	
 	public void onTick() {

@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.energy.WirelessSystem;
-import cn.academy.energy.block.tile.impl.TileWirelessBase;
 import cn.academy.energy.msg.MsgEnergyHeartbeat;
 
 /**

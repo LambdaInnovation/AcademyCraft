@@ -77,10 +77,6 @@ public class WirelessSystem {
 		return getData(((TileEntity)tile).getWorldObj()).isRegistered(tile);
 	}
 	
-	public static IWirelessNode getNearestNode(World world, int x, int y, int z) {
-		return getData(world).getNearestNode(x, y, z);
-	}
-	
 	public static List<String> getAvailableChannels(World world, int x, int y, int z, double range, int max) {
 		return getData(world).getChannelsIn(x, y, z, range, max);
 	}
@@ -91,6 +87,10 @@ public class WirelessSystem {
 	
 	public static String getTileChannel(IWirelessTile tile) {
 		return getData(((TileEntity)tile).getWorldObj()).getChannel(tile);
+	}
+	
+	public static IWirelessNode getConnectedNode(IWirelessTile tile) {
+		return getData(((TileEntity)tile).getWorldObj()).getConnectedNode(tile);
 	}
 	
 	private static WiWorldData getData(World world) {

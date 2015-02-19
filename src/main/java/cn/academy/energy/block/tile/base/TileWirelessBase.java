@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.energy.block.tile.impl;
+package cn.academy.energy.block.tile.base;
 
 import java.util.List;
 
@@ -25,14 +25,16 @@ public abstract class TileWirelessBase extends TileEntity implements
 	
 	//Those are just for loading purpose.
 	boolean loaded;
-	String channelToLoad;
 
 	public TileWirelessBase() {}
 	
 	@Override
 	public void updateEntity() {
 		++updateTicker;
-		
+		if(!loaded) {
+			loaded = true;
+			init();
+		}
 		
 		if(updateTicker >= UPDATE_RATE) {
 			updateTicker = 0;
@@ -40,6 +42,8 @@ public abstract class TileWirelessBase extends TileEntity implements
 			this.markDirty();
 		}
 	}
+	
+	protected void init() {}
 	
 	protected void onUpdate() {}
 	
@@ -69,9 +73,6 @@ public abstract class TileWirelessBase extends TileEntity implements
     }
 	
 	//Sandbox methods
-	public IWirelessNode getNearestNode() {
-		return WirelessSystem.getNearestNode(getWorldObj(), xCoord, yCoord, zCoord);
-	}
 	
 	public List<String> getAvailableChannels(int max) {
 		return WirelessSystem.getAvailableChannels(getWorldObj(), xCoord, yCoord, zCoord, getSearchRange(), max);

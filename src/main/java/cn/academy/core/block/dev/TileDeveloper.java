@@ -24,6 +24,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.register.ACBlocks;
+import cn.academy.energy.block.tile.base.ACReceiverBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegTileEntity;
@@ -49,7 +50,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends TileGenericSink implements IEnergySink, ISittable {
+public class TileDeveloper extends ACReceiverBase implements ISittable {
 
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
@@ -92,7 +93,9 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	private int stimTicker;
 	private static final Random RNG = new Random();
 
-	public TileDeveloper() {}
+	public TileDeveloper() {
+		setMaxEnergy(INIT_MAX_ENERGY);
+	}
 	
 	//Sit and use API
 	SitEntity es;
@@ -244,7 +247,6 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		}
 		if(user != null){
 			int side = this.getBlockMetadata() & 3;
-			System.out.println(side + " " + worldObj.isRemote + " " + user.getCommandSenderName());
 			float rot = 0;
 			switch(side) {
 			case 0:
@@ -351,6 +353,11 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		return super.injectEnergyUnits(directionFrom, amount);
 	}
 	
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+    	return INFINITE_EXTENT_AABB;
+    }
+	
 	//Registry
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
@@ -388,5 +395,10 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
     		super(wrld);
     	}
     }
+
+	@Override
+	public double getSearchRange() {
+		return 24;
+	}
     
 }
