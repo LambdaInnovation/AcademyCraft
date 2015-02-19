@@ -11,6 +11,19 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String frClearConfirm() {
+		//你确认要清除当前机器的连接么？
+		return local("ac.frclearconfirm");
+	}
+	
+	public static String frEstbConn() { //Establish Connection
+		return local("ac.frestb");
+	}
+	
+	public static String frClearConn() {
+		return local("ac.frclear");
+	}
+	
 	public static String frCurrentChannel() {
 		return local("ac.frcur");
 	}

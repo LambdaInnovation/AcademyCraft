@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.Widget;
-import cn.liutils.api.gui.Widget.AlignStyle;
+import cn.liutils.api.gui.widget.InputBox;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.LambdaFont.Align;
@@ -18,12 +18,16 @@ public class Dialogues {
 	static ResourceLocation TEX_DIAG = new ResourceLocation("academy:textures/guis/wireless_dialogue.png");
 	
 	enum DiagState { 
-		LOADING(279, 95), FAIL(253, 95), SUCCESS(220, 95);
-		DiagState(int _u, int _v) {
+		LOADING(279, 95, ACLangs.transmitting()), 
+		FAIL(253, 95, ACLangs.opFailed()), 
+		SUCCESS(220, 95, ACLangs.opSuccessful());
+		DiagState(int _u, int _v, String str) {
 			u = _u;
 			v = _v;
+			msg = str;
 		}
 		public final int u, v;
+		public final String msg;
 	};
 
 	public static abstract class Dialogue extends Widget {
@@ -58,7 +62,6 @@ public class Dialogues {
 	public static class StateDiag extends Dialogue {
 		
 		public DiagState state = DiagState.LOADING;
-		public String msg = ACLangs.transmitting();
 
 		public StateDiag() {}
 		
@@ -84,7 +87,7 @@ public class Dialogues {
 			} GL11.glPopMatrix();
 			
 			GL11.glColor4d(0, 1, 1, 0.8);
-			drawText(msg, 53, 60, 6, Align.CENTER);
+			drawText(state.msg, 53, 60, 6, Align.CENTER);
 			RenderUtils.bindIdentity();
 		}
 		
@@ -102,12 +105,64 @@ public class Dialogues {
 		
 	}
 	
-	private static void drawText(String text, double x, double y, double size) {
+	abstract static class InputPassword extends Dialogue {
+		
+		public final String cn;
+		InputBox box;
+
+		public InputPassword(String _cn) {
+			cn = _cn;
+		}
+		
+		public abstract void performAction(String pwd);
+		
+		@Override
+		public void onAdded() {
+			addWidget(box = new InputBox(46, 51, 46, 8.5, 6, 1, 12)
+				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255)); 
+			
+			addWidget(new Dialogues.WigOK() {
+				{
+					setPos(50, 75);
+				}
+				
+				@Override
+				public void onMouseDown(double mx, double my) {
+					performAction(box.getContent());
+				}
+			});
+		}
+		
+		@Override
+		public void draw(double mx, double my, boolean b) {
+			super.draw(mx, my, b);
+			RenderUtils.bindColor(100, 255, 255);
+			drawText(ACLangs.wirelessLogin(), 54, 10, 7, Align.CENTER);
+			
+			//23 202 172 21
+			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
+			HudUtils.drawRect(9, 30, 23, 202, 86, 10.5, 172, 21);
+			HudUtils.drawRect(9, 50, 23, 230, 86, 10.5, 172, 21);
+			
+			drawText(cn, 68, 31, 6, Align.CENTER, 48);
+		}
+		
+	}
+	
+	public static void drawText(String text, double x, double y, double size) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
 	}
 	
-	private static void drawText(String text, double x, double y, double size, Align align) {
+	public static void drawText(String text, double x, double y, double size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+	}
+	
+	public static void drawText(String text, double x, double y, double size, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
+	}
+	
+	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
 	}
 
 }

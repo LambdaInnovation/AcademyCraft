@@ -311,10 +311,8 @@ public class GuiMatrix extends LIGuiScreen {
 			if(mat.stateDiag == null)
 				return;
 			if(successful) {
-				mat.stateDiag.msg = ACLangs.opSuccessful();
 				mat.stateDiag.state = DiagState.SUCCESS;
 			} else {
-				mat.stateDiag.msg = ACLangs.channelExists();
 				mat.stateDiag.state = DiagState.FAIL;
 			}
 			mat.stateDiag.initCancel();
@@ -355,10 +353,8 @@ public class GuiMatrix extends LIGuiScreen {
 			if(mat.stateDiag == null)
 				return;
 			if(successful) {
-				mat.stateDiag.msg = ACLangs.opSuccessful();
 				mat.stateDiag.state = DiagState.SUCCESS;
 			} else {
-				mat.stateDiag.msg = ACLangs.opFailed();
 				mat.stateDiag.state = DiagState.FAIL;
 			}
 			mat.stateDiag.initCancel();

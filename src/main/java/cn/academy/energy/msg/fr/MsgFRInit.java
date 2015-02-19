@@ -88,6 +88,7 @@ public class MsgFRInit implements IMessage {
 			fr.synced = true;
 			fr.channels = msg.cnMap;
 			fr.curChannel = msg.curChannel;
+			fr.onInit();
 			return null;
 		}
 		

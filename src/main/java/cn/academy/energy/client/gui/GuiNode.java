@@ -16,6 +16,7 @@ import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.client.gui.Dialogues.DiagState;
 import cn.academy.energy.client.gui.Dialogues.Dialogue;
+import cn.academy.energy.client.gui.Dialogues.InputPassword;
 import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.node.MsgInitNode;
 import cn.academy.energy.msg.node.MsgNodeGuiLoad;
@@ -241,51 +242,22 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onMouseDown(double mx, double my) {
-			gui.addWidget(new InputPassword(channel));
+			gui.addWidget(new NInputPassword(channel));
 			choosePage.dispose();
 		}
 	}
 	
-	private class InputPassword extends Dialogue {
-		
-		final String cn;
-		InputBox box;
+	private class NInputPassword extends InputPassword {
 
-		public InputPassword(String _cn) {
-			cn = _cn;
+		public NInputPassword(String _cn) {
+			super(_cn);
 		}
-		
+
 		@Override
-		public void onAdded() {
-			addWidget(new Dialogues.WigOK() {
-				{
-					setPos(50, 75);
-				}
-				
-				@Override
-				public void onMouseDown(double mx, double my) {
-					gui.addWidget(stateDiag = new StateDiag());
-					AcademyCraft.netHandler.sendToServer(new MsgInitNode(tile, cn, box.getContent()));
-					InputPassword.this.dispose();
-				}
-			});
-			
-			addWidget(box = new InputBox(46, 51, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255)); 
-		}
-		
-		@Override
-		public void draw(double mx, double my, boolean b) {
-			super.draw(mx, my, b);
-			RenderUtils.bindColor(100, 255, 255);
-			drawText(ACLangs.wirelessLogin(), 54, 10, 7, Align.CENTER);
-			
-			//23 202 172 21
-			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
-			HudUtils.drawRect(9, 30, 23, 202, 86, 10.5, 172, 21);
-			HudUtils.drawRect(9, 50, 23, 230, 86, 10.5, 172, 21);
-			
-			drawAdjusted(cn, 68, 31, 6, Align.CENTER, 48);
+		public void performAction(String pwd) {
+			gui.addWidget(stateDiag = new StateDiag());
+			AcademyCraft.netHandler.sendToServer(new MsgInitNode(tile, cn, pwd));
+			dispose();
 		}
 		
 	}
