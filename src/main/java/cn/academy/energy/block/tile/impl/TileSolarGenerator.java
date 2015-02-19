@@ -99,5 +99,10 @@ public class TileSolarGenerator extends TileUserBase implements IWirelessGenerat
 		currentEU -= csm;
 		return csm;
 	}
+
+	@Override
+	public double getSearchRange() {
+		return 24;
+	}
 	
 }

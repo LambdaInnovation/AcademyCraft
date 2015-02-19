@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.energy.WirelessSystem;
+import cn.liutils.util.misc.Pair;
 import cn.liutils.util.space.IBlockFilter;
 
 /**
@@ -42,6 +43,8 @@ public abstract class TileWirelessBase extends TileEntity implements
 	
 	protected void onUpdate() {}
 	
+	public abstract double getSearchRange(); 
+	
     public void onChunkUnload() {
     	onUnload();
     }
@@ -70,8 +73,12 @@ public abstract class TileWirelessBase extends TileEntity implements
 		return WirelessSystem.getNearestNode(getWorldObj(), xCoord, yCoord, zCoord);
 	}
 	
-	public List<String> getAvailableChannels(double range, int max) {
-		return WirelessSystem.getAvailableChannels(getWorldObj(), xCoord, yCoord, zCoord, range, max);
+	public List<String> getAvailableChannels(int max) {
+		return WirelessSystem.getAvailableChannels(getWorldObj(), xCoord, yCoord, zCoord, getSearchRange(), max);
+	}
+	
+	public List<Pair<IWirelessNode, String>> getAvailableNodes(int max) {
+		return WirelessSystem.getAvailableNodes(getWorldObj(), xCoord, yCoord, zCoord, getSearchRange(), max);
 	}
 
 }

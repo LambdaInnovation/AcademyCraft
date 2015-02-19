@@ -203,4 +203,9 @@ public class TileNode extends TileNodeBase implements IInventory {
         }
     }
 
+	@Override
+	public double getSearchRange() {
+		return 48;
+	}
+
 }

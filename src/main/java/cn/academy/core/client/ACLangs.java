@@ -11,6 +11,22 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String frCurrentChannel() {
+		return local("ac.frcur");
+	}
+	
+	public static String frChannelSelect() {
+		return local("ac.frselect");
+	}
+	
+	public static String frSelectedChannel() {
+		return local("ac.frchannel");
+	}
+	
+	public static String freqReg() {
+		return local("ac.freqreg");
+	}
+	
 	public static String matChangePwd() {
 		return local("ac.matpwd");
 	}

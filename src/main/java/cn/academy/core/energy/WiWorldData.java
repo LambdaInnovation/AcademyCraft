@@ -22,6 +22,7 @@ import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.energy.WirelessNetwork.NodeConns;
 import cn.liutils.util.GenericUtils;
+import cn.liutils.util.misc.Pair;
 
 /**
  * Per world wireless-system data.
@@ -99,13 +100,26 @@ public class WiWorldData {
 		for(int i = x - 1; i <= x + 1; ++i) {
 			for(int j = z - 1; j <= z + 1; ++j) {
 				if(ret.size() == max) break;
-				ret.addAll(getNodesInChunk(excl, i, j, x, y, z, range, max - ret.size()));
+				ret.addAll(getChannelsInChunk(excl, i, j, x, y, z, range, max - ret.size()));
 			}
 		}
 		return new ArrayList<String>(ret);
 	}
 	
-	private Set<String> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
+	public List<Pair<IWirelessNode, String>> getNodesIn(int x, int y, int z, double range, int max) {
+		Set<String> excl = new HashSet();
+		Set<Pair<IWirelessNode, String>> ret = new HashSet();
+		range *= range;
+		for(int i = x - 1; i <= x + 1; ++i) {
+			for(int j = z - 1; j <= z + 1; ++j) {
+				if(ret.size() == max) break;
+				ret.addAll(getNodesInChunk(excl, i, j, x, y, z, range, max - ret.size()));
+			}
+		}
+		return new ArrayList<Pair<IWirelessNode, String>>(ret);
+	}
+	
+	private Set<String> getChannelsInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
 		List<IWirelessNode> nodes = getNodeList(cx, cz);
 		Set<String> ret = new HashSet();
 		for(IWirelessNode node : nodes) {
@@ -117,6 +131,25 @@ public class WiWorldData {
 			if(td < rsq) {
 				excl.add(chan);
 				ret.add(lookup.get(node));
+				if(max == ret.size())
+					break;
+			}
+		}
+		return ret;
+	}
+	
+	private Set<Pair<IWirelessNode, String>> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
+		List<IWirelessNode> nodes = getNodeList(cx, cz);
+		Set<Pair<IWirelessNode, String>> ret = new HashSet();
+		for(IWirelessNode node : nodes) {
+			String chan = lookup.get(node);
+			if(excl.contains(chan))
+				continue;
+			TileEntity tile = (TileEntity) node;
+			double td = GenericUtils.distanceSq(tile.xCoord, tile.yCoord, tile.zCoord, x, y, z);
+			if(td < rsq) {
+				excl.add(chan);
+				ret.add(new Pair(node, lookup.get(node)));
 				if(max == ret.size())
 					break;
 			}

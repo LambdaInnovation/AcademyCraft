@@ -7,6 +7,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
+import cn.academy.energy.item.ItemFreqRegulator;
 import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
@@ -45,7 +46,7 @@ public class ACItems {
 		public RendererCoin.ItemRender renderCoin;
 	};
 
-	//TODO: Reconfiguration the medicine system.
+	//TODO: Reconfigure the medicine system.
 /*	@RegItem
 	public static ItemCapsule capsuleA = new ItemCapsule(1);
 	@RegItem
@@ -177,5 +178,7 @@ public class ACItems {
 		public RenderVoid renderVoid;
 	};
 	
+	@RegItem
+	public static ItemFreqRegulator freqReg;
 	
 }

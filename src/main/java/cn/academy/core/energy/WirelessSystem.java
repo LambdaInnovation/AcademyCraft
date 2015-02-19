@@ -14,6 +14,7 @@ import cn.academy.api.energy.IWirelessTile;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
+import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
@@ -82,6 +83,10 @@ public class WirelessSystem {
 	
 	public static List<String> getAvailableChannels(World world, int x, int y, int z, double range, int max) {
 		return getData(world).getChannelsIn(x, y, z, range, max);
+	}
+	
+	public static List<Pair<IWirelessNode, String>> getAvailableNodes(World world, int x, int y, int z, double range, int max) {
+		return getData(world).getNodesIn(x, y, z, range, max);
 	}
 	
 	public static String getTileChannel(IWirelessTile tile) {

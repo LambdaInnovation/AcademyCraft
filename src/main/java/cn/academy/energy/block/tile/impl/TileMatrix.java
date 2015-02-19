@@ -155,4 +155,9 @@ public class TileMatrix extends TileNodeBase {
     	return INFINITE_EXTENT_AABB;
     }
 
+	@Override
+	public double getSearchRange() {
+		return 0;
+	}
+
 }

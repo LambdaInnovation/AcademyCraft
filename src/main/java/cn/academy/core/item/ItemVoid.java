@@ -29,7 +29,6 @@ public class ItemVoid extends Item {
 
 	public ItemVoid() {
 		super();
-		setUnlocalizedName("void");
 		setTextureName("academy:void");
 		FMLCommonHandler.instance().bus().register(this);
 		this.setFull3D();
