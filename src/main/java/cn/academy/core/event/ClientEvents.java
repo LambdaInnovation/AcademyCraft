@@ -9,6 +9,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.render.ACModelBiped;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
@@ -47,6 +48,7 @@ public class ClientEvents {
 	@SubscribeEvent
 	public void startRender(RenderPlayerEvent.Pre event) {
 		RenderPlayer render = event.renderer;
+		
 		//Init last models
 		if(realMain == null) {
 			realMain = render.modelBipedMain;
@@ -56,7 +58,7 @@ public class ClientEvents {
 		}
 		
 		//Replace
-		if(event.entityPlayer.getEntityData().getBoolean("developing")) {
+		if(event.entityPlayer.ridingEntity instanceof TileDeveloper.SitEntity) {
 			render.modelBipedMain = hackMain;
 			render.modelArmor = hackArmor;
 			render.modelArmorChestplate = hackChestplate;

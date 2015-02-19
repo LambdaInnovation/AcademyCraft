@@ -53,7 +53,10 @@ public class MsgDismount implements IMessage {
 				AcademyCraft.log.error("ERR: Didn't find TileDeveloper instance");
 				return null;
 			}
-			((TileDeveloper)te).userQuit();
+			//Second pass validation, in case of wrong client data
+			TileDeveloper dev = (TileDeveloper) te;
+			if(player.equals(dev.getUser()))
+				((TileDeveloper)te).userQuit();
 			return null;
 		}
 		

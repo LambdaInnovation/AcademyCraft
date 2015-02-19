@@ -33,7 +33,8 @@ public class ACModelBiped extends ModelBiped {
     			return;
     		}
     		//System.out.println(DebugUtils.formatArray(par2, par3, par4, par5, par6, par7));
-    		GL11.glRotated(135, 0, 1, 0);
+    		GL11.glTranslated(0, 1, 0);
+    		GL11.glRotated(200, 0, 1, 0);
     		GL11.glRotated(90, 1, 0, 0);
     		GL11.glRotated(180, 0, 1, 0);
     		super.render(par1Entity, par2, par3, par4, par5, par6, par7);

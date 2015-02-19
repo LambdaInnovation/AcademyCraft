@@ -3,13 +3,15 @@
  */
 package cn.academy.core.block.dev;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -34,6 +36,8 @@ public class MsgDeveloper implements IMessage {
 	
 	int nMagIncr;
 	
+	int userID;
+	
 	public MsgDeveloper(TileDeveloper tileDeveloper) {
 		x = tileDeveloper.xCoord;
 		y = tileDeveloper.yCoord;
@@ -43,6 +47,7 @@ public class MsgDeveloper implements IMessage {
 		stimSuccess = tileDeveloper.stimSuccess;
 		stimFailure = tileDeveloper.stimFailure;
 		nMagIncr = tileDeveloper.nMagIncr;
+		userID = tileDeveloper.getUser() == null ? 0 : tileDeveloper.getUser().getEntityId();
 	}
 	
 	public MsgDeveloper() {}
@@ -57,6 +62,7 @@ public class MsgDeveloper implements IMessage {
 		stimSuccess = buf.readByte();
 		stimFailure = buf.readByte();
 		nMagIncr = buf.readByte();
+		userID = buf.readInt();
 	}
 
 	@Override
@@ -69,6 +75,7 @@ public class MsgDeveloper implements IMessage {
 			.writeByte(stimSuccess)
 			.writeByte(stimFailure);
 		buf.writeByte(nMagIncr);
+		buf.writeInt(userID);
 	}
 	
 	@RegMessageHandler(msg = MsgDeveloper.class, side = RegMessageHandler.Side.CLIENT)
@@ -89,6 +96,10 @@ public class MsgDeveloper implements IMessage {
 			dev.stimSuccess = msg.stimSuccess;
 			dev.stimFailure = msg.stimFailure;
 			dev.nMagIncr = msg.nMagIncr;
+			Entity e = world.getEntityByID(msg.userID);
+			if(e instanceof EntityPlayer) {
+				dev.user = (EntityPlayer) e;
+			} else dev.user = null;
 			return null;
 		}
 		

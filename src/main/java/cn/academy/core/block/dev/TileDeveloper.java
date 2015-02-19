@@ -25,6 +25,7 @@ import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.register.ACBlocks;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
@@ -37,6 +38,7 @@ import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
 import cn.liutils.util.space.BlockPos;
 import cn.liutils.util.space.IBlockFilter;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -85,7 +87,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	int nMagIncr;
 	
 	//Internal States
-	private EntityPlayer user;
+	public EntityPlayer user;
 	private int updateCount;
 	private int stimTicker;
 	private static final Random RNG = new Random();
@@ -93,8 +95,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	public TileDeveloper() {}
 	
 	//Sit and use API
-	
-	EntitySittable es;
+	SitEntity es;
 	
 	/**
 	 * Let a player use this ability dev.
@@ -229,7 +230,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	}
 	
 	public double getSyncRate() {
-		return 0.421 + nMagIncr * 0.12;
+		return 0.421 + Math.min(6, nMagIncr) * 0.12;
 	}
 	
 	//Internal update
@@ -240,9 +241,34 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		if(!isHead())
 			return;
 		
+		if(user != null && (user.isDead || (es != null && user.ridingEntity != es))) {
+			user = null;
+		}
+		if(user != null){
+			int side = this.getBlockMetadata() & 3;
+			System.out.println(side + " " + worldObj.isRemote + " " + user.getCommandSenderName());
+			float rot = 0;
+			switch(side) {
+			case 0:
+				rot = 90;
+				break;
+			case 1:
+				rot = 180;
+				break;
+			case 2:
+				rot = -90;
+				break;
+			case 3:
+				rot = -55;
+				break;
+			}
+			user.rotationYaw = user.rotationYawHead = rot;
+			user.rotationPitch = 40;
+		}
+		
 		if(!worldObj.isRemote && this.es == null) {
 			worldObj.spawnEntityInWorld(es 
-				= new EntitySittable(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
+				= new SitEntity(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
 		}
 		
 		boolean update = false;
@@ -255,7 +281,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 			updateModules();
 		}
 		
-		if(!worldObj.isRemote && user != null) {
+		if(!worldObj.isRemote) {
 			//HeartBeat update
 			if(isStimulating) {
 				updateStimulate();
@@ -281,7 +307,8 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	
 	private void sync() {
 		if(!worldObj.isRemote) {
-			AcademyCraft.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
+			TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
+			AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
 		}
 	}
 	
@@ -347,4 +374,21 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
     		return null;
     	}
     };
+    
+    @RegEntity
+    /**
+     * Dummy inherition. Used for determination purpose.
+     * @author WeathFolD
+     */
+    public static class SitEntity extends EntitySittable {
+    	public SitEntity(World wrld, float x, float y, float z, int bx,
+    			int by, int bz) {
+    		super(wrld, x, y, z, bx, by, bz);
+    	}
+
+    	public SitEntity(World wrld) {
+    		super(wrld);
+    	}
+    }
+    
 }
