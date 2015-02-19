@@ -126,6 +126,10 @@ public class ACItems {
 	@RegItem.UTName("ac_siliconrod")
 	public static ACSimpleItem siliconRod;
 	
+	@RegItem
+	@RegItem.UTName("ac_smallsi")
+	public static ACSimpleItem smallSi;
+	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
 //	@RegItem
 //	@RegItem.UTName("iron_dust")
