@@ -6,6 +6,7 @@
 "elec.weak": {"category": "master", "sounds": [{"name": "elec/arc_weak", "stream": false}]},
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
 "elec.mineview": {"category": "master", "sounds": [{"name": "elec/mineview", "stream": false}]},
+"elec.railgun": {"category": "master", "sounds": [{"name": "elec/railgun", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
 "tp.tp": {"category": "master", "sounds": [{"name": "tp/tp", "stream": false}]},
 "tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]}

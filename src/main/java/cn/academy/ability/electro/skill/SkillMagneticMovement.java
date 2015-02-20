@@ -58,7 +58,7 @@ public class SkillMagneticMovement extends SkillBase {
 		final double tx, ty, tz;
 		double mox, moy, moz;
 		
-		final static double ACCEL = 0.04d;
+		final static double ACCEL = 0.08d;
 		final double vel;
 
 		public HandleVel(EntityPlayer target, double _tx, double _ty, double _tz, double _vel) {
@@ -211,7 +211,7 @@ public class SkillMagneticMovement extends SkillBase {
 			if(mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
 				//player.worldObj.spawnEntityInWorld(new EntityBlockSimulator)
 				player.worldObj.spawnEntityInWorld
-				(handler = new HandleVel(player, mop.hitVec.xCoord, mop.hitVec.yCoord + 0.8, mop.hitVec.zCoord, 3));
+				(handler = new HandleVel(player, mop.hitVec.xCoord, mop.hitVec.yCoord + 0.8, mop.hitVec.zCoord, dist * 0.07));
 				if(!isRemote()) {
 					player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
 				}

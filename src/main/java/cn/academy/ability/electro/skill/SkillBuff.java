@@ -85,7 +85,7 @@ public class SkillBuff extends SkillBase {
 		
 		@Override
 		protected boolean onTick(int time) {
-			boolean b = data.decreaseCP(consume);
+			boolean b = time >= 60 || data.decreaseCP(consume);
 			good = good && b;
 			return !b;
 		}
@@ -97,7 +97,7 @@ public class SkillBuff extends SkillBase {
 			} 
 			
 			if(good) {
-				int time = 50; //TODO: Change to min(real tick, 60)
+				int time = Math.min(this.getTickTime(), 60); //TODO: Change to min(real tick, 60)
 				double prob = (time - 10) / 18.0;
 				int life = GenericUtils.randIntv(2, 4) * time * 
 						(data.getSkillID(CatElectro.buff) + data.getLevelID() * 2);
@@ -112,7 +112,7 @@ public class SkillBuff extends SkillBase {
 				}
 				
 				if(isRemote()) {
-					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, life, 8));
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 18, 8));
 				}
 			}
 		}

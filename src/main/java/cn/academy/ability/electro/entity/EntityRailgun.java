@@ -3,6 +3,7 @@
  */
 package cn.academy.ability.electro.entity;
 
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -55,7 +56,7 @@ public class EntityRailgun extends EntityRay {
 		
 		int sid = data.getSkillID(CatElectro.railgun);
 		damage = 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F;
-		explRadius = (int) (damage * 0.5);
+		explRadius = (int) (damage * 0.2);
 		
 		MovingObjectPosition ret = this.performTrace();
 		if(ret != null) onCollide(ret);
@@ -89,7 +90,12 @@ public class EntityRailgun extends EntityRay {
 	private void onCollide(MovingObjectPosition trace) {
 		Explosion exp = worldObj.createExplosion(this.getSpawner(), trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, explRadius, true);
 		exp.doExplosionA();
-		//exp.doExplosionB(false);
+		System.out.println(damage);
+		GenericUtils.doRangeDamage(worldObj, DamageSource.causeMobDamage(getSpawner()), 
+			worldObj.getWorldVec3Pool().getVecFromPool(trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord),
+			damage * .4f,
+			damage * .3);
+		exp.doExplosionB(false);
 	}
 	
 	@Override

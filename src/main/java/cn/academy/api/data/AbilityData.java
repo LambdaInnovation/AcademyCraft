@@ -136,7 +136,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public float getMaxCPIncr(float consumedCP) {
-		return consumedCP * 0.01f;
+		return consumedCP * 0.005f;
 	}
 	
 	//-----Skill-----
@@ -335,6 +335,7 @@ public class AbilityData implements IExtendedEntityProperties {
 			return false;
 		setCurrentCP(ret ? currentCP - need : 0);
 		addSkillExp(sid, getSexpForCP(need));
+		//System.out.println("new cp : " + this.getMaxCP() + " " + this.getMaxCPIncr(need) + " " + player.worldObj.isRemote);
 		setMaxCP(Math.min(this.getMaxCP() + this.getMaxCPIncr(need), this.getLevel().getMaxCP()));
 		return ret;
 	}
@@ -389,7 +390,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public double getSkillUpgradeProgress(int sid) {
-		if(skillLevels[sid] == 0) return 1;
+		if(skillLevels[sid] == 0 || !this.canSkillUpgrade(sid)) return 1;
 		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]));
 	}
 	

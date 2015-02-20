@@ -15,10 +15,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,6 +35,7 @@ import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.render.IPlayerRenderHook;
 import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook;
 import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook.Pass;
+import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -110,11 +113,18 @@ public class SkillRenderManager {
 	public void renderHudEvent(RenderGameOverlayEvent e) {
 		ScaledResolution sr = e.resolution;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(e.type != ElementType.CROSSHAIRS)
+			return;
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 		long time = Minecraft.getSystemTime();
 		for(RenderNode node : renderers) {
 			node.render.renderHud(player, sr, time - node.createTime);
 		}
+		RenderUtils.loadTexture(WIDGITS);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
+	
+	private static final ResourceLocation WIDGITS      = new ResourceLocation("textures/gui/widgets.png");
 	
 	public static void renderThirdPerson(EntityLivingBase ent, ItemStack stack, ItemRenderType type) {
 		if(type == ItemRenderType.EQUIPPED_FIRST_PERSON || !(ent instanceof EntityPlayer)) return;

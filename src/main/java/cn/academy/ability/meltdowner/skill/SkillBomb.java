@@ -36,7 +36,7 @@ public class SkillBomb extends SkillBase {
 	}
 	
 	private static float getConsume(int slv, int lv) {
-		return 250 + slv *  40 + lv * 20;
+		return 150 + slv * 15 + lv * 10;
 	}
 	
 	private static float getDamage(int slv, int lv) {

@@ -29,8 +29,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity.HasRender
 public class EntityArcS extends EntityX {
 	
-	static final ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
-	
 	final static int FRAME_RATE = 100; //0.1s per change
 	
 	public boolean show;
@@ -40,6 +38,8 @@ public class EntityArcS extends EntityX {
 	long lastChangeTime;
 	
 	public final int roll = rand.nextInt(360);
+	
+	public ResourceLocation[] texs = ACClientProps.ANIM_SMALL_ARC;
 	
 	@RegEntity.Render
 	public static ArcRender render;
@@ -96,6 +96,7 @@ public class EntityArcS extends EntityX {
 
 		public ArcRender() {
 			super(null);
+			this.setBlend(.8f);
 		}
 		
 		@Override
@@ -113,10 +114,11 @@ public class EntityArcS extends EntityX {
 			long time = Minecraft.getSystemTime();
 			if(time - arc.lastChangeTime > FRAME_RATE) {
 				arc.lastChangeTime = time;
-				arc.texIndex = arc.rand.nextInt(TEX.length);
+				arc.texIndex = arc.rand.nextInt(arc.texs.length);
 			}
 			
-			this.icon = TEX[arc.texIndex];
+			this.setSize(arc.size);
+			this.icon = arc.texs[arc.texIndex % arc.texs.length];
 		}
 		
 		@Override
