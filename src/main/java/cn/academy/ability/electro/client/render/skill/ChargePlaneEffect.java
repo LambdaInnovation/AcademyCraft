@@ -41,10 +41,9 @@ public class ChargePlaneEffect extends SkillRenderer {
 	@Override
 	public void renderHud(EntityPlayer player, ScaledResolution sr, long time) {
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix(); {
-			RenderUtils.bindIdentity();
+			GL11.glColor4d(1, 1, 1, 0.4);
 			double w = sr.getScaledWidth_double(), h = sr.getScaledHeight_double();
 			if(lct == 0 || time - lct > 200) {
 				lct = time;
@@ -54,9 +53,9 @@ public class ChargePlaneEffect extends SkillRenderer {
 				RenderUtils.loadTexture(TEXS[seq.get(i)]);
 				HudUtils.drawRect(w * pts[i][0], h * pts[i][1], sizes[i] * w, sizes[i] * w);
 			}
+			RenderUtils.bindIdentity();
 		} GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
-		//GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 
 }
