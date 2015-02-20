@@ -37,6 +37,7 @@ public class SkillStrongArc extends SkillBase {
 	public SkillStrongArc() {
 		setLogo("electro/arc_strong.png");
 		setName("em_arc_strong");
+		setMaxSkillLevel(10);
 	}
 	
 	@Override
@@ -61,13 +62,13 @@ public class SkillStrongArc extends SkillBase {
 		public void onStart() {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
-					player.worldObj.spawnEntityInWorld(new WeakArc(player));
+					player.worldObj.spawnEntityInWorld(new StrongArc(player));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 500);
-					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS.Strong(player, 40, 5));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			}
@@ -75,9 +76,9 @@ public class SkillStrongArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = 1, lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
-			float need = 340 + lv * 25 + clv * 30;
-			return data.decreaseCP(need);
+			int id = 1, slv = data.getSkillLevel(id), lv = data.getLevelID() + 1;
+			float need = 1000 + slv * 60 + lv * 80;
+			return data.decreaseCP(need, CatElectro.strongArc);
 		}
 
 		@Override
@@ -86,19 +87,19 @@ public class SkillStrongArc extends SkillBase {
 	}
 	
 	@RegEntity
-	public static class WeakArc extends AttackingArcBase {
+	public static class StrongArc extends AttackingArcBase {
 
-		public WeakArc(EntityPlayer creator) {
+		public StrongArc(EntityPlayer creator) {
 			super(creator);
 		}
 		
-		public WeakArc(World world) {
+		public StrongArc(World world) {
 			super(world);
 		}
 
 		@Override
 		protected SkillBase getSkill() {
-			return CatElectro.weakArc;
+			return CatElectro.strongArc;
 		}
 
 		@Override

@@ -44,17 +44,17 @@ public class CatElectro extends Category {
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .7));
 		this.addLevel(new Level(this, 3500.0f, 5500.0f, 2.2f, 2.6f, .6));
 		this.addLevel(new Level(this, 6000.0f, 9000.0f, 3.0f, 3.5f, .5));
-		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .3));
+		this.addLevel(new Level(this, 10000.0f, 30000.0f, 4.0f, 5.0f, .3));
 		
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(weakArc = new SkillWeakArc(), 0);
 		this.addSkill(itemCharge = new SkillItemCharge(), 0);
-		this.addSkill(buff = new SkillBuff(), 0);
-		this.addSkill(strongArc = new SkillStrongArc(), 0);
-		this.addSkill(magMovement = new SkillMagneticMovement(), 0);
-		this.addSkill(railgun = new SkillRailgun(), 0);
+		this.addSkill(magMovement = new SkillMagneticMovement(), 1);
+		this.addSkill(buff = new SkillBuff(), 2);
+		this.addSkill(strongArc = new SkillStrongArc(), 2);
 		this.addSkill(mineDetect = new SkillMineDetect(), 2);
-		this.addSkill(lightningFlash = new SkillLightningFlash(), 0);
+		this.addSkill(railgun = new SkillRailgun(), 3);
+		this.addSkill(lightningFlash = new SkillLightningFlash(), 4);
 		
 		this.setColorStyle(26, 143, 218);
 		this.setLogo("electro/main.png");

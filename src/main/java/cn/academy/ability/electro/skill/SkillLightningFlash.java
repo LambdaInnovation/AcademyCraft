@@ -8,15 +8,16 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.CatElectro;
+import cn.academy.ability.electro.client.render.skill.ChargePlaneEffect;
 import cn.academy.ability.electro.entity.EntityLF;
+import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.client.render.SkillRenderManager;
 import cn.liutils.util.GenericUtils;
 
 /**
@@ -59,11 +60,19 @@ public class SkillLightningFlash extends SkillBase {
 			int ccp = 2200 - 20 * (slv * slv);
 			float dmg = (float) GenericUtils.randIntv((double)5, 5 + slv * 2);
 			
+			if(!data.decreaseCP(ccp, CatElectro.lightningFlash)) {
+				return;
+			}
+			
 			//give buff
 			if(!player.worldObj.isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, time, 4));
 				player.addPotionEffect(new PotionEffect(Potion.jump.id, time, 4));
 				player.worldObj.spawnEntityInWorld(new EntityLF(data, time));
+			} else {
+				player.worldObj.spawnEntityInWorld(new EntityLF(data, time));
+				player.worldObj.spawnEntityInWorld(new ChargeEffectS.Strong(player, time, 3));
+				SkillRenderManager.addEffect(new ChargePlaneEffect(), time * 50);
 			}
 		}
 

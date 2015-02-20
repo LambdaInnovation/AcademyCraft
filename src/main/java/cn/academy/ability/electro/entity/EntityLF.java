@@ -6,6 +6,7 @@ package cn.academy.ability.electro.entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import cn.academy.ability.electro.CatElectro;
+import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.data.AbilityData;
 import cn.liutils.api.entityx.FakeEntity;
 import cn.liutils.api.entityx.motion.LifeTime;
@@ -37,7 +38,6 @@ public class EntityLF extends FakeEntity {
 			atkTicker = 0;
 			EntityLivingBase elb = (EntityLivingBase) EntityUtils.getNearestEntityTo(this, 2, GenericUtils.selectorLiving, data.getPlayer());
 			if(elb != null) {
-				
 				elb.attackEntityFrom(DamageSource.causePlayerDamage(data.getPlayer()), dmg);
 			}
 		}

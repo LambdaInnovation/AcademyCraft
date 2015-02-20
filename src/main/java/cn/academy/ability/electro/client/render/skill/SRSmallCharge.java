@@ -37,7 +37,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
 	IPointFactory poi;
 	
-	static final ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
+	ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
 	
 	private static Random RNG = new Random();
 	
@@ -45,7 +45,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
 	double dra;
 			
-	static class ArcObject extends DrawObject {
+	class ArcObject extends DrawObject {
 		public Rect rect;
 		public AssignTexture tex;
 		
@@ -86,6 +86,10 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 		for(int i = 0; i < n; ++i) {
 			arcs.add(new ArcObject(poi.next(), size));
 		}
+	}
+	
+	public void setTex(ResourceLocation[] ts) {
+		this.TEX = ts;
 	}
 	
 	@SideOnly(Side.CLIENT)
