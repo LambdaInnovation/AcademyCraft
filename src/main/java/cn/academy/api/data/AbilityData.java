@@ -193,10 +193,6 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
-	public void incrSkillExp(int skillID, float value) {
-		setSkillExp(skillID, getSkillExp(skillID) + value);
-	}
-	
 	public int getMaxSkillLevel(int skillID) {
 		return getSkill(skillID).getMaxSkillLevel();
 	}
@@ -296,12 +292,19 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	/**
+	 * use decreaseCP(float need, SkillBase) instead.
 	 * @return if decrease action is successful
 	 */
+	@Deprecated
 	public boolean decreaseCP(float need) {
 		return decreaseCP(need, false);
 	}
 	
+	/**
+	 * use decreaseCP(float need, SkillBase, boolean force) instead.
+	 * @return if decrease action is successful
+	 */
+	@Deprecated
 	public boolean decreaseCP(float need, boolean force) {
 		if(player.capabilities.isCreativeMode) {
 			return true;
@@ -312,6 +315,26 @@ public class AbilityData implements IExtendedEntityProperties {
 		setCurrentCP(ret ? currentCP - need : 0);
 		return ret;
 	}
+	
+	public boolean decreaseCP(float need, SkillBase skill) {
+		return decreaseCP(need, skill);
+	}
+	
+	public boolean decreaseCP(float need, SkillBase base, boolean force) {
+		if(player.capabilities.isCreativeMode) {
+			return true;
+		}
+		int sid = this.getSkillID(base);
+		if(sid == -1) sid = 0; //Go dummy
+		
+		boolean ret = currentCP >= need;
+		if(!force && !ret)
+			return false;
+		setCurrentCP(ret ? currentCP - need : 0);
+		addSkillExp(sid, getSexpForCP(need));
+		return ret;
+	}
+	
 
 	private float getRecoverRate() {
 		Level lv = GenericUtils.assertObj(getCategory().getLevel(getLevelID()));
@@ -334,6 +357,43 @@ public class AbilityData implements IExtendedEntityProperties {
 			}
 		}
 		return true;
+	}
+	
+	//Skill Experience API
+	/**
+	 * Get the skillExp required to update to next level.
+	 */
+	protected float getSexpForSkillLevel(int lev) {
+		return 10 + lev * 3;
+	}
+	
+	protected float getSexpForCP(float cp) {
+		return cp * 0.002f; //1 exp every 500cp
+	}
+	
+	public boolean canSkillUpgrade(int sid) {
+		if(skillLevels[sid] == 0) return true;
+		SkillBase skill = this.getSkill(sid);
+		return this.skillLevels[sid] != skill.getMaxSkillLevel() && getSkillExp(sid) >= getSexpForSkillLevel(getSkillLevel(sid));
+	}
+	
+	public void addSkillExp(int sid, float exp) {
+		this.setSkillExp(sid, Math.min(this.getSexpForSkillLevel(skillLevels[sid]), exp + skillExps[sid]));
+	}
+	
+	public double getSkillUpgradeProgress(int sid) {
+		if(skillLevels[sid] == 0) return 1;
+		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(skillLevels[sid]));
+	}
+	
+	public void upgrade(int sid) {
+		//TODO:Second-pass validation?
+		SkillBase skill = this.getSkill(sid);
+		if(skillLevels[sid] == skill.getMaxSkillLevel())
+			return;
+		skillLevels[sid]++;
+		skillExps[sid] = 0;
+		this.syncAll();
 	}
 	
 	//-----INTERNAL PROCESSING-----

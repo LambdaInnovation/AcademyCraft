@@ -25,7 +25,7 @@ public class DevActionSkill implements IDevAction {
 
 	@Override
 	public void onActionFinished(AbilityData data) {
-		data.setSkillLevel(skillID, data.getSkillLevel(skillID) + 1);
+		data.upgrade(skillID);
 	}
 
 	@Override
