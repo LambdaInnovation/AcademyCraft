@@ -6,7 +6,7 @@ package cn.academy.ability.electro;
 import cn.academy.ability.electro.skill.SkillBuff;
 import cn.academy.ability.electro.skill.SkillItemCharge;
 import cn.academy.ability.electro.skill.SkillLightningFlash;
-import cn.academy.ability.electro.skill.SkillMagneticMovement;
+import cn.academy.ability.electro.skill.SkillMagMove;
 import cn.academy.ability.electro.skill.SkillMineDetect;
 import cn.academy.ability.electro.skill.SkillRailgun;
 import cn.academy.ability.electro.skill.SkillStrongArc;
@@ -30,7 +30,7 @@ public class CatElectro extends Category {
 	public static SkillWeakArc weakArc;
 	public static SkillItemCharge itemCharge;
 	public static SkillStrongArc strongArc;
-	public static SkillMagneticMovement magMovement;
+	public static SkillMagMove magMovement;
 	public static SkillRailgun railgun;
 	public static SkillMineDetect mineDetect;
 	public static SkillLightningFlash lightningFlash;
@@ -49,7 +49,7 @@ public class CatElectro extends Category {
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(weakArc = new SkillWeakArc(), 0);
 		this.addSkill(itemCharge = new SkillItemCharge(), 0);
-		this.addSkill(magMovement = new SkillMagneticMovement(), 1);
+		this.addSkill(magMovement = new SkillMagMove(), 1);
 		this.addSkill(buff = new SkillBuff(), 2);
 		this.addSkill(strongArc = new SkillStrongArc(), 2);
 		this.addSkill(mineDetect = new SkillMineDetect(), 2);

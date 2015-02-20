@@ -1,27 +1,22 @@
 package cn.academy.core.register;
 
 import net.minecraft.item.Item;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
 import cn.academy.energy.item.ItemFreqRegulator;
 import cn.academy.misc.client.render.RendererCoin;
-import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
-import cn.academy.misc.item.ItemCapsule;
+import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ItemCoin;
 import cn.academy.misc.item.ItemExpNail;
+import cn.academy.misc.item.ItemMagHook;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemSibarn;
-import cn.academy.misc.item.ItemTablet;
 import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -189,5 +184,9 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("ac_sibarn")
 	public static ItemSibarn sibarn;
+	
+	@RegItem
+	@RegItem.HasRender
+	public static ItemMagHook magHook;
 	
 }

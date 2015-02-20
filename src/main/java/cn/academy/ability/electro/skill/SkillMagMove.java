@@ -3,6 +3,8 @@
  */
 package cn.academy.ability.electro.skill;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
@@ -33,9 +35,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-public class SkillMagneticMovement extends SkillBase {
+public class SkillMagMove extends SkillBase {
 
-	public SkillMagneticMovement() {
+	public SkillMagMove() {
 		this.setLogo("electro/moving.png");
 		setName("em_move");
 	}
@@ -212,8 +214,13 @@ public class SkillMagneticMovement extends SkillBase {
 				//player.worldObj.spawnEntityInWorld(new EntityBlockSimulator)
 				player.worldObj.spawnEntityInWorld
 				(handler = new HandleVel(player, mop.hitVec.xCoord, mop.hitVec.yCoord + 0.8, mop.hitVec.zCoord, dist * 0.07));
+				
 				if(!isRemote()) {
+					player.playSound("academy:elec.move", 0.5f, 1.0f);
 					player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
+				} else {
+					Minecraft.getMinecraft().getSoundHandler().playSound(
+							PositionedSoundRecord.func_147674_a(new ResourceLocation("academy:elec.move"), 1.0f));
 				}
 			}
 		}
