@@ -16,6 +16,7 @@ import cn.academy.misc.item.ItemCoin;
 import cn.academy.misc.item.ItemExpNail;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
+import cn.academy.misc.item.ItemSibarn;
 import cn.academy.misc.item.ItemTablet;
 import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.RegistrationClass;
@@ -184,5 +185,9 @@ public class ACItems {
 	
 	@RegItem
 	public static ItemFreqRegulator freqReg;
+	
+	@RegItem
+	@RegItem.UTName("ac_sibarn")
+	public static ItemSibarn sibarn;
 	
 }
