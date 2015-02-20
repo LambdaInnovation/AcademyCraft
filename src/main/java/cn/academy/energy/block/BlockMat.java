@@ -31,7 +31,7 @@ public class BlockMat extends BlockDirectionalMulti {
 		setBlockTextureName("academy:grid");
 		setCreativeTab(AcademyCraft.cct);
 		setLightLevel(2.0F);
-		
+		setHardness(2.7f);
 		addSubBlock(0, 0, 1);
 		addSubBlock(1, 0, 1);
 		addSubBlock(1, 0, 0);
