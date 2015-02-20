@@ -5,7 +5,6 @@ package cn.academy.core;
 
 import java.util.Map;
 
-import cpw.mods.fml.relauncher.FMLCorePlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 /**

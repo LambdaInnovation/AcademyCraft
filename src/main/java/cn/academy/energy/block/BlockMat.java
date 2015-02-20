@@ -37,7 +37,8 @@ public class BlockMat extends BlockDirectionalMulti {
 		addSubBlock(1, 0, 0);
 	}
 	
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p, 
+    @Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p, 
     	int s, float tx, float ty, float tz) {
     	int[] origin = this.getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
     	if(origin != null) {
@@ -56,6 +57,7 @@ public class BlockMat extends BlockDirectionalMulti {
 		return null;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public Vec3 getOffsetRotated(int dir) {
 		switch(dir) {
@@ -72,12 +74,14 @@ public class BlockMat extends BlockDirectionalMulti {
 	
 	@RegGuiHandler
 	public static GuiHandlerBase matGui = new GuiHandlerBase() {
+		@Override
 		@SideOnly(Side.CLIENT)
 		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			return te instanceof TileMatrix ? new GuiMatrix((TileMatrix) te) : null;
 		}
 		
+		@Override
 		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
 			return null;
 		}

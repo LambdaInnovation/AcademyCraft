@@ -5,7 +5,6 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
@@ -180,6 +179,7 @@ public class SkillMagMove extends SkillBase {
 			this.setByPoint(posX, posY, posZ, x, y, z);
 		}
 		
+		@Override
 		@SideOnly(Side.CLIENT)
 		public void beforeRender() {
 			this.setByPoint(posX, posY, posZ, x, y, z);

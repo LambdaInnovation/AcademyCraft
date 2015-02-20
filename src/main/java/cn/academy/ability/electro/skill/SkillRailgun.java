@@ -8,12 +8,10 @@ import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.RailgunPlaneEffect;
 import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.ability.electro.entity.fx.ChargeEffectS;
-import cn.academy.ability.electro.entity.fx.ChargeEffectS.Strong;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -22,14 +20,11 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.ThrowCoinEvent;
 import cn.academy.core.client.render.SkillRenderManager;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityThrowingCoin;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 传说中的超电磁炮~~！

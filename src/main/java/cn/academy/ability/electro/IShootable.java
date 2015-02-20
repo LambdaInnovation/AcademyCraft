@@ -3,9 +3,6 @@
  */
 package cn.academy.ability.electro;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 /**
  * Interface for Entity, making one entity operatable by SkillRailgun.
  * The action involved is preparation and progress judgment.

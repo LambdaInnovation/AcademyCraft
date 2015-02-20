@@ -4,9 +4,7 @@
 package cn.academy.misc.entity;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.skill.SkillMineDetect.HandlerEntity;
 import cn.academy.misc.client.render.RenderBlockSimulator;
 import cn.annoreg.core.RegistrationClass;

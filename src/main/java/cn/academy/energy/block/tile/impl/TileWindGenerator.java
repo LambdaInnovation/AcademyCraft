@@ -78,7 +78,8 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
             this.currentEU = MAX_EU;
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
         return INFINITE_EXTENT_AABB;
@@ -123,7 +124,7 @@ public class TileWindGenerator extends TileEntity implements IWirelessNode {
         if(totalFree <= 216) // Free blocks
             EUToAdd = 180;
         
-        float weatherPower = this.getWeather(theWorld);
+        float weatherPower = TileWindGenerator.getWeather(theWorld);
         this.addEnergy(EUToAdd * weatherPower);
     				
         

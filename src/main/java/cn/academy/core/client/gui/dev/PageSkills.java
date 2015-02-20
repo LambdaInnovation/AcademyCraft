@@ -3,8 +3,6 @@
  */
 package cn.academy.core.client.gui.dev;
 
-import java.util.List;
-
 import javax.vecmath.Vector2d;
 
 import net.minecraft.client.Minecraft;
@@ -89,6 +87,7 @@ public class PageSkills extends DevSubpage {
 			}
 		}
 		
+		@Override
 		public int getDrawPriority() {
 			return 5;
 		}
@@ -122,7 +121,7 @@ public class PageSkills extends DevSubpage {
 				fullyLearned = base.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
 				canUpgrade = base.data.canSkillUpgrade(skillID);
 				Pair<Integer, Double> exp = 
-					base.dev.getExpectation(base.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
+					base.dev.getExpectation(TileDeveloper.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
 				expectedEnergy = exp.second.intValue();
 			}
@@ -164,7 +163,7 @@ public class PageSkills extends DevSubpage {
 					//level
 					RenderUtils.bindColor(base.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					base.drawText(text, 97.5, 5.5, 4.8);
+					GuiDeveloper.drawText(text, 97.5, 5.5, 4.8);
 					
 					GL11.glColor4d(0.2, 0.2, 0.2, 0.7);
 					HudUtils.drawModalRect(30, 15, 75, 1);
@@ -175,16 +174,17 @@ public class PageSkills extends DevSubpage {
 				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(base.EXP_INDI_COLOR);
-					base.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
+					GuiDeveloper.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
 					
 					RenderUtils.bindColor(base.EU_INDI_COLOR);
-					base.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
+					GuiDeveloper.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
 				} else {
 					RenderUtils.bindColor(59, 177, 43);
-					base.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
+					GuiDeveloper.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
 				}
 			}
 			
+			@Override
 			public void onMouseDown(double mx, double my) {
 				if(!this.fullyLearned && this.canUpgrade)
 					getGui().addWidget(new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID));

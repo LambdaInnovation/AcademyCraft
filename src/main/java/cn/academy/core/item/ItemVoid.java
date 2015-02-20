@@ -8,9 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -46,7 +44,8 @@ public class ItemVoid extends Item {
 		}
 	}
 	
-    public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
+    @Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
     	if(!(entity instanceof EntityPlayer))
     		return;
     	EntityPlayer player = (EntityPlayer) entity;

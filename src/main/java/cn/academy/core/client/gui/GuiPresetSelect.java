@@ -179,7 +179,8 @@ public class GuiPresetSelect extends AuxGui {
 			
 			//Front Drawing
 			float step = 23F;
-			Preset preset = EventHandlerClient.getPresetManager().getPreset(curSelection);
+			EventHandlerClient.getPresetManager();
+			Preset preset = PresetManager.getPreset(curSelection);
 			float cx = 0F;
 			GL11.glDepthFunc(GL11.GL_GEQUAL);
 			GL11.glColor4d(1, 1, 1, prog * 0.5);
@@ -238,7 +239,8 @@ public class GuiPresetSelect extends AuxGui {
 			if(curSelection == i) {
 				rect(x0 + tx, y0 + ty + ny, mw, y_step, 0.6F, 0.6F);
 			}
-			Preset pr = EventHandlerClient.getPresetManager().getPreset(i);
+			EventHandlerClient.getPresetManager();
+			Preset pr = PresetManager.getPreset(i);
 			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.7); //Linear brightening effect
 			drawText(ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 5);
 		}

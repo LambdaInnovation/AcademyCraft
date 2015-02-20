@@ -3,7 +3,6 @@
  */
 package cn.academy.ability.teleport.entity;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -11,8 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.teleport.client.model.SimpleModelBiped;
@@ -20,13 +17,10 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.api.draw.prop.DisableLight;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.render.IDrawable;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Spawn a position mark indicating where the player would be teleport to.

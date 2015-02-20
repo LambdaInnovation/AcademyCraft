@@ -63,6 +63,7 @@ public abstract class EntityMdRayBase extends EntityRay {
 		super(world);
 	}
 	
+	@Override
 	public boolean doesFollowSpawner() {
 		return false;
 	}

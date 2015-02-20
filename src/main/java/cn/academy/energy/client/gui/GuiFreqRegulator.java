@@ -252,7 +252,8 @@ public class GuiFreqRegulator extends LIGuiScreen {
 		}
 	}
 	
-    public boolean doesGuiPauseGame()  {
+    @Override
+	public boolean doesGuiPauseGame()  {
         return false;
     }
 

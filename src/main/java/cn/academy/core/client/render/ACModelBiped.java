@@ -25,7 +25,8 @@ public class ACModelBiped extends ModelBiped {
     	super(par1);
     }
 	
-    public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+    @Override
+	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
     {
     	GL11.glPushMatrix(); {
     		if(par1Entity == Minecraft.getMinecraft().thePlayer) {
@@ -41,7 +42,8 @@ public class ACModelBiped extends ModelBiped {
     	} GL11.glPopMatrix();
     }
 	
-    public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity ent) {
+    @Override
+	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity ent) {
     	
     }
 }

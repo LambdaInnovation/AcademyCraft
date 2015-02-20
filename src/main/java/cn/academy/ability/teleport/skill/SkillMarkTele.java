@@ -22,6 +22,7 @@ public class SkillMarkTele extends SkillBase {
 		setLogo("tp/marked.png");
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(400) {
 

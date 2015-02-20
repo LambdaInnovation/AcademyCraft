@@ -3,7 +3,6 @@
  */
 package cn.academy.misc.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -103,6 +102,7 @@ public class EntityMagHook extends EntityX {
 		sync();
 	}
 	
+	@Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
 		if(!worldObj.isRemote && ticksExisted > 20)
 			this.dropAsItem();
@@ -129,12 +129,14 @@ public class EntityMagHook extends EntityX {
 		}
 	}
 	
-    public boolean interactFirst(EntityPlayer player) {
+    @Override
+	public boolean interactFirst(EntityPlayer player) {
     	dropAsItem();
         return true;
     }
     
-    public boolean canBeCollidedWith() {
+    @Override
+	public boolean canBeCollidedWith() {
         return true;
     }
     
@@ -192,6 +194,7 @@ public class EntityMagHook extends EntityX {
 		tag.setInteger("hookZ", hookZ);
 	}
 	
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		isHit = tag.getBoolean("isHit");

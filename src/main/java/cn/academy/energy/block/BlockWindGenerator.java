@@ -10,14 +10,11 @@
  */
 package cn.academy.energy.block;
 
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.block.tile.impl.TileWindGenerator;
 import cn.liutils.template.block.BlockDirectionalMulti;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
@@ -49,7 +46,8 @@ public class BlockWindGenerator extends BlockDirectionalMulti {
 		return null;
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public Vec3 getOffsetRotated(int dir) {
     	return Vec3.createVectorHelper(0.5D, 0D, 0.5D);
     }

@@ -39,7 +39,8 @@ public class ACOre extends Block {
 		return this;
 	}
 	
-    public ACOre setLightLevel(float light) {
+    @Override
+	public ACOre setLightLevel(float light) {
         super.setLightLevel(light);
         return this;
     }

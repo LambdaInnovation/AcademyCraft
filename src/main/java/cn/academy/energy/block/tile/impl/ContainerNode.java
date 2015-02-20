@@ -33,7 +33,7 @@ public class ContainerNode extends Container {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(inv, j + i * 9 + 9,
-						(int) 6 + j * 19, 96 + i * 19));
+						6 + j * 19, 96 + i * 19));
 			}
 		}
 		for (int i = 0; i < 9; i++) {
@@ -69,7 +69,8 @@ public class ContainerNode extends Container {
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      * WeAthFolD：↑MC傻逼代码
      */
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot)
     {
     	ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);

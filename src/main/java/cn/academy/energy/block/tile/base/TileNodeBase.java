@@ -64,13 +64,15 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 		return transDist;
 	}
 	
-    public void readFromNBT(NBTTagCompound tag)
+    @Override
+	public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
         energy = tag.getDouble("energy");
     }
 
-    public void writeToNBT(NBTTagCompound tag)
+    @Override
+	public void writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);

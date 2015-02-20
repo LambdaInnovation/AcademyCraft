@@ -6,14 +6,12 @@ package cn.academy.misc.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityMagHook;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.api.render.model.IItemModel;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 
@@ -33,7 +31,8 @@ public class ItemMagHook extends Item {
 		this.setFull3D();
 	}
 	
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    @Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
     	if(!world.isRemote) {
     		world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
     		world.spawnEntityInWorld(new EntityMagHook(player));
@@ -52,6 +51,7 @@ public class ItemMagHook extends Item {
 			this.setEquipOffset(1, 0, 0);
 		}
 		
+		@Override
 		protected void renderAtStdPosition(float i) {
 			this.setOffset(0, 0, 1);
 			this.setEquipOffset(0.5, 0.1, 0);

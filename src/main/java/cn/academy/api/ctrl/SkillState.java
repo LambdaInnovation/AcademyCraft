@@ -1,11 +1,9 @@
 package cn.academy.api.ctrl;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.render.SkillRenderDebug;
 
 /**
  * The state of an active skill.

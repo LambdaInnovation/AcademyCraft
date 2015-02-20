@@ -48,8 +48,7 @@ public class WirelessSystem {
 	 */
 	public static void registerNode(IWirelessNode node, String channel) {
 		assert(node instanceof TileEntity);
-		//System.out.println("RegNode " + channel);
-		instance().getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
+		getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
 	}
 	
 	public static String getPassword(World world, String channel) {
@@ -66,7 +65,8 @@ public class WirelessSystem {
 	 */
 	public static void unregisterTile(IWirelessTile tile) {
 		assert(tile instanceof TileEntity);
-		instance().getData(((TileEntity) tile).getWorldObj()).unregister(tile);
+		instance();
+		WirelessSystem.getData(((TileEntity) tile).getWorldObj()).unregister(tile);
 	}
 	
 	public static boolean isTileIn(IWirelessTile tile, String channel) {

@@ -3,8 +3,6 @@
  */
 package cn.academy.core.block.dev;
 
-import ic2.api.energy.tile.IEnergySink;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -30,7 +27,6 @@ import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.block.TileGenericSink;
 import cn.liutils.template.entity.EntitySittable;
 import cn.liutils.template.entity.EntitySittable.ISittable;
 import cn.liutils.util.DebugUtils;
@@ -331,6 +327,7 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	}
 	
 	//Energy
+	@Override
 	public double getMaxEnergy() {
 		return INIT_MAX_ENERGY;
 	}
@@ -353,7 +350,8 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 		return super.injectEnergyUnits(directionFrom, amount);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
     	return INFINITE_EXTENT_AABB;
     }
@@ -365,7 +363,8 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-    	@SideOnly(Side.CLIENT)
+    	@Override
+		@SideOnly(Side.CLIENT)
     	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if(te == null || !(te instanceof TileDeveloper)) {
@@ -375,7 +374,8 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 			return new GuiDeveloper((TileDeveloper) te);
     	}
     	
-    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+    	@Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
     		return null;
     	}
     };

@@ -11,12 +11,7 @@
 package cn.academy.misc.item;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.register.ACBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

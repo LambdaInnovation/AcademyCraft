@@ -6,8 +6,6 @@ package cn.academy.core.energy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -207,8 +205,8 @@ public class WirelessNetwork {
 	}
 	
 	static class NodeConns {
-		public static Set<IWirelessGenerator> generators = new HashSet();
-		public static Set<IWirelessReceiver> receivers = new HashSet();
+		public Set<IWirelessGenerator> generators = new HashSet();
+		public Set<IWirelessReceiver> receivers = new HashSet();
 	}
 
 }

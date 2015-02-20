@@ -17,7 +17,6 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.api.render.model.TileEntityModelCustom;
-import cn.liutils.core.proxy.LIClientProps;
 import cn.liutils.template.block.BlockDirectionalMulti;
 import cn.liutils.template.client.render.block.RenderDirMultiModelled;
 import cpw.mods.fml.relauncher.Side;
@@ -71,6 +70,7 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 		return new Tile();
 	}
 	
+	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess vw, int x, int y, int z) {
 		int meta = vw.getBlockMetadata(x, y, z) & 3;
 		float l = 0.2f, h = 0.8f, bh = 0.6f;
@@ -91,7 +91,8 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 		return null;
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public Vec3 getOffsetRotated(int dir) {
     	return Vec3.createVectorHelper(0.5, 0, 0.5);
     }

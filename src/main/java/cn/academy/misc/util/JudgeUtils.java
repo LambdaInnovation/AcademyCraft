@@ -83,7 +83,6 @@ public class JudgeUtils {
 	}
 	
 	public static boolean isEntityMetallic(Entity ent) {
-		System.out.println(ent + " " + metalEntities.contains(ent.getClass()));
 		return metalEntities.contains(ent.getClass());
 	}
 

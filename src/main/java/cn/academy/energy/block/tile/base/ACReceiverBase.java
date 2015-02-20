@@ -41,12 +41,14 @@ public abstract class ACReceiverBase extends TileUserBase implements
 		}
 	}
 	
+	@Override
 	protected void onUnload() { 
 		super.onUnload();
 		if(!worldObj.isRemote)
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 	}
 	
+	@Override
 	protected void init() {
 		super.init();
 		if(!worldObj.isRemote) {
@@ -82,12 +84,14 @@ public abstract class ACReceiverBase extends TileUserBase implements
 		return maxInput;
 	}
 	
-    public void readFromNBT(NBTTagCompound nbt) {
+    @Override
+	public void readFromNBT(NBTTagCompound nbt) {
     	super.readFromNBT(nbt);
     	curEnergy = nbt.getDouble("energy");
     }
     
-    public void writeToNBT(NBTTagCompound nbt) {
+    @Override
+	public void writeToNBT(NBTTagCompound nbt) {
     	super.writeToNBT(nbt);
     	nbt.setDouble("energy", curEnergy);
     }

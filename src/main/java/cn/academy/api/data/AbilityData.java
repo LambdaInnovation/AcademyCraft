@@ -4,13 +4,9 @@
 package cn.academy.api.data;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -20,7 +16,6 @@ import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
-import cn.liutils.util.misc.Pair;
 
 /**
  * @author WeathFolD, acaly

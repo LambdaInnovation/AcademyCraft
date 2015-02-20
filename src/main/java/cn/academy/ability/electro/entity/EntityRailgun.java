@@ -120,6 +120,7 @@ public class EntityRailgun extends EntityRay {
 		return 50.0f;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void beforeRender() { 
 		//EntityLivingBase spawner = getSpawner();

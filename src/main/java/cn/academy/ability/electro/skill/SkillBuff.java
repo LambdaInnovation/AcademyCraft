@@ -40,6 +40,7 @@ public class SkillBuff extends SkillBase {
 		setName("em_buff");
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(100) {
 

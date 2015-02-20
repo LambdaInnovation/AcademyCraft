@@ -6,11 +6,7 @@ package cn.academy.core.client.gui.dev;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.liutils.api.gui.Widget;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
 
 /**
  * Base class of any subpage

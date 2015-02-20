@@ -5,13 +5,11 @@ package cn.academy.energy.block.tile.base;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.energy.WirelessSystem;
 import cn.liutils.util.misc.Pair;
-import cn.liutils.util.space.IBlockFilter;
 
 /**
  * @author WeathFolD
@@ -49,11 +47,13 @@ public abstract class TileWirelessBase extends TileEntity implements
 	
 	public abstract double getSearchRange(); 
 	
-    public void onChunkUnload() {
+    @Override
+	public void onChunkUnload() {
     	onUnload();
     }
     
-    public void invalidate() {
+    @Override
+	public void invalidate() {
     	super.invalidate();
     	onUnload();
     }

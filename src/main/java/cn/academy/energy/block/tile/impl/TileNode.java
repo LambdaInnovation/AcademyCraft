@@ -185,7 +185,8 @@ public class TileNode extends TileNodeBase implements IInventory {
 		return EnergyUtils.isElecItem(stack);
 	}
 	
-    public void readFromNBT(NBTTagCompound tag)
+    @Override
+	public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
         NBTTagCompound tmp = tag.getCompoundTag("battery");
@@ -193,7 +194,8 @@ public class TileNode extends TileNodeBase implements IInventory {
         	battery = ItemStack.loadItemStackFromNBT(tmp);
     }
 
-    public void writeToNBT(NBTTagCompound tag)
+    @Override
+	public void writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         if(battery != null) {
