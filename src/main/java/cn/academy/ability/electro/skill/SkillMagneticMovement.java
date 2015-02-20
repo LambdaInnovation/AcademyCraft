@@ -180,7 +180,8 @@ public class SkillMagneticMovement extends SkillBase {
 	public static class Render extends RenderElecArc {
 		
 		public Render() {
-			this.width = 0.5F;
+			widthFp = 0.5F;
+			widthTp = 1.0F;
 		}
 		
 	}

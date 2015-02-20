@@ -20,7 +20,7 @@ public class RendererRaySimple<T extends EntityRay> extends RendererRayBase<T> {
 	
 	final ResourceLocation tex;
 	final double ratio;
-	double width = 0.3;
+	protected double widthFp, widthTp = 0.3;
 	
 	protected DrawObject drawer;
 	protected Rect rect;
@@ -33,12 +33,17 @@ public class RendererRaySimple<T extends EntityRay> extends RendererRayBase<T> {
 		drawer.addHandler(rect = new Rect());
 	}
 	
-	public void setWidth(double w) {
-		width = w;
+	public void setWidthFp(double w) {
+		widthFp = w;
+	}
+	
+	public void setWidthTp(double w2) {
+		widthTp = w2;
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent, double len) {
+	protected void drawAtOrigin(T ent, double len, boolean firstPerson) {
+		double width = firstPerson ? widthFp : widthTp;
 		GL11.glPushMatrix(); {
 			
 			RenderUtils.loadTexture(tex);

@@ -69,6 +69,8 @@ public abstract class AttackingArcBase extends EntityArcBase {
 			double tx = mop.hitVec.xCoord, ty = mop.hitVec.yCoord, tz = mop.hitVec.zCoord;
 			for(Entity ent : ents) {
 				//spawn the arc and attack the AOEed target
+				if(ent.equals(getSpawner()))
+					continue;
 				ent.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), sdmg);
 				double ox = ent.posX, oy = ent.posY + ent.height * 0.6, oz = ent.posZ;
 				new EntityExcitedArc(worldObj, 

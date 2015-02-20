@@ -25,6 +25,7 @@ public class SkillBase {
 	
 	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
 	String name = "null";
+	int maxSkillLv = 1;
 	
 	protected static final Random rand = new Random();
 	
@@ -48,8 +49,12 @@ public class SkillBase {
 		name = _name;
 	}
 	
-	public int getMaxSkillLevel() {
-		return 1;
+	public void setMaxSkillLevel(int i) {
+		maxSkillLv = i;
+	}
+	
+	public final int getMaxSkillLevel() {
+		return maxSkillLv;
 	}
 	
 	/**

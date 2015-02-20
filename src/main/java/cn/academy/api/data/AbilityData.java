@@ -108,7 +108,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public boolean canUpdateLevel() {
-		return getLevelID() < getLevelCount() - 1;
+		return getLevelID() < getLevelCount() - 1 && this.currentCP >= getLevel().getMaxCP();
 	}
 	
 	public int getLevelID() {
@@ -135,6 +135,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
+	public float getMaxCPIncr(float consumedCP) {
+		return consumedCP * 0.01f;
+	}
+	
 	//-----Skill-----
 	public int getSkillID(SkillBase skill) {
 		return skill.getIndexInCategory(getCategory());
@@ -150,6 +154,12 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public boolean isSkillLearned(int sid) {
 		return sid == 0 || skillLevels[sid] > 0;
+	}
+	
+	public boolean isSkillLearned(SkillBase skill) {
+		int sid = getSkillID(skill);
+		if(sid == -1) return false;
+		return isSkillLearned(sid);
 	}
 	
 	/**
@@ -297,7 +307,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	@Deprecated
 	public boolean decreaseCP(float need) {
-		return decreaseCP(need, false);
+		return decreaseCP(need, getSkill(0), false);
 	}
 	
 	/**
@@ -306,18 +316,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	 */
 	@Deprecated
 	public boolean decreaseCP(float need, boolean force) {
-		if(player.capabilities.isCreativeMode) {
-			return true;
-		}
-		boolean ret = currentCP >= need;
-		if(!force && !ret)
-			return false;
-		setCurrentCP(ret ? currentCP - need : 0);
-		return ret;
+		return decreaseCP(need, getSkill(0), force);
 	}
 	
 	public boolean decreaseCP(float need, SkillBase skill) {
-		return decreaseCP(need, skill);
+		return decreaseCP(need, skill, false);
 	}
 	
 	public boolean decreaseCP(float need, SkillBase base, boolean force) {
@@ -332,6 +335,7 @@ public class AbilityData implements IExtendedEntityProperties {
 			return false;
 		setCurrentCP(ret ? currentCP - need : 0);
 		addSkillExp(sid, getSexpForCP(need));
+		setMaxCP(Math.min(this.getMaxCP() + this.getMaxCPIncr(need), this.getLevel().getMaxCP()));
 		return ret;
 	}
 	
@@ -362,9 +366,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	//Skill Experience API
 	/**
 	 * Get the skillExp required to update to next level.
+	 * @param srlv skill min learn lv
+	 * @param lev skill current lv
 	 */
-	protected float getSexpForSkillLevel(int lev) {
-		return 10 + lev * 3;
+	protected float getSexpForSkillLevel(SkillBase sb, int lev) {
+		return (getCategory().getSkillMinLevel(sb) + 1) * (10 + lev * 3);
 	}
 	
 	protected float getSexpForCP(float cp) {
@@ -374,16 +380,17 @@ public class AbilityData implements IExtendedEntityProperties {
 	public boolean canSkillUpgrade(int sid) {
 		if(skillLevels[sid] == 0) return true;
 		SkillBase skill = this.getSkill(sid);
-		return this.skillLevels[sid] != skill.getMaxSkillLevel() && getSkillExp(sid) >= getSexpForSkillLevel(getSkillLevel(sid));
+		return this.skillLevels[sid] != skill.getMaxSkillLevel() 
+				&& getSkillExp(sid) >= getSexpForSkillLevel(skill, getSkillLevel(sid));
 	}
 	
 	public void addSkillExp(int sid, float exp) {
-		this.setSkillExp(sid, Math.min(this.getSexpForSkillLevel(skillLevels[sid]), exp + skillExps[sid]));
+		this.setSkillExp(sid, Math.min(this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]), exp + skillExps[sid]));
 	}
 	
 	public double getSkillUpgradeProgress(int sid) {
 		if(skillLevels[sid] == 0) return 1;
-		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(skillLevels[sid]));
+		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]));
 	}
 	
 	public void upgrade(int sid) {

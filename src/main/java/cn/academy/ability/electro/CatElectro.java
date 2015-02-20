@@ -53,7 +53,7 @@ public class CatElectro extends Category {
 		this.addSkill(strongArc = new SkillStrongArc(), 0);
 		this.addSkill(magMovement = new SkillMagneticMovement(), 0);
 		this.addSkill(railgun = new SkillRailgun(), 0);
-		this.addSkill(mineDetect = new SkillMineDetect(), 0);
+		this.addSkill(mineDetect = new SkillMineDetect(), 2);
 		this.addSkill(lightningFlash = new SkillLightningFlash(), 0);
 		
 		this.setColorStyle(26, 143, 218);

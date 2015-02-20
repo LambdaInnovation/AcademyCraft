@@ -48,7 +48,8 @@ public class EntityExcitedArc extends EntityArcBase {
 	
 	public static final class ThinArcRender extends RenderElecArc {
 		public ThinArcRender() {
-			width = 0.3;
+			widthFp = 0.3;
+			widthTp = 0.6;
 		}
 	}
 	

@@ -60,6 +60,14 @@ public class Preset {
 		return data[keyId];
 	}
 	
+	public boolean hasSkillMapping(int skillId) {
+		for(int i = 0; i < 4; ++i) {
+			if(data[i] == skillId)
+				return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Set the skill mapping.
 	 * @param keyId

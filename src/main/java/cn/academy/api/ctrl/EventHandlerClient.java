@@ -423,6 +423,10 @@ public class EventHandlerClient implements IKeyHandler {
 		return INSTANCE.skillEnabled;
 	}
 	
+	public static boolean isSkillMapped(int sid) {
+		return INSTANCE.getPresetManager().getCurrentPreset().hasSkillMapping(sid);
+	}
+	
 	@Override
 	public void onKeyDown(int keyCode, boolean tickEnd) {
 		if(tickEnd || !ClientUtils.isPlayerInGame()) return;

@@ -25,7 +25,7 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	
 	ResourceLocation texture;
 	
-	public double width = 0.2;
+	public double widthFp = 0.2, widthTp = 0.5;
 	
 	public double ratio = 2.0; // tWidth / tHeight
 	
@@ -52,8 +52,9 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent, double len) {
+	protected void drawAtOrigin(T ent, double len, boolean h) {
 		//len = Math.min(len, 20.0);
+		double width = h ? widthFp : widthTp;
 		double forw = width * ratio; //per billboard forward in distance.
 		int i = 0;
 		//System.out.println("d-" + dist);

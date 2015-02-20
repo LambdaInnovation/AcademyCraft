@@ -83,5 +83,8 @@ public class Level {
 		return StatCollector.translateToLocal("level_" + getID());
 	}
 	
-	public void enterLevel(AbilityData abilityData) {}
+	public void enterLevel(AbilityData data) {
+		data.setMaxCP(this.initialCP);
+		data.setCurrentCP(this.initialCP);
+	}
 }

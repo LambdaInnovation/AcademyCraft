@@ -166,12 +166,11 @@ public class PageSkills extends DevSubpage {
 					text = String.format("Lv%d", level);
 					base.drawText(text, 97.5, 5.5, 4.8);
 					
-					if(!canUpgrade) {
-						GL11.glColor4d(0.2, 0.2, 0.2, 0.7);
-						HudUtils.drawModalRect(30, 15, 75, 1);
-						
-						GL11.glColor4d(0, 1, 0, 0.8);
-					}
+					GL11.glColor4d(0.2, 0.2, 0.2, 0.7);
+					HudUtils.drawModalRect(30, 15, 75, 1);
+					
+					GL11.glColor4d(0, 1, 0, 0.8);
+					HudUtils.drawModalRect(30, 15, 75 * base.data.getSkillUpgradeProgress(skillID), 1);
 				}
 				
 				if(!fullyLearned) {

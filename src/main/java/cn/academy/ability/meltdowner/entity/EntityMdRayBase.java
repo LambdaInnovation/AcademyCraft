@@ -74,7 +74,8 @@ public abstract class EntityMdRayBase extends EntityRay {
 			super(new ResourceLocation("academy:textures/effects/mdray.png"),
 				  new ResourceLocation("academy:textures/effects/mdray_begin.png"),
 				 0.666666);
-			this.setWidth(0.4);
+			this.setWidthFp(0.2);
+			this.setWidthTp(0.4);
 			this.setAlpha(0.6);
 		}
 		

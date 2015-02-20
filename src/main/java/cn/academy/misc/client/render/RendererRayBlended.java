@@ -24,7 +24,9 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent, double len) {
+	protected void drawAtOrigin(T ent, double len, boolean w) {
+		double width = w ? widthFp : widthTp;
+		
 		double forw = width * ratio;
 		if(len < 2 * forw) len = 2 * forw; //Change to safe range
 		

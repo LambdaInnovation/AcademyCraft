@@ -39,7 +39,8 @@ public class EntityRailgun extends EntityRay {
 		
 		public Render() {
 			super(ACClientProps.TEX_EFF_RAILGUN, 4);
-			this.setWidth(0.12);
+			widthFp = 0.12;
+			widthTp = 0.3;
 		}
 		
 	}
@@ -54,7 +55,7 @@ public class EntityRailgun extends EntityRay {
 		
 		int sid = data.getSkillID(CatElectro.railgun);
 		damage = 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F;
-		explRadius = (int) (damage * 0.02);
+		explRadius = (int) (damage * 0.5);
 		
 		MovingObjectPosition ret = this.performTrace();
 		if(ret != null) onCollide(ret);

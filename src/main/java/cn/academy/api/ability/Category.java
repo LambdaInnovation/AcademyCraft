@@ -4,12 +4,10 @@
 package cn.academy.api.ability;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-import scala.annotation.varargs;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
@@ -29,6 +27,7 @@ public class Category {
 	
 	private List<Level> levels = new ArrayList<Level>();
 	private List<SkillBase> skills = new ArrayList<SkillBase>();
+	private Map<SkillBase, Integer> initialLevels = new HashMap();
 	
 	protected int colorStyle[] = { 255, 255, 255 };
 
@@ -86,6 +85,7 @@ public class Category {
 		int ret = skills.size();
 		skills.add(skill);
 		Abilities.registerSkill(skill);
+		this.initialLevels.put(skill, minLevel);
 		for(int i = minLevel; i < getLevelCount(); ++i)
 			getLevel(i).addCanLearnSkill(ret);
 		return ret;
@@ -93,6 +93,11 @@ public class Category {
 	
 	public final SkillBase getSkill(int sid) {
 		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(skills, sid));
+	}
+	
+	public final int getSkillMinLevel(SkillBase sb) {
+		Integer i = initialLevels.get(sb);
+		return i == null ? 0 : i;
 	}
 	
 	public final int getSkillCount() {

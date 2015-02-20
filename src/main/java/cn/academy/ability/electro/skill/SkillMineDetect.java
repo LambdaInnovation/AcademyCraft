@@ -21,6 +21,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
@@ -66,6 +67,15 @@ public class SkillMineDetect extends SkillBase {
 	public SkillMineDetect() {
 		setLogo("electro/mineview.png");
 		setName("em_mine");
+		setMaxSkillLevel(10);
+	}
+	
+	static int getCPConsume(int slv, int lv) {
+		return 3000 + slv * 50 + lv * 200;
+	}
+	
+	static double getDetectRange(int slv, int lv) {
+		return 10 + slv * 2 + lv * 5;
 	}
 	
 	@Override
@@ -85,10 +95,6 @@ public class SkillMineDetect extends SkillBase {
 		return ACClientProps.EFF_MV_TEST;
 	}
 	
-	public int getMaxSkillLevel() {
-		return 10;
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public static final class HandlerEntity extends FakeEntity {
 		
@@ -102,8 +108,10 @@ public class SkillMineDetect extends SkillBase {
 		private double lastX, lastY, lastZ;
 		
 		private EntityPlayer target;
+		
+		private final boolean isAdvanced;
 
-		public HandlerEntity(EntityPlayer target, int time, double range) {
+		public HandlerEntity(EntityPlayer target, int time, double range, boolean advanced) {
 			super(target);
 			this.lifeTime = time;
 			this.range = range;
@@ -111,6 +119,8 @@ public class SkillMineDetect extends SkillBase {
 			
 			double tmp = range * 0.2;
 			safeDistSq = tmp * tmp;
+			
+			isAdvanced = advanced;
 			
 			target.addPotionEffect(new PotionEffect(Potion.blindness.id, 10000));
 			this.setCurMotion(new Ticker());
@@ -168,7 +178,7 @@ public class SkillMineDetect extends SkillBase {
 						ebs = aliveSims.get(ind);
 						ind += 1;
 					} else {
-						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, true);
+						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, isAdvanced);
 						worldObj.spawnEntityInWorld(ebs);
 					}
 					toRetain.add(ebs);
@@ -205,14 +215,14 @@ public class SkillMineDetect extends SkillBase {
 		@Override
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
-			if(!data.decreaseCP(0)) {
+			int slv = data.getSkillLevel(CatElectro.mineDetect), lv = data.getLevelID() + 1;
+			if(!data.decreaseCP(getCPConsume(slv, lv), CatElectro.mineDetect)) {
 				return;
 			}
 			player.playSound("academy:elec.mineview", 0.5f, 1.0f);
 			if(player.worldObj.isRemote) {
-				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 30));
-			} else {
-				//consume CPs, etc
+				player.worldObj.spawnEntityInWorld(
+					new HandlerEntity(player, 100, getDetectRange(slv, lv), lv >= 3 && slv >= 5));
 			}
 			this.finishSkill();
 		}

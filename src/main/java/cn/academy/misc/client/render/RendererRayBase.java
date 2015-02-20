@@ -86,8 +86,6 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 			
 			if(firstPerson) {
 				transformFirstPerson(er, x, y, z);
-				if(!er.doesFollowSpawner())
-					optimizeView(er, x, y, z);
 			} else {
 				transformThirdPerson(er, x, y, z);
 				optimizeView(er, x, y, z);
@@ -97,7 +95,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 				Tessellator.instance.setBrightness(15728880);
 			}
-			drawAtOrigin(er, len);
+			drawAtOrigin(er, len, firstPerson);
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -130,7 +128,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		}
 	}
 	
-	protected abstract void drawAtOrigin(T ent, double len);
+	protected abstract void drawAtOrigin(T ent, double len, boolean firstPerson);
 	
 	protected void sv(Vec3 v, double x, double y, double z) {
 		v.xCoord = x;

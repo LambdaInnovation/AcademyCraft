@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.CubePointFactory;
 import cn.academy.ability.electro.client.render.IPointFactory.NormalVert;
@@ -43,6 +44,10 @@ public class ChargeEffectS extends FakeEntity {
 	public ChargeEffectS(World world, double x, double y, double z, int lifeTime, int _itensity, double _ht) {
 		super(world, x, y, z);
 		init(lifeTime, _itensity, _ht);
+	}
+	
+	public void setTextures(ResourceLocation[] anim) {
+		
 	}
 	
 	private void init(int lifeTime, int _itensity, double _ht) {
