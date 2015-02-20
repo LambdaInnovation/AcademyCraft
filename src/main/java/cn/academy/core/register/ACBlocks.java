@@ -34,36 +34,37 @@ public class ACBlocks {
 	@RegBlock
 	@RegBlock.BTName("cu_ore")
 	@RegBlock.OreDict("oreCopper")
-	public static ACOre oreCopper = new ACOre(1);
+	public static ACOre oreCopper = new ACOre(1, 3.05f);
 	
 	@RegBlock
 	@RegBlock.BTName("tin_ore")
 	@RegBlock.OreDict("oreTin")
-	public static ACOre oreTin = new ACOre(1);
+	public static ACOre oreTin = new ACOre(1, 2.95f);
 	
 	@RegBlock
 	@RegBlock.BTName("al_ore")
 	@RegBlock.OreDict("oreAluminium")
-	public static ACOre oreAl = new ACOre(1);
+	public static ACOre oreAl = new ACOre(1, 2.9f);
 	
 	@RegBlock
 	@RegBlock.BTName("mg_ore")
 	@RegBlock.OreDict("oreMagnesium")
-	public static ACOre oreMg = new ACOre(1);
+	public static ACOre oreMg = new ACOre(1, 2.95f);
 	
 	@RegBlock
 	@RegBlock.BTName("ni_ore")
 	@RegBlock.OreDict("oreNickel")
-	public static ACOre oreNi = new ACOre(1);
+	public static ACOre oreNi = new ACOre(1, 3.2f);
 	
 	@RegBlock
 	@RegBlock.BTName("crystal_ore")
 	@RegBlock.OreDict("oreCrystal")
-	public static ACOre oreCrystal = new ACOre(2).setOreHardness(3.5f);
+	public static ACOre oreCrystal = new ACOre(2, 3.5f);
 	
 	@RegBlock
 	@RegBlock.BTName("shadow_ore")
 	@RegBlock.OreDict("oreShadow")
-	public static ACOre oreShadow = new ACOre(2).setLightLevel(0.9375f);
+	public static ACOre oreShadow = new ACOre(2, 0.9375f);
+	/** Reconstruction note: Referenced on atoms relative mass */
 	
 }

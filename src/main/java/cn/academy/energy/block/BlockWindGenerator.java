@@ -36,6 +36,7 @@ public class BlockWindGenerator extends BlockDirectionalMulti {
 		setBlockName("windgen");
 		setBlockTextureName("academy:windgen");
 		setCreativeTab(AcademyCraft.cct);
+		setHardness(2.0f);
 	}
 
 	@Override

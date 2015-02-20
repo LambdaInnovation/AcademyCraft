@@ -17,13 +17,19 @@ public class ACOre extends Block {
 	private float lightLevel;
 	private float hardness = 3.0f;
 	
-	public ACOre(int harvest) {
+	/** Reconstructed: Different ore have different hardness */
+	public ACOre(int harvest, float hardness) {
 		super(Material.rock);
 		setHarvestLevel("pickaxe", harvest);
 		setCreativeTab(AcademyCraft.cct);
 		setStepSound(Block.soundTypePiston);
 		setHardness(hardness);
+		this.hardness = hardness;
 		setResistance(5.0F);
+	}
+	
+	public ACOre(int harvest) {
+		this(harvest, 3.0f);
 	}
 	
 	@Override

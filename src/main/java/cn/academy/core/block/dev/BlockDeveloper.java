@@ -23,7 +23,7 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		setBlockName("ac_developer");
 		setBlockTextureName("academy:bed");
 		setCreativeTab(AcademyCraft.cct);
-		
+		setHardness(4.0f);
 		this.addSubBlock(1, 0, 0);
 		this.setBlockBounds(0, 0, 0, 1, 0.5F, 1);
 	}
