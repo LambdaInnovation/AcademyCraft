@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACRecipes;
+import cn.academy.core.register.ACWorldGen;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
@@ -23,6 +24,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 /**
@@ -79,6 +81,8 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_RENDER_HOOK);
+		
+		GameRegistry.registerWorldGenerator(new ACWorldGen(), 2);
 	}
 
 	@EventHandler

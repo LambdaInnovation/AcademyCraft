@@ -64,7 +64,7 @@ public class ACBlocks {
 	@RegBlock
 	@RegBlock.BTName("shadow_ore")
 	@RegBlock.OreDict("oreShadow")
-	public static ACOre oreShadow = new ACOre(2).setLightLevel(0.9375f);
+	public static ACOre oreShadow = new ACOre(2, 3.5f).setLightLevel(0.9375f);
 	/** Fix note: Shadow Metal Ore has a lightness of 0.9375f (equals to torchs), this isn't its hardness. */
 	
 }
