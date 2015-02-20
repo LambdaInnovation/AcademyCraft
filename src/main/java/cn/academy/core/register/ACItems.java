@@ -9,7 +9,6 @@ import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ItemCoin;
-import cn.academy.misc.item.ItemExpNail;
 import cn.academy.misc.item.ItemMagHook;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
@@ -165,14 +164,11 @@ public class ACItems {
 	@RegItem.UTName("ac_cplank")
 	public static ACSimpleItem compPlank;
 	
-	@RegItem
-	@RegItem.UTName("ac_exp_nail")
-	public static ItemExpNail expNail;
-	
 	@RegItem()
 	@RegItem.HasRender
 	@RegWithName("ac_void")
 	public static ItemVoid ivoid = new ItemVoid() {
+		//吐槽：这到底什么微妙的写法
 		@SideOnly(Side.CLIENT)
 		@RegItem.Render
 		public RenderVoid renderVoid;

@@ -30,10 +30,12 @@ public class ItemMagHook extends Item {
 		setCreativeTab(AcademyCraft.cct);
 		setUnlocalizedName("ac_maghook");
 		setTextureName("academy:maghook");
+		this.setFull3D();
 	}
 	
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
     	if(!world.isRemote) {
+    		world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
     		world.spawnEntityInWorld(new EntityMagHook(player));
     		stack.damageItem(1, player);
     	}
@@ -44,9 +46,16 @@ public class ItemMagHook extends Item {
 
 		public HookRender() {
 			super(new ItemModelCustom(ACClientProps.MDL_MAGHOOK), ACClientProps.TEX_MDL_MAGHOOK);
-			System.out.println("AAAAAAAAAAAAAAAAAPOI");
-			this.setScale(0.3d);
-			this.setStdRotation(0, 0, 90);
+			this.setScale(0.15d);
+			this.setStdRotation(0, -90, 90);
+			this.setOffset(0, 0.0, -3);
+			this.setEquipOffset(1, 0, 0);
+		}
+		
+		protected void renderAtStdPosition(float i) {
+			this.setOffset(0, 0, 1);
+			this.setEquipOffset(0.5, 0.1, 0);
+			super.renderAtStdPosition(i);
 		}
     	
     }

@@ -30,6 +30,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityBlockSimulator;
+import cn.academy.misc.util.JudgeUtils;
 import cn.liutils.api.entityx.FakeEntity;
 import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.util.GenericUtils;
@@ -47,19 +48,7 @@ public class SkillMineDetect extends SkillBase {
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
 		public boolean accepts(World world, Block block, int x, int y, int z) {
-			if(block instanceof BlockOre) {
-				return true;
-			}
-			
-			if(Item.getItemFromBlock(block) == null)
-				return false;
-			ItemStack stack = new ItemStack(block);
-			int[] val = OreDictionary.getOreIDs(stack);
-			for(int i : val) {
-				if(OreDictionary.getOreName(i).contains("ore"))
-					return true;
-			}
-			return false;
+			return JudgeUtils.isOreBlock(block);
 		}
 	};
 	
