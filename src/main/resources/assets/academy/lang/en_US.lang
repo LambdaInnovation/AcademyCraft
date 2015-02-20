@@ -29,6 +29,8 @@ item.shadow_ingot.name=Shadow Metal Ingot
 item.ac_cplank.name=Composite Wood Planks
 item.ac_exp_nail.name=Expansion Nail
 item.ac_smallsi.name=Small Piece of Silicon
+item.ac_freqreg.name=Frequency Regulator
+item.ac_sibarn.name=Silicon Barn
 
 #Blocks
 tile.ac_developer.name=Ability Developer

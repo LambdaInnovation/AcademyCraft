@@ -14,18 +14,14 @@ import net.minecraft.item.Item;
 public class ACOre extends Block {
 	
 	private Item itemDropped;
-	private float lightLevel;
-	private float hardness = 3.0f;
 	
-	/** Reconstructed: Different ore have different hardness */
 	public ACOre(int harvest, float hardness) {
 		super(Material.rock);
 		setHarvestLevel("pickaxe", harvest);
 		setCreativeTab(AcademyCraft.cct);
 		setStepSound(Block.soundTypePiston);
 		setHardness(hardness);
-		this.hardness = hardness;
-		setResistance(5.0F);
+		setResistance(5.0f);
 	}
 	
 	public ACOre(int harvest) {
@@ -46,11 +42,6 @@ public class ACOre extends Block {
     public ACOre setLightLevel(float light) {
         super.setLightLevel(light);
         return this;
-    }
-    
-    public ACOre setOreHardness(float hardness) {
-    	this.hardness = hardness;
-    	return this;
     }
 
 }

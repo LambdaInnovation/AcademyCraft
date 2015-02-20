@@ -29,6 +29,8 @@ item.shadow_ingot.name=影子金属锭
 item.ac_cplank.name=复合木板
 item.ac_exp_nail.name=粘性膨胀钉
 item.ac_smallsi.name=小块硅
+item.ac_freqreg.name=频率变送器
+item.ac_sibarn.name=扩散支援半导体
 
 #方块
 tile.ac_developer.name=能力开发机
@@ -175,8 +177,8 @@ level_4=超能力者
 ac.notconnected=未连接
 ac.matinit=初始化
 ac.opstat=WEN状态
-ac.opsuc=开启成功
-ac.opfail=开启失败
+ac.opsuc=操作成功
+ac.opfail=操作失败
 ac.cnnexist=频道存在
 ac.transmitting=连接中
 ac.inconsistentpass=两次输入的密码必须一致！
