@@ -2,6 +2,8 @@ package cn.academy.ability.teleport.skill;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -20,6 +22,7 @@ public class SkillViscusStripping extends SkillBase {
 	public SkillViscusStripping() {
 		setName("tp_visc");
 		setLogo("tp/viscus_stripping.png");
+		setMaxSkillLevel(10);
 	}
 	
 	@Override
@@ -64,8 +67,12 @@ public class SkillViscusStripping extends SkillBase {
 				if(mop.entityHit instanceof EntityLivingBase) {
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
 					mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg);
-					if(isRemote())
+					if(isRemote()) {
 						EntityBloodSplash.genSplashEffect(mop.entityHit);
+					} else {
+						//反♂胃
+						player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
+					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
 				}
 			}

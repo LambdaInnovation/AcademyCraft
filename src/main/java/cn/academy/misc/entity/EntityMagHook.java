@@ -104,8 +104,8 @@ public class EntityMagHook extends EntityX {
 	
 	@Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
-		if(!worldObj.isRemote && ticksExisted > 20)
-			this.dropAsItem();
+//		if(!worldObj.isRemote && ticksExisted > 20)
+//			this.dropAsItem();
 	}
 	
 	private void sync() {
@@ -131,13 +131,14 @@ public class EntityMagHook extends EntityX {
 	
     @Override
 	public boolean interactFirst(EntityPlayer player) {
-    	dropAsItem();
+    	if(!worldObj.isRemote)
+    		dropAsItem();
         return true;
     }
     
     @Override
 	public boolean canBeCollidedWith() {
-        return true;
+        return this.isHit;
     }
     
     private void dropAsItem() {

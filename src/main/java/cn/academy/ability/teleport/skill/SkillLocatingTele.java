@@ -6,5 +6,6 @@ public class SkillLocatingTele extends SkillBase {
 	public SkillLocatingTele() {
 		setName("tp_loc");
 		setLogo("tp/locating.png");
+		setMaxSkillLevel(10);
 	}
 }

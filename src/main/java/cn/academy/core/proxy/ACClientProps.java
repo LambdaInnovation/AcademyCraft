@@ -116,6 +116,14 @@ public class ACClientProps {
 		src("academy:textures/effects/arcw/3.png"),
 		src("academy:textures/effects/arcw/4.png"),
 		src("academy:textures/effects/arcw/5.png"),
+	},
+	ANIM_TP_MARK[] = {
+		src("academy:textures/effects/tp_mark/0.png"),
+		src("academy:textures/effects/tp_mark/1.png"),
+		src("academy:textures/effects/tp_mark/2.png"),
+		src("academy:textures/effects/tp_mark/3.png"),
+		src("academy:textures/effects/tp_mark/4.png"),
+		src("academy:textures/effects/tp_mark/5.png"),
 	};
 	
 	public static ResourceLocation ANIM_SMALL_ARC[];

@@ -3,7 +3,7 @@ package cn.academy.ability.teleport.skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import cn.academy.ability.teleport.CatTeleport;
-import cn.academy.ability.teleport.entity.EntityTPMarking;
+import cn.academy.ability.teleport.entity.fx.EntityTPMarking;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
@@ -20,6 +20,7 @@ public class SkillMarkTele extends SkillBase {
 	public SkillMarkTele() {
 		setName("tp_mark");
 		setLogo("tp/marked.png");
+		setMaxSkillLevel(10);
 	}
 	
 	@Override
@@ -93,7 +94,7 @@ public class SkillMarkTele extends SkillBase {
 			data.decreaseCP((float) 
 				(dist * getConsumePerBlock(
 				data.getSkillLevel(CatTeleport.skillMarkedTele), 
-				data.getLevelID() + 1)), true);
+				data.getLevelID() + 1)), CatTeleport.skillMarkedTele, true);
 			mark.setDead();
 		}
 

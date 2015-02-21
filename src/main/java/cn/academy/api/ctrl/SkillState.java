@@ -127,6 +127,10 @@ public class SkillState {
 		fromNBT(nbt);
 	}
 	
+	public boolean isRemote() {
+		return player.worldObj.isRemote;
+	}
+	
 	/**
 	 * Called by SkillStateManager. Handle tick events in SkillState.
 	 * @return Return true to indicate that this State is finished.

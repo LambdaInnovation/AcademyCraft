@@ -41,6 +41,8 @@ public class ChargePlaneEffect extends SkillRenderer {
 	@Override
 	public void renderHud(EntityPlayer player, ScaledResolution sr, long time) {
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthMask(false);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix(); {
 			GL11.glColor4d(1, 1, 1, 0.4);
@@ -55,7 +57,9 @@ public class ChargePlaneEffect extends SkillRenderer {
 			}
 			RenderUtils.bindIdentity();
 		} GL11.glPopMatrix();
+		GL11.glDepthMask(true);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 
 }
