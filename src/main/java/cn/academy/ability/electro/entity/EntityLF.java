@@ -6,7 +6,6 @@ package cn.academy.ability.electro.entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import cn.academy.ability.electro.CatElectro;
-import cn.academy.ability.electro.entity.fx.ChargeEffectS;
 import cn.academy.api.data.AbilityData;
 import cn.liutils.api.entityx.FakeEntity;
 import cn.liutils.api.entityx.motion.LifeTime;

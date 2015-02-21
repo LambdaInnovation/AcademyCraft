@@ -27,7 +27,7 @@ public class PageMain extends Widget {
 	GuiDeveloper dev;
 
 	public PageMain(GuiDeveloper gd) {
-		super(0, 0, gd.WIDTH, gd.HEIGHT);
+		super(0, 0, GuiDeveloper.WIDTH, GuiDeveloper.HEIGHT);
 		this.alignStyle = AlignStyle.CENTER;
 		this.initTexDraw(ACClientProps.TEX_GUI_AD_MAIN, 0, 0, 456, 369);
 		dev = gd;
@@ -72,17 +72,17 @@ public class PageMain extends Widget {
 				156, 4.5, 8.5, Align.CENTER);
 		
 		//Titles
-		dev.drawText(ACLangs.holoView(), 147, 20.5, 7.5);
+		GuiDeveloper.drawText(ACLangs.holoView(), 147, 20.5, 7.5);
 		
-		dev.drawText(ACLangs.ad_UserInfo(), 147.5, 119, 7.5);
+		GuiDeveloper.drawText(ACLangs.ad_UserInfo(), 147.5, 119, 7.5);
 		
 		//Misc
 		drawUserInfo();
 	}
 	
 	private void drawUserInfo() {
-		dev.drawText("CP.", 148, 153, 6);
-		dev.drawText("PRG.", 148, 167.5, 6);
+		GuiDeveloper.drawText("CP.", 148, 153, 6);
+		GuiDeveloper.drawText("PRG.", 148, 167.5, 6);
 		
 		AbilityData data = AbilityDataMain.getData(dev.user);
 		ResourceLocation logo = null;
@@ -125,7 +125,7 @@ public class PageMain extends Widget {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glPushMatrix(); {
 			GL11.glTranslatef(183, 58, 100F);
-			GL11.glScalef((float) (-scale), (float) scale, (float) scale);
+			GL11.glScalef((-scale), scale, scale);
 			GL11.glRotated(-25, 1, 0, 0);
 			RenderHelper.enableStandardItemLighting();
 			GL11.glRotatef(Minecraft.getSystemTime() / 100F, 0F, 1F, 0F); //Rotate around Y

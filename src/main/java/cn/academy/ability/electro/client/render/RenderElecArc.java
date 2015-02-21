@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.electro.entity.EntityArcBase;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayTiling;
 
 /**

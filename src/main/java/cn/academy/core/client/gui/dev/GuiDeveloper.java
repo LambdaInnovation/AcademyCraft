@@ -76,13 +76,15 @@ public class GuiDeveloper extends LIGuiScreen {
     	}
     }
     
-    public void drawScreen(int mx, int my, float w)
+    @Override
+	public void drawScreen(int mx, int my, float w)
     {
     	HudUtils.setTextureResolution(512, 512);
     	super.drawScreen(mx, my, w);
     }
     
-    public void onGuiClosed() {
+    @Override
+	public void onGuiClosed() {
     	super.onGuiClosed();
     	//TODO: State checking and doesn't userQuit when re-constructing
     	dev.userQuit();

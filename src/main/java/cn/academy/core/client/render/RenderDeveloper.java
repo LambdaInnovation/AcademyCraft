@@ -3,17 +3,9 @@
  */
 package cn.academy.core.client.render;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.proxy.ACClientProps;

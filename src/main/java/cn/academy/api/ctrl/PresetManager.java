@@ -1,8 +1,6 @@
 package cn.academy.api.ctrl;
 
 import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
-import cn.academy.api.ability.Category;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;

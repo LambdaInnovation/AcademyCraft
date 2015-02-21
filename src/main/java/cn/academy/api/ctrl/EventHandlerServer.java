@@ -16,14 +16,12 @@ import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * The event handler in server side. It's actually a network handler.

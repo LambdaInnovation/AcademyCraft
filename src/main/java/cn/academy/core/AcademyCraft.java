@@ -14,7 +14,6 @@ import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.liutils.core.LIUtils;
-import cn.liutils.util.render.LambdaFont;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

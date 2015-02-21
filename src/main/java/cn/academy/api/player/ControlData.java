@@ -1,6 +1,5 @@
 package cn.academy.api.player;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,15 +7,12 @@ import java.util.Map.Entry;
 
 import cpw.mods.fml.relauncher.Side;
 import cn.academy.api.player.lock.LockBase;
-import cn.academy.api.player.lock.LockBase;
 import cn.academy.api.player.lock.LockBase.LockType;
 import cn.academy.api.player.lock.LockPosition;
 import cn.academy.core.AcademyCraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 

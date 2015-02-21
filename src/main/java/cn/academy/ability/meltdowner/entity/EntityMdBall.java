@@ -181,7 +181,8 @@ public class EntityMdBall extends EntityX {
 		state = ns;
 	}
 	
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+    @Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
     	setDead();
     }
 	

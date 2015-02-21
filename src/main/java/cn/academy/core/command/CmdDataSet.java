@@ -3,10 +3,7 @@
  */
 package cn.academy.core.command;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.Abilities;
@@ -41,7 +38,7 @@ public class CmdDataSet extends LICommandBase {
 
 	@Override
 	public void processCommand(ICommandSender ics, String[] args) {
-		EntityPlayer player = this.getCommandSenderAsPlayer(ics);
+		EntityPlayer player = CommandBase.getCommandSenderAsPlayer(ics);
 		if(player == null) return;
 		
 		AbilityData data = AbilityDataMain.getData(player);
@@ -115,8 +112,8 @@ public class CmdDataSet extends LICommandBase {
 				player.experience = 0;
 			}
 		} else {
-			this.sendError(ics, "Invalid argument size");
-			this.sendChat(ics, getCommandUsage(ics));
+			LICommandBase.sendError(ics, "Invalid argument size");
+			LICommandBase.sendChat(ics, getCommandUsage(ics));
 		}
 	}
 

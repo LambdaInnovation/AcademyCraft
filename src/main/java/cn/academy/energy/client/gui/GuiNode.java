@@ -15,7 +15,6 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.client.gui.Dialogues.DiagState;
-import cn.academy.energy.client.gui.Dialogues.Dialogue;
 import cn.academy.energy.client.gui.Dialogues.InputPassword;
 import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.node.MsgInitNode;
@@ -25,7 +24,6 @@ import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiContainer;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
-import cn.liutils.api.gui.widget.InputBox;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -78,6 +76,7 @@ public class GuiNode extends LIGuiContainer {
 		gui.addWidget(mainPage = new Page());
 	}
 	
+	@Override
 	public boolean isSlotActive() {
 		return mainPage.doesListenKey;
 	}
@@ -91,6 +90,7 @@ public class GuiNode extends LIGuiContainer {
 			this.setTexResolution(384, 384);
 		}
 		
+		@Override
 		public void draw(double mx, double my, boolean hov) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(-.2, 0.5, 0);
@@ -159,6 +159,7 @@ public class GuiNode extends LIGuiContainer {
 			list.setDragBar(db);
 		}
 		
+		@Override
 		public void draw(double mx, double my, boolean hover) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(-this.getNode().x, -this.getNode().y, 0);

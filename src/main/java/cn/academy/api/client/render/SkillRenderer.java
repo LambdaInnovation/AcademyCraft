@@ -5,7 +5,6 @@ package cn.academy.api.client.render;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.api.ctrl.SkillState;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

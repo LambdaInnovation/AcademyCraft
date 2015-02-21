@@ -10,7 +10,9 @@ public abstract class PatternHold implements IPattern {
 		public State(EntityPlayer player) {
 			super(player);
 		}
+		@Override
 		public abstract void onStart();
+		@Override
 		public abstract void onFinish();
 		public abstract void onHold();
 		public final boolean isRemote() {

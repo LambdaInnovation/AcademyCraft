@@ -78,12 +78,14 @@ public class ACGeneratorBase extends TileUserBase implements IWirelessGenerator,
 		if(energy < 0.0) energy = 0.0;
 	}
 	
-    public void readFromNBT(NBTTagCompound nbt) {
+    @Override
+	public void readFromNBT(NBTTagCompound nbt) {
     	super.readFromNBT(nbt);
     	energy = nbt.getDouble("energy");
     }
     
-    public void writeToNBT(NBTTagCompound nbt) {
+    @Override
+	public void writeToNBT(NBTTagCompound nbt) {
     	super.writeToNBT(nbt);
     	nbt.setDouble("energy", energy);
     }

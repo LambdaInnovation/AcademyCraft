@@ -3,6 +3,7 @@
  */
 package cn.academy.core.command;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.Category;
@@ -37,7 +38,7 @@ public class CmdDataView extends LICommandBase {
 
 	@Override
 	public void processCommand(ICommandSender ics, String[] args) {
-		EntityPlayer player = this.getCommandSenderAsPlayer(ics);
+		EntityPlayer player = CommandBase.getCommandSenderAsPlayer(ics);
 		if(player == null) return;
 		AbilityData data = AbilityDataMain.getData(player);
 		Category cat = data.getCategory();

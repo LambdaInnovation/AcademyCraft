@@ -1,8 +1,6 @@
 package cn.academy.api.ctrl;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;

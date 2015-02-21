@@ -15,7 +15,6 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.misc.entity.EntityRay;
-import cn.liutils.util.GenericUtils;
 
 /**
  * This only peforms correct translation.

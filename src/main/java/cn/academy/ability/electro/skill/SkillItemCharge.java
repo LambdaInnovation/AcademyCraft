@@ -5,7 +5,6 @@ package cn.academy.ability.electro.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.SRSmallCharge;
 import cn.academy.ability.electro.entity.EntityChargingArc;
@@ -18,7 +17,6 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.client.render.SkillRenderManager.RenderNode;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.register.ACItems;
 import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;

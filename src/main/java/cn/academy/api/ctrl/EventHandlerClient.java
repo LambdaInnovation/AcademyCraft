@@ -1,6 +1,5 @@
 package cn.academy.api.ctrl;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,7 +23,6 @@ import cn.liutils.api.register.Configurable;
 import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -63,7 +61,7 @@ public class EventHandlerClient implements IKeyHandler {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			if (!skillEnabled) return;
-			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
+			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
@@ -71,7 +69,7 @@ public class EventHandlerClient implements IKeyHandler {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
             if (!skillEnabled) return;
-			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
+			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
 		@Override
@@ -424,7 +422,7 @@ public class EventHandlerClient implements IKeyHandler {
 	}
 	
 	public static boolean isSkillMapped(int sid) {
-		return INSTANCE.getPresetManager().getCurrentPreset().hasSkillMapping(sid);
+		return PresetManager.getCurrentPreset().hasSkillMapping(sid);
 	}
 	
 	@Override

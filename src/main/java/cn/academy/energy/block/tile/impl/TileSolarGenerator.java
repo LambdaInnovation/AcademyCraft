@@ -18,12 +18,8 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.api.energy.IWirelessGenerator;
-import cn.academy.api.energy.IWirelessNode;
-import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.base.ACGeneratorBase;
-import cn.academy.energy.block.tile.base.TileUserBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.util.RenderUtils;

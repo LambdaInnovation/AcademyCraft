@@ -4,16 +4,13 @@
 package cn.academy.energy.item;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.block.tile.base.TileUserBase;
 import cn.academy.energy.client.gui.GuiFreqRegulator;
-import cn.academy.energy.msg.fr.MsgFRInit;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
@@ -37,7 +34,8 @@ public class ItemFreqRegulator extends Item {
 		setCreativeTab(AcademyCraft.cct);
 	}
 	
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, 
+    @Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, 
     		int x, int y, int z, int side, float tx, float ty, float tz) {
     	TileEntity te = world.getTileEntity(x, y, z);
     	if(!(te instanceof TileUserBase)) {
@@ -50,14 +48,16 @@ public class ItemFreqRegulator extends Item {
     
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-    	@SideOnly(Side.CLIENT)
+    	@Override
+		@SideOnly(Side.CLIENT)
     	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
     		TileUserBase te = tsGet(world, x, y, z);
     		if(te == null) return null;
     		return new GuiFreqRegulator(te);
     	}
     	
-    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+    	@Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
     		return null;
     	}
     	

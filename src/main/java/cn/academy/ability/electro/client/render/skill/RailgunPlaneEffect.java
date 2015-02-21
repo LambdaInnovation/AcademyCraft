@@ -3,14 +3,12 @@
  */
 package cn.academy.ability.electro.client.render.skill;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import cn.academy.api.client.render.SkillRenderer;
-import cn.academy.api.ctrl.SkillState;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.draw.DrawObject;
 import cn.liutils.api.draw.DrawObject.EventType;

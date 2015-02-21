@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
 
 /**

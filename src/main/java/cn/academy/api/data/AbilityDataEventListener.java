@@ -1,7 +1,5 @@
 package cn.academy.api.data;
 
-import cn.academy.api.ctrl.EventHandlerClient;
-import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;

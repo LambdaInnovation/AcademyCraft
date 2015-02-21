@@ -18,7 +18,8 @@ public class SlotElectricItem extends Slot {
 		super(inv, slot, x, y);
 	}
 	
-    public boolean isItemValid(ItemStack stack) {
+    @Override
+	public boolean isItemValid(ItemStack stack) {
         return EnergyUtils.isElecItem(stack);
     }
 

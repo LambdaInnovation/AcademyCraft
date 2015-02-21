@@ -52,7 +52,7 @@ public class ACRecipes {
 				'a', Blocks.log);
 		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), "  a", "  a", "  a",
 				'a', Blocks.log);
-		GameRegistry.addRecipe(new ItemStack(ACItems.expNail, 8), "aba", "bcb", "dad",
+		GameRegistry.addRecipe(new ItemStack(ACItems.magHook, 8), "aba", "bcb", "dad",
 				'a', Items.iron_ingot, 'b', ACItems.compPlank, 'c', Items.gunpowder, 'd', Items.slime_ball);
 		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
 				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);

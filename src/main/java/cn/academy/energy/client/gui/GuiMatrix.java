@@ -105,6 +105,7 @@ public class GuiMatrix extends LIGuiScreen {
 			public SB() {
 				setSize(74.5, 10.5);
 			}
+			@Override
 			public void draw(double mx, double my, boolean h) {
 				if(h) {
 					RenderUtils.bindColor(126, 241, 241, 180);

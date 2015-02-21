@@ -10,9 +10,6 @@ import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.LifeTime;
-import cn.liutils.util.DebugUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD

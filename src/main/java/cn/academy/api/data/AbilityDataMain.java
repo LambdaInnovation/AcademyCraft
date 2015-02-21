@@ -1,17 +1,11 @@
 package cn.academy.api.data;
 
-import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 
 @RegistrationClass
 @RegSubmoduleInit

@@ -36,6 +36,7 @@ public class SkillHoldTest extends SkillBase {
 		
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(30) {
 

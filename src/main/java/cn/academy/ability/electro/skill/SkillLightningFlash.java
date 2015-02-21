@@ -56,7 +56,7 @@ public class SkillLightningFlash extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			
 			int slv = data.getSkillLevel(CatElectro.lightningFlash);
-			int time = 100 + slv * 28;
+			int time = 100 + slv * 10;
 			int ccp = 2200 - 20 * (slv * slv);
 			float dmg = (float) GenericUtils.randIntv((double)5, 5 + slv * 2);
 			

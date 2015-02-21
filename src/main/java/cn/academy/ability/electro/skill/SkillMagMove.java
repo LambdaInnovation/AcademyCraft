@@ -3,11 +3,14 @@
  */
 package cn.academy.ability.electro.skill;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.RenderElecArc;
@@ -17,12 +20,12 @@ import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.JudgeUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.FakeEntity;
-import cn.liutils.util.DebugUtils;
 import cn.liutils.util.GenericUtils;
+import cn.liutils.util.space.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,9 +36,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-public class SkillMagneticMovement extends SkillBase {
+public class SkillMagMove extends SkillBase {
 
-	public SkillMagneticMovement() {
+	public SkillMagMove() {
 		this.setLogo("electro/moving.png");
 		setName("em_move");
 	}
@@ -55,8 +58,11 @@ public class SkillMagneticMovement extends SkillBase {
 	private static class HandleVel extends FakeEntity {
 		
 		final EntityPlayer player;
-		final double tx, ty, tz;
+		double tx, ty, tz;
 		double mox, moy, moz;
+		
+		boolean followEntity;
+		Entity targ;
 		
 		final static double ACCEL = 0.08d;
 		final double vel;
@@ -74,21 +80,29 @@ public class SkillMagneticMovement extends SkillBase {
 			moz = target.motionZ;
 		}
 		
+		public HandleVel(EntityPlayer target, Entity dest, double _vel) {
+			this(target, dest.posX, dest.posY + dest.height * 0.7, dest.posZ, _vel);
+			followEntity = true;
+			targ = dest;
+		}
+		
 		@Override
 		public void onUpdate() {
 			super.onUpdate();
-			//player.motionY -= 0.08d; //cancel gravity
+			
+			if(followEntity && !targ.isDead) {
+				tx = targ.posX;
+				ty = targ.posY + targ.height * 0.7;
+				tz = targ.posZ;
+			}
 			
 			double 
 				dx = tx - player.posX,
 				dy = ty - player.posY,
 				dz = tz - player.posZ;
 			
-//			System.out.println(Math.abs(GenericUtils.distanceSq(mox, moy, moz) - 
-//			GenericUtils.distanceSq(player.motionX, player.motionY, player.motionZ)));
 			if(Math.abs(GenericUtils.distanceSq(mox, moy, moz) - 
 			GenericUtils.distanceSq(player.motionX, player.motionY, player.motionZ)) > 0.5) {
-				//System.out.println("Collision happened.");
 				mox = player.motionX;
 				moy = player.motionY;
 				moz = player.motionZ;
@@ -165,6 +179,7 @@ public class SkillMagneticMovement extends SkillBase {
 			this.setByPoint(posX, posY, posZ, x, y, z);
 		}
 		
+		@Override
 		@SideOnly(Side.CLIENT)
 		public void beforeRender() {
 			this.setByPoint(posX, posY, posZ, x, y, z);
@@ -194,6 +209,9 @@ public class SkillMagneticMovement extends SkillBase {
 		final double dist;
 		
 		final AbilityData data;
+	
+		@SideOnly(Side.CLIENT)
+		private static ResourceLocation snd = new ResourceLocation("academy:elec.move");
 
 		public MagState(EntityPlayer player) {
 			super(player);
@@ -207,13 +225,33 @@ public class SkillMagneticMovement extends SkillBase {
 		public void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
 			
-			MovingObjectPosition mop = GenericUtils.tracePlayer(player, dist);
-			if(mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
-				//player.worldObj.spawnEntityInWorld(new EntityBlockSimulator)
-				player.worldObj.spawnEntityInWorld
-				(handler = new HandleVel(player, mop.hitVec.xCoord, mop.hitVec.yCoord + 0.8, mop.hitVec.zCoord, dist * 0.07));
-				if(!isRemote()) {
-					player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
+			Motion3D mo = new Motion3D(player, true);
+			Vec3 v1 = mo.getPosVec(player.worldObj), v2 = mo.move(dist).getPosVec(player.worldObj);
+			MovingObjectPosition mop = GenericUtils.rayTraceBlocksAndEntities(null, player.worldObj, v1, v2, player);
+			
+			if(mop != null) {
+				if((mop.typeOfHit == MovingObjectType.BLOCK && 
+					JudgeUtils.isMetalBlock(player.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ)))
+						|| (mop.typeOfHit == MovingObjectType.ENTITY && JudgeUtils.isEntityMetallic(mop.entityHit))) {
+					
+					player.worldObj.spawnEntityInWorld
+					(handler = (
+						mop.typeOfHit == MovingObjectType.BLOCK ? 
+							new HandleVel(player, 
+								mop.hitVec.xCoord, 
+								mop.hitVec.yCoord + 0.8, 
+								mop.hitVec.zCoord, 
+								dist * 0.07) : 
+							new HandleVel(player, mop.entityHit, dist * 0.07)
+					));
+					
+					if(!isRemote()) {
+						player.playSound("academy:elec.move", 0.5f, 1.0f);
+						player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
+					} else {
+						Minecraft.getMinecraft().getSoundHandler().playSound(
+								PositionedSoundRecord.func_147674_a(snd, 1.0f));
+					}
 				}
 			}
 		}
@@ -229,6 +267,9 @@ public class SkillMagneticMovement extends SkillBase {
 				handler.setDead();
 			if(ray != null)
 				ray.setDead();
+			if(!player.worldObj.isRemote && data.getSkillLevel(CatElectro.magMovement) >= 5) {
+				//Add fall protection
+			}
 		}
 
 		@Override

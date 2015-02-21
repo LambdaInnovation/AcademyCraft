@@ -24,7 +24,6 @@ import cn.liutils.api.draw.prop.DisableLight;
 import cn.liutils.api.draw.tess.Rect;
 import cn.liutils.api.draw.tess.Transform;
 import cn.liutils.api.render.IDrawable;
-import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -92,6 +91,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 		this.TEX = ts;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderHandEffect(EntityPlayer player, HandRenderType type, long time) {
 		if(type == HandRenderType.EQUIPPED)

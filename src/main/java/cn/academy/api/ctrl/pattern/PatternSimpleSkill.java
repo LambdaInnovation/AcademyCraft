@@ -1,6 +1,5 @@
 package cn.academy.api.ctrl.pattern;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillState;

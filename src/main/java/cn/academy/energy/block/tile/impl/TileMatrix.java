@@ -59,6 +59,7 @@ public class TileMatrix extends TileNodeBase {
 		}
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		boolean b = WirelessSystem.isTileRegistered(this);
@@ -70,7 +71,8 @@ public class TileMatrix extends TileNodeBase {
 		}
     }
 	
-    public void readFromNBT(NBTTagCompound tag) {
+    @Override
+	public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         boolean b = tag.getBoolean("netLoaded");
         if(b) {

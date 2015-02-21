@@ -24,6 +24,7 @@ public class SkillBomb extends SkillBase {
 		this.setName("md_bomb");
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(1) {
 

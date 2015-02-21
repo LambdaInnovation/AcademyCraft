@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.CollisionCheck;
-import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
 
