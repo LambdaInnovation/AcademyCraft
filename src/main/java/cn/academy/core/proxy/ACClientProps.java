@@ -124,6 +124,8 @@ public class ACClientProps {
 		src("academy:textures/effects/tp_mark/3.png"),
 		src("academy:textures/effects/tp_mark/4.png"),
 		src("academy:textures/effects/tp_mark/5.png"),
+		src("academy:textures/effects/tp_mark/6.png"),
+		src("academy:textures/effects/tp_mark/7.png"),
 	};
 	
 	public static ResourceLocation ANIM_SMALL_ARC[];

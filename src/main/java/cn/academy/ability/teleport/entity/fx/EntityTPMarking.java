@@ -118,7 +118,7 @@ public abstract class EntityTPMarking extends EntityX {
 		@Override
 		public void doRender(Entity ent, double x, double y, double z, float var8, float var9) {
 			EntityTPMarking mark = (EntityTPMarking) ent;
-			int texID = (mark.ticksExisted / 2) % tex.length;
+			int texID = (int) ((mark.ticksExisted / 2.5) % tex.length);
 			
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glDisable(GL11.GL_LIGHTING);

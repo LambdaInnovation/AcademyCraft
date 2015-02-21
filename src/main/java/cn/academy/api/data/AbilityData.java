@@ -328,10 +328,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		boolean ret = currentCP >= need;
 		if(!force && !ret)
 			return false;
-		setCurrentCP(ret ? currentCP - need : 0);
 		addSkillExp(sid, getSexpForCP(need));
-		//System.out.println("new cp : " + this.getMaxCP() + " " + this.getMaxCPIncr(need) + " " + player.worldObj.isRemote);
 		setMaxCP(Math.min(this.getMaxCP() + this.getMaxCPIncr(need), this.getLevel().getMaxCP()));
+		setCurrentCP(ret ? currentCP - need : 0);
+		
 		return ret;
 	}
 	
