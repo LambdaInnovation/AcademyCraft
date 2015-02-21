@@ -59,7 +59,7 @@ public class SkillState {
 		if (!player.worldObj.isRemote) {
 			//sync to client
 			this.stateID = nextID++;
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class SkillState {
 	
 	public final void updateSkill() {
 		if (!player.worldObj.isRemote) {
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class SkillState {
 		onFinish();
 		alive = false;
 		if (!player.worldObj.isRemote) {
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
 		}
 	}
 	

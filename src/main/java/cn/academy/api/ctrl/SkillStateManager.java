@@ -223,7 +223,7 @@ public class SkillStateManager {
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.entity;
-            AcademyCraft.netHandler.sendTo(constructDimensionMessage(event.world.provider.dimensionId), player);
+            //AcademyCraft.netHandler.sendTo(constructDimensionMessage(event.world.provider.dimensionId), player);
         }
     }
 }

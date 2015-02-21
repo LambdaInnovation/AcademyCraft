@@ -48,6 +48,7 @@ public class CatTeleport extends Category {
 		// Minecraft.getMinecraft().thePlayer.e
 
 		// TODO : Edit data
+		// TODO: Buff skills not added in β. Waiting for implementation.
 		this.addLevel(new Level(this, 800.0f, 1800.0f, 0.5f, 1.0f, .9));
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .8));
 		this.addLevel(new Level(this, 3500.0f, 5500.0f, 2.2f, 2.6f, .7));
@@ -56,18 +57,15 @@ public class CatTeleport extends Category {
 
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(skillThreateningTele = new SkillThreateningTele(), 0);
-		this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
+		//this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
 		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 0);
 		this.addSkill(skillMarkedTele = new SkillMarkTele(), 0);
 		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 0);
 		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 0);
-		this.addSkill(
-				skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
-		this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
-		this.addSkill(
-				skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
-		this.addSkill(
-				skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
+		//this.addSkill(skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
+		//this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
+		//this.addSkill(skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
+		//this.addSkill(skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
 		
 		this.setLogo("tp/main.png");
 	}
@@ -82,7 +80,7 @@ public class CatTeleport extends Category {
 	 * Get the level of two string theorys' sum. Used in both error calculation and CP consumption.
 	 */
 	public static int getStringTheoryLevel(AbilityData data) {
-		return data.getSkillLevel(skillStringTheory);
+		return 6;
 	}
 	
 	/**
