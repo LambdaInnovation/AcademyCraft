@@ -19,6 +19,10 @@ import cn.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * AC Item Registration Class
+ * @author LI Members
+ */
 @RegistrationClass
 public class ACItems {
 	
@@ -75,7 +79,8 @@ public class ACItems {
 	@RegItem.OreDict("ingotCu")
 	public static ACSimpleItem ingotCu;
 	
-	@RegItem
+	//TODO: These items isn't in used in AC beta.
+/*	@RegItem
 	@RegItem.UTName("steelingot")
 	@RegItem.OreDict("ingotRefinedIron")
 	public static ACSimpleItem ingotSteel;
@@ -83,7 +88,7 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("tiningot")
 	@RegItem.OreDict("ingotTin")
-	public static ACSimpleItem ingotTin;
+	public static ACSimpleItem ingotTin;*/
 	
 	@RegItem
 	@RegItem.UTName("mg_ingot")

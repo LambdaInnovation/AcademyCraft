@@ -9,6 +9,10 @@ import cn.academy.misc.block.ACOre;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
 
+/**
+ * AC Blocks Registration Class
+ * @author LI Members
+ */
 @RegistrationClass
 public class ACBlocks {
 	
@@ -36,10 +40,11 @@ public class ACBlocks {
 	@RegBlock.OreDict("oreCopper")
 	public static ACOre oreCopper = new ACOre(1, 3.05f);
 	
-	@RegBlock
+	//TODO: This block isn't in used in AC beta.
+/*	@RegBlock
 	@RegBlock.BTName("tin_ore")
 	@RegBlock.OreDict("oreTin")
-	public static ACOre oreTin = new ACOre(1, 2.95f);
+	public static ACOre oreTin = new ACOre(1, 2.95f);*/
 	
 	@RegBlock
 	@RegBlock.BTName("al_ore")
@@ -65,6 +70,5 @@ public class ACBlocks {
 	@RegBlock.BTName("shadow_ore")
 	@RegBlock.OreDict("oreShadow")
 	public static ACOre oreShadow = new ACOre(2, 3.5f).setLightLevel(0.9375f);
-	/** Fix note: Shadow Metal Ore has a lightness of 0.9375f (equals to torchs), this isn't its hardness. */
 	
 }
