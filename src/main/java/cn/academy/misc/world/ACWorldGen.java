@@ -1,7 +1,8 @@
-package cn.academy.core.register;
+package cn.academy.misc.world;
 
 import java.util.Random;
 
+import cn.academy.core.register.ACBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -24,13 +25,14 @@ public class ACWorldGen implements IWorldGenerator {
 	}
 	
 	public void genOverworld(World world, Random random, int i, int j) {
-		for (int k = 0; k < 35; k++) {
+		//TODO: This ore gen isn't available in this version.
+/*		for (int k = 0; k < 35; k++) {
 			int tinOreXCoord = i + random.nextInt(16);
 			int tinOreYCoord = random.nextInt(48);
 			int tinOreZCoord = j + random.nextInt(16);
 			(new WorldGenMinable(ACBlocks.oreTin, 3)).generate(world, random, 
 					tinOreXCoord, tinOreYCoord, tinOreZCoord);
-		}
+		}*/
 		for (int k = 0; k < 35; k++) {
 			int copperOreXCoord = i + random.nextInt(16);
 			int copperOreYCoord = random.nextInt(48);

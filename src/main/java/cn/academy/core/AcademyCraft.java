@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACRecipes;
-import cn.academy.core.register.ACWorldGen;
+import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
