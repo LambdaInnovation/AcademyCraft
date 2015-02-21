@@ -23,7 +23,7 @@ public class ACWorldGen implements IWorldGenerator {
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		switch(world.provider.dimensionId) {
 		case 0:
-			genOverworld(world, random, chunkX, chunkZ);
+			genOverworld(world, random, chunkX * 16, chunkZ * 16);
 			break;
 		}
 	}
@@ -32,42 +32,41 @@ public class ACWorldGen implements IWorldGenerator {
 		WorldChunkManager chunkmgr = new WorldChunkManager(world);
 		int biomeId = chunkmgr.getBiomeGenAt(x, z).biomeID;
 		//TODO: This ore gen isn't available in this version.
-/*		for (int k = 0; k < 35; k++) {
+/*		for (int k = 0; k < 35; ++k) {
 			int xc = x + random.nextInt(16);
 			int yc = random.nextInt(48);
 			int zc = z + random.nextInt(16);
 			(new WorldGenMinable(ACBlocks.oreTxn, 3)).generate(world, random, 
 					xc, yc, zc);
 		}*/
-		for (int k = 0; k < 20; k++) {
+		for (int k = 0; k < 40; ++k) {
 			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(60);
+			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreCopper, 3)).generate(world, random, 
+			(new WorldGenMinable(ACBlocks.oreCopper, 7)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 20; k++) {
+		for (int k = 0; k < 40; ++k) {
 			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(60);
+			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreAl, 3)).generate(world, random, 
+			(new WorldGenMinable(ACBlocks.oreAl, 5)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 20; k++) {
+		for (int k = 0; k < 30; ++k) {
 			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(60);
+			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreMg, 2)).generate(world, random, 
+			(new WorldGenMinable(ACBlocks.oreMg, 3)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 20; k++) {
+		for (int k = 0; k < 35; ++k) {
 			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(60);
+			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreNi, 2)).generate(world, random, 
+			(new WorldGenMinable(ACBlocks.oreNi, 3)).generate(world, random, 
 					xc, yc, zc);
-		}
-		System.err.println("biome "+biomeId);		
+		}		
 		switch(biomeId) {
 		case 3:
 		case 13:
@@ -84,13 +83,12 @@ public class ACWorldGen implements IWorldGenerator {
 		case 0:
 		case 10:
 		case 24:
-			for (int k = 0; k < 5; k++) {
+			for (int k = 0; k < 2; ++k) {
 				int xc = x + random.nextInt(16);
 				int yc = random.nextInt(10);
 				int zc = z + random.nextInt(16);
-				(new WorldGenMinable(ACBlocks.oreShadow, 1)).generate(world, random, 
+				(new WorldGenMinable(ACBlocks.oreShadow, 2)).generate(world, random, 
 						xc, yc, zc);
-				System.err.println("	shadow "+xc+" "+yc+" "+zc);
 			}
 			break;
 		}
@@ -109,13 +107,12 @@ public class ACWorldGen implements IWorldGenerator {
 		case 161:
 		case 2:
 		case 130:
-			for (int k = 0; k < 10; k++) {
+			for (int k = 0; k < 10; ++k) {
 				int xc = x + random.nextInt(16);
-				int yc = random.nextInt(20);
+				int yc = random.nextInt(30);
 				int zc = z + random.nextInt(16);
 				(new WorldGenMinable(ACBlocks.oreCrystal, 3)).generate(world, random, 
 						xc, yc, zc);
-				System.err.println("	crystal "+xc+" "+yc+" "+zc);
 			}
 			break;
 		}
