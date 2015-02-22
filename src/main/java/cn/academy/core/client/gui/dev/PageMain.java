@@ -102,7 +102,7 @@ public class PageMain extends Widget {
 			//Update prog
 			Level curLv = data.getLevel();
 			if(data.getLevelID() < data.getLevelCount() - 1) {
-				prog = (data.getCurrentCP() - curLv.getInitialCP()) / (curLv.getMaxCP() - curLv.getInitialCP());
+				prog = (data.getMaxCP() - curLv.getInitialCP()) / (curLv.getMaxCP() - curLv.getInitialCP());
 			} else {
 				prog = 1.0;
 			}

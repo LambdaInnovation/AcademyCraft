@@ -371,7 +371,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	protected float getSexpForCP(float cp) {
-		return cp * 0.002f; //1 exp every 500cp
+		return cp * 0.003f;
 	}
 	
 	public boolean canSkillUpgrade(int sid) {
