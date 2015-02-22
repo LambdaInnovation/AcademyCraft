@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class ACClientProps {
 
 	//Textures
@@ -55,18 +54,6 @@ public class ACClientProps {
 	public static final ResourceLocation
 		SKL_TEST_1 = src("academy:textures/abilities/test/skill1.png"),
 		SKL_TEST_2 = src("academy:textures/abilities/test/skill2.png");
-		
-	//OBJ models
-	@SideOnly(Side.CLIENT)
-	public static IModelCustom 
-	MDL_ABILITY_DEVELOPER = AdvancedModelLoader.loadModel(src("academy:models/ability_developer.obj")),
-	MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj")),
-	MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj")),
-	MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj")),
-	MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj")),
-	MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj")),
-	MDL_MAGHOOK = AdvancedModelLoader.loadModel(src("academy:models/maghook.obj")),
-	MDL_MAGHOOK_OPEN = AdvancedModelLoader.loadModel(src("academy:models/maghook_open.obj"));
 	
 	public static final ResourceLocation
 		TEX_MDL_GRID = src("academy:textures/models/grid.png"),
@@ -167,17 +154,6 @@ public class ACClientProps {
 
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);
-	}
-	
-	public static void init() {
-		MDL_ABILITY_DEVELOPER = AdvancedModelLoader.loadModel(src("academy:models/ability_developer.obj"));
-		MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj"));
-		MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj"));
-		MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj"));
-		MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj"));
-		MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj"));
-		MDL_MAGHOOK = AdvancedModelLoader.loadModel(src("academy:models/maghook.obj"));
-		MDL_MAGHOOK_OPEN = AdvancedModelLoader.loadModel(src("academy:models/maghook_open.obj"));
 	}
 
 }

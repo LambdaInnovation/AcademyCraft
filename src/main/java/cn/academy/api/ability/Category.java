@@ -163,14 +163,12 @@ public class Category {
 		return colorStyle;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public final String getDisplayName() {
 		return StatCollector.translateToLocal("cat_" + getInternalName());
 	}
 	
 	private ResourceLocation logo;
 	
-	@SideOnly(Side.CLIENT)
 	public final ResourceLocation getLogo() {
 		return logo;
 	}

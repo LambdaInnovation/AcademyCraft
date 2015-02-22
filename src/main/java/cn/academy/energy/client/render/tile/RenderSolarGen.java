@@ -11,6 +11,7 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderSolarGen extends TileEntitySpecialRenderer {
 
-	IModelCustom model = ACClientProps.MDL_SOLAR;
+	IModelCustom model = ACModels.MDL_SOLAR;
 	ResourceLocation tex = ACClientProps.TEX_MDL_SOLAR;
 	
 	@Override

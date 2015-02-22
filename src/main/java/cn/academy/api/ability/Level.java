@@ -76,7 +76,6 @@ public class Level {
 		return new ArrayList<Integer>(canLearnSkills);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("level_" + getID());
 	}

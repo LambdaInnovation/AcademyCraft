@@ -100,9 +100,9 @@ public class PageMain extends Widget {
 			HudUtils.drawRect(163, 155F, 3, 372, prog * 58.5, 5.5, prog * 117, 11);
 			
 			//Update prog
-			if(data.canUpdateLevel()) {
-				Level curLv = data.getLevel();
-				prog = Math.min(1.0, (data.getCurrentCP() - curLv.getInitialCP()) / (curLv.getMaxCP() - curLv.getInitialCP()));
+			Level curLv = data.getLevel();
+			if(data.getLevelID() < data.getLevelCount() - 1) {
+				prog = (data.getCurrentCP() - curLv.getInitialCP()) / (curLv.getMaxCP() - curLv.getInitialCP());
 			} else {
 				prog = 1.0;
 			}

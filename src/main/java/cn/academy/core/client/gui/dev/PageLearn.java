@@ -45,7 +45,7 @@ public class PageLearn extends DevSubpage {
 				{1, 477}
 			}) {
 			{
-				if(!isFirst && isMaxLevel) {
+				if(!base.data.canUpdateLevel()) {
 					this.setInvalid(true); //Unable to upgrade
 				}
 				this.setFont(ACClientProps.FONT_YAHEI_32);

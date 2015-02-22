@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntityMagHook;
 import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -17,8 +18,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RendererMagHook extends Render {
 
-	final IModelCustom model = ACClientProps.MDL_MAGHOOK,
-			model_open = ACClientProps.MDL_MAGHOOK_OPEN;
+	final IModelCustom model = ACModels.MDL_MAGHOOK,
+			model_open = ACModels.MDL_MAGHOOK_OPEN;
 
 	@Override
 	public void doRender(Entity ent, double x, double y, double z, float a,

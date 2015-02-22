@@ -103,7 +103,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public boolean canUpdateLevel() {
-		return getLevelID() < getLevelCount() - 1 && this.currentCP >= getLevel().getMaxCP();
+		return !this.hasAbility() || (getLevelID() < getLevelCount() - 1 && this.currentCP >= getLevel().getMaxCP());
 	}
 	
 	public int getLevelID() {

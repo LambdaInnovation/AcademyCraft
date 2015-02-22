@@ -8,12 +8,13 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.liutils.template.client.render.block.RenderTileDirMulti;
 import cn.liutils.util.RenderUtils;
 
 public class RenderMatrix  extends RenderTileDirMulti {
 	
-	IModelCustom model = ACClientProps.MDL_GRID;
+	IModelCustom model = ACModels.MDL_GRID;
 	ResourceLocation tex = ACClientProps.TEX_MDL_GRID;
 	
 	@Override

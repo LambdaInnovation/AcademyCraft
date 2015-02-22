@@ -6,9 +6,9 @@ package cn.academy.core.client.render;
 import java.util.Random;
 
 import net.minecraft.tileentity.TileEntity;
-
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.liutils.api.render.model.TileEntityModelCustom;
 import cn.liutils.template.client.render.block.RenderDirMultiModelled;
 
@@ -20,7 +20,7 @@ public class RenderDeveloper extends RenderDirMultiModelled {
 	
 	private static Random RNG = new Random();
 	public RenderDeveloper() {
-		super(new TileEntityModelCustom(ACClientProps.MDL_ABILITY_DEVELOPER));
+		super(new TileEntityModelCustom(ACModels.MDL_ABILITY_DEVELOPER));
 		this.texture = ACClientProps.TEX_MDL_DEVELOPER;
 		setScale(0.021F);
 	}

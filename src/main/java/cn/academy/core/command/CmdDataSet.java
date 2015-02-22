@@ -33,7 +33,7 @@ public class CmdDataSet extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/aset [cat][level][cp][maxcp][exp][open][god] <index> <value>";
+		return "/aset ([cat][level][slv][cp][maxcp][exp][openall][god]) <index> <value>, where <index> <value> are optional parameters.";
 	}
 
 	@Override
@@ -110,6 +110,11 @@ public class CmdDataSet extends LICommandBase {
 			} else if(args[0].equalsIgnoreCase("sexp")) { //give player some experience.
 				player.addExperienceLevel(30);
 				player.experience = 0;
+			} else if(args[0].equalsIgnoreCase("openall")) {
+				for(Integer i : data.getCanLearnSkillList()) {
+					data.setSkillLevel(i, Math.max(1, data.getSkillLevel(i)));
+				}
+				sendChat(ics, "learned all available skills");
 			}
 		} else {
 			LICommandBase.sendError(ics, "Invalid argument size");

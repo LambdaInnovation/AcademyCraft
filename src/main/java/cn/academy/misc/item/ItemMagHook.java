@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntityMagHook;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
@@ -44,7 +45,7 @@ public class ItemMagHook extends Item {
     public static class HookRender extends RenderModelItem {
 
 		public HookRender() {
-			super(new ItemModelCustom(ACClientProps.MDL_MAGHOOK), ACClientProps.TEX_MDL_MAGHOOK);
+			super(new ItemModelCustom(ACModels.MDL_MAGHOOK), ACClientProps.TEX_MDL_MAGHOOK);
 			this.setScale(0.15d);
 			this.setStdRotation(0, -90, 90);
 			this.setOffset(0, 0.0, -3);

@@ -21,8 +21,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegEntity()
-@RegEntity.HasRender
+//@RegEntity.HasRender
 public class EntityMeltDowner extends EntityMdRayBase {
+	
+	
 	
 	float dmg;
 
