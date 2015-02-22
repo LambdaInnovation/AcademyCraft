@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.api.energy.IWirelessGenerator;
 import cn.academy.api.energy.IWirelessNode;
@@ -117,6 +118,17 @@ public class WirelessNetwork {
 	}
 	
 	public void onTick() {
+		Iterator<IWirelessNode> iter = nodes.iterator();
+		while(iter.hasNext()) {
+			IWirelessNode node = iter.next();
+			TileEntity te = (TileEntity) node;
+			if(te.isInvalid()) {
+				iter.remove();
+			}
+		}
+		if(nodes.size() == 0) {
+			dead = true;
+		}
 		calcNodes();
 		balanceNodes();
 	}

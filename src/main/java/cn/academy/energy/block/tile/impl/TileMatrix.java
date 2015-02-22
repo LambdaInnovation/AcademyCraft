@@ -19,6 +19,7 @@ import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.template.client.render.block.RenderTileDirMulti;
+import cn.liutils.util.DebugUtils;
 import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,6 +43,13 @@ public class TileMatrix extends TileNodeBase {
 		super(100000, 512, 30);
 	}
 	
+	public void onBreak() {
+		String str = this.getChannel();
+		if(str != null) {
+			WirelessSystem.removeChannel(worldObj, str);
+		}
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
     public boolean shouldRenderInPass(int pass) {
@@ -53,6 +61,7 @@ public class TileMatrix extends TileNodeBase {
 	public void updateEntity() {
 		super.updateEntity();
 		if(channelToLoad != null && pwdToLoad != null) {
+			System.out.println("Restoring " + channelToLoad + " " + DebugUtils.formatArray(xCoord, yCoord, zCoord));
 			WirelessSystem.registerNode(this, channelToLoad);
 			WirelessSystem.setPassword(worldObj, channelToLoad, pwdToLoad);
 			channelToLoad = pwdToLoad = null;
@@ -77,7 +86,7 @@ public class TileMatrix extends TileNodeBase {
         boolean b = tag.getBoolean("netLoaded");
         if(b) {
         	channelToLoad = tag.getString("netChannel");
-        	pwdToLoad = tag.getString("entPwd");
+        	pwdToLoad = tag.getString("netPwd");
         }
     }
 

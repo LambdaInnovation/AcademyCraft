@@ -70,8 +70,7 @@ public class ContainerNode extends Container {
      * WeAthFolD：↑MC傻逼代码
      */
     @Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot)
-    {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
     	ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 		// null checks and checks if the item can be stacked (maxStackSize > 1)

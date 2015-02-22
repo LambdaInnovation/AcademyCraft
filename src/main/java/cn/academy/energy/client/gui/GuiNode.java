@@ -161,14 +161,13 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void draw(double mx, double my, boolean hover) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(-this.getNode().x, -this.getNode().y, 0);
-			GL11.glColor4d(0, 0, 0, .7);
-			HudUtils.drawModalRect(0, 0, GuiNode.this.width, GuiNode.this.height);
-			GL11.glPopMatrix();
+			drawBlackout();
 			
 			GL11.glColor4d(1, 1, 1, 1);
 			super.draw(mx, my, hover);
+			
+			RenderUtils.bindColor(COLOR);
+			drawText(ACLangs.selectChannel(), 80, 10, 7, Align.CENTER);
 		}
 		
 		public void onClose() {

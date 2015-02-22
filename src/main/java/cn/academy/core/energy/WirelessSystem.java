@@ -9,11 +9,11 @@ import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -23,10 +23,10 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEventHandler(Bus.FML)
 public class WirelessSystem {
 	
-	private static final WirelessSystem INSTANCE = new WirelessSystem();
+	@RegEventHandler()
+	public static final WirelessSystem INSTANCE = new WirelessSystem();
 	
 	static Map<Integer, WiWorldData> worldData = new HashMap<Integer, WiWorldData>();
 	
@@ -67,6 +67,10 @@ public class WirelessSystem {
 		assert(tile instanceof TileEntity);
 		instance();
 		WirelessSystem.getData(((TileEntity) tile).getWorldObj()).unregister(tile);
+	}
+	
+	public static void removeChannel(World world, String channel) {
+		getData(world).removeChannel(channel);
 	}
 	
 	public static boolean isTileIn(IWirelessTile tile, String channel) {
@@ -110,8 +114,21 @@ public class WirelessSystem {
 	public void onServerTick(ServerTickEvent event) {
 		for(WiWorldData data : worldData.values()) {
 			data.onTick();
-			//System.out.println(data);
 		}
 	}
+	
+	@SubscribeEvent
+	public void onWorldLoad(WorldEvent.Load event) {
+		if(!event.world.isRemote) {
+			worldData.remove(event.world.provider.dimensionId);
+			System.out.println("remOVE");
+		}
+	}
+	
+	@SubscribeEvent
+	public void onWorldUnload(WorldEvent.Unload event) {
+		worldData.remove(event.world.provider.dimensionId);
+	}
+	
 
 }

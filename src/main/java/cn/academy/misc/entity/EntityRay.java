@@ -2,6 +2,7 @@ package cn.academy.misc.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -20,7 +21,7 @@ public class EntityRay extends EntityX {
 	
 	Motion3D motion;
 	
-	EntityLivingBase spawner;
+	EntityPlayer spawner;
 	
 	boolean load;
 	
@@ -31,7 +32,7 @@ public class EntityRay extends EntityX {
 		ignoreFrustumCheck = true;
 	}
 	
-	public EntityRay(EntityLivingBase _spawner) {
+	public EntityRay(EntityPlayer _spawner) {
 		super(_spawner.worldObj);
 		spawner = _spawner;
 		motion = new Motion3D(spawner, true);
@@ -81,8 +82,8 @@ public class EntityRay extends EntityX {
 		rayLength = dataWatcher.getWatchableObjectFloat(11);
 		int eid = dataWatcher.getWatchableObjectInt(12);
 		Entity elb = worldObj.getEntityByID(eid);
-		if(elb instanceof EntityLivingBase) {
-			spawner = (EntityLivingBase) elb;
+		if(elb instanceof EntityPlayer) {
+			spawner = (EntityPlayer) elb;
 		}
 		
 		if(!lastLoad && load) {
@@ -130,7 +131,7 @@ public class EntityRay extends EntityX {
 		return true;
 	}
 	
-	public EntityLivingBase getSpawner() {
+	public EntityPlayer getSpawner() {
 		return spawner;
 	}
 	

@@ -52,7 +52,6 @@ public class EntityWeakRay extends EntityMdRayBase {
 				EntityLivingBase elb = (EntityLivingBase) mop.entityHit;
 				elb.hurtResistantTime = -1;
 			}
-			System.out.println(this.dmg + " " + worldObj.isRemote);
 			mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), dmg);
 		}
 	}

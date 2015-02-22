@@ -55,14 +55,24 @@ public class EnergyUtils {
 	public static boolean isElecItem(ItemStack stack) {
 		return stack.getItem() instanceof IElectricItem;
 	}
+
+	public static int tryCharge(ItemStack stack, int amt) {
+		return tryCharge(stack, amt, false);
+	}
 	
-	public static void tryCharge(ItemStack stack, int amt) {
+	/**
+	 * 
+	 * @param stack
+	 * @param amt
+	 * @return How much energy transfered into the stack
+	 */
+	public static int tryCharge(ItemStack stack, int amt, boolean simulate) {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
 			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? ((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
-			System.out.println(manager);
-			manager.charge(stack, amt, 3, true, false);
+			return manager.charge(stack, amt, 3, true, simulate);
 		}
+		return 0;
 	}
 
 }

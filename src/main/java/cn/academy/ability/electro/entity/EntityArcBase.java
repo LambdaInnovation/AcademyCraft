@@ -3,7 +3,7 @@
  */
 package cn.academy.ability.electro.entity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.client.render.RenderElecArc;
@@ -44,7 +44,7 @@ public class EntityArcBase extends EntityRay {
 	public boolean isDrawing = true;
 	int lastTick, tickWait;
 
-	public EntityArcBase(EntityLivingBase creator) {
+	public EntityArcBase(EntityPlayer creator) {
 		super(creator);
 	}
 	

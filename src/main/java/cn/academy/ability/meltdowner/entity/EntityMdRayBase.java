@@ -27,26 +27,30 @@ public abstract class EntityMdRayBase extends EntityRay {
 	
 	private boolean attacked = false;
 
-	public EntityMdRayBase(EntityLivingBase _spawner) {
+	public EntityMdRayBase(EntityPlayer _spawner) {
 		super(_spawner);
 	}
 	
 	public EntityMdRayBase(EntityPlayer _spawner, EntityMdBall ball) {
 		super(_spawner);
-		MovingObjectPosition mop = GenericUtils.tracePlayer(_spawner, 20.0);
-		double dist = mop == null ? 20.0 : 
-			mop.hitVec.distanceTo
-			(worldObj.getWorldVec3Pool()
-			.getVecFromPool(ball.posX, ball.posY, ball.posZ));
-		Motion3D mo = new Motion3D(_spawner, true).move(dist);
-		double tox = ball.posX, toy = ball.posY + 0.1, toz = ball.posZ;
-		this.setHeading(mo.posX - tox, mo.posY - toy, mo.posZ - toz, 1.0);
-		this.rayLength = (float) dist;
-		this.setPosition(tox, toy, toz);
+		resetHeading(ball);
 	}
 	
 	public EntityMdRayBase(World world) {
 		super(world);
+	}
+	
+	public void resetHeading(EntityMdBall ball) {
+		MovingObjectPosition mop = GenericUtils.tracePlayer(getSpawner(), 20.0);
+		double dist = mop == null ? 20.0 : 
+			mop.hitVec.distanceTo
+			(worldObj.getWorldVec3Pool()
+			.getVecFromPool(ball.posX, ball.posY, ball.posZ));
+		Motion3D mo = new Motion3D(getSpawner(), true).move(dist);
+		double tox = ball.posX, toy = ball.posY + 0.1, toz = ball.posZ;
+		this.setHeading(mo.posX - tox, mo.posY - toy, mo.posZ - toz, 1.0);
+		this.rayLength = (float) dist;
+		this.setPosition(tox, toy, toz);
 	}
 	
 	private void doAttack() {
@@ -59,14 +63,14 @@ public abstract class EntityMdRayBase extends EntityRay {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(!worldObj.isRemote && !attacked) {
+		if(attackOnSpawn() && !worldObj.isRemote && !attacked) {
 			attacked = true;
 			doAttack();
 		}
 	}
 	
 	public float getDisplayRayLen() { //This enables comlicated display tricks on ray len.
-		return Math.min(2.5f * ticksExisted, rayLength);
+		return Math.min(5f * ticksExisted, rayLength);
 	}
 	
 	protected abstract void handleCollision(MovingObjectPosition mop);
@@ -82,6 +86,8 @@ public abstract class EntityMdRayBase extends EntityRay {
 	protected float getDefaultRayLen() {
 		return 40.0f;
 	}
+	
+	protected boolean attackOnSpawn() { return true; }
 	
 	@SideOnly(Side.CLIENT)
 	public static class RayRender <T extends EntityMdRayBase> extends RendererRayBlended<T> {

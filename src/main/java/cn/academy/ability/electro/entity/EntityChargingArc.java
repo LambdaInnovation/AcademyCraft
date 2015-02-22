@@ -3,7 +3,7 @@
  */
 package cn.academy.ability.electro.entity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public class EntityChargingArc extends EntityArcBase {
 	@SideOnly(Side.CLIENT)
 	ChargeEffectS eff;
 
-	public EntityChargingArc(EntityLivingBase creator, int _ept) {
+	public EntityChargingArc(EntityPlayer creator, int _ept) {
 		super(creator);
 		ept = _ept;
 	}

@@ -3,7 +3,7 @@
  */
 package cn.academy.ability.meltdowner.entity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -26,7 +26,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	
 	float dmg;
 
-	public EntityMeltDowner(EntityLivingBase _spawner, float dmg) {
+	public EntityMeltDowner(EntityPlayer _spawner, float dmg) {
 		super(_spawner);
 		this.dmg = dmg;
 	}

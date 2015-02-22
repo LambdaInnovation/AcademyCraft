@@ -67,8 +67,10 @@ public class EntityMagHook extends EntityX {
 			@Override
 			protected void onCollided(MovingObjectPosition res) {
 				if(res.typeOfHit == MovingObjectType.ENTITY) {
-					res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
-					dropAsItem();
+					if(!(res.entityHit instanceof EntityMagHook)) {
+						res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
+						dropAsItem();
+					}
 				} else {
 					isHit = true;
 					hitSide = res.sideHit;
@@ -134,6 +136,15 @@ public class EntityMagHook extends EntityX {
     	if(!worldObj.isRemote)
     		dropAsItem();
         return true;
+    }
+    
+    @Override
+    public boolean attackEntityFrom(DamageSource ds, float dmg) {
+    	System.out.println(ds.getDamageType());
+    	if(!worldObj.isRemote && ds.getEntity() instanceof EntityPlayer) {
+    		dropAsItem();
+    	}
+    	return true;
     }
     
     @Override

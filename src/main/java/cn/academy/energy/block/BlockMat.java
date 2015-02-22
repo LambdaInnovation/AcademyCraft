@@ -3,6 +3,7 @@
  */
 package cn.academy.energy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -45,6 +46,18 @@ public class BlockMat extends BlockDirectionalMulti {
     		matGui.openGuiContainer(p, world, origin[0], origin[1], origin[2]);
     	}
         return false;
+    }
+    
+    @Override
+    public void breakBlock(World world, int x, int y, int z, 
+    		Block block, int meta) {
+    	int[] ori = this.getOrigin(world, x, y, z, meta);
+    	TileEntity te = world.getTileEntity(ori[0], ori[1], ori[2]);
+    	System.out.println("matbreakblock");
+    	if(te instanceof TileMatrix) {
+    		((TileMatrix)te).onBreak();
+    	}
+    	super.breakBlock(world, x, y, z, block, meta);
     }
 
 	@Override

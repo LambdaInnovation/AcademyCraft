@@ -56,6 +56,12 @@ public class WiWorldData {
 			net.hasNode((IWirelessNode) tile) : net.hasUser(tile);
 	}
 	
+	public void removeChannel(String chn) {
+		WirelessNetwork wn = netMap.get(chn);
+		if(wn != null)
+			wn.dead = true;
+	}
+	
 	public boolean isRegistered(IWirelessTile tile) {
 		return lookup.containsKey(tile);
 	}
@@ -189,6 +195,8 @@ public class WiWorldData {
 			return;
 		}
 		WirelessNetwork net = netMap.get(chan);
+		if(net == null)
+			return;
 		net.unregister(tile);
 		
 		if(tile instanceof IWirelessNode) {
@@ -220,11 +228,8 @@ public class WiWorldData {
 	
 	public void onTick() {
 		Iterator<Map.Entry<String, WirelessNetwork>> iter = netMap.entrySet().iterator();
-		
 		while(iter.hasNext()) {
 			WirelessNetwork net = iter.next().getValue();
-			//System.out.print("---");
-			//System.out.println(net.channel);
 			if(net.dead) {
 				for(NodeConns conn : net.conns.values()) {
 					for(IWirelessGenerator gen : conn.generators) {
@@ -236,13 +241,12 @@ public class WiWorldData {
 				}
 				for(IWirelessNode node : net.nodes) {
 					getNodeList((TileEntity) node).remove(node);
+					lookup.remove(node);
 				}
 				iter.remove();
 			} else {
 				net.onTick();
 			}
-			//System.out.println(net.getPassword());
-			//System.out.println("---");
 		}
 		
 	}

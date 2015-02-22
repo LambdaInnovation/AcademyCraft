@@ -3,6 +3,7 @@
  */
 package cn.academy.energy.block.tile.impl;
 
+import ic2.api.item.IElectricItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -13,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.energy.WirelessSystem;
 import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
@@ -113,11 +115,20 @@ public class TileNode extends TileNodeBase implements IInventory {
 		}
 		
 	}
+	
+	String channelToLoad;
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		//System.out.println(energy);
+		if(channelToLoad != null) {
+			WirelessSystem.registerNode(this, channelToLoad);
+			channelToLoad = null;
+		}
+		
+		if(battery != null) {
+			this.energy -= EnergyUtils.tryCharge(battery, (int) Math.min(this.energy, this.getLatency()), false);
+		}
 	}
 	
 	
@@ -140,8 +151,9 @@ public class TileNode extends TileNodeBase implements IInventory {
 			--battery.stackSize;
 			return battery;
 		}
+		ItemStack toRet = battery;
 		battery = null;
-		return null;
+		return toRet;
 	}
 
 	@Override
@@ -166,7 +178,7 @@ public class TileNode extends TileNodeBase implements IInventory {
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 64;
+		return 1;
 	}
 
 	@Override
@@ -192,6 +204,9 @@ public class TileNode extends TileNodeBase implements IInventory {
         NBTTagCompound tmp = tag.getCompoundTag("battery");
         if(tmp != null)
         	battery = ItemStack.loadItemStackFromNBT(tmp);
+        if(tag.getBoolean("connected")) {
+        	channelToLoad = tag.getString("netChannel");
+        }
     }
 
     @Override
@@ -202,6 +217,11 @@ public class TileNode extends TileNodeBase implements IInventory {
         	NBTTagCompound tmp = new NBTTagCompound();
         	battery.writeToNBT(tmp);
         	tag.setTag("battery", tmp);
+        }
+        String chan = WirelessSystem.getTileChannel(this);
+        if(chan != null) {
+        	tag.setBoolean("connected", true);
+        	tag.setString("netChannel", chan);
         }
     }
 

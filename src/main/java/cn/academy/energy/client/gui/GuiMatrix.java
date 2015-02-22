@@ -149,6 +149,10 @@ public class GuiMatrix extends LIGuiScreen {
 						setErrMessage(ACLangs.inconsistentPass());
 						return;
 					}
+					if(ssid.getContent().equals("")) {
+						setErrMessage(ACLangs.ssidnotnull());
+						return;
+					}
 					AcademyCraft.netHandler.sendToServer(
 						new MsgInitMatrix(mat.mat, 
 						ssid.getContent(), pwd.getContent()));
@@ -273,7 +277,8 @@ public class GuiMatrix extends LIGuiScreen {
 			
 			//input elements
 			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
-			HudUtils.drawRect(11, 24, 23, 202, 86, 38.5, 172, 77);
+			HudUtils.drawRect(11, 38, 23, 230, 86, 24.5, 172, 49);
+			HudUtils.drawRect(11, 24, 23, 286, 86, 10.5, 172, 21);
 			
 			if(errStr != null) {
 				long time = Minecraft.getSystemTime();

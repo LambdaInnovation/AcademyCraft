@@ -11,6 +11,15 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String selectChannel() {
+		return local("ac.selchannel");
+	}
+	
+	public static String ssidnotnull() {
+		//输入的ssid不能为空
+		return local("ac.ssidnn");
+	}
+	
 	public static String frClearConfirm() {
 		//你确认要清除当前机器的连接么？
 		return local("ac.frclearconfirm");
