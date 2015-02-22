@@ -11,6 +11,10 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String devNewAbility() {
+		return local("ac.devnew");
+	}
+	
 	public static String selectChannel() {
 		return local("ac.selchannel");
 	}
