@@ -21,6 +21,7 @@ import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,12 +31,18 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillWeakArc extends SkillBase {
 	
 	static final int MAX_HOLD_TIME = 200;
 	
 	@SideOnly(Side.CLIENT)
-	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
+	static SkillRenderer charge;
+	
+	@SideOnly(Side.CLIENT)
+	public static void init() {
+		charge = new SRSmallCharge(5, 0.8);
+	}
 	
 	public SkillWeakArc() {
 		setLogo("electro/arc.png");
@@ -121,6 +128,7 @@ public class SkillWeakArc extends SkillBase {
 		}
 
 		@Override
+		@SideOnly(Side.CLIENT)
 		public ResourceLocation[] getTexs() {
 			return ACClientProps.ANIM_ELEC_ARC;
 		}

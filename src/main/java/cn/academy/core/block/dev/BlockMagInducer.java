@@ -5,20 +5,14 @@ package cn.academy.core.block.dev;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.client.render.RenderMagInducer;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.api.render.model.TileEntityModelCustom;
 import cn.liutils.template.block.BlockDirectionalMulti;
-import cn.liutils.template.client.render.block.RenderDirMultiModelled;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,26 +29,7 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 		
 		@RegTileEntity.Render
 		@SideOnly(Side.CLIENT)
-		public static MIRender render;
-		
-		@SideOnly(Side.CLIENT)
-		public static class MIRender extends RenderDirMultiModelled {
-			
-			private static ResourceLocation TEX = new ResourceLocation("academy:textures/models/magincr.png");
-
-			public MIRender() {
-				super(new TileEntityModelCustom(ACClientProps.MDL_MAGNET_MODULE));
-				setModelTexture(TEX);
-				this.scale = 0.003f;
-			}
-			
-			@Override
-			protected void renderAtOrigin(TileEntity te) {
-				GL11.glRotated(90, 0, 1, 0);
-				super.renderAtOrigin(te);
-			}
-			
-		}
+		public static RenderMagInducer render;
 		
 	}
 

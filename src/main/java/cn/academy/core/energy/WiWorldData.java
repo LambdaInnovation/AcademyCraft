@@ -28,7 +28,7 @@ import cn.liutils.util.misc.Pair;
  * Per world wireless-system data.
  * @author WeathFolD
  */
-public class WiWorldData {
+class WiWorldData {
 	
 	public final World world;
 

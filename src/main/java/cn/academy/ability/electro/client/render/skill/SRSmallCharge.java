@@ -36,6 +36,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
 	IPointFactory poi;
 	
+	@SideOnly(Side.CLIENT)
 	ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
 	
 	private static Random RNG = new Random();

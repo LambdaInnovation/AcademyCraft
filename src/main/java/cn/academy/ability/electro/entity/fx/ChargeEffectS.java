@@ -23,7 +23,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author WeathFolD
  */
-@SideOnly(Side.CLIENT)
 public class ChargeEffectS extends FakeEntity {
 	
 	public static class Strong extends ChargeEffectS {

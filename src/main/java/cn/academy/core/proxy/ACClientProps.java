@@ -3,15 +3,21 @@
  */
 package cn.academy.core.proxy;
 
-import cn.liutils.util.render.LambdaFont;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.util.render.LambdaFont;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Generic client information such as models and textures.
  * @author WeathFolD
  */
+@RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class ACClientProps {
 
 	//Textures
@@ -51,15 +57,16 @@ public class ACClientProps {
 		SKL_TEST_2 = src("academy:textures/abilities/test/skill2.png");
 		
 	//OBJ models
-	public static final IModelCustom 
-		MDL_ABILITY_DEVELOPER = AdvancedModelLoader.loadModel(src("academy:models/ability_developer.obj")),
-		MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj")),
-		MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj")),
-		MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj")),
-		MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj")),
-		MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj")),
-		MDL_MAGHOOK = AdvancedModelLoader.loadModel(src("academy:models/maghook.obj")),
-		MDL_MAGHOOK_OPEN = AdvancedModelLoader.loadModel(src("academy:models/maghook_open.obj"));
+	@SideOnly(Side.CLIENT)
+	public static IModelCustom 
+		MDL_ABILITY_DEVELOPER,
+		MDL_ELEC_CARD,
+		MDL_MAGNET_MODULE,
+		MDL_WINDGEN,
+		MDL_SOLAR,
+		MDL_GRID,
+		MDL_MAGHOOK,
+		MDL_MAGHOOK_OPEN;
 	
 	public static final ResourceLocation
 		TEX_MDL_GRID = src("academy:textures/models/grid.png"),
@@ -160,6 +167,17 @@ public class ACClientProps {
 
 	private static ResourceLocation src(String s) {
 		return new ResourceLocation(s);
+	}
+	
+	public static void init() {
+		MDL_ABILITY_DEVELOPER = AdvancedModelLoader.loadModel(src("academy:models/ability_developer.obj"));
+		MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj"));
+		MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj"));
+		MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj"));
+		MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj"));
+		MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj"));
+		MDL_MAGHOOK = AdvancedModelLoader.loadModel(src("academy:models/maghook.obj"));
+		MDL_MAGHOOK_OPEN = AdvancedModelLoader.loadModel(src("academy:models/maghook_open.obj"));
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.ability.electro.client.render;
+package cn.academy.ability.electro.client.render.entity;
 
 import net.minecraft.util.ResourceLocation;
 

@@ -25,7 +25,6 @@ public class EntityRay extends EntityX {
 	
 	boolean load;
 	
-	@SideOnly(Side.CLIENT)
 	protected double alpha = 1.0;
 	
 	{
@@ -50,7 +49,6 @@ public class EntityRay extends EntityX {
 		load = true;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public EntityRay(World world) {
 		super(world);
 		load = false;

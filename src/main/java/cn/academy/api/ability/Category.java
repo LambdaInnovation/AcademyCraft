@@ -169,7 +169,7 @@ public class Category {
 		return StatCollector.translateToLocal("cat_" + getInternalName());
 	}
 	
-	private ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	private ResourceLocation logo;
 	
 	@SideOnly(Side.CLIENT)
 	public final ResourceLocation getLogo() {

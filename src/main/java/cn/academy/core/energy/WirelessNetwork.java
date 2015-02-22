@@ -20,7 +20,7 @@ import cn.academy.api.energy.IWirelessTile;
  * A set of wireless tiles within the same channel.
  * @author WeathFolD
  */
-public class WirelessNetwork {
+class WirelessNetwork {
 	
 	static final int MAX_LAG = 2000;
 	

@@ -8,10 +8,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
+import cn.academy.ability.electro.client.render.entity.RenderRailgun;
 import cn.academy.ability.electro.entity.fx.EntityArcS;
 import cn.academy.api.data.AbilityData;
-import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.client.render.RendererRaySimple;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -33,18 +32,7 @@ public class EntityRailgun extends EntityRay {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
-	public static Render renderer;
-	
-	@SideOnly(Side.CLIENT)
-	public static class Render extends RendererRaySimple<EntityRailgun> {
-		
-		public Render() {
-			super(ACClientProps.TEX_EFF_RAILGUN, 4);
-			widthFp = 0.12;
-			widthTp = 0.3;
-		}
-		
-	}
+	public static RenderRailgun renderer;
 	
 	int explRadius;
 	float damage;

@@ -22,6 +22,8 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.client.render.SkillRenderManager.RenderNode;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,10 +32,17 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Bioelectricity Itensify skill
  * @author WeathFolD
  */
+//@RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillBuff extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
-	static SRSmallCharge render = new SRSmallCharge(5, 0.5);
+	static SRSmallCharge render;
+	
+	@SideOnly(Side.CLIENT)
+	public static void init() {
+		render = new SRSmallCharge(5, 0.5);
+	}
 
 	public SkillBuff() {
 		this.setLogo("electro/buff.png");

@@ -15,6 +15,8 @@ import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemSibarn;
 import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -171,6 +173,7 @@ public class ACItems {
 	
 	@RegItem()
 	@RegItem.HasRender
+	@RegEventHandler(Bus.FML)
 	@RegWithName("ac_void")
 	public static ItemVoid ivoid = new ItemVoid() {
 		//吐槽：这到底什么微妙的写法

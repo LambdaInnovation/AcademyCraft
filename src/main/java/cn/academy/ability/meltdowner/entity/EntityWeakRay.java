@@ -10,6 +10,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.client.render.RenderWeakRay;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -28,7 +29,7 @@ public class EntityWeakRay extends EntityMdRayBase {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
-	public static WRRender render;
+	public static RenderWeakRay render;
 	
 	final float dmg;
 
@@ -74,16 +75,8 @@ public class EntityWeakRay extends EntityMdRayBase {
 	}
 
 	@Override
-	protected ResourceLocation[] getTexData() {
+	public ResourceLocation[] getTexData() {
 		return ACClientProps.ANIM_MD_SMALL_RAY;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static class WRRender extends RayRender<EntityWeakRay> {
-		{
-			this.setWidthFp(0.5);
-			this.setWidthTp(0.9);
-		}
 	}
 
 }

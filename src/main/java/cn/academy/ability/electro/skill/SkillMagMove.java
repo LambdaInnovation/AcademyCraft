@@ -3,8 +3,6 @@
  */
 package cn.academy.ability.electro.skill;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
@@ -13,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
-import cn.academy.ability.electro.client.render.RenderElecArc;
+import cn.academy.ability.electro.client.render.entity.MoveArcRender;
 import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -135,7 +133,7 @@ public class SkillMagMove extends SkillBase {
 		
 		@RegEntity.Render
 		@SideOnly(Side.CLIENT)
-		public static Render renderer;
+		public static MoveArcRender renderer;
 
 		public Ray(HandleVel ent) {
 			super(ent.player);
@@ -192,15 +190,6 @@ public class SkillMagMove extends SkillBase {
 		
 	}
 	
-	public static class Render extends RenderElecArc {
-		
-		public Render() {
-			widthFp = 0.5F;
-			widthTp = 1.0F;
-		}
-		
-	}
-	
 	private static class MagState extends PatternHold.State {
 		
 		HandleVel handler;
@@ -210,7 +199,6 @@ public class SkillMagMove extends SkillBase {
 		
 		final AbilityData data;
 	
-		@SideOnly(Side.CLIENT)
 		private static ResourceLocation snd = new ResourceLocation("academy:elec.move");
 
 		public MagState(EntityPlayer player) {
@@ -246,11 +234,8 @@ public class SkillMagMove extends SkillBase {
 					));
 					
 					if(!isRemote()) {
-						player.playSound("academy:elec.move", 0.5f, 1.0f);
+						player.worldObj.playSoundAtEntity(player, "academy:elec.move", 0.5f, 1.0f);
 						player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
-					} else {
-						Minecraft.getMinecraft().getSoundHandler().playSound(
-								PositionedSoundRecord.func_147674_a(snd, 1.0f));
 					}
 				}
 			}

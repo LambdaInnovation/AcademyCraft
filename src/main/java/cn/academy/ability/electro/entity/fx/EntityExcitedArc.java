@@ -5,11 +5,13 @@ package cn.academy.ability.electro.entity.fx;
 
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.client.render.RenderElecArc;
+import cn.academy.ability.electro.client.render.entity.ThinArcRender;
 import cn.academy.ability.electro.entity.EntityArcBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.LifeTime;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -20,6 +22,7 @@ import cn.liutils.api.entityx.motion.LifeTime;
 public class EntityExcitedArc extends EntityArcBase {
 	
 	@RegEntity.Render
+	@SideOnly(Side.CLIENT)
 	public static ThinArcRender render;
 
 	public EntityExcitedArc(World world, Vec3 begin, Vec3 end, int life) {
@@ -41,13 +44,6 @@ public class EntityExcitedArc extends EntityArcBase {
 	@Override
 	protected boolean doesPerformTrace() {
 		return false;
-	}
-	
-	public static final class ThinArcRender extends RenderElecArc {
-		public ThinArcRender() {
-			widthFp = 0.3;
-			widthTp = 0.6;
-		}
 	}
 	
 }

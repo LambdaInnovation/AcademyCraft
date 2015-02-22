@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillBase {
 	
-	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	ResourceLocation logo;
 	String name = "null";
 	int maxSkillLv = 1;
 	
@@ -84,7 +84,7 @@ public class SkillBase {
 	 */
 	@SideOnly(Side.CLIENT)
 	public final ResourceLocation getLogo() {
-		return logo;
+		return logo == null ? ACClientProps.TEX_QUESTION_MARK : logo;
 	}
 	
 	/**

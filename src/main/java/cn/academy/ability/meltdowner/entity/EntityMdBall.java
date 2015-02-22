@@ -8,18 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.client.render.RenderMdBall;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.motion.FollowEntity;
 import cn.liutils.api.entityx.motion.VelocityUpdate;
-import cn.liutils.template.client.render.entity.RenderIcon;
 import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -50,9 +49,9 @@ public class EntityMdBall extends EntityX {
 		}
 	}
 	
-	boolean load = false;
-	EntityPlayer spawner;
-	double offx, offy, offz;
+	public boolean load = false;
+	public EntityPlayer spawner;
+	public double offx, offy, offz;
 	
 	final int timeOffset = rand.nextInt(233333);
 	
@@ -60,7 +59,7 @@ public class EntityMdBall extends EntityX {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
-	public static BallRender render;
+	public static RenderMdBall render;
 	
 	public enum BallState { 
 		NORMAL(TEX_NORMAL), ACTIVE(TEX_ACTIVE);
@@ -189,55 +188,17 @@ public class EntityMdBall extends EntityX {
 		return pass == 1;
 	}
 	
-	protected boolean doesFollow() {
+	public boolean doesFollow() {
 		return true;
 	}
 	
 	@SideOnly(Side.CLIENT)
-	protected double getAlpha() {
+	public double getAlpha() {
 		return Math.min(1.0, (double)ticksExisted / fadeTime);
 	}
 	
 	public static interface Callback {
 		void action(EntityMdBall ball);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static class BallRender extends RenderIcon {
-
-		public BallRender() {
-			super(null);
-			setSize(0.5f);
-			setHasLight(false);
-			setBlend(0.8f);
-		}
-		
-		@Override
-		public void doRender(Entity ent, double x, double y,
-				double z, float f, float g) {
-			EntityPlayer clientPlayer = Minecraft.getMinecraft().thePlayer;
-			EntityMdBall ball = (EntityMdBall) ent;
-			if(ball.spawner == null)
-				return;
-			
-			boolean firstPerson = 
-					Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 
-					&& clientPlayer.equals(ball.spawner);
-			long time = Minecraft.getSystemTime();
-			
-			//position hack
-			if(ball.doesFollow()) {
-				x = ball.offx + (ball.spawner.posX - clientPlayer.posX);
-				y = ball.offy - 1.6  + (ball.spawner.posY - clientPlayer.posY);
-				z = ball.offz  + (ball.spawner.posZ - clientPlayer.posZ);
-			}
-			
-			icon = ball.getTexture();
-			this.alpha = 0.8 * ball.getAlpha();
-			
-			super.doRender(ent, x, y, z, f, g);
-		}
-		
 	}
 
 }

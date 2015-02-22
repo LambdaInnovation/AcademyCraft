@@ -75,7 +75,7 @@ public abstract class EntityMdRayBase extends EntityRay {
 	
 	protected abstract void handleCollision(MovingObjectPosition mop);
 	
-	protected abstract ResourceLocation[] getTexData();
+	public abstract ResourceLocation[] getTexData();
 	
 	@Override
 	public boolean doesFollowSpawner() {
@@ -88,25 +88,5 @@ public abstract class EntityMdRayBase extends EntityRay {
 	}
 	
 	protected boolean attackOnSpawn() { return true; }
-	
-	@SideOnly(Side.CLIENT)
-	public static class RayRender <T extends EntityMdRayBase> extends RendererRayBlended<T> {
-
-		public RayRender() {
-			super(null,
-				  null,
-				 1);
-		}
-		
-		@Override
-		protected void drawAtOrigin(T ent, double len, boolean firstPerson) {
-			ResourceLocation[] texData = ent.getTexData();
-			int i = ent.ticksExisted % (texData.length - 1);
-			this.tex = texData[i + 1];
-			this.blendTex = texData[0];
-			super.drawAtOrigin(ent, len, firstPerson);
-		}
-		
-	}
 
 }

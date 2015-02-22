@@ -4,17 +4,13 @@
 package cn.academy.ability.electro.entity.fx;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-
+import cn.academy.ability.electro.client.render.entity.RenderArcEff;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
-import cn.liutils.template.client.render.entity.RenderIcon;
 import cn.liutils.util.misc.EntityPool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,25 +20,25 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @RegistrationClass
-@SideOnly(Side.CLIENT)
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityArcS extends EntityX {
 	
-	final static int FRAME_RATE = 100; //0.1s per change
+	public final static int FRAME_RATE = 100; //0.1s per change
 	
 	public boolean show;
 	public float size;
 	
-	int texIndex;
-	long lastChangeTime;
+	public int texIndex;
+	public long lastChangeTime;
 	
 	public final int roll = rand.nextInt(360);
 	
 	public ResourceLocation[] texs = ACClientProps.ANIM_SMALL_ARC;
 	
 	@RegEntity.Render
-	public static ArcRender render;
+	@SideOnly(Side.CLIENT)
+	public static RenderArcEff render;
 	
 	private static EntityPool<EntityArcS> pool = new EntityPool<EntityArcS>() {
 
@@ -91,42 +87,4 @@ public class EntityArcS extends EntityX {
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}
-	
-	public static final class ArcRender extends RenderIcon {
-
-		public ArcRender() {
-			super(null);
-			this.setBlend(.8f);
-		}
-		
-		@Override
-		public void doRender(Entity ent, double par2, double par4,
-				double par6, float par8, float par9) {
-			if(((EntityArcS)ent).show)
-				super.doRender(ent, par2, par4, par6, par8, par9);
-		}
-
-		@Override
-		protected void postTranslate(Entity ent) {
-			EntityArcS arc = (EntityArcS) ent;
-			
-			//GL11.glRotated(arc.rotOffset, 1, 1, 1);
-			long time = Minecraft.getSystemTime();
-			if(time - arc.lastChangeTime > FRAME_RATE) {
-				arc.lastChangeTime = time;
-				arc.texIndex = arc.rand.nextInt(arc.texs.length);
-			}
-			
-			this.setSize(arc.size);
-			this.icon = arc.texs[arc.texIndex % arc.texs.length];
-		}
-		
-		@Override
-		protected void firstTranslate(Entity ent) {
-			EntityArcS arc = (EntityArcS) ent;
-			GL11.glRotated(arc.roll, 0, 0, 1);
-		}
-		
-	}
-	
 }

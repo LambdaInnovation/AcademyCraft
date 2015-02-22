@@ -44,7 +44,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	}
 
 	@Override
-	protected ResourceLocation[] getTexData() {
+	public ResourceLocation[] getTexData() {
 		return ACClientProps.ANIM_ARC_LONG;
 	}
 

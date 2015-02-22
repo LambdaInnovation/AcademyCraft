@@ -7,8 +7,10 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACRecipes;
+import cn.academy.energy.block.tile.impl.TileSolarGenerator;
 import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;

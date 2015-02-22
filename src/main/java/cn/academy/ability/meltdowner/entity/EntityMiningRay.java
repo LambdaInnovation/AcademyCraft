@@ -10,6 +10,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.client.render.RenderMiningRay;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -27,7 +28,7 @@ public class EntityMiningRay extends EntityMdRayBase {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
-	public static MRRender render;
+	public static RenderMiningRay render;
 	
 	int harvestLevel;
 	
@@ -75,16 +76,10 @@ public class EntityMiningRay extends EntityMdRayBase {
 	}
 
 	@Override
-	protected ResourceLocation[] getTexData() {
+	public ResourceLocation[] getTexData() {
 		return ACClientProps.ANIM_MD_SMALL_RAY;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static class MRRender extends EntityMdRayBase.RayRender<EntityMiningRay> {
-		{
-			this.setWidthFp(0.3);
-			this.setWidthTp(0.5);
-		}
-	}
+
 	
 }

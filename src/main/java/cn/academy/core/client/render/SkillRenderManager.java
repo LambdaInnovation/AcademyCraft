@@ -48,9 +48,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
+@SideOnly(Side.CLIENT)
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 @RegEventHandler({Bus.Forge, Bus.FML})
-@SideOnly(Side.CLIENT)
 public class SkillRenderManager {
 	
 	private static SkillRenderManager instance = new SkillRenderManager();

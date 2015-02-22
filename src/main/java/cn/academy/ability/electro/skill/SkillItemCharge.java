@@ -20,6 +20,7 @@ import cn.academy.core.client.render.SkillRenderManager.RenderNode;
 import cn.academy.core.register.ACItems;
 import cn.academy.energy.util.EnergyUtils;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,10 +29,16 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillItemCharge extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
-	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
+	static SkillRenderer charge;
+	
+	@SideOnly(Side.CLIENT)
+	public static void init() {
+		charge = new SRSmallCharge(5, 0.8);
+	}
 
 	public SkillItemCharge() {
 		this.setLogo("electro/itemcharge.png");

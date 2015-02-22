@@ -3,9 +3,6 @@
  */
 package cn.academy.misc.entity;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,15 +10,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.register.ACItems;
+import cn.academy.misc.client.render.RendererMagHook;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
@@ -29,7 +21,6 @@ import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.api.entityx.motion.CollisionCheck;
 import cn.liutils.api.entityx.motion.GravityApply;
 import cn.liutils.api.entityx.motion.VelocityUpdate;
-import cn.liutils.util.RenderUtils;
 import cn.liutils.util.space.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,11 +42,11 @@ public class EntityMagHook extends EntityX {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
-	public static HookRender renderer;
+	public static RendererMagHook renderer;
 	
-	boolean isHit;
-	int hitSide;
-	int hookX, hookY, hookZ;
+	public boolean isHit;
+	public int hitSide;
+	public int hookX, hookY, hookZ;
 	
 	boolean doesSetStill;
 	
@@ -219,7 +210,7 @@ public class EntityMagHook extends EntityX {
 		}
 	}
 	
-	private void preRender() {
+	public void preRender() {
 		if(this.isHit) {
 			switch(hitSide) {
 			case 0:
@@ -240,44 +231,6 @@ public class EntityMagHook extends EntityX {
 					hookY + 0.5 + fd.offsetY * 0.51, 
 					hookZ + 0.5 + fd.offsetZ * 0.51);
 		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static class HookRender extends Render {
-		
-		final IModelCustom
-			model = ACClientProps.MDL_MAGHOOK,
-			model_open = ACClientProps.MDL_MAGHOOK_OPEN;
-
-		@Override
-		public void doRender(Entity ent, double x, double y,
-				double z, float a, float b) {
-			EntityMagHook hook = (EntityMagHook) ent;
-			IModelCustom realModel = model;
-			if(hook.isHit) {
-				realModel = model_open;
-				hook.preRender();
-				x = hook.posX - RenderManager.renderPosX;
-				y = hook.posY - RenderManager.renderPosY;
-				z = hook.posZ - RenderManager.renderPosZ;
-			}
-			
-			GL11.glPushMatrix();
-			RenderUtils.loadTexture(ACClientProps.TEX_MDL_MAGHOOK);
-			GL11.glTranslated(x, y, z);
-			GL11.glRotated(-hook.rotationYaw + 90, 0, 1, 0);
-			GL11.glRotated(hook.rotationPitch - 90, 0, 0, 1);
-			double scale = 0.0054;
-			GL11.glScaled(scale, scale, scale);
-			realModel.renderAll();
-			GL11.glPopMatrix();
-		}
-
-		@Override
-		protected ResourceLocation getEntityTexture(Entity var1) {
-			return null;
-		}
-		
 	}
 
 }
