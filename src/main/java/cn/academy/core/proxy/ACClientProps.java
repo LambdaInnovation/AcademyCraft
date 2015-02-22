@@ -59,14 +59,14 @@ public class ACClientProps {
 	//OBJ models
 	@SideOnly(Side.CLIENT)
 	public static IModelCustom 
-		MDL_ABILITY_DEVELOPER,
-		MDL_ELEC_CARD,
-		MDL_MAGNET_MODULE,
-		MDL_WINDGEN,
-		MDL_SOLAR,
-		MDL_GRID,
-		MDL_MAGHOOK,
-		MDL_MAGHOOK_OPEN;
+	MDL_ABILITY_DEVELOPER = AdvancedModelLoader.loadModel(src("academy:models/ability_developer.obj")),
+	MDL_ELEC_CARD = AdvancedModelLoader.loadModel(src("academy:models/card.obj")),
+	MDL_MAGNET_MODULE = AdvancedModelLoader.loadModel(src("academy:models/magincr.obj")),
+	MDL_WINDGEN = AdvancedModelLoader.loadModel(src("academy:models/windgen.obj")),
+	MDL_SOLAR = AdvancedModelLoader.loadModel(src("academy:models/solar.obj")),
+	MDL_GRID = AdvancedModelLoader.loadModel(src("academy:models/grid.obj")),
+	MDL_MAGHOOK = AdvancedModelLoader.loadModel(src("academy:models/maghook.obj")),
+	MDL_MAGHOOK_OPEN = AdvancedModelLoader.loadModel(src("academy:models/maghook_open.obj"));
 	
 	public static final ResourceLocation
 		TEX_MDL_GRID = src("academy:textures/models/grid.png"),

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.GuiOpenEvent;
 
 import org.lwjgl.input.Keyboard;
 
@@ -239,7 +240,7 @@ public class EventHandlerClient implements IKeyHandler {
 	@Configurable(category = "Control", key = "KEY_DISABLE", defValueInt = DEFAULT_KEY_DISABLE)
 	public static int KEY_DISABLE;
 	
-	@RegEventHandler(RegEventHandler.Bus.FML)
+	@RegEventHandler
 	public static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
 	private Category category;
@@ -342,6 +343,18 @@ public class EventHandlerClient implements IKeyHandler {
 	}
 	
 	@SubscribeEvent
+	/**
+	 * This overrides the open gui event, the player can't open gui when using skills.
+	 * @param event
+	 */
+	public void onPlayerOpenGui(GuiOpenEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(player == null) return;
+		this.skillEventAll(SkillEventType.RAW_CANCEL);
+		AcademyCraft.netHandler.sendToServer(new ClientCancelMessage());
+	}
+	
+	@SubscribeEvent
 	public void onThePlayerLoggedOut(ClientDisconnectionFromServerEvent event) {
 		//First save preset data
 		presets.save();
@@ -415,7 +428,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * EventHandlerClient as a IKeyHandler, handling KEY_DISABLE.
 	 */
 	
-	public boolean skillEnabled = true;
+	public boolean skillEnabled = false;
 	
 	public static boolean isSkillEnabled() {
 		return INSTANCE.skillEnabled;

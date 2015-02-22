@@ -110,4 +110,11 @@ public class SkillBase {
 		return false;
 	}
 	
+	/**
+	 * @return If the skill still receives control event when holding item.
+	 */
+	public boolean useWithItem() {
+		return false;
+	}
+	
 }

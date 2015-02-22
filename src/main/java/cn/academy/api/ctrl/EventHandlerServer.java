@@ -300,11 +300,8 @@ public class EventHandlerServer {
 		EntityPlayer player = event.player;
 		
 		//Cancel all skills.
-		skillEventAll(player, SkillEventType.RAW_CANCEL);
-		
 		//Remove this player.
-		rehMap.remove(player);
-		kaMap.remove(player);
+		clearPlayerStates(player);
 		
 		SkillStateManager.removePlayerFromServer(player);
 	}
@@ -327,6 +324,16 @@ public class EventHandlerServer {
 	    if (rehMap.containsKey(event.original)) {
 	        rehMap.remove(event.original);
 	    }
+	}
+	
+	/**
+	 * Clear all the player's current states.
+	 * @param player
+	 */
+	public void clearPlayerStates(EntityPlayer player) {
+		skillEventAll(player, SkillEventType.RAW_CANCEL);
+		rehMap.remove(player);
+		kaMap.remove(player);
 	}
 
 	/**

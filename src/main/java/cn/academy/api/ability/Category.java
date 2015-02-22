@@ -128,11 +128,10 @@ public class Category {
 	 */
 	public void onSkillExpChanged(AbilityData data, int skillID, float oldValue, float newValue) {
 		//increase max CP
-		Level lv = GenericUtils.assertObj(getLevel(data.getLevelID()));
-		
-		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
-		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
-		data.setMaxCP(newMaxCP);
+//		Level lv = GenericUtils.assertObj(getLevel(data.getLevelID()));
+//		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
+//		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
+//		data.setMaxCP(newMaxCP);
 		
 		data.getSkill(skillID).onSkillExpChange(data, skillID, oldValue, newValue);
 	}

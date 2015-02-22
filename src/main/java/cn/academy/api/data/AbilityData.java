@@ -288,9 +288,10 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setMaxCP(float value) {
+		if(!player.worldObj.isRemote)
+			System.out.println("set MaxCP " + maxCP + " to " + value);
 		maxCP = value;
 		currentCP = Math.min(currentCP, maxCP);
-		
 		if (!player.worldObj.isRemote) {
 			syncSimple();
 		}
