@@ -5,6 +5,7 @@ package cn.academy.core.block.dev;
 
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.data.AbilityData;
+import cn.academy.core.client.ACLangs;
 
 /**
  * @author WeathFolD
@@ -33,7 +34,7 @@ public class DevActionDevelop implements IDevAction {
 
 	@Override
 	public String getActionInfo(AbilityData data) {
-		return "Developing new ability";
+		return ACLangs.devNewAbility();
 	}
 
 }
