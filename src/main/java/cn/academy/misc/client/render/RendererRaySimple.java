@@ -18,7 +18,7 @@ import cn.liutils.util.RenderUtils;
  */
 public class RendererRaySimple<T extends EntityRay> extends RendererRayBase<T> {
 	
-	final ResourceLocation tex;
+	protected ResourceLocation tex;
 	final double ratio;
 	protected double widthFp, widthTp = 0.3;
 	

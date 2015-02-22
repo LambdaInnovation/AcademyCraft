@@ -23,31 +23,30 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegEntity(clientOnly = true)
-@RegEntity.HasRender
 public abstract class EntityMdRayBase extends EntityRay {
 	
-	@SideOnly(Side.CLIENT)
-	@RegEntity.Render
-	public static RayRender render;
+	private boolean attacked = false;
 
 	public EntityMdRayBase(EntityLivingBase _spawner) {
 		super(_spawner);
-		doAttack();
 	}
 	
 	public EntityMdRayBase(EntityPlayer _spawner, EntityMdBall ball) {
-		super(_spawner.worldObj);
+		super(_spawner);
 		MovingObjectPosition mop = GenericUtils.tracePlayer(_spawner, 20.0);
 		double dist = mop == null ? 20.0 : 
 			mop.hitVec.distanceTo
 			(worldObj.getWorldVec3Pool()
 			.getVecFromPool(ball.posX, ball.posY, ball.posZ));
 		Motion3D mo = new Motion3D(_spawner, true).move(dist);
-		this.setHeading(mo.posX - ball.posX, mo.posY - ball.posY, mo.posZ - ball.posZ, 1.0);
+		double tox = ball.posX, toy = ball.posY + 0.1, toz = ball.posZ;
+		this.setHeading(mo.posX - tox, mo.posY - toy, mo.posZ - toz, 1.0);
 		this.rayLength = (float) dist;
-		this.setPosition(ball.posX, ball.posY, ball.posZ);
-		
-		doAttack();
+		this.setPosition(tox, toy, toz);
+	}
+	
+	public EntityMdRayBase(World world) {
+		super(world);
 	}
 	
 	private void doAttack() {
@@ -57,27 +56,49 @@ public abstract class EntityMdRayBase extends EntityRay {
 		}
 	}
 	
-	protected abstract void handleCollision(MovingObjectPosition mop);
-
-	public EntityMdRayBase(World world) {
-		super(world);
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if(!worldObj.isRemote && !attacked) {
+			attacked = true;
+			doAttack();
+		}
 	}
+	
+	public float getDisplayRayLen() { //This enables comlicated display tricks on ray len.
+		return Math.min(2.5f * ticksExisted, rayLength);
+	}
+	
+	protected abstract void handleCollision(MovingObjectPosition mop);
+	
+	protected abstract ResourceLocation[] getTexData();
 	
 	@Override
 	public boolean doesFollowSpawner() {
 		return false;
 	}
 	
+	@Override
+	protected float getDefaultRayLen() {
+		return 40.0f;
+	}
+	
 	@SideOnly(Side.CLIENT)
-	public static class RayRender extends RendererRayBlended {
+	public static class RayRender <T extends EntityMdRayBase> extends RendererRayBlended<T> {
 
 		public RayRender() {
-			super(new ResourceLocation("academy:textures/effects/mdray.png"),
-				  new ResourceLocation("academy:textures/effects/mdray_begin.png"),
-				 0.666666);
-			this.setWidthFp(0.2);
-			this.setWidthTp(0.4);
-			this.setAlpha(0.6);
+			super(null,
+				  null,
+				 1);
+		}
+		
+		@Override
+		protected void drawAtOrigin(T ent, double len, boolean firstPerson) {
+			ResourceLocation[] texData = ent.getTexData();
+			int i = ent.ticksExisted % (texData.length - 1);
+			this.tex = texData[i + 1];
+			this.blendTex = texData[0];
+			super.drawAtOrigin(ent, len, firstPerson);
 		}
 		
 	}

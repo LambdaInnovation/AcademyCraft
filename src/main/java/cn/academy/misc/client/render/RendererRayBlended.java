@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T> {
 	
-	ResourceLocation blendTex;
+	protected ResourceLocation blendTex;
 
 	public RendererRayBlended(ResourceLocation _tex, ResourceLocation _blend, double _ratio) {
 		super(_tex, _ratio);
@@ -43,18 +43,18 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 			GL11.glPopMatrix();
 			
 			//Ending blend
-			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, len);
-			GL11.glScaled(1, 1, -1);
-			rect.map.set(0, 0, 1, 1);
-			drawer.draw();
-			GL11.glPopMatrix();
+//			GL11.glPushMatrix();
+//			GL11.glTranslated(0, 0, len);
+//			GL11.glScaled(1, 1, -1);
+//			rect.map.set(0, 0, 1, 1);
+//			drawer.draw();
+//			GL11.glPopMatrix();
 			
 			RenderUtils.loadTexture(tex);
 			//Real ray
 			RenderUtils.loadTexture(tex);
 			GL11.glTranslated(0, 0, forw);
-			len = len - 2 * forw;
+			len = len - forw;
 			rect.map.set(0, 0, len * ratio, 1);
 			rect.setSize(len, width);
 			drawer.draw();

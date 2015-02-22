@@ -7,7 +7,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -39,6 +41,11 @@ public class EntityMeltDowner extends EntityMdRayBase {
 		if(mop.typeOfHit == MovingObjectType.ENTITY) {
 			mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), dmg);
 		}
+	}
+
+	@Override
+	protected ResourceLocation[] getTexData() {
+		return ACClientProps.ANIM_ARC_LONG;
 	}
 
 }

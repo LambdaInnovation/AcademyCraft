@@ -50,7 +50,6 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	public final void doRender(Entity var1, double x, double y, double z,
 			float h, float a) {
 		long time = Minecraft.getSystemTime();
-		
 		T er = (T) var1;
 		if(!er.isLoaded()) {
 			return;
@@ -84,9 +83,11 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 			GL11.glColor4d(1, 1, 1, alpha * er.getAlpha());
 			
 			if(firstPerson) {
-				transformFirstPerson(er, x, y, z);
+				if(er.isNearPlayer())
+					transformFirstPerson(er, x, y, z);
 			} else {
-				transformThirdPerson(er, x, y, z);
+				if(er.isNearPlayer())
+					transformThirdPerson(er, x, y, z);
 				optimizeView(er, x, y, z);
 			}
 			

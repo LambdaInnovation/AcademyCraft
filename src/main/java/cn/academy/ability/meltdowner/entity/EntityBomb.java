@@ -106,9 +106,6 @@ public class EntityBomb extends EntityMdBall {
 	}
 	
 	@Override
-	protected boolean doesFloat() { return false; }
-	
-	@Override
 	protected boolean doesFollow() { return ticksExisted <= 15; }
 
 }

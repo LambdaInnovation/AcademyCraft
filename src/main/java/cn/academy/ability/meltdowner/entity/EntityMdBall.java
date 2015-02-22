@@ -107,7 +107,7 @@ public class EntityMdBall extends EntityX {
 		List<Callback> res = events.get(ticks);
 		if(res == null) {
 			res = new ArrayList();
-			events.put(ticks, res);
+			events.put(ticks + ticksExisted, res);
 		}
 		res.add(bc);
 	}
@@ -150,9 +150,6 @@ public class EntityMdBall extends EntityX {
 			if(ent instanceof EntityPlayer && !load) {
 				load = true;
 				spawner = (EntityPlayer) ent;
-//				addDaemonHandler(new FollowEntity(this, ent)
-//						.setOffset(offx, offy - 1.6, offz));
-				//System.out.println("real load in client");
 			}
 		}
 	}
@@ -191,8 +188,6 @@ public class EntityMdBall extends EntityX {
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}
-
-	protected boolean doesFloat() { return true; }
 	
 	protected boolean doesFollow() {
 		return true;
@@ -236,8 +231,6 @@ public class EntityMdBall extends EntityX {
 				y = ball.offy - 1.6  + (ball.spawner.posY - clientPlayer.posY);
 				z = ball.offz  + (ball.spawner.posZ - clientPlayer.posZ);
 			}
-			if(ball.doesFloat()) 
-				y += 0.1 * Math.sin((time - ball.timeOffset) / 700D);
 			
 			icon = ball.getTexture();
 			this.alpha = 0.8 * ball.getAlpha();

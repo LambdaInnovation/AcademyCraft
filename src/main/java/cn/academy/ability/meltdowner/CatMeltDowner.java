@@ -43,19 +43,18 @@ public class CatMeltDowner extends Category {
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .8));
 		this.addLevel(new Level(this, 3500.0f, 5500.0f, 2.2f, 2.6f, .7));
 		this.addLevel(new Level(this, 6000.0f, 9000.0f, 3.0f, 3.5f, .4));
-		this.addLevel(new Level(this, 10000.0f, Float.MAX_VALUE, 4.0f, 5.0f, .2));
+		this.addLevel(new Level(this, 10000.0f, 40000.0f, 4.0f, 5.0f, .2));
 		
 		this.addSkill(new SkillBase(), 0);
-		//TODO: Correct levels
 		this.addSkill(bomb = new SkillBomb(), 0);
 		this.addSkill(mineBasic = new SkillMiningBasic(), 0);
-		this.addSkill(scatterBomb = new SkillScatterBomb(), 0);
-		this.addSkill(shield = new SkillLightShield(), 0);
-		this.addSkill(meltDowner = new SkillMeltDowner(), 0);
-		this.addSkill(mineExpert = new SkillMiningExpert(), 0);
-		this.addSkill(rayBarrage = new SkillRayBarrage(), 0);
-		this.addSkill(mineLuck = new SkillMiningLuck(), 0);
-		this.addSkill(mineAcc = new SkillMiningAcc(), 0);
+		this.addSkill(scatterBomb = new SkillScatterBomb(), 1);
+		this.addSkill(shield = new SkillLightShield(), 1);
+		this.addSkill(meltDowner = new SkillMeltDowner(), 2);
+		this.addSkill(mineExpert = new SkillMiningExpert(), 2);
+		this.addSkill(rayBarrage = new SkillRayBarrage(), 3);
+		this.addSkill(mineLuck = new SkillMiningLuck(), 3);
+		this.addSkill(mineAcc = new SkillMiningAcc(), 4);
 		
 		this.setLogo("meltdowner/main.png");
 		this.setColorStyle(72, 214, 79);

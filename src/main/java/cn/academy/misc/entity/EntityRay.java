@@ -123,6 +123,13 @@ public class EntityRay extends EntityX {
 		return false;
 	}
 	
+	/**
+	 * Return if this ray is designed to be spawned right at player's hand. Used for render effect.
+	 */
+	public boolean isNearPlayer() {
+		return true;
+	}
+	
 	public EntityLivingBase getSpawner() {
 		return spawner;
 	}
