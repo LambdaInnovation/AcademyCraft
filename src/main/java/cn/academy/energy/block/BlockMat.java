@@ -53,7 +53,6 @@ public class BlockMat extends BlockDirectionalMulti {
     		Block block, int meta) {
     	int[] ori = this.getOrigin(world, x, y, z, meta);
     	TileEntity te = world.getTileEntity(ori[0], ori[1], ori[2]);
-    	System.out.println("matbreakblock");
     	if(te instanceof TileMatrix) {
     		((TileMatrix)te).onBreak();
     	}

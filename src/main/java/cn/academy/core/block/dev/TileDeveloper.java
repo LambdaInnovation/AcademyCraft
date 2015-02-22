@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -255,10 +256,10 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 				rot = -90;
 				break;
 			case 3:
-				rot = -55;
+				rot = 0;
 				break;
 			}
-			user.rotationYaw = user.rotationYawHead = rot;
+			user.renderYawOffset = user.rotationYaw = user.rotationYawHead = rot;
 			user.rotationPitch = 40;
 		}
 		
