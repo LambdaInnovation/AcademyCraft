@@ -109,12 +109,9 @@ skl_tp_penetrate=Penetrate Teleporting
 skl_tp_mark=Marked Teleporting
 skl_tp_visc=Viscus Stripping
 skl_tp_loc=Locating Teleporting
-skl_gn_btc=Brain Training Course
 skl_tp_hst=High Speed Teleporting
-skl_gn_btc2=Brain Training Course Ⅱ
-skl_gn_spirit=Spirit Training Course
 
-tp_threatening.desc=Ssometimes just a small fragment is able to kill an enemy.
+tp_threatening.desc=Sometimes just a small fragment is able to kill an enemy.
 tp_string.desc=String Theory is the essential of teleportation, which allows you to acquire accurate perception of the space.
 tp_penetrate.desc=Teleport through a wall. You can only know roughly where you can land correctly, so there's a risk of suffocating yourself.
 tp_mark.desc=Confirm the destination point with your eyes, and teleport directly.
@@ -123,6 +120,10 @@ tp_loc.desc=Remember the place that you've been to and teleport to there wheneve
 tp_hst.desc=A new way of long-distance teleporting, the high-speed teleportation and inertia alternation can make you maneuver in the air.
 
 #Generic Skills
+skl_gn_btc=Brain Training Course
+skl_gn_btc2=Brain Training Course Ⅱ
+skl_gn_spirit=Spirit Training Course
+
 gn_btc.desc=You have to train your mind to adapt to higher and higher computation requirement.
 gn_btc2.desc=Advanced mind training makes you enable to withstand massive computation.
 gn_spirit.desc=Learn to calm down and relax your mind. Leads to higher CP recover rate.
