@@ -88,7 +88,7 @@ public class SkillMarkTele extends SkillBase {
 			} else {
 				player.setPosition(mark.posX, mark.posY, mark.posZ);
 			}
-			player.fallDistance = 0.0f;
+			player.fallDistance *= 0.3f;
 			player.playSound("academy:tp.tp", 1.0f, 1.0f);
 			
 			data.decreaseCP((float) 

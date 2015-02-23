@@ -3,6 +3,8 @@
 "records.sn": {"category": "record", "sounds": [{"name": "records/sister's_noise", "stream": true}]},
 "records.lv5": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]},
 
+"deny": {"category": "master", "sounds": [{"name": "deny", "stream": false}]},
+
 "elec.weak": {"category": "master", "sounds": [{"name": "elec/arc_weak", "stream": false}]},
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
 "elec.mineview": {"category": "master", "sounds": [{"name": "elec/mineview", "stream": false}]},

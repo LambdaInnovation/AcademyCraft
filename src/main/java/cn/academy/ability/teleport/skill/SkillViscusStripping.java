@@ -14,6 +14,7 @@ import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.misc.entity.EntityMarker;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
 
@@ -35,9 +36,14 @@ public class SkillViscusStripping extends SkillBase {
 		});
 	}
 	
+	private static double getDist(int slv, int lv) {
+		return 8 + slv * .8 + lv * 3;
+	}
+	
 	public static class ViscusState extends PatternHold.State {
 		
 		final AbilityData data;
+		EntityMarker mark;
 
 		public ViscusState(EntityPlayer player) {
 			super(player);
@@ -46,23 +52,26 @@ public class SkillViscusStripping extends SkillBase {
 
 		@Override
 		public void onStart() {
-			
+			if(isRemote()) {
+				player.worldObj.spawnEntityInWorld(mark = new EntityMarker(player));
+				mark.r = 1;
+				mark.g = mark.b = 0.2f;
+				mark.a = 0.8f;
+			}
 		}
 
 		@Override
 		public void onFinish() {
+			if(mark != null)
+				mark.setDead();
+			
 			int slv = data.getSkillLevel(CatTeleport.skillViscusStripping), lv = data.getLevelID() + 1;
 			float csm = 400 + lv * 45 + slv * 50;
 			if(!data.decreaseCP(csm))
 				return;
 			
-			double dist = 8 + slv * .8 + lv * 3;
-			Motion3D mo = new Motion3D(player, true);
-			MovingObjectPosition mop = GenericUtils.rayTraceBlocksAndEntities(GenericUtils.selectorLiving,
-				player.worldObj, 
-				mo.getPosVec(player.worldObj), 
-				mo.move(dist).getPosVec(player.worldObj), 
-				player);
+			double dist = getDist(slv, lv);
+			MovingObjectPosition mop = performTrace();
 			if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY) {
 				if(mop.entityHit instanceof EntityLivingBase) {
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
@@ -76,6 +85,37 @@ public class SkillViscusStripping extends SkillBase {
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
 				}
 			}
+		}
+		
+		@Override
+		public boolean onTick(int ticks) {
+			if(isRemote()) {
+				int slv = data.getSkillLevel(CatTeleport.skillViscusStripping), lv = data.getLevelID() + 1;
+				double dist = getDist(slv, lv);
+				MovingObjectPosition mop = performTrace();
+				if(mop == null) {
+					Motion3D mo = new Motion3D(player, true);
+					mo.move(dist);
+					mark.forceSetPos(mo.posX, mo.posY, mo.posZ);
+				} else if(mop.typeOfHit == MovingObjectType.ENTITY) {
+					mark.target = mop.entityHit;
+				} else {
+					mark.forceSetPos(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord);
+				}
+			}
+			return false;
+		}
+		
+		private MovingObjectPosition performTrace() {
+			int slv = data.getSkillLevel(CatTeleport.skillViscusStripping), lv = data.getLevelID() + 1;
+			double dist = getDist(slv, lv);
+			Motion3D mo = new Motion3D(player, true);
+			MovingObjectPosition mop = GenericUtils.rayTraceBlocksAndEntities(GenericUtils.selectorLiving,
+				player.worldObj, 
+				mo.getPosVec(player.worldObj), 
+				mo.move(dist).getPosVec(player.worldObj), 
+				player);
+			return mop;
 		}
 
 		@Override

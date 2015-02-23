@@ -32,25 +32,21 @@ public class EntityMarker extends EntityX {
 		target = _target;
 		ignoreFrustumCheck = true;
 		setPosition(target.posX, target.posY, target.posZ);
-	}
-	
-	@Override
-	public void entityInit() {
-		dataWatcher.addObject(10, Integer.valueOf(0));
+		setSize(0.1f, 0.1f);
 	}
 	
 	@Override
 	public void onUpdate() {
-		setPosition(target.posX, target.posY, target.posZ);
-		
+		if(target != null)
+			setPosition(target.posX, target.posY, target.posZ);
 	}
 	
-	private void sync() {
-		if(worldObj.isRemote) {
-			target = worldObj.getEntityByID(dataWatcher.getWatchableObjectInt(10));
-		} else {
-			dataWatcher.updateObject(10, Integer.valueOf(target == null ? 0 : target.getEntityId()));
-		}
+	/**
+	 * Clears the following target and forces to the point. 
+	 */
+	public void forceSetPos(double x, double y, double z) {
+		target = this;
+		setPosition(x, y, z);
 	}
 
 }
