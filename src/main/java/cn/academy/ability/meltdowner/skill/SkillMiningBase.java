@@ -5,7 +5,6 @@ package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;
-import cn.academy.ability.meltdowner.entity.EntityMdBall.Callback;
 import cn.academy.ability.meltdowner.entity.EntityMiningRay;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -13,6 +12,7 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.liutils.api.entityx.EntityX.EntityCallback;
 
 /**
  * @author WeathFolD
@@ -84,9 +84,9 @@ public abstract class SkillMiningBase extends SkillBase {
 				return true;
 			if(ticks % spawnRate == 0) {
 				EntityMdBall ball = new EntityMdBall(player);
-				ball.execAfter(14, new Callback() {
+				ball.execAfter(14, new EntityCallback<EntityMdBall>() {
 					@Override
-					public void action(EntityMdBall ball) {
+					public void execute(EntityMdBall ball) {
 						ball.worldObj.spawnEntityInWorld(instance.createEntity(player, ball));
 						ball.setDead();
 					}

@@ -31,10 +31,10 @@ public class EntityBomb extends EntityMdBall {
 		super(player);
 		dmg = _dmg;
 		init();
-		this.execAfter(15, new Callback() {
+		this.execAfter(15, new EntityCallback<EntityMdBall>() {
 
 			@Override
-			public void action(EntityMdBall ball) {
+			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
 				//setState(BallState.ACTIVE);
 
@@ -67,10 +67,10 @@ public class EntityBomb extends EntityMdBall {
 
 	public EntityBomb(World world) {
 		super(world);
-		this.execAfter(15, new Callback() {
+		this.execAfter(15, new EntityCallback<EntityMdBall>() {
 
 			@Override
-			public void action(EntityMdBall ball) {
+			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
 				addCollisionCheck();
 				//setState(BallState.ACTIVE);

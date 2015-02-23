@@ -4,19 +4,21 @@
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;
 import cn.academy.ability.meltdowner.entity.EntityMiningRay;
 import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 
 /**
  * @author WeathFolD
  *
  */
+@RegistrationClass
 public class SkillMiningLuck extends SkillMiningBase {
 
 	public SkillMiningLuck() {
@@ -40,19 +42,30 @@ public class SkillMiningLuck extends SkillMiningBase {
 	}
 	
 	protected EntityMiningRay createEntity(EntityPlayer player, EntityMdBall ball) {
-		return new EntityMiningRay(player, ball, getHarvestLevel()) {
-			@Override
-			protected void onDiggedBlock(Block b, int x, int y, int z, int meta) {
-				int n = 1 + rand.nextInt(3);
-				for(int i = 0; i < n; ++i) {
-					super.onDiggedBlock(b, x, y, z, meta);
-				}
+		return new LuckyRay(player, ball);
+	}
+	
+	@RegEntity
+	public static class LuckyRay extends EntityMiningRay {
+		public LuckyRay(EntityPlayer player, EntityMdBall ball) {
+			super(player, ball, CatMeltDowner.mineLuck.getHarvestLevel());
+		}
+		
+		public LuckyRay(World world) {
+			super(world);
+		}
+		
+		@Override
+		protected void onDiggedBlock(Block b, int x, int y, int z, int meta) {
+			int n = 1 + rand.nextInt(3);
+			for(int i = 0; i < n; ++i) {
+				super.onDiggedBlock(b, x, y, z, meta);
 			}
-			@Override
-			public ResourceLocation[] getTexData() {
-				return ACClientProps.ANIM_MD_RAY_SF;
-			}
-		};
+		}
+		@Override
+		public ResourceLocation[] getTexData() {
+			return ACClientProps.ANIM_MD_RAY_SF;
+		}
 	}
 
 }

@@ -168,13 +168,14 @@ adev.holoview=全息视图
 adev.userinfo=能力者信息
 ac.presset=预设设置
 ac.preset=预设#
-prs.chooseskl=选择能力
-ac.devnew=学习新的能力
+prs.chooseskl=选择技能
+ac.devnew=开发新能力
 level_0=低能力者
 level_1=异能力者
 level_2=强能力者
 level_3=大能力者
 level_4=超能力者
+ac.presselect=预设选择
 #level_5=绝对能力者
 
 

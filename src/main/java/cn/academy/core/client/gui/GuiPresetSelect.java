@@ -136,129 +136,108 @@ public class GuiPresetSelect extends AuxGui {
 		GL11.glPushMatrix(); {
 			float x0 = w / 2F, 
 				y0 = h / 2F,
-				scale = 0.9F;
+				scale = 0.32F;
+			GL11.glTranslated(0, -5, 0);
 			GL11.glTranslatef(x0, y0, 0);
 			GL11.glScalef(scale, scale, 1);
-			GL11.glTranslatef(-x0, -y0, 0);
 			
-			double prog = Math.min(1.0, 
-					(Minecraft.getSystemTime() - lastOpenTime) / (double)ANIM_TIME);
-			drawSelectionMenu(w, h, prog);
-			drawPresetInfo(w, h, prog);
-			drawTag(w, h, prog);
+			HudUtils.setTextureResolution(768, 512);
+			RenderUtils.loadTexture(ACClientProps.TEX_GUI_PRESET);
+			long dt = Minecraft.getSystemTime() - lastOpenTime;
+			drawSelectionMenu(w, h, dt);
+			drawPresetInfo(w, h, dt);
+			drawTag(w, h, dt);
 		} GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 	
-	private void drawTag(int w, int h, double prog) {
-		float vw = 92.6F, vh = 13;
-		float x0 = w / 2F, y0 = h / 2F - vh;
-		float tx = 6, ty = -5;
-		float color = 0.16F;
-		GL11.glPushMatrix(); {
-			//the mask
-			rect(x0 + tx, y0 + ty, vw * prog, vh, 0.12F, 0.6F);
-			//text
-			GL11.glDepthFunc(GL11.GL_GEQUAL);
-			GL11.glColor4d(1, 1, 1, prog * .7);
-			drawText(ACLangs.presetSelect(), x0 + tx + 5, y0 + ty + 1.7, 7);
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-		} GL11.glPopMatrix();
-	}
-	
-	private void drawPresetInfo(int w, int h, double prog) {
-		float vw = 97.2F, vh = 34.9F;
-		float x0 = w * 0.5F - vw, y0 = h * 0.5F - vh;
-		float tx = -6, ty = -5;
-		GL11.glPushMatrix(); {
-			//Background&Mask
-			GL11.glPushMatrix(); {
-				GL11.glTranslated(vw * (1.0 - prog), 0, 0);
-				rect(x0 + tx, y0 + ty, vw * prog, vh, 0.12F, 0.6F);
-			} GL11.glPopMatrix();
-			
-			//Front Drawing
-			float step = 23F;
-			EventHandlerClient.getPresetManager();
-			Preset preset = PresetManager.getPreset(curSelection);
-			float cx = 0F;
-			GL11.glDepthFunc(GL11.GL_GEQUAL);
-			GL11.glColor4d(1, 1, 1, prog * 0.5);
-			
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			AbilityData data = AbilityDataMain.getData(player);
-			for(int i = 0; i < SELECTION_MAX; ++i) {
-				//Text
-				String name = LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(i));
-				float font_size = 7F;
-				drawText(name, x0 + tx + cx + step / 2 + 3, y0 + ty + 4, font_size, Align.CENTER);
-				
-				//Ability Logo
-				{
-					GL11.glDisable(GL11.GL_TEXTURE_2D);
-					float rectSize = 14F;
-					double rx = x0 + tx + cx + step / 2 - rectSize / 2 + 3,
-						  ry = y0 + ty + 16.5;
-					HudUtils.drawRectOutline(rx, ry, rectSize, rectSize, 2F);
-					GL11.glEnable(GL11.GL_TEXTURE_2D);
-					//Find the logo, if any
-					
-					SkillBase skl = data.getSkill(preset.getSkillMapping(i));
-					if(skl != null) {
-						//Draw the logo
-						ResourceLocation logo = skl.getLogo();
-						if(logo != null) {
-							RenderUtils.loadTexture(logo);
-							HudUtils.drawRect(rx + 1, ry + 1, rectSize - 2, rectSize - 2);
-						}
-					}
-					
-				}
-				
-				cx += step;
-			}
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-		} GL11.glPopMatrix();
-	}
-	
-	private void drawSelectionMenu(int w, int h, double prog) {
-		prog = Math.min(prog * 1.2, 1); //speedup
-		float x0 = w * 0.5F, y0 = h * 0.5F;
-		
-		//BackMenu
-		float tx = 6, ty = 5;
-		float mw = 40, mh = 45.4F;
-		float color = 0.16F;
-		rect(x0 + tx, y0 + ty, mw, mh * prog, 0.12F, 0.6F);
-		
-		//select element
-		GL11.glDepthFunc(GL11.GL_GEQUAL);
-		float y_step = 11F;
-		for(int i = 0; i < SELECTION_MAX; ++i) {
-			float ny = y_step * i + 0.5F;
-			if(curSelection == i) {
-				rect(x0 + tx, y0 + ty + ny, mw, y_step, 0.6F, 0.6F);
-			}
-			EventHandlerClient.getPresetManager();
-			Preset pr = PresetManager.getPreset(i);
-			GL11.glColor4d(1, 1, 1, 0.1 + prog * 0.7); //Linear brightening effect
-			drawText(ACLangs.presetPrefix() + (i + 1), x0 + tx + 3, y0 + ty + ny + 2, 5);
+	private void drawTag(int w, int h, long dt) {
+		double dx = 0;
+		double mAlpha;
+		mAlpha = Math.min(1.0, dt / 300d);
+		final double delta = 30;
+		if(dt < 200) {
+			dx = delta;
+		} else if(dt < 400) {
+			dx = -(delta / 200) * (dt - 200) + delta;
+		} else {
+			dt = 0;
 		}
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glPushMatrix();
+		GL11.glTranslated(dx, 0, 0);
+		GL11.glColor4d(1, 1, 1, mAlpha);
+		rect(1, -28, 399, 87, 162, 28);
+		GL11.glColor4d(.2, .2, .2, mAlpha * .8);
+		drawText(ACLangs.presetSelect(), 15, -25, 17);
+		GL11.glPopMatrix();
 	}
 	
-	//Fast rect drawing routine (grayscale)
-	private void rect(float x, float y, double width, double height, float lum, float alpha) {
-		RenderUtils.bindGray(lum, alpha);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		HudUtils.drawModalRect(x, y, width, height);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+	private void drawSelectionMenu(int w, int h, long dt) {
+		double ratio = dt < 500 ? 0 : (dt < 600 ? (dt - 500) / 100d : 1.0);
+		double mAlpha = dt < 700 ? 0 : Math.min(1.0, (dt - 700) / 300d);
+		double textAlpha = dt < 850 ? 0 : Math.min(1.0, (dt - 850) / 300d);
+		
+		GL11.glColor4d(1, 1, 1, 1);
+		GL11.glPushMatrix();
+		GL11.glTranslated(18, 0, 0);
+		rect(0, 0, 419, 115, 6, 22 * ratio);
+		
+		GL11.glColor4d(1, 1, 1, mAlpha);
+		rect(0, 22, 419, 137, 118, 127);
+		
+		//draw each text
+		final double y_step = 32;
+		double y0 = 22;
+		GL11.glColor4d(0.3, 0.3, 0.3, mAlpha);
+		for(int i = 0; i < 4; ++i) {
+			if(curSelection == i) {
+				rect(-6, y0, 413, 233, 6, 31);
+				GL11.glColor4d(0, 0, 0, mAlpha * 0.2);
+				HudUtils.drawModalRect(0, y0, 118, 31);
+			}
+			
+			GL11.glColor4d(0.3, 0.3, 0.3, mAlpha);
+			drawText(ACLangs.presetPrefix() + (i + 1), 10, y0 + 8, 15);
+			RenderUtils.loadTexture(ACClientProps.TEX_GUI_PRESET);
+			y0 += y_step;
+		}
+		
+		GL11.glPopMatrix();
+	}
+	
+	
+	final int[][] posArray = {{7, 7}, {83, 7}, {249, 40}, {325, 40}};
+	private void drawPresetInfo(int w, int h, long dt) {
+		double mAlpha = Math.min(1.0, dt / 300d);
+		GL11.glColor4d(1, 1, 1, mAlpha);
+		rect(-399, -115, 0, 0, 399, 115);
+		Preset p = PresetManager.getPreset(curSelection);
+		AbilityData data = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer);
+		GL11.glColor4d(1, 1, 1, .35);
+		for(int i = 0; i < 4; i++) {
+			int n = p.getSkillMapping(i);
+			if(n != 0) {
+				SkillBase sb = data.getSkill(p.getSkillMapping(i));
+				ResourceLocation logo = sb.getLogo();
+				if(logo != null) {
+					RenderUtils.loadTexture(logo);
+					HudUtils.drawRect(posArray[i][0] - 399, posArray[i][1] - 115, 69, 69);
+				}
+			}
+		}
+		RenderUtils.loadTexture(ACClientProps.TEX_GUI_PRESET);
 	}
 	
 	@Override
 	protected boolean overrideMouse() {
 		return true;
+	}
+	
+	/**
+	 * TexW == RealW, TexH == RealH
+	 */
+	private void rect(double x, double y, double u, double v, double w, double h) {
+		HudUtils.drawRect(x, y, u, v, w, h, w, h);
 	}
 	
 	private void drawText(String text, double x, double y, float size) {

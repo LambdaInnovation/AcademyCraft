@@ -49,8 +49,6 @@ public class EntityMdBall extends EntityX {
 	@SideOnly(Side.CLIENT)
 	public static RenderMdBall render;
 	
-	Map<Integer, List<Callback>> events = new HashMap();
-	
 	int texID = 0;
 	
 	public EntityMdBall(EntityPlayer player) {
@@ -81,15 +79,6 @@ public class EntityMdBall extends EntityX {
 		dataWatcher.addObject(14, Float.valueOf(0));
 	}
 	
-	public void execAfter(int ticks, Callback bc) {
-		List<Callback> res = events.get(ticks);
-		if(res == null) {
-			res = new ArrayList();
-			events.put(ticks + ticksExisted, res);
-		}
-		res.add(bc);
-	}
-	
 	@Override
 	public void onUpdate() {
 		if(spawner != null && doesFollow()) {
@@ -99,13 +88,6 @@ public class EntityMdBall extends EntityX {
 		}
 		
 		super.onUpdate();
-		//System.out.println(posX + " " + worldObj.isRemote);
-		//System.out.println(offy + " " + worldObj.isRemote);
-		List<Callback> res = events.get(ticksExisted);
-		if(res != null) {
-			for(Callback cb : res)
-				cb.action(this);
-		}
 		
 		texID = rand.nextInt(texs.length);
 		sync();
@@ -166,10 +148,6 @@ public class EntityMdBall extends EntityX {
 	@SideOnly(Side.CLIENT)
 	public double getAlpha() {
 		return Math.min(1.0, (double)ticksExisted / fadeTime);
-	}
-	
-	public static interface Callback {
-		void action(EntityMdBall ball);
 	}
 
 }
