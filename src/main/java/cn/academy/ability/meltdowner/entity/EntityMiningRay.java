@@ -77,7 +77,7 @@ public class EntityMiningRay extends EntityMdRayBase {
 
 	@Override
 	public ResourceLocation[] getTexData() {
-		return ACClientProps.ANIM_MD_SMALL_RAY;
+		return ACClientProps.ANIM_MD_RAY_S;
 	}
 
 

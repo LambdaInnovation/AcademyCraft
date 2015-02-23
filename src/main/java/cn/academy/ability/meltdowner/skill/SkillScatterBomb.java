@@ -7,11 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;
-import cn.academy.ability.meltdowner.entity.EntityMdBall.BallState;
-import cn.academy.ability.meltdowner.entity.EntityMdBall.Callback;
 import cn.academy.ability.meltdowner.entity.EntityWeakRay;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -85,24 +82,19 @@ public class SkillScatterBomb extends SkillBase {
 				ball.setDead();
 			}
 			if(!b) {
-				player.attackEntityFrom(DamageSource.causePlayerDamage(player), 
-						Math.min(player.getHealth() - 1f, 10f));
+				//player.attackEntityFrom(DamageSource.causePlayerDamage(player), 
+				//		Math.min(player.getHealth() - 1f, 10f));
 			}
 		}
 		
 		@Override
 		public boolean onTick(int ticks) {
-			if(ticks >= 200)
+			if(ticks >= 240)
 				return true;
 			if(!isRemote() && ticks <= 110 && (ticks - 20) % 15 == 0) {
 				EntityMdBall ball = new EntityMdBall(player);
 				balls.add(ball);
 				player.worldObj.spawnEntityInWorld(ball);
-			}
-			if(ticks == 170) {
-				for(EntityMdBall ball : balls) {
-					ball.setState(BallState.ACTIVE);
-				}
 			}
 			return ticks <= 110 && !data.decreaseCP(ccp, CatMeltDowner.scatterBomb);
 		}

@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.client.render.RenderMdBall;
+import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
@@ -34,20 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity.HasRender
 public class EntityMdBall extends EntityX {
 	
-	static ResourceLocation[] 
-		TEX_NORMAL, 
-		TEX_ACTIVE;
-	static {
-		TEX_NORMAL = new ResourceLocation[5];
-		for(int i = 0; i < 5; ++i) {
-			TEX_NORMAL[i] = new ResourceLocation("academy:textures/effects/mdball/" + i + ".png");
-		}
-		
-		TEX_ACTIVE = new ResourceLocation[4];
-		for(int i = 0; i < 4; ++i) {
-			TEX_ACTIVE[i] = new ResourceLocation("academy:textures/effects/mdball_active/" + i + ".png");
-		}
-	}
+	final ResourceLocation[] texs = ACClientProps.ANIM_MDBALL;
 	
 	public boolean load = false;
 	public EntityPlayer spawner;
@@ -61,16 +49,7 @@ public class EntityMdBall extends EntityX {
 	@SideOnly(Side.CLIENT)
 	public static RenderMdBall render;
 	
-	public enum BallState { 
-		NORMAL(TEX_NORMAL), ACTIVE(TEX_ACTIVE);
-		public ResourceLocation[] texs;
-		BallState(ResourceLocation[] _t) {
-			texs = _t;
-		}
-	};
-	
 	Map<Integer, List<Callback>> events = new HashMap();
-	private BallState state = BallState.NORMAL;
 	
 	int texID = 0;
 	
@@ -128,20 +107,18 @@ public class EntityMdBall extends EntityX {
 				cb.action(this);
 		}
 		
-		texID = rand.nextInt(state.texs.length);
+		texID = rand.nextInt(texs.length);
 		sync();
 	}
 	
 	private void sync() {
 		if(!worldObj.isRemote) {
-			dataWatcher.updateObject(10, Byte.valueOf((byte) state.ordinal()));
 			dataWatcher.updateObject(11, Integer.valueOf(spawner.getEntityId()));
 			
 			dataWatcher.updateObject(12, Float.valueOf((float) offx));
 			dataWatcher.updateObject(13, Float.valueOf((float) offy));
 			dataWatcher.updateObject(14, Float.valueOf((float) offz));
 		} else {
-			state = BallState.values()[dataWatcher.getWatchableObjectByte(10)];
 			Entity ent = worldObj.getEntityByID(dataWatcher.getWatchableObjectInt(11));
 			offx = dataWatcher.getWatchableObjectFloat(12);
 			offy = dataWatcher.getWatchableObjectFloat(13);
@@ -168,13 +145,7 @@ public class EntityMdBall extends EntityX {
 	}
 	
 	public ResourceLocation getTexture() {
-		return state.texs[texID % state.texs.length];
-	}
-	
-	public void setState(BallState ns) {
-		if(ns != state)
-			texID = 0;
-		state = ns;
+		return texs[texID % texs.length];
 	}
 	
     @Override

@@ -76,7 +76,7 @@ public class SkillMineDetect extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
 	private static ResourceLocation getTexture(Block block) {
-		return ACClientProps.EFF_MV_TEST;
+		return ACClientProps.EFF_MV;
 	}
 	
 	@SideOnly(Side.CLIENT)

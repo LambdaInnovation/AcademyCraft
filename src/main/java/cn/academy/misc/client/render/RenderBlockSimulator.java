@@ -35,7 +35,7 @@ public class RenderBlockSimulator extends Render {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glPushMatrix(); {
-			RenderUtils.loadTexture(ACClientProps.EFF_MV_TEST);
+			RenderUtils.loadTexture(ACClientProps.EFF_MV);
 			GL11.glTranslated(x + .05, y + .05, z + .05);
 			GL11.glColor4d(ebs.color[0] / 255F, ebs.color[1] / 255F, ebs.color[2] / 255F, 
 					calcAlpha(x, y, z, ebs.getParent().range));

@@ -8,8 +8,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;
 import cn.academy.ability.meltdowner.entity.EntityMiningRay;
+import cn.academy.core.proxy.ACClientProps;
 
 /**
  * @author WeathFolD
@@ -45,6 +47,10 @@ public class SkillMiningLuck extends SkillMiningBase {
 				for(int i = 0; i < n; ++i) {
 					super.onDiggedBlock(b, x, y, z, meta);
 				}
+			}
+			@Override
+			public ResourceLocation[] getTexData() {
+				return ACClientProps.ANIM_MD_RAY_SF;
 			}
 		};
 	}
