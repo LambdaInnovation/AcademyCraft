@@ -31,6 +31,7 @@ public class SkillLightningFlash extends SkillBase {
 	public SkillLightningFlash() {
 		this.setLogo("electro/lf.png");
 		setName("em_lf");
+		setMaxLevel(5);
 	}
 	
 	@Override

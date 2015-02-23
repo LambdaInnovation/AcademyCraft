@@ -17,6 +17,7 @@ public class SkillLightShield extends SkillBase {
 	public SkillLightShield() {
 		this.setLogo("meltdowner/shield.png");
 		this.setName("md_shield");
+		setMaxLevel(15);
 	}
 
 }

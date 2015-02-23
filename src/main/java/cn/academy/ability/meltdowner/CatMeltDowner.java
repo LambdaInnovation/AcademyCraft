@@ -7,7 +7,6 @@ import cn.academy.ability.meltdowner.skill.SkillMiningAcc;
 import cn.academy.ability.meltdowner.skill.SkillMiningBasic;
 import cn.academy.ability.meltdowner.skill.SkillMiningExpert;
 import cn.academy.ability.meltdowner.skill.SkillMiningLuck;
-import cn.academy.ability.meltdowner.skill.SkillRayBarrage;
 import cn.academy.ability.meltdowner.skill.SkillScatterBomb;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
@@ -31,7 +30,6 @@ public class CatMeltDowner extends Category {
 	public static SkillLightShield shield;
 	public static SkillMeltDowner meltDowner;
 	public static SkillMiningExpert mineExpert;
-	public static SkillRayBarrage rayBarrage;
 	public static SkillMiningLuck mineLuck;
 	public static SkillMiningAcc mineAcc;
 
@@ -52,7 +50,6 @@ public class CatMeltDowner extends Category {
 		this.addSkill(shield = new SkillLightShield(), 1);
 		this.addSkill(meltDowner = new SkillMeltDowner(), 2);
 		this.addSkill(mineExpert = new SkillMiningExpert(), 2);
-		this.addSkill(rayBarrage = new SkillRayBarrage(), 3);
 		this.addSkill(mineLuck = new SkillMiningLuck(), 3);
 		this.addSkill(mineAcc = new SkillMiningAcc(), 4);
 		

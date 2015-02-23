@@ -30,7 +30,7 @@ item.ac_cplank.name=Composite Wood Planks
 item.ac_exp_nail.name=Expansion Nail
 item.ac_smallsi.name=Small Piece of Silicon
 item.ac_freqreg.name=Frequency Regulator
-item.ac_sibarn.name=Silicon Barn
+item.ac_silbarn.name=Silicon Barn
 item.maghook.name=Magnetic Hook
 
 #Blocks
@@ -87,7 +87,6 @@ skl_md_scatter=Scattering Electron Bomb
 skl_md_shield=Light Shield
 skl_md_meltdown=Melt Downer
 skl_md_mineexpert=Expert Mining Ray
-skl_md_barrage=Scattered Ray Barrage
 skl_md_mineluck=Expert Mining Ray - Luck
 skl_md_mineacc=Expert Mining Ray - Accuracy
 
@@ -97,7 +96,6 @@ md_scatter.desc=Generate multiple electron balls simultaneously. However, the ac
 md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
 md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
 md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
-md_barrage.desc=With the supportive semiconductor, you can split your electron current into thousands of rays, and destroy everything in front of you.
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 

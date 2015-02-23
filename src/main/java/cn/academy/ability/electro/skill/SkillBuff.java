@@ -47,6 +47,7 @@ public class SkillBuff extends SkillBase {
 	public SkillBuff() {
 		this.setLogo("electro/buff.png");
 		setName("em_buff");
+		setMaxLevel(10);
 	}
 	
 	@Override

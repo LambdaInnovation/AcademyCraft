@@ -30,6 +30,7 @@ public class SkillScatterBomb extends SkillBase {
 	public SkillScatterBomb() {
 		this.setLogo("meltdowner/scatter.png");
 		this.setName("md_scatter");
+		setMaxLevel(10);
 	}
 	
 	private static float getDamage(int slv, int lv) {

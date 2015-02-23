@@ -43,6 +43,7 @@ public class SkillItemCharge extends SkillBase {
 	public SkillItemCharge() {
 		this.setLogo("electro/itemcharge.png");
 		setName("em_itemcharge");
+		setMaxLevel(10);
 	}
 	
 	@Override

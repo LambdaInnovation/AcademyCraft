@@ -49,7 +49,7 @@ public class SkillBase {
 		name = _name;
 	}
 	
-	public void setMaxSkillLevel(int i) {
+	public void setMaxLevel(int i) {
 		maxSkillLv = i;
 	}
 	

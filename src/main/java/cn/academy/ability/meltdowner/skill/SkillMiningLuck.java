@@ -24,6 +24,7 @@ public class SkillMiningLuck extends SkillMiningBase {
 	public SkillMiningLuck() {
 		this.setLogo("meltdowner/mine_luck.png");
 		this.setName("md_mineluck");
+		setMaxLevel(10);
 	}
 
 	@Override

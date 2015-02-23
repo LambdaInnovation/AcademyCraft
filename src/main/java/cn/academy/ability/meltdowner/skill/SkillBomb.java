@@ -22,6 +22,7 @@ public class SkillBomb extends SkillBase {
 	public SkillBomb() {
 		this.setLogo("meltdowner/bomb.png");
 		this.setName("md_bomb");
+		setMaxLevel(10);
 	}
 	
 	@Override

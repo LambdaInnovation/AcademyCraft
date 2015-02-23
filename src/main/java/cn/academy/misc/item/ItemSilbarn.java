@@ -5,11 +5,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.academy.misc.entity.EntitySibarn;
+import cn.academy.misc.entity.EntitySilbarn;
 
-public class ItemSibarn extends Item {
+public class ItemSilbarn extends Item {
 	
-	public ItemSibarn() {
+	public ItemSilbarn() {
 		setCreativeTab(AcademyCraft.cct);
 	}
 	
@@ -17,7 +17,7 @@ public class ItemSibarn extends Item {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
     	if(!world.isRemote) {
     		world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-    		world.spawnEntityInWorld(new EntitySibarn(player));
+    		world.spawnEntityInWorld(new EntitySilbarn(player));
     		if(!player.capabilities.isCreativeMode)
     			stack.damageItem(1, player);
     	}

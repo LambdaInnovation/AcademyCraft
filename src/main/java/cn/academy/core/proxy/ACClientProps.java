@@ -55,7 +55,8 @@ public class ACClientProps {
 	public static final ResourceLocation
 		TEX_MDL_GRID = src("academy:textures/models/grid.png"),
 		TEX_MDL_GRID_BLOCK = src("academy:textures/models/grid_block.png"),
-		TEX_MDL_MAGHOOK = src("academy:textures/models/maghook.png");
+		TEX_MDL_MAGHOOK = src("academy:textures/models/maghook.png"),
+		TEX_MDL_SILBARN = src("academy:textures/models/silbarn.png");
 	
 	//Animations
 	public static final ResourceLocation
@@ -67,7 +68,8 @@ public class ACClientProps {
 		ANIM_MD_RAY_SA[] = eff("mdray_sa", 5),
 		ANIM_MD_RAY_SF[] = eff("mdray_sf", 5),
 		ANIM_BLOOD_SPLASH[] = eff("blood_splash", 10),
-		ANIM_MDBALL[] = eff("mdball", 5);
+		ANIM_MDBALL[] = eff("mdball", 5),
+		ANIM_MD_RAY_L[] = eff("mdray_l", 5);
 	
 	public static ResourceLocation ANIM_SMALL_ARC[] = eff("arcs", 20);
 	

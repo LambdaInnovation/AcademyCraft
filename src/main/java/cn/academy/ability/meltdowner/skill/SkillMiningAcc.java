@@ -27,6 +27,7 @@ public class SkillMiningAcc extends SkillMiningBase {
 	public SkillMiningAcc() {
 		this.setLogo("meltdowner/mine_acc.png");
 		this.setName("md_mineacc");
+		setMaxLevel(10);
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class SkillMiningAcc extends SkillMiningBase {
 		protected void onDiggedBlock(Block b, int x, int y, int z, int meta) {
 			Item i = Item.getItemFromBlock(b);
 			if(i != null) {
-				ItemStack toDrop = new ItemStack(i);
+				ItemStack toDrop = new ItemStack(i, 1, meta);
 				worldObj.spawnEntityInWorld(new EntityItem(worldObj, x + .5, y + .5, z + .5, toDrop));
 			} else {
 				super.onDiggedBlock(b, x, y, z, meta);

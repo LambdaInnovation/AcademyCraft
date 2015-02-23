@@ -44,7 +44,7 @@ public class SkillStrongArc extends SkillBase {
 	public SkillStrongArc() {
 		setLogo("electro/arc_strong.png");
 		setName("em_arc_strong");
-		setMaxSkillLevel(10);
+		setMaxLevel(10);
 	}
 	
 	@Override

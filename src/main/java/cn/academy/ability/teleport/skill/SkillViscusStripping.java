@@ -23,7 +23,7 @@ public class SkillViscusStripping extends SkillBase {
 	public SkillViscusStripping() {
 		setName("tp_visc");
 		setLogo("tp/viscus_stripping.png");
-		setMaxSkillLevel(10);
+		setMaxLevel(10);
 	}
 	
 	@Override

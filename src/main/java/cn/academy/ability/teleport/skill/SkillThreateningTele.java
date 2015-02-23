@@ -34,7 +34,7 @@ public class SkillThreateningTele extends SkillBase {
 		instance = this;
 		setLogo("tp/threatening.png");
 		setName("tp_threatening");
-		setMaxSkillLevel(15);
+		setMaxLevel(10);
 	}
 
 	@Override

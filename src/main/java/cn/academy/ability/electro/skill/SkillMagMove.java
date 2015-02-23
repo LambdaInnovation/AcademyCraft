@@ -39,6 +39,7 @@ public class SkillMagMove extends SkillBase {
 	public SkillMagMove() {
 		this.setLogo("electro/moving.png");
 		setName("em_move");
+		setMaxLevel(10);
 	}
 	
 	@Override

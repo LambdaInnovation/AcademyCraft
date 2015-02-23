@@ -20,7 +20,7 @@ public class SkillMarkTele extends SkillBase {
 	public SkillMarkTele() {
 		setName("tp_mark");
 		setLogo("tp/marked.png");
-		setMaxSkillLevel(10);
+		setMaxLevel(10);
 	}
 	
 	@Override

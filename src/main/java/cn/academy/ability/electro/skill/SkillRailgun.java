@@ -38,7 +38,7 @@ public class SkillRailgun extends SkillBase {
 	public SkillRailgun() {
 		setLogo("electro/railgun.png");
 		setName("em_railgun");
-		setMaxSkillLevel(6);
+		setMaxLevel(6);
 	}
 	
 	private static Map<EntityPlayer, Integer> etcData = new HashMap();

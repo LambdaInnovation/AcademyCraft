@@ -18,7 +18,7 @@ public class SkillPenetrateTele extends SkillBase {
 	public SkillPenetrateTele() {
 		setName("tp_penetrate");
 		setLogo("tp/penetrate.png");
-		setMaxSkillLevel(15);
+		setMaxLevel(15);
 	}
 	
 	@Override

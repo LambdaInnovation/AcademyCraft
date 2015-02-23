@@ -51,7 +51,7 @@ public class SkillMineDetect extends SkillBase {
 	public SkillMineDetect() {
 		setLogo("electro/mineview.png");
 		setName("em_mine");
-		setMaxSkillLevel(10);
+		setMaxLevel(10);
 	}
 	
 	static int getCPConsume(int slv, int lv) {

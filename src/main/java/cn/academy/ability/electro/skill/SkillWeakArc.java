@@ -47,6 +47,7 @@ public class SkillWeakArc extends SkillBase {
 	public SkillWeakArc() {
 		setLogo("electro/arc.png");
 		setName("em_arc");
+		setMaxLevel(10);
 	}
 	
 	@Override
