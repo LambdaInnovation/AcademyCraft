@@ -169,6 +169,7 @@ public class PageSkills extends DevSubpage {
 					HudUtils.drawModalRect(30, 15, 75, 1);
 					
 					GL11.glColor4d(0, 1, 0, 0.8);
+					
 					HudUtils.drawModalRect(30, 15, 75 * base.data.getSkillUpgradeProgress(skillID), 1);
 				}
 				

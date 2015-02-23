@@ -98,7 +98,7 @@ public class SkillMineDetect extends SkillBase {
 		public HandlerEntity(EntityPlayer target, int time, double range, boolean advanced) {
 			super(target);
 			this.lifeTime = time;
-			this.range = range;
+			this.range = Math.min(range, 28);
 			this.target = target;
 			
 			double tmp = range * 0.2;
@@ -155,7 +155,10 @@ public class SkillMineDetect extends SkillBase {
 				int ind = 0;
 					
 				Set<EntityBlockSimulator> toRetain = new HashSet<EntityBlockSimulator>();
+				int n = 0;
 				for(BlockPos bp : set) {
+					//++n;
+					//if(n >= 200) break; //Force limit in order to not get jammy
 					//Get a new EBS and set
 					EntityBlockSimulator ebs;
 					if(ind < aliveSims.size()) {

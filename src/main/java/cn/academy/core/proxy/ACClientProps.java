@@ -47,7 +47,8 @@ public class ACClientProps {
 		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png"),
 		TEX_LOGO_GEOM = src("academy:textures/guis/logo_geom.png"),
 		TEX_LOGO_BACK = src("academy:textures/guis/logo_back.png"),
-		TEX_GUI_PRESET = src("academy:textures/guis/preset.png");
+		TEX_GUI_PRESET = src("academy:textures/guis/preset.png"),
+		TEX_EFF_MD_SHIELD = src("academy:textures/effects/mdshield.png");
 	
 	public static final LambdaFont FONT_YAHEI_32 = new LambdaFont(src("academy:fonts/yahei.png"), "/assets/academy/fonts/yahei.lf");
 	

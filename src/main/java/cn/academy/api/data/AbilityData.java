@@ -103,7 +103,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public boolean canUpdateLevel() {
-		return !this.hasAbility() || (getLevelID() < getLevelCount() - 1 && this.currentCP >= getLevel().getMaxCP());
+		return !this.hasAbility() || (getLevelID() < getLevelCount() - 1 && this.maxCP >= getLevel().getMaxCP());
 	}
 	
 	public int getLevelID() {
@@ -386,7 +386,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public double getSkillUpgradeProgress(int sid) {
-		if(skillLevels[sid] == 0 || !this.canSkillUpgrade(sid)) return 1;
+		if(skillLevels[sid] == 0 || this.skillLevels[sid] == getSkill(sid).getMaxSkillLevel()) return 1;
 		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]));
 	}
 	
