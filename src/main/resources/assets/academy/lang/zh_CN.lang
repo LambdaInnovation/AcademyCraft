@@ -57,7 +57,7 @@ tile.ac_mgore.name=镁矿
 tile.ac_shadowore.name=影子金属矿
 
 #创造栏
-itemGroup.AcademyCraft=异能时代
+itemGroup.AcademyCraft=AcademyCraft
 
 #其他能力
 skl_null=无
