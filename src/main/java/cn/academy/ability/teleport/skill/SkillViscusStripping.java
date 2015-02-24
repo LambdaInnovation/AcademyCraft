@@ -92,7 +92,8 @@ public class SkillViscusStripping extends SkillBase {
 						EntityBloodSplash.genSplashEffect(mop.entityHit);
 					} else {
 						//反♂胃
-						player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
+						if(rand.nextDouble() < 0.25)
+							player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
 				}
