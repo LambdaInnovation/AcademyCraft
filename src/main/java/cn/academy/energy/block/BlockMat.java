@@ -44,6 +44,7 @@ public class BlockMat extends BlockDirectionalMulti {
     	int[] origin = this.getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
     	if(origin != null) {
     		matGui.openGuiContainer(p, world, origin[0], origin[1], origin[2]);
+    		return true;
     	}
         return false;
     }
