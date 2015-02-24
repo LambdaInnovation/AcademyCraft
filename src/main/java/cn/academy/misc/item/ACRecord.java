@@ -33,6 +33,11 @@ public class ACRecord extends ItemRecord {
 	
 	private static final String[] rnames = {"ac1", "ac2", "ac3"};
 	private static final String[] unames = {"ac_record1", "ac_record2", "ac_record3"};
+	private static final ResourceLocation sources[] = new ResourceLocation[] {
+		new ResourceLocation("academy:records.omr"),
+		new ResourceLocation("academy:records.sn"),
+		new ResourceLocation("academy:records.lv5")
+	};
 	
 	private int recId;
 	
@@ -89,15 +94,9 @@ public class ACRecord extends ItemRecord {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon("academy:ac_record" + recId);
+		this.itemIcon = par1IconRegister.registerIcon("academy:record" + recId);
 	}
-	
-	private static final ResourceLocation sources[] = new ResourceLocation[] {
-		new ResourceLocation("academy:records.omr"),
-		new ResourceLocation("academy:records.sn"),
-		new ResourceLocation("academy:records.lv5")
-	};
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getRecordResource(String par1) {

@@ -5,49 +5,56 @@ item.ac_logo.name=
 item.ac_record1.name=Railgun Record #1
 item.ac_record2.name=Railgun Record #2
 item.ac_record3.name=Railgun Record #3
+
+item.ac_alingot.name=Aluminum Ingot
+item.ac_cuingot.name=Copper Ingot
+item.ac_steelingot.name=Steel Ingot
+item.ac_tiningot.name=Tin Ingot
+item.ac_siliconrod.name=Silicon Rod
+item.ac_niingot.name=Nickel Ingot
+item.ac_crystal.name=Crystal Rock
+item.ac_shadowingot.name=Shadow Metal Ingot
+item.ac_mgingot.name=Magnesium Ingot
+
+item.ac_smallsi.name=Small Piece of Silicon
+item.ac_coppercoil.name=Copper Coil
+item.ac_mgplate.name=Magnesium Plate
+item.ac_aplate1.name=Magnalium Plate
+item.ac_alplate.name=Aluminum Plate
+item.ac_cplank.name=Composite Wood Planks
+
 item.ac_coin.name=Game Coin
 item.ac_needle.name=Needle
-item.ac_energycrystal.name=Energy Crystal
+item.ac_exp_nail.name=Expansion Nail
+item.ac_silbarn.name=Silicon Barn
+item.ac_maghook.name=Magnetic Hook
+
 item.ad_card.name=Ability Developer Electricity Card
-item.al_ingot.name=Aluminum Ingot
-item.cu_ingot.name=Copper Ingot
-item.steelingot.name=Steel Ingot
-item.tiningot.name=Tin Ingot
-item.ac_siliconrod.name=Silicon Rod
-item.ac_coppercoil.name=Copper Coil
-item.ni_ingot.name=Nickel Ingot
-item.mg_plate.name=Magnesium Plate
-item.almg_plate.name=Magnalium Plate
-item.al_plate.name=Aluminum Plate
-item.mg_ingot.name=Magnesium Ingot
 item.ac_pcbn.name=PCB
 item.ac_bodydet.name=Body State Detector
 item.ac_io.name=I/O Port
 item.ac_brainbeta.name=Brainwave Resonator β
-item.ac_crystal.name=Crystal Rock
-item.shadow_ingot.name=Shadow Metal Ingot
-item.ac_cplank.name=Composite Wood Planks
-item.ac_exp_nail.name=Expansion Nail
-item.ac_smallsi.name=Small Piece of Silicon
+
+item.ac_energycrystal.name=Energy Crystal
 item.ac_freqreg.name=Frequency Regulator
-item.ac_silbarn.name=Silicon Barn
-item.maghook.name=Magnetic Hook
 
 #Blocks
-tile.ac_developer.name=Ability Developer
 tile.null.name=
-tile.windgen.name=Wind Generator
-tile.cu_ore.name=Copper Ore
-tile.tin_ore.name=Tin Ore
-tile.al_ore.name=Aluminum Ore
-tile.crystal_ore.name=Crystal Ore
-tile.ni_ore.name=Nickel Ore
-tile.mg_ore.name=Magnesium Ore
-tile.ac_solar.name=Solar Generator
-tile.shadow_ore.name=Shadow Metal Ore
+tile.ac_developer.name=Ability Developer
 tile.ac_magindc.name=Magnetic Inducer
+
+tile.ac_windgen.name=Wind Generator
+tile.ac_solar.name=Solar Generator
 tile.ac_node.name=Wireless Power Node
 tile.ac_grid.name=Wireless Power Grid
+
+tile.ac_cuore.name=Copper Ore
+tile.ac_tinore.name=Tin Ore
+tile.ac_alore.name=Aluminum Ore
+tile.ac_crystalore.name=Crystal Ore
+tile.ac_niore.name=Nickel Ore
+tile.ac_mgore.name=Magnesium Ore
+tile.ac_shadowore.name=Shadow Metal Ore
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
@@ -138,6 +145,8 @@ setting.outofbounds=Input out of bounds.
 page.adskill=Skill Acquiring
 page.adlevel=Level Upgrading
 page.adlearning=Ability Learning
+page.adconfirm=Action Confirm
+
 ac.notlearned=Not Learned
 ac.machinestat=Status
 ac.curenergy=Current Energy
@@ -145,7 +154,6 @@ ac.syncrate=Synchronization Rate
 ac.learnability=Learn Ability
 ac.btnconfirm=Confirm
 ac.btncancel=Cancel
-page.adconfirm=Action Confirm
 ac.confirm.head=You are about to perform the following action
 ac.confirm.tail=Continue?
 ac.upgradeto=Elevate player level to 
@@ -162,18 +170,21 @@ ac.upgradeskill=Upgrade Skill
 ac.upgradelv=Upgrade Level
 ac.accept=Accept
 ac.restore=Restore
-adev.holoview=Holographic View
-adev.userinfo=User Info
 ac.presset=Preset Settings
 ac.preset=Preset #
-prs.chooseskl=Select Skill
 ac.devnew=Develop a new ability
+ac.presselect=Preset Selection
+
+adev.holoview=Holographic View
+adev.userinfo=User Info
+
+prs.chooseskl=Select Skill
+
 level_0=Level 1
 level_1=Level 2
 level_2=Level 3
 level_3=Level 4
 level_4=Level 5
-ac.presselect=Preset Selection
 #level_5=Level 6
 
 #WEN
