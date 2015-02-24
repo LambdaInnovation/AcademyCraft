@@ -15,6 +15,8 @@ package cn.academy.core.register;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
@@ -64,7 +66,7 @@ public class ACRecipes {
 				'a', Blocks.log);
 		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), "  a", "  a", "  a",
 				'a', Blocks.log);
-		GameRegistry.addRecipe(new ItemStack(ACItems.magHook, 8), "aba", "bcb", "dad",
+		GameRegistry.addRecipe(new ItemStack(ACItems.magHook, 2), "aba", "bcb", "dad",
 				'a', Items.iron_ingot, 'b', ACItems.compPlank, 'c', Items.gunpowder, 'd', Items.slime_ball);
 		GameRegistry.addRecipe(new ItemStack(ACItems.pcb), "aba", "cdc", "aba",
 				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);
@@ -77,6 +79,8 @@ public class ACRecipes {
 				'a', ACItems.siliconRod, 'b', ACItems.smallSi);
 		GameRegistry.addRecipe(new ItemStack(ACItems.freqReg), "abb", "ccd", "abb",
 				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
+		GameRegistry.addRecipe(new ItemStack(ACItems.needle, 6), " a ", " a ", " a ",
+				'a', Items.iron_ingot);
 	}
 	
 	public static void regSmelting() {
@@ -90,6 +94,20 @@ public class ACRecipes {
 //		GameRegistry.addSmelting(ACBlocks.oreTin, new ItemStack(ACItems.ingotTin), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreCrystal, new ItemStack(ACItems.crystal), 1.2f);
 		GameRegistry.addSmelting(ACBlocks.oreShadow, new ItemStack(ACItems.ingotShadow), 1.2f);
+	}
+	
+	public static void regChestGen() {
+		WeightedRandomChestContent gens[] = {
+				new WeightedRandomChestContent(new ItemStack(ACItems.record0), 1, 1, 5),
+				new WeightedRandomChestContent(new ItemStack(ACItems.record1), 1, 1, 5),
+				new WeightedRandomChestContent(new ItemStack(ACItems.record2), 1, 1, 5),
+		};
+		for(WeightedRandomChestContent gen : gens) {
+			ChestGenHooks.addItem("dungeonChest", gen);
+			ChestGenHooks.addItem("villageBlacksmith", gen);
+			ChestGenHooks.addItem("pyramidDesertyChest", gen);
+			ChestGenHooks.addItem("pyramidJungleChest", gen);
+		}
 	}
 	
 }

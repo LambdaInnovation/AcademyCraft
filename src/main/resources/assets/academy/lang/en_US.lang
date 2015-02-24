@@ -119,7 +119,7 @@ tp_threatening.desc=Sometimes just a small fragment is able to kill an enemy.
 tp_string.desc=String Theory is the essential of teleportation, which allows you to acquire accurate perception of the space.
 tp_penetrate.desc=Teleport through a wall. You can only know roughly where you can land correctly, so there's a risk of suffocating yourself.
 tp_mark.desc=Confirm the destination point with your eyes, and teleport directly.
-tp_visc.desc=Touch a living thing and drag its viscus out. It's so violent that could cause serious mental sequela.
+tp_visc.desc=Touch a living thing and drag its viscus out. It's so violent that could cause serious nausea.
 tp_loc.desc=Remember the place that you've been to and teleport to there whenever you want. The entities around you will also be teleported.
 tp_hst.desc=A new way of long-distance teleporting, the high-speed teleportation and inertia alternation can make you maneuver in the air.
 

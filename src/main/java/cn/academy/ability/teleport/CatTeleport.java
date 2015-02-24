@@ -70,10 +70,10 @@ public class CatTeleport extends Category {
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(skillThreateningTele = new SkillThreateningTele(), 0);
 		//this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
-//		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
+		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
 		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 1);
 		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 2);
-		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);
+//		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);
 		//this.addSkill(skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
 		//this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
 		//this.addSkill(skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
