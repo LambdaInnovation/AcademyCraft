@@ -104,6 +104,7 @@ public class AcademyCraft {
         
         ACRecipes.regRecipe();
         ACRecipes.regSmelting();
+        ACRecipes.regChestGen();
 	}
 
 	@EventHandler
