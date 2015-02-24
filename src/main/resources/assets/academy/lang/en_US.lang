@@ -1,4 +1,4 @@
-#English Language File Debug Ver.
+#AcademyCraft English Language File Debug Ver.
 #Items
 item.null.name=
 item.ac_logo.name=
@@ -12,7 +12,7 @@ item.ac_steelingot.name=Steel Ingot
 item.ac_tiningot.name=Tin Ingot
 item.ac_siliconrod.name=Silicon Rod
 item.ac_niingot.name=Nickel Ingot
-item.ac_crystal.name=Crystal Rock
+item.ac_crystal.name=Crystallized Rock
 item.ac_shadowingot.name=Shadow Metal Ingot
 item.ac_mgingot.name=Magnesium Ingot
 
@@ -25,11 +25,9 @@ item.ac_cplank.name=Composite Wood Planks
 
 item.ac_coin.name=Game Coin
 item.ac_needle.name=Needle
-item.ac_exp_nail.name=Expansion Nail
 item.ac_silbarn.name=Silicon Barn
 item.ac_maghook.name=Magnetic Hook
 
-item.ad_card.name=Ability Developer Electricity Card
 item.ac_pcbn.name=PCB
 item.ac_bodydet.name=Body State Detector
 item.ac_io.name=I/O Port
@@ -46,7 +44,7 @@ tile.ac_magindc.name=Magnetic Inducer
 tile.ac_windgen.name=Wind Generator
 tile.ac_solar.name=Solar Generator
 tile.ac_node.name=Wireless Power Node
-tile.ac_grid.name=Wireless Power Grid
+tile.ac_grid.name=Wireless Power Matrix
 
 tile.ac_cuore.name=Copper Ore
 tile.ac_tinore.name=Tin Ore
@@ -99,10 +97,10 @@ skl_md_mineacc=Expert Mining Ray - Accuracy
 
 md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 md_minebasic.desc=Generate a weak electron current to help you mine.
-md_scatter.desc=Generate multiple electron balls simultaneously. However, the accuracy of aiming will go down.
+md_scatter.desc=Generate multiple electron balls simultaneously. However, the aiming accuracy will go down.
 md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
 md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
-md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
+md_mineexpert.desc=With continious practice on mining basics, you can mine faster and harder without damaging the mine resource itself.
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
@@ -180,7 +178,7 @@ level_3=Level 4
 level_4=Level 5
 #level_5=Level 6
 
-#WEN
+#WEN (Wireless Energy Network)
 ac.notconnected=Not Connected
 ac.matinit=Initialization
 ac.opstat=WEN Status
@@ -198,6 +196,6 @@ ac.frselect=Channel Select
 ac.frcur=Current Channel
 ac.frclear=Create/Clear Connection
 ac.frestb=Establish Connection
-ac.frclearconfirm=Do you confirm to clear the connections of this machine?
+ac.frclearconfirm=Do you really wanna clear the connections of this machine?
 ac.ssidnn=The SSIDs you entered must not be empty!
 ac.selchannel=Select Channel
