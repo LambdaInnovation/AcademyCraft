@@ -22,6 +22,7 @@ import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.render.ACModelBiped;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
+import cn.liutils.util.RegUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,6 +43,7 @@ public class ClientEvents {
 	static {
 		try {
 			fldmain = RendererLivingEntity.class.getDeclaredField("mainModel");
+			fldmain = RegUtils.getObfField(RendererLivingEntity.class, "mainModel", "field_77045_g");
 			fldmain.setAccessible(true);
 		} catch(Exception e) {
 			e.printStackTrace();
