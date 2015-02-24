@@ -21,15 +21,11 @@ import cn.liutils.template.client.render.item.RenderModelItem;
  */
 @RegistrationClass
 public class ItemMagHook extends Item {
-	
-	@RegItem.Render
-	public static HookRender renderer;
 
 	public ItemMagHook() {
 		setCreativeTab(AcademyCraft.cct);
 		setUnlocalizedName("ac_maghook");
 		setTextureName("academy:maghook");
-		this.setFull3D();
 	}
 	
     @Override
@@ -41,25 +37,6 @@ public class ItemMagHook extends Item {
     			stack.damageItem(1, player);
     	}
         return stack;
-    }
-    
-    public static class HookRender extends RenderModelItem {
-
-		public HookRender() {
-			super(new ItemModelCustom(ACModels.MDL_MAGHOOK), ACClientProps.TEX_MDL_MAGHOOK);
-			this.setScale(0.15d);
-			this.setStdRotation(0, -90, 90);
-			this.setOffset(0, 0.0, -3);
-			this.setEquipOffset(1, 0, 0);
-		}
-		
-		@Override
-		protected void renderAtStdPosition(float i) {
-			this.setOffset(0, 0, 1);
-			this.setEquipOffset(0.5, 0.1, 0);
-			super.renderAtStdPosition(i);
-		}
-    	
     }
 
 }

@@ -63,7 +63,7 @@ itemGroup.AcademyCraft=异能时代
 skl_null=无
 
 #电气使
-cat_elecmaster=电气使
+cat_elecmaster=电击使
 
 skl_em_arc=电弧激发
 skl_em_itemcharge=电流回冲
