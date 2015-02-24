@@ -42,7 +42,6 @@ public class ClientEvents {
 	private static Field fldmain;
 	static {
 		try {
-			fldmain = RendererLivingEntity.class.getDeclaredField("mainModel");
 			fldmain = RegUtils.getObfField(RendererLivingEntity.class, "mainModel", "field_77045_g");
 			fldmain.setAccessible(true);
 		} catch(Exception e) {
