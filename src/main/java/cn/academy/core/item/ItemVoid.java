@@ -54,6 +54,7 @@ public class ItemVoid extends Item {
 	}
 	
     @Override
+    @SideOnly(Side.CLIENT)
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
     	if(!(entity instanceof EntityPlayer))
     		return;
