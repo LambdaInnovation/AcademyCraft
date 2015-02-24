@@ -1,4 +1,4 @@
-#中文语言文件 调试版本
+#AcademyCraft 中文语言文件 调试版本
 #物品
 item.null.name=
 item.ac_logo.name=
@@ -159,7 +159,7 @@ ac.attempts=尝试
 ac.fails=失败
 ac.aborted=撤销
 ac.successful=成功
-ac.expconsumption=期望消耗
+ac.expconsumption=预计消耗
 ac.fullylearned=完全习得
 ac.upgradeskill=能力提升
 ac.upgradelv=等级提升
