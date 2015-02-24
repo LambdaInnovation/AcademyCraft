@@ -51,28 +51,28 @@ public class ACWorldGen implements IWorldGenerator {
 			(new WorldGenMinable(ACBlocks.oreTxn, 3)).generate(world, random, 
 					xc, yc, zc);
 		}*/
-		for (int k = 0; k < 40; ++k) {
+		for (int k = 0; k < 25; ++k) {
 			int xc = x + random.nextInt(16);
 			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
 			(new WorldGenMinable(ACBlocks.oreCopper, 7)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 40; ++k) {
+		for (int k = 0; k < 25; ++k) {
 			int xc = x + random.nextInt(16);
 			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
 			(new WorldGenMinable(ACBlocks.oreAl, 5)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 30; ++k) {
+		for (int k = 0; k < 20; ++k) {
 			int xc = x + random.nextInt(16);
 			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
 			(new WorldGenMinable(ACBlocks.oreMg, 3)).generate(world, random, 
 					xc, yc, zc);
 		}
-		for (int k = 0; k < 35; ++k) {
+		for (int k = 0; k < 18; ++k) {
 			int xc = x + random.nextInt(16);
 			int yc = random.nextInt(50);
 			int zc = z + random.nextInt(16);
