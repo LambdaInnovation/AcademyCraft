@@ -16,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
@@ -282,6 +283,11 @@ public class GuiNode extends LIGuiContainer {
 	
 	private boolean isConnected() {
 		return curChannel != null;
+	}
+	
+	@Override
+	protected boolean containerAcceptsKey(int key) {
+		return key != Keyboard.KEY_E; //Interrupts the key event
 	}
 	
 	private static void drawText(String str, double x, double y, double size) {

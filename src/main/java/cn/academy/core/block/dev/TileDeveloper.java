@@ -113,8 +113,13 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	public boolean use(EntityPlayer player) {
 		if(user != null) return false;
 		user = player;
-		if(!worldObj.isRemote)
+		if(!worldObj.isRemote) {
+			if(es == null) {
+				System.err.println("null developer sitEntity instance, isHead: " + isHead());
+				return false;
+			}
 			es.mount(user);
+		}
 		guiHandler.openGuiContainer(player, worldObj, xCoord, yCoord, zCoord);
 		return true;
 	}

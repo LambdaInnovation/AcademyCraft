@@ -123,15 +123,15 @@ public class SkillBuff extends SkillBase {
 						(data.getSkillID(CatElectro.buff) + data.getLevelID() * 2);
 				int level = (int) prob;
 				
-				Collections.shuffle(buffs);
-				for(int i = 0; i < prob; ++i) {
-					double tmp = Math.min(1.0, prob - i);
-					if(rand.nextDouble() < tmp) {
-						player.addPotionEffect(new PotionEffect(buffs.get(i), life, level));
+				if(!isRemote()) {
+					Collections.shuffle(buffs);
+					for(int i = 0; i < prob; ++i) {
+						double tmp = Math.min(1.0, prob - i);
+						if(rand.nextDouble() < tmp) {
+							player.addPotionEffect(new PotionEffect(buffs.get(i), life, level));
+						}
 					}
-				}
-				
-				if(isRemote()) {
+				} else {
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 18, 8));
 				}
 			}

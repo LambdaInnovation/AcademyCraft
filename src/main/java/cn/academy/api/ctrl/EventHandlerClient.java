@@ -89,34 +89,6 @@ public class EventHandlerClient implements IKeyHandler {
 		public void onKeyTick(int keyCode, boolean tickEnd) {}
 		
 	}
-	
-	/**
-	 * The network message handler. Use this class to avoid extra instances of EventHandlerClient.
-	 * @author acaly
-	 *
-	 */
-	@RegMessageHandler(msg = ControlMessage.class, side = RegMessageHandler.Side.CLIENT)
-	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
-		
-		@Override
-		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
-			//Client side only receives RAW_CANCEL.
-			switch (msg.eventType) {
-			case RAW_CANCEL:
-				INSTANCE.onEvent(msg.skillId, msg.eventType);
-				break;
-			case INIT_QUERY_WORLD_ID:
-				//Get the worldId.
-				//There's a hack that we store the id in time.
-				INSTANCE.loadPresetManager(msg.time);
-				break;
-			default:
-				AcademyCraft.log.error("An unexpected packet is received from server.");
-			}
-			return null;
-		}
-		
-	}
 
 	/**
 	 * Class used to handle per skill state.
@@ -350,7 +322,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * Get the world id from server. Use this id to initialize PresetManager.
 	 * @param id
 	 */
-	private void loadPresetManager(int id) {
+	void loadPresetManager(int id) {
 		INSTANCE.presets = new PresetManager(id);
 	}
 	
@@ -385,7 +357,7 @@ public class EventHandlerClient implements IKeyHandler {
 		SkillStateManager.tickClient();
 	}
 	
-	private void onEvent(int skillId, SkillEventType type) {
+	void onEvent(int skillId, SkillEventType type) {
 		//If it's the empty skill, do nothing.
 		if (skillId == 0) return;
 		skillEvent(skillId, type);

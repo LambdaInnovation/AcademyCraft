@@ -114,12 +114,12 @@ public class SkillMineDetect extends SkillBase {
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@RegEntity(clientOnly = true)
 	@RegEntity.HasRender
 	public static final class HandlerEntity extends EntityX {
 		
 		@RegEntity.Render
+		@SideOnly(Side.CLIENT)
 		public static HandlerRender renderer;
 		
 		//Current elements to display.
@@ -148,8 +148,6 @@ public class SkillMineDetect extends SkillBase {
 			safeDistSq = tmp * tmp;
 			
 			isAdvanced = advanced;
-			
-			target.addPotionEffect(new PotionEffect(Potion.blindness.id, time));
 			
 			setPosition(target.posX, target.posY, target.posZ);
 			addDaemonHandler(new FollowEntity(this, target));
@@ -278,6 +276,8 @@ public class SkillMineDetect extends SkillBase {
 			if(player.worldObj.isRemote) {
 				player.worldObj.spawnEntityInWorld(
 					new HandlerEntity(player, 100, getDetectRange(slv, lv), lv >= 3 && slv >= 5));
+			} else {
+				player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100));
 			}
 			this.finishSkill();
 		}

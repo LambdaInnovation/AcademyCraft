@@ -203,7 +203,6 @@ public class ACItems {
 	public static ItemSilbarn sibarn;
 	
 	@RegItem
-	@RegItem.HasRender
 	public static ItemMagHook magHook;
 	
 }

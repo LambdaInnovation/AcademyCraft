@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,7 @@ import cn.academy.energy.client.gui.GuiFreqRegulator;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.liutils.template.block.BlockDirectionalMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -46,6 +48,20 @@ public class ItemFreqRegulator extends Item {
     @Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, 
     		int x, int y, int z, int side, float tx, float ty, float tz) {
+    	//TODO: High coupling code, consider better approach
+    	Block block = world.getBlock(x, y, z);
+    	//If this is a BlockDirectionalMulti, fall back to its origin block
+    	if(block instanceof BlockDirectionalMulti) {
+    		int[] coords = ((BlockDirectionalMulti)block).getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
+    		if(coords != null) {
+    			x = coords[0];
+    			y = coords[1];
+    			z = coords[2];
+    		} else {
+    			return false;
+    		}
+    	}
+    	
     	TileEntity te = world.getTileEntity(x, y, z);
     	if(!(te instanceof TileUserBase)) {
     		return false;
