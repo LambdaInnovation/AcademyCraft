@@ -12,7 +12,7 @@ item.ac_steelingot.name=Steel Ingot
 item.ac_tiningot.name=Tin Ingot
 item.ac_siliconrod.name=Silicon Rod
 item.ac_niingot.name=Nickel Ingot
-item.ac_crystal.name=Crystal Rock
+item.ac_crystal.name=Crystallized Rock
 item.ac_shadowingot.name=Shadow Metal Ingot
 item.ac_mgingot.name=Magnesium Ingot
 
@@ -25,11 +25,9 @@ item.ac_cplank.name=Composite Wood Planks
 
 item.ac_coin.name=Game Coin
 item.ac_needle.name=Needle
-item.ac_exp_nail.name=Expansion Nail
 item.ac_silbarn.name=Silicon Barn
 item.ac_maghook.name=Magnetic Hook
 
-item.ad_card.name=Ability Developer Electricity Card
 item.ac_pcbn.name=PCB
 item.ac_bodydet.name=Body State Detector
 item.ac_io.name=I/O Port
@@ -46,7 +44,7 @@ tile.ac_magindc.name=Magnetic Inducer
 tile.ac_windgen.name=Wind Generator
 tile.ac_solar.name=Solar Generator
 tile.ac_node.name=Wireless Power Node
-tile.ac_grid.name=Wireless Power Grid
+tile.ac_grid.name=Wireless Power Matrix
 
 tile.ac_cuore.name=Copper Ore
 tile.ac_tinore.name=Tin Ore

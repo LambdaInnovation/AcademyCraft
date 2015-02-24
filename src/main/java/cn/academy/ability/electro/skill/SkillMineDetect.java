@@ -140,7 +140,7 @@ public class SkillMineDetect extends SkillBase {
 			
 			isAdvanced = advanced;
 			
-			target.addPotionEffect(new PotionEffect(Potion.blindness.id, 10000));
+			target.addPotionEffect(new PotionEffect(Potion.blindness.id, time));
 			
 			setPosition(target.posX, target.posY, target.posZ);
 			addDaemonHandler(new FollowEntity(this, target));
