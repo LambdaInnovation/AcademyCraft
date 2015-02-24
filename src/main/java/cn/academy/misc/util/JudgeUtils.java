@@ -80,11 +80,9 @@ public class JudgeUtils {
 	
 	private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();
 	static {
-		metalEntities.addAll((Collection<? extends Class<? extends Entity>>) Arrays.asList(new Class[] {
-			EntityMinecart.class,
-			EntityMagHook.class,
-			EntityIronGolem.class
-		}));
+		metalEntities.add(EntityMinecart.class);
+		metalEntities.add(EntityMagHook.class);
+		metalEntities.add(EntityIronGolem.class);
 	}
 	
 	public static boolean isMetalBlock(Block block) {
@@ -92,7 +90,11 @@ public class JudgeUtils {
 	}
 	
 	public static boolean isEntityMetallic(Entity ent) {
-		return metalEntities.contains(ent.getClass());
+		for(Class<? extends Entity> cl : metalEntities) {
+			if(cl.isInstance(ent))
+				return true;
+		}
+		return false;
 	}
 
 }

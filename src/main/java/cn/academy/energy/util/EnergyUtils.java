@@ -79,6 +79,8 @@ public class EnergyUtils {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
 			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? ((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
+			if(manager == null)
+				return 0;
 			return manager.charge(stack, amt, 3, true, simulate);
 		}
 		return 0;
