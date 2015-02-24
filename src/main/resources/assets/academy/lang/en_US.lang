@@ -97,10 +97,10 @@ skl_md_mineacc=Expert Mining Ray - Accuracy
 
 md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 md_minebasic.desc=Generate a weak electron current to help you mine.
-md_scatter.desc=Generate multiple electron balls simultaneously. However, the accuracy of aiming will go down.
+md_scatter.desc=Generate multiple electron balls simultaneously. However, the aiming accuracy will go down.
 md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
 md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
-md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
+md_mineexpert.desc=With continious practice on mining basics, you can mine faster and harder without damaging the mine resource itself.
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
@@ -131,13 +131,6 @@ skl_gn_spirit=Spirit Training Course
 gn_btc.desc=You have to train your mind to adapt to higher and higher computation requirement.
 gn_btc2.desc=Advanced mind training makes you enable to withstand massive computation.
 gn_spirit.desc=Learn to calm down and relax your mind. Leads to higher CP recover rate.
-
-#Commands
-aimctrl.presetinf=Preset %s : %s
-aimctrl.curpreset=Current Preset ID: %s
-aimctrl.classinit=Player Ability class uninitialized.
-setting.successful=Setting successful.
-setting.outofbounds=Input out of bounds.
 
 #GUI
 page.adskill=Skill Acquiring
@@ -185,7 +178,7 @@ level_3=Level 4
 level_4=Level 5
 #level_5=Level 6
 
-#WEN
+#WEN (Wireless Energy Network)
 ac.notconnected=Not Connected
 ac.matinit=Initialization
 ac.opstat=WEN Status
@@ -203,6 +196,6 @@ ac.frselect=Channel Select
 ac.frcur=Current Channel
 ac.frclear=Create/Clear Connection
 ac.frestb=Establish Connection
-ac.frclearconfirm=Do you confirm to clear the connections of this machine?
+ac.frclearconfirm=Do you really wanna clear the connections of this machine?
 ac.ssidnn=The SSIDs you entered must not be empty!
 ac.selchannel=Select Channel

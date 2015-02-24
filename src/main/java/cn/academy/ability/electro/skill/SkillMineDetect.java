@@ -170,8 +170,9 @@ public class SkillMineDetect extends SkillBase {
 					updateBlocks();
 				}
 				
-				if(ticksExisted > lifeTime)
+				if(ticksExisted > lifeTime) {
 					setDead();
+				}
 			}
 			
 			private void updateBlocks() {
