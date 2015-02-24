@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Bioelectricity Itensify skill
  * @author WeathFolD
  */
-//@RegistrationClass
+@RegistrationClass
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillBuff extends SkillBase {
 	

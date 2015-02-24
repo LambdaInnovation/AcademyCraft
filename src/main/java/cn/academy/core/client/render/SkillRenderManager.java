@@ -103,7 +103,8 @@ public class SkillRenderManager {
 				iter.remove();
 				continue;
 			}
-			if(node.dead || node.render.tickUpdate(player, dt)) {
+			if(node.dead || 
+			node.render.tickUpdate(player, dt)) {
 				iter.remove();
 			}
 		}
@@ -124,7 +125,7 @@ public class SkillRenderManager {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
 	
-	private static final ResourceLocation WIDGITS      = new ResourceLocation("textures/gui/widgets.png");
+	private static final ResourceLocation WIDGITS = new ResourceLocation("textures/gui/widgets.png");
 	
 	public static void renderThirdPerson(EntityLivingBase ent, ItemStack stack, ItemRenderType type) {
 		if(type == ItemRenderType.EQUIPPED_FIRST_PERSON || !(ent instanceof EntityPlayer)) return;

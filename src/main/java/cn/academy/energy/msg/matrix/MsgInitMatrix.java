@@ -99,22 +99,22 @@ public class MsgInitMatrix implements IMessage {
 			buf.writeBoolean(successful);
 		}
 		
-		@RegMessageHandler(msg = Reply.class, side = Side.CLIENT)
-		public static class Handler implements IMessageHandler<Reply, IMessage> {
+	}
+	
+	@RegMessageHandler(msg = Reply.class, side = Side.CLIENT)
+	public static class ReplyHandler implements IMessageHandler<Reply, IMessage> {
 
-			@Override
-			@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
-			public IMessage onMessage(Reply msg, MessageContext ctx) {
-				GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-				if(gui instanceof GuiMatrix) {
-					GuiMatrix mat = (GuiMatrix) gui;
-					mat.executeEvent(new GuiMatrix.InitReply(msg.successful));
-				} else {
-					//Possibly closed by player, ignore
-				}
-				return null;
+		@Override
+		@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+		public IMessage onMessage(Reply msg, MessageContext ctx) {
+			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+			if(gui instanceof GuiMatrix) {
+				GuiMatrix mat = (GuiMatrix) gui;
+				mat.executeEvent(new GuiMatrix.InitReply(msg.successful));
+			} else {
+				//Possibly closed by player, ignore
 			}
-			
+			return null;
 		}
 		
 	}
