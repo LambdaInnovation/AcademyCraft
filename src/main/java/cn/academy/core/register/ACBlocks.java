@@ -36,38 +36,38 @@ public class ACBlocks {
 	public static BlockMagInducer magInducer;
 	
 	@RegBlock
-	@RegBlock.BTName("cuore")
+	@RegBlock.BTName("cu_ore")
 	@RegBlock.OreDict("oreCopper")
 	public static ACOre oreCopper = new ACOre(1, 3.05f);
 	
 	//TODO: This block isn't in used in AC beta.
 /*	@RegBlock
-	@RegBlock.BTName("tinore")
+	@RegBlock.BTName("tin_ore")
 	@RegBlock.OreDict("oreTin")
 	public static ACOre oreTin = new ACOre(1, 2.95f);*/
 	
 	@RegBlock
-	@RegBlock.BTName("alore")
+	@RegBlock.BTName("al_ore")
 	@RegBlock.OreDict("oreAluminium")
 	public static ACOre oreAl = new ACOre(1, 2.9f);
 	
 	@RegBlock
-	@RegBlock.BTName("mgore")
+	@RegBlock.BTName("mg_ore")
 	@RegBlock.OreDict("oreMagnesium")
 	public static ACOre oreMg = new ACOre(1, 2.95f);
 	
 	@RegBlock
-	@RegBlock.BTName("niore")
+	@RegBlock.BTName("ni_ore")
 	@RegBlock.OreDict("oreNickel")
 	public static ACOre oreNi = new ACOre(1, 3.2f);
 	
 	@RegBlock
-	@RegBlock.BTName("crystalore")
+	@RegBlock.BTName("crystal_ore")
 	@RegBlock.OreDict("oreCrystal")
 	public static ACOre oreCrystal = new ACOre(2, 3.5f);
 	
 	@RegBlock
-	@RegBlock.BTName("shadowore")
+	@RegBlock.BTName("shadow_ore")
 	@RegBlock.OreDict("oreShadow")
 	public static ACOre oreShadow = new ACOre(2, 3.5f).setLightLevel(0.9375f);
 	

@@ -72,12 +72,12 @@ public class ACItems {
 	public static ItemModuleAttached adEnergyCard;
 	
 	@RegItem
-	@RegItem.UTName("alingot")
+	@RegItem.UTName("al_ingot")
 	@RegItem.OreDict("ingotAl")
 	public static ACSimpleItem ingotAl;
 	
 	@RegItem
-	@RegItem.UTName("cuingot")
+	@RegItem.UTName("cu_ingot")
 	@RegItem.OreDict("ingotCu")
 	public static ACSimpleItem ingotCu;
 	
@@ -93,52 +93,52 @@ public class ACItems {
 	public static ACSimpleItem ingotTin;*/
 	
 	@RegItem
-	@RegItem.UTName("mgingot")
+	@RegItem.UTName("mg_ingot")
 	@RegItem.OreDict("ingotMg")
 	public static ACSimpleItem ingotMg;
 	
 	@RegItem
-	@RegItem.UTName("niingot")
+	@RegItem.UTName("ni_ingot")
 	@RegItem.OreDict("ingotNi")
 	public static ACSimpleItem ingotNi;
 	
 	@RegItem
-	@RegItem.UTName("crystal")
+	@RegItem.UTName("ac_crystal")
 	@RegItem.OreDict("crystal")
 	public static ACSimpleItem crystal;
 	
 	@RegItem
-	@RegItem.UTName("shadowingot")
+	@RegItem.UTName("shadow_ingot")
 	@RegItem.OreDict("ingotShadow")
 	public static ACSimpleItem ingotShadow;
 	
 	@RegItem
-	@RegItem.UTName("mgplate")
+	@RegItem.UTName("mg_plate")
 	public static ACSimpleItem mgPlate;
 	
 	@RegItem
-	@RegItem.UTName("alplate")
+	@RegItem.UTName("al_plate")
 	public static ACSimpleItem alPlate;
 	
 	@RegItem
-	@RegItem.UTName("aplate1")
-	public static ACSimpleItem aplate1;
+	@RegItem.UTName("almg_plate")
+	public static ACSimpleItem almgPlate;
 	
 	@RegItem
-	@RegItem.UTName("siliconrod")
+	@RegItem.UTName("ac_siliconrod")
 	public static ACSimpleItem siliconRod;
 	
 	@RegItem
-	@RegItem.UTName("smallsi")
+	@RegItem.UTName("ac_smallsi")
 	public static ACSimpleItem smallSi;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
 //	@RegItem
-//	@RegItem.UTName("irondust")
+//	@RegItem.UTName("iron_dust")
 //	public static ACSimpleItem ironDust;
 
 	@RegItem
-	@RegItem.UTName("coppercoil")
+	@RegItem.UTName("ac_coppercoil")
 	public static ACSimpleItem copperCoil;
 	
 	//TODO: If these items is unnecessary, delete them.
@@ -147,11 +147,11 @@ public class ACItems {
 //	public static ACSimpleItem coreBearing;
 	
 	@RegItem
-	@RegItem.UTName("bodydet")
+	@RegItem.UTName("ac_bodydet")
 	public static ACSimpleItem bodyDet;
 	
 	@RegItem
-	@RegItem.UTName("io")
+	@RegItem.UTName("ac_io")
 	public static ACSimpleItem ioPort;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
@@ -160,21 +160,21 @@ public class ACItems {
 //	public static ACSimpleItem brainAlpha;
 	
 	@RegItem
-	@RegItem.UTName("brainbeta")
+	@RegItem.UTName("ac_brainbeta")
 	public static ACSimpleItem brainBeta;
 	
 	@RegItem
-	@RegItem.UTName("pcbn")
+	@RegItem.UTName("ac_pcbn")
 	public static ACSimpleItem pcb;
 	
 	@RegItem
-	@RegItem.UTName("cplank")
+	@RegItem.UTName("ac_cplank")
 	public static ACSimpleItem compPlank;
 	
 	@RegItem()
 	@RegItem.HasRender
 	@RegEventHandler(Bus.FML)
-	@RegWithName("void")
+	@RegWithName("ac_void")
 	public static ItemVoid ivoid = new ItemVoid() {
 		//吐槽：这到底什么微妙的写法
 		@SideOnly(Side.CLIENT)
@@ -186,7 +186,7 @@ public class ACItems {
 	public static ItemFreqRegulator freqReg;
 	
 	@RegItem
-	@RegItem.UTName("silbarn")
+	@RegItem.UTName("ac_silbarn")
 	public static ItemSilbarn sibarn;
 	
 	@RegItem
