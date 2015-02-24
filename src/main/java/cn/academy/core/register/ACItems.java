@@ -68,8 +68,9 @@ public class ACItems {
 	@RegItem
 	public static ItemEnergyCrystal energyCrystal;
 	
-	@RegItem
-	public static ItemModuleAttached adEnergyCard;
+	//TODO: These items isn't in used in AC beta.
+/*	@RegItem
+	public static ItemModuleAttached adEnergyCard;*/
 	
 	@RegItem
 	@RegItem.UTName("alingot")
