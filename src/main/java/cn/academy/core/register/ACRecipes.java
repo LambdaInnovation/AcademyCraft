@@ -36,7 +36,7 @@ public class ACRecipes {
 				'a', ACItems.ingotMg);
 		GameRegistry.addRecipe(new ItemStack(ACItems.mgPlate, 3), "   ", "   ", "aaa",
 				'a', ACItems.ingotMg);	
-		GameRegistry.addShapelessRecipe(new ItemStack(ACItems.almgPlate, 2), 
+		GameRegistry.addShapelessRecipe(new ItemStack(ACItems.aplate1, 2), 
 				ACItems.alPlate, ACItems.mgPlate);
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.node), "aba", "cdc", "aba",
 				'a', Blocks.planks, 'b', Items.iron_ingot, 'c', ACItems.energyCrystal, 'd', ACItems.pcb);
@@ -45,7 +45,7 @@ public class ACRecipes {
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.magInducer), " a ", "aba", " a ",
 				'a', ACItems.copperCoil, 'b', ACItems.pcb);
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.grid), "aba", "cdc", "aba",
-				'a', Blocks.glass_pane, 'b', ACItems.pcb, 'c', ACItems.almgPlate, 'd', ACItems.energyCrystal);
+				'a', Blocks.glass_pane, 'b', ACItems.pcb, 'c', ACItems.aplate1, 'd', ACItems.energyCrystal);
 		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), "a  ", "a  ", "a  ",
 				'a', Blocks.log);
 		GameRegistry.addRecipe(new ItemStack(ACItems.compPlank), " a ", " a ", " a ",
@@ -58,13 +58,13 @@ public class ACRecipes {
 				'a', ACItems.ingotNi, 'b', ACItems.crystal, 'c', Items.redstone, 'd', Items.iron_ingot);
 		GameRegistry.addRecipe(new ItemStack(ACBlocks.developer), "aba", "cdc", "efe",
 				'a', ACItems.ioPort, 'b', ACItems.bodyDet, 'c', ACItems.brainBeta, 'd', ACItems.pcb,
-				'e', ACBlocks.node, 'f', ACItems.almgPlate);
+				'e', ACBlocks.node, 'f', ACItems.aplate1);
 		GameRegistry.addRecipe(new ItemStack(ACItems.siliconRod), "aaa", "a a", "aaa",
 				'a', ACItems.smallSi);
 		GameRegistry.addRecipe(new ItemStack(ACItems.sibarn), "aba", "bab", "aba",
 				'a', ACItems.siliconRod, 'b', ACItems.smallSi);
 		GameRegistry.addRecipe(new ItemStack(ACItems.freqReg), "abb", "ccd", "abb",
-				'a', ACItems.almgPlate, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
+				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
 	}
 	
 	public static void regSmelting() {
