@@ -47,7 +47,7 @@ public class CatTeleport extends Category {
 		INSTANCE = this;
 		// Minecraft.getMinecraft().thePlayer.e
 
-		// TODO : Edit data
+		// TODO: Edit data
 		// TODO: Buff skills not added in β. Waiting for implementation.
 		this.addLevel(new Level(this, 800.0f, 1800.0f, 0.5f, 1.0f, .9));
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .8));
@@ -58,7 +58,7 @@ public class CatTeleport extends Category {
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(skillThreateningTele = new SkillThreateningTele(), 0);
 		//this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
-		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
+//		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
 		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 1);
 		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 2);
 		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);

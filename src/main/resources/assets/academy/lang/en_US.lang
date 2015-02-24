@@ -134,13 +134,6 @@ gn_btc.desc=You have to train your mind to adapt to higher and higher computatio
 gn_btc2.desc=Advanced mind training makes you enable to withstand massive computation.
 gn_spirit.desc=Learn to calm down and relax your mind. Leads to higher CP recover rate.
 
-#Commands
-aimctrl.presetinf=Preset %s : %s
-aimctrl.curpreset=Current Preset ID: %s
-aimctrl.classinit=Player Ability class uninitialized.
-setting.successful=Setting successful.
-setting.outofbounds=Input out of bounds.
-
 #GUI
 page.adskill=Skill Acquiring
 page.adlevel=Level Upgrading
