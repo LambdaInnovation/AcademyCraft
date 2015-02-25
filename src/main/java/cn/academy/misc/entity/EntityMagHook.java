@@ -161,10 +161,10 @@ public class EntityMagHook extends EntityX {
     	this.doesSetStill = true;
     }
     
-    private void realSetStill() {
+    private void realSetStill() {	
     	motionX = motionY = motionZ = 0;
     	if(worldObj != null) {
-    		worldObj.playSoundAtEntity(this, "random.anvil_land", .3f, 1.3f);
+    		worldObj.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
     	}
     	this.setSize(1f, 1f);
     	this.clearDaemonHandlers();

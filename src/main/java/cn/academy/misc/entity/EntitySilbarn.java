@@ -124,6 +124,7 @@ public class EntitySilbarn extends EntityX {
 	
 	public void onHitted() {
 		hit = true;
+		this.playSound("academy:silbarn_heavy", .5f, 1f);
 		this.execAfter(10, new EntityCallback() {
 			@Override
 			public void execute(EntityX ent) {

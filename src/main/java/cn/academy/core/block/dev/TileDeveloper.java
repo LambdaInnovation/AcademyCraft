@@ -395,11 +395,11 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
     	}
     };
     
-    @RegEntity
     /**
      * Dummy inherition. Used for determination purpose.
      * @author WeathFolD
      */
+    @RegEntity
     public static class SitEntity extends EntitySittable {
     	public SitEntity(World wrld, float x, float y, float z, int bx,
     			int by, int bz) {
