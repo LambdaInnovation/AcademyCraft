@@ -472,10 +472,9 @@ public class AbilityData implements IExtendedEntityProperties {
 	private void syncSimple() {
 		if (!isInSetup) {
 			if (needToReset) {
-				AbilityDataMain.resetPlayer(player);
-				needToReset = false;
+			    syncAll();
 			} else {
-				AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
+			    dirtyTick += 1;
 			}
 		}
 	}
@@ -484,10 +483,23 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!isInSetup) {
 			AbilityDataMain.resetPlayer(player);
 			needToReset = false;
+			dirtyTick = 0;
 		} else {
 			needToReset = true;
 		}
 	}
+    
+	/**
+	 * In syncSimple, instead of sending a packet, we just make it dirty.
+	 * Sync packet is sent here. Called by AbilityDataMain.
+	 */
+    public void doSync() {
+        if (dirtyTick == 0) return;
+        if (++dirtyTick >= 20) { //at least one sync packet every 20 ticks
+            AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
+            dirtyTick = 0;
+        }
+    }
 	
 	/**
 	 * Set the AbilityData to the initial value of the given category.
@@ -509,4 +521,6 @@ public class AbilityData implements IExtendedEntityProperties {
 	private boolean needToReset = false;
 	
 	private int tickCount = 0;
+	
+	private int dirtyTick = 0;
 }

@@ -17,7 +17,9 @@ import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 
 @RegistrationClass
 @RegSubmoduleInit
@@ -66,4 +68,11 @@ public class AbilityDataMain {
 		AcademyCraft.netHandler.sendToAll(new MsgResetAbilityData(player));
 	}
 
+	public static void doDataSync() {
+	    for (Object obj : MinecraftServer.getServer()
+	            .getConfigurationManager().playerEntityList) {
+	        EntityPlayerMP player = (EntityPlayerMP) obj;
+	        getData(player).doSync();
+	    }
+	}
 }

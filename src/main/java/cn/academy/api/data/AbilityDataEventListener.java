@@ -60,7 +60,6 @@ public class AbilityDataEventListener {
 	    public void onLivingFallEvent(LivingFallEvent event) {
 
 	    }
-		
 	}
 
 	@RegEventHandler(RegEventHandler.Bus.FML)
@@ -92,6 +91,11 @@ public class AbilityDataEventListener {
 			EntityPlayer player = event.player;
 			AbilityDataMain.getData(player).onPlayerTick();
 		}
+
+        @SubscribeEvent
+        public void onServerTick(TickEvent.ServerTickEvent event) {
+            AbilityDataMain.doDataSync();
+        }
 	}
 
 }
