@@ -123,7 +123,6 @@ public class EntityThrowingCoin extends EntityX {
 		this.setCurMotion(new KeepPosition());
 		this.motionY += INITVEL;
 		axis = Vec3.createVectorHelper(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
-		this.getEntityData().setLong("startTime", GenericUtils.getSystemTime());
 		this.setSize(0.2F, 0.2F);
 	}
 	

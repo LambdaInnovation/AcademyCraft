@@ -12,6 +12,7 @@
  */
 package cn.academy.misc.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,7 +55,7 @@ public class EntitySilbarn extends EntityX {
 	
 	boolean hit;
 	
-	long createTime = GenericUtils.getSystemTime();
+	long createTime;
 	Vec3 axis = Vec3.createVectorHelper(rand.nextInt(), rand.nextInt(), rand.nextInt());
 	
 	{
@@ -92,9 +93,10 @@ public class EntitySilbarn extends EntityX {
 		this.onGround = false;
 	}
 	
-	
+	@SideOnly(Side.CLIENT)
 	public EntitySilbarn(World world) {
 		super(world);
+		this.createTime = Minecraft.getSystemTime();
 		addDaemonHandler(new CollisionCheck(this) {
 			@Override
 			protected void onCollided(MovingObjectPosition res) {
@@ -185,7 +187,7 @@ public class EntitySilbarn extends EntityX {
 			RenderUtils.loadTexture(tex);
 			double scale = .05;
 			GL11.glScaled(scale, scale, scale);
-			GL11.glRotated(0.03 * (GenericUtils.getSystemTime() - sibarn.createTime), 
+			GL11.glRotated(0.03 * (Minecraft.getSystemTime() - sibarn.createTime), 
 					sibarn.axis.xCoord, sibarn.axis.yCoord, sibarn.axis.zCoord);
 			GL11.glRotated(-var1.rotationYaw, 0, 1, 0);
 			GL11.glRotated(90, 1, 0, 0);
