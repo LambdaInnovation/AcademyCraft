@@ -16,8 +16,8 @@ import cn.academy.core.AcademyCraft;
 import net.minecraft.item.Item;
 
 /**
+ * Ability Developer Elec Card (Needs Maintenance)
  * @author WeAthFolD
- *
  */
 public class ItemModuleAttached extends Item {
 

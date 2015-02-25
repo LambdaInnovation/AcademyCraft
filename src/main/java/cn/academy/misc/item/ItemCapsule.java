@@ -19,24 +19,17 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 
 /**
+ * Dev Capsule
+ * TODO: Not added in β
  * @author KSkun
- * 狼狼记得重写吃药的动作，我们要每天萌萌哒
  */
+@Deprecated
 public class ItemCapsule extends Item {
 	
 	private static String[] uname = {"", "ability_capsule1", "ability_capsule2", "ability_capsule3"};
 	
 	int capsuleID;
 	
-	/**
-	 * 
-	 * @param subID
-	 * metadata
-	 * TODO START FROM 1!
-	 * 
-	 * @param capsuleID
-	 * metadata2
-	 */
 	public ItemCapsule(int subID) {
 		setCreativeTab(AcademyCraft.cct);
 		capsuleID = subID;

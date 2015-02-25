@@ -19,21 +19,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Dev Tablet
+ * TODO: Not added in β
  * @author KSkun
- * Tablet
  */
+@Deprecated
 public class ItemTablet extends Item {
 	
 	private static final String[] unames = {"", "ability_tablet1", "ability_tablet2", "ability_tablet3"};
 
 	int tabletID;
-	
-	/**
-	 * 
-	 * @param subID
-	 * 		metadata
-	 * 
-	 */
+
 	public ItemTablet(int subID) {
 		setCreativeTab(AcademyCraft.cct);
 		tabletID = subID;

@@ -29,8 +29,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Energy Matrix
  * @author WeathFolD
- *
  */
 @RegistrationClass
 public class BlockMat extends BlockDirectionalMulti {

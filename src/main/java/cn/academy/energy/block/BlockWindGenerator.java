@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 
 /**
- * 风能发电机Block类
+ * Wind Generator
  * TODO: Not added in β
  * @author WeAthFolD
  */

@@ -16,8 +16,8 @@ import cn.academy.core.AcademyCraft;
 import net.minecraft.item.Item;
 
 /**
+ * Needle (Teleporter Support)
  * @author KSkun
- * Needle
  */
 public class ItemNeedle extends Item {
 

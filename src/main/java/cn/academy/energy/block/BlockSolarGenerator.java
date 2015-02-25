@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 
 /**
- * 太阳能发电机Block类
+ * Solar Generator
  * @author WeAthFolD
  *
  */

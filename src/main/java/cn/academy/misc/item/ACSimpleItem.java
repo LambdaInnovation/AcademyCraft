@@ -16,7 +16,7 @@ import cn.academy.core.AcademyCraft;
 import net.minecraft.item.Item;
 
 /**
- * Simple Items
+ * An item with AcademyCraft CreativeTab
  * @author KSkun
  */
 public class ACSimpleItem extends Item {

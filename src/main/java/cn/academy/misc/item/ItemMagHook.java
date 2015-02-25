@@ -26,6 +26,7 @@ import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 
 /**
+ * Elec Move Support Hook
  * @author WeathFolD
  */
 @RegistrationClass
