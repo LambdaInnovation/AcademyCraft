@@ -20,6 +20,7 @@ import cn.academy.energy.block.BlockSolarGenerator;
 import cn.academy.misc.block.ACOre;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
+import cn.liutils.template.item.ItemBlockDirMulti;
 
 /**
  * AC Blocks Registration Class
@@ -28,7 +29,7 @@ import cn.annoreg.mc.RegBlock;
 @RegistrationClass
 public class ACBlocks {
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockDirMulti.class)
 	public static BlockDeveloper developer;
 	
 	//@RegBlock
