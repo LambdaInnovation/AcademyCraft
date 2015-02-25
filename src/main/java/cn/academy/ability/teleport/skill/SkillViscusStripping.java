@@ -49,7 +49,7 @@ public class SkillViscusStripping extends SkillBase {
 	}
 	
 	private static double getDist(int slv, int lv) {
-		return 8 + slv * .8 + lv * 3;
+		return 0.5 * (8 + slv * .8 + lv * 1);
 	}
 	
 	public static class ViscusState extends PatternHold.State {
@@ -78,14 +78,19 @@ public class SkillViscusStripping extends SkillBase {
 				mark.setDead();
 			
 			int slv = data.getSkillLevel(CatTeleport.skillViscusStripping), lv = data.getLevelID() + 1;
-			float csm = 400 + lv * 45 + slv * 50;
-			if(!data.decreaseCP(csm))
-				return;
+			float csm = 400 + lv * 45 + slv * 100;
 			
 			double dist = getDist(slv, lv);
 			MovingObjectPosition mop = performTrace();
 			if(mop != null && mop.typeOfHit == MovingObjectType.ENTITY) {
-				if(mop.entityHit instanceof EntityLivingBase) {
+				if(mop.entityHit instanceof EntityLivingBase) { 
+					//really hit an entity, try attack it.
+					if(!data.decreaseCP(csm, CatTeleport.skillViscusStripping)) {
+						if(isRemote()) {
+							player.playSound("academy:deny", 0.5f, 1.0f);
+						}
+						return;
+					}
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
 					mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg);
 					if(isRemote()) {
@@ -96,7 +101,11 @@ public class SkillViscusStripping extends SkillBase {
 							player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
+				} else if(isRemote()) { //failed, play sound
+					player.playSound("academy:deny", .5f, 1f);
 				}
+			} else if(isRemote()) { //failed, play sound
+				player.playSound("academy:deny", .5f, 1f);
 			}
 		}
 		

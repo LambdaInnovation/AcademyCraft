@@ -79,7 +79,6 @@ public class SkillRailgun extends SkillBase {
 						return false;
 					EntityThrowingCoin etc = (EntityThrowingCoin) ent;
 					if(!etc.isDead && etc.getProgress() > 0.7) {
-						//player.playSound("academy:elec.railgun", 0.5f, 1.0f);
 						if(!player.worldObj.isRemote) {
 							player.worldObj.playSoundAtEntity(player, "academy:elec.railgun", 0.5f, 1.0f);
 							player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));

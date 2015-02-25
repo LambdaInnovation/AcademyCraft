@@ -46,7 +46,7 @@ public class SkillPenetrateTele extends SkillBase {
 	}
 	
 	private static float getConsumePerBlock(int slv, int lv) {
-		return 30 + slv * 8 + lv * 20;
+		return 20 + slv * 8 + lv * 10;
 	}
 	
 	private static float getMaxDistance(int slv, int lv) {
@@ -67,21 +67,32 @@ public class SkillPenetrateTele extends SkillBase {
 		@Override
 		public void onStart() {
 			mark = new PeneMarking(player);
-			player.playSound("academy:tp.tp_pre", 0.5F, 1.0F);
+			double dist = mark.getDist();
+			if(dist < 3) {
+				mark  = null;
+				if(isRemote())
+					player.playSound("academy:deny", .5f, 1f);
+				finishSkill();
+				return;
+			}
+			if(isRemote())
+				player.playSound("academy:tp.tp_pre", 0.5F, 1.0F);
 			player.worldObj.spawnEntityInWorld(mark);
 		}
 
 		@Override
 		public void onFinish() {
+			if(mark == null)
+				return;
+			
 			double dist = mark.getDist();
 			//Here we ignore the slight variation and believe that we will always success
+			player.fallDistance = 0.0f;
+			
 			if(player instanceof EntityPlayerMP) {
 				((EntityPlayerMP)player).setPositionAndUpdate(mark.posX, mark.posY, mark.posZ);
-			} else {
-				player.setPosition(mark.posX, mark.posY, mark.posZ);
 			}
-			player.fallDistance = 0.0f;
-			player.playSound("academy:tp.tp", 1.0f, 1.0f);
+			player.worldObj.playSoundAtEntity(player, "academy:tp.tp", .5f, 1f);
 			
 			data.decreaseCP((float) 
 				(dist * getConsumePerBlock(
@@ -98,8 +109,10 @@ public class SkillPenetrateTele extends SkillBase {
 	private static class PeneMarking extends EntityTPMarking {
 		public PeneMarking(EntityPlayer player) {
 			super(player);
+			updatePos();
 		}
 		
+		@Override
 		protected void updatePos() {
 			Vec3 targ = getTargetPos(player, getMaxDistance());
 			setPosition(targ.xCoord, targ.yCoord, targ.zCoord);

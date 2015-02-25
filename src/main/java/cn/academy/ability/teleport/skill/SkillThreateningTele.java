@@ -70,12 +70,12 @@ public class SkillThreateningTele extends SkillBase {
 		@Override
 		public void onStart() {
 			ItemStack stack = player.getCurrentEquippedItem();
-			if(stack == null|| stack.getItem() == ACItems.ivoid || stack.getItem() instanceof ItemBlock) {
-				return;
-			}
-
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillLevel(data.getSkillID(instance)), lv = data.getLevelID() + 1;
+			if(stack == null|| stack.getItem() == ACItems.ivoid || (slv <= 3 && stack.getItem() instanceof ItemBlock)) {
+				return;
+			}
+			
 			double dist = 5 + slv * .5 + lv * 1;
 			float ccp = 350F - slv * 10F + lv * 125F;
 			if(!data.decreaseCP(ccp, instance)) {
