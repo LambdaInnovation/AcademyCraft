@@ -34,10 +34,12 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 传说中的超电磁炮~~！
- * TODO 施工中
+ * TODO add other item support, better QTE
  * @author WeathFolD
  */
 @RegistrationClass
@@ -76,7 +78,7 @@ public class SkillRailgun extends SkillBase {
 					if(!data.decreaseCP(consume, SkillRailgun.this))
 						return false;
 					EntityThrowingCoin etc = (EntityThrowingCoin) ent;
-					if(!etc.isDead && etc.getProgress() > 0.8) {
+					if(!etc.isDead && etc.getProgress() > 0.7) {
 						//player.playSound("academy:elec.railgun", 0.5f, 1.0f);
 						if(!player.worldObj.isRemote) {
 							player.worldObj.playSoundAtEntity(player, "academy:elec.railgun", 0.5f, 1.0f);
@@ -92,7 +94,8 @@ public class SkillRailgun extends SkillBase {
 	}
 	
 	@SubscribeEvent
-	public void onThrowCoin(ThrowCoinEvent event) {
+	@SideOnly(Side.CLIENT)
+	public void clientThrowCoin(ThrowCoinEvent event) {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
 		
 		if(data.getCategory() != CatElectro.INSTANCE || 
@@ -106,10 +109,23 @@ public class SkillRailgun extends SkillBase {
 		}
 		
 		etcData.put(event.entityPlayer, event.coin.getEntityId());
-		if(event.entityPlayer.worldObj.isRemote && data.isSkillLearned(CatElectro.railgun)) {
+		if(event.entityPlayer.worldObj.isRemote) {
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.SERVER)
+	public void serverThrowCoin(ThrowCoinEvent event) {
+		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
+		
+		if(data.getCategory() != CatElectro.INSTANCE || 
+			!data.isSkillLearned(CatElectro.railgun)) {
+				return;
+		}
+		
+		etcData.put(event.entityPlayer, event.coin.getEntityId());
 	}
 
 }
