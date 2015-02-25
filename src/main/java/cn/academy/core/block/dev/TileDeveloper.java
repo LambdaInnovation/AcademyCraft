@@ -234,6 +234,12 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 		isStimulating = true;
 		maxStimTimes = action.getExpectedStims(data);
 		stimSuccess = stimFailure = 0;
+		
+		if(user.capabilities.isCreativeMode) { //Player in creative mode. End the dev action immediately.
+			isStimulating = false;
+			this.stimSuccess = this.maxStimTimes;
+			action.onActionFinished(data);
+		}
 		sync(); //Force update if server
 	}
 	
