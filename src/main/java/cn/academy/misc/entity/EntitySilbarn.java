@@ -56,6 +56,7 @@ public class EntitySilbarn extends EntityX {
 	boolean hit;
 	
 	long createTime;
+	
 	Vec3 axis = Vec3.createVectorHelper(rand.nextInt(), rand.nextInt(), rand.nextInt());
 	
 	{
