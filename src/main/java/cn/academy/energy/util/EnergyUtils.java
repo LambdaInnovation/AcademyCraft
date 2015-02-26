@@ -70,7 +70,6 @@ public class EnergyUtils {
 	}
 	
 	/**
-	 * 
 	 * @param stack
 	 * @param amt
 	 * @return How much energy transfered into the stack
@@ -78,9 +77,10 @@ public class EnergyUtils {
 	public static int tryCharge(ItemStack stack, int amt, boolean simulate) {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
-			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? ((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
-			if(manager == null)
-				return 0;
+			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? 
+				((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
+			if(manager == null) //IC2 not installed, lazy initialization.
+				manager = new IC2DefaultEIManager();
 			return manager.charge(stack, amt, 3, true, simulate);
 		}
 		return 0;

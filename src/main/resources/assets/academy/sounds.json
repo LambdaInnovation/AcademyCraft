@@ -16,6 +16,12 @@
 "elec.move.3": {"category": "master", "sounds": [{"name": "elec/move/3", "stream": false}]},
 "elec.move.4": {"category": "master", "sounds": [{"name": "elec/move/4", "stream": false}]},
 
+"elec.charge.0": {"category": "master", "sounds": [{"name": "elec/charge/0", "stream": false}]},
+"elec.charge.1": {"category": "master", "sounds": [{"name": "elec/charge/1", "stream": false}]},
+"elec.charge.2": {"category": "master", "sounds": [{"name": "elec/charge/2", "stream": false}]},
+"elec.charge.3": {"category": "master", "sounds": [{"name": "elec/charge/3", "stream": false}]},
+"elec.charge.4": {"category": "master", "sounds": [{"name": "elec/charge/4", "stream": false}]},
+
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
 "silbarn_heavy": {"category": "master", "sounds": [{"name": "silbarn_heavy", "stream": false}]},

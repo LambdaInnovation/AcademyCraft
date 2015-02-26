@@ -55,6 +55,10 @@ public class SkillItemCharge extends SkillBase {
 		setMaxLevel(10);
 	}
 	
+	private static void playSound(EntityPlayer player, int n) {
+		player.worldObj.playSoundAtEntity(player, "academy:elec.charge." + n, .5f, 1f);
+	}
+	
 	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(1000) {
@@ -129,6 +133,12 @@ public class SkillItemCharge extends SkillBase {
 		
 		@Override
 		protected boolean onTick(int time) {
+			int judge = time - 1;
+			if(judge == 0) { //begin sound
+				playSound(player, 0);
+			} else if(judge % 40 == 0) { //continuing sound
+				playSound(player, ((judge - 40) / 40) % 4 + 1);
+			}
 			return cb.tick();
 		}
 
