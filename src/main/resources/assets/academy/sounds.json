@@ -21,5 +21,6 @@
 "silbarn_heavy": {"category": "master", "sounds": [{"name": "silbarn_heavy", "stream": false}]},
 
 "tp.tp": {"category": "master", "sounds": [{"name": "tp/tp", "stream": false}]},
-"tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]}
+"tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]},
+"tp.guts": {"category": "master", "sounds": [{"name": "tp/guts", "stream": false}]}
 }
