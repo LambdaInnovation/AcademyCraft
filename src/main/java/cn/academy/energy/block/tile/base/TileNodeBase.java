@@ -35,9 +35,10 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 	}
 	
 	@Override
-	protected void onUpdate() {
-		if(!worldObj.isRemote)
-			AcademyCraft.netHandler.sendToAllAround(new MsgEnergyHeartbeat(this), new TargetPoint(worldObj.provider.dimensionId, xCoord + .5, yCoord + .5, zCoord + .5, 10));
+	protected void onSync() {
+		if(!worldObj.isRemote) {
+			AcademyCraft.netHandler.sendToAllAround(new MsgEnergyHeartbeat(this), new TargetPoint(worldObj.provider.dimensionId, xCoord + .5, yCoord + .5, zCoord + .5, 6));
+		}
 	}
 	
 	public boolean activate(String channel) {

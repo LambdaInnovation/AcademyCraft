@@ -22,12 +22,11 @@ import cn.liutils.util.misc.Pair;
 
 /**
  * @author WeathFolD
- *
  */
 public abstract class TileWirelessBase extends TileEntity implements
 		IWirelessTile {
 	
-	private static final int UPDATE_RATE = 5;
+	private static final int SYNC_RATE = 20;
 	private int updateTicker;
 	
 	//Those are just for loading purpose.
@@ -43,16 +42,16 @@ public abstract class TileWirelessBase extends TileEntity implements
 			init();
 		}
 		
-		if(updateTicker >= UPDATE_RATE) {
+		if(updateTicker >= SYNC_RATE) {
 			updateTicker = 0;
-			onUpdate();
+			onSync();
 			this.markDirty();
 		}
 	}
 	
 	protected void init() {}
 	
-	protected void onUpdate() {}
+	protected void onSync() {}
 	
 	public abstract double getSearchRange(); 
 	
