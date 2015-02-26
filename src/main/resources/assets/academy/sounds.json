@@ -9,7 +9,12 @@
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
 "elec.mineview": {"category": "master", "sounds": [{"name": "elec/mineview", "stream": false}]},
 "elec.railgun": {"category": "master", "sounds": [{"name": "elec/railgun", "stream": false}]},
-"elec.move": {"category": "master", "sounds": [{"name": "elec/move", "stream": false}]},
+
+"elec.move.0": {"category": "master", "sounds": [{"name": "elec/move/0", "stream": false}]},
+"elec.move.1": {"category": "master", "sounds": [{"name": "elec/move/1", "stream": false}]},
+"elec.move.2": {"category": "master", "sounds": [{"name": "elec/move/2", "stream": false}]},
+"elec.move.3": {"category": "master", "sounds": [{"name": "elec/move/3", "stream": false}]},
+"elec.move.4": {"category": "master", "sounds": [{"name": "elec/move/4", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
