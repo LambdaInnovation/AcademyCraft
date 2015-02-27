@@ -20,6 +20,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.CollisionCheck;
@@ -45,6 +46,7 @@ public class EntityBomb extends EntityMdBall {
 			@Override
 			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
+				worldObj.playSoundAtEntity(EntityBomb.this, "academy:md.ballshoot", .5f, 1f);
 				//setState(BallState.ACTIVE);
 
 				MovingObjectPosition ret = GenericUtils.tracePlayer(spawner, 40.0);
@@ -72,6 +74,8 @@ public class EntityBomb extends EntityMdBall {
 			}
 			
 		});
+		
+		CatMeltDowner.playChargeSSnd(this, rand.nextInt(200));
 	}
 
 	public EntityBomb(World world) {

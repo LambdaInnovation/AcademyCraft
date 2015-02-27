@@ -22,6 +22,14 @@
 "elec.charge.3": {"category": "master", "sounds": [{"name": "elec/charge/3", "stream": false}]},
 "elec.charge.4": {"category": "master", "sounds": [{"name": "elec/charge/4", "stream": false}]},
 
+"md.charges.0": {"category": "master", "sounds": [{"name": "md/charges/0", "stream": false}]},
+"md.charges.1": {"category": "master", "sounds": [{"name": "md/charges/1", "stream": false}]},
+"md.charges.2": {"category": "master", "sounds": [{"name": "md/charges/2", "stream": false}]},
+"md.charges.3": {"category": "master", "sounds": [{"name": "md/charges/3", "stream": false}]},
+"md.charges.4": {"category": "master", "sounds": [{"name": "md/charges/4", "stream": false}]},
+
+"md.ballshoot": {"category": "master", "sounds": [{"name": "md/ballshoot", "stream": false}]},
+
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
 "silbarn_heavy": {"category": "master", "sounds": [{"name": "silbarn_heavy", "stream": false}]},

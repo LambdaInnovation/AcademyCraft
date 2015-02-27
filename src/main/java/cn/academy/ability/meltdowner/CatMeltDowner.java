@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.meltdowner;
 
+import net.minecraft.entity.Entity;
 import cn.academy.ability.meltdowner.skill.SkillBomb;
 import cn.academy.ability.meltdowner.skill.SkillLightShield;
 import cn.academy.ability.meltdowner.skill.SkillMeltDowner;
@@ -72,5 +73,10 @@ public class CatMeltDowner extends Category {
 	@Override
 	public String getInternalName() {
 		return "meltdowner";
+	}
+	
+	//Sandbox utils
+	public static void playChargeSSnd(Entity player, int n) {
+		player.worldObj.playSoundAtEntity(player, "academy:md.charges." + (n % 5), .5f, 1f);
 	}
 }
