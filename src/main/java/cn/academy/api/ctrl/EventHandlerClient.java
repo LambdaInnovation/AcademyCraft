@@ -19,15 +19,16 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.ControlStateEvent;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.LIGeneralRegistry;
 import cn.liutils.api.key.IKeyHandler;
@@ -39,9 +40,6 @@ import cn.liutils.util.GenericUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -335,7 +333,7 @@ public class EventHandlerClient implements IKeyHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(player == null) return;
 		this.skillEventAll(SkillEventType.RAW_CANCEL);
-		AcademyCraft.netHandler.sendToServer(new ClientCancelMessage());
+		AcademyCraft.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
 	}
 	
 	@SubscribeEvent
@@ -429,12 +427,14 @@ public class EventHandlerClient implements IKeyHandler {
 		
 		skillEnabled = !skillEnabled;
 		if (skillEnabled) {
-			AcademyCraft.log.info("Player skill is enabled.");
+			//AcademyCraft.log.info("Player skill is enabled.");
 		} else {
-			AcademyCraft.log.info("Player skill is disabled.");
+			//AcademyCraft.log.info("Player skill is disabled.");
 			INSTANCE.skillEventAll(SkillEventType.RAW_CANCEL);
 			AcademyCraft.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
 		}
+		//Notify
+		MinecraftForge.EVENT_BUS.post(new ControlStateEvent());
 	}
 
 	@Override

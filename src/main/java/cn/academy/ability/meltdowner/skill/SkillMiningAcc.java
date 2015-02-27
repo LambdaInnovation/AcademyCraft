@@ -66,7 +66,7 @@ public class SkillMiningAcc extends SkillMiningBase {
 
 		@Override
 		public ResourceLocation[] getTexData() {
-			return ACClientProps.ANIM_MD_RAY_S;
+			return ACClientProps.ANIM_MD_RAY_SA;
 		}
 
 		@Override
