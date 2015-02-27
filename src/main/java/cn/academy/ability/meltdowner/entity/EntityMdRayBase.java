@@ -82,7 +82,7 @@ public abstract class EntityMdRayBase extends EntityRay {
 		return Math.min(5f * ticksExisted, rayLength);
 	}
 	
-	protected abstract void handleCollision(MovingObjectPosition mop);
+	protected void handleCollision(MovingObjectPosition mop) {}
 	
 	public abstract ResourceLocation[] getTexData();
 	

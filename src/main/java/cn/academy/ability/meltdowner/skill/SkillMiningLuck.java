@@ -13,12 +13,11 @@
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.CatMeltDowner;
-import cn.academy.ability.meltdowner.entity.EntityMdBall;
-import cn.academy.ability.meltdowner.entity.EntityMiningRay;
+import cn.academy.ability.meltdowner.entity.EntityMiningRayBase;
+import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -29,36 +28,12 @@ import cn.annoreg.mc.RegEntity;
  */
 @RegistrationClass
 public class SkillMiningLuck extends SkillMiningBase {
-
-	public SkillMiningLuck() {
-		this.setLogo("meltdowner/mine_luck.png");
-		this.setName("md_mineluck");
-		setMaxLevel(10);
-	}
-
-	@Override
-	float getConsume(int slv, int lv) {
-		return 0.3f * (95 - slv * 2.5f);
-	}
-
-	@Override
-	int getHarvestLevel() {
-		return 3;
-	}
-
-	@Override
-	int getSpawnRate() {
-		return 24;
-	}
-	
-	protected EntityMiningRay createEntity(EntityPlayer player, EntityMdBall ball) {
-		return new LuckyRay(player, ball);
-	}
 	
 	@RegEntity
-	public static class LuckyRay extends EntityMiningRay {
-		public LuckyRay(EntityPlayer player, EntityMdBall ball) {
-			super(player, ball, CatMeltDowner.mineLuck.getHarvestLevel());
+	public static class LuckyRay extends EntityMiningRayBase {
+
+		public LuckyRay(AbilityData data) {
+			super(data, CatMeltDowner.mineLuck);
 		}
 		
 		public LuckyRay(World world) {
@@ -72,10 +47,42 @@ public class SkillMiningLuck extends SkillMiningBase {
 				super.onDiggedBlock(b, x, y, z, meta);
 			}
 		}
+
+		@Override
+		protected int getDigRate(int slv, int lv) {
+			return 14;
+		}
+
+		@Override
+		protected int getHarvestLevel() {
+			return 3;
+		}
+
 		@Override
 		public ResourceLocation[] getTexData() {
 			return ACClientProps.ANIM_MD_RAY_SF;
 		}
+
+		@Override
+		public float getRayWidth() {
+			return .35f;
+		}
+	}
+
+	public SkillMiningLuck() {
+		this.setLogo("meltdowner/mine_luck.png");
+		this.setName("md_mineluck");
+		setMaxLevel(10);
+	}
+
+	@Override
+	float getConsume(int slv, int lv) {
+		return 0.3f * (95 - slv * 2.5f);
+	}
+
+	@Override
+	protected EntityMiningRayBase createEntity(AbilityData data) {
+		return new LuckyRay(data);
 	}
 
 }

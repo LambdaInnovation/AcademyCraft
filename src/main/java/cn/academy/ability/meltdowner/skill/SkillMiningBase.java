@@ -14,7 +14,7 @@ package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;
-import cn.academy.ability.meltdowner.entity.EntityMiningRay;
+import cn.academy.ability.meltdowner.entity.EntityMiningRayBase;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
@@ -48,28 +48,26 @@ public abstract class SkillMiningBase extends SkillBase {
 	}
 	
 	abstract float getConsume(int slv, int lv); //per tick
-	abstract int getHarvestLevel();
-	abstract int getSpawnRate();
 	
-	protected EntityMiningRay createEntity(EntityPlayer player, EntityMdBall ball) {
-		return new EntityMiningRay(player, ball, getHarvestLevel());
-	}
+	protected abstract EntityMiningRayBase createEntity(AbilityData data);
 	
 	public static class MiningState extends State {
 		
+		int slv, lv;
 		float ccp;
 		int harvLevel, spawnRate;
 		SkillMiningBase instance;
 		AbilityData data;
+		EntityMiningRayBase ray;
 		
 		public MiningState(EntityPlayer player, SkillMiningBase _instance) {
 			super(player);
 			instance = _instance;
 			data = AbilityDataMain.getData(player);
-			int slv = data.getSkillLevel(instance), lv = data.getLevelID() + 1;
+			slv = data.getSkillLevel(instance);
+			lv = data.getLevelID() + 1;
 			ccp = instance.getConsume(slv, lv);
-			harvLevel = instance.getHarvestLevel();
-			spawnRate = instance.getSpawnRate();
+			ray = instance.createEntity(data);
 		}
 
 		public MiningState(EntityPlayer player) {
@@ -77,10 +75,18 @@ public abstract class SkillMiningBase extends SkillBase {
 		}
 
 		@Override
-		public void onStart() {}
+		public void onStart() {
+			if(!isRemote()) {
+				player.worldObj.spawnEntityInWorld(ray);
+			}
+		}
 
 		@Override
-		public void onFinish() {}
+		public void onFinish() {
+			if(!isRemote()) {
+				ray.setDead();
+			}
+		}
 
 		@Override
 		public void onHold() {}
@@ -89,20 +95,7 @@ public abstract class SkillMiningBase extends SkillBase {
 		public boolean onTick(int ticks) {
 			if(isRemote())
 				return false;
-			if(!data.decreaseCP(ccp, instance))
-				return true;
-			if(ticks % spawnRate == 0) {
-				EntityMdBall ball = new EntityMdBall(player);
-				ball.execAfter(14, new EntityCallback<EntityMdBall>() {
-					@Override
-					public void execute(EntityMdBall ball) {
-						ball.worldObj.spawnEntityInWorld(instance.createEntity(player, ball));
-						ball.setDead();
-					}
-				});
-				player.worldObj.spawnEntityInWorld(ball);
-			}
-			return false;
+			return !data.decreaseCP(ccp, instance);
 		}
 		
 	}

@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -44,7 +45,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	protected double 
 		tpOffsetX = -0.3,
 		tpOffsetY = -0.6,
-		tpOffsetZ = -0.2;
+		tpOffsetZ = 0.2;
 	
 	protected double alpha = 1.0;
 
@@ -58,12 +59,16 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	@Override
 	public final void doRender(Entity var1, double x, double y, double z,
 			float h, float a) {
+		
 		long time = Minecraft.getSystemTime();
 		T er = (T) var1;
 		if(!er.isLoaded()) {
 			return;
 		}
 		er.beforeRender();
+		x = er.posX - RenderManager.renderPosX;
+		y = er.posY - RenderManager.renderPosY;
+		z = er.posZ - RenderManager.renderPosZ;
 		
 		EntityPlayer clientPlayer = Minecraft.getMinecraft().thePlayer;
 		boolean firstPerson = 
@@ -73,7 +78,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		double len = er.getDisplayRayLen();
 		
 		//System.out.println(firstPerson);
-		if(firstPerson && er.doesFollowSpawner()) {
+		if(er.doesFollowSpawner()) {
 			//Pos injection, for better viewing effect
 			x = 0;
 			y = 0;
