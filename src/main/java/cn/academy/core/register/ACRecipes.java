@@ -87,7 +87,8 @@ public class ACRecipes {
 		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.smallSi), 0f);
 		//Ore Smelting
 		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
-		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
+		//TODO: Copper Ore is unavailable.
+//		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
 		GameRegistry.addSmelting(ACBlocks.oreMg, new ItemStack(ACItems.ingotMg), 0.8f);
 		GameRegistry.addSmelting(ACBlocks.oreNi, new ItemStack(ACItems.ingotNi), 0.8f);
 		//TODO: This recipe isn't available in this version.
