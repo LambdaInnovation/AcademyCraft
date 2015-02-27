@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACModels;
+import cn.academy.energy.block.tile.impl.TileMatrix;
 import cn.liutils.template.client.render.block.RenderTileDirMulti;
 import cn.liutils.util.RenderUtils;
 
@@ -31,6 +32,7 @@ public class RenderMatrix  extends RenderTileDirMulti {
 	
 	@Override
 	public void renderAtOrigin(TileEntity te) {
+		TileMatrix tm = (TileMatrix) te;
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix(); {
@@ -44,7 +46,7 @@ public class RenderMatrix  extends RenderTileDirMulti {
 			
 			GL11.glPushMatrix(); {
 				GL11.glTranslated(0, 6.3, 0);
-				drawCube();
+				drawCube(tm.isLoaded);
 			} GL11.glPopMatrix();
 			
 			GL11.glDepthMask(false);
@@ -55,10 +57,14 @@ public class RenderMatrix  extends RenderTileDirMulti {
 		} GL11.glPopMatrix();
 	}
 	
-	private void drawCube() {
+	private void drawCube(boolean load) {
 		GL11.glTranslated(0, 0.6 * Math.sin(Minecraft.getSystemTime() / 400D), 0);
-		GL11.glRotated(Minecraft.getSystemTime() / 25D, 1, 1, 1);
-		GL11.glRotated(Minecraft.getSystemTime() / 50D, 2, 0, 1);
+		if(load) {
+			GL11.glRotated(Minecraft.getSystemTime() / 25D, 1, 1, 1);
+			GL11.glRotated(Minecraft.getSystemTime() / 50D, 2, 0, 1);
+		} else {
+			GL11.glTranslated(0, -1.5, 0);
+		}
 		final double size = 3.2, hs = size * 0.5;
 		GL11.glTranslated(-hs, -hs, -hs);
 		GL11.glColor4d(1, 1, 1, 0.7);
