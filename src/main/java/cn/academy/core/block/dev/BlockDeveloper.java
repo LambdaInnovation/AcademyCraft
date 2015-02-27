@@ -1,12 +1,20 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.block.dev;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
@@ -23,14 +31,13 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		setBlockName("ac_developer");
 		setBlockTextureName("academy:bed");
 		setCreativeTab(AcademyCraft.cct);
-		
+		setHardness(4.0f);
 		this.addSubBlock(1, 0, 0);
 		this.setBlockBounds(0, 0, 0, 1, 0.5F, 1);
 	}
 	
 	@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz)
-    {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz) {
 		{ //Transform to head block
 			int meta = world.getBlockMetadata(x, y, z);
 			int[] coords = this.getOrigin(world, x, y, z, meta);

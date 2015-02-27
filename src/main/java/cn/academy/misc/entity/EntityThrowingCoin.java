@@ -1,12 +1,20 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.misc.entity;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.register.ACItems;
@@ -15,7 +23,6 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.MotionHandler;
-import cn.liutils.api.entityx.motion.CollisionCheck;
 import cn.liutils.api.entityx.motion.GravityApply;
 import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.util.GenericUtils;
@@ -96,30 +103,26 @@ public class EntityThrowingCoin extends EntityX {
 		this.motionY = player.motionY;
 		setup();
 		dataWatcher.updateObject(10, Float.valueOf(initHt));
-		this.addDaemonHandler(new CollisionCheck(this) {
-			@Override
-			protected void onCollided(MovingObjectPosition res) {
-				if(posY > EntityThrowingCoin.this.player.posY + yOffset) {
-					System.out.println(res);
-					setDead();
-					if(!worldObj.isRemote && 
-						!EntityThrowingCoin.this.player.capabilities.isCreativeMode)
-						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
-				}
-			}
-		}.addExclusion(player));
+//		this.addDaemonHandler(new CollisionCheck(this) {
+//			@Override
+//			protected void onCollided(MovingObjectPosition res) {
+//				if(posY > EntityThrowingCoin.this.player.posY + yOffset) {
+//					setDead();
+//					if(!worldObj.isRemote && 
+//						!EntityThrowingCoin.this.player.capabilities.isCreativeMode)
+//						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
+//				}
+//			}
+//		}.addExclusion(player));
 		this.addDaemonHandler(new VelocityUpdate(this));
 		this.ignoreFrustumCheck = true;
 	}
 	
 	private void setup() {
-		this.removeDaemonHandler("collision");
 		this.addDaemonHandler(new GravityApply(this, 0.06));
 		this.setCurMotion(new KeepPosition());
-		this.handleClient = true;
 		this.motionY += INITVEL;
 		axis = Vec3.createVectorHelper(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
-		this.getEntityData().setLong("startTime", GenericUtils.getSystemTime());
 		this.setSize(0.2F, 0.2F);
 	}
 	

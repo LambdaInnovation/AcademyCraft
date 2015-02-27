@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.gui.dev;
 
@@ -31,9 +40,9 @@ public class DialogueBase extends Widget {
 					{465, 0}
 				});
 			this.setText(id);
-			this.setTextData(6, new int[][] {
-				dev.DEFAULT_COLOR,
-				dev.DEFAULT_COLOR,
+			this.setTextData(4, new int[][] {
+				{255, 95, 95, 255},
+				{255, 95, 95, 255},
 				{150, 150, 150, 255}
 			});
 			setFont(ACClientProps.FONT_YAHEI_32);
@@ -56,7 +65,7 @@ public class DialogueBase extends Widget {
 					{465, 30}
 				});
 			this.setText(id);
-			this.setTextData(6, new int[][] {
+			this.setTextData(4, new int[][] {
 				dev.DEFAULT_COLOR,
 				dev.DEFAULT_COLOR,
 				{150, 150, 150, 255}
@@ -104,7 +113,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(title, 2.5, 1.5, 9);
+		GuiDeveloper.drawText(title, 2.5, 2.4, 6);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

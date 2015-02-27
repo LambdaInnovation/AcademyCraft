@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.gui.dev;
 
@@ -59,10 +68,10 @@ public class DiagActionConfirm extends DialogueBase {
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 7, Align.CENTER);
-		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 7, Align.CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 4.5, Align.CENTER);
+		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 5.5, Align.CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 9, Align.CENTER);
+		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 6, Align.CENTER, 102);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

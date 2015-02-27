@@ -1,28 +1,42 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.core.register;
 
 import net.minecraft.item.Item;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
+import cn.academy.energy.item.ItemFreqRegulator;
 import cn.academy.misc.client.render.RendererCoin;
-import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ACRecord;
-import cn.academy.misc.item.ItemCapsule;
+import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ItemCoin;
-import cn.academy.misc.item.ItemExpNail;
+import cn.academy.misc.item.ItemMagHook;
 import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
-import cn.academy.misc.item.ItemTablet;
+import cn.academy.misc.item.ItemSilbarn;
 import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegItem;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * AC Item Registration Class
+ * @author WeathFold, KSkun
+ */
 @RegistrationClass
 public class ACItems {
 	
@@ -45,7 +59,7 @@ public class ACItems {
 		public RendererCoin.ItemRender renderCoin;
 	};
 
-	//TODO: Reconfiguration the medicine system.
+	//TODO: Reconfigure the medicine system.
 /*	@RegItem
 	public static ItemCapsule capsuleA = new ItemCapsule(1);
 	@RegItem
@@ -66,20 +80,22 @@ public class ACItems {
 	@RegItem
 	public static ItemEnergyCrystal energyCrystal;
 	
-	@RegItem
-	public static ItemModuleAttached adEnergyCard;
+	//TODO: These items isn't in used in AC beta.
+/*	@RegItem
+	public static ItemModuleAttached adEnergyCard;*/
 	
 	@RegItem
-	@RegItem.UTName("al_ingot")
+	@RegItem.UTName("alingot")
 	@RegItem.OreDict("ingotAl")
 	public static ACSimpleItem ingotAl;
 	
 	@RegItem
-	@RegItem.UTName("cu_ingot")
+	@RegItem.UTName("cuingot")
 	@RegItem.OreDict("ingotCu")
 	public static ACSimpleItem ingotCu;
 	
-	@RegItem
+	//TODO: These items isn't in used in AC beta.
+/*	@RegItem
 	@RegItem.UTName("steelingot")
 	@RegItem.OreDict("ingotRefinedIron")
 	public static ACSimpleItem ingotSteel;
@@ -87,51 +103,55 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("tiningot")
 	@RegItem.OreDict("ingotTin")
-	public static ACSimpleItem ingotTin;
+	public static ACSimpleItem ingotTin;*/
 	
 	@RegItem
-	@RegItem.UTName("mg_ingot")
+	@RegItem.UTName("mgingot")
 	@RegItem.OreDict("ingotMg")
 	public static ACSimpleItem ingotMg;
 	
 	@RegItem
-	@RegItem.UTName("ni_ingot")
+	@RegItem.UTName("niingot")
 	@RegItem.OreDict("ingotNi")
 	public static ACSimpleItem ingotNi;
 	
 	@RegItem
-	@RegItem.UTName("ac_crystal")
+	@RegItem.UTName("crystal")
 	@RegItem.OreDict("crystal")
 	public static ACSimpleItem crystal;
 	
 	@RegItem
-	@RegItem.UTName("shadow_ingot")
+	@RegItem.UTName("shadowingot")
 	@RegItem.OreDict("ingotShadow")
 	public static ACSimpleItem ingotShadow;
 	
 	@RegItem
-	@RegItem.UTName("mg_plate")
+	@RegItem.UTName("mgplate")
 	public static ACSimpleItem mgPlate;
 	
 	@RegItem
-	@RegItem.UTName("al_plate")
+	@RegItem.UTName("alplate")
 	public static ACSimpleItem alPlate;
 	
 	@RegItem
-	@RegItem.UTName("almg_plate")
-	public static ACSimpleItem almgPlate;
+	@RegItem.UTName("aplate1")
+	public static ACSimpleItem aplate1;
 	
 	@RegItem
-	@RegItem.UTName("ac_siliconrod")
+	@RegItem.UTName("siliconrod")
 	public static ACSimpleItem siliconRod;
+	
+	@RegItem
+	@RegItem.UTName("smallsi")
+	public static ACSimpleItem smallSi;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
 //	@RegItem
-//	@RegItem.UTName("iron_dust")
+//	@RegItem.UTName("irondust")
 //	public static ACSimpleItem ironDust;
 
 	@RegItem
-	@RegItem.UTName("ac_coppercoil")
+	@RegItem.UTName("coppercoil")
 	public static ACSimpleItem copperCoil;
 	
 	//TODO: If these items is unnecessary, delete them.
@@ -140,11 +160,11 @@ public class ACItems {
 //	public static ACSimpleItem coreBearing;
 	
 	@RegItem
-	@RegItem.UTName("ac_bodydet")
+	@RegItem.UTName("bodydet")
 	public static ACSimpleItem bodyDet;
 	
 	@RegItem
-	@RegItem.UTName("ac_io")
+	@RegItem.UTName("io")
 	public static ACSimpleItem ioPort;
 	
 	//TODO: This is not available in the beta version, remove the annotation when in a release version.
@@ -153,33 +173,36 @@ public class ACItems {
 //	public static ACSimpleItem brainAlpha;
 	
 	@RegItem
-	@RegItem.UTName("ac_brainbeta")
+	@RegItem.UTName("brainbeta")
 	public static ACSimpleItem brainBeta;
 	
 	@RegItem
-	@RegItem.UTName("ac_pcbn")
+	@RegItem.UTName("pcbn")
 	public static ACSimpleItem pcb;
 	
 	@RegItem
-	@RegItem.UTName("ac_cplank")
+	@RegItem.UTName("cplank")
 	public static ACSimpleItem compPlank;
-	
-	@RegItem
-	@RegItem.UTName("ac_exp_nail")
-	public static ItemExpNail expNail;
-	
-	@RegItem
-	@RegItem.UTName("ac_aimcell")
-	public static ACSimpleItem aimCell;
 	
 	@RegItem()
 	@RegItem.HasRender
-	@RegWithName("ac_void")
+	@RegEventHandler(Bus.FML)
+	@RegWithName("void")
 	public static ItemVoid ivoid = new ItemVoid() {
+		//吐槽：这到底什么微妙的写法
 		@SideOnly(Side.CLIENT)
 		@RegItem.Render
 		public RenderVoid renderVoid;
 	};
 	
+	@RegItem
+	public static ItemFreqRegulator freqReg;
+	
+	@RegItem
+	@RegItem.UTName("silbarn")
+	public static ItemSilbarn sibarn;
+	
+	@RegItem
+	public static ItemMagHook magHook;
 	
 }

@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.misc.client.render;
 
@@ -25,7 +34,7 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	
 	ResourceLocation texture;
 	
-	public double width = 0.2;
+	public double widthFp = 0.2, widthTp = 0.5;
 	
 	public double ratio = 2.0; // tWidth / tHeight
 	
@@ -52,8 +61,9 @@ public class RendererRayTiling<T extends EntityRay> extends RendererRayBase<T> {
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent, double len) {
+	protected void drawAtOrigin(T ent, double len, boolean h) {
 		//len = Math.min(len, 20.0);
+		double width = h ? widthFp : widthTp;
 		double forw = width * ratio; //per billboard forward in distance.
 		int i = 0;
 		//System.out.println("d-" + dist);

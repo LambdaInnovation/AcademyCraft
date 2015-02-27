@@ -1,11 +1,21 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.api.ctrl;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.client.render.SkillRenderer;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.render.SkillRenderDebug;
 
 /**
  * The state of an active skill.
@@ -61,7 +71,7 @@ public class SkillState {
 		if (!player.worldObj.isRemote) {
 			//sync to client
 			this.stateID = nextID++;
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.START));
 		}
 	}
 	
@@ -73,7 +83,7 @@ public class SkillState {
 	
 	public final void updateSkill() {
 		if (!player.worldObj.isRemote) {
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.UPDATE));
 		}
 	}
 	
@@ -88,7 +98,7 @@ public class SkillState {
 		onFinish();
 		alive = false;
 		if (!player.worldObj.isRemote) {
-			AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
+			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
 		}
 	}
 	
@@ -127,6 +137,10 @@ public class SkillState {
 	 */
 	public void onUpdate(NBTTagCompound nbt) {
 		fromNBT(nbt);
+	}
+	
+	public boolean isRemote() {
+		return player.worldObj.isRemote;
 	}
 	
 	/**

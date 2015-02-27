@@ -1,26 +1,35 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.skill;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOre;
-import net.minecraft.block.BlockStone;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
+
+import org.lwjgl.opengl.GL11;
+
+import cn.academy.ability.electro.CatElectro;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
@@ -28,10 +37,14 @@ import cn.academy.api.ctrl.pattern.PatternDown;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.entity.EntityBlockSimulator;
-import cn.liutils.api.entityx.FakeEntity;
+import cn.academy.misc.util.JudgeUtils;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
+import cn.liutils.api.entityx.EntityX;
 import cn.liutils.api.entityx.MotionHandler;
+import cn.liutils.api.entityx.motion.FollowEntity;
 import cn.liutils.util.GenericUtils;
+import cn.liutils.util.RenderUtils;
 import cn.liutils.util.space.BlockPos;
 import cn.liutils.util.space.IBlockFilter;
 import cpw.mods.fml.relauncher.Side;
@@ -41,24 +54,21 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Make the player able to see the mineral block information through a surrounding region for a specified len of time.
  * @author WeathFolD
  */
+@RegistrationClass
 public class SkillMineDetect extends SkillBase {
+	
+	static final int colors[][] = { //alpha will be reset each time rendering
+		{115, 200, 227, 0}, //default color
+		{161, 181, 188, 0}, //harvest level 0-3
+		{87, 231, 248, 0},
+		{97, 204, 94, 0},
+		{235, 109, 84, 0}
+	};
 
 	private static IBlockFilter blockFilter = new IBlockFilter() {
 		@Override
 		public boolean accepts(World world, Block block, int x, int y, int z) {
-			if(block instanceof BlockOre) {
-				return true;
-			}
-			
-			if(Item.getItemFromBlock(block) == null)
-				return false;
-			ItemStack stack = new ItemStack(block);
-			int[] val = OreDictionary.getOreIDs(stack);
-			for(int i : val) {
-				if(OreDictionary.getOreName(i).contains("ore"))
-					return true;
-			}
-			return false;
+			return JudgeUtils.isOreBlock(block);
 		}
 	};
 	
@@ -66,6 +76,15 @@ public class SkillMineDetect extends SkillBase {
 	public SkillMineDetect() {
 		setLogo("electro/mineview.png");
 		setName("em_mine");
+		setMaxLevel(10);
+	}
+	
+	static int getCPConsume(int slv, int lv) {
+		return 3000 + slv * 50 + lv * 200;
+	}
+	
+	static double getDetectRange(int slv, int lv) {
+		return 10 + slv * 2 + lv * 5;
 	}
 	
 	@Override
@@ -82,18 +101,29 @@ public class SkillMineDetect extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
 	private static ResourceLocation getTexture(Block block) {
-		return ACClientProps.EFF_MV_TEST;
+		return ACClientProps.EFF_MV;
 	}
 	
-	public int getMaxSkillLevel() {
-		return 10;
+	public static class MineElem {
+		public final int x, y, z, level;
+		public MineElem(int _x, int _y, int _z, int _lv) {
+			x = _x;
+			y = _y;
+			z = _z;
+			level = _lv; //this correspond to the color array index
+		}
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public static final class HandlerEntity extends FakeEntity {
+	@RegEntity(clientOnly = true)
+	@RegEntity.HasRender
+	public static final class HandlerEntity extends EntityX {
 		
-		//Serve as a pool.
-		final List<EntityBlockSimulator> aliveSims = new ArrayList<EntityBlockSimulator>();
+		@RegEntity.Render
+		@SideOnly(Side.CLIENT)
+		public static HandlerRender renderer;
+		
+		//Current elements to display.
+		final List<MineElem> aliveSims = new ArrayList<MineElem>();
 		
 		final int lifeTime;
 		public final double range;
@@ -102,23 +132,34 @@ public class SkillMineDetect extends SkillBase {
 		private double lastX, lastY, lastZ;
 		
 		private EntityPlayer target;
+		
+		private final boolean isAdvanced;
 
-		public HandlerEntity(EntityPlayer target, int time, double range) {
-			super(target);
+		public HandlerEntity(EntityPlayer target, int time, double range, boolean advanced) {
+			super(target.worldObj);
+			
+			this.ignoreFrustumCheck = true;
+			
 			this.lifeTime = time;
-			this.range = range;
+			this.range = Math.min(range, 28);
 			this.target = target;
 			
 			double tmp = range * 0.2;
 			safeDistSq = tmp * tmp;
 			
-			target.addPotionEffect(new PotionEffect(Potion.blindness.id, 10000));
-			this.setCurMotion(new Ticker());
+			isAdvanced = advanced;
+			
+			setPosition(target.posX, target.posY, target.posZ);
+			addDaemonHandler(new FollowEntity(this, target));
+			setCurMotion(new Ticker());
+		}
+		
+		@Override
+		public boolean shouldRenderInPass(int pass) {
+			return pass == 1;
 		}
 		
 		private class Ticker extends MotionHandler {
-			
-			int ticksUntilUpdate = 0;
 
 			public Ticker() {
 				super(HandlerEntity.this);
@@ -131,56 +172,29 @@ public class SkillMineDetect extends SkillBase {
 
 			@Override
 			public void onUpdate() {
-				
 				double distSq = GenericUtils.distanceSq(posX, posY, posZ, lastX, lastY, lastZ);
 				if(distSq > safeDistSq) {
 					updateBlocks();
 				}
 				
-				if(ticksExisted == lifeTime) {
-					for(EntityBlockSimulator ebs : aliveSims) {
-						ebs.setDead();
-					}
-					aliveSims.clear();
+				if(ticksExisted > lifeTime) {
 					setDead();
-					target.removePotionEffect(Potion.blindness.id);
 				}
 			}
 			
 			private void updateBlocks() {
-				Iterator<EntityBlockSimulator> iter = aliveSims.iterator();
-				while(iter.hasNext()) {
-					EntityBlockSimulator ebs = iter.next();
-					if(ebs.isDead) iter.remove();
-				}
+				aliveSims.clear();
 				
 				AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(
 						posX - range * 0.5, posY - range * 0.5, posZ - range * 0.5,
 						posX + range * 0.5, posY + range * 0.5, posZ + range * 0.5);
 				Set<BlockPos> set = GenericUtils.getBlocksWithinAABB(worldObj, aabb, blockFilter);
-				int ind = 0;
 					
-				Set<EntityBlockSimulator> toRetain = new HashSet<EntityBlockSimulator>();
 				for(BlockPos bp : set) {
-					//Get a new EBS and set
-					EntityBlockSimulator ebs;
-					if(ind < aliveSims.size()) {
-						ebs = aliveSims.get(ind);
-						ind += 1;
-					} else {
-						ebs = new EntityBlockSimulator(HandlerEntity.this, bp, true);
-						worldObj.spawnEntityInWorld(ebs);
-					}
-					toRetain.add(ebs);
+					aliveSims.add(new MineElem(
+						bp.x, bp.y, bp.z, 
+						isAdvanced ? Math.min(3, (bp.block.getHarvestLevel(0) + 1)) : 0));
 				}
-				
-				//Clear the rest(which are useless)
-				for(int i = ind; i < aliveSims.size(); ++i) {
-					aliveSims.get(i).setDead();
-				}
-				aliveSims.clear();
-				
-				aliveSims.addAll(toRetain);
 				
 				lastX = posX;
 				lastY = posY;
@@ -196,6 +210,55 @@ public class SkillMineDetect extends SkillBase {
 		
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public static class HandlerRender extends Render {
+
+		@Override
+		public void doRender(Entity var1, double var2, double var4,
+				double var6, float var8, float var9) {
+			HandlerEntity he = (HandlerEntity) var1;
+			for(MineElem me : he.aliveSims) {
+				drawSingle(me, (int) 
+					(calcAlpha(he.posX - me.x, he.posY - me.y, he.posZ - me.z, he.range) * 255));
+			}
+		}
+		
+		private float calcAlpha(double x, double y, double z, double range) {
+			double jdg = 1 - GenericUtils.distance(x, y, z) / range * 2.2;
+			return 0.3f + (float) (jdg * 0.7);
+		}
+		
+		private void drawSingle(MineElem me, int alpha) {
+			double x = me.x - RenderManager.renderPosX, 
+				y = me.y - RenderManager.renderPosY, 
+				z = me.z - RenderManager.renderPosZ;
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_FOG);
+			GL11.glPushMatrix(); {
+				RenderUtils.loadTexture(ACClientProps.EFF_MV);
+				GL11.glTranslated(x + .05, y + .05, z + .05);
+				int[] color = colors[me.level];
+				color[3] = alpha;
+				RenderUtils.bindColor(color);
+				RenderUtils.drawCube(.9, .9, .9, true);
+			} GL11.glPopMatrix();
+			GL11.glEnable(GL11.GL_FOG);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glEnable(GL11.GL_LIGHTING);
+		}
+
+		@Override
+		protected ResourceLocation getEntityTexture(Entity var1) {
+			return null;
+		}
+		
+	}
+	
 	public static final class EnableVision extends SkillState {
 
 		public EnableVision(EntityPlayer player) {
@@ -205,11 +268,16 @@ public class SkillMineDetect extends SkillBase {
 		@Override
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
-			
+			int slv = data.getSkillLevel(CatElectro.mineDetect), lv = data.getLevelID() + 1;
+			if(!data.decreaseCP(getCPConsume(slv, lv), CatElectro.mineDetect)) {
+				return;
+			}
+			player.playSound("academy:elec.mineview", 0.5f, 1.0f);
 			if(player.worldObj.isRemote) {
-				player.worldObj.spawnEntityInWorld(new HandlerEntity(player, 100, 30));
+				player.worldObj.spawnEntityInWorld(
+					new HandlerEntity(player, 100, getDetectRange(slv, lv), lv >= 3 && slv >= 5));
 			} else {
-				//consume CPs, etc
+				player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100));
 			}
 			this.finishSkill();
 		}

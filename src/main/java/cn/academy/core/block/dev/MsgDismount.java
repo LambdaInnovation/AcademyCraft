@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.block.dev;
 
@@ -53,7 +62,10 @@ public class MsgDismount implements IMessage {
 				AcademyCraft.log.error("ERR: Didn't find TileDeveloper instance");
 				return null;
 			}
-			((TileDeveloper)te).userQuit();
+			//Second pass validation, in case of wrong client data
+			TileDeveloper dev = (TileDeveloper) te;
+			if(player.equals(dev.getUser()))
+				((TileDeveloper)te).userQuit();
 			return null;
 		}
 		

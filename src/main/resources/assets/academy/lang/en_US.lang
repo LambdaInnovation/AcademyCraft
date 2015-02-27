@@ -1,52 +1,58 @@
-#English Language File Debug Ver.
+#AcademyCraft English Language File Debug Ver.
 #Items
-item.ac_void.name=
+item.null.name=
 item.ac_logo.name=
 item.ac_record1.name=Railgun Record #1
 item.ac_record2.name=Railgun Record #2
 item.ac_record3.name=Railgun Record #3
+
+item.ac_alingot.name=Aluminum Ingot
+item.ac_cuingot.name=Copper Ingot
+item.ac_steelingot.name=Steel Ingot
+item.ac_tiningot.name=Tin Ingot
+item.ac_siliconrod.name=Silicon Rod
+item.ac_niingot.name=Nickel Ingot
+item.ac_crystal.name=Crystallized Rock
+item.ac_shadowingot.name=Shadow Metal Ingot
+item.ac_mgingot.name=Magnesium Ingot
+
+item.ac_smallsi.name=Small Piece of Silicon
+item.ac_coppercoil.name=Copper Coil
+item.ac_mgplate.name=Magnesium Plate
+item.ac_aplate1.name=Magnalium Plate
+item.ac_alplate.name=Aluminum Plate
+item.ac_cplank.name=Composite Wood Planks
+
 item.ac_coin.name=Game Coin
 item.ac_needle.name=Needle
-item.ac_energycrystal.name=Energy Crystal
-item.ad_card.name=Ability Developer Electricity Card
-item.al_ingot.name=Aluminum Ingot
-item.cu_ingot.name=Copper Ingot
-item.steelingot.name=Steel Ingot
-item.tiningot.name=Tin Ingot
-item.ac_siliconrod.name=Silicon Rod
-item.ac_coppercoil.name=Copper Coil
-item.ni_ingot.name=Nickel Ingot
-item.mg_plate.name=Magnesium Plate
-item.almg_plate.name=Magnalium Plate
-item.al_plate.name=Aluminum Plate
-item.mg_ingot.name=Magnesium Ingot
+item.ac_silbarn.name=Silicon Barn
+item.ac_maghook.name=Magnetic Hook
+
 item.ac_pcbn.name=PCB
 item.ac_bodydet.name=Body State Detector
 item.ac_io.name=I/O Port
 item.ac_brainbeta.name=Brainwave Resonator β
-item.ac_crystal.name=Crystal Rock
-item.shadow_ingot.name=Shadow Metal Ingot
-item.ac_cplank.name=Composite Wood Planks
-item.ac_exp_nail.name=Expansion Nail
-item.ac_aimcell.name=AIM Dormancy Cell
 
-item.ecrystal.energy=Current Energy
+item.ac_energycrystal.name=Energy Crystal
+item.ac_freqreg.name=Frequency Regulator
 
 #Blocks
-tile.ac_developer.name=Ability Developer
 tile.null.name=
-tile.windgen.name=Wind Generator
-tile.copperore.name=Copper Ore
-tile.tinore.name=Tin Ore
-tile.aluminumore.name=Aluminum Ore
-tile.crystal_ore.name=Crystal Ore
-tile.ni_ore.name=Nickel Ore
-tile.mg_ore.name=Magnesium Ore
-tile.ac_solar.name=Solar Generator
-tile.shadow_ore.name=Shadow Metal Ore
+tile.ac_developer.name=Ability Developer
 tile.ac_magindc.name=Magnetic Inducer
+
+tile.ac_windgen.name=Wind Generator
+tile.ac_solar.name=Solar Generator
 tile.ac_node.name=Wireless Power Node
-tile.ac_grid.name=Wireless Power Grid
+tile.ac_grid.name=Wireless Power Matrix
+
+tile.ac_cuore.name=Copper Ore
+tile.ac_tinore.name=Tin Ore
+tile.ac_alore.name=Aluminum Ore
+tile.ac_crystalore.name=Crystal Ore
+tile.ac_niore.name=Nickel Ore
+tile.ac_mgore.name=Magnesium Ore
+tile.ac_shadowore.name=Shadow Metal Ore
 
 #CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
@@ -86,39 +92,59 @@ skl_md_scatter=Scattering Electron Bomb
 skl_md_shield=Light Shield
 skl_md_meltdown=Melt Downer
 skl_md_mineexpert=Expert Mining Ray
-skl_md_barrage=Scattered Ray Barrage
 skl_md_mineluck=Expert Mining Ray - Luck
 skl_md_mineacc=Expert Mining Ray - Accuracy
 
 md_bomb.desc=Generate a ball with a small number of electrons, and shoot it directionally.
 md_minebasic.desc=Generate a weak electron current to help you mine.
-md_scatter.desc=Generate multiple electron balls simultaneously. However, the accuracy of aiming will go down.
+md_scatter.desc=Generate multiple electron balls simultaneously. However, the aiming accuracy will go down.
 md_shield.desc=Compress electrons into a shield, the high momentum of electrons will decomposite anything closing in.
 md_meltdown.desc=Generate a high-energy electron beam that will melt down any obstacle on its path.
-md_mineexpert.desc=With continious practicing on mining basics, you can mine faster and harder without damaging the mine resource itself.
-md_barrage.desc=With the supportive semiconductor, you can split your electron current into thousands of rays, and destroy everything in front of you.
+md_mineexpert.desc=With continious practice on mining basics, you can mine faster and harder without damaging the mine resource itself.
 md_mineluck.desc=Keeping mining and lumbering with your ability allows you to do better in eliminating the impurities without damaging mineral.
 md_mineacc.desc=Sometimes high-energy rays will also destroy rare materials in the ore. After learning this, you can cut ores accurately and acquire the pure materials within.
 
-#Commands
-aimctrl.presetinf=Preset %s : %s
-aimctrl.curpreset=Current Preset ID: %s
-aimctrl.classinit=Player Ability class uninitialized.
-setting.successful=Setting successful.
-setting.outofbounds=Input out of bounds.
+#Teleporter
+cat_teleport=Teleporter
+
+skl_tp_threatening=Threatening Teleporting
+skl_tp_string=String Theory
+skl_tp_penetrate=Penetrate Teleporting
+skl_tp_mark=Marked Teleporting
+skl_tp_visc=Viscus Stripping
+skl_tp_loc=Locating Teleporting
+skl_tp_hst=High Speed Teleporting
+
+tp_threatening.desc=Sometimes just a small fragment is able to kill an enemy.
+tp_string.desc=String Theory is the essential of teleportation, which allows you to acquire accurate perception of the space.
+tp_penetrate.desc=Teleport through a wall. You can only know roughly where you can land correctly, so there's a risk of suffocating yourself.
+tp_mark.desc=Confirm the destination point with your eyes, and teleport directly.
+tp_visc.desc=Touch a living thing and drag its viscus out. It's so violent that could cause serious nausea.
+tp_loc.desc=Remember the place that you've been to and teleport to there whenever you want. The entities around you will also be teleported.
+tp_hst.desc=A new way of long-distance teleporting, the high-speed teleportation and inertia alternation can make you maneuver in the air.
+
+#Generic Skills
+skl_gn_btc=Brain Training Course
+skl_gn_btc2=Brain Training Course Ⅱ
+skl_gn_spirit=Spirit Training Course
+
+gn_btc.desc=You have to train your mind to adapt to higher and higher computation requirement.
+gn_btc2.desc=Advanced mind training makes you enable to withstand massive computation.
+gn_spirit.desc=Learn to calm down and relax your mind. Leads to higher CP recover rate.
 
 #GUI
 page.adskill=Skill Acquiring
 page.adlevel=Level Upgrading
 page.adlearning=Ability Learning
+page.adconfirm=Action Confirm
+
 ac.notlearned=Not Learned
-ac.machinestat=Stat
+ac.machinestat=Status
 ac.curenergy=Current Energy
 ac.syncrate=Synchronization Rate
 ac.learnability=Learn Ability
 ac.btnconfirm=Confirm
 ac.btncancel=Cancel
-page.adconfirm=Action Confirm
 ac.confirm.head=You are about to perform the following action
 ac.confirm.tail=Continue?
 ac.upgradeto=Elevate player level to 
@@ -135,14 +161,41 @@ ac.upgradeskill=Upgrade Skill
 ac.upgradelv=Upgrade Level
 ac.accept=Accept
 ac.restore=Restore
-adev.holoview=Holographic View
-adev.userinfo=User Info
 ac.presset=Preset Settings
 ac.preset=Preset #
+ac.devnew=Develop a new ability
+ac.presselect=Preset Selection
+
+adev.holoview=Holographic View
+adev.userinfo=User Info
+
 prs.chooseskl=Select Skill
+
 level_0=Level 1
 level_1=Level 2
 level_2=Level 3
 level_3=Level 4
 level_4=Level 5
 #level_5=Level 6
+
+#WEN (Wireless Energy Network)
+ac.notconnected=Not Connected
+ac.matinit=Initialization
+ac.opstat=WEN Status
+ac.opsuc=Operation Successful
+ac.opfail=Operation Failed
+ac.cnnexist=Channel Exists
+ac.transmitting=Transmitting
+ac.inconsistentpass=The passwords you entered must be the same!
+ac.loading=Loading
+ac.wllogin=WEN Login
+ac.matpwd=Change Password
+ac.freqreg=Frequency Regulator
+ac.frchannel=Channel
+ac.frselect=Channel Select
+ac.frcur=Current Channel
+ac.frclear=Clear Connection
+ac.frestb=Establish Connection
+ac.frclearconfirm=Do you really wanna clear the connections of this machine?
+ac.ssidnn=The SSIDs you entered must not be empty!
+ac.selchannel=Select Channel

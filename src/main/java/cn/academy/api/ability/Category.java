@@ -1,15 +1,22 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.api.ability;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-import scala.annotation.varargs;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
@@ -29,6 +36,7 @@ public class Category {
 	
 	private List<Level> levels = new ArrayList<Level>();
 	private List<SkillBase> skills = new ArrayList<SkillBase>();
+	private Map<SkillBase, Integer> initialLevels = new HashMap();
 	
 	protected int colorStyle[] = { 255, 255, 255 };
 
@@ -86,6 +94,7 @@ public class Category {
 		int ret = skills.size();
 		skills.add(skill);
 		Abilities.registerSkill(skill);
+		this.initialLevels.put(skill, minLevel);
 		for(int i = minLevel; i < getLevelCount(); ++i)
 			getLevel(i).addCanLearnSkill(ret);
 		return ret;
@@ -93,6 +102,11 @@ public class Category {
 	
 	public final SkillBase getSkill(int sid) {
 		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(skills, sid));
+	}
+	
+	public final int getSkillMinLevel(SkillBase sb) {
+		Integer i = initialLevels.get(sb);
+		return i == null ? 0 : i;
 	}
 	
 	public final int getSkillCount() {
@@ -123,11 +137,10 @@ public class Category {
 	 */
 	public void onSkillExpChanged(AbilityData data, int skillID, float oldValue, float newValue) {
 		//increase max CP
-		Level lv = GenericUtils.assertObj(getLevel(data.getLevelID()));
-		
-		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
-		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
-		data.setMaxCP(newMaxCP);
+//		Level lv = GenericUtils.assertObj(getLevel(data.getLevelID()));
+//		float newMaxCP = data.getMaxCP() + (newValue - oldValue) * 0.1f * lv.getInitialCP();
+//		newMaxCP = Math.min(newMaxCP, lv.getMaxCP());
+//		data.setMaxCP(newMaxCP);
 		
 		data.getSkill(skillID).onSkillExpChange(data, skillID, oldValue, newValue);
 	}
@@ -159,14 +172,12 @@ public class Category {
 		return colorStyle;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public final String getDisplayName() {
 		return StatCollector.translateToLocal("cat_" + getInternalName());
 	}
 	
-	private ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	private ResourceLocation logo;
 	
-	@SideOnly(Side.CLIENT)
 	public final ResourceLocation getLogo() {
 		return logo;
 	}

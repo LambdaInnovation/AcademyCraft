@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.ability.teleport;
 
 import cn.academy.ability.generic.skill.SkillBrainTrainingCourse;
@@ -47,7 +59,8 @@ public class CatTeleport extends Category {
 		INSTANCE = this;
 		// Minecraft.getMinecraft().thePlayer.e
 
-		// TODO : Edit data
+		// TODO: Edit data
+		// TODO: Buff skills not added in β. Waiting for implementation.
 		this.addLevel(new Level(this, 800.0f, 1800.0f, 0.5f, 1.0f, .9));
 		this.addLevel(new Level(this, 2000.0f, 3000.0f, 1.5f, 1.8f, .8));
 		this.addLevel(new Level(this, 3500.0f, 5500.0f, 2.2f, 2.6f, .7));
@@ -56,18 +69,15 @@ public class CatTeleport extends Category {
 
 		this.addSkill(new SkillBase(), 0);
 		this.addSkill(skillThreateningTele = new SkillThreateningTele(), 0);
-		this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
-		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 0);
-		this.addSkill(skillMarkedTele = new SkillMarkTele(), 0);
-		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 0);
-		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 0);
-		this.addSkill(
-				skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
-		this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
-		this.addSkill(
-				skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
-		this.addSkill(
-				skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
+		//this.addSkill(skillStringTheory = new SkillStringTheory(), 0);
+		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
+		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 1);
+		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 2);
+//		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);
+		//this.addSkill(skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
+		//this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
+		//this.addSkill(skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);
+		//this.addSkill(skillSpiritTrainingCourse = new SkillSpiritTrainingCourse(), 0);
 		
 		this.setLogo("tp/main.png");
 	}
@@ -82,7 +92,7 @@ public class CatTeleport extends Category {
 	 * Get the level of two string theorys' sum. Used in both error calculation and CP consumption.
 	 */
 	public static int getStringTheoryLevel(AbilityData data) {
-		return data.getSkillLevel(skillStringTheory);
+		return 6;
 	}
 	
 	/**

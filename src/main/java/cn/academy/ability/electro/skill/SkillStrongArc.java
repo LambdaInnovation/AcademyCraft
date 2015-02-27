@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.skill;
 
@@ -21,6 +30,7 @@ import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,14 +39,21 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillStrongArc extends SkillBase {
 	
 	@SideOnly(Side.CLIENT)
-	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
+	static SkillRenderer charge;
+	
+	@SideOnly(Side.CLIENT)
+	public static void init() {
+		charge = new SRSmallCharge(5, 0.8);
+	}
 	
 	public SkillStrongArc() {
 		setLogo("electro/arc_strong.png");
 		setName("em_arc_strong");
+		setMaxLevel(10);
 	}
 	
 	@Override
@@ -61,13 +78,13 @@ public class SkillStrongArc extends SkillBase {
 		public void onStart() {
 			if(!player.worldObj.isRemote) {
 				if(consumeCP()){
-					player.worldObj.spawnEntityInWorld(new WeakArc(player));
+					player.worldObj.spawnEntityInWorld(new StrongArc(player));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 500);
-					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 40, 5));
+					player.worldObj.spawnEntityInWorld(new ChargeEffectS.Strong(player, 40, 5));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
 				}
 			}
@@ -75,9 +92,9 @@ public class SkillStrongArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = 1, lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
-			float need = 340 + lv * 25 + clv * 30;
-			return data.decreaseCP(need);
+			int id = 1, slv = data.getSkillLevel(id), lv = data.getLevelID() + 1;
+			float need = 1000 + slv * 60 + lv * 80;
+			return data.decreaseCP(need, CatElectro.strongArc);
 		}
 
 		@Override
@@ -86,19 +103,19 @@ public class SkillStrongArc extends SkillBase {
 	}
 	
 	@RegEntity
-	public static class WeakArc extends AttackingArcBase {
+	public static class StrongArc extends AttackingArcBase {
 
-		public WeakArc(EntityPlayer creator) {
+		public StrongArc(EntityPlayer creator) {
 			super(creator);
 		}
 		
-		public WeakArc(World world) {
+		public StrongArc(World world) {
 			super(world);
 		}
 
 		@Override
 		protected SkillBase getSkill() {
-			return CatElectro.weakArc;
+			return CatElectro.strongArc;
 		}
 
 		@Override

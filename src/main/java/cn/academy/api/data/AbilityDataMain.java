@@ -1,9 +1,17 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.api.data;
 
-import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
@@ -11,7 +19,7 @@ import cn.annoreg.mc.RegSubmoduleInit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.server.MinecraftServer;
 
 @RegistrationClass
 @RegSubmoduleInit
@@ -60,4 +68,11 @@ public class AbilityDataMain {
 		AcademyCraft.netHandler.sendToAll(new MsgResetAbilityData(player));
 	}
 
+	public static void doDataSync() {
+	    for (Object obj : MinecraftServer.getServer()
+	            .getConfigurationManager().playerEntityList) {
+	        EntityPlayerMP player = (EntityPlayerMP) obj;
+	        getData(player).doSync();
+	    }
+	}
 }

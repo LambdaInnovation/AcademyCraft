@@ -1,12 +1,21 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.entity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import cn.academy.ability.electro.client.render.RenderElecArc;
+import cn.academy.ability.electro.client.render.entity.RenderElecArc;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
@@ -27,13 +36,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @HasRender
 public class EntityArcBase extends EntityRay {
 	
-	@SideOnly(Side.CLIENT)
 	static final int SEQ_SIZE = 20;
 	
-	@SideOnly(Side.CLIENT)
 	public IntRandomSequence indSeq = new IntRandomSequence(SEQ_SIZE, getTexs().length);
 	
-	@SideOnly(Side.CLIENT)
 	public DoubleRandomSequence rotSeq = new DoubleRandomSequence(SEQ_SIZE, -5, 40);
 	
 	@RegEntity.Render
@@ -44,14 +50,14 @@ public class EntityArcBase extends EntityRay {
 	public boolean isDrawing = true;
 	int lastTick, tickWait;
 
-	public EntityArcBase(EntityLivingBase creator) {
+	public EntityArcBase(EntityPlayer creator) {
 		super(creator);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public EntityArcBase(World world) {
 		super(world);
-		addEffectUpdate();
+		if(world.isRemote)
+			addEffectUpdate();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -64,7 +70,6 @@ public class EntityArcBase extends EntityRay {
 		return rotSeq.get(i % SEQ_SIZE);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public void addEffectUpdate() {
 		this.addDaemonHandler(new MotionHandler(this) {
 			@Override public void onCreated() {}
@@ -87,7 +92,6 @@ public class EntityArcBase extends EntityRay {
 		});
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public ResourceLocation[] getTexs() {
 		return ACClientProps.ANIM_ELEC_ARC;
 	}

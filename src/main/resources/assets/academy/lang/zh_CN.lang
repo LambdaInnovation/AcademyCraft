@@ -1,59 +1,69 @@
-#中文语言文件 调试版本
-#Items
-item.void.name=
+#AcademyCraft 中文语言文件 调试版本
+#物品
+item.null.name=
 item.ac_logo.name=
 item.ac_record1.name=超电磁炮唱片#1
 item.ac_record2.name=超电磁炮唱片#2
 item.ac_record3.name=超电磁炮唱片#3
+
+item.ac_alingot.name=铝锭
+item.ac_cuingot.name=铜锭
+item.ac_steelingot.name=钢锭
+item.ac_tiningot.name=锡锭
+item.ac_siliconrod.name=硅锭
+item.ac_niingot.name=镍锭
+item.ac_mgingot.name=镁锭
+item.ac_shadowingot.name=影子金属锭
+item.ac_crystal.name=晶化岩
+
+item.ac_smallsi.name=小块硅
+item.ac_mgplate.name=镁板
+item.ac_aplate1.name=铝镁合金板
+item.ac_alplate.name=铝板
+item.ac_coppercoil.name=线圈
+item.ac_cplank.name=复合木板
+
 item.ac_coin.name=游戏币
 item.ac_needle.name=钢针
-item.ac_energycrystal.name=能源水晶
+item.ac_exp_nail.name=粘性膨胀钉
+item.ac_silbarn.name=扩散支援半导体
+item.ac_maghook.name=磁力钩
+
 item.ad_card.name=电力扩展卡
-item.al_ingot.name=铝锭
-item.cu_ingot.name=铜锭
-item.steelingot.name=钢锭
-item.tiningot.name=锡锭
-item.ac_siliconrod.name=硅锭
-item.ac_coppercoil.name=线圈
-item.ni_ingot.name=镍锭
-item.mg_plate.name=镁锭
-item.almg_plate.name=铝镁合金板
-item.al_plate.name=铝板
-item.mg_ingot.name=镁板
 item.ac_pcbn.name=初级电路板
 item.ac_bodydet.name=人体状态探测器
 item.ac_io.name=I/O接口
 item.ac_brainbeta.name=脑波谐振装置β
-item.ac_crystal.name=晶化岩
-item.shadow_ingot.name=影子金属锭
-item.ac_cplank.name=复合木板
-item.ac_exp_nail.name=粘性膨胀钉
-item.ac_aimcell.name=开发休眠舱
 
-#Blocks
-tile.ac_developer.name=能力开发机
+item.ac_energycrystal.name=能源水晶
+item.ac_freqreg.name=频率变送器
+
+#方块
 tile.null.name=
-tile.windgen.name=风力发电机
-tile.copperore.name=铜矿
-tile.tinore.name=锡矿
-tile.aluminumore.name=铝矿
-tile.crystal_ore.name=晶化岩石
-tile.ni_ore.name=镍矿
-tile.mg_ore.name=镁矿
-tile.ac_solar.name=太阳能发电机
-tile.shadow_ore.name=影子金属矿
+tile.ac_developer.name=能力开发机
 tile.ac_magindc.name=磁场增幅装置
+
+tile.ac_windgen.name=风力发电机
+tile.ac_solar.name=太阳能发电机
 tile.ac_node.name=无线能源节点
 tile.ac_grid.name=无线能源矩阵
 
-#CreativeTabs
+tile.ac_cuore.name=铜矿
+tile.ac_tinore.name=锡矿
+tile.ac_alore.name=铝矿
+tile.ac_crystalore.name=晶化岩石
+tile.ac_niore.name=镍矿
+tile.ac_mgore.name=镁矿
+tile.ac_shadowore.name=影子金属矿
+
+#创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
-#Generic Ability
+#其他能力
 skl_null=无
 
-#Electro Master
-cat_elecmaster=电气使
+#电气使
+cat_elecmaster=电击使
 
 skl_em_arc=电弧激发
 skl_em_itemcharge=电流回冲
@@ -75,24 +85,63 @@ em_buff.desc=成为强能力者后，对于电磁能力有更深理解的你开�
 #em_swordgen.desc=强力的磁力控制与计算力储备让你能熟练的使用铁砂来帮助自己进行攻击。
 em_lf.desc=用强烈的电流支配自己的身体，获得可怕的运动力和攻击能力，扫平你眼前的一切敌人。
 
-#Melt Downer
+#原子崩坏
 cat_meltdowner=原子崩坏
 
-skl_md_elecdart=电子飞弹
+skl_md_bomb=电子飞弹
+skl_md_minebasic=基础采集光束
+skl_md_scatter=电子弹散射
+skl_md_shield=光盾
+skl_md_meltdown=原子崩坏
+skl_md_mineexpert=采集光束精修
+skl_md_barrage=散射光束雨
+skl_md_mineluck=采集光束精修-时运
+skl_md_mineacc=采集光束精修-精准
 
-md_elecdart.desc=聚集少量电子形成球形，发射出去并对生物造成微弱的伤害。
+md_bomb.desc=聚集少量电子形成球形，发射出去并对生物造成微弱的伤害。
+md_minebasic.desc=发射微弱的电子射流，将破坏力压制在较低的程度来帮助矿物的采集工作。
+md_scatter.desc=复数的操控电子团放射来进行攻击，作为复数操控的代价，你无法精准的控制落点.
+md_shield.desc=将电子团横截面扩大形成护盾，高速运动的电子将会摧毁来犯物质，并伤害任何用近距离接触来伤害自己的东西.
+md_meltdown.desc=以雷击之势所放出的特殊电子线，可以将金属像纸屑般吹散，厚实的墙壁溶解，连同障碍物与敌人一起贯穿。然而由于能力过于强大与不稳定，高出力的原子崩坏可能会伤害自己.
+md_mineexpert.desc=经过基础采集的锻炼，你能更好的控制自己的电子射流，从而采掘更加坚硬的矿物.
+md_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但是电子弹无法形成弹幕，难以应对全方位的饱和攻击，因此通过“扩散支援半导体”来应对能力无法大规模攻击的缺点.
+md_mineluck.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的破坏矿物周边的杂质而不损伤矿物.
+md_mineacc.desc=有时候将大量杂质破坏是无意义的，反而会让某些矿石附带的稀少素材也惨遭破坏，所以你开始去学习用电子束来完美的切割各种矿物.
 
-#Commands
-aimctrl.presetinf=预设%s：%s
-aimctrl.curpreset=当前预设编号：%s
-aimctrl.classinit=能力信息未初始化。
-setting.successful=设置成功。
-setting.outofbounds=输入信息溢出。
+#空间移动
+cat_teleport=空间移动
+
+skl_tp_threatening=危险传送
+skl_tp_string=弦理论概论
+skl_tp_penetrate=穿透传送
+skl_tp_mark=标记传送
+skl_tp_visc=内脏剥离
+skl_tp_loc=定位传送
+skl_tp_hst=高速闪现
+
+tp_threatening.desc=等级尚低的你无法移动质量较高或体积较大的东西，但是一个小小的碎片有时候就足以对别人造成巨大的伤害。
+tp_string.desc=所有的空间能力者们都需要学习弦理论来确保自己移动的精确性，你也不例外。
+tp_penetrate.desc=对于空间的奇妙感觉能让你知道眼前的障碍物大概的厚度，虽然感觉不是十分可靠，多多学习弦理论能进行更精确的传送。
+tp_mark.desc=以肉眼确认一个实体，确认实体的某个面为自己的传送坐标。
+tp_visc.desc=近距离触摸某个生物，将其内脏直接传送出体外，但是因为过于血腥的杀伤效果，让你不敢传送太多内脏，并且可能在使用技能之后产生反胃。
+tp_loc.desc=记忆下当前的坐标，如有必要可发动超远程范围传送来到该坐标，可将较近距离的生物一起传送，计算力消耗极大。
+tp_hst.desc=远超标记传送机动性的新传送方式，虽然单次传送的距离不如标记传送，但是极高的传送速度与惯性消除能让你实现强大的空中机动。
+
+#通用buff类技能
+skl_gn_btc=大脑锻炼课程
+skl_gn_btc2=大脑锻炼课程Ⅱ
+skl_gn_spirit=思维修养课程
+
+gn_btc.desc=锻炼你的思维能力以应对更加复杂的计算任务。提高计算力上上限
+gn_btc2.desc=更好的锻炼，让你的计算力的上限能够得到更好的强化。
+gn_spirit.desc=为了让计算力的恢复速度加快，要让自己使用过度的大脑得到好的修养。
 
 #GUI
 page.adskill=技能学习
 page.adlevel=等级提升
 page.adlearning=能力学习
+page.adconfirm=操作确认
+
 ac.notlearned=未习得
 ac.machinestat=状态
 ac.curenergy=当前电力
@@ -100,7 +149,6 @@ ac.syncrate=同步率
 ac.learnability=能力学习
 ac.btnconfirm=确认
 ac.btncancel=取消
-page.adconfirm=操作确认
 ac.confirm.head=你将要执行以下操作
 ac.confirm.tail=继续？
 ac.upgradeto=提高玩家等级至
@@ -111,20 +159,47 @@ ac.attempts=尝试
 ac.fails=失败
 ac.aborted=撤销
 ac.successful=成功
-ac.expconsumption=期望消耗
+ac.expconsumption=预计消耗
 ac.fullylearned=完全习得
 ac.upgradeskill=能力提升
 ac.upgradelv=等级提升
-ac.accept=接受
-ac.restore=复原
+ac.accept=完成
+ac.restore=取消
+ac.presset=预设设置
+ac.presselect=预设选择
+ac.preset=预设#
+ac.devnew=开发新能力
+
 adev.holoview=全息视图
 adev.userinfo=能力者信息
-ac.presset=预设设置
-ac.preset=预设#
-prs.chooseskl=选择能力
-level_0=Level 1
-level_1=Level 2
-level_2=Level 3
-level_3=Level 4
-level_4=Level 5
-#level_5=Level 6
+
+prs.chooseskl=选择技能
+
+level_0=低能力者
+level_1=异能力者
+level_2=强能力者
+level_3=大能力者
+level_4=超能力者
+#level_5=绝对能力者
+
+#WEN
+ac.notconnected=未连接
+ac.matinit=初始化
+ac.opstat=WEN状态
+ac.opsuc=操作成功
+ac.opfail=操作失败
+ac.cnnexist=频道已存在！
+ac.transmitting=操作中
+ac.inconsistentpass=两次输入的密码必须一致！
+ac.loading=加载中
+ac.wllogin=WEN登录
+ac.matpwd=更改密码
+ac.freqreg=频率变送器
+ac.frchannel=频道
+ac.frselect=选择频道
+ac.frcur=当前频道
+ac.frclear=清除连接
+ac.frestb=建立连接
+ac.frclearconfirm=你确认要清除当前机器的连接么？
+ac.ssidnn=输入的SSID不能为空.
+ac.selchannel=选择频道

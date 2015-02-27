@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.api.ctrl;
 
 import java.util.HashMap;
@@ -16,14 +28,12 @@ import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * The event handler in server side. It's actually a network handler.
@@ -302,11 +312,8 @@ public class EventHandlerServer {
 		EntityPlayer player = event.player;
 		
 		//Cancel all skills.
-		skillEventAll(player, SkillEventType.RAW_CANCEL);
-		
 		//Remove this player.
-		rehMap.remove(player);
-		kaMap.remove(player);
+		clearPlayerStates(player);
 		
 		SkillStateManager.removePlayerFromServer(player);
 	}
@@ -329,6 +336,16 @@ public class EventHandlerServer {
 	    if (rehMap.containsKey(event.original)) {
 	        rehMap.remove(event.original);
 	    }
+	}
+	
+	/**
+	 * Clear all the player's current states.
+	 * @param player
+	 */
+	public void clearPlayerStates(EntityPlayer player) {
+		skillEventAll(player, SkillEventType.RAW_CANCEL);
+		rehMap.remove(player);
+		kaMap.remove(player);
 	}
 
 	/**

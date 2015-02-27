@@ -1,16 +1,24 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.energy;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.api.energy.IWirelessGenerator;
 import cn.academy.api.energy.IWirelessNode;
@@ -21,7 +29,7 @@ import cn.academy.api.energy.IWirelessTile;
  * A set of wireless tiles within the same channel.
  * @author WeathFolD
  */
-public class WirelessNetwork {
+class WirelessNetwork {
 	
 	static final int MAX_LAG = 2000;
 	
@@ -49,6 +57,7 @@ public class WirelessNetwork {
 	}
 	
 	public void setPassword(String np) {
+		System.out.println(channel + "- setpw: " + np);
 		password = np;
 	}
 	
@@ -67,6 +76,10 @@ public class WirelessNetwork {
 			return conns.receivers.contains(tile);
 		}
 		return false;
+	}
+	
+	public IWirelessNode getConn(IWirelessTile tile) {
+		return lookup.get(tile);
 	}
 	
 	public void registerNode(IWirelessNode node) {
@@ -114,6 +127,17 @@ public class WirelessNetwork {
 	}
 	
 	public void onTick() {
+		Iterator<IWirelessNode> iter = nodes.iterator();
+		while(iter.hasNext()) {
+			IWirelessNode node = iter.next();
+			TileEntity te = (TileEntity) node;
+			if(te.isInvalid()) {
+				iter.remove();
+			}
+		}
+		if(nodes.size() == 0) {
+			dead = true;
+		}
 		calcNodes();
 		balanceNodes();
 	}
@@ -121,6 +145,7 @@ public class WirelessNetwork {
 	private void calcNodes() {
 		for(Map.Entry<IWirelessNode, NodeConns> ent : conns.entrySet()) {
 			calcNode(ent.getKey(), ent.getValue());
+			//System.out.println(ent.getKey());
 		}
 	}
 	
@@ -201,8 +226,8 @@ public class WirelessNetwork {
 	}
 	
 	static class NodeConns {
-		public static Set<IWirelessGenerator> generators = new HashSet();
-		public static Set<IWirelessReceiver> receivers = new HashSet();
+		public Set<IWirelessGenerator> generators = new HashSet();
+		public Set<IWirelessReceiver> receivers = new HashSet();
 	}
 
 }

@@ -1,9 +1,18 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.gui.dev;
 
-import java.util.List;
+import javax.vecmath.Vector2d;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +48,7 @@ public class PageSkills extends DevSubpage {
 		static final int MAXCHARS = 60;
 		static final float LW = 1;
 		int[] color = new int[] { 28, 28, 28 , 255};
-		static final float FONT_SIZE = 8F;
+		static final float FONT_SIZE = 5F;
 		
 		long lastDeac = 0;
 		
@@ -56,25 +65,21 @@ public class PageSkills extends DevSubpage {
 			WidgetNode top = getGui().getTopNode(mx, my);
 			if(top != null && top.widget instanceof SkillList.SkillElement) {
 				String str = ((SkillList.SkillElement)top.widget).skill.getDescription();
-				List<String> todraw = GenericUtils.chopString(str, MAXCHARS);
 				
 				int alpha = (int) (200 * Math.min((time - lastDeac) / 400.0, 1.0));
 				color[3] = alpha;
 				
+				GL11.glDepthFunc(GL11.GL_LEQUAL);
 				//Calc the maxium window length.
-				final float font_step = 9F;
-				double slen = 0.0;
-				for(int i = 0; i < todraw.size(); ++i) {
-					String tmp = todraw.get(i);
-					slen = Math.max(slen, GuiDeveloper.strLen(tmp, FONT_SIZE));
-				}
-				
 				final double SIDE = 10, TOP = 5;
-				float ht = font_step * todraw.size();
+				RenderUtils.bindColor(65, 163, 220, alpha);
+				HudUtils.setZLevel(201);
+				Vector2d rect = GuiDeveloper.FONT.drawLinebreak(str, SIDE, TOP, 6, 140);
 				
+				HudUtils.setZLevel(200);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				//rect
-				double w = slen + SIDE * 2, h = ht + TOP * 2;
+				double w = rect.x + SIDE * 2, h = rect.y + TOP * 2;
 				RenderUtils.bindColor(color);
 				HudUtils.drawModalRect(0, 0, w, h);
 				//outline
@@ -82,15 +87,16 @@ public class PageSkills extends DevSubpage {
 				HudUtils.drawRectOutline(0, 0, w, h, LW);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				
+				HudUtils.setZLevel(-90);
+				GL11.glDepthFunc(GL11.GL_ALWAYS);
+				
 				//description
-				for(int i = 0; i < todraw.size(); ++i) {
-					GuiDeveloper.drawText(todraw.get(i), SIDE, TOP + i * font_step, FONT_SIZE);
-				}
 			} else{
 				lastDeac = time;
 			}
 		}
 		
+		@Override
 		public int getDrawPriority() {
 			return 5;
 		}
@@ -106,6 +112,7 @@ public class PageSkills extends DevSubpage {
 			//Inferred data
 			final boolean learned;
 			final boolean fullyLearned;
+			final boolean canUpgrade;
 			final int level;
 			final int expectedExp;
 			final int expectedEnergy;
@@ -117,13 +124,13 @@ public class PageSkills extends DevSubpage {
 				
 				skillID = id;
 				skill = base.data.getSkill(id);
-				System.out.println("Adding " + skill);
 				
 				level = base.data.getSkillLevel(skillID);
 				learned = base.data.isSkillLearned(skillID);
 				fullyLearned = base.data.getSkillLevel(skillID) == skill.getMaxSkillLevel();
+				canUpgrade = base.data.canSkillUpgrade(skillID);
 				Pair<Integer, Double> exp = 
-					base.dev.getExpectation(base.dev.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
+					base.dev.getExpectation(TileDeveloper.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
 				expectedEnergy = exp.second.intValue();
 			}
@@ -135,7 +142,7 @@ public class PageSkills extends DevSubpage {
 				double v0;
 				if(fullyLearned) {
 					v0 = 139;
-				} else if(mouseHovering) {
+				} else if(canUpgrade && mouseHovering) {
 					v0 = 1;
 				} else if(!learned){
 					v0 = 70;
@@ -158,30 +165,38 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				GuiDeveloper.drawText(text, 30, 5.5, 9);
+				GuiDeveloper.drawText(text, 30, 6, 6, 63);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
 					//level
 					RenderUtils.bindColor(base.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					base.drawText(text, 97.5, 5.5, 7);
+					GuiDeveloper.drawText(text, 97.5, 5.5, 4.8);
+					
+					GL11.glColor4d(0.2, 0.2, 0.2, 0.7);
+					HudUtils.drawModalRect(30, 15, 75, 1);
+					
+					GL11.glColor4d(0, 1, 0, 0.8);
+					
+					HudUtils.drawModalRect(30, 15, 75 * base.data.getSkillUpgradeProgress(skillID), 1);
 				}
 				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(base.EXP_INDI_COLOR);
-					base.drawText(String.valueOf(expectedExp), 37, 19, 8);
+					GuiDeveloper.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
 					
 					RenderUtils.bindColor(base.EU_INDI_COLOR);
-					base.drawText(String.valueOf(expectedEnergy), 80, 19, 8);
+					GuiDeveloper.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
 				} else {
 					RenderUtils.bindColor(59, 177, 43);
-					base.drawText(ACLangs.fullyLearned(), 30, 17.5, 8);
+					GuiDeveloper.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
 				}
 			}
 			
+			@Override
 			public void onMouseDown(double mx, double my) {
-				if(!this.fullyLearned)
+				if(!this.fullyLearned && this.canUpgrade)
 					getGui().addWidget(new DiagActionConfirm(base, TileDeveloper.ID_SKILL_ACQUIRE, skillID));
 			}
 			
@@ -269,7 +284,7 @@ public class PageSkills extends DevSubpage {
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(base.DEFAULT_COLOR);
-		GuiDeveloper.drawText(str, 5, 135, 8);
+		GuiDeveloper.drawText(str, 5, 135, 5.5);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 

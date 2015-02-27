@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.api.ability;
 
@@ -23,8 +32,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class SkillBase {
 	
-	ResourceLocation logo = ACClientProps.TEX_QUESTION_MARK;
+	ResourceLocation logo;
 	String name = "null";
+	int maxSkillLv = 1;
 	
 	protected static final Random rand = new Random();
 	
@@ -48,8 +58,12 @@ public class SkillBase {
 		name = _name;
 	}
 	
-	public int getMaxSkillLevel() {
-		return 1;
+	public void setMaxLevel(int i) {
+		maxSkillLv = i;
+	}
+	
+	public final int getMaxSkillLevel() {
+		return maxSkillLv;
 	}
 	
 	/**
@@ -79,7 +93,7 @@ public class SkillBase {
 	 */
 	@SideOnly(Side.CLIENT)
 	public final ResourceLocation getLogo() {
-		return logo;
+		return logo == null ? ACClientProps.TEX_QUESTION_MARK : logo;
 	}
 	
 	/**
@@ -102,6 +116,13 @@ public class SkillBase {
 	 * @return If this skill is a 'dummy' skill (Skill that can't be controlled, only receive other events)
 	 */
 	public boolean isDummy() {
+		return false;
+	}
+	
+	/**
+	 * @return If the skill still receives control event when holding item.
+	 */
+	public boolean useWithItem() {
 		return false;
 	}
 	

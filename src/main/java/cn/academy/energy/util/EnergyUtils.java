@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.util;
 
@@ -7,6 +16,8 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
+import ic2.api.item.IElectricItemManager;
+import ic2.api.item.ISpecialElectricItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -53,12 +64,26 @@ public class EnergyUtils {
 	public static boolean isElecItem(ItemStack stack) {
 		return stack.getItem() instanceof IElectricItem;
 	}
+
+	public static int tryCharge(ItemStack stack, int amt) {
+		return tryCharge(stack, amt, false);
+	}
 	
-	public static void tryCharge(ItemStack stack, int amt) {
+	/**
+	 * 
+	 * @param stack
+	 * @param amt
+	 * @return How much energy transfered into the stack
+	 */
+	public static int tryCharge(ItemStack stack, int amt, boolean simulate) {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
-			ElectricItem.manager.charge(stack, amt, Integer.MAX_VALUE, true, false);
+			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? ((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
+			if(manager == null)
+				return 0;
+			return manager.charge(stack, amt, 3, true, simulate);
 		}
+		return 0;
 	}
 
 }

@@ -1,12 +1,24 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.api.ctrl;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.GuiOpenEvent;
 
 import org.lwjgl.input.Keyboard;
 
@@ -24,7 +36,6 @@ import cn.liutils.api.register.Configurable;
 import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -63,7 +74,7 @@ public class EventHandlerClient implements IKeyHandler {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
 			if (!skillEnabled) return;
-			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_DOWN);
+			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
 		@Override
@@ -71,39 +82,11 @@ public class EventHandlerClient implements IKeyHandler {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
             if (!skillEnabled) return;
-			onEvent(presets.getSkillMapping(id), SkillEventType.RAW_UP);
+			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
 		@Override
 		public void onKeyTick(int keyCode, boolean tickEnd) {}
-		
-	}
-	
-	/**
-	 * The network message handler. Use this class to avoid extra instances of EventHandlerClient.
-	 * @author acaly
-	 *
-	 */
-	@RegMessageHandler(msg = ControlMessage.class, side = RegMessageHandler.Side.CLIENT)
-	public static class NetworkHandler implements IMessageHandler<ControlMessage, IMessage> {
-		
-		@Override
-		public IMessage onMessage(ControlMessage msg, MessageContext ctx) {
-			//Client side only receives RAW_CANCEL.
-			switch (msg.eventType) {
-			case RAW_CANCEL:
-				INSTANCE.onEvent(msg.skillId, msg.eventType);
-				break;
-			case INIT_QUERY_WORLD_ID:
-				//Get the worldId.
-				//There's a hack that we store the id in time.
-				INSTANCE.loadPresetManager(msg.time);
-				break;
-			default:
-				AcademyCraft.log.error("An unexpected packet is received from server.");
-			}
-			return null;
-		}
 		
 	}
 
@@ -241,7 +224,7 @@ public class EventHandlerClient implements IKeyHandler {
 	@Configurable(category = "Control", key = "KEY_DISABLE", defValueInt = DEFAULT_KEY_DISABLE)
 	public static int KEY_DISABLE;
 	
-	@RegEventHandler(RegEventHandler.Bus.FML)
+	@RegEventHandler
 	public static final EventHandlerClient INSTANCE = new EventHandlerClient();
 	
 	private Category category;
@@ -339,8 +322,20 @@ public class EventHandlerClient implements IKeyHandler {
 	 * Get the world id from server. Use this id to initialize PresetManager.
 	 * @param id
 	 */
-	private void loadPresetManager(int id) {
+	void loadPresetManager(int id) {
 		INSTANCE.presets = new PresetManager(id);
+	}
+	
+	@SubscribeEvent
+	/**
+	 * This overrides the open gui event, the player can't open gui when using skills.
+	 * @param event
+	 */
+	public void onPlayerOpenGui(GuiOpenEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(player == null) return;
+		this.skillEventAll(SkillEventType.RAW_CANCEL);
+		AcademyCraft.netHandler.sendToServer(new ClientCancelMessage());
 	}
 	
 	@SubscribeEvent
@@ -362,7 +357,7 @@ public class EventHandlerClient implements IKeyHandler {
 		SkillStateManager.tickClient();
 	}
 	
-	private void onEvent(int skillId, SkillEventType type) {
+	void onEvent(int skillId, SkillEventType type) {
 		//If it's the empty skill, do nothing.
 		if (skillId == 0) return;
 		skillEvent(skillId, type);
@@ -417,10 +412,14 @@ public class EventHandlerClient implements IKeyHandler {
 	 * EventHandlerClient as a IKeyHandler, handling KEY_DISABLE.
 	 */
 	
-	public boolean skillEnabled = true;
+	public boolean skillEnabled = false;
 	
 	public static boolean isSkillEnabled() {
 		return INSTANCE.skillEnabled;
+	}
+	
+	public static boolean isSkillMapped(int sid) {
+		return PresetManager.getCurrentPreset().hasSkillMapping(sid);
 	}
 	
 	@Override

@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.msg.matrix;
 
@@ -48,12 +57,14 @@ public class MsgInitMatrix implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		channel = ByteBufUtils.readUTF8String(buf);
+		pwd = ByteBufUtils.readUTF8String(buf);
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(x).writeInt(y).writeInt(z);
 		ByteBufUtils.writeUTF8String(buf, channel);
+		ByteBufUtils.writeUTF8String(buf, pwd);
 	}
 
 	@RegMessageHandler(msg = MsgInitMatrix.class, side = Side.SERVER)
@@ -97,22 +108,22 @@ public class MsgInitMatrix implements IMessage {
 			buf.writeBoolean(successful);
 		}
 		
-		@RegMessageHandler(msg = Reply.class, side = Side.CLIENT)
-		public static class Handler implements IMessageHandler<Reply, IMessage> {
+	}
+	
+	@RegMessageHandler(msg = Reply.class, side = Side.CLIENT)
+	public static class ReplyHandler implements IMessageHandler<Reply, IMessage> {
 
-			@Override
-			@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
-			public IMessage onMessage(Reply msg, MessageContext ctx) {
-				GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-				if(gui instanceof GuiMatrix) {
-					GuiMatrix mat = (GuiMatrix) gui;
-					mat.executeEvent(new GuiMatrix.InitReply(msg.successful));
-				} else {
-					//Possibly closed by player, ignore
-				}
-				return null;
+		@Override
+		@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
+		public IMessage onMessage(Reply msg, MessageContext ctx) {
+			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+			if(gui instanceof GuiMatrix) {
+				GuiMatrix mat = (GuiMatrix) gui;
+				mat.executeEvent(new GuiMatrix.InitReply(msg.successful));
+			} else {
+				//Possibly closed by player, ignore
 			}
-			
+			return null;
 		}
 		
 	}

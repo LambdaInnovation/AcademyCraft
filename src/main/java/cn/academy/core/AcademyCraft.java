@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.core;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -7,13 +19,15 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACRecipes;
+import cn.academy.energy.block.tile.impl.TileSolarGenerator;
+import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.liutils.core.LIUtils;
-import cn.liutils.util.render.LambdaFont;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -23,6 +37,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 /**
@@ -37,7 +52,7 @@ public class AcademyCraft {
 	/**
 	 * 当前版本
 	 */
-	public static final String VERSION = "0.0.1dev";
+	public static final String VERSION = "1.0alpha";
 
 	public static final String NET_CHANNEL = "academy-network";
 
@@ -79,6 +94,8 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_RENDER_HOOK);
+		
+		GameRegistry.registerWorldGenerator(new ACWorldGen(), 2);
 	}
 
 	@EventHandler
@@ -87,6 +104,7 @@ public class AcademyCraft {
         
         ACRecipes.regRecipe();
         ACRecipes.regSmelting();
+        ACRecipes.regChestGen();
 	}
 
 	@EventHandler

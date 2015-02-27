@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.client.gui;
 
@@ -7,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
@@ -14,10 +24,16 @@ import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
+import cn.academy.energy.client.gui.Dialogues.DiagState;
+import cn.academy.energy.client.gui.Dialogues.InputPassword;
+import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.node.MsgInitNode;
+import cn.academy.energy.msg.node.MsgNodeGuiLoad;
+import cn.academy.energy.msg.node.MsgNodeLoadList;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiContainer;
 import cn.liutils.api.gui.Widget;
+import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -35,23 +51,31 @@ public class GuiNode extends LIGuiContainer {
 	
 	static final int[] COLOR = { 133, 240, 240 };
 	
+	//Parents/Associations
 	final ContainerNode node;
 	final TileNode tile;
 	
+	//Sync flags
 	public boolean synced; //flag set by Messages indicating the packet was sent
+	public boolean listSynced; //whether channel list was synced.
+	
 	//Sync data
+	public String curChannel;
 	public List<String> channels;
 	public int nNodes;
 	public int nGens;
 
+	//pages
 	Page mainPage;
+	StateDiag stateDiag;
 	Choose choosePage;
 	
 	public GuiNode(ContainerNode c) {
 		super(c);
 		node = c;
 		tile = c.node;
-		
+		AcademyCraft.netHandler.sendToServer(new MsgNodeGuiLoad.Request(tile));
+		AcademyCraft.netHandler.sendToServer(new MsgNodeLoadList.Request(tile));
 		reinit();
 	}
 	
@@ -62,6 +86,7 @@ public class GuiNode extends LIGuiContainer {
 		gui.addWidget(mainPage = new Page());
 	}
 	
+	@Override
 	public boolean isSlotActive() {
 		return mainPage.doesListenKey;
 	}
@@ -75,6 +100,7 @@ public class GuiNode extends LIGuiContainer {
 			this.setTexResolution(384, 384);
 		}
 		
+		@Override
 		public void draw(double mx, double my, boolean hov) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(-.2, 0.5, 0);
@@ -87,8 +113,8 @@ public class GuiNode extends LIGuiContainer {
 			GL11.glPopMatrix();
 			
 			RenderUtils.bindColor(COLOR);
-			String channel = tile.isConnected() ? tile.getChannel() : ACLangs.notConnected();
-			drawText(channel, 81, 14.5, 7, Align.LEFT);
+			String cn = synced ? (curChannel == null ? ACLangs.notConnected() : curChannel) : ACLangs.loading();
+			drawText(cn, 81, 14.5, 7, Align.LEFT);
 			
 			RenderUtils.bindIdentity();
 		}
@@ -109,8 +135,8 @@ public class GuiNode extends LIGuiContainer {
 		public void draw(double mx, double my, boolean hov) {
 			final double tw = 18, th = 24;
 			RenderUtils.loadTexture(TEX);
-			if(tile.isConnected()) {
-				HudUtils.drawRect(0, 0, 315, 64, tw / 1.5, th / 1.5, tw, th);
+			if(isConnected()) {
+				HudUtils.drawRect(0, 0, 315, 62, tw / 1.5, th / 1.5, tw, th);
 			} else {
 				HudUtils.drawRect(0, 0, 315, 22, tw / 1.5, th / 1.5, tw, th);
 			}
@@ -136,24 +162,37 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onAdded() {
-			addWidget(new ChannelList());
+			ChannelList list;
+			addWidget(list = new ChannelList());
+			ChooseDB db = new ChooseDB();
+			addWidget(db);
+			list.setDragBar(db);
 		}
 		
+		@Override
 		public void draw(double mx, double my, boolean hover) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(-this.getNode().x, -this.getNode().y, 0);
-			GL11.glColor4d(0, 0, 0, .7);
-			HudUtils.drawModalRect(0, 0, GuiNode.this.width, GuiNode.this.height);
-			GL11.glPopMatrix();
+			drawBlackout();
 			
 			GL11.glColor4d(1, 1, 1, 1);
 			super.draw(mx, my, hover);
+			
+			RenderUtils.bindColor(COLOR);
+			drawText(ACLangs.selectChannel(), 80, 10, 7, Align.CENTER);
 		}
 		
 		public void onClose() {
 			mainPage.doesListenKey = true;
 			dispose();
 		}
+	}
+	
+	private class ChooseDB extends DragBar {
+
+		public ChooseDB() {
+			super(135, 38, 16, 172.5, 16);
+			this.initTexDraw(TEX_SELECT, 304, 0, 32, 32);
+		}
+		
 	}
 	
 	private class ChannelList extends ListVertical {
@@ -167,7 +206,7 @@ public class GuiNode extends LIGuiContainer {
 		@Override
 		public void draw(double mx, double my, boolean h) {
 			super.draw(mx, my, h);
-			if(!loaded && synced) {
+			if(!loaded && listSynced) {
 				loaded = true;
 				init();
 			}
@@ -175,7 +214,7 @@ public class GuiNode extends LIGuiContainer {
 		
 		@Override
 		public void onAdded() {
-			if(synced) {
+			if(listSynced) {
 				loaded = true;
 				init();
 			}
@@ -207,14 +246,48 @@ public class GuiNode extends LIGuiContainer {
 				RenderUtils.bindColor(ACTIVE_COLOR);
 				HudUtils.drawModalRect(0, 0, width, height);
 			}
-			drawText(channel, 5, 4, 5);
+			RenderUtils.bindColor(100, 255, 255);
+			drawText(channel, 5, 4, 7);
 		}
 		
 		@Override
 		public void onMouseDown(double mx, double my) {
-			AcademyCraft.netHandler.sendToServer(new MsgInitNode(GuiNode.this.tile, channel));
+			gui.addWidget(new NInputPassword(channel));
 			choosePage.dispose();
 		}
+	}
+	
+	private class NInputPassword extends InputPassword {
+
+		public NInputPassword(String _cn) {
+			super(_cn);
+		}
+
+		@Override
+		public void performAction(String pwd) {
+			gui.addWidget(stateDiag = new StateDiag());
+			AcademyCraft.netHandler.sendToServer(new MsgInitNode(tile, cn, pwd));
+			dispose();
+		}
+		
+	}
+	
+	public void finishInit(boolean suc) {
+		if(stateDiag != null) {
+			stateDiag.state = suc ? DiagState.SUCCESS : DiagState.FAIL;
+			stateDiag.initCancel();
+		} else {
+			AcademyCraft.log.error("WTF");
+		}
+	}
+	
+	private boolean isConnected() {
+		return curChannel != null;
+	}
+	
+	@Override
+	protected boolean containerAcceptsKey(int key) {
+		return key != Keyboard.KEY_E; //Interrupts the key event
 	}
 	
 	private static void drawText(String str, double x, double y, double size) {
@@ -223,6 +296,10 @@ public class GuiNode extends LIGuiContainer {
 	
 	private static void drawText(String str, double x, double y, double size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(str, x, y, size, align);
+	}
+	
+	private static void drawAdjusted(String str, double x, double y, double size, Align align, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(str, x, y, size, align, cst);
 	}
 	
 }

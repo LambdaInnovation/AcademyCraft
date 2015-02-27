@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client;
 
@@ -10,6 +19,64 @@ import net.minecraft.util.StatCollector;
  * @author WeathFolD
  */
 public class ACLangs {
+	
+	public static String devNewAbility() {
+		return local("ac.devnew");
+	}
+	
+	public static String selectChannel() {
+		return local("ac.selchannel");
+	}
+	
+	public static String ssidnotnull() {
+		//输入的ssid不能为空
+		return local("ac.ssidnn");
+	}
+	
+	public static String frClearConfirm() {
+		//你确认要清除当前机器的连接么？
+		return local("ac.frclearconfirm");
+	}
+	
+	public static String frEstbConn() { //Establish Connection
+		return local("ac.frestb");
+	}
+	
+	public static String frClearConn() {
+		return local("ac.frclear");
+	}
+	
+	public static String frCurrentChannel() {
+		return local("ac.frcur");
+	}
+	
+	public static String frChannelSelect() {
+		return local("ac.frselect");
+	}
+	
+	public static String frSelectedChannel() {
+		return local("ac.frchannel");
+	}
+	
+	public static String freqReg() {
+		return local("ac.freqreg");
+	}
+	
+	public static String matChangePwd() {
+		return local("ac.matpwd");
+	}
+	
+	public static String wirelessLogin() {
+		return local("ac.wllogin");
+	}
+	
+	public static String opFailed() {
+		return local("ac.opfail");
+	}
+	
+	public static String presetSelect() {
+		return local("ac.presselect");
+	}
 	
 	public static String opSuccessful() {
 		return local("ac.opsuc");

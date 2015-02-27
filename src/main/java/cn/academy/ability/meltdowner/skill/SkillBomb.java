@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.meltdowner.skill;
 
@@ -22,8 +31,10 @@ public class SkillBomb extends SkillBase {
 	public SkillBomb() {
 		this.setLogo("meltdowner/bomb.png");
 		this.setName("md_bomb");
+		setMaxLevel(10);
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(1) {
 
@@ -36,7 +47,7 @@ public class SkillBomb extends SkillBase {
 	}
 	
 	private static float getConsume(int slv, int lv) {
-		return 250 + slv *  40 + lv * 20;
+		return 150 + slv * 15 + lv * 10;
 	}
 	
 	private static float getDamage(int slv, int lv) {

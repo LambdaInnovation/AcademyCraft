@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.misc.client.render;
 
@@ -15,7 +24,6 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.misc.entity.EntityRay;
-import cn.liutils.util.GenericUtils;
 
 /**
  * This only peforms correct translation.
@@ -51,7 +59,6 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 	public final void doRender(Entity var1, double x, double y, double z,
 			float h, float a) {
 		long time = Minecraft.getSystemTime();
-		
 		T er = (T) var1;
 		if(!er.isLoaded()) {
 			return;
@@ -85,11 +92,11 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 			GL11.glColor4d(1, 1, 1, alpha * er.getAlpha());
 			
 			if(firstPerson) {
-				transformFirstPerson(er, x, y, z);
-				if(!er.doesFollowSpawner())
-					optimizeView(er, x, y, z);
+				if(er.isNearPlayer())
+					transformFirstPerson(er, x, y, z);
 			} else {
-				transformThirdPerson(er, x, y, z);
+				if(er.isNearPlayer())
+					transformThirdPerson(er, x, y, z);
 				optimizeView(er, x, y, z);
 			}
 			
@@ -97,7 +104,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 				Tessellator.instance.setBrightness(15728880);
 			}
-			drawAtOrigin(er, len);
+			drawAtOrigin(er, len, firstPerson);
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -130,7 +137,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		}
 	}
 	
-	protected abstract void drawAtOrigin(T ent, double len);
+	protected abstract void drawAtOrigin(T ent, double len, boolean firstPerson);
 	
 	protected void sv(Vec3 v, double x, double y, double z) {
 		v.xCoord = x;

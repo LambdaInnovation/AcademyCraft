@@ -1,12 +1,18 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.command;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.Abilities;
@@ -36,12 +42,12 @@ public class CmdDataSet extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/aset [cat][level][cp][maxcp][exp][open][god] <index> <value>";
+		return "/aset ([cat][level][slv][cp][maxcp][exp][openall][god]) <index> <value>, where <index> <value> are optional parameters.";
 	}
 
 	@Override
 	public void processCommand(ICommandSender ics, String[] args) {
-		EntityPlayer player = this.getCommandSenderAsPlayer(ics);
+		EntityPlayer player = CommandBase.getCommandSenderAsPlayer(ics);
 		if(player == null) return;
 		
 		AbilityData data = AbilityDataMain.getData(player);
@@ -113,10 +119,15 @@ public class CmdDataSet extends LICommandBase {
 			} else if(args[0].equalsIgnoreCase("sexp")) { //give player some experience.
 				player.addExperienceLevel(30);
 				player.experience = 0;
+			} else if(args[0].equalsIgnoreCase("openall")) {
+				for(Integer i : data.getCanLearnSkillList()) {
+					data.setSkillLevel(i, Math.max(1, data.getSkillLevel(i)));
+				}
+				sendChat(ics, "learned all available skills");
 			}
 		} else {
-			this.sendError(ics, "Invalid argument size");
-			this.sendChat(ics, getCommandUsage(ics));
+			LICommandBase.sendError(ics, "Invalid argument size");
+			LICommandBase.sendChat(ics, getCommandUsage(ics));
 		}
 	}
 

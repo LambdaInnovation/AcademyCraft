@@ -1,16 +1,27 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMeltDowner;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD
@@ -21,6 +32,15 @@ public class SkillMeltDowner extends SkillBase {
 	public SkillMeltDowner() {
 		this.setLogo("meltdowner/meltdown.png");
 		this.setName("md_meltdown");
+		setMaxLevel(6);
+	}
+	
+	private static float getCPConsume(int slv, int lv) {
+		return 10 + slv * 1.2f + lv * 0.6f;
+	}
+	
+	private static float getDamage(int slv, int lv, int ticks) {
+		return (ticks * 0.025f) * (float)(10 + GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8));
 	}
 	
 	@Override
@@ -40,10 +60,14 @@ public class SkillMeltDowner extends SkillBase {
 		boolean spawn = true;
 		
 		EntityMeltDowner mdRay;
+		
+		final float ccp;
 
 		public MDState(EntityPlayer player) {
 			super(player);
 			data = AbilityDataMain.getData(player);
+			int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
+			ccp = getCPConsume(slv, lv);
 		}
 
 		@Override
@@ -53,23 +77,26 @@ public class SkillMeltDowner extends SkillBase {
 
 		@Override
 		public void onFinish() {
-			if(!spawn) {
+			if(!spawn || this.getTickTime() < 12) {
 				return;
 			}
+			
 			if(!isRemote()) {
-				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, 5.0f));
+				int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
+				int rt = Math.min(getTickTime(), 40);
+				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv, rt)));
 			}
 		}
 		
 		@Override
 		public boolean onTick(int ticks) {
-			if(!data.decreaseCP(100)) {
+			if(!data.decreaseCP(ccp, CatMeltDowner.meltDowner)) {
 				spawn = false;
 				return true;
 			}
-			if(ticks == 100) {
+			if(ticks == 120) {
 				player.attackEntityFrom(DamageSource.causePlayerDamage(player), 
-					Math.min(player.getHealth() - 0.1f, 19.0f));
+					Math.min(player.getHealth() - 0.1f, 5.0f));
 				spawn = false;
 				return true;
 			}

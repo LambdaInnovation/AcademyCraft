@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.meltdowner.entity;
 
@@ -23,31 +32,34 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegEntity(clientOnly = true)
-@RegEntity.HasRender
 public abstract class EntityMdRayBase extends EntityRay {
 	
-	@SideOnly(Side.CLIENT)
-	@RegEntity.Render
-	public static RayRender render;
+	private boolean attacked = false;
 
-	public EntityMdRayBase(EntityLivingBase _spawner) {
+	public EntityMdRayBase(EntityPlayer _spawner) {
 		super(_spawner);
-		doAttack();
 	}
 	
 	public EntityMdRayBase(EntityPlayer _spawner, EntityMdBall ball) {
-		super(_spawner.worldObj);
-		MovingObjectPosition mop = GenericUtils.tracePlayer(_spawner, 20.0);
+		super(_spawner);
+		resetHeading(ball);
+	}
+	
+	public EntityMdRayBase(World world) {
+		super(world);
+	}
+	
+	public void resetHeading(EntityMdBall ball) {
+		MovingObjectPosition mop = GenericUtils.tracePlayer(getSpawner(), 20.0);
 		double dist = mop == null ? 20.0 : 
 			mop.hitVec.distanceTo
 			(worldObj.getWorldVec3Pool()
 			.getVecFromPool(ball.posX, ball.posY, ball.posZ));
-		Motion3D mo = new Motion3D(_spawner, true).move(dist);
-		this.setHeading(mo.posX - ball.posX, mo.posY - ball.posY, mo.posZ - ball.posZ, 1.0);
+		Motion3D mo = new Motion3D(getSpawner(), true).move(dist);
+		double tox = ball.posX, toy = ball.posY + 0.1, toz = ball.posZ;
+		this.setHeading(mo.posX - tox, mo.posY - toy, mo.posZ - toz, 1.0);
 		this.rayLength = (float) dist;
-		this.setPosition(ball.posX, ball.posY, ball.posZ);
-		
-		doAttack();
+		this.setPosition(tox, toy, toz);
 	}
 	
 	private void doAttack() {
@@ -57,27 +69,33 @@ public abstract class EntityMdRayBase extends EntityRay {
 		}
 	}
 	
-	protected abstract void handleCollision(MovingObjectPosition mop);
-
-	public EntityMdRayBase(World world) {
-		super(world);
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if(attackOnSpawn() && !worldObj.isRemote && !attacked) {
+			attacked = true;
+			doAttack();
+		}
 	}
 	
+	public float getDisplayRayLen() { //This enables comlicated display tricks on ray len.
+		return Math.min(5f * ticksExisted, rayLength);
+	}
+	
+	protected abstract void handleCollision(MovingObjectPosition mop);
+	
+	public abstract ResourceLocation[] getTexData();
+	
+	@Override
 	public boolean doesFollowSpawner() {
 		return false;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public static class RayRender extends RendererRayBlended {
-
-		public RayRender() {
-			super(new ResourceLocation("academy:textures/effects/mdray.png"),
-				  new ResourceLocation("academy:textures/effects/mdray_begin.png"),
-				 0.666666);
-			this.setWidth(0.4);
-			this.setAlpha(0.6);
-		}
-		
+	@Override
+	protected float getDefaultRayLen() {
+		return 40.0f;
 	}
+	
+	protected boolean attackOnSpawn() { return true; }
 
 }

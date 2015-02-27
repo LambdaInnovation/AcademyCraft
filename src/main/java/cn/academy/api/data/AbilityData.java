@@ -1,16 +1,21 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.api.data;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -20,7 +25,6 @@ import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
-import cn.liutils.util.misc.Pair;
 
 /**
  * @author WeathFolD, acaly
@@ -107,6 +111,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getCategory().getLevel(levelId);
 	}
 	
+	public boolean canUpdateLevel() {
+		return !this.hasAbility() || (getLevelID() < getLevelCount() - 1 && this.maxCP >= getLevel().getMaxCP());
+	}
+	
 	public int getLevelID() {
 		return levelId;
 	}
@@ -131,6 +139,10 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
+	public float getMaxCPIncr(float consumedCP) {
+		return consumedCP * 0.005f;
+	}
+	
 	//-----Skill-----
 	public int getSkillID(SkillBase skill) {
 		return skill.getIndexInCategory(getCategory());
@@ -146,6 +158,12 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public boolean isSkillLearned(int sid) {
 		return sid == 0 || skillLevels[sid] > 0;
+	}
+	
+	public boolean isSkillLearned(SkillBase skill) {
+		int sid = getSkillID(skill);
+		if(sid == -1) return false;
+		return isSkillLearned(sid);
 	}
 	
 	/**
@@ -187,10 +205,6 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!player.worldObj.isRemote) {
 			syncSimple();
 		}
-	}
-	
-	public void incrSkillExp(int skillID, float value) {
-		setSkillExp(skillID, getSkillExp(skillID) + value);
 	}
 	
 	public int getMaxSkillLevel(int skillID) {
@@ -283,31 +297,54 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setMaxCP(float value) {
+		if(!player.worldObj.isRemote)
+			System.out.println("set MaxCP " + maxCP + " to " + value);
 		maxCP = value;
 		currentCP = Math.min(currentCP, maxCP);
-		
 		if (!player.worldObj.isRemote) {
 			syncSimple();
 		}
 	}
 	
 	/**
+	 * use decreaseCP(float need, SkillBase) instead.
 	 * @return if decrease action is successful
 	 */
+	@Deprecated
 	public boolean decreaseCP(float need) {
-		return decreaseCP(need, false);
+		return decreaseCP(need, getSkill(0), false);
 	}
 	
+	/**
+	 * use decreaseCP(float need, SkillBase, boolean force) instead.
+	 * @return if decrease action is successful
+	 */
+	@Deprecated
 	public boolean decreaseCP(float need, boolean force) {
+		return decreaseCP(need, getSkill(0), force);
+	}
+	
+	public boolean decreaseCP(float need, SkillBase skill) {
+		return decreaseCP(need, skill, false);
+	}
+	
+	public boolean decreaseCP(float need, SkillBase base, boolean force) {
 		if(player.capabilities.isCreativeMode) {
 			return true;
 		}
+		int sid = this.getSkillID(base);
+		if(sid == -1) sid = 0; //Go dummy
+		
 		boolean ret = currentCP >= need;
 		if(!force && !ret)
 			return false;
+		addSkillExp(sid, getSexpForCP(need));
+		setMaxCP(Math.min(this.getMaxCP() + this.getMaxCPIncr(need), this.getLevel().getMaxCP()));
 		setCurrentCP(ret ? currentCP - need : 0);
+		
 		return ret;
 	}
+	
 
 	private float getRecoverRate() {
 		Level lv = GenericUtils.assertObj(getCategory().getLevel(getLevelID()));
@@ -330,6 +367,46 @@ public class AbilityData implements IExtendedEntityProperties {
 			}
 		}
 		return true;
+	}
+	
+	//Skill Experience API
+	/**
+	 * Get the skillExp required to update to next level.
+	 * @param srlv skill min learn lv
+	 * @param lev skill current lv
+	 */
+	protected float getSexpForSkillLevel(SkillBase sb, int lev) {
+		return (getCategory().getSkillMinLevel(sb) + 1) * (10 + lev * 3);
+	}
+	
+	protected float getSexpForCP(float cp) {
+		return cp * 0.003f;
+	}
+	
+	public boolean canSkillUpgrade(int sid) {
+		if(skillLevels[sid] == 0) return true;
+		SkillBase skill = this.getSkill(sid);
+		return this.skillLevels[sid] != skill.getMaxSkillLevel() 
+				&& getSkillExp(sid) >= getSexpForSkillLevel(skill, getSkillLevel(sid));
+	}
+	
+	public void addSkillExp(int sid, float exp) {
+		this.setSkillExp(sid, Math.min(this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]), exp + skillExps[sid]));
+	}
+	
+	public double getSkillUpgradeProgress(int sid) {
+		if(skillLevels[sid] == 0 || this.skillLevels[sid] == getSkill(sid).getMaxSkillLevel()) return 1;
+		return Math.min(1, this.getSkillExp(sid) / this.getSexpForSkillLevel(getSkill(sid), skillLevels[sid]));
+	}
+	
+	public void upgrade(int sid) {
+		//TODO:Second-pass validation?
+		SkillBase skill = this.getSkill(sid);
+		if(skillLevels[sid] == skill.getMaxSkillLevel())
+			return;
+		skillLevels[sid]++;
+		skillExps[sid] = 0;
+		this.syncAll();
 	}
 	
 	//-----INTERNAL PROCESSING-----
@@ -395,10 +472,9 @@ public class AbilityData implements IExtendedEntityProperties {
 	private void syncSimple() {
 		if (!isInSetup) {
 			if (needToReset) {
-				AbilityDataMain.resetPlayer(player);
-				needToReset = false;
+			    syncAll();
 			} else {
-				AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
+			    dirtyTick += 1;
 			}
 		}
 	}
@@ -407,10 +483,23 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (!isInSetup) {
 			AbilityDataMain.resetPlayer(player);
 			needToReset = false;
+			dirtyTick = 0;
 		} else {
 			needToReset = true;
 		}
 	}
+    
+	/**
+	 * In syncSimple, instead of sending a packet, we just make it dirty.
+	 * Sync packet is sent here. Called by AbilityDataMain.
+	 */
+    public void doSync() {
+        if (dirtyTick == 0) return;
+        if (++dirtyTick >= 20) { //at least one sync packet every 20 ticks
+            AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
+            dirtyTick = 0;
+        }
+    }
 	
 	/**
 	 * Set the AbilityData to the initial value of the given category.
@@ -432,4 +521,6 @@ public class AbilityData implements IExtendedEntityProperties {
 	private boolean needToReset = false;
 	
 	private int tickCount = 0;
+	
+	private int dirtyTick = 0;
 }

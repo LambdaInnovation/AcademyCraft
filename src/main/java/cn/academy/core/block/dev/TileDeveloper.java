@@ -1,9 +1,16 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.block.dev;
-
-import ic2.api.energy.tile.IEnergySink;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -12,8 +19,8 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -24,11 +31,12 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.gui.dev.GuiDeveloper;
 import cn.academy.core.client.render.RenderDeveloper;
 import cn.academy.core.register.ACBlocks;
+import cn.academy.energy.block.tile.base.ACReceiverBase;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.block.TileGenericSink;
 import cn.liutils.template.entity.EntitySittable;
 import cn.liutils.template.entity.EntitySittable.ISittable;
 import cn.liutils.util.DebugUtils;
@@ -37,6 +45,7 @@ import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
 import cn.liutils.util.space.BlockPos;
 import cn.liutils.util.space.IBlockFilter;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -47,7 +56,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends TileGenericSink implements IEnergySink, ISittable {
+public class TileDeveloper extends ACReceiverBase implements ISittable {
 
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
@@ -85,16 +94,17 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	int nMagIncr;
 	
 	//Internal States
-	private EntityPlayer user;
+	public EntityPlayer user;
 	private int updateCount;
 	private int stimTicker;
 	private static final Random RNG = new Random();
 
-	public TileDeveloper() {}
+	public TileDeveloper() {
+		setMaxEnergy(INIT_MAX_ENERGY);
+	}
 	
 	//Sit and use API
-	
-	EntitySittable es;
+	SitEntity es;
 	
 	/**
 	 * Let a player use this ability dev.
@@ -103,9 +113,13 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	public boolean use(EntityPlayer player) {
 		if(user != null) return false;
 		user = player;
-		user.getEntityData().setBoolean("developing", true);
-		if(!worldObj.isRemote)
+		if(!worldObj.isRemote) {
+			if(es == null) {
+				System.err.println("null developer sitEntity instance, isHead: " + isHead());
+				return false;
+			}
 			es.mount(user);
+		}
 		guiHandler.openGuiContainer(player, worldObj, xCoord, yCoord, zCoord);
 		return true;
 	}
@@ -115,7 +129,6 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 			return;
 		if(!worldObj.isRemote)
 			es.disMount();
-		user.getEntityData().setBoolean("developing", false);
 		user = null;
 	}
 	
@@ -221,6 +234,12 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		isStimulating = true;
 		maxStimTimes = action.getExpectedStims(data);
 		stimSuccess = stimFailure = 0;
+		
+		if(user.capabilities.isCreativeMode) { //Player in creative mode. End the dev action immediately.
+			isStimulating = false;
+			this.stimSuccess = this.maxStimTimes;
+			action.onActionFinished(data);
+		}
 		sync(); //Force update if server
 	}
 	
@@ -229,7 +248,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	}
 	
 	public double getSyncRate() {
-		return 0.421 + nMagIncr * 0.12;
+		return 0.421 + Math.min(6, nMagIncr) * 0.12;
 	}
 	
 	//Internal update
@@ -240,9 +259,33 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		if(!isHead())
 			return;
 		
+		if(user != null && (user.isDead || (es != null && user.ridingEntity != es))) {
+			user = null;
+		}
+		if(user != null){
+			int side = this.getBlockMetadata() & 3;
+			float rot = 0;
+			switch(side) {
+			case 0:
+				rot = 90;
+				break;
+			case 1:
+				rot = 180;
+				break;
+			case 2:
+				rot = -90;
+				break;
+			case 3:
+				rot = 0;
+				break;
+			}
+			user.renderYawOffset = user.rotationYaw = user.rotationYawHead = rot;
+			user.rotationPitch = 40;
+		}
+		
 		if(!worldObj.isRemote && this.es == null) {
 			worldObj.spawnEntityInWorld(es 
-				= new EntitySittable(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
+				= new SitEntity(worldObj, xCoord + .5F, yCoord + .6F, zCoord + .5F, xCoord, yCoord, zCoord));
 		}
 		
 		boolean update = false;
@@ -255,7 +298,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 			updateModules();
 		}
 		
-		if(!worldObj.isRemote && user != null) {
+		if(!worldObj.isRemote) {
 			//HeartBeat update
 			if(isStimulating) {
 				updateStimulate();
@@ -281,7 +324,8 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	
 	private void sync() {
 		if(!worldObj.isRemote) {
-			AcademyCraft.netHandler.sendTo(new MsgDeveloper(this), (EntityPlayerMP) user);
+			TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
+			AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
 		}
 	}
 	
@@ -304,6 +348,7 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	}
 	
 	//Energy
+	@Override
 	public double getMaxEnergy() {
 		return INIT_MAX_ENERGY;
 	}
@@ -326,6 +371,12 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 		return super.injectEnergyUnits(directionFrom, amount);
 	}
 	
+    @Override
+	@SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+    	return INFINITE_EXTENT_AABB;
+    }
+	
 	//Registry
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
@@ -333,7 +384,8 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 	
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-    	@SideOnly(Side.CLIENT)
+    	@Override
+		@SideOnly(Side.CLIENT)
     	protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if(te == null || !(te instanceof TileDeveloper)) {
@@ -343,8 +395,31 @@ public class TileDeveloper extends TileGenericSink implements IEnergySink, ISitt
 			return new GuiDeveloper((TileDeveloper) te);
     	}
     	
-    	protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+    	@Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
     		return null;
     	}
     };
+    
+    /**
+     * Dummy inherition. Used for determination purpose.
+     * @author WeathFolD
+     */
+    @RegEntity
+    public static class SitEntity extends EntitySittable {
+    	public SitEntity(World wrld, float x, float y, float z, int bx,
+    			int by, int bz) {
+    		super(wrld, x, y, z, bx, by, bz);
+    	}
+
+    	public SitEntity(World wrld) {
+    		super(wrld);
+    	}
+    }
+
+	@Override
+	public double getSearchRange() {
+		return 24;
+	}
+    
 }

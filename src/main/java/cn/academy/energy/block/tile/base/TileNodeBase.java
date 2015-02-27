@@ -1,12 +1,23 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.block.tile.base;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.energy.IWirelessNode;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.energy.WirelessSystem;
-import cn.academy.energy.block.tile.impl.TileWirelessBase;
+import cn.academy.energy.msg.MsgEnergyHeartbeat;
 
 /**
  * @author WeathFolD
@@ -21,6 +32,12 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 		maxEnergy = _maxEnergy;
 		latency = _latency;
 		transDist = _dist;
+	}
+	
+	@Override
+	protected void onUpdate() {
+		if(!worldObj.isRemote)
+			AcademyCraft.netHandler.sendToAllAround(new MsgEnergyHeartbeat(this), new TargetPoint(worldObj.provider.dimensionId, xCoord + .5, yCoord + .5, zCoord + .5, 10));
 	}
 	
 	public boolean activate(String channel) {
@@ -56,13 +73,15 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 		return transDist;
 	}
 	
-    public void readFromNBT(NBTTagCompound tag)
+    @Override
+	public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
         energy = tag.getDouble("energy");
     }
 
-    public void writeToNBT(NBTTagCompound tag)
+    @Override
+	public void writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);

@@ -1,11 +1,19 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.block;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +30,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Energy Node
  * @author WeathFolD
  */
 @RegistrationClass
@@ -33,23 +42,27 @@ public class BlockNode extends BlockContainer {
 		super(Material.rock);
 		setBlockName("ac_node");
 		setCreativeTab(AcademyCraft.cct);
+		setHardness(2.0f);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
     	return side == 0 || side == 1 ? mainIcon : sideIcon;
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
         sideIcon = ir.registerIcon("academy:nodes_side");
         mainIcon = ir.registerIcon("academy:nodes_main");
     }
     
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, 
+    @Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, 
     		int side, float accx, float accy, float accz){
     	TileNode node = safeGet(world, x, y, z);
-    	if(node != null && node.isUseableByPlayer(player)) {
+    	if(node != null) {
     		element.openGuiContainer(player, world, x, y, z);
     		return true;
     	}
@@ -66,7 +79,8 @@ public class BlockNode extends BlockContainer {
 		return new TileNode();
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getRenderBlockPass() {
         return -1;
     }
@@ -79,6 +93,7 @@ public class BlockNode extends BlockContainer {
     @RegGuiHandler
 	public static GuiHandlerBase element = new GuiHandlerBase() {
 		
+		@Override
 		@SideOnly(Side.CLIENT)
 		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileNode node = BlockNode.safeGet(world, x, y, z);
@@ -88,6 +103,7 @@ public class BlockNode extends BlockContainer {
 			return null;
 		}
 		
+		@Override
 		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileNode node = BlockNode.safeGet(world, x, y, z);
 			if(node != null) {

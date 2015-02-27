@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.energy.block.tile.impl;
 
@@ -33,7 +42,7 @@ public class ContainerNode extends Container {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(inv, j + i * 9 + 9,
-						(int) 6 + j * 19, 96 + i * 19));
+						6 + j * 19, 96 + i * 19));
 			}
 		}
 		for (int i = 0; i < 9; i++) {
@@ -69,8 +78,8 @@ public class ContainerNode extends Container {
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      * WeAthFolD：↑MC傻逼代码
      */
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
-    {
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
     	ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 		// null checks and checks if the item can be stacked (maxStackSize > 1)

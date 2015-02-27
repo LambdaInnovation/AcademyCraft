@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.misc.client.render;
 
@@ -16,7 +25,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T> {
 	
-	ResourceLocation blendTex;
+	protected ResourceLocation blendTex;
 
 	public RendererRayBlended(ResourceLocation _tex, ResourceLocation _blend, double _ratio) {
 		super(_tex, _ratio);
@@ -24,7 +33,9 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 	}
 
 	@Override
-	protected void drawAtOrigin(T ent, double len) {
+	protected void drawAtOrigin(T ent, double len, boolean w) {
+		double width = w ? widthFp : widthTp;
+		
 		double forw = width * ratio;
 		if(len < 2 * forw) len = 2 * forw; //Change to safe range
 		
@@ -41,18 +52,18 @@ public class RendererRayBlended<T extends EntityRay> extends RendererRaySimple<T
 			GL11.glPopMatrix();
 			
 			//Ending blend
-			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, len);
-			GL11.glScaled(1, 1, -1);
-			rect.map.set(0, 0, 1, 1);
-			drawer.draw();
-			GL11.glPopMatrix();
+//			GL11.glPushMatrix();
+//			GL11.glTranslated(0, 0, len);
+//			GL11.glScaled(1, 1, -1);
+//			rect.map.set(0, 0, 1, 1);
+//			drawer.draw();
+//			GL11.glPopMatrix();
 			
 			RenderUtils.loadTexture(tex);
 			//Real ray
 			RenderUtils.loadTexture(tex);
 			GL11.glTranslated(0, 0, forw);
-			len = len - 2 * forw;
+			len = len - forw;
 			rect.map.set(0, 0, len * ratio, 1);
 			rect.setSize(len, width);
 			drawer.draw();

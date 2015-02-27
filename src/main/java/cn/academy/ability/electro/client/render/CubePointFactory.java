@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.client.render;
 
@@ -42,9 +51,14 @@ public class CubePointFactory implements IPointFactory {
 	private List<Pair<Double, Integer>> probList = new ArrayList<Pair<Double, Integer>>(); //probLowerBound-face pairs
 	private double w, h, l;
 	private static final Random RNG = new Random();
+	boolean centered;
 
 	public CubePointFactory(double _w, double _h, double _l) {
 		setSize(_w, _h, _l);
+	}
+	
+	public void setCentered(boolean b) {
+		centered = b;
 	}
 	
 	public void setEnableFaces(Integer... faces) {
@@ -100,24 +114,29 @@ public class CubePointFactory implements IPointFactory {
 	public NormalVert next() {
 		int face = randFace();
 		double a, b;
+		double xOffset = 0, zOffset = 0;
+		if(centered) {
+			xOffset = -w * 0.5;
+			zOffset = -l * 0.5;
+		}
 		switch(face) {
 		case 0:
 		case 1:
 			a = RNG.nextDouble() * w;
 			b = RNG.nextDouble() * l;
-			return new NormalVert(a, face == 0 ? 0 : h, b, 
+			return new NormalVert(a + xOffset, face == 0 ? 0 : h, b + zOffset, 
 				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		case 2:
 		case 3:
 			a = RNG.nextDouble() * h;
 			b = RNG.nextDouble() * w;
-			return new NormalVert(b, a, face == 2 ? 0 : l, 
+			return new NormalVert(b + xOffset, a, (face == 2 ? 0 : l) + zOffset, 
 				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		case 4:
 		case 5:
 			a = RNG.nextDouble() * h;
 			b = RNG.nextDouble() * l;
-			return new NormalVert(face == 4 ? 0 : w, a, b,
+			return new NormalVert((face == 4 ? 0 : w) + xOffset, a, b + zOffset,
 				NORMALS[face][0], NORMALS[face][1], NORMALS[face][2]);
 		}
 		return null; //Not supposed to happen

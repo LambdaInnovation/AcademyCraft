@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.client.render.skill;
 
@@ -21,10 +30,9 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.draw.DrawObject;
 import cn.liutils.api.draw.prop.AssignTexture;
 import cn.liutils.api.draw.prop.DisableLight;
+import cn.liutils.api.draw.prop.Transform;
 import cn.liutils.api.draw.tess.Rect;
-import cn.liutils.api.draw.tess.Transform;
 import cn.liutils.api.render.IDrawable;
-import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,7 +45,8 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
 	IPointFactory poi;
 	
-	static final ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
+	@SideOnly(Side.CLIENT)
+	ResourceLocation[] TEX = ACClientProps.ANIM_SMALL_ARC;
 	
 	private static Random RNG = new Random();
 	
@@ -45,7 +54,7 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 	
 	double dra;
 			
-	static class ArcObject extends DrawObject {
+	class ArcObject extends DrawObject {
 		public Rect rect;
 		public AssignTexture tex;
 		
@@ -88,6 +97,11 @@ public class SRSmallCharge extends SkillRenderer implements IDrawable {
 		}
 	}
 	
+	public void setTex(ResourceLocation[] ts) {
+		this.TEX = ts;
+	}
+	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderHandEffect(EntityPlayer player, HandRenderType type, long time) {
 		if(type == HandRenderType.EQUIPPED)

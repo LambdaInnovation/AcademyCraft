@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.core.register;
 
 import cn.academy.core.block.dev.BlockDeveloper;
@@ -8,11 +20,16 @@ import cn.academy.energy.block.BlockSolarGenerator;
 import cn.academy.misc.block.ACOre;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
+import cn.liutils.template.item.ItemBlockDirMulti;
 
+/**
+ * AC Blocks Registration Class
+ * @author WeathFold, KSkun
+ */
 @RegistrationClass
 public class ACBlocks {
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockDirMulti.class)
 	public static BlockDeveloper developer;
 	
 	//@RegBlock
@@ -32,31 +49,39 @@ public class ACBlocks {
 	public static BlockMagInducer magInducer;
 	
 	@RegBlock
+	@RegBlock.BTName("cuore")
 	@RegBlock.OreDict("oreCopper")
-	public static ACOre oreCopper = new ACOre("copperore", 1);
+	public static ACOre oreCopper = new ACOre(1, 3.05f);
 	
-	@RegBlock
+	//TODO: This block isn't in used in AC beta.
+/*	@RegBlock
+	@RegBlock.BTName("tinore")
 	@RegBlock.OreDict("oreTin")
-	public static ACOre oreTin = new ACOre("tinore", 1);
+	public static ACOre oreTin = new ACOre(1, 2.95f);*/
 	
 	@RegBlock
-	@RegBlock.OreDict("oreAluminum")
-	public static ACOre oreAl = new ACOre("aluminumore", 1);
+	@RegBlock.BTName("alore")
+	@RegBlock.OreDict("oreAluminium")
+	public static ACOre oreAl = new ACOre(1, 2.9f);
 	
 	@RegBlock
-	@RegBlock.OreDict("oreMg")
-	public static ACOre oreMg = new ACOre("mg_ore", 1);
+	@RegBlock.BTName("mgore")
+	@RegBlock.OreDict("oreMagnesium")
+	public static ACOre oreMg = new ACOre(1, 2.95f);
 	
 	@RegBlock
-	@RegBlock.OreDict("oreNi")
-	public static ACOre oreNi = new ACOre("ni_ore", 1);
+	@RegBlock.BTName("niore")
+	@RegBlock.OreDict("oreNickel")
+	public static ACOre oreNi = new ACOre(1, 3.2f);
 	
 	@RegBlock
+	@RegBlock.BTName("crystalore")
 	@RegBlock.OreDict("oreCrystal")
-	public static ACOre oreCrystal = new ACOre("crystal_ore", 1);
+	public static ACOre oreCrystal = new ACOre(2, 3.5f);
 	
 	@RegBlock
+	@RegBlock.BTName("shadowore")
 	@RegBlock.OreDict("oreShadow")
-	public static ACOre oreShadow = new ACOre("shadow_ore", 1);
+	public static ACOre oreShadow = new ACOre(2, 3.5f).setLightLevel(0.9375f);
 	
 }

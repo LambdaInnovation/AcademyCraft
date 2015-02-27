@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.meltdowner.entity;
 
@@ -14,7 +23,6 @@ import net.minecraft.world.World;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.CollisionCheck;
-import cn.liutils.api.entityx.motion.VelocityUpdate;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
 
@@ -32,10 +40,10 @@ public class EntityBomb extends EntityMdBall {
 		super(player);
 		dmg = _dmg;
 		init();
-		this.execAfter(15, new Callback() {
+		this.execAfter(15, new EntityCallback<EntityMdBall>() {
 
 			@Override
-			public void action(EntityMdBall ball) {
+			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
 				//setState(BallState.ACTIVE);
 
@@ -68,10 +76,10 @@ public class EntityBomb extends EntityMdBall {
 
 	public EntityBomb(World world) {
 		super(world);
-		this.execAfter(15, new Callback() {
+		this.execAfter(15, new EntityCallback<EntityMdBall>() {
 
 			@Override
-			public void action(EntityMdBall ball) {
+			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
 				addCollisionCheck();
 				//setState(BallState.ACTIVE);
@@ -107,9 +115,6 @@ public class EntityBomb extends EntityMdBall {
 	}
 	
 	@Override
-	protected boolean doesFloat() { return false; }
-	
-	@Override
-	protected boolean doesFollow() { return ticksExisted <= 15; }
+	public boolean doesFollow() { return ticksExisted <= 15; }
 
 }

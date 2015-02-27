@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.energy;
 
@@ -9,11 +18,12 @@ import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.api.energy.IWirelessTile;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
+import cn.liutils.util.misc.Pair;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
@@ -22,10 +32,10 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEventHandler(Bus.FML)
 public class WirelessSystem {
 	
-	private static final WirelessSystem INSTANCE = new WirelessSystem();
+	@RegEventHandler()
+	public static final WirelessSystem INSTANCE = new WirelessSystem();
 	
 	static Map<Integer, WiWorldData> worldData = new HashMap<Integer, WiWorldData>();
 	
@@ -47,8 +57,7 @@ public class WirelessSystem {
 	 */
 	public static void registerNode(IWirelessNode node, String channel) {
 		assert(node instanceof TileEntity);
-		//System.out.println("RegNode " + channel);
-		instance().getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
+		getData(((TileEntity) node).getWorldObj()).registerNode(node, channel);
 	}
 	
 	public static String getPassword(World world, String channel) {
@@ -65,19 +74,36 @@ public class WirelessSystem {
 	 */
 	public static void unregisterTile(IWirelessTile tile) {
 		assert(tile instanceof TileEntity);
-		instance().getData(((TileEntity) tile).getWorldObj()).unregister(tile);
+		instance();
+		WirelessSystem.getData(((TileEntity) tile).getWorldObj()).unregister(tile);
+	}
+	
+	public static void removeChannel(World world, String channel) {
+		getData(world).removeChannel(channel);
 	}
 	
 	public static boolean isTileIn(IWirelessTile tile, String channel) {
 		return getData(((TileEntity)tile).getWorldObj()).isInChannel(tile, channel);
 	}
 	
-	public static IWirelessNode getNearestNode(World world, int x, int y, int z) {
-		return getData(world).getNearestNode(x, y, z);
+	public static boolean isTileRegistered(IWirelessTile tile) {
+		return getData(((TileEntity)tile).getWorldObj()).isRegistered(tile);
 	}
 	
-	public static List<IWirelessNode> getAvailableNodes(World world, int x, int y, int z, double range, int max) {
+	public static List<String> getAvailableChannels(World world, int x, int y, int z, double range, int max) {
+		return getData(world).getChannelsIn(x, y, z, range, max);
+	}
+	
+	public static List<Pair<IWirelessNode, String>> getAvailableNodes(World world, int x, int y, int z, double range, int max) {
 		return getData(world).getNodesIn(x, y, z, range, max);
+	}
+	
+	public static String getTileChannel(IWirelessTile tile) {
+		return getData(((TileEntity)tile).getWorldObj()).getChannel(tile);
+	}
+	
+	public static IWirelessNode getConnectedNode(IWirelessTile tile) {
+		return getData(((TileEntity)tile).getWorldObj()).getConnectedNode(tile);
 	}
 	
 	private static WiWorldData getData(World world) {
@@ -97,8 +123,21 @@ public class WirelessSystem {
 	public void onServerTick(ServerTickEvent event) {
 		for(WiWorldData data : worldData.values()) {
 			data.onTick();
-			//System.out.println(data);
 		}
 	}
+	
+	@SubscribeEvent
+	public void onWorldLoad(WorldEvent.Load event) {
+		if(!event.world.isRemote) {
+			worldData.remove(event.world.provider.dimensionId);
+			System.out.println("remOVE");
+		}
+	}
+	
+	@SubscribeEvent
+	public void onWorldUnload(WorldEvent.Unload event) {
+		worldData.remove(event.world.provider.dimensionId);
+	}
+	
 
 }

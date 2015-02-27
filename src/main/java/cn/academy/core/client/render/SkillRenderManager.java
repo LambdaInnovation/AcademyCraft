@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.render;
 
@@ -15,10 +24,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,6 +44,7 @@ import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.render.IPlayerRenderHook;
 import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook;
 import cn.liutils.registry.PlayerRenderHookRegistry.RegPlayerRenderHook.Pass;
+import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -45,9 +57,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
+@SideOnly(Side.CLIENT)
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 @RegEventHandler({Bus.Forge, Bus.FML})
-@SideOnly(Side.CLIENT)
 public class SkillRenderManager {
 	
 	private static SkillRenderManager instance = new SkillRenderManager();
@@ -100,7 +112,8 @@ public class SkillRenderManager {
 				iter.remove();
 				continue;
 			}
-			if(node.dead || node.render.tickUpdate(player, dt)) {
+			if(node.dead || 
+			node.render.tickUpdate(player, dt)) {
 				iter.remove();
 			}
 		}
@@ -110,11 +123,18 @@ public class SkillRenderManager {
 	public void renderHudEvent(RenderGameOverlayEvent e) {
 		ScaledResolution sr = e.resolution;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(e.type != ElementType.CROSSHAIRS)
+			return;
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 		long time = Minecraft.getSystemTime();
 		for(RenderNode node : renderers) {
 			node.render.renderHud(player, sr, time - node.createTime);
 		}
+		RenderUtils.loadTexture(WIDGITS);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
 	}
+	
+	private static final ResourceLocation WIDGITS = new ResourceLocation("textures/gui/widgets.png");
 	
 	public static void renderThirdPerson(EntityLivingBase ent, ItemStack stack, ItemRenderType type) {
 		if(type == ItemRenderType.EQUIPPED_FIRST_PERSON || !(ent instanceof EntityPlayer)) return;

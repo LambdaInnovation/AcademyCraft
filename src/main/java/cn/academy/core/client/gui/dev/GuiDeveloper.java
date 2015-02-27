@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.gui.dev;
 
@@ -16,6 +25,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.util.HudUtils;
+import cn.liutils.util.render.LambdaFont;
 import cn.liutils.util.render.LambdaFont.Align;
 
 /**
@@ -40,6 +50,8 @@ public class GuiDeveloper extends LIGuiScreen {
 	protected PageMain pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
+	public static LambdaFont FONT = ACClientProps.FONT_YAHEI_32;
+	
 	AbilityData data;
 	TileDeveloper dev;
 	EntityPlayer user;
@@ -57,7 +69,8 @@ public class GuiDeveloper extends LIGuiScreen {
 		gui.addWidget(pageMain = new PageMain(this));
 		subs.clear();
 		subs.add(new PageLearn(this));
-		subs.add(new PageSkills(this));
+		if(data.hasAbility())
+			subs.add(new PageSkills(this));
 		
 		for(DevSubpage sp : subs) {
 			pageMain.addWidget(sp);
@@ -72,13 +85,15 @@ public class GuiDeveloper extends LIGuiScreen {
     	}
     }
     
-    public void drawScreen(int mx, int my, float w)
+    @Override
+	public void drawScreen(int mx, int my, float w)
     {
     	HudUtils.setTextureResolution(512, 512);
     	super.drawScreen(mx, my, w);
     }
     
-    public void onGuiClosed() {
+    @Override
+	public void onGuiClosed() {
     	super.onGuiClosed();
     	//TODO: State checking and doesn't userQuit when re-constructing
     	dev.userQuit();
@@ -94,12 +109,20 @@ public class GuiDeveloper extends LIGuiScreen {
         return false;
     }
 	
-	public static void drawText(String text, double x, double y, float size) {
+	public static void drawText(String text, double x, double y, double size) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
 	}
 	
-	public static void drawText(String text, double x, double y, float size, Align align) {
+	public static void drawText(String text, double x, double y, double size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+	}
+	
+	public static void drawText(String text, double x, double y, double size, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
+	}
+	
+	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
+		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
 	}
 	
 	public static double strLen(String text, double size) {

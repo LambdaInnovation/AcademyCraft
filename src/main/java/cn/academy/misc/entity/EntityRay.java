@@ -1,7 +1,20 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
 package cn.academy.misc.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -20,18 +33,17 @@ public class EntityRay extends EntityX {
 	
 	Motion3D motion;
 	
-	EntityLivingBase spawner;
+	EntityPlayer spawner;
 	
 	boolean load;
 	
-	@SideOnly(Side.CLIENT)
 	protected double alpha = 1.0;
 	
 	{
 		ignoreFrustumCheck = true;
 	}
 	
-	public EntityRay(EntityLivingBase _spawner) {
+	public EntityRay(EntityPlayer _spawner) {
 		super(_spawner.worldObj);
 		spawner = _spawner;
 		motion = new Motion3D(spawner, true);
@@ -49,7 +61,6 @@ public class EntityRay extends EntityX {
 		load = true;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public EntityRay(World world) {
 		super(world);
 		load = false;
@@ -81,8 +92,8 @@ public class EntityRay extends EntityX {
 		rayLength = dataWatcher.getWatchableObjectFloat(11);
 		int eid = dataWatcher.getWatchableObjectInt(12);
 		Entity elb = worldObj.getEntityByID(eid);
-		if(elb instanceof EntityLivingBase) {
-			spawner = (EntityLivingBase) elb;
+		if(elb instanceof EntityPlayer) {
+			spawner = (EntityPlayer) elb;
 		}
 		
 		if(!lastLoad && load) {
@@ -123,7 +134,14 @@ public class EntityRay extends EntityX {
 		return false;
 	}
 	
-	public EntityLivingBase getSpawner() {
+	/**
+	 * Return if this ray is designed to be spawned right at player's hand. Used for render effect.
+	 */
+	public boolean isNearPlayer() {
+		return true;
+	}
+	
+	public EntityPlayer getSpawner() {
 		return spawner;
 	}
 	
@@ -201,6 +219,16 @@ public class EntityRay extends EntityX {
 		if(doesFollowSpawner()) {
 			setBySpawner();
 		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		setDead();
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		setDead();
 	}
 	
 	@Override

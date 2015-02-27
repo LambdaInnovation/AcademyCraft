@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.ability.electro.skill;
 
@@ -21,6 +30,7 @@ import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
+import cn.annoreg.mc.RegSubmoduleInit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,16 +40,23 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @RegistrationClass
+@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class SkillWeakArc extends SkillBase {
 	
 	static final int MAX_HOLD_TIME = 200;
 	
 	@SideOnly(Side.CLIENT)
-	static SkillRenderer charge = new SRSmallCharge(5, 0.8);
+	static SkillRenderer charge;
+	
+	@SideOnly(Side.CLIENT)
+	public static void init() {
+		charge = new SRSmallCharge(5, 0.8);
+	}
 	
 	public SkillWeakArc() {
 		setLogo("electro/arc.png");
 		setName("em_arc");
+		setMaxLevel(10);
 	}
 	
 	@Override
@@ -121,6 +138,7 @@ public class SkillWeakArc extends SkillBase {
 		}
 
 		@Override
+		@SideOnly(Side.CLIENT)
 		public ResourceLocation[] getTexs() {
 			return ACClientProps.ANIM_ELEC_ARC;
 		}

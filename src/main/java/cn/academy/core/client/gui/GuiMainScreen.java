@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.client.gui;
 
@@ -135,11 +144,11 @@ public class GuiMainScreen extends AuxGui {
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);
-				ACClientProps.FONT_YAHEI_32.draw(data.getLevel().getDisplayName(), 184, 60, 21);
+				ACClientProps.FONT_YAHEI_32.drawAdjusted(data.getLevel().getDisplayName(), 184, 58, 20, 69);
 				
 				//Numeric CP
 				String str = String.format("%.0f/%.0f", data.getCurrentCP(), data.getMaxCP());
-				font.draw(str, 316, 88, 25, Align.CENTER);
+				font.drawAdjusted(str, 316, 87, 22, Align.CENTER, 167);
 			}
 		} GL11.glPopMatrix();
 		RenderUtils.bindIdentity();

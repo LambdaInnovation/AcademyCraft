@@ -1,5 +1,14 @@
 /**
- * 
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.lambdacraft.cn/
+ *
+ * AcademyCraft is open-source, and it is distributed under 
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.item;
 
@@ -8,9 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -29,7 +36,6 @@ public class ItemVoid extends Item {
 
 	public ItemVoid() {
 		super();
-		setUnlocalizedName("void");
 		setTextureName("academy:void");
 		FMLCommonHandler.instance().bus().register(this);
 		this.setFull3D();
@@ -47,7 +53,9 @@ public class ItemVoid extends Item {
 		}
 	}
 	
-    public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
+    @Override
+    @SideOnly(Side.CLIENT)
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
     	if(!(entity instanceof EntityPlayer))
     		return;
     	EntityPlayer player = (EntityPlayer) entity;
