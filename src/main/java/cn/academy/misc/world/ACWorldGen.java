@@ -46,7 +46,8 @@ public class ACWorldGen implements IWorldGenerator {
 	private void genOverworld(World world, Random random, int x, int z) {
 		//TODO: This ore gen isn't available in this version.
 //		(new ACGenMinable(ACBlocks.oreTin, 5, 60, 23)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreCopper, 7, 60, 25)).generate(world, random, x, z);
+		//TODO: Copper Ore is unavailable.
+//		(new ACGenMinable(ACBlocks.oreCopper, 7, 60, 25)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreAl, 5, 60, 25)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreMg, 3, 60, 20)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreNi, 3, 60, 18)).generate(world, random, x, z);

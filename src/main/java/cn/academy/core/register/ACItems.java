@@ -89,10 +89,11 @@ public class ACItems {
 	@RegItem.OreDict("ingotAluminum")
 	public static ACSimpleItem ingotAl;
 	
-	@RegItem
+	//TODO: Not in the plan.
+/*	@RegItem
 	@RegItem.UTName("cuingot")
 	@RegItem.OreDict("ingotCopper")
-	public static ACSimpleItem ingotCu;
+	public static ACSimpleItem ingotCu;*/
 	
 	//TODO: These items isn't in used in AC beta.
 /*	@RegItem
@@ -139,6 +140,7 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.UTName("siliconrod")
+	@RegItem.OreDict("ingotSilicon")
 	public static ACSimpleItem siliconRod;
 	
 	@RegItem
