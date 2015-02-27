@@ -86,12 +86,12 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.UTName("alingot")
-	@RegItem.OreDict("ingotAl")
+	@RegItem.OreDict("ingotAluminum")
 	public static ACSimpleItem ingotAl;
 	
 	@RegItem
 	@RegItem.UTName("cuingot")
-	@RegItem.OreDict("ingotCu")
+	@RegItem.OreDict("ingotCopper")
 	public static ACSimpleItem ingotCu;
 	
 	//TODO: These items isn't in used in AC beta.
@@ -107,12 +107,12 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.UTName("mgingot")
-	@RegItem.OreDict("ingotMg")
+	@RegItem.OreDict("ingotMagnesium")
 	public static ACSimpleItem ingotMg;
 	
 	@RegItem
 	@RegItem.UTName("niingot")
-	@RegItem.OreDict("ingotNi")
+	@RegItem.OreDict("ingotNickel")
 	public static ACSimpleItem ingotNi;
 	
 	@RegItem
@@ -178,6 +178,7 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.UTName("pcbn")
+	@RegItem.OreDict("circuitBase")
 	public static ACSimpleItem pcb;
 	
 	@RegItem
