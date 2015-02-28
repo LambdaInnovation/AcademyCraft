@@ -14,6 +14,7 @@ package cn.academy.misc.msg;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -57,9 +58,10 @@ public class TeleportMsg implements IMessage {
 
 		@Override
 		public IMessage onMessage(TeleportMsg msg, MessageContext ctx) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
-			player.travelToDimension(msg.dim);
-			player.setPosition(msg.x, msg.y, msg.z);
+			EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+			if(player.worldObj.provider.dimensionId != msg.dim)
+				player.travelToDimension(msg.dim);
+			player.setPositionAndUpdate(msg.x, msg.y, msg.z);
 			return null;
 		}
 		

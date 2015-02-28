@@ -137,15 +137,6 @@ public class LocationData implements IExtendedEntityProperties {
 	public static void register(EntityPlayer player) {
 		LocationData data = new LocationData(player);
 		player.registerExtendedProperties(IDENTIFIER, data);
-		data.locationList.add(new Location("www", 
-			player.worldObj.provider.dimensionId, 
-			player.posX, player.posY, player.posZ));
-		data.locationList.add(new Location("hhh", 
-				player.worldObj.provider.dimensionId, 
-				player.posX, player.posY, player.posZ));
-		data.locationList.add(new Location("fff", 
-				player.worldObj.provider.dimensionId, 
-				player.posX, player.posY, player.posZ));
 	}
 	
 	public Location getLocation(int i) {
