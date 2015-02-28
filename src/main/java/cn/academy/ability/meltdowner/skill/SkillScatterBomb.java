@@ -59,7 +59,7 @@ public class SkillScatterBomb extends SkillBase {
 				return new SBState(player);
 			}
 			
-		});
+		}.setCooldown(50000));
 	}
 	
 	public static class SBState extends State {

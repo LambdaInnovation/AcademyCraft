@@ -96,7 +96,7 @@ public class SkillMineDetect extends SkillBase {
 				return new EnableVision(player);
 			}
 			
-		});
+		}.setCooldown(10000));
 	}
 	
 	@SideOnly(Side.CLIENT)
