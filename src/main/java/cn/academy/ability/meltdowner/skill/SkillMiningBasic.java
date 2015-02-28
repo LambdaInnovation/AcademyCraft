@@ -12,15 +12,54 @@
  */
 package cn.academy.ability.meltdowner.skill;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import cn.academy.ability.meltdowner.CatMeltDowner;
+import cn.academy.ability.meltdowner.entity.EntityMiningRayBase;
+import cn.academy.api.data.AbilityData;
+import cn.academy.core.proxy.ACClientProps;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEntity;
+
 /**
  * @author WeathFolD
  *
  */
+@RegistrationClass
 public class SkillMiningBasic extends SkillMiningBase {
 
-	/**
-	 * 
-	 */
+	@RegEntity
+	public static class BasicRay extends EntityMiningRayBase {
+
+		public BasicRay(AbilityData data) {
+			super(data, CatMeltDowner.mineBasic);
+		}
+		
+		public BasicRay(World world) {
+			super(world);
+		}
+
+		@Override
+		protected int getDigRate(int slv, int lv) {
+			return 16;
+		}
+
+		@Override
+		protected int getHarvestLevel() {
+			return 2;
+		}
+
+		@Override
+		public ResourceLocation[] getTexData() {
+			return ACClientProps.ANIM_MD_RAY_S;
+		}
+
+		@Override
+		public float getRayWidth() {
+			return .2f;
+		}
+	}
+	
 	public SkillMiningBasic() {
 		this.setLogo("meltdowner/mine_basic.png");
 		this.setName("md_minebasic");
@@ -33,13 +72,8 @@ public class SkillMiningBasic extends SkillMiningBase {
 	}
 
 	@Override
-	int getHarvestLevel() {
-		return 1;
-	}
-
-	@Override
-	int getSpawnRate() {
-		return 30;
+	protected EntityMiningRayBase createEntity(AbilityData data) {
+		return new BasicRay(data);
 	}
 	
 }

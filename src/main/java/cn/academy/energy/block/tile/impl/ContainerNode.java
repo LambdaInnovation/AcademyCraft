@@ -53,20 +53,12 @@ public class ContainerNode extends Container {
 	@Override
     public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for(int i = 0; i < this.crafters.size(); ++i) {
-			ICrafting ic = (ICrafting) this.crafters.get(i);
-			ic.sendProgressBarUpdate(this, 0, (int) node.getEnergy() / 3);
-		}
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void updateProgressBar(int par1, int par2) {
     	loaded = true;
-    	switch(par1) {
-    	case 0:
-    		node.setEnergy(par2 * 3);
-    	}
     }
 
 	@Override

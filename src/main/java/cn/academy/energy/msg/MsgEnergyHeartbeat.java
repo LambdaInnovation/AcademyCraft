@@ -17,6 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.api.energy.IWirelessNode;
+import cn.academy.core.energy.WirelessSystem;
+import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
 import cn.annoreg.mc.RegMessageHandler.Side;
@@ -34,13 +36,15 @@ public class MsgEnergyHeartbeat implements IMessage {
 	
 	int x, y, z;
 	float energy;
+	boolean loaded;
 
-	public MsgEnergyHeartbeat(IWirelessNode node) {
+	public MsgEnergyHeartbeat(TileNodeBase node) {
 		TileEntity te = (TileEntity) node;
 		x = te.xCoord;
 		y = te.yCoord;
 		z = te.zCoord;
 		energy = (float) node.getEnergy();
+		loaded = WirelessSystem.isTileRegistered(node);
 	}
 	
 	public MsgEnergyHeartbeat() {}
@@ -51,11 +55,12 @@ public class MsgEnergyHeartbeat implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		energy = buf.readFloat();
+		loaded = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(x).writeInt(y).writeInt(z).writeFloat(energy);
+		buf.writeInt(x).writeInt(y).writeInt(z).writeFloat(energy).writeBoolean(loaded);
 	}
 	
 	@RegMessageHandler(msg = MsgEnergyHeartbeat.class, side = Side.CLIENT)
@@ -66,8 +71,10 @@ public class MsgEnergyHeartbeat implements IMessage {
 		public IMessage onMessage(MsgEnergyHeartbeat msg, MessageContext ctx) {
 			World world = Minecraft.getMinecraft().theWorld;
 			TileEntity te = world.getTileEntity(msg.x, msg.y, msg.z);
-			if(te instanceof IWirelessNode) {
-				((IWirelessNode)te).setEnergy(msg.energy);
+			if(te instanceof TileNodeBase) {
+				TileNodeBase node = (TileNodeBase) te;
+				node.setEnergy(msg.energy);
+				node.isLoaded = msg.loaded;
 			}
 			return null;
 		}

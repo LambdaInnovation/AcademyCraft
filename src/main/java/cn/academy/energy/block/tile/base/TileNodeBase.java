@@ -12,12 +12,14 @@
  */
 package cn.academy.energy.block.tile.base;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.api.energy.IWirelessNode;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.energy.WirelessSystem;
 import cn.academy.energy.msg.MsgEnergyHeartbeat;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -28,6 +30,9 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 	protected final double maxEnergy, latency, transDist;
 	protected double energy;
 	
+	@SideOnly(Side.CLIENT)
+	public boolean isLoaded; //Client fake load flag, used for rendering.
+	
 	public TileNodeBase(double _maxEnergy, double _latency, double _dist) {
 		maxEnergy = _maxEnergy;
 		latency = _latency;
@@ -35,9 +40,10 @@ public abstract class TileNodeBase extends TileWirelessBase implements IWireless
 	}
 	
 	@Override
-	protected void onUpdate() {
-		if(!worldObj.isRemote)
-			AcademyCraft.netHandler.sendToAllAround(new MsgEnergyHeartbeat(this), new TargetPoint(worldObj.provider.dimensionId, xCoord + .5, yCoord + .5, zCoord + .5, 10));
+	protected void onSync() {
+		if(!worldObj.isRemote) {
+			AcademyCraft.netHandler.sendToAllAround(new MsgEnergyHeartbeat(this), new TargetPoint(worldObj.provider.dimensionId, xCoord + .5, yCoord + .5, zCoord + .5, 6));
+		}
 	}
 	
 	public boolean activate(String channel) {

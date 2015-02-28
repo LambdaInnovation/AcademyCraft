@@ -51,13 +51,9 @@ public class CatTeleport extends Category {
 	public static SkillBrainTrainingCourse2 skillBrainTrainingCourse2;
 	public static SkillSpiritTrainingCourse skillSpiritTrainingCourse;
 
-	// public final static ResourceLocation TELE_LOGO = new
-	// ResourceLocation("academy:textures/abilities/teleport/main.png");
-
 	@Override
 	protected void register() {
 		INSTANCE = this;
-		// Minecraft.getMinecraft().thePlayer.e
 
 		// TODO: Edit data
 		// TODO: Buff skills not added in β. Waiting for implementation.
@@ -73,7 +69,7 @@ public class CatTeleport extends Category {
 		this.addSkill(skillMarkedTele = new SkillMarkTele(), 1);
 		this.addSkill(skillPenetrateTele = new SkillPenetrateTele(), 1);
 		this.addSkill(skillViscusStripping = new SkillViscusStripping(), 2);
-//		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);
+		this.addSkill(skillLocatingTele = new SkillLocatingTele(), 3);
 		//this.addSkill(skillBrainTrainingCourse = new SkillBrainTrainingCourse(), 0);
 		//this.addSkill(skillHighSpeedTele = new SkillHighSpeedTele(), 0);
 		//this.addSkill(skillBrainTrainingCourse2 = new SkillBrainTrainingCourse2(), 0);

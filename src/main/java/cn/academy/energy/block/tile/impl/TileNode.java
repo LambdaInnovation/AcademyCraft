@@ -12,10 +12,16 @@
  */
 package cn.academy.energy.block.tile.impl;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.energy.WirelessSystem;
 import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.academy.energy.client.render.tile.RenderNode;
@@ -32,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileNode extends TileNodeBase implements IInventory {
+public class TileNode extends TileNodeBase implements IInventory, IEnergySink {
 	
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
@@ -57,6 +63,21 @@ public class TileNode extends TileNodeBase implements IInventory {
 		}
 	}
 	
+	@Override
+	protected void init() {
+		super.init();
+		if(!worldObj.isRemote) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
+	}
+	
+	@Override
+	protected void onUnload() {
+		super.onUnload();
+		if(!worldObj.isRemote) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+		}
+	}
 	
 	//---Inventory part
 	ItemStack battery; //battery slot
@@ -154,6 +175,30 @@ public class TileNode extends TileNodeBase implements IInventory {
 	@Override
 	public double getSearchRange() {
 		return 48;
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter,
+			ForgeDirection direction) {
+		return true;
+	}
+
+	@Override
+	public double demandedEnergyUnits() {
+		return maxEnergy - energy;
+	}
+
+	@Override
+	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+		double need = Math.min(maxEnergy - energy, amount);
+		energy += need;
+		return amount - need;
+	}
+
+	@Override
+	public int getMaxSafeInput() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

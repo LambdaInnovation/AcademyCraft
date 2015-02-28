@@ -37,9 +37,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * 吸引金属类方块而移动自身的能力，在原作中用来进行紧急回避，由于自伤太大所以较少使用……
- * TODO 施工中
- * TODO 关于自伤的考量？
+ * The magnet movement ability. Makes the player fly towards some magnetic target
+ * (Both blocks and entities).
  * @author WeathFolD
  */
 @RegistrationClass
@@ -49,6 +48,10 @@ public class SkillMagMove extends SkillBase {
 		this.setLogo("electro/moving.png");
 		setName("em_move");
 		setMaxLevel(10);
+	}
+	
+	private static void playSound(EntityPlayer player, int n) {
+		player.worldObj.playSoundAtEntity(player, "academy:elec.move." + n, 0.5f, 1.0f);
 	}
 	
 	@Override
@@ -231,7 +234,6 @@ public class SkillMagMove extends SkillBase {
 				if((mop.typeOfHit == MovingObjectType.BLOCK && 
 					JudgeUtils.isMetalBlock(player.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ)))
 						|| (mop.typeOfHit == MovingObjectType.ENTITY && JudgeUtils.isEntityMetallic(mop.entityHit))) {
-					
 					player.worldObj.spawnEntityInWorld
 					(handler = (
 						mop.typeOfHit == MovingObjectType.BLOCK ? 
@@ -247,12 +249,22 @@ public class SkillMagMove extends SkillBase {
 						player.worldObj.playSoundAtEntity(player, "academy:elec.move", 0.5f, 1.0f);
 						player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
 					}
+					
+					return; //fin starting action if successful
 				}
 			}
+			//not successful
+			if(isRemote()) {
+				player.playSound("academy:deny", .5f, 1);
+			}
+			this.finishSkill();
 		}
 		
 		@Override
-		public boolean onTick(int tick) {
+		public boolean onTick(int ticks) {
+			if(!isRemote() && (ticks - 1) % 40 == 0) {
+				playSound(player, ((ticks - 1) / 40) % 5);
+			}
 			return !data.decreaseCP(csm);
 		}
 

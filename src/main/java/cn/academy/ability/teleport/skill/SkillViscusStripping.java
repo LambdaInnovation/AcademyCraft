@@ -93,7 +93,7 @@ public class SkillViscusStripping extends SkillBase {
 					}
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
 					mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg);
-					if(isRemote()) {
+					if(isRemote()) { //TODO: In formal version, switch to spawn in server
 						EntityBloodSplash.genSplashEffect(mop.entityHit);
 					} else {
 						//反♂胃
@@ -101,10 +101,11 @@ public class SkillViscusStripping extends SkillBase {
 							player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
-				} else if(isRemote()) { //failed, play sound
-					player.playSound("academy:deny", .5f, 1f);
+					player.playSound("academy:tp.guts", 0.5f, 1.0f);
+					return;
 				}
-			} else if(isRemote()) { //failed, play sound
+			}
+			if(isRemote()) { //failed, play sound
 				player.playSound("academy:deny", .5f, 1f);
 			}
 		}

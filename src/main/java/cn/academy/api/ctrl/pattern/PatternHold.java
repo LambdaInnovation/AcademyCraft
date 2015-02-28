@@ -23,10 +23,10 @@ public abstract class PatternHold implements IPattern {
 			super(player);
 		}
 		@Override
-		public abstract void onStart();
+		public void onStart() {}
 		@Override
-		public abstract void onFinish();
-		public abstract void onHold();
+		public void onFinish() {}
+		public void onHold() {}
 		public final boolean isRemote() {
 			return player.worldObj.isRemote;
 		}

@@ -14,14 +14,13 @@ package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.CatMeltDowner;
-import cn.academy.ability.meltdowner.entity.EntityMdBall;
-import cn.academy.ability.meltdowner.entity.EntityMiningRay;
+import cn.academy.ability.meltdowner.entity.EntityMiningRayBase;
+import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -32,36 +31,12 @@ import cn.annoreg.mc.RegEntity;
  */
 @RegistrationClass
 public class SkillMiningAcc extends SkillMiningBase {
-
-	public SkillMiningAcc() {
-		this.setLogo("meltdowner/mine_acc.png");
-		this.setName("md_mineacc");
-		setMaxLevel(10);
-	}
-
-	@Override
-	float getConsume(int slv, int lv) {
-		return 0.5f * (95 - slv *2.5f);
-	}
-
-	@Override
-	int getHarvestLevel() {
-		return 4;
-	}
-
-	@Override
-	int getSpawnRate() {
-		return 25;
-	}
 	
-	protected EntityMiningRay createEntity(EntityPlayer player, EntityMdBall ball) {
-		return new AccRay(player, ball);
-	}
-
 	@RegEntity
-	public static class AccRay extends EntityMiningRay {
-		public AccRay(EntityPlayer player, EntityMdBall ball) {
-			super(player, ball, CatMeltDowner.mineAcc.getHarvestLevel());
+	public static class AccRay extends EntityMiningRayBase {
+
+		public AccRay(AbilityData data) {
+			super(data, CatMeltDowner.mineAcc);
 		}
 		
 		public AccRay(World world) {
@@ -78,11 +53,42 @@ public class SkillMiningAcc extends SkillMiningBase {
 				super.onDiggedBlock(b, x, y, z, meta);
 			}
 		}
-		
+
+		@Override
+		protected int getDigRate(int slv, int lv) {
+			return 14;
+		}
+
+		@Override
+		protected int getHarvestLevel() {
+			return 4;
+		}
+
 		@Override
 		public ResourceLocation[] getTexData() {
 			return ACClientProps.ANIM_MD_RAY_SA;
 		}
-	};
+
+		@Override
+		public float getRayWidth() {
+			return .35f;
+		}
+	}
+
+	public SkillMiningAcc() {
+		this.setLogo("meltdowner/mine_acc.png");
+		this.setName("md_mineacc");
+		setMaxLevel(10);
+	}
+
+	@Override
+	float getConsume(int slv, int lv) {
+		return 0.5f * (95 - slv *2.5f);
+	}
+
+	@Override
+	protected EntityMiningRayBase createEntity(AbilityData data) {
+		return new AccRay(data);
+	}
 	
 }
