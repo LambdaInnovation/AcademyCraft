@@ -25,6 +25,7 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.api.event.AbilityEvent;
 import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
@@ -125,8 +126,10 @@ public class EventHandlerClient implements IKeyHandler {
 			switch (type) {
 			case RAW_DOWN:
 				//Send RAW_DOWN to server and client.
-				if(!reh.onEvent(type, reh.getTime(), true))
+				if(!reh.onEvent(type, reh.getTime(), true)) {
+					MinecraftForge.EVENT_BUS.post(new AbilityEvent.AbortControl());
 					return false;
+				}
 				toServer(type);
 				//Start to count down tickToKeepAlive.
 				tickToKeepAlive = RawEventHandler.KA_INTERVAL;

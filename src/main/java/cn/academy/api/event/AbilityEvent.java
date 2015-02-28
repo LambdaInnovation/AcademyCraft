@@ -3,6 +3,7 @@
  */
 package cn.academy.api.event;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +30,13 @@ public class AbilityEvent extends PlayerEvent {
 		public ChangeCategory(AbilityData _data) {
 			super(_data);
 		}
+	}
+	
+	/**
+	 * Fired when player pressed the key but was unable to perform certain actions.
+	 */
+	public static class AbortControl extends Event {
+		public AbortControl() {}
 	}
 
 }

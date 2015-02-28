@@ -31,8 +31,9 @@ public abstract class Pattern {
 	
 	public Pattern() {}
 	
-	public void setCooldown(long cd) {
+	public Pattern setCooldown(long cd) {
 		this.cd = cd;
+		return this;
 	}
 	
 	/**

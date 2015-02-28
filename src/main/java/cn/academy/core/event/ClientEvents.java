@@ -17,18 +17,21 @@ import java.lang.reflect.Field;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.render.ACModelBiped;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
+import cn.liutils.util.ClientUtils;
 import cn.liutils.util.RegUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Rewrite to adapt to obfuscation, or completely find a new method
+ * Some misc client events listener.
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)
@@ -53,6 +56,13 @@ public class ClientEvents {
 		hackMain = hackModel = new ACModelBiped(0.0F);
 		hackChestplate = new ACModelBiped(1.0F);
 		hackArmor = new ACModelBiped(0.5F);
+	}
+	
+	final ResourceLocation abortSound = new ResourceLocation("academy:deny");
+	@SubscribeEvent
+	public void abilityAborted(AbilityEvent.AbortControl event) {
+		//play sound to inform player.
+		ClientUtils.playSound(abortSound, 0.5f);
 	}
 	
 	@SubscribeEvent
