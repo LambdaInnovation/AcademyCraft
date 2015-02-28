@@ -62,7 +62,7 @@ public class ClientEvents {
 	@SubscribeEvent
 	public void abilityAborted(AbilityEvent.AbortControl event) {
 		//play sound to inform player.
-		ClientUtils.playSound(abortSound, 0.5f);
+		ClientUtils.playSound(abortSound, 1.0f);
 	}
 	
 	@SubscribeEvent
