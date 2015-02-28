@@ -12,7 +12,9 @@
  */
 package cn.academy.api.data;
 
+import cn.academy.api.ability.Category;
 import cn.academy.api.ctrl.EventHandlerClient;
+import cn.academy.api.event.AbilityEvent.ChangeCategory;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
@@ -20,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -64,10 +67,13 @@ public class MsgResetAbilityData implements IMessage {
 			Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
 			if (entity == null || !(entity instanceof EntityPlayer)) return null;
 			EntityPlayer player = (EntityPlayer) entity;
+			
 			if (!AbilityDataMain.hasData(player)) {
 				//register is done in onEntityConstructing, so here the data should exist.
 				AcademyCraft.log.fatal("Error on setting AbilityData on client.");
 			} else {
+				AbilityData data = AbilityDataMain.getData(player);
+				Category preCat = data.getCategory();
 				AbilityDataMain.getData(player).loadNBTData(message.data);
 			}
 			

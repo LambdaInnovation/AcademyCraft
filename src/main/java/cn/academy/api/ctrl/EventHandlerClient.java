@@ -25,8 +25,8 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.event.ControlStateEvent;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegSubmoduleInit;

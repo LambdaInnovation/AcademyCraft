@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.core.event;
+package cn.academy.api.event;
 
 import cn.academy.api.ctrl.EventHandlerClient;
 import cpw.mods.fml.common.eventhandler.Event;
