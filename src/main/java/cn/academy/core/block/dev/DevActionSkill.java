@@ -29,7 +29,7 @@ public class DevActionSkill implements IDevAction {
 
 	@Override
 	public int getExpectedStims(AbilityData data) {
-		return 5;
+		return data.getSkill(skillID).getLearnCost(data);
 	}
 
 	@Override

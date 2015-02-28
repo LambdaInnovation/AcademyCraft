@@ -38,6 +38,8 @@ public class SkillBase {
 	
 	protected static final Random rand = new Random();
 	
+	int[] defaultStims = { 3, 5, 8, 14, 20 };
+	
 	/**
 	 * Called by RawEventHandler when the skill is reset.
 	 * Add patterns to the RawEventHandler instance in this function.
@@ -82,6 +84,15 @@ public class SkillBase {
 				return i;
 		}
 		return -1;
+	}
+	
+	/**
+	 * Get the stimulation required to learn a skill.
+	 * @param data
+	 * @return
+	 */
+	public int getLearnCost(AbilityData data) {
+		return defaultStims[data.getCategory().getSkillMinLevel(this)];
 	}
 	
 	@Deprecated
