@@ -14,15 +14,18 @@ package cn.academy.api.data;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.api.ability.Abilities;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.ability.SkillBase;
+import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
 
@@ -95,10 +98,14 @@ public class AbilityData implements IExtendedEntityProperties {
 		if (this.isInSetup) {
 			throw new RuntimeException("Cannot modify category during setup api.");
 		}
+		boolean diff = cat != this.getCategory();
 		if (!player.worldObj.isRemote) {
 			setInitial(cat);
 			//Force reset
 			AbilityDataMain.resetPlayer(player);
+			if(diff) { //Post event in server side
+				MinecraftForge.EVENT_BUS.post(new AbilityEvent.ChangeCategory(this));
+			}
 		}
 	}
 	

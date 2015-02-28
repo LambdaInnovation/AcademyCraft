@@ -35,7 +35,7 @@ public class Abilities {
 	}
 	
 	public static Category getCategory(int caid) {
-		return GenericUtils.assertObj(GenericUtils.safeFetchFrom(catList, caid));
+		return GenericUtils.safeFetchFrom(catList, caid);
 	}
 	
 	public static int getCategoryCount() {

@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
@@ -25,7 +26,7 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
-import cn.academy.core.event.ControlStateEvent;
+import cn.academy.api.event.ControlStateEvent;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
@@ -191,7 +192,6 @@ public class SkillLocatingTele extends SkillBase {
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			bs.draw(width, height);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			//super.drawScreen(mx, my, w);
 		}
 	}
 	
