@@ -68,7 +68,7 @@ public class SkillBuff extends SkillBase {
 				return new BuffState(player);
 			}
 			
-		});
+		}.setCooldown(60000));
 	}
 	
 	public static class BuffState extends PatternHold.State {

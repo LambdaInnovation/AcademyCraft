@@ -52,7 +52,7 @@ public class SkillLightningFlash extends SkillBase {
 				return new LFState(player);
 			}
 			
-		});
+		}.setCooldown(30000));
 	}
 	
 	public static class LFState extends PatternHold.State {
