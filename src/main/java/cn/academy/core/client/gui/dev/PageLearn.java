@@ -20,6 +20,7 @@ import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.api.gui.widget.StateButton;
 import cn.liutils.util.HudUtils;
@@ -94,29 +95,29 @@ public class PageLearn extends DevSubpage {
 		GL11.glPushMatrix(); {
 			RenderUtils.bindColor(base.DEFAULT_COLOR);
 			//Machine stat
-			GuiDeveloper.drawText(ACLangs.machineStat(), 6, 100.5, 7.5);
+			ACUtils.drawText(ACLangs.machineStat(), 6, 100.5, 7.5);
 			
 			//Current Energy
-			GuiDeveloper.drawText(
+			ACUtils.drawText(
 				String.format("%s: %.0f/%.0f EU", ACLangs.curEnergy(), base.dev.curEnergy, base.dev.getMaxEnergy()), 
 				6, 121, 6);
 			//Sync Rate
-			GuiDeveloper.drawText(String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay()), 
+			ACUtils.drawText(String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay()), 
 				6, 130, 6);
 			RenderUtils.bindIdentity();
 			
 			//Numeric indication
 			if(isFirst || !isMaxLevel) {
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				GuiDeveloper.drawText(ACLangs.expConsumption(), 56, 50, 5.6);
+				ACUtils.drawText(ACLangs.expConsumption(), 56, 50, 5.6);
 				
 				Pair<Integer, Double> exp = base.dev.getExpectation(ida, base.data);
 				
 				RenderUtils.bindColor(base.EXP_INDI_COLOR);
-				GuiDeveloper.drawText(String.format("%d", exp.first), 70, 59, 5.8F);
+				ACUtils.drawText(String.format("%d", exp.first), 70, 59, 5.8F);
 				
 				RenderUtils.bindColor(base.EU_INDI_COLOR);
-				GuiDeveloper.drawText(String.format("%.0f", exp.second), 70, 67, 5.8F);
+				ACUtils.drawText(String.format("%.0f", exp.second), 70, 67, 5.8F);
 				
 				RenderUtils.loadTexture(TEXTURE);
 				RenderUtils.bindIdentity();

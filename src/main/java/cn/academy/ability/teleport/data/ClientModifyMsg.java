@@ -41,6 +41,8 @@ public class ClientModifyMsg implements IMessage {
 		opcode = _opcode;
 		arg = _arg;
 	}
+	
+	public ClientModifyMsg() {}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
@@ -48,7 +50,7 @@ public class ClientModifyMsg implements IMessage {
 		if(opcode == ADD) {
 			arg = new Location(buf);
 		} else if(opcode == REMOVE) {
-			buf.writeInt((Integer) arg);
+			arg = (Integer) buf.readInt();
 		}
 	}
 
@@ -58,7 +60,7 @@ public class ClientModifyMsg implements IMessage {
 		if(opcode == ADD) {
 			((Location)arg).toBuf(buf);
 		} else if(opcode == REMOVE) {
-			arg = (Integer) buf.readInt();
+			buf.writeInt((Integer) arg);
 		}
 	}
 	

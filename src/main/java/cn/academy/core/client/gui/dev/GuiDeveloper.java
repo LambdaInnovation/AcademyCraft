@@ -109,22 +109,6 @@ public class GuiDeveloper extends LIGuiScreen {
         return false;
     }
 	
-	public static void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
-	}
-	
 	public static double strLen(String text, double size) {
 		return ACClientProps.FONT_YAHEI_32.getWidth(text, size);
 	}

@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
@@ -30,11 +31,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-@RegEventHandler
 public class LocationData implements IExtendedEntityProperties {
 	
 	static final String IDENTIFIER = "tp_location";
 	final EntityPlayer player;
+	
+	@RegEventHandler
+	public static LocationData regInstance = new LocationData();
 	
 	@SubscribeEvent
     public void onEntityConstructing(EntityConstructing event) {
@@ -44,10 +47,18 @@ public class LocationData implements IExtendedEntityProperties {
         }
 	}
 	
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) {
+        	get((EntityPlayer) event.entity).sync();
+        }
+    }
+	
 	@SubscribeEvent
 	public void onCategoryChanged(AbilityEvent.ChangeCategory event) {
-		get(event.entityPlayer).locationList.clear();
-		sync();
+		LocationData data = get(event.entityPlayer);
+		data.locationList.clear();
+		data.sync();
 	}
 	
 	/**
@@ -66,13 +77,13 @@ public class LocationData implements IExtendedEntityProperties {
 			z = tag.getFloat("z_" + i);
 		}
 		
-		public Location(String _name, int dim, float _x, float _y, float _z) {
+		public Location(String _name, int dim, double _x, double _y, double _z) {
 			GenericUtils.assertObj(_name); //check if valid
 			name = _name;
 			dimension = dim;
-			x = _x;
-			y = _y;
-			z = _z;
+			x = (float) _x;
+			y = (float) _y;
+			z = (float) _z;
 		}
 		
 		public Location(ByteBuf buf) {
@@ -87,8 +98,8 @@ public class LocationData implements IExtendedEntityProperties {
 			tag.setString("id_" + i, name);
 			tag.setByte("dim_" + i, (byte) dimension);
 			tag.setFloat("x_" + i, x);
-			tag.setFloat("y_" + i, x);
-			tag.setFloat("z_" + i, x);
+			tag.setFloat("y_" + i, y);
+			tag.setFloat("z_" + i, z);
 		}
 		
 		void toBuf(ByteBuf buf) {
@@ -100,7 +111,9 @@ public class LocationData implements IExtendedEntityProperties {
 	
 	//May be modified by SyncMsg.
 	List<Location> locationList = new ArrayList();
-
+	
+	private LocationData() { player = null; }
+	
 	public LocationData(EntityPlayer _player) {
 		player = _player;
 	}
@@ -112,10 +125,27 @@ public class LocationData implements IExtendedEntityProperties {
 	@SideOnly(Side.CLIENT)
 	public void clientAdd(Location loc) {
 		locationList.add(loc);
+		AcademyCraft.netHandler.sendToServer(new ClientModifyMsg(ClientModifyMsg.ADD, loc));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void clientRemove(int i) {
+		locationList.remove(i);
+		AcademyCraft.netHandler.sendToServer(new ClientModifyMsg(ClientModifyMsg.REMOVE, i));
 	}
 	
 	public static void register(EntityPlayer player) {
-		player.registerExtendedProperties(IDENTIFIER, new LocationData(player));
+		LocationData data = new LocationData(player);
+		player.registerExtendedProperties(IDENTIFIER, data);
+		data.locationList.add(new Location("www", 
+			player.worldObj.provider.dimensionId, 
+			player.posX, player.posY, player.posZ));
+		data.locationList.add(new Location("hhh", 
+				player.worldObj.provider.dimensionId, 
+				player.posX, player.posY, player.posZ));
+		data.locationList.add(new Location("fff", 
+				player.worldObj.provider.dimensionId, 
+				player.posX, player.posY, player.posZ));
 	}
 	
 	public Location getLocation(int i) {
@@ -129,6 +159,9 @@ public class LocationData implements IExtendedEntityProperties {
 	@Override
 	public void saveNBTData(NBTTagCompound tag) {
 		tag.setInteger("count", locationList.size());
+		for(int i = 0; i < locationList.size(); ++i) {
+			locationList.get(i).toNBT(tag, i);
+		}
 	}
 
 	@Override
@@ -137,8 +170,6 @@ public class LocationData implements IExtendedEntityProperties {
 		for(int i = 0; i < n; ++i) {
 			locationList.add(new Location(tag, i));
 		}
-		//Sync to client right away
-		sync();
 	}
 
 	@Override

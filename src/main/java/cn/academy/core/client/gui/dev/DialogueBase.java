@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.StateButton;
 import cn.liutils.util.HudUtils;
@@ -113,7 +114,7 @@ public class DialogueBase extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		super.draw(mx, my, mouseHovering);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(title, 2.5, 2.4, 6);
+		ACUtils.drawText(title, 2.5, 2.4, 6);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

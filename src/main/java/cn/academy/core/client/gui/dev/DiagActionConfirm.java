@@ -19,6 +19,7 @@ import cn.academy.core.block.dev.IDevAction;
 import cn.academy.core.block.dev.MsgActionStart;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.LambdaFont.Align;
 
@@ -68,10 +69,10 @@ public class DiagActionConfirm extends DialogueBase {
 	public void draw(double mx, double my, boolean hover) {
 		super.draw(mx, my, hover);
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(ACLangs.confirmHead(), 57.5, 15, 4.5, Align.CENTER);
-		GuiDeveloper.drawText(ACLangs.confirmTail(), 57.5, 35.5, 5.5, Align.CENTER);
+		ACUtils.drawText(ACLangs.confirmHead(), 57.5, 15, 4.5, Align.CENTER);
+		ACUtils.drawText(ACLangs.confirmTail(), 57.5, 35.5, 5.5, Align.CENTER);
 		RenderUtils.bindColor(200, 97, 29);
-		GuiDeveloper.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 6, Align.CENTER, 102);
+		ACUtils.drawText(devAction.getActionInfo(dev.data), 57.5, 24, 6, Align.CENTER, 102);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 	

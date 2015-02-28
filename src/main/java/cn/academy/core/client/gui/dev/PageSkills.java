@@ -23,6 +23,7 @@ import cn.academy.api.ability.SkillBase;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.draw.prop.AssignColor;
 import cn.liutils.api.draw.prop.AssignTexture;
 import cn.liutils.api.gui.LIGui.WidgetNode;
@@ -165,14 +166,14 @@ public class PageSkills extends DevSubpage {
 				//Skill Name
 				String text = skill.getDisplayName();
 				RenderUtils.bindColor(base.DEFAULT_COLOR);
-				GuiDeveloper.drawText(text, 30, 6, 6, 63);
+				ACUtils.drawText(text, 30, 6, 6, 63);
 				GL11.glColor4d(1, 1, 1, 1);
 				
 				if(learned) {
 					//level
 					RenderUtils.bindColor(base.DEFAULT_COLOR);
 					text = String.format("Lv%d", level);
-					GuiDeveloper.drawText(text, 97.5, 5.5, 4.8);
+					ACUtils.drawText(text, 97.5, 5.5, 4.8);
 					
 					GL11.glColor4d(0.2, 0.2, 0.2, 0.7);
 					HudUtils.drawModalRect(30, 15, 75, 1);
@@ -184,13 +185,13 @@ public class PageSkills extends DevSubpage {
 				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(base.EXP_INDI_COLOR);
-					GuiDeveloper.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
+					ACUtils.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
 					
 					RenderUtils.bindColor(base.EU_INDI_COLOR);
-					GuiDeveloper.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
+					ACUtils.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);
 				} else {
 					RenderUtils.bindColor(59, 177, 43);
-					GuiDeveloper.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
+					ACUtils.drawText(ACLangs.fullyLearned(), 30, 18.5, 5.5);
 				}
 			}
 			
@@ -284,7 +285,7 @@ public class PageSkills extends DevSubpage {
 		//sync rate
 		String str = String.format("%s: %.2f%%", ACLangs.devSyncRate(), base.dev.getSyncRateForDisplay());
 		RenderUtils.bindColor(base.DEFAULT_COLOR);
-		GuiDeveloper.drawText(str, 5, 135, 5.5);
+		ACUtils.drawText(str, 5, 135, 5.5);
 		GL11.glColor4d(1, 1, 1, 1);
 	}
 

@@ -28,6 +28,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -80,21 +81,21 @@ public class PageMain extends Widget {
 		// Page name
 		String pname = dev.getCurPage().getDisplayName();
 		RenderUtils.bindColor(dev.DEFAULT_COLOR);
-		GuiDeveloper.drawText(pname,
+		ACUtils.drawText(pname,
 				156, 4.5, 8.5, Align.CENTER);
 		
 		//Titles
-		GuiDeveloper.drawText(ACLangs.holoView(), 147, 20.5, 7.5);
+		ACUtils.drawText(ACLangs.holoView(), 147, 20.5, 7.5);
 		
-		GuiDeveloper.drawText(ACLangs.ad_UserInfo(), 147.5, 119, 7.5);
+		ACUtils.drawText(ACLangs.ad_UserInfo(), 147.5, 119, 7.5);
 		
 		//Misc
 		drawUserInfo();
 	}
 	
 	private void drawUserInfo() {
-		GuiDeveloper.drawText("CP.", 148, 153, 6);
-		GuiDeveloper.drawText("PRG.", 148, 167.5, 6);
+		ACUtils.drawText("CP.", 148, 153, 6);
+		ACUtils.drawText("PRG.", 148, 167.5, 6);
 		
 		AbilityData data = AbilityDataMain.getData(dev.user);
 		ResourceLocation logo = null;
@@ -102,8 +103,8 @@ public class PageMain extends Widget {
 			Category cat = data.getCategory();
 			logo = cat.getLogo();
 			//Cat and level
-			GuiDeveloper.drawText(cat.getDisplayName(), 167.5, 130, 7.5);
-			GuiDeveloper.drawText(data.getLevel().getDisplayName(), 167.5, 140, 5.5);
+			ACUtils.drawText(cat.getDisplayName(), 167.5, 130, 7.5);
+			ACUtils.drawText(data.getLevel().getDisplayName(), 167.5, 140, 5.5);
 			//Progress Bar
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_AD_MAIN);
 			//CP
@@ -121,7 +122,7 @@ public class PageMain extends Widget {
 			HudUtils.drawRect(163, 168.5F, 3, 387, prog * 58.5, 5.5, prog * 117, 11);
 		} else {
 			logo = ACClientProps.TEX_QUESTION_MARK;
-			GuiDeveloper.drawText(ACLangs.notLearned(), 167.5, 130, 7);
+			ACUtils.drawText(ACLangs.notLearned(), 167.5, 130, 7);
 		}
 		RenderUtils.loadTexture(logo);
 		HudUtils.drawRect(148.5, 130.5, 15.5, 15.5);
