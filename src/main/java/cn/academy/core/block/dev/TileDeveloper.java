@@ -197,7 +197,7 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	 * Get the basic EXP consume per stimulation.
 	 */
 	public int getExpConsume() {
-		return 18;
+		return 12;
 	}
 	
 	public double getSuccessProb(AbilityData data) {

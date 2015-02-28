@@ -46,7 +46,7 @@ public class ACOre extends Block {
 		return itemDropped;
 	}
 	
-	public ACOre getItemDropped(Item itemDropped) {
+	public ACOre setItemDropped(Item itemDropped) {
 		this.itemDropped = itemDropped;
 		return this;
 	}
