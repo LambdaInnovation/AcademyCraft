@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.core.register.ACItems;
-import cn.academy.core.register.ACRecipes;
+import cn.academy.core.register.ACMiscReg;
 import cn.academy.energy.block.tile.impl.TileSolarGenerator;
 import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationManager;
@@ -94,17 +94,14 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_RENDER_HOOK);
-		
-		GameRegistry.registerWorldGenerator(new ACWorldGen(), 2);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
         
-        ACRecipes.regRecipe();
-        ACRecipes.regSmelting();
-        ACRecipes.regChestGen();
+        ACMiscReg.regRecipe();
+        ACMiscReg.regSmelting();
 	}
 
 	@EventHandler

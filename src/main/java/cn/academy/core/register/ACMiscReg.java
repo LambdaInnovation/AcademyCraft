@@ -12,6 +12,11 @@
  */
 package cn.academy.core.register;
 
+import cn.academy.misc.util.ACChestContent;
+import cn.academy.misc.world.ACWorldGen;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegChestContent;
+import cn.annoreg.mc.RegWorldGen;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -23,7 +28,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
  * Recipes and Smeltings Registration Class
  * @author KSkun
  */
-public class ACRecipes {
+@RegistrationClass
+public class ACMiscReg {
 
 	public static void regRecipe() {
 		GameRegistry.addRecipe(new ItemStack(ACItems.coin, 12), "aaa", "bbb", "aaa", 
@@ -97,18 +103,14 @@ public class ACRecipes {
 		GameRegistry.addSmelting(ACBlocks.oreShadow, new ItemStack(ACItems.ingotShadow), 1.2f);
 	}
 	
-	public static void regChestGen() {
-		WeightedRandomChestContent gens[] = {
-				new WeightedRandomChestContent(new ItemStack(ACItems.record0), 1, 1, 5),
-				new WeightedRandomChestContent(new ItemStack(ACItems.record1), 1, 1, 5),
-				new WeightedRandomChestContent(new ItemStack(ACItems.record2), 1, 1, 5),
-		};
-		for(WeightedRandomChestContent gen : gens) {
-			ChestGenHooks.addItem("dungeonChest", gen);
-			ChestGenHooks.addItem("villageBlacksmith", gen);
-			ChestGenHooks.addItem("pyramidDesertyChest", gen);
-			ChestGenHooks.addItem("pyramidJungleChest", gen);
-		}
-	}
+	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record0 = new ACChestContent(new ItemStack(ACItems.record0), 1, 1, 5);
+	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record1 = new ACChestContent(new ItemStack(ACItems.record1), 1, 1, 5);
+	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record2 = new ACChestContent(new ItemStack(ACItems.record2), 1, 1, 5);
+	
+	@RegWorldGen(2)
+	public static ACWorldGen oreGen;
 	
 }
