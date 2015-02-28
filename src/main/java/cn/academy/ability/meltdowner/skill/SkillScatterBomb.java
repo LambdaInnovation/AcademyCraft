@@ -82,7 +82,7 @@ public class SkillScatterBomb extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			final boolean b = this.getTickTime() < 200;
 			final int slv = data.getSkillLevel(CatMeltDowner.scatterBomb), lv = data.getLevelID() + 1;
 			for(EntityMdBall ball : balls) {
@@ -95,6 +95,7 @@ public class SkillScatterBomb extends SkillBase {
 				//player.attackEntityFrom(DamageSource.causePlayerDamage(player), 
 				//		Math.min(player.getHealth() - 1f, 10f));
 			}
+			return true;
 		}
 		
 		@Override

@@ -17,7 +17,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.SkillBase;
-import cn.academy.api.ctrl.pattern.IPattern;
+import cn.academy.api.ctrl.pattern.Pattern;
 
 /**
  * This class handles raw event and send the proper event to skill (through patterns).
@@ -30,6 +30,7 @@ public class RawEventHandler {
 	
 	private SkillBase skill;
 	private EntityPlayer player;
+	
 	
 	RawEventHandler(EntityPlayer player, SkillBase skill) {
 		skill.initPattern(this);
@@ -49,14 +50,26 @@ public class RawEventHandler {
 	 * Trigger skill event with its own time.
 	 * @param type The event type.
 	 * @param time On server, it's time on client (sent in Message). On client, it's time get by getTime.
+	 * @return arbitary on server, true on client if needed to send events to server.
 	 */
-	void onEvent(SkillEventType type, int time) {
+	boolean onEvent(SkillEventType type, int time, boolean client) {
+		
+		//CD hack, needs modifying to support more than 1 patterns.
+		if(client) {
+			if(type == SkillEventType.RAW_DOWN) {
+				//If any pattern doesn't receive event, don't send any event at all.
+				for(Pattern p : patterns) {
+					if(!p.receivesEvent()) return false;
+				}
+			}
+		}
+		
 		/* 
 		 * Event type handled (same between server and client):
 		 * RAW_DOWN, RAW_UP, RAW_TICK_DOWN, RAW_TICK_UP, RAW_CANCEL, RAW_ADJUST, RAW_CLICK, RAW_DBLCLK.
 		 */
 		boolean resetFlag = false;
-		for (IPattern pattern : patterns) {
+		for (Pattern pattern : patterns) {
 			resetFlag = pattern.onRawEvent(player, type, time, this.getTime()) || resetFlag;
 		}
 		if (resetFlag) {
@@ -79,6 +92,7 @@ public class RawEventHandler {
 		default:
 			break;
 		}
+		return true;
 	}
 	
 	/**
@@ -97,7 +111,7 @@ public class RawEventHandler {
 	/**
 	 * The current patterns of this skill. 
 	 */
-	private List<IPattern> patterns = new ArrayList();
+	private List<Pattern> patterns = new ArrayList();
 	
 	/**
 	 * Clear all patterns.
@@ -111,7 +125,7 @@ public class RawEventHandler {
 	 * Add a new pattern. Used by skills in initPattern.
 	 * @param pattern The pattern to be added.
 	 */
-	public void addPattern(IPattern pattern) {
+	public void addPattern(Pattern pattern) {
 		patterns.add(pattern);
 	}
 }

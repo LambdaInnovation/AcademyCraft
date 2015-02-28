@@ -81,9 +81,9 @@ public class SkillPenetrateTele extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(mark == null)
-				return;
+				return true;
 			
 			double dist = mark.getDist();
 			//Here we ignore the slight variation and believe that we will always success
@@ -99,6 +99,7 @@ public class SkillPenetrateTele extends SkillBase {
 				data.getSkillLevel(CatTeleport.skillPenetrateTele), 
 				data.getLevelID() + 1)), CatTeleport.skillPenetrateTele, true);
 			mark.setDead();
+			return true;
 		}
 
 		@Override

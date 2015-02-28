@@ -73,7 +73,7 @@ public class SkillViscusStripping extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(mark != null)
 				mark.setDead();
 			
@@ -89,7 +89,7 @@ public class SkillViscusStripping extends SkillBase {
 						if(isRemote()) {
 							player.playSound("academy:deny", 0.5f, 1.0f);
 						}
-						return;
+						return false;
 					}
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
 					mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg);
@@ -102,12 +102,13 @@ public class SkillViscusStripping extends SkillBase {
 					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
 					player.playSound("academy:tp.guts", 0.5f, 1.0f);
-					return;
+					return true;
 				}
 			}
 			if(isRemote()) { //failed, play sound
 				player.playSound("academy:deny", .5f, 1f);
 			}
+			return false;
 		}
 		
 		@Override

@@ -12,11 +12,14 @@
  */
 package cn.academy.api.ctrl.pattern;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
+import cn.annoreg.mc.RegMessageHandler.Side;
 
-public abstract class PatternHold implements IPattern {
+public abstract class PatternHold extends Pattern {
 	
 	public static abstract class State extends SkillState {
 		public State(EntityPlayer player) {
@@ -25,7 +28,7 @@ public abstract class PatternHold implements IPattern {
 		@Override
 		public void onStart() {}
 		@Override
-		public void onFinish() {}
+		public boolean onFinish() { return false; }
 		public void onHold() {}
 		public final boolean isRemote() {
 			return player.worldObj.isRemote;
@@ -52,6 +55,9 @@ public abstract class PatternHold implements IPattern {
 			holdCalled = false;
 			state = createSkill(player);
 			state.startSkill();
+			if(player.worldObj.isRemote) {
+				SkillStateManager.regPatternFor(state, this);
+			}
 			return false;
 		case RAW_UP:
 		case RAW_CANCEL:
@@ -63,7 +69,7 @@ public abstract class PatternHold implements IPattern {
 		case RAW_ADJUST:
 			if (!holdCalled && rawTime >= this.time) {
 				holdCalled = true;
-				state.onHold(); //TODO: Crashed multiple times here because of NullPointerException
+				state.onHold();
 			}
 		default:
 			return false;

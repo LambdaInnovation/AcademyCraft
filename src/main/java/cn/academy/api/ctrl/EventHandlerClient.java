@@ -125,8 +125,9 @@ public class EventHandlerClient implements IKeyHandler {
 			switch (type) {
 			case RAW_DOWN:
 				//Send RAW_DOWN to server and client.
+				if(!reh.onEvent(type, reh.getTime(), true))
+					return false;
 				toServer(type);
-				reh.onEvent(type, reh.getTime());
 				//Start to count down tickToKeepAlive.
 				tickToKeepAlive = RawEventHandler.KA_INTERVAL;
 				//Is a double click still possible?
@@ -134,13 +135,13 @@ public class EventHandlerClient implements IKeyHandler {
 					tickToFinishClick = 0;
 					//Only inform client side.
 					//On server side RAW_DBLCLK is invoked by EventHandlerServer.
-					reh.onEvent(SkillEventType.RAW_DBLCLK, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_DBLCLK, reh.getTime(), true);
 				}
 				return true;
 			case RAW_UP:
 				//Send RAW_UP to server and client.
 				toServer(type);
-				reh.onEvent(type, reh.getTime());
+				reh.onEvent(type, reh.getTime(), true);
 				//Start to wait for a double click.
 				tickToFinishClick = RawEventHandler.DBL_DELAY;
 				tickToKeepAlive = 0;
@@ -152,11 +153,11 @@ public class EventHandlerClient implements IKeyHandler {
 					//Send keep-alive message.
 					toServer(SkillEventType.RAW_CLIENT_DOWN);
 					//Client still need RAW_TICK_DOWN in this time.
-					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime(), true);
 				} else if (tickToKeepAlive > 1) {
 					--tickToKeepAlive;
 					//Send RAW_TICK_DOWN to client.
-					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_TICK_DOWN, reh.getTime(), true);
 				}
 				if (tickToFinishClick == 1) {
 					//Reset counter.
@@ -165,19 +166,19 @@ public class EventHandlerClient implements IKeyHandler {
 					//This RAW_CLIENT_UP will be converted into RAW_CLICK by EventHandlerServer.
 					toServer(SkillEventType.RAW_CLIENT_UP);
 					//Also inform the client side.
-					reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime(), true);
 				} else if (tickToFinishClick > 1) {
 					--tickToFinishClick;
 					//Send a tick to client.
 					//TODO is this really needed?
-					reh.onEvent(SkillEventType.RAW_TICK_UP, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_TICK_UP, reh.getTime(), true);
 				}
 				//If either counter is not 0, we still need RAW_TICK next time.
 				return tickToKeepAlive > 0 || tickToFinishClick > 0;
 			case RAW_CANCEL:
 				//Skill is cancelled. Just log it and inform the client.
 				AcademyCraft.log.warn("Skill cancelled by server.");
-				reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
+				reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime(), true);
 				//Reset both counters.
 				tickToKeepAlive = tickToFinishClick = 0;
 				return false;

@@ -25,7 +25,7 @@ import cn.academy.api.ctrl.SkillState;
  * @author acaly
  *
  */
-public abstract class PatternSimpleSkill implements IPattern {
+public abstract class PatternSimpleSkill extends Pattern {
 	
 	private int prep;
 	private boolean holdCalled;

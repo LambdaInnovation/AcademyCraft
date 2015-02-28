@@ -269,7 +269,7 @@ public class SkillMagMove extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(handler != null)
 				handler.setDead();
 			if(ray != null)
@@ -277,6 +277,7 @@ public class SkillMagMove extends SkillBase {
 			if(!player.worldObj.isRemote && data.getSkillLevel(CatElectro.magMovement) >= 5) {
 				//Add fall protection
 			}
+			return true;
 		}
 
 		@Override

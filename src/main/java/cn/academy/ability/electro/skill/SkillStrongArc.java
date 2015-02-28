@@ -98,7 +98,9 @@ public class SkillStrongArc extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {}
+		public boolean onFinish() {
+			return true;
+		}
 		
 	}
 	

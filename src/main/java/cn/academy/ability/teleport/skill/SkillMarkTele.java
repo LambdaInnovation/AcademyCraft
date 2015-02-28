@@ -102,9 +102,9 @@ public class SkillMarkTele extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(mark == null)
-				return;
+				return true;
 			
 			//player.motionX = player.motionZ = player.motionY = 0;
 			double dist = mark.getDist();
@@ -120,6 +120,7 @@ public class SkillMarkTele extends SkillBase {
 				data.getSkillLevel(CatTeleport.skillMarkedTele), 
 				data.getLevelID() + 1)), CatTeleport.skillMarkedTele, true);
 			mark.setDead();
+			return true;
 		}
 
 		@Override

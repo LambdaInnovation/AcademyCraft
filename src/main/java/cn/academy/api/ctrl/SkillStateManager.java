@@ -19,17 +19,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegEventHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import cn.academy.api.ctrl.pattern.Pattern;
+import cn.academy.api.ctrl.pattern.PatternHold.State;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class manages all SkillStates, both on client and on server.
@@ -160,6 +161,13 @@ public class SkillStateManager {
 			}
 		}
 	}
+	
+	static Map<State, Pattern> clientConnectMap = new HashMap();
+	
+	@SideOnly(Side.CLIENT)
+	public static void regPatternFor(State state, Pattern pattern) {
+		clientConnectMap.put(state, pattern);
+	}
 
 	/**
 	 * Send tick event to all active State in the client map. Called by EventHandlerClient.
@@ -170,7 +178,11 @@ public class SkillStateManager {
 			while (itor.hasNext()) {
 				SkillState state = itor.next();
 				if (state.tickSkill()) {
-					state.reallyFinishSkill();
+					boolean res = state.reallyFinishSkill();
+					Pattern pat = clientConnectMap.remove(state);
+					if(pat != null) {
+						pat.onStateEnd(res);
+					}
 					itor.remove();
 				}
 			}

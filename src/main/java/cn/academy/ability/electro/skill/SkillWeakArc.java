@@ -102,7 +102,9 @@ public class SkillWeakArc extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {}
+		public boolean onFinish() {
+			return true;
+		}
 		
 	}
 	

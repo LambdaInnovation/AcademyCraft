@@ -73,7 +73,9 @@ public class SkillBomb extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {}
+		public boolean onFinish() {
+			return true;
+		}
 
 		@Override
 		public void onHold() {}

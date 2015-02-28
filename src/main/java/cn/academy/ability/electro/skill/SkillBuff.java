@@ -111,9 +111,10 @@ public class SkillBuff extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(isRemote()) {
 				node.setDead();
+				return good;
 			} 
 			
 			if(good) {
@@ -135,6 +136,7 @@ public class SkillBuff extends SkillBase {
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 18, 8));
 				}
 			}
+			return good;
 		}
 
 		@Override

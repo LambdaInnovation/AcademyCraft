@@ -36,12 +36,13 @@ public class SkillDebug extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if (player.worldObj.isRemote) {
 				player.addChatMessage(new ChatComponentText("Skill debug: onKeyUp (client side)."));
 			} else {
 				player.addChatMessage(new ChatComponentText("Skill debug: onKeyUp (server side)."));
 			}
+			return true;
 		}
 	}
 

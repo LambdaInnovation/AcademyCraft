@@ -76,9 +76,9 @@ public class SkillMeltDowner extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(!spawn || this.getTickTime() < 12) {
-				return;
+				return false;
 			}
 			
 			if(!isRemote()) {
@@ -86,6 +86,7 @@ public class SkillMeltDowner extends SkillBase {
 				int rt = Math.min(getTickTime(), 40);
 				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv, rt)));
 			}
+			return true;
 		}
 		
 		@Override

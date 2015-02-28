@@ -14,9 +14,9 @@ package cn.academy.api.ctrl.pattern.internal;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
-import cn.academy.api.ctrl.pattern.IPattern;
+import cn.academy.api.ctrl.pattern.Pattern;
 
-public abstract class PatternUp implements IPattern {
+public abstract class PatternUp extends Pattern {
 
 	@Override
 	public boolean onRawEvent(EntityPlayer player, SkillEventType type, int rawTime, int time) {

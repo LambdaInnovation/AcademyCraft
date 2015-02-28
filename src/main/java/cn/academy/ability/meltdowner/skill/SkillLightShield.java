@@ -76,10 +76,11 @@ public class SkillLightShield extends SkillBase {
 		}
 
 		@Override
-		public void onFinish() {
+		public boolean onFinish() {
 			if(!isRemote()) {
 				shield.setDead();
 			}
+			return true;
 		}
 		
 		@Override

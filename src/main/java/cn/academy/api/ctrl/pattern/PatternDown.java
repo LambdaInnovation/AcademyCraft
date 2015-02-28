@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillState;
 
-public abstract class PatternDown implements IPattern {
+public abstract class PatternDown extends Pattern {
 	
 	private SkillState state;
 

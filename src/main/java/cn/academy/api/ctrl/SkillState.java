@@ -75,6 +75,10 @@ public class SkillState {
 		}
 	}
 	
+	public final void finishSkillRightAway() {
+		
+	}
+	
 	public final void finishSkill() {
 		//Finish the state next tick.
 		//This can avoid modification of the player state list while iterating.
@@ -94,12 +98,13 @@ public class SkillState {
 		tickToFinish = ticks;
 	}
 	
-	public final void reallyFinishSkill() {
-		onFinish();
+	public final boolean reallyFinishSkill() {
+		boolean ret = onFinish();
 		alive = false;
 		if (!player.worldObj.isRemote) {
 			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
 		}
+		return ret;
 	}
 	
 	/**
@@ -115,7 +120,10 @@ public class SkillState {
 	
 	protected void onStart() {}
 	
-	protected void onFinish() {}
+	/**
+	 * @return Whether this skill was successfully executed and needs cooldown
+	 */
+	protected boolean onFinish() { return false; }
 	
 	/**
 	 * Will be called every tick while this state is active.

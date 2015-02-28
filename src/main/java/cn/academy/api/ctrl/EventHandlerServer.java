@@ -155,7 +155,7 @@ public class EventHandlerServer {
 				} else if (tickToSetDead > 1) {
 					--tickToSetDead; 
 					//Send tick event to server.
-					reh.onEvent(SkillEventType.RAW_TICK_DOWN, time);
+					reh.onEvent(SkillEventType.RAW_TICK_DOWN, time, false);
 				}
 				if (tickToFinishClick == 1) {
 					//Reset counter.
@@ -166,7 +166,7 @@ public class EventHandlerServer {
 					--tickToFinishClick;
 					//Send tick to server.
 					//TODO needed?
-					reh.onEvent(SkillEventType.RAW_TICK_UP, time);
+					reh.onEvent(SkillEventType.RAW_TICK_UP, time, false);
 				}
 				return tickToSetDead > 0 || tickToFinishClick > 0;
 			case RAW_DOWN:
@@ -181,12 +181,12 @@ public class EventHandlerServer {
 					setDead();
 					return false;
 				}
-				reh.onEvent(type, time);
+				reh.onEvent(type, time, false);
 				tickToSetDead = RawEventHandler.KA_INTERVAL + RawEventHandler.KA_DELAY;
 				if (tickToFinishClick > 0) {
 					//Still waiting for CLIENT_UP, so that's a double click.
 					tickToFinishClick = 0;
-					reh.onEvent(SkillEventType.RAW_DBLCLK, time);
+					reh.onEvent(SkillEventType.RAW_DBLCLK, time, false);
 				}
 				return true;
 			case RAW_UP:
@@ -206,10 +206,10 @@ public class EventHandlerServer {
 				tickToFinishClick = RawEventHandler.DBL_DELAY + RawEventHandler.KA_DELAY;
 				if (time > reh.getTime()) {
 					//Client time is greater. Need an adjust event.
-					reh.onEvent(SkillEventType.RAW_ADJUST, time);
-					reh.onEvent(SkillEventType.RAW_UP, time);
+					reh.onEvent(SkillEventType.RAW_ADJUST, time, false);
+					reh.onEvent(SkillEventType.RAW_UP, time, false);
 				} else {
-					reh.onEvent(SkillEventType.RAW_UP, reh.getTime());
+					reh.onEvent(SkillEventType.RAW_UP, reh.getTime(), false);
 				}
 				return true;
 			case RAW_CLIENT_DOWN:
@@ -229,10 +229,10 @@ public class EventHandlerServer {
 				//Reset counter.
 				tickToFinishClick = 0;
 				//Invoke CLICK on server.
-				reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime());
+				reh.onEvent(SkillEventType.RAW_CLICK, reh.getTime(), false);
 				return false;
 			case RAW_CANCEL:
-                reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime());
+                reh.onEvent(SkillEventType.RAW_CANCEL, reh.getTime(), false);
                 AcademyCraft.netHandler.sendTo(
                         new ControlMessage(skillId, SkillEventType.RAW_CANCEL, time),
                         player);
@@ -249,7 +249,7 @@ public class EventHandlerServer {
 		private void setDead() {
 			AcademyCraft.log.warn("Delay in client side. Skill cancelled.");
 			int time = reh.getTime();
-			reh.onEvent(SkillEventType.RAW_CANCEL, time);
+			reh.onEvent(SkillEventType.RAW_CANCEL, time, false);
 			AcademyCraft.netHandler.sendTo(
 					new ControlMessage(skillId, SkillEventType.RAW_CANCEL, time),
 					player);

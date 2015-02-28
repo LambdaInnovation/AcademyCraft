@@ -84,9 +84,9 @@ public class SkillLocatingTele extends SkillBase {
 
 		@Override
 		@SideOnly(Side.CLIENT) //Client-Only override.
-		public void onFinish() {
+		public boolean onFinish() {
 			if(isOpeningGui()) { //Opening gui, don't do anything.
-				return;
+				return false;
 			}
 			
 			if(isRemote()) {
@@ -98,6 +98,7 @@ public class SkillLocatingTele extends SkillBase {
 					guiCreateHandler.openClientGui();
 				}
 			}
+			return true;
 		}
 
 		@Override
