@@ -29,6 +29,9 @@ import cpw.mods.fml.common.IWorldGenerator;
  * @author KSkun
  */
 public class ACWorldGen implements IWorldGenerator {
+	
+	private int[] shadowGenIds = new int[] {0, 3, 10, 13, 17, 18, 19, 22, 24, 28, 31, 33, 131, 156, 161};
+	private int[] crystalGenIds = new int[] {2, 3, 13, 17, 18, 19, 22, 28, 31, 33, 130, 131, 156, 161};
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
@@ -40,94 +43,16 @@ public class ACWorldGen implements IWorldGenerator {
 		}
 	}
 	
-	public void genOverworld(World world, Random random, int x, int z) {
-		WorldChunkManager chunkmgr = new WorldChunkManager(world);
-		int biomeId = chunkmgr.getBiomeGenAt(x, z).biomeID;
+	private void genOverworld(World world, Random random, int x, int z) {
 		//TODO: This ore gen isn't available in this version.
-/*		for (int k = 0; k < 35; ++k) {
-			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(48);
-			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreTxn, 3)).generate(world, random, 
-					xc, yc, zc);
-		}*/
-		for (int k = 0; k < 25; ++k) {
-			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(50);
-			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreCopper, 7)).generate(world, random, 
-					xc, yc, zc);
-		}
-		for (int k = 0; k < 25; ++k) {
-			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(50);
-			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreAl, 5)).generate(world, random, 
-					xc, yc, zc);
-		}
-		for (int k = 0; k < 20; ++k) {
-			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(50);
-			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreMg, 3)).generate(world, random, 
-					xc, yc, zc);
-		}
-		for (int k = 0; k < 18; ++k) {
-			int xc = x + random.nextInt(16);
-			int yc = random.nextInt(50);
-			int zc = z + random.nextInt(16);
-			(new WorldGenMinable(ACBlocks.oreNi, 3)).generate(world, random, 
-					xc, yc, zc);
-		}		
-		switch(biomeId) {
-		case 3:
-		case 13:
-		case 17:
-		case 18:
-		case 19:
-		case 22:
-		case 28:
-		case 31:
-		case 33:
-		case 131:
-		case 156:
-		case 161:
-		case 0:
-		case 10:
-		case 24:
-			for (int k = 0; k < 2; ++k) {
-				int xc = x + random.nextInt(16);
-				int yc = random.nextInt(10);
-				int zc = z + random.nextInt(16);
-				(new WorldGenMinable(ACBlocks.oreShadow, 2)).generate(world, random, 
-						xc, yc, zc);
-			}
-			break;
-		}
-		switch(biomeId) {
-		case 3:
-		case 13:
-		case 17:
-		case 18:
-		case 19:
-		case 22:
-		case 28:
-		case 31:
-		case 33:
-		case 131:
-		case 156:
-		case 161:
-		case 2:
-		case 130:
-			for (int k = 0; k < 10; ++k) {
-				int xc = x + random.nextInt(16);
-				int yc = random.nextInt(30);
-				int zc = z + random.nextInt(16);
-				(new WorldGenMinable(ACBlocks.oreCrystal, 3)).generate(world, random, 
-						xc, yc, zc);
-			}
-			break;
-		}
+//		(new ACGenMinable(ACBlocks.oreTin, 5, 60, 23)).generate(world, random, x, z);
+		//TODO: Copper Ore is unavailable.
+//		(new ACGenMinable(ACBlocks.oreCopper, 7, 60, 25)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreAl, 5, 60, 25)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreMg, 3, 60, 20)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreNi, 3, 60, 18)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreShadow, 2, 10, 2, shadowGenIds)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 10, crystalGenIds)).generate(world, random, x, z);
 	}
 
 }

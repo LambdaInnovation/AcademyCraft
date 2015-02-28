@@ -48,10 +48,11 @@ public class ACBlocks {
 	@RegBlock
 	public static BlockMagInducer magInducer;
 	
-	@RegBlock
+	//TODO: Not in the plan.
+/*	@RegBlock
 	@RegBlock.BTName("cuore")
 	@RegBlock.OreDict("oreCopper")
-	public static ACOre oreCopper = new ACOre(1, 3.05f);
+	public static ACOre oreCopper = new ACOre(1, 3.05f);*/
 	
 	//TODO: This block isn't in used in AC beta.
 /*	@RegBlock

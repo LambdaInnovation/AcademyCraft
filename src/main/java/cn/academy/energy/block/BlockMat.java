@@ -49,7 +49,7 @@ public class BlockMat extends BlockDirectionalMulti {
 	
     @Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p, 
-    	int s, float tx, float ty, float tz) {
+			int s, float tx, float ty, float tz) {
     	int[] origin = this.getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
     	if(origin != null) {
     		matGui.openGuiContainer(p, world, origin[0], origin[1], origin[2]);
