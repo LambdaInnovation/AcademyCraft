@@ -17,8 +17,10 @@ import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegChestContent;
 import cn.annoreg.mc.RegWorldGen;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
@@ -90,17 +92,28 @@ public class ACMiscReg {
 	}
 	
 	public static void regSmelting() {
-		GameRegistry.addSmelting(Blocks.glass , new ItemStack(ACItems.smallSi), 0f);
-		//Ore Smelting
-		GameRegistry.addSmelting(ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f);
-		//TODO: Copper Ore is unavailable.
-//		GameRegistry.addSmelting(ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f);
-		GameRegistry.addSmelting(ACBlocks.oreMg, new ItemStack(ACItems.ingotMg), 0.8f);
-		GameRegistry.addSmelting(ACBlocks.oreNi, new ItemStack(ACItems.ingotNi), 0.8f);
-		//TODO: This recipe isn't available in this version.
-//		GameRegistry.addSmelting(ACBlocks.oreTin, new ItemStack(ACItems.ingotTin), 0.7f);
-		GameRegistry.addSmelting(ACBlocks.oreCrystal, new ItemStack(ACItems.crystal), 1.2f);
-		GameRegistry.addSmelting(ACBlocks.oreShadow, new ItemStack(ACItems.ingotShadow), 1.2f);
+		Object[][] ac_smelting = {
+				{Blocks.glass, new ItemStack(ACItems.smallSi), 0f},
+				{ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f},
+//				{ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f},
+				{ACBlocks.oreMg, new ItemStack(ACItems.ingotMg), 0.8f},
+				{ACBlocks.oreNi, new ItemStack(ACItems.ingotNi), 0.8f},
+//				{ACBlocks.oreTin, new ItemStack(ACItems.ingotTin), 0.7f},
+				{ACBlocks.oreCrystal, new ItemStack(ACItems.crystal), 1.2f},
+				{ACBlocks.oreShadow, new ItemStack(ACItems.ingotShadow), 1.2f}
+		};
+		addSmelting(ac_smelting);
+	}
+	
+	private static void addSmelting(Object[][] obj) {
+		for(Object[] i : obj) {
+			if(i[0] instanceof Item)
+				GameRegistry.addSmelting((Item) i[0], (ItemStack) i[1], (Float) i[2]);
+			else if(i[0] instanceof ItemStack)
+				GameRegistry.addSmelting((ItemStack) i[0], (ItemStack) i[1], (Float) i[2]);
+			else if(i[0] instanceof Block)
+				GameRegistry.addSmelting((Block) i[0], (ItemStack) i[1], (Float) i[2]);
+		}
 	}
 	
 	@RegChestContent({0, 1, 2, 3})
