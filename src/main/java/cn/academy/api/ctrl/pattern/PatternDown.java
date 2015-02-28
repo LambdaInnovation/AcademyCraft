@@ -15,6 +15,7 @@ package cn.academy.api.ctrl.pattern;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
 
 public abstract class PatternDown extends Pattern {
 	
@@ -29,6 +30,8 @@ public abstract class PatternDown extends Pattern {
 				return false;
 			}
 			state = createSkill(player);
+			if(player.worldObj.isRemote)
+				SkillStateManager.regPatternFor(state, this);
 			if (state != null)
 				state.startSkill();
 			return false;

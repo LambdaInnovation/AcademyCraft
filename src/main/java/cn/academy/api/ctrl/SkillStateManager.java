@@ -25,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import cn.academy.api.ctrl.pattern.Pattern;
-import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -162,10 +161,10 @@ public class SkillStateManager {
 		}
 	}
 	
-	static Map<State, Pattern> clientConnectMap = new HashMap();
+	static Map<SkillState, Pattern> clientConnectMap = new HashMap();
 	
 	@SideOnly(Side.CLIENT)
-	public static void regPatternFor(State state, Pattern pattern) {
+	public static void regPatternFor(SkillState state, Pattern pattern) {
 		clientConnectMap.put(state, pattern);
 	}
 
