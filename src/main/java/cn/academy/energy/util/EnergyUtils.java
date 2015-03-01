@@ -77,10 +77,11 @@ public class EnergyUtils {
 	public static int tryCharge(ItemStack stack, int amt, boolean simulate) {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
-			IElectricItemManager manager = iei instanceof ISpecialElectricItem ? 
-				((ISpecialElectricItem)iei).getManager(stack) : ElectricItem.manager;
+			IElectricItemManager manager = ElectricItem.manager;
 			if(manager == null) //IC2 not installed, lazy initialization.
-				manager = new IC2DefaultEIManager();
+				ElectricItem.manager = manager = new IC2DefaultGatewayManager();
+			if(ElectricItem.rawManager == null)
+				ElectricItem.rawManager = new IC2DefaultEIManager();
 			return manager.charge(stack, amt, 3, true, simulate);
 		}
 		return 0;

@@ -213,6 +213,9 @@ public class GuiMainScreen extends AuxGui {
 	
 	@SubscribeEvent
 	public void onUpdateCD(UpdateCDEvent event) {
+		if(event.cd == 0)
+			return;
+		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		AbilityData data = AbilityDataMain.getData(player);
 		int i = data.getSkillID(event.skill);

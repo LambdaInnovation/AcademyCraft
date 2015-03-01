@@ -184,18 +184,21 @@ class WirelessNetwork {
 		if(nodes.size() <= 1)
 			return;
 		double sum = 0.0;
-		
+		double maxSum = 0.0;
 		//First pass: calc sum
 		for(IWirelessNode node : nodes) {
 			sum += node.getEnergy();
+			maxSum += node.getMaxEnergy();
 		}
 		sum += energyLag; //Also account for unprocessed energy
 		sum = Math.max(sum, 0);
-		sum /= nodes.size();
+
+		double rate = sum / maxSum;
 		
 		//Second pass: do the balance, use energyLag as middle buffer
 		for(IWirelessNode node : nodes) {
-			double delta = Math.min(sum, node.getMaxEnergy()) - node.getEnergy();
+			double to = node.getMaxEnergy() * rate;
+			double delta = Math.min(to, node.getMaxEnergy()) - node.getEnergy();
 			delta = queryLag(Math.signum(delta) * Math.min(Math.abs(delta), node.getLatency()));
 			node.setEnergy(delta + node.getEnergy());
 		}

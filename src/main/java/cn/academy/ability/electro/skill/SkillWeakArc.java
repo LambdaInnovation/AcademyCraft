@@ -68,7 +68,7 @@ public class SkillWeakArc extends SkillBase {
 				return new StateArc(player);
 			}
 			
-		}.setCooldown(5));
+		}.setCooldown(300));
 	}
 
 	public static class StateArc extends SkillState {
