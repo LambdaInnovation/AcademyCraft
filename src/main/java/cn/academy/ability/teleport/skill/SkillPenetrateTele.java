@@ -42,7 +42,7 @@ public class SkillPenetrateTele extends SkillBase {
 				return new PeneState(player);
 			}
 			
-		});
+		}.setCooldown(0));
 	}
 	
 	private static float getConsumePerBlock(int slv, int lv) {

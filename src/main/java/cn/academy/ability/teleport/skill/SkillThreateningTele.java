@@ -58,7 +58,7 @@ public class SkillThreateningTele extends SkillBase {
 				return new ThreateningState(player);
 			}
 
-		});
+		}.setCooldown(0));
 	}
 
 	private static class ThreateningState extends SkillState {

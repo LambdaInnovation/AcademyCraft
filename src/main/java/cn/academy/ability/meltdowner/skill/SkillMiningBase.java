@@ -44,7 +44,7 @@ public abstract class SkillMiningBase extends SkillBase {
 				return new MiningState(player, SkillMiningBase.this);
 			}
 			
-		});
+		}.setCooldown(0));
 	}
 	
 	abstract float getConsume(int slv, int lv); //per tick
