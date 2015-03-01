@@ -69,12 +69,15 @@ public class MsgNodeGuiLoad implements IMessage {
 		@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
 		public IMessage onMessage(MsgNodeGuiLoad msg, MessageContext ctx) {
 			GuiScreen gs = Minecraft.getMinecraft().currentScreen;
+			System.out.println("received load msg");
 			if(!(gs instanceof GuiNode)) {
+				System.err.println("unexepected quit");
 				return null;
 			}
 			GuiNode node = (GuiNode) gs;
 			node.synced = true;
 			node.curChannel = msg.channel;
+			System.out.println("fin");
 			return null;
 		}
 		
@@ -116,6 +119,7 @@ public class MsgNodeGuiLoad implements IMessage {
 				AcademyCraft.log.error("Didn't find TileNode in server when opening gui");
 				return null;
 			}
+			System.out.println("sending load msg");
 			TileNode node = (TileNode) te;
 			return new MsgNodeGuiLoad(node);
 		}

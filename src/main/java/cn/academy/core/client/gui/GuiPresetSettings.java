@@ -66,20 +66,13 @@ public class GuiPresetSettings extends LIGuiScreen {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			Minecraft mc = Minecraft.getMinecraft();
-			guiHandler.openClientGui();
+			GuiHandlers.handlerPresetSettings.openClientGui();
 		}
 		@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 		@Override public void onKeyTick(int keyCode, boolean tickEnd) {}
 	}
 	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		@Override
-		@SideOnly(Side.CLIENT)
-		protected GuiScreen getClientGui() {
-			return new GuiPresetSettings();
-		}
-	};
+
 	
 	private boolean isSetting;
 

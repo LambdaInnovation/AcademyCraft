@@ -249,7 +249,8 @@ public class SkillStateManager {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(player == null) return true;
 		//System.out.println(getMapForSide(player));
-		return getMapForSide(player).get(player.getCommandSenderName()).isEmpty();
+		List<SkillState> list = getMapForSide(player).get(player.getCommandSenderName());
+		return list == null ? true : list.isEmpty();
 	}
 
     @SubscribeEvent

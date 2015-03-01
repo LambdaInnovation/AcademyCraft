@@ -45,7 +45,7 @@ public class SkillViscusStripping extends SkillBase {
 			public State createSkill(EntityPlayer player) {
 				return new ViscusState(player);
 			}
-		}.setCooldown(50000));
+		}.setCooldown(5000));
 	}
 	
 	private static double getDist(int slv, int lv) {

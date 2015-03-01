@@ -396,10 +396,5 @@ public class SkillLocatingTele extends SkillBase {
 			return new LIGuiScreen(new GuiSelect()).setDrawBack(false);
 		}
 	};
-	
-	@SubscribeEvent
-	public void onStateChange(ControlStateEvent event) {
-		
-	}
 
 }

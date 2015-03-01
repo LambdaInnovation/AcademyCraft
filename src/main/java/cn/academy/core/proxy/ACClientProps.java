@@ -59,7 +59,7 @@ public class ACClientProps {
 		TEX_GUI_PRESET = src("academy:textures/guis/preset.png"),
 		TEX_EFF_MD_SHIELD = src("academy:textures/effects/mdshield.png");
 	
-	public static final LambdaFont FONT_YAHEI_32 = new LambdaFont(src("academy:fonts/yahei.png"), "/assets/academy/fonts/yahei.lf");
+	public static LambdaFont FONT_YAHEI_32 = new LambdaFont(src("academy:fonts/yahei.png"), "/assets/academy/fonts/yahei.lf");;
 	
 	//Model Textures
 	public static final ResourceLocation

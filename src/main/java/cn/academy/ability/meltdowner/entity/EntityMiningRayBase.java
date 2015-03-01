@@ -64,7 +64,7 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 				Block targ = worldObj.getBlock(workX, workY, workZ);
 				int harvLevel = targ.getHarvestLevel(worldObj.getBlockMetadata(workX, workY, workZ));
 				System.out.println(harvLevel);
-				if(harvLevel < 0 || harvLevel > getHarvestLevel()) {
+				if(targ.getBlockHardness(worldObj, workX, workY, workZ) < 0|| harvLevel > getHarvestLevel()) {
 					workX = workY = workZ = -1;
 				}
 			} else {

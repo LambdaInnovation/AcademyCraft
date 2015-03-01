@@ -127,7 +127,7 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	public void userQuit() {
 		if(user == null)
 			return;
-		if(!worldObj.isRemote)
+		if(!worldObj.isRemote && es != null)
 			es.disMount();
 		user = null;
 	}

@@ -42,7 +42,7 @@ public class SkillPenetrateTele extends SkillBase {
 				return new PeneState(player);
 			}
 			
-		}.setCooldown(0));
+		}.setCooldown(2000));
 	}
 	
 	private static float getConsumePerBlock(int slv, int lv) {
@@ -146,7 +146,6 @@ public class SkillPenetrateTele extends SkillBase {
 		
 		boolean nearDet = false,  //Whether we have determined the near point.
 				meetd = false; //Whether we have met the first 'dangerous' point.
-		System.out.println("---");
 		for(int i = 0; i <= maxDist; ++i) {
 			boolean safe;
 			int cx = (int) mo.posX, cy = (int) mo.posY, cz = (int) mo.posZ;
@@ -170,9 +169,7 @@ public class SkillPenetrateTele extends SkillBase {
 				if(!safe) break; //next dangerous point, end
 			}
 			mo.move(1.0d);
-			System.out.println(i);
 		}
-		System.out.println("---");
 		
 		double farX = mo.posX, farY = mo.posY, farZ = mo.posZ;
 		return world.getWorldVec3Pool().getVecFromPool((nearX + farX) / 2, (nearY + farY) / 2, (nearZ + farZ) / 2);
