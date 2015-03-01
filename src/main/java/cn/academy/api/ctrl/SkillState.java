@@ -45,6 +45,7 @@ public class SkillState {
 	public final boolean isRemote;
 	
 	private int tickToFinish = 0;
+	private boolean finishResult;
 	
 	private boolean alive = false;
 	
@@ -75,14 +76,10 @@ public class SkillState {
 		}
 	}
 	
-	public final void finishSkillRightAway() {
-		
-	}
-	
-	public final void finishSkill() {
+	public final void finishSkill(boolean normal) {
 		//Finish the state next tick.
 		//This can avoid modification of the player state list while iterating.
-		finishSkillAfter(1);
+		finishSkillAfter(1, normal);
 	}
 	
 	public final void updateSkill() {
@@ -91,15 +88,16 @@ public class SkillState {
 		}
 	}
 	
-	public final void finishSkillAfter(int ticks) {
+	public final void finishSkillAfter(int ticks, boolean normal) {
 		if (ticks != 1 && tickToFinish != 0) {
 			AcademyCraft.log.warn("Call finishSkillAfter more than once. Overwritten.");
 		}
 		tickToFinish = ticks;
+		finishResult = normal;
 	}
 	
 	public final boolean reallyFinishSkill() {
-		boolean ret = onFinish();
+		boolean ret = onFinish(finishResult);
 		alive = false;
 		if (!player.worldObj.isRemote) {
 			//AcademyCraft.netHandler.sendToAll(new SkillStateMessage(this, SkillStateMessage.Action.FINISH));
@@ -121,9 +119,10 @@ public class SkillState {
 	protected void onStart() {}
 	
 	/**
+	 * @param result true=ended normally, false=aborted, just cleanup
 	 * @return Whether this skill was successfully executed and needs cooldown
 	 */
-	protected boolean onFinish() { return false; }
+	protected boolean onFinish(boolean result) { return false; }
 	
 	/**
 	 * Will be called every tick while this state is active.

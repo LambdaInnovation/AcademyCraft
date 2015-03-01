@@ -73,9 +73,13 @@ public class SkillViscusStripping extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean result) {
 			if(mark != null)
 				mark.setDead();
+			
+			if(!result) {
+				return false;
+			}
 			
 			int slv = data.getSkillLevel(CatTeleport.skillViscusStripping), lv = data.getLevelID() + 1;
 			float csm = 400 + lv * 45 + slv * 100;

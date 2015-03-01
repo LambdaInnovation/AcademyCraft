@@ -124,7 +124,7 @@ public class SkillItemCharge extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean fin) {
 			if(player.worldObj.isRemote) {
 				node.setDead();
 			}

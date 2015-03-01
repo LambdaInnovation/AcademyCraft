@@ -72,7 +72,7 @@ public class SkillPenetrateTele extends SkillBase {
 				mark  = null;
 				if(isRemote())
 					player.playSound("academy:deny", .5f, 1f);
-				finishSkill();
+				finishSkill(false);
 				return;
 			}
 			if(isRemote())
@@ -81,9 +81,14 @@ public class SkillPenetrateTele extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean res) {
 			if(mark == null)
 				return true;
+			
+			if(!res) {
+				mark.setDead();
+				return false;
+			}
 			
 			double dist = mark.getDist();
 			//Here we ignore the slight variation and believe that we will always success

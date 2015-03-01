@@ -434,6 +434,9 @@ public class EventHandlerClient implements IKeyHandler {
 		if (presets == null) return;
 		
 		skillEnabled = !skillEnabled;
+		
+		boolean fakeChange = !skillEnabled && !SkillStateManager.isClientStateEmpty();
+		
 		if (skillEnabled) {
 			//AcademyCraft.log.info("Player skill is enabled.");
 		} else {
@@ -441,8 +444,14 @@ public class EventHandlerClient implements IKeyHandler {
 			INSTANCE.skillEventAll(SkillEventType.RAW_CANCEL);
 			AcademyCraft.netHandler.sendToServer(new ControlMessage(0, SkillEventType.CLIENT_STOP_ALL, 0));
 		}
-		//Notify
-		MinecraftForge.EVENT_BUS.post(new ControlStateEvent());
+		
+		if(fakeChange) { //Using skill. Just clear the states.
+			skillEnabled = true;
+			MinecraftForge.EVENT_BUS.post(new AbilityEvent.AbortControl()); //Notify.
+		} else {
+			//Notify
+			MinecraftForge.EVENT_BUS.post(new ControlStateEvent());
+		}
 	}
 
 	@Override

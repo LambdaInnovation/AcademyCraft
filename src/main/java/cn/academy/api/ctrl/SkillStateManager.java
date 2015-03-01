@@ -243,6 +243,13 @@ public class SkillStateManager {
 	    
 	    return ret;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static boolean isClientStateEmpty() {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(player == null) return true;
+		return getMapForSide(player).isEmpty();
+	}
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {

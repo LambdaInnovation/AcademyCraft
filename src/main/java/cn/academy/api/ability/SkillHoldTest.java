@@ -33,7 +33,7 @@ public class SkillHoldTest extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean result) {
 			if (!player.worldObj.isRemote) {
 				player.addChatComponentMessage(new ChatComponentText("Hold Skill: Finish."));
 			}

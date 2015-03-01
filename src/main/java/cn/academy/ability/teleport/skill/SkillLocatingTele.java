@@ -84,10 +84,11 @@ public class SkillLocatingTele extends SkillBase {
 
 		@Override
 		@SideOnly(Side.CLIENT) //Client-Only override.
-		public boolean onFinish() {
+		public boolean onFinish(boolean res) {
 			if(isOpeningGui()) { //Opening gui, don't do anything.
 				return false;
 			}
+			if(!res) return false;
 			
 			if(isRemote()) {
 				if(this.getTickTime() < 10) {

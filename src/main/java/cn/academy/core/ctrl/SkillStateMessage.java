@@ -43,6 +43,7 @@ public class SkillStateMessage implements IMessage {
 		START,
 		UPDATE,
 		FINISH,
+		ABORT,
 		
 		//used by DimensionSkillStateMessage
 		SYNC,
@@ -151,9 +152,10 @@ public class SkillStateMessage implements IMessage {
 				break;
 				
 			case FINISH:
+			case ABORT:
 				ss = SkillStateManager.getStateById(msg.playerName, msg.stateID);
 				if (ss == null) break;
-				ss.finishSkill();
+				ss.finishSkill(msg.action == Action.FINISH);
 				break;
 			    
 			}

@@ -73,7 +73,7 @@ public class SkillBomb extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean fin) {
 			return true;
 		}
 

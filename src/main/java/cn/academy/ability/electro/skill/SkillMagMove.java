@@ -257,7 +257,7 @@ public class SkillMagMove extends SkillBase {
 			if(isRemote()) {
 				player.playSound("academy:deny", .5f, 1);
 			}
-			this.finishSkill();
+			this.finishSkill(false);
 		}
 		
 		@Override
@@ -269,7 +269,7 @@ public class SkillMagMove extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean fin) {
 			if(handler != null)
 				handler.setDead();
 			if(ray != null)

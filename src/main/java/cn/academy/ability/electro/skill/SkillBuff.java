@@ -111,7 +111,7 @@ public class SkillBuff extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean fin) {
 			if(isRemote()) {
 				node.setDead();
 				return good;

@@ -38,7 +38,7 @@ public abstract class PatternDown extends Pattern {
 		case RAW_UP:
 		case RAW_CANCEL:
 			if (state == null) return false;
-			state.finishSkill();
+			state.finishSkill(type == SkillEventType.RAW_UP);
 			state = null;
 			return false;
 		default:

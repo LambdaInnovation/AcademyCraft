@@ -260,8 +260,6 @@ public class SkillMineDetect extends SkillBase {
 	}
 	
 	public static final class EnableVision extends SkillState {
-		
-		boolean good = false;
 
 		public EnableVision(EntityPlayer player) {
 			super(player);
@@ -272,6 +270,7 @@ public class SkillMineDetect extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillLevel(CatElectro.mineDetect), lv = data.getLevelID() + 1;
 			if(!data.decreaseCP(getCPConsume(slv, lv), CatElectro.mineDetect)) {
+				this.finishSkill(false);
 				return;
 			}
 			player.playSound("academy:elec.mineview", 0.5f, 1.0f);
@@ -281,13 +280,12 @@ public class SkillMineDetect extends SkillBase {
 			} else {
 				player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100));
 			}
-			good = true;
-			this.finishSkill();
+			this.finishSkill(true);
 		}
 		
 		@Override
-		protected boolean onFinish() {
-			return good;
+		protected boolean onFinish(boolean fin) {
+			return fin;
 		}
 		
 	}

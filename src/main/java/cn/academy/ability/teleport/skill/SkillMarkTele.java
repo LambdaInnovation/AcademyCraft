@@ -78,7 +78,7 @@ public class SkillMarkTele extends SkillBase {
 				if(player.worldObj.isRemote) {
 					player.playSound("academy:deny", .5f, 1f);
 				}
-				finishSkill();
+				finishSkill(false);
 				return;
 			}
 			
@@ -102,9 +102,13 @@ public class SkillMarkTele extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean res) {
 			if(mark == null)
 				return true;
+			if(!res) {
+				mark.setDead();
+				return false;
+			}
 			
 			//player.motionX = player.motionZ = player.motionY = 0;
 			double dist = mark.getDist();

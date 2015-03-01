@@ -87,7 +87,7 @@ public class SkillLightningFlash extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() { return true; }
+		public boolean onFinish(boolean fin) { return true; }
 
 		@Override
 		public void onHold() {}

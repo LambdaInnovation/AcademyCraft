@@ -82,7 +82,7 @@ public abstract class SkillMiningBase extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
+		public boolean onFinish(boolean ended) {
 			if(!isRemote()) {
 				ray.setDead();
 			}

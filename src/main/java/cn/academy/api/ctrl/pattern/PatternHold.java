@@ -28,7 +28,7 @@ public abstract class PatternHold extends Pattern {
 		@Override
 		public void onStart() {}
 		@Override
-		public boolean onFinish() { return false; }
+		public boolean onFinish(boolean state) { return false; }
 		public void onHold() {}
 		public final boolean isRemote() {
 			return player.worldObj.isRemote;
@@ -62,7 +62,7 @@ public abstract class PatternHold extends Pattern {
 		case RAW_UP:
 		case RAW_CANCEL:
 			if (state == null) return false;
-			state.finishSkill();
+			state.finishSkill(type == SkillEventType.RAW_UP);
 			state = null;
 			return false;
 		case RAW_TICK_DOWN:

@@ -76,8 +76,8 @@ public class SkillMeltDowner extends SkillBase {
 		}
 
 		@Override
-		public boolean onFinish() {
-			if(!spawn || this.getTickTime() < 12) {
+		public boolean onFinish(boolean res) {
+			if(!spawn || this.getTickTime() < 12 || !res) {
 				return false;
 			}
 			
