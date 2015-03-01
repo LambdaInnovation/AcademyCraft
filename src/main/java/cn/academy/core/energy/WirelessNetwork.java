@@ -57,7 +57,6 @@ class WirelessNetwork {
 	}
 	
 	public void setPassword(String np) {
-		System.out.println(channel + "- setpw: " + np);
 		password = np;
 	}
 	

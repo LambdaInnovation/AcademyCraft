@@ -203,9 +203,11 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.UTName("silbarn")
+	@RegItem.HasRender
 	public static ItemSilbarn sibarn;
 	
 	@RegItem
+	@RegItem.HasRender
 	public static ItemMagHook magHook;
 	
 }

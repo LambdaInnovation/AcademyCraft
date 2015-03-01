@@ -53,7 +53,7 @@ public class EntityMdShield extends EntityX {
 	@RegEntity.Render
 	public static ShieldRender render;
 	
-	final float size = 1.6f;
+	final float size = 2f;
 	float dmgl, dmgr; //The random range of fallback damage;
 
 	EntityPlayer spawner;
@@ -135,7 +135,7 @@ public class EntityMdShield extends EntityX {
 	private void preRender() {
 		if(spawner != null) {
 			motion.init(spawner, 0, true);
-			motion.move(2);
+			motion.move(1);
 			motion.applyToEntity(this);
 		}
 	}

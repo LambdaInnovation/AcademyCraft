@@ -12,6 +12,7 @@
  */
 package cn.academy.misc.item;
 
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntityMagHook;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
+import cpw.mods.fml.relauncher.Side;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 
@@ -31,6 +33,10 @@ import cn.liutils.template.client.render.item.RenderModelItem;
  */
 @RegistrationClass
 public class ItemMagHook extends Item {
+	
+	@SideOnly(Side.CLIENT)
+	@RegItem.Render
+	public static HookRender render;
 
 	public ItemMagHook() {
 		setCreativeTab(AcademyCraft.cct);
@@ -48,5 +54,24 @@ public class ItemMagHook extends Item {
     	}
         return stack;
     }
+    
+    @SideOnly(Side.CLIENT)
+    public static class HookRender extends RenderModelItem {
+    	public HookRender() {
+    		super(new ItemModelCustom(ACModels.MDL_MAGHOOK), ACClientProps.TEX_MDL_MAGHOOK);
+    		renderInventory = false;
+    		this.setScale(0.15d);
+    		this.setStdRotation(0, -90, 90);
+    		this.setOffset(0, 0.0, -3);
+    		this.setEquipOffset(1, 0, 0);
+    	}
+    	
+    	protected void renderAtStdPosition(float i) {
+    		this.setOffset(0, 0, 1);
+    		this.setEquipOffset(0.5, 0.1, 0);
+    		super.renderAtStdPosition(i);
+    	}
+    }
+
 
 }

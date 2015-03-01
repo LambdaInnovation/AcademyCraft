@@ -17,9 +17,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.proxy.ACClientProps;
+import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntitySilbarn;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegItem;
+import cn.liutils.api.render.model.ItemModelCustom;
+import cn.liutils.template.client.render.item.RenderModelItem;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@RegistrationClass
 public class ItemSilbarn extends Item {
+	
+	@SideOnly(Side.CLIENT)
+	@RegItem.Render
+	public static RenderSilbarn render;
 	
 	public ItemSilbarn() {
 		setCreativeTab(AcademyCraft.cct);
@@ -36,4 +49,16 @@ public class ItemSilbarn extends Item {
         return stack;
     }
 	
+    public static class RenderSilbarn extends RenderModelItem {
+
+		public RenderSilbarn() {
+			super(new ItemModelCustom(ACModels.MDL_SILBARN), ACClientProps.TEX_MDL_SILBARN);
+			this.renderInventory = false;
+			this.setStdRotation(90, 0, 0);
+			this.setEquipRotation(0, 90, 0);
+			this.setEquipOffset(.5, 0.1, -.2);
+		}
+    	
+    }
+    
 }

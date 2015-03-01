@@ -66,7 +66,7 @@ public class SkillItemCharge extends SkillBase {
 			public State createSkill(EntityPlayer player) {
 				return new ChargeState(player);
 			}
-		}.setCooldown(0));
+		}.setCooldown(300));
 	}
 	
 	public static float getConsume(AbilityData data) {
