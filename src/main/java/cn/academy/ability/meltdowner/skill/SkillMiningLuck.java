@@ -13,6 +13,8 @@
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.CatMeltDowner;
@@ -43,6 +45,9 @@ public class SkillMiningLuck extends SkillMiningBase {
 		@Override
 		protected void onDiggedBlock(Block b, int x, int y, int z, int meta) {
 			int n = 1 + rand.nextInt(3);
+			Item it = b.getItemDropped(meta, rand, meta);
+			
+			if(it instanceof ItemBlock) n = 1;
 			for(int i = 0; i < n; ++i) {
 				super.onDiggedBlock(b, x, y, z, meta);
 			}

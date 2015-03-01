@@ -59,7 +59,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class SkillLocatingTele extends SkillBase {
 	
-	static final double scale = 0.5;
+	static final double scale = 0.4;
 	
 	private final static ResourceLocation tex = new ResourceLocation("academy:textures/guis/tp_locating_ui.png");
 		
@@ -210,7 +210,7 @@ public class SkillLocatingTele extends SkillBase {
 				this.alignStyle = AlignStyle.CENTER;
 				createTime = time;
 				
-				this.scale = 0.6;
+				this.scale = SkillLocatingTele.scale;
 			}
 			 
 			double[][] shadowOffsets = {

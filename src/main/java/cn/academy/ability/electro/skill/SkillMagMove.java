@@ -12,6 +12,10 @@
  */
 package cn.academy.ability.electro.skill;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
@@ -19,6 +23,8 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.entity.MoveArcRender;
 import cn.academy.ability.electro.entity.EntityArcBase;
@@ -33,6 +39,9 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.FakeEntity;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,11 +52,32 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 public class SkillMagMove extends SkillBase {
+	
+	static Map<EntityPlayer, Integer> entitiesToReduce = new HashMap();
 
 	public SkillMagMove() {
 		this.setLogo("electro/moving.png");
 		setName("em_move");
 		setMaxLevel(10);
+		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerFall(LivingFallEvent event) {
+		if(entitiesToReduce.keySet().contains(event.entityLiving)) {
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onServerTick(ServerTickEvent event) {
+		Iterator<Map.Entry<EntityPlayer, Integer>> iter = entitiesToReduce.entrySet().iterator();
+		while(iter.hasNext()) {
+			Map.Entry<EntityPlayer, Integer> entry = iter.next();
+			if(entry.getValue() == 0) { iter.remove();  continue; }
+			entry.setValue(entry.getValue() - 1);
+		}
 	}
 	
 	private static void playSound(EntityPlayer player, int n) {
@@ -275,7 +305,7 @@ public class SkillMagMove extends SkillBase {
 			if(ray != null)
 				ray.setDead();
 			if(!player.worldObj.isRemote && data.getSkillLevel(CatElectro.magMovement) >= 5) {
-				//Add fall protection
+				entitiesToReduce.put(player, 40); //2sec falling protection
 			}
 			return true;
 		}
