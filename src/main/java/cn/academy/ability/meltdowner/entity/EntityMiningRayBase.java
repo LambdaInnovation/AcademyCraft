@@ -62,12 +62,12 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 					workZ = nz;
 				}
 				Block targ = worldObj.getBlock(workX, workY, workZ);
-				if(targ.getHarvestLevel(worldObj.getBlockMetadata(workX, workY, workZ)) > getHarvestLevel()) {
-					System.out.println("bad reset");
+				int harvLevel = targ.getHarvestLevel(worldObj.getBlockMetadata(workX, workY, workZ));
+				System.out.println(harvLevel);
+				if(harvLevel < 0 || harvLevel > getHarvestLevel()) {
 					workX = workY = workZ = -1;
 				}
 			} else {
-				System.out.println("null reset");
 				workX = workY = workZ = -1;
 			}
 			
@@ -82,7 +82,6 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 					workX = workY = workZ = -1; //Finished, invalidate
 				}
 			}
-			System.out.println(workX + " " + workY + " " + workZ + " -> " + workTime);
 		}
 	}
 	

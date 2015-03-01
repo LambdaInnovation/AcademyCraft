@@ -96,7 +96,7 @@ public class MsgDeveloper implements IMessage {
 			World world = Minecraft.getMinecraft().theWorld;
 			TileEntity te = world.getTileEntity(msg.x, msg.y, msg.z);
 			if(te == null || !(te instanceof TileDeveloper)) {
-				AcademyCraft.log.error("Didn't find the right instance while synchronizing AbilityDeveloper");
+				//AcademyCraft.log.error("Didn't find the right instance while synchronizing AbilityDeveloper");
 				return null;
 			}
 			TileDeveloper dev = (TileDeveloper) te;
