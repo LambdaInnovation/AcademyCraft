@@ -260,6 +260,8 @@ public class SkillMineDetect extends SkillBase {
 	}
 	
 	public static final class EnableVision extends SkillState {
+		
+		boolean good = false;
 
 		public EnableVision(EntityPlayer player) {
 			super(player);
@@ -279,7 +281,13 @@ public class SkillMineDetect extends SkillBase {
 			} else {
 				player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100));
 			}
+			good = true;
 			this.finishSkill();
+		}
+		
+		@Override
+		protected boolean onFinish() {
+			return good;
 		}
 		
 	}

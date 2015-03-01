@@ -14,11 +14,16 @@ package cn.academy.api.ctrl.pattern;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillEventType;
+import cn.academy.api.event.UpdateCDEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class Pattern {
+	
+	public RawEventHandler reh; //the reh instance that this pattern belongs to.
 	
 	long cd = 500;
 	
@@ -61,6 +66,7 @@ public abstract class Pattern {
 	public void onStateEnd(boolean response) {
 		if(response) {
 			this.lastActiveEvent = Minecraft.getSystemTime();
+			MinecraftForge.EVENT_BUS.post(new UpdateCDEvent(reh.getSkill(), (int) cd));
 		}
 	}
 	

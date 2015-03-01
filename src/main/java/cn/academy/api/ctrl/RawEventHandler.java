@@ -34,8 +34,15 @@ public class RawEventHandler {
 	
 	RawEventHandler(EntityPlayer player, SkillBase skill) {
 		skill.initPattern(this);
+		for(Pattern pat : patterns) {
+			pat.reh = this;
+		}
 		this.skill = skill;
 		this.player = player;
+	}
+	
+	public SkillBase getSkill() {
+		return skill;
 	}
 	
 	/**
