@@ -12,18 +12,18 @@
  */
 package cn.academy.api.data;
 
-import cn.academy.api.ability.Category;
-import cn.academy.api.ctrl.EventHandlerClient;
-import cn.academy.api.event.AbilityEvent.ChangeCategory;
-import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegMessageHandler;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
-import io.netty.buffer.ByteBuf;
+import cn.academy.api.ability.Category;
+import cn.academy.api.ctrl.EventHandlerClient;
+import cn.academy.api.event.AbilityEvent;
+import cn.academy.core.AcademyCraft;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegMessageHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -80,6 +80,7 @@ public class MsgResetAbilityData implements IMessage {
 			if (player == Minecraft.getMinecraft().thePlayer) {
     			//Call client side ctrl api.
     			EventHandlerClient.resetPlayerSkillData();
+    			MinecraftForge.EVENT_BUS.post(new AbilityEvent.ChangeCategory(AbilityDataMain.getData(player)));
 			}
 			return null;
 		}

@@ -56,6 +56,8 @@ public class LocationData implements IExtendedEntityProperties {
 	
 	@SubscribeEvent
 	public void onCategoryChanged(AbilityEvent.ChangeCategory event) {
+		if(event.entityPlayer.worldObj.isRemote)
+			return;
 		LocationData data = get(event.entityPlayer);
 		data.locationList.clear();
 		data.sync();

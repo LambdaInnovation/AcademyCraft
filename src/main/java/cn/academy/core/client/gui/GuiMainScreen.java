@@ -12,36 +12,48 @@
  */
 package cn.academy.core.client.gui;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.EventHandlerClient;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.api.event.AbilityEvent;
+import cn.academy.api.event.UpdateCDEvent;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.api.draw.GUIObject;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
+import cn.liutils.util.misc.Pair;
 import cn.liutils.util.render.LambdaFont;
 import cn.liutils.util.render.LambdaFont.Align;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
- *
  */
 @RegistrationClass
 @SideOnly(Side.CLIENT)
 public class GuiMainScreen extends AuxGui {
 	
 	@RegAuxGui
+	@RegEventHandler(Bus.Forge)
 	public static GuiMainScreen INSTANCE = new GuiMainScreen();
 	
 	private long lastInactiveTime, lastActiveTime;
@@ -64,9 +76,6 @@ public class GuiMainScreen extends AuxGui {
 		return player != null && AbilityDataMain.getData(player).hasAbility();
 	}
 
-	/* (non-Javadoc)
-	 * @see cn.liutils.api.gui.AuxGui#draw(net.minecraft.client.gui.ScaledResolution)
-	 */
 	@Override
 	public void draw(ScaledResolution sr) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -116,6 +125,9 @@ public class GuiMainScreen extends AuxGui {
 					Math.max((300 + lastActiveTime - time) / 300D, 0.0);
 			
 			if(mAlpha > 0) {
+				//Cooldown
+				drawCooldownBars(data, mAlpha, w, h);
+				
 				GL11.glColor4d(1, 1, 1, mAlpha * 0.6);
 				RenderUtils.loadTexture(ACClientProps.TEX_HUD_BAR);
 				HudUtils.setTextureResolution(512, 200);
@@ -155,6 +167,66 @@ public class GuiMainScreen extends AuxGui {
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 	
+	private void drawCooldownBars(AbilityData data, double mAlpha, double w, double h) {
+		final double len = 100;
+		final double fSize = 7, step = 17;
+		
+		double y0 = 0;
+		Iterator<Map.Entry<Integer, Pair<Integer, Long>>> iter = aliveCooldowns.entrySet().iterator();
+		
+		long time = Minecraft.getSystemTime();
+		
+		GL11.glPushMatrix();
+		
+		GL11.glTranslated(w - 120, h - 90, 0);
+		
+		while(iter.hasNext()) {
+			Map.Entry<Integer, Pair<Integer, Long>> ent = iter.next();
+			Pair<Integer, Long> dt = ent.getValue();
+			
+			SkillBase sb = data.getSkill(ent.getKey());
+			if(sb != null) {
+				GL11.glColor4d(1, 1, 1, mAlpha);
+				String name = sb.getDisplayName();
+				double prog = 1 - Math.min(1, (double)(time - dt.second) / dt.first);
+				ACUtils.drawText(name, len, y0, fSize, Align.RIGHT);
+				GL11.glColor4d(.3, .3, .3, mAlpha);
+				HudUtils.drawModalRect(0, y0 + 10, len, 2.3);
+				double l = len * prog;
+				GL11.glColor4d(.8, .8, .8, mAlpha);
+				HudUtils.drawModalRect(len - l, y0 + 10, l, 2.3);
+				y0 -= step;
+			}
+			
+			if(time - dt.second > dt.first) {
+				iter.remove();
+			}
+		}
+		
+		GL11.glPopMatrix();
+	}
 	
+	@SubscribeEvent
+	public void catChanged(AbilityEvent.ChangeCategory event) {
+		aliveCooldowns.clear();
+	}
+	
+	@SubscribeEvent
+	public void onUpdateCD(UpdateCDEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		AbilityData data = AbilityDataMain.getData(player);
+		int i = data.getSkillID(event.skill);
+		if(i >= 0) { //Valid skill
+			Pair<Integer, Long> pair = aliveCooldowns.get(i);
+			if(pair == null) {
+				pair = new Pair();
+				aliveCooldowns.put(i, pair);
+			}
+			pair.first = event.cd;
+			pair.second = Minecraft.getSystemTime();
+		}
+	}
+	
+	Map<Integer, Pair<Integer, Long>> aliveCooldowns = new HashMap();
 
 }

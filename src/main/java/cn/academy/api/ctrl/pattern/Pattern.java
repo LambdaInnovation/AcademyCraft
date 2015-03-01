@@ -66,6 +66,7 @@ public abstract class Pattern {
 	public void onStateEnd(boolean response) {
 		if(response) {
 			this.lastActiveEvent = Minecraft.getSystemTime();
+			//System.out.println("posted");
 			MinecraftForge.EVENT_BUS.post(new UpdateCDEvent(reh.getSkill(), (int) cd));
 		}
 	}
