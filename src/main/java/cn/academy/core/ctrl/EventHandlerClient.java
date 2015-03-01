@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +24,10 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
+import cn.academy.api.ctrl.PresetManager;
+import cn.academy.api.ctrl.RawEventHandler;
+import cn.academy.api.ctrl.SkillEventType;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.api.event.ControlStateEvent;
@@ -290,7 +294,7 @@ public class EventHandlerClient implements IKeyHandler {
 	 * @param cat The skill data of the player.
 	 */
 	public static void resetPlayerSkillData() {
-		AcademyCraft.log.info("EventHandlerClient: Reset player.");
+		//AcademyCraft.log.info("EventHandlerClient: Reset player.");
 		Category cat = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategory();
 
 		if(cat == null) {

@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +21,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import cn.academy.api.ability.Category;
+import cn.academy.api.ctrl.RawEventHandler;
+import cn.academy.api.ctrl.SkillEventType;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
@@ -247,7 +250,7 @@ public class EventHandlerServer {
 		 * Send RAW_CANCEL to server and client to abort current skill.
 		 */
 		private void setDead() {
-			AcademyCraft.log.warn("Delay in client side. Skill cancelled.");
+			//AcademyCraft.log.warn("Delay in client side. Skill cancelled.");
 			int time = reh.getTime();
 			reh.onEvent(SkillEventType.RAW_CANCEL, time, false);
 			AcademyCraft.netHandler.sendTo(
@@ -276,7 +279,7 @@ public class EventHandlerServer {
 	 * @param name The name of player joined.
 	 */
 	public static void resetPlayerSkillData(EntityPlayer player) {
-		AcademyCraft.log.info("EventHandlerServer: Reset player.");
+		//AcademyCraft.log.info("EventHandlerServer: Reset player.");
 		
         //Cancel all skills.
         INSTANCE.skillEventAll(player, SkillEventType.RAW_CANCEL);

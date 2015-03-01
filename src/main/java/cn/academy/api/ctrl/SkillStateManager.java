@@ -25,6 +25,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import cn.academy.api.ctrl.pattern.Pattern;
+import cn.academy.core.ctrl.DimensionSkillStateMessage;
+import cn.academy.core.ctrl.SkillStateMessage;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -56,7 +58,7 @@ public class SkillStateManager {
 	 * Remove all states associated to this player
 	 * @param player
 	 */
-	static void removePlayerFromServer(EntityPlayer player) {
+	public static void removePlayerFromServer(EntityPlayer player) {
 		if (server.containsKey(player.getCommandSenderName())) {
 		    List<SkillState> removed = server.remove(player.getCommandSenderName());
 		    
@@ -148,7 +150,7 @@ public class SkillStateManager {
 	/**
 	 * Send tick event to all active State in the server map. Called by EventHandlerServer.
 	 */
-	static void tickServer() {
+	public static void tickServer() {
 		for (List<SkillState> playerList : server.values()) {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
@@ -171,7 +173,7 @@ public class SkillStateManager {
 	/**
 	 * Send tick event to all active State in the client map. Called by EventHandlerClient.
 	 */
-	static void tickClient() {
+	public static void tickClient() {
 		for (List<SkillState> playerList : client.values()) {
 			Iterator<SkillState> itor = playerList.iterator();
 			while (itor.hasNext()) {
@@ -216,7 +218,7 @@ public class SkillStateManager {
 	
 	//Only used by SkillStateMessage.
 	//Should NEVER be called on server.
-	static SkillState getStateById(String player, int id) {
+	public static SkillState getStateById(String player, int id) {
 		List<SkillState> playerList = client.get(player);
 		//client.get(player);
 		if (playerList == null) return null;

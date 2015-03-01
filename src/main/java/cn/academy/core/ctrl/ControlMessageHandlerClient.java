@@ -1,4 +1,4 @@
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;

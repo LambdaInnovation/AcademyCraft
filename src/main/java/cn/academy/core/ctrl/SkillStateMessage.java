@@ -10,9 +10,12 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
 import java.lang.reflect.Constructor;
+
+import cn.academy.api.ctrl.SkillState;
+import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;

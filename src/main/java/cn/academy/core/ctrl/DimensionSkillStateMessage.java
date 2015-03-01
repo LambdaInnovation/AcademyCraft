@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class DimensionSkillStateMessage implements IMessage {
     
-    int dimension;
-    List<SkillStateMessage> states = new ArrayList();
+    public int dimension;
+    public List<SkillStateMessage> states = new ArrayList();
     
     public DimensionSkillStateMessage() {}
     

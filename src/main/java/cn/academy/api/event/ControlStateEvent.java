@@ -3,7 +3,7 @@
  */
 package cn.academy.api.event;
 
-import cn.academy.api.ctrl.EventHandlerClient;
+import cn.academy.core.ctrl.EventHandlerClient;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

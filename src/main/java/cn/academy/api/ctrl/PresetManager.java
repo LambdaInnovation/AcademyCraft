@@ -14,6 +14,7 @@ package cn.academy.api.ctrl;
 
 import net.minecraftforge.common.config.ConfigCategory;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.ctrl.EventHandlerClient;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 
@@ -71,7 +72,7 @@ public class PresetManager {
 		nextWorldId = AcademyCraft.config.get(PRESET_CONFIG_GLOBAL_OTHER, PRESET_CONFIG_ID, 0).getInt();
 	}
 	
-	void reset() {
+	public void reset() {
 		for (int i = 0; i < PRESET_COUNT; ++i) {
 			presets[i] = new Preset();
 		}
@@ -82,7 +83,7 @@ public class PresetManager {
 	 * Save presets to config file.
 	 * Called by EventHandlerClient when exiting a world.
 	 */
-	void save() {
+	public void save() {
 		//First check the nextWorldId
 		if (worldId == nextWorldId) {
 			++nextWorldId;
@@ -106,7 +107,7 @@ public class PresetManager {
 	 * Create a new PresetManager with the given worldId.
 	 * @param worldId The world id.
 	 */
-	PresetManager(int worldId) {
+	public PresetManager(int worldId) {
 		this.worldId = worldId;
 		
 		String worldIdStr = PRESET_CONFIG_GLOBAL_WORLD + worldId;
@@ -128,7 +129,7 @@ public class PresetManager {
 	 * Get nextWorldId.
 	 * @return Result.
 	 */
-	static int getNextWorldId() {
+	public static int getNextWorldId() {
 		return nextWorldId;
 	}
 	

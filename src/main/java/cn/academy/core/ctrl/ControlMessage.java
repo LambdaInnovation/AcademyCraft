@@ -10,8 +10,9 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.api.ctrl;
+package cn.academy.core.ctrl;
 
+import cn.academy.api.ctrl.SkillEventType;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 

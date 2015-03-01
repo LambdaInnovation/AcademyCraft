@@ -32,7 +32,7 @@ public class RawEventHandler {
 	private EntityPlayer player;
 	
 	
-	RawEventHandler(EntityPlayer player, SkillBase skill) {
+	public RawEventHandler(EntityPlayer player, SkillBase skill) {
 		skill.initPattern(this);
 		for(Pattern pat : patterns) {
 			pat.reh = this;
@@ -48,7 +48,7 @@ public class RawEventHandler {
 	/**
 	 * Network constants used by EventHandlers
 	 */
-	static final int KA_INTERVAL = 50,
+	public static final int KA_INTERVAL = 50,
 						KA_DELAY = 50,
 						DBL_DELAY = 10;
 	
@@ -59,7 +59,7 @@ public class RawEventHandler {
 	 * @param time On server, it's time on client (sent in Message). On client, it's time get by getTime.
 	 * @return arbitary on server, true on client if needed to send events to server.
 	 */
-	boolean onEvent(SkillEventType type, int time, boolean client) {
+	public boolean onEvent(SkillEventType type, int time, boolean client) {
 		
 		//CD hack, needs modifying to support more than 1 patterns.
 		if(client) {
@@ -111,7 +111,7 @@ public class RawEventHandler {
 	 * Get current skill time on this side.
 	 * @return The time.
 	 */
-	int getTime() {
+	public int getTime() {
 		return time;
 	}
 	

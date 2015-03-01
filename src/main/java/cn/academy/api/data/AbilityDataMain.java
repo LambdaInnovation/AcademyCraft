@@ -12,8 +12,8 @@
  */
 package cn.academy.api.data;
 
-import cn.academy.api.ctrl.EventHandlerServer;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.ctrl.EventHandlerServer;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import net.minecraft.entity.player.EntityPlayer;

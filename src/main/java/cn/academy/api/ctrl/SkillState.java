@@ -114,9 +114,9 @@ public class SkillState {
 		return alive;
 	}
 	
-	protected void fromNBT(NBTTagCompound nbt) {}
+	public void fromNBT(NBTTagCompound nbt) {}
 	
-	protected void toNBT(NBTTagCompound nbt) {}
+	public void toNBT(NBTTagCompound nbt) {}
 	
 	protected void onStart() {}
 	

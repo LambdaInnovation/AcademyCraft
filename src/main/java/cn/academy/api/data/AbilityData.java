@@ -30,6 +30,8 @@ import cn.academy.core.AcademyCraft;
 import cn.liutils.util.GenericUtils;
 
 /**
+ * The complete description of player ability data. Stores information 
+ * about player category, cp, skill exp, and so on. Automatically syncs between client and server.
  * @author WeathFolD, acaly
  */
 public class AbilityData implements IExtendedEntityProperties {
@@ -304,8 +306,6 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setMaxCP(float value) {
-		if(!player.worldObj.isRemote)
-			System.out.println("set MaxCP " + maxCP + " to " + value);
 		maxCP = value;
 		currentCP = Math.min(currentCP, maxCP);
 		if (!player.worldObj.isRemote) {

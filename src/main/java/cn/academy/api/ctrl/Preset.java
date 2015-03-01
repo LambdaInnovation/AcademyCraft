@@ -14,6 +14,7 @@ package cn.academy.api.ctrl;
 
 import net.minecraftforge.common.config.Property;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.ctrl.EventHandlerClient;
 
 /**
  * A set of key-skill binding. Manipulated by EventHandlerClient.
