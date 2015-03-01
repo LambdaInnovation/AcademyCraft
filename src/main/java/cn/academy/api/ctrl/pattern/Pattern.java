@@ -65,10 +65,14 @@ public abstract class Pattern {
 	@SideOnly(Side.CLIENT)
 	public void onStateEnd(boolean response) {
 		if(response) {
-			this.lastActiveEvent = Minecraft.getSystemTime();
-			//System.out.println("posted");
-			MinecraftForge.EVENT_BUS.post(new UpdateCDEvent(reh.getSkill(), (int) cd));
+			updateCD();
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void updateCD() {
+		this.lastActiveEvent = Minecraft.getSystemTime();
+		MinecraftForge.EVENT_BUS.post(new UpdateCDEvent(reh.getSkill(), (int) cd));
 	}
 	
 }

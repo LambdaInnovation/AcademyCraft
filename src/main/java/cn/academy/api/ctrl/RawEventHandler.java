@@ -128,6 +128,10 @@ public class RawEventHandler {
 		patterns.clear();
 	}
 	
+	public Pattern getPattern(int i) {
+		return patterns.get(i);
+	}
+	
 	/**
 	 * Add a new pattern. Used by skills in initPattern.
 	 * @param pattern The pattern to be added.

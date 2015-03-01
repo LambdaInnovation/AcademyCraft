@@ -67,7 +67,7 @@ public class EntityMagHook extends EntityX {
 			@Override
 			protected void onCollided(MovingObjectPosition res) {
 				if(res.typeOfHit == MovingObjectType.ENTITY) {
-					if(!(res.entityHit instanceof EntityMagHook)) {
+					if(!(res.entityHit instanceof EntityMagHook) || ((EntityMagHook)res.entityHit).isHit) {
 						res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
 						dropAsItem();
 					}

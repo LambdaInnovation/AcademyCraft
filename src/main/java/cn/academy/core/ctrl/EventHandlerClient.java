@@ -24,10 +24,12 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
+import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillStateManager;
+import cn.academy.api.ctrl.pattern.Pattern;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.api.event.ControlStateEvent;
@@ -426,6 +428,18 @@ public class EventHandlerClient implements IKeyHandler {
 	
 	public static boolean isSkillMapped(int sid) {
 		return PresetManager.getCurrentPreset().hasSkillMapping(sid);
+	}
+	
+	/**
+	 * Manually add cooldown. This should only be used when you are outside any SkilState.
+	 */
+	public void addCooldown(int skillID) {
+		RawEventHandler reh = rehMap.get(skillID);
+		if(reh != null) {
+			Pattern p = reh.getPattern(0);
+			if(p != null)
+				p.updateCD();
+		}
 	}
 	
 	@Override

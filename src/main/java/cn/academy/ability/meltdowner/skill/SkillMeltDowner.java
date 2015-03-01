@@ -50,7 +50,7 @@ public class SkillMeltDowner extends SkillBase {
 			public State createSkill(EntityPlayer player) {
 				return new MDState(player);
 			}
-		}.setCooldown(100000));
+		}.setCooldown(15000));
 	}
 	
 	public static class MDState extends PatternHold.State {

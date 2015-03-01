@@ -58,7 +58,7 @@ public class ClientEvents {
 		hackArmor = new ACModelBiped(0.5F);
 	}
 	
-	final ResourceLocation abortSound = new ResourceLocation("academy:deny");
+	public static final ResourceLocation abortSound = new ResourceLocation("academy:deny");
 	@SubscribeEvent
 	public void abilityAborted(AbilityEvent.AbortControl event) {
 		//play sound to inform player.

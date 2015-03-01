@@ -21,17 +21,21 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.ability.teleport.CatTeleport;
 import cn.academy.ability.teleport.data.LocationData;
 import cn.academy.ability.teleport.data.LocationData.Location;
+import cn.academy.ability.teleport.msg.LocTeleMsg;
 import cn.academy.ability.teleport.skill.SkillLocatingTele.GuiBase.GList.ListElem;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
+import cn.academy.api.data.AbilityData;
+import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.ClientEvents;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.msg.TeleportMsg;
 import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
@@ -48,6 +52,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * TODO:This skill needs localizing.
+ * @author WeathFolD
+ */
 @RegistrationClass
 public class SkillLocatingTele extends SkillBase {
 	
@@ -70,7 +78,14 @@ public class SkillLocatingTele extends SkillBase {
 				return new LocState(player);
 			}
 			
-		});
+		}.setCooldown(0));
+	}
+	
+	public static final float getConsumption(int slv, int lv, double dist, boolean difdimm) {
+		dist = Math.min(800, dist);
+		return (float) ((difdimm ? 2 : 1) * 
+				Math.max(8, Math.sqrt(Math.min(dist, 800))) * 
+				(200 - slv *10 + 5 * (lv * lv)));
 	}
 	
 	public static class LocState extends State {
@@ -112,10 +127,13 @@ public class SkillLocatingTele extends SkillBase {
 		return !ClientUtils.isPlayerInGame();
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static abstract class GuiBase extends LIGui {
 		EntityPlayer player;
 		LocationData data;
 		BaseScreen mainScreen;
+		
+		final String name;
 		
 		static final int[] color = { 178, 178, 178, 180 };
 		
@@ -166,7 +184,9 @@ public class SkillLocatingTele extends SkillBase {
 			}
 		}
 		
-		public GuiBase() {}
+		public GuiBase(String _name) {
+			name = _name;
+		}
 		
 		void init() {
 			boolean first = mainScreen == null;
@@ -217,6 +237,8 @@ public class SkillLocatingTele extends SkillBase {
 				
 				RenderUtils.bindColor(220, 220, 220, 200);
 				ACUtils.drawText(getHint(), 45, 48, 15);
+				
+				ACUtils.drawText(name, 20, -18, 18);
 			}
 			
 			private void drawOneShadow(double ox, double oy) {
@@ -243,6 +265,7 @@ public class SkillLocatingTele extends SkillBase {
 		float targX, targY, targZ;
 		
 		public GuiCreate() {
+			super("Edit Locations");
 			init();
 		}
 		
@@ -294,7 +317,7 @@ public class SkillLocatingTele extends SkillBase {
 			StringBuilder sb = new StringBuilder();
 			if(isCreating()) {
 				 sb.append(String.format("x %.1f\ny %.1f\nz %.1f\n", targX, targY, targZ));
-				 sb.append("ENTER: add\n");
+				 sb.append(data.getLocCount() == 5 ? "Can't add more.\n" : "ENTER: add\n");
 			}
 			if(isRemoving()) {
 				GList.ListElem le = (GList.ListElem) getFocus();
@@ -309,6 +332,7 @@ public class SkillLocatingTele extends SkillBase {
 	public static class GuiSelect extends GuiBase {
 		
 		public GuiSelect() {
+			super("Teleportation");
 			init();
 		}
 		
@@ -331,13 +355,26 @@ public class SkillLocatingTele extends SkillBase {
 		@Override
 		public void keyTyped(char ch, int kid) {
 			super.keyTyped(ch, kid);
-			if(kid == Keyboard.KEY_RETURN) {
+			if(data.getLocCount() < 5 && kid == Keyboard.KEY_RETURN) {
 				Widget focus;
 				if((focus = getFocus()) != null) {
 					GList.ListElem le = (ListElem) focus;
 					//Do the teleportation.
+					//Validate in client. ignore the small CP variation. Maybe further changed to sync in server.
+					double dist = Math.sqrt(player.getDistance(le.data.x, le.data.y, le.data.z));
+					boolean diffdimm = player.worldObj.provider.dimensionId != le.data.dimension;
+					AbilityData data = AbilityDataMain.getData(player);
+					int slv = data.getSkillLevel(CatTeleport.skillLocatingTele), lv = data.getLevelID() + 1;
+					float cp = getConsumption(slv, lv, dist, diffdimm);
+					if(cp > data.getCurrentCP()) {
+						//failed.
+						ClientUtils.playSound(ClientEvents.abortSound, 1);
+						player.closeScreen();
+						return;
+					}
+					
 					AcademyCraft.netHandler.sendToServer(
-						new TeleportMsg(le.data.dimension, le.data.x, le.data.y, le.data.z));
+						new LocTeleMsg(le.data.dimension, le.data.x, le.data.y, le.data.z, cp));
 					player.closeScreen();
 				}
 			}

@@ -53,11 +53,10 @@ public class TeleportMsg implements IMessage {
 		buf.writeByte(dim).writeFloat(x).writeFloat(y).writeFloat(z);
 	}
 	
-	@RegMessageHandler(msg = TeleportMsg.class, side = RegMessageHandler.Side.SERVER)
-	public static class Handler implements IMessageHandler<TeleportMsg, IMessage> {
+	public static class Handler<T extends TeleportMsg> implements IMessageHandler<T, IMessage> {
 
 		@Override
-		public IMessage onMessage(TeleportMsg msg, MessageContext ctx) {
+		public IMessage onMessage(T msg, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 			if(player.worldObj.provider.dimensionId != msg.dim)
 				player.travelToDimension(msg.dim);
