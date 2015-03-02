@@ -12,44 +12,36 @@
  */
 package cn.academy.ability.teleport.skill;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.teleport.CatTeleport;
-import cn.academy.ability.teleport.data.LocationData;
+import cn.academy.ability.teleport.client.gui.LocatingGuiBase;
+import cn.academy.ability.teleport.client.gui.LocatingGuiBase.GList;
+import cn.academy.ability.teleport.client.gui.LocatingGuiBase.GList.ListElem;
 import cn.academy.ability.teleport.data.LocationData.Location;
 import cn.academy.ability.teleport.msg.LocTeleMsg;
-import cn.academy.ability.teleport.skill.SkillLocatingTele.GuiBase.GList.ListElem;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.event.ClientEvents;
 import cn.academy.core.proxy.ACClientProps;
-import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
-import cn.liutils.api.gui.widget.FocusedVList;
 import cn.liutils.api.gui.widget.InputBox;
 import cn.liutils.util.ClientUtils;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -60,9 +52,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class SkillLocatingTele extends SkillBase {
 	
-	static final double scale = 0.4;
+	public static final double scale = 0.4;
 	
-	private final static ResourceLocation tex = new ResourceLocation("academy:textures/guis/tp_locating_ui.png");
+	public final static ResourceLocation tex = new ResourceLocation("academy:textures/guis/tp_locating_ui.png");
 		
 	public SkillLocatingTele() {
 		setName("tp_loc");
@@ -128,137 +120,7 @@ public class SkillLocatingTele extends SkillBase {
 		return !ClientUtils.isPlayerInGame();
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public static abstract class GuiBase extends LIGui {
-		EntityPlayer player;
-		LocationData data;
-		BaseScreen mainScreen;
-		
-		final String name;
-		
-		static final int[] color = { 178, 178, 178, 180 };
-		
-		public static class GList extends FocusedVList {
-			public GList() {
-				super("list", 175, 40, 198, 138);
-			}
-			
-			@Override
-			public void onAdded() {
-				LocationData data = LocationData.get(Minecraft.getMinecraft().thePlayer);
-				for(int i = 0; i < data.getLocCount(); ++i) {
-					addWidget(new ListElem(data.getLocation(i), i));
-				}
-			}
-			
-			public class ListElem extends Widget {
-				final LocationData.Location data;
-				final int n;
-				
-				public ListElem(LocationData.Location _data, int _n) {
-					data = _data;
-					n = _n;
-					setSize(198, 25);
-				}
-				
-				public void draw(double mx, double my, boolean hov) {
-					if(getGui().getFocus() == this) {
-						RenderUtils.bindColor(color);
-						HudUtils.drawModalRect(0, 0, width, height);
-					} else if(hov) {
-						RenderUtils.bindColor(178, 178, 178, 60);
-						HudUtils.drawModalRect(0, 0, width, height);
-					}
-					RenderUtils.bindColor(200, 200, 200, 200);
-					ACUtils.drawText(data.name, 5, 5, 14, 180);
-				}
-				
-				@Override
-				public boolean doesNeedFocus() {
-					return true;
-				}
-				
-				@Override
-				public void onMouseDown(double mx, double my) {
-					GList.this.setFocus(n);
-				}
-			}
-		}
-		
-		public GuiBase(String _name) {
-			name = _name;
-		}
-		
-		void init() {
-			boolean first = mainScreen == null;
-			player = Minecraft.getMinecraft().thePlayer;
-			data = LocationData.get(player);
-			
-			if(!first)
-				this.clear();
-			long time = first ? Minecraft.getSystemTime() : mainScreen.createTime;
-			addWidget(mainScreen = new BaseScreen(time));
-			mainScreen.addWidget(new GList());
-		}
-		
-		abstract String getHint();
-		
-		private class BaseScreen extends Widget {
-			 long createTime;
-			
-			public BaseScreen(long time) {
-				super(413, 219);
-				this.alignStyle = AlignStyle.CENTER;
-				createTime = time;
-				
-				this.scale = SkillLocatingTele.scale;
-			}
-			 
-			double[][] shadowOffsets = {
-					{ 51, -32 },
-					{ -60, -60 },
-					{ 66, 30 },
-					{ -30, 60 }
-			};
-			
-			@Override
-			public void draw(double mx, double my, boolean hov) {
-				long dt = Minecraft.getSystemTime() - createTime;
-				double mAlpha = Math.min(1.0, dt / 800.0);
-				
-				HudUtils.setTextureResolution(512, 512);
-				RenderUtils.loadTexture(tex);
-				
-				GL11.glColor4d(1, 1, 1, mAlpha);
-				double ratio = Math.min(1.0, dt / 600.0);
-				for(double[] off : shadowOffsets) {
-					drawOneShadow(ratio * off[0], ratio * off[1]);
-				}
-				drawMainWindow();
-				
-				RenderUtils.bindColor(220, 220, 220, 200);
-				ACUtils.drawText(getHint(), 45, 48, 15);
-				
-				ACUtils.drawText(name, 20, -18, 18);
-			}
-			
-			private void drawOneShadow(double ox, double oy) {
-				GL11.glPushMatrix();
-				rect(ox, oy, 0, 219, 413, 219);
-				GL11.glPopMatrix();
-			}
-			
-			private void drawMainWindow() {
-				rect(0, 0, 0, 0, 413, 219);
-			}
-			
-			protected void rect(double x, double y, double u, double v, double w2, double h2) {
-				HudUtils.drawRect(x, y, u, v, w2, h2, w2, h2);
-			}
-		}
-	}
-	
-	public static class GuiCreate extends GuiBase {
+	public static class GuiCreate extends LocatingGuiBase {
 		
 		InputBox box;
 		
@@ -270,7 +132,7 @@ public class SkillLocatingTele extends SkillBase {
 			init();
 		}
 		
-		void init() {
+		protected void init() {
 			super.init();
 			targX = (float) player.posX;
 			targY = (float) player.posY;
@@ -314,7 +176,7 @@ public class SkillLocatingTele extends SkillBase {
 		}
 
 		@Override
-		String getHint() {
+		public String getHint() {
 			StringBuilder sb = new StringBuilder();
 			if(isCreating()) {
 				 sb.append(String.format("x %.1f\ny %.1f\nz %.1f\n", targX, targY, targZ));
@@ -331,7 +193,7 @@ public class SkillLocatingTele extends SkillBase {
 		}
 	}
 	
-	public static class GuiSelect extends GuiBase {
+	public static class GuiSelect extends LocatingGuiBase {
 		
 		public GuiSelect() {
 			super(ACLangs.tpLocatingSelect());
@@ -345,7 +207,7 @@ public class SkillLocatingTele extends SkillBase {
 		}
 
 		@Override
-		String getHint() {
+		public String getHint() {
 			StringBuilder sb = new StringBuilder();
 			if(getFocus() != null) {
 				sb.append("ENTER: " + ACLangs.tpLocatingTeleport() + "\n");

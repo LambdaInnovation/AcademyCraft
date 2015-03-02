@@ -17,6 +17,7 @@ import cn.academy.ability.generic.skill.SkillBrainTrainingCourse2;
 import cn.academy.ability.generic.skill.SkillSpiritTrainingCourse;
 import cn.academy.ability.teleport.skill.SkillHighSpeedTele;
 import cn.academy.ability.teleport.skill.SkillLocatingTele;
+//import cn.academy.ability.teleport.skill.SkillLocatingTele;
 import cn.academy.ability.teleport.skill.SkillMarkTele;
 import cn.academy.ability.teleport.skill.SkillPenetrateTele;
 import cn.academy.ability.teleport.skill.SkillStringTheory;

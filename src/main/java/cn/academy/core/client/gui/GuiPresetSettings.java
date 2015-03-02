@@ -65,8 +65,10 @@ public class GuiPresetSettings extends LIGuiScreen {
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
-			Minecraft mc = Minecraft.getMinecraft();
-			GuiHandlers.handlerPresetSettings.openClientGui();
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			AbilityData data = AbilityDataMain.getData(player);
+			if(data.hasAbility())
+				GuiHandlers.handlerPresetSettings.openClientGui();
 		}
 		@Override public void onKeyUp(int keyCode, boolean tickEnd) {}
 		@Override public void onKeyTick(int keyCode, boolean tickEnd) {}

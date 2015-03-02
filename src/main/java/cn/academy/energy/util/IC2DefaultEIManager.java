@@ -3,9 +3,7 @@ package cn.academy.energy.util;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
-import ic2.core.IC2;
-import ic2.core.Platform;
-import ic2.core.util.StackUtil;
+import cn.liutils.util.GenericUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -29,7 +27,7 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		if ((!ignoreTransferLimit) && (charge > item.getTransferLimit(stack)))
 			charge = item.getTransferLimit(stack);
 
-		NBTTagCompound tNBT = StackUtil.getOrCreateNbtData(stack);
+		NBTTagCompound tNBT = GenericUtils.loadCompound(stack);
 		int newCharge = tNBT.getInteger("charge");
 
 		if (charge > item.getMaxCharge(stack) - newCharge)
@@ -79,7 +77,7 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		if ((!ignoreTransferLimit) && (charge > item.getTransferLimit(stack)))
 			charge = item.getTransferLimit(stack);
 
-		NBTTagCompound tNBT = StackUtil.getOrCreateNbtData(stack);
+		NBTTagCompound tNBT = GenericUtils.loadCompound(stack);
 		int newCharge = tNBT.getInteger("charge");
 
 		if (charge > newCharge)
@@ -170,10 +168,6 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 				}
 			}
 		}
-
-		if ((inventoryChanged) && ((entity instanceof EntityPlayer))
-				&& (IC2.platform.isSimulating()))
-			((EntityPlayer) entity).openContainer.detectAndSendChanges();
 	}
 
 	public String getToolTip(ItemStack itemStack) {
