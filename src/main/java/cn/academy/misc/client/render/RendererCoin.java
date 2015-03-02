@@ -84,11 +84,7 @@ public class RendererCoin extends Render {
 			EntityLivingBase elb = (EntityLivingBase) data[1];
 			if(!(elb instanceof EntityPlayer)) return;
 			EntityPlayer player = (EntityPlayer) elb;
-			if(!ACItems.coin.inProgress(item)) {
-				GL11.glScalef(sc, sc, sc);
-				RenderUtils.renderItemIn2d(0.0625, ACClientProps.TEX_COIN_FRONT, ACClientProps.TEX_COIN_BACK);
-				return;
-			}
+			RenderUtils.renderItemIn2d(0.0625 * sc, ACClientProps.TEX_COIN_FRONT, ACClientProps.TEX_COIN_BACK);
 		}
 	}
 

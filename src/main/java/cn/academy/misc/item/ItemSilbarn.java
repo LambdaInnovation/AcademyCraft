@@ -43,9 +43,9 @@ public class ItemSilbarn extends Item {
     	if(!world.isRemote) {
     		world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
     		world.spawnEntityInWorld(new EntitySilbarn(player));
-    		if(!player.capabilities.isCreativeMode)
-    			stack.damageItem(1, player);
     	}
+    	if(!player.capabilities.isCreativeMode)
+			--stack.stackSize;
         return stack;
     }
 	

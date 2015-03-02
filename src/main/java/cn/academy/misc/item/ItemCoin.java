@@ -12,6 +12,9 @@
  */
 package cn.academy.misc.item;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,63 +34,53 @@ import cn.liutils.util.GenericUtils;
  */
 public class ItemCoin extends Item {
 	
+	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
+	
 	public ItemCoin() {
 		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin-front");
 		setCreativeTab(AcademyCraft.cct);
-		//setMaxDamage(0);
+		this.hasSubtypes = false;
 	}
 	
-    @Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean equipped) {
-    	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-    	if(!(entity instanceof EntityPlayer) || !equipped) {
-    		reset(nbt);
-    		return;
-    	}
-    	if(!nbt.getBoolean("throwing"))
-    		return;
-    	EntityThrowingCoin etc = getThrowingEntity(world, stack);
-    	if(etc == null || etc.isDead) {
-    		reset(nbt);
-    		return;
-    	}
-    	((EntityPlayer)entity).isSwingInProgress = false;
-    }
 
     @Override
+	public void onUpdate(ItemStack arg0, World arg1, Entity arg2, int arg3, boolean arg4) {
+		super.onUpdate(arg0, arg1, arg2, arg3, arg4);
+		if(!(arg2 instanceof EntityPlayer))
+			return;
+		EntityPlayer player = (EntityPlayer) arg2;
+		Map<EntityPlayer, Integer> map = getMap(player);
+		if(getMap((EntityPlayer) arg2).containsKey(arg2)) {
+			Integer i = map.remove(player);
+			if(i > 0)
+				map.put((EntityPlayer) arg2, i - 1);
+		}
+	}
+
+
+	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
     {
+		if(getMap(player).containsKey(player))
+			return stack;
+		
     	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
-    	if(nbt.getBoolean("throwing")) return stack;
     	//Spawn at both side, not syncing for render effect purpose
     	EntityThrowingCoin etc = new EntityThrowingCoin(player, stack);
     	world.spawnEntityInWorld(etc);
+    	
     	MinecraftForge.EVENT_BUS.post(new ThrowCoinEvent(player, etc));
-    	nbt.setInteger("entID", etc.getEntityId());
-    	nbt.setBoolean("throwing", true);
     	player.playSound("academy:flipcoin", 0.5F, 1.0F);
+    	getMap(player).put(player, 58);
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;
     	}
         return stack;
     }
-
-	private void reset(NBTTagCompound nbt) {
-		nbt.setBoolean("throwing", false);
-	}
 	
-	private EntityThrowingCoin getThrowingEntity(World world, ItemStack is) {
-		NBTTagCompound nbt = is.getTagCompound();
-		Entity e = world.getEntityByID(nbt.getInteger("entID"));
-		
-		if(e == null || !(e instanceof EntityThrowingCoin))
-			return null;
-		return (EntityThrowingCoin) e;
-	}
-	
-	public boolean inProgress(ItemStack is) {
-		return GenericUtils.loadCompound(is).getBoolean("throwing");
+	private Map<EntityPlayer, Integer> getMap(EntityPlayer player) {
+		return player.worldObj.isRemote ? client : server;
 	}
 
 }

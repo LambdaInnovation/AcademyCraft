@@ -52,7 +52,7 @@ public class EntityRailgun extends EntityRay {
 		super(data.getPlayer());
 		
 		int sid = data.getSkillID(CatElectro.railgun);
-		damage = 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F;
+		damage = Math.max(9, 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F);
 		explRadius = (int) (damage * 0.2);
 		
 		MovingObjectPosition ret = this.performTrace();

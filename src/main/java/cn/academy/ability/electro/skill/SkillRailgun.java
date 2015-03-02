@@ -96,11 +96,18 @@ public class SkillRailgun extends SkillBase {
 	@SideOnly(Side.CLIENT)
 	public void clientThrowCoin(ThrowCoinEvent event) {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
+		System.out.println("railgun render to1");
+		
+		Integer id = etcData.get(event.entityPlayer);
+		Entity ent = id == null ? null : event.entityPlayer.worldObj.getEntityByID(id);
+		if(ent instanceof EntityThrowingCoin && !ent.isDead)
+			return;
 		
 		if(data.getCategory() != CatElectro.INSTANCE || 
 			!data.isSkillLearned(CatElectro.railgun)) {
 				return;
 		}
+		System.out.println("railgun render to2");
 		if(data.getPlayer().worldObj.isRemote) {
 			if(!EventHandlerClient.isSkillEnabled() || 
 			!EventHandlerClient.isSkillMapped(data.getSkillID(CatElectro.railgun)))
@@ -109,6 +116,7 @@ public class SkillRailgun extends SkillBase {
 		
 		etcData.put(event.entityPlayer, event.coin.getEntityId());
 		if(event.entityPlayer.worldObj.isRemote) {
+			System.out.println("真的加了特技啦~~");
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}
@@ -118,6 +126,10 @@ public class SkillRailgun extends SkillBase {
 	@SideOnly(Side.SERVER)
 	public void serverThrowCoin(ThrowCoinEvent event) {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
+		
+		Entity ent = event.entityPlayer.worldObj.getEntityByID(etcData.get(event.entityPlayer));
+		if(ent instanceof EntityThrowingCoin && !ent.isDead)
+			return;
 		
 		if(data.getCategory() != CatElectro.INSTANCE || 
 			!data.isSkillLearned(CatElectro.railgun)) {
