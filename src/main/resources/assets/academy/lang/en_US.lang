@@ -165,6 +165,13 @@ ac.presset=Preset Settings
 ac.preset=Preset #
 ac.devnew=Develop a new ability
 ac.presselect=Preset Selection
+ac.tpLocatingQuit=Quit
+ac.tpLocatingTeleport=Teleport
+ac.tpLocatingSelect=Teleportation
+ac.tpLocatingCreate=Edit Position
+ac.tpLocatingRemove=Remove
+ac.tpLocatingMax=Can't add more.
+ac.tpLocatingAdd=Add
 
 adev.holoview=Holographic View
 adev.userinfo=User Info

@@ -20,6 +20,34 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String tpLocatingAdd() {
+		return local("ac.tpLocatingAdd");
+	}
+	
+	public static String tpLocatingMax() {
+		return local("ac.tpLocatingMax");
+	}
+	
+	public static String tpLocatingRemove() {
+		return local("ac.tpLocatingRemove");
+	}
+	
+	public static String tpLocatingCreate() {
+		return local("ac.tpLocatingCreate");
+	}
+	
+	public static String tpLocatingSelect() {
+		return local("ac.tpLocatingSelect");
+	}
+	
+	public static String tpLocatingTeleport() {
+		return local("ac.tpLocatingTeleport");
+	}
+	
+	public static String tpLocatingQuit() {
+		return local("ac.tpLocatingQuit");
+	}
+	
 	public static String devNewAbility() {
 		return local("ac.devnew");
 	}

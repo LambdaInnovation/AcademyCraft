@@ -34,6 +34,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.ACLangs;
 import cn.academy.core.event.ClientEvents;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.util.ACUtils;
@@ -265,7 +266,7 @@ public class SkillLocatingTele extends SkillBase {
 		float targX, targY, targZ;
 		
 		public GuiCreate() {
-			super("Edit Locations");
+			super(ACLangs.tpLocatingCreate());
 			init();
 		}
 		
@@ -317,14 +318,15 @@ public class SkillLocatingTele extends SkillBase {
 			StringBuilder sb = new StringBuilder();
 			if(isCreating()) {
 				 sb.append(String.format("x %.1f\ny %.1f\nz %.1f\n", targX, targY, targZ));
-				 sb.append(data.getLocCount() == 5 ? "Can't add more.\n" : "ENTER: add\n");
+				 sb.append(data.getLocCount() == 5 ? ACLangs.tpLocatingMax() + "\n" : 
+					 "ENTER: " + ACLangs.tpLocatingAdd() + "\n");
 			}
 			if(isRemoving()) {
 				GList.ListElem le = (GList.ListElem) getFocus();
 				sb.append(String.format("x %.1f\ny %.1f\nz %.1f\n", le.data.x, le.data.y, le.data.z));
-				sb.append("DEL: remove\n");
+				sb.append("DEL: " + ACLangs.tpLocatingRemove() + "\n");
 			}
-			sb.append("ESC: quit\n");
+			sb.append("ESC: " + ACLangs.tpLocatingQuit() + "\n");
 			return sb.toString();
 		}
 	}
@@ -332,7 +334,7 @@ public class SkillLocatingTele extends SkillBase {
 	public static class GuiSelect extends GuiBase {
 		
 		public GuiSelect() {
-			super("Teleportation");
+			super(ACLangs.tpLocatingSelect());
 			init();
 		}
 		
@@ -346,9 +348,9 @@ public class SkillLocatingTele extends SkillBase {
 		String getHint() {
 			StringBuilder sb = new StringBuilder();
 			if(getFocus() != null) {
-				sb.append("ENTER: Teleport\n");
+				sb.append("ENTER: " + ACLangs.tpLocatingTeleport() + "\n");
 			}
-			sb.append("ESC: Quit");
+			sb.append("ESC: " + ACLangs.tpLocatingQuit());
 			return sb.toString();
 		}
 		
