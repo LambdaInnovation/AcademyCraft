@@ -72,7 +72,11 @@ public abstract class Pattern {
 	@SideOnly(Side.CLIENT)
 	public void updateCD() {
 		this.lastActiveEvent = Minecraft.getSystemTime();
-		MinecraftForge.EVENT_BUS.post(new UpdateCDEvent(reh.getSkill(), (int) cd));
+		System.out.println("updateCD");
+		MinecraftForge.EVENT_BUS.post(
+			new UpdateCDEvent(
+				reh.getSkill(), 
+				(int) cd));
 	}
 	
 }

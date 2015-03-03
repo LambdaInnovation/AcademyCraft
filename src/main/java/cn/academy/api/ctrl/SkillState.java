@@ -122,7 +122,9 @@ public class SkillState {
 	 * @param result true=ended normally, false=aborted, just cleanup
 	 * @return Whether this skill was successfully executed and needs cooldown
 	 */
-	protected boolean onFinish(boolean result) { return false; }
+	protected boolean onFinish(boolean fin) {
+		return fin;
+	}
 	
 	/**
 	 * Will be called every tick while this state is active.

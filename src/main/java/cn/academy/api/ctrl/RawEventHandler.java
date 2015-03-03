@@ -18,6 +18,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.pattern.Pattern;
+import cn.academy.api.ctrl.pattern.PatternDown;
 
 /**
  * This class handles raw event and send the proper event to skill (through patterns).
@@ -34,9 +35,6 @@ public class RawEventHandler {
 	
 	public RawEventHandler(EntityPlayer player, SkillBase skill) {
 		skill.initPattern(this);
-		for(Pattern pat : patterns) {
-			pat.reh = this;
-		}
 		this.skill = skill;
 		this.player = player;
 	}
@@ -66,10 +64,16 @@ public class RawEventHandler {
 			if(type == SkillEventType.RAW_DOWN) {
 				//If any pattern doesn't receive event, don't send any event at all.
 				for(Pattern p : patterns) {
-					if(!p.receivesEvent()) return false;
+					System.out.println("Testing pattern " + p + " " + (p instanceof PatternDown));
+					if(!p.receivesEvent()) {
+						System.out.println("aborted" + p);
+						return false;
+					}
 				}
 			}
 		}
+		if(type == SkillEventType.RAW_DOWN)
+			System.out.println("exec " + skill);
 		
 		/* 
 		 * Event type handled (same between server and client):
@@ -138,5 +142,6 @@ public class RawEventHandler {
 	 */
 	public void addPattern(Pattern pattern) {
 		patterns.add(pattern);
+		pattern.reh = this;
 	}
 }

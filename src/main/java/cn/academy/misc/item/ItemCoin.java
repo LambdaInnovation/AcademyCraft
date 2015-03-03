@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.api.IOverrideItemUse;
 import cn.academy.api.event.ThrowCoinEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.entity.EntityThrowingCoin;
@@ -32,6 +33,7 @@ import cn.liutils.util.GenericUtils;
  * ~\(≧▽≦)/~
  * @author KSkun, WeAthFolD
  */
+@IOverrideItemUse
 public class ItemCoin extends Item {
 	
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();

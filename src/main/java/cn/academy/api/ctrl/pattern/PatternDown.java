@@ -30,10 +30,11 @@ public abstract class PatternDown extends Pattern {
 				return false;
 			}
 			state = createSkill(player);
-			if(player.worldObj.isRemote)
-				SkillStateManager.regPatternFor(state, this);
-			if (state != null)
+			if (state != null) {
+				if(player.worldObj.isRemote)
+					SkillStateManager.regPatternFor(state, this);
 				state.startSkill();
+			}
 			return false;
 		case RAW_UP:
 		case RAW_CANCEL:

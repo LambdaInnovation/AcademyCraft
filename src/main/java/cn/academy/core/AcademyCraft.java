@@ -39,7 +39,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 /**
  * Academy Craft Mod 主类
- * @author acaly
+ * @author acaly, WeathFolD, KS
  *
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION)

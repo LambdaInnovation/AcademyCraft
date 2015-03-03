@@ -15,8 +15,8 @@ package cn.academy.core.item;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
@@ -32,10 +32,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * used by RenderVoid to support hand motion and ability effect rendering.
  * @author WeathFolD
  */
-public class ItemVoid extends Item {
+public class ItemVoid extends ItemSword {
 
 	public ItemVoid() {
-		super();
+		super(ToolMaterial.EMERALD);
 		setTextureName("academy:void");
 		FMLCommonHandler.instance().bus().register(this);
 		this.setFull3D();
@@ -52,6 +52,10 @@ public class ItemVoid extends Item {
 			player.inventory.setInventorySlotContents(curSlot, new ItemStack(ACItems.ivoid));
 		}
 	}
+	
+    public ItemStack onItemRightClick(ItemStack stack, World par2World, EntityPlayer par3EntityPlayer) {
+    	return stack;
+    }
 	
     @Override
     @SideOnly(Side.CLIENT)
