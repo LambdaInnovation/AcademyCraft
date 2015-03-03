@@ -100,7 +100,6 @@ public class ACRecord extends ItemRecord {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public ResourceLocation getRecordResource(String par1) {
 		return sources[recId];
 	}
