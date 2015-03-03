@@ -84,7 +84,7 @@ public class ClientModifyMsg implements IMessage {
 				break;
 			}
 			
-			data.sync();
+			data.markDirty();
 			return null;
 		}
 		

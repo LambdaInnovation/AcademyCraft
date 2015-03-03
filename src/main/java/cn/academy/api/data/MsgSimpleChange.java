@@ -12,12 +12,19 @@
  */
 package cn.academy.api.data;
 
+import io.netty.buffer.ByteBuf;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegMessageHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import io.netty.buffer.ByteBuf;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -33,6 +40,8 @@ public class MsgSimpleChange implements IMessage {
 	private int skillCount;
 	private float[] skillExp;
 	
+	private Map<String, NBTTagCompound> misc = new HashMap();
+	
 	public MsgSimpleChange() {}
 	
 	public MsgSimpleChange(AbilityData data) {
@@ -41,6 +50,13 @@ public class MsgSimpleChange implements IMessage {
 		maxCP = data.maxCP;
 		skillCount = data.getSkillCount();
 		skillExp = data.skillExps.clone();
+		
+		for(Entry<String, ExtendedAbilityData> ent : data.aliveData.entrySet()) {
+			if(ent.getValue().dirty) {
+				ent.getValue().dirty = false;
+				misc.put(ent.getKey(), data.miscData.getCompoundTag(ent.getKey()));
+			}
+		}
 	}
 
 	@Override
@@ -54,6 +70,13 @@ public class MsgSimpleChange implements IMessage {
 		for (int i = 0; i < skillCount; ++i) {
 			skillExp[i] = buf.readFloat();
 		}
+		
+		int n = buf.readByte();
+		for(int i = 0; i < n; ++i) {
+			String id = ByteBufUtils.readUTF8String(buf);
+			NBTTagCompound tag = ByteBufUtils.readTag(buf);
+			misc.put(id, tag);
+		}
 	}
 
 	@Override
@@ -66,6 +89,12 @@ public class MsgSimpleChange implements IMessage {
 		for (int i = 0; i < skillCount; ++i) {
 			buf.writeFloat(skillExp[i]);
 		}
+		
+		buf.writeByte(misc.size());
+		for(Entry<String, NBTTagCompound> ent : misc.entrySet()) {
+			ByteBufUtils.writeUTF8String(buf, ent.getKey());
+			ByteBufUtils.writeTag(buf, ent.getValue());
+		}
 	}
 
 	@RegMessageHandler(msg = MsgSimpleChange.class, side = RegMessageHandler.Side.CLIENT)
@@ -76,6 +105,8 @@ public class MsgSimpleChange implements IMessage {
 		public IMessage onMessage(MsgSimpleChange msg, MessageContext ctx) {
 			EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
 			if (msg.entityID == thePlayer.getEntityId()) {
+				System.out.println("sync");
+				
 				//Only sync cp of thePlayer
 				AbilityData data = AbilityDataMain.getData(thePlayer);
 				data.currentCP = msg.cp;
@@ -85,6 +116,11 @@ public class MsgSimpleChange implements IMessage {
 					AcademyCraft.log.fatal("Invalid ability data message.");
 				}
 				data.skillExps = msg.skillExp;
+				
+				for(Entry<String, NBTTagCompound> e : msg.misc.entrySet()) {
+					data.miscData.setTag(e.getKey(), e.getValue());
+					data.getData(e.getKey()).fromNBT(data.miscData.getCompoundTag(e.getKey()));
+				}
 			}
 			return null;
 		}

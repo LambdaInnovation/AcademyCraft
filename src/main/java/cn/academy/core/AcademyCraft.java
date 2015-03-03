@@ -19,11 +19,9 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACMiscReg;
-import cn.academy.energy.block.tile.impl.TileSolarGenerator;
-import cn.academy.misc.world.ACWorldGen;
+import cn.academy.core.register.ExtendedDataRegistration;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
@@ -37,7 +35,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 /**
@@ -99,6 +96,8 @@ public class AcademyCraft {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
+        
+        RegistrationManager.INSTANCE.registerAll(this, ExtendedDataRegistration.ID);
         
         ACMiscReg.regRecipe();
         ACMiscReg.regSmelting();

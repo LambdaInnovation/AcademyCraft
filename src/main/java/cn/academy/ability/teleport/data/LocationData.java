@@ -13,11 +13,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import cn.academy.api.data.AbilityDataMain;
+import cn.academy.api.data.ExtendedAbilityData;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.register.RegExtendedData;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.liutils.util.GenericUtils;
@@ -31,37 +33,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-public class LocationData implements IExtendedEntityProperties {
+@RegExtendedData
+public class LocationData extends ExtendedAbilityData {
 	
-	static final String IDENTIFIER = "tp_location";
-	final EntityPlayer player;
-	
-	@RegEventHandler
-	public static LocationData regInstance = new LocationData();
-	
-	@SubscribeEvent
-    public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-            if (LocationData.get((EntityPlayer) event.entity) == null)
-            	LocationData.register((EntityPlayer) event.entity);
-        }
-	}
-	
-    @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer) {
-        	get((EntityPlayer) event.entity).sync();
-        }
-    }
-	
-	@SubscribeEvent
-	public void onCategoryChanged(AbilityEvent.ChangeCategory event) {
-		if(event.entityPlayer.worldObj.isRemote)
-			return;
-		LocationData data = get(event.entityPlayer);
-		data.locationList.clear();
-		data.sync();
-	}
+	public static final String IDENTIFIER = "tp_location";
 	
 	/**
 	 * Saving struct.
@@ -111,17 +86,12 @@ public class LocationData implements IExtendedEntityProperties {
 		}
 	}
 	
-	//May be modified by SyncMsg.
 	List<Location> locationList = new ArrayList();
 	
-	private LocationData() { player = null; }
-	
-	public LocationData(EntityPlayer _player) {
-		player = _player;
-	}
+	public LocationData() {}
 	
 	public static LocationData get(EntityPlayer player) {
-		return (LocationData) player.getExtendedProperties(IDENTIFIER);
+		return (LocationData) AbilityDataMain.getData(player).getData(IDENTIFIER);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -136,11 +106,6 @@ public class LocationData implements IExtendedEntityProperties {
 		AcademyCraft.netHandler.sendToServer(new ClientModifyMsg(ClientModifyMsg.REMOVE, i));
 	}
 	
-	public static void register(EntityPlayer player) {
-		LocationData data = new LocationData(player);
-		player.registerExtendedProperties(IDENTIFIER, data);
-	}
-	
 	public Location getLocation(int i) {
 		return locationList.get(i);
 	}
@@ -150,28 +115,21 @@ public class LocationData implements IExtendedEntityProperties {
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound tag) {
+	public void toNBT(NBTTagCompound tag) {
 		tag.setInteger("count", locationList.size());
 		for(int i = 0; i < locationList.size(); ++i) {
 			locationList.get(i).toNBT(tag, i);
 		}
+		System.out.println(":TO");
 	}
 
 	@Override
-	public void loadNBTData(NBTTagCompound tag) {
+	public void fromNBT(NBTTagCompound tag) {
 		int n = tag.getInteger("count");
 		for(int i = 0; i < n; ++i) {
 			locationList.add(new Location(tag, i));
 		}
-	}
-
-	@Override
-	public void init(Entity entity, World world) {
-		//NOPE
-	}
-	
-	void sync() {
-		AcademyCraft.netHandler.sendTo(new SyncMsg(this), (EntityPlayerMP) this.player);
+		System.out.println(":FROM");
 	}
 
 }

@@ -74,7 +74,7 @@ public class MsgResetAbilityData implements IMessage {
 			} else {
 				AbilityData data = AbilityDataMain.getData(player);
 				Category preCat = data.getCategory();
-				AbilityDataMain.getData(player).loadNBTData(message.data);
+				data.loadNBTData(message.data);
 			}
 			
 			if (player == Minecraft.getMinecraft().thePlayer) {

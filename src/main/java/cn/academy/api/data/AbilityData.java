@@ -13,7 +13,10 @@
 package cn.academy.api.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,6 +51,11 @@ public class AbilityData implements IExtendedEntityProperties {
 	float maxCP;
 	float skillExps[];
 	int skillLevels[];
+	
+	/**
+	 * This allows other mod built-in skills to fast save and retreive data.
+	 */
+	NBTTagCompound miscData = new NBTTagCompound();
 
 	/**
 	 * Create an AbilityData for the player with the empty category.
@@ -415,6 +423,27 @@ public class AbilityData implements IExtendedEntityProperties {
 		skillExps[sid] = 0;
 		this.syncAll();
 	}
+	 
+	//----Extended data API
+	static Map<String, Class<? extends ExtendedAbilityData>> registeredData = new HashMap();
+	
+	Map<String, ExtendedAbilityData> aliveData = new HashMap();
+	
+	public static void regData(String identifier, Class<? extends ExtendedAbilityData> clazz) {
+		registeredData.put(identifier, clazz);
+	}
+	
+	public ExtendedAbilityData getData(String id) {
+		if(!registeredData.containsKey(id)) {
+			throw new RuntimeException("Unregistered extended data");
+		}
+		ExtendedAbilityData data = aliveData.get(id);
+		if(data == null) { //lazy init
+			data = constructData(id, registeredData.get(id));
+		}
+		
+		return data;
+	}
 	
 	//-----INTERNAL PROCESSING-----
 	@Override
@@ -436,6 +465,13 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 
 		playerNBT.setTag(IDENTIFIER, nbt);
+		
+		for(Entry<String, ExtendedAbilityData> ds : aliveData.entrySet()) {
+			NBTTagCompound tag = new NBTTagCompound();
+			ds.getValue().toNBT(tag);
+			miscData.setTag(ds.getKey(), tag);
+		}
+		nbt.setTag("misc", miscData);
 	}
 
 	@Override
@@ -461,10 +497,30 @@ public class AbilityData implements IExtendedEntityProperties {
 			skillLevels[i] = nbt.getInteger("slevel_" + i);
 		}
 		
+		miscData = nbt.getCompoundTag("misc");
+		
+		//Construct all the extended data instance in server at once
+		for(Entry<String, Class<? extends ExtendedAbilityData>> ent : registeredData.entrySet()) {
+			constructData(ent.getKey(), ent.getValue());
+		}
+		
 		if (oldCat != catID) {
 			Abilities.getCategory(oldCat).onLeaveCategory(this);
 			getCategory().onEnterCategory(this);
 		}
+	}
+	
+	private ExtendedAbilityData constructData(String id, Class<? extends ExtendedAbilityData> cl) {
+		ExtendedAbilityData ret = null;
+		try {
+			ret = cl.newInstance();
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
+		this.aliveData.put(id, ret);
+		if(!player.worldObj.isRemote)
+			ret.fromNBT(miscData.getCompoundTag(id));
+		return ret;
 	}
 	
 	public void onPlayerTick() {
@@ -501,6 +557,9 @@ public class AbilityData implements IExtendedEntityProperties {
 	 * Sync packet is sent here. Called by AbilityDataMain.
 	 */
     public void doSync() {
+    	for(ExtendedAbilityData e : aliveData.values()) {
+    		if(e.dirty) ++dirtyTick;
+    	}
         if (dirtyTick == 0) return;
         if (++dirtyTick >= 20) { //at least one sync packet every 20 ticks
             AcademyCraft.netHandler.sendToAll(new MsgSimpleChange(this));
