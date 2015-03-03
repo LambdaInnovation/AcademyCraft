@@ -12,6 +12,7 @@
  */
 package cn.academy.core.client.render;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,6 @@ import cn.liutils.util.RenderUtils;
 public class RenderVoid implements IItemRenderer {
 	
 	protected static ModelBiped model = new ModelBiped();
-	private static final ResourceLocation steveTexture = new ResourceLocation("minecraft:textures/entity/steve.png");
 
 	public RenderVoid() {}
 
@@ -56,7 +56,7 @@ public class RenderVoid implements IItemRenderer {
 		GL11.glPushMatrix();
 
 		RenderUtils.renderEnchantGlint_Equip();
-		RenderUtils.loadTexture(steveTexture);
+		RenderUtils.loadTexture(((AbstractClientPlayer)player).getLocationSkin());
 		GL11.glRotated(-23.75, 0.0F, 0.0F, 1.0F);
 		GL11.glRotated(21.914, 0.0F, 1.0F, 0.0F);
 		GL11.glRotated(32.75, 1.0F, 0.0F, 0.0F);

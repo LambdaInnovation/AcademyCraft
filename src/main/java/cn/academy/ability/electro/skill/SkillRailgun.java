@@ -66,8 +66,6 @@ public class SkillRailgun extends SkillBase {
 				Integer eid = etcData.get(player);
 				if(eid == null) return false;
 				
-				
-				
 				Entity ent = player.worldObj.getEntityByID(eid);
 				if(ent != null && ent instanceof EntityThrowingCoin) {
 					if(player.worldObj.isRemote) {
@@ -84,12 +82,16 @@ public class SkillRailgun extends SkillBase {
 							player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
 							etc.setDead();
 						}
+						
+						if(player.worldObj.isRemote) {
+							this.updateCD();
+						}
 					}
 				}
 				return true;
 			}
 			
-		}.setCooldown(180000));
+		}.setCooldown(12000));
 	}
 	
 	@SubscribeEvent
