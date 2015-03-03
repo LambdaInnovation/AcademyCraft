@@ -90,7 +90,6 @@ public class SkillRailgun extends SkillBase {
 				}
 				return true;
 			}
-			
 		}.setCooldown(12000));
 	}
 	
