@@ -48,7 +48,7 @@ public class SkillLightShield extends SkillBase {
 				return new LSState(player);
 			}
 			
-		}.setCooldown(0));
+		}.setCooldown(50));
 	}
 	
 	public static class LSState extends State {

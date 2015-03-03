@@ -93,7 +93,7 @@ public class SkillMagMove extends SkillBase {
 				return new MagState(player);
 			}
 			
-		});
+		}.setCooldown(50));
 	}
 	
 	private static class HandleVel extends FakeEntity {

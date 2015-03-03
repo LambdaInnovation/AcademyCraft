@@ -27,7 +27,7 @@ item.ac_cplank.name=複合木の板
 item.ac_coin.name=ゲームセンターのコイン
 item.ac_needle.name=鉄矢
 item.ac_exp_nail.name=粘着ネール
-item.ac_silbarn.name=拡散支援半導体
+item.ac_silbarn.name=シリコンバーン
 item.ac_maghook.name=磁石のかぎ
 
 item.ad_card.name=電力拡張カード
@@ -60,19 +60,19 @@ tile.ac_shadowore.name=影金属鉱石
 #CreativeTab
 itemGroup.AcademyCraft=AcademyCraft
 
-#other ability
+#他のスキル
 skl_null=なし
 
-#电气使
-cat_elecmaster=発電系
+#電撃使い
+cat_elecmaster=電撃使い
 
-#原子崩坏
-cat_meltdowner=電子操作系
+#原子崩し
+cat_meltdowner=原子崩し
 
-#空间移动
-cat_teleport=空間移動系
+#空間移動
+cat_teleport=空間移動
 
-#通用buff类技能
+#BUFFスキル
 skl_gn_btc=ブレイントレーニングコース
 skl_gn_btc2=ブレイントレーニングコースⅡ
 skl_gn_spirit=マインドトレーニングコース
