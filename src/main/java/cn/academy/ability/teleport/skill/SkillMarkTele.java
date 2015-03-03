@@ -44,7 +44,7 @@ public class SkillMarkTele extends SkillBase {
 				return new MTState(player);
 			}
 			
-		}.setCooldown(0));
+		}.setCooldown(1000));
 	}
 	
 	private int getMaxDistance(float cp, int slv, int lv) {
