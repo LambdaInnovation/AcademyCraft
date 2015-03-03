@@ -52,6 +52,8 @@ public class AbilityData implements IExtendedEntityProperties {
 	float skillExps[];
 	int skillLevels[];
 	
+	boolean activated;
+	
 	/**
 	 * This allows other mod built-in skills to fast save and retreive data.
 	 */
@@ -82,6 +84,18 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public EntityPlayer getPlayer() {
 		return player;
+	}
+	
+	//Activate API
+	/**
+	 * Doesn't perform any synchronization.
+	 */
+	public void setActivated(boolean b) {
+		activated = b;
+	}
+	
+	public boolean isActivated() {
+		return activated;
 	}
 	
 	//-----Category-----

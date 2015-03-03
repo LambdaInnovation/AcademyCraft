@@ -24,13 +24,14 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.api.ability.Category;
-import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.PresetManager;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillStateManager;
 import cn.academy.api.ctrl.pattern.Pattern;
+import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.api.data.MsgActivate;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.api.event.ControlStateEvent;
 import cn.academy.core.AcademyCraft;
@@ -78,7 +79,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
-			if (!skillEnabled) return;
+			if (!isSkillEnabled()) return;
 			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_DOWN);
 		}
 
@@ -86,7 +87,7 @@ public class EventHandlerClient implements IKeyHandler {
 		public void onKeyUp(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 			if (presets == null) return; //Haven't got the world id yet.
-            if (!skillEnabled) return;
+            if (!isSkillEnabled()) return;
 			onEvent(PresetManager.getSkillMapping(id), SkillEventType.RAW_UP);
 		}
 
@@ -334,11 +335,11 @@ public class EventHandlerClient implements IKeyHandler {
 		INSTANCE.presets = new PresetManager(id);
 	}
 	
-	@SubscribeEvent
 	/**
 	 * This overrides the open gui event, the player can't open gui when using skills.
 	 * @param event
 	 */
+	@SubscribeEvent
 	public void onPlayerOpenGui(GuiOpenEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(player == null) return;
@@ -420,10 +421,10 @@ public class EventHandlerClient implements IKeyHandler {
 	 * EventHandlerClient as a IKeyHandler, handling KEY_DISABLE.
 	 */
 	
-	public boolean skillEnabled = false;
-	
 	public static boolean isSkillEnabled() {
-		return INSTANCE.skillEnabled;
+		if(Minecraft.getMinecraft().thePlayer == null)
+			return false;
+		return AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).isActivated();
 	}
 	
 	public static boolean isSkillMapped(int sid) {
@@ -447,11 +448,13 @@ public class EventHandlerClient implements IKeyHandler {
 		if(tickEnd || !ClientUtils.isPlayerInGame()) return;
 		if (presets == null) return;
 		
-		skillEnabled = !skillEnabled;
+		AbilityData data = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer);
+		boolean enabled = data.isActivated();
+		enabled = !enabled;
 		
-		boolean fakeChange = !skillEnabled && !SkillStateManager.isClientStateEmpty();
+		boolean fakeChange = !enabled && !SkillStateManager.isClientStateEmpty();
 		
-		if (skillEnabled) {
+		if (enabled) {
 			//AcademyCraft.log.info("Player skill is enabled.");
 		} else {
 			//AcademyCraft.log.info("Player skill is disabled.");
@@ -460,11 +463,17 @@ public class EventHandlerClient implements IKeyHandler {
 		}
 		
 		if(fakeChange) { //Using skill. Just clear the states.
-			skillEnabled = true;
+			enabled = true;
 			MinecraftForge.EVENT_BUS.post(new AbilityEvent.AbortControl()); //Notify.
 		} else {
 			//Notify
 			MinecraftForge.EVENT_BUS.post(new ControlStateEvent());
+		}
+		
+		//change activate and send message!
+		if(enabled != data.isActivated()) {
+			data.setActivated(enabled);
+			AcademyCraft.netHandler.sendToServer(new MsgActivate(enabled));
 		}
 	}
 

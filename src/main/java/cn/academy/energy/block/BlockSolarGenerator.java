@@ -35,7 +35,7 @@ public class BlockSolarGenerator extends Block implements ITileEntityProvider {
 		super(Material.iron);
 		setCreativeTab(AcademyCraft.cct);
 		setBlockName("ac_solar");
-		setBlockTextureName("academy:solar"); //TODO:Texture required
+		setBlockTextureName("academy:solar");
 		setHardness(2.0F);
 	}
 	
