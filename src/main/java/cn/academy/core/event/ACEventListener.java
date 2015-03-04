@@ -48,7 +48,7 @@ public class ACEventListener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 		System.out.println("interact " + event.entityPlayer.worldObj.isRemote);
-		if(activated(event.entityPlayer) && override(stack))
+		if(activated(event.entityPlayer) && !override(stack))
 			event.setCanceled(true);
 	}
 	
@@ -65,7 +65,7 @@ public class ACEventListener {
 	}
 	
 	private boolean override(ItemStack stack) {
-		return stack != null && stack.getItem().getClass().getAnnotation(IOverrideItemUse.class) != null;
+		return stack != null && stack.getItem() instanceof IOverrideItemUse;
 	}
 	
 	private boolean activated(EntityPlayer player) {

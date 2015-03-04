@@ -33,8 +33,7 @@ import cn.liutils.util.GenericUtils;
  * ~\(≧▽≦)/~
  * @author KSkun, WeAthFolD
  */
-@IOverrideItemUse
-public class ItemCoin extends Item {
+public class ItemCoin extends Item implements IOverrideItemUse {
 	
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
 	

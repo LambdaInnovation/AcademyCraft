@@ -64,9 +64,7 @@ public class RawEventHandler {
 			if(type == SkillEventType.RAW_DOWN) {
 				//If any pattern doesn't receive event, don't send any event at all.
 				for(Pattern p : patterns) {
-					System.out.println("Testing pattern " + p + " " + (p instanceof PatternDown));
 					if(!p.receivesEvent()) {
-						System.out.println("aborted" + p);
 						return false;
 					}
 				}

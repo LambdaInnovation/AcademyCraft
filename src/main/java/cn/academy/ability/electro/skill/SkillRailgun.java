@@ -51,7 +51,7 @@ public class SkillRailgun extends SkillBase {
 		setMaxLevel(6);
 	}
 	
-	private static Map<EntityPlayer, Integer> etcData = new HashMap();
+	private static Map<EntityPlayer, EntityThrowingCoin> etcData = new HashMap();
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -60,7 +60,7 @@ public class SkillRailgun extends SkillBase {
 			public SkillState createSkill(EntityPlayer player) {
 				return new RailgunState(player);
 			}
-		}.setCooldown(12000));
+		}.setCooldown(2000)); //先意思意思，现在服务端和客户端的同步真心不能忍……
 	}
 	
 	public static class RailgunState extends SkillState {
@@ -73,39 +73,40 @@ public class SkillRailgun extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillID(CatElectro.railgun), lv = data.getLevelID() + 1;
 			
-			Integer eid = etcData.get(player);
-			if(eid == null) {
+			System.out.println("onstart? " + player.worldObj.isRemote);
+			
+			EntityThrowingCoin etc = etcData.get(player);
+			if(etc == null) {
+				System.out.println("noooo? " + player.worldObj.isRemote);
 				this.finishSkill(false);
 				return;
 			}
 			
-			Entity ent = player.worldObj.getEntityByID(eid);
-			if(ent != null && ent instanceof EntityThrowingCoin) {
-				if(player.worldObj.isRemote) {
-					player.worldObj.spawnEntityInWorld(
-						new ChargeEffectS.Strong(data.getPlayer(), 30, 4));
-				}
-				
-				EntityThrowingCoin etc = (EntityThrowingCoin) ent;
-				if(!etc.isDead) { 
-					if(etc.getProgress() > 0.7) {
-						float consume = 2000 - 15 * (slv * slv);
-						if(!data.decreaseCP(consume, CatElectro.railgun)) {
-							finishSkill(false);
-							return;
-						}
-						
-						if(!player.worldObj.isRemote) {
-							player.worldObj.playSoundAtEntity(player, "academy:elec.railgun", 0.5f, 1.0f);
-							player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
-							etc.setDead();
-						}
-						finishSkill(true);
-						return;
-					} else {
-						finishSkill(true);
+			if(player.worldObj.isRemote) {
+				player.worldObj.spawnEntityInWorld(
+					new ChargeEffectS.Strong(data.getPlayer(), 30, 4));
+			}
+			
+			System.out.println("huh? " + etc.worldObj.isRemote);
+			if(!etc.isDead) { 
+				if(etc.getProgress() > 0.7) {
+					float consume = 2200 - 15 * (slv * slv);
+					if(!data.decreaseCP(consume, CatElectro.railgun)) {
+						finishSkill(false);
 						return;
 					}
+					
+					if(!player.worldObj.isRemote) {
+						player.worldObj.playSoundAtEntity(player, "academy:elec.railgun", 0.5f, 1.0f);
+						player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
+						etc.setDead();
+					}
+					System.out.println("fin in " + etc.worldObj.isRemote);
+					finishSkill(true);
+					return;
+				} else {
+					finishSkill(true);
+					return;
 				}
 			}
 			finishSkill(false);
@@ -117,9 +118,8 @@ public class SkillRailgun extends SkillBase {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
 		System.out.println("railgun render to1");
 		
-		Integer id = etcData.get(event.entityPlayer);
-		Entity ent = id == null ? null : event.entityPlayer.worldObj.getEntityByID(id);
-		if(ent instanceof EntityThrowingCoin && !ent.isDead)
+		EntityThrowingCoin id = etcData.get(event.entityPlayer);
+		if(id != null && !id.isDead)
 			return;
 		
 		if(data.getCategory() != CatElectro.INSTANCE || 
@@ -132,9 +132,10 @@ public class SkillRailgun extends SkillBase {
 				return;
 		}
 		
-		etcData.put(event.entityPlayer, event.coin.getEntityId());
+		etcData.put(event.entityPlayer, event.coin);
+		
 		if(event.entityPlayer.worldObj.isRemote) {
-			System.out.println("真的加了特技啦~~");
+			System.out.println("真的加了特技啦~~ " + event.coin.getEntityId());
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}

@@ -12,27 +12,28 @@
  */
 package cn.academy.misc.item;
 
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cn.academy.api.IOverrideItemUse;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntityMagHook;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
-import cpw.mods.fml.relauncher.Side;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Elec Move Support Hook
  * @author WeathFolD
  */
 @RegistrationClass
-public class ItemMagHook extends Item {
+public class ItemMagHook extends Item implements IOverrideItemUse {
 	
 	@SideOnly(Side.CLIENT)
 	@RegItem.Render

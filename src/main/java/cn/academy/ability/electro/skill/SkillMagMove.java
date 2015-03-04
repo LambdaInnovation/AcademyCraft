@@ -93,7 +93,7 @@ public class SkillMagMove extends SkillBase {
 				return new MagState(player);
 			}
 			
-		}.setCooldown(50));
+		}.setCooldown(400));
 	}
 	
 	private static class HandleVel extends FakeEntity {
@@ -307,7 +307,7 @@ public class SkillMagMove extends SkillBase {
 			if(!player.worldObj.isRemote && data.getSkillLevel(CatElectro.magMovement) >= 5) {
 				entitiesToReduce.put(player, 40); //2sec falling protection
 			}
-			return true;
+			return fin;
 		}
 
 		@Override

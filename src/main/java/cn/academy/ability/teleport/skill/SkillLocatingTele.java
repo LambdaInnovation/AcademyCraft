@@ -230,7 +230,7 @@ public class SkillLocatingTele extends SkillBase {
 					AbilityData data = AbilityDataMain.getData(player);
 					int slv = data.getSkillLevel(CatTeleport.skillLocatingTele), lv = data.getLevelID() + 1;
 					float cp = getConsumption(slv, lv, dist, diffdimm);
-					if(cp > data.getCurrentCP()) {
+					if(!data.decreaseCP(cp, CatTeleport.skillLocatingTele)) {
 						//failed.
 						ClientUtils.playSound(ClientEvents.abortSound, 1);
 						player.closeScreen();

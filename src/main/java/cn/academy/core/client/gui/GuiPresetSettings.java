@@ -175,7 +175,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				modKey = id;
 				isModifying = true;
 				PageMain.this.doesDraw = false;
-				gui.addWidget(new PageModify());
+				gui.addWidget(new PageModify(id));
 			}
 			
 		}
@@ -282,6 +282,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 		
 		double mAlpha = 0.0;
 		long createTime;
+		int modKey;
 		
 		private class PartSkillInfo extends Widget {
 			
@@ -299,7 +300,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 				boolean u = false;
 				if(i != 0) {
 					for(int k = 0; k < 4; ++k) {
-						if(tempPreset.getSkillMapping(k) == i) 
+						if(k != modKey && tempPreset.getSkillMapping(k) == i) 
 							u = true;
 					}
 				}
@@ -343,10 +344,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 
 		static final float HEIGHT = 50, WIDTH = 30, STEP = WIDTH + 10;
 
-		public PageModify() {
+		public PageModify(int _modKey) {
 			super(0, 0, GuiPresetSettings.this.width, HEIGHT);
 			this.alignStyle = AlignStyle.CENTER;
 			createTime = Minecraft.getSystemTime();
+			modKey = _modKey;
 		}
 		
 		@Override
