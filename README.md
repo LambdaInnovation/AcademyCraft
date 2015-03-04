@@ -1,7 +1,12 @@
-#AcademyCraft
+![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo_resized.png)  
+
+#Introduction
 ============
+Welcome to the repository of AcademyCraft!
 
 AcademyCraft is a Minecraft SSP/SMP mod about superability, including its aquiring, upgrading and using. The inspiration of the mod comes from A Certain Magical Index (とある魔術の禁書目録(インデックス) Toaru Majutsu no Indekkusu)
+
+AcademyCraft is licensed under the [GPL license](http://www.gnu.org/licenses/gpl.html "gpl license")
 
 #Installation
 =====
