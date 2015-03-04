@@ -29,6 +29,7 @@
 "md.charges.4": {"category": "master", "sounds": [{"name": "md/charges/4", "stream": false}]},
 
 "md.ballshoot": {"category": "master", "sounds": [{"name": "md/ballshoot", "stream": false}]},
+"md.ray_small": {"category": "master", "sounds": [{"name": "md/ray_small", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},

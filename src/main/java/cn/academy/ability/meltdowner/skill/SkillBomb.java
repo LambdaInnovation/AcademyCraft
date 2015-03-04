@@ -43,7 +43,7 @@ public class SkillBomb extends SkillBase {
 				return new BombState(player);
 			}
 			
-		});
+		}.setCooldown(0));
 	}
 	
 	private static float getConsume(int slv, int lv) {

@@ -14,6 +14,7 @@ package cn.academy.ability.meltdowner.skill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.meltdowner.CatMeltDowner;
@@ -25,7 +26,10 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
+import cn.liutils.core.event.eventhandler.LIHandler;
 import cn.liutils.util.GenericUtils;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 /**
  * @author WeathFolD
@@ -48,6 +52,39 @@ public class SkillScatterBomb extends SkillBase {
 	
 	private static float getCPConsume(int slv, int lv) { //Per tick.
 		return 13 + slv * 1.2f + lv;
+	}
+	
+	private static class PlayBurstSound extends LIHandler<ServerTickEvent> {
+		
+		static final int RATE = 4;
+		static final double VARY_RANGE = 1.1;
+		static final String SND = "academy:md.ray_small";
+		
+		final EntityPlayer player;
+		
+		int ticker, life;
+		
+		public PlayBurstSound(EntityPlayer _player, int _life) {
+			player = _player;
+			life = _life;
+		}
+
+		@Override
+		protected boolean onEvent(ServerTickEvent event) {
+			if(ticker++ % RATE == 0) {
+				double x = player.posX + gen(),
+						y = player.posY + gen(),
+						z = player.posZ + gen();
+				player.worldObj.playSoundEffect(x, y, z, SND, 0.5f, 1.0f);
+			}
+			if(ticker >= life) this.setDead();
+			return true;
+		}
+		
+		private double gen() {
+			return GenericUtils.randIntv(-VARY_RANGE, VARY_RANGE);
+		}
+		
 	}
 	
 	@Override
@@ -83,19 +120,21 @@ public class SkillScatterBomb extends SkillBase {
 
 		@Override
 		public boolean onFinish(boolean res) {
-			final boolean b = this.getTickTime() < 200;
+			final boolean b = this.getTickTime() < 200 && res;
+			if(!b) return false;
+			
 			final int slv = data.getSkillLevel(CatMeltDowner.scatterBomb), lv = data.getLevelID() + 1;
-			for(EntityMdBall ball : balls) {
-				if(b) {
-					player.worldObj.spawnEntityInWorld(new EntityWeakRay(player, ball, getDamage(slv, lv), 10));
+			if(!player.worldObj.isRemote) {
+				for(EntityMdBall ball : balls) {
+					player.worldObj.spawnEntityInWorld(
+							new EntityWeakRay(player, 
+							ball, getDamage(slv, lv), 10));
+					ball.setDead();
 				}
-				ball.setDead();
+				int life = PlayBurstSound.RATE * balls.size();
+				LIFMLGameEventDispatcher.INSTANCE.registerServerTick(new PlayBurstSound(player, life));
 			}
-//			if(!b) {
-//				//player.attackEntityFrom(DamageSource.causePlayerDamage(player), 
-//				//		Math.min(player.getHealth() - 1f, 10f));
-//			}
-			return true;
+			return b;
 		}
 		
 		@Override
