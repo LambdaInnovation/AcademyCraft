@@ -13,6 +13,7 @@
 package cn.academy.core;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
@@ -22,8 +23,10 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
  *
  */
 public class ACCorePlugin implements IFMLLoadingPlugin {
+	
+	public static boolean runtimeObfEnabled;
 
-	public ACCorePlugin() { }
+	public ACCorePlugin() {}
 
 	@Override
 	public String[] getASMTransformerClass() {
@@ -43,7 +46,9 @@ public class ACCorePlugin implements IFMLLoadingPlugin {
 	}
 
 	@Override
-	public void injectData(Map<String, Object> data) {}
+	public void injectData(Map<String, Object> data) {
+		runtimeObfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
+	}
 
 	@Override
 	public String getAccessTransformerClass() {
