@@ -20,21 +20,33 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cn.academy.core.ACCorePlugin;
+
 /**
  * Core asm transformer of ACAPI.
+ * Turns out that we have to manually handle the obfuscated environment. What are you doing forge guys? 0A0
  * @author WeathFolD
- *
  */
 public class APITransformerClient implements IClassTransformer {
+	
+	final String[]
+		fEntityLivingBase = { "Lnet/minecraft/entity/EntityLivingBase;", "Lrh;" },
+		fItemStack = { "Lnet/minecraft/item/ItemStack;", "Labp;" },
+		mRenderItemFP = { "renderItemInFirstPerson", "a" };
+	
+	String descRenderItem, descRenderThirdPerson, mdRenderItemFP;
 
-	public APITransformerClient() {
-	}
+	public APITransformerClient() {}
 
 	@Override
 	public byte[] transform(String n1, String n2, byte[] data) {
 		
-		if(n1.equals("net.minecraft.client.renderer.ItemRenderer")) {
-			System.out.println("Transforming " + n1 + ", " + n2);
+		if(n2.equals("net.minecraft.client.renderer.ItemRenderer")) {
+			descRenderItem = buildMethodDesc(fEntityLivingBase, fItemStack, "ILnet/minecraftforge/client/IItemRenderer$ItemRenderType;", "V");
+			descRenderThirdPerson = buildMethodDesc(fEntityLivingBase, fItemStack, "Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;", "V");
+			mdRenderItemFP = getDesc(mRenderItemFP);
+			
 			ClassReader cr = new ClassReader(data);
 			ClassWriter cw = new ClassWriter(Opcodes.ASM4);
 			ClassVisitor cv = new ClassVisitor(Opcodes.ASM4, cw) {
@@ -43,14 +55,16 @@ public class APITransformerClient implements IClassTransformer {
 			    public MethodVisitor visitMethod(int access, String name, String desc,
 			            String signature, String[] exceptions) {
 			    	MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-			    	if(name.equals("renderItemInFirstPerson")) {
+			    	if((name.equals(mdRenderItemFP)) && desc.equals("(F)V")) {
+			    		System.out.println("[AC]Injecting renderItemInFirstPerson");
 			    		return new FPSkillEffect(mv);
-			    	} else if(name.equals("renderItem") && 
-			    			desc.equals("(Lnet/minecraft/entity/EntityLivingBase;"
-			    					+ "Lnet/minecraft/item/ItemStack;"
-			    					+ "ILnet/minecraftforge/client/IItemRenderer$ItemRenderType;)V")) {
-			    		System.out.println("Injecting renderItem");
-			    		return new TPSkillEffect(mv);
+			    	} else if(name.equals("renderItem")) {
+			    		if(desc.equals(descRenderItem)) {
+			    			System.out.println("[AC]Injecting renderItem");
+			    			return new TPSkillEffect(mv);
+			    		} else {
+			    			System.out.println("[AC]Bad descriptor: " + desc);
+			    		}
 			    	}
 			    	return mv;
 			    }
@@ -63,7 +77,7 @@ public class APITransformerClient implements IClassTransformer {
 		return data;
 	}
 	
-	private static class TPSkillEffect extends MethodVisitor {
+	private class TPSkillEffect extends MethodVisitor {
 		
 		int visTime = 0;
 		
@@ -75,14 +89,13 @@ public class APITransformerClient implements IClassTransformer {
 	    public void visitMethodInsn(int opcode, String owner, String name,
 	            String desc) {
 			if(Opcodes.INVOKESTATIC == opcode && name.equals("glPopMatrix") && (++visTime == 4)) { //Before the last glPopMatrix() call
-				System.out.println("Injected renderItem");
 				mv.visitVarInsn(Opcodes.ALOAD, 1);
 				mv.visitVarInsn(Opcodes.ALOAD, 2);
 				mv.visitVarInsn(Opcodes.ALOAD, 4);
-				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderManager", "renderThirdPerson", 
-						"(Lnet/minecraft/entity/EntityLivingBase;"
-						+ "Lnet/minecraft/item/ItemStack;"
-						+ "Lnet/minecraftforge/client/IItemRenderer$ItemRenderType;)V");
+				mv.visitMethodInsn(Opcodes.INVOKESTATIC, 
+					"cn/academy/core/client/render/SkillRenderManager", 
+					"renderThirdPerson", 
+					descRenderThirdPerson);
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc);
 	    }
@@ -105,7 +118,6 @@ public class APITransformerClient implements IClassTransformer {
 	    public void visitMethodInsn(int opcode, String owner, String name,
 	            String desc) {
 			if(Opcodes.INVOKESTATIC == opcode && name.equals("glDisable") && (++visTime == 2)) { //Before the glDisable(GL_RESCALE_NORMAL) call
-				System.out.println("Injected renderInFirstPerson");
 				mv.visitMethodInsn(Opcodes.INVOKESTATIC, "cn/academy/core/client/render/SkillRenderManager", "renderFirstPerson", "()V");
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc);
@@ -117,6 +129,33 @@ public class APITransformerClient implements IClassTransformer {
 	    	mv.visitFieldInsn(opcode, owner, name, desc);
 	    }
 		
+	}
+	
+	private static String buildMethodDesc(Object ...objs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for(int i = 0; i < objs.length - 1; ++i) {
+			sb.append(parse(objs[i]));
+		}
+		sb.append(")");
+		sb.append(parse(objs[objs.length - 1]));
+		return sb.toString();
+	}
+	
+	private static String parse(Object o) {
+		return (String) (o instanceof String ? o : getDesc((String[])o));
+	}
+	
+	/**
+	 * Get a correct method name/descriptor regarding the current environment.
+	 */
+	private static String getDesc(String[] data) {
+		return getDesc(data[0], data[1]);
+	}
+	
+	private static String getDesc(String normal, String obf) {
+		System.out.println("ObfEnabled: " + ACCorePlugin.runtimeObfEnabled);
+		return ACCorePlugin.runtimeObfEnabled ? obf : normal;
 	}
 
 }

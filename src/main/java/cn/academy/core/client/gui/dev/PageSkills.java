@@ -69,27 +69,25 @@ public class PageSkills extends DevSubpage {
 				
 				int alpha = (int) (200 * Math.min((time - lastDeac) / 400.0, 1.0));
 				color[3] = alpha;
-				
-				GL11.glDepthFunc(GL11.GL_LEQUAL);
+
 				//Calc the maxium window length.
 				final double SIDE = 10, TOP = 5;
 				RenderUtils.bindColor(65, 163, 220, alpha);
-				HudUtils.setZLevel(201);
-				Vector2d rect = GuiDeveloper.FONT.drawLinebreak(str, SIDE, TOP, 6, 140);
+				Vector2d rect = GuiDeveloper.FONT.simDrawLinebreak(str, SIDE, TOP, 6, 140);
 				
-				HudUtils.setZLevel(200);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				//rect
 				double w = rect.x + SIDE * 2, h = rect.y + TOP * 2;
 				RenderUtils.bindColor(color);
 				HudUtils.drawModalRect(0, 0, w, h);
+				
 				//outline
 				RenderUtils.bindColor(65, 163, 220, alpha);
 				HudUtils.drawRectOutline(0, 0, w, h, LW);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				
-				HudUtils.setZLevel(-90);
-				GL11.glDepthFunc(GL11.GL_ALWAYS);
+				//really draw
+				GuiDeveloper.FONT.drawLinebreak(str, SIDE, TOP, 6, 140);
 				
 				//description
 			} else{

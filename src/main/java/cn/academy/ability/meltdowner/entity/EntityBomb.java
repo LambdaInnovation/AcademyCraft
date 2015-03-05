@@ -41,13 +41,13 @@ public class EntityBomb extends EntityMdBall {
 		super(player);
 		dmg = _dmg;
 		init();
+		worldObj.playSoundAtEntity(EntityBomb.this, "academy:md.ballshoot", .3f, 1f);
+		
 		this.execAfter(15, new EntityCallback<EntityMdBall>() {
 
 			@Override
 			public void execute(EntityMdBall ball) {
 				removeDaemonHandler("followent");
-				worldObj.playSoundAtEntity(EntityBomb.this, "academy:md.ballshoot", .5f, 1f);
-				//setState(BallState.ACTIVE);
 
 				MovingObjectPosition ret = GenericUtils.tracePlayer(spawner, 40.0);
 				double tx, ty, tz;

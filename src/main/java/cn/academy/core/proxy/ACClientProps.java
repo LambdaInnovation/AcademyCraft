@@ -13,19 +13,16 @@
 package cn.academy.core.proxy;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.util.render.LambdaFont;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Generic client information such as models and textures.
  * @author WeathFolD
  */
 @RegistrationClass
+@ForcePreloadTexture
 public class ACClientProps {
 
 	//Textures

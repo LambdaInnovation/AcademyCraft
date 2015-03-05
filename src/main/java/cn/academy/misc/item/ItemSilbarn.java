@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cn.academy.api.IOverrideItemUse;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACModels;
@@ -28,7 +29,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @RegistrationClass
-public class ItemSilbarn extends Item {
+public class ItemSilbarn extends Item implements IOverrideItemUse {
 	
 	@SideOnly(Side.CLIENT)
 	@RegItem.Render

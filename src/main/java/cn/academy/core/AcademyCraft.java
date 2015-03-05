@@ -106,6 +106,7 @@ public class AcademyCraft {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
+        RegistrationManager.INSTANCE.registerAll(this, "Texture");
 	}
 	
 	@EventHandler()
