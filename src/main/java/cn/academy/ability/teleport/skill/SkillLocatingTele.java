@@ -54,7 +54,9 @@ public class SkillLocatingTele extends SkillBase {
 	
 	public static final double scale = 0.4;
 	
-	public final static ResourceLocation tex = new ResourceLocation("academy:textures/guis/tp_locating_ui.png");
+	public final static ResourceLocation 
+		tex = new ResourceLocation("academy:textures/guis/tp_locating_ui.png"),
+		tex2 = new ResourceLocation("academy:textures/guis/tp_locating_ui2.png");
 		
 	public SkillLocatingTele() {
 		setName("tp_loc");
@@ -128,7 +130,7 @@ public class SkillLocatingTele extends SkillBase {
 		float targX, targY, targZ;
 		
 		public GuiCreate() {
-			super(ACLangs.tpLocatingCreate());
+			super(ACLangs.tpLocatingCreate(), tex, new int[] { 220, 220, 220, 200 });
 			init();
 		}
 		
@@ -196,7 +198,7 @@ public class SkillLocatingTele extends SkillBase {
 	public static class GuiSelect extends LocatingGuiBase {
 		
 		public GuiSelect() {
-			super(ACLangs.tpLocatingSelect());
+			super(ACLangs.tpLocatingSelect(), tex2, new int[] { 40, 40, 40, 200 });
 			init();
 		}
 		

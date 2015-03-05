@@ -74,7 +74,7 @@ public class ClientModifyMsg implements IMessage {
 			
 			switch(msg.opcode) {
 			case ADD:
-				data.locationList.add((Location) msg.arg);
+				data.realAdd((Location) msg.arg);
 				break;
 			case REMOVE:
 				data.locationList.remove((int)((Integer)msg.arg));

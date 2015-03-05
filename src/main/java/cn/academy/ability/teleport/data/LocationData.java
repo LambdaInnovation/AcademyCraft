@@ -96,8 +96,23 @@ public class LocationData extends ExtendedAbilityData {
 	
 	@SideOnly(Side.CLIENT)
 	public void clientAdd(Location loc) {
-		locationList.add(loc);
+		//validation first
+		realAdd(loc);
 		AcademyCraft.netHandler.sendToServer(new ClientModifyMsg(ClientModifyMsg.ADD, loc));
+	}
+	
+	void realAdd(Location loc) {
+		boolean set = false;
+		for(int i = 0; i < locationList.size(); ++i) {
+			Location l = locationList.get(i);
+			if(loc.name == l.name) {
+				set = true;
+				locationList.set(i, loc);
+				break;
+			}
+		}
+		if(!set)
+			locationList.add(loc);
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -2,6 +2,7 @@ package cn.academy.ability.teleport.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -21,12 +22,14 @@ public abstract class LocatingGuiBase extends LIGui {
 	protected EntityPlayer player;
 	protected LocationData data;
 	public BaseScreen mainScreen;
+	private ResourceLocation tex;
+	private final int[] textColor;
 	
 	protected final String name;
 	
 	protected static final int[] color = { 178, 178, 178, 180 };
 	
-	public static class GList extends FocusedVList {
+	public class GList extends FocusedVList {
 		public GList() {
 			super("list", 175, 40, 198, 138);
 		}
@@ -57,7 +60,7 @@ public abstract class LocatingGuiBase extends LIGui {
 					RenderUtils.bindColor(178, 178, 178, 60);
 					HudUtils.drawModalRect(0, 0, width, height);
 				}
-				RenderUtils.bindColor(200, 200, 200, 200);
+				RenderUtils.bindColor(textColor);
 				ACUtils.drawText(data.name, 5, 5, 14, 180);
 			}
 			
@@ -73,8 +76,10 @@ public abstract class LocatingGuiBase extends LIGui {
 		}
 	}
 	
-	public LocatingGuiBase(String _name) {
+	public LocatingGuiBase(String _name, ResourceLocation _tex, int[] texColor) {
 		name = _name;
+		tex = _tex;
+		textColor = texColor;
 	}
 	
 	protected void init() {
@@ -92,7 +97,8 @@ public abstract class LocatingGuiBase extends LIGui {
 	public abstract String getHint();
 	
 	public class BaseScreen extends Widget {
-		 long createTime;
+		
+		long createTime;
 		
 		public BaseScreen(long time) {
 			super(413, 219);
@@ -101,12 +107,12 @@ public abstract class LocatingGuiBase extends LIGui {
 			
 			this.scale = SkillLocatingTele.scale;
 		}
-		 
-		double[][] shadowOffsets = {
-				{ 51, -32 },
-				{ -60, -60 },
-				{ 66, 30 },
-				{ -30, 60 }
+		
+		double[][] offsetData = { //radx, rady, dphase, speed divisor
+			{ 50, 30, Math.PI, -6500},
+			{ 60, 60, 0, 9000},
+			{ 60, 30, Math.PI * .5, -6200},
+			{ 30, 60, Math.PI * .25, 5800}
 		};
 		
 		@Override
@@ -115,18 +121,20 @@ public abstract class LocatingGuiBase extends LIGui {
 			double mAlpha = Math.min(1.0, dt / 800.0);
 			
 			HudUtils.setTextureResolution(512, 512);
-			RenderUtils.loadTexture(SkillLocatingTele.tex);
+			RenderUtils.loadTexture(tex);
 			
 			GL11.glColor4d(1, 1, 1, mAlpha);
-			double ratio = Math.min(1.0, dt / 600.0);
-			for(double[] off : shadowOffsets) {
-				drawOneShadow(ratio * off[0], ratio * off[1]);
+			for(double[] off : offsetData) {
+				double t = Minecraft.getSystemTime() / off[3];
+				double x = off[0] * Math.sin(t - off[2]), y = off[1] * Math.cos(t - off[2]);
+				drawOneShadow(x, y);
 			}
 			drawMainWindow();
 			
-			RenderUtils.bindColor(220, 220, 220, 200);
+			RenderUtils.bindColor(textColor);
 			ACUtils.drawText(getHint(), 45, 48, 15);
 			
+			RenderUtils.bindColor(200, 200, 200, 230);
 			ACUtils.drawText(name, 20, -18, 18);
 		}
 		

@@ -64,7 +64,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 	public static class KeyHandler implements IKeyHandler {
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(tickEnd || !ClientUtils.isPlayerInGame()) return;
+			if(tickEnd || !ClientUtils.isPlayerInGame() ||
+					AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategoryID() == 0) return;
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
 			if(data.hasAbility())
