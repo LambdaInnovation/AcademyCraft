@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Lambda Innovation, 2013-2015
  * 本作品版权由Lambda Innovation所有。
- * http://www.lambdacraft.cn/
+ * http://www.li-dev.cn/
  *
  * AcademyCraft is open-source, and it is distributed under 
  * the terms of GNU General Public License. You can modify
