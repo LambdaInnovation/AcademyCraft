@@ -52,7 +52,7 @@ public class SkillMarkTele extends SkillBase {
 	}
 	
 	private float getConsumePerBlock(int slv, int lv) {
-		return 30 + slv * 6 + lv * 10;
+		return 20 + slv * 4 + lv * 8;
 	}
 	
 	private double getPosErrorRatio(int slv, int lv) {

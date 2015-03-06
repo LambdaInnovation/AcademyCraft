@@ -76,7 +76,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			}
 		}
 		//真男人从不回头看爆炸
-		GenericUtils.explode(worldObj, getSpawner(), dmg * 0.4f, dmg * 0.3, 
+		GenericUtils.explode(worldObj, getSpawner(), dmg * .2f, dmg * .15f, 
 			mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, dmg * .5f);
 	}
 	

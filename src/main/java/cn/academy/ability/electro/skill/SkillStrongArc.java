@@ -127,7 +127,7 @@ public class SkillStrongArc extends SkillBase {
 
 		@Override
 		protected double getAOERange(int slv, int lv) {
-			return 7 + lv * 0.6 + slv * 1;
+			return 5 + lv * 0.6 + slv * 1;
 		}
 		
 		@Override

@@ -58,7 +58,7 @@ public class EntityScatteredRay extends EntityMdRayBase {
 		mo.applyToEntity(this);
 		setPosition(silbarn.posX, silbarn.posY, silbarn.posZ);
 		
-		dmg = (float) (GenericUtils.randIntv(0.3, 0.6) * md.dmg);
+		dmg = (float) (GenericUtils.randIntv(0.4, 0.7) * md.dmg);
 	}
 	
 	public MovingObjectPosition performTrace() {
