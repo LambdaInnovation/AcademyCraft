@@ -1,4 +1,16 @@
 #AcademyCraft 中文语言文件 调试版本
+#命令
+commands.aim.desc=/aim [玩家名字](可省略) [指令名称]/[?] [参数...]
+commands.aim.infodisp=[%s]: %s
+commands.aim.help.desc=显示所有可用的作弊指令。
+commands.aim.category.desc=更改玩家的能力系。 参数：[int 能力系ID]
+commands.aim.level.desc=更改玩家的能力等级。参数： [int 等级ID]（从0开始）
+commands.aim.god.desc=升到最高等级并且获得所有技能。
+commands.aim.successful=指令执行成功。
+commands.aim.overflow=输入的数太大或太小。
+commands.aim.nokey=并不存在这样的指令。
+commands.aim.fail=指令执行失败。
+
 #物品
 item.null.name=
 item.ac_logo.name=
