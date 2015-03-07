@@ -3,10 +3,10 @@
  * 本作品版权由Lambda Innovation所有。
  * http://www.li-dev.cn/
  *
- * AcademyCraft is open-source, and it is distributed under 
+ * This project is open-source, and it is distributed under  
  * the terms of GNU General Public License. You can modify
  * and distribute freely as long as you follow the license.
- * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
@@ -46,7 +46,7 @@ public class SkillPenetrateTele extends SkillBase {
 	}
 	
 	private static float getConsumePerBlock(int slv, int lv) {
-		return 20 + slv * 8 + lv * 10;
+		return 15 + slv * 6 + lv * 7;
 	}
 	
 	private static float getMaxDistance(int slv, int lv) {

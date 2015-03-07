@@ -3,10 +3,10 @@
  * 本作品版权由Lambda Innovation所有。
  * http://www.li-dev.cn/
  *
- * AcademyCraft is open-source, and it is distributed under 
+ * This project is open-source, and it is distributed under  
  * the terms of GNU General Public License. You can modify
  * and distribute freely as long as you follow the license.
- * AcademyCraft是一个开源项目，且遵循GNU通用公共授权协议。
+ * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
@@ -76,7 +76,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			}
 		}
 		//真男人从不回头看爆炸
-		GenericUtils.explode(worldObj, getSpawner(), dmg * 0.4f, dmg * 0.3, 
+		GenericUtils.explode(worldObj, getSpawner(), dmg * .2f, dmg * .15f, 
 			mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, dmg * .5f);
 	}
 	
