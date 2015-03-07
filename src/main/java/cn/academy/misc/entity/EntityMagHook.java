@@ -68,7 +68,8 @@ public class EntityMagHook extends EntityX {
 			protected void onCollided(MovingObjectPosition res) {
 				if(res.typeOfHit == MovingObjectType.ENTITY) {
 					if(!(res.entityHit instanceof EntityMagHook) || ((EntityMagHook)res.entityHit).isHit) {
-						res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
+						if(!(res.entityHit instanceof EntityMagHook))
+							res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
 						dropAsItem();
 					}
 				} else {
@@ -140,7 +141,6 @@ public class EntityMagHook extends EntityX {
     
     @Override
     public boolean attackEntityFrom(DamageSource ds, float dmg) {
-    	System.out.println(ds.getDamageType());
     	if(!worldObj.isRemote && ds.getEntity() instanceof EntityPlayer) {
     		dropAsItem();
     	}
