@@ -1,4 +1,16 @@
 #AcademyCraft English Language File Debug Ver.
+#Commands
+commands.aim.desc=/aim [playerName](emittable) [keyName]/[?] [parameters...]
+commands.aim.infodisp=[%s]: %s
+commands.aim.help.desc=Display available command instructions.
+commands.aim.category.desc=Change player ability category. args: [int catID]
+commands.aim.level.desc=Change player ability level. args: [int levelID](Starting from 0)
+commands.aim.god.desc=Goto level max and acquire all skills.
+commands.aim.successful=Command successful performed.
+commands.aim.overflow=Input number too small or too large.
+commands.aim.nokey=No such instruction exist.
+commands.aim.fail=Failed to perform the command.
+
 #Items
 item.null.name=
 item.ac_logo.name=

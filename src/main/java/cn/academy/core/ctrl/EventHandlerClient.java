@@ -424,7 +424,8 @@ public class EventHandlerClient implements IKeyHandler {
 	public static boolean isSkillEnabled() {
 		if(Minecraft.getMinecraft().thePlayer == null)
 			return false;
-		return AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).isActivated();
+		AbilityData data = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer);
+		return data.isActivated();
 	}
 	
 	public static boolean isSkillMapped(int sid) {
@@ -449,6 +450,9 @@ public class EventHandlerClient implements IKeyHandler {
 		if (presets == null) return;
 		
 		AbilityData data = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer);
+		if(!data.hasAbility())
+			return;
+		
 		boolean enabled = data.isActivated();
 		enabled = !enabled;
 		

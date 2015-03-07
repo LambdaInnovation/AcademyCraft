@@ -12,10 +12,19 @@
  */
 package cn.academy.core.proxy;
 
+import cn.annoreg.core.RegistrationClass;
+import cn.liutils.api.register.Configurable;
+import cn.liutils.registry.ConfigurableRegistry.RegConfigurable;
+
 /**
  * Global vars.
  * @author WeathFolD
- *
  */
+@RegistrationClass
+@RegConfigurable
 public class ACCommonProps {
+	
+	@Configurable(category = "General", key = "debugMode", defValueBool = false,
+			comment = "This enables some debug-mode features, like advanced data modifying.")	
+	public static boolean debugMode;
 }

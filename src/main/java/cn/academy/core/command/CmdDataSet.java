@@ -28,12 +28,14 @@ import cn.liutils.template.command.LICommandBase;
  * @author WeathFolD
  *
  */
-@RegistrationClass
-@RegCommand
 public class CmdDataSet extends LICommandBase {
 
 	public CmdDataSet() {
 	}
+	
+    public int getRequiredPermissionLevel()  {
+        return 3;
+    }
 
 	@Override
 	public String getCommandName() {
@@ -42,7 +44,7 @@ public class CmdDataSet extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/aset ([cat][level][slv][cp][maxcp][exp][openall][god]) <index> <value>, where <index> <value> are optional parameters.";
+		return "/aset ([cat][level][slv][cp][maxcp][exp][openall][god][slevel]) <index> <value>, where <index> <value> are optional parameters.";
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public class CmdDataSet extends LICommandBase {
 					} else sendError(ics, "Invalid exp");
 				} else sendError(ics, "Invalid skill id.");
 				
-			} else if(args[0].equalsIgnoreCase("skilllevel")){
+			} else if(args[0].equalsIgnoreCase("slevel")){
 				int ind = Integer.parseInt(args[1]);
 				Category cat = data.getCategory();
 				if(ind >= 0 && ind < cat.getSkillCount()) {

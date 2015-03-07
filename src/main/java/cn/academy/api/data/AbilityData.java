@@ -95,7 +95,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public boolean isActivated() {
-		return activated;
+		return catID != 0 && activated;
 	}
 	
 	//-----Category-----
@@ -544,6 +544,11 @@ public class AbilityData implements IExtendedEntityProperties {
 			tickCount++;
 		}
 		recoverCP();
+	}
+	
+	public void markDirty() {
+		if(dirtyTick == 0)
+			++dirtyTick;
 	}
 	
 	private void syncSimple() {

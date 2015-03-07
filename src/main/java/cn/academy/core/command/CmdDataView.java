@@ -28,12 +28,13 @@ import cn.liutils.util.DebugUtils;
  * 显示玩家当前的能力信息（服务端）
  * @author WeathFolD
  */
-@RegistrationClass
-@RegCommand
 public class CmdDataView extends LICommandBase {
 
-	public CmdDataView() {
-	}
+	public CmdDataView() {}
+	
+    public int getRequiredPermissionLevel() {
+        return 4;
+    }
 
 	@Override
 	public String getCommandName() {

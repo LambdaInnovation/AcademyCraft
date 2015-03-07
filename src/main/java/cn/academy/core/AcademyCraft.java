@@ -12,13 +12,19 @@
  */
 package cn.academy.core;
 
+import net.minecraft.command.CommandHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cn.academy.core.command.CmdCheating;
+import cn.academy.core.command.CmdDataSet;
+import cn.academy.core.command.CmdDataView;
+import cn.academy.core.proxy.ACCommonProps;
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACMiscReg;
 import cn.academy.core.register.ExtendedDataRegistration;
@@ -85,12 +91,11 @@ public class AcademyCraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
-		
-		RegistrationManager.INSTANCE.registerAll(this, "PreInit");
-		
         RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
 		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_RENDER_HOOK);
+		
+		RegistrationManager.INSTANCE.registerAll(this, "PreInit");
 	}
 
 	@EventHandler
@@ -112,5 +117,14 @@ public class AcademyCraft {
 	@EventHandler()
 	public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+        CommandHandler ch = (CommandHandler) MinecraftServer.getServer().getCommandManager();
+        
+        //Manually register for debug testing
+        if(ACCommonProps.debugMode) {
+        	ch.registerCommand(new CmdDataSet());
+        	ch.registerCommand(new CmdDataView());
+        }
+        
+        ch.registerCommand(new CmdCheating());
 	}
 }
