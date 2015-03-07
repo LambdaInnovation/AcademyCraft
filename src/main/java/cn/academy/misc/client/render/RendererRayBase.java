@@ -78,7 +78,7 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		double len = er.getDisplayRayLen();
 		
 		//System.out.println(firstPerson);
-		if(er.doesFollowSpawner()) {
+		if(firstPerson && er.doesFollowSpawner()) {
 			//Pos injection, for better viewing effect
 			x = 0;
 			y = 0;
