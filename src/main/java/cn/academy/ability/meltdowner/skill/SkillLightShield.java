@@ -12,7 +12,12 @@
  */
 package cn.academy.ability.meltdowner.skill;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMdShield;
 import cn.academy.api.ability.SkillBase;
@@ -21,22 +26,38 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.liutils.util.GenericUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Light shield skill
  * @author WeathFolD
  */
 public class SkillLightShield extends SkillBase {
+	
+	private static Map<EntityPlayer, EntityMdShield> table = new HashMap(); //Used in server side
 
 	public SkillLightShield() {
 		this.setLogo("meltdowner/shield.png");
 		this.setName("md_shield");
-		setMaxLevel(15);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	private static float getCCP(int slv, int lv) {
 		return 35 - slv * 0.4f - lv * 1.2f;
+	}
+	
+	/**
+	 * Return the percent that a damage will be holded by the shield.
+	 */
+	private static double getHoldAmt(int slv, int lv) {
+		return Math.min(1, .4 + slv * .03 + lv * .05);
+	}
+	
+	/**
+	 * Return the max dmg that this shield can hold.
+	 */
+	private static double getHoldMax(int slv, int lv) {
+		return 8 + slv * 2 + lv * 4;
 	}
 	
 	@Override
@@ -49,6 +70,22 @@ public class SkillLightShield extends SkillBase {
 			}
 			
 		}.setCooldown(50));
+	}
+	
+	@SubscribeEvent
+	public void onLivingAttack(LivingAttackEvent e) {
+		EntityMdShield shield;
+		if((shield = table.get(e.entityLiving)) != null) {
+			if(shield.canHold()) {
+				AbilityData data = AbilityDataMain.getData((EntityPlayer) e.entityLiving);
+				int slv = data.getSkillLevel(CatMeltDowner.shield), lv = data.getLevelID() + 1;
+				double r = getHoldAmt(slv, lv);
+				float reduce = (float) Math.min(getHoldMax(slv, lv), r * e.ammount);
+				shield.setHolded(); //Called first to prevent infinite recursive(?)
+				e.setCanceled(true);
+				e.entityLiving.attackEntityFrom(e.source, e.ammount - reduce);
+			}
+		}
 	}
 	
 	public static class LSState extends State {
@@ -72,6 +109,7 @@ public class SkillLightShield extends SkillBase {
 		public void onStart() {
 			if(!isRemote()) {
 				player.worldObj.spawnEntityInWorld(shield = new EntityMdShield(player, dmgl, dmgr));
+				table.put(player, shield);
 			}
 		}
 
@@ -79,6 +117,7 @@ public class SkillLightShield extends SkillBase {
 		public boolean onFinish(boolean fin) {
 			if(!isRemote()) {
 				shield.setDead();
+				table.remove(player);
 			}
 			return true;
 		}

@@ -86,6 +86,10 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, dmg * .5f);
 	}
 	
+	/**
+	 * TODO: Needs optimization
+	 * @param sb
+	 */
 	private void doScatterAt(EntitySilbarn sb) {
 		EntityPlayer spawner = getSpawner();
 		
@@ -112,15 +116,12 @@ public class EntityMeltDowner extends EntityMdRayBase {
 //		System.out.println(rawBound);
 		
 		//Get all the entities within the raw bound and shrink the range.
-		System.out.println("user: " + spawner.rotationYawHead + "  " + spawner.rotationPitch);
 		List<Entity> le = EntityUtils.getEntitiesAround(sb, judgeDist * 2, selector);
 		for(Entity e : le) {
 			//view orientation test
 			double dx = e.posX - sb.posX, dy = e.posY - sb.posY, dz = e.posZ - sb.posZ;
 			float yaw = -(float)(Math.atan2(dx, dz) * 180.0D / Math.PI);
 			float pitch = -(float)(Math.atan2(dy, (double)Math.sqrt(dx * dx + dz * dz)) * 180.0D / Math.PI);
-			
-			System.out.println(e + " " + yaw + " " + " " + pitch);
 			
 			if(Math.abs((yaw - spawner.rotationYawHead) % 360.0) <= scatRange &&
 				Math.abs((pitch - spawner.rotationPitch) % 180.0) <= hScat) {
@@ -149,9 +150,6 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	};
 	
 	private void expandAABB(AxisAlignedBB aabb, double x, double y, double z) {
-		System.out.println("Expanding " + x + " " + y + " " + z);
-		System.out.println("Origin: " + aabb);
-		
 		aabb.minX = Math.min(x, aabb.minX);
 		aabb.minY = Math.min(y, aabb.minY);
 		aabb.minZ = Math.min(z, aabb.minZ);
@@ -159,8 +157,6 @@ public class EntityMeltDowner extends EntityMdRayBase {
 		aabb.maxX = Math.max(x, aabb.maxX);
 		aabb.maxY = Math.max(y, aabb.maxY);
 		aabb.maxZ = Math.max(z, aabb.maxZ);
-		
-		System.out.println("After: " + aabb);
 	}
 	
 	private void doExpand(AxisAlignedBB aabb, Motion3D ori, float yaw, float pitch, double dist) {

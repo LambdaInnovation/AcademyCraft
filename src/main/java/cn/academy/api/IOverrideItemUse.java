@@ -14,6 +14,7 @@ package cn.academy.api;
 
 /**
  * Implement this interface in your item class to let it able to be used while ability is activated.
+ * Will be deprecated in formal version.
  * @author WeathFolD
  */
 public interface IOverrideItemUse {

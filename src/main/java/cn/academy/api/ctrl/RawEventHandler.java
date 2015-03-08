@@ -70,8 +70,6 @@ public class RawEventHandler {
 				}
 			}
 		}
-		if(type == SkillEventType.RAW_DOWN)
-			System.out.println("exec " + skill);
 		
 		/* 
 		 * Event type handled (same between server and client):

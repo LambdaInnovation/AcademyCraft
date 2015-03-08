@@ -98,7 +98,6 @@ public class BlockNode extends BlockContainer {
 		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileNode node = BlockNode.safeGet(world, x, y, z);
 			if(node != null) {
-				System.out.println("open client");
 				return new GuiNode(new ContainerNode(node, player));
 			}
 			return null;
@@ -108,7 +107,6 @@ public class BlockNode extends BlockContainer {
 		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
 			TileNode node = BlockNode.safeGet(world, x, y, z);
 			if(node != null) {
-				System.out.println("open server");
 				return new ContainerNode(node, player);
 			}
 			return null;

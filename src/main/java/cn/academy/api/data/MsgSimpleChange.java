@@ -105,8 +105,6 @@ public class MsgSimpleChange implements IMessage {
 		public IMessage onMessage(MsgSimpleChange msg, MessageContext ctx) {
 			EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
 			if (msg.entityID == thePlayer.getEntityId()) {
-				System.out.println("sync");
-				
 				//Only sync cp of thePlayer
 				AbilityData data = AbilityDataMain.getData(thePlayer);
 				data.currentCP = msg.cp;

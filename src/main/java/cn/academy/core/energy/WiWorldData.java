@@ -135,7 +135,6 @@ class WiWorldData {
 				continue;
 			TileEntity tile = (TileEntity) node;
 			double td = GenericUtils.distanceSq(tile.xCoord, tile.yCoord, tile.zCoord, x, y, z);
-			System.out.println(tile);
 			if(td < rsq) {
 				excl.add(chan);
 				ret.add(lookup.get(node));

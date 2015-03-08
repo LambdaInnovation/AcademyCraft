@@ -320,7 +320,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setCurrentCP(float value) {
-		currentCP = value;
+		currentCP = Math.max(0, Math.min(maxCP, value));
 		
 		if (!player.worldObj.isRemote) {
 			syncSimple();
@@ -328,7 +328,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void setMaxCP(float value) {
-		maxCP = value;
+		maxCP = Math.max(0, value);
 		currentCP = Math.min(currentCP, maxCP);
 		if (!player.worldObj.isRemote) {
 			syncSimple();

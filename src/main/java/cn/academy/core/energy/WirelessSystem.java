@@ -130,7 +130,6 @@ public class WirelessSystem {
 	public void onWorldLoad(WorldEvent.Load event) {
 		if(!event.world.isRemote) {
 			worldData.remove(event.world.provider.dimensionId);
-			System.out.println("remOVE");
 		}
 	}
 	

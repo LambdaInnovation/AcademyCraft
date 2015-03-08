@@ -45,6 +45,9 @@ public class CmdCheating extends LICommandBase {
 		calls.put("cat", new Category());
 		calls.put("level", new Level());
 		calls.put("god", new God());
+		calls.put("cp", new CP());
+		calls.put("maxcp", new MaxCP());
+		calls.put("clear", new Clear());
 	}
 	
 	public CmdCheating() {}
@@ -191,6 +194,59 @@ public class CmdCheating extends LICommandBase {
 		@Override
 		public String getDesc() {
 			return "commands.aim.god.desc";
+		}
+	}
+	
+	class CP implements Call {
+		@Override
+		public boolean invoke(ICommandSender ics, EntityPlayer player, String[] pars) {
+			AbilityData data = AbilityDataMain.getData(player);
+			if(!data.hasAbility())
+				return true;
+			Float f = Float.valueOf(pars[0]);
+			if(f == null) return false;
+			data.setCurrentCP(f);
+			
+			return true;
+		}
+
+		@Override
+		public String getDesc() {
+			return "commands.aim.cp.desc";
+		}
+	}
+	
+	class MaxCP implements Call {
+		@Override
+		public boolean invoke(ICommandSender ics, EntityPlayer player, String[] pars) {
+			AbilityData data = AbilityDataMain.getData(player);
+			if(!data.hasAbility())
+				return true;
+			Float f = Float.valueOf(pars[0]);
+			if(f == null) return false;
+			data.setMaxCP(f);
+			
+			return true;
+		}
+
+		@Override
+		public String getDesc() {
+			return "commands.aim.maxcp.desc";
+		}
+	}
+	
+	class Clear implements Call {
+		@Override
+		public boolean invoke(ICommandSender ics, EntityPlayer player,
+				String[] pars) {
+			AbilityData data = AbilityDataMain.getData(player);
+			data.setCategory(Abilities.catEmpty);
+			return true;
+		}
+		
+		@Override
+		public String getDesc() {
+			return "commands.aim.clear.desc";
 		}
 	}
 

@@ -87,7 +87,6 @@ public class EntityRailgun extends EntityRay {
 	private void onCollide(MovingObjectPosition trace) {
 		Explosion exp = worldObj.createExplosion(this.getSpawner(), trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, explRadius, true);
 		exp.doExplosionA();
-		System.out.println(damage);
 		GenericUtils.doRangeDamage(worldObj, DamageSource.causeMobDamage(getSpawner()), 
 			worldObj.getWorldVec3Pool().getVecFromPool(trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord),
 			damage * .4f,

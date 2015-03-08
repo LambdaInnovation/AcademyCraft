@@ -62,7 +62,6 @@ public class TileMatrix extends TileNodeBase {
 	public void updateEntity() {
 		super.updateEntity();
 		if(channelToLoad != null && pwdToLoad != null) {
-			System.out.println("Restoring " + channelToLoad + " " + DebugUtils.formatArray(xCoord, yCoord, zCoord));
 			WirelessSystem.registerNode(this, channelToLoad);
 			WirelessSystem.setPassword(worldObj, channelToLoad, pwdToLoad);
 			channelToLoad = pwdToLoad = null;

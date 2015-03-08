@@ -47,7 +47,6 @@ public class ACEventListener {
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-		System.out.println("interact " + event.entityPlayer.worldObj.isRemote);
 		if(activated(event.entityPlayer) && !override(stack))
 			event.setCanceled(true);
 	}

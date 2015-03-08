@@ -56,14 +56,12 @@ public class APITransformerClient implements IClassTransformer {
 			            String signature, String[] exceptions) {
 			    	MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 			    	if((name.equals(mdRenderItemFP)) && desc.equals("(F)V")) {
-			    		System.out.println("[AC]Injecting renderItemInFirstPerson");
+			    		System.out.println("[AC] Injecting renderItemInFirstPerson");
 			    		return new FPSkillEffect(mv);
 			    	} else if(name.equals("renderItem")) {
 			    		if(desc.equals(descRenderItem)) {
-			    			System.out.println("[AC]Injecting renderItem");
+			    			System.out.println("[AC] Injecting renderItem");
 			    			return new TPSkillEffect(mv);
-			    		} else {
-			    			System.out.println("[AC]Bad descriptor: " + desc);
 			    		}
 			    	}
 			    	return mv;
@@ -154,7 +152,6 @@ public class APITransformerClient implements IClassTransformer {
 	}
 	
 	private static String getDesc(String normal, String obf) {
-		System.out.println("ObfEnabled: " + ACCorePlugin.runtimeObfEnabled);
 		return ACCorePlugin.runtimeObfEnabled ? obf : normal;
 	}
 

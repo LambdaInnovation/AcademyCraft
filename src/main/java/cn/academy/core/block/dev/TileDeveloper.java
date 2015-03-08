@@ -115,7 +115,7 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 		user = player;
 		if(!worldObj.isRemote) {
 			if(es == null) {
-				System.err.println("null developer sitEntity instance, isHead: " + isHead());
+				AcademyCraft.log.error("null developer sitEntity instance, isHead: " + isHead());
 				return false;
 			}
 			es.mount(user);
@@ -253,7 +253,6 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	
 	//Internal update
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void updateEntity() {
 		super.updateEntity();
 		if(!isHead())
@@ -323,10 +322,8 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	}
 	
 	private void sync() {
-		if(!worldObj.isRemote) {
-			TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
-			AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
-		}
+		TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
+		AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
 	}
 	
 	private TileDeveloper getHead() {

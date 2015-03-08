@@ -73,11 +73,8 @@ public class SkillRailgun extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillID(CatElectro.railgun), lv = data.getLevelID() + 1;
 			
-			System.out.println("onstart? " + player.worldObj.isRemote);
-			
 			EntityThrowingCoin etc = etcData.get(player);
 			if(etc == null) {
-				System.out.println("noooo? " + player.worldObj.isRemote);
 				this.finishSkill(false);
 				return;
 			}
@@ -87,7 +84,6 @@ public class SkillRailgun extends SkillBase {
 					new ChargeEffectS.Strong(data.getPlayer(), 30, 4));
 			}
 			
-			System.out.println("huh? " + etc.worldObj.isRemote);
 			if(!etc.isDead) { 
 				if(etc.getProgress() > 0.7) {
 					float consume = 2200 - 15 * (slv * slv);
@@ -101,7 +97,6 @@ public class SkillRailgun extends SkillBase {
 						player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
 						etc.setDead();
 					}
-					System.out.println("fin in " + etc.worldObj.isRemote);
 					finishSkill(true);
 					return;
 				} else {
@@ -116,7 +111,6 @@ public class SkillRailgun extends SkillBase {
 	@SubscribeEvent
 	public void throwCoin(ThrowCoinEvent event) {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
-		System.out.println("railgun render to1");
 		
 		EntityThrowingCoin id = etcData.get(event.entityPlayer);
 		if(id != null && !id.isDead)
@@ -126,7 +120,6 @@ public class SkillRailgun extends SkillBase {
 			!data.isSkillLearned(CatElectro.railgun) || !data.isActivated()) {
 				return;
 		}
-		System.out.println("railgun render to2");
 		if(data.getPlayer().worldObj.isRemote) {
 			if(!EventHandlerClient.isSkillMapped(data.getSkillID(CatElectro.railgun)))
 				return;
@@ -135,7 +128,6 @@ public class SkillRailgun extends SkillBase {
 		etcData.put(event.entityPlayer, event.coin);
 		
 		if(event.entityPlayer.worldObj.isRemote) {
-			System.out.println("真的加了特技啦~~ " + event.coin.getEntityId());
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}

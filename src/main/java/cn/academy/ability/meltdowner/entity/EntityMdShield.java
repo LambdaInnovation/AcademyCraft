@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -55,6 +56,8 @@ public class EntityMdShield extends EntityX {
 	
 	final float size = 2f;
 	float dmgl, dmgr; //The random range of fallback damage;
+	
+	int coolDown; //Cooldown tick until able to hold attacks.
 
 	EntityPlayer spawner;
 	
@@ -100,8 +103,21 @@ public class EntityMdShield extends EntityX {
 				worldObj, posX, posY, posZ, size * 1.2, GenericUtils.selectorLiving, spawner);
 			for(Entity e : entities) {
 				e.attackEntityFrom(DamageSource.causePlayerDamage(getSpawner()), (float) GenericUtils.randIntv(dmgl, dmgr));
+				if(e instanceof EntityArrow) {
+					e.setDead();
+				}
 			}
+			
+			if(coolDown > 0) --coolDown;
 		}
+	}
+	
+	public void setHolded() {
+		coolDown = 10;
+	}
+	
+	public boolean canHold() {
+		return coolDown == 0;
 	}
 	
 	public EntityPlayer getSpawner() {

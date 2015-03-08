@@ -97,18 +97,15 @@ public class MsgFRAction implements IMessage {
 			} else {
 				TileEntity te2 = world.getTileEntity(msg.coords[0], msg.coords[1], msg.coords[2]);
 				if(!(te2 instanceof IWirelessNode)) {
-					System.out.println("fail a " + te2);
 					return new MsgFRActionReply(false);
 				}
 				//Pass validation
 				IWirelessNode node = (IWirelessNode) te2;
 				String pwd = WirelessSystem.getPassword(world, WirelessSystem.getTileChannel(node));
 				if(!msg.pwd.equals(pwd)) {
-					System.out.println("fail b " + pwd);
 					return new MsgFRActionReply(false);
 				}
 				//Do it!
-				System.out.println("successful!");
 				WirelessSystem.attachTile(tub, node);
 				return new MsgFRActionReply(true);
 			}

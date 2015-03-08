@@ -81,12 +81,12 @@ public class DiagActionConfirm extends DialogueBase {
 	 * Called when we confirm the dialogue action.
 	 */
 	public void onConfirm() {
+		//Open the progress gui
+		dev.getGui().addWidget(new DiagStimulate(dev, devAction));
+		
 		//Sync to the server
 		dev.dev.startStimulating(id, par);
 		AcademyCraft.netHandler.sendToServer(new MsgActionStart(dev.dev, id, par));
-		
-		//Open the progress gui
-		dev.getGui().addWidget(new DiagStimulate(dev, devAction));
 	}
 
 }

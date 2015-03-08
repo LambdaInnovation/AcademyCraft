@@ -135,7 +135,6 @@ public class LocationData extends ExtendedAbilityData {
 		for(int i = 0; i < locationList.size(); ++i) {
 			locationList.get(i).toNBT(tag, i);
 		}
-		System.out.println(":TO");
 	}
 
 	@Override
@@ -144,7 +143,6 @@ public class LocationData extends ExtendedAbilityData {
 		for(int i = 0; i < n; ++i) {
 			locationList.add(new Location(tag, i));
 		}
-		System.out.println(":FROM");
 	}
 
 }
