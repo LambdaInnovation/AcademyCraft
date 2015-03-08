@@ -83,7 +83,7 @@ public class ACMiscReg {
 				'e', ACBlocks.node, 'f', ACItems.aplate1);
 		GameRegistry.addRecipe(new ItemStack(ACItems.siliconRod), "aaa", "a a", "aaa",
 				'a', ACItems.smallSi);
-		GameRegistry.addRecipe(new ItemStack(ACItems.sibarn), "aba", "bab", "aba",
+		GameRegistry.addRecipe(new ItemStack(ACItems.sibarn, 8), "aba", "bab", "aba",
 				'a', ACItems.siliconRod, 'b', ACItems.smallSi);
 		GameRegistry.addRecipe(new ItemStack(ACItems.freqReg), "abb", "ccd", "abb",
 				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
