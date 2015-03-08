@@ -175,6 +175,7 @@ public class EntityMdShield extends EntityX {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotated(-shield.rotationYaw + 90, 0, 1, 0);
 			GL11.glRotated(shield.rotationPitch, 0, 0, 1);
+			GL11.glRotated(Minecraft.getSystemTime() / 2D, 1, 0, 0);
 			drawer.draw();
 			GL11.glPopMatrix();
 		}

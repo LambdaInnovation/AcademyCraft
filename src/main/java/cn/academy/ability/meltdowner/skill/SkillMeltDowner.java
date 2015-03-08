@@ -91,6 +91,9 @@ public class SkillMeltDowner extends SkillBase {
 		
 		@Override
 		public boolean onTick(int ticks) {
+			//if(!player.worldObj.isRemote)
+			//	System.out.println("user: " + player.rotationYawHead + "  " + player.rotationPitch);
+			
 			if(!data.decreaseCP(ccp, CatMeltDowner.meltDowner)) {
 				spawn = false;
 				return true;

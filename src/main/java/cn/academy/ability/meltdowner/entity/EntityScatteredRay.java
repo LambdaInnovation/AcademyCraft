@@ -52,9 +52,9 @@ public class EntityScatteredRay extends EntityMdRayBase {
 	
 	float dmg;
 	
-	public EntityScatteredRay(EntityMeltDowner md, EntitySilbarn silbarn) {
+	public EntityScatteredRay(EntityMeltDowner md, EntitySilbarn silbarn, int scatRange) {
 		super(md.getSpawner());
-		Motion3D mo = new Motion3D(md, 40, true);
+		Motion3D mo = new Motion3D(md, scatRange, true);
 		mo.applyToEntity(this);
 		setPosition(silbarn.posX, silbarn.posY, silbarn.posZ);
 		
@@ -75,9 +75,10 @@ public class EntityScatteredRay extends EntityMdRayBase {
 
 	@Override
 	protected void handleCollision(MovingObjectPosition mop) {
-		if(mop.typeOfHit == MovingObjectType.ENTITY) {
-			mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(getSpawner()), dmg);
-		}
+		//DO nothing, damage done in EntityMeltDowner.
+//		if(mop.typeOfHit == MovingObjectType.ENTITY) {
+//			mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(getSpawner()), dmg);
+//		}
 	}
 	
 	@Override
