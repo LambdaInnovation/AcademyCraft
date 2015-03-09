@@ -14,16 +14,17 @@ package cn.academy.ability.electro.client.render.entity;
 
 import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.client.render.RendererRayBlended;
 import cn.academy.misc.client.render.RendererRaySimple;
 
 /**
  * @author WeathFolD
  * 
  */
-public class RenderRailgun extends RendererRaySimple<EntityRailgun>{
+public class RenderRailgun extends RendererRayBlended<EntityRailgun>{
 	public RenderRailgun() {
-		super(ACClientProps.TEX_EFF_RAILGUN, 4);
-		widthFp = 0.12;
-		widthTp = 0.3;
+		super(ACClientProps.TEX_EFF_RAILGUN, ACClientProps.TEX_EFF_RAILGUN_FADE, 0.66667);
+		widthFp = 0.18;
+		widthTp = 0.44;
 	}
 }

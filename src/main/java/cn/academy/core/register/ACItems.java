@@ -53,11 +53,7 @@ public class ACItems {
 	
 	@RegItem
 	@RegItem.HasRender
-	public static ItemCoin coin = new ItemCoin() {
-		@RegItem.Render
-		@SideOnly(Side.CLIENT)
-		public RendererCoin.ItemRender renderCoin;
-	};
+	public static ItemCoin coin = new ItemCoin();
 
 	//TODO: Reconfigure the medicine system.
 /*	@RegItem

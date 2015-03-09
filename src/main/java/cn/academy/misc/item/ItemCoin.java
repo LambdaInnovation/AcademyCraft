@@ -25,15 +25,28 @@ import net.minecraftforge.common.MinecraftForge;
 import cn.academy.api.IOverrideItemUse;
 import cn.academy.api.event.ThrowCoinEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.misc.client.render.RendererCoin;
 import cn.academy.misc.entity.EntityThrowingCoin;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegItem;
 import cn.liutils.util.GenericUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The coin from the game center which is used by Misaka Mikoto for her proud Railgun skill!
  * ~\(≧▽≦)/~
  * @author KSkun, WeAthFolD
  */
+@RegistrationClass
 public class ItemCoin extends Item implements IOverrideItemUse {
+	
+	@RegItem.Render
+	@SideOnly(Side.CLIENT)
+	public RendererCoin.ItemRender renderCoin;
 	
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
 	
@@ -41,24 +54,20 @@ public class ItemCoin extends Item implements IOverrideItemUse {
 		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin-front");
 		setCreativeTab(AcademyCraft.cct);
+		FMLCommonHandler.instance().bus().register(this);
 		this.hasSubtypes = false;
 	}
-	
-
-    @Override
-	public void onUpdate(ItemStack arg0, World arg1, Entity arg2, int arg3, boolean arg4) {
-		super.onUpdate(arg0, arg1, arg2, arg3, arg4);
-		if(!(arg2 instanceof EntityPlayer))
-			return;
-		EntityPlayer player = (EntityPlayer) arg2;
+    
+    @SubscribeEvent
+    public void onPlayerTick(PlayerTickEvent event) {
+    	EntityPlayer player = event.player;
 		Map<EntityPlayer, Integer> map = getMap(player);
-		if(getMap((EntityPlayer) arg2).containsKey(arg2)) {
+		if(getMap(player).containsKey(player)) {
 			Integer i = map.remove(player);
 			if(i > 0)
-				map.put((EntityPlayer) arg2, i - 1);
+				map.put(player, i - 1);
 		}
-	}
-
+    }
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
@@ -73,7 +82,7 @@ public class ItemCoin extends Item implements IOverrideItemUse {
     	
     	MinecraftForge.EVENT_BUS.post(new ThrowCoinEvent(player, etc));
     	player.playSound("academy:flipcoin", 0.5F, 1.0F);
-    	getMap(player).put(player, 58);
+    	getMap(player).put(player, 50);
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;
     	}

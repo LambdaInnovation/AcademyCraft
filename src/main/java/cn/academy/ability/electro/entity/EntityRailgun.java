@@ -20,6 +20,7 @@ import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.entity.RenderRailgun;
 import cn.academy.ability.electro.entity.fx.EntityArcS;
 import cn.academy.api.data.AbilityData;
+import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -72,6 +73,9 @@ public class EntityRailgun extends EntityRay {
 					y = mo.posY + GenericUtils.randIntv(rfr, rto) - 0.3, 
 					z = mo.posZ + GenericUtils.randIntv(rfr, rto);
 			EntityArcS arc = EntityArcS.get(worldObj);
+			arc.reset();
+			arc.texs = ACClientProps.ANIM_ELEC_ARC_STRONG;
+			arc.size = 0.8f;
 			arc.setPosition(x, y, z);
 			arc.addDaemonHandler(new LifeTime(arc, 15));
 			worldObj.spawnEntityInWorld(arc);

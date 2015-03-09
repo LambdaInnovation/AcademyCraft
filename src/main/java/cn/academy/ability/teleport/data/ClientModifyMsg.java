@@ -77,7 +77,8 @@ public class ClientModifyMsg implements IMessage {
 				data.realAdd((Location) msg.arg);
 				break;
 			case REMOVE:
-				data.locationList.remove((int)((Integer)msg.arg));
+				if(data.locationList.size() > (Integer)msg.arg)
+					data.locationList.remove((int)((Integer)msg.arg));
 				break;
 			case CLEAR:
 				data.locationList.clear();

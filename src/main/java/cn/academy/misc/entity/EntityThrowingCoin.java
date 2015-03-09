@@ -12,9 +12,11 @@
  */
 package cn.academy.misc.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.register.ACItems;
@@ -62,8 +64,12 @@ public class EntityThrowingCoin extends EntityX {
 			maxHt = Math.max(maxHt, posY);
 			if(worldObj.isRemote) {
 				initHt = dataWatcher.getWatchableObjectFloat(10);
+				Entity e = worldObj.getEntityByID(dataWatcher.getWatchableObjectInt(11));
+				if(e instanceof EntityPlayer)
+					player = (EntityPlayer) e;
 			} else {
 				dataWatcher.updateObject(10, Float.valueOf(initHt));
+				dataWatcher.updateObject(11, Integer.valueOf(player.getEntityId()));
 			}
 		}
 
@@ -114,12 +120,12 @@ public class EntityThrowingCoin extends EntityX {
 //				}
 //			}
 //		}.addExclusion(player));
-		this.addDaemonHandler(new VelocityUpdate(this));
 		this.ignoreFrustumCheck = true;
 	}
 	
 	private void setup() {
 		this.addDaemonHandler(new GravityApply(this, 0.06));
+		this.addDaemonHandler(new VelocityUpdate(this));
 		this.setCurMotion(new KeepPosition());
 		this.motionY += INITVEL;
 		axis = Vec3.createVectorHelper(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
@@ -147,6 +153,14 @@ public class EntityThrowingCoin extends EntityX {
 	
 	@Override
 	public void entityInit() {
-		this.dataWatcher.addObject(10, Float.valueOf(0));
+		dataWatcher.addObject(10, Float.valueOf(0));
+		dataWatcher.addObject(11, Integer.valueOf(-1));
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		setDead();
+		worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(ACItems.coin)));
 	}
 }

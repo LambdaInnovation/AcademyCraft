@@ -102,17 +102,14 @@ public class LocationData extends ExtendedAbilityData {
 	}
 	
 	void realAdd(Location loc) {
-		boolean set = false;
 		for(int i = 0; i < locationList.size(); ++i) {
 			Location l = locationList.get(i);
 			if(loc.name == l.name) {
-				set = true;
 				locationList.set(i, loc);
-				break;
+				return;
 			}
 		}
-		if(!set)
-			locationList.add(loc);
+		locationList.add(loc);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -139,6 +136,7 @@ public class LocationData extends ExtendedAbilityData {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
+		locationList.clear();
 		int n = tag.getInteger("count");
 		for(int i = 0; i < n; ++i) {
 			locationList.add(new Location(tag, i));
