@@ -241,8 +241,6 @@ public class SkillMagMove extends SkillBase {
 		final double dist;
 		
 		final AbilityData data;
-	
-		private static ResourceLocation snd = new ResourceLocation("academy:elec.move");
 
 		public MagState(EntityPlayer player) {
 			super(player);
@@ -276,7 +274,6 @@ public class SkillMagMove extends SkillBase {
 					));
 					
 					if(!isRemote()) {
-						player.worldObj.playSoundAtEntity(player, "academy:elec.move", 0.5f, 1.0f);
 						player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
 					}
 					
