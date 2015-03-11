@@ -27,6 +27,7 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.misc.entity.EntityMarker;
+import cn.academy.misc.util.DamageHelper;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
 
@@ -96,7 +97,7 @@ public class SkillViscusStripping extends SkillBase {
 						return false;
 					}
 					float dmg = (float) GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8);
-					mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg);
+					DamageHelper.applyEntityDamage(mop.entityHit, DamageSource.causePlayerDamage(player), dmg);
 					if(isRemote()) { //TODO: In formal version, switch to spawn in server
 						EntityBloodSplash.genSplashEffect(mop.entityHit);
 					} else {

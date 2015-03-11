@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.draw.DrawObject;
@@ -102,7 +103,8 @@ public class EntityMdShield extends EntityX {
 			List<Entity> entities = EntityUtils.getEntitiesAround(
 				worldObj, posX, posY, posZ, size * 1.2, GenericUtils.selectorLiving, spawner);
 			for(Entity e : entities) {
-				e.attackEntityFrom(DamageSource.causePlayerDamage(getSpawner()), (float) GenericUtils.randIntv(dmgl, dmgr));
+				DamageHelper.applyEntityDamage(e, DamageSource.causePlayerDamage(getSpawner()), (float) GenericUtils.randIntv(dmgl, dmgr));
+				
 				if(e instanceof EntityArrow) {
 					e.setDead();
 				}

@@ -14,11 +14,14 @@ package cn.academy.api.ability;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.DamageHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -135,6 +138,11 @@ public class SkillBase {
 	 */
 	public boolean useWithItem() {
 		return false;
+	}
+	
+	//Sandbox methods
+	protected void attackEntity(Entity targ, DamageSource ds, float dmg) {
+		DamageHelper.applyEntityDamage(targ, ds, dmg);
 	}
 	
 }

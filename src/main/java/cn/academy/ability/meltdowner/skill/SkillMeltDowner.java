@@ -71,9 +71,7 @@ public class SkillMeltDowner extends SkillBase {
 		}
 
 		@Override
-		public void onStart() {
-			//if(!isRemote())
-		}
+		public void onStart() {}
 
 		@Override
 		public boolean onFinish(boolean res) {
@@ -85,15 +83,13 @@ public class SkillMeltDowner extends SkillBase {
 				int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
 				int rt = Math.min(getTickTime(), 40);
 				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv, rt)));
+				player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner", 0.5f, 1.0f);
 			}
 			return true;
 		}
 		
 		@Override
 		public boolean onTick(int ticks) {
-			//if(!player.worldObj.isRemote)
-			//	System.out.println("user: " + player.rotationYawHead + "  " + player.rotationPitch);
-			
 			if(!data.decreaseCP(ccp, CatMeltDowner.meltDowner)) {
 				spawn = false;
 				return true;

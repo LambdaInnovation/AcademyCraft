@@ -41,7 +41,7 @@ public class EntityMarker extends EntityX {
 		target = _target;
 		ignoreFrustumCheck = true;
 		setPosition(target.posX, target.posY, target.posZ);
-		setSize(0.1f, 0.1f);
+		setSize(0.3f, 0.3f);
 	}
 	
 	@Override

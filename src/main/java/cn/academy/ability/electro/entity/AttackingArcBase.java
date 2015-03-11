@@ -28,6 +28,7 @@ import cn.academy.ability.electro.entity.fx.EntityExcitedArc;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.misc.util.DamageHelper;
 import cn.liutils.api.entityx.motion.LifeTime;
 import cn.liutils.util.EntityUtils;
 import cn.liutils.util.GenericUtils;
@@ -59,8 +60,8 @@ public abstract class AttackingArcBase extends EntityArcBase {
 		float damage = getDamage(slv, lv);
 		if(mop != null) {
 			if(mop.typeOfHit == MovingObjectType.ENTITY) {
-				mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(data.getPlayer()),
-					damage);
+				DamageHelper.applyEntityDamage(
+					mop.entityHit, DamageSource.causePlayerDamage(data.getPlayer()), damage);
 			} else {
 				double ip = getIgniteProb(slv, lv);
 				if(rand.nextDouble() <= ip) {
@@ -80,7 +81,7 @@ public abstract class AttackingArcBase extends EntityArcBase {
 				//spawn the arc and attack the AOEed target
 				if(ent.equals(getSpawner()))
 					continue;
-				ent.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), sdmg);
+				DamageHelper.applyEntityDamage(ent, DamageSource.causeMobDamage(getSpawner()), sdmg);
 				double ox = ent.posX, oy = ent.posY + ent.height * 0.6, oz = ent.posZ;
 				new EntityExcitedArc(worldObj, 
 					Vec3.createVectorHelper(tx, ty, tz),

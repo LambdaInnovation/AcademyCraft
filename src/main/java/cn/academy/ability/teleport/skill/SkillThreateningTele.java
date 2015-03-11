@@ -33,6 +33,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.register.ACItems;
 import cn.academy.misc.item.ItemNeedle;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
@@ -90,7 +91,7 @@ public class SkillThreateningTele extends SkillBase {
 				if (stack.getItem() instanceof ItemNeedle) {
 					damage *= 2F;
 				}
-				mop.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
+				DamageHelper.applyEntityDamage(mop.entityHit, DamageSource.causePlayerDamage(player), damage);
 				if(!isRemote() && rand.nextDouble() < 0.2) {
 					double len = mop.hitVec.distanceTo(Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
 					dropItem(stack, len);

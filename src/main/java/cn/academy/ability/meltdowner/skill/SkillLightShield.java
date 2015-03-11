@@ -90,6 +90,8 @@ public class SkillLightShield extends SkillBase {
 	
 	public static class LSState extends State {
 		
+		static final int SND_PLAY_INTERVAL = 51, SND_OFFSET = 8;
+		
 		final AbilityData data;
 		final float ccp, dmgl, dmgr;
 		
@@ -109,6 +111,7 @@ public class SkillLightShield extends SkillBase {
 		public void onStart() {
 			if(!isRemote()) {
 				player.worldObj.spawnEntityInWorld(shield = new EntityMdShield(player, dmgl, dmgr));
+				player.worldObj.playSoundAtEntity(player, "academy:md.shield_startup", .5f, 1f);
 				table.put(player, shield);
 			}
 		}
@@ -124,6 +127,9 @@ public class SkillLightShield extends SkillBase {
 		
 		@Override
 		public boolean onTick(int ticks) {
+			if((ticks - SND_OFFSET) % SND_PLAY_INTERVAL == 0) {
+				//player.worldObj.playSoundAtEntity(player, "academy:md.shield_loop", .5f, 1f);
+			}
 			return !data.decreaseCP(ccp, CatMeltDowner.shield);
 		}
 

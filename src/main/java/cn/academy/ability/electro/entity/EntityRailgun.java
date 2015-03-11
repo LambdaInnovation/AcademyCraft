@@ -22,6 +22,7 @@ import cn.academy.ability.electro.entity.fx.EntityArcS;
 import cn.academy.api.data.AbilityData;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.entity.EntityRay;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegEntity.HasRender;
@@ -54,7 +55,7 @@ public class EntityRailgun extends EntityRay {
 		
 		int sid = data.getSkillID(CatElectro.railgun);
 		damage = Math.max(9, 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F);
-		explRadius = (int) (damage * 0.2);
+		explRadius = (int) (damage * 0.35);
 		
 		MovingObjectPosition ret = this.performTrace();
 		if(ret != null) onCollide(ret);
@@ -89,13 +90,7 @@ public class EntityRailgun extends EntityRay {
 	}
 	
 	private void onCollide(MovingObjectPosition trace) {
-		Explosion exp = worldObj.createExplosion(this.getSpawner(), trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, explRadius, true);
-		exp.doExplosionA();
-		GenericUtils.doRangeDamage(worldObj, DamageSource.causeMobDamage(getSpawner()), 
-			worldObj.getWorldVec3Pool().getVecFromPool(trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord),
-			damage * .4f,
-			damage * .3);
-		exp.doExplosionB(false);
+		DamageHelper.explode(worldObj, getSpawner(), explRadius, damage * .6, trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, damage * .4f);
 	}
 	
 	@Override

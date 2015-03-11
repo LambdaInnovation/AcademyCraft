@@ -62,12 +62,24 @@ public class GuiMainScreen extends AuxGui {
 	
 	private static LambdaFont font = ACClientProps.FONT_YAHEI_32;
 	
+	private String tipString;
+	private long tipUpdateTime;
+	
 	private GuiMainScreen() {
 		logoBack = new GUIObject.Tex(ACClientProps.TEX_LOGO_BACK, 0, 0, 256, 256, 0, 0, 256, 256);
 		logoRays = new GUIObject.Tex(ACClientProps.TEX_LOGO_RAYS, 0, 0, 256, 256, 0, 0, 256, 256);
 		logoFrame = new GUIObject.Tex(ACClientProps.TEX_LOGO_FRAME, 0, 0, 256, 256, 0, 0, 256, 256);
 		logoGeom = new GUIObject.Tex(ACClientProps.TEX_LOGO_GEOM, 0, 0, 256, 256, 0, 0, 256, 256);
 		logoGeom.getTransform().setPivotPt(128, 128, 0);
+	}
+	
+	//Tip API
+	/**
+	 * Should be translated String
+	 */
+	public void updateTip(String tip) {
+		tipString = tip;
+		tipUpdateTime = Minecraft.getSystemTime();
 	}
 
 	@Override
@@ -85,9 +97,20 @@ public class GuiMainScreen extends AuxGui {
 		boolean active = EventHandlerClient.isSkillEnabled();
 		long time = Minecraft.getSystemTime();
 		
+		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix(); {
+			//Tip rendering
+			{
+				GL11.glColor4d(1, 1, 1, 0.4);
+				long tdt = time - tipUpdateTime;
+				if(tdt > 1000) tipString = null;
+				if(tipString != null) {
+					ACClientProps.FONT_YAHEI_32.draw(tipString, w / 2 - 6, h / 2 - 12, 6, Align.RIGHT);
+				}
+			}
+			
 			GL11.glPushMatrix(); { //Logo rendering
 				double scale = .25;
 				double mAlpha = active ? 0.8 : 0.4;

@@ -21,8 +21,12 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import cn.academy.api.IOverrideItemUse;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.core.client.ACLangs;
+import cn.academy.core.client.gui.GuiMainScreen;
+import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
+import cn.liutils.util.ClientUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -34,8 +38,12 @@ public class ACEventListener {
 	
 	@SubscribeEvent
 	public void killBreakSpeed(BreakSpeed haha) {
-		if(activated(haha.entityPlayer))
+		if(activated(haha.entityPlayer)) {
+			if(haha.entityPlayer.worldObj.isRemote) {
+				onFail();
+			}
 			haha.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent
@@ -47,20 +55,38 @@ public class ACEventListener {
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-		if(activated(event.entityPlayer) && !override(stack))
+		if(activated(event.entityPlayer) && !override(stack)) {
+			if(!(stack != null && stack.getItem() == ACItems.ivoid) && 
+					event.entityPlayer.worldObj.isRemote) {
+				onFail();
+			}
 			event.setCanceled(true);
+		}
 	}
 	
 	@SubscribeEvent
 	public void onStartUseItem(PlayerUseItemEvent.Start event) {
-		if(activated(event.entityPlayer) && override(event.item))
+		if(activated(event.entityPlayer) && override(event.item)) {
+			if(event.item.getItem() != ACItems.ivoid && event.entityPlayer.worldObj.isRemote) {
+				onFail();
+			}
 			event.setCanceled(true);
+		}
 	}
 	
 	@SubscribeEvent
 	public void onInteractEntity(EntityInteractEvent event) {
-		if(activated(event.entityPlayer))
+		if(activated(event.entityPlayer)) {
+			if(event.entityPlayer.worldObj.isRemote) {
+				onFail();
+			}
 			event.setCanceled(true);
+		}
+	}
+	
+	private void onFail() {
+		GuiMainScreen.INSTANCE.updateTip(ACLangs.cantInteract());
+		//ClientUtils.playSound(ClientEvents.abortSound, 1.0f);
 	}
 	
 	private boolean override(ItemStack stack) {

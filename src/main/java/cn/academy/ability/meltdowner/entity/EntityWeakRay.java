@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.client.render.RenderWeakRay;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.GenericUtils;
@@ -62,7 +63,7 @@ public class EntityWeakRay extends EntityMdRayBase {
 				EntityLivingBase elb = (EntityLivingBase) mop.entityHit;
 				elb.hurtResistantTime = -1;
 			}
-			mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), dmg);
+			DamageHelper.applyEntityDamage(mop.entityHit, DamageSource.causeMobDamage(getSpawner()), dmg);
 		}
 	}
 	

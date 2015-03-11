@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayTiling;
 import cn.academy.misc.entity.EntitySilbarn;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.EntityUtils;
@@ -78,11 +79,11 @@ public class EntityMeltDowner extends EntityMdRayBase {
 				doScatterAt((EntitySilbarn) mop.entityHit);
 				return;
 			} else {
-				mop.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getSpawner()), dmg);
+				DamageHelper.applyEntityDamage(mop.entityHit, DamageSource.causeMobDamage(getSpawner()), dmg);
 			}
 		}
 		//真男人从不回头看爆炸
-		GenericUtils.explode(worldObj, getSpawner(), dmg * .2f, dmg * .15f, 
+		DamageHelper.explode(worldObj, getSpawner(), dmg * .35f, dmg * .12f, 
 			mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, dmg * .5f);
 	}
 	

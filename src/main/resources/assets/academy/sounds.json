@@ -30,6 +30,9 @@
 
 "md.ballshoot": {"category": "master", "sounds": [{"name": "md/ballshoot", "stream": false}]},
 "md.ray_small": {"category": "master", "sounds": [{"name": "md/ray_small", "stream": false}]},
+"md.shield_startup": {"category": "master", "sounds": [{"name": "md/shield_startup", "stream": false}]},
+"md.shield_loop": {"category": "master", "sounds": [{"name": "md/shield_loop", "stream": false}]},
+"md.meltdowner": {"category": "master", "sounds": [{"name": "md/meltdowner", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},

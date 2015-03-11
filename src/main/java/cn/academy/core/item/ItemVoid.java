@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+import cn.academy.api.IOverrideItemUse;
 import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
 import cpw.mods.fml.common.FMLCommonHandler;

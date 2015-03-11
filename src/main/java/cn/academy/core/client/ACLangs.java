@@ -20,6 +20,10 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String cantInteract() {
+		return local("ac.cantinteract");
+	}
+	
 	public static String tpLocatingAdd() {
 		return local("ac.tpLocatingAdd");
 	}

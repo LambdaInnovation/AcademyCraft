@@ -21,6 +21,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.CatMeltDowner;
+import cn.academy.misc.util.DamageHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.entityx.motion.CollisionCheck;
@@ -102,7 +103,7 @@ public class EntityBomb extends EntityMdBall {
 			@Override
 			protected void onCollided(MovingObjectPosition res) {
 				if(res.typeOfHit == MovingObjectType.ENTITY) {
-					res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(spawner), dmg);
+					DamageHelper.applyEntityDamage(res.entityHit, DamageSource.causePlayerDamage(spawner), dmg);
 				}
 				EntityBomb.this.setDead();
 			}
