@@ -44,11 +44,7 @@ public class DevActionSkill implements IDevAction {
 
 	@Override
 	public double getSuccessfulRate(AbilityData data) {
-		return Math.max(0.15, (0.8 - 0.15 * data.getLevelID())) * Math.pow(1 - dropRate(data.getLevelID()), data.getSkillLevel(skillID));
-	}
-	
-	private double dropRate(int lvid) {
-		return Math.min(0.06, 0.01 + lvid * 0.01);
+		return 0.8;
 	}
 
 }

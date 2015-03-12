@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -134,7 +135,9 @@ class WiWorldData {
 			if(excl.contains(chan))
 				continue;
 			TileEntity tile = (TileEntity) node;
-			double td = GenericUtils.distanceSq(tile.xCoord, tile.yCoord, tile.zCoord, x, y, z);
+			double td = GenericUtils.distanceSq(
+				new double[] { tile.xCoord, tile.yCoord, tile.zCoord }, 
+				new double[] { x, y, z });
 			if(td < rsq) {
 				excl.add(chan);
 				ret.add(lookup.get(node));
@@ -148,6 +151,7 @@ class WiWorldData {
 	private Set<Pair<IWirelessNode, String>> getNodesInChunk(Set<String> excl, int cx, int cz, int x, int y, int z, double rsq, int max) {
 		List<IWirelessNode> nodes = getNodeList(rawGetChunkKey(cx, cz));
 		Set<Pair<IWirelessNode, String>> ret = new HashSet();
+		
 		for(IWirelessNode node : nodes) {
 			String chan = lookup.get(node);
 			if(excl.contains(chan))

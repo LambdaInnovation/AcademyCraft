@@ -31,6 +31,7 @@ import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
+import cn.liutils.util.ExpUtils;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -113,7 +114,7 @@ public class PageSkills extends DevSubpage {
 			final boolean fullyLearned;
 			final boolean canUpgrade;
 			final int level;
-			final int expectedExp;
+			final int expectedExp, expectedExpLevel;
 			final int expectedEnergy;
 			
 
@@ -131,6 +132,7 @@ public class PageSkills extends DevSubpage {
 				Pair<Integer, Double> exp = 
 					base.dev.getExpectation(TileDeveloper.getAction(TileDeveloper.ID_SKILL_ACQUIRE, id), base.data);
 				expectedExp = exp.first;
+				expectedExpLevel = ExpUtils.getLevel(expectedExp);
 				expectedEnergy = exp.second.intValue();
 			}
 			
@@ -183,7 +185,7 @@ public class PageSkills extends DevSubpage {
 				
 				if(!fullyLearned) {
 					RenderUtils.bindColor(base.EXP_INDI_COLOR);
-					ACUtils.drawText(String.valueOf(expectedExp), 37, 20, 5.5);
+					ACUtils.drawText(String.format("%d (lv%d)", expectedExp, expectedExpLevel), 37, 20, 5.5);
 					
 					RenderUtils.bindColor(base.EU_INDI_COLOR);
 					ACUtils.drawText(String.valueOf(expectedEnergy), 80, 20, 5.5);

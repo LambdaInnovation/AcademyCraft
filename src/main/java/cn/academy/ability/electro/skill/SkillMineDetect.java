@@ -224,7 +224,7 @@ public class SkillMineDetect extends SkillBase {
 		}
 		
 		private float calcAlpha(double x, double y, double z, double range) {
-			double jdg = 1 - GenericUtils.distance(x, y, z) / range * 2.2;
+			double jdg = 1 - GenericUtils.vecLen(x, y, z) / range * 2.2;
 			return 0.3f + (float) (jdg * 0.7);
 		}
 		

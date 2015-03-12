@@ -13,6 +13,7 @@
 package cn.academy.core.client.gui.dev;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -130,7 +131,7 @@ public class PageMain extends Widget {
 
 	private void drawPlayer() {
 		EntityPlayer player = dev.user;
-		RenderUtils.loadTexture(RenderUtils.STEVE_TEXTURE);
+		RenderUtils.loadTexture(((AbstractClientPlayer)player).getLocationSkin());
 		float x = 100, y = 100, scale = 2.1F;
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

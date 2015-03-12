@@ -23,6 +23,7 @@ import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.api.gui.widget.StateButton;
+import cn.liutils.util.ExpUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.misc.Pair;
@@ -114,7 +115,7 @@ public class PageLearn extends DevSubpage {
 				Pair<Integer, Double> exp = base.dev.getExpectation(ida, base.data);
 				
 				RenderUtils.bindColor(base.EXP_INDI_COLOR);
-				ACUtils.drawText(String.format("%d", exp.first), 70, 59, 5.8F);
+				ACUtils.drawText(String.format("%d (lv%d)", exp.first, ExpUtils.getLevel(exp.first)), 70, 59, 5.8F);
 				
 				RenderUtils.bindColor(base.EU_INDI_COLOR);
 				ACUtils.drawText(String.format("%.0f", exp.second), 70, 67, 5.8F);

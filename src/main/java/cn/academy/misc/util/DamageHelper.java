@@ -38,7 +38,6 @@ public class DamageHelper {
 	
 	public static void explode(World world, Entity entity, float strengh,
 			double radius, double posX, double posY, double posZ, float adddmg) {
-		System.out.println(destroyTerrain);
 		GenericUtils.explode(world, entity, strengh, radius, posX, posY, posZ, adddmg, destroyTerrain);
 	}
 

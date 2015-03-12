@@ -142,8 +142,8 @@ public class SkillMagMove extends SkillBase {
 				dy = ty - player.posY,
 				dz = tz - player.posZ;
 			
-			if(Math.abs(GenericUtils.distanceSq(mox, moy, moz) - 
-			GenericUtils.distanceSq(player.motionX, player.motionY, player.motionZ)) > 0.5) {
+			if(Math.abs(GenericUtils.vecLenSq(mox, moy, moz) - 
+			GenericUtils.vecLenSq(player.motionX, player.motionY, player.motionZ)) > 0.5) {
 				mox = player.motionX;
 				moy = player.motionY;
 				moz = player.motionZ;
