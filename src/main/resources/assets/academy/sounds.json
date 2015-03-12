@@ -9,6 +9,8 @@
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
 "elec.mineview": {"category": "master", "sounds": [{"name": "elec/mineview", "stream": false}]},
 "elec.railgun": {"category": "master", "sounds": [{"name": "elec/railgun", "stream": false}]},
+"elec.lf": {"category": "master", "sounds": [{"name": "elec/lf", "stream": false}]},
+"elec.lf_loop": {"category": "master", "sounds": [{"name": "elec/lf_loop", "stream": false}]},
 
 "elec.move.0": {"category": "master", "sounds": [{"name": "elec/move/0", "stream": false}]},
 "elec.move.1": {"category": "master", "sounds": [{"name": "elec/move/1", "stream": false}]},
@@ -28,11 +30,16 @@
 "md.charges.3": {"category": "master", "sounds": [{"name": "md/charges/3", "stream": false}]},
 "md.charges.4": {"category": "master", "sounds": [{"name": "md/charges/4", "stream": false}]},
 
+"elec.buff_activate": {"category": "master", "sounds": [{"name": "elec/buff_activate", "stream": false}]},
+"elec.buff_loop": {"category": "master", "sounds": [{"name": "elec/buff_loop", "stream": false}]},
+
 "md.ballshoot": {"category": "master", "sounds": [{"name": "md/ballshoot", "stream": false}]},
 "md.ray_small": {"category": "master", "sounds": [{"name": "md/ray_small", "stream": false}]},
 "md.shield_startup": {"category": "master", "sounds": [{"name": "md/shield_startup", "stream": false}]},
 "md.shield_loop": {"category": "master", "sounds": [{"name": "md/shield_loop", "stream": false}]},
 "md.meltdowner": {"category": "master", "sounds": [{"name": "md/meltdowner", "stream": false}]},
+"md.mine_advanced": {"category": "master", "sounds": [{"name": "md/mine_advanced", "stream": false}]},
+"md.mine_simple": {"category": "master", "sounds": [{"name": "md/mine_simple", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},

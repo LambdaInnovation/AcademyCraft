@@ -71,7 +71,9 @@ public class SkillMeltDowner extends SkillBase {
 		}
 
 		@Override
-		public void onStart() {}
+		public void onStart() {
+			player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner_prepare", 0.5f, 1.0f);
+		}
 
 		@Override
 		public boolean onFinish(boolean res) {

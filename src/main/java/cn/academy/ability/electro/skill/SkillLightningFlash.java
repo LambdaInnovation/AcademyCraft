@@ -27,6 +27,7 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
+import cn.academy.misc.util.LoopSoundPlayer;
 import cn.liutils.util.GenericUtils;
 
 /**
@@ -75,6 +76,9 @@ public class SkillLightningFlash extends SkillBase {
 			}
 			
 			//give buff
+			player.worldObj.playSoundAtEntity(player, "academy:elec.lf", .5f, 1f);
+			LoopSoundPlayer.dispatch(new LoopSoundPlayer(player, "academy:elec.lf_loop", time, 120));
+			
 			if(!player.worldObj.isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, time, 4));
 				player.addPotionEffect(new PotionEffect(Potion.jump.id, time, 4));

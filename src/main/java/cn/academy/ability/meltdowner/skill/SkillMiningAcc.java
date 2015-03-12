@@ -76,6 +76,7 @@ public class SkillMiningAcc extends SkillMiningBase {
 	}
 
 	public SkillMiningAcc() {
+		super(1.4f);
 		this.setLogo("meltdowner/mine_acc.png");
 		this.setName("md_mineacc");
 		setMaxLevel(10);

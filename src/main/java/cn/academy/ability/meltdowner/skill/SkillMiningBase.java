@@ -13,7 +13,7 @@
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.meltdowner.entity.EntityMdBall;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.meltdowner.entity.EntityMiningRayBase;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
@@ -21,7 +21,7 @@ import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.ctrl.pattern.PatternHold.State;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.liutils.api.entityx.EntityX.EntityCallback;
+import cn.liutils.util.ClientUtils;
 
 /**
  * @author WeathFolD
@@ -29,10 +29,16 @@ import cn.liutils.api.entityx.EntityX.EntityCallback;
  */
 public abstract class SkillMiningBase extends SkillBase {
 	
-	/**
-	 * 
-	 */
-	public SkillMiningBase() {
+	static final int LOOP_TIME = 55;
+	
+	ResourceLocation loopSrc;
+	String loopName;
+	float pitch;
+	
+	public SkillMiningBase(float _pitch) {
+		pitch = _pitch;
+		loopName = "academy:md.mine_simple";
+		loopSrc = new ResourceLocation(loopName);
 	}
 	
 	@Override
@@ -94,6 +100,14 @@ public abstract class SkillMiningBase extends SkillBase {
 		
 		@Override
 		public boolean onTick(int ticks) {
+			if((ticks - 1) % LOOP_TIME == 0) {
+				if(isRemote()) {
+					ClientUtils.playSound(instance.loopSrc, instance.pitch);
+				} else {
+					player.playSound(instance.loopName, 1.0f, instance.pitch);
+				}
+			}
+			
 			if(isRemote())
 				return false;
 			return !data.decreaseCP(ccp, instance);

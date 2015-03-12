@@ -121,7 +121,12 @@ public class SkillScatterBomb extends SkillBase {
 		@Override
 		public boolean onFinish(boolean res) {
 			final boolean b = this.getTickTime() < 200 && res;
-			if(!b) return false;
+			if(!b) {
+				for(EntityMdBall ball : balls) {
+					ball.setDead();
+				}
+				return false;
+			}
 			
 			final int slv = data.getSkillLevel(CatMeltDowner.scatterBomb), lv = data.getLevelID() + 1;
 			if(!player.worldObj.isRemote) {
@@ -139,6 +144,10 @@ public class SkillScatterBomb extends SkillBase {
 		
 		@Override
 		public boolean onTick(int ticks) {
+			if((ticks - 1) % 40 == 0) {
+				CatMeltDowner.playChargeSSnd(player, rand.nextInt(100));
+			}
+			
 			if(ticks >= 240)
 				return true;
 			if(!isRemote() && ticks <= 110 && (ticks - 20) % 15 == 0) {

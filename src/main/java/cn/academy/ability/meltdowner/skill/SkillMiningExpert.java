@@ -64,6 +64,7 @@ public class SkillMiningExpert extends SkillMiningBase {
 	 * 
 	 */
 	public SkillMiningExpert() {
+		super(1.4f);
 		this.setLogo("meltdowner/mine_expert.png");
 		this.setName("md_mineexpert");
 		setMaxLevel(15);

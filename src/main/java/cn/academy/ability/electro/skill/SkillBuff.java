@@ -31,6 +31,7 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.render.SkillRenderManager;
 import cn.academy.core.client.render.SkillRenderManager.RenderNode;
+import cn.academy.misc.util.LoopSoundPlayer;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.GenericUtils;
@@ -114,13 +115,20 @@ public class SkillBuff extends SkillBase {
 		public boolean onFinish(boolean fin) {
 			if(isRemote()) {
 				node.setDead();
+				if(good) {
+					int time = Math.min(this.getTickTime(), 60);
+					int life = GenericUtils.randIntv(2, 4) * time * 
+							(data.getSkillID(CatElectro.buff) + data.getLevelID() * 2);
+					LoopSoundPlayer.dispatch(new LoopSoundPlayer(player, "academy:elec.buff_loop", 
+							Math.min(320, life), 120));
+				}
 				return good;
 			} 
 			
 			if(good) {
-				int time = Math.min(this.getTickTime(), 60); //TODO: Change to min(real tick, 60)
+				int time = Math.min(this.getTickTime(), 60);
 				double prob = (time - 10) / 18.0;
-				int life = GenericUtils.randIntv(2, 4) * time * 
+				int life = GenericUtils.randIntv(1, 2) * time * 
 						(data.getSkillID(CatElectro.buff) + data.getLevelID() * 2);
 				int level = (int) prob;
 				
@@ -135,6 +143,10 @@ public class SkillBuff extends SkillBase {
 				} else {
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 18, 8));
 				}
+				
+				player.worldObj.playSoundAtEntity(player, "academy:elec.buff_activate", 0.5f, 1.0f);
+				LoopSoundPlayer.dispatch(new LoopSoundPlayer(player, 
+						"academy:elec.buff_loop", Math.min(320, life), 120));
 			}
 			return good;
 		}
