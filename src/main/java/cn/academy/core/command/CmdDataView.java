@@ -43,7 +43,7 @@ public class CmdDataView extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/aview <full>";
+		return "/aview";
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class CmdDataView extends LICommandBase {
 		sendChat(ics, "lv : " + data.getLevelID());
 		sendChat(ics, "cp : " + data.getCurrentCP() + "/" + data.getMaxCP());
 		if(args.length >= 1 && args[0].equalsIgnoreCase("full")) {
-			sendChat(ics, "opn: " + DebugUtils.formatArray(data.getSkillLevelArray()));
+			sendChat(ics, "slv: " + DebugUtils.formatArray(data.getSkillLevelArray()));
 			sendChat(ics, "exp: " + DebugUtils.formatArray(data.getSkillExpArray()));
 		}
 		String open = "open: ";

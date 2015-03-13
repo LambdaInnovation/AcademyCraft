@@ -55,7 +55,7 @@ public class AcademyCraft {
 	/**
 	 * 当前版本
 	 */
-	public static final String VERSION = "1.0alpha4";
+	public static final String VERSION = "1.0beta1";
 
 	public static final String NET_CHANNEL = "academy-network";
 
@@ -91,18 +91,12 @@ public class AcademyCraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
-        RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_CONFIGURABLE);
-		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_KEYHANDLER);
-		RegistrationManager.INSTANCE.registerAll(this, LIUtils.REGISTER_TYPE_RENDER_HOOK);
-		
 		RegistrationManager.INSTANCE.registerAll(this, "PreInit");
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
-        
-        RegistrationManager.INSTANCE.registerAll(this, ExtendedDataRegistration.ID);
         
         ACMiscReg.regRecipe();
         ACMiscReg.regSmelting();
@@ -111,7 +105,6 @@ public class AcademyCraft {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
-        RegistrationManager.INSTANCE.registerAll(this, "Texture");
 	}
 	
 	@EventHandler()
@@ -121,7 +114,6 @@ public class AcademyCraft {
         
         //Manually register for debug testing
         if(ACCommonProps.debugMode) {
-        	ch.registerCommand(new CmdDataSet());
         	ch.registerCommand(new CmdDataView());
         }
         
