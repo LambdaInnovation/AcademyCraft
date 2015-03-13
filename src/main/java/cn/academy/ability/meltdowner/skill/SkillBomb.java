@@ -64,7 +64,7 @@ public class SkillBomb extends SkillBase {
 		public void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillLevel(CatMeltDowner.bomb), lv = data.getLevelID() + 1;
-			if(data.decreaseCP(getConsume(slv, lv))) {
+			if(data.decreaseCP(getConsume(slv, lv), CatMeltDowner.bomb)) {
 			
 				if(!isRemote()) {
 					player.worldObj.spawnEntityInWorld(new EntityBomb(player, getDamage(slv, lv)));

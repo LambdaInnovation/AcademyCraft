@@ -71,12 +71,12 @@ public class SkillMiningAcc extends SkillMiningBase {
 
 		@Override
 		public float getRayWidth() {
-			return .35f;
+			return .8f;
 		}
 	}
 
 	public SkillMiningAcc() {
-		super(1.4f);
+		super("academy:md.mine_acc_startup", "academy:md.mine_simple_loop");
 		this.setLogo("meltdowner/mine_acc.png");
 		this.setName("md_mineacc");
 		setMaxLevel(10);

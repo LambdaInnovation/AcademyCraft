@@ -27,7 +27,7 @@ public class DevActionDevelop implements IDevAction {
 
 	@Override
 	public int getExpectedStims(AbilityData data) {
-		return 9;
+		return 6;
 	}
 
 	@Override

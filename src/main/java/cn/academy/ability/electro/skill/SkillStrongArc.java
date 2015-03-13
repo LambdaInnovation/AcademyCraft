@@ -80,13 +80,13 @@ public class SkillStrongArc extends SkillBase {
 				if(consumeCP()){
 					player.worldObj.spawnEntityInWorld(new StrongArc(player));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
-				}
+				} else finishSkill(false);
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 500);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS.Strong(player, 40, 5));
 					player.playSound("academy:elec.strong", 0.5F, 1.0F);
-				}
+				} else finishSkill(false);
 			}
 		}
 		

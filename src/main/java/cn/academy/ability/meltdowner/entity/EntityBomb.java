@@ -76,7 +76,7 @@ public class EntityBomb extends EntityMdBall {
 			
 		});
 		
-		CatMeltDowner.playChargeSSnd(this, rand.nextInt(200));
+		player.worldObj.playSoundAtEntity(player, "academy:md.simple_charge", .5f, 1f);
 	}
 
 	public EntityBomb(World world) {

@@ -24,12 +24,6 @@
 "elec.charge.3": {"category": "master", "sounds": [{"name": "elec/charge/3", "stream": false}]},
 "elec.charge.4": {"category": "master", "sounds": [{"name": "elec/charge/4", "stream": false}]},
 
-"md.charges.0": {"category": "master", "sounds": [{"name": "md/charges/0", "stream": false}]},
-"md.charges.1": {"category": "master", "sounds": [{"name": "md/charges/1", "stream": false}]},
-"md.charges.2": {"category": "master", "sounds": [{"name": "md/charges/2", "stream": false}]},
-"md.charges.3": {"category": "master", "sounds": [{"name": "md/charges/3", "stream": false}]},
-"md.charges.4": {"category": "master", "sounds": [{"name": "md/charges/4", "stream": false}]},
-
 "elec.buff_activate": {"category": "master", "sounds": [{"name": "elec/buff_activate", "stream": false}]},
 "elec.buff_loop": {"category": "master", "sounds": [{"name": "elec/buff_loop", "stream": false}]},
 
@@ -38,12 +32,16 @@
 "md.shield_startup": {"category": "master", "sounds": [{"name": "md/shield_startup", "stream": false}]},
 "md.shield_loop": {"category": "master", "sounds": [{"name": "md/shield_loop", "stream": false}]},
 "md.meltdowner": {"category": "master", "sounds": [{"name": "md/meltdowner", "stream": false}]},
-"md.mine_advanced": {"category": "master", "sounds": [{"name": "md/mine_advanced", "stream": false}]},
-"md.mine_simple": {"category": "master", "sounds": [{"name": "md/mine_simple", "stream": false}]},
+"md.mine_simple_startup": {"category": "master", "sounds": [{"name": "md/mine_simple_startup", "stream": false}]},
+"md.mine_acc_startup": {"category": "master", "sounds": [{"name": "md/mine_acc_startup", "stream": false}]},
+"md.mine_luck_startup": {"category": "master", "sounds": [{"name": "md/mine_luck_startup", "stream": false}]},
+"md.mine_simple_loop": {"category": "master", "sounds": [{"name": "md/mine_simple_loop", "stream": false}]},
+"md.simple_charge": {"category": "master", "sounds": [{"name": "md/simple_charge", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
 "silbarn_heavy": {"category": "master", "sounds": [{"name": "silbarn_heavy", "stream": false}]},
+"silbarn_light": {"category": "master", "sounds": [{"name": "silbarn_light", "stream": false}]},
 
 "tp.tp": {"category": "master", "sounds": [{"name": "tp/tp", "stream": false}]},
 "tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]},

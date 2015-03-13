@@ -29,15 +29,14 @@ import cn.liutils.util.ClientUtils;
  */
 public abstract class SkillMiningBase extends SkillBase {
 	
-	static final int LOOP_TIME = 55;
+	static final int LOOP_TIME = 60;
 	
-	ResourceLocation loopSrc;
-	String loopName;
-	float pitch;
+	final ResourceLocation loopSrc;
+	final String loopName, startName;
 	
-	public SkillMiningBase(float _pitch) {
-		pitch = _pitch;
-		loopName = "academy:md.mine_simple";
+	public SkillMiningBase(String _startName, String _loopName) {
+		loopName = _loopName;
+		startName = _startName;
 		loopSrc = new ResourceLocation(loopName);
 	}
 	
@@ -83,6 +82,7 @@ public abstract class SkillMiningBase extends SkillBase {
 		@Override
 		public void onStart() {
 			if(!isRemote()) {
+				player.worldObj.playSoundAtEntity(player, instance.startName, .5f, 1f);
 				player.worldObj.spawnEntityInWorld(ray);
 			}
 		}
@@ -102,9 +102,9 @@ public abstract class SkillMiningBase extends SkillBase {
 		public boolean onTick(int ticks) {
 			if((ticks - 1) % LOOP_TIME == 0) {
 				if(isRemote()) {
-					ClientUtils.playSound(instance.loopSrc, instance.pitch);
+					ClientUtils.playSound(instance.loopSrc, 1f);
 				} else {
-					player.playSound(instance.loopName, 1.0f, instance.pitch);
+					player.playSound(instance.loopName, 1.0f, 1f);
 				}
 			}
 			

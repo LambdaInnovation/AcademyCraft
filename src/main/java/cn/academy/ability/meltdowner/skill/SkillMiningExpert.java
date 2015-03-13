@@ -56,7 +56,7 @@ public class SkillMiningExpert extends SkillMiningBase {
 
 		@Override
 		public float getRayWidth() {
-			return .3f;
+			return .8f;
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class SkillMiningExpert extends SkillMiningBase {
 	 * 
 	 */
 	public SkillMiningExpert() {
-		super(1.4f);
+		super("academy:md.mine_simple_startup", "academy:md.mine_simple_loop");
 		this.setLogo("meltdowner/mine_expert.png");
 		this.setName("md_mineexpert");
 		setMaxLevel(15);

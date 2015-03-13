@@ -58,6 +58,8 @@ public class AbilityData implements IExtendedEntityProperties {
 	 * This allows other mod built-in skills to fast save and retreive data.
 	 */
 	NBTTagCompound miscData = new NBTTagCompound();
+	
+	int recoverCd; //Countdown, 0 means not counting (can recover)
 
 	/**
 	 * Create an AbilityData for the player with the empty category.
@@ -335,24 +337,6 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 	}
 	
-	/**
-	 * use decreaseCP(float need, SkillBase) instead.
-	 * @return if decrease action is successful
-	 */
-	@Deprecated
-	public boolean decreaseCP(float need) {
-		return decreaseCP(need, getSkill(0), false);
-	}
-	
-	/**
-	 * use decreaseCP(float need, SkillBase, boolean force) instead.
-	 * @return if decrease action is successful
-	 */
-	@Deprecated
-	public boolean decreaseCP(float need, boolean force) {
-		return decreaseCP(need, getSkill(0), force);
-	}
-	
 	public boolean decreaseCP(float need, SkillBase skill) {
 		return decreaseCP(need, skill, false);
 	}
@@ -370,6 +354,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		addSkillExp(sid, getSexpForCP(need));
 		setMaxCP(Math.min(this.getMaxCP() + this.getMaxCPIncr(need), this.getLevel().getMaxCP()));
 		setCurrentCP(ret ? currentCP - need : 0);
+		recoverCd = 20;
 		
 		return ret;
 	}
@@ -543,7 +528,9 @@ public class AbilityData implements IExtendedEntityProperties {
 		} else {
 			tickCount++;
 		}
-		recoverCP();
+		if(recoverCd > 0) {
+			--recoverCd;
+		} else recoverCP();
 	}
 	
 	public void markDirty() {

@@ -74,9 +74,4 @@ public class CatMeltDowner extends Category {
 	public String getInternalName() {
 		return "meltdowner";
 	}
-	
-	//Sandbox utils
-	public static void playChargeSSnd(Entity player, int n) {
-		player.worldObj.playSoundAtEntity(player, "academy:md.charges." + (n % 5), .5f, 1f);
-	}
 }

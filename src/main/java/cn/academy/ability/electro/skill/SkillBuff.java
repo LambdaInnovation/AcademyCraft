@@ -106,7 +106,7 @@ public class SkillBuff extends SkillBase {
 		
 		@Override
 		protected boolean onTick(int time) {
-			boolean b = time >= 60 || data.decreaseCP(consume);
+			boolean b = time >= 60 || data.decreaseCP(consume, CatElectro.buff);
 			good = good && b;
 			return !b;
 		}

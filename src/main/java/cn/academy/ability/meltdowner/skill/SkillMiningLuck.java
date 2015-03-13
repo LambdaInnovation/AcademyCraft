@@ -70,12 +70,12 @@ public class SkillMiningLuck extends SkillMiningBase {
 
 		@Override
 		public float getRayWidth() {
-			return .35f;
+			return .8f;
 		}
 	}
 
 	public SkillMiningLuck() {
-		super(1.4f);
+		super("academy:md.mine_luck_startup", "academy:md.mine_simple_loop");
 		this.setLogo("meltdowner/mine_luck.png");
 		this.setName("md_mineluck");
 		setMaxLevel(10);

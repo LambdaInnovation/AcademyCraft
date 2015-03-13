@@ -17,12 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import cn.academy.api.IOverrideItemUse;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.client.gui.GuiMainScreen;
+import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
@@ -58,7 +60,13 @@ public class ACEventListener {
 		if(activated(event.entityPlayer) && !override(stack)) {
 			if(!(stack != null && stack.getItem() == ACItems.ivoid) && 
 					event.entityPlayer.worldObj.isRemote) {
-				onFail();
+				boolean b = false;
+				if(event.action == Action.LEFT_CLICK_BLOCK) {
+					b = !EventHandlerClient.isSkillMapped(0);
+				} else {
+					b = !EventHandlerClient.isSkillMapped(1);
+				}
+				if(b) onFail();
 			}
 			event.setCanceled(true);
 		}
@@ -67,7 +75,7 @@ public class ACEventListener {
 	@SubscribeEvent
 	public void onStartUseItem(PlayerUseItemEvent.Start event) {
 		if(activated(event.entityPlayer) && override(event.item)) {
-			if(event.item.getItem() != ACItems.ivoid && event.entityPlayer.worldObj.isRemote) {
+			if(event.item.getItem() != ACItems.ivoid && event.entityPlayer.worldObj.isRemote && !EventHandlerClient.isSkillMapped(1)) {
 				onFail();
 			}
 			event.setCanceled(true);

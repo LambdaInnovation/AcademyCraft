@@ -84,13 +84,13 @@ public class SkillWeakArc extends SkillBase {
 					player.worldObj.spawnEntityInWorld(
 						new WeakArc(player));
 					player.playSound("academy:elec.weak", 0.5F, 1.0F);
-				}
+				} else finishSkill(false);
 			} else {
 				if(consumeCP()) {
 					SkillRenderManager.addEffect(charge, 600);
 					player.worldObj.spawnEntityInWorld(new ChargeEffectS(player, 15, 5));
 					player.playSound("academy:elec.weak", 0.5F, 1.0F);
-				}
+				} else finishSkill(false);
 			}
 		}
 		
@@ -98,7 +98,7 @@ public class SkillWeakArc extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			int id = data.getSkillID(CatElectro.weakArc), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
 			float need = 250 - lv * (21 - lv) + 10 * clv * (15 - clv);
-			return data.decreaseCP(need);
+			return data.decreaseCP(need, CatElectro.weakArc);
 		}
 
 		@Override

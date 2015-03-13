@@ -180,11 +180,14 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	public static class RenderMD extends RendererRayTiling<EntityMeltDowner> {
 		public RenderMD() {
 			super(null);
-			this.widthFp = 0.9;
-			this.widthTp = 1.6;
+			this.widthFp = 1.7;
+			this.widthTp = 2.8;
+			this.fpOffsetX = -0.18;
+			this.fpOffsetY = -0.05;
 		}
 		
 		protected ResourceLocation nextTexture(EntityMeltDowner ent, int i) {
+			this.fpOffsetX = -0.5;
 			return ent.getTexData()[i == 0 ? 0 : ent.seq.get(i % ent.seq.size()) + 1];
 		}
 	}

@@ -78,6 +78,7 @@ public class EntitySilbarn extends EntityX {
 			@Override
 			protected void onCollided(MovingObjectPosition res) {
 				this.alive = false;
+				playSound("academy:silbarn_light", .5f, 1f);
 				execAfter(10, new EntityCallback() {
 					@Override
 					public void execute(EntityX ent) {

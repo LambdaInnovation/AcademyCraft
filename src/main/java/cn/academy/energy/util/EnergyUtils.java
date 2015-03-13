@@ -62,7 +62,7 @@ public class EnergyUtils {
 	}
 	
 	public static boolean isElecItem(ItemStack stack) {
-		return stack.getItem() instanceof IElectricItem;
+		return stack != null && stack.getItem() instanceof IElectricItem;
 	}
 
 	public static int tryCharge(ItemStack stack, int amt) {

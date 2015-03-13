@@ -25,6 +25,8 @@ public class RenderMdRayBase <T extends EntityMdRayBase> extends RendererRayBlen
 		super(null,
 			  null,
 			 1);
+		this.fpOffsetX = -0.18;
+		this.fpOffsetY = -0.05;
 	}
 	
 	@Override

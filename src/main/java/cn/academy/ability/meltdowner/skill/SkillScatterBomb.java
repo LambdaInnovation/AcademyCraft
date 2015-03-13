@@ -144,8 +144,8 @@ public class SkillScatterBomb extends SkillBase {
 		
 		@Override
 		public boolean onTick(int ticks) {
-			if((ticks - 1) % 40 == 0) {
-				CatMeltDowner.playChargeSSnd(player, rand.nextInt(100));
+			if((ticks - 1) % 20 == 0) {
+				player.worldObj.playSoundAtEntity(player, "academy:md.simple_charge", .5f, 1f);
 			}
 			
 			if(ticks >= 240)

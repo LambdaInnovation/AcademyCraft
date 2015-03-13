@@ -292,7 +292,7 @@ public class SkillMagMove extends SkillBase {
 			if(!isRemote() && (ticks - 1) % 40 == 0) {
 				playSound(player, ((ticks - 1) / 40) % 5);
 			}
-			return !data.decreaseCP(csm);
+			return !data.decreaseCP(csm, CatElectro.magMovement);
 		}
 
 		@Override

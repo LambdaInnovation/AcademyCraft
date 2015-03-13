@@ -161,7 +161,7 @@ public class SkillItemCharge extends SkillBase {
 			if(!EnergyUtils.isElecItem(stack)) {
 				return true;
 			}
-			if(data.decreaseCP(cpt)) {
+			if(data.decreaseCP(cpt, CatElectro.itemCharge)) {
 				EnergyUtils.tryCharge(stack, chg);
 			} else {
 				return true;
@@ -190,7 +190,7 @@ public class SkillItemCharge extends SkillBase {
 
 		@Override
 		public boolean tick() {
-			return !data.decreaseCP(cpt);
+			return !data.decreaseCP(cpt, CatElectro.itemCharge);
 		}
 
 		@Override
