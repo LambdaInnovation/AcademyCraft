@@ -118,12 +118,13 @@ public class ACMiscReg {
 		}
 	}
 	
-	@RegChestContent({0, 1, 2, 3})
+	//TODO: Not add until fixed the bug.
+/*	@RegChestContent({0, 1, 2, 3})
 	public static ACChestContent record0 = new ACChestContent(new ItemStack(ACItems.record0), 1, 1, 5);
 	@RegChestContent({0, 1, 2, 3})
 	public static ACChestContent record1 = new ACChestContent(new ItemStack(ACItems.record1), 1, 1, 5);
 	@RegChestContent({0, 1, 2, 3})
-	public static ACChestContent record2 = new ACChestContent(new ItemStack(ACItems.record2), 1, 1, 5);
+	public static ACChestContent record2 = new ACChestContent(new ItemStack(ACItems.record2), 1, 1, 5);*/
 	
 	@RegWorldGen(2)
 	public static ACWorldGen oreGen;
