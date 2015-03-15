@@ -89,6 +89,8 @@ public class ACMiscReg {
 				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
 		GameRegistry.addRecipe(new ItemStack(ACItems.needle, 6), " a ", " a ", " a ",
 				'a', Items.iron_ingot);
+		GameRegistry.addRecipe(new ItemStack(ACItems.energyCrystal), "aaa", "bcb", "aaa",
+				'a', ACItems.crystal, 'b', ACItems.siliconRod, 'c', ACItems.ingotMg);
 	}
 	
 	public static void regSmelting() {
