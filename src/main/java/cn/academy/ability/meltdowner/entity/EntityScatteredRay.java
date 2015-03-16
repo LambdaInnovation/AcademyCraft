@@ -12,9 +12,7 @@
  */
 package cn.academy.ability.meltdowner.entity;
 
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -61,6 +59,7 @@ public class EntityScatteredRay extends EntityMdRayBase {
 		dmg = (float) (GenericUtils.randIntv(0.4, 0.7) * md.dmg);
 	}
 	
+	@Override
 	public MovingObjectPosition performTrace() {
 		Motion3D mo = new Motion3D(this, true);
 		Vec3 v1 = mo.getPosVec(worldObj), v2 = mo.move(getDefaultRayLen()).getPosVec(worldObj);

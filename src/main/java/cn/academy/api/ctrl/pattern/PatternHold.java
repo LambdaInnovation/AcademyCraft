@@ -12,12 +12,10 @@
  */
 package cn.academy.api.ctrl.pattern;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ctrl.SkillEventType;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.SkillStateManager;
-import cn.annoreg.mc.RegMessageHandler.Side;
 
 public abstract class PatternHold extends Pattern {
 	
@@ -30,6 +28,7 @@ public abstract class PatternHold extends Pattern {
 		@Override
 		public boolean onFinish(boolean state) { return false; }
 		public void onHold() {}
+		@Override
 		public final boolean isRemote() {
 			return player.worldObj.isRemote;
 		}

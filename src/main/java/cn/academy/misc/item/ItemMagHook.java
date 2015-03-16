@@ -67,7 +67,8 @@ public class ItemMagHook extends Item implements IOverrideItemUse {
     		this.setEquipOffset(1, 0, 0);
     	}
     	
-    	protected void renderAtStdPosition(float i) {
+    	@Override
+		protected void renderAtStdPosition(float i) {
     		this.setOffset(0, 0, 1);
     		this.setEquipOffset(0.5, 0.1, 0);
     		super.renderAtStdPosition(i);

@@ -17,12 +17,9 @@ import cn.academy.core.client.render.RenderVoid;
 import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
 import cn.academy.energy.item.ItemFreqRegulator;
-import cn.academy.misc.client.render.RendererCoin;
-import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ItemCoin;
 import cn.academy.misc.item.ItemMagHook;
-import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemSilbarn;
 import cn.annoreg.core.RegWithName;
@@ -44,12 +41,13 @@ public class ACItems {
 	@RegItem.UTName("logo")
 	public static Item logo;
 	
-	@RegItem
-	public static ACRecord record0 = new ACRecord(0);
-	@RegItem
-	public static ACRecord record1 = new ACRecord(1);
-	@RegItem
-	public static ACRecord record2 = new ACRecord(2);
+	//TODO: Fuck forge
+	//@RegItem
+	//public static ACRecord record0 = new ACRecord(0);
+	//@RegItem
+	//public static ACRecord record1 = new ACRecord(1);
+	//@RegItem
+	//public static ACRecord record2 = new ACRecord(2);
 	
 	@RegItem
 	@RegItem.HasRender

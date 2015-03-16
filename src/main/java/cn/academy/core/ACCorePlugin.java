@@ -13,8 +13,6 @@
 package cn.academy.core;
 
 import java.util.Map;
-import java.util.Map.Entry;
-
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 /**

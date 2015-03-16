@@ -5,8 +5,6 @@ import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
 import cn.liutils.util.GenericUtils;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -14,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * All credits of this class' code goes to IC2 team.
  */
 public class IC2DefaultEIManager implements IElectricItemManager {
+	@Override
 	public int charge(ItemStack stack, int charge, int tier,
 			boolean ignoreTransferLimit, boolean simulate) {
 		IElectricItem item = (IElectricItem) stack.getItem();
@@ -64,6 +63,7 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		return charge;
 	}
 
+	@Override
 	public int discharge(ItemStack stack, int charge, int tier,
 			boolean ignoreTransferLimit, boolean simulate) {
 		IElectricItem item = (IElectricItem) stack.getItem();
@@ -114,15 +114,18 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		return charge;
 	}
 
+	@Override
 	public int getCharge(ItemStack itemStack) {
 		return ElectricItem.manager.discharge(itemStack, 2147483647,
 				2147483647, true, true);
 	}
 
+	@Override
 	public boolean canUse(ItemStack itemStack, int amount) {
 		return ElectricItem.manager.getCharge(itemStack) >= amount;
 	}
 
+	@Override
 	public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
 		ElectricItem.manager.chargeFromArmor(itemStack, entity);
 
@@ -139,6 +142,7 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		return false;
 	}
 
+	@Override
 	public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity) {
 		boolean inventoryChanged = false;
 
@@ -170,6 +174,7 @@ public class IC2DefaultEIManager implements IElectricItemManager {
 		}
 	}
 
+	@Override
 	public String getToolTip(ItemStack itemStack) {
 		IElectricItem item = (IElectricItem) itemStack.getItem();
 

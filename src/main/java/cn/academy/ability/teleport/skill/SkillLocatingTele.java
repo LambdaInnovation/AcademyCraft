@@ -21,7 +21,6 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.teleport.CatTeleport;
 import cn.academy.ability.teleport.client.gui.LocatingGuiBase;
-import cn.academy.ability.teleport.client.gui.LocatingGuiBase.GList;
 import cn.academy.ability.teleport.client.gui.LocatingGuiBase.GList.ListElem;
 import cn.academy.ability.teleport.data.LocationData.Location;
 import cn.academy.ability.teleport.msg.LocTeleMsg;
@@ -65,6 +64,7 @@ public class SkillLocatingTele extends SkillBase {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
+	@Override
 	public void initPattern(RawEventHandler reh) {
 		reh.addPattern(new PatternHold(40) { //TODO: Time settings invalid, wtf?
 
@@ -134,6 +134,7 @@ public class SkillLocatingTele extends SkillBase {
 			init();
 		}
 		
+		@Override
 		protected void init() {
 			super.init();
 			targX = (float) player.posX;
@@ -249,6 +250,7 @@ public class SkillLocatingTele extends SkillBase {
 	
 	@RegGuiHandler
 	public static GuiHandlerBase guiCreateHandler = new GuiHandlerBase() {
+		@Override
 		@SideOnly(Side.CLIENT)
 		protected GuiScreen getClientGui() {
 			return new LIGuiScreen(new GuiCreate()).setDrawBack(false);
@@ -257,6 +259,7 @@ public class SkillLocatingTele extends SkillBase {
 	
 	@RegGuiHandler
 	public static GuiHandlerBase guiSelectHandler = new GuiHandlerBase() {
+		@Override
 		@SideOnly(Side.CLIENT)
 		protected GuiScreen getClientGui() {
 			return new LIGuiScreen(new GuiSelect()).setDrawBack(false);

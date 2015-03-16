@@ -51,8 +51,10 @@ public class MsgFRInit implements IMessage {
 		List<Pair<IWirelessNode, String>> nearNodes = tile.getAvailableNodes(ItemFreqRegulator.LIST_MAX);
 		for(int i = 0; i < nearNodes.size() && i < ItemFreqRegulator.LIST_MAX; ++i) {
 			Pair<IWirelessNode, String> pair = nearNodes.get(i);
-			TileEntity te = (TileEntity) pair.first;
-			cnMap.put(pair.second, new int[] { te.xCoord, te.yCoord, te.zCoord });
+			if(pair.second != null) { //Temp fix to prevent crash
+				TileEntity te = (TileEntity) pair.first;
+				cnMap.put(pair.second, new int[] { te.xCoord, te.yCoord, te.zCoord });
+			}
 		}
 	}
 	

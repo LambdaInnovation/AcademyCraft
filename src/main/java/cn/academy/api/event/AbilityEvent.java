@@ -5,8 +5,6 @@ package cn.academy.api.event;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cn.academy.api.data.AbilityData;
-import cn.academy.api.data.AbilityDataMain;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 /**
@@ -24,7 +22,7 @@ public class AbilityEvent extends PlayerEvent {
 	
 	/**
 	 * Fired when player changes his category. At the moment the data is already in the changed state.
-	 * Fired only in server side.
+	 * Fired in both client and server side.
 	 */
 	public static class ChangeCategory extends AbilityEvent {
 		public ChangeCategory(AbilityData _data) {

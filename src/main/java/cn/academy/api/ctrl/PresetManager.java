@@ -13,10 +13,12 @@
 package cn.academy.api.ctrl;
 
 import net.minecraftforge.common.config.ConfigCategory;
+import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ctrl.EventHandlerClient;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Used by EventHandlerClient to store, find, switch, and modify presets.
@@ -198,5 +200,12 @@ public class PresetManager {
 			throw new RuntimeException("Cannot get the PresetManager instance.");
 		}
 		return presets;
+	}
+	
+	@SubscribeEvent
+	public void onCatChanged(AbilityEvent.ChangeCategory event) {
+		if(event.data.getPlayer().worldObj.isRemote) {
+			this.reset();
+		}
 	}
 }

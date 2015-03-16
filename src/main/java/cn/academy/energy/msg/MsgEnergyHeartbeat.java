@@ -16,7 +16,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.api.energy.IWirelessNode;
 import cn.academy.core.energy.WirelessSystem;
 import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.annoreg.core.RegistrationClass;
@@ -39,7 +38,7 @@ public class MsgEnergyHeartbeat implements IMessage {
 	boolean loaded;
 
 	public MsgEnergyHeartbeat(TileNodeBase node) {
-		TileEntity te = (TileEntity) node;
+		TileEntity te = node;
 		x = te.xCoord;
 		y = te.yCoord;
 		z = te.zCoord;

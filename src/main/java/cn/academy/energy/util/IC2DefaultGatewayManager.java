@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
  */
 public class IC2DefaultGatewayManager implements IElectricItemManager {
 
+	@Override
 	public int charge(ItemStack itemStack, int amount, int tier,
 			boolean ignoreTransferLimit, boolean simulate) {
 		Item item = itemStack.getItem();
@@ -45,6 +46,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 				ignoreTransferLimit, simulate);
 	}
 
+	@Override
 	public int discharge(ItemStack itemStack, int amount, int tier,
 			boolean ignoreTransferLimit, boolean simulate) {
 		Item item = itemStack.getItem();
@@ -64,6 +66,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 				ignoreTransferLimit, simulate);
 	}
 
+	@Override
 	public int getCharge(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 
@@ -77,6 +80,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 		return ElectricItem.rawManager.getCharge(itemStack);
 	}
 
+	@Override
 	public boolean canUse(ItemStack itemStack, int amount) {
 		Item item = itemStack.getItem();
 
@@ -92,6 +96,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 		return ElectricItem.rawManager.canUse(itemStack, amount);
 	}
 
+	@Override
 	public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
 		Item item = itemStack.getItem();
 
@@ -105,6 +110,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 		return ElectricItem.rawManager.use(itemStack, amount, entity);
 	}
 
+	@Override
 	public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity) {
 		Item item = itemStack.getItem();
 
@@ -118,6 +124,7 @@ public class IC2DefaultGatewayManager implements IElectricItemManager {
 			ElectricItem.rawManager.chargeFromArmor(itemStack, entity);
 	}
 
+	@Override
 	public String getToolTip(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 

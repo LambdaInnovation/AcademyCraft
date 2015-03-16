@@ -41,7 +41,7 @@ public class AbilityData implements IExtendedEntityProperties {
 	
 	public static final String IDENTIFIER = "ac_ability";
 	
-	private final EntityPlayer player;
+	EntityPlayer player;
 	
 	/*
 	 * These fields may be used by Messages.

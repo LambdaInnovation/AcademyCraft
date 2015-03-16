@@ -19,8 +19,6 @@ import java.util.Set;
 
 import net.minecraft.util.StatCollector;
 import cn.academy.api.data.AbilityData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Ability level providing skill learn info

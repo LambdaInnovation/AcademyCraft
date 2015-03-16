@@ -26,7 +26,6 @@ import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.render.LambdaFont;
-import cn.liutils.util.render.LambdaFont.Align;
 
 /**
  * Main class of Developer GUI.

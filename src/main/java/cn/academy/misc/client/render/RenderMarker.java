@@ -15,13 +15,11 @@ package cn.academy.misc.client.render;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.proxy.ACModels;
 import cn.academy.misc.entity.EntityMarker;
 
 /**
@@ -57,10 +55,12 @@ public class RenderMarker extends Render {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glPushMatrix();
+			
 			GL11.glTranslated(x - width / 2, y, z - width / 2);
 			GL11.glColor4d(marker.r, marker.g, marker.b, marker.a);
 			for(int i = 0; i < 8; ++i) {
 				GL11.glPushMatrix();
+				
 				boolean rev = i < 4;
 				double sx = width * mulArray[i][0], sy = height * mulArray[i][1], sz = width * mulArray[i][2];
 				final double len = 0.2 * width;
@@ -79,12 +79,9 @@ public class RenderMarker extends Render {
 				t.addVertex(0, 0, len);
 				t.draw();
 				
-				GL11.glPushMatrix();
-				GL11.glScaled(0.1, 0.1, 0.1);
-				//ACModels.MDL_SOLAR.renderAll();
-				GL11.glPopMatrix();
 				GL11.glPopMatrix();
 			}
+			
 			GL11.glPopMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_LIGHTING);

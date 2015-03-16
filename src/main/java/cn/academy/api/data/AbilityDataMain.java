@@ -26,7 +26,7 @@ import net.minecraft.server.MinecraftServer;
 public class AbilityDataMain {
 
 	public static AbilityData getData(EntityPlayer player) {
-		AbilityData data = (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
+		AbilityData data = checkData(player);
 		if(data == null) {
 			//This function is used to get the AbilityData. Never throw an exception or return null.
 			AcademyCraft.log.warn("Player Ability Data is null. Creating a new one.");
@@ -74,5 +74,13 @@ public class AbilityDataMain {
 	        EntityPlayerMP player = (EntityPlayerMP) obj;
 	        getData(player).doSync();
 	    }
+	}
+	
+	private static AbilityData checkData(EntityPlayer player) {
+		AbilityData data = (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
+		if(data != null) {
+			data.player = player; //In case of dimension change or player death.
+		}
+		return data;
 	}
 }

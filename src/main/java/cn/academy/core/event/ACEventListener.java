@@ -28,7 +28,6 @@ import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
-import cn.liutils.util.ClientUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

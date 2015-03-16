@@ -122,7 +122,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			//view orientation test
 			double dx = e.posX - sb.posX, dy = e.posY - sb.posY, dz = e.posZ - sb.posZ;
 			float yaw = -(float)(Math.atan2(dx, dz) * 180.0D / Math.PI);
-			float pitch = -(float)(Math.atan2(dy, (double)Math.sqrt(dx * dx + dz * dz)) * 180.0D / Math.PI);
+			float pitch = -(float)(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * 180.0D / Math.PI);
 			
 			if(Math.abs((yaw - spawner.rotationYawHead) % 360.0) <= scatRange &&
 				Math.abs((pitch - spawner.rotationPitch) % 180.0) <= hScat) {
@@ -136,9 +136,9 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	
     private boolean canSeeEachOther(Entity e1, Entity e2) {
         return this.worldObj.rayTraceBlocks(this.worldObj.getWorldVec3Pool().getVecFromPool(
-        	e1.posX, e1.posY + (double)e1.getEyeHeight(), e1.posZ), 
+        	e1.posX, e1.posY + e1.getEyeHeight(), e1.posZ), 
         	this.worldObj.getWorldVec3Pool().getVecFromPool(e2.posX, e2.posY + 
-        	(double)e2.getEyeHeight(), e2.posZ)) == null;
+        	e2.getEyeHeight(), e2.posZ)) == null;
     }
 	
 	private final IEntitySelector selector = new IEntitySelector() {
@@ -186,6 +186,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			this.fpOffsetY = -0.05;
 		}
 		
+		@Override
 		protected ResourceLocation nextTexture(EntityMeltDowner ent, int i) {
 			this.fpOffsetX = -0.5;
 			return ent.getTexData()[i == 0 ? 0 : ent.seq.get(i % ent.seq.size()) + 1];

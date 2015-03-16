@@ -15,7 +15,6 @@ package cn.academy.ability.electro.skill;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.skill.RailgunPlaneEffect;
@@ -51,7 +50,9 @@ public class SkillRailgun extends SkillBase {
 		setMaxLevel(6);
 	}
 	
-	private static Map<EntityPlayer, EntityThrowingCoin> etcData = new HashMap();
+	private static Map<EntityPlayer, EntityThrowingCoin> 
+		tableClient = new HashMap(),
+		tableServer = new HashMap();
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
@@ -60,7 +61,7 @@ public class SkillRailgun extends SkillBase {
 			public SkillState createSkill(EntityPlayer player) {
 				return new RailgunState(player);
 			}
-		}.setCooldown(2000)); //先意思意思，现在服务端和客户端的同步真心不能忍……
+		}.setCooldown(4000)); //先意思意思，现在服务端和客户端的同步真心不能忍……
 	}
 	
 	public static class RailgunState extends SkillState {
@@ -69,11 +70,12 @@ public class SkillRailgun extends SkillBase {
 			super(player);
 		}
 		
+		@Override
 		protected void onStart() {
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillID(CatElectro.railgun), lv = data.getLevelID() + 1;
 			
-			EntityThrowingCoin etc = etcData.get(player);
+			EntityThrowingCoin etc = getTable(player).get(player);
 			if(etc == null) {
 				this.finishSkill(false);
 				return;
@@ -112,7 +114,7 @@ public class SkillRailgun extends SkillBase {
 	public void throwCoin(ThrowCoinEvent event) {
 		AbilityData data = AbilityDataMain.getData(event.entityPlayer);
 		
-		EntityThrowingCoin id = etcData.get(event.entityPlayer);
+		EntityThrowingCoin id = getTable(event.entityPlayer).get(event.entityPlayer);
 		if(id != null && !id.isDead)
 			return;
 		
@@ -125,11 +127,15 @@ public class SkillRailgun extends SkillBase {
 				return;
 		}
 		
-		etcData.put(event.entityPlayer, event.coin);
+		getTable(event.entityPlayer).put(event.entityPlayer, event.coin);
 		
 		if(event.entityPlayer.worldObj.isRemote) {
 			SkillRenderManager.addEffect(RailgunPlaneEffect.instance, 
 					RailgunPlaneEffect.getAnimLength());
 		}
+	}
+	
+	private static Map<EntityPlayer, EntityThrowingCoin> getTable(EntityPlayer player) {
+		return player.worldObj.isRemote ? tableClient : tableServer;
 	}
 }

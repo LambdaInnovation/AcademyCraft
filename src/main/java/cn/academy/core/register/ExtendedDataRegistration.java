@@ -12,8 +12,6 @@
  */
 package cn.academy.core.register;
 
-import java.lang.annotation.Annotation;
-
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.ExtendedAbilityData;
 import cn.annoreg.core.AnnotationData;

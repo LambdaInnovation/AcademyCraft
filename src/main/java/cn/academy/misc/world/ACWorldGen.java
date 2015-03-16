@@ -12,16 +12,11 @@
  */
 package cn.academy.misc.world;
 
-import net.minecraft.world.gen.feature.WorldGenMinable;
-
 import java.util.Random;
 
 import cn.academy.core.register.ACBlocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import cpw.mods.fml.common.IWorldGenerator;
 
 /**

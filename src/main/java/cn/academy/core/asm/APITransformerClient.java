@@ -20,7 +20,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cn.academy.core.ACCorePlugin;
 
 /**

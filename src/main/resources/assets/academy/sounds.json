@@ -1,7 +1,11 @@
 {
-"records.omr": {"category": "record", "sounds": [{"name": "records/only_my_railgun", "stream": true}]},
-"records.sn": {"category": "record", "sounds": [{"name": "records/sister's_noise", "stream": true}]},
-"records.lv5": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]},
+"records.ac1": {"category": "record", "sounds": [{"name": "records/only_my_railgun", "stream": true}]},
+"records.ac2": {"category": "record", "sounds": [{"name": "records/sister's_noise", "stream": true}]},
+"records.ac3": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]},
+
+"records.academy:records.ac1": {"category": "record", "sounds": [{"name": "records/only_my_railgun", "stream": true}]},
+"records.academy:records.ac2": {"category": "record", "sounds": [{"name": "records/sister's_noise", "stream": true}]},
+"records.academy:records.ac3": {"category": "record", "sounds": [{"name": "records/level5_judgelight_", "stream": true}]},
 
 "deny": {"category": "master", "sounds": [{"name": "deny", "stream": false}]},
 

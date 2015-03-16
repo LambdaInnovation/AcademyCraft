@@ -19,8 +19,6 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegCommand;
 import cn.liutils.template.command.LICommandBase;
 import cn.liutils.util.DebugUtils;
 
@@ -32,7 +30,8 @@ public class CmdDataView extends LICommandBase {
 
 	public CmdDataView() {}
 	
-    public int getRequiredPermissionLevel() {
+    @Override
+	public int getRequiredPermissionLevel() {
         return 4;
     }
 
