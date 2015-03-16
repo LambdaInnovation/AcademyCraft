@@ -85,6 +85,8 @@ public class ACMiscReg {
 				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
 		GameRegistry.addRecipe(new ItemStack(ACItems.needle, 6), " a ", " a ", " a ",
 				'a', Items.iron_ingot);
+		GameRegistry.addRecipe(new ItemStack(ACItems.energyCrystal), "aaa", "bcb", "aaa",
+				'a', ACItems.crystal, 'b', ACItems.siliconRod, 'c', ACItems.ingotMg);
 	}
 	
 	public static void regSmelting() {
@@ -112,12 +114,13 @@ public class ACMiscReg {
 		}
 	}
 	
-//	@RegChestContent({0, 1, 2, 3})
-//	public static ACChestContent record0 = new ACChestContent(new ItemStack(ACItems.record0), 1, 1, 5);
-//	@RegChestContent({0, 1, 2, 3})
-//	public static ACChestContent record1 = new ACChestContent(new ItemStack(ACItems.record1), 1, 1, 5);
-//	@RegChestContent({0, 1, 2, 3})
-//	public static ACChestContent record2 = new ACChestContent(new ItemStack(ACItems.record2), 1, 1, 5);
+	//TODO: Not add until fixed the bug.
+/*	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record0 = new ACChestContent(new ItemStack(ACItems.record0), 1, 1, 5);
+	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record1 = new ACChestContent(new ItemStack(ACItems.record1), 1, 1, 5);
+	@RegChestContent({0, 1, 2, 3})
+	public static ACChestContent record2 = new ACChestContent(new ItemStack(ACItems.record2), 1, 1, 5);*/
 	
 	@RegWorldGen(2)
 	public static ACWorldGen oreGen;

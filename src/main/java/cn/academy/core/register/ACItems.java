@@ -41,13 +41,14 @@ public class ACItems {
 	@RegItem.UTName("logo")
 	public static Item logo;
 	
-	//TODO: Fuck forge
-	//@RegItem
-	//public static ACRecord record0 = new ACRecord(0);
-	//@RegItem
-	//public static ACRecord record1 = new ACRecord(1);
-	//@RegItem
-	//public static ACRecord record2 = new ACRecord(2);
+
+	//TODO: Not add until fixed the bug.
+/*	@RegItem
+	public static ACRecord record0 = new ACRecord(0);
+	@RegItem
+	public static ACRecord record1 = new ACRecord(1);
+	@RegItem
+	public static ACRecord record2 = new ACRecord(2);*/
 	
 	@RegItem
 	@RegItem.HasRender
