@@ -523,6 +523,9 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public void onPlayerTick() {
+		if(this.isActivated()) {
+			player.isSwingInProgress = false;
+		}
 		if (tickCount == Integer.MAX_VALUE) {
 			tickCount = 0;
 		} else {

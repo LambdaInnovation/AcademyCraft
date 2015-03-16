@@ -68,7 +68,7 @@ public class SkillThreateningTele extends SkillBase {
 			ItemStack stack = player.getCurrentEquippedItem();
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillLevel(data.getSkillID(instance)), lv = data.getLevelID() + 1;
-			if(stack == null|| stack.getItem() == ACItems.ivoid || (slv <= 3 && stack.getItem() instanceof ItemBlock)) {
+			if(stack == null || (slv <= 3 && stack.getItem() instanceof ItemBlock)) {
 				return;
 			}
 			

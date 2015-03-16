@@ -14,7 +14,6 @@ package cn.academy.core.register;
 
 import net.minecraft.item.Item;
 import cn.academy.core.client.render.RenderVoid;
-import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
 import cn.academy.energy.item.ItemFreqRegulator;
 import cn.academy.misc.item.ACSimpleItem;
@@ -181,17 +180,6 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("cplank")
 	public static ACSimpleItem compPlank;
-	
-	@RegItem()
-	@RegItem.HasRender
-	@RegEventHandler(Bus.FML)
-	@RegWithName("void")
-	public static ItemVoid ivoid = new ItemVoid() {
-		//吐槽：这到底什么微妙的写法
-		@SideOnly(Side.CLIENT)
-		@RegItem.Render
-		public RenderVoid renderVoid;
-	};
 	
 	@RegItem
 	public static ItemFreqRegulator freqReg;

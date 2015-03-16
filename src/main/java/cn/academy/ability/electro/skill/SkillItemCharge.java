@@ -111,7 +111,7 @@ public class SkillItemCharge extends SkillBase {
 			ItemStack stack = player.getCurrentEquippedItem();
 			AbilityData data = AbilityDataMain.getData(player);
 			
-			if(stack == null || stack.getItem() == ACItems.ivoid) {
+			if(stack == null) {
 				cb = new ChargeBlock(data);
 			} else {
 				cb = new ChargeItem(data);
