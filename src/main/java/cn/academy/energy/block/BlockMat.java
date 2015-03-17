@@ -45,6 +45,10 @@ public class BlockMat extends BlockDirectionalMulti {
 		addSubBlock(0, 0, 1);
 		addSubBlock(1, 0, 1);
 		addSubBlock(1, 0, 0);
+		addSubBlock(0, 1, 0);
+		addSubBlock(0, 1, 1);
+		addSubBlock(1, 1, 1);
+		addSubBlock(1, 1, 0);
 	}
 	
     @Override

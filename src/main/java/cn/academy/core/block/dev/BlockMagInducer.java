@@ -47,6 +47,7 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 		setCreativeTab(AcademyCraft.cct);
 		setBlockName("ac_magindc");
 		setBlockTextureName("academy:mag");
+		setHardness(3.0f);
 	}
 
 	@Override

@@ -256,4 +256,9 @@ public class GuiPresetSelect extends AuxGui {
 	private void drawText(String text, double x, double y, float size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
 	}
+
+	@Override
+	public boolean isForeground() {
+		return true;
+	}
 }

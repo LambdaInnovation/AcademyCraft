@@ -1,4 +1,6 @@
 {
+"deny": {"category": "master", "sounds": [{"name": "deny", "stream": false}]},
+
 "elec.weak": {"category": "master", "sounds": [{"name": "elec/arc_weak", "stream": false}]},
 "elec.strong": {"category": "master", "sounds": [{"name": "elec/arc_strong", "stream": false}]},
 "elec.mineview": {"category": "master", "sounds": [{"name": "elec/mineview", "stream": false}]},
