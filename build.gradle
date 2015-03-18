@@ -93,7 +93,6 @@ dependencies {
 	compile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
 	compile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
 }
-
 //---------------------------------
 
 ext.maven_branch = 'mvn_repo'
@@ -160,14 +159,19 @@ task removeMavenRepoAfterUpload(dependsOn: 'uploadGithubArchives') << {
 // add a source jar
 task sourceJar(type: Jar, dependsOn: 'setupMavenRepo') {
     from sourceSets.main.allSource
-    from sourceSets.api.allSource
     classifier = 'sources'
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
 }
 
 // because the normal output has been made to be obfuscated
 task deobfJar(type: Jar, dependsOn: 'setupMavenRepo') {
     from sourceSets.main.output
     classifier = 'dev'
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
 }
 
 // add api classes to main package
@@ -177,6 +181,9 @@ jar {
     manifest {
         attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
     }
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
 }
 
 // make sure all of these happen when we run build
