@@ -83,7 +83,7 @@ public class ACMiscReg {
 				'e', ACBlocks.node, 'f', ACItems.aplate1);
 		GameRegistry.addRecipe(new ItemStack(ACItems.siliconRod), "aaa", "a a", "aaa",
 				'a', ACItems.smallSi);
-		GameRegistry.addRecipe(new ItemStack(ACItems.sibarn, 8), "aba", "bab", "aba",
+		GameRegistry.addRecipe(new ItemStack(ACItems.sibarn, 8), "bbb", "bab", "bbb",
 				'a', ACItems.siliconRod, 'b', ACItems.smallSi);
 		GameRegistry.addRecipe(new ItemStack(ACItems.freqReg), "abb", "ccd", "abb",
 				'a', ACItems.aplate1, 'b', Blocks.glass_pane, 'c', ACItems.pcb, 'd', ACItems.ioPort);
@@ -95,7 +95,7 @@ public class ACMiscReg {
 	
 	public static void regSmelting() {
 		Object[][] ac_smelting = {
-				{Blocks.glass, new ItemStack(ACItems.smallSi), 0f},
+				{Blocks.glass, new ItemStack(ACItems.smallSi), 0.1f},
 				{ACBlocks.oreAl, new ItemStack(ACItems.ingotAl), 0.7f},
 //				{ACBlocks.oreCopper, new ItemStack(ACItems.ingotCu), 0.7f},
 				{ACBlocks.oreMg, new ItemStack(ACItems.ingotMg), 0.8f},
