@@ -48,7 +48,7 @@ public final class RenderArcEff extends RenderIcon {
 		
 		//GL11.glRotated(arc.rotOffset, 1, 1, 1);
 		long time = Minecraft.getSystemTime();
-		if(time - arc.lastChangeTime > arc.FRAME_RATE) {
+		if(time - arc.lastChangeTime > EntityArcS.FRAME_RATE) {
 			arc.lastChangeTime = time;
 			arc.texIndex = rand.nextInt(arc.texs.length);
 		}

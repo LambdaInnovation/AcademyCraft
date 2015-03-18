@@ -52,6 +52,7 @@ public abstract class LocatingGuiBase extends LIGui {
 				setSize(198, 25);
 			}
 			
+			@Override
 			public void draw(double mx, double my, boolean hov) {
 				if(getGui().getFocus() == this) {
 					RenderUtils.bindColor(color);

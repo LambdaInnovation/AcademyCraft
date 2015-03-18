@@ -189,7 +189,6 @@ public class EntityMagHook extends EntityX {
     	});
     }
 
-	@SideOnly(Side.CLIENT)
 	public EntityMagHook(World world) {
 		super(world);
 		this.isAirBorne = true;

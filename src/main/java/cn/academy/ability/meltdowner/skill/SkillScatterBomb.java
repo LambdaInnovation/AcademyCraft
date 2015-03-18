@@ -14,8 +14,6 @@ package cn.academy.ability.meltdowner.skill;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMdBall;

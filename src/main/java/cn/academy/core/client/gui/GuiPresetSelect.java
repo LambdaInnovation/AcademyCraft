@@ -14,7 +14,6 @@ package cn.academy.core.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
@@ -256,5 +255,10 @@ public class GuiPresetSelect extends AuxGui {
 	
 	private void drawText(String text, double x, double y, float size, Align align) {
 		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+	}
+
+	@Override
+	public boolean isForeground() {
+		return true;
 	}
 }

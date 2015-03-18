@@ -255,4 +255,9 @@ public class GuiMainScreen extends AuxGui {
 	
 	Map<Integer, Pair<Integer, Long>> aliveCooldowns = new HashMap();
 
+	@Override
+	public boolean isForeground() {
+		return false;
+	}
+
 }

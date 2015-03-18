@@ -13,14 +13,12 @@
 package cn.academy.ability.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import cn.academy.ability.meltdowner.CatMeltDowner;
 import cn.academy.ability.meltdowner.entity.EntityMeltDowner;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
-import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.liutils.util.GenericUtils;
@@ -65,6 +63,7 @@ public class SkillMeltDowner extends SkillBase {
 			super(player);
 		}
 		
+		@Override
 		protected void onStart() {
 			int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
 			if(!data.decreaseCP(getCPConsume(slv, lv), CatMeltDowner.meltDowner)) {
@@ -75,6 +74,7 @@ public class SkillMeltDowner extends SkillBase {
 				player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner", 0.5f, 1.0f);
 		}
 		
+		@Override
 		protected boolean onTick(int time) {
 			if(time == 5) {
 				int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;

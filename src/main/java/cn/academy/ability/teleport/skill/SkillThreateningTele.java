@@ -12,8 +12,6 @@
  */
 package cn.academy.ability.teleport.skill;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -22,13 +20,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import cn.academy.ability.electro.CatElectro;
-import cn.academy.ability.teleport.CatTeleport;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.RawEventHandler;
 import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
-import cn.academy.api.ctrl.pattern.PatternHold;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.register.ACItems;
@@ -73,7 +68,7 @@ public class SkillThreateningTele extends SkillBase {
 			ItemStack stack = player.getCurrentEquippedItem();
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillLevel(data.getSkillID(instance)), lv = data.getLevelID() + 1;
-			if(stack == null|| stack.getItem() == ACItems.ivoid || (slv <= 3 && stack.getItem() instanceof ItemBlock)) {
+			if(stack == null || (slv <= 3 && stack.getItem() instanceof ItemBlock)) {
 				return;
 			}
 			
@@ -104,7 +99,11 @@ public class SkillThreateningTele extends SkillBase {
 			}
 			
 			if(!player.capabilities.isCreativeMode) {
+				System.out.println("Consuming " + stack);
 				--stack.stackSize;
+				if(stack.stackSize <= 0) {
+					player.setCurrentItemOrArmor(0, null);
+				}
 			}
 		}
 		

@@ -12,18 +12,14 @@
  */
 package cn.academy.core.register;
 
-import cn.academy.misc.util.ACChestContent;
 import cn.academy.misc.world.ACWorldGen;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegChestContent;
 import cn.annoreg.mc.RegWorldGen;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**

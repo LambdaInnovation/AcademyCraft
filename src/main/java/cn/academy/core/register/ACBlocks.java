@@ -39,7 +39,7 @@ public class ACBlocks {
 	@RegBlock
 	public static BlockSolarGenerator solarGen;
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockDirMulti.class)
 	public static BlockMat grid;
 	
 	@RegBlock

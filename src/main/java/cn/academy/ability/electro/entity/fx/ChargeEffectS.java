@@ -26,8 +26,6 @@ import cn.liutils.api.entityx.MotionHandler;
 import cn.liutils.api.entityx.motion.FollowEntity;
 import cn.liutils.api.entityx.motion.LifeTime;
 import cn.liutils.util.GenericUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD

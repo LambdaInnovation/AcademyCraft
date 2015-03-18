@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
@@ -52,7 +53,8 @@ public class CmdCheating extends LICommandBase {
 	
 	public CmdCheating() {}
 	
-    public int getRequiredPermissionLevel() {
+    @Override
+	public int getRequiredPermissionLevel() {
         return 2; //OP+cheating
     }
 
@@ -69,7 +71,7 @@ public class CmdCheating extends LICommandBase {
 	@Override
 	public void processCommand(ICommandSender ics, String[] pars) {
 		if(pars.length  == 0) {
-			this.sendChat(ics, getCommandUsage(ics));
+			LICommandBase.sendChat(ics, getCommandUsage(ics));
 			return;
 		}
 		EntityPlayer player = null;
@@ -78,7 +80,7 @@ public class CmdCheating extends LICommandBase {
 		} catch(Exception e) {}
 		
 		if(player == null) { //Fallback and try the "implicit player"
-			player = this.getCommandSenderAsPlayer(ics);
+			player = CommandBase.getCommandSenderAsPlayer(ics);
 		} else {
 			pars = Arrays.copyOfRange(pars, 1, pars.length);
 		}

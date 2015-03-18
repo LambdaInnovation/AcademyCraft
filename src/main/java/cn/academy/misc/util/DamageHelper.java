@@ -3,7 +3,6 @@ package cn.academy.misc.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.register.Configurable;

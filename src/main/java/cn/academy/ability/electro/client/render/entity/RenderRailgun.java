@@ -15,7 +15,6 @@ package cn.academy.ability.electro.client.render.entity;
 import cn.academy.ability.electro.entity.EntityRailgun;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayBlended;
-import cn.academy.misc.client.render.RendererRaySimple;
 
 /**
  * @author WeathFolD

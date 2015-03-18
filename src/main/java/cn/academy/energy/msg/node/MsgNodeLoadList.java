@@ -68,7 +68,8 @@ public class MsgNodeLoadList implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeShort(cns.size());
 		for(int i = 0; i < cns.size(); ++i) {
-			ByteBufUtils.writeUTF8String(buf, cns.get(i));
+			String add = cns.get(i);
+			if(add != null) ByteBufUtils.writeUTF8String(buf, add);
 		}
 	}
 	

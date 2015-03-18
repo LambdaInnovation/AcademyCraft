@@ -14,15 +14,11 @@ package cn.academy.core.register;
 
 import net.minecraft.item.Item;
 import cn.academy.core.client.render.RenderVoid;
-import cn.academy.core.item.ItemVoid;
 import cn.academy.energy.item.ItemEnergyCrystal;
 import cn.academy.energy.item.ItemFreqRegulator;
-import cn.academy.misc.client.render.RendererCoin;
-import cn.academy.misc.item.ACRecord;
 import cn.academy.misc.item.ACSimpleItem;
 import cn.academy.misc.item.ItemCoin;
 import cn.academy.misc.item.ItemMagHook;
-import cn.academy.misc.item.ItemModuleAttached;
 import cn.academy.misc.item.ItemNeedle;
 import cn.academy.misc.item.ItemSilbarn;
 import cn.annoreg.core.RegWithName;
@@ -44,6 +40,7 @@ public class ACItems {
 	@RegItem.UTName("logo")
 	public static Item logo;
 	
+
 	//TODO: Not add until fixed the bug.
 /*	@RegItem
 	public static ACRecord record0 = new ACRecord(0);
@@ -183,17 +180,6 @@ public class ACItems {
 	@RegItem
 	@RegItem.UTName("cplank")
 	public static ACSimpleItem compPlank;
-	
-	@RegItem()
-	@RegItem.HasRender
-	@RegEventHandler(Bus.FML)
-	@RegWithName("void")
-	public static ItemVoid ivoid = new ItemVoid() {
-		//吐槽：这到底什么微妙的写法
-		@SideOnly(Side.CLIENT)
-		@RegItem.Render
-		public RenderVoid renderVoid;
-	};
 	
 	@RegItem
 	public static ItemFreqRegulator freqReg;

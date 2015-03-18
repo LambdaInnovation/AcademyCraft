@@ -50,7 +50,7 @@ public class ClientModifyMsg implements IMessage {
 		if(opcode == ADD) {
 			arg = new Location(buf);
 		} else if(opcode == REMOVE) {
-			arg = (Integer) buf.readInt();
+			arg = buf.readInt();
 		}
 	}
 

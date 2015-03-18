@@ -20,8 +20,6 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Level;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegCommand;
 import cn.liutils.template.command.LICommandBase;
 
 /**
@@ -33,7 +31,8 @@ public class CmdDataSet extends LICommandBase {
 	public CmdDataSet() {
 	}
 	
-    public int getRequiredPermissionLevel()  {
+    @Override
+	public int getRequiredPermissionLevel()  {
         return 3;
     }
 

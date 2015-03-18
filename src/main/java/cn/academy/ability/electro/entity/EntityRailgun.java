@@ -12,9 +12,7 @@
  */
 package cn.academy.ability.electro.entity;
 
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import cn.academy.ability.electro.CatElectro;
 import cn.academy.ability.electro.client.render.entity.RenderRailgun;

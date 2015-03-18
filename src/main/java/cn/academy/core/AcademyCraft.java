@@ -22,16 +22,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.academy.core.command.CmdCheating;
-import cn.academy.core.command.CmdDataSet;
 import cn.academy.core.command.CmdDataView;
 import cn.academy.core.proxy.ACCommonProps;
 import cn.academy.core.register.ACItems;
 import cn.academy.core.register.ACMiscReg;
-import cn.academy.core.register.ExtendedDataRegistration;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegMessageHandler;
-import cn.liutils.core.LIUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

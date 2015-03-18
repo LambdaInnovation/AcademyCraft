@@ -14,6 +14,7 @@ package cn.academy.core.event;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -25,10 +26,8 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.client.gui.GuiMainScreen;
 import cn.academy.core.ctrl.EventHandlerClient;
-import cn.academy.core.register.ACItems;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
-import cn.liutils.util.ClientUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -58,8 +57,7 @@ public class ACEventListener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 		if(activated(event.entityPlayer) && !override(stack)) {
-			if(!(stack != null && stack.getItem() == ACItems.ivoid) && 
-					event.entityPlayer.worldObj.isRemote) {
+			if(event.entityPlayer.worldObj.isRemote) {
 				boolean b = false;
 				if(event.action == Action.LEFT_CLICK_BLOCK) {
 					b = !EventHandlerClient.isSkillMapped(0);
@@ -74,10 +72,17 @@ public class ACEventListener {
 	
 	@SubscribeEvent
 	public void onStartUseItem(PlayerUseItemEvent.Start event) {
-		if(activated(event.entityPlayer) && override(event.item)) {
-			if(event.item.getItem() != ACItems.ivoid && event.entityPlayer.worldObj.isRemote && !EventHandlerClient.isSkillMapped(1)) {
+		if(activated(event.entityPlayer) && !override(event.item)) {
+			if(event.entityPlayer.worldObj.isRemote && !EventHandlerClient.isSkillMapped(1)) {
 				onFail();
 			}
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onAttackEntity(AttackEntityEvent event) {
+		if(activated(event.entityPlayer) && !override(event.entityPlayer.getCurrentEquippedItem())) {
 			event.setCanceled(true);
 		}
 	}

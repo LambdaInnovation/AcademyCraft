@@ -94,6 +94,7 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 					meta, 1.0F, 0);
 	}
 	
+	@Override
 	public abstract ResourceLocation[] getTexData();
 	
 	@SideOnly(Side.CLIENT)

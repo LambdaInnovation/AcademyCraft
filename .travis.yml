@@ -1,0 +1,7 @@
+language: java
+
+install:
+- true
+
+script:
+- gradle build uploadGithubAndClean -Dorg.ajoberstar.grgit.auth.username=$GITHUB_REPO_AUTH_USERNAME -Dorg.ajoberstar.grgit.auth.password=$GITHUB_REPO_AUTH_PASSWORD

@@ -21,7 +21,9 @@ import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.academy.energy.client.render.tile.RenderMatrix;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.util.DebugUtils;
+import cn.liutils.core.LIUtils;
+import cn.liutils.core.network.MsgTileDirMulti;
+import cn.liutils.template.block.IMetadataProvider;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileMatrix extends TileNodeBase {
+public class TileMatrix extends TileNodeBase implements IMetadataProvider {
 	
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -66,6 +68,14 @@ public class TileMatrix extends TileNodeBase {
 			WirelessSystem.setPassword(worldObj, channelToLoad, pwdToLoad);
 			channelToLoad = pwdToLoad = null;
 		}
+		
+		if(meta == -1) {
+			meta = this.getBlockMetadata();
+		}
+		if(worldObj.isRemote && !synced && ++ticksUntilReq == 5) {
+			ticksUntilReq = 0;
+			LIUtils.netHandler.sendToServer(new MsgTileDirMulti.Request(this));
+		}
 	}
 	
 	@Override
@@ -73,6 +83,7 @@ public class TileMatrix extends TileNodeBase {
 		super.writeToNBT(tag);
 		boolean b = WirelessSystem.isTileRegistered(this);
 		tag.setBoolean("netLoaded", b);
+		tag.setInteger("meta", meta);
 		if(b) {
 			String channel = WirelessSystem.getTileChannel(this);
 			tag.setString("netChannel", channel);
@@ -83,6 +94,7 @@ public class TileMatrix extends TileNodeBase {
     @Override
 	public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        meta = tag.getInteger("meta");
         boolean b = tag.getBoolean("netLoaded");
         if(b) {
         	channelToLoad = tag.getString("netChannel");
@@ -121,6 +133,20 @@ public class TileMatrix extends TileNodeBase {
 	@Override
 	public double getSearchRange() {
 		return 0;
+	}
+
+	int meta = -1;
+	private boolean synced = false;
+	private int ticksUntilReq = 4;
+	
+	@Override
+	public int getMetadata() {
+		return meta;
+	}
+
+	@Override
+	public void setMetadata(int meta) {
+		this.meta = meta;
 	}
 
 }

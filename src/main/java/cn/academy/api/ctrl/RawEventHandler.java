@@ -18,7 +18,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.api.ability.SkillBase;
 import cn.academy.api.ctrl.pattern.Pattern;
-import cn.academy.api.ctrl.pattern.PatternDown;
 
 /**
  * This class handles raw event and send the proper event to skill (through patterns).

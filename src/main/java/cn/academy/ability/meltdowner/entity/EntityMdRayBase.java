@@ -12,19 +12,15 @@
  */
 package cn.academy.ability.meltdowner.entity;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import cn.academy.misc.client.render.RendererRayBlended;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -78,6 +74,7 @@ public abstract class EntityMdRayBase extends EntityRay {
 		}
 	}
 	
+	@Override
 	public float getDisplayRayLen() { //This enables comlicated display tricks on ray len.
 		return Math.min(5f * ticksExisted, rayLength);
 	}

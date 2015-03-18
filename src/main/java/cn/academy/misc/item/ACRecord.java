@@ -13,10 +13,6 @@
 package cn.academy.misc.item;
 
 import java.util.List;
-
-import cn.academy.core.AcademyCraft;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +22,9 @@ import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import cn.academy.core.AcademyCraft;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author KSkun
@@ -36,29 +35,24 @@ public class ACRecord extends ItemRecord {
 	private static final String[] rnames = {"ac1", "ac2", "ac3"};
 	private static final String[] unames = {"ac_record1", "ac_record2", "ac_record3"};
 	private static final ResourceLocation sources[] = new ResourceLocation[] {
-		new ResourceLocation("academy:records.omr"),
-		new ResourceLocation("academy:records.sn"),
-		new ResourceLocation("academy:records.lv5")
+		new ResourceLocation("academy:records.ac1"),
+		new ResourceLocation("academy:records.ac2"),
+		new ResourceLocation("academy:records.ac3")
 	};
 	
 	private int recId;
 	
 	public ACRecord(int subId) {
-		this(rnames[subId]);
-		this.setUnlocalizedName(unames[subId]);
+		super(rnames[subId]);
+ 		setUnlocalizedName(unames[subId]);
 		setCreativeTab(AcademyCraft.cct);
 		recId = subId;
-	}
-	
-	public ACRecord(String rname) {
-		super(rname);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int par1) {
 		return this.itemIcon;
-		
 	}
 	
 	@Override
@@ -80,9 +74,10 @@ public class ACRecord extends ItemRecord {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getRecordNameLocal() {
-		String rname[] = new String[] {"fripSide - Only My Railgun",
-				"fripSide - Sister's Noise",
-				"fripSide - LEVEL5 -Judgelight-"};
+		String rname[] = new String[] {
+			"fripSide - Only My Railgun",
+			"fripSide - Sister's Noise",
+			"fripSide - LEVEL5 -Judgelight-"};
 		return rname[recId];
 	}
 	
@@ -101,6 +96,7 @@ public class ACRecord extends ItemRecord {
 
 	@Override
 	public ResourceLocation getRecordResource(String par1) {
+		System.out.println("Called resource override " + recId + " " + sources[recId]);
 		return sources[recId];
 	}
 	
