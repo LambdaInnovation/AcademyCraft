@@ -25,22 +25,22 @@ public class ACUtils {
 
 	@SideOnly(Side.CLIENT)
 	public static void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
+		ACClientProps.font().draw(text, x, y, size);
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+		ACClientProps.font().draw(text, x, y, size, align);
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void drawText(String text, double x, double y, double size, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
+		ACClientProps.font().drawAdjusted(text, x, y, size, cst);
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
+		ACClientProps.font().drawAdjusted(text, x, y, size, align, cst);
 	}
 
 }

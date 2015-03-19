@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.InputBox;
 import cn.liutils.util.HudUtils;
@@ -82,7 +83,7 @@ public class Dialogues {
 			super.draw(mx, my, h);
 			
 			GL11.glColor4d(0.3, 1, 1, 0.8);
-			drawText(ACLangs.opStatus(), 54, 10, 7.5, Align.CENTER);
+			ACUtils.drawText(ACLangs.opStatus(), 54, 10, 7.5, Align.CENTER);
 			
 			GL11.glColor4d(1, 1, 1, 1);
 			RenderUtils.loadTexture(TEX_DIAG);
@@ -99,7 +100,7 @@ public class Dialogues {
 			} GL11.glPopMatrix();
 			
 			GL11.glColor4d(0, 1, 1, 0.8);
-			drawText(state.msg, 53, 60, 6, Align.CENTER);
+			ACUtils.drawText(state.msg, 53, 60, 6, Align.CENTER);
 			RenderUtils.bindIdentity();
 		}
 		
@@ -131,7 +132,7 @@ public class Dialogues {
 		@Override
 		public void onAdded() {
 			addWidget(box = new InputBox(46, 51, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255)); 
+				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255)); 
 			
 			addWidget(new Dialogues.WigOK() {
 				{
@@ -149,32 +150,16 @@ public class Dialogues {
 		public void draw(double mx, double my, boolean b) {
 			super.draw(mx, my, b);
 			RenderUtils.bindColor(100, 255, 255);
-			drawText(ACLangs.wirelessLogin(), 54, 10, 7, Align.CENTER);
+			ACUtils.drawText(ACLangs.wirelessLogin(), 54, 10, 7, Align.CENTER);
 			
 			//23 202 172 21
 			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
 			HudUtils.drawRect(9, 30, 23, 202, 86, 10.5, 172, 21);
 			HudUtils.drawRect(9, 50, 23, 230, 86, 10.5, 172, 21);
 			
-			drawText(cn, 68, 31, 6, Align.CENTER, 48);
+			ACUtils.drawText(cn, 68, 31, 6, Align.CENTER, 48);
 		}
 		
-	}
-	
-	public static void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
 	}
 
 }

@@ -27,6 +27,7 @@ import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.key.IKeyHandler;
@@ -233,6 +234,8 @@ public class GuiPresetSelect extends AuxGui {
 					HudUtils.drawRect(posArray[i][0] - 399, posArray[i][1] - 115, 69, 69);
 				}
 			}
+			GL11.glColor4d(1, 1, 1, 1);
+			ACUtils.drawText(LIKeyProcess.getKeyName(EventHandlerClient.getKeyId(i)), posArray[i][0] - 367, posArray[i][1] - (i <= 1 ? 40 : 146), 20, Align.CENTER);
 		}
 		RenderUtils.loadTexture(ACClientProps.TEX_GUI_PRESET);
 	}
@@ -250,11 +253,11 @@ public class GuiPresetSelect extends AuxGui {
 	}
 	
 	private void drawText(String text, double x, double y, float size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
+		ACClientProps.font().draw(text, x, y, size);
 	}
 	
 	private void drawText(String text, double x, double y, float size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+		ACClientProps.font().draw(text, x, y, size, align);
 	}
 
 	@Override

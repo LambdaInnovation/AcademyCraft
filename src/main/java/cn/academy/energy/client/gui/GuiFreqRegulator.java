@@ -22,7 +22,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.base.TileUserBase;
 import cn.academy.energy.client.gui.Dialogues.DiagState;
 import cn.academy.energy.client.gui.Dialogues.Dialogue;
@@ -30,6 +29,7 @@ import cn.academy.energy.client.gui.Dialogues.InputPassword;
 import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.fr.MsgFRAction;
 import cn.academy.energy.msg.fr.MsgFRInitQuery;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.ListVertical;
@@ -89,8 +89,8 @@ public class GuiFreqRegulator extends LIGuiScreen {
 			aborter.doesDraw = selection != null;
 			
 			RenderUtils.bindColor(TEXT_COLOR);
-			drawText(ACLangs.freqReg(), 166, 29, 6, Align.CENTER);
-			drawText(ACLangs.frChannelSelect(), 60, 31, 5.7);
+			ACUtils.drawText(ACLangs.freqReg(), 166, 29, 6, Align.CENTER);
+			ACUtils.drawText(ACLangs.frChannelSelect(), 60, 31, 5.7);
 			
 			String ssTitle, ssName;
 			if(selection == null) {
@@ -103,8 +103,8 @@ public class GuiFreqRegulator extends LIGuiScreen {
 				ssName = selection;
 			}
 			
-			drawText(ssTitle, 164, 88, 7, Align.CENTER);
-			drawText(ssName, 164, 101, 6, Align.CENTER, 50);
+			ACUtils.drawText(ssTitle, 164, 88, 7, Align.CENTER);
+			ACUtils.drawText(ssName, 164, 101, 6, Align.CENTER, 50);
 			RenderUtils.bindIdentity();
 		}
 	}
@@ -124,7 +124,7 @@ public class GuiFreqRegulator extends LIGuiScreen {
 				
 				RenderUtils.bindColor(TEXT_COLOR);
 				String actionName = selection == null ? ACLangs.frClearConn() : ACLangs.frEstbConn();
-				drawText(actionName, 30, -5, 6);
+				ACUtils.drawText(actionName, 30, -5, 6);
 				RenderUtils.bindIdentity();
 			}
 			super.draw(mx, my, h);
@@ -189,7 +189,7 @@ public class GuiFreqRegulator extends LIGuiScreen {
 				HudUtils.drawModalRect(0, 0, width, height);
 			}
 			RenderUtils.bindColor(TEXT_COLOR);
-			drawText(cn, 2, 1, 5, 59);
+			ACUtils.drawText(cn, 2, 1, 5, 59);
 		}
 		
 		@Override
@@ -241,7 +241,7 @@ public class GuiFreqRegulator extends LIGuiScreen {
 		public void draw(double mx, double my, boolean h) {
 			super.draw(mx, my, h);
 			RenderUtils.bindColor(TEXT_COLOR);
-			drawText(ACLangs.frClearConfirm(), 54, 36, 6.5, Align.CENTER);
+			ACUtils.drawText(ACLangs.frClearConfirm(), 54, 36, 6.5, Align.CENTER);
 		}
 	}
 	
@@ -265,21 +265,5 @@ public class GuiFreqRegulator extends LIGuiScreen {
 	public boolean doesGuiPauseGame()  {
         return false;
     }
-
-	public static void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, cst);
-	}
-	
-	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(text, x, y, size, align, cst);
-	}
     
 }

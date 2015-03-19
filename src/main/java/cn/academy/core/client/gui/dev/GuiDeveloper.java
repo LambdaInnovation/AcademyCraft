@@ -49,8 +49,6 @@ public class GuiDeveloper extends LIGuiScreen {
 	protected PageMain pageMain;
 	protected List<DevSubpage> subs = new ArrayList<DevSubpage>();
 	
-	public static LambdaFont FONT = ACClientProps.FONT_YAHEI_32;
-	
 	AbilityData data;
 	TileDeveloper dev;
 	EntityPlayer user;
@@ -109,7 +107,7 @@ public class GuiDeveloper extends LIGuiScreen {
     }
 	
 	public static double strLen(String text, double size) {
-		return ACClientProps.FONT_YAHEI_32.getWidth(text, size);
+		return ACClientProps.font().getWidth(text, size);
 	}
 	
 }

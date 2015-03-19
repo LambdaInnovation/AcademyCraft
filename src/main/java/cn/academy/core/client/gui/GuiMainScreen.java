@@ -60,8 +60,6 @@ public class GuiMainScreen extends AuxGui {
 	
 	GUIObject.Tex logoBack, logoRays, logoFrame, logoGeom;
 	
-	private static LambdaFont font = ACClientProps.FONT_YAHEI_32;
-	
 	private String tipString;
 	private long tipUpdateTime;
 	
@@ -107,7 +105,7 @@ public class GuiMainScreen extends AuxGui {
 				long tdt = time - tipUpdateTime;
 				if(tdt > 1000) tipString = null;
 				if(tipString != null) {
-					ACClientProps.FONT_YAHEI_32.draw(tipString, w / 2 - 6, h / 2 - 12, 6, Align.RIGHT);
+					ACClientProps.font().draw(tipString, w / 2 - 6, h / 2 - 12, 6, Align.RIGHT);
 				}
 			}
 			
@@ -179,11 +177,11 @@ public class GuiMainScreen extends AuxGui {
 				
 				//Level
 				GL11.glColor4d(1, 1, 1, mAlpha * .6);
-				ACClientProps.FONT_YAHEI_32.drawAdjusted(data.getLevel().getDisplayName(), 184, 58, 20, 69);
+				ACClientProps.font().drawAdjusted(data.getLevel().getDisplayName(), 184, 58, 20, 69);
 				
 				//Numeric CP
 				String str = String.format("%.0f/%.0f", data.getCurrentCP(), data.getMaxCP());
-				font.drawAdjusted(str, 316, 87, 22, Align.CENTER, 167);
+				ACClientProps.font().drawAdjusted(str, 316, 87, 22, Align.CENTER, 167);
 			}
 		} GL11.glPopMatrix();
 		RenderUtils.bindIdentity();

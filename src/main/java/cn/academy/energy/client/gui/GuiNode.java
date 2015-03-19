@@ -21,7 +21,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
-import cn.academy.core.proxy.ACClientProps;
 import cn.academy.energy.block.tile.impl.ContainerNode;
 import cn.academy.energy.block.tile.impl.TileNode;
 import cn.academy.energy.client.gui.Dialogues.DiagState;
@@ -30,6 +29,7 @@ import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.node.MsgInitNode;
 import cn.academy.energy.msg.node.MsgNodeGuiLoad;
 import cn.academy.energy.msg.node.MsgNodeLoadList;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.gui.LIGuiContainer;
 import cn.liutils.api.gui.Widget;
@@ -114,7 +114,7 @@ public class GuiNode extends LIGuiContainer {
 			
 			RenderUtils.bindColor(COLOR);
 			String cn = synced ? (curChannel == null ? ACLangs.notConnected() : curChannel) : ACLangs.loading();
-			drawText(cn, 81, 14.5, 7, Align.LEFT);
+			ACUtils.drawText(cn, 81, 14.5, 7, Align.LEFT);
 			
 			RenderUtils.bindIdentity();
 		}
@@ -177,7 +177,7 @@ public class GuiNode extends LIGuiContainer {
 			super.draw(mx, my, hover);
 			
 			RenderUtils.bindColor(COLOR);
-			drawText(ACLangs.selectChannel(), 80, 10, 7, Align.CENTER);
+			ACUtils.drawText(ACLangs.selectChannel(), 80, 10, 7, Align.CENTER);
 		}
 		
 		public void onClose() {
@@ -247,7 +247,7 @@ public class GuiNode extends LIGuiContainer {
 				HudUtils.drawModalRect(0, 0, width, height);
 			}
 			RenderUtils.bindColor(100, 255, 255);
-			drawText(channel, 5, 4, 7);
+			ACUtils.drawText(channel, 5, 4, 7);
 		}
 		
 		@Override
@@ -288,18 +288,6 @@ public class GuiNode extends LIGuiContainer {
 	@Override
 	protected boolean containerAcceptsKey(int key) {
 		return key != Keyboard.KEY_E; //Interrupts the key event
-	}
-	
-	private static void drawText(String str, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(str, x, y, size);
-	}
-	
-	private static void drawText(String str, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(str, x, y, size, align);
-	}
-	
-	private static void drawAdjusted(String str, double x, double y, double size, Align align, double cst) {
-		ACClientProps.FONT_YAHEI_32.drawAdjusted(str, x, y, size, align, cst);
 	}
 	
 }

@@ -74,7 +74,7 @@ public class PageSkills extends DevSubpage {
 				//Calc the maxium window length.
 				final double SIDE = 10, TOP = 5;
 				RenderUtils.bindColor(65, 163, 220, alpha);
-				Vector2d rect = GuiDeveloper.FONT.simDrawLinebreak(str, SIDE, TOP, 6, 140);
+				Vector2d rect = ACClientProps.font().simDrawLinebreak(str, SIDE, TOP, 6, 140);
 				
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				//rect
@@ -88,7 +88,7 @@ public class PageSkills extends DevSubpage {
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				
 				//really draw
-				GuiDeveloper.FONT.drawLinebreak(str, SIDE, TOP, 6, 140);
+				ACClientProps.font().drawLinebreak(str, SIDE, TOP, 6, 140);
 				
 				//description
 			} else{

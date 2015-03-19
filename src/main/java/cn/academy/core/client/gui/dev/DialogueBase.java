@@ -46,7 +46,7 @@ public class DialogueBase extends Widget {
 				{255, 95, 95, 255},
 				{150, 150, 150, 255}
 			});
-			setFont(ACClientProps.FONT_YAHEI_32);
+			setFont(ACClientProps.font());
 		}
 		
 		@Override
@@ -71,7 +71,7 @@ public class DialogueBase extends Widget {
 				dev.DEFAULT_COLOR,
 				{150, 150, 150, 255}
 			});
-			setFont(ACClientProps.FONT_YAHEI_32);
+			setFont(ACClientProps.font());
 		}
 		
 		@Override

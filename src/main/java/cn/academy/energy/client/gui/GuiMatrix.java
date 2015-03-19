@@ -27,6 +27,7 @@ import cn.academy.energy.client.gui.Dialogues.StateDiag;
 import cn.academy.energy.msg.matrix.MsgChangePwd;
 import cn.academy.energy.msg.matrix.MsgGuiLoadQuery;
 import cn.academy.energy.msg.matrix.MsgInitMatrix;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.api.gui.LIGuiScreen;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.InputBox;
@@ -103,10 +104,10 @@ public class GuiMatrix extends LIGuiScreen {
 			
 			RenderUtils.bindColor(108, 236, 236);
 			String pct = String.format("%.2f%%", prog * 100);
-			drawText(pct, 52, 122, 6.2f, Align.CENTER);
+			ACUtils.drawText(pct, 52, 122, 6.2f, Align.CENTER);
 			
-			drawText(channelName, 52, 25, 7f, Align.CENTER);
-			drawText("******", 52, 55, 7f, Align.CENTER);
+			ACUtils.drawText(channelName, 52, 25, 7f, Align.CENTER);
+			ACUtils.drawText("******", 52, 55, 7f, Align.CENTER);
 		}
 		
 		private abstract class SB extends Widget {
@@ -183,20 +184,20 @@ public class GuiMatrix extends LIGuiScreen {
 			});
 			
 			addWidget(ssid = new InputBox(48, 25, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setTextColor(0, 255, 255, 255));
 			
 			addWidget(pwd = new InputBox(48, 39, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
 			
 			addWidget(pwd2 = new InputBox(48, 53, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
 		}
 		
 		@Override
 		public void draw(double mx, double my, boolean h) {
 			super.draw(mx, my, h);
 			RenderUtils.bindColor(0, 255, 255, 255);
-			drawText(ACLangs.matInit(), 54, 8.5, 7, Align.CENTER);
+			ACUtils.drawText(ACLangs.matInit(), 54, 8.5, 7, Align.CENTER);
 			
 			//input elements
 			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
@@ -205,7 +206,7 @@ public class GuiMatrix extends LIGuiScreen {
 			if(errStr != null) {
 				long time = Minecraft.getSystemTime();
 				GL11.glColor4d(1, 0.2, 0.2, 0.8);
-				drawText(errStr, 12, 63, 5.5);
+				ACUtils.drawText(errStr, 12, 63, 5.5);
 				if(time - lastTime > TIME_WAIT) {
 					errStr = null;
 				}
@@ -268,20 +269,20 @@ public class GuiMatrix extends LIGuiScreen {
 			});
 			
 			addWidget(opw = new InputBox(48, 25, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setTextColor(0, 255, 255, 255));
 			
 			addWidget(pwd = new InputBox(48, 39, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
 			
 			addWidget(pwd2 = new InputBox(48, 53, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.FONT_YAHEI_32).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
 		}
 		
 		@Override
 		public void draw(double mx, double my, boolean h) {
 			super.draw(mx, my, h);
 			RenderUtils.bindColor(0, 255, 255, 255);
-			drawText(ACLangs.matChangePwd(), 54, 8.5, 7, Align.CENTER);
+			ACUtils.drawText(ACLangs.matChangePwd(), 54, 8.5, 7, Align.CENTER);
 			
 			//input elements
 			RenderUtils.loadTexture(Dialogues.TEX_DIAG);
@@ -291,7 +292,7 @@ public class GuiMatrix extends LIGuiScreen {
 			if(errStr != null) {
 				long time = Minecraft.getSystemTime();
 				GL11.glColor4d(1, 0.2, 0.2, 0.8);
-				drawText(errStr, 12, 63, 5.5);
+				ACUtils.drawText(errStr, 12, 63, 5.5);
 				if(time - lastTime > TIME_WAIT) {
 					errStr = null;
 				}
@@ -374,14 +375,6 @@ public class GuiMatrix extends LIGuiScreen {
 			mat.stateDiag.initCancel();
 		}
 		
-	}
-	
-	private static void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
-	}
-	
-	private static void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
 	}
 
 }

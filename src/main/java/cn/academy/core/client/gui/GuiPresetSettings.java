@@ -166,6 +166,7 @@ public class GuiPresetSettings extends LIGuiScreen {
 					RenderUtils.bindGray(.6, .6);
 					HudUtils.drawModalRect(0, 0, STEP, HEIGHT);
 				}
+				
 			}
 			
 			@Override
@@ -387,11 +388,11 @@ public class GuiPresetSettings extends LIGuiScreen {
 	}
 	
 	private void drawText(String text, double x, double y, double size) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size);
+		ACClientProps.font().draw(text, x, y, size);
 	}
 	
 	private void drawText(String text, double x, double y, double size, Align align) {
-		ACClientProps.FONT_YAHEI_32.draw(text, x, y, size, align);
+		ACClientProps.font().draw(text, x, y, size, align);
 	}
 	
 }

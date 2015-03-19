@@ -145,7 +145,7 @@ public class SkillLocatingTele extends SkillBase {
 			//sub widgets
 			mainScreen.addWidget(box = new InputBox(42, 148, 127, 25, 20, 1, 15));
 			box.setTextColor(255, 255, 255, 180);
-			box.setFont(ACClientProps.FONT_YAHEI_32);
+			box.setFont(ACClientProps.font());
 		}
 		
 		private boolean isCreating() {

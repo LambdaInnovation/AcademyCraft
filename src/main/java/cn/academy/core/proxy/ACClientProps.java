@@ -15,6 +15,8 @@ package cn.academy.core.proxy;
 import net.minecraft.util.ResourceLocation;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
+import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegSubmoduleInit.Side;
 import cn.liutils.util.render.LambdaFont;
 
 /**
@@ -23,6 +25,7 @@ import cn.liutils.util.render.LambdaFont;
  */
 @RegistrationClass
 @ForcePreloadTexture
+@RegSubmoduleInit(side = Side.CLIENT_ONLY)
 public class ACClientProps {
 
 	//Textures
@@ -57,13 +60,14 @@ public class ACClientProps {
 		TEX_GUI_PRESET = src("academy:textures/guis/preset.png"),
 		TEX_EFF_MD_SHIELD = src("academy:textures/effects/mdshield.png");
 	
-	public static LambdaFont FONT_YAHEI_32 = new LambdaFont(
-		"/assets/academy/fonts/yahei.lf",
-		new ResourceLocation[] { 
-			src("academy:fonts/yahei0.png"),
-			src("academy:fonts/yahei1.png"),
-			src("academy:fonts/yahei2.png")
-		});
+	private static ResourceLocation[] fontLocation;
+	static {
+		fontLocation = new ResourceLocation[12];
+		for(int i = 0; i < 12; ++i) {
+			fontLocation[i] = new ResourceLocation("academy:fonts/yahei" + i + ".png");
+		}
+	}
+	private static LambdaFont FONT_YAHEI_32;
 	
 	//Model Textures
 	public static final ResourceLocation
@@ -102,6 +106,14 @@ public class ACClientProps {
 			ret[i] = src("academy:textures/effects/" + s + "/" + i + ".png");
 		}
 		return ret;
+	}
+	
+	public static void init() {
+		FONT_YAHEI_32 = new LambdaFont("/assets/academy/fonts/yahei.lf", fontLocation);
+	}
+	
+	public static LambdaFont font() {
+		return FONT_YAHEI_32;
 	}
 
 }
