@@ -14,7 +14,6 @@ package cn.academy.core;
 
 import net.minecraft.command.CommandHandler;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 
@@ -24,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 import cn.academy.core.command.CmdCheating;
 import cn.academy.core.command.CmdDataView;
 import cn.academy.core.proxy.ACCommonProps;
-import cn.academy.core.register.ACItems;
+import cn.academy.core.register.ACCreativeTab;
 import cn.academy.core.register.ACMiscReg;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
@@ -78,12 +77,7 @@ public class AcademyCraft {
 	/**
 	 * 创造栏
 	 */
-	public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
-		@Override
-		public Item getTabIconItem() {
-			return ACItems.logo;
-		}
-	};
+	public static CreativeTabs cct = new ACCreativeTab();
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -108,7 +102,7 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 	}
 	
-	@EventHandler()
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
         CommandHandler ch = (CommandHandler) MinecraftServer.getServer().getCommandManager();
