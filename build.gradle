@@ -1,50 +1,258 @@
+//This build script can upload built jars to a maven repo.
+//
+//Usage:
+//  Use task 'uploadGithubAndClean'. It will build, generate jars and publish them.
+//  gradle params:
+//    -PnewMavenRepo=1
+//      Create a new maven repo, instead of reading from Github.
+//    -PpublishVersion=<string>
+//      Use the given string as the project version.
+//    -Dorg.ajoberstar.grgit.auth.username=<string>
+//      The username in authentication to Github repo.
+//    -Dorg.ajoberstar.grgit.auth.password=<string>
+//      The password in authentication to Github repo.
+
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-	}
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+
+        //Grgit: handle git repository in Gradle
+        classpath 'org.ajoberstar:grgit:1.1.0'
+    }
 }
 
 apply plugin: 'forge'
-
-version = "0.0.1dev"
-group= "cn.academy.core.AcademyCraftMod"
-archivesBaseName = "AcademyCraft"
+apply plugin: 'maven'
 
 minecraft {
-	version = "1.7.2-10.12.2.1121"
-	runDir = "eclipse/assets"
-}
-
-jar {
-	manifest {
-		attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
-	}
+    version = "1.7.2-10.12.2.1121"
+    runDir = "eclipse/assets"
 }
 
 processResources
 {
-	inputs.property "version", project.version
-	inputs.property "mcversion", project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+    }
 
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-	}
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
+
+
+//---------------------------------
+//          Configuration
+//---------------------------------
+
+//mc version, used as the beginning part of the project version
+ext.mc_version = "1.7.2"
+
+//maven repo to be pushed
+ext.maven_github_url = 'https://github.com/LambdaInnovation/AcademyCraft.git'
+
+//maven repo group
+group= "cn.academy"
+
+//maven repo base name
+archivesBaseName = "AcademyCraft"
+
+//---------------------------------
+//          Dependencies
+//---------------------------------
+
+repositories {
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+	maven {
+		name = "annoreg"
+		url = "https://raw.github.com/LambdaInnovation/AnnotationRegistry/mvn_repo/AnnotationRegistry"
+	}
+	maven {
+		name = "liutils"
+		url = "https://raw.github.com/LambdaInnovation/LIUtils/mvn_repo/LIUtils"
+	}
+}
+dependencies {
+	compile 'net.industrial-craft:industrialcraft-2:2.1.484-experimental:api'
+	compile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
+	compile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
+}
+//---------------------------------
+
+ext.maven_branch = 'mvn_repo'
+ext.tmp_mvn_dir = 'build/tmp/mvn_repo'
+ext.mvn_url = (new File(tmp_mvn_dir, archivesBaseName)).toURI().toURL().toString()
+
+// Tasks
+
+import org.ajoberstar.grgit.*
+
+// setup a temp repo in ./build/tmp/mvn_repo, according to params
+// newMavenRepo=1, create new maven repo
+// publishVersion=<string>, name of the version
+task setupMavenRepo << {
+    File f = new File(tmp_mvn_dir)
+    if (f.exists()) {
+        print('Delete temp repo.\n')
+        org.apache.commons.io.FileUtils.deleteDirectory(f)
+    }
+
+    if (project.hasProperty('newMavenRepo')) {
+        def mvn_repo = Grgit.init(dir: tmp_mvn_dir)
+        mvn_repo.checkout(branch: maven_branch, orphan: true)
+        if (project.hasProperty('publishVersion')) {
+            project.version = project.publishVersion
+        } else {
+            project.version = mc_version + '.1'
+        }
+        mvn_repo.close()
+    } else {
+        def mvn_repo = Grgit.clone(dir: tmp_mvn_dir, uri: maven_github_url)
+        mvn_repo.checkout(
+            branch:maven_branch, 
+            startPoint:'remotes/origin/' + maven_branch, 
+            createBranch:true)
+
+        if (project.hasProperty('publishVersion')) {
+            project.version = project.publishVersion
+        } else {
+            def commit = mvn_repo.log().find {
+                it.shortMessage.startsWith('Build ' + mc_version) && 
+                    it.shortMessage.substring(it.shortMessage.lastIndexOf('.') + 1).matches('\\d+')
+            }
+            def msg = '.0'
+            if (commit != null)
+                msg = commit.shortMessage
+            def build_number = msg.substring(msg.lastIndexOf('.') + 1).toInteger() + 1
+            project.version = mc_version + '.' + build_number
+        }
+        mvn_repo.close()
+    }
+}
+
+task removeMavenRepoAfterUpload(dependsOn: 'uploadGithubArchives') << {
+    File f = new File(tmp_mvn_dir)
+    if (f.exists()) {
+        print('Delete temp repo.\n')
+        org.apache.commons.io.FileUtils.deleteDirectory(f)
+    }
+}
+
+// The 3 jars to be published
+
+// add a source jar
+task sourceJar(type: Jar, dependsOn: 'setupMavenRepo') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
+}
+
+// because the normal output has been made to be obfuscated
+task deobfJar(type: Jar, dependsOn: 'setupMavenRepo') {
+    from sourceSets.main.output
+    classifier = 'dev'
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
+}
+
+// add api classes to main package
+jar {
+    dependsOn 'setupMavenRepo'
+    
+    manifest {
+        attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
+    }
+
+    exclude 'cn/annoreg/*'
+    exclude 'cn/liutils/*'
+}
+
+// make sure all of these happen when we run build
+build.dependsOn sourceJar, deobfJar
+
+// specify artifacts to be uploaded
+artifacts {
+    // the default jar is already here by default
+    archives sourceJar
+    archives deobfJar
+}
+
+task setupUploadParams(dependsOn: 'setupMavenRepo') << {
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: mvn_url)
+
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'A Minecraft mod about superability, including its aquiring, upgrading and using.'
+                        url 'https://github.com/LambdaInnovation/AcademyCraft'
+
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/LambdaInnovation/AcademyCraft/issues'
+                        }
+
+                        licenses {
+                            license {
+                                name 'GNU General Public License.'
+                                url 'http://www.gnu.org/licenses/gpl.html'
+                                distribution 'repo'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'LambdaInnovation'
+                                name 'LambdaInnovation'
+                                roles { role 'developer' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+uploadArchives {
+    dependsOn 'setupUploadParams'
+    dependsOn 'reobf'
+}
+
+task uploadGithubArchives(dependsOn: 'uploadArchives') << {
+    def mvn_repo = Grgit.open(dir:tmp_mvn_dir)
+    mvn_repo.add(patterns: ['.'])
+    mvn_repo.commit(message: 'Build ' + version,
+        author: new Person('LI Github', 'github@li-dev.cn'))
+    mvn_repo.push(remote: maven_github_url)
+    mvn_repo.close()
+}
+
+task uploadGithubAndClean(dependsOn: 'removeMavenRepoAfterUpload') << {
+}
