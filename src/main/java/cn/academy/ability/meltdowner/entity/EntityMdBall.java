@@ -135,7 +135,8 @@ public class EntityMdBall extends EntityX {
 	}
 	
     @Override
-	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+	public void readFromNBT(NBTTagCompound tag) {
+    	super.readFromNBT(tag);
     	setDead();
     }
 	

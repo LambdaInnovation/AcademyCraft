@@ -86,6 +86,13 @@ public class EntityMagHook extends EntityX {
 		this.onGround = false;
 	}
 	
+	public EntityMagHook(World world) {
+		super(world);
+		this.isAirBorne = true;
+		this.onGround = false;
+		this.ignoreFrustumCheck = true;
+	}
+	
 	@Override
 	public void entityInit() {
 		super.entityInit();
@@ -112,6 +119,7 @@ public class EntityMagHook extends EntityX {
 	}
 	
 	private void sync() {
+		//System.out.println("sync " + posX + " " + posY + " " + posZ + " " + worldObj.isRemote + " " + isHit + " " + this);
 		if(worldObj.isRemote) {
 			boolean lastHit = isHit;
 			byte b1 = dataWatcher.getWatchableObjectByte(10);
@@ -131,17 +139,10 @@ public class EntityMagHook extends EntityX {
 			dataWatcher.updateObject(13, Integer.valueOf(hookZ));
 		}
 	}
-	
-    @Override
-	public boolean interactFirst(EntityPlayer player) {
-    	if(!worldObj.isRemote)
-    		dropAsItem();
-        return true;
-    }
     
     @Override
     public boolean attackEntityFrom(DamageSource ds, float dmg) {
-    	if(!worldObj.isRemote && ds.getEntity() instanceof EntityPlayer) {
+    	if(isHit && !worldObj.isRemote && ds.getEntity() instanceof EntityPlayer) {
     		dropAsItem();
     	}
     	return true;
@@ -188,31 +189,28 @@ public class EntityMagHook extends EntityX {
     		
     	});
     }
-
-	public EntityMagHook(World world) {
-		super(world);
-		this.isAirBorne = true;
-		this.onGround = false;
-	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
+		System.out.println("Storing magHook");
 		tag.setBoolean("isHit", isHit);
 		tag.setInteger("hitSide", hitSide);
 		tag.setInteger("hookX", hookX);
-		tag.setInteger("hookZ", hookZ);
+		tag.setInteger("hookY", hookY);
 		tag.setInteger("hookZ", hookZ);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
+		
 		isHit = tag.getBoolean("isHit");
 		hitSide = tag.getInteger("hitSide");
 		hookX = tag.getInteger("hookX");
 		hookY = tag.getInteger("hookY");
 		hookZ = tag.getInteger("hookZ");
+		
 		if(isHit) {
 			setStill();
 		}

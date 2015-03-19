@@ -63,11 +63,11 @@ public class GuiPresetSelect extends AuxGui {
 	public static class KeyHandler implements IKeyHandler {
 		@Override
 		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(tickEnd || !ClientUtils.isPlayerInGame() ||
-				AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategoryID() == 0) return;
-			if(GuiPresetSelect.instance.isOpen())
+			if(tickEnd || !AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).hasAbility())
+				return;
+			if(GuiPresetSelect.instance.isOpen()) {
 				GuiPresetSelect.instance.closeGui();
-			else if(ClientUtils.isPlayerInGame()) {
+			} else if(ClientUtils.isPlayerInGame()) {
 				GuiPresetSelect.instance.openGui();
 			}
 		}

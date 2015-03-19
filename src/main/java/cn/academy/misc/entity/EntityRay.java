@@ -223,12 +223,13 @@ public class EntityRay extends EntityX {
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
 		setDead();
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
-		setDead();
+		super.writeToNBT(tag);
 	}
 	
 	@Override

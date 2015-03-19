@@ -106,6 +106,9 @@ public class SkillMagMove extends SkillBase {
 		
 		final static double ACCEL = 0.08d;
 		final double vel;
+		
+		boolean lastHelping;
+		int lastHelpTick;
 
 		public HandleVel(EntityPlayer target, double _tx, double _ty, double _tz, double _vel) {
 			super(target);
@@ -141,19 +144,33 @@ public class SkillMagMove extends SkillBase {
 				dy = ty - player.posY,
 				dz = tz - player.posZ;
 			
-			if(Math.abs(GenericUtils.vecLenSq(mox, moy, moz) - 
-			GenericUtils.vecLenSq(player.motionX, player.motionY, player.motionZ)) > 0.5) {
+			double lastMo = GenericUtils.vecLenSq(player.motionX, player.motionY, player.motionZ);
+			if(Math.abs(GenericUtils.vecLenSq(mox, moy, moz) - lastMo) > 0.5) {
 				mox = player.motionX;
 				moy = player.motionY;
 				moz = player.motionZ;
 			}
 			
+			System.out.println(lastMo);
+			
 			double mod = Math.sqrt(dx * dx + dy * dy + dz * dz) / vel;
 			
 			dx /= mod; dy /= mod; dz /= mod;
+
+			//Prevent helping player too much and make him flying in the air.
+			boolean help = lastMo < 0.009;
+			if(help) {
+				if(!lastHelping && (ticksExisted - lastHelpTick < 10))
+					help = false;
+			} else {
+				if(lastHelping) {
+					lastHelpTick = ticksExisted;
+				}
+			}
+			lastHelping = help;
 			
 			mox = player.motionX = tryAdjust(mox, dx);
-			moy = player.motionY = tryAdjust(moy, dy);
+			moy = player.motionY = tryAdjust(moy, dy) + (help ? 0.15 : 0);
 			moz = player.motionZ = tryAdjust(moz, dz);
 		}
 		
@@ -261,19 +278,22 @@ public class SkillMagMove extends SkillBase {
 				if((mop.typeOfHit == MovingObjectType.BLOCK && 
 					JudgeUtils.isMetalBlock(player.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ)))
 						|| (mop.typeOfHit == MovingObjectType.ENTITY && JudgeUtils.isEntityMetallic(mop.entityHit))) {
-					player.worldObj.spawnEntityInWorld
-					(handler = (
-						mop.typeOfHit == MovingObjectType.BLOCK ? 
-							new HandleVel(player, 
-								mop.hitVec.xCoord, 
-								mop.hitVec.yCoord + 0.8, 
-								mop.hitVec.zCoord, 
-								dist * 0.07) : 
-							new HandleVel(player, mop.entityHit, dist * 0.07)
-					));
+					
+					handler = (
+							mop.typeOfHit == MovingObjectType.BLOCK ? 
+								new HandleVel(player, 
+									mop.hitVec.xCoord, 
+									mop.hitVec.yCoord + 0.8, 
+									mop.hitVec.zCoord, 
+									dist * 0.07) : 
+								new HandleVel(player, mop.entityHit, dist * 0.07)
+						);
+					
 					
 					if(!isRemote()) {
 						player.worldObj.spawnEntityInWorld(ray = new Ray(handler));
+					} else {
+						player.worldObj.spawnEntityInWorld(handler);
 					}
 					
 					return; //fin starting action if successful
@@ -291,6 +311,8 @@ public class SkillMagMove extends SkillBase {
 			if(!isRemote() && (ticks - 1) % 40 == 0) {
 				playSound(player, ((ticks - 1) / 40) % 5);
 			}
+			if(handler.followEntity && handler.targ.isDead)
+				finishSkill(true);
 			return !data.decreaseCP(csm, CatElectro.magMovement);
 		}
 

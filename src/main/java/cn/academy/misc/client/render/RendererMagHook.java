@@ -41,11 +41,8 @@ public class RendererMagHook extends Render {
 		if (hook.isHit) {
 			realModel = model_open;
 			hook.preRender();
-			x = hook.posX - RenderManager.renderPosX;
-			y = hook.posY - RenderManager.renderPosY;
-			z = hook.posZ - RenderManager.renderPosZ;
 		}
-
+		
 		GL11.glPushMatrix();
 		RenderUtils.loadTexture(ACClientProps.TEX_MDL_MAGHOOK);
 		GL11.glTranslated(x, y, z);
