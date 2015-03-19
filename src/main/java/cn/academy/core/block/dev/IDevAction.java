@@ -40,6 +40,11 @@ public interface IDevAction {
 	double getSuccessfulRate(AbilityData data);
 	
 	/**
+	 * Validation method, in both client and server.
+	 */
+	boolean canPerform(AbilityData data);
+	
+	/**
 	 * Get a human readable information about this action. Typically used in GUIs.
 	 */
 	@SideOnly(Side.CLIENT)

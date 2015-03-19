@@ -47,5 +47,10 @@ public class DevActionLevel implements IDevAction {
 	public double getSuccessfulRate(AbilityData data) {
 		return data.getLevel().getStimulationProb();
 	}
+
+	@Override
+	public boolean canPerform(AbilityData data) {
+		return data.canUpgradeLevel();
+	}
 	
 }

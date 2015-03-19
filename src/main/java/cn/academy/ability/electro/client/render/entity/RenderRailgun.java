@@ -23,7 +23,7 @@ import cn.academy.misc.client.render.RendererRayBlended;
 public class RenderRailgun extends RendererRayBlended<EntityRailgun>{
 	public RenderRailgun() {
 		super(ACClientProps.TEX_EFF_RAILGUN, ACClientProps.TEX_EFF_RAILGUN_FADE, 0.66667);
-		widthFp = 0.18;
-		widthTp = 0.44;
+		widthFp = 0.4;
+		widthTp = 0.6;
 	}
 }

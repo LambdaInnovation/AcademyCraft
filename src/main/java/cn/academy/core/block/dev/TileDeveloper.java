@@ -230,6 +230,10 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 		}
 		action = getAction(id, par);
 		AbilityData data = AbilityDataMain.getData(user);
+		if(!action.canPerform(data)) { //Server-side validation
+			return;
+		}
+		
 		isStimulating = true;
 		maxStimTimes = action.getExpectedStims(data);
 		stimSuccess = stimFailure = 0;

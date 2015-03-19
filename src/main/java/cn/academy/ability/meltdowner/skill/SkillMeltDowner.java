@@ -25,7 +25,6 @@ import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD
- *
  */
 public class SkillMeltDowner extends SkillBase {
 
@@ -40,7 +39,7 @@ public class SkillMeltDowner extends SkillBase {
 	}
 	
 	private static float getDamage(int slv, int lv) {
-		return (1.5f) * (float)(10 + GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8));
+		return (2f) * (float)(10 + GenericUtils.randIntv(slv + lv * 1.2, slv * 1.2 + lv * 1.8));
 	}
 	
 	@Override
@@ -70,21 +69,11 @@ public class SkillMeltDowner extends SkillBase {
 				this.finishSkill(false);
 				return;
 			}
-			if(!player.worldObj.isRemote)
+			if(!player.worldObj.isRemote) {
 				player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner", 0.5f, 1.0f);
-		}
-		
-		@Override
-		protected boolean onTick(int time) {
-			if(time == 5) {
-				int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
-				if(!player.worldObj.isRemote) {
-					player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv)));
-				}
-				finishSkill(true);
-				return true;
+				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv)));
 			}
-			return false;
+			finishSkill(true);
 		}
 		
 	}

@@ -46,4 +46,9 @@ public class DevActionDevelop implements IDevAction {
 		return ACLangs.devNewAbility();
 	}
 
+	@Override
+	public boolean canPerform(AbilityData data) {
+		return !data.hasAbility();
+	}
+
 }

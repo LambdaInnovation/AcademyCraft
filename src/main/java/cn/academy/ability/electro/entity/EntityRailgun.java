@@ -52,7 +52,7 @@ public class EntityRailgun extends EntityRay {
 		super(data.getPlayer());
 		
 		int sid = data.getSkillID(CatElectro.railgun);
-		damage = Math.max(9, 19 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 13F);
+		damage = Math.max(9, 17 + data.getSkillLevel(sid) * 3F + (data.getLevelID() - 3) * 10F);
 		explRadius = (int) (damage * 0.35);
 		
 		MovingObjectPosition ret = this.performTrace();
@@ -88,7 +88,7 @@ public class EntityRailgun extends EntityRay {
 	}
 	
 	private void onCollide(MovingObjectPosition trace) {
-		DamageHelper.explode(worldObj, getSpawner(), explRadius, damage * .6, trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, damage * .4f);
+		DamageHelper.explode(worldObj, getSpawner(), explRadius, trace.hitVec.xCoord, trace.hitVec.yCoord, trace.hitVec.zCoord, 0.27);
 	}
 	
 	@Override

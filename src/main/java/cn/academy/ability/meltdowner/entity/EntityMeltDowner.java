@@ -83,8 +83,7 @@ public class EntityMeltDowner extends EntityMdRayBase {
 			}
 		}
 		//真男人从不回头看爆炸
-		DamageHelper.explode(worldObj, getSpawner(), dmg * .35f, dmg * .12f, 
-			mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, dmg * .5f);
+		DamageHelper.explode(worldObj, getSpawner(), dmg * .25f, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, 0.3);
 	}
 	
 	/**
@@ -174,6 +173,11 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	@Override
 	public ResourceLocation[] getTexData() {
 		return ACClientProps.ANIM_MD_RAY_L;
+	}
+	
+	@Override
+	protected float getDefaultRayLen() {
+		return 60.0f;
 	}
 	
 	@SideOnly(Side.CLIENT)

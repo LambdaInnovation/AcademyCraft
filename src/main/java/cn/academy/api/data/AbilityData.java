@@ -144,7 +144,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		return getCategory().getLevel(levelId);
 	}
 	
-	public boolean canUpdateLevel() {
+	public boolean canUpgradeLevel() {
 		return !this.hasAbility() || (getLevelID() < getLevelCount() - 1 && this.maxCP >= getLevel().getMaxCP());
 	}
 	
@@ -173,7 +173,8 @@ public class AbilityData implements IExtendedEntityProperties {
 	}
 	
 	public float getMaxCPIncr(float consumedCP) {
-		return consumedCP * 0.005f;
+		float factor = (float) (1.0 - this.levelId * 0.14);
+		return consumedCP * 0.005f * factor;
 	}
 	
 	//-----Skill-----

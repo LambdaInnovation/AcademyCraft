@@ -47,4 +47,9 @@ public class DevActionSkill implements IDevAction {
 		return 0.8;
 	}
 
+	@Override
+	public boolean canPerform(AbilityData data) {
+		return data.canSkillUpgrade(skillID);
+	}
+
 }

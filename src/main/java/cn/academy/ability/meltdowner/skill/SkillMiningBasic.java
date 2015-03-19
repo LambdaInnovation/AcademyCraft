@@ -69,7 +69,7 @@ public class SkillMiningBasic extends SkillMiningBase {
 
 	@Override
 	float getConsume(int slv, int lv) {
-		return 0.6f * (10 - slv * 0.3f - lv * 0.4f);
+		return 0.5f * (10 - slv * 0.3f + lv * 0.4f);
 	}
 
 	@Override
