@@ -35,7 +35,7 @@ public class EntityRay extends EntityX {
 	
 	EntityPlayer spawner;
 	
-	boolean load;
+	protected boolean load;
 	
 	protected double alpha = 1.0;
 	

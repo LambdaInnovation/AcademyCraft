@@ -126,12 +126,12 @@ public class SkillWeakArc extends SkillBase {
 
 		@Override
 		protected float getDamage(int slv, int lv) {
-			return lv + slv * 0.5f;
+			return 3f + lv * 0.5f + slv * 0.3f; //3-8
 		}
 
 		@Override
 		protected double getAOERange(int slv, int lv) {
-			return 2 + lv * 0.3 + slv * 0.5;
+			return 0;
 		}
 		
 		@Override

@@ -48,6 +48,7 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 		setBlockName("ac_magindc");
 		setBlockTextureName("academy:mag");
 		setHardness(3.0f);
+		setBlockBounds(0, 0, 0, 1, 0.6f, 1);
 	}
 
 	@Override

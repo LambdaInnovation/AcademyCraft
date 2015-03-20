@@ -83,9 +83,9 @@ public abstract class AttackingArcBase extends EntityArcBase {
 					continue;
 				DamageHelper.applyEntityDamage(ent, DamageSource.causeMobDamage(getSpawner()), sdmg);
 				double ox = ent.posX, oy = ent.posY + ent.height * 0.6, oz = ent.posZ;
-				new EntityExcitedArc(worldObj, 
+				worldObj.spawnEntityInWorld(new EntityExcitedArc(worldObj, 
 					Vec3.createVectorHelper(tx, ty, tz),
-					Vec3.createVectorHelper(ox, oy, oz), 5);
+					Vec3.createVectorHelper(ox, oy, oz), 12));
 			}
 		}
 	}

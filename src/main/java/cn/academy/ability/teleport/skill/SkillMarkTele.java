@@ -116,7 +116,7 @@ public class SkillMarkTele extends SkillBase {
 			if(player instanceof EntityPlayerMP) {
 				((EntityPlayerMP)player).setPositionAndUpdate(mark.posX, mark.posY, mark.posZ);
 			}
-			player.fallDistance *= 0.3f; //lower the fall distance.
+			player.fallDistance = 0.0f; //lower the fall distance.
 			player.worldObj.playSoundAtEntity(player, "academy:tp.tp", .5f, 1f);
 			if(!isRemote())
 			data.decreaseCP((float) 

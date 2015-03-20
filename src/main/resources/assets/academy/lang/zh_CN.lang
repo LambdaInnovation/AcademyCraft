@@ -205,20 +205,20 @@ level_3=大能力者
 level_4=超能力者
 #level_5=绝对能力者
 
-#WEN
+#WEN(Wireless Energy Network)
 ac.notconnected=未连接
 ac.matinit=初始化
-ac.opstat=WEN状态
+ac.opstat=操作状态
 ac.opsuc=操作成功
 ac.opfail=操作失败
 ac.cnnexist=频道已存在！
 ac.transmitting=操作中
 ac.inconsistentpass=两次输入的密码必须一致！
 ac.loading=加载中
-ac.wllogin=WEN登录
+ac.wllogin=能源网登录
 ac.matpwd=更改密码
 ac.freqreg=频率变送器
-ac.frchannel=频道
+ac.frchannel=选择的频道
 ac.frselect=选择频道
 ac.frcur=当前频道
 ac.frclear=清除连接

@@ -40,7 +40,10 @@ public class RenderElecArc extends RendererRayTiling<EntityArcBase> {
 	
 	@Override
 	protected void drawPerBillboard(EntityArcBase ent, int i) {
-		GL11.glRotated(ent.getRotation(i), 0, 0, 1);
+		GL11.glPushMatrix();
+		//GL11.glRotated(ent.getRotation(i), 0, 0, 1);
+		super.drawPerBillboard(ent, i);
+		GL11.glPopMatrix();
 	}
 
 }

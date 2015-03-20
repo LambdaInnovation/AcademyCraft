@@ -36,7 +36,8 @@ public class EntityExcitedArc extends EntityArcBase {
 
 	public EntityExcitedArc(World world, Vec3 begin, Vec3 end, int life) {
 		super(world);
-		this.clearDaemonHandlers();
+		this.load = true;
+		//this.clearDaemonHandlers();
 		addDaemonHandler(new LifeTime(this, life));
 		this.setByPoint(begin.xCoord, begin.yCoord, begin.zCoord, end.xCoord, end.yCoord, end.zCoord);
 	}
@@ -52,6 +53,11 @@ public class EntityExcitedArc extends EntityArcBase {
 	
 	@Override
 	protected boolean doesPerformTrace() {
+		return false;
+	}
+	
+	@Override
+	public boolean isNearPlayer() {
 		return false;
 	}
 	

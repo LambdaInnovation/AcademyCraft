@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.meltdowner.skill;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.ability.meltdowner.CatMeltDowner;
@@ -40,8 +41,8 @@ public class SkillMiningExpert extends SkillMiningBase {
 		}
 
 		@Override
-		protected int getDigRate(int slv, int lv) {
-			return 9;
+		protected float getSpeed(int slv, int lv) {
+			return .25f;
 		}
 
 		@Override

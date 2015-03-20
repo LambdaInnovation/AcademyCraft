@@ -313,6 +313,7 @@ public class SkillMagMove extends SkillBase {
 			}
 			if(handler.followEntity && handler.targ.isDead)
 				finishSkill(true);
+			player.fallDistance = 0.0f; //Cancel the falling distance while doing movement.
 			return !data.decreaseCP(csm, CatElectro.magMovement);
 		}
 

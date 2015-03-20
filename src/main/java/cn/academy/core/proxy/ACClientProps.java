@@ -30,51 +30,52 @@ public class ACClientProps {
 
 	//Textures
 	public static final ResourceLocation
-		TEX_MDL_DEVELOPER = src("academy:textures/models/ability_developer.png"),
-		TEX_MDL_ELEC_CARD = src("academy:textures/models/card.png"),
-		TEX_HUD_BAR = src("academy:textures/guis/bar.png"),
-		TEX_COIN_FRONT = src("academy:textures/items/coin-front.png"),
-		TEX_COIN_BACK = src("academy:textures/items/coin-back.png"),
-		TEX_EFF_RAILGUN = src("academy:textures/effects/railgun.png"),
-		TEX_EFF_RAILGUN_FADE = src("academy:textures/effects/railgun_fade.png"),
-		TEX_GUI_RAILGUN = src("academy:textures/guis/railgun.png"),
-		TEX_GUI_RAILGUN_PRG = src("academy:textures/guis/railgun_prog.png"),
-		TEX_GUI_RAILGUN_DEC = src("academy:textures/guis/dec_railgun.png"),
-		TEX_GUI_AD_MAIN = src("academy:textures/guis/ad_main.png"),
-		TEX_GUI_AD_LEARNING = src("academy:textures/guis/ad_learning.png"),
-		TEX_GUI_AD_SKILL = src("academy:textures/guis/ad_skill.png"),
-		TEX_GUI_AD_DIAG = src("academy:textures/guis/ad_dialogue.png"),
-		TEX_DBG_STD = src("academy:textures/debug/11.png"),
-		TEX_DBG_31 = src("academy:textures/debug/31.png"),
-		//TEX_MDL_WINDGEN = src("academy:textures/models/windgen.png"),
-		//TEX_MDL_WINDGEN_FAN = src("academy:textures/models/windgen_fan.png"),
-		TEX_MDL_SOLAR = src("academy:textures/models/solar.png"),
-		TEX_ELECARC = src("academy:textures/effects/arc.png"),
-		TEX_GUI_CLOSE = src("academy:textures/guis/close.png"),
-		TEX_GUI_KS_MASK = src("academy:textures/guis/key_settings_mask.png"),
-		TEX_QUESTION_MARK = src("academy:textures/guis/question.png"),
-		TEX_LOGO_RAYS = src("academy:textures/guis/logo_rays.png"),
-		TEX_LOGO_FRAME = src("academy:textures/guis/logo_frame.png"),
-		TEX_LOGO_GEOM = src("academy:textures/guis/logo_geom.png"),
-		TEX_LOGO_BACK = src("academy:textures/guis/logo_back.png"),
-		TEX_GUI_PRESET = src("academy:textures/guis/preset.png"),
-		TEX_EFF_MD_SHIELD = src("academy:textures/effects/mdshield.png");
+		TEX_MDL_DEVELOPER = src("textures/models/ability_developer.png"),
+		TEX_MDL_ELEC_CARD = src("textures/models/card.png"),
+		TEX_HUD_BAR = src("textures/guis/bar.png"),
+		TEX_COIN_FRONT = src("textures/items/coin-front.png"),
+		TEX_COIN_BACK = src("textures/items/coin-back.png"),
+		TEX_EFF_RAILGUN = src("textures/effects/railgun.png"),
+		TEX_EFF_RAILGUN_FADE = src("textures/effects/railgun_fade.png"),
+		TEX_GUI_RAILGUN = src("textures/guis/railgun.png"),
+		TEX_GUI_RAILGUN_PRG = src("textures/guis/railgun_prog.png"),
+		TEX_GUI_RAILGUN_DEC = src("textures/guis/dec_railgun.png"),
+		TEX_GUI_AD_MAIN = src("textures/guis/ad_main.png"),
+		TEX_GUI_AD_LEARNING = src("textures/guis/ad_learning.png"),
+		TEX_GUI_AD_SKILL = src("textures/guis/ad_skill.png"),
+		TEX_GUI_AD_DIAG = src("textures/guis/ad_dialogue.png"),
+		TEX_DBG_STD = src("textures/debug/11.png"),
+		TEX_DBG_31 = src("textures/debug/31.png"),
+		//TEX_MDL_WINDGEN = src("textures/models/windgen.png"),
+		//TEX_MDL_WINDGEN_FAN = src("textures/models/windgen_fan.png"),
+		TEX_MDL_SOLAR = src("textures/models/solar.png"),
+		TEX_ELECARC = src("textures/effects/arc.png"),
+		TEX_GUI_CLOSE = src("textures/guis/close.png"),
+		TEX_GUI_KS_MASK = src("textures/guis/key_settings_mask.png"),
+		TEX_QUESTION_MARK = src("textures/guis/question.png"),
+		TEX_LOGO_RAYS = src("textures/guis/logo_rays.png"),
+		TEX_LOGO_FRAME = src("textures/guis/logo_frame.png"),
+		TEX_LOGO_GEOM = src("textures/guis/logo_geom.png"),
+		TEX_LOGO_BACK = src("textures/guis/logo_back.png"),
+		TEX_GUI_PRESET = src("textures/guis/preset.png"),
+		TEX_EFF_MD_SHIELD = src("textures/effects/mdshield.png"),
+		TEX_EFF_LAVA = src("textures/effects/lava.png");
 	
 	private static ResourceLocation[] fontLocation;
 	static {
 		fontLocation = new ResourceLocation[12];
 		for(int i = 0; i < 12; ++i) {
-			fontLocation[i] = new ResourceLocation("academy:fonts/yahei" + i + ".png");
+			fontLocation[i] = src("fonts/yahei" + i + ".png");
 		}
 	}
 	private static LambdaFont FONT_YAHEI_32;
 	
 	//Model Textures
 	public static final ResourceLocation
-		TEX_MDL_GRID = src("academy:textures/models/grid.png"),
-		TEX_MDL_GRID_BLOCK = src("academy:textures/models/grid_block.png"),
-		TEX_MDL_MAGHOOK = src("academy:textures/models/maghook.png"),
-		TEX_MDL_SILBARN = src("academy:textures/models/silbarn.png");
+		TEX_MDL_GRID = src("textures/models/grid.png"),
+		TEX_MDL_GRID_BLOCK = src("textures/models/grid_block.png"),
+		TEX_MDL_MAGHOOK = src("textures/models/maghook.png"),
+		TEX_MDL_SILBARN = src("textures/models/silbarn.png");
 	
 	//Animations
 	public static final ResourceLocation
@@ -93,17 +94,17 @@ public class ACClientProps {
 	
 	//Railgun
 	public static final ResourceLocation
-		EFF_MV = src("academy:textures/effects/mineview.png"),
-		EFF_RAILGUN_PREP_CC = src("academy:textures/effects/railgun_prepare.png");
+		EFF_MV = src("textures/effects/mineview.png"),
+		EFF_RAILGUN_PREP_CC = src("textures/effects/railgun_prepare.png");
 
 	private static ResourceLocation src(String s) {
-		return new ResourceLocation(s);
+		return new ResourceLocation("academy:" + s);
 	}
 	
 	private static ResourceLocation[] eff(String s, int n) {
 		ResourceLocation[] ret = new ResourceLocation[n];
 		for(int i = 0; i < n; ++i) {
-			ret[i] = src("academy:textures/effects/" + s + "/" + i + ".png");
+			ret[i] = src("textures/effects/" + s + "/" + i + ".png");
 		}
 		return ret;
 	}

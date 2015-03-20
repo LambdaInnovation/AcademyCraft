@@ -325,8 +325,10 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	}
 	
 	private void sync() {
-		TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
-		AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
+		if(!worldObj.isRemote) {
+			TargetPoint tp = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12.0);
+			AcademyCraft.netHandler.sendToAllAround(new MsgDeveloper(this), tp);
+		}
 	}
 	
 	private TileDeveloper getHead() {

@@ -12,6 +12,8 @@
  */
 package cn.academy.ability.electro.client.render.entity;
 
+import net.minecraft.entity.Entity;
+import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,8 +27,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ThinArcRender extends RenderElecArc {
 
 	{
-		widthFp = 0.3;
-		widthTp = 0.6;
+		widthFp = 2.0;
+		widthTp = 2.0;
+		ratio = 3;
+	}
+	
+	@Override
+	public void doRender(Entity var1, double x, double y, double z,
+			float h, float a) {
+		super.doRender(var1, x, y, z, h, a);
 	}
 
 }

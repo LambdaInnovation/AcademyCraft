@@ -153,7 +153,11 @@ public class SkillScatterBomb extends SkillBase {
 				balls.add(ball);
 				player.worldObj.spawnEntityInWorld(ball);
 			}
-			return ticks <= 110 && !data.decreaseCP(ccp, CatMeltDowner.scatterBomb);
+			
+			if(ticks <= 110 && !data.decreaseCP(ccp, CatMeltDowner.scatterBomb)) {
+				finishSkill(true);
+			}
+			return false;
 		}
 
 		@Override

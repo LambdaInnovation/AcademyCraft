@@ -54,8 +54,8 @@ public class SkillMiningLuck extends SkillMiningBase {
 		}
 
 		@Override
-		protected int getDigRate(int slv, int lv) {
-			return 14;
+		protected float getSpeed(int slv, int lv) {
+			return .22f;
 		}
 
 		@Override

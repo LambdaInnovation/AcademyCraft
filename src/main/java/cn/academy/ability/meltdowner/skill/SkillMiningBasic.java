@@ -40,13 +40,13 @@ public class SkillMiningBasic extends SkillMiningBase {
 		}
 
 		@Override
-		protected int getDigRate(int slv, int lv) {
-			return 16;
+		protected float getSpeed(int slv, int lv) {
+			return .1f;
 		}
 
 		@Override
 		protected int getHarvestLevel() {
-			return 2;
+			return 1;
 		}
 
 		@Override
