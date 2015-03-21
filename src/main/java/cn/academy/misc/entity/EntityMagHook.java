@@ -193,7 +193,6 @@ public class EntityMagHook extends EntityX {
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		System.out.println("Storing magHook");
 		tag.setBoolean("isHit", isHit);
 		tag.setInteger("hitSide", hitSide);
 		tag.setInteger("hookX", hookX);

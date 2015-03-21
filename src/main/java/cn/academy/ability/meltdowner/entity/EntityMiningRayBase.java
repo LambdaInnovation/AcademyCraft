@@ -163,22 +163,18 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 		}
 		
 		private void renderTarget(EntityMiningRayBase ray) {
-			System.out.println("Rendering targ");
 			if(ray.targHardness != 0 && ray.workY != -1 && ray.worldObj.getBlock(ray.workX, ray.workY, ray.workZ).isOpaqueCube()) {
 				GL11.glPushMatrix();
-				
 				double alpha = .8 * ray.curHardness / ray.targHardness;
 				GL11.glColor4d(1, 1, 1, alpha);
 				RenderUtils.loadTexture(ACClientProps.TEX_EFF_LAVA);
 				double padding = 0.01;
 				double x = ray.workX - padding - RenderManager.renderPosX,
-					y = ray.workY - padding - RenderManager.renderPosY,
-					z = ray.workZ - padding - RenderManager.renderPosZ;
-				
+				y = ray.workY - padding - RenderManager.renderPosY,
+				z = ray.workZ - padding - RenderManager.renderPosZ;
 				GL11.glTranslated(x, y, z);
 				double len = padding * 2 + 1;
 				RenderUtils.drawCube(len, len, len, true);
-				
 				GL11.glPopMatrix();
 			}
 		}

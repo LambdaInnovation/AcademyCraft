@@ -223,7 +223,7 @@ public class GuiPresetSelect extends AuxGui {
 		rect(-399, -115, 0, 0, 399, 115);
 		Preset p = PresetManager.getPreset(curSelection);
 		AbilityData data = AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer);
-		GL11.glColor4d(1, 1, 1, .35);
+		
 		for(int i = 0; i < 4; i++) {
 			int n = p.getSkillMapping(i);
 			if(n != 0) {
@@ -231,6 +231,7 @@ public class GuiPresetSelect extends AuxGui {
 				ResourceLocation logo = sb.getLogo();
 				if(logo != null) {
 					RenderUtils.loadTexture(logo);
+					GL11.glColor4d(1, 1, 1, .7);
 					HudUtils.drawRect(posArray[i][0] - 399, posArray[i][1] - 115, 69, 69);
 				}
 			}

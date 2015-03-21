@@ -151,8 +151,6 @@ public class SkillMagMove extends SkillBase {
 				moz = player.motionZ;
 			}
 			
-			System.out.println(lastMo);
-			
 			double mod = Math.sqrt(dx * dx + dy * dy + dz * dz) / vel;
 			
 			dx /= mod; dy /= mod; dz /= mod;

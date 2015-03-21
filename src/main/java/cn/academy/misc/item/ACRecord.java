@@ -96,7 +96,6 @@ public class ACRecord extends ItemRecord {
 
 	@Override
 	public ResourceLocation getRecordResource(String par1) {
-		System.out.println("Called resource override " + recId + " " + sources[recId]);
 		return sources[recId];
 	}
 	

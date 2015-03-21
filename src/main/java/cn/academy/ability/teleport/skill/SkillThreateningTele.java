@@ -99,7 +99,6 @@ public class SkillThreateningTele extends SkillBase {
 			}
 			
 			if(!player.capabilities.isCreativeMode) {
-				System.out.println("Consuming " + stack);
 				--stack.stackSize;
 				if(stack.stackSize <= 0) {
 					player.setCurrentItemOrArmor(0, null);

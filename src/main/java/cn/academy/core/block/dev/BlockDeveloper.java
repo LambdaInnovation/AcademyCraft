@@ -14,10 +14,12 @@ package cn.academy.core.block.dev;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.register.ACItems;
 import cn.liutils.template.block.BlockDirectionalMulti;
 
 /**
@@ -38,6 +40,11 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 	
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float px, float py, float pz) {
+		ItemStack stack = player.getCurrentEquippedItem();
+		if(stack != null && stack.getItem() == ACItems.freqReg) {
+			return false;
+		}
+		
 		{ //Transform to head block
 			int meta = world.getBlockMetadata(x, y, z);
 			int[] coords = this.getOrigin(world, x, y, z, meta);

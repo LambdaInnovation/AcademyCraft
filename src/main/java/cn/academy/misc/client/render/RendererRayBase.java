@@ -63,13 +63,11 @@ public abstract class RendererRayBase<T extends EntityRay> extends Render {
 		long time = Minecraft.getSystemTime();
 		T er = (T) var1;
 		
-		System.out.println("pre render " + var1);
 		if(!er.isLoaded()) {
 			return;
 		}
 		er.beforeRender();
 		
-		System.out.println("start render " + var1);
 		x = er.posX - RenderManager.renderPosX;
 		y = er.posY - RenderManager.renderPosY;
 		z = er.posZ - RenderManager.renderPosZ;
