@@ -12,7 +12,9 @@
  */
 package cn.academy.misc.util;
 
+import net.minecraft.util.ResourceLocation;
 import cn.academy.core.proxy.ACClientProps;
+import cn.liutils.util.ClientUtils;
 import cn.liutils.util.render.LambdaFont.Align;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,6 +43,11 @@ public class ACUtils {
 	@SideOnly(Side.CLIENT)
 	public static void drawText(String text, double x, double y, double size, Align align, double cst) {
 		ACClientProps.font().drawAdjusted(text, x, y, size, align, cst);
+	}
+	
+	public static final ResourceLocation abortSound = new ResourceLocation("academy:deny");
+	public static void playAbortSound() {
+		ClientUtils.playSound(abortSound, 1.0f);
 	}
 
 }

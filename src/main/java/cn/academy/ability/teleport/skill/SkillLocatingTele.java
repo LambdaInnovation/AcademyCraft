@@ -34,6 +34,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
 import cn.academy.core.event.ClientEvents;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
@@ -235,7 +236,7 @@ public class SkillLocatingTele extends SkillBase {
 					float cp = getConsumption(slv, lv, dist, diffdimm);
 					if(!data.decreaseCP(cp, CatTeleport.skillLocatingTele)) {
 						//failed.
-						ClientUtils.playSound(ClientEvents.abortSound, 1);
+						ACUtils.playAbortSound();
 						player.closeScreen();
 						return;
 					}

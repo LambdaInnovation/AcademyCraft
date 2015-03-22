@@ -39,6 +39,7 @@ public class SkillLightShield extends SkillBase {
 	public SkillLightShield() {
 		this.setLogo("meltdowner/shield.png");
 		this.setName("md_shield");
+		this.setMaxLevel(5);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	

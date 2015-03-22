@@ -54,6 +54,7 @@ public class RenderMarker extends Render {
 		if(targ != null) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glPushMatrix();
 			
 			GL11.glTranslated(x - width / 2, y, z - width / 2);
@@ -85,6 +86,7 @@ public class RenderMarker extends Render {
 			GL11.glPopMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		}
 	}
 

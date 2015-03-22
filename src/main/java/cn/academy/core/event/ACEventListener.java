@@ -62,7 +62,7 @@ public class ACEventListener {
 				if(event.action == Action.LEFT_CLICK_BLOCK) {
 					b = !EventHandlerClient.isSkillMapped(0);
 				} else {
-					b = !EventHandlerClient.isSkillMapped(1);
+					b = !EventHandlerClient.isSkillMapped(1) && event.entityPlayer.getCurrentEquippedItem() != null;
 				}
 				if(b) onFail();
 			}

@@ -22,6 +22,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import cn.academy.api.event.AbilityEvent;
 import cn.academy.core.block.dev.TileDeveloper;
 import cn.academy.core.client.render.ACModelBiped;
+import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.liutils.util.ClientUtils;
@@ -58,11 +59,11 @@ public class ClientEvents {
 		hackArmor = new ACModelBiped(0.5F);
 	}
 	
-	public static final ResourceLocation abortSound = new ResourceLocation("academy:deny");
+	
 	@SubscribeEvent
 	public void abilityAborted(AbilityEvent.AbortControl event) {
 		//play sound to inform player.
-		ClientUtils.playSound(abortSound, 1.0f);
+		ACUtils.playAbortSound();
 	}
 	
 	@SubscribeEvent
