@@ -106,7 +106,4 @@ dependencies {
     modCompile 'net.industrial-craft:industrialcraft-2:2.1.484-experimental:dev'
     modCompile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
     modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
-
-    //dependencies needed in the reobf jar
-    modReobf 'net.industrial-craft:industrialcraft-2:2.1.484-experimental:api'
 }
