@@ -24,7 +24,7 @@ import cn.academy.energy.client.gui.GuiFreqRegulator;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.block.BlockDirectionalMulti;
+import cn.liutils.template.block.BlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -50,9 +50,9 @@ public class ItemFreqRegulator extends Item {
     		int x, int y, int z, int side, float tx, float ty, float tz) {
     	//TODO: High coupling code, consider better approach
     	Block block = world.getBlock(x, y, z);
-    	//If this is a BlockDirectionalMulti, fall back to its origin block
-    	if(block instanceof BlockDirectionalMulti) {
-    		int[] coords = ((BlockDirectionalMulti)block).getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
+    	//If this is a BlockMulti, fall back to its origin block
+    	if(block instanceof BlockMulti) {
+    		int[] coords = ((BlockMulti)block).getOrigin(world, x, y, z);
     		if(coords != null) {
     			x = coords[0];
     			y = coords[1];

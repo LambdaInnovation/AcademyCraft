@@ -16,7 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.block.tile.impl.TileMatrix;
@@ -24,7 +23,7 @@ import cn.academy.energy.client.gui.GuiMatrix;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.block.BlockDirectionalMulti;
+import cn.liutils.template.block.BlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-public class BlockMat extends BlockDirectionalMulti {
+public class BlockMat extends BlockMulti {
 
 	public BlockMat() {
 		super(Material.anvil);
@@ -42,19 +41,12 @@ public class BlockMat extends BlockDirectionalMulti {
 		setCreativeTab(AcademyCraft.cct);
 		setLightLevel(2.0F);
 		setHardness(2.7f);
-		addSubBlock(0, 0, 1);
-		addSubBlock(1, 0, 1);
-		addSubBlock(1, 0, 0);
-		addSubBlock(0, 1, 0);
-		addSubBlock(0, 1, 1);
-		addSubBlock(1, 1, 1);
-		addSubBlock(1, 1, 0);
 	}
 	
     @Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p, 
 			int s, float tx, float ty, float tz) {
-    	int[] origin = this.getOrigin(world, x, y, z, world.getBlockMetadata(x, y, z));
+    	int[] origin = this.getOrigin(world, x, y, z);
     	if(origin != null) {
     		matGui.openGuiContainer(p, world, origin[0], origin[1], origin[2]);
     		return true;
@@ -65,7 +57,7 @@ public class BlockMat extends BlockDirectionalMulti {
     @Override
     public void breakBlock(World world, int x, int y, int z, 
     		Block block, int meta) {
-    	int[] ori = this.getOrigin(world, x, y, z, meta);
+    	int[] ori = this.getOrigin(world, x, y, z);
     	TileEntity te = world.getTileEntity(ori[0], ori[1], ori[2]);
     	if(te instanceof TileMatrix) {
     		((TileMatrix)te).onBreak();
@@ -76,26 +68,6 @@ public class BlockMat extends BlockDirectionalMulti {
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileMatrix();
-	}
-
-	@Override
-	public Vec3 getRenderOffset() {
-		return null;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public Vec3 getOffsetRotated(int dir) {
-		switch(dir) {
-		case 2:
-			return Vec3.createVectorHelper(-1, 0, -1);
-		case 3:
-			return Vec3.createVectorHelper(2, 0, 2);
-		case 4:
-			return Vec3.createVectorHelper(-1, 0, 2);
-		default:
-			return Vec3.createVectorHelper(2, 0, -1);
-		}
 	}
 	
 	@RegGuiHandler
@@ -112,5 +84,21 @@ public class BlockMat extends BlockDirectionalMulti {
 			return null;
 		}
 	};
+
+	@Override
+	public void initSubBlock() {
+		addSubBlock(0, 0, 1);
+		addSubBlock(1, 0, 1);
+		addSubBlock(1, 0, 0);
+		addSubBlock(0, 1, 0);
+		addSubBlock(0, 1, 1);
+		addSubBlock(1, 1, 1);
+		addSubBlock(1, 1, 0);
+	}
+
+	@Override
+	public double[] getRotCenter() {
+		return new double[] { 1, 0, 1 };
+	}
 
 }

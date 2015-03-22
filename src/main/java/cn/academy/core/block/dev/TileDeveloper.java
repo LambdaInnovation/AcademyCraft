@@ -20,6 +20,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -36,6 +37,8 @@ import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.liutils.template.block.IMultiTile;
+import cn.liutils.template.block.InfoBlockMulti;
 import cn.liutils.template.entity.EntitySittable;
 import cn.liutils.template.entity.EntitySittable.ISittable;
 import cn.liutils.util.DebugUtils;
@@ -55,7 +58,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends ACReceiverBase implements ISittable {
+public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTile {
 
 	public static final double INIT_MAX_ENERGY = 80000.0;
 	public static final int UPDATE_RATE = 5;
@@ -258,6 +261,9 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		if(info != null)
+			info.update();
+		
 		if(!isHead())
 			return;
 		
@@ -336,7 +342,7 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 		if(!(b instanceof BlockDeveloper))
 			return this;
 		BlockDeveloper bd = (BlockDeveloper) b;
-		TileEntity res = bd.getOriginTileEntity(getWorldObj(), xCoord, yCoord, zCoord, getBlockMetadata());
+		TileEntity res = bd.getOriginTile(getWorldObj(), xCoord, yCoord, zCoord);
 		if(res == null || !(res instanceof TileDeveloper)) {
 			AcademyCraft.log.error("Didn't find the corresponding head for developer at " 
 					+ DebugUtils.formatArray(xCoord, yCoord, zCoord) + " " + worldObj.isRemote);
@@ -423,5 +429,30 @@ public class TileDeveloper extends ACReceiverBase implements ISittable {
 	public double getSearchRange() {
 		return 24;
 	}
+	
+	//Multi tile(dirty code!)
+	InfoBlockMulti info = new InfoBlockMulti(this);
+
+	@Override
+	public InfoBlockMulti getBlockInfo() {
+		return info;
+	}
+
+	@Override
+	public void setBlockInfo(InfoBlockMulti i) {
+		info = i;
+	}
+
+	@Override
+    public void readFromNBT(NBTTagCompound nbt) {
+    	super.readFromNBT(nbt);
+    	info = new InfoBlockMulti(this, nbt);
+    }
+    
+	@Override
+    public void writeToNBT(NBTTagCompound nbt) {
+    	super.writeToNBT(nbt);
+    	info.save(nbt);
+    }
     
 }

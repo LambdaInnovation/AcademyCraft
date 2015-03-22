@@ -19,26 +19,25 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.proxy.ACModels;
 import cn.liutils.api.render.model.TileEntityModelCustom;
-import cn.liutils.template.client.render.block.RenderDirMultiModelled;
+import cn.liutils.template.block.RenderBlockMultiModel;
 
 /**
  * @author WeathFolD
  *
  */
-public class RenderMagInducer extends RenderDirMultiModelled {
+public class RenderMagInducer extends RenderBlockMultiModel {
 	
 	private static ResourceLocation TEX = new ResourceLocation("academy:textures/models/magincr.png");
 
 	public RenderMagInducer() {
-		super(new TileEntityModelCustom(ACModels.MDL_MAGNET_MODULE));
-		setModelTexture(TEX);
+		super(new TileEntityModelCustom(ACModels.MDL_MAGNET_MODULE), TEX);
 		this.scale = 0.003f;
 	}
 	
 	@Override
-	protected void renderAtOrigin(TileEntity te) {
+	public void drawAtOrigin(TileEntity te) {
 		GL11.glRotated(90, 0, 1, 0);
-		super.renderAtOrigin(te);
+		super.drawAtOrigin(te);
 	}
 
 }

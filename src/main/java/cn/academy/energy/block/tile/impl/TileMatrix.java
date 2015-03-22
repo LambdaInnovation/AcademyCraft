@@ -21,9 +21,8 @@ import cn.academy.energy.block.tile.base.TileNodeBase;
 import cn.academy.energy.client.render.tile.RenderMatrix;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.core.LIUtils;
-import cn.liutils.core.network.MsgTileDirMulti;
-import cn.liutils.template.block.IMetadataProvider;
+import cn.liutils.template.block.IMultiTile;
+import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -34,13 +33,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileMatrix extends TileNodeBase implements IMetadataProvider {
+public class TileMatrix extends TileNodeBase implements IMultiTile {
 	
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static RenderMatrix render;
 	
 	String channelToLoad, pwdToLoad;
+	
+	InfoBlockMulti info = new InfoBlockMulti(this);
 	
 	public TileMatrix() {
 		super(100000, 512, 30);
@@ -63,18 +64,13 @@ public class TileMatrix extends TileNodeBase implements IMetadataProvider {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		if(info != null)
+			info.update();
+		
 		if(channelToLoad != null && pwdToLoad != null) {
 			WirelessSystem.registerNode(this, channelToLoad);
 			WirelessSystem.setPassword(worldObj, channelToLoad, pwdToLoad);
 			channelToLoad = pwdToLoad = null;
-		}
-		
-		if(meta == -1) {
-			meta = this.getBlockMetadata();
-		}
-		if(worldObj.isRemote && !synced && ++ticksUntilReq == 5) {
-			ticksUntilReq = 0;
-			LIUtils.netHandler.sendToServer(new MsgTileDirMulti.Request(this));
 		}
 	}
 	
@@ -83,7 +79,7 @@ public class TileMatrix extends TileNodeBase implements IMetadataProvider {
 		super.writeToNBT(tag);
 		boolean b = WirelessSystem.isTileRegistered(this);
 		tag.setBoolean("netLoaded", b);
-		tag.setInteger("meta", meta);
+		info.save(tag);
 		if(b) {
 			String channel = WirelessSystem.getTileChannel(this);
 			tag.setString("netChannel", channel);
@@ -94,8 +90,8 @@ public class TileMatrix extends TileNodeBase implements IMetadataProvider {
     @Override
 	public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        meta = tag.getInteger("meta");
         boolean b = tag.getBoolean("netLoaded");
+        info = new InfoBlockMulti(this, tag);
         if(b) {
         	channelToLoad = tag.getString("netChannel");
         	pwdToLoad = tag.getString("netPwd");
@@ -119,9 +115,8 @@ public class TileMatrix extends TileNodeBase implements IMetadataProvider {
 	}
 	
 	private TileMatrix getHead() {
-		int[] c = ACBlocks.grid.getOrigin(worldObj, xCoord, yCoord, zCoord, getBlockMetadata());
-		TileEntity te = worldObj.getTileEntity(c[0], c[1], c[2]);
-		return (TileMatrix) (te instanceof TileMatrix ? te : this);
+		TileEntity ret = ACBlocks.grid.getOriginTile(this);
+		return (TileMatrix) (ret instanceof TileMatrix ? ret : this);
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -135,18 +130,14 @@ public class TileMatrix extends TileNodeBase implements IMetadataProvider {
 		return 0;
 	}
 
-	int meta = -1;
-	private boolean synced = false;
-	private int ticksUntilReq = 4;
-	
 	@Override
-	public int getMetadata() {
-		return meta;
+	public InfoBlockMulti getBlockInfo() {
+		return info;
 	}
 
 	@Override
-	public void setMetadata(int meta) {
-		this.meta = meta;
+	public void setBlockInfo(InfoBlockMulti i) {
+		info = i;
 	}
 
 }

@@ -20,7 +20,7 @@ import cn.academy.energy.block.BlockSolarGenerator;
 import cn.academy.misc.block.ACOre;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
-import cn.liutils.template.item.ItemBlockDirMulti;
+import cn.liutils.template.block.ItemBlockMulti;
 
 /**
  * AC Blocks Registration Class
@@ -29,7 +29,7 @@ import cn.liutils.template.item.ItemBlockDirMulti;
 @RegistrationClass
 public class ACBlocks {
 	
-	@RegBlock(item = ItemBlockDirMulti.class)
+	@RegBlock(item = ItemBlockMulti.class)
 	public static BlockDeveloper developer;
 	
 	//@RegBlock
@@ -39,13 +39,13 @@ public class ACBlocks {
 	@RegBlock
 	public static BlockSolarGenerator solarGen;
 	
-	@RegBlock(item = ItemBlockDirMulti.class)
+	@RegBlock(item = ItemBlockMulti.class)
 	public static BlockMat grid;
 	
 	@RegBlock
 	public static BlockNode node;
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockMulti.class)
 	public static BlockMagInducer magInducer;
 	
 	//TODO: Not in the plan.

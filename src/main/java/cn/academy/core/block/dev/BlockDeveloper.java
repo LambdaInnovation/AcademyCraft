@@ -20,21 +20,19 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.register.ACItems;
-import cn.liutils.template.block.BlockDirectionalMulti;
+import cn.liutils.template.block.BlockMulti;
 
 /**
  * @author WeathFolD
  */
-public class BlockDeveloper extends BlockDirectionalMulti {
+public class BlockDeveloper extends BlockMulti {
 
 	public BlockDeveloper() {
 		super(Material.anvil);
-		this.useRotation = true;
 		setBlockName("ac_developer");
 		setBlockTextureName("academy:bed");
 		setCreativeTab(AcademyCraft.cct);
 		setHardness(4.0f);
-		this.addSubBlock(1, 0, 0);
 		this.setBlockBounds(0, 0, 0, 1, 0.5F, 1);
 	}
 	
@@ -47,7 +45,7 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 		
 		{ //Transform to head block
 			int meta = world.getBlockMetadata(x, y, z);
-			int[] coords = this.getOrigin(world, x, y, z, meta);
+			int[] coords = this.getOrigin(world, x, y, z);
 			x = coords[0];
 			y = coords[1];
 			z = coords[2];
@@ -70,14 +68,19 @@ public class BlockDeveloper extends BlockDirectionalMulti {
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileDeveloper();
 	}
-
-	@Override
-	public Vec3 getRenderOffset() {
-		return Vec3.createVectorHelper(1, 0, 0.5);
-	}
 	
 	private TileDeveloper safecast(TileEntity te) {
 		return te == null ? null : (te instanceof TileDeveloper ? (TileDeveloper) te : null);
+	}
+
+	@Override
+	public void initSubBlock() {
+		addSubBlock(1, 0, 0);
+	}
+
+	@Override
+	public double[] getRotCenter() {
+		return new double[] { 1, 0, 0.5 };
 	}
 
 }

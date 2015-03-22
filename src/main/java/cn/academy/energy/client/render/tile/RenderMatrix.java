@@ -22,21 +22,20 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.core.proxy.ACModels;
 import cn.academy.energy.block.tile.impl.TileMatrix;
-import cn.liutils.template.client.render.block.RenderTileDirMulti;
+import cn.liutils.template.block.RenderBlockMulti;
 import cn.liutils.util.RenderUtils;
 
-public class RenderMatrix  extends RenderTileDirMulti {
+public class RenderMatrix extends RenderBlockMulti {
 	
 	IModelCustom model = ACModels.MDL_GRID;
 	ResourceLocation tex = ACClientProps.TEX_MDL_GRID;
 	
 	@Override
-	public void renderAtOrigin(TileEntity te) {
+	public void drawAtOrigin(TileEntity te) {
 		TileMatrix tm = (TileMatrix) te;
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix(); {
-			GL11.glTranslated(-1, 0, -1);
 			double scale = 0.22;
 			GL11.glScaled(scale, scale, scale);
 			RenderUtils.loadTexture(tex);

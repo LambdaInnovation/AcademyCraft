@@ -14,14 +14,14 @@ package cn.academy.core.block.dev;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderMagInducer;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.template.block.BlockDirectionalMulti;
+import cn.liutils.template.block.BlockMulti;
+import cn.liutils.template.block.TileMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,11 +30,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @RegistrationClass
-public class BlockMagInducer extends BlockDirectionalMulti {
+public class BlockMagInducer extends BlockMulti {
 	
 	@RegTileEntity
 	@RegTileEntity.HasRender
-	public static class Tile extends TileEntity {
+	public static class Tile extends TileMulti {
 		
 		@RegTileEntity.Render
 		@SideOnly(Side.CLIENT)
@@ -73,14 +73,11 @@ public class BlockMagInducer extends BlockDirectionalMulti {
 	}
 
 	@Override
-	public Vec3 getRenderOffset() {
-		return null;
+	public void initSubBlock() {}
+
+	@Override
+	public double[] getRotCenter() {
+		return new double[] { .5, 0, .5 };
 	}
-	
-    @Override
-	@SideOnly(Side.CLIENT)
-    public Vec3 getOffsetRotated(int dir) {
-    	return Vec3.createVectorHelper(0.5, 0, 0.5);
-    }
 
 }
