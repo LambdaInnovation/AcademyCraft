@@ -93,11 +93,11 @@ repositories {
     }
     maven {
         name = "annoreg"
-        url = "https://raw.github.com/LambdaInnovation/AnnotationRegistry/mvn_repo/AnnotationRegistry"
+        url = "https://raw.github.com/LambdaInnovation/AnnotationRegistry/mvn-repo/AnnotationRegistry"
     }
     maven {
         name = "liutils"
-        url = "https://raw.github.com/LambdaInnovation/LIUtils/mvn_repo/LIUtils"
+        url = "https://raw.github.com/LambdaInnovation/LIUtils/mvn-repo/LIUtils"
     }
 }
 
