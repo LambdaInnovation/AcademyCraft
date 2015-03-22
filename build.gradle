@@ -108,7 +108,7 @@ dependencies {
     modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
 }
 
-jar {
+excludeDepJar {
     manifest {
         attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
     }
