@@ -260,9 +260,10 @@ public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTi
 	//Internal update
 	@Override
 	public void updateEntity() {
-		super.updateEntity();
 		if(info != null)
 			info.update();
+		
+		super.updateEntity();
 		
 		if(!isHead())
 			return;
@@ -271,20 +272,22 @@ public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTi
 			user = null;
 		}
 		if(user != null){
-			int side = this.getBlockMetadata() & 3;
+			ForgeDirection side = info.getDir();
 			float rot = 0;
 			switch(side) {
-			case 0:
+			case SOUTH:
 				rot = 90;
 				break;
-			case 1:
+			case WEST:
 				rot = 180;
 				break;
-			case 2:
+			case NORTH:
 				rot = -90;
 				break;
-			case 3:
+			case EAST:
 				rot = 0;
+				break;
+			default:
 				break;
 			}
 			user.renderYawOffset = user.rotationYaw = user.rotationYawHead = rot;
@@ -344,15 +347,13 @@ public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTi
 		BlockDeveloper bd = (BlockDeveloper) b;
 		TileEntity res = bd.getOriginTile(getWorldObj(), xCoord, yCoord, zCoord);
 		if(res == null || !(res instanceof TileDeveloper)) {
-			AcademyCraft.log.error("Didn't find the corresponding head for developer at " 
-					+ DebugUtils.formatArray(xCoord, yCoord, zCoord) + " " + worldObj.isRemote);
 			return this;
 		}
 		return (TileDeveloper) res;
 	}
 	
 	private boolean isHead() {
-		return getBlockMetadata() >> 2 == 0;
+		return info == null ? true : info.getSubID() == 0;
 	}
 	
 	//Energy

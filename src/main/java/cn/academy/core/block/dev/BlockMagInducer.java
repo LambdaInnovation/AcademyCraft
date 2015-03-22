@@ -55,22 +55,6 @@ public class BlockMagInducer extends BlockMulti {
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new Tile();
 	}
-	
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess vw, int x, int y, int z) {
-		int meta = vw.getBlockMetadata(x, y, z) & 3;
-		float l = 0.2f, h = 0.8f, bh = 0.6f;
-		switch(meta) {
-		case 0:
-		case 2:
-			this.setBlockBounds(0, 0, l, 1, bh, h);
-			break;
-		case 1:
-		case 3:
-			this.setBlockBounds(l, 0, 0, h, bh, 1);
-			break;
-		}
-	}
 
 	@Override
 	public void initSubBlock() {}

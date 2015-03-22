@@ -144,7 +144,6 @@ class WirelessNetwork {
 	private void calcNodes() {
 		for(Map.Entry<IWirelessNode, NodeConns> ent : conns.entrySet()) {
 			calcNode(ent.getKey(), ent.getValue());
-			//System.out.println(ent.getKey());
 		}
 	}
 	

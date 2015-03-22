@@ -33,8 +33,6 @@ public abstract class ACReceiverBase extends TileUserBase implements
 	
 	public double curEnergy;
 	
-	protected boolean init = false;
-	
 	public ACReceiverBase() {}
 	
 	public void setMaxEnergy(double d) {
@@ -44,10 +42,6 @@ public abstract class ACReceiverBase extends TileUserBase implements
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(!init) {
-			init = true;
-			init();
-		}
 	}
 	
 	@Override

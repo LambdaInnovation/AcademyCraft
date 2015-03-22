@@ -30,6 +30,7 @@ import cn.academy.api.energy.IWirelessReceiver;
 import cn.academy.api.energy.IWirelessTile;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.energy.WirelessNetwork.NodeConns;
+import cn.academy.energy.block.tile.impl.TileMatrix;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
 
@@ -242,6 +243,11 @@ class WiWorldData {
 		while(iter.hasNext()) {
 			WirelessNetwork net = iter.next().getValue();
 			if(net.dead) {
+				for(IWirelessNode node : net.nodes) {
+					getNodeList((TileEntity) node).remove(node);
+					lookup.remove(node);
+				}
+				
 				for(NodeConns conn : net.conns.values()) {
 					for(IWirelessGenerator gen : conn.generators) {
 						lookup.remove(gen);
@@ -250,13 +256,22 @@ class WiWorldData {
 						lookup.remove(rec);
 					}
 				}
-				for(IWirelessNode node : net.nodes) {
-					getNodeList((TileEntity) node).remove(node);
-					lookup.remove(node);
-				}
 				iter.remove();
 			} else {
 				net.onTick();
+			}
+			
+			Iterator<IWirelessNode> iter2 = net.nodes.iterator();
+			while(iter2.hasNext()) {
+				IWirelessNode node = iter2.next();
+				TileEntity te = (TileEntity) node;
+				if(te.isInvalid()) {
+					if(te instanceof TileMatrix) { //Hard-coded awful logic. Will be updated very soon in formal ver.
+						net.destroy();
+					} else {
+						iter.remove();
+					}
+				}
 			}
 		}
 		

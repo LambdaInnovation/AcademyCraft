@@ -53,17 +53,6 @@ public class BlockMat extends BlockMulti {
     	}
         return false;
     }
-    
-    @Override
-    public void breakBlock(World world, int x, int y, int z, 
-    		Block block, int meta) {
-    	int[] ori = this.getOrigin(world, x, y, z);
-    	TileEntity te = world.getTileEntity(ori[0], ori[1], ori[2]);
-    	if(te instanceof TileMatrix) {
-    		((TileMatrix)te).onBreak();
-    	}
-    	super.breakBlock(world, x, y, z, block, meta);
-    }
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
