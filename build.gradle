@@ -107,3 +107,9 @@ dependencies {
     modCompile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
     modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
 }
+
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
+    }
+}
