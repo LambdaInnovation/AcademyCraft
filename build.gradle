@@ -47,6 +47,11 @@ forgemaven {
         exclude 'cn/liutils/**/*'
     }
 
+    coremod {
+        plugin = 'cn.academy.core.ACCorePlugin'
+        containsFMLMod = true
+    }
+
     gitUser {
         username = 'LI Github'
         email = 'github@li-dev.cn'
@@ -106,10 +111,4 @@ dependencies {
     modCompile 'net.industrial-craft:industrialcraft-2:2.1.484-experimental:dev'
     modCompile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
     modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
-}
-
-excludeDepJar {
-    manifest {
-        attributes 'FMLCorePlugin': 'cn.academy.core.ACCorePlugin'
-    }
 }
