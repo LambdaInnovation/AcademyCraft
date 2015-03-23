@@ -192,6 +192,7 @@ ac.tpLocatingRemove=移除
 ac.tpLocatingMax=坐标记录已满！
 ac.tpLocatingAdd=添加
 ac.cantinteract=能力激活时无法互动
+ac.necp=计算力不足
 
 adev.holoview=全息视图
 adev.userinfo=能力者信息

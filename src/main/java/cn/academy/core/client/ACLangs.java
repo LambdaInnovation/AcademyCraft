@@ -20,6 +20,10 @@ import net.minecraft.util.StatCollector;
  */
 public class ACLangs {
 	
+	public static String notEnoughCP() {
+		return local("ac.necp");
+	}
+	
 	public static String cantInteract() {
 		return local("ac.cantinteract");
 	}

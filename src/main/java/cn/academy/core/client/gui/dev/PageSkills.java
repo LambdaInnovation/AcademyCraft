@@ -255,14 +255,12 @@ public class PageSkills extends DevSubpage {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressLast();
-				bar.setProgress(sl.getRelativeProgress());
 			}
 		},
 		new Widget(120.5, 107, 5.5, 5.5) {
 			@Override
 			public void onMouseDown(double mx, double my) {
 				sl.progressNext();
-				bar.setProgress(sl.getRelativeProgress());
 			}
 		},
 		new RandBufProgressBar(7, 124.5, 122, 5.5, 14, 293, 244, 11) {

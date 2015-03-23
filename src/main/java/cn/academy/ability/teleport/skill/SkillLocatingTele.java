@@ -22,6 +22,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.ability.teleport.CatTeleport;
 import cn.academy.ability.teleport.client.gui.LocatingGuiBase;
 import cn.academy.ability.teleport.client.gui.LocatingGuiBase.GList.ListElem;
+import cn.academy.ability.teleport.data.ClientModifyMsg;
 import cn.academy.ability.teleport.data.LocationData.Location;
 import cn.academy.ability.teleport.msg.LocTeleMsg;
 import cn.academy.api.ability.SkillBase;
@@ -32,7 +33,6 @@ import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACLangs;
-import cn.academy.core.event.ClientEvents;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.util.ACUtils;
 import cn.annoreg.core.RegistrationClass;
@@ -67,7 +67,7 @@ public class SkillLocatingTele extends SkillBase {
 	
 	@Override
 	public void initPattern(RawEventHandler reh) {
-		reh.addPattern(new PatternHold(40) { //TODO: Time settings invalid, wtf?
+		reh.addPattern(new PatternHold(40) {
 
 			@Override
 			public State createSkill(EntityPlayer player) {
@@ -96,21 +96,30 @@ public class SkillLocatingTele extends SkillBase {
 		@Override
 		@SideOnly(Side.CLIENT) //Client-Only override.
 		public boolean onFinish(boolean res) {
-			if(isOpeningGui()) { //Opening gui, don't do anything.
-				return false;
-			}
 			if(!res) return false;
 			
 			if(isRemote()) {
-				if(this.getTickTime() < 10) {
-					//Open teleport gui
-					guiSelectHandler.openClientGui();
-				} else {
-					//Open create gui
-					guiCreateHandler.openClientGui();
-				}
+				tryOpenGui(guiSelectHandler);
 			}
 			return true;
+		}
+		
+		@Override
+		public boolean onTick(int ticks) {
+			if(ticks == 12) {
+				finishSkill(false);
+				if(isRemote())
+					tryOpenGui(guiCreateHandler);
+			}
+			return false;
+		}
+		
+		private void tryOpenGui(GuiHandlerBase gh) {
+			if(isOpeningGui()) { //Opening gui, don't do anything.
+				return;
+			}
+			AcademyCraft.netHandler.sendToServer(new ClientModifyMsg(ClientModifyMsg.REQ, null));
+			gh.openClientGui();
 		}
 
 		@Override
@@ -199,22 +208,23 @@ public class SkillLocatingTele extends SkillBase {
 	
 	public static class GuiSelect extends LocatingGuiBase {
 		
+		final AbilityData adata;
+		
 		public GuiSelect() {
 			super(ACLangs.tpLocatingSelect(), tex2, new int[] { 40, 40, 40, 200 });
 			init();
-		}
-		
-		@Override
-		protected void init() {
-			super.init();
-			
+			adata = AbilityDataMain.getData(player);
 		}
 
 		@Override
 		public String getHint() {
 			StringBuilder sb = new StringBuilder();
 			if(getFocus() != null) {
-				sb.append("ENTER: " + ACLangs.tpLocatingTeleport() + "\n");
+				if(adata.getCurrentCP() < getCons()) {
+					sb.append(ACLangs.notEnoughCP() + "\n");
+				} else {
+					sb.append("ENTER: " + ACLangs.tpLocatingTeleport() + "\n");
+				}
 			}
 			sb.append("ESC: " + ACLangs.tpLocatingQuit());
 			return sb.toString();
@@ -223,7 +233,7 @@ public class SkillLocatingTele extends SkillBase {
 		@Override
 		public void keyTyped(char ch, int kid) {
 			super.keyTyped(ch, kid);
-			if(data.getLocCount() < 5 && kid == Keyboard.KEY_RETURN) {
+			if(kid == Keyboard.KEY_RETURN) {
 				Widget focus;
 				if((focus = getFocus()) != null) {
 					GList.ListElem le = (ListElem) focus;
@@ -247,6 +257,17 @@ public class SkillLocatingTele extends SkillBase {
 				}
 			}
 		}
+		
+		private float getCons() {
+			GList.ListElem le = (ListElem) getFocus();
+			if(le == null) return 0f;
+			//Do the teleportation.
+			//Validate in client. ignore the small CP variation. Maybe further changed to sync in server.
+			double dist = Math.sqrt(player.getDistance(le.data.x, le.data.y, le.data.z));
+			boolean diffdimm = player.worldObj.provider.dimensionId != le.data.dimension;
+			int slv = adata.getSkillLevel(CatTeleport.skillLocatingTele), lv = adata.getLevelID() + 1;
+			return getConsumption(slv, lv, dist, diffdimm);
+		}
 	}
 	
 	@RegGuiHandler
@@ -254,7 +275,11 @@ public class SkillLocatingTele extends SkillBase {
 		@Override
 		@SideOnly(Side.CLIENT)
 		protected GuiScreen getClientGui() {
-			return new LIGuiScreen(new GuiCreate()).setDrawBack(false);
+			return new LIGuiScreen(new GuiCreate()) { 
+			    public boolean doesGuiPauseGame() {
+			        return false;
+			    }
+			}.setDrawBack(false);
 		}
 	};
 	
@@ -263,8 +288,13 @@ public class SkillLocatingTele extends SkillBase {
 		@Override
 		@SideOnly(Side.CLIENT)
 		protected GuiScreen getClientGui() {
-			return new LIGuiScreen(new GuiSelect()).setDrawBack(false);
+			return new LIGuiScreen(new GuiSelect()) { 
+			    public boolean doesGuiPauseGame() {
+			        return false;
+			    }
+			}.setDrawBack(false);
 		}
+		
 	};
 
 }

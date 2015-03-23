@@ -38,7 +38,7 @@ import cn.liutils.util.GenericUtils;
  * @author WeathFolD, acaly
  */
 public class AbilityData implements IExtendedEntityProperties {
-	
+	 
 	public static final String IDENTIFIER = "ac_ability";
 	
 	EntityPlayer player;
@@ -439,6 +439,7 @@ public class AbilityData implements IExtendedEntityProperties {
 		}
 		ExtendedAbilityData data = aliveData.get(id);
 		if(data == null) { //lazy init
+			System.out.println("Constructing new client data");
 			data = constructData(id, registeredData.get(id));
 		}
 		
@@ -588,6 +589,13 @@ public class AbilityData implements IExtendedEntityProperties {
 		category.onInitCategory(this);
 		isInSetup = false;
 		//Sync is not triggered here.
+	}
+	
+	public void onPlayerInstanceChanged() {
+		for(ExtendedAbilityData data : aliveData.values()) {
+			data.markDirty();
+		}
+		System.out.println("onPI change " + player.worldObj.isRemote);
 	}
 	
 	@Override

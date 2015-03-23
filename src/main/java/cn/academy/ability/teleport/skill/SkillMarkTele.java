@@ -55,10 +55,6 @@ public class SkillMarkTele extends SkillBase {
 		return 20 + slv * 4 + lv * 8;
 	}
 	
-	private double getPosErrorRatio(int slv, int lv) {
-		return 4 - slv * 0.1 - lv * 0.3;
-	}
-	
 	public class MTState extends State {
 		
 		final AbilityData data;

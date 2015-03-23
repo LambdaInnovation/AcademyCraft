@@ -102,6 +102,7 @@ public class LocationData extends ExtendedAbilityData {
 			}
 		}
 		locationList.add(loc);
+		System.out.println("really added " + loc.name);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -121,18 +122,24 @@ public class LocationData extends ExtendedAbilityData {
 	@Override
 	public void toNBT(NBTTagCompound tag) {
 		tag.setInteger("count", locationList.size());
+		System.out.println("svr: {");
 		for(int i = 0; i < locationList.size(); ++i) {
 			locationList.get(i).toNBT(tag, i);
+			System.out.println("-" + locationList.get(i).name);
 		}
+		System.out.println("}");
 	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		locationList.clear();
+		System.out.println("cln: {");
 		int n = tag.getInteger("count");
 		for(int i = 0; i < n; ++i) {
 			locationList.add(new Location(tag, i));
+			System.out.println("-" + locationList.get(i).name);
 		}
+		System.out.println("}");
 	}
 
 }

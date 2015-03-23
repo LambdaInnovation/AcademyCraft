@@ -79,6 +79,9 @@ public class AbilityDataMain {
 	private static AbilityData checkData(EntityPlayer player) {
 		AbilityData data = (AbilityData) player.getExtendedProperties(AbilityData.IDENTIFIER);
 		if(data != null) {
+			if(player != data.player) {
+				data.onPlayerInstanceChanged();
+			}
 			data.player = player; //In case of dimension change or player death.
 		}
 		return data;
