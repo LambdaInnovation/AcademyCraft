@@ -12,6 +12,8 @@
  */
 package cn.academy.core.block.dev;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -79,6 +81,7 @@ public class BlockDeveloper extends BlockMulti {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public double[] getRotCenter() {
 		return new double[] { 1, 0, 0.5 };
 	}

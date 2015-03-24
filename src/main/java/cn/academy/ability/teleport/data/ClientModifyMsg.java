@@ -35,7 +35,8 @@ public class ClientModifyMsg implements IMessage {
 	public static final int 
 		ADD = 0, //arg: Location
 		REMOVE = 1, //arg: int
-		CLEAR = 2; //arg: none
+		CLEAR = 2, //arg: none
+		REQ = 3; //arg: none
 	
 	public ClientModifyMsg(int _opcode, Object _arg) {
 		opcode = _opcode;
@@ -49,6 +50,7 @@ public class ClientModifyMsg implements IMessage {
 		opcode = buf.readByte();
 		if(opcode == ADD) {
 			arg = new Location(buf);
+			System.out.println("Rert add location " + ((Location)arg).name);
 		} else if(opcode == REMOVE) {
 			arg = buf.readInt();
 		}
@@ -82,6 +84,8 @@ public class ClientModifyMsg implements IMessage {
 				break;
 			case CLEAR:
 				data.locationList.clear();
+				break;
+			case REQ:
 				break;
 			}
 			

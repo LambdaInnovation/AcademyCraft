@@ -26,7 +26,6 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class ACWorldGen implements IWorldGenerator {
 	
 	private int[] shadowGenIds = new int[] {0, 3, 10, 13, 17, 18, 19, 22, 24, 28, 31, 33, 131, 156, 161};
-	private int[] crystalGenIds = new int[] {2, 3, 13, 17, 18, 19, 22, 28, 31, 33, 130, 131, 156, 161};
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
@@ -46,8 +45,8 @@ public class ACWorldGen implements IWorldGenerator {
 		(new ACGenMinable(ACBlocks.oreAl, 5, 60, 25)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreMg, 3, 60, 20)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreNi, 3, 60, 18)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreShadow, 2, 10, 2, shadowGenIds)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 10, crystalGenIds)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreShadow, 2, 15, 5, shadowGenIds)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 10)).generate(world, random, x, z);
 	}
 
 }

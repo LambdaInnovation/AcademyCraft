@@ -187,6 +187,7 @@ ac.tpLocatingCreate=Edit Position
 ac.tpLocatingRemove=Remove
 ac.tpLocatingMax=Can't add more.
 ac.tpLocatingAdd=Add
+ac.necp=CP not enough.
 ac.cantinteract=Can't interact with ability activated.
 
 adev.holoview=Holographic View

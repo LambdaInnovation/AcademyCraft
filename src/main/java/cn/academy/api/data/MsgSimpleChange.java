@@ -54,7 +54,9 @@ public class MsgSimpleChange implements IMessage {
 		for(Entry<String, ExtendedAbilityData> ent : data.aliveData.entrySet()) {
 			if(ent.getValue().dirty) {
 				ent.getValue().dirty = false;
-				misc.put(ent.getKey(), data.miscData.getCompoundTag(ent.getKey()));
+				NBTTagCompound tag = data.miscData.getCompoundTag(ent.getKey());
+				ent.getValue().toNBT(tag);
+				misc.put(ent.getKey(), tag);
 			}
 		}
 	}
@@ -118,6 +120,7 @@ public class MsgSimpleChange implements IMessage {
 				for(Entry<String, NBTTagCompound> e : msg.misc.entrySet()) {
 					data.miscData.setTag(e.getKey(), e.getValue());
 					data.getData(e.getKey()).fromNBT(data.miscData.getCompoundTag(e.getKey()));
+					System.out.println("Retr sync  " + e.getKey() + " isntance: " + data.getData(e.getKey()));
 				}
 			}
 			return null;

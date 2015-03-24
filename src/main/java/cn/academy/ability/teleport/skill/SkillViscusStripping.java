@@ -50,7 +50,7 @@ public class SkillViscusStripping extends SkillBase {
 	}
 	
 	private static double getDist(int slv, int lv) {
-		return 0.5 * (8 + slv * .8 + lv * 1);
+		return 4 + slv * .4 + lv * .5;
 	}
 	
 	public static class ViscusState extends PatternHold.State {

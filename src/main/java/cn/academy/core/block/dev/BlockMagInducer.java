@@ -60,6 +60,7 @@ public class BlockMagInducer extends BlockMulti {
 	public void initSubBlock() {}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public double[] getRotCenter() {
 		return new double[] { .5, 0, .5 };
 	}

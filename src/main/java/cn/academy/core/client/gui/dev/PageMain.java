@@ -71,6 +71,8 @@ public class PageMain extends Widget {
 	public void draw(double mx, double my, boolean mouseHovering) {
 		// Background
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4d(1, 1, 1, 1);
 		super.draw(mx, my, mouseHovering);
 		
 		//Player
