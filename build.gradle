@@ -38,6 +38,7 @@ apply plugin: 'cn.li.forgemaven'
 forgemaven {
     name = "AcademyCraft"
     group = "cn.academy"
+    commitVersionPrefix = "BUILD RELEASE"
 
     forgeVersion = "1.7.2-10.12.2.1121"
     gitUrl = 'https://github.com/LambdaInnovation/AcademyCraft.git'
