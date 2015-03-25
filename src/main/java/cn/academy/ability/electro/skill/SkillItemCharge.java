@@ -74,7 +74,7 @@ public class SkillItemCharge extends SkillBase {
 	}
 	
 	public static int getCharge(AbilityData data) {
-		return 7 * (data.getLevelID() + 1) * (data.getSkillLevel(CatElectro.itemCharge) + 1);
+		return 7 * (data.getLevelID() + 1) * data.getSkillLevel(CatElectro.itemCharge);
 	}
 	
 	private static abstract class Callback {

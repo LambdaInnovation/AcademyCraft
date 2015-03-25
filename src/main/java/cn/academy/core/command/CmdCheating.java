@@ -49,6 +49,7 @@ public class CmdCheating extends LICommandBase {
 		calls.put("cp", new CP());
 		calls.put("maxcp", new MaxCP());
 		calls.put("clear", new Clear());
+		calls.put("slv", new Slv());
 	}
 	
 	public CmdCheating() {}
@@ -249,6 +250,22 @@ public class CmdCheating extends LICommandBase {
 		@Override
 		public String getDesc() {
 			return "commands.aim.clear.desc";
+		}
+	}
+	
+	class Slv implements Call {
+		@Override
+		public boolean invoke(ICommandSender ics, EntityPlayer player, String[] pars) {
+			AbilityData data = AbilityDataMain.getData(player);
+			for(int i = 0; i < data.getCategory().getSkillCount(); ++i) {
+				data.setSkillLevel(i, Math.min(data.getSkill(i).getMaxSkillLevel(), data.getSkillLevel(i) + 1));
+			}
+			return true;
+		}
+
+		@Override
+		public String getDesc() {
+			return "commands.aim.slv.desc";
 		}
 	}
 

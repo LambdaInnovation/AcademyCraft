@@ -50,7 +50,6 @@ public class ClientModifyMsg implements IMessage {
 		opcode = buf.readByte();
 		if(opcode == ADD) {
 			arg = new Location(buf);
-			System.out.println("Rert add location " + ((Location)arg).name);
 		} else if(opcode == REMOVE) {
 			arg = buf.readInt();
 		}

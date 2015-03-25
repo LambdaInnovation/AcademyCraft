@@ -41,6 +41,15 @@ public class BlockMat extends BlockMulti {
 		setCreativeTab(AcademyCraft.cct);
 		setLightLevel(2.0F);
 		setHardness(2.7f);
+		
+		addSubBlock(0, 0, 1);
+        addSubBlock(1, 0, 1);
+        addSubBlock(1, 0, 0);
+        addSubBlock(0, 1, 0);
+        addSubBlock(0, 1, 1);
+        addSubBlock(1, 1, 1);
+        addSubBlock(1, 1, 0);
+        finishInit();
 	}
 	
     @Override
@@ -73,17 +82,6 @@ public class BlockMat extends BlockMulti {
 			return null;
 		}
 	};
-
-	@Override
-	public void initSubBlock() {
-		addSubBlock(0, 0, 1);
-		addSubBlock(1, 0, 1);
-		addSubBlock(1, 0, 0);
-		addSubBlock(0, 1, 0);
-		addSubBlock(0, 1, 1);
-		addSubBlock(1, 1, 1);
-		addSubBlock(1, 1, 0);
-	}
 
 	@Override
 	public double[] getRotCenter() {

@@ -32,12 +32,14 @@ public class EntityLF extends FakeEntity {
 	
 	final AbilityData data;
 	final float dmg;
+	final float initHealth;
 
 	public EntityLF(AbilityData _data, int time) {
 		super(_data.getPlayer());
 		data = _data; 
 		dmg = (float) GenericUtils.randIntv(14.0 + data.getSkillLevel(CatElectro.lightningFlash), 14 + data.getSkillLevel(CatElectro.lightningFlash) * 3);
 		addDaemonHandler(new LifeTime(this, time));
+		initHealth = data.getPlayer().getHealth();
 	}
 	
 	@Override
@@ -50,6 +52,7 @@ public class EntityLF extends FakeEntity {
 				DamageHelper.applyEntityDamage(elb, DamageSource.causePlayerDamage(data.getPlayer()), dmg);
 			}
 		}
+		data.getPlayer().setHealth(initHealth);
 	}
 
 }

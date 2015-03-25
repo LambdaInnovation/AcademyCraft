@@ -49,15 +49,13 @@ public class BlockMagInducer extends BlockMulti {
 		setBlockTextureName("academy:mag");
 		setHardness(3.0f);
 		setBlockBounds(0, 0, 0, 1, 0.6f, 1);
+		finishInit();
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new Tile();
 	}
-
-	@Override
-	public void initSubBlock() {}
 
 	@Override
 	@SideOnly(Side.CLIENT)

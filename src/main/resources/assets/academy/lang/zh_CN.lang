@@ -13,6 +13,7 @@ commands.aim.successful=指令执行成功。
 commands.aim.overflow=输入的数太大或太小。
 commands.aim.nokey=并不存在这样的指令。
 commands.aim.fail=指令执行失败。
+commands.aim.slv=提升所有能力一级。
 
 #物品
 item.null.name=

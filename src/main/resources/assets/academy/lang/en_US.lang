@@ -13,6 +13,7 @@ commands.aim.successful=Command successful performed.
 commands.aim.overflow=Input number too small or too large.
 commands.aim.nokey=No such instruction exist.
 commands.aim.fail=Failed to perform the command.
+commands.aim.slv.desc=Upgrade all skills by 1 level.
 
 #Items
 item.null.name=

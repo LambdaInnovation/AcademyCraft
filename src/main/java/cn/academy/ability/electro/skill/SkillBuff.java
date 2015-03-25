@@ -113,6 +113,9 @@ public class SkillBuff extends SkillBase {
 
 		@Override
 		public boolean onFinish(boolean fin) {
+		    if(this.getTickTime() < 10)
+		        return false;
+		    
 			if(isRemote()) {
 				node.setDead();
 				if(good) {

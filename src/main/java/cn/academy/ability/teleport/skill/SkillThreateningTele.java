@@ -56,7 +56,7 @@ public class SkillThreateningTele extends SkillBase {
 				return new ThreateningState(player);
 			}
 
-		}.setCooldown(0));
+		}.setCooldown(500));
 	}
 
 	private static class ThreateningState extends SkillState {
@@ -70,7 +70,7 @@ public class SkillThreateningTele extends SkillBase {
 			AbilityData data = AbilityDataMain.getData(player);
 			slv = data.getSkillLevel(data.getSkillID(instance));
 			lv = data.getLevelID() + 1;
-			dist = 5 + slv * .5 + lv * 1;
+			dist = 8 + slv * .5 + lv * .8;
 		}
 
 		@Override
@@ -117,7 +117,7 @@ public class SkillThreateningTele extends SkillBase {
 				return false;
 			}
 			
-			float ccp = 350F - slv * 10F + lv * 125F;
+			float ccp = 250F - slv * 20F + lv * 150F;
 			if(!data.decreaseCP(ccp, instance)) {
 				if(isRemote()) {
 					ACUtils.playAbortSound();
@@ -134,9 +134,9 @@ public class SkillThreateningTele extends SkillBase {
 			Entity targ = (Entity) dest[3];
 			if(targ != null) {
 				//hit entity
-				float damage = 1F + slv * .5F + lv * .8F;
+				float damage = 2F + slv * .4F + lv * .6F;
 				if (stack.getItem() instanceof ItemNeedle) {
-					damage *= 2F;
+					damage *= 1.5F;
 				}
 				DamageHelper.applyEntityDamage(targ, DamageSource.causePlayerDamage(player), damage);
 				if(!isRemote() && rand.nextDouble() < 0.2) {

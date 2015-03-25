@@ -92,6 +92,11 @@ public class SkillLightningFlash extends SkillBase {
 
 		@Override
 		public boolean onFinish(boolean fin) { return true; }
+		
+		@Override
+		public boolean onTick(int ticks) {
+		   return false;
+		}
 
 		@Override
 		public void onHold() {}

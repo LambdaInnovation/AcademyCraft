@@ -36,6 +36,9 @@ public class BlockDeveloper extends BlockMulti {
 		setCreativeTab(AcademyCraft.cct);
 		setHardness(4.0f);
 		this.setBlockBounds(0, 0, 0, 1, 0.5F, 1);
+		
+		addSubBlock(1, 0, 0);
+		finishInit();
 	}
 	
 	@Override
@@ -73,11 +76,6 @@ public class BlockDeveloper extends BlockMulti {
 	
 	private TileDeveloper safecast(TileEntity te) {
 		return te == null ? null : (te instanceof TileDeveloper ? (TileDeveloper) te : null);
-	}
-
-	@Override
-	public void initSubBlock() {
-		addSubBlock(1, 0, 0);
 	}
 
 	@Override

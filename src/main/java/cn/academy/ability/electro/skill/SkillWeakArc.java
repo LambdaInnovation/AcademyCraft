@@ -96,8 +96,8 @@ public class SkillWeakArc extends SkillBase {
 		
 		private boolean consumeCP() {
 			AbilityData data = AbilityDataMain.getData(player);
-			int id = data.getSkillID(CatElectro.weakArc), lv = data.getSkillLevel(id), clv = data.getLevelID() + 1;
-			float need = 250 - lv * (21 - lv) + 10 * clv * (15 - clv);
+			int id = data.getSkillID(CatElectro.weakArc), slv = data.getSkillLevel(id), lv = data.getLevelID() + 1;
+			float need = 300 - slv * 20 + lv * 125;
 			return data.decreaseCP(need, CatElectro.weakArc);
 		}
 

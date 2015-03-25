@@ -33,6 +33,7 @@
 "md.mine_luck_startup": {"category": "master", "sounds": [{"name": "md/mine_luck_startup", "stream": false}]},
 "md.mine_simple_loop": {"category": "master", "sounds": [{"name": "md/mine_simple_loop", "stream": false}]},
 "md.simple_charge": {"category": "master", "sounds": [{"name": "md/simple_charge", "stream": false}]},
+"md.md_charge": {"category": "master", "sounds": [{"name": "md/md_charge", "stream": false}]},
 
 "maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
 "flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},

@@ -46,7 +46,7 @@ public class SkillPenetrateTele extends SkillBase {
 	}
 	
 	private static float getConsumePerBlock(int slv, int lv) {
-		return 15 + slv * 6 + lv * 7;
+		return 15 - slv * 0.2f + lv * 6f;
 	}
 	
 	private static float getMaxDistance(int slv, int lv) {

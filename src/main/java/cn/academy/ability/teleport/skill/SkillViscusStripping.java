@@ -104,6 +104,9 @@ public class SkillViscusStripping extends SkillBase {
 						//反♂胃
 						if(rand.nextDouble() < 0.25)
 							player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
+						if(mop.entityHit instanceof EntityLivingBase) {
+						    ((EntityLivingBase)mop.entityHit).addPotionEffect(new PotionEffect(Potion.weakness.id, 60, 2));
+						}
 					}
 					player.playSound("academy:tp.tp", 0.5f, 1.0f);
 					player.playSound("academy:tp.guts", 0.5f, 1.0f);

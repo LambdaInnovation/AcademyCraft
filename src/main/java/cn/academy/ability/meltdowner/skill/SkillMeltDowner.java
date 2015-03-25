@@ -57,6 +57,9 @@ public class SkillMeltDowner extends SkillBase {
 	public static class MDState extends SkillState {
 		
 		AbilityData data = AbilityDataMain.getData(player);
+		int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
+		
+		final float max = 0.1f, min = 0.001f;
 
 		public MDState(EntityPlayer player) {
 			super(player);
@@ -64,16 +67,36 @@ public class SkillMeltDowner extends SkillBase {
 		
 		@Override
 		protected void onStart() {
-			int slv = data.getSkillLevel(CatMeltDowner.meltDowner), lv = data.getLevelID() + 1;
-			if(!data.decreaseCP(getCPConsume(slv, lv), CatMeltDowner.meltDowner)) {
-				this.finishSkill(false);
-				return;
+			if(!isRemote()) {
+				player.worldObj.playSoundAtEntity(player, "academy:md.md_charge", 0.5f, 1.0f);
 			}
-			if(!player.worldObj.isRemote) {
-				player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner", 0.5f, 1.0f);
-				player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv)));
-			}
-			finishSkill(true);
+		}
+		
+		@Override
+		protected boolean onTick(int ticks) {
+		    if(isRemote()) {
+		        player.capabilities.setPlayerWalkSpeed(Math.max(min, max - (max - min) / 100 * ticks));
+		    }
+		    
+		    if(ticks == 120) {
+		        if(!data.decreaseCP(getCPConsume(slv, lv), CatMeltDowner.meltDowner)) {
+		            finishSkill(false);
+		            return false;
+		        }
+		        if(!isRemote()) {
+		            player.worldObj.playSoundAtEntity(player, "academy:md.meltdowner", 0.5f, 1.0f);
+	                player.worldObj.spawnEntityInWorld(new EntityMeltDowner(player, getDamage(slv, lv)));
+		        }
+		        this.finishSkill(true);
+		    }
+            return false;
+		}
+		
+		@Override
+		protected boolean onFinish(boolean res) {
+		    if(isRemote())
+		        player.capabilities.setPlayerWalkSpeed(.1f);
+		    return res;
 		}
 		
 	}
