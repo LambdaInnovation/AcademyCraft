@@ -89,6 +89,8 @@ public class SkillMeltDowner extends SkillBase {
 		        }
 		        this.finishSkill(true);
 		    }
+		    if(!isRemote())
+                player.capabilities.setPlayerWalkSpeed(.1f);
             return false;
 		}
 		
