@@ -38,7 +38,7 @@ public class WirelessNetwork {
     String ssid;
     boolean isEncrypted;
     String password;
-    Coord matrix;
+    Coord matrix; //Matrix coord.
     
     //Matrix parameters. Copied in the network to prevent unloaded matrix.
     int capacity;
@@ -46,8 +46,7 @@ public class WirelessNetwork {
     double range;
     
     //Internal data
-    List<NodeConn> connectedNodes = new ArrayList();
-    Map<Coord, Integer> nodeLookup = new HashMap();
+    Set<Coord> connectedNodes = new HashSet(); //Connected nodes coordinate set.
     
     public WirelessNetwork(IWirelessMatrix _mat, String _ssid, boolean isEnc, String pwd) {
         TileEntity te = (TileEntity) _mat;
@@ -68,15 +67,9 @@ public class WirelessNetwork {
         load(tag);
     }
     
-    void addNode(IWirelessNode node) {}
+    void tick() {}
     
-    void addReceiver(IWirelessReceiver receiver, IWirelessNode node) {}
-    
-    void addGenerator(IWirelessGenerator generator, IWirelessNode node) {}
-    
-    private void addNode(NodeConn c) {
-        
-    }
+    void addNode(Coord node) {}
     
     private void save(NBTTagCompound tag) {
         tag.setString("ssid", ssid);
@@ -90,11 +83,12 @@ public class WirelessNetwork {
         tag.setDouble("range", range);
         
         tag.setInteger("nodes", connectedNodes.size());
-        for(int i = 0; i < connectedNodes.size(); ++i) {
-            NodeConn conn = connectedNodes.get(i);
+        int i = 0;
+        for(Coord c : connectedNodes) {
             NBTTagCompound t2 = new NBTTagCompound();
-            conn.save(t2);
+            c.save(t2);
             tag.setTag("node" + i, t2);
+            ++i;
         }
     }
     
@@ -111,69 +105,11 @@ public class WirelessNetwork {
         
         int n = tag.getInteger("nodes");
         for(int i = 0; i < n; ++i) {
-            addNode(new NodeConn((NBTTagCompound) tag.getTag("node" + i)));
+            addNode(new Coord(world, 
+                    (NBTTagCompound)tag.getTag("node" + i), BlockType.NODE));
         }
     }
     
-    private class NodeConn {
-        
-        Coord node;
-        Set<Coord> 
-            receivers = new HashSet(), 
-            generators = new HashSet();
-        
-        public NodeConn(IWirelessNode _node) {
-            TileEntity te = (TileEntity) _node;
-            node = new Coord(te, BlockType.NODE);
-        }
-        
-        public NodeConn(NBTTagCompound tag) {
-            load(tag);
-        }
-        
-        public void save(NBTTagCompound tag) {
-            node.save(tag);
-            tag.setInteger("receivers", receivers.size());
-            int i = 0;
-            for(Coord c : receivers) {
-                NBTTagCompound tag2 = new NBTTagCompound();
-                tag.setTag("rec" + i, tag2);
-                c.save(tag2);
-                ++i;
-            }
-            
-            tag.setInteger("generators", generators.size());
-            i = 0;
-            for(Coord c : generators) {
-                NBTTagCompound tag2 = new NBTTagCompound();
-                tag.setTag("gen" + i, tag2);
-                c.save(tag2);
-                ++i;
-            }
-        }
-        
-        public void load(NBTTagCompound tag) {
-            node = new Coord(world, tag, BlockType.NODE);
-            int n = tag.getInteger("receivers");
-            for(int i = 0; i < n; ++i) {
-                addReceiver(new Coord(world, 
-                        (NBTTagCompound) tag.getTag("rec" + i), BlockType.RECEIVER));
-            }
-            
-            n = tag.getInteger("generators");
-            for(int i = 0; i < n; ++i) {
-                addReceiver(new Coord(world, 
-                        (NBTTagCompound) tag.getTag("gen" + i), BlockType.GENERATOR));
-            }
-        }
-        
-        void addReceiver(Coord c) {
-            
-        }
-        
-        void addGenerator(Coord c) {
-            
-        }
-    }
+    
 
 }

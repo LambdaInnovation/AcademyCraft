@@ -12,11 +12,21 @@
  */
 package cn.academy.energy.internal;
 
+import cn.annoreg.mc.RegEventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+
 /**
  * @author WeathFolD
  */
+@RegEventHandler
 public class WirelessSystem {
 
     public WirelessSystem() {}
+    
+    @SubscribeEvent
+    public void onServerTick(ServerTickEvent event) {
+        
+    }
 
 }
