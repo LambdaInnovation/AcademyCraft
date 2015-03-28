@@ -10,20 +10,28 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api;
+package cn.academy.phone.gui;
+
+import org.lwjgl.input.Mouse;
+
+import net.minecraft.util.MouseHelper;
 
 /**
  * @author WeathFolD
- *
  */
-public interface IWirelessReceiver extends IWirelessTile {
+public class PhoneMouseHelper extends MouseHelper {
     
-    double getRequiredEnergy();
-    double injectEnergy(double amt);
+    public static MouseHelper def = new MouseHelper();
+    public static PhoneMouseHelper instance = new PhoneMouseHelper();
     
-    /**
-     * @return How much energy this receiver can retrieve each tick.
-     */
-    double getLatency();
-    
+    public int dx, dy;
+
+    @Override
+    public void mouseXYChange() {
+        //this.deltaX = Mouse.getDX();
+        //this.deltaY = Mouse.getDY();
+        dx = Mouse.getDX();
+        dy = Mouse.getDY();
+    }
+
 }

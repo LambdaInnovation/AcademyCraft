@@ -10,20 +10,21 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api;
+package cn.academy.core;
+
+import cn.academy.phone.item.ItemPhone;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegItem;
 
 /**
  * @author WeathFolD
  *
  */
-public interface IWirelessReceiver extends IWirelessTile {
-    
-    double getRequiredEnergy();
-    double injectEnergy(double amt);
-    
-    /**
-     * @return How much energy this receiver can retrieve each tick.
-     */
-    double getLatency();
-    
+@RegistrationClass
+public class ACItems {
+
+    @RegItem
+    @RegItem.UTName("phone")
+    public static ItemPhone phone;
+
 }

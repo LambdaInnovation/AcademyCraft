@@ -44,6 +44,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @RegistrationClass
 public class AcademyCraft {
+    
     public static final String NET_CHANNEL = "academy-network";
     /**
      * 主类实例
@@ -64,7 +65,7 @@ public class AcademyCraft {
     
     @RegItem
     @RegItem.UTName("logo")
-    private static Item logo;
+    public static Item logo;
     
     /**
      * 创造栏

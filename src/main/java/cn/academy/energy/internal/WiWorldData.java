@@ -13,31 +13,38 @@
 package cn.academy.energy.internal;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
 import cn.academy.core.AcademyCraft;
-import cn.academy.energy.api.IWirelessGenerator;
 import cn.academy.energy.api.IWirelessNode;
 
 /**
  * @author WeathFolD
  *
  */
-public class WiWorldData {
+public class WiWorldData extends WorldSavedData {
+    
+    public static final String ID = "WEN_DATA";
     
     final World world;
     
     public WiWorldData(World _world) {
+        super(ID);
         world = _world;
     }
     
     void tick() {
-        
+        Iterator<Map.Entry<Coord, NodeConn>> iter1 = nodeConns.entrySet().iterator();
+        while(iter1.hasNext()) {
+            NodeConn conn = iter1.next().getValue();
+            conn.tick();
+            if(conn.dead) iter1.remove();
+        }
     }
 
     //---Matrix Connections
@@ -51,14 +58,14 @@ public class WiWorldData {
     //---Node Connections
     /**
      * You can use one of the following to look for a node connection: <br/>
-     * -Coord of node
+     * -Coord of node </br>
      * -Coord of generator/receiver
      */
     Map<Coord, NodeConn> nodeConns = new HashMap();
     
     public void linkGenerator(Coord gen, Coord node) {
-        NodeConn conn = nodeConns.get(node);
-        if((conn = nodeConns.get(node)) == null) {
+        NodeConn conn = getConnFor(node);
+        if(conn == null) {
             AcademyCraft.log.error("Try to link to a node that doesn't exist.");
             return;
         }
@@ -66,81 +73,69 @@ public class WiWorldData {
     }
     
     public void linkReceiver(Coord rec, Coord node) {
-        NodeConn conn = nodeConns.get(node);
-        if((conn = nodeConns.get(node)) == null) {
+        NodeConn conn = getConnFor(node);
+        if(conn == null) {
             AcademyCraft.log.error("Try to link to a node that doesn't exist.");
             return;
         }
         conn.addReceiver(rec);
     }
     
-    private class NodeConn {
-        
-        Coord node;
-        Set<Coord> 
-            receivers = new HashSet(), 
-            generators = new HashSet();
-        
-        public NodeConn(IWirelessNode _node) {
-            TileEntity te = (TileEntity) _node;
-            node = new Coord(te, BlockType.NODE);
+    public void unlinkGenerator(Coord c) {
+        NodeConn conn = getConnFor(c);
+        if(conn == null) {
+            AcademyCraft.log.error("Try to link to a node that doesn't exist.");
+            return;
         }
-        
-        public NodeConn(NBTTagCompound tag) {
-            load(tag);
-        }
-        
-        public void save(NBTTagCompound tag) {
-            node.save(tag);
-            tag.setInteger("receivers", receivers.size());
-            int i = 0;
-            for(Coord c : receivers) {
-                NBTTagCompound tag2 = new NBTTagCompound();
-                tag.setTag("rec" + i, tag2);
-                c.save(tag2);
-                ++i;
-            }
-            
-            tag.setInteger("generators", generators.size());
-            i = 0;
-            for(Coord c : generators) {
-                NBTTagCompound tag2 = new NBTTagCompound();
-                tag.setTag("gen" + i, tag2);
-                c.save(tag2);
-                ++i;
-            }
-        }
-        
-        public void load(NBTTagCompound tag) {
-            node = new Coord(world, tag, BlockType.NODE);
-            int n = tag.getInteger("receivers");
-            for(int i = 0; i < n; ++i) {
-                Coord c = new Coord(world, 
-                        (NBTTagCompound) tag.getTag("rec" + i), BlockType.RECEIVER);
-                receivers.add(c);
-                nodeConns.put(c, this); //Update the lookup
-            }
-            
-            n = tag.getInteger("generators");
-            for(int i = 0; i < n; ++i) {
-                Coord c = new Coord(world, 
-                        (NBTTagCompound) tag.getTag("gen" + i), BlockType.GENERATOR);
-                generators.add(c);
-                nodeConns.put(c, this); //Update the lookup
-            }
-        }
-        
-        public void addReceiver(Coord rec) {
-            receivers.add(rec);
-        }
-        
-        public void addGenerator(Coord gen) {
-            generators.add(gen);
-        }
-        
-        public void tick() {
-            //Validate and balance
-        }
-        
+        conn.unlinkGenerator(c);
     }
+    
+    public void unlikReceiver(Coord c) {
+        NodeConn conn = getConnFor(c);
+        if(conn == null) {
+            AcademyCraft.log.error("Try to link to a node that doesn't exist.");
+            return;
+        }
+        conn.unlinkReceiver(c);
+    }
+    
+    /**
+     * Lazy init. Returns a correct connection as long as the target coord validates correctly.
+     */
+    private NodeConn getConnFor(Coord node) {
+        TileEntity te = node.getAndCheck();
+        if(te == null) return null;
+        NodeConn ret = nodeConns.get(node);
+        if(ret == null) {
+            ret = new NodeConn(this, (IWirelessNode) te);
+            nodeConns.put(node, ret);
+        }
+        return ret;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        //Restore conn
+        int n = tag.getInteger("conns_size");
+        
+        for(int i = 0; i < n; ++i) {
+            new NodeConn(this, (NBTTagCompound) tag.getTag("conn_" + i));
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        //Store conn
+        tag.setInteger("conns_size", nodeConns.size());
+        
+        int i = 0;
+        for(NodeConn conn : nodeConns.values()) {
+            NBTTagCompound tag2 = new NBTTagCompound();
+            conn.save(tag2);
+            tag.setTag("conn_" + i, tag2);
+            ++i;
+        }
+    }
+    
+
 }

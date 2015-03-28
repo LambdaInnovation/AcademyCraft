@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.internal;
 
+import cn.academy.energy.api.IWirelessTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -24,6 +25,10 @@ public class Coord {
     public final World world;
     public final int x, y, z;
     public final BlockType type;
+    
+    public Coord(IWirelessTile _te, BlockType _type) {
+        this((TileEntity) _te, _type);
+    }
     
     public Coord(TileEntity _te, BlockType _type) {
         this(_te.getWorldObj(), _te.xCoord, _te.yCoord, _te.zCoord, _type);
@@ -48,7 +53,7 @@ public class Coord {
         tag.setInteger("z", z);
     }
     
-    public boolean isValid() {
+    public boolean isLoaded() {
         return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
     }
     
@@ -57,6 +62,7 @@ public class Coord {
      * @return The desired tile, or null if validation failed.
      */
     public TileEntity getAndCheck() {
+        if(!isLoaded()) return null;
         TileEntity te = world.getTileEntity(x, y, z);
         return type.validate(te) ? te : null;
     }
@@ -66,7 +72,7 @@ public class Coord {
         if(!(o instanceof Coord))
             return false;
         Coord c = (Coord) o;
-        return c.x == x && c.y == y && c.z == z;
+        return c.x == x && c.y == y && c.z == z && c.type == type;
     }
     
     @Override

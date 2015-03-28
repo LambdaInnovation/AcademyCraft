@@ -10,20 +10,22 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api;
+package cn.academy.phone.gui;
+
+import cn.academy.generic.client.ClientProps;
+import cn.liutils.api.gui.Widget;
 
 /**
  * @author WeathFolD
  *
  */
-public interface IWirelessReceiver extends IWirelessTile {
-    
-    double getRequiredEnergy();
-    double injectEnergy(double amt);
-    
-    /**
-     * @return How much energy this receiver can retrieve each tick.
-     */
-    double getLatency();
+public class PagePhone extends Widget {
+
+    public PagePhone() {
+        super(317, 512);
+        
+        this.initTexDraw(ClientProps.TEX_GUI_PHONE_BACK, 0, 0, 317, 512);
+        this.setTexResolution(512, 512);
+    }
     
 }
