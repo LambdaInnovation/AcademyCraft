@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Lambda Innovation, 2013-2015
  * 本作品版权由Lambda Innovation所有。
- * http://www.lambdacraft.cn/
+ * http://www.li-dev.cn/
  *
  * This project is open-source, and it is distributed under 
  * the terms of GNU General Public License. You can modify
@@ -10,21 +10,22 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core;
+package cn.academy.phone.app;
 
-import cn.academy.phone.item.ItemPhone;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegItem;
+import cn.academy.phone.gui.GuiPhone;
+import cn.liutils.api.gui.Widget;
 
 /**
  * @author WeathFolD
  *
  */
-@RegistrationClass
-public class ACItems {
+public class TestAppGui extends Widget {
 
-    @RegItem
-    @RegItem.UTName("phone_low")
-    public static ItemPhone phoneLowend = new ItemPhone(1, 10000);
+    /**
+     * 
+     */
+    public TestAppGui(GuiPhone gui) {
+        // TODO Auto-generated constructor stub
+    }
 
 }

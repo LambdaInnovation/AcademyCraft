@@ -12,23 +12,50 @@
  */
 package cn.academy.generic.client;
 
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.ForcePreloadTexture;
+import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegSubmoduleInit.Side;
+import cn.liutils.util.render.LambdaFont;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeathFolD
  *
  */
+@RegistrationClass
+@ForcePreloadTexture
+@RegSubmoduleInit(side = Side.CLIENT_ONLY)
 public class ClientProps {
 
     public static ResourceLocation
-        TEX_GUI_PHONE_BACK = gui("phone_back.png");
+        TEX_GUI_PHONE_BACK = gui("phone_back"),
+        TEX_GUI_APP_BG = gui("app_back");
+    
+    private static LambdaFont font;
+    
+    private static ResourceLocation[] fontLocation;
+    static {
+        fontLocation = new ResourceLocation[12];
+        for(int i = 0; i < 12; ++i) {
+            fontLocation[i] = res("fonts/yahei" + i + ".png");
+        }
+    }
+    
+    public static void init() {
+        font = new LambdaFont("/assets/academy/fonts/yahei.lf", fontLocation);
+    }
+    
+    public static LambdaFont font() {
+        return font;
+    }
     
     private static ResourceLocation res(String loc) {
         return new ResourceLocation("academy:" + loc);
     }
     
     private static ResourceLocation gui(String loc) {
-        return res("textures/guis/" + loc);
+        return res("textures/guis/" + loc + ".png");
     }
 
 }

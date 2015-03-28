@@ -25,13 +25,19 @@ import cn.academy.phone.gui.GuiPhone;
  */
 public class ItemPhone extends Item {
     
-    public ItemPhone() {
+    public final int level; //1-3.
+    public final int maxEnergy;
+    
+    public ItemPhone(int _level, int _maxEnergy) {
         setCreativeTab(AcademyCraft.cct);
+        level = _level;
+        maxEnergy = _maxEnergy;
     }
     
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if(world.isRemote) {
-            GuiPhone.instance.open();
+            if(!GuiPhone.instance.isOpen())
+                GuiPhone.instance.open(stack);
         }
         return stack;
     }

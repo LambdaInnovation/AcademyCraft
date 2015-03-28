@@ -14,8 +14,8 @@ package cn.academy.phone.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.item.ItemStack;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -47,6 +47,8 @@ public class GuiPhone extends AuxGui {
     boolean open;
     long lastOpenTime;
     
+    ItemStack stack;
+    
     public GuiPhone() {
         gui = new LIGui();
         gui.addWidget(new PagePhone());
@@ -54,7 +56,7 @@ public class GuiPhone extends AuxGui {
 
             @Override
             public void onKeyDown(int keyCode, boolean tickEnd) {
-                if(Minecraft.getSystemTime() - lastOpenTime > 500)
+                if(Minecraft.getSystemTime() - lastOpenTime > 500L)
                     close();
             }
 
@@ -77,14 +79,19 @@ public class GuiPhone extends AuxGui {
         return true;
     }
     
-    public void open() {
+    public void open(ItemStack _stack) {
+        if(Minecraft.getSystemTime() - lastOpenTime < 400)
+            return;
+        
         open = true;
         lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.instance;
+        stack = _stack;
     }
     
     public void close() {
         open = false;
+        lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.def;
     }
 
@@ -99,7 +106,9 @@ public class GuiPhone extends AuxGui {
         
         PhoneMouseHelper.instance.dx = PhoneMouseHelper.instance.dy = 0;
         
-        System.out.println(mouseX + " " + mouseY);
+        //System.out.println(mouseX + " " + mouseY);
+        
+        
         
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
@@ -122,14 +131,14 @@ public class GuiPhone extends AuxGui {
         GL11.glColor4d(1, 1, 1, 1);
         
         //GL11.glTranslated(0, 0, -10);
-        GL11.glTranslated(.24 * aspect, 0.85, -1.5);
+        GL11.glTranslated(.22 * aspect, 0.77, -1.5);
         RenderUtils.loadTexture(ClientProps.TEX_GUI_PHONE_BACK);
         
         GL11.glTranslated(1, 0, 0);
         GL11.glRotated(-12 + 1 * Math.sin(Minecraft.getSystemTime() / 800.0), 0, 1, 0);
         GL11.glTranslated(-1, 0, 0);
         
-        final double scale = 1.0 / 275;
+        final double scale = 1.0 / 300;
         GL11.glScaled(scale, -scale, scale);
         gui.draw(mouseX, mouseY);
         
@@ -143,6 +152,9 @@ public class GuiPhone extends AuxGui {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glCullFace(GL11.GL_BACK);
+        
+        if(!stack.equals(mc.thePlayer.getCurrentEquippedItem()))
+            close();
     }
 
 }
