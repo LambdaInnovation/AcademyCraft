@@ -45,8 +45,8 @@ public class ACWorldGen implements IWorldGenerator {
 		(new ACGenMinable(ACBlocks.oreAl, 5, 60, 25)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreMg, 3, 60, 20)).generate(world, random, x, z);
 		(new ACGenMinable(ACBlocks.oreNi, 3, 60, 18)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreShadow, 2, 15, 5, shadowGenIds)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 10)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreShadow, 2, 15, 8, shadowGenIds)).generate(world, random, x, z);
+		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 15)).generate(world, random, x, z);
 	}
 
 }
