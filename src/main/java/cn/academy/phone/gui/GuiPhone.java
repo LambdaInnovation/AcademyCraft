@@ -106,10 +106,6 @@ public class GuiPhone extends AuxGui {
         
         PhoneMouseHelper.instance.dx = PhoneMouseHelper.instance.dy = 0;
         
-        //System.out.println(mouseX + " " + mouseY);
-        
-        
-        
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
@@ -125,12 +121,10 @@ public class GuiPhone extends AuxGui {
         
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        //GL11.glCullFace(GL11.GL_FRONT);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4d(1, 1, 1, 1);
         
-        //GL11.glTranslated(0, 0, -10);
         GL11.glTranslated(.22 * aspect, 0.77, -1.5);
         RenderUtils.loadTexture(ClientProps.TEX_GUI_PHONE_BACK);
         

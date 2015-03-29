@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Lambda Innovation, 2013-2015
  * 本作品版权由Lambda Innovation所有。
- * http://www.lambdacraft.cn/
+ * http://www.li-dev.cn/
  *
  * This project is open-source, and it is distributed under 
  * the terms of GNU General Public License. You can modify
@@ -12,19 +12,22 @@
  */
 package cn.academy.core;
 
-import cn.academy.phone.item.ItemPhone;
+import cn.academy.energy.block.BlockNode;
+import cn.academy.energy.block.BlockNode.NodeType;
 import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegItem;
+import cn.annoreg.mc.RegBlock;
 
 /**
- * All registration of item goes here.
+ * All registration of blocks goes here.
  * @author WeathFolD
  */
 @RegistrationClass
-public class ACItems {
+public class ACBlocks {
 
-    @RegItem
-    @RegItem.UTName("phone_low")
-    public static ItemPhone phoneLowend = new ItemPhone(1, 10000);
+    @RegBlock
+    public static BlockNode
+        node_basic = new BlockNode(NodeType.BASIC),
+        node_standard = new BlockNode(NodeType.STANDARD),
+        node_advanced = new BlockNode(NodeType.ADVANCED);
 
 }
