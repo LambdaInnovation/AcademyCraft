@@ -15,8 +15,10 @@ package cn.academy.misc.world;
 import java.util.Random;
 
 import cn.academy.core.register.ACBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import cpw.mods.fml.common.IWorldGenerator;
 
 /**
@@ -37,16 +39,18 @@ public class ACWorldGen implements IWorldGenerator {
 		}
 	}
 	
+	private CustomGen[] generators = new CustomGen[] {
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreAl, 0, 10, Blocks.stone), 60, 5),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreMg, 0, 10, Blocks.stone), 60, 5),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreNi, 0, 10, Blocks.stone), 60, 5),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreShadow, 0, 10, Blocks.stone), 60, 5, shadowGenIds),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreCrystal, 0, 10, Blocks.stone), 30, 5),
+	};
+	
 	private void genOverworld(World world, Random random, int x, int z) {
-		//TODO: This ore gen isn't available in this version.
-//		(new ACGenMinable(ACBlocks.oreTin, 5, 60, 23)).generate(world, random, x, z);
-		//TODO: Copper Ore is unavailable.
-//		(new ACGenMinable(ACBlocks.oreCopper, 7, 60, 25)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreAl, 5, 60, 25)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreMg, 3, 60, 23)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreNi, 3, 60, 23)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreShadow, 2, 15, 15, shadowGenIds)).generate(world, random, x, z);
-		(new ACGenMinable(ACBlocks.oreCrystal, 3, 30, 19)).generate(world, random, x, z);
+		for(CustomGen gen : generators) {
+		    gen.generate(world, random, x, z);
+		}
 	}
 
 }

@@ -58,8 +58,7 @@ public class ACClientProps {
 		TEX_LOGO_GEOM = src("textures/guis/logo_geom.png"),
 		TEX_LOGO_BACK = src("textures/guis/logo_back.png"),
 		TEX_GUI_PRESET = src("textures/guis/preset.png"),
-		TEX_EFF_MD_SHIELD = src("textures/effects/mdshield.png"),
-		TEX_EFF_LAVA = src("textures/effects/lava.png");
+		TEX_EFF_MD_SHIELD = src("textures/effects/mdshield.png");
 	
 	private static ResourceLocation[] fontLocation;
 	static {
@@ -88,7 +87,8 @@ public class ACClientProps {
 		ANIM_MD_RAY_SF[] = eff("mdray_sf", 5),
 		ANIM_BLOOD_SPLASH[] = eff("blood_splash", 10),
 		ANIM_MDBALL[] = eff("mdball", 5),
-		ANIM_MD_RAY_L[] = eff("mdray_l", 5);
+		ANIM_MD_RAY_L[] = eff("mdray_l", 5),
+		ANIM_MELT[] = eff("melt", 5);
 	
 	public static ResourceLocation ANIM_SMALL_ARC[] = eff("arcs", 20);
 	

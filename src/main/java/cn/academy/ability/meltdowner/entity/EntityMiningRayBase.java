@@ -40,6 +40,8 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 	int workX, workY, workZ; //current aiming block
 	float targHardness;
 	float curHardness;
+	
+	int texID;
 
 	public EntityMiningRayBase(AbilityData data, SkillBase skill) {
 		super(data.getPlayer());
@@ -124,6 +126,8 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 			dataWatcher.updateObject(17, Float.valueOf(curHardness));
 			dataWatcher.updateObject(18, Float.valueOf(targHardness));
 		}
+		
+		texID = rand.nextInt(5);
 	}
 	
 	protected abstract float getSpeed(int slv, int lv);
@@ -167,7 +171,7 @@ public abstract class EntityMiningRayBase extends EntityMdRayBase {
 				GL11.glPushMatrix();
 				double alpha = .8 * ray.curHardness / ray.targHardness;
 				GL11.glColor4d(1, 1, 1, alpha);
-				RenderUtils.loadTexture(ACClientProps.TEX_EFF_LAVA);
+				RenderUtils.loadTexture(ACClientProps.ANIM_MELT[ray.texID]);
 				double padding = 0.01;
 				double x = ray.workX - padding - RenderManager.renderPosX,
 				y = ray.workY - padding - RenderManager.renderPosY,
