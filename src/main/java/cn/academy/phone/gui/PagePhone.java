@@ -32,7 +32,9 @@ import cn.liutils.util.render.LambdaFont.Align;
 public class PagePhone extends Widget {
     
     static final int PER_LINE = 3, MAX_LINES = 3;
-    static final int START_X = 20, START_Y = 42, SIZE = 86, STEP_X = 96, STEP_Y = 110;
+    static final double 
+        START_X = 20, START_Y = 42, SIZE = 86, LOGO_SIZE = 81.52, LOGO_YOFF = 7 * (86D / 211), LOGO_XOFF = 5 * (86D / 211),
+        STEP_X = 96, STEP_Y = 110;
     
     static final int MAX_MX = GuiPhone.MAX_MX, MAX_MY = GuiPhone.MAX_MY;
 
@@ -69,14 +71,17 @@ public class PagePhone extends Widget {
             double dz = ht ? 10 : 1;
             
             GL11.glPushMatrix();
-            GL11.glTranslated(0, 0, dz);
+            GL11.glTranslated(x, y, dz);
             GL11.glColor4d(1, 1, 1, ht ? 1 : 0.6);
             RenderUtils.loadTexture(ClientProps.TEX_PHONE_APP_BG);
-            HudUtils.drawRect(x, y, SIZE, SIZE);
+            HudUtils.drawRect(0, 0, SIZE, SIZE);
+            
+            RenderUtils.loadTexture(app.getIcon());
+            HudUtils.drawRect(LOGO_XOFF, LOGO_YOFF, LOGO_SIZE, LOGO_SIZE);
             
             String name = app.getDisplayName();
             float fsize = 12f;
-            ClientProps.font().draw(name, x + SIZE / 2, y + SIZE + 2, fsize, Align.CENTER);
+            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, Align.CENTER);
             GL11.glPopMatrix();
             
             ++cx;

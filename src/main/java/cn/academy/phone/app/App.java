@@ -54,6 +54,10 @@ public class App {
         return id;
     }
     
+    public ResourceLocation getIcon() {
+        return icon;
+    }
+    
     public Widget createWidget(GuiPhone gui) {
         try {
             return wigCtor.newInstance(gui);

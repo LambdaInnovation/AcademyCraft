@@ -4,6 +4,10 @@ import cn.academy.phone.app.App;
 import cn.academy.phone.app.TestAppGui;
 import cn.annoreg.core.RegistrationClass;
 
+/**
+ * This class is just for testing.
+ * @author WeathFolD
+ */
 @RegistrationClass
 public class DefaultApps {
 
