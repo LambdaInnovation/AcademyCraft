@@ -35,19 +35,24 @@ import cn.liutils.util.RenderUtils;
 @RegistrationClass
 public class GuiPhone extends AuxGui {
     
+    private static final double BALANCE_SPEED = 3; //pixel/ms
+    
     @RegAuxGui
     public static GuiPhone instance = new GuiPhone();
     
     LIGui gui; //Forward to the rendering of this gui.
     
-    final int MAX_MX = 317, MAX_MY = 512;
-    final double SENSITIVITY = 1.0;
+    public static final int MAX_MX = 317, MAX_MY = 512;
+    final double SENSITIVITY = 0.5;
     double mouseX, mouseY;
+    double buffX, buffY; //Used for rotation judging. Will balance to mouseX and mouseY at the rate of BALANCE_SPEED.
     
     boolean open;
     long lastOpenTime;
     
     ItemStack stack;
+    
+    long lastFrameTime;
     
     public GuiPhone() {
         gui = new LIGui();
@@ -98,11 +103,17 @@ public class GuiPhone extends AuxGui {
     @Override
     public void draw(ScaledResolution sr) {
         Minecraft mc = Minecraft.getMinecraft();
+        long time = Minecraft.getSystemTime();
+        if(lastFrameTime == 0) lastFrameTime = time;
+        long dt = time - lastFrameTime;
         
         mouseX += PhoneMouseHelper.instance.dx * SENSITIVITY;
         mouseY -= PhoneMouseHelper.instance.dy * SENSITIVITY;
         mouseX = Math.max(0, Math.min(MAX_MX, mouseX));
         mouseY = Math.max(0, Math.min(MAX_MY, mouseY));
+        
+        buffX = balance(dt, buffX, mouseX);
+        buffY = balance(dt, buffY, mouseY);
         
         PhoneMouseHelper.instance.dx = PhoneMouseHelper.instance.dy = 0;
         
@@ -125,14 +136,21 @@ public class GuiPhone extends AuxGui {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4d(1, 1, 1, 1);
         
-        GL11.glTranslated(.22 * aspect, 0.77, -1.5);
-        RenderUtils.loadTexture(ClientProps.TEX_GUI_PHONE_BACK);
+        double scale;
+        if(mc.gameSettings.thirdPersonView == 0) {
+            scale = 1.0 / 250;
+            GL11.glTranslated(.24 * aspect, 0.95, -2.2);
+        } else {
+            scale = 1.0 / 250;
+            GL11.glTranslated(.24 * aspect, 1.1, -2.8);
+        }
+        RenderUtils.loadTexture(ClientProps.TEX_PHONE_BACK);
         
-        GL11.glTranslated(1, 0, 0);
-        GL11.glRotated(-12 + 1 * Math.sin(Minecraft.getSystemTime() / 800.0), 0, 1, 0);
-        GL11.glTranslated(-1, 0, 0);
+        GL11.glTranslated(.5, -0.5, 0);
+        GL11.glRotated(-20 - 6 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);
+        GL11.glRotated(4 - 4 * (buffY / MAX_MY - 0.5), 1, 0, 0);
+        GL11.glTranslated(-.5, 0.5, 0);
         
-        final double scale = 1.0 / 300;
         GL11.glScaled(scale, -scale, scale);
         gui.draw(mouseX, mouseY);
         
@@ -149,6 +167,13 @@ public class GuiPhone extends AuxGui {
         
         if(!stack.equals(mc.thePlayer.getCurrentEquippedItem()))
             close();
+        
+        lastFrameTime = time;
+    }
+    
+    private double balance(long dt, double from, double to) {
+        double d = to - from;
+        return from + Math.min(BALANCE_SPEED * dt, Math.abs(d)) * Math.signum(d);
     }
 
 }

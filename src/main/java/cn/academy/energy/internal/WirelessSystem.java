@@ -15,8 +15,8 @@ package cn.academy.energy.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import cn.academy.energy.api.event.LinkUserEvent;
 import cn.academy.energy.api.event.UnlinkUserEvent;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
@@ -35,6 +35,24 @@ public class WirelessSystem {
     Map<World, WiWorldData> table = new HashMap();
 
     public WirelessSystem() {}
+    
+    @SubscribeEvent
+    public void worldLoaded(WorldEvent.Load event) {
+        if(event.world.isRemote) return;
+        WiWorldData data = (WiWorldData) event.world.loadItemData(WiWorldData.class, WiWorldData.ID);
+        if(data != null) {
+            table.put(event.world, data);
+        }
+    }
+    
+    @SubscribeEvent
+    public void worldSaved(WorldEvent.Save event) {
+        if(event.world.isRemote) return;
+        WiWorldData data = table.get(event.world);
+        if(data != null) {
+            event.world.setItemData(WiWorldData.ID, data);
+        }
+    }
     
     @SubscribeEvent
     public void onServerTick(ServerTickEvent event) {

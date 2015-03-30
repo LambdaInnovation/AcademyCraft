@@ -12,7 +12,10 @@
  */
 package cn.academy.phone.gui;
 
+import net.minecraft.client.Minecraft;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import cn.academy.generic.client.ClientProps;
 import cn.academy.phone.app.App;
@@ -30,11 +33,13 @@ public class PagePhone extends Widget {
     
     static final int PER_LINE = 3, MAX_LINES = 3;
     static final int START_X = 20, START_Y = 42, SIZE = 86, STEP_X = 96, STEP_Y = 110;
+    
+    static final int MAX_MX = GuiPhone.MAX_MX, MAX_MY = GuiPhone.MAX_MY;
 
     public PagePhone() {
         super(317, 512);
         
-        this.initTexDraw(ClientProps.TEX_GUI_PHONE_BACK, 0, 0, 317, 512);
+        this.initTexDraw(ClientProps.TEX_PHONE_BACK, 0, 0, 317, 512);
         this.setTexResolution(512, 512);
     }
     
@@ -42,10 +47,15 @@ public class PagePhone extends Widget {
     public void draw(double mx, double my, boolean hover) {
         HudUtils.setZLevel(0);
         super.draw(mx, my, hover);
+        long time = Minecraft.getSystemTime();
         
-        int[] appList = { 0, 1, 2, 1, 2, 0, 2, 0, 1, 2, 1, 1 };
+        int[] appList = { 0, 1, 2, 1, 2, 0, 2, 0 };
+        int lines = fldiv(appList.length, PER_LINE); //Actually lines-1
         
-        int highlight = 0;
+        int hLine = Math.min(lines, Math.min((int) (MAX_LINES * (my / MAX_MY)), MAX_LINES - 1)), 
+            hColumn = Math.min((hLine == lines ? appList.length - lines * PER_LINE : PER_LINE) - 1, 
+                    Math.min((int) (PER_LINE * (mx / MAX_MX)), PER_LINE - 1));
+        int highlight = hLine * 3 + hColumn;
         
         int cx = 0, cy = 0;
         for(int i = 0; i < appList.length; ++i) {
@@ -56,12 +66,12 @@ public class PagePhone extends Widget {
             double y = START_Y + STEP_Y * cy;
             
             boolean ht = highlight == i;
-            double dz = ht ? 20 : 1;
+            double dz = ht ? 10 : 1;
             
             GL11.glPushMatrix();
             GL11.glTranslated(0, 0, dz);
-            GL11.glColor4d(1, 1, 1, ht ? 0.8 : 0.6);
-            RenderUtils.loadTexture(ClientProps.TEX_GUI_APP_BG);
+            GL11.glColor4d(1, 1, 1, ht ? 1 : 0.6);
+            RenderUtils.loadTexture(ClientProps.TEX_PHONE_APP_BG);
             HudUtils.drawRect(x, y, SIZE, SIZE);
             
             String name = app.getDisplayName();
@@ -76,5 +86,41 @@ public class PagePhone extends Widget {
             }
             if(cx + cy * 3 == 9) break;
         }
+        
+        drawUpdate(time);
+    }
+    
+    private void drawUpdate(long time) {
+        final double size = 100;
+        GL11.glPushMatrix();
+        GL11.glTranslated(230, 360, 0);
+        GL11.glColor4d(1, 1, 1, 0.6);
+        final double scale = 0.9;
+        GL11.glScaled(scale, scale, scale);
+        HudUtils.setZLevel(15);
+        
+        GL11.glPushMatrix();
+        RenderUtils.loadTexture(ClientProps.TEX_PHONE_SYNC);
+        GL11.glTranslated(size / 2, size / 2, 0);
+        GL11.glRotated(time / 200.0, 0, 0, 1);
+        GL11.glTranslated(-size / 2, -size / 2, 0);
+        HudUtils.drawRect(0, 0, size, size);
+        GL11.glPopMatrix();
+        
+        GL11.glPushMatrix();
+        GL11.glTranslated(0, 5 * Math.sin(time / 1000.0), 0);
+        RenderUtils.loadTexture(ClientProps.TEX_PHONE_SYNC_MASK);
+        HudUtils.setZLevel(19);
+        HudUtils.drawRect(0, 0, size, size);
+        GL11.glPopMatrix();
+        
+        HudUtils.setZLevel(27);
+        ClientProps.font().draw("Loading...", 30, 15, 15);
+        
+        GL11.glPopMatrix();
+    }
+    
+    int fldiv(int a, int b) {
+        return a % b == 0 ? (a / b - 1) : (a / b);
     }
 }

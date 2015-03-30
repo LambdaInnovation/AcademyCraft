@@ -29,8 +29,10 @@ import net.minecraft.util.ResourceLocation;
 public class ClientProps {
 
     public static ResourceLocation
-        TEX_GUI_PHONE_BACK = gui("phone_back"),
-        TEX_GUI_APP_BG = gui("app_back");
+        TEX_PHONE_BACK = phone("phone_back"),
+        TEX_PHONE_APP_BG = phone("app_back"),
+        TEX_PHONE_SYNC_MASK = phone("sync_mask"),
+        TEX_PHONE_SYNC = phone("sync");
     
     private static LambdaFont font;
     
@@ -58,4 +60,8 @@ public class ClientProps {
         return res("textures/guis/" + loc + ".png");
     }
 
+    private static ResourceLocation phone(String gloc) {
+        return res("textures/phone/" + gloc + ".png");
+    }
+    
 }

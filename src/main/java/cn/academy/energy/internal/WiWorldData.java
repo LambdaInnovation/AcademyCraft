@@ -36,6 +36,8 @@ public class WiWorldData extends WorldSavedData {
     public WiWorldData(World _world) {
         super(ID);
         world = _world;
+        if(world.isRemote)
+            throw new RuntimeException("Creation of client WiWorldData is not allowed.");
     }
     
     void tick() {
