@@ -22,14 +22,20 @@ public class LinkNodeEvent extends WirelessEvent {
     
     public final IWirelessNode node;
     public final String ssid;
-
+    public final String pwd;
+    
+    public LinkNodeEvent(IWirelessNode _node, String _ssid) {
+        this(_node, _ssid, "");
+    }
+    
     /**
      * @param _tile
      */
-    public LinkNodeEvent(IWirelessNode _node, String _ssid) {
+    public LinkNodeEvent(IWirelessNode _node, String _ssid, String _pwd) {
         super(_node);
         node = _node;
         ssid = _ssid;
+        pwd = _pwd;
     }
 
 }

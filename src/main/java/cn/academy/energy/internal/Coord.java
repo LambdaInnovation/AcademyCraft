@@ -12,10 +12,12 @@
  */
 package cn.academy.energy.internal;
 
-import cn.academy.energy.api.IWirelessTile;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.energy.api.IWirelessTile;
+import cn.liutils.util.DebugUtils;
 
 /**
  * @author WeathFolD
@@ -32,6 +34,14 @@ public class Coord {
     
     public Coord(TileEntity _te, BlockType _type) {
         this(_te.getWorldObj(), _te.xCoord, _te.yCoord, _te.zCoord, _type);
+    }
+    
+    public Coord(World _world, ByteBuf buf) {
+        world = _world;
+        x = buf.readInt();
+        y = buf.readInt();
+        z = buf.readInt();
+        type = BlockType.values()[buf.readByte()];
     }
 
     public Coord(World _world, int _x, int _y, int _z, BlockType _type) {
@@ -67,6 +77,10 @@ public class Coord {
         return type.validate(te) ? te : null;
     }
     
+    public void toBuf(ByteBuf buf) {
+        buf.writeInt(x).writeInt(y).writeInt(z).writeByte(type.ordinal());
+    }
+    
     @Override
     public boolean equals(Object o) {
         if(!(o instanceof Coord))
@@ -78,6 +92,11 @@ public class Coord {
     @Override
     public int hashCode() {
         return x ^ (y << 4) ^ (z << 8);
+    }
+    
+    @Override
+    public String toString() {
+        return "[" + DebugUtils.formatArray(x, y, z) + ", " + type.name() + "]";
     }
 
 }

@@ -17,7 +17,11 @@ import java.util.Map;
 
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
+import cn.academy.energy.api.event.CreateNetworkEvent;
+import cn.academy.energy.api.event.DestroyNetworkEvent;
+import cn.academy.energy.api.event.LinkNodeEvent;
 import cn.academy.energy.api.event.LinkUserEvent;
+import cn.academy.energy.api.event.UnlinkNodeEvent;
 import cn.academy.energy.api.event.UnlinkUserEvent;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
 import cn.annoreg.mc.RegEventHandler;
@@ -83,10 +87,34 @@ public class WirelessSystem {
         }
     }
     
+    @SubscribeEvent
+    public void createNetwork(CreateNetworkEvent event) {
+        if(!getDataFor(event.getWorld()).createNetwork(new Coord(event.mat, BlockType.MATRIX)
+                , event.ssid, event.isEncrypted, event.pwd))
+            event.setCanceled(true);
+    }
+    
+    @SubscribeEvent
+    public void destroyNetwork(DestroyNetworkEvent event) {
+        getDataFor(event.getWorld()).destroyNetwork(new Coord(event.mat, BlockType.MATRIX));
+    }
+    
+    @SubscribeEvent
+    public void linkNode(LinkNodeEvent event) {
+        boolean ret = getDataFor(event.getWorld()).linkNode(event.ssid, new Coord(event.node, BlockType.NODE), event.pwd);
+        event.setCanceled(!ret);
+    }
+    
+    @SubscribeEvent
+    public void unlinkNode(UnlinkNodeEvent event) {
+        getDataFor(event.getWorld()).unlinkNode(new Coord(event.node, BlockType.NODE));
+    }
+    
     private WiWorldData getDataFor(World world) {
         WiWorldData ret = table.get(world);
         if(ret == null) {
             ret = new WiWorldData(world);
+            world.setItemData(WiWorldData.ID, ret);
             table.put(world, ret);
         }
         

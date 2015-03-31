@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import cn.academy.core.AcademyCraft;
+import cn.academy.energy.api.IWirelessMatrix;
 import cn.academy.energy.api.IWirelessNode;
 
 /**
@@ -47,6 +48,7 @@ public class WiWorldData extends WorldSavedData {
             conn.tick();
             if(conn.dead) iter1.remove();
         }
+        this.markDirty(); //Always save
     }
 
     //---Matrix Connections
@@ -54,14 +56,72 @@ public class WiWorldData extends WorldSavedData {
      * You can use one of the following to look for a network:<br/>
      * -Strings(ssid) <br/>
      * -Coords(Matrix position or node position)
+     * [Node position handled by WirelessNetwork itself!]
      */
     Map<Object, WirelessNetwork> aliveNetworks = new HashMap();
+    
+    public boolean createNetwork(Coord mat, String ssid, boolean encrypted, String pwd) {
+        if(aliveNetworks.get(ssid) != null || aliveNetworks.get(mat) != null) {
+            AcademyCraft.log.error("Network already exists, cant duplicate #" 
+                    + mat + " with ssid " + ssid);
+            return false;
+        }
+        TileEntity te = mat.getAndCheck();
+        if(te == null) {
+            AcademyCraft.log.error("Invalid matrix connection request #" + mat);
+            return false;
+        }
+        
+        WirelessNetwork net = new WirelessNetwork(this, (IWirelessMatrix) te, ssid, encrypted, pwd);
+        aliveNetworks.put(ssid, net);
+        aliveNetworks.put(mat, net);
+        return true;
+    }
+    
+    public void destroyNetwork(Coord mat) {
+        WirelessNetwork net = aliveNetworks.get(mat);
+        if(net == null) {
+            AcademyCraft.log.error("Try to destroy a non-existent wireless net #" + mat);
+            return;
+        }
+        //Clean up the lookup
+        net.onDestroyed();
+        aliveNetworks.remove(net.ssid);
+        aliveNetworks.remove(mat);
+    }
+    
+    public boolean linkNode(String ssid, Coord node, String pwd) {
+        if(aliveNetworks.containsKey(node)) {
+            unlinkNode(node);
+        }
+        WirelessNetwork net = aliveNetworks.get(ssid);
+        if(net == null) {
+            AcademyCraft.log.error("Try to link node " + 
+                    node + " to a non-existent net: " + ssid);
+            return false;
+        }
+        //Validation
+        if(net.isEncrypted && !pwd.equals(net.password)) {
+            return false;
+        }
+        net.addNode(node);
+        return true;
+    }
+    
+    public void unlinkNode(Coord node) {
+        WirelessNetwork net = aliveNetworks.get(node);
+        if(net == null) {
+            AcademyCraft.log.error("Try to unlink a not-connected node #" + node);
+            return;
+        }
+        net.removeNode(node);
+    }
     
     //---Node Connections
     /**
      * You can use one of the following to look for a node connection: <br/>
      * -Coord of node </br>
-     * -Coord of generator/receiver
+     * -Coord of generator/receiver [Handled by NodeConn itself]
      */
     Map<Coord, NodeConn> nodeConns = new HashMap();
     

@@ -12,26 +12,20 @@
  */
 package cn.academy.energy.internal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.energy.api.IWirelessGenerator;
 import cn.academy.energy.api.IWirelessMatrix;
-import cn.academy.energy.api.IWirelessNode;
-import cn.academy.energy.api.IWirelessReceiver;
 
 /**
  * @author WeathFolD
  */
 public class WirelessNetwork {
     
+    final WiWorldData parent;
     final World world;
     
     //Basic info
@@ -48,10 +42,12 @@ public class WirelessNetwork {
     //Internal data
     Set<Coord> connectedNodes = new HashSet(); //Connected nodes coordinate set.
     
-    public WirelessNetwork(IWirelessMatrix _mat, String _ssid, boolean isEnc, String pwd) {
+    public WirelessNetwork(WiWorldData _parent, IWirelessMatrix _mat, String _ssid, boolean isEnc, String pwd) {
+        parent = _parent;
+        world = _parent.world;
+        
         TileEntity te = (TileEntity) _mat;
         
-        world = te.getWorldObj();
         matrix = new Coord(te, BlockType.MATRIX);
         ssid = _ssid;
         isEncrypted = isEnc;
@@ -62,14 +58,29 @@ public class WirelessNetwork {
         range = _mat.getRange();
     }
 
-    public WirelessNetwork(World _world, NBTTagCompound tag) {
-        world = _world;
+    public WirelessNetwork(WiWorldData _parent, NBTTagCompound tag) {
+        parent = _parent;
+        world = _parent.world;
         load(tag);
     }
     
     void tick() {}
     
-    void addNode(Coord node) {}
+    void onDestroyed() {
+        for(Coord c : connectedNodes) {
+            parent.aliveNetworks.remove(c);
+        }
+    }
+    
+    void addNode(Coord node) {
+        connectedNodes.add(node);
+        parent.aliveNetworks.put(node, this);
+    }
+    
+    void removeNode(Coord node) {
+        connectedNodes.remove(node);
+        parent.aliveNetworks.remove(node);
+    }
     
     private void save(NBTTagCompound tag) {
         tag.setString("ssid", ssid);

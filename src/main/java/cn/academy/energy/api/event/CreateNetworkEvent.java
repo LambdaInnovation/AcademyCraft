@@ -12,14 +12,14 @@
  */
 package cn.academy.energy.api.event;
 
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.IWirelessMatrix;
-import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Cancelable;
 
 /**
  * Fired whenever you want to create an wireless network.
  * @author WeathFolD
  */
+@Cancelable
 public class CreateNetworkEvent extends WirelessEvent {
 
     public final IWirelessMatrix mat;
