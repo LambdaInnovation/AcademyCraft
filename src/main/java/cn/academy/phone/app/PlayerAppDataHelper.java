@@ -14,6 +14,7 @@ package cn.academy.phone.app;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.phone.event.AppInfoUpdateEvent;
@@ -40,7 +41,6 @@ public class PlayerAppDataHelper {
                 arr[i] = preInstalled.get(i).getID();
             }
         }
-        
         return arr;
     }
     

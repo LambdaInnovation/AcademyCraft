@@ -42,7 +42,6 @@ public class PagePhone extends Widget {
         super(317, 512);
         
         this.initTexDraw(ClientProps.TEX_PHONE_BACK, 0, 0, 317, 512);
-        this.setTexResolution(512, 512);
     }
     
     @Override
