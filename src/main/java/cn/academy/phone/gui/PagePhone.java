@@ -15,12 +15,12 @@ package cn.academy.phone.gui;
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 import cn.academy.generic.client.ClientProps;
 import cn.academy.phone.app.App;
 import cn.academy.phone.app.AppRegistry;
 import cn.liutils.api.gui.Widget;
+import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 import cn.liutils.util.render.LambdaFont.Align;
@@ -53,9 +53,10 @@ public class PagePhone extends Widget {
         int[] appList = { 0, 1, 2, 1, 2, 0, 2, 0 };
         int lines = fldiv(appList.length, PER_LINE); //Actually lines-1
         
-        int hLine = Math.min(lines, Math.min((int) (MAX_LINES * (my / MAX_MY)), MAX_LINES - 1)), 
-            hColumn = Math.min((hLine == lines ? appList.length - lines * PER_LINE : PER_LINE) - 1, 
-                    Math.min((int) (PER_LINE * (mx / MAX_MX)), PER_LINE - 1));
+        int hLine = GenericUtils.min(lines, (int) (MAX_LINES * (my / MAX_MY)), MAX_LINES - 1), 
+            hColumn = GenericUtils.min((hLine == lines ? 
+                    appList.length - lines * PER_LINE : PER_LINE) - 1, 
+                    (int) (PER_LINE * (mx / MAX_MX)), PER_LINE - 1);
         int highlight = hLine * 3 + hColumn;
         
         int cx = 0, cy = 0;

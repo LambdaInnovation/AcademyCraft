@@ -12,12 +12,13 @@
  */
 package cn.academy.generic.client;
 
+import net.minecraft.util.ResourceLocation;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.annoreg.mc.RegSubmoduleInit.Side;
 import cn.liutils.util.render.LambdaFont;
-import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -34,6 +35,10 @@ public class ClientProps {
         TEX_PHONE_SYNC_MASK = phone("sync_mask"),
         TEX_PHONE_SYNC = phone("sync");
     
+    public static ResourceLocation 
+        TEX_GUI_NODE = gui("node"),
+        TEX_GUI_NODE_LIST = gui("node_list");
+    
     private static LambdaFont font;
     
     private static ResourceLocation[] fontLocation;
@@ -44,6 +49,7 @@ public class ClientProps {
         }
     }
     
+    @SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
     public static void init() {
         font = new LambdaFont("/assets/academy/fonts/yahei.lf", fontLocation);
     }
