@@ -15,11 +15,16 @@ package cn.academy.energy.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
+import cn.academy.energy.client.gui.GuiNode;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,6 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Wireless Node block.
  * @author WeathFolD
  */
+@RegistrationClass
 public class BlockNode extends BlockContainer {
 
     public enum NodeType { //Ordinal == Tile metadata.
@@ -96,10 +102,38 @@ public class BlockNode extends BlockContainer {
             float tx, float ty, float tz, int meta) {
         return type.ordinal();
     }
+    
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
+            float tx, float ty, float tz) {
+        if(!player.isSneaking()) {
+            guiHandler.openGuiContainer(player, world, x, y, z);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
         return new TileNode();
     }
+    
+    @RegGuiHandler
+    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+        @SideOnly(Side.CLIENT)
+        protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+            ContainerNode c = (ContainerNode) getServerContainer(player, world, x, y, z);
+            return c == null ? null : new GuiNode(c);
+        }
+        
+        protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+            TileNode te = check(world, x, y, z);
+            return te == null ? null : new ContainerNode(te, player);
+        }
+        
+        private TileNode check(World world, int x, int y, int z) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            return (TileNode) (te instanceof TileNode ? te : null);
+        }
+    };
 
 }

@@ -13,26 +13,67 @@
 package cn.academy.energy.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author WeathFolD
- *
  */
 public class ContainerNode extends Container {
+    
+    final double STEP = 17.230769230769230769230769230769;
 
     public final TileNode node;
+
+    public ContainerNode(TileNode _node, EntityPlayer player) {
+        node = _node;
+        initInventory(player.inventory);
+    }
+    
+    private void initInventory(InventoryPlayer inv) {
+        this.addSlotToContainer(new Slot(node, 0, 24, 73));
+        this.addSlotToContainer(new Slot(node, 1, 136, 37));
+        
+        for(int i = 0; i < 9; ++i) {
+            addSlotToContainer(new Slot(inv, i, (int) Math.round(10.49 + i * STEP), 152));
+        }
+        
+        for(int i = 1; i < 4; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                int slot = (4 - i) * 9 + j;
+                addSlotToContainer(new Slot(inv, slot, (int) Math.round(10.49 + j * STEP), 
+                        (int) Math.round(148 - i * STEP)));
+            }
+        }
+    }
     
     /**
-     * 
+     * This already become a template...
      */
-    public ContainerNode(TileNode _node) {
-        node = _node;
+    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+        Slot slot = this.getSlot(id);
+        if(slot == null || !slot.getHasStack())
+            return null;
+        ItemStack cur = slot.getStack(), ret = cur.copy();
+        if(id >= 2) {
+            
+        } else {
+            
+        }
+        if(cur.stackSize == 0) {
+            slot.putStack(null);
+        } else {
+            slot.onSlotChanged();
+        }
+        
+        if(cur.stackSize == ret.stackSize)
+            return null;
+        slot.onPickupFromSlot(player, cur);
+        return ret;
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.inventory.Container#canInteractWith(net.minecraft.entity.player.EntityPlayer)
-     */
     @Override
     public boolean canInteractWith(EntityPlayer var1) {
         return var1.getDistanceSq(node.xCoord + .5, node.yCoord + .5, node.zCoord + .5) < 10.0;

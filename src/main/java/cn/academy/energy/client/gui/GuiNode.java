@@ -47,7 +47,7 @@ public class GuiNode extends LIGuiContainer {
     
     public void receivedSimpleMessage(boolean con, String _name) {
         isConnected = con;
-        name = _name;;
+        name = _name;
         loaded = true;
     }
     
