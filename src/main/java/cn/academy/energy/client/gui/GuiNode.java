@@ -13,6 +13,7 @@
 package cn.academy.energy.client.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.academy.energy.block.ContainerNode;
@@ -35,20 +36,30 @@ public class GuiNode extends LIGuiContainer {
     boolean loaded = false;
     
     //GUI state
-    Widget mainPage, listPage;
+    PageNode mainPage;
+    PageNodeList listPage;
 
     TileNode node;
     
     public GuiNode(ContainerNode c) {
         super(c);
-        node = c.node;
+        
         initWidgets();
+        
+        //DEBUG
+        receivedSimpleMessage(true, "wwwwww");
+        receivedListMessage(Arrays.asList("aaa", "bbb", "loooooooooooooooooooooooooooooooooooooooooooong", "FreakingOut", "Whatever", "EzioAuditore", "SakuraYuki", "Meow",
+                "loooooooooooooooooooooooooooooooooooooooooooong"));
+        //DEBUG END
+        
+        node = c.node;
     }
     
     public void receivedSimpleMessage(boolean con, String _name) {
         isConnected = con;
         name = _name;
         loaded = true;
+        mainPage.finishedInit();
     }
     
     public void receivedListMessage(List<String> list) {
@@ -57,8 +68,25 @@ public class GuiNode extends LIGuiContainer {
     }
     
     private void initWidgets() {
-        gui.addWidget(mainPage = new PageNode());
-        gui.addWidget(listPage = new PageNodeList());
+        gui.addWidget(mainPage = new PageNode(this));
+    }
+    
+    public void openListGui() {
+        if(listPage == null) {
+            gui.addWidget(listPage = new PageNodeList(this));
+        }
+        listPage.doesDraw = true;
+        mainPage.doesListenKey = false;
+    }
+    
+    public void closeListGui() {
+        listPage.doesDraw = false;
+        mainPage.doesListenKey = true;
+    }
+    
+    @Override
+    public boolean isSlotActive() {
+        return listPage == null || !listPage.doesDraw;
     }
 
 }

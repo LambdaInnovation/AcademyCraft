@@ -32,7 +32,10 @@ public class PageNode extends Widget {
     static final double SCALE = 16.0 / 26.0;
     static final ResourceLocation TEX = ClientProps.TEX_GUI_NODE;
 
-    public PageNode() {
+    final GuiNode guiNode;
+    
+    public PageNode(GuiNode _guiNode) {
+        guiNode = _guiNode;
         this.setSize(280, 300);
         this.initTexDraw(ClientProps.TEX_GUI_NODE, 0, 0, 280, 300);
         this.alignStyle = AlignStyle.CENTER;
@@ -42,7 +45,7 @@ public class PageNode extends Widget {
     @Override
     public void onAdded() {
         //DEBUG
-        finishedInit();
+        //finishedInit();
     }
     
     void finishedInit() {
@@ -62,7 +65,9 @@ public class PageNode extends Widget {
         }) {
             @Override
             public void buttonPressed(double mx, double my) {
-                System.out.println("heh");
+                if(guiNode.listLoaded) {
+                    guiNode.openListGui();
+                }
             }
         });
         

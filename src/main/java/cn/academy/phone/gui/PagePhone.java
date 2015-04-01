@@ -13,6 +13,7 @@
 package cn.academy.phone.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -122,6 +123,21 @@ public class PagePhone extends Widget {
         HudUtils.setZLevel(27);
         ClientProps.font().draw("Loading...", 30, 15, 15);
         
+        drawHint(-375, -400, ClientProps.TEX_PHONE_HINT_ML, "Open App");
+        drawHint(-375, -340, ClientProps.TEX_PHONE_HINT_MR, "Quit");
+        
+        GL11.glPopMatrix();
+    }
+    
+    private void drawHint(double x, double y, ResourceLocation base, String text) {
+        GL11.glPushMatrix();
+        HudUtils.setZLevel(0);
+        GL11.glTranslated(x, y, 10);
+        float scale = .5f;
+        GL11.glScalef(scale, scale, scale);
+        RenderUtils.loadTexture(base);
+        HudUtils.drawRect(0, 0, 256, 256);
+        ClientProps.font().draw(text, 155, 122, 28, Align.CENTER);
         GL11.glPopMatrix();
     }
     

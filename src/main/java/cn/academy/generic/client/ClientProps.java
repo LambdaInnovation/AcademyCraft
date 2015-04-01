@@ -33,7 +33,9 @@ public class ClientProps {
         TEX_PHONE_BACK = phone("phone_back"),
         TEX_PHONE_APP_BG = phone("app_back"),
         TEX_PHONE_SYNC_MASK = phone("sync_mask"),
-        TEX_PHONE_SYNC = phone("sync");
+        TEX_PHONE_SYNC = phone("sync"),
+        TEX_PHONE_HINT_ML = phone("hint_mouse_left"),
+        TEX_PHONE_HINT_MR = phone("hint_mouse_right");
     
     public static ResourceLocation 
         TEX_GUI_NODE = gui("node"),

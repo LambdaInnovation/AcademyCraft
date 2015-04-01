@@ -20,6 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,6 +29,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
+@RegistrationClass
+@RegTileEntity
 public class TileNode extends TileEntity implements IWirelessNode, IInventory {
 
     protected double energy;
@@ -36,7 +40,7 @@ public class TileNode extends TileEntity implements IWirelessNode, IInventory {
      * Used for just rendering.
      */
     @SideOnly(Side.CLIENT)
-    public boolean enabled;
+    public boolean enabled = true;
     
     public TileNode() {}
 
