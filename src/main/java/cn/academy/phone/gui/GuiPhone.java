@@ -55,8 +55,6 @@ public class GuiPhone extends AuxGui {
     long lastFrameTime;
     
     public GuiPhone() {
-        gui = new LIGui();
-        gui.addWidget(new PagePhone());
         this.addKeyHandler("quit", LIKeyProcess.MOUSE_RIGHT, false, new IKeyHandler() {
 
             @Override
@@ -84,9 +82,17 @@ public class GuiPhone extends AuxGui {
         return true;
     }
     
+    @Override
+    protected boolean overrideMouse() {
+        return true;
+    }
+    
     public void open(ItemStack _stack) {
         if(Minecraft.getSystemTime() - lastOpenTime < 400)
             return;
+        
+        gui = new LIGui();
+        gui.addWidget(new PagePhone(this));
         
         open = true;
         lastOpenTime = Minecraft.getSystemTime();

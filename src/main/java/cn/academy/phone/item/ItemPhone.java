@@ -25,11 +25,12 @@ import cn.academy.phone.gui.GuiPhone;
  */
 public class ItemPhone extends Item {
     
-    public final int level; //1-3.
+    public final int level; //1-3. TODO: Not sure of that.
     public final int maxEnergy;
     
     public ItemPhone(int _level, int _maxEnergy) {
         setCreativeTab(AcademyCraft.cct);
+        
         level = _level;
         maxEnergy = _maxEnergy;
     }

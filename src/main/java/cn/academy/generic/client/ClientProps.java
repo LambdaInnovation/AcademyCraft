@@ -36,19 +36,12 @@ public class ClientProps {
         TEX_PHONE_SYNC_MASK = phone("sync_mask"),
         TEX_PHONE_SYNC = phone("sync"),
         TEX_PHONE_HINT_ML = phone("hint_mouse_left"),
-        TEX_PHONE_HINT_MR = phone("hint_mouse_right");
+        TEX_PHONE_HINT_MR = phone("hint_mouse_right"),
+        TEX_PHONE_ARROW = phone("arrow");
     
     public static ResourceLocation 
         TEX_GUI_NODE = gui("node"),
         TEX_GUI_NODE_LIST = gui("node_list");
-    
-    private static ResourceLocation[] fontLocation;
-    static {
-        fontLocation = new ResourceLocation[12];
-        for(int i = 0; i < 12; ++i) {
-            fontLocation[i] = res("fonts/yahei" + i + ".png");
-        }
-    }
     
     public static Font font() {
         return Font.font;
