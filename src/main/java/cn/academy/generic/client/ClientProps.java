@@ -17,6 +17,7 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.annoreg.mc.RegSubmoduleInit.Side;
+import cn.liutils.util.render.Font;
 import cn.liutils.util.render.LambdaFont;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,8 +42,6 @@ public class ClientProps {
         TEX_GUI_NODE = gui("node"),
         TEX_GUI_NODE_LIST = gui("node_list");
     
-    private static LambdaFont font;
-    
     private static ResourceLocation[] fontLocation;
     static {
         fontLocation = new ResourceLocation[12];
@@ -51,13 +50,8 @@ public class ClientProps {
         }
     }
     
-    @SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
-    public static void init() {
-        font = new LambdaFont("/assets/academy/fonts/yahei.lf", fontLocation);
-    }
-    
-    public static LambdaFont font() {
-        return font;
+    public static Font font() {
+        return Font.font;
     }
     
     private static ResourceLocation res(String loc) {

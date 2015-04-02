@@ -13,6 +13,7 @@
 package cn.academy.phone.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -24,7 +25,7 @@ import cn.liutils.api.gui.Widget;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.LambdaFont.Align;
+import cn.liutils.util.render.Font.Align;
 
 /**
  * @author WeathFolD
@@ -82,7 +83,7 @@ public class PagePhone extends Widget {
             
             String name = app.getDisplayName();
             float fsize = 12f;
-            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, Align.CENTER);
+            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, 0xffffff, Align.CENTER);
             GL11.glPopMatrix();
             
             ++cx;
@@ -121,7 +122,7 @@ public class PagePhone extends Widget {
         GL11.glPopMatrix();
         
         HudUtils.setZLevel(27);
-        ClientProps.font().draw("Loading...", 30, 15, 15);
+        ClientProps.font().draw("Loading...", 30, 15, 15, 0xffffff);
         
         drawHint(-375, -400, ClientProps.TEX_PHONE_HINT_ML, "Open App");
         drawHint(-375, -340, ClientProps.TEX_PHONE_HINT_MR, "Quit");
@@ -137,7 +138,7 @@ public class PagePhone extends Widget {
         GL11.glScalef(scale, scale, scale);
         RenderUtils.loadTexture(base);
         HudUtils.drawRect(0, 0, 256, 256);
-        ClientProps.font().draw(text, 155, 122, 28, Align.CENTER);
+        ClientProps.font().draw(text, 155, 122, 28, 0xffffff, Align.CENTER);
         GL11.glPopMatrix();
     }
     

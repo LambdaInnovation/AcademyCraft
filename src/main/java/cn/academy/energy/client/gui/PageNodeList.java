@@ -9,7 +9,7 @@ import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
 import cn.liutils.util.HudUtils;
-import cn.liutils.util.render.LambdaFont.Align;
+import cn.liutils.util.render.Font.Align;
 
 /**
  * It should guaranteed that when this gui is created, the node list info is ALREADY loaded.
@@ -28,7 +28,6 @@ public class PageNodeList extends Widget {
         this.setSize(280, 320);
         this.initTexDraw(ClientProps.TEX_GUI_NODE_LIST, 0, 0, 280, 320);
         this.scale = SCALE;
-        this.doesDraw = false;
         this.alignStyle = AlignStyle.CENTER;
     }
     
@@ -45,8 +44,7 @@ public class PageNodeList extends Widget {
         this.drawBlackout();
         super.draw(mx, my, hov);
         String header = "Channel select";
-        GL11.glColor4d(0.3, 1, 1, 1);
-        ClientProps.font().draw(header, 160, 26, 16, Align.CENTER);
+        ClientProps.font().draw(header, 160, 26, 16, 0x3cffff, Align.CENTER);
         GL11.glColor4d(1, 1, 1, 1);
     }
     
@@ -93,8 +91,7 @@ public class PageNodeList extends Widget {
             }
             
             final float fSize = 15;
-            GL11.glColor4d(0, 1, 1, 1);
-            ClientProps.font().drawTrimmed(ssid, 10, 4, fSize, Align.LEFT, 180, "...");
+            ClientProps.font().drawTrimmed(ssid, 10, 4, fSize, 0x00ffff,Align.LEFT, 180, "...");
             GL11.glColor4d(1, 1, 1, 1);
         }
     }

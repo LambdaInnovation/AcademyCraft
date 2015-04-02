@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.client.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -21,7 +22,7 @@ import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.api.gui.widget.RandBufProgressBar.Direction;
 import cn.liutils.api.gui.widget.StateButton;
-import cn.liutils.util.render.LambdaFont.Align;
+import cn.liutils.util.render.Font.Align;
 
 /**
  * @author WeathFolD
@@ -44,11 +45,29 @@ public class PageNode extends Widget {
     
     @Override
     public void onAdded() {
-        //DEBUG
-        //finishedInit();
+        addWidget(new Widget(115, 42, 51, 57) {
+            @Override
+            public void draw(double mx, double my, boolean hov) {
+                GL11.glPushMatrix();
+                GL11.glTranslated(51 / 2, 57 / 2, 0);
+                GL11.glRotated(Minecraft.getSystemTime() / 80.0, 0, 0, 1);
+                GL11.glTranslated(-51 / 2, -57 / 2, 0);
+                super.draw(mx, my, hov);
+                GL11.glPopMatrix();
+            }
+        }.initTexDraw(TEX, 337, 121));
+        
+        addWidget(new Widget(141, 110, 0, 0) {
+            @Override
+            public void draw(double mx, double my, boolean hov) {
+                ClientProps.font().draw("Loading...", 0, 0, 14, 0x00ffff, Align.CENTER);
+            }
+        });
     }
     
     void finishedInit() {
+        getGui().clearSubWidgets(this);
+        
         //Charge Slot
         addWidget(new Widget(29, 127, 38, 38).initTexDraw(TEX, 285, 37));
         
@@ -66,7 +85,7 @@ public class PageNode extends Widget {
             @Override
             public void buttonPressed(double mx, double my) {
                 if(guiNode.listLoaded) {
-                    guiNode.openListGui();
+                    guiNode.openSubPage(new PageNodeList(guiNode));
                 }
             }
         });
@@ -78,7 +97,7 @@ public class PageNode extends Widget {
         }) {
             @Override
             public void buttonPressed(double mx, double my) {
-                System.out.println("niconiconi~");
+                guiNode.openSubPage(new PageNodeRename(guiNode));
             }
         });
         
@@ -91,14 +110,13 @@ public class PageNode extends Widget {
         }.setDirection(Direction.UP).setFluctRegion(0));
         
         //Node name
-        addWidget(new Widget(163, 15, 0, 0) {
+        addWidget(new Widget(139, 18, 0, 0) {
             @Override
             public void draw(double x, double y, boolean hov) {
                 final float fSize = 10;
                 GL11.glColor4d(0, 1, 1, 1);
-                
-                String name = "Altair Auditore";
-                ClientProps.font().drawTrimmed(name, 0, 0, fSize, Align.RIGHT, 54, "...");
+
+                ClientProps.font().drawTrimmed(guiNode.name, 0, 0, fSize, 0x00ffff, Align.CENTER, 54, "...");
                 
                 GL11.glColor4d(1, 1, 1, 1);
             }
@@ -110,9 +128,9 @@ public class PageNode extends Widget {
             public void draw(double x, double y, boolean hov) {
                 final float fSize = 10, step = 15;
                 GL11.glColor4d(0, 1, 1, 1);
-                ClientProps.font().draw("SSID:", 0, 0, fSize, Align.CENTER);
+                ClientProps.font().draw("SSID:", 0, 0, fSize, 0x00ffff, Align.CENTER);
                 String ssid = "Imagination Fieldxxxxxxxxxxxx";
-                ClientProps.font().drawTrimmed(ssid, 0, step, 10, Align.CENTER, 75, "...");
+                ClientProps.font().drawTrimmed(ssid, 0, step, 10, 0x00ffff, Align.CENTER, 75, "...");
                 GL11.glColor4d(1, 1, 1, 1);
             }
         });
