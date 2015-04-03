@@ -79,10 +79,7 @@ public class DiagStimulate extends DialogueBase {
 			}
 		});
 		
-		addWidget(progress = new RandBufProgressBar(6.5, 16, 103, 5.5, 13, 137, 206, 11) {
-			{
-				this.addSetTexture(TEXTURE);
-			}
+		addWidget(progress = new RandBufProgressBar(6.5, 16, 103, 5.5, TEXTURE, 13, 137, 206, 11) {
 			@Override
 			public double getProgress() {
 				return (double)dev.dev.stimSuccess / dev.dev.maxStimTimes;

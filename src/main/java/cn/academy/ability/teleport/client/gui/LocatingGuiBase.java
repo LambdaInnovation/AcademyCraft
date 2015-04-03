@@ -121,7 +121,6 @@ public abstract class LocatingGuiBase extends LIGui {
 			long dt = Minecraft.getSystemTime() - createTime;
 			double mAlpha = Math.min(1.0, dt / 800.0);
 			
-			HudUtils.setTextureResolution(512, 512);
 			RenderUtils.loadTexture(tex);
 			
 			GL11.glColor4d(1, 1, 1, mAlpha);

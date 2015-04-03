@@ -138,7 +138,6 @@ public class PageSkills extends DevSubpage {
 			
 			@Override
 			public void draw(double mx, double my, boolean mouseHovering) {
-				HudUtils.setTextureResolution(512, 512);
 				
 				double v0;
 				if(fullyLearned) {
@@ -263,11 +262,8 @@ public class PageSkills extends DevSubpage {
 				sl.progressNext();
 			}
 		},
-		new RandBufProgressBar(7, 124.5, 122, 5.5, 14, 293, 244, 11) {
+		new RandBufProgressBar(7, 124.5, 122, 5.5, ACClientProps.TEX_GUI_AD_SKILL, 14, 293, 244, 11) {
 			{
-				drawer.addHandlers(
-					new AssignTexture(ACClientProps.TEX_GUI_AD_SKILL),
-					new AssignColor());
 				this.fluctRegion = 0;
 			}
 			@Override

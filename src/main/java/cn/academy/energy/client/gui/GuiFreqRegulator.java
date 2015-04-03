@@ -73,7 +73,6 @@ public class GuiFreqRegulator extends LIGuiScreen {
 		public MainPage() {
 			this.setSize(250, 171);
 			this.initTexDraw(TEX, 0, 0, 500, 342);
-			this.setTexResolution(512, 512);
 			this.alignStyle = AlignStyle.CENTER;
 		}
 		

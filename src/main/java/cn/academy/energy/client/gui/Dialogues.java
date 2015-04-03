@@ -48,7 +48,6 @@ public class Dialogues {
 			this.setSize(109.5, 94.5);
 			this.alignStyle = AlignStyle.CENTER;
 			this.initTexDraw(TEX_DIAG, 0, 0, 219, 189);
-			this.setTexResolution(512, 512);
 		}
 		
 		@Override
@@ -132,7 +131,7 @@ public class Dialogues {
 		@Override
 		public void onAdded() {
 			addWidget(box = new InputBox(46, 51, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255)); 
+				.setEcho(true).setTextColor(0x00FFFF)); 
 			
 			addWidget(new Dialogues.WigOK() {
 				{

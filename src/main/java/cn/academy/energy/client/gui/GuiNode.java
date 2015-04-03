@@ -97,7 +97,6 @@ public class GuiNode extends LIGuiContainer {
 			this.alignStyle = AlignStyle.CENTER;
 			this.setSize(207.5, 205.333333);
 			this.initTexDraw(TEX, 0, 0, 313, 308);
-			this.setTexResolution(384, 384);
 		}
 		
 		@Override
@@ -154,7 +153,6 @@ public class GuiNode extends LIGuiContainer {
 		public Choose() {
 			this.setSize(150, 216.5);
 			this.initTexDraw(TEX_SELECT, 0, 0, 300, 433);
-			this.setTexResolution(512, 512);
 			
 			choosePage = this;
 			this.alignStyle = AlignStyle.CENTER;

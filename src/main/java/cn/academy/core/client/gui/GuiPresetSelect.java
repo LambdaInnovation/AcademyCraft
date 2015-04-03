@@ -152,7 +152,6 @@ public class GuiPresetSelect extends AuxGui {
 			GL11.glTranslatef(x0, y0, 0);
 			GL11.glScalef(scale, scale, 1);
 			
-			HudUtils.setTextureResolution(768, 512);
 			RenderUtils.loadTexture(ACClientProps.TEX_GUI_PRESET);
 			long dt = Minecraft.getSystemTime() - lastOpenTime;
 			drawSelectionMenu(w, h, dt);

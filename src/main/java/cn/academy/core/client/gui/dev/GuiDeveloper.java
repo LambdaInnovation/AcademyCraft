@@ -85,7 +85,6 @@ public class GuiDeveloper extends LIGuiScreen {
     @Override
 	public void drawScreen(int mx, int my, float w)
     {
-    	HudUtils.setTextureResolution(512, 512);
     	super.drawScreen(mx, my, w);
     }
     

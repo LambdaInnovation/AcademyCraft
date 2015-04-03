@@ -69,7 +69,6 @@ public class GuiMatrix extends LIGuiScreen {
 			mat = _mat;
 			this.alignStyle = AlignStyle.CENTER;
 			this.initTexDraw(TEX, 0, 0, 404, 370);
-			this.setTexResolution(512, 512);
 		}
 		
 		@Override
@@ -184,13 +183,13 @@ public class GuiMatrix extends LIGuiScreen {
 			});
 			
 			addWidget(ssid = new InputBox(48, 25, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setTextColor(0, 255, 255, 255));
+				.setTextColor(0x00FFFF));
 			
 			addWidget(pwd = new InputBox(48, 39, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setEcho(true).setTextColor(0x00FFFF));
 			
 			addWidget(pwd2 = new InputBox(48, 53, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setEcho(true).setTextColor(0x00FFFF));
 		}
 		
 		@Override
@@ -269,13 +268,13 @@ public class GuiMatrix extends LIGuiScreen {
 			});
 			
 			addWidget(opw = new InputBox(48, 25, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setTextColor(0, 255, 255, 255));
+				.setTextColor(0x00FFFF));
 			
 			addWidget(pwd = new InputBox(48, 39, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setEcho(true).setTextColor(0x00FFFF));
 			
 			addWidget(pwd2 = new InputBox(48, 53, 46, 8.5, 6, 1, 12)
-				.setFont(ACClientProps.font()).setEcho(true).setTextColor(0, 255, 255, 255));
+				.setEcho(true).setTextColor(0x00FFFF));
 		}
 		
 		@Override

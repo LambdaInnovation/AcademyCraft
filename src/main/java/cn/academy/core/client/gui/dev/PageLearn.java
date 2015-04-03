@@ -78,10 +78,9 @@ public class PageLearn extends DevSubpage {
 			}
 		});
 		
-		addWidget(new RandBufProgressBar(8.5, 112.5, 122, 5.5, 17, 293, 244, 11) {
+		addWidget(new RandBufProgressBar(8.5, 112.5, 122, 5.5, TEXTURE, 17, 293, 244, 11) {
 			{
 				this.fluctRegion = 0;
-				this.addSetTexture(TEXTURE);
 			}
 			@Override
 			public double getProgress() {
