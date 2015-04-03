@@ -44,7 +44,7 @@ public class ACWorldGen implements IWorldGenerator {
 	        new CustomGen(new WorldGenMinable(ACBlocks.oreMg, 0, 3, Blocks.stone), 60, 26),
 	        new CustomGen(new WorldGenMinable(ACBlocks.oreNi, 0, 5, Blocks.stone), 60, 28),
 	        new CustomGen(new WorldGenMinable(ACBlocks.oreShadow, 0, 2, Blocks.stone), 60, 13, shadowGenIds),
-	        new CustomGen(new WorldGenMinable(ACBlocks.oreCrystal, 0, 2, Blocks.stone), 40, 22),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreCrystal, 0, 2, Blocks.stone), 40, 25),
 	};
 	
 	private void genOverworld(World world, Random random, int x, int z) {
