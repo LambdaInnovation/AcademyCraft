@@ -40,10 +40,10 @@ public class ACWorldGen implements IWorldGenerator {
 	}
 	
 	private CustomGen[] generators = new CustomGen[] {
-	        new CustomGen(new WorldGenMinable(ACBlocks.oreAl, 0, 6, Blocks.stone), 60, 30),
-	        new CustomGen(new WorldGenMinable(ACBlocks.oreMg, 0, 3, Blocks.stone), 60, 28),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreAl, 0, 5, Blocks.stone), 60, 28),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreMg, 0, 3, Blocks.stone), 60, 26),
 	        new CustomGen(new WorldGenMinable(ACBlocks.oreNi, 0, 5, Blocks.stone), 60, 28),
-	        new CustomGen(new WorldGenMinable(ACBlocks.oreShadow, 0, 2, Blocks.stone), 60, 15, shadowGenIds),
+	        new CustomGen(new WorldGenMinable(ACBlocks.oreShadow, 0, 2, Blocks.stone), 60, 13, shadowGenIds),
 	        new CustomGen(new WorldGenMinable(ACBlocks.oreCrystal, 0, 2, Blocks.stone), 40, 22),
 	};
 	
