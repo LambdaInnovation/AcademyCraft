@@ -20,6 +20,7 @@ import cn.academy.energy.api.IWirelessTile;
 import cn.liutils.util.DebugUtils;
 
 /**
+ * Representing a block coord in a world representing a certain wireless tile type.
  * @author WeathFolD
  */
 public class Coord {

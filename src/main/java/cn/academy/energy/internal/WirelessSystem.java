@@ -12,11 +12,15 @@
  */
 package cn.academy.energy.internal;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
+import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.IWirelessTile;
 import cn.academy.energy.api.event.CreateNetworkEvent;
 import cn.academy.energy.api.event.DestroyNetworkEvent;
 import cn.academy.energy.api.event.LinkNodeEvent;
@@ -108,6 +112,26 @@ public class WirelessSystem {
     @SubscribeEvent
     public void unlinkNode(UnlinkNodeEvent event) {
         getDataFor(event.getWorld()).unlinkNode(new Coord(event.node, BlockType.NODE));
+    }
+    
+    //Lookup part(Helper methods)
+    /**
+     * Get all the available SSIDs for an wirelss node.
+     */
+    public static Collection<String> getAvailableSSIDs(IWirelessNode node) {
+        return instance.getDataFor(world(node)).getAvailableSSIDs(node);
+    }
+    
+    /**
+     * Get all the available nodes for an wireless user(receiver/generator).
+     */
+    public static Collection<Coord> getAvailableNodes(IWirelessTile user) {
+        return instance.getDataFor(world(user)).getAvailableNodes(user);
+    }
+    
+    //Internal Implementation
+    private static World world(IWirelessTile te) {
+        return ((TileEntity)te).getWorldObj();
     }
     
     private WiWorldData getDataFor(World world) {

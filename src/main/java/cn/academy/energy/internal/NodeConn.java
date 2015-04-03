@@ -40,7 +40,7 @@ class NodeConn {
         load(tag);
     }
 
-    public void save(NBTTagCompound tag) {
+    void save(NBTTagCompound tag) {
         node.save(tag);
         tag.setInteger("receivers", receivers.size());
         int i = 0;
@@ -61,9 +61,8 @@ class NodeConn {
         }
     }
 
-    public void load(NBTTagCompound tag) {
+    void load(NBTTagCompound tag) {
         node = new Coord(world, tag, BlockType.NODE);
-        parent.nodeConns.put(node, this); // Update the lookup
         
         int n = tag.getInteger("receivers");
         for (int i = 0; i < n; ++i) {
@@ -82,6 +81,10 @@ class NodeConn {
         }
     }
 
+    void onRemoved() {
+        
+    }
+    
     public void addReceiver(Coord rec) {
         receivers.add(rec);
     }

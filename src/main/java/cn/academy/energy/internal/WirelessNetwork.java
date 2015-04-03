@@ -13,17 +13,21 @@
 package cn.academy.energy.internal;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.energy.api.IWirelessMatrix;
+import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.internal.WiWorldData.ChunkCoord;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD
  */
-public class WirelessNetwork {
+class WirelessNetwork {
     
     final WiWorldData parent;
     final World world;
@@ -41,6 +45,9 @@ public class WirelessNetwork {
     
     //Internal data
     Set<Coord> connectedNodes = new HashSet(); //Connected nodes coordinate set.
+    final double MAX_LAG = 0; //abs value.
+    double energyLag = MAX_LAG / 2; //The "invisible buffer" used when balancing energy.
+    boolean dead; //Death flag.
     
     public WirelessNetwork(WiWorldData _parent, IWirelessMatrix _mat, String _ssid, boolean isEnc, String pwd) {
         parent = _parent;
@@ -64,11 +71,60 @@ public class WirelessNetwork {
         load(tag);
     }
     
-    void tick() {}
+    void tick() {
+        double totalEnergy = 0.0, totalMax = 0.0;
+        Iterator<Coord> iter = connectedNodes.iterator();
+        //Pass 1: Calculate average energy pct
+        while(iter.hasNext()) {
+            Coord c = iter.next();
+            if(!c.isLoaded())
+                continue;
+            TileEntity te = c.getAndCheck();
+            if(te == null) {
+                iter.remove();
+                continue;
+            }
+            IWirelessNode node = (IWirelessNode) te;
+            totalEnergy += node.getEnergy();
+            totalMax += node.getMaxEnergy();
+        }
+        totalMax += MAX_LAG;
+        totalEnergy += energyLag;
+        
+        //Pass 2: Balance max up to latency.
+        double alpha = Math.min(1, totalEnergy / totalMax);
+        double totalChanged = 0.0;
+        for(Coord c : connectedNodes) {
+            if(!c.isLoaded())
+                continue;
+            IWirelessNode node = (IWirelessNode) c;
+            double targ = alpha * node.getEnergy();
+            double delta = targ - node.getEnergy();
+            delta = Math.signum(delta) * GenericUtils.min(latency - totalChanged, Math.abs(delta), node.getLatency());
+            delta = queryChange(delta);
+            totalChanged += Math.abs(delta);
+            node.setEnergy(delta + node.getEnergy());
+            if(totalChanged <= 0)
+                break;
+        }
+    }
+    
+    private double queryChange(double c) {
+        if(c > 0) {
+            double give = Math.min(energyLag, c);
+            energyLag -= give;
+            return give;
+        } else {
+            double give = Math.min(MAX_LAG - energyLag, -c);
+            energyLag += give;
+            return -give;
+        }
+    }
     
     void onDestroyed() {
         for(Coord c : connectedNodes) {
             parent.aliveNetworks.remove(c);
+            parent.lazyNetLookup(new ChunkCoord(c)).remove(c.getAndCheck());
         }
     }
     
@@ -82,7 +138,7 @@ public class WirelessNetwork {
         parent.aliveNetworks.remove(node);
     }
     
-    private void save(NBTTagCompound tag) {
+    void save(NBTTagCompound tag) {
         tag.setString("ssid", ssid);
         tag.setBoolean("encrypted", isEncrypted);
         if(isEncrypted)
@@ -103,7 +159,7 @@ public class WirelessNetwork {
         }
     }
     
-    private void load(NBTTagCompound tag) {
+    void load(NBTTagCompound tag) {
         ssid = tag.getString("ssid");
         isEncrypted = tag.getBoolean("encrypted");
         if(isEncrypted)
@@ -121,6 +177,8 @@ public class WirelessNetwork {
         }
     }
     
-    
+    void setDead() {
+        dead = true;
+    }
 
 }
