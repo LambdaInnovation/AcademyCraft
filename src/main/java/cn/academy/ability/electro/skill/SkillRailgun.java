@@ -72,6 +72,13 @@ public class SkillRailgun extends SkillBase {
 		
 		@Override
 		protected void onStart() {
+		    if(!player.worldObj.isRemote) {
+                player.worldObj.playSoundAtEntity(player, "academy:elec.railgun", 0.5f, 1.0f);
+                player.worldObj.spawnEntityInWorld(new EntityRailgun(AbilityDataMain.getData(player)));
+            }
+		    finishSkill(false);
+		    if(true) return;
+		    
 			AbilityData data = AbilityDataMain.getData(player);
 			int slv = data.getSkillID(CatElectro.railgun), lv = data.getLevelID() + 1;
 			
