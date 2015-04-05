@@ -37,6 +37,7 @@ import cn.academy.api.ctrl.pattern.PatternDown;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
 import cn.academy.core.proxy.ACClientProps;
+import cn.academy.misc.util.ACUtils;
 import cn.academy.misc.util.JudgeUtils;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
@@ -271,6 +272,8 @@ public class SkillMineDetect extends SkillBase {
 			int slv = data.getSkillLevel(CatElectro.mineDetect), lv = data.getLevelID() + 1;
 			if(!data.decreaseCP(getCPConsume(slv, lv), CatElectro.mineDetect)) {
 				this.finishSkill(false);
+				if(data.getPlayer().worldObj.isRemote)
+				    ACUtils.playAbortSound();
 				return;
 			}
 			player.playSound("academy:elec.mineview", 0.5f, 1.0f);

@@ -69,7 +69,7 @@ public class MsgNodeLoadList implements IMessage {
 		buf.writeShort(cns.size());
 		for(int i = 0; i < cns.size(); ++i) {
 			String add = cns.get(i);
-			if(add != null) ByteBufUtils.writeUTF8String(buf, add);
+			ByteBufUtils.writeUTF8String(buf, add);
 		}
 	}
 	

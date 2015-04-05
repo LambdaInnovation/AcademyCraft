@@ -132,7 +132,7 @@ class WiWorldData {
 		Set<String> ret = new HashSet();
 		for(IWirelessNode node : nodes) {
 			String chan = lookup.get(node);
-			if(excl.contains(chan))
+			if(excl.contains(chan) || chan == null)
 				continue;
 			TileEntity tile = (TileEntity) node;
 			double td = GenericUtils.distanceSq(

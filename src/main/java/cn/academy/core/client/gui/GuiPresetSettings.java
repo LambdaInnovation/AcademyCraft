@@ -63,6 +63,8 @@ public class GuiPresetSettings extends LIGuiScreen {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd || !ClientUtils.isPlayerInGame() ||
 					AbilityDataMain.getData(Minecraft.getMinecraft().thePlayer).getCategoryID() == 0) return;
+			if(EventHandlerClient.getPresetManager() == null)
+			    return;
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			AbilityData data = AbilityDataMain.getData(player);
 			if(data.hasAbility())

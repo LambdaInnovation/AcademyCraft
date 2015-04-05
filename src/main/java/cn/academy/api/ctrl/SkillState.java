@@ -45,7 +45,7 @@ public class SkillState {
 	public final boolean isRemote;
 	
 	private int tickToFinish = 0;
-	private boolean finishResult;
+	protected boolean finishResult;
 	
 	private boolean alive = false;
 	

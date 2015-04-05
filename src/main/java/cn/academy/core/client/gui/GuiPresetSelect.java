@@ -66,6 +66,8 @@ public class GuiPresetSelect extends AuxGui {
 		public void onKeyDown(int keyCode, boolean tickEnd) {
 			if(tickEnd)
 				return;
+			if(EventHandlerClient.getPresetManager() == null)
+                return;
 			if(GuiPresetSelect.instance.isOpen()) {
 				GuiPresetSelect.instance.closeGui();
 			} else {

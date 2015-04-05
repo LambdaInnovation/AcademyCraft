@@ -21,6 +21,7 @@ import cn.academy.api.ctrl.SkillState;
 import cn.academy.api.ctrl.pattern.PatternDown;
 import cn.academy.api.data.AbilityData;
 import cn.academy.api.data.AbilityDataMain;
+import cn.academy.misc.util.ACUtils;
 import cn.liutils.util.GenericUtils;
 
 /**
@@ -70,6 +71,7 @@ public class SkillMeltDowner extends SkillBase {
 			if(!isRemote()) {
 				player.worldObj.playSoundAtEntity(player, "academy:md.md_charge", 0.5f, 1.0f);
 			}
+			this.finishResult = false;
 		}
 		
 		@Override
@@ -94,8 +96,13 @@ public class SkillMeltDowner extends SkillBase {
 		
 		@Override
 		protected boolean onFinish(boolean res) {
-		    if(isRemote())
+		    if(isRemote()) {
 		        player.capabilities.setPlayerWalkSpeed(.1f);
+		        if(this.getTickTime() < 120 || !res) {
+                    ACUtils.playAbortSound();
+                    return false;
+                }
+		    }
 		    return res;
 		}
 		

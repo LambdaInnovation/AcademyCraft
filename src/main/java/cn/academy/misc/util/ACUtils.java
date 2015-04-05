@@ -13,6 +13,7 @@
 package cn.academy.misc.util;
 
 import net.minecraft.util.ResourceLocation;
+import cn.academy.core.ctrl.EventHandlerClient;
 import cn.academy.core.proxy.ACClientProps;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.render.LambdaFont.Align;
