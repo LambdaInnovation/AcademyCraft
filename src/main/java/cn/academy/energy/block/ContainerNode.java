@@ -76,7 +76,7 @@ public class ContainerNode extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer var1) {
-        return var1.getDistanceSq(node.xCoord + .5, node.yCoord + .5, node.zCoord + .5) < 10.0;
+        return var1.getDistanceSq(node.xCoord + .5, node.yCoord + .5, node.zCoord + .5) < 64.0;
     }
 
 }

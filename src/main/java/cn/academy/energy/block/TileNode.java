@@ -145,7 +145,7 @@ public class TileNode extends TileEntity implements IWirelessNode, IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return player.getDistanceSq(xCoord + .5, yCoord + .5, zCoord + .5) < 10;
+        return player.getDistanceSq(xCoord + .5, yCoord + .5, zCoord + .5) < 64;
     }
 
     @Override
