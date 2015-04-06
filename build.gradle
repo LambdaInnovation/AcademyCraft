@@ -1,16 +1,18 @@
 //This build script can upload built jars to a maven repo.
 //
 //Usage:
-//  Use task 'uploadGithubAndClean'. It will build, generate jars and publish them.
+//  Use task 'uploadModToOss'. It will build, generate jars and publish them.
 //  gradle params:
 //    -PnewMavenRepo=1
-//      Create a new maven repo, instead of reading from Github.
+//      Create a new maven repo.
 //    -PpublishVersion=<string>
 //      Use the given string as the project version.
-//    -Dorg.ajoberstar.grgit.auth.username=<string>
-//      The username in authentication to Github repo.
-//    -Dorg.ajoberstar.grgit.auth.password=<string>
-//      The password in authentication to Github repo.
+//    -PossKeyId=<string>
+//      The AccessKey ID in authentication to OSS Client.
+//    -PossKeySecret=<string>
+//      The AccessKey Secret in authentication to OSS Client.
+//    -PossEndpoint=<string>
+//      The Endpoint of Aliyun OSS to upload.
 
 buildscript {
     repositories {
@@ -24,24 +26,29 @@ buildscript {
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
         maven {
-            name = "forgemaven"
-            url = "https://raw.github.com/LambdaInnovation/ForgeMaven/mvn-repo"
+            name = "lidev"
+            url = "http://maven.li-dev.cn/"
         }
     }
     dependencies {
-        classpath 'cn.li:ForgeMaven:1.0'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'cn.lidev:LIteBuilder:1.0.0'
     }
 }
 
-apply plugin: 'cn.li.forgemaven'
+apply plugin: 'litebuilder'
 
-forgemaven {
+litebuilder {
     name = "AcademyCraft"
     group = "cn.academy"
-    commitVersionPrefix = "BUILD RELEASE"
+	
+	//The bucket name of OSS to upload.
+    ossBucket = "libuild"
+    //The folder name of OSS to upload.
+    //You can also put / into the string to upload to a child folder
+    uploadDir = "dev"
 
     forgeVersion = "1.7.2-10.12.2.1121"
-    gitUrl = 'https://github.com/LambdaInnovation/AcademyCraft.git'
 
     jarClasses {
         exclude 'cn/annoreg/**/*'
@@ -51,11 +58,6 @@ forgemaven {
     coremod {
         plugin = 'cn.academy.core.ACCorePlugin'
         containsFMLMod = true
-    }
-
-    gitUser {
-        username = 'LI Github'
-        email = 'github@li-dev.cn'
     }
 
     pom {
@@ -98,12 +100,8 @@ repositories {
         url = "http://maven.ic2.player.to/"
     }
     maven {
-        name = "annoreg"
-        url = "https://raw.github.com/LambdaInnovation/AnnotationRegistry/mvn-repo/AnnotationRegistry"
-    }
-    maven {
-        name = "liutils"
-        url = "https://raw.github.com/LambdaInnovation/LIUtils/mvn-repo/LIUtils"
+        name = "lidev"
+        url = "http://maven.li-dev.cn/dev"
     }
 }
 

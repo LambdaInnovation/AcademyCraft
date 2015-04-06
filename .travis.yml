@@ -1,7 +1,10 @@
 language: java
 
+jdk:
+- oraclejdk8
+
 install:
 - true
 
 script:
-- gradle uploadModToMaven -Dorg.ajoberstar.grgit.auth.username=$GITHUB_REPO_AUTH_USERNAME -Dorg.ajoberstar.grgit.auth.password=$GITHUB_REPO_AUTH_PASSWORD
+- gradle uploadModToOss -PossKeyId=$OSS_KEY_ID -PossKeySecret=$OSS_KEY_SECRET -PossEndpoint=$OSS_ENDPOINT
