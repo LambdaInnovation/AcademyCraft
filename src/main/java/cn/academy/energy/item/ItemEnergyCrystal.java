@@ -93,7 +93,7 @@ public class ItemEnergyCrystal extends Item implements IElectricItem {
 	}
 
 	@Override
-	public int getMaxCharge(ItemStack itemStack) {
+	public double getMaxCharge(ItemStack itemStack) {
 		return this.maxCharge;
 	}
 
@@ -103,7 +103,7 @@ public class ItemEnergyCrystal extends Item implements IElectricItem {
 	}
 
 	@Override
-	public int getTransferLimit(ItemStack itemStack) {
+	public double getTransferLimit(ItemStack itemStack) {
 		return this.transferLimit;
 	}
 		

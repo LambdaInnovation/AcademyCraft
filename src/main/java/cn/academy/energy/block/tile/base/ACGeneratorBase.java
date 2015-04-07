@@ -99,4 +99,9 @@ public class ACGeneratorBase extends TileUserBase implements IWirelessGenerator,
     	nbt.setDouble("energy", energy);
     }
 
+	@Override
+	public int getSourceTier() {
+		return 2;
+	}
+
 }

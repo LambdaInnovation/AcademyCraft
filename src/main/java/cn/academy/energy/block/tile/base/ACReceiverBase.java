@@ -70,21 +70,16 @@ public abstract class ACReceiverBase extends TileUserBase implements
 	}
 
 	@Override
-	public double demandedEnergyUnits() {
+	public double getDemandedEnergy() {
 		return Math.max(0, getMaxEnergy() - curEnergy);
 	}
 
 	@Override
-	public double injectEnergyUnits(ForgeDirection fd, double amt) {
+	public double injectEnergy(ForgeDirection fd, double amt, double volts) {
 		curEnergy += amt;
 		double left = Math.max(0, curEnergy - getMaxEnergy());
 		curEnergy -= left;
 		return left;
-	}
-
-	@Override
-	public int getMaxSafeInput() {
-		return maxInput;
 	}
 	
     @Override

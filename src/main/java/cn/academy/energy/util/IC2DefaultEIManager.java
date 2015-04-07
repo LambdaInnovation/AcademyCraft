@@ -3,8 +3,12 @@ package cn.academy.energy.util;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
-import cn.liutils.util.GenericUtils;
+import ic2.core.IC2;
+import ic2.core.item.DamageHandler;
+import ic2.core.util.StackUtil;
+import ic2.core.util.Util;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -12,173 +16,158 @@ import net.minecraft.nbt.NBTTagCompound;
  * All credits of this class' code goes to IC2 team.
  */
 public class IC2DefaultEIManager implements IElectricItemManager {
-	@Override
-	public int charge(ItemStack stack, int charge, int tier,
-			boolean ignoreTransferLimit, boolean simulate) {
-		IElectricItem item = (IElectricItem) stack.getItem();
+	  public double charge(ItemStack stack, double amount, int tier, boolean ignoreTransferLimit, boolean simulate)
+	  {
+	    IElectricItem item = (IElectricItem)stack.getItem();
 
-		assert (item.getMaxCharge(stack) > 0);
+	    assert (item.getMaxCharge(stack) > 0.0D);
 
-		if ((charge < 0) || (stack.stackSize > 1)
-				|| (item.getTier(stack) > tier))
-			return 0;
+	    if ((amount < 0.0D) || (stack.stackSize > 1) || (item.getTier(stack) > tier)) return 0.0D;
 
-		if ((!ignoreTransferLimit) && (charge > item.getTransferLimit(stack)))
-			charge = item.getTransferLimit(stack);
+	    if ((!ignoreTransferLimit) && (amount > item.getTransferLimit(stack))) amount = item.getTransferLimit(stack);
 
-		NBTTagCompound tNBT = GenericUtils.loadCompound(stack);
-		int newCharge = tNBT.getInteger("charge");
+	    NBTTagCompound tNBT = StackUtil.getOrCreateNbtData(stack);
+	    double newCharge = tNBT.getDouble("charge");
 
-		if (charge > item.getMaxCharge(stack) - newCharge)
-			charge = item.getMaxCharge(stack) - newCharge;
+	    amount = Math.min(amount, item.getMaxCharge(stack) - newCharge);
 
-		if (!simulate) {
-			newCharge += charge;
+	    if (!simulate) {
+	      newCharge += amount;
 
-			if (newCharge > 0) {
-				tNBT.setInteger("charge", newCharge);
-			} else {
-				tNBT.removeTag("charge");
-				if (tNBT.hasNoTags())
-					stack.setTagCompound(null);
-			}
+	      if (newCharge > 0.0D) {
+	        tNBT.setDouble("charge", newCharge);
+	      } else {
+	        tNBT.removeTag("charge");
+	        if (tNBT.hasNoTags()) stack.setTagCompound(null);
+	      }
 
-			stack.func_150996_a(newCharge > 0 ? item.getChargedItem(stack)
-					: item.getEmptyItem(stack));
+	      stack.func_150996_a(newCharge > 0.0D ? item.getChargedItem(stack) : item.getEmptyItem(stack));
 
-			if ((stack.getItem() instanceof IElectricItem)) {
-				item = (IElectricItem) stack.getItem();
+	      if ((stack.getItem() instanceof IElectricItem)) {
+	        item = (IElectricItem)stack.getItem();
+	        int maxDamage = DamageHandler.getMaxDamage(stack);
 
-				if (stack.getMaxDamage() > 2)
-					stack.setItemDamage((int) (1L + (item.getMaxCharge(stack) - newCharge)
-							* (stack.getMaxDamage() - 2L)
-							/ item.getMaxCharge(stack)));
-				else
-					stack.setItemDamage(0);
-			} else {
-				stack.setItemDamage(0);
-			}
-		}
+	        if (maxDamage > 2) {
+	          DamageHandler.setDamage(stack, maxDamage - 1 - (int)Util.map(newCharge, item.getMaxCharge(stack), maxDamage - 2));
+	        }
+	        else
+	          DamageHandler.setDamage(stack, 0);
+	      }
+	      else {
+	        DamageHandler.setDamage(stack, 0);
+	      }
+	    }
 
-		return charge;
-	}
+	    return amount;
+	  }
 
-	@Override
-	public int discharge(ItemStack stack, int charge, int tier,
-			boolean ignoreTransferLimit, boolean simulate) {
-		IElectricItem item = (IElectricItem) stack.getItem();
+	  public double discharge(ItemStack stack, double amount, int tier, boolean ignoreTransferLimit, boolean externally, boolean simulate)
+	  {
+	    IElectricItem item = (IElectricItem)stack.getItem();
 
-		assert (item.getMaxCharge(stack) > 0);
+	    assert (item.getMaxCharge(stack) > 0.0D);
 
-		if ((charge < 0) || (stack.stackSize > 1)
-				|| (item.getTier(stack) > tier))
-			return 0;
+	    if ((amount < 0.0D) || (stack.stackSize > 1) || (item.getTier(stack) > tier)) return 0.0D;
+	    if ((externally) && (!item.canProvideEnergy(stack))) return 0.0D;
 
-		if ((!ignoreTransferLimit) && (charge > item.getTransferLimit(stack)))
-			charge = item.getTransferLimit(stack);
+	    if ((!ignoreTransferLimit) && (amount > item.getTransferLimit(stack))) amount = item.getTransferLimit(stack);
 
-		NBTTagCompound tNBT = GenericUtils.loadCompound(stack);
-		int newCharge = tNBT.getInteger("charge");
+	    NBTTagCompound tNBT = StackUtil.getOrCreateNbtData(stack);
+	    double newCharge = tNBT.getDouble("charge");
 
-		if (charge > newCharge)
-			charge = newCharge;
+	    amount = Math.min(amount, newCharge);
 
-		if (!simulate) {
-			newCharge -= charge;
+	    if (!simulate) {
+	      newCharge -= amount;
 
-			if (newCharge > 0) {
-				tNBT.setInteger("charge", newCharge);
-			} else {
-				tNBT.removeTag("charge");
-				if (tNBT.hasNoTags())
-					stack.setTagCompound(null);
-			}
+	      if (newCharge > 0.0D) {
+	        tNBT.setDouble("charge", newCharge);
+	      } else {
+	        tNBT.removeTag("charge");
+	        if (tNBT.hasNoTags()) stack.setTagCompound(null);
+	      }
 
-			stack.func_150996_a(newCharge > 0 ? item.getChargedItem(stack)
-					: item.getEmptyItem(stack));
+	      stack.func_150996_a(newCharge > 0.0D ? item.getChargedItem(stack) : item.getEmptyItem(stack));
 
-			if ((stack.getItem() instanceof IElectricItem)) {
-				item = (IElectricItem) stack.getItem();
+	      if ((stack.getItem() instanceof IElectricItem)) {
+	        item = (IElectricItem)stack.getItem();
+	        int maxDamage = DamageHandler.getMaxDamage(stack);
 
-				if (stack.getMaxDamage() > 2)
-					stack.setItemDamage((int) (1L + (item.getMaxCharge(stack) - newCharge)
-							* (stack.getMaxDamage() - 2L)
-							/ item.getMaxCharge(stack)));
-				else
-					stack.setItemDamage(0);
-			} else {
-				stack.setItemDamage(0);
-			}
-		}
+	        if (maxDamage > 2) {
+	          DamageHandler.setDamage(stack, maxDamage - 1 - (int)Util.map(newCharge, item.getMaxCharge(stack), maxDamage - 2));
+	        }
+	        else
+	          DamageHandler.setDamage(stack, 0);
+	      }
+	      else {
+	        DamageHandler.setDamage(stack, 0);
+	      }
+	    }
 
-		return charge;
-	}
+	    return amount;
+	  }
 
-	@Override
-	public int getCharge(ItemStack itemStack) {
-		return ElectricItem.manager.discharge(itemStack, 2147483647,
-				2147483647, true, true);
-	}
+	  public double getCharge(ItemStack itemStack)
+	  {
+	    return ElectricItem.manager.discharge(itemStack, (1.0D / 0.0D), 2147483647, true, false, true);
+	  }
 
-	@Override
-	public boolean canUse(ItemStack itemStack, int amount) {
-		return ElectricItem.manager.getCharge(itemStack) >= amount;
-	}
+	  public boolean canUse(ItemStack itemStack, double amount)
+	  {
+	    return ElectricItem.manager.getCharge(itemStack) >= amount;
+	  }
 
-	@Override
-	public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
-		ElectricItem.manager.chargeFromArmor(itemStack, entity);
+	  public boolean use(ItemStack itemStack, double amount, EntityLivingBase entity)
+	  {
+	    ElectricItem.manager.chargeFromArmor(itemStack, entity);
 
-		int transfer = ElectricItem.manager.discharge(itemStack, amount,
-				2147483647, true, true);
+	    double transfer = ElectricItem.manager.discharge(itemStack, amount, 2147483647, true, false, true);
 
-		if (transfer == amount) {
-			ElectricItem.manager.discharge(itemStack, amount, 2147483647, true,
-					false);
-			ElectricItem.manager.chargeFromArmor(itemStack, entity);
+	    if (Util.isSimilar(transfer, amount)) {
+	      ElectricItem.manager.discharge(itemStack, amount, 2147483647, true, false, false);
+	      ElectricItem.manager.chargeFromArmor(itemStack, entity);
 
-			return true;
-		}
-		return false;
-	}
+	      return true;
+	    }
+	    return false;
+	  }
 
-	@Override
-	public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity) {
-		boolean inventoryChanged = false;
+	  public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity)
+	  {
+	    boolean transferred = false;
 
-		for (int i = 0; i < 4; i++) {
-			ItemStack armorItemStack = entity.getEquipmentInSlot(i + 1);
+	    for (int i = 0; i < 4; i++) {
+	      ItemStack armorItemStack = entity.getEquipmentInSlot(i + 1);
+	      if (armorItemStack != null)
+	      {
+	        int tier;
+	        if ((armorItemStack.getItem() instanceof IElectricItem))
+	          tier = ((IElectricItem)armorItemStack.getItem()).getTier(itemStack);
+	        else {
+	          tier = 2147483647;
+	        }
 
-			if ((armorItemStack != null)
-					&& ((armorItemStack.getItem() instanceof IElectricItem))) {
-				IElectricItem armorItem = (IElectricItem) armorItemStack
-						.getItem();
+	        double transfer = ElectricItem.manager.discharge(armorItemStack, (1.0D / 0.0D), 2147483647, true, true, true);
+	        if (transfer > 0.0D)
+	        {
+	          transfer = ElectricItem.manager.charge(itemStack, transfer, tier, true, false);
+	          if (transfer > 0.0D)
+	          {
+	            ElectricItem.manager.discharge(armorItemStack, transfer, 2147483647, true, true, false);
+	            transferred = true;
+	          }
+	        }
+	      }
+	    }
+	    if ((transferred) && ((entity instanceof EntityPlayer)) && (IC2.platform.isSimulating()))
+	      ((EntityPlayer)entity).openContainer.detectAndSendChanges();
+	  }
 
-				if ((armorItem.canProvideEnergy(armorItemStack))
-						&& (armorItem.getTier(armorItemStack) >= ((IElectricItem) itemStack
-								.getItem()).getTier(itemStack))) {
-					int transfer = ElectricItem.manager.charge(itemStack,
-							2147483647, 2147483647, true, true);
+	  public String getToolTip(ItemStack itemStack)
+	  {
+	    double charge = ElectricItem.manager.getCharge(itemStack);
+	    double space = ElectricItem.manager.charge(itemStack, (1.0D / 0.0D), 2147483647, true, true);
 
-					transfer = ElectricItem.manager.discharge(armorItemStack,
-							transfer, 2147483647, true, false);
-
-					if (transfer > 0) {
-						ElectricItem.manager.charge(itemStack, transfer,
-								2147483647, true, false);
-
-						inventoryChanged = true;
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	public String getToolTip(ItemStack itemStack) {
-		IElectricItem item = (IElectricItem) itemStack.getItem();
-
-		return ElectricItem.manager.getCharge(itemStack) + "/"
-				+ item.getMaxCharge(itemStack) + " EU";
-	}
+	    return Util.toSiString(charge, 3) + "/" + Util.toSiString(charge + space, 3) + " EU";
+	  }
 }

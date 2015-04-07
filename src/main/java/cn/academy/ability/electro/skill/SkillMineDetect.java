@@ -185,7 +185,7 @@ public class SkillMineDetect extends SkillBase {
 			private void updateBlocks() {
 				aliveSims.clear();
 				
-				AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(
+				AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(
 						posX - range * 0.5, posY - range * 0.5, posZ - range * 0.5,
 						posX + range * 0.5, posY + range * 0.5, posZ + range * 0.5);
 				Set<BlockPos> set = GenericUtils.getBlocksWithinAABB(worldObj, aabb, blockFilter);

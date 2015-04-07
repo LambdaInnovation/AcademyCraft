@@ -13,7 +13,6 @@
 package cn.academy.energy.util;
 
 import ic2.api.item.ElectricItem;
-import ic2.api.item.ICustomElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
@@ -26,121 +25,73 @@ import net.minecraft.item.ItemStack;
  * IndustrialCraft2's original developers.
  */
 public class IC2DefaultGatewayManager implements IElectricItemManager {
+	  public double charge(ItemStack itemStack, double amount, int tier, boolean ignoreTransferLimit, boolean simulate)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return 0.0D;
 
-	@Override
-	public int charge(ItemStack itemStack, int amount, int tier,
-			boolean ignoreTransferLimit, boolean simulate) {
-		Item item = itemStack.getItem();
+	    return manager.charge(itemStack, amount, tier, ignoreTransferLimit, simulate);
+	  }
 
-		if (!(item instanceof IElectricItem))
-			return 0;
+	  public double discharge(ItemStack itemStack, double amount, int tier, boolean ignoreTransferLimit, boolean externally, boolean simulate)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return 0.0D;
 
-		if ((item instanceof ICustomElectricItem))
-			return ((ICustomElectricItem) item).charge(itemStack, amount, tier,
-					ignoreTransferLimit, simulate);
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack).charge(
-					itemStack, amount, tier, ignoreTransferLimit, simulate);
-		}
-		return ElectricItem.rawManager.charge(itemStack, amount, tier,
-				ignoreTransferLimit, simulate);
-	}
+	    return manager.discharge(itemStack, amount, tier, ignoreTransferLimit, externally, simulate);
+	  }
 
-	@Override
-	public int discharge(ItemStack itemStack, int amount, int tier,
-			boolean ignoreTransferLimit, boolean simulate) {
-		Item item = itemStack.getItem();
+	  public double getCharge(ItemStack itemStack)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return 0.0D;
 
-		if (!(item instanceof IElectricItem))
-			return 0;
+	    return manager.getCharge(itemStack);
+	  }
 
-		if ((item instanceof ICustomElectricItem))
-			return ((ICustomElectricItem) item).discharge(itemStack, amount,
-					tier, ignoreTransferLimit, simulate);
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack)
-					.discharge(itemStack, amount, tier, ignoreTransferLimit,
-							simulate);
-		}
-		return ElectricItem.rawManager.discharge(itemStack, amount, tier,
-				ignoreTransferLimit, simulate);
-	}
+	  public boolean canUse(ItemStack itemStack, double amount)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return false;
 
-	@Override
-	public int getCharge(ItemStack itemStack) {
-		Item item = itemStack.getItem();
+	    return manager.canUse(itemStack, amount);
+	  }
 
-		if (!(item instanceof IElectricItem))
-			return 0;
+	  public boolean use(ItemStack itemStack, double amount, EntityLivingBase entity)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return false;
 
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack)
-					.getCharge(itemStack);
-		}
-		return ElectricItem.rawManager.getCharge(itemStack);
-	}
+	    return manager.use(itemStack, amount, entity);
+	  }
 
-	@Override
-	public boolean canUse(ItemStack itemStack, int amount) {
-		Item item = itemStack.getItem();
+	  public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity)
+	  {
+	    if (entity == null) return;
 
-		if (!(item instanceof IElectricItem))
-			return false;
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return;
 
-		if ((item instanceof ICustomElectricItem))
-			return ((ICustomElectricItem) item).canUse(itemStack, amount);
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack).canUse(
-					itemStack, amount);
-		}
-		return ElectricItem.rawManager.canUse(itemStack, amount);
-	}
+	    manager.chargeFromArmor(itemStack, entity);
+	  }
 
-	@Override
-	public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
-		Item item = itemStack.getItem();
+	  public String getToolTip(ItemStack itemStack)
+	  {
+	    IElectricItemManager manager = getManager(itemStack);
+	    if (manager == null) return null;
 
-		if (!(item instanceof IElectricItem))
-			return false;
+	    return manager.getToolTip(itemStack);
+	  }
 
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack).use(
-					itemStack, amount, entity);
-		}
-		return ElectricItem.rawManager.use(itemStack, amount, entity);
-	}
+	  private IElectricItemManager getManager(ItemStack stack) {
+	    Item item = stack.getItem();
+	    if (item == null) return null;
 
-	@Override
-	public void chargeFromArmor(ItemStack itemStack, EntityLivingBase entity) {
-		Item item = itemStack.getItem();
-
-		if ((entity == null) || (!(item instanceof IElectricItem)))
-			return;
-
-		if ((item instanceof ISpecialElectricItem))
-			((ISpecialElectricItem) item).getManager(itemStack)
-					.chargeFromArmor(itemStack, entity);
-		else
-			ElectricItem.rawManager.chargeFromArmor(itemStack, entity);
-	}
-
-	@Override
-	public String getToolTip(ItemStack itemStack) {
-		Item item = itemStack.getItem();
-
-		if (!(item instanceof IElectricItem))
-			return null;
-
-		if ((item instanceof ICustomElectricItem)) {
-			if (((ICustomElectricItem) item).canShowChargeToolTip(itemStack)) {
-				return ElectricItem.rawManager.getToolTip(itemStack);
-			}
-			return null;
-		}
-		if ((item instanceof ISpecialElectricItem)) {
-			return ((ISpecialElectricItem) item).getManager(itemStack)
-					.getToolTip(itemStack);
-		}
-		return ElectricItem.rawManager.getToolTip(itemStack);
-	}
+	    if ((item instanceof ISpecialElectricItem))
+	      return ((ISpecialElectricItem)item).getManager(stack);
+	    if ((item instanceof IElectricItem)) {
+	      return ElectricItem.rawManager;
+	    }
+	    return ElectricItem.getBackupManager(stack);
+	  }
 }

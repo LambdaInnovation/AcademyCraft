@@ -41,12 +41,11 @@ public class DialogueBase extends Widget {
 					{465, 0}
 				});
 			this.setText(id);
-			this.setTextData(4, new int[][] {
-				{255, 95, 95, 255},
-				{255, 95, 95, 255},
-				{150, 150, 150, 255}
+			this.setTextData(4, new int[] {
+					0xff5f5f,
+					0xff5f5f,
+					0x969696,
 			});
-			setFont(ACClientProps.font());
 		}
 		
 		@Override
@@ -66,12 +65,11 @@ public class DialogueBase extends Widget {
 					{465, 30}
 				});
 			this.setText(id);
-			this.setTextData(4, new int[][] {
-				dev.DEFAULT_COLOR,
-				dev.DEFAULT_COLOR,
-				{150, 150, 150, 255}
+			this.setTextData(4, new int[] {
+				0x309bbe,
+				0x309bbe,
+				0x969696
 			});
-			setFont(ACClientProps.font());
 		}
 		
 		@Override

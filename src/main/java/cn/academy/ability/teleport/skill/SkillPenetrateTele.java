@@ -172,6 +172,6 @@ public class SkillPenetrateTele extends SkillBase {
 		}
 		
 		double farX = mo.posX, farY = mo.posY, farZ = mo.posZ;
-		return world.getWorldVec3Pool().getVecFromPool((nearX + farX) / 2, (nearY + farY) / 2, (nearZ + farZ) / 2);
+		return Vec3.createVectorHelper((nearX + farX) / 2, (nearY + farY) / 2, (nearZ + farZ) / 2);
 	}
 }

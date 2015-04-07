@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.core.proxy.ACClientProps;
 import cn.academy.misc.client.render.RendererRayTiling;
@@ -134,9 +135,9 @@ public class EntityMeltDowner extends EntityMdRayBase {
 	}
 	
     private boolean canSeeEachOther(Entity e1, Entity e2) {
-        return this.worldObj.rayTraceBlocks(this.worldObj.getWorldVec3Pool().getVecFromPool(
+        return this.worldObj.rayTraceBlocks(Vec3.createVectorHelper(
         	e1.posX, e1.posY + e1.getEyeHeight(), e1.posZ), 
-        	this.worldObj.getWorldVec3Pool().getVecFromPool(e2.posX, e2.posY + 
+        	Vec3.createVectorHelper(e2.posX, e2.posY + 
         	e2.getEyeHeight(), e2.posZ)) == null;
     }
 	

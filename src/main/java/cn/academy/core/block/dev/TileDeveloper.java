@@ -41,7 +41,6 @@ import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
 import cn.liutils.template.entity.EntitySittable;
 import cn.liutils.template.entity.EntitySittable.ISittable;
-import cn.liutils.util.DebugUtils;
 import cn.liutils.util.ExpUtils;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.misc.Pair;
@@ -363,21 +362,21 @@ public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTi
 	}
 
 	@Override
-	public double demandedEnergyUnits() {
+	public double getDemandedEnergy() {
 		return getHead().realDEU();
 	}
 	
 	private double realDEU() {
-		return super.demandedEnergyUnits();
+		return super.getDemandedEnergy();
 	}
 
 	@Override
-	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
-		return getHead().realIEU(directionFrom, amount);
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double volts) {
+		return getHead().realIEU(directionFrom, amount, volts);
 	}
 	
-	private double realIEU(ForgeDirection directionFrom, double amount) {
-		return super.injectEnergyUnits(directionFrom, amount);
+	private double realIEU(ForgeDirection directionFrom, double amount, double volts) {
+		return super.injectEnergy(directionFrom, amount, volts);
 	}
 	
     @Override
@@ -455,5 +454,10 @@ public class TileDeveloper extends ACReceiverBase implements ISittable, IMultiTi
     	super.writeToNBT(nbt);
     	info.save(nbt);
     }
+
+	@Override
+	public int getSinkTier() {
+		return 2;
+	}
     
 }

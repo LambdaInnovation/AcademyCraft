@@ -45,7 +45,7 @@ public class EnergyUtils {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te instanceof IEnergySink) {
 			IEnergySink ies = (IEnergySink) te;
-			ies.injectEnergyUnits(ForgeDirection.DOWN, amt);
+			ies.injectEnergy(ForgeDirection.DOWN, amt, 128);
 			return true;
 		} else if(te instanceof IWirelessReceiver) {
 			IWirelessReceiver iwr = (IWirelessReceiver) te;
@@ -64,7 +64,7 @@ public class EnergyUtils {
 		return stack != null && stack.getItem() instanceof IElectricItem;
 	}
 
-	public static int tryCharge(ItemStack stack, int amt) {
+	public static double tryCharge(ItemStack stack, int amt) {
 		return tryCharge(stack, amt, false);
 	}
 	
@@ -73,7 +73,7 @@ public class EnergyUtils {
 	 * @param amt
 	 * @return How much energy transfered into the stack
 	 */
-	public static int tryCharge(ItemStack stack, int amt, boolean simulate) {
+	public static double tryCharge(ItemStack stack, int amt, boolean simulate) {
 		if(stack.getItem() instanceof IElectricItem) {
 			IElectricItem iei = (IElectricItem) stack.getItem();
 			IElectricItemManager manager = ElectricItem.manager;

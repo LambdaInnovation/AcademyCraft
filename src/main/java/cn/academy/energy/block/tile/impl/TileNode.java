@@ -184,21 +184,20 @@ public class TileNode extends TileNodeBase implements IInventory, IEnergySink {
 	}
 
 	@Override
-	public double demandedEnergyUnits() {
+	public double getDemandedEnergy() {
 		return maxEnergy - energy;
 	}
 
 	@Override
-	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double volts) {
 		double need = Math.min(maxEnergy - energy, amount);
 		energy += need;
 		return amount - need;
 	}
 
 	@Override
-	public int getMaxSafeInput() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getSinkTier() {
+		return 2;
 	}
 
 }

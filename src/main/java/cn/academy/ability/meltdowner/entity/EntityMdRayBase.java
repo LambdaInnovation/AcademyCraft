@@ -15,6 +15,7 @@ package cn.academy.ability.meltdowner.entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.misc.entity.EntityRay;
 import cn.annoreg.core.RegistrationClass;
@@ -49,8 +50,7 @@ public abstract class EntityMdRayBase extends EntityRay {
 		MovingObjectPosition mop = GenericUtils.tracePlayer(getSpawner(), 20.0);
 		double dist = mop == null ? 20.0 : 
 			mop.hitVec.distanceTo
-			(worldObj.getWorldVec3Pool()
-			.getVecFromPool(ball.posX, ball.posY, ball.posZ));
+			(Vec3.createVectorHelper(ball.posX, ball.posY, ball.posZ));
 		Motion3D mo = new Motion3D(getSpawner(), true).move(dist);
 		double tox = ball.posX, toy = ball.posY + 0.1, toz = ball.posZ;
 		this.setHeading(mo.posX - tox, mo.posY - toy, mo.posZ - toz, 1.0);
