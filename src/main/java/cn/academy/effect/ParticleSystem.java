@@ -37,15 +37,17 @@ public class ParticleSystem {
 	}
 	
 	private static Particle queryInstance(World world) {
+		Particle ret;
 		if(!dead.isEmpty()) {
 			Iterator<Particle> iter = dead.iterator();
 			Particle next = iter.next();
 			iter.remove();
 			next.worldObj = world;
 			next.isDead = false;
-			return next;
+			ret = next;
+		} else {
+			ret = new Particle(world);
 		}
-		Particle ret = new Particle(world);
 		if(alive.size() < MAX_POOL_SIZE) {
 			alive.add(ret);
 		}

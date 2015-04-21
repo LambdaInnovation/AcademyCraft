@@ -19,6 +19,7 @@ import java.util.Map;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.IWirelessTile;
 import cn.academy.energy.api.event.CreateNetworkEvent;
@@ -28,6 +29,7 @@ import cn.academy.energy.api.event.LinkUserEvent;
 import cn.academy.energy.api.event.UnlinkNodeEvent;
 import cn.academy.energy.api.event.UnlinkUserEvent;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
+import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -35,6 +37,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 /**
  * @author WeathFolD
  */
+@RegistrationClass
 public class WirelessSystem {
     
     @RegEventHandler
@@ -42,7 +45,9 @@ public class WirelessSystem {
     
     Map<World, WiWorldData> table = new HashMap();
 
-    public WirelessSystem() {}
+    WirelessSystem() {
+    	AcademyCraft.log.info("AcademyCraft Wireless Energy System is loading.");
+    }
     
     @SubscribeEvent
     public void worldLoaded(WorldEvent.Load event) {

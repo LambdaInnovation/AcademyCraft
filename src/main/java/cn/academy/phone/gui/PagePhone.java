@@ -21,7 +21,10 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.generic.client.ClientProps;
 import cn.academy.phone.app.App;
 import cn.academy.phone.app.AppRegistry;
-import cn.liutils.api.gui.Widget;
+import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
@@ -46,74 +49,79 @@ public class PagePhone extends Widget {
     int maxProgress;
     
     public PagePhone(GuiPhone gui) {
-        super(317, 512);
         guiPhone = gui;
-        this.initTexDraw(ClientProps.TEX_PHONE_BACK, 0, 0, 317, 512);
+        this.addComponent(new DrawTexture().setTex(ClientProps.TEX_PHONE_BACK));
+        transform.setSize(317, 512);
+        
+        this.regEventHandler(new FrameEventHandler() {
+
+			@Override
+			public void handleEvent(Widget w, FrameEvent event) {
+		        HudUtils.setZLevel(0);
+		        
+		        double mx = event.mx, my = event.my;
+		        long time = Minecraft.getSystemTime();
+		        int lines = fldiv(appList.length, PER_LINE); //Actually lines-1
+		        int hLine = GenericUtils.min(lines, (int) (MAX_LINES * (my / MAX_MY)), MAX_LINES - 1), 
+		            hColumn = GenericUtils.min((hLine == lines ? 
+		                    appList.length - lines * PER_LINE : PER_LINE) - 1, 
+		                    (int) (PER_LINE * (mx / MAX_MX)), PER_LINE - 1);
+		        int highlight = progress * PER_LINE + hLine * PER_LINE + hColumn;
+		        
+		        //Logic update
+		        if(guiPhone.mouseY == MAX_MY) {
+		            progress = Math.min(maxProgress, progress + 1);
+		            guiPhone.mouseY -= 50;
+		        } else if(guiPhone.mouseY == 0) {
+		            progress = Math.max(0, progress - 1);
+		            guiPhone.mouseY += 50;
+		        }
+		        
+		        //draw App
+		        int cx = 0, cy = 0;
+		        for(int i = progress * PER_LINE; i < appList.length; ++i) {
+		            int iapp = appList[i];
+		            App app = AppRegistry.instance.getApp(iapp);
+		            
+		            double x = START_X + STEP_X * cx;
+		            double y = START_Y + STEP_Y * cy;
+		            
+		            boolean ht = highlight == i;
+		            double dz = ht ? 10 : 1;
+		            
+		            GL11.glPushMatrix();
+		            GL11.glTranslated(x, y, dz);
+		            GL11.glColor4d(1, 1, 1, ht ? 1 : 0.6);
+		            RenderUtils.loadTexture(ClientProps.TEX_PHONE_APP_BG);
+		            HudUtils.drawRect(0, 0, SIZE, SIZE);
+		            
+		            RenderUtils.loadTexture(app.getIcon());
+		            HudUtils.drawRect(LOGO_XOFF, LOGO_YOFF, LOGO_SIZE, LOGO_SIZE);
+		            
+		            String name = app.getDisplayName();
+		            float fsize = 12f;
+		            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, 0xffffff, Align.CENTER);
+		            GL11.glPopMatrix();
+		            
+		            ++cx;
+		            if(cx == 3) {
+		                cx = 0;
+		                ++cy;
+		            }
+		            if(cx + cy * 3 == 9) break;
+		        }
+		        
+		        drawUpdate(time);
+		        
+		        if(progress < maxProgress) {
+		            drawDownArrow();
+		        }
+			}
+        	
+        });
+        
         appList = this.getInstalledAppList(Minecraft.getMinecraft().thePlayer);
         maxProgress = Math.max(0, udiv(appList.length, PER_LINE) - MAX_LINES);
-    }
-    
-    @Override
-    public void draw(double mx, double my, boolean hover) {
-        HudUtils.setZLevel(0);
-        super.draw(mx, my, hover);
-        
-        long time = Minecraft.getSystemTime();
-        int lines = fldiv(appList.length, PER_LINE); //Actually lines-1
-        int hLine = GenericUtils.min(lines, (int) (MAX_LINES * (my / MAX_MY)), MAX_LINES - 1), 
-            hColumn = GenericUtils.min((hLine == lines ? 
-                    appList.length - lines * PER_LINE : PER_LINE) - 1, 
-                    (int) (PER_LINE * (mx / MAX_MX)), PER_LINE - 1);
-        int highlight = progress * PER_LINE + hLine * PER_LINE + hColumn;
-        
-        //Logic update
-        if(guiPhone.mouseY == MAX_MY) {
-            progress = Math.min(maxProgress, progress + 1);
-            guiPhone.mouseY -= 50;
-        } else if(guiPhone.mouseY == 0) {
-            progress = Math.max(0, progress - 1);
-            guiPhone.mouseY += 50;
-        }
-        
-        //draw App
-        int cx = 0, cy = 0;
-        for(int i = progress * PER_LINE; i < appList.length; ++i) {
-            int iapp = appList[i];
-            App app = AppRegistry.instance.getApp(iapp);
-            
-            double x = START_X + STEP_X * cx;
-            double y = START_Y + STEP_Y * cy;
-            
-            boolean ht = highlight == i;
-            double dz = ht ? 10 : 1;
-            
-            GL11.glPushMatrix();
-            GL11.glTranslated(x, y, dz);
-            GL11.glColor4d(1, 1, 1, ht ? 1 : 0.6);
-            RenderUtils.loadTexture(ClientProps.TEX_PHONE_APP_BG);
-            HudUtils.drawRect(0, 0, SIZE, SIZE);
-            
-            RenderUtils.loadTexture(app.getIcon());
-            HudUtils.drawRect(LOGO_XOFF, LOGO_YOFF, LOGO_SIZE, LOGO_SIZE);
-            
-            String name = app.getDisplayName();
-            float fsize = 12f;
-            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, 0xffffff, Align.CENTER);
-            GL11.glPopMatrix();
-            
-            ++cx;
-            if(cx == 3) {
-                cx = 0;
-                ++cy;
-            }
-            if(cx + cy * 3 == 9) break;
-        }
-        
-        drawUpdate(time);
-        
-        if(progress < maxProgress) {
-            drawDownArrow();
-        }
     }
     
     private void drawUpdate(long time) {

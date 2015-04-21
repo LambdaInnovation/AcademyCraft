@@ -80,10 +80,11 @@ public class AcademyCraft {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
-        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
+        
+        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
 
     @EventHandler

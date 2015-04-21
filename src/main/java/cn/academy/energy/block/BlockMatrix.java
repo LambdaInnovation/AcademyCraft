@@ -15,6 +15,7 @@ package cn.academy.energy.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.core.AcademyCraft;
 import cn.liutils.template.block.BlockMulti;
 
 /**
@@ -24,15 +25,15 @@ import cn.liutils.template.block.BlockMulti;
 public class BlockMatrix extends BlockMulti {
 	
 	public enum MatrixType {
-		LOWEND(5, 10, 10), NORMAL(10, 20, 100), ADVANCED(20, 30, 1000);
+		BASIC(5, 10, 10), STANDARD(10, 20, 100), ADVANCED(20, 30, 1000);
 		MatrixType(int cap, double r, double lat) {
 			capacity = cap;
 			range = r;
 			latency = lat;
 		}
 		
-		public double latency, range;
-		public int capacity;
+		public final double latency, range;
+		public final int capacity;
 	};
 
 	public final MatrixType type;
@@ -40,6 +41,11 @@ public class BlockMatrix extends BlockMulti {
 	public BlockMatrix(MatrixType mt) {
 		super(Material.rock);
 		type = mt;
+		
+		setCreativeTab(AcademyCraft.cct);
+		setBlockName("matrix_" + mt.toString().toLowerCase());
+		setBlockTextureName("academy:matrix_" + mt.toString().toLowerCase());
+		setHardness(3.0f);
 	}
 
 	@Override
@@ -51,5 +57,10 @@ public class BlockMatrix extends BlockMulti {
 	public double[] getRotCenter() {
 		return new double[] { 0, 0, 0};
 	}
+	
+	@Override
+    public int getRenderType() {
+        return 0;
+    }
 
 }

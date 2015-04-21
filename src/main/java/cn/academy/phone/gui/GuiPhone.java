@@ -15,18 +15,23 @@ package cn.academy.phone.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.GuiOpenEvent;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.util.ControlOverrider;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.api.gui.AuxGui;
-import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.RenderUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeathFolD
@@ -38,6 +43,7 @@ public class GuiPhone extends AuxGui {
     private static final double BALANCE_SPEED = 3; //pixel/ms
     
     @RegAuxGui
+    @RegEventHandler(Bus.Forge)
     public static GuiPhone instance = new GuiPhone();
     
     LIGui gui; //Forward to the rendering of this gui.
@@ -82,11 +88,6 @@ public class GuiPhone extends AuxGui {
         return true;
     }
     
-    @Override
-    protected boolean overrideMouse() {
-        return true;
-    }
-    
     public void open(ItemStack _stack) {
         if(Minecraft.getSystemTime() - lastOpenTime < 400)
             return;
@@ -98,12 +99,17 @@ public class GuiPhone extends AuxGui {
         lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.instance;
         stack = _stack;
+        
+        ControlOverrider.override(LIKeyProcess.MOUSE_LEFT);
+        ControlOverrider.override(LIKeyProcess.MOUSE_RIGHT);
     }
     
     public void close() {
         open = false;
         lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.def;
+        ControlOverrider.removeOverride(LIKeyProcess.MOUSE_LEFT);
+        ControlOverrider.removeOverride(LIKeyProcess.MOUSE_RIGHT);
     }
 
     @Override
@@ -180,6 +186,13 @@ public class GuiPhone extends AuxGui {
     private double balance(long dt, double from, double to) {
         double d = to - from;
         return from + Math.min(BALANCE_SPEED * dt, Math.abs(d)) * Math.signum(d);
+    }
+    
+    @SubscribeEvent
+	public void onGuiOpen(GuiOpenEvent event) {
+    	if(this.isOpen()) {
+    		this.close();
+    	}
     }
 
 }

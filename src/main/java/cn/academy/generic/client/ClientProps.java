@@ -27,7 +27,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @ForcePreloadTexture
-@RegSubmoduleInit(side = Side.CLIENT_ONLY)
 public class ClientProps {
 
     public static ResourceLocation
