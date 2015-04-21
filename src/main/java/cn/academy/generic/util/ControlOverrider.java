@@ -18,21 +18,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.IntHashMap;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.RegUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class overrides(i.e.Disables) vanilla minecraft's control on a certain key. 
- * It is currently intented to be used DURING gameplay and will unlock all overrides when any GUI is present.
+ * It is currently intented to be used DURING gameplay and will unlock all overrides when any GUI is present,
+ * and restore 
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
@@ -67,42 +70,46 @@ public class ControlOverrider {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			kb.setKeyCode(-1);
 			activeOverrides.put(keyID, kb);
 		}
 	}
 	
 	public static void removeOverride(int keyID) {
-		removeOverride(keyID, true);
-	}
-	
-	private static void removeOverride(int keyID, boolean really) {
-		KeyBinding kb = activeOverrides.get(keyID);
+		KeyBinding kb = activeOverrides.remove(keyID);
 		if(kb != null) {
 			kb.setKeyCode(keyID);
 			kbMap.addKey(keyID, kb);
 		}
-		if(really) {
-			activeOverrides.remove(keyID);
+	}
+	
+	private static void releaseLocks() {
+		for(Map.Entry<Integer, KeyBinding> ao: activeOverrides.entrySet()) {
+			kbMap.addKey(ao.getKey(), ao.getValue());
 		}
 	}
 	
-	private static void removeAllOverrides() {
-		for(Integer i : activeOverrides.keySet()) {
-			removeOverride(i, false);
+	private static void restoreLocks() {
+		for(Map.Entry<Integer, KeyBinding> ao: activeOverrides.entrySet()) {
+			try {
+				pressedField.set(ao.getValue(), false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			kbMap.removeObject(ao.getKey());
 		}
-		activeOverrides.clear();
 	}
 	
-	private static Collection<KeyBinding> getRegisteredBindings() {
-		List<KeyBinding> kbs = null;
-		try {
-			kbs = (List<KeyBinding>) RegUtils.getObfField(KeyBinding.class, "keybindArray", "idk").get(null);
-		} catch (Exception e) {}
-		return kbs;
-	}
-	
+	GuiScreen lastTickGui;
 	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent event) {
-		removeAllOverrides();
+	public void onClientTick(ClientTickEvent cte) {
+		GuiScreen cgs = Minecraft.getMinecraft().currentScreen;
+		if(lastTickGui == null && cgs != null) {
+			releaseLocks();
+		}
+		if(lastTickGui != null && cgs == null) {
+			restoreLocks();
+		}
+		lastTickGui = cgs;
 	}
 }

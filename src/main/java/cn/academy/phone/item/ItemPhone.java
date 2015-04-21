@@ -38,7 +38,7 @@ public class ItemPhone extends Item {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if(world.isRemote) {
             if(!GuiPhone.instance.isOpen())
-                GuiPhone.instance.open(stack);
+                GuiPhone.instance.open();
         }
         return stack;
     }
