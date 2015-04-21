@@ -58,8 +58,6 @@ public class ControlOverrider {
 		}
 	}
 	
-	//TODO: Used raw loop. If performance becomes a problem use clever replacement.
-	
 	public static void override(int keyID) {
 		if(activeOverrides.containsKey(keyID))
 			return;
