@@ -60,7 +60,7 @@ public class ParticleTest {
 		};
 	}
 	
-	@SubscribeEvent
+	//@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if(event.phase == Phase.END && event.side == Side.CLIENT) {
 			EntityPlayer player = event.player;
