@@ -77,7 +77,7 @@ public abstract class AbstractParticleFactory {
 						}
 					}
 				}
-				System.out.println("GC: " + alive.size() + " / " + dead.size());
+				//System.out.println("GC: " + alive.size() + " / " + dead.size());
 			}
 		}
 	}
