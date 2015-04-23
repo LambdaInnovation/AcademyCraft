@@ -35,29 +35,10 @@ public class SkillInstance extends SyncAction {
         System.out.println("Skill finished.");
     }
     
-    /*
-     * Internal
-     */
-
     /**
-     * DO NOT USE THIS!
-     * Public used in remote call delegate.
+     * Called by ClientHandler
      */
-    public final void doKeyUp() {
+    void onClientKeyUp() {
         onKeyUp();
     }
-    
-    /**
-     * Called by ClientHandler.
-     */
-    void clientKeyUpEvent() {
-        doKeyUp();
-        sendKeyUpToServer();
-    }
-    
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendKeyUpToServer() {
-        doKeyUp();
-    }
-    
 }
