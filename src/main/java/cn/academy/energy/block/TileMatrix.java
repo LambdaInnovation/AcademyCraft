@@ -39,7 +39,7 @@ public class TileMatrix extends TileEntity implements IWirelessMatrix {
 	
 	private MatrixType getMatrixType() {
 		Block bt = getBlockType();
-		return bt instanceof BlockMatrix ? ((BlockMatrix)bt).type : MatrixType.NORMAL;
+		return bt instanceof BlockMatrix ? ((BlockMatrix)bt).type : MatrixType.STANDARD;
 	}
 
 }

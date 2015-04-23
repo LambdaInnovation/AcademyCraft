@@ -14,19 +14,26 @@ package cn.academy.phone.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.GuiOpenEvent;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import cn.academy.core.ACItems;
 import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.util.ControlOverrider;
 import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.api.gui.AuxGui;
-import cn.liutils.api.gui.LIGui;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
+import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 import cn.liutils.util.RenderUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeathFolD
@@ -38,6 +45,7 @@ public class GuiPhone extends AuxGui {
     private static final double BALANCE_SPEED = 3; //pixel/ms
     
     @RegAuxGui
+    @RegEventHandler(Bus.Forge)
     public static GuiPhone instance = new GuiPhone();
     
     LIGui gui; //Forward to the rendering of this gui.
@@ -50,7 +58,7 @@ public class GuiPhone extends AuxGui {
     boolean open;
     long lastOpenTime;
     
-    ItemStack stack;
+    int openingSlot;
     
     long lastFrameTime;
     
@@ -82,12 +90,7 @@ public class GuiPhone extends AuxGui {
         return true;
     }
     
-    @Override
-    protected boolean overrideMouse() {
-        return true;
-    }
-    
-    public void open(ItemStack _stack) {
+    public void open() {
         if(Minecraft.getSystemTime() - lastOpenTime < 400)
             return;
         
@@ -97,13 +100,20 @@ public class GuiPhone extends AuxGui {
         open = true;
         lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.instance;
-        stack = _stack;
+        openingSlot = getPlayer().inventory.currentItem;
+        if(!validateStack())
+        	close();
+        
+        ControlOverrider.override(LIKeyProcess.MOUSE_LEFT);
+        ControlOverrider.override(LIKeyProcess.MOUSE_RIGHT);
     }
     
     public void close() {
         open = false;
         lastOpenTime = Minecraft.getSystemTime();
         Minecraft.getMinecraft().mouseHelper = PhoneMouseHelper.def;
+        ControlOverrider.removeOverride(LIKeyProcess.MOUSE_LEFT);
+        ControlOverrider.removeOverride(LIKeyProcess.MOUSE_RIGHT);
     }
 
     @Override
@@ -171,7 +181,7 @@ public class GuiPhone extends AuxGui {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glCullFace(GL11.GL_BACK);
         
-        if(!stack.equals(mc.thePlayer.getCurrentEquippedItem()))
+        if(!validateStack())
             close();
         
         lastFrameTime = time;
@@ -180,6 +190,28 @@ public class GuiPhone extends AuxGui {
     private double balance(long dt, double from, double to) {
         double d = to - from;
         return from + Math.min(BALANCE_SPEED * dt, Math.abs(d)) * Math.signum(d);
+    }
+    
+    private EntityPlayer getPlayer() {
+    	return Minecraft.getMinecraft().thePlayer;
+    }
+    
+    private boolean validateStack() {
+    	EntityPlayer player = getPlayer();
+    	if(player.inventory.currentItem != openingSlot) return false;
+    	if(player.getCurrentEquippedItem() == null || player.getCurrentEquippedItem().getItem() != ACItems.phoneLowend) return false;
+    	return true;
+    }
+    
+    ItemStack getTargetPhone() {
+    	return getPlayer().inventory.getStackInSlot(openingSlot);
+    }
+    
+    @SubscribeEvent
+	public void onGuiOpen(GuiOpenEvent event) {
+    	if(this.isOpen()) {
+    		this.close();
+    	}
     }
 
 }
