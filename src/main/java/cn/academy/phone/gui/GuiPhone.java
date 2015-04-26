@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import cn.academy.core.ACItems;
-import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.client.Resources;
 import cn.academy.generic.util.ControlOverrider;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEventHandler;
@@ -160,7 +160,7 @@ public class GuiPhone extends AuxGui {
             scale = 1.0 / 250;
             GL11.glTranslated(.24 * aspect, 1.1, -2.8);
         }
-        RenderUtils.loadTexture(ClientProps.TEX_PHONE_BACK);
+        RenderUtils.loadTexture(Resources.TEX_PHONE_BACK);
         
         GL11.glTranslated(.5, -0.5, 0);
         GL11.glRotated(-20 - 6 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);

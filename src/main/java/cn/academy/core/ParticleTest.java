@@ -18,7 +18,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 
-@RegistrationClass
+//@RegistrationClass
 @RegEventHandler(Bus.FML)
 public class ParticleTest {
 	
@@ -60,7 +60,7 @@ public class ParticleTest {
 		};
 	}
 	
-	//@SubscribeEvent
+	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if(event.phase == Phase.END && event.side == Side.CLIENT) {
 			EntityPlayer player = event.player;

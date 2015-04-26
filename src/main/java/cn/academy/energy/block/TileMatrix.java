@@ -13,14 +13,27 @@
 package cn.academy.energy.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import cn.academy.energy.api.IWirelessMatrix;
 import cn.academy.energy.block.BlockMatrix.MatrixType;
+import cn.academy.energy.client.render.block.RenderMatrix;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.RegTileEntity;
+import cn.liutils.template.block.TileMulti;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
-public class TileMatrix extends TileEntity implements IWirelessMatrix {
+@RegistrationClass
+@RegTileEntity
+@RegTileEntity.HasRender
+public class TileMatrix extends TileMulti implements IWirelessMatrix {
+	
+	@RegTileEntity.Render
+	@SideOnly(Side.CLIENT)
+	public static RenderMatrix renderer;
 
 	@Override
 	public int getCapacity() {
@@ -42,4 +55,8 @@ public class TileMatrix extends TileEntity implements IWirelessMatrix {
 		return bt instanceof BlockMatrix ? ((BlockMatrix)bt).type : MatrixType.STANDARD;
 	}
 
+	@SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
+	}
 }

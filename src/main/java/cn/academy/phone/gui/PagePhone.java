@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.client.Resources;
 import cn.academy.phone.app.App;
 import cn.academy.phone.app.AppRegistry;
 import cn.liutils.cgui.gui.Widget;
@@ -50,7 +50,7 @@ public class PagePhone extends Widget {
     
     public PagePhone(GuiPhone gui) {
         guiPhone = gui;
-        this.addComponent(new DrawTexture().setTex(ClientProps.TEX_PHONE_BACK));
+        this.addComponent(new DrawTexture().setTex(Resources.TEX_PHONE_BACK));
         transform.setSize(317, 512);
         
         this.regEventHandler(new FrameEventHandler() {
@@ -92,7 +92,7 @@ public class PagePhone extends Widget {
 		            GL11.glPushMatrix();
 		            GL11.glTranslated(x, y, dz);
 		            GL11.glColor4d(1, 1, 1, ht ? 1 : 0.6);
-		            RenderUtils.loadTexture(ClientProps.TEX_PHONE_APP_BG);
+		            RenderUtils.loadTexture(Resources.TEX_PHONE_APP_BG);
 		            HudUtils.drawRect(0, 0, SIZE, SIZE);
 		            
 		            RenderUtils.loadTexture(app.getIcon());
@@ -100,7 +100,7 @@ public class PagePhone extends Widget {
 		            
 		            String name = app.getDisplayName();
 		            float fsize = 12f;
-		            ClientProps.font().draw(name, SIZE / 2, SIZE + 2, fsize, 0xffffff, Align.CENTER);
+		            Resources.font().draw(name, SIZE / 2, SIZE + 2, fsize, 0xffffff, Align.CENTER);
 		            GL11.glPopMatrix();
 		            
 		            ++cx;
@@ -134,7 +134,7 @@ public class PagePhone extends Widget {
         HudUtils.setZLevel(15);
         
         GL11.glPushMatrix();
-        RenderUtils.loadTexture(ClientProps.TEX_PHONE_SYNC);
+        RenderUtils.loadTexture(Resources.TEX_PHONE_SYNC);
         GL11.glTranslated(size / 2, size / 2, 0);
         GL11.glRotated(time / 200.0, 0, 0, 1);
         GL11.glTranslated(-size / 2, -size / 2, 0);
@@ -143,16 +143,16 @@ public class PagePhone extends Widget {
         
         GL11.glPushMatrix();
         GL11.glTranslated(0, 5 * Math.sin(time / 1000.0), 0);
-        RenderUtils.loadTexture(ClientProps.TEX_PHONE_SYNC_MASK);
+        RenderUtils.loadTexture(Resources.TEX_PHONE_SYNC_MASK);
         HudUtils.setZLevel(19);
         HudUtils.drawRect(0, 0, size, size);
         GL11.glPopMatrix();
         
         HudUtils.setZLevel(27);
-        ClientProps.font().draw("Loading...", 30, 15, 15, 0xffffff);
+        Resources.font().draw("Loading...", 30, 15, 15, 0xffffff);
         
-        drawHint(-375, -400, ClientProps.TEX_PHONE_HINT_ML, "Open App");
-        drawHint(-375, -340, ClientProps.TEX_PHONE_HINT_MR, "Quit");
+        drawHint(-375, -400, Resources.TEX_PHONE_HINT_ML, "Open App");
+        drawHint(-375, -340, Resources.TEX_PHONE_HINT_MR, "Quit");
         
         GL11.glPopMatrix();
     }
@@ -165,12 +165,12 @@ public class PagePhone extends Widget {
         GL11.glScalef(scale, scale, scale);
         RenderUtils.loadTexture(base);
         HudUtils.drawRect(0, 0, 256, 256);
-        ClientProps.font().draw(text, 155, 122, 28, 0xffffff, Align.CENTER);
+        Resources.font().draw(text, 155, 122, 28, 0xffffff, Align.CENTER);
         GL11.glPopMatrix();
     }
     
     private void drawDownArrow() {
-        RenderUtils.loadTexture(ClientProps.TEX_PHONE_ARROW);
+        RenderUtils.loadTexture(Resources.TEX_PHONE_ARROW);
         HudUtils.setZLevel(2);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glColor4d(1, 1, 1, 0.5);
