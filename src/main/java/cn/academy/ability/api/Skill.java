@@ -12,10 +12,24 @@ public abstract class Skill {
             super(player);
         }
         
+        @Override
         protected void onKeyUp() {
             this.normalEnd();
         }
         
+        @Override
+        protected void onActionStarted() {
+            this.addSubAction(new cn.academy.ability.api.action.ClientEntityAction(player) {
+
+                @Override
+                protected net.minecraft.entity.Entity createEntity() {
+                    net.minecraft.entity.Entity ret = new net.minecraft.entity.passive.EntityHorse(player.worldObj);
+                    ret.setPosition(player.posX, player.posY, player.posZ);
+                    return ret;
+                }
+                
+            });
+        }
     }
     
     //TODO change to abstract after test
