@@ -1,6 +1,6 @@
 #AcademyCraft 中文语言文件 调试版本
 #命令
-commands.aim.desc=/aim [玩家名字](可省略) [指令名称]/[?] [参数...]
+commands.aim.desc=/aim [玩家名字] <指令名称>|<?> <参数> [参数...]
 commands.aim.infodisp=[%s]: %s
 commands.aim.help.desc=显示所有可用的作弊指令。
 commands.aim.category.desc=更改玩家的能力系。 参数：[能力系ID]
@@ -148,7 +148,7 @@ skl_gn_btc=大脑锻炼课程
 skl_gn_btc2=大脑锻炼课程Ⅱ
 skl_gn_spirit=思维修养课程
 
-gn_btc.desc=锻炼你的思维能力以应对更加复杂的计算任务。提高计算力上上限
+gn_btc.desc=锻炼你的思维能力以应对更加复杂的计算任务，提高计算力上上限。
 gn_btc2.desc=更好的锻炼，让你的计算力的上限能够得到更好的强化。
 gn_spirit.desc=为了让计算力的恢复速度加快，要让自己使用过度的大脑得到好的修养。
 
@@ -226,5 +226,5 @@ ac.frcur=当前频道
 ac.frclear=清除连接
 ac.frestb=建立连接
 ac.frclearconfirm=你确认要清除当前机器的连接么？
-ac.ssidnn=输入的SSID不能为空.
+ac.ssidnn=输入的SSID不能为空。
 ac.selchannel=选择频道
