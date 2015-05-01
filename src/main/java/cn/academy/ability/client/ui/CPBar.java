@@ -44,7 +44,7 @@ public class CPBar extends Widget {
 	
 	static final float WIDTH = 964, HEIGHT = 147;
 	
-	static double sin41 = Math.sin(42.0 / 180 * Math.PI), tan41 = Math.tan(42.0 / 180 * Math.PI);
+	static double sin41 = Math.sin(44.0 / 180 * Math.PI);
 	
 	public static ResourceLocation
 		TEX_BACK_NORMAL = tex("back_normal"),
@@ -67,9 +67,9 @@ public class CPBar extends Widget {
 		cpColors.add(new ProgColor(0.35, new Color(0xffffae44)));
 		cpColors.add(new ProgColor(1.0, new Color(0xffffffff)));
 		
-		overrideColors.add(new ProgColor(0.0, new Color(0x05dfdfdf)));
-		overrideColors.add(new ProgColor(0.75, new Color(0x18f0d49d)));
-		overrideColors.add(new ProgColor(1.0, new Color(0x18f56464)));
+		overrideColors.add(new ProgColor(0.0, new Color(0x0Adfdfdf)));
+		overrideColors.add(new ProgColor(0.55, new Color(0x23f0d49d)));
+		overrideColors.add(new ProgColor(1.0, new Color(0x50f56464)));
 	}
 	
 	private void initEvents() {
@@ -78,7 +78,7 @@ public class CPBar extends Widget {
 			public void handleEvent(Widget w, FrameEvent event) {
 				double test = (Math.sin(Minecraft.getSystemTime() / 2000.0) + 1) * 0.5;
 				
-				double override = test * 2;
+				double override = test * 1.2;
 				if(override < 1.0) {
 					drawNormal(override);
 				} else {
@@ -103,9 +103,6 @@ public class CPBar extends Widget {
 		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
 		int frontID = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 		
-		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
@@ -118,7 +115,6 @@ public class CPBar extends Widget {
 		ARBMultitexture.glActiveTextureARB(ARBMultitexture.GL_TEXTURE3_ARB);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, maskID);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT);
 		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_REPLACE);
 		
 		float uOffset = Minecraft.getSystemTime() / 10000.0f;
@@ -151,8 +147,6 @@ public class CPBar extends Widget {
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_RGB_EXT, GL11.GL_INCR);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_INCR);
 		//End drawing blend
 		
 		//Draw Highlight
@@ -170,14 +164,15 @@ public class CPBar extends Widget {
 		
 		autoLerp(overrideColors, override);
 		double len = override * WIDTH;
-		HudUtils.drawModalRect(X0 + WIDTH - len, Y0, len, HEIGHT);
+		
+		RenderUtils.loadTexture(TEX_MASK);
+		subHud(X0 + WIDTH - len, Y0, len, HEIGHT);
 	}
 	
 	private void drawCPBar(double prog) {
 		RenderUtils.loadTexture(TEX_CP);
 		
 		//We need a cut-angle effect so this must be done manually
-		sin41 = Math.sin(44 / 180.0 * Math.PI);
 		
 		autoLerp(cpColors, prog);
 		
@@ -197,6 +192,16 @@ public class CPBar extends Widget {
 		t.draw();
 		
 		GL11.glCullFace(GL11.GL_BACK);
+	}
+	
+	private void subHud(double x, double y, double width, double height) {
+		Tessellator t = Tessellator.instance;
+		t.startDrawingQuads();
+		addVertex(x, 		 y);
+		addVertex(x, 		 y + height);
+		addVertex(x + width, y + height);
+		addVertex(x + width, y);
+		t.draw();
 	}
 	
 	private void addVertex(double x, double y) {

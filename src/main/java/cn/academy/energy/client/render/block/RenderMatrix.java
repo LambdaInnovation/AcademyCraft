@@ -43,7 +43,6 @@ public class RenderMatrix extends RenderBlockMulti {
 		
 		TileMatrix matrix = (TileMatrix) te;
 		GL11.glPushMatrix();
-		
 		RenderUtils.loadTexture(texture);
 		drawBase(matrix);
 		drawShields(matrix);

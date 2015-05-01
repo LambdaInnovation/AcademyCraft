@@ -16,6 +16,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import cn.annoreg.core.RegistrationClass;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.cgui.gui.LIGui;
+import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 
 /**
@@ -27,9 +28,13 @@ public class AbilityUI extends AuxGui {
 	
 	LIGui scene = new LIGui();
 	
+	CPBar cpbar;
+	
 	public AbilityUI() {
-		CPBar cpbar = new CPBar();
-		cpbar.transform.x = 900;
+		cpbar = new CPBar();
+		cpbar.transform.alignWidth = WidthAlign.RIGHT;
+		cpbar.transform.y = 20;
+		cpbar.transform.x = -20;
 		
 		scene.addWidget(cpbar);
 	}
@@ -46,7 +51,8 @@ public class AbilityUI extends AuxGui {
 
 	@Override
 	public void draw(ScaledResolution sr) {
-		scene.draw(sr.getScaledWidth_double(), sr.getScaledHeight_double());
+		scene.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
+		scene.draw(0, 0);
 	}
 
 }

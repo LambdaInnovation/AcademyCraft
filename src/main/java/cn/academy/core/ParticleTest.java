@@ -48,7 +48,7 @@ public class ParticleTest {
 					@Override
 					public void onUpdate() {
 						getTarget().color.a = Math.max(0.0, 1.0 - (double)getTarget().getParticleLife() / time);
-						System.out.println(getTarget().color.a);
+						//System.out.println(getTarget().color.a);
 						//getTarget().color.a = 0.3f;
 						if(getTarget().getParticleLife() > time + 1000) {
 							getTarget().setDead();
