@@ -44,4 +44,13 @@ public interface ThreadProxy {
 	 * @param action
 	 */
 	void removeAction(SyncAction action);
+	
+	/**
+	 * Return a string value that is guaranteed to be different between 
+	 * sides.
+	 * @return
+	 */
+	String getSideId();
+	
+	EntityPlayer getThePlayer();
 }

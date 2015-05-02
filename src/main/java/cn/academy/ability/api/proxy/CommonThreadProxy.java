@@ -51,4 +51,8 @@ public abstract class CommonThreadProxy implements ThreadProxy {
     public SyncAction getActionFromId(String id) {
         return actionMap.get(id);
     }
+    
+    public String getSideId() {
+        return sideName;
+    }
 }
