@@ -35,8 +35,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 /**
- * Academy Craft Mod 主类
- * 
+ * Academy Craft Mod Main Class
  * @author acaly, WeathFolD, KS
  *
  */
@@ -46,19 +45,13 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 public class AcademyCraft {
     
     public static final String NET_CHANNEL = "academy-network";
-    /**
-     * 主类实例
-     */
+
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
-    /**
-     * 日志
-     */
+
     public static Logger log = LogManager.getLogger("AcademyCraft");
     public static Configuration config;
-    /**
-     * 网络发包处理实例
-     */
+
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
             .newSimpleChannel(AcademyCraft.NET_CHANNEL);
@@ -67,9 +60,6 @@ public class AcademyCraft {
     @RegItem.UTName("logo")
     public static Item logo;
     
-    /**
-     * 创造栏
-     */
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
         public Item getTabIconItem() {

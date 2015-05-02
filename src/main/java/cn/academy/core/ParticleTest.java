@@ -18,7 +18,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 
-@RegistrationClass
+//@RegistrationClass
 @RegEventHandler(Bus.FML)
 public class ParticleTest {
 	
@@ -48,7 +48,7 @@ public class ParticleTest {
 					@Override
 					public void onUpdate() {
 						getTarget().color.a = Math.max(0.0, 1.0 - (double)getTarget().getParticleLife() / time);
-						System.out.println(getTarget().color.a);
+						//System.out.println(getTarget().color.a);
 						//getTarget().color.a = 0.3f;
 						if(getTarget().getParticleLife() > time + 1000) {
 							getTarget().setDead();
@@ -60,7 +60,7 @@ public class ParticleTest {
 		};
 	}
 	
-	//@SubscribeEvent
+	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if(event.phase == Phase.END && event.side == Side.CLIENT) {
 			EntityPlayer player = event.player;

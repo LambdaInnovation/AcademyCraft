@@ -46,6 +46,17 @@ public class BlockMatrix extends BlockMulti {
 		setBlockName("matrix_" + mt.toString().toLowerCase());
 		setBlockTextureName("academy:matrix_" + mt.toString().toLowerCase());
 		setHardness(3.0f);
+		
+		addSubBlock(0, 0, 1);
+		addSubBlock(1, 0, 1);
+		addSubBlock(1, 0, 0);
+		
+		addSubBlock(0, 1, 0);
+		addSubBlock(0, 1, 1);
+		addSubBlock(1, 1, 1);
+		addSubBlock(1, 1, 0);
+		
+		this.finishInit();
 	}
 
 	@Override
@@ -55,12 +66,12 @@ public class BlockMatrix extends BlockMulti {
 
 	@Override
 	public double[] getRotCenter() {
-		return new double[] { 0, 0, 0};
+		return new double[] { 1.0, 0, 1.0};
 	}
 	
-	@Override
-    public int getRenderType() {
-        return 0;
-    }
+//	@Override
+//    public int getRenderType() {
+//        return 0;
+//    }
 
 }

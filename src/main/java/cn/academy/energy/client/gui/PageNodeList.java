@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.client.Resources;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.DragBar;
 import cn.liutils.api.gui.widget.ListVertical;
@@ -19,14 +19,14 @@ import cn.liutils.util.render.Font.Align;
 public class PageNodeList extends Widget {
     
     static final double SCALE = 0.4;
-    static final ResourceLocation TEX = ClientProps.TEX_GUI_NODE_LIST;
+    static final ResourceLocation TEX = Resources.TEX_GUI_NODE_LIST;
     
     final GuiNode guiNode;
 
     public PageNodeList(GuiNode _guiNode) {
         guiNode = _guiNode;
         this.setSize(280, 320);
-        this.initTexDraw(ClientProps.TEX_GUI_NODE_LIST, 0, 0, 280, 320);
+        this.initTexDraw(Resources.TEX_GUI_NODE_LIST, 0, 0, 280, 320);
         this.scale = SCALE;
         this.alignStyle = AlignStyle.CENTER;
     }
@@ -44,7 +44,7 @@ public class PageNodeList extends Widget {
         this.drawBlackout();
         super.draw(mx, my, hov);
         String header = "Channel select";
-        ClientProps.font().draw(header, 160, 26, 16, 0x3cffff, Align.CENTER);
+        Resources.font().draw(header, 160, 26, 16, 0x3cffff, Align.CENTER);
         GL11.glColor4d(1, 1, 1, 1);
     }
     
@@ -91,7 +91,7 @@ public class PageNodeList extends Widget {
             }
             
             final float fSize = 15;
-            ClientProps.font().drawTrimmed(ssid, 10, 4, fSize, 0x00ffff,Align.LEFT, 180, "...");
+            Resources.font().drawTrimmed(ssid, 10, 4, fSize, 0x00ffff,Align.LEFT, 180, "...");
             GL11.glColor4d(1, 1, 1, 1);
         }
     }

@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.generic.client.ClientProps;
+import cn.academy.generic.client.Resources;
 import cn.liutils.api.gui.Widget;
 import cn.liutils.api.gui.widget.RandBufProgressBar;
 import cn.liutils.api.gui.widget.RandBufProgressBar.Direction;
@@ -31,14 +31,14 @@ import cn.liutils.util.render.Font.Align;
 public class PageNode extends Widget {
     
     static final double SCALE = 16.0 / 26.0;
-    static final ResourceLocation TEX = ClientProps.TEX_GUI_NODE;
+    static final ResourceLocation TEX = Resources.TEX_GUI_NODE;
 
     final GuiNode guiNode;
     
     public PageNode(GuiNode _guiNode) {
         guiNode = _guiNode;
         this.setSize(280, 300);
-        this.initTexDraw(ClientProps.TEX_GUI_NODE, 0, 0, 280, 300);
+        this.initTexDraw(Resources.TEX_GUI_NODE, 0, 0, 280, 300);
         this.alignStyle = AlignStyle.CENTER;
         this.scale = SCALE;
     }
@@ -60,7 +60,7 @@ public class PageNode extends Widget {
         addWidget(new Widget(141, 110, 0, 0) {
             @Override
             public void draw(double mx, double my, boolean hov) {
-                ClientProps.font().draw("Loading...", 0, 0, 14, 0x00ffff, Align.CENTER);
+                Resources.font().draw("Loading...", 0, 0, 14, 0x00ffff, Align.CENTER);
             }
         });
     }
@@ -116,7 +116,7 @@ public class PageNode extends Widget {
                 final float fSize = 10;
                 GL11.glColor4d(0, 1, 1, 1);
 
-                ClientProps.font().drawTrimmed(guiNode.name, 0, 0, fSize, 0x00ffff, Align.CENTER, 54, "...");
+                Resources.font().drawTrimmed(guiNode.name, 0, 0, fSize, 0x00ffff, Align.CENTER, 54, "...");
                 
                 GL11.glColor4d(1, 1, 1, 1);
             }
@@ -128,9 +128,9 @@ public class PageNode extends Widget {
             public void draw(double x, double y, boolean hov) {
                 final float fSize = 10, step = 15;
                 GL11.glColor4d(0, 1, 1, 1);
-                ClientProps.font().draw("SSID:", 0, 0, fSize, 0x00ffff, Align.CENTER);
+                Resources.font().draw("SSID:", 0, 0, fSize, 0x00ffff, Align.CENTER);
                 String ssid = "Imagination Fieldxxxxxxxxxxxx";
-                ClientProps.font().drawTrimmed(ssid, 0, step, 10, 0x00ffff, Align.CENTER, 75, "...");
+                Resources.font().drawTrimmed(ssid, 0, step, 10, 0x00ffff, Align.CENTER, 75, "...");
                 GL11.glColor4d(1, 1, 1, 1);
             }
         });

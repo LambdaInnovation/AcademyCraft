@@ -12,14 +12,15 @@
  */
 package cn.academy.generic.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
-import cn.annoreg.mc.RegSubmoduleInit;
-import cn.annoreg.mc.RegSubmoduleInit.Side;
 import cn.liutils.util.render.Font;
-import cn.liutils.util.render.LambdaFont;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
@@ -27,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @ForcePreloadTexture
-public class ClientProps {
+public class Resources {
 
     public static ResourceLocation
         TEX_PHONE_BACK = phone("phone_back"),
@@ -41,6 +42,25 @@ public class ClientProps {
     public static ResourceLocation 
         TEX_GUI_NODE = gui("node"),
         TEX_GUI_NODE_LIST = gui("node_list");
+    
+    private static Map<String, IModelCustom> createdModels = new HashMap();
+    
+    /**
+     * Get the model instance of the given name. If the name is
+     * first queried, will load that resource from the file system.
+     */
+    public static IModelCustom getModel(String mdlName) {
+    	IModelCustom ret = createdModels.get(mdlName);
+    	if(ret != null)
+    		return ret;
+    	ret = AdvancedModelLoader.loadModel(res("models/" + mdlName + ".obj"));
+    	createdModels.put(mdlName, ret);
+    	return ret;
+    }
+    
+    public static ResourceLocation getTexture(String loc) {
+    	return res("textures/" + loc + ".png");
+    }
     
     public static Font font() {
         return Font.font;
