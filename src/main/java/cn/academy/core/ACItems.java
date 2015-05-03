@@ -12,19 +12,38 @@
  */
 package cn.academy.core;
 
+import org.apache.commons.io.IOUtils;
+
 import cn.academy.phone.item.ItemPhone;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegItem;
+import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.loading.item.ItemLoader;
 
 /**
  * All registration of item goes here.
  * @author WeathFolD
  */
 @RegistrationClass
+@RegSubmoduleInit
 public class ACItems {
 
     @RegItem
     @RegItem.UTName("phone_low")
     public static ItemPhone phoneLowend = new ItemPhone(1, 10000);
+    
+    public static void init() {
+    	try {
+	    	ItemLoader loader = new ItemLoader();
+	    	String json = IOUtils.toString(ACItems.class.getResource("/assets/liutils/test.json"));
+	    	System.out.println("Json is: ");
+	    	System.out.println(json);
+	    	
+	    	loader.feed(json);
+	    	loader.loadAll();
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
 
 }
