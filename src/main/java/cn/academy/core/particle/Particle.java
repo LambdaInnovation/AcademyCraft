@@ -18,11 +18,11 @@ import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.render.ISpriteEntity;
 import cn.academy.core.client.render.RenderIcon;
 import cn.academy.core.client.render.Sprite;
-import cn.academy.core.entityx.EntityAdvanced;
-import cn.academy.core.entityx.handlers.Rigidbody;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.cgui.utils.Color;
+import cn.liutils.entityx.EntityAdvanced;
+import cn.liutils.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
