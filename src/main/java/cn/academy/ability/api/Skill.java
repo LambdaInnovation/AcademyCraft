@@ -19,7 +19,7 @@ public abstract class Skill {
         
         @Override
         protected void onActionStarted() {
-            this.addSubAction(new cn.academy.ability.api.action.ClientEntityAction(player) {
+            this.addSubAction("entity", new cn.academy.ability.api.action.ClientEntityAction(player) {
 
                 @Override
                 protected net.minecraft.entity.Entity createEntity() {

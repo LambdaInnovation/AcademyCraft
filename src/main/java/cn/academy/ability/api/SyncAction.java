@@ -8,6 +8,8 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -49,7 +51,7 @@ public class SyncAction extends Tickable {
     protected void onActionTicked() {}
     
     /**
-     * Call this function to cancel this action.
+     * Call this function on any side(s) to cancel this action.
      */
     protected final void cancelAction() {
         if (!isStarted) return;
@@ -60,14 +62,15 @@ public class SyncAction extends Tickable {
         }
         
         if (isRemote)
-            sendCancelToServer();
+            sendCancelToServer(ProxyHelper.get().getThePlayer());
         else
-            sendCancelToClient();
+            sendCancelToClient(null);
+        
         doCancelAction();
     }
     
     /**
-     * This function should be called right after it is created in the first side.
+     * This function should be called right after it is created on the FIRST side.
      * Note that creating one action on both sides results in two actions on both.
      */
     protected final void startSync() {
@@ -78,15 +81,15 @@ public class SyncAction extends Tickable {
         ProxyHelper.get().registerAction(this);
         
         if (isRemote)
-            sendSyncStartToServer();
+            sendSyncStartToServer(ProxyHelper.get().getThePlayer());
         else
-            sendSyncStartToClient();
+            sendSyncStartToClient(null);
         
         onActionStarted();
     }
     
     /**
-     * Call on either side. Finish the action.
+     * Call on ONE side. Finish the action.
      */
     protected final void normalEnd() {
         if (!isStarted) return;
@@ -97,27 +100,35 @@ public class SyncAction extends Tickable {
         }
         
         if (isRemote)
-            sendEndToServer();
+            sendEndToServer(ProxyHelper.get().getThePlayer());
         else
-            sendEndToClient();
+            sendEndToClient(null);
         
         doNormalEnd();
     }
     
+    /**
+     * Actually this is all actions that should finish as soon as this action finishes.
+     * Note that a sub action may only present in this array on one side (server or client),
+     * and that is enough for it to work.
+     */
     private ArrayList<SyncAction> subActions = new ArrayList();
     
     /**
      * Add a sub action, and start it immediately (by calling startSync).
      * When this finishes, the subs are automatically terminated.
      * This function will handle the start of the sub. <BR/>
-     * <B>IMPORTANT</B>: this call must be manually synchronized on all sides, 
-     * which means, you must call this function on all sides in the exact same order,
-     * or the system level synchronization will break.
+     * <B>IMPORTANT</B>: this call must be manually synchronized on all sides.
      * @param sub
      */
-    protected final void addSubAction(SyncAction sub) {
+    protected final void addSubAction(String id, SyncAction sub) {
         subActions.add(sub);
-        sub.startNonsync(this.id + ":" + subActions.size());
+        sub.startNonsync(this.id + ":" + id);
+    }
+    
+    protected final void addSubActionAndWait(String id, SyncAction sub) {
+        sub.subActions.add(this);
+        sub.startNonsync(this.id + ":" + id);
     }
     
     /*
@@ -134,10 +145,11 @@ public class SyncAction extends Tickable {
     }
 
     /**
-     * DO NOT USE THIS!
-     * Public used in remote call delegate.
+     * If the first side is client, this function is called
+     * twice on that side, with the second time by remote call
+     * from server.
      */
-    public final void doNormalEnd() {
+    private void doNormalEnd() {
         isStarted = false;
         
         onActionFinished();
@@ -152,11 +164,9 @@ public class SyncAction extends Tickable {
     }
     
     /**
-     * DO NOT USE THIS!
      * Called on both sides. Call callback and finalize.
-     * Public used in remote call delegate.
      */
-    public final void doCancelAction() {
+    private void doCancelAction() {
         isStarted = false;
         
         onActionCancelled();
@@ -164,10 +174,12 @@ public class SyncAction extends Tickable {
     }
     
     /**
-     * DO NOT USE THIS!
-     * Public used in remote call delegate.
+     * If the first side is client, this function is called
+     * twice on that side, with the second time by remote call
+     * from server.
      */
-    public final void remoteStartAction() {
+    private void remoteStartAction() {
+        if (isStarted) return;
         isStarted = true;
         
         onActionStarted();
@@ -178,13 +190,19 @@ public class SyncAction extends Tickable {
         onActionTicked();
     }
     
+    
+    /*
+     * Network part.
+     */
+    
     @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendCancelToServer() {
+    private void sendCancelToServer(@Instance EntityPlayer source) {
         doCancelAction();
+        sendCancelToClient(source);
     }
     
     @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendCancelToClient() {
+    private void sendCancelToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
         doCancelAction();
     }
 
@@ -192,24 +210,28 @@ public class SyncAction extends Tickable {
     //DATA option should be used with great care, for the DataSerializer for the class
     //may not exist.
     @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendSyncStartToServer() {
+    private void sendSyncStartToServer(@Instance EntityPlayer source) {
         //Creation has been done in ActionSerializer.
+        //No need to check newly-created-flag in starting.
         remoteStartAction();
+        sendSyncStartToClient(source);
     }
     
     @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendSyncStartToClient() {
+    private void sendSyncStartToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
         //Creation has been done in ActionSerializer.
+        //No need to check newly-created-flag in starting.
         remoteStartAction();
     }
     
     @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendEndToServer() {
+    private void sendEndToServer(@Instance EntityPlayer source) {
         doNormalEnd();
+        sendEndToClient(source);
     }
     
     @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendEndToClient() {
+    private void sendEndToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
         doNormalEnd();
     }
 }
