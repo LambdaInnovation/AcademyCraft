@@ -12,14 +12,15 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessMatrix;
-import cn.academy.energy.block.BlockMatrix.MatrixType;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.template.block.TileMulti;
+import cn.liutils.template.block.IMultiTile;
+import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,32 +30,64 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileMatrix extends TileMulti implements IWirelessMatrix {
-	
+public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
+
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static RenderMatrix renderer;
+	
+	public TileMatrix() {
+		super("wireless_matrix", 4);
+	}
+	
+	//InfoBlockMulti delegation
+	InfoBlockMulti info = new InfoBlockMulti(this);
+	
+	@Override
+	public void updateEntity() {
+		if(info != null)
+			info.update();
+	}
 
 	@Override
+	public InfoBlockMulti getBlockInfo() {
+		return info;
+	}
+
+	@Override
+	public void setBlockInfo(InfoBlockMulti i) {
+		info = i;
+	}
+
+	@Override
+    public void readFromNBT(NBTTagCompound nbt) {
+    	super.readFromNBT(nbt);
+    	info = new InfoBlockMulti(this, nbt);
+    }
+    
+	@Override
+    public void writeToNBT(NBTTagCompound nbt) {
+    	super.writeToNBT(nbt);
+    	info.save(nbt);
+    }
+
+	//WEN
+	@Override
 	public int getCapacity() {
-		return getMatrixType().capacity;
+		return 10;
 	}
 
 	@Override
 	public double getLatency() {
-		return getMatrixType().latency;
+		return 100;
 	}
 
 	@Override
 	public double getRange() {
-		return getMatrixType().range;
+		return 20;
 	}
 	
-	private MatrixType getMatrixType() {
-		Block bt = getBlockType();
-		return bt instanceof BlockMatrix ? ((BlockMatrix)bt).type : MatrixType.STANDARD;
-	}
-
+	//AABB
 	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;

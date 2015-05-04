@@ -13,7 +13,6 @@
 package cn.academy.core;
 
 import cn.academy.energy.block.BlockMatrix;
-import cn.academy.energy.block.BlockMatrix.MatrixType;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.annoreg.core.RegistrationClass;
@@ -33,9 +32,6 @@ public class ACBlocks {
         nodeAdvanced = new BlockNode(NodeType.ADVANCED);
     
     @RegBlock
-    public static BlockMatrix
-    	matBasic = new BlockMatrix(MatrixType.BASIC),
-    	matStandard = new BlockMatrix(MatrixType.STANDARD),
-    	matAdvanced = new BlockMatrix(MatrixType.ADVANCED);
+    public static BlockMatrix matrix = new BlockMatrix();
 
 }

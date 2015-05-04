@@ -13,39 +13,33 @@
 package cn.academy.energy.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
+import cn.academy.energy.client.gui.matrix.GuiMatrix;
+import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.block.BlockMulti;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  *
  */
+@RegistrationClass
 public class BlockMatrix extends BlockMulti {
 	
-	public enum MatrixType {
-		BASIC(5, 10, 10), STANDARD(10, 20, 100), ADVANCED(20, 30, 1000);
-		MatrixType(int cap, double r, double lat) {
-			capacity = cap;
-			range = r;
-			latency = lat;
-		}
-		
-		public final double latency, range;
-		public final int capacity;
-	};
-
-	public final MatrixType type;
-	
-	public BlockMatrix(MatrixType mt) {
+	public BlockMatrix() {
 		super(Material.rock);
-		type = mt;
 		
 		setCreativeTab(AcademyCraft.cct);
-		setBlockName("matrix_" + mt.toString().toLowerCase());
-		setBlockTextureName("academy:matrix_" + mt.toString().toLowerCase());
+		setBlockName("matrix");
+		setBlockTextureName("academy:matrix");
 		setHardness(3.0f);
+		setLightLevel(1f);
 		
 		addSubBlock(0, 0, 1);
 		addSubBlock(1, 0, 1);
@@ -73,5 +67,36 @@ public class BlockMatrix extends BlockMulti {
 //    public int getRenderType() {
 //        return 0;
 //    }
+	
+	@Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
+            float tx, float ty, float tz) {
+        if(!player.isSneaking()) {
+            guiHandler.openGuiContainer(player, world, x, y, z);
+            return true;
+        }
+        return false;
+    }
+	
+	@RegGuiHandler
+	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+		@SideOnly(Side.CLIENT)
+		@Override
+		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+			TileMatrix te = check(world, x, y, z);
+			return te == null ? null : new GuiMatrix(new ContainerMatrix(te, player));
+		}
+		
+		@Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+			TileMatrix te = check(world, x, y, z);
+			return te == null ? null : new ContainerMatrix(te, player);
+		}
+		
+		private TileMatrix check(World world, int x, int y, int z) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			return (TileMatrix) (te instanceof TileMatrix ? te : null);
+		}
+	};
 
 }

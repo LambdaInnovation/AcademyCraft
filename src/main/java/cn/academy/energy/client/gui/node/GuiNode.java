@@ -10,19 +10,19 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.phone.registry;
+package cn.academy.energy.client.gui.node;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import cn.academy.energy.block.ContainerNode;
+import cn.liutils.cgui.gui.LIGuiContainer;
 
 /**
  * @author WeathFolD
+ *
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface RegApp {
+public class GuiNode extends LIGuiContainer {
+    
+    public GuiNode(ContainerNode c) {
+        super(c);
+    }
 
 }

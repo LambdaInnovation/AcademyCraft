@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.energy.block.BlockNode.NodeType;
@@ -31,7 +31,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegTileEntity
-public class TileNode extends TileEntity implements IWirelessNode, IInventory {
+public class TileNode extends TileInventory implements IWirelessNode, IInventory {
 
     protected double energy;
     
@@ -42,7 +42,9 @@ public class TileNode extends TileEntity implements IWirelessNode, IInventory {
     @SideOnly(Side.CLIENT)
     public boolean enabled = true;
     
-    public TileNode() {}
+    public TileNode() {
+    	super("wireless_node", 2);
+    }
 
     @Override
     public double getMaxEnergy() {
@@ -90,73 +92,6 @@ public class TileNode extends TileEntity implements IWirelessNode, IInventory {
      */
     public void linkNetwork(String ssid) {
         
-    }
-    
-    //Stupid inventory code
-    ItemStack[] inv = new ItemStack[2];
-
-    @Override
-    public int getSizeInventory() {
-        return 2;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inv.length > slot ? inv[slot] : null;
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int n) {
-        ItemStack stack = getStackInSlot(slot);
-        if(stack == null) return null;
-        stack.stackSize -= Math.min(n, stack.stackSize);
-        if(stack.stackSize == 0) {
-            inv[slot] = null;
-            return null;
-        }
-        return stack;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-        if(inv.length > slot)
-            inv[slot] = stack;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return "wireless_node";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return player.getDistanceSq(xCoord + .5, yCoord + .5, zCoord + .5) < 64;
-    }
-
-    @Override
-    public void openInventory() {}
-
-    @Override
-    public void closeInventory() {}
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return stack.getItem() instanceof ImagEnergyItem;
     }
 
 }

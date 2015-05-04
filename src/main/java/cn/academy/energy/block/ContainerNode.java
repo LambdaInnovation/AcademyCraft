@@ -53,25 +53,28 @@ public class ContainerNode extends Container {
      * This already become a template...
      */
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-        Slot slot = this.getSlot(id);
-        if(slot == null || !slot.getHasStack())
-            return null;
-        ItemStack cur = slot.getStack(), ret = cur.copy();
-        if(id >= 2) {
-            
-        } else {
-            
+        ItemStack stack = null;
+        Slot slot = (Slot)this.inventorySlots.get(id);
+
+        if (slot != null && slot.getHasStack()) {
+            ItemStack stack1 = slot.getStack();
+            stack = stack1.copy();
+
+            if (id < 2) { //tileInv->playerInv
+                if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
+                    return null;
+            } else if (!this.mergeItemStack(stack1, 0, 2, false)) { //playerInv->tileInv
+                return null;
+            }
+
+            if (stack1.stackSize == 0) {
+                slot.putStack((ItemStack)null);
+            } else {
+                slot.onSlotChanged();
+            }
         }
-        if(cur.stackSize == 0) {
-            slot.putStack(null);
-        } else {
-            slot.onSlotChanged();
-        }
-        
-        if(cur.stackSize == ret.stackSize)
-            return null;
-        slot.onPickupFromSlot(player, cur);
-        return ret;
+
+        return stack;
     }
 
     @Override
