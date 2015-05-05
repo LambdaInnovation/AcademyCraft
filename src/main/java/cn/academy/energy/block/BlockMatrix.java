@@ -72,7 +72,10 @@ public class BlockMatrix extends BlockMulti {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
         if(!player.isSneaking()) {
-            guiHandler.openGuiContainer(player, world, x, y, z);
+        	int[] center = this.getOrigin(world, x, y, z);
+        	if(center != null) {
+        		guiHandler.openGuiContainer(player, world, center[0], center[1], center[2]);
+        	}
             return true;
         }
         return false;

@@ -16,6 +16,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.energy.api.IWirelessMatrix;
+import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.IWirelessReceiver;
 import cn.academy.energy.api.IWirelessTile;
 import cn.liutils.util.DebugUtils;
 
@@ -28,6 +31,26 @@ public class Coord {
     public final World world;
     public final int x, y, z;
     public final BlockType type;
+    
+    public Coord(IWirelessTile _te) {
+    	BlockType type;
+    	if(_te instanceof IWirelessMatrix) {
+    		type = BlockType.MATRIX;
+    	} else if(_te instanceof IWirelessNode) {
+    		type = BlockType.NODE;
+    	} else if(_te instanceof IWirelessReceiver) {
+    		type = BlockType.RECEIVER;
+    	} else {
+    		type = BlockType.GENERATOR;
+    	}
+    	
+    	TileEntity te = (TileEntity) _te;
+    	world = te.getWorldObj();
+        x = te.xCoord;
+        y = te.yCoord;
+        z = te.zCoord;
+        this.type = type;
+    }
     
     public Coord(IWirelessTile _te, BlockType _type) {
         this((TileEntity) _te, _type);

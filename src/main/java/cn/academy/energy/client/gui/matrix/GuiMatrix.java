@@ -12,9 +12,12 @@
  */
 package cn.academy.energy.client.gui.matrix;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
+import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.cgui.gui.LIGui;
@@ -22,15 +25,18 @@ import cn.liutils.cgui.gui.LIGuiContainer;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.cgui.utils.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * TODO: Localization
  * @author WeAthFolD
  */
 @RegistrationClass
@@ -44,6 +50,25 @@ public class GuiMatrix extends LIGuiContainer {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/matrix.xml"));
 	}
 	
+	//--------
+	
+	//Synced states
+	boolean receivedSync;
+	
+	boolean isLoaded;
+	
+	String ssid;
+	int nodes;
+	int capacity;
+	int latency;
+	int range;
+	
+	//Action
+	boolean waitingForResult;
+	long resultReceivedTime; //Used for anim display time ctrl.
+	ActionResult result;
+	
+	//Meta objects
 	final TileMatrix tile;
 	
 	final ContainerMatrix container;
@@ -58,7 +83,50 @@ public class GuiMatrix extends LIGuiContainer {
 		load();
 	}
 	
+	public void receiveSync(NBTTagCompound tag) {
+		if(!receivedSync) {
+			receivedSync = true;
+			
+			isLoaded = tag.getBoolean("loaded");
+			capacity = tag.getInteger("capacity");
+			latency = tag.getInteger("latency");
+			range = tag.getInteger("range");
+			
+			//Setup the info about matrix itself
+			TextBox box;
+			box = pageMain.getWidget("info_Node2").getComponent("TextBox");
+			box.content = nodes + "/" + capacity;
+			
+			box = pageMain.getWidget("info_BM2").getComponent("TextBox");
+			box.content = String.format("%d", latency);
+			
+			box = pageMain.getWidget("info_Range2").getComponent("TextBox");
+			box.content = String.format("%d", range);
+			
+			box = pageMain.getWidget("info_ssid2").getComponent("TextBox");
+			if(isLoaded) {
+				ssid = tag.getString("ssid");
+				box.content = ssid;
+			} else {
+				box.content = "Not Loaded";
+			}
+		}
+	}
+	
+	/**
+	 * May called by sync method or gui itself, to update state animation.
+	 */
+	public void receiveActionResult(ActionResult result) {
+		if(waitingForResult) {
+			waitingForResult = false;
+			this.result = result;
+			resultReceivedTime = Minecraft.getSystemTime();
+		}
+	}
+	
 	private void load() {
+		GuiMatrixSync.sendSyncRequest(this);
+		
 		LIGui gui = getGui();
 		pageMain = loaded.getWidget("Main").copy();
 		pageSSID = loaded.getWidget("SSIDINIT").copy();
@@ -68,10 +136,10 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		pageSSID.transform.doesDraw = false;
 		
-		handleButton(pageMain.getWidget("button"));
+		wrapButton(pageMain.getWidget("button"));
 		
-		handleButton(pageSSID.getWidget("button_YES"));
-		handleButton(pageSSID.getWidget("button_NO"));
+		wrapButton(pageSSID.getWidget("button_YES"));
+		wrapButton(pageSSID.getWidget("button_NO"));
 		
 		EventLoader.load(pageMain, new MainCallback());
 		EventLoader.load(pageSSID, new SSIDCallback());
@@ -82,17 +150,37 @@ public class GuiMatrix extends LIGuiContainer {
     	return !pageSSID.transform.doesDraw;
     }
 	
-	private void handleButton(Widget w) {
+	private void wrapButton(Widget w) {
 		DrawTexture drawer = w.getComponent("DrawTexture");
-		drawer.enabled = false;
+		final Color hoverColor = new Color(1, 1, 1, 1), idleColor = new Color(1, 1, 1, 0.3);
+		drawer.color = idleColor;
 		
 		w.regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
 				DrawTexture drawer = w.getComponent("DrawTexture");
-				drawer.enabled = event.hovering;
+				drawer.color = event.hovering ? hoverColor : idleColor;
 			}
 		});
+	}
+	
+	private void onDialogueOpen() {
+		TextBox box = pageSSID.getWidget("Text_SSID").getComponent("TextBox");
+		
+		if(isLoaded) {
+			box.content = ssid;
+			box.allowEdit = false;
+		} else {
+			box.content = "fff";
+			System.out.println("AllowEdit");
+			box.allowEdit = true;
+		}
+		
+		box = pageSSID.getWidget("Text_Pass").getComponent("TextBox");
+		box.content = "";
+		
+		box = pageSSID.getWidget("Text_Confirm").getComponent("TextBox");
+		box.content = "";
 	}
 	
 	public class MainCallback {
@@ -100,27 +188,51 @@ public class GuiMatrix extends LIGuiContainer {
 		@GuiCallback("button")
 		public void openDialogue(Widget w, MouseDownEvent event) {
 			pageSSID.transform.doesDraw = true;
+			onDialogueOpen();
+		}
+		
+		@GuiCallback
+		public void blackout(Widget w, FrameEvent event) {
+			if(pageSSID.transform.doesDraw) {
+				LIGui.drawBlackout();
+			}
 		}
 		
 	}
 
 	public class SSIDCallback {
 		
-		@GuiCallback
-		public void blackout(Widget w, FrameEvent event) {
-			LIGui.drawBlackout();
-		}
-		
 		@GuiCallback("button_YES")
 		public void yesDown(Widget w, MouseDownEvent event) {
-			
+			String pwd = getPassword();
+			waitingForResult = true;
+			if(pwd == null) {
+				//Quit with error
+				receiveActionResult(ActionResult.INCPASS);
+			} else if(isLoaded) {
+				//Update password
+				GuiMatrixSync.passwordUpdate(tile, "", "");//TODO
+			} else {
+				//Full init
+				GuiMatrixSync.fullInit(tile, getSSID(), pwd);
+			}
 			pageSSID.transform.doesDraw = false;
 		}
 		
 		@GuiCallback("button_NO")
 		public void noDown(Widget w, MouseDownEvent event) {
-			
+			//Close without doing anything
 			pageSSID.transform.doesDraw = false;
+		}
+		
+		private String getSSID() {
+			TextBox box = pageSSID.getWidget("Text_SSID").getComponent("TextBox");
+			return box.content;
+		}
+		
+		private String getPassword() {
+			TextBox b1 = pageSSID.getWidget("Text_Pass").getComponent("TextBox"), b2 = pageSSID.getWidget("Text_Confirm").getComponent("TextBox");
+			return b1.content.equals(b2.content) ? b1.content : null;
 		}
 		
 	}

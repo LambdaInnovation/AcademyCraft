@@ -20,7 +20,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.energy.api.IWirelessGenerator;
 import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.IWirelessReceiver;
 import cn.academy.energy.api.IWirelessTile;
 import cn.academy.energy.api.event.CreateNetworkEvent;
 import cn.academy.energy.api.event.DestroyNetworkEvent;
@@ -53,6 +55,7 @@ public class WirelessSystem {
     public void worldLoaded(WorldEvent.Load event) {
         if(event.world.isRemote) return;
         WiWorldData data = (WiWorldData) event.world.loadItemData(WiWorldData.class, WiWorldData.ID);
+        data.world = event.world;
         if(data != null) {
             table.put(event.world, data);
         }
@@ -121,6 +124,13 @@ public class WirelessSystem {
     
     //Lookup part(Helper methods)
     /**
+     * Return the ssid for the matrix or node, or null if they are not loaded.
+     */
+    public static String getSSID(IWirelessTile matOrNode) {
+    	return instance.getDataFor(world(matOrNode)).getSSID(new Coord(matOrNode));
+    }
+    
+    /**
      * Get all the available SSIDs for an wirelss node.
      */
     public static Collection<String> getAvailableSSIDs(IWirelessNode node) {
@@ -134,6 +144,15 @@ public class WirelessSystem {
         return instance.getDataFor(world(user)).getAvailableNodes(user);
     }
     
+    public static boolean isTileActive(IWirelessTile tile) {
+    	WiWorldData data = instance.getDataFor(world(tile));
+    	if(tile instanceof IWirelessGenerator || tile instanceof IWirelessReceiver) {
+    		return data.isUserPresent(new Coord(tile));
+    	} else {
+    		return data.isMatrixOrNodePresent(new Coord(tile));
+    	}
+    }
+    
     //Internal Implementation
     private static World world(IWirelessTile te) {
         return ((TileEntity)te).getWorldObj();
@@ -142,10 +161,12 @@ public class WirelessSystem {
     private WiWorldData getDataFor(World world) {
         WiWorldData ret = table.get(world);
         if(ret == null) {
-            ret = new WiWorldData(world);
+            ret = new WiWorldData();
             world.setItemData(WiWorldData.ID, ret);
             table.put(world, ret);
         }
+        
+        ret.world = world;
         
         return ret;
     }

@@ -36,17 +36,18 @@ import cn.liutils.util.GenericUtils;
 /**
  * @author WeathFolD
  */
-class WiWorldData extends WorldSavedData {
+public class WiWorldData extends WorldSavedData {
     
     public static final String ID = "WEN_DATA";
     
-    final World world;
+    World world; //Instance injected by WirelessSystem
     
-    public WiWorldData(World _world) {
+    public WiWorldData() {
+    	this("WTF");
+    }
+    
+    public WiWorldData(String wtf) {
         super(ID);
-        world = _world;
-        if(world.isRemote)
-            throw new RuntimeException("Creation of client WiWorldData is not allowed.");
     }
     
     void tick() {
@@ -82,7 +83,22 @@ class WiWorldData extends WorldSavedData {
      */
     Map<Object, WirelessNetwork> aliveNetworks = new HashMap();
     
+    public boolean isMatrixOrNodePresent(Coord pos) {
+    	System.out.println("imnp");
+    	return aliveNetworks.containsKey(pos);
+    }
+    
+    public boolean isSSIDPresent(String ssid) {
+    	return aliveNetworks.containsKey(ssid);
+    }
+    
+    public String getSSID(Coord pos) {
+    	WirelessNetwork net = aliveNetworks.get(pos);
+    	return net == null ? null : net.ssid;
+    }
+    
     public boolean createNetwork(Coord mat, String ssid, boolean encrypted, String pwd) {
+    	//TODO: Check if the network is already disposed that time
         if(aliveNetworks.get(ssid) != null || aliveNetworks.get(mat) != null) {
             AcademyCraft.log.error("Network already exists, cant duplicate #" 
                     + mat + " with ssid " + ssid);
@@ -94,6 +110,7 @@ class WiWorldData extends WorldSavedData {
             return false;
         }
         
+        System.out.println("Creating network " + ssid);
         WirelessNetwork net = new WirelessNetwork(this, (IWirelessMatrix) te, ssid, encrypted, pwd);
         aliveNetworks.put(ssid, net);
         aliveNetworks.put(mat, net);
@@ -146,6 +163,10 @@ class WiWorldData extends WorldSavedData {
      * -Coord of generator/receiver [Handled by NodeConn itself]
      */
     Map<Coord, NodeConn> nodeConns = new HashMap();
+    
+    public boolean isUserPresent(Coord coord) {
+    	return nodeConns.containsKey(coord);
+    }
     
     public void linkGenerator(Coord gen, Coord node) {
         NodeConn conn = getConnFor(node);
