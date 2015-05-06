@@ -14,7 +14,7 @@ public abstract class Skill {
         
         @Override
         protected void onKeyUp() {
-            this.normalEnd();
+            //this.normalEnd();
         }
         
         @Override
@@ -26,6 +26,14 @@ public abstract class Skill {
                     net.minecraft.entity.Entity ret = new net.minecraft.entity.passive.EntityHorse(player.worldObj);
                     ret.setPosition(player.posX, player.posY, player.posZ);
                     return ret;
+                }
+                
+            });
+            this.schedule(20, new Runnable() {
+
+                @Override
+                public void run() {
+                    normalEndNonSync();
                 }
                 
             });

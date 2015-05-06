@@ -35,7 +35,7 @@ public final class ClientHandler {
             @Override
             public void onKeyUp(int keyCode, boolean tickEnd) {
                 if (down != null) {
-                    down.normalEnd();
+                    down.onClientKeyUp();
                     down = null;
                 }
             }

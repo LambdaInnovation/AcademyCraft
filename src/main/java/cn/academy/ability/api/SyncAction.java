@@ -85,7 +85,7 @@ public class SyncAction extends Tickable {
         else
             sendSyncStartToClient(null);
         
-        onActionStarted();
+        doStartAction();
     }
     
     /**
@@ -103,6 +103,20 @@ public class SyncAction extends Tickable {
             sendEndToServer(ProxyHelper.get().getThePlayer());
         else
             sendEndToClient(null);
+        
+        doNormalEnd();
+    }
+    
+    /**
+     * Call on ALL side. Finish the action.
+     */
+    protected final void normalEndNonSync() {
+        if (!isStarted) return;
+        isStarted = false;
+        
+        for (SyncAction sub : subActions) {
+            sub.normalEndNonSync();
+        }
         
         doNormalEnd();
     }
@@ -141,6 +155,11 @@ public class SyncAction extends Tickable {
         
         ProxyHelper.get().registerAction(id, this);
         
+        doStartAction();
+    }
+    
+    private void doStartAction() {
+        startTickEvent();
         onActionStarted();
     }
 
@@ -161,6 +180,7 @@ public class SyncAction extends Tickable {
      */
     private void doFinalizeAction() {
         ProxyHelper.get().removeAction(this);
+        stopTickEvent();
     }
     
     /**
@@ -182,7 +202,7 @@ public class SyncAction extends Tickable {
         if (isStarted) return;
         isStarted = true;
         
-        onActionStarted();
+        doStartAction();
     }
     
     @Override
