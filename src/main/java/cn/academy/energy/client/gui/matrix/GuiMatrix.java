@@ -171,8 +171,6 @@ public class GuiMatrix extends LIGuiContainer {
 			box.content = ssid;
 			box.allowEdit = false;
 		} else {
-			box.content = "fff";
-			System.out.println("AllowEdit");
 			box.allowEdit = true;
 		}
 		
@@ -205,6 +203,8 @@ public class GuiMatrix extends LIGuiContainer {
 		@GuiCallback("button_YES")
 		public void yesDown(Widget w, MouseDownEvent event) {
 			String pwd = getPassword();
+			
+			resultReceivedTime = Minecraft.getSystemTime();
 			waitingForResult = true;
 			if(pwd == null) {
 				//Quit with error

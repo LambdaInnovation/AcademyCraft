@@ -55,9 +55,8 @@ public class WirelessSystem {
     public void worldLoaded(WorldEvent.Load event) {
         if(event.world.isRemote) return;
         WiWorldData data = (WiWorldData) event.world.loadItemData(WiWorldData.class, WiWorldData.ID);
-        data.world = event.world;
-        if(data != null) {
-            table.put(event.world, data);
+        if(data == null) {
+        	data = getDataFor(event.world);
         }
     }
     
