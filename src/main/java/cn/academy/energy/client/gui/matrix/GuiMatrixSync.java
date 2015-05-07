@@ -35,7 +35,7 @@ public class GuiMatrixSync {
 	
 	public enum ActionResult {
 		WAITING, //Should never send this one.
-		INCPASS, //Inconsistent pass.
+		INVALID_INPUT,
 		SUCCESS,
 		FAIL
 	}
@@ -48,10 +48,8 @@ public class GuiMatrixSync {
 	public static void fullInit(@Instance TileMatrix matrix, @Data String ssid, @Data String password) {
 		if(MinecraftForge.EVENT_BUS.post(new CreateNetworkEvent(matrix, ssid, password))) {
 			result(matrix, ActionResult.FAIL);
-			System.out.println("Failed");
 		} else {
 			result(matrix, ActionResult.SUCCESS);
-			System.out.println("Succeeded");
 		}
 	}
 	
@@ -68,11 +66,13 @@ public class GuiMatrixSync {
 	public static void result(@Instance TileMatrix matrix, @Instance ActionResult result) {
 		GuiMatrix gui = locate(matrix);
 		if(gui != null)
-			gui.receiveActionResult(result);
+			gui.receiveActionResult(result, true);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void receivedRequest(@Instance TileMatrix matrix) {
+		if(matrix == null)
+			return;
 		//Extract out the stuffs
 		NBTTagCompound tag = new NBTTagCompound();
 		boolean loaded = WirelessSystem.instance.isTileActive(matrix);

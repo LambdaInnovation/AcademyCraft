@@ -33,18 +33,19 @@ public class ContainerNode extends Container {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new Slot(node, 0, 24, 73));
-        this.addSlotToContainer(new Slot(node, 1, 136, 37));
+        this.addSlotToContainer(new Slot(node, 0, 34, 63));
+        this.addSlotToContainer(new Slot(node, 1, 125, 35));
+        
+        int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, (int) Math.round(10.49 + i * STEP), 152));
+            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, (int) Math.round(10.49 + j * STEP), 
-                        (int) Math.round(148 - i * STEP)));
+                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
     }

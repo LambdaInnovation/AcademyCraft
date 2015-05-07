@@ -94,16 +94,16 @@ public class GuiMatrix extends LIGuiContainer {
 			
 			//Setup the info about matrix itself
 			TextBox box;
-			box = pageMain.getWidget("info_Node2").getComponent("TextBox");
+			box = pageMain.getWidget("text_cap2").getComponent("TextBox");
 			box.content = nodes + "/" + capacity;
 			
-			box = pageMain.getWidget("info_BM2").getComponent("TextBox");
+			box = pageMain.getWidget("text_latency2").getComponent("TextBox");
 			box.content = String.format("%d", latency);
 			
-			box = pageMain.getWidget("info_Range2").getComponent("TextBox");
+			box = pageMain.getWidget("text_range2").getComponent("TextBox");
 			box.content = String.format("%d", range);
 			
-			box = pageMain.getWidget("info_ssid2").getComponent("TextBox");
+			box = pageMain.getWidget("text_ssid2").getComponent("TextBox");
 			if(isLoaded) {
 				ssid = tag.getString("ssid");
 				box.content = ssid;
@@ -113,14 +113,23 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 	}
 	
+	private void startWaiting() {
+		waitingForResult = true;
+	}
+	
 	/**
 	 * May called by sync method or gui itself, to update state animation.
 	 */
-	public void receiveActionResult(ActionResult result) {
+	public void receiveActionResult(ActionResult result, boolean needSync) {
 		if(waitingForResult) {
 			waitingForResult = false;
 			this.result = result;
 			resultReceivedTime = Minecraft.getSystemTime();
+			
+			if(needSync) {
+				receivedSync = false;
+				GuiMatrixSync.sendSyncRequest(this);
+			}
 		}
 	}
 	
@@ -128,18 +137,18 @@ public class GuiMatrix extends LIGuiContainer {
 		GuiMatrixSync.sendSyncRequest(this);
 		
 		LIGui gui = getGui();
-		pageMain = loaded.getWidget("Main").copy();
-		pageSSID = loaded.getWidget("SSIDINIT").copy();
+		pageMain = loaded.getWidget("window_main").copy();
+		pageSSID = loaded.getWidget("window_init").copy();
 		
 		gui.addWidget(pageMain);
 		gui.addWidget(pageSSID);
 		
 		pageSSID.transform.doesDraw = false;
 		
-		wrapButton(pageMain.getWidget("button"));
+		wrapButton(pageMain.getWidget("button_init"));
 		
-		wrapButton(pageSSID.getWidget("button_YES"));
-		wrapButton(pageSSID.getWidget("button_NO"));
+		wrapButton(pageSSID.getWidget("button_yes"));
+		wrapButton(pageSSID.getWidget("button_no"));
 		
 		EventLoader.load(pageMain, new MainCallback());
 		EventLoader.load(pageSSID, new SSIDCallback());
@@ -148,6 +157,10 @@ public class GuiMatrix extends LIGuiContainer {
 	@Override
     public boolean isSlotActive() {
     	return !pageSSID.transform.doesDraw;
+    }
+	
+    protected boolean containerAcceptsKey(int key) {
+    	return false;
     }
 	
 	private void wrapButton(Widget w) {
@@ -164,29 +177,34 @@ public class GuiMatrix extends LIGuiContainer {
 		});
 	}
 	
-	private void onDialogueOpen() {
-		TextBox box = pageSSID.getWidget("Text_SSID").getComponent("TextBox");
+	private void openInitWindow() {
+		TextBox box = pageSSID.getWidget("text_1").getComponent("TextBox");
+		DrawTexture 
+			drawSSID = DrawTexture.get(pageSSID.getWidget("input_ssid")),
+			drawOldPW = DrawTexture.get(pageSSID.getWidget("input_oldpw"));
+		box.content = "";
+		box.allowEdit = true;
 		
 		if(isLoaded) {
-			box.content = ssid;
-			box.allowEdit = false;
+			drawSSID.enabled = false;
+			drawOldPW.enabled = true;
 		} else {
-			box.allowEdit = true;
+			drawSSID.enabled = true;
+			drawOldPW.enabled = false;
 		}
 		
-		box = pageSSID.getWidget("Text_Pass").getComponent("TextBox");
-		box.content = "";
+		TextBox.get(pageSSID.getWidget("text_2")).content = "";
+		TextBox.get(pageSSID.getWidget("text_3")).content = "";
 		
-		box = pageSSID.getWidget("Text_Confirm").getComponent("TextBox");
-		box.content = "";
+		pageSSID.transform.doesDraw = true;
 	}
 	
 	public class MainCallback {
 		
-		@GuiCallback("button")
+		@GuiCallback("button_init")
 		public void openDialogue(Widget w, MouseDownEvent event) {
-			pageSSID.transform.doesDraw = true;
-			onDialogueOpen();
+			if(receivedSync)
+				openInitWindow();
 		}
 		
 		@GuiCallback
@@ -200,39 +218,41 @@ public class GuiMatrix extends LIGuiContainer {
 
 	public class SSIDCallback {
 		
-		@GuiCallback("button_YES")
+		@GuiCallback("button_yes")
 		public void yesDown(Widget w, MouseDownEvent event) {
-			String pwd = getPassword();
+			startWaiting();
 			
-			resultReceivedTime = Minecraft.getSystemTime();
-			waitingForResult = true;
-			if(pwd == null) {
-				//Quit with error
-				receiveActionResult(ActionResult.INCPASS);
-			} else if(isLoaded) {
-				//Update password
-				GuiMatrixSync.passwordUpdate(tile, "", "");//TODO
+			if(!isLoaded) {
+				//Do init
+				String ssid = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
+				if(pw1.equals(pw2) && !ssid.isEmpty()) {
+					GuiMatrixSync.fullInit(tile, ssid, pw1);
+					
+					pageSSID.transform.doesDraw = false;
+				} else {
+					receiveActionResult(ActionResult.INVALID_INPUT, false);
+				}
 			} else {
-				//Full init
-				GuiMatrixSync.fullInit(tile, getSSID(), pwd);
+				//Update pass
+				String oldpw = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
+				if(pw1.equals(pw2)) {
+					GuiMatrixSync.passwordUpdate(tile, oldpw, pw1);
+					
+					pageSSID.transform.doesDraw = false;
+				} else {
+					receiveActionResult(ActionResult.INVALID_INPUT, false);
+				}
 			}
-			pageSSID.transform.doesDraw = false;
 		}
 		
-		@GuiCallback("button_NO")
+		@GuiCallback("button_no")
 		public void noDown(Widget w, MouseDownEvent event) {
 			//Close without doing anything
 			pageSSID.transform.doesDraw = false;
 		}
 		
-		private String getSSID() {
-			TextBox box = pageSSID.getWidget("Text_SSID").getComponent("TextBox");
-			return box.content;
-		}
-		
-		private String getPassword() {
-			TextBox b1 = pageSSID.getWidget("Text_Pass").getComponent("TextBox"), b2 = pageSSID.getWidget("Text_Confirm").getComponent("TextBox");
-			return b1.content.equals(b2.content) ? b1.content : null;
+		private String getContent(int iid) {
+			return TextBox.get(pageSSID.getWidget("text_" + iid)).content;
 		}
 		
 	}
