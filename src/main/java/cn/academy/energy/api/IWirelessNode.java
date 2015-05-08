@@ -32,4 +32,8 @@ public interface IWirelessNode extends IWirelessTile {
      */
     double getRange();
     
+    String getNodeName();
+    
+    void setNodeName(String name);
+    
 }

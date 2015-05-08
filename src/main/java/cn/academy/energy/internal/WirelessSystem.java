@@ -152,6 +152,10 @@ public class WirelessSystem {
     	}
     }
     
+	public static NodeConn getNodeConnection(IWirelessNode node) {
+		return instance.getDataFor(world(node)).getConnFor(new Coord(node));
+	}
+    
     //Internal Implementation
     private static World world(IWirelessTile te) {
         return ((TileEntity)te).getWorldObj();

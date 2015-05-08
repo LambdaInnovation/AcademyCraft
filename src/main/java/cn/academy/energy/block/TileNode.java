@@ -94,4 +94,16 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         
     }
 
+    String name = "Unnamed";
+    
+	@Override
+	public String getNodeName() {
+		return name;
+	}
+
+	@Override
+	public void setNodeName(String name) {
+		this.name = name;
+	}
+
 }

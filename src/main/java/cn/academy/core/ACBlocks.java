@@ -17,6 +17,7 @@ import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegBlock;
+import cn.liutils.template.block.ItemBlockMulti;
 
 /**
  * All registration of blocks goes here.
@@ -31,7 +32,7 @@ public class ACBlocks {
         nodeStandard = new BlockNode(NodeType.STANDARD),
         nodeAdvanced = new BlockNode(NodeType.ADVANCED);
     
-    @RegBlock
+    @RegBlock(item = ItemBlockMulti.class)
     public static BlockMatrix matrix = new BlockMatrix();
 
 }

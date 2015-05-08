@@ -71,7 +71,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     	info.save(nbt);
     }
 
-	//WEN
+	//WEN TODO
 	@Override
 	public int getCapacity() {
 		return 10;

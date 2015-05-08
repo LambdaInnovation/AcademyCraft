@@ -207,7 +207,7 @@ public class WiWorldData extends WorldSavedData {
     /**
      * Lazy init. Returns a correct connection as long as the target coord validates correctly.
      */
-    private NodeConn getConnFor(Coord node) {
+    public NodeConn getConnFor(Coord node) {
         TileEntity te = node.getAndCheck();
         if(te == null) return null;
         NodeConn ret = nodeConns.get(node);
@@ -300,7 +300,9 @@ public class WiWorldData extends WorldSavedData {
                 Set<Coord> targets = wirelessNetLookup.get(cc);
                 if(targets != null) {
                     for(Coord c : targets) {
-                        WirelessNetwork net = aliveNetworks.get(c);
+                    	if(!c.isLoaded())
+                    		continue;
+                    	WirelessNetwork net = aliveNetworks.get(c);
                         if(net == null) {
                             AcademyCraft.log.error("ERROR: WEN Lookup leak #" + c);
                             continue;

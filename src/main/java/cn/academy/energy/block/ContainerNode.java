@@ -12,6 +12,8 @@
  */
 package cn.academy.energy.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -30,6 +32,20 @@ public class ContainerNode extends Container {
     public ContainerNode(TileNode _node, EntityPlayer player) {
         node = _node;
         initInventory(player.inventory);
+    }
+    
+    @Override
+    public void detectAndSendChanges() {
+    	super.detectAndSendChanges();
+    	this.updateProgressBar(0, (int) (node.getEnergy() / 6));
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void updateProgressBar(int a, int b) {
+    	if(a == 0) {
+    		node.energy = b * 6;
+    	}
     }
     
     private void initInventory(InventoryPlayer inv) {

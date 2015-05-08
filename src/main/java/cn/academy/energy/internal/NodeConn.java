@@ -11,7 +11,7 @@ import cn.academy.energy.api.IWirelessGenerator;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.IWirelessReceiver;
 
-class NodeConn {
+public class NodeConn {
     
     final WiWorldData parent;
     final World world;
@@ -38,6 +38,10 @@ class NodeConn {
         parent = _data;
         world = _data.world;
         load(tag);
+    }
+    
+    public int getLoad() {
+    	return receivers.size() + generators.size();
     }
 
     void save(NBTTagCompound tag) {
