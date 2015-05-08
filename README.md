@@ -15,5 +15,3 @@ Don't forget to put the [coremod loading hook](https://github.com/LambdaInnovati
 
 [liu]: https://github.com/LambdaInnovation/LIUtils
 [ar]: https://github.com/LambdaInnovation/AnnotationRegistry
-
-[![Build Status](https://travis-ci.org/LambdaInnovation/AcademyCraft.svg?branch=master)](https://travis-ci.org/LambdaInnovation/AcademyCraft)
