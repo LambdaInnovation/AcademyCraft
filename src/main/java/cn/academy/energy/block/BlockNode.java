@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class BlockNode extends BlockContainer {
 
-    public enum NodeType { //Ordinal == Tile metadata.
+    public enum NodeType {
         BASIC("basic", 10000, 20, 9), 
         STANDARD("standard", 50000, 40, 12), 
         ADVANCED("advanced", 300000, 100, 19);

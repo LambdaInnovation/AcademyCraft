@@ -20,7 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 
 /**
  * You better directly extend this class rather than delegating it. Too much interfaces could be a burden.
- * <br/> Notch的脑子绝！对！秀！逗！了！
+ * <br/> P.S.Notch的脑子绝！对！秀！逗！了！
  * @author WeAthFolD
  */
 public class TileInventory extends TileEntity implements IInventory {
