@@ -12,7 +12,11 @@
  */
 package cn.academy.test;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +29,15 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.test.ArcFactory.Arc;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
+import cn.annoreg.mc.RegEventHandler;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
 import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 /**
  * @author WeAthFolD
@@ -43,12 +51,30 @@ public class EntityArc extends EntityAdvanced {
 	@RegEntity.Render
 	public static Renderer render = new Renderer();
 	
-	int iid = rand.nextInt(100);
+	int [] iid;
+	int n = GenericUtils.randIntv(1, 3);
+	boolean show = true;
 
 	public EntityArc(EntityPlayer player) {
 		super(player.worldObj);
 		new Motion3D(player, true).applyToEntity(this);
 		ignoreFrustumCheck = true;
+		iid = new int[n];
+	}
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		for(int i = 0; i < iid.length; ++i) {
+			if(rand.nextDouble() < 0.5)
+				iid[i] = rand.nextInt(100);
+		}
+		if(show && rand.nextDouble() < 0.2) {
+			show = !show;
+		}
+		else if(!show && rand.nextDouble() < 0.2) {
+			show = !show;
+		}
 	}
 
 	@Override
@@ -72,20 +98,23 @@ public class EntityArc extends EntityAdvanced {
 			ArcFactory fac = new ArcFactory();
 			for(int i = 0; i < 100; ++i) {
 				patterns[i] = fac.generate();
-				System.out.println("Generating pattern " + i);
+				//System.out.println("Generating pattern " + i);
 			}
 		}
 		
 		@Override
 		public void doRender(Entity e, double x, double y, double z, float f, float g) {
 			EntityArc arc = (EntityArc) e;
+			if(!arc.show)
+				return;
 			
 			GL11.glPushMatrix();
 			
 			GL11.glTranslated(x, y, z);
 			GL11.glRotatef(arc.rotationYaw + 90, 0, -1, 0);
 			GL11.glRotatef(arc.rotationPitch, 0, 0, -1);
-			patterns[arc.iid].draw();
+			for(int i = 0; i < arc.n; ++i)
+				patterns[arc.iid[i]].draw();
 			
 			GL11.glPopMatrix();
 		}

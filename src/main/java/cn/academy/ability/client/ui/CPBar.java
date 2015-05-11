@@ -21,9 +21,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.ARBMultitexture;
+import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GLContext;
 
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
@@ -35,7 +37,6 @@ import cn.liutils.util.HudUtils;
 import cn.liutils.util.RenderUtils;
 
 /**
- * TODO May crash running on machines that don't have ARB extention. Need wrapping?
  * @author WeAthFolD
  */
 @RegistrationClass
@@ -56,8 +57,15 @@ public class CPBar extends Widget {
 		TEX_MASK = tex("mask");
 	
 	List<ProgColor> cpColors = new ArrayList(), overrideColors = new ArrayList();
+	
+	static boolean supportARB;
+	static {
+		ContextCapabilities contextcapabilities = GLContext.getCapabilities();
+		supportARB = contextcapabilities.GL_ARB_multitexture;
+	}
 
 	public CPBar() {
+		
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.24f;
 		
@@ -82,12 +90,42 @@ public class CPBar extends Widget {
 				if(override < 1.0) {
 					drawNormal(override);
 				} else {
-					drawOverload(override);
+					if(supportARB) {
+						drawOverload(override);
+					} else {
+						drawOverloadLegacy(override);
+					}
 				}
 				
 				drawCPBar(0.5);
 			}
 		});
+	}
+	
+	/**
+	 * Draw the overload without ARB blending, when the machine does not support it.
+	 */
+	private void drawOverloadLegacy(double override) {
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		
+		//Draw plain background
+		GL11.glColor4d(1, 1, 1, 0.8);
+		HudUtils.drawRect(TEX_BACK_OVERLOAD, WIDTH, HEIGHT);
+		
+		//Start drawing blend
+		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
+		float uOffset = Minecraft.getSystemTime() / 10000.0f * WIDTH;
+		GL11.glColor4d(1, 1, 1, 0.8);
+		
+		final double x0 = 30, width2 = WIDTH - x0 - 20;
+		HudUtils.drawRect(x0, 0, uOffset, 0, width2, HEIGHT, width2, HEIGHT);
+		//End drawing blend
+		
+		//Draw Highlight
+		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(Minecraft.getSystemTime() / 200.0) + 1));
+		HudUtils.drawRect(TEX_OVERLOAD_HIGHLIGHT, WIDTH, HEIGHT);
+		
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
 	private void drawOverload(double override) {
