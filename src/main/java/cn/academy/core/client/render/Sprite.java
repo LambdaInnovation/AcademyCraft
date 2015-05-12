@@ -31,7 +31,7 @@ public final class Sprite {
 	 */
 	public ResourceLocation texture;
 	public float width = 1.0f, height = 1.0f;
-	public Color color = Color.WHITE;
+	public Color color = Color.WHITE();
 	public boolean hasLight = false;
 	public boolean cullFace = true;
 	

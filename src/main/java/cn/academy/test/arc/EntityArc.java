@@ -10,13 +10,12 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.test;
+package cn.academy.test.arc;
 
-import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,19 +24,17 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 
-import cn.academy.test.ArcFactory.Arc;
+import cn.academy.test.arc.ArcFactory.Arc;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegEntity;
-import cn.annoreg.mc.RegEventHandler;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.space.Motion3D;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 /**
  * @author WeAthFolD
@@ -102,8 +99,13 @@ public class EntityArc extends EntityAdvanced {
 			}
 		}
 		
+		DoubleBuffer db = ByteBuffer.allocateDirect(256).asDoubleBuffer();
+		
 		@Override
 		public void doRender(Entity e, double x, double y, double z, float f, float g) {
+			db.clear();
+			//GL11.glLoadIdentity();
+			
 			EntityArc arc = (EntityArc) e;
 			if(!arc.show)
 				return;

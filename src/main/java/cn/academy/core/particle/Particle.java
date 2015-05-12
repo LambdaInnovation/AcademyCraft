@@ -39,7 +39,7 @@ public final class Particle extends EntityAdvanced implements ISpriteEntity {
 	public static RenderIcon render;
 	
 	public ResourceLocation texture = null;
-	public Color color = Color.WHITE.copy();
+	public Color color = Color.WHITE();
 	public float size = 1.0f;
 	public boolean hasLight = false;
 
