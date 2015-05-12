@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.Vec3;
-import cn.weaponry.core.blob.VecUtils;
+import cn.liutils.util.VecUtils;
 
 /**
  * Immutable line segment class.

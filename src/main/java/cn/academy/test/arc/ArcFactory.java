@@ -12,7 +12,7 @@
  */
 package cn.academy.test.arc;
 
-import static cn.weaponry.core.blob.VecUtils.*;
+import static cn.liutils.util.VecUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import cn.liutils.util.GenericUtils;
 import cn.liutils.util.RenderUtils;
-import cn.weaponry.core.blob.VecUtils;
+import cn.liutils.util.VecUtils;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.

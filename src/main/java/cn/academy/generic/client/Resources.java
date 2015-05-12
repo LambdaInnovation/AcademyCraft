@@ -20,6 +20,8 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.ForcePreloadTexture;
+import cn.liutils.render.material.Material;
+import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.util.render.Font;
 
 /**
@@ -60,6 +62,13 @@ public class Resources {
     
     public static ResourceLocation getTexture(String loc) {
     	return res("textures/" + loc + ".png");
+    }
+    
+    public static Material[] getRayTextures(String name) {
+    	SimpleMaterial ms1 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/blend_in.png")).setIgnoreLight();
+    	SimpleMaterial ms2 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/tile.png")).setIgnoreLight();
+    	SimpleMaterial ms3 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/blend_out.png")).setIgnoreLight();
+    	return new Material[] { ms1, ms2, ms3 };
     }
     
     public static Font font() {

@@ -12,49 +12,87 @@
  */
 package cn.academy.generic.client.render;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
 
+import cn.academy.generic.client.Resources;
 import cn.academy.generic.entity.IRay;
-import cn.annoreg.core.RegistrationClass;
-import cn.annoreg.mc.RegEventHandler;
 import cn.liutils.render.material.Material;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
+import cn.liutils.render.mesh.Mesh;
+import cn.liutils.render.mesh.MeshUtils;
 
 /**
  * @author WeAthFolD
- *
  */
-@RegistrationClass
-@RegEventHandler
-public class RendererRaySimple extends Render {
-
+public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
+	
+	public static final double DEFAULT_WIDTH = 0.5;
+	
+	public double width;
+	
+	/**
+	 * tile should be 1px infinite tile, and blend should be square textures.
+	 */
 	Material blendIn, tile, blendOut;
 	
-	public RendererRaySimple() {}
+	Mesh mesh, mesh2;
 	
-	public RendererRaySimple(Material _blendIn, Material _tile, Material _blendOut) {}	
+	public RendererRaySimple(Material _blendIn, Material _tile, Material _blendOut) {
+		blendIn = _blendIn;
+		tile = _tile;
+		blendOut = _blendOut;
+		
+		mesh = MeshUtils.createBillboard(null, -0.5, -0.5, 0.5, 0.5);
+		mesh2 = MeshUtils.createBillboard(null, -0.5, -0.5, 0.5, 0.5);
+		
+		setWidth(DEFAULT_WIDTH);
+	}
 	
-
-	@Override
-	public void doRender(Entity entity, double x, double y, double z, float a, float b) {
-		IRay ray = (IRay) entity;
+	public RendererRaySimple setWidth(double w) {
+		width = w;
+		return this;
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
-		return null;
+	protected void drawAtOrigin(T ray) {
+		
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		
+		GL11.glPushMatrix();
+		GL11.glScaled(width, width, width);
+		GL11.glTranslated(-0.5, 0, 0);
+		mesh.draw(blendIn);
+		GL11.glPopMatrix();
+		
+		GL11.glPushMatrix();
+		GL11.glScaled(ray.getLength(), width, width);
+		GL11.glTranslated(0.5, 0, 0);
+//		double u = ray.getLength() / width;
+//		mesh2.setUV(1, new double[] { u, 0 });
+//		mesh2.setUV(2, new double[] { u, 1 });
+		mesh2.draw(tile);
+		GL11.glPopMatrix();
+		
+		GL11.glPushMatrix();
+		GL11.glScaled(width, width, width);
+		GL11.glTranslated(ray.getLength() / width + 0.5, 0, 0);
+		mesh.draw(blendOut);
+		GL11.glPopMatrix();
+		
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		
 	}
 	
+	public static RendererRaySimple createFromName(String name) {
+		try {
+			Material[] mats = Resources.getRayTextures(name);
+			return new RendererRaySimple(mats[0], mats[1], mats[2]);
+		} catch(Exception e) {
+			System.out.println("FFFFF");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

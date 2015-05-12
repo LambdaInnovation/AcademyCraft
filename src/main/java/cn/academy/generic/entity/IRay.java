@@ -12,8 +12,6 @@ public interface IRay {
 	
 	Vec3 getPosition();
 	
-	Vector2f getLookingAngle();
-	
 	double getLength();
 	
 }
