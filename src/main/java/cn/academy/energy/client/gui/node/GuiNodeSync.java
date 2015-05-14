@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.event.LinkNodeEvent;
 import cn.academy.energy.block.TileNode;
@@ -39,22 +40,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegistrationClass
 public class GuiNodeSync {
 	
-	enum CheckState { 
-		INPUT, TRANSMITTING, SUCCESSFUL, FAILED;
+	public enum CheckState { 
+		INPUT("2333"), TRANSMITTING("loading"), SUCCESSFUL("confirmed"), FAILED("reject");
 		public final ResourceLocation texture;
-		CheckState() {
-			String n = this.toString().toLowerCase();
-			texture = new ResourceLocation("academy:textures/guis/mark" + n + ".png");
+		final String translateKey;
+		
+		String getDisplayName() {
+			return StatCollector.translateToLocal(translateKey);
+		}
+		
+		CheckState(String logo) {
+			translateKey = "ac.gui.node.mark." + this.toString().toLowerCase() + ".desc";
+			texture = new ResourceLocation("academy:textures/guis/mark/mark_" + logo + ".png");
 		}
 	};
-	
-    static class Mat {
-    	final String ssid;
-    	
-    	public Mat(String _ssid) {
-    		ssid = _ssid;
-    	}
-    }
 	
 	//Init
 	public static void doQueryInfo(TileNode target) {
@@ -65,7 +64,7 @@ public class GuiNodeSync {
 	public static void queryInfo(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
-		receiveInfo(player, target, WirelessSystem.getNodeConnection(target).getLoad(), target.getNodeName());
+		receiveInfo(player, target, WirelessSystem.getNodeConnection(target).getLoad(), target.getNodeName(), WirelessSystem.getSSID(target));
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
@@ -73,10 +72,11 @@ public class GuiNodeSync {
 			@Target EntityPlayer player, 
 			@Instance TileNode target, 
 			@Data Integer load, 
-			@Data String name) {
+			@Data String name,
+			@Data String ssid) {
 		GuiNode gui = locate(target);
 		if(gui != null) {
-			gui.receivedInitSync(load, name);
+			gui.receivedInitSync(load, name, ssid);
 		}
 	}
 	
@@ -103,8 +103,8 @@ public class GuiNodeSync {
 	
 	//Login
 	@SideOnly(Side.CLIENT)
-	static void tryLogin(GuiNode gui, Mat m, String password) {
-		doLogin(Minecraft.getMinecraft().thePlayer, gui.tile, m.ssid, password);
+	static void tryLogin(GuiNode gui, String ssid, String password) {
+		doLogin(Minecraft.getMinecraft().thePlayer, gui.tile, ssid, password);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
@@ -136,8 +136,6 @@ public class GuiNodeSync {
 			node.receivedActionState(state);
 		}
 	}
-	
-
 	
 	private static GuiNode locate(TileNode target) {
 		GuiScreen scr = Minecraft.getMinecraft().currentScreen;

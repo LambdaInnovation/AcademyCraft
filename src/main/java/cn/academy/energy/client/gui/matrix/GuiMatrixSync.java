@@ -14,7 +14,10 @@ package cn.academy.energy.client.gui.matrix;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.event.ChangePassEvent;
 import cn.academy.energy.api.event.CreateNetworkEvent;
@@ -24,6 +27,7 @@ import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -34,43 +38,55 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiMatrixSync {
 	
 	public enum ActionResult {
-		WAITING, //Should never send this one.
-		INVALID_INPUT,
-		SUCCESS,
-		FAIL
+		WAITING("loading"), //Should never send this one.
+		INVALID_INPUT("reject"),
+		SUCCESS("confirmed"),
+		FAIL("reject");
+		
+		public final ResourceLocation markSrc;
+		private final String translateKey;
+		
+		public String getDescription() {
+			return StatCollector.translateToLocal(translateKey);
+		}
+		
+		ActionResult(String logo) {
+			markSrc = new ResourceLocation("academy:textures/guis/mark/mark_" + logo + ".png");
+			translateKey = "ac.gui.matrix.mark." + this.toString().toLowerCase() + ".desc";
+		}
 	}
 
 	public static void sendSyncRequest(GuiMatrix gui) {
-		receivedRequest(gui.tile);
+		receivedRequest(Minecraft.getMinecraft().thePlayer, gui.tile);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void fullInit(@Instance TileMatrix matrix, @Data String ssid, @Data String password) {
+	public static void fullInit(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String ssid, @Data String password) {
 		if(MinecraftForge.EVENT_BUS.post(new CreateNetworkEvent(matrix, ssid, password))) {
-			result(matrix, ActionResult.FAIL);
+			result(player, matrix, ActionResult.FAIL);
 		} else {
-			result(matrix, ActionResult.SUCCESS);
+			result(player, matrix, ActionResult.SUCCESS);
 		}
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void passwordUpdate(@Instance TileMatrix matrix, @Data String oldPass, @Data String newPass) {
+	public static void passwordUpdate(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String oldPass, @Data String newPass) {
 		if(MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, oldPass, newPass))) {
-			result(matrix, ActionResult.FAIL);
+			result(player, matrix, ActionResult.FAIL);
 		} else {
-			result(matrix, ActionResult.SUCCESS);
+			result(player, matrix, ActionResult.SUCCESS);
 		}
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	public static void result(@Instance TileMatrix matrix, @Instance ActionResult result) {
+	public static void result(@Target EntityPlayer player, @Instance TileMatrix matrix, @Instance ActionResult result) {
 		GuiMatrix gui = locate(matrix);
 		if(gui != null)
 			gui.receiveActionResult(result, true);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void receivedRequest(@Instance TileMatrix matrix) {
+	public static void receivedRequest(@Instance EntityPlayer player, @Instance TileMatrix matrix) {
 		if(matrix == null)
 			return;
 		//Extract out the stuffs
@@ -90,11 +106,11 @@ public class GuiMatrixSync {
 		}
 		
 		//Throw to client
-		receivedReply(matrix, tag);
+		receivedReply(player, matrix, tag);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	public static void receivedReply(@Instance TileMatrix matrix, @Data NBTTagCompound tag) {
+	public static void receivedReply(@Target EntityPlayer player, @Instance TileMatrix matrix, @Data NBTTagCompound tag) {
 		GuiMatrix gui = locate(matrix);
 		if(gui != null)
 			gui.receiveSync(tag);

@@ -38,7 +38,7 @@ public class ContainerMatrix extends Container {
         this.addSlotToContainer(new Slot(tile, 0, 12, 5));
         this.addSlotToContainer(new Slot(tile, 1, 76, 5));
         this.addSlotToContainer(new Slot(tile, 2, 44, 64));
-        this.addSlotToContainer(new Slot(tile, 2, 44, 28));
+        this.addSlotToContainer(new Slot(tile, 3, 44, 28));
         
         int STEP = 18;
         

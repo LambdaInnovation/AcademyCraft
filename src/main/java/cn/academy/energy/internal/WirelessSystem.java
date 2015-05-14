@@ -24,6 +24,7 @@ import cn.academy.energy.api.IWirelessGenerator;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.IWirelessReceiver;
 import cn.academy.energy.api.IWirelessTile;
+import cn.academy.energy.api.event.ChangePassEvent;
 import cn.academy.energy.api.event.CreateNetworkEvent;
 import cn.academy.energy.api.event.DestroyNetworkEvent;
 import cn.academy.energy.api.event.LinkNodeEvent;
@@ -67,6 +68,18 @@ public class WirelessSystem {
         if(data != null) {
             event.world.setItemData(WiWorldData.ID, data);
         }
+    }
+    
+    @SubscribeEvent
+    public void changePassword(ChangePassEvent event) {
+    	WiWorldData data = table.get(event.getWorld());
+    	if(data != null) {
+    		Coord c = new Coord(event.tile);
+    		if(data.changePassword(c, event.oldpwd, event.pwd)) {
+    			return;
+    		}
+    	}
+    	event.setCanceled(true);
     }
     
     @SubscribeEvent

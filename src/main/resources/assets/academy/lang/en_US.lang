@@ -1,3 +1,23 @@
-ac.app.settings=Settings
-ac.app.record=Life Record
-ac.app.skillTree=Skill Tree
+# AcademyCraft lang file
+# Debug version
+# Last modified: 2015/5/14
+
+# GUI
+
+# Generic
+ac.gui.loading_lowercase.desc=loading...
+ac.gui.loading_uppercase.desc=LOADING...
+# Generic End
+
+# Matrix
+ac.gui.matrix.mark.waiting.desc=Transmitting...
+ac.gui.matrix.mark.invalid_input.desc=Invalid input value.
+ac.gui.matrix.mark.success.desc=Action successful.
+ac.gui.matrix.mark.fail.desc=Action failed.
+# Matrix End
+
+# Node
+ac.gui.node.not_connected.desc=NOT CONNECTED
+# Node end
+
+# GUI End

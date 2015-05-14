@@ -87,6 +87,9 @@ public class Coord {
         tag.setInteger("z", z);
     }
     
+    /**
+     * @return Whether the chunk that this node is at is loaded.
+     */
     public boolean isLoaded() {
         return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
     }

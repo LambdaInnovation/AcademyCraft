@@ -12,16 +12,18 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessNode;
-import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.academy.energy.internal.WirelessSystem;
+import cn.academy.generic.client.render.block.RenderDynamicBlock;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegTileEntity;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Data;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,9 +33,16 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistrationClass
 @RegTileEntity
+@RegTileEntity.HasRender
 public class TileNode extends TileInventory implements IWirelessNode, IInventory {
+	
+	@SideOnly(Side.CLIENT)
+	@RegTileEntity.Render
+	public static RenderDynamicBlock renderer;
 
     protected double energy;
+    
+    private int updateTicker;
     
     /**
      * Client-only flag. Only *roughly* indicates whether the block is linked.
@@ -44,6 +53,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     
     public TileNode() {
     	super("wireless_node", 2);
+    }
+    
+    @Override
+    public void updateEntity() {
+    	if(!getWorldObj().isRemote) {
+    		++updateTicker;
+    		if(updateTicker == 20) {
+    			updateTicker = 0;
+    			boolean b = WirelessSystem.isTileActive(this);
+    			System.out.println("Server " + b);
+    			receiveSyncMessage(b);
+    		}
+    	}
     }
 
     @Override
@@ -104,6 +126,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 	@Override
 	public void setNodeName(String name) {
 		this.name = name;
+	}
+	
+	//TODO: Limit the sending range, or this will send a huge bunch of useless data!
+	
+	@SuppressWarnings("unused")
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	public void receiveSyncMessage(@Data Boolean enabled) {
+		if(this == null) {
+			System.err.println("this is null!");
+			return;
+		}
+		
+		this.enabled = enabled;
 	}
 
 }

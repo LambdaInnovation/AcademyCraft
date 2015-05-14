@@ -16,8 +16,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Logger;
 
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.core.RegistrationManager;
@@ -44,12 +45,14 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @RegistrationClass
 public class AcademyCraft {
     
+	public static final boolean DEBUG_MODE = true;
+	
     public static final String NET_CHANNEL = "academy-network";
 
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static Logger log = LogManager.getLogger("AcademyCraft");
+    public static Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     public static Configuration config;
 
     @RegMessageHandler.WrapperInstance
@@ -70,9 +73,14 @@ public class AcademyCraft {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
+        
+        if(DEBUG_MODE)
+        	log.setLevel(Level.ALL);
+        
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
+        log.debug("This is a debug message.");
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }

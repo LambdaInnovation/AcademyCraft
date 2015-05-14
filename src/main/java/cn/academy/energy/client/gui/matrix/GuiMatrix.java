@@ -13,6 +13,7 @@
 package cn.academy.energy.client.gui.matrix;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.energy.block.ContainerMatrix;
@@ -52,6 +53,9 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	//--------
 	
+	//Callbacks
+	CheckCallback checkCallback;
+	
 	//Synced states
 	boolean receivedSync;
 	
@@ -73,12 +77,15 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	final ContainerMatrix container;
 	
-	Widget pageMain, pageSSID;
+	final EntityPlayer player;
+	
+	Widget pageMain, pageSSID, pageCheck;
 
 	public GuiMatrix(ContainerMatrix c) {
 		super(c);
 		tile = c.tile;
 		container = c;
+		player = Minecraft.getMinecraft().thePlayer;
 		
 		load();
 	}
@@ -94,16 +101,16 @@ public class GuiMatrix extends LIGuiContainer {
 			
 			//Setup the info about matrix itself
 			TextBox box;
-			box = pageMain.getWidget("text_cap2").getComponent("TextBox");
+			box = TextBox.get(pageMain.getWidget("text_cap2"));
 			box.content = nodes + "/" + capacity;
 			
-			box = pageMain.getWidget("text_latency2").getComponent("TextBox");
+			box = TextBox.get(pageMain.getWidget("text_latency2"));
 			box.content = String.format("%d", latency);
 			
-			box = pageMain.getWidget("text_range2").getComponent("TextBox");
+			box = TextBox.get(pageMain.getWidget("text_range2"));
 			box.content = String.format("%d", range);
 			
-			box = pageMain.getWidget("text_ssid2").getComponent("TextBox");
+			box = TextBox.get(pageMain.getWidget("text_ssid2"));
 			if(isLoaded) {
 				ssid = tag.getString("ssid");
 				box.content = ssid;
@@ -115,6 +122,11 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	private void startWaiting() {
 		waitingForResult = true;
+		result = ActionResult.WAITING;
+		
+		checkCallback.updateCheckState();
+		pageCheck.transform.doesDraw = true;
+		pageMain.transform.doesListenKey = false;
 	}
 	
 	/**
@@ -125,6 +137,7 @@ public class GuiMatrix extends LIGuiContainer {
 			waitingForResult = false;
 			this.result = result;
 			resultReceivedTime = Minecraft.getSystemTime();
+			checkCallback.updateCheckState();
 			
 			if(needSync) {
 				receivedSync = false;
@@ -139,24 +152,30 @@ public class GuiMatrix extends LIGuiContainer {
 		LIGui gui = getGui();
 		pageMain = loaded.getWidget("window_main").copy();
 		pageSSID = loaded.getWidget("window_init").copy();
+		pageCheck = loaded.getWidget("window_check").copy();
 		
 		gui.addWidget(pageMain);
 		gui.addWidget(pageSSID);
+		gui.addWidget(pageCheck);
 		
 		pageSSID.transform.doesDraw = false;
+		pageCheck.transform.doesDraw = false;
 		
 		wrapButton(pageMain.getWidget("button_init"));
 		
 		wrapButton(pageSSID.getWidget("button_yes"));
 		wrapButton(pageSSID.getWidget("button_no"));
 		
+		wrapButton(pageCheck.getWidget("button_close"));
+		
 		EventLoader.load(pageMain, new MainCallback());
 		EventLoader.load(pageSSID, new SSIDCallback());
+		EventLoader.load(pageCheck, checkCallback = new CheckCallback());
 	}
 	
 	@Override
     public boolean isSlotActive() {
-    	return !pageSSID.transform.doesDraw;
+    	return pageMain.transform.doesListenKey;
     }
 	
     protected boolean containerAcceptsKey(int key) {
@@ -196,6 +215,7 @@ public class GuiMatrix extends LIGuiContainer {
 		TextBox.get(pageSSID.getWidget("text_2")).content = "";
 		TextBox.get(pageSSID.getWidget("text_3")).content = "";
 		
+		pageMain.transform.doesListenKey = false;
 		pageSSID.transform.doesDraw = true;
 	}
 	
@@ -209,7 +229,7 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		@GuiCallback
 		public void blackout(Widget w, FrameEvent event) {
-			if(pageSSID.transform.doesDraw) {
+			if(!pageMain.transform.doesListenKey) {
 				LIGui.drawBlackout();
 			}
 		}
@@ -226,9 +246,7 @@ public class GuiMatrix extends LIGuiContainer {
 				//Do init
 				String ssid = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
 				if(pw1.equals(pw2) && !ssid.isEmpty()) {
-					GuiMatrixSync.fullInit(tile, ssid, pw1);
-					
-					pageSSID.transform.doesDraw = false;
+					GuiMatrixSync.fullInit(player, tile, ssid, pw1);
 				} else {
 					receiveActionResult(ActionResult.INVALID_INPUT, false);
 				}
@@ -236,23 +254,52 @@ public class GuiMatrix extends LIGuiContainer {
 				//Update pass
 				String oldpw = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
 				if(pw1.equals(pw2)) {
-					GuiMatrixSync.passwordUpdate(tile, oldpw, pw1);
-					
-					pageSSID.transform.doesDraw = false;
+					GuiMatrixSync.passwordUpdate(player, tile, oldpw, pw1);
 				} else {
 					receiveActionResult(ActionResult.INVALID_INPUT, false);
 				}
 			}
+			
+			pageSSID.transform.doesDraw = false;
 		}
 		
 		@GuiCallback("button_no")
 		public void noDown(Widget w, MouseDownEvent event) {
 			//Close without doing anything
 			pageSSID.transform.doesDraw = false;
+			pageMain.transform.doesListenKey = true;
 		}
 		
 		private String getContent(int iid) {
 			return TextBox.get(pageSSID.getWidget("text_" + iid)).content;
+		}
+		
+	}
+	
+	public class CheckCallback {
+		Widget markDrawer, info, markBorder;
+		
+		public CheckCallback() {
+			markBorder = pageCheck.getWidget("mark_check1");
+			markDrawer = pageCheck.getWidget("mark_check2");
+			info = pageCheck.getWidget("text_info");
+		}
+		
+		public void updateCheckState() {
+			DrawTexture.get(markDrawer).texture = result.markSrc;
+			TextBox.get(info).content = result.getDescription();
+		}
+		
+		@GuiCallback("mark_check1")
+		public void updateAlpha(Widget w, FrameEvent event) {
+			double alpha = 0.7 * 0.5 * (1 + Math.sin(Minecraft.getSystemTime() / 600.0)) + 0.3;
+			DrawTexture.get(markBorder).color.a = alpha;
+		}
+		
+		@GuiCallback("button_close")
+		public void close(Widget w, MouseDownEvent event) {
+			pageCheck.transform.doesDraw = false;
+			pageMain.transform.doesListenKey = true;
 		}
 		
 	}

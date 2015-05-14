@@ -22,9 +22,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.client.gui.node.GuiNode;
+import cn.academy.generic.client.render.block.RenderDynamicBlock;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.liutils.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -74,7 +76,20 @@ public class BlockNode extends BlockContainer {
     
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+    	//System.out.println("GetIcon2 called.");
+    	//Thread.dumpStack();
         return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getRenderBlockPass() {
+        return -1;
+    }
+    
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
     }
     
     @SideOnly(Side.CLIENT)
@@ -91,9 +106,14 @@ public class BlockNode extends BlockContainer {
             enabled = false;
             pct = 0;
         }
+        
+//        System.out.println("GetIcon1 called.");
+//        Thread.dumpStack();
+        
         if(side == 0 || side == 1) {
             return enabled ? iconTop_enabled : iconTop_disabled;
         }
+        
         return sideIcon[pct];
     }
     

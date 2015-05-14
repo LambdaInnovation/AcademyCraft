@@ -19,6 +19,7 @@ import java.util.Set;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.IWirelessMatrix;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.internal.WiWorldData.ChunkCoord;
@@ -72,6 +73,15 @@ class WirelessNetwork {
     }
     
     void tick() {
+    	//Check if matrix is still present
+    	if(matrix.isLoaded() && matrix.getAndCheck() == null) {
+    		dead = true;
+    		AcademyCraft.log.info("Matrix not present for ssid " + ssid + ", killing the network.");
+    		return;
+    	}
+    	
+    	//AcademyCraft.log.info("Ticking network " + ssid + ".");
+    	
         double totalEnergy = 0.0, totalMax = 0.0;
         Iterator<Coord> iter = connectedNodes.iterator();
         //Pass 1: Calculate average energy pct
@@ -97,7 +107,7 @@ class WirelessNetwork {
         for(Coord c : connectedNodes) {
             if(!c.isLoaded())
                 continue;
-            IWirelessNode node = (IWirelessNode) c;
+            IWirelessNode node = (IWirelessNode) c.getAndCheck();
             double targ = alpha * node.getEnergy();
             double delta = targ - node.getEnergy();
             delta = Math.signum(delta) * GenericUtils.min(latency - totalChanged, Math.abs(delta), node.getLatency());

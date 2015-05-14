@@ -84,7 +84,6 @@ public class WiWorldData extends WorldSavedData {
     Map<Object, WirelessNetwork> aliveNetworks = new HashMap();
     
     public boolean isMatrixOrNodePresent(Coord pos) {
-    	System.out.println("imnp");
     	return aliveNetworks.containsKey(pos);
     }
     
@@ -115,6 +114,18 @@ public class WiWorldData extends WorldSavedData {
         aliveNetworks.put(ssid, net);
         aliveNetworks.put(mat, net);
         return true;
+    }
+    
+    public boolean changePassword(Object lookup, String oldPass, String newPass) {
+    	WirelessNetwork net = aliveNetworks.get(lookup);
+    	if(net == null) {
+    		return false;
+    	}
+    	if(net.password.equals(oldPass)) {
+    		net.password = newPass;
+    		return true;
+    	}
+    	return false;
     }
     
     public void destroyNetwork(Coord mat) {

@@ -13,11 +13,13 @@
 package cn.academy.energy.api.event;
 
 import cn.academy.energy.api.IWirelessNode;
+import cpw.mods.fml.common.eventhandler.Cancelable;
 
 /**
  * Fired when a node is to be linked.
  * @author WeathFolD
  */
+@Cancelable
 public class LinkNodeEvent extends WirelessEvent {
     
     public final IWirelessNode node;
