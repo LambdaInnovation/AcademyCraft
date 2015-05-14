@@ -49,6 +49,8 @@ public class RenderDynamicBlock extends TileEntitySpecialRenderer {
 		Tessellator tes = Tessellator.instance;
 		tes.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 		
+		renderBlocks.blockAccess = t.getWorldObj();
+		
 		GL11.glPushMatrix();
 		{
 			if (Minecraft.isAmbientOcclusionEnabled()) {

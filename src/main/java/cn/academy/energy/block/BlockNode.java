@@ -76,8 +76,6 @@ public class BlockNode extends BlockContainer {
     
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-    	//System.out.println("GetIcon2 called.");
-    	//Thread.dumpStack();
         return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
     }
     
@@ -106,10 +104,6 @@ public class BlockNode extends BlockContainer {
             enabled = false;
             pct = 0;
         }
-        
-//        System.out.println("GetIcon1 called.");
-//        Thread.dumpStack();
-        
         if(side == 0 || side == 1) {
             return enabled ? iconTop_enabled : iconTop_disabled;
         }

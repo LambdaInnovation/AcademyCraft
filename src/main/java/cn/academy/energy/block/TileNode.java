@@ -49,7 +49,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
      * Used for just rendering.
      */
     @SideOnly(Side.CLIENT)
-    public boolean enabled = true;
+    public boolean enabled = false;
     
     public TileNode() {
     	super("wireless_node", 2);
@@ -62,7 +62,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     		if(updateTicker == 20) {
     			updateTicker = 0;
     			boolean b = WirelessSystem.isTileActive(this);
-    			System.out.println("Server " + b);
     			receiveSyncMessage(b);
     		}
     	}
@@ -134,7 +133,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	public void receiveSyncMessage(@Data Boolean enabled) {
 		if(this == null) {
-			System.err.println("this is null!");
 			return;
 		}
 		
