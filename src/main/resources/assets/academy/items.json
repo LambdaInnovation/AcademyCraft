@@ -14,5 +14,9 @@
         "unlName": "ac_energy_unit",
         "maxEnergy": 10000,
         "latency": 20
+    },
+    
+    "coin": {
+        "itemType": "cn.academy.ability.impl.electro.item.ItemCoin"
     }
 }
