@@ -12,32 +12,35 @@
  */
 package cn.academy.core.registry;
 
-import cn.academy.core.util.KeyHandler;
-import cn.academy.core.util.KeyManager;
-import cn.annoreg.base.RegistrationFieldSimple;
+import cn.academy.core.util.PlayerData;
+import cn.annoreg.core.AnnotationData;
 import cn.annoreg.core.LoadStage;
+import cn.annoreg.core.RegistryType;
 import cn.annoreg.core.RegistryTypeDecl;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  *
  */
 @RegistryTypeDecl
-@SideOnly(Side.CLIENT)
-public class KeyHandlerRegistration extends RegistrationFieldSimple<RegKeyHandler, KeyHandler> {
+public class DataPartRegistration extends RegistryType {
 
-	public KeyHandlerRegistration() {
-		super(RegKeyHandler.class, "ACKeyHandler");
+	public DataPartRegistration() {
+		super(RegDataPart.class, "ac_DataPart");
 		setLoadStage(LoadStage.INIT);
 	}
 
 	@Override
-	protected void register(KeyHandler value, RegKeyHandler anno, String field)
-			throws Exception {
-		KeyManager.instance.addKeyHandler(anno.name(), anno.desc(), anno.defaultKey(), value);
+	public boolean registerClass(AnnotationData data) throws Exception {
+		Class c = data.getTheClass();
+		RegDataPart anno = data.getAnnotation();
+		PlayerData.register(anno.value(), c);
+		return true;
 	}
 
+	@Override
+	public boolean registerField(AnnotationData data) throws Exception {
+		throw new RuntimeException();
+	}
 
 }

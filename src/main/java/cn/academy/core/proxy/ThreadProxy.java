@@ -1,8 +1,8 @@
-package cn.academy.ability.api.proxy;
+package cn.academy.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.SyncAction;
+import cn.academy.core.util.PlayerData;
 
 /**
  * Any side-dependent utility goes here, including basic API functions,
@@ -13,7 +13,7 @@ import cn.academy.ability.api.SyncAction;
  */
 public interface ThreadProxy {
     
-	AbilityData getAbilityData(EntityPlayer player);
+	PlayerData getPlayerData(EntityPlayer player);
 	
 	/**
 	 * Get the action with the given id.

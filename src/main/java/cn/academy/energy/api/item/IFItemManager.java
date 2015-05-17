@@ -13,14 +13,75 @@
 package cn.academy.energy.api.item;
 
 import net.minecraft.item.ItemStack;
+import cn.academy.support.EnergyHelper.EnergyItemManager;
+import cn.liutils.util.GenericUtils;
 
 /**
  * @author WeathFolD
  */
-public interface IFItemManager {
+public final class IFItemManager implements EnergyItemManager {
+	
+	public static IFItemManager instance = new IFItemManager();
+	
+	private IFItemManager() {}
     
-    double getEnergy(ItemStack stack);
-    void setEnergy(ItemStack stack, double amt);
+    public double getEnergy(ItemStack stack) {
+    	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
+		return GenericUtils.loadCompound(stack).getDouble("energy");
+    }
     
+    public double getMaxEnergy(ItemStack stack) {
+    	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
+		return item.getMaxEnergy();
+    }
+    
+    public void setEnergy(ItemStack stack, double amt) {
+    	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
+		amt = Math.min(item.getMaxEnergy(), amt);
+		GenericUtils.loadCompound(stack).setDouble("energy", amt);
+		
+		int approxDamage = (int) Math.round((1 - amt / getMaxEnergy(stack)) * stack.getMaxDamage());
+		stack.setItemDamage(approxDamage);
+    }
+    
+    public double charge(ItemStack stack, double amt) {
+    	return charge(stack, amt, false);
+    }
+    
+    /**
+     * @param stack
+     * @param amt Energy trying to charge into stack, can be neigative
+     * @param ignoreLatency
+     * @return How much energy not transfered into stack
+     */
+    public double charge(ItemStack stack, double amt, boolean ignoreLatency) {
+    	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
+		double lim = ignoreLatency ? Double.MAX_VALUE : item.getLatency();
+		double cur = getEnergy(stack);
+		double spare = 0.0;
+		if(amt + cur > item.getMaxEnergy()) {
+			spare = cur + amt - item.getMaxEnergy();
+			amt = item.getMaxEnergy() - cur;
+		}
+		if(amt + cur < 0) {
+			spare = amt + cur;
+			amt = -cur;
+		}
+		
+		double namt = Math.signum(amt) * Math.min(Math.abs(amt), lim);
+		spare += amt - namt;
+		
+		setEnergy(stack, cur + namt);
+		return spare;
+    }
+    
+    public String getDescription(ItemStack stack) {
+    	return String.format("%.0f/%.0f IF", getEnergy(stack), getMaxEnergy(stack));
+    }
+
+	@Override
+	public boolean isSupported(ItemStack stack) {
+		return stack.getItem() instanceof ImagEnergyItem;
+	}
     
 }

@@ -12,11 +12,15 @@
  */
 package cn.academy.core;
 
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+
 import org.apache.commons.io.IOUtils;
 
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.loading.item.ItemLoader;
+import cn.liutils.util.GenericUtils;
 
 /**
  * All registration of item goes here.
@@ -25,19 +29,23 @@ import cn.liutils.loading.item.ItemLoader;
 @RegistrationClass
 @RegSubmoduleInit
 public class ACItems {
+	
+	public static ItemLoader items;
     
     public static void init() {
     	try {
-	    	ItemLoader loader = new ItemLoader();
-	    	String json = IOUtils.toString(ACItems.class.getResource("/assets/liutils/test.json"));
-	    	System.out.println("Json is: ");
-	    	System.out.println(json);
+	    	items = new ItemLoader();
+	    	String json = IOUtils.toString(GenericUtils.getResourceStream(new ResourceLocation("academy:items.json")));
 	    	
-	    	loader.feed(json);
-	    	loader.loadAll();
+	    	items.feed(json);
+	    	items.loadAll();
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
+    }
+    
+    public static <T extends Item> T getItem(String name) {
+    	return (T) items.getObject(name);
     }
 
 }

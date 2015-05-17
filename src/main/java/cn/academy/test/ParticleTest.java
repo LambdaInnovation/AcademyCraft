@@ -1,4 +1,4 @@
-package cn.academy.core;
+package cn.academy.test;
 
 import java.util.Random;
 

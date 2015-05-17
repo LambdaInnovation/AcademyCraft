@@ -1,10 +1,11 @@
-package cn.academy.ability.api.proxy;
+package cn.academy.core.proxy;
 
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.SyncAction;
+import cn.academy.core.util.PlayerData;
 
 public abstract class CommonThreadProxy implements ThreadProxy {
     
@@ -13,10 +14,20 @@ public abstract class CommonThreadProxy implements ThreadProxy {
     protected CommonThreadProxy(String sideName) {
         this.sideName = sideName;
     }
+    
+    public static final String DATA_IDENTIFIER  = "ac_PlayerData";
 
-    public AbilityData getAbilityData(EntityPlayer player) {
-        return new AbilityData();
+    public PlayerData getPlayerData(EntityPlayer player) {
+    	PlayerData ret = (PlayerData) player.getExtendedProperties(DATA_IDENTIFIER);
+		if(ret == null) {
+			return regPlayerData(player);
+		}
+		
+		ret.player = player;
+		return ret;
     }
+    
+    public abstract PlayerData regPlayerData(EntityPlayer player);
     
     /*
      * Action instance management

@@ -46,7 +46,7 @@ class WirelessNetwork {
     
     //Internal data
     Set<Coord> connectedNodes = new HashSet(); //Connected nodes coordinate set.
-    final double MAX_LAG = 0; //abs value.
+    final double MAX_LAG = 2000; //abs value.
     double energyLag = MAX_LAG / 2; //The "invisible buffer" used when balancing energy.
     boolean dead; //Death flag.
     

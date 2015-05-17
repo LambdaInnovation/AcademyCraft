@@ -13,9 +13,11 @@
 package cn.academy.energy.block;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.item.IFItemManager;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.internal.WirelessSystem;
 import cn.academy.generic.client.render.block.RenderDynamicBlock;
@@ -36,6 +38,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity.HasRender
 public class TileNode extends TileInventory implements IWirelessNode, IInventory {
 	
+	static IFItemManager itemManager = IFItemManager.instance;
+	
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
 	public static RenderDynamicBlock renderer;
@@ -51,6 +55,10 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     @SideOnly(Side.CLIENT)
     public boolean enabled = false;
     
+    public boolean chargingIn = false;
+    
+    public boolean chargingOut = false;
+    
     public TileNode() {
     	super("wireless_node", 2);
     }
@@ -59,11 +67,46 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public void updateEntity() {
     	if(!getWorldObj().isRemote) {
     		++updateTicker;
-    		if(updateTicker == 20) {
+    		if(updateTicker == 10) {
     			updateTicker = 0;
     			boolean b = WirelessSystem.isTileActive(this);
-    			receiveSyncMessage(b);
+    			receiveSyncMessage(b, chargingIn, chargingOut, energy);
+    			
     		}
+    		
+    		updateChargeIn();
+    		updateChargeOut();
+    	}
+    }
+    
+    private void updateChargeIn() {
+    	ItemStack stack = this.getStackInSlot(0);
+    	if(stack != null && itemManager.isSupported(stack)) {
+    		//Charge into the node.
+    		double req = Math.min(getLatency(), getMaxEnergy() - energy);
+    		double left = itemManager.charge(stack, -req);
+    		
+    		chargingIn = req != -left;
+    		req += left;
+    		this.setEnergy(req + getEnergy());
+    	} else {
+    		chargingIn = false;
+    	}
+    }
+    
+    private void updateChargeOut() {
+    	ItemStack stack = this.getStackInSlot(1);
+    	if(stack != null && itemManager.isSupported(stack)) {
+    		double cur = getEnergy();
+    		if(cur > 0) {
+    			cur = Math.min(getLatency(), cur);
+    			double left = itemManager.charge(stack, cur);
+    			
+    			chargingOut = left != cur;
+    			this.setEnergy(getEnergy() - (cur - left));
+    		}
+    	} else {
+    		chargingOut = false;
     	}
     }
 
@@ -107,13 +150,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
     }
-    
-    /**
-     * Helper method to link a network.
-     */
-    public void linkNetwork(String ssid) {
-        
-    }
 
     String name = "Unnamed";
     
@@ -131,12 +167,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 	
 	@SuppressWarnings("unused")
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	public void receiveSyncMessage(@Data Boolean enabled) {
+	public void receiveSyncMessage(
+		@Data Boolean enabled, 
+		@Data Boolean chargingIn,
+		@Data Boolean chargingOut, 
+		@Data Double energy) {
 		if(this == null) {
 			return;
 		}
 		
 		this.enabled = enabled;
+		this.chargingIn = chargingIn;
+		this.chargingOut = chargingOut;
+		this.energy = energy;
 	}
 
 }

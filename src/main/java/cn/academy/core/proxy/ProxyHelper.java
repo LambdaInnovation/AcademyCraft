@@ -1,4 +1,4 @@
-package cn.academy.ability.api.proxy;
+package cn.academy.core.proxy;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -15,10 +15,10 @@ public final class ProxyHelper {
         @Override protected ThreadProxy initialValue() {
         	try {
         		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-					return (ThreadProxy) Class.forName("cn.academy.ability.api.proxy.ClientThreadProxy")
+					return (ThreadProxy) Class.forName("cn.academy.core.proxy.ClientThreadProxy")
 							.newInstance();
         		} else {
-					return (ThreadProxy) Class.forName("cn.academy.ability.api.proxy.ServerThreadProxy")
+					return (ThreadProxy) Class.forName("cn.academy.core.proxy.ServerThreadProxy")
 							.newInstance();
         		}
 			} catch (Exception e) {

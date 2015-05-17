@@ -152,22 +152,22 @@ public class GuiNode extends LIGuiContainer {
     	//---Main Page
     	ProgressBar.get(pageMain.getWidget("progress_node")).progress = tile.getEnergy() / tile.getMaxEnergy();
     	
-    	wrapThunder(pageMain.getWidget("mark_input"), new ThunderCond() {
+    	wrapThunder(pageMain.getWidget("mark_input"), new Condition() {
 			@Override
 			public boolean shows() {
-				return false;
+				return tile.chargingIn;
 			}
     	});
-    	wrapThunder(pageMain.getWidget("mark_output"), new ThunderCond() {
+    	wrapThunder(pageMain.getWidget("mark_output"), new Condition() {
 			@Override
 			public boolean shows() {
-				return false;
+				return tile.chargingOut;
 			}
     	});
-    	wrapThunder(pageMain.getWidget("mark_net"), new ThunderCond() {
+    	wrapThunder(pageMain.getWidget("mark_net"), new Condition() {
 			@Override
 			public boolean shows() {
-				return ssid != null;
+				return tile.enabled;
 			}
     	});
     	
@@ -207,7 +207,7 @@ public class GuiNode extends LIGuiContainer {
     	EventLoader.load(pageCheck, checkCallback = new CheckCallback());
     }
     
-    private void wrapThunder(Widget thunder, final ThunderCond cond) {
+    private void wrapThunder(Widget thunder, final Condition cond) {
     	final DrawTexture dt = DrawTexture.get(thunder);
     	dt.enabled = false;
     	thunder.regEventHandler(new FrameEventHandler() {
@@ -239,7 +239,7 @@ public class GuiNode extends LIGuiContainer {
     	loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/node.xml"));
     }
     
-    interface ThunderCond {
+    interface Condition {
     	boolean shows();
     }
     
@@ -269,6 +269,12 @@ public class GuiNode extends LIGuiContainer {
         @GuiCallback("progress_node")
         public void updateProgress(Widget w, FrameEvent event) {
         	ProgressBar.get(w).progress = tile.getEnergy() / tile.getMaxEnergy();
+        	
+        	if(event.hovering) {
+        		List<String> list = new ArrayList();
+        		list.add(String.format("%.0f/%.0f IF", tile.getEnergy(), tile.getMaxEnergy()));
+        		drawHoveringText(list, (int)event.mx, (int)event.my, Minecraft.getMinecraft().fontRenderer);
+        	}
         }
     	
     	@GuiCallback

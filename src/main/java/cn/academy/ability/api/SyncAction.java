@@ -3,7 +3,7 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 
 import cpw.mods.fml.relauncher.Side;
-import cn.academy.ability.api.proxy.ProxyHelper;
+import cn.academy.core.proxy.ProxyHelper;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.RegSerializable;

@@ -1,7 +1,8 @@
-package cn.academy.ability.api.proxy;
+ package cn.academy.core.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.core.util.PlayerData;
 
 public class ClientThreadProxy extends CommonThreadProxy {
 
@@ -13,5 +14,10 @@ public class ClientThreadProxy extends CommonThreadProxy {
     public EntityPlayer getThePlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
+
+	@Override
+	public PlayerData regPlayerData(EntityPlayer player) {
+		return new PlayerData.Client(player);
+	}
 
 }

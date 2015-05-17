@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import cn.academy.ability.api.proxy.ProxyHelper;
+import cn.academy.core.proxy.ProxyHelper;
 import cn.annoreg.mc.s11n.DataSerializer;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.SerializationManager;

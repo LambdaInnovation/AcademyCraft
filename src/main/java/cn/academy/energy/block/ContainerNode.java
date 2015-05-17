@@ -24,8 +24,6 @@ import net.minecraft.item.ItemStack;
  * @author WeathFolD
  */
 public class ContainerNode extends Container {
-    
-    final double STEP = 17.230769230769230769230769230769;
 
     public final TileNode node;
 
@@ -37,20 +35,11 @@ public class ContainerNode extends Container {
     @Override
     public void detectAndSendChanges() {
     	super.detectAndSendChanges();
-    	this.updateProgressBar(0, (int) (node.getEnergy() / 6));
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void updateProgressBar(int a, int b) {
-    	if(a == 0) {
-    		node.energy = b * 6;
-    	}
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new Slot(node, 0, 34, 63));
-        this.addSlotToContainer(new Slot(node, 1, 125, 35));
+        this.addSlotToContainer(new SlotIFItem(node, 0, 34, 63));
+        this.addSlotToContainer(new SlotIFItem(node, 1, 125, 35));
         
         int STEP = 18;
         
