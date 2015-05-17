@@ -23,8 +23,10 @@ import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
  * @author WeAthFolD
  */
 @RegistrationClass
-@RegAuxGui
 public class AbilityUI extends AuxGui {
+	
+	@RegAuxGui
+	public static AbilityUI instance = new AbilityUI();
 	
 	LIGui scene = new LIGui();
 	
@@ -37,11 +39,6 @@ public class AbilityUI extends AuxGui {
 		cpbar.transform.x = -20;
 		
 		scene.addWidget(cpbar);
-	}
-
-	@Override
-	public boolean isOpen() {
-		return true;
 	}
 	
 	@Override

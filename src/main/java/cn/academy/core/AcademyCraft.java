@@ -15,6 +15,7 @@ package cn.academy.core;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.world.WorldEvent;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,8 @@ import org.apache.logging.log4j.core.Logger;
 import cn.annoreg.core.RegistrationClass;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegMessageHandler;
 import cpw.mods.fml.common.Mod;
@@ -32,6 +35,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
@@ -43,6 +47,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod(modid = "academy-craft", name = "AcademyCraft")
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @RegistrationClass
+@RegEventHandler(Bus.Forge)
 public class AcademyCraft {
     
 	public static final boolean DEBUG_MODE = true;
@@ -80,7 +85,6 @@ public class AcademyCraft {
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
-        log.debug("This is a debug message.");
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
@@ -98,5 +102,10 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+    }
+    
+    @SubscribeEvent
+    public void onWorldSave(WorldEvent.Save event) {
+    	config.save();
     }
 }

@@ -12,16 +12,12 @@
  */
 package cn.academy.test.mp3;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.core.registry.RegKeyHandler;
+import cn.academy.core.util.KeyHandler;
 import cn.academy.misc.media.AppMediaPlayer;
 import cn.annoreg.core.RegistrationClass;
-import cn.liutils.api.key.IKeyHandler;
-import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
-import cn.liutils.util.ClientUtils;
 
 /**
  * @author WeAthFolD
@@ -29,41 +25,31 @@ import cn.liutils.util.ClientUtils;
  */
 @RegistrationClass
 public class MP3PlayerTest {
-
-	@RegAttachKeyHandler(clazz = KeyHandler.class)
-	public static int KEYID = Keyboard.KEY_O;
 	
-	public static class KeyHandler implements IKeyHandler {
+	@RegKeyHandler(name = "mediaPlayerTest", defaultKey = Keyboard.KEY_I)
+	public static KeyHandler handler = new KeyHandler() {
 		
 		AppMediaPlayer mediaPlayer = new AppMediaPlayer();
 
 		@Override
-		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(!tickEnd && ClientUtils.isPlayerInGame()) {
-				if(mediaPlayer.isPlaying()) {
-					mediaPlayer.resume();
-				} else {
-					mediaPlayer.startPlay("only_my_railgun");
-				}
+		public void onKeyDown() {
+			if(mediaPlayer.isPlaying()) {
+				mediaPlayer.resume();
+			} else {
+				mediaPlayer.startPlay("only_my_railgun");
 			}
 		}
 
 		@Override
-		public void onKeyUp(int keyCode, boolean tickEnd) {
-			if(!tickEnd) {
-				mediaPlayer.pause();
-			}
-		}
-
-		@Override
-		public void onKeyTick(int keyCode, boolean tickEnd) {
-			if(!tickEnd) {
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			}
+		public void onKeyUp() {
+			mediaPlayer.pause();
 		}
 		
-	}
-	
-	
+		@Override
+		public void onKeyAbort() {
+			mediaPlayer.stop();
+		}
+		
+	};
 	
 }
