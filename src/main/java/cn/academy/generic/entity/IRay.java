@@ -12,6 +12,11 @@ public interface IRay {
 	
 	Vec3 getPosition();
 	
+	/**
+	 * Return a normalized vector representing ray's direction.
+	 */
+	Vec3 getLookingDirection();
+	
 	double getLength();
 	
 }

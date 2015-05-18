@@ -46,6 +46,11 @@ public class MP3PlayerTest {
 		}
 		
 		@Override
+		public void onKeyTick() {
+			System.out.println(getPlayer().rotationYaw);
+		}
+		
+		@Override
 		public void onKeyAbort() {
 			mediaPlayer.stop();
 		}

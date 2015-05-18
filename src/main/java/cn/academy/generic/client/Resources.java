@@ -68,11 +68,11 @@ public class Resources {
 		return layers;
     }
     
-    public static Material[] getRayTextures(String name) {
-    	SimpleMaterial ms1 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/blend_in.png")).setIgnoreLight();
-    	SimpleMaterial ms2 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/tile.png")).setIgnoreLight();
-    	SimpleMaterial ms3 = new SimpleMaterial(new ResourceLocation("academy:textures/effects/" + name + "/blend_out.png")).setIgnoreLight();
-    	return new Material[] { ms1, ms2, ms3 };
+    public static ResourceLocation[] getRayTextures(String name) {
+    	ResourceLocation r1 = new ResourceLocation("academy:textures/effects/" + name + "/blend_in.png");
+    	ResourceLocation r2 = new ResourceLocation("academy:textures/effects/" + name + "/tile.png");
+    	ResourceLocation r3 = new ResourceLocation("academy:textures/effects/" + name + "/blend_out.png");
+    	return new ResourceLocation[] { r1, r2, r3 };
     }
     
     public static Font font() {

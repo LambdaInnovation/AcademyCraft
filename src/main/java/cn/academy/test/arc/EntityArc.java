@@ -95,17 +95,11 @@ public class EntityArc extends EntityAdvanced {
 			ArcFactory fac = new ArcFactory();
 			for(int i = 0; i < 100; ++i) {
 				patterns[i] = fac.generate();
-				//System.out.println("Generating pattern " + i);
 			}
 		}
 		
-		DoubleBuffer db = ByteBuffer.allocateDirect(256).asDoubleBuffer();
-		
 		@Override
 		public void doRender(Entity e, double x, double y, double z, float f, float g) {
-			db.clear();
-			//GL11.glLoadIdentity();
-			
 			EntityArc arc = (EntityArc) e;
 			if(!arc.show)
 				return;

@@ -39,7 +39,12 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	public double getLength() {
 		return 15;
 	}
-
+	
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
+	}
+	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tag) {
 		posX = tag.getDouble("x");
@@ -52,6 +57,11 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		tag.setDouble("x", posX);
 		tag.setDouble("y", posY);
 		tag.setDouble("z", posZ);
+	}
+
+	@Override
+	public Vec3 getLookingDirection() {
+		return Vec3.createVectorHelper(motionX, motionY, motionZ);
 	}
 
 }

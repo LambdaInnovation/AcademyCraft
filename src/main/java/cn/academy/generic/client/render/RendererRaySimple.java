@@ -12,37 +12,34 @@
  */
 package cn.academy.generic.client.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.generic.client.Resources;
 import cn.academy.generic.entity.IRay;
-import cn.liutils.render.material.Material;
-import cn.liutils.render.mesh.Mesh;
-import cn.liutils.render.mesh.MeshUtils;
+import cn.liutils.util.RenderUtils;
+import cn.liutils.util.VecUtils;
 
 /**
  * @author WeAthFolD
  */
 public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
 	
-	public static final double DEFAULT_WIDTH = 0.5;
+	public static final double DEFAULT_WIDTH = 0.9;
 	
 	public double width;
 	
-	/**
-	 * tile should be 1px infinite tile, and blend should be square textures.
-	 */
-	Material blendIn, tile, blendOut;
+	ResourceLocation blendIn, tile, blendOut;
 	
-	Mesh mesh, mesh2;
-	
-	public RendererRaySimple(Material _blendIn, Material _tile, Material _blendOut) {
+	public RendererRaySimple(ResourceLocation _blendIn, ResourceLocation _tile, ResourceLocation _blendOut) {
 		blendIn = _blendIn;
 		tile = _tile;
 		blendOut = _blendOut;
-		
-		mesh = MeshUtils.createBillboard(null, -0.5, -0.5, 0.5, 0.5);
-		mesh2 = MeshUtils.createBillboard(null, -0.5, -0.5, 0.5, 0.5);
 		
 		setWidth(DEFAULT_WIDTH);
 	}
@@ -53,43 +50,47 @@ public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
 	}
 
 	@Override
-	protected void drawAtOrigin(T ray) {
-		
+	protected void draw(T ray, Vec3 start, Vec3 end, Vec3 dir) {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDepthMask(false);
+
+		Tessellator t = Tessellator.instance;
 		
-		GL11.glPushMatrix();
-		GL11.glScaled(width, width, width);
-		GL11.glTranslated(-0.5, 0, 0);
-		mesh.draw(blendIn);
-		GL11.glPopMatrix();
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.defaultTexUnit, 240f, 240f);
+		t.setBrightness(15728880);
+		Vec3 look = VecUtils.subtract(end, start).normalize();
 		
-		GL11.glPushMatrix();
-		GL11.glScaled(ray.getLength(), width, width);
-		GL11.glTranslated(0.5, 0, 0);
-//		double u = ray.getLength() / width;
-//		mesh2.setUV(1, new double[] { u, 0 });
-//		mesh2.setUV(2, new double[] { u, 1 });
-		mesh2.draw(tile);
-		GL11.glPopMatrix();
+		end = VecUtils.add(end, VecUtils.scalarMultiply(look, 0.8));
+		start = VecUtils.add(start, VecUtils.scalarMultiply(look, -0.6));
 		
-		GL11.glPushMatrix();
-		GL11.glScaled(width, width, width);
-		GL11.glTranslated(ray.getLength() / width + 0.5, 0, 0);
-		mesh.draw(blendOut);
-		GL11.glPopMatrix();
+		Vec3 mid1 = VecUtils.add(start, VecUtils.scalarMultiply(look, width));
+		Vec3 mid2 = VecUtils.add(end, VecUtils.scalarMultiply(look, -width));
 		
+		GL11.glColor4d(1, 1, 1, 0.2 + 0.4 * (1 + Math.sin(Minecraft.getSystemTime() / 400.0)));
+		
+		RenderUtils.loadTexture(blendIn);
+		this.drawBoard(start, mid1, dir, width);
+		
+		RenderUtils.loadTexture(tile);
+		this.drawBoard(mid1, mid2, dir, width);
+		
+		RenderUtils.loadTexture(blendOut);
+		this.drawBoard(mid2, end, dir, width);
+		
+		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 	
 	public static RendererRaySimple createFromName(String name) {
 		try {
-			Material[] mats = Resources.getRayTextures(name);
+			ResourceLocation[] mats = Resources.getRayTextures(name);
 			return new RendererRaySimple(mats[0], mats[1], mats[2]);
 		} catch(Exception e) {
-			System.out.println("FFFFF");
 			e.printStackTrace();
 			return null;
 		}

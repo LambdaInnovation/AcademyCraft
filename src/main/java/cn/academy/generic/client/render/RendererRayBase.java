@@ -12,6 +12,7 @@
  */
 package cn.academy.generic.client.render;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -53,33 +54,43 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 		//Calculate the most appropriate 'billboard-up' direction.
 		
 		//The ray viewing direction.
-		Vec3 dir = VecUtils.toDirVector(entity.rotationYaw, entity.rotationPitch);
+		Vec3 dir = ray.getLookingDirection();
 		//Pick two far enough start and end point.
-		Vec3 start = VecUtils.vec(0, 0, 0), end = VecUtils.scalarMultiply(dir, 100);
+		Vec3 start = VecUtils.vec(0, 0, 0), end = VecUtils.scalarMultiply(dir, ray.getLength());
 		//Get closest point for view judging.
-		Vec3 pt = VecUtils.getClosestPointOn(VecUtils.neg(relativePosition), start, end);
+		Vec3 pt = VecUtils.vec(0, 0, 0);
+		
 		//The player viewing direction towards pt.
 		Vec3 perpViewDir = VecUtils.subtract(pt, VecUtils.neg(relativePosition));
 		
 		// cross product to get the 'up' vector
 		Vec3 upDir = VecUtils.crossProduct(perpViewDir, dir);
+		
+		//TODO: Is this really necessary?
 		if(upDir.lengthVector() < 1.0E-2) {
 			upDir = Vec3.createVectorHelper(nbt.getDouble("upX"), nbt.getDouble("upY"), nbt.getDouble("upZ"));
 		}
-		upDir.normalize();
+		upDir = upDir.normalize();
 		
-		//Rotate the upDir to align it to z axis and calc the angle by arctan. Now we get it!
-		double phi = Math.atan2(Math.sqrt(upDir.xCoord * upDir.xCoord + upDir.zCoord * upDir.zCoord), upDir.yCoord) * 180 / Math.PI;
-		
-		GL11.glRotated(-90 -entity.rotationYaw, 0, 1, 0);
-		GL11.glRotated(entity.rotationPitch, 0, 0, -1);
+		//DEBUG
+//		GL11.glDisable(GL11.GL_TEXTURE_2D);
+//		Tessellator t = Tessellator.instance;
+//		
+//		t.startDrawing(GL11.GL_LINES);
+//		//VecUtils.tessellate(start);
+//		//VecUtils.tessellate(end);
+//		
+//		VecUtils.tessellate(pt);
+//		VecUtils.tessellate(VecUtils.add(pt, VecUtils.scalarMultiply(upDir, 5)));
+//		t.draw();
+//		
+//		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		//DEBUG END
 		
 		doTransform(ray);
 		
-		GL11.glRotated(phi, 1, 0, 0);
-		
 		//Now delegate to the render itself~
-		drawAtOrigin(ray);
+		draw(ray, start, end, upDir);
 		
 		GL11.glPopMatrix();
 		
@@ -92,11 +103,32 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 	
 	protected void doTransform(T ray) {}
 	
+	protected void drawBoard(Vec3 start, Vec3 end, Vec3 upDir, double width) {
+		width /= 2;
+		Vec3 
+			v1 = VecUtils.add(start, VecUtils.scalarMultiply(upDir, width)),
+			v2 = VecUtils.add(start, VecUtils.scalarMultiply(upDir, -width)),
+			v3 = VecUtils.add(end, 	 VecUtils.scalarMultiply(upDir, -width)),
+			v4 = VecUtils.add(end,   VecUtils.scalarMultiply(upDir, width));
+		
+		Tessellator t = Tessellator.instance;
+		t.startDrawingQuads();
+		t.setBrightness(15728880);
+		VecUtils.tessellate(v1, 0, 1);
+		VecUtils.tessellate(v2, 0, 0);
+		VecUtils.tessellate(v3, 1, 0);
+		VecUtils.tessellate(v4, 1, 1);
+		t.draw();
+	}
+	
 	/**
 	 * Draw the ray at the origin. The ray's heading direction should be toward x+, 
 	 * and normal is always in z direction.
+	 * @param start THe start point
+	 * @param end The end point
+	 * @param sideDir the suggested billboard-up direction. You can ignore this if not drawing a billboard.
 	 */
-	protected abstract void drawAtOrigin(T ray);
+	protected abstract void draw(T ray, Vec3 start, Vec3 end, Vec3 sideDir);
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
