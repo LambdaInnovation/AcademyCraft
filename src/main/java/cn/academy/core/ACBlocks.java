@@ -12,6 +12,7 @@
  */
 package cn.academy.core;
 
+import cn.academy.energy.block.BlockIonicFlux;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
@@ -34,5 +35,8 @@ public class ACBlocks {
     
     @RegBlock(item = ItemBlockMulti.class)
     public static BlockMatrix matrix = new BlockMatrix();
+    
+    @RegBlock
+    public static BlockIonicFlux ionicFlux;
 
 }

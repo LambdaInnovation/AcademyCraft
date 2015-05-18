@@ -65,7 +65,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 			if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
 				EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
 				ProxyHelper.get().getPlayerData(thePlayer).tick();
-				System.out.println("Ticking client");
+				//System.out.println("Ticking client");
 			}
 		}
 		
@@ -223,6 +223,8 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	}
 	
 	public void receiveSync(String name, NBTTagCompound tag) {
+		if(this == null) return;
+		
 		BiMap<Class<? extends DataPart>, String> inverse = staticParts.inverse();
 		for(DataPart dp : constructed.values()) {
 			if(inverse.get(dp.getClass()).equals(name)) {

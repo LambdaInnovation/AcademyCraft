@@ -39,7 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderDynamicBlock extends TileEntitySpecialRenderer {
 	
-	static RenderBlocks renderBlocks = RenderBlocks.getInstance();
+	public static RenderBlocks renderBlocks = RenderBlocks.getInstance();
 
 	@Override
 	public void renderTileEntityAt(TileEntity t, double x,
@@ -51,7 +51,6 @@ public class RenderDynamicBlock extends TileEntitySpecialRenderer {
 		
 		renderBlocks.blockAccess = t.getWorldObj();
 		
-		GL11.glPushMatrix();
 		{
 			if (Minecraft.isAmbientOcclusionEnabled()) {
                 GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -71,7 +70,6 @@ public class RenderDynamicBlock extends TileEntitySpecialRenderer {
 			
 			RenderHelper.enableStandardItemLighting();
 		}
-		GL11.glPopMatrix();
 	}
 
 }

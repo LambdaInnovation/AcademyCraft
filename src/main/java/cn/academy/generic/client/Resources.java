@@ -31,15 +31,6 @@ import cn.liutils.util.render.Font;
 @RegistrationClass
 @ForcePreloadTexture
 public class Resources {
-
-    public static ResourceLocation
-        TEX_PHONE_BACK = phone("phone_back"),
-        TEX_PHONE_APP_BG = phone("app_back"),
-        TEX_PHONE_SYNC_MASK = phone("sync_mask"),
-        TEX_PHONE_SYNC = phone("sync"),
-        TEX_PHONE_HINT_ML = phone("hint_mouse_left"),
-        TEX_PHONE_HINT_MR = phone("hint_mouse_right"),
-        TEX_PHONE_ARROW = phone("arrow");
     
     public static ResourceLocation 
         TEX_GUI_NODE = gui("node"),
@@ -62,6 +53,15 @@ public class Resources {
     
     public static ResourceLocation getTexture(String loc) {
     	return res("textures/" + loc + ".png");
+    }
+    
+    public static ResourceLocation[] getEffectSeq(String effectName, int n) {
+    	ResourceLocation[] layers = new ResourceLocation[n];
+		String baseName = "academy:textures/effects/" + effectName + "/";
+		for(int i = 0; i < n; ++i) {
+			layers[i] = new ResourceLocation(baseName + i + ".png");
+		}
+		return layers;
     }
     
     public static Material[] getRayTextures(String name) {
