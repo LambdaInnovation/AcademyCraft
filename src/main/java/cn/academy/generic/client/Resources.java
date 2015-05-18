@@ -36,6 +36,10 @@ public class Resources {
         TEX_GUI_NODE = gui("node"),
         TEX_GUI_NODE_LIST = gui("node_list");
     
+    public static ResourceLocation
+    	TEX_COIN_FRONT = res("textures/items/coin_front"),
+    	TEX_COIN_BACK = res("textures/items/coin_back");
+    
     private static Map<String, IModelCustom> createdModels = new HashMap();
     
     /**
