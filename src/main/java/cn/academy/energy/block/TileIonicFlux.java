@@ -2,12 +2,12 @@ package cn.academy.energy.block;
 
 import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.client.render.block.RenderIonicFlux;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@RegistrationClass
+@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileIonicFlux extends TileEntity {

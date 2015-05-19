@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.ability.impl.electro.client.renderer.RendererCoinThrowing;
 import cn.academy.ability.impl.electro.entity.EntityCoinThrowing;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.GenericUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +36,7 @@ import net.minecraft.world.World;
  * 
  * @author KSkun
  */
-@RegistrationClass
+@Registrant
 public class ItemCoin extends Item {
 	
 	@RegItem.Render

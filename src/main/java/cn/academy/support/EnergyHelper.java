@@ -17,14 +17,14 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.IFItemManager;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 
 /**
  * A generic-typed energy helper. Preserved for future use.
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @RegSubmoduleInit
 public class EnergyHelper {
 

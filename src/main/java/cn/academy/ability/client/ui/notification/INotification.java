@@ -10,22 +10,26 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core.client.render;
+package cn.academy.ability.client.ui.notification;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 
 /**
+ * Represents one instance of message to be displayed on the main gui.
  * @author WeAthFolD
  */
-public interface ISpriteEntity {
+public interface INotification {
+	
+	ResourceLocation getIcon();
 	
 	/**
-	 * Called each rendering frame before rendering to update the sprite's state
+	 * The title string to be directly displayed.
 	 */
-	@SideOnly(Side.CLIENT)
-	void updateSprite(Sprite s);
+	String getTitle();
 	
-	boolean needViewOptimize();
+	/**
+	 * The content string to be directly displayed.
+	 */
+	String getContent();
 	
 }

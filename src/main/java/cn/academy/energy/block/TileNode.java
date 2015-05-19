@@ -21,7 +21,7 @@ import cn.academy.energy.api.item.IFItemManager;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.internal.WirelessSystem;
 import cn.academy.generic.client.render.block.RenderDynamicBlock;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
@@ -33,7 +33,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileNode extends TileInventory implements IWirelessNode, IInventory {

@@ -13,7 +13,7 @@
 package cn.academy.ability.client.ui;
 
 import net.minecraft.client.gui.ScaledResolution;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
@@ -22,7 +22,7 @@ import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 /**
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 public class AbilityUI extends AuxGui {
 	
 	@RegAuxGui
@@ -32,13 +32,22 @@ public class AbilityUI extends AuxGui {
 	
 	CPBar cpbar;
 	
+	NotifyUI notifyUI;
+	
+	/**
+	 * 
+	 */
 	public AbilityUI() {
 		cpbar = new CPBar();
 		cpbar.transform.alignWidth = WidthAlign.RIGHT;
 		cpbar.transform.y = 20;
 		cpbar.transform.x = -20;
 		
+		notifyUI = new NotifyUI();
+		notifyUI.transform.setPos(0, 33);
+		
 		scene.addWidget(cpbar);
+		scene.addWidget(notifyUI);
 	}
 	
 	@Override

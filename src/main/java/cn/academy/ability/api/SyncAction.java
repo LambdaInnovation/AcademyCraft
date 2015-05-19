@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import cpw.mods.fml.relauncher.Side;
 import cn.academy.core.proxy.ProxyHelper;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption;
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author acaly
  *
  */
-@RegistrationClass
+@Registrant
 @RegSerializable(instance = ActionSerializer.class)
 public class SyncAction extends Tickable {
     

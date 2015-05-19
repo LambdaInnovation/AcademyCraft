@@ -12,18 +12,24 @@
  */
 package cn.academy.test.mp3;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.registry.RegKeyHandler;
 import cn.academy.core.util.KeyHandler;
+import cn.academy.knowledge.KnowledgeData;
 import cn.academy.misc.media.AppMediaPlayer;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Target;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 public class MP3PlayerTest {
 	
 	@RegKeyHandler(name = "mediaPlayerTest", defaultKey = Keyboard.KEY_I)
@@ -33,28 +39,34 @@ public class MP3PlayerTest {
 
 		@Override
 		public void onKeyDown() {
-			if(mediaPlayer.isPlaying()) {
-				mediaPlayer.resume();
-			} else {
-				mediaPlayer.startPlay("only_my_railgun");
-			}
+//			if(mediaPlayer.isPlaying()) {
+//				mediaPlayer.resume();
+//			} else {
+//				mediaPlayer.startPlay("only_my_railgun");
+//			}
+			
+			kkk(this.getPlayer());
 		}
 
 		@Override
 		public void onKeyUp() {
-			mediaPlayer.pause();
+//			mediaPlayer.pause();
 		}
 		
 		@Override
 		public void onKeyTick() {
-			System.out.println(getPlayer().rotationYaw);
 		}
 		
 		@Override
 		public void onKeyAbort() {
-			mediaPlayer.stop();
+//			mediaPlayer.stop();
 		}
 		
 	};
+	
+	@RegNetworkCall(side = Side.SERVER)
+	static void kkk(@Target EntityPlayer player) {
+		KnowledgeData.get(player).learn("bubble");
+	}
 	
 }

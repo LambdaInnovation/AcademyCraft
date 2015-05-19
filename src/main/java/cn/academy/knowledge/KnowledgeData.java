@@ -12,27 +12,162 @@
  */
 package cn.academy.knowledge;
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.core.proxy.ProxyHelper;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
-import cn.annoreg.core.RegistrationClass;
+import cn.academy.knowledge.event.KnowledgeLearnedEvent;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.DataSerializer;
+import cn.annoreg.mc.s11n.SerializationManager;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Target;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableList;
+
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegDataPart("knowledge")
 public class KnowledgeData extends DataPart {
+	
+	//STATIC REGISTRY PART
+	private static List<Knowledge> knowledgeList = new ArrayList();
+	
+	private static BiMap<String, Integer> idMap = HashBiMap.create();
+	
+	public static KnowledgeData get(EntityPlayer player) {
+		return PlayerData.get(player).getPart(KnowledgeData.class);
+	}
+	
+	public static List<Knowledge> getKnowledgeList() {
+		return ImmutableList.copyOf(knowledgeList);
+	}
+	
+	public static void addKnowledge(Knowledge k) {
+		if(idMap.containsKey(k.name)) {
+			throw new RuntimeException("Duplicating knowledge" + k.name);
+		}
+		idMap.put(k.name, knowledgeList.size());
+		knowledgeList.add(k);
+	}
+	
+	public static void addKnowledges(Knowledge... ks) {
+		for(Knowledge k : ks)
+			addKnowledge(k);
+	}
+	
+	/**
+	 * Initialize the knowledges using the standard class.
+	 */
+	public static void addKnowledges(String ...ss) {
+		for(String s : ss) {
+			Knowledge k = new Knowledge(s);
+			addKnowledge(k);
+		}
+	}
+	
+	public static Knowledge getKnowledge(String name) {
+		Integer i = idMap.get(name);
+		return i == null ? null : getKnowledge(i);
+	}
+	
+	public static Knowledge getKnowledge(int id) {
+		return knowledgeList.size() > id ? knowledgeList.get(id) : null;
+	}
+	
+	//------
+	
+	static DataSerializer<BitSet> bitsetSer = SerializationManager.INSTANCE.getDataSerializer(BitSet.class);
+	
+	BitSet learned;
+	
+	public KnowledgeData() {
+		learned = new BitSet(knowledgeList.size());
+	}
+	
+	/**
+	 * See desc of learn(int id).
+	 */
+	public void learn(String name) {
+		Integer i = idMap.get(name);
+		if(i != null) {
+			learn(i);
+		}
+	}
+	
+	/**
+	 * Acquire the knowledge. will only be useful in SERVER.
+	 * If the knowledge is not previously acquired, this is a effective call,
+	 * and will trigger a KnowledgeAcquiredEvent in both CLIENT and SERVER.
+	 */
+	public void learn(int id) {
+		if(!isLearned(id)) {
+			learned.set(id, true);
+			if(!isRemote()) {
+				System.out.println("Triggering in server");
+				doLearnKnowledge(getPlayer(), id);
+				learnedKnowledge(getPlayer(), id);
+			}
+			markDirty();
+		}
+	}
+	
+	public boolean isLearned(String name) {
+		Integer id = idMap.get(name);
+		if(id == null) {
+			AcademyCraft.log.warn("Querying invalid knowledge " + name);
+		}
+		return isLearned(id);
+	}
+	
+	public boolean isLearned(int id) {
+		return learned.size() > id && learned.get(id);
+	}
+	
+	public void fromNBT(NBTTagCompound tag) {
+		try {
+			learned = bitsetSer.readData(tag, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public NBTTagCompound toNBT() {
+		try {
+			return (NBTTagCompound) bitsetSer.writeData(learned);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public void tick() {
 	}
 	
-	public static KnowledgeData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart("knowledge");
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void learnedKnowledge(@Target EntityPlayer player, @Data Integer id) {
+		doLearnKnowledge(player, id);
+		System.out.println("Receiving in client");
+	}
+	
+	private static void doLearnKnowledge(EntityPlayer player, int id) {
+		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(player, id));
 	}
 
 }

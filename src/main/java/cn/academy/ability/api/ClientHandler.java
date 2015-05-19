@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.api.key.LIKeyProcess;
@@ -15,7 +15,7 @@ import cn.liutils.util.ClientUtils;
  * @author acaly
  *
  */
-@RegistrationClass
+@Registrant
 @RegSubmoduleInit
 public final class ClientHandler {
     

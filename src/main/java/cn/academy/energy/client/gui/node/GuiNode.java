@@ -24,7 +24,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
@@ -49,7 +49,7 @@ import cn.liutils.cgui.utils.Color;
  * @author WeathFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
 public class GuiNode extends LIGuiContainer {
 	

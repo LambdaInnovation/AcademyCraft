@@ -25,7 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.event.LinkNodeEvent;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.WirelessSystem;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 public class GuiNodeSync {
 	
 	public enum CheckState { 

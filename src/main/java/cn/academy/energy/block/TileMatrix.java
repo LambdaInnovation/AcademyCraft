@@ -17,7 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
@@ -27,7 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {

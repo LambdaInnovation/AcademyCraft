@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
@@ -43,7 +43,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * TODO: Localization
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @SideOnly(Side.CLIENT)
 @RegSubmoduleInit
 public class GuiMatrix extends LIGuiContainer {

@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GLContext;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
@@ -39,7 +39,7 @@ import cn.liutils.util.RenderUtils;
 /**
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @ForcePreloadTexture
 public class CPBar extends Widget {
 	

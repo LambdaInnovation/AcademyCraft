@@ -32,7 +32,7 @@ import cn.academy.energy.api.event.LinkUserEvent;
 import cn.academy.energy.api.event.UnlinkNodeEvent;
 import cn.academy.energy.api.event.UnlinkUserEvent;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -40,7 +40,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 /**
  * @author WeathFolD
  */
-@RegistrationClass
+@Registrant
 public class WirelessSystem {
     
     @RegEventHandler

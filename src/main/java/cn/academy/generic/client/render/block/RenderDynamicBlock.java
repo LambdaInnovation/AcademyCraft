@@ -25,7 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.liutils.util.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * that renders dynamically and wants to use the original IIcon approach, use this on your TileEntity.
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @SideOnly(Side.CLIENT)
 public class RenderDynamicBlock extends TileEntitySpecialRenderer {
 	

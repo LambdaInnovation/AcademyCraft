@@ -4,6 +4,10 @@
 
 # GUI
 
+# Knowledge UI
+ac.knowledge.acquired=Acquired Knowledge
+# Knowledge UI end
+
 # Generic
 ac.gui.loading_lowercase.desc=loading...
 ac.gui.loading_uppercase.desc=LOADING...
@@ -21,3 +25,9 @@ ac.gui.node.not_connected.desc=NOT CONNECTED
 # Node end
 
 # GUI End
+
+# Knowledge
+ac.knowledge.bubble.name=Bubble Master
+
+
+# Knowledge end

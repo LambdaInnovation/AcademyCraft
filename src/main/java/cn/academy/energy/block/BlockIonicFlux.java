@@ -24,13 +24,13 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProvider {
 	
 	public static Fluid fluid = new Fluid("imagFlux");

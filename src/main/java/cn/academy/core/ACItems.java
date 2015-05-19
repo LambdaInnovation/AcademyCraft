@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.io.IOUtils;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.util.GenericUtils;
@@ -26,7 +26,7 @@ import cn.liutils.util.GenericUtils;
  * All registration of item goes here.
  * @author WeathFolD
  */
-@RegistrationClass
+@Registrant
 @RegSubmoduleInit
 public class ACItems {
 	

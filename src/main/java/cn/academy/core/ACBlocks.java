@@ -16,7 +16,7 @@ import cn.academy.energy.block.BlockIonicFlux;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.liutils.template.block.ItemBlockMulti;
 
@@ -24,7 +24,7 @@ import cn.liutils.template.block.ItemBlockMulti;
  * All registration of blocks goes here.
  * @author WeathFolD
  */
-@RegistrationClass
+@Registrant
 public class ACBlocks {
 
     @RegBlock

@@ -6,14 +6,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
-@RegistrationClass
+@Registrant
 public class Tickable {
     private class Task {
         Runnable r;

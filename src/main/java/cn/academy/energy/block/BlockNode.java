@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.client.gui.node.GuiNode;
 import cn.academy.generic.client.render.block.RenderDynamicBlock;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
@@ -34,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Wireless Node block.
  * @author WeathFolD
  */
-@RegistrationClass
+@Registrant
 public class BlockNode extends BlockContainer {
 
     public enum NodeType {

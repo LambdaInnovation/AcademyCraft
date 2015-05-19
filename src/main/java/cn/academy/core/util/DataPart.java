@@ -12,21 +12,45 @@
  */
 package cn.academy.core.util;
 
-import cn.academy.core.AcademyCraft;
-import cn.liutils.util.ReflectUtils;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.core.AcademyCraft;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.s11n.InstanceSerializer;
+import cn.annoreg.mc.s11n.RegSerializable;
+import cn.annoreg.mc.s11n.SerializationManager;
+import cn.liutils.util.GenericUtils;
+import cn.liutils.util.ReflectUtils;
 
 /**
  * @author WeAthFolD
  */
+@Registrant
+@RegSerializable(instance = DataPart.Serializer.class)
 public abstract class DataPart {
 
 	public PlayerData data;
 	
-	public DataPart() {}
+	boolean dirty;
 	
-	boolean dirty = true;
+	public DataPart() {
+		dirty = GenericUtils.getSide() == Side.SERVER;
+	}
+	
+	/**
+	 * If this flag is false, client sync requests will ALWAYS get discarded.
+	 * This is used to prevent stupid mistakes. If your DataPart need to sync from
+	 * client using the 'dirty' mechanism, set this to true.
+	 */
+	protected boolean allowClientSync = false;
+	
+	/**
+	 * If this is enabled, will load the public field(If possible via DataSerializer) automatically.
+	 */
+	protected boolean autoSync = false;
 	
 	/**
 	 * Mark this data as dirty for next tick's network sync.
@@ -41,27 +65,70 @@ public abstract class DataPart {
 		return data.player;
 	}
 	
+	public boolean isRemote() {
+		return getPlayer().worldObj.isRemote;
+	}
+	
 	public <T extends DataPart> T getPart(String name) {
 		return data.getPart(name);
 	}
 	
+	public String getName() {
+		return data.getName(this);
+	}
+	
 	public void fromNBT(NBTTagCompound tag) {
-		try {
-			ReflectUtils.fromNBT(this, tag);
-		} catch (Exception e) {
-			AcademyCraft.log.error("Exception occured handling nbt loading of " + this.getClass());
-			e.printStackTrace();
+		if(autoSync) {
+			try {
+				ReflectUtils.fromNBT(this, tag);
+			} catch (Exception e) {
+				AcademyCraft.log.error("Exception occured handling nbt loading of " + this.getClass());
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public NBTTagCompound toNBT() {
-		try {
-			return ReflectUtils.toNBT(this);
-		} catch(Exception e) {
-			AcademyCraft.log.error("Exception converting nbt of " + this.getClass());
-			e.printStackTrace();
+		if(autoSync) {
+			try {
+				return ReflectUtils.toNBT(this);
+			} catch(Exception e) {
+				AcademyCraft.log.error("Exception converting nbt of " + this.getClass());
+				e.printStackTrace();
+			}
 		}
 		return null;
+	}
+	
+	public static class Serializer implements InstanceSerializer<DataPart> {
+		
+		InstanceSerializer entitySer = SerializationManager.INSTANCE.getInstanceSerializer(Entity.class);
+
+		@Override
+		public DataPart readInstance(NBTBase nbt) throws Exception {
+			NBTTagCompound tag = (NBTTagCompound) nbt;
+			NBTBase entityTag = tag.getTag("e");
+			if(entityTag != null) {
+				Entity e = (Entity) entitySer.readInstance(entityTag);
+				if(e instanceof EntityPlayer) {
+					return PlayerData.get((EntityPlayer) e).getPart(tag.getString("n"));
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public NBTBase writeInstance(DataPart obj) throws Exception {
+			NBTTagCompound ret = new NBTTagCompound();
+			
+			NBTBase entityTag = entitySer.writeInstance(obj.getPlayer());
+			
+			ret.setTag("e", entityTag);
+			ret.setString("n", obj.getName());
+			
+			return ret;
+		}
+		
 	}
 	
 }

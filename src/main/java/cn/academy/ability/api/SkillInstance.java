@@ -1,12 +1,12 @@
 package cn.academy.ability.api;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 
-@RegistrationClass
+@Registrant
 public class SkillInstance extends SyncAction {
     //TODO data access and utilities integration
 

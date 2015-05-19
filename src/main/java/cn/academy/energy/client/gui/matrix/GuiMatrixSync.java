@@ -23,7 +23,7 @@ import cn.academy.energy.api.event.ChangePassEvent;
 import cn.academy.energy.api.event.CreateNetworkEvent;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.internal.WirelessSystem;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
@@ -34,7 +34,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 public class GuiMatrixSync {
 	
 	public enum ActionResult {

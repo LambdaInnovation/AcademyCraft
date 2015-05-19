@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegEventHandler;
@@ -46,7 +46,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft")
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
-@RegistrationClass
+@Registrant
 @RegEventHandler(Bus.Forge)
 public class AcademyCraft {
     

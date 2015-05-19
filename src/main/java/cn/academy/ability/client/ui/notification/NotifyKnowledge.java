@@ -10,26 +10,37 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.client.ui;
+package cn.academy.ability.client.ui.notification;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import cn.academy.knowledge.Knowledge;
 
 /**
- * Represents one instance of message to be displayed on the main gui.
  * @author WeAthFolD
+ *
  */
-public interface INotification {
+public class NotifyKnowledge implements INotification {
+
+	public final Knowledge knowledge;
 	
-	ResourceLocation getLogo();
+	public NotifyKnowledge(Knowledge k) {
+		knowledge = k;
+	}
 	
-	/**
-	 * The title string to be directly displayed.
-	 */
-	String getTitle();
+	@Override
+	public ResourceLocation getIcon() {
+		return knowledge.getIcon();
+	}
 	
-	/**
-	 * The content string to be directly displayed.
-	 */
-	String getContent();
-	
+	@Override
+	public String getTitle() {
+		return StatCollector.translateToLocal("ac.knowledge.acquired");
+	}
+
+	@Override
+	public String getContent() {
+		return knowledge.getName();
+	}
+
 }

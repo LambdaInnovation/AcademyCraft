@@ -18,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.client.gui.matrix.GuiMatrix;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.block.BlockMulti;
@@ -29,7 +29,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 public class BlockMatrix extends BlockMulti {
 	
 	public BlockMatrix() {

@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
 import cn.academy.test.arc.ArcFactory.Arc;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.entityx.EntityAdvanced;
@@ -40,7 +40,7 @@ import cn.liutils.util.space.Motion3D;
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegEntity
 @RegEntity.HasRender
 public class EntityArc extends EntityAdvanced {

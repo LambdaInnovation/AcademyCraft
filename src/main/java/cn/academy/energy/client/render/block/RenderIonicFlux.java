@@ -26,14 +26,14 @@ import net.minecraftforge.fluids.RenderBlockFluid;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.generic.client.Resources;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.liutils.util.RenderUtils;
 
 /**
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 public class RenderIonicFlux extends TileEntitySpecialRenderer {
 	
 	public ResourceLocation[] layers;
@@ -94,8 +94,9 @@ public class RenderIonicFlux extends TileEntitySpecialRenderer {
 	}
 	
 	private void drawLayer(int layer, double height, double vx, double vz, double density) {
-		double du = (Minecraft.getSystemTime() * 0.001 * vx) % 1;
-		double dv = (Minecraft.getSystemTime() * 0.001 * vz) % 1;
+		long time = Minecraft.getSystemTime();
+		double du = (time * 0.001 * vx) % 1;
+		double dv = (time * 0.001 * vz) % 1;
 		
 		RenderUtils.loadTexture(layers[layer]);
 		t.startDrawingQuads();

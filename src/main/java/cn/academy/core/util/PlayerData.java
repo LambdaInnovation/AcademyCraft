@@ -27,7 +27,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ProxyHelper;
 import cn.academy.core.proxy.ThreadProxy;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.SideHelper;
 import cn.annoreg.mc.network.RegNetworkCall;
@@ -35,6 +35,7 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.liutils.util.ClientUtils;
+import cn.liutils.util.GenericUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -50,7 +51,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegSerializable(instance = PlayerData.Serializer.class)
 public abstract class PlayerData implements IExtendedEntityProperties {
 	
@@ -93,7 +94,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 			updateParts();
 			
 			for(DataPart p : constructed.values()) {
-				if(p.dirty) {
+				if(p.allowClientSync && p.dirty) {
 					p.dirty = false;
 					syncToServer(getName(p), p.toNBT());
 				}
@@ -105,6 +106,11 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 
 		@Override
 		public void loadNBTData(NBTTagCompound compound) {}
+
+		@Override
+		public void syncNow(DataPart part) {
+			this.syncToClient(part.getName(), part.toNBT());
+		}
 		
 	}
 	
@@ -146,28 +152,10 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 				}
 			}
 		}
-		
-	}
-	
-	public static class Serializer implements InstanceSerializer<PlayerData> {
 
 		@Override
-		public PlayerData readInstance(NBTBase nbt) throws Exception {
-			int[] ids = ((NBTTagIntArray) nbt).func_150302_c();
-			World world = SideHelper.getWorld(ids[0]);
-			if (world != null) {
-				Entity ent = world.getEntityByID(ids[1]);
-				if(ent instanceof EntityPlayer) {
-					return ProxyHelper.get().getPlayerData((EntityPlayer) ent);
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public NBTBase writeInstance(PlayerData obj) throws Exception {
-			EntityPlayer ent = obj.player;
-			return new NBTTagIntArray(new int[] { ent.dimension, ent.getEntityId() });
+		public void syncNow(DataPart part) {
+			this.syncToServer(part.getName(), part.toNBT());
 		}
 		
 	}
@@ -179,8 +167,6 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	public static void register(String name, Class<? extends DataPart> clazz) {
 		staticParts.put(name, clazz);
 	}
-	
-	
 	
 	/**
 	 * Do NOT modify this field!
@@ -224,7 +210,12 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	
 	public void receiveSync(String name, NBTTagCompound tag) {
 		if(this == null) return;
+		if(tag == null) {
+			AcademyCraft.log.warn("Received NULL sync message from " + name + ", discarding");
+			return;
+		}
 		
+		System.out.println("Received sync of " + name + " in " + GenericUtils.getEffectiveSide());
 		BiMap<Class<? extends DataPart>, String> inverse = staticParts.inverse();
 		for(DataPart dp : constructed.values()) {
 			if(inverse.get(dp.getClass()).equals(name)) {
@@ -238,22 +229,58 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		return constructed.inverse().get(part);
 	}
 	
+	public void syncNow(String name) {
+		syncNow(getPart(name));
+	}
+	
+	public abstract void syncNow(DataPart part);
+	
 	public <T extends DataPart> T getPart(String name) {
 		return (T) constructed.get(name);
+	}
+	
+	public <T extends DataPart> T getPart(Class<T> clazz) {
+		String id = staticParts.inverse().get(clazz);
+		return (T) constructed.get(id);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	public void syncToClient(@Data String name, @Data NBTTagCompound tag) {
 		receiveSync(name, tag);
+		System.out.println("[DataPart] Synced [" + name + "] from server");
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public void syncToServer(@Data String name, @Data NBTTagCompound tag) {
 		receiveSync(name, tag);
+		System.out.println("[DataPart] Synced [" + name + "] from client");
 	}
 	
 	public static PlayerData get(EntityPlayer player) {
 		return ProxyHelper.get().getPlayerData(player);
+	}
+	
+	public static class Serializer implements InstanceSerializer<PlayerData> {
+
+		@Override
+		public PlayerData readInstance(NBTBase nbt) throws Exception {
+			int[] ids = ((NBTTagIntArray) nbt).func_150302_c();
+			World world = SideHelper.getWorld(ids[0]);
+			if (world != null) {
+				Entity ent = world.getEntityByID(ids[1]);
+				if(ent instanceof EntityPlayer) {
+					return ProxyHelper.get().getPlayerData((EntityPlayer) ent);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public NBTBase writeInstance(PlayerData obj) throws Exception {
+			EntityPlayer ent = obj.player;
+			return new NBTTagIntArray(new int[] { ent.dimension, ent.getEntityId() });
+		}
+		
 	}
 
 }

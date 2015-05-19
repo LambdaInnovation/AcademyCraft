@@ -24,7 +24,7 @@ import cn.academy.core.registry.RegKeyHandler;
 import cn.academy.core.util.KeyHandler;
 import cn.academy.generic.client.render.RendererRayComposite;
 import cn.academy.generic.entity.EntityRayBase;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.VecUtils;
 import cn.liutils.util.space.Motion3D;
@@ -33,7 +33,7 @@ import cn.liutils.util.space.Motion3D;
  * @author WeAthFolD
  *
  */
-@RegistrationClass
+@Registrant
 @RegEntity
 @RegEntity.HasRender
 public class EntityRayTest extends EntityRayBase {

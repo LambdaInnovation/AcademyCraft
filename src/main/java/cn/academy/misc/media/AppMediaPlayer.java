@@ -17,7 +17,7 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import paulscode.sound.SoundSystem;
-import cn.annoreg.core.RegistrationClass;
+import cn.annoreg.core.Registrant;
 import cn.liutils.util.RegUtils;
 
 import com.google.common.collect.BiMap;
@@ -30,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * No gui yet, pre-programming
  * @author WeAthFolD
  */
-@RegistrationClass
+@Registrant
 @SideOnly(Side.CLIENT)
 public class AppMediaPlayer {
 	
