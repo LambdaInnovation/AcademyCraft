@@ -12,18 +12,16 @@
  */
 package cn.academy.core.util;
 
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.SerializationManager;
-import cn.liutils.util.GenericUtils;
-import cn.liutils.util.ReflectUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * DataPart represents a single tickable instance attached on an EntityPlayer.
@@ -78,6 +76,14 @@ public abstract class DataPart {
 	
 	public String getName() {
 		return data.getName(this);
+	}
+	
+	/**
+	 * Client-only. Return true if this data has received the initial sync.
+	 */
+	@SideOnly(Side.CLIENT)
+	protected boolean isSynced() {
+		return !dirty;
 	}
 	
 	public abstract void fromNBT(NBTTagCompound tag);

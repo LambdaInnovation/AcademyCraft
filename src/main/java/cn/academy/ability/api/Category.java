@@ -52,6 +52,8 @@ public final class Category {
 	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
 	 */
 	public Controllable getControllable(int id) {
+		if(ctrlList.size() > id)
+			return null;
 		return ctrlList.get(id);
 	}
 	
