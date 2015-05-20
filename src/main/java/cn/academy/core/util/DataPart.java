@@ -26,38 +26,38 @@ import cn.liutils.util.GenericUtils;
 import cn.liutils.util.ReflectUtils;
 
 /**
+ * DataPart represents a single tickable instance attached on an EntityPlayer.
+ *  It is driven by the PlayerData of this player. <br/>
+ *  
+ * The DataPart is attached statically via {@link PlayerData#register(String, Class)}
+ *  method or @RegDataPart (This should be done at init stages), and is automatically constructed when an
+ *  EntityPlayer enters the world. At server, the {@link DataPart#fromNBT(NBTTagCompound)}
+ *  method will be called right away, and the NBT will also be sync to client ASAP. 
+ *  Also when the world is being saved, the {@link DataPart#toNBT()} will be called to save stuffs
+ *   in server.
+ *  <br/>
+ * 
+ * However no dynamic sync helper is provided. It's more convenient and flexible
+ *  if you take advantage of AR's NetworkCall to sync stuffs (Either lazily or dynamically). 
+ *  For that purpose, we have already provided the instance serializer for you.<br/>
+ *  
+ * Each tick when player is available the {@link DataPart#tick()} will get called. You can 
+ * process stuffs within it.
+ * 
  * @author WeAthFolD
  */
 @Registrant
 @RegSerializable(instance = DataPart.Serializer.class)
 public abstract class DataPart {
 
+	/**
+	 * Internal sync flag, used to determine whether this part is init in client.
+	 */
+	boolean dirty = true;
+	
 	public PlayerData data;
 	
-	boolean dirty;
-	
-	public DataPart() {
-		dirty = GenericUtils.getSide() == Side.SERVER;
-	}
-	
-	/**
-	 * If this flag is false, client sync requests will ALWAYS get discarded.
-	 * This is used to prevent stupid mistakes. If your DataPart need to sync from
-	 * client using the 'dirty' mechanism, set this to true.
-	 */
-	protected boolean allowClientSync = false;
-	
-	/**
-	 * If this is enabled, will load the public field(If possible via DataSerializer) automatically.
-	 */
-	protected boolean autoSync = false;
-	
-	/**
-	 * Mark this data as dirty for next tick's network sync.
-	 */
-	public void markDirty() {
-		dirty = true;
-	}
+	public DataPart() {}
 	
 	public abstract void tick();
 	
@@ -77,28 +77,9 @@ public abstract class DataPart {
 		return data.getName(this);
 	}
 	
-	public void fromNBT(NBTTagCompound tag) {
-		if(autoSync) {
-			try {
-				ReflectUtils.fromNBT(this, tag);
-			} catch (Exception e) {
-				AcademyCraft.log.error("Exception occured handling nbt loading of " + this.getClass());
-				e.printStackTrace();
-			}
-		}
-	}
+	public abstract void fromNBT(NBTTagCompound tag);
 	
-	public NBTTagCompound toNBT() {
-		if(autoSync) {
-			try {
-				return ReflectUtils.toNBT(this);
-			} catch(Exception e) {
-				AcademyCraft.log.error("Exception converting nbt of " + this.getClass());
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+	public abstract NBTTagCompound toNBT();
 	
 	public static class Serializer implements InstanceSerializer<DataPart> {
 		

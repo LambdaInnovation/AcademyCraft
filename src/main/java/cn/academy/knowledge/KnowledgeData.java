@@ -28,8 +28,8 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.DataSerializer;
 import cn.annoreg.mc.s11n.SerializationManager;
+import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Target;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -86,6 +86,10 @@ public class KnowledgeData extends DataPart {
 		return i == null ? null : getKnowledge(i);
 	}
 	
+	public static boolean hasKnowledge(String name) {
+		return idMap.containsKey(name);
+	}
+	
 	public static Knowledge getKnowledge(int id) {
 		return knowledgeList.size() > id ? knowledgeList.get(id) : null;
 	}
@@ -98,6 +102,17 @@ public class KnowledgeData extends DataPart {
 	
 	public KnowledgeData() {
 		learned = new BitSet(knowledgeList.size());
+	}
+	
+	public int getLearnedCount() {
+		return learned.cardinality();
+	}
+	
+	/**
+	 * You should NOT modify the result value, for this would cause sync loss.
+	 */
+	public BitSet getBitmask() {
+		return learned;
 	}
 	
 	/**
@@ -117,14 +132,42 @@ public class KnowledgeData extends DataPart {
 	 */
 	public void learn(int id) {
 		if(!isLearned(id)) {
-			learned.set(id, true);
 			if(!isRemote()) {
-				System.out.println("Triggering in server");
-				doLearnKnowledge(getPlayer(), id);
-				learnedKnowledge(getPlayer(), id);
+				doLearnKnowledge(id);
+				learnedKnowledge(id);
 			}
-			markDirty();
 		}
+	}
+	
+	public void unlearn(String name) {
+		Integer i = idMap.get(name);
+		if(i != null) {
+			unlearn(i);
+		}
+	}
+	
+	/**
+	 * Unlearn some knowledge, debug only, should only call in SERVER.
+	 */
+	public void unlearn(int id) {
+		learned.set(id, false);
+		plainSync(learned);
+	}
+	
+	/**
+	 * Learn all knowledges, debug only, should only call in SERVER.
+	 */
+	public void learnAll() {
+		learned.set(0, knowledgeList.size(), true);
+		plainSync(learned);
+	}
+	
+	/**
+	 * Unlearn all knowledges, debug only, should only call in SERVER.
+	 */
+	public void unlearnAll() {
+		learned.set(0, knowledgeList.size(), false);
+		plainSync(learned);
 	}
 	
 	public boolean isLearned(String name) {
@@ -160,14 +203,22 @@ public class KnowledgeData extends DataPart {
 	public void tick() {
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT)
-	private static void learnedKnowledge(@Target EntityPlayer player, @Data Integer id) {
-		doLearnKnowledge(player, id);
-		System.out.println("Receiving in client");
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void plainSync(@Data BitSet bs) {
+		if(this != null)
+			this.learned = bs;
 	}
 	
-	private static void doLearnKnowledge(EntityPlayer player, int id) {
-		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(player, id));
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void learnedKnowledge(@Data Integer id) {
+		if(this != null)
+			doLearnKnowledge(id);
+	}
+	
+	private void doLearnKnowledge(int id) {
+		learned.set(id, true);
+		System.out.println("DoLearnKnowledge in " + this.getPlayer().worldObj.isRemote + ", " + learned);
+		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getPlayer(), id));
 	}
 
 }

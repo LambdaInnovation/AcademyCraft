@@ -101,7 +101,7 @@ public class NotifyUI extends Widget {
 						drawIcon(end, 1);
 						drawText(1);
 						
-					} else if(dt < KEEP_TIME) {
+					} else if(dt < KEEP_TIME) { 
 						
 						double alpha = 1 - (dt - (KEEP_TIME - BLEND_OUT_TIME)) / BLEND_OUT_TIME;
 						drawBack(alpha);

@@ -17,7 +17,9 @@ public class ClientThreadProxy extends CommonThreadProxy {
 
 	@Override
 	public PlayerData regPlayerData(EntityPlayer player) {
-		return new PlayerData.Client(player);
+		PlayerData data = new PlayerData.Client(player);
+		player.registerExtendedProperties(DATA_IDENTIFIER, data);
+		return data;
 	}
 
 }

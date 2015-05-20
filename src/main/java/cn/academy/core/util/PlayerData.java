@@ -33,6 +33,7 @@ import cn.annoreg.mc.SideHelper;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
+import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.liutils.util.ClientUtils;
 import cn.liutils.util.GenericUtils;
@@ -48,117 +49,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * The environment provider and handler of DataPart. <br/>
+ * It is recommended not to access this class explicitly, but create
+ * some static get method in each DataPart class.
  * @author WeAthFolD
- *
  */
 @Registrant
 @RegSerializable(instance = PlayerData.Serializer.class)
 public abstract class PlayerData implements IExtendedEntityProperties {
 	
 	private static String IDENTIFIER = "ac_playerData";
-	
-	@RegEventHandler
-	public static class Ticks {
-		
-		@SubscribeEvent
-		@SideOnly(Side.CLIENT)
-		public void onClientTick(ClientTickEvent event) {
-			if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
-				EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-				ProxyHelper.get().getPlayerData(thePlayer).tick();
-				//System.out.println("Ticking client");
-			}
-		}
-		
-		@SubscribeEvent
-		public void onServerTick(ServerTickEvent event) {
-			if(event.phase == Phase.END) {
-				ThreadProxy proxy = ProxyHelper.get();
-				for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-					EntityPlayer player = (EntityPlayer) p;
-					proxy.getPlayerData(player).tick();
-				}
-			}
-		}
-		
-	}
-	
-	public static class Client extends PlayerData {
-
-		public Client(EntityPlayer player) {
-			super(player);
-		}
-
-		@Override
-		protected void tick() {
-			updateParts();
-			
-			for(DataPart p : constructed.values()) {
-				if(p.allowClientSync && p.dirty) {
-					p.dirty = false;
-					syncToServer(getName(p), p.toNBT());
-				}
-			}
-		}
-
-		@Override
-		public void saveNBTData(NBTTagCompound compound) {}
-
-		@Override
-		public void loadNBTData(NBTTagCompound compound) {}
-
-		@Override
-		public void syncNow(DataPart part) {
-			this.syncToClient(part.getName(), part.toNBT());
-		}
-		
-	}
-	
-	public static class Server extends PlayerData {
-
-		public Server(EntityPlayer player) {
-			super(player);
-		}
-
-		@Override
-		protected void tick() {
-			updateParts();
-			
-			for(DataPart p : constructed.values()) {
-				if(p.dirty) {
-					p.dirty = false;
-					syncToClient(getName(p), p.toNBT());
-				}
-			}
-		}
-
-		@Override
-		public void saveNBTData(NBTTagCompound tag) {
-			
-			for(DataPart p : constructed.values()) {
-				NBTTagCompound ret = p.toNBT();
-				tag.setTag(getName(p), ret);
-			}
-		}
-
-		@Override
-		public void loadNBTData(NBTTagCompound tag) {
-			
-			for(DataPart p : constructed.values()) {
-				String name = getName(p);
-				NBTTagCompound t = (NBTTagCompound) tag.getTag(name);
-				if(t != null) {
-					p.fromNBT(t);
-				}
-			}
-		}
-
-		@Override
-		public void syncNow(DataPart part) {
-			this.syncToServer(part.getName(), part.toNBT());
-		}
-		
-	}
 	
 	static BiMap<String, Class<? extends DataPart> > staticParts = HashBiMap.create();
 	
@@ -173,7 +73,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	 */
 	public EntityPlayer player;
 	
-	public PlayerData(EntityPlayer player) {
+	PlayerData(EntityPlayer player) {
 		this.player = player;
 		
 		try {
@@ -195,9 +95,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		}
 	}
 	
-	protected abstract void tick();
-	
-	protected void updateParts() {
+	protected void tick() {
 		for(DataPart p : constructed.values()) {
 			p.tick();
 		}
@@ -208,32 +106,9 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		player = (EntityPlayer) entity;
 	}
 	
-	public void receiveSync(String name, NBTTagCompound tag) {
-		if(this == null) return;
-		if(tag == null) {
-			AcademyCraft.log.warn("Received NULL sync message from " + name + ", discarding");
-			return;
-		}
-		
-		System.out.println("Received sync of " + name + " in " + GenericUtils.getEffectiveSide());
-		BiMap<Class<? extends DataPart>, String> inverse = staticParts.inverse();
-		for(DataPart dp : constructed.values()) {
-			if(inverse.get(dp.getClass()).equals(name)) {
-				dp.fromNBT(tag);
-				break;
-			}
-		}
-	}
-	
 	public String getName(DataPart part) {
 		return constructed.inverse().get(part);
 	}
-	
-	public void syncNow(String name) {
-		syncNow(getPart(name));
-	}
-	
-	public abstract void syncNow(DataPart part);
 	
 	public <T extends DataPart> T getPart(String name) {
 		return (T) constructed.get(name);
@@ -244,20 +119,133 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		return (T) constructed.get(id);
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT)
-	public void syncToClient(@Data String name, @Data NBTTagCompound tag) {
-		receiveSync(name, tag);
-		System.out.println("[DataPart] Synced [" + name + "] from server");
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public void syncToServer(@Data String name, @Data NBTTagCompound tag) {
-		receiveSync(name, tag);
-		System.out.println("[DataPart] Synced [" + name + "] from client");
-	}
-	
 	public static PlayerData get(EntityPlayer player) {
 		return ProxyHelper.get().getPlayerData(player);
+	}
+	
+	@Override
+	public void loadNBTData(NBTTagCompound tag) {
+		for(DataPart p : constructed.values()) {
+			String name = getName(p);
+			NBTTagCompound t = (NBTTagCompound) tag.getTag(name);
+			if(t != null) {
+				p.fromNBT(t);
+			}
+		}
+	}
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	protected void receivedSyncQuery() {
+		if(this != null) {
+			System.out.println("ReceivedSyncQuery");
+			NBTTagCompound tag = new NBTTagCompound();
+			this.saveNBTData(tag);
+			this.receiveSync(tag);
+		}
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	protected void receiveSync(@Data NBTTagCompound tagAll) {
+		if(this != null) {
+			System.out.println("ReceivedSync");
+			this.loadNBTData(tagAll);
+		}
+	}
+	
+	public static class Client extends PlayerData {
+
+		int syncTicker;
+		
+		public Client(EntityPlayer player) {
+			super(player);
+			System.out.println("Constructed in client");
+		}
+
+		@Override
+		protected void tick() {
+			//System.out.println(syncTicker);
+			if(syncTicker == 0) {
+				syncTicker = 20;
+				this.receivedSyncQuery();
+			} else if(syncTicker > 0) {
+				syncTicker--;
+			}
+			
+			super.tick();
+		}
+		
+		@Override
+		public void saveNBTData(NBTTagCompound tag) {
+			//Do nothing in client.
+			System.out.println("SaveNBTData client");
+		}
+
+		@Override
+		public void loadNBTData(NBTTagCompound tag) {
+			super.loadNBTData(tag);
+			System.out.println("LoadNBTData client");
+			syncTicker = -1; //Received init, do not automatically sync any more.
+		}
+		
+	}
+	
+	public static class Server extends PlayerData {
+
+		public Server(EntityPlayer player) {
+			super(player);
+			System.out.println("Constructed in server");
+		}
+
+		@Override
+		public void saveNBTData(NBTTagCompound tag) {
+			for(DataPart p : constructed.values()) {
+				NBTTagCompound ret = p.toNBT();
+				tag.setTag(getName(p), ret);
+			}
+			
+			System.out.println("SaveNBTData server");
+		}
+		
+		@Override
+		public void loadNBTData(NBTTagCompound tag) {
+			System.out.println("LoadNBTData server");
+			super.loadNBTData(tag);
+		}
+		
+	}
+	
+	@RegEventHandler
+	public static class Events {
+		
+		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
+		public void onClientTick(ClientTickEvent event) {
+			if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
+				EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
+				ProxyHelper.get().getPlayerData(thePlayer).tick();
+			}
+		}
+		
+		@SubscribeEvent
+		public void onServerTick(ServerTickEvent event) {
+			if(event.phase == Phase.END) {
+				ThreadProxy proxy = ProxyHelper.get();
+				for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+					EntityPlayer player = (EntityPlayer) p;
+					proxy.getPlayerData(player).tick();
+				}
+			}
+		}
+		
+		@SubscribeEvent
+		public void onEntityConstructed(EntityConstructing event) {
+			if(GenericUtils.getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer) {
+				//A hack that forces the data to be loaded once the entity is constructed.
+				//loadNBT will only be called if we do so.
+				ProxyHelper.get().getPlayerData((EntityPlayer) event.entity);
+			}
+		}
+		
 	}
 	
 	public static class Serializer implements InstanceSerializer<PlayerData> {

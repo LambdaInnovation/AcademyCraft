@@ -51,6 +51,7 @@ public class ControlOverrider {
 	
 	public static void init() {
 		try {
+			//TODO
 			kbMap = (IntHashMap) RegUtils.getObfField(KeyBinding.class, "hash", "idk").get(null);
 			pressedField = RegUtils.getObfField(KeyBinding.class, "pressed", "idk");
 		} catch(Exception e) {
