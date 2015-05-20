@@ -55,6 +55,11 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
     public int getRenderBlockPass() {
         return 0;
     }
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {

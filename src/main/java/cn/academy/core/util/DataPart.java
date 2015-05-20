@@ -41,9 +41,12 @@ import cn.liutils.util.ReflectUtils;
  *  if you take advantage of AR's NetworkCall to sync stuffs (Either lazily or dynamically). 
  *  For that purpose, we have already provided the instance serializer for you.<br/>
  *  
- * Each tick when player is available the {@link DataPart#tick()} will get called. You can 
- * process stuffs within it.
+ * When player is available the {@link DataPart#tick()} will get called every tick. You can 
+ * process update stuffs within that method. <br/>
  * 
+ * TODO If tick is too slow make selective ticking optimization <br/>
+ * TODO Generalize this pattern if necessary <br/>
+ * TODO Allow dynamic dispatch if necessary <br/>
  * @author WeAthFolD
  */
 @Registrant

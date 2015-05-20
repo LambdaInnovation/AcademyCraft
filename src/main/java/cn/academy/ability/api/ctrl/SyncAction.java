@@ -1,4 +1,4 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public class SyncAction extends Tickable {
      * This function should be called right after it is created on the FIRST side.
      * Note that creating one action on both sides results in two actions on both.
      */
-    protected final void startSync() {
+    public final void startSync() {
         if (isStarted) return;
         isStarted = true;
         

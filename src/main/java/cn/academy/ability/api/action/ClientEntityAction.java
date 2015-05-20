@@ -3,7 +3,7 @@ package cn.academy.ability.api.action;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.SyncAction;
+import cn.academy.ability.api.ctrl.SyncAction;
 
 public abstract class ClientEntityAction extends SyncAction {
 

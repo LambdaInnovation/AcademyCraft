@@ -10,23 +10,25 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api.preset;
+package cn.academy.ability.api.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
-import cn.academy.ability.client.ui.KeyHint;
-import cn.liutils.api.key.LIKeyProcess;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.api.AbilityData;
+import cpw.mods.fml.common.eventhandler.Event;
 
 /**
  * @author WeAthFolD
  */
-public final class Preset {
+public abstract class AbilityEvent extends Event {
 	
+	public final EntityPlayer player;
 	
+	public AbilityEvent(EntityPlayer _player) {
+		player = _player;
+	}
+	
+	public AbilityData getAbilityData() {
+		return AbilityData.get(player);
+	}
 	
 }

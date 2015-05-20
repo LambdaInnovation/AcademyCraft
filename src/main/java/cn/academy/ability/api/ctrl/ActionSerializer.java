@@ -1,4 +1,4 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;

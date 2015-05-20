@@ -1,4 +1,4 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;

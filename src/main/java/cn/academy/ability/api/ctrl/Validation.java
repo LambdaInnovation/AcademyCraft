@@ -1,4 +1,4 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 /**
  * Validation used by {@link SyncAction}s.

@@ -3,8 +3,7 @@ package cn.academy.core.proxy;
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.SyncAction;
+import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.core.util.PlayerData;
 
 public abstract class CommonThreadProxy implements ThreadProxy {

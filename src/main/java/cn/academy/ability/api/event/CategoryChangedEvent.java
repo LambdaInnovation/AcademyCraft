@@ -10,23 +10,19 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api.preset;
+package cn.academy.ability.api.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
-import cn.academy.ability.client.ui.KeyHint;
-import cn.liutils.api.key.LIKeyProcess;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.common.eventhandler.Event;
 
 /**
+ * Fired in both sides, when the player category has just changed.
  * @author WeAthFolD
  */
-public final class Preset {
-	
-	
+public class CategoryChangedEvent extends AbilityEvent {
+
+	public CategoryChangedEvent(EntityPlayer _player) {
+		super(_player);
+	}
 	
 }

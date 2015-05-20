@@ -1,4 +1,4 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 import java.util.ArrayList;
 import java.util.Collection;

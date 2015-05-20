@@ -1,9 +1,10 @@
-package cn.academy.ability.api;
+package cn.academy.ability.api.ctrl;
 
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.api.Skill;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.api.key.IKeyHandler;

@@ -1,7 +1,7 @@
 package cn.academy.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.SyncAction;
+import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.core.util.PlayerData;
 
 /**
