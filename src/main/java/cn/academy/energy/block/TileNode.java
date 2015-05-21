@@ -163,19 +163,14 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		this.name = name;
 	}
 	
-	//TODO: Limit the sending range, or this will send a huge bunch of useless data!
-	
-	@SuppressWarnings("unused")
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	public void receiveSyncMessage(
 		@Data Boolean enabled, 
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
 		@Data Double energy) {
-		if(this == null) {
-			return;
-		}
-		
+//		if(this == null)
+//			return;
 		this.enabled = enabled;
 		this.chargingIn = chargingIn;
 		this.chargingOut = chargingOut;

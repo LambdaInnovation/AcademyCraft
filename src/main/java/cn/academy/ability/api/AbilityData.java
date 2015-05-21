@@ -41,7 +41,7 @@ public class AbilityData extends DataPart {
 	 * Only effective in server. If c==null then set the player state to unlearned.
 	 */
 	public void setCategory(Category c) {
-		setCategoryID(CategoryManager.INSTANCE.getCategoryID(c));
+		setCategoryID(c.getCategoryID());
 	}
 	
 	/**
@@ -49,6 +49,7 @@ public class AbilityData extends DataPart {
 	 */
 	public void setCategoryID(int id) {
 		if(id != catID && !isRemote()) {
+			catID = id;
 			doCompleteSync();
 			MinecraftForge.EVENT_BUS.post(new CategoryChangedEvent(getPlayer()));
 		}
@@ -78,7 +79,7 @@ public class AbilityData extends DataPart {
 	public NBTTagCompound toNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
 		
-		tag.setByte("c", (byte) catID); //There cant be more than 128 ticks yeah? >)
+		tag.setByte("c", (byte) catID); //There cant be more than 128 categories yeah? >)
 		
 		return tag;
 	}

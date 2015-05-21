@@ -34,6 +34,10 @@ public abstract class ACCommand extends LICommandBase {
 		return "ac.command.successful";
 	}
 	
+	public String locNotLearned() {
+		return "ac.command.notlearned";
+	}
+	
 	@Override
 	public String getCommandName() {
 		return commandName;
@@ -41,6 +45,10 @@ public abstract class ACCommand extends LICommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender ics) {
-		return "ac.command." + commandName + ".usage";
+		return getLoc("usage");
+	}
+	
+	protected String getLoc(String s) {
+		return "ac.command." + commandName + "." + s;
 	}
 }

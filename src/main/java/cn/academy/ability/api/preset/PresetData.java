@@ -12,6 +12,9 @@
  */
 package cn.academy.ability.api.preset;
 
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -21,6 +24,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
+import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
@@ -74,6 +78,10 @@ public class PresetData extends DataPart {
 		return new PresetEditor(presets[presetID]);
 	}
 	
+	public Preset getPreset(int id) {
+		return presets[id];
+	}
+	
 	public Preset getCurrentPreset() {
 		if(!getIsActive()) {
 			return null;
@@ -116,6 +124,10 @@ public class PresetData extends DataPart {
 			return this.isSynced() && getAbilityData().isLearned();
 		}
 		return getAbilityData().isLearned();
+	}
+	
+	public static PresetData get(EntityPlayer player) {
+		return PlayerData.get(player).getPart(PresetData.class);
 	}
 	
 	public class PresetEditor {
@@ -189,6 +201,30 @@ public class PresetData extends DataPart {
 			for(int i = 0; i < MAX_KEYS; ++i) {
 				data[i] = d[i];
 			}
+		}
+		
+		public String formatDetail() {
+			StringBuilder sb = new StringBuilder();
+			Category cat = AbilityData.get(getPlayer()).getCategory();
+			List<Controllable> ctrlList = cat.getControllableList();
+			
+			for(int i = 0; i < ctrlList.size(); ++i) {
+				Controllable c = ctrlList.get(i);
+				if(c != null) {
+					sb.append(i + " => " + c.toString() + "(" + data[i] + ")\n");
+				}
+			}
+			return sb.toString();
+		}
+		
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Preset[").append(getPlayer().getCommandSenderName()).append("] <");
+			for(int i = 0; i < MAX_KEYS; ++i) {
+				sb.append(data[i]).append(i == MAX_KEYS - 1 ? ">" : ",");
+			}
+			return sb.toString();
 		}
 		
 	}

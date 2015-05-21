@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.knowledge.debug;
+package cn.academy.knowledge.command;
 
 import java.util.BitSet;
 import java.util.List;
@@ -124,10 +124,6 @@ public class CommandKnowledge extends ACCommand {
 			}
 			}
 		}
-	}
-	
-	private String getLoc(String name) {
-		return "ac.command.knowledge." + name;
 	}
 
 }

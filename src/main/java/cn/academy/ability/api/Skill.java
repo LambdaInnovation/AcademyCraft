@@ -127,4 +127,9 @@ public abstract class Skill implements Controllable {
         return si;
     }
     
+    @Override
+    public String toString() {
+    	return getFullName();
+    }
+    
 }

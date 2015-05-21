@@ -20,6 +20,8 @@ import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.generic.client.Resources;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * @author WeAthFolD
  */
@@ -28,7 +30,9 @@ public final class Category {
 	List<Skill> skillList = new ArrayList();
 	List<Controllable> ctrlList = new ArrayList();
 	
-	public final String name;
+	private final String name;
+	
+	int catID = -1;
 	
 	protected ResourceLocation icon;
 	
@@ -39,6 +43,10 @@ public final class Category {
 	
 	public void addSkill(Skill skill) {
 		skillList.add(skill);
+	}
+	
+	public int getCategoryID() {
+		return catID;
 	}
 	
 	/**
@@ -55,6 +63,13 @@ public final class Category {
 		if(ctrlList.size() > id)
 			return null;
 		return ctrlList.get(id);
+	}
+	
+	/**
+	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
+	 */
+	public List<Controllable> getControllableList() {
+		return ImmutableList.copyOf(ctrlList);
 	}
 	
 	public ResourceLocation getIcon() {

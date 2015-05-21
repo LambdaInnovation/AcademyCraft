@@ -10,8 +10,31 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
+package cn.academy.ability.impl;
+
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.CategoryManager;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegSubmoduleInit;
+
 /**
- * This package contains stuffs that are related to cross-mod support.
  * @author WeAthFolD
+ *
  */
-package cn.academy.support;
+@Registrant
+@RegSubmoduleInit
+public class VanillaAbilities {
+	
+	public static void init() {
+		//Electro master
+		{
+			Category cat = new Category("electro_master");
+			
+			
+			
+			CategoryManager.INSTANCE.register(cat);
+		}
+	}
+	
+	
+}
