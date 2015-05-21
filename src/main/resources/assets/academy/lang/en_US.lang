@@ -22,6 +22,17 @@ ac.gui.node.not_connected.desc=NOT CONNECTED
 
 # -----
 
+# Electro Master
+ac.ability.electro_master.arc_gen.name=Arc Generation
+
+ac.ability.electro_master.mag_attract.name=Magnet Attraction
+
+ac.ability.electro_master.mine_detect.name=Mine Detection
+
+ac.ability.electro_master.railgun.name=Railgun
+
+
+
 
 # Knowledge
 ac.knowledge.bubble.name=Bubble Master
@@ -52,6 +63,7 @@ ac.command.aim.cats=Currently available categories:
 ac.command.aim.curcat=Player current category: %s
 ac.command.aim.nonecat=No ability
 
+ac.command.preset.usage=/preset <command>|<help> [parameters...]
 ac.command.preset.help=/preset help: Display the help message.
 ac.command.preset.view=/preset view <id>: View the preset info with given ID.
 ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: Edit the preset with given ID. Mapping is controllable id.

@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electro.entity;
+package cn.academy.ability.impl.electromaster.entity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.ability.impl.electro.client.renderer.RendererCoinThrowing;
+import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.core.ACItems;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;

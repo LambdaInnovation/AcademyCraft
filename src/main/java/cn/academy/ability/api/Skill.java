@@ -24,11 +24,12 @@ public abstract class Skill implements Controllable {
 	
 	public Skill(String _name) {
 		name = _name;
-		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 	}
 	
-	final void addedSkill(Category _category) {
+	final void addedIntoCategory(Category _category) {
 		category = _category;
+		
+		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 		
 		initSkill();
 	}

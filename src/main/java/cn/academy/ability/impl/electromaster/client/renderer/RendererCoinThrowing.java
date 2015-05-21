@@ -10,11 +10,11 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electro.client.renderer;
+package cn.academy.ability.impl.electromaster.client.renderer;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.impl.electro.entity.EntityCoinThrowing;
+import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.generic.client.Resources;
 import cn.liutils.util.RenderUtils;
 import net.minecraft.client.Minecraft;

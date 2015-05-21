@@ -14,6 +14,10 @@ package cn.academy.ability.impl;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.ability.impl.electromaster.skill.SkillArcGen;
+import cn.academy.ability.impl.electromaster.skill.SkillMagAttract;
+import cn.academy.ability.impl.electromaster.skill.SkillMineDetect;
+import cn.academy.ability.impl.electromaster.skill.SkillRailgun;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 
@@ -30,7 +34,10 @@ public class VanillaAbilities {
 		{
 			Category cat = new Category("electro_master");
 			
-			
+			cat.addSkill(new SkillArcGen());
+			cat.addSkill(new SkillMagAttract());
+			cat.addSkill(new SkillMineDetect());
+			cat.addSkill(new SkillRailgun());
 			
 			CategoryManager.INSTANCE.register(cat);
 		}

@@ -96,11 +96,12 @@ public class CommandPreset extends ACCommand {
 					} else {
 						Preset p = pData.getPreset(id);
 						String[] strs = p.formatDetail().split("\n");
-						for(String s : strs) {
-							sendChat(ics, s);
-						}
-						if(strs[0].equals("")) {
+						if(strs[0].trim().equals("")) {
 							sendChat(ics, getLoc("nobind"));
+						} else {
+							for(String s : strs) {
+								sendChat(ics, s);
+							}
 						}
 					}
 				} else {

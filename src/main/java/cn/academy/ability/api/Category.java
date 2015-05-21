@@ -43,10 +43,17 @@ public final class Category {
 	
 	public void addSkill(Skill skill) {
 		skillList.add(skill);
+		addControllable(skill);
+		
+		skill.addedIntoCategory(this);
 	}
 	
 	public int getCategoryID() {
 		return catID;
+	}
+	
+	public void addControllable(Controllable c) {
+		ctrlList.add(c);
 	}
 	
 	/**
@@ -61,8 +68,8 @@ public final class Category {
 	 */
 	public Controllable getControllable(int id) {
 		if(ctrlList.size() > id)
-			return null;
-		return ctrlList.get(id);
+			return ctrlList.get(id);
+		return null;
 	}
 	
 	/**

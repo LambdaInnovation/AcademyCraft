@@ -72,7 +72,7 @@ public class PresetData extends DataPart {
 	}
 	
 	/**
-	 * Client only. Create a instance that have capability to edit a fixed preset.
+	 * Create a instance that have capability to edit a fixed preset.
 	 */
 	public PresetEditor createEditor(int presetID) {
 		return new PresetEditor(presets[presetID]);
@@ -83,7 +83,7 @@ public class PresetData extends DataPart {
 	}
 	
 	public Preset getCurrentPreset() {
-		if(!getIsActive()) {
+		if(!isActive()) {
 			return null;
 		}
 		return locked ? specialPreset : presets[presetID];
@@ -92,18 +92,28 @@ public class PresetData extends DataPart {
 	@Override
 	public void tick() {}
 	
-	private void syncToServer() {
-		recServerSync(toNBT());
+	private void sync() {
+		if(isRemote()) {
+			recServerSync(toNBT());
+		} else {
+			recClientSync(toNBT());
+		}
 	}
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void recServerSync(@Data NBTTagCompound tag) {
 		fromNBT(tag);
 	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void recClientSync(@Data NBTTagCompound tag) {
+		fromNBT(tag);
+	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		presetID = tag.getByte("cur");
+		System.out.println("Received sync in " + isRemote());
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			presets[i].fromNBT(tag.getCompoundTag("" + i));
 		}
@@ -119,7 +129,7 @@ public class PresetData extends DataPart {
 		return ret;
 	}
 	
-	private boolean getIsActive() {
+	public boolean isActive() {
 		if(isRemote()) {
 			return this.isSynced() && getAbilityData().isLearned();
 		}
@@ -154,7 +164,7 @@ public class PresetData extends DataPart {
 		
 		public void save() {
 			target.setData(display);
-			syncToServer();
+			sync();
 		}
 		
 	}
@@ -208,8 +218,11 @@ public class PresetData extends DataPart {
 			Category cat = AbilityData.get(getPlayer()).getCategory();
 			List<Controllable> ctrlList = cat.getControllableList();
 			
-			for(int i = 0; i < ctrlList.size(); ++i) {
-				Controllable c = ctrlList.get(i);
+			for(int i = 0; i < MAX_KEYS; ++i) {
+				Controllable c = null;
+				if(data[i] != -1) {
+					c = ctrlList.get(data[i]);
+				}
 				if(c != null) {
 					sb.append(i + " => " + c.toString() + "(" + data[i] + ")\n");
 				}

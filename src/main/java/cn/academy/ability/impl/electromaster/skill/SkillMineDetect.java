@@ -10,25 +10,18 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.client.ui;
+package cn.academy.ability.impl.electromaster.skill;
 
-import net.minecraft.util.ResourceLocation;
+import cn.academy.ability.api.Skill;
 
 /**
  * @author WeAthFolD
+ *
  */
-public class KeyHint {
+public class SkillMineDetect extends Skill {
 
-	public final ResourceLocation logo;
-	
-	public final int keyID;
-	
-	public final String description;
-	
-	public KeyHint(String logoPath, int kid, String desc) {
-		logo = new ResourceLocation("academy:textures/" + logoPath + ".png");
-		keyID = kid;
-		description = desc;
+	public SkillMineDetect() {
+		super("mine_detect");
 	}
-	
+
 }

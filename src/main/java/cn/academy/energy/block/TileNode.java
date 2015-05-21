@@ -169,8 +169,8 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
 		@Data Double energy) {
-//		if(this == null)
-//			return;
+		if(this == null)
+			return;
 		this.enabled = enabled;
 		this.chargingIn = chargingIn;
 		this.chargingOut = chargingOut;

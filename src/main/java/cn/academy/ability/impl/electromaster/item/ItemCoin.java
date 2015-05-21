@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electro.item;
+package cn.academy.ability.impl.electromaster.item;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.ability.impl.electro.client.renderer.RendererCoinThrowing;
-import cn.academy.ability.impl.electro.entity.EntityCoinThrowing;
+import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
+import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;

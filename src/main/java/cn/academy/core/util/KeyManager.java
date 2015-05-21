@@ -82,6 +82,19 @@ public class KeyManager {
 		addKeyHandler(name, keyDesc, defKeyID, false, handler);
 	}
 	
+	private KeyBinding getKeyBinding(KeyHandler handler) {
+		for(KeyBinding kb : nameMap.values()) {
+			if(kb.handler == handler)
+				return kb;
+		}
+		return null;
+	}
+	
+	public int getKeyID(KeyHandler handler) {
+		KeyBinding kb = getKeyBinding(handler);
+		return kb == null ? -1 : kb.keyID;
+	}
+	
 	/**
 	 * Add a key handler.
 	 * @param name

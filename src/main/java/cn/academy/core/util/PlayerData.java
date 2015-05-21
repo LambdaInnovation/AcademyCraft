@@ -130,6 +130,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 			NBTTagCompound t = (NBTTagCompound) tag.getTag(name);
 			if(t != null) {
 				p.fromNBT(t);
+				p.dirty = false;
 			}
 		}
 	}

@@ -17,6 +17,6 @@
     },
     
     "coin": {
-        "itemType": "cn.academy.ability.impl.electro.item.ItemCoin"
+        "itemType": "cn.academy.ability.impl.electromaster.item.ItemCoin"
     }
 }

@@ -34,6 +34,8 @@ public class AbilityUI extends AuxGui {
 	
 	NotifyUI notifyUI;
 	
+	KeyHintUI keyHintUI;
+	
 	/**
 	 * 
 	 */
@@ -46,8 +48,11 @@ public class AbilityUI extends AuxGui {
 		notifyUI = new NotifyUI();
 		notifyUI.transform.setPos(0, 33);
 		
+		keyHintUI = new KeyHintUI();
+		
 		scene.addWidget(cpbar);
 		scene.addWidget(notifyUI);
+		scene.addWidget(keyHintUI);
 	}
 	
 	@Override
