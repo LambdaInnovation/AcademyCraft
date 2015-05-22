@@ -12,20 +12,28 @@
  */
 package cn.academy.energy.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import cn.academy.core.AcademyCraft;
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.annoreg.core.Registrant;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -34,6 +42,7 @@ import cn.liutils.template.client.render.block.RenderEmptyBlock;
 public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProvider {
 	
 	public static Fluid fluid = new Fluid("imagFlux");
+	public final MatterMaterial mat;
 	static { //TODO: @RegFluid
 		fluid.setLuminosity(8).setDensity(7000).setViscosity(6000).setTemperature(0).setDensity(1);
 		FluidRegistry.registerFluid(fluid);
@@ -48,6 +57,11 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
 		setBlockTextureName("academy:black");
 		
 		this.setQuantaPerBlock(3);
+		
+		mat = new MatterMaterial("imag_ionic", this);
+		ItemMatterUnit.addMatterMaterial(mat);
+		
+		MinecraftForge.EVENT_BUS.register(this);
 	}    
 	
 	@SideOnly(Side.CLIENT)
@@ -66,4 +80,17 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
 		return new TileIonicFlux();
 	}
 
+	@SubscribeEvent
+	public void onInteract(PlayerInteractEvent event) {
+		System.out.println("OnInteract");
+		if(event.action == Action.RIGHT_CLICK_BLOCK) {
+			Block b = event.world.getBlock(event.x, event.y, event.z);
+			System.out.println(b);
+			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+			if(b == this && stack != null && stack.getItem() == ModuleCrafting.matterUnit) {
+				ModuleCrafting.matterUnit.setMaterial(stack, mat);
+			}
+		}
+	}
+	
 }

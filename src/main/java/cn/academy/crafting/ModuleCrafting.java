@@ -30,12 +30,6 @@ public class ModuleCrafting {
 	public static ItemMatterUnit matterUnit;
 
 	public static void init() {
-		String[] materialNames = {
-			"imag_ionic"	
-		};
-		for(String name : materialNames) {
-			ItemMatterUnit.addMatterMaterial(new MatterMaterial(name));
-		}
 	}
 	
 }
