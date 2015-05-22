@@ -20,7 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
-import cn.academy.generic.command.ACCommand;
+import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
 

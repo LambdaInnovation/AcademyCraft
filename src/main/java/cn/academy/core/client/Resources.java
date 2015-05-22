@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.generic.client;
+package cn.academy.core.client;
 
 import java.util.HashMap;
 import java.util.Map;

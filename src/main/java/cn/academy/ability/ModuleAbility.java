@@ -10,35 +10,45 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl;
+package cn.academy.ability;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.ability.impl.electromaster.item.ItemCoin;
 import cn.academy.ability.impl.electromaster.skill.SkillArcGen;
 import cn.academy.ability.impl.electromaster.skill.SkillMagAttract;
 import cn.academy.ability.impl.electromaster.skill.SkillMineDetect;
 import cn.academy.ability.impl.electromaster.skill.SkillRailgun;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegSubmoduleInit;
 
 /**
+ * The ability module init class.
  * @author WeAthFolD
- *
  */
 @Registrant
 @RegSubmoduleInit
-public class VanillaAbilities {
+public class ModuleAbility {
 	
+	@RegItem
+	@RegItem.HasRender
+	public static ItemCoin coin;
+
 	public static void init() {
+		initCategories();
+	}
+	
+	private static void initCategories() {
 		//Electro master
 		{
 			Category cat = new Category("electro_master");
-			
+					
 			cat.addSkill(new SkillArcGen());
 			cat.addSkill(new SkillMagAttract());
 			cat.addSkill(new SkillMineDetect());
 			cat.addSkill(new SkillRailgun());
-			
+					
 			CategoryManager.INSTANCE.register(cat);
 		}
 	}

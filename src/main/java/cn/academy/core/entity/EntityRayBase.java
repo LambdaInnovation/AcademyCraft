@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.generic.entity;
+package cn.academy.core.entity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;

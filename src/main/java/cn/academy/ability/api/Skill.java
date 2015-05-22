@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.generic.client.Resources;
+import cn.academy.core.client.Resources;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer

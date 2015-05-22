@@ -25,7 +25,7 @@ import net.minecraftforge.fluids.RenderBlockFluid;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.generic.client.Resources;
+import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.liutils.util.RenderUtils;
 

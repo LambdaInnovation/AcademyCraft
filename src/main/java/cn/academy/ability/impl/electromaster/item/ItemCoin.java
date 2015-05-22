@@ -15,22 +15,22 @@ package cn.academy.ability.impl.electromaster.item;
 import java.util.HashMap;
 import java.util.Map;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.GenericUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
@@ -41,7 +41,7 @@ public class ItemCoin extends Item {
 	
 	@RegItem.Render
 	@SideOnly(Side.CLIENT)
-	public RendererCoinThrowing.ItemRender renderCoin;
+	public static RendererCoinThrowing.ItemRender renderCoin;
 	
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
 	

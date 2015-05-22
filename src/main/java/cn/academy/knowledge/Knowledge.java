@@ -12,7 +12,7 @@
  */
 package cn.academy.knowledge;
 
-import cn.academy.generic.client.Resources;
+import cn.academy.core.client.Resources;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 

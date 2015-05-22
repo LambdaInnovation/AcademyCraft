@@ -19,8 +19,8 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.client.Resources;
 import cn.academy.energy.block.TileMatrix;
-import cn.academy.generic.client.Resources;
 import cn.liutils.template.block.RenderBlockMulti;
 import cn.liutils.util.RenderUtils;
 

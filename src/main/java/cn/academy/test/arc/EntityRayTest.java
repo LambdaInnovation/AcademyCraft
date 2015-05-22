@@ -20,10 +20,10 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.core.client.render.RendererRayComposite;
+import cn.academy.core.entity.EntityRayBase;
 import cn.academy.core.registry.RegKeyHandler;
 import cn.academy.core.util.KeyHandler;
-import cn.academy.generic.client.render.RendererRayComposite;
-import cn.academy.generic.entity.EntityRayBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.VecUtils;

@@ -1,4 +1,4 @@
-package cn.academy.generic.entity;
+package cn.academy.core.entity;
 
 import net.minecraft.util.Vec3;
 

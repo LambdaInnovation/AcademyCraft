@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.client.ui.notification.INotification;
 import cn.academy.ability.client.ui.notification.NotifyKnowledge;
-import cn.academy.generic.client.Resources;
+import cn.academy.core.client.Resources;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;

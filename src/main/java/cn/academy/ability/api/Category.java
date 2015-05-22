@@ -18,7 +18,7 @@ import java.util.List;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.Controllable;
-import cn.academy.generic.client.Resources;
+import cn.academy.core.client.Resources;
 
 import com.google.common.collect.ImmutableList;
 

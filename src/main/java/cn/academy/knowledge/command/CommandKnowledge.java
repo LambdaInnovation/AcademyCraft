@@ -16,7 +16,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
-import cn.academy.generic.command.ACCommand;
+import cn.academy.core.command.ACCommand;
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
 import cn.annoreg.core.Registrant;

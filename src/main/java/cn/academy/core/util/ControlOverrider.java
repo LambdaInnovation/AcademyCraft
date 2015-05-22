@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.generic.util;
+package cn.academy.core.util;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

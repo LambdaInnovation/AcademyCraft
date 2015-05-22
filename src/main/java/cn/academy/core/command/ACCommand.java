@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.generic.command;
+package cn.academy.core.command;
 
 import net.minecraft.command.ICommandSender;
 import cn.liutils.template.command.LICommandBase;

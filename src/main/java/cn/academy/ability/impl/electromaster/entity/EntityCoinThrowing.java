@@ -12,23 +12,22 @@
  */
 package cn.academy.ability.impl.electromaster.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
-import cn.academy.core.ACItems;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.util.GenericUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
@@ -131,10 +130,10 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		//try merge
 		if(!worldObj.isRemote && !player.capabilities.isCreativeMode
 			&& GenericUtils.mergeStackable(player.inventory, new ItemStack(
-					(Item) ACItems.items.getObject("coin"))) > 0) {
+					ModuleAbility.coin)) > 0) {
 			//if fail...
 			worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 
-				+ yOffset, player.posZ, new ItemStack((Item) ACItems.items.getObject("coin"))));
+				+ yOffset, player.posZ, new ItemStack(ModuleAbility.coin)));
 		}
 		setDead();
 	}
@@ -158,7 +157,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		super.readFromNBT(tag);
 		setDead();
 		worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(
-				(Item) ACItems.items.getObject("coin"))));
+				ModuleAbility.coin)));
 	}
 
 	@Override

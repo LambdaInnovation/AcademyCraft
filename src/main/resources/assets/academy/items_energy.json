@@ -1,9 +1,4 @@
 {
-    "default": {
-        "ignore": true,
-        "creativeTab": "cn.academy.core.AcademyCraft.cct",
-        "namespace": "academy"
-    },
     "energy_item": {
         "ignore": true,
         "itemType": "cn.academy.energy.template.ItemEnergyTemplate"
@@ -14,9 +9,5 @@
         "unlName": "ac_energy_unit",
         "maxEnergy": 10000,
         "latency": 20
-    },
-    
-    "coin": {
-        "itemType": "cn.academy.ability.impl.electromaster.item.ItemCoin"
     }
 }

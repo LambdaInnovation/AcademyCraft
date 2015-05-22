@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.generic.client.render;
+package cn.academy.core.client.render;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -23,7 +23,7 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.generic.entity.IRay;
+import cn.academy.core.entity.IRay;
 import cn.liutils.util.VecUtils;
 
 /**

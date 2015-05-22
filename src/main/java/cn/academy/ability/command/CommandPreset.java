@@ -22,7 +22,7 @@ import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.api.preset.PresetData.Preset;
 import cn.academy.ability.api.preset.PresetData.PresetEditor;
-import cn.academy.generic.command.ACCommand;
+import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
 

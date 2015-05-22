@@ -15,12 +15,12 @@ package cn.academy.energy.block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IWirelessNode;
 import cn.academy.energy.api.item.IFItemManager;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.internal.WirelessSystem;
-import cn.academy.generic.client.render.block.RenderDynamicBlock;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
@@ -169,8 +169,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
 		@Data Double energy) {
-		if(this == null)
-			return;
 		this.enabled = enabled;
 		this.chargingIn = chargingIn;
 		this.chargingOut = chargingOut;
