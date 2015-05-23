@@ -17,7 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.tile.TileInventory;
-import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.WirelessHelper;
+import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.item.IFItemManager;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.internal.WirelessSystem;
@@ -69,7 +70,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     		++updateTicker;
     		if(updateTicker == 10) {
     			updateTicker = 0;
-    			boolean b = WirelessSystem.isTileActive(this);
+    			boolean b = WirelessHelper.isNodeLinked(this);
     			receiveSyncMessage(b, chargingIn, chargingOut, energy);
     			
     		}

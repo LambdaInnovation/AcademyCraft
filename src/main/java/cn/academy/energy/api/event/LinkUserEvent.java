@@ -12,8 +12,8 @@
  */
 package cn.academy.energy.api.event;
 
-import cn.academy.energy.api.IWirelessNode;
-import cn.academy.energy.api.IWirelessTile;
+import cn.academy.energy.api.block.IWirelessNode;
+import cn.academy.energy.api.block.IWirelessTile;
 
 /**
  * Fired whenever a wireless user(receiver or generator) is to be linked to a node.

@@ -12,7 +12,7 @@
  */
 package cn.academy.energy.api.event;
 
-import cn.academy.energy.api.IWirelessTile;
+import cn.academy.energy.api.block.IWirelessTile;
 
 /**
  * Fired whenever a wireless user is to be destroyed.</br>

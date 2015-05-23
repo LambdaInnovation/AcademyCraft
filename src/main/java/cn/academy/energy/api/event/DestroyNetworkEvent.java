@@ -12,7 +12,7 @@
  */
 package cn.academy.energy.api.event;
 
-import cn.academy.energy.api.IWirelessMatrix;
+import cn.academy.energy.api.block.IWirelessMatrix;
 
 /**
  * Fire this whenever you want to destroy a wireless network manually.

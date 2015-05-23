@@ -12,9 +12,9 @@
  */
 package cn.academy.energy.api.event;
 
-import cn.academy.energy.api.IWirelessGenerator;
-import cn.academy.energy.api.IWirelessReceiver;
-import cn.academy.energy.api.IWirelessTile;
+import cn.academy.energy.api.block.IWirelessGenerator;
+import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.api.block.IWirelessTile;
 
 /**
  * @author WeathFolD

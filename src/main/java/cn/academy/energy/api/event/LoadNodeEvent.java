@@ -12,7 +12,7 @@
  */
 package cn.academy.energy.api.event;
 
-import cn.academy.energy.api.IWirelessNode;
+import cn.academy.energy.api.block.IWirelessNode;
 
 /**
  * This should be explicitly posted when a wireless node is created or re-loaded from NBT, to add it to the lookup table.

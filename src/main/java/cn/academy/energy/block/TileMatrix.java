@@ -15,7 +15,7 @@ package cn.academy.energy.block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.tile.TileInventory;
-import cn.academy.energy.api.IWirelessMatrix;
+import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;

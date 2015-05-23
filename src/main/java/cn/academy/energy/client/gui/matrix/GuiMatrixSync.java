@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.ChangePassEvent;
 import cn.academy.energy.api.event.CreateNetworkEvent;
 import cn.academy.energy.block.TileMatrix;
@@ -91,7 +92,7 @@ public class GuiMatrixSync {
 			return;
 		//Extract out the stuffs
 		NBTTagCompound tag = new NBTTagCompound();
-		boolean loaded = WirelessSystem.instance.isTileActive(matrix);
+		boolean loaded = WirelessHelper.isMatrixActive(matrix);
 		tag.setBoolean("loaded", loaded);
 		int cap = matrix.getCapacity();
 		double lat = matrix.getLatency();
@@ -101,7 +102,7 @@ public class GuiMatrixSync {
 		tag.setInteger("range", (int) range);
 		
 		if(loaded) {
-			String ssid = WirelessSystem.instance.getSSID(matrix);
+			String ssid = WirelessHelper.getWirelessNet(matrix).getSSID();
 			tag.setString("ssid", ssid);
 		}
 		

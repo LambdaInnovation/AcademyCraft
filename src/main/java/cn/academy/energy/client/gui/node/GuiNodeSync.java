@@ -22,14 +22,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.LinkNodeEvent;
 import cn.academy.energy.block.TileNode;
+import cn.academy.energy.internal.WirelessNet;
 import cn.academy.energy.internal.WirelessSystem;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.liutils.util.VecUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -64,7 +67,8 @@ public class GuiNodeSync {
 	public static void queryInfo(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
-		receiveInfo(player, target, WirelessSystem.getNodeConnection(target).getLoad(), target.getNodeName(), WirelessSystem.getSSID(target));
+		WirelessNet net = WirelessHelper.getWirelessNet(target);
+		receiveInfo(player, target, WirelessHelper.getNodeConn(target).getLoad(), target.getNodeName(), net == null ? "" : net.getSSID());
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
@@ -89,8 +93,12 @@ public class GuiNodeSync {
 	public static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
-		Collection<String> ret = WirelessSystem.getAvailableSSIDs(target);
-		List<String> list = new ArrayList(ret);
+		List<WirelessNet> nets = WirelessHelper.getNetInRange(target.getWorldObj(), 
+			VecUtils.vec(target.xCoord + 0.5, target.yCoord + 0.5, target.zCoord + 0.5), 10, 20);
+		List<String> list = new ArrayList();
+		for(WirelessNet net : nets) {
+			list.add(net.getSSID());
+		}
 		receiveList(player, target, list);
 	}
 	

@@ -14,7 +14,7 @@ package cn.academy.energy.api.event;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.energy.api.IWirelessTile;
+import cn.academy.energy.api.block.IWirelessTile;
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**

@@ -10,22 +10,27 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api;
+package cn.academy.energy.api.block;
 
 /**
+ * Information providing interface of a wireless matrix.
  * @author WeathFolD
  */
-public interface IWirelessGenerator extends IWirelessTile {
+public interface IWirelessMatrix extends IWirelessTile {
     
     /**
-     * @param req How much energy is required
-     * @return How much energy this generator can provide.
+     * @return How many nodes it can hold
      */
-    public double getProvidedEnergy(double req);
+    int getCapacity();
     
     /**
-     * @return Max enerty transmitted each tick
+     * @return How much energy allowed to balance between nodes each tick
      */
-    public double getLatency();
+    double getLatency();
+    
+    /**
+     * @return the max range that this matrix can reach
+     */
+    double getRange();
     
 }

@@ -10,30 +10,22 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api;
+package cn.academy.energy.api.block;
 
 /**
- * Information providing interface of a wireless node.
  * @author WeathFolD
  */
-public interface IWirelessNode extends IWirelessTile {
-    
-    double getMaxEnergy();
-    double getEnergy();
-    void setEnergy(double value);
+public interface IWirelessGenerator extends IWirelessUser {
     
     /**
-     * @return How many energy that this node can transfer each tick.
+     * @param req How much energy is required
+     * @return How much energy this generator can provide.
      */
-    double getLatency();
+    public double getProvidedEnergy(double req);
     
     /**
-     * @return How far this node's signal can reach.
+     * @return Max enerty transmitted each tick
      */
-    double getRange();
-    
-    String getNodeName();
-    
-    void setNodeName(String name);
+    public double getLatency();
     
 }
