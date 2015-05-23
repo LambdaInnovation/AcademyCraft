@@ -3,5 +3,10 @@
         "ignore": true,
         "creativeTab": "cn.academy.core.AcademyCraft.cct",
         "namespace": "academy"
+    },
+    "coin": {
+        "unlName": "ac_coin",
+        "itemType": "cn.academy.ability.impl.electromaster.item.ItemCoin",
+        "renderer": "cn.academy.ability.impl.electromaster.item.ItemCoin.rendererCoin"
     }
 }
