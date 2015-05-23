@@ -12,11 +12,9 @@
  */
 package cn.academy.energy.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
@@ -55,8 +53,9 @@ public class WirelessHelper {
 		return getWirelessNet(matrix) != null;
 	}
 	
-	public static List<WirelessNet> getNetInRange(World world, Vec3 pos, double range, int max) {
-		return new ArrayList();
+	public static Collection<WirelessNet> getNetInRange(World world, double x, double y, double z, double range, int max) {
+		WiWorldData data = WiWorldData.get(world);
+		return data.rangeSearch(x, y, z, range, max);
 	}
 	
 	//-----Node Connection

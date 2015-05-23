@@ -68,7 +68,6 @@ public class KeyHintUI extends Widget {
 			public void handleEvent(Widget w, FrameEvent event) {
 				PresetData pData = PresetData.get(Minecraft.getMinecraft().thePlayer);
 				double curY = 0, yStep = 92;
-				//System.out.println(pData.isActive());
 				if(pData.isActive()) {
 					Preset p = pData.getCurrentPreset();
 					for(int i = 0; i < PresetData.MAX_KEYS; ++i) {

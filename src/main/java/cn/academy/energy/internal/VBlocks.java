@@ -21,13 +21,11 @@ import cn.academy.energy.api.block.IWirelessTile;
 
 /**
  * @author WeAthFolD
- *
  */
 public class VBlocks {
 	
 	static abstract class VBlock<T extends IWirelessTile> {
 		
-		protected final World world;
 		protected final int x, y, z;
 		protected final boolean ignoreChunk;
 		
@@ -35,31 +33,57 @@ public class VBlocks {
 			x = te.xCoord;
 			y = te.yCoord;
 			z = te.zCoord;
-			world = te.getWorldObj();
 			ignoreChunk = _ignoreChunk;
 		}
 		
-		public VBlock(World _world, NBTTagCompound tag, boolean _ignoreChunk) {
-			world = _world;
+		public VBlock(NBTTagCompound tag, boolean _ignoreChunk) {
 			x = tag.getInteger("x");
 			y = tag.getInteger("y");
 			z = tag.getInteger("z");
 			ignoreChunk = _ignoreChunk;
 		}
 		
-		public boolean isLoaded() {
+		public boolean isLoaded(World world) {
 			return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
 		}
 		
-		public T get() {
-			if(!ignoreChunk && !isLoaded())
+		public T get(World world) {
+			if(!ignoreChunk && !isLoaded(world))
 				return null;
+			
+			world.getChunkProvider().loadChunk(x >> 4, z >> 4);
 			
 			TileEntity te = world.getTileEntity(x, y, z);
 			if(te == null || !isAcceptable(te)) {
 				return null;
 			}
 			return (T) te;
+		}
+		
+		public NBTTagCompound toNBT() {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setInteger("x", x);
+			tag.setInteger("y", y);
+			tag.setInteger("z", z);
+			return tag;
+		}
+		
+		public int hashCode() {
+			return x ^ y ^ z;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj.getClass() != this.getClass()) {
+				return false;
+			}
+			VBlock vb = (VBlock) obj;
+			return vb.x == x && vb.y == y && vb.z == z;
+		}
+		
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + "[" + x + ", " + y + ", " + z + "]";
 		}
 		
 		protected abstract boolean isAcceptable(TileEntity tile);
@@ -72,8 +96,8 @@ public class VBlocks {
 			super((TileEntity) te, true);
 		}
 		
-		public VWMatrix(World world, NBTTagCompound tag) {
-			super(world, tag, true);
+		public VWMatrix(NBTTagCompound tag) {
+			super(tag, true);
 		}
 
 		@Override
@@ -89,8 +113,8 @@ public class VBlocks {
 			super((TileEntity) te, false);
 		}
 		
-		public VWNode(World world, NBTTagCompound tag) {
-			super(world, tag, false);
+		public VWNode(NBTTagCompound tag) {
+			super(tag, false);
 		}
 
 		@Override

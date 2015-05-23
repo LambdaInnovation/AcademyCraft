@@ -113,7 +113,6 @@ public class PresetData extends DataPart {
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		presetID = tag.getByte("cur");
-		System.out.println("Received sync in " + isRemote());
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			presets[i].fromNBT(tag.getCompoundTag("" + i));
 		}

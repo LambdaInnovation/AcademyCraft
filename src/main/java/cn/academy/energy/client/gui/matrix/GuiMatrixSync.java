@@ -101,6 +101,8 @@ public class GuiMatrixSync {
 		tag.setInteger("latency", (int) lat);
 		tag.setInteger("range", (int) range);
 		
+		System.out.println("Loaded: " + loaded);
+		
 		if(loaded) {
 			String ssid = WirelessHelper.getWirelessNet(matrix).getSSID();
 			tag.setString("ssid", ssid);

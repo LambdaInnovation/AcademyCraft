@@ -82,7 +82,6 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
 
 	@SubscribeEvent
 	public void onInteract(PlayerInteractEvent event) {
-		System.out.println("OnInteract");
 		if(event.action == Action.RIGHT_CLICK_BLOCK) {
 			Block b = event.world.getBlock(event.x, event.y, event.z);
 			System.out.println(b);

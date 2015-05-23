@@ -26,7 +26,6 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.LinkNodeEvent;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.WirelessNet;
-import cn.academy.energy.internal.WirelessSystem;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
@@ -93,8 +92,10 @@ public class GuiNodeSync {
 	public static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
-		List<WirelessNet> nets = WirelessHelper.getNetInRange(target.getWorldObj(), 
-			VecUtils.vec(target.xCoord + 0.5, target.yCoord + 0.5, target.zCoord + 0.5), 10, 20);
+		Collection<WirelessNet> nets = WirelessHelper.getNetInRange(
+			target.getWorldObj(), 
+			target.xCoord + 0.5, target.yCoord + 0.5, target.zCoord + 0.5, 
+			10, 20);
 		List<String> list = new ArrayList();
 		for(WirelessNet net : nets) {
 			list.add(net.getSSID());
@@ -104,7 +105,7 @@ public class GuiNodeSync {
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	public static void receiveList(@Target EntityPlayer player, @Instance TileNode target, @Data List<String> ssids) {
-		
+		//System.
 	}
 	
 	//Rename
