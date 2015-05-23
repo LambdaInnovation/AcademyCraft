@@ -12,13 +12,15 @@
  */
 package cn.academy.energy.internal;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.Debug;
 import cn.academy.energy.api.block.IWirelessMatrix;
@@ -204,14 +206,6 @@ public class WirelessNet {
 	
 	void tick() {
 		
-		// Check whether the matrix is valid. The matrix is ALWAYS loaded.
-		IWirelessMatrix imat = matrix.get(world);
-		if(imat == null) {
-			Debug.print("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
-			dispose();
-			return;
-		}
-		
 		// Filter the not-alive nets and update the state lazily
 		if(!isAlive()) {
 			--aliveUpdateCounter;
@@ -223,8 +217,20 @@ public class WirelessNet {
 			return;
 		}
 		
+		// Check whether the matrix is valid. The matrix is ALWAYS loaded.
+		IWirelessMatrix imat = matrix.get(world);
+		if(imat == null) {
+			Debug.print("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
+			dispose();
+			return;
+		}
+		
 		// Balance.
-		double sum = buffer, maxSum = BUFFER_MAX;
+		// Shuffle in order to not balance one node all the time
+		// Maybe a bit of slow?
+		Collections.shuffle(nodes);
+		
+		double sum = 0, maxSum = 0;
 		Iterator<VWNode> iter = nodes.iterator();
 		while(iter.hasNext()) {
 			VWNode vn = iter.next();

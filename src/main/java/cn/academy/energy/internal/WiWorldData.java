@@ -179,10 +179,12 @@ public class WiWorldData extends WorldSavedData {
 	
 	private void saveNetwork(NBTTagCompound tag) {
 		NBTTagList list = new NBTTagList();
+		Set<WirelessNet> added = new HashSet();
 		for(WirelessNet net : networks.values()) {
-			if(!net.isDisposed()) {
+			if(!added.contains(net) && !net.isDisposed()) {
 				list.appendTag(net.toNBT());
 			}
+			added.add(net);
 		}
 		tag.setTag("networks", list);
 	}
