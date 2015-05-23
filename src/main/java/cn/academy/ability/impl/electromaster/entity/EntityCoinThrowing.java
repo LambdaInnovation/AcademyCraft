@@ -21,6 +21,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
@@ -33,6 +34,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * @author KSkun
  */
+@Registrant
+@RegEntity
+@RegEntity.HasRender
 public class EntityCoinThrowing extends EntityAdvanced {
 
 	double yOffset = 0.6;

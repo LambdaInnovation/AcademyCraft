@@ -46,9 +46,7 @@ public class ItemCoin extends Item {
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
 	
 	public ItemCoin() {
-		setUnlocalizedName("ac_coin");
 		setTextureName("academy:coin_front");
-		setCreativeTab(AcademyCraft.cct);
 		FMLCommonHandler.instance().bus().register(this);
 	}
 	

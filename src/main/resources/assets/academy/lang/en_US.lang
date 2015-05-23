@@ -1,6 +1,11 @@
 # AcademyCraft lang file
 # Debug version
-# Last modified: 2015/5/21
+# Last modified: 2015/5/23
+
+# Item
+item.ac_coin.name=Coin
+
+# Block
 
 # GUI
 
