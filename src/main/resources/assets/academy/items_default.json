@@ -8,5 +8,33 @@
         "unlName": "ac_coin",
         "itemType": "cn.academy.ability.impl.electromaster.item.ItemCoin",
         "renderer": "cn.academy.ability.impl.electromaster.item.ItemCoin.rendererCoin"
+    },
+    "wafer": {
+        "unlName": "ac_wafer",
+        "textureName": "wafer"
+    },
+    "buffer_ingot": {
+        "unlName": "ac_ingot_buffer",
+        "textureName": "buffer_ingot"
+    },
+    "machine_casing": {
+        "unlName": "ac_machine_casing",
+        "textureName": "machine_casing"
+    },
+    "brain_part": {
+        "unlName": "ac_brain_part",
+        "textureName": "brain_part"
+    },
+    "memory": {
+        "unlName": "ac_memory",
+        "textureName": "memory"
+    },
+    "info_part": {
+        "unlName": "ac_info_part",
+        "textureName": "info_part"
+    },
+    "resonance_part": {
+        "unlName": "ac_resonance_part",
+        "textureName": "resonance_part"
     }
 }
