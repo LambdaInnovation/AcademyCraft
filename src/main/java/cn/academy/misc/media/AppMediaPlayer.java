@@ -18,7 +18,7 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import paulscode.sound.SoundSystem;
 import cn.annoreg.core.Registrant;
-import cn.liutils.util.RegUtils;
+import cn.liutils.util3.RegUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

@@ -80,7 +80,7 @@ public class AcademyCraft {
         config = new Configuration(event.getSuggestedConfigurationFile());
         
         if(DEBUG_MODE)
-        	log.setLevel(Level.ALL);
+        	((Logger)LogManager.getRootLogger()).setLevel(Level.DEBUG);
         
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");

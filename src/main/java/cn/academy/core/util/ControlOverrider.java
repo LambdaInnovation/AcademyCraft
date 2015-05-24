@@ -26,7 +26,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.util.RegUtils;
+import cn.liutils.util3.RegUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;

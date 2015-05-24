@@ -32,9 +32,9 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
-import cn.liutils.util.ClientUtils;
-import cn.liutils.util.GenericUtils;
-import cn.liutils.util.space.Motion3D;
+import cn.liutils.util3.ClientUtils;
+import cn.liutils.util3.GenericUtils;
+import cn.liutils.util3.space.Motion3D;
 
 /**
  * @author WeAthFolD

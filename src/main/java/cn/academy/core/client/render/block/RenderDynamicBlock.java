@@ -26,7 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 import cn.annoreg.core.Registrant;
-import cn.liutils.util.RenderUtils;
+import cn.liutils.util3.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

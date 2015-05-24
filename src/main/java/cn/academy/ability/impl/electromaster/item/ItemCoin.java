@@ -25,7 +25,7 @@ import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;

@@ -26,7 +26,7 @@ import org.lwjgl.input.Mouse;
 import cn.academy.core.AcademyCraft;
 import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
 import cn.liutils.core.event.eventhandler.LIHandler;
-import cn.liutils.util.ClientUtils;
+import cn.liutils.util3.ClientUtils;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 

@@ -15,7 +15,6 @@ package cn.academy.energy.internal;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.Debug;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
@@ -62,7 +61,6 @@ public class WirelessSystem {
 	@SubscribeEvent
 	public void onCreateNet(CreateNetworkEvent event) {
 		WiWorldData data = WiWorldData.get(event.getWorld());
-		Debug.print(event.getWorld());
 		if(!data.createNetwork(event.mat, event.ssid, event.pwd)) {
 			event.setCanceled(true);
 		}
@@ -129,6 +127,10 @@ public class WirelessSystem {
 			NodeConn conn = data.getNodeConnection(rec);
 			conn.removeReceiver(new VNReceiver(rec));
 		}
+	}
+	
+	private void debug(Object msg) {
+		AcademyCraft.log.info("WirelessSys: " + msg);
 	}
 	
 }

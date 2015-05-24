@@ -13,16 +13,14 @@
 package cn.academy.energy.internal;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import cn.academy.core.Debug;
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
@@ -81,7 +79,7 @@ public class WirelessNet {
 			doAddNode(new VWNode(list.getCompoundTagAt(i)));
 		}
 		
-		Debug.print("Loading " + ssid + " from NBT, " + list.tagCount() + " nodes.");
+		debug("Loading " + ssid + " from NBT, " + list.tagCount() + " nodes.");
 	}
 	
 	NBTTagCompound toNBT() { 
@@ -99,7 +97,7 @@ public class WirelessNet {
 		}
 		tag.setTag("list", list);
 		
-		Debug.print(ssid + " toNBT()");
+		debug(ssid + " toNBT()");
 		
 		return tag; 
 	}
@@ -232,7 +230,7 @@ public class WirelessNet {
 		// Check whether the matrix is valid. The matrix is ALWAYS loaded.
 		IWirelessMatrix imat = matrix.get(world);
 		if(imat == null) {
-			Debug.print("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
+			debug("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
 			dispose();
 			return;
 		}
@@ -249,7 +247,7 @@ public class WirelessNet {
 			if(vn.isLoaded(world)) {
 				IWirelessNode node = vn.get(world);
 				if(node == null) {
-					Debug.print("Removing " + vn + " from " + ssid);
+					debug("Removing " + vn + " from " + ssid);
 					iter.remove();
 				} else {
 					sum += node.getEnergy();
@@ -285,6 +283,10 @@ public class WirelessNet {
 					break;
 			}
 		}
+	}
+	
+	private void debug(Object msg) {
+		AcademyCraft.log.info("WN:" + msg);
 	}
 	
 }

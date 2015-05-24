@@ -35,8 +35,8 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.liutils.util.ClientUtils;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.ClientUtils;
+import cn.liutils.util3.GenericUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

@@ -24,7 +24,7 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.VecUtils;
+import cn.liutils.util3.VecUtils;
 
 /**
  * @author WeAthFolD

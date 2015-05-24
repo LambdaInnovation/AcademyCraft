@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
-import cn.liutils.util.RenderUtils;
+import cn.liutils.util3.RenderUtils;
 
 /**
  * @author WeAthFolD

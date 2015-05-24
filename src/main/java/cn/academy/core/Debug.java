@@ -4,7 +4,7 @@ public class Debug {
 	
 	public static void print(Object obj) {
 		if(AcademyCraft.DEBUG_MODE)
-			AcademyCraft.log.info(obj);
+			AcademyCraft.log.debug(obj);
 	}
 	
 }

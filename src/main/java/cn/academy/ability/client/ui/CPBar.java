@@ -33,8 +33,8 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.utils.Color;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
+import cn.liutils.util3.HudUtils;
+import cn.liutils.util3.RenderUtils;
 
 /**
  * @author WeAthFolD

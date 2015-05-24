@@ -22,8 +22,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.RenderUtils;
-import cn.liutils.util.VecUtils;
+import cn.liutils.util3.RenderUtils;
+import cn.liutils.util3.VecUtils;
 
 /**
  * @author WeAthFolD

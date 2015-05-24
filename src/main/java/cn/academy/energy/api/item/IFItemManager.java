@@ -14,7 +14,7 @@ package cn.academy.energy.api.item;
 
 import net.minecraft.item.ItemStack;
 import cn.academy.support.EnergyHelper.EnergyItemManager;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 
 /**
  * @author WeathFolD

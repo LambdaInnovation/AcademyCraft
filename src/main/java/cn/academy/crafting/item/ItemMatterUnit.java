@@ -30,7 +30,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

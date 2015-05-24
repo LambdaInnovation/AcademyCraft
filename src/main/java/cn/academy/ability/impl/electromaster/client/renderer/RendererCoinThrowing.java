@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.core.client.Resources;
-import cn.liutils.util.RenderUtils;
+import cn.liutils.util3.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

@@ -12,7 +12,7 @@ import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.render.particle.Particle;
 import cn.liutils.render.particle.SimpleParticleFactory;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;

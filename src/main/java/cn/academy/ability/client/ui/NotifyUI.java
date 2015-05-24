@@ -27,11 +27,11 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.utils.Color;
-import cn.liutils.util.GenericUtils;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
-import cn.liutils.util.VecUtils;
-import cn.liutils.util.render.Font;
+import cn.liutils.util.helper.Font;
+import cn.liutils.util3.GenericUtils;
+import cn.liutils.util3.HudUtils;
+import cn.liutils.util3.RenderUtils;
+import cn.liutils.util3.VecUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 

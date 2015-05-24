@@ -26,7 +26,7 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

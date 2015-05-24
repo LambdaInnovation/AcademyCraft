@@ -19,7 +19,7 @@ import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

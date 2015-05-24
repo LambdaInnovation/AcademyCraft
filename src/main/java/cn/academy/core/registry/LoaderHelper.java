@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 
 import cn.liutils.loading.item.ItemLoader;
-import cn.liutils.util.GenericUtils;
+import cn.liutils.util3.GenericUtils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

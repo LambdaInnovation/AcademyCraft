@@ -29,10 +29,10 @@ import cn.liutils.cgui.gui.component.Transform.HeightAlign;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.util.HudUtils;
-import cn.liutils.util.RenderUtils;
-import cn.liutils.util.render.Font;
-import cn.liutils.util.render.Font.Align;
+import cn.liutils.util.helper.Font;
+import cn.liutils.util.helper.Font.Align;
+import cn.liutils.util3.HudUtils;
+import cn.liutils.util3.RenderUtils;
 
 /**
  * @author WeAthFolD

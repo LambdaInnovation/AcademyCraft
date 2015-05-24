@@ -28,7 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import cn.academy.core.Debug;
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
@@ -38,9 +38,9 @@ import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.liutils.util.GenericUtils;
-import cn.liutils.util.space.BlockPos;
-import cn.liutils.util.space.IBlockFilter;
+import cn.liutils.util3.GenericUtils;
+import cn.liutils.util3.space.BlockPos;
+import cn.liutils.util3.space.IBlockFilter;
 
 /**
  * @author WeAthFolD
@@ -163,7 +163,7 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	private void doRemoveNetwork(WirelessNet net) {
-		Debug.print("DoRemoveNet" + net.ssid);
+		debug("DoRemoveNet" + net.ssid);
 		netList.remove(net);
 		net.onCleanup(this);
 	}
@@ -180,7 +180,7 @@ public class WiWorldData extends WorldSavedData {
 			WirelessNet net = new WirelessNet(this, tag2);
 			doAddNetwork(net);
 		}
-		Debug.print("WEN: Loaded " + list.tagCount() + " nets in " + world);
+		debug("WEN: Loaded " + list.tagCount() + " nets in " + world);
 		
 	}
 	
@@ -330,6 +330,10 @@ public class WiWorldData extends WorldSavedData {
 			}
 			return false;
 		}
+	}
+	
+	private void debug(Object msg) {
+		AcademyCraft.log.info("WiWorldData: " + msg);
 	}
 
 }

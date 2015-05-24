@@ -26,8 +26,8 @@ import cn.academy.core.registry.RegKeyHandler;
 import cn.academy.core.util.KeyHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.util.VecUtils;
-import cn.liutils.util.space.Motion3D;
+import cn.liutils.util3.VecUtils;
+import cn.liutils.util3.space.Motion3D;
 
 /**
  * @author WeAthFolD

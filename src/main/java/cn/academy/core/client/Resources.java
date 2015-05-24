@@ -22,7 +22,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.render.material.Material;
 import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.util.render.Font;
+import cn.liutils.util.helper.Font;
 
 /**
  * @author WeathFolD
