@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
-import cn.academy.energy.api.event.LinkNodeEvent;
+import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.WirelessNet;
 import cn.annoreg.core.Registrant;

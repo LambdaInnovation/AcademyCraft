@@ -27,13 +27,11 @@ public interface IWirelessNode extends IWirelessTile {
      */
     double getLatency();
     
+    int getCapacity();
+    
     /**
      * @return How far this node's signal can reach.
      */
     double getRange();
-    
-    String getNodeName();
-    
-    void setNodeName(String name);
     
 }

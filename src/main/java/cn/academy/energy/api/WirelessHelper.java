@@ -16,10 +16,11 @@ import java.util.Collection;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.energy.api.block.IWirelessUser;
-import cn.academy.energy.internal.NodeConnection;
+import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
 
@@ -59,14 +60,19 @@ public class WirelessHelper {
 	}
 	
 	//-----Node Connection
-	public static NodeConnection getNodeConn(IWirelessNode node) {
+	public static NodeConn getNodeConn(IWirelessNode node) {
 		TileEntity tile = (TileEntity) node;
 		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(node);
 	}
 	
-	public static NodeConnection getNodeConn(IWirelessUser user) {
-		TileEntity tile = (TileEntity) user;
-		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(user);
+	public static NodeConn getNodeConn(IWirelessGenerator gen) {
+		TileEntity tile = (TileEntity) gen;
+		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(gen);
+	}
+	
+	public static NodeConn getNodeConn(IWirelessReceiver rec) {
+		TileEntity tile = (TileEntity) rec;
+		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(rec);
 	}
 	
 }

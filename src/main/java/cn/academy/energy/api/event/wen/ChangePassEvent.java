@@ -1,6 +1,7 @@
-package cn.academy.energy.api.event;
+package cn.academy.energy.api.event.wen;
 
 import cn.academy.energy.api.block.IWirelessMatrix;
+import cn.academy.energy.api.event.WirelessEvent;
 import cpw.mods.fml.common.eventhandler.Cancelable;
 
 @Cancelable

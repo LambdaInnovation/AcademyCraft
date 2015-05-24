@@ -130,6 +130,16 @@ public class WirelessNet {
 		return disposed;
 	}
 	
+	public int getLoad() {
+		return nodes.size();
+	}
+	
+	public int getCapacity() {
+		World world = data.world;
+		IWirelessMatrix imat = matrix.get(world);
+		return imat == null ? 0 : imat.getCapacity();
+	}
+	
 	/**
 	 * Dispose (a.k.a. destroy) this network and unlink all its linked nodes.
 	 */
@@ -140,6 +150,8 @@ public class WirelessNet {
 	boolean addNode(VWNode node, String password) {
 		
 		if(!password.equals(this.password))
+			return false;
+		if(getLoad() >= getCapacity())
 			return false;
 		
 		WiWorldData data = getWorldData();
@@ -159,27 +171,27 @@ public class WirelessNet {
 		//Really add
 		WiWorldData data = getWorldData();
 		nodes.add(node);
-		data.networks.put(node, this);
+		data.netLookup.put(node, this);
 	}
 	
 	void removeNode(VWNode node) {
 		nodes.remove(node);
 		
 		WiWorldData data = getWorldData();
-		data.networks.remove(node);
+		data.netLookup.remove(node);
 	}
 	
 	void onCreate(WiWorldData data) {
-		data.networks.put(ssid, this);
-		data.networks.put(matrix, this);
+		data.netLookup.put(ssid, this);
+		data.netLookup.put(matrix, this);
 	}
 	
 	void onCleanup(WiWorldData data) {
-		data.networks.remove(ssid);
-		data.networks.remove(matrix);
+		data.netLookup.remove(ssid);
+		data.netLookup.remove(matrix);
 		
 		for(VWNode n : nodes) {
-			data.networks.remove(n);
+			data.netLookup.remove(n);
 		}
 	}
 	

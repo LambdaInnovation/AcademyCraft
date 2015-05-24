@@ -16,11 +16,18 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.Debug;
-import cn.academy.energy.api.event.ChangePassEvent;
-import cn.academy.energy.api.event.CreateNetworkEvent;
-import cn.academy.energy.api.event.DestroyNetworkEvent;
-import cn.academy.energy.api.event.LinkNodeEvent;
-import cn.academy.energy.api.event.UnlinkNodeEvent;
+import cn.academy.energy.api.block.IWirelessGenerator;
+import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.api.event.WirelessUserEvent.UserType;
+import cn.academy.energy.api.event.node.LinkUserEvent;
+import cn.academy.energy.api.event.node.UnlinkUserEvent;
+import cn.academy.energy.api.event.wen.ChangePassEvent;
+import cn.academy.energy.api.event.wen.CreateNetworkEvent;
+import cn.academy.energy.api.event.wen.DestroyNetworkEvent;
+import cn.academy.energy.api.event.wen.LinkNodeEvent;
+import cn.academy.energy.api.event.wen.UnlinkNodeEvent;
+import cn.academy.energy.internal.VBlocks.VNGenerator;
+import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -93,6 +100,35 @@ public class WirelessSystem {
 		
 		if(net != null)
 			net.removeNode(new VWNode(event.node));
+	}
+	
+	@SubscribeEvent
+	public void linkUser(LinkUserEvent event) {
+		WiWorldData data = WiWorldData.get(event.getWorld());
+		NodeConn conn = data.getNodeConnection(event.node);
+		
+		if(event.type == UserType.GENERATOR) {
+			if(!conn.addGenerator(new VNGenerator(event.getAsGenerator())))
+				event.setCanceled(true);
+		} else { //RECEIVER
+			if(!conn.addReceiver(new VNReceiver(event.getAsReceiver())))
+				event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void unlinkUser(UnlinkUserEvent event) {
+		WiWorldData data = WiWorldData.get(event.getWorld());
+		
+		if(event.type == UserType.GENERATOR) {
+			IWirelessGenerator gen = event.getAsGenerator();
+			NodeConn conn = data.getNodeConnection(gen);
+			conn.removeGenerator(new VNGenerator(gen));
+		} else { //RECEIVER
+			IWirelessReceiver rec = event.getAsReceiver();
+			NodeConn conn = data.getNodeConnection(rec);
+			conn.removeReceiver(new VNReceiver(rec));
+		}
 	}
 	
 }

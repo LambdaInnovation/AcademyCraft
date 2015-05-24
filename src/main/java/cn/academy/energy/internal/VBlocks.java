@@ -15,8 +15,10 @@ package cn.academy.energy.internal;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
+import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.block.IWirelessTile;
 
 /**
@@ -124,7 +126,49 @@ public class VBlocks {
 		
 	}
 	
+	static class VNNode extends VBlock<IWirelessNode> {
+		public VNNode(IWirelessNode te) {
+			super((TileEntity) te, true);
+		}
+		
+		public VNNode(NBTTagCompound tag) {
+			super(tag, true);
+		}
+
+		@Override
+		protected boolean isAcceptable(TileEntity tile) {
+			return tile instanceof IWirelessNode;
+		}
+	}
 	
+	static class VNGenerator extends VBlock<IWirelessGenerator> {
+		public VNGenerator(IWirelessGenerator te) {
+			super((TileEntity) te, true);
+		}
+		
+		public VNGenerator(NBTTagCompound tag) {
+			super(tag, true);
+		}
+
+		@Override
+		protected boolean isAcceptable(TileEntity tile) {
+			return tile instanceof IWirelessGenerator;
+		}
+	}
 	
+	static class VNReceiver extends VBlock<IWirelessReceiver> {
+		public VNReceiver(IWirelessReceiver te) {
+			super((TileEntity) te, true);
+		}
+		
+		public VNReceiver(NBTTagCompound tag) {
+			super(tag, true);
+		}
+
+		@Override
+		protected boolean isAcceptable(TileEntity tile) {
+			return tile instanceof IWirelessReceiver;
+		}
+	}
 	
 }

@@ -36,5 +36,13 @@ public class WirelessUserEvent extends WirelessEvent {
             throw new RuntimeException("Invalid user type");
         }
     }
+    
+    public IWirelessGenerator getAsGenerator() {
+    	return (IWirelessGenerator) tile;
+    }
+    
+    public IWirelessReceiver getAsReceiver() {
+    	return (IWirelessReceiver) tile;
+    }
 
 }

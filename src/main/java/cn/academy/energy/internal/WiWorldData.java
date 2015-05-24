@@ -29,9 +29,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import cn.academy.core.Debug;
+import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.energy.api.block.IWirelessUser;
+import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.internal.VBlocks.VNGenerator;
+import cn.academy.energy.internal.VBlocks.VNNode;
+import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.liutils.util.GenericUtils;
@@ -68,7 +72,8 @@ public class WiWorldData extends WorldSavedData {
 	/***
 	 * Object valid for lookup: VWMatrix, VWNode, String ssid
 	 */
-	Map<Object, WirelessNet> networks = new HashMap();
+	Map<Object, WirelessNet> netLookup = new HashMap();
+	Set<WirelessNet> netList = new HashSet();
 	
 	/**
 	 * Internal, used to prevent concurrent modification.
@@ -81,7 +86,7 @@ public class WiWorldData extends WorldSavedData {
 		}
 		toRemove.clear();
 		
-		Iterator<WirelessNet> iter = networks.values().iterator();
+		Iterator<WirelessNet> iter = netList.iterator();
 		while(iter.hasNext()) {
 			WirelessNet net = iter.next();
 			if(net.isDisposed()) {
@@ -94,14 +99,14 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	boolean createNetwork(IWirelessMatrix matrix, String ssid, String password) {
-		if(networks.containsKey(ssid)) { //Doesn't allow ssid duplication
+		if(netLookup.containsKey(ssid)) { //Doesn't allow ssid duplication
 			return false;
 		}
 		
 		// Kill old net of the same matrix, if any
 		VWMatrix vm = new VWMatrix(matrix);
-		if(networks.containsKey(vm)) {
-			WirelessNet old = networks.get(vm);
+		if(netLookup.containsKey(vm)) {
+			WirelessNet old = netLookup.get(vm);
 			doRemoveNetwork(old);
 		}
 		
@@ -145,24 +150,26 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	public WirelessNet getNetwork(String ssid) {
-		return networks.get(ssid);
+		return netLookup.get(ssid);
 	}
 	
 	public WirelessNet getNetwork(IWirelessMatrix matrix) {
 		System.out.println(matrix);
-		return networks.get(new VWMatrix(matrix));
+		return netLookup.get(new VWMatrix(matrix));
 	}
 	
 	public WirelessNet getNetwork(IWirelessNode node) {
-		return networks.get(new VWNode(node));
+		return netLookup.get(new VWNode(node));
 	}
 	
 	private void doRemoveNetwork(WirelessNet net) {
 		Debug.print("DoRemoveNet" + net.ssid);
+		netList.remove(net);
 		net.onCleanup(this);
 	}
 	
 	private void doAddNetwork(WirelessNet net) {
+		netList.add(net);
 		net.onCreate(this);
 	}
 	
@@ -179,32 +186,82 @@ public class WiWorldData extends WorldSavedData {
 	
 	private void saveNetwork(NBTTagCompound tag) {
 		NBTTagList list = new NBTTagList();
-		Set<WirelessNet> added = new HashSet();
-		for(WirelessNet net : networks.values()) {
-			if(!added.contains(net) && !net.isDisposed()) {
+		for(WirelessNet net : netList) {
+			if(!net.isDisposed()) {
 				list.appendTag(net.toNBT());
 			}
-			added.add(net);
 		}
 		tag.setTag("networks", list);
 	}
 	
 	//-----NodeConn----
-	//TODO: Implement
+	Map<Object, NodeConn> nodeLookup = new HashMap();
+	Set<NodeConn> nodeList = new HashSet();
+	List<NodeConn> nToRemove = new ArrayList();
 	
-	public NodeConnection getNodeConnection(IWirelessNode node) {
-		return new NodeConnection();
+	/**
+	 * Get the node connection of a node. If not found will create a new one. Never returns null.
+	 */
+	public NodeConn getNodeConnection(IWirelessNode node) {
+		VNNode vnn = new VNNode(node);
+		NodeConn ret = nodeLookup.get(vnn);
+		if(ret == null) {
+			doAddNode(ret = new NodeConn(this, vnn));
+		}
+		return ret;
 	}
 	
-	public NodeConnection getNodeConnection(IWirelessUser user) {
-		return new NodeConnection();
+	public NodeConn getNodeConnection(IWirelessGenerator generator) {
+		return nodeLookup.get(new VNGenerator(generator));
 	}
 	
-	private void tickNode() {}
+	public NodeConn getNodeConnection(IWirelessReceiver receiver) {
+		return nodeLookup.get(new VNReceiver(receiver));
+	}
 	
-	private void loadNode(NBTTagCompound tag) {}
+	private void tickNode() {
+		for(NodeConn nc : nToRemove) {
+			doRemoveNode(nc);
+		}
+		nToRemove.clear();
+		
+		Iterator<NodeConn> iter = nodeList.iterator();
+		while(iter.hasNext()) {
+			NodeConn conn = iter.next();
+			if(conn.isDisposed()) {
+				nToRemove.add(conn);
+			} else {
+				conn.tick();
+			}
+		}
+	}
 	
-	private void saveNode(NBTTagCompound tag) {}
+	private void doAddNode(NodeConn conn) {
+		nodeList.add(conn);
+		conn.onAdded(this);
+	}
+	
+	private void doRemoveNode(NodeConn conn) {
+		nodeList.remove(conn);
+		conn.onCleanup(this);
+	}
+	
+	private void loadNode(NBTTagCompound tag) {
+		NBTTagList list = (NBTTagList) tag.getTag("list");
+		for(int i = 0; i < list.tagCount(); ++i) {
+			doAddNode(new NodeConn(this, list.getCompoundTagAt(i)));
+		}
+	}
+	
+	private void saveNode(NBTTagCompound tag) {
+		NBTTagList list = new NBTTagList();
+		for(NodeConn c : nodeList) {
+			if(!c.isDisposed()) {
+				list.appendTag(c.toNBT());
+			}
+		}
+		tag.setTag("list", list);
+	}
 	
 	//-----Generic-----
 	public void tick() {

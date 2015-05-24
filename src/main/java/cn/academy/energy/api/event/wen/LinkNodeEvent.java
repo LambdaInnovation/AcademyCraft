@@ -10,43 +10,35 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api.event;
+package cn.academy.energy.api.event.wen;
 
-import cn.academy.energy.api.block.IWirelessMatrix;
+import cn.academy.energy.api.block.IWirelessNode;
+import cn.academy.energy.api.event.WirelessEvent;
 import cpw.mods.fml.common.eventhandler.Cancelable;
 
 /**
- * Fired whenever you want to create an wireless network.
+ * Fired when a node is to be linked.
  * @author WeathFolD
  */
 @Cancelable
-public class CreateNetworkEvent extends WirelessEvent {
-
-    public final IWirelessMatrix mat;
-    public final boolean isEncrypted;
+public class LinkNodeEvent extends WirelessEvent {
+    
+    public final IWirelessNode node;
     public final String ssid;
     public final String pwd;
     
-    /**
-     * Non-encryption creation
-     */
-    public CreateNetworkEvent(IWirelessMatrix _mat, String _ssid) {
-        super(_mat);
-        mat = _mat;
-        ssid = _ssid;
-        isEncrypted = false;
-        pwd = "";
+    public LinkNodeEvent(IWirelessNode _node, String _ssid) {
+        this(_node, _ssid, "");
     }
     
     /**
-     * Encrypted creation
+     * @param _tile
      */
-    public CreateNetworkEvent(IWirelessMatrix _mat, String _ssid, String _pwd) {
-        super(_mat);
-        mat = _mat;
+    public LinkNodeEvent(IWirelessNode _node, String _ssid, String _pwd) {
+        super(_node);
+        node = _node;
         ssid = _ssid;
-        isEncrypted = true;
         pwd = _pwd;
     }
-    
+
 }

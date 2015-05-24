@@ -10,22 +10,20 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.api.event;
+package cn.academy.energy.api.event.node;
 
-import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessTile;
+import cn.academy.energy.api.event.WirelessUserEvent;
 
 /**
- * Fired whenever a wireless user(receiver or generator) is to be linked to a node.
+ * Fired whenever a wireless user is to be destroyed.</br>
+ * NOTE: When a user is no longer available, it will be automatically unlinked.
  * @author WeathFolD
  */
-public class LinkUserEvent extends WirelessUserEvent {
+public class UnlinkUserEvent extends WirelessUserEvent {
 
-    public final IWirelessNode node;
-    
-    public LinkUserEvent(IWirelessTile _tile, IWirelessNode _node) {
+    public UnlinkUserEvent(IWirelessTile _tile) {
         super(_tile);
-        node = _node;
     }
 
 }

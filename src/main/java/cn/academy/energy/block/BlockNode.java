@@ -38,17 +38,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockNode extends BlockContainer {
 
     public enum NodeType {
-        BASIC("basic", 10000, 20, 9), 
-        STANDARD("standard", 50000, 40, 12), 
-        ADVANCED("advanced", 300000, 100, 19);
+        BASIC("basic", 10000, 20, 9, 5), 
+        STANDARD("standard", 50000, 40, 12, 10), 
+        ADVANCED("advanced", 300000, 100, 19, 20);
         
-        final int maxEnergy, latency, range;
+        final int maxEnergy, latency, range, capacity;
         final String name;
-        NodeType(String _name, int _maxEnergy, int _latency, int _range) {
+        NodeType(String _name, int _maxEnergy, int _latency, int _range, int _capacity) {
             name = _name;
             maxEnergy = _maxEnergy;
             latency = _latency;
             range = _range;
+            capacity = _capacity;
         }
     }
     
