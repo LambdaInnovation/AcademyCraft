@@ -12,19 +12,21 @@
  */
 package cn.academy.ability.impl.electromaster.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
-import cn.academy.core.client.Resources;
-import cn.liutils.util3.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
+import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
+import cn.academy.core.client.Resources;
+import cn.liutils.util.client.RenderUtils;
 
 /**
  * 
@@ -41,7 +43,7 @@ public class RendererCoinThrowing extends Render {
 		EntityPlayer player = etc.player;
 		boolean fp = player == Minecraft.getMinecraft().thePlayer 
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
-		double dt = Minecraft.getSystemTime() - etc.getEntityData().getLong("startTime");
+		double dt = Minecraft.getSystemTime();
 		if(etc.player == null)
 			return;
 		//If synced and in client computer, do not render
@@ -49,8 +51,15 @@ public class RendererCoinThrowing extends Render {
 			return;
 		if(etc.posY < player.posY)
 			return;
-		System.err.println("Hey we're rendering");
+		//System.err.println("Hey we're rendering" + (player == Minecraft.getMinecraft().thePlayer));
 		GL11.glPushMatrix(); {
+			x = player.posX - RenderManager.renderPosX;
+			y = etc.posY - RenderManager.renderPosY;
+			z = player.posZ - RenderManager.renderPosZ;
+			if(player == Minecraft.getMinecraft().thePlayer) {
+				x = z = 0;
+			}
+			
 			GL11.glTranslated(x, y, z);
 			if(fp) {
 				GL11.glRotated(player.rotationYaw, 0, -1, 0);
@@ -59,9 +68,9 @@ public class RendererCoinThrowing extends Render {
 			float scale = 0.3F;
 			GL11.glScalef(scale, scale, scale);
 			GL11.glTranslated(0.5, 0.5, 0);
-			GL11.glRotated(dt * 2, etc.axis.xCoord, etc.axis.yCoord, etc.axis.zCoord);
+			GL11.glRotated((dt % 360.0) * 1.6, etc.axis.xCoord, etc.axis.yCoord, etc.axis.zCoord);
 			GL11.glTranslated(-0.5, -0.5, 0);
-			RenderUtils.renderItemIn2d(0.0625, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
+			RenderUtils.drawEquippedItem(0.0625, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
 		} GL11.glPopMatrix();
 	}
 	
@@ -88,8 +97,12 @@ public class RendererCoinThrowing extends Render {
 			if(!(elb instanceof EntityPlayer)) return;
 			EntityPlayer player = (EntityPlayer) elb;
 			double scale = type == ItemRenderType.EQUIPPED ? 0.6 : .8;
+			GL11.glPushMatrix();
+			{ //FIX: Added matrix state for transform.
 			GL11.glScaled(scale, scale, scale);
-			RenderUtils.renderItemIn2d(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
+			RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
+			}
+			GL11.glPopMatrix();
 		}
 	}
 

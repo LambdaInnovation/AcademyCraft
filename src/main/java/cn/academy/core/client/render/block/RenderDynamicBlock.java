@@ -12,8 +12,6 @@
  */
 package cn.academy.core.client.render.block;
 
-import java.lang.reflect.Field;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -26,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 import cn.annoreg.core.Registrant;
-import cn.liutils.util3.RenderUtils;
+import cn.liutils.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

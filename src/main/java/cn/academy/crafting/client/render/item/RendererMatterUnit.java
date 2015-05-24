@@ -23,8 +23,8 @@ import cn.academy.core.client.Resources;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
-import cn.liutils.util3.HudUtils;
-import cn.liutils.util3.RenderUtils;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
 
 /**
  * @author WeAthFolD
@@ -54,31 +54,32 @@ public class RendererMatterUnit implements IItemRenderer {
 		ItemMatterUnit item = ModuleCrafting.matterUnit;
 		GL11.glColor4d(1, 1, 1, 1);
 		if(type != ItemRenderType.INVENTORY) {
-			RenderUtils.renderItemIn2d(stack, 0.0625f);
+			RenderUtils.drawEquippedItem(stack, 0.0625f);
 			GL11.glPushMatrix(); {
 				GL11.glColorMask(false,false,false,false);
-				RenderUtils.renderItemIn2d(0.0626f, texMask, texMask);
+				RenderUtils.drawEquippedItem(0.0626f, texMask, texMask);
 				GL11.glColorMask(true, true, true, true);
 				
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 				MatterMaterial mat = item.getMaterial(stack);
-				RenderUtils.renderItemIn2d(0.0626f, mat.texture, mat.texture, true);
+				RenderUtils.drawEquippedItemOverlay(0.0626f, mat.texture);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			} GL11.glPopMatrix();
 		} else {
 			RenderUtils.renderItemInventory(stack);
 			
-			HudUtils.setZLevel(102);
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, 0, 10);
 			
 			GL11.glColor4d(1, 1, 1, 1);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			HudUtils.setZLevel(10);
 			
 			GL11.glColorMask(false, false, false, false);
 			GL11.glDepthMask(true);
-			HudUtils.drawRect(texMask, 16, 16);
+			RenderUtils.loadTexture(texMask);
+			HudUtils.rect(16, 16);
 			GL11.glColorMask(true, true, true, true);
 			
 			GL11.glEnable(GL11.GL_BLEND);
@@ -89,13 +90,13 @@ public class RendererMatterUnit implements IItemRenderer {
 			GL11.glDepthFunc(GL11.GL_EQUAL);
 			RenderUtils.loadTexture(item.getMaterial(stack).texture);
 			double du = -(Minecraft.getSystemTime() / 100000.0) % 1.0, dv = (Minecraft.getSystemTime() / 10000.0) % 1.0;
-			HudUtils.rawDrawRect(0, 0, du, dv, 16, 16, 1, 1);
+			HudUtils.rawRect(0, 0, du, dv, 16, 16, 1, 1);
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 			GL11.glDepthMask(true);
 			
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			
-			HudUtils.setZLevel(-90);
+			GL11.glPopMatrix();
 		}
 	}
 

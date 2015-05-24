@@ -22,10 +22,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
-import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.mc.StackUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -68,7 +67,7 @@ public class ItemCoin extends Item {
 			return stack;
 		}
 		
-    	NBTTagCompound nbt = GenericUtils.loadCompound(stack);
+    	NBTTagCompound nbt = StackUtils.loadTag(stack);
     	//Spawn at both side, not syncing for render effect purpose
     	EntityCoinThrowing etc = new EntityCoinThrowing(player, stack);
     	world.spawnEntityInWorld(etc);

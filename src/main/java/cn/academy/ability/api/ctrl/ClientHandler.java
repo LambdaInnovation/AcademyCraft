@@ -1,16 +1,13 @@
 package cn.academy.ability.api.ctrl;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.preset.PresetData;
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.util.KeyHandler;
-import cn.academy.core.util.KeyManager;
+import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.util.helper.KeyHandler;
+import cn.liutils.util.helper.KeyManager;
 
 /**
  * Key event listener for skill events.
@@ -29,20 +26,20 @@ public final class ClientHandler {
 	
 	public static int getKeyMapping(int kid) {
 		if(kid < STATIC_KEYS) {
-			return KeyManager.instance.getKeyID(handlers[kid]);
+			return ModuleCoreClient.keyManager.getKeyID(handlers[kid]);
 		} else {
-			return KeyManager.dynamic.getKeyID(handlers[kid]);
+			return ModuleCoreClient.dynKeyManager.getKeyID(handlers[kid]);
 		}
 	}
     
     public static void init() {
     	
     	for(int i = 0; i < STATIC_KEYS; ++i) {
-    		KeyManager.instance.addKeyHandler("ability_" + i, defaultMapping[i], handlers[i] = new AbilityKey(i));
+    		ModuleCoreClient.keyManager.addKeyHandler("ability_" + i, defaultMapping[i], handlers[i] = new AbilityKey(i));
     	}
     	
     	for(int i = STATIC_KEYS; i < MAX_KEYS; ++i) {
-    		KeyManager.dynamic.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
+    		ModuleCoreClient.dynKeyManager.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
     	}
     	
         //TODO: Implement

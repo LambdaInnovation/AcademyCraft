@@ -22,12 +22,12 @@ import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.client.render.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
-import cn.academy.core.registry.RegKeyHandler;
-import cn.academy.core.util.KeyHandler;
+import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.util3.VecUtils;
-import cn.liutils.util3.space.Motion3D;
+import cn.liutils.util.generic.VecUtils;
+import cn.liutils.util.helper.KeyHandler;
+import cn.liutils.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD
@@ -43,14 +43,14 @@ public class EntityRayTest extends EntityRayBase {
 	//public static Render renderer = new RendererRayCylinder();
 	public static Render renderer = new RendererRayComposite("railgun");
 	
-	@RegKeyHandler(defaultKey = Keyboard.KEY_L, name = "MeltDowner")
+	@RegACKeyHandler(defaultKey = Keyboard.KEY_L, name = "MeltDowner")
 	public static KH keyHandler;
 	
 	public EntityRayTest(EntityPlayer player) {
 		this(player.worldObj);
 		new Motion3D(player, true).applyToEntity(this);
 		Vec3 offset = VecUtils.vec(0, 0, 1);
-		offset = VecUtils.toGlobalOffset(player, offset);
+		offset.rotateAroundY(player.rotationYaw);
 		
 		posX += offset.xCoord;
 		posY += offset.yCoord;

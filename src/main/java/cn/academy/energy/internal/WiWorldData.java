@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -38,9 +37,9 @@ import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.liutils.util3.GenericUtils;
-import cn.liutils.util3.space.BlockPos;
-import cn.liutils.util3.space.IBlockFilter;
+import cn.liutils.util.helper.BlockPos;
+import cn.liutils.util.helper.IBlockFilter;
+import cn.liutils.util.mc.WorldUtils;
 
 /**
  * @author WeAthFolD
@@ -62,7 +61,7 @@ public class WiWorldData extends WorldSavedData {
 	private IBlockFilter filterWirelessBlocks = new IBlockFilter() {
 
 		@Override
-		public boolean accepts(World world, Block block, int x, int y, int z) {
+		public boolean accepts(World world, int x, int y, int z) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			return te instanceof IWirelessMatrix || te instanceof IWirelessNode;
 		}
@@ -127,11 +126,11 @@ public class WiWorldData extends WorldSavedData {
 				y + range,
 				z + range
 			);
-		Collection<BlockPos> bps = GenericUtils.getBlocksWithinAABB(world, aabb, filterWirelessBlocks, max * 2);
+		Collection<BlockPos> bps = WorldUtils.getBlocksWithin(world, x, y, z, range, max, filterWirelessBlocks);
 		
 		Set<WirelessNet> set = new HashSet();
 		for(BlockPos bp : bps) {
-			TileEntity te = bp.getTileEntity(world);
+			TileEntity te = bp.getTile();
 			WirelessNet net;
 			if(te instanceof IWirelessMatrix) {
 				net = getNetwork((IWirelessMatrix) te);

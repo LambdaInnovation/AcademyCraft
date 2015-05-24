@@ -14,7 +14,7 @@ package cn.academy.energy.api.item;
 
 import net.minecraft.item.ItemStack;
 import cn.academy.support.EnergyHelper.EnergyItemManager;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.mc.StackUtils;
 
 /**
  * @author WeathFolD
@@ -27,7 +27,7 @@ public final class IFItemManager implements EnergyItemManager {
     
     public double getEnergy(ItemStack stack) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
-		return GenericUtils.loadCompound(stack).getDouble("energy");
+		return StackUtils.loadTag(stack).getDouble("energy");
     }
     
     public double getMaxEnergy(ItemStack stack) {
@@ -38,7 +38,7 @@ public final class IFItemManager implements EnergyItemManager {
     public void setEnergy(ItemStack stack, double amt) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
 		amt = Math.min(item.getMaxEnergy(), amt);
-		GenericUtils.loadCompound(stack).setDouble("energy", amt);
+		StackUtils.loadTag(stack).setDouble("energy", amt);
 		
 		int approxDamage = (int) Math.round((1 - amt / getMaxEnergy(stack)) * stack.getMaxDamage());
 		stack.setItemDamage(approxDamage);

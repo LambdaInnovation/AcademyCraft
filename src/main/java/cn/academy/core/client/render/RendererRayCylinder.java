@@ -21,10 +21,10 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.cgui.utils.Color;
 import cn.liutils.render.material.Material;
 import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.render.mesh.Mesh;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD

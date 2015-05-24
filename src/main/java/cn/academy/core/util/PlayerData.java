@@ -35,12 +35,12 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.liutils.util3.ClientUtils;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.client.ClientUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -240,7 +240,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		
 		@SubscribeEvent
 		public void onEntityConstructed(EntityConstructing event) {
-			if(GenericUtils.getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer) {
+			if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer) {
 				//A hack that forces the data to be loaded once the entity is constructed.
 				//loadNBT will only be called if we do so.
 				ProxyHelper.get().getPlayerData((EntityPlayer) event.entity);

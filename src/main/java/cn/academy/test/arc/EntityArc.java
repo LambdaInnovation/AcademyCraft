@@ -12,9 +12,6 @@
  */
 package cn.academy.test.arc;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -22,19 +19,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
 
+import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.test.arc.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.api.key.IKeyHandler;
 import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.registry.AttachKeyHandlerRegistry.RegAttachKeyHandler;
-import cn.liutils.util3.ClientUtils;
-import cn.liutils.util3.GenericUtils;
-import cn.liutils.util3.space.Motion3D;
+import cn.liutils.util.client.ClientUtils;
+import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.helper.KeyHandler;
+import cn.liutils.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD
@@ -49,7 +46,7 @@ public class EntityArc extends EntityAdvanced {
 	public static Renderer render = new Renderer();
 	
 	int [] iid;
-	int n = GenericUtils.randIntv(1, 3);
+	int n = RandUtils.rangei(1, 3);
 	boolean show = true;
 
 	public EntityArc(EntityPlayer player) {
@@ -122,14 +119,15 @@ public class EntityArc extends EntityAdvanced {
 		
 	}
 	
-	@RegAttachKeyHandler(clazz = KeyHandler.class)
-	public static final int keyid = Keyboard.KEY_P;
+	@RegACKeyHandler(name = "arc_test", defaultKey = Keyboard.KEY_P)
+	public static KH kh;
 	
-	public static class KeyHandler implements IKeyHandler {
+	
+	public static class KH extends KeyHandler {
 
 		@Override
-		public void onKeyDown(int keyCode, boolean tickEnd) {
-			if(!tickEnd && ClientUtils.isPlayerInGame()) {
+		public void onKeyDown() {
+			if(ClientUtils.isPlayerInGame()) {
 				EntityPlayer p = Minecraft.getMinecraft().thePlayer;
 				EntityArc a = new EntityArc(p);
 				p.worldObj.spawnEntityInWorld(a);
@@ -137,16 +135,10 @@ public class EntityArc extends EntityAdvanced {
 		}
 
 		@Override
-		public void onKeyUp(int keyCode, boolean tickEnd) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void onKeyUp() {}
 
 		@Override
-		public void onKeyTick(int keyCode, boolean tickEnd) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void onKeyTick() {}
 		
 	}
 

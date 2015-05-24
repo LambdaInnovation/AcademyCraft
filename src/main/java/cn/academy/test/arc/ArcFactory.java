@@ -12,7 +12,11 @@
  */
 package cn.academy.test.arc;
 
-import static cn.liutils.util3.VecUtils.*;
+import static cn.liutils.util.generic.VecUtils.add;
+import static cn.liutils.util.generic.VecUtils.crossProduct;
+import static cn.liutils.util.generic.VecUtils.scalarMultiply;
+import static cn.liutils.util.generic.VecUtils.subtract;
+import static cn.liutils.util.generic.VecUtils.vec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +26,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.MinecraftForgeClient;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import cn.liutils.util3.GenericUtils;
-import cn.liutils.util3.RenderUtils;
-import cn.liutils.util3.VecUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.generic.VecUtils;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.
@@ -135,11 +139,11 @@ public class ArcFactory {
 	}
 	
 	static private Vec3 randomRotate(float range, Vec3 dir) {
-		float a = (float) (GenericUtils.randIntv(-range, range) / 180 * Math.PI);
+		float a = (float) (RandUtils.rangef(-range, range) / 180 * Math.PI);
 		Vec3 ret = VecUtils.copy(dir);
-		ret.rotateAroundX((float) GenericUtils.randIntv(-a, a));
-		ret.rotateAroundY((float) GenericUtils.randIntv(-a, a));
-		ret.rotateAroundZ((float) GenericUtils.randIntv(-a, a));
+		ret.rotateAroundX(RandUtils.rangef(-a, a));
+		ret.rotateAroundY(RandUtils.rangef(-a, a));
+		ret.rotateAroundZ(RandUtils.rangef(-a, a));
 		return ret;
 	}
 	

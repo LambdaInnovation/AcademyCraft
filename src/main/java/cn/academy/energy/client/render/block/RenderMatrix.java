@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.TileMatrix;
 import cn.liutils.template.block.RenderBlockMulti;
-import cn.liutils.util3.RenderUtils;
+import cn.liutils.util.client.RenderUtils;
 
 /**
  * @author WeAthFolD

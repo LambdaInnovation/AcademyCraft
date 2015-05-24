@@ -43,7 +43,7 @@ import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.cgui.utils.Color;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeathFolD

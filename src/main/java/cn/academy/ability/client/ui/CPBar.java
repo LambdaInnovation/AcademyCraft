@@ -24,7 +24,6 @@ import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GLContext;
 
 import cn.annoreg.core.Registrant;
@@ -32,9 +31,9 @@ import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.utils.Color;
-import cn.liutils.util3.HudUtils;
-import cn.liutils.util3.RenderUtils;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD
@@ -110,7 +109,8 @@ public class CPBar extends Widget {
 		
 		//Draw plain background
 		GL11.glColor4d(1, 1, 1, 0.8);
-		HudUtils.drawRect(TEX_BACK_OVERLOAD, WIDTH, HEIGHT);
+		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
+		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Start drawing blend
 		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
@@ -118,12 +118,13 @@ public class CPBar extends Widget {
 		GL11.glColor4d(1, 1, 1, 0.8);
 		
 		final double x0 = 30, width2 = WIDTH - x0 - 20;
-		HudUtils.drawRect(x0, 0, uOffset, 0, width2, HEIGHT, width2, HEIGHT);
+		HudUtils.rect(x0, 0, uOffset, 0, width2, HEIGHT, width2, HEIGHT);
 		//End drawing blend
 		
 		//Draw Highlight
 		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(Minecraft.getSystemTime() / 200.0) + 1));
-		HudUtils.drawRect(TEX_OVERLOAD_HIGHLIGHT, WIDTH, HEIGHT);
+		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
+		HudUtils.rect(WIDTH, HEIGHT);
 		
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
@@ -133,7 +134,8 @@ public class CPBar extends Widget {
 		
 		//Draw plain background
 		GL11.glColor4d(1, 1, 1, 0.8);
-		HudUtils.drawRect(TEX_BACK_OVERLOAD, WIDTH, HEIGHT);
+		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
+		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Start drawing blend
 		RenderUtils.loadTexture(TEX_MASK);
@@ -189,13 +191,15 @@ public class CPBar extends Widget {
 		
 		//Draw Highlight
 		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(Minecraft.getSystemTime() / 200.0) + 1));
-		HudUtils.drawRect(TEX_OVERLOAD_HIGHLIGHT, WIDTH, HEIGHT);
+		RenderUtils.loadTexture(TEX_OVERLOAD_HIGHLIGHT);
+		HudUtils.rect(WIDTH, HEIGHT);
 		
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
 	private void drawNormal(double override) {
-		HudUtils.drawRect(TEX_BACK_NORMAL, WIDTH, HEIGHT);
+		RenderUtils.loadTexture(TEX_BACK_NORMAL);
+		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Overload progress
 		final double X0 = 0, Y0 = 21, WIDTH = 943, HEIGHT = 104;

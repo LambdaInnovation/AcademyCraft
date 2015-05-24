@@ -13,9 +13,7 @@
 package cn.academy.core.util;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
@@ -26,7 +24,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.util3.RegUtils;
+import cn.liutils.util.generic.RegistryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -52,8 +50,8 @@ public class ControlOverrider {
 	public static void init() {
 		try {
 			//TODO
-			kbMap = (IntHashMap) RegUtils.getObfField(KeyBinding.class, "hash", "idk").get(null);
-			pressedField = RegUtils.getObfField(KeyBinding.class, "pressed", "idk");
+			kbMap = (IntHashMap) RegistryUtils.getObfField(KeyBinding.class, "hash", "idk").get(null);
+			pressedField = RegistryUtils.getObfField(KeyBinding.class, "pressed", "idk");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

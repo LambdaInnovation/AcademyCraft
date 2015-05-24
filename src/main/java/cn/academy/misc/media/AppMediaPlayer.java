@@ -18,7 +18,7 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import paulscode.sound.SoundSystem;
 import cn.annoreg.core.Registrant;
-import cn.liutils.util3.RegUtils;
+import cn.liutils.util.generic.RegistryUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -47,9 +47,9 @@ public class AppMediaPlayer {
 	public void startPlay(String name) {
 		stop();
 		
-		soundManager = RegUtils.getFieldInstance(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), "sndManager", "field_147694_f");
-		playingSounds = ((HashBiMap<String, ISound>) RegUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
-		sndSystem = RegUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
+		soundManager = RegistryUtils.getFieldInstance(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), "sndManager", "field_147694_f");
+		playingSounds = ((HashBiMap<String, ISound>) RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
+		sndSystem = RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
 		
 		media = new MediaInstance(name);
 		soundManager.sndHandler.playSound(media);

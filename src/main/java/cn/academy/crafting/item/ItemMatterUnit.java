@@ -30,7 +30,8 @@ import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;
 import cn.annoreg.mc.RegItem;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.mc.PlayerUtils;
+import cn.liutils.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -89,7 +90,7 @@ public class ItemMatterUnit extends ACItem {
 	}
 	
 	public MatterMaterial getMaterial(ItemStack stack) {
-		String name = GenericUtils.loadCompound(stack).getString("material");
+		String name = StackUtils.loadTag(stack).getString("material");
 		MatterMaterial mat = nameMap.get(name);
 		if(mat == null) {
 			setMaterial(stack, NONE);
@@ -130,7 +131,7 @@ public class ItemMatterUnit extends ACItem {
                     		System.out.println("Matched " + m.name);
                     		ItemStack newStack = new ItemStack(this);
                     		this.setMaterial(newStack, m);
-                    		int left = GenericUtils.mergeStackable(player.inventory, newStack);
+                    		int left = PlayerUtils.mergeStackable(player.inventory, newStack);
                     		if(left > 0 && !world.isRemote) {
                     			newStack.stackSize = left;
                     			player.dropPlayerItemWithRandomChoice(newStack, false);
@@ -152,7 +153,7 @@ public class ItemMatterUnit extends ACItem {
     }
 
 	public void setMaterial(ItemStack stack, MatterMaterial mat) {
-		GenericUtils.loadCompound(stack).setString("material", mat.name);
+		StackUtils.loadTag(stack).setString("material", mat.name);
 	}
 	
 	public void setMaterial(ItemStack stack, String name) {

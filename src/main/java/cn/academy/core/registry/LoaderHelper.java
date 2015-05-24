@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 
 import cn.liutils.loading.item.ItemLoader;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.generic.RegistryUtils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,7 +37,7 @@ public class LoaderHelper {
 		if(defaultItem == null) {
 			try {
 				defaultItem = (JsonObject) parser.parse(IOUtils.toString(
-					GenericUtils.getResourceStream(new ResourceLocation("academy:items_default.json"))
+					RegistryUtils.getResourceStream(new ResourceLocation("academy:items_default.json"))
 				));
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();

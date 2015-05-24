@@ -26,12 +26,12 @@ import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.utils.Color;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.generic.VecUtils;
+import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
-import cn.liutils.util3.GenericUtils;
-import cn.liutils.util3.HudUtils;
-import cn.liutils.util3.RenderUtils;
-import cn.liutils.util3.VecUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 
@@ -133,15 +133,15 @@ public class NotifyUI extends Widget {
 	private void drawBack(double alpha) {
 		GL11.glColor4d(1, 1, 1, alpha);
 		RenderUtils.loadTexture(texture);
-		HudUtils.drawRect(517, 170);
+		HudUtils.rect(517, 170);
 	}
 	
 	private void drawIcon(Vec3 p, double alpha) {
 		GL11.glColor4d(1, 1, 1, alpha);
 		GL11.glPushMatrix();
-		VecUtils.glTranslate(p);
+		RenderUtils.glTranslate(p);
 		RenderUtils.loadTexture(lastNotify.getIcon());
-		HudUtils.drawRect(83, 83);
+		HudUtils.rect(83, 83);
 		GL11.glPopMatrix();
 	}
 	
@@ -152,7 +152,7 @@ public class NotifyUI extends Widget {
 	
 	@SubscribeEvent
 	public void onLearned(KnowledgeLearnedEvent event) {
-		if(GenericUtils.getEffectiveSide() == Side.CLIENT) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			notify(new NotifyKnowledge(event.getKnowledge()));
 		}
 	}

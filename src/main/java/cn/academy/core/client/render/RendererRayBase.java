@@ -17,14 +17,14 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.util3.VecUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.generic.VecUtils;
 
 /**
  * @author WeAthFolD
@@ -49,7 +49,7 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 		Vec3 position = ray.getPosition();
 		Vec3 relativePosition = VecUtils.subtract(position, 
 				VecUtils.vec(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
-		VecUtils.glTranslate(relativePosition);
+		RenderUtils.glTranslate(relativePosition);
 		
 		//Calculate the most appropriate 'billboard-up' direction.
 		
@@ -114,10 +114,10 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
 		t.setBrightness(15728880);
-		VecUtils.tessellate(v1, 0, 1);
-		VecUtils.tessellate(v2, 0, 0);
-		VecUtils.tessellate(v3, 1, 0);
-		VecUtils.tessellate(v4, 1, 1);
+		RenderUtils.addVertex(v1, 0, 1);
+		RenderUtils.addVertex(v2, 0, 0);
+		RenderUtils.addVertex(v3, 1, 0);
+		RenderUtils.addVertex(v4, 1, 1);
 		t.draw();
 	}
 	

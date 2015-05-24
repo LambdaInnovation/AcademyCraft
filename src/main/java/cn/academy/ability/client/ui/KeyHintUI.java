@@ -23,16 +23,16 @@ import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.api.preset.PresetData.Preset;
 import cn.academy.core.client.Resources;
-import cn.academy.core.util.KeyManager;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Transform.HeightAlign;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
-import cn.liutils.util3.HudUtils;
-import cn.liutils.util3.RenderUtils;
+import cn.liutils.util.helper.KeyManager;
 
 /**
  * @author WeAthFolD
@@ -92,7 +92,7 @@ public class KeyHintUI extends Widget {
 		
 		// Back
 		RenderUtils.loadTexture(TEX_BACK);
-		HudUtils.drawRect(-78, 0, 385, 83);
+		HudUtils.rect(-78, 0, 385, 83);
 		
 		// KeyHint
 		{
@@ -124,10 +124,10 @@ public class KeyHintUI extends Widget {
 		// Logo
 		GL11.glColor4d(1, 1, 1, 1);
 		RenderUtils.loadTexture(TEX_ICON_BACK);
-		HudUtils.drawRect(216, 5, 72, 72);
+		HudUtils.rect(216, 5, 72, 72);
 		
 		RenderUtils.loadTexture(icon);
-		HudUtils.drawRect(221, 10, 62, 62);
+		HudUtils.rect(221, 10, 62, 62);
 		
 		// Text
 		font.draw(text, 154, 28, 32, 0xffffff, Align.RIGHT);
@@ -136,7 +136,7 @@ public class KeyHintUI extends Widget {
 	private void drawBack(ResourceLocation tex) {
 		RenderUtils.loadTexture(tex);
 		GL11.glColor4d(1, 1, 1, 1);
-		HudUtils.drawRect(161, 22, 50, 48);
+		HudUtils.rect(161, 22, 50, 48);
 	}
 	
 	private static ResourceLocation tex(String name) {

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.Vec3;
-import cn.liutils.util3.VecUtils;
+import cn.liutils.util.generic.VecUtils;
 
 /**
  * Immutable line segment class.

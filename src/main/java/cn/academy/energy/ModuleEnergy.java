@@ -12,7 +12,10 @@
  */
 package cn.academy.energy;
 
-import net.minecraft.util.ResourceLocation;
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
+
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.energy.block.BlockIonicFlux;
 import cn.academy.energy.block.BlockMatrix;
@@ -47,7 +50,11 @@ public class ModuleEnergy {
 	
 	public static void init() {
 		loader = LoaderHelper.createItemLoader();
-		loader.feed(new ResourceLocation("academy:items_energy.json"));
+		try {
+			loader.feed(IOUtils.toString(ModuleEnergy.class.getResource("/assets/academy/items_energy.json")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		loader.loadAll();
 	}

@@ -26,7 +26,7 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.mc.PlayerUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -133,7 +133,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
 	void finishThrowing() {
 		//try merge
 		if(!worldObj.isRemote && !player.capabilities.isCreativeMode
-			&& GenericUtils.mergeStackable(player.inventory, new ItemStack(
+			&& PlayerUtils.mergeStackable(player.inventory, new ItemStack(
 					ModuleAbility.coin)) > 0) {
 			//if fail...
 			worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 

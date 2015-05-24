@@ -19,7 +19,6 @@ import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegSubmoduleInit;
-import cn.liutils.util3.GenericUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -50,7 +49,7 @@ public class KnowledgeTest {
 	
 	@SubscribeEvent
 	public void onLearned(KnowledgeLearnedEvent event) {
-		System.out.println("Learned [" + event.getKnowledge() + "] in " + GenericUtils.getEffectiveSide());
+		System.out.println("Learned [" + event.getKnowledge() + "]");
 	}
 	
 }

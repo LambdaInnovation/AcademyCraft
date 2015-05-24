@@ -5,14 +5,16 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import cn.annoreg.core.Registrant;
+
+import org.apache.commons.lang3.RandomUtils;
+
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.render.particle.Particle;
 import cn.liutils.render.particle.SimpleParticleFactory;
-import cn.liutils.util3.GenericUtils;
+import cn.liutils.util.generic.RandUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -35,7 +37,7 @@ public class ParticleTest {
 			public Particle next() {
 				Particle ret = super.next();
 				ret.addMotionHandler(new Rigidbody());
-				final long time = GenericUtils.randIntv(3000, 4000);
+				final long time = RandUtils.rangei(3000, 4000);
 				ret.addMotionHandler(new MotionHandler<Particle>() {
 					@Override
 					public String getID() {
@@ -66,13 +68,13 @@ public class ParticleTest {
 			EntityPlayer player = event.player;
 			factory.world = player.worldObj;
 			
-			int n = GenericUtils.randIntv(4, 8);
+			int n = RandUtils.rangei(4, 8);
 			for(int i = 0; i < n; ++i) {
 				double theta = rand.nextDouble() * Math.PI * 2;
-				double r = 1.5 + GenericUtils.randIntv(-0.1, 0.1);
-				double dx = r * Math.sin(theta), dy = GenericUtils.randIntv(-2, -1.5), dz = r * Math.cos(theta);
+				double r = 1.5 + RandUtils.ranged(-0.1, 0.1);
+				double dx = r * Math.sin(theta), dy = RandUtils.ranged(-2, -1.5), dz = r * Math.cos(theta);
 				factory.pos = Vec3.createVectorHelper(player.posX + dx, player.posY + dy, player.posZ + dz);
-				factory.vel = Vec3.createVectorHelper(GenericUtils.randIntv(-0.02, 0.02), GenericUtils.randIntv(0.02, 0.03), GenericUtils.randIntv(-0.02, 0.02));
+				factory.vel = Vec3.createVectorHelper(RandUtils.ranged(-0.02, 0.02), RandUtils.ranged(0.02, 0.03), RandUtils.ranged(-0.02, 0.02));
 				player.worldObj.spawnEntityInWorld(factory.next());
 			}
 		}

@@ -12,11 +12,12 @@
  */
 package cn.academy.core.registry;
 
-import cn.academy.core.util.KeyHandler;
-import cn.academy.core.util.KeyManager;
+import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.base.RegistrationFieldSimple;
 import cn.annoreg.core.LoadStage;
 import cn.annoreg.core.RegistryTypeDecl;
+import cn.liutils.util.helper.KeyHandler;
+import cn.liutils.util.helper.KeyManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,18 +27,18 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @RegistryTypeDecl
 @SideOnly(Side.CLIENT)
-public class KeyHandlerRegistration extends RegistrationFieldSimple<RegKeyHandler, KeyHandler> {
+public class KeyHandlerRegistration extends RegistrationFieldSimple<RegACKeyHandler, KeyHandler> {
 
 	public KeyHandlerRegistration() {
-		super(RegKeyHandler.class, "ACKeyHandler");
+		super(RegACKeyHandler.class, "ACKeyHandler");
 		setLoadStage(LoadStage.INIT);
 	}
 
 	@Override
-	protected void register(KeyHandler value, RegKeyHandler anno, String field)
+	protected void register(KeyHandler value, RegACKeyHandler anno, String field)
 			throws Exception {
-		KeyManager.instance.addKeyHandler(anno.name(), anno.desc(), anno.defaultKey(), value);
+		KeyManager target = anno.dynamic() ? ModuleCoreClient.dynKeyManager : ModuleCoreClient.keyManager;
+		target.addKeyHandler(anno.name(), anno.desc(), anno.defaultKey(), value);
 	}
-
 
 }
