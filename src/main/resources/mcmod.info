@@ -1,15 +1,15 @@
 [
 {
-  "modid": "academy-craft",
-  "name": "Academy Craft",
-  "description": "A mod about superability, including its acquiring, updating, and using. Become an ESPer and alter your reality in Minecraft!",
-  "version": "1.0beta3",
-  "url": "http://ac.li-dev.cn/",
+  "modid": "LIUtils",
+  "name": "LIUtils",
+  "description": "An utility API mod that gives better modding experience for modders.",
+  "version": "1.7.10.100",
+  "url": "https://github.com/LambdaInnovation",
   "updateUrl": "",
-  "authorList": ["Lambda Innovation"],
-  "credits": "All the players of the mod, like you",
-  "logoFile": "logo.png",
+  "authorList": ["LambdaInnovation"],
+  "credits": "",
+  "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["IC2"]
 }
 ]
