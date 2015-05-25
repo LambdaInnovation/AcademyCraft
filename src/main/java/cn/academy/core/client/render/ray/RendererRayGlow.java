@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core.client.render;
+package cn.academy.core.client.render.ray;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -28,15 +28,17 @@ import cn.liutils.util.generic.VecUtils;
 /**
  * @author WeAthFolD
  */
-public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
+public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 	
 	public static final double DEFAULT_WIDTH = 0.9;
 	
 	public double width;
 	
+	public double startFix = 0.0, endFix = 0.0; //How many units of offset does we go. Used to align with cylinder renderer.
+	
 	ResourceLocation blendIn, tile, blendOut;
 	
-	public RendererRaySimple(ResourceLocation _blendIn, ResourceLocation _tile, ResourceLocation _blendOut) {
+	public RendererRayGlow(ResourceLocation _blendIn, ResourceLocation _tile, ResourceLocation _blendOut) {
 		blendIn = _blendIn;
 		tile = _tile;
 		blendOut = _blendOut;
@@ -44,7 +46,7 @@ public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
 		setWidth(DEFAULT_WIDTH);
 	}
 	
-	public RendererRaySimple setWidth(double w) {
+	public RendererRayGlow setWidth(double w) {
 		width = w;
 		return this;
 	}
@@ -63,13 +65,13 @@ public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
 		t.setBrightness(15728880);
 		Vec3 look = VecUtils.subtract(end, start).normalize();
 		
-		end = VecUtils.add(end, VecUtils.scalarMultiply(look, 0.8));
-		start = VecUtils.add(start, VecUtils.scalarMultiply(look, -0.6));
+		end = VecUtils.add(end, VecUtils.scalarMultiply(look, endFix));
+		start = VecUtils.add(start, VecUtils.scalarMultiply(look, startFix));
 		
 		Vec3 mid1 = VecUtils.add(start, VecUtils.scalarMultiply(look, width));
 		Vec3 mid2 = VecUtils.add(end, VecUtils.scalarMultiply(look, -width));
 		
-		GL11.glColor4d(1, 1, 1, 0.2 + 0.4 * (1 + Math.sin(Minecraft.getSystemTime() / 400.0)));
+		GL11.glColor4d(1, 1, 1, ray.getAlpha());
 		
 		RenderUtils.loadTexture(blendIn);
 		this.drawBoard(start, mid1, dir, width);
@@ -86,10 +88,10 @@ public class RendererRaySimple<T extends IRay> extends RendererRayBase<T> {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 	
-	public static RendererRaySimple createFromName(String name) {
+	public static RendererRayGlow createFromName(String name) {
 		try {
 			ResourceLocation[] mats = Resources.getRayTextures(name);
-			return new RendererRaySimple(mats[0], mats[1], mats[2]);
+			return new RendererRayGlow(mats[0], mats[1], mats[2]);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;

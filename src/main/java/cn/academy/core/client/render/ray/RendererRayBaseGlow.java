@@ -10,8 +10,9 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core.client.render;
+package cn.academy.core.client.render.ray;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -27,10 +28,10 @@ import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.VecUtils;
 
 /**
+ * Renderer to draw glow texture
  * @author WeAthFolD
- *
  */
-public abstract class RendererRayBase<T extends IRay> extends Render {
+public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 
 	/**
 	 * TODO: Too heavy mathematics and polar<->xyz. Maybe we can tweak it?
@@ -41,6 +42,7 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 		T ray = (T) entity;
 		
 		NBTTagCompound nbt = entity.getEntityData();
+		Minecraft mc = Minecraft.getMinecraft();
 		
 		GL11.glPushMatrix();
 		
@@ -86,6 +88,12 @@ public abstract class RendererRayBase<T extends IRay> extends Render {
 //		
 //		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		//DEBUG END
+		if(ray.needsViewOptimize()) {
+			Vec3 vec = ViewOptimize.getFixVector();
+			vec.rotateAroundY((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
+			start = VecUtils.add(start, vec);
+			end = VecUtils.add(end, vec);
+		}
 		
 		doTransform(ray);
 		

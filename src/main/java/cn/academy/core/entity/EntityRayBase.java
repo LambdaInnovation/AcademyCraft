@@ -12,22 +12,42 @@
  */
 package cn.academy.core.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
-import org.lwjgl.util.vector.Vector2f;
-
 import cn.liutils.entityx.EntityAdvanced;
+import cn.liutils.entityx.EntityCallback;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
- *
  */
+@SideOnly(Side.CLIENT)
 public class EntityRayBase extends EntityAdvanced implements IRay {
+	
+	public long blendInTime = 100;
+	public int life = 30;
+	public long blendOutTime = 300;
+	public double length = 15.0;
+	
+	long creationTime;
 
 	public EntityRayBase(World world) {
 		super(world);
+		creationTime = Minecraft.getSystemTime();
+		
+	}
+	
+	protected void onFirstUpdate() {
+		executeAfter(new EntityCallback() {
+			@Override
+			public void execute(Entity target) {
+				setDead();
+			}
+		}, life);
 	}
 	
 	@Override
@@ -37,7 +57,8 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
 	@Override
 	public double getLength() {
-		return 15;
+		long dt = Minecraft.getSystemTime() - creationTime;
+		return (dt < blendInTime ? (double)dt / blendInTime : 1) * length;
 	}
 	
 	@Override
@@ -62,6 +83,17 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	@Override
 	public Vec3 getLookingDirection() {
 		return Vec3.createVectorHelper(motionX, motionY, motionZ);
+	}
+
+	@Override
+	public double getAlpha() {
+		long dt = Minecraft.getSystemTime() - creationTime;
+		return dt > life * 50 - blendOutTime ? 1 - (dt + blendOutTime - life * 50.0) / blendOutTime : 1.0;
+	}
+
+	@Override
+	public boolean needsViewOptimize() {
+		return true;
 	}
 
 }

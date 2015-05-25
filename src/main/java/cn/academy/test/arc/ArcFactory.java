@@ -49,7 +49,6 @@ public class ArcFactory {
 	static Random rand = new Random();
 	static Matrix4f matrix = new Matrix4f();
 	
-	public double length = 15.0;
 	public double width = 0.1;
 	//public ICurve curve;
 	public double lengthShrink = 0.7;
@@ -105,7 +104,7 @@ public class ArcFactory {
 		}
 	}
 	
-	public Arc generate() {
+	public Arc generate(double length) {
 		listAll.clear();
 		bufferAll.clear();
 		
@@ -119,8 +118,9 @@ public class ArcFactory {
 		bufferAll.add(new ArrayList());
 		
 		boolean flip = false;
-		double offset = maxOffset;
-		for(int i = 0; i < passes; ++i) {
+		double offset = maxOffset * (length / 15.0);
+		int realPasses = (int) Math.round(passes * length / 15.0);
+		for(int i = 0; i < realPasses; ++i) {
 			if(flip) {
 				for(int j = 0; j < listAll.size(); ++j) {
 					handleSingle(bufferAll.get(j), listAll.get(j), offset);

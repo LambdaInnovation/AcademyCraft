@@ -17,6 +17,13 @@ public interface IRay {
 	 */
 	Vec3 getLookingDirection();
 	
+	boolean needsViewOptimize();
+	
 	double getLength();
+	
+	/**
+	 * @return An alpha multiplyer. Can be used for blend out.
+	 */
+	double getAlpha();
 	
 }

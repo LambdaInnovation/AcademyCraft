@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.test.arc;
+package cn.academy.ability.impl.electromaster.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.core.client.render.RendererRayComposite;
+import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;
@@ -35,32 +35,28 @@ import cn.liutils.util.helper.Motion3D;
  */
 @Registrant
 @RegEntity
-@RegEntity.HasRender
-public class EntityRayTest extends EntityRayBase {
-	
-	@RegEntity.Render
-	//public static Render renderer = RendererRaySimple.createFromName("mdray_s");
-	//public static Render renderer = new RendererRayCylinder();
-	public static Render renderer = new RendererRayComposite("railgun");
+public class EntityRailgunFX extends EntityRayBase {
 	
 	@RegACKeyHandler(defaultKey = Keyboard.KEY_L, name = "MeltDowner")
 	public static KH keyHandler;
 	
-	public EntityRayTest(EntityPlayer player) {
+	public EntityRailgunFX(EntityPlayer player) {
 		this(player.worldObj);
 		new Motion3D(player, true).applyToEntity(this);
-		Vec3 offset = VecUtils.vec(0, 0, 1);
-		offset.rotateAroundY(player.rotationYaw);
 		
-		posX += offset.xCoord;
-		posY += offset.yCoord;
-		posZ += offset.zCoord;
+		this.life = 40;
 		
 		ignoreFrustumCheck = true;
 	}
 
-	public EntityRayTest(World world) {
+	public EntityRailgunFX(World world) {
 		super(world);
+	}
+	
+	@Override
+	protected void onFirstUpdate() {
+		super.onFirstUpdate();
+		worldObj.playSound(posX, posY, posZ, "academy:elec.railgun", 0.5f, 1.0f, false);
 	}
 	
 	public static class KH extends KeyHandler {
@@ -68,7 +64,7 @@ public class EntityRayTest extends EntityRayBase {
 		@Override
 		public void onKeyDown() {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			player.worldObj.spawnEntityInWorld(new EntityRayTest(player));
+			player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player));
 		}
 		
 	}

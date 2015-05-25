@@ -10,36 +10,36 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core.client.render;
+package cn.academy.core.client.render.ray;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.render.material.Material;
 import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.render.mesh.Mesh;
 import cn.liutils.util.helper.Color;
 
 /**
+ * Renderer to draw the concrete cylinder
  * @author WeAthFolD
- *
  */
-public class RendererRayCylinder<T extends IRay> extends RendererRayBase<T> {
+public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 	
 	public double width = 0.08;
+	
+	public double headFix = 1.0;
 	
 	static final int DIV = 12;
 	
 	static Mesh head = new Mesh();
 	static Mesh cylinder = new Mesh();
 	
-	public Material material;
+	public SimpleMaterial material;
 	
 	static {
 		try{
@@ -132,6 +132,11 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBase<T> {
 		}
 	}
 	
+	public RendererRayCylinder(double width) {
+		this();
+		this.width = width;
+	}
+	
 	public RendererRayCylinder() {
 		SimpleMaterial sm = new SimpleMaterial(null).setIgnoreLight();
 		sm.color = new Color().setColor4i(244, 234, 165, 170);
@@ -139,17 +144,18 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBase<T> {
 	}
 
 	@Override
-	protected void draw(T ray, Vec3 start, Vec3 end, Vec3 sideDir) {
+	protected void draw(Entity entity) {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		
-		Entity ent = (Entity) ray;
-		
-		GL11.glRotatef(270 - ent.rotationYaw, 0, 1, 0);
-		GL11.glRotatef(ent.rotationPitch, 0, 0, -1);
+		IRay ray = (IRay) entity;
+		double oldA = material.color.a;
+		material.color.a *= ray.getAlpha();
 		
 		GL11.glPushMatrix();
-		GL11.glScaled(width, width, width);
+		double offset = width * (1 - headFix);
+		GL11.glTranslated(offset, 0, 0);
+		GL11.glScaled(width * headFix, width, width);
 		head.draw(material);
 		GL11.glPopMatrix();
 		
@@ -161,7 +167,15 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBase<T> {
 		cylinder.draw(material);
 		GL11.glPopMatrix();
 		
+		GL11.glPushMatrix();
+		GL11.glTranslated(len + width - offset, 0, 0);
+		GL11.glScaled(-width * headFix, width, -width);
+		head.draw(material);
 		GL11.glPopMatrix();
+		
+		GL11.glPopMatrix();
+		
+		material.color.a = oldA;
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 

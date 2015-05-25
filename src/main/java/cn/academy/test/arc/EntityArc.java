@@ -46,7 +46,7 @@ public class EntityArc extends EntityAdvanced {
 	public static Renderer render = new Renderer();
 	
 	int [] iid;
-	int n = RandUtils.rangei(1, 3);
+	int n = 1;//RandUtils.rangei(1, 2);
 	boolean show = true;
 
 	public EntityArc(EntityPlayer player) {
@@ -91,7 +91,7 @@ public class EntityArc extends EntityAdvanced {
 		public Renderer() {
 			ArcFactory fac = new ArcFactory();
 			for(int i = 0; i < 100; ++i) {
-				patterns[i] = fac.generate();
+				patterns[i] = fac.generate(10);
 			}
 		}
 		
@@ -106,8 +106,17 @@ public class EntityArc extends EntityAdvanced {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotatef(arc.rotationYaw + 90, 0, -1, 0);
 			GL11.glRotatef(arc.rotationPitch, 0, 0, -1);
+			
+			GL11.glPushMatrix();
 			for(int i = 0; i < arc.n; ++i)
 				patterns[arc.iid[i]].draw();
+			GL11.glPopMatrix();
+			
+			GL11.glPushMatrix();
+			GL11.glTranslated(20, 0, 0);
+			for(int i = 0; i < arc.n; ++i)
+				patterns[arc.iid[i]].draw();
+			GL11.glPopMatrix();
 			
 			GL11.glPopMatrix();
 		}
