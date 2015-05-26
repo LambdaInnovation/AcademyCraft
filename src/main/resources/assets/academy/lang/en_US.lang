@@ -2,6 +2,10 @@
 # Debug version
 # Last modified: 2015/5/23
 
+# Generic
+ac.generic.energy.desc=Energy
+ac.generic.load.desc=Load
+
 # Item
 item.ac_coin.name=Coin
 
@@ -24,6 +28,17 @@ ac.gui.matrix.mark.fail.desc=Action failed.
 
 # Node
 ac.gui.node.not_connected.desc=NOT CONNECTED
+ac.gui.node.node_name.desc=Node Name
+ac.gui.node.ssid.desc=SSID: 
+ac.gui.node.password.desc=Password: 
+ac.gui.node.current_ssid.desc=Current SSID: 
+ac.gui.node.not_connected.desc=<Not Connected>
+
+ac.gui.node.mark.loading.desc=LOADING
+ac.gui.node.mark.idle.desc=IDLE
+ac.gui.node.transmitting.desc=TRANSMITTING
+ac.gui.node.successful.desc=SUCCESSFUL
+ac.gui.node.failed.desc=FAILED
 
 # -----
 

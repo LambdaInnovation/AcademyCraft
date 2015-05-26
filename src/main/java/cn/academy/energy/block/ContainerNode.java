@@ -38,8 +38,8 @@ public class ContainerNode extends Container {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotIFItem(node, 0, 34, 63));
-        this.addSlotToContainer(new SlotIFItem(node, 1, 125, 35));
+        this.addSlotToContainer(new SlotIFItem(node, 0, 38, 72));
+        this.addSlotToContainer(new SlotIFItem(node, 1, 78, 72));
         
         int STEP = 18;
         

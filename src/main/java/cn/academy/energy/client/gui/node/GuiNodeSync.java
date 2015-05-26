@@ -42,12 +42,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiNodeSync {
 	
 	public enum CheckState { 
-		INPUT("2333"), TRANSMITTING("loading"), SUCCESSFUL("confirmed"), FAILED("reject");
+		LOADING("loading"),
+		IDLE("confirmed", "idle"),
+		TRANSMITTING("loading", "transmitting"), 
+		SUCCESSFUL("confirmed"),
+		FAILED("reject");
+		
 		public final ResourceLocation texture;
 		final String translateKey;
 		
 		String getDisplayName() {
 			return StatCollector.translateToLocal(translateKey);
+		}
+		
+		CheckState(String logo, String desc) {
+			translateKey = "ac.gui.node.mark." + desc + ".desc";
+			texture = new ResourceLocation("academy:textures/guis/mark/mark_" + logo + ".png");
 		}
 		
 		CheckState(String logo) {
@@ -84,7 +94,7 @@ public class GuiNodeSync {
 	
 	//List
 	public static void doQueryList(TileNode target) {
-		//Waiting for finish of array list serializer.
+		queryList(Minecraft.getMinecraft().thePlayer, target);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
@@ -104,19 +114,32 @@ public class GuiNodeSync {
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	public static void receiveList(@Target EntityPlayer player, @Instance TileNode target, @Data List<String> ssids) {
-		//System.
+		GuiNode gui = locate(target);
+		if(gui != null) {
+			gui.receivedListSync(ssids);
+		}
 	}
 	
 	//Rename
-	
-	//Login
 	@SideOnly(Side.CLIENT)
-	static void tryLogin(GuiNode gui, String ssid, String password) {
-		doLogin(Minecraft.getMinecraft().thePlayer, gui.tile, ssid, password);
+	static void doRename(GuiNode gui, String newName) {
+		rename(gui.tile, newName);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void doLogin(
+	public static void rename(@Instance TileNode tile, @Data String newName) {
+		if(tile != null)
+			tile.setNodeName(newName);
+	}
+	
+	//Login
+	@SideOnly(Side.CLIENT)
+	static void doLogin(GuiNode gui, String ssid, String password) {
+		login(Minecraft.getMinecraft().thePlayer, gui.tile, ssid, password);
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	public static void login(
 			@Instance EntityPlayer player, 
 			@Instance TileNode target, 
 			@Data String ssid, 
