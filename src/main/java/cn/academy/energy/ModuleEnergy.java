@@ -17,6 +17,7 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 
 import cn.academy.core.registry.LoaderHelper;
+import cn.academy.energy.block.BlockImagFusor;
 import cn.academy.energy.block.BlockIonicFlux;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
@@ -47,6 +48,9 @@ public class ModuleEnergy {
     
     @RegBlock
     public static BlockIonicFlux ionicFlux;
+    
+    @RegBlock
+    public static BlockImagFusor imagFusor;
 	
 	public static void init() {
 		loader = LoaderHelper.createItemLoader();

@@ -24,7 +24,6 @@ import net.minecraft.inventory.Slot;
 public class ContainerMatrix extends Container {
 	
 	public final TileMatrix tile;
-	
 	public final EntityPlayer player;
 	
 	public ContainerMatrix(TileMatrix _tile, EntityPlayer _player) {
