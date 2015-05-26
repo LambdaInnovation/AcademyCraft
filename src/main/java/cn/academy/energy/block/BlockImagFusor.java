@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
+import cn.academy.energy.client.gui.imagfusor.GuiImagFusor;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
@@ -24,8 +25,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * TODO: icon and animation
  * @author WeAthFolD
- *
  */
 @Registrant
 public class BlockImagFusor extends ACBlockContainer {

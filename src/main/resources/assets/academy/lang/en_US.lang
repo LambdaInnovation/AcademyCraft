@@ -40,6 +40,10 @@ ac.gui.node.transmitting.desc=TRANSMITTING
 ac.gui.node.successful.desc=SUCCESSFUL
 ac.gui.node.failed.desc=FAILED
 
+#Imag Fusor
+ac.gui.imagfusor.ion.desc=Imag Ion
+ac.gui.imagfusor.flux.desc=Imag Flux
+
 # -----
 
 # Electro Master

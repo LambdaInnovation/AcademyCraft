@@ -15,6 +15,7 @@ package cn.academy.support;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.IFItemManager;
 import cn.annoreg.core.Registrant;
@@ -66,6 +67,18 @@ public class EnergyHelper {
 			}
 		}
 		return amt;
+	}
+	
+	public static ItemStack createEmptyItem(Item item) {
+		ItemStack ret = new ItemStack(item);
+		charge(ret, 0, true);
+		return ret;
+	}
+	
+	public static ItemStack createFullItem(Item item) {
+		ItemStack ret = new ItemStack(item);
+		charge(ret, Integer.MAX_VALUE, true);
+		return ret;
 	}
 	
 	public interface EnergyItemManager {

@@ -12,8 +12,11 @@
  */
 package cn.academy.crafting;
 
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegSubmoduleInit;
@@ -28,8 +31,17 @@ public class ModuleCrafting {
 	@RegItem
 	@RegItem.HasRender
 	public static ItemMatterUnit matterUnit;
-
+	
+	public static Fluid fluidImagIon = new Fluid("imagFlux");
+    static {
+    	fluidImagIon.setLuminosity(8).setDensity(7000)
+    		.setViscosity(6000).setTemperature(0).setDensity(1);
+		FluidRegistry.registerFluid(fluidImagIon);
+    }
+	
 	public static void init() {
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagIon, 1000), 
+			matterUnit.create("imag_ionic"), matterUnit.create("none"));
 	}
 	
 }

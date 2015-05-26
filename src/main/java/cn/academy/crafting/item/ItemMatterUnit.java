@@ -124,11 +124,9 @@ public class ItemMatterUnit extends ACItem {
                     }
                     
                     Block b = world.getBlock(i, j, k);
-                    System.out.println(b);
                     for(MatterMaterial m : nameMap.values()) {
                     	if(m.block == b) {
                     		// Match, merge the stack.
-                    		System.out.println("Matched " + m.name);
                     		ItemStack newStack = new ItemStack(this);
                     		this.setMaterial(newStack, m);
                     		int left = PlayerUtils.mergeStackable(player.inventory, newStack);
@@ -158,6 +156,16 @@ public class ItemMatterUnit extends ACItem {
 	
 	public void setMaterial(ItemStack stack, String name) {
 		setMaterial(stack, getMatterMaterial(name));
+	}
+	
+	public ItemStack create(String name) {
+		return create(getMatterMaterial(name));
+	}
+	
+	public ItemStack create(MatterMaterial mat) {
+		ItemStack ret = new ItemStack(this);
+		setMaterial(ret, mat);
+		return ret;
 	}
 	
 	@Override

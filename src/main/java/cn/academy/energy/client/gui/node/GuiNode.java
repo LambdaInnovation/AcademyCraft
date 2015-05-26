@@ -217,6 +217,8 @@ public class GuiNode extends LIGuiContainer {
     		ProgressBar bar = ProgressBar.get(getWidget("progress_load"));
     		bar.progress = (double)load / maxLoad;
     		
+    		TextBox.get(getWidget("input_name")).content = nodeName;
+    		
     		updateSSID(ssid);
     	}
     	

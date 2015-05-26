@@ -69,6 +69,10 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 	public double getEnergy() {
 		return energy;
 	}
+	
+	public double getMaxEnergy() {
+		return maxEnergy;
+	}
 
 	@Override
 	public double getLatency() {

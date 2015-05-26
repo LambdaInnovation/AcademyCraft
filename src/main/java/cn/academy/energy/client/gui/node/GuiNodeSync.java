@@ -43,7 +43,7 @@ public class GuiNodeSync {
 	
 	public enum CheckState { 
 		LOADING("loading"),
-		IDLE("confirmed", "idle"),
+		IDLE("idle"),
 		TRANSMITTING("loading", "transmitting"), 
 		SUCCESSFUL("confirmed"),
 		FAILED("reject");

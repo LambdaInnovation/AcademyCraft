@@ -13,7 +13,14 @@
 package cn.academy.energy.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD
@@ -27,7 +34,29 @@ public class ContainerImagFusor extends Container {
 	public ContainerImagFusor(TileImagFusor _tile, EntityPlayer _player) {
 		tile = _tile;
 		player = _player;
+		
+		initInventory(player.inventory);
 	}
+	
+    private void initInventory(InventoryPlayer inv) {
+    	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
+    	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
+        this.addSlotToContainer(new Slot(tile, 2, 32, 72));
+        this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 72));
+        
+        int STEP = 18;
+        
+        for(int i = 0; i < 9; ++i) {
+            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+        }
+        
+        for(int i = 1; i < 4; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                int slot = (4 - i) * 9 + j;
+                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+            }
+        }
+    }
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer p_75145_1_) {

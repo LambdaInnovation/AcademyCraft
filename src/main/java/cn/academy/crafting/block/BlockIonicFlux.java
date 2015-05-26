@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.block;
+package cn.academy.crafting.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -36,22 +36,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * TODO: Implement particle and fog effect
  * @author WeAthFolD
  */
 @Registrant
 public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProvider {
 	
-	public static Fluid fluid = new Fluid("imagFlux");
 	public final MatterMaterial mat;
-	static { //TODO: @RegFluid
-		fluid.setLuminosity(8).setDensity(7000).setViscosity(6000).setTemperature(0).setDensity(1);
-		FluidRegistry.registerFluid(fluid);
-	}
-	
-	public static Material material = new MaterialLiquid(MapColor.obsidianColor);
 
 	public BlockIonicFlux() {
-		super(fluid, Material.water);
+		super(ModuleCrafting.fluidImagIon, Material.water);
 		setCreativeTab(AcademyCraft.cct);
 		setBlockName("ac_ionic_flux");
 		setBlockTextureName("academy:black");
@@ -84,7 +78,6 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
 	public void onInteract(PlayerInteractEvent event) {
 		if(event.action == Action.RIGHT_CLICK_BLOCK) {
 			Block b = event.world.getBlock(event.x, event.y, event.z);
-			System.out.println(b);
 			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 			if(b == this && stack != null && stack.getItem() == ModuleCrafting.matterUnit) {
 				ModuleCrafting.matterUnit.setMaterial(stack, mat);
