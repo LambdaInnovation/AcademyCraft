@@ -157,22 +157,22 @@ public class CPBar extends Widget {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_REPLACE);
 		
-		float uOffset = Minecraft.getSystemTime() / 10000.0f;
+		double uOffset = (Minecraft.getSystemTime() % 10000L) / 10000.0d;
 		GL11.glColor4d(1, 1, 1, 0.8);
 		GL11.glBegin(GL11.GL_QUADS);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 1.0f);
+			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 1.0f);
 			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 0.0f, 1.0f);  
 			GL11.glVertex3d(0.0f, 0.0f, 0.0f);
 		  
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 0.0f);
+			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 0.0f);
 			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 0.0f, 0.0f);
 			GL11.glVertex3d(0.0, HEIGHT * 1.0, 0.0);
 		  
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 0.0f);
+			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 0.0f);
 			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 0.0f); 
 			GL11.glVertex3d(WIDTH * 1.0, HEIGHT * 1.0, 0.0);
 		  
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 1.0f);
+			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 1.0f);
 			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 1.0f);
 			GL11.glVertex3d(WIDTH * 1.0, 0.0, 0.0);
 		GL11.glEnd();

@@ -57,6 +57,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDepthMask(false);
 
 		Tessellator t = Tessellator.instance;
@@ -83,6 +84,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		this.drawBoard(mid2, end, dir, width);
 		
 		GL11.glDepthMask(true);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

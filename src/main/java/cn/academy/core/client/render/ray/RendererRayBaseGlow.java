@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.generic.VecUtils;
 
 /**

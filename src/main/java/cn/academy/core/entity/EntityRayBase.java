@@ -96,4 +96,14 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		return true;
 	}
 
+	@Override
+	public double getStartFix() {
+		return 0.0;
+	}
+
+	@Override
+	public double getWidth() {
+		return 1.0;
+	}
+
 }

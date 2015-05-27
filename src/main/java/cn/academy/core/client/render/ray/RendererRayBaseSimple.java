@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
+import cn.liutils.util.client.ViewOptimize;
 
 /**
  * @author WeAthFolD
