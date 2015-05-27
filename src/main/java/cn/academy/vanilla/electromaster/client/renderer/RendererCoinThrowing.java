@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.client.renderer;
+package cn.academy.vanilla.electromaster.client.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -24,8 +24,8 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
 import cn.academy.core.client.Resources;
+import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.liutils.util.client.RenderUtils;
 
 /**

@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.item;
+package cn.academy.vanilla.electromaster.item;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
-import cn.academy.ability.impl.electromaster.entity.EntityCoinThrowing;
+import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
+import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.mc.StackUtils;

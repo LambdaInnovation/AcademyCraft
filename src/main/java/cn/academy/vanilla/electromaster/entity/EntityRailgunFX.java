@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.entity;
+package cn.academy.vanilla.electromaster.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -44,7 +44,12 @@ public class EntityRailgunFX extends EntityRayBase {
 		this(player.worldObj);
 		new Motion3D(player, true).applyToEntity(this);
 		
-		this.life = 40;
+		this.life = 50;
+		this.blendInTime = 150;
+		this.widthShrinkTime = 800;
+		this.widthWiggleRadius = 0.3;
+		this.maxWiggleSpeed = 0.8;
+		this.blendOutTime = 1000;
 		
 		ignoreFrustumCheck = true;
 	}

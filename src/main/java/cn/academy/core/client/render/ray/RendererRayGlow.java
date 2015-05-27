@@ -24,6 +24,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.VecUtils;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD
@@ -35,6 +36,8 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 	public double width;
 	
 	public double startFix = 0.0, endFix = 0.0; //How many units of offset does we go. Used to align with cylinder renderer.
+	
+	public Color color = Color.WHITE();
 	
 	ResourceLocation blendIn, tile, blendOut;
 	
@@ -72,7 +75,12 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		Vec3 mid1 = VecUtils.add(start, VecUtils.scalarMultiply(look, width));
 		Vec3 mid2 = VecUtils.add(end, VecUtils.scalarMultiply(look, -width));
 		
-		GL11.glColor4d(1, 1, 1, ray.getAlpha());
+		double preA = color.a;
+		color.a = preA * ray.getAlpha();
+		color.bind();
+		color.a = preA;
+		
+		double width = this.width * ray.getWidth();
 		
 		RenderUtils.loadTexture(blendIn);
 		this.drawBoard(start, mid1, dir, width);

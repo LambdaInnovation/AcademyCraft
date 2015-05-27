@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.entity;
+package cn.academy.vanilla.electromaster.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -20,7 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.ModuleAbility;
-import cn.academy.ability.impl.electromaster.client.renderer.RendererCoinThrowing;
+import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
@@ -134,10 +135,10 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		//try merge
 		if(!worldObj.isRemote && !player.capabilities.isCreativeMode
 			&& PlayerUtils.mergeStackable(player.inventory, new ItemStack(
-					ModuleAbility.coin)) > 0) {
+					ModuleVanilla.coin)) > 0) {
 			//if fail...
 			worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 
-				+ yOffset, player.posZ, new ItemStack(ModuleAbility.coin)));
+				+ yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
 		}
 		setDead();
 	}
@@ -161,7 +162,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		super.readFromNBT(tag);
 		setDead();
 		worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(
-				ModuleAbility.coin)));
+				ModuleVanilla.coin)));
 	}
 
 	@Override

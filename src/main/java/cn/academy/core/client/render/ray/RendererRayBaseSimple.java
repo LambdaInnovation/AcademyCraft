@@ -42,8 +42,10 @@ public abstract class RendererRayBaseSimple extends Render {
 		}
 		
 		GL11.glRotatef(ent.rotationPitch, 0, 0, -1);
+		double fix = ray.getStartFix();
 		
-		draw(ent);
+		GL11.glTranslated(fix, 0, 0);
+		draw(ent, ray.getLength() - fix);
 		
 		GL11.glPopMatrix();
 	}
@@ -51,7 +53,7 @@ public abstract class RendererRayBaseSimple extends Render {
 	/**
 	 * Render the ray in x+ direction. The transformation is automatically applied,.
 	 */
-	protected abstract void draw(Entity entity);
+	protected abstract void draw(Entity entity, double suggestedLength);
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {

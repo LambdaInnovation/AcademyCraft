@@ -6,8 +6,8 @@
     },
     "coin": {
         "unlName": "ac_coin",
-        "itemType": "cn.academy.ability.impl.electromaster.item.ItemCoin",
-        "renderer": "cn.academy.ability.impl.electromaster.item.ItemCoin.rendererCoin"
+        "itemType": "cn.academy.vanilla.electromaster.item.ItemCoin",
+        "renderer": "cn.academy.vanilla.electromaster.item.ItemCoin.rendererCoin"
     },
     "wafer": {
         "unlName": "ac_wafer",

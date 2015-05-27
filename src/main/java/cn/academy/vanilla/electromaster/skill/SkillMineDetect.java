@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.skill;
+package cn.academy.vanilla.electromaster.skill;
 
 import cn.academy.ability.api.Skill;
 

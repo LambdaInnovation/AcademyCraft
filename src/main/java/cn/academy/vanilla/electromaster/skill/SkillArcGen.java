@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.skill;
+package cn.academy.vanilla.electromaster.skill;
 
 import cn.academy.ability.api.Skill;
 
@@ -18,10 +18,10 @@ import cn.academy.ability.api.Skill;
  * @author WeAthFolD
  *
  */
-public class SkillRailgun extends Skill {
+public class SkillArcGen extends Skill {
 
-	public SkillRailgun() {
-		super("railgun");
+	public SkillArcGen() {
+		super("arc_gen");
 	}
 
 }

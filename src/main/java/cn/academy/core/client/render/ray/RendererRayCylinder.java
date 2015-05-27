@@ -139,18 +139,22 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 	
 	public RendererRayCylinder() {
 		SimpleMaterial sm = new SimpleMaterial(null).setIgnoreLight();
-		sm.color = new Color().setColor4i(244, 234, 165, 170);
+		sm.color.setColor4i(244, 234, 165, 170);
 		material = sm;
 	}
 
 	@Override
-	protected void draw(Entity entity) {
+	protected void draw(Entity entity, double len) {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		
 		IRay ray = (IRay) entity;
+		
+		//HACK: Store the previous alpha
 		double oldA = material.color.a;
 		material.color.a *= ray.getAlpha();
+		
+		double width = this.width * ray.getWidth();
 		
 		GL11.glPushMatrix();
 		double offset = width * (1 - headFix);
@@ -159,7 +163,6 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 		head.draw(material);
 		GL11.glPopMatrix();
 		
-		double len = ray.getLength();
 		//Draw the cylinder
 		GL11.glPushMatrix();
 		GL11.glTranslated(width, 0, 0);

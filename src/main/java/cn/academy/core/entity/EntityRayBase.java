@@ -19,6 +19,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
+import cn.liutils.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,17 +29,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityRayBase extends EntityAdvanced implements IRay {
 	
-	public long blendInTime = 100;
 	public int life = 30;
+	
+	public long blendInTime = 100;
+	
 	public long blendOutTime = 300;
+	public long widthShrinkTime = 300;
+	
 	public double length = 15.0;
 	
+	public double widthWiggleRadius = 0.1;
+	public double maxWiggleSpeed = 0.4;
+	public double widthWiggle = 0.0;
+	
+	long lastFrame = 0;
 	long creationTime;
 
 	public EntityRayBase(World world) {
 		super(world);
 		creationTime = Minecraft.getSystemTime();
-		
+		ignoreFrustumCheck = true;
 	}
 	
 	protected void onFirstUpdate() {
@@ -48,6 +58,10 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 				setDead();
 			}
 		}, life);
+	}
+	
+	protected long getDeltaTime() {
+		return Minecraft.getSystemTime() - creationTime;
 	}
 	
 	@Override
@@ -84,11 +98,25 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	public Vec3 getLookingDirection() {
 		return Vec3.createVectorHelper(motionX, motionY, motionZ);
 	}
+	
+	public long getLifeMS() {
+		return life * 50;
+	}
 
+	//TODO Add glow texture alpha wiggle
 	@Override
 	public double getAlpha() {
 		long dt = Minecraft.getSystemTime() - creationTime;
-		return dt > life * 50 - blendOutTime ? 1 - (dt + blendOutTime - life * 50.0) / blendOutTime : 1.0;
+		long lifeMS = getLifeMS();
+		return dt > lifeMS - blendOutTime ? 1 - (double) (dt + blendOutTime - lifeMS) / blendOutTime : 1.0;
+	}
+	
+	@Override
+	public double getWidth() {
+		long dt = Minecraft.getSystemTime() - creationTime;
+		long lifeMS = getLifeMS();
+		return widthWiggle +
+			(dt > lifeMS - widthShrinkTime ? 1 - (double) (dt + widthShrinkTime - lifeMS) / widthShrinkTime : 1.0);
 	}
 
 	@Override
@@ -102,8 +130,18 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	}
 
 	@Override
-	public double getWidth() {
-		return 1.0;
+	public void onRenderTick() {
+		long time = Minecraft.getSystemTime();
+		if(lastFrame != 0) {
+			long dt = time - lastFrame;
+			widthWiggle += dt * RandUtils.ranged(-maxWiggleSpeed, maxWiggleSpeed) / 1000.0;	
+			if(widthWiggle > widthWiggleRadius)
+				widthWiggle = widthWiggleRadius;
+			if(widthWiggle < 0)
+				widthWiggle = 0;
+		}
+		
+		lastFrame = Minecraft.getSystemTime();
 	}
 
 }

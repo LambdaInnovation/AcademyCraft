@@ -34,9 +34,6 @@ import cn.liutils.util.generic.VecUtils;
  */
 public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 
-	/**
-	 * TODO: Too heavy mathematics and polar<->xyz. Maybe we can tweak it?
-	 */
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, 
 			float a, float b) {
@@ -59,7 +56,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		//The ray viewing direction.
 		Vec3 dir = ray.getLookingDirection();
 		//Pick two far enough start and end point.
-		Vec3 start = VecUtils.vec(0, 0, 0), end = VecUtils.scalarMultiply(dir, ray.getLength());
+		Vec3 start = VecUtils.scalarMultiply(dir, ray.getStartFix()), end = VecUtils.add(start, VecUtils.scalarMultiply(dir, ray.getLength() - ray.getStartFix()));
 		//Get closest point for view judging.
 		Vec3 pt = VecUtils.vec(0, 0, 0);
 		
@@ -70,9 +67,9 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		Vec3 upDir = VecUtils.crossProduct(perpViewDir, dir);
 		
 		//TODO: Is this really necessary?
-		if(upDir.lengthVector() < 1.0E-2) {
-			upDir = Vec3.createVectorHelper(nbt.getDouble("upX"), nbt.getDouble("upY"), nbt.getDouble("upZ"));
-		}
+//		if(upDir.lengthVector() < 1.0E-2) {
+//			upDir = Vec3.createVectorHelper(nbt.getDouble("upX"), nbt.getDouble("upY"), nbt.getDouble("upZ"));
+//		}
 		upDir = upDir.normalize();
 		
 		//DEBUG
@@ -103,9 +100,9 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		
 		GL11.glPopMatrix();
 		
-		nbt.setDouble("upX", upDir.xCoord);
-		nbt.setDouble("upY", upDir.yCoord);
-		nbt.setDouble("upZ", upDir.zCoord);
+//		nbt.setDouble("upX", upDir.xCoord);
+//		nbt.setDouble("upY", upDir.yCoord);
+//		nbt.setDouble("upZ", upDir.zCoord);
 	}
 	
 	protected void doPostTransform(T ray) {}

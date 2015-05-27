@@ -12,10 +12,10 @@
  */
 package cn.academy.core.client.render.ray;
 
-import cn.academy.core.client.render.RendererList;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import cn.academy.core.client.render.RendererList;
+import cn.academy.core.entity.IRay;
 
 /**
  * @author WeAthFolD
@@ -31,6 +31,13 @@ public class RendererRayComposite extends RendererList {
 		append(cylinderIn = new RendererRayCylinder(0.05f));
 		append(cylinderOut = new RendererRayCylinder(0.08f));
 		cylinderIn.headFix = 0.98;
+	}
+	
+	@Override
+	public void doRender(Entity ent, double x,
+			double y, double z, float a, float b) {
+		((IRay)ent).onRenderTick();
+		super.doRender(ent, x, y, z, a, b);
 	}
 
 	@Override

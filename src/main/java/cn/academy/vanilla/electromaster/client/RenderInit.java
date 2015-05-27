@@ -10,10 +10,10 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.impl.electromaster.client;
+package cn.academy.vanilla.electromaster.client;
 
-import cn.academy.ability.impl.electromaster.entity.EntityRailgunFX;
 import cn.academy.core.client.render.ray.RendererRayComposite;
+import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.helper.Color;
