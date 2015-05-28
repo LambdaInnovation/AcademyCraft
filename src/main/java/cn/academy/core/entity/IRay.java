@@ -33,6 +33,11 @@ public interface IRay {
 	double getAlpha();
 	
 	/**
+	 * @return The alpha multiplyer of the glow texture.
+	 */
+	double getGlowAlpha();
+	
+	/**
 	 * Get the advance distance of the ray starting point. Can be used for blend out.
 	 */
 	double getStartFix();

@@ -56,6 +56,9 @@ public abstract class DataPart {
 	 */
 	boolean dirty = true;
 	
+	/**
+	 * The player instance when this data is available. Do NOT modify this field!
+	 */
 	public PlayerData data;
 	
 	public DataPart() {}

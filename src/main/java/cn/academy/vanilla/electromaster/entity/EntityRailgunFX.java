@@ -70,6 +70,7 @@ public class EntityRailgunFX extends EntityRayBase {
 		public void onKeyDown() {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player));
+			System.out.println("SR");
 		}
 		
 	}

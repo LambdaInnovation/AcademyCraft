@@ -159,7 +159,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		
 		public Client(EntityPlayer player) {
 			super(player);
-			System.out.println("Constructed in client");
+			//System.out.println("Constructed in client");
 		}
 
 		@Override
@@ -178,13 +178,13 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		@Override
 		public void saveNBTData(NBTTagCompound tag) {
 			//Do nothing in client.
-			System.out.println("SaveNBTData client");
+			//System.out.println("SaveNBTData client");
 		}
 
 		@Override
 		public void loadNBTData(NBTTagCompound tag) {
 			super.loadNBTData(tag);
-			System.out.println("LoadNBTData client");
+			//System.out.println("LoadNBTData client");
 			syncTicker = -1; //Received init, do not automatically sync any more.
 		}
 		
@@ -194,7 +194,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 
 		public Server(EntityPlayer player) {
 			super(player);
-			System.out.println("Constructed in server");
+			//System.out.println("Constructed in server");
 		}
 
 		@Override
@@ -204,12 +204,12 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 				tag.setTag(getName(p), ret);
 			}
 			
-			System.out.println("SaveNBTData server");
+			//System.out.println("SaveNBTData server");
 		}
 		
 		@Override
 		public void loadNBTData(NBTTagCompound tag) {
-			System.out.println("LoadNBTData server");
+			//System.out.println("LoadNBTData server");
 			super.loadNBTData(tag);
 		}
 		

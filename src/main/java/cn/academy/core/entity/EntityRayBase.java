@@ -42,6 +42,10 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	public double maxWiggleSpeed = 0.4;
 	public double widthWiggle = 0.0;
 	
+	public double glowWiggleRadius = 0.1;
+	public double maxGlowWiggleSpeed = 0.4;
+	public double glowWiggle = 0.0;
+	
 	long lastFrame = 0;
 	long creationTime;
 
@@ -111,6 +115,8 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		return dt > lifeMS - blendOutTime ? 1 - (double) (dt + blendOutTime - lifeMS) / blendOutTime : 1.0;
 	}
 	
+	
+	
 	@Override
 	public double getWidth() {
 		long dt = Minecraft.getSystemTime() - creationTime;
@@ -139,9 +145,22 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 				widthWiggle = widthWiggleRadius;
 			if(widthWiggle < 0)
 				widthWiggle = 0;
+			
+			glowWiggle += dt * RandUtils.ranged(-maxGlowWiggleSpeed, maxGlowWiggleSpeed) / 1000.0;
+			if(glowWiggle > glowWiggleRadius)
+				glowWiggle = glowWiggleRadius;
+			if(glowWiggle < 0)
+				glowWiggle = 0;
 		}
 		
 		lastFrame = Minecraft.getSystemTime();
+	}
+
+	@Override
+	public double getGlowAlpha() {
+		long dt = Minecraft.getSystemTime() - creationTime;
+		long lifeMS = getLifeMS();
+		return (1 - glowWiggleRadius + glowWiggle) * getAlpha();
 	}
 
 }

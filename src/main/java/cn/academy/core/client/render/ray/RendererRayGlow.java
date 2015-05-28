@@ -76,7 +76,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		Vec3 mid2 = VecUtils.add(end, VecUtils.scalarMultiply(look, -width));
 		
 		double preA = color.a;
-		color.a = preA * ray.getAlpha();
+		color.a = preA * ray.getAlpha() * ray.getGlowAlpha();
 		color.bind();
 		color.a = preA;
 		
