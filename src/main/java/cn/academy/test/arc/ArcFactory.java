@@ -118,8 +118,8 @@ public class ArcFactory {
 		bufferAll.add(new ArrayList());
 		
 		boolean flip = false;
-		double offset = maxOffset * (length / 15.0);
-		int realPasses = (int) Math.round(passes * length / 15.0);
+		double offset = maxOffset;
+		int realPasses = passes;
 		for(int i = 0; i < realPasses; ++i) {
 			if(flip) {
 				for(int j = 0; j < listAll.size(); ++j) {
@@ -184,14 +184,14 @@ public class ArcFactory {
 			
 			RenderUtils.loadTexture(TEXTURE);
 			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glLineWidth(0.4f);
 			GL11.glCallList(listId);
-			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_LIGHTING);
-			//System.out.println("draw");
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		}
 		
 		private void buildList(List< List<Segment> > list, Vec3 normal) {
