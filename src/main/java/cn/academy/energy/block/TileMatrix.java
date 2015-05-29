@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.block;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.tile.TileInventory;
@@ -31,6 +32,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
+	
+	public static final double 
+		MAX_CAPACITY = getCapacity(3, 3), 
+		MAX_LATENCY = getLatency(3, 3), 
+		MAX_RANGE = getRange(3, 3);
 
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -70,21 +76,55 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     	super.writeToNBT(nbt);
     	info.save(nbt);
     }
+	
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
 
 	//WEN TODO
+	public int getPlateCount() {
+		int count = 0;
+		for(int i = 0; i < 3; ++i) {
+			if(this.getStackInSlot(i) != null)
+				count++;
+		}
+		return count;
+	}
+	
+	private static int getCapacity(int N, int L) {
+		return (int) Math.round(Math.sqrt(N) * L * 6);
+	}
+	
+	private static double getLatency(int N, int L) {
+		return N * L * L * 20;
+	}
+	
+	private static double getRange(int N, int L) {
+		return N * Math.sqrt(L) * 8;
+	}
+	
+	public int getCoreLevel() {
+		ItemStack stack = getStackInSlot(3);
+		return stack == null ? 0 : stack.getItemDamage() + 1;
+	}
+	
 	@Override
 	public int getCapacity() {
-		return 10;
+		int N = getPlateCount(), L = getCoreLevel();
+		return getCapacity(N, L);
 	}
 
 	@Override
 	public double getLatency() {
-		return 100;
+		int N = getPlateCount(), L = getCoreLevel();
+		return getLatency(N, L);
 	}
 
 	@Override
 	public double getRange() {
-		return 20;
+		int N = getPlateCount(), L = getCoreLevel();
+		return getRange(N, L);
 	}
 	
 	//AABB

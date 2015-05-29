@@ -16,11 +16,12 @@ import java.io.IOException;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.io.IOUtils;
 
+import cn.academy.core.registry.InstanceEjector.FromLoader;
+import cn.academy.core.registry.InstanceEjector;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.block.BlockIonicFlux;
@@ -28,9 +29,11 @@ import cn.academy.energy.block.BlockImagFusor;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.support.EnergyHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
+import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.template.block.ItemBlockMulti;
@@ -41,6 +44,8 @@ import cn.liutils.template.block.ItemBlockMulti;
 @Registrant
 @RegSubmoduleInit
 public class ModuleEnergy {
+	
+
 
 	public static ItemLoader loader;
 	
@@ -59,7 +64,14 @@ public class ModuleEnergy {
     @RegBlock
     public static BlockImagFusor imagFusor;
     
+    @FromLoader
     public static Item energyUnit;
+    
+    @FromLoader
+    public static Item constraintPlate;
+    
+    @RegItem
+    public static ItemMatrixCore matrixCore;
 	
 	public static void init() {
 		loader = LoaderHelper.createItemLoader();
@@ -70,8 +82,7 @@ public class ModuleEnergy {
 		}
 		
 		loader.loadAll();
-		
-		energyUnit = (Item) loader.getObject("energy_unit");
+		InstanceEjector.fromItemLoader(ModuleEnergy.class, loader);
 		
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagIon, 1000), 
 			EnergyHelper.createFullItem(energyUnit), EnergyHelper.createEmptyItem(energyUnit));

@@ -13,9 +13,9 @@
         "unlName": "ac_wafer",
         "textureName": "wafer"
     },
-    "buffer_ingot": {
-        "unlName": "ac_ingot_buffer",
-        "textureName": "buffer_ingot"
+    "constraint_ingot": {
+        "unlName": "ac_constraint_ingot",
+        "textureName": "constraint_ingot"
     },
     "machine_casing": {
         "unlName": "ac_machine_casing",
@@ -29,12 +29,12 @@
         "unlName": "ac_memory",
         "textureName": "memory"
     },
-    "info_part": {
-        "unlName": "ac_info_part",
-        "textureName": "info_part"
+    "info_component": {
+        "unlName": "ac_info_component",
+        "textureName": "info_component"
     },
     "resonance_part": {
-        "unlName": "ac_resonance_part",
-        "textureName": "resonance_part"
+        "unlName": "ac_resonance_component",
+        "textureName": "resonance_component"
     }
 }

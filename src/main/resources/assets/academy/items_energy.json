@@ -9,5 +9,9 @@
         "unlName": "ac_energy_unit",
         "maxEnergy": 10000,
         "latency": 20
+    },
+    "constraint_plate": {
+        "unlName": "ac_constraint_plate",
+        "textureName": "constraint_plate"
     }
 }

@@ -12,10 +12,13 @@
  */
 package cn.academy.energy.block;
 
+import cn.academy.energy.ModuleEnergy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author WeAthFolD
@@ -56,6 +59,32 @@ public class ContainerMatrix extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return player.getDistanceSq(tile.xCoord + .5, tile.yCoord + .5, tile.zCoord + .5) < 64;
+	}
+	
+	public static class SlotCore extends Slot {
+
+		public SlotCore(IInventory inv, int slot, int x, int y) {
+			super(inv, slot, x, y);
+		}
+		
+		@Override
+	    public boolean isItemValid(ItemStack stack) {
+	        return stack != null && stack.getItem() == ModuleEnergy.matrixCore;
+	    }
+		
+	}
+	
+	public static class SlotPlate extends Slot {
+
+		public SlotPlate(IInventory inv, int slot, int x, int y) {
+			super(inv, slot, x, y);
+		}
+		
+		@Override
+	    public boolean isItemValid(ItemStack stack) {
+	        return stack != null && stack.getItem() == ModuleEnergy.constraintPlate;
+	    }
+		
 	}
 
 }
