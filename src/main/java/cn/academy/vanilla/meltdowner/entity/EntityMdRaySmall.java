@@ -25,7 +25,6 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD
@@ -89,10 +88,12 @@ public class EntityMdRaySmall extends EntityRayBase {
 		@Override
 		public void onKeyDown() {
 			EntityPlayer player = getPlayer();
-			EntityMdRaySmall ray = new EntityMdRaySmall(player.worldObj);
-			new Motion3D(player, true).applyToEntity(ray);
+//			EntityMdRaySmall ray = new EntityMdRaySmall(player.worldObj);
+//			new Motion3D(player, true).applyToEntity(ray);
+//			
+//			player.worldObj.spawnEntityInWorld(ray);
 			
-			player.worldObj.spawnEntityInWorld(ray);
+			player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player));
 		}
 		
 	}

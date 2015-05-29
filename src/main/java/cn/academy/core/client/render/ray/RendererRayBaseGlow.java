@@ -27,6 +27,7 @@ import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.generic.VecUtils;
+import cn.liutils.util.helper.Motion3D;
 
 /**
  * Renderer to draw glow texture
@@ -54,7 +55,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		//Calculate the most appropriate 'billboard-up' direction.
 		
 		//The ray viewing direction.
-		Vec3 dir = ray.getLookingDirection();
+		Vec3 dir = new Motion3D(entity, true).getMotionVec();
 		//Pick two far enough start and end point.
 		Vec3 start = VecUtils.scalarMultiply(dir, ray.getStartFix()), end = VecUtils.add(start, VecUtils.scalarMultiply(dir, ray.getLength() - ray.getStartFix()));
 		//Get closest point for view judging.
@@ -87,7 +88,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 //		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		//DEBUG END
 		if(ray.needsViewOptimize()) {
-			Vec3 vec = ViewOptimize.getFixVector();
+			Vec3 vec = ViewOptimize.getFixVector(ray);
 			vec.rotateAroundY((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
 			start = VecUtils.add(start, vec);
 			end = VecUtils.add(end, vec);

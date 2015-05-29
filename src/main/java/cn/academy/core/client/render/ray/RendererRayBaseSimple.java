@@ -38,7 +38,7 @@ public abstract class RendererRayBaseSimple extends Render {
 		GL11.glRotatef(270 - ent.rotationYaw, 0, 1, 0);
 		
 		if(ray.needsViewOptimize()) {
-			ViewOptimize.fix();
+			ViewOptimize.fix(ray);
 		}
 		
 		GL11.glRotatef(ent.rotationPitch, 0, 0, -1);

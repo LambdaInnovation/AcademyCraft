@@ -39,6 +39,11 @@ public class RendererRayComposite extends RendererList {
 		((IRay)ent).onRenderTick();
 		super.doRender(ent, x, y, z, a, b);
 	}
+	
+	public void plainDoRender(Entity ent, double x,
+			double y, double z, float a, float b) {
+		super.doRender(ent, x, y, z, a, b);
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {

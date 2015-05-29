@@ -1,23 +1,18 @@
 package cn.academy.core.entity;
 
 import net.minecraft.util.Vec3;
-
-import org.lwjgl.util.vector.Vector2f;
+import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 
 /**
  * States used in RenderRay classes.
+ * The view direction of the ray is determined by the rotationYaw and rotationPitch.
  * @author WeAthFolD
  */
-public interface IRay {
+public interface IRay extends IAssociatePlayer {
 	
 	void onRenderTick();
 	
 	Vec3 getPosition();
-	
-	/**
-	 * Return a normalized vector representing ray's direction.
-	 */
-	Vec3 getLookingDirection();
 	
 	/**
 	 * @return If this ray is spawned at player's hand and need to be treated differently for 1st and 3rd person

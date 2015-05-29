@@ -14,6 +14,7 @@ package cn.academy.core.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -28,6 +29,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class EntityRayBase extends EntityAdvanced implements IRay {
+	
+	EntityPlayer spawner;
 	
 	public int life = 30;
 	
@@ -48,6 +51,14 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	
 	long lastFrame = 0;
 	long creationTime;
+	
+	/**
+	 * This just link the ray to a player. You still have to setup the view direction based on the ray type.
+	 */
+	public EntityRayBase(EntityPlayer player) {
+		this(player.worldObj);
+		spawner = player;
+	}
 
 	public EntityRayBase(World world) {
 		super(world);
@@ -96,11 +107,6 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		tag.setDouble("x", posX);
 		tag.setDouble("y", posY);
 		tag.setDouble("z", posZ);
-	}
-
-	@Override
-	public Vec3 getLookingDirection() {
-		return Vec3.createVectorHelper(motionX, motionY, motionZ);
 	}
 	
 	public long getLifeMS() {
@@ -161,6 +167,11 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		long dt = Minecraft.getSystemTime() - creationTime;
 		long lifeMS = getLifeMS();
 		return (1 - glowWiggleRadius + glowWiggle) * getAlpha();
+	}
+
+	@Override
+	public EntityPlayer getPlayer() {
+		return spawner;
 	}
 
 }

@@ -99,8 +99,8 @@ public class RendererCoinThrowing extends Render {
 			double scale = type == ItemRenderType.EQUIPPED ? 0.6 : .8;
 			GL11.glPushMatrix();
 			{ //FIX: Added matrix state for transform.
-			GL11.glScaled(scale, scale, scale);
-			RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
+				GL11.glScaled(scale, scale, scale);
+				RenderUtils.drawEquippedItem(0.04, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
 			}
 			GL11.glPopMatrix();
 		}

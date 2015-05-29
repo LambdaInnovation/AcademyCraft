@@ -34,6 +34,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.ViewOptimize;
+import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
@@ -61,7 +62,7 @@ public class EntityRailgunFX extends EntityRayBase {
 	List<SubArc> arcList = new ArrayList();
 	
 	public EntityRailgunFX(EntityPlayer player) {
-		super(player.worldObj);
+		super(player);
 		new Motion3D(player, true).applyToEntity(this);
 		
 		this.life = 50;
@@ -195,7 +196,7 @@ public class EntityRailgunFX extends EntityRayBase {
 			GL11.glDepthMask(false);
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
-			ViewOptimize.fix();
+			ViewOptimize.fix((IAssociatePlayer) ent);
 			
 			EntityRailgunFX railgun = (EntityRailgunFX) ent;
 			
