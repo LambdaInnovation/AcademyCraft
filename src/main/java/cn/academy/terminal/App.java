@@ -13,17 +13,50 @@
 package cn.academy.terminal;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import cn.academy.core.client.Resources;
 
 /**
- * It is enforced that you use Flyweight approach on each app.
- * Every time the player opens the app, the onActivated() function will get called,
- * When it was closed the onKilled() function will get called, and you are responsible for updating the states.
- * @author WeAthFolD, Jiangyue.
  */
 public abstract class App {
-
-	public abstract void onActivated(NBTTagCompound nbt);
 	
-	public abstract void onKilled(NBTTagCompound nbt);
+	int appid;
+	private final String name;
+	protected ResourceLocation icon;
+	
+	public App(String _name) {
+		name = _name;
+		icon = getTexture("icon");
+	}
+	
+	protected ResourceLocation getTexture(String texname) {
+		return Resources.getTexture("guis/apps/" + name + "/" + texname);
+	}
+	
+	protected String local(String key) {
+		return StatCollector.translateToLocal("ac.app." + name + "." + key);
+	}
+	
+	public int getID() {
+		return appid;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getDisplayName() {
+		return local("name");
+	}
+	
+	public abstract boolean isPreInstalled();
+	
+	void getEnvironment() {
+		AppEnvironment env = createEnvironment();
+		env.app = this;
+	}
+
+	protected abstract AppEnvironment createEnvironment();
 	
 }

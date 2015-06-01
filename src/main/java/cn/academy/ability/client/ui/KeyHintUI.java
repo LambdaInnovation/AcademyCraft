@@ -55,7 +55,7 @@ public class KeyHintUI extends Widget {
 		transform.alignWidth = WidthAlign.RIGHT;
 		transform.alignHeight = HeightAlign.CENTER;
 		transform.x = 0;
-		transform.width = 150;
+		transform.width = 140;
 		transform.scale = 0.23;
 		
 		addDrawing();
@@ -92,11 +92,11 @@ public class KeyHintUI extends Widget {
 		
 		// Back
 		RenderUtils.loadTexture(TEX_BACK);
-		HudUtils.rect(-78, 0, 385, 83);
+		HudUtils.rect(122, 0, 185, 83);
 		
 		// KeyHint
 		{
-			double wx = 189, wy = 35;
+			double wx = 184, wy = 27;
 			
 			if(keyCode >= 0) {
 				String name = Keyboard.getKeyName(keyCode);
@@ -106,7 +106,7 @@ public class KeyHintUI extends Widget {
 					drawBack(TEX_KEY_LONG);
 				}
 				
-				font.draw(name, wx, wy, 21, 0x194246, Align.CENTER);
+				font.draw(name, wx, wy, 32, 0x194246, Align.CENTER);
 			} else {
 				
 				if(keyCode == KeyManager.MOUSE_LEFT) {
@@ -115,7 +115,7 @@ public class KeyHintUI extends Widget {
 					drawBack(TEX_MOUSE_R);
 				} else {
 					drawBack(TEX_MOUSE_GENERIC);
-					font.draw("" + (keyCode + 100), wx, wy, 25, 0x194246, Align.CENTER);
+					font.draw("" + (keyCode + 100), wx, wy, 32, 0x194246, Align.CENTER);
 				}
 				
 			}
@@ -129,14 +129,12 @@ public class KeyHintUI extends Widget {
 		RenderUtils.loadTexture(icon);
 		HudUtils.rect(221, 10, 62, 62);
 		
-		// Text
-		font.draw(text, 154, 28, 32, 0xffffff, Align.RIGHT);
 	}
 	
 	private void drawBack(ResourceLocation tex) {
 		RenderUtils.loadTexture(tex);
 		GL11.glColor4d(1, 1, 1, 1);
-		HudUtils.rect(161, 22, 50, 48);
+		HudUtils.rect(146, 10, 70, 70);
 	}
 	
 	private static ResourceLocation tex(String name) {

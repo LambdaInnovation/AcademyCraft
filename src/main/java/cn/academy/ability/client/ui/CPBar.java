@@ -66,7 +66,7 @@ public class CPBar extends Widget {
 	public CPBar() {
 		
 		transform.setSize(WIDTH, HEIGHT);
-		transform.scale = 0.24f;
+		transform.scale = 0.2f;
 		
 		initEvents();
 		
@@ -277,7 +277,7 @@ public class CPBar extends Widget {
 	}
 	
 	private static ResourceLocation tex(String name) {
-		return new ResourceLocation("academy:textures/cpbar/" + name + ".png");
+		return new ResourceLocation("academy:textures/guis/cpbar/" + name + ".png");
 	}
 	
 	private static class ProgColor {

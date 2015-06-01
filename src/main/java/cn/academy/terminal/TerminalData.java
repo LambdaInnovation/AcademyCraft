@@ -1,0 +1,144 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.li-dev.cn/
+ *
+ * This project is open-source, and it is distributed under  
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
+package cn.academy.terminal;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.registry.RegDataPart;
+import cn.academy.core.util.DataPart;
+import cn.academy.core.util.PlayerData;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.Future;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.Target;
+import cpw.mods.fml.relauncher.Side;
+
+/**
+ * @author WeAthFolD
+ */
+@Registrant
+@RegDataPart("terminal")
+public class TerminalData extends DataPart {
+	
+	private Set<Integer> installedList = new HashSet();
+	private List<NBTTagCompound> appDataList = new ArrayList();
+	
+	/**
+	 * CLIENT only. Update the data of the specified app to the server.
+	 */
+	public void overrideData(int appid, NBTTagCompound data) {
+		if(!isRemote()) {
+			throw new RuntimeException("Not allowed in server side!");
+		}
+		appDataList.set(appid, data);
+		updateApp(appid, data);
+	}
+	
+	/**
+	 * Must called in SERVER side.
+	 */
+	public void installApp(int appid) {
+		if(isRemote()) {
+			throw new RuntimeException("Not allowed in client side!");
+		}
+		doInstall(appid);
+		installSync(appid);
+	}
+	
+	public static TerminalData get(EntityPlayer player) {
+		return PlayerData.get(player).getPart(TerminalData.class);
+	}
+
+	@Override
+	public void tick() {}
+
+	@Override
+	public void fromNBT(NBTTagCompound tag) {
+		int[] arr = tag.getIntArray("learned");
+		if(arr.length == 0) {
+			// Build the pre-install app list
+			for(App a : AppRegistry.enumeration()) {
+				if(a.isPreInstalled()) {
+					installedList.add(a.appid);
+				}
+			}
+		} else {
+			for(int i = 0; i < arr.length; ++i)
+				installedList.add(arr[i]);
+		}
+		
+		NBTTagList list = (NBTTagList) tag.getTag("data");
+		List<App> l = AppRegistry.enumeration();
+		for(int i = 0; i < l.size(); ++i) { // NBTTagList already have null fix
+			appDataList.add(list.getCompoundTagAt(i));
+		}
+	}
+
+	@Override
+	public NBTTagCompound toNBT() {
+		NBTTagCompound ret = new NBTTagCompound();
+		
+		Integer[] iarr = installedList.toArray(new Integer[0]);
+		int[] arr = new int[iarr.length];
+		for(int i = 0; i < arr.length; ++i)
+			arr[i] = iarr[i];
+		
+		ret.setIntArray("learned", arr);
+		
+		NBTTagList rlist = new NBTTagList();
+		List<App> l = AppRegistry.enumeration();
+		for(int i = 0; i < l.size(); ++i) {
+			rlist.appendTag(appDataList.get(i));
+		}
+		
+		return ret;
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	void querySync(@Data Future future) {
+		receivedSync(getPlayer(), future, toNBT());
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	void receivedSync(@Target EntityPlayer player, @Instance Future future, @Data NBTTagCompound tag) {
+		if(future == null) {
+			AcademyCraft.log.info("We get a null future");
+			return;
+		}
+		AcademyCraft.log.info("Retrieved Terminal sync");
+		fromNBT(tag);
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	private void updateApp(@Data Integer appid, @Data NBTTagCompound data) {
+		appDataList.set(appid, data);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	private void installSync(@Data Integer appid) {
+		doInstall(appid);
+	}
+	
+	private void doInstall(Integer appid) {
+		installedList.add(appid);
+	}
+}

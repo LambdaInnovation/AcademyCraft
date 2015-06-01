@@ -97,8 +97,6 @@ public class CommandAIM extends ACCommand {
 					sendChat(ics, getLoc("nocat"));
 				}
 				return true;
-			} else {
-				sendChat(ics, locInvalid());
 			}
 			break;	
 		}

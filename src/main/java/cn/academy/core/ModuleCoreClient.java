@@ -13,6 +13,7 @@
 package cn.academy.core;
 
 import net.minecraftforge.common.config.Configuration;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.util.helper.KeyManager;
 import cpw.mods.fml.relauncher.Side;
@@ -23,6 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @SideOnly(Side.CLIENT)
+@Registrant
 @RegSubmoduleInit
 public class ModuleCoreClient {
 	
@@ -34,5 +36,7 @@ public class ModuleCoreClient {
 	};
 	
 	public static KeyManager dynKeyManager = new KeyManager();
+	
+	public static void init() {}
 	
 }

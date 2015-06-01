@@ -25,16 +25,12 @@ import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.util.helper.Font;
 
 /**
+ * The core resource utils of AC.
  * @author WeathFolD
- *
  */
 @Registrant
 @ForcePreloadTexture
 public class Resources {
-    
-    public static ResourceLocation 
-        TEX_GUI_NODE = gui("node"),
-        TEX_GUI_NODE_LIST = gui("node_list");
     
     public static ResourceLocation
     	TEX_COIN_FRONT = res("textures/items/coin_front.png"),

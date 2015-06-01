@@ -26,6 +26,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 /**
+ * All ItemLoader and BlockLoader instances within AC should be created from this.
  * @author WeAthFolD
  */
 public class LoaderHelper {
