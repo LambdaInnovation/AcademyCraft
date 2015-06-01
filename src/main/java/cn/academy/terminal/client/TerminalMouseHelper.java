@@ -21,10 +21,10 @@ import net.minecraft.util.MouseHelper;
  */
 public class TerminalMouseHelper extends MouseHelper {
 	
-	public int rDeltaX, rDeltaY;
+	public int dx, dy;
 	
     public void mouseXYChange() {
-        this.rDeltaX = Mouse.getDX();
-        this.rDeltaY = Mouse.getDY();
+        this.dx = Mouse.getDX();
+        this.dy = Mouse.getDY();
     }
 }
