@@ -36,12 +36,12 @@ public class ItemApp extends ACItem {
 	public ItemApp() {
 		super("apps");
 		this.setHasSubtypes(true);
-		itemIcons = new IIcon[AppRegistry.enumeration().size()];
 	}
 	
     @SideOnly(Side.CLIENT)
     @Override
     public void registerIcons(IIconRegister ir) {
+    	itemIcons = new IIcon[AppRegistry.enumeration().size()];
     	for(App app : AppRegistry.enumeration()) {
     		itemIcons[app.getID()] = ir.registerIcon("academy:app_" + app.getName());
     	}

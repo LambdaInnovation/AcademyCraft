@@ -1,6 +1,6 @@
 # AcademyCraft lang file
 # Debug version
-# Last modified: 2015/5/23
+# Last modified: 2015/6/1
 
 # Generic
 ac.generic.energy.desc=Energy
@@ -11,7 +11,14 @@ item.ac_coin.name=Coin
 
 # Block
 
-# GUI
+
+# Data Terminal
+ac.gui.terminal.appcount=%d Applications
+
+# Apps
+ac.app.skill_tree.name=Skill Tree
+ac.app.knowledge_record.name=Life Record
+ac.app.settings.name=Settings
 
 # Knowledge UI
 ac.knowledge.acquired=Acquired Knowledge
@@ -43,8 +50,6 @@ ac.gui.node.failed.desc=FAILED
 #Imag Fusor
 ac.gui.imagfusor.ion.desc=Imag Ion
 ac.gui.imagfusor.flux.desc=Imag Flux
-
-# -----
 
 # Electro Master
 ac.ability.electro_master.arc_gen.name=Arc Generation

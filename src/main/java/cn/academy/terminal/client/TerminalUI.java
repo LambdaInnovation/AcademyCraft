@@ -12,23 +12,43 @@
  */
 package cn.academy.terminal.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.registry.RegACKeyHandler;
+import cn.academy.core.util.ControlOverrider;
+import cn.academy.terminal.App;
+import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.AppRegistry;
+import cn.academy.terminal.TerminalData;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.Component;
+import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.TextBox;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.KeyHandler;
+import cn.liutils.util.helper.KeyManager;
 
 /**
  * @author WeAthFolD
@@ -38,6 +58,8 @@ public class TerminalUI extends AuxGui {
 	
 	private static final double BALANCE_SPEED = 3; //pixel/ms
 	public static final int MAX_MX = 605, MAX_MY = 740;
+	
+	static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight");
 	
 	final double SENSITIVITY = 0.5;
 
@@ -53,15 +75,22 @@ public class TerminalUI extends AuxGui {
 	boolean isActivated = false;
 	TerminalMouseHelper helper;
 	MouseHelper oldHelper;
+	LeftClickHandler clickHandler;
 	
 	double mouseX, mouseY;
 	double buffX, buffY; //Used for rotation judging. Will balance to mouseX and mouseY at the rate of BALANCE_SPEED.
 	
 	long lastFrameTime;
 	
+	int selection = 0;
+	int scroll = 0;
+	List<Widget> apps = new ArrayList();
+	
+	boolean isSynced;
+	
 	public TerminalUI() {
 		gui = new LIGui();
-		gui.addWidget(root = loaded.getWidget("back"));
+		gui.addWidget(root = loaded.getWidget("back").copy());
 		
 		initGui();
 	}
@@ -71,21 +100,40 @@ public class TerminalUI extends AuxGui {
 		Minecraft mc = Minecraft.getMinecraft();
 		oldHelper = mc.mouseHelper;
 		mc.mouseHelper = helper = new TerminalMouseHelper();
+		
+		ControlOverrider.override(KeyManager.MOUSE_LEFT);
+		ModuleCoreClient.dynKeyManager.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
 	}
 	
 	@Override
 	public void onDisposed() {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.mouseHelper = oldHelper;
+		
+		ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
+		ModuleCoreClient.dynKeyManager.removeKeyHandler("terminal_click");
 	}
 
 	@Override
 	public boolean isForeground() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public void draw(ScaledResolution sr) {
+		//Frame update
+		selection = (int)((mouseY - 0.01) / MAX_MY * 3) * 3 + (int)((mouseX - 0.01) / MAX_MX * 3);
+		
+		if(mouseY == 0) {
+			mouseY = 20;
+			if(scroll > 0) scroll--;
+		}
+		if(mouseY == MAX_MY) {
+			mouseY -= 20;
+			if(scroll < getMaxScroll()) scroll++;
+		}
+		
+		//Draw
         Minecraft mc = Minecraft.getMinecraft();
         long time = Minecraft.getSystemTime();
         if(lastFrameTime == 0) lastFrameTime = time;
@@ -120,20 +168,12 @@ public class TerminalUI extends AuxGui {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4d(1, 1, 1, 1);
         
-        double scale;
-        if(mc.gameSettings.thirdPersonView == 0) {
-            scale = 1.0 / 310;
-            GL11.glTranslated(.35 * aspect, 1.2, -4);
-        } else {
-            scale = 1.0 / 310;
-            GL11.glTranslated(.35 * aspect, 1.2, -4);
-        }
+        double scale = 1.0 / 310;
+        GL11.glTranslated(.35 * aspect, 1.2, -4);
         
         GL11.glTranslated(1, -1.8, 0);
         
-        //GL11.glRotated(20, 1, 0, 0);
         GL11.glRotated(-1.6, 0, 0, 1);
-        
         GL11.glRotated(-18 - 2 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);
         GL11.glRotated(7 + 2 * (buffY / MAX_MY - 0.5), 1, 0, 0);
         
@@ -170,7 +210,118 @@ public class TerminalUI extends AuxGui {
     }
     
     private void initGui() {
-    	//TODO
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	
+    	final TerminalData data = TerminalData.get(player);
+    	
+    	updateAppList(data);
+    	
+    	TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
+    	
+    	data.querySync(new FutureCallback() {
+
+			@Override
+			public void onReady(Object val) {
+				if(!isSynced) {
+					updateAppList(data);
+					root.removeWidget("text_loading");
+					root.removeWidget("icon_loading");
+					isSynced = true;
+					AcademyCraft.log.info("Received TerminalUI callback!");
+				} else {
+					AcademyCraft.log.warn("Received unidentified TerminalUI callback!");
+				}
+			}
+    		
+    	});
+    	
+    	root.getWidget("arrow_up").regEventHandler(new FrameEventHandler() {
+
+			@Override
+			public void handleEvent(Widget w, FrameEvent event) {
+				DrawTexture.get(w).enabled = scroll > 0;
+			}
+    		
+    	});
+    	
+    	root.getWidget("arrow_down").regEventHandler(new FrameEventHandler() {
+
+			@Override
+			public void handleEvent(Widget w, FrameEvent event) {
+				DrawTexture.get(w).enabled = scroll < getMaxScroll();
+			}
+    		
+    	});
+    	
+    	root.getWidget("icon_loading").regEventHandlerAtBegin(new FrameEventHandler() {
+
+			@Override
+			public void handleEvent(Widget w, FrameEvent event) {
+				DrawTexture.get(w).color.a = MathHelper.sin(Minecraft.getSystemTime() / 1000.0f);
+			}
+    		
+    	});
+    }
+    
+    private void updateAppList(TerminalData data) {
+    	for(Widget w : apps)
+    		w.dispose();
+    	apps.clear();
+    	for(Integer i : data.getInstalledApps()) {
+    		Widget w = createAppWidget(apps.size(), AppRegistry.INSTANCE.get(i));
+    		root.addWidget(w);
+    		apps.add(w);
+    	}
+    	
+    	TextBox.get(root.getWidget("text_appcount")).content = 
+    		StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", apps.size());
+    	updatePosition();
+    }
+    
+    private void updatePosition() {
+    	final double START_X = 50, START_Y = 155, STEP_X = 180, STEP_Y = 180;
+    	
+    	// Check if scroll is viable
+    	int max = getMaxScroll();
+    	if(scroll > max) scroll = max;
+    	
+    	for(Widget w : apps) {
+    		w.transform.doesDraw = false;
+    	}
+    	
+    	for(int i = scroll * 3; i < scroll * 3 + 9 && i < apps.size(); ++i) {
+    		int order = i - scroll * 3;
+    		Widget app = apps.get(i);
+    		app.transform.doesDraw = true;
+    		app.transform.x = START_X + STEP_X * (order % 3);
+    		app.transform.y = START_Y + STEP_Y * (order / 3);
+    		app.dirty = true;
+    	}
+    }
+    
+    private int getMaxScroll() {
+    	int r;
+    	if(apps.size() % 3 == 0)
+    		r = apps.size() / 3;
+    	else r = apps.size() / 3 + 1;
+    	return Math.max(0, r - 3);
+    }
+    
+    private Widget getSelectedApp() {
+    	int lookup = scroll + selection;
+    	return apps.size() <= lookup ? null : apps.get(lookup);
+    }
+    
+    private Widget createAppWidget(int id, App app) {
+    	Widget ret = root.getWidget("app_template").copy();
+    	Widget icon = ret.getWidget("icon");
+    	Widget text = ret.getWidget("text");
+    	DrawTexture.get(icon).texture = app.getIcon();
+    	TextBox.get(text).content = "§L" + app.getDisplayName(); //Enforce bold
+    	
+    	ret.addComponent(new AppHandler(id, app));
+    	
+    	return ret;
     }
 
 	private static ResourceLocation tex(String name) {
@@ -184,11 +335,72 @@ public class TerminalUI extends AuxGui {
 		public void onKeyDown() {
 			if(current != null) {
 				current.dispose();
+				current = null;
+			} else {
+				current = new TerminalUI();
+				register(current);
 			}
-			current = new TerminalUI();
-			System.out.println("fff");
-			register(current);
 		}
 	};
+	
+	private class AppHandler extends Component {
+		
+		final int id;
+		final App app;
+
+		public AppHandler(int _id, App _app) {
+			super("AppHandler");
+			id = _id;
+			app = _app;
+			
+			this.addEventHandler(new FrameEventHandler() {
+
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					DrawTexture drawer = DrawTexture.get(w);
+					TextBox text = TextBox.get(w.getWidget("text"));
+					DrawTexture icon = DrawTexture.get(w.getWidget("icon"));
+					
+					if(w == getSelectedApp()) {
+						drawer.texture = APP_BACK_HDR;
+						
+						drawer.zLevel = text.zLevel = icon.zLevel = 40;
+						
+						icon.color.a = text.color.a = 0.8;
+					} else {
+						drawer.texture = APP_BACK;
+						
+						drawer.zLevel = text.zLevel = icon.zLevel = 10;
+						
+						icon.color.a = text.color.a = 0.6;
+					}
+				}
+				
+			});
+		}
+	}
+	
+	static AppHandler getHandler(Widget w) {
+		return w.getComponent("AppHandler");
+	}
+	
+	private class LeftClickHandler extends KeyHandler {
+		
+		@Override
+		public void onKeyDown() {
+			Widget app = getSelectedApp();
+			if(app != null) {
+				AppHandler handler = getHandler(app);
+				AppEnvironment env = handler.app.createEnvironment();
+				TerminalData data = TerminalData.get(getPlayer());
+				
+				env.app = handler.app;
+				env.terminal = TerminalUI.this;
+				
+				env.onStart(data.getAppData(handler.app.getID()));
+			}
+		}
+		
+	}
 	
 }

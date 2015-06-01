@@ -38,6 +38,10 @@ public abstract class App {
 		return StatCollector.translateToLocal("ac.app." + name + "." + key);
 	}
 	
+	public ResourceLocation getIcon() {
+		return icon;
+	}
+	
 	public int getID() {
 		return appid;
 	}
@@ -57,6 +61,6 @@ public abstract class App {
 		env.app = this;
 	}
 
-	protected abstract AppEnvironment createEnvironment();
+	public abstract AppEnvironment createEnvironment();
 	
 }

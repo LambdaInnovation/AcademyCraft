@@ -45,8 +45,6 @@ import cn.liutils.template.block.ItemBlockMulti;
 @RegSubmoduleInit
 public class ModuleEnergy {
 	
-
-
 	public static ItemLoader loader;
 	
     @RegBlock

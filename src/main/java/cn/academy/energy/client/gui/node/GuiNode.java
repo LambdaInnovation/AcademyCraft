@@ -274,7 +274,7 @@ public class GuiNode extends LIGuiContainer {
 					VerticalDragBar db = VerticalDragBar.get(w);
 					ElementList elist = ElementList.get(getWidget("list"));
 					elist.setProgress(w, 
-						(int) Math.round((db.getProgress(w) * elist.getMaxProgress())));
+						(int) Math.round((db.getProgress() * elist.getMaxProgress())));
 				}
     			
     		});

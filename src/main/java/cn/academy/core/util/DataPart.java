@@ -82,9 +82,8 @@ public abstract class DataPart {
 	}
 	
 	/**
-	 * Client-only. Return true if this data has received the initial sync.
+	 * Return true if this data has received the initial sync.
 	 */
-	@SideOnly(Side.CLIENT)
 	protected boolean isSynced() {
 		return !dirty;
 	}

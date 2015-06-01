@@ -25,8 +25,8 @@ public class AppEnvironment {
 	/*
 	 * Instances to be injected when startup
 	 */
-	App app;
-	TerminalUI terminal;
+	public App app;
+	public TerminalUI terminal;
 
 	/**
 	 * Called just before environment is activated on client side. Load the data.
@@ -34,7 +34,7 @@ public class AppEnvironment {
 	public void onStart(NBTTagCompound tag) {}
 	
 	/**
-	 * EXPLICITLY called when this app is to be closed. Save the data and sync 'em to server side.
+	 * EXPLICITLY call this when this app is to be closed. Save the data and sync 'em to server side.
 	 */
 	public final void onEnd(NBTTagCompound tag) {
 		TerminalData.get(getPlayer()).overrideData(app.appid, tag);

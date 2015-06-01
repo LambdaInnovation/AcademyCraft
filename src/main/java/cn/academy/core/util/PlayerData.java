@@ -130,8 +130,8 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 			NBTTagCompound t = (NBTTagCompound) tag.getTag(name);
 			if(t != null) {
 				p.fromNBT(t);
-				p.dirty = false;
 			}
+			p.dirty = false;
 		}
 	}
 	
@@ -200,8 +200,12 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		@Override
 		public void saveNBTData(NBTTagCompound tag) {
 			for(DataPart p : constructed.values()) {
-				NBTTagCompound ret = p.toNBT();
-				tag.setTag(getName(p), ret);
+				if(p.isSynced()) {
+					NBTTagCompound ret = p.toNBT();
+					tag.setTag(getName(p), ret);
+				} else {
+					AcademyCraft.log.warn("Ignored saving of " + p.getName());
+				}
 			}
 			
 			//System.out.println("SaveNBTData server");
@@ -223,7 +227,9 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		public void onClientTick(ClientTickEvent event) {
 			if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
 				EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-				ProxyHelper.get().getPlayerData(thePlayer).tick();
+				PlayerData data = ProxyHelper.get().getPlayerData(thePlayer);
+				if(data != null)
+					data.tick();
 			}
 		}
 		
@@ -233,17 +239,10 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 				ThreadProxy proxy = ProxyHelper.get();
 				for(Object p : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
 					EntityPlayer player = (EntityPlayer) p;
-					proxy.getPlayerData(player).tick();
+					PlayerData data = proxy.getPlayerData(player);
+					if(data != null)
+						data.tick();
 				}
-			}
-		}
-		
-		@SubscribeEvent
-		public void onEntityConstructed(EntityConstructing event) {
-			if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.entity instanceof EntityPlayer) {
-				//A hack that forces the data to be loaded once the entity is constructed.
-				//loadNBT will only be called if we do so.
-				ProxyHelper.get().getPlayerData((EntityPlayer) event.entity);
 			}
 		}
 		

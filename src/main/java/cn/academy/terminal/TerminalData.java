@@ -17,20 +17,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
+import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -42,6 +46,12 @@ public class TerminalData extends DataPart {
 	private Set<Integer> installedList = new HashSet();
 	private List<NBTTagCompound> appDataList = new ArrayList();
 	
+	public TerminalData() {
+		int size = AppRegistry.enumeration().size();
+		for(int i = 0; i < size; ++i)
+			appDataList.add(new NBTTagCompound());
+	}
+	
 	/**
 	 * CLIENT only. Update the data of the specified app to the server.
 	 */
@@ -51,6 +61,30 @@ public class TerminalData extends DataPart {
 		}
 		appDataList.set(appid, data);
 		updateApp(appid, data);
+	}
+	
+	public List<Integer> getInstalledApps() {
+		return ImmutableList.copyOf(installedList);
+	}
+	
+	public NBTTagCompound getAppData(int appid) {
+		return appDataList.get(appid);
+	}
+	
+	/**
+	 * Make a sync query from client and call the callback when received sync.
+	 */
+	@SideOnly(Side.CLIENT)
+	public void querySync(final FutureCallback callback) {
+		doQuerySync(Future.create(new FutureCallback() {
+
+			@Override
+			public void onReady(Object val) {
+				callback.onReady(val);
+				fromNBT((NBTTagCompound) val);
+			}
+			
+		}));
 	}
 	
 	/**
@@ -73,6 +107,8 @@ public class TerminalData extends DataPart {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
+		System.out.println("FromNBT Called in  " + isRemote());
+		
 		int[] arr = tag.getIntArray("learned");
 		if(arr.length == 0) {
 			// Build the pre-install app list
@@ -87,7 +123,11 @@ public class TerminalData extends DataPart {
 		}
 		
 		NBTTagList list = (NBTTagList) tag.getTag("data");
+		if(list == null)
+			return;
+		
 		List<App> l = AppRegistry.enumeration();
+		appDataList.clear();
 		for(int i = 0; i < l.size(); ++i) { // NBTTagList already have null fix
 			appDataList.add(list.getCompoundTagAt(i));
 		}
@@ -113,27 +153,22 @@ public class TerminalData extends DataPart {
 		return ret;
 	}
 	
-	@RegNetworkCall(side = Side.SERVER)
-	void querySync(@Data Future future) {
-		receivedSync(getPlayer(), future, toNBT());
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	private void doQuerySync(@Data Future future) {
+		future.setAndSync(toNBT());
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT)
-	void receivedSync(@Target EntityPlayer player, @Instance Future future, @Data NBTTagCompound tag) {
-		if(future == null) {
-			AcademyCraft.log.info("We get a null future");
-			return;
-		}
-		AcademyCraft.log.info("Retrieved Terminal sync");
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	public void clientSync(@Target EntityPlayer player, @Data NBTTagCompound tag) {
 		fromNBT(tag);
 	}
 	
-	@RegNetworkCall(side = Side.SERVER)
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void updateApp(@Data Integer appid, @Data NBTTagCompound data) {
 		appDataList.set(appid, data);
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT)
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void installSync(@Data Integer appid) {
 		doInstall(appid);
 	}
