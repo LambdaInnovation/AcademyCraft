@@ -141,16 +141,33 @@ public class PresetData extends DataPart {
 	
 	public class PresetEditor {
 		
-		final byte display[] = new byte[MAX_KEYS];
+		/**
+		 * NO DIRECT EDITING
+		 */
+		public final byte display[] = new byte[MAX_KEYS];
 		
-		private final Preset target;
+		public final Preset target;
 		
 		public PresetEditor(Preset _target) {
 			target = _target;
+			for(int i = 0; i < MAX_KEYS; ++i) {
+				display[i] = target.data[i];
+			}
 		}
 		
 		public void edit(int key, int newMapping) {
 			display[key] = (byte) newMapping;
+		}
+		
+		/**
+		 * Return whether current edit state has the cid specified as mapping.
+		 */
+		public boolean hasMapping(int cid) {
+			for(byte b : display)
+				if(b == cid)
+					return true;
+			
+			return false;
 		}
 		
 		public boolean hasChanged() {
@@ -170,7 +187,10 @@ public class PresetData extends DataPart {
 	
 	public class Preset {
 		
-		final byte data[] = new byte[MAX_KEYS];
+		/**
+		 * NO DIRECT EDITING
+		 */
+		public final byte data[] = new byte[MAX_KEYS];
 		
 		public Preset() {
 			for(int i = 0; i < MAX_KEYS; ++i) {

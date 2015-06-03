@@ -12,11 +12,21 @@
  */
 package cn.academy.ability.client.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.Controllable;
+import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.api.preset.PresetData.Preset;
 import cn.academy.ability.api.preset.PresetData.PresetEditor;
@@ -29,11 +39,13 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
+import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
@@ -46,8 +58,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class PresetEditUI extends GuiScreen {
 	
 	static final Color 
-		CRL_SKILL = new Color().setColor4i(229, 229, 229, 255),
-		CRL_BACK = new Color().setColor4i(49, 49, 49, 255);
+		CRL_BACK = new Color().setColor4i(49, 49, 49, 160),
+		CRL_WHITE = new Color(1, 1, 1, 0.6);
 	
 	static Widget template;
 	
@@ -55,6 +67,26 @@ public class PresetEditUI extends GuiScreen {
 	static final long TRANSIT_TIME = 350;
 	static final double MAX_ALPHA = 1, MIN_ALPHA = 0.3;
 	static final double MAX_SCALE = 0.27, MIN_SCALE = 0.22;
+	
+	/**
+	 * Dummy skill used to cancel the binding.
+	 */
+	static final Skill cancelBinding = new Skill("cancel") {
+		@Override
+		public SkillInstance createSkillInstance(EntityPlayer player) {
+			return null;
+		}
+
+		@Override
+		public ResourceLocation getHintIcon() {
+			return new ResourceLocation("academy:textures/guis/preset_settings/cancel.png");
+		}
+
+		@Override
+		public String getHintText() {
+			return "";
+		}
+	};
 	
 	/**
 	 * Drawer when nothing happened
@@ -96,7 +128,7 @@ public class PresetEditUI extends GuiScreen {
 	long deltaTime; //Time that has passed since last transition
 	double transitProgress;
 	
-	Widget skillSelector;
+	Widget selector;
 	
 	public PresetEditUI() {
 		player = Minecraft.getMinecraft().thePlayer;
@@ -108,13 +140,16 @@ public class PresetEditUI extends GuiScreen {
 		init();
 	}
 	
+	public void onGuiClosed() {
+		editor.save();
+	}
+	
 	private void init() {
 		// Build the pages
 		for(int i = 0; i < 4; ++i) {
 			Widget normal = createCopy();
-			for(Widget w : normal.getDrawList()) {
-				// Add for one sub key
-				w.addComponent(new HintHandler());
+			for(int j = 0; j < 4; ++j) {
+				normal.getWidget("" + j).addComponent(new HintHandler(j));
 			}
 			normal.addComponent(new ForegroundPage(i));
 			add(i, foreground, normal);
@@ -126,14 +161,22 @@ public class PresetEditUI extends GuiScreen {
 			add(i, transitor, back);
 		}
 		
-		resetEditor();
+		resetAll();
 	}
 	
-	private void resetEditor() {
+	private void resetAll() {
 		updateInfo(foreground);
 		updateInfo(transitor);
 		
 		updatePosForeground();
+		
+		updateEditor();
+	}
+	
+	private void updateEditor() {
+		if(editor != null)
+			editor.save();
+		editor = data.createEditor(active);
 	}
 	
 	private Widget createCopy() {
@@ -188,6 +231,8 @@ public class PresetEditUI extends GuiScreen {
     
     // Major control
     private void startTransit(int to) {
+    	updateInfo(transitor);
+    	
     	lastActive = active;
     	active = to;
     	transiting = true;
@@ -196,6 +241,7 @@ public class PresetEditUI extends GuiScreen {
     
     private void finishTransit() {
     	updatePosForeground();
+    	updateEditor();
     }
     
     // Foreground page
@@ -257,9 +303,13 @@ public class PresetEditUI extends GuiScreen {
     	}
     	
     	public void updateInfo() {
+    		
     		Preset p = data.getPreset(id);
+    		byte[] pdata = (id == active && editor != null) ? editor.display : p.data;
+    		
     		for(int i = 0; i < 4; ++i) {
-    			Controllable c = p.getControllable(i);
+    			Category cat = AbilityData.get(player).getCategory();
+    			Controllable c = cat.getControllable(pdata[i]);
     			Widget main = widget.getWidget("" + i);
     			DrawTexture.get(main.getWidget("icon")).texture = c == null ? Resources.TEX_EMPTY : c.getHintIcon();
     			TextBox.get(main.getWidget("text")).content = c == null ? "" : c.getHintText();
@@ -284,8 +334,11 @@ public class PresetEditUI extends GuiScreen {
     
     private class HintHandler extends Component {
 
-		public HintHandler() {
+    	final int keyid;
+    	
+		public HintHandler(int _keyid) {
 			super("Hint");
+			keyid = _keyid;
 			
 			addEventHandler(new FrameEventHandler() {
 
@@ -304,8 +357,14 @@ public class PresetEditUI extends GuiScreen {
 				@Override
 				public void handleEvent(Widget w, MouseDownEvent event) {
 					Page page = getPage(w.getWidgetParent());
-					if(page.id == active) {
+					if(selector != null && !selector.disposed) {
+						selector.dispose();
+						selector = null;
+					} else if(page.id == active) {
 						// Open the selector
+						selector = new Selector(keyid);
+						selector.transform.setPos(foreground.mouseX, foreground.mouseY);
+						foreground.addWidget(selector);
 					} else {
 						startTransit(page.id);
 					}
@@ -386,6 +445,81 @@ public class PresetEditUI extends GuiScreen {
 			}
 		}
     	
+    }
+    
+    private class Selector extends Widget {
+    	final int MAX_PER_ROW = 4;
+    	final double MARGIN = 2.5, SIZE = 15, STEP = SIZE + 3;
+    	
+    	List<Skill> available = new ArrayList();
+    	final int keyid;
+    	
+    	double width, height;
+    	
+    	public Selector(int _keyid) {
+    		keyid = _keyid;
+    		
+    		final Category c = AbilityData.get(player).getCategory();
+    		available.add(cancelBinding);
+    		for(Skill s : c.getSkillList()) {
+    			int cid = c.getControlID(s);
+    			if(!editor.hasMapping(cid)) {
+    				available.add(s);
+    			}
+    		}
+    		
+    		height = MARGIN * 2 + SIZE + STEP * (ldiv(available.size(), MAX_PER_ROW) - 1);
+    		width = available.size() < MAX_PER_ROW ? 
+    			MARGIN * 2 + SIZE + STEP * (available.size() - 1) : 
+    			MARGIN * 2 + SIZE + STEP * (MAX_PER_ROW - 1);
+    		
+    		transform.setSize(width, height);
+    		
+    		// Build the window and the widget
+    		regEventHandler(new FrameEventHandler() {
+
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					
+					CRL_WHITE.bind();
+					HudUtils.drawRectOutline(0, 0, width, height, 2);
+					
+					CRL_BACK.bind();
+					HudUtils.colorRect(0, 0, width, height);
+					
+					GL11.glColor4d(1, 1, 1, 1);
+				}
+    			
+    		});
+    		
+    		// Build all the skills that can be set
+    		for(int i = 0; i < available.size(); ++i) {
+    			int row = i / MAX_PER_ROW, col = i % MAX_PER_ROW;
+    			final Skill skill = available.get(i);
+    			Widget single = new Widget();
+    			single.transform.setPos(MARGIN + col * STEP, MARGIN + row * STEP);
+    			single.transform.setSize(SIZE, SIZE);
+    			
+    			DrawTexture tex = new DrawTexture().setTex(available.get(i).getHintIcon());
+    			single.addComponent(tex);
+    			single.addComponent(new Tint());
+    			
+    			single.regEventHandler(new MouseDownHandler() {
+
+					@Override
+					public void handleEvent(Widget w, MouseDownEvent event) {
+						onEdit(keyid, c.getControlID(skill));
+						Selector.this.dispose();
+					}
+    				
+    			});
+    			addWidget(single);
+    		}
+    	}
+    }
+    
+    private int ldiv(int a, int b) {
+    	return a % b == 0 ? a / b : a / b + 1;
     }
 	
 }

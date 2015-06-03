@@ -48,6 +48,21 @@ public final class Category {
 		skill.addedIntoCategory(this);
 	}
 	
+	public int getSkillID(Skill s) {
+		return skillList.indexOf(s);
+	}
+	
+	public Skill getSkill(int id) {
+		return skillList.get(id);
+	}
+	
+	/**
+	 * Get an <b>immutable</b> list of skills in this category.
+	 */
+	public List<Skill> getSkillList() {
+		return ImmutableList.copyOf(skillList);
+	}
+	
 	public int getCategoryID() {
 		return catID;
 	}
@@ -67,6 +82,8 @@ public final class Category {
 	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
 	 */
 	public Controllable getControllable(int id) {
+		if(id < 0)
+			return null;
 		if(ctrlList.size() > id)
 			return ctrlList.get(id);
 		return null;
