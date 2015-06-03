@@ -101,7 +101,7 @@ public class TerminalUI extends AuxGui {
 		oldHelper = mc.mouseHelper;
 		mc.mouseHelper = helper = new TerminalMouseHelper();
 		
-		ControlOverrider.override(KeyManager.MOUSE_LEFT);
+		//ControlOverrider.override(KeyManager.MOUSE_LEFT);
 		ModuleCoreClient.dynKeyManager.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
 	}
 	
@@ -110,7 +110,7 @@ public class TerminalUI extends AuxGui {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.mouseHelper = oldHelper;
 		
-		ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
+		//ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
 		ModuleCoreClient.dynKeyManager.removeKeyHandler("terminal_click");
 	}
 

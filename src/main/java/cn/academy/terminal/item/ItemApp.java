@@ -16,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -46,6 +47,14 @@ public class ItemApp extends ACItem {
     		itemIcons[app.getID()] = ir.registerIcon("academy:app_" + app.getName());
     	}
     }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int damage) {
+    	if(damage >= itemIcons.length)
+    		damage = 0;
+        return itemIcons[damage];
+    }
 	
 	public App getApp(ItemStack stack) {
 		return AppRegistry.INSTANCE.get(stack.getItemDamage());
@@ -57,10 +66,9 @@ public class ItemApp extends ACItem {
         	list.add(new ItemStack(this, 1, app.getID()));
         }
     }
-	
-	@Override
-    public String getItemStackDisplayName(ItemStack stack) {
-    	return getApp(stack).getDisplayName();
+    
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
+    	list.add(getApp(stack).getDisplayName());
     }
-
 }

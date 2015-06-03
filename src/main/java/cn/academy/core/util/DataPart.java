@@ -56,6 +56,8 @@ public abstract class DataPart {
 	 */
 	boolean dirty = true;
 	
+	int tickUntilQuery = 0;
+	
 	/**
 	 * The player instance when this data is available. Do NOT modify this field!
 	 */

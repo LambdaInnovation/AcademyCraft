@@ -36,6 +36,9 @@ public class Resources {
     	TEX_COIN_FRONT = res("textures/items/coin_front.png"),
     	TEX_COIN_BACK = res("textures/items/coin_back.png");
     
+    public static ResourceLocation
+    	TEX_EMPTY = getTexture("null");
+    
     private static Map<String, IModelCustom> createdModels = new HashMap();
     
     /**

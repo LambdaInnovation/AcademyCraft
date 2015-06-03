@@ -22,6 +22,7 @@ import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -41,7 +42,7 @@ public class AbilityData extends DataPart {
 	 * Only effective in server. If c==null then set the player state to unlearned.
 	 */
 	public void setCategory(Category c) {
-		setCategoryID(c.getCategoryID());
+		setCategoryID(c == null ? -1 : c.getCategoryID());
 	}
 	
 	/**
@@ -85,11 +86,11 @@ public class AbilityData extends DataPart {
 	}
 	
 	private void doCompleteSync() {
-		receivedCompleteSync(catID);
+		receivedCompleteSync(getPlayer(), catID);
 	}
 	
-	@RegNetworkCall(side = Side.SERVER)
-	private void receivedCompleteSync(@Data Integer catID) {
+	@RegNetworkCall(side = Side.CLIENT)
+	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID) {
 		this.catID = catID;
 	}
 	

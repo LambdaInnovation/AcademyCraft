@@ -8,6 +8,7 @@ ac.generic.load.desc=Load
 
 # Item
 item.ac_coin.name=Coin
+item.ac_apps.name=App Installer
 
 # Block
 

@@ -71,12 +71,12 @@ public class CommandPreset extends ACCommand {
 		PresetData pData = PresetData.get(player);
 		
 		Category c = aData.getCategory();
-		List<Controllable> list = c.getControllableList();
-		
 		if(!aData.isLearned()) {
 			sendChat(ics, locNotLearned());
 			return;
 		}
+		
+		List<Controllable> list = c.getControllableList();
 		
 		switch(pars[0]) {
 		case "help":

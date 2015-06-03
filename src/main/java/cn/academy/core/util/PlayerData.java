@@ -23,7 +23,6 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.proxy.ProxyHelper;
 import cn.academy.core.proxy.ThreadProxy;
@@ -35,12 +34,12 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.util.client.ClientUtils;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -125,6 +124,7 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	
 	@Override
 	public void loadNBTData(NBTTagCompound tag) {
+		// This comes from AC delegation. No tag redirecting.
 		for(DataPart p : constructed.values()) {
 			String name = getName(p);
 			NBTTagCompound t = (NBTTagCompound) tag.getTag(name);
@@ -154,22 +154,20 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 	}
 	
 	public static class Client extends PlayerData {
-
-		int syncTicker;
 		
 		public Client(EntityPlayer player) {
 			super(player);
-			//System.out.println("Constructed in client");
 		}
 
 		@Override
 		protected void tick() {
-			//System.out.println(syncTicker);
-			if(syncTicker == 0) {
-				syncTicker = 20;
-				this.receivedSyncQuery();
-			} else if(syncTicker > 0) {
-				syncTicker--;
+			for(DataPart p : constructed.values()) {
+				if(p.dirty) {
+					if(p.tickUntilQuery-- == 0) {
+						p.tickUntilQuery = 20;
+						query(getName(p));
+					}					
+				}
 			}
 			
 			super.tick();
@@ -178,14 +176,11 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 		@Override
 		public void saveNBTData(NBTTagCompound tag) {
 			//Do nothing in client.
-			//System.out.println("SaveNBTData client");
 		}
 
 		@Override
 		public void loadNBTData(NBTTagCompound tag) {
-			super.loadNBTData(tag);
-			//System.out.println("LoadNBTData client");
-			syncTicker = -1; //Received init, do not automatically sync any more.
+			//Do nothing in client.
 		}
 		
 	}
@@ -194,11 +189,14 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 
 		public Server(EntityPlayer player) {
 			super(player);
-			//System.out.println("Constructed in server");
 		}
 
 		@Override
-		public void saveNBTData(NBTTagCompound tag) {
+		public void saveNBTData(NBTTagCompound tag2) {
+			// HACK
+			// This comes from Minecraft delegation. Find the custom tag.
+			NBTTagCompound tag = tag2.getCompoundTag("ForgeData");
+			
 			for(DataPart p : constructed.values()) {
 				if(p.isSynced()) {
 					NBTTagCompound ret = p.toNBT();
@@ -208,15 +206,26 @@ public abstract class PlayerData implements IExtendedEntityProperties {
 				}
 			}
 			
-			//System.out.println("SaveNBTData server");
+			tag2.setTag("ForgeData", tag);
 		}
 		
 		@Override
 		public void loadNBTData(NBTTagCompound tag) {
-			//System.out.println("LoadNBTData server");
 			super.loadNBTData(tag);
 		}
 		
+	}
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	protected void query(@Data String pname) {
+		synced(player, pname, getPart(pname).toNBT());
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	protected void synced(@Target EntityPlayer player, @Data String pname, @Data NBTTagCompound tag) {
+		DataPart part = getPart(pname);
+		part.fromNBT(tag);
+		part.dirty = false;
 	}
 	
 	@RegEventHandler
