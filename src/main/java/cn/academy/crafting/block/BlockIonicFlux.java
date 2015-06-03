@@ -45,14 +45,14 @@ public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProv
 	public final MatterMaterial mat;
 
 	public BlockIonicFlux() {
-		super(ModuleCrafting.fluidImagIon, Material.water);
+		super(ModuleCrafting.fluidImagProj, Material.water);
 		setCreativeTab(AcademyCraft.cct);
-		setBlockName("ac_ionic_flux");
+		setBlockName("ac_imag_proj_liquid");
 		setBlockTextureName("academy:black");
 		
 		this.setQuantaPerBlock(3);
 		
-		mat = new MatterMaterial("imag_ionic", this);
+		mat = new MatterMaterial("imag_proj", this);
 		ItemMatterUnit.addMatterMaterial(mat);
 		
 		MinecraftForge.EVENT_BUS.register(this);

@@ -82,7 +82,7 @@ public class ModuleEnergy {
 		loader.loadAll();
 		InstanceEjector.fromItemLoader(ModuleEnergy.class, loader);
 		
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagIon, 1000), 
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
 			EnergyHelper.createFullItem(energyUnit), EnergyHelper.createEmptyItem(energyUnit));
 	}
 	

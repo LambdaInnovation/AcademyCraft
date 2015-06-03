@@ -32,16 +32,16 @@ public class ModuleCrafting {
 	@RegItem.HasRender
 	public static ItemMatterUnit matterUnit;
 	
-	public static Fluid fluidImagIon = new Fluid("imagFlux");
+	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {
-    	fluidImagIon.setLuminosity(8).setDensity(7000)
+    	fluidImagProj.setLuminosity(8).setDensity(7000)
     		.setViscosity(6000).setTemperature(0).setDensity(1);
-		FluidRegistry.registerFluid(fluidImagIon);
+		FluidRegistry.registerFluid(fluidImagProj);
     }
 	
 	public static void init() {
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagIon, 1000), 
-			matterUnit.create("imag_ionic"), matterUnit.create("none"));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000), 
+			matterUnit.create("imag_proj"), matterUnit.create("none"));
 	}
 	
 }

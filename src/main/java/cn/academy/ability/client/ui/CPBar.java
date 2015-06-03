@@ -28,6 +28,7 @@ import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.academy.ability.api.preset.PresetData;
 import cn.annoreg.core.Registrant;
@@ -101,6 +102,9 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
+				if(!AbilityData.get(Minecraft.getMinecraft().thePlayer).isLearned())
+					return;
+				
 				long time = Minecraft.getSystemTime();
 				
 				double test = (Math.sin(time / 2000.0) + 1) * 0.5;
@@ -116,7 +120,7 @@ public class CPBar extends Widget {
 					}
 				}
 				
-				drawCPBar(0.5);
+				drawCPBar(1);
 				
 				final long preset_wait = 2000L;
 				if(time - presetChangeTime < preset_wait)

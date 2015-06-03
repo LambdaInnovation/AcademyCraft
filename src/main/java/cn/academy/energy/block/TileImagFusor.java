@@ -49,7 +49,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if(resource.getFluid() != ModuleCrafting.fluidImagIon) {
+		if(resource.getFluid() != ModuleCrafting.fluidImagProj) {
 			return 0;
 		}
 		return tank.fill(resource, doFill);

@@ -11,7 +11,7 @@ item.ac_coin.name=Coin
 item.ac_apps.name=App Installer
 
 # Block
-
+tile.ac_imag_proj_liquid.name=Imag Projection Liquid
 
 # Data Terminal
 ac.gui.terminal.appcount=%d Applications
@@ -49,7 +49,7 @@ ac.gui.node.successful.desc=SUCCESSFUL
 ac.gui.node.failed.desc=FAILED
 
 #Imag Fusor
-ac.gui.imagfusor.ion.desc=Imag Ion
+ac.gui.imagfusor.ion.desc=Proj Liquid
 ac.gui.imagfusor.flux.desc=Imag Flux
 
 # Electro Master
