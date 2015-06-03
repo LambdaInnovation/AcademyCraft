@@ -82,6 +82,15 @@ public class PresetData extends DataPart {
 		return presets[id];
 	}
 	
+	public void switchCurrent(int nid) {
+		presetID = nid;
+		sync();
+	}
+	
+	public int getCurrentID() {
+		return presetID;
+	}
+	
 	public Preset getCurrentPreset() {
 		if(!isActive()) {
 			return null;

@@ -1,9 +1,11 @@
 package cn.academy.ability;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.registry.RegACKeyHandler;
@@ -31,7 +33,21 @@ public class ModuleAbilityClient {
 			System.out.println("awefrawef");
 		}
 	};
-
+	
+	@RegACKeyHandler(name = "Switch Preset", defaultKey = Keyboard.KEY_C)
+	public static KeyHandler keySwitchPreset = new KeyHandler() {
+		@Override
+		public void onKeyDown() {
+			PresetData data = PresetData.get(getPlayer());
+			//TODO: If in special skill mode, doesn't change preset?
+			if(data.isActive()) {
+				int next = (data.getCurrentID() + 1) % 4;
+				data.switchCurrent(next);
+				MinecraftForge.EVENT_BUS.post(new SwitchPresetEvent(data.getPlayer()));
+			}
+		}
+	};
+	
 	public static void init() {
 		
 	}

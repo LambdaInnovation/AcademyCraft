@@ -18,7 +18,9 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
@@ -26,6 +28,8 @@ import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import cn.academy.ability.api.event.SwitchPresetEvent;
+import cn.academy.ability.api.preset.PresetData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
@@ -34,6 +38,9 @@ import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Color;
+import cn.liutils.util.helper.Font;
+import cn.liutils.util.helper.Font.Align;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeAthFolD
@@ -62,9 +69,12 @@ public class CPBar extends Widget {
 		ContextCapabilities contextcapabilities = GLContext.getCapabilities();
 		supportARB = contextcapabilities.GL_ARB_multitexture;
 	}
+	
+	long presetChangeTime, lastPresetTime;
+	
+	EntityPlayer player;
 
 	public CPBar() {
-		
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.2f;
 		
@@ -77,13 +87,23 @@ public class CPBar extends Widget {
 		overrideColors.add(new ProgColor(0.0, new Color(0x0Adfdfdf)));
 		overrideColors.add(new ProgColor(0.55, new Color(0x23f0d49d)));
 		overrideColors.add(new ProgColor(1.0, new Color(0x50f56464)));
+		
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@SubscribeEvent
+	public void onSwitchPreset(SwitchPresetEvent event) {
+		lastPresetTime = presetChangeTime;
+		presetChangeTime = Minecraft.getSystemTime();
 	}
 	
 	private void initEvents() {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				double test = (Math.sin(Minecraft.getSystemTime() / 2000.0) + 1) * 0.5;
+				long time = Minecraft.getSystemTime();
+				
+				double test = (Math.sin(time / 2000.0) + 1) * 0.5;
 				
 				double override = test * 1.2;
 				if(override < 1.0) {
@@ -97,6 +117,11 @@ public class CPBar extends Widget {
 				}
 				
 				drawCPBar(0.5);
+				
+				final long preset_wait = 2000L;
+				if(time - presetChangeTime < preset_wait)
+					drawPresetHint((double)(time - presetChangeTime) / preset_wait,
+						time - lastPresetTime);
 			}
 		});
 	}
@@ -234,6 +259,45 @@ public class CPBar extends Widget {
 		t.draw();
 		
 		GL11.glCullFace(GL11.GL_BACK);
+	}
+	
+	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160);
+	final Color temp = new Color();
+	
+	private void drawPresetHint(double progress, long untilLast) {
+		final double x0 = 580, y0 = 136;
+		final double size = 52, step = size + 10;
+		
+		double x = x0, y = y0;
+		
+		int cur = PresetData.get(
+			Minecraft.getMinecraft().thePlayer).getCurrentID();
+		
+		double alpha;
+		if(untilLast > 3000 && progress < 0.2) {
+			alpha = progress / 0.2;
+		} else if(progress > 0.8) {
+			alpha = (1 - progress) / 0.2;
+		} else {
+			alpha = 1;
+		}
+		alpha *= 0.75;
+		
+		for(int i = 0; i < 4; ++i) {
+			CRL_P_BACK.a = alpha;
+			CRL_P_BACK.bind();
+			HudUtils.colorRect(x, y, size, size);
+			
+			temp.a = alpha;
+			temp.bind();
+			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, 0xa0ffffff, Align.CENTER);
+			
+			if(i == cur)
+				HudUtils.drawRectOutline(x, y, size, size, 3);
+			
+			x += step;
+		}
+		
 	}
 	
 	private void subHud(double x, double y, double width, double height) {
