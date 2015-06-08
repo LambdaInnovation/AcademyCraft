@@ -12,14 +12,12 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.academy.ability.ModuleAbility;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.annoreg.core.Registrant;
@@ -27,6 +25,9 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
+import cn.liutils.util.helper.EntitySyncer;
+import cn.liutils.util.helper.EntitySyncer.SyncType;
+import cn.liutils.util.helper.EntitySyncer.Synchronized;
 import cn.liutils.util.mc.PlayerUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,15 +58,6 @@ public class EntityCoinThrowing extends EntityAdvanced {
 			}
 			
 			maxHt = Math.max(maxHt, posY);
-			if(worldObj.isRemote) {
-				initHt = dataWatcher.getWatchableObjectFloat(10);
-				Entity e = worldObj.getEntityByID(dataWatcher.getWatchableObjectInt(11));
-				if(e instanceof EntityPlayer)
-					player = (EntityPlayer) e;
-			} else {
-				dataWatcher.updateObject(10, Float.valueOf(initHt));
-				dataWatcher.updateObject(11, Integer.valueOf(player.getEntityId()));
-			}
 		}
 
 		@Override
@@ -85,9 +77,15 @@ public class EntityCoinThrowing extends EntityAdvanced {
 	private static final int MAXLIFE = 120;
 	private static final double INITVEL = 0.85;
 	
+	private EntitySyncer syncer;
+	
+	@Synchronized(SyncType.ONCE)
 	private float initHt;
 	private double maxHt;
+	
+	@Synchronized(SyncType.ONCE)
 	public EntityPlayer player;
+	
 	public ItemStack stack;
 	public Vec3 axis;
 	public boolean isSync = false;
@@ -106,19 +104,16 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		setPosition(player.posX, player.posY, player.posZ);
 		this.motionY = player.motionY;
 		setup();
-		dataWatcher.updateObject(10, Float.valueOf(initHt));
-//		this.addDaemonHandler(new CollisionCheck(this) {
-//			@Override
-//			protected void onCollided(MovingObjectPosition res) {
-//				if(posY > EntityThrowingCoin.this.player.posY + yOffset) {
-//					setDead();
-//					if(!worldObj.isRemote && 
-//						!EntityThrowingCoin.this.player.capabilities.isCreativeMode)
-//						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY + .5, posZ, new ItemStack(ACItems.coin)));
-//				}
-//			}
-//		}.addExclusion(player));
+
 		this.ignoreFrustumCheck = true;
+	}
+	
+	@Override
+	public void onUpdate() {
+		if(!worldObj.isRemote || isSync)
+			syncer.update();
+		//System.out.println(initHt + " " + player + " " + worldObj.isRemote);
+		super.onUpdate();
 	}
 	
 	private void setup() {
@@ -153,8 +148,9 @@ public class EntityCoinThrowing extends EntityAdvanced {
 	
 	@Override
 	public void entityInit() {
-		dataWatcher.addObject(10, Float.valueOf(0));
-		dataWatcher.addObject(11, Integer.valueOf(-1));
+		syncer = new EntitySyncer(this);
+		
+		syncer.init();
 	}
 	
 	@Override
