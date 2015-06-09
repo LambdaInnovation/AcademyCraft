@@ -39,8 +39,6 @@ import cn.liutils.util.helper.Color;
 @RegSubmoduleInit
 public class GuiImagFusor extends LIGuiContainer {
 	
-	//text_req
-	
 	static LIGui loaded;
 	
 	public static void init() {

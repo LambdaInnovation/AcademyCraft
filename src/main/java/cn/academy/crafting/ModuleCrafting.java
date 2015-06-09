@@ -12,16 +12,24 @@
  */
 package cn.academy.crafting;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import cn.academy.core.registry.InstanceEjector.FromLoader;
+import cn.academy.core.registry.InstanceEjector;
+import cn.academy.core.registry.LoaderHelper;
+import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegSubmoduleInit;
+import cn.liutils.loading.item.ItemLoader;
 
 /**
  * @author WeAthFolD
@@ -30,12 +38,22 @@ import cn.annoreg.mc.RegSubmoduleInit;
 @RegSubmoduleInit
 public class ModuleCrafting {
 	
+	public static ItemLoader items;
+	
 	@RegItem
 	@RegItem.HasRender
 	public static ItemMatterUnit matterUnit;
 	
+	@FromLoader
+	public static Item crystalLow;
+	
 	@RegBlock
     public static BlockImagFusor imagFusor;
+	
+	@RegBlock
+	public static BlockGenericOre 
+		oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 2),
+		oreCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {
@@ -47,6 +65,15 @@ public class ModuleCrafting {
 	public static void init() {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000), 
 			matterUnit.create("imag_proj"), matterUnit.create("none"));
+		
+		items = LoaderHelper.createItemLoader();
+		items.feed(new ResourceLocation("academy:items_crafting.json"));
+		
+		items.loadAll();
+		
+		InstanceEjector.fromItemLoader(ModuleCrafting.class, items);
+		
+		oreCrystal.setDropData(crystalLow, 1, 3);
 	}
 	
 }

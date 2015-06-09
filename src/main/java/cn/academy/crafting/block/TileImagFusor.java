@@ -268,8 +268,6 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     	tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
     	workProgress = progress;
     	currentRecipe = recipe;
-    	
-    	System.out.println("SyncBack");
     }
 
 }

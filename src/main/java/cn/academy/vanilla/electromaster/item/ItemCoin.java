@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.annoreg.core.Registrant;
@@ -36,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author KSkun
  */
 @Registrant
-public class ItemCoin extends Item {
+public class ItemCoin extends ACItem {
 	
 	@RegItem.Render
 	@SideOnly(Side.CLIENT)
@@ -45,6 +46,7 @@ public class ItemCoin extends Item {
 	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
 	
 	public ItemCoin() {
+		super("coin");
 		setTextureName("academy:coin_front");
 		FMLCommonHandler.instance().bus().register(this);
 	}
