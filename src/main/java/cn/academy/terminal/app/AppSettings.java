@@ -30,11 +30,7 @@ public class AppSettings extends App {
 
 	private AppSettings() {
 		super("settings");
-	}
-
-	@Override
-	public boolean isPreInstalled() {
-		return true;
+		setPreInstalled();
 	}
 
 	@Override

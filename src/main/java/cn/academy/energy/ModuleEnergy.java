@@ -24,8 +24,8 @@ import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.InstanceEjector;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.BlockIonicFlux;
-import cn.academy.energy.block.BlockImagFusor;
+import cn.academy.crafting.block.BlockImagFusor;
+import cn.academy.crafting.block.BlockImagProj;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
@@ -57,10 +57,7 @@ public class ModuleEnergy {
     public static BlockMatrix matrix = new BlockMatrix();
     
     @RegBlock
-    public static BlockIonicFlux ionicFlux;
-    
-    @RegBlock
-    public static BlockImagFusor imagFusor;
+    public static BlockImagProj ionicFlux;
     
     @FromLoader
     public static Item energyUnit;

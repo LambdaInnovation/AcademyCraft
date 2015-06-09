@@ -40,11 +40,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @Registrant
-public class BlockIonicFlux extends BlockFluidClassic implements ITileEntityProvider {
+public class BlockImagProj extends BlockFluidClassic implements ITileEntityProvider {
 	
 	public final MatterMaterial mat;
 
-	public BlockIonicFlux() {
+	public BlockImagProj() {
 		super(ModuleCrafting.fluidImagProj, Material.water);
 		setCreativeTab(AcademyCraft.cct);
 		setBlockName("ac_imag_proj_liquid");

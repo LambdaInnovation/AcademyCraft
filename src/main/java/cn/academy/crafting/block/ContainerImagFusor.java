@@ -10,12 +10,14 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.block;
+package cn.academy.crafting.block;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import cn.academy.energy.ModuleEnergy;
+import cn.academy.energy.block.SlotIFItem;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.event.FrameEvent;
@@ -41,7 +43,7 @@ public class ContainerImagFusor extends Container {
     private void initInventory(InventoryPlayer inv) {
     	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
     	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
-        this.addSlotToContainer(new Slot(tile, 2, 32, 72));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.ionicFlux.mat, 2, 32, 72));
         this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 72));
         
         int STEP = 18;

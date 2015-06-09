@@ -25,7 +25,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileInventory extends TileEntity implements IInventory {
 	
-	private final ItemStack[] inventory;
+	protected final ItemStack[] inventory;
 	
 	private final String invName;
 	

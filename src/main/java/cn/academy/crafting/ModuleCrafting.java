@@ -16,8 +16,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegSubmoduleInit;
 
@@ -31,6 +33,9 @@ public class ModuleCrafting {
 	@RegItem
 	@RegItem.HasRender
 	public static ItemMatterUnit matterUnit;
+	
+	@RegBlock
+    public static BlockImagFusor imagFusor;
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {

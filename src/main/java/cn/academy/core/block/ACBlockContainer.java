@@ -14,7 +14,9 @@ package cn.academy.core.block;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.mc.gui.GuiHandlerBase;
@@ -34,6 +36,10 @@ public abstract class ACBlockContainer extends BlockContainer {
 		setBlockName("ac_" + name);
 		setBlockTextureName("academy:" + name);
 	}
+	
+	protected IIcon ricon(IIconRegister ir, String name) {
+    	return ir.registerIcon("academy:" + name);
+    }
 
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 

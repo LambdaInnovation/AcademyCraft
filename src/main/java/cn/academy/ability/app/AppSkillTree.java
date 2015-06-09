@@ -28,11 +28,7 @@ public class AppSkillTree extends App {
 
 	public AppSkillTree() {
 		super("skill_tree");
-	}
-
-	@Override
-	public boolean isPreInstalled() {
-		return true;
+		setPreInstalled();
 	}
 
 	@Override

@@ -28,11 +28,7 @@ public class AppKnowledgeRecord extends App {
 
 	private AppKnowledgeRecord() {
 		super("knowledge_record");
-	}
-
-	@Override
-	public boolean isPreInstalled() {
-		return true;
+		setPreInstalled();
 	}
 
 	@Override

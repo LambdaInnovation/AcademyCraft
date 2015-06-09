@@ -25,6 +25,8 @@ public abstract class App {
 	private final String name;
 	protected ResourceLocation icon;
 	
+	private boolean preInstalled = false;
+	
 	public App(String _name) {
 		name = _name;
 		icon = getTexture("icon");
@@ -42,6 +44,11 @@ public abstract class App {
 		return icon;
 	}
 	
+	public App setPreInstalled() {
+		preInstalled = true;
+		return this;
+	}
+	
 	public int getID() {
 		return appid;
 	}
@@ -54,7 +61,9 @@ public abstract class App {
 		return local("name");
 	}
 	
-	public abstract boolean isPreInstalled();
+	public final boolean isPreInstalled() {
+		return preInstalled;
+	}
 	
 	void getEnvironment() {
 		AppEnvironment env = createEnvironment();

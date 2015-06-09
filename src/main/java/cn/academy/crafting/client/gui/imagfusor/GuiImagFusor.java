@@ -10,14 +10,14 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.client.gui.imagfusor;
+package cn.academy.crafting.client.gui.imagfusor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
-import cn.academy.energy.block.ContainerImagFusor;
-import cn.academy.energy.block.TileImagFusor;
+import cn.academy.crafting.block.ContainerImagFusor;
+import cn.academy.crafting.block.TileImagFusor;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegSubmoduleInit;
 import cn.liutils.cgui.gui.LIGui;
@@ -76,7 +76,7 @@ public class GuiImagFusor extends LIGuiContainer {
 				 List<String> list = new ArrayList();
 				 list.add(tile.getEnergy() + "/" + tile.getMaxEnergy() + " IF");
 				 this.drawHoveringText(list, x + offsetX, y + offsetY, this.fontRendererObj);
-			 } else if(widget.getName().equals("progress_ion")) {
+			 } else if(widget.getName().equals("progress_proj")) {
 				 List<String> list = new ArrayList();
 				 list.add(tile.getLiquidAmount() + "/" + tile.getTankSize() + " mB");
 				 this.drawHoveringText(list, x + offsetX, y + offsetY, this.fontRendererObj);
@@ -92,20 +92,20 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	public class Handler {
 		
-		ProgressBar progressProduct, progressIon, progressImag;
+		ProgressBar progressProduct, progressProj, progressImag;
 		
 		public Handler() {
 			wrapButton(page.getWidget("button_config"));
 			
 			progressProduct = ProgressBar.get(page.getWidget("progress_pro"));
-			progressIon = ProgressBar.get(page.getWidget("progress_ion"));
+			progressProj = ProgressBar.get(page.getWidget("progress_proj"));
 			progressImag = ProgressBar.get(page.getWidget("progress_imag"));
 		}
 		
 		@GuiCallback
 		public void frameUpdate(Widget w, FrameEvent event) {
-			progressProduct.progress = tile.getCraftProgress();
-			progressIon.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
+			progressProduct.progress = tile.getWorkProgress();
+			progressProj.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
 			progressImag.progress = (double) tile.getEnergy() / tile.getMaxEnergy();
 		}
 	}
