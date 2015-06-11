@@ -84,6 +84,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 
 	//WEN TODO
 	public int getPlateCount() {
+		if(true) return 2;
 		int count = 0;
 		for(int i = 0; i < 3; ++i) {
 			if(this.getStackInSlot(i) != null)
@@ -97,15 +98,18 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	}
 	
 	private static double getLatency(int N, int L) {
+		if(true) return 30;
 		return N * L * L * 20;
 	}
 	
 	private static double getRange(int N, int L) {
+		if(true) return 15;
 		return N * Math.sqrt(L) * 8;
 	}
 	
 	public int getCoreLevel() {
 		ItemStack stack = getStackInSlot(3);
+		if(true) return 2;
 		return stack == null ? 0 : stack.getItemDamage() + 1;
 	}
 	

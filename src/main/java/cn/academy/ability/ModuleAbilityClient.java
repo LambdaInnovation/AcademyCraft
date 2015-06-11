@@ -30,7 +30,6 @@ public class ModuleAbilityClient {
 			} else {
 				System.out.println("Not active!");
 			}
-			System.out.println("awefrawef");
 		}
 	};
 	

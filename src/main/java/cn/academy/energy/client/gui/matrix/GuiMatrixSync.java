@@ -23,6 +23,7 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.wen.ChangePassEvent;
 import cn.academy.energy.api.event.wen.CreateNetworkEvent;
 import cn.academy.energy.block.TileMatrix;
+import cn.academy.energy.internal.WirelessNet;
 import cn.academy.energy.internal.WirelessSystem;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
@@ -100,12 +101,16 @@ public class GuiMatrixSync {
 		tag.setByte("capacity", (byte) cap);
 		tag.setInteger("latency", (int) lat);
 		tag.setInteger("range", (int) range);
+		tag.setByte("nodes", (byte) 0);
 		
 		System.out.println("Loaded: " + loaded);
 		
 		if(loaded) {
-			String ssid = WirelessHelper.getWirelessNet(matrix).getSSID();
+			WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+			String ssid = net.getSSID();
+			
 			tag.setString("ssid", ssid);
+			tag.setByte("nodes", (byte) net.getLoad());
 		}
 		
 		//Throw to client

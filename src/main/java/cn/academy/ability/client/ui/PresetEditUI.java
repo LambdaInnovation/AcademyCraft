@@ -202,7 +202,7 @@ public class PresetEditUI extends GuiScreen {
     	if(transiting) {
     		updateTransit();
     		transitor.resize(width, height);
-    		transitor.draw(mx, my);
+    		transitor.draw(-1, -1);
     	} else {
     		updatePosForeground();
     		foreground.resize(width, height);
@@ -306,6 +306,7 @@ public class PresetEditUI extends GuiScreen {
     		
     		Preset p = data.getPreset(id);
     		byte[] pdata = (id == active && editor != null) ? editor.display : p.data;
+    		System.out.println("UpdateInfo");
     		
     		for(int i = 0; i < 4; ++i) {
     			Category cat = AbilityData.get(player).getCategory();

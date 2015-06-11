@@ -37,10 +37,11 @@ public class ContainerMatrix extends Container {
 	}
 	
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new Slot(tile, 0, 12, 5));
-        this.addSlotToContainer(new Slot(tile, 1, 76, 5));
-        this.addSlotToContainer(new Slot(tile, 2, 44, 64));
-        this.addSlotToContainer(new Slot(tile, 3, 44, 28));
+        this.addSlotToContainer(new Slot(tile, 0, 27, 65));
+        this.addSlotToContainer(new Slot(tile, 1, 76, 65));
+        this.addSlotToContainer(new Slot(tile, 2, 50, 6));
+        
+        this.addSlotToContainer(new Slot(tile, 3, 50, 33));
         
         int STEP = 18;
         

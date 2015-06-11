@@ -33,6 +33,9 @@ ac.gui.matrix.mark.waiting.desc=Transmitting...
 ac.gui.matrix.mark.invalid_input.desc=Invalid input value.
 ac.gui.matrix.mark.success.desc=Action successful.
 ac.gui.matrix.mark.fail.desc=Action failed.
+ac.gui.matrix.latency=Latency
+ac.gui.matrix.range=Range
+ac.gui.matrix.capacity=Capacity
 
 # Node
 ac.gui.node.not_connected.desc=NOT CONNECTED
@@ -44,9 +47,9 @@ ac.gui.node.not_connected.desc=<Not Connected>
 
 ac.gui.node.mark.loading.desc=LOADING
 ac.gui.node.mark.idle.desc=IDLE
-ac.gui.node.transmitting.desc=TRANSMITTING
-ac.gui.node.successful.desc=SUCCESSFUL
-ac.gui.node.failed.desc=FAILED
+ac.gui.node.mark.transmitting.desc=TRANSMITTING
+ac.gui.node.mark.successful.desc=SUCCESSFUL
+ac.gui.node.mark.failed.desc=FAILED
 
 #Imag Fusor
 ac.gui.imagfusor.ion.desc=Proj Liquid

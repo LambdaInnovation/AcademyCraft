@@ -12,4 +12,8 @@ public class ModuleTerminal {
 	@RegItem
 	public static ItemApp itemApp;
 	
+	public static void init() {
+		
+	}
+	
 }

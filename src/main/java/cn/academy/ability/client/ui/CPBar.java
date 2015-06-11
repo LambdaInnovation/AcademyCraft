@@ -292,10 +292,12 @@ public class CPBar extends Widget {
 			CRL_P_BACK.bind();
 			HudUtils.colorRect(x, y, size, size);
 			
-			temp.a = alpha;
-			temp.bind();
-			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, 0xa0ffffff, Align.CENTER);
+			temp.a = Math.max(0.05, alpha * 0.8);
 			
+			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, temp.asHexColor(), Align.CENTER);
+			
+			
+			temp.bind();
 			if(i == cur)
 				HudUtils.drawRectOutline(x, y, size, size, 3);
 			

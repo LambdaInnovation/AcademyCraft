@@ -12,10 +12,13 @@
  */
 package cn.academy.energy.client.gui.matrix;
 
+import java.util.Arrays;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
@@ -26,6 +29,7 @@ import cn.liutils.cgui.gui.LIGuiContainer;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.ProgressBar;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
@@ -98,24 +102,52 @@ public class GuiMatrix extends LIGuiContainer {
 			capacity = tag.getInteger("capacity");
 			latency = tag.getInteger("latency");
 			range = tag.getInteger("range");
+			nodes = tag.getInteger("nodes");
 			
 			//Setup the info about matrix itself
-			TextBox box;
-			box = TextBox.get(pageMain.getWidget("text_cap2"));
-			box.content = nodes + "/" + capacity;
+			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / capacity);
 			
-			box = TextBox.get(pageMain.getWidget("text_latency2"));
-			box.content = String.format("%d", latency);
+			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) latency / TileMatrix.MAX_CAPACITY);
 			
-			box = TextBox.get(pageMain.getWidget("text_range2"));
-			box.content = String.format("%d", range);
+			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) range / TileMatrix.MAX_RANGE);
 			
-			box = TextBox.get(pageMain.getWidget("text_ssid2"));
+			TextBox box = TextBox.get(pageMain.getWidget("text_ssid2"));
 			if(isLoaded) {
 				ssid = tag.getString("ssid");
 				box.content = ssid;
 			} else {
 				box.content = "Not Loaded";
+			}
+			
+		}
+	}
+	
+	private static String local(String s) {
+		return StatCollector.translateToLocal("ac.gui.matrix." + s);
+	}
+	
+	@Override
+	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		Widget w = gui.getTopWidget(x, y);
+		if(w != null) {
+			String text = null;
+			switch(w.getName()) {
+			case "progress_cap":
+				text = local("capacity") + ": " + nodes + "/" + capacity;
+				break;
+			case "progress_lat":
+				text = local("latency") + ": " + latency + "IF/t";
+				break;
+			case "progress_ran":
+				text = local("range") + ": " + range + "m";
+				break;
+			default:
+				break;
+			}
+			
+			if(text != null) {
+				int offsetX = -160, offsetY = -45;
+				this.drawHoveringText(Arrays.asList(new String[] { text }), x + offsetX, y + offsetY, this.fontRendererObj);
 			}
 		}
 	}
@@ -161,7 +193,7 @@ public class GuiMatrix extends LIGuiContainer {
 		pageSSID.transform.doesDraw = false;
 		pageCheck.transform.doesDraw = false;
 		
-		wrapButton(pageMain.getWidget("button_init"));
+		wrapButton(pageMain.getWidget("button_config"));
 		
 		wrapButton(pageSSID.getWidget("button_yes"));
 		wrapButton(pageSSID.getWidget("button_no"));
@@ -221,7 +253,7 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	public class MainCallback {
 		
-		@GuiCallback("button_init")
+		@GuiCallback("button_config")
 		public void openDialogue(Widget w, MouseDownEvent event) {
 			if(receivedSync)
 				openInitWindow();
@@ -282,7 +314,7 @@ public class GuiMatrix extends LIGuiContainer {
 		public CheckCallback() {
 			markBorder = pageCheck.getWidget("mark_check1");
 			markDrawer = pageCheck.getWidget("mark_check2");
-			info = pageCheck.getWidget("text_info");
+			info = pageCheck.getWidget("test_info");
 		}
 		
 		public void updateCheckState() {

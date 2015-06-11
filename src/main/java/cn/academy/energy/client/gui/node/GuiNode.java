@@ -20,6 +20,7 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
+import scala.actors.threadpool.Arrays;
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
@@ -104,6 +105,23 @@ public class GuiNode extends LIGuiContainer {
     protected boolean containerAcceptsKey(int key) {
     	return key == Keyboard.KEY_ESCAPE;
     }
+    
+	@Override
+	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		Widget w = gui.getTopWidget(x, y);
+		if(w != null) {
+			String text = null;
+			switch(w.getName()) {
+			default:
+				break;
+			}
+			
+			if(text != null) {
+				int offsetX = -160, offsetY = -45;
+				this.drawHoveringText(Arrays.asList(new String[] { text }), x + offsetX, y + offsetY, this.fontRendererObj);
+			}
+		}
+	}
     
     private static String local(String name) {
     	return StatCollector.translateToLocal("ac.gui.node." + name + ".desc");
