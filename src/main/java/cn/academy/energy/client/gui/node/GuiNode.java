@@ -13,6 +13,7 @@
 package cn.academy.energy.client.gui.node;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +21,6 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
-import scala.actors.threadpool.Arrays;
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
@@ -112,7 +112,11 @@ public class GuiNode extends LIGuiContainer {
 		if(w != null) {
 			String text = null;
 			switch(w.getName()) {
-			default:
+			case "progress_load":
+				text = load + "/" + maxLoad;
+				break;
+			case "progress_imag":
+				text = tile.getEnergy() + "/" + tile.getMaxEnergy() + "IF";
 				break;
 			}
 			
@@ -169,7 +173,7 @@ public class GuiNode extends LIGuiContainer {
 			public void handleEvent(Widget w, FrameEvent event) {
 				LIGui.drawBlackout();
 			}
-    		
+    		 
     	});
     	
     	//Callback
