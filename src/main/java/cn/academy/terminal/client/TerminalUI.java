@@ -31,7 +31,6 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.academy.core.util.ControlOverrider;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
@@ -224,8 +223,8 @@ public class TerminalUI extends AuxGui {
 			public void onReady(Object val) {
 				if(!isSynced) {
 					updateAppList(data);
-					root.removeWidget("text_loading");
-					root.removeWidget("icon_loading");
+					//root.removeWidget("text_loading");
+					//root.removeWidget("icon_loading");
 					isSynced = true;
 					AcademyCraft.log.info("Received TerminalUI callback!");
 				} else {
@@ -254,12 +253,14 @@ public class TerminalUI extends AuxGui {
     	});
     	
     	root.getWidget("icon_loading").regEventHandlerAtBegin(new FrameEventHandler() {
-
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).color.a = MathHelper.sin(Minecraft.getSystemTime() / 1000.0f);
+				DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(Minecraft.getSystemTime() / 200.0f));
 			}
-    		
+    	});
+    	
+    	root.getWidget("text_loading").regEventHandlerAtBegin(FrameEvent.class, (Widget w, FrameEvent event) -> {
+    		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(Minecraft.getSystemTime() / 200.0f));
     	});
     }
     
@@ -279,7 +280,7 @@ public class TerminalUI extends AuxGui {
     }
     
     private void updatePosition() {
-    	final double START_X = 50, START_Y = 155, STEP_X = 180, STEP_Y = 180;
+    	final double START_X = 65, START_Y = 155, STEP_X = 180, STEP_Y = 180;
     	
     	// Check if scroll is viable
     	int max = getMaxScroll();
