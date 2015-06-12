@@ -25,7 +25,7 @@ import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
 import cn.liutils.cgui.gui.Widget;
@@ -51,7 +51,7 @@ import cn.liutils.util.helper.Color;
  *
  */
 @Registrant
-@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@RegInit(side = RegInit.Side.CLIENT_ONLY)
 public class GuiNode extends LIGuiContainer {
 	
 	static LIGui loaded;

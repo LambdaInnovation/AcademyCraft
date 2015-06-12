@@ -10,13 +10,13 @@ import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Registrant
-@RegSubmoduleInit(side = RegSubmoduleInit.Side.CLIENT_ONLY)
+@RegInit(side = RegInit.Side.CLIENT_ONLY)
 @SideOnly(Side.CLIENT)
 public class ModuleAbilityClient {
 	

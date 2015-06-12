@@ -10,28 +10,38 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability;
+package cn.academy.vanilla.electromaster;
 
 import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
-import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.electromaster.skill.SkillArcGen;
 import cn.academy.vanilla.electromaster.skill.SkillMagAttract;
 import cn.academy.vanilla.electromaster.skill.SkillMineDetect;
 import cn.academy.vanilla.electromaster.skill.SkillRailgun;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegItem;
-import cn.annoreg.mc.RegInit;
 
 /**
- * The ability module init class.
  * @author WeAthFolD
+ *
  */
-@Registrant
-@RegInit
-public class ModuleAbility {
+public class CatElectroMaster extends Category {
 	
-	public static void init() {}
-	
-	
+	public SkillArcGen arcGen;
+	public SkillMagAttract magAttract;
+	public SkillMineDetect mineDetect;
+	public SkillRailgun railgun;
+
+	public CatElectroMaster() {
+		super("electro_master");
+		
+		defineTypes("default");
+		
+		addSkill("default", arcGen = new SkillArcGen());
+		addSkill("default", magAttract = new SkillMagAttract());
+		addSkill("default", mineDetect = new SkillMineDetect());
+		addSkill("default", railgun = new SkillRailgun());
+		
+		magAttract.setParent(arcGen);
+		mineDetect.setParent(magAttract);
+		railgun.setParent(magAttract);
+	}
+
 }

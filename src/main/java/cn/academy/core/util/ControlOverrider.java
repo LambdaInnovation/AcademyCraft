@@ -23,7 +23,7 @@ import net.minecraft.util.IntHashMap;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.util.generic.RegistryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -38,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegSubmoduleInit
+@RegInit
 @RegEventHandler(Bus.Forge)
 public class ControlOverrider {
 	

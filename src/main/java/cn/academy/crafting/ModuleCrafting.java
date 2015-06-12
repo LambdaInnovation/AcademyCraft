@@ -28,14 +28,14 @@ import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegItem;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.loading.item.ItemLoader;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public class ModuleCrafting {
 	
 	public static ItemLoader items;

@@ -12,6 +12,11 @@
  */
 package cn.academy.ability.api;
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,9 +38,10 @@ import cpw.mods.fml.relauncher.Side;
 public class AbilityData extends DataPart {
 	
 	private int catID = -1;
+	private BitSet learnedSkills;
 
 	public AbilityData() {
-		
+		learnedSkills = new BitSet(32);
 	}
 	
 	/**
@@ -66,14 +72,33 @@ public class AbilityData extends DataPart {
 		return CategoryManager.INSTANCE.getCategory(catID);
 	}
 	
-	@Override
-	public void tick() {
-
+	/**
+	 * Get all the learned skills. This method creates a new list.
+	 */
+	public List<Skill> getLearnedSkillList() {
+		Category c = getCategory();
+		if(c == null)
+			return new ArrayList();
+		return c.getSkillList()
+				.stream()
+				.filter((Skill s) -> learnedSkills.get(s.getID()))
+				.collect(Collectors.toList());
 	}
+	
+	public boolean isSkillLearned(Skill s) {
+		return s.getCategory() == getCategory() && learnedSkills.get(s.getID());
+	}
+	
+	@Override
+	public void tick() {}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		catID = tag.getByte("c");
+		
+		byte[] arr = tag.getByteArray("l");
+		if(arr.length != 0)
+			learnedSkills = BitSet.valueOf(arr);
 	}
 
 	@Override
@@ -81,6 +106,7 @@ public class AbilityData extends DataPart {
 		NBTTagCompound tag = new NBTTagCompound();
 		
 		tag.setByte("c", (byte) catID); //There cant be more than 128 categories yeah? >)
+		tag.setByteArray("l", learnedSkills.toByteArray());
 		
 		return tag;
 	}

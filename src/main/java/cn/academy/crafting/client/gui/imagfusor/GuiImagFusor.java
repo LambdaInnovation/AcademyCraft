@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import cn.academy.crafting.block.ContainerImagFusor;
 import cn.academy.crafting.block.TileImagFusor;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
 import cn.liutils.cgui.gui.Widget;
@@ -36,7 +36,7 @@ import cn.liutils.util.helper.Color;
  * @author WeAthFolD
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public class GuiImagFusor extends LIGuiContainer {
 	
 	static LIGui loaded;

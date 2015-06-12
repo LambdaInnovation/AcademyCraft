@@ -3,10 +3,10 @@ package cn.academy.terminal;
 import cn.academy.terminal.item.ItemApp;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public class ModuleTerminal {
 
 	@RegItem

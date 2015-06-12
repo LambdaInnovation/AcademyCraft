@@ -23,7 +23,7 @@ import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
 import cn.liutils.cgui.gui.Widget;
@@ -46,7 +46,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@RegSubmoduleInit
+@RegInit
 public class GuiMatrix extends LIGuiContainer {
 	
 	static LIGui loaded;

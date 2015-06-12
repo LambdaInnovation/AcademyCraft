@@ -13,7 +13,9 @@
 package cn.academy.ability.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -25,10 +27,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author WeAthFolD
  */
-public final class Category {
+public class Category {
 
-	List<Skill> skillList = new ArrayList();
-	List<Controllable> ctrlList = new ArrayList();
+	private List<Skill> skillList = new ArrayList();
+	private List<Controllable> ctrlList = new ArrayList();
+	
+	private Map<String, List<Skill> > typeMap;
 	
 	private final String name;
 	
@@ -41,11 +45,31 @@ public final class Category {
 		icon = Resources.getTexture("abilities/" + name + "/icon");
 	}
 	
-	public void addSkill(Skill skill) {
+	public void defineTypes(String ...types) {
+		if(typeMap != null)
+			throw new RuntimeException("Can't define twice!");
+		
+		typeMap = new HashMap();
+		for(String s : types)
+			typeMap.put(s, new ArrayList());
+	}
+	
+	public void addSkill(String type, Skill skill) {
+		// TODO Can remove when release
+		if(getSkill(skill.getName()) != null)
+			throw new RuntimeException("Duplicating skill " + skill.getName() + "!!");
+		if(typeMap == null)
+			throw new RuntimeException("Type not defined");
+		
+		List<Skill> mapList = typeMap.get(type);
+		if(mapList == null)
+			throw new RuntimeException("Type " + type + " does not exist");
+		
 		skillList.add(skill);
+		mapList.add(skill);
 		addControllable(skill);
 		
-		skill.addedIntoCategory(this);
+		skill.addedIntoCategory(this, skillList.size() - 1);
 	}
 	
 	public int getSkillID(Skill s) {
@@ -56,11 +80,22 @@ public final class Category {
 		return skillList.get(id);
 	}
 	
+	public Skill getSkill(String name) {
+		for(Skill s : skillList)
+			if(s.getName().equals(name))
+				return s;
+		return null;
+	}
+	
 	/**
 	 * Get an <b>immutable</b> list of skills in this category.
 	 */
 	public List<Skill> getSkillList() {
 		return ImmutableList.copyOf(skillList);
+	}
+	
+	public List<Skill> getSkillsOfType(String type) {
+		return ImmutableList.copyOf(typeMap.get(type));
 	}
 	
 	public int getCategoryID() {

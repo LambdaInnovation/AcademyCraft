@@ -19,14 +19,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.IFItemManager;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 
 /**
  * A generic-typed energy helper. Preserved for future use.
  * @author WeAthFolD
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public class EnergyHelper {
 
 	static List<EnergyItemManager> supported = new ArrayList();

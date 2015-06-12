@@ -34,7 +34,7 @@ import cn.academy.support.EnergyHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegItem;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.template.block.ItemBlockMulti;
 
@@ -42,7 +42,7 @@ import cn.liutils.template.block.ItemBlockMulti;
  * @author WeAthFolD
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public class ModuleEnergy {
 	
 	public static ItemLoader loader;

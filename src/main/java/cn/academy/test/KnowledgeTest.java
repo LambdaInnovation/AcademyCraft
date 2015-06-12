@@ -18,7 +18,7 @@ import cn.academy.knowledge.KnowledgeData;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -26,7 +26,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  *
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 @RegEventHandler
 public class KnowledgeTest {
 

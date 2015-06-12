@@ -5,7 +5,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.ability.api.preset.PresetData;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegSubmoduleInit;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
 
@@ -15,7 +15,7 @@ import cn.liutils.util.helper.KeyManager;
  *
  */
 @Registrant
-@RegSubmoduleInit
+@RegInit
 public final class ClientHandler {
 	
 	public static final int MAX_KEYS = PresetData.MAX_KEYS, STATIC_KEYS = 4;

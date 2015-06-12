@@ -1,11 +1,18 @@
 package cn.academy.ability.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.learning.LearningCondition;
+import cn.academy.ability.api.learning.RootLearningCondition;
 import cn.academy.core.client.Resources;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
@@ -19,6 +26,14 @@ public abstract class Skill implements Controllable {
 	
 	private Category category;
 	
+	private final List<LearningCondition> learningConditions = new ArrayList();
+	
+	/**
+	 * The parent skill of the skill. This is the upper level skill in the Skill Tree UI. If not specified, this skill is the root skill of the type.
+	 */
+	private Skill parent;
+	private int id;
+	
 	private final String name;
 	private ResourceLocation icon;
 	
@@ -26,15 +41,28 @@ public abstract class Skill implements Controllable {
 		name = _name;
 	}
 	
-	final void addedIntoCategory(Category _category) {
+	final void addedIntoCategory(Category _category, int id) {
 		category = _category;
 		
 		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 		
+		addLearningCondition(new RootLearningCondition());
+		
 		initSkill();
 	}
 	
+	/**
+	 * Called AFTER the skill is added into the category.
+	 */
 	protected void initSkill() {}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public Category getCategory() {
+		return category;
+	}
 	
 	/**
 	 * Get the direct name of the skill.
@@ -77,6 +105,32 @@ public abstract class Skill implements Controllable {
 	protected String getLocalized(String key) {
 		return StatCollector.translateToLocal("ac.ability." + getFullName() + "." + key);
 	}
+	
+	//--- Learning
+	public void setParent(Skill skill) {
+		parent = skill;
+	}
+	
+	public Skill getParent() {
+		return parent;
+	}
+	
+	public boolean isRoot() {
+		return parent == null;
+	}
+	
+	protected void addLearningCondition(LearningCondition cond) {
+		learningConditions.add(cond);
+	}
+	
+	/**
+	 * Returns an immutable list of learning conditions of this skill.
+	 */
+	public List<LearningCondition> getLearningConditions() {
+		return ImmutableList.copyOf(learningConditions);
+	}
+	
+	//
 	
     public static Skill testSkill = new Skill("test") {
 
