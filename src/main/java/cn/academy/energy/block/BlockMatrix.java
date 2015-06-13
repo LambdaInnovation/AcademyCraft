@@ -36,7 +36,7 @@ public class BlockMatrix extends BlockMulti {
 		super(Material.rock);
 		
 		setCreativeTab(AcademyCraft.cct);
-		setBlockName("matrix");
+		setBlockName("ac_matrix");
 		setBlockTextureName("academy:matrix");
 		setHardness(3.0f);
 		setLightLevel(1f);
