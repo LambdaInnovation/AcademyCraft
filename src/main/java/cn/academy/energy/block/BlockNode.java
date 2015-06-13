@@ -60,7 +60,7 @@ public class BlockNode extends BlockContainer {
     public BlockNode(NodeType _type) {
         super(Material.rock);
         setCreativeTab(AcademyCraft.cct);
-        setBlockName("node_" + _type.name);
+        setBlockName("ac_node_" + _type.name);
         
         type = _type;
     }
