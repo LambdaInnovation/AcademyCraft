@@ -19,6 +19,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.GL11;
+
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
@@ -128,6 +131,8 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		GL11.glPopMatrix();
+		
 		Widget w = gui.getTopWidget(x, y);
 		if(w != null) {
 			String text = null;
@@ -146,10 +151,11 @@ public class GuiMatrix extends LIGuiContainer {
 			}
 			
 			if(text != null) {
-				int offsetX = -160, offsetY = -45;
-				this.drawHoveringText(Arrays.asList(new String[] { text }), x + offsetX, y + offsetY, this.fontRendererObj);
+				this.drawHoveringText(Arrays.asList(new String[] { text }), x, y, this.fontRendererObj);
 			}
 		}
+		
+		GL11.glPushMatrix();
 	}
 	
 	private void startWaiting() {

@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import cn.academy.crafting.block.ContainerImagFusor;
 import cn.academy.crafting.block.TileImagFusor;
 import cn.annoreg.core.Registrant;
@@ -67,19 +70,22 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		GL11.glPopMatrix();
+		
 		 Widget widget = gui.getTopWidget(x, y);
 		 if(widget != null) {
-			 int offsetX = -160, offsetY = -50;
 			 if(widget.getName().equals("progress_imag")) {
 				 List<String> list = new ArrayList();
 				 list.add(tile.getEnergy() + "/" + tile.getMaxEnergy() + " IF");
-				 this.drawHoveringText(list, x + offsetX, y + offsetY, this.fontRendererObj);
+				 this.drawHoveringText(list, x, y, this.fontRendererObj);
 			 } else if(widget.getName().equals("progress_proj")) {
 				 List<String> list = new ArrayList();
 				 list.add(tile.getLiquidAmount() + "/" + tile.getTankSize() + " mB");
-				 this.drawHoveringText(list, x + offsetX, y + offsetY, this.fontRendererObj);
+				 this.drawHoveringText(list, x, y, this.fontRendererObj);
 			 }
 		 }
+		 
+		 GL11.glPushMatrix();
 	}
 	
 	private void load() {

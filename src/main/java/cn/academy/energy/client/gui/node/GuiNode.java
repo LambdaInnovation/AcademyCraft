@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
@@ -108,6 +109,8 @@ public class GuiNode extends LIGuiContainer {
     
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		GL11.glPopMatrix();
+		
 		Widget w = gui.getTopWidget(x, y);
 		if(w != null) {
 			String text = null;
@@ -121,10 +124,12 @@ public class GuiNode extends LIGuiContainer {
 			}
 			
 			if(text != null) {
-				int offsetX = -160, offsetY = -45;
-				this.drawHoveringText(Arrays.asList(new String[] { text }), x + offsetX, y + offsetY, this.fontRendererObj);
+				//int offsetX = -160, offsetY = -45;
+				this.drawHoveringText(Arrays.asList(new String[] { text }), x, y, this.fontRendererObj);
 			}
 		}
+		
+		GL11.glPushMatrix();
 	}
     
     private static String local(String name) {
@@ -295,13 +300,13 @@ public class GuiNode extends LIGuiContainer {
 				public void handleEvent(Widget w, DraggedEvent event) {
 					VerticalDragBar db = VerticalDragBar.get(w);
 					ElementList elist = ElementList.get(getWidget("list"));
-					elist.setProgress(w, 
-						(int) Math.round((db.getProgress() * elist.getMaxProgress())));
+					elist.setProgress((int) Math.round((db.getProgress() * elist.getMaxProgress())));
 				}
     			
     		});
     		
     		wrapButton(getWidget("button_close"), 0.6);
+    		
     	}
     	
     	/**
@@ -315,6 +320,8 @@ public class GuiNode extends LIGuiContainer {
     		
     		Widget list = getWidget("list");
     		ElementList eList = new ElementList();
+    		eList.spacing = 4.0;
+    		
     		for(String s : networks) {
     			Widget single = getWidget("ssid_template").copy();
     			single.addComponent(new DrawTexture().setTex(null));
