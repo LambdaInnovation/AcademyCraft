@@ -45,13 +45,14 @@ tile.ac_node_standard.name=Improved Wireless Imag Node
 tile.ac_node_advanced.name=Advanced Wireless Imag Node
 
 # Generic Knowledges
-knowledge.marathon.name=Marathon
-knowledge.iron_feet.name=Iron Feet
-knowledge.intheknee.name=Arrow in the Knee
-knowledge.bouncer.name=Bouncer
-knowledge.trajectory.name=Trajectory Master
-knowledge.baseball.name=Homerun!!
-knowledge.anatomy.name=Anatomist
+ac.knowledge.marathon.name=Marathon
+ac.knowledge.iron_feet.name=Iron Feet
+ac.knowledge.intheknee.name=Arrow in the Knee
+ac.knowledge.intheknee.desc=I used to be an adventurer like you...
+ac.knowledge.bouncer.name=Bouncer
+ac.knowledge.trajectory.name=Trajectory Master
+ac.knowledge.baseball.name=Homerun!!
+ac.knowledge.anatomy.name=Anatomist
 
 # Data Terminal
 ac.gui.terminal.appcount=%d Applications
@@ -62,7 +63,7 @@ ac.app.knowledge_record.name=Life Record
 ac.app.settings.name=Settings
 
 # Knowledge UI
-ac.knowledge.acquired=Acquired Knowledge
+ac.ac.knowledge.acquired=Acquired Knowledge
 
 # Generic
 ac.gui.loading_lowercase.desc=loading...
@@ -97,12 +98,12 @@ ac.gui.imagfusor.flux.desc=Imag Flux
 
 # Electro Master
 ## EM Knowledges
-knowledge.em_basic_volt.name=Basic Voltage Control
-knowledge.em_improved_volt.name=Improved Volt Control
-knowledge.em_high_volt.name=High Voltage Control
-knowledge.mag_ctrl.name=Magnet Field Control
-knowledge.em_projectile_master.name=Magnet Projectile Master
-knowledge.highenergy.name=High Energy Theory
+ac.knowledge.em_basic_volt.name=Basic Voltage Control
+ac.knowledge.em_improved_volt.name=Improved Volt Control
+ac.knowledge.em_high_volt.name=High Voltage Control
+ac.knowledge.mag_ctrl.name=Magnet Field Control
+ac.knowledge.em_projectile_master.name=Magnet Projectile Master
+ac.knowledge.highenergy.name=High Energy Theory
 
 ## EM Skills
 ac.ability.electro_master.arc_gen.name=Arc Generation
@@ -117,26 +118,26 @@ ac.ability.electro_master.railgun.name=Railgun
 
 
 # Knowledge
-ac.knowledge.bubble.name=Bubble Master
+ac.ac.knowledge.bubble.name=Bubble Master
 
 # Command
 ac.command.invalid=Invalid input, please try again.
 ac.command.successful=Command sucessfully performed.
 ac.command.notlearned=The player has not learned any ability yet.
 
-ac.command.knowledge.usage=/knowledge <command>|<help> [parameters...]
-ac.command.knowledge.help=/knowledge help: Display the help message.
-ac.command.knowledge.stat=/knowledge stat: Show statistics info of player knowledge.
-ac.command.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
-ac.command.knowledge.getall=/knowledge getall: Learn all knowledges right now.
-ac.command.knowledge.list=/knowledge list: List all available knowledges.
-ac.command.knowledge.learn=/knowledge learn [knowledge_name]: Learn some knowledge. 
-ac.command.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some knowledge.
-ac.command.knowledge.stat2=Knowledge learned: %s
-ac.command.knowledge.stat3=Knowledge discovered: %s
-ac.command.knowledge.notfound=Knowledge with name %s doesn't exist.
-ac.command.knowledge.all=All knowledges:
-ac.command.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific knowledge.
+ac.command.ac.knowledge.usage=/knowledge <command>|<help> [parameters...]
+ac.command.ac.knowledge.help=/knowledge help: Display the help message.
+ac.command.ac.knowledge.stat=/knowledge stat: Show statistics info of player ac.knowledge.
+ac.command.ac.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
+ac.command.ac.knowledge.getall=/knowledge getall: Learn all knowledges right now.
+ac.command.ac.knowledge.list=/knowledge list: List all available knowledges.
+ac.command.ac.knowledge.learn=/knowledge learn [knowledge_name]: Learn some ac.knowledge. 
+ac.command.ac.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some ac.knowledge.
+ac.command.ac.knowledge.stat2=Knowledge learned: %s
+ac.command.ac.knowledge.stat3=Knowledge discovered: %s
+ac.command.ac.knowledge.notfound=Knowledge with name %s doesn't exist.
+ac.command.ac.knowledge.all=All knowledges:
+ac.command.ac.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific ac.knowledge.
 
 ac.command.aim.usage=/aim [playerName] <command>|<help> [parameters...]
 ac.command.aim.help=/aim help: Display the help message.

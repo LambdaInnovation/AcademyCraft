@@ -12,6 +12,8 @@
  */
 package cn.academy.knowledge.app;
 
+import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.knowledge.client.ui.LifeRecordUI;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
@@ -34,7 +36,10 @@ public class AppKnowledgeRecord extends App {
 	@Override
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
-			
+			@Override
+			public void onStart(NBTTagCompound tag) {
+				LifeRecordUI.guiHandler.openClientGui();
+			}
 		};
 	}
 
