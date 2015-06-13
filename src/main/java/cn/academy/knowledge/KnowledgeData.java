@@ -58,6 +58,10 @@ public class KnowledgeData extends DataPart {
 		return ImmutableList.copyOf(knowledgeList);
 	}
 	
+	public static int getKnowledgeCount() {
+		return knowledgeList.size();
+	}
+	
 	public static void addKnowledge(Knowledge k) {
 		if(idMap.containsKey(k.name)) {
 			throw new RuntimeException("Duplicating knowledge" + k.name);
@@ -100,19 +104,15 @@ public class KnowledgeData extends DataPart {
 	
 	BitSet learned;
 	
+	BitSet discovered;
+	
 	public KnowledgeData() {
 		learned = new BitSet(knowledgeList.size());
+		discovered = new BitSet(knowledgeList.size());
 	}
 	
 	public int getLearnedCount() {
 		return learned.cardinality();
-	}
-	
-	/**
-	 * You should NOT modify the result value, for this would cause sync loss.
-	 */
-	public BitSet getBitmask() {
-		return learned;
 	}
 	
 	/**
@@ -155,6 +155,23 @@ public class KnowledgeData extends DataPart {
 	}
 	
 	/**
+	 * Discover some knowledge, should only call in SERVER.
+	 */
+	public void discover(int id) {
+		discovered.set(id, true);
+		plainSyncDiscovered(discovered);
+	}
+	
+	/**
+	 * Discover some knowledge, should only call in SERVER.
+	 */
+	public void discover(String name) {
+		Integer i = idMap.get(name);
+		if(i != null)
+			discover(i);
+	}
+	
+	/**
 	 * Learn all knowledges, debug only, should only call in SERVER.
 	 */
 	public void learnAll() {
@@ -167,6 +184,7 @@ public class KnowledgeData extends DataPart {
 	 */
 	public void unlearnAll() {
 		learned.set(0, knowledgeList.size(), false);
+		discovered.set(0, knowledgeList.size(), false);
 		plainSync(learned);
 	}
 	
@@ -182,9 +200,21 @@ public class KnowledgeData extends DataPart {
 		return learned.size() > id && learned.get(id);
 	}
 	
+	public boolean isDiscovered(String name) {
+		Integer id = idMap.get(name);
+		return id == null ? false : isDiscovered(id);
+	}
+	
+	public boolean isDiscovered(int id) {
+		return discovered.size() > id && 
+				discovered.get(id) && 
+				!learned.get(id);
+	}
+	
 	public void fromNBT(NBTTagCompound tag) {
 		try {
-			learned = bitsetSer.readData(tag, null);
+			learned = bitsetSer.readData(tag.getTag("l"), null);
+			discovered = bitsetSer.readData(tag.getTag("b"), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -192,7 +222,10 @@ public class KnowledgeData extends DataPart {
 	
 	public NBTTagCompound toNBT() {
 		try {
-			return (NBTTagCompound) bitsetSer.writeData(learned);
+			NBTTagCompound ret = new NBTTagCompound();
+			ret.setTag("l", bitsetSer.writeData(learned));
+			ret.setTag("b", bitsetSer.writeData(discovered));
+			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,6 +240,12 @@ public class KnowledgeData extends DataPart {
 	private void plainSync(@Data BitSet bs) {
 		if(this != null)
 			this.learned = bs;
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void plainSyncDiscovered(@Data BitSet bs) {
+		if(this != null)
+			this.discovered = bs;
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)

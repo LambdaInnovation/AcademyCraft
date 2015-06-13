@@ -13,6 +13,15 @@ item.ac_apps.name=App Installer
 # Block
 tile.ac_imag_proj_liquid.name=Imag Projection Liquid
 
+# Generic Knowledges
+knowledge.marathon.name=Marathon
+knowledge.iron_feet.name=Iron Feet
+knowledge.intheknee.name=Arrow in the Knee
+knowledge.bouncer.name=Bouncer
+knowledge.trajectory.name=Trajectory Master
+knowledge.baseball.name=Homerun!!
+knowledge.anatomy.name=Anatomist
+
 # Data Terminal
 ac.gui.terminal.appcount=%d Applications
 
@@ -56,6 +65,15 @@ ac.gui.imagfusor.ion.desc=Proj Liquid
 ac.gui.imagfusor.flux.desc=Imag Flux
 
 # Electro Master
+## EM Knowledges
+knowledge.em_basic_volt.name=Basic Voltage Control
+knowledge.em_improved_volt.name=Improved Volt Control
+knowledge.em_high_volt.name=High Voltage Control
+knowledge.mag_ctrl.name=Magnet Field Control
+knowledge.em_projectile_master.name=Magnet Projectile Master
+knowledge.highenergy.name=High Energy Theory
+
+## EM Skills
 ac.ability.electro_master.arc_gen.name=Arc Generation
 
 ac.ability.electro_master.mag_attract.name=Magnet Attraction
@@ -81,11 +99,13 @@ ac.command.knowledge.stat=/knowledge stat: Show statistics info of player knowle
 ac.command.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
 ac.command.knowledge.getall=/knowledge getall: Learn all knowledges right now.
 ac.command.knowledge.list=/knowledge list: List all available knowledges.
-ac.command.knowledge.learn=/knowledge learn: Learn some knowledge. Parameter: Knowledge name.
-ac.command.knowledge.unlearn=/knowledge unlearn: Unlearn some knowledge. Parameter: Knowledge name.
+ac.command.knowledge.learn=/knowledge learn [knowledge_name]: Learn some knowledge. 
+ac.command.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some knowledge.
 ac.command.knowledge.stat2=Knowledge learned: %s
+ac.command.knowledge.stat3=Knowledge discovered: %s
 ac.command.knowledge.notfound=Knowledge with name %s doesn't exist.
 ac.command.knowledge.all=All knowledges:
+ac.command.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific knowledge.
 
 ac.command.aim.usage=/aim [playerName] <command>|<help> [parameters...]
 ac.command.aim.help=/aim help: Display the help message.

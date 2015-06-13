@@ -30,7 +30,7 @@ import cn.annoreg.mc.RegCommand;
 @RegCommand
 public class CommandKnowledge extends ACCommand {
 
-	String cmds[] = { "stat", "list", "learn", "getall", "unlearn", "clear" };
+	String cmds[] = { "stat", "list", "learn", "getall", "unlearn", "clear", "discover" };
 	
 	public CommandKnowledge() {
 		super("knowledge");
@@ -59,16 +59,21 @@ public class CommandKnowledge extends ACCommand {
 			case "stat":
 			{
 				StringBuilder sb = new StringBuilder();
-				BitSet bs = data.getBitmask();
+				
+				StringBuilder sb2 = new StringBuilder();
 				
 				boolean first = true;
-				for(int i = 0; i < bs.size(); ++i) {
-					if(bs.get(i)) {
+				for(int i = 0; i < KnowledgeData.getKnowledgeCount(); ++i) {
+					if(data.isLearned(i)) {
 						sb.append(first ? "" : ",").append(data.getKnowledge(i));
 						first = false;
 					}
+					if(data.isDiscovered(i)) {
+						sb2.append(first ? "" : ",").append(data.getKnowledge(i));
+					}
 				}
 				this.sendChat(ics, getLoc("stat2"), sb.toString());
+				this.sendChat(ics, getLoc("stat3"), sb2.toString());
 				break;
 			}
 			case "list":
@@ -116,6 +121,16 @@ public class CommandKnowledge extends ACCommand {
 			{
 				data.unlearnAll();
 				this.sendChat(ics, locSuccessful());
+				break;
+			}
+			case "discover":
+			{
+				if(data.hasKnowledge(pars[1])) {
+					data.discover(pars[1]);
+					this.sendChat(ics, locSuccessful());
+				} else {
+					this.sendChat(ics, getLoc("notfound"), pars[1]);
+				}
 				break;
 			}
 			default:

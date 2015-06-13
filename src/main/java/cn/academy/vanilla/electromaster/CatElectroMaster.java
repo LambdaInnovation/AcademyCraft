@@ -13,6 +13,7 @@
 package cn.academy.vanilla.electromaster;
 
 import cn.academy.ability.api.Category;
+import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.electromaster.skill.SkillArcGen;
 import cn.academy.vanilla.electromaster.skill.SkillMagAttract;
 import cn.academy.vanilla.electromaster.skill.SkillMineDetect;
@@ -42,6 +43,15 @@ public class CatElectroMaster extends Category {
 		magAttract.setParent(arcGen);
 		mineDetect.setParent(magAttract);
 		railgun.setParent(magAttract);
+		
+		KnowledgeData.addKnowledges(new String[] {
+			"em_basic_volt",
+			"em_improved_volt",
+			"em_high_volt",
+			"em_mag_ctrl",
+			"em_projectile_master",
+			"em_highenergy"
+		});
 	}
 
 }

@@ -22,6 +22,10 @@ public class AppRegistry {
 		return appList.get(id);
 	}
 	
+	public int size() {
+		return appList.size();
+	}
+	
 	public static List<App> enumeration() {
 		return ImmutableList.copyOf(INSTANCE.appList);
 	}
