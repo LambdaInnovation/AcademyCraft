@@ -37,12 +37,16 @@ public abstract class Skill implements Controllable {
 	private final String name;
 	private ResourceLocation icon;
 	
-	public Skill(String _name) {
+	private final int level;
+	
+	public Skill(String _name, int atLevel) {
 		name = _name;
+		level = atLevel;
 	}
 	
 	final void addedIntoCategory(Category _category, int id) {
 		category = _category;
+		this.id = id;
 		
 		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 		
@@ -58,6 +62,10 @@ public abstract class Skill implements Controllable {
 	
 	public int getID() {
 		return id;
+	}
+	
+	public int getLevel() {
+		return level;
 	}
 	
 	public Category getCategory() {
@@ -132,7 +140,7 @@ public abstract class Skill implements Controllable {
 	
 	//
 	
-    public static Skill testSkill = new Skill("test") {
+    public static Skill testSkill = new Skill("test", 1) {
 
 		@Override
 		protected void initSkill() {

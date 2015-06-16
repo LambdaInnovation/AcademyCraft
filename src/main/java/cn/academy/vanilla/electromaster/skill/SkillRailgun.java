@@ -21,7 +21,7 @@ import cn.academy.ability.api.Skill;
 public class SkillRailgun extends Skill {
 
 	public SkillRailgun() {
-		super("railgun");
+		super("railgun", 4);
 	}
 
 }

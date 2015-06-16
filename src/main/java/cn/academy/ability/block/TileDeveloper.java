@@ -1,0 +1,166 @@
+/**
+ * Copyright (c) Lambda Innovation, 2013-2015
+ * 本作品版权由Lambda Innovation所有。
+ * http://www.li-dev.cn/
+ *
+ * This project is open-source, and it is distributed under  
+ * the terms of GNU General Public License. You can modify
+ * and distribute freely as long as you follow the license.
+ * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
+ * http://www.gnu.org/licenses/gpl.html
+ */
+package cn.academy.ability.block;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.ability.block.BlockDeveloper.DeveloperType;
+import cn.academy.ability.learning.DevelopManager;
+import cn.academy.ability.learning.DevelopProgress;
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.block.TileReceiverBase;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.Future;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.liutils.ripple.ScriptNamespace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+/**
+ * @author WeAthFolD
+ *
+ */
+@Registrant
+public class TileDeveloper extends TileReceiverBase {
+	
+	DevelopManager devManager;
+
+	@SideOnly(Side.CLIENT)
+	public boolean isDevelopingDisplay;
+	@SideOnly(Side.CLIENT)
+	public double devProgressDisplay;
+	
+	public static final ScriptNamespace script = AcademyCraft.script.at("ac.developer");
+	
+	int syncCD;
+	
+	EntityPlayer user;
+	
+	public TileDeveloper() {
+		super("ability_developer", 2, 100000, 300);
+	}
+
+	@Override
+	public void updateEntity() {
+		if(!worldObj.isRemote) {
+			
+			if(devManager != null)
+				devManager.tick();
+			
+		} else {
+			
+			// Sync faster when developing.
+			// TODO: Better off syncing those in Container
+			if(++syncCD == (isDevelopingDisplay ? 5 : 20)) {
+				syncCD = 0;
+				doSync();
+			}
+			
+		}
+	}
+	
+	public EntityPlayer getUser() {
+		return user;
+	}
+	
+	public boolean use(EntityPlayer player) {
+		if(user == null) {
+			user = player;
+			onStartUse();
+			return true;
+		}
+		return player.equals(user);
+	}
+	
+	public void unuse() {
+		if(user != null) {
+			onEndUse();
+		}
+		user = null;
+	}
+	
+	private void onStartUse() {
+		
+	}
+	
+	private void onEndUse() {
+		if(devManager == null)
+			devManager.abortDeveloping();
+	}
+	
+	/**
+	 * Start the develop. Only effective in SERVER.
+	 */
+	public void startDevelop(DevelopProgress progress) {
+		if(user != null) {
+			if(devManager == null)
+				devManager = new DevelopManager(this);
+			devManager.startDevelop(progress);
+		}
+	}
+	
+	/**
+	 * Get the "Tick per stimulation" param.
+	 */
+	public double getTPS() {
+		return script.getDouble(propPath("tps"));
+	}
+	
+	public double getConsumePerStim() {
+		return 1000;
+	}
+	
+	private String propPath(String val) {
+		return getType().toString().toLowerCase() + "." + val;
+	}
+	
+	private DeveloperType getType() {
+		Block blockType = getBlockType();
+		DeveloperType type = blockType instanceof BlockDeveloper ? ((BlockDeveloper)blockType).type : DeveloperType.BASIC;
+		return type;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void doSync() {
+		Future future = Future.create((Object ret) -> {
+			NBTTagCompound tag = (NBTTagCompound) ret;
+			isDevelopingDisplay = tag.getBoolean("d");
+			devProgressDisplay = tag.getDouble("p");
+		});
+		sync(future);
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	private void sync(@Data Future future) {
+		NBTTagCompound ret = new NBTTagCompound();
+		
+		boolean dev;
+		double devProg;
+		
+		if(devManager == null) {
+			dev = false;
+			devProg = 0;
+		} else {
+			dev = devManager.isDeveloping();
+			devProg = devManager.getDevelopProgress();
+		}
+		
+		ret.setBoolean("d", dev);
+		ret.setDouble("p", devProg);
+		
+		future.setAndSync(ret);
+	}
+	
+}

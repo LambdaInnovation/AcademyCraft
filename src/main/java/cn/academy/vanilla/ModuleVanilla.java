@@ -47,7 +47,8 @@ public class ModuleVanilla {
 		
 		@Override
 		public void onKeyUp() {
-			mark.setDead();
+			if(mark != null)
+				mark.setDead();
 		}
 	}
 	

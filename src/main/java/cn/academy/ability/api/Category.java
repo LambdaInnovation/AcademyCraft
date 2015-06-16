@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -76,8 +77,16 @@ public class Category {
 		return skillList.indexOf(s);
 	}
 	
+	public int getSkillCount() {
+		return skillList.size();
+	}
+	
 	public Skill getSkill(int id) {
-		return skillList.get(id);
+		return id >= skillList.size() ? null : skillList.get(id);
+	}
+	
+	public boolean containsSkill(Skill skill) {
+		return skill == getSkill(skill.getID());
 	}
 	
 	public Skill getSkill(String name) {
@@ -96,6 +105,11 @@ public class Category {
 	
 	public List<Skill> getSkillsOfType(String type) {
 		return ImmutableList.copyOf(typeMap.get(type));
+	}
+	
+	public List<Skill> getSkillsOfLevel(int level) {
+		return skillList.stream().filter((Skill s) -> s.getLevel() == level)
+				.collect(Collectors.toList());
 	}
 	
 	public int getCategoryID() {

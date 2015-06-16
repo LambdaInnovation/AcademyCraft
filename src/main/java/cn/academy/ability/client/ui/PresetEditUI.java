@@ -71,7 +71,7 @@ public class PresetEditUI extends GuiScreen {
 	/**
 	 * Dummy skill used to cancel the binding.
 	 */
-	static final Skill cancelBinding = new Skill("cancel") {
+	static final Skill cancelBinding = new Skill("cancel", -1) {
 		@Override
 		public SkillInstance createSkillInstance(EntityPlayer player) {
 			return null;

@@ -20,6 +20,7 @@ import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 
 /**
+ * TODO: Placement customization
  * @author WeAthFolD
  */
 @Registrant

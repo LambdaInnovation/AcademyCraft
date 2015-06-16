@@ -21,7 +21,7 @@ import cn.academy.ability.api.Skill;
 public class SkillArcGen extends Skill {
 
 	public SkillArcGen() {
-		super("arc_gen");
+		super("arc_gen", 1);
 	}
 
 }

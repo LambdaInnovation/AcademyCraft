@@ -21,6 +21,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.event.CategoryChangedEvent;
+import cn.academy.ability.api.event.LearnedSkillEvent;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
@@ -85,6 +87,39 @@ public class AbilityData extends DataPart {
 				.collect(Collectors.toList());
 	}
 	
+	/**
+	 * Should ONLY be called in SERVER. Learn the specified skill.
+	 */
+	public void learnSkill(Skill s) {
+		if(s.getCategory() != getCategory())
+			return;
+		learnSkill(s.getID());
+	}
+	
+	/**
+	 * Should ONLY be called in SERVER. Learn the specified skill.
+	 */
+	public void learnSkill(int id) {
+		Category cat = getCategory();
+		if(id >= cat.getSkillCount()) {
+			AcademyCraft.log.warn("Skill ID overflow when learning skill " + id);
+			return;
+		}
+		if(!learnedSkills.get(id)) {
+			MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(id)));
+			learnedSkills.set(id);
+			doCompleteSync();
+		}
+	}
+	
+	/**
+	 * Learn all the skills. SERVER only.
+	 */
+	public void learnAllSkills() {
+		learnedSkills.set(0, learnedSkills.size(), true);
+		doCompleteSync();
+	}
+	
 	public boolean isSkillLearned(Skill s) {
 		return s.getCategory() == getCategory() && learnedSkills.get(s.getID());
 	}
@@ -112,12 +147,20 @@ public class AbilityData extends DataPart {
 	}
 	
 	private void doCompleteSync() {
-		receivedCompleteSync(getPlayer(), catID);
+		receivedCompleteSync(getPlayer(), catID, learnedSkills);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID) {
+	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID, @Data BitSet bitset) {
 		this.catID = catID;
+		Category cat = getCategory();
+		if(cat != null) {
+			for(int i = 0; i < cat.getSkillCount(); ++i) {
+				if(!learnedSkills.get(i) && bitset.get(i))
+					MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(i)));
+			}
+		}
+		this.learnedSkills = bitset;
 	}
 	
 	public static AbilityData get(EntityPlayer player) {

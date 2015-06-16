@@ -14,6 +14,7 @@ package cn.academy.core;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -28,6 +29,8 @@ import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegMessageHandler;
+import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.ripple.ScriptProgram;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -61,6 +64,8 @@ public class AcademyCraft {
 
     public static Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     public static Configuration config;
+    
+    public static ScriptProgram script;
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
@@ -88,6 +93,10 @@ public class AcademyCraft {
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
         
+        // Load the script
+        script = new ScriptProgram();
+        script.loadScript(new ResourceLocation("academy:scripts/generic.r"));
+        
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
 
@@ -109,5 +118,17 @@ public class AcademyCraft {
     @SubscribeEvent
     public void onWorldSave(WorldEvent.Save event) {
     	config.save();
+    }
+    
+    public static ScriptFunction getFunction(String name) {
+    	return script.root.getFunction("ac." + name);
+    }
+    
+    public static double getDouble(String name) {
+    	return script.root.getDouble("ac." + name);
+    }
+    
+    public static double getInt(String name) {
+    	return script.root.getInteger("ac." + name);
     }
 }

@@ -10,18 +10,30 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.electromaster.skill;
+package cn.academy.ability.learning;
 
+import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Skill;
+import cn.academy.core.AcademyCraft;
 
 /**
  * @author WeAthFolD
  *
  */
-public class SkillMagAttract extends Skill {
+public class SkillDevProgress extends CommonDevProgress {
+	
+	final Skill skill;
 
-	public SkillMagAttract() {
-		super("mag_attract", 2);
+	public SkillDevProgress(Skill _skill) {
+		super(getLearningCost(_skill.getLevel()), (EntityPlayer player) -> {
+			AbilityData data = AbilityData.get(player);
+		});
+		skill = _skill;
+	}
+	
+	private static int getLearningCost(int skillLevel) {
+		return AcademyCraft.getFunction("learning.learning_cost").callInteger(skillLevel);
 	}
 
 }

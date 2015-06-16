@@ -21,7 +21,7 @@ import cn.academy.ability.api.Skill;
 public class SkillMineDetect extends Skill {
 
 	public SkillMineDetect() {
-		super("mine_detect");
+		super("mine_detect", 3);
 	}
 
 }
