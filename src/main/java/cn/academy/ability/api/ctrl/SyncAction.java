@@ -1,257 +1,148 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.ArrayList;
-
 import cpw.mods.fml.relauncher.Side;
-import cn.academy.core.proxy.ProxyHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.RegSerializable;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.Target;
-import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 
-/**
- * Base class for all skill actions.
- * There MUST be a constructor receiving an EntityPlayer.
- * @author acaly
- *
- */
-@Registrant
-@RegSerializable(instance = ActionSerializer.class)
-public class SyncAction extends Tickable {
-    
-    public final EntityPlayer player;
-    public final boolean isRemote;
-    private boolean isStarted = false;
-    
-    /**
-     * Internal id, used by serializer.
-     * You SHOULD NOT modify this field.
-     */
-    public String id;
-    
-    public SyncAction(EntityPlayer player) {
-        this.player = player;
-        this.isRemote = player.worldObj.isRemote;
-    }
+public abstract class SyncAction {
 
-    protected final boolean validate(Validation v) {
-        if (!v.validate()) {
-            cancelAction();
-            return false;
-        }
-        return true;
-    }
-    
-    protected void onActionStarted() {}
-    protected void onActionCancelled() {}
-    protected void onActionFinished() {}
-    protected void onActionTicked() {}
-    
-    /**
-     * Call this function on any side(s) to cancel this action.
-     */
-    protected final void cancelAction() {
-        if (!isStarted) return;
-        isStarted = false;
-        
-        for (SyncAction sub : subActions) {
-            sub.cancelAction();
-        }
-        
-        if (isRemote)
-            sendCancelToServer(ProxyHelper.get().getThePlayer());
-        else
-            sendCancelToClient(null);
-        
-        doCancelAction();
-    }
-    
-    /**
-     * This function should be called right after it is created on the FIRST side.
-     * Note that creating one action on both sides results in two actions on both.
-     */
-    public final void startSync() {
-        if (isStarted) return;
-        isStarted = true;
-        
-        //First get an id
-        ProxyHelper.get().registerAction(this);
-        
-        if (isRemote)
-            sendSyncStartToServer(ProxyHelper.get().getThePlayer());
-        else
-            sendSyncStartToClient(null);
-        
-        doStartAction();
-    }
-    
-    /**
-     * Call on ONE side. Finish the action.
-     */
-    protected final void normalEnd() {
-        if (!isStarted) return;
-        isStarted = false;
-        
-        for (SyncAction sub : subActions) {
-            sub.normalEnd();
-        }
-        
-        if (isRemote)
-            sendEndToServer(ProxyHelper.get().getThePlayer());
-        else
-            sendEndToClient(null);
-        
-        doNormalEnd();
-    }
-    
-    /**
-     * Call on ALL side. Finish the action.
-     */
-    protected final void normalEndNonSync() {
-        if (!isStarted) return;
-        isStarted = false;
-        
-        for (SyncAction sub : subActions) {
-            sub.normalEndNonSync();
-        }
-        
-        doNormalEnd();
-    }
-    
-    /**
-     * Actually this is all actions that should finish as soon as this action finishes.
-     * Note that a sub action may only present in this array on one side (server or client),
-     * and that is enough for it to work.
-     */
-    private ArrayList<SyncAction> subActions = new ArrayList();
-    
-    /**
-     * Add a sub action, and start it immediately (by calling startSync).
-     * When this finishes, the subs are automatically terminated.
-     * This function will handle the start of the sub. <BR/>
-     * <B>IMPORTANT</B>: this call must be manually synchronized on all sides.
-     * @param sub
-     */
-    protected final void addSubAction(String id, SyncAction sub) {
-        subActions.add(sub);
-        sub.startNonsync(this.id + ":" + id);
-    }
-    
-    protected final void addSubActionAndWait(String id, SyncAction sub) {
-        sub.subActions.add(this);
-        sub.startNonsync(this.id + ":" + id);
-    }
-    
-    /*
-     * Internal implementations
-     */
-    
-    private void startNonsync(String id) {
-        if (isStarted) return;
-        isStarted = true;
-        
-        ProxyHelper.get().registerAction(id, this);
-        
-        doStartAction();
-    }
-    
-    private void doStartAction() {
-        startTickEvent();
-        onActionStarted();
-    }
-
-    /**
-     * If the first side is client, this function is called
-     * twice on that side, with the second time by remote call
-     * from server.
-     */
-    private void doNormalEnd() {
-        isStarted = false;
-        
-        onActionFinished();
-        doFinalizeAction();
-    }
-    
-    /**
-     * Called on both sides. Remove the action from sync list.
-     */
-    private void doFinalizeAction() {
-        ProxyHelper.get().removeAction(this);
-        stopTickEvent();
-    }
-    
-    /**
-     * Called on both sides. Call callback and finalize.
-     */
-    private void doCancelAction() {
-        isStarted = false;
-        
-        onActionCancelled();
-        doFinalizeAction();
-    }
-    
-    /**
-     * If the first side is client, this function is called
-     * twice on that side, with the second time by remote call
-     * from server.
-     */
-    private void remoteStartAction() {
-        if (isStarted) return;
-        isStarted = true;
-        
-        doStartAction();
-    }
-    
-    @Override
-    protected final void onTick() {
-        onActionTicked();
-    }
-    
-    
-    /*
-     * Network part.
-     */
-    
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendCancelToServer(@Instance EntityPlayer source) {
-        doCancelAction();
-        sendCancelToClient(source);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendCancelToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
-        doCancelAction();
-    }
-
-    //Still use INSTANCE option.
-    //DATA option should be used with great care, for the DataSerializer for the class
-    //may not exist.
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendSyncStartToServer(@Instance EntityPlayer source) {
-        //Creation has been done in ActionSerializer.
-        //No need to check newly-created-flag in starting.
-        remoteStartAction();
-        sendSyncStartToClient(source);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendSyncStartToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
-        //Creation has been done in ActionSerializer.
-        //No need to check newly-created-flag in starting.
-        remoteStartAction();
-    }
-    
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendEndToServer(@Instance EntityPlayer source) {
-        doNormalEnd();
-        sendEndToClient(source);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void sendEndToClient(@Target(range = Target.RangeOption.EXCEPT) EntityPlayer ex) {
-        doNormalEnd();
-    }
+	int id;
+	State state;
+	int intv = -1;
+	
+	@SideOnly(Side.SERVER)
+	int lastInformed = 0;
+	
+	protected SyncAction(int interval) {
+		intv = interval;
+		state = State.CREATED;
+	}
+	
+	static enum State {
+		CREATED,
+		IDENTIFIED,
+		STARTED,
+		ENDED,
+		ABORTED
+	}
+	
+	/* start from client
+	 * send to server(start)
+	 * server reply, server.onStart or nothing
+	 * corresponding: client.onStart or nothing
+	 */
+	/* start from server
+	 * send to client(start), server.onStart
+	 * client.onStart
+	 */
+	/**
+	 * Called when this start at both sides
+	 */
+	public abstract void onStart();
+	
+	/* (server) tick and send(every ${interval})
+	 * server inform
+	 */
+	/**
+	 * Called every tick at both sides
+	 */
+	public abstract void onTick();
+	
+	
+	/* end from client
+	 * send to server
+	 * server reply, server inform(final) and (server.onAbort or server.onEnd) 
+	 * client.onUpdate and (corresponding: client.onAbort or client.onEnd) 
+	 */
+	/* end from server
+	 * send to client, server inform(final) and server.onEnd
+	 * client.onUpdate and client.onEnd
+	 */
+	/**
+	 * Called when ended at both sides
+	 */
+	public abstract void onEnd();
+	
+	/* abort from client
+	 * send to server
+	 * server inform(final) and server.onAbort
+	 * client.onUpdate and client.onAbort
+	 */
+	/* abort from server
+	 * server inform(final) and server.onAbort
+	 * client.onUpdate and client.onAbort
+	 */
+	/**
+	 * Called when aborted at both sides
+	 */
+	public abstract void onAbort();
+	
+	public void readNBTStart(NBTTagCompound tag) {
+	}
+	public void readNBTUpdate(NBTTagCompound tag) {
+	}
+	public void readNBTFinal(NBTTagCompound tag) {
+	}
+	public void writeNBTStart(NBTTagCompound tag) {
+	}
+	public void writeNBTUpdate(NBTTagCompound tag) {
+	}
+	public void writeNBTFinal(NBTTagCompound tag) {
+	}
+	
+	private static final String NBT_ID = "0";
+	private static final String NBT_STATE = "1";
+	private static final String NBT_INTERVAL = "2";
+	private static final String NBT_OBJECT = "3";
+	
+	void setNBTStart(NBTTagCompound tag) {
+		id = tag.getInteger(NBT_ID);
+		intv = tag.getInteger(NBT_INTERVAL);
+		if (tag.hasKey(NBT_OBJECT))
+			readNBTStart(tag.getCompoundTag(NBT_OBJECT));
+	}
+	void setNBTUpdate(NBTTagCompound tag) {
+		if (tag.hasKey(NBT_OBJECT))
+			readNBTUpdate(tag.getCompoundTag(NBT_OBJECT));
+	}
+	void setNBTFinal(NBTTagCompound tag) {
+		state = State.valueOf(tag.getString(NBT_STATE));
+		if (tag.hasKey(NBT_OBJECT))
+			readNBTFinal(tag.getCompoundTag(NBT_OBJECT));
+	}
+	NBTTagCompound getNBTStart() {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger(NBT_ID, id);
+		tag.setInteger(NBT_INTERVAL, intv);
+		NBTTagCompound obj = new NBTTagCompound();
+		writeNBTStart(obj);
+		tag.setTag(NBT_OBJECT, obj);
+		return tag;
+	}
+	NBTTagCompound getNBTUpdate() {
+		NBTTagCompound tag = new NBTTagCompound();
+		NBTTagCompound obj = new NBTTagCompound();
+		writeNBTUpdate(obj);
+		tag.setTag(NBT_OBJECT, obj);
+		return tag;
+	}
+	NBTTagCompound getNBTFinal() {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setString(NBT_STATE, state.toString());
+		NBTTagCompound obj = new NBTTagCompound();
+		writeNBTFinal(obj);
+		tag.setTag(NBT_OBJECT, obj);
+		return tag;
+	}
+	
+	static final NBTTagCompound TAG_ENDED;
+	static final NBTTagCompound TAG_ABORTED;
+	
+	static {
+		TAG_ENDED = new NBTTagCompound();
+		TAG_ENDED.setString(NBT_STATE, State.ENDED.toString());
+		TAG_ABORTED = new NBTTagCompound();
+		TAG_ABORTED.setString(NBT_STATE, State.ABORTED.toString());
+	}
+	
 }
