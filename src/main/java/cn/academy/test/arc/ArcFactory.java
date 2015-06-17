@@ -104,6 +104,16 @@ public class ArcFactory {
 		}
 	}
 	
+	/**
+	 * Generate count arcs with random picked length in [lengthFrom, lengthTo).
+	 */
+	public Arc[] generateList(int count, double lengthFrom, double lengthTo) {
+		Arc[] arr = new Arc[count];
+		for(int i = 0; i < count; ++i)
+			arr[i] = generate(RandUtils.ranged(lengthFrom, lengthTo));
+		return arr;
+	}
+	
 	public Arc generate(double length) {
 		listAll.clear();
 		bufferAll.clear();

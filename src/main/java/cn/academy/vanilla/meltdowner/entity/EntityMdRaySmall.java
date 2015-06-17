@@ -20,6 +20,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.core.registry.RegACKeyHandler;
+import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.generic.MathUtils;
@@ -93,7 +94,11 @@ public class EntityMdRaySmall extends EntityRayBase {
 //			
 //			player.worldObj.spawnEntityInWorld(ray);
 			
-			player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player));
+			//player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player));
+			
+			EntitySurroundArc esa = new EntitySurroundArc(player);
+			System.out.println("ESA");
+			player.worldObj.spawnEntityInWorld(esa);
 		}
 		
 	}
