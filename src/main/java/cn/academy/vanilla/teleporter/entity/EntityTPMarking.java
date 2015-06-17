@@ -63,17 +63,16 @@ public abstract class EntityTPMarking extends EntityAdvanced {
 		rotationYaw = player.rotationYaw;
 		this.updatePos();
 		
-		particleFac.world = worldObj;
-		particleFac.pos = VecUtils.vec(
+		particleFac.setPosition(
 			posX + RandUtils.ranged(-1, 1), 
 			posY + RandUtils.ranged(0, 1), 
 			posZ + RandUtils.ranged(-1, 1));
-		particleFac.vel = VecUtils.vec(
+		particleFac.setVelocity(
 			RandUtils.ranged(-.05, .05),
 			RandUtils.ranged(0, 0.05),
 			RandUtils.ranged(-.05, .05));
 		
-		worldObj.spawnEntityInWorld(particleFac.next());
+		worldObj.spawnEntityInWorld(particleFac.next(worldObj));
 	}
 	
 	public static void sync(@Target EntityPlayer player) {

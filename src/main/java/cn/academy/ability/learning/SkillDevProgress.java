@@ -33,7 +33,7 @@ public class SkillDevProgress extends CommonDevProgress {
 	}
 	
 	private static int getLearningCost(int skillLevel) {
-		return AcademyCraft.getFunction("learning.learning_cost").callInteger(skillLevel);
+		return AcademyCraft.getFunction("ability.learning.learning_cost").callInteger(skillLevel);
 	}
 
 }

@@ -5,8 +5,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
-import cn.academy.ability.api.preset.PresetData;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;

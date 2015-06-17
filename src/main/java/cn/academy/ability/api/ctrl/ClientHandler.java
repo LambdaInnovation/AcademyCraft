@@ -2,7 +2,7 @@ package cn.academy.ability.api.ctrl;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.preset.PresetData;
+import cn.academy.ability.api.PresetData;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;

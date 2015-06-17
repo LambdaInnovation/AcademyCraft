@@ -15,7 +15,6 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +40,8 @@ public class AbilityData extends DataPart {
 	
 	private int catID = -1;
 	private BitSet learnedSkills;
+	
+	private int level;
 
 	public AbilityData() {
 		learnedSkills = new BitSet(32);
@@ -68,6 +69,10 @@ public class AbilityData extends DataPart {
 		return catID >= 0;
 	}
 	
+	public int getLevel() {
+		return level;
+	}
+	
 	public Category getCategory() {
 		if(catID == -1)
 			return null;
@@ -81,10 +86,12 @@ public class AbilityData extends DataPart {
 		Category c = getCategory();
 		if(c == null)
 			return new ArrayList();
-		return c.getSkillList()
-				.stream()
-				.filter((Skill s) -> learnedSkills.get(s.getID()))
-				.collect(Collectors.toList());
+		
+		List<Skill> ret = new ArrayList();
+		for(Skill s : c.getSkillList())
+			if(isSkillLearned(s))
+				ret.add(s);
+		return ret;
 	}
 	
 	/**

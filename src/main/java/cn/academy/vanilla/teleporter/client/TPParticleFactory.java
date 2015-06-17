@@ -12,16 +12,17 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
+import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
 import cn.liutils.render.particle.Particle;
-import cn.liutils.render.particle.SimpleParticleFactory;
+import cn.liutils.render.particle.ParticleFactory;
 import cn.liutils.util.generic.RandUtils;
 
 /**
  * @author WeAthFolD
  *
  */
-public class TPParticleFactory extends SimpleParticleFactory {
+public class TPParticleFactory extends ParticleFactory {
 	
 	static Particle template = new Particle();
 	static {
@@ -37,8 +38,9 @@ public class TPParticleFactory extends SimpleParticleFactory {
 		super(template);
 	}
 	
-	public Particle next() {
-		Particle ret = super.next();
+	@Override
+	public Particle next(World world) {
+		Particle ret = super.next(world);
 		ret.size = RandUtils.rangef(0.1f, 0.2f);
 		ret.color.a = RandUtils.ranged(0.9f, 1f);
 		ret.fadeAfter(20, 20);

@@ -5,15 +5,13 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-
-import org.apache.commons.lang3.RandomUtils;
-
+import net.minecraft.world.World;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.render.particle.Particle;
-import cn.liutils.render.particle.SimpleParticleFactory;
+import cn.liutils.render.particle.ParticleFactory;
 import cn.liutils.util.generic.RandUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -24,7 +22,7 @@ import cpw.mods.fml.relauncher.Side;
 @RegEventHandler(Bus.FML)
 public class ParticleTest {
 	
-	SimpleParticleFactory factory;
+	ParticleFactory factory;
 	Random rand = new Random();
 	
 	public ParticleTest() {
@@ -32,10 +30,10 @@ public class ParticleTest {
 		template.texture = new ResourceLocation("academy:textures/effects/is_test.png");
 		template.size = 0.6f;
 		
-		factory = new SimpleParticleFactory(template) {
+		factory = new ParticleFactory(template) {
 			@Override
-			public Particle next() {
-				Particle ret = super.next();
+			public Particle next(World world) {
+				Particle ret = super.next(world);
 				ret.addMotionHandler(new Rigidbody());
 				final long time = RandUtils.rangei(3000, 4000);
 				ret.addMotionHandler(new MotionHandler<Particle>() {
@@ -66,16 +64,15 @@ public class ParticleTest {
 	public void playerTick(PlayerTickEvent event) {
 		if(event.phase == Phase.END && event.side == Side.CLIENT) {
 			EntityPlayer player = event.player;
-			factory.world = player.worldObj;
 			
 			int n = RandUtils.rangei(4, 8);
 			for(int i = 0; i < n; ++i) {
 				double theta = rand.nextDouble() * Math.PI * 2;
 				double r = 1.5 + RandUtils.ranged(-0.1, 0.1);
 				double dx = r * Math.sin(theta), dy = RandUtils.ranged(-2, -1.5), dz = r * Math.cos(theta);
-				factory.pos = Vec3.createVectorHelper(player.posX + dx, player.posY + dy, player.posZ + dz);
-				factory.vel = Vec3.createVectorHelper(RandUtils.ranged(-0.02, 0.02), RandUtils.ranged(0.02, 0.03), RandUtils.ranged(-0.02, 0.02));
-				player.worldObj.spawnEntityInWorld(factory.next());
+				factory.setPosition(player.posX + dx, player.posY + dy, player.posZ + dz);
+				factory.setVelocity(RandUtils.ranged(-0.02, 0.02), RandUtils.ranged(0.02, 0.03), RandUtils.ranged(-0.02, 0.02));
+				player.worldObj.spawnEntityInWorld(factory.next(player.worldObj));
 			}
 		}
 	}

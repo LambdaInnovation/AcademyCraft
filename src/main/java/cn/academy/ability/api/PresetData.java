@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api.preset;
+package cn.academy.ability.api;
 
 import java.util.List;
 
@@ -19,9 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;

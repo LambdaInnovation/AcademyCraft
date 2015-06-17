@@ -93,9 +93,13 @@ public class AcademyCraft {
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
         
-        // Load the script
+        // Load the scripts
         script = new ScriptProgram();
-        script.loadScript(new ResourceLocation("academy:scripts/generic.r"));
+        String[] scripts = {
+        	"generic", "ability", "electro_master"
+        };
+        for(String s : scripts)
+        	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }

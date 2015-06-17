@@ -15,11 +15,13 @@ package cn.academy.energy.block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
+import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
@@ -84,7 +86,6 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 
 	//WEN TODO
 	public int getPlateCount() {
-		if(true) return 2;
 		int count = 0;
 		for(int i = 0; i < 3; ++i) {
 			if(this.getStackInSlot(i) != null)
@@ -94,22 +95,19 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	}
 	
 	private static int getCapacity(int N, int L) {
-		return (int) Math.round(Math.sqrt(N) * L * 6);
+		return (int) getProp("capacity", N, L);
 	}
 	
 	private static double getLatency(int N, int L) {
-		if(true) return 30;
-		return N * L * L * 20;
+		return getProp("latency", N, L);
 	}
 	
 	private static double getRange(int N, int L) {
-		if(true) return 15;
-		return N * Math.sqrt(L) * 8;
+		return getProp("range", N, L);
 	}
 	
 	public int getCoreLevel() {
 		ItemStack stack = getStackInSlot(3);
-		if(true) return 2;
 		return stack == null ? 0 : stack.getItemDamage() + 1;
 	}
 	
@@ -129,6 +127,14 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	public double getRange() {
 		int N = getPlateCount(), L = getCoreLevel();
 		return getRange(N, L);
+	}
+	
+	private static double getProp(String propName, int N, int L) {
+		return getFunc(propName).callDouble(N, L);
+	}
+	
+	private static ScriptFunction getFunc(String name) {
+		return AcademyCraft.getFunction("matrix." + name);
 	}
 	
 	//AABB

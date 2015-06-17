@@ -24,12 +24,12 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Controllable;
+import cn.academy.ability.api.PresetData.Preset;
+import cn.academy.ability.api.PresetData.PresetEditor;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.preset.PresetData;
-import cn.academy.ability.api.preset.PresetData.Preset;
-import cn.academy.ability.api.preset.PresetData.PresetEditor;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
@@ -463,7 +463,7 @@ public class PresetEditUI extends GuiScreen {
     		final Category c = AbilityData.get(player).getCategory();
     		available.add(cancelBinding);
     		for(Skill s : c.getSkillList()) {
-    			int cid = c.getControlID(s);
+    			int cid = s.getControlID();
     			if(!editor.hasMapping(cid)) {
     				available.add(s);
     			}
@@ -509,7 +509,7 @@ public class PresetEditUI extends GuiScreen {
 
 					@Override
 					public void handleEvent(Widget w, MouseDownEvent event) {
-						onEdit(keyid, c.getControlID(skill));
+						onEdit(keyid, skill.getControlID());
 						Selector.this.dispose();
 					}
     				

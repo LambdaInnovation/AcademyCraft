@@ -16,11 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.core.client.Resources;
 
 import com.google.common.collect.ImmutableList;
@@ -70,7 +68,7 @@ public class Category {
 		mapList.add(skill);
 		addControllable(skill);
 		
-		skill.addedIntoCategory(this, skillList.size() - 1);
+		skill.addedSkill(this, skillList.size() - 1);
 	}
 	
 	public int getSkillID(Skill s) {
@@ -108,8 +106,11 @@ public class Category {
 	}
 	
 	public List<Skill> getSkillsOfLevel(int level) {
-		return skillList.stream().filter((Skill s) -> s.getLevel() == level)
-				.collect(Collectors.toList());
+		List<Skill> ret = new ArrayList();
+		for(Skill s : skillList)
+			if(s.getLevel() == level)
+				ret.add(s);
+		return ret;
 	}
 	
 	public int getCategoryID() {
@@ -118,17 +119,11 @@ public class Category {
 	
 	public void addControllable(Controllable c) {
 		ctrlList.add(c);
+		c.addedControllable(this, ctrlList.size() - 1);
 	}
 	
 	/**
-	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
-	 */
-	public int getControlID(Skill skill) {
-		return ctrlList.indexOf(skill);
-	}
-	
-	/**
-	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
+	 * Get the controllable with given id.
 	 */
 	public Controllable getControllable(int id) {
 		if(id < 0)
@@ -139,7 +134,7 @@ public class Category {
 	}
 	
 	/**
-	 * Internal call used majorly by Preset system. DO NOT CALL THIS!
+	 * Get the immutable controllable list of this category.
 	 */
 	public List<Controllable> getControllableList() {
 		return ImmutableList.copyOf(ctrlList);

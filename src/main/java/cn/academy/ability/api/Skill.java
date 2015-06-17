@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
@@ -22,7 +21,7 @@ import com.google.common.collect.ImmutableList;
  * method so that the skill control will take effect.
  * @author WeAthFolD
  */
-public abstract class Skill implements Controllable {
+public abstract class Skill extends Controllable {
 	
 	private Category category;
 	
@@ -44,7 +43,7 @@ public abstract class Skill implements Controllable {
 		level = atLevel;
 	}
 	
-	final void addedIntoCategory(Category _category, int id) {
+	final void addedSkill(Category _category, int id) {
 		category = _category;
 		this.id = id;
 		
@@ -66,10 +65,6 @@ public abstract class Skill implements Controllable {
 	
 	public int getLevel() {
 		return level;
-	}
-	
-	public Category getCategory() {
-		return category;
 	}
 	
 	/**

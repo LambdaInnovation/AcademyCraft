@@ -29,8 +29,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
-import cn.academy.ability.api.preset.PresetData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
