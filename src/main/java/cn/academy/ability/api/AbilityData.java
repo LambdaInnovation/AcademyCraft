@@ -15,12 +15,13 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.event.CategoryChangedEvent;
+import cn.academy.ability.api.event.LearnedSkillEvent;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
@@ -39,6 +40,8 @@ public class AbilityData extends DataPart {
 	
 	private int catID = -1;
 	private BitSet learnedSkills;
+	
+	private int level;
 
 	public AbilityData() {
 		learnedSkills = new BitSet(32);
@@ -66,6 +69,10 @@ public class AbilityData extends DataPart {
 		return catID >= 0;
 	}
 	
+	public int getLevel() {
+		return level;
+	}
+	
 	public Category getCategory() {
 		if(catID == -1)
 			return null;
@@ -79,10 +86,45 @@ public class AbilityData extends DataPart {
 		Category c = getCategory();
 		if(c == null)
 			return new ArrayList();
-		return c.getSkillList()
-				.stream()
-				.filter((Skill s) -> learnedSkills.get(s.getID()))
-				.collect(Collectors.toList());
+		
+		List<Skill> ret = new ArrayList();
+		for(Skill s : c.getSkillList())
+			if(isSkillLearned(s))
+				ret.add(s);
+		return ret;
+	}
+	
+	/**
+	 * Should ONLY be called in SERVER. Learn the specified skill.
+	 */
+	public void learnSkill(Skill s) {
+		if(s.getCategory() != getCategory())
+			return;
+		learnSkill(s.getID());
+	}
+	
+	/**
+	 * Should ONLY be called in SERVER. Learn the specified skill.
+	 */
+	public void learnSkill(int id) {
+		Category cat = getCategory();
+		if(id >= cat.getSkillCount()) {
+			AcademyCraft.log.warn("Skill ID overflow when learning skill " + id);
+			return;
+		}
+		if(!learnedSkills.get(id)) {
+			MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(id)));
+			learnedSkills.set(id);
+			doCompleteSync();
+		}
+	}
+	
+	/**
+	 * Learn all the skills. SERVER only.
+	 */
+	public void learnAllSkills() {
+		learnedSkills.set(0, learnedSkills.size(), true);
+		doCompleteSync();
 	}
 	
 	public boolean isSkillLearned(Skill s) {
@@ -112,12 +154,20 @@ public class AbilityData extends DataPart {
 	}
 	
 	private void doCompleteSync() {
-		receivedCompleteSync(getPlayer(), catID);
+		receivedCompleteSync(getPlayer(), catID, learnedSkills);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID) {
+	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID, @Data BitSet bitset) {
 		this.catID = catID;
+		Category cat = getCategory();
+		if(cat != null) {
+			for(int i = 0; i < cat.getSkillCount(); ++i) {
+				if(!learnedSkills.get(i) && bitset.get(i))
+					MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(i)));
+			}
+		}
+		this.learnedSkills = bitset;
 	}
 	
 	public static AbilityData get(EntityPlayer player) {

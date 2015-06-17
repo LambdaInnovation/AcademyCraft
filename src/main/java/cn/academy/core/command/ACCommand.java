@@ -21,9 +21,10 @@ import cn.liutils.template.command.LICommandBase;
 public abstract class ACCommand extends LICommandBase {
 	
 	final String commandName;
+	protected String localName;
 
 	public ACCommand(String name) {
-		commandName = name;
+		localName = commandName = name;
 	}
 	
 	public String locInvalid() {
@@ -38,6 +39,10 @@ public abstract class ACCommand extends LICommandBase {
 		return "ac.command.notlearned";
 	}
 	
+	public String locNoPlayer() {
+		return "ac.command.noplayer";
+	}
+	
 	@Override
 	public String getCommandName() {
 		return commandName;
@@ -49,6 +54,6 @@ public abstract class ACCommand extends LICommandBase {
 	}
 	
 	protected String getLoc(String s) {
-		return "ac.command." + commandName + "." + s;
+		return "ac.command." + localName + "." + s;
 	}
 }

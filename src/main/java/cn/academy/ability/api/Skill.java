@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.ability.api.ctrl.Controllable;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
@@ -22,7 +21,7 @@ import com.google.common.collect.ImmutableList;
  * method so that the skill control will take effect.
  * @author WeAthFolD
  */
-public abstract class Skill implements Controllable {
+public abstract class Skill extends Controllable {
 	
 	private Category category;
 	
@@ -37,12 +36,16 @@ public abstract class Skill implements Controllable {
 	private final String name;
 	private ResourceLocation icon;
 	
-	public Skill(String _name) {
+	private final int level;
+	
+	public Skill(String _name, int atLevel) {
 		name = _name;
+		level = atLevel;
 	}
 	
-	final void addedIntoCategory(Category _category, int id) {
+	final void addedSkill(Category _category, int id) {
 		category = _category;
+		this.id = id;
 		
 		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 		
@@ -60,8 +63,8 @@ public abstract class Skill implements Controllable {
 		return id;
 	}
 	
-	public Category getCategory() {
-		return category;
+	public int getLevel() {
+		return level;
 	}
 	
 	/**
@@ -129,8 +132,6 @@ public abstract class Skill implements Controllable {
 	public List<LearningCondition> getLearningConditions() {
 		return ImmutableList.copyOf(learningConditions);
 	}
-	
-    
     
     //TODO change to abstract after test
     public abstract SkillInstance createSkillInstance(EntityPlayer player);

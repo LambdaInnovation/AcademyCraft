@@ -96,4 +96,11 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 		energy = e;
 	}
 
+	@Override
+	public double pullEnergy(double amt) {
+		double a = Math.min(amt, energy);
+		energy -= a;
+		return a;
+	}
+
 }

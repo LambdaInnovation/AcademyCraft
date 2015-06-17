@@ -10,18 +10,22 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.electromaster.skill;
+package cn.academy.ability.api.event;
 
+import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
 
 /**
+ * Fired in BOTH CLIENT AND SERVER, when an Skill is newly learned by the player.
  * @author WeAthFolD
- *
  */
-public class SkillMagAttract extends Skill {
+public class LearnedSkillEvent extends AbilityEvent {
+	
+	public final Skill skill;
 
-	public SkillMagAttract() {
-		super("mag_attract", 2);
+	public LearnedSkillEvent(EntityPlayer player, Skill _skill) {
+		super(player);
+		skill = _skill;
 	}
 
 }

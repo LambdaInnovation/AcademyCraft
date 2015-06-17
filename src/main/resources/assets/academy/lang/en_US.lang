@@ -118,35 +118,42 @@ ac.ability.electro_master.railgun.name=Railgun
 
 
 # Knowledge
-ac.ac.knowledge.bubble.name=Bubble Master
+ac.knowledge.bubble.name=Bubble Master
 
 # Command
 ac.command.invalid=Invalid input, please try again.
 ac.command.successful=Command sucessfully performed.
 ac.command.notlearned=The player has not learned any ability yet.
 
-ac.command.ac.knowledge.usage=/knowledge <command>|<help> [parameters...]
-ac.command.ac.knowledge.help=/knowledge help: Display the help message.
-ac.command.ac.knowledge.stat=/knowledge stat: Show statistics info of player ac.knowledge.
-ac.command.ac.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
-ac.command.ac.knowledge.getall=/knowledge getall: Learn all knowledges right now.
-ac.command.ac.knowledge.list=/knowledge list: List all available knowledges.
-ac.command.ac.knowledge.learn=/knowledge learn [knowledge_name]: Learn some ac.knowledge. 
-ac.command.ac.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some ac.knowledge.
-ac.command.ac.knowledge.stat2=Knowledge learned: %s
-ac.command.ac.knowledge.stat3=Knowledge discovered: %s
-ac.command.ac.knowledge.notfound=Knowledge with name %s doesn't exist.
-ac.command.ac.knowledge.all=All knowledges:
-ac.command.ac.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific ac.knowledge.
+ac.command.knowledge.usage=/knowledge <command>|<help> [parameters...]
+ac.command.knowledge.help=/knowledge help: Display the help message.
+ac.command.knowledge.stat=/knowledge stat: Show statistics info of player ac.knowledge.
+ac.command.knowledge.clear=/knowledge clear: Clear all knowledge info and start over again.
+ac.command.knowledge.getall=/knowledge getall: Learn all knowledges right now.
+ac.command.knowledge.list=/knowledge list: List all available knowledges.
+ac.command.knowledge.learn=/knowledge learn [knowledge_name]: Learn some ac.knowledge. 
+ac.command.knowledge.unlearn=/knowledge unlearn [knowledge_name]: Unlearn some ac.knowledge.
+ac.command.knowledge.stat2=Knowledge learned: %s
+ac.command.knowledge.stat3=Knowledge discovered: %s
+ac.command.knowledge.notfound=Knowledge with name %s doesn't exist.
+ac.command.knowledge.all=All knowledges:
+ac.command.knowledge.discover=/knowledge discover [knowledge_name]: Discover a specific ac.knowledge.
 
 ac.command.aim.usage=/aim [playerName] <command>|<help> [parameters...]
 ac.command.aim.help=/aim help: Display the help message.
 ac.command.aim.cat=/aim [user] cat [catName]: change the specified player's categories or display the current category.
 ac.command.aim.catlist=/aim catlist: List all available categories' names.
+ac.command.aim.learn=/aim learn <id>|<skillName>: Learn the specified skill. Regardless of its learning condition requirements.
+ac.command.aim.learn_all=/aim learn_all: Learn all the skills.
+ac.command.aim.reset=/aim reset: Clear your ability information.
+ac.command.aim.learned=/aim learned: Display all currently learned skills.
+ac.command.aim.skills=/aim skills: Display all skills in player's current category.
 ac.command.aim.nocat=Specified category not found.
 ac.command.aim.cats=Currently available categories: 
 ac.command.aim.curcat=Player current category: %s
 ac.command.aim.nonecat=No ability
+ac.command.aim.noskill=No such skill was found.
+ac.command.aim.learned.format=Learned skills: %s
 
 ac.command.preset.usage=/preset <command>|<help> [parameters...]
 ac.command.preset.help=/preset help: Display the help message.

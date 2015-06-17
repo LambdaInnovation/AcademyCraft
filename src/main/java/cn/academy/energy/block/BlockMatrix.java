@@ -14,6 +14,7 @@ package cn.academy.energy.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
@@ -34,7 +35,6 @@ public class BlockMatrix extends BlockMulti {
 	
 	public BlockMatrix() {
 		super(Material.rock);
-		
 		setCreativeTab(AcademyCraft.cct);
 		setBlockName("ac_matrix");
 		setBlockTextureName("academy:matrix");
