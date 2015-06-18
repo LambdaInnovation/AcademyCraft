@@ -12,6 +12,9 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
+/**
+ * @author EAirPeter
+ */
 class AMServer implements IActionManager {
 
 	AMServer() {

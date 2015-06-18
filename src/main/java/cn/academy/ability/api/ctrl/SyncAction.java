@@ -4,6 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * @author EAirPeter
+ */
 public abstract class SyncAction {
 
 	int id;

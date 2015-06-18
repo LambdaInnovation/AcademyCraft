@@ -1,5 +1,8 @@
 package cn.academy.ability.api.ctrl;
 
+/**
+ * @author EAirPeter
+ */
 interface IActionManager {
 	void startAction(SyncAction action);
 	void endAction(SyncAction action);

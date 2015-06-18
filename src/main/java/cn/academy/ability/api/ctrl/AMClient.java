@@ -14,6 +14,14 @@ import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
+
+/* TODO: client operation?
+ * send to server
+ * server send to all
+ */
+/**
+ * @author EAirPeter
+ */
 class AMClient implements IActionManager {
 
 	AMClient() {
@@ -28,6 +36,7 @@ class AMClient implements IActionManager {
 			@Override
 			public void onReady(Object val) {
 				action.id = (int) val;
+				//just ignore?
 				if (action.id >= 0) {
 					action.state = State.IDENTIFIED;
 					map.put(action.id, action);

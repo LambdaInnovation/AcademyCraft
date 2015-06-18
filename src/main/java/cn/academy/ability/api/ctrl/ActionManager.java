@@ -11,6 +11,9 @@ import cn.annoreg.mc.s11n.StorageOption.Data;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
+/**
+ * @author EAirPeter
+ */
 @Registrant
 public class ActionManager {
 
