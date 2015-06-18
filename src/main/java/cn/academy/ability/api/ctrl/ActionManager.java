@@ -16,10 +16,8 @@ import cpw.mods.fml.relauncher.Side;
  */
 @Registrant
 public class ActionManager {
-
-	@RegEventHandler(Bus.FML)
+	
 	private static final AMServer AMS = new AMServer();
-	@RegEventHandler(Bus.FML)
 	private static final AMClient AMC = new AMClient();
 	
 	public static void startAction(SyncAction action) {

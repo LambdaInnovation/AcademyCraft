@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.ctrl.SyncAction.State;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -15,9 +17,10 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 /**
  * @author EAirPeter
  */
-class AMServer implements IActionManager {
+public class AMServer implements IActionManager {
 
 	AMServer() {
+		FMLCommonHandler.instance().bus().register(this);
 	}
 	
 	Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();

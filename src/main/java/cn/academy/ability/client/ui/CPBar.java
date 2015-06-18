@@ -29,6 +29,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.annoreg.core.Registrant;
@@ -72,8 +73,6 @@ public class CPBar extends Widget {
 	}
 	
 	long presetChangeTime, lastPresetTime;
-	
-	EntityPlayer player;
 
 	public CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
@@ -102,25 +101,25 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				if(!AbilityData.get(Minecraft.getMinecraft().thePlayer).isLearned())
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				if(!AbilityData.get(player).isLearned())
 					return;
+				CPData cpData = CPData.get(player);
 				
 				long time = Minecraft.getSystemTime();
 				
-				double test = (Math.sin(time / 2000.0) + 1) * 0.5;
-				
-				double override = test * 1.2;
-				if(override < 1.0) {
-					drawNormal(override);
+				float overload = cpData.getOverload() / cpData.getMaxOverload();
+				if(overload < 1.0) {
+					drawNormal(overload);
 				} else {
 					if(supportARB) {
-						drawOverload(override);
+						drawOverload(overload);
 					} else {
-						drawOverloadLegacy(override);
+						drawOverloadLegacy(overload);
 					}
 				}
 				
-				drawCPBar(1);
+				drawCPBar(cpData.getCP() / cpData.getMaxCP());
 				
 				final long preset_wait = 2000L;
 				if(time - presetChangeTime < preset_wait)
@@ -133,7 +132,7 @@ public class CPBar extends Widget {
 	/**
 	 * Draw the overload without ARB blending, when the machine does not support it.
 	 */
-	private void drawOverloadLegacy(double override) {
+	private void drawOverloadLegacy(float overload) {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		
 		//Draw plain background
@@ -158,7 +157,7 @@ public class CPBar extends Widget {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
-	private void drawOverload(double override) {
+	private void drawOverload(float overload) {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		
 		//Draw plain background
@@ -226,28 +225,28 @@ public class CPBar extends Widget {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
-	private void drawNormal(double override) {
+	private void drawNormal(float overload) {
 		RenderUtils.loadTexture(TEX_BACK_NORMAL);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Overload progress
 		final double X0 = 0, Y0 = 21, WIDTH = 943, HEIGHT = 104;
 		
-		autoLerp(overrideColors, override);
-		double len = override * WIDTH;
+		autoLerp(overrideColors, overload);
+		double len = overload * WIDTH;
 		
 		RenderUtils.loadTexture(TEX_MASK);
 		subHud(X0 + WIDTH - len, Y0, len, HEIGHT);
 	}
 	
-	private void drawCPBar(double prog) {
+	private void drawCPBar(float prog) {
 		RenderUtils.loadTexture(TEX_CP);
 		
 		//We need a cut-angle effect so this must be done manually
 		
 		autoLerp(cpColors, prog);
 		
-		prog = 0.16 + prog * 0.84; //Keep the largest one.
+		prog = 0.16f + prog * 0.84f; //Keep the largest one.
 		
 		final double OFF = 103 * sin41, X0 = 47, Y0 = 30, WIDTH = 883, HEIGHT = 84;
 		Tessellator t = Tessellator.instance;
@@ -339,7 +338,7 @@ public class CPBar extends Widget {
 				return;
 			}
 		}
-		throw new RuntimeException(); //Should never reach here
+		throw new RuntimeException("bad progress: " + prog); //Should never reach here
 	}
 	
 	private double lerp(double a, double b, double factor) {
