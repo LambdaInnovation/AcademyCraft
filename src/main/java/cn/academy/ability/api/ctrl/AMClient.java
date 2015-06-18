@@ -9,14 +9,17 @@ import cn.academy.ability.api.ctrl.SyncAction.State;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
-class AMClient implements IActionManager {
+public class AMClient implements IActionManager {
 
 	AMClient() {
+		FMLCommonHandler.instance().bus().register(this);
 	}
 	
 	Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();

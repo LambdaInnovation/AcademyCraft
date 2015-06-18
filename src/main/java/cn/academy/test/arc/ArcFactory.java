@@ -145,7 +145,7 @@ public class ArcFactory {
 			offset /= 2;
 		}
 		
-		return new Arc(flip ? bufferAll : listAll, normal);
+		return new Arc(flip ? bufferAll : listAll, normal, length);
 	}
 	
 	static private Vec3 randomRotate(float range, Vec3 dir) {
@@ -185,9 +185,11 @@ public class ArcFactory {
 	
 	public static class Arc {
 		int listId;
+		public final double length;
 		
-		public Arc(List< List<Segment> > list, Vec3 normal) {
+		public Arc(List< List<Segment> > list, Vec3 normal, double len) {
 			buildList(list, normal);
+			length = len;
 		}
 		
 		public void draw() {

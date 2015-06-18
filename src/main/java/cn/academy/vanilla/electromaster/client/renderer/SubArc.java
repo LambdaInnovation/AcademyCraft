@@ -36,6 +36,11 @@ public class SubArc {
 	boolean draw;
 	boolean dead;
 	
+	public double frameRate = 1.0;
+	public double switchRate = 1.0;
+	
+	public int life = 30;
+	
 	public SubArc(Vec3 v, int _templateCount) {
 		pos = v;
 		templateCount = _templateCount;
@@ -48,17 +53,17 @@ public class SubArc {
 	}
 	
 	public void tick() {
-		if(rand.nextDouble() < 0.5)
+		if(rand.nextDouble() < 0.5 * frameRate)
 			texID = rand.nextInt(templateCount);
 		
 		if(rand.nextDouble() < 0.9) tick++;
-		if(tick == 30) dead = true;
+		if(tick == life) dead = true;
 		
 		if(draw) {
-			if(rand.nextDouble() < 0.4)
+			if(rand.nextDouble() < 0.4 * switchRate)
 				draw = false;
 		} else {
-			if(rand.nextDouble() < 0.3)
+			if(rand.nextDouble() < 0.3 * switchRate)
 				draw = true;
 		}
 	}

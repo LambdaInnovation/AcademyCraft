@@ -40,12 +40,15 @@ public class CPData extends DataPart {
 	private static final int 
 		RECOVER_COOLDOWN = getIntParam("recover_cooldown"),
 		OVERLOAD_COOLDOWN = getIntParam("overload_cooldown");
+	private static final float 
+		OVERLOAD_O_MUL = getFloatParam("overload_o_mul"),
+		OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
 	
 	private float currentCP;
-	private float maxCP;
+	private float maxCP = 100.0f;
 	
 	private float overload;
-	private float maxOverload;
+	private float maxOverload = 100.0f;
 	
 	/**
 	 * Tick counter for cp recover.
@@ -55,7 +58,6 @@ public class CPData extends DataPart {
 	 * Tick conter for overload recover.
 	 */
 	private int untilOverloadRecover;
-
 	
 	private boolean dataDirty = false;
 	
@@ -129,6 +131,10 @@ public class CPData extends DataPart {
 	 * Will just make a simulation in client side.
 	 */
 	public boolean consumeCP(float amt) {
+		if(isOverloaded()) {
+			amt *= OVERLOAD_CP_MUL;
+		}
+		
 		if(currentCP < amt)
 			return false;
 		currentCP -= amt;
@@ -136,6 +142,7 @@ public class CPData extends DataPart {
 		
 		if(!isRemote())
 			dataDirty = true;
+		
 		return true;
 	}
 	
@@ -144,12 +151,25 @@ public class CPData extends DataPart {
 	 * @return whether the overloading is successful.
 	 */
 	public boolean addOverload(float amt) {
-		if(overload + amt > maxOverload)
+		if(overload + amt > 2 * maxOverload)
 			return false;
-		overload += amt;
+		
+		if(overload + amt > maxOverload) {
+			amt = amt - (maxOverload - overload);
+			overload = Math.min(2 * maxOverload, overload + amt * OVERLOAD_O_MUL);
+		} else {
+			overload += amt;
+		}
 		untilOverloadRecover = OVERLOAD_COOLDOWN;
 		
+		if(!isRemote())
+			dataDirty = true;
+		
 		return true;
+	}
+	
+	public boolean isOverloaded() {
+		return overload > maxOverload;
 	}
 	
 	/**
@@ -164,8 +184,14 @@ public class CPData extends DataPart {
 		AbilityData data = AbilityData.get(getPlayer());
 		
 		this.maxCP = getFunc("init_cp").callFloat(data.getLevel());
+		currentCP = 0;
 		
 		this.maxOverload = getFunc("init_overload").callFloat(data.getLevel());
+		
+		if(!isRemote())
+			doSyncComplete();
+		
+		System.out.println("CP : " + maxCP + ", O: " + maxOverload);
 	}
 	
 	@Override
@@ -194,6 +220,10 @@ public class CPData extends DataPart {
 	
 	private static int getIntParam(String name) {
 		return AcademyCraft.script.root.getInteger(path(name));
+	}
+	
+	private static float getFloatParam(String name) {
+		return AcademyCraft.script.root.getFloat(path(name));
 	}
 	
 	private static ScriptFunction getFunc(String name) {
@@ -243,6 +273,7 @@ public class CPData extends DataPart {
 		@SubscribeEvent
 		public void changedCategory(CategoryChangedEvent event) {
 			CPData.get(event.player).recalcMaxValue();
+			System.out.println("ChangedCategory");
 		}
 		
 	}

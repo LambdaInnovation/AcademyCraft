@@ -14,21 +14,22 @@ package cn.academy.vanilla.electromaster.entity;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.client.IPointFactory;
+import cn.academy.core.client.render.CubePointFactory;
 import cn.academy.test.arc.ArcFactory;
 import cn.academy.test.arc.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.renderer.SubArcHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.generic.DebugUtils;
-import cn.liutils.util.generic.VecUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -55,16 +56,16 @@ public class EntitySurroundArc extends EntityAdvanced {
 		ArcType.THIN.templates = factory.generateList(10, 1.5, 2);
 		
 		factory.width = 0.3;
-		ArcType.NORMAL.templates = factory.generateList(10, 2, 3);
+		ArcType.NORMAL.templates = factory.generateList(10, 3, 4);
 		
-		factory.passes = 4;
-		factory.width = 0.4;
-		factory.maxOffset = 1.1;
-		ArcType.BOLD.templates = factory.generateList(10, 3, 4);
+		factory.passes = 3;
+		factory.width = 0.35;
+		factory.maxOffset =	1.2;
+		ArcType.BOLD.templates = factory.generateList(10, 4, 5);
 	}
 	
 	public enum ArcType {
-		THIN(5), NORMAL(5), BOLD(5);
+		THIN(4), NORMAL(6), BOLD(5);
 		
 		public Arc[] templates;
 		public int count;
@@ -77,26 +78,41 @@ public class EntitySurroundArc extends EntityAdvanced {
 	@RegEntity.Render
 	public static Renderer renderer;
 	
-	private ArcType arcType = ArcType.NORMAL;
+	private ArcType arcType = ArcType.BOLD;
 	private final PosObject pos;
-	private double arcRange;
+	
+	public int life = 100;
 
 	SubArcHandler arcHandler;
 	
+	IPointFactory pointFactory;
+	
 	public EntitySurroundArc(Entity follow) {
-		super(follow.worldObj);
-		pos = new EntityPos(follow);
-		arcRange = follow.height / 1.8;
+		this(follow, 1.3);
 	}
 	
-	public EntitySurroundArc(World world, double x, double y, double z, double _arcRange) {
+	public EntitySurroundArc(Entity follow, double sizeMultiplyer) {
+		super(follow.worldObj);
+		pos = new EntityPos(follow);
+		pointFactory = new CubePointFactory(
+			follow.width * sizeMultiplyer, 
+			follow.height * sizeMultiplyer, 
+			follow.width * sizeMultiplyer).setCentered(true);
+	}
+	
+	public EntitySurroundArc(World world, double x, double y, double z, double wl, double h) {
 		super(world);
 		pos = new ConstPos(x, y, z);
-		arcRange = _arcRange;
+		pointFactory = new CubePointFactory(wl, h, wl).setCentered(true);
 	}
 	
 	public EntitySurroundArc setArcType(ArcType type) {
 		arcType = type;
+		return this;
+	}
+	
+	public EntitySurroundArc setLife(int life) {
+		this.life = life;
 		return this;
 	}
 	
@@ -113,9 +129,14 @@ public class EntitySurroundArc extends EntityAdvanced {
 	@Override
 	public void onFirstUpdate() {
 		// Create the arcs!
-		System.out.println("???");
 		arcHandler = new SubArcHandler(arcType.templates);
+		arcHandler.frameRate = 0.6;
+		arcHandler.switchRate = 0.7;
 		
+		doGenerate();
+	}
+	
+	private void doGenerate() {
 		for(int i = 0; i < arcType.count; ++i) {
 			double yaw = rand.nextDouble() * Math.PI * 2;
 			double pitch = rand.nextDouble() * Math.PI;
@@ -125,17 +146,25 @@ public class EntitySurroundArc extends EntityAdvanced {
 				x = zz * Math.sin(yaw),
 				z = zz * Math.cos(yaw);
 			
-			System.out.println(DebugUtils.formatArray(x, y, z, arcRange));
-			arcHandler.generateAt(VecUtils.vec(arcRange * x, arcRange * y, arcRange * z));
+			arcHandler.generateAt(pointFactory.next());
 		}
 	}
 	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if(arcHandler.isEmpty())
+			doGenerate();
+		
 		arcHandler.tick();
-		Vec3 vec = pos.getPos();
-		setPosition(vec.xCoord, vec.yCoord, vec.zCoord);
+		
+		pos.tick();
+		setPosition(pos.x, pos.y, pos.z);
+		rotationYaw = pos.yaw;
+		rotationPitch = pos.pitch;
+		
+		if(ticksExisted == life)
+			setDead();
 	}
 
 	@Override
@@ -146,8 +175,11 @@ public class EntitySurroundArc extends EntityAdvanced {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag) {}
 	
-	private interface PosObject {
-		Vec3 getPos();
+	private abstract class PosObject {
+		double x, y, z;
+		float yaw, pitch;
+		
+		void tick() {}
 	}
 	
 	public static class Renderer extends Render {
@@ -156,15 +188,18 @@ public class EntitySurroundArc extends EntityAdvanced {
 		public void doRender(Entity entity, double x,
 				double y, double z, float a,
 				float b) {
-			GL11.glPushMatrix();
-			
-			GL11.glTranslated(x, y, z);
 			EntitySurroundArc esa = (EntitySurroundArc) entity;
-			if(esa.arcHandler != null) {
-				esa.arcHandler.drawAll();
-			}
 			
-			GL11.glPopMatrix();
+			if(esa.arcHandler != null) {
+				GL11.glPushMatrix();
+				
+				GL11.glTranslated(x, y, z);
+				
+				GL11.glRotatef(-esa.rotationYaw, 0, 1, 0);
+				esa.arcHandler.drawAll();
+				
+				GL11.glPopMatrix();
+			}
 		}
 
 		@Override
@@ -174,31 +209,32 @@ public class EntitySurroundArc extends EntityAdvanced {
 		
 	}
 	
-	private class EntityPos implements PosObject {
+	private class EntityPos extends PosObject {
 		
 		final Entity entity;
+		final boolean isPlayer;
 		
 		public EntityPos(Entity e) {
 			entity = e;
+			isPlayer = e instanceof EntityPlayer;
 		}
 		
 		@Override
-		public Vec3 getPos() {
-			return VecUtils.vec(entity.posX, entity.posY, entity.posZ);
+		void tick() {
+			x = entity.posX;
+			y = isPlayer ? entity.posY - 1.6 : entity.posY;
+			z = entity.posZ;
+			yaw = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).rotationYawHead : entity.rotationYaw;
+			pitch = entity.rotationPitch;
 		}
 	}
 	
-	private class ConstPos implements PosObject {
+	private class ConstPos extends PosObject {
 		
-		final Vec3 vec;
-		
-		public ConstPos(double x, double y, double z) {
-			vec = VecUtils.vec(x, y, z);
-		}
-		
-		@Override
-		public Vec3 getPos() {
-			return vec;
+		public ConstPos(double _x, double _y, double _z) {
+			x = _x;
+			y = _y;
+			z = _z;
 		}
 	}
 

@@ -34,12 +34,17 @@ public class SubArcHandler {
 	
 	List<SubArc> list = new LinkedList();
 	
+	public double frameRate = 1.0, switchRate = 1.0;
+	
 	public SubArcHandler(Arc[] _arcs) {
 		arcs = _arcs;
 	}
 	
 	public void generateAt(Vec3 pos) {
-		list.add(new SubArc(pos, arcs.length));
+		SubArc sa = new SubArc(pos, arcs.length);
+		sa.frameRate = frameRate;
+		sa.switchRate = switchRate;
+		list.add(sa);
 	}
 	
 	public void tick() {
@@ -55,6 +60,10 @@ public class SubArcHandler {
 	
 	public void clear() {
 		list.clear();
+	}
+	
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 	
 	public void drawAll() {
@@ -73,7 +82,7 @@ public class SubArcHandler {
 				
 				final double scale = 0.3;
 				GL11.glScaled(scale, scale, scale);
-				GL11.glTranslated(-2.5, 0, 0);
+				GL11.glTranslated(-arcs[arc.texID].length / 2, 0, 0);
 				arcs[arc.texID].draw();
 				GL11.glPopMatrix();
 			}
