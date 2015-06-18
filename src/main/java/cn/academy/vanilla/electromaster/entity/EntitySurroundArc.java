@@ -61,7 +61,8 @@ public class EntitySurroundArc extends EntityAdvanced {
 		factory.passes = 3;
 		factory.width = 0.35;
 		factory.maxOffset =	1.2;
-		ArcType.BOLD.templates = factory.generateList(10, 4, 5);
+		factory.branchFactor = 0.45;
+		ArcType.BOLD.templates = factory.generateList(10, 3.5, 4.5);
 	}
 	
 	public enum ArcType {

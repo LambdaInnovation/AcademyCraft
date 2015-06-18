@@ -80,7 +80,9 @@ public class EntityMdBall extends EntityAdvanced {
 		this.spawner = player;
 		
 		// Calc the sub-offset
-		float theta = RandUtils.rangef(0, MathUtils.PI_F * 2);
+		float theta = -player.rotationYaw / 180 * MathUtils.PI_F + 
+			RandUtils.rangef(-MathUtils.PI_F * 0.45f, MathUtils.PI_F * 0.45f);
+		
 		float range = RandUtils.rangef(RANGE_FROM, RANGE_TO);
 		subX = MathHelper.sin(theta) * range;
 		subZ = MathHelper.cos(theta) * range;
@@ -234,8 +236,11 @@ public class EntityMdBall extends EntityAdvanced {
 		int lifeMS = life * 50;
 		long time = Minecraft.getSystemTime();
 		long dt = time - spawnTime;
+		
 		if(dt > lifeMS - 100)
-			return Math.max(0, MathUtils.lerpf(1, 0, (float) (dt - (lifeMS - 100)) / 100));
+			return Math.max(0, MathUtils.lerpf(1.5f, 0, (float) (dt - (lifeMS - 100)) / 100));
+		if(dt > lifeMS - 300)
+			return MathUtils.lerpf(1, 1.5f, (float) (dt - (lifeMS - 300)) / 200);
 		return 1;
 	}
 	
