@@ -27,41 +27,7 @@ public abstract class CommonThreadProxy implements ThreadProxy {
     }
     
     public abstract PlayerData regPlayerData(EntityPlayer player);
-    
-    /*
-     * Action instance management
-     */
-    protected long nextActionId = 0;
-    protected HashMap<String, SyncAction> actionMap = new HashMap();
 
-    public void registerAction(SyncAction action) {
-        if (action.id != null) {
-            throw new RuntimeException("action has been registered");
-        }
-        String id = sideName + "_" + Long.toString(nextActionId++);
-        action.id = id;
-        actionMap.put(id, action);
-    }
-
-    public void registerAction(String id, SyncAction action) {
-        if (action.id != null) {
-            throw new RuntimeException("action has been registered");
-        }
-        action.id = id;
-        actionMap.put(id, action);
-    }
-
-    public void removeAction(SyncAction action) {
-        if (action.id == null || 
-                actionMap.remove(action.id) == null) {
-            throw new RuntimeException("action has not been registered");
-        }
-    }
-
-    public SyncAction getActionFromId(String id) {
-        return actionMap.get(id);
-    }
-    
     public String getSideId() {
         return sideName;
     }

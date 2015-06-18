@@ -132,9 +132,11 @@ public abstract class Skill extends Controllable {
 	public List<LearningCondition> getLearningConditions() {
 		return ImmutableList.copyOf(learningConditions);
 	}
-    
-    //TODO change to abstract after test
-    public abstract SkillInstance createSkillInstance(EntityPlayer player);
+	
+	@Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+		return null;
+	}
     
     @Override
     public String toString() {
