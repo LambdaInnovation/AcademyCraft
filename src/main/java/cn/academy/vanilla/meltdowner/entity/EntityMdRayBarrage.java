@@ -90,7 +90,6 @@ public class EntityMdRayBarrage extends EntityRayBase {
 		float pitchOffset;
 		
 		public SubRay(float max) {
-			//TODO
 			yawOffset = RandUtils.rangef(-max, max);
 			pitchOffset = RandUtils.rangef(-max / 2, max / 2);	
 		}

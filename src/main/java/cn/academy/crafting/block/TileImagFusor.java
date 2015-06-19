@@ -40,7 +40,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Implement recipe system and server-side mechanism
  * @author WeAthFolD
  */
 @Registrant

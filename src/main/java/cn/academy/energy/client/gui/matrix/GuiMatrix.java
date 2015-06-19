@@ -44,7 +44,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Localization
  * @author WeAthFolD
  */
 @Registrant

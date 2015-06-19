@@ -12,7 +12,9 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
+import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.SkillInstance;
 
 /**
  * @author WeAthFolD
@@ -22,6 +24,33 @@ public class SkillArcGen extends Skill {
 
 	public SkillArcGen() {
 		super("arc_gen", 1);
+	}
+	
+	@Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+		return new SkillInstance() {
+			
+			@Override
+			public void onStart() {
+				System.out.println("ArcGen start");
+			}
+			
+			@Override
+			public void onTick() {
+				System.out.println("ArcGen tick");
+			}
+			
+			@Override
+			public void onEnd() {
+				System.out.println("ArcGen end");
+			}
+			
+			@Override
+			public void onAbort() {
+				System.out.println("ArcGen abort");
+			}
+			
+		};
 	}
 
 }

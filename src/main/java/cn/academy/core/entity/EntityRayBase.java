@@ -121,8 +121,6 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		return dt > lifeMS - blendOutTime ? 1 - (double) (dt + blendOutTime - lifeMS) / blendOutTime : 1.0;
 	}
 	
-	
-	
 	@Override
 	public double getWidth() {
 		long dt = Minecraft.getSystemTime() - creationTime;
