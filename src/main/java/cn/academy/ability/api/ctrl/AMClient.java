@@ -8,12 +8,15 @@ import java.util.Map;
 import cn.academy.ability.api.ctrl.SyncAction.State;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
 /* TODO: client operation?
@@ -33,10 +36,12 @@ public class AMClient implements IActionManager {
 	
 	@Override
 	public void startAction(SyncAction action) {
+		msg("startAction");
 		NBTTagCompound tag = action.getNBTStart();
-		ActionManager.startAtServer(action.getClass().getName(), tag, Future.create(new FutureCallback() {
+		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
 			public void onReady(Object val) {
+				msg("startAction.onReady");
 				action.id = (int) val;
 				//just ignore?
 				if (action.id >= 0) {
@@ -49,35 +54,55 @@ public class AMClient implements IActionManager {
 
 	@Override
 	public void endAction(SyncAction action) {
-		ActionManager.endAtServer(action.id, Future.create(new FutureCallback() {
-			@Override
-			public void onReady(Object val) {
-				map.get(action.id).setNBTFinal((NBTTagCompound) val);
-			}
-		}));
+		ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.id);
 	}
 
 	@Override
 	public void abortAction(SyncAction action) {
-		ActionManager.abortAtServer(action.id, Future.create(new FutureCallback() {
-			@Override
-			public void onReady(Object val) {
-				map.get(action.id).setNBTFinal((NBTTagCompound) val);
-			}
-		}));
+		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.id);
 	}
 
-	@Override
-	public void abortActionLocally(SyncAction action) {
-		map.get(action.id).state = State.ABORTED;
+	void abortAtClient(SyncAction action) {
+		SyncAction _action = map.get(action.id);
+		if (_action != null) {
+			_action.state = State.ABORTED;
+			_action.onAbort();
+		}
+		map.remove(action.id);
 	}
 	
+	void startFromServer(String className, NBTTagCompound tag) {
+		SyncAction action = null;
+		try {
+			action = (SyncAction) Class.forName(className).newInstance();
+			action.setNBTStart(tag);
+			if (action.id >= 0) {
+				action.state = State.IDENTIFIED;
+				map.put(action.id, action);
+			}
+		}
+		catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	void updateFromServer(int id, NBTTagCompound tag) {
+		SyncAction action = map.get(id);
+		if (action != null)
+			action.setNBTUpdate(tag);
+	}
+	
+	void terminateFromServer(int id, NBTTagCompound tag) {
+		SyncAction action = map.get(id);
+		if (action != null)
+			action.setNBTFinal(tag);
+	}
+
 	@SubscribeEvent
-	public void onTick(ClientTickEvent event) {
-		if (event.phase.equals(Phase.START))
+	public void onClientTick(ClientTickEvent event) {
+		if (Minecraft.getMinecraft().isGamePaused() || event.phase.equals(Phase.START))
 			return;
-		Collection<SyncAction> actions = map.values();
-		for (Iterator<SyncAction> i = actions.iterator(); i.hasNext(); ) {
+		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
 			switch (action.state) {
 			case IDENTIFIED:
@@ -101,23 +126,18 @@ public class AMClient implements IActionManager {
 		}
 	}
 	
-	void startFromServer(SyncAction action) {
-		if (action.id >= 0) {
-			action.state = State.IDENTIFIED;
-			map.put(action.id, action);
-		}
-	}
-
-	void updateFromServer(int id, NBTTagCompound tag) {
-		SyncAction action = map.get(id);
-		if (action != null)
-			action.setNBTUpdate(tag);
+	@SubscribeEvent
+	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
+		log("onClientDisconnectionFromServer: " + Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
+		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); )
+			abortAtClient(i.next());
 	}
 	
-	void terminateFromServer(int id, NBTTagCompound tag) {
-		SyncAction action = map.get(id);
-		if (action != null)
-			action.setNBTFinal(tag);
+	//TODO TREMOVE
+	public static void msg(String msg) {
+		cn.academy.ability.api.ctrl.test.TM.msg("AMC", msg);
 	}
-
+	public static void log(String msg) {
+		cn.academy.ability.api.ctrl.test.TM.log("AMC", msg);
+	}
 }
