@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.api.Controllable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,6 +26,8 @@ public abstract class SkillInstance {
 	enum State { FINE, ENDED, ABORTED };
 	
 	State state = State.FINE;
+	
+	Controllable controllable;
 	
 	private List<SyncAction> childs;
 	
@@ -68,6 +71,13 @@ public abstract class SkillInstance {
 	 */
 	protected void abortSkill() {
 		state = State.ABORTED;
+	}
+	
+	/**
+	 * Set a specific cooldown time for this controllable.
+	 */
+	protected final void setCooldown(int ticks) {
+		ClientHandler.setCooldown(controllable, ticks);
 	}
 	
 	public void stopOnEnd(SyncAction action) {

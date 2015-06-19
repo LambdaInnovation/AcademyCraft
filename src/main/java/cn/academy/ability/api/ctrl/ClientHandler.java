@@ -1,5 +1,10 @@
 package cn.academy.ability.api.ctrl;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.Controllable;
@@ -7,9 +12,15 @@ import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
+import cn.liutils.util.client.ClientUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,7 +37,14 @@ public final class ClientHandler {
 	
 	private static AbilityKey[] handlers = new AbilityKey[MAX_KEYS];
 	
-	private static int[] defaultMapping = new int[] { KeyManager.MOUSE_LEFT, KeyManager.MOUSE_RIGHT, Keyboard.KEY_R, Keyboard.KEY_F };
+	private static int[] defaultMapping = new int[] { 
+		KeyManager.MOUSE_LEFT, 
+		KeyManager.MOUSE_RIGHT, 
+		Keyboard.KEY_R, 
+		Keyboard.KEY_F 
+	};
+	
+	private static Map<Controllable, Integer> cooldown = new HashMap();
 	
 	public static int getKeyMapping(int kid) {
 		if(kid < STATIC_KEYS) {
@@ -46,6 +64,27 @@ public final class ClientHandler {
     		ModuleCoreClient.dynKeyManager.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
     	}
         
+    }
+    
+    static void setCooldown(Controllable c, int cd) {
+    	cooldown.put(c, cd);
+    }
+    
+    public static boolean isInCooldown(Controllable c) {
+    	return cooldown.containsKey(c);
+    }
+    
+    private static void updateCooldown() {
+    	Iterator< Entry<Controllable, Integer> > iter = cooldown.entrySet().iterator();
+    	
+    	while(iter.hasNext()) {
+    		Entry< Controllable, Integer > entry = iter.next();
+    		if(entry.getValue() == 0) {
+    			iter.remove();
+    		} else {
+    			entry.setValue(entry.getValue() - 1);
+    		}
+    	}
     }
     
     private static class AbilityKey extends KeyHandler {
@@ -108,7 +147,24 @@ public final class ClientHandler {
     			return null;
     		
     		Controllable cc = pdata.getCurrentPreset().getControllable(internalID);
-    		return cc == null ? null : cc.createSkillInstance(getPlayer());
+    		if(isInCooldown(cc) || cc == null) return null;
+    		
+    		SkillInstance instance = cc.createSkillInstance(getPlayer());
+    		instance.controllable = cc;
+    		
+    		return instance;
+    	}
+    	
+    }
+    
+    @RegEventHandler(Bus.FML)
+    public static class Events {
+    	
+    	@SubscribeEvent
+    	public void onClientTick(ClientTickEvent event) {
+    		if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
+    			updateCooldown();
+    		}
     	}
     	
     }
