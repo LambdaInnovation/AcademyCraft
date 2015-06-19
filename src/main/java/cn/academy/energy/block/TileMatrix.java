@@ -84,7 +84,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		return 1;
 	}
 
-	//WEN TODO
+	//WEN
 	public int getPlateCount() {
 		int count = 0;
 		for(int i = 0; i < 3; ++i) {

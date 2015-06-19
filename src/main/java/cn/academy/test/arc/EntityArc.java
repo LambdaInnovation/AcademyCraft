@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -27,11 +26,16 @@ import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.test.arc.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
+import cn.annoreg.mc.network.Future;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.util.client.ClientUtils;
-import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.Motion3D;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -130,7 +134,6 @@ public class EntityArc extends EntityAdvanced {
 	
 	@RegACKeyHandler(name = "arc_test", defaultKey = Keyboard.KEY_P)
 	public static KH kh;
-	
 	
 	public static class KH extends KeyHandler {
 

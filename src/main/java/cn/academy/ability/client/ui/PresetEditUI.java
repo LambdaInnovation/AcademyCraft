@@ -48,6 +48,7 @@ import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -236,7 +237,7 @@ public class PresetEditUI extends GuiScreen {
     	lastActive = active;
     	active = to;
     	transiting = true;
-    	transitStartTime = Minecraft.getSystemTime();
+    	transitStartTime = GameTimer.getAbsTime();
     }
     
     private void finishTransit() {
@@ -256,7 +257,8 @@ public class PresetEditUI extends GuiScreen {
     
     // Transition page
     private void updateTransit() {
-    	deltaTime = Minecraft.getMinecraft().getSystemTime() - transitStartTime;
+    	deltaTime = GameTimer.getAbsTime() - transitStartTime;
+    	
     	transitProgress = (double)deltaTime / TRANSIT_TIME;
     	if(transitProgress > 1) {
     		transitProgress = 1;

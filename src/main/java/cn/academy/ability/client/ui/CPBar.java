@@ -42,6 +42,7 @@ import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -94,7 +95,7 @@ public class CPBar extends Widget {
 	@SubscribeEvent
 	public void onSwitchPreset(SwitchPresetEvent event) {
 		lastPresetTime = presetChangeTime;
-		presetChangeTime = Minecraft.getSystemTime();
+		presetChangeTime = GameTimer.getTime();
 	}
 	
 	private void initEvents() {
@@ -106,7 +107,7 @@ public class CPBar extends Widget {
 					return;
 				CPData cpData = CPData.get(player);
 				
-				long time = Minecraft.getSystemTime();
+				long time = GameTimer.getTime();
 				
 				float overload = cpData.getOverload() / cpData.getMaxOverload();
 				if(overload < 1.0) {
@@ -142,7 +143,7 @@ public class CPBar extends Widget {
 		
 		//Start drawing blend
 		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
-		float uOffset = Minecraft.getSystemTime() / 10000.0f * WIDTH;
+		float uOffset = GameTimer.getTime() / 10000.0f * WIDTH;
 		GL11.glColor4d(1, 1, 1, 0.8);
 		
 		final double x0 = 30, width2 = WIDTH - x0 - 20;
@@ -150,7 +151,7 @@ public class CPBar extends Widget {
 		//End drawing blend
 		
 		//Draw Highlight
-		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(Minecraft.getSystemTime() / 200.0) + 1));
+		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
 		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
@@ -185,7 +186,7 @@ public class CPBar extends Widget {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_REPLACE);
 		
-		double uOffset = (Minecraft.getSystemTime() % 10000L) / 10000.0d;
+		double uOffset = (GameTimer.getTime() % 10000L) / 10000.0d;
 		GL11.glColor4d(1, 1, 1, 0.8);
 		GL11.glBegin(GL11.GL_QUADS);
 			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 1.0f);
@@ -218,7 +219,7 @@ public class CPBar extends Widget {
 		//End drawing blend
 		
 		//Draw Highlight
-		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(Minecraft.getSystemTime() / 200.0) + 1));
+		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
 		RenderUtils.loadTexture(TEX_OVERLOAD_HIGHLIGHT);
 		HudUtils.rect(WIDTH, HEIGHT);
 		

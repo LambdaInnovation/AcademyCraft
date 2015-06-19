@@ -44,7 +44,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * TODO If tick is too slow make selective ticking optimization <br/>
  * TODO Generalize this pattern if necessary <br/>
- * TODO Allow dynamic dispatch if necessary <br/>
  * @author WeAthFolD
  */
 @Registrant
@@ -61,7 +60,7 @@ public abstract class DataPart {
 	/**
 	 * The player instance when this data is available. Do NOT modify this field!
 	 */
-	public PlayerData data;
+	PlayerData data;
 	
 	public DataPart() {}
 	
@@ -108,6 +107,7 @@ public abstract class DataPart {
 					return PlayerData.get((EntityPlayer) e).getPart(tag.getString("n"));
 				}
 			}
+			
 			return null;
 		}
 

@@ -51,6 +51,7 @@ public class Category {
 		typeMap = new HashMap();
 		for(String s : types)
 			typeMap.put(s, new ArrayList());
+		
 	}
 	
 	public void addSkill(String type, Skill skill) {
