@@ -61,4 +61,4 @@ build/
 
 
 # Custom
-src\main\resources\assets\academy\sounds\*
+src/main/resources/assets/academy/sounds/media/*
