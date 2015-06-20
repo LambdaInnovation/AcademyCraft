@@ -1,18 +1,35 @@
 package cn.academy.ability.api.ctrl;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * @author EAirPeter
+ */
 public abstract class SyncAction {
 
-	int id;
+	//TODO TREMOVE protected
+	protected int id;
 	State state;
 	int intv = -1;
-	
-	@SideOnly(Side.SERVER)
 	int lastInformed = 0;
 	
+	protected final boolean isRemote = FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	
+	/**
+	 * The associated player
+	 * null for started from server
+	 */
+	protected EntityPlayer player = null;
+	
+	/**
+	 * Construct a SyncAction
+	 * Notice: Every subclass of SyncAction must have a constructor with no parameter
+	 * @param interval Server side will send an update to client side every interval ticks, while -1 for never.
+	 */
 	protected SyncAction(int interval) {
 		intv = interval;
 		state = State.CREATED;
@@ -33,7 +50,7 @@ public abstract class SyncAction {
 	 */
 	/* start from server
 	 * send to client(start), server.onStart
-	 * client.onStart
+	 * client.onStart or abortAtServer
 	 */
 	/**
 	 * Called when this start at both sides
@@ -74,6 +91,8 @@ public abstract class SyncAction {
 	 */
 	/**
 	 * Called when aborted at both sides
+	 * This is nothing to do with network
+	 * If any, please use NBT operation(Final)
 	 */
 	public abstract void onAbort();
 	
@@ -133,6 +152,13 @@ public abstract class SyncAction {
 		writeNBTFinal(obj);
 		tag.setTag(NBT_OBJECT, obj);
 		return tag;
+	}
+	
+	static final int getIdFromNBT(NBTTagCompound tag) {
+		if (tag.hasKey(NBT_ID))
+			return tag.getInteger(NBT_ID);
+		else
+			return -1;
 	}
 	
 	static final NBTTagCompound TAG_ENDED;
