@@ -13,13 +13,18 @@
 package cn.academy.vanilla.electromaster.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MovingObjectPosition;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SkillInstanceInstant;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SyncActionInstant;
+import cn.academy.core.util.ACSounds;
+import cn.academy.test.arc.EntityArc;
+import cn.liutils.entityx.handlers.Life;
+import cn.liutils.util.mc.WorldUtils;
 
 /**
  * @author WeAthFolD
@@ -59,31 +64,33 @@ public class SkillArcGen extends Skill {
 		return instance.getFunc("exp_incr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
 	}
 	
-	public static class ArcGenAction extends SyncAction {
+	public static class ArcGenAction extends SyncActionInstant {
 
-		public ArcGenAction() {
-			super(-1);
+		@Override
+		public boolean validate() {
+			AbilityData aData = AbilityData.get(player);
+			CPData cpData = CPData.get(player);
+			
+			return cpData.perform(getOverload(aData), getConsumption(aData));
 		}
 
 		@Override
-		public void onStart() {
-			CPData cpData;
-			AbilityData aData;
+		public void execute() {
+			AbilityData aData = AbilityData.get(player);
 			
-			if(this.isRemote) {
-				//FIXME: Buggy here, player should be a valid instance
-				System.out.println("Player: " + player);
-				//player.worldObj.spawnEntityInWorld(new EntityArc(player));
-			} else {
-				System.out.println("SPlayer: " + player);
-				cpData = CPData.get(player);
-				aData = AbilityData.get(player);
-				
-				if(cpData.perform(getOverload(aData), getConsumption(aData))) {
-					
-				} else {
-					ActionManager.abortAction(this);
+			if(!isRemote) {
+				// Perform ray trace
+				MovingObjectPosition result = WorldUtils.tracePlayerWithEntities(player, 20, null);
+				System.out.println(result);
+				if(result != null && result.entityHit != null) {
+					result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
 				}
+			} else {
+				EntityArc arc = new EntityArc(player);
+				arc.addMotionHandler(new Life(20));
+				
+				player.worldObj.spawnEntityInWorld(arc);
+				ACSounds.playClient(player, "em.arc_weak", 0.5f, 1f);
 			}
 		}
 		
