@@ -41,9 +41,7 @@ public class AMClient implements IActionManager {
 	}
 	
 	private Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();
-	private Map<Integer, NBTTagCompound> updt = new HashMap<Integer, NBTTagCompound>();
-	private Map<Integer, NBTTagCompound> tmnt = new HashMap<Integer, NBTTagCompound>();
-	//For optimization
+	//Optimized: abortPlayer
 	private Set<Integer> set = new HashSet<Integer>();
 	
 	@Override
