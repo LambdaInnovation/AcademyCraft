@@ -41,6 +41,8 @@ public class AMClient implements IActionManager {
 	}
 	
 	private Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();
+	private Map<Integer, NBTTagCompound> updt = new HashMap<Integer, NBTTagCompound>();
+	private Map<Integer, NBTTagCompound> tmnt = new HashMap<Integer, NBTTagCompound>();
 	//For optimization
 	private Set<Integer> set = new HashSet<Integer>();
 	
@@ -56,6 +58,7 @@ public class AMClient implements IActionManager {
 				//just ignore?
 				if (action.id >= 0) {
 					action.state = State.IDENTIFIED;
+					action.player = Minecraft.getMinecraft().thePlayer;
 					map.put(action.id, action);
 					set.add(action.id);
 				}
@@ -90,14 +93,24 @@ public class AMClient implements IActionManager {
 
 	void updateFromServer(int id, NBTTagCompound tag) {
 		SyncAction action = map.get(id);
-		if (action != null)
+		if (action != null) {
+			if (action.state.equals(State.IDENTIFIED)) {
+				action.state = State.STARTED;
+				action.onStart();
+			}
 			action.setNBTUpdate(tag);
+		}
 	}
 	
 	void terminateFromServer(int id, NBTTagCompound tag) {
 		SyncAction action = map.get(id);
-		if (action != null)
+		if (action != null) {
+			if (action.state.equals(State.IDENTIFIED)) {
+				action.state = State.STARTED;
+				action.onStart();
+			}
 			action.setNBTFinal(tag);
+		}
 	}
 	
 	@SubscribeEvent

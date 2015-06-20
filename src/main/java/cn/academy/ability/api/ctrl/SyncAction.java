@@ -55,7 +55,8 @@ public abstract class SyncAction {
 	/**
 	 * Called when this start at both sides
 	 */
-	public void onStart() {}
+	public void onStart() {
+	}
 	
 	/* (server) tick and send(every ${interval})
 	 * server inform
@@ -63,7 +64,8 @@ public abstract class SyncAction {
 	/**
 	 * Called every tick at both sides
 	 */
-	public void onTick() {}
+	public void onTick() {
+	}
 	
 	
 	/* end from client
@@ -78,7 +80,8 @@ public abstract class SyncAction {
 	/**
 	 * Called when ended at both sides
 	 */
-	public void onEnd() {}
+	public void onEnd() {
+	}
 	
 	/* abort from client
 	 * send to server
@@ -94,7 +97,8 @@ public abstract class SyncAction {
 	 * This is nothing to do with network
 	 * If any, please use NBT operation(Final)
 	 */
-	public void onAbort() {}
+	public void onAbort() {
+	}
 	
 	public void readNBTStart(NBTTagCompound tag) {
 	}
