@@ -50,6 +50,8 @@ public class ItemMedia extends ACItem {
 				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaPlayer.getMedia(mID).getName()));
 			} else {
 				data.installMedia(mID);
+				if(!player.capabilities.isCreativeMode)
+					stack.stackSize--;
 				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaPlayer.getMedia(mID).getName()));
 			}
 		}

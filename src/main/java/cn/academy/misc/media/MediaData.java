@@ -43,7 +43,7 @@ public class MediaData extends DataPart {
 	 * @return Whether the media is successfully installed
 	 */
 	public boolean installMedia(int mediaID) {
-		if(!isRemote())
+		if(isRemote())
 			throw new RuntimeException("Wrong side");
 		
 		if(learned.get(mediaID))
