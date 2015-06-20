@@ -97,24 +97,6 @@ public class PresetData extends DataPart {
 	
 	@Override
 	public void tick() {}
-	
-	private void sync() {
-		if(isRemote()) {
-			recServerSync(toNBT());
-		} else {
-			recClientSync(toNBT());
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-	private void recServerSync(@Data NBTTagCompound tag) {
-		fromNBT(tag);
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void recClientSync(@Data NBTTagCompound tag) {
-		fromNBT(tag);
-	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {

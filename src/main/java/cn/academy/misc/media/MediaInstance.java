@@ -26,7 +26,7 @@ class MediaInstance extends MovingSound {
 	
 	final EntityPlayer player;
 	
-	final String name;
+	final Media media;
 	
 	boolean disposed = false;
 	
@@ -35,25 +35,21 @@ class MediaInstance extends MovingSound {
 	String mediaUUID;
 	boolean isPaused;
 	
-	protected MediaInstance(String name) {
-		super(new ResourceLocation("academy:media." + name));
-		this.name = name;
+	protected MediaInstance(Media _media) {
+		super(new ResourceLocation("academy:media." + _media.name));
+		this.media = _media;
 		player = Minecraft.getMinecraft().thePlayer;
 		xPosF = (float) player.posX;
         yPosF = (float) player.posY;
         zPosF = (float) player.posZ;
 	}
 	
-	public float getPlayTime() {
-		return tick / 20f;
+	public int getPlayTime() {
+		return tick / 20;
 	}
 	
 	public boolean isDisposed() {
 		return disposed;
-	}
-	
-	public String getDisplayName() {
-		return StatCollector.translateToLocal("ac.media." + name + ".name");
 	}
 	
 	public void dispose() {

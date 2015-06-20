@@ -398,7 +398,7 @@ public class TerminalUI extends AuxGui {
 				env.app = handler.app;
 				env.terminal = TerminalUI.this;
 				
-				env.onStart(data.getAppData(handler.app.getID()));
+				env.onStart();
 			}
 		}
 		

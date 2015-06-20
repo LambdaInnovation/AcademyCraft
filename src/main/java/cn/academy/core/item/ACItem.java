@@ -26,4 +26,5 @@ public class ACItem extends Item {
 		setTextureName("academy:" + name);
 		setCreativeTab(AcademyCraft.cct);
 	}
+	
 }

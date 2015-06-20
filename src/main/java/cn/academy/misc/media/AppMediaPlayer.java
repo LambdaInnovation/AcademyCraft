@@ -12,85 +12,33 @@
  */
 package cn.academy.misc.media;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundManager;
-import paulscode.sound.SoundSystem;
+import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.terminal.App;
+import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
-import cn.liutils.util.generic.RegistryUtils;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * No gui yet, pre-programming
  * @author WeAthFolD
+ *
  */
 @Registrant
-@SideOnly(Side.CLIENT)
-public class AppMediaPlayer {
+public class AppMediaPlayer extends App {
 	
-	static final String[] builtInMedias = { "only_my_railgun", "sisters_noise", "level5_judgelight", "grow_slowly" };
-	
-	SoundManager soundManager;
-	BiMap<ISound, String> playingSounds;
-	SoundSystem sndSystem;
-	
-	MediaInstance media;
-	
-	public AppMediaPlayer() {}
-	
-	public void startPlay(String name) {
-		stop();
-		
-		soundManager = RegistryUtils.getFieldInstance(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), "sndManager", "field_147694_f");
-		playingSounds = ((HashBiMap<String, ISound>) RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
-		sndSystem = RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
-		
-		media = new MediaInstance(name);
-		soundManager.sndHandler.playSound(media);
-		media.mediaUUID = playingSounds.get(media);
+	@RegApp
+	public static AppMediaPlayer instance = new AppMediaPlayer();
+
+	AppMediaPlayer() {
+		super("media_player");
+		setPreInstalled();
 	}
-	
-	public boolean isPlaying() {
-		return media != null && !media.disposed;
+
+	@Override
+	public AppEnvironment createEnvironment() {
+		return new AppEnvironment() {
+			@Override
+			public void onStart() {}
+		};
 	}
-	
-	public boolean isPaused() {
-		return media == null ? false : media.isPaused;
-	}
-	
-	public String getMediaTitle() {
-		return media == null ? null : media.getDisplayName();
-	}
-	
-	public float getPlayedTime() {
-		return media.getPlayTime();
-	}
-	
-	public void pause() {
-		if(media != null) {
-			sndSystem.pause(media.mediaUUID);
-			media.isPaused = true;
-		}
-	}
-	
-	public void resume() {
-		if(media != null) {
-			sndSystem.play(media.mediaUUID);
-			media.isPaused = false;
-		}
-	}
-	
-	public void stop() {
-		if(media != null) {
-			media.dispose();
-			media = null;
-		}
-	}
-	
+
 }

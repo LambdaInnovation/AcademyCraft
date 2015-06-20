@@ -31,14 +31,7 @@ public class AppEnvironment {
 	/**
 	 * Called just before environment is activated on client side. Load the data.
 	 */
-	public void onStart(NBTTagCompound tag) {}
-	
-	/**
-	 * EXPLICITLY call this when this app is to be closed. Save the data and sync 'em to server side.
-	 */
-	public final void onEnd(NBTTagCompound tag) {
-		TerminalData.get(getPlayer()).overrideData(app.appid, tag);
-	}
+	public void onStart() {}
 	
 	protected App getApp() {
 		return app;

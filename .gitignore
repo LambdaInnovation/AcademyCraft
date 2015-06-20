@@ -61,4 +61,4 @@ build/
 
 
 # Custom
-*.ogg
+src\main\resources\assets\academy\sounds\*

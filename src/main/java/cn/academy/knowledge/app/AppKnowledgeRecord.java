@@ -37,7 +37,7 @@ public class AppKnowledgeRecord extends App {
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
 			@Override
-			public void onStart(NBTTagCompound tag) {
+			public void onStart() {
 				LifeRecordUI.guiHandler.openClientGui();
 			}
 		};

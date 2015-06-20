@@ -17,11 +17,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.SerializationManager;
+import cn.annoreg.mc.s11n.StorageOption.Data;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * DataPart represents a single tickable instance attached on an EntityPlayer.
@@ -35,9 +36,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  *   in server.
  *  <br/>
  * 
- * However no dynamic sync helper is provided. It's more convenient and flexible
- *  if you take advantage of AR's NetworkCall to sync stuffs (Either lazily or dynamically). 
- *  For that purpose, we have already provided the instance serializer for you.<br/>
+ * A simple sync helper is provided. You can use sync() in both CLIENT and SERVER side to make a new NBT
+ *  synchronization. However, for complex syncs you might want to consider using NetworkCall.
  *  
  * When player is available the {@link DataPart#tick()} will get called every tick. You can 
  * process update stuffs within that method. <br/>
@@ -87,6 +87,24 @@ public abstract class DataPart {
 	 */
 	protected boolean isSynced() {
 		return !dirty;
+	}
+	
+	protected void sync() {
+		if(isRemote()) {
+			syncFromClient(toNBT());
+		} else {
+			syncFromServer(toNBT());
+		}
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	private void syncFromClient(@Data NBTTagCompound tag) {
+		fromNBT(tag);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	private void syncFromServer(@Data NBTTagCompound tag) {
+		fromNBT(tag);
 	}
 	
 	public abstract void fromNBT(NBTTagCompound tag);

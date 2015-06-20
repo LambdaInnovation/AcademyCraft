@@ -44,31 +44,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TerminalData extends DataPart {
 	
 	private Set<Integer> installedList = new HashSet();
-	private List<NBTTagCompound> appDataList = new ArrayList();
 	
 	public TerminalData() {
 		int size = AppRegistry.enumeration().size();
-		for(int i = 0; i < size; ++i)
-			appDataList.add(new NBTTagCompound());
-	}
-	
-	/**
-	 * CLIENT only. Update the data of the specified app to the server.
-	 */
-	public void overrideData(int appid, NBTTagCompound data) {
-		if(!isRemote()) {
-			throw new RuntimeException("Not allowed in server side!");
-		}
-		appDataList.set(appid, data);
-		updateApp(appid, data);
 	}
 	
 	public List<Integer> getInstalledApps() {
 		return ImmutableList.copyOf(installedList);
-	}
-	
-	public NBTTagCompound getAppData(int appid) {
-		return appDataList.get(appid);
 	}
 	
 	/**
@@ -107,7 +89,7 @@ public class TerminalData extends DataPart {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
-		System.out.println("FromNBT Called in  " + isRemote());
+		// System.out.println("FromNBT Called in  " + isRemote());
 		
 		int[] arr = tag.getIntArray("learned");
 		if(arr.length == 0) {
@@ -125,12 +107,6 @@ public class TerminalData extends DataPart {
 		NBTTagList list = (NBTTagList) tag.getTag("data");
 		if(list == null)
 			return;
-		
-		List<App> l = AppRegistry.enumeration();
-		appDataList.clear();
-		for(int i = 0; i < l.size(); ++i) { // NBTTagList already have null fix
-			appDataList.add(list.getCompoundTagAt(i));
-		}
 	}
 
 	@Override
@@ -144,12 +120,6 @@ public class TerminalData extends DataPart {
 		
 		ret.setIntArray("learned", arr);
 		
-		NBTTagList rlist = new NBTTagList();
-		List<App> l = AppRegistry.enumeration();
-		for(int i = 0; i < l.size(); ++i) {
-			rlist.appendTag(appDataList.get(i));
-		}
-		
 		return ret;
 	}
 	
@@ -161,11 +131,6 @@ public class TerminalData extends DataPart {
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	public void clientSync(@Target EntityPlayer player, @Data NBTTagCompound tag) {
 		fromNBT(tag);
-	}
-	
-	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-	private void updateApp(@Data Integer appid, @Data NBTTagCompound data) {
-		appDataList.set(appid, data);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
