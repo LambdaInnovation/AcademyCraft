@@ -13,44 +13,80 @@
 package cn.academy.vanilla.electromaster.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.ctrl.SkillInstanceInstant;
+import cn.academy.ability.api.ctrl.SyncAction;
 
 /**
  * @author WeAthFolD
  *
  */
 public class SkillArcGen extends Skill {
+	
+	static SkillArcGen instance;
 
 	public SkillArcGen() {
 		super("arc_gen", 1);
+		instance = this;
 	}
 	
 	@Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance() {
+		return new SkillInstanceInstant().addExecution(new ArcGenAction());
+	}
+	
+	private static float getDamage(AbilityData data) {
+		return instance.getFunc("damage").callFloat(data.getSkillExp(instance));
+	}
+	
+	private static float getOverload(AbilityData data) {
+		return instance.getFunc("overload").callFloat(data.getSkillExp(instance));
+	}
+	
+	private static float getConsumption(AbilityData data) {
+		return instance.getFunc("consumption").callFloat(data.getSkillExp(instance));
+	}
+	
+	private static double getIgniteProb(AbilityData data) {
+		return instance.getFunc("p_ignite").callFloat(data.getSkillExp(instance));
+	}
+	
+	private static float getExpIncr(AbilityData data, boolean effectiveHit) {
+		return instance.getFunc("exp_incr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
+	}
+	
+	public static class ArcGenAction extends SyncAction {
+
+		public ArcGenAction() {
+			super(-1);
+		}
+
+		@Override
+		public void onStart() {
+			CPData cpData;
+			AbilityData aData;
 			
-			@Override
-			public void onStart() {
-				System.out.println("ArcGen start");
+			if(this.isRemote) {
+				//FIXME: Buggy here, player should be a valid instance
+				System.out.println("Player: " + player);
+				//player.worldObj.spawnEntityInWorld(new EntityArc(player));
+			} else {
+				System.out.println("SPlayer: " + player);
+				cpData = CPData.get(player);
+				aData = AbilityData.get(player);
+				
+				if(cpData.perform(getOverload(aData), getConsumption(aData))) {
+					
+				} else {
+					ActionManager.abortAction(this);
+				}
 			}
-			
-			@Override
-			public void onTick() {
-				System.out.println("ArcGen tick");
-			}
-			
-			@Override
-			public void onEnd() {
-				System.out.println("ArcGen end");
-			}
-			
-			@Override
-			public void onAbort() {
-				System.out.println("ArcGen abort");
-			}
-			
-		};
+		}
+		
 	}
 
 }

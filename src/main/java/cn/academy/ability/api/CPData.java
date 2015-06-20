@@ -71,8 +71,11 @@ public class CPData extends DataPart {
 
 	@Override
 	public void tick() {
+		//System.out.println(isRemote() + " " + untilRecover + " " + untilOverloadRecover);
+		
 		if(untilRecover == 0) {
-			float recover = (float) getFunc("recover_speed").callDouble(currentCP, maxCP);
+			float recover = (float) getFunc("recover_speed")
+					.callDouble(currentCP, maxCP);
 			currentCP += recover;
 			if(currentCP > maxCP)
 				currentCP = maxCP;
@@ -81,7 +84,9 @@ public class CPData extends DataPart {
 		}
 		
 		if(untilOverloadRecover == 0) {
-			float recover = (float) getFunc("overload_recover_speed").callDouble(overload, maxOverload);
+			float recover = (float) getFunc("overload_recover_speed")
+					.callDouble(overload, maxOverload);
+			
 			overload -= recover;
 			if(overload < 0)
 				overload = 0;
@@ -116,6 +121,18 @@ public class CPData extends DataPart {
 	
 	public float getMaxOverload() {
 		return maxOverload;
+	}
+	
+	/**
+	 * Performs a generic ability action. 
+	 * Will fail when either can't overload anymore or can't consume cp.
+	 * @param overload Amount of overload
+	 * @param cp Amount of CP
+	 */
+	public boolean perform(float overload, float cp) {
+		if(!addOverload(overload))
+			return false;
+		return consumeCP(cp);
 	}
 	
 	/**

@@ -9,7 +9,10 @@ import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.ripple.ScriptNamespace;
 
 import com.google.common.collect.ImmutableList;
 
@@ -38,6 +41,8 @@ public abstract class Skill extends Controllable {
 	
 	private final int level;
 	
+	private ScriptNamespace script;
+	
 	public Skill(String _name, int atLevel) {
 		name = _name;
 		level = atLevel;
@@ -50,6 +55,8 @@ public abstract class Skill extends Controllable {
 		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
 		
 		addLearningCondition(new RootLearningCondition());
+		
+		script = AcademyCraft.script.at("ac." + category.getName() + "." + this.getName());
 		
 		initSkill();
 	}
@@ -141,6 +148,19 @@ public abstract class Skill extends Controllable {
     @Override
     public String toString() {
     	return getFullName();
+    }
+    
+    //---Script integration
+    protected ScriptFunction getFunc(String name) {
+    	return script.getFunction(name);
+    }
+    
+    protected float getFloat(String name) {
+    	return script.getFloat(name);
+    }
+    
+    protected double getDouble(String name) {
+    	return script.getDouble(name);
     }
     
 }

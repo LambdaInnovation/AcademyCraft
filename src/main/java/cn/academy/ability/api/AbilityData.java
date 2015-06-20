@@ -40,11 +40,13 @@ public class AbilityData extends DataPart {
 	
 	private int catID = -1;
 	private BitSet learnedSkills;
+	private float[] skillExps;
 	
 	private int level;
 
 	public AbilityData() {
 		learnedSkills = new BitSet(32);
+		skillExps = new float[32];
 	}
 	
 	/**
@@ -117,6 +119,10 @@ public class AbilityData extends DataPart {
 			learnedSkills.set(id);
 			doCompleteSync();
 		}
+	}
+	
+	public float getSkillExp(Skill skill) {
+		return skill.getCategory() == getCategory() ? this.skillExps[skill.getID()] : 0.0f;
 	}
 	
 	/**
