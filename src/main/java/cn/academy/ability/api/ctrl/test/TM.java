@@ -32,7 +32,7 @@ public class TM {
 	public static SyncAction server = null;
 	public static SyncAction client = null;
 	
-	@RegACKeyHandler(name = "sendai", defaultKey = Keyboard.KEY_U)
+	@RegACKeyHandler(name = "sendai", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler start = new KeyHandler() {
 		public void onKeyUp() {
 			if (client != null)

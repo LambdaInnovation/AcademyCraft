@@ -23,7 +23,6 @@ public class AT1 extends SyncAction {
 
 	@Override
 	public void onTick() {
-		//msg("onTick");
 		if (!isRemote) {
 			data1 = rng.nextInt(2147483647);
 		}
@@ -31,52 +30,52 @@ public class AT1 extends SyncAction {
 
 	@Override
 	public void onEnd() {
-		msg("onEnd " + data1 + " " + data2);
+		msg("onEnd " + data1 + " " + id);
 	}
 
 	@Override
 	public void onAbort() {
-		msg("onAbort " + data1 + " " + data2);
+		msg("onAbort " + data1 + " " + id);
 	}
 	
 	@Override
 	public void readNBTStart(NBTTagCompound tag) {
-		data2 = tag.getInteger("data2");
-		msg("read start " + data1 + " " + data2);
+		id = tag.getInteger("id");
+		msg("read start " + data1 + " " + id);
 	}
 	@Override
 	public void readNBTUpdate(NBTTagCompound tag) {
 		data1 = tag.getInteger("data1");
-		msg("read update " + data1 + " " + data2);
+		msg("read update " + data1 + " " + id);
 	}
 	@Override
 	public void readNBTFinal(NBTTagCompound tag) {
 		readNBTUpdate(tag);
-		data2 = tag.getInteger("data2");
-		msg("read final " + data1 + " " + data2);
+		id = tag.getInteger("id");
+		msg("read final " + data1 + " " + id);
 	}
 	@Override
 	public void writeNBTStart(NBTTagCompound tag) {
-		tag.setInteger("data2", data2);
-		msg("write start " + data1 + " " + data2);
+		tag.setInteger("id", id);
+		msg("write start " + data1 + " " + id);
 	}
 	@Override
 	public void writeNBTUpdate(NBTTagCompound tag) {
 		tag.setInteger("data1", data1);
-		msg("write update " + data1 + " " + data2);
+		msg("write update " + data1 + " " + id);
 	}
 	@Override
 	public void writeNBTFinal(NBTTagCompound tag) {
 		writeNBTUpdate(tag);
-		tag.setInteger("data2", data2);
-		msg("write final " + data1 + " " + data2);
+		tag.setInteger("id", id);
+		msg("write final " + data1 + " " + id);
 	}
 	
 	public static void msg(String msg) {
 		TM.msg("AT1", msg);
 	}
 	
-	int data1, data2;
+	int data1;
 	Random rng = new Random();
 	
 }

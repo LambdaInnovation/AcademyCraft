@@ -11,12 +11,18 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public abstract class SyncAction {
 
-	int id;
+	//TODO TREMOVE protected
+	protected int id;
 	State state;
 	int intv = -1;
 	int lastInformed = 0;
 	
 	protected final boolean isRemote = FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	
+	/**
+	 * The associated player
+	 * null for started from server
+	 */
 	protected EntityPlayer player = null;
 	
 	/**

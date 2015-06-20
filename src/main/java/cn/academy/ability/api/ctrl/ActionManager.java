@@ -64,6 +64,12 @@ public class ActionManager {
 		AMS.abortFromClient(player, id);
 	}
 	
+	@RegNetworkCall(side = Side.SERVER)
+	static void abortPlayerAtServer(@Instance EntityPlayer player) {
+		msg("abortPlayerAtServer");
+		AMS.abortPlayer(player);
+	};
+	
 	@RegNetworkCall(side = Side.CLIENT)
 	static void startAtClient(@Target(range = RangeOption.EXCEPT) EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
 		msg("startAtClient");

@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.api.ctrl.SyncAction.State;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -30,10 +32,10 @@ public class AMServer implements IActionManager {
 		map.put(dummy, new HashMap<Integer, SyncAction>());
 	}
 	
-	Map<UUID, Map<Integer, SyncAction>> map = new HashMap<UUID, Map<Integer, SyncAction>>();
-	List<UUID> off = new LinkedList<UUID>();
+	private Map<UUID, Map<Integer, SyncAction>> map = new HashMap<UUID, Map<Integer, SyncAction>>();
+	private List<UUID> off = new LinkedList<UUID>();
 	
-	private static UUID dummy = UUID.randomUUID();
+	private static final UUID dummy = UUID.randomUUID();
 	
 	int nextId = 0;
 	
@@ -106,6 +108,11 @@ public class AMServer implements IActionManager {
 			ActionManager.terminateAtClient(id, action.getNBTFinal());
 		}
 	}
+	
+	void abortPlayer(EntityPlayer player) {
+		for (Iterator<SyncAction> i = map.get(player.getUniqueID()).values().iterator(); i.hasNext(); )
+			abortAction(i.next());
+	}
 
 	private UUID playerUUID(SyncAction action) {
 		return action.player == null ? dummy : action.player.getUniqueID();
@@ -128,9 +135,6 @@ public class AMServer implements IActionManager {
 					action.lastInformed = curTick;
 					action.state = State.STARTED;
 					action.onStart();
-					//onStart() and onTick()
-					//or?
-					//onStart(), next tick onTick()
 					break;
 				case STARTED:
 					action.onTick();
@@ -160,8 +164,7 @@ public class AMServer implements IActionManager {
 	@SubscribeEvent
 	public void onPlayerChangedDimension(PlayerChangedDimensionEvent event) {
 		log("onPlayerChangedDimension");
-		for (Iterator<SyncAction> i = map.get(event.player).values().iterator(); i.hasNext(); )
-			abortAction(i.next());
+		abortPlayer(event.player);
 	}
 	
 	@SubscribeEvent
@@ -173,8 +176,7 @@ public class AMServer implements IActionManager {
 	@SubscribeEvent
 	public void onPlayerLoggedOut(PlayerLoggedOutEvent event) {
 		log("onPlayerLoggedOut");
-		for (Iterator<SyncAction> i = map.get(event.player.getUniqueID()).values().iterator(); i.hasNext(); )
-			abortAction(i.next());
+		abortPlayer(event.player);
 		off.add(event.player.getUniqueID());
 	}
 	

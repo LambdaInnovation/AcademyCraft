@@ -2,14 +2,21 @@ package cn.academy.ability.api.ctrl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import cn.academy.ability.api.ctrl.SyncAction.State;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
+import cn.liutils.api.event.OpenAuxGuiEvent;
+import cn.liutils.util.client.ClientUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
@@ -30,9 +37,12 @@ public class AMClient implements IActionManager {
 
 	AMClient() {
 		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();
+	private Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();
+	//For optimization
+	private Set<Integer> set = new HashSet<Integer>();
 	
 	@Override
 	public void startAction(SyncAction action) {
@@ -47,6 +57,7 @@ public class AMClient implements IActionManager {
 				if (action.id >= 0) {
 					action.state = State.IDENTIFIED;
 					map.put(action.id, action);
+					set.add(action.id);
 				}
 			}
 		}));
@@ -60,15 +71,6 @@ public class AMClient implements IActionManager {
 	@Override
 	public void abortAction(SyncAction action) {
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.id);
-	}
-
-	void abortAtClient(SyncAction action) {
-		SyncAction _action = map.get(action.id);
-		if (_action != null) {
-			_action.state = State.ABORTED;
-			_action.onAbort();
-		}
-		map.remove(action.id);
 	}
 	
 	void startFromServer(String className, NBTTagCompound tag) {
@@ -97,7 +99,7 @@ public class AMClient implements IActionManager {
 		if (action != null)
 			action.setNBTFinal(tag);
 	}
-
+	
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused() || event.phase.equals(Phase.START))
@@ -115,10 +117,12 @@ public class AMClient implements IActionManager {
 			case ENDED:
 				action.onEnd();
 				i.remove();
+				set.remove(action.id);
 				break;
 			case ABORTED:
 				action.onAbort();
 				i.remove();
+				set.remove(action.id);
 				break;
 			default:
 				break;
@@ -129,8 +133,30 @@ public class AMClient implements IActionManager {
 	@SubscribeEvent
 	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		log("onClientDisconnectionFromServer: " + Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
-		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); )
-			abortAtClient(i.next());
+		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
+			SyncAction action = i.next();
+			action.state = State.ABORTED;
+			action.onAbort();
+			i.remove();
+		}
+	}
+	
+	private void abortPlayer() {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (player != null && !set.isEmpty())
+			ActionManager.abortPlayerAtServer(player);
+	}
+	
+	@SubscribeEvent
+	public void onGuiOpen(GuiOpenEvent event) {
+		if (event.gui != null)
+			abortPlayer();
+	}
+	
+	@SubscribeEvent
+	public void onOpenAuxGui(OpenAuxGuiEvent event) {
+		if (event.gui != null)
+			abortPlayer();
 	}
 	
 	//TODO TREMOVE
