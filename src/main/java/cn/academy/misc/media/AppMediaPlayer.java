@@ -37,7 +37,9 @@ public class AppMediaPlayer extends App {
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
 			@Override
-			public void onStart() {}
+			public void onStart() {
+				GuiMediaPlayer.guiHandler.openClientGui();
+			}
 		};
 	}
 

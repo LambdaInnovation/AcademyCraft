@@ -81,7 +81,7 @@ public class SkillArcGen extends Skill {
 			if(!isRemote) {
 				// Perform ray trace
 				MovingObjectPosition result = WorldUtils.tracePlayerWithEntities(player, 20, null);
-				System.out.println(result);
+
 				if(result != null && result.entityHit != null) {
 					result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
 				}

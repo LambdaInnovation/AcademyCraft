@@ -54,6 +54,7 @@ class MediaInstance extends MovingSound {
 	
 	public void dispose() {
 		disposed = true;
+		donePlaying = true;
 	}
 
 	@Override
@@ -63,7 +64,8 @@ class MediaInstance extends MovingSound {
             yPosF = (float) player.posY;
             zPosF = (float) player.posZ;
             
-            ++tick;
+            if(!isPaused)
+            	++tick;
         } else {
         	disposed = true;
             this.donePlaying = true;

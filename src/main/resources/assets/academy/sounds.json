@@ -44,5 +44,7 @@
 "tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]},
 "tp.guts": {"category": "master", "sounds": [{"name": "tp/guts", "stream": false}]},
 
-"media.only_my_railgun": {"category": "master", "sounds": [{"name": "media/only_my_railgun", "stream": true}]}
+"media.only_my_railgun": {"category": "master", "sounds": [{"name": "media/only_my_railgun", "stream": true}]},
+"media.level5_judgelight": {"category": "master", "sounds": [{"name": "media/level5_judgelight", "stream": true}]},
+"media.sisters_noise": {"category": "master", "sounds": [{"name": "media/sisters_noise", "stream": true}]}
 }

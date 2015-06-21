@@ -30,7 +30,7 @@ public class Media {
 	public Media(String _name, int _length) {
 		name = _name;
 		length = _length;
-		cover = Resources.getTexture("/media/" + name + "_cover.png");
+		cover = Resources.getTexture("media/" + name + "_cover");
 	}
 	
 	public String getName() {
@@ -50,7 +50,8 @@ public class Media {
 	}
 	
 	public static String getPlayingTime(int seconds) {
-		return String.format("%2d:%2d", seconds / 60, seconds % 60);
+		int a = seconds / 60, b = seconds % 60;
+		return String.format((a < 10 ? "0" : "") + a + ":" + (b < 10 ? "0" : "") + b);
 	}
 
 }

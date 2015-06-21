@@ -52,6 +52,8 @@ public class MediaPlayer {
 	
 	static {
 		addMedia("only_my_railgun", 257);
+		addMedia("level5_judgelight", 285);
+		addMedia("sisters_noise", 283);
 	}
 	
 	public static void addMedia(String name, int len) {
@@ -98,6 +100,7 @@ public class MediaPlayer {
 	};
 	
 	List<Media> playerMedias = new ArrayList();
+	Media lastMedia;
 	
 	public PlayPref playPref = PlayPref.LOOP;
 	
@@ -109,6 +112,14 @@ public class MediaPlayer {
 	
 	MediaPlayer() {}
 	
+	public void startPlay() {
+		if(lastMedia == null)
+			lastMedia = playerMedias.isEmpty() ? null : playerMedias.get(0);
+		System.out.println(lastMedia);
+		if(lastMedia != null)
+			startPlay(lastMedia);
+	}
+	
 	public void startPlay(Media media) {
 		stop();
 		
@@ -116,9 +127,13 @@ public class MediaPlayer {
 		playingSounds = ((HashBiMap<String, ISound>) RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
 		sndSystem = RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
 		
+		Minecraft.getMinecraft().theWorld.playAuxSFX(1005, 0, 0, 0, 0);
+		
 		mediaInst = new MediaInstance(media);
 		soundManager.sndHandler.playSound(mediaInst);
 		mediaInst.mediaUUID = playingSounds.get(mediaInst);
+		
+		lastMedia = media;
 	}
 	
 	public void startPlay(String name) {
@@ -130,7 +145,7 @@ public class MediaPlayer {
 	}
 	
 	public boolean isPlaying() {
-		return mediaInst != null && !mediaInst.disposed;
+		return mediaInst != null && !mediaInst.disposed && !mediaInst.isPaused;
 	}
 	
 	public boolean isPaused() {
@@ -176,6 +191,10 @@ public class MediaPlayer {
 		default:
 			return null;
 		}
+	}
+	
+	public MediaInstance getPlayingMedia() {
+		return mediaInst;
 	}
 	
 	@SubscribeEvent

@@ -95,9 +95,17 @@ ac.gui.node.mark.transmitting.desc=TRANSMITTING
 ac.gui.node.mark.successful.desc=SUCCESSFUL
 ac.gui.node.mark.failed.desc=FAILED
 
-#Imag Fusor
+# Imag Fusor
 ac.gui.imagfusor.ion.desc=Proj Liquid
 ac.gui.imagfusor.flux.desc=Imag Flux
+
+# Media
+ac.media.only_my_railgun.name=Only My Railgun
+ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
+ac.media.level5_judgelight.name=Level5. Judgelight
+ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
+ac.media.sisters_noise.name=Sister's Noise
+ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
 
 # Electro Master
 ## EM Knowledges
