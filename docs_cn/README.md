@@ -3,6 +3,8 @@
 
 Author: WeAthFolD
 
+本代码规范主要说明在AC中编程的代码惯例。本代码规范未涉及的部分，请参考[Google Java Style](http://google-styleguide.googlecode.com/svn/trunk/javaguide.html)或[Code Conventions for the Java TM Programming Language](http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html)。
+应该还存在很多没完善的内容，持续补完中。
 
 包结构
 ===
@@ -81,6 +83,13 @@ Item和Block是个例外。它们由于经常被全局访问，应该在每个�
 ===
 
 目前可以无脑推送到```master```。在接下来应该会引入更严谨的git协作组织规则。
+
+Ripple脚本集成
+===
+
+AC中有很多数据很重的实现部分。为了将数据和实现解耦，我们使用了LIUtils提供的Ripple脚本语言。任何数据量很大又经常修改的内容，都应该考虑使用脚本来实现。能力实现部分强制使用Ripple编写数据。
+
+关于脚本的使用惯例详见 scripts.md
 
 其它文档
 ===
