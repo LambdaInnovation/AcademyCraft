@@ -1,9 +1,8 @@
-package cn.academy.ability.learning;
+package cn.academy.ability.api.learning;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.learning.LearningCondition;
 
 public class LearningHelper {
 

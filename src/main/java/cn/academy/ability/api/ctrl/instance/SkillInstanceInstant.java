@@ -10,10 +10,14 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api.ctrl;
+package cn.academy.ability.api.ctrl.instance;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.ctrl.SyncAction;
 
 /**
  * A wrapping for skills that just do something on click.

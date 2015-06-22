@@ -9,6 +9,7 @@ import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
+import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.liutils.ripple.ScriptFunction;
@@ -66,10 +67,16 @@ public abstract class Skill extends Controllable {
 	 */
 	protected void initSkill() {}
 	
+	/**
+	 * Get the id of the skill in the Category.
+	 */
 	public int getID() {
 		return id;
 	}
 	
+	/**
+	 * Get the level id that this skill is in.
+	 */
 	public int getLevel() {
 		return level;
 	}
@@ -116,6 +123,12 @@ public abstract class Skill extends Controllable {
 		return StatCollector.translateToLocal("ac.ability." + getFullName() + "." + key);
 	}
 	
+	//--- Ctrl
+	@Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+		return null;
+	}
+	
 	//--- Learning
 	public void setParent(Skill skill) {
 		parent = skill;
@@ -140,9 +153,23 @@ public abstract class Skill extends Controllable {
 		return ImmutableList.copyOf(learningConditions);
 	}
 	
-	@Override
-    public SkillInstance createSkillInstance(EntityPlayer player) {
-		return null;
+	/**
+	 * @return The stimulation in the developer required in order to learn this skill
+	 */
+	public int getLearningStims() {
+		return AcademyCraft.getFunction("ability.learning_cost").callInteger(level);
+	}
+	
+	/**
+	 * @return The minimul developer type that this skill will appear on
+	 */
+	public DeveloperType getMinimumDeveloperType() {
+		if(level <= 1) // Level 1 and 2
+			return DeveloperType.PORTABLE;
+		if(level <= 2) // Level 3
+			return DeveloperType.NORMAL;
+		else // Level 4 and 5
+			return DeveloperType.ADVANCED;
 	}
     
     @Override

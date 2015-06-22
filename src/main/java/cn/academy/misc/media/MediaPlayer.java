@@ -145,7 +145,7 @@ public class MediaPlayer {
 	}
 	
 	public boolean isPlaying() {
-		return mediaInst != null && !mediaInst.disposed && !mediaInst.isPaused;
+		return mediaInst != null && !mediaInst.disposed;
 	}
 	
 	public boolean isPaused() {

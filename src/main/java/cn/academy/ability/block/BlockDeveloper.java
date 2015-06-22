@@ -15,20 +15,14 @@ package cn.academy.ability.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.block.ACBlockContainer;
-import cn.annoreg.mc.gui.GuiHandlerBase;
 
 /**
  * @author WeAthFolD
  *
  */
 public class BlockDeveloper extends ACBlockContainer {
-	
-	public enum DeveloperType {
-		BASIC,
-		IMPROVED,
-		ADVANCED
-	}
 	
 	public final DeveloperType type;
 
@@ -41,7 +35,5 @@ public class BlockDeveloper extends ACBlockContainer {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileDeveloper();
 	}
-	
-	
 
 }

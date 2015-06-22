@@ -17,7 +17,7 @@ import cn.academy.ability.api.Skill;
 
 /**
  * A learning condition is an atomic condition/requirement on player ability data
- * in order to learn some ability.
+ * in order to learn some skill.
  * @author WeAthFolD
  */
 public interface LearningCondition {

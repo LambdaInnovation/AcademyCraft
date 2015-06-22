@@ -10,30 +10,27 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.learning;
+package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.Skill;
-import cn.academy.core.AcademyCraft;
 
 /**
+ * An IDevelopeType represents a single kind of process to be performed in Developer.
+ * You have to provide the stimulation count and the learned callback.
  * @author WeAthFolD
- *
  */
-public class SkillDevProgress extends CommonDevProgress {
+public interface IDevelopType {
 	
-	final Skill skill;
-
-	public SkillDevProgress(Skill _skill) {
-		super(getLearningCost(_skill.getLevel()), (EntityPlayer player) -> {
-			AbilityData data = AbilityData.get(player);
-		});
-		skill = _skill;
-	}
+	int getStimulations();
 	
-	private static int getLearningCost(int skillLevel) {
-		return AcademyCraft.getFunction("ability.learning.learning_cost").callInteger(skillLevel);
-	}
-
+	DeveloperType getMinimumType();
+	
+	/**
+	 * @return Whether the action can be REALLY started/performed at the moment.
+	 * This should be some constraints to player's current state.
+	 */
+	boolean validate(EntityPlayer player);
+	
+	void onLearned(EntityPlayer player);
+	
 }

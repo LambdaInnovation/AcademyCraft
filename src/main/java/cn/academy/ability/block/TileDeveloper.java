@@ -14,15 +14,17 @@ package cn.academy.ability.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.academy.ability.block.BlockDeveloper.DeveloperType;
-import cn.academy.ability.learning.DevelopManager;
-import cn.academy.ability.learning.DevelopProgress;
+import cn.academy.ability.developer.Developer;
+import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.InstanceSerializer;
+import cn.annoreg.mc.s11n.SerializationManager;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.liutils.ripple.ScriptNamespace;
 import cpw.mods.fml.relauncher.Side;
@@ -35,7 +37,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class TileDeveloper extends TileReceiverBase {
 	
-	DevelopManager devManager;
+	public final Developer developer;
+	
+	static InstanceSerializer<EntityPlayer> ser = SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
 
 	@SideOnly(Side.CLIENT)
 	public boolean isDevelopingDisplay;
@@ -50,14 +54,36 @@ public class TileDeveloper extends TileReceiverBase {
 	
 	public TileDeveloper() {
 		super("ability_developer", 2, 100000, 300);
+		developer = new Developer() {
+
+			@Override
+			public EntityPlayer getUser() {
+				return user;
+			}
+
+			@Override
+			public int getTPS() {
+				return TileDeveloper.this.getTPS();
+			}
+
+			@Override
+			public boolean pullEnergy(double amt) {
+				return TileDeveloper.this.pullEnergy(amt) == amt;
+			}
+
+			@Override
+			public double getCPS() {
+				return getConsumePerStim();
+			}
+			
+		};
 	}
 
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
 			
-			if(devManager != null)
-				devManager.tick();
+			developer.tick();
 			
 		} else {
 			
@@ -71,6 +97,10 @@ public class TileDeveloper extends TileReceiverBase {
 		}
 	}
 	
+	public Developer getDeveloper() {
+		return developer;
+	}
+	
 	public EntityPlayer getUser() {
 		return user;
 	}
@@ -78,46 +108,27 @@ public class TileDeveloper extends TileReceiverBase {
 	public boolean use(EntityPlayer player) {
 		if(user == null) {
 			user = player;
-			onStartUse();
+			developer.reset();
 			return true;
 		}
 		return player.equals(user);
 	}
 	
 	public void unuse() {
-		if(user != null) {
-			onEndUse();
-		}
 		user = null;
-	}
-	
-	private void onStartUse() {
-		
-	}
-	
-	private void onEndUse() {
-		if(devManager == null)
-			devManager.abortDeveloping();
-	}
-	
-	/**
-	 * Start the develop. Only effective in SERVER.
-	 */
-	public void startDevelop(DevelopProgress progress) {
-		if(user != null) {
-			if(devManager == null)
-				devManager = new DevelopManager(this);
-			devManager.startDevelop(progress);
-		}
+		developer.reset();
 	}
 	
 	/**
 	 * Get the "Tick per stimulation" param.
 	 */
-	public double getTPS() {
-		return script.getDouble(propPath("tps"));
+	public int getTPS() {
+		return script.getInteger(propPath("tps"));
 	}
 	
+	/**
+	 * TODO: Implement modules
+	 */
 	public double getConsumePerStim() {
 		return 1000;
 	}
@@ -128,7 +139,7 @@ public class TileDeveloper extends TileReceiverBase {
 	
 	private DeveloperType getType() {
 		Block blockType = getBlockType();
-		DeveloperType type = blockType instanceof BlockDeveloper ? ((BlockDeveloper)blockType).type : DeveloperType.BASIC;
+		DeveloperType type = blockType instanceof BlockDeveloper ? ((BlockDeveloper)blockType).type : DeveloperType.PORTABLE;
 		return type;
 	}
 	
@@ -138,6 +149,11 @@ public class TileDeveloper extends TileReceiverBase {
 			NBTTagCompound tag = (NBTTagCompound) ret;
 			isDevelopingDisplay = tag.getBoolean("d");
 			devProgressDisplay = tag.getDouble("p");
+			
+//			NBTBase tag2 = tag.getTag("a");
+//			if(tag2 != null) {
+//				user = ret.
+//			}
 		});
 		sync(future);
 	}
@@ -149,16 +165,24 @@ public class TileDeveloper extends TileReceiverBase {
 		boolean dev;
 		double devProg;
 		
-		if(devManager == null) {
+		if(developer == null) {
 			dev = false;
 			devProg = 0;
 		} else {
-			dev = devManager.isDeveloping();
-			devProg = devManager.getDevelopProgress();
+			dev = developer.isDeveloping();
+			devProg = developer.getDevelopProgress();
 		}
 		
 		ret.setBoolean("d", dev);
 		ret.setDouble("p", devProg);
+		
+//		if(getUser() != null) {
+//			try {
+//				ret.setTag("a", ser.writeInstance(getUser()));
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		future.setAndSync(ret);
 	}

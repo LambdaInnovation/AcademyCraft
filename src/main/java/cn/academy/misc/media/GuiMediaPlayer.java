@@ -131,7 +131,10 @@ public class GuiMediaPlayer extends LIGuiScreen {
 	@GuiCallback("pop")
 	public void onPopDown(Widget w, MouseDownEvent event) {
 		if(player.isPlaying()) {
-			player.pause();
+			if(player.isPaused())
+				player.resume();
+			else
+				player.pause();
 		} else {
 			player.startPlay();
 		}
@@ -172,7 +175,7 @@ public class GuiMediaPlayer extends LIGuiScreen {
 	
 	private void updatePopState() {
 		System.out.println(player.isPlaying());
-		DrawTexture.get(pageMain.getWidget("pop")).texture = player.isPlaying() ? T_PAUSE : T_PLAY;
+		DrawTexture.get(pageMain.getWidget("pop")).texture = (player.isPlaying() && !player.isPaused()) ? T_PAUSE : T_PLAY;
 	}
 	
 	private class UpdateMediaEvent implements GuiEvent {} 
