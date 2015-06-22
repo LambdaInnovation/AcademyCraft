@@ -10,52 +10,35 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.client.ui;
+package cn.academy.core.client.ui;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.gui.ScaledResolution;
 import cn.annoreg.core.Registrant;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.component.Transform.WidthAlign;
+import cn.liutils.cgui.gui.Widget;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 
 /**
- * TODO: Placement customization
+ * AC global HUD drawing dispatcher.
+ * TODO: Support position customizing
  * @author WeAthFolD
  */
 @Registrant
-public class AbilityUI extends AuxGui {
+public class ACHud extends AuxGui {
 	
 	@RegAuxGui
-	public static AbilityUI instance = new AbilityUI();
+	public static ACHud instance = new ACHud();
 	
-	LIGui scene = new LIGui();
+	List<Node> nodes = new ArrayList();
 	
-	CPBar cpbar;
-	
-	NotifyUI notifyUI;
-	
-	KeyHintUI keyHintUI;
-	
-	/**
-	 * 
-	 */
-	public AbilityUI() {
-		cpbar = new CPBar();
-		cpbar.transform.alignWidth = WidthAlign.RIGHT;
-		cpbar.transform.y = 12;
-		cpbar.transform.x = -12;
-		
-		notifyUI = new NotifyUI();
-		notifyUI.transform.setPos(0, 33);
-		
-		keyHintUI = new KeyHintUI();
-		
-		scene.addWidget(cpbar);
-		scene.addWidget(notifyUI);
-		scene.addWidget(keyHintUI);
-	}
-	
+	LIGui gui = new LIGui();
+
+	ACHud() {}
+
 	@Override
 	public boolean isForeground() {
 		return false;
@@ -63,8 +46,31 @@ public class AbilityUI extends AuxGui {
 
 	@Override
 	public void draw(ScaledResolution sr) {
-		scene.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
-		scene.draw(0, 0);
+		gui.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
+		for(Node n : nodes) {
+			n.w.transform.enabled = n.cond.shows();
+		}
+		
+		gui.draw();
+	}
+	
+	public void addElement(Widget w, Condition showCondition) {
+		nodes.add(new Node(w, showCondition));
+		gui.addWidget(w);
+	}
+	
+	public interface Condition {
+		boolean shows();
+	}
+	
+	private class Node {
+		Widget w;
+		Condition cond;
+		
+		public Node(Widget wi, Condition c) {
+			w = wi;
+			cond = c;
+		}
 	}
 
 }

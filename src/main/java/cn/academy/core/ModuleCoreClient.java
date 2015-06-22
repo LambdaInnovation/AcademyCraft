@@ -13,6 +13,8 @@
 package cn.academy.core;
 
 import net.minecraftforge.common.config.Configuration;
+import cn.academy.core.client.ui.ACHud;
+import cn.academy.core.client.ui.NotifyUI;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyManager;
@@ -37,6 +39,8 @@ public class ModuleCoreClient {
 	
 	public static KeyManager dynKeyManager = new KeyManager();
 	
-	public static void init() {}
+	public static void init() {
+		ACHud.instance.addElement(new NotifyUI(), () -> true);
+	}
 	
 }

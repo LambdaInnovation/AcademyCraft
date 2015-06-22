@@ -35,6 +35,7 @@ import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.client.HudUtils;
@@ -78,6 +79,8 @@ public class CPBar extends Widget {
 	public CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.2f;
+		transform.alignWidth = WidthAlign.RIGHT;
+		transform.setPos(-12, 12);
 		
 		initEvents();
 		

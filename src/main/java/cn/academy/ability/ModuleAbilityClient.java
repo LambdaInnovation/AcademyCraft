@@ -5,9 +5,14 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
+import cn.academy.ability.client.ui.CPBar;
+import cn.academy.ability.client.ui.KeyHintUI;
 import cn.academy.ability.client.ui.PresetEditUI;
+import cn.academy.core.client.ui.ACHud;
+import cn.academy.core.client.ui.ACHud.Condition;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -48,7 +53,10 @@ public class ModuleAbilityClient {
 	};
 	
 	public static void init() {
+		Condition abilityActivatedCondition = () -> AbilityData.get(Minecraft.getMinecraft().thePlayer).isLearned();
 		
+		ACHud.instance.addElement(new CPBar(), abilityActivatedCondition);
+		ACHud.instance.addElement(new KeyHintUI(), abilityActivatedCondition);
 	}
 	
 }

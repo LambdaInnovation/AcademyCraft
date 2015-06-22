@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.client.ui;
+package cn.academy.core.client.ui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -19,8 +19,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.client.ui.notification.INotification;
-import cn.academy.ability.client.ui.notification.NotifyKnowledge;
 import cn.academy.core.client.Resources;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.liutils.cgui.gui.Widget;
@@ -64,6 +62,7 @@ public class NotifyUI extends Widget {
 		
 		texture = Resources.getTexture("guis/notification/back");
 		transform.scale = 0.25f;
+		transform.setPos(0, 15);
 		
 		MinecraftForge.EVENT_BUS.register(this);
 	}

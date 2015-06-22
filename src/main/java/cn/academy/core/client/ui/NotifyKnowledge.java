@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.client.ui.notification;
+package cn.academy.core.client.ui;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
