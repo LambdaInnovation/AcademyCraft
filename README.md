@@ -17,5 +17,8 @@ You must add the two mods mentioned above into your workspace and then add Acade
 
 You must put the [coremod loading hook](https://github.com/LambdaInnovation/AcademyCraft/tree/master/jar "loading hook") into your ```eclipse/mods``` folder, so that AcademyCraft's coremod will be loaded.
 
+## Code Documents
+We are working on filling up the documents of AC codes. You can check out the Chinese version of API document at [HERE](https://github.com/LambdaInnovation/AcademyCraft/tree/master/docs_cn "Chinese Documents"). Pull requests are welcomed.
+
 [liu]: https://github.com/LambdaInnovation/LIUtils
 [ar]: https://github.com/LambdaInnovation/AnnotationRegistry
