@@ -48,7 +48,7 @@ public class ACHud extends AuxGui {
 	public void draw(ScaledResolution sr) {
 		gui.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
 		for(Node n : nodes) {
-			n.w.transform.enabled = n.cond.shows();
+			n.w.transform.doesDraw = n.cond.shows();
 		}
 		
 		gui.draw();
