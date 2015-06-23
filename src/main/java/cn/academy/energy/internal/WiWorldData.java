@@ -38,7 +38,7 @@ import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.liutils.util.helper.BlockPos;
-import cn.liutils.util.helper.IBlockFilter;
+import cn.liutils.util.mc.IBlockFilter;
 import cn.liutils.util.mc.WorldUtils;
 
 /**

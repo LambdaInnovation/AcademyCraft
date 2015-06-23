@@ -24,7 +24,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.core.util.ACSounds;
 import cn.academy.test.arc.EntityArc;
 import cn.liutils.entityx.handlers.Life;
-import cn.liutils.util.mc.WorldUtils;
+import cn.liutils.util.raytrace.Raytrace;
 
 /**
  * @author WeAthFolD
@@ -80,7 +80,7 @@ public class SkillArcGen extends Skill {
 			
 			if(!isRemote) {
 				// Perform ray trace
-				MovingObjectPosition result = WorldUtils.tracePlayerWithEntities(player, 20, null);
+				MovingObjectPosition result = Raytrace.traceLiving(player, 20);
 
 				if(result != null && result.entityHit != null) {
 					result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));

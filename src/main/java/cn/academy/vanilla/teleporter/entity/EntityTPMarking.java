@@ -23,9 +23,8 @@ import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.WorldUtils;
+import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -86,7 +85,7 @@ public abstract class EntityTPMarking extends EntityAdvanced {
 	
 	protected void updatePos() {
 		double md = getMaxDistance();
-		MovingObjectPosition mop = WorldUtils.tracePlayer(player, md);
+		MovingObjectPosition mop = Raytrace.traceLiving(player, md);
 		
 		
 		if(mop != null) {

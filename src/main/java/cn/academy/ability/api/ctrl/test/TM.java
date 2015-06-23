@@ -32,7 +32,7 @@ public class TM {
 	public static SyncAction server = null;
 	public static SyncAction client = null;
 	
-	@RegACKeyHandler(name = "sendai", defaultKey = Keyboard.KEY_K)
+	//@RegACKeyHandler(name = "sendai", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler start = new KeyHandler() {
 		public void onKeyUp() {
 			if (client != null)
@@ -42,7 +42,7 @@ public class TM {
 		}
 	};
 	
-	@RegACKeyHandler(name = "jintuu", defaultKey = Keyboard.KEY_I)
+	//@RegACKeyHandler(name = "jintuu", defaultKey = Keyboard.KEY_I)
 	public static KeyHandler end = new KeyHandler() {
 		public void onKeyUp() {
 			if (client == null)
@@ -52,7 +52,7 @@ public class TM {
 		}
 	};
 	
-	@RegACKeyHandler(name = "naka", defaultKey = Keyboard.KEY_O)
+	//@RegACKeyHandler(name = "naka", defaultKey = Keyboard.KEY_O)
 	public static KeyHandler abort = new KeyHandler() {
 		public void onKeyUp() {
 			if (client == null)

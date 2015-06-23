@@ -130,9 +130,13 @@ public class CPData extends DataPart {
 	 * @param cp Amount of CP
 	 */
 	public boolean perform(float overload, float cp) {
-		if(!addOverload(overload))
+		if(this.overload + overload > getMaxOverload() * 2 ||
+			currentCP - cp < 0)
 			return false;
-		return consumeCP(cp);
+		
+		addOverload(overload);
+		consumeCP(cp);
+		return true;
 	}
 	
 	/**

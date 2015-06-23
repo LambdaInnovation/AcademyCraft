@@ -6,6 +6,8 @@ import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
+import cn.academy.vanilla.meltdowner.CatMeltdowner;
+import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -20,8 +22,15 @@ public class ModuleVanilla {
 	@RegItem.HasRender
 	public static ItemCoin coin;
 	
+	@RegItem
+	@RegItem.HasRender
+	public static ItemSilbarn silbarn;
+	
 	@RegCategory
 	public static CatElectroMaster electroMaster;
+	
+	@RegCategory
+	public static CatMeltdowner meltdowner;
 	
 	@RegACKeyHandler(name = "FFF", defaultKey = Keyboard.KEY_MINUS)
 	public static KeyHandler test = new Test();

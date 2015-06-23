@@ -97,7 +97,6 @@ public class EntityMdRaySmall extends EntityRayBase {
 			//player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player));
 			
 			EntitySurroundArc esa = new EntitySurroundArc(player);
-			System.out.println("ESA");
 			player.worldObj.spawnEntityInWorld(esa);
 		}
 		

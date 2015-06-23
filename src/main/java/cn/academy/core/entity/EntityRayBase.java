@@ -66,6 +66,17 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		ignoreFrustumCheck = true;
 	}
 	
+	public void setFromTo(double x0, double y0, double z0, double x1, double y1, double z1) {
+		setPosition(x0, y0, z0);
+		
+		double dx = x1 - x0, dy = y1 - y0, dz = z1 - z0;
+		double dxzsq = dx * dx + dz * dz;
+		rotationYaw = (float) (-Math.atan2(dx, dz) * 180 / Math.PI);
+		rotationPitch = (float) (-Math.atan2(dy, Math.sqrt(dxzsq)) * 180 / Math.PI);
+		
+		length = Math.sqrt(dxzsq + dy * dy);
+	}
+	
 	protected void onFirstUpdate() {
 		executeAfter(new EntityCallback() {
 			@Override

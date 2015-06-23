@@ -44,6 +44,10 @@ public abstract class Skill extends Controllable {
 	
 	private ScriptNamespace script;
 	
+	/**
+	 * @param _name Skill internal name
+	 * @param atLevel The level at which this skill is in
+	 */
 	public Skill(String _name, int atLevel) {
 		name = _name;
 		level = atLevel;

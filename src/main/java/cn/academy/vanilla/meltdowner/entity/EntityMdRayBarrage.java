@@ -13,12 +13,11 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import cn.academy.core.entity.EntityRayBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.helper.Motion3D;
 
 /**
  * This class uses some little hacks. By rendering all the barrage rays within a 
@@ -35,9 +34,12 @@ public class EntityMdRayBarrage extends EntityRayBase {
 	
 	private SubRay[] subrays;
 
-	public EntityMdRayBarrage(EntityPlayer player) {
-		super(player);
-		new Motion3D(player, true).applyToEntity(this);
+	public EntityMdRayBarrage(World world, double x, double y, double z, float yaw, float pitch) {
+		super(world);
+		
+		setPosition(x, y, z);
+		rotationYaw = yaw;
+		rotationPitch = pitch;
 		
 		this.life = 50;
 		
