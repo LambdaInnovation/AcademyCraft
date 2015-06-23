@@ -41,7 +41,6 @@ public class AMServer implements IActionManager {
 	
 	@Override
 	public void startAction(SyncAction action) {
-		msg("startAction");
 		action.id = nextId++;
 		action.state = State.IDENTIFIED;
 		action.player = null;
@@ -160,32 +159,20 @@ public class AMServer implements IActionManager {
 		off.clear();
 	}
 	
-	//TODO abortAll
 	@SubscribeEvent
 	public void onPlayerChangedDimension(PlayerChangedDimensionEvent event) {
-		log("onPlayerChangedDimension");
 		abortPlayer(event.player);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-		log("onPlayerLoggedIn");
 		map.put(event.player.getUniqueID(), new HashMap<Integer, SyncAction>());
 	}
 	
 	@SubscribeEvent
 	public void onPlayerLoggedOut(PlayerLoggedOutEvent event) {
-		log("onPlayerLoggedOut");
 		abortPlayer(event.player);
 		off.add(event.player.getUniqueID());
 	}
-	
-	//TODO TREMOVE
-	public static void msg(String msg) {
-		cn.academy.ability.api.ctrl.test.TM.msg("AMS", msg);
-	}
-	public static void log(String msg) {
-		cn.academy.ability.api.ctrl.test.TM.log("AMS", msg);
-	}
-	
+
 }

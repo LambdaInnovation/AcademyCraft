@@ -26,10 +26,6 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
-/* TODO: client operation?
- * send to server
- * server send to all
- */
 /**
  * @author EAirPeter
  */
@@ -46,14 +42,11 @@ public class AMClient implements IActionManager {
 	
 	@Override
 	public void startAction(SyncAction action) {
-		msg("startAction");
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
 			public void onReady(Object val) {
-				msg("startAction.onReady");
 				action.id = (int) val;
-				//just ignore?
 				if (action.id >= 0) {
 					action.state = State.IDENTIFIED;
 					action.player = Minecraft.getMinecraft().thePlayer;
@@ -143,7 +136,6 @@ public class AMClient implements IActionManager {
 	
 	@SubscribeEvent
 	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
-		log("onClientDisconnectionFromServer: " + Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
 			action.state = State.ABORTED;
@@ -169,12 +161,5 @@ public class AMClient implements IActionManager {
 		if (event.gui != null)
 			abortPlayer();
 	}
-	
-	//TODO TREMOVE
-	public static void msg(String msg) {
-		cn.academy.ability.api.ctrl.test.TM.msg("AMC", msg);
-	}
-	public static void log(String msg) {
-		cn.academy.ability.api.ctrl.test.TM.log("AMC", msg);
-	}
+
 }

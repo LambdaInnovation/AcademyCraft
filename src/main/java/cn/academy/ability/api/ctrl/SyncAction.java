@@ -11,8 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public abstract class SyncAction {
 
-	//TODO TREMOVE protected
-	protected int id;
+	int id;
 	State state;
 	int intv = -1;
 	int lastInformed = 0;
