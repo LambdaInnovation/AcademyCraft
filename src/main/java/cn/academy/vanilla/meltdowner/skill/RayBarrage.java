@@ -24,6 +24,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
+import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.raytrace.Raytrace;
 
@@ -66,7 +67,7 @@ public class RayBarrage extends Skill {
 	public static class BarrageAction extends SyncActionInstant {
 		
 		boolean hit;
-		float hitX, hitY, hitZ;
+		EntitySilbarn silbarn;
 
 		@Override
 		public boolean validate() {
@@ -76,9 +77,7 @@ public class RayBarrage extends Skill {
 			MovingObjectPosition pos = Raytrace.traceLiving(player, RAY_DIST);
 			if(pos != null && pos.entityHit instanceof EntitySilbarn) {
 				hit = true;
-				hitX = (float) pos.hitVec.xCoord;
-				hitY = (float) pos.hitVec.yCoord;
-				hitZ = (float) pos.hitVec.zCoord;
+				silbarn = (EntitySilbarn) pos.entityHit;
 			}
 			
 			return cData.perform(getOverload(aData), getConsumption(aData));
@@ -87,18 +86,14 @@ public class RayBarrage extends Skill {
 		public void readNBTFinal(NBTTagCompound tag) {
 			hit = tag.getBoolean("h");
 			if(hit) {
-				hitX = tag.getFloat("x");
-				hitY = tag.getFloat("y");
-				hitZ = tag.getFloat("z");
+				silbarn = (EntitySilbarn) player.worldObj.getEntityByID(tag.getInteger("e"));
 			}
 		}
 		
 		public void writeNBTFinal(NBTTagCompound tag) {
 			tag.setBoolean("h", hit);
 			if(hit) {
-				tag.setFloat("x", hitX);
-				tag.setFloat("y", hitY);
-				tag.setFloat("z", hitZ);
+				tag.setInteger("e", silbarn.getEntityId());
 			}
 		}
 
@@ -106,14 +101,20 @@ public class RayBarrage extends Skill {
 		public void execute() {
 			double tx, ty, tz;
 			if(hit) {
-				tx = hitX;
-				ty = hitY;
-				tz = hitZ;
+				if(silbarn == null)
+					return;
+				tx = silbarn.posX;
+				ty = silbarn.posY;
+				tz = silbarn.posZ;
+				
+				// Post the collide event to make it break. Might a bit hacking
+				silbarn.postEvent(new CollideEvent(new MovingObjectPosition(silbarn)));
 				
 				if(isRemote) {
 					player.worldObj.spawnEntityInWorld(
 						new EntityMdRayBarrage(player.worldObj, tx, ty, tz, 
 							player.rotationYaw, player.rotationPitch));
+					
 				} else {
 					// Do the damage
 				}
