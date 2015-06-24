@@ -10,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -66,7 +67,7 @@ public final class ClientHandler {
         
     }
     
-    static void setCooldown(Controllable c, int cd) {
+    public static void setCooldown(Controllable c, int cd) {
     	cooldown.put(c, cd);
     }
     
@@ -150,7 +151,10 @@ public final class ClientHandler {
     		if(isInCooldown(cc) || cc == null) return null;
     		
     		SkillInstance instance = cc.createSkillInstance(getPlayer());
-    		instance.controllable = cc;
+    		if(instance == null) {
+    			AcademyCraft.log.warn("NULL SkillInstance for " + cc);
+    		} else
+    			instance.controllable = cc;
     		
     		return instance;
     	}

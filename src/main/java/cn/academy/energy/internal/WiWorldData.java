@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -61,7 +62,7 @@ public class WiWorldData extends WorldSavedData {
 	private IBlockFilter filterWirelessBlocks = new IBlockFilter() {
 
 		@Override
-		public boolean accepts(World world, int x, int y, int z) {
+		public boolean accepts(World world, int x, int y, int z, Block block) {
 			TileEntity te = world.getTileEntity(x, y, z);
 			return te instanceof IWirelessMatrix || te instanceof IWirelessNode;
 		}

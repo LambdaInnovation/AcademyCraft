@@ -1,5 +1,7 @@
 package cn.academy.vanilla;
 
+import net.minecraft.potion.Potion;
+
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
@@ -35,7 +37,8 @@ public class ModuleVanilla {
 	@RegACKeyHandler(name = "FFF", defaultKey = Keyboard.KEY_MINUS)
 	public static KeyHandler test = new Test();
 
-	public static void init() {}
+	public static void init() {
+	}
 	
 	private static class Test extends KeyHandler {
 		

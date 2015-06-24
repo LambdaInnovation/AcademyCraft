@@ -12,6 +12,18 @@
  */
 package cn.academy.vanilla.electromaster;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.electromaster.skill.SkillArcGen;
@@ -52,6 +64,55 @@ public class CatElectroMaster extends Category {
 			"em_projectile_master",
 			"em_highenergy"
 		});
+	}
+	
+	public static boolean isOreBlock(Block block) {
+		if(block instanceof BlockOre) {
+			return true;
+		}
+		
+		if(Item.getItemFromBlock(block) == null)
+			return false;
+		ItemStack stack = new ItemStack(block);
+		int[] val = OreDictionary.getOreIDs(stack);
+		for(int i : val) {
+			if(OreDictionary.getOreName(i).contains("ore"))
+				return true;
+		}
+		return false;
+	}
+	
+	private static HashSet<Block> metalBlocks = new HashSet();
+	static {
+		metalBlocks.addAll(Arrays.asList(new Block[] {
+			Blocks.rail,
+			Blocks.dispenser,
+			Blocks.hopper,
+			Blocks.iron_bars,
+			Blocks.iron_block,
+			Blocks.iron_door,
+			Blocks.iron_ore,
+			Blocks.activator_rail,
+		}));
+	}
+	
+	private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();
+	static {
+		metalEntities.add(EntityMinecart.class);
+		//metalEntities.add(EntityMagHook.class);
+		metalEntities.add(EntityIronGolem.class);
+	}
+	
+	public static boolean isMetalBlock(Block block) {
+		return metalBlocks.contains(block);
+	}
+	
+	public static boolean isEntityMetallic(Entity ent) {
+		for(Class<? extends Entity> cl : metalEntities) {
+			if(cl.isInstance(ent))
+				return true;
+		}
+		return false;
 	}
 
 }
