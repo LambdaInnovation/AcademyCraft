@@ -35,7 +35,7 @@ public class EntityBarrageRayPre extends EntityMdRaySmall {
 	
 	@Override
 	public boolean needsViewOptimize() {
-		return false;
+		return true;
 	}
 
 }

@@ -191,6 +191,7 @@ public class EntitySilbarn extends EntityAdvanced {
 			particles.setVelocity(vx, vy, vz);
 			worldObj.spawnEntityInWorld(particles.next(worldObj));
 		}
+		//TileMatrix
 	}
 	
 	@SideOnly(Side.CLIENT)

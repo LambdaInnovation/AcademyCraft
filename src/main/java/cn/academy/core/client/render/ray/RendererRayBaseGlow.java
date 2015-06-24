@@ -40,7 +40,6 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 			float a, float b) {
 		T ray = (T) entity;
 		
-		NBTTagCompound nbt = entity.getEntityData();
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		GL11.glPushMatrix();
@@ -67,10 +66,6 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		// cross product to get the 'up' vector
 		Vec3 upDir = VecUtils.crossProduct(perpViewDir, dir);
 		
-		//TODO: Is this really necessary?
-//		if(upDir.lengthVector() < 1.0E-2) {
-//			upDir = Vec3.createVectorHelper(nbt.getDouble("upX"), nbt.getDouble("upY"), nbt.getDouble("upZ"));
-//		}
 		upDir = upDir.normalize();
 		
 		//DEBUG
@@ -87,11 +82,14 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 //		
 //		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		//DEBUG END
+		
 		if(ray.needsViewOptimize()) {
 			Vec3 vec = ViewOptimize.getFixVector(ray);
 			vec.rotateAroundY((float) ((270 - entity.rotationYaw) / 180 * Math.PI));
 			start = VecUtils.add(start, vec);
-			end = VecUtils.add(end, vec);
+			
+			// Don't fix end to get accurate pointing direction
+			// end = VecUtils.add(end, vec);
 		}
 		
 		doTransform(ray);
@@ -100,10 +98,6 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		draw(ray, start, end, upDir);
 		
 		GL11.glPopMatrix();
-		
-//		nbt.setDouble("upX", upDir.xCoord);
-//		nbt.setDouble("upY", upDir.yCoord);
-//		nbt.setDouble("upZ", upDir.zCoord);
 	}
 	
 	protected void doPostTransform(T ray) {}
