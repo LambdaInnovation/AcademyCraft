@@ -12,27 +12,45 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
+import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
+import cn.annoreg.core.Registrant;
 import cn.liutils.entityx.event.CollideEvent;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Motion3D;
+import cn.liutils.util.mc.EntitySelectors;
+import cn.liutils.util.mc.WorldUtils;
 import cn.liutils.util.raytrace.Raytrace;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class RayBarrage extends Skill {
 	
+	static final double DISPLAY_RAY_DIST = 20;
 	static final double RAY_DIST = 20;
 	
 	static RayBarrage instance;
@@ -41,14 +59,18 @@ public class RayBarrage extends Skill {
 		super("ray_barrage", 3);
 		
 		instance = this;
+		FMLCommonHandler.instance().bus().register(this);
 	}
+	
+	//TODO Script integration
+	//TODO Sounds
 	
 	private static float getPlainDamage(AbilityData data) {
 		return 10.0f;
 	}
 	
 	private static float getScatteredDamage(AbilityData data) {
-		return 3.0f;
+		return 8.0f;
 	}
 	
 	private static float getConsumption(AbilityData data) {
@@ -74,8 +96,8 @@ public class RayBarrage extends Skill {
 			CPData cData = CPData.get(player);
 			AbilityData aData = AbilityData.get(player);
 			
-			MovingObjectPosition pos = Raytrace.traceLiving(player, RAY_DIST);
-			if(pos != null && pos.entityHit instanceof EntitySilbarn) {
+			MovingObjectPosition pos = Raytrace.traceLiving(player, DISPLAY_RAY_DIST);
+			if(pos != null && pos.entityHit instanceof EntitySilbarn && !((EntitySilbarn)pos.entityHit).isHit()) {
 				hit = true;
 				silbarn = (EntitySilbarn) pos.entityHit;
 			}
@@ -99,6 +121,8 @@ public class RayBarrage extends Skill {
 
 		@Override
 		public void execute() {
+			AbilityData aData = AbilityData.get(player);
+			
 			double tx, ty, tz;
 			if(hit) {
 				if(silbarn == null)
@@ -117,17 +141,63 @@ public class RayBarrage extends Skill {
 					
 				} else {
 					// Do the damage
+					// TODO Add probability
+					float range = 55;
+					
+					float yaw = player.rotationYaw;
+					float pitch = player.rotationPitch;
+					
+					float minYaw = yaw - range / 2, maxYaw = yaw + range / 2;
+					float minPitch = pitch - range, maxPitch = pitch + range;
+					
+					IEntitySelector selector = EntitySelectors.combine(
+						EntitySelectors.excludeType(EntityRayBase.class),
+						EntitySelectors.excludeOf(silbarn, player)
+					);
+					
+					Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ);
+					
+					Vec3 v0 = mo.getPosVec(),
+						v1 = mo.clone().fromRotation(minYaw, minPitch).move(RAY_DIST).getPosVec(),
+						v2 = mo.clone().fromRotation(minYaw, maxPitch).move(RAY_DIST).getPosVec(),
+						v3 = mo.clone().fromRotation(maxYaw, maxPitch).move(RAY_DIST).getPosVec(),
+						v4 = mo.clone().fromRotation(maxYaw, minPitch).move(RAY_DIST).getPosVec();
+					
+					AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4);
+					
+					List<Entity> list = WorldUtils.getEntities(player.worldObj, aabb, selector);
+					for(Entity e : list) {
+						// Double check whether the entity is within range.
+						double dx = e.posX - player.posX;
+						double dy = (e.posY + e.getEyeHeight()) - (player.posY + player.getEyeHeight());
+						double dz = e.posZ - player.posZ;
+						
+						mo.setMotion(dx, dy, dz);
+						float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
+						
+						if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
+							e.attackEntityFrom(DamageSource.causePlayerDamage(player), getScatteredDamage(aData));
+						}
+					}
 				}
 				
 			} else {
-				Motion3D mo = new Motion3D(player, true).move(RAY_DIST);
+				Motion3D mo = new Motion3D(player, true).move(DISPLAY_RAY_DIST);
 				tx = mo.px;
 				ty = mo.py;
 				tz = mo.pz;
+				
+				if(!isRemote) {
+					MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
+					if(result != null && result.entityHit != null) {
+						result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getPlainDamage(aData));
+					}
+				}
+				
 			}
 			
 			if(isRemote) {
-				EntityBarrageRayPre raySmall = new EntityBarrageRayPre(player.worldObj);
+				EntityBarrageRayPre raySmall = new EntityBarrageRayPre(player.worldObj, hit);
 				raySmall.setFromTo(player.posX, player.posY, player.posZ, tx, ty, tz);
 				player.worldObj.spawnEntityInWorld(raySmall);
 			}

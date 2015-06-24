@@ -37,9 +37,6 @@ public class EntityMdRaySmall extends EntityRayBase {
 	
 	@RegEntity.Render
 	public static SmallMdRayRender renderer;
-	
-	@RegACKeyHandler(defaultKey = Keyboard.KEY_K, name = "SpawnMdRaySmall")
-	public static KH keyHandler;
 
 	public EntityMdRaySmall(World world) {
 		super(world);
@@ -80,24 +77,6 @@ public class EntityMdRaySmall extends EntityRayBase {
 			
 			this.glow.width = 0.3;
 			this.glow.color.a = 0.5;
-		}
-		
-	}
-	
-	public static class KH extends KeyHandler {
-		
-		@Override
-		public void onKeyDown() {
-			EntityPlayer player = getPlayer();
-//			EntityMdRaySmall ray = new EntityMdRaySmall(player.worldObj);
-//			new Motion3D(player, true).applyToEntity(ray);
-//			
-//			player.worldObj.spawnEntityInWorld(ray);
-			
-			//player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player));
-			
-			EntitySurroundArc esa = new EntitySurroundArc(player);
-			player.worldObj.spawnEntityInWorld(esa);
 		}
 		
 	}

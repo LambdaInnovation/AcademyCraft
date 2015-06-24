@@ -19,8 +19,8 @@ ac {
             }
             
             # 在过载时CP和过载消耗（增量）所乘的倍数。
-            overload_cp_mul { 2 }
-            overload_o_mul { 2 }
+            overload_cp_mul { 2.5 }
+            overload_o_mul { 1.5 }
             
             # 各个等级初始CP值
             init_cp(level) {

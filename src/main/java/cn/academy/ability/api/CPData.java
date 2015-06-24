@@ -61,7 +61,7 @@ public class CPData extends DataPart {
 	
 	private boolean dataDirty = false;
 	
-	private int untilSync;
+	private int tickSync;
 
 	public CPData() {}
 	
@@ -95,14 +95,11 @@ public class CPData extends DataPart {
 		}
 		
 		if(!isRemote()) {
-			if(untilSync == 0) {
-				untilSync = 3;
-				if(dataDirty) {
-					dataDirty = false;
-					doSyncSimple();
-				}
-			} else {
-				untilSync--;
+			++tickSync;
+			if(tickSync >= (dataDirty ? 4 : 25)) {
+				dataDirty = false;
+				tickSync = 0;
+				doSyncComplete();
 			}
 		}
 	}
@@ -130,6 +127,9 @@ public class CPData extends DataPart {
 	 * @param cp Amount of CP
 	 */
 	public boolean perform(float overload, float cp) {
+		if(getPlayer().capabilities.isCreativeMode)
+			return true;
+		
 		if(this.overload + overload > getMaxOverload() * 2 ||
 			currentCP - cp < 0)
 			return false;
@@ -255,20 +255,8 @@ public class CPData extends DataPart {
 		return new Path("ac.ability.cp." + name);
 	}
 	
-	private void doSyncSimple() { 
-		syncSimple(currentCP, untilRecover, overload, untilOverloadRecover); 
-	}
 	private void doSyncComplete() { 
 		syncComplete(currentCP, untilRecover, maxCP, overload, untilOverloadRecover, maxOverload); 
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	private void syncSimple(@Data Float cp, @Data Integer cooldown, @Data Float o, @Data Integer ocd) {
-		currentCP = cp;
-		untilRecover = cooldown;
-		
-		overload = o;
-		untilOverloadRecover = ocd;
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)

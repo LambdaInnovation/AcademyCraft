@@ -12,10 +12,13 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall.SmallMdRayRender;
+import net.minecraft.world.World;
+import cn.academy.core.client.render.ray.RendererRayComposite;
+import cn.academy.core.entity.EntityRayBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import net.minecraft.world.World;
+import cn.liutils.util.generic.MathUtils;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD
@@ -24,18 +27,52 @@ import net.minecraft.world.World;
 @Registrant
 @RegEntity
 @RegEntity.HasRender
-public class EntityBarrageRayPre extends EntityMdRaySmall {
+public class EntityBarrageRayPre extends EntityRayBase {
 	
 	@RegEntity.Render
-	public static SmallMdRayRender renderer;
+	public static BRPRender renderer;
 
-	public EntityBarrageRayPre(World world) {
+	public EntityBarrageRayPre(World world, boolean hit) {
 		super(world);
+		
+		this.blendInTime = 200;
+		this.blendOutTime = 400;
+		this.life = hit ? 50 : 30;
+		this.length = 15.0;
 	}
 	
 	@Override
-	public boolean needsViewOptimize() {
-		return true;
+	protected void onFirstUpdate() {
+		super.onFirstUpdate();
+		worldObj.playSound(posX, posY, posZ, "academy:md.ray_small", 0.8f, 1.0f, false);
+	}
+	
+	@Override
+	public double getWidth() {
+		long dt = getDeltaTime();
+		int blendTime = 500;
+
+		if(dt > this.life * 50 - blendTime) {
+			return MathUtils.lerp(1, 0, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
+		}
+		
+		return 1.0;
+	}
+	
+	public static class BRPRender extends RendererRayComposite {
+
+		public BRPRender() {
+			super("mdray_small");
+			this.cylinderIn.width = 0.045;
+			this.cylinderIn.material.color = new Color().setColor4i(216, 248, 216, 230);
+			
+			this.cylinderOut.width = 0.052;
+			this.cylinderOut.material.color = new Color().setColor4i(106, 242, 106, 50);
+			
+			this.glow.width = 0.4;
+			this.glow.color.a = 0.5;
+		}
+		
 	}
 
 }

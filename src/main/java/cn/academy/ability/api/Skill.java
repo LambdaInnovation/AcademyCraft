@@ -96,7 +96,7 @@ public abstract class Skill extends Controllable {
 	 * Get the full name of the skill, in format [category].[name].
 	 */
 	public String getFullName() {
-		return category.getName() + "." + getName();
+		return (category == null ? "<unassigned>" : category.getName()) + "." + getName();
 	}
 	
 	/**

@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -62,7 +63,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
 	public EntityRayBase(World world) {
 		super(world);
-		creationTime = Minecraft.getSystemTime();
+		creationTime = GameTimer.getTime();
 		ignoreFrustumCheck = true;
 	}
 	
@@ -87,7 +88,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	}
 	
 	protected long getDeltaTime() {
-		return Minecraft.getSystemTime() - creationTime;
+		return GameTimer.getTime() - creationTime;
 	}
 	
 	@Override
@@ -97,7 +98,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
 	@Override
 	public double getLength() {
-		long dt = Minecraft.getSystemTime() - creationTime;
+		long dt = GameTimer.getTime() - creationTime;
 		return (dt < blendInTime ? (double)dt / blendInTime : 1) * length;
 	}
 	
@@ -127,14 +128,14 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	//TODO Add glow texture alpha wiggle
 	@Override
 	public double getAlpha() {
-		long dt = Minecraft.getSystemTime() - creationTime;
+		long dt = getDeltaTime();
 		long lifeMS = getLifeMS();
 		return dt > lifeMS - blendOutTime ? 1 - (double) (dt + blendOutTime - lifeMS) / blendOutTime : 1.0;
 	}
 	
 	@Override
 	public double getWidth() {
-		long dt = Minecraft.getSystemTime() - creationTime;
+		long dt = getDeltaTime();
 		long lifeMS = getLifeMS();
 		return widthWiggle +
 			(dt > lifeMS - widthShrinkTime ? 1 - (double) (dt + widthShrinkTime - lifeMS) / widthShrinkTime : 1.0);
@@ -152,7 +153,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
 	@Override
 	public void onRenderTick() {
-		long time = Minecraft.getSystemTime();
+		long time = GameTimer.getTime();
 		if(lastFrame != 0) {
 			long dt = time - lastFrame;
 			widthWiggle += dt * RandUtils.ranged(-maxWiggleSpeed, maxWiggleSpeed) / 1000.0;	
@@ -168,12 +169,12 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 				glowWiggle = 0;
 		}
 		
-		lastFrame = Minecraft.getSystemTime();
+		lastFrame = GameTimer.getTime();
 	}
 
 	@Override
 	public double getGlowAlpha() {
-		long dt = Minecraft.getSystemTime() - creationTime;
+		long dt = GameTimer.getTime() - creationTime;
 		long lifeMS = getLifeMS();
 		return (1 - glowWiggleRadius + glowWiggle) * getAlpha();
 	}

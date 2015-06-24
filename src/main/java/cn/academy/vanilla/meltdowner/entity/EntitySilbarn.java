@@ -94,13 +94,11 @@ public class EntitySilbarn extends EntityAdvanced {
 	public EntitySilbarn(EntityPlayer player) {
 		super(player.worldObj);
 		this.regEventHandler(new CollideHandler() {
-
-			boolean collided;
 			
 			@Override
 			public void onEvent(CollideEvent event) {
-				if(!collided) {
-					collided = true;
+				if(!hit) {
+					hit = true;
 					playSound("academy:silbarn_light", .5f, 1f);
 					executeAfter(new EntityCallback() {
 						@Override
@@ -129,6 +127,7 @@ public class EntitySilbarn extends EntityAdvanced {
 		this.regEventHandler(new CollideHandler() {
 			@Override
 			public void onEvent(CollideEvent event) {
+				hit = true;
 				MovingObjectPosition res = event.result;
 				ForgeDirection dir = ForgeDirection.getOrientation(res.sideHit);
 				final double mul = 0.1;
@@ -147,6 +146,10 @@ public class EntitySilbarn extends EntityAdvanced {
 	@Override
 	public void entityInit() {
 		dataWatcher.addObject(10, Byte.valueOf((byte) 0));
+	}
+	
+	public boolean isHit() {
+		return hit;
 	}
 	
 	@Override
