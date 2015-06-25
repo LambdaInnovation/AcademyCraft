@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cn.academy.ability.api.Controllable;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.util.client.ClientUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -30,6 +33,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 	client cooldown on SkillInstance startup. But you can still visit the method to avoid side dependency.
  * @author WeAthFolD
  */
+@Registrant
+@RegEventHandler(Bus.FML)
 public class Cooldown {
 	
 	/**
