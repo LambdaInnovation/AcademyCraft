@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -120,7 +120,7 @@ public class SkillMineDetect extends Skill {
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
 			ACSounds.playClient(player, "em.mineview", 0.5f, 1.0f);
 			
-			ClientHandler.setCooldown(SkillMineDetect.instance, getCooldown(aData));
+			Cooldown.setCooldown(instance, getCooldown(aData));
 		}
 		
 	}

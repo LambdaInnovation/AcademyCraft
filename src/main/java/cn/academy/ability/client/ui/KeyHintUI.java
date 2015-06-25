@@ -32,11 +32,12 @@ import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
+import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyManager;
 
 /**
+ * TODO: I guess we should draw overload in the area of skill icons as well
  * @author WeAthFolD
- *
  */
 public class KeyHintUI extends Widget {
 	
@@ -50,6 +51,9 @@ public class KeyHintUI extends Widget {
 		TEX_MOUSE_GENERIC = tex("mouse_generic");
 	
 	Font font = Font.font;
+	
+	long lastFrameTime, showTime;
+	double mAlpha;
 	
 	public KeyHintUI() {
 		transform.alignWidth = WidthAlign.RIGHT;
@@ -67,6 +71,18 @@ public class KeyHintUI extends Widget {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
 				PresetData pData = PresetData.get(Minecraft.getMinecraft().thePlayer);
+				
+				long time = GameTimer.getTime();
+				if(time - lastFrameTime > 300L) {
+					showTime = time;
+				}
+				
+				if((time - showTime) < 300L) {
+					mAlpha = (time - showTime) / 300.0;
+				} else {
+					mAlpha = 1.0;
+				}
+				
 				double curY = 0, yStep = 92;
 				if(pData.isActive()) {
 					Preset p = pData.getCurrentPreset();
@@ -81,6 +97,9 @@ public class KeyHintUI extends Widget {
 						}
 					}
 				}
+				
+				lastFrameTime = time;
+				GL11.glColor4d(1, 1, 1, 1);
 			}
 			
 		});
@@ -92,6 +111,7 @@ public class KeyHintUI extends Widget {
 		
 		// Back
 		RenderUtils.loadTexture(TEX_BACK);
+		color4d(1, 1, 1, 1);
 		HudUtils.rect(122, 0, 185, 83);
 		
 		// KeyHint
@@ -122,7 +142,7 @@ public class KeyHintUI extends Widget {
 		}
 		
 		// Logo
-		GL11.glColor4d(1, 1, 1, 1);
+		color4d(1, 1, 1, 1);
 		RenderUtils.loadTexture(TEX_ICON_BACK);
 		HudUtils.rect(216, 5, 72, 72);
 		
@@ -133,8 +153,12 @@ public class KeyHintUI extends Widget {
 	
 	private void drawBack(ResourceLocation tex) {
 		RenderUtils.loadTexture(tex);
-		GL11.glColor4d(1, 1, 1, 1);
+		color4d(1, 1, 1, 1);
 		HudUtils.rect(146, 10, 70, 70);
+	}
+	
+	private void color4d(double r, double g, double b, double a) {
+		GL11.glColor4d(r, g, b, a * mAlpha);
 	}
 	
 	private static ResourceLocation tex(String name) {

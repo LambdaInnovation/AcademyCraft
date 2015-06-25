@@ -6,6 +6,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.academy.ability.client.ui.CPBar;
@@ -53,7 +54,7 @@ public class ModuleAbilityClient {
 	};
 	
 	public static void init() {
-		Condition abilityActivatedCondition = () -> AbilityData.get(Minecraft.getMinecraft().thePlayer).isLearned();
+		Condition abilityActivatedCondition = () -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated();
 		
 		ACHud.instance.addElement(new CPBar(), abilityActivatedCondition);
 		ACHud.instance.addElement(new KeyHintUI(), abilityActivatedCondition);

@@ -30,7 +30,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 
 /**
- * CP and overload data of the player.
+ * CP but more than CP. CPData stores rather dynamic part of player ability data, 
+ * 	for example, whether the player is using ability, current CP and overload, etc.
  * @author WeAthFolD
  */
 @Registrant
@@ -43,6 +44,8 @@ public class CPData extends DataPart {
 	private static final float 
 		OVERLOAD_O_MUL = getFloatParam("overload_o_mul"),
 		OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
+	
+	private boolean activated = false;
 	
 	private float currentCP;
 	private float maxCP = 100.0f;
@@ -99,8 +102,34 @@ public class CPData extends DataPart {
 			if(tickSync >= (dataDirty ? 4 : 25)) {
 				dataDirty = false;
 				tickSync = 0;
-				doSyncComplete();
+				sync();
 			}
+		}
+	}
+	
+	public boolean isActivated() {
+		return activated;
+	}
+	
+	public void activate() {
+		if(AbilityData.get(getPlayer()).isLearned()) {
+			activated = true;
+			
+			if(!isRemote()) {
+				System.out.println("Activated at server.");
+				sync();
+			}
+		} else {
+			AcademyCraft.log.warn("Trying to activate ability when player doesn't have one");
+		}
+	}
+	
+	public void deactivate() {
+		activated = false;
+		
+		if(!isRemote()) {
+			System.out.println("Deactivated at server.");
+			sync();
 		}
 	}
 	
@@ -144,7 +173,7 @@ public class CPData extends DataPart {
 	 */
 	public void addMaxCP(float amt) {
 		maxCP += amt;
-		doSyncComplete();
+		sync();
 	}
 	
 	/**
@@ -210,7 +239,7 @@ public class CPData extends DataPart {
 		this.maxOverload = getFunc("init_overload").callFloat(data.getLevel());
 		
 		if(!isRemote())
-			doSyncComplete();
+			sync();
 		
 		System.out.println("CP : " + maxCP + ", O: " + maxOverload);
 	}
@@ -218,21 +247,32 @@ public class CPData extends DataPart {
 	@Override
 	public NBTTagCompound toNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
+		
+		tag.setBoolean("A", activated);
+		
 		tag.setFloat("C", currentCP);
 		tag.setFloat("M", maxCP);
+		tag.setInteger("I", untilRecover);
 		
 		tag.setFloat("D", overload);
 		tag.setFloat("N", maxOverload);
+		tag.setInteger("J", untilOverloadRecover);
+		
 		return tag;
 	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
+		
+		activated = tag.getBoolean("A");
+		
 		currentCP = tag.getFloat("C");
 		maxCP = tag.getFloat("M");
+		untilRecover = tag.getInteger("I");
 		
 		overload = tag.getFloat("D");
 		maxOverload = tag.getFloat("N");
+		untilOverloadRecover = tag.getInteger("J");
 	}
 	
 	private static double getDoubleParam(String name) {
@@ -255,34 +295,17 @@ public class CPData extends DataPart {
 		return new Path("ac.ability.cp." + name);
 	}
 	
-	private void doSyncComplete() { 
-		syncComplete(currentCP, untilRecover, maxCP, overload, untilOverloadRecover, maxOverload); 
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	private void syncComplete(
-		@Data Float cp, 
-		@Data Integer cooldown, 
-		@Data Float mcp,
-		@Data Float o,
-		@Data Integer ocd,
-		@Data Float mo) {
-		currentCP = cp;
-		untilRecover = cooldown;
-		maxCP = mcp;
-		
-		overload = o;
-		maxOverload = mo;
-		untilOverloadRecover = ocd;
-	}
-	
 	@RegEventHandler(Bus.Forge)
 	public static class Events {
 		
 		@SubscribeEvent
 		public void changedCategory(CategoryChangedEvent event) {
-			CPData.get(event.player).recalcMaxValue();
-			System.out.println("ChangedCategory");
+			CPData cpData = CPData.get(event.player);
+			
+			if(!AbilityData.get(event.player).isLearned()) {
+				cpData.deactivate();
+			}
+			cpData.recalcMaxValue();
 		}
 		
 	}

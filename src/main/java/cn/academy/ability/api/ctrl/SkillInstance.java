@@ -77,7 +77,7 @@ public abstract class SkillInstance {
 	 * Set a specific cooldown time for this controllable.
 	 */
 	protected final void setCooldown(int ticks) {
-		ClientHandler.setCooldown(controllable, ticks);
+		Cooldown.setCooldown(controllable, ticks);
 	}
 	
 	public void stopOnEnd(SyncAction action) {

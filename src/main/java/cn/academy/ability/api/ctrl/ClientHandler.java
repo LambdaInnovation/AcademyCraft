@@ -1,33 +1,28 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
-import cn.liutils.util.client.ClientUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Key event listener for skill events.
- * TODO: Decouple the cooldown mechanism, to make it side-independent and call it from a better place.
+ * Key event listener for skill events. <br>
+ * TODO: We might wanna setup a Activate Key callback to do something else in certain envs.
+ * 	e.g. When in special ability mode and want to cancel the skill,
+ * 		or when using charge skills and want to cancel the charging...
  * @author acaly, WeAthFolD
  */
 @SideOnly(Side.CLIENT)
@@ -39,14 +34,14 @@ public final class ClientHandler {
 	
 	private static AbilityKey[] handlers = new AbilityKey[MAX_KEYS];
 	
-	private static int[] defaultMapping = new int[] { 
+	private static final int[] defaultMapping = new int[] { 
 		KeyManager.MOUSE_LEFT, 
 		KeyManager.MOUSE_RIGHT, 
 		Keyboard.KEY_R, 
 		Keyboard.KEY_F 
 	};
 	
-	private static Map<Controllable, Integer> cooldown = new HashMap();
+	static final int ACTIVATE_KEY_MAPPING = Keyboard.KEY_V;
 	
 	public static int getKeyMapping(int kid) {
 		if(kid < STATIC_KEYS) {
@@ -65,28 +60,9 @@ public final class ClientHandler {
     	for(int i = STATIC_KEYS; i < MAX_KEYS; ++i) {
     		ModuleCoreClient.dynKeyManager.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
     	}
-        
-    }
-    
-    public static void setCooldown(Controllable c, int cd) {
-    	cooldown.put(c, cd);
-    }
-    
-    public static boolean isInCooldown(Controllable c) {
-    	return cooldown.containsKey(c);
-    }
-    
-    private static void updateCooldown() {
-    	Iterator< Entry<Controllable, Integer> > iter = cooldown.entrySet().iterator();
     	
-    	while(iter.hasNext()) {
-    		Entry< Controllable, Integer > entry = iter.next();
-    		if(entry.getValue() == 0) {
-    			iter.remove();
-    		} else {
-    			entry.setValue(entry.getValue() - 1);
-    		}
-    	}
+    	ModuleCoreClient.keyManager.addKeyHandler("ability_activate", ACTIVATE_KEY_MAPPING, new ActivateKey());
+        
     }
     
     private static class AbilityKey extends KeyHandler {
@@ -106,9 +82,11 @@ public final class ClientHandler {
     			instance = null;
     		}
     		
-    		instance = locate();
-    		if(instance != null) {
-    			instance.onStart();
+    		if(CPData.get(getPlayer()).isActivated()) {
+	    		instance = locate();
+	    		if(instance != null) {
+	    			instance.onStart();
+	    		}
     		}
     	}
     	
@@ -149,7 +127,7 @@ public final class ClientHandler {
     			return null;
     		
     		Controllable cc = pdata.getCurrentPreset().getControllable(internalID);
-    		if(isInCooldown(cc) || cc == null) return null;
+    		if(Cooldown.isInCooldown(cc) || cc == null) return null;
     		
     		SkillInstance instance = cc.createSkillInstance(getPlayer());
     		if(instance == null) {
@@ -162,13 +140,26 @@ public final class ClientHandler {
     	
     }
     
-    @RegEventHandler(Bus.FML)
-    public static class Events {
+    /**
+     * The key to activate and deactivate the ability, might have other use in certain circumstances,
+     *  e.g. quit charging when using ability.
+     */
+    private static class ActivateKey extends KeyHandler {
     	
-    	@SubscribeEvent
-    	public void onClientTick(ClientTickEvent event) {
-    		if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
-    			updateCooldown();
+    	@Override
+    	public void onKeyDown() {
+    		EntityPlayer player = getPlayer();
+    		AbilityData aData = AbilityData.get(player);
+    		CPData cpData = CPData.get(player);
+    		
+    		if(aData.isLearned()) {
+    			if(cpData.isActivated()) {
+    				System.out.println("Deactivated.");
+    				ControlSyncs.deactivateAtServer(cpData);
+    			} else {
+    				System.out.println("Activated.");
+    				ControlSyncs.activateAtServer(cpData);
+    			}
     		}
     	}
     	

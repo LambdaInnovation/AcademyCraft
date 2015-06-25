@@ -75,6 +75,11 @@ public class CPBar extends Widget {
 	}
 	
 	long presetChangeTime, lastPresetTime;
+	
+	long lastDrawTime;
+	long showTime;
+	
+	float mAlpha; //Master alpha, used for blending in.
 
 	public CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
@@ -105,12 +110,20 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
+				
+				long time = GameTimer.getTime();
+				if(time - lastDrawTime > 300L) {
+					showTime = time;
+				}
+				lastDrawTime = GameTimer.getTime();
+				
+				final long BLENDIN_TIME = 200L;
+				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME : 1.0f;
+				
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				if(!AbilityData.get(player).isLearned())
 					return;
 				CPData cpData = CPData.get(player);
-				
-				long time = GameTimer.getTime();
 				
 				float overload = cpData.getOverload() / cpData.getMaxOverload();
 				if(overload < 1.0) {
@@ -129,6 +142,8 @@ public class CPBar extends Widget {
 				if(time - presetChangeTime < preset_wait)
 					drawPresetHint((double)(time - presetChangeTime) / preset_wait,
 						time - lastPresetTime);
+				
+				GL11.glColor4d(1, 1, 1, 1);
 			}
 		});
 	}
@@ -140,21 +155,21 @@ public class CPBar extends Widget {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		
 		//Draw plain background
-		GL11.glColor4d(1, 1, 1, 0.8);
+		color4d(1, 1, 1, 0.8);
 		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Start drawing blend
 		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
 		float uOffset = GameTimer.getTime() / 10000.0f * WIDTH;
-		GL11.glColor4d(1, 1, 1, 0.8);
+		color4d(1, 1, 1, 0.8);
 		
 		final double x0 = 30, width2 = WIDTH - x0 - 20;
 		HudUtils.rect(x0, 0, uOffset, 0, width2, HEIGHT, width2, HEIGHT);
 		//End drawing blend
 		
 		//Draw Highlight
-		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
+		color4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
 		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
@@ -165,7 +180,7 @@ public class CPBar extends Widget {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		
 		//Draw plain background
-		GL11.glColor4d(1, 1, 1, 0.8);
+		color4d(1, 1, 1, 0.8);
 		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
@@ -190,7 +205,7 @@ public class CPBar extends Widget {
 		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_REPLACE);
 		
 		double uOffset = (GameTimer.getTime() % 10000L) / 10000.0d;
-		GL11.glColor4d(1, 1, 1, 0.8);
+		color4d(1, 1, 1, 0.8);
 		GL11.glBegin(GL11.GL_QUADS);
 			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 1.0f);
 			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 0.0f, 1.0f);  
@@ -222,7 +237,7 @@ public class CPBar extends Widget {
 		//End drawing blend
 		
 		//Draw Highlight
-		GL11.glColor4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
+		color4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
 		RenderUtils.loadTexture(TEX_OVERLOAD_HIGHLIGHT);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
@@ -231,6 +246,8 @@ public class CPBar extends Widget {
 	
 	private void drawNormal(float overload) {
 		RenderUtils.loadTexture(TEX_BACK_NORMAL);
+		
+		color4d(1, 1, 1, .8);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
 		//Overload progress
@@ -297,8 +314,8 @@ public class CPBar extends Widget {
 			
 			temp.a = Math.max(0.05, alpha * 0.8);
 			
+			//TODO: This approach seems to be buggy in SOME machines :(
 			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, temp.asHexColor(), Align.CENTER);
-			
 			
 			temp.bind();
 			if(i == cur)
@@ -307,6 +324,10 @@ public class CPBar extends Widget {
 			x += step;
 		}
 		
+	}
+	
+	private void color4d(double r, double g, double b, double a) {
+		GL11.glColor4d(r, g, b, mAlpha * a);
 	}
 	
 	private void subHud(double x, double y, double width, double height) {
@@ -326,7 +347,7 @@ public class CPBar extends Widget {
 	}
 	
 	private void lerpBindColor(Color a, Color b, double factor) {
-		GL11.glColor4d(lerp(a.r, b.r, factor), lerp(a.g, b.g, factor), lerp(a.b, b.b, factor), lerp(a.a, b.a, factor));
+		color4d(lerp(a.r, b.r, factor), lerp(a.g, b.g, factor), lerp(a.b, b.b, factor), lerp(a.a, b.a, factor));
 	}
 	
 	private void autoLerp(List<ProgColor> list, double prog) {
