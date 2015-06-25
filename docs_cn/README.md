@@ -89,7 +89,33 @@ Ripple脚本集成
 
 AC中有很多数据很重的实现部分。为了将数据和实现解耦，我们使用了LIUtils提供的Ripple脚本语言。任何数据量很大又经常修改的内容，都应该考虑使用脚本来实现。能力实现部分强制使用Ripple编写数据。
 
-关于脚本的使用惯例详见 scripts.md
+在脚本摆放计算值或者脚本所必须遵守的命名范例如下：
+
+* 脚本文件存放在assets/academy/scripts
+* 必须在"ac"命名空间之内。
+* 可以直接在第一级子命名空间摆放内容。 例如 ac { developer { } }
+* 在上一条使用过程中出现名称冲突的情况，考虑直接更名。
+* 对能力系的脚本摆放有特殊的要求。格式如下：
+```
+ac {
+	<category_name> {
+		<skill_name> {
+			<prop> { 1 }
+			<prop> { 2 }
+			<funct>(par1, par2, ...) { ... }
+		}
+	}
+}
+```
+* 杂项数值可以放置在"generic.r"中。
+* 能力系通用数值放置在"ability.r"中。
+* 每个能力系技能相关数值单独新建一个脚本。（"electro_master.r", "melt_downer.r"）
+* 如果有很多数值同属于一个分类，考虑为那个分类单独新建一个脚本文件。
+
+在调用和加载脚本时：
+
+* 在AcademtCraft#preInit方法内加载所有脚本文件。
+* 使用AcademyCraft#getValue,getDouble,getFunction获取方法。也可以使用Academy.script.xxx。
 
 其它文档
 ===

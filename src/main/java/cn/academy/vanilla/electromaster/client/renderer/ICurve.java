@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.test.arc;
+package cn.academy.vanilla.electromaster.client.renderer;
 
 import java.util.ArrayList;
 import java.util.List;

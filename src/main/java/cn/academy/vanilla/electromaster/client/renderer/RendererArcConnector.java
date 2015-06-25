@@ -20,8 +20,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import cn.academy.test.arc.ArcFactory;
-import cn.academy.test.arc.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
 
 /**
  * This class will combine a set of pre-generated arcs to achive the given ray length.

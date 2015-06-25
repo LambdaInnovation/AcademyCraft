@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.test.arc;
+package cn.academy.vanilla.electromaster.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -23,19 +23,16 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.academy.test.arc.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import cn.annoreg.mc.network.Future;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.util.client.ClientUtils;
+import cn.liutils.util.client.ViewOptimize;
+import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -44,33 +41,66 @@ import cpw.mods.fml.relauncher.Side;
 @Registrant
 @RegEntity
 @RegEntity.HasRender
-public class EntityArc extends EntityAdvanced {
+public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
+	
+	static final int GEN = 20;
+	
+	// Default patterns
+	static Arc[] defaultPatterns = new Arc[GEN];
+	static {
+		ArcFactory fac = new ArcFactory();
+		for(int i = 0; i < GEN; ++i) {
+			defaultPatterns[i] = fac.generate(20);
+		}
+	}
 	
 	@RegEntity.Render
 	public static Renderer render = new Renderer();
 	
+	final Arc[] patterns;
+	
 	int [] iid;
 	int n = 1;//RandUtils.rangei(1, 2);
 	boolean show = true;
+	
+	/**
+	 * Render properties
+	 */
+	public double 
+		showWiggle = .2,
+		hideWiggle = .2,
+		texWiggle = .5;
+	
+	public boolean viewOptimize = true;
+	
+	final EntityPlayer player;
 
-	public EntityArc(EntityPlayer player) {
-		super(player.worldObj);
+	public EntityArc(EntityPlayer _player, Arc[]_patterns) {
+		super(_player.worldObj);
+		this.player = _player;
+		
 		new Motion3D(player, true).applyToEntity(this);
 		ignoreFrustumCheck = true;
 		iid = new int[n];
+		
+		this.patterns = _patterns;
+	}
+	
+	public EntityArc(EntityPlayer _player) {
+		this(_player, defaultPatterns);
 	}
 	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		for(int i = 0; i < iid.length; ++i) {
-			if(rand.nextDouble() < 0.5)
-				iid[i] = rand.nextInt(100);
+			if(rand.nextDouble() < texWiggle)
+				iid[i] = rand.nextInt(patterns.length);
 		}
-		if(show && rand.nextDouble() < 0.2) {
+		if(show && rand.nextDouble() < showWiggle) {
 			show = !show;
 		}
-		else if(!show && rand.nextDouble() < 0.2) {
+		else if(!show && rand.nextDouble() < hideWiggle) {
 			show = !show;
 		}
 	}
@@ -90,15 +120,6 @@ public class EntityArc extends EntityAdvanced {
 	
 	public static class Renderer extends Render {
 		
-		Arc[] patterns = new Arc[100];
-		
-		public Renderer() {
-			ArcFactory fac = new ArcFactory();
-			for(int i = 0; i < 100; ++i) {
-				patterns[i] = fac.generate(10);
-			}
-		}
-		
 		@Override
 		public void doRender(Entity e, double x, double y, double z, float f, float g) {
 			EntityArc arc = (EntityArc) e;
@@ -110,17 +131,13 @@ public class EntityArc extends EntityAdvanced {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotatef(arc.rotationYaw + 90, 0, -1, 0);
 			GL11.glRotatef(arc.rotationPitch, 0, 0, -1);
+
+			if(arc.viewOptimize) {
+				ViewOptimize.fix(arc);
+			}
 			
-			GL11.glPushMatrix();
 			for(int i = 0; i < arc.n; ++i)
-				patterns[arc.iid[i]].draw();
-			GL11.glPopMatrix();
-			
-			GL11.glPushMatrix();
-			GL11.glTranslated(20, 0, 0);
-			for(int i = 0; i < arc.n; ++i)
-				patterns[arc.iid[i]].draw();
-			GL11.glPopMatrix();
+				arc.patterns[arc.iid[i]].draw();
 			
 			GL11.glPopMatrix();
 		}
@@ -152,6 +169,11 @@ public class EntityArc extends EntityAdvanced {
 		@Override
 		public void onKeyTick() {}
 		
+	}
+
+	@Override
+	public EntityPlayer getPlayer() {
+		return player;
 	}
 
 }

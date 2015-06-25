@@ -22,9 +22,12 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.core.util.ACSounds;
-import cn.academy.test.arc.EntityArc;
+import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
+import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
 import cn.liutils.util.raytrace.Raytrace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -86,12 +89,20 @@ public class SkillArcGen extends Skill {
 					result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
 				}
 			} else {
-				EntityArc arc = new EntityArc(player);
-				arc.addMotionHandler(new Life(20));
-				
-				player.worldObj.spawnEntityInWorld(arc);
-				ACSounds.playClient(player, "em.arc_weak", 0.5f, 1f);
+				spawnEffects();
 			}
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void spawnEffects() {
+			EntityArc arc = new EntityArc(player, ArcPatterns.weakArc);
+			arc.texWiggle = 0.7;
+			arc.showWiggle = 0.1;
+			arc.hideWiggle = 0.4;
+			arc.addMotionHandler(new Life(10));
+			
+			player.worldObj.spawnEntityInWorld(arc);
+			ACSounds.playClient(player, "em.arc_weak", 0.5f, 1f);
 		}
 		
 	}

@@ -27,6 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Key event listener for skill events.
+ * TODO: Decouple the cooldown mechanism, to make it side-independent and call it from a better place.
  * @author acaly, WeAthFolD
  */
 @SideOnly(Side.CLIENT)

@@ -34,6 +34,7 @@ import cn.liutils.entityx.EntityCallback;
 import cn.liutils.template.client.render.entity.RenderIcon;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -107,7 +108,7 @@ public class EntityMdBall extends EntityAdvanced {
 	
 	public EntityMdBall(World world) {
 		super(world);
-		spawnTime = Minecraft.getSystemTime();
+		spawnTime = GameTimer.getTime();
 		ignoreFrustumCheck = true; // Small variation in render tick posupdate will cause problem
 	}
 	
@@ -185,7 +186,7 @@ public class EntityMdBall extends EntityAdvanced {
 			return false;
 		
 		final double maxAccel = 4;
-		long time = Minecraft.getSystemTime();
+		long time = GameTimer.getTime();
 		long life = time - spawnTime;
 		
 		//Alpha wiggling
@@ -221,7 +222,7 @@ public class EntityMdBall extends EntityAdvanced {
 	
 	private double getAlpha() {
 		int lifeMS = life * 50;
-		long time = Minecraft.getSystemTime();
+		long time = GameTimer.getTime();
 		long dt = time - spawnTime;
 		
 		final int blendTime = 150;
@@ -234,7 +235,7 @@ public class EntityMdBall extends EntityAdvanced {
 	
 	private float getSize() {
 		int lifeMS = life * 50;
-		long time = Minecraft.getSystemTime();
+		long time = GameTimer.getTime();
 		long dt = time - spawnTime;
 		
 		if(dt > lifeMS - 100)
@@ -301,6 +302,7 @@ public class EntityMdBall extends EntityAdvanced {
 			}
 			
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glDepthMask(false);
 			GL11.glPushMatrix();
 			{
 			
@@ -325,6 +327,7 @@ public class EntityMdBall extends EntityAdvanced {
 				
 			}
 			GL11.glPopMatrix();
+			GL11.glDepthMask(true);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
 		

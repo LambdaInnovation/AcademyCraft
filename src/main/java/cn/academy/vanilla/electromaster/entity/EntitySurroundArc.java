@@ -24,9 +24,9 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.IPointFactory;
 import cn.academy.core.client.render.CubePointFactory;
-import cn.academy.test.arc.ArcFactory;
-import cn.academy.test.arc.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory;
 import cn.academy.vanilla.electromaster.client.renderer.SubArcHandler;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;

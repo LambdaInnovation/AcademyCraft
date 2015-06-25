@@ -20,7 +20,7 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.test.arc.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
 import cn.liutils.util.client.RenderUtils;
 
 /**

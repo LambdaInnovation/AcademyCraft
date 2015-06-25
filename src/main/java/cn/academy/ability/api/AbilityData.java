@@ -18,6 +18,8 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.event.CategoryChangedEvent;
 import cn.academy.ability.api.event.LearnedSkillEvent;
@@ -147,6 +149,14 @@ public class AbilityData extends DataPart {
 		byte[] arr = tag.getByteArray("l");
 		if(arr.length != 0)
 			learnedSkills = BitSet.valueOf(arr);
+		
+		NBTTagList list = (NBTTagList) tag.getTag("s");
+		Category c = getCategory();
+		if(c != null && list != null) {
+			for(int i = 0; i < c.getSkillCount(); ++i) {
+				skillExps[i] = list.func_150308_e(i);
+			}
+		}
 	}
 
 	@Override
@@ -155,6 +165,15 @@ public class AbilityData extends DataPart {
 		
 		tag.setByte("c", (byte) catID); //There cant be more than 128 categories yeah? >)
 		tag.setByteArray("l", learnedSkills.toByteArray());
+		
+		Category c = getCategory();
+		if(c != null) {
+			NBTTagList list = new NBTTagList();
+			for(int i = 0; i < c.getSkillCount(); ++i) {
+				list.appendTag(new NBTTagFloat(skillExps[i]));
+			}
+			tag.setTag("s", list);
+		}
 		
 		return tag;
 	}
