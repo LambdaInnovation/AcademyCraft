@@ -22,6 +22,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.raytrace.Raytrace;
@@ -154,7 +155,11 @@ public class MagMovement extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void startEffect() {
-			arc = new EntityArc(player);
+			arc = new EntityArc(player, ArcPatterns.thinContiniousArc);
+			arc.lengthFixed = false;
+			arc.texWiggle = 1;
+			arc.showWiggle = 0.1;
+			arc.hideWiggle = 0.6;
 			
 			player.worldObj.spawnEntityInWorld(arc);
 		}

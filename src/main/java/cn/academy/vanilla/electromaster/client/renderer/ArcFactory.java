@@ -162,6 +162,7 @@ public class ArcFactory {
 		double width;
 		
 		public Point(Vec3 _pt, double _w) {
+			
 			pt = _pt;
 			width = _w;
 		}
@@ -185,48 +186,64 @@ public class ArcFactory {
 	
 	public static class Arc {
 		int listId;
+		
+		private final List< List<Segment> > segmentList;
+		private final Vec3 normal;
+		
 		public final double length;
 		
-		public Arc(List< List<Segment> > list, Vec3 normal, double len) {
-			buildList(list, normal);
+		public Arc(List< List<Segment> > list, Vec3 _normal, double len) {
+			segmentList = new ArrayList(list);
+			normal = _normal;
+			
+			buildList();
 			length = len;
 		}
 		
 		public void draw() {
-			
-			RenderUtils.loadTexture(TEXTURE);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glLineWidth(0.4f);
+			doPreWork();
 			GL11.glCallList(listId);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			doPostWork();
 		}
 		
-		private void buildList(List< List<Segment> > list, Vec3 normal) {
-			listId = GL11.glGenLists(1);
+		public void draw(double length) {
+			draw(length, true);
+		}
+		
+		private void draw(double length, boolean really) {
+			if(really) doPreWork();
 			
-			GL11.glNewList(listId, GL11.GL_COMPILE);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glBegin(GL11.GL_QUADS);
 			
-			for(List<Segment> l : list) {
-				handleSingle(l, normal);
+			System.out.println(this + " " + segmentList.hashCode());
+			for(List<Segment> l : segmentList) {
+				handleSingle(l, normal, length);
 			}
 			
 			GL11.glEnd();
-			
 			GL11.glEnable(GL11.GL_CULL_FACE);
+			
+			if(really) doPostWork();
+		}
+		
+		private void buildList() {
+			listId = GL11.glGenLists(1);
+			
+			GL11.glNewList(listId, GL11.GL_COMPILE);
+			
+			draw(23333333, false);
+			
 			GL11.glEndList();
 		}
 		
-		private void handleSingle(List<Segment> list, Vec3 normal) {
+		private void handleSingle(List<Segment> list, Vec3 normal, double len) {
 			Vec3 lastDir = null;
 			for(Segment s : list) {
-				Vec3 dir = randomRotate(10, crossProduct(subtract(s.end.pt, s.start.pt), normal)).normalize();
+				if(s.start.pt.xCoord > len)
+					break;
+				
+				Vec3 dir = randomRotate(15, crossProduct(subtract(s.end.pt, s.start.pt), normal)).normalize();
 				if(lastDir == null) lastDir = dir;
 				
 				Vec3 p1 = add(s.start.pt, scalarMultiply(lastDir, s.start.width)),
@@ -243,6 +260,18 @@ public class ArcFactory {
 				lastDir = dir;
 			}
 		}
+		
+		private void doPreWork() {
+			RenderUtils.loadTexture(TEXTURE);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glLineWidth(0.4f);
+		}
+		
+		private void doPostWork() {}
 		
 		private void addVert(Vec3 vec, double u, double v) {
 			GL11.glTexCoord2d(u, v);

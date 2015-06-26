@@ -31,6 +31,7 @@ import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.util.client.ClientUtils;
 import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
@@ -74,6 +75,9 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 		hideWiggle = .2,
 		texWiggle = .5;
 	
+	public double length = 20.0;
+	public boolean lengthFixed = true;
+	
 	public boolean viewOptimize = true;
 	
 	final EntityPlayer player;
@@ -115,6 +119,8 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 		double dxzsq = dx * dx + dz * dz;
 		rotationYaw = (float) (-Math.atan2(dx, dz) * 180 / Math.PI);
 		rotationPitch = (float) (-Math.atan2(dy, Math.sqrt(dxzsq)) * 180 / Math.PI);
+		
+		length = MathUtils.distance(x0, y0, z0, x1, y1, z1);
 	}
 
 	@Override
@@ -148,8 +154,15 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 				ViewOptimize.fix(arc);
 			}
 			
-			for(int i = 0; i < arc.n; ++i)
-				arc.patterns[arc.iid[i]].draw();
+			if(arc.lengthFixed) {
+				for(int i = 0; i < arc.n; ++i)
+					arc.patterns[arc.iid[i]].draw();
+			} else {
+				for(int i = 0; i < arc.n; ++i) {
+					System.out.println(arc.iid[i]);
+					arc.patterns[arc.iid[i]].draw(arc.length);
+				}
+			}
 			
 			GL11.glPopMatrix();
 		}

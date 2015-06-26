@@ -30,6 +30,8 @@ public class ArcPatterns {
 
 	public static Arc[] weakArc;
 	
+	public static Arc[] thinContiniousArc;
+	
 	static {
 		{
 			ArcFactory fac = new ArcFactory();
@@ -38,6 +40,16 @@ public class ArcPatterns {
 			fac.maxOffset = 1.5;
 			
 			weakArc = fac.generateList(GEN, 20, 20);
+		}
+		
+		{
+			ArcFactory fac = new ArcFactory();
+			fac.branchFactor = 0.2;
+			fac.passes = 5;
+			fac.width = 0.08;
+			fac.maxOffset = 1.2;
+			
+			thinContiniousArc = fac.generateList(GEN, 20, 20);
 		}
 	}
 
