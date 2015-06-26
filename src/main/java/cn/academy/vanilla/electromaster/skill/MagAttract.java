@@ -18,9 +18,9 @@ import cn.academy.ability.api.Skill;
  * @author WeAthFolD
  *
  */
-public class SkillMagAttract extends Skill {
+public class MagAttract extends Skill {
 
-	public SkillMagAttract() {
+	public MagAttract() {
 		super("mag_attract", 2);
 	}
 

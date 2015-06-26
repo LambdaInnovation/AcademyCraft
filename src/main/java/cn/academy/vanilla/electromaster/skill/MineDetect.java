@@ -58,13 +58,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @Registrant
-public class SkillMineDetect extends Skill {
+public class MineDetect extends Skill {
 	
 	static final int TIME = 100;
 	
-	static SkillMineDetect instance;
+	static MineDetect instance;
 
-	public SkillMineDetect() {
+	public MineDetect() {
 		super("mine_detect", 3);
 		instance = this;
 	}

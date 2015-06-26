@@ -18,9 +18,9 @@ import cn.academy.ability.api.Skill;
  * @author WeAthFolD
  *
  */
-public class SkillRailgun extends Skill {
+public class Railgun extends Skill {
 
-	public SkillRailgun() {
+	public Railgun() {
 		super("railgun", 4);
 	}
 

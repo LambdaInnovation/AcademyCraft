@@ -33,11 +33,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-public class SkillArcGen extends Skill {
+public class ArcGen extends Skill {
 	
-	static SkillArcGen instance;
+	static ArcGen instance;
 
-	public SkillArcGen() {
+	public ArcGen() {
 		super("arc_gen", 1);
 		instance = this;
 	}

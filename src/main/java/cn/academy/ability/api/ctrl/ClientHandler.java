@@ -85,7 +85,7 @@ public final class ClientHandler {
     		if(CPData.get(getPlayer()).isActivated()) {
 	    		instance = locate();
 	    		if(instance != null) {
-	    			instance.onStart();
+	    			instance.ctrlStarted();
 	    		}
     		}
     	}

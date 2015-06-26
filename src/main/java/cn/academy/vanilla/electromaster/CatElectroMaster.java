@@ -26,10 +26,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
-import cn.academy.vanilla.electromaster.skill.SkillArcGen;
-import cn.academy.vanilla.electromaster.skill.SkillMagAttract;
-import cn.academy.vanilla.electromaster.skill.SkillMineDetect;
-import cn.academy.vanilla.electromaster.skill.SkillRailgun;
+import cn.academy.vanilla.electromaster.skill.MagMovement;
+import cn.academy.vanilla.electromaster.skill.ArcGen;
+import cn.academy.vanilla.electromaster.skill.MagAttract;
+import cn.academy.vanilla.electromaster.skill.MineDetect;
+import cn.academy.vanilla.electromaster.skill.Railgun;
 
 /**
  * @author WeAthFolD
@@ -37,20 +38,22 @@ import cn.academy.vanilla.electromaster.skill.SkillRailgun;
  */
 public class CatElectroMaster extends Category {
 	
-	public SkillArcGen arcGen;
-	public SkillMagAttract magAttract;
-	public SkillMineDetect mineDetect;
-	public SkillRailgun railgun;
+	public ArcGen arcGen;
+	public MagAttract magAttract;
+	public MineDetect mineDetect;
+	public Railgun railgun;
+	public MagMovement magMovement;
 
 	public CatElectroMaster() {
 		super("electro_master");
 		
 		defineTypes("default");
 		
-		addSkill("default", arcGen = new SkillArcGen());
-		addSkill("default", magAttract = new SkillMagAttract());
-		addSkill("default", mineDetect = new SkillMineDetect());
-		addSkill("default", railgun = new SkillRailgun());
+		addSkill("default", arcGen = new ArcGen());
+		addSkill("default", magAttract = new MagAttract());
+		addSkill("default", mineDetect = new MineDetect());
+		addSkill("default", railgun = new Railgun());
+		addSkill("default", magMovement = new MagMovement());
 		
 		magAttract.setParent(arcGen);
 		mineDetect.setParent(magAttract);

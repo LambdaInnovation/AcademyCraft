@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  the end(or abort) event will be automatically sent to those SyncActions.
  * @author WeAthFolD
  */
-public abstract class SkillInstance {
+public class SkillInstance {
 	
 	enum State { FINE, ENDED, ABORTED };
 	
@@ -40,6 +40,15 @@ public abstract class SkillInstance {
 	public void onEnd() {}
 	
 	public void onAbort() {}
+	
+	void ctrlStarted() {
+		onStart();
+		
+		if(childs != null) {
+			for(SyncAction act : childs)
+				ActionManager.startAction(act);
+		}
+	}
 	
 	void ctrlEnded() { 
 		onEnd();
@@ -80,11 +89,16 @@ public abstract class SkillInstance {
 		Cooldown.setCooldown(controllable, ticks);
 	}
 	
-	public void stopOnEnd(SyncAction action) {
+	/**
+	 * Add a sub SyncAction to be automatically started at SI execution and 
+	 *  end(abort)ed at end.
+	 */
+	public SkillInstance addChild(SyncAction action) {
 		if(childs == null)
 			childs = new ArrayList();
 		
 		childs.add(action);
+		return this;
 	}
 	
 	@SideOnly(Side.CLIENT)
