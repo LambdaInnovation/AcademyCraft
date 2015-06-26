@@ -14,7 +14,6 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +40,8 @@ import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.mc.WorldUtils;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -135,10 +134,7 @@ public class RayBarrage extends Skill {
 				silbarn.postEvent(new CollideEvent(new MovingObjectPosition(silbarn)));
 				
 				if(isRemote) {
-					player.worldObj.spawnEntityInWorld(
-						new EntityMdRayBarrage(player.worldObj, tx, ty, tz, 
-							player.rotationYaw, player.rotationPitch));
-					
+					spawnBarrage();
 				} else {
 					// Do the damage
 					// TODO Add probability
@@ -197,10 +193,22 @@ public class RayBarrage extends Skill {
 			}
 			
 			if(isRemote) {
-				EntityBarrageRayPre raySmall = new EntityBarrageRayPre(player.worldObj, hit);
-				raySmall.setFromTo(player.posX, player.posY, player.posZ, tx, ty, tz);
-				player.worldObj.spawnEntityInWorld(raySmall);
+				spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
 			}
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void spawnPreRay(double x0, double y0, double z0, double x1, double y1, double z1) {
+			EntityBarrageRayPre raySmall = new EntityBarrageRayPre(player.worldObj, hit);
+			raySmall.setFromTo(x0, y0, z0, x1, y1, z1);
+			player.worldObj.spawnEntityInWorld(raySmall);
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void spawnBarrage() {
+			player.worldObj.spawnEntityInWorld(
+					new EntityMdRayBarrage(player.worldObj, silbarn.posX, silbarn.posY, silbarn.posZ, 
+						player.rotationYaw, player.rotationPitch));
 		}
 		
 	}

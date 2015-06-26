@@ -58,6 +58,7 @@ public class GuiMatrixSync {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void sendSyncRequest(GuiMatrix gui) {
 		receivedRequest(Minecraft.getMinecraft().thePlayer, gui.tile);
 	}

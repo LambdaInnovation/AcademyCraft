@@ -23,12 +23,15 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  *
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegInit
 public class AuxGuiMediaPlayer {
 	

@@ -23,7 +23,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ActionManager {
 	
 	private static final AMServer AMS = new AMServer();
-	@SideOnly(Side.CLIENT)
+	
+	// FIXME: The @SideOnly anno doesn't work this way. I have used a straightforward approach
+	//  by adding @SideOnly(CLIENT) anno in AMC methods that references thePlayer to fix server issues. If you don't
+	//  like that you can fix by yourself. - WeAthFolD
 	private static final AMClient AMC = new AMClient();
 	
 	public static void startAction(SyncAction action) {

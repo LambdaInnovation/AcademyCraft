@@ -66,9 +66,14 @@ public class GuiNodeSync {
 		}
 	};
 	
-	//Init
+	@SideOnly(Side.CLIENT)
 	public static void doQueryInfo(TileNode target) {
 		queryInfo(Minecraft.getMinecraft().thePlayer, target);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void doQueryList(TileNode target) {
+		queryList(Minecraft.getMinecraft().thePlayer, target);
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
@@ -93,9 +98,7 @@ public class GuiNodeSync {
 	}
 	
 	//List
-	public static void doQueryList(TileNode target) {
-		queryList(Minecraft.getMinecraft().thePlayer, target);
-	}
+
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
@@ -168,6 +171,7 @@ public class GuiNodeSync {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	private static GuiNode locate(TileNode target) {
 		GuiScreen scr = Minecraft.getMinecraft().currentScreen;
 		if(scr instanceof GuiNode) {

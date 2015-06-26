@@ -34,7 +34,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeathFolD
  */
 @Registrant
-@RegEntity(clientOnly = true)
+@RegEntity
+@SideOnly(Side.CLIENT)
 @RegEntity.HasRender
 public abstract class EntityTPMarking extends EntityAdvanced {
 	

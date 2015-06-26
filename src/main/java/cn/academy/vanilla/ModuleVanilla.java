@@ -33,35 +33,7 @@ public class ModuleVanilla {
 	
 	@RegCategory
 	public static CatMeltdowner meltdowner;
-	
-	@RegACKeyHandler(name = "FFF", defaultKey = Keyboard.KEY_MINUS)
-	public static KeyHandler test = new Test();
 
-	public static void init() {
-	}
-	
-	private static class Test extends KeyHandler {
-		
-		EntityTPMarking mark;
-		
-		@Override
-		public void onKeyDown() {
-			mark = new EntityTPMarking(getPlayer()) {
-
-				@Override
-				protected double getMaxDistance() {
-					return 20;
-				}
-				
-			};
-			getPlayer().worldObj.spawnEntityInWorld(mark);
-		}
-		
-		@Override
-		public void onKeyUp() {
-			if(mark != null)
-				mark.setDead();
-		}
-	}
+	public static void init() {}
 	
 }

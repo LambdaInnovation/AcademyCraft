@@ -18,6 +18,8 @@ import cn.academy.core.entity.EntityRayBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.generic.RandUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class uses some little hacks. By rendering all the barrage rays within a 
@@ -25,6 +27,7 @@ import cn.liutils.util.generic.RandUtils;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegEntity
 @RegEntity.HasRender
 public class EntityMdRayBarrage extends EntityRayBase {

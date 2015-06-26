@@ -22,6 +22,7 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.SerializationManager;
 import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -93,7 +94,7 @@ public abstract class DataPart {
 		if(isRemote()) {
 			syncFromClient(toNBT());
 		} else {
-			syncFromServer(toNBT());
+			syncFromServer(getPlayer(), toNBT());
 		}
 	}
 	
@@ -103,7 +104,7 @@ public abstract class DataPart {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private void syncFromServer(@Data NBTTagCompound tag) {
+	private void syncFromServer(@Target EntityPlayer player, @Data NBTTagCompound tag) {
 		fromNBT(tag);
 	}
 	

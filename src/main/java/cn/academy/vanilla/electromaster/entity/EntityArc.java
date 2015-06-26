@@ -33,6 +33,8 @@ import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.Motion3D;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -40,6 +42,7 @@ import cn.liutils.util.helper.Motion3D;
  */
 @Registrant
 @RegEntity
+@SideOnly(Side.CLIENT)
 @RegEntity.HasRender
 public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 	
@@ -146,28 +149,6 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 		protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
 			return null;
 		}
-		
-	}
-	
-	@RegACKeyHandler(name = "arc_test", defaultKey = Keyboard.KEY_P)
-	public static KH kh;
-	
-	public static class KH extends KeyHandler {
-
-		@Override
-		public void onKeyDown() {
-			if(ClientUtils.isPlayerInGame()) {
-				EntityPlayer p = Minecraft.getMinecraft().thePlayer;
-				EntityArc a = new EntityArc(p);
-				p.worldObj.spawnEntityInWorld(a);
-			}
-		}
-
-		@Override
-		public void onKeyUp() {}
-
-		@Override
-		public void onKeyTick() {}
 		
 	}
 

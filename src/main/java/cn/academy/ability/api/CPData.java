@@ -97,7 +97,8 @@ public class CPData extends DataPart {
 			untilOverloadRecover--;
 		}
 		
-		if(!isRemote()) {
+		// Do the sync. Only sync when player activated ability to avoid waste
+		if(!isRemote() && activated) {
 			++tickSync;
 			if(tickSync >= (dataDirty ? 4 : 25)) {
 				dataDirty = false;

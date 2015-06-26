@@ -26,7 +26,6 @@ import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.EnergyHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
@@ -51,6 +50,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	static final int SYNC_INTV = 5;
 	
 	@RegTileEntity.Render
+	@SideOnly(Side.CLIENT)
 	public static RenderDynamicBlock renderer;
 	
 	static final int TANK_SIZE = 8000;

@@ -14,8 +14,9 @@ package cn.academy.terminal;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.terminal.client.TerminalUI;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -41,6 +42,7 @@ public class AppEnvironment {
 		return terminal;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	protected EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}

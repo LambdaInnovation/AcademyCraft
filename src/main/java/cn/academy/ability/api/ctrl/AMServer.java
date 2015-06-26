@@ -108,6 +108,7 @@ public class AMServer implements IActionManager {
 		}
 	}
 	
+	// FIXME: Crash
 	void abortPlayer(EntityPlayer player) {
 		for (Iterator<SyncAction> i = map.get(player.getUniqueID()).values().iterator(); i.hasNext(); )
 			abortAction(i.next());

@@ -51,9 +51,6 @@ public class EntityMdBall extends EntityAdvanced {
 	@SideOnly(Side.CLIENT)
 	public static R renderer;
 	
-	@RegACKeyHandler(defaultKey = Keyboard.KEY_J, name = "MdBallTest")
-	public static KH key;
-	
 	static final int MAX_TETXURES = 5;
 	
 	static final float RANGE_FROM = 0.8f, RANGE_TO = 1.3f;
@@ -249,28 +246,6 @@ public class EntityMdBall extends EntityAdvanced {
 		posX = spawner.posX + subX;
 		posY = spawner.posY + subY + (worldObj.isRemote ? 0 : 1.6); //Fix for different sides
 		posZ = spawner.posZ + subZ;
-	}
-	
-	public static class KH extends KeyHandler {
-		
-		@Override
-		public void onKeyDown() {
-			spawn(getPlayer());
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void spawn(@Instance EntityPlayer player) {
-		World world = player.worldObj;
-		
-		EntityMdBall ball = new EntityMdBall(player, 50, new EntityCallback<EntityMdBall>() {
-			@Override
-			public void execute(EntityMdBall target) {
-				System.out.println("Blah " + target.worldObj.isRemote);
-			}
-		});
-		
-		world.spawnEntityInWorld(ball);
 	}
 	
 	@SideOnly(Side.CLIENT)

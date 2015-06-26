@@ -1,30 +1,27 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import cn.academy.ability.api.ctrl.SyncAction.State;
-import cn.annoreg.mc.network.Future;
-import cn.annoreg.mc.network.Future.FutureCallback;
-import cn.liutils.api.event.OpenAuxGuiEvent;
-import cn.liutils.util.client.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.ability.api.ctrl.SyncAction.State;
+import cn.annoreg.mc.network.Future;
+import cn.annoreg.mc.network.Future.FutureCallback;
+import cn.liutils.api.event.OpenAuxGuiEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author EAirPeter
@@ -41,6 +38,7 @@ public class AMClient implements IActionManager {
 	private Set<Integer> set = new HashSet<Integer>();
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
@@ -58,11 +56,13 @@ public class AMClient implements IActionManager {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void endAction(SyncAction action) {
 		ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.id);
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void abortAction(SyncAction action) {
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.id);
 	}
@@ -105,6 +105,7 @@ public class AMClient implements IActionManager {
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused() || event.phase.equals(Phase.START))
 			return;
@@ -135,6 +136,7 @@ public class AMClient implements IActionManager {
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
@@ -144,6 +146,7 @@ public class AMClient implements IActionManager {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	private void abortPlayer() {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (player != null && !set.isEmpty())
@@ -151,12 +154,14 @@ public class AMClient implements IActionManager {
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onGuiOpen(GuiOpenEvent event) {
 		if (event.gui != null)
 			abortPlayer();
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onOpenAuxGui(OpenAuxGuiEvent event) {
 		if (event.gui != null)
 			abortPlayer();
