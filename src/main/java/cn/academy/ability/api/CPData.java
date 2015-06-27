@@ -164,12 +164,14 @@ public class CPData extends DataPart {
 			currentCP - cp < 0)
 			return false;
 		
-		System.out.println("DDD " + isRemote());
 		addOverload(overload);
 		consumeCP(cp);
 		return true;
 	}
 	
+	/**
+	 * Consume the CP and does the overload without any validation. This should be used WITH CAUTION.
+	 */
 	public void performWithForce(float overload, float cp) {
 		if(getPlayer().capabilities.isCreativeMode)
 			return;
@@ -208,8 +210,6 @@ public class CPData extends DataPart {
 		
 		if(!isRemote())
 			dataDirty = true;
-		
-		System.out.println("DoConsumeCP " + isRemote());
 		
 		return true;
 	}

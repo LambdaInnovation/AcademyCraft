@@ -59,6 +59,8 @@ public class CPBar extends Widget {
 	
 	static double sin41 = Math.sin(44.0 / 180 * Math.PI);
 	
+	static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
+	
 	public static ResourceLocation
 		TEX_BACK_NORMAL = tex("back_normal"),
 		TEX_BACK_OVERLOAD = tex("back_overload"),
@@ -82,6 +84,9 @@ public class CPBar extends Widget {
 	long showTime;
 	
 	float mAlpha; //Master alpha, used for blending in.
+	
+	float bufferedCP;
+	float bufferedOverload;
 
 	public CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
@@ -112,29 +117,35 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				
 				long time = GameTimer.getTime();
+				
 				if(time - lastDrawTime > 300L) {
 					showTime = time;
 				}
-				lastDrawTime = GameTimer.getTime();
+				
+				long deltaTime = Math.min(100L, time - lastDrawTime);
+				lastDrawTime = time;
 				
 				final long BLENDIN_TIME = 200L;
 				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME : 1.0f;
 				
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-				if(!AbilityData.get(player).isLearned())
-					return;
+
 				CPData cpData = CPData.get(player);
 				
-				float overload = cpData.getOverload() / cpData.getMaxOverload();
-				if(overload < 1.0) {
-					drawNormal(overload);
+				float poverload = cpData.getOverload() / cpData.getMaxOverload();
+				bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
+				
+				float pcp = cpData.getCP() / cpData.getMaxCP();
+				bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
+				
+				if(bufferedOverload < 1.0) {
+					drawNormal(bufferedOverload);
 				} else {
 					if(supportARB) {
-						drawOverload(overload);
+						drawOverload(bufferedOverload);
 					} else {
-						drawOverloadLegacy(overload);
+						drawOverloadLegacy(bufferedOverload);
 					}
 				}
 				
@@ -147,13 +158,13 @@ public class CPBar extends Widget {
 					float oldAlpha = mAlpha;
 					mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
 					
-					drawCPBar(cpData.getCP() / cpData.getMaxCP());
+					drawCPBar(pcp);
 					
 					mAlpha = oldAlpha;
 					
 					drawCPBar(ncp / cpData.getMaxCP());
 				} else {
-					drawCPBar(cpData.getCP() / cpData.getMaxCP());
+					drawCPBar(bufferedCP);
 				}
 				
 				final long preset_wait = 2000L;
@@ -386,6 +397,13 @@ public class CPBar extends Widget {
 	
 	private double lerp(double a, double b, double factor) {
 		return a * (1 - factor) + b * factor;
+	}
+	
+	private float balance(float from, float to, float max) {
+		float delta = to - from;
+		delta = Math.signum(delta) * Math.min(max, Math.abs(delta));
+		
+		return from + delta;
 	}
 	
 	private static ResourceLocation tex(String name) {
