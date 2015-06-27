@@ -65,6 +65,18 @@ public final class ClientHandler {
         
     }
     
+    private static boolean hasMutexInstance() {
+    	return getMutexInstance() != null;
+    }
+    
+    public static SkillInstance getMutexInstance() {
+    	for(AbilityKey key : handlers) {
+    		if(key.instance != null && key.instance.isMutex)
+    			return key.instance;
+    	}
+    	return null;
+    }
+    
     private static class AbilityKey extends KeyHandler {
     	
     	final int internalID;
@@ -130,6 +142,9 @@ public final class ClientHandler {
     		if(Cooldown.isInCooldown(cc) || cc == null) return null;
     		
     		SkillInstance instance = cc.createSkillInstance(getPlayer());
+    		if(instance.isMutex && hasMutexInstance())
+    			instance = null;
+    		
     		if(instance == null) {
     			AcademyCraft.log.warn("NULL SkillInstance for " + cc);
     		} else

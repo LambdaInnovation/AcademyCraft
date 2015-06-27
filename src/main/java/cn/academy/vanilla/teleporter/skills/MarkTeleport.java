@@ -24,6 +24,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.core.util.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
@@ -116,8 +117,23 @@ public class MarkTeleport extends Skill {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new MTAction());
+		MTAction action = new MTAction();
+		AbilityData data = AbilityData.get(player);
+		
+		return new SkillInstance() { 
+			@Override
+			public void onTick() {
+				if(action.mark == null)
+					return;
+				
+				float distance = (float) MathUtils.distance(
+					action.mark.posX, action.mark.posY, action.mark.posZ,
+					player.posX, player.posY, player.posZ);
+				this.estimatedCP = distance * getCPB(data);
+			}
+		}.addChild(action);
 	}
 	
 	public static class MTAction extends SyncAction {
@@ -151,7 +167,7 @@ public class MarkTeleport extends Skill {
 				;
 			} else {
 			
-				cpData.perform(distance * getOPB(aData), distance * getCPB(aData));
+				cpData.performWithForce(distance * getOPB(aData), distance * getCPB(aData));
 				
 				if(!isRemote) {
 					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);

@@ -164,9 +164,24 @@ public class CPData extends DataPart {
 			currentCP - cp < 0)
 			return false;
 		
+		System.out.println("DDD " + isRemote());
 		addOverload(overload);
 		consumeCP(cp);
 		return true;
+	}
+	
+	public void performWithForce(float overload, float cp) {
+		if(getPlayer().capabilities.isCreativeMode)
+			return;
+		
+		this.overload += overload;
+		this.currentCP -= cp;
+		
+		if(currentCP < 0) currentCP = 0;
+		if(overload > getMaxOverload() * 2) overload = getMaxOverload() * 2;
+		
+		if(!isRemote())
+			dataDirty = true;
 	}
 	
 	/**
@@ -193,6 +208,8 @@ public class CPData extends DataPart {
 		
 		if(!isRemote())
 			dataDirty = true;
+		
+		System.out.println("DoConsumeCP " + isRemote());
 		
 		return true;
 	}
@@ -274,6 +291,8 @@ public class CPData extends DataPart {
 		overload = tag.getFloat("D");
 		maxOverload = tag.getFloat("N");
 		untilOverloadRecover = tag.getInteger("J");
+		
+		System.out.println("FromNBT " + isRemote());
 	}
 	
 	private static double getDoubleParam(String name) {

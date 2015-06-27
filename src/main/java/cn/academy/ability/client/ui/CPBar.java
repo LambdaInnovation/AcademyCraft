@@ -31,6 +31,8 @@ import org.lwjgl.opengl.GLContext;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.PresetData;
+import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.event.SwitchPresetEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
@@ -136,7 +138,23 @@ public class CPBar extends Widget {
 					}
 				}
 				
-				drawCPBar(cpData.getCP() / cpData.getMaxCP());
+				SkillInstance active = ClientHandler.getMutexInstance();
+				float estmCons = active == null ? 0 : active.estimatedCP;
+				
+				if(estmCons != 0) {
+					float ncp = Math.max(0, cpData.getCP() - estmCons);
+					
+					float oldAlpha = mAlpha;
+					mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
+					
+					drawCPBar(cpData.getCP() / cpData.getMaxCP());
+					
+					mAlpha = oldAlpha;
+					
+					drawCPBar(ncp / cpData.getMaxCP());
+				} else {
+					drawCPBar(cpData.getCP() / cpData.getMaxCP());
+				}
 				
 				final long preset_wait = 2000L;
 				if(time - presetChangeTime < preset_wait)
@@ -267,7 +285,7 @@ public class CPBar extends Widget {
 		
 		autoLerp(cpColors, prog);
 		
-		prog = 0.16f + prog * 0.84f; //Keep the largest one.
+		prog = 0.16f + prog * 0.8f;
 		
 		final double OFF = 103 * sin41, X0 = 47, Y0 = 30, WIDTH = 883, HEIGHT = 84;
 		Tessellator t = Tessellator.instance;

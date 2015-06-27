@@ -31,7 +31,25 @@ public class SkillInstance {
 	
 	private List<SyncAction> childs;
 	
+	/**
+	 * Return: Whether this SkillInstance mutex others.
+	 * Mutex SkillInstance will not be opened at the same time.
+	 * ( That is, a player can only execute ONE mutex skill at once ).
+	 */
+	boolean isMutex = true;
+	
+	/**
+	 * The estimated consumption of this SkillInstance when release.
+	 * This will be drawn onto AbilityUI dynamically, when this instance is active.
+	 */
+	public float estimatedCP;
+	
 	public SkillInstance() {}
+	
+	public SkillInstance setNonMutex() {
+		isMutex = false;
+		return this;
+	}
 	
 	public void onStart() {}
 	

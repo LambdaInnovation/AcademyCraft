@@ -27,7 +27,9 @@ public class SkillInstanceInstant extends SkillInstance {
 	
 	List<SyncAction> actions;
 
-	public SkillInstanceInstant() {}
+	public SkillInstanceInstant() {
+		setNonMutex();
+	}
 	
 	@Override
 	public final void onStart() {
