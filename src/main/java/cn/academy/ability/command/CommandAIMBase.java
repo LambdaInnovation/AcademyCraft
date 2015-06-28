@@ -18,6 +18,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
@@ -93,7 +94,8 @@ public abstract class CommandAIMBase extends ACCommand {
 	String[] commands = {
 		"help", "cat", "catlist", 
 		"learn", "learn_all", "reset",
-		"learned", "skills"
+		"learned", "skills", "fullcp",
+		"level"
 	};
 
 	public CommandAIMBase(String name) {
@@ -104,15 +106,14 @@ public abstract class CommandAIMBase extends ACCommand {
 	protected void matchCommands(ICommandSender ics, EntityPlayer player, String[] pars) {
 		AbilityData aData = AbilityData.get(player);
 		switch(pars[0]) {
-		case "help":
-		{
+		case "help": {
 			for(String c : commands) {
 				sendChat(ics, getLoc(c));
 			}
 			return;
 		}
-		case "cat":
-		{
+		
+		case "cat": {
 			if(pars.length == 1) {
 				Category cat = aData.getCategory();
 				sendChat(ics, getLoc("curcat"), cat == null ? getLoc("nonecat") : cat.getDisplayName());
@@ -130,8 +131,8 @@ public abstract class CommandAIMBase extends ACCommand {
 			}
 			break;	
 		}
-		case "catlist":
-		{
+		
+		case "catlist": {
 			sendChat(ics, getLoc("cats"));
 			StringBuilder sb = new StringBuilder();
 			List<Category> catList = CategoryManager.INSTANCE.getCategories();
@@ -141,8 +142,8 @@ public abstract class CommandAIMBase extends ACCommand {
 			sendChat(ics, sb.toString());
 			return;
 		}
-		case "learn":
-		{
+		
+		case "learn": {
 			Category cat = aData.getCategory();
 			if(cat == null) {
 				sendChat(ics, getLoc("nocat"));
@@ -175,8 +176,8 @@ public abstract class CommandAIMBase extends ACCommand {
 			}
 			return;
 		}
-		case "learn_all":
-		{
+		
+		case "learn_all": {
 			if(aData.getCategory() == null) {
 				sendChat(ics, getLoc("nocat"));
 				return;
@@ -185,14 +186,14 @@ public abstract class CommandAIMBase extends ACCommand {
 			sendChat(ics, locSuccessful());
 			return;
 		}
-		case "reset":
-		{
+		
+		case "reset": {
 			aData.setCategory(null);
 			sendChat(ics, locSuccessful());
 			return;
 		}
-		case "learned":
-		{
+		
+		case "learned": {
 			StringBuilder sb = new StringBuilder();
 			
 			boolean begin = true;
@@ -204,8 +205,8 @@ public abstract class CommandAIMBase extends ACCommand {
 			sendChat(ics, getLoc("learned.format"), sb.toString());
 			return;
 		}
-		case "skills":
-		{
+		
+		case "skills": {
 			Category cat = aData.getCategory();
 			if(cat == null) {
 				sendChat(ics, getLoc("nocat"));
@@ -215,6 +216,24 @@ public abstract class CommandAIMBase extends ACCommand {
 			for(Skill s : cat.getSkillList()) {
 				sendChat(ics, s.getName() + " [" + s.getID() + "]");
 			}
+			return;
+		}
+		
+		case "level": {
+			int lv = Integer.valueOf(pars[1]);
+			if(lv > 0 && lv <= 5) {
+				aData.setLevel(lv);
+				sendChat(ics, locSuccessful());
+			} else {
+				sendChat(ics, locInvalid());
+			}
+			return;
+		}
+		
+		case "fullcp": {
+			CPData cpData = CPData.get(player);
+			cpData.setCP(cpData.getMaxCP());
+			sendChat(ics, locSuccessful());
 			return;
 		}
 		}

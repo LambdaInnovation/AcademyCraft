@@ -64,7 +64,8 @@ public class AbilityData extends DataPart {
 	public void setCategoryID(int id) {
 		if(id != catID && !isRemote()) {
 			catID = id;
-			doCompleteSync();
+			if(!isRemote())
+				sync();
 			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
 		}
 	}
@@ -75,6 +76,13 @@ public class AbilityData extends DataPart {
 	
 	public int getLevel() {
 		return level;
+	}
+	
+	public void setLevel(int lv) {
+		level = lv;
+		if(!isRemote()) {
+			sync();
+		}
 	}
 	
 	public Category getCategory() {
@@ -119,7 +127,9 @@ public class AbilityData extends DataPart {
 		if(!learnedSkills.get(id)) {
 			MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(id)));
 			learnedSkills.set(id);
-			doCompleteSync();
+			
+			if(!isRemote())
+				sync();
 		}
 	}
 	
@@ -132,7 +142,8 @@ public class AbilityData extends DataPart {
 	 */
 	public void learnAllSkills() {
 		learnedSkills.set(0, learnedSkills.size(), true);
-		doCompleteSync();
+		if(!isRemote())
+			sync();
 	}
 	
 	public boolean isSkillLearned(Skill s) {
@@ -150,6 +161,8 @@ public class AbilityData extends DataPart {
 		if(arr.length != 0)
 			learnedSkills = BitSet.valueOf(arr);
 		
+		level = tag.getInteger("v");
+		
 		NBTTagList list = (NBTTagList) tag.getTag("s");
 		Category c = getCategory();
 		if(c != null && list != null) {
@@ -166,6 +179,8 @@ public class AbilityData extends DataPart {
 		tag.setByte("c", (byte) catID); //There cant be more than 128 categories yeah? >)
 		tag.setByteArray("l", learnedSkills.toByteArray());
 		
+		tag.setInteger("v", level);
+		
 		Category c = getCategory();
 		if(c != null) {
 			NBTTagList list = new NBTTagList();
@@ -176,23 +191,6 @@ public class AbilityData extends DataPart {
 		}
 		
 		return tag;
-	}
-	
-	private void doCompleteSync() {
-		receivedCompleteSync(getPlayer(), catID, learnedSkills);
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	private void receivedCompleteSync(@Target EntityPlayer player, @Data Integer catID, @Data BitSet bitset) {
-		this.catID = catID;
-		Category cat = getCategory();
-		if(cat != null) {
-			for(int i = 0; i < cat.getSkillCount(); ++i) {
-				if(!learnedSkills.get(i) && bitset.get(i))
-					MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(i)));
-			}
-		}
-		this.learnedSkills = bitset;
 	}
 	
 	public static AbilityData get(EntityPlayer player) {

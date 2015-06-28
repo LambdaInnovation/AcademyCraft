@@ -14,6 +14,8 @@ import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.PresetData.Preset;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
+import cn.academy.ability.api.event.AbilityActivateEvent;
+import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.AcademyCraft;
@@ -21,14 +23,11 @@ import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.util.ControlOverrider;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
-import cn.liutils.util.generic.DebugUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -110,32 +109,48 @@ public final class ClientHandler {
     		rebuildOverrides();
     }
     
+    @SubscribeEvent
+    public void activate(AbilityActivateEvent event) {
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
+    }
+    
+    @SubscribeEvent
+    public void deactivate(AbilityDeactivateEvent event) {
+    	System.out.println("AbilityDeactivate");
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
+    }
+    
     private void rebuildOverrides() {
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     	//if(player == null)
     	//	return;
     	
     	PresetData pdata = PresetData.get(player);
+    	CPData cpData = CPData.get(player);
     	
     	if(lastOverrides != null) {
     		for(int i : lastOverrides)
     			ControlOverrider.removeOverride(i);
     	}
     	
-    	Preset preset = pdata.getCurrentPreset();
-    	if(preset != null) {
-    		List<Integer> list = new ArrayList();
-    		
-	    	for(int i = 0; i < MAX_KEYS; ++i) {
-	    		if(preset.hasMapping(i)) {
-	    			int mapping = getKeyMapping(i);
-	    			
-	    			list.add(mapping);
-	    			ControlOverrider.override(mapping);
-	    		}
-	    	}
-	    	
-	    	lastOverrides = list.toArray(new Integer[] {});
+    	if(cpData.isActivated()) {
+	    	Preset preset = pdata.getCurrentPreset();
+	    	if(preset != null) {
+	    		List<Integer> list = new ArrayList();
+	    		
+		    	for(int i = 0; i < MAX_KEYS; ++i) {
+		    		if(preset.hasMapping(i)) {
+		    			int mapping = getKeyMapping(i);
+		    			
+		    			list.add(mapping);
+		    			ControlOverrider.override(mapping);
+		    		}
+		    	}
+		    	
+		    	lastOverrides = list.toArray(new Integer[] {});
+    	}
     	}
     }
     

@@ -46,7 +46,7 @@ public class MagMovement extends Skill {
 	}
 	
 	private static float getOverload(AbilityData data) {
-		return 10;
+		return 1;
 	}
 	
 	private static double getMaxDistance(AbilityData data) {

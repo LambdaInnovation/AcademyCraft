@@ -14,6 +14,9 @@ package cn.academy.ability.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import cn.academy.ability.api.event.AbilityActivateEvent;
+import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
@@ -119,11 +122,12 @@ public class CPData extends DataPart {
 	}
 	
 	public void activate() {
-		if(AbilityData.get(getPlayer()).isLearned()) {
+		if(AbilityData.get(getPlayer()).isLearned() && !activated) {
 			activated = true;
 			
 			if(!isRemote()) {
 				System.out.println("Activated at server.");
+				MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getPlayer()));
 				sync();
 			}
 		} else {
@@ -132,16 +136,27 @@ public class CPData extends DataPart {
 	}
 	
 	public void deactivate() {
-		activated = false;
-		
-		if(!isRemote()) {
-			System.out.println("Deactivated at server.");
-			sync();
+		if(activated) {
+			activated = false;
+			
+			if(!isRemote()) {
+				System.out.println("Deactivated at server.");
+				MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getPlayer()));
+				sync();
+			}
 		}
 	}
 	
 	public float getCP() {
 		return currentCP;
+	}
+	
+	public void setCP(float cp) {
+		currentCP = cp;
+		if(currentCP < 0) currentCP = 0;
+		if(currentCP > maxCP) currentCP = maxCP;
+		if(!isRemote())
+			dataDirty = true;
 	}
 	
 	public float getMaxCP() {
@@ -166,8 +181,7 @@ public class CPData extends DataPart {
 		if(getPlayer().capabilities.isCreativeMode)
 			return true;
 		
-		if(this.overload + overload > getMaxOverload() * 2 ||
-			currentCP - cp < 0)
+		if(currentCP - cp < 0)
 			return false;
 		
 		addOverload(overload);
@@ -221,25 +235,22 @@ public class CPData extends DataPart {
 	}
 	
 	/**
-	 * Add a specific amount of overload.
-	 * @return whether the overloading is successful.
+	 * Add a specific amount of overload. Note that the action will ALWAYS be
+	 * successful, even if you try to overload over 2*maxOverload. (The value will
+	 * stay at 2*maxo)
 	 */
-	public boolean addOverload(float amt) {
-		if(overload + amt > 2 * maxOverload)
-			return false;
+	public void addOverload(float amt) {
+		if(getPlayer().capabilities.isCreativeMode)
+			return;
 		
-		if(overload + amt > maxOverload) {
-			amt = amt - (maxOverload - overload);
-			overload = Math.min(2 * maxOverload, overload + amt * OVERLOAD_O_MUL);
-		} else {
-			overload += amt;
-		}
+		overload += amt;
+		if(overload > 2 * maxOverload)
+			overload = 2 * maxOverload;
+		
 		untilOverloadRecover = OVERLOAD_COOLDOWN;
 		
 		if(!isRemote())
 			dataDirty = true;
-		
-		return true;
 	}
 	
 	public boolean isOverloaded() {
@@ -286,7 +297,7 @@ public class CPData extends DataPart {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
-		
+		boolean lastActivated = activated;
 		activated = tag.getBoolean("A");
 		
 		currentCP = tag.getFloat("C");
@@ -296,6 +307,14 @@ public class CPData extends DataPart {
 		overload = tag.getFloat("D");
 		maxOverload = tag.getFloat("N");
 		untilOverloadRecover = tag.getInteger("J");
+		
+		if(isRemote() && isSynced()) {
+			if(lastActivated ^ activated) {
+				MinecraftForge.EVENT_BUS.post(activated ? 
+					new AbilityActivateEvent(getPlayer()) :
+					new AbilityDeactivateEvent(getPlayer()));
+			}
+		}
 	}
 	
 	private static double getDoubleParam(String name) {
