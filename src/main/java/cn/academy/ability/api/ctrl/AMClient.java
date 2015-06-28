@@ -106,7 +106,7 @@ public class AMClient implements IActionManager {
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void onClientTick(ClientTickEvent event) {
+	public synchronized void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused() || event.phase.equals(Phase.START))
 			return;
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
@@ -137,7 +137,7 @@ public class AMClient implements IActionManager {
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
+	public synchronized void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
 			action.state = State.ABORTED;

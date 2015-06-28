@@ -108,10 +108,11 @@ public class AMServer implements IActionManager {
 		}
 	}
 	
-	// FIXME: Crash
 	void abortPlayer(EntityPlayer player) {
-		for (Iterator<SyncAction> i = map.get(player.getUniqueID()).values().iterator(); i.hasNext(); )
-			abortAction(i.next());
+		Map<Integer, SyncAction> _map = map.get(player.getUniqueID());
+		if (_map != null)
+			for (SyncAction action : _map.values())
+				abortAction(action);
 	}
 
 	private UUID playerUUID(SyncAction action) {
@@ -121,7 +122,7 @@ public class AMServer implements IActionManager {
 	private int curTick = 0;
 	
 	@SubscribeEvent
-	public void onServerTick(ServerTickEvent event) {
+	public synchronized void onServerTick(ServerTickEvent event) {
 		if (event.phase.equals(Phase.START))
 			return;
 		++curTick;
@@ -166,7 +167,7 @@ public class AMServer implements IActionManager {
 	}
 	
 	@SubscribeEvent
-	public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+	public synchronized void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		map.put(event.player.getUniqueID(), new HashMap<Integer, SyncAction>());
 	}
 	
