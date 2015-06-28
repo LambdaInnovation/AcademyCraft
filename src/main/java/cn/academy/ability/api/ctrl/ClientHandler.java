@@ -25,6 +25,7 @@ import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -96,16 +97,21 @@ public final class ClientHandler {
     
     @SubscribeEvent
     public void changePreset(PresetSwitchEvent event) {
-    	rebuildOverrides();
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
     }
     
     @SubscribeEvent
     public void editPreset(PresetUpdateEvent event) {
-    	rebuildOverrides();
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
     }
     
     private void rebuildOverrides() {
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	if(player == null)
+    		return;
+    	
     	PresetData pdata = PresetData.get(player);
     	
     	if(lastOverrides != null) {

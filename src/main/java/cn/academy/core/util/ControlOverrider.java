@@ -94,7 +94,7 @@ public class ControlOverrider {
 			ovr.count--;
 		} else {
 			ovr.kb.setKeyCode(keyID);
-			kbMap.addKey(keyID, ovr);
+			kbMap.addKey(keyID, ovr.kb);
 		}
 	}
 	
