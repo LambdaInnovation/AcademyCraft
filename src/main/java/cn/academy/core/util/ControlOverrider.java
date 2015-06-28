@@ -1,13 +1,13 @@
 /**
  * Copyright (c) Lambda Innovation, 2013-2015
- * 譛ｬ菴懷刀迚域揀逕ｱLambda Innovation謇�譛峨��
+ * 本作品版权由Lambda Innovation所有。
  * http://www.li-dev.cn/
  *
- * This project is open-source, and it is distributed under  
+ * This project is open-source, and it is distributed under 
  * the terms of GNU General Public License. You can modify
  * and distribute freely as long as you follow the license.
- * 譛ｬ鬘ｹ逶ｮ譏ｯ荳�荳ｪ蠑�貅宣｡ｹ逶ｮ�ｼ御ｸ秘�ｵ蠕ｪGNU騾夂畑蜈ｬ蜈ｱ謗域揀蜊剰ｮｮ縲�
- * 蝨ｨ驕ｵ辣ｧ隸･蜊剰ｮｮ逧�諠�蜀ｵ荳具ｼ梧お蜿ｯ莉･閾ｪ逕ｱ莨�謦ｭ蜥御ｿｮ謾ｹ縲�
+ * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
+ * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.util;
