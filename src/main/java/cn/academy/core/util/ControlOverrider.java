@@ -1,13 +1,13 @@
 /**
  * Copyright (c) Lambda Innovation, 2013-2015
- * 本作品版权由Lambda Innovation所有。
+ * 譛ｬ菴懷刀迚域揀逕ｱLambda Innovation謇�譛峨��
  * http://www.li-dev.cn/
  *
  * This project is open-source, and it is distributed under  
  * the terms of GNU General Public License. You can modify
  * and distribute freely as long as you follow the license.
- * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
- * 在遵照该协议的情况下，您可以自由传播和修改。
+ * 譛ｬ鬘ｹ逶ｮ譏ｯ荳�荳ｪ蠑�貅宣｡ｹ逶ｮ�ｼ御ｸ秘�ｵ蠕ｪGNU騾夂畑蜈ｬ蜈ｱ謗域揀蜊剰ｮｮ縲�
+ * 蝨ｨ驕ｵ辣ｧ隸･蜊剰ｮｮ逧�諠�蜀ｵ荳具ｼ梧お蜿ｯ莉･閾ｪ逕ｱ莨�謦ｭ蜥御ｿｮ謾ｹ縲�
  * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.core.util;
@@ -45,10 +45,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEventHandler(Bus.Forge)
 public class ControlOverrider {
 	
-	public interface IKeyEventFilter {
-		boolean accepts(int keyID);
-	}
-	
 	private static IntHashMap kbMap;
 	private static Field pressedField;
 	
@@ -70,6 +66,7 @@ public class ControlOverrider {
 			if(activeOverrides.get(keyID).count > 100)
 				AcademyCraft.log.warn("Over 100 override locks for " + 
 						keyID + ". Might be a programming error?");
+			System.out.println("Override increment " + "[" + keyID + "]" + activeOverrides.get(keyID).count);
 			return;
 		}
 		
@@ -80,21 +77,30 @@ public class ControlOverrider {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			kb.setKeyCode(-1);
+			//kb.setKeyCode(-1);
 			activeOverrides.put(keyID, new Override(kb));
+			System.out.println("Override new [" + keyID + "]");
+		} else {
+			System.out.println("Override ignored [" + keyID + "]");
 		}
 	}
 	
 	public static void removeOverride(int keyID) {
-		Override ovr = activeOverrides.remove(keyID);
+		Override ovr = activeOverrides.get(keyID);
 		if(ovr == null)
 			return;
 		
 		if(ovr.count > 1) {
 			ovr.count--;
+			
+			System.out.println("Override decrement [" + keyID + "]" + ovr.count);
 		} else {
+			activeOverrides.remove(keyID);
+			
 			ovr.kb.setKeyCode(keyID);
 			kbMap.addKey(keyID, ovr.kb);
+			
+			System.out.println("Override remove [" + keyID + "]");
 		}
 	}
 	
