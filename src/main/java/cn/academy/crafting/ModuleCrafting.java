@@ -12,23 +12,23 @@
  */
 package cn.academy.crafting;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.InstanceEjector;
+import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
+import cn.academy.crafting.block.BlockInciser;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
-import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegInit;
+import cn.annoreg.mc.RegItem;
 import cn.liutils.loading.item.ItemLoader;
 
 /**
@@ -49,6 +49,9 @@ public class ModuleCrafting {
 	
 	@RegBlock
     public static BlockImagFusor imagFusor;
+	
+	@RegBlock
+	public static BlockInciser inciser;
 	
 	@RegBlock
 	public static BlockGenericOre 
