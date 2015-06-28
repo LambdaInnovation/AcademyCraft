@@ -19,9 +19,9 @@ import cpw.mods.fml.common.eventhandler.Event;
  * Fired in both sides, when the player category has just changed.
  * @author WeAthFolD
  */
-public class CategoryChangedEvent extends AbilityEvent {
+public class CategoryChangeEvent extends AbilityEvent {
 
-	public CategoryChangedEvent(EntityPlayer _player) {
+	public CategoryChangeEvent(EntityPlayer _player) {
 		super(_player);
 	}
 	

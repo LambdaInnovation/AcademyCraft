@@ -14,7 +14,7 @@ package cn.academy.ability.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.academy.ability.api.event.CategoryChangedEvent;
+import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
@@ -259,7 +259,6 @@ public class CPData extends DataPart {
 		if(!isRemote())
 			sync();
 		
-		System.out.println("CP : " + maxCP + ", O: " + maxOverload);
 	}
 	
 	@Override
@@ -291,8 +290,6 @@ public class CPData extends DataPart {
 		overload = tag.getFloat("D");
 		maxOverload = tag.getFloat("N");
 		untilOverloadRecover = tag.getInteger("J");
-		
-		System.out.println("FromNBT " + isRemote());
 	}
 	
 	private static double getDoubleParam(String name) {
@@ -319,7 +316,7 @@ public class CPData extends DataPart {
 	public static class Events {
 		
 		@SubscribeEvent
-		public void changedCategory(CategoryChangedEvent event) {
+		public void changedCategory(CategoryChangeEvent event) {
 			CPData cpData = CPData.get(event.player);
 			
 			if(!AbilityData.get(event.player).isLearned()) {

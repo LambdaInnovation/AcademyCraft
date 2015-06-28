@@ -307,8 +307,7 @@ public class PresetEditUI extends GuiScreen {
     	public void updateInfo() {
     		
     		Preset p = data.getPreset(id);
-    		byte[] pdata = (id == active && editor != null) ? editor.display : p.data;
-    		System.out.println("UpdateInfo");
+    		byte[] pdata = (id == active && editor != null) ? editor.display : p.getData();
     		
     		for(int i = 0; i < 4; ++i) {
     			Category cat = AbilityData.get(player).getCategory();

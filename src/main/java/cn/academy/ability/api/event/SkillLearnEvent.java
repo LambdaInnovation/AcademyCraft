@@ -13,17 +13,19 @@
 package cn.academy.ability.api.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-
+import cn.academy.ability.api.Skill;
 
 /**
- * Fired only in client, when the player has just changed his preset using the
- * Preset Switch key(default 'C').
+ * Fired in BOTH CLIENT AND SERVER, when an Skill is newly learned by the player.
  * @author WeAthFolD
  */
-public class SwitchPresetEvent extends AbilityEvent {
+public class SkillLearnEvent extends AbilityEvent {
+	
+	public final Skill skill;
 
-	public SwitchPresetEvent(EntityPlayer _player) {
-		super(_player);
+	public SkillLearnEvent(EntityPlayer player, Skill _skill) {
+		super(player);
+		skill = _skill;
 	}
 
 }

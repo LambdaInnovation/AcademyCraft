@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.PresetData;
-import cn.academy.ability.api.event.SwitchPresetEvent;
+import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.KeyHintUI;
 import cn.academy.ability.client.ui.PresetEditUI;
@@ -48,7 +48,7 @@ public class ModuleAbilityClient {
 			if(data.isActive()) {
 				int next = (data.getCurrentID() + 1) % 4;
 				data.switchCurrent(next);
-				MinecraftForge.EVENT_BUS.post(new SwitchPresetEvent(data.getPlayer()));
+				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));
 			}
 		}
 	};

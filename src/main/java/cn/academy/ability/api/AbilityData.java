@@ -21,8 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
-import cn.academy.ability.api.event.CategoryChangedEvent;
-import cn.academy.ability.api.event.LearnedSkillEvent;
+import cn.academy.ability.api.event.CategoryChangeEvent;
+import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
@@ -65,7 +65,7 @@ public class AbilityData extends DataPart {
 		if(id != catID && !isRemote()) {
 			catID = id;
 			doCompleteSync();
-			MinecraftForge.EVENT_BUS.post(new CategoryChangedEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class AbilityData extends DataPart {
 			return;
 		}
 		if(!learnedSkills.get(id)) {
-			MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(id)));
+			MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(id)));
 			learnedSkills.set(id);
 			doCompleteSync();
 		}
@@ -189,7 +189,7 @@ public class AbilityData extends DataPart {
 		if(cat != null) {
 			for(int i = 0; i < cat.getSkillCount(); ++i) {
 				if(!learnedSkills.get(i) && bitset.get(i))
-					MinecraftForge.EVENT_BUS.post(new LearnedSkillEvent(getPlayer(), cat.getSkill(i)));
+					MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(i)));
 			}
 		}
 		this.learnedSkills = bitset;

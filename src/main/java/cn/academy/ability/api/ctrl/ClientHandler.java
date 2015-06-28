@@ -1,5 +1,9 @@
 package cn.academy.ability.api.ctrl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
@@ -8,13 +12,20 @@ import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.PresetData;
+import cn.academy.ability.api.PresetData.Preset;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
+import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.util.ControlOverrider;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,6 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @Registrant
 @RegInit
+@RegEventHandler(Bus.Forge)
 public final class ClientHandler {
 	
 	public static final int MAX_KEYS = PresetData.MAX_KEYS, STATIC_KEYS = 4;
@@ -75,6 +87,44 @@ public final class ClientHandler {
     			return key.instance;
     	}
     	return null;
+    }
+    
+    /**
+     * Stores KEYID in case the key mapping is editted.
+     */
+    private Integer[] lastOverrides;
+    
+    @SubscribeEvent
+    public void changePreset(PresetSwitchEvent event) {
+    	rebuildOverrides();
+    }
+    
+    @SubscribeEvent
+    public void editPreset(PresetUpdateEvent event) {
+    	rebuildOverrides();
+    }
+    
+    private void rebuildOverrides() {
+    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	PresetData pdata = PresetData.get(player);
+    	
+    	if(lastOverrides != null) {
+    		for(int i : lastOverrides)
+    			ControlOverrider.removeOverride(i);
+    	}
+    	
+    	Preset preset = pdata.getCurrentPreset();
+    	if(preset != null) {
+    		List<Integer> list = new ArrayList();
+    		
+	    	for(int i = 0; i < MAX_KEYS; ++i) {
+	    		if(preset.hasMapping(i)) {
+	    			list.add(getKeyMapping(i));
+	    		}
+	    	}
+	    	
+	    	lastOverrides = list.toArray(new Integer[] {});
+    	}
     }
     
     private static class AbilityKey extends KeyHandler {

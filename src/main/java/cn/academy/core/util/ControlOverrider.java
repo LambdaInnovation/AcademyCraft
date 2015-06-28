@@ -13,13 +13,16 @@
 package cn.academy.core.util;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.IntHashMap;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
@@ -32,8 +35,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class overrides(i.e.Disables) vanilla minecraft's control on a certain key. 
- * It is currently intented to be used DURING gameplay and will unlock all overrides when any GUI is present,
- * and restore 
+ * It is currently intented to be used DURING gameplay and will unlock all overrides when any GUI is present.
+ * There are two ways to use ControlOverrider: activate/deactivate a key manually, or add key event filters into it.
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
@@ -42,10 +45,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEventHandler(Bus.Forge)
 public class ControlOverrider {
 	
+	public interface IKeyEventFilter {
+		boolean accepts(int keyID);
+	}
+	
 	private static IntHashMap kbMap;
 	private static Field pressedField;
 	
-	private static Map<Integer, KeyBinding> activeOverrides = new HashMap();
+	private static Map<Integer, Override> activeOverrides = new HashMap();
 	
 	public static void init() {
 		try {
@@ -58,8 +65,14 @@ public class ControlOverrider {
 	}
 	
 	public static void override(int keyID) {
-		if(activeOverrides.containsKey(keyID))
+		if(activeOverrides.containsKey(keyID)) {
+			activeOverrides.get(keyID).count++;
+			if(activeOverrides.get(keyID).count > 100)
+				AcademyCraft.log.warn("Over 100 override locks for " + 
+						keyID + ". Might be a programming error?");
 			return;
+		}
+		
 		KeyBinding kb = (KeyBinding) kbMap.removeObject(keyID);
 		if(kb != null) {
 			try {
@@ -68,28 +81,33 @@ public class ControlOverrider {
 				e.printStackTrace();
 			}
 			kb.setKeyCode(-1);
-			activeOverrides.put(keyID, kb);
+			activeOverrides.put(keyID, new Override(kb));
 		}
 	}
 	
 	public static void removeOverride(int keyID) {
-		KeyBinding kb = activeOverrides.remove(keyID);
-		if(kb != null) {
-			kb.setKeyCode(keyID);
-			kbMap.addKey(keyID, kb);
+		Override ovr = activeOverrides.remove(keyID);
+		if(ovr == null)
+			return;
+		
+		if(ovr.count > 1) {
+			ovr.count--;
+		} else {
+			ovr.kb.setKeyCode(keyID);
+			kbMap.addKey(keyID, ovr);
 		}
 	}
 	
 	private static void releaseLocks() {
-		for(Map.Entry<Integer, KeyBinding> ao: activeOverrides.entrySet()) {
-			kbMap.addKey(ao.getKey(), ao.getValue());
+		for(Map.Entry<Integer, Override> ao: activeOverrides.entrySet()) {
+			kbMap.addKey(ao.getKey(), ao.getValue().kb);
 		}
 	}
 	
 	private static void restoreLocks() {
-		for(Map.Entry<Integer, KeyBinding> ao: activeOverrides.entrySet()) {
+		for(Map.Entry<Integer, Override> ao: activeOverrides.entrySet()) {
 			try {
-				pressedField.set(ao.getValue(), false);
+				pressedField.set(ao.getValue().kb, false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -108,5 +126,15 @@ public class ControlOverrider {
 			restoreLocks();
 		}
 		lastTickGui = cgs;
+	}
+	
+	private static class Override {
+		final KeyBinding kb;
+		int count;
+		
+		public Override(KeyBinding _kb) {
+			kb = _kb;
+			count = 1;
+		}
 	}
 }

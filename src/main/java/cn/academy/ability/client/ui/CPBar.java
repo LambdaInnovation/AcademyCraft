@@ -33,7 +33,7 @@ import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.event.SwitchPresetEvent;
+import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.cgui.gui.Widget;
@@ -108,7 +108,7 @@ public class CPBar extends Widget {
 	}
 	
 	@SubscribeEvent
-	public void onSwitchPreset(SwitchPresetEvent event) {
+	public void onSwitchPreset(PresetSwitchEvent event) {
 		lastPresetTime = presetChangeTime;
 		presetChangeTime = GameTimer.getTime();
 	}

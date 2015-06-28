@@ -16,17 +16,15 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -104,6 +102,8 @@ public class PresetData extends DataPart {
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			presets[i].fromNBT(tag.getCompoundTag("" + i));
 		}
+		
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 	}
 
 	@Override
@@ -168,6 +168,8 @@ public class PresetData extends DataPart {
 		
 		public void save() {
 			target.setData(display);
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+			
 			sync();
 		}
 		
@@ -178,7 +180,7 @@ public class PresetData extends DataPart {
 		/**
 		 * NO DIRECT EDITING
 		 */
-		public final byte data[] = new byte[MAX_KEYS];
+		final byte data[] = new byte[MAX_KEYS];
 		
 		public Preset() {
 			for(int i = 0; i < MAX_KEYS; ++i) {
@@ -194,6 +196,14 @@ public class PresetData extends DataPart {
 			for(int i = 0; i < MAX_KEYS; ++i) {
 				data[i] = _data[i];
 			}
+		}
+		
+		public byte[] getData() {
+			return data;
+		}
+		
+		public boolean hasMapping(int key) {
+			return getControllable(key) != null;
 		}
 		
 		public Controllable getControllable(int key) {
