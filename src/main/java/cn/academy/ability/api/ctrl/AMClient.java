@@ -29,13 +29,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class AMClient implements IActionManager {
 
 	AMClient() {
-		FMLCommonHandler.instance().bus().register(this);
-		MinecraftForge.EVENT_BUS.register(this);
+		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT)) {
+			FMLCommonHandler.instance().bus().register(this);
+			MinecraftForge.EVENT_BUS.register(this);
+			map = new HashMap<Integer, SyncAction>();
+			set = new HashSet<Integer>();
+		}
 	}
 	
-	private Map<Integer, SyncAction> map = new HashMap<Integer, SyncAction>();
+	private Map<Integer, SyncAction> map = null;
 	//Optimized: abortPlayer
-	private Set<Integer> set = new HashSet<Integer>();
+	private Set<Integer> set = null;
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -67,6 +71,7 @@ public class AMClient implements IActionManager {
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.id);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	void startFromServer(String className, NBTTagCompound tag) {
 		SyncAction action = null;
 		try {
@@ -82,6 +87,7 @@ public class AMClient implements IActionManager {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	void updateFromServer(int id, NBTTagCompound tag) {
 		SyncAction action = map.get(id);
 		if (action != null) {
@@ -93,6 +99,7 @@ public class AMClient implements IActionManager {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	void terminateFromServer(int id, NBTTagCompound tag) {
 		SyncAction action = map.get(id);
 		if (action != null) {
@@ -144,6 +151,7 @@ public class AMClient implements IActionManager {
 			action.onAbort();
 			i.remove();
 		}
+		set.clear();
 	}
 	
 	@SideOnly(Side.CLIENT)
