@@ -20,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;

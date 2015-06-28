@@ -3,7 +3,7 @@
  * 本作品版权由Lambda Innovation所有。
  * http://www.li-dev.cn/
  *
- * This project is open-source, and it is distributed under  
+ * This project is open-source, and it is distributed under 
  * the terms of GNU General Public License. You can modify
  * and distribute freely as long as you follow the license.
  * 本项目是一个开源项目，且遵循GNU通用公共授权协议。
@@ -45,10 +45,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEventHandler(Bus.Forge)
 public class ControlOverrider {
 	
-	public interface IKeyEventFilter {
-		boolean accepts(int keyID);
-	}
-	
 	private static IntHashMap kbMap;
 	private static Field pressedField;
 	
@@ -70,6 +66,7 @@ public class ControlOverrider {
 			if(activeOverrides.get(keyID).count > 100)
 				AcademyCraft.log.warn("Over 100 override locks for " + 
 						keyID + ". Might be a programming error?");
+			System.out.println("Override increment " + "[" + keyID + "]" + activeOverrides.get(keyID).count);
 			return;
 		}
 		
@@ -80,21 +77,30 @@ public class ControlOverrider {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			kb.setKeyCode(-1);
+			//kb.setKeyCode(-1);
 			activeOverrides.put(keyID, new Override(kb));
+			System.out.println("Override new [" + keyID + "]");
+		} else {
+			System.out.println("Override ignored [" + keyID + "]");
 		}
 	}
 	
 	public static void removeOverride(int keyID) {
-		Override ovr = activeOverrides.remove(keyID);
+		Override ovr = activeOverrides.get(keyID);
 		if(ovr == null)
 			return;
 		
 		if(ovr.count > 1) {
 			ovr.count--;
+			
+			System.out.println("Override decrement [" + keyID + "]" + ovr.count);
 		} else {
+			activeOverrides.remove(keyID);
+			
 			ovr.kb.setKeyCode(keyID);
-			kbMap.addKey(keyID, ovr);
+			kbMap.addKey(keyID, ovr.kb);
+			
+			System.out.println("Override remove [" + keyID + "]");
 		}
 	}
 	

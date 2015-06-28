@@ -23,9 +23,12 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
+import cn.liutils.util.generic.DebugUtils;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,7 +42,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @Registrant
 @RegInit
-@RegEventHandler(Bus.Forge)
+@RegEventHandler()
 public final class ClientHandler {
 	
 	public static final int MAX_KEYS = PresetData.MAX_KEYS, STATIC_KEYS = 4;
@@ -93,19 +96,25 @@ public final class ClientHandler {
      * Stores KEYID in case the key mapping is editted.
      */
     private Integer[] lastOverrides;
+    private boolean overrideInit;
     
     @SubscribeEvent
     public void changePreset(PresetSwitchEvent event) {
-    	rebuildOverrides();
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
     }
     
     @SubscribeEvent
     public void editPreset(PresetUpdateEvent event) {
-    	rebuildOverrides();
+    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    		rebuildOverrides();
     }
     
     private void rebuildOverrides() {
     	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+    	//if(player == null)
+    	//	return;
+    	
     	PresetData pdata = PresetData.get(player);
     	
     	if(lastOverrides != null) {
@@ -120,6 +129,7 @@ public final class ClientHandler {
 	    	for(int i = 0; i < MAX_KEYS; ++i) {
 	    		if(preset.hasMapping(i)) {
 	    			int mapping = getKeyMapping(i);
+	    			
 	    			list.add(mapping);
 	    			ControlOverrider.override(mapping);
 	    		}
