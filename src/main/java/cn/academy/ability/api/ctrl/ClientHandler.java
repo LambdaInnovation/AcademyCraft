@@ -194,7 +194,7 @@ public final class ClientHandler {
     		if(Cooldown.isInCooldown(cc) || cc == null) return null;
     		
     		SkillInstance instance = cc.createSkillInstance(getPlayer());
-    		if(instance.isMutex && hasMutexInstance())
+    		if(instance != null && instance.isMutex && hasMutexInstance())
     			instance = null;
     		
     		if(instance == null) {
