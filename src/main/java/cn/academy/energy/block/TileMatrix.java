@@ -20,6 +20,7 @@ import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.template.block.IMultiTile;
@@ -31,14 +32,21 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 @Registrant
+@RegInit
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
 	
-	public static final double 
-		MAX_CAPACITY = getCapacity(3, 3), 
-		MAX_LATENCY = getLatency(3, 3), 
+	public static double 
+		MAX_CAPACITY, 
+		MAX_LATENCY, 
+		MAX_RANGE;
+	
+	public static void init() {
+		MAX_CAPACITY = getCapacity(3, 3);
+		MAX_LATENCY = getLatency(3, 3);
 		MAX_RANGE = getRange(3, 3);
+	}
 
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)

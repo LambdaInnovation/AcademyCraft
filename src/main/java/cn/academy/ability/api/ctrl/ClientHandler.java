@@ -119,7 +119,9 @@ public final class ClientHandler {
     		
 	    	for(int i = 0; i < MAX_KEYS; ++i) {
 	    		if(preset.hasMapping(i)) {
-	    			list.add(getKeyMapping(i));
+	    			int mapping = getKeyMapping(i);
+	    			list.add(mapping);
+	    			ControlOverrider.override(mapping);
 	    		}
 	    	}
 	    	

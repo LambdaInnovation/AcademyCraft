@@ -22,12 +22,10 @@ import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.ripple.Path;
 import cn.liutils.ripple.ScriptFunction;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * CP but more than CP. CPData stores rather dynamic part of player ability data, 
@@ -35,15 +33,23 @@ import cpw.mods.fml.relauncher.Side;
  * @author WeAthFolD
  */
 @Registrant
+@RegInit
 @RegDataPart("CP")
 public class CPData extends DataPart {
 	
-	private static final int 
-		RECOVER_COOLDOWN = getIntParam("recover_cooldown"),
+	private static int 
+		RECOVER_COOLDOWN,
+		OVERLOAD_COOLDOWN;
+	private static float 
+		OVERLOAD_O_MUL,
+		OVERLOAD_CP_MUL;
+	
+	public static void init() {
+		RECOVER_COOLDOWN = getIntParam("recover_cooldown");
 		OVERLOAD_COOLDOWN = getIntParam("overload_cooldown");
-	private static final float 
-		OVERLOAD_O_MUL = getFloatParam("overload_o_mul"),
+		OVERLOAD_O_MUL = getFloatParam("overload_o_mul");
 		OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
+	}
 	
 	private boolean activated = false;
 	

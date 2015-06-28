@@ -14,13 +14,13 @@ package cn.academy.ability.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
@@ -35,6 +35,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @Registrant
+@RegInit
 public class TileDeveloper extends TileReceiverBase {
 	
 	public final Developer developer;
@@ -46,7 +47,11 @@ public class TileDeveloper extends TileReceiverBase {
 	@SideOnly(Side.CLIENT)
 	public double devProgressDisplay;
 	
-	public static final ScriptNamespace script = AcademyCraft.script.at("ac.developer");
+	private static ScriptNamespace script;
+	
+	public static void init() {
+		script = AcademyCraft.script.at("ac.developer");
+	}
 	
 	int syncCD;
 	
