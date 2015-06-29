@@ -61,6 +61,12 @@ public class CPBar extends Widget {
 	
 	static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
 	
+	static IConsumptionHintProvider chProvider;
+	
+	public static void setHintProvider(IConsumptionHintProvider provider) {
+		chProvider = provider;
+	}
+	
 	public static ResourceLocation
 		TEX_BACK_NORMAL = tex("back_normal"),
 		TEX_BACK_OVERLOAD = tex("back_overload"),
@@ -76,6 +82,11 @@ public class CPBar extends Widget {
 	static {
 		ContextCapabilities contextcapabilities = GLContext.getCapabilities();
 		supportARB = contextcapabilities.GL_ARB_multitexture;
+	}
+	
+	public interface IConsumptionHintProvider {
+		boolean alive();
+		float getConsumption();
 	}
 	
 	long presetChangeTime, lastPresetTime;
@@ -149,8 +160,10 @@ public class CPBar extends Widget {
 					}
 				}
 				
-				SkillInstance active = ClientHandler.getMutexInstance();
-				float estmCons = active == null ? 0 : active.estimatedCP;
+				if(chProvider != null && !chProvider.alive())
+					chProvider = null;
+				
+				float estmCons = chProvider == null ? 0 : chProvider.getConsumption();
 				
 				if(estmCons != 0) {
 					float ncp = Math.max(0, cpData.getCP() - estmCons);

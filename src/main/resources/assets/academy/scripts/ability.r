@@ -10,7 +10,7 @@ ac {
         cp {
             recover_cooldown { 15 } # 技能使用后，CP恢复开始的冷却时间。
             recover_speed(cp, maxcp) { # CP的恢复速度。参数：当前CP，最大CP
-                0.001 * maxcp * lerp(0.6, 1, cp / maxcp)
+                0.001 * maxcp * lerp(1, 2, cp / maxcp)
             }
             
             overload_cooldown { 20 } # 技能使用后，过载恢复开始的冷却时间。

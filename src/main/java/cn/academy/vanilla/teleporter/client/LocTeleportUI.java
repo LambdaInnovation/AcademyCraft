@@ -53,7 +53,7 @@ public class LocTeleportUI extends LIGuiScreen {
 	
 	Widget pageInspect, pageAdd, pageAction;
 	
-	Location selection;
+	public Location selection;
 	
 	final LocTeleData data;
 	final EntityPlayer player;
@@ -61,6 +61,7 @@ public class LocTeleportUI extends LIGuiScreen {
 	public LocTeleportUI() {
 		data = LocTeleData.get(Minecraft.getMinecraft().thePlayer);
 		player = data.getPlayer();
+		drawBack = false;
 		
 		init();
 	}
@@ -101,7 +102,7 @@ public class LocTeleportUI extends LIGuiScreen {
 				public void handleEvent(Widget w, FrameEvent event) {
 					if(wait == 0) {
 						wait = 100;
-						w.getWidget("text_disabled").transform.doesDraw = canRecordLocation();
+						w.getWidget("text_disabled").transform.doesDraw = !canRecordLocation();
 					} else {
 						wait--;
 					}
@@ -133,7 +134,7 @@ public class LocTeleportUI extends LIGuiScreen {
 				public void handleEvent(Widget w, FrameEvent event) {
 					if(wait == 0) {
 						wait = 100;
-						w.getWidget("text_nocp").transform.doesDraw = LocationTeleport.canPerform(player, selection);
+						w.getWidget("text_nocp").transform.doesDraw = !LocationTeleport.canPerform(player, selection);
 					} else {
 						wait--;
 					}

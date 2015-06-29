@@ -3,14 +3,19 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
+import cn.academy.ability.client.ui.CPBar;
+import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
 import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
@@ -21,6 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Location teleport. This is the skill plus the synchronization&logic needed for the UI.
  * @author WeAthFolD
  */
+@Registrant
 public class LocationTeleport extends Skill {
 	
 	static LocationTeleport instance;
@@ -37,6 +43,27 @@ public class LocationTeleport extends Skill {
 			@Override
 			public void execute() {
 				LocTeleportUI.handler.openClientGui();
+				
+				CPBar.setHintProvider(new IConsumptionHintProvider() {
+
+					@Override
+					public boolean alive() {
+						return locate() != null;
+					}
+
+					@Override
+					public float getConsumption() {
+						LocTeleportUI ui = locate();
+						if(ui == null || ui.selection == null) return 0;
+						return LocationTeleport.getConsumption(player, ui.selection);
+					}
+					
+					private LocTeleportUI locate() {
+						GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+						return screen instanceof LocTeleportUI ? ((LocTeleportUI)screen) : null;
+					}
+					
+				});
 			}
 		};
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.client.ui.CPBar;
+import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  the end(or abort) event will be automatically sent to those SyncActions.
  * @author WeAthFolD
  */
-public class SkillInstance {
+public class SkillInstance implements IConsumptionHintProvider {
 	
 	enum State { FINE, ENDED, ABORTED };
 	
@@ -60,6 +62,7 @@ public class SkillInstance {
 	public void onAbort() {}
 	
 	void ctrlStarted() {
+		CPBar.setHintProvider(this);
 		onStart();
 		
 		if(childs != null) {
@@ -72,6 +75,7 @@ public class SkillInstance {
 		onEnd();
 		
 		System.out.println("SI#ENDED");
+		state = State.ENDED;
 		if(childs != null) {
 			for(SyncAction act : childs)
 				ActionManager.endAction(act);
@@ -82,6 +86,7 @@ public class SkillInstance {
 		onAbort();
 		
 		System.out.println("SI#ABORTED");
+		state = State.ABORTED;
 		if(childs != null) {
 			for(SyncAction act : childs)
 				ActionManager.abortAction(act);
@@ -124,6 +129,16 @@ public class SkillInstance {
 	@SideOnly(Side.CLIENT)
 	protected EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
+	public boolean alive() {
+		return state == State.FINE;
+	}
+
+	@Override
+	public float getConsumption() {
+		return estimatedCP;
 	}
 	
 }
