@@ -38,8 +38,6 @@ import cn.liutils.util.generic.VecUtils;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.
- * @TODO Support animating
- * @TODO Support combining of multiple arcs
  * @author WeAthFolD
  */
 public class ArcFactory {
@@ -216,9 +214,8 @@ public class ArcFactory {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glBegin(GL11.GL_QUADS);
 			
-			System.out.println(this + " " + segmentList.hashCode());
 			for(List<Segment> l : segmentList) {
-				handleSingle(l, normal, length);
+				handleSegment(l, normal, length);
 			}
 			
 			GL11.glEnd();
@@ -237,7 +234,7 @@ public class ArcFactory {
 			GL11.glEndList();
 		}
 		
-		private void handleSingle(List<Segment> list, Vec3 normal, double len) {
+		private void handleSegment(List<Segment> list, Vec3 normal, double len) {
 			Vec3 lastDir = null;
 			for(Segment s : list) {
 				if(s.start.pt.xCoord > len)

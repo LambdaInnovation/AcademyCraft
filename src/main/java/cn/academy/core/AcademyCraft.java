@@ -96,7 +96,7 @@ public class AcademyCraft {
         // Load the scripts
         script = new ScriptProgram();
         String[] scripts = {
-        	"generic", "ability", "electro_master"
+        	"generic", "ability", "electro_master", "teleporter"
         };
         for(String s : scripts)
         	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));

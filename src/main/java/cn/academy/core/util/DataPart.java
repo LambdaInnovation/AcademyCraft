@@ -85,6 +85,7 @@ public abstract class DataPart {
 	
 	/**
 	 * Return true if this data has received the initial sync.
+	 * ALWAYS true in server.
 	 */
 	protected boolean isSynced() {
 		return !dirty;

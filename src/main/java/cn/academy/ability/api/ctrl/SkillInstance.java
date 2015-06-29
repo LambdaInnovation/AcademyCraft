@@ -71,6 +71,7 @@ public class SkillInstance {
 	void ctrlEnded() { 
 		onEnd();
 		
+		System.out.println("SI#ENDED");
 		if(childs != null) {
 			for(SyncAction act : childs)
 				ActionManager.endAction(act);
@@ -80,6 +81,7 @@ public class SkillInstance {
 	void ctrlAborted() { 
 		onAbort();
 		
+		System.out.println("SI#ABORTED");
 		if(childs != null) {
 			for(SyncAction act : childs)
 				ActionManager.abortAction(act);

@@ -15,7 +15,7 @@ package cn.academy.ability.developer;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * An IDevelopeType represents a single kind of process to be performed in Developer.
+ * An IDevelopType represents a single kind of process to be performed in Developer.
  * You have to provide the stimulation count and the learned callback.
  * @author WeAthFolD
  */

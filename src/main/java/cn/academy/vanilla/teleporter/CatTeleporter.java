@@ -13,6 +13,7 @@
 package cn.academy.vanilla.teleporter;
 
 import cn.academy.ability.api.Category;
+import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.academy.vanilla.teleporter.skills.MarkTeleport;
 
 /**
@@ -22,12 +23,15 @@ public class CatTeleporter extends Category {
 
 	public static MarkTeleport markTeleport;
 	
+	public static LocationTeleport locTeleport;
+	
 	public CatTeleporter() {
 		super("teleporter");
 		
 		this.defineTypes("default");
 		
 		this.addSkill("default", markTeleport = new MarkTeleport());
+		this.addSkill("default", locTeleport = new LocationTeleport());
 	}
 
 }
