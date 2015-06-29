@@ -1,5 +1,7 @@
 package cn.academy.ability.api.ctrl;
 
+import java.util.UUID;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public abstract class SyncAction {
 
-	int id;
+	UUID uuid;
 	State state;
 	int intv = -1;
 	int lastInformed = 0;
@@ -32,11 +34,12 @@ public abstract class SyncAction {
 	protected SyncAction(int interval) {
 		intv = interval;
 		state = State.CREATED;
+		uuid = UUID.randomUUID();
 	}
 	
 	static enum State {
 		CREATED,
-		IDENTIFIED,
+		VALIDATED,
 		STARTED,
 		ENDED,
 		ABORTED
@@ -112,13 +115,13 @@ public abstract class SyncAction {
 	public void writeNBTFinal(NBTTagCompound tag) {
 	}
 	
-	private static final String NBT_ID = "0";
+	private static final String NBT_UUID = "0";
 	private static final String NBT_STATE = "1";
 	private static final String NBT_INTERVAL = "2";
 	private static final String NBT_OBJECT = "3";
 	
 	void setNBTStart(NBTTagCompound tag) {
-		id = tag.getInteger(NBT_ID);
+		uuid = UUID.fromString(tag.getString(NBT_UUID));
 		intv = tag.getInteger(NBT_INTERVAL);
 		if (tag.hasKey(NBT_OBJECT))
 			readNBTStart(tag.getCompoundTag(NBT_OBJECT));
@@ -134,7 +137,7 @@ public abstract class SyncAction {
 	}
 	NBTTagCompound getNBTStart() {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger(NBT_ID, id);
+		tag.setString(NBT_UUID, uuid.toString());
 		tag.setInteger(NBT_INTERVAL, intv);
 		NBTTagCompound obj = new NBTTagCompound();
 		writeNBTStart(obj);
@@ -157,11 +160,11 @@ public abstract class SyncAction {
 		return tag;
 	}
 	
-	static final int getIdFromNBT(NBTTagCompound tag) {
-		if (tag.hasKey(NBT_ID))
-			return tag.getInteger(NBT_ID);
+	static final UUID getUUIDFromNBT(NBTTagCompound tag) {
+		if (tag.hasKey(NBT_UUID))
+			return UUID.fromString(tag.getString(NBT_UUID));
 		else
-			return -1;
+			return null;
 	}
 	
 	static final NBTTagCompound TAG_ENDED;
