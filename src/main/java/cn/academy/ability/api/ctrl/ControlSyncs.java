@@ -1,6 +1,6 @@
 package cn.academy.ability.api.ctrl;
 
-import cn.academy.ability.api.CPData;
+import cn.academy.ability.api.data.CPData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Instance;

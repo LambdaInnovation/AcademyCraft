@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.ability.api.pipeline;
+package cn.academy.core.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

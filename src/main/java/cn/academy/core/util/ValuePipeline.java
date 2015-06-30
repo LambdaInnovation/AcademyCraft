@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.academy.ability.api.pipeline;
+package cn.academy.core.util;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

@@ -28,13 +28,13 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
 import cn.academy.core.util.ACSounds;
 import cn.academy.vanilla.electromaster.CatElectroMaster;

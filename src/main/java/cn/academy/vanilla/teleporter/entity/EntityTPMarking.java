@@ -15,7 +15,7 @@ package cn.academy.vanilla.teleporter.entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
-import cn.academy.ability.api.AbilityData;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.MarkRender;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.annoreg.core.Registrant;

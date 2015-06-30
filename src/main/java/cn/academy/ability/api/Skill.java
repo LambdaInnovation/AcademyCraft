@@ -21,8 +21,14 @@ import com.google.common.collect.ImmutableList;
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
  * and can be activated/controlled via the Preset system. <br/>
  * A skill must be added into a Category, otherwise its instance is meaningless. <br/>
+ * 
+ * A skill can be specified to not appear in Preset Edit screen. This kind of skills usually serve as 'passive' skills and provide
+ *  pipeline functions inside to affect the skill damage or other values. <br/>
+ * 
  * You should provide the SkillInstance for the skill via {@link Skill#createSkillInstance(EntityPlayer)}
  * method so that the skill control will take effect.
+ * 
+ * @see cn.academy.core.util.ValuePipeline
  * @author WeAthFolD
  */
 public abstract class Skill extends Controllable {
@@ -30,6 +36,8 @@ public abstract class Skill extends Controllable {
 	private Category category;
 	
 	private final List<LearningCondition> learningConditions = new ArrayList();
+	
+	private String fullName;
 	
 	/**
 	 * The parent skill of the skill. This is the upper level skill in the Skill Tree UI. If not specified, this skill is the root skill of the type.
@@ -45,12 +53,26 @@ public abstract class Skill extends Controllable {
 	private ScriptNamespace script;
 	
 	/**
+	 * Whether this skill can be controlled (i.e. appear in preset edit ui).
+	 */
+	protected boolean canControl = true;
+	
+	/**
+	 * Whether this skill is a generic skill (Skill used across many categories). 
+	 * If set to true, the logo lookup path and the name lookup path will be changed. (CategoryName="generic")
+	 */
+	protected boolean isGeneric = false;
+	
+	/**
 	 * @param _name Skill internal name
 	 * @param atLevel The level at which this skill is in
 	 */
 	public Skill(String _name, int atLevel) {
 		name = _name;
 		level = atLevel;
+		fullName = "<unassigned>." + name;
+		
+		AcademyCraft.pipeline.register(this);
 	}
 	
 	final void addedSkill(Category _category, int id) {
@@ -61,7 +83,9 @@ public abstract class Skill extends Controllable {
 		
 		addLearningCondition(new RootLearningCondition());
 		
-		script = AcademyCraft.script.at("ac." + category.getName() + "." + this.getName());
+		fullName = (isGeneric ? "generic" : category.getName()) + "." + name;
+		
+		script = AcademyCraft.script.at("ac." + fullName);
 		
 		initSkill();
 	}
@@ -96,7 +120,7 @@ public abstract class Skill extends Controllable {
 	 * Get the full name of the skill, in format [category].[name].
 	 */
 	public String getFullName() {
-		return (category == null ? "<unassigned>" : category.getName()) + "." + getName();
+		return fullName;
 	}
 	
 	/**
@@ -111,6 +135,10 @@ public abstract class Skill extends Controllable {
 	 */
 	public String getDescription() {
 		return getLocalized("desc");
+	}
+	
+	public boolean canControl() {
+		return canControl;
 	}
 	
 	@Override
@@ -192,6 +220,19 @@ public abstract class Skill extends Controllable {
     
     protected double getDouble(String name) {
     	return script.getDouble(name);
+    }
+    
+    //---Pipeline integration
+    protected float pipeFloat(String key, float value, Object ...params) {
+    	return AcademyCraft.pipeline.pipeFloat(getFullName() + "." + key, value, params);
+    }
+    
+    protected double pipeDouble(String key, double value, Object ...params) {
+    	return AcademyCraft.pipeline.pipeDouble(getFullName() + "." + key, value, params);
+    }
+    
+    protected int pipeInt(String key, int value, Object ...params) {
+    	return AcademyCraft.pipeline.pipeInt(getFullName() + "." + key, value, params);
     }
     
 }

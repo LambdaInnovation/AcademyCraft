@@ -13,8 +13,8 @@
 package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.learning.LearningHelper;
 
 /**

@@ -16,12 +16,12 @@ import java.util.List;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.PresetData;
-import cn.academy.ability.api.PresetData.Preset;
-import cn.academy.ability.api.PresetData.PresetEditor;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.PresetData;
+import cn.academy.ability.api.data.PresetData.Preset;
+import cn.academy.ability.api.data.PresetData.PresetEditor;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;

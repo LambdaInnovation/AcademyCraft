@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
+import cn.academy.core.util.ValuePipeline;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
@@ -52,6 +53,9 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Registrant
 @RegEventHandler(Bus.Forge)
 public class AcademyCraft {
+	
+	@Instance("academy-craft")
+    public static AcademyCraft INSTANCE;
     
 	public static final boolean DEBUG_MODE = true;
 	
@@ -59,13 +63,21 @@ public class AcademyCraft {
 	
     public static final String NET_CHANNEL = "academy-network";
 
-    @Instance("academy-craft")
-    public static AcademyCraft INSTANCE;
-
     public static Logger log = (Logger) LogManager.getLogger("AcademyCraft");
+    
     public static Configuration config;
     
+    /**
+     * The globally used script program.
+     */
     public static ScriptProgram script;
+    
+    /**
+     * The globally used value pipeline.
+     * 
+     * CONVENTION: If needed, ALWAYS pass EntityPlayer as pipeline's first argument.
+     */
+    public static ValuePipeline pipeline = new ValuePipeline();
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE

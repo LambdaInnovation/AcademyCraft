@@ -5,9 +5,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.CPData;
-import cn.academy.ability.api.PresetData;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.KeyHintUI;

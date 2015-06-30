@@ -19,9 +19,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.PresetData;
-import cn.academy.ability.api.PresetData.Preset;
 import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.data.PresetData;
+import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.Resources;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Transform.HeightAlign;

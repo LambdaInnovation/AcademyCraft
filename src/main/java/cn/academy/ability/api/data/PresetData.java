@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api;
+package cn.academy.ability.api.data;
 
 import java.util.List;
 
@@ -20,6 +20,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.commons.lang3.NotImplementedException;
 
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.registry.RegDataPart;

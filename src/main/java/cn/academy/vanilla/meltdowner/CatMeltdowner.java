@@ -13,6 +13,7 @@
 package cn.academy.vanilla.meltdowner;
 
 import cn.academy.ability.api.Category;
+import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.meltdowner.skill.RayBarrage;
 
 /**
@@ -25,10 +26,11 @@ public class CatMeltdowner extends Category {
 	public CatMeltdowner() {
 		super("melt_downer");
 		
-		this.defineTypes("A", "B", "C", "D"); //For test
+		this.defineTypes("A", "B", "C", "D", "passive"); //For test
 		
 		this.addSkill("A", rayBarrage = new RayBarrage());
 		
+		ModuleVanilla.addGenericSkills(this);
 	}
 
 }

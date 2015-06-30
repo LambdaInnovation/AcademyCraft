@@ -22,14 +22,14 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.PresetData.Preset;
-import cn.academy.ability.api.PresetData.PresetEditor;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.PresetData;
+import cn.academy.ability.api.data.PresetData.Preset;
+import cn.academy.ability.api.data.PresetData.PresetEditor;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
@@ -73,11 +73,6 @@ public class PresetEditUI extends GuiScreen {
 	 * Dummy skill used to cancel the binding.
 	 */
 	static final Skill cancelBinding = new Skill("cancel", -1) {
-		@Override
-		public SkillInstance createSkillInstance(EntityPlayer player) {
-			return null;
-		}
-
 		@Override
 		public ResourceLocation getHintIcon() {
 			return new ResourceLocation("academy:textures/guis/preset_settings/cancel.png");
@@ -461,9 +456,11 @@ public class PresetEditUI extends GuiScreen {
     	public Selector(int _keyid) {
     		keyid = _keyid;
     		
-    		final Category c = AbilityData.get(player).getCategory();
+    		AbilityData aData = AbilityData.get(player);
+    		Category c = aData.getCategory();
+    		
     		available.add(cancelBinding);
-    		for(Skill s : c.getSkillList()) {
+    		for(Skill s : aData.getControllableSkillList()) {
     			int cid = s.getControlID();
     			if(!editor.hasMapping(cid)) {
     				available.add(s);

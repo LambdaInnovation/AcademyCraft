@@ -28,11 +28,11 @@ import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.CPData;
-import cn.academy.ability.api.PresetData;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;

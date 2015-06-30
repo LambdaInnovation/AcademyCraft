@@ -2,9 +2,9 @@ package cn.academy.test;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.pipeline.SubscribePipeline;
-import cn.academy.ability.api.pipeline.ValuePipeline;
 import cn.academy.core.registry.RegACKeyHandler;
+import cn.academy.core.util.SubscribePipeline;
+import cn.academy.core.util.ValuePipeline;
 import cn.annoreg.core.Registrant;
 import cn.liutils.util.helper.KeyHandler;
 

@@ -8,12 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.PresetData;
-import cn.academy.ability.api.PresetData.Preset;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.data.PresetData;
+import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;

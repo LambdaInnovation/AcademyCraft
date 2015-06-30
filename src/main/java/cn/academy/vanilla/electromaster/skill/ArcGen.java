@@ -15,12 +15,12 @@ package cn.academy.vanilla.electromaster.skill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import cn.academy.ability.api.AbilityData;
-import cn.academy.ability.api.CPData;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
 import cn.academy.core.util.ACSounds;
 import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
@@ -52,11 +52,15 @@ public class ArcGen extends Skill {
 	}
 	
 	private static float getOverload(AbilityData data) {
-		return instance.getFunc("overload").callFloat(data.getSkillExp(instance));
+		return instance.pipeFloat("overload", 
+			instance.getFunc("overload")
+			.callFloat(data.getSkillExp(instance)));
 	}
 	
 	private static float getConsumption(AbilityData data) {
-		return instance.getFunc("consumption").callFloat(data.getSkillExp(instance));
+		return instance.pipeFloat("cp", 
+			instance.getFunc("consumption")
+			.callFloat(data.getSkillExp(instance)));
 	}
 	
 	private static double getIgniteProb(AbilityData data) {

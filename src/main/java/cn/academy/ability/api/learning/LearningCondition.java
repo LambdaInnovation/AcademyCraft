@@ -12,8 +12,8 @@
  */
 package cn.academy.ability.api.learning;
 
-import cn.academy.ability.api.AbilityData;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.data.AbilityData;
 
 /**
  * A learning condition is an atomic condition/requirement on player ability data

@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api;
+package cn.academy.ability.api.data;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -264,14 +264,14 @@ public class CPData extends DataPart {
 	 * currently learned buff skills and level.
 	 */
 	public void recalcMaxValue() {
-		//TODO: Support buff skills
-		// NOTE: Maybe open up a RecalcCPEvent?
 		AbilityData data = AbilityData.get(getPlayer());
 		
-		this.maxCP = getFunc("init_cp").callFloat(data.getLevel());
+		this.maxCP = AcademyCraft.pipeline.pipeFloat
+			("ability.maxcp", getFunc("init_cp").callFloat(data.getLevel()), getPlayer());
 		currentCP = 0;
 		
-		this.maxOverload = getFunc("init_overload").callFloat(data.getLevel());
+		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
+			"ability.maxo", getFunc("init_overload").callFloat(data.getLevel()), getPlayer());
 		
 		if(!isRemote())
 			sync();

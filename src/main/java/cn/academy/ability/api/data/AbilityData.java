@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.api;
+package cn.academy.ability.api.data;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -21,6 +21,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.CategoryManager;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
@@ -95,15 +98,32 @@ public class AbilityData extends DataPart {
 	 * Get all the learned skills. This method creates a new list.
 	 */
 	public List<Skill> getLearnedSkillList() {
+		return getSkillListFiltered((Skill s) -> isSkillLearned(s));
+	}
+	
+	/**
+	 * Get all the learned and controllable skills. This method creates a new list.
+	 */
+	public List<Skill> getControllableSkillList() {
+		// DEBUG
+		if(true) return getSkillListFiltered((Skill s) -> s.canControl());
+		return getSkillListFiltered((Skill s) -> (s.canControl() && isSkillLearned(s)));
+	}
+	
+	private List<Skill> getSkillListFiltered(SkillFilter filter) {
 		Category c = getCategory();
 		if(c == null)
 			return new ArrayList();
 		
 		List<Skill> ret = new ArrayList();
 		for(Skill s : c.getSkillList())
-			if(isSkillLearned(s))
+			if(filter.accepts(s))
 				ret.add(s);
 		return ret;
+	}
+	
+	private interface SkillFilter {
+		boolean accepts(Skill skill);
 	}
 	
 	/**

@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
+import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
 import cn.academy.vanilla.electromaster.skill.MagAttract;
@@ -47,7 +48,7 @@ public class CatElectroMaster extends Category {
 	public CatElectroMaster() {
 		super("electro_master");
 		
-		defineTypes("default");
+		defineTypes("default", "passive");
 		
 		addSkill("default", arcGen = new ArcGen());
 		addSkill("default", magAttract = new MagAttract());
@@ -67,6 +68,8 @@ public class CatElectroMaster extends Category {
 			"em_projectile_master",
 			"em_highenergy"
 		});
+		
+		ModuleVanilla.addGenericSkills(this);
 	}
 	
 	public static boolean isOreBlock(Block block) {
