@@ -14,13 +14,12 @@ import cn.academy.core.AcademyCraft;
 /**
  * ValuePipeline receives value as input and returns the same type of value as output.
  * Each value is assigned with a key(channel), so they can be uniquely identified.
- * You can register PipelineListeners to the ValuePipeline and use @SubscribePipeline
+ * You can register any Object to the ValuePipeline and use @SubscribePipeline
  * to specify pipeline subscriber methods. Those methods will be called (in no particular order)
  *  when you pipe values into this ValuePipeline. They will modify the values and you will
  *  get the modified output.
  *  
  * @see SubscribePipeline
- * @see PipelineListener
  * @author WeAthFolD
  */
 public class ValuePipeline {
@@ -32,7 +31,7 @@ public class ValuePipeline {
 	/**
 	 * Register an PipelineListener into the pipeline.
 	 */
-	public void register(PipelineListener listener) {
+	public void register(Object listener) {
 		for(Method m : listener.getClass().getMethods()) {
 			SubscribePipeline anno = m.getAnnotation(SubscribePipeline.class);
 			if(anno != null) {
@@ -79,8 +78,7 @@ public class ValuePipeline {
 		
 		Object[] args = buildParArr(value, pars);
 		for(SubscriberVisitor visitor : list) {
-			if(visitor.object.isListenerActivated())
-				value = visitor.pipe(args);
+			value = visitor.pipe(args);
 		}
 		
 		return value;
@@ -97,9 +95,9 @@ public class ValuePipeline {
 	private class SubscriberVisitor {
 		
 		final Method theMethod;
-		final PipelineListener object;
+		final Object object;
 		
-		public SubscriberVisitor(Method aMethod, PipelineListener _object) {
+		public SubscriberVisitor(Method aMethod, Object _object) {
 			theMethod = aMethod;
 			object = _object;
 			

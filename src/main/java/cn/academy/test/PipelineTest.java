@@ -2,7 +2,6 @@ package cn.academy.test;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.pipeline.PipelineListener;
 import cn.academy.ability.api.pipeline.SubscribePipeline;
 import cn.academy.ability.api.pipeline.ValuePipeline;
 import cn.academy.core.registry.RegACKeyHandler;
@@ -29,16 +28,11 @@ public class PipelineTest {
 		}
 	};
 	
-	public static class Listener implements PipelineListener {
+	public static class Listener  {
 		
 		@SubscribePipeline("val1")
 		public float mulx2(float val, boolean aaa) {
 			return val * 2 * (aaa ? 1.5f : 2f);
-		}
-
-		@Override
-		public boolean isListenerActivated() {
-			return true;
 		}
 		
 	}
