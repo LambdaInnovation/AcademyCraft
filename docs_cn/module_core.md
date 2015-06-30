@@ -100,7 +100,7 @@ public [type] pipelineMethod([type] input, [AnyType] par1, [AnyType] par2, ...);
 它们应该描述在计算这个值时候的附加条件（例如，使用技能的玩家实例），并且越少越好。
 后面的参数和pipe时的参数的数量和类型精确匹配。如果匹配失败，将会在控制台打印一个警告。
 
-你可以通过AcademyCraft.pipeline访问AC的全局pipeline。
+你可以通过```AcademyCraft.pipeline```访问AC的全局pipeline。
 
 **风格提示：请尽量保证pipe时的参数简洁。一般来说，仅给一个EntityPlayer参数就够了。所有代码应该尽可能保证这个单player参数的规范，避免复杂化。**
 
