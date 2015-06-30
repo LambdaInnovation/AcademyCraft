@@ -31,7 +31,7 @@ import cn.annoreg.mc.RegInit;
 @RegInit
 public class ModuleAbility {
 	
-	public static void init() {}
-	
+	public static void init() {
+	}
 	
 }

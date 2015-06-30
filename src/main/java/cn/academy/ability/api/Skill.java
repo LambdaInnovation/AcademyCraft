@@ -9,6 +9,7 @@ import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
+import cn.academy.ability.api.pipeline.PipelineListener;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
@@ -25,7 +26,7 @@ import com.google.common.collect.ImmutableList;
  * method so that the skill control will take effect.
  * @author WeAthFolD
  */
-public abstract class Skill extends Controllable {
+public abstract class Skill extends Controllable implements PipelineListener {
 	
 	private Category category;
 	
@@ -179,6 +180,11 @@ public abstract class Skill extends Controllable {
     @Override
     public String toString() {
     	return getFullName();
+    }
+    
+    @Override
+    public boolean isListenerActivated() {
+    	return true;
     }
     
     //---Script integration

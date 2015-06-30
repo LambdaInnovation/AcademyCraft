@@ -23,11 +23,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  the end(or abort) event will be automatically sent to those SyncActions.
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class SkillInstance implements IConsumptionHintProvider {
 	
-	enum State { FINE, ENDED, ABORTED };
+	enum State { CONSTRUCTED, FINE, ENDED, ABORTED };
 	
-	State state = State.FINE;
+	State state;
 	
 	Controllable controllable;
 	
@@ -46,7 +47,9 @@ public class SkillInstance implements IConsumptionHintProvider {
 	 */
 	public float estimatedCP;
 	
-	public SkillInstance() {}
+	public SkillInstance() {
+		state = State.CONSTRUCTED;
+	}
 	
 	public SkillInstance setNonMutex() {
 		isMutex = false;
@@ -62,6 +65,8 @@ public class SkillInstance implements IConsumptionHintProvider {
 	public void onAbort() {}
 	
 	void ctrlStarted() {
+		state = State.FINE;
+		
 		CPBar.setHintProvider(this);
 		onStart();
 		
@@ -74,7 +79,7 @@ public class SkillInstance implements IConsumptionHintProvider {
 	void ctrlEnded() { 
 		onEnd();
 		
-		System.out.println("SI#ENDED");
+		//System.out.println("SI#ENDED");
 		state = State.ENDED;
 		if(childs != null) {
 			for(SyncAction act : childs)
@@ -85,7 +90,7 @@ public class SkillInstance implements IConsumptionHintProvider {
 	void ctrlAborted() { 
 		onAbort();
 		
-		System.out.println("SI#ABORTED");
+		//System.out.println("SI#ABORTED");
 		state = State.ABORTED;
 		if(childs != null) {
 			for(SyncAction act : childs)
@@ -131,6 +136,9 @@ public class SkillInstance implements IConsumptionHintProvider {
 		return Minecraft.getMinecraft().thePlayer;
 	}
 
+	/**
+	 * Return whether this SkillInstance is still in execution.
+	 */
 	@Override
 	public boolean alive() {
 		return state == State.FINE;
