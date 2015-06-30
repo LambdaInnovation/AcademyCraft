@@ -82,7 +82,7 @@ DataPart以服务端从NBT所读取的数据为准加载，并且在加载时会
 ValuePipeline
 ---
 
-```ValuePipeline```主要用来处理被动技能一类的需求。你可以把它当做一个魔改+极度简化的事件总线。
+ **ValuePipeline**主要用来处理被动技能一类的需求。你可以把它当做一个魔改+极度简化的事件总线。
 
 你可以往ValuePipeline里面pipe一系列的数值（int, float, double）（via ```ValuePipeline.pipeXXX(key, value, parameters...)```，
 并且用一个String作为键（频道）以区分不同的数值内容。在一个值被pipe进去以后，ValuePipeline会遍历该键值的Subscriber，
