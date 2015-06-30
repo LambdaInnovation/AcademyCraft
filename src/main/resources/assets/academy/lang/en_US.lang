@@ -53,6 +53,8 @@ ac.knowledge.trajectory.name=Trajectory Master
 ac.knowledge.baseball.name=Homerun!!
 ac.knowledge.anatomy.name=Anatomist
 
+ac.gui.preset_edit.tag=Preset #
+
 # Data Terminal
 ac.gui.terminal.appcount=%d Applications
 

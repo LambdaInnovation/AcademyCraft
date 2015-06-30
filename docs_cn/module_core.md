@@ -79,6 +79,31 @@ DataPart以服务端从NBT所读取的数据为准加载，并且在加载时会
 最后，推荐在每个自定义DataPart里使用一个```public static get(EntityPlayer)```方法获取对应于玩家的该DataPart实例，可以大幅减少代码量。
 
 
+ValuePipeline
+---
+
+```ValuePipeline```主要用来处理被动技能一类的需求。你可以把它当做一个魔改+极度简化的事件总线。
+
+你可以往ValuePipeline里面pipe一系列的数值（int, float, double）（via ```ValuePipeline.pipeXXX(key, value, parameters...)```，
+并且用一个String作为键（频道）以区分不同的数值内容。在一个值被pipe进去以后，ValuePipeline会遍历该键值的Subscriber，
+并且对这个值施加修改。在pipe完成后，所获得的返回值就是被所有Subscriber修改以后的值。
+
+你可以通过```ValuePipeline.register(Object)```来注册一个Subscriber对象。里面所有的用```@SubscribePipeline(key)```标记的方法都认为是一个pipeline方法。
+一个pipeline方法应该形如：
+
+```java
+@SubscribePipeline("someValue")
+public [type] pipelineMethod([type] input, [AnyType] par1, [AnyType] par2, ...);
+```
+
+也就是说，第一个参数和返回值必须类型相同，并且都是(int, float , double)中的一种。后面的参数是在pipe时候传入的附加参数。
+它们应该描述在计算这个值时候的附加条件（例如，使用技能的玩家实例），并且越少越好。
+后面的参数和pipe时的参数的数量和类型精确匹配。如果匹配失败，将会在控制台打印一个警告。
+
+你可以通过AcademyCraft.pipeline访问AC的全局pipeline。
+
+**风格提示：请尽量保证pipe时的参数简洁。一般来说，仅给一个EntityPlayer参数就够了。所有代码应该尽可能保证这个单player参数的规范，避免复杂化。**
+
 提示UI
 ---
 我们实现了一个酷炫的提示UI，就像这样：

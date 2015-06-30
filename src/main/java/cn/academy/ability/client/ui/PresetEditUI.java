@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -62,6 +63,7 @@ public class PresetEditUI extends GuiScreen {
 		CRL_BACK = new Color().setColor4i(49, 49, 49, 160),
 		CRL_WHITE = new Color(1, 1, 1, 0.6);
 	
+	static LIGui loaded;
 	static Widget template;
 	
 	static final double STEP = 125;
@@ -95,7 +97,8 @@ public class PresetEditUI extends GuiScreen {
 	LIGui transitor = new LIGui();
 	
 	static {
-		template = CGUIDocLoader.load(new ResourceLocation("academy:guis/preset_edit.xml")).getWidget("template");
+		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/preset_edit.xml"));
+		template = loaded.getWidget("template");
 	}
 	
 	@RegGuiHandler
@@ -140,10 +143,19 @@ public class PresetEditUI extends GuiScreen {
 		editor.save();
 	}
 	
+	private String local(String key) {
+		return StatCollector.translateToLocal("ac.gui.preset_edit." + key);
+	}
+	
 	private void init() {
+		foreground.addWidget(loaded.getWidget("background").copy());
+		transitor.addWidget(loaded.getWidget("background").copy());
+		
 		// Build the pages
 		for(int i = 0; i < 4; ++i) {
 			Widget normal = createCopy();
+			TextBox.get(normal.getWidget("title")).setContent( local("tag") + (i + 1) );
+			
 			for(int j = 0; j < 4; ++j) {
 				normal.getWidget("" + j).addComponent(new HintHandler(j));
 			}

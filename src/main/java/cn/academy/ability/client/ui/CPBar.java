@@ -107,7 +107,7 @@ public class CPBar extends Widget {
 		
 		initEvents();
 		
-		cpColors.add(new ProgColor(0.0, new Color(0xfffb2a2a)));
+		cpColors.add(new ProgColor(0.0, new Color(0xfff06767)));
 		cpColors.add(new ProgColor(0.35, new Color(0xffffae44)));
 		cpColors.add(new ProgColor(1.0, new Color(0xffffffff)));
 		
