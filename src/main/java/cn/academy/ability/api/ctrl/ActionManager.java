@@ -1,5 +1,7 @@
 package cn.academy.ability.api.ctrl;
 
+import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.annoreg.core.Registrant;
@@ -48,13 +50,13 @@ public class ActionManager {
 	}
 
 	@RegNetworkCall(side = Side.SERVER)
-	static void endAtServer(@Instance EntityPlayer player, @Data Integer id) {
-		AMS.endFromClient(player, id);
+	static void endAtServer(@Instance EntityPlayer player, @Data String uuid) {
+		AMS.endFromClient(player, UUID.fromString(uuid));
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	static void abortAtServer(@Instance EntityPlayer player, @Data Integer id) {
-		AMS.abortFromClient(player, id);
+	static void abortAtServer(@Instance EntityPlayer player, @Data String uuid) {
+		AMS.abortFromClient(player, UUID.fromString(uuid));
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
@@ -68,13 +70,13 @@ public class ActionManager {
 	}
 
 	@RegNetworkCall(side = Side.CLIENT)
-	static void updateAtClient(@Data Integer id, @Data NBTTagCompound tag) {
-		AMC.updateFromServer(id, tag);
+	static void updateAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+		AMC.updateFromServer(UUID.fromString(uuid), tag);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void terminateAtClient(@Data Integer id, @Data NBTTagCompound tag) {
-		AMC.terminateFromServer(id, tag);
+	static void terminateAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+		AMC.terminateFromServer(UUID.fromString(uuid), tag);
 	}
 	
 }
