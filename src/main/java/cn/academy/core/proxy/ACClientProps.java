@@ -62,8 +62,8 @@ public class ACClientProps {
 	
 	private static ResourceLocation[] fontLocation;
 	static {
-		fontLocation = new ResourceLocation[12];
-		for(int i = 0; i < 12; ++i) {
+		fontLocation = new ResourceLocation[15];
+		for(int i = 0; i < 15; ++i) {
 			fontLocation[i] = src("fonts/yahei" + i + ".png");
 		}
 	}

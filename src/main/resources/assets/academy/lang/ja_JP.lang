@@ -1,146 +1,229 @@
-#AcademyCraft 日本語 言語ファイル　デバッグバージョン
-#Author mkpoli
-#アイテム
+# AcademyCraft beta JP Language File.
+# version: 1.0beta3
+# Translation: noriokun4649
+
+commands.aim.desc=/aim [プレイヤーネーム](emittable) [キーコード]/[?] [parameters...]
+commands.aim.infodisp=[%s]: %s
+commands.aim.help.desc=使用可能なコマンドを表示します。
+commands.aim.category.desc=プレイヤーの能力のカテゴリを変更します。args: [int catID]
+commands.aim.level.desc=プレイヤーの能力レベルを変更します。args: [int levelID](Starting from 0)
+commands.aim.god.desc=すべてのスキル・レベルを入手します。
+commands.aim.cp.desc=現在のCP値を設定します。
+commands.aim.maxcp.desc=最大CP値を設定します。
+commands.aim.clear.desc=すべての能力ステータスを削除し最初からやり直せます。
+commands.aim.successful=コマンドの実行に成功しました。
+commands.aim.overflow=入力した数値が小さすぎるかまたは大きすぎます。
+commands.aim.nokey=そのコマンドは存在しません。
+commands.aim.fail=コマンドの実行に失敗しました。
+commands.aim.slv.desc=1レベルですべてのスキルをアップグレードします。
+
+#Items
 item.null.name=
 item.ac_logo.name=
-item.ac_record1.name=とある燃える音楽ディスク#1
-item.ac_record2.name=とある燃える音楽ディスク#2
-item.ac_record3.name=とある燃える音楽ディスク#3
+item.ac_record1.name=Railgun Record #1
+item.ac_record2.name=Railgun Record #2
+item.ac_record3.name=Railgun Record #3
 
 item.ac_alingot.name=アルミニウムインゴット
 item.ac_cuingot.name=銅インゴット
-item.ac_steelingot.name=鋼インゴット
-item.ac_tiningot.name=亜鉛インゴット
-item.ac_siliconrod.name=シリコンインゴット
+item.ac_steelingot.name=スチールインゴット
+item.ac_tiningot.name=スズインゴット
+item.ac_siliconrod.name=シリコンの棒
 item.ac_niingot.name=ニッケルインゴット
+item.ac_crystal.name=結晶岩
+item.ac_shadowingot.name=シャドウ金属インゴット
 item.ac_mgingot.name=マグネシウムインゴット
-item.ac_shadowingot.name=影金属インゴット
-item.ac_crystal.name=晶化岩
 
-item.ac_smallsi.name=小シリコン
-item.ac_mgplate.name=マグネシウムの板
-item.ac_aplate1.name=マグナリウム合金の板
-item.ac_alplate.name=アルミニウムの板
-item.ac_coppercoil.name=コイル
-item.ac_cplank.name=複合木の板
+item.ac_smallsi.name=シリコンの小片
+item.ac_coppercoil.name=銅コイル
+item.ac_mgplate.name=マグネシウムプレート
+item.ac_aplate1.name=マグナリウムプレート
+item.ac_alplate.name=アルミニウムプレート
+item.ac_cplank.name=合成木材プレート
 
-item.ac_coin.name=ゲームセンターのコイン
-item.ac_needle.name=鉄矢
-item.ac_exp_nail.name=粘着ネール
-item.ac_silbarn.name=拡散支援半導体
-item.ac_maghook.name=磁石のかぎ
+item.ac_coin.name=ゲームコイン
+item.ac_needle.name=針
+item.ac_silbarn.name=拡散支援シリコン
+item.ac_maghook.name=マグネットフック
 
-item.ad_card.name=電力拡張カード
-item.ac_pcbn.name=基板
-item.ac_bodydet.name=人の状態検出器
-item.ac_io.name=I/Oインターフェース
-item.ac_brainbeta.name=脳波共振装置β
+item.ac_pcbn.name=プリント基板
+item.ac_bodydet.name=人体情報検出器
+item.ac_io.name=I/Oポート
+item.ac_brainbeta.name=脳波共振器 β
 
-item.ac_energycrystal.name=エナジークリスタル
-item.ac_freqreg.name=周波数調整器
+item.ac_energycrystal.name=エネルギークリスタル
+item.ac_freqreg.name=周波数レギュレータ
 
-#ブロック
+#Blocks
 tile.null.name=
-tile.ac_developer.name=超能力開発装置
-tile.ac_magindc.name=磁場増やし装置
+tile.ac_developer.name=能力開発機
+tile.ac_magindc.name=磁気誘導機
 
 tile.ac_windgen.name=風力発電機
-tile.ac_solar.name=ソーラー発電機
-tile.ac_node.name=無線電力ノード
-tile.ac_grid.name=無線電力網
+tile.ac_solar.name=太陽光発電機
+tile.ac_node.name=無線エネルギーノード
+tile.ac_grid.name=無線エネルギーマトリックス
 
 tile.ac_cuore.name=銅鉱石
-tile.ac_tinore.name=亜鉛鉱石
+tile.ac_tinore.name=スズ鉱石
 tile.ac_alore.name=アルミニウム鉱石
-tile.ac_crystalore.name=晶化岩石
+tile.ac_crystalore.name=水晶原石
 tile.ac_niore.name=ニッケル鉱石
 tile.ac_mgore.name=マグネシウム鉱石
-tile.ac_shadowore.name=影金属鉱石
+tile.ac_shadowore.name=シャドウ金属鉱石
 
-#CreativeTab
+#CreativeTabs
 itemGroup.AcademyCraft=AcademyCraft
 
-#other ability
-skl_null=なし
+#Generic Ability
+skl_null=None
 
-#电气使
-cat_elecmaster=発電系
+#Electro Master
+cat_elecmaster=Electro Master
 
-#原子崩坏
-cat_meltdowner=電子操作系
+skl_em_arc=アーク放電の発生
+skl_em_itemcharge=充電アイテム
+skl_em_move=磁気の動き
+skl_em_railgun=超電磁砲
+skl_em_mine=鉱石検出
+skl_em_arc_strong=雷の槍
+#skl_em_swordgen=剣の時代
+skl_em_buff=人体改造
+skl_em_lf=ライトニングフラッシュ
 
-#空间移动
-cat_teleport=空間移動系
+em_arc.desc=攻撃した領域にわずかな損傷を引き起こす弱い電気スパークを起こさせます。直接可燃性ブロックに当たると燃やせることがあります。
+em_itemcharge.desc=電気の項目にあなたの能力と伝達のエネルギーをフルに活用し、ブロック、同時に電気操作であなたのスキルを強化します。
+em_move.desc=強い強磁場を発生するフィールドを生成し、磁気ターゲットに向かって自分を引き出します。移動またはエスケープされたとき非常に便利です。
+em_railgun.desc=電磁誘導を用いて高速でコインが飛び出します。それが当たる場所で被害が発生します。
+em_mine.desc=すぐ目と磁力線の流れを感じてあなたの周りにある貴重な鉱物資源の場所を表示させ簡単に入手できるようにします。
+em_arc_strong.desc=電流の膨大な量を非常に強力な物に圧縮できます。膨大な電流が急に飛び出すと、近くに居るすべてのモブにダメージを与えます。
+em_buff.desc=短時間であなたの身体能力を向上させることができる電気を微調整します。
+#em_ironsand.desc=砂鉄を使用して、強力な agnetic 制御機能とのコンピューティング能力を巧みに攻撃できます。
+em_lf.desc=高電圧電流であなたの体をオーバークロックし、驚異的なボディ強度を取得します。雷のように三振し、攻撃範囲内のすべてのモブにダメージを与えます。
 
-#通用buff类技能
-skl_gn_btc=ブレイントレーニングコース
-skl_gn_btc2=ブレイントレーニングコースⅡ
-skl_gn_spirit=マインドトレーニングコース
+#Melt Downer
+cat_meltdowner=Melt Downer
+
+skl_md_bomb=電子爆弾
+skl_md_minebasic=採掘電子ビーム
+skl_md_scatter=散乱電子爆弾
+skl_md_shield=ライトシールド
+skl_md_meltdown=鎮静剤を溶かす
+skl_md_mineexpert=エキスパート採掘電子ビーム
+skl_md_mineluck=エキスパート採掘電子ビーム(運)
+skl_md_mineacc=エキスパート採掘電子ビーム(精度)
+
+md_bomb.desc=少量の電子でできた球体、投げるとモブに弱いダメージを与えます。
+md_minebasic.desc=基本的な採掘電子ビームです。まれに弱い電気を受けて低レベルのダメージを受けます。
+md_scatter.desc=同時に複数の電子ボールを生成します。ただし、照準精度が下がります。
+md_shield.desc=シールド、電子の高速運動によりあなたに近づいてくるモブを破壊しさらにあなた自身も傷つけてしまいます。
+md_meltdown.desc=あなたが選択した障害物を溶かすことのできる高エネルギー電子ビームを生成します。
+md_mineexpert.desc=採掘の基礎練習で、鉱山などを傷つけずに迅速かつ正確に採取することができます。
+md_barrage.desc=複数電子爆弾攻撃は手のひらから行うことができますが電子爆弾の集中砲火を形成できません、そのため飽和攻撃の完全な範囲に対応することは困難です。「拡散支援シリコン」を使うことで大規模な攻撃の欠点に対処します。
+md_mineluck.desc=自己解析しこの破壊的な電子ビームを使用する時に周囲のミネラル排除することで効果の改善が期待できます。
+md_mineacc.desc=時々不純物破壊は無意味です。いくつかできるようになるさまざまな鉱物の完璧なカッティングには、電子ビームを使用して学習を開始するために貴重な映像や鉱石を台無しにします。
+
+#Teleporter
+cat_teleport=Teleporter
+
+skl_tp_threatening=危険な空間移動
+skl_tp_string=ストリング理論
+skl_tp_penetrate=透過テレポート
+skl_tp_mark=マークされたテレポート
+skl_tp_visc=内蔵破壊を脅かすテレポート
+skl_tp_loc=検索してテレポート
+skl_tp_hst=長距離高速テレポート
+
+tp_threatening.desc=ときどきこの小さな破片はモブを殺すことができます。
+tp_string.desc=ストリング理論は念力移動の要点です。そして、それは宇宙の正確な認識を得ることができます。
+tp_penetrate.desc=壁を越えてテレポートできます。ほぼ正しくテレポートすることができなく、あなた自身を窒息させる危険性があるので注意です。
+tp_mark.desc=直接目でテレポート先のポイントを確認してください。
+tp_visc.desc=生き物に触れるしその臓器を引っぱりだすこともあります。それは深刻な吐き気を起こすこともありとても危険です。
+tp_loc.desc=あなたはいつどこでそのテレポートをしたか覚えています。あなたの周りのモブも一緒にテレポートします。
+tp_hst.desc=長距離テレポートの新しい方法です。高速テレポーテーションは慣性の交替や空気の操縦を行うことができます。
+
+#Generic Skills
+skl_gn_btc=脳トレーニングコース
+skl_gn_btc2=脳トレーニングコースⅡ
+skl_gn_spirit=精神トレーニングコース
+
+gn_btc.desc=あなたはより高い能力を得るために心のトレーニングをして鍛えなければいけません。
+gn_btc2.desc=このトレーニングがあなたに大きな負荷に耐えることのできる心を作ります。
+gn_spirit.desc=落ち着いて、あなたの心をいやすことのできる能力を学ぶ。より高いCPを得ることにつながるかも知れません。
 
 #GUI
-page.adskill=スキル開発
+page.adskill=能力の取得
 page.adlevel=レベルアップ
-page.adlearning=能力開発
-page.adconfirm=操作確認
+page.adlearning=能力を学習
+page.adconfirm=能力取得を確定
 
-ac.notlearned=未習得
-ac.machinestat=状態
-ac.curenergy=現在の電力
+ac.notlearned=学習してません
+ac.machinestat=ステータス
+ac.curenergy=現在のエネルギー
 ac.syncrate=同期率
-ac.learnability=能力開発
-ac.btnconfirm=OK
-ac.btncancel=キャンセル
-ac.confirm.head=次の操作をしますか？
-ac.confirm.tail=続きますか？
-ac.upgradeto=どこまでレベルアップ
-ac.learnskill=能力開発 
-ac.stimprog=開発進展
-ac.curaction=現在の操作
+ac.learnability=能力を取得:
+ac.btnconfirm=はい
+ac.btncancel=キャンセルl
+ac.confirm.head=次のアクションを実行しようとしています
+ac.confirm.tail=続行しますか？
+ac.upgradeto=プレーヤーのレベルを上げます
+ac.learnskill=能力を学ぶ:
+ac.stimprog=進行状況
+ac.curaction=現在のアクション
 ac.attempts=試み
-ac.fails=失败
-ac.aborted=キャンセル
-ac.successful=成功
-ac.expconsumption=見積もる消耗
-ac.fullylearned=完全習得
-ac.upgradeskill=能力アップ
-ac.upgradelv=レベルアップ
-ac.accept=OK
-ac.restore=キャンセル
-ac.presset=デフォルト
-ac.presselect=デフォルト
-ac.preset=デフォルト#
-ac.devnew=新能力を開発する
+ac.fails=失敗しました
+ac.aborted=中止
+ac.successful=成功しました
+ac.expconsumption=Estmを消費
+ac.fullylearned=完全に取得済み
+ac.upgradeskill=能力をアップグレードします
+ac.upgradelv=レベルをアップグレード
+ac.accept=更新
+ac.restore=復元
+ac.presset=プリセットの設定
+ac.preset=プリセット #
+ac.devnew=新たな能力を開発します
+ac.presselect=プリセットの選択
+ac.tpLocatingQuit=終了
+ac.tpLocatingTeleport=テレポート
+ac.tpLocatingSelect=テレポーテーション
+ac.tpLocatingCreate=位置を編集
+ac.tpLocatingRemove=削除
+ac.tpLocatingMax=これ以上追加できません
+ac.tpLocatingAdd=追加
+ac.necp=CP不足です
+ac.cantinteract=起動機能が操作できません
 
-adev.holoview=ホログラフィックビュー
-adev.userinfo=能力者情報
+adev.holoview=ホログラム表示
+adev.userinfo=ユーザー情報
 
-prs.chooseskl=能力選択
+prs.chooseskl=能力を選択
 
-level_0=低能力者
-level_1=異能力者
-level_2=強能力者
-level_3=大能力者
-level_4=超能力者
-#level_5=绝对能力者
+level_0=Level 1
+level_1=Level 2
+level_2=Level 3
+level_3=Level 4
+level_4=Level 5
+#level_5=Level 6
 
-#WEN
-ac.notconnected=ディスコネクト
+#WEN (Wireless Energy Network)
+ac.notconnected=接続されていません
 ac.matinit=初期化
-ac.opstat=無線電力網
-ac.opsuc=操作成功
-ac.opfail=操作失败
-ac.cnnexist=チャンネルは既に存在しています！
-ac.transmitting=操作中
-ac.inconsistentpass=パスワードが一致していません。
-ac.loading=ロード中
-ac.wllogin=無線電力網ログイン
-ac.matpwd=パスワードを忘れた方
-ac.freqreg=周波数調整器
+ac.opstat=WENステータス
+ac.opsuc=操作が正常に終了しました
+ac.opfail=操作を正常にできませんでした
+ac.cnnexist=チャンネルが存在します
+ac.transmitting=送信
+ac.inconsistentpass=パスワードが違います！
+ac.loading=読み込み
+ac.wllogin=WENログイン
+ac.matpwd=パスワードの変更
+ac.freqreg=周波数レギュレータ
 ac.frchannel=チャンネル
 ac.frselect=チャンネル選択
 ac.frcur=現在のチャンネル
-ac.frclear=チャンネル消す
-ac.frestb=チャンネルする
-ac.frclearconfirm=チャンネルを消しますか？
-ac.ssidnn=SSIDを入力してください.
+ac.frclear=チャンネル切断
+ac.frestb=接続を確立
+ac.frclearconfirm=現在の接続を切断しますか？
+ac.ssidnn=SSIDは必ず入力する必要があります!
 ac.selchannel=チャンネル選択
