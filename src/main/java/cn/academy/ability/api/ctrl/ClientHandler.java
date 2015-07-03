@@ -64,6 +64,15 @@ public final class ClientHandler {
 			return ModuleCoreClient.dynKeyManager.getKeyID(handlers[kid]);
 		}
 	}
+	
+	/**
+	 * Remaps a Special Key.
+	 */
+	public static void remap(int id, int keyID) {
+		if(id >= 4)
+			throw new IllegalStateException("id overflow");
+		ModuleCoreClient.dynKeyManager.resetBindingKey("ability_" + (id + 4), keyID);
+	}
     
     public static void init() {
     	
@@ -87,6 +96,14 @@ public final class ClientHandler {
     	for(AbilityKey key : handlers) {
     		if(key.instance != null && key.instance.isMutex)
     			return key.instance;
+    	}
+    	return null;
+    }
+    
+    private static AbilityKey getMutexHandler() {
+    	for(AbilityKey key : handlers) {
+    		if(key.instance != null && key.instance.isMutex)
+    			return key;
     	}
     	return null;
     }
@@ -243,14 +260,26 @@ public final class ClientHandler {
     		EntityPlayer player = getPlayer();
     		AbilityData aData = AbilityData.get(player);
     		CPData cpData = CPData.get(player);
+    		PresetData pData = PresetData.get(player);
     		
     		if(aData.isLearned()) {
-    			if(cpData.isActivated()) {
-    				System.out.println("Deactivated.");
-    				ControlSyncs.deactivateAtServer(cpData);
+    			AbilityKey mutexHandler = getMutexHandler();
+    			
+    			if(pData.isOverriding()) {
+    				// End preset override
+    				pData.endOverride();
+    			} else if(mutexHandler != null) {
+    				// Abort the mutex skill
+    				mutexHandler.onKeyAbort();
     			} else {
-    				System.out.println("Activated.");
-    				ControlSyncs.activateAtServer(cpData);
+    				// Activate or deactivate the skill
+	    			if(cpData.isActivated()) {
+	    				System.out.println("Deactivated.");
+	    				ControlSyncs.deactivateAtServer(cpData);
+	    			} else {
+	    				System.out.println("Activated.");
+	    				ControlSyncs.activateAtServer(cpData);
+	    			}
     			}
     		}
     	}

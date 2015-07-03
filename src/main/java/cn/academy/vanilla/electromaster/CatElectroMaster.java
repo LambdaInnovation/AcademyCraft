@@ -27,9 +27,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
+import cn.academy.vanilla.electromaster.skill.IronSand;
 import cn.academy.vanilla.electromaster.skill.MagAttract;
+import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.MineDetect;
 import cn.academy.vanilla.electromaster.skill.Railgun;
 
@@ -44,6 +45,7 @@ public class CatElectroMaster extends Category {
 	public MineDetect mineDetect;
 	public Railgun railgun;
 	public MagMovement magMovement;
+	public IronSand ironSand;
 
 	public CatElectroMaster() {
 		super("electro_master");
@@ -55,6 +57,7 @@ public class CatElectroMaster extends Category {
 		addSkill("default", mineDetect = new MineDetect());
 		addSkill("default", railgun = new Railgun());
 		addSkill("default", magMovement = new MagMovement());
+		addSkill("default", ironSand = new IronSand());
 		
 		magAttract.setParent(arcGen);
 		mineDetect.setParent(magAttract);

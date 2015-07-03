@@ -61,12 +61,30 @@ public class PresetData extends DataPart {
 		return AbilityData.get(getPlayer());
 	}
 	
+	public boolean isOverriding() {
+		return locked;
+	}
+	
 	public void override(Preset special) {
-		throw new NotImplementedException("override");
+		if(special.getPData() != this) {
+			throw new IllegalArgumentException("Try to inject a preset of another player");
+		}
+		locked = true;
+		specialPreset = special;
+		if(isRemote()) {
+			sync();
+		}
 	}
 	
 	public void endOverride() {
-		throw new NotImplementedException("endOverride");
+		if(locked) {
+			locked = false;
+			specialPreset = null;
+			
+			if(isRemote()) {
+				sync();
+			}
+		}
 	}
 	
 	/**
@@ -98,6 +116,11 @@ public class PresetData extends DataPart {
 	
 	@Override
 	public void tick() {}
+	
+	@Override
+	public void preSaving() {
+		endOverride();
+	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
@@ -105,6 +128,9 @@ public class PresetData extends DataPart {
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			presets[i].fromNBT(tag.getCompoundTag("" + i));
 		}
+		
+		locked = tag.getBoolean("l");
+		if(locked) specialPreset.fromNBT(tag.getCompoundTag("k"));
 		
 		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 	}
@@ -116,6 +142,10 @@ public class PresetData extends DataPart {
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			ret.setTag("" + i, presets[i].toNBT());
 		}
+		
+		ret.setBoolean("l", locked);
+		if(locked) ret.setTag("k", specialPreset.toNBT());
+		
 		return ret;
 	}
 	
@@ -178,12 +208,20 @@ public class PresetData extends DataPart {
 		
 	}
 	
+	/**
+	 * @return A preset that is in the scope of the same Player. 
+	 * Probably used for overriding control.
+	 */
+	public Preset createPreset() {
+		return new Preset();
+	}
+	
 	public class Preset {
 		
 		/**
-		 * NO DIRECT EDITING
+		 * Warning: Direct edit will cause sync loss.
 		 */
-		final byte data[] = new byte[MAX_KEYS];
+		public final byte data[] = new byte[MAX_KEYS];
 		
 		public Preset() {
 			for(int i = 0; i < MAX_KEYS; ++i) {
@@ -258,6 +296,10 @@ public class PresetData extends DataPart {
 				sb.append(data[i]).append(i == MAX_KEYS - 1 ? ">" : ",");
 			}
 			return sb.toString();
+		}
+		
+		private PresetData getPData() {
+			return PresetData.this;
 		}
 		
 	}

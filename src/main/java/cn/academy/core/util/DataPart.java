@@ -65,7 +65,15 @@ public abstract class DataPart {
 	
 	public DataPart() {}
 	
-	public abstract void tick();
+	/**
+	 * Invoked every tick
+	 */
+	public void tick() {}
+	
+	/**
+	 * Invoked before the data is saved. Can do validation and cleanup.
+	 */
+	public void preSaving() {}
 	
 	public EntityPlayer getPlayer() {
 		return data.player;

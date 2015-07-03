@@ -5,6 +5,7 @@ import java.util.UUID;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -113,6 +114,23 @@ public abstract class SyncAction {
 	public void writeNBTUpdate(NBTTagCompound tag) {
 	}
 	public void writeNBTFinal(NBTTagCompound tag) {
+	}
+	
+	/**
+	 * @return Whether this SyncAction is local. a.k.a. Is at the side where it started.
+	 * 	<br/>Returns true when: <br/>
+	 * 	* At server and started at server <br/>
+	 * 	* At the client that constructed this SyncAction
+	 */
+	public final boolean isLocal() {
+		if(isRemote)
+			return isLocalClient();
+		return player == null;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private boolean isLocalClient() {
+		return Minecraft.getMinecraft().thePlayer.equals(player);
 	}
 	
 	private static final String NBT_UUID = "0";
