@@ -33,8 +33,6 @@ public class ModuleAbilityClient {
 			PresetData data = PresetData.get(Minecraft.getMinecraft().thePlayer);
 			if(data.isActive()) {
 				PresetEditUI.guiHandler.openClientGui();
-			} else {
-				System.out.println("Not active!");
 			}
 		}
 	};
@@ -44,8 +42,9 @@ public class ModuleAbilityClient {
 		@Override
 		public void onKeyDown() {
 			PresetData data = PresetData.get(getPlayer());
-			//TODO: If in special skill mode, doesn't change preset?
-			if(data.isActive()) {
+			CPData cpData = CPData.get(getPlayer());
+			
+			if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
 				int next = (data.getCurrentID() + 1) % 4;
 				data.switchCurrent(next);
 				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));

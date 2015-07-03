@@ -133,7 +133,10 @@ public class PresetData extends DataPart {
 		}
 		
 		locked = tag.getBoolean("l");
-		if(locked) specialPreset.fromNBT(tag.getCompoundTag("k"));
+		if(locked)  {
+			specialPreset = new Preset();
+			specialPreset.fromNBT(tag.getCompoundTag("k"));
+		}
 		
 		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 	}

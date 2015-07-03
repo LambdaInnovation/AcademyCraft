@@ -71,6 +71,11 @@ Vio快来填坑
 详见.vanilla.generic包的几个技能。
 
 
+特殊技能
+---
+特殊技能通过SpecialSkill配合SubSkill类来实现。在特殊技能执行的阶段，会有一个SpecialSkillAction持续活跃。你可以通过这个SpecialSkillAction来操纵
+特殊技能对操纵的重载情况。具体的实现方法详见javadoc。
+
 SyncAction用法详述
 ---
 Vio快来填坑~

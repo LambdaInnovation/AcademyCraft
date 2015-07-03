@@ -265,13 +265,13 @@ public final class ClientHandler {
     		if(aData.isLearned()) {
     			AbilityKey mutexHandler = getMutexHandler();
     			
-    			if(pData.isOverriding()) {
-    				// End preset override
-    				pData.endOverride();
-    			} else if(mutexHandler != null) {
+    			if(mutexHandler != null) {
     				// Abort the mutex skill
     				mutexHandler.onKeyAbort();
-    			} else {
+    			} else if(pData.isOverriding()) {
+    				// End preset override
+    				pData.endOverride();
+    			}  else {
     				// Activate or deactivate the skill
 	    			if(cpData.isActivated()) {
 	    				System.out.println("Deactivated.");

@@ -40,13 +40,5 @@ public class IronSand extends SpecialSkill {
 		System.out.println("ValidateExecution");
 		return true;
 	}
-	
-	/**
-	 * Called in both client and server when executing the SpecialSkill.
-	 */
-	@Override
-	public void execute(EntityPlayer player) {
-		System.out.println("execute " + player.worldObj.isRemote);
-	}
 
 }

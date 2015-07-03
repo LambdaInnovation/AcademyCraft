@@ -17,21 +17,25 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.annoreg.mc.s11n.InstanceSerializer;
-import cn.annoreg.mc.s11n.SerializationManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * SpecialSkill is a kind of skill that OVERRIDES current preset. Once activated,
  * 	it creates a Preset Override that remaps all the SubSkill onto player control.
- * 
+ *  At the same time it creates a SpecialSkillAction that can be treated as 'environment'
+ *  of this execution. When you end this action, the override is ended; When override is
+ *  ended, this action is ended/aborted to. You can do something (e.g. consume CP) within
+ *  this SpecialSkillAction.
  * @see cn.academy.ability.api.SubSkill
  * @author WeAthFolD
  */
@@ -76,25 +80,129 @@ public abstract class SpecialSkill extends Skill {
 	}
 	
 	/**
-	 * Called in both client and server when executing the SpecialSkill.
+	 * Will only get called in CLIENT. Return a SpecialSkillAction that
+	 * 	automatically starts when player enters SpecialSkill.
 	 */
-	public void execute(EntityPlayer player) {}
-	
-	@Override
-    public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstanceInstant().addExecution(new SSAction(this));
+	protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
+		return new DefaultSSAction(this);
 	}
 	
-	public static class SSAction extends SyncActionInstant {
+	@Override
+    public final SkillInstance createSkillInstance(EntityPlayer player) {
+		return new SkillInstanceInstant().addExecution(new ExecuteAction(this));
+	}
+	
+	/**
+	 * SpecialSkillAction provides an environment for SpecialSkill. Every time player enters a
+	 * 	SpecialSkill, a corresponding SpecialSkillAction is opened. Aborting or ending that
+	 *  action will end the overriding state as well, and when override is ended the action is also ended.
+	 * @author WeAthFolD
+	 */
+	public static class SpecialSkillAction extends SyncAction {
+		
+		static final InstanceSerializer<Controllable> ctrlSer = new ControllableSerializer();
+		SpecialSkill skill;
+		PresetData presetData;
+		
+		public SpecialSkillAction(SpecialSkill _skill, int interval) {
+			super(interval);
+			skill = _skill;
+		}
+		
+		public SpecialSkillAction(int interval) {
+			super(interval);
+		}
+		
+		@Override
+		public void readNBTStart(NBTTagCompound tag) {
+			try {
+				skill = (SpecialSkill) ctrlSer.readInstance(tag.getTag("s"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public void writeNBTStart(NBTTagCompound tag) {
+			try {
+				tag.setTag("s", ctrlSer.writeInstance(skill));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public final void onStart() {
+			presetData = PresetData.get(player);
+			onSkillStart();
+		}
+		
+		@Override
+		public final void onTick() {
+			if(!presetData.isOverriding()) {
+				ActionManager.endAction(this);
+			} else {
+				onSkillTick();
+			}
+		}
+		
+		@Override
+		public final void onEnd() {
+			presetData.endOverride();
+			
+			onSkillEnd();
+		}
+		
+		@Override
+		public final void onAbort() {
+			presetData.endOverride();
+			
+			onSkillAbort();
+		}
+		
+		/*
+		 * EVENT DELEGATES
+		 * Those methods works exactly the same as SyncActions.
+		 * extend and override them
+		 */
+		
+		protected void onSkillStart() {
+			System.out.println("[SS]Started");
+		}
+		
+		protected void onSkillTick() {
+			System.out.println("[SS]Ticked");
+		}
+		
+		protected void onSkillEnd() {
+			System.out.println("[SS]Ended");
+		}
+		
+		protected void onSkillAbort() {
+			System.out.println("[SS]Aborted");
+		}
+	}
+	
+	public static final class DefaultSSAction extends SpecialSkillAction {
+		public DefaultSSAction(SpecialSkill _skill) {
+			super(_skill, -1);
+		}
+		
+		public DefaultSSAction() {
+			super(-1);
+		}
+	}
+	
+	public static final class ExecuteAction extends SyncActionInstant {
 		
 		static final InstanceSerializer<Controllable> ctrlSer = new ControllableSerializer();
 		SpecialSkill skill;
 		
-		public SSAction(SpecialSkill _skill) {
+		public ExecuteAction(SpecialSkill _skill) {
 			skill = _skill;
 		}
 		
-		public SSAction() {}
+		public ExecuteAction() {}
 		
 		@Override
 		public void readNBTStart(NBTTagCompound tag) {
@@ -144,7 +252,9 @@ public abstract class SpecialSkill extends Skill {
 			
 			pData.override(preset);
 			
-			skill.execute(player);
+			if(isRemote) {
+				ActionManager.startAction(skill.getSpecialAction(player));
+			}
 		}
 		
 	}
