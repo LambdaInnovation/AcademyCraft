@@ -42,7 +42,6 @@ public class PresetData extends DataPart {
 	Preset[] presets = new Preset[4];
 
 	//Hooks that are related to SpecialSkill
-	// TODO: Implement
 	boolean locked = false;
 	Preset specialPreset;
 	
@@ -74,6 +73,8 @@ public class PresetData extends DataPart {
 		if(isRemote()) {
 			sync();
 		}
+		
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 	}
 	
 	public void endOverride() {
@@ -84,6 +85,8 @@ public class PresetData extends DataPart {
 			if(isRemote()) {
 				sync();
 			}
+			
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 		}
 	}
 	

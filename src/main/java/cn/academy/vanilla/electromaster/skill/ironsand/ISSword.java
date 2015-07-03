@@ -10,18 +10,25 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.electromaster.skill;
+package cn.academy.vanilla.electromaster.skill.ironsand;
 
-import cn.academy.ability.api.SpecialSkill;
+import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.api.SubSkill;
+import cn.academy.ability.api.ctrl.SkillInstance;
 
 /**
- * Iron sand manipulation
  * @author WeAthFolD
  */
-public class IronSand extends SpecialSkill {
+public class ISSword extends SubSkill {
 
-	public IronSand() {
-		super("iron_sand", 4);
+	public ISSword() {
+		super("sword");
+	}
+
+	@Override
+	public SkillInstance createSkillInstance(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

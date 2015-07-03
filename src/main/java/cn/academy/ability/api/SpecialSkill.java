@@ -87,11 +87,10 @@ public abstract class SpecialSkill extends Skill {
 	
 	public static class SSAction extends SyncActionInstant {
 		
-		InstanceSerializer<Controllable> ctrlSer;
+		static final InstanceSerializer<Controllable> ctrlSer = new ControllableSerializer();
 		SpecialSkill skill;
 		
 		public SSAction(SpecialSkill _skill) {
-			ctrlSer = SerializationManager.INSTANCE.getInstanceSerializer(Controllable.class);
 			skill = _skill;
 		}
 		
