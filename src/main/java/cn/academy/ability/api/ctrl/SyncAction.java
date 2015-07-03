@@ -133,6 +133,26 @@ public abstract class SyncAction {
 		return Minecraft.getMinecraft().thePlayer.equals(player);
 	}
 	
+	public static enum ActionState {
+		NORMAL,
+		ENDED,
+		ABORTED
+	}
+	
+	/**
+	 * @return The action's state
+	 */
+	public final ActionState getActionState() {
+		switch(state) {
+		case ENDED:
+			return ActionState.ENDED;
+		case ABORTED:
+			return ActionState.ABORTED;
+		default:
+			return ActionState.NORMAL;
+		}
+	}
+	
 	private static final String NBT_UUID = "0";
 	private static final String NBT_STATE = "1";
 	private static final String NBT_INTERVAL = "2";
