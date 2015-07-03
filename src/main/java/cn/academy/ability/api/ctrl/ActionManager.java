@@ -39,6 +39,10 @@ public class ActionManager {
 		getActionManager().abortAction(action);
 	}
 	
+	public static SyncAction findAction(EntityPlayer player, Class clazz) {
+		return getActionManager().findAction(player, clazz);
+	}
+	
 	private static IActionManager getActionManager() {
 		return FMLCommonHandler.instance().getEffectiveSide().equals(Side.SERVER) ? AMS : AMC;
 	}

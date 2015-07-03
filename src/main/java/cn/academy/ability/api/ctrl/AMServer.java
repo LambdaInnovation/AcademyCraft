@@ -72,6 +72,17 @@ public class AMServer implements IActionManager {
 		}
 	}
 	
+	@Override
+	public SyncAction findAction(EntityPlayer player, Class clazz) {
+		Map<UUID, SyncAction> _map = map.get(playerUUID(player));
+		if (_map == null)
+			return null;
+		for (SyncAction action : _map.values())
+			if (clazz.isInstance(action))
+				return action;
+		return null;
+	}
+	
 	boolean startFromClient(EntityPlayer player, String className, NBTTagCompound tag) {
 		System.out.println("AMS#NET_START");
 		SyncAction action = null;
@@ -122,7 +133,11 @@ public class AMServer implements IActionManager {
 	}
 
 	private UUID playerUUID(SyncAction action) {
-		return action.player == null ? dummy : action.player.getUniqueID();
+		return playerUUID(action.player);
+	}
+	
+	private UUID playerUUID(EntityPlayer player) {
+		return player == null ? dummy : player.getUniqueID();
 	}
 	
 	private int curTick = 0;

@@ -74,6 +74,19 @@ public class AMClient implements IActionManager {
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public SyncAction findAction(EntityPlayer player, Class clazz) {
+		for (SyncAction action : map.values())
+			if (clazz.isInstance(action)) {
+				if (player == null && action.player == null)
+					return action;
+				if (player != null && action.player != null && player.equals(action.player))
+					return action;
+			}
+		return null;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	void startFromServer(String className, NBTTagCompound tag) {
 		System.out.println("AMC#NET_START");
