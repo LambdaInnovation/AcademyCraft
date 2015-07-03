@@ -26,7 +26,7 @@ import cn.liutils.util.raytrace.Raytrace;
 public class WorldHeater extends Skill
 {
 	static WorldHeater instance;
-	public static HashMap<Block,Block> heatmap;
+	public static HashMap<Block,Block> heatmap = new HashMap();
 	static
 	{
 		heatmap.put(Block.getBlockFromName("sand"),Block.getBlockFromName("glass"));

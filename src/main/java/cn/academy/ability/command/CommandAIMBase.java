@@ -40,14 +40,14 @@ public abstract class CommandAIMBase extends ACCommand {
 		}
 		
 		@Override
-		public void processCommand(ICommandSender commondsender, String[] pars) {
+		public void processCommand(ICommandSender commandSender, String[] pars) {
 			if(pars.length == 0||"?".equals(pars[0]))
 			{
-				sendChat(commondsender, getLoc("help"));
+				sendChat(commandSender, getLoc("help"));
 				return;
 			}
 			
-			matchCommands(commondsender, this.getCommandSenderAsPlayer(commondsender), pars);
+			matchCommands(commandSender, this.getCommandSenderAsPlayer(commandSender), pars);
 		}
 		
 	}
