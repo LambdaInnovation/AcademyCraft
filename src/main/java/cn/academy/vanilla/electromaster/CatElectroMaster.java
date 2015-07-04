@@ -28,6 +28,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
+import cn.academy.vanilla.electromaster.skill.CurrentCharging;
 import cn.academy.vanilla.electromaster.skill.MagAttract;
 import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.MineDetect;
@@ -46,6 +47,7 @@ public class CatElectroMaster extends Category {
 	public Railgun railgun;
 	public MagMovement magMovement;
 	public IronSand ironSand;
+	public CurrentCharging currentCharging;
 
 	public CatElectroMaster() {
 		super("electro_master");
@@ -58,6 +60,7 @@ public class CatElectroMaster extends Category {
 		addSkill("default", railgun = new Railgun());
 		addSkill("default", magMovement = new MagMovement());
 		addSkill("default", ironSand = new IronSand());
+		addSkill("default", currentCharging = new CurrentCharging());
 		
 		magAttract.setParent(arcGen);
 		mineDetect.setParent(magAttract);

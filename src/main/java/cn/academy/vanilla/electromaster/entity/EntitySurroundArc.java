@@ -109,6 +109,12 @@ public class EntitySurroundArc extends EntityAdvanced {
 		pointFactory = new CubePointFactory(wl, h, wl).setCentered(true);
 	}
 	
+	public void updatePos(double x, double y, double z) {
+		pos.x = x;
+		pos.y = y;
+		pos.z = z;
+	}
+	
 	public EntitySurroundArc setArcType(ArcType type) {
 		arcType = type;
 		return this;

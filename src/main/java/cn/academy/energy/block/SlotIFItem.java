@@ -12,7 +12,7 @@
  */
 package cn.academy.energy.block;
 
-import cn.academy.energy.api.item.IFItemManager;
+import cn.academy.energy.api.IFItemManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

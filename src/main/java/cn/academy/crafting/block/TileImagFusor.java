@@ -26,7 +26,7 @@ import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
-import cn.academy.support.EnergyHelper;
+import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
@@ -153,7 +153,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 		
 		// Update energy
 		if(inventory[3] != null) {
-			double gain = -EnergyHelper.charge(inventory[3], -(getMaxEnergy() - getEnergy()), false);
+			double gain = -EnergyItemHelper.charge(inventory[3], -(getMaxEnergy() - getEnergy()), false);
 			this.injectEnergy(gain);
 		}
 		

@@ -30,7 +30,7 @@ import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.item.ItemMatrixCore;
-import cn.academy.support.EnergyHelper;
+import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegItem;
@@ -80,7 +80,7 @@ public class ModuleEnergy {
 		InstanceEjector.fromItemLoader(ModuleEnergy.class, loader);
 		
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
-			EnergyHelper.createFullItem(energyUnit), EnergyHelper.createEmptyItem(energyUnit));
+			EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
 	}
 	
 }

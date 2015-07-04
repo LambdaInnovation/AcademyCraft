@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cn.academy.energy.api.item.IFItemManager;
+import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.liutils.loading.Loader.ObjectNamespace;
 import cn.liutils.loading.item.ItemLoadRule;

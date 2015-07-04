@@ -48,12 +48,13 @@ public class AbilityData extends DataPart {
 	private float[] skillExps;
 	
 	private int level;
+	
+	private int updateTicker = 0;
 
 	public AbilityData() {
 		learnedSkills = new BitSet(32);
 		skillExps = new float[32];
 	}
-	
 	/**
 	 * Only effective in server. If c==null then set the player state to unlearned.
 	 */
@@ -157,6 +158,16 @@ public class AbilityData extends DataPart {
 		return skill.getCategory() == getCategory() ? this.skillExps[skill.getID()] : 0.0f;
 	}
 	
+	public void addSkillExp(Skill skill, float amt) {
+		if(skill.getCategory() == getCategory()) {
+			skillExps[skill.getID()] += amt;
+			if(skillExps[skill.getID()] > 1.0f)
+				skillExps[skill.getID()] = 1.0f;
+			if(!isRemote())
+				scheduleUpdate(25);
+		}
+	}
+	
 	/**
 	 * Learn all the skills. SERVER only.
 	 */
@@ -170,8 +181,23 @@ public class AbilityData extends DataPart {
 		return s.getCategory() == getCategory() && learnedSkills.get(s.getID());
 	}
 	
+	private void scheduleUpdate(int ticks) {
+		if(updateTicker == 0)
+			updateTicker = ticks;
+		else if(updateTicker != 1)
+			updateTicker -= 1;
+	}
+	
 	@Override
-	public void tick() {}
+	public void tick() {
+		if(!isRemote()) {
+			if(updateTicker > 0) {
+				if(--updateTicker == 0) {
+					sync();
+				}
+			}
+		}
+	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
