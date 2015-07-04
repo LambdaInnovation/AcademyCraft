@@ -104,7 +104,7 @@ ac.gui.imagfusor.flux.desc=Imag Flux
 # Media
 ac.media.only_my_railgun.name=Only My Railgun
 ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
-ac.media.level5_judgelight.name=Level5. Judgelight
+ac.media.level5_judgelight.name=Level5 -Judgelight-
 ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
 ac.media.sisters_noise.name=Sister's Noise
 ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
@@ -166,7 +166,7 @@ ac.command.knowledge.discover=/knowledge discover [knowledge_name]: Discover a s
 
 ac.command.aim.usage=/aim <command>|<help> [parameters...]
 ac.command.aim.help=/aim help: Display the help message.
-ac.command.aim.cat=/aim cat [catName]: change the specified player's categories or display the current category.
+ac.command.aim.cat=/aim cat [catName]: Change the specified player's categories or display the current category.
 ac.command.aim.catlist=/aim catlist: List all available categories' names.
 ac.command.aim.learn=/aim learn <id>|<skillName>: Learn the specified skill. Regardless of its learning condition requirements.
 ac.command.aim.learn_all=/aim learn_all: Learn all the skills.
