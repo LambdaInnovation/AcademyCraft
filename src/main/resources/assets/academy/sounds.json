@@ -1,25 +1,24 @@
 {
-"deny": {"category": "master", "sounds": [{"name": "deny", "stream": false}]},
+"ability.deny": {"category": "master", "sounds": [{"name": "ability/deny", "stream": false}]},
 
 "em.arc_weak": {"category": "master", "sounds": [{"name": "em/arc_weak", "stream": false}]},
 "em.arc_strong": {"category": "master", "sounds": [{"name": "em/arc_strong", "stream": false}]},
-"em.mineview": {"category": "master", "sounds": [{"name": "em/mineview", "stream": false}]},
+"em.minedetect": {"category": "master", "sounds": [{"name": "em/minedetect", "stream": false}]},
 "em.railgun": {"category": "master", "sounds": [{"name": "em/railgun", "stream": false}]},
-"em.lf": {"category": "master", "sounds": [{"name": "em/lf", "stream": false}]},
-"em.lf_loop": {"category": "master", "sounds": [{"name": "em/lf_loop", "stream": false}]},
-
-"em.move.0": {"category": "master", "sounds": [{"name": "em/move/0", "stream": false}]},
-"em.move.1": {"category": "master", "sounds": [{"name": "em/move/1", "stream": false}]},
-"em.move.2": {"category": "master", "sounds": [{"name": "em/move/2", "stream": false}]},
-"em.move.3": {"category": "master", "sounds": [{"name": "em/move/3", "stream": false}]},
-"em.move.4": {"category": "master", "sounds": [{"name": "em/move/4", "stream": false}]},
-
-"em.charge.0": {"category": "master", "sounds": [{"name": "em/charge/0", "stream": false}]},
-"em.charge.1": {"category": "master", "sounds": [{"name": "em/charge/1", "stream": false}]},
-"em.charge.2": {"category": "master", "sounds": [{"name": "em/charge/2", "stream": false}]},
-"em.charge.3": {"category": "master", "sounds": [{"name": "em/charge/3", "stream": false}]},
-"em.charge.4": {"category": "master", "sounds": [{"name": "em/charge/4", "stream": false}]},
-
+"em.move": {"category": "master", "sounds": [
+    {"name": "em/move/0", "stream": false},
+    {"name": "em/move/1", "stream": false},
+    {"name": "em/move/2", "stream": false},
+    {"name": "em/move/3", "stream": false},
+    {"name": "em/move/4", "stream": false}
+]},
+"em.charge.0": {"category": "master", "sounds": [
+    {"name": "em/charge/0", "stream": false},
+    {"name": "em/charge/1", "stream": false},
+    {"name": "em/charge/2", "stream": false},
+    {"name": "em/charge/3", "stream": false},
+    {"name": "em/charge/4", "stream": false}
+]},
 "em.buff_activate": {"category": "master", "sounds": [{"name": "em/buff_activate", "stream": false}]},
 "em.buff_loop": {"category": "master", "sounds": [{"name": "em/buff_loop", "stream": false}]},
 
@@ -35,10 +34,9 @@
 "md.simple_charge": {"category": "master", "sounds": [{"name": "md/simple_charge", "stream": false}]},
 "md.md_charge": {"category": "master", "sounds": [{"name": "md/md_charge", "stream": false}]},
 
-"maghook_land": {"category": "master", "sounds": [{"name": "maghook_land", "stream": false}]},
-"flipcoin": {"category": "master", "sounds": [{"name": "flipcoin", "stream": false}]},
-"silbarn_heavy": {"category": "master", "sounds": [{"name": "silbarn_heavy", "stream": false}]},
-"silbarn_light": {"category": "master", "sounds": [{"name": "silbarn_light", "stream": false}]},
+"entity.flipcoin": {"category": "master", "sounds": [{"name": "entity/flipcoin", "stream": false}]},
+"entity.silbarn_heavy": {"category": "master", "sounds": [{"name": "entity/silbarn_heavy", "stream": false}]},
+"entity.silbarn_light": {"category": "master", "sounds": [{"name": "entity/silbarn_light", "stream": false}]},
 
 "tp.tp": {"category": "master", "sounds": [{"name": "tp/tp", "stream": false}]},
 "tp.tp_pre": {"category": "master", "sounds": [{"name": "tp/tp_pre", "stream": false}]},

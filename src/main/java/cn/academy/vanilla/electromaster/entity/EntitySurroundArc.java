@@ -82,6 +82,8 @@ public class EntitySurroundArc extends EntityAdvanced {
 	private ArcType arcType = ArcType.BOLD;
 	private final PosObject pos;
 	
+	public boolean draw = true;
+	
 	public int life = 100;
 
 	SubArcHandler arcHandler;
@@ -191,7 +193,7 @@ public class EntitySurroundArc extends EntityAdvanced {
 				float b) {
 			EntitySurroundArc esa = (EntitySurroundArc) entity;
 			
-			if(esa.arcHandler != null) {
+			if(esa.draw && esa.arcHandler != null) {
 				GL11.glPushMatrix();
 				
 				GL11.glTranslated(x, y, z);

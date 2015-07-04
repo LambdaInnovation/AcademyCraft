@@ -14,6 +14,15 @@ ac {
 		  exp_incr_ineffective(exp) {
 		      0.00003 * consumption(exp)
 		  }
+		},
+		
+		charging { # 电流回充
+		  speed(exp) { lerp(5, 15, exp) }, # IF/tick
+		  consumption(exp) { lerp(3, 7, exp) },
+		  overload(exp) { lerp(65, 48, exp) },
+		  
+		  exp_incr_effective(exp) { consumption(exp) * 0.0008 },
+		  exp_incr_ineffective(exp) { consumption(exp) * 0.0003 }
 		}
 	}
 }

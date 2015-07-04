@@ -1,5 +1,7 @@
 package cn.academy.ability.api;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -36,6 +38,7 @@ public abstract class Controllable {
 		return id;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public abstract SkillInstance createSkillInstance(EntityPlayer player);
 	
 	/**

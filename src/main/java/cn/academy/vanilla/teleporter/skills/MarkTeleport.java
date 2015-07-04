@@ -22,7 +22,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.util.ACSounds;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
@@ -172,7 +172,7 @@ public class MarkTeleport extends Skill {
 				if(!isRemote) {
 					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
 				} else {
-					ACSounds.playClient(player, "tp.tp", .5f, RandUtils.rangef(0.8f, 1.2f));
+					ACSounds.playAtEntity(player, "tp.tp", .5f);
 				}
 			}
 			

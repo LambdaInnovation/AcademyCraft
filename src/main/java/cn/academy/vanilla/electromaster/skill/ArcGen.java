@@ -21,7 +21,7 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.util.ACSounds;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
@@ -106,7 +106,7 @@ public class ArcGen extends Skill {
 			arc.addMotionHandler(new Life(10));
 			
 			player.worldObj.spawnEntityInWorld(arc);
-			ACSounds.playClient(player, "em.arc_weak", 0.5f, 1f);
+			ACSounds.playAtEntity(player, "em.arc_weak", 0.5f);
 		}
 		
 	}

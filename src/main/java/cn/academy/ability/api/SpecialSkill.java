@@ -88,6 +88,7 @@ public abstract class SpecialSkill extends Skill {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
     public final SkillInstance createSkillInstance(EntityPlayer player) {
 		return new SkillInstanceInstant().addExecution(new ExecuteAction(this));
 	}
@@ -193,6 +194,7 @@ public abstract class SpecialSkill extends Skill {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static final class ExecuteAction extends SyncActionInstant {
 		
 		static final InstanceSerializer<Controllable> ctrlSer = new ControllableSerializer();

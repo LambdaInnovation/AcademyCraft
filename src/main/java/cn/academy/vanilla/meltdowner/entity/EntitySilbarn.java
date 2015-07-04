@@ -99,7 +99,10 @@ public class EntitySilbarn extends EntityAdvanced {
 			public void onEvent(CollideEvent event) {
 				if(!hit) {
 					hit = true;
-					playSound("academy:silbarn_light", .5f, 1f);
+					if(event.result.entityHit instanceof EntitySilbarn)
+						playSound("academy:entity.silbarn_heavy", .5f, 1f);
+					else
+						playSound("academy:entity.silbarn_light", .5f, 1f);
 					executeAfter(new EntityCallback() {
 						@Override
 						public void execute(Entity ent) {

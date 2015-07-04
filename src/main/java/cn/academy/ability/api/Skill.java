@@ -17,6 +17,9 @@ import cn.liutils.ripple.ScriptNamespace;
 
 import com.google.common.collect.ImmutableList;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
  * and can be activated/controlled via the Preset system. <br/>
@@ -157,6 +160,7 @@ public abstract class Skill extends Controllable {
 	
 	//--- Ctrl
 	@Override
+	@SideOnly(Side.CLIENT)
     public SkillInstance createSkillInstance(EntityPlayer player) {
 		return null;
 	}

@@ -15,6 +15,7 @@ package cn.academy.core;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -39,6 +40,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -51,7 +53,6 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION)
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
-@RegEventHandler(Bus.Forge)
 public class AcademyCraft {
 	
 	@Instance("academy-craft")
@@ -96,14 +97,11 @@ public class AcademyCraft {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        
-        if(DEBUG_MODE)
-        	((Logger)LogManager.getRootLogger()).setLevel(Level.DEBUG);
-        
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
+        
+        config = new Configuration(event.getSuggestedConfigurationFile());
         
         // Load the scripts
         script = new ScriptProgram();
@@ -112,6 +110,8 @@ public class AcademyCraft {
         };
         for(String s : scripts)
         	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
+        
+        MinecraftForge.EVENT_BUS.register(this);
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
@@ -131,8 +131,8 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
     }
     
-    @SubscribeEvent
-    public void onWorldSave(WorldEvent.Save event) {
+    @EventHandler
+    public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
     }
     

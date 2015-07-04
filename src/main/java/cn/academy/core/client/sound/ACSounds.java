@@ -10,23 +10,32 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.core.util;
+package cn.academy.core.client.sound;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Generic sound playing utils. Client only.
  * @author WeAthFolD
- *
  */
+@SideOnly(Side.CLIENT)
 public class ACSounds {
-
-	public static void playClient(Entity target, String name, float volume, float pitch) {
-		playClient(target.worldObj, target.posX, target.posY, target.posZ, name, volume, pitch);
+	
+	public static void playAtEntity(Entity target, String name, float volume) {
+		playClient(new FollowEntitySound(target, name).setVolume(volume));
 	}
 	
 	public static void playClient(World world, double x, double y, double z, String name, float vol, float pitch) {
 		world.playSound(x, y, z, "academy:" + name, vol, pitch, false);
+	}
+	
+	public static void playClient(ISound sound) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(sound);
 	}
 
 }

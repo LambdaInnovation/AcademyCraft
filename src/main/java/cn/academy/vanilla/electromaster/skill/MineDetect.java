@@ -36,7 +36,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
-import cn.academy.core.util.ACSounds;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
@@ -118,7 +118,7 @@ public class MineDetect extends Skill {
 		private void spawnEffects(AbilityData aData) {
 			player.worldObj.spawnEntityInWorld(
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
-			ACSounds.playClient(player, "em.mineview", 0.5f, 1.0f);
+			ACSounds.playAtEntity(player, "em.mineview", 0.5f);
 			
 			Cooldown.setCooldown(instance, getCooldown(aData));
 		}
