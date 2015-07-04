@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.learning.LearningCondition;
 import cn.academy.ability.api.learning.RootLearningCondition;
 import cn.academy.ability.developer.DeveloperType;
@@ -216,6 +217,17 @@ public abstract class Skill extends Controllable {
     //---Script integration
     protected ScriptFunction getFunc(String name) {
     	return script.getFunction(name);
+    }
+    
+    /**
+     * The most commonly used script operation. Pass the skill exp of this skill as argument into the function [name].
+     */
+    protected float callFloatWithExp(String name, AbilityData data) {
+    	return getFunc(name).callFloat(data.getSkillExp(this));
+    }
+    
+    protected int callIntWithExp(String name, AbilityData data) {
+    	return getFunc(name).callInteger(data.getSkillExp(this));
     }
     
     protected float getFloat(String name) {

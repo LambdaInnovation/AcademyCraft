@@ -159,7 +159,6 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 					arc.patterns[arc.iid[i]].draw();
 			} else {
 				for(int i = 0; i < arc.n; ++i) {
-					System.out.println(arc.iid[i]);
 					arc.patterns[arc.iid[i]].draw(arc.length);
 				}
 			}

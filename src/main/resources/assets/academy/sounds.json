@@ -7,8 +7,8 @@
 "em.railgun": {"category": "master", "sounds": [{"name": "em/railgun", "stream": false}]},
 "em.move_loop": {"category": "master", "sounds": [{"name": "em/move_loop", "stream": false}]},
 "em.charge_loop": {"category": "master", "sounds": [{"name": "em/charge_loop", "stream": false}]},
-"em.buff_activate": {"category": "master", "sounds": [{"name": "em/buff_activate", "stream": false}]},
-"em.buff_loop": {"category": "master", "sounds": [{"name": "em/buff_loop", "stream": false}]},
+"em.intensify_activate": {"category": "master", "sounds": [{"name": "em/intensify_activate", "stream": false}]},
+"em.intensify_loop": {"category": "master", "sounds": [{"name": "em/intensify_loop", "stream": false}]},
 
 "md.ballshoot": {"category": "master", "sounds": [{"name": "md/ballshoot", "stream": false}]},
 "md.ray_small": {"category": "master", "sounds": [{"name": "md/ray_small", "stream": false}]},

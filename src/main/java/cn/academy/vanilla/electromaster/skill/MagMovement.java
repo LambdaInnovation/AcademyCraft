@@ -110,8 +110,7 @@ public class MagMovement extends Skill {
 			AbilityData aData = AbilityData.get(player);
 			CPData cpData = CPData.get(player);
 			
-			// FIXME: At only thePlayer client, this should be supported by SyncAction
-			if(isRemote) {
+			if(isLocal()) {
 				target.tick();
 				
 				double 
