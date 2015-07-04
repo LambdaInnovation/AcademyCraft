@@ -21,8 +21,8 @@ ac {
 		  consumption(exp) { lerp(3, 7, exp) }
 		  overload(exp) { lerp(65, 48, exp) }
 		  
-		  exp_incr_effective(exp) { consumption(exp) * 0.0008 }
-		  exp_incr_ineffective(exp) { consumption(exp) * 0.0003 }
+		  exp_incr_effective(exp) { lerp(3, 7, exp) * 0.0008 }
+		  exp_incr_ineffective(exp) { lerp(3, 7, exp) * 0.0003 }
 		}
 	}
 }

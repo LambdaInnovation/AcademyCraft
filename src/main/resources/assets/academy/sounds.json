@@ -5,20 +5,8 @@
 "em.arc_strong": {"category": "master", "sounds": [{"name": "em/arc_strong", "stream": false}]},
 "em.minedetect": {"category": "master", "sounds": [{"name": "em/minedetect", "stream": false}]},
 "em.railgun": {"category": "master", "sounds": [{"name": "em/railgun", "stream": false}]},
-"em.move": {"category": "master", "sounds": [
-    {"name": "em/move/0", "stream": false},
-    {"name": "em/move/1", "stream": false},
-    {"name": "em/move/2", "stream": false},
-    {"name": "em/move/3", "stream": false},
-    {"name": "em/move/4", "stream": false}
-]},
-"em.charge.0": {"category": "master", "sounds": [
-    {"name": "em/charge/0", "stream": false},
-    {"name": "em/charge/1", "stream": false},
-    {"name": "em/charge/2", "stream": false},
-    {"name": "em/charge/3", "stream": false},
-    {"name": "em/charge/4", "stream": false}
-]},
+"em.move_loop": {"category": "master", "sounds": [{"name": "em/move_loop", "stream": false}]},
+"em.charge_loop": {"category": "master", "sounds": [{"name": "em/charge_loop", "stream": false}]},
 "em.buff_activate": {"category": "master", "sounds": [{"name": "em/buff_activate", "stream": false}]},
 "em.buff_loop": {"category": "master", "sounds": [{"name": "em/buff_loop", "stream": false}]},
 

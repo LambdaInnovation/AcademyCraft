@@ -24,7 +24,7 @@ public class FollowEntitySound extends MovingSound {
 	
 	public final Entity entity;
 
-	protected FollowEntitySound(Entity _entity, String name) {
+	public FollowEntitySound(Entity _entity, String name) {
 		super(new ResourceLocation("academy:" + name));
 		entity = _entity;
 		

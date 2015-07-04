@@ -23,10 +23,15 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyItemHelper;
+import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
+import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
+import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,6 +42,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class CurrentCharging extends Skill {
 
+	static final String SOUND = "em.charge_loop";
 	static CurrentCharging instance;
 	
 	public CurrentCharging() {
@@ -87,6 +93,7 @@ public class CurrentCharging extends Skill {
 	
 	public static class ActionChargeBlock extends SyncAction {
 		
+		static final double DISTANCE = 15.0;
 		AbilityData aData;
 		CPData cpData;
 
@@ -100,12 +107,16 @@ public class CurrentCharging extends Skill {
 			cpData = CPData.get(player);
 			
 			cpData.perform(getOverload(aData), 0);
+			
+			if(isRemote)
+				startEffects();
 		}
 		
 		@Override
 		public void onTick() {
+			
 			// Perform raytrace 
-			MovingObjectPosition pos = Raytrace.traceLiving(player, 15.0d);
+			MovingObjectPosition pos = Raytrace.traceLiving(player, DISTANCE);
 			
 			boolean good;
 			if(pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
@@ -128,8 +139,9 @@ public class CurrentCharging extends Skill {
 			cpData.perform(0, getConsumption(aData));
 			aData.addSkillExp(instance, getExpIncr(aData, good));
 			
-			if(isRemote)
+			if(isRemote) {
 				updateEffects(pos, good);
+			}
 		}
 		
 		@Override
@@ -152,18 +164,41 @@ public class CurrentCharging extends Skill {
 		EntitySurroundArc surround;
 		
 		@SideOnly(Side.CLIENT)
+		FollowEntitySound sound;
+		
+		@SideOnly(Side.CLIENT)
 		private void startEffects() {
-			player.worldObj.spawnEntityInWorld(arc = new EntityArc(player));
+			player.worldObj.spawnEntityInWorld(arc = new EntityArc(player, ArcPatterns.chargingArc));
+			arc.lengthFixed = false;
+			arc.hideWiggle = 0.8;
+			arc.showWiggle = 0.2;
+			arc.texWiggle = 0.8;
+			
 			player.worldObj.spawnEntityInWorld(
-				surround = new EntitySurroundArc(player.worldObj, player.posX, player.posY, player.posZ, 1, 1));
+				surround = new EntitySurroundArc(player.worldObj, player.posX, player.posY, player.posZ, 1, 1)
+				.setArcType(ArcType.NORMAL));
+			
+			sound = new FollowEntitySound(player, SOUND).setLoop();
+			ACSounds.playClient(sound);
 		}
 		
 		@SideOnly(Side.CLIENT)
 		private void updateEffects(MovingObjectPosition res, boolean isGood) {
-			double x = res.hitVec.xCoord, y = res.hitVec.yCoord, z = res.hitVec.zCoord;
-			if(res.typeOfHit == MovingObjectType.ENTITY) {
-				y += res.entityHit.getEyeHeight();
+			double x, y, z;
+			if(res != null) {
+				x = res.hitVec.xCoord;
+				y = res.hitVec.yCoord;
+				z = res.hitVec.zCoord;
+				if(res.typeOfHit == MovingObjectType.ENTITY) {
+					y += res.entityHit.getEyeHeight();
+				}
+			} else {
+				Motion3D mo = new Motion3D(player, true).move(DISTANCE);
+				x = mo.px;
+				y = mo.py;
+				z = mo.pz;
 			}
+			arc.setFromTo(player.posX, player.posY, player.posZ, x, y, z);
 			
 			if(isGood) {
 				surround.updatePos(res.blockX + 0.5, res.blockY, res.blockZ + 0.5);
@@ -175,18 +210,20 @@ public class CurrentCharging extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
-			surround.setDead();
-			arc.setDead();
+			if(surround != null) surround.setDead();
+			if(arc != null) arc.setDead();
+			if(sound != null) sound.stop();
 		}
 		
 	}
 	
+	// TODO: Add hand render effect
 	public static class ActionChargeItem extends SyncAction {
 		
 		AbilityData aData;
 		CPData cpData;
 
-		protected ActionChargeItem() {
+		public ActionChargeItem() {
 			super(-1);
 		}
 		
@@ -209,6 +246,29 @@ public class CurrentCharging extends Skill {
 			} else {
 				ActionManager.endAction(this);
 			}
+		}
+		
+		@Override
+		public void onAbort() {
+			if(isRemote) endEffects();
+		}
+		
+		@Override
+		public void onEnd() {
+			if(isRemote) endEffects();
+		}
+		
+		@SideOnly(Side.CLIENT)
+		FollowEntitySound sound;
+		
+		@SideOnly(Side.CLIENT)
+		private void startEffects() {
+			ACSounds.playClient(sound = new FollowEntitySound(player, SOUND).setLoop());
+		}	
+		
+		@SideOnly(Side.CLIENT)
+		private void endEffects() {
+			if(sound != null) sound.stop();
 		}
 	}
 

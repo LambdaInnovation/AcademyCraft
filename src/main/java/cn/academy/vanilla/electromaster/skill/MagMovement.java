@@ -22,6 +22,8 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.util.generic.MathUtils;
@@ -34,6 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class MagMovement extends Skill {
 
+	static final String SOUND = "em.move_loop";
 	private static MagMovement instance;
 
 	public MagMovement() {
@@ -154,6 +157,9 @@ public class MagMovement extends Skill {
 		private EntityArc arc;
 		
 		@SideOnly(Side.CLIENT)
+		private FollowEntitySound sound;
+		
+		@SideOnly(Side.CLIENT)
 		private void startEffect() {
 			arc = new EntityArc(player, ArcPatterns.thinContiniousArc);
 			arc.lengthFixed = false;
@@ -162,6 +168,8 @@ public class MagMovement extends Skill {
 			arc.hideWiggle = 0.6;
 			
 			player.worldObj.spawnEntityInWorld(arc);
+			
+			ACSounds.playClient(sound = new FollowEntitySound(player, SOUND).setLoop());
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -172,6 +180,7 @@ public class MagMovement extends Skill {
 		@SideOnly(Side.CLIENT)
 		private void endEffect() {
 			arc.setDead();
+			sound.stop();
 		}
 		
 		private double tryAdjust(double from, double to) {
