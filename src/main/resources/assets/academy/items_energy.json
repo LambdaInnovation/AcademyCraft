@@ -8,7 +8,7 @@
         "parent": "energy_item",
         "unlName": "ac_energy_unit",
         "maxEnergy": 10000,
-        "latency": 20
+        "bandwidth": 20
     },
     "constraint_plate": {
         "unlName": "ac_constraint_plate",

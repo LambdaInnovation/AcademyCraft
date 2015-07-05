@@ -46,12 +46,12 @@ public class IFReceiverManager implements IEnergyBlockManager {
 	}
 
 	@Override
-	public double charge(TileEntity tile, double amt, boolean ignoreLatency) {
+	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		return ((IWirelessReceiver) tile).injectEnergy(amt);
 	}
 
 	@Override
-	public double pull(TileEntity tile, double amt, boolean ignoreLatency) {
+	public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		return ((IWirelessReceiver) tile).pullEnergy(amt);
 	}
 

@@ -27,7 +27,7 @@ import cpw.mods.fml.relauncher.Side;
 public abstract class TileGeneratorBase extends TileInventory implements IWirelessGenerator {
 	
 	final double bufferSize;
-	final double transferRate;
+	final double bandwidth;
 	
 	private int updateTicker = 20;
 	
@@ -36,10 +36,10 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 	 */
 	private double energy;
 
-	public TileGeneratorBase(String _invName, int size, double _bufferSize, double _transferRate) {
+	public TileGeneratorBase(String _invName, int size, double _bufferSize, double _bandwidth) {
 		super(_invName, size);
 		bufferSize = _bufferSize;
-		transferRate = _transferRate;
+		bandwidth = _bandwidth;
 	}
 	
 	@Override
@@ -49,6 +49,8 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 			if(required > 0) {
 				energy += getGeneration(required);
 			}
+			if (energy > bufferSize)
+				energy = bufferSize;
 			
 			if(--updateTicker == 0) {
 				updateTicker = 20;
@@ -66,8 +68,8 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 	}
 
 	@Override
-	public double getLatency() {
-		return transferRate;
+	public double getBandwidth() {
+		return bandwidth;
 	}
 	
 	/**

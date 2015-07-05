@@ -24,8 +24,8 @@ public interface IWirelessGenerator extends IWirelessUser {
     public double getProvidedEnergy(double req);
     
     /**
-     * @return Max enerty transmitted each tick
+     * @return Max energy transmitted each tick
      */
-    public double getLatency();
+    public double getBandwidth();
     
 }

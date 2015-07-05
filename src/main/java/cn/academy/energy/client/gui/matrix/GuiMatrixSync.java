@@ -97,10 +97,10 @@ public class GuiMatrixSync {
 		boolean loaded = WirelessHelper.isMatrixActive(matrix);
 		tag.setBoolean("loaded", loaded);
 		int cap = matrix.getCapacity();
-		double lat = matrix.getLatency();
+		double bwidth = matrix.getBandwidth();
 		double range = matrix.getRange();
 		tag.setByte("capacity", (byte) cap);
-		tag.setInteger("latency", (int) lat);
+		tag.setInteger("bandwidth", (int) bwidth);
 		tag.setInteger("range", (int) range);
 		tag.setByte("nodes", (byte) 0);
 		

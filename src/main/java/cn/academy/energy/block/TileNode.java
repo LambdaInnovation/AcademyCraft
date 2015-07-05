@@ -84,7 +84,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     	ItemStack stack = this.getStackInSlot(0);
     	if(stack != null && itemManager.isSupported(stack)) {
     		//Charge into the node.
-    		double req = Math.min(getLatency(), getMaxEnergy() - energy);
+    		double req = Math.min(getBandwidth(), getMaxEnergy() - energy);
     		double left = itemManager.charge(stack, -req);
     		
     		chargingIn = req != -left;
@@ -100,7 +100,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     	if(stack != null && itemManager.isSupported(stack)) {
     		double cur = getEnergy();
     		if(cur > 0) {
-    			cur = Math.min(getLatency(), cur);
+    			cur = Math.min(getBandwidth(), cur);
     			double left = itemManager.charge(stack, cur);
     			
     			chargingOut = left != cur;
@@ -127,8 +127,8 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     }
 
     @Override
-    public double getLatency() {
-        return getType().latency;
+    public double getBandwidth() {
+        return getType().bandwidth;
     }
 
     @Override

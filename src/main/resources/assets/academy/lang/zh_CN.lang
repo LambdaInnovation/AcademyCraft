@@ -82,7 +82,7 @@ ac.gui.matrix.mark.waiting.desc=传输中……
 ac.gui.matrix.mark.invalid_input.desc=无效输入。
 ac.gui.matrix.mark.success.desc=操作已完成。
 ac.gui.matrix.mark.fail.desc=操作失败。
-ac.gui.matrix.latency=延时
+ac.gui.matrix.bandwidth=带宽
 ac.gui.matrix.range=范围
 ac.gui.matrix.capacity=负载
 

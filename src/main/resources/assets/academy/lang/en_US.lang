@@ -82,7 +82,7 @@ ac.gui.matrix.mark.waiting.desc=Transmitting...
 ac.gui.matrix.mark.invalid_input.desc=Invalid input value.
 ac.gui.matrix.mark.success.desc=Action successful.
 ac.gui.matrix.mark.fail.desc=Action failed.
-ac.gui.matrix.latency=Latency
+ac.gui.matrix.bandwidth=Bandwidth
 ac.gui.matrix.range=Range
 ac.gui.matrix.capacity=Capacity
 

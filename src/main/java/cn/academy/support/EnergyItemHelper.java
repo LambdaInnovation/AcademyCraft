@@ -60,10 +60,10 @@ public class EnergyItemHelper {
 		}
 	}
 	
-	public static double charge(ItemStack stack, double amt, boolean ignoreLatency) {
+	public static double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
 		for(EnergyItemManager m : supported) {
 			if(m.isSupported(stack)) {
-				return m.charge(stack, amt, ignoreLatency);
+				return m.charge(stack, amt, ignoreBandwidth);
 			}
 		}
 		return amt;
@@ -92,7 +92,7 @@ public class EnergyItemHelper {
 		/**
 		 * @return How much energy not transfered into stack(left)
 		 */
-		double charge(ItemStack stack, double amt, boolean ignoreLatency);
+		double charge(ItemStack stack, double amt, boolean ignoreBandwidth);
 		
 	}
 	

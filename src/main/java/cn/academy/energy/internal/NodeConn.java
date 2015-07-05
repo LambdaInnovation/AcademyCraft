@@ -193,7 +193,7 @@ public class NodeConn {
 			return;
 		}
 		
-		double transferLeft = iNode.getLatency();
+		double transferLeft = iNode.getBandwidth();
 		
 		{
 			Collections.shuffle(generators);
@@ -208,7 +208,7 @@ public class NodeConn {
 					} else {
 						double cur = iNode.getEnergy();
 						double amt = igen.getProvidedEnergy(Math.min(transferLeft, 
-							Math.min(igen.getLatency(), iNode.getMaxEnergy() - cur)));
+							Math.min(igen.getBandwidth(), iNode.getMaxEnergy() - cur)));
 						
 						cur += amt;
 						iNode.setEnergy(cur);
@@ -218,7 +218,7 @@ public class NodeConn {
 			}
 		}
 		
-		transferLeft = iNode.getLatency();
+		transferLeft = iNode.getBandwidth();
 		{
 			Collections.shuffle(receivers);
 			
@@ -232,7 +232,7 @@ public class NodeConn {
 					} else {
 						
 						double cur = iNode.getEnergy();
-						double give = Math.min(cur, Math.min(transferLeft, irec.getLatency()));
+						double give = Math.min(cur, Math.min(transferLeft, irec.getBandwidth()));
 						
 						cur -= give;
 						irec.injectEnergy(give);

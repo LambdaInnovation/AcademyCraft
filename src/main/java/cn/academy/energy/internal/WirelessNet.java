@@ -257,7 +257,7 @@ public class WirelessNet {
 		}
 		
 		double percent = sum / maxSum;
-		double transferLeft = imat.getLatency();
+		double transferLeft = imat.getBandwidth();
 		// Loop through and calc
 		for(VWNode vn : nodes) {
 			if(vn.isLoaded(world)) {
@@ -267,7 +267,7 @@ public class WirelessNet {
 				double targ = node.getMaxEnergy() * percent;
 				
 				double delta = targ - cur;
-				delta = Math.signum(delta) * Math.min(Math.abs(delta), Math.min(transferLeft, node.getLatency()));
+				delta = Math.signum(delta) * Math.min(Math.abs(delta), Math.min(transferLeft, node.getBandwidth()));
 				
 				if(buffer + delta > BUFFER_MAX) {
 					delta = BUFFER_MAX - buffer;
