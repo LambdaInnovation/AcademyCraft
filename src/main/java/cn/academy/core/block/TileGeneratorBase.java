@@ -49,6 +49,8 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 			if(required > 0) {
 				energy += getGeneration(required);
 			}
+			if (energy > bufferSize)
+				energy = bufferSize;
 			
 			if(--updateTicker == 0) {
 				updateTicker = 20;
