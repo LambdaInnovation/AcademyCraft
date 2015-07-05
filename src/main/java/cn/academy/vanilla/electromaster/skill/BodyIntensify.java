@@ -29,6 +29,9 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
+import cn.academy.vanilla.electromaster.client.ui.CurrentChargingHUD;
+import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect;
+import cn.liutils.api.gui.AuxGuiHandler;
 import cn.liutils.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -190,15 +193,19 @@ public class BodyIntensify extends Skill {
 		}
 		
 		// CLIENT
-		// TODO: Implement drawing
 		
 		@SideOnly(Side.CLIENT)
 		FollowEntitySound loopSound;
 		
 		@SideOnly(Side.CLIENT)
+		CurrentChargingHUD hud;
+		
+		@SideOnly(Side.CLIENT)
 		public void startEffect() {
 			if(isLocal()) {
 				ACSounds.playClient(loopSound = new FollowEntitySound(player, LOOP_SOUND).setLoop());
+				
+				AuxGuiHandler.register(hud = new CurrentChargingHUD());
 			}
 		}
 		
@@ -212,10 +219,13 @@ public class BodyIntensify extends Skill {
 			if(isLocal()) {
 				if(loopSound != null)
 					loopSound.stop();
-				 
-				if(performed) {
-					ACSounds.playAtEntity(player, ACTIVATE_SOUND, 0.5f);
-				}
+				if(hud != null)
+					hud.startBlend(performed);
+			}
+			
+			if(performed) {
+				ACSounds.playAtEntity(player, ACTIVATE_SOUND, 0.5f);
+				player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player));
 			}
 		}
 		

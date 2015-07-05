@@ -40,11 +40,13 @@ public class SubArcHandler {
 		arcs = _arcs;
 	}
 	
-	public void generateAt(Vec3 pos) {
+	public SubArc generateAt(Vec3 pos) {
 		SubArc sa = new SubArc(pos, arcs.length);
 		sa.frameRate = frameRate;
 		sa.switchRate = switchRate;
 		list.add(sa);
+		
+		return sa;
 	}
 	
 	public void tick() {

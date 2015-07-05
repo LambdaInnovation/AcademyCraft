@@ -145,7 +145,10 @@ public class EntitySurroundArc extends EntityAdvanced {
 		doGenerate();
 	}
 	
-	private void doGenerate() {
+	/**
+	 * Do the arc generation.
+	 */
+	protected void doGenerate() {
 		for(int i = 0; i < arcType.count; ++i) {
 			double yaw = rand.nextDouble() * Math.PI * 2;
 			double pitch = rand.nextDouble() * Math.PI;

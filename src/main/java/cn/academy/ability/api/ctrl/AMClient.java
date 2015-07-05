@@ -191,7 +191,7 @@ public class AMClient implements IActionManager {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onOpenAuxGui(OpenAuxGuiEvent event) {
-		if (event.gui != null)
+		if (event.gui != null && event.gui.isForeground())
 			abortPlayer();
 	}
 

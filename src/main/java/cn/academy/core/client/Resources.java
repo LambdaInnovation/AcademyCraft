@@ -32,12 +32,17 @@ import cn.liutils.util.helper.Font;
 @ForcePreloadTexture
 public class Resources {
     
+	// PUBLICLY USED RESOURCES
+	
     public static ResourceLocation
     	TEX_COIN_FRONT = res("textures/items/coin_front.png"),
     	TEX_COIN_BACK = res("textures/items/coin_back.png");
     
     public static ResourceLocation
     	TEX_EMPTY = getTexture("null");
+    
+    public static ResourceLocation
+    	ARC_SMALL[] = getEffectSeq("arcs", 10);
     
     private static Map<String, IModelCustom> createdModels = new HashMap();
     
