@@ -130,7 +130,8 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		GL11.glTranslated(-guiLeft, -guiTop, 0);
 		
 		Widget w = gui.getTopWidget(x, y);
 		if(w != null) {
@@ -154,7 +155,7 @@ public class GuiMatrix extends LIGuiContainer {
 			}
 		}
 		
-		GL11.glPushMatrix();
+		GL11.glPopMatrix();
 	}
 	
 	private void startWaiting() {

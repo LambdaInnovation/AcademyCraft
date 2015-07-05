@@ -70,7 +70,9 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		//Notice: We used a hack to get rid of MC's offset and use absolute offset.
+		GL11.glTranslated(-this.guiLeft, -this.guiTop, 0);
 		
 		 Widget widget = gui.getTopWidget(x, y);
 		 if(widget != null) {
@@ -85,7 +87,7 @@ public class GuiImagFusor extends LIGuiContainer {
 			 }
 		 }
 		 
-		 GL11.glPushMatrix();
+		 GL11.glPopMatrix();
 	}
 	
 	private void load() {

@@ -109,7 +109,8 @@ public class GuiNode extends LIGuiContainer {
     
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		GL11.glTranslated(-guiLeft, -guiTop, 0);
 		
 		Widget w = gui.getTopWidget(x, y);
 		if(w != null) {
@@ -119,7 +120,7 @@ public class GuiNode extends LIGuiContainer {
 				text = load + "/" + maxLoad;
 				break;
 			case "progress_imag":
-				text = tile.getEnergy() + "/" + tile.getMaxEnergy() + "IF";
+				text = String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy());
 				break;
 			}
 			
@@ -129,7 +130,7 @@ public class GuiNode extends LIGuiContainer {
 			}
 		}
 		
-		GL11.glPushMatrix();
+		GL11.glPopMatrix();
 	}
     
     private static String local(String name) {

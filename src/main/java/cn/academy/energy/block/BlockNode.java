@@ -70,7 +70,7 @@ public class BlockNode extends BlockContainer {
         iconTop_disabled = ir.registerIcon("academy:node_top_0");
         iconTop_enabled = ir.registerIcon("academy:node_top_1");
         sideIcon = new IIcon[5];
-        for(int i = 0; i < 4; ++i) {
+        for(int i = 0; i < 5; ++i) {
             sideIcon[i] = ir.registerIcon("academy:node_" + type.name + "_side_" + i);
         }
     }
@@ -100,7 +100,7 @@ public class BlockNode extends BlockContainer {
         if(te instanceof TileNode) {
             TileNode node = (TileNode) te;
             enabled = node.enabled;
-            pct = Math.min(4, (int)(node.getEnergy() / node.getMaxEnergy()));
+            pct = (int) Math.min(4, Math.round((4 * node.getEnergy() / node.getMaxEnergy())));
         } else {
             enabled = false;
             pct = 0;
@@ -108,6 +108,7 @@ public class BlockNode extends BlockContainer {
         if(side == 0 || side == 1) {
             return enabled ? iconTop_enabled : iconTop_disabled;
         }
+        
         
         return sideIcon[pct];
     }

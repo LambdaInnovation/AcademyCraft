@@ -12,6 +12,7 @@
  */
 package cn.academy.vanilla.electromaster.client.ui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
@@ -62,18 +63,18 @@ public class CurrentChargingHUD extends AuxGui {
 		
 		arcHandler.clear();
 		
-		if(regen) {
-//			int gen = RandUtils.rangei(10, 15);
-//			while(gen-- > 0) {
-//				double phi = RandUtils.ranged(0.6, 1);
-//				double theta = RandUtils.ranged(0, Math.PI * 2);
-//				double size = RandUtils.ranged(35, 40);
-//				
-//				SubArc2D arc = arcHandler.generateAt(phi * Math.sin(theta), phi * Math.cos(theta), size);
-//				arc.life = 25;
-//				arc.frameRate = 0.3;
-//				arc.switchRate = 0.2;
-//			}
+		if(regen && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+			int gen = RandUtils.rangei(10, 15);
+			while(gen-- > 0) {
+				double phi = RandUtils.ranged(0.6, 1);
+				double theta = RandUtils.ranged(0, Math.PI * 2);
+				double size = RandUtils.ranged(35, 40);
+				
+				SubArc2D arc = arcHandler.generateAt(phi * Math.sin(theta), phi * Math.cos(theta), size);
+				arc.life = 25;
+				arc.frameRate = 0.3;
+				arc.switchRate = 0.2;
+			}
 		}
 	}
 	
