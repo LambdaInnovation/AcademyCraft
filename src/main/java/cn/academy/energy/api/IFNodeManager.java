@@ -46,24 +46,24 @@ public class IFNodeManager implements IEnergyBlockManager {
 	}
 
 	@Override
-	public double charge(TileEntity tile, double amt, boolean ignoreLatency) {
+	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		IWirelessNode node = ((IWirelessNode)tile);
 		double max = node.getMaxEnergy() - node.getEnergy();
 		double chg = Math.min(amt, max);
-		if(!ignoreLatency)
-			chg = Math.min(node.getLatency(), chg);
+		if(!ignoreBandwidth)
+			chg = Math.min(node.getBandwidth(), chg);
 		
 		node.setEnergy(node.getEnergy() + chg);
 		return amt - chg;
 	}
 
 	@Override
-	public double pull(TileEntity tile, double amt, boolean ignoreLatency) {
+	public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		IWirelessNode node = (IWirelessNode) tile;
 		double max = node.getEnergy();
 		double pull = Math.min(max, amt);
-		if(!ignoreLatency)
-			pull = Math.min(node.getLatency(), pull);
+		if(!ignoreBandwidth)
+			pull = Math.min(node.getBandwidth(), pull);
 		
 		node.setEnergy(node.getEnergy() - pull);
 		return pull;

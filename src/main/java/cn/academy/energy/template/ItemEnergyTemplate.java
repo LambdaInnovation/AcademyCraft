@@ -39,7 +39,7 @@ public class ItemEnergyTemplate extends Item implements ImagEnergyItem, ItemLoad
 	public String name;
 	
 	public double maxEnergy;
-	public double latency;
+	public double bandwidth;
 	
 	IIcon iconEmpty, iconHalf, iconFull;
 	
@@ -71,8 +71,8 @@ public class ItemEnergyTemplate extends Item implements ImagEnergyItem, ItemLoad
 	}
 
 	@Override
-	public double getLatency() {
-		return latency;
+	public double getBandwidth() {
+		return bandwidth;
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -99,7 +99,7 @@ public class ItemEnergyTemplate extends Item implements ImagEnergyItem, ItemLoad
 				public void load(Item item, ObjectNamespace ns, String name)
 						throws Exception {
 					maxEnergy = ns.getDouble("maxEnergy");
-					latency = ns.getDouble("latency");
+					bandwidth = ns.getDouble("bandwidth");
 					
 					ItemEnergyTemplate.this.name = name;
 				}

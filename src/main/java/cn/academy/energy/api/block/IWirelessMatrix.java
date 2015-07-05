@@ -26,7 +26,7 @@ public interface IWirelessMatrix extends IWirelessTile {
     /**
      * @return How much energy allowed to balance between nodes each tick
      */
-    double getLatency();
+    double getBandwidth();
     
     /**
      * @return the max range that this matrix can reach

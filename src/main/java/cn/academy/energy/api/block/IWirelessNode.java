@@ -25,7 +25,7 @@ public interface IWirelessNode extends IWirelessTile {
     /**
      * @return How many energy that this node can transfer each tick.
      */
-    double getLatency();
+    double getBandwidth();
     
     int getCapacity();
     

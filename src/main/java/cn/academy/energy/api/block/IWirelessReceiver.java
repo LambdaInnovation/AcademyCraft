@@ -34,6 +34,6 @@ public interface IWirelessReceiver extends IWirelessUser {
     /**
      * @return How much energy this receiver can retrieve each tick.
      */
-    double getLatency();
+    double getBandwidth();
     
 }

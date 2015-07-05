@@ -70,7 +70,7 @@ public class GuiMatrix extends LIGuiContainer {
 	String ssid;
 	int nodes;
 	int capacity;
-	int latency;
+	int bandwidth;
 	int range;
 	
 	//Action
@@ -102,14 +102,14 @@ public class GuiMatrix extends LIGuiContainer {
 			
 			isLoaded = tag.getBoolean("loaded");
 			capacity = tag.getInteger("capacity");
-			latency = tag.getInteger("latency");
+			bandwidth = tag.getInteger("bandwidth");
 			range = tag.getInteger("range");
 			nodes = tag.getInteger("nodes");
 			
 			//Setup the info about matrix itself
 			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / capacity);
 			
-			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) latency / TileMatrix.MAX_CAPACITY);
+			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) bandwidth / TileMatrix.MAX_CAPACITY);
 			
 			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) range / TileMatrix.MAX_RANGE);
 			
@@ -141,7 +141,7 @@ public class GuiMatrix extends LIGuiContainer {
 				text = local("capacity") + ": " + nodes + "/" + capacity;
 				break;
 			case "progress_lat":
-				text = local("latency") + ": " + latency + "IF/t";
+				text = local("bandwidth") + ": " + bandwidth + "IF/t";
 				break;
 			case "progress_ran":
 				text = local("range") + ": " + range + "m";

@@ -38,18 +38,18 @@ public class EnergyBlockHelper {
 			}
 	}
 	
-	public static double charge(TileEntity tile, double amt, boolean ignoreLatency) {
+	public static double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		for(IEnergyBlockManager handler : handlers)
 			if(handler.isSupported(tile)) {
-				return handler.charge(tile, amt, ignoreLatency);
+				return handler.charge(tile, amt, ignoreBandwidth);
 			}
 		return amt;
 	}
 	
-	public static double pull(TileEntity tile, double amt, boolean ignoreLatency) {
+	public static double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		for(IEnergyBlockManager handler : handlers)
 			if(handler.isSupported(tile)) {
-				return handler.pull(tile, amt, ignoreLatency);
+				return handler.pull(tile, amt, ignoreBandwidth);
 			}
 		return 0;
 	}
@@ -66,12 +66,12 @@ public class EnergyBlockHelper {
 		 * Charge a specified amount of energy into the tile.
 		 * @return How much energy not charged into the tile(left)
 		 */
-		double charge(TileEntity tile, double amt, boolean ignoreLatency);
+		double charge(TileEntity tile, double amt, boolean ignoreBandwidth);
 		/**
 		 * Pull a specified amount of energy from the energy tile.
 		 * @return How much energy pulled out
 		 */
-		double pull(TileEntity tile, double amt, boolean ignoreLatency);
+		double pull(TileEntity tile, double amt, boolean ignoreBandwidth);
 		
 	}
 	

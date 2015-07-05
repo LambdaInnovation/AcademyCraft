@@ -33,14 +33,14 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 	int updateTicker = 0;
 	
 	final double maxEnergy;
-	final double latency;
+	final double bandwidth;
 	
 	public double energy;
 
-	public TileReceiverBase(String name, int invSize, double max, double lat) {
+	public TileReceiverBase(String name, int invSize, double max, double bwidth) {
 		super(name, invSize);
 		maxEnergy = max;
-		latency = lat;
+		bandwidth = bwidth;
 	}
 	
 	public void updateEntity() {
@@ -75,8 +75,8 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 	}
 
 	@Override
-	public double getLatency() {
-		return latency;
+	public double getBandwidth() {
+		return bandwidth;
 	}
 	
 	@Override

@@ -39,12 +39,12 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	
 	public static double 
 		MAX_CAPACITY, 
-		MAX_LATENCY, 
+		MAX_BANDWIDTH, 
 		MAX_RANGE;
 	
 	public static void init() {
 		MAX_CAPACITY = getCapacity(3, 3);
-		MAX_LATENCY = getLatency(3, 3);
+		MAX_BANDWIDTH = getBandwidth(3, 3);
 		MAX_RANGE = getRange(3, 3);
 	}
 
@@ -106,8 +106,8 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		return (int) getProp("capacity", N, L);
 	}
 	
-	private static double getLatency(int N, int L) {
-		return getProp("latency", N, L);
+	private static double getBandwidth(int N, int L) {
+		return getProp("bandwidth", N, L);
 	}
 	
 	private static double getRange(int N, int L) {
@@ -126,9 +126,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	}
 
 	@Override
-	public double getLatency() {
+	public double getBandwidth() {
 		int N = getPlateCount(), L = getCoreLevel();
-		return getLatency(N, L);
+		return getBandwidth(N, L);
 	}
 
 	@Override

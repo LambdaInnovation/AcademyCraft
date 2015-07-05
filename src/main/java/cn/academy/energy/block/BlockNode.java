@@ -42,12 +42,12 @@ public class BlockNode extends BlockContainer {
         STANDARD("standard", 50000, 40, 12, 10), 
         ADVANCED("advanced", 300000, 100, 19, 20);
         
-        final int maxEnergy, latency, range, capacity;
+        final int maxEnergy, bandwidth, range, capacity;
         final String name;
-        NodeType(String _name, int _maxEnergy, int _latency, int _range, int _capacity) {
+        NodeType(String _name, int _maxEnergy, int _bandwidth, int _range, int _capacity) {
             name = _name;
             maxEnergy = _maxEnergy;
-            latency = _latency;
+            bandwidth = _bandwidth;
             range = _range;
             capacity = _capacity;
         }

@@ -51,13 +51,13 @@ public final class IFItemManager implements EnergyItemManager {
     
     /**
      * @param stack
-     * @param amt Energy trying to charge into stack, can be neigative
-     * @param ignoreLatency
+     * @param amt Energy trying to charge into stack, can be negative
+     * @param ignoreBandwidth
      * @return How much energy not transfered into stack
      */
-    public double charge(ItemStack stack, double amt, boolean ignoreLatency) {
+    public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
-		double lim = ignoreLatency ? Double.MAX_VALUE : item.getLatency();
+		double lim = ignoreBandwidth ? Double.MAX_VALUE : item.getBandwidth();
 		double cur = getEnergy(stack);
 		double spare = 0.0;
 		if(amt + cur > item.getMaxEnergy()) {
