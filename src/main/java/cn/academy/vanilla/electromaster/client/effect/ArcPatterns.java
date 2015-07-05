@@ -10,9 +10,9 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.electromaster.client.renderer;
+package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cpw.mods.fml.relauncher.Side;

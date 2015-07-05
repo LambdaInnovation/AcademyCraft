@@ -27,7 +27,7 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyItemHelper;
-import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
+import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;

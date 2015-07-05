@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.electromaster.client.ui;
+package cn.academy.vanilla.electromaster.client.effect;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -19,8 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
-import cn.academy.vanilla.electromaster.client.renderer.SubArc2D;
-import cn.academy.vanilla.electromaster.client.renderer.SubArcHandler2D;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;

@@ -1,4 +1,4 @@
-package cn.academy.vanilla.electromaster.client.renderer;
+package cn.academy.vanilla.electromaster.client.effect;
 
 import java.util.Iterator;
 import java.util.LinkedList;

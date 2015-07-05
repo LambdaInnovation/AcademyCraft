@@ -29,7 +29,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
-import cn.academy.vanilla.electromaster.client.ui.CurrentChargingHUD;
+import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD;
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect;
 import cn.liutils.api.gui.AuxGuiHandler;
 import cn.liutils.util.generic.RandUtils;

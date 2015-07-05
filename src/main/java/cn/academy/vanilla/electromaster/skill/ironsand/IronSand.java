@@ -14,6 +14,9 @@ package cn.academy.vanilla.electromaster.skill.ironsand;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.SpecialSkill;
+import cn.academy.vanilla.electromaster.client.effect.IronSandParticles;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Iron sand manipulation
@@ -21,8 +24,12 @@ import cn.academy.ability.api.SpecialSkill;
  */
 public class IronSand extends SpecialSkill {
 
+	static IronSand instance;
+	
 	public IronSand() {
 		super("iron_sand", 4);
+		
+		instance = this;
 		
 		addSubSkill(new ISSword());
 		addSubSkill(new ISWhip());
@@ -37,8 +44,62 @@ public class IronSand extends SpecialSkill {
 	 */
 	@Override
 	public boolean validateExecution(EntityPlayer player) {
-		System.out.println("ValidateExecution");
 		return true;
+	}
+	
+	@Override
+	protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
+		return new IronSandAction();
+	}
+	
+	public static class IronSandAction extends SpecialSkillAction {
+		
+		public IronSandAction() {
+			super(instance, -1);
+		}
+		
+		@Override
+		protected void onSkillStart() {
+			if(isRemote)
+				startEffects();
+		}
+		
+		@Override
+		protected void onSkillTick() {
+			if(isRemote)
+				updateEffects();
+		}
+		
+		@Override
+		protected void onSkillEnd() {
+			if(isRemote)
+				endEffects();
+		}
+		
+		@Override
+		protected void onSkillAbort() {
+			if(isRemote)
+				endEffects();
+		}
+		
+		// CLIENT
+		@SideOnly(Side.CLIENT)
+		IronSandParticles particles;
+		
+		@SideOnly(Side.CLIENT)
+		private void startEffects() {
+			particles = new IronSandParticles(player);
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void updateEffects() {
+			particles.tick();
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void endEffects() {
+		}
+		
 	}
 
 }

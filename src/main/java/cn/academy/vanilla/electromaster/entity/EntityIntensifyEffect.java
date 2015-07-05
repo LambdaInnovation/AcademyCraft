@@ -13,7 +13,7 @@
 package cn.academy.vanilla.electromaster.entity;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.vanilla.electromaster.client.renderer.SubArc;
+import cn.academy.vanilla.electromaster.client.effect.SubArc;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityCallback;

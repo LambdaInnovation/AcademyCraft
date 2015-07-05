@@ -22,7 +22,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.vanilla.electromaster.client.renderer.ArcPatterns;
+import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
 import cn.liutils.util.raytrace.Raytrace;

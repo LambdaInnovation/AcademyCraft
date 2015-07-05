@@ -12,10 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +24,11 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.academy.vanilla.electromaster.client.renderer.ArcFactory;
-import cn.academy.vanilla.electromaster.client.renderer.SubArcHandler;
-import cn.academy.vanilla.electromaster.client.renderer.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
+import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
-import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 import cn.liutils.util.generic.MathUtils;
