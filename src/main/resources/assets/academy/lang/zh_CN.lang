@@ -81,7 +81,7 @@ ac.gui.matrix.mark.success.desc=操作已完成。
 ac.gui.matrix.mark.fail.desc=操作失败。
 ac.gui.matrix.latency=延时
 ac.gui.matrix.range=范围
-ac.gui.matrix.capacity=性能
+ac.gui.matrix.capacity=负载
 
 # 节点
 ac.gui.node.not_connected.desc=未连接
