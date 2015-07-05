@@ -91,6 +91,14 @@ public class WirelessHelper {
 		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(rec);
 	}
 	
+	public static boolean isReceiverLinked(IWirelessReceiver rec) {
+		return getNodeConn(rec) != null;
+	}
+	
+	public static boolean isGeneratorLinked(IWirelessGenerator gen) {
+		return getNodeConn(gen) != null;
+	}
+	
 	/**
 	 * Get a list of IWirelessNode in the range within the given position.
 	 * @param world
@@ -100,7 +108,7 @@ public class WirelessHelper {
 	 * @param range
 	 * @return
 	 */
-	public Collection<IWirelessNode> getNodesInRange(World world, double x, double y, double z, double range) {
+	public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z, double range) {
 		List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockFilter() {
 
 			@Override

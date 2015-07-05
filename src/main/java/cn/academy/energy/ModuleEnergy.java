@@ -20,12 +20,12 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.io.IOUtils;
 
-import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.InstanceEjector;
+import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.block.BlockImagProj;
+import cn.academy.energy.block.BlockInfiniteGen;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
@@ -33,8 +33,8 @@ import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
-import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegInit;
+import cn.annoreg.mc.RegItem;
 import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.template.block.ItemBlockMulti;
 
@@ -58,6 +58,9 @@ public class ModuleEnergy {
     
     @RegBlock
     public static BlockImagProj ionicFlux;
+    
+    @RegBlock
+    public static BlockInfiniteGen infiniteGenerator;
     
     @FromLoader
     public static Item energyUnit;

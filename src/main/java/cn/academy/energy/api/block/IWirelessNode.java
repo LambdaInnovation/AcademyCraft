@@ -37,6 +37,6 @@ public interface IWirelessNode extends IWirelessTile {
     /**
      * @return the user custom name of the node
      */
-    String getName();
+    String getNodeName();
     
 }
