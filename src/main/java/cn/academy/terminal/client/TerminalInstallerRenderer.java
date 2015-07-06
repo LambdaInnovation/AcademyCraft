@@ -30,7 +30,7 @@ public class TerminalInstallerRenderer extends RenderModelItem {
 		super(new ItemModelCustom(Resources.getModel("terminal_installer")), 
 				Resources.getTexture("models/terminal_installer"));
 		renderEntityItem = true;
-		renderInventory = true;
+		renderInventory = false;
 		
 		this.scale = 4.0;
 		this.equipOffset = VecUtils.vec(0.5, 0.16, -0.24);
@@ -41,9 +41,6 @@ public class TerminalInstallerRenderer extends RenderModelItem {
 		this.stdOffset.yCoord = 0.0;
 		this.entityItemScale = 1.1; 
 		this.entityItemRotation.xCoord = 15;
-		this.inventorySpin = false;
-		this.invRotation.xCoord = -90;
-		this.invRotation.yCoord = 30 + 180;
 		this.equipRotation.xCoord = 0;
 		this.equipRotation.yCoord = -15;
 		this.equipRotation.zCoord = 90;

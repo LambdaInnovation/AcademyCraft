@@ -12,15 +12,25 @@
  */
 package cn.academy.terminal.item;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
 import cn.academy.core.item.ACItem;
+import cn.academy.terminal.TerminalData;
+import cn.academy.terminal.client.TerminalInstallEffect;
 import cn.academy.terminal.client.TerminalInstallerRenderer;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.liutils.api.gui.AuxGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class ItemTerminalInstaller extends ACItem {
 	
 	@SideOnly(Side.CLIENT)
@@ -30,6 +40,34 @@ public class ItemTerminalInstaller extends ACItem {
 	public ItemTerminalInstaller() {
 		super("terminal_installer");
 		this.bFull3D = true;
+		this.maxStackSize = 1;
+	}
+	
+	@Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		TerminalData tData = TerminalData.get(player);
+		if(tData.isTerminalInstalled()) {
+			if(!world.isRemote)
+				player.addChatMessage(new ChatComponentTranslation("ac.terminal.alrdy_installed"));
+		} else {
+			if(!world.isRemote) {
+				if(!player.capabilities.isCreativeMode)
+					stack.stackSize--;
+				tData.install();
+				startInstalling();
+			}
+		}
+        return stack;
+    }
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void startInstalling() {
+		install();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private static void install() {
+		AuxGuiHandler.register(new TerminalInstallEffect());
 	}
 
 }

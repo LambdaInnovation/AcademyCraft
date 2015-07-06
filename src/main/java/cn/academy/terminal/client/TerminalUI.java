@@ -23,6 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.event.world.WorldEvent;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -37,6 +38,8 @@ import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.gui.AuxGuiHandler;
@@ -50,6 +53,7 @@ import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeAthFolD
@@ -117,6 +121,11 @@ public class TerminalUI extends AuxGui {
 
 	@Override
 	public boolean isForeground() {
+		return false;
+	}
+	
+	@Override
+	public boolean isConsistent() {
 		return false;
 	}
 
@@ -332,6 +341,7 @@ public class TerminalUI extends AuxGui {
 	}
 	
 	@RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_U)
+	@RegEventHandler(Bus.Forge)
 	public static KeyHandler keyHandler = new KeyHandler() {
 		
 		TerminalUI current;
@@ -341,7 +351,7 @@ public class TerminalUI extends AuxGui {
 			TerminalData tData = TerminalData.get(player);
 			
 			if(tData.isTerminalInstalled()) {
-				if(current != null) {
+				if(current != null || (current != null && current.isDisposed())) {
 					current.dispose();
 					current = null;
 				} else {
