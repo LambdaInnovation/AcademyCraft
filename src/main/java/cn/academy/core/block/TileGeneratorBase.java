@@ -61,7 +61,7 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 
 	@Override
 	public double getProvidedEnergy(double req) {
-		if(energy > req) req = energy;
+		if(req > energy) req = energy;
 		
 		energy -= req;
 		return req;

@@ -37,11 +37,11 @@ public class ContainerMatrix extends Container {
 	}
 	
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new Slot(tile, 0, 27, 65));
-        this.addSlotToContainer(new Slot(tile, 1, 76, 65));
-        this.addSlotToContainer(new Slot(tile, 2, 50, 6));
+        this.addSlotToContainer(new SlotPlate(tile, 0, 27, 65));
+        this.addSlotToContainer(new SlotPlate(tile, 1, 76, 65));
+        this.addSlotToContainer(new SlotPlate(tile, 2, 50, 6));
         
-        this.addSlotToContainer(new Slot(tile, 3, 50, 33));
+        this.addSlotToContainer(new SlotCore(tile, 3, 50, 33));
         
         int STEP = 18;
         
@@ -61,6 +61,31 @@ public class ContainerMatrix extends Container {
 	public boolean canInteractWith(EntityPlayer player) {
 		return player.getDistanceSq(tile.xCoord + .5, tile.yCoord + .5, tile.zCoord + .5) < 64;
 	}
+	
+    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+        ItemStack stack = null;
+        Slot slot = (Slot)this.inventorySlots.get(id);
+
+        if (slot != null && slot.getHasStack()) {
+            ItemStack stack1 = slot.getStack();
+            stack = stack1.copy();
+
+            if (id < 4) { //tileInv->playerInv
+                if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
+                    return null;
+            } else if (!this.mergeItemStack(stack1, 0, 4, false)) { //playerInv->tileInv
+                return null;
+            }
+
+            if (stack1.stackSize == 0) {
+                slot.putStack((ItemStack)null);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+
+        return stack;
+    }
 	
 	public static class SlotCore extends Slot {
 

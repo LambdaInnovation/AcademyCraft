@@ -107,13 +107,16 @@ public class TileInventory extends TileEntity implements IInventory {
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
     	super.writeToNBT(nbt);
-    	NBTTagCompound tag = nbt.getCompoundTag("inventory");
+    	NBTTagCompound tag = new NBTTagCompound();
     	for(int i = 0; i < inventory.length; ++i) {
     		if(inventory[i] != null) {
-    			NBTTagCompound tag2 = tag.getCompoundTag("" + i);
+    			NBTTagCompound tag2 = new NBTTagCompound();
     			inventory[i].writeToNBT(tag2);
+    			tag.setTag("" + i, tag2);
     		}
     	}
+    	
+    	nbt.setTag("inventory", tag);
     }
 
 	@Override

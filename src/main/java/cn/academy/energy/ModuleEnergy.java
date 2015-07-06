@@ -25,6 +25,7 @@ import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.block.BlockImagProj;
+import cn.academy.energy.block.BlockInfiniteGen;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
@@ -57,6 +58,9 @@ public class ModuleEnergy {
     
     @RegBlock
     public static BlockImagProj ionicFlux;
+    
+    @RegBlock
+    public static BlockInfiniteGen infiniteGen;
     
     @FromLoader
     public static Item energyUnit;

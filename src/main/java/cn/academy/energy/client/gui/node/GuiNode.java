@@ -86,20 +86,7 @@ public class GuiNode extends LIGuiContainer {
         create();
         
         GuiNodeSync.doQueryInfo(tile);
-        
-        List<String> dummy = new ArrayList();
-        dummy.add("aaa");
-        dummy.add("bbb");
-        dummy.add("ccc");
-        dummy.add("ddd");
-        dummy.add("eee");
-        dummy.add("fff");
-        dummy.add("ggg");
-        dummy.add("hhh");
-        dummy.add("iii");
-        dummy.add("jjj");
-        
-        receivedListSync(dummy);
+        GuiNodeSync.doQueryList(tile);
     }
     
     @Override

@@ -13,15 +13,14 @@
 package cn.academy.energy.internal;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
@@ -207,8 +206,14 @@ public class NodeConn {
 						iter.remove();
 					} else {
 						double cur = iNode.getEnergy();
-						double amt = igen.getProvidedEnergy(Math.min(transferLeft, 
-							Math.min(igen.getBandwidth(), iNode.getMaxEnergy() - cur)));
+						double required = Math.min(transferLeft, 
+							Math.min(igen.getBandwidth(), iNode.getMaxEnergy() - cur));
+						double amt = igen.getProvidedEnergy(required);
+						
+						if(amt > required) {
+							AcademyCraft.log.warn("Energy input overflow for generator " + igen);
+							amt = required;
+						}
 						
 						cur += amt;
 						iNode.setEnergy(cur);

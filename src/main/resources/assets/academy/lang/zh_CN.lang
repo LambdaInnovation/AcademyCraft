@@ -3,7 +3,7 @@
 
 # 常规
 ac.generic.energy.desc=能量
-ac.generic.load.desc=载入
+ac.generic.load.desc=负载
 
 # 创造栏
 itemGroup.AcademyCraft=AcademyCraft
@@ -13,7 +13,7 @@ item.ac_crystal_low.name=低纯度虚能水晶
 item.ac_constraint_ingot.name=缓冲金属锭
 item.ac_constraint_plate.name=缓冲金属板
 item.ac_wafer.name=晶圆
-item.ac_silbarn.name=硅锭
+item.ac_silbarn.name=扩散性支援半导体
 
 item.ac_memory.name=数据储存器
 item.ac_brain_part.name=脑波分析模块

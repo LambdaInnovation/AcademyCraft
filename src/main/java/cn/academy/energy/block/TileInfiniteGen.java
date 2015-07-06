@@ -29,7 +29,7 @@ public class TileInfiniteGen extends TileGeneratorBase {
 
 	@Override
 	public double getGeneration(double required) {
-		return 500;
+		return Math.min(required, 500);
 	}
 
 }
