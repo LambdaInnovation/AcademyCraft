@@ -12,27 +12,28 @@
  */
 package cn.academy.terminal;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.core.registry.RegDataPart;
 import cn.academy.core.util.DataPart;
 import cn.academy.core.util.PlayerData;
+import cn.academy.terminal.event.TerminalInstalledEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
+
+import com.google.common.collect.ImmutableList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,6 +45,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TerminalData extends DataPart {
 	
 	private Set<Integer> installedList = new HashSet();
+	private boolean isInstalled;
 	
 	public TerminalData() {
 		int size = AppRegistry.enumeration().size();
@@ -51,6 +53,21 @@ public class TerminalData extends DataPart {
 	
 	public List<Integer> getInstalledApps() {
 		return ImmutableList.copyOf(installedList);
+	}
+	
+	public boolean isTerminalInstalled() {
+		return isInstalled;
+	}
+	
+	public void install() {
+		checkSide(false);
+		if(!isInstalled) {
+			isInstalled = true;
+			sync();
+			
+			MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getPlayer()));
+			informInstallAtClient(getPlayer());
+		}
 	}
 	
 	/**
@@ -89,7 +106,7 @@ public class TerminalData extends DataPart {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
-		// System.out.println("FromNBT Called in  " + isRemote());
+		isInstalled = tag.getBoolean("i");
 		
 		int[] arr = tag.getIntArray("learned");
 		if(arr.length == 0) {
@@ -120,6 +137,8 @@ public class TerminalData extends DataPart {
 		
 		ret.setIntArray("learned", arr);
 		
+		ret.setBoolean("i", isInstalled);
+		
 		return ret;
 	}
 	
@@ -136,6 +155,11 @@ public class TerminalData extends DataPart {
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void installSync(@Data Integer appid) {
 		doInstall(appid);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void informInstallAtClient(@Target EntityPlayer player) {
+		MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(player));
 	}
 	
 	private void doInstall(Integer appid) {

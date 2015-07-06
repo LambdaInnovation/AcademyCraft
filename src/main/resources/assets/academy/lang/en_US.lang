@@ -30,6 +30,7 @@ item.ac_energy_unit.name=Energy Unit
 
 item.ac_coin.name=Coin
 
+item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer
 
 # Block
@@ -58,6 +59,7 @@ ac.knowledge.anatomy.name=Anatomist
 ac.gui.preset_edit.tag=Preset #
 
 # Data Terminal
+ac.terminal.notinstalled=You have not yet installed the Data Terminal.
 ac.gui.terminal.appcount=%d Applications
 
 # Apps

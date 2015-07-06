@@ -18,6 +18,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
@@ -38,6 +39,7 @@ import cn.academy.terminal.TerminalData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.gui.AuxGui;
+import cn.liutils.api.gui.AuxGuiHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
@@ -331,17 +333,26 @@ public class TerminalUI extends AuxGui {
 	
 	@RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_U)
 	public static KeyHandler keyHandler = new KeyHandler() {
+		
 		TerminalUI current;
 		
 		public void onKeyDown() {
-			if(current != null) {
-				current.dispose();
-				current = null;
+			EntityPlayer player = getPlayer();
+			TerminalData tData = TerminalData.get(player);
+			
+			if(tData.isTerminalInstalled()) {
+				if(current != null) {
+					current.dispose();
+					current = null;
+				} else {
+					current = new TerminalUI();
+					AuxGuiHandler.register(current);
+				}
 			} else {
-				current = new TerminalUI();
-				register(current);
+				player.addChatComponentMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
 			}
 		}
+		
 	};
 	
 	private class AppHandler extends Component {

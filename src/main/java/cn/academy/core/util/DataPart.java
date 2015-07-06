@@ -121,6 +121,12 @@ public abstract class DataPart {
 	
 	public abstract NBTTagCompound toNBT();
 	
+	protected void checkSide(boolean isRemote) {
+		if(isRemote ^ isRemote()) {
+			throw new IllegalStateException("Wrong side: " + isRemote());
+		}
+	}
+	
 	public static class Serializer implements InstanceSerializer<DataPart> {
 		
 		InstanceSerializer entitySer = SerializationManager.INSTANCE.getInstanceSerializer(Entity.class);
