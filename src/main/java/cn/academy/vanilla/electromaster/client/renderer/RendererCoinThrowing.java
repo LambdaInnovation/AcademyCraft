@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class RendererCoinThrowing extends Render {
 		EntityPlayer player = etc.player;
 		boolean fp = player == Minecraft.getMinecraft().thePlayer 
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
-		double dt = Minecraft.getSystemTime();
+		double dt = GameTimer.getTime();
 		if(etc.player == null)
 			return;
 		//If synced and in client computer, do not render

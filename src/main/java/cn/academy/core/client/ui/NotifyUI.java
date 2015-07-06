@@ -12,7 +12,6 @@
  */
 package cn.academy.core.client.ui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +28,7 @@ import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -74,7 +74,7 @@ public class NotifyUI extends Widget {
 			public void handleEvent(Widget w, FrameEvent event) {
 				GL11.glDisable(GL11.GL_ALPHA_TEST);
 				if(lastNotify != null) {
-					long dt = Minecraft.getSystemTime() - lastReceiveTime;
+					long dt = GameTimer.getTime() - lastReceiveTime;
 					GL11.glEnable(GL11.GL_BLEND);
 					
 					if(dt < BLEND_IN_TIME) {
@@ -146,7 +146,7 @@ public class NotifyUI extends Widget {
 	
 	private void notify(INotification n) {
 		lastNotify = n;
-		lastReceiveTime = Minecraft.getSystemTime();
+		lastReceiveTime = GameTimer.getTime();
 	}
 	
 	@SubscribeEvent

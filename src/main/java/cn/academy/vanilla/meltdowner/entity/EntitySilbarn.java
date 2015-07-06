@@ -12,7 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +38,7 @@ import cn.liutils.render.particle.Particle;
 import cn.liutils.render.particle.ParticleFactory;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.mc.EntitySelectors;
 import cpw.mods.fml.relauncher.Side;
@@ -125,7 +125,7 @@ public class EntitySilbarn extends EntityAdvanced {
 	@SideOnly(Side.CLIENT)
 	public EntitySilbarn(World world) {
 		super(world);
-		this.createTime = Minecraft.getSystemTime();
+		this.createTime = GameTimer.getTime();
 		
 		this.regEventHandler(new CollideHandler() {
 			@Override
@@ -217,7 +217,7 @@ public class EntitySilbarn extends EntityAdvanced {
 			RenderUtils.loadTexture(tex);
 			double scale = .05;
 			GL11.glScaled(scale, scale, scale);
-			GL11.glRotated(0.03 * (Minecraft.getSystemTime() - sibarn.createTime), 
+			GL11.glRotated(0.03 * (GameTimer.getTime() - sibarn.createTime), 
 					sibarn.axis.xCoord, sibarn.axis.yCoord, sibarn.axis.zCoord);
 			GL11.glRotated(-var1.rotationYaw, 0, 1, 0);
 			GL11.glRotated(90, 1, 0, 0);

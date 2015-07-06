@@ -28,6 +28,7 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD
@@ -94,7 +95,7 @@ public class RenderImagProjLiquid extends TileEntitySpecialRenderer {
 	}
 	
 	private void drawLayer(int layer, double height, double vx, double vz, double density) {
-		long time = Minecraft.getSystemTime();
+		long time = GameTimer.getTime();
 		double du = (time * 0.001 * vx) % 1;
 		double dv = (time * 0.001 * vz) % 1;
 		

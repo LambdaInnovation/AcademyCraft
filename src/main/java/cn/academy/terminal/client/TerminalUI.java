@@ -23,7 +23,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.event.world.WorldEvent;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -51,9 +50,9 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeAthFolD
@@ -145,7 +144,7 @@ public class TerminalUI extends AuxGui {
 		
 		//Draw
         Minecraft mc = Minecraft.getMinecraft();
-        long time = Minecraft.getSystemTime();
+        long time = GameTimer.getTime();
         if(lastFrameTime == 0) lastFrameTime = time;
         long dt = time - lastFrameTime;
         
@@ -266,12 +265,12 @@ public class TerminalUI extends AuxGui {
     	root.getWidget("icon_loading").regEventHandlerAtBegin(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(Minecraft.getSystemTime() / 200.0f));
+				DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
 			}
     	});
     	
     	root.getWidget("text_loading").regEventHandlerAtBegin(FrameEvent.class, (Widget w, FrameEvent event) -> {
-    		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(Minecraft.getSystemTime() / 200.0f));
+    		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
     	});
     }
     

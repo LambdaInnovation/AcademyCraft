@@ -12,7 +12,6 @@
  */
 package cn.academy.energy.client.render.block;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
@@ -23,6 +22,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.energy.block.TileMatrix;
 import cn.liutils.template.block.RenderBlockMulti;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD
@@ -58,7 +58,7 @@ public class RenderMatrix extends RenderBlockMulti {
 	
 	private void drawShields(TileMatrix mat) {
 		int shieldCount = 3;
-		long time = Minecraft.getMinecraft().getSystemTime();
+		long time = GameTimer.getTime();
 		double dtheta = 360.0 / shieldCount, phase = time / 20.0;
 		double htPhaseOff = 40.0;
 		for(int i = 0; i < shieldCount; ++i) {

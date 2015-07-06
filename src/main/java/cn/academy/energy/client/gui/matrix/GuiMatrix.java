@@ -40,6 +40,7 @@ import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.Color;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -174,7 +175,7 @@ public class GuiMatrix extends LIGuiContainer {
 		if(waitingForResult) {
 			waitingForResult = false;
 			this.result = result;
-			resultReceivedTime = Minecraft.getSystemTime();
+			resultReceivedTime = GameTimer.getAbsTime();
 			checkCallback.updateCheckState();
 			
 			if(needSync) {
@@ -330,7 +331,7 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		@GuiCallback("mark_check1")
 		public void updateAlpha(Widget w, FrameEvent event) {
-			double alpha = 0.7 * 0.5 * (1 + Math.sin(Minecraft.getSystemTime() / 600.0)) + 0.3;
+			double alpha = 0.7 * 0.5 * (1 + Math.sin(GameTimer.getAbsTime() / 600.0)) + 0.3;
 			DrawTexture.get(markBorder).color.a = alpha;
 		}
 		

@@ -12,7 +12,6 @@
  */
 package cn.academy.crafting.client.render.item;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -25,6 +24,7 @@ import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD
@@ -89,7 +89,7 @@ public class RendererMatterUnit implements IItemRenderer {
 			GL11.glDepthMask(false);
 			GL11.glDepthFunc(GL11.GL_EQUAL);
 			RenderUtils.loadTexture(item.getMaterial(stack).texture);
-			double du = -(Minecraft.getSystemTime() / 100000.0) % 1.0, dv = (Minecraft.getSystemTime() / 10000.0) % 1.0;
+			double du = -(GameTimer.getAbsTime() / 100000.0) % 1.0, dv = (GameTimer.getAbsTime() / 10000.0) % 1.0;
 			HudUtils.rawRect(0, 0, du, dv, 16, 16, 1, 1);
 			GL11.glDepthFunc(GL11.GL_LEQUAL);
 			GL11.glDepthMask(true);

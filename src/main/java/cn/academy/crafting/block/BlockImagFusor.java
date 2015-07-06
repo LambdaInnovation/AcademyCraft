@@ -12,9 +12,7 @@
  */
 package cn.academy.crafting.block;
 
-import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +24,7 @@ import cn.academy.crafting.client.gui.imagfusor.GuiImagFusor;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -82,7 +81,7 @@ public class BlockImagFusor extends ACBlockContainer {
     	case 4:
     	case 5:
     		if(!working) return side_idle;
-    		return side_working[(int) ((Minecraft.getSystemTime() / 400) % 4)];
+    		return side_working[(int) ((GameTimer.getTime() / 400) % 4)];
     	default:
     		throw new RuntimeException("WTF");
     	}
