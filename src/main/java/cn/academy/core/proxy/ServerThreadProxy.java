@@ -14,12 +14,4 @@ public class ServerThreadProxy extends CommonThreadProxy {
         return null;
     }
 
-	@Override
-	public PlayerData regPlayerData(EntityPlayer player) {
-		PlayerData data = new PlayerData.Server(player);
-		player.registerExtendedProperties(DATA_IDENTIFIER, data);
-		data.loadNBTData(player.getEntityData());
-		return data;
-	}
-
 }

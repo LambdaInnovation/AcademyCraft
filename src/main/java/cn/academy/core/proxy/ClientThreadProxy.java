@@ -14,12 +14,4 @@ public class ClientThreadProxy extends CommonThreadProxy {
     public EntityPlayer getThePlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
-
-	@Override
-	public PlayerData regPlayerData(EntityPlayer player) {
-		PlayerData data = new PlayerData.Client(player);
-		player.registerExtendedProperties(DATA_IDENTIFIER, data);
-		return data;
-	}
-
 }

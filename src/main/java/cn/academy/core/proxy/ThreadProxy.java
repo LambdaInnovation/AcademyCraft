@@ -12,8 +12,6 @@ import cn.liutils.util.helper.PlayerData;
  *
  */
 public interface ThreadProxy {
-    
-	PlayerData getPlayerData(EntityPlayer player);
 	
 	/**
 	 * Return a string value that is guaranteed to be different between 
@@ -23,4 +21,5 @@ public interface ThreadProxy {
 	String getSideId();
 	
 	EntityPlayer getThePlayer();
+	
 }
