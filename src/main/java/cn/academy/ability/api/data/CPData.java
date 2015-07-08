@@ -19,15 +19,15 @@ import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
+import cn.liutils.registry.RegDataPart;
 import cn.liutils.ripple.Path;
 import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

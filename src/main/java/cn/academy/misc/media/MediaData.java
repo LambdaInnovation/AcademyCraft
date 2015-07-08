@@ -18,10 +18,10 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
+import cn.liutils.registry.RegDataPart;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 
 /**
  * @author WeAthFolD

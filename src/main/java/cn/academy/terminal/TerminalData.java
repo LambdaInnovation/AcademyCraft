@@ -20,9 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.academy.terminal.event.TerminalInstalledEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
@@ -31,6 +28,9 @@ import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.liutils.registry.RegDataPart;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 
 import com.google.common.collect.ImmutableList;
 

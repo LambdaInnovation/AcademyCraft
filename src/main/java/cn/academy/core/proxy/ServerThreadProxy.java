@@ -1,6 +1,6 @@
 package cn.academy.core.proxy;
 
-import cn.academy.core.util.PlayerData;
+import cn.liutils.util.helper.PlayerData;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class ServerThreadProxy extends CommonThreadProxy {

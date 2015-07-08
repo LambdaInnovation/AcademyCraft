@@ -27,13 +27,13 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.liutils.registry.RegDataPart;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.relauncher.Side;
 
 /**

@@ -24,10 +24,10 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
+import cn.liutils.registry.RegDataPart;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 
 /**
  * @author WeAthFolD

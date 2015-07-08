@@ -2,7 +2,7 @@
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.core.util.PlayerData;
+import cn.liutils.util.helper.PlayerData;
 
 public class ClientThreadProxy extends CommonThreadProxy {
 

@@ -10,12 +10,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import cn.academy.core.registry.RegDataPart;
-import cn.academy.core.util.DataPart;
-import cn.academy.core.util.PlayerData;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.s11n.DataSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
+import cn.liutils.registry.RegDataPart;
+import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
 
 /**
  * The data of player's location teleport skill.
