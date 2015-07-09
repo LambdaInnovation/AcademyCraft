@@ -28,14 +28,13 @@ import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-import cn.academy.ability.api.ctrl.ClientHandler;
-import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.core.client.ui.ACHud;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
@@ -52,6 +51,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  * @author WeAthFolD
  */
 @Registrant
+@RegInit
 @ForcePreloadTexture
 public class CPBar extends Widget {
 	
@@ -62,6 +62,10 @@ public class CPBar extends Widget {
 	static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
 	
 	static IConsumptionHintProvider chProvider;
+	
+	public static void init() {
+		ACHud.instance.addElement(new CPBar(), () -> true);
+	}
 	
 	public static void setHintProvider(IConsumptionHintProvider provider) {
 		chProvider = provider;
@@ -99,7 +103,7 @@ public class CPBar extends Widget {
 	float bufferedCP;
 	float bufferedOverload;
 
-	public CPBar() {
+	private CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.2f;
 		transform.alignWidth = WidthAlign.RIGHT;
@@ -128,8 +132,11 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
-				long time = GameTimer.getTime();
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				CPData cpData = CPData.get(player);
 				
+				// Calculate alpha
+				long time = GameTimer.getTime();
 				if(time - lastDrawTime > 300L) {
 					showTime = time;
 				}
@@ -140,50 +147,53 @@ public class CPBar extends Widget {
 				final long BLENDIN_TIME = 200L;
 				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME : 1.0f;
 				
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
-				CPData cpData = CPData.get(player);
 				
-				float poverload = cpData.getOverload() / cpData.getMaxOverload();
-				bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
-				
-				float pcp = cpData.getCP() / cpData.getMaxCP();
-				bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
-				
-				if(bufferedOverload < 1.0) {
-					drawNormal(bufferedOverload);
-				} else {
-					if(supportARB) {
-						drawOverload(bufferedOverload);
-					} else {
-						drawOverloadLegacy(bufferedOverload);
+				if(cpData.isActivated()) {
+					/* Draw CPBar */ {
+						float poverload = cpData.getOverload() / cpData.getMaxOverload();
+						bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
+						
+						float pcp = cpData.getCP() / cpData.getMaxCP();
+						bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
+						
+						if(bufferedOverload < 1.0) {
+							drawNormal(bufferedOverload);
+						} else {
+							if(supportARB) {
+								drawOverload(bufferedOverload);
+							} else {
+								drawOverloadLegacy(bufferedOverload);
+							}
+						}
+						
+						if(chProvider != null && !chProvider.alive())
+							chProvider = null;
+						
+						float estmCons = chProvider == null ? 0 : chProvider.getConsumption();
+						
+						if(estmCons != 0) {
+							float ncp = Math.max(0, cpData.getCP() - estmCons);
+							
+							float oldAlpha = mAlpha;
+							mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
+							
+							drawCPBar(pcp);
+							
+							mAlpha = oldAlpha;
+							
+							drawCPBar(ncp / cpData.getMaxCP());
+						} else {
+							drawCPBar(bufferedCP);
+						}
+					}
+					
+					/* Draw Preset Hint */ {
+						final long preset_wait = 2000L;
+						if(time - presetChangeTime < preset_wait)
+							drawPresetHint((double)(time - presetChangeTime) / preset_wait,
+								time - lastPresetTime);
 					}
 				}
-				
-				if(chProvider != null && !chProvider.alive())
-					chProvider = null;
-				
-				float estmCons = chProvider == null ? 0 : chProvider.getConsumption();
-				
-				if(estmCons != 0) {
-					float ncp = Math.max(0, cpData.getCP() - estmCons);
-					
-					float oldAlpha = mAlpha;
-					mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
-					
-					drawCPBar(pcp);
-					
-					mAlpha = oldAlpha;
-					
-					drawCPBar(ncp / cpData.getMaxCP());
-				} else {
-					drawCPBar(bufferedCP);
-				}
-				
-				final long preset_wait = 2000L;
-				if(time - presetChangeTime < preset_wait)
-					drawPresetHint((double)(time - presetChangeTime) / preset_wait,
-						time - lastPresetTime);
 				
 				GL11.glColor4d(1, 1, 1, 1);
 			}

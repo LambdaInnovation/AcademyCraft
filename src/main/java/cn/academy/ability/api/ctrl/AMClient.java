@@ -45,7 +45,7 @@ public class AMClient implements IActionManager {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
-		System.out.println("AMC#INT_START");
+		//System.out.println("AMC#INT_START");
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
@@ -63,14 +63,14 @@ public class AMClient implements IActionManager {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void endAction(SyncAction action) {
-		System.out.println("AMC#INT_END: " + action.uuid);
+		//System.out.println("AMC#INT_END: " + action.uuid);
 		ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void abortAction(SyncAction action) {
-		System.out.println("AMC#INT_ABORT: " + action.uuid);
+		//System.out.println("AMC#INT_ABORT: " + action.uuid);
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 	
@@ -89,7 +89,7 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	void startFromServer(String className, NBTTagCompound tag) {
-		System.out.println("AMC#NET_START");
+		//System.out.println("AMC#NET_START");
 		SyncAction action = null;
 		try {
 			action = (SyncAction) Class.forName(className).newInstance();
@@ -106,7 +106,7 @@ public class AMClient implements IActionManager {
 
 	@SideOnly(Side.CLIENT)
 	void updateFromServer(UUID uuid, NBTTagCompound tag) {
-		System.out.println("AMC#NET_UPDATE");
+		//System.out.println("AMC#NET_UPDATE");
 		SyncAction action = map.get(uuid);
 		if (action != null) {
 			if (action.state.equals(State.VALIDATED)) {
@@ -119,7 +119,7 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	void terminateFromServer(UUID uuid, NBTTagCompound tag) {
-		System.out.println("AMC#NET_TERMINATE");
+		//System.out.println("AMC#NET_TERMINATE");
 		SyncAction action = map.get(uuid);
 		if (action != null) {
 			if (action.state.equals(State.VALIDATED)) {
@@ -175,7 +175,7 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	private void abortPlayer() {
-		System.out.println("AMC#PRI_APLAYER");
+		//System.out.println("AMC#PRI_APLAYER");
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (player != null && !set.isEmpty())
 			ActionManager.abortPlayerAtServer(player);

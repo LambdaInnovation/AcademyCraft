@@ -13,6 +13,7 @@
 package cn.academy.ability.client.ui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
@@ -20,9 +21,13 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.Resources;
+import cn.academy.core.client.ui.ACHud;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Transform.HeightAlign;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
@@ -36,10 +41,16 @@ import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyManager;
 
 /**
- * TODO: I guess we should draw overload in the area of skill icons as well
  * @author WeAthFolD
  */
+@Registrant
+@RegInit
 public class KeyHintUI extends Widget {
+	
+	public static void init() {
+		ACHud.instance.addElement(new KeyHintUI(), 
+			() -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated());
+	}
 	
 	ResourceLocation 
 		TEX_BACK = tex("back"),
@@ -55,7 +66,7 @@ public class KeyHintUI extends Widget {
 	long lastFrameTime, showTime;
 	double mAlpha;
 	
-	public KeyHintUI() {
+	private KeyHintUI() {
 		transform.alignWidth = WidthAlign.RIGHT;
 		transform.alignHeight = HeightAlign.CENTER;
 		transform.x = 0;
@@ -70,6 +81,8 @@ public class KeyHintUI extends Widget {
 
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				
 				PresetData pData = PresetData.get(Minecraft.getMinecraft().thePlayer);
 				
 				long time = GameTimer.getTime();

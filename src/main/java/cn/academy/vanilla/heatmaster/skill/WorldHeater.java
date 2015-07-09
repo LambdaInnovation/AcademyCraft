@@ -31,6 +31,7 @@ public class WorldHeater extends Skill
 	{
 		heatmap.put(Block.getBlockFromName("sand"),Block.getBlockFromName("glass"));
 		//TODO add more
+		// Suggestion: Maybe you can access minecraft's melting data? Weathfold
 	}
 	public WorldHeater()
 	{

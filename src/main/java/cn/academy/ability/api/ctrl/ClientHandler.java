@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
@@ -18,8 +19,10 @@ import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
+import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.core.util.ControlOverrider;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -32,10 +35,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Key event listener for skill events. <br>
- * TODO: We might wanna setup a Activate Key callback to do something else in certain envs.
- * 	e.g. When in special ability mode and want to cancel the skill,
- * 		or when using charge skills and want to cancel the charging...
+ * Key event listener for skill events. <br>、、
  * @author acaly, WeAthFolD
  */
 @SideOnly(Side.CLIENT)
@@ -285,5 +285,31 @@ public final class ClientHandler {
     	}
     	
     }
+    
+	@RegACKeyHandler(name = "Edit Preset", defaultKey = Keyboard.KEY_N)
+	public static KeyHandler keyEditPreset = new KeyHandler() {
+		@Override
+		public void onKeyDown() {
+			PresetData data = PresetData.get(Minecraft.getMinecraft().thePlayer);
+			if(data.isActive()) {
+				PresetEditUI.guiHandler.openClientGui();
+			}
+		}
+	};
+	
+	@RegACKeyHandler(name = "Switch Preset", defaultKey = Keyboard.KEY_C)
+	public static KeyHandler keySwitchPreset = new KeyHandler() {
+		@Override
+		public void onKeyDown() {
+			PresetData data = PresetData.get(getPlayer());
+			CPData cpData = CPData.get(getPlayer());
+			
+			if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
+				int next = (data.getCurrentID() + 1) % 4;
+				data.switchCurrent(next);
+				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));
+			}
+		}
+	};
     
 }

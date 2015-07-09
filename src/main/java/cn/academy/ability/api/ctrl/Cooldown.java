@@ -41,25 +41,36 @@ public class Cooldown {
 	 * The current cooldown data map. Direct manipulation should be avoided, this
 	 *  is opened just for visit of reading (like UI drawings)
 	 */
-	public static final Map<Controllable, Integer> cooldown = new HashMap();
+	public static final Map<Controllable, CooldownData> cooldown = new HashMap();
 	
     public static void setCooldown(Controllable c, int cd) {
-    	cooldown.put(c, cd);
+    	if(isInCooldown(c)) {
+    		CooldownData data = cooldown.get(c);
+    		if(data.max < cd) data.max = cd;
+    		data.current = Math.max(cd, data.current);
+    	} else {
+    		cooldown.put(c, new CooldownData(cd));
+    	}
     }
     
     public static boolean isInCooldown(Controllable c) {
     	return cooldown.containsKey(c);
     }
     
+    public static CooldownData getCooldownData(Controllable c) {
+    	return cooldown.get(c);
+    }
+    
     private static void updateCooldown() {
-    	Iterator< Entry<Controllable, Integer> > iter = cooldown.entrySet().iterator();
+    	Iterator< Entry<Controllable, CooldownData> > iter = cooldown.entrySet().iterator();
     	
     	while(iter.hasNext()) {
-    		Entry< Controllable, Integer > entry = iter.next();
-    		if(entry.getValue() == 0) {
+    		Entry< Controllable, CooldownData > entry = iter.next();
+    		CooldownData data = entry.getValue();
+    		if(data.current <= 0) {
     			iter.remove();
     		} else {
-    			entry.setValue(entry.getValue() - 1);
+    			data.current -= 1;
     		}
     	}
     }
@@ -70,6 +81,29 @@ public class Cooldown {
     	if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
 			updateCooldown();
 		}
+    }
+    
+    public static class CooldownData {
+    	private int current;
+    	private int max;
+    	
+    	public CooldownData(int time) {
+    		current = max = time;
+    	}
+    	
+    	/**
+    	 * @return How many ticks until the cooldown is end
+    	 */
+    	public int getTickLeft() {
+    		return current;
+    	}
+    	
+    	/**
+    	 * @return the cooldown time specified at the start of the cooldown progress.
+    	 */
+    	public int getMaxTick() {
+    		return max;
+    	}
     }
 
 }
