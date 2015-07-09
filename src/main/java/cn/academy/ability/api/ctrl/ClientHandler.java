@@ -5,288 +5,147 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.ctrl.SkillInstance.State;
+import cn.academy.ability.api.ctrl.ClientController.AbilityKey;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
-import cn.academy.ability.api.data.PresetData.Preset;
-import cn.academy.ability.api.event.AbilityActivateEvent;
-import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
-import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.academy.core.util.ControlOverrider;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Key event listener for skill events. <br>、、
- * @author acaly, WeAthFolD
+ * Misc key event listener for skill events.
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegInit
-@RegEventHandler()
+@RegEventHandler
 public final class ClientHandler {
 	
-	public static final int MAX_KEYS = PresetData.MAX_KEYS, STATIC_KEYS = 4;
+	// Name constants for looking up keys in ACKeyHandler.
+	public static final String
+		KEY_SWITCH_PRESET = "switch_preset",
+		KEY_EDIT_PRESET = "edit_preset",
+		KEY_ACTIVATE_ABILITY = "ability_activation";
 	
-	private static AbilityKey[] handlers = new AbilityKey[MAX_KEYS];
+	private interface IActivateHandler {
+		
+		boolean handles(EntityPlayer player);
+		void onKeyDown(EntityPlayer player);
+		String getHint();
+		
+	}
 	
-	private static final int[] defaultMapping = new int[] { 
-		KeyManager.MOUSE_LEFT, 
-		KeyManager.MOUSE_RIGHT, 
-		Keyboard.KEY_R, 
-		Keyboard.KEY_F 
-	};
+	private static List<IActivateHandler> activateHandlers = new ArrayList();
+	static {
+		activateHandlers.add(new IActivateHandler() {
+			@Override
+			public boolean handles(EntityPlayer player) {
+				AbilityKey mutexHandler = ClientController.getMutexHandler();
+				return mutexHandler != null;
+			}
+
+			@Override
+			public void onKeyDown(EntityPlayer player) {
+				ClientController.getMutexHandler().onKeyAbort();
+			}
+
+			@Override
+			public String getHint() {
+				return "endskill";
+			}
+		});
+		
+		activateHandlers.add(new IActivateHandler() {
+			@Override
+			public boolean handles(EntityPlayer player) {
+				return PresetData.get(player).isOverriding();
+			}
+
+			@Override
+			public void onKeyDown(EntityPlayer player) {
+				PresetData.get(player).endOverride();
+			}
+
+			@Override
+			public String getHint() {
+				return "endspecial";
+			}
+		});
+		
+		activateHandlers.add(new IActivateHandler() {
+			@Override
+			public boolean handles(EntityPlayer player) {
+				return true;
+			}
+
+			@Override
+			public void onKeyDown(EntityPlayer player) {
+				CPData cpData = CPData.get(player);
+				if(cpData.isActivated()) {
+					System.out.println("deactivate");
+					cpData.deactivate();
+				} else {
+					System.out.println("activate");
+					cpData.activate();
+				}
+			}
+
+			@Override
+			public String getHint() {
+				return "deactivate";
+			}
+		});
+	}
 	
-	static final int ACTIVATE_KEY_MAPPING = Keyboard.KEY_V;
+	public static String getActivateKeyHint() {
+		String kname = KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(keyActivate));
+		return "[" + kname + "]: " + StatCollector.translateToLocal(
+			"ac.activate_key." + getActivateHandler().getHint() + ".desc");
+	}
 	
-	public static int getKeyMapping(int kid) {
-		if(kid < STATIC_KEYS) {
-			return ModuleCoreClient.keyManager.getKeyID(handlers[kid]);
-		} else {
-			return ModuleCoreClient.dynKeyManager.getKeyID(handlers[kid]);
+	private static IActivateHandler getActivateHandler() {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		for(IActivateHandler h : activateHandlers) {
+			if(h.handles(player))
+				return h;
 		}
-	}
-	
-	/**
-	 * Remaps a Special Key.
-	 */
-	public static void remap(int id, int keyID) {
-		if(id >= 4)
-			throw new IllegalStateException("id overflow");
-		ModuleCoreClient.dynKeyManager.resetBindingKey("ability_" + (id + 4), keyID);
+		throw new RuntimeException();
 	}
     
-    public static void init() {
-    	
-    	for(int i = 0; i < STATIC_KEYS; ++i) {
-    		ModuleCoreClient.keyManager.addKeyHandler("ability_" + i, defaultMapping[i], handlers[i] = new AbilityKey(i));
-    	}
-    	
-    	for(int i = STATIC_KEYS; i < MAX_KEYS; ++i) {
-    		ModuleCoreClient.dynKeyManager.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
-    	}
-    	
-    	ModuleCoreClient.keyManager.addKeyHandler("ability_activate", ACTIVATE_KEY_MAPPING, new ActivateKey());
-        
-    }
-    
-    private static boolean hasMutexInstance() {
-    	return getMutexInstance() != null;
-    }
-    
-    public static SkillInstance getMutexInstance() {
-    	for(AbilityKey key : handlers) {
-    		if(key.instance != null && key.instance.isMutex)
-    			return key.instance;
-    	}
-    	return null;
-    }
-    
-    private static AbilityKey getMutexHandler() {
-    	for(AbilityKey key : handlers) {
-    		if(key.instance != null && key.instance.isMutex)
-    			return key;
-    	}
-    	return null;
-    }
-    
     /**
-     * Stores KEYID in case the key mapping is editted.
-     */
-    private Integer[] lastOverrides;
-    private boolean overrideInit;
-    
-    @SubscribeEvent
-    public void changePreset(PresetSwitchEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
-    }
-    
-    @SubscribeEvent
-    public void editPreset(PresetUpdateEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
-    }
-    
-    @SubscribeEvent
-    public void activate(AbilityActivateEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
-    }
-    
-    @SubscribeEvent
-    public void deactivate(AbilityDeactivateEvent event) {
-    	System.out.println("AbilityDeactivate");
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
-    }
-    
-    private void rebuildOverrides() {
-    	EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-    	//if(player == null)
-    	//	return;
-    	
-    	PresetData pdata = PresetData.get(player);
-    	CPData cpData = CPData.get(player);
-    	
-    	if(lastOverrides != null) {
-    		for(int i : lastOverrides)
-    			ControlOverrider.removeOverride(i);
-    	}
-    	
-    	if(cpData.isActivated()) {
-	    	Preset preset = pdata.getCurrentPreset();
-	    	if(preset != null) {
-	    		List<Integer> list = new ArrayList();
-	    		
-		    	for(int i = 0; i < MAX_KEYS; ++i) {
-		    		if(preset.hasMapping(i)) {
-		    			int mapping = getKeyMapping(i);
-		    			
-		    			list.add(mapping);
-		    			ControlOverrider.override(mapping);
-		    		}
-		    	}
-		    	
-		    	lastOverrides = list.toArray(new Integer[] {});
-    	}
-    	}
-    }
-    
-    private static class AbilityKey extends KeyHandler {
-    	
-    	final int internalID;
-    	
-    	SkillInstance instance;
-    	
-    	public AbilityKey(int id) {
-    		internalID = id;
-    	}
-    	
-    	@Override
-    	public void onKeyDown() {
-    		if(instance != null) {
-    			instance.onAbort();
-    			instance = null;
-    		}
-    		
-    		if(CPData.get(getPlayer()).isActivated()) {
-	    		instance = locate();
-	    		if(instance != null) {
-	    			instance.ctrlStarted();
-	    		}
-    		}
-    	}
-    	
-    	@Override
-    	public void onKeyTick() {
-    		if(instance != null) {
-    			if(instance.state == State.ENDED) {
-    				instance.ctrlEnded();
-    				instance = null;
-    			} else if(instance.state == State.ABORTED) {
-    				instance.ctrlAborted();
-    				instance = null;
-    			} else {
-    				instance.onTick();
-    			}
-    		}
-    	}
-    	
-    	@Override
-    	public void onKeyUp() {
-    		if(instance != null) {
-    			instance.ctrlEnded();
-    			instance = null;
-    		}
-    	}
-    	
-    	@Override
-    	public void onKeyAbort() {
-    		if(instance != null) {
-    			instance.ctrlAborted();
-    			instance = null;
-    		}
-    	}
-    	
-    	private SkillInstance locate() {
-    		PresetData pdata = PresetData.get(getPlayer());
-    		if(!pdata.isActive())
-    			return null;
-    		
-    		Controllable cc = pdata.getCurrentPreset().getControllable(internalID);
-    		if(Cooldown.isInCooldown(cc) || cc == null) return null;
-    		
-    		SkillInstance instance = cc.createSkillInstance(getPlayer());
-    		if(instance != null && instance.isMutex && hasMutexInstance())
-    			instance = null;
-    		
-    		if(instance == null) {
-    			AcademyCraft.log.warn("NULL SkillInstance for " + cc);
-    		} else
-    			instance.controllable = cc;
-    		
-    		return instance;
-    	}
-    	
-    }
-    
-    /**
-     * The key to activate and deactivate the ability, might have other use in certain circumstances,
+     * The key to activate and deactivate the ability, might have other uses in certain circumstances,
      *  e.g. quit charging when using ability.
      */
-    private static class ActivateKey extends KeyHandler {
+    @RegACKeyHandler(name = KEY_ACTIVATE_ABILITY, defaultKey = Keyboard.KEY_V)
+    public static KeyHandler keyActivate = new KeyHandler() {
     	
     	@Override
     	public void onKeyDown() {
     		EntityPlayer player = getPlayer();
     		AbilityData aData = AbilityData.get(player);
-    		CPData cpData = CPData.get(player);
-    		PresetData pData = PresetData.get(player);
     		
     		if(aData.isLearned()) {
-    			AbilityKey mutexHandler = getMutexHandler();
-    			
-    			if(mutexHandler != null) {
-    				// Abort the mutex skill
-    				mutexHandler.onKeyAbort();
-    			} else if(pData.isOverriding()) {
-    				// End preset override
-    				pData.endOverride();
-    			}  else {
-    				// Activate or deactivate the skill
-	    			if(cpData.isActivated()) {
-	    				System.out.println("Deactivated.");
-	    				ControlSyncs.deactivateAtServer(cpData);
-	    			} else {
-	    				System.out.println("Activated.");
-	    				ControlSyncs.activateAtServer(cpData);
-	    			}
-    			}
+    			System.out.println("www " + getActivateHandler().getHint());
+    			getActivateHandler().onKeyDown(player);
     		}
     	}
     	
-    }
+    };
     
-	@RegACKeyHandler(name = "Edit Preset", defaultKey = Keyboard.KEY_N)
+	@RegACKeyHandler(name = KEY_EDIT_PRESET, defaultKey = Keyboard.KEY_N)
 	public static KeyHandler keyEditPreset = new KeyHandler() {
 		@Override
 		public void onKeyDown() {
@@ -297,7 +156,7 @@ public final class ClientHandler {
 		}
 	};
 	
-	@RegACKeyHandler(name = "Switch Preset", defaultKey = Keyboard.KEY_C)
+	@RegACKeyHandler(name = KEY_SWITCH_PRESET, defaultKey = Keyboard.KEY_C)
 	public static KeyHandler keySwitchPreset = new KeyHandler() {
 		@Override
 		public void onKeyDown() {

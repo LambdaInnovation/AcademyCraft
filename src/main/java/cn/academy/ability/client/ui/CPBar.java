@@ -28,6 +28,7 @@ import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
@@ -193,6 +194,8 @@ public class CPBar extends Widget {
 							drawPresetHint((double)(time - presetChangeTime) / preset_wait,
 								time - lastPresetTime);
 					}
+					
+					drawActivateKeyHint();
 				}
 				
 				GL11.glColor4d(1, 1, 1, 1);
@@ -337,6 +340,8 @@ public class CPBar extends Widget {
 		GL11.glCullFace(GL11.GL_BACK);
 	}
 	
+	
+	
 	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160);
 	final Color temp = new Color();
 	
@@ -376,6 +381,13 @@ public class CPBar extends Widget {
 			x += step;
 		}
 		
+	}
+	
+	private void drawActivateKeyHint() {
+		final double x0 = 850, y0 = 140;
+		String str = ClientHandler.getActivateKeyHint();
+		
+		Font.font.draw(str, x0, y0, 50, 0xffffffff, Align.RIGHT);
 	}
 	
 	private void color4d(double r, double g, double b, double a) {

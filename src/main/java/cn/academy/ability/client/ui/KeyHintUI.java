@@ -20,7 +20,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.ctrl.ClientController;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
@@ -104,7 +104,7 @@ public class KeyHintUI extends Widget {
 						if(c != null) {
 							GL11.glPushMatrix();
 							GL11.glTranslated(-200, curY, 0);
-							drawSingle(ClientHandler.getKeyMapping(i), c);
+							drawSingle(ClientController.getKeyMapping(i), c);
 							GL11.glPopMatrix();
 							curY += yStep;
 						}

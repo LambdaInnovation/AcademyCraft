@@ -22,6 +22,9 @@ import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.ripple.Path;
@@ -29,6 +32,7 @@ import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * CP but more than CP. CPData stores rather dynamic part of player ability data, 
@@ -122,28 +126,34 @@ public class CPData extends DataPart {
 	}
 	
 	public void activate() {
+		if(isRemote()) {
+			activateAtServer();
+			return;
+		}
+		
 		if(AbilityData.get(getPlayer()).isLearned() && !activated) {
 			activated = true;
 			
-			if(!isRemote()) {
-				System.out.println("Activated at server.");
-				MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getPlayer()));
-				sync();
-			}
+			System.out.println("Activated at server.");
+			MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getPlayer()));
+			sync();
 		} else {
 			AcademyCraft.log.warn("Trying to activate ability when player doesn't have one");
 		}
 	}
 	
 	public void deactivate() {
+		if(isRemote()) {
+			deactivateAtServer();
+			return;
+		}
+		
 		if(activated) {
 			activated = false;
 			
-			if(!isRemote()) {
-				System.out.println("Deactivated at server.");
-				MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getPlayer()));
-				sync();
-			}
+			System.out.println("Deactivated at server.");
+			MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getPlayer()));
+			sync();
 		}
 	}
 	
@@ -335,6 +345,18 @@ public class CPData extends DataPart {
 	
 	private static Path path(String name) {
 		return new Path("ac.ability.cp." + name);
+	}
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	private void activateAtServer() {
+		System.out.println("ActivateAtServer called");
+		activate();
+	}
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	private void deactivateAtServer() {
+		System.out.println("DeactivateAtServer called");
+		deactivate();
 	}
 	
 	@RegEventHandler(Bus.Forge)

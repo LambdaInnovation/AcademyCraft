@@ -5,6 +5,10 @@
 ac.generic.energy.desc=Energy
 ac.generic.load.desc=Load
 
+ac.activate_key.deactivate.desc=Deactivate Ability
+ac.activate_key.endspecial.desc=End Special Skill Mode
+ac.activate_key.endskill.desc=Abort Skill
+
 # CreativeTab
 itemGroup.AcademyCraft=AcademyCraft
 

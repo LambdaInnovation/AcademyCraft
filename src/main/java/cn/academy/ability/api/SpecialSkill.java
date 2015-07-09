@@ -18,7 +18,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.ctrl.ClientController;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
@@ -241,7 +241,7 @@ public abstract class SpecialSkill extends Skill {
 						throw new RuntimeException("There can't be more than 4 remap SubSkills.");
 					}
 					
-					ClientHandler.remap(nRemap - 1, ss.getRemappedKey());
+					ClientController.remap(nRemap - 1, ss.getRemappedKey());
 					preset.data[4 + (nRemap - 1)] = (byte) ss.getControlID();
 				} else {
 					if(++nNormal > 4) {
