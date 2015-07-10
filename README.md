@@ -4,7 +4,7 @@
 
 Welcome to the repository of AcademyCraft!
 
-AcademyCraft is a Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of the mod comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but is not limited of the background.
+AcademyCraft is a Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of the mod comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
 AcademyCraft is licensed under the [GPL license](http://www.gnu.org/licenses/gpl.html "gpl license")
 
