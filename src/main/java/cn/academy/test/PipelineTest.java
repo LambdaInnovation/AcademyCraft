@@ -24,7 +24,8 @@ public class PipelineTest {
 	public static KeyHandler key = new KeyHandler() {
 		@Override
 		public void onKeyDown() {
-			System.out.println(pipeline.pipeFloat("val1", 233, true));
+			System.out.println("val1 = " + pipeline.pipeFloat("val1", 233, true));
+			System.out.println("ns.val2 = " + pipeline.pipeFloat("ns.val2", 30, true));
 		}
 	};
 	
@@ -33,6 +34,11 @@ public class PipelineTest {
 		@SubscribePipeline("val1")
 		public float mulx2(float val, boolean aaa) {
 			return val * 2 * (aaa ? 1.5f : 2f);
+		}
+		
+		@SubscribePipeline("ns.?")
+		public float mulx3(float val, boolean aaa) {
+			return val * 3;
 		}
 		
 	}

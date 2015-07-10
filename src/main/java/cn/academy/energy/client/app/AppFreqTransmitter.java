@@ -16,6 +16,7 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
+import cn.liutils.api.gui.AuxGuiHandler;
 
 /**
  * @author WeAthFolD
@@ -36,6 +37,7 @@ public class AppFreqTransmitter extends App {
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
 			public void onStart() {
+				AuxGuiHandler.register(new FreqTransmitterUI());
 				this.getTerminal().dispose();
 			}
 		};

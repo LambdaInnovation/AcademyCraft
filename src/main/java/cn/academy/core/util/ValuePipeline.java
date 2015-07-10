@@ -17,34 +17,124 @@ import cn.academy.core.AcademyCraft;
  * You can register any Object to the ValuePipeline and use @SubscribePipeline
  * to specify pipeline subscriber methods. Those methods will be called (in no particular order)
  *  when you pipe values into this ValuePipeline. They will modify the values and you will
- *  get the modified output.
- *  
+ *  get the modified output. <br>
+ * 
+ * The key must be specified acording the following rule: <br>
+ * 	<code>[ns1].[ns2]. ... . [key]</code> <br>
+ * each keyword in '[' and ']' must only consists of alphabetic letters or '_' or '-' or numbers.
+ * 
+ * And by which the Listener can use wildcard matching on keys. 
+ * this allows them to perform operations on more than one key. <br>
+ * 
+ * You are expected to register all the listeners before 
+ * any value is piped so we can cache for efficiency.
+ * 
  * @see SubscribePipeline
  * @author WeAthFolD
  */
 public class ValuePipeline {
 	
+	/*
+	 * Current supported wildcard(s):
+	 * 
+	 * ? -- one of any keyword. 
+	 * 	e.g. "electro_master.?.consumption" matches "electro_master.arcgen.consumption", "electro_master.railgun.consumption" and so on.
+	 */
+	
 	private enum Type { INT, FLOAT, DOUBLE };
 	
-	Map< String, List<SubscriberVisitor> > visitors = new HashMap();
+	List<SubscriberVisitor> visitors = new ArrayList();
+	Map< String, List<SubscriberVisitor> > cachedVisitors = new HashMap();
+	
+	private interface RuleNode {
+		boolean accepts(String keyword);
+	}
+	
+	private class NodeKeyword implements RuleNode {
+		final String kwd;
+		
+		public NodeKeyword(String _kwd) {
+			checkKeyword(_kwd);
+			kwd = _kwd;
+		}
 
-	/**
-	 * Register an PipelineListener into the pipeline.
-	 */
+		@Override
+		public boolean accepts(String keyword) {
+			return keyword.equals(kwd);
+		}
+	}
+	
+	private class NodeAny implements RuleNode {
+
+		@Override
+		public boolean accepts(String keyword) {
+			return true;
+		}
+		
+	}
+	
+	private class Rule {
+		
+		List<RuleNode> rules = new ArrayList();
+		
+		public Rule(String str) {
+			// Parse the str in the ctor
+			String[] strs = split(str);
+			for(String s : strs) {
+				if(s.equals("?")) {
+					rules.add(new NodeAny());
+				} else {
+					rules.add(new NodeKeyword(s));
+				}
+			}
+		}
+		
+		public boolean matches(String[] input) {
+			if(rules.size() != input.length)
+				return false;
+			for(int i = 0; i < input.length; ++i) {
+				if(!rules.get(i).accepts(input[i]))
+					return false;
+			}
+			return true;
+		}
+	}
+	
+	private void checkKeyword(String kwd) {
+		for(int i = 0; i < kwd.length(); ++i) {
+			char ch = kwd.charAt(i);
+			if(!Character.isAlphabetic(ch) && 
+				!Character.isDigit(ch) && ch 
+				!= '-'  && ch != '_')
+				throw new RuntimeException("Invalid keyword " + kwd + ": '" + ch + "' is not a valid character");
+		}
+	}
+	
 	public void register(Object listener) {
 		for(Method m : listener.getClass().getMethods()) {
 			SubscribePipeline anno = m.getAnnotation(SubscribePipeline.class);
 			if(anno != null) {
-				String key = anno.value();
-				List<SubscriberVisitor> list = visitors.get(key);
-				if(list == null) {
-					list = new ArrayList();
-					visitors.put(key, list);
-				}
-				
-				list.add(new SubscriberVisitor(m, listener));
+				visitors.add(new SubscriberVisitor(m, listener, new Rule(anno.value())));
 			}
 		}
+	}
+	
+	private String[] split(String str) {
+		List<String> ret = new ArrayList();
+		
+		int last = 0;
+		for(int i = 0; i < str.length(); ++i) {
+			char ch = str.charAt(i);
+			if(ch == '.') {
+				if(i == last) {
+					throw new RuntimeException("Invalid pattern");
+				}
+				ret.add(str.substring(last, i));
+				last = i + 1;
+			}
+		}
+		
+		return ret.toArray(new String[ret.size()]);
 	}
 	
 	/**
@@ -72,8 +162,21 @@ public class ValuePipeline {
 	}
 	
 	private Object pipe(String key, Object value, Object ...pars) {
-		List<SubscriberVisitor> list = visitors.get(key);
-		if(list == null)
+		List<SubscriberVisitor> list = cachedVisitors.get(key);
+		if(list == null) { // build the cache
+			cachedVisitors.put(key, list = new ArrayList());
+			
+			String[] kwds = split(key);
+			for(String s : kwds) 
+				checkKeyword(s);
+			
+			for(SubscriberVisitor sv : visitors) {
+				if(sv.rule.matches(kwds))
+					list.add(sv);
+			}
+		}
+		
+		if(list.size() == 0)
 			return value;
 		
 		Object[] args = buildParArr(value, pars);
@@ -96,10 +199,12 @@ public class ValuePipeline {
 		
 		final Method theMethod;
 		final Object object;
+		final Rule rule;
 		
-		public SubscriberVisitor(Method aMethod, Object _object) {
+		public SubscriberVisitor(Method aMethod, Object _object, Rule _rule) {
 			theMethod = aMethod;
 			object = _object;
+			rule = _rule;
 			
 			// Check the signature
 			if(aMethod.getParameterCount() == 0)
