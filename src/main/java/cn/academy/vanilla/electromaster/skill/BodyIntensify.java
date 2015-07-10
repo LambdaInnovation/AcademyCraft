@@ -72,14 +72,6 @@ public class BodyIntensify extends Skill {
 	
 	// CT: ChargeTime
 	
-	private static float getConsumption(AbilityData data) {
-		return instance.callFloatWithExp("consumption", data);
-	}
-	
-	private static float getOverload(AbilityData data) {
-		return instance.callFloatWithExp("overload", data);
-	}
-	
 	private static int getCooldown(AbilityData data) {
 		return instance.callIntWithExp("cooldown", data);
 	}
@@ -116,9 +108,9 @@ public class BodyIntensify extends Skill {
 		public void onStart() {
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
-			consumption = getConsumption(aData);
+			consumption = instance.getConsumption(aData);
 			
-			cpData.perform(getOverload(aData), 0);
+			cpData.perform(instance.getOverload(aData), 0);
 			
 			if(isRemote) 
 				startEffect();

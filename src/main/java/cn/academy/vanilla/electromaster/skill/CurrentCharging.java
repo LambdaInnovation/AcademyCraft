@@ -75,14 +75,6 @@ public class CurrentCharging extends Skill {
 		return call("speed", data);
 	}
 	
-	public static float getConsumption(AbilityData data) {
-		return call("consumption", data);
-	}
-	
-	public static float getOverload(AbilityData data) {
-		return call("overload", data);
-	}
-	
 	public static float getExpIncr(AbilityData data, boolean effective) {
 		return call("exp_incr_" + (effective ? "effective" : "ineffective"), data);
 	}
@@ -106,7 +98,7 @@ public class CurrentCharging extends Skill {
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
 			
-			cpData.perform(getOverload(aData), 0);
+			cpData.perform(instance.getOverload(aData), 0);
 			
 			if(isRemote)
 				startEffects();
@@ -136,7 +128,7 @@ public class CurrentCharging extends Skill {
 				good = false;
 			}
 			
-			cpData.perform(0, getConsumption(aData));
+			cpData.perform(0, instance.getConsumption(aData));
 			aData.addSkillExp(instance, getExpIncr(aData, good));
 			
 			if(isRemote) {
@@ -237,7 +229,7 @@ public class CurrentCharging extends Skill {
 		public void onTick() {
 			ItemStack stack = player.getCurrentEquippedItem();
 			if(stack != null) {
-				float cp = getConsumption(aData);
+				float cp = instance.getConsumption(aData);
 				float amt = getChargingSpeed(aData);
 				if(EnergyItemHelper.isSupported(stack))
 					EnergyItemHelper.charge(stack, amt, false);

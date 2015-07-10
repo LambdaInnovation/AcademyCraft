@@ -35,6 +35,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class MagMovement extends Skill {
+	
+	final static double ACCEL = 0.08d;
 
 	static final String SOUND = "em.move_loop";
 	private static MagMovement instance;
@@ -44,20 +46,16 @@ public class MagMovement extends Skill {
 		instance = this;
 	}
 	
-	private static float getConsumption(AbilityData data) {
-		return 15;
-	}
-	
-	private static float getOverload(AbilityData data) {
-		return 1;
-	}
-	
 	private static double getMaxDistance(AbilityData data) {
-		return 20;
+		return 25;
 	}
 	
 	private static double getVelocity(AbilityData data) {
 		return 1;
+	}
+	
+	private static float getExpIncr(double distance) {
+		return instance.getFunc("exp_incr").callFloat(distance);
 	}
 	
 	private static Target toTarget(MovingObjectPosition pos) {
@@ -83,11 +81,11 @@ public class MagMovement extends Skill {
 		return null;
 	}
 	
-	final static double ACCEL = 0.08d;
-	
 	public static class MovementAction extends SyncAction {
 		
 		double mox, moy, moz;
+		
+		double sx, sy, sz;
 		
 		Target target;
 		
@@ -102,7 +100,13 @@ public class MagMovement extends Skill {
 		
 		@Override
 		public void onStart() {
-			if(isRemote) startEffect();
+			if(isRemote) {
+				startEffect();
+			} else {
+				sx = player.posX;
+				sy = player.posY;
+				sz = player.posZ;
+			}
 		}
 		
 		@Override
@@ -138,7 +142,8 @@ public class MagMovement extends Skill {
 				updateEffect();
 			}
 			
-			if((target != null && !target.alive()) || !cpData.perform(getOverload(aData), getConsumption(aData)))
+			if((target != null && !target.alive()) || !cpData.perform(
+					instance.getOverload(aData), instance.getConsumption(aData)))
 				ActionManager.abortAction(this);
 		}
 		
@@ -149,7 +154,13 @@ public class MagMovement extends Skill {
 		
 		@Override
 		public void onEnd() {
-			if(isRemote) endEffect();
+			if(isRemote) {
+				endEffect();
+			} else {
+				double traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ);
+				AbilityData aData = AbilityData.get(player);
+				aData.addSkillExp(instance, getExpIncr(traveledDistance));
+			}
 		}
 		
 		@SideOnly(Side.CLIENT)

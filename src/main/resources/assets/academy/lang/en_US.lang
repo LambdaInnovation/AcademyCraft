@@ -74,6 +74,7 @@ ac.app.skill_tree.name=Skill Tree
 ac.app.knowledge_record.name=Life Record
 ac.app.settings.name=Settings
 ac.app.media_player.name=Media Player
+ac.app.freq_transmitter.name=Frequency Transmitter
 
 # Knowledge UI
 ac.knowledge.acquired=Acquired Knowledge

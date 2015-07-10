@@ -39,5 +39,19 @@ ac {
 		  cooldown(exp) { lerp(45, 30, exp) }
 		  overload(exp) { lerp(200, 120, exp) }
 		}
+		
+		mine_detect { # 矿物探测
+		  consumption(exp) { lerp(1800, 1400, exp) }
+		  overload(exp) { lerp(200, 180, exp) }
+		  cooldown(exp) { lerp(900, 400, exp) }
+		  range(exp) { lerp(15, 30, exp) } # 可视距离
+		}
+		
+		mag_movement { # 电磁牵引
+		  consumption(exp) { lerp(15, 10, exp) } # per tick
+		  overload(exp) { lerp(3, 2, exp) } # per tick
+		  exp_incr(distance) { distance * 0.00015 }
+		}
+		
 	}
 }

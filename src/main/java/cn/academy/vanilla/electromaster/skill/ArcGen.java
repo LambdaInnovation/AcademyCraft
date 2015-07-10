@@ -12,9 +12,16 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
@@ -25,6 +32,8 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
+import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.mc.BlockFilters;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,24 +60,22 @@ public class ArcGen extends Skill {
 		return instance.getFunc("damage").callFloat(data.getSkillExp(instance));
 	}
 	
-	private static float getOverload(AbilityData data) {
-		return instance.pipeFloat("overload", 
-			instance.getFunc("overload")
-			.callFloat(data.getSkillExp(instance)));
-	}
-	
-	private static float getConsumption(AbilityData data) {
-		return instance.pipeFloat("cp", 
-			instance.getFunc("consumption")
-			.callFloat(data.getSkillExp(instance)));
-	}
-	
 	private static double getIgniteProb(AbilityData data) {
+		//if(true) return 1.0;
 		return instance.getFunc("p_ignite").callFloat(data.getSkillExp(instance));
 	}
 	
 	private static float getExpIncr(AbilityData data, boolean effectiveHit) {
 		return instance.getFunc("exp_incr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
+	}
+	
+	private static double getFishProb(AbilityData data) {
+		//if(true) return 1.0;
+		return data.getSkillExp(instance) > 0.5f ? 0.1 : 0;
+	}
+	
+	private static boolean canStunEnemy(AbilityData data) {
+		return data.getSkillExp(instance) >= 1.0f;
 	}
 	
 	public static class ArcGenAction extends SyncActionInstant {
@@ -78,19 +85,42 @@ public class ArcGen extends Skill {
 			AbilityData aData = AbilityData.get(player);
 			CPData cpData = CPData.get(player);
 			
-			return cpData.perform(getOverload(aData), getConsumption(aData));
+			return cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 		}
 
 		@Override
 		public void execute() {
 			AbilityData aData = AbilityData.get(player);
+			World world = player.worldObj;
 			
 			if(!isRemote) {
 				// Perform ray trace
-				MovingObjectPosition result = Raytrace.traceLiving(player, 20);
+				MovingObjectPosition result = Raytrace.traceLiving(player, 20, null, BlockFilters.filNothing);
 
-				if(result != null && result.entityHit != null) {
-					result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
+				if(result != null) {
+					if(result.typeOfHit == MovingObjectType.ENTITY) {
+						result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
+					} else { //BLOCK
+						int hx = result.blockX, hy = result.blockY, hz = result.blockZ;
+						Block block = player.worldObj.getBlock(hx, hy, hz);
+						if(block == Blocks.water) {
+							if(RandUtils.ranged(0, 1) < getFishProb(aData)) {
+								world.spawnEntityInWorld(new EntityItem(
+									world,
+									result.hitVec.xCoord,
+									result.hitVec.yCoord,
+									result.hitVec.zCoord,
+									new ItemStack(Items.fish)));
+							}
+						} else {
+							System.out.println("Hah " + getIgniteProb(aData));
+							if(RandUtils.ranged(0, 1) < getIgniteProb(aData)) {
+								if(world.getBlock(hx, hy + 1, hz) == Blocks.air) {
+									world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03);
+								}
+							}
+						}
+					}
 				}
 			} else {
 				spawnEffects();

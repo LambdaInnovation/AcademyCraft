@@ -221,13 +221,19 @@ public abstract class CommandAIMBase extends ACCommand {
 		}
 		
 		case "level": {
-			int lv = Integer.valueOf(pars[1]);
-			if(lv > 0 && lv <= 5) {
-				aData.setLevel(lv);
-				sendChat(ics, locSuccessful());
+			
+			if(pars.length == 1) {
+				sendChat(ics, "" + aData.getLevel());
 			} else {
-				sendChat(ics, locInvalid());
+				int lv = Integer.valueOf(pars[1]);
+				if(lv > 0 && lv <= 5) {
+					aData.setLevel(lv);
+					sendChat(ics, locSuccessful());
+				} else {
+					sendChat(ics, locInvalid());
+				}
 			}
+			
 			return;
 		}
 		

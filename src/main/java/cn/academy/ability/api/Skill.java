@@ -198,7 +198,7 @@ public abstract class Skill extends Controllable {
 	}
 	
 	/**
-	 * @return The minimul developer type that this skill will appear on
+	 * @return The minimum developer type that this skill will appear on
 	 */
 	public DeveloperType getMinimumDeveloperType() {
 		if(level <= 1) // Level 1 and 2
@@ -249,6 +249,15 @@ public abstract class Skill extends Controllable {
     
     protected int pipeInt(String key, int value, Object ...params) {
     	return AcademyCraft.pipeline.pipeInt(getFullName() + "." + key, value, params);
+    }
+    
+    // Subclass sandbox
+    protected float getConsumption(AbilityData data) {
+    	return pipeFloat("cp", callFloatWithExp("consumption", data), data.getPlayer());
+    }
+    
+    protected float getOverload(AbilityData data) {
+    	return pipeFloat("overload", callFloatWithExp("overload", data), data.getPlayer());
     }
     
 }

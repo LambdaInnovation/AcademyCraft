@@ -72,14 +72,6 @@ public class RayBarrage extends Skill {
 		return 8.0f;
 	}
 	
-	private static float getConsumption(AbilityData data) {
-		return 10.0f;
-	}
-	
-	private static float getOverload(AbilityData data) {
-		return 10.0f;
-	}
-	
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
 		return new SkillInstanceInstant().addExecution(new BarrageAction());
@@ -101,7 +93,7 @@ public class RayBarrage extends Skill {
 				silbarn = (EntitySilbarn) pos.entityHit;
 			}
 			
-			return cData.perform(getOverload(aData), getConsumption(aData));
+			return cData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 		}
 		
 		public void readNBTFinal(NBTTagCompound tag) {

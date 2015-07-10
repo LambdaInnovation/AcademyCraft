@@ -70,23 +70,15 @@ public class MineDetect extends Skill {
 	}
 	
 	public static float getRange(AbilityData data) {
-		return 20;
+		return instance.callFloatWithExp("range", data);
 	}
 	
 	public static boolean isAdvanced(AbilityData data) {
-		return true;
-	}
-	
-	public static float getCP(AbilityData data) {
-		return 100f;
-	}
-	
-	public static float getOverload(AbilityData data) {
-		return 10f;
+		return data.getSkillExp(instance) > 0.5f;
 	}
 	
 	public static int getCooldown(AbilityData data) {
-		return 100;
+		return instance.callIntWithExp("cooldown", data);
 	}
 	
 	@Override
@@ -100,16 +92,17 @@ public class MineDetect extends Skill {
 		public boolean validate() {
 			AbilityData aData = AbilityData.get(player);
 			CPData cpData = CPData.get(player);
-			return cpData.perform(getOverload(aData), getCP(aData));
+			return cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 		}
 
 		@Override
 		public void execute() {
 			AbilityData aData = AbilityData.get(player);
 			
-			if(isRemote) {
+			if(isLocal())
 				spawnEffects(aData);
-			} else {
+			
+			if(!isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.blindness.id, TIME));
 			}
 		}
@@ -118,7 +111,7 @@ public class MineDetect extends Skill {
 		private void spawnEffects(AbilityData aData) {
 			player.worldObj.spawnEntityInWorld(
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
-			ACSounds.playAtEntity(player, "em.mineview", 0.5f);
+			ACSounds.playAtEntity(player, "em.minedetect", 0.5f);
 			
 			Cooldown.setCooldown(instance, getCooldown(aData));
 		}
@@ -274,11 +267,10 @@ public class MineDetect extends Skill {
 			GL11.glPushMatrix(); {
 				RenderUtils.loadTexture(texture);
 				GL11.glTranslated(x + .05, y + .05, z + .05);
-				Color color = colors[me.level];
+				Color color = colors[Math.min(colors.length - 1, me.level)];
 				color.a = alpha;
 				
 				material.color.from(color);
-				System.out.println(material.color);
 				
 				mesh.draw(material);
 			} GL11.glPopMatrix();
