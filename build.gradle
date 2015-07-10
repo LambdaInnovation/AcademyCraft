@@ -30,10 +30,15 @@ buildscript {
     }
     dependencies {
         classpath 'cn.li:ForgeMaven:1.0'
+		classpath 'me.tatarka:gradle-retrolambda:3.1.0'
     }
 }
 
 apply plugin: 'cn.li.forgemaven'
+apply plugin: 'me.tatarka.retrolambda'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.7
 
 forgemaven {
     name = "AcademyCraft"
@@ -109,7 +114,6 @@ repositories {
 
 dependencies {
     //dependencies needed in compilation
-    modCompile 'net.industrial-craft:industrialcraft-2:2.1.484-experimental:dev'
     modCompile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
     modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
 }
