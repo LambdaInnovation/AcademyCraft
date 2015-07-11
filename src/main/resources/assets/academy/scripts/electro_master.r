@@ -4,11 +4,16 @@
 
 ac {
 	electro_master {
-		arc_gen { # 电弧激发
-		  damage(exp) { lerp(3, 7, exp) } # 伤害
-		  consumption(exp) { lerp(60, 90, exp) } # CP消耗
-		  overload(exp) { lerp(15, 10, exp) } # 过载
-		  p_ignite(exp) { lerp(0, 0.6, exp) } # 点燃概率
+	   # 电弧激发
+		arc_gen { 
+		  # 伤害
+		  damage(exp) { lerp(3, 7, exp) } 
+		  # CP消耗
+		  consumption(exp) { lerp(60, 90, exp) } 
+		  # 过载
+		  overload(exp) { lerp(15, 10, exp) } 
+		  # 点燃概率
+		  p_ignite(exp) { lerp(0, 0.6, exp) } 
 		  
 		  # 有效攻击时增加的熟练度
 		  exp_incr_effective(exp) { 
@@ -20,8 +25,10 @@ ac {
 		  }
 		}
 		
-		charging { # 电流回充
-		  speed(exp) { lerp(5, 15, exp) } # 充能速度，IF/tick
+		# 电流回充
+		charging { 
+		  # 充能速度，IF/tick
+		  speed(exp) { lerp(5, 15, exp) } 
 		  consumption(exp) { lerp(3, 7, exp) }
 		  overload(exp) { lerp(65, 48, exp) }
 		  
@@ -29,28 +36,43 @@ ac {
 		  exp_incr_ineffective(exp) { lerp(3, 7, exp) * 0.0003 }
 		}
 		
-		body_intensify { # 生物电强化, ct=蓄力时间 (range: [10, 40])
-		  probability(ct) { (ct - 10.0) / 18.0 } # 总概率
-		  time(exp, ct) { floor(4 * lerp(1.5, 2.5, exp) * range_double(1, 2) * ct) } # 每个buff持续时间
-		  level(exp, ct) { floor( lerp(0.5, 1, exp) * (ct / 18.0) ) } # buff等级
-		  hunger_time(ct) { ct * 5 / 4 } # 饥饿buff时间
+		# 生物电强化, ct=蓄力时间 (range: [10, 40])
+		body_intensify { 
+		  # 总概率
+		  probability(ct) { (ct - 10.0) / 18.0 } 
+		  # 每个buff持续时间
+		  time(exp, ct) { floor(4 * lerp(1.5, 2.5, exp) * range_double(1, 2) * ct) } 
+		  # buff等级
+		  level(exp, ct) { floor( lerp(0.5, 1, exp) * (ct / 18.0) ) } 
+		  # 饥饿buff时间
+		  hunger_time(ct) { ct * 5 / 4 } 
 		  
 		  consumption(exp) { lerp(20, 15, exp) }
 		  cooldown(exp) { lerp(45, 30, exp) }
 		  overload(exp) { lerp(200, 120, exp) }
 		}
 		
-		mine_detect { # 矿物探测
+		# 矿物探测
+		mine_detect { 
 		  consumption(exp) { lerp(1800, 1400, exp) }
 		  overload(exp) { lerp(200, 180, exp) }
 		  cooldown(exp) { lerp(900, 400, exp) }
-		  range(exp) { lerp(15, 30, exp) } # 可视距离
+		  # 可视距离
+		  range(exp) { lerp(15, 30, exp) } 
 		}
 		
-		mag_movement { # 电磁牵引
+		# 电磁牵引
+		mag_movement { 
 		  consumption(exp) { lerp(15, 10, exp) } # per tick
 		  overload(exp) { lerp(3, 2, exp) } # per tick
 		  exp_incr(distance) { distance * 0.00015 }
+		}
+		
+		# 超电磁炮
+		railgun { 
+		  consumption(exp) { lerp(200, 500, exp) }
+		  overload(exp) { lerp(120, 80, exp) }
+		  cooldown(exp) { lerp(300, 160, exp) }
 		}
 		
 	}

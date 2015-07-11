@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -43,7 +42,7 @@ public class ItemCoin extends ACItem {
 	@SideOnly(Side.CLIENT)
 	public static RendererCoinThrowing.ItemRender renderCoin;
 	
-	Map<EntityPlayer, Integer> client = new HashMap(), server = new HashMap();
+	Map<EntityPlayer, EntityCoinThrowing> client = new HashMap(), server = new HashMap();
 	
 	public ItemCoin() {
 		super("coin");
@@ -54,11 +53,11 @@ public class ItemCoin extends ACItem {
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
     	EntityPlayer player = event.player;
-		Map<EntityPlayer, Integer> map = getMap(player);
-		if(getMap(player).containsKey(player)) {
-			Integer i = map.remove(player);
-			if(i > 0)
-				map.put(player, i - 1);
+		Map<EntityPlayer, EntityCoinThrowing> map = getMap(player);
+		if(map.containsKey(player)) {
+			if(map.get(player).isDead) {
+				map.remove(player);
+			}
 		}
     }
 
@@ -75,16 +74,19 @@ public class ItemCoin extends ACItem {
     	world.spawnEntityInWorld(etc);
     	
     	player.playSound("academy:flipcoin", 0.5F, 1.0F);
-    	getMap(player).put(player, 50);
+    	getMap(player).put(player, etc);
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;
     	}
         return stack;
     }
 	
-	private Map<EntityPlayer, Integer> getMap(EntityPlayer player) {
+	public EntityCoinThrowing getPlayerCoin(EntityPlayer player) {
+		return getMap(player).get(player);
+	}
+	
+	private Map<EntityPlayer, EntityCoinThrowing> getMap(EntityPlayer player) {
 		return player.worldObj.isRemote ? client : server;
 	}
-
 
 }

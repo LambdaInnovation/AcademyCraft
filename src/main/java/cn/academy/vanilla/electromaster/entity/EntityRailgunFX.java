@@ -110,7 +110,7 @@ public class EntityRailgunFX extends EntityRayBase {
 	@Override
 	protected void onFirstUpdate() {
 		super.onFirstUpdate();
-		worldObj.playSound(posX, posY, posZ, "academy:elec.railgun", 0.5f, 1.0f, false);
+		worldObj.playSound(posX, posY, posZ, "academy:em.railgun", 0.5f, 1.0f, false);
 	}
 	
 	@Override
