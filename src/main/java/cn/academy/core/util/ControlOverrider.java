@@ -13,9 +13,8 @@
 package cn.academy.core.util;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
@@ -27,6 +26,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
+import cn.liutils.core.LIUtils;
 import cn.liutils.util.generic.RegistryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -47,18 +47,68 @@ public class ControlOverrider {
 	
 	private static IntHashMap kbMap;
 	private static Field pressedField;
+	private static Field kbMapField;
 	
 	private static Map<Integer, Override> activeOverrides = new HashMap();
 	
+	private static boolean completeOverriding;
+	
 	public static void init() {
 		try {
-			//TODO
-			kbMap = (IntHashMap) RegistryUtils.getObfField(KeyBinding.class, "hash", "idk").get(null);
-			pressedField = RegistryUtils.getObfField(KeyBinding.class, "pressed", "idk");
+			kbMap = (IntHashMap) (kbMapField = RegistryUtils.getObfField(KeyBinding.class, "hash", "field_74514_b")).get(null);
+			
+			pressedField = RegistryUtils.getObfField(KeyBinding.class, "pressed", "field_74513_e");
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+		    modifiersField.setAccessible(true);
+		    modifiersField.setInt(kbMapField, kbMapField.getModifiers() & (~Modifier.FINAL));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private static IntHashMap createCopy(IntHashMap from, IntHashMap to) {
+		if(to == null)
+			to = new IntHashMap();
+		// Awkward, but who knows if this is faster than reflection?
+		for(int i = -100; i <= 250; ++i) {
+			if(from.containsItem(i))
+				to.addKey(i, from.lookup(i));
+		}
+		return to;
+	}
+	
+	private static IntHashMap getOriginalKbMap() {
+		try {
+			return (IntHashMap) kbMapField.get(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// SUPERHACKTECH Starts
+	/**
+	 * A complete override stops ALL minecraft keys to function. Currently you can open up complete override globally only once.
+	 */
+	public static void startCompleteOverride() {
+		if(!completeOverriding) {
+			completeOverriding = true;
+			kbMap = createCopy(kbMap, null);
+			getOriginalKbMap().clearMap();
+		}
+	}
+	
+	public static void endCompleteOverride() {
+		if(completeOverriding) {
+			completeOverriding = false;
+			createCopy(kbMap, getOriginalKbMap());
+			kbMap = getOriginalKbMap();
+		} else {
+			AcademyCraft.log.error("Try to stop complete override while not overriding at all");
+			Thread.dumpStack();
+		}
+	}
+	// SUPERHACKTECH Ends
 	
 	public static void override(int keyID) {
 		if(activeOverrides.containsKey(keyID)) {

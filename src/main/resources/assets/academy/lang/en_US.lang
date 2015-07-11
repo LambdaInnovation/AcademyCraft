@@ -74,7 +74,9 @@ ac.app.skill_tree.name=Skill Tree
 ac.app.knowledge_record.name=Life Record
 ac.app.settings.name=Settings
 ac.app.media_player.name=Media Player
+
 ac.app.freq_transmitter.name=Frequency Transmitter
+ac.app.freq_transmitter.s0_0=Please right-click a wireless matrix or node to start establish link from.
 
 # Knowledge UI
 ac.knowledge.acquired=Acquired Knowledge
