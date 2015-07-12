@@ -41,7 +41,7 @@ public abstract class CommandAIMBase extends ACCommand {
 		
 		@Override
 		public void processCommand(ICommandSender commandSender, String[] pars) {
-			if(pars.length == 0||"?".equals(pars[0]))
+			if(pars.length == 0)
 			{
 				sendChat(commandSender, getLoc("help"));
 				return;
@@ -107,6 +107,7 @@ public abstract class CommandAIMBase extends ACCommand {
 	protected void matchCommands(ICommandSender ics, EntityPlayer player, String[] pars) {
 		AbilityData aData = AbilityData.get(player);
 		switch(pars[0]) {
+		case "?":
 		case "help": {
 			for(String c : commands) {
 				sendChat(ics, getLoc(c));

@@ -32,10 +32,12 @@ public class WorldHeater extends Skill
 		heatmap.put(Block.getBlockFromName("sand"),Block.getBlockFromName("glass"));
 		//TODO add more
 		// Suggestion: Maybe you can access minecraft's melting data? Weathfold
+		// Reply: Yiya~ exp will be ignored. ShieLian
 	}
 	public WorldHeater()
 	{
 		super("world_heater", 1);
+		instance=this;
 	}
 
 	@Override
@@ -79,6 +81,7 @@ public class WorldHeater extends Skill
 			if (!isRemote)
 			{
 				player.worldObj.setBlock(result.blockX,result.blockY,result.blockZ,heatmap.get(block));
+				System.out.println("Block changed");
 			}
 			else
 			{
@@ -87,21 +90,25 @@ public class WorldHeater extends Skill
 		}
 		
 		private static float getOverload(AbilityData data) {
-			return instance.pipeFloat("overload", 
+			/*return instance.pipeFloat("overload", 
 				instance.getFunc("overload")
-				.callFloat(data.getSkillExp(instance)));
+				.callFloat(data.getSkillExp(instance)));*/
+			//TODO ripple support
+			return 1.0F;
 		}
 		
 		private static float getConsumption(AbilityData data) {
-			return instance.pipeFloat("cp", 
+			/*return instance.pipeFloat("cp", 
 				instance.getFunc("consumption")
-				.callFloat(data.getSkillExp(instance)));
+				.callFloat(data.getSkillExp(instance)));*/
+			//TODO ripple support
+			return 10.0F;
 		}
 
 		@SideOnly(Side.CLIENT)
 		private void spawnEffects()
 		{
-			System.out.println("HeatSuccessful");
+			System.out.println("Effects Spawned");
 			//TODO
 			/*
 			EntityWorldHeater worldheater= new EntityWorldHeater(player.worldObj);
