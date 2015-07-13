@@ -49,6 +49,7 @@ tile.ac_node_basic.name=Basic Wireless Imag Node
 tile.ac_node_standard.name=Improved Wireless Imag Node
 tile.ac_node_advanced.name=Advanced Wireless Imag Node
 tile.ac_inciser.name=Inciser
+tile.ac_solar_generator.name=Solar Generator
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon

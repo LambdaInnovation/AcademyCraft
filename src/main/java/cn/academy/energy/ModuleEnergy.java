@@ -29,6 +29,7 @@ import cn.academy.energy.block.BlockInfiniteGen;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.academy.energy.block.BlockSolarGen;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
@@ -61,6 +62,9 @@ public class ModuleEnergy {
     
     @RegBlock
     public static BlockInfiniteGen infiniteGen;
+    
+    @RegBlock
+    public static BlockSolarGen solarGen;
     
     @FromLoader
     public static Item energyUnit;

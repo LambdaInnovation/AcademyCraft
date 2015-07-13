@@ -55,7 +55,8 @@ public class ControlOverrider {
 	
 	public static void init() {
 		try {
-			kbMap = (IntHashMap) (kbMapField = RegistryUtils.getObfField(KeyBinding.class, "hash", "field_74514_b")).get(null);
+			kbMapField = RegistryUtils.getObfField(KeyBinding.class, "hash", "field_74514_b");
+			kbMap = getOriginalKbMap();
 			
 			pressedField = RegistryUtils.getObfField(KeyBinding.class, "pressed", "field_74513_e");
 			Field modifiersField = Field.class.getDeclaredField("modifiers");

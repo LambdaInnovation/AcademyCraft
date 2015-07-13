@@ -23,7 +23,6 @@ public class CatHeatMatser extends Category
 		addSkill("default",worldhearter= new WorldHeater());
 
 		//KnowledgeData.addKnowledges(new String[] {});
-
 		ModuleVanilla.addGenericSkills(this);
 	}
 }
