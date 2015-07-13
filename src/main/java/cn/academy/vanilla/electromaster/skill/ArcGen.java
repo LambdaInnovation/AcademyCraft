@@ -110,7 +110,7 @@ public class ArcGen extends Skill {
 									result.hitVec.xCoord,
 									result.hitVec.yCoord,
 									result.hitVec.zCoord,
-									new ItemStack(Items.fish)));
+									new ItemStack(Items.cooked_fished)));
 							}
 						} else {
 							System.out.println("Hah " + getIgniteProb(aData));

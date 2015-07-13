@@ -78,6 +78,18 @@ ac.app.media_player.name=Media Player
 
 ac.app.freq_transmitter.name=Frequency Transmitter
 ac.app.freq_transmitter.s0_0=Please right-click a wireless matrix or node to start establish link from.
+ac.app.freq_transmitter.s1_0=Press ENTER to confirm
+ac.app.freq_transmitter.s1_1=Authorizing...
+ac.app.freq_transmitter.s2_0=Right click any wireless node nearby to establish link. Click any other blocks to quit.
+ac.app.freq_transmitter.s3_0=Right click any wireless receiver or generator nearby to esablish link. Click any other blocks to quit.
+
+ac.app.freq_transmitter.e0=The wireless matrix is not initialized.
+ac.app.freq_transmitter.e1=Authorization failed.
+ac.app.freq_transmitter.e2=Link failed. Possibly the matrix reached its capacity or signal out of range.
+ac.app.freq_transmitter.e3=Link failed. Possibly the node reached its capacity or signal out of range.
+ac.app.freq_transmitter.e4=Action aborted.
+ac.app.freq_transmitter.e5=Transmitting...
+ac.app.freq_transmitter.e6=Link successful.
 
 # Knowledge UI
 ac.knowledge.acquired=Acquired Knowledge
