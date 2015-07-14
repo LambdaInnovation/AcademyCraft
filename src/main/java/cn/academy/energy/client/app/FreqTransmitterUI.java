@@ -105,6 +105,11 @@ public class FreqTransmitterUI extends AuxGui {
 		ControlOverrider.override(KeyManager.MOUSE_RIGHT);
 	}
 	
+	@Override
+	public boolean isConsistent() {
+		return false;
+	}
+	
 	private void setState(State next) {
 		if(next == null) {
 			this.dispose();
