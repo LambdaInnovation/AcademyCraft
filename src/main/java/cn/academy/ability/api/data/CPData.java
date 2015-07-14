@@ -44,10 +44,10 @@ import cpw.mods.fml.relauncher.Side;
 @RegDataPart("CP")
 public class CPData extends DataPart {
 	
-	private static int 
+	public static int 
 		RECOVER_COOLDOWN,
 		OVERLOAD_COOLDOWN;
-	private static float 
+	public static float 
 		OVERLOAD_O_MUL,
 		OVERLOAD_CP_MUL;
 	

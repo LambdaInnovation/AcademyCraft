@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity
 @SideOnly(Side.CLIENT)
 @RegEntity.HasRender
-public abstract class EntityTPMarking extends EntityAdvanced {
+public class EntityTPMarking extends EntityAdvanced {
 	
 	@RegEntity.Render
 	@SideOnly(Side.CLIENT)
@@ -47,13 +47,14 @@ public abstract class EntityTPMarking extends EntityAdvanced {
 	
 	final AbilityData data;
 	protected final EntityPlayer player;
+	
+	public boolean available = true;
 
 	public EntityTPMarking(EntityPlayer player) {
 		super(player.worldObj);
 		data = AbilityData.get(player);
 		this.player = player;
-		updatePos();
-		//this.ignoreFrustumCheck = true;
+		setPosition(player.posX, player.posY, player.posZ);
 	}
 	
 	@Override
@@ -61,22 +62,19 @@ public abstract class EntityTPMarking extends EntityAdvanced {
 		super.onUpdate();
 		rotationPitch = player.rotationPitch;
 		rotationYaw = player.rotationYaw;
-		this.updatePos();
 		
-		particleFac.setPosition(
-			posX + RandUtils.ranged(-1, 1), 
-			posY + RandUtils.ranged(0, 1), 
-			posZ + RandUtils.ranged(-1, 1));
-		particleFac.setVelocity(
-			RandUtils.ranged(-.05, .05),
-			RandUtils.ranged(0, 0.05),
-			RandUtils.ranged(-.05, .05));
-		
-		worldObj.spawnEntityInWorld(particleFac.next(worldObj));
-	}
-	
-	public static void sync(@Target EntityPlayer player) {
-		
+		if(available) {
+			particleFac.setPosition(
+				posX + RandUtils.ranged(-1, 1), 
+				posY + RandUtils.ranged(0, 1), 
+				posZ + RandUtils.ranged(-1, 1));
+			particleFac.setVelocity(
+				RandUtils.ranged(-.03, .03),
+				RandUtils.ranged(0, 0.05),
+				RandUtils.ranged(-.03, .03));
+			
+			worldObj.spawnEntityInWorld(particleFac.next(worldObj));
+		}
 	}
 	
 	@Override
@@ -84,50 +82,9 @@ public abstract class EntityTPMarking extends EntityAdvanced {
 		return pass == 1;
 	}
 	
-	protected void updatePos() {
-		double md = getMaxDistance();
-		MovingObjectPosition mop = Raytrace.traceLiving(player, md);
-		
-		
-		if(mop != null) {
-			double x = mop.hitVec.xCoord,
-					y= mop.hitVec.yCoord,
-					z= mop.hitVec.zCoord;
-			switch(mop.sideHit) {
-			case 0:
-				y -= 1.0; break;
-			case 1:
-				y += 1.8; break;
-			case 2:
-				z -= .6; y = mop.blockY + 1.7; break;
-			case 3:
-				z += .6; y = mop.blockY + 1.7;  break;
-			case 4:
-				x -= .6; y = mop.blockY + 1.7;  break;
-			case 5: 
-				x += .6; y = mop.blockY + 1.7;  break;
-			}
-			//check head
-			if(mop.sideHit > 1) {
-				int hx = (int) x, hy = (int) (y + 1), hz = (int) z;
-				if(!worldObj.isAirBlock(hx, hy, hz)) {
-					y -= 1.25;
-				}
-			}
-			
-			setPosition(x, y, z);
-		} else {
-			Motion3D mo = new Motion3D(player, true);
-			mo.move(md);
-			setPosition(mo.px, mo.py, mo.pz);
-		}
-	}
-	
 	public double getDist() {
 		return this.getDistanceToEntity(player);
 	}
-	
-	protected abstract double getMaxDistance();
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {}

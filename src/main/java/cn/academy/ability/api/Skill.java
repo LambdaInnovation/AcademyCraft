@@ -260,4 +260,8 @@ public abstract class Skill extends Controllable {
     	return pipeFloat("overload", callFloatWithExp("overload", data), data.getPlayer());
     }
     
+    protected int getCooldown(AbilityData data) {
+    	return pipeInt("cooldown", callIntWithExp("cooldown", data), data.getPlayer());
+    }
+    
 }

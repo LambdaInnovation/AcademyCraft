@@ -34,6 +34,8 @@ public class SkillInstance implements IConsumptionHintProvider {
 	
 	private List<SyncAction> childs;
 	
+	private int ticks;
+	
 	/**
 	 * Return: Whether this SkillInstance mutex others.
 	 * Mutex SkillInstance will not be opened at the same time.
@@ -76,6 +78,11 @@ public class SkillInstance implements IConsumptionHintProvider {
 		}
 	}
 	
+	void ctrlTick() {
+		++ticks;
+		onTick();
+	}
+	
 	void ctrlEnded() { 
 		onEnd();
 		
@@ -110,6 +117,10 @@ public class SkillInstance implements IConsumptionHintProvider {
 	 */
 	protected void abortSkill() {
 		state = State.ABORTED;
+	}
+	
+	protected int getTicks() {
+		return ticks;
 	}
 	
 	/**

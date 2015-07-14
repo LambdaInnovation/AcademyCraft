@@ -14,6 +14,7 @@ package cn.academy.vanilla.teleporter.skills;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
@@ -25,7 +26,6 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.raytrace.Raytrace;
@@ -46,13 +46,11 @@ public class MarkTeleport extends Skill {
 		instance = this;
 	}
 	
-	public static double getMaxDist(AbilityData data, CPData cpData) {
+	public static double getMaxDist(AbilityData data, CPData cpData, int ticks) {
 		double max = 20.0;
-		double 
-			cplim = cpData.getCP() / getCPB(data), 
-			olim = (2 * cpData.getMaxOverload() - cpData.getOverload()) / getOPB(data);
+		double cplim = cpData.getCP() / getCPB(data);
 		
-		return Math.min(max, Math.min(cplim, olim));
+		return Math.min((ticks + 1) * 2, Math.min(max, cplim));
 	}
 	
 	/**
@@ -69,9 +67,9 @@ public class MarkTeleport extends Skill {
 		return 1.0f;
 	}
 	
-	private static Vec3 getDest(EntityPlayer player) {
-		double dist = getMaxDist(AbilityData.get(player), CPData.get(player));
-		
+	private static Vec3 getDest(EntityPlayer player, int ticks) {
+		double dist = getMaxDist(AbilityData.get(player), CPData.get(player), ticks);
+		System.out.println(dist);
 		MovingObjectPosition mop = Raytrace.traceLiving(player, dist);
 		
 		double x, y, z;
@@ -138,11 +136,10 @@ public class MarkTeleport extends Skill {
 	
 	public static class MTAction extends SyncAction {
 		
-		@SideOnly(Side.CLIENT)
-		MTMark mark;
-		
 		AbilityData aData;
 		CPData cpData;
+		
+		int ticks;
 
 		public MTAction() {
 			super(-1);
@@ -150,17 +147,37 @@ public class MarkTeleport extends Skill {
 		
 		@Override
 		public void onStart() {
+			//if(true) return;
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
 			
 			if(isRemote) {
-				startMark();
+				startEffects();
 			}
 		}
 		
 		@Override
+		public void onTick() {
+			ticks++;
+			
+			if(isRemote) {
+				updateEffects(getDest(player, ticks));
+			}
+		}
+		
+		@Override
+		public void writeNBTFinal(NBTTagCompound tag) {
+			tag.setShort("t", (short) ticks);
+		}
+		
+		@Override
+		public void readNBTFinal(NBTTagCompound tag) {
+			ticks = tag.getShort("t");
+		}
+		
+		@Override
 		public void onEnd() {
-			Vec3 dest = getDest(player);
+			Vec3 dest = getDest(player, ticks);
 			float distance = (float) dest.distanceTo(VecUtils.vec(player.posX, player.posY, player.posZ));
 			if(distance < MINIMUM_VALID_DISTANCE) {
 				// TODO: Play abort sound
@@ -177,38 +194,39 @@ public class MarkTeleport extends Skill {
 			}
 			
 			if(isRemote) {
-				endMark();
+				endEffects();
 			}
 		}
 		
 		@Override
 		public void onAbort() {
 			if(isRemote) {
-				endMark();
+				endEffects();
+			}
+		}
+		
+		// CLIENT
+		@SideOnly(Side.CLIENT)
+		EntityTPMarking mark;
+		
+		@SideOnly(Side.CLIENT)
+		private void startEffects() {
+			if(isLocal()) {
+				player.worldObj.spawnEntityInWorld(mark = new EntityTPMarking(player));
 			}
 		}
 		
 		@SideOnly(Side.CLIENT)
-		private void startMark() {
-			player.worldObj.spawnEntityInWorld(mark = new MTMark(player));
+		private void updateEffects(Vec3 dest) {
+			if(isLocal()) {
+				mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+			}
 		}
 		
 		@SideOnly(Side.CLIENT)
-		private void endMark() {
-			mark.setDead();
-		}
-		
-	}
-	
-	private static class MTMark extends EntityTPMarking {
-
-		public MTMark(EntityPlayer player) {
-			super(player);
-		}
-
-		@Override
-		protected double getMaxDistance() {
-			return getMaxDist(AbilityData.get(player), CPData.get(player));
+		private void endEffects() {
+			if(mark != null)
+				mark.setDead();
 		}
 		
 	}

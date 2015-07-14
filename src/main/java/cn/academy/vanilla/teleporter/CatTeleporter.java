@@ -16,6 +16,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.academy.vanilla.teleporter.skills.MarkTeleport;
+import cn.academy.vanilla.teleporter.skills.PenetrateTeleport;
 
 /**
  * @author WeAthFolD
@@ -26,6 +27,8 @@ public class CatTeleporter extends Category {
 	
 	public static LocationTeleport locTeleport;
 	
+	public static PenetrateTeleport penetrateTeleport;
+	
 	public CatTeleporter() {
 		super("teleporter");
 		
@@ -33,6 +36,7 @@ public class CatTeleporter extends Category {
 		
 		this.addSkill("default", markTeleport = new MarkTeleport());
 		this.addSkill("default", locTeleport = new LocationTeleport());
+		this.addSkill("default", penetrateTeleport = new PenetrateTeleport());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

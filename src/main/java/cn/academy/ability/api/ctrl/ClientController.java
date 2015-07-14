@@ -208,7 +208,7 @@ public class ClientController {
     				instance.ctrlAborted();
     				instance = null;
     			} else {
-    				instance.onTick();
+    				instance.ctrlTick();
     			}
     		}
     	}

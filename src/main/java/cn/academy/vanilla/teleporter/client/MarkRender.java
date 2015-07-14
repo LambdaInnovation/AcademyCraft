@@ -36,13 +36,16 @@ public class MarkRender extends Render {
 	@Override
 	public void doRender(Entity ent, double x, double y, double z, float var8, float var9) {
 		EntityTPMarking mark = (EntityTPMarking) ent;
+		if(!mark.firstUpdated())
+			return;
+		
 		int texID = (int) ((mark.ticksExisted / 2.5) % tex.length);
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor4d(1, 1, 1, 1);
+		
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(x, y, z);
 			
@@ -51,6 +54,13 @@ public class MarkRender extends Render {
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 			Tessellator.instance.setBrightness(15728880);
 			RenderUtils.loadTexture(tex[texID]);
+			
+			if(!mark.available) {
+				GL11.glColor4d(1, 0.2, 0.2, 1);
+			} else {
+				GL11.glColor4d(1, 1, 1, 1);
+			}
+			
 			model.draw();
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

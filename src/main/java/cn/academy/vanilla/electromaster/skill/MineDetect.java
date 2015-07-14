@@ -77,10 +77,6 @@ public class MineDetect extends Skill {
 		return data.getSkillExp(instance) > 0.5f;
 	}
 	
-	public static int getCooldown(AbilityData data) {
-		return instance.callIntWithExp("cooldown", data);
-	}
-	
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
 		return new SkillInstanceInstant().addExecution(new MDAction());
@@ -113,7 +109,7 @@ public class MineDetect extends Skill {
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
 			ACSounds.playAtEntity(player, "em.minedetect", 0.5f);
 			
-			Cooldown.setCooldown(instance, getCooldown(aData));
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 	}

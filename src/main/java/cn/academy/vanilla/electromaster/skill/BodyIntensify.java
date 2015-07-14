@@ -72,10 +72,6 @@ public class BodyIntensify extends Skill {
 	
 	// CT: ChargeTime
 	
-	private static int getCooldown(AbilityData data) {
-		return instance.callIntWithExp("cooldown", data);
-	}
-	
 	private static double getProbability(int ct) {
 		return instance.getFunc("probability").callDouble(ct);
 	}
@@ -167,7 +163,7 @@ public class BodyIntensify extends Skill {
 					player.addPotionEffect(new PotionEffect(Potion.hunger.id, getHungerBuffTime(tick), 2));
 				}
 				
-				Cooldown.setCooldown(instance, getCooldown(aData));
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 				
 				if(isRemote) 
 					endEffect(true);
