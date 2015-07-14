@@ -29,6 +29,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
@@ -99,7 +100,7 @@ public class ArcGen extends Skill {
 
 				if(result != null) {
 					if(result.typeOfHit == MovingObjectType.ENTITY) {
-						result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getDamage(aData));
+						DamageHelper.attack(result.entityHit, DamageSource.causePlayerDamage(player), getDamage(aData));
 					} else { //BLOCK
 						int hx = result.blockX, hy = result.blockY, hz = result.blockZ;
 						Block block = player.worldObj.getBlock(hx, hy, hz);

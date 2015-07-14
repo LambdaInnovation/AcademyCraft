@@ -29,6 +29,7 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.entity.EntityRayBase;
+import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
@@ -164,7 +165,7 @@ public class RayBarrage extends Skill {
 						float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
 						
 						if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
-							e.attackEntityFrom(DamageSource.causePlayerDamage(player), getScatteredDamage(aData));
+							DamageHelper.attack(e, DamageSource.causePlayerDamage(player), getScatteredDamage(aData));
 						}
 					}
 				}
@@ -178,7 +179,7 @@ public class RayBarrage extends Skill {
 				if(!isRemote) {
 					MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
 					if(result != null && result.entityHit != null) {
-						result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), getPlainDamage(aData));
+						DamageHelper.attack(result.entityHit, DamageSource.causePlayerDamage(player), getPlainDamage(aData));
 					}
 				}
 				

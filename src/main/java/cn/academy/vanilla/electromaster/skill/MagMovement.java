@@ -12,10 +12,13 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -24,6 +27,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
+import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.util.generic.MathUtils;
@@ -59,11 +63,19 @@ public class MagMovement extends Skill {
 		return instance.getFunc("exp_incr").callFloat(distance);
 	}
 	
-	private static Target toTarget(MovingObjectPosition pos) {
+	private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {
 		if(pos.typeOfHit == MovingObjectType.BLOCK) {
+			Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
+			if(aData.getSkillExp(instance) < 0.5f && !CatElectroMaster.isMetalBlock(block))
+				return null;
+			if(block.getMaterial() != Material.rock && block.getMaterial() != Material.anvil)
+				return null;
 			return new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord);
 		} else {
-			return new EntityTarget(pos.entityHit);
+			if(CatElectroMaster.isEntityMetallic(pos.entityHit))
+				return new EntityTarget(pos.entityHit);
+			else
+				return null;
 		}
 	}
 	
@@ -74,7 +86,7 @@ public class MagMovement extends Skill {
 		MovingObjectPosition result = Raytrace.traceLiving(player, getMaxDistance(aData));
 		
 		if(result != null) {
-			Target t = toTarget(result);
+			Target t = toTarget(aData, player.worldObj, result);
 			if(t != null) {
 				return new SkillInstance().addChild(new MovementAction(t));
 			}

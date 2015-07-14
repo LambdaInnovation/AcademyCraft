@@ -50,6 +50,7 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
@@ -65,7 +66,7 @@ public class TerminalUI extends AuxGui {
 	
 	static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight");
 	
-	final double SENSITIVITY = 0.5;
+	final double SENSITIVITY = 0.7;
 
 	static LIGui loaded;
 	static {
@@ -84,6 +85,7 @@ public class TerminalUI extends AuxGui {
 	double mouseX, mouseY;
 	double buffX, buffY; //Used for rotation judging. Will balance to mouseX and mouseY at the rate of BALANCE_SPEED.
 	
+	long createTime;
 	long lastFrameTime;
 	
 	int selection = 0;
@@ -223,6 +225,8 @@ public class TerminalUI extends AuxGui {
     	
     	final TerminalData data = TerminalData.get(player);
     	
+    	createTime = GameTimer.getTime();
+    	
     	updateAppList(data);
     	
     	TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
@@ -233,8 +237,9 @@ public class TerminalUI extends AuxGui {
 			public void onReady(Object val) {
 				if(!isSynced) {
 					updateAppList(data);
-					//root.removeWidget("text_loading");
-					//root.removeWidget("icon_loading");
+					root.removeWidget("text_loading");
+					root.removeWidget("icon_loading");
+					createTime = GameTimer.getTime();
 					isSynced = true;
 					AcademyCraft.log.info("Received TerminalUI callback!");
 				} else {
@@ -323,6 +328,10 @@ public class TerminalUI extends AuxGui {
     	return apps.size() <= lookup ? null : apps.get(lookup);
     }
     
+    private long getLifetime() {
+    	return GameTimer.getTime() - createTime;
+    }
+    
     private Widget createAppWidget(int id, App app) {
     	Widget ret = root.getWidget("app_template").copy();
     	Widget icon = ret.getWidget("icon");
@@ -369,6 +378,10 @@ public class TerminalUI extends AuxGui {
 		final int id;
 		final App app;
 
+		DrawTexture drawer;
+		TextBox text;
+		DrawTexture icon;
+		
 		public AppHandler(int _id, App _app) {
 			super("AppHandler");
 			id = _id;
@@ -378,26 +391,37 @@ public class TerminalUI extends AuxGui {
 
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
-					DrawTexture drawer = DrawTexture.get(w);
-					TextBox text = TextBox.get(w.getWidget("text"));
-					DrawTexture icon = DrawTexture.get(w.getWidget("icon"));
+					double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
 					
 					if(w == getSelectedApp()) {
 						drawer.texture = APP_BACK_HDR;
 						
 						drawer.zLevel = text.zLevel = icon.zLevel = 40;
 						
-						icon.color.a = text.color.a = 0.8;
+						drawer.color.a = mAlpha;
+						icon.color.a = 0.8 * mAlpha;
+						text.color.a = 0.1 + 0.72 * mAlpha;
 					} else {
 						drawer.texture = APP_BACK;
 						
 						drawer.zLevel = text.zLevel = icon.zLevel = 10;
 						
-						icon.color.a = text.color.a = 0.6;
+						drawer.color.a = mAlpha;
+						icon.color.a = 0.6 * mAlpha;
+						text.color.a = 0.10 + 0.1 * mAlpha;
 					}
 				}
 				
 			});
+		}
+		
+		@Override
+		public void onAdded() {
+			drawer = DrawTexture.get(widget);
+			text = TextBox.get(widget.getWidget("text"));
+			icon = DrawTexture.get(widget.getWidget("icon"));
+			drawer.color.a = icon.color.a = 0;
+			text.color.a = 0.1;
 		}
 	}
 	

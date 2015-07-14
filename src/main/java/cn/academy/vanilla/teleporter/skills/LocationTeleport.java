@@ -3,8 +3,12 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -19,6 +23,8 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.liutils.util.mc.EntitySelectors;
+import cn.liutils.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -92,12 +98,16 @@ public class LocationTeleport extends Skill {
 	}
 	
 	public static float getOverload(EntityPlayer player) {
-		return 20f;
+		return instance.getOverload(AbilityData.get(player));
 	}
 	
 	public static boolean canPerform(EntityPlayer player, Location dest) {
 		CPData cpData = CPData.get(player);
 		return cpData.getCP() >= getConsumption(player, dest);
+	}
+	
+	private static float getRange() {
+		return instance.getFloat("range");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -107,12 +117,26 @@ public class LocationTeleport extends Skill {
 	
 	@RegNetworkCall(side = Side.SERVER)
 	private static void performAtServer(@Instance EntityPlayer player, @Data Location dest) {
+		AbilityData aData = AbilityData.get(player);
 		CPData cpData = CPData.get(player);
+		
 		if(cpData.perform(getOverload(player), getConsumption(player, dest))) {
+			//TODO Filter entities
+			List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5, 
+					EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living));
+			entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
+			
 			if(player.worldObj.provider.dimensionId != dest.dimension) {
 				player.travelToDimension(dest.dimension);
+				for(Entity e : entitiesToTeleport) {
+					e.travelToDimension(dest.dimension);
+				}
 			}
 			
+			for(Entity e : entitiesToTeleport) {
+				double dx = e.posX - player.posX, dy = e.posY - player.posY, dz = e.posZ - player.posZ;
+				e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz);
+			}
 			player.setPositionAndUpdate(dest.x, dest.y, dest.z);
 		}
 	}

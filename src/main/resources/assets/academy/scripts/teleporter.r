@@ -5,6 +5,13 @@ ac {
             consumption(dist, dimfac, exp) { 
                 lerp(200, 150, exp) * dimfac * max(8, sqrt( min(800, dist) ))
             }
+            # 最多附加传送几个实体
+            entities(exp) {
+                round(lerp(3, 7, exp))
+            }
+            # 传送距离
+            range { 4 }
+            overload(exp) { 240 }
         }
         
         penetrate_teleport {

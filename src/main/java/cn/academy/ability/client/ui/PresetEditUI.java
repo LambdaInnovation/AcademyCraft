@@ -26,11 +26,11 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.ability.api.data.PresetData.PresetEditor;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
@@ -49,6 +49,7 @@ import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
+import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -491,12 +492,17 @@ public class PresetEditUI extends GuiScreen {
 
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
-					
 					CRL_WHITE.bind();
-					HudUtils.drawRectOutline(0, 0, width, height, 2);
+					ACRenderingHelper.drawGlow(0, 0, width, height, 1, CRL_WHITE);
 					
 					CRL_BACK.bind();
 					HudUtils.colorRect(0, 0, width, height);
+					
+					Widget hovering = foreground.getHoveringWidget();
+					if(hovering != null && hovering.getName().contains("_sel")) {
+						SelHandler sh = hovering.getComponent("_sel");
+						Font.font.draw(sh.skill.getHintText(), 0, -10, 10, 0xffffff);
+					}
 					
 					GL11.glColor4d(1, 1, 1, 1);
 				}
@@ -514,8 +520,19 @@ public class PresetEditUI extends GuiScreen {
     			DrawTexture tex = new DrawTexture().setTex(available.get(i).getHintIcon());
     			single.addComponent(tex);
     			single.addComponent(new Tint());
-    			
-    			single.regEventHandler(new MouseDownHandler() {
+    			single.addComponent(new SelHandler(skill));
+    			addWidget("_sel" + i, single);
+    		}
+    	}
+    	
+    	private class SelHandler extends Component {
+    		
+    		final Skill skill;
+
+			public SelHandler(Skill _skill) {
+				super("_sel");
+				skill = _skill;
+				this.addEventHandler(new MouseDownHandler() {
 
 					@Override
 					public void handleEvent(Widget w, MouseDownEvent event) {
@@ -524,8 +541,8 @@ public class PresetEditUI extends GuiScreen {
 					}
     				
     			});
-    			addWidget(single);
-    		}
+			}
+    		
     	}
     }
     

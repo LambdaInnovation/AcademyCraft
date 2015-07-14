@@ -12,6 +12,10 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +32,8 @@ import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
+import cn.liutils.util.mc.EntitySelectors;
+import cn.liutils.util.mc.WorldUtils;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

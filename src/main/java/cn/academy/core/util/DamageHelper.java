@@ -70,14 +70,23 @@ public class DamageHelper {
 		World world, double x, double y, double z, double range, 
 		float damage, DamageSource dmgSrc, 
 		IEntitySelector entitySelector) {
-		List<Entity> list = WorldUtils.getEntities(world, x, y, z, range, EntitySelectors.combine(dmgSelector, entitySelector));
+		List<Entity> list = WorldUtils.getEntities(world, x, y, z, range, entitySelector);
 		for(Entity ent : list) {
 			double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);
 			float factor = 1 - MathUtils.wrapf(0, 1, (float) (dist / range));
 			float appliedDamage = MathUtils.lerpf(0, damage, factor);
-			System.out.println(ent + ", " + appliedDamage);
-			ent.attackEntityFrom(dmgSrc, appliedDamage);
+			attack(ent, dmgSrc, appliedDamage);
 		}
+	}
+	
+	/**
+	 * A delegation to the normal attack function. if e is a player and the config doesn't allow PvP the attack will be ignored.
+	 * 	ALL skills should use this approach when applying damage.
+	 */
+	public static void attack(Entity e, DamageSource src, float damage) {
+		if(e instanceof EntityPlayer && !ATTACK_PLAYER)
+			return;
+		e.attackEntityFrom(src, damage);
 	}
 	
 }
