@@ -17,17 +17,17 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.apache.commons.lang3.NotImplementedException;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeAthFolD
@@ -88,6 +88,14 @@ public class PresetData extends DataPart {
 			
 			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
 		}
+	}
+	
+	public void clear() {
+		endOverride();
+		for(int i = 0; i < 4; ++i)
+			presets[i] = new Preset();
+		if(!isRemote())
+			sync();
 	}
 	
 	/**
@@ -306,6 +314,16 @@ public class PresetData extends DataPart {
 		
 		private PresetData getPData() {
 			return PresetData.this;
+		}
+		
+	}
+	
+	@RegEventHandler(Bus.Forge)
+	public static class Events {
+		
+		@SubscribeEvent
+		public void onCategoryChanged(CategoryChangeEvent event) {
+			PresetData.get(event.player).clear();
 		}
 		
 	}

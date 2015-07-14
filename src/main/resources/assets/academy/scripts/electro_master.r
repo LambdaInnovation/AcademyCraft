@@ -75,5 +75,14 @@ ac {
 		  cooldown(exp) { lerp(300, 160, exp) }
 		}
 		
+		# 终极落雷
+		thunder_clap {
+		  damage(exp, ct) { lerp(40, 70, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
+		  range(exp) { 2 * lerp(5, 10, exp) }
+		  consumption(exp) { lerp(100, 120, exp) }
+		  overload(exp) { lerp(400, 350, exp) }
+		  cooldown(exp, ct) { ct * lerp(18, 10, exp) }
+		}
+		
 	}
 }

@@ -148,13 +148,18 @@ ac.knowledge.highenergy.name=High Energy Theory
 
 ## EM Skills
 ac.ability.electro_master.arc_gen.name=Arc Generation
-
-ac.ability.electro_master.mag_attract.name=Magnet Attraction
-
+ac.ability.electro_master.mag_manip.name=Magnet Manipulation
 ac.ability.electro_master.mine_detect.name=Mine Detection
-
 ac.ability.electro_master.railgun.name=Railgun
-
+ac.ability.electro_master.mag_movement.name=Magnet Movement
+ac.ability.electro_master.iron_sand.name=Iron Sand Control
+ac.ability.electro_master.iron_sand.sword.name=Iron Sand Sword
+ac.ability.electro_master.iron_sand.whip.name=Iron Sand Whip
+ac.ability.electro_master.iron_sand.storm.name=Iron Sand Sword
+ac.ability.electro_master.iron_sand.cone.name=Iron Sand Cone
+ac.ability.electro_master.charging.name=Current Charging
+ac.ability.electro_master.body_intensify.name=Body Intensify
+ac.ability.electro_master.thunder_clap.name=Thunderclap
 
 # Teleporter
 

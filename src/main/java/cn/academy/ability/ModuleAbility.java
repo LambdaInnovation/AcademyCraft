@@ -16,7 +16,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
-import cn.academy.vanilla.electromaster.skill.MagAttract;
+import cn.academy.vanilla.electromaster.skill.MagManip;
 import cn.academy.vanilla.electromaster.skill.MineDetect;
 import cn.academy.vanilla.electromaster.skill.Railgun;
 import cn.annoreg.core.Registrant;

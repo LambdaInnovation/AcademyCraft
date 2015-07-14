@@ -30,10 +30,11 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
 import cn.academy.vanilla.electromaster.skill.BodyIntensify;
 import cn.academy.vanilla.electromaster.skill.CurrentCharging;
-import cn.academy.vanilla.electromaster.skill.MagAttract;
+import cn.academy.vanilla.electromaster.skill.MagManip;
 import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.MineDetect;
 import cn.academy.vanilla.electromaster.skill.Railgun;
+import cn.academy.vanilla.electromaster.skill.ThunderClap;
 import cn.academy.vanilla.electromaster.skill.ironsand.IronSand;
 
 /**
@@ -43,13 +44,14 @@ import cn.academy.vanilla.electromaster.skill.ironsand.IronSand;
 public class CatElectroMaster extends Category {
 	
 	public ArcGen arcGen;
-	public MagAttract magAttract;
+	public MagManip magManip;
 	public MineDetect mineDetect;
 	public Railgun railgun;
 	public MagMovement magMovement;
 	public IronSand ironSand;
 	public CurrentCharging currentCharging;
 	public BodyIntensify bodyIntensify;
+	public ThunderClap thunderClap;
 
 	public CatElectroMaster() {
 		super("electro_master");
@@ -57,17 +59,18 @@ public class CatElectroMaster extends Category {
 		defineTypes("default", "passive");
 		
 		addSkill("default", arcGen = new ArcGen());
-		addSkill("default", magAttract = new MagAttract());
+		addSkill("default", magManip = new MagManip());
 		addSkill("default", mineDetect = new MineDetect());
 		addSkill("default", railgun = new Railgun());
 		addSkill("default", magMovement = new MagMovement());
 		addSkill("default", ironSand = new IronSand());
 		addSkill("default", currentCharging = new CurrentCharging());
 		addSkill("default", bodyIntensify = new BodyIntensify());
+		addSkill("default", thunderClap = new ThunderClap());
 		
-		magAttract.setParent(arcGen);
-		mineDetect.setParent(magAttract);
-		railgun.setParent(magAttract);
+		magManip.setParent(arcGen);
+		mineDetect.setParent(magManip);
+		railgun.setParent(magManip);
 		
 		KnowledgeData.addKnowledges(new String[] {
 			"em_basic_volt",

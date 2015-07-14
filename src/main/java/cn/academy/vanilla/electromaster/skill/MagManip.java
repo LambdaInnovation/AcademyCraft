@@ -15,13 +15,13 @@ package cn.academy.vanilla.electromaster.skill;
 import cn.academy.ability.api.Skill;
 
 /**
+ * Magnet manipulation
  * @author WeAthFolD
- *
  */
-public class MagAttract extends Skill {
+public class MagManip extends Skill {
 
-	public MagAttract() {
-		super("mag_attract", 2);
+	public MagManip() {
+		super("mag_manip", 2);
 	}
 
 }

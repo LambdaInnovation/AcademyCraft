@@ -32,6 +32,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * TODO: Filter blocks according to skill experience
  * @author WeAthFolD
  */
 public class MagMovement extends Skill {

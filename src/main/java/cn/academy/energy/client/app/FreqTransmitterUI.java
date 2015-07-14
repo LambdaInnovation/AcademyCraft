@@ -194,7 +194,6 @@ public class FreqTransmitterUI extends AuxGui {
 				if(event instanceof MouseInputEvent) {
 					int mid = Mouse.getEventButton();
 					if(mid == 1 && Mouse.getEventButtonState()) {
-						System.out.println("Handle clicking");
 						current.handleClicking(Raytrace.traceLiving(player, 4, EntitySelectors.nothing));
 					}
 				} else {
@@ -243,7 +242,6 @@ public class FreqTransmitterUI extends AuxGui {
 		public void handleDraw(double w, double h) {
 			super.handleDraw(w, h);
 			if(this.getDeltaTime() > 2500L) {
-				System.out.println("Dispose??");
 				dispose();
 			}
 		}
@@ -262,7 +260,6 @@ public class FreqTransmitterUI extends AuxGui {
 		public void handleDraw(double w, double h) {
 			super.handleDraw(w, h);
 			if(this.getDeltaTime() > 2500L) {
-				System.out.println("SetState");
 				setState(toSwitch);
 			}
 		}

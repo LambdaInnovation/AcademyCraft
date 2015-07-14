@@ -25,6 +25,7 @@ import cn.liutils.util.client.ClientUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,6 +82,11 @@ public class Cooldown {
     	if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
 			updateCooldown();
 		}
+    }
+    
+    @SubscribeEvent
+    public void onDisconnect(ClientDisconnectionFromServerEvent event) {
+    	cooldown.clear();
     }
     
     public static class CooldownData {
