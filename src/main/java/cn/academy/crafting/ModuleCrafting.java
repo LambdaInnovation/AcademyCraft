@@ -18,6 +18,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import cn.academy.core.item.ACItem;
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.core.registry.InstanceEjector;
 import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.LoaderHelper;
@@ -29,6 +31,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
+import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 import cn.liutils.loading.item.ItemLoader;
 
 /**
@@ -36,27 +39,47 @@ import cn.liutils.loading.item.ItemLoader;
  */
 @Registrant
 @RegInit
+@RegACRecipeNames
 public class ModuleCrafting {
 	
 	public static ItemLoader items;
 	
 	@RegItem
 	@RegItem.HasRender
+	@RecipeName("matter_unit")
 	public static ItemMatterUnit matterUnit;
 	
 	@FromLoader
+	@RecipeName("crystal0")
 	public static Item crystalLow;
+
+	@RegItem
+	@RecipeName("frame")
+	public static Item machineFrame = new ACItem("machine_frame");
+	
+	@RegItem
+	@RecipeName("calc_chip")
+	public static Item calcChip = new ACItem("calc_chip");
+	
+	@FromLoader
+	@RecipeName("reso_part")
+	public static Item resonancePart;
 	
 	@RegBlock
+	@RecipeName("fusor")
     public static BlockImagFusor imagFusor;
 	
 	@RegBlock
+	@RecipeName("inciser")
 	public static BlockInciser inciser;
 	
 	@RegBlock
-	public static BlockGenericOre 
-		oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 2),
-		oreCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
+	@RecipeName("cons_ore")
+	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 2);
+	
+	@RegBlock
+	@RecipeName("crystal_ore")
+	public static BlockGenericOre oreCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {

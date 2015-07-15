@@ -17,9 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.world.WorldEvent;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
@@ -27,10 +25,10 @@ import cn.academy.core.util.ValuePipeline;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegMessageHandler;
+import cn.liutils.crafting.CustomMappingHelper;
+import cn.liutils.crafting.RecipeRegistry;
 import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.ripple.ScriptProgram;
 import cpw.mods.fml.common.Mod;
@@ -41,7 +39,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
@@ -64,21 +61,23 @@ public class AcademyCraft {
 	
     public static final String NET_CHANNEL = "academy-network";
 
-    public static Logger log = (Logger) LogManager.getLogger("AcademyCraft");
+    public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     
     public static Configuration config;
     
     /**
      * The globally used script program.
      */
-    public static ScriptProgram script;
+    public static final ScriptProgram script = new ScriptProgram();
     
     /**
      * The globally used value pipeline.
      * 
      * CONVENTION: If needed, ALWAYS pass EntityPlayer as pipeline's first argument.
      */
-    public static ValuePipeline pipeline = new ValuePipeline();
+    public static final ValuePipeline pipeline = new ValuePipeline();
+    
+    public static final RecipeRegistry recipes = new RecipeRegistry();
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
@@ -104,7 +103,6 @@ public class AcademyCraft {
         config = new Configuration(event.getSuggestedConfigurationFile());
         
         // Load the scripts
-        script = new ScriptProgram();
         String[] scripts = {
         	"generic", "ability", "electro_master", "teleporter"
         };
@@ -124,6 +122,8 @@ public class AcademyCraft {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
+        
+        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
     }
 
     @EventHandler
@@ -134,6 +134,10 @@ public class AcademyCraft {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
+    }
+    
+    public static void addToRecipe(Class klass) {
+    	CustomMappingHelper.addMapping(recipes, klass);
     }
     
     public static ScriptFunction getFunction(String name) {

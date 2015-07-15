@@ -1,0 +1,6 @@
+
+shaped(node0) { 
+    [nil, calc_chip, nil]
+    [iron_ingot, frame, iron_ingot]
+    [crystal0, reso_part, crystal0] 
+}

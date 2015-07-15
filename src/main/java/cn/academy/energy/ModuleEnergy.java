@@ -20,11 +20,12 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.io.IOUtils;
 
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.core.registry.InstanceEjector;
 import cn.academy.core.registry.InstanceEjector.FromLoader;
 import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.BlockImagProj;
+import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.energy.block.BlockInfiniteGen;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
@@ -36,6 +37,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
+import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.template.block.ItemBlockMulti;
 
@@ -44,35 +46,45 @@ import cn.liutils.template.block.ItemBlockMulti;
  */
 @Registrant
 @RegInit
+@RegACRecipeNames
 public class ModuleEnergy {
 	
 	public static ItemLoader loader;
 	
     @RegBlock
-    public static BlockNode
-        nodeBasic = new BlockNode(NodeType.BASIC),
-        nodeStandard = new BlockNode(NodeType.STANDARD),
-        nodeAdvanced = new BlockNode(NodeType.ADVANCED);
+    @RecipeName("node0")
+    public static BlockNode nodeBasic = new BlockNode(NodeType.BASIC);
+    @RegBlock
+    @RecipeName("node1")
+    public static BlockNode nodeStandard = new BlockNode(NodeType.STANDARD);
+    @RegBlock
+    @RecipeName("node2")
+    public static BlockNode nodeAdvanced = new BlockNode(NodeType.ADVANCED);
     
     @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("mat")
     public static BlockMatrix matrix = new BlockMatrix();
     
     @RegBlock
-    public static BlockImagProj ionicFlux;
+    public static BlockImagPhase imagPhase;
     
     @RegBlock
     public static BlockInfiniteGen infiniteGen;
     
     @RegBlock
+    @RecipeName("solar")
     public static BlockSolarGen solarGen;
     
     @FromLoader
+    @RecipeName("ene_unit")
     public static Item energyUnit;
     
     @FromLoader
+    @RecipeName("cons_plate")
     public static Item constraintPlate;
     
     @RegItem
+    @RecipeName("mat_core")
     public static ItemMatrixCore matrixCore;
 	
 	public static void init() {

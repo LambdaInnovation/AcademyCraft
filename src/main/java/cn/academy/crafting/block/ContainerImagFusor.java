@@ -43,7 +43,7 @@ public class ContainerImagFusor extends Container {
     private void initInventory(InventoryPlayer inv) {
     	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
     	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.ionicFlux.mat, 2, 32, 72));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, 2, 32, 72));
         this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 72));
         
         int STEP = 18;
