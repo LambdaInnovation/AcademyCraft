@@ -12,9 +12,13 @@
  */
 package cn.academy.core;
 
+import java.util.Map.Entry;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -77,7 +81,7 @@ public class AcademyCraft {
      */
     public static final ValuePipeline pipeline = new ValuePipeline();
     
-    public static final RecipeRegistry recipes = new RecipeRegistry();
+    private static RecipeRegistry recipes = new RecipeRegistry();
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
@@ -124,6 +128,33 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
         
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
+        
+        if(DEBUG_MODE) {
+        	System.out.println("AC Recipe Name Mappings:");
+        	System.out.println("---------------------------------------");
+	        for(Entry<String, Object> entry : recipes.nameMapping.entrySet()) {
+	        	Object obj = entry.getValue();
+	        	String str1 = entry.getKey(), str2;
+	        	if(obj instanceof Item) {
+	        		str2 = StatCollector.translateToLocal(((Item)obj).getUnlocalizedName() + ".name");
+	        	} else if(obj instanceof Block) {
+	        		str2 = StatCollector.translateToLocal(((Block)obj).getUnlocalizedName() + ".name");
+	        	} else {
+	        		str2 = obj.toString();
+	        	}
+	        	System.out.println(String.format("%s: %s", expand(str2, 30), str1));
+	        }
+	        System.out.println("---------------------------------------");
+        }
+        
+        recipes = null; //Doesn't need it after loading
+    }
+    
+    private static String expand(String str, int size) {
+    	StringBuilder sb = new StringBuilder(str);
+    	for(int i = str.length(); i < size; ++i)
+    		sb.append(' ');
+    	return sb.toString();
     }
 
     @EventHandler

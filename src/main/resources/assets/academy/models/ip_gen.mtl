@@ -1,16 +1,12 @@
-# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# 创建的文件:14.07.2015 22:58:05
+#
+# ip_gen.mtl
+#
 
 newmtl 02___Default
-	Ns 10.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	illum 2
-	Ka 0.5882 0.5882 0.5882
-	Kd 0.5882 0.5882 0.5882
-	Ks 0.0000 0.0000 0.0000
-	Ke 0.0000 0.0000 0.0000
-	map_Ka G:\SystemFiles\Desktop\xuxiangwei-texture.png
-	map_Kd G:\SystemFiles\Desktop\xuxiangwei-texture.png
+illum 2
+Kd 0.588200 0.588200 0.588200
+Ka 0.588200 0.588200 0.588200
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 1.500000
+map_Kd D:\dev\Repos\AcademyCraft\src\main\resources\assets\academy\models/G:\SystemFiles\Desktop\xuxiangwei-texture.png

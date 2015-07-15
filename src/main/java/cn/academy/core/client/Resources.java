@@ -63,6 +63,13 @@ public class Resources {
     	return res("textures/" + loc + ".png");
     }
     
+    public static ResourceLocation[] getTextureSeq(String loc, int n) {
+    	ResourceLocation[] ret = new ResourceLocation[n];
+    	for(int i = 0; i < n; ++i)
+    		ret[i] = getTexture(loc + i);
+    	return ret;
+    }
+    
     public static ResourceLocation[] getEffectSeq(String effectName, int n) {
     	ResourceLocation[] layers = new ResourceLocation[n];
 		String baseName = "academy:textures/effects/" + effectName + "/";

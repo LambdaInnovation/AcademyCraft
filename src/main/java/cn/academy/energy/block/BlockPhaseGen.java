@@ -10,31 +10,36 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.client.render.block;
+package cn.academy.energy.block;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.client.Resources;
-import cn.liutils.api.render.model.TileEntityModelCustom;
-import cn.liutils.template.block.RenderBlockMultiModel;
+import net.minecraft.world.World;
+import cn.academy.core.block.ACBlockContainer;
+import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
  */
-public class RenderSolarGenerator extends RenderBlockMultiModel {
+public class BlockPhaseGen extends ACBlockContainer {
 
-	public RenderSolarGenerator() {
-		super(new TileEntityModelCustom(Resources.getModel("solar")), 
-			Resources.getTexture("models/solar"));
-		scale = 0.014;
+	public BlockPhaseGen() {
+		super("phase_generator", Material.rock, null);
 	}
 	
 	@Override
-	public void drawAtOrigin(TileEntity te) {
-		GL11.glRotated(90, 0, 1, 0);
-		super.drawAtOrigin(te);
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return RenderEmptyBlock.id;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TilePhaseGen();
 	}
 
 }

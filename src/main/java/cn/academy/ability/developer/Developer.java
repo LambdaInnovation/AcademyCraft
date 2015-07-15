@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class represents actions performed by the Developer. 
- * Seperated from TileEntity to be used in both Portable and Block version.
+ * Separated from TileEntity to be used in both Portable and Block version.
  * @author WeAthFolD
  */
 public abstract class Developer {

@@ -15,7 +15,7 @@ package cn.academy.energy.block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.core.block.TileGeneratorBase;
-import cn.academy.energy.client.render.block.RenderSolarGenerator;
+import cn.academy.energy.client.render.block.RenderSolarGen;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.template.block.IMultiTile;
@@ -33,7 +33,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 	
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
-	public static RenderSolarGenerator renderer;
+	public static RenderSolarGen renderer;
 
 	public TileSolarGen() {
 		super("solar_generator", 1, 1000, 100);

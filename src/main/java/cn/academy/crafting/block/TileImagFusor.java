@@ -110,12 +110,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
+		return fluid == ModuleCrafting.fluidImagProj;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return fluid == ModuleCrafting.fluidImagProj;
 	}
 	
 	@Override

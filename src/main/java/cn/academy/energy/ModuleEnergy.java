@@ -30,6 +30,7 @@ import cn.academy.energy.block.BlockInfiniteGen;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.academy.energy.block.BlockPhaseGen;
 import cn.academy.energy.block.BlockSolarGen;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.support.EnergyItemHelper;
@@ -51,6 +52,7 @@ public class ModuleEnergy {
 	
 	public static ItemLoader loader;
 	
+	// BLOCKS
     @RegBlock
     @RecipeName("node0")
     public static BlockNode nodeBasic = new BlockNode(NodeType.BASIC);
@@ -72,9 +74,14 @@ public class ModuleEnergy {
     public static BlockInfiniteGen infiniteGen;
     
     @RegBlock
-    @RecipeName("solar")
+    @RecipeName("solar_gen")
     public static BlockSolarGen solarGen;
     
+    @RegBlock
+    @RecipeName("phase_gen")
+    public static BlockPhaseGen phaseGen;
+    
+    // ITEMS
     @FromLoader
     @RecipeName("ene_unit")
     public static Item energyUnit;
