@@ -30,6 +30,7 @@ import cn.liutils.util.helper.Motion3D;
  * TODO Implement entity damage
  * TODO Implement energy distribution
  * TODO Render effects
+ * TODO Sound effects
  * @author WeAthFolD
  */
 public class RangedRayDamage {
@@ -76,7 +77,7 @@ public class RangedRayDamage {
 		
 		if(DamageHelper.DESTROY_BLOCKS) {
 			for(double s = -range; s <= range; s += STEP) {
-				for(double t = (int) -range; t <= range; t += STEP) {
+				for(double t = -range; t <= range; t += STEP) {
 					if(s * s + t * t > range * range)
 						continue;
 					
