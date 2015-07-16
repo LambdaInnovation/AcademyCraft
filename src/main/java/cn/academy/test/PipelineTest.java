@@ -1,12 +1,16 @@
 package cn.academy.test;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.academy.core.util.SubscribePipeline;
-import cn.academy.core.util.ValuePipeline;
+import cn.academy.core.util.RangedRayDamage;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.liutils.util.helper.KeyHandler;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * ValuePipeline unittest
@@ -15,32 +19,19 @@ import cn.liutils.util.helper.KeyHandler;
 @Registrant
 public class PipelineTest {
 	
-	static ValuePipeline pipeline = new ValuePipeline();
-	static {
-		pipeline.register(new Listener());
-	}
-	
 	@RegACKeyHandler(name = "miku", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler key = new KeyHandler() {
 		@Override
 		public void onKeyDown() {
-			System.out.println("val1 = " + pipeline.pipeFloat("val1", 233, true));
-			System.out.println("ns.val2 = " + pipeline.pipeFloat("ns.val2", 30, true));
+			rangeDmgAtServer(getPlayer());
 		}
 	};
 	
-	public static class Listener  {
-		
-		@SubscribePipeline("val1")
-		public float mulx2(float val, boolean aaa) {
-			return val * 2 * (aaa ? 1.5f : 2f);
-		}
-		
-		@SubscribePipeline("ns.?")
-		public float mulx3(float val, boolean aaa) {
-			return val * 3;
-		}
-		
+	@RegNetworkCall(side = Side.SERVER)
+	public static void rangeDmgAtServer(@Instance EntityPlayer player) {
+		RangedRayDamage rrd = new RangedRayDamage(player, 5, 1);
+		rrd.perform();
 	}
+	
 	
 }
