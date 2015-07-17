@@ -53,8 +53,8 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	/**
 	 * Unit: Degree per second
 	 */
-	public float getSpinSpeed() {
-		return 10.0f;
+	public double getSpinSpeed() {
+		return 60.0;
 	}
 
 	// InfoBlockMulti delegates

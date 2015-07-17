@@ -26,8 +26,6 @@ public class RenderWindGenPillar extends RenderTileEntityModel {
 	public RenderWindGenPillar() {
 		super(new TileEntityModelCustom(Resources.getModel("windgen_pillar")), 
 				Resources.getTexture("models/windgen_pillar"));
-		this.reverse = false;
-		this.scale = 1;
 	}
 
 }

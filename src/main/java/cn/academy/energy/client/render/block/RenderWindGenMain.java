@@ -22,6 +22,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.energy.block.wind.TileWindGenMain;
 import cn.liutils.template.block.RenderBlockMulti;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD
@@ -48,8 +49,15 @@ public class RenderWindGenMain extends RenderBlockMulti {
 		
 		// draw fan
 		if(gen.isFanInstalled()) {
+			// update fan rotation
+			long time = GameTimer.getTime();
+			long dt = gen.lastFrame == -1 ? 0 : time - gen.lastFrame;
+			gen.lastFrame = time;
+			gen.lastRotation += gen.getSpinSpeed() * dt / 1000.0;
+			
 			GL11.glPushMatrix();
 			GL11.glTranslated(0, 0.5, 0.82);
+			GL11.glRotated(gen.lastRotation, 0, 0, -1);
 			RenderUtils.loadTexture(texFan);
 			mdlFan.renderAll();
 			GL11.glPopMatrix();
