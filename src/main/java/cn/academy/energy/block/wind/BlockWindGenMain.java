@@ -10,44 +10,35 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.block;
+package cn.academy.energy.block.wind;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockMulti;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
  */
-public class BlockSolarGen extends ACBlockMulti {
+public class BlockWindGenMain extends ACBlockMulti {
 
-	public BlockSolarGen() {
-		super("solar_gen", Material.rock);
-		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
-		this.finishInit();
-	}
-	
-	@Override
-	public int getRenderType() {
-		return RenderEmptyBlock.id;
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
+	public BlockWindGenMain() {
+		super("windgen_main", Material.rock);
+		this.addSubBlock(new int[][] {
+			{ 0, 0, -1 },
+			{ 0, 0, 1 }
+		});
+		finishInit();
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileSolarGen();
+		return new TileWindGenMain();
 	}
 
 	@Override
 	public double[] getRotCenter() {
-		return new double[] { 0.5, 0, 0.5 };
+		return new double[] { 0.5, 0, 0.4 };
 	}
 
 }

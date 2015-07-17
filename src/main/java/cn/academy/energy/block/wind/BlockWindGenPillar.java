@@ -10,24 +10,22 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.block;
+package cn.academy.energy.block.wind;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.block.ACBlockMulti;
+import cn.academy.core.block.ACBlockContainer;
+import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
  */
-public class BlockSolarGen extends ACBlockMulti {
+public class BlockWindGenPillar extends ACBlockContainer {
 
-	public BlockSolarGen() {
-		super("solar_gen", Material.rock);
-		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
-		this.finishInit();
+	public BlockWindGenPillar() {
+		super("windgen_pillar", Material.rock, null);
 	}
 	
 	@Override
@@ -42,12 +40,7 @@ public class BlockSolarGen extends ACBlockMulti {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileSolarGen();
-	}
-
-	@Override
-	public double[] getRotCenter() {
-		return new double[] { 0.5, 0, 0.5 };
+		return new TileWindGenPillar();
 	}
 
 }

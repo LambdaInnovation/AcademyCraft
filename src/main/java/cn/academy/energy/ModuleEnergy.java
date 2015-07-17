@@ -32,6 +32,9 @@ import cn.academy.energy.block.BlockNode;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.block.BlockPhaseGen;
 import cn.academy.energy.block.BlockSolarGen;
+import cn.academy.energy.block.wind.BlockWindGenBase;
+import cn.academy.energy.block.wind.BlockWindGenMain;
+import cn.academy.energy.block.wind.BlockWindGenPillar;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
@@ -56,9 +59,11 @@ public class ModuleEnergy {
     @RegBlock
     @RecipeName("node0")
     public static BlockNode nodeBasic = new BlockNode(NodeType.BASIC);
+    
     @RegBlock
     @RecipeName("node1")
     public static BlockNode nodeStandard = new BlockNode(NodeType.STANDARD);
+    
     @RegBlock
     @RecipeName("node2")
     public static BlockNode nodeAdvanced = new BlockNode(NodeType.ADVANCED);
@@ -80,6 +85,18 @@ public class ModuleEnergy {
     @RegBlock
     @RecipeName("phase_gen")
     public static BlockPhaseGen phaseGen;
+    
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("windgen_base")
+    public static BlockWindGenBase windgenBase;
+    
+    @RegBlock
+    @RecipeName("windgen_pillar")
+    public static BlockWindGenPillar windgenPillar;
+    
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("windgen_main")
+    public static BlockWindGenMain windgenMain;
     
     // ITEMS
     @FromLoader

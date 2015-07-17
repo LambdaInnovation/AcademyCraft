@@ -14,15 +14,13 @@ package cn.academy.energy.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
+import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.client.gui.matrix.GuiMatrix;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.block.BlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,13 +29,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @Registrant
-public class BlockMatrix extends BlockMulti {
+public class BlockMatrix extends ACBlockMulti {
 	
 	public BlockMatrix() {
-		super(Material.rock);
-		setCreativeTab(AcademyCraft.cct);
-		setBlockName("ac_matrix");
-		setBlockTextureName("academy:matrix");
+		super("matrix", Material.rock);
 		setHardness(3.0f);
 		setLightLevel(1f);
 		
