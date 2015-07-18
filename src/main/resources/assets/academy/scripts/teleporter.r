@@ -20,5 +20,12 @@ ac {
             consumption(exp) { lerp(20, 14, exp) }
             overload(exp) { lerp(80, 50, exp) }
         }
+        
+        threatening_teleport {
+            range(exp) { lerp(8, 15, exp) }
+            damage(exp) { lerp(3, 6, exp) }
+            consumption(exp) { lerp(35, 150, exp) }
+            overload(exp) { lerp(18, 13, exp) }
+        }
     }
 }

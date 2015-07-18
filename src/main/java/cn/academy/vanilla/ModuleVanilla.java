@@ -1,7 +1,9 @@
 package cn.academy.vanilla;
 
+import net.minecraft.item.Item;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
+import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
@@ -31,6 +33,10 @@ public class ModuleVanilla {
 	@RegItem.HasRender
 	@RecipeName("silbarn")
 	public static ItemSilbarn silbarn;
+	
+	@RegItem
+	@RecipeName("needle")
+	public static Item needle = new ACItem("needle");
 	
 	@RegCategory
 	public static CatElectroMaster electroMaster;

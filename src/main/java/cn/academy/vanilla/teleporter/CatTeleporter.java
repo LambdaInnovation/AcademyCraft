@@ -17,26 +17,30 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.academy.vanilla.teleporter.skills.MarkTeleport;
 import cn.academy.vanilla.teleporter.skills.PenetrateTeleport;
+import cn.academy.vanilla.teleporter.skills.ThreateningTeleport;
 
 /**
  * @author WeAthFolD
  */
 public class CatTeleporter extends Category {
 
-	public static MarkTeleport markTeleport;
+	public static MarkTeleport markTP;
 	
-	public static LocationTeleport locTeleport;
+	public static LocationTeleport locTP;
 	
-	public static PenetrateTeleport penetrateTeleport;
+	public static PenetrateTeleport penetrateTP;
+	
+	public static ThreateningTeleport threateningTP;
 	
 	public CatTeleporter() {
 		super("teleporter");
 		
 		this.defineTypes("default", "passive");
 		
-		this.addSkill("default", markTeleport = new MarkTeleport());
-		this.addSkill("default", locTeleport = new LocationTeleport());
-		this.addSkill("default", penetrateTeleport = new PenetrateTeleport());
+		this.addSkill("default", markTP = new MarkTeleport());
+		this.addSkill("default", locTP = new LocationTeleport());
+		this.addSkill("default", penetrateTP = new PenetrateTeleport());
+		this.addSkill("default", threateningTP = new ThreateningTeleport());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}
