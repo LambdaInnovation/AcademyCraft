@@ -114,7 +114,7 @@ vn -0.977234 0.000000 -0.212166
 g default
 # 0 triangles in group
 
-g windgen_main:pCylinder3
+g windgen_main_pCylinder3
 s 1
 f 1/1/1 2/2/1 9/3/1
 f 9/3/1 2/2/1 10/4/1
@@ -150,7 +150,7 @@ f 15/6/10 16/13/10 18/7/10
 f 16/13/10 9/12/10 18/7/10
 # 32 triangles in group
 
-g windgen_main:pCube17
+g windgen_main_pCube17
 f 35/14/11 36/15/11 37/16/11
 f 37/16/11 36/15/11 38/17/11
 f 37/18/10 38/19/10 39/20/10
@@ -165,7 +165,7 @@ f 41/22/14 35/23/14 39/24/14
 f 39/24/14 35/23/14 37/25/14
 # 12 triangles in group
 
-g windgen_main:pCube18
+g windgen_main_pCube18
 f 43/26/15 44/27/15 45/28/15
 f 45/28/15 44/27/15 46/29/15
 f 45/30/10 46/31/10 47/32/10
