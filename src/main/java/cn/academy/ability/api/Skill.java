@@ -215,6 +215,8 @@ public abstract class Skill extends Controllable {
     }
     
     //---Script integration
+    // TODO: Unify the pipeline call
+    
     protected ScriptFunction getFunc(String name) {
     	return script.getFunction(name);
     }
