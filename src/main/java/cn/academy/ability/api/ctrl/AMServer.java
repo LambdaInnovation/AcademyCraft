@@ -55,8 +55,14 @@ public class AMServer implements IActionManager {
 		if (_action == null)
 			ActionManager.terminateAtClient(action.uuid.toString(), SyncAction.TAG_ABORTED);
 		else {
-			_action.state = State.ENDED;
-			ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
+			if (_action.isStarted()) {
+				_action.state = State.ENDED;
+				ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
+			}
+			else {
+				_action.state = State.ABANDONED;
+				ActionManager.terminateAtClient(_action.uuid.toString(), SyncAction.TAG_ABORTED);
+			}
 		}
 	}
 
@@ -67,8 +73,14 @@ public class AMServer implements IActionManager {
 		if (_action == null)
 			ActionManager.terminateAtClient(action.uuid.toString(), SyncAction.TAG_ABORTED);
 		else {
-			_action.state = State.ABORTED;
-			ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
+			if (_action.isStarted()) {
+				_action.state = State.ABORTED;
+				ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
+			}
+			else {
+				_action.state = State.ABANDONED;
+				ActionManager.terminateAtClient(_action.uuid.toString(), SyncAction.TAG_ABORTED);
+			}
 		}
 	}
 	
@@ -106,11 +118,17 @@ public class AMServer implements IActionManager {
 		SyncAction action = map.get(player.getUniqueID()).get(uuid);
 		if (action != null) {
 			System.out.println("AMS#NET_END: action not null");
-			if (action.state.equals(State.STARTED))
-				action.state = State.ENDED;
-			else
-				action.state = State.ABORTED;
-			ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
+			if (action.isStarted()) {
+				if (action.state.equals(State.STARTED))
+					action.state = State.ENDED;
+				else
+					action.state = State.ABORTED;
+				ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
+			}
+			else {
+				action.state = State.ABANDONED;
+				ActionManager.terminateAtClient(uuid.toString(), SyncAction.TAG_ABORTED);
+			}
 		}
 	}
 
@@ -119,8 +137,14 @@ public class AMServer implements IActionManager {
 		SyncAction action = map.get(player.getUniqueID()).get(uuid);
 		if (action != null) {
 			System.out.println("AMS#NET_ABORT: action not null");
-			action.state = State.ABORTED;
-			ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
+			if (action.isStarted()) {
+				action.state = State.ABORTED;
+				ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
+			}
+			else {
+				action.state = State.ABANDONED;
+				ActionManager.terminateAtClient(uuid.toString(),  SyncAction.TAG_ABORTED);
+			}
 		}
 	}
 	
@@ -171,6 +195,9 @@ public class AMServer implements IActionManager {
 					break;
 				case ABORTED:
 					action.onAbort();
+					i.remove();
+					break;
+				case ABANDONED:
 					i.remove();
 					break;
 				default:

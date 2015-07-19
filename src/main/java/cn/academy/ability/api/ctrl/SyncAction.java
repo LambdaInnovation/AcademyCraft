@@ -43,7 +43,8 @@ public abstract class SyncAction {
 		VALIDATED,
 		STARTED,
 		ENDED,
-		ABORTED
+		ABORTED,
+		ABANDONED
 	}
 	
 	/* start from client
@@ -158,22 +159,22 @@ public abstract class SyncAction {
 	private static final String NBT_INTERVAL = "2";
 	private static final String NBT_OBJECT = "3";
 	
-	void setNBTStart(NBTTagCompound tag) {
+	final void setNBTStart(NBTTagCompound tag) {
 		uuid = UUID.fromString(tag.getString(NBT_UUID));
 		intv = tag.getInteger(NBT_INTERVAL);
 		if (tag.hasKey(NBT_OBJECT))
 			readNBTStart(tag.getCompoundTag(NBT_OBJECT));
 	}
-	void setNBTUpdate(NBTTagCompound tag) {
+	final void setNBTUpdate(NBTTagCompound tag) {
 		if (tag.hasKey(NBT_OBJECT))
 			readNBTUpdate(tag.getCompoundTag(NBT_OBJECT));
 	}
-	void setNBTFinal(NBTTagCompound tag) {
+	final void setNBTFinal(NBTTagCompound tag) {
 		state = State.valueOf(tag.getString(NBT_STATE));
 		if (tag.hasKey(NBT_OBJECT))
 			readNBTFinal(tag.getCompoundTag(NBT_OBJECT));
 	}
-	NBTTagCompound getNBTStart() {
+	final NBTTagCompound getNBTStart() {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(NBT_UUID, uuid.toString());
 		tag.setInteger(NBT_INTERVAL, intv);
@@ -182,20 +183,24 @@ public abstract class SyncAction {
 		tag.setTag(NBT_OBJECT, obj);
 		return tag;
 	}
-	NBTTagCompound getNBTUpdate() {
+	final NBTTagCompound getNBTUpdate() {
 		NBTTagCompound tag = new NBTTagCompound();
 		NBTTagCompound obj = new NBTTagCompound();
 		writeNBTUpdate(obj);
 		tag.setTag(NBT_OBJECT, obj);
 		return tag;
 	}
-	NBTTagCompound getNBTFinal() {
+	final NBTTagCompound getNBTFinal() {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString(NBT_STATE, state.toString());
 		NBTTagCompound obj = new NBTTagCompound();
 		writeNBTFinal(obj);
 		tag.setTag(NBT_OBJECT, obj);
 		return tag;
+	}
+	
+	final boolean isStarted() {
+		return !state.equals(State.CREATED) && !state.equals(State.VALIDATED);
 	}
 	
 	static final UUID getUUIDFromNBT(NBTTagCompound tag) {
