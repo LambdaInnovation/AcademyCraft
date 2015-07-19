@@ -46,13 +46,13 @@ public class AMClient implements IActionManager {
 	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
 		//System.out.println("AMC#INT_START");
+		action.player = Minecraft.getMinecraft().thePlayer;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
 			public void onReady(Object val) {
 				if ((boolean) val) {
 					action.state = State.VALIDATED;
-					action.player = Minecraft.getMinecraft().thePlayer;
 					map.put(action.uuid, action);
 					set.add(action.uuid);
 				}

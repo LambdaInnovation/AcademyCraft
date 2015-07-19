@@ -41,8 +41,8 @@ public class AMServer implements IActionManager {
 	public void startAction(SyncAction action) {
 		System.out.println("AMS#INT_START");
 		action.uuid = UUID.randomUUID();
-		action.state = State.VALIDATED;
 		action.player = null;
+		action.state = State.VALIDATED;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtClient(null, action.getClass().getName(), tag);
 		map.get(dummy).put(action.uuid, action);
@@ -88,8 +88,8 @@ public class AMServer implements IActionManager {
 		SyncAction action = null;
 		try {
 			action = (SyncAction) Class.forName(className).newInstance();
-			action.setNBTStart(tag);
 			action.player = player;
+			action.setNBTStart(tag);
 			action.state = State.VALIDATED;
 			ActionManager.startAtClient(player, className, action.getNBTStart());
 			map.get(playerUUID(action)).put(action.uuid, action);
