@@ -12,23 +12,36 @@
  */
 package cn.academy.core.util;
 
+import static cn.liutils.util.generic.VecUtils.add;
+import static cn.liutils.util.generic.VecUtils.scalarMultiply;
+import static cn.liutils.util.generic.VecUtils.subtract;
+import static cn.liutils.util.generic.VecUtils.vec;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.liutils.util.generic.MathUtils;
+import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
+import cn.liutils.util.mc.EntitySelectors;
+import cn.liutils.util.mc.WorldUtils;
 
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,
  * 	and destroy blocks in the path, also damages entities. It takes account of global damage switches.
  * 
- * TODO Implement entity damage
- * TODO Implement energy distribution
  * TODO Render effects
  * TODO Sound effects
  * @author WeAthFolD
@@ -41,7 +54,14 @@ public class RangedRayDamage {
 	public final Motion3D motion;
 	public double range;
 	public float totalEnergy; // decrements [hardness of block] when hit a block
-	public int maxIncrement = 100;
+	public int maxIncrement = 50;
+	public float dropProb = 0.05f;
+	
+	public IEntitySelector entitySelector = EntitySelectors.everything;
+	public DamageSource dmgSrc = DamageSource.generic;
+	public float startDamage = 10.0f; // ATTN: LINEAR 1.0*startDamage at dist 0; 0.2 * startDamage at maxIncrement
+	
+	private Vec3 start, slope;
 	
 	public RangedRayDamage(World _world, Motion3D _motion, double _range, float _energy) {
 		world = _world;
@@ -52,20 +72,25 @@ public class RangedRayDamage {
 	
 	public RangedRayDamage(Entity entity, double _range, float _energy) {
 		this(entity.worldObj, new Motion3D(entity, true).move(1), _range, _energy);
+		if(entity instanceof EntityLivingBase) {
+			dmgSrc = DamageSource.causeMobDamage((EntityLivingBase) entity);
+		}
+		entitySelector = EntitySelectors.excludeOf(entity);
 	}
 	
 	/**
 	 * BOOM!
 	 */
 	public void perform() {
-		// Plot the line
 		motion.normalize();
 		Set<int[]> processed = new HashSet();
 		
 		float yaw = -MathUtils.PI_F * 0.5f - motion.getRotationYawRadians(), 
 				pitch = motion.getRotationPitchRadians();
 		
-		Vec3 start = motion.getPosVec(), slope = motion.getMotionVec();
+		start = motion.getPosVec();
+		slope = motion.getMotionVec();
+		
 		Vec3 vp0 = VecUtils.vec(0, 0, 1);
 		vp0.rotateAroundZ(pitch);
 		vp0.rotateAroundY(yaw);
@@ -78,7 +103,8 @@ public class RangedRayDamage {
 		if(DamageHelper.DESTROY_BLOCKS) {
 			for(double s = -range; s <= range; s += STEP) {
 				for(double t = -range; t <= range; t += STEP) {
-					if(s * s + t * t > range * range)
+					double rr = range * RandUtils.ranged(0.9, 1.1);
+					if(s * s + t * t > rr * rr)
 						continue;
 					
 					Vec3 pos = VecUtils.add(start, 
@@ -91,8 +117,40 @@ public class RangedRayDamage {
 						continue;
 					
 					processed.add(coords);
-					processLine(coords[0], coords[1], coords[2], slope, 1000);
 				}
+			}
+			
+			float ave = totalEnergy / processed.size();
+			for(int[] coords : processed) {
+				processLine(coords[0], coords[1], coords[2], 
+					slope, ave * RandUtils.rangef(0.95f, 1.05f));
+			}
+		}
+		
+		/* Apply Entity Damage */ {
+			Vec3 v0 = add(start, add(scalarMultiply(vp0, -range), scalarMultiply(vp1, -range))),
+				v1 = add(start, add(scalarMultiply(vp0, range), scalarMultiply(vp1, -range))),
+				v2 = add(start, add(scalarMultiply(vp0, range), scalarMultiply(vp1, range))),
+				v3 = add(start, add(scalarMultiply(vp0, -range), scalarMultiply(vp1, range))),
+				v4 = add(v0, scalarMultiply(slope, maxIncrement)),
+				v5 = add(v1, scalarMultiply(slope, maxIncrement)),
+				v6 = add(v2, scalarMultiply(slope, maxIncrement)),
+				v7 = add(v3, scalarMultiply(slope, maxIncrement));
+			AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4, v5, v6, v7);
+			
+			IEntitySelector areaSelector = new IEntitySelector() {
+
+				@Override
+				public boolean isEntityApplicable(Entity target) {
+					Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+					Vec3 proj = dv.crossProduct(slope);
+					return proj.lengthVector() < range * 1.2;
+				}
+				
+			};
+			List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.combine(entitySelector, areaSelector));
+			for(Entity e : targets) {
+				attackEntity(e);
 			}
 		}
 	}
@@ -104,17 +162,45 @@ public class RangedRayDamage {
 			++incrs;
 			int[] coords = plotter.next();
 			int x = coords[0], y = coords[1], z = coords[2];
+			boolean snd = incrs < 20;
 			
-			Block block = world.getBlock(x, y, z);
-			float hardness = block.getBlockHardness(world, x, y, z);
-			if(hardness < 0) hardness = 2333333f;
-			if((energy -= hardness) > 0) {
-				//TODO Add destroy effects
-				world.setBlockToAir(x, y, z);
+			energy = destroyBlock(energy, x, y, z, snd);
+			
+			if(RandUtils.ranged(0, 1) < 0.05) {
+				ForgeDirection dir = ForgeDirection.values()[RandUtils.rangei(0, 6)];
+				energy = destroyBlock(energy, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, snd);
 			}
-//			world.setBlock(x, y, z, Blocks.stone);
 		}
-		System.out.println(String.format("%d increments", incrs));
+		//System.out.println(String.format("%d increments", incrs));
+	}
+	
+	private float destroyBlock(float energy, int x, int y, int z, boolean snd) {
+		Block block = world.getBlock(x, y, z);
+		float hardness = block.getBlockHardness(world, x, y, z);
+		if((energy -= hardness) > 0) {
+			if(block.getMaterial() != Material.air) {
+				block.dropBlockAsItemWithChance(world, x, y, z, 
+					world.getBlockMetadata(x, y, z), dropProb, 0);
+				
+				if(snd && RandUtils.ranged(0, 1) < 0.1) {
+					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), 
+	                		(double)((float)z + 0.5F), 
+	                		block.stepSound.getBreakSound(), 
+	                		(block.stepSound.getVolume() + 1.0F) / 2.0F, 
+	                		block.stepSound.getPitch() * 0.8F);
+				}
+			}
+			world.setBlockToAir(x, y, z);
+		}
+		return energy;
+	}
+	
+	private void attackEntity(Entity target) {
+		Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+		float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
+		
+		float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, (float) dist / maxIncrement);
+		DamageHelper.attack(target, dmgSrc, realDmg);
 	}
 	
 	static class Plotter {

@@ -28,6 +28,7 @@ import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.core.util.RangedRayDamage;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
@@ -93,29 +94,32 @@ public class Railgun extends Skill {
 				
 				if(coin != null) {
 					if(checkRailgunQTETime(coin)) {
-						ActionManager.startAction(new ActionShootCoin());
+						ActionManager.startAction(new ActionShootCoin(coin));
 						this.endSkill();
 					} else {
 						this.abortSkill();
 					}
 				} else {
 					ItemStack stack = player.getCurrentEquippedItem();
-					boolean successful = false;
+					boolean execute = false;
 					
 					if(stack != null) {
 						for(SupportedItem si : supportedItems) {
 							if(si.accepts(stack)) {
 								SyncAction action = new ActionShootItem(si);
+								
 								ActionManager.startAction(action);
-								this.estimatedCP = Railgun.this.getConsumption(aData);
 								this.addChild(action);
-								successful = true;
+								
+								this.estimatedCP = Railgun.this.getConsumption(aData);
+								
+								execute = true;
 								break;
 							}
 						}
 					}
 					
-					if(!successful)
+					if(!execute)
 						this.abortSkill();
 				}
 			}
@@ -127,8 +131,22 @@ public class Railgun extends Skill {
 	}
 	
 	public static class ActionShootCoin extends SyncActionInstant {
+		
+		EntityCoinThrowing coin;
 
-		protected ActionShootCoin() {}
+		public ActionShootCoin(EntityCoinThrowing _coin) {
+			coin = _coin;
+		}
+		
+		public ActionShootCoin() {}
+		
+		@Override
+		public void writeNBTStart(NBTTagCompound tag) {
+		}
+		
+		@Override
+		public void readNBTStart(NBTTagCompound tag) {
+		}
 
 		@Override
 		public boolean validate() {
@@ -137,9 +155,16 @@ public class Railgun extends Skill {
 
 		@Override
 		public void execute() {
-			System.out.println("Shootin'!");
 			if(isRemote) {
 				spawnRay();
+			} else {
+				System.out.println("WHY?");
+				RangedRayDamage damage = new RangedRayDamage(player, 2, 1000);
+				damage.perform();
+				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);
+				if(coin != null) {
+					coin.setDead();
+				}
 			}
 		}
 		

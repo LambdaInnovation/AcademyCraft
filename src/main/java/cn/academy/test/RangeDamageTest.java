@@ -29,7 +29,7 @@ public class RangeDamageTest {
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void rangeDmgAtServer(@Instance EntityPlayer player) {
-		RangedRayDamage rrd = new RangedRayDamage(player, 5, 1);
+		RangedRayDamage rrd = new RangedRayDamage(player, 2, 1000);
 		rrd.perform();
 	}
 	
