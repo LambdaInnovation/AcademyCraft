@@ -69,11 +69,11 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		t.setBrightness(15728880);
 		Vec3 look = VecUtils.subtract(end, start).normalize();
 		
-		end = VecUtils.add(end, VecUtils.scalarMultiply(look, endFix));
-		start = VecUtils.add(start, VecUtils.scalarMultiply(look, startFix));
+		end = VecUtils.add(end, VecUtils.multiply(look, endFix));
+		start = VecUtils.add(start, VecUtils.multiply(look, startFix));
 		
-		Vec3 mid1 = VecUtils.add(start, VecUtils.scalarMultiply(look, width));
-		Vec3 mid2 = VecUtils.add(end, VecUtils.scalarMultiply(look, -width));
+		Vec3 mid1 = VecUtils.add(start, VecUtils.multiply(look, width));
+		Vec3 mid2 = VecUtils.add(end, VecUtils.multiply(look, -width));
 		
 		double preA = color.a;
 		color.a = preA * ray.getAlpha() * ray.getGlowAlpha();

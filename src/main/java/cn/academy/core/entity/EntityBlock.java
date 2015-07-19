@@ -13,9 +13,13 @@
 package cn.academy.core.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderEntityBlock;
 import cn.annoreg.core.Registrant;
@@ -72,6 +76,8 @@ public class EntityBlock extends EntityAdvanced {
 	public void entityInit() {
 		dataWatcher.addObject(BLOCKID, Short.valueOf((short) 0));
 		dataWatcher.addObject(META, Byte.valueOf((byte) 0));
+		
+		setSize(1, 1);
 	}
 	
 	@Override
@@ -98,7 +104,20 @@ public class EntityBlock extends EntityAdvanced {
 
 				@Override
 				public void onEvent(CollideEvent event) {
-					// TODO
+					if(!worldObj.isRemote && event.result.typeOfHit == MovingObjectType.BLOCK) {
+						int tx = event.result.blockX,
+								ty = event.result.blockY,
+								tz = event.result.blockZ;
+						Block hitblock = worldObj.getBlock(tx, ty, tz);
+						if(!hitblock.isReplaceable(worldObj, tx, ty, tz)) {
+							ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
+							tx += dir.offsetX;
+							ty += dir.offsetY;
+							tz += dir.offsetZ;
+						}
+						worldObj.setBlock(tx, ty, tz, block, metadata, 0x03);
+						setDead();
+					}
 				}
 				
 			});
@@ -124,6 +143,17 @@ public class EntityBlock extends EntityAdvanced {
 	public void setBlock(Block _block, int _metadata) {
 		block = _block;
 		metadata = _metadata;
+	}
+	
+	public void fromItemStack(ItemStack stack) {
+		Block block = Block.getBlockFromItem(stack.getItem());
+		int meta = stack.getItemDamage();
+		setBlock(block, meta);
+		if(block instanceof ITileEntityProvider) {
+			TileEntity te = ((ITileEntityProvider)block)
+					.createNewTileEntity(worldObj, meta);
+			setTileEntity(te);
+		}
 	}
 	
 	public void setTileEntity(TileEntity _te) {

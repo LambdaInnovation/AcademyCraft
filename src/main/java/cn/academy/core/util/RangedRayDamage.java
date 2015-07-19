@@ -13,7 +13,7 @@
 package cn.academy.core.util;
 
 import static cn.liutils.util.generic.VecUtils.add;
-import static cn.liutils.util.generic.VecUtils.scalarMultiply;
+import static cn.liutils.util.generic.VecUtils.multiply;
 import static cn.liutils.util.generic.VecUtils.subtract;
 import static cn.liutils.util.generic.VecUtils.vec;
 
@@ -109,8 +109,8 @@ public class RangedRayDamage {
 					
 					Vec3 pos = VecUtils.add(start, 
 						VecUtils.add(
-							VecUtils.scalarMultiply(vp0, s),
-							VecUtils.scalarMultiply(vp1, t)));
+							VecUtils.multiply(vp0, s),
+							VecUtils.multiply(vp1, t)));
 					
 					int[] coords = { (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord };
 					if(processed.contains(coords))
@@ -128,14 +128,14 @@ public class RangedRayDamage {
 		}
 		
 		/* Apply Entity Damage */ {
-			Vec3 v0 = add(start, add(scalarMultiply(vp0, -range), scalarMultiply(vp1, -range))),
-				v1 = add(start, add(scalarMultiply(vp0, range), scalarMultiply(vp1, -range))),
-				v2 = add(start, add(scalarMultiply(vp0, range), scalarMultiply(vp1, range))),
-				v3 = add(start, add(scalarMultiply(vp0, -range), scalarMultiply(vp1, range))),
-				v4 = add(v0, scalarMultiply(slope, maxIncrement)),
-				v5 = add(v1, scalarMultiply(slope, maxIncrement)),
-				v6 = add(v2, scalarMultiply(slope, maxIncrement)),
-				v7 = add(v3, scalarMultiply(slope, maxIncrement));
+			Vec3 v0 = add(start, add(multiply(vp0, -range), multiply(vp1, -range))),
+				v1 = add(start, add(multiply(vp0, range), multiply(vp1, -range))),
+				v2 = add(start, add(multiply(vp0, range), multiply(vp1, range))),
+				v3 = add(start, add(multiply(vp0, -range), multiply(vp1, range))),
+				v4 = add(v0, multiply(slope, maxIncrement)),
+				v5 = add(v1, multiply(slope, maxIncrement)),
+				v6 = add(v2, multiply(slope, maxIncrement)),
+				v7 = add(v3, multiply(slope, maxIncrement));
 			AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4, v5, v6, v7);
 			
 			IEntitySelector areaSelector = new IEntitySelector() {
@@ -187,7 +187,7 @@ public class RangedRayDamage {
 	                		(double)((float)z + 0.5F), 
 	                		block.stepSound.getBreakSound(), 
 	                		(block.stepSound.getVolume() + 1.0F) / 2.0F, 
-	                		block.stepSound.getPitch() * 0.8F);
+	                		block.stepSound.getPitch());
 				}
 			}
 			world.setBlockToAir(x, y, z);

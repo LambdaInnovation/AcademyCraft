@@ -40,10 +40,10 @@ public class RenderEntityBlock extends Render {
 	public void doRender(Entity e, double x, double y,
 			double z, float a, float b) {
 		EntityBlock entity = (EntityBlock) e;
-//		if(++entity.c == 50) {
-//			entity.c = 0;
-//			System.out.println("Rendering " + entity.block + ", " + entity.tileEntity);
-//		}
+		if(++entity.c == 50) {
+			entity.c = 0;
+			System.out.println("Rendering " + entity.block + ", " + entity.tileEntity);
+		}
 		
 		if(entity.block != null) {
 			GL11.glPushMatrix(); {
@@ -61,6 +61,10 @@ public class RenderEntityBlock extends Render {
 					
 					RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
 		            
+					//x += b * entity.motionX;
+					//y += b * entity.motionY;
+					//z += b * entity.motionZ;
+					
 					int ix = (int) entity.posX, iy = (int) entity.posY, iz = (int) entity.posZ;
 					
 					tes.startDrawingQuads();
@@ -75,11 +79,13 @@ public class RenderEntityBlock extends Render {
 		}
 		
 		if(entity.tileEntity != null) {
+			entity.tileEntity.blockType = entity.block;
 			TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance.getSpecialRenderer(entity.tileEntity);
 			try {
 				tesr.renderTileEntityAt(entity.tileEntity, x - 0.5, y, z - 0.5, a);
 			} catch(Exception ex) {
 				AcademyCraft.log.error("Error handling EntityBlock TE rendering: " + tesr.getClass());
+				ex.printStackTrace();
 			}
 		}
 	}

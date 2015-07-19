@@ -14,7 +14,7 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import static cn.liutils.util.generic.VecUtils.add;
 import static cn.liutils.util.generic.VecUtils.crossProduct;
-import static cn.liutils.util.generic.VecUtils.scalarMultiply;
+import static cn.liutils.util.generic.VecUtils.multiply;
 import static cn.liutils.util.generic.VecUtils.subtract;
 import static cn.liutils.util.generic.VecUtils.vec;
 
@@ -86,7 +86,7 @@ public class ArcFactory {
 			if(rand.nextDouble() < branchFactor) {
 				matrix.setIdentity();
 				Vector3f v3f;
-				Vec3 dir = scalarMultiply(subtract(ave.pt, s.start.pt), lengthShrink);
+				Vec3 dir = multiply(subtract(ave.pt, s.start.pt), lengthShrink);
 				dir = randomRotate(10, dir);
 				//matrix.rotate(GenericUtils.randIntv(-50, 50) / 180 * (float)Math.PI, asV3f(random()));
 				//dir = applyMatrix(matrix, dir);
@@ -243,10 +243,10 @@ public class ArcFactory {
 				Vec3 dir = randomRotate(15, crossProduct(subtract(s.end.pt, s.start.pt), normal)).normalize();
 				if(lastDir == null) lastDir = dir;
 				
-				Vec3 p1 = add(s.start.pt, scalarMultiply(lastDir, s.start.width)),
-					p2 = add(s.start.pt, scalarMultiply(lastDir, -s.start.width)),
-					p3 = add(s.end.pt, scalarMultiply(dir, s.end.width)),
-					p4 = add(s.end.pt, scalarMultiply(dir, -s.end.width));
+				Vec3 p1 = add(s.start.pt, multiply(lastDir, s.start.width)),
+					p2 = add(s.start.pt, multiply(lastDir, -s.start.width)),
+					p3 = add(s.end.pt, multiply(dir, s.end.width)),
+					p4 = add(s.end.pt, multiply(dir, -s.end.width));
 				
 				GL11.glColor4d(1, 1, 1, s.alpha);
 				addVert(p1, 0, 0);

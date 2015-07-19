@@ -56,7 +56,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		//The ray viewing direction.
 		Vec3 dir = new Motion3D(entity, true).getMotionVec();
 		//Pick two far enough start and end point.
-		Vec3 start = VecUtils.scalarMultiply(dir, ray.getStartFix()), end = VecUtils.add(start, VecUtils.scalarMultiply(dir, ray.getLength() - ray.getStartFix()));
+		Vec3 start = VecUtils.multiply(dir, ray.getStartFix()), end = VecUtils.add(start, VecUtils.multiply(dir, ray.getLength() - ray.getStartFix()));
 		//Get closest point for view judging.
 		Vec3 pt = VecUtils.vec(0, 0, 0);
 		
@@ -107,10 +107,10 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 	protected void drawBoard(Vec3 start, Vec3 end, Vec3 upDir, double width) {
 		width /= 2;
 		Vec3 
-			v1 = VecUtils.add(start, VecUtils.scalarMultiply(upDir, width)),
-			v2 = VecUtils.add(start, VecUtils.scalarMultiply(upDir, -width)),
-			v3 = VecUtils.add(end, 	 VecUtils.scalarMultiply(upDir, -width)),
-			v4 = VecUtils.add(end,   VecUtils.scalarMultiply(upDir, width));
+			v1 = VecUtils.add(start, VecUtils.multiply(upDir, width)),
+			v2 = VecUtils.add(start, VecUtils.multiply(upDir, -width)),
+			v3 = VecUtils.add(end, 	 VecUtils.multiply(upDir, -width)),
+			v4 = VecUtils.add(end,   VecUtils.multiply(upDir, width));
 		
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
