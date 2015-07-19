@@ -16,14 +16,15 @@ itemGroup.AcademyCraft=AcademyCraft
 item.ac_crystal_low.name=Low-purity Imag Crystal
 item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
-item.ac_wafer.name=Silicon Wafer
-item.ac_silbarn.name=Silicon Ingot
+item.ac_wafer.name=Imag Silicon Wafer
+item.ac_machine_frame.name=Machine Frame
 
 item.ac_memory.name=Data Storage
 item.ac_brain_part.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
 item.ac_machine_casing.name=Machine Casing
 item.ac_resonance_component.name=Resonator
+item.ac_calc_chip.name=Calculation Chip
 
 item.ac_matter_unit_imag_proj.name=Imag Projection Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
@@ -33,6 +34,8 @@ item.ac_matrix_core_2.name=Advanced Matrix Core
 item.ac_energy_unit.name=Energy Unit
 
 item.ac_coin.name=Coin
+item.ac_silbarn.name=Silicon Barn
+item.ac_needle.name=Needle
 
 item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer
@@ -49,7 +52,12 @@ tile.ac_node_basic.name=Basic Wireless Imag Node
 tile.ac_node_standard.name=Improved Wireless Imag Node
 tile.ac_node_advanced.name=Advanced Wireless Imag Node
 tile.ac_inciser.name=Inciser
-tile.ac_solar_generator.name=Solar Generator
+tile.ac_solar_gen.name.name=Solar Generator
+tile.ac_infinite_generator.name=Infinite Generator
+tile.ac_phase_generator.name=Phase Generator
+tile.ac_windgen_base.name=Wind Generator Pillar Base
+tile.ac_windgen_pillar.name=Wind Generator Pillar
+tile.ac_windgen_main.name=Wind Generator
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon
@@ -155,7 +163,7 @@ ac.ability.electro_master.mag_movement.name=Magnet Movement
 ac.ability.electro_master.iron_sand.name=Iron Sand Control
 ac.ability.electro_master.iron_sand.sword.name=Iron Sand Sword
 ac.ability.electro_master.iron_sand.whip.name=Iron Sand Whip
-ac.ability.electro_master.iron_sand.storm.name=Iron Sand Sword
+ac.ability.electro_master.iron_sand.storm.name=Iron Sand Storm # baka狼
 ac.ability.electro_master.iron_sand.cone.name=Iron Sand Cone
 ac.ability.electro_master.charging.name=Current Charging
 ac.ability.electro_master.body_intensify.name=Body Intensify
