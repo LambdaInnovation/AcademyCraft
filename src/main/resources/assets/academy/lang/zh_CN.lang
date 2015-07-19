@@ -5,21 +5,26 @@
 ac.generic.energy.desc=能量
 ac.generic.load.desc=负载
 
+ac.activate_key.deactivate.desc=解除能力
+ac.activate_key.endspecial.desc=结束特殊技能模式
+ac.activate_key.endskill.desc=停止技能
+
 # 创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
 # 物品
 item.ac_crystal_low.name=低纯度虚能水晶
-item.ac_constraint_ingot.name=缓冲金属锭
-item.ac_constraint_plate.name=缓冲金属板
-item.ac_wafer.name=晶圆
-item.ac_silbarn.name=扩散性支援半导体
+item.ac_constraint_ingot.name=束能金属锭
+item.ac_constraint_plate.name=束能金属板
+item.ac_wafer.name=虚像硅晶圆
+item.ac_machine_frame.name=机械框架
 
 item.ac_memory.name=数据储存器
 item.ac_brain_part.name=脑波分析模块
 item.ac_info_component.name=信息处理模块
 item.ac_machine_casing.name=机器外壳
 item.ac_resonance_component.name=共振模块
+item.ac_calc_chip.name=计算芯片
 
 item.ac_matter_unit_imag_proj.name=虚相液体单元
 item.ac_matter_unit_none.name=空单元
@@ -29,11 +34,14 @@ item.ac_matrix_core_2.name=高级矩阵核心
 item.ac_energy_unit.name=能量单元
 
 item.ac_coin.name=硬币
+item.ac_silbarn.name=扩散性支援半导体
+item.ac_needle.name=钢针
 
+item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
 
 # 方块
-tile.ac_constraint_metal_ore.name=缓冲金属矿
+tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
 
 tile.ac_imag_proj_liquid.name=虚相液体
@@ -44,6 +52,12 @@ tile.ac_node_basic.name=基础无线虚能节点
 tile.ac_node_standard.name=改良无线虚能节点
 tile.ac_node_advanced.name=高级无线虚能节点
 tile.ac_inciser.name=芯片切割机
+tile.ac_solar_gen.name=太阳能能量发生机
+tile.ac_infinite_generator.name=无限能量发生机
+tile.ac_phase_generator.name=虚相位能量发生机
+tile.ac_windgen_base.name=风力能量发生器 - 支架底座
+tile.ac_windgen_pillar.name=风力能量发生器 - 支架
+tile.ac_windgen_main.name=风力能量发生器 - 主机
 
 # 常规知识
 ac.knowledge.marathon.name=长跑
@@ -58,6 +72,10 @@ ac.knowledge.anatomy.name=解剖学
 ac.gui.preset_edit.tag=预设 #
 
 # 数据终端
+ac.terminal.notinstalled=你没有安装数据终端。
+ac.terminal.alrdy_installed=你已经安装了数据终端。
+# 这个空行是故意加入的，请保留它。
+ac.gui.terminal.installing= 安装中……
 ac.gui.terminal.appcount=%d 应用
 
 # 应用
@@ -65,6 +83,21 @@ ac.app.skill_tree.name=技能树
 ac.app.knowledge_record.name=人生记录
 ac.app.settings.name=设置
 ac.app.media_player.name=媒体播放器
+
+ac.app.freq_transmitter.name=频率变送器
+ac.app.freq_transmitter.s0_0=请右击一个无线矩阵或节点以建立连接。
+ac.app.freq_transmitter.s1_0=按下“回车”以确认
+ac.app.freq_transmitter.s1_1=验证中……
+ac.app.freq_transmitter.s2_0=右击附近的无线节点以建立连接。单击其他方块以退出。
+ac.app.freq_transmitter.s3_0=右击附近的无线能源接收对象或能源发生机以建立连接。 单击其他方块以退出。
+
+ac.app.freq_transmitter.e0=这个无线矩阵还未初始化。
+ac.app.freq_transmitter.e1=验证失败。
+ac.app.freq_transmitter.e2=连接失败。可能是由于矩阵已达到负载饱和或超出最大范围。
+ac.app.freq_transmitter.e3=连接失败。可能是由于节点已达到负载饱和或超出最大范围。
+ac.app.freq_transmitter.e4=操作取消。
+ac.app.freq_transmitter.e5=传输中……
+ac.app.freq_transmitter.e6=连接成功。
 
 # 知识UI
 ac.knowledge.acquired=习得知识
@@ -123,13 +156,18 @@ ac.knowledge.highenergy.name=高能理论
 
 ## 电击使 技能
 ac.ability.electro_master.arc_gen.name=电弧激发
-
-ac.ability.electro_master.mag_attract.name=电磁牵引
-
+ac.ability.electro_master.mag_manip.name=磁场控制
 ac.ability.electro_master.mine_detect.name=矿物探测
-
 ac.ability.electro_master.railgun.name=超电磁炮
-
+ac.ability.electro_master.mag_movement.name=电磁牵引
+ac.ability.electro_master.iron_sand.name=铁砂操作
+ac.ability.electro_master.iron_sand.sword.name=铁砂长剑
+ac.ability.electro_master.iron_sand.whip.name=铁砂长鞭
+ac.ability.electro_master.iron_sand.storm.name=铁砂风暴
+ac.ability.electro_master.iron_sand.cone.name=铁椎
+ac.ability.electro_master.charging.name=电流回冲
+ac.ability.electro_master.body_intensify.name=生物电强化
+ac.ability.electro_master.thunder_clap.name=终极落雷
 
 # 传送使
 
