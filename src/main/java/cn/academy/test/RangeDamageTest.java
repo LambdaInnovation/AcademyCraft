@@ -17,7 +17,7 @@ import cpw.mods.fml.relauncher.Side;
  * @author WeAthFolD
  */
 @Registrant
-public class PipelineTest {
+public class RangeDamageTest {
 	
 	@RegACKeyHandler(name = "miku", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler key = new KeyHandler() {

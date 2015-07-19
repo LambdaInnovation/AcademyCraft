@@ -23,7 +23,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
- *
  */
 @SideOnly(Side.CLIENT)
 @Registrant

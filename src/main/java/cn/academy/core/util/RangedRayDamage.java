@@ -165,9 +165,10 @@ public class RangedRayDamage {
 			int nextX = x + dirflag;
 			double valy = y0 + (nextX - x0) * dyx;
 			double valz = z0 + (nextX - x0) * dzx;
-			if(Math.abs(valy - y) > 1.0) {
+			if(Math.abs(valy - y) > 0.5) {
+				// 卧槽见鬼了 += double不用cast
 				y += Math.signum(dyx) * dirflag;
-			} else if(valz - z > 1.0) {
+			} else if(Math.abs(valz - z) > 0.5) {
 				z += Math.signum(dzx) * dirflag;
 			} else {
 				x = nextX;
