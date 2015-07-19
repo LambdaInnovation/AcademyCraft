@@ -13,23 +13,13 @@
 package cn.academy.vanilla.electromaster.skill.ironsand;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.SubSkill;
-import cn.academy.ability.api.ctrl.SkillInstance;
 
 /**
  * @author WeAthFolD
  */
-public class ISCone extends SubSkill {
-
-	public ISCone() {
-		super("cone");
-	}
-
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new ISInstanceBase("cone") {
-			
-		};
-	}
-
+public interface ISStateCallback {
+	
+	void startState(EntityPlayer player);
+	void endState(EntityPlayer player);
+	
 }

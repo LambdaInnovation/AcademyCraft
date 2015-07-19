@@ -27,7 +27,9 @@ public class ISStorm extends SubSkill {
 
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return null;
+		return new ISInstanceBase("storm") {
+			
+		};
 	}
 
 }

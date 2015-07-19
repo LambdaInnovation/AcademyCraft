@@ -70,6 +70,13 @@ public abstract class SpecialSkill extends Skill {
 		subSkills.add(skill);
 	}
 	
+	protected SubSkill getSubSkill(String name) {
+		for(SubSkill ss : subSkills)
+			if(ss.getName().equals(name))
+				return ss;
+		return null;
+	}
+	
 	/**
 	 * Called when player started SpecialSkill. Validate at SERVER to proceed.
 	 * @param player

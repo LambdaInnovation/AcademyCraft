@@ -19,7 +19,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 /**
  * @author WeAthFolD
  */
-public class ISSword extends SubSkill {
+public class ISSword extends SubSkill implements ISStateCallback {
 
 	public ISSword() {
 		super("sword");
@@ -27,8 +27,19 @@ public class ISSword extends SubSkill {
 
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ISInstanceBase("sword") {
+			
+		};
+	}
+
+	@Override
+	public void startState(EntityPlayer player) {
+		System.out.println("Sword state started");
+	}
+
+	@Override
+	public void endState(EntityPlayer player) {
+		System.out.println("Sword state ended");
 	}
 
 }

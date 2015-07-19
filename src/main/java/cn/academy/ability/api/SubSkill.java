@@ -74,6 +74,10 @@ public abstract class SubSkill extends Controllable {
 	public SpecialSkill getParent() {
 		return parent;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public ResourceLocation getHintIcon() {

@@ -25,13 +25,11 @@ public class ISWhip extends SubSkill {
 		super("whip");
 	}
 
-	/* (non-Javadoc)
-	 * @see cn.academy.ability.api.Controllable#createSkillInstance(net.minecraft.entity.player.EntityPlayer)
-	 */
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ISInstanceBase("whip") {
+			
+		};
 	}
 
 }

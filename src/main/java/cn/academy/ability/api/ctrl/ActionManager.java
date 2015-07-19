@@ -39,8 +39,8 @@ public class ActionManager {
 		getActionManager().abortAction(action);
 	}
 	
-	public static SyncAction findAction(EntityPlayer player, Class clazz) {
-		return getActionManager().findAction(player, clazz);
+	public static <T extends SyncAction> T findAction(EntityPlayer player, Class<T> clazz) {
+		return (T) getActionManager().findAction(player, clazz);
 	}
 	
 	private static IActionManager getActionManager() {

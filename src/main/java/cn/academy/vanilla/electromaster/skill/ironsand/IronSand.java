@@ -14,6 +14,7 @@ package cn.academy.vanilla.electromaster.skill.ironsand;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.SpecialSkill;
+import cn.academy.ability.api.SubSkill;
 import cn.academy.vanilla.electromaster.client.effect.IronSandParticles;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -82,7 +83,37 @@ public class IronSand extends SpecialSkill {
 				endEffects();
 		}
 		
-		// CLIENT
+		// CLIENT ONLY, type API
+		private String currentType = "idle";
+		
+		public void setCurrentType(String type) {
+			endCurrentType();
+			currentType = type;
+			startCurrentType();
+		}
+		
+		public String getCurrentType() {
+			return currentType;
+		}
+		
+		private void endCurrentType() {
+			SubSkill ss = instance.getSubSkill(currentType);
+			if(ss != null && ss instanceof ISStateCallback) {
+				((ISStateCallback)ss).endState(player);
+			}
+		}
+		
+		private void startCurrentType() {
+			SubSkill ss = instance.getSubSkill(currentType);
+			if(ss != null && ss instanceof ISStateCallback) {
+				((ISStateCallback)ss).startState(player);
+			}
+		}
+				
+		// ------------------
+		
+		// CLIENT EFFS
+		
 		@SideOnly(Side.CLIENT)
 		IronSandParticles particles;
 		
