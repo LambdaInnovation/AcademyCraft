@@ -14,10 +14,7 @@ package cn.academy.vanilla.teleporter;
 
 import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.teleporter.skills.LocationTeleport;
-import cn.academy.vanilla.teleporter.skills.MarkTeleport;
-import cn.academy.vanilla.teleporter.skills.PenetrateTeleport;
-import cn.academy.vanilla.teleporter.skills.ThreateningTeleport;
+import cn.academy.vanilla.teleporter.skills.*;
 
 /**
  * @author WeAthFolD
@@ -32,6 +29,8 @@ public class CatTeleporter extends Category {
 	
 	public static ThreateningTeleport threateningTP;
 	
+	public static ShiftTeleport shiftTP;
+	
 	public CatTeleporter() {
 		super("teleporter");
 		
@@ -41,6 +40,7 @@ public class CatTeleporter extends Category {
 		this.addSkill("default", locTP = new LocationTeleport());
 		this.addSkill("default", penetrateTP = new PenetrateTeleport());
 		this.addSkill("default", threateningTP = new ThreateningTeleport());
+		this.addSkill("default", shiftTP = new ShiftTeleport());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

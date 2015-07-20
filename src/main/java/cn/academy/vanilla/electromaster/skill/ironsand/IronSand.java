@@ -73,14 +73,18 @@ public class IronSand extends SpecialSkill {
 		
 		@Override
 		protected void onSkillEnd() {
-			if(isRemote)
+			if(isRemote) {
 				endEffects();
+				endCurrentType();
+			}
 		}
 		
 		@Override
 		protected void onSkillAbort() {
-			if(isRemote)
+			if(isRemote) {
 				endEffects();
+				endCurrentType();
+			}
 		}
 		
 		// CLIENT ONLY, type API

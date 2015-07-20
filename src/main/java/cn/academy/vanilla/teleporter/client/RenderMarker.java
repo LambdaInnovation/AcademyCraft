@@ -29,6 +29,7 @@ import cn.liutils.util.helper.GameTimer;
  */
 public class RenderMarker extends Render {
 	
+	static final Tessellator t = Tessellator.instance;
 	final double[][] mulArray = {
 			{0, 0, 0},
 			{1, 0, 0},
@@ -53,22 +54,32 @@ public class RenderMarker extends Render {
 			return;
 		
 		Entity targ = marker.target;
-		double width, height;
+		float width, height;
 		if(targ != null) {
 			width = targ.width;
 			height = targ.height;
 		} else {
-			width = height = 0.6;
+			width = marker.width;
+			height = marker.height;
 		}
-		
-		Tessellator t = Tessellator.instance;
+		System.out.println("Drawing");
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		//GL11.glDisable(GL11.GL_DEPTH_TEST);
+		if(marker.ignoreDepth)
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glPushMatrix();
 		
 		GL11.glTranslated(x - width / 2, y + 0.05 * Math.sin(GameTimer.getAbsTime() / 400.0), z - width / 2);
 		marker.color.bind();
+		renderMark(width, height);
+		
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+	}
+	
+	protected void renderMark(float width, float height) {
 		for(int i = 0; i < 8; ++i) {
 			GL11.glPushMatrix();
 			
@@ -91,11 +102,6 @@ public class RenderMarker extends Render {
 			
 			GL11.glPopMatrix();
 		}
-		
-		GL11.glPopMatrix();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

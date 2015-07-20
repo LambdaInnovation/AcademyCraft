@@ -158,7 +158,6 @@ public class Railgun extends Skill {
 			if(isRemote) {
 				spawnRay();
 			} else {
-				System.out.println("WHY?");
 				RangedRayDamage damage = new RangedRayDamage(player, 2, 1000);
 				damage.perform();
 				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);

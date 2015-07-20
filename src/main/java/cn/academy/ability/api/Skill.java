@@ -215,38 +215,47 @@ public abstract class Skill extends Controllable {
     }
     
     //---Script integration
-    // TODO: Unify the pipeline call
     
     protected ScriptFunction getFunc(String name) {
     	return script.getFunction(name);
     }
     
     /**
+     * Fetch a float value from a function call in script and pipeline it.
+     * @param args the arguments passed into the SCRIPT FUNCTION
+     */
+    protected float getFloatPiped(String key, EntityPlayer player, Object... args) {
+    	return AcademyCraft.pipeline.pipeFloat(getFullName() + "." + key, 
+    		getFunc(key).callFloat(args), player);
+    }
+    
+    protected int getIntPiped(String key, EntityPlayer player, Object... args) {
+    	return AcademyCraft.pipeline.pipeInt(getFullName() + "." + key, 
+    		getFunc(key).callInteger(args), player);
+    }
+    
+    /**
      * The most commonly used script operation. Pass the skill exp of this skill as argument into the function [name].
      */
     protected float callFloatWithExp(String name, AbilityData data) {
-    	return getFunc(name).callFloat(data.getSkillExp(this));
+    	return getFloatPiped(name, data.getPlayer(), data.getSkillExp(this));
     }
     
     protected int callIntWithExp(String name, AbilityData data) {
-    	return getFunc(name).callInteger(data.getSkillExp(this));
+    	return getIntPiped(name, data.getPlayer(), data.getSkillExp(this));
     }
     
     protected float getFloat(String name) {
-    	return script.getFloat(name);
+    	return script.getFloat(getFullName() + "." + name);
     }
     
-    protected double getDouble(String name) {
-    	return script.getDouble(name);
+    protected int getInt(String name) {
+    	return script.getInteger(getFullName() + "." + name);
     }
     
     //---Pipeline integration
     protected float pipeFloat(String key, float value, Object ...params) {
     	return AcademyCraft.pipeline.pipeFloat(getFullName() + "." + key, value, params);
-    }
-    
-    protected double pipeDouble(String key, double value, Object ...params) {
-    	return AcademyCraft.pipeline.pipeDouble(getFullName() + "." + key, value, params);
     }
     
     protected int pipeInt(String key, int value, Object ...params) {

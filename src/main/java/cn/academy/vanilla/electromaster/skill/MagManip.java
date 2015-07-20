@@ -131,7 +131,7 @@ public class MagManip extends Skill {
 			super.onFirstUpdate();
 			(syncer = new EntitySyncer(this)).init();
 			
-			Rigidbody rb = new Rigidbody();
+			Rigidbody rb = this.getMotionHandler(Rigidbody.class);
 			rb.entitySel = new IEntitySelector() {
 				@Override
 				public boolean isEntityApplicable(Entity target) {
@@ -139,8 +139,6 @@ public class MagManip extends Skill {
 				}
 			};
 			rb.gravity = 0.02;
-			
-			addMotionHandler(rb);
 		}
 		
 		public void onUpdate() {

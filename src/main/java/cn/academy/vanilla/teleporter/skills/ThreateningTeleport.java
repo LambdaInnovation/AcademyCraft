@@ -186,7 +186,7 @@ public class ThreateningTeleport extends Skill {
 		void endEffects() {
 			marker.setDead();
 			if(attacked) {
-				ACSounds.playAtEntity(player, "tp.tp", 0.5f);
+				ACSounds.playAtEntityClient(player, "tp.tp", 0.5f);
 			}
 		}
 		

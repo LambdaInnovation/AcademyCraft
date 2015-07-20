@@ -30,6 +30,7 @@ import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.entityx.event.CollideEvent.CollideHandler;
+import cn.liutils.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -69,6 +70,7 @@ public class EntityBlock extends EntityAdvanced {
 
 	public EntityBlock(World world) {
 		super(world);
+		this.addMotionHandler(new Rigidbody());
 		ignoreFrustumCheck = true;
 	}
 	

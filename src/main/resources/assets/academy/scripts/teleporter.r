@@ -27,5 +27,12 @@ ac {
             consumption(exp) { lerp(35, 150, exp) }
             overload(exp) { lerp(18, 13, exp) }
         }
+        
+        shift_tp {
+            damage(exp) { lerp(15, 30, exp) }
+            consumption(exp) { lerp(160, 320, exp) }
+            overload(exp) { lerp(80, 50, exp) }
+            range(exp) { lerp(25, 35, exp) }
+        }
     }
 }

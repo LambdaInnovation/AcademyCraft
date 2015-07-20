@@ -158,7 +158,7 @@ public class PenetrateTeleport extends Skill {
 			double distance = player.getDistance(x, y, z);
 			if(isRemote) {
 				player.setPosition(x, y, z);
-				ACSounds.playAtEntity(player, "tp.tp", .5f);
+				ACSounds.playAtEntityClient(player, "tp.tp", .5f);
 			} else {
 				float cp = (float) (distance * instance.getConsumption(aData));
 				float overload = (float) (distance * instance.getOverload(aData));

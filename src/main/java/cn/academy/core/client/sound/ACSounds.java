@@ -20,20 +20,22 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Generic sound playing utils. Client only.
+ * Generic sound playing utils.
  * @author WeAthFolD
  */
-@SideOnly(Side.CLIENT)
 public class ACSounds {
 	
-	public static void playAtEntity(Entity target, String name, float volume) {
+	@SideOnly(Side.CLIENT)
+	public static void playAtEntityClient(Entity target, String name, float volume) {
 		playClient(new FollowEntitySound(target, name).setVolume(volume));
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void playClient(World world, double x, double y, double z, String name, float vol, float pitch) {
 		world.playSound(x, y, z, "academy:" + name, vol, pitch, false);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void playClient(ISound sound) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(sound);
 	}

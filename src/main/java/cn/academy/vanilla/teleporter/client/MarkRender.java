@@ -68,6 +68,7 @@ public class MarkRender extends Render {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
+
 	@Override
 	protected ResourceLocation getEntityTexture(Entity var1) {
 		return null;

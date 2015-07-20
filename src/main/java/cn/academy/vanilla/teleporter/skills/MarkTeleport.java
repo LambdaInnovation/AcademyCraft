@@ -195,7 +195,7 @@ public class MarkTeleport extends Skill {
 				if(!isRemote) {
 					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
 				} else {
-					ACSounds.playAtEntity(player, "tp.tp", .5f);
+					ACSounds.playAtEntityClient(player, "tp.tp", .5f);
 				}
 			}
 			
