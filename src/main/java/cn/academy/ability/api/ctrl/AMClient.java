@@ -46,13 +46,13 @@ public class AMClient implements IActionManager {
 	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
 		//System.out.println("AMC#INT_START");
+		action.player = Minecraft.getMinecraft().thePlayer;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
 			public void onReady(Object val) {
 				if ((boolean) val) {
 					action.state = State.VALIDATED;
-					action.player = Minecraft.getMinecraft().thePlayer;
 					map.put(action.uuid, action);
 					set.add(action.uuid);
 				}
@@ -122,11 +122,10 @@ public class AMClient implements IActionManager {
 		//System.out.println("AMC#NET_TERMINATE");
 		SyncAction action = map.get(uuid);
 		if (action != null) {
-			if (action.state.equals(State.VALIDATED)) {
-				action.state = State.STARTED;
-				action.onStart();
-			}
-			action.setNBTFinal(tag);
+			if (action.isStarted())
+				action.setNBTFinal(tag);
+			else
+				action.state = State.ABANDONED;
 		}
 	}
 	
@@ -155,6 +154,10 @@ public class AMClient implements IActionManager {
 				i.remove();
 				set.remove(action.uuid);
 				break;
+			case ABANDONED:
+				i.remove();
+				set.remove(action.uuid);
+				break;
 			default:
 				break;
 			}
@@ -166,8 +169,10 @@ public class AMClient implements IActionManager {
 	public synchronized void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
-			action.state = State.ABORTED;
-			action.onAbort();
+			if (action.isStarted()) {
+				action.state = State.ABORTED;
+				action.onAbort();
+			}
 			i.remove();
 		}
 		set.clear();
