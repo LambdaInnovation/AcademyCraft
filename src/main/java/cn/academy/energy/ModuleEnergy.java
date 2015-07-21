@@ -72,7 +72,7 @@ public class ModuleEnergy {
     @RecipeName("mat")
     public static BlockMatrix matrix = new BlockMatrix();
     
-    @RegBlock
+    @RegBlock(item = BlockImagPhase.ItemPhaseLiq.class)
     public static BlockImagPhase imagPhase;
     
     @RegBlock

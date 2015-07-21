@@ -26,7 +26,7 @@ item.ac_machine_casing.name=Machine Casing
 item.ac_resonance_component.name=Resonator
 item.ac_calc_chip.name=Calculation Chip
 
-item.ac_matter_unit_imag_proj.name=Imag Projection Liquid Unit
+item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
 item.ac_matrix_core_0.name=Basic Matrix Core
 item.ac_matrix_core_1.name=Improved Matrix Core
@@ -44,7 +44,7 @@ item.ac_apps.name=App Installer
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
 
-tile.ac_imag_proj_liquid.name=Imag Projection Liquid
+tile.ac_phase_liquid.name=Imag Phase Liquid
 
 tile.ac_imag_fusor.name=Imag Fusor
 tile.ac_matrix.name=Wireless Imag Matrix
@@ -230,3 +230,9 @@ ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: Edit the p
 ac.command.preset.list=/preset list: View all currently available controllables.
 ac.command.preset.nobind=No bindings.
 ac.command.preset.list2=Available controllables:
+
+# Achievements
+achievement.ac_phase_liquid=Unusual Matter
+achievement.ac_phase_liquid.desc=Collect some phase liquid and start thinking about using them for energy.
+achievement.ac_node_basic=Basic Storage
+achievement.ac_node_basic.desc=Craft a Basic Wireless Node to hold and transmit energy.

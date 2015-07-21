@@ -22,7 +22,7 @@ import cn.annoreg.core.Registrant;
 /**
  * @author WeAthFolD
  */
-@Registrant
+//@Registrant
 public class AppKnowledgeRecord extends App {
 	
 	@RegApp

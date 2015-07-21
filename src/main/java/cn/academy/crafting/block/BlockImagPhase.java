@@ -14,18 +14,17 @@ package cn.academy.crafting.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
@@ -42,21 +41,42 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProvider {
 	
-	public final MatterMaterial mat;
+	public static class ItemPhaseLiq extends ItemBlock {
+		
+		IIcon icon;
 
+		public ItemPhaseLiq(Block block) {
+			super(block);
+		}
+		
+		@Override
+	    @SideOnly(Side.CLIENT)
+	    public void registerIcons(IIconRegister ir) {
+	    	icon = ir.registerIcon("academy:phase_liquid");
+	    }
+		
+	    @SideOnly(Side.CLIENT)
+	    public IIcon getIconFromDamage(int meta) {
+	        return icon;
+	    }
+		
+	}
+	
+	public final MatterMaterial mat;
+	
 	public BlockImagPhase() {
 		super(ModuleCrafting.fluidImagProj, Material.water);
 		setCreativeTab(AcademyCraft.cct);
-		setBlockName("ac_imag_proj_liquid");
+		setBlockName("ac_phase_liquid");
 		setBlockTextureName("academy:black");
 		
 		this.setQuantaPerBlock(3);
 		
-		mat = new MatterMaterial("imag_proj", this);
+		mat = new MatterMaterial("phase_liquid", this);
 		ItemMatterUnit.addMatterMaterial(mat);
 		
 		MinecraftForge.EVENT_BUS.register(this);
-	}    
+	}
 	
 	@SideOnly(Side.CLIENT)
     @Override
@@ -71,7 +91,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileIonicFlux();
+		return new TileImagPhase();
 	}
 
 	@SubscribeEvent

@@ -26,8 +26,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
+import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.mc.PlayerUtils;
@@ -140,6 +142,7 @@ public class ItemMatterUnit extends ACItem {
                     		}
                     		// Clear block
                     		world.setBlockToAir(i, j, k);
+                    		MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, m));
                     		break;
                     	}
                     }

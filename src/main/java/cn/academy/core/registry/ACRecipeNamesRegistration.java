@@ -35,7 +35,7 @@ public class ACRecipeNamesRegistration extends RegistryType {
 
 	public ACRecipeNamesRegistration() {
 		super(RegACRecipeNames.class, "ac_recipeNames");
-		setLoadStage(LoadStage.INIT);
+		setLoadStage(LoadStage.POST_INIT);
 	}
 
 	@Override

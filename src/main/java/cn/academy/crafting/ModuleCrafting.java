@@ -90,7 +90,7 @@ public class ModuleCrafting {
 	
 	public static void init() {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000), 
-			matterUnit.create("imag_proj"), matterUnit.create("none"));
+			matterUnit.create("phase_liquid"), matterUnit.create("none"));
 		
 		items = LoaderHelper.createItemLoader();
 		items.feed(new ResourceLocation("academy:items_crafting.json"));

@@ -131,6 +131,9 @@ public class KnowledgeData extends DataPart {
 	 * and will trigger a KnowledgeAcquiredEvent in both CLIENT and SERVER.
 	 */
 	public void learn(int id) {
+		// Disable the functionality
+		if(true)
+			return;
 		if(!isLearned(id)) {
 			if(!isRemote()) {
 				doLearnKnowledge(id);
@@ -256,7 +259,6 @@ public class KnowledgeData extends DataPart {
 	
 	private void doLearnKnowledge(int id) {
 		learned.set(id, true);
-		System.out.println("DoLearnKnowledge in " + this.getPlayer().worldObj.isRemote + ", " + learned);
 		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getPlayer(), id));
 	}
 

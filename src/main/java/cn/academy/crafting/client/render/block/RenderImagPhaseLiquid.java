@@ -35,7 +35,7 @@ import cn.liutils.util.helper.GameTimer;
  *
  */
 @Registrant
-public class RenderImagProjLiquid extends TileEntitySpecialRenderer {
+public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
 	
 	public ResourceLocation[] layers;
 	
@@ -43,7 +43,7 @@ public class RenderImagProjLiquid extends TileEntitySpecialRenderer {
 	
 	RenderBlockFluid rbf = RenderBlockFluid.instance;
 	
-	public RenderImagProjLiquid() {
+	public RenderImagPhaseLiquid() {
 		t = Tessellator.instance;
 		layers = Resources.getEffectSeq("imag_proj_liquid", 3);
 	}
