@@ -12,16 +12,39 @@
  */
 package cn.academy.energy.client.gui.wind;
 
-import net.minecraft.inventory.Container;
+import net.minecraft.util.ResourceLocation;
+import cn.academy.energy.block.wind.ContainerWindGenBase;
+import cn.academy.energy.block.wind.TileWindGenBase;
+import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiContainer;
+import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
 public class GuiWindGenBase extends LIGuiContainer {
+	
+	static LIGui loaded;
+	static {
+		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/wind_base.xml"));
+	}
+	
+	final TileWindGenBase tile;
+	
+	Widget main;
 
-	public GuiWindGenBase(Container c) {
+	public GuiWindGenBase(ContainerWindGenBase c) {
 		super(c);
+		
+		tile = c.tile;
+		initWidgets();
+	}
+	
+	void initWidgets() {
+		main = loaded.getWidget("main").copy();
+		
+		gui.addWidget(main);
 	}
 
 }

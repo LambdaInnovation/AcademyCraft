@@ -38,7 +38,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 	public static RenderWindGenBase renderer;
 
 	public TileWindGenBase() {
-		super("windgen_base", 1, 1000, 100);
+		super("windgen_base", 1, 2000, 100);
 	}
 
 	@Override

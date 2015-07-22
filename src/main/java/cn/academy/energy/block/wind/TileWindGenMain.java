@@ -43,7 +43,6 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	@SideOnly(Side.CLIENT)
 	public float lastRotation;
 	
-	@SideOnly(Side.CLIENT)
 	public boolean complete;
 	
 	int updateWait;
@@ -101,6 +100,11 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	public void setBlockInfo(InfoBlockMulti i) {
 		info = i;
 	}
+	
+	@Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    	return slot != 0 || (stack != null && stack.getItem() == ModuleEnergy.windgenFan);
+    }
 	
 	public boolean isCompleteStructure() {
 		int[] origin = ModuleEnergy.windgenMain.getOrigin(this);
