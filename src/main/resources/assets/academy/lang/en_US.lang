@@ -127,6 +127,13 @@ ac.gui.node.password.desc=Password:
 ac.gui.node.current_ssid.desc=Current SSID: 
 ac.gui.node.not_connected.desc=<Not Connected>
 
+# Wind Generator
+ac.gui.wind_base.fancap=Fan Capacity
+ac.gui.wind_base.speed=Generation
+ac.gui.wind_base.buffer=Buffer
+
+ac.gui.wind.structure=Incomplete generator structure.
+
 ac.gui.node.mark.loading.desc=LOADING
 ac.gui.node.mark.idle.desc=IDLE
 ac.gui.node.mark.transmitting.desc=TRANSMITTING

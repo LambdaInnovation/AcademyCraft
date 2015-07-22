@@ -12,8 +12,11 @@
  */
 package cn.academy.energy.block.wind;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.tile.TileInventory;
+import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
@@ -40,21 +43,27 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	@SideOnly(Side.CLIENT)
 	public float lastRotation;
 	
+	@SideOnly(Side.CLIENT)
+	public boolean complete;
+	
+	int updateWait;
+	
 	public TileWindGenMain() {
 		super("windgen_main", 1);
 	}
 
 	// Spin logic
-	// TODO Implement
 	public boolean isFanInstalled() {
-		return true;
+		ItemStack stack = this.getStackInSlot(0);
+		return stack != null && stack.getItem() == ModuleEnergy.windgenFan;
 	}
 	
 	/**
 	 * Unit: Degree per second
 	 */
+	@SideOnly(Side.CLIENT)
 	public double getSpinSpeed() {
-		return 60.0;
+		return complete ? 60.0 : 0;
 	}
 
 	// InfoBlockMulti delegates
@@ -64,6 +73,13 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	public void updateEntity() {
 		super.updateEntity();
 		info.update();
+		
+		if(getWorldObj().isRemote) {
+			if(++updateWait == 10) {
+				updateWait = 0;
+				complete = isCompleteStructure();
+			}
+		}
 	}
 	
 	public void readFromNBT(NBTTagCompound tag) {
@@ -84,6 +100,32 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	@Override
 	public void setBlockInfo(InfoBlockMulti i) {
 		info = i;
+	}
+	
+	public boolean isCompleteStructure() {
+		int[] origin = ModuleEnergy.windgenMain.getOrigin(this);
+		if(origin == null)
+			return false;
+		
+		int x = origin[0], y = origin[1] - 1, z = origin[2];
+		int state = 1;
+		int pillars = 0;
+		
+		for(; state < 2; --y) {
+			Block block = worldObj.getBlock(x, y, z);
+			if(state == 1) {
+				if(block == ModuleEnergy.windgenPillar) {
+					++pillars;
+					if(pillars > WindGenerator.MAX_PILLARS)
+						break;
+				} else if(block == ModuleEnergy.windgenBase){
+					state = 2;
+				} else {
+					state = 3;
+				}
+			}
+		}
+		return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
 	}
 	
 }

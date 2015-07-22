@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.io.IOUtils;
 
+import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.core.registry.InstanceEjector;
 import cn.academy.core.registry.InstanceEjector.FromLoader;
@@ -110,6 +111,10 @@ public class ModuleEnergy {
     @RegItem
     @RecipeName("mat_core")
     public static ItemMatrixCore matrixCore;
+    
+    @RegItem
+    @RecipeName("windgen_fan")
+    public static Item windgenFan = new ACItem("windgen_fan");
 	
 	public static void init() {
 		loader = LoaderHelper.createItemLoader();

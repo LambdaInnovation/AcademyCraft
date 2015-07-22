@@ -12,8 +12,11 @@
  */
 package cn.academy.energy.block.wind;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
@@ -73,4 +76,32 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 		info = i;
 	}
 
+	public boolean isCompleteStructure() {
+		int state = 1;
+		int pillars = 0;
+		
+		for(int y = yCoord + 1; state < 2; ++y) {
+			TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
+			Block block = worldObj.getBlock(xCoord, y, zCoord);
+			if(state == 1) {
+				if(block == ModuleEnergy.windgenPillar) {
+					++pillars;
+					if(pillars > WindGenerator.MAX_PILLARS)
+						break;
+				} else if(te instanceof TileWindGenMain) {
+					TileWindGenMain gen = (TileWindGenMain) te;
+					if(gen.getBlockInfo().getSubID() == 0) {
+						state = 2;
+					} else {
+						break;
+					}
+				} else {
+					state = 3;
+					break;
+				}
+			}
+		}
+		
+		return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
+	}
 }
