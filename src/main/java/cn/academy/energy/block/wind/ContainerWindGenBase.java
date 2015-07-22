@@ -35,13 +35,13 @@ public class ContainerWindGenBase extends Container {
 	}
 	
 	private void initInventory() {
-        this.addSlotToContainer(new SlotFan(tile, 0, 78, 71));
+        this.addSlotToContainer(new SlotIFItem(tile, 0, 78, 71));
         
         InventoryPlayer inv = player.inventory;
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new SlotIFItem(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {

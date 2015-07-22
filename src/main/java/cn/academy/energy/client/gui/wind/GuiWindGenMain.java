@@ -67,7 +67,7 @@ public class GuiWindGenMain extends LIGuiContainer {
 		
 		if(!tile.complete) {
 			String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-			EnergyUIHelper.drawTextBox(text, 0, -40, 20, Align.CENTER);
+			EnergyUIHelper.drawTextBox(text, 10, -40, 20, Align.CENTER);
 		}
 	}
 

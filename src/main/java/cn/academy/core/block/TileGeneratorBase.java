@@ -26,8 +26,8 @@ import cpw.mods.fml.relauncher.Side;
 @Registrant
 public abstract class TileGeneratorBase extends TileInventory implements IWirelessGenerator {
 	
-	final double bufferSize;
-	final double bandwidth;
+	public final double bufferSize;
+	public final double bandwidth;
 	
 	private int updateTicker = 20;
 	
@@ -65,6 +65,14 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 		
 		energy -= req;
 		return req;
+	}
+	
+	public double getEnergy() {
+		return energy;
+	}
+	
+	public void setEnergy(double energy) {
+		this.energy = energy;
 	}
 
 	@Override

@@ -114,7 +114,7 @@ public class ModuleEnergy {
     
     @RegItem
     @RecipeName("windgen_fan")
-    public static Item windgenFan = new ACItem("windgen_fan");
+    public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
 	
 	public static void init() {
 		loader = LoaderHelper.createItemLoader();
