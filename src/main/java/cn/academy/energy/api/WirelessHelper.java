@@ -52,10 +52,16 @@ public class WirelessHelper {
 		return WiWorldData.get(tile.getWorldObj()).getNetwork(node);
 	}
 	
+	/**
+	 * @return Whether the wireless node is linked into a WEN
+	 */
 	public static boolean isNodeLinked(IWirelessNode node) {
 		return getWirelessNet(node) != null;
 	}
 	
+	/**
+	 * @return Whether the matrix is initialized with an SSID
+	 */
 	public static boolean isMatrixActive(IWirelessMatrix matrix) {
 		return getWirelessNet(matrix) != null;
 	}
@@ -106,7 +112,7 @@ public class WirelessHelper {
 	 * @param y
 	 * @param z
 	 * @param range
-	 * @return
+	 * @return nodes in the area, does not guarantee any order
 	 */
 	public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z, double range) {
 		List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockFilter() {
