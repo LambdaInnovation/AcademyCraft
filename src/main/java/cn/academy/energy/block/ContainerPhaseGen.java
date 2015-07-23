@@ -10,25 +10,29 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.energy.block.wind;
+package cn.academy.energy.block;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cn.academy.energy.api.IFItemManager;
-import cn.academy.energy.block.SlotIFItem;
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.block.SlotMatterUnit;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.energy.ModuleEnergy;
 
 /**
  * @author WeAthFolD
  */
-public class ContainerWindGenBase extends Container {
+public class ContainerPhaseGen extends Container {
 	
+	public static final int SLOT_LIQUID_IN = 0, SLOT_LIQUID_OUT = 1, SLOT_OUTPUT = 2;
+	
+	public final TilePhaseGen tile;
 	public final EntityPlayer player;
-	public final TileWindGenBase tile;
-	
-	public ContainerWindGenBase(EntityPlayer _player, TileWindGenBase _tile) {
+
+	public ContainerPhaseGen(EntityPlayer _player, TilePhaseGen _tile) {
 		player = _player;
 		tile = _tile;
 		
@@ -36,7 +40,9 @@ public class ContainerWindGenBase extends Container {
 	}
 	
 	private void initInventory() {
-        this.addSlotToContainer(new SlotIFItem(tile, 0, 78, 71));
+		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, SLOT_LIQUID_IN, 15, 4));
+		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, SLOT_LIQUID_OUT, 81, 44));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 78, 71));
         
         InventoryPlayer inv = player.inventory;
         int STEP = 18;
@@ -62,15 +68,17 @@ public class ContainerWindGenBase extends Container {
             ItemStack stack1 = slot.getStack();
             stack = stack1.copy();
 
-            if (id < 1) { //tileInv->playerInv
-                if (!this.mergeItemStack(stack1, 1, this.inventorySlots.size(), true)) {
+            if (id < 3) { //tileInv->playerInv
+                if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
                     return null;
-                }
-            } else {
-            	if(!IFItemManager.instance.isSupported(stack1) || 
-            			!this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
+            } else { 
+            	if (ModuleCrafting.matterUnit.getMaterial(stack1) != ModuleEnergy.imagPhase.mat || !this.mergeItemStack(stack1, 0, 1, false))
             		return null;
-            	}
+            	if (stack1.getItem() != ModuleCrafting.matterUnit || ModuleCrafting.matterUnit.getMaterial(stack1) != ItemMatterUnit.NONE || 
+            			!this.mergeItemStack(stack1, 1, 2, false))
+            		return null;
+            	if (!this.mergeItemStack(stack1, 2, 3, false))
+            		return null;
             }
 
             if (stack1.stackSize == 0) {
@@ -82,7 +90,7 @@ public class ContainerWindGenBase extends Container {
 
         return stack;
     }
-
+	
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;

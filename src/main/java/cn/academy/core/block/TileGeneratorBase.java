@@ -12,7 +12,9 @@
  */
 package cn.academy.core.block;
 
+import net.minecraft.item.ItemStack;
 import cn.academy.core.tile.TileInventory;
+import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
@@ -78,6 +80,17 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 	@Override
 	public double getBandwidth() {
 		return bandwidth;
+	}
+	
+	/**
+	 * Try to charge a ItemStack with the buffer energy within the generator.
+	 */
+	public void tryChargeStack(ItemStack stack) {
+		if(IFItemManager.instance.isSupported(stack)) {
+			double cangive = Math.min(energy, bandwidth);
+			double ret = IFItemManager.instance.charge(stack, cangive);
+			energy -= (cangive - ret);
+		}
 	}
 	
 	/**

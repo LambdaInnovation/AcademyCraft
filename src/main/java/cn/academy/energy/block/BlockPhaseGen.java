@@ -13,18 +13,42 @@
 package cn.academy.energy.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
+import cn.academy.energy.client.gui.GuiPhaseGen;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class BlockPhaseGen extends ACBlockContainer {
+	
+	@RegGuiHandler
+	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+		@SideOnly(Side.CLIENT)
+		@Override
+		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+			ContainerPhaseGen container = (ContainerPhaseGen) getServerContainer(player, world, x, y, z);
+			return container == null ? null : new GuiPhaseGen(container);
+		}
+		
+		@Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			return te instanceof TilePhaseGen ? new ContainerPhaseGen(player, (TilePhaseGen) te) : null;
+		}
+	};
 
 	public BlockPhaseGen() {
-		super("phase_generator", Material.rock, null);
+		super("phase_generator", Material.rock, guiHandler);
 	}
 	
 	@Override

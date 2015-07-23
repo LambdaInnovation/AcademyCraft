@@ -107,7 +107,6 @@ public class ModuleEnergy {
 	public static Item constPlate = new ACItem("constraint_plate");
 	
 	public static void init() {
-		
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
 			EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
 	}

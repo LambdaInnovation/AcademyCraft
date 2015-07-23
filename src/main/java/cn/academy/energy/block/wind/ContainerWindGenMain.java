@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.block.wind;
 
+import cn.academy.energy.ModuleEnergy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -63,7 +64,8 @@ public class ContainerWindGenMain extends Container {
             if (id < 1) { //tileInv->playerInv
                 if (!this.mergeItemStack(stack1, 1, this.inventorySlots.size(), true))
                     return null;
-            } else if(!this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
+            } else if(stack1.getItem() != ModuleEnergy.windgenFan || 
+            	!this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
                 return null;
             }
 

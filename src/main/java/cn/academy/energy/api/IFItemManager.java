@@ -45,6 +45,9 @@ public final class IFItemManager implements EnergyItemManager {
 		stack.setItemDamage(approxDamage);
     }
     
+    /**
+     * @return How much energy NOT transfered into stack
+     */
     public double charge(ItemStack stack, double amt) {
     	return charge(stack, amt, false);
     }
@@ -53,7 +56,7 @@ public final class IFItemManager implements EnergyItemManager {
      * @param stack
      * @param amt Energy trying to charge into stack, can be negative
      * @param ignoreBandwidth
-     * @return How much energy not transfered into stack
+     * @return How much energy NOT transfered into stack
      */
     public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();

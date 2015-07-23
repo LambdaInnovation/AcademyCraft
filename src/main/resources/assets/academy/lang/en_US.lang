@@ -131,6 +131,10 @@ ac.gui.node.password.desc=Password:
 ac.gui.node.current_ssid.desc=Current SSID: 
 ac.gui.node.not_connected.desc=<Not Connected>
 
+# Phase Generator
+ac.gui.phase_gen.liquid=Liquid
+ac.gui.phase_gen.buffer=Buffer
+
 # Wind Generator
 ac.gui.wind_base.fancap=Fan Capacity
 ac.gui.wind_base.speed=Generation
