@@ -20,11 +20,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import cn.academy.core.item.ACItem;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.item.ImagEnergyItem;
-import cn.liutils.loading.Loader.ObjectNamespace;
-import cn.liutils.loading.item.ItemLoadRule;
-import cn.liutils.loading.item.ItemLoadRuleProvider;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,18 +30,23 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-public class ItemEnergyTemplate extends Item implements ImagEnergyItem, ItemLoadRuleProvider {
+public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 	
 	protected static IFItemManager itemManager = IFItemManager.instance;
 	
-	public String name;
+	public final String name;
 	
-	public double maxEnergy;
-	public double bandwidth;
+	public final double maxEnergy;
+	public final double bandwidth;
 	
 	IIcon iconEmpty, iconHalf, iconFull;
 	
-	public ItemEnergyTemplate() {
+	public ItemEnergyBase(String _name, double _maxEnergy, double _bandwidth) {
+		super(_name);
+		name = _name;
+		maxEnergy = _maxEnergy;
+		bandwidth = _bandwidth;
+		
 		setMaxDamage(13);
 	}
 	
@@ -90,21 +93,5 @@ public class ItemEnergyTemplate extends Item implements ImagEnergyItem, ItemLoad
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
     	list.add(itemManager.getDescription(stack));
     }
-
-	@Override
-	public ItemLoadRule[] getRules() {
-		return new ItemLoadRule[] {
-			new ItemLoadRule() {
-				@Override
-				public void load(Item item, ObjectNamespace ns, String name)
-						throws Exception {
-					maxEnergy = ns.getDouble("maxEnergy");
-					bandwidth = ns.getDouble("bandwidth");
-					
-					ItemEnergyTemplate.this.name = name;
-				}
-			}
-		};
-	}
 
 }

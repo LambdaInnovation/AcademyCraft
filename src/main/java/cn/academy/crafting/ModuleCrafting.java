@@ -13,16 +13,12 @@
 package cn.academy.crafting;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
-import cn.academy.core.registry.InstanceEjector;
-import cn.academy.core.registry.InstanceEjector.FromLoader;
-import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.block.BlockInciser;
@@ -32,7 +28,6 @@ import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
-import cn.liutils.loading.item.ItemLoader;
 
 /**
  * @author WeAthFolD
@@ -42,16 +37,14 @@ import cn.liutils.loading.item.ItemLoader;
 @RegACRecipeNames
 public class ModuleCrafting {
 	
-	public static ItemLoader items;
-	
 	@RegItem
 	@RegItem.HasRender
 	@RecipeName("matter_unit")
 	public static ItemMatterUnit matterUnit;
 	
-	@FromLoader
+	@RegItem
 	@RecipeName("crystal0")
-	public static Item crystalLow;
+	public static Item crystalLow = new ACItem("crystal_low");
 
 	@RegItem
 	@RecipeName("frame")
@@ -90,7 +83,7 @@ public class ModuleCrafting {
 	public static Item wafer = new ACItem("wafer");
 	
 	@RegItem
-	@RecipeName("const_ingot")
+	@RecipeName("cons_ingot")
 	public static Item ingotConst = new ACItem("constraint_ingot");
 	
 	@RegItem
@@ -117,10 +110,6 @@ public class ModuleCrafting {
 	@RecipeName("reso_comp")
 	public static Item resoComp = new ACItem("resonance_component");
 	
-	@RegItem
-	@RecipeName("const_plate")
-	public static Item constPlate = new ACItem("constraint_plate");
-	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {
     	fluidImagProj.setLuminosity(8).setDensity(7000)
@@ -131,13 +120,6 @@ public class ModuleCrafting {
 	public static void init() {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000), 
 			matterUnit.create("phase_liquid"), matterUnit.create("none"));
-		
-		items = LoaderHelper.createItemLoader();
-		items.feed(new ResourceLocation("academy:items_crafting.json"));
-		
-		items.loadAll();
-		
-		InstanceEjector.fromItemLoader(ModuleCrafting.class, items);
 		
 		oreCrystal.setDropData(crystalLow, 1, 3);
 	}

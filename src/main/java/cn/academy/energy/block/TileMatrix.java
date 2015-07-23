@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.tile.TileInventory;
+import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
@@ -62,7 +63,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		if(stack == null)
 			return false;
 		if(0 <= slot && slot <= 2) {
-			return stack.getItem() == ModuleEnergy.constraintPlate;
+			return stack.getItem() == ModuleEnergy.constPlate;
 		} else if(slot == 3) {
 			return stack.getItem() == ModuleEnergy.matrixCore;
 		} else {

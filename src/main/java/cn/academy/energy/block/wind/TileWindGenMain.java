@@ -15,11 +15,16 @@ package cn.academy.energy.block.wind;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
@@ -45,7 +50,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	
 	public boolean complete;
 	
-	int updateWait;
+	int updateWait, updateWait2;
 	
 	public TileWindGenMain() {
 		super("windgen_main", 1);
@@ -77,6 +82,11 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 			if(++updateWait == 10) {
 				updateWait = 0;
 				complete = isCompleteStructure();
+			}
+		} else {
+			if(++updateWait2 == 20) {
+				updateWait2 = 0;
+				this.syncTheStack(this, this.getStackInSlot(0));
 			}
 		}
 	}
@@ -130,6 +140,13 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 			}
 		}
 		return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void syncTheStack(
+		@RangedTarget(range = 16) TileEntity te, 
+		@Data ItemStack stack) {
+		this.setInventorySlotContents(0, stack);
 	}
 	
 }

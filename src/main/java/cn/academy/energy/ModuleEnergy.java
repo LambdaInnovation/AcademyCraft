@@ -12,19 +12,11 @@
  */
 package cn.academy.energy;
 
-import java.io.IOException;
-
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import org.apache.commons.io.IOUtils;
-
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
-import cn.academy.core.registry.InstanceEjector;
-import cn.academy.core.registry.InstanceEjector.FromLoader;
-import cn.academy.core.registry.LoaderHelper;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.energy.block.BlockInfiniteGen;
@@ -37,13 +29,13 @@ import cn.academy.energy.block.wind.BlockWindGenBase;
 import cn.academy.energy.block.wind.BlockWindGenMain;
 import cn.academy.energy.block.wind.BlockWindGenPillar;
 import cn.academy.energy.item.ItemMatrixCore;
+import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
-import cn.liutils.loading.item.ItemLoader;
 import cn.liutils.template.block.ItemBlockMulti;
 
 /**
@@ -53,8 +45,6 @@ import cn.liutils.template.block.ItemBlockMulti;
 @RegInit
 @RegACRecipeNames
 public class ModuleEnergy {
-	
-	public static ItemLoader loader;
 	
 	// BLOCKS
     @RegBlock
@@ -100,13 +90,9 @@ public class ModuleEnergy {
     public static BlockWindGenMain windgenMain;
     
     // ITEMS
-    @FromLoader
+    @RegItem
     @RecipeName("ene_unit")
-    public static Item energyUnit;
-    
-    @FromLoader
-    @RecipeName("cons_plate")
-    public static Item constraintPlate;
+    public static Item energyUnit = new ItemEnergyBase("energy_unit", 10000, 20);
     
     @RegItem
     @RecipeName("mat_core")
@@ -115,17 +101,12 @@ public class ModuleEnergy {
     @RegItem
     @RecipeName("windgen_fan")
     public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
+    
+    @RegItem
+	@RecipeName("cons_plate")
+	public static Item constPlate = new ACItem("constraint_plate");
 	
 	public static void init() {
-		loader = LoaderHelper.createItemLoader();
-		try {
-			loader.feed(IOUtils.toString(ModuleEnergy.class.getResource("/assets/academy/items_energy.json")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		loader.loadAll();
-		InstanceEjector.fromItemLoader(ModuleEnergy.class, loader);
 		
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
 			EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));

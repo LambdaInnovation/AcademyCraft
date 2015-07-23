@@ -1,7 +1,0 @@
-{
-    "default": {
-        "ignore": true,
-        "creativeTab": "cn.academy.core.AcademyCraft.cct",
-        "namespace": "academy"
-    }
-}

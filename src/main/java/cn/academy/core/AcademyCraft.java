@@ -152,6 +152,10 @@ public class AcademyCraft {
     
     private static String expand(String str, int size) {
     	StringBuilder sb = new StringBuilder(str);
+    	int len;
+    	for(int i = 0; i < str.length(); ++i) {
+    		
+    	}
     	for(int i = str.length(); i < size; ++i)
     		sb.append(' ');
     	return sb.toString();
