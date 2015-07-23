@@ -16,6 +16,7 @@ itemGroup.AcademyCraft=AcademyCraft
 item.ac_crystal_low.name=Low-purity Imag Crystal
 item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
+item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
 item.ac_machine_frame.name=Machine Frame
 
@@ -25,6 +26,7 @@ item.ac_info_component.name=Information Processor
 item.ac_machine_casing.name=Machine Casing
 item.ac_resonance_component.name=Resonator
 item.ac_calc_chip.name=Calculation Chip
+item.ac_data_chip.name=Data Chip
 
 item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
@@ -32,6 +34,7 @@ item.ac_matrix_core_0.name=Basic Matrix Core
 item.ac_matrix_core_1.name=Improved Matrix Core
 item.ac_matrix_core_2.name=Advanced Matrix Core
 item.ac_energy_unit.name=Energy Unit
+item.ac_windgen_fan.name=Wind Generator Fan
 
 item.ac_coin.name=Coin
 item.ac_silbarn.name=Silicon Barn
@@ -43,6 +46,7 @@ item.ac_apps.name=App Installer
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
+tile.ac_imag_silicon_ore.name=Imag Silicon Ore
 
 tile.ac_phase_liquid.name=Imag Phase Liquid
 

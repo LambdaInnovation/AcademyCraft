@@ -61,9 +61,9 @@ public class ModuleCrafting {
 	@RecipeName("calc_chip")
 	public static Item calcChip = new ACItem("calc_chip");
 	
-	@FromLoader
-	@RecipeName("reso_part")
-	public static Item resonancePart;
+	@RegItem
+	@RecipeName("data_chip")
+	public static Item dataChip = new ACItem("data_chip");
 	
 	@RegBlock
 	@RecipeName("fusor")
@@ -80,6 +80,46 @@ public class ModuleCrafting {
 	@RegBlock
 	@RecipeName("crystal_ore")
 	public static BlockGenericOre oreCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
+	
+	@RegBlock
+	@RecipeName("imagsil_ore")
+	public static BlockGenericOre oreImagSil = new BlockGenericOre("imag_silicon_ore", 2.75f, 2);
+	
+	@RegItem
+	@RecipeName("wafer")
+	public static Item wafer = new ACItem("wafer");
+	
+	@RegItem
+	@RecipeName("const_ingot")
+	public static Item ingotConst = new ACItem("constraint_ingot");
+	
+	@RegItem
+	@RecipeName("imagsil_ingot")
+	public static Item ingotImagSil = new ACItem("imag_silicon_ingot");
+	
+	@RegItem
+	@RecipeName("mac_casing")
+	public static Item macCasing = new ACItem("machine_casing");
+	
+	@RegItem
+	@RecipeName("brain_part")
+	public static Item brainPart = new ACItem("brain_part");
+	
+	@RegItem
+	@RecipeName("memory")
+	public static Item memory = new ACItem("memory");
+	
+	@RegItem
+	@RecipeName("info_comp")
+	public static Item infoComp = new ACItem("info_component");
+	
+	@RegItem
+	@RecipeName("reso_comp")
+	public static Item resoComp = new ACItem("resonance_component");
+	
+	@RegItem
+	@RecipeName("const_plate")
+	public static Item constPlate = new ACItem("constraint_plate");
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {
