@@ -42,9 +42,9 @@ public class AMServer implements IActionManager {
 		System.out.println("AMS#INT_START");
 		action.uuid = UUID.randomUUID();
 		action.player = null;
-		action.state = State.VALIDATED;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtClient(null, action.getClass().getName(), tag);
+		action.start();
 		map.get(dummy).put(action.uuid, action);
 	}
 
@@ -53,17 +53,9 @@ public class AMServer implements IActionManager {
 		System.out.println("AMS#INT_END");
 		SyncAction _action = map.get(playerUUID(action)).get(action.uuid);
 		if (_action == null)
-			ActionManager.terminateAtClient(action.uuid.toString(), SyncAction.TAG_ABORTED);
-		else {
-			if (_action.isStarted()) {
-				_action.state = State.ENDED;
-				ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
-			}
-			else {
-				_action.state = State.ABANDONED;
-				ActionManager.terminateAtClient(_action.uuid.toString(), SyncAction.TAG_ABORTED);
-			}
-		}
+			ActionManager.endAtClient(action.uuid.toString(), SyncAction.TAG_EMPTY);
+		else
+			ActionManager.endAtClient(_action.uuid.toString(), _action.end());
 	}
 
 	@Override
@@ -71,17 +63,9 @@ public class AMServer implements IActionManager {
 		System.out.println("AMS#INT_ABORT");
 		SyncAction _action = map.get(playerUUID(action)).get(action.uuid);
 		if (_action == null)
-			ActionManager.terminateAtClient(action.uuid.toString(), SyncAction.TAG_ABORTED);
-		else {
-			if (_action.isStarted()) {
-				_action.state = State.ABORTED;
-				ActionManager.terminateAtClient(_action.uuid.toString(), _action.getNBTFinal());
-			}
-			else {
-				_action.state = State.ABANDONED;
-				ActionManager.terminateAtClient(_action.uuid.toString(), SyncAction.TAG_ABORTED);
-			}
-		}
+			ActionManager.abortAtClient(action.uuid.toString(), SyncAction.TAG_EMPTY);
+		else
+			ActionManager.abortAtClient(_action.uuid.toString(), _action.abort());
 	}
 	
 	@Override
@@ -102,8 +86,8 @@ public class AMServer implements IActionManager {
 			action = (SyncAction) Class.forName(className).newInstance();
 			action.player = player;
 			action.setNBTStart(tag);
-			action.state = State.VALIDATED;
 			ActionManager.startAtClient(player, className, action.getNBTStart());
+			action.start();
 			map.get(playerUUID(action)).put(action.uuid, action);
 			return true;
 		}
@@ -116,36 +100,19 @@ public class AMServer implements IActionManager {
 	void endFromClient(EntityPlayer player, UUID uuid) {
 		System.out.println("AMS#NET_END");
 		SyncAction action = map.get(player.getUniqueID()).get(uuid);
-		if (action != null) {
-			System.out.println("AMS#NET_END: action not null");
-			if (action.isStarted()) {
-				if (action.state.equals(State.STARTED))
-					action.state = State.ENDED;
-				else
-					action.state = State.ABORTED;
-				ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
-			}
-			else {
-				action.state = State.ABANDONED;
-				ActionManager.terminateAtClient(uuid.toString(), SyncAction.TAG_ABORTED);
-			}
-		}
+		if (action == null)
+			ActionManager.abortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
+		else
+			endAction(action);
 	}
 
 	void abortFromClient(EntityPlayer player, UUID uuid) {
 		System.out.println("AMS#NET_ABORT");
 		SyncAction action = map.get(player.getUniqueID()).get(uuid);
-		if (action != null) {
-			System.out.println("AMS#NET_ABORT: action not null");
-			if (action.isStarted()) {
-				action.state = State.ABORTED;
-				ActionManager.terminateAtClient(uuid.toString(), action.getNBTFinal());
-			}
-			else {
-				action.state = State.ABANDONED;
-				ActionManager.terminateAtClient(uuid.toString(),  SyncAction.TAG_ABORTED);
-			}
-		}
+		if (action == null)
+			ActionManager.abortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
+		else
+			abortAction(action);
 	}
 	
 	void abortPlayer(EntityPlayer player) {
@@ -174,14 +141,9 @@ public class AMServer implements IActionManager {
 		for (Map<UUID, SyncAction>  m : map.values())
 			for (Iterator<SyncAction> i = m.values().iterator(); i.hasNext(); ) {
 				SyncAction action = i.next();
-				switch (action.state) {
+				switch (action.getState()) {
 				case CREATED:
 					throw new IllegalStateException();
-				case VALIDATED:
-					action.lastInformed = curTick;
-					action.state = State.STARTED;
-					action.onStart();
-					break;
 				case STARTED:
 					action.onTick();
 					if (action.intv > 0 && curTick - action.lastInformed >= action.intv) {
@@ -190,14 +152,7 @@ public class AMServer implements IActionManager {
 					}
 					break;
 				case ENDED:
-					action.onEnd();
-					i.remove();
-					break;
 				case ABORTED:
-					action.onAbort();
-					i.remove();
-					break;
-				case ABANDONED:
 					i.remove();
 					break;
 				default:

@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 public abstract class SyncAction {
 
 	UUID uuid;
-	State state;
 	int intv = -1;
 	int lastInformed = 0;
 	
@@ -38,13 +37,13 @@ public abstract class SyncAction {
 		uuid = UUID.randomUUID();
 	}
 	
-	static enum State {
+	private State state;
+	
+	public static enum State {
 		CREATED,
-		VALIDATED,
 		STARTED,
 		ENDED,
 		ABORTED,
-		ABANDONED
 	}
 	
 	/* start from client
@@ -104,6 +103,12 @@ public abstract class SyncAction {
 	public void onAbort() {
 	}
 	
+	/**
+	 * called after onEnd or onAbort
+	 */
+	public void onFinalize() {
+	}
+	
 	public void readNBTStart(NBTTagCompound tag) {
 	}
 	public void readNBTUpdate(NBTTagCompound tag) {
@@ -134,24 +139,11 @@ public abstract class SyncAction {
 		return Minecraft.getMinecraft().thePlayer.equals(player);
 	}
 	
-	public static enum ActionState {
-		NORMAL,
-		ENDED,
-		ABORTED
-	}
-	
 	/**
 	 * @return The action's state
 	 */
-	public final ActionState getActionState() {
-		switch(state) {
-		case ENDED:
-			return ActionState.ENDED;
-		case ABORTED:
-			return ActionState.ABORTED;
-		default:
-			return ActionState.NORMAL;
-		}
+	public final State getState() {
+		return state;
 	}
 	
 	private static final String NBT_UUID = "0";
@@ -170,7 +162,6 @@ public abstract class SyncAction {
 			readNBTUpdate(tag.getCompoundTag(NBT_OBJECT));
 	}
 	final void setNBTFinal(NBTTagCompound tag) {
-		state = State.valueOf(tag.getString(NBT_STATE));
 		if (tag.hasKey(NBT_OBJECT))
 			readNBTFinal(tag.getCompoundTag(NBT_OBJECT));
 	}
@@ -192,17 +183,57 @@ public abstract class SyncAction {
 	}
 	final NBTTagCompound getNBTFinal() {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(NBT_STATE, state.toString());
 		NBTTagCompound obj = new NBTTagCompound();
 		writeNBTFinal(obj);
 		tag.setTag(NBT_OBJECT, obj);
 		return tag;
 	}
 	
-	final boolean isStarted() {
-		return !state.equals(State.CREATED) && !state.equals(State.VALIDATED);
+	final void start() {
+		state = State.STARTED;
+		onStart();
 	}
 	
+	final void end(NBTTagCompound tag) {
+		if (state.equals(State.STARTED)) {
+			state = State.ENDED;
+			setNBTFinal(tag);
+			onEnd();
+			onFinalize();
+		}
+	}
+	
+	final NBTTagCompound end() {
+		NBTTagCompound tag = TAG_EMPTY;
+		if (state.equals(State.STARTED)) {
+			state = State.ENDED;
+			tag = getNBTFinal();
+			onEnd();
+			onFinalize();
+		}
+		return tag;
+	}
+	
+	final void abort(NBTTagCompound tag) {
+		if (state.equals(State.STARTED)) {
+			state = State.ABORTED;
+			setNBTFinal(tag);
+			onAbort();
+			onFinalize();
+		}
+	}
+	
+	final NBTTagCompound abort() {
+		NBTTagCompound tag = TAG_EMPTY;
+		if (state.equals(State.STARTED)) {
+			state = State.ABORTED;
+			tag = getNBTFinal();
+			onAbort();
+			onFinalize();
+		}
+		return tag;
+	}
+
 	static final UUID getUUIDFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey(NBT_UUID))
 			return UUID.fromString(tag.getString(NBT_UUID));
@@ -210,14 +241,6 @@ public abstract class SyncAction {
 			return null;
 	}
 	
-	static final NBTTagCompound TAG_ENDED;
-	static final NBTTagCompound TAG_ABORTED;
-	
-	static {
-		TAG_ENDED = new NBTTagCompound();
-		TAG_ENDED.setString(NBT_STATE, State.ENDED.toString());
-		TAG_ABORTED = new NBTTagCompound();
-		TAG_ABORTED.setString(NBT_STATE, State.ABORTED.toString());
-	}
+	static final NBTTagCompound TAG_EMPTY = new NBTTagCompound();
 	
 }

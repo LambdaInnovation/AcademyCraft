@@ -79,8 +79,13 @@ public class ActionManager {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void terminateAtClient(@Data String uuid, @Data NBTTagCompound tag) {
-		AMC.terminateFromServer(UUID.fromString(uuid), tag);
+	static void endAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+		AMC.endFromServer(UUID.fromString(uuid), tag);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	static void abortAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+		AMC.abortFromServer(UUID.fromString(uuid), tag);
 	}
 	
 }

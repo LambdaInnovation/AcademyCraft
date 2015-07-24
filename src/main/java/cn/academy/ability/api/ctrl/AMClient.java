@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import cn.academy.ability.api.ctrl.SyncAction.State;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.event.OpenAuxGuiEvent;
@@ -45,14 +44,14 @@ public class AMClient implements IActionManager {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
-		//System.out.println("AMC#INT_START");
+		System.out.println("AMC#INT_START");
 		action.player = Minecraft.getMinecraft().thePlayer;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
 			@Override
 			public void onReady(Object val) {
 				if ((boolean) val) {
-					action.state = State.VALIDATED;
+					action.start();
 					map.put(action.uuid, action);
 					set.add(action.uuid);
 				}
@@ -63,14 +62,14 @@ public class AMClient implements IActionManager {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void endAction(SyncAction action) {
-		//System.out.println("AMC#INT_END: " + action.uuid);
+		System.out.println("AMC#INT_END: " + action.uuid);
 		ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void abortAction(SyncAction action) {
-		//System.out.println("AMC#INT_ABORT: " + action.uuid);
+		System.out.println("AMC#INT_ABORT: " + action.uuid);
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 	
@@ -89,13 +88,13 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	void startFromServer(String className, NBTTagCompound tag) {
-		//System.out.println("AMC#NET_START");
+		System.out.println("AMC#NET_START");
 		SyncAction action = null;
 		try {
 			action = (SyncAction) Class.forName(className).newInstance();
 			action.setNBTStart(tag);
 			if (action.uuid != null) {
-				action.state = State.VALIDATED;
+				action.start();
 				map.put(action.uuid, action);
 			}
 		}
@@ -106,27 +105,26 @@ public class AMClient implements IActionManager {
 
 	@SideOnly(Side.CLIENT)
 	void updateFromServer(UUID uuid, NBTTagCompound tag) {
-		//System.out.println("AMC#NET_UPDATE");
+		System.out.println("AMC#NET_UPDATE");
 		SyncAction action = map.get(uuid);
-		if (action != null) {
-			if (action.state.equals(State.VALIDATED)) {
-				action.state = State.STARTED;
-				action.onStart();
-			}
+		if (action != null)
 			action.setNBTUpdate(tag);
-		}
 	}
 	
 	@SideOnly(Side.CLIENT)
-	void terminateFromServer(UUID uuid, NBTTagCompound tag) {
-		//System.out.println("AMC#NET_TERMINATE");
+	void endFromServer(UUID uuid, NBTTagCompound tag) {
+		System.out.println("AMC#NET_END");
 		SyncAction action = map.get(uuid);
-		if (action != null) {
-			if (action.isStarted())
-				action.setNBTFinal(tag);
-			else
-				action.state = State.ABANDONED;
-		}
+		if (action != null)
+			action.end(tag);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	void abortFromServer(UUID uuid, NBTTagCompound tag) {
+		System.out.println("AMC#NET_ABORT");
+		SyncAction action = map.get(uuid);
+		if (action != null)
+			action.abort(tag);
 	}
 	
 	@SubscribeEvent
@@ -136,25 +134,14 @@ public class AMClient implements IActionManager {
 			return;
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
-			switch (action.state) {
-			case VALIDATED:
-				action.state = State.STARTED;
-				action.onStart();
-				break;
+			switch (action.getState()) {
+			case CREATED:
+				throw new IllegalStateException();
 			case STARTED:
 				action.onTick();
 				break;
 			case ENDED:
-				action.onEnd();
-				i.remove();
-				set.remove(action.uuid);
-				break;
 			case ABORTED:
-				action.onAbort();
-				i.remove();
-				set.remove(action.uuid);
-				break;
-			case ABANDONED:
 				i.remove();
 				set.remove(action.uuid);
 				break;
@@ -169,10 +156,8 @@ public class AMClient implements IActionManager {
 	public synchronized void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
-			if (action.isStarted()) {
-				action.state = State.ABORTED;
-				action.onAbort();
-			}
+			action.onAbort();
+			action.onFinalize();
 			i.remove();
 		}
 		set.clear();
