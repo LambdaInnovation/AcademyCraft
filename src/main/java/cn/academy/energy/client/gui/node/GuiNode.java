@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
+import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -55,7 +56,7 @@ import cn.liutils.util.helper.Color;
 @RegInit(side = RegInit.Side.CLIENT_ONLY)
 public class GuiNode extends LIGuiContainer {
 	
-	static LIGui loaded;
+	public static LIGui loaded;
 	
 	final ContainerNode container;
 	final TileNode tile;
@@ -112,15 +113,14 @@ public class GuiNode extends LIGuiContainer {
 			}
 			
 			if(text != null) {
-				//int offsetX = -160, offsetY = -45;
-				this.drawHoveringText(Arrays.asList(new String[] { text }), x, y, this.fontRendererObj);
+				EnergyUIHelper.drawTextBox(text, x + 5, y, 9);
 			}
 		}
 		
 		GL11.glPopMatrix();
 	}
     
-    private static String local(String name) {
+    public static String local(String name) {
     	return StatCollector.translateToLocal("ac.gui.node." + name + ".desc");
     }
     
@@ -174,11 +174,11 @@ public class GuiNode extends LIGuiContainer {
     	EventLoader.load(pageSelect, selectHandler = new SelectHandler());
     }
     
-    private static void wrapButton(Widget button, double alpha0) {
+    public static void wrapButton(Widget button, double alpha0) {
     	wrapButton(button, alpha0, 1);
     }
     
-    private static void wrapButton(Widget button, double alpha0, double alpha1) {
+    public static void wrapButton(Widget button, double alpha0, double alpha1) {
     	final DrawTexture drawer = DrawTexture.get(button);
     	final Color idle = new Color(1, 1, 1, alpha0), active = new Color(1, 1, 1, alpha1);
     	drawer.color = idle;

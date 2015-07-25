@@ -80,7 +80,7 @@ public class BlockWindGenBase extends ACBlockMulti {
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
-        if(!player.isSneaking()) {
+        if(!world.isRemote && !player.isSneaking()) {
         	guiHandler.openGuiContainer(player, world, x, y, z);
             return true;
         }

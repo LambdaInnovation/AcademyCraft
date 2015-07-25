@@ -62,6 +62,7 @@ public class GuiWindGenBase extends LIGuiContainer {
 	void initWidgets() {
 		main = loaded.getWidget("main").copy();
 		
+		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
 		EventLoader.load(main, this);
 		
 		gui.addWidget(main);

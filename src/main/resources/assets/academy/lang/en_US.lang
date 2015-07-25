@@ -114,6 +114,11 @@ ac.media.haveone=You have already installed media %s
 ac.gui.loading_lowercase.desc=loading...
 ac.gui.loading_uppercase.desc=LOADING...
 
+# Link UI
+ac.gui.link.transmitting=Transmitting...
+ac.gui.link.successful=Link Successful.
+ac.gui.link.failed=Link Failed.
+
 # Matrix
 ac.gui.matrix.mark.waiting.desc=Transmitting...
 ac.gui.matrix.mark.invalid_input.desc=Invalid input value.
@@ -128,7 +133,7 @@ ac.gui.node.not_connected.desc=NOT CONNECTED
 ac.gui.node.node_name.desc=Node Name
 ac.gui.node.ssid.desc=SSID: 
 ac.gui.node.password.desc=Password: 
-ac.gui.node.current_ssid.desc=Current SSID: 
+ac.gui.node.current_ssid.desc=Current Linked: 
 ac.gui.node.not_connected.desc=<Not Connected>
 
 # Phase Generator

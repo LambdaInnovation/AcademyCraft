@@ -51,6 +51,8 @@ public class GuiPhaseGen extends LIGuiContainer {
 	void init() {
 		main = loaded.getWidget("main").copy();
 		EventLoader.load(main, this);
+		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
+		
 		gui.addWidget(main);
 	}
 	

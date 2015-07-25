@@ -33,6 +33,7 @@ import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
@@ -211,12 +212,13 @@ public class WiWorldData extends WorldSavedData {
 		return ret;
 	}
 	
-	public NodeConn getNodeConnection(IWirelessGenerator generator) {
-		return nodeLookup.get(new VNGenerator(generator));
-	}
-	
-	public NodeConn getNodeConnection(IWirelessReceiver receiver) {
-		return nodeLookup.get(new VNReceiver(receiver));
+	public NodeConn getNodeConnection(IWirelessUser user) {
+		if(user instanceof IWirelessGenerator) {
+			return nodeLookup.get(new VNGenerator((IWirelessGenerator) user));
+		} else if(user instanceof IWirelessReceiver) {
+			return nodeLookup.get(new VNReceiver((IWirelessReceiver) user));
+		} else
+			throw new RuntimeException("Invalid user");
 	}
 	
 	private void tickNode() {

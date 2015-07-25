@@ -89,6 +89,8 @@ public class NodeConn {
 		}
 		ret.setTag("generators", list);
 		
+		ret.setTag("node", node.toNBT());
+		
 		return ret;
 	}
 	
@@ -105,9 +107,11 @@ public class NodeConn {
 			return false;
 		
 		World world = getWorld();
-		NodeConn old = data.getNodeConnection(receiver.get(world));
-		if(old != null) {
-			old.removeReceiver(receiver);
+		if(world != null) {
+			NodeConn old = data.getNodeConnection(receiver.get(world));
+			if(old != null) {
+				old.removeReceiver(receiver);
+			}
 		}
 		
 		receivers.add(receiver);
@@ -187,8 +191,10 @@ public class NodeConn {
 		
 		IWirelessNode iNode = node.get(world);
 		if(iNode == null) {
-			System.out.println(node + " destroyed, destroy NodeConn...");
-			dispose();
+			if(!node.isLoaded(world)) {
+				System.out.println(node + " destroyed, destroy NodeConn...");
+				dispose();
+			}
 			return;
 		}
 		
@@ -198,7 +204,7 @@ public class NodeConn {
 			Collections.shuffle(generators);
 			
 			Iterator<VNGenerator> iter = generators.iterator();
-			while(iter.hasNext()) {
+			while(transferLeft != 0 && iter.hasNext()) {
 				VNGenerator gen = iter.next();
 				if(gen.isLoaded(world)) {
 					IWirelessGenerator igen = gen.get(world);
@@ -228,7 +234,7 @@ public class NodeConn {
 			Collections.shuffle(receivers);
 			
 			Iterator<VNReceiver> iter = receivers.iterator();
-			while(iter.hasNext()) {
+			while(transferLeft != 0 && iter.hasNext()) {
 				VNReceiver rec = iter.next();
 				if(rec.isLoaded(world)) {
 					IWirelessReceiver irec = rec.get(world);
@@ -238,9 +244,12 @@ public class NodeConn {
 						
 						double cur = iNode.getEnergy();
 						double give = Math.min(cur, Math.min(transferLeft, irec.getBandwidth()));
+						give = Math.min(irec.getRequiredEnergy(), give);
+						
+						System.out.println("Give " + give);
+						give = give - irec.injectEnergy(give);
 						
 						cur -= give;
-						irec.injectEnergy(give);
 						transferLeft -= give;
 					}
 				}
@@ -253,6 +262,10 @@ public class NodeConn {
 		}
 	}
 	
+	public IWirelessNode getNode() {
+		return node.get(getWorld());
+	}
+	
 	private World getWorld() {
 		return data.world;
 	}
@@ -262,8 +275,9 @@ public class NodeConn {
 	}
 	
 	public int getCapacity() {
-		IWirelessNode inode = node.get(getWorld());
-		return inode == null ? 0 : inode.getCapacity();
+		World world = getWorld();
+		IWirelessNode inode = world == null ? null : node.get(getWorld());
+		return inode == null ? Integer.MAX_VALUE : inode.getCapacity();
 	}
 	
 }

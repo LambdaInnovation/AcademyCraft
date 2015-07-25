@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.crafting.block.ContainerImagFusor;
 import cn.academy.crafting.block.TileImagFusor;
+import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
@@ -76,14 +77,15 @@ public class GuiImagFusor extends LIGuiContainer {
 		
 		 Widget widget = gui.getTopWidget(x, y);
 		 if(widget != null) {
+			 String text = null;
 			 if(widget.getName().equals("progress_imag")) {
-				 List<String> list = new ArrayList();
-				 list.add(tile.getEnergy() + "/" + tile.getMaxEnergy() + " IF");
-				 this.drawHoveringText(list, x, y, this.fontRendererObj);
+				 text = tile.getEnergy() + "/" + tile.getMaxEnergy() + " IF";
 			 } else if(widget.getName().equals("progress_proj")) {
-				 List<String> list = new ArrayList();
-				 list.add(tile.getLiquidAmount() + "/" + tile.getTankSize() + " mB");
-				 this.drawHoveringText(list, x, y, this.fontRendererObj);
+				 text = tile.getLiquidAmount() + "/" + tile.getTankSize() + " mB";
+			 }
+			 
+			 if(text != null) {
+				 EnergyUIHelper.drawTextBox(text, x + 5, y + 2, 9);
 			 }
 		 }
 		 
@@ -101,11 +103,11 @@ public class GuiImagFusor extends LIGuiContainer {
 		ProgressBar progressProduct, progressProj, progressImag;
 		
 		public Handler() {
-			wrapButton(page.getWidget("button_config"));
-			
 			progressProduct = ProgressBar.get(page.getWidget("progress_pro"));
 			progressProj = ProgressBar.get(page.getWidget("progress_proj"));
 			progressImag = ProgressBar.get(page.getWidget("progress_imag"));
+			
+			EnergyUIHelper.initNodeLinkButton(tile, page.getWidget("btn_link"));
 		}
 		
 		@GuiCallback
