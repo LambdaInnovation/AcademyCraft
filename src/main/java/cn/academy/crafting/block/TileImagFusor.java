@@ -120,6 +120,8 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
+		
 		if(isWorking()) {
 			updateWork();
 		} else {
@@ -153,7 +155,8 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 		
 		// Update energy
 		if(inventory[3] != null) {
-			double gain = -EnergyItemHelper.charge(inventory[3], -(getMaxEnergy() - getEnergy()), false);
+			double gain = EnergyItemHelper
+					.pull(inventory[3], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
 			this.injectEnergy(gain);
 		}
 		

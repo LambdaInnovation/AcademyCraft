@@ -5,6 +5,9 @@ import javax.vecmath.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.api.block.IWirelessUser;
@@ -38,6 +41,7 @@ public class EnergyUIHelper {
 	}
 	
 	public static void drawTextBox(String str, double x, double y, double size) {
+		GL11.glEnable(GL11.GL_BLEND);
 		drawTextBox(str, x, y, size, Align.LEFT);
 	}
 	

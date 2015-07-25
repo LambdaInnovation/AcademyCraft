@@ -12,9 +12,14 @@
  */
 package cn.academy.energy.client.gui;
 
+import java.util.ArrayList;
+
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
+import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
+import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.internal.NodeConn;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
@@ -31,16 +36,34 @@ public class LinkToNodeSyncs {
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void retrieveNearbyNetworks(@Instance TileEntity te, @Instance Future future) {
-		IWirelessUser user = (IWirelessUser) te;
-		future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 0.5, te.zCoord + 0.5));
+		if(te instanceof IWirelessUser) {
+			IWirelessUser user = (IWirelessUser) te;
+			future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 0.5, te.zCoord + 0.5));
+		} else {
+			future.setAndSync(new ArrayList());
+		}
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void retrieveCurrentLink(@Instance TileEntity te, @Data Future future) {
-		IWirelessUser user = (IWirelessUser) te;
-		NodeConn conn = WirelessHelper.getNodeConn(user);
-		
-		future.setAndSync(conn == null ? "" : conn.getNode().getNodeName());
+		if(te instanceof IWirelessUser) {
+			IWirelessUser user = (IWirelessUser) te;
+			NodeConn conn = WirelessHelper.getNodeConn(user);
+			
+			future.setAndSync(conn == null ? "" : conn.getNode().getNodeName());
+		} else {
+			future.setAndSync("");
+		}
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	public static void startLink(@Instance TileEntity te, @Instance TileEntity node, @Data Future future) {
+		if(te instanceof IWirelessUser && node instanceof IWirelessNode) {
+			future.setAndSync(!MinecraftForge.EVENT_BUS.post(
+				new LinkUserEvent((IWirelessUser) te, (IWirelessNode) node)));
+		} else {
+			future.setAndSync(false);
+		}
 	}
 	
 }

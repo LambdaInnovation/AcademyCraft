@@ -12,14 +12,18 @@
  */
 package cn.academy.core.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.liutils.util.mc.StackUtils;
 
 /**
  * BaseClass for typical block containers. will automatically try to open the container gui.
@@ -49,6 +53,17 @@ public abstract class ACBlockContainer extends BlockContainer {
             return true;
         }
         return false;
+    }
+	
+	@Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int wtf) {
+		if(!world.isRemote) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if(te instanceof IInventory) {
+				StackUtils.dropItems(world, x, y, z, (IInventory) te);
+			}
+		}
+		super.breakBlock(world, x, y, z, block, wtf);
     }
 
 }

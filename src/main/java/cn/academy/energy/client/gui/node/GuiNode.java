@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
+import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -112,8 +113,7 @@ public class GuiNode extends LIGuiContainer {
 			}
 			
 			if(text != null) {
-				//int offsetX = -160, offsetY = -45;
-				this.drawHoveringText(Arrays.asList(new String[] { text }), x, y, this.fontRendererObj);
+				EnergyUIHelper.drawTextBox(text, x + 5, y, 9);
 			}
 		}
 		

@@ -17,6 +17,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.node.GuiNode;
@@ -31,17 +32,28 @@ import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
+import cn.liutils.util.helper.Font.Align;
+import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD
  */
 public class GuiLinkToNode extends LIGuiScreen {
 	
+	private interface Callback {
+		void invoke();
+	}
+	
 	TileEntity tile;
 	
 	Widget main;
 	
 	List<IWirelessNode> nodes = new ArrayList();
+	
+	String msg;
+	long msgLength;
+	long msgStartTime;
+	Callback callback;
 	
 	public GuiLinkToNode(IWirelessUser _user) {
 		tile = (TileEntity) _user;
@@ -65,6 +77,35 @@ public class GuiLinkToNode extends LIGuiScreen {
 	@Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+	
+	private void showMessage(String _msg, long time, Callback _callback) {
+		msg = StatCollector.translateToLocal("ac.gui.link." + _msg);
+		msgLength = time;
+		msgStartTime = GameTimer.getTime();
+		callback = _callback;
+	}
+	
+	@Override
+    public void drawScreen(int mx, int my, float w) {
+		super.drawScreen(mx, my, w);
+		if(msg != null) {
+			long deltaTime = GameTimer.getTime() - msgStartTime;
+			if(deltaTime > msgLength) {
+				msg = null;
+				if(callback != null) {
+					callback.invoke();
+				}
+			} else {
+				EnergyUIHelper.drawTextBox(msg, width / 2, height / 2 - 3, 8, Align.CENTER);
+			}
+		}
+	}
+	
+    @Override
+    protected void mouseClicked(int mx, int my, int btn) {
+    	if(msg == null)
+    		super.mouseClicked(mx, my, btn);
     }
 	
 	private void initWidgets() {
@@ -109,7 +150,11 @@ public class GuiLinkToNode extends LIGuiScreen {
 			single.regEventHandler(new MouseDownHandler() {
 				@Override
 				public void handleEvent(Widget w, MouseDownEvent event) {
-					// TODO
+					showMessage("Linking", 10000, null);
+					LinkToNodeSyncs.startLink(tile, (TileEntity) node, 
+						Future.create((Boolean b) -> {
+							showMessage(b ? "successful" : "failed", 2000, GuiLinkToNode.this::closeGui);
+						}));
 				}
 			});
 			GuiNode.wrapButton(single, 0.0, 0.3);
@@ -118,6 +163,11 @@ public class GuiLinkToNode extends LIGuiScreen {
 		}
 		
 		main.getWidget("list").addComponent(eList);
+	}
+	
+	private void closeGui() {
+		if(Minecraft.getMinecraft().currentScreen == this)
+			Minecraft.getMinecraft().displayGuiScreen(null);
 	}
 	
 }

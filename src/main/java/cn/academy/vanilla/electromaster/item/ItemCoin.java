@@ -73,7 +73,7 @@ public class ItemCoin extends ACItem {
     	EntityCoinThrowing etc = new EntityCoinThrowing(player, stack);
     	world.spawnEntityInWorld(etc);
     	
-    	player.playSound("academy:flipcoin", 0.5F, 1.0F);
+    	player.playSound("academy:entity.flipcoin", 0.5F, 1.0F);
     	getMap(player).put(player, etc);
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;

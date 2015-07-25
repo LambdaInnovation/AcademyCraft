@@ -145,7 +145,7 @@ public class AcademyCraft {
 	        	} else {
 	        		str2 = obj.toString();
 	        	}
-	        	System.out.printf(String.format("| %-22s---| %s\n", str1, str2));
+	        	System.out.printf(String.format("| %-25s| %s\n", str1, str2));
 	        }
 	        System.out.printf("|-------------------------------------------------------\n");
         }

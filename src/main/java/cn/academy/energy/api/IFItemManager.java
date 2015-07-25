@@ -67,10 +67,6 @@ public final class IFItemManager implements EnergyItemManager {
 			spare = cur + amt - item.getMaxEnergy();
 			amt = item.getMaxEnergy() - cur;
 		}
-		if(amt + cur < 0) {
-			spare = amt + cur;
-			amt = -cur;
-		}
 		
 		double namt = Math.signum(amt) * Math.min(Math.abs(amt), lim);
 		spare += amt - namt;
@@ -86,6 +82,20 @@ public final class IFItemManager implements EnergyItemManager {
 	@Override
 	public boolean isSupported(ItemStack stack) {
 		return stack.getItem() instanceof ImagEnergyItem;
+	}
+
+	@Override
+	public double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
+		ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
+		
+		double cur = getEnergy(stack);
+		double give = Math.min(amt, cur);
+		if(!ignoreBandwidth) {
+			give = Math.min(give, item.getBandwidth());
+		}
+		setEnergy(stack, cur - give);
+		
+		return give;
 	}
     
 }

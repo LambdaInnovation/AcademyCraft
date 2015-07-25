@@ -69,6 +69,15 @@ public class EnergyItemHelper {
 		return amt;
 	}
 	
+	public static double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
+		for(EnergyItemManager m : supported) {
+			if(m.isSupported(stack)) {
+				return m.pull(stack, amt, ignoreBandwidth);
+			}
+		}
+		return 0;
+	}
+	
 	public static ItemStack createEmptyItem(Item item) {
 		ItemStack ret = new ItemStack(item);
 		charge(ret, 0, true);
@@ -93,6 +102,11 @@ public class EnergyItemHelper {
 		 * @return How much energy not transfered into stack(left)
 		 */
 		double charge(ItemStack stack, double amt, boolean ignoreBandwidth);
+		
+		/**
+		 * @return How much energy pulled out of stack
+		 */
+		double pull(ItemStack stack, double amt, boolean ignoreBandwidth);
 		
 	}
 	
