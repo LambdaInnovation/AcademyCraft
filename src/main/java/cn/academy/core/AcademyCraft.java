@@ -152,11 +152,12 @@ public class AcademyCraft {
     
     private static String expand(String str, int size) {
     	StringBuilder sb = new StringBuilder(str);
-    	int len;
+    	int len = 0;
     	for(int i = 0; i < str.length(); ++i) {
-    		
+    		char ch = str.charAt(i);
+    		len += Character.isIdeographic(ch) ? 2 : 1;
     	}
-    	for(int i = str.length(); i < size; ++i)
+    	for(int i = str.length(); i < len; ++i)
     		sb.append(' ');
     	return sb.toString();
     }
