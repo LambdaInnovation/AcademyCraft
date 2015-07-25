@@ -26,7 +26,7 @@ public class EnergyUIHelper {
 		CRL_GLOW = new Color().setColor4i(0, 214, 232, 180),
 		CRL_BACK = new Color().setColor4i(0, 128, 165, 90);
 	
-	public static ResourceLocation
+	public static final ResourceLocation
 		BTN_WIFI = Resources.getTexture("guis/button/button_wifi"),
 		BTN_WIFI_N = Resources.getTexture("guis/button/button_wifi2");
 	

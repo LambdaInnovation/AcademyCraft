@@ -130,8 +130,11 @@ public class AcademyCraft {
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
         
         if(DEBUG_MODE) {
-        	System.out.println("AC Recipe Name Mappings:");
-        	System.out.println("---------------------------------------");
+        	System.out.printf("|-------------------------------------------------------\n");
+        	System.out.printf("| AC Recipe Name Mappings\n");
+        	System.out.printf("|--------------------------|----------------------------\n");
+        	System.out.printf(String.format("| %-25s| Object Name\n", "Recipe Name"));
+        	System.out.printf("|--------------------------|----------------------------\n");
 	        for(Entry<String, Object> entry : recipes.nameMapping.entrySet()) {
 	        	Object obj = entry.getValue();
 	        	String str1 = entry.getKey(), str2;
@@ -142,24 +145,12 @@ public class AcademyCraft {
 	        	} else {
 	        		str2 = obj.toString();
 	        	}
-	        	System.out.println(String.format("%s: %s", expand(str2, 30), str1));
+	        	System.out.printf(String.format("| %-22s---| %s\n", str1, str2));
 	        }
-	        System.out.println("---------------------------------------");
+	        System.out.printf("|-------------------------------------------------------\n");
         }
         
         recipes = null; //Doesn't need it after loading
-    }
-    
-    private static String expand(String str, int size) {
-    	StringBuilder sb = new StringBuilder(str);
-    	int len = 0;
-    	for(int i = 0; i < str.length(); ++i) {
-    		char ch = str.charAt(i);
-    		len += Character.isIdeographic(ch) ? 2 : 1;
-    	}
-    	for(int i = str.length(); i < len; ++i)
-    		sb.append(' ');
-    	return sb.toString();
     }
 
     @EventHandler
