@@ -128,7 +128,7 @@ ac.gui.node.not_connected.desc=未连接
 ac.gui.node.node_name.desc=节点名
 ac.gui.node.ssid.desc=SSID: 
 ac.gui.node.password.desc=密码: 
-ac.gui.node.current_ssid.desc=当前SSID: 
+ac.gui.node.current_ssid.desc=当前连接: 
 ac.gui.node.not_connected.desc=<未连接>
 
 ac.gui.node.mark.loading.desc=加载中

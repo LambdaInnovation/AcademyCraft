@@ -23,6 +23,7 @@ import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
@@ -87,14 +88,9 @@ public class WirelessHelper {
 		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(node);
 	}
 	
-	public static NodeConn getNodeConn(IWirelessGenerator gen) {
+	public static NodeConn getNodeConn(IWirelessUser gen) {
 		TileEntity tile = (TileEntity) gen;
 		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(gen);
-	}
-	
-	public static NodeConn getNodeConn(IWirelessReceiver rec) {
-		TileEntity tile = (TileEntity) rec;
-		return WiWorldData.get(tile.getWorldObj()).getNodeConnection(rec);
 	}
 	
 	public static boolean isReceiverLinked(IWirelessReceiver rec) {
@@ -106,15 +102,15 @@ public class WirelessHelper {
 	}
 	
 	/**
-	 * Get a list of IWirelessNode in the range within the given position.
+	 * Get a list of IWirelessNode that can reach the given position.
 	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param range
 	 * @return nodes in the area, does not guarantee any order
 	 */
-	public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z, double range) {
+	public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z) {
+		double range = 20.0;
 		List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockFilter() {
 
 			@Override

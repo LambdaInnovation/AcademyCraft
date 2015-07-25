@@ -128,7 +128,7 @@ ac.gui.node.not_connected.desc=NOT CONNECTED
 ac.gui.node.node_name.desc=Node Name
 ac.gui.node.ssid.desc=SSID: 
 ac.gui.node.password.desc=Password: 
-ac.gui.node.current_ssid.desc=Current SSID: 
+ac.gui.node.current_ssid.desc=Current Linked: 
 ac.gui.node.not_connected.desc=<Not Connected>
 
 # Phase Generator

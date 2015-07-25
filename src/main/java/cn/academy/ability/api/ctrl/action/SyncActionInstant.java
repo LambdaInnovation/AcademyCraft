@@ -27,16 +27,21 @@ public abstract class SyncActionInstant extends SyncAction {
 	
 	@Override
 	public final void onStart() {
+		System.out.println("OnStart " + isRemote);
 		if(!isRemote) {
-			if(!validate())
+			if(!validate()) {
+				System.out.println("aborted");
 				ActionManager.abortAction(this);
-			else
+			} else {
+				System.out.println("ended");
 				ActionManager.endAction(this);
+			}
 		}
 	}
 	
 	@Override
 	public final void onEnd() {
+		System.out.println("OnEnd " + isRemote);
 		execute();
 	}
 	

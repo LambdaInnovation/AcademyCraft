@@ -253,6 +253,10 @@ public class NodeConn {
 		}
 	}
 	
+	public IWirelessNode getNode() {
+		return node.get(getWorld());
+	}
+	
 	private World getWorld() {
 		return data.world;
 	}

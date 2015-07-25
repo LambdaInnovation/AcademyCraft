@@ -55,7 +55,7 @@ import cn.liutils.util.helper.Color;
 @RegInit(side = RegInit.Side.CLIENT_ONLY)
 public class GuiNode extends LIGuiContainer {
 	
-	static LIGui loaded;
+	public static LIGui loaded;
 	
 	final ContainerNode container;
 	final TileNode tile;
@@ -120,7 +120,7 @@ public class GuiNode extends LIGuiContainer {
 		GL11.glPopMatrix();
 	}
     
-    private static String local(String name) {
+    public static String local(String name) {
     	return StatCollector.translateToLocal("ac.gui.node." + name + ".desc");
     }
     
@@ -174,11 +174,11 @@ public class GuiNode extends LIGuiContainer {
     	EventLoader.load(pageSelect, selectHandler = new SelectHandler());
     }
     
-    private static void wrapButton(Widget button, double alpha0) {
+    public static void wrapButton(Widget button, double alpha0) {
     	wrapButton(button, alpha0, 1);
     }
     
-    private static void wrapButton(Widget button, double alpha0, double alpha1) {
+    public static void wrapButton(Widget button, double alpha0, double alpha1) {
     	final DrawTexture drawer = DrawTexture.get(button);
     	final Color idle = new Color(1, 1, 1, alpha0), active = new Color(1, 1, 1, alpha1);
     	drawer.color = idle;

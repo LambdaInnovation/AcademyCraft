@@ -56,7 +56,7 @@ public class BlockInfiniteGen extends ACBlockContainer {
 				MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent(gen));
 				player.addChatMessage(new ChatComponentTranslation("Already linked, unlinking the generator."));
 			} else {
-				List<IWirelessNode> nodes = WirelessHelper.getNodesInRange(world, x, y, z, 20);
+				List<IWirelessNode> nodes = WirelessHelper.getNodesInRange(world, x, y, z);
 				if(nodes.isEmpty()) {
 					player.addChatMessage(new ChatComponentTranslation("Didn't find any node nearby, can't link."));
 				} else {
