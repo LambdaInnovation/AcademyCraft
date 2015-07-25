@@ -44,8 +44,8 @@ public class AMServer implements IActionManager {
 		action.player = null;
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtClient(null, action.getClass().getName(), tag);
-		action.start();
 		map.get(dummy).put(action.uuid, action);
+		action.start();
 	}
 
 	@Override
@@ -87,8 +87,8 @@ public class AMServer implements IActionManager {
 			action.player = player;
 			action.setNBTStart(tag);
 			ActionManager.startAtClient(player, className, action.getNBTStart());
-			action.start();
 			map.get(playerUUID(action)).put(action.uuid, action);
+			action.start();
 			return true;
 		}
 		catch (Throwable e) {
@@ -134,7 +134,7 @@ public class AMServer implements IActionManager {
 	private int curTick = 0;
 	
 	@SubscribeEvent
-	public synchronized void onServerTick(ServerTickEvent event) {
+	public void onServerTick(ServerTickEvent event) {
 		if (event.phase.equals(Phase.START))
 			return;
 		++curTick;
@@ -170,7 +170,7 @@ public class AMServer implements IActionManager {
 	}
 	
 	@SubscribeEvent
-	public synchronized void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+	public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		map.put(event.player.getUniqueID(), new HashMap<UUID, SyncAction>());
 	}
 	

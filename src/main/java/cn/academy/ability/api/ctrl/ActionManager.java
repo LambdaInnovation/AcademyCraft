@@ -49,8 +49,8 @@ public class ActionManager {
 	
 	//NETWORK CALLS
 	@RegNetworkCall(side = Side.SERVER)
-	static void startAtServer(@Instance EntityPlayer player, @Data String className, @Data NBTTagCompound tag, @Data Future res) {
-		res.setAndSync(AMS.startFromClient(player, className, tag));
+	static void startAtServer(@Instance EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
+		AMS.startFromClient(player, className, tag);
 	}
 
 	@RegNetworkCall(side = Side.SERVER)
@@ -69,8 +69,8 @@ public class ActionManager {
 	};
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void startAtClient(@Target(range = RangeOption.EXCEPT) EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
-		AMC.startFromServer(className, tag);
+	static void startAtClient(@Instance EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
+		AMC.startFromServer(player, className, tag);
 	}
 
 	@RegNetworkCall(side = Side.CLIENT)

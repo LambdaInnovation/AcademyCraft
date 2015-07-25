@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public abstract class SyncAction {
 
-	UUID uuid;
+	protected UUID uuid;
 	int intv = -1;
 	int lastInformed = 0;
 	
@@ -195,6 +195,7 @@ public abstract class SyncAction {
 	}
 	
 	final void end(NBTTagCompound tag) {
+		System.out.println("SA#END0");
 		if (state.equals(State.STARTED)) {
 			state = State.ENDED;
 			setNBTFinal(tag);
