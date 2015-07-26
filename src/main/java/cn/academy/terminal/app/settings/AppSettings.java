@@ -10,13 +10,15 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.terminal.app;
+package cn.academy.terminal.app.settings;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.client.Minecraft;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -27,7 +29,7 @@ public class AppSettings extends App {
 
 	@RegApp
 	public static AppSettings instance = new AppSettings();
-
+	
 	private AppSettings() {
 		super("settings");
 		setPreInstalled();
@@ -37,8 +39,9 @@ public class AppSettings extends App {
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
 			@Override
+			@SideOnly(Side.CLIENT)
 			public void onStart() {
-				System.out.println("Hey I'm opened!");
+				Minecraft.getMinecraft().displayGuiScreen(new SettingsUI());
 			}
 		};
 	}

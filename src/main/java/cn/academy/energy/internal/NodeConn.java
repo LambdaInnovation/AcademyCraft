@@ -246,9 +246,7 @@ public class NodeConn {
 						double give = Math.min(cur, Math.min(transferLeft, irec.getBandwidth()));
 						give = Math.min(irec.getRequiredEnergy(), give);
 						
-						System.out.println("Give " + give);
 						give = give - irec.injectEnergy(give);
-						
 						cur -= give;
 						transferLeft -= give;
 					}
