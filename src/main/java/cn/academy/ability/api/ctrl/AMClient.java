@@ -44,32 +44,23 @@ public class AMClient implements IActionManager {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void startAction(SyncAction action) {
-		System.out.println("AMC#INT_START");
+		//System.out.println("AMC#INT_START");
 		action.player = Minecraft.getMinecraft().thePlayer;
 		NBTTagCompound tag = action.getNBTStart();
-		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag, Future.create(new FutureCallback() {
-			@Override
-			public void onReady(Object val) {
-				if ((boolean) val) {
-					action.start();
-					map.put(action.uuid, action);
-					set.add(action.uuid);
-				}
-			}
-		}));
+		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void endAction(SyncAction action) {
-		System.out.println("AMC#INT_END: " + action.uuid);
+		//System.out.println("AMC#INT_END: " + action.uuid);
 		ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void abortAction(SyncAction action) {
-		System.out.println("AMC#INT_ABORT: " + action.uuid);
+		//System.out.println("AMC#INT_ABORT: " + action.uuid);
 		ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
 	}
 	
@@ -87,15 +78,18 @@ public class AMClient implements IActionManager {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	void startFromServer(String className, NBTTagCompound tag) {
-		System.out.println("AMC#NET_START");
+	void startFromServer(EntityPlayer player, String className, NBTTagCompound tag) {
+		//System.out.println("AMC#NET_START");
 		SyncAction action = null;
 		try {
 			action = (SyncAction) Class.forName(className).newInstance();
 			action.setNBTStart(tag);
+			action.player = player;
 			if (action.uuid != null) {
-				action.start();
 				map.put(action.uuid, action);
+				if (player != null && player.equals(Minecraft.getMinecraft().thePlayer))
+					set.add(action.uuid);
+				action.start();
 			}
 		}
 		catch (Throwable e) {
@@ -105,7 +99,7 @@ public class AMClient implements IActionManager {
 
 	@SideOnly(Side.CLIENT)
 	void updateFromServer(UUID uuid, NBTTagCompound tag) {
-		System.out.println("AMC#NET_UPDATE");
+		//System.out.println("AMC#NET_UPDATE");
 		SyncAction action = map.get(uuid);
 		if (action != null)
 			action.setNBTUpdate(tag);
@@ -113,7 +107,7 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	void endFromServer(UUID uuid, NBTTagCompound tag) {
-		System.out.println("AMC#NET_END");
+		//System.out.println("AMC#NET_END");
 		SyncAction action = map.get(uuid);
 		if (action != null)
 			action.end(tag);
@@ -121,7 +115,7 @@ public class AMClient implements IActionManager {
 	
 	@SideOnly(Side.CLIENT)
 	void abortFromServer(UUID uuid, NBTTagCompound tag) {
-		System.out.println("AMC#NET_ABORT");
+		//System.out.println("AMC#NET_ABORT");
 		SyncAction action = map.get(uuid);
 		if (action != null)
 			action.abort(tag);
@@ -129,7 +123,7 @@ public class AMClient implements IActionManager {
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public synchronized void onClientTick(ClientTickEvent event) {
+	public void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused() || event.phase.equals(Phase.START))
 			return;
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
@@ -153,7 +147,7 @@ public class AMClient implements IActionManager {
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public synchronized void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
+	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
 			action.onAbort();
