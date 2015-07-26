@@ -57,7 +57,7 @@ public class ClientController {
 	
 	private static AbilityKey[] handlers = new AbilityKey[MAX_KEYS];
 	
-	private static final int[] defaultMapping = new int[] { 
+	public static final int[] defaultMapping = new int[] { 
 		KeyManager.MOUSE_LEFT, 
 		KeyManager.MOUSE_RIGHT, 
 		Keyboard.KEY_R, 

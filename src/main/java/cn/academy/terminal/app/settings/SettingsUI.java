@@ -20,6 +20,8 @@ import java.util.Map.Entry;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import cn.academy.ability.api.ctrl.ClientController;
+import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -44,6 +46,11 @@ public class SettingsUI extends LIGuiScreen {
 	static {
 		addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true);
 		addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true);
+		
+		addProperty(PropertyElements.KEY, "keys", "ability_0", ClientController.defaultMapping[0]);
+		addProperty(PropertyElements.KEY, "keys", "ability_1", ClientController.defaultMapping[1]);
+		addProperty(PropertyElements.KEY, "keys", "ability_2", ClientController.defaultMapping[2]);
+		addProperty(PropertyElements.KEY, "keys", "ability_3", ClientController.defaultMapping[3]);
 	}
 	
 	public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue) {

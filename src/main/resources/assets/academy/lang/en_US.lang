@@ -111,6 +111,12 @@ ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
 
+ac.settings.cat.keys=Keys
+ac.settings.prop.ability_0=Ability #1
+ac.settings.prop.ability_1=Ability #2
+ac.settings.prop.ability_2=Ability #3
+ac.settings.prop.ability_3=Ability #4
+
 # Media
 ac.media.acquired=You have installed media %s
 ac.media.haveone=You have already installed media %s

@@ -3,12 +3,24 @@ package cn.academy.terminal.app.settings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import org.lwjgl.input.Keyboard;
+
 import cn.academy.core.client.Resources;
 import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.cgui.gui.event.GainFocusEvent;
+import cn.liutils.cgui.gui.event.GainFocusEvent.GainFocusHandler;
+import cn.liutils.cgui.gui.event.KeyEvent;
+import cn.liutils.cgui.gui.event.KeyEvent.KeyEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
+import cn.liutils.util.helper.Color;
+import cn.liutils.util.helper.KeyManager;
 
 public class PropertyElements {
 	
@@ -43,6 +55,98 @@ public class PropertyElements {
 			return ret;
 		}
 		
+	},
+	
+	KEY = new IPropertyElement() {
+		
+		@Override
+		public Widget getWidget(UIProperty prop) {
+			Configuration cfg = getConfig();
+			Property p = cfg.get(prop.category, prop.id, (int) prop.defValue);
+			
+			Widget ret = SettingsUI.loaded.getWidget("t_key").copy();
+			TextBox.get(ret.getWidget("text")).setContent(prop.getDisplayID());
+			
+			Widget key = ret.getWidget("key");
+			key.addComponent(new EditKey(p));
+			
+			return ret;
+		}
+		
 	};
+	
+	private static class EditKey extends Component {
+		
+		static final Color 
+			CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
+			CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
+		
+		final Property prop;
+
+		public boolean editing;
+		
+		TextBox textBox;
+		
+		public EditKey(Property _prop) {
+			super("EditKey");
+			
+			prop = _prop;
+			
+			this.addEventHandler(new KeyEventHandler() {
+
+				@Override
+				public void handleEvent(Widget w, KeyEvent event) {
+					if(editing) {
+						endEditing(event.keyCode);
+					}
+				}
+				
+			});
+			
+			TextBox tb;
+			
+			this.addEventHandler(new GainFocusHandler() {
+
+				@Override
+				public void handleEvent(Widget w, GainFocusEvent event) {
+					System.out.println("StartEditing");
+					startEditing();
+				}
+				
+			});
+		}
+		
+		@Override
+		public void onAdded() {
+			textBox = TextBox.get(widget);
+			widget.transform.doesListenKey = true;
+			updateKeyName();
+		}
+		
+		private void updateKeyName() {
+			textBox.setContent(KeyManager.getKeyName(prop.getInt()));
+		}
+		
+		private void startEditing() {
+			editing = true;
+			textBox.setContent("PRESS");
+			textBox.color = CRL_EDIT;
+		}
+		
+		private void endEditing(int key) {
+			editing = false;
+			textBox.color = CRL_NORMAL;
+			widget.getGui().removeFocus();
+			
+			if(key == Keyboard.KEY_ESCAPE) {
+				;
+			} else {
+				prop.set(key);
+			}
+			
+			updateKeyName();
+		}
+		
+	}
 	
 }
