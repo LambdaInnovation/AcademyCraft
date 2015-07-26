@@ -12,6 +12,7 @@
  */
 package cn.academy.core;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
 import cn.academy.core.util.ValuePipeline;
+import cn.academy.support.ResidenceAdapter;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
@@ -156,11 +158,28 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+        setupResidence();
     }
     
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
+    }
+    
+    private void setupResidence() {
+    	try {
+        	log.info("Checking Residence...");
+			if (Class.forName("com.bekvon.bukkit.residence.Residence") != null)
+				Class.forName("cn.academy.support.ResidenceAdapter").getMethod("init").invoke(null);
+			else
+				log.info("Residence not found");
+		}
+    	catch (ClassNotFoundException e) {
+			log.info("Residence not found");
+		}
+    	catch (Exception e) {
+			log.error("Failed to hook into Residence");
+		}
     }
     
     public static void addToRecipe(Class klass) {
@@ -177,5 +196,6 @@ public class AcademyCraft {
     
     public static double getInt(String name) {
     	return script.root.getInteger("ac." + name);
-    }
+    }    
+
 }
