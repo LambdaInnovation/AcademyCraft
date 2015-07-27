@@ -27,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
 import cn.academy.core.util.ValuePipeline;
-import cn.academy.support.ResidenceAdapter;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
@@ -158,7 +157,7 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
-        setupResidence();
+        setupBukkit();
     }
     
     @EventHandler
@@ -166,19 +165,22 @@ public class AcademyCraft {
     	config.save();
     }
     
-    private void setupResidence() {
+    private void setupBukkit() {
     	try {
-        	log.info("Checking Residence...");
-			if (Class.forName("com.bekvon.bukkit.residence.Residence") != null)
-				Class.forName("cn.academy.support.ResidenceAdapter").getMethod("init").invoke(null);
+        	log.info("Checking for Bukkit...");
+			if (Class.forName("org.bukkit.Bukkit") != null) {
+				Class.forName("cn.academy.support.bukkit.BukkitAdapter").getMethod("init").invoke(null);
+				log.info("Successfully hooked into Bukkit");
+			}
 			else
-				log.info("Residence not found");
+				log.info("Bukkit not found");
 		}
     	catch (ClassNotFoundException e) {
-			log.info("Residence not found");
+			log.info("Bukkit not found");
+			e.printStackTrace();
 		}
     	catch (Exception e) {
-			log.error("Failed to hook into Residence");
+			log.error("Failed to hook into Bukkit", e);
 		}
     }
     

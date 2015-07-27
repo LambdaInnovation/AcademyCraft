@@ -1,4 +1,4 @@
-package cn.academy.support;
+package cn.academy.support.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,15 +15,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.SERVER)
-public class ResidenceAdapter {
+public final class ResidenceAdapter {
 	
 	public static final ResidenceAdapter INSTANCE = new ResidenceAdapter();
 	
 	public static void init() {
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
-		AcademyCraft.log.info("Hooked into Residence successfully");
 	}
-	
 	
 	@SubscribeEvent
 	public void onBlockDestroy(BlockDestroyEvent event) {
