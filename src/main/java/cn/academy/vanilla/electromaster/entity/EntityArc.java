@@ -42,7 +42,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @SideOnly(Side.CLIENT)
 @RegEntity.HasRender
 public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
@@ -58,8 +58,9 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@RegEntity.Render
-	public static Renderer render = new Renderer();
+	public static Renderer render;
 	
 	final Arc[] patterns;
 	
