@@ -91,6 +91,7 @@ public class ModuleCrafting {
 	public static Item ingotImagSil = new ACItem("imag_silicon_ingot");
 	
 	@RegItem
+	@RegItem.OreDict("plateIron")
 	@RecipeName("mac_casing")
 	public static Item macCasing = new ACItem("machine_casing");
 	
@@ -109,6 +110,10 @@ public class ModuleCrafting {
 	@RegItem
 	@RecipeName("reso_comp")
 	public static Item resoComp = new ACItem("resonance_component");
+	
+	@RegItem
+	@RecipeName("conv_comp")
+	public static Item comvComp = new ACItem("energy_convert_component");
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {

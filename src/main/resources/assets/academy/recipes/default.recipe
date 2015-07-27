@@ -1,6 +1,101 @@
 
+shaped(phase_gen) {
+    [nil, nil, nil]
+    [crystal0, frame, crystal0]
+    [matter_unit, nil, matter_unit]
+}
+
+shaped(solar_gen) {
+    [glass_pane, glass_pane, glass_pane]
+    [nil, wafer, nil]
+    [conv_comp, frame, conv_comp]
+}
+
+shaped(windgen_base) {
+    [nil, iron_ingot, nil]
+    [nil, frame, nil]
+    [nil, conv_comp, nil]
+}
+
+shaped(windgen_pillar) {
+    [nil, iron_bars, nil]
+    [nil, redstone, nil]
+    [nil, iron_bars, nil]
+}
+
+shaped(windgen_main) {
+    [nil, frame, nil]
+    [cons_plate, conv_comp, cons_plate]
+    [nil, frame, nil]
+}
+
+shaped(windgen_fan) {
+    [nil, plateIron, nil]
+    [plateIron, iron_bars, plateIron]
+    [nil, plateIron, nil]
+}
+
 shaped(node0) { 
     [nil, calc_chip, nil]
     [iron_ingot, frame, iron_ingot]
     [crystal0, reso_part, crystal0] 
 }
+
+shaped(node1) {
+    [nil, crystal1, nil]
+    [calc_chip, beacon, calc_chip]
+    [nil, node0, nil]
+}
+
+shaped(node2) {
+    [nil, crystal2, nil]
+    [nil, ender_pearl, nil]
+    [nil, node1, nil]
+}
+
+shaped(matter_unit#0*2) {
+    [nil, cons_plate, nil]
+    [cons_plate, glass_pane, cons_plate]
+    [nil, cons_plate, nil]
+}
+
+shaped(ene_unit) {
+    [nil, cons_plate, nil]
+    [cons_plate, crystal0, cons_plate]
+    [nil, data_chip, nil]
+}
+
+shaped(cons_plate#0*2) {
+    [cons_ingot, cons_ingot, cons_ingot]
+}
+
+shaped(terminal) {
+    [memory, glass_pane, memory]
+    [mac_casing, brain_part, mac_casing]
+    [info_comp, calc_chip, redstone]
+}
+
+shaped(fusor) {
+    [cons_plate, crystal0, cons_plate]
+    [calc_chip, frame, calc_chip]
+    [cons_plate, matter_unit, cons_plate]
+}
+
+shaped(inciser) {
+    [cons_plate, shears, cons_plate]
+    [calc_chip, frame, calc_chip]
+    [cons_plate, matter_unit, cons_plate]
+}
+
+shaped(mac_casing#0*2) {
+    [iron_ingot, iron_ingot]
+    [iron_ingot, iron_ingot]
+}
+
+shaped(frame) {
+    [nil, mac_casing, nil]
+    [mac_casing, redstone, mac_casing]
+    [nil, mac_casing, nil]
+}
+
+//修改记录：2015/7/27 本次修改未添加无线矩阵等未完成合成，策划阻塞
