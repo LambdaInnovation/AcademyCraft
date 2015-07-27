@@ -45,7 +45,15 @@ public class ModuleCrafting {
 	@RegItem
 	@RecipeName("crystal0")
 	public static Item crystalLow = new ACItem("crystal_low");
-
+	
+	@RegItem
+	@RecipeName("crystal1")
+	public static Item crystalNormal = new ACItem("crystal_normal");
+	
+	@RegItem
+	@RecipeName("crystal2")
+	public static Item crystalPure = new ACItem("crystal_pure");
+	
 	@RegItem
 	@RecipeName("frame")
 	public static Item machineFrame = new ACItem("machine_frame");
