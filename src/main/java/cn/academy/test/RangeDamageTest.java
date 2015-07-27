@@ -11,6 +11,7 @@ import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.liutils.util.helper.KeyHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * ValuePipeline unittest

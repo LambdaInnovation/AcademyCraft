@@ -12,15 +12,10 @@
  */
 package cn.academy.ability;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
-import cn.academy.vanilla.electromaster.item.ItemCoin;
-import cn.academy.vanilla.electromaster.skill.ArcGen;
-import cn.academy.vanilla.electromaster.skill.MagManip;
-import cn.academy.vanilla.electromaster.skill.MineDetect;
-import cn.academy.vanilla.electromaster.skill.Railgun;
+import cn.academy.ability.block.BlockDeveloper;
+import cn.academy.ability.developer.DeveloperType;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegItem;
+import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 
 /**
@@ -30,6 +25,10 @@ import cn.annoreg.mc.RegInit;
 @Registrant
 @RegInit
 public class ModuleAbility {
+	
+	@RegBlock
+	public static BlockDeveloper 
+		developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
 	
 	public static void init() {
 	}

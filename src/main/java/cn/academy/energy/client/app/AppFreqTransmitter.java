@@ -17,6 +17,8 @@ import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
 import cn.liutils.api.gui.AuxGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -36,6 +38,7 @@ public class AppFreqTransmitter extends App {
 	@Override
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
+			@SideOnly(Side.CLIENT)
 			public void onStart() {
 				AuxGuiHandler.register(new FreqTransmitterUI());
 				this.getTerminal().dispose();

@@ -30,7 +30,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import cn.academy.core.event.BlockDestroyEvent;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
@@ -177,7 +179,7 @@ public class RangedRayDamage {
 	private float destroyBlock(float energy, int x, int y, int z, boolean snd) {
 		Block block = world.getBlock(x, y, z);
 		float hardness = block.getBlockHardness(world, x, y, z);
-		if((energy -= hardness) > 0) {
+		if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z)) && (energy -= hardness) > 0) {
 			if(block.getMaterial() != Material.air) {
 				block.dropBlockAsItemWithChance(world, x, y, z, 
 					world.getBlockMetadata(x, y, z), dropProb, 0);

@@ -15,12 +15,14 @@ package cn.academy.ability.block;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import cn.academy.ability.client.render.RenderDeveloper;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
+import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
@@ -36,7 +38,13 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 @RegInit
+@RegTileEntity
+@RegTileEntity.HasRender
 public class TileDeveloper extends TileReceiverBase {
+	
+	@SideOnly(Side.CLIENT)
+	@RegTileEntity.Render
+	public static RenderDeveloper renderer;
 	
 	public final Developer developer;
 	

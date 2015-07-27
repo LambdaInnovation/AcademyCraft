@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.block.ACBlockContainer;
+import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
@@ -29,6 +30,16 @@ public class BlockDeveloper extends ACBlockContainer {
 	public BlockDeveloper(DeveloperType _type) {
 		super("developer", Material.rock, null);
 		type = _type;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return RenderEmptyBlock.id;
+	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
 	}
 
 	@Override

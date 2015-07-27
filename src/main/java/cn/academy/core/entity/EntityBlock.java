@@ -32,6 +32,7 @@ import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.entityx.event.CollideEvent.CollideHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * An entity that renders block.
@@ -45,6 +46,7 @@ public class EntityBlock extends EntityAdvanced {
 	// For debug
 	public int c;
 	
+	@SideOnly(Side.CLIENT)
 	@RegEntity.Render
 	public static RenderEntityBlock renderer;
 	

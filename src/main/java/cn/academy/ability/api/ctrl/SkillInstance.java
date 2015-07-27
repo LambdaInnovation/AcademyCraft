@@ -23,7 +23,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  the end(or abort) event will be automatically sent to those SyncActions.
  * @author WeAthFolD
  */
-@SideOnly(Side.CLIENT)
 public class SkillInstance implements IConsumptionHintProvider {
 	
 	enum State { CONSTRUCTED, FINE, ENDED, ABORTED };
