@@ -54,7 +54,7 @@ shaped(node2) {
     [nil, node1, nil]
 }
 
-shaped(matter_unit#0*2) {
+shaped(matter_unit*2) {
     [nil, cons_plate, nil]
     [cons_plate, glass_pane, cons_plate]
     [nil, cons_plate, nil]
@@ -88,7 +88,7 @@ shaped(inciser) {
     [cons_plate, matter_unit, cons_plate]
 }
 
-shaped(mac_casing#0*2) {
+shaped(mac_casing*2) {
     [iron_ingot, iron_ingot]
     [iron_ingot, iron_ingot]
 }
