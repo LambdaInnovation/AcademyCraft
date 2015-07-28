@@ -20,6 +20,7 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.core.client.Resources;
+import cn.liutils.util.helper.Color;
 
 import com.google.common.collect.ImmutableList;
 
@@ -39,6 +40,11 @@ public class Category {
 	
 	protected ResourceLocation icon;
 	
+	/**
+	 * The color style of this category. Used in many various places for rendering.
+	 */
+	protected Color colorStyle = Color.WHITE();
+	
 	public Category(String _name) {
 		name = _name;
 		icon = Resources.getTexture("abilities/" + name + "/icon");
@@ -52,6 +58,10 @@ public class Category {
 		for(String s : types)
 			typeMap.put(s, new ArrayList());
 		
+	}
+	
+	public Color getColorStyle() {
+		return colorStyle;
 	}
 	
 	public void addSkill(String type, Skill skill) {

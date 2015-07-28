@@ -33,6 +33,7 @@ public class CatTeleporter extends Category {
 	
 	public CatTeleporter() {
 		super("teleporter");
+		colorStyle.setColor4i(164, 164, 164, 145);
 		
 		this.defineTypes("default", "passive");
 		

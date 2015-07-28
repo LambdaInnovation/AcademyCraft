@@ -56,6 +56,7 @@ public class CatElectroMaster extends Category {
 	public CatElectroMaster() {
 		super("electro_master");
 		
+		colorStyle.setColor4i(20, 113, 208, 100);
 		defineTypes("default", "passive");
 		
 		addSkill("default", arcGen = new ArcGen());
