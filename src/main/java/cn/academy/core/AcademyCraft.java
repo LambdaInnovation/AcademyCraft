@@ -157,31 +157,11 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
-        setupBukkit();
     }
     
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
-    }
-    
-    private void setupBukkit() {
-    	try {
-        	log.info("Checking for Bukkit...");
-			if (Class.forName("org.bukkit.Bukkit") != null) {
-				Class.forName("cn.academy.support.bukkit.BukkitAdapter").getMethod("init").invoke(null);
-				log.info("Successfully hooked into Bukkit");
-			}
-			else
-				log.info("Bukkit not found");
-		}
-    	catch (ClassNotFoundException e) {
-			log.info("Bukkit not found");
-			e.printStackTrace();
-		}
-    	catch (Exception e) {
-			log.error("Failed to hook into Bukkit", e);
-		}
     }
     
     public static void addToRecipe(Class klass) {
