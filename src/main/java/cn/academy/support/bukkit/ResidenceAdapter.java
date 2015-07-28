@@ -36,18 +36,9 @@ public final class ResidenceAdapter {
 			MinecraftForge.EVENT_BUS.register(INSTANCE);
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			AcademyCraft.log.error("Failed to load ResidenceAdapter", e);
 		}
 	}
-	
-	/*
-	@SubscribeEvent
-	public void onBlockDestroy(BlockDestroyEvent event) {
-		World world = Bukkit.getWorld(event.world.getWorldInfo().getWorldName());
-		FlagPermissions perms = Residence.getPermsByLoc(new Location(world, event.x, event.y, event.z));
-		if (!perms.has("destroy", perms.has("build", true)))
-			event.setCanceled(true);
-	}*/
 	
 	public static final UUID dummy = UUID.randomUUID();
 	
@@ -68,7 +59,7 @@ public final class ResidenceAdapter {
 			event.setCanceled((boolean) _checkBlockDestroy.invoke(null, event.x, event.y, event.z));
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			AcademyCraft.log.error("Failed to handle BlockDestroyEvent", e);
 		}
 	}
 }
