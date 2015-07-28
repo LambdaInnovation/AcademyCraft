@@ -66,7 +66,7 @@ shaped(ene_unit) {
     [nil, data_chip, nil]
 }
 
-shaped(cons_plate#0*2) {
+shaped(cons_plate*2) {
     [cons_ingot, cons_ingot, cons_ingot]
 }
 
