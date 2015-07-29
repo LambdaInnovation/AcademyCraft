@@ -13,7 +13,10 @@
 package cn.academy.support.ic2;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
 import cn.academy.core.block.TileReceiverBase;
 
@@ -24,6 +27,7 @@ import cn.academy.core.block.TileReceiverBase;
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	double buffer = 0d;
+	boolean isRegistered = false;
 
 	public TileEUOutput() {
 		super("ac_eu_output", 0, 0, 100);
@@ -51,6 +55,30 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	public double injectEnergy(double amount) {
 		buffer = amount;
 		return 0;
+	}
+	
+	@Override
+	public void updateEntity() {
+		if(!isRegistered || !getWorldObj().isRemote) {
+			isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
+		super.updateEntity();
+	}
+	
+	@Override
+	public void onChunkUnload() {
+		if(!isRegistered || !getWorldObj().isRemote) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+		}
+		super.onChunkUnload();
+	}
+	
+	@Override
+	public void invalidate() {
+		if(!isRegistered || !getWorldObj().isRemote) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+		}
+		super.invalidate();
 	}
 
 }
