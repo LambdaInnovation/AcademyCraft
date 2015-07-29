@@ -14,6 +14,7 @@ package cn.academy.support.ic2;
 
 import cn.academy.core.AcademyCraft;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
  * 
  * @author KSkun
  */
-public class BlockEUOutput extends Block {
+public class BlockEUOutput extends BlockContainer {
 
 	public BlockEUOutput() {
 		super(Material.rock);
@@ -34,8 +35,8 @@ public class BlockEUOutput extends Block {
 	}
 	
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileEUOutput();
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+		return new TileEUInput();
 	}
 
 }

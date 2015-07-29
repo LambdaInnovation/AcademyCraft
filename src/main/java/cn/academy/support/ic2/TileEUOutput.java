@@ -21,7 +21,7 @@ import ic2.api.energy.tile.IEnergySource;
 import cn.academy.core.block.TileReceiverBase;
 
 /**
- * 
+ * (Unfinished)
  * @author KSkun
  */
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
@@ -59,7 +59,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	@Override
 	public void updateEntity() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 		}
 		super.updateEntity();
@@ -67,7 +67,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	@Override
 	public void onChunkUnload() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 		}
 		super.onChunkUnload();
@@ -75,7 +75,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	@Override
 	public void invalidate() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 		}
 		super.invalidate();

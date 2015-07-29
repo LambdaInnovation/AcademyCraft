@@ -15,6 +15,8 @@ package cn.academy.support;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cn.academy.support.ic2.BlockEUInput;
 import cn.academy.support.ic2.BlockEUOutput;
+import cn.academy.support.ic2.TileEUInput;
+import cn.academy.support.ic2.TileEUOutput;
 import cn.liutils.crafting.RecipeRegistry;
 
 /**
@@ -27,8 +29,12 @@ public class ModuleSupport {
 		BlockEUInput euInput = new BlockEUInput();
 		BlockEUOutput euOutput = new BlockEUOutput();
 		
+		
 		GameRegistry.registerBlock(euInput, "eu_input");
 		GameRegistry.registerBlock(euOutput, "eu_output");
+		
+		GameRegistry.registerTileEntity(TileEUInput.class, "eu_input");
+		GameRegistry.registerTileEntity(TileEUOutput.class, "eu_output");
 		
 		recipes.map("eu_input", euInput);
 		recipes.map("eu_output", euOutput);

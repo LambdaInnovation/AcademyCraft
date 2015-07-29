@@ -35,7 +35,15 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double getGeneration(double required) {
-		return buffer * 0;
+		System.err.println("IF required " + required);
+		if(buffer >= required) {
+			buffer -= required;
+			return required;
+		} else {
+			double buf = buffer;
+			buffer = 0;
+			return buf;
+		}
 	}
 
 	@Override
@@ -45,7 +53,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double getDemandedEnergy() {
-		return Double.MAX_VALUE;
+		return 1000 - buffer;
 	}
 
 	@Override
@@ -55,13 +63,20 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		buffer = amount;
-		return 0;
+		System.err.println("IC2 amount " + amount);
+		if(buffer < (1000 - amount)) {
+			buffer += amount;
+			return 0;
+		} else {
+			double buf = buffer;
+			buffer = 1000;
+			return amount - (1000 - buf);
+		}
 	}
 	
 	@Override
 	public void updateEntity() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 		}
 		super.updateEntity();
@@ -69,7 +84,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
 	@Override
 	public void onChunkUnload() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 		}
 		super.onChunkUnload();
@@ -77,10 +92,14 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
 	@Override
 	public void invalidate() {
-		if(!isRegistered || !getWorldObj().isRemote) {
+		if(!isRegistered && !getWorldObj().isRemote) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 		}
 		super.invalidate();
+	}
+	
+	private void p(String s) {
+		System.err.println(s);
 	}
 
 }
