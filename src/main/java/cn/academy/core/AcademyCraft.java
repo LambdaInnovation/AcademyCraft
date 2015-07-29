@@ -128,6 +128,15 @@ public class AcademyCraft {
     public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
         
+        try { 
+        	Class.forName("ic2.core.IC2");
+			Class.forName("cn.academy.support.ModuleSupport")
+				.getMethod("initIC2", RecipeRegistry.class).invoke(this, 
+					recipes);
+        } catch(Exception e) {
+			e.printStackTrace();
+		}
+        
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
         
         if(DEBUG_MODE) {
