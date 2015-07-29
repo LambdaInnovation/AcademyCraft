@@ -21,16 +21,15 @@ import ic2.api.energy.tile.IEnergySource;
 import cn.academy.core.block.TileReceiverBase;
 
 /**
- * (Unfinished)
+ * 
  * @author KSkun
  */
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
-	double buffer = 0d;
-	boolean isRegistered = false;
+	private boolean isRegistered = false;
 
 	public TileEUOutput() {
-		super("ac_eu_output", 0, 0, 100);
+		super("ac_eu_output", 0, 2000, 100);
 	}
 
 	@Override
@@ -40,21 +39,18 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 
 	@Override
 	public double getOfferedEnergy() {
-		return buffer;
+		return energy;
 	}
 
 	@Override
-	public void drawEnergy(double amount) {}
+	public void drawEnergy(double amount) {
+		energy -= amount;
+		if(energy < 0d) energy = 0d;
+	}
 
 	@Override
 	public int getSourceTier() {
 		return 2;
-	}
-	
-	@Override
-	public double injectEnergy(double amount) {
-		buffer = amount;
-		return 0;
 	}
 	
 	@Override

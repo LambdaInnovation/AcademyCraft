@@ -29,7 +29,6 @@ public class ModuleSupport {
 		BlockEUInput euInput = new BlockEUInput();
 		BlockEUOutput euOutput = new BlockEUOutput();
 		
-		
 		GameRegistry.registerBlock(euInput, "eu_input");
 		GameRegistry.registerBlock(euOutput, "eu_output");
 		
