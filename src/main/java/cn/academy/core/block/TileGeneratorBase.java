@@ -60,6 +60,16 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 			}
 		}
 	}
+	
+	/**
+	 * Manually add [amt] energy into the buffer.
+	 * @return Energy not consumed
+	 */
+	public double addEnergy(double amt) {
+		double add = Math.min(bufferSize - energy, amt);
+		energy += add;
+		return amt - add;
+	}
 
 	@Override
 	public double getProvidedEnergy(double req) {

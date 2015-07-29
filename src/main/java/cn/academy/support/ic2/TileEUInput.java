@@ -26,24 +26,15 @@ import cn.academy.core.block.TileGeneratorBase;
  */
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
-	double buffer = 0d;
 	boolean isRegistered  = false;
 
 	public TileEUInput() {
-		super("ac_eu_input", 0, 0, 100);
+		super("ac_eu_input", 0, 2000, 100);
 	}
 
 	@Override
 	public double getGeneration(double required) {
-		System.err.println("IF required " + required);
-		if(buffer >= required) {
-			buffer -= required;
-			return required;
-		} else {
-			double buf = buffer;
-			buffer = 0;
-			return buf;
-		}
+		return 0;
 	}
 
 	@Override
@@ -53,7 +44,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double getDemandedEnergy() {
-		return 1000 - buffer;
+		return bufferSize - getEnergy();
 	}
 
 	@Override
@@ -64,14 +55,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		System.err.println("IC2 amount " + amount);
-		if(buffer < (1000 - amount)) {
-			buffer += amount;
-			return 0;
-		} else {
-			double buf = buffer;
-			buffer = 1000;
-			return amount - (1000 - buf);
-		}
+		return addEnergy(amount);
 	}
 	
 	@Override
