@@ -34,6 +34,7 @@ import cn.academy.vanilla.electromaster.skill.MagManip;
 import cn.academy.vanilla.electromaster.skill.MagMovement;
 import cn.academy.vanilla.electromaster.skill.MineDetect;
 import cn.academy.vanilla.electromaster.skill.Railgun;
+import cn.academy.vanilla.electromaster.skill.ThunderBolt;
 import cn.academy.vanilla.electromaster.skill.ThunderClap;
 import cn.academy.vanilla.electromaster.skill.ironsand.IronSand;
 
@@ -51,6 +52,7 @@ public class CatElectroMaster extends Category {
 	public IronSand ironSand;
 	public CurrentCharging currentCharging;
 	public BodyIntensify bodyIntensify;
+	public ThunderBolt thunderBolt;
 	public ThunderClap thunderClap;
 
 	public CatElectroMaster() {
@@ -67,6 +69,7 @@ public class CatElectroMaster extends Category {
 		addSkill("default", ironSand = new IronSand());
 		addSkill("default", currentCharging = new CurrentCharging());
 		addSkill("default", bodyIntensify = new BodyIntensify());
+		addSkill("default", thunderBolt = new ThunderBolt());
 		addSkill("default", thunderClap = new ThunderClap());
 		
 		magManip.setParent(arcGen);

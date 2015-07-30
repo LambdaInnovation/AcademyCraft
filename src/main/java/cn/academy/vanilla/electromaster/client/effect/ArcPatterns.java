@@ -34,12 +34,16 @@ public class ArcPatterns {
 	
 	public static Arc[] chargingArc;
 	
+	public static Arc[] strongArc;
+	
+	public static Arc[] aoeArc;
+	
 	static {
 		{
 			ArcFactory fac = new ArcFactory();
-			fac.branchFactor = 0.2;
+			fac.branchFactor = 0.15;
 			fac.passes = 6;
-			fac.maxOffset = 1.5;
+			fac.maxOffset = 1.1;
 			
 			weakArc = fac.generateList(GEN, 20, 20);
 		}
@@ -62,6 +66,26 @@ public class ArcPatterns {
 			fac.maxOffset = 1.2;
 			
 			chargingArc = fac.generateList(GEN, 20, 20);
+		}
+		
+		{
+			ArcFactory fac = new ArcFactory();
+			fac.branchFactor = 0.3;
+			fac.passes = 5;
+			fac.width = 0.3;
+			fac.maxOffset = 1.4;
+			
+			strongArc = fac.generateList(GEN, 20, 20);
+		}
+		
+		{
+			ArcFactory fac = new ArcFactory();
+			fac.branchFactor = 0.28;
+			fac.passes = 5;
+			fac.width = 0.13;
+			fac.maxOffset = 1.2;
+			
+			aoeArc = fac.generateList(GEN, 20, 20);
 		}
 	}
 

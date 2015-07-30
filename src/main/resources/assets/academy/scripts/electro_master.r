@@ -68,6 +68,15 @@ ac {
 		  exp_incr(distance) { distance * 0.00015 }
 		}
 		
+		# 雷击之枪
+		thunder_bolt {
+			damage(exp) { lerp(10, 18, exp) }
+			aoe_damage(exp) { 0.2 * lerp(10, 18, exp) }
+			consumption(exp) { lerp(100, 200, exp) }
+			overload(exp) { lerp(30, 27, exp) }
+			cooldown(exp) { floor(20 * lerp(4, 1.5, exp)) }
+		}
+		
 		# 超电磁炮
 		railgun { 
 		  consumption(exp) { lerp(200, 500, exp) }

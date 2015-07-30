@@ -19,7 +19,7 @@ import cn.academy.ability.api.ctrl.SyncAction;
  * SyncAction that only does something on creation but needs additional validation in both sides.
  * @author WeAthFolD
  */
-public abstract class SyncActionInstant extends SyncAction {
+public abstract class SyncActionInstant extends SkillSyncAction {
 
 	public SyncActionInstant() {
 		super(-1);
@@ -27,13 +27,11 @@ public abstract class SyncActionInstant extends SyncAction {
 	
 	@Override
 	public final void onStart() {
-		System.out.println("OnStart " + isRemote);
+		super.onStart();
 		if(!isRemote) {
 			if(!validate()) {
-				System.out.println("aborted");
 				ActionManager.abortAction(this);
 			} else {
-				System.out.println("ended");
 				ActionManager.endAction(this);
 			}
 		}
@@ -41,7 +39,6 @@ public abstract class SyncActionInstant extends SyncAction {
 	
 	@Override
 	public final void onEnd() {
-		System.out.println("OnEnd " + isRemote);
 		execute();
 	}
 	
@@ -54,5 +51,9 @@ public abstract class SyncActionInstant extends SyncAction {
 	 * Execute the action.
 	 */
 	public abstract void execute();
+	
+	protected void debug(Object o) {
+		System.out.println("SA: " + o);
+	}
 
 }
