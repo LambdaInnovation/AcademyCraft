@@ -16,12 +16,14 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.client.render.block.RenderWindGenBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
+import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
@@ -118,6 +120,17 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 	public void setBlockInfo(InfoBlockMulti i) {
 		info = i;
 	}
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+    	Block block = getBlockType();
+    	if(block instanceof BlockMulti) {
+    		return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+    	} else {
+    		return super.getRenderBoundingBox();
+    	}
+    }
 
 	public boolean isCompleteStructure() {
 		return findMainTile() != null;

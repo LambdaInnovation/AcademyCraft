@@ -12,6 +12,7 @@
  */
 package cn.academy.energy.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -25,6 +26,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
@@ -106,6 +108,17 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	public int getInventoryStackLimit() {
 		return 1;
 	}
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+    	Block block = getBlockType();
+    	if(block instanceof BlockMulti) {
+    		return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+    	} else {
+    		return super.getRenderBoundingBox();
+    	}
+    }
 
 	//WEN
 	public int getPlateCount() {
@@ -158,11 +171,5 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	
 	private static ScriptFunction getFunc(String name) {
 		return AcademyCraft.getFunction("matrix." + name);
-	}
-	
-	//AABB
-	@SideOnly(Side.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox() {
-		return INFINITE_EXTENT_AABB;
 	}
 }
