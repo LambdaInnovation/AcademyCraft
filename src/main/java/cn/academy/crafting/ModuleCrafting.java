@@ -100,8 +100,8 @@ public class ModuleCrafting {
 	
 	@RegItem
 	@RegItem.OreDict("plateIron")
-	@RecipeName("mac_casing")
-	public static Item macCasing = new ACItem("machine_casing");
+	@RecipeName("rf_iron_plate")
+	public static Item rfIronPlate = new ACItem("reinforced_iron_plate");
 	
 	@RegItem
 	@RecipeName("brain_part")

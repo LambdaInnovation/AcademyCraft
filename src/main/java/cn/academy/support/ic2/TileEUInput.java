@@ -26,7 +26,7 @@ import cn.academy.core.block.TileGeneratorBase;
  */
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
-	boolean isRegistered  = false;
+	private boolean isRegistered  = false;
 
 	public TileEUInput() {
 		super("ac_eu_input", 0, 2000, 100);
@@ -54,7 +54,6 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		System.err.println("IC2 amount " + amount);
 		return addEnergy(amount);
 	}
 	
@@ -80,10 +79,6 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 		}
 		super.invalidate();
-	}
-	
-	private void p(String s) {
-		System.err.println(s);
 	}
 
 }
