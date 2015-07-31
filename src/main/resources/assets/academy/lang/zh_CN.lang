@@ -57,7 +57,7 @@ tile.ac_node_standard.name=改良无线虚能节点
 tile.ac_node_advanced.name=高级无线虚能节点
 tile.ac_inciser.name=切割机
 tile.ac_solar_gen.name=太阳能能量发生机
-tile.ac_infinite_generator.name=无限能量发生机
+tile.ac_cat_engine.name=吐司猫
 tile.ac_phase_generator.name=虚相位能量发生机
 tile.ac_windgen_base.name=风力能量发生器 - 支架底座
 tile.ac_windgen_pillar.name=风力能量发生器 - 支架
@@ -140,6 +140,11 @@ ac.gui.node.mark.failed.desc=失败
 # 虚能融合机
 ac.gui.imagfusor.ion.desc=虚相液体
 ac.gui.imagfusor.flux.desc=虚能
+
+# 吐司猫
+ac.cat_engine.unlink=已经和节点断开了连接喵~
+ac.cat_engine.notfound=并没有在旁边找到任何节点喵~
+ac.cat_engine.linked=连接到了名字为%s的节点喵~
 
 # 媒体
 ac.media.only_my_railgun.name=Only My Railgun

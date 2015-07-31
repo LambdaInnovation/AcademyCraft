@@ -57,7 +57,7 @@ tile.ac_node_standard.name=Improved Wireless Imag Node
 tile.ac_node_advanced.name=Advanced Wireless Imag Node
 tile.ac_inciser.name=Inciser
 tile.ac_solar_gen.name.name=Solar Generator
-tile.ac_infinite_generator.name=Infinite Generator
+tile.ac_cat_engine.name=Toast and Cat
 tile.ac_phase_generator.name=Phase Generator
 tile.ac_windgen_base.name=Wind Generator Pillar Base
 tile.ac_windgen_pillar.name=Wind Generator Pillar
@@ -167,6 +167,11 @@ ac.gui.node.mark.failed.desc=FAILED
 # Imag Fusor
 ac.gui.imagfusor.ion.desc=Proj Liquid
 ac.gui.imagfusor.flux.desc=Imag Flux
+
+# Cat Engine
+ac.cat_engine.unlink=Unlinked from the node meow~
+ac.cat_engine.notfound=Didn't found any node nearby meow~
+ac.cat_engine.linked=Linked to the node named %s meow~
 
 # Media
 ac.media.only_my_railgun.name=Only My Railgun

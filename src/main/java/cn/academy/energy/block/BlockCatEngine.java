@@ -25,24 +25,35 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.node.UnlinkUserEvent;
+import cn.liutils.template.client.render.block.RenderEmptyBlock;
 import cn.liutils.util.generic.RandUtils;
 
 /**
- * Infinite Generator for debug
  * @author WeAthFolD
  */
-public class BlockInfiniteGen extends ACBlockContainer {
+public class BlockCatEngine extends ACBlockContainer {
 
-	public BlockInfiniteGen() {
-		super("infinite_generator", Material.rock, null);
+	public BlockCatEngine() {
+		super("cat_engine", Material.rock, null);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileInfiniteGen();
+		return new TileCatEngine();
+	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return RenderEmptyBlock.id;
 	}
 	
 	// WILL GET REMOVED WHEN RELEASE
+	// TODO Maybe we can just let it be...
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
@@ -50,18 +61,18 @@ public class BlockInfiniteGen extends ACBlockContainer {
 			return false;
 		
 		TileEntity te = world.getTileEntity(x, y, z);
-		if(te instanceof TileInfiniteGen) {
-			TileInfiniteGen gen = (TileInfiniteGen) te;
+		if(te instanceof TileCatEngine) {
+			TileCatEngine gen = (TileCatEngine) te;
 			if(WirelessHelper.isGeneratorLinked(gen)) {
 				MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent(gen));
-				player.addChatMessage(new ChatComponentTranslation("Already linked, unlinking the generator."));
+				player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.unlink"));
 			} else {
 				List<IWirelessNode> nodes = WirelessHelper.getNodesInRange(world, x, y, z);
 				if(nodes.isEmpty()) {
-					player.addChatMessage(new ChatComponentTranslation("Didn't find any node nearby, can't link."));
+					player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.notfound"));
 				} else {
 					IWirelessNode node = nodes.get(RandUtils.rangei(0, nodes.size()));
-					player.addChatMessage(new ChatComponentTranslation("Linking to a random node named " + node.getNodeName()));
+					player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.linked", node.getNodeName()));
 					MinecraftForge.EVENT_BUS.post(new LinkUserEvent(gen, node));
 				}
 			}

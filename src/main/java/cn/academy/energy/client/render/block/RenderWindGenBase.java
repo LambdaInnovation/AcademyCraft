@@ -12,7 +12,10 @@
  */
 package cn.academy.energy.client.render.block;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
+import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.liutils.api.render.model.TileEntityModelCustom;
 import cn.liutils.template.block.RenderBlockMultiModel;
 
@@ -20,10 +23,21 @@ import cn.liutils.template.block.RenderBlockMultiModel;
  * @author WeAthFolD
  */
 public class RenderWindGenBase extends RenderBlockMultiModel {
+	
+	ResourceLocation 
+		TEX_NORMAL = Resources.getTexture("models/windgen_base"),
+		TEX_DISABLED = Resources.getTexture("models/windgen_base_disabled");
 
 	public RenderWindGenBase() {
 		super(new TileEntityModelCustom(Resources.getModel("windgen_base")),
-				Resources.getTexture("models/windgen_base"));
+				null);
+	}
+	
+	@Override
+	public void drawAtOrigin(TileEntity te) {
+		TileWindGenBase tile = (TileWindGenBase) te;
+		this.tex = tile.complete ? TEX_NORMAL : TEX_DISABLED;
+		super.drawAtOrigin(te);
 	}
 	
 }

@@ -48,9 +48,7 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 	public void updateEntity() {
 		if(!getWorldObj().isRemote) {
 			double required = bufferSize - energy;
-			if(required > 0) {
-				energy += getGeneration(required);
-			}
+			energy += getGeneration(required);
 			if (energy > bufferSize)
 				energy = bufferSize;
 			
