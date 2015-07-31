@@ -34,5 +34,14 @@ ac {
             overload(exp) { lerp(80, 50, exp) }
             range(exp) { lerp(25, 35, exp) }
         }
+		
+		flesh_ripping {
+			range(exp) { lerp(6, 14, exp) }
+			damage(exp) { lerp(5, 15, exp) }
+			consumption(exp) { lerp(130, 150, exp) }
+			overload(exp) { lerp(60, 50, exp) }
+			cooldown(exp) { floor(20 * lerp(5, 3, exp)) }
+			disgust_prob { 0.05 }
+		}
     }
 }

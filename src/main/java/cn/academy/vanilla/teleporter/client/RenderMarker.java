@@ -62,7 +62,7 @@ public class RenderMarker extends Render {
 			width = marker.width;
 			height = marker.height;
 		}
-		System.out.println("Drawing");
+		
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		if(marker.ignoreDepth)

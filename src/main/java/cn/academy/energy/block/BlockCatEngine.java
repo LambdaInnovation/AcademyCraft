@@ -52,8 +52,7 @@ public class BlockCatEngine extends ACBlockContainer {
 		return RenderEmptyBlock.id;
 	}
 	
-	// WILL GET REMOVED WHEN RELEASE
-	// TODO Maybe we can just let it be...
+	// just let it be...
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {

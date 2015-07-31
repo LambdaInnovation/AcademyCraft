@@ -246,11 +246,11 @@ public abstract class Skill extends Controllable {
     }
     
     protected float getFloat(String name) {
-    	return script.getFloat(getFullName() + "." + name);
+    	return script.getFloat(name);
     }
     
     protected int getInt(String name) {
-    	return script.getInteger(getFullName() + "." + name);
+    	return script.getInteger(name);
     }
     
     //---Pipeline integration

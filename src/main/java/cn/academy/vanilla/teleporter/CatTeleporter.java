@@ -31,6 +31,8 @@ public class CatTeleporter extends Category {
 	
 	public static ShiftTeleport shiftTP;
 	
+	public static FleshRipping fleshRipping;
+	
 	public CatTeleporter() {
 		super("teleporter");
 		colorStyle.setColor4i(164, 164, 164, 145);
@@ -42,6 +44,7 @@ public class CatTeleporter extends Category {
 		this.addSkill("default", penetrateTP = new PenetrateTeleport());
 		this.addSkill("default", threateningTP = new ThreateningTeleport());
 		this.addSkill("default", shiftTP = new ShiftTeleport());
+		this.addSkill("default", fleshRipping = new FleshRipping());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

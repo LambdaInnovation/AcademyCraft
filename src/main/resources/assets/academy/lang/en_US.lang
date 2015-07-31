@@ -206,6 +206,8 @@ ac.ability.electro_master.body_intensify.name=Body Intensify
 ac.ability.electro_master.thunder_clap.name=Thunderclap
 
 # Teleporter
+ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
+
 
 ## TP Skills
 
