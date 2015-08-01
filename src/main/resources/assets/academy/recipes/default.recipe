@@ -72,7 +72,7 @@ shaped(cons_plate*2) {
 
 shaped(terminal) {
     [memory, glass_pane, memory]
-    [mac_casing, brain_part, mac_casing]
+    [rf_iron_plate, brain_part, rf_iron_plate]
     [info_comp, calc_chip, redstone]
 }
 
@@ -88,13 +88,13 @@ shaped(inciser) {
     [cons_plate, matter_unit, cons_plate]
 }
 
-shaped(mac_casing*2) {
+shaped(rf_iron_plate*2) {
     [iron_ingot, iron_ingot]
     [iron_ingot, iron_ingot]
 }
 
 shaped(frame) {
-    [nil, mac_casing, nil]
-    [mac_casing, redstone, mac_casing]
-    [nil, mac_casing, nil]
+    [nil, rf_iron_plate, nil]
+    [rf_iron_plate, redstone, rf_iron_plate]
+    [nil, rf_iron_plate, nil]
 }
