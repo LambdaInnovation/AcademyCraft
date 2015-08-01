@@ -18,17 +18,18 @@ import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.CategoryChangeEvent;
+import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
+import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.RegInit;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.ripple.Path;
 import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -57,6 +58,8 @@ public class CPData extends DataPart {
 		OVERLOAD_O_MUL = getFloatParam("overload_o_mul");
 		OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
 	}
+	
+	AbilityData aData;
 	
 	private boolean activated = false;
 	
@@ -89,38 +92,41 @@ public class CPData extends DataPart {
 
 	@Override
 	public void tick() {
-		//System.out.println(isRemote() + " " + untilRecover + " " + untilOverloadRecover);
+		if(aData == null)
+			aData = AbilityData.get(getPlayer());
 		
-		if(untilRecover == 0) {
-			float recover = (float) getFunc("recover_speed")
-					.callDouble(currentCP, maxCP);
-			currentCP += recover;
-			if(currentCP > maxCP)
-				currentCP = maxCP;
-		} else {
-			untilRecover--;
-		}
-		
-		if(untilOverloadRecover == 0) {
-			float recover = (float) getFunc("overload_recover_speed")
-					.callDouble(overload, maxOverload);
-			
-			overload -= recover;
-			if(overload <= 0) {
-				canUseAbility = true;
-				overload = 0;
+		if(aData.isLearned()) {
+			if(untilRecover == 0) {
+				float recover = (float) getFunc("recover_speed")
+						.callDouble(currentCP, maxCP);
+				currentCP += recover;
+				if(currentCP > maxCP)
+					currentCP = maxCP;
+			} else {
+				untilRecover--;
 			}
-		} else {
-			untilOverloadRecover--;
-		}
-		
-		// Do the sync. Only sync when player activated ability to avoid waste
-		if(!isRemote() && activated) {
-			++tickSync;
-			if(tickSync >= (dataDirty ? 4 : 25)) {
-				dataDirty = false;
-				tickSync = 0;
-				sync();
+			
+			if(untilOverloadRecover == 0) {
+				float recover = (float) getFunc("overload_recover_speed")
+						.callDouble(overload, maxOverload);
+				
+				overload -= recover;
+				if(overload <= 0) {
+					canUseAbility = true;
+					overload = 0;
+				}
+			} else {
+				untilOverloadRecover--;
+			}
+			
+			// Do the sync. Only sync when player activated ability to avoid waste
+			if(!isRemote() && activated) {
+				++tickSync;
+				if(tickSync >= (dataDirty ? 4 : 25)) {
+					dataDirty = false;
+					tickSync = 0;
+					sync();
+				}
 			}
 		}
 	}
@@ -386,6 +392,21 @@ public class CPData extends DataPart {
 				cpData.deactivate();
 			}
 			cpData.recalcMaxValue();
+		}
+		
+		@SubscribeEvent
+		public void changedLevel(LevelChangeEvent event) {
+			CPData cpData = CPData.get(event.player);
+			AbilityData aData = AbilityData.get(event.player);
+			
+			cpData.maxCP = getFunc("init_cp").callFloat(aData.getLevel());
+			cpData.maxOverload = getFunc("init_overload").callFloat(aData.getLevel());
+			
+			cpData.currentCP = MathUtils.wrapf(0, cpData.maxCP, cpData.currentCP);
+			cpData.overload = MathUtils.wrapf(0, cpData.maxOverload, cpData.overload);
+			
+			if(!aData.isRemote())
+				cpData.sync();
 		}
 		
 	}

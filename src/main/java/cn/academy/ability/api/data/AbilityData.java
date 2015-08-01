@@ -25,16 +25,13 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.CategoryChangeEvent;
+import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -55,6 +52,7 @@ public class AbilityData extends DataPart {
 		learnedSkills = new BitSet(32);
 		skillExps = new float[32];
 	}
+	
 	/**
 	 * Only effective in server. If c==null then set the player state to unlearned.
 	 */
@@ -68,6 +66,13 @@ public class AbilityData extends DataPart {
 	public void setCategoryID(int id) {
 		if(id != catID && !isRemote()) {
 			catID = id;
+			if(catID != -1 && level == 0) {
+				setLevel(1);
+			}
+			if(catID == -1 && level != 0) {
+				setLevel(0);
+			}
+			
 			if(!isRemote())
 				sync();
 			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
@@ -83,9 +88,12 @@ public class AbilityData extends DataPart {
 	}
 	
 	public void setLevel(int lv) {
-		level = lv;
 		if(!isRemote()) {
-			sync();
+			if(level != lv) {
+				level = lv;
+				MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getPlayer()));
+				sync();
+			}
 		}
 	}
 	
