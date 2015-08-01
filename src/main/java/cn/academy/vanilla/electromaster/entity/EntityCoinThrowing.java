@@ -104,7 +104,6 @@ public class EntityCoinThrowing extends EntityAdvanced {
 		setPosition(player.posX, player.posY, player.posZ);
 		this.motionY = player.motionY;
 		setup();
-
 		this.ignoreFrustumCheck = true;
 	}
 	
@@ -128,12 +127,21 @@ public class EntityCoinThrowing extends EntityAdvanced {
 	
 	void finishThrowing() {
 		//try merge
-		if(!worldObj.isRemote && !player.capabilities.isCreativeMode
-			&& PlayerUtils.mergeStackable(player.inventory, new ItemStack(
+		if(!worldObj.isRemote && !player.capabilities.isCreativeMode) {
+			ItemStack equipped = player.getCurrentEquippedItem();
+			if(equipped == null) {
+				player.setCurrentItemOrArmor(0, new ItemStack(ModuleVanilla.coin));
+			} else if(equipped.getItem() == ModuleVanilla.coin && equipped.stackSize < equipped.getMaxStackSize()) {
+				++equipped.stackSize;
+				player.inventory.inventoryChanged = true;
+			} else if(PlayerUtils.mergeStackable(player.inventory, new ItemStack(
 					ModuleVanilla.coin)) > 0) {
-			//if fail...
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 
-				+ yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
+				;
+			} else {
+				//if fail...
+				worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 
+					+ yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
+			}
 		}
 		setDead();
 	}

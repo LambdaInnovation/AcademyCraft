@@ -124,12 +124,12 @@ public class MineDetect extends Skill {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@RegEntity(clientOnly = true)
 	@RegEntity.HasRender
 	public static final class HandlerEntity extends EntityAdvanced {
 		
 		@RegEntity.Render
-		@SideOnly(Side.CLIENT)
 		public static HandlerRender renderer;
 		
 		static final IBlockFilter blockFilter = new IBlockFilter() {

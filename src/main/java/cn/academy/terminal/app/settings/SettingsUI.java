@@ -21,7 +21,6 @@ import java.util.Map.Entry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.ctrl.ClientController;
-import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -30,6 +29,8 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
+import cn.liutils.cgui.gui.event.global.GlobalMouseEvent;
+import cn.liutils.cgui.gui.event.global.GlobalMouseEvent.GlobalMouseHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 
 /**

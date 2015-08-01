@@ -49,7 +49,7 @@ public class RenderCatEngine extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		
-		GL11.glTranslated(x, y, z);
+		GL11.glTranslated(x, y + 0.03 * Math.sin(GameTimer.getTime() * 0.006), z);
 		
 		double yaw = Math.atan2(x, z) * 180 / Math.PI;
 		GL11.glRotated(yaw + 180, 0, 1, 0);

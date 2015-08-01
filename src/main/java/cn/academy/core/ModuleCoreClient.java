@@ -12,12 +12,15 @@
  */
 package cn.academy.core;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.client.ui.ACHud;
 import cn.academy.core.client.ui.NotifyUI;
+import cn.academy.core.event.ConfigModifyEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,17 +32,28 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegInit
 public class ModuleCoreClient {
 	
-	public static KeyManager keyManager= new KeyManager() {
-		@Override
-		protected Configuration getConfig() {
-			return AcademyCraft.config;
-		}
-	};
+	public static KeyManager keyManager= new ACKeyManager();
 	
 	public static KeyManager dynKeyManager = new KeyManager();
 	
 	public static void init() {
 		ACHud.instance.addElement(new NotifyUI(), () -> true);
+	}
+	
+	public static class ACKeyManager extends KeyManager {
+		{
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+		
+		@Override
+		protected Configuration getConfig() {
+			return AcademyCraft.config;
+		}
+		
+		@SubscribeEvent
+		public void onConfigModified(ConfigModifyEvent event) {
+			resetBindingKey(event.property.getName(), event.property.getInt());
+		}
 	}
 	
 }

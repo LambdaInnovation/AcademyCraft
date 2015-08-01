@@ -66,6 +66,8 @@ public class CPData extends DataPart {
 	private float overload;
 	private float maxOverload = 100.0f;
 	
+	private boolean canUseAbility = true;
+	
 	/**
 	 * Tick counter for cp recover.
 	 */
@@ -104,8 +106,10 @@ public class CPData extends DataPart {
 					.callDouble(overload, maxOverload);
 			
 			overload -= recover;
-			if(overload < 0)
+			if(overload <= 0) {
+				canUseAbility = true;
 				overload = 0;
+			}
 		} else {
 			untilOverloadRecover--;
 		}
@@ -123,6 +127,10 @@ public class CPData extends DataPart {
 	
 	public boolean isActivated() {
 		return activated;
+	}
+	
+	public boolean canUseAbility() {
+		return canUseAbility;
 	}
 	
 	public void activate() {
@@ -184,18 +192,24 @@ public class CPData extends DataPart {
 	/**
 	 * Performs a generic ability action. 
 	 * Will fail when either can't overload anymore or can't consume cp.
-	 * @param overload Amount of overload
-	 * @param cp Amount of CP
+	 * @param overloadToAdd Amount of overload
+	 * @param cpToAdd Amount of CP
 	 */
-	public boolean perform(float overload, float cp) {
+	public boolean perform(float overloadToAdd, float cpToAdd) {
+		
 		if(getPlayer().capabilities.isCreativeMode)
 			return true;
 		
-		if(currentCP - cp < 0)
+		if(currentCP - cpToAdd < 0)
 			return false;
 		
-		addOverload(overload);
-		consumeCP(cp);
+		addOverload(overloadToAdd);
+		consumeCP(cpToAdd);
+		
+		if(overload > getMaxOverload()) {
+			canUseAbility = false;
+		}
+		
 		return true;
 	}
 	
@@ -211,6 +225,8 @@ public class CPData extends DataPart {
 		
 		if(currentCP < 0) currentCP = 0;
 		if(overload > getMaxOverload() * 2) overload = getMaxOverload() * 2;
+		
+		if(overload > getMaxOverload()) canUseAbility = false;
 		
 		if(!isRemote())
 			dataDirty = true;
@@ -302,11 +318,15 @@ public class CPData extends DataPart {
 		tag.setFloat("N", maxOverload);
 		tag.setInteger("J", untilOverloadRecover);
 		
+		tag.setBoolean("B", canUseAbility);
+		
 		return tag;
 	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
+		System.out.println("SyncClient");
+		
 		boolean lastActivated = activated;
 		activated = tag.getBoolean("A");
 		
@@ -317,6 +337,8 @@ public class CPData extends DataPart {
 		overload = tag.getFloat("D");
 		maxOverload = tag.getFloat("N");
 		untilOverloadRecover = tag.getInteger("J");
+		
+		canUseAbility = tag.getBoolean("B");
 		
 		if(isRemote() && isSynced()) {
 			if(lastActivated ^ activated) {

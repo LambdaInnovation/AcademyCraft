@@ -155,7 +155,7 @@ public class PresetEditUI extends GuiScreen {
 		// Build the pages
 		for(int i = 0; i < 4; ++i) {
 			Widget normal = createCopy();
-			TextBox.get(normal.getWidget("title")).setContent( local("tag") + (i + 1) );
+			TextBox.get(normal.getWidget("title")).setContent(local("tag") + (i + 1));
 			
 			for(int j = 0; j < 4; ++j) {
 				normal.getWidget("" + j).addComponent(new HintHandler(j));
@@ -166,6 +166,8 @@ public class PresetEditUI extends GuiScreen {
 		
 		for(int i = 0; i < 4; ++i) {
 			Widget back = createCopy();
+			TextBox.get(back.getWidget("title")).setContent(local("tag") + (i + 1));
+			
 			back.addComponent(new TransitPage(i));
 			add(i, transitor, back);
 		}

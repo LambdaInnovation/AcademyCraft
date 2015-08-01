@@ -1,24 +1,27 @@
 package cn.academy.terminal.app.settings;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.client.Resources;
+import cn.academy.core.event.ConfigModifyEvent;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.GainFocusEvent;
 import cn.liutils.cgui.gui.event.GainFocusEvent.GainFocusHandler;
+import cn.liutils.cgui.gui.event.GuiEventHandler;
 import cn.liutils.cgui.gui.event.KeyEvent;
 import cn.liutils.cgui.gui.event.KeyEvent.KeyEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
+import cn.liutils.cgui.gui.event.global.GlobalMouseEvent;
+import cn.liutils.cgui.gui.event.global.GlobalMouseEvent.GlobalMouseHandler;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.KeyManager;
 
@@ -48,6 +51,7 @@ public class PropertyElements {
 					boolean b = !p.getBoolean();
 					p.set(b);
 					DrawTexture.get(check).setTex(b ? CHECK_TRUE : CHECK_FALSE);
+					MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(p));
 				}
 				
 			});
@@ -80,6 +84,8 @@ public class PropertyElements {
 		static final Color 
 			CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
 			CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
+		
+		GuiEventHandler gMouseHandler;
 		
 		final Property prop;
 
@@ -131,6 +137,14 @@ public class PropertyElements {
 			editing = true;
 			textBox.setContent("PRESS");
 			textBox.color = CRL_EDIT;
+			widget.getGui().regEventHandler(gMouseHandler = new GlobalMouseHandler() {
+
+				@Override
+				public void handleEvent(Widget w, GlobalMouseEvent event) {
+					endEditing(event.key - 100);
+				}
+				
+			});
 		}
 		
 		private void endEditing(int key) {
@@ -145,6 +159,8 @@ public class PropertyElements {
 			}
 			
 			updateKeyName();
+			widget.getGui().removeEventHandler(gMouseHandler);
+			MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(prop));
 		}
 		
 	}

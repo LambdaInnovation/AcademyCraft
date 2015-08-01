@@ -190,7 +190,8 @@ public class ClientController {
     			instance = null;
     		}
     		
-    		if(CPData.get(getPlayer()).isActivated()) {
+    		CPData cpData = CPData.get(getPlayer());
+    		if(cpData.isActivated() && cpData.canUseAbility()) {
 	    		instance = locate();
 	    		if(instance != null) {
 	    			instance.ctrlStarted();

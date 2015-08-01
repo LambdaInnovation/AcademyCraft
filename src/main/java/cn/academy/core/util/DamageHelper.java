@@ -19,13 +19,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.ConfigModifyEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.mc.WorldUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author WeAthFolD
@@ -48,6 +50,16 @@ public class DamageHelper {
 	};
 	
 	public static void init() {
+		loadConfigProps();
+		MinecraftForge.EVENT_BUS.register(new DamageHelper());
+	}
+	
+	@SubscribeEvent
+	public void onConfigModified(ConfigModifyEvent event) {
+		loadConfigProps();
+	}
+	
+	private static void loadConfigProps() {
 		Configuration conf = AcademyCraft.config;
 		
 		ATTACK_PLAYER = conf.getBoolean("attackPlayer", "generic", true, "Whether the skills are effective on players.");

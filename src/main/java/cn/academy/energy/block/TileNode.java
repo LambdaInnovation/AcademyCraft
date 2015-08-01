@@ -85,11 +85,10 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     	if(stack != null && itemManager.isSupported(stack)) {
     		//Charge into the node.
     		double req = Math.min(getBandwidth(), getMaxEnergy() - energy);
-    		double left = itemManager.charge(stack, -req);
+    		double pull = itemManager.pull(stack, req, false);
     		
-    		chargingIn = req != -left;
-    		req += left;
-    		this.setEnergy(req + getEnergy());
+    		chargingIn = pull != 0;
+    		this.setEnergy(energy + pull);
     	} else {
     		chargingIn = false;
     	}

@@ -65,6 +65,7 @@ public class CurrentCharging extends Skill {
 					action = new ActionChargeItem();
 				}
 				
+				System.out.println("Starting Action");
 				ActionManager.startAction(action);
 				this.addChild(action);
 			}
@@ -95,6 +96,7 @@ public class CurrentCharging extends Skill {
 		
 		@Override
 		public void onStart() {
+			System.out.println("OnStart " + isRemote);
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
 			
@@ -106,7 +108,7 @@ public class CurrentCharging extends Skill {
 		
 		@Override
 		public void onTick() {
-			
+			System.out.println("OnTick " + this);
 			// Perform raytrace 
 			MovingObjectPosition pos = Raytrace.traceLiving(player, DISTANCE);
 			
@@ -138,12 +140,14 @@ public class CurrentCharging extends Skill {
 		
 		@Override
 		public void onEnd() {
+			System.out.println("OnEnd " + isRemote);
 			if(isRemote)
 				endEffects();
 		}
 		
 		@Override
 		public void onAbort() {
+			System.out.println("OnAbort " + isRemote);
 			if(isRemote)
 				endEffects();
 		}
@@ -202,6 +206,7 @@ public class CurrentCharging extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
+			System.out.println("EndEffect " + isRemote);
 			if(surround != null) surround.setDead();
 			if(arc != null) arc.setDead();
 			if(sound != null) sound.stop();

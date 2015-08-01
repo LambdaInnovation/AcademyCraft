@@ -268,14 +268,25 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		@GuiCallback
 		public void blackout(Widget w, FrameEvent event) {
-			if(!pageMain.transform.doesListenKey) {
-				LIGui.drawBlackout();
-			}
+			
 		}
 		
 	}
 
 	public class SSIDCallback {
+		
+		public SSIDCallback() {
+			pageSSID.regEventHandlerAtBegin(new FrameEventHandler() {
+
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					if(!pageMain.transform.doesListenKey) {
+						LIGui.drawBlackout();
+					}
+				}
+				
+			});
+		}
 		
 		@GuiCallback("button_yes")
 		public void yesDown(Widget w, MouseDownEvent event) {

@@ -23,6 +23,7 @@ public class RangeDamageTest {
 	@RegACKeyHandler(name = "miku", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler key = new KeyHandler() {
 		@Override
+		@SideOnly(Side.CLIENT)
 		public void onKeyDown() {
 			rangeDmgAtServer(getPlayer());
 		}
