@@ -15,7 +15,7 @@ package cn.academy.ability.api.event;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Fired at client when player's ability level has changed.
+ * Fired at server when player's ability level has changed.
  * @author WeAthFolD
  */
 public class LevelChangeEvent extends AbilityEvent {
