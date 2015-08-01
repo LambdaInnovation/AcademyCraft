@@ -189,7 +189,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	
 	private void updateWork() {
 		// Check the input stack, and abort if item isnt there
-		if(currentRecipe.consumeType.getItem() != inventory[0].getItem()) {
+		if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()) {
 			abortWorking();
 			return;
 		}
@@ -235,8 +235,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 		return !isWorking() || 
 			(inventory[0].stackSize < currentRecipe.consumeType.stackSize) ||
 			(inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) || 
-			inventory[1].stackSize + currentRecipe.output.stackSize < inventory[1].getMaxStackSize())) ||
+			inventory[1].stackSize + currentRecipe.output.stackSize > inventory[1].getMaxStackSize())) ||
 			currentRecipe.consumeLiquid > this.getLiquidAmount();
+	}
+	
+	public IFRecipe getCurrentRecipe() {
+		return currentRecipe;
 	}
 	
 	//---

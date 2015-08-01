@@ -13,12 +13,14 @@
 package cn.academy.crafting;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
+import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.block.BlockInciser;
@@ -135,6 +137,8 @@ public class ModuleCrafting {
 			matterUnit.create("phase_liquid"), matterUnit.create("none"));
 		
 		oreCrystal.setDropData(crystalLow, 1, 3);
+		
+		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
 	}
 	
 }

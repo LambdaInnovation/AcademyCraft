@@ -12,13 +12,11 @@
  */
 package cn.academy.crafting.client.gui.imagfusor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.block.ContainerImagFusor;
 import cn.academy.crafting.block.TileImagFusor;
 import cn.academy.energy.client.gui.EnergyUIHelper;
@@ -30,6 +28,7 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.ProgressBar;
+import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.EventLoader;
@@ -115,6 +114,16 @@ public class GuiImagFusor extends LIGuiContainer {
 			progressProduct.progress = tile.getWorkProgress();
 			progressProj.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
 			progressImag.progress = (double) tile.getEnergy() / tile.getMaxEnergy();
+			
+			String str;
+			IFRecipe recipe = tile.getCurrentRecipe();
+			if(recipe == null) {
+				str = "";
+			} else {
+				str = "" + recipe.consumeLiquid;
+			}
+			
+			TextBox.get(w.getWidget("text_req")).content = str;
 		}
 	}
 
