@@ -14,6 +14,8 @@ itemGroup.AcademyCraft=AcademyCraft
 
 # 物品
 item.ac_crystal_low.name=低纯度虚能水晶
+item.ac_crystal_normal.name=中纯度虚能水晶
+item.ac_crystal_pure.name=高纯度虚能水晶
 item.ac_constraint_ingot.name=束能金属锭
 item.ac_constraint_plate.name=束能金属板
 item.ac_imag_silicon_ingot.name=虚像硅锭
@@ -32,6 +34,7 @@ item.ac_data_chip.name=数据芯片
 item.ac_matter_unit.name=物质单元
 item.ac_matter_unit_phase_liquid.name=虚相位液体单元
 item.ac_matter_unit_none.name=空单元
+item.ac_matrix_core.name=矩阵核心
 item.ac_matrix_core_0.name=基础矩阵核心
 item.ac_matrix_core_1.name=改良矩阵核心
 item.ac_matrix_core_2.name=高级矩阵核心
