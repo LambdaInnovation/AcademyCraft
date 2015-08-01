@@ -71,8 +71,8 @@ shaped(cons_plate*2) {
 }
 
 shaped(terminal) {
-    [memory, glass_pane, memory]
-    [mac_casing, brain_part, mac_casing]
+    [data_comp, glass_pane, data_comp]
+    [plateIron, brain_comp, plateIron]
     [info_comp, calc_chip, redstone]
 }
 
@@ -88,13 +88,65 @@ shaped(inciser) {
     [cons_plate, matter_unit, cons_plate]
 }
 
-shaped(mac_casing*2) {
+shaped(plateIron*2) {
     [iron_ingot, iron_ingot]
     [iron_ingot, iron_ingot]
 }
 
 shaped(frame) {
-    [nil, mac_casing, nil]
-    [mac_casing, redstone, mac_casing]
-    [nil, mac_casing, nil]
+    [nil, plateIron, nil]
+    [plateIron, redstone, plateIron]
+    [nil, plateIron, nil]
 }
+
+shaped(mat) {
+    [nil, redstone, nil]
+    [redstone, frame, redstone]
+    [data_chip, redstone, data_chip]
+}
+
+; shaped(mat_code) until fix #113
+
+smelting(imagsil_ingot) {
+    [imagsil_ore]
+}
+
+smelting(cons_ingot) {
+    [cons_ore]
+}
+
+smelting(crystal0) {
+    [crystal_ore]
+}
+
+; crystal1, 2 until fuser finish
+
+; wafer, data_chip, calc_chip, cons_plate until inciser finish
+
+shaped(info_comp) {
+    [glowstone_dust]
+    [data_comp]
+}
+
+shaped(brain_comp) {
+    [nil, gold_nugget, nil]
+    [redstone, calc_chip, redstone]
+    [nil, gold_nugget, nil]
+}
+
+shaped(reso_comp) {
+    [nil, calc_chip, nil]
+    [nil, redstone, nil]
+    [cons_plate, mat_core, cons_plate]
+}
+; mat_core unfinished, needs modify
+
+shaped(conv_comp) {
+    [calc_chip]
+    [ene_unit]
+    [ender_eye]
+}
+
+; needle, coin, sil_barn until inciser finish
+
+; developer, inciser, fuser, app installer pending.

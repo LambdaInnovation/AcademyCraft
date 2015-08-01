@@ -14,22 +14,27 @@ itemGroup.AcademyCraft=AcademyCraft
 
 # Item
 item.ac_crystal_low.name=Low-purity Imag Crystal
+item.ac_crystal_normal.name=Mid-purity Imag Crystal
+item.ac_crystal_pure.name=High-purity Imag Crystal
 item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
 item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
 item.ac_machine_frame.name=Machine Frame
 
-item.ac_memory.name=Data Storage
-item.ac_brain_part.name=Brainwave Analyzer
+item.ac_data_component.name=Data Storage
+item.ac_brain_component.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
 item.ac_reinforced_iron_plate.name=Reinforced Iron Plate
 item.ac_resonance_component.name=Resonator
+item.ac_energy_convert_component.name=Energy Converter
 item.ac_calc_chip.name=Calculation Chip
 item.ac_data_chip.name=Data Chip
 
+item.ac_matter_unit.name=Matter Unit
 item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
+item.ac_matrix_core.name=Matrix Core
 item.ac_matrix_core_0.name=Basic Matrix Core
 item.ac_matrix_core_1.name=Improved Matrix Core
 item.ac_matrix_core_2.name=Advanced Matrix Core
@@ -56,12 +61,15 @@ tile.ac_node_basic.name=Basic Wireless Imag Node
 tile.ac_node_standard.name=Improved Wireless Imag Node
 tile.ac_node_advanced.name=Advanced Wireless Imag Node
 tile.ac_inciser.name=Inciser
-tile.ac_solar_gen.name.name=Solar Generator
+tile.ac_solar_gen.name=Solar Generator
 tile.ac_cat_engine.name=Toast and Cat
 tile.ac_phase_generator.name=Phase Generator
 tile.ac_windgen_base.name=Wind Generator Pillar Base
 tile.ac_windgen_pillar.name=Wind Generator Pillar
 tile.ac_windgen_main.name=Wind Generator
+tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
+tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
+tile.ac_developer.name=Ability Developer
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon
