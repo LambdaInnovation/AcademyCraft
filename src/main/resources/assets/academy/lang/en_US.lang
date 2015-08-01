@@ -25,9 +25,11 @@ item.ac_brain_part.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
 item.ac_reinforced_iron_plate.name=Reinforced Iron Plate
 item.ac_resonance_component.name=Resonator
+item.ac_energy_convert_component.name=Energy Converter
 item.ac_calc_chip.name=Calculation Chip
 item.ac_data_chip.name=Data Chip
 
+item.ac_matter_unit.name=Matter Unit
 item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
 item.ac_matrix_core_0.name=Basic Matrix Core
@@ -62,6 +64,8 @@ tile.ac_phase_generator.name=Phase Generator
 tile.ac_windgen_base.name=Wind Generator Pillar Base
 tile.ac_windgen_pillar.name=Wind Generator Pillar
 tile.ac_windgen_main.name=Wind Generator
+tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
+tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon

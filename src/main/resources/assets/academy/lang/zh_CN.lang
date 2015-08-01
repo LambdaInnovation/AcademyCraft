@@ -25,9 +25,11 @@ item.ac_brain_part.name=脑波分析模块
 item.ac_info_component.name=信息处理模块
 item.ac_reinforced_iron_plate.name=强化铁板
 item.ac_resonance_component.name=共振模块
+item.ac_energy_convert_component.name=能量转换模块
 item.ac_calc_chip.name=计算芯片
 item.ac_data_chip.name=数据芯片
 
+item.ac_matter_unit.name=物质单元
 item.ac_matter_unit_phase_liquid.name=虚相位液体单元
 item.ac_matter_unit_none.name=空单元
 item.ac_matrix_core_0.name=基础矩阵核心
@@ -62,6 +64,8 @@ tile.ac_phase_generator.name=虚相位能量发生机
 tile.ac_windgen_base.name=风力能量发生器 - 支架底座
 tile.ac_windgen_pillar.name=风力能量发生器 - 支架
 tile.ac_windgen_main.name=风力能量发生器 - 主机
+tile.ac_eu_output.name=能源桥（IC2 EU输出）
+tile.ac_eu_input.name=能源桥（IC2 EU输入）
 
 # 常规知识
 ac.knowledge.marathon.name=长跑
