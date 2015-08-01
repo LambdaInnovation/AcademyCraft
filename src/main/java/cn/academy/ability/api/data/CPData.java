@@ -141,8 +141,6 @@ public class CPData extends DataPart {
 		
 		if(AbilityData.get(getPlayer()).isLearned() && !activated) {
 			activated = true;
-			
-			System.out.println("Activated at server.");
 			MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getPlayer()));
 			sync();
 		} else {
@@ -158,8 +156,6 @@ public class CPData extends DataPart {
 		
 		if(activated) {
 			activated = false;
-			
-			System.out.println("Deactivated at server.");
 			MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getPlayer()));
 			sync();
 		}
@@ -325,8 +321,6 @@ public class CPData extends DataPart {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
-		System.out.println("SyncClient");
-		
 		boolean lastActivated = activated;
 		activated = tag.getBoolean("A");
 		
