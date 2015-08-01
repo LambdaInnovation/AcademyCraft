@@ -11,6 +11,7 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.api.ctrl.SyncAction.State;
+import cn.academy.core.AcademyCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -86,13 +87,18 @@ public class AMServer implements IActionManager {
 			action = (SyncAction) Class.forName(className).newInstance();
 			action.player = player;
 			action.setNBTStart(tag);
-			ActionManager.startAtClient(player, className, action.getNBTStart());
-			map.get(playerUUID(action)).put(action.uuid, action);
-			action.start();
+			Map<UUID, SyncAction> sub = map.get(playerUUID(action));
+			if (!sub.containsKey(action.uuid)) {
+				ActionManager.startAtClient(player, className, action.getNBTStart());
+				sub.put(action.uuid, action);
+				action.start();
+			}
+			else
+				AcademyCraft.log.warn("An action with UUID(" + action.uuid + ") has already existed!");
 			return true;
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			AcademyCraft.log.error("Failed to start an action", e);
 			return false;
 		}
 	}
