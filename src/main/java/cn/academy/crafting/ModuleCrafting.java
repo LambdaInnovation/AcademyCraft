@@ -104,12 +104,12 @@ public class ModuleCrafting {
 	public static Item rfIronPlate = new ACItem("reinforced_iron_plate");
 	
 	@RegItem
-	@RecipeName("brain_part")
-	public static Item brainPart = new ACItem("brain_part");
+	@RecipeName("brain_comp")
+	public static Item brainComp = new ACItem("brain_component");
 	
 	@RegItem
-	@RecipeName("memory")
-	public static Item memory = new ACItem("memory");
+	@RecipeName("data_comp")
+	public static Item dataComp = new ACItem("data_component");
 	
 	@RegItem
 	@RecipeName("info_comp")

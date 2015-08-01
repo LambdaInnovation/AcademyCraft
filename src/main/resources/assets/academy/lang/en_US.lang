@@ -22,8 +22,8 @@ item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
 item.ac_machine_frame.name=Machine Frame
 
-item.ac_memory.name=Data Storage
-item.ac_brain_part.name=Brainwave Analyzer
+item.ac_data_component.name=Data Storage
+item.ac_brain_component.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
 item.ac_reinforced_iron_plate.name=Reinforced Iron Plate
 item.ac_resonance_component.name=Resonator
@@ -69,6 +69,7 @@ tile.ac_windgen_pillar.name=Wind Generator Pillar
 tile.ac_windgen_main.name=Wind Generator
 tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
 tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
+tile.ac_developer.name=Ability Developer
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon
