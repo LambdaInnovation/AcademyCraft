@@ -130,11 +130,16 @@ public class AcademyCraft {
         
         try { 
         	Class.forName("ic2.core.IC2");
-			Class.forName("cn.academy.support.ModuleSupport")
-				.getMethod("initIC2", RecipeRegistry.class).invoke(this, 
-					recipes);
-        } catch(Exception e) {
-			e.printStackTrace();
+        	try {
+        		Class.forName("cn.academy.support.ModuleSupport")
+					.getMethod("initIC2", RecipeRegistry.class).invoke(this, 
+							recipes);
+        	}
+        	catch (Throwable e) {
+        		log.error("Failed to initialize IC2 support", e);
+        	}
+        }
+        catch(Throwable e) {
 		}
         
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));

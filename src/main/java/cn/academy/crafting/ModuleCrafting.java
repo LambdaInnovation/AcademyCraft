@@ -139,6 +139,7 @@ public class ModuleCrafting {
 		oreCrystal.setDropData(crystalLow, 1, 3);
 		
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
+		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 2000, new ItemStack(crystalPure));
 	}
 	
 }

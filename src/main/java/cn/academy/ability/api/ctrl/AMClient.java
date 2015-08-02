@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.event.OpenAuxGuiEvent;
@@ -86,14 +87,18 @@ public class AMClient implements IActionManager {
 			action.setNBTStart(tag);
 			action.player = player;
 			if (action.uuid != null) {
-				map.put(action.uuid, action);
-				if (player != null && player.equals(Minecraft.getMinecraft().thePlayer))
-					set.add(action.uuid);
-				action.start();
+				if (!map.containsKey(action.uuid)) {
+					map.put(action.uuid, action);
+					if (player != null && player.equals(Minecraft.getMinecraft().thePlayer))
+						set.add(action.uuid);
+					action.start();
+				}
+				else
+					AcademyCraft.log.warn("An action with UUID(" + action.uuid + ") has already existed!");
 			}
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			AcademyCraft.log.error("Failed to start an action", e);
 		}
 	}
 
