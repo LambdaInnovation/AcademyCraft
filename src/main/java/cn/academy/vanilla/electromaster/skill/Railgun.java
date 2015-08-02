@@ -108,7 +108,6 @@ public class Railgun extends Skill {
 							if(si.accepts(stack)) {
 								SyncAction action = new ActionShootItem(si);
 								
-								ActionManager.startAction(action);
 								this.addChild(action);
 								
 								this.estimatedCP = Railgun.this.getConsumption(aData);
