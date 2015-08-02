@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import cn.academy.core.item.ACItem;
 import cn.annoreg.core.Registrant;
+import cn.liutils.util.generic.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,7 +43,6 @@ public class ItemMatrixCore extends ACItem {
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName(stack) + "_" + stack.getItemDamage();
     }
-
 	
     @SideOnly(Side.CLIENT)
     @Override
@@ -50,6 +50,12 @@ public class ItemMatrixCore extends ACItem {
     	for(int i = 0; i < LEVELS; ++i) {
     		icons[i] = ir.registerIcon("academy:matrix_core_" + i);
     	}
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int meta) {
+        return icons[MathUtils.wrapi(0, icons.length, meta)];
     }
     
     @SideOnly(Side.CLIENT)
