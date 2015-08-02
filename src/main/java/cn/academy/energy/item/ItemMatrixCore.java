@@ -55,7 +55,7 @@ public class ItemMatrixCore extends ACItem {
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIconFromDamage(int meta) {
-        return icons[MathUtils.wrapi(0, icons.length, meta)];
+        return icons[MathUtils.wrapi(0, icons.length - 1, meta)];
     }
     
     @SideOnly(Side.CLIENT)
