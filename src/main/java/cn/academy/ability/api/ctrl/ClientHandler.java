@@ -105,15 +105,16 @@ public final class ClientHandler {
 
 			@Override
 			public String getHint() {
-				return "deactivate";
+				return null;
 			}
 		});
 	}
 	
 	public static String getActivateKeyHint() {
 		String kname = KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(keyActivate));
-		return "[" + kname + "]: " + StatCollector.translateToLocal(
-			"ac.activate_key." + getActivateHandler().getHint() + ".desc");
+		String hint = getActivateHandler().getHint();
+		return hint == null ? null : ("[" + kname + "]: " + StatCollector.translateToLocal(
+			"ac.activate_key." + hint + ".desc"));
 	}
 	
 	private static IActivateHandler getActivateHandler() {

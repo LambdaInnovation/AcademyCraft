@@ -32,6 +32,7 @@ import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.ui.ACHud;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
@@ -343,7 +344,8 @@ public class CPBar extends Widget {
 	
 	
 	
-	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160);
+	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160),
+			CRL_P_FORE = new Color().setColor4i(255, 255, 255, 200);
 	final Color temp = new Color();
 	
 	private void drawPresetHint(double progress, long untilLast) {
@@ -376,19 +378,31 @@ public class CPBar extends Widget {
 			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, temp.asHexColor(), Align.CENTER);
 			
 			temp.bind();
-			if(i == cur)
-				HudUtils.drawRectOutline(x, y, size, size, 3);
+			if(i == cur) {
+				ACRenderingHelper.drawGlow(x, y, size, size, 5, CRL_P_FORE);
+				//HudUtils.drawRectOutline(x, y, size, size, 3);
+			}
 			
 			x += step;
 		}
 		
 	}
 	
+	static final Color 
+		CRL_KH_BACK = new Color().setColor4i(65, 65, 65, 70), 
+		CRL_KH_GLOW = new Color().setColor4i(255, 255, 255, 40);
+	
 	private void drawActivateKeyHint() {
-		final double x0 = 850, y0 = 140;
 		String str = ClientHandler.getActivateKeyHint();
 		
-		Font.font.draw(str, x0, y0, 50, 0xffffffff, Align.RIGHT);
+		if(str != null) {
+			final double x0 = 500, y0 = 140, fsize = 44, MARGIN = 8;
+			CRL_KH_BACK.bind();
+			double len = Font.font.strLen(str, fsize);
+			HudUtils.colorRect(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, fsize + MARGIN * 2);
+			ACRenderingHelper.drawGlow(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, fsize + MARGIN * 2, 5, CRL_KH_GLOW);
+			Font.font.draw(str, x0, y0, fsize, 0xa0ffffff, Align.RIGHT);
+		}
 	}
 	
 	private void color4d(double r, double g, double b, double a) {
