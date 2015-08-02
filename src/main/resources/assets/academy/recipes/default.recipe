@@ -119,10 +119,6 @@ smelting(crystal0) {
     [crystal_ore]
 }
 
-; crystal1, 2 until fuser finish
-
-; wafer, data_chip, calc_chip, cons_plate until inciser finish
-
 shaped(info_comp) {
     [glowstone_dust]
     [data_comp]
@@ -147,6 +143,4 @@ shaped(conv_comp) {
     [ender_eye]
 }
 
-; needle, coin, sil_barn until inciser finish
-
-; developer, inciser, fuser, app installer pending.
+; developer pending.
