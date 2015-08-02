@@ -15,6 +15,7 @@ package cn.academy.vanilla.meltdowner;
 import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.meltdowner.skill.RayBarrage;
+import cn.academy.vanilla.meltdowner.skill.ScatterBomb;
 
 /**
  * @author WeAthFolD
@@ -22,13 +23,16 @@ import cn.academy.vanilla.meltdowner.skill.RayBarrage;
 public class CatMeltdowner extends Category {
 	
 	public static RayBarrage rayBarrage;
+	public static ScatterBomb scatterBomb;
 
 	public CatMeltdowner() {
 		super("melt_downer");
+		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
 		this.defineTypes("A", "B", "C", "D", "passive"); //For test
 		
 		this.addSkill("A", rayBarrage = new RayBarrage());
+		this.addSkill("A", scatterBomb = new ScatterBomb());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

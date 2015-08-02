@@ -82,7 +82,7 @@ public class AcademyCraft {
      */
     public static final ValuePipeline pipeline = new ValuePipeline();
     
-    private static RecipeRegistry recipes = new RecipeRegistry();
+    public static RecipeRegistry recipes = new RecipeRegistry();
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
@@ -109,12 +109,10 @@ public class AcademyCraft {
         
         // Load the scripts
         String[] scripts = {
-        	"generic", "ability", "electro_master", "teleporter"
+        	"generic", "ability", "electro_master", "teleporter", "melt_downer"
         };
         for(String s : scripts)
         	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
-        
-        MinecraftForge.EVENT_BUS.register(this);
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }

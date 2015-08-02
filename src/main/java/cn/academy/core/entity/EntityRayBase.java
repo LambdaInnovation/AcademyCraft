@@ -50,6 +50,8 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 	public double maxGlowWiggleSpeed = 0.4;
 	public double glowWiggle = 0.0;
 	
+	public boolean viewOptimize = true;
+	
 	long lastFrame = 0;
 	long creationTime;
 	
@@ -143,7 +145,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 
 	@Override
 	public boolean needsViewOptimize() {
-		return true;
+		return viewOptimize;
 	}
 
 	@Override

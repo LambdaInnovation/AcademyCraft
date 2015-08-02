@@ -19,9 +19,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.item.ACItem;
 import cn.annoreg.core.Registrant;
-import cn.liutils.util.generic.MathUtils;
+import cn.liutils.crafting.RecipeRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -55,7 +56,7 @@ public class ItemMatrixCore extends ACItem {
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIconFromDamage(int meta) {
-        return icons[MathUtils.wrapi(0, icons.length - 1, meta)];
+        return icons[meta];
     }
     
     @SideOnly(Side.CLIENT)

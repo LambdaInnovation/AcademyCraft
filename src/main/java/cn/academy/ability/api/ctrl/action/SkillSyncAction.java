@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.api.ctrl.action;
 
+import net.minecraft.world.World;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
@@ -24,6 +25,7 @@ public class SkillSyncAction extends SyncAction {
 	
 	public AbilityData aData;
 	public CPData cpData;
+	public World world;
 
 	protected SkillSyncAction(int interval) {
 		super(interval);
@@ -33,6 +35,7 @@ public class SkillSyncAction extends SyncAction {
 	public void onStart() {
 		aData = AbilityData.get(player);
 		cpData = CPData.get(player);
+		world = player.worldObj;
 	}
 	
 }

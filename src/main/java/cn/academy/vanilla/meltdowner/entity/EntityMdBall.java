@@ -73,6 +73,14 @@ public class EntityMdBall extends EntityAdvanced {
 	
 	double offsetX, offsetY, offsetZ;
 	
+	public EntityMdBall(EntityPlayer player) {
+		this(player, 2333333, null);
+	}
+	
+	public EntityMdBall(EntityPlayer player, int life) {
+		this(player, life, null);
+	}
+	
 	public EntityMdBall(EntityPlayer player, int life, final EntityCallback<EntityMdBall> callback) {
 		super(player.worldObj);
 		this.spawner = player;
@@ -100,7 +108,8 @@ public class EntityMdBall extends EntityAdvanced {
 			}
 			
 		}, life);
-		this.executeAfter(callback, life - 2);
+		if(callback != null)
+			this.executeAfter(callback, life - 2);
 	}
 	
 	public EntityMdBall(World world) {
@@ -115,6 +124,7 @@ public class EntityMdBall extends EntityAdvanced {
 		dataWatcher.addObject(4, Float.valueOf(0));
 		dataWatcher.addObject(5, Float.valueOf(0));
 		dataWatcher.addObject(6, Float.valueOf(0));
+		dataWatcher.addObject(7, Integer.valueOf(0));
 	}
 	
 	@Override
@@ -124,6 +134,7 @@ public class EntityMdBall extends EntityAdvanced {
 			dataWatcher.updateObject(4, Float.valueOf(subX));
 			dataWatcher.updateObject(5, Float.valueOf(subY));
 			dataWatcher.updateObject(6, Float.valueOf(subZ));
+			dataWatcher.updateObject(7, Integer.valueOf(life));
 		}
 	}
 	
@@ -146,6 +157,7 @@ public class EntityMdBall extends EntityAdvanced {
 					subX = dataWatcher.getWatchableObjectFloat(4);
 					subY = dataWatcher.getWatchableObjectFloat(5);
 					subZ = dataWatcher.getWatchableObjectFloat(6);
+					life = dataWatcher.getWatchableObjectInt(7);
 					System.out.println("Rec pos sync");
 				} else {
 					updatePosition();
@@ -227,6 +239,8 @@ public class EntityMdBall extends EntityAdvanced {
 			return Math.max(0, MathUtils.lerpf(1, 0, (float) (dt - (lifeMS - blendTime)) / blendTime));
 		if(dt > lifeMS - burstTime)
 			return MathUtils.lerp(0.6, 1.0, (double) (dt - (lifeMS - burstTime)) / (burstTime - blendTime));
+		if(dt < 300)
+			return MathUtils.lerp(0, 0.6, (double) dt / 300);
 		return 0.6;
 	}
 	
