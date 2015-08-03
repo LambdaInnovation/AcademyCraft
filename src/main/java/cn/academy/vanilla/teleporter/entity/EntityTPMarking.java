@@ -30,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Spawn a position mark indicating where the player would be teleport to.
- * You should spawn this entity in both sides and it will not synchronize.
+ * You should spawn it in CLIENT ONLY.
  * @author WeathFolD
  */
 @Registrant

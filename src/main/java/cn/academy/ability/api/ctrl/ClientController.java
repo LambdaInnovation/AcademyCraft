@@ -161,10 +161,13 @@ public class ClientController {
 	    		
 		    	for(int i = 0; i < MAX_KEYS; ++i) {
 		    		if(preset.hasMapping(i)) {
-		    			int mapping = getKeyMapping(i);
-		    			
-		    			list.add(mapping);
-		    			ControlOverrider.override(mapping);
+		    			Controllable c = preset.getControllable(i);
+		    			if(c.shouldOverrideKey()) {
+			    			int mapping = getKeyMapping(i);
+			    			
+			    			list.add(mapping);
+			    			ControlOverrider.override(mapping);
+		    			}
 		    		}
 		    	}
 		    	

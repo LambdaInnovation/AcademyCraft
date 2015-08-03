@@ -51,6 +51,13 @@ public abstract class Controllable {
 	 */
 	public abstract String getHintText();
 	
+	/**
+	 * @return Whether this controllable should override the vanilla key control.
+	 */
+	public boolean shouldOverrideKey() {
+		return true;
+	}
+	
 	public static class ControllableSerializer implements InstanceSerializer<Controllable> {
 
 		@Override

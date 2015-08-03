@@ -43,5 +43,11 @@ ac {
 			cooldown(exp) { floor(20 * lerp(5, 3, exp)) }
 			disgust_prob { 0.05 }
 		}
+		
+		flashing {
+			range(exp) { lerp(12, 18, exp) }
+			consumption(exp) { lerp(100, 70, exp) }
+			overload(exp) { lerp(250, 180, exp) }
+		}
     }
 }
