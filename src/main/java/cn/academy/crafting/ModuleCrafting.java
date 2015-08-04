@@ -59,7 +59,7 @@ public class ModuleCrafting {
 	@RecipeName("crystal2")
 	public static Item crystalPure = new ACItem("crystal_pure");
 	
-	@RegItem
+	@RegBlock
 	@RecipeName("frame")
 	public static Block machineFrame = new ACBlock("machine_frame", Material.rock).setHardness(4.0f);
 	
