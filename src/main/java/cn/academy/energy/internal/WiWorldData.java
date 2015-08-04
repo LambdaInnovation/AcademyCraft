@@ -118,10 +118,6 @@ public class WiWorldData extends WorldSavedData {
 		return true;
 	}
 	
-	public interface NetPredictate {
-		boolean accepts(WirelessNet net);
-	}
-	
 	public Collection<WirelessNet> rangeSearch(int x, int y, int z, double range, int max) {
 		Collection<BlockPos> bps = WorldUtils.getBlocksWithin(world, x, y, z, range, max, filterWirelessBlocks);
 		

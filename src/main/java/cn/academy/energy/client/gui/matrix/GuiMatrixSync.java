@@ -98,15 +98,7 @@ public class GuiMatrixSync {
 		NBTTagCompound tag = new NBTTagCompound();
 		boolean loaded = WirelessHelper.isMatrixActive(matrix);
 		tag.setBoolean("loaded", loaded);
-		int cap = matrix.getCapacity();
-		double bwidth = matrix.getBandwidth();
-		double range = matrix.getRange();
-		tag.setByte("capacity", (byte) cap);
-		tag.setInteger("bandwidth", (int) bwidth);
-		tag.setInteger("range", (int) range);
 		tag.setByte("nodes", (byte) 0);
-		
-		System.out.println("Loaded: " + loaded);
 		
 		if(loaded) {
 			WirelessNet net = WirelessHelper.getWirelessNet(matrix);

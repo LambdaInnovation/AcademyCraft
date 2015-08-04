@@ -31,7 +31,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegInit
 @RegEventHandler
 public final class ClientHandler {
 	

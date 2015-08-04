@@ -69,9 +69,6 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	String ssid;
 	int nodes;
-	int capacity;
-	int bandwidth;
-	int range;
 	
 	//Action
 	boolean waitingForResult;
@@ -102,17 +99,7 @@ public class GuiMatrix extends LIGuiContainer {
 		receivedSync = true;
 		
 		isLoaded = tag.getBoolean("loaded");
-		capacity = tag.getInteger("capacity");
-		bandwidth = tag.getInteger("bandwidth");
-		range = tag.getInteger("range");
 		nodes = tag.getInteger("nodes");
-		
-		//Setup the info about matrix itself
-		ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / capacity);
-		
-		ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) bandwidth / TileMatrix.MAX_CAPACITY);
-		
-		ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) range / TileMatrix.MAX_RANGE);
 		
 		TextBox box = TextBox.get(pageMain.getWidget("text_ssid2"));
 		if(isLoaded) {
@@ -137,13 +124,13 @@ public class GuiMatrix extends LIGuiContainer {
 			String text = null;
 			switch(w.getName()) {
 			case "progress_cap":
-				text = local("capacity") + ": " + nodes + "/" + capacity;
+				text = local("capacity") + ": " + nodes + "/" + tile.getCapacity();
 				break;
 			case "progress_lat":
-				text = local("bandwidth") + ": " + bandwidth + "IF/t";
+				text = local("bandwidth") + String.format(": %.1f IF/t", tile.getBandwidth());
 				break;
 			case "progress_ran":
-				text = local("range") + ": " + range + "m";
+				text = local("range") + String.format(": %.2fm", tile.getRange());
 				break;
 			default:
 				break;
@@ -268,8 +255,10 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 		
 		@GuiCallback
-		public void frameUpdate(Widget w, FrameEvent event) {
-			
+		public void onFrame(Widget w, FrameEvent event) {
+			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / tile.getCapacity());
+			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
+			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) tile.getRange() / TileMatrix.MAX_RANGE);
 		}
 		
 	}
