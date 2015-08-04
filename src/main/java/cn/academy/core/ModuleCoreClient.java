@@ -17,8 +17,11 @@ import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.client.ui.ACHud;
 import cn.academy.core.client.ui.NotifyUI;
 import cn.academy.core.event.ConfigModifyEvent;
+import cn.academy.terminal.app.settings.PropertyElements;
+import cn.academy.terminal.app.settings.SettingsUI;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
+import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -53,6 +56,13 @@ public class ModuleCoreClient {
 		@SubscribeEvent
 		public void onConfigModified(ConfigModifyEvent event) {
 			resetBindingKey(event.property.getName(), event.property.getInt());
+		}
+		
+		@Override
+		public void addKeyHandler(String name, String keyDesc, int defKeyID, 
+				boolean global, KeyHandler handler) {
+			super.addKeyHandler(name, keyDesc, defKeyID, global, handler);
+			SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID);
 		}
 	}
 	

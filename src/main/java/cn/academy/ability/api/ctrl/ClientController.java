@@ -20,10 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.ctrl.SkillInstance.State;
 import cn.academy.ability.api.data.CPData;
@@ -36,11 +32,17 @@ import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.util.ControlOverrider;
+import cn.academy.terminal.app.settings.PropertyElements;
+import cn.academy.terminal.app.settings.SettingsUI;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class handles the ability key and their controlling, 

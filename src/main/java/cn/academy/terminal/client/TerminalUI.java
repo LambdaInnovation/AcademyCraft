@@ -348,7 +348,7 @@ public class TerminalUI extends AuxGui {
 		return Resources.getTexture("guis/data_terminal/" + name);
 	}
 	
-	@RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_U)
+	@RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_LMENU)
 	@RegEventHandler(Bus.Forge)
 	public static KeyHandler keyHandler = new KeyHandler() {
 		

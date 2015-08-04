@@ -213,7 +213,7 @@ public class WiWorldData extends WorldSavedData {
 		} else if(user instanceof IWirelessReceiver) {
 			return nodeLookup.get(new VNReceiver((IWirelessReceiver) user));
 		} else
-			throw new RuntimeException("Invalid user");
+			return null;
 	}
 	
 	private void tickNode() {

@@ -57,6 +57,8 @@ public class VBlocks {
 		public T get(World world) {
 			if(!ignoreChunk && !isLoaded(world))
 				return null;
+			if(world == null)
+				return null;
 			
 			world.getChunkProvider().loadChunk(x >> 4, z >> 4);
 			
