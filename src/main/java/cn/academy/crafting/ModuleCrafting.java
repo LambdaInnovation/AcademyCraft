@@ -12,12 +12,15 @@
  */
 package cn.academy.crafting;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import cn.academy.core.block.ACBlock;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.api.ImagFusorRecipes;
@@ -58,7 +61,7 @@ public class ModuleCrafting {
 	
 	@RegItem
 	@RecipeName("frame")
-	public static Item machineFrame = new ACItem("machine_frame");
+	public static Block machineFrame = new ACBlock("machine_frame", Material.rock).setHardness(4.0f);
 	
 	@RegItem
 	@RecipeName("calc_chip")
@@ -137,6 +140,7 @@ public class ModuleCrafting {
 			matterUnit.create("phase_liquid"), matterUnit.create("none"));
 		
 		oreCrystal.setDropData(crystalLow, 1, 3);
+		machineFrame.setHarvestLevel("pickaxe", 3);
 		
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 2000, new ItemStack(crystalPure));

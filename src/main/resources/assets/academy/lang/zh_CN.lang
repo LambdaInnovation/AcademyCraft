@@ -20,7 +20,6 @@ item.ac_constraint_ingot.name=束能金属锭
 item.ac_constraint_plate.name=束能金属板
 item.ac_imag_silicon_ingot.name=虚像硅锭
 item.ac_wafer.name=虚像硅晶圆
-item.ac_machine_frame.name=机械框架
 
 item.ac_data_component.name=数据储存器
 item.ac_brain_component.name=脑波分析模块
@@ -70,6 +69,7 @@ tile.ac_windgen_main.name=风力能量发生器 - 主机
 tile.ac_eu_output.name=能源桥（IC2 EU输出）
 tile.ac_eu_input.name=能源桥（IC2 EU输入）
 tile.ac_developer.name=能力开发机
+tile.ac_machine_frame.name=机械框架
 
 # 常规知识
 ac.knowledge.marathon.name=长跑

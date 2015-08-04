@@ -20,7 +20,6 @@ item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
 item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
-item.ac_machine_frame.name=Machine Frame
 
 item.ac_data_component.name=Data Storage
 item.ac_brain_component.name=Brainwave Analyzer
@@ -52,6 +51,7 @@ item.ac_apps.name=App Installer
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
 tile.ac_imag_silicon_ore.name=Imag Silicon Ore
+tile.ac_machine_frame.name=Machine Frame
 
 tile.ac_phase_liquid.name=Imag Phase Liquid
 
