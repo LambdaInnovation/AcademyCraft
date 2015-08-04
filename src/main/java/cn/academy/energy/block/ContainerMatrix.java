@@ -60,7 +60,7 @@ public class ContainerMatrix extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return player.getDistanceSq(tile.xCoord + .5, tile.yCoord + .5, tile.zCoord + .5) < 64;
+		return true;
 	}
 	
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
@@ -74,8 +74,24 @@ public class ContainerMatrix extends Container {
             if (id < 4) { //tileInv->playerInv
                 if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
                     return null;
-            } else if (!this.mergeItemStack(stack1, 0, 4, false)) { //playerInv->tileInv
-                return null;
+            } else {
+            	if(stack.getItem() == ModuleEnergy.constPlate) {
+            		for(int s = 0; s < 3; ++s) {
+            			if(tile.getStackInSlot(s) == null) {
+            				stack1.stackSize--;
+            				tile.setInventorySlotContents(s, new ItemStack(ModuleEnergy.constPlate));
+            				break;
+            			}
+            		}
+            		stack = null;
+            	} else if(stack.getItem() == ModuleEnergy.matrixCore) {
+            		if(tile.getStackInSlot(3) == null) {
+            			stack1.stackSize--;
+            			tile.setInventorySlotContents(3, 
+            				new ItemStack(ModuleEnergy.matrixCore, 1, stack1.getItemDamage()));
+            		}
+            		stack = null;
+            	}
             }
 
             if (stack1.stackSize == 0) {

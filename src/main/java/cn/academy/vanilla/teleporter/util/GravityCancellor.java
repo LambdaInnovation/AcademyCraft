@@ -33,7 +33,6 @@ public class GravityCancellor extends LIHandler<ClientTickEvent> {
 	@Override
 	protected boolean onEvent(ClientTickEvent event) {
 		if(p.isDead || (++ticker == ticks)) {
-			System.out.println("GC SetDead");
 			this.setDead();
 		} else {
 			if(!p.capabilities.isFlying) {

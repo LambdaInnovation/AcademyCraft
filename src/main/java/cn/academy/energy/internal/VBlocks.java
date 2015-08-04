@@ -20,6 +20,7 @@ import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.block.IWirelessTile;
+import cn.liutils.util.generic.MathUtils;
 
 /**
  * @author WeAthFolD
@@ -43,6 +44,10 @@ public class VBlocks {
 			y = tag.getInteger("y");
 			z = tag.getInteger("z");
 			ignoreChunk = _ignoreChunk;
+		}
+		
+		public double distSq(VBlock another) {
+			return MathUtils.distanceSq(another.x, another.y, another.z, x, y, z);
 		}
 		
 		public boolean isLoaded(World world) {

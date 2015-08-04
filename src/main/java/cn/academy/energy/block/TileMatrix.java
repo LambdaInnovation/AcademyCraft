@@ -12,19 +12,25 @@
  */
 package cn.academy.energy.block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.tile.TileInventory;
-import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegTileEntity;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
@@ -51,10 +57,12 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		MAX_BANDWIDTH = getBandwidth(3, 3);
 		MAX_RANGE = getRange(3, 3);
 	}
-
+	
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static RenderMatrix renderer;
+	
+	int updateTicker;
 	
 	public TileMatrix() {
 		super("wireless_matrix", 4);
@@ -80,6 +88,11 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	public void updateEntity() {
 		if(info != null)
 			info.update();
+		
+		if(++updateTicker == 20) {
+			updateTicker = 0;
+			this.syncInventory();
+		}
 	}
 
 	@Override
@@ -167,6 +180,21 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	
 	private static double getProp(String propName, int N, int L) {
 		return getFunc(propName).callDouble(N, L);
+	}
+	
+	private void syncInventory() {
+		syncInventory(this, this.getStackInSlot(0), this.getStackInSlot(1), 
+				this.getStackInSlot(2), this.getStackInSlot(3));
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void syncInventory(
+			@RangedTarget(range = 8) TileMatrix matrix,
+			@Data ItemStack s0, @Data ItemStack s1, @Data ItemStack s2, @Data ItemStack s3) {
+		this.setInventorySlotContents(0, s0);
+		this.setInventorySlotContents(1, s1);
+		this.setInventorySlotContents(2, s2);
+		this.setInventorySlotContents(3, s3);
 	}
 	
 	private static ScriptFunction getFunc(String name) {

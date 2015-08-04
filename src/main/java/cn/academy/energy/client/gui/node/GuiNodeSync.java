@@ -98,16 +98,14 @@ public class GuiNodeSync {
 	}
 	
 	//List
-
-	
 	@RegNetworkCall(side = Side.SERVER)
 	public static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
 		Collection<WirelessNet> nets = WirelessHelper.getNetInRange(
 			target.getWorldObj(), 
-			target.xCoord + 0.5, target.yCoord + 0.5, target.zCoord + 0.5, 
-			10, 20);
+			target.xCoord, target.yCoord, target.zCoord, 
+			target.getRange(), 20);
 		List<String> list = new ArrayList();
 		for(WirelessNet net : nets) {
 			list.add(net.getSSID());

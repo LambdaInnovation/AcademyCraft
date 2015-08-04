@@ -65,7 +65,6 @@ public class GuiMatrix extends LIGuiContainer {
 	
 	//Synced states
 	boolean receivedSync;
-	
 	boolean isLoaded;
 	
 	String ssid;
@@ -87,6 +86,8 @@ public class GuiMatrix extends LIGuiContainer {
 	final EntityPlayer player;
 	
 	Widget pageMain, pageSSID, pageCheck;
+	
+	long syncedTime = -1;
 
 	public GuiMatrix(ContainerMatrix c) {
 		super(c);
@@ -98,30 +99,27 @@ public class GuiMatrix extends LIGuiContainer {
 	}
 	
 	public void receiveSync(NBTTagCompound tag) {
-		if(!receivedSync) {
-			receivedSync = true;
-			
-			isLoaded = tag.getBoolean("loaded");
-			capacity = tag.getInteger("capacity");
-			bandwidth = tag.getInteger("bandwidth");
-			range = tag.getInteger("range");
-			nodes = tag.getInteger("nodes");
-			
-			//Setup the info about matrix itself
-			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / capacity);
-			
-			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) bandwidth / TileMatrix.MAX_CAPACITY);
-			
-			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) range / TileMatrix.MAX_RANGE);
-			
-			TextBox box = TextBox.get(pageMain.getWidget("text_ssid2"));
-			if(isLoaded) {
-				ssid = tag.getString("ssid");
-				box.content = ssid;
-			} else {
-				box.content = "Not Loaded";
-			}
-			
+		receivedSync = true;
+		
+		isLoaded = tag.getBoolean("loaded");
+		capacity = tag.getInteger("capacity");
+		bandwidth = tag.getInteger("bandwidth");
+		range = tag.getInteger("range");
+		nodes = tag.getInteger("nodes");
+		
+		//Setup the info about matrix itself
+		ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / capacity);
+		
+		ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) bandwidth / TileMatrix.MAX_CAPACITY);
+		
+		ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) range / TileMatrix.MAX_RANGE);
+		
+		TextBox box = TextBox.get(pageMain.getWidget("text_ssid2"));
+		if(isLoaded) {
+			ssid = tag.getString("ssid");
+			box.content = ssid;
+		} else {
+			box.content = "Not Loaded";
 		}
 	}
 	
@@ -157,7 +155,11 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 		
 		GL11.glPopMatrix();
+		
+		if(GameTimer.getTime() - syncedTime > 1200)
+			GuiMatrixSync.sendSyncRequest(this);
 	}
+	
 	
 	private void startWaiting() {
 		waitingForResult = true;
@@ -179,7 +181,6 @@ public class GuiMatrix extends LIGuiContainer {
 			checkCallback.updateCheckState();
 			
 			if(needSync) {
-				receivedSync = false;
 				GuiMatrixSync.sendSyncRequest(this);
 			}
 		}
@@ -267,7 +268,7 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 		
 		@GuiCallback
-		public void blackout(Widget w, FrameEvent event) {
+		public void frameUpdate(Widget w, FrameEvent event) {
 			
 		}
 		
@@ -277,14 +278,12 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		public SSIDCallback() {
 			pageSSID.regEventHandlerAtBegin(new FrameEventHandler() {
-
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
 					if(!pageMain.transform.doesListenKey) {
 						LIGui.drawBlackout();
 					}
 				}
-				
 			});
 		}
 		
@@ -333,6 +332,15 @@ public class GuiMatrix extends LIGuiContainer {
 			markBorder = pageCheck.getWidget("mark_check1");
 			markDrawer = pageCheck.getWidget("mark_check2");
 			info = pageCheck.getWidget("test_info");
+			
+			pageCheck.regEventHandlerAtBegin(new FrameEventHandler() {
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					if(!pageMain.transform.doesListenKey) {
+						LIGui.drawBlackout();
+					}
+				}
+			});
 		}
 		
 		public void updateCheckState() {

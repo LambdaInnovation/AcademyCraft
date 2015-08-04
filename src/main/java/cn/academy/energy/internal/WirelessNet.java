@@ -25,6 +25,7 @@ import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
+import cn.liutils.util.generic.MathUtils;
 
 /**
  * @author WeAthFolD
@@ -146,10 +147,18 @@ public class WirelessNet {
 	}
 	
 	boolean addNode(VWNode node, String password) {
-		
 		if(!password.equals(this.password))
 			return false;
 		if(getLoad() >= getCapacity())
+			return false;
+		
+		IWirelessMatrix imat = matrix.get(world);
+		if(imat == null) {
+			return false;
+		}
+		
+		double r = imat.getRange();
+		if(node.distSq(matrix) > r * r)
 			return false;
 		
 		WiWorldData data = getWorldData();
@@ -163,6 +172,16 @@ public class WirelessNet {
 		doAddNode(node);
 		
 		return true;
+	}
+	
+	boolean isInRange(int x, int y, int z) {
+		IWirelessMatrix imat = matrix.get(world);
+		if(imat == null) {
+			return false;
+		}
+		
+		double r = imat.getRange();
+		return MathUtils.distanceSq(x, y, z, matrix.x, matrix.y, matrix.z) <= r * r;
 	}
 	
 	private void doAddNode(VWNode node) {

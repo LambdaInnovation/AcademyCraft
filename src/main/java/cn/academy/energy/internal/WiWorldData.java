@@ -118,16 +118,11 @@ public class WiWorldData extends WorldSavedData {
 		return true;
 	}
 	
-	public Collection<WirelessNet> rangeSearch(double x, double y, double z, double range, int max) {
-		AxisAlignedBB aabb = 
-			AxisAlignedBB.getBoundingBox(
-				x - range,
-				y - range,
-				z - range,
-				x + range,
-				y + range,
-				z + range
-			);
+	public interface NetPredictate {
+		boolean accepts(WirelessNet net);
+	}
+	
+	public Collection<WirelessNet> rangeSearch(int x, int y, int z, double range, int max) {
 		Collection<BlockPos> bps = WorldUtils.getBlocksWithin(world, x, y, z, range, max, filterWirelessBlocks);
 		
 		Set<WirelessNet> set = new HashSet();
@@ -141,7 +136,7 @@ public class WiWorldData extends WorldSavedData {
 			} else {
 				throw new RuntimeException("Invalid TileEntity");
 			}
-			if(net != null) {
+			if(net != null && net.isInRange(x, y, z)) {
 				set.add(net);
 				if(set.size() >= max)
 					return set;

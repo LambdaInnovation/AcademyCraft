@@ -47,6 +47,7 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 		maxEnergy = _maxEnergy;
 		bandwidth = _bandwidth;
 		
+		setMaxStackSize(1);
 		setMaxDamage(13);
 	}
 	

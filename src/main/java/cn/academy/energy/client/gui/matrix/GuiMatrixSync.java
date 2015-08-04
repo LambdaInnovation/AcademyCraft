@@ -30,6 +30,7 @@ import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -60,6 +61,7 @@ public class GuiMatrixSync {
 
 	@SideOnly(Side.CLIENT)
 	public static void sendSyncRequest(GuiMatrix gui) {
+		gui.syncedTime = GameTimer.getTime();
 		receivedRequest(Minecraft.getMinecraft().thePlayer, gui.tile);
 	}
 	

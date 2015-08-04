@@ -12,19 +12,45 @@
  */
 package cn.academy.misc;
 
+import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
+import static net.minecraftforge.common.ChestGenHooks.MINESHAFT_CORRIDOR;
+import static net.minecraftforge.common.ChestGenHooks.PYRAMID_DESERT_CHEST;
+import static net.minecraftforge.common.ChestGenHooks.PYRAMID_JUNGLE_CHEST;
+import static net.minecraftforge.common.ChestGenHooks.STRONGHOLD_LIBRARY;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.misc.media.ItemMedia;
+import cn.academy.misc.media.MediaPlayer;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
+@RegInit
 public class ModuleMisc {
 	
 	@RegItem
 	public static ItemMedia itemMedia;
 
-	public static void init() {}
+	public static void init() {
+		String[] mediaApperance = {
+			MINESHAFT_CORRIDOR,
+			PYRAMID_DESERT_CHEST,
+			PYRAMID_JUNGLE_CHEST,
+			STRONGHOLD_LIBRARY,
+			DUNGEON_CHEST
+		};
+		
+		for(String s : mediaApperance) {
+			for(int i = 0; i < MediaPlayer.getMediaCount(); ++i) {
+				ItemStack stack = new ItemStack(itemMedia, 1, i);
+				ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+			}
+		}
+	}
 
 }

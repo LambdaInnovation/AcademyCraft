@@ -68,7 +68,7 @@ public class WirelessHelper {
 	}
 	
 	/**
-	 * Get a list off WirelessNet at the position within the given range.
+	 * Get a list of WirelessNet at the position within the given range.
 	 * @param world
 	 * @param x
 	 * @param y
@@ -77,7 +77,7 @@ public class WirelessHelper {
 	 * @param max
 	 * @return
 	 */
-	public static Collection<WirelessNet> getNetInRange(World world, double x, double y, double z, double range, int max) {
+	public static Collection<WirelessNet> getNetInRange(World world, int x, int y, int z, double range, int max) {
 		WiWorldData data = WiWorldData.get(world);
 		return data.rangeSearch(x, y, z, range, max);
 	}
