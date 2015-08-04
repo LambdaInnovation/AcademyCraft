@@ -67,6 +67,12 @@ public class ItemMedia extends ACItem {
     	}
     }
     
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int meta) {
+        return icons[meta];
+    }
+    
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
     	return StatCollector.translateToLocal(MediaPlayer.getMedia(stack.getItemDamage()).getDisplayName());

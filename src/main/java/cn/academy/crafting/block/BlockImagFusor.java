@@ -14,9 +14,12 @@ package cn.academy.crafting.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
@@ -29,13 +32,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: icon and animation
  * @author WeAthFolD
  */
 @Registrant
 public class BlockImagFusor extends ACBlockContainer {
 	
-	IIcon bottom, top, side_idle;
+	IIcon bottom, top, mside, side_idle;
 	IIcon[] side_working = new IIcon[4];
 
 	public BlockImagFusor() {
@@ -46,6 +48,7 @@ public class BlockImagFusor extends ACBlockContainer {
     public void registerBlockIcons(IIconRegister ir) {
     	bottom = ricon(ir, "machine_bottom");
     	top = ricon(ir, "machine_top");
+    	mside = ricon(ir, "machine_side");
     	side_idle = ricon(ir, "ief_off");
     	
     	for(int i = 0; i < 4; ++i) {
@@ -62,15 +65,25 @@ public class BlockImagFusor extends ACBlockContainer {
     		working = te.isWorking();
     	}
     	
-    	return getIcon(side, working);
+    	return getIcon(world.getBlockMetadata(x, y, z) & 3, side, working);
     }
     
     @Override
     public IIcon getIcon(int side, int meta) {
-    	return getIcon(side, false);
+    	return getIcon(meta & 3, side, false);
     }
     
-    private IIcon getIcon(int side, boolean working) {
+	@Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+    	int l = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+    	l = (l + 2) % 4;
+    	world.setBlockMetadataWithNotify(x, y, z, l, 0x03);
+    	System.out.println(l);
+	}
+	
+	static final int[] map = { 2, 0, 1, 3 };
+    
+    private IIcon getIcon(int dir, int side, boolean working) {
     	switch(side) {
     	case 0:
     		return bottom;
@@ -80,6 +93,7 @@ public class BlockImagFusor extends ACBlockContainer {
     	case 3:
     	case 4:
     	case 5:
+    		if(dir != (map[side - 2])) return this.mside;
     		if(!working) return side_idle;
     		return side_working[(int) ((GameTimer.getTime() / 400) % 4)];
     	default:
