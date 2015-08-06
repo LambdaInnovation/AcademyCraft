@@ -120,7 +120,6 @@ public class PresetData extends DataPart {
 	
 	public Preset getCurrentPreset() {
 		if(!isActive()) {
-			System.out.println("NOTACTIVE");
 			return null;
 		}
 		return locked ? specialPreset : presets[presetID];

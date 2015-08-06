@@ -29,6 +29,7 @@ import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 
 /**
+ * DEBUG COMMAND
  * @author WeAthFolD
  */
 @Registrant

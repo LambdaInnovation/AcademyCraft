@@ -93,7 +93,14 @@ public class MagManip extends Skill {
 					entity.fromItemStack(stack);
 					new Motion3D(player, true).applyToEntity(entity);
 					
-					player.worldObj.spawnEntityInWorld(entity);
+					if(entity.isAvailable()) {
+						if(!player.capabilities.isCreativeMode) {
+							if(--stack.stackSize == 0) {
+								player.setCurrentItemOrArmor(0, null);
+							}
+						}
+						player.worldObj.spawnEntityInWorld(entity);
+					}
 				}
 			}
 		}
@@ -118,7 +125,7 @@ public class MagManip extends Skill {
 		EntityPlayer player;
 		
 		public ManipEntityBlock(EntityPlayer _player) {
-			super(_player.worldObj);
+			super(_player);
 			player = _player;
 		}
 

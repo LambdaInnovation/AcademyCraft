@@ -19,22 +19,20 @@ import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.entity.EntityBlock;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
@@ -104,22 +102,31 @@ public class ShiftTeleport extends Skill {
 			if(isRemote) endEffects();
 			
 			if(!isRemote) {
-				Vec3 dest = getTraceDest();
+				MovingObjectPosition position = getTracePosition();
 				ItemStack stack = player.getCurrentEquippedItem();
 				Block block;
 				
-				if(stack != null && (block = Block.getBlockFromItem(stack.getItem())) != null
-						&& cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
-					EntityBlock entity = new STEntityBlock(player.worldObj);
-					entity.fromItemStack(stack);
-					entity.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+				if(stack != null && 
+				  stack.getItem() instanceof ItemBlock && 
+				  (block = Block.getBlockFromItem(stack.getItem())) != null &&
+				  cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
 					
+					ItemBlock item = (ItemBlock) stack.getItem();
+					item.placeBlockAt(stack, player, player.worldObj,
+							position.blockX, position.blockY, position.blockZ, position.sideHit, 
+							(float) position.hitVec.xCoord, (float) position.hitVec.yCoord, (float) position.hitVec.zCoord, 
+							stack.getItemDamage());
+					if(!player.capabilities.isCreativeMode) {
+						if(--stack.stackSize == 0) {
+							player.setCurrentItemOrArmor(0, null);
+						}
+					}
+				
 					List<Entity> list = getTargetsInLine();
 					for(Entity target : list) {
 						TPAttackHelper.attack(player, instance, target, getDamage(aData));
 					}
 					
-					player.worldObj.spawnEntityInWorld(entity);
 					player.worldObj.playSoundAtEntity(player, "academy:tp.tp", 0.5f, 1f);
 					aData.addSkillExp(instance, getExpIncr(list.size()));
 					
@@ -132,19 +139,39 @@ public class ShiftTeleport extends Skill {
 			}
 		}
 		
-		private Vec3 getTraceDest() {
+		// TODO: Some boilerplate... Clean this up in case you aren't busy
+		private int[] getTraceDest() {
 			double range = getRange(aData);
 			MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
-			if(result != null)
-				return result.hitVec;
-			return new Motion3D(player, true).move(range).getPosVec();
+			if(result != null) {
+				ForgeDirection dir = ForgeDirection.values()[result.sideHit];
+				return new int[] { result.blockX + dir.offsetX, result.blockY + dir.offsetY, result.blockZ + dir.offsetZ };
+			}
+			Motion3D mo = new Motion3D(player, true).move(range);
+			return new int[] { (int) mo.px, (int) mo.py, (int) mo.pz };
+		}
+		
+		private MovingObjectPosition getTracePosition() {
+			double range = getRange(aData);
+			MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+			if(result != null) {
+				ForgeDirection dir = ForgeDirection.values()[result.sideHit];
+				result.blockX += dir.offsetX;
+				result.blockY += dir.offsetY;
+				result.blockZ += dir.offsetZ;
+				return result;
+			}
+			Motion3D mo = new Motion3D(player, true).move(range);
+			return new MovingObjectPosition((int) mo.px, (int) mo.py, (int) mo.pz, 0, 
+					VecUtils.vec(mo.px, mo.py, mo.pz));
 		}
 		
 		private List<Entity> getTargetsInLine() {
 			double range = getRange(aData);
-			Vec3 v0 = VecUtils.vec(player.posX, player.posY, player.posZ), v1 = getTraceDest();
+			int[] dest = getTraceDest();
+			Vec3 v0 = VecUtils.vec(player.posX, player.posY, player.posZ), v1 = VecUtils.vec(dest[0] + .5, dest[1] + .5, dest[2] + .5);
 			
-			AxisAlignedBB area = WorldUtils.ofPoints(VecUtils.vec(player.posX, player.posY, player.posZ), getTraceDest());
+			AxisAlignedBB area = WorldUtils.ofPoints(v0, v1);
 			IEntitySelector selector = new IEntitySelector() {
 
 				@Override
@@ -202,8 +229,8 @@ public class ShiftTeleport extends Skill {
 					}
 				}
 				
-				Vec3 dest = getTraceDest();
-				blockMarker.setPosition(dest.xCoord, dest.yCoord - 0.2, dest.zCoord);
+				int[] dest = getTraceDest();
+				blockMarker.setPosition(dest[0] + 0.5, dest[1], dest[2] + 0.5);
 			}
 		}
 		
@@ -217,19 +244,4 @@ public class ShiftTeleport extends Skill {
 		}
 		
 	}
-	
-	@RegEntity
-	public static class STEntityBlock extends EntityBlock {
-		
-		public STEntityBlock(World world) {
-			super(world);
-		}
-		
-		{
-			Rigidbody rb = getMotionHandler(Rigidbody.class);
-			rb.gravity = 0.04;
-		}
-		
-	}
-
 }

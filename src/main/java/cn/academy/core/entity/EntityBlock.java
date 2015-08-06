@@ -14,10 +14,14 @@ package cn.academy.core.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraft;
@@ -31,6 +35,7 @@ import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.entityx.event.CollideEvent.CollideHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
+import cn.liutils.template.block.BlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -53,10 +58,12 @@ public class EntityBlock extends EntityAdvanced {
 	/**
 	 * Create an EntityBlock from the block given in the coordinate.
 	 * DOESN't set the coordinate, do it yourself!
+	 * @return An setup entity block, or null if convert failed.
 	 */
 	public static EntityBlock convert(World world, int x, int y, int z) {
 		EntityBlock ret = new EntityBlock(world);
-		ret.setBlock(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+		if(!ret.setBlock(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z)))
+			return null;
 		ret.setTileEntity(world.getTileEntity(x, y, z));
 		return ret;
 	}
@@ -69,10 +76,22 @@ public class EntityBlock extends EntityAdvanced {
 	
 	// other
 	public boolean placeWhenCollide = true;
+	
+	EntityPlayer player;
+	
+	/**
+	 * Server ctor. We use a player parameter to forge the ItemBlock#placeBlockAt function's parameter.
+	 */
+	public EntityBlock(EntityPlayer _player) {
+		this(_player.worldObj);
+		player = _player;
+	}
 
 	public EntityBlock(World world) {
 		super(world);
-		this.addMotionHandler(new Rigidbody());
+		Rigidbody rb = new Rigidbody();
+		rb.accurateCollision = true;
+		this.addMotionHandler(rb);
 		ignoreFrustumCheck = true;
 	}
 	
@@ -119,7 +138,12 @@ public class EntityBlock extends EntityAdvanced {
 							ty += dir.offsetY;
 							tz += dir.offsetZ;
 						}
-						worldObj.setBlock(tx, ty, tz, block, metadata, 0x03);
+						
+						Vec3 vec = event.result.hitVec;
+						((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
+							new ItemStack(block, 0, metadata), player, worldObj, tx, ty, tz, event.result.sideHit, 
+							(float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord, metadata);
+						
 						setDead();
 					}
 				}
@@ -139,14 +163,21 @@ public class EntityBlock extends EntityAdvanced {
 			}
 		}
 	}
+	
+	public boolean isAvailable() {
+		return block != null;
+	}
 
 	public void setBlock(Block _block) {
 		block = _block;
 	}
 	
-	public void setBlock(Block _block, int _metadata) {
+	public boolean setBlock(Block _block, int _metadata) {
+		if(Item.getItemFromBlock(_block) == null)
+			return false;
 		block = _block;
 		metadata = _metadata;
+		return true;
 	}
 	
 	public void fromItemStack(ItemStack stack) {
