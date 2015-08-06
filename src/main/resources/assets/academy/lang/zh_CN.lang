@@ -66,8 +66,8 @@ tile.ac_phase_generator.name=虚相位能量发生机
 tile.ac_windgen_base.name=风力能量发生器 - 支架底座
 tile.ac_windgen_pillar.name=风力能量发生器 - 支架
 tile.ac_windgen_main.name=风力能量发生器 - 主机
-tile.ac_eu_output.name=能源桥（IC2 EU输出）
-tile.ac_eu_input.name=能源桥（IC2 EU输入）
+tile.ac_eu_output.name=能源桥 (IC2 EU输出) 
+tile.ac_eu_input.name=能源桥 (IC2 EU输入) 
 tile.ac_developer.name=能力开发机
 tile.ac_machine_frame.name=机械框架
 
