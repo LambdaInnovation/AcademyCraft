@@ -121,25 +121,31 @@ public class ClientController {
     
     @SubscribeEvent
     public void changePreset(PresetSwitchEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
+    	checkOverrides(event.player);
     }
     
     @SubscribeEvent
     public void editPreset(PresetUpdateEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
+    	checkOverrides(event.player);
     }
     
     @SubscribeEvent
     public void activate(AbilityActivateEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-    		rebuildOverrides();
+    	checkOverrides(event.player);
     }
     
     @SubscribeEvent
     public void deactivate(AbilityDeactivateEvent event) {
-    	if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    	checkOverrides(event.player);
+    }
+    
+    @SubscribeEvent
+    public void changeCategory(AbilityActivateEvent event) {
+    	checkOverrides(event.player);
+    }
+    
+    private void checkOverrides(EntityPlayer player) {
+    	if(player.worldObj.isRemote)
     		rebuildOverrides();
     }
     
@@ -155,12 +161,13 @@ public class ClientController {
     		for(int i : lastOverrides)
     			ControlOverrider.removeOverride(i);
     	}
-    	
+    	//System.out.println("{");
     	if(cpData.isActivated()) {
+    		//System.out.println("	IsActivated");
 	    	Preset preset = pdata.getCurrentPreset();
 	    	if(preset != null) {
 	    		List<Integer> list = new ArrayList();
-	    		
+	    		//System.out.println("	NotNull");
 		    	for(int i = 0; i < MAX_KEYS; ++i) {
 		    		if(preset.hasMapping(i)) {
 		    			Controllable c = preset.getControllable(i);
@@ -174,8 +181,9 @@ public class ClientController {
 		    	}
 		    	
 		    	lastOverrides = list.toArray(new Integer[] {});
+	    	}
     	}
-    	}
+    	//System.out.println("}");
     }
     
     static class AbilityKey extends KeyHandler {

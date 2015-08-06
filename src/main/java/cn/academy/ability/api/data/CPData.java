@@ -343,7 +343,7 @@ public class CPData extends DataPart {
 		
 		canUseAbility = tag.getBoolean("B");
 		
-		if(isRemote() && isSynced()) {
+		if(isRemote()) {
 			if(lastActivated ^ activated) {
 				MinecraftForge.EVENT_BUS.post(activated ? 
 					new AbilityActivateEvent(getPlayer()) :

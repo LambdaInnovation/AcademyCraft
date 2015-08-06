@@ -217,6 +217,8 @@ public class AbilityData extends DataPart {
 	public void fromNBT(NBTTagCompound tag) {
 		catID = tag.getByte("c");
 		
+		int lastcat = catID;
+		
 		byte[] arr = tag.getByteArray("l");
 		if(arr.length != 0)
 			learnedSkills = BitSet.valueOf(arr);
@@ -229,6 +231,10 @@ public class AbilityData extends DataPart {
 			for(int i = 0; i < c.getSkillCount(); ++i) {
 				skillExps[i] = list.func_150308_e(i);
 			}
+		}
+		
+		if(lastcat != catID) {
+			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
 		}
 	}
 
