@@ -21,7 +21,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -31,8 +30,8 @@ import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.entity.EntityBlock;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.handlers.Rigidbody;
@@ -59,6 +58,10 @@ public class ShiftTeleport extends Skill {
 	public ShiftTeleport() {
 		super("shift_tp", 4);
 		instance = this;
+	}
+	
+	static float getExpIncr(int attackEntities) {
+		return instance.getFunc("expincr").callFloat(attackEntities);
 	}
 	
 	public static float getDamage(AbilityData data) {
@@ -113,11 +116,12 @@ public class ShiftTeleport extends Skill {
 					
 					List<Entity> list = getTargetsInLine();
 					for(Entity target : list) {
-						DamageHelper.attack(target, DamageSource.causePlayerDamage(player), getDamage(aData));
+						TPAttackHelper.attack(player, instance, target, getDamage(aData));
 					}
 					
 					player.worldObj.spawnEntityInWorld(entity);
 					player.worldObj.playSoundAtEntity(player, "academy:tp.tp", 0.5f, 1f);
+					aData.addSkillExp(instance, getExpIncr(list.size()));
 					
 					if(!player.capabilities.isCreativeMode) {
 						if(stack.stackSize-- == 0) {

@@ -190,6 +190,10 @@ public class AcademyCraft {
     
     public static double getInt(String name) {
     	return script.root.getInteger("ac." + name);
-    }    
+    }   
+    
+    public static float getFloat(String name) {
+    	return script.root.getFloat("ac." + name);
+    }
 
 }

@@ -301,6 +301,9 @@ public class CPData extends DataPart {
 		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
 			"ability.maxo", getFunc("init_overload").callFloat(data.getLevel()), getPlayer());
 		
+		currentCP = MathUtils.wrapf(0, maxCP, currentCP);
+		overload = MathUtils.wrapf(0, maxOverload, overload);
+		
 		if(!isRemote())
 			sync();
 		
@@ -397,16 +400,7 @@ public class CPData extends DataPart {
 		@SubscribeEvent
 		public void changedLevel(LevelChangeEvent event) {
 			CPData cpData = CPData.get(event.player);
-			AbilityData aData = AbilityData.get(event.player);
-			
-			cpData.maxCP = getFunc("init_cp").callFloat(aData.getLevel());
-			cpData.maxOverload = getFunc("init_overload").callFloat(aData.getLevel());
-			
-			cpData.currentCP = MathUtils.wrapf(0, cpData.maxCP, cpData.currentCP);
-			cpData.overload = MathUtils.wrapf(0, cpData.maxOverload, cpData.overload);
-			
-			if(!aData.isRemote())
-				cpData.sync();
+			cpData.recalcMaxValue();
 		}
 		
 	}

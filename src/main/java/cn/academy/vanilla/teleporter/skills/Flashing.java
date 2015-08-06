@@ -172,6 +172,7 @@ public class Flashing extends SpecialSkill {
 				player.fallDistance = 0.0f;
 				
 				cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+				aData.addSkillExp(instance, instance.getFloat("expincr"));
 			} else {
 				Cooldown.setCooldown(movement, 5);
 			}

@@ -36,6 +36,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class LocationTeleport extends Skill {
 	
 	static LocationTeleport instance;
+	static IEntitySelector basicSelector = EntitySelectors.combine(EntitySelectors.living, new IEntitySelector() {
+
+		@Override
+		public boolean isEntityApplicable(Entity entity) {
+			return entity.width * entity.width * entity.height < 80f;
+		}
+		
+	});
 
 	public LocationTeleport() {
 		super("location_teleport", 3);
@@ -73,9 +81,6 @@ public class LocationTeleport extends Skill {
 			}
 		};
 	}
-	
-	//NOTE: Currently all of the methods doesn't check player category.
-	// Might this cause issues? 
 	
 	/**
 	 * Determine whether player can record the current location.
@@ -121,9 +126,9 @@ public class LocationTeleport extends Skill {
 		CPData cpData = CPData.get(player);
 		
 		if(cpData.perform(getOverload(player), getConsumption(player, dest))) {
-			//TODO Filter entities
 			List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5, 
-					EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living));
+				EntitySelectors.combine(
+					EntitySelectors.excludeOf(player), basicSelector));
 			entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
 			
 			if(player.worldObj.provider.dimensionId != dest.dimension) {
@@ -138,6 +143,9 @@ public class LocationTeleport extends Skill {
 				e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz);
 			}
 			player.setPositionAndUpdate(dest.x, dest.y, dest.z);
+			
+			double dist = player.getDistance(dest.x, dest.y, dest.z);
+			aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(dist));
 		}
 	}
 

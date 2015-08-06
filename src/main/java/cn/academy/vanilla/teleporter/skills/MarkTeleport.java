@@ -53,7 +53,7 @@ public class MarkTeleport extends Skill {
 	}
 	
 	public static double getMaxDist(AbilityData data, CPData cpData, int ticks) {
-		double max = 20.0;
+		double max = instance.callFloatWithExp("range", data);
 		double cplim = cpData.getCP() / getCPB(data);
 		
 		return Math.min((ticks + 1) * 2, Math.min(max, cplim));
@@ -63,19 +63,11 @@ public class MarkTeleport extends Skill {
 	 * @return Consumption per block
 	 */
 	public static float getCPB(AbilityData data) {
-		return 100.0f;
-	}
-	
-	/**
-	 * @return Overload per block
-	 */
-	public static float getOPB(AbilityData data) {
-		return 1.0f;
+		return instance.getConsumption(data);
 	}
 	
 	private static Vec3 getDest(EntityPlayer player, int ticks) {
 		double dist = getMaxDist(AbilityData.get(player), CPData.get(player), ticks);
-		System.out.println(dist);
 		MovingObjectPosition mop = Raytrace.traceLiving(player, dist);
 		
 		double x, y, z;
@@ -129,8 +121,9 @@ public class MarkTeleport extends Skill {
 		return new SkillInstance() { 
 			@Override
 			public void onTick() {
-				if(action.mark == null)
+				if(action.mark == null) {
 					return;
+				}
 				
 				float distance = (float) MathUtils.distance(
 					action.mark.posX, action.mark.posY, action.mark.posZ,
@@ -190,10 +183,11 @@ public class MarkTeleport extends Skill {
 				;
 			} else {
 			
-				cpData.performWithForce(distance * getOPB(aData), distance * getCPB(aData));
+				cpData.performWithForce(instance.getOverload(aData), distance * getCPB(aData));
 				
 				if(!isRemote) {
 					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+					aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
 				} else {
 					ACSounds.playAtEntityClient(player, "tp.tp", .5f);
 				}
@@ -225,13 +219,14 @@ public class MarkTeleport extends Skill {
 		@SideOnly(Side.CLIENT)
 		private void updateEffects(Vec3 dest) {
 			if(isLocal()) {
+				System.out.println(this);
 				mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
 			}
 		}
 		
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
-			if(mark != null)
+			if(isLocal())
 				mark.setDead();
 		}
 		

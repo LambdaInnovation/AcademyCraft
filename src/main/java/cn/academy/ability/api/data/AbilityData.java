@@ -73,6 +73,10 @@ public class AbilityData extends DataPart {
 				setLevel(0);
 			}
 			
+			for(int i = 0; i < skillExps.length; ++i)
+				skillExps[i] = 0.0f;
+			learnedSkills.set(0, learnedSkills.size(), false);
+			
 			if(!isRemote())
 				sync();
 			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
@@ -168,6 +172,8 @@ public class AbilityData extends DataPart {
 	
 	public void addSkillExp(Skill skill, float amt) {
 		if(skill.getCategory() == getCategory()) {
+			System.out.println("AddSkillExp " + amt);
+			learnSkill(skill);
 			skillExps[skill.getID()] += amt;
 			if(skillExps[skill.getID()] > 1.0f)
 				skillExps[skill.getID()] = 1.0f;

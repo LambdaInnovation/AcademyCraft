@@ -160,9 +160,8 @@ public class PenetrateTeleport extends Skill {
 				player.setPosition(x, y, z);
 				ACSounds.playAtEntityClient(player, "tp.tp", .5f);
 			} else {
-				float cp = (float) (distance * instance.getConsumption(aData));
-				float overload = (float) (distance * instance.getOverload(aData));
-				cpData.performWithForce(overload, cp);
+				cpData.performWithForce(instance.getOverload(aData), (float) (distance * instance.getConsumption(aData)));
+				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
 				
 				player.setPositionAndUpdate(x, y, z);
 			}

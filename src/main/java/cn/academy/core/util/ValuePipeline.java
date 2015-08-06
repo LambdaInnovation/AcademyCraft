@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.academy.core.AcademyCraft;
+import cn.liutils.util.generic.DebugUtils;
 
 /**
  * ValuePipeline receives value as input and returns the same type of value as output.
@@ -76,6 +77,7 @@ public class ValuePipeline {
 	private class Rule {
 		
 		List<RuleNode> rules = new ArrayList();
+		String _str;
 		
 		public Rule(String str) {
 			// Parse the str in the ctor
@@ -87,6 +89,7 @@ public class ValuePipeline {
 					rules.add(new NodeKeyword(s));
 				}
 			}
+			_str = str;
 		}
 		
 		public boolean matches(String[] input) {
@@ -125,7 +128,8 @@ public class ValuePipeline {
 		int last = 0;
 		for(int i = 0; i < str.length(); ++i) {
 			char ch = str.charAt(i);
-			if(ch == '.') {
+			if(ch == '.' || i == str.length() - 1) {
+				if(i == str.length() - 1) i += 1;
 				if(i == last) {
 					throw new RuntimeException("Invalid pattern");
 				}
@@ -174,15 +178,24 @@ public class ValuePipeline {
 				if(sv.rule.matches(kwds))
 					list.add(sv);
 			}
+			
+//			System.out.println("Build list for " + key + ", visitors: {");
+//			for(SubscriberVisitor v : list) {
+//				System.out.println("\t" + v.object.getClass().getName() + "/" + v.theMethod.getName());
+//			}
+//			System.out.println("}");
 		}
 		
 		if(list.size() == 0)
 			return value;
 		
+		//System.out.print("['" + key + "' " + value + " ");
 		Object[] args = buildParArr(value, pars);
 		for(SubscriberVisitor visitor : list) {
 			value = visitor.pipe(args);
+			//System.out.print("-(" + visitor.theMethod.getName() + ")>" + value + " ");
 		}
+		//System.out.print("]\n");
 		
 		return value;
 	}

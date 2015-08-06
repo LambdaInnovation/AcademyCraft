@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import cn.academy.ability.api.Skill;
@@ -26,9 +25,9 @@ import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
@@ -54,6 +53,10 @@ public class ThreateningTeleport extends Skill {
 	
 	public static float getRange(AbilityData data) {
 		return instance.callFloatWithExp("range", data);
+	}
+	
+	public static float getExpIncr(boolean attacked) {
+		return (attacked ? 1 : 0.2f) * instance.getFloat("expincr");
 	}
 	
 	public static float getDamage(AbilityData data, ItemStack stack) {
@@ -114,14 +117,17 @@ public class ThreateningTeleport extends Skill {
 				attacked = true;
 				TraceResult result = calcDropPos();
 				
-				double dropProb = 1.0;
-				if(result.target != null) {
-					DamageHelper.attack(result.target, 
-						DamageSource.causePlayerDamage(player), getDamage(aData, curStack));
-					dropProb = 0.3;
-				}
-				
 				if(!isRemote) {
+					double dropProb = 1.0;
+					boolean attacked = false;
+					
+					if(result.target != null) {
+						attacked = true;
+						TPAttackHelper.attack(player, instance, result.target, getDamage(aData, curStack));
+						
+						dropProb = 0.3;
+					}
+					
 					if(!player.capabilities.isCreativeMode) {
 						if(--curStack.stackSize == 0) {
 							player.setCurrentItemOrArmor(0, null);
@@ -134,6 +140,8 @@ public class ThreateningTeleport extends Skill {
 						player.worldObj.spawnEntityInWorld(
 							new EntityItem(player.worldObj, result.x, result.y, result.z, drop));
 					}
+					
+					aData.addSkillExp(instance, getExpIncr(attacked));
 				}
 			}
 			

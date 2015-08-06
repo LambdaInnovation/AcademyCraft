@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
@@ -27,9 +26,9 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.teleporter.entity.EntityBloodSplash;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
@@ -113,13 +112,13 @@ public class FleshRipping extends Skill {
 				if(!isRemote) {
 					cpData.performWithForce(instance.getOverload(aData), 
 							instance.getConsumption(aData));
-					DamageHelper.attack(target.target, DamageSource.causePlayerDamage(player), getDamage(aData));
+					TPAttackHelper.attack(player, instance, target.target, getDamage(aData));
 					if(RandUtils.ranged(0, 1) < getDisgustProb()) {
 						player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					
-					aData.addSkillExp(instance, 0.002f);
 					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}
 		}

@@ -15,11 +15,16 @@ package cn.academy.vanilla.teleporter;
 import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.skills.*;
+import cn.academy.vanilla.teleporter.passiveskills.*;
 
 /**
  * @author WeAthFolD
  */
 public class CatTeleporter extends Category {
+	
+	public static DimFoldingTheoreom dimFolding;
+	
+	public static SpaceFluctuation spaceFluct;
 
 	public static MarkTeleport markTP;
 	
@@ -42,11 +47,15 @@ public class CatTeleporter extends Category {
 		this.defineTypes("default", "passive");
 		
 		this.addSkill("default", markTP = new MarkTeleport());
+		this.addSkill("passive", dimFolding = new DimFoldingTheoreom());
+		
 		this.addSkill("default", locTP = new LocationTeleport());
 		this.addSkill("default", penetrateTP = new PenetrateTeleport());
 		this.addSkill("default", threateningTP = new ThreateningTeleport());
 		this.addSkill("default", shiftTP = new ShiftTeleport());
 		this.addSkill("default", fleshRipping = new FleshRipping());
+		
+		this.addSkill("passive", spaceFluct = new SpaceFluctuation());
 		this.addSkill("default", flashing = new Flashing());
 		
 		ModuleVanilla.addGenericSkills(this);

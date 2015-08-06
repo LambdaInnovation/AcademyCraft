@@ -137,6 +137,8 @@ public class CPBar extends Widget {
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				CPData cpData = CPData.get(player);
 				
+				//System.out.println("chProvider: "+ chProvider);
+				
 				// Calculate alpha
 				long time = GameTimer.getTime();
 				if(time - lastDrawTime > 300L) {
@@ -173,7 +175,7 @@ public class CPBar extends Widget {
 						
 						float estmCons = chProvider == null ? 0 : chProvider.getConsumption() * 
 							(cpData.isOverloaded() ? cpData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
-						
+						//System.out.println(chProvider + "/" + estmCons);
 						if(estmCons != 0) {
 							float ncp = Math.max(0, cpData.getCP() - estmCons);
 							
