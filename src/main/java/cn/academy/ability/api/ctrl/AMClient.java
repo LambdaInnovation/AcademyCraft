@@ -47,6 +47,7 @@ public class AMClient implements IActionManager {
 	public void startAction(SyncAction action) {
 		//System.out.println("AMC#INT_START");
 		action.player = Minecraft.getMinecraft().thePlayer;
+		map.put(action.uuid, action);
 		NBTTagCompound tag = action.getNBTStart();
 		ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag);
 	}
@@ -81,25 +82,22 @@ public class AMClient implements IActionManager {
 	@SideOnly(Side.CLIENT)
 	void startFromServer(EntityPlayer player, String className, NBTTagCompound tag) {
 		//System.out.println("AMC#NET_START");
-		SyncAction action = null;
-		try {
-			action = (SyncAction) Class.forName(className).newInstance();
-			action.setNBTStart(tag);
-			action.player = player;
-			if (action.uuid != null) {
-				if (!map.containsKey(action.uuid)) {
-					map.put(action.uuid, action);
-					if (player != null && player.equals(Minecraft.getMinecraft().thePlayer))
-						set.add(action.uuid);
-					action.start();
-				}
-				else
-					AcademyCraft.log.warn("An action with UUID(" + action.uuid + ") has already existed!");
+		SyncAction action = map.get(SyncAction.getUUIDFromNBT(tag));
+		if (action == null)
+			try {
+				action = (SyncAction) Class.forName(className).newInstance();
+				action.player = player;
+				action.setNBTStart(tag);
+				map.put(action.uuid, action);
 			}
-		}
-		catch (Throwable e) {
-			AcademyCraft.log.error("Failed to start an action", e);
-		}
+			catch (Throwable e) {
+				AcademyCraft.log.error("Failed to create an action", e);
+			}
+		else
+			action.setNBTStart(tag);
+		if (player != null && player.equals(Minecraft.getMinecraft().thePlayer))
+			set.add(action.uuid);
+		action.start();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -135,7 +133,7 @@ public class AMClient implements IActionManager {
 			SyncAction action = i.next();
 			switch (action.getState()) {
 			case CREATED:
-				throw new IllegalStateException();
+				break;
 			case STARTED:
 				action.onTick();
 				break;

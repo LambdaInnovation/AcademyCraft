@@ -98,7 +98,7 @@ public class AMServer implements IActionManager {
 			return true;
 		}
 		catch (Throwable e) {
-			AcademyCraft.log.error("Failed to start an action", e);
+			AcademyCraft.log.error("Failed to create an action", e);
 			return false;
 		}
 	}
