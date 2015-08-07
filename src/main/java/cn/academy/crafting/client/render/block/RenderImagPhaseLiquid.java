@@ -57,11 +57,13 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
 		
 		BlockFluidClassic liq = (BlockFluidClassic) te.getBlockType();
 		double distSq = Minecraft.getMinecraft().thePlayer.getDistanceSq(te.xCoord + .5, te.yCoord + .5, te.zCoord + .5);
-		double alpha = 1 / (1 + 0.2 * Math.pow(distSq, 0.2));
+		double alpha = 1 / (1 + 0.2 * Math.pow(distSq, 0.5));
 		
 		if(alpha < 1E-1)
 			return;
 		
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
     	

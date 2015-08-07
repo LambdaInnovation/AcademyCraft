@@ -22,8 +22,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.mc.WorldUtils;
@@ -99,6 +102,15 @@ public class DamageHelper {
 		if(e instanceof EntityPlayer && !ATTACK_PLAYER)
 			return;
 		e.attackEntityFrom(src, damage);
+	}
+	
+	@RegEventHandler(Bus.Forge)
+	public static class Events {
+		@SubscribeEvent
+		public void onBlockDestroy(BlockDestroyEvent event) {
+			if(!DESTROY_BLOCKS)
+				event.setCanceled(true);
+		}
 	}
 	
 }
