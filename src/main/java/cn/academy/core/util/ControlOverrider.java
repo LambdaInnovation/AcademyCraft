@@ -63,6 +63,7 @@ public class ControlOverrider {
 		    modifiersField.setAccessible(true);
 		    modifiersField.setInt(kbMapField, kbMapField.getModifiers() & (~Modifier.FINAL));
 		} catch(Exception e) {
+			error("init", e);
 			e.printStackTrace();
 		}
 	}
@@ -82,6 +83,7 @@ public class ControlOverrider {
 		try {
 			return (IntHashMap) kbMapField.get(null);
 		} catch (Exception e) {
+			error("getOriginalKbMap", e);
 			e.printStackTrace();
 			return null;
 		}
@@ -105,8 +107,7 @@ public class ControlOverrider {
 			createCopy(kbMap, getOriginalKbMap());
 			kbMap = getOriginalKbMap();
 		} else {
-			AcademyCraft.log.error("Try to stop complete override while not overriding at all");
-			Thread.dumpStack();
+			error("Try to stop complete override while not overriding at all", new RuntimeException());
 		}
 	}
 	// SUPERHACKTECH Ends
@@ -117,7 +118,7 @@ public class ControlOverrider {
 			if(activeOverrides.get(keyID).count > 100)
 				AcademyCraft.log.warn("Over 100 override locks for " + 
 						keyID + ". Might be a programming error?");
-			System.out.println("Override increment " + "[" + keyID + "]" + activeOverrides.get(keyID).count);
+			log("Override increment " + "[" + keyID + "]" + activeOverrides.get(keyID).count);
 			return;
 		}
 		
@@ -130,9 +131,9 @@ public class ControlOverrider {
 			}
 			//kb.setKeyCode(-1);
 			activeOverrides.put(keyID, new Override(kb));
-			System.out.println("Override new [" + keyID + "]");
+			log("Override new [" + keyID + "]");
 		} else {
-			System.out.println("Override ignored [" + keyID + "]");
+			log("Override ignored [" + keyID + "]");
 		}
 	}
 	
@@ -144,14 +145,14 @@ public class ControlOverrider {
 		if(ovr.count > 1) {
 			ovr.count--;
 			
-			System.out.println("Override decrement [" + keyID + "]" + ovr.count);
+			log("Override decrement [" + keyID + "]" + ovr.count);
 		} else {
 			activeOverrides.remove(keyID);
 			
 			ovr.kb.setKeyCode(keyID);
 			kbMap.addKey(keyID, ovr.kb);
 			
-			System.out.println("Override remove [" + keyID + "]");
+			log("Override remove [" + keyID + "]");
 		}
 	}
 	
@@ -183,6 +184,15 @@ public class ControlOverrider {
 			restoreLocks();
 		}
 		lastTickGui = cgs;
+	}
+	
+	private static void log(String s) {
+		if(AcademyCraft.DEBUG_MODE)
+			AcademyCraft.log.info(s);
+	}
+	
+	private static void error(String s, Exception e) {
+		AcademyCraft.log.error("ControlOverrider error: " + s, e);
 	}
 	
 	private static class Override {
