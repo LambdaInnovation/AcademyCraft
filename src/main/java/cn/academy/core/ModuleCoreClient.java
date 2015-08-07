@@ -55,7 +55,8 @@ public class ModuleCoreClient {
 		
 		@SubscribeEvent
 		public void onConfigModified(ConfigModifyEvent event) {
-			resetBindingKey(event.property.getName(), event.property.getInt());
+			if(event.property.isIntValue())
+				resetBindingKey(event.property.getName(), event.property.getInt());
 		}
 		
 		@Override
