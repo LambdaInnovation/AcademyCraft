@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.misc.media.ItemMedia;
-import cn.academy.misc.media.MediaPlayer;
+import cn.academy.misc.media.MediaRegistry;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
@@ -46,7 +46,7 @@ public class ModuleMisc {
 		};
 		
 		for(String s : mediaApperance) {
-			for(int i = 0; i < MediaPlayer.getMediaCount(); ++i) {
+			for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
 				ItemStack stack = new ItemStack(itemMedia, 1, i);
 				ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
 			}

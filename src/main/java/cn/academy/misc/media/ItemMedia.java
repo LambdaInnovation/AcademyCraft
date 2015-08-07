@@ -47,12 +47,12 @@ public class ItemMedia extends ACItem {
 			int mID = stack.getItemDamage();
 			
 			if(data.isMediaInstalled(mID)) {
-				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaPlayer.getMedia(mID).getName()));
+				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getName()));
 			} else {
 				data.installMedia(mID);
 				if(!player.capabilities.isCreativeMode)
 					stack.stackSize--;
-				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaPlayer.getMedia(mID).getName()));
+				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getName()));
 			}
 		}
         return stack;
@@ -61,9 +61,9 @@ public class ItemMedia extends ACItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerIcons(IIconRegister ir) {
-    	icons = new IIcon[MediaPlayer.getMediaCount()];
-    	for(int i = 0; i < MediaPlayer.getMediaCount(); ++i) {
-    		icons[i] = ir.registerIcon("academy:media_" + MediaPlayer.getMedia(i).name);
+    	icons = new IIcon[MediaRegistry.getMediaCount()];
+    	for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
+    		icons[i] = ir.registerIcon("academy:media_" + MediaRegistry.getMedia(i).name);
     	}
     }
     
@@ -75,19 +75,19 @@ public class ItemMedia extends ACItem {
     
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-    	return StatCollector.translateToLocal(MediaPlayer.getMedia(stack.getItemDamage()).getDisplayName());
+    	return StatCollector.translateToLocal(MediaRegistry.getMedia(stack.getItemDamage()).getDisplayName());
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-    	list.add(MediaPlayer.getMedia(stack.getItemDamage()).getDesc());
+    	list.add(MediaRegistry.getMedia(stack.getItemDamage()).getDesc());
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for(int i = 0; i < MediaPlayer.getMediaCount(); ++i) {
+        for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
         	list.add(new ItemStack(this, 1, i));
         }
     }

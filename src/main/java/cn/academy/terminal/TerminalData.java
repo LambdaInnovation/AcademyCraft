@@ -55,6 +55,14 @@ public class TerminalData extends DataPart {
 		return ImmutableList.copyOf(installedList);
 	}
 	
+	public boolean isInstalled(int appid) {
+		return installedList.contains(appid);
+	}
+	
+	public boolean isInstalled(App app) {
+		return isInstalled(app.getID());
+	}
+	
 	public boolean isTerminalInstalled() {
 		return isInstalled;
 	}
@@ -84,6 +92,10 @@ public class TerminalData extends DataPart {
 			}
 			
 		}));
+	}
+	
+	public void installApp(App app) {
+		installApp(app.getID());
 	}
 	
 	/**

@@ -16,7 +16,7 @@ public class WorldGenPhaseLiq extends WorldGenerator {
     private Block theBlock;
 
     public WorldGenPhaseLiq() {
-        this.theBlock = ModuleEnergy.imagPhase;
+        this.theBlock = ModuleCrafting.imagPhase;
     }
 
     public boolean generate(World world, Random random, int x, int y, int z) {

@@ -179,7 +179,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     
     private boolean isPhaseLiquid(ItemStack stack) {
     	return stack.getItem() == ModuleCrafting.matterUnit && 
-    			ModuleCrafting.matterUnit.getMaterial(stack) == ModuleEnergy.imagPhase.mat;
+    			ModuleCrafting.matterUnit.getMaterial(stack) == ModuleCrafting.imagPhase.mat;
     }
     
     private boolean isOutputSlotAvailable() {

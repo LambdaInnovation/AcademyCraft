@@ -40,8 +40,8 @@ public class ContainerPhaseGen extends Container {
 	}
 	
 	private void initInventory() {
-		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, SLOT_LIQUID_IN, 15, 4));
-		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, SLOT_LIQUID_OUT, 81, 44));
+		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 15, 4));
+		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 81, 44));
         this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 78, 71));
         
         InventoryPlayer inv = player.inventory;
@@ -72,7 +72,7 @@ public class ContainerPhaseGen extends Container {
                 if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
                     return null;
             } else { 
-            	if (ModuleCrafting.matterUnit.getMaterial(stack1) != ModuleEnergy.imagPhase.mat || !this.mergeItemStack(stack1, 0, 1, false))
+            	if (ModuleCrafting.matterUnit.getMaterial(stack1) != ModuleCrafting.imagPhase.mat || !this.mergeItemStack(stack1, 0, 1, false))
             		return null;
             	if (stack1.getItem() != ModuleCrafting.matterUnit || ModuleCrafting.matterUnit.getMaterial(stack1) != ItemMatterUnit.NONE || 
             			!this.mergeItemStack(stack1, 1, 2, false))

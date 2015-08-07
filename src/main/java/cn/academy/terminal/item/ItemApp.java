@@ -19,15 +19,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import cn.academy.core.item.ACItem;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
+import cn.academy.terminal.TerminalData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Implement right click installation
+ * ItemInstaller app
  * @author WeAthFolD
  */
 public class ItemApp extends ACItem {
@@ -38,6 +41,25 @@ public class ItemApp extends ACItem {
 		super("apps");
 		this.setHasSubtypes(true);
 	}
+	
+	@Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if(!world.isRemote) {
+			App app = getApp(stack);
+			if(app != null) {
+				TerminalData terminalData = TerminalData.get(player);
+				if(terminalData.isInstalled(app)) {
+					player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
+				} else {
+					if(!player.capabilities.isCreativeMode)
+						stack.stackSize--;
+					terminalData.installApp(app);
+					player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
+				}
+			}
+		}
+        return stack;
+    }
 	
     @SideOnly(Side.CLIENT)
     @Override

@@ -86,9 +86,12 @@ ac.gui.preset_edit.tag=Preset #
 # Data Terminal
 ac.terminal.notinstalled=You have not yet installed Data Terminal.
 ac.terminal.alrdy_installed=You have already installed Data Terminal.
-# That space is added on purpose. Keep it.
+
 ac.gui.terminal.installing= Installing...
 ac.gui.terminal.appcount=%d Applications
+
+ac.terminal.app_alrdy_installed=You have already installed app %s.
+ac.terminal.app_installed=You have successfully installed app %s.
 
 # Apps
 ac.app.skill_tree.name=Skill Tree

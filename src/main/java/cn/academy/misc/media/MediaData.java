@@ -61,9 +61,9 @@ public class MediaData extends DataPart {
 	
 	public List<Media> getInstalledMediaList() {
 		List<Media> ret = new ArrayList();
-		for(int i = 0; i < MediaPlayer.getMediaCount(); ++i)
+		for(int i = 0; i < MediaRegistry.getMediaCount(); ++i)
 			if(isMediaInstalled(i))
-				ret.add(MediaPlayer.getMedia(i));
+				ret.add(MediaRegistry.getMedia(i));
 		return ret;
 	}
 

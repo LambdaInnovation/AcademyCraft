@@ -19,7 +19,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.block.SlotIFItem;
 
@@ -42,7 +41,7 @@ public class ContainerImagFusor extends Container {
     private void initInventory(InventoryPlayer inv) {
     	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
     	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleEnergy.imagPhase.mat, 2, 32, 72));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, 2, 32, 72));
         this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 72));
         
         int STEP = 18;
@@ -74,7 +73,7 @@ public class ContainerImagFusor extends Container {
                     return null;
             } else {
             	//playerInv->tileInv
-            	if(unit.getMaterial(stack) == ModuleEnergy.imagPhase.mat) {
+            	if(unit.getMaterial(stack) == ModuleCrafting.imagPhase.mat) {
             		if (!this.mergeItemStack(stack1, 2, 3, false))  
                 		return null;
             	} else if(IFItemManager.instance.isSupported(stack)) {

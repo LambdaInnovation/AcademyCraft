@@ -15,6 +15,7 @@ package cn.academy.misc.achievements;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
+import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.misc.achievements.ACAchievements.CraftedItem;
@@ -34,7 +35,7 @@ public class DeafultAchievementPage extends AchievementPage {
 		nodeBasic;
 	
 	public static void init() {
-		phaseLiquid = ACAchievements.createAchievement("phase_liquid", ModuleEnergy.imagPhase, 2, 2, null);
+		phaseLiquid = ACAchievements.createAchievement("phase_liquid", ModuleCrafting.imagPhase, 2, 2, null);
 		nodeBasic = ACAchievements.createAchievement("node_basic", ModuleEnergy.nodeBasic, 2, 4, phaseLiquid);
 		
 		// Init activation conditions.
@@ -54,7 +55,7 @@ public class DeafultAchievementPage extends AchievementPage {
 	
 	@SubscribeEvent
 	public void onMatterUnitHarvest(MatterUnitHarvestEvent event) {
-		if(event.mat.block == ModuleEnergy.imagPhase) {
+		if(event.mat.block == ModuleCrafting.imagPhase) {
 			event.player.triggerAchievement(phaseLiquid);
 		}
 	}

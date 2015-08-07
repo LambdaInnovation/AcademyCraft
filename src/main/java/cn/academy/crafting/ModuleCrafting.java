@@ -26,6 +26,7 @@ import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
+import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.crafting.block.BlockInciser;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
@@ -46,6 +47,9 @@ public class ModuleCrafting {
 	@RegItem.HasRender
 	@RecipeName("matter_unit")
 	public static ItemMatterUnit matterUnit;
+	
+    @RegBlock(item = BlockImagPhase.ItemPhaseLiq.class)
+    public static BlockImagPhase imagPhase;
 	
 	@RegItem
 	@RecipeName("crystal0")

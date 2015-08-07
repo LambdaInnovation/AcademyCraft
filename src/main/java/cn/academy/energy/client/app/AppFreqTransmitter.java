@@ -31,8 +31,6 @@ public class AppFreqTransmitter extends App {
 
 	private AppFreqTransmitter() {
 		super("freq_transmitter");
-		// DEBUG
-		this.setPreInstalled();
 	}
 
 	@Override
