@@ -136,9 +136,19 @@ public class AcademyCraft {
         	catch (Throwable e) {
         		log.error("Failed to initialize IC2 support", e);
         	}
-        }
-        catch(Throwable e) {
-		}
+        } catch(Throwable e) {}
+        
+        try { 
+        	Class.forName("cofh.CoFHCore");
+        	try {
+        		Class.forName("cn.academy.support.ModuleSupport")
+					.getMethod("initTE", RecipeRegistry.class).invoke(this, 
+							recipes);
+        	}
+        	catch (Throwable e) {
+        		log.error("Failed to initialize TE support", e);
+        	}
+        } catch(Throwable e) {}
         
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
         

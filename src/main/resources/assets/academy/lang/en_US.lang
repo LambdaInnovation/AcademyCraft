@@ -69,6 +69,8 @@ tile.ac_windgen_pillar.name=Wind Generator Pillar
 tile.ac_windgen_main.name=Wind Generator
 tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
 tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
+tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
+tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
 tile.ac_developer.name=Ability Developer
 
 # Generic Knowledges

@@ -20,6 +20,8 @@ Current Forge version: 1.7.10-10.13.4.1448.
 
 Current IC2 version: [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/).
 
+Current Redstone Flux API version: [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API)
+
 The mod requires Java 8 to compile and execute. Officially we use [RetroLamba](https://github.com/orfjackal/retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
 
 Currently AcademyCraft is under heavy developement, so it is almost always up to date with its dependency mods([LIUtils][liu] and [AnnotationRegistry][ar]).

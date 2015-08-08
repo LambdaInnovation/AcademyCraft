@@ -17,6 +17,10 @@ import cn.academy.support.ic2.BlockEUInput;
 import cn.academy.support.ic2.BlockEUOutput;
 import cn.academy.support.ic2.TileEUInput;
 import cn.academy.support.ic2.TileEUOutput;
+import cn.academy.support.te.BlockRFInput;
+import cn.academy.support.te.BlockRFOutput;
+import cn.academy.support.te.TileRFInput;
+import cn.academy.support.te.TileRFOutput;
 import cn.liutils.crafting.RecipeRegistry;
 
 /**
@@ -37,6 +41,20 @@ public class ModuleSupport {
 		
 		recipes.map("eu_input", euInput);
 		recipes.map("eu_output", euOutput);
+	}
+	
+	public static void initTE(RecipeRegistry recipes) {
+		BlockRFInput rfInput = new BlockRFInput();
+		BlockRFOutput rfOutput = new BlockRFOutput();
+		
+		GameRegistry.registerBlock(rfInput, "rf_input");
+		GameRegistry.registerBlock(rfOutput, "rf_output");
+		
+		GameRegistry.registerTileEntity(TileRFInput.class, "rf_input");
+		GameRegistry.registerTileEntity(TileRFOutput.class, "rf_output");
+		
+		recipes.map("rf_input", rfInput);
+		recipes.map("rf_output", rfOutput);
 	}
 
 }

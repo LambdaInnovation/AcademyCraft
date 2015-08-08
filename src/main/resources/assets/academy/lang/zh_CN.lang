@@ -68,6 +68,8 @@ tile.ac_windgen_pillar.name=风力能量发生器 - 支架
 tile.ac_windgen_main.name=风力能量发生器 - 主机
 tile.ac_eu_output.name=能源桥 (IC2 EU输出) 
 tile.ac_eu_input.name=能源桥 (IC2 EU输入) 
+tile.ac_rf_output.name=能源桥 (CoFH RF输出)
+tile.ac_rf_input.name=能源桥 (CoFH RF输入)
 tile.ac_developer.name=能力开发机
 tile.ac_machine_frame.name=机械框架
 

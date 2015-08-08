@@ -105,7 +105,7 @@ shaped(mat) {
     [data_chip, redstone, data_chip]
 }
 
-; shaped(mat_code) until fix #113
+; shaped(mat_core) until fix #113
 
 smelting(imagsil_ingot) {
     [imagsil_ore]
@@ -133,9 +133,8 @@ shaped(brain_comp) {
 shaped(reso_comp) {
     [nil, calc_chip, nil]
     [nil, redstone, nil]
-    [cons_plate, mat_core, cons_plate]
+    [cons_plate, mat_core*0, cons_plate]
 }
-; mat_core unfinished, needs modify
 
 shaped(conv_comp) {
     [calc_chip]
