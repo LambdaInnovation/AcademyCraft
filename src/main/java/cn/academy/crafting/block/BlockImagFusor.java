@@ -23,7 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
-import cn.academy.crafting.client.gui.imagfusor.GuiImagFusor;
+import cn.academy.crafting.client.gui.GuiImagFusor;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.gui.GuiHandlerBase;
 import cn.annoreg.mc.gui.RegGuiHandler;

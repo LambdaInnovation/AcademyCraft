@@ -14,6 +14,7 @@ package cn.academy.crafting;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -24,10 +25,12 @@ import cn.academy.core.block.ACBlock;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.api.ImagFusorRecipes;
+import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.block.BlockGenericOre;
 import cn.academy.crafting.block.BlockImagFusor;
 import cn.academy.crafting.block.BlockImagPhase;
-import cn.academy.crafting.block.BlockInciser;
+import cn.academy.crafting.block.BlockMetalFormer;
+import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
@@ -81,7 +84,7 @@ public class ModuleCrafting {
 	
 	@RegBlock
 	@RecipeName("inciser")
-	public static BlockInciser inciser;
+	public static BlockMetalFormer inciser;
 	
 	@RegBlock
 	@RecipeName("cons_ore")
@@ -144,6 +147,9 @@ public class ModuleCrafting {
 		
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 2000, new ItemStack(crystalPure));
+		
+		// DEBUG & EXAMPLE, REMOVE AFTERWARDS
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(rfIronPlate, 2), new ItemStack(Items.diamond), Mode.PLATE);
 	}
 	
 }
