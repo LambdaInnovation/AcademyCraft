@@ -26,9 +26,12 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.raytrace.Raytrace;
@@ -178,6 +181,7 @@ public class ThreateningTeleport extends Skill {
 		void startEffects() {
 			player.worldObj.spawnEntityInWorld(marker = new EntityMarker(player.worldObj));
 			marker.setPosition(player.posX, player.posY, player.posZ);
+			marker.width = marker.height = 0.5f;
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -195,6 +199,27 @@ public class ThreateningTeleport extends Skill {
 			marker.setDead();
 			if(attacked) {
 				ACSounds.playAtEntityClient(player, "tp.tp", 0.5f);
+				
+				TraceResult dropPos = calcDropPos();
+				double dx = dropPos.x + .5 - player.posX,
+						dy = dropPos.y + .5 - (player.posY - 0.5),
+						dz = dropPos.z + .5 - player.posZ;
+				double dist = MathUtils.length(dx, dy, dz);
+				Motion3D mo = new Motion3D(player.posX, player.posY - 0.5, player.posZ, 
+						dx, dy, dz);
+				mo.normalize();
+				
+				double move = 1;
+				for(double x = move; x <= dist; x += (move = RandUtils.ranged(1, 2))) {
+					mo.move(move);
+					player.worldObj.spawnEntityInWorld(
+					TPParticleFactory.instance.next(player.worldObj, mo.getPosVec(), 
+							VecUtils.vec(
+								RandUtils.ranged(-.02, .02),
+								RandUtils.ranged(-.02, .05),
+								RandUtils.ranged(-.02, .02)
+							)));
+				}
 			}
 		}
 		

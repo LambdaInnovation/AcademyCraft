@@ -122,6 +122,7 @@ public class ControlOverrider {
 			return;
 		}
 		
+		RangedRayDamage rdd;
 		KeyBinding kb = (KeyBinding) kbMap.removeObject(keyID);
 		if(kb != null) {
 			try {

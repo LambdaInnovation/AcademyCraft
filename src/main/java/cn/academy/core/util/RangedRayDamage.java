@@ -43,9 +43,6 @@ import cn.liutils.util.mc.WorldUtils;
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,
  * 	and destroy blocks in the path, also damages entities. It takes account of global damage switches.
- * 
- * TODO Render effects
- * TODO Sound effects
  * @author WeAthFolD
  */
 public class RangedRayDamage {
@@ -179,7 +176,9 @@ public class RangedRayDamage {
 	private float destroyBlock(float energy, int x, int y, int z, boolean snd) {
 		Block block = world.getBlock(x, y, z);
 		float hardness = block.getBlockHardness(world, x, y, z);
-		if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z)) && (energy -= hardness) > 0) {
+		if(hardness < 0)
+			hardness = 233333;
+		if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z)) && energy >= hardness) {
 			if(block.getMaterial() != Material.air) {
 				block.dropBlockAsItemWithChance(world, x, y, z, 
 					world.getBlockMetadata(x, y, z), dropProb, 0);
@@ -193,8 +192,9 @@ public class RangedRayDamage {
 				}
 			}
 			world.setBlockToAir(x, y, z);
+			return energy - hardness;
 		}
-		return energy;
+		return 0;
 	}
 	
 	private void attackEntity(Entity target) {

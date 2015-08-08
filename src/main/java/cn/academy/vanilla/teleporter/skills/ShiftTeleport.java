@@ -30,9 +30,12 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.annoreg.core.Registrant;
+import cn.liutils.util.generic.MathUtils;
+import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
@@ -97,14 +100,21 @@ public class ShiftTeleport extends Skill {
 			if(isRemote) updateEffects();
 		}
 		
+		boolean attacked;
+		
 		@Override
 		public void onEnd() {
+			Block block;
+			ItemStack stack = player.getCurrentEquippedItem();
+			attacked = stack != null && 
+					  stack.getItem() instanceof ItemBlock && 
+					  (block = Block.getBlockFromItem(stack.getItem())) != null &&
+					  cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+			
 			if(isRemote) endEffects();
 			
-			if(!isRemote) {
+			if(attacked && !isRemote) {
 				MovingObjectPosition position = getTracePosition();
-				ItemStack stack = player.getCurrentEquippedItem();
-				Block block;
 				
 				if(stack != null && 
 				  stack.getItem() instanceof ItemBlock && 
@@ -240,6 +250,29 @@ public class ShiftTeleport extends Skill {
 				for(EntityMarker em : targetMarkers)
 					em.setDead();
 				blockMarker.setDead();
+			}
+			
+			if(attacked) {
+				int[] dest = getTraceDest();
+				double dx = dest[0] + .5 - player.posX,
+						dy = dest[1] + .5 - (player.posY - 0.5),
+						dz = dest[2] + .5 - player.posZ;
+				double dist = MathUtils.length(dx, dy, dz);
+				Motion3D mo = new Motion3D(player.posX, player.posY - 0.5, player.posZ, 
+						dx, dy, dz);
+				mo.normalize();
+				
+				double move = 1;
+				for(double x = move; x <= dist; x += (move = RandUtils.ranged(0.6, 1))) {
+					mo.move(move);
+					player.worldObj.spawnEntityInWorld(
+					TPParticleFactory.instance.next(player.worldObj, mo.getPosVec(), 
+							VecUtils.vec(
+								RandUtils.ranged(-.05, .05),
+								RandUtils.ranged(-.02, .05),
+								RandUtils.ranged(-.05, .05)
+							)));
+				}
 			}
 		}
 		
