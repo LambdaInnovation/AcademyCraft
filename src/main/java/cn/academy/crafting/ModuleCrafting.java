@@ -117,10 +117,6 @@ public class ModuleCrafting {
 	public static Item brainComp = new ACItem("brain_component");
 	
 	@RegItem
-	@RecipeName("data_comp")
-	public static Item dataComp = new ACItem("data_component");
-	
-	@RegItem
 	@RecipeName("info_comp")
 	public static Item infoComp = new ACItem("info_component");
 	
@@ -130,7 +126,7 @@ public class ModuleCrafting {
 	
 	@RegItem
 	@RecipeName("conv_comp")
-	public static Item comvComp = new ACItem("energy_convert_component");
+	public static Item convComp = new ACItem("energy_convert_component");
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {

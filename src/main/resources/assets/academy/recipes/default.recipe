@@ -71,7 +71,7 @@ shaped(cons_plate*2) {
 }
 
 shaped(terminal) {
-    [data_comp, glass_pane, data_comp]
+    [data_chip, glass_pane, data_chip]
     [plateIron, brain_comp, plateIron]
     [info_comp, calc_chip, redstone]
 }
@@ -105,7 +105,23 @@ shaped(mat) {
     [data_chip, redstone, data_chip]
 }
 
-; shaped(mat_core) until fix #113
+shaped(mat_core*0) {
+    [crystal0]
+    [calc_chip]
+    [conv_comp]
+}
+
+shaped(mat_core*1) {
+    [ender_eye]
+    [crystal1]
+    [mat_core*0]
+}
+
+shaped(mat_core*2) {
+    [glowstone]
+    [beacon]
+    [mat_core*1]
+}
 
 smelting(imagsil_ingot) {
     [imagsil_ore]
@@ -121,7 +137,7 @@ smelting(crystal0) {
 
 shaped(info_comp) {
     [glowstone_dust]
-    [data_comp]
+    [data_chip]
 }
 
 shaped(brain_comp) {
@@ -140,6 +156,24 @@ shaped(conv_comp) {
     [calc_chip]
     [ene_unit]
     [ender_eye]
+}
+
+shaped(app_skill_tree) {
+    [compass]
+    [data_chip]
+    [info_comp]
+}
+
+shaped(app_media_player) {
+    [jukebox]
+    [data_chip]
+    [info_comp]
+}
+
+shaped(app_freq_transmitter) {
+    [reso_comp]
+    [data_chip]
+    [info_comp]
 }
 
 ; developer pending.

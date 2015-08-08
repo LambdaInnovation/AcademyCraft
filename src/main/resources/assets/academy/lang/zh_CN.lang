@@ -21,7 +21,6 @@ item.ac_constraint_plate.name=束能金属板
 item.ac_imag_silicon_ingot.name=虚像硅锭
 item.ac_wafer.name=虚像硅晶圆
 
-item.ac_data_component.name=数据储存器
 item.ac_brain_component.name=脑波分析模块
 item.ac_info_component.name=信息处理模块
 item.ac_reinforced_iron_plate.name=强化铁板

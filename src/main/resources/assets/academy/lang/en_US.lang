@@ -21,7 +21,6 @@ item.ac_constraint_plate.name=Constraint Metal Plate
 item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
 
-item.ac_data_component.name=Data Storage
 item.ac_brain_component.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
 item.ac_reinforced_iron_plate.name=Reinforced Iron Plate

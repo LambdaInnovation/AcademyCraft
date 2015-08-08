@@ -12,7 +12,11 @@
  */
 package cn.academy.support;
 
+import ic2.core.Ic2Items;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.ic2.BlockEUInput;
 import cn.academy.support.ic2.BlockEUOutput;
 import cn.academy.support.ic2.TileEUInput;
@@ -39,8 +43,13 @@ public class ModuleSupport {
 		GameRegistry.registerTileEntity(TileEUInput.class, "eu_input");
 		GameRegistry.registerTileEntity(TileEUOutput.class, "eu_output");
 		
-		recipes.map("eu_input", euInput);
-		recipes.map("eu_output", euOutput);
+		GameRegistry.addRecipe(new ItemStack(euInput), "   ", "abc", " d ",
+				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
+				'c', ModuleCrafting.crystalLow, 'd', ModuleCrafting.convComp);
+		GameRegistry.addRecipe(new ItemStack(euOutput), "   ", "abc", " d ",
+				'a', Ic2Items.batBox.getItem(), 'b', ModuleCrafting.machineFrame,
+				'c', Ic2Items.insulatedCopperCableBlock.getItem(),
+				'd', ModuleCrafting.convComp);
 	}
 	
 	public static void initTE(RecipeRegistry recipes) {
