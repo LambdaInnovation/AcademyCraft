@@ -12,10 +12,6 @@ import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 @RegInit
 @RegACRecipeNames
 public class ModuleTerminal {
-
-	@RegItem
-	@RecipeName("app")
-	public static ItemApp itemApp;
 	
 	@RegItem
 	@RegItem.HasRender
@@ -23,7 +19,7 @@ public class ModuleTerminal {
 	public static ItemTerminalInstaller terminalInstaller;
 	
 	public static void init() {
-		
+		ItemApp.registerItems();
 	}
 	
 }

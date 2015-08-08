@@ -26,7 +26,6 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
-import cn.liutils.core.LIUtils;
 import cn.liutils.util.generic.RegistryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -122,7 +121,6 @@ public class ControlOverrider {
 			return;
 		}
 		
-		RangedRayDamage rdd;
 		KeyBinding kb = (KeyBinding) kbMap.removeObject(keyID);
 		if(kb != null) {
 			try {

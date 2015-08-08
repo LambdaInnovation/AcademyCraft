@@ -12,20 +12,20 @@
  */
 package cn.academy.terminal.item;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.item.ACItem;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,62 +35,49 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ItemApp extends ACItem {
 	
-	IIcon[] itemIcons;
+	static Map<App, ItemApp> items = new HashMap();
+	
+	public static void registerItems() {
+		for(App app : AppRegistry.enumeration()) {
+			ItemApp item = new ItemApp(app);
+			GameRegistry.registerItem(item, "ac_app_" + app.getName());
+			AcademyCraft.recipes.map("app_" + app.getName(), item);
+			items.put(app, item);
+		}
+	}
+	
+	public static ItemApp getItemForApp(App app) {
+		return items.get(app);
+	}
+	
+	public final App app;
 
-	public ItemApp() {
+	private ItemApp(App _app) {
 		super("apps");
+		app = _app;
+		setTextureName("academy:app_" + app.getName());
 		this.setHasSubtypes(true);
 	}
 	
 	@Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if(!world.isRemote) {
-			App app = getApp(stack);
-			if(app != null) {
-				TerminalData terminalData = TerminalData.get(player);
-				if(terminalData.isInstalled(app)) {
-					player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
-				} else {
-					if(!player.capabilities.isCreativeMode)
-						stack.stackSize--;
-					terminalData.installApp(app);
-					player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
-				}
+			TerminalData terminalData = TerminalData.get(player);
+			if(terminalData.isInstalled(app)) {
+				player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
+			} else {
+				if(!player.capabilities.isCreativeMode)
+					stack.stackSize--;
+				terminalData.installApp(app);
+				player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
 			}
 		}
         return stack;
     }
-	
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerIcons(IIconRegister ir) {
-    	itemIcons = new IIcon[AppRegistry.enumeration().size()];
-    	for(App app : AppRegistry.enumeration()) {
-    		itemIcons[app.getID()] = ir.registerIcon("academy:app_" + app.getName());
-    	}
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-    	if(damage >= itemIcons.length)
-    		damage = 0;
-        return itemIcons[damage];
-    }
-	
-	public App getApp(ItemStack stack) {
-		return AppRegistry.INSTANCE.get(stack.getItemDamage());
-	}
-	
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs cct, List list) {
-        for(App app : AppRegistry.enumeration()) {
-        	list.add(new ItemStack(this, 1, app.getID()));
-        }
-    }
     
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-    	list.add(getApp(stack).getDisplayName());
+    	list.add(app.getDisplayName());
     }
+    
 }
