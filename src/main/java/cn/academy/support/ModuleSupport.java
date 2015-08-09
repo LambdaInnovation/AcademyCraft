@@ -45,7 +45,8 @@ public class ModuleSupport {
 		
 		GameRegistry.addRecipe(new ItemStack(euInput), "   ", "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', ModuleCrafting.crystalLow, 'd', ModuleCrafting.convComp);
+				'c', Ic2Items.insulatedCopperCableBlock.getItem(), 
+				'd', ModuleCrafting.convComp);
 		GameRegistry.addRecipe(new ItemStack(euOutput), "   ", "abc", " d ",
 				'a', Ic2Items.batBox.getItem(), 'b', ModuleCrafting.machineFrame,
 				'c', Ic2Items.insulatedCopperCableBlock.getItem(),
