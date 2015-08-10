@@ -15,14 +15,23 @@ visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 
 ## Dev Setup
 
+### Requirements
+
 Current Forge version: 1.7.10-10.13.4.1448.
 
-Current IC2 version: [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/).
+### Supported Mods (Compile-Time Dependencies)
 
-Current Redstone Flux API version: [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API).
-Current CoFHCore version: [3.0.3-303](http://minecraft.curseforge.com/mc-mods/69162-cofhcore/files/2246919).
-Current Thermal Foundation version: [1.2.0-102](http://minecraft.curseforge.com/mc-mods/222880-thermal-foundation/files/2246921).
-Current Thermal Expasion version: [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
+IndustrialCraft [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/).
+
+Redstone Flux API [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API).
+
+CoFHCore [3.0.3-303](http://minecraft.curseforge.com/mc-mods/69162-cofhcore/files/2246919).
+
+Thermal Foundation [1.2.0-102](http://minecraft.curseforge.com/mc-mods/222880-thermal-foundation/files/2246921).
+
+Thermal Expasion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
+
+
 
 The mod requires Java 8 to compile and execute. Officially we use [RetroLamba](https://github.com/orfjackal/retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
 
