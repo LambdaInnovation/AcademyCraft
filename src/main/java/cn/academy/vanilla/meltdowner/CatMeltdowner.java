@@ -14,6 +14,7 @@ package cn.academy.vanilla.meltdowner;
 
 import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.meltdowner.skill.LightShield;
 import cn.academy.vanilla.meltdowner.skill.RayBarrage;
 import cn.academy.vanilla.meltdowner.skill.ScatterBomb;
 
@@ -24,6 +25,7 @@ public class CatMeltdowner extends Category {
 	
 	public static RayBarrage rayBarrage;
 	public static ScatterBomb scatterBomb;
+	public static LightShield lightShield;
 
 	public CatMeltdowner() {
 		super("melt_downer");
@@ -33,6 +35,7 @@ public class CatMeltdowner extends Category {
 		
 		this.addSkill("A", rayBarrage = new RayBarrage());
 		this.addSkill("A", scatterBomb = new ScatterBomb());
+		this.addSkill("A", lightShield = new LightShield());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

@@ -172,7 +172,6 @@ public class AbilityData extends DataPart {
 	
 	public void addSkillExp(Skill skill, float amt) {
 		if(skill.getCategory() == getCategory()) {
-			System.out.println("AddSkillExp " + amt);
 			learnSkill(skill);
 			skillExps[skill.getID()] += amt;
 			if(skillExps[skill.getID()] > 1.0f)
