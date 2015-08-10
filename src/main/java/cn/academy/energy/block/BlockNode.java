@@ -36,9 +36,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockNode extends ACBlockContainer {
 
     public enum NodeType {
-        BASIC("basic", 10000, 20, 9, 5), 
-        STANDARD("standard", 50000, 40, 12, 10), 
-        ADVANCED("advanced", 300000, 100, 19, 20);
+        BASIC("basic", 15000, 150, 9, 5), 
+        STANDARD("standard", 50000, 300, 12, 10), 
+        ADVANCED("advanced", 200000, 900, 19, 20);
         
         final int maxEnergy, bandwidth, range, capacity;
         final String name;

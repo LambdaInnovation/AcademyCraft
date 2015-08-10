@@ -47,7 +47,7 @@ public class TileMetalFormer extends TileReceiverBase {
 		WORK_TICKS = 60;
 	
 	public static final double
-		CONSUME_PER_TICK = 20;
+		CONSUME_PER_TICK = 13.3;
 	
 	// Available in both sides.
 	public Mode mode = Mode.PLATE;

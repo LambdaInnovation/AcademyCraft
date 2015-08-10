@@ -42,12 +42,16 @@ public class EnergyUIHelper {
 	
 	public static void drawTextBox(String str, double x, double y, double size) {
 		GL11.glEnable(GL11.GL_BLEND);
-		drawTextBox(str, x, y, size, Align.LEFT);
+		drawTextBox(str, x, y, size, 233333, Align.LEFT);
 	}
 	
-	public static void drawTextBox(String str, double x, double y, double size, Align align) {
-		final double trimLength = 120;
-		Vector2d vec = Font.font.simDrawWrapped(str, size, trimLength);
+	public static void drawTextBox(String str, double x, double y, double size, double limit) {
+		GL11.glEnable(GL11.GL_BLEND);
+		drawTextBox(str, x, y, size, limit, Align.LEFT);
+	}
+	
+	public static void drawTextBox(String str, double x, double y, double size, double limit, Align align) {
+		Vector2d vec = Font.font.simDrawWrapped(str, size, limit);
 		double X0 = x, Y0 = y, MARGIN = Math.min(5, size * 0.3);
 		
 		if(align == Align.CENTER) {
@@ -57,7 +61,7 @@ public class EnergyUIHelper {
 		}
 		
 		drawBox(X0, Y0, MARGIN * 2 + vec.x, MARGIN * 2 + vec.y);
-		Font.font.drawWrapped(str, X0 + MARGIN, Y0 + MARGIN, size, 0xffffff, trimLength);
+		Font.font.drawWrapped(str, X0 + MARGIN, Y0 + MARGIN, size, 0xffffff, limit);
 	}
 	
 	/**

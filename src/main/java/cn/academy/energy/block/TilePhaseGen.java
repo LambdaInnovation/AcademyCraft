@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.energy.IFConstants;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderPhaseGen;
 import cn.annoreg.core.Registrant;
@@ -53,13 +54,13 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 	@SideOnly(Side.CLIENT)
 	public static RenderPhaseGen renderer;
 	
-	static final int CONSUME_PER_TICK = 4;
-	static final double GEN_PER_MB = 2;
+	static final int CONSUME_PER_TICK = 100;
+	static final double GEN_PER_MB = 0.5;
 	
 	int untilSync;
 
 	public TilePhaseGen() {
-		super("phase_gen", 3, 1000, 100);
+		super("phase_gen", 3, 6000, IFConstants.LATENCY_MK1);
 	}
 
 	@Override

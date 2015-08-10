@@ -12,20 +12,29 @@
  */
 package cn.academy.energy.block.wind;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.energy.IFConstants;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.client.render.block.RenderWindGenBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.liutils.template.block.BlockMulti;
+import cn.liutils.template.block.BlockMulti.SubBlockPos;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
+import cn.liutils.util.generic.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -48,10 +57,11 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 	// CLIENT STATES
 	public TileWindGenMain mainTile;
 	public boolean complete;
+	public boolean noObstacle;
 	public int untilUpdate;
 	
 	public TileWindGenBase() {
-		super("windgen_base", 1, 2000, 100);
+		super("windgen_base", 1, 20000, IFConstants.LATENCY_MK3);
 	}
 
 	@Override
@@ -60,10 +70,13 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 		return Math.min(required, sim);
 	}
 	
-	// TODO: Nail down formula
+	// TODO: Improve the fomula?
 	public double getSimulatedGeneration() {
-		if(complete) {
-			return 50.0;
+		if(complete && noObstacle) {
+			int y = mainTile.yCoord;
+			double heightFactor = MathUtils.lerp(0.3, 1, 
+				MathUtils.wrapd(0, 1, (y - 20.0) / 90.0));
+			return heightFactor * MAX_GENERATION_SPEED;
 		} else {
 			return 0.0;
 		}
@@ -94,6 +107,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 			untilUpdate = 0;
 			mainTile = findMainTile();
 			complete = mainTile != null;
+			noObstacle = (mainTile != null && mainTile.noObstacle);
 		}
 		
 		updateChargeOut();

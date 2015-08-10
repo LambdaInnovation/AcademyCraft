@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderSolarGen;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
@@ -39,14 +40,14 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 	public static RenderSolarGen renderer;
 
 	public TileSolarGen() {
-		super("solar_generator", 1, 1000, 100);
+		super("solar_generator", 1, 1000, IFConstants.LATENCY_MK2);
 	}
 
 	@Override
 	public double getGeneration(double required) {
         World theWorld = this.getWorldObj();
         double brightLev = theWorld.isDaytime() && theWorld.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord) ? 1.0 : 0.0;
-		return Math.min(required, brightLev * 5);
+		return Math.min(required, brightLev * 3.0);
 	}
 	
 	// InfoBlockMulti delegates

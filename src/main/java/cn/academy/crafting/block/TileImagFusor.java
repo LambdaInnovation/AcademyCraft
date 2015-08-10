@@ -26,6 +26,7 @@ import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
+import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
@@ -46,7 +47,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity.HasRender
 public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	
-	static final double WORK_SPEED = 0.03;
+	static final double WORK_SPEED = 1.0 / 80;
+	static final double CONSUME_PER_TICK = 15;
 	static final int SYNC_INTV = 5;
 	
 	@RegTileEntity.Render
@@ -70,7 +72,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	private int checkCooldown = 10, syncCooldown = SYNC_INTV;
 
 	public TileImagFusor() {
-		super("imag_fusor", 4, 100000, 50);
+		super("imag_fusor", 4, 2000, IFConstants.LATENCY_MK1);
 	}
 
 	@Override
@@ -189,7 +191,8 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	
 	private void updateWork() {
 		// Check the input stack, and abort if item isnt there
-		if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()) {
+		if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
+				|| this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK) {
 			abortWorking();
 			return;
 		}

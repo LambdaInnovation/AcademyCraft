@@ -12,11 +12,18 @@
  */
 package cn.academy.energy.block.wind;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
@@ -29,6 +36,7 @@ import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
+import cn.liutils.template.block.BlockMulti.SubBlockPos;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,6 +47,24 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileWindGenMain extends TileInventory implements IMultiTile {
+	
+	static List<SubBlockPos>[] checkAreas = new ArrayList[6];
+	static {
+		List<SubBlockPos> checkArea = new ArrayList();
+		for(int i = -6; i <= 6; ++i) {
+			for(int j = -6; j <= 6; ++j) {
+				if(i != 0 || j != 0)
+					checkArea.add(new SubBlockPos(i, j, -1));
+			}
+		}
+		
+		for(int i = 2; i < 6; ++i) {
+			List list = (checkAreas[i] = new ArrayList());
+			for(SubBlockPos pos : checkArea) {
+				list.add(BlockMulti.rotate(pos, ForgeDirection.values()[i]));
+			}
+		}
+	}
 	
 	// State for render
 	@SideOnly(Side.CLIENT)
@@ -51,6 +77,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	public float lastRotation;
 	
 	public boolean complete;
+	public boolean noObstacle;
 	
 	int updateWait, updateWait2;
 	
@@ -80,15 +107,18 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 		super.updateEntity();
 		info.update();
 		
-		if(getWorldObj().isRemote) {
+		if(info.getSubID() == 0) {
 			if(++updateWait == 10) {
 				updateWait = 0;
 				complete = isCompleteStructure();
+				noObstacle = complete && isNoObstacle();
 			}
-		} else {
-			if(++updateWait2 == 20) {
-				updateWait2 = 0;
-				this.syncTheStack(this, this.getStackInSlot(0));
+			
+			if(!getWorldObj().isRemote) {
+				if(++updateWait2 == 20) {
+					updateWait2 = 0;
+					this.syncTheStack(this, this.getStackInSlot(0));
+				}
 			}
 		}
 	}
@@ -153,6 +183,18 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 			}
 		}
 		return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
+	}
+	
+	public boolean isNoObstacle() {
+		int x = xCoord, y = yCoord, z = zCoord;
+		InfoBlockMulti info = getBlockInfo();
+		World world = getWorldObj();
+		List<SubBlockPos> arr = checkAreas[info.getDir().ordinal()];
+		for(SubBlockPos sbp : arr) {
+			if(world.getBlock(x + sbp.dx, y + sbp.dy, z + sbp.dz).getMaterial() != Material.air)
+				return false;
+		}
+		return true;
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)

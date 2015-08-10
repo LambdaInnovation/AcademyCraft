@@ -97,7 +97,7 @@ public class GuiLinkToNode extends LIGuiScreen {
 					callback.invoke();
 				}
 			} else {
-				EnergyUIHelper.drawTextBox(msg, width / 2, height / 2 - 3, 8, Align.CENTER);
+				EnergyUIHelper.drawTextBox(msg, width / 2, height / 2 - 3, 8, 120, Align.CENTER);
 			}
 		}
 	}

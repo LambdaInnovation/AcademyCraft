@@ -32,13 +32,13 @@ public enum MetalFormerRecipes {
 	
 	@RegSerializable(instance = RecipeSerializer.class)
 	public static class RecipeObject {
-		private int id;
+		private int id = -1;
 		
 		public final Mode mode;
 		public final ItemStack input;
 		public final ItemStack output;
 		
-		public RecipeObject(ItemStack _input, ItemStack _output, Mode _mode) {
+		private RecipeObject(ItemStack _input, ItemStack _output, Mode _mode) {
 			input = _input;
 			output = _output;
 			mode = _mode;
@@ -48,7 +48,7 @@ public enum MetalFormerRecipes {
 			return  stack != null &&
 					mode == mode2 &&
 					input.getItem() == stack.getItem() &&
-					input.stackSize <= stack.stackSize 	  && 
+					input.stackSize <= stack.stackSize && 
 					input.getItemDamage() == stack.getItemDamage();
 		}
 	}

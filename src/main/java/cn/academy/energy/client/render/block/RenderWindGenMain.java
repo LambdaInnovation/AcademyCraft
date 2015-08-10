@@ -47,8 +47,9 @@ public class RenderWindGenMain extends RenderBlockMulti {
 		RenderUtils.loadTexture(texBody);
 		mdlBody.renderAll();
 		
+		
 		// draw fan
-		if(gen.isFanInstalled()) {
+		if(gen.isFanInstalled() && gen.noObstacle) {
 			// update fan rotation
 			long time = GameTimer.getTime();
 			long dt = gen.lastFrame == -1 ? 0 : time - gen.lastFrame;
