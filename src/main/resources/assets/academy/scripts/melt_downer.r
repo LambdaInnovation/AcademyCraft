@@ -22,5 +22,10 @@ ac {
 			touch_damage(exp) { lerp(2, 6, exp) }
 			absorb_damage(exp) { lerp(8, 25, exp) }
 		}
+		
+		jet_engine {
+			consumption(exp) { 233 }
+			overload(exp) { 233 }
+		}
 	}
 }
