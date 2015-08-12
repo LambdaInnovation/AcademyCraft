@@ -134,6 +134,7 @@ public class CPBar extends Widget {
 		regEventHandler(new FrameEventHandler() {
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
+				
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				CPData cpData = CPData.get(player);
 				

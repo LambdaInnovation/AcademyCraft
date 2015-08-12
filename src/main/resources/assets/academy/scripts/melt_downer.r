@@ -30,5 +30,14 @@ ac {
 			overload(exp) { lerp(60, 50, exp) }
 			expincr { 0.004 }
 		}
+		
+		mine_ray_basic {
+			range { 10 }
+			speed(exp) { 0.1 * lerp(1, 2, exp) }
+			consumption(exp) { lerp(15, 20, exp) }
+			overload(exp) { lerp(8, 5, exp) }
+			cooldown(exp) { lerp(60, 30, exp) }
+			expincr { 0.0005 }
+		}
 	}
 }

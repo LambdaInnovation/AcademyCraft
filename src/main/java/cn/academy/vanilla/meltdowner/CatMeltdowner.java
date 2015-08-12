@@ -14,10 +14,7 @@ package cn.academy.vanilla.meltdowner;
 
 import cn.academy.ability.api.Category;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.meltdowner.skill.JetEngine;
-import cn.academy.vanilla.meltdowner.skill.LightShield;
-import cn.academy.vanilla.meltdowner.skill.RayBarrage;
-import cn.academy.vanilla.meltdowner.skill.ScatterBomb;
+import cn.academy.vanilla.meltdowner.skill.*;
 
 /**
  * @author WeAthFolD
@@ -28,6 +25,7 @@ public class CatMeltdowner extends Category {
 	public static ScatterBomb scatterBomb;
 	public static LightShield lightShield;
 	public static JetEngine jetEngine;
+	public static MineRayBasic minerayBasic;
 
 	public CatMeltdowner() {
 		super("melt_downer");
@@ -39,6 +37,7 @@ public class CatMeltdowner extends Category {
 		this.addSkill("A", scatterBomb = new ScatterBomb());
 		this.addSkill("A", lightShield = new LightShield());
 		this.addSkill("A", jetEngine = new JetEngine());
+		this.addSkill("A", minerayBasic = new MineRayBasic());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

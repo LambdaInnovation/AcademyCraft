@@ -49,7 +49,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		Vec3 position = ray.getPosition();
 		Vec3 relativePosition = VecUtils.subtract(position, 
 				VecUtils.vec(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
-		RenderUtils.glTranslate(relativePosition);
+		GL11.glTranslated(x, y, z);
 		
 		//Calculate the most appropriate 'billboard-up' direction.
 		
@@ -61,7 +61,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		Vec3 pt = VecUtils.vec(0, 0, 0);
 		
 		//The player viewing direction towards pt.
-		Vec3 perpViewDir = VecUtils.subtract(pt, VecUtils.neg(relativePosition));
+		Vec3 perpViewDir = VecUtils.add(pt, relativePosition);
 		
 		// cross product to get the 'up' vector
 		Vec3 upDir = VecUtils.crossProduct(perpViewDir, dir);
