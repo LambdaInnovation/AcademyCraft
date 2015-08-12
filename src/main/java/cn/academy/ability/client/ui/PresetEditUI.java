@@ -72,20 +72,17 @@ public class PresetEditUI extends GuiScreen {
 	static final double MAX_ALPHA = 1, MIN_ALPHA = 0.3;
 	static final double MAX_SCALE = 0.27, MIN_SCALE = 0.22;
 	
-	/**
-	 * Dummy skill used to cancel the binding.
-	 */
-	static final Skill cancelBinding = new Skill("cancel", -1) {
-		@Override
-		public ResourceLocation getHintIcon() {
-			return new ResourceLocation("academy:textures/guis/preset_settings/cancel.png");
+	static class SelectionProvider {
+		public final int id;
+		public final ResourceLocation texture;
+		public final String hint;
+		
+		public SelectionProvider(int _id, ResourceLocation _texture, String _hint) {
+			id = _id;
+			texture = _texture;
+			hint = _hint;
 		}
-
-		@Override
-		public String getHintText() {
-			return "";
-		}
-	};
+	}
 	
 	/**
 	 * Drawer when nothing happened
@@ -474,7 +471,6 @@ public class PresetEditUI extends GuiScreen {
     		AbilityData aData = AbilityData.get(player);
     		Category c = aData.getCategory();
     		
-    		available.add(cancelBinding);
     		for(Skill s : aData.getControllableSkillList()) {
     			int cid = s.getControlID();
     			if(!editor.hasMapping(cid)) {
@@ -482,9 +478,14 @@ public class PresetEditUI extends GuiScreen {
     			}
     		}
     		
-    		height = MARGIN * 2 + SIZE + STEP * (ldiv(available.size(), MAX_PER_ROW) - 1);
+    		List<SelectionProvider> providers = new ArrayList();
+    		providers.add(new SelectionProvider(-1, Resources.getTexture("guis/preset_settings/cancel"), ""));
+    		for(Skill s : available)
+    			providers.add(new SelectionProvider(s.getControlID(), s.getHintIcon(), s.getDisplayName()));
+    		
+    		height = MARGIN * 2 + SIZE + STEP * (ldiv(providers.size(), MAX_PER_ROW) - 1);
     		width = available.size() < MAX_PER_ROW ? 
-    			MARGIN * 2 + SIZE + STEP * (available.size() - 1) : 
+    			MARGIN * 2 + SIZE + STEP * (providers.size() - 1) : 
     			MARGIN * 2 + SIZE + STEP * (MAX_PER_ROW - 1);
     		
     		transform.setSize(width, height);
@@ -503,7 +504,7 @@ public class PresetEditUI extends GuiScreen {
 					Widget hovering = foreground.getHoveringWidget();
 					if(hovering != null && hovering.getName().contains("_sel")) {
 						SelHandler sh = hovering.getComponent("_sel");
-						Font.font.draw(sh.skill.getHintText(), 0, -10, 10, 0xffffff);
+						Font.font.draw(sh.selection.hint, 0, -10, 10, 0xffffff);
 					}
 					
 					GL11.glColor4d(1, 1, 1, 1);
@@ -512,33 +513,33 @@ public class PresetEditUI extends GuiScreen {
     		});
     		
     		// Build all the skills that can be set
-    		for(int i = 0; i < available.size(); ++i) {
+    		for(int i = 0; i < providers.size(); ++i) {
     			int row = i / MAX_PER_ROW, col = i % MAX_PER_ROW;
-    			final Skill skill = available.get(i);
+    			SelectionProvider selection = providers.get(i);
     			Widget single = new Widget();
     			single.transform.setPos(MARGIN + col * STEP, MARGIN + row * STEP);
     			single.transform.setSize(SIZE, SIZE);
     			
-    			DrawTexture tex = new DrawTexture().setTex(available.get(i).getHintIcon());
+    			DrawTexture tex = new DrawTexture().setTex(selection.texture);
     			single.addComponent(tex);
     			single.addComponent(new Tint());
-    			single.addComponent(new SelHandler(skill));
+    			single.addComponent(new SelHandler(selection));
     			addWidget("_sel" + i, single);
     		}
     	}
     	
     	private class SelHandler extends Component {
     		
-    		final Skill skill;
+    		final SelectionProvider selection;
 
-			public SelHandler(Skill _skill) {
+			public SelHandler(SelectionProvider _selection) {
 				super("_sel");
-				skill = _skill;
+				selection = _selection;
 				this.addEventHandler(new MouseDownHandler() {
 
 					@Override
 					public void handleEvent(Widget w, MouseDownEvent event) {
-						onEdit(keyid, skill.getControlID());
+						onEdit(keyid, selection.id);
 						Selector.this.dispose();
 					}
     				
