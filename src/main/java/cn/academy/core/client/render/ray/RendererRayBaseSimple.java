@@ -12,6 +12,7 @@
  */
 package cn.academy.core.client.render.ray;
 
+import static cn.liutils.util.generic.VecUtils.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -21,7 +22,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.ViewOptimize;
-import cn.liutils.util.generic.VecUtils;
+import cn.liutils.util.generic.MathUtils;
+import cn.liutils.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD
@@ -36,36 +38,33 @@ public abstract class RendererRayBaseSimple extends Render {
 		
 		GL11.glPushMatrix();
 		
-		GL11.glTranslated(x, y, z);
-		GL11.glRotatef(270 - ent.rotationYaw, 0, 1, 0);
-		
-//		if(ray.needsViewOptimize()) {
-//			ViewOptimize.fix(ray);
-//		}
 		double length = ray.getLength();
-		
-		// A advanced ray view optimization with no ending point displacement.
-		// This works by reversely calculating the angle needed to rotate and the length of the 'fixed' ray,
-		// And then perform the rotation at the end point of the ray.
-		if(ray.needsViewOptimize()) {
-			Vec3 fix = ViewOptimize.getFixVector(ray);
-			double dx = length - fix.xCoord, dy = 0 - fix.yCoord, dz = 0 - fix.zCoord;
-			double dxzsq = dx * dx + dz * dz;
-			double pitch = Math.atan2(dy, Math.sqrt(dxzsq)) * 180 / Math.PI;
-			double yaw = Math.atan2(dx, dz) * 180 / Math.PI;
-			
-			length = Math.sqrt(dxzsq + dy * dy);
-			
-			// Apply transformation
-			GL11.glTranslated(length, 0, 0);
-			GL11.glRotated(270 + yaw, 0, 1, 0);
-			GL11.glRotated(pitch, 0, 0, 1);
-			GL11.glTranslated(-length, 0, 0);
-		}
-		
-		GL11.glRotatef(ent.rotationPitch, 0, 0, -1);
 		double fix = ray.getStartFix();
 		
+		Vec3 vo;
+		if(ray.needsViewOptimize())
+			vo = ViewOptimize.getFixVector(ray);
+		else
+			vo = vec(0, 0, 0);
+		// Rotate fix vector to world coordinate
+		vo.rotateAroundY(MathUtils.toRadians(270 - ent.rotationYaw));
+		
+		Vec3 start = vec(0, 0, 0),
+			end = add(start, multiply(new Motion3D(ent, true).getMotionVec(), length));
+		start = add(start, vo);
+		
+		x += start.xCoord;
+		y += start.yCoord;
+		z += start.zCoord;
+		
+		Vec3 delta = subtract(end, start);
+		double dxzsq = delta.xCoord * delta.xCoord + delta.zCoord * delta.zCoord;
+		double npitch = MathUtils.toAngle(Math.atan2(delta.yCoord, Math.sqrt(dxzsq)));
+		double nyaw = MathUtils.toAngle(Math.atan2(delta.xCoord, delta.zCoord));
+		
+		GL11.glTranslated(x, y, z);
+		GL11.glRotated(-90 + nyaw, 0, 1, 0);
+		GL11.glRotated(npitch, 0, 0, 1);
 		GL11.glTranslated(fix, 0, 0);
 		draw(ent, ray.getLength() - fix);
 		

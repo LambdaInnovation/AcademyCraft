@@ -24,8 +24,11 @@ ac {
 		}
 		
 		jet_engine {
-			consumption(exp) { 233 }
-			overload(exp) { 233 }
+			damage(exp) { lerp(7, 10, exp) }
+			cooldown(exp) { 20 * floor(lerp(6, 3, exp)) }
+			consumption(exp) { lerp(170, 140, exp) }
+			overload(exp) { lerp(60, 50, exp) }
+			expincr { 0.004 }
 		}
 	}
 }

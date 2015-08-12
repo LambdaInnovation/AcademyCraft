@@ -13,15 +13,19 @@
 package cn.academy.vanilla.meltdowner.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
+import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
@@ -46,6 +50,14 @@ public class JetEngine extends Skill {
 	public JetEngine() {
 		super("jet_engine", 4);
 		instance = this;
+	}
+	
+	static float getExpIncr(AbilityData data) {
+		return instance.getFloat("expincr");
+	}
+	
+	static float getDamage(AbilityData data) {
+		return instance.callFloatWithExp("damage", data);
 	}
 	
 	@Override
@@ -82,6 +94,8 @@ public class JetEngine extends Skill {
 		public void onEnd() {
 			if(!isRemote && cpData.perform(instance.getConsumption(aData), instance.getOverload(aData))) {
 				startTriggerAction(player, getDest().addVector(0, 1.65, 0));
+				aData.addSkillExp(instance, getExpIncr(aData));
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 			}
 		}
 		
@@ -148,6 +162,8 @@ public class JetEngine extends Skill {
 		public void onStart() {
 			super.onStart();
 			if(isRemote) {
+				startEffects();
+				
 				start = VecUtils.vec(player.posX, player.posY, player.posZ);
 				velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME);
 			}
@@ -170,14 +186,34 @@ public class JetEngine extends Skill {
 				}
 				
 				updateEffects();
+			} else {
+				MovingObjectPosition pos = Raytrace.perform(world, 
+					VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
+					VecUtils.vec(player.posX, player.posY, player.posZ),
+					EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living)
+				);
+				if(pos != null && pos.entityHit != null) {
+					DamageHelper.attack(pos.entityHit, 
+						DamageSource.causePlayerDamage(player), getDamage(aData));
+				}
 			}
-			
-			
 		}
 		
 		@Override
 		public void onFinalize() {
 			player.capabilities.setPlayerWalkSpeed(0.1f);
+			
+			if(isRemote)
+				endEffects();
+		}
+		
+		// CLIENT
+		@SideOnly(Side.CLIENT)
+		EntityDiamondShield entity;
+		
+		@SideOnly(Side.CLIENT)
+		private void startEffects() {
+			world.spawnEntityInWorld(entity = new EntityDiamondShield(player));
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -202,6 +238,11 @@ public class JetEngine extends Skill {
 					world.spawnEntityInWorld(p);
 				}
 			}
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void endEffects() {
+			entity.setDead();
 		}
 		
 	}
