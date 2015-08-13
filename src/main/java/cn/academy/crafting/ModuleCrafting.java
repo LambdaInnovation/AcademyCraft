@@ -148,8 +148,10 @@ public class ModuleCrafting {
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 2000, new ItemStack(crystalPure));
 		
-		// DEBUG & EXAMPLE, REMOVE AFTERWARDS
-		MetalFormerRecipes.INSTANCE.add(new ItemStack(rfIronPlate, 2), new ItemStack(Items.diamond), Mode.PLATE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(wafer), new ItemStack(dataChip, 4), Mode.INCISE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(dataChip), new ItemStack(calcChip), Mode.ETCH);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate), Mode.PLATE);
 	}
 	
 }
