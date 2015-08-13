@@ -101,16 +101,6 @@ public abstract class MineRaysBase extends Skill {
 		}
 		
 		@Override
-		public void writeNBTUpdate(NBTTagCompound tag) {
-			
-		}
-		
-		@Override
-		public void readNBTUpdate(NBTTagCompound tag) {
-			
-		}
-		
-		@Override
 		public void onTick() {
 			if(!cpData.perform(skill.getOverload(aData), skill.getConsumption(aData)));
 			
@@ -118,10 +108,16 @@ public abstract class MineRaysBase extends Skill {
 			if(result != null) {
 				int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
 				if(tx != x || ty != y || tz != z) {
-					x = tx; y = ty; z = tz;
-					hardnessLeft = world.getBlock(tx, ty, tz).getBlockHardness(world, tx, ty, tz);
-					if(hardnessLeft < 0)
-						hardnessLeft = Float.MAX_VALUE;
+					Block block = world.getBlock(tx, ty, tz);
+					if(block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
+						x = tx; y = ty; z = tz;
+						hardnessLeft = block.getBlockHardness(world, tx, ty, tz);
+						
+						if(hardnessLeft < 0)
+							hardnessLeft = Float.MAX_VALUE;
+					} else {
+						x = y = z = -1;
+					}
 				} else {
 					hardnessLeft -= skill.callFloatWithExp("speed", aData);
 					if(hardnessLeft <= 0) {

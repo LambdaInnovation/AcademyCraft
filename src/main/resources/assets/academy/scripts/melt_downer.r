@@ -33,11 +33,42 @@ ac {
 		
 		mine_ray_basic {
 			range { 10 }
+			harvest_level { 2 }
 			speed(exp) { 0.1 * lerp(1, 2, exp) }
 			consumption(exp) { lerp(15, 20, exp) }
 			overload(exp) { lerp(8, 5, exp) }
 			cooldown(exp) { lerp(60, 30, exp) }
 			expincr { 0.0005 }
+		}
+		
+		mine_ray_expert {
+			range { 20 }
+			harvest_level { 5 }
+			speed(exp) { 0.5 * lerp(1, 2, exp) }
+			consumption(exp) { lerp(25, 20, exp) }
+			overload(exp) { lerp(12, 10, exp) }
+			cooldown(exp) { lerp(60, 30, exp) }
+			expincr { 0.0003 }
+		}
+		
+		mine_ray_luck {
+			range { 20 }
+			harvest_level { 5 }
+			speed(exp) { 0.5 * lerp(1, 2, exp) }
+			consumption(exp) { lerp(25, 20, exp) }
+			overload(exp) { lerp(12, 10, exp) }
+			cooldown(exp) { lerp(60, 30, exp) }
+			expincr { 0.0003 
+		}
+		
+		mine_ray_acc {
+			range { 20 }
+			harvest_level { 5 }
+			speed(exp) { 0.5 * lerp(1, 2, exp) }
+			consumption(exp) { lerp(25, 20, exp) }
+			overload(exp) { lerp(12, 10, exp) }
+			cooldown(exp) { lerp(60, 30, exp) }
+			expincr { 0.0003 
 		}
 	}
 }

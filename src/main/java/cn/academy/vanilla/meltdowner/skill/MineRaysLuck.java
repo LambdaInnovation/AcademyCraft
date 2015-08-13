@@ -17,27 +17,27 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
+import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
 
 /**
  * @author WeAthFolD
  */
-public class MineRayBasic extends MineRaysBase {
+public class MineRaysLuck extends MineRaysBase {
 
-	public MineRayBasic() {
-		super("basic", 2);
+	public MineRaysLuck() {
+		super("expert", 4);
 	}
 
 	@Override
 	protected void onBlockBreak(World world, int x, int y, int z, Block block) {
 		world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound(), .5f, 1f);
-		block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0);
+		block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 3);
 		world.setBlock(x, y, z, Blocks.air);
 	}
 
 	@Override
 	protected Entity createRay(EntityPlayer player) {
-		return new EntityMineRayBasic(player);
+		return new EntityMineRayExpert(player);
 	}
 
 }

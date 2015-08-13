@@ -35,12 +35,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 @RegEntity
 @RegEntity.HasRender
-public class EntityMineRayBasic extends EntityRayBase {
+public class EntityMineRayExpert extends EntityRayBase {
 	
 	@RegEntity.Render
-	public static BasicMineRayRender renderer;
+	public static ExpertRayRenderer renderer;
 	
-	public EntityMineRayBasic(EntityPlayer _player) {
+	public EntityMineRayExpert(EntityPlayer _player) {
 		super(_player);
 		
 		this.blendInTime = 200;
@@ -55,7 +55,7 @@ public class EntityMineRayBasic extends EntityRayBase {
 		EntityPlayer player = getPlayer();
 		Vec3 end = new Motion3D(player, true).move(15).getPosVec();
 		this.setFromTo(player.posX, player.posY, player.posZ, end.xCoord, end.yCoord, end.zCoord);
-		if(RandUtils.nextDouble() < 0.5) {
+		if(RandUtils.nextDouble() < 0.6) {
 			Particle p = MdParticleFactory.INSTANCE.next(worldObj,
 					new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
 					VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
@@ -63,18 +63,18 @@ public class EntityMineRayBasic extends EntityRayBase {
 		}
 	}
 	
-	public static class BasicMineRayRender extends RendererRayComposite {
+	public static class ExpertRayRenderer extends RendererRayComposite {
 
-		public BasicMineRayRender() {
-			super("mdray_small");
-			this.cylinderIn.width = 0.03;
+		public ExpertRayRenderer() {
+			super("mdray_expert");
+			this.cylinderIn.width = 0.045;
 			this.cylinderIn.material.color = new Color().setColor4i(216, 248, 216, 230);
 			
-			this.cylinderOut.width = 0.045;
+			this.cylinderOut.width = 0.056;
 			this.cylinderOut.material.color = new Color().setColor4i(106, 242, 106, 50);
 			
-			this.glow.width = 0.3;
-			this.glow.color.a = 0.5;
+			this.glow.width = 0.5;
+			this.glow.color.a = 0.7;
 		}
 		
 	}

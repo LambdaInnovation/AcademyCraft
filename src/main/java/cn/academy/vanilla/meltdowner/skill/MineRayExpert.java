@@ -17,15 +17,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
+import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
 
 /**
  * @author WeAthFolD
  */
-public class MineRayBasic extends MineRaysBase {
+public class MineRayExpert extends MineRaysBase {
 
-	public MineRayBasic() {
-		super("basic", 2);
+	public MineRayExpert() {
+		super("expert", 4);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class MineRayBasic extends MineRaysBase {
 
 	@Override
 	protected Entity createRay(EntityPlayer player) {
-		return new EntityMineRayBasic(player);
+		return new EntityMineRayExpert(player);
 	}
 
 }
