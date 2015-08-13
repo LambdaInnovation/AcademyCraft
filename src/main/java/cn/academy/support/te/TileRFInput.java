@@ -18,6 +18,9 @@ import cn.academy.core.block.TileGeneratorBase;
 
 public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
 
+	/** The convert rate (RF * RATE = IF) */
+	private static final float RATE = 1f; 
+	
 	public TileRFInput() {
 		super("ac_rf_input", 0, 2000, 100);
 	}
@@ -30,17 +33,18 @@ public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive,
 			boolean simulate) {
-		return (int) (maxReceive - addEnergy(maxReceive));
+		int amount = (int) (maxReceive * RATE);
+		return (int) (maxReceive - addEnergy(amount) / RATE);
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) getEnergy();
+		return (int) ((int) getEnergy() / RATE);
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return 2000;
+		return (int) (2000 / RATE);
 	}
 
 	@Override

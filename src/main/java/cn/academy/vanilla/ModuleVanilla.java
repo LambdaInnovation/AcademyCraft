@@ -1,10 +1,14 @@
 package cn.academy.vanilla;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.api.MetalFormerRecipes;
+import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.generic.skill.SkillBrainCourse;
@@ -50,7 +54,11 @@ public class ModuleVanilla {
 	@RegCategory
 	public static CatHeatMatser heatmaster;
 
-	public static void init() {}
+	public static void init() {
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate), new ItemStack(needle, 6), Mode.INCISE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate, 2), new ItemStack(coin, 3), Mode.PLATE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.wafer), new ItemStack(silbarn), Mode.INCISE);
+	}
 	
 	public static void addGenericSkills(Category category) {
 		category.addSkill("passive", new SkillBrainCourse());

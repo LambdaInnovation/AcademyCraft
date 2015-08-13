@@ -129,23 +129,17 @@ public class AcademyCraft {
         try { 
         	Class.forName("ic2.core.IC2");
         	try {
-        		Class.forName("cn.academy.support.ModuleSupport")
-					.getMethod("initIC2", RecipeRegistry.class).invoke(this, 
-							recipes);
-        	}
-        	catch (Throwable e) {
+        		Class.forName("cn.academy.support.ic2.IC2Support").getMethod("init").invoke(this);
+        	} catch (Throwable e) {
         		log.error("Failed to initialize IC2 support", e);
         	}
         } catch(Throwable e) {}
         
         try { 
-        	Class.forName("cofh.CoFHCore");
+        	Class.forName("cofh.thermalexpansion.ThermalExpansion");
         	try {
-        		Class.forName("cn.academy.support.ModuleSupport")
-					.getMethod("initTE", RecipeRegistry.class).invoke(this, 
-							recipes);
-        	}
-        	catch (Throwable e) {
+        		Class.forName("cn.academy.support.te.TESupport").getMethod("init").invoke(this);
+        	} catch (Throwable e) {
         		log.error("Failed to initialize TE support", e);
         	}
         } catch(Throwable e) {}

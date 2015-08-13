@@ -17,6 +17,9 @@ import cofh.api.energy.IEnergyProvider;
 import cn.academy.core.block.TileReceiverBase;
 
 public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
+	
+	/** The convert rate (RF * RATE = IF) */
+	private static final float RATE = 1f; 
 
 	public TileRFOutput() {
 		super("ac_rf_output", 0, 2000, 100);
@@ -31,19 +34,19 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 	public int extractEnergy(ForgeDirection from, int maxExtract,
 			boolean simulate) {
 		int e = (int) energy;
-		energy -= maxExtract;
+		energy -= maxExtract / RATE;
 		if(energy < 0d) energy = 0d;
-		return Math.min(e, maxExtract);
+		return (int) Math.min(e / RATE, maxExtract);
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) energy;
+		return (int) ((int) energy / RATE);
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return 2000;
+		return (int) (2000 / RATE);
 	}
 
 }
