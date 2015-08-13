@@ -10,17 +10,13 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.support;
+package cn.academy.support.ic2;
 
 import ic2.core.Ic2Items;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.support.ic2.BlockEUInput;
-import cn.academy.support.ic2.BlockEUOutput;
-import cn.academy.support.ic2.TileEUInput;
-import cn.academy.support.ic2.TileEUOutput;
 
 /**
  * 

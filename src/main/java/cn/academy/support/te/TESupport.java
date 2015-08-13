@@ -1,14 +1,10 @@
-package cn.academy.support;
+package cn.academy.support.te;
 
 import cofh.thermalexpansion.block.cell.BlockCell;
 import cofh.thermalexpansion.item.TEItems;
 import net.minecraft.item.ItemStack;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.support.te.BlockRFInput;
-import cn.academy.support.te.BlockRFOutput;
-import cn.academy.support.te.TileRFInput;
-import cn.academy.support.te.TileRFOutput;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TESupport {

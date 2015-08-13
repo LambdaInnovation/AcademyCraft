@@ -129,7 +129,7 @@ public class AcademyCraft {
         try { 
         	Class.forName("ic2.core.IC2");
         	try {
-        		Class.forName("cn.academy.support.IC2Support").getMethod("init").invoke(this);
+        		Class.forName("cn.academy.support.ic2.IC2Support").getMethod("init").invoke(this);
         	} catch (Throwable e) {
         		log.error("Failed to initialize IC2 support", e);
         	}
@@ -138,7 +138,7 @@ public class AcademyCraft {
         try { 
         	Class.forName("cofh.thermalexpansion.ThermalExpansion");
         	try {
-        		Class.forName("cn.academy.support.TESupport").getMethod("init").invoke(this);
+        		Class.forName("cn.academy.support.te.TESupport").getMethod("init").invoke(this);
         	} catch (Throwable e) {
         		log.error("Failed to initialize TE support", e);
         	}
