@@ -27,6 +27,8 @@ import cn.academy.core.block.TileReceiverBase;
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	private boolean isRegistered = false;
+	/** The convert rate (EU * RATE = IF) */
+	private static final float RATE = 1f; 
 
 	public TileEUOutput() {
 		super("ac_eu_output", 0, 2000, 100);
@@ -39,12 +41,12 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 
 	@Override
 	public double getOfferedEnergy() {
-		return energy;
+		return energy / RATE;
 	}
 
 	@Override
 	public void drawEnergy(double amount) {
-		energy -= amount;
+		energy -= (amount / RATE);
 		if(energy < 0d) energy = 0d;
 	}
 
