@@ -27,6 +27,7 @@ public class CatMeltdowner extends Category {
 	public static JetEngine jetEngine;
 	public static MineRayBasic minerayBasic;
 	public static MineRayExpert mineRayExpert;
+	public static MineRayLuck mineRayLuck;
 
 	public CatMeltdowner() {
 		super("melt_downer");
@@ -40,6 +41,7 @@ public class CatMeltdowner extends Category {
 		this.addSkill("A", jetEngine = new JetEngine());
 		this.addSkill("A", minerayBasic = new MineRayBasic());
 		this.addSkill("A", mineRayExpert = new MineRayExpert());
+		this.addSkill("A", mineRayLuck = new MineRayLuck());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

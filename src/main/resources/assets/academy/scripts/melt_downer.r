@@ -36,7 +36,7 @@ ac {
 			harvest_level { 2 }
 			speed(exp) { 0.1 * lerp(1, 2, exp) }
 			consumption(exp) { lerp(15, 20, exp) }
-			overload(exp) { lerp(8, 5, exp) }
+			overload(exp) { lerp(4, 2.5, exp) }
 			cooldown(exp) { lerp(60, 30, exp) }
 			expincr { 0.0005 }
 		}
@@ -46,7 +46,7 @@ ac {
 			harvest_level { 5 }
 			speed(exp) { 0.5 * lerp(1, 2, exp) }
 			consumption(exp) { lerp(25, 20, exp) }
-			overload(exp) { lerp(12, 10, exp) }
+			overload(exp) { lerp(6, 5, exp) }
 			cooldown(exp) { lerp(60, 30, exp) }
 			expincr { 0.0003 }
 		}
@@ -56,9 +56,9 @@ ac {
 			harvest_level { 5 }
 			speed(exp) { 0.5 * lerp(1, 2, exp) }
 			consumption(exp) { lerp(25, 20, exp) }
-			overload(exp) { lerp(12, 10, exp) }
+			overload(exp) { lerp(6, 5, exp) }
 			cooldown(exp) { lerp(60, 30, exp) }
-			expincr { 0.0003 
+			expincr { 0.0003 }
 		}
 		
 		mine_ray_acc {
@@ -66,9 +66,9 @@ ac {
 			harvest_level { 5 }
 			speed(exp) { 0.5 * lerp(1, 2, exp) }
 			consumption(exp) { lerp(25, 20, exp) }
-			overload(exp) { lerp(12, 10, exp) }
+			overload(exp) { lerp(6, 5, exp) }
 			cooldown(exp) { lerp(60, 30, exp) }
-			expincr { 0.0003 
+			expincr { 0.0003 }
 		}
 	}
 }

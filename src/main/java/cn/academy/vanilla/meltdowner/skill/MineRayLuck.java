@@ -22,10 +22,10 @@ import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
 /**
  * @author WeAthFolD
  */
-public class MineRaysLuck extends MineRaysBase {
+public class MineRayLuck extends MineRaysBase {
 
-	public MineRaysLuck() {
-		super("expert", 4);
+	public MineRayLuck() {
+		super("luck", 4);
 	}
 
 	@Override
