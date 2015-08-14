@@ -63,6 +63,10 @@ public class Resources {
     	return res("textures/" + loc + ".png");
     }
     
+    public static ResourceLocation getShader(String loc) {
+    	return res("shaders/" + loc + ".glsl");
+    }
+    
     public static ResourceLocation[] getTextureSeq(String loc, int n) {
     	ResourceLocation[] ret = new ResourceLocation[n];
     	for(int i = 0; i < n; ++i)

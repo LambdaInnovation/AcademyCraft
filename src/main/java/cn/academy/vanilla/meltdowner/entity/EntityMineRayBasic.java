@@ -68,10 +68,10 @@ public class EntityMineRayBasic extends EntityRayBase {
 		public BasicMineRayRender() {
 			super("mdray_small");
 			this.cylinderIn.width = 0.03;
-			this.cylinderIn.material.color = new Color().setColor4i(216, 248, 216, 230);
+			this.cylinderIn.color.setColor4i(216, 248, 216, 230);
 			
 			this.cylinderOut.width = 0.045;
-			this.cylinderOut.material.color = new Color().setColor4i(106, 242, 106, 50);
+			this.cylinderOut.color.setColor4i(106, 242, 106, 50);
 			
 			this.glow.width = 0.3;
 			this.glow.color.a = 0.5;

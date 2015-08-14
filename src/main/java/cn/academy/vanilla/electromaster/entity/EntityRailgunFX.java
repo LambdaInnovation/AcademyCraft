@@ -143,10 +143,10 @@ public class EntityRailgunFX extends EntityRayBase {
 			glow.endFix = 0.3;
 			glow.width = 1.1;
 			
-			cylinderIn.material.color = new Color().setColor4i(241, 240, 222, 200);
+			cylinderIn.color.setColor4i(241, 240, 222, 200);
 			cylinderIn.width = 0.09;
 			
-			cylinderOut.material.color = new Color().setColor4i(236, 170, 93, 60);
+			cylinderOut.color.setColor4i(236, 170, 93, 60);
 			cylinderOut.width = 0.13;
 			
 			ArcFactory factory = new ArcFactory();

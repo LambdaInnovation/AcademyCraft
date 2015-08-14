@@ -68,10 +68,10 @@ public class EntityMineRayExpert extends EntityRayBase {
 		public ExpertRayRenderer() {
 			super("mdray_expert");
 			this.cylinderIn.width = 0.045;
-			this.cylinderIn.material.color = new Color().setColor4i(216, 248, 216, 230);
+			this.cylinderIn.color.setColor4i(216, 248, 216, 230);
 			
 			this.cylinderOut.width = 0.056;
-			this.cylinderOut.material.color = new Color().setColor4i(106, 242, 106, 50);
+			this.cylinderOut.color.setColor4i(106, 242, 106, 50);
 			
 			this.glow.width = 0.5;
 			this.glow.color.a = 0.7;

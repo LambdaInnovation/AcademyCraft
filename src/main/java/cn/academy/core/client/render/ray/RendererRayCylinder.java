@@ -18,10 +18,12 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
+import cn.academy.core.client.glsl.GLSLMesh;
+import cn.academy.core.client.glsl.ShaderNaiveNotex;
 import cn.academy.core.entity.IRay;
 import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
 import cn.liutils.util.helper.Color;
 
 /**
@@ -36,10 +38,11 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 	
 	static final int DIV = 12;
 	
-	static Mesh head = new Mesh();
-	static Mesh cylinder = new Mesh();
+	static GLSLMesh head = new GLSLMesh();
+	static GLSLMesh cylinder = new GLSLMesh();
 	
-	public SimpleMaterial material;
+	public final Color color = new Color();
+	private final ShaderNaiveNotex shader = ShaderNaiveNotex.instance();
 	
 	static {
 		try{
@@ -138,9 +141,7 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 	}
 	
 	public RendererRayCylinder() {
-		SimpleMaterial sm = new SimpleMaterial(null).setIgnoreLight();
-		sm.color.setColor4i(244, 234, 165, 170);
-		material = sm;
+		color.setColor4i(244, 234, 165, 170);
 	}
 
 	@Override
@@ -151,35 +152,39 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 		IRay ray = (IRay) entity;
 		
 		//HACK: Store the previous alpha
-		double oldA = material.color.a;
-		material.color.a *= ray.getAlpha();
+		double oldA = color.a;
+		color.a *= ray.getAlpha();
 		
 		double width = this.width * ray.getWidth();
 		
+		color.bind();
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glPushMatrix();
 		double offset = width * (1 - headFix);
 		GL11.glTranslated(offset, 0, 0);
 		GL11.glScaled(width * headFix, width, width);
-		head.draw(material);
+		head.draw(shader);
 		GL11.glPopMatrix();
 		
 		//Draw the cylinder
 		GL11.glPushMatrix();
 		GL11.glTranslated(width, 0, 0);
 		GL11.glScaled(len - width, width, width);
-		cylinder.draw(material);
+		cylinder.draw(shader);
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslated(len + width - offset, 0, 0);
 		GL11.glScaled(-width * headFix, width, -width);
-		head.draw(material);
+		head.draw(shader);
 		GL11.glPopMatrix();
 		
 		GL11.glPopMatrix();
 		
-		material.color.a = oldA;
+		color.a = oldA;
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glColor4d(1, 1, 1, 1);
 	}
 
 }
