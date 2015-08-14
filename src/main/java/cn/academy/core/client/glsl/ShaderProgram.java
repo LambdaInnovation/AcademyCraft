@@ -14,27 +14,18 @@ package cn.academy.core.client.glsl;
 
 // WHY DO YOU SEPERATE VERSIONS IT'S NONSENSE LWJGL!
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL14.*;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL31.*;
-import static org.lwjgl.opengl.GL32.*;
-import static org.lwjgl.opengl.GL33.*;
-import static org.lwjgl.opengl.GL40.*;
-import static org.lwjgl.opengl.GL41.*;
-import static org.lwjgl.opengl.GL42.*;
-import static org.lwjgl.opengl.GL43.*;
-import static org.lwjgl.opengl.GL44.*;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.util.ResourceLocation;
 
 import org.apache.commons.io.IOUtils;
 
-import net.minecraft.util.ResourceLocation;
 import cn.academy.core.AcademyCraft;
 import cn.liutils.util.generic.RegistryUtils;
 
@@ -44,8 +35,16 @@ import cn.liutils.util.generic.RegistryUtils;
  */
 public class ShaderProgram {
 	
+	static Map<ResourceLocation, Integer> loadedShaders = new HashMap();
+	public static void releaseResources() {
+		for(Integer e : loadedShaders.values())
+			glDeleteShader(e);
+		loadedShaders.clear();
+	}
+	
 	private boolean compiled = false;
 	private int programID;
+	private List<Integer> attachedShaders = new ArrayList();
 	
 	public ShaderProgram() {
 		programID = glCreateProgram();
@@ -53,18 +52,25 @@ public class ShaderProgram {
 	
 	public void linkShader(ResourceLocation location, int type) {
 		try {
-			String str = IOUtils.toString(RegistryUtils.getResourceStream(location));
-			int shaderID = glCreateShader(type);
-			glShaderSource(shaderID, str);
-			glCompileShader(shaderID);
 			
-			int successful = glGetShaderi(shaderID, GL_COMPILE_STATUS);
-			if(successful == GL_FALSE) {
-				String log = glGetShaderInfoLog(shaderID, glGetShaderi(shaderID, GL_INFO_LOG_LENGTH));
-				AcademyCraft.log.error("Error when linking shader '" + location + "'. code: " + successful + ", Error string: \n" + log);
-				throw new RuntimeException();
+			int shaderID;
+			if(loadedShaders.containsKey(location)) {
+				shaderID = loadedShaders.get(location);
+			} else {
+				String str = IOUtils.toString(RegistryUtils.getResourceStream(location));
+				shaderID = glCreateShader(type);
+				glShaderSource(shaderID, str);
+				glCompileShader(shaderID);
+				
+				int successful = glGetShaderi(shaderID, GL_COMPILE_STATUS);
+				if(successful == GL_FALSE) {
+					String log = glGetShaderInfoLog(shaderID, glGetShaderi(shaderID, GL_INFO_LOG_LENGTH));
+					AcademyCraft.log.error("Error when linking shader '" + location + "'. code: " + successful + ", Error string: \n" + log);
+					throw new RuntimeException();
+				}
 			}
 			
+			attachedShaders.add(shaderID);
 			glAttachShader(programID, shaderID);
 		} catch (IOException e) {
 			AcademyCraft.log.error("Error when linking shader " + location, e);
@@ -92,6 +98,10 @@ public class ShaderProgram {
 		}
 		
 		glLinkProgram(programID);
+		
+		for(Integer i : attachedShaders)
+			glDetachShader(programID, i);
+		attachedShaders = null;
 		
 		int status = glGetProgrami(programID, GL_LINK_STATUS);
 		if(status == GL_FALSE) {

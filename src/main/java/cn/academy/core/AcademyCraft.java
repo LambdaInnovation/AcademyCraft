@@ -12,7 +12,6 @@
  */
 package cn.academy.core;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -20,12 +19,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
+import cn.academy.core.client.glsl.ShaderProgram;
 import cn.academy.core.util.ValuePipeline;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
@@ -46,6 +45,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Academy Craft Mod Main Class
@@ -168,6 +169,12 @@ public class AcademyCraft {
         }
         
         recipes = null; //Doesn't need it after loading
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void postInit2(FMLPostInitializationEvent event) {
+    	ShaderProgram.releaseResources();
     }
 
     @EventHandler
