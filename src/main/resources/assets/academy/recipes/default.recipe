@@ -123,15 +123,15 @@ shaped(mat_core*2) {
     [mat_core*1]
 }
 
-smelting(imagsil_ingot) {
+smelting(imagsil_ingot)[0.8] {
     [imagsil_ore]
 }
 
-smelting(cons_ingot) {
+smelting(cons_ingot)[0.7] {
     [cons_ore]
 }
 
-smelting(crystal0) {
+smelting(crystal0)[0.8] {
     [crystal_ore]
 }
 
