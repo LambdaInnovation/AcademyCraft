@@ -41,7 +41,7 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) ((int) energy / RATE);
+		return (int) (energy / RATE);
 	}
 
 	@Override
