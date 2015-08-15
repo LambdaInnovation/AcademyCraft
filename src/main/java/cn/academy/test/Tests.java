@@ -1,9 +1,11 @@
 package cn.academy.test;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.input.Keyboard;
 
+import cn.academy.ability.client.skilltree.GuiSkillTree;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.core.util.RangedRayDamage;
 import cn.annoreg.core.Registrant;
@@ -14,26 +16,19 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * ValuePipeline unittest
- * @author WeAthFolD
+ * Tests
  */
 @Registrant
-public class RangeDamageTest {
+public class Tests {
 	
 	@RegACKeyHandler(name = "miku", defaultKey = Keyboard.KEY_K)
 	public static KeyHandler key = new KeyHandler() {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void onKeyDown() {
-			rangeDmgAtServer(getPlayer());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTree(getPlayer()));
 		}
 	};
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void rangeDmgAtServer(@Instance EntityPlayer player) {
-		RangedRayDamage rrd = new RangedRayDamage(player, 2, 1000);
-		rrd.perform();
-	}
 	
 	
 }

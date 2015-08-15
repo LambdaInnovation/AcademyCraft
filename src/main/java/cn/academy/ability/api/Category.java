@@ -60,6 +60,14 @@ public class Category {
 		
 	}
 	
+	public String[] getTypes() {
+		return typeMap.keySet().toArray(new String[] {});
+	}
+	
+	public String getTypeName(String type) {
+		return StatCollector.translateToLocal("ac.ability." + name + ".type." + type + ".desc");
+	}
+	
 	public Color getColorStyle() {
 		return colorStyle;
 	}

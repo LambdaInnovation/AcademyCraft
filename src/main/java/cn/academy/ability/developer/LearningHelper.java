@@ -10,31 +10,21 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.vanilla.generic.skill;
+package cn.academy.ability.developer;
 
-import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.util.SubscribePipeline;
 
 /**
- * Generic skill: Brain Course.
+ * All sorts of judging utilities about ability learning.
  * @author WeAthFolD
  */
-public class SkillBrainCourse extends Skill {
-
-	public SkillBrainCourse() {
-		super("brain_course", 4);
-		this.canControl = false;
-		this.isGeneric = true;
-		this.guiPosition.set(100, 100);
+public class LearningHelper {
+	
+	/**
+	 * @return Whether the given player can level up currently
+	 */
+	public static boolean canLevelUp(AbilityData aData) {
+		return true;
 	}
 	
-	@SubscribePipeline("ability.maxcp")
-	public float addMaxCP(float cp, EntityPlayer player) {
-		if(AbilityData.get(player).isSkillLearned(this))
-			cp += 1000;
-		return cp;
-	}
-
 }

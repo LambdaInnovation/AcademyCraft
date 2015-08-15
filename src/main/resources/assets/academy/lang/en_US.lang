@@ -127,7 +127,7 @@ ac.skill_tree.espinfo_title=ESPer info
 
 ac.skill_tree.macinfo_title=Machine Info
 ac.skill_tree.energy=Energy
-ac.skill_tree.syncrate=Synchonization Rate
+ac.skill_tree.syncrate=Sync Rate
 
 # Settings
 ac.settings.cat.generic=Generic
@@ -209,6 +209,14 @@ ac.media.level5_judgelight.name=Level5 -Judgelight-
 ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
 ac.media.sisters_noise.name=Sister's Noise
 ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
+
+# Ability Generic
+ac.ability.level0=Level 0
+ac.ability.level1=Level 1
+ac.ability.level2=Level 2
+ac.ability.level3=Level 3
+ac.ability.level4=Level 4
+ac.ability.level5=Level 5
 
 # Electro Master
 ## EM Knowledges

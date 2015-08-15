@@ -12,6 +12,7 @@
  */
 package cn.academy.core.client;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -20,6 +21,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,6 +50,7 @@ public class ACRenderingHelper {
 		
 		final double s = size;
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		Tessellator t = Tessellator.instance;
 		gdraw(GLOW_L,  x - s, 	  y, 		  s, 	 height);
 		gdraw(GLOW_R,  x + width, y, 		  s, 	 height);
 		gdraw(GLOW_U,  x, 	  	  y - s, 	  width, s);
@@ -58,9 +61,51 @@ public class ACRenderingHelper {
 		gdraw(GLOW_LD, x - s, 	  y + height, s, 	 s);
 	}
 	
-	private static void gdraw(ResourceLocation tex, double x0, double y0, double w, double h) {
+	/**
+	 * Draws a circular progress bar at (0, 0) with radius 1
+	 */
+	public static void drawCircularProgbar(ResourceLocation texture, double progress) {
+		progress *= 360;
+		if(progress > 360)
+			progress %= 360;
+		
+		Tessellator t = Tessellator.instance;
+		
+		GL11.glPushMatrix();
+		GL11.glRotated(-90, 0, 0, 1);
+		RenderUtils.loadTexture(texture);
+		for(int i = 0; i < 4; ++i) {
+			double angle = Math.min(90, progress - 90 * i);
+			if(angle <= 0)
+				break;
+			double u1, v1;
+			t.startDrawing(GL11.GL_TRIANGLES);
+			
+			if(angle <= 45) {
+				u1 = Math.tan(MathUtils.toRadians(angle));
+				v1 = 0;
+			} else {
+				u1 = 1;
+				v1 = Math.tan(MathUtils.toRadians(90 - angle));
+				
+				t.addVertexWithUV(0, 0, 0, 0, 1);
+				t.addVertexWithUV(1, 0, 0, 1, 1);
+				t.addVertexWithUV(u1, 1 - v1, 0, u1, v1);
+			}
+			
+			t.addVertexWithUV(0, 1, 0, 0, 0);
+			t.addVertexWithUV(0, 0, 0, 0, 1);
+			t.addVertexWithUV(u1, 1 - v1, 0, u1, v1);
+			t.draw();
+			
+			GL11.glRotated(90, 0, 0, 1);
+		}
+		GL11.glPopMatrix();
+	}
+	
+	private static void gdraw(ResourceLocation tex, double x, double y, double width, double height) {
 		RenderUtils.loadTexture(tex);
-		HudUtils.rect(x0, y0, w, h);
+		HudUtils.rect(x, y, width, height);
 	}
 	
 	private static ResourceLocation glowtex(String path) {

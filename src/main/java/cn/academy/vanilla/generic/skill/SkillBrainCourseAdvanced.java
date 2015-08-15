@@ -27,6 +27,7 @@ public class SkillBrainCourseAdvanced extends Skill {
 		super("brain_course_advanced", 5);
 		this.canControl = false;
 		this.isGeneric = false;
+		this.guiPosition.set(200, 100);
 	}
 	
 	@Override

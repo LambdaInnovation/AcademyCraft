@@ -44,21 +44,35 @@ public class CatTeleporter extends Category {
 		super("teleporter");
 		colorStyle.setColor4i(164, 164, 164, 145);
 		
-		this.defineTypes("default", "passive");
+		this.defineTypes("jumping", "moving", "passive");
 		
-		this.addSkill("default", markTP = new MarkTeleport());
+		this.addSkill("moving", markTP = new MarkTeleport());
 		this.addSkill("passive", dimFolding = new DimFoldingTheoreom());
 		
-		this.addSkill("default", locTP = new LocationTeleport());
-		this.addSkill("default", penetrateTP = new PenetrateTeleport());
-		this.addSkill("default", threateningTP = new ThreateningTeleport());
-		this.addSkill("default", shiftTP = new ShiftTeleport());
-		this.addSkill("default", fleshRipping = new FleshRipping());
+		this.addSkill("jumping", locTP = new LocationTeleport());
+		this.addSkill("jumping", penetrateTP = new PenetrateTeleport());
+		this.addSkill("moving", threateningTP = new ThreateningTeleport());
+		this.addSkill("jumping", shiftTP = new ShiftTeleport());
+		this.addSkill("moving", fleshRipping = new FleshRipping());
 		
 		this.addSkill("passive", spaceFluct = new SpaceFluctuation());
-		this.addSkill("default", flashing = new Flashing());
+		this.addSkill("moving", flashing = new Flashing());
 		
 		ModuleVanilla.addGenericSkills(this);
+		
+		// Moving page
+		markTP.guiPosition.set(100, 100);
+		threateningTP.guiPosition.set(200, 100);
+		flashing.guiPosition.set(350, 300);
+		
+		// Jumping pave
+		locTP.guiPosition.set(100, 100);
+		penetrateTP.guiPosition.set(200, 100);
+		shiftTP.guiPosition.set(300, 200);
+		
+		// Passive page
+		dimFolding.guiPosition.set(500, 100);
+		spaceFluct.guiPosition.set(600, 200);
 	}
 
 }

@@ -6,6 +6,9 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import org.lwjgl.util.vector.Vector2f;
+
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.learning.LearningCondition;
@@ -55,6 +58,11 @@ public abstract class Skill extends Controllable {
 	private final int level;
 	
 	private ScriptNamespace script;
+	
+	/**
+	 * The place this skill is at in the Skill Tree UI. You should manually edit this or skills will overlap.
+	 */
+	public final Vector2f guiPosition = new Vector2f(100, 100);
 	
 	/**
 	 * Whether this skill can be controlled (i.e. appear in preset edit ui).
