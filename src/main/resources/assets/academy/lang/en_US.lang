@@ -118,6 +118,17 @@ ac.app.freq_transmitter.e6=Link successful.
 # Knowledge UI
 ac.knowledge.acquired=Acquired Knowledge
 
+# Skill Tree
+ac.skill_tree.title=Skill Tree
+ac.skill_tree.version=Version: 1.0β1
+ac.skill_tree.notacquired=Ability not acquired.
+
+ac.skill_tree.espinfo_title=ESPer info
+
+ac.skill_tree.macinfo_title=Machine Info
+ac.skill_tree.energy=Energy
+ac.skill_tree.syncrate=Synchonization Rate
+
 # Settings
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
