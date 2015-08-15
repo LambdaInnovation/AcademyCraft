@@ -249,6 +249,7 @@ public class NodeConn {
 						give = give - irec.injectEnergy(give);
 						cur -= give;
 						transferLeft -= give;
+						iNode.setEnergy(cur);
 					}
 				}
 			}
