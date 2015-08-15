@@ -105,22 +105,22 @@ shaped(mat) {
     [data_chip, redstone, data_chip]
 }
 
-shaped(mat_core*0) {
+shaped(mat_core#0) {
     [crystal0]
     [calc_chip]
     [conv_comp]
 }
 
-shaped(mat_core*1) {
+shaped(mat_core#1) {
     [ender_eye]
     [crystal1]
-    [mat_core*0]
+    [mat_core#0]
 }
 
-shaped(mat_core*2) {
+shaped(mat_core#2) {
     [glowstone]
     [beacon]
-    [mat_core*1]
+    [mat_core#1]
 }
 
 smelting(imagsil_ingot)[0.8] {
@@ -149,7 +149,7 @@ shaped(brain_comp) {
 shaped(reso_comp) {
     [nil, calc_chip, nil]
     [nil, redstone, nil]
-    [cons_plate, mat_core*0, cons_plate]
+    [cons_plate, mat_core#0, cons_plate]
 }
 
 shaped(conv_comp) {
