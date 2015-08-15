@@ -1,6 +1,6 @@
 ; AcademyCraft Recipe language file
 
-shaped(phase_gen) { ; This is a test comment
+shaped(phase_gen) {
     [nil, nil, nil]
     [crystal0, frame, crystal0]
     [matter_unit, nil, matter_unit]
@@ -82,7 +82,7 @@ shaped(fusor) {
     [cons_plate, matter_unit, cons_plate]
 }
 
-shaped(inciser) {
+shaped(metal_former) {
     [cons_plate, shears, cons_plate]
     [calc_chip, frame, calc_chip]
     [cons_plate, matter_unit, cons_plate]
