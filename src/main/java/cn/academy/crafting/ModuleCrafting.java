@@ -83,8 +83,8 @@ public class ModuleCrafting {
     public static BlockImagFusor imagFusor;
 	
 	@RegBlock
-	@RecipeName("inciser")
-	public static BlockMetalFormer inciser;
+	@RecipeName("metal_former")
+	public static BlockMetalFormer metalFormer;
 	
 	@RegBlock
 	@RecipeName("cons_ore")
