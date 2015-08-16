@@ -353,19 +353,19 @@ public class CPData extends DataPart {
 	}
 	
 	private static double getDoubleParam(String name) {
-		return AcademyCraft.script.root.getDouble(path(name));
+		return AcademyCraft.getScript().root.getDouble(path(name));
 	}
 	
 	private static int getIntParam(String name) {
-		return AcademyCraft.script.root.getInteger(path(name));
+		return AcademyCraft.getScript().root.getInteger(path(name));
 	}
 	
 	private static float getFloatParam(String name) {
-		return AcademyCraft.script.root.getFloat(path(name));
+		return AcademyCraft.getScript().root.getFloat(path(name));
 	}
 	
 	private static ScriptFunction getFunc(String name) {
-		return AcademyCraft.script.root.getFunction(path(name));
+		return AcademyCraft.getScript().root.getFunction(path(name));
 	}
 	
 	private static Path path(String name) {

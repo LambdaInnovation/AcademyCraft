@@ -97,7 +97,7 @@ public abstract class Skill extends Controllable {
 		
 		fullName = (isGeneric ? "generic" : category.getName()) + "." + name;
 		
-		script = AcademyCraft.script.at("ac." + fullName);
+		script = AcademyCraft.getScript().at("ac." + fullName);
 		
 		initSkill();
 	}

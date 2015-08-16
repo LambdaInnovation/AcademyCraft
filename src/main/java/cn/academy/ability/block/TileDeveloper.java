@@ -58,7 +58,7 @@ public class TileDeveloper extends TileReceiverBase {
 	private static ScriptNamespace script;
 	
 	public static void init() {
-		script = AcademyCraft.script.at("ac.developer");
+		script = AcademyCraft.getScript().at("ac.developer");
 	}
 	
 	int syncCD;

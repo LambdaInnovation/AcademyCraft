@@ -72,7 +72,7 @@ public class AcademyCraft {
     /**
      * The globally used script program.
      */
-    public static final ScriptProgram script = new ScriptProgram();
+    private static ScriptProgram script;
     
     private static boolean scriptLoaded;
     
@@ -188,12 +188,17 @@ public class AcademyCraft {
     		scriptLoaded = true;
     		
     		// Load the scripts
+    		script = new ScriptProgram();
             String[] scripts = {
             	"generic", "ability", "electro_master", "teleporter", "melt_downer"
             };
             for(String s : scripts)
             	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
     	}
+    }
+    
+    public static ScriptProgram getScript() {
+    	return script;
     }
     
     public static void addToRecipe(Class klass) {
