@@ -18,9 +18,7 @@ public class CatHeatMatser extends Category
 	{
 		super("heat_master");
 
-		defineTypes("default","passive");
-
-		addSkill("default",worldhearter= new WorldHeater());
+		addSkill(worldhearter= new WorldHeater());
 
 		//KnowledgeData.addKnowledges(new String[] {});
 		ModuleVanilla.addGenericSkills(this);

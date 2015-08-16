@@ -44,19 +44,17 @@ public class CatTeleporter extends Category {
 		super("teleporter");
 		colorStyle.setColor4i(164, 164, 164, 145);
 		
-		this.defineTypes("jumping", "moving", "passive");
+		this.addSkill(markTP = new MarkTeleport());
+		this.addSkill(dimFolding = new DimFoldingTheoreom());
 		
-		this.addSkill("moving", markTP = new MarkTeleport());
-		this.addSkill("passive", dimFolding = new DimFoldingTheoreom());
+		this.addSkill(locTP = new LocationTeleport());
+		this.addSkill(penetrateTP = new PenetrateTeleport());
+		this.addSkill(threateningTP = new ThreateningTeleport());
+		this.addSkill(shiftTP = new ShiftTeleport());
+		this.addSkill(fleshRipping = new FleshRipping());
 		
-		this.addSkill("jumping", locTP = new LocationTeleport());
-		this.addSkill("jumping", penetrateTP = new PenetrateTeleport());
-		this.addSkill("moving", threateningTP = new ThreateningTeleport());
-		this.addSkill("jumping", shiftTP = new ShiftTeleport());
-		this.addSkill("moving", fleshRipping = new FleshRipping());
-		
-		this.addSkill("passive", spaceFluct = new SpaceFluctuation());
-		this.addSkill("moving", flashing = new Flashing());
+		this.addSkill(spaceFluct = new SpaceFluctuation());
+		this.addSkill(flashing = new Flashing());
 		
 		ModuleVanilla.addGenericSkills(this);
 		

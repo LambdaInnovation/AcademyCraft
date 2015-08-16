@@ -60,7 +60,8 @@ public abstract class Skill extends Controllable {
 	private ScriptNamespace script;
 	
 	/**
-	 * The place this skill is at in the Skill Tree UI. You should manually edit this or skills will overlap.
+	 * The place this skill is at in the Skill Tree UI. This field is automatically loaded from script from field
+	 * "x" and "y"
 	 */
 	public final Vector2f guiPosition = new Vector2f(100, 100);
 	
@@ -98,6 +99,13 @@ public abstract class Skill extends Controllable {
 		fullName = (isGeneric ? "generic" : category.getName()) + "." + name;
 		
 		script = AcademyCraft.getScript().at("ac." + fullName);
+		
+		try {
+			float x = script.getFloat("x"), y = script.getFloat("y");
+			guiPosition.set(x, y);
+		} catch(Exception e) {
+			AcademyCraft.log.error("Failed to load gui position of skill " + fullName);
+		}
 		
 		initSkill();
 	}

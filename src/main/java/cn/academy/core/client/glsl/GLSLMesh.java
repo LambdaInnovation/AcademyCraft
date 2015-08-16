@@ -79,12 +79,12 @@ public class GLSLMesh extends Mesh {
 	
 	@Override
 	public void draw(Material mat) {
-		throw new NotImplementedException("GLSLMesh doesn't handle old drawing routine");
+		throw new NotImplementedException("GLSLMesh doesn't handle tess drawing routine");
 	}
 	
 	@Override
 	public void redraw(Material mat) {
-		throw new NotImplementedException("GLSLMesh doesn't handle old drawing routine");
+		throw new NotImplementedException("GLSLMesh doesn't handle tess drawing routine");
 	}
 	
 }

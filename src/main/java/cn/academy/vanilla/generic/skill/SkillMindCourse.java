@@ -27,7 +27,6 @@ public class SkillMindCourse extends Skill {
 		super("mind_course", 5);
 		this.canControl = false;
 		this.isGeneric = true;
-		this.guiPosition.set(300, 100);
 	}
 	
 	@SubscribePipeline("ability.cp_recover_speed")

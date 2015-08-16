@@ -26,13 +26,7 @@ public class SkillBrainCourseAdvanced extends Skill {
 	public SkillBrainCourseAdvanced() {
 		super("brain_course_advanced", 5);
 		this.canControl = false;
-		this.isGeneric = false;
-		this.guiPosition.set(200, 100);
-	}
-	
-	@Override
-	protected void initSkill() {
-		this.setParent(this.getCategory().getSkill("brain_course"));
+		this.isGeneric = true;
 	}
 	
 	@SubscribePipeline("ability.maxcp")

@@ -33,15 +33,13 @@ public class CatMeltdowner extends Category {
 		super("melt_downer");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
-		this.defineTypes("A", "B", "C", "D", "passive"); //For test
-		
-		this.addSkill("A", rayBarrage = new RayBarrage());
-		this.addSkill("A", scatterBomb = new ScatterBomb());
-		this.addSkill("A", lightShield = new LightShield());
-		this.addSkill("A", jetEngine = new JetEngine());
-		this.addSkill("A", minerayBasic = new MineRayBasic());
-		this.addSkill("A", mineRayExpert = new MineRayExpert());
-		this.addSkill("A", mineRayLuck = new MineRayLuck());
+		this.addSkill(rayBarrage = new RayBarrage());
+		this.addSkill(scatterBomb = new ScatterBomb());
+		this.addSkill(lightShield = new LightShield());
+		this.addSkill(jetEngine = new JetEngine());
+		this.addSkill(minerayBasic = new MineRayBasic());
+		this.addSkill(mineRayExpert = new MineRayExpert());
+		this.addSkill(mineRayLuck = new MineRayLuck());
 		
 		ModuleVanilla.addGenericSkills(this);
 	}

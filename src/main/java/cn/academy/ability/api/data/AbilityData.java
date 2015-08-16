@@ -118,8 +118,6 @@ public class AbilityData extends DataPart {
 	 * Get all the learned and controllable skills. This method creates a new list.
 	 */
 	public List<Skill> getControllableSkillList() {
-		// DEBUG
-		if(true) return getSkillListFiltered((Skill s) -> s.canControl());
 		return getSkillListFiltered((Skill s) -> (s.canControl() && isSkillLearned(s)));
 	}
 	
@@ -219,8 +217,7 @@ public class AbilityData extends DataPart {
 		int lastcat = catID;
 		
 		byte[] arr = tag.getByteArray("l");
-		if(arr.length != 0)
-			learnedSkills = BitSet.valueOf(arr);
+		learnedSkills = BitSet.valueOf(arr);
 		
 		level = tag.getInteger("v");
 		

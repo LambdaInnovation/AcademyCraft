@@ -32,8 +32,6 @@ public class Category {
 	private List<Skill> skillList = new ArrayList();
 	private List<Controllable> ctrlList = new ArrayList();
 	
-	private Map<String, List<Skill> > typeMap;
-	
 	private final String name;
 	
 	int catID = -1;
@@ -50,19 +48,6 @@ public class Category {
 		icon = Resources.getTexture("abilities/" + name + "/icon");
 	}
 	
-	public void defineTypes(String ...types) {
-		if(typeMap != null)
-			throw new RuntimeException("Can't define twice!");
-		
-		typeMap = new HashMap();
-		for(String s : types)
-			typeMap.put(s, new ArrayList());
-		
-	}
-	
-	public String[] getTypes() {
-		return typeMap.keySet().toArray(new String[] {});
-	}
 	
 	public String getTypeName(String type) {
 		return StatCollector.translateToLocal("ac.ability." + name + ".type." + type + ".desc");
@@ -72,19 +57,12 @@ public class Category {
 		return colorStyle;
 	}
 	
-	public void addSkill(String type, Skill skill) {
+	public void addSkill(Skill skill) {
 		// TODO Can remove when release
 		if(getSkill(skill.getName()) != null)
 			throw new RuntimeException("Duplicating skill " + skill.getName() + "!!");
-		if(typeMap == null)
-			throw new RuntimeException("Type not defined");
-		
-		List<Skill> mapList = typeMap.get(type);
-		if(mapList == null)
-			throw new RuntimeException("Type " + type + " does not exist");
 		
 		skillList.add(skill);
-		mapList.add(skill);
 		addControllable(skill);
 		
 		skill.addedSkill(this, skillList.size() - 1);
@@ -118,10 +96,6 @@ public class Category {
 	 */
 	public List<Skill> getSkillList() {
 		return ImmutableList.copyOf(skillList);
-	}
-	
-	public List<Skill> getSkillsOfType(String type) {
-		return ImmutableList.copyOf(typeMap.get(type));
 	}
 	
 	public List<Skill> getSkillsOfLevel(int level) {

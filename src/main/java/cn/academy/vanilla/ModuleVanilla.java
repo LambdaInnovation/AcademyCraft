@@ -3,6 +3,7 @@ package cn.academy.vanilla;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
@@ -61,9 +62,12 @@ public class ModuleVanilla {
 	}
 	
 	public static void addGenericSkills(Category category) {
-		category.addSkill("passive", new SkillBrainCourse());
-		category.addSkill("passive", new SkillBrainCourseAdvanced());
-		category.addSkill("passive", new SkillMindCourse());
+		Skill bc, bca, mc;
+		category.addSkill(bc = new SkillBrainCourse());
+		category.addSkill(bca = new SkillBrainCourseAdvanced());
+		category.addSkill(mc = new SkillMindCourse());
+		bca.setParent(bc);
+		mc.setParent(bca);
 	}
 	
 }

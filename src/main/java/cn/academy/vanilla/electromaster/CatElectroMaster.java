@@ -59,22 +59,28 @@ public class CatElectroMaster extends Category {
 		super("electro_master");
 		
 		colorStyle.setColor4i(20, 113, 208, 100);
-		defineTypes("default", "passive");
 		
-		addSkill("default", arcGen = new ArcGen());
-		addSkill("default", magManip = new MagManip());
-		addSkill("default", mineDetect = new MineDetect());
-		addSkill("default", railgun = new Railgun());
-		addSkill("default", magMovement = new MagMovement());
-		addSkill("default", ironSand = new IronSand());
-		addSkill("default", currentCharging = new CurrentCharging());
-		addSkill("default", bodyIntensify = new BodyIntensify());
-		addSkill("default", thunderBolt = new ThunderBolt());
-		addSkill("default", thunderClap = new ThunderClap());
+		addSkill(arcGen = new ArcGen());
+		addSkill(magManip = new MagManip());
+		addSkill(mineDetect = new MineDetect());
+		addSkill(railgun = new Railgun());
+		addSkill(magMovement = new MagMovement());
+		addSkill(ironSand = new IronSand());
+		addSkill(currentCharging = new CurrentCharging());
+		addSkill(bodyIntensify = new BodyIntensify());
+		addSkill(thunderBolt = new ThunderBolt());
+		addSkill(thunderClap = new ThunderClap());
+		ModuleVanilla.addGenericSkills(this);
 		
-		magManip.setParent(arcGen);
+		currentCharging.setParent(arcGen);
+		magMovement.setParent(arcGen);
+		magManip.setParent(magMovement);
+		bodyIntensify.setParent(arcGen);
 		mineDetect.setParent(magManip);
-		railgun.setParent(magManip);
+		thunderBolt.setParent(arcGen);
+		railgun.setParent(thunderBolt);
+		ironSand.setParent(magManip);
+		thunderClap.setParent(thunderBolt);
 		
 		KnowledgeData.addKnowledges(new String[] {
 			"em_basic_volt",
@@ -84,8 +90,6 @@ public class CatElectroMaster extends Category {
 			"em_projectile_master",
 			"em_highenergy"
 		});
-		
-		ModuleVanilla.addGenericSkills(this);
 	}
 	
 	public static boolean isOreBlock(Block block) {

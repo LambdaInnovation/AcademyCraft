@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.client.skilltree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
@@ -27,15 +29,22 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
+import cn.academy.core.client.glsl.ShaderMono;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
@@ -43,21 +52,30 @@ import cn.liutils.util.helper.Font.Align;
 /**
  * @author WeAthFolD
  */
+@Registrant
+@RegInit
 public class GuiSkillTree extends LIGuiScreen {
 	
+	static ShaderMono shader;
 	static LIGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/skill_tree.xml"));
 	static final Color
 		CRL_SKILL_ENABLED = new Color().setColor4i(74, 74, 74, 255),
 		CRL_SKILL_DISABLED = new Color().setColor4i(48, 48, 48, 48),
 		CRL_LVL_ACQUIRED = new Color().setColor4i(196, 196, 196, 0),
-		CRL_LVL_CANREACH = new Color().setColor4i(196, 196, 196, 0),
-		CRL_LVL_UNREACHED = new Color().setColor4i(65, 65, 65, 0);
+		CRL_LVL_CANREACH = new Color().setColor4i(255, 255, 255, 0),
+		CRL_LVL_UNREACHED = new Color().setColor4i(65, 65, 65, 0),
+		CRL_LINE = new Color().setColor4i(178, 178, 178, 255),
+		CRL_LINE_DISABLED = new Color().setColor4i(132, 132, 132, 255);
 	
 	static final ResourceLocation
 		TEX_EXPPROG_BACK = tex("expprog_back"),
 		TEX_EXPPROG_GLOW = tex("expprog_glow"),
 		TEX_LVL_GLOW = Resources.getTexture("guis/mark/mark_ball_highlighted");
-		
+	
+	public static void init() {
+		shader = ShaderMono.instance();
+	}
+	
 	private static ResourceLocation tex(String loc) {
 		return Resources.getTexture("guis/skill_tree/" + loc);
 	}
@@ -69,9 +87,8 @@ public class GuiSkillTree extends LIGuiScreen {
 	Widget window;
 	Widget treeArea;
 	
-	// Skill tree selection info
-	String[] types;
-	String currentType;
+	List<Widget> skillWidgets;
+	List<int[]> connections;
 	
 	public GuiSkillTree(EntityPlayer _player) {
 		player = _player;
@@ -100,48 +117,136 @@ public class GuiSkillTree extends LIGuiScreen {
 			window.addWidget(loaded.getWidget("widgets/not_acquired").copy());
 		}
 		
-		gui.addWidget(window);
+		System.out.println("load events");
+		gui.addWidget("window", window);
+		EventLoader.load(gui, this);
 	}
 	
 	private void initSkillTree() {
 		Category cat = aData.getCategory();
-		types = cat.getTypes();
-		setCurrentType(types[0]);
+		
+		List<Skill> list = cat.getSkillList();
+		List<Skill> list2 = new ArrayList();
+		
+		skillWidgets = new ArrayList();
+		for(Skill s : list) {
+			if(aData.isSkillLearned(s) || LearningHelper.canBePotentiallyLearned(aData, s)) {
+				Widget w = createSkillWidget(s);
+				onSkillWidgetCreated(w);
+				treeArea.addWidget(w);
+				skillWidgets.add(w);
+				list2.add(s);
+			}
+		}
+		
+		connections = new ArrayList();
+		for(int i = 0; i < list2.size(); ++i) {
+			Skill s = list.get(i);
+			Skill parent = s.getParent();
+			if(parent != null) {
+				for(int j = 0; j < list2.size(); ++j) {
+					if(list.get(j) == parent) {
+						connections.add(new int[] { i, j });
+						break;
+					}
+				}
+			}
+		}
 	}
 	
-	private void setCurrentType(String type) {
-		currentType = type;
-		List<Skill> skills = aData.getCategory().getSkillsOfType(currentType);
-		for(Skill s : skills) {
-			treeArea.addWidget(createSkillWidget(s));
+	@GuiCallback("window/tree_area")
+	public void drawConnections(Widget w, FrameEvent event) {
+		//System.out.println("DC" + connections.size());
+		final double zLevel = 0.5;
+		for(int[] c : connections) {
+			Widget a = skillWidgets.get(c[0]), b = skillWidgets.get(c[1]);
+			Skill parent = ((SkillHandler) b.getComponent("SkillHandler")).skill;
+			if(aData.isSkillLearned(parent))
+				CRL_LINE.bind();
+			else
+				CRL_LINE_DISABLED.bind();
+			GL11.glLineWidth(2f);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3d(a.transform.x, a.transform.y, zLevel);
+			GL11.glVertex3d(b.transform.x, b.transform.y, zLevel);
+			GL11.glEnd();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
+		
 	}
 	
 	private Widget createSkillWidget(Skill skill) {
 		Widget ret = loaded.getWidget("widgets/single_skill").copy();
-		DrawTexture.get(ret).color = aData.isSkillLearned(skill) ? CRL_SKILL_ENABLED : CRL_SKILL_DISABLED;
+		DrawTexture.get(ret.getWidget("back")).color = aData.isSkillLearned(skill) ? CRL_SKILL_ENABLED : CRL_SKILL_DISABLED;
 		DrawTexture.get(ret.getWidget("skill_icon")).setTex(skill.getHintIcon());
-		ret.regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				// Draw the progress bar
-				GL11.glPushMatrix();
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glTranslated(w.transform.width / 2, w.transform.height / 2, 0);
-				final float size = 70;
-				GL11.glColor4d(1, 1, 1, event.hovering ? 1 : 0.8);
-				GL11.glScalef(size, size, 1);
-				ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_BACK, 1);
-				ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_GLOW, aData.getSkillExp(skill));
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glPopMatrix();
-				GL11.glColor4d(1, 1, 1, 1);
-			}
-			
-		});
+		ret.addComponent(new SkillHandler(skill));
 		ret.transform.setPos(skill.guiPosition.x, skill.guiPosition.y);
 		return ret;
+	}
+	
+	public class SkillHandler extends Component {
+		
+		final Skill skill;
+		long lastHover = -1;
+
+		public SkillHandler(Skill _skill) {
+			super("SkillHandler");
+			skill = _skill;
+		}
+		
+		@Override
+		public void onAdded() {
+			if(!aData.isSkillLearned(skill)) {
+				Widget icon = widget.getWidget("skill_icon");
+				icon.removeComponent("DrawTexture");
+				icon.regEventHandler(new FrameEventHandler() {
+
+					@Override
+					public void handleEvent(Widget w, FrameEvent event) {
+						GL11.glDisable(GL11.GL_DEPTH_TEST);
+						GL11.glColor4d(1, 1, 1, 1);
+						shader.useProgram();
+						RenderUtils.loadTexture(skill.getHintIcon());
+						HudUtils.rect(0, 0, w.transform.width, w.transform.height);
+						GL20.glUseProgram(0);
+						GL11.glEnable(GL11.GL_DEPTH_TEST);
+					}
+					
+				});
+			}
+			
+			widget.getWidget("back").regEventHandler(new FrameEventHandler() {
+
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					// Draw the progress bar
+					GL11.glPushMatrix();
+					GL11.glDepthMask(false);
+					GL11.glDisable(GL11.GL_CULL_FACE);
+					GL11.glTranslated(w.transform.width / 2, w.transform.height / 2, 1);
+					final float size = 70;
+					GL11.glColor4d(1, 1, 1, event.hovering ? 1 : 0.8);
+					GL11.glScalef(size, size, 1);
+					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_BACK, 1);
+					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_GLOW, aData.getSkillExp(skill));
+					GL11.glEnable(GL11.GL_CULL_FACE);
+					GL11.glDepthMask(true);
+					GL11.glPopMatrix();
+					GL11.glColor4d(1, 1, 1, 1);
+					
+					// Draw the skill name
+					if(event.hovering) {
+						GL11.glPushMatrix();
+						GL11.glTranslated(0, 0, 10);
+						Font.font.draw(skill.getDisplayName(), 20, -5, 40, 0xbbbbbb, Align.RIGHT);
+						GL11.glPopMatrix();
+					}
+				}
+				
+			});
+		}
+		
 	}
 	
 	public class LevelHandler extends Component {
@@ -167,7 +272,7 @@ public class GuiSkillTree extends LIGuiScreen {
 	 	public void onAdded() {
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
-	 		
+	 		System.out.println(level);
 	 		Color color;
 	 		if(level == aData.getLevel() + 1 && LearningHelper.canLevelUp(aData)) {
 	 			double original = widget.transform.width, now = 60;

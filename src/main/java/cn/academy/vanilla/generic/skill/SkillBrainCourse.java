@@ -27,7 +27,6 @@ public class SkillBrainCourse extends Skill {
 		super("brain_course", 4);
 		this.canControl = false;
 		this.isGeneric = true;
-		this.guiPosition.set(100, 100);
 	}
 	
 	@SubscribePipeline("ability.maxcp")
