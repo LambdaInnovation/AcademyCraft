@@ -23,20 +23,20 @@ import cn.liutils.util.helper.Color;
 /**
  * @author WeAthFolD
  */
-public class ShaderNaiveNotex extends ShaderProgram {
+public class ShaderNotex extends ShaderProgram {
 	
-	private static ShaderNaiveNotex instance;
+	private static ShaderNotex instance;
 	
-	public static ShaderNaiveNotex instance() {
+	public static ShaderNotex instance() {
 		if(instance == null) {
-			instance = new ShaderNaiveNotex();
+			instance = new ShaderNotex();
 		}
 		return instance;
 	}
 	
-	private ShaderNaiveNotex() {
-		this.linkShader(Resources.getShader("naive_vert"), GL20.GL_VERTEX_SHADER);
-		this.linkShader(Resources.getShader("naive_frag_notex"), GL20.GL_FRAGMENT_SHADER);
+	private ShaderNotex() {
+		this.linkShader(Resources.getShader("simple.vert"), GL20.GL_VERTEX_SHADER);
+		this.linkShader(Resources.getShader("notex.frag"), GL20.GL_FRAGMENT_SHADER);
 		this.compile();
 	}
 	

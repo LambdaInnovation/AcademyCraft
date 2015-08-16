@@ -139,13 +139,14 @@ public class GuiSkillTree extends LIGuiScreen {
 			}
 		}
 		
+		System.out.println("HuH");
 		connections = new ArrayList();
 		for(int i = 0; i < list2.size(); ++i) {
-			Skill s = list.get(i);
+			Skill s = list2.get(i);
 			Skill parent = s.getParent();
 			if(parent != null) {
 				for(int j = 0; j < list2.size(); ++j) {
-					if(list.get(j) == parent) {
+					if(list2.get(j) == parent) {
 						connections.add(new int[] { i, j });
 						break;
 					}
@@ -168,8 +169,15 @@ public class GuiSkillTree extends LIGuiScreen {
 			GL11.glLineWidth(2f);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex3d(a.transform.x, a.transform.y, zLevel);
-			GL11.glVertex3d(b.transform.x, b.transform.y, zLevel);
+			
+			double x0 = a.transform.x, y0 = a.transform.y, x1 = b.transform.x, y1 = b.transform.y;
+			double dy = y1 - y0, dx = x1 - x0;
+			double len = Math.sqrt(dx * dx + dy * dy);
+			final double move = 45;
+			dx *= move / len; dy *= move / len;
+			
+			GL11.glVertex3d(a.transform.x + dx, a.transform.y + dy, zLevel);
+			GL11.glVertex3d(b.transform.x - dx, b.transform.y - dy, zLevel);
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}

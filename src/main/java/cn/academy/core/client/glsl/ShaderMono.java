@@ -30,8 +30,8 @@ public class ShaderMono extends ShaderProgram {
 	}
 	
 	private ShaderMono() {
-		this.linkShader(Resources.getShader("naive_vert"), GL20.GL_VERTEX_SHADER);
-		this.linkShader(Resources.getShader("naive_frag_mono"), GL20.GL_FRAGMENT_SHADER);
+		this.linkShader(Resources.getShader("simple.vert"), GL20.GL_VERTEX_SHADER);
+		this.linkShader(Resources.getShader("mono.frag"), GL20.GL_FRAGMENT_SHADER);
 		this.compile();
 		
 		this.useProgram();

@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.glsl.GLSLMesh;
-import cn.academy.core.client.glsl.ShaderNaiveNotex;
+import cn.academy.core.client.glsl.ShaderNotex;
 import cn.academy.core.entity.IRay;
 import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.util.helper.Color;
@@ -42,7 +42,7 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 	static GLSLMesh cylinder = new GLSLMesh();
 	
 	public final Color color = new Color();
-	private final ShaderNaiveNotex shader = ShaderNaiveNotex.instance();
+	private final ShaderNotex shader = ShaderNotex.instance();
 	
 	static {
 		try{

@@ -12,10 +12,14 @@
  */
 package cn.academy.ability.app;
 
+import net.minecraft.client.Minecraft;
+import cn.academy.ability.client.skilltree.GuiSkillTree;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -34,7 +38,11 @@ public class AppSkillTree extends App {
 	@Override
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
-			
+			@SideOnly(Side.CLIENT)
+			@Override
+			public void onStart() {
+				Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTree(getPlayer()));
+			}
 		};
 	}
 
