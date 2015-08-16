@@ -129,6 +129,9 @@ ac.skill_tree.macinfo_title=Machine Info
 ac.skill_tree.energy=Energy
 ac.skill_tree.syncrate=Sync Rate
 
+ac.skill_tree.acquireprog=%.0f%% acquired
+ac.skill_tree.not_acquired=Not acquired
+
 # Settings
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP

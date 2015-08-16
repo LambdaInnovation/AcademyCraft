@@ -12,6 +12,8 @@
  */
 package cn.academy.core.client.component;
 
+import org.lwjgl.opengl.GL11;
+
 import cn.academy.core.client.ACRenderingHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -34,6 +36,8 @@ public class Glow extends Component {
 	
 	public Color color = new Color();
 	public double glowSize = 10.0;
+	public double zLevel = 0.0;
+	public boolean writeDepth = true;
 	
 	public static void init() {
 		// Register for editing
@@ -47,7 +51,13 @@ public class Glow extends Component {
 
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
+				if(!writeDepth)
+					GL11.glDepthMask(false);
+				GL11.glPushMatrix();
+				GL11.glTranslated(0, 0, zLevel);
 				ACRenderingHelper.drawGlow(0, 0, w.transform.width, w.transform.height, glowSize, color);
+				GL11.glPopMatrix();
+				GL11.glDepthMask(true);
 			}
 			
 		});
