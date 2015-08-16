@@ -64,8 +64,6 @@ public class AcademyCraft {
 	public static final boolean DEBUG_MODE = true;
 	
 	public static final String VERSION = "1.0a1";
-	
-    public static final String NET_CHANNEL = "academy-network";
 
     public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     
@@ -76,10 +74,10 @@ public class AcademyCraft {
      */
     public static final ScriptProgram script = new ScriptProgram();
     
+    private static boolean scriptLoaded;
+    
     /**
      * The globally used value pipeline.
-     * 
-     * CONVENTION: If needed, ALWAYS pass EntityPlayer as pipeline's first argument.
      */
     public static final ValuePipeline pipeline = new ValuePipeline();
     
@@ -87,7 +85,7 @@ public class AcademyCraft {
 
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
-            .newSimpleChannel(AcademyCraft.NET_CHANNEL);
+            .newSimpleChannel("academy-network");
     
     @RegItem
     @RegItem.UTName("logo")
@@ -108,12 +106,7 @@ public class AcademyCraft {
         
         config = new Configuration(event.getSuggestedConfigurationFile());
         
-        // Load the scripts
-        String[] scripts = {
-        	"generic", "ability", "electro_master", "teleporter", "melt_downer"
-        };
-        for(String s : scripts)
-        	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
+        reloadScript();
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
@@ -185,6 +178,22 @@ public class AcademyCraft {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
+    }
+    
+    /**
+     * Reload all the scripts. Used for debugging.
+     */
+    public static void reloadScript() {
+    	if(!scriptLoaded || DEBUG_MODE) {
+    		scriptLoaded = true;
+    		
+    		// Load the scripts
+            String[] scripts = {
+            	"generic", "ability", "electro_master", "teleporter", "melt_downer"
+            };
+            for(String s : scripts)
+            	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
+    	}
     }
     
     public static void addToRecipe(Class klass) {

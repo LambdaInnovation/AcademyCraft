@@ -13,10 +13,12 @@
 package cn.academy.ability;
 
 import cn.academy.ability.block.BlockDeveloper;
+import cn.academy.ability.block.ItemDeveloper;
 import cn.academy.ability.developer.DeveloperType;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
+import cn.annoreg.mc.RegItem;
 
 /**
  * The ability module init class.
@@ -26,9 +28,14 @@ import cn.annoreg.mc.RegInit;
 @RegInit
 public class ModuleAbility {
 	
+	@RegItem
+	public static ItemDeveloper
+		developerPortable;
+	
 	@RegBlock
 	public static BlockDeveloper 
-		developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
+		developerNormal = new BlockDeveloper(DeveloperType.NORMAL),
+		developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
 	
 	public static void init() {
 	}
