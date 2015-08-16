@@ -33,7 +33,7 @@ public class LearningHelper {
 	 */
 	public static boolean canBePotentiallyLearned(AbilityData data, Skill skill) {
 		return data.getLevel() >= skill.getLevel() &&
-				(!data.isSkillLearned(skill) || 
+				(!data.isSkillLearned(skill) && 
 					(skill.getParent() == null || data.isSkillLearned(skill.getParent())));
 	}
 	
