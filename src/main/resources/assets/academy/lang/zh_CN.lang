@@ -246,16 +246,16 @@ ac.ability.electro_master.body_intensify.name=生物电强化
 ac.ability.electro_master.thunder_clap.name=终极落雷
 ac.ability.electro_master.thunder_bolt.name=雷击之枪
 
-ac.ability.electro_master.arc_gen.desc=激发出一道较微弱的电弧, 会在落点处扩散来造成伤害, 如果直击到易燃方块, 可能会将其点燃.
-ac.ability.electro_master.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体, 甚至将它们投掷出去杀伤敌人.
-ac.ability.electro_master.mine_detect.desc=闭上眼睛感受周围的磁力线流动, 可以让你看到身旁珍惜矿物资源的痕迹.
-ac.ability.electro_master.railgun.desc=利用电磁诱导原理, 将硬币高速射出, 在全力一击的情况下有恐怖的破坏力.
-ac.ability.electro_master.mag_movement.desc=向外界的某个可磁化物体释放电磁力, 使自己的身体快速移动.
-ac.ability.electro_master.iron_sand.desc=通过分离和操纵身体周围的铁砂, 创造出变化多端而又极其危险的攻击效果.
-ac.ability.electro_master.charging.desc=对手持的物品或世界中的电力方块进行充能.
-ac.ability.electro_master.body_intensify.desc=操纵自身生物电, 在短时间内强化身体素质.
-ac.ability.electro_master.thunder_clap.desc=操纵大气中的电磁场氛围, 催化出雷云, 并牵引其中的电力产生一次破坏性的落雷.
-ac.ability.electro_master.thunder_bolt.desc=生成海量的电力, 将其约束成柱形发射.击中实体后, 猛烈的电流会爆发出去产生第二次伤害.
+ac.ability.electro_master.arc_gen.desc=激发出一道较微弱的电弧，会在落点处扩散来造成伤害，如果直击到易燃方块，可能会将其点燃。
+ac.ability.electro_master.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体，甚至将它们投掷出去杀伤敌人。
+ac.ability.electro_master.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍惜矿物资源的痕迹。
+ac.ability.electro_master.railgun.desc=利用电磁诱导原理，将硬币高速射出，在全力一击的情况下有恐怖的破坏力。
+ac.ability.electro_master.mag_movement.desc=向外界的某个可磁化物体释放电磁力，使自己的身体快速移动。
+ac.ability.electro_master.iron_sand.desc=通过分离和操纵身体周围的铁砂，创造出变化多端而又极其危险的攻击效果。
+ac.ability.electro_master.charging.desc=对手持的物品或世界中的电力方块进行充能。
+ac.ability.electro_master.body_intensify.desc=操纵自身生物电，在短时间内强化身体素质。
+ac.ability.electro_master.thunder_clap.desc=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
+ac.ability.electro_master.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
 # 传送使
 
@@ -281,14 +281,14 @@ ac.ability.generic.mind_course.name=思维修养课程
 ac.knowledge.bubble.name=泡泡大师
 
 # 指令
-ac.command.invalid=无效输入, 请再次尝试.
+ac.command.invalid=无效输入，请再次尝试.
 ac.command.successful=指令已执行.
 ac.command.notlearned=玩家还未学习任何能力.
 
 ac.command.knowledge.usage=/knowledge <command>|<help> [参数...]
 ac.command.knowledge.help=/knowledge help: 显示帮助信息.
 ac.command.knowledge.stat=/knowledge stat: 显示玩家知识的统计信息.
-ac.command.knowledge.clear=/knowledge clear: 清楚任何知识信息, 从头再来.
+ac.command.knowledge.clear=/knowledge clear: 清楚任何知识信息，从头再来.
 ac.command.knowledge.getall=/knowledge getall: 立刻学习所有知识.
 ac.command.knowledge.list=/knowledge list: 列出所有可用知识.
 ac.command.knowledge.learn=/knowledge learn [知识名称]: 学习指定的知识.

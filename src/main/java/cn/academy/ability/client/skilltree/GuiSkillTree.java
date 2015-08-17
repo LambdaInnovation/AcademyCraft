@@ -12,8 +12,24 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDepthMask;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLineWidth;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.glVertex3d;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -440,7 +456,8 @@ public class GuiSkillTree extends LIGuiScreen {
 			skill = _skill;
 			boolean learned = aData.isSkillLearned(skill);
 			color = learned ? CRL_SDESC_LEARNED : CRL_SDESC_NOTLEARNED;
-			transform.setSize(450, 100);
+			double width1 = Font.font.strLen(skill.getDisplayName(), 50);
+			transform.setSize(Math.max(180 + width1, 450), 115);
 			transform.doesListenKey = false;
 			
 			regEventHandler(new FrameEventHandler() {
@@ -454,7 +471,7 @@ public class GuiSkillTree extends LIGuiScreen {
 					color.a = blendfac(300);
 					Font.font.draw(skill.getDisplayName(), 120, -6, 50, color.asHexColor());
 					color.a = blendfac(400);
-					Font.font.draw(Localization.levelDesc(skill.getLevel()), 
+					Font.font.draw("Lv" + skill.getLevel(), 
 						w.getWidgetParent().transform.width - 50, -1, 44, color.asHexColor(), Align.RIGHT);
 					
 					Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
@@ -475,13 +492,15 @@ public class GuiSkillTree extends LIGuiScreen {
 	
 	public class SkillHint extends Widget {
 		
-		static final double WIDTH = 450, FONT_SIZE = 40;
+		static final double FONT_SIZE = 33;
 		final String text;
 		long ct = GameTimer.getTime();
+		double width = 420;
 		
-		public SkillHint(Skill _skill) {
-			text = _skill.getDescription();
-			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, WIDTH);
+		public SkillHint(WidgetSkillDesc _skill) {
+			text = _skill.handler.skill.getDescription();
+			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
+					width = Math.max(width, _skill.width - 50));
 			transform.setSize(vec.x, vec.y);
 			transform.doesListenKey = false;
 			
@@ -493,12 +512,13 @@ public class GuiSkillTree extends LIGuiScreen {
 					glTranslated(0, 0, 10);
 					double a = .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
 					CRL_SKILL_DESC_1.a = a;
-					Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), WIDTH);
+					Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
 					glPopMatrix();
 				}
 				
 			});
 		}
+		
 	}
 	
 }
