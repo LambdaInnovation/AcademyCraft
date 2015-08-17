@@ -262,7 +262,13 @@ public class GuiSkillTree extends LIGuiScreen {
 						active();
 						menu.transform.x += widget.transform.x;
 						menu.transform.y += widget.transform.y;
-						treeArea.addWidget(menu, true);
+						
+						// To make the draw order correct, we used a bit of hack to re-add the current skill
+						// widget and menu widget to the last of the draw list.
+						treeArea.forceRemoveWidget(widget);
+						widget.disposed = false;
+						treeArea.addWidget(menu);
+						treeArea.addWidget(widget);
 					}
 				}
 				
@@ -277,11 +283,13 @@ public class GuiSkillTree extends LIGuiScreen {
 					public void handleEvent(Widget w, FrameEvent event) {
 						glColor4d(1, 1, 1, 1);
 						shader.useProgram();
+						glDepthMask(active);
 						RenderUtils.loadTexture(skill.getHintIcon());
 						HudUtils.pushZLevel();
 						HudUtils.zLevel = active ? 11 : 1;
 						HudUtils.rect(0, 0, w.transform.width, w.transform.height);
 						HudUtils.popZLevel();
+						glDepthMask(true);
 						glUseProgram(0);
 					}
 					
@@ -294,8 +302,13 @@ public class GuiSkillTree extends LIGuiScreen {
 				public void handleEvent(Widget w, FrameEvent event) {
 					double zLevel = active ? 11 : 1;
 					DrawTexture dt1 = DrawTexture.get(widget.getWidget("skill_icon"));
-					if(dt1 != null) dt1.zLevel = zLevel;
-					DrawTexture.get(w).zLevel = zLevel;
+					if(dt1 != null) {
+						dt1.zLevel = zLevel;
+						dt1.writeDepth = active;
+					}
+					dt1 = DrawTexture.get(w);
+					dt1.zLevel = zLevel;
+					dt1.writeDepth = active;
 					
 					// Size update
 					if(current != null) {
