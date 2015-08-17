@@ -222,6 +222,8 @@ ac.ability.level4=大能力者
 ac.ability.level5=超能力者
 
 # 电击使
+ac.ability.electro_master.name=电击使
+
 ## 电击使 知识
 ac.knowledge.em_basic_volt.name=基础电压控制
 ac.knowledge.em_improved_volt.name=进阶电压控制
@@ -258,6 +260,7 @@ ac.ability.electro_master.thunder_clap.desc=操纵大气中的电磁场氛围，
 ac.ability.electro_master.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
 # 传送使
+ac.ability.teleporter.name=传送使
 
 ## 传送使 技能
 ac.ability.teleporter.flesh_ripping.name=肌体撕裂
