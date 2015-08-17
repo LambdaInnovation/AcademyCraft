@@ -222,6 +222,8 @@ ac.ability.level4=Level 4
 ac.ability.level5=Level 5
 
 # Electro Master
+ac.ability.electro_master.name=Electro Master
+
 ## EM Knowledges
 ac.knowledge.em_basic_volt.name=Basic Voltage Control
 ac.knowledge.em_improved_volt.name=Improved Volt Control
@@ -258,6 +260,7 @@ ac.ability.electro_master.thunder_clap.desc=Manipulate the magnetic field in the
 ac.ability.electro_master.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and cause the second damage.
 
 # Teleporter
+ac.ability.teleporter.name=Teleporter
 
 ## TP Skills
 ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
