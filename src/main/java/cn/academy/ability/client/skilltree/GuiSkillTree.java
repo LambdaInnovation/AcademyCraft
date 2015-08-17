@@ -12,23 +12,7 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_LINES;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor4d;
-import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glDepthMask;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glLineWidth;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTranslated;
-import static org.lwjgl.opengl.GL11.glVertex3d;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.util.ArrayList;
@@ -42,6 +26,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
@@ -54,6 +39,7 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
@@ -94,7 +80,8 @@ public class GuiSkillTree extends LIGuiScreen {
 	static final ResourceLocation
 		TEX_EXPPROG_BACK = tex("expprog_back"),
 		TEX_EXPPROG_GLOW = tex("expprog_glow"),
-		TEX_LVL_GLOW = Resources.getTexture("guis/mark/mark_ball_highlighted");
+		TEX_LVL_GLOW = Resources.getTexture("guis/mark/mark_ball_highlighted"),
+		TEX_UNKNOWN_CAT = tex("cat_not_found");
 	
 	public static void init() {
 		shader = ShaderMono.instance();
@@ -107,15 +94,19 @@ public class GuiSkillTree extends LIGuiScreen {
 	final EntityPlayer player;
 	final AbilityData aData;
 	final CPData cpData;
+	final DeveloperType type;
 	
 	Widget window;
 	Widget treeArea;
 	
+	Widget windowEsper, windowMachine;
+	
 	List<Widget> skillWidgets;
 	List<int[]> connections;
 	
-	public GuiSkillTree(EntityPlayer _player) {
+	public GuiSkillTree(EntityPlayer _player, DeveloperType _type) {
 		player = _player;
+		type = _type;
 		aData = AbilityData.get(player);
 		cpData = CPData.get(player);
 		initPages();
@@ -129,8 +120,8 @@ public class GuiSkillTree extends LIGuiScreen {
 		window = loaded.getWidget("window").copy();
 		treeArea = window.getWidget("tree_area");
 		
-		window.addWidget(loaded.getWidget("widgets/window_esper").copy());
-		window.addWidget(loaded.getWidget("widgets/window_machine").copy());
+		window.addWidget(windowEsper = loaded.getWidget("widgets/window_esper").copy());
+		window.addWidget(windowMachine = loaded.getWidget("widgets/window_machine").copy());
 		
 		for(int i = 1; i <= 5; ++i) {
 			Widget ball = treeArea.getWidget("ball" + i);
@@ -143,7 +134,9 @@ public class GuiSkillTree extends LIGuiScreen {
 			window.addWidget(loaded.getWidget("widgets/not_acquired").copy());
 		}
 		
-		System.out.println("load events");
+		initPlayerInfo();
+		TextBox.get(windowMachine.getWidget("dev_type")).content = Localization.machineType(type);
+		
 		gui.addWidget("window", window);
 		EventLoader.load(gui, this);
 	}
@@ -181,6 +174,15 @@ public class GuiSkillTree extends LIGuiScreen {
 		}
 	}
 	
+	private void initPlayerInfo() {
+		TextBox.get(windowEsper.getWidget("text_user")).content = player.getDisplayName();
+		TextBox.get(windowEsper.getWidget("text_level")).content = Localization.levelDesc(aData.getLevel());
+		
+		Category cat = aData.getCategory();
+		TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? Localization.unknown() : cat.getDisplayName();
+		DrawTexture.get(windowEsper.getWidget("icon_cat")).texture = cat == null ? TEX_UNKNOWN_CAT : cat.getIcon();
+	}
+	
 	@Override
     public boolean doesGuiPauseGame() {
         return false;
@@ -188,7 +190,8 @@ public class GuiSkillTree extends LIGuiScreen {
 	
 	@GuiCallback("window/tree_area")
 	public void drawConnections(Widget w, FrameEvent event) {
-		//System.out.println("DC" + connections.size());
+		if(connections == null)
+			return;
 		final double zLevel = 0.5;
 		for(int[] c : connections) {
 			Widget a = skillWidgets.get(c[0]), b = skillWidgets.get(c[1]);
@@ -410,8 +413,12 @@ public class GuiSkillTree extends LIGuiScreen {
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
 					if(event.hovering) {
-						Font.font.draw(Localization.levelDesc(level),
-							-10, -10, 40, 0xd0ffffff, Align.RIGHT);
+						if(level <= aData.getLevel())
+							Font.font.draw(Localization.levelDesc(level),
+									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
+						else if(LearningHelper.canLevelUp(aData) && level == aData.getLevel() + 1)
+							Font.font.draw(level == 1 ? Localization.acquire() : Localization.upgradeTo(level),
+									-10, -10, 37, 0xe0ffffff, Align.RIGHT);
 					}
 				}
 	 			
@@ -421,7 +428,6 @@ public class GuiSkillTree extends LIGuiScreen {
 	 	public void onAdded() {
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
-	 		System.out.println(level);
 	 		Color color;
 	 		if(level == aData.getLevel() + 1 && LearningHelper.canLevelUp(aData)) {
 	 			double original = widget.transform.width, now = 60;
@@ -430,7 +436,20 @@ public class GuiSkillTree extends LIGuiScreen {
 	 			widget.transform.x += offset;
 	 			widget.transform.y += offset;
 	 			color = CRL_LVL_CANREACH;
-	 			DrawTexture.get(widget).setTex(TEX_LVL_GLOW);
+	 			
+	 			DrawTexture dt = DrawTexture.get(widget);
+	 			dt.setTex(TEX_LVL_GLOW);
+	 			
+	 			widget.removeComponent("Tint");
+	 			widget.regEventHandler(new FrameEventHandler() {
+
+					@Override
+					public void handleEvent(Widget w, FrameEvent event) {
+						dt.color.a = (event.hovering ? 1.0 : 0.8) * (0.4 + 0.3 * (1 + Math.sin(GameTimer.getTime() / 300.0)));
+					}
+	 				
+	 			});
+	 			
 	 		} else if(level <= aData.getLevel()) {
 	 			color = CRL_LVL_ACQUIRED;
 	 		} else {
@@ -498,7 +517,8 @@ public class GuiSkillTree extends LIGuiScreen {
 		double width = 420;
 		
 		public SkillHint(WidgetSkillDesc _skill) {
-			text = _skill.handler.skill.getDescription();
+			Skill skill = _skill.handler.skill;
+			text = aData.isSkillLearned(skill) ? skill.getDescription() : Localization.unknownSkill();
 			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
 					width = Math.max(width, _skill.width - 50));
 			transform.setSize(vec.x, vec.y);

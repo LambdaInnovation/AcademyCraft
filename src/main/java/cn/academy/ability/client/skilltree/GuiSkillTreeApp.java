@@ -13,15 +13,38 @@
 package cn.academy.ability.client.skilltree;
 
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.ability.developer.DeveloperType;
 import cn.liutils.cgui.gui.Widget;
+import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.ProgressBar;
+import cn.liutils.util.helper.Color;
 
 /**
  * @author WeAthFolD
  */
 public class GuiSkillTreeApp extends GuiSkillTree {
+	
+	static Color
+		COLOR_PROG_MONO0 = new Color().setColor4i(106, 106, 106, 255),
+		COLOR_PROG_NONO1 = new Color().setColor4i(127, 127, 127, 255);
 
 	public GuiSkillTreeApp(EntityPlayer _player) {
-		super(_player);
+		super(_player, DeveloperType.PORTABLE);
+		initAppPage();
+	}
+	
+	private void initAppPage() {
+		ProgressBar p = ProgressBar.get(windowMachine.getWidget("p_energy"));
+		p.color
+			= DrawTexture.get(windowMachine.getWidget("i_energy")).color 
+			= COLOR_PROG_MONO0;
+		p.fluctRegion = 0;
+		
+		p = ProgressBar.get(windowMachine.getWidget("p_syncrate"));
+		p.color
+			= DrawTexture.get(windowMachine.getWidget("i_syncrate")).color
+			= COLOR_PROG_NONO1;
+		p.fluctRegion = 0;
 	}
 	
 	@Override

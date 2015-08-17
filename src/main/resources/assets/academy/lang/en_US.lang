@@ -131,6 +131,10 @@ ac.skill_tree.syncrate=Sync Rate
 
 ac.skill_tree.acquireprog=%.0f%% acquired
 ac.skill_tree.not_acquired=Not acquired
+ac.skill_tree.uplevel=Upgrade to %s
+ac.skill_tree.acquire=Acquire Ability!
+ac.skill_tree.unknown_skill=<ERROR 0x5f3759df Unknown skill>
+ac.skill_tree.unknown=[UNKNOWN]
 
 # Settings
 ac.settings.cat.generic=Generic
