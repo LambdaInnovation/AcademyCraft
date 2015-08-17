@@ -12,8 +12,24 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDepthMask;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLineWidth;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.glVertex3d;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,9 +155,11 @@ public class GuiSkillTree extends LIGuiScreen {
 		List<Skill> list2 = new ArrayList();
 		
 		skillWidgets = new ArrayList();
+		
+		int i = 0;
 		for(Skill s : list) {
 			if(aData.isSkillLearned(s) || LearningHelper.canBePotentiallyLearned(aData, s)) {
-				Widget w = createSkillWidget(s);
+				Widget w = createSkillWidget(s, i++);
 				treeArea.addWidget(w);
 				skillWidgets.add(w);
 				list2.add(s);
@@ -149,7 +167,7 @@ public class GuiSkillTree extends LIGuiScreen {
 		}
 		
 		connections = new ArrayList();
-		for(int i = 0; i < list2.size(); ++i) {
+		for(i = 0; i < list2.size(); ++i) {
 			Skill s = list2.get(i);
 			Skill parent = s.getParent();
 			if(parent != null) {
@@ -174,8 +192,8 @@ public class GuiSkillTree extends LIGuiScreen {
 		final double zLevel = 0.5;
 		for(int[] c : connections) {
 			Widget a = skillWidgets.get(c[0]), b = skillWidgets.get(c[1]);
-			Skill parent = ((SkillHandler) b.getComponent("SkillHandler")).skill;
-			if(aData.isSkillLearned(parent))
+			Skill me = ((SkillHandler) a.getComponent("SkillHandler")).skill;
+			if(aData.isSkillLearned(me))
 				CRL_LINE.bind();
 			else
 				CRL_LINE_DISABLED.bind();
@@ -190,8 +208,13 @@ public class GuiSkillTree extends LIGuiScreen {
 			final double move = 45;
 			dx *= move / len; dy *= move / len;
 			
-			glVertex3d(a.transform.x + dx * a.transform.scale, a.transform.y + dy * a.transform.scale, zLevel);
-			glVertex3d(b.transform.x - dx * b.transform.scale, b.transform.y - dy * b.transform.scale, zLevel);
+			x0 += dx * a.transform.scale; y0 += dy * a.transform.scale;
+			x1 -= dx * b.transform.scale; y1 -= dy * b.transform.scale;
+			float alpha = ((SkillHandler) a.getComponent("SkillHandler")).getAlpha();
+			x0 = x1 + (x0 - x1) * alpha; y0 = y1 + (y0 - y1) * alpha;
+			
+			glVertex3d(x0, y0, zLevel);
+			glVertex3d(x1, y1, zLevel);
 			glEnd();
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_TEXTURE_2D);
@@ -199,46 +222,48 @@ public class GuiSkillTree extends LIGuiScreen {
 		
 	}
 	
-	private Widget createSkillWidget(Skill skill) {
+	private Widget createSkillWidget(Skill skill, int i) {
 		Widget ret = loaded.getWidget("widgets/single_skill").copy();
 		DrawTexture.get(ret.getWidget("back")).color = aData.isSkillLearned(skill) ? CRL_SKILL_ENABLED : CRL_SKILL_DISABLED;
 		DrawTexture.get(ret.getWidget("skill_icon")).setTex(skill.getHintIcon());
-		ret.addComponent(new SkillHandler(skill));
+		ret.addComponent(new SkillHandler(skill, i));
 		ret.transform.setPos(skill.guiPosition.x, skill.guiPosition.y);
 		return ret;
 	}
 	
-	enum BlendState { IN, OUT }
+	enum ScaleState { IN, OUT }
 	
-	// TODO: Cleanup the Z-Level dirty hack
 	public class SkillHandler extends Component {
 		
 		final Skill skill;
 		
-		final int blendTime = 100;
+		final int scaleTime = 100;
 		final double maxScale = 1.2;
 		
 		private boolean active = false, lastHovering = false;
 		
-		private BlendState current, queued;
-		private long lastEvent;
+		private ScaleState current, queued;
+		private long lastEvent, create;
+		private int timeOffset;
 
-		public SkillHandler(Skill _skill) {
+		public SkillHandler(Skill _skill, int i) {
 			super("SkillHandler");
 			skill = _skill;
+			create = GameTimer.getTime();
+			timeOffset = i * 100;
 		}
 		
 		void active() {
 			active = true;
-			startBlend(BlendState.IN);
+			startScale(ScaleState.IN);
 		} 
 		
 		void deactive() {
 			active = false;
-			startBlend(BlendState.OUT);
+			startScale(ScaleState.OUT);
 		}
 		
-		void startBlend(BlendState state) {
+		void startScale(ScaleState state) {
 			if(current == null) {
 				current = state;
 				lastEvent = GameTimer.getTime();
@@ -247,6 +272,11 @@ public class GuiSkillTree extends LIGuiScreen {
 					queued = state;
 				}
 			}
+		}
+		
+		float getAlpha() {
+			long dt = GameTimer.getTime() - create;
+			return MathUtils.wrapf(0, 1, (float)(dt - timeOffset) / 200);
 		}
 		
 		@Override
@@ -281,7 +311,7 @@ public class GuiSkillTree extends LIGuiScreen {
 
 					@Override
 					public void handleEvent(Widget w, FrameEvent event) {
-						glColor4d(1, 1, 1, 1);
+						glColor4f(1, 1, 1, getAlpha());
 						shader.useProgram();
 						glDepthMask(active);
 						RenderUtils.loadTexture(skill.getHintIcon());
@@ -301,20 +331,24 @@ public class GuiSkillTree extends LIGuiScreen {
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
 					double zLevel = active ? 11 : 1;
+					float alpha = getAlpha();
+					
 					DrawTexture dt1 = DrawTexture.get(widget.getWidget("skill_icon"));
 					if(dt1 != null) {
 						dt1.zLevel = zLevel;
 						dt1.writeDepth = active;
+						dt1.color.a = alpha;
 					}
 					dt1 = DrawTexture.get(w);
 					dt1.zLevel = zLevel;
 					dt1.writeDepth = active;
+					dt1.color.a = alpha;
 					
 					// Size update
 					if(current != null) {
 						long dt = GameTimer.getTime() - lastEvent;
-						double prog = Math.min(1.0, (double) dt / blendTime);
-						if(current == BlendState.IN) {
+						double prog = Math.min(1.0, (double) dt / scaleTime);
+						if(current == ScaleState.IN) {
 							widget.transform.scale = MathUtils.lerp(1, maxScale, prog);
 						} else {
 							widget.transform.scale = MathUtils.lerp(maxScale, 1, prog);
@@ -324,13 +358,13 @@ public class GuiSkillTree extends LIGuiScreen {
 						widget.dirty = true;
 					} else {
 						if(queued != null) {
-							startBlend(queued);
+							startScale(queued);
 							queued = null;
 						}
 					}
 					
 					if(!active && (event.hovering ^ lastHovering)) {
-						startBlend(event.hovering ? BlendState.IN : BlendState.OUT);
+						startScale(event.hovering ? ScaleState.IN : ScaleState.OUT);
 					}
 					
 					lastHovering = event.hovering;
@@ -341,7 +375,7 @@ public class GuiSkillTree extends LIGuiScreen {
 					glDisable(GL_CULL_FACE);
 					glTranslated(w.transform.width / 2, w.transform.height / 2, zLevel);
 					final float size = 70;
-					glColor4d(1, 1, 1, event.hovering ? 1 : 0.8);
+					glColor4d(1, 1, 1, alpha * (event.hovering ? 1 : 0.8));
 					glScalef(size, size, 1);
 					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_BACK, 1);
 					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_GLOW, aData.getSkillExp(skill));
@@ -351,7 +385,7 @@ public class GuiSkillTree extends LIGuiScreen {
 					glColor4d(1, 1, 1, 1);
 					
 					// Draw the skill name
-					if(event.hovering && !active) {
+					if(event.hovering && !active && alpha == 1.0f) {
 						glPushMatrix();
 						glTranslated(0, 0, 10);
 						Font.font.draw(skill.getDisplayName(), 20, -5, 40, 0xbbbbbb, Align.RIGHT);
@@ -422,7 +456,8 @@ public class GuiSkillTree extends LIGuiScreen {
 			skill = _skill;
 			boolean learned = aData.isSkillLearned(skill);
 			color = learned ? CRL_SDESC_LEARNED : CRL_SDESC_NOTLEARNED;
-			transform.setSize(450, 100);
+			double width1 = Font.font.strLen(skill.getDisplayName(), 50);
+			transform.setSize(Math.max(180 + width1, 450), 115);
 			transform.doesListenKey = false;
 			
 			regEventHandler(new FrameEventHandler() {
@@ -436,7 +471,7 @@ public class GuiSkillTree extends LIGuiScreen {
 					color.a = blendfac(300);
 					Font.font.draw(skill.getDisplayName(), 120, -6, 50, color.asHexColor());
 					color.a = blendfac(400);
-					Font.font.draw(Localization.levelDesc(skill.getLevel()), 
+					Font.font.draw("Lv" + skill.getLevel(), 
 						w.getWidgetParent().transform.width - 50, -1, 44, color.asHexColor(), Align.RIGHT);
 					
 					Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
@@ -457,13 +492,15 @@ public class GuiSkillTree extends LIGuiScreen {
 	
 	public class SkillHint extends Widget {
 		
-		static final double WIDTH = 450, FONT_SIZE = 40;
+		static final double FONT_SIZE = 33;
 		final String text;
 		long ct = GameTimer.getTime();
+		double width = 420;
 		
-		public SkillHint(Skill _skill) {
-			text = _skill.getDescription();
-			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, WIDTH);
+		public SkillHint(WidgetSkillDesc _skill) {
+			text = _skill.handler.skill.getDescription();
+			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
+					width = Math.max(width, _skill.width - 50));
 			transform.setSize(vec.x, vec.y);
 			transform.doesListenKey = false;
 			
@@ -475,12 +512,13 @@ public class GuiSkillTree extends LIGuiScreen {
 					glTranslated(0, 0, 10);
 					double a = .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
 					CRL_SKILL_DESC_1.a = a;
-					Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), WIDTH);
+					Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
 					glPopMatrix();
 				}
 				
 			});
 		}
+		
 	}
 	
 }

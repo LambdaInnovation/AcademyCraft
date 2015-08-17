@@ -28,7 +28,7 @@ public class GuiSkillTreeApp extends GuiSkillTree {
 	protected Widget createDesc(SkillHandler handler) {
 		WidgetSkillDesc ret = new WidgetSkillDesc(handler);
 		ret.addWidget(new GuiSkillTree.SkillLevelDesc(handler.skill));
-		ret.addWidget(new GuiSkillTree.SkillHint(handler.skill));
+		ret.addWidget(new GuiSkillTree.SkillHint(ret));
 		return ret;
 	}
 
