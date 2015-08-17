@@ -76,7 +76,7 @@ tile.ac_machine_frame.name=机械框架
 ac.knowledge.marathon.name=长跑
 ac.knowledge.iron_feet.name=铁脚
 ac.knowledge.intheknee.name=膝盖中了一箭
-ac.knowledge.intheknee.desc=我曾经也是一个像你一样的探险家……
+ac.knowledge.intheknee.desc=我曾经也是一个像你一样的探险家...
 ac.knowledge.bouncer.name=跳高
 ac.knowledge.trajectory.name=弹道学
 ac.knowledge.baseball.name=打棒球
@@ -85,11 +85,14 @@ ac.knowledge.anatomy.name=解剖学
 ac.gui.preset_edit.tag=预设 #
 
 # 数据终端
-ac.terminal.notinstalled=你没有安装数据终端。
-ac.terminal.alrdy_installed=你已经安装了数据终端。
-# 这个空行是故意加入的，请保留它。
-ac.gui.terminal.installing= 安装中……
+ac.terminal.notinstalled=你没有安装数据终端.
+ac.terminal.alrdy_installed=你已经安装了数据终端.
+
+ac.gui.terminal.installing= 安装中...
 ac.gui.terminal.appcount=%d 应用
+
+ac.terminal.app_alrdy_installed=你已经安装了%s.
+ac.terminal.app_installed=成功安装%s.
 
 # 应用
 ac.app.skill_tree.name=技能树
@@ -98,36 +101,66 @@ ac.app.settings.name=设置
 ac.app.media_player.name=媒体播放器
 
 ac.app.freq_transmitter.name=频率变送器
-ac.app.freq_transmitter.s0_0=请右击一个无线矩阵或节点以建立连接。
-ac.app.freq_transmitter.s1_0=按下“回车”以确认
-ac.app.freq_transmitter.s1_1=验证中……
-ac.app.freq_transmitter.s2_0=右击附近的无线节点以建立连接。单击其他方块以退出。
-ac.app.freq_transmitter.s3_0=右击附近的无线能源接收对象或能源发生机以建立连接。 单击其他方块以退出。
+ac.app.freq_transmitter.s0_0=请右击一个无线矩阵或节点以建立连接.
+ac.app.freq_transmitter.s1_0=按下"回车"以确认
+ac.app.freq_transmitter.s1_1=验证中...
+ac.app.freq_transmitter.s2_0=右击附近的无线节点以建立连接.单击其他方块以退出.
+ac.app.freq_transmitter.s3_0=右击附近的无线能源接收对象或能源发生机以建立连接. 单击其他方块以退出.
 
-ac.app.freq_transmitter.e0=这个无线矩阵还未初始化。
-ac.app.freq_transmitter.e1=验证失败。
-ac.app.freq_transmitter.e2=连接失败。可能是由于矩阵已达到负载饱和或超出最大范围。
-ac.app.freq_transmitter.e3=连接失败。可能是由于节点已达到负载饱和或超出最大范围。
-ac.app.freq_transmitter.e4=操作取消。
-ac.app.freq_transmitter.e5=传输中……
-ac.app.freq_transmitter.e6=连接成功。
+ac.app.freq_transmitter.e0=这个无线矩阵还未初始化.
+ac.app.freq_transmitter.e1=验证失败.
+ac.app.freq_transmitter.e2=连接失败. 可能是由于矩阵已达到负载饱和或超出最大范围.
+ac.app.freq_transmitter.e3=连接失败. 可能是由于节点已达到负载饱和或超出最大范围.
+ac.app.freq_transmitter.e4=操作取消.
+ac.app.freq_transmitter.e5=传输中...
+ac.app.freq_transmitter.e6=连接成功.
 
 # 知识UI
 ac.knowledge.acquired=习得知识
 
+# 技能树
+ac.skill_tree.title=技能树
+ac.skill_tree.version=版本: 1.0β1
+ac.skill_tree.notacquired=能力未获得.
+
+ac.skill_tree.espinfo_title=个人信息
+
+ac.skill_tree.macinfo_title=机器信息
+ac.skill_tree.energy=能量
+ac.skill_tree.syncrate=同步率
+
+ac.skill_tree.acquireprog=已获得 %.0f%%
+ac.skill_tree.not_acquired=未获得
+
+# 设置
+ac.settings.cat.generic=常规
+ac.settings.prop.attackPlayer=开启PvP (玩家vs玩家)
+ac.settings.prop.destroyBlocks=开启方块破坏
+
+ac.settings.cat.keys=键位
+ac.settings.prop.ability_0=能力 #1
+ac.settings.prop.ability_1=能力 #2
+ac.settings.prop.ability_2=能力 #3
+ac.settings.prop.ability_3=能力 #4
+
 # 媒体
-ac.media.acquired=你已获得媒体 %s
-ac.media.haveone=你已经获得了媒体 %s
+ac.media.acquired=你已获得媒体  %s
+ac.media.haveone=你已经获得了媒体  %s
 
 # 常规
-ac.gui.loading_lowercase.desc=加载中……
-ac.gui.loading_uppercase.desc=加载中……
+ac.gui.loading_lowercase.desc=加载中...
+ac.gui.loading_uppercase.desc=加载中...
+
+# 连接UI
+ac.gui.link.transmitting=连接中...
+ac.gui.link.successful=连接成功.
+ac.gui.link.failed=连接失败.
 
 # 矩阵
-ac.gui.matrix.mark.waiting.desc=传输中……
-ac.gui.matrix.mark.invalid_input.desc=无效输入。
-ac.gui.matrix.mark.success.desc=操作已完成。
-ac.gui.matrix.mark.fail.desc=操作失败。
+ac.gui.matrix.mark.waiting.desc=传输中...
+ac.gui.matrix.mark.invalid_input.desc=无效输入.
+ac.gui.matrix.mark.success.desc=操作已完成.
+ac.gui.matrix.mark.fail.desc=操作失败.
 ac.gui.matrix.bandwidth=带宽
 ac.gui.matrix.range=范围
 ac.gui.matrix.capacity=负载
@@ -142,13 +175,30 @@ ac.gui.node.not_connected.desc=<未连接>
 
 ac.gui.node.mark.loading.desc=加载中
 ac.gui.node.mark.idle.desc=待机
-ac.gui.node.mark.transmitting.desc=传输中
+ac.gui.node.mark.transmitting.desc=连接中
 ac.gui.node.mark.successful.desc=成功
 ac.gui.node.mark.failed.desc=失败
+
+# 虚相位能量发生机
+ac.gui.phase_gen.liquid=虚相位液体
+ac.gui.phase_gen.buffer=能量缓存
+
+# 风力能量发生机
+ac.gui.wind_base.fancap=扇叶负载
+ac.gui.wind_base.speed=能量发生速率
+ac.gui.wind_base.buffer=能量缓存
+
+ac.gui.wind.structure=发生机结构缺失或损坏.
+ac.gui.wind.obstacle=不能放置扇叶.
 
 # 虚能融合机
 ac.gui.imagfusor.ion.desc=虚相液体
 ac.gui.imagfusor.flux.desc=虚能
+
+# 金属处理机
+ac.gui.metal_former.mode.etch=蚀刻
+ac.gui.metal_former.mode.plate=冲压
+ac.gui.metal_former.mode.incise=切割
 
 # 吐司猫
 ac.cat_engine.unlink=已经和节点断开了连接喵~
@@ -162,6 +212,14 @@ ac.media.level5_judgelight.name=Level5 -Judgelight-
 ac.media.level5_judgelight.desc=《某科学的超电磁炮》 OP2
 ac.media.sisters_noise.name=Sister's Noise
 ac.media.sisters_noise.desc=《某科学的超电磁炮S》 OP1
+
+# Ability Generic
+ac.ability.level0=无能力者
+ac.ability.level1=低能力者
+ac.ability.level2=异能力者
+ac.ability.level3=强能力者
+ac.ability.level4=大能力者
+ac.ability.level5=超能力者
 
 # 电击使
 ## 电击使 知识
@@ -186,65 +244,90 @@ ac.ability.electro_master.iron_sand.cone.name=铁椎
 ac.ability.electro_master.charging.name=电流回冲
 ac.ability.electro_master.body_intensify.name=生物电强化
 ac.ability.electro_master.thunder_clap.name=终极落雷
+ac.ability.electro_master.thunder_bolt.name=雷击之枪
+
+ac.ability.electro_master.arc_gen.desc=激发出一道较微弱的电弧, 会在落点处扩散来造成伤害, 如果直击到易燃方块, 可能会将其点燃.
+ac.ability.electro_master.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体, 甚至将它们投掷出去杀伤敌人.
+ac.ability.electro_master.mine_detect.desc=闭上眼睛感受周围的磁力线流动, 可以让你看到身旁珍惜矿物资源的痕迹.
+ac.ability.electro_master.railgun.desc=利用电磁诱导原理, 将硬币高速射出, 在全力一击的情况下有恐怖的破坏力.
+ac.ability.electro_master.mag_movement.desc=向外界的某个可磁化物体释放电磁力, 使自己的身体快速移动.
+ac.ability.electro_master.iron_sand.desc=通过分离和操纵身体周围的铁砂, 创造出变化多端而又极其危险的攻击效果.
+ac.ability.electro_master.charging.desc=对手持的物品或世界中的电力方块进行充能.
+ac.ability.electro_master.body_intensify.desc=操纵自身生物电, 在短时间内强化身体素质.
+ac.ability.electro_master.thunder_clap.desc=操纵大气中的电磁场氛围, 催化出雷云, 并牵引其中的电力产生一次破坏性的落雷.
+ac.ability.electro_master.thunder_bolt.desc=生成海量的电力, 将其约束成柱形发射.击中实体后, 猛烈的电流会爆发出去产生第二次伤害.
 
 # 传送使
 
 ## 传送使 技能
+ac.ability.teleporter.flesh_ripping.name=肌体撕裂
 
 ac.gui.loctele.tag0=已记录坐标
 ac.gui.loctele.tag1=添加坐标
-ac.gui.loctele.name=名称：
-ac.gui.loctele.location=坐标：
-ac.gui.loctele.distance=距离：
-ac.gui.loctele.dim=维度：#
-ac.gui.loctele.warn0=[CP不足。]
-ac.gui.loctele.warn1=你现在无法记录此坐标。
+ac.gui.loctele.name=名称: 
+ac.gui.loctele.location=坐标: 
+ac.gui.loctele.distance=距离: 
+ac.gui.loctele.dim=维度: #
+ac.gui.loctele.warn0=[CP不足.]
+ac.gui.loctele.warn1=你现在无法记录此坐标.
 ac.gui.loctele.teleport=传送！
+
+# 常规技能
+ac.ability.generic.brain_course.name=大脑训练课程
+ac.ability.generic.brain_course_advanced.name=大脑训练课程 (高级)
+ac.ability.generic.mind_course.name=思维修养课程
 
 # 知识
 ac.knowledge.bubble.name=泡泡大师
 
 # 指令
-ac.command.invalid=无效输入，请再次尝试。
-ac.command.successful=指令已执行。
-ac.command.notlearned=玩家还未学习任何能力。
+ac.command.invalid=无效输入, 请再次尝试.
+ac.command.successful=指令已执行.
+ac.command.notlearned=玩家还未学习任何能力.
 
-ac.command.knowledge.usage=/knowledge <command>|<help> [参数……]
-ac.command.knowledge.help=/knowledge help：显示帮助信息。
-ac.command.knowledge.stat=/knowledge stat：显示玩家知识的统计信息。
-ac.command.knowledge.clear=/knowledge clear：清楚任何知识信息，从头再来。
-ac.command.knowledge.getall=/knowledge getall：立刻学习所有知识。
-ac.command.knowledge.list=/knowledge list：列出所有可用知识。
-ac.command.knowledge.learn=/knowledge learn [知识名称]：学习指定的知识。
-ac.command.knowledge.unlearn=/knowledge unlearn [知识名称]：忘记指定的知识。
-ac.command.knowledge.stat2=知识已学习：%s
-ac.command.knowledge.stat3=知识已发现：%s
-ac.command.knowledge.notfound=名称为 %s 的知识不存在。
-ac.command.knowledge.all=所有知识：
-ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定的知识。
+ac.command.knowledge.usage=/knowledge <command>|<help> [参数...]
+ac.command.knowledge.help=/knowledge help: 显示帮助信息.
+ac.command.knowledge.stat=/knowledge stat: 显示玩家知识的统计信息.
+ac.command.knowledge.clear=/knowledge clear: 清楚任何知识信息, 从头再来.
+ac.command.knowledge.getall=/knowledge getall: 立刻学习所有知识.
+ac.command.knowledge.list=/knowledge list: 列出所有可用知识.
+ac.command.knowledge.learn=/knowledge learn [知识名称]: 学习指定的知识.
+ac.command.knowledge.unlearn=/knowledge unlearn [知识名称]: 忘记指定的知识.
+ac.command.knowledge.stat2=知识已学习: %s
+ac.command.knowledge.stat3=知识已发现: %s
+ac.command.knowledge.notfound=名称为  %s 的知识不存在.
+ac.command.knowledge.all=所有知识: 
+ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定的知识.
 
-ac.command.aim.usage=/aim <command>|<help> [参数……]
-ac.command.aim.help=/aim help: 显示帮助信息。
-ac.command.aim.cat=/aim cat [能力名称]：改变指定玩家的能力或是显示当前能力。
-ac.command.aim.catlist=/aim catlist：列出所有可用能力。
-ac.command.aim.learn=/aim learn <id>|<技能名称>：无视所有要求学习指定技能。
-ac.command.aim.learn_all=/aim learn_all：学习所有技能。
-ac.command.aim.reset=/aim reset：清空你的能力信息。
-ac.command.aim.learned=/aim learned：显示已学习的技能。
-ac.command.aim.skills=/aim skills：显示玩家当前能力的所有技能。
-ac.command.aim.fullcp=/aim fullcp：将当前玩家CP恢复至满。
-ac.command.aim.level=/aim level：设置当前玩家的能力等级。
-ac.command.aim.nocat=该能力不存在。
-ac.command.aim.cats=当前可用能力：
-ac.command.aim.curcat=玩家当前能力：%s
+ac.command.aim.usage=/aim <command>|<help> [参数...]
+ac.command.aim.help=/aim help: 显示帮助信息.
+ac.command.aim.cat=/aim cat [能力名称]: 改变指定玩家的能力或是显示当前能力.
+ac.command.aim.catlist=/aim catlist: 列出所有可用能力.
+ac.command.aim.learn=/aim learn <id>|<技能名称>: 无视所有要求学习指定技能.
+ac.command.aim.learn_all=/aim learn_all: 学习所有技能.
+ac.command.aim.reset=/aim reset: 清空你的能力信息.
+ac.command.aim.learned=/aim learned: 显示已学习的技能.
+ac.command.aim.skills=/aim skills: 显示玩家当前能力的所有技能.
+ac.command.aim.fullcp=/aim fullcp: 将当前玩家CP恢复至满.
+ac.command.aim.level=/aim level: 设置当前玩家的能力等级.
+ac.command.aim.nocat=该能力不存在.
+ac.command.aim.cats=当前可用能力: 
+ac.command.aim.curcat=玩家当前能力: %s
 ac.command.aim.nonecat=无能力
-ac.command.aim.noskill=该技能不存在。
-ac.command.aim.learned.format=已习得技能：%s
+ac.command.aim.noskill=该技能不存在.
+ac.command.aim.learned.format=已习得技能: %s
 
-ac.command.preset.usage=/preset <command>|<help> [参数……]
-ac.command.preset.help=/preset help: 显示帮助信息。
-ac.command.preset.view=/preset view <id>：显示编号为<id>的键位信息。
-ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]：编辑编号为<id>的键位设置。Mapping是Controllable ID。
-ac.command.preset.list=/preset list：显示当前所有可用Controllable。
-ac.command.preset.nobind=未绑定。
-ac.command.preset.list2=可用Controllable：
+ac.command.preset.usage=/preset <command>|<help> [参数...]
+ac.command.preset.help=/preset help: 显示帮助信息.
+ac.command.preset.view=/preset view <id>: 显示编号为<id>的键位信息.
+ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: 编辑编号为<id>的键位设置. Mapping是Controllable ID.
+ac.command.preset.list=/preset list: 显示当前所有可用Controllable.
+ac.command.preset.nobind=未绑定.
+ac.command.preset.list2=可用Controllable: 
+
+
+# 成就
+achievement.ac_phase_liquid=神秘的物质
+achievement.ac_phase_liquid.desc=收集一些虚相位液体, 然后思考如何用它们创造能量.
+achievement.ac_node_basic=基础存储
+achievement.ac_node_basic.desc=合成一个虚能矩阵以存储和传输能量.

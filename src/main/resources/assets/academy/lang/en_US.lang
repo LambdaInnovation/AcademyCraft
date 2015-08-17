@@ -173,6 +173,12 @@ ac.gui.node.password.desc=Password:
 ac.gui.node.current_ssid.desc=Current Linked: 
 ac.gui.node.not_connected.desc=<Not Connected>
 
+ac.gui.node.mark.loading.desc=LOADING
+ac.gui.node.mark.idle.desc=IDLE
+ac.gui.node.mark.transmitting.desc=TRANSMITTING
+ac.gui.node.mark.successful.desc=SUCCESSFUL
+ac.gui.node.mark.failed.desc=FAILED
+
 # Phase Generator
 ac.gui.phase_gen.liquid=Liquid
 ac.gui.phase_gen.buffer=Buffer
@@ -184,12 +190,6 @@ ac.gui.wind_base.buffer=Buffer
 
 ac.gui.wind.structure=Incomplete generator structure.
 ac.gui.wind.obstacle=Can't place generator fan.
-
-ac.gui.node.mark.loading.desc=LOADING
-ac.gui.node.mark.idle.desc=IDLE
-ac.gui.node.mark.transmitting.desc=TRANSMITTING
-ac.gui.node.mark.successful.desc=SUCCESSFUL
-ac.gui.node.mark.failed.desc=FAILED
 
 # Imag Fusor
 ac.gui.imagfusor.ion.desc=Proj Liquid
@@ -239,17 +239,28 @@ ac.ability.electro_master.mag_movement.name=Magnet Movement
 ac.ability.electro_master.iron_sand.name=Iron Sand Control
 ac.ability.electro_master.iron_sand.sword.name=Iron Sand Sword
 ac.ability.electro_master.iron_sand.whip.name=Iron Sand Whip
-ac.ability.electro_master.iron_sand.storm.name=Iron Sand Storm # baka狼
+ac.ability.electro_master.iron_sand.storm.name=Iron Sand Storm
 ac.ability.electro_master.iron_sand.cone.name=Iron Sand Cone
 ac.ability.electro_master.charging.name=Current Charging
 ac.ability.electro_master.body_intensify.name=Body Intensify
 ac.ability.electro_master.thunder_clap.name=Thunderclap
+ac.ability.electro_master.thunder_bolt.name=Thunder Bolt
+
+ac.ability.electro_master.arc_gen.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
+ac.ability.electro_master.mag_manip.desc=Manipulate and move magnetizable things with the magnetic force, even throw them out to damage enemies.
+ac.ability.electro_master.mine_detect.desc=Close your eyes and feel the flowing of magnetic line, and you will be able to see a hint of precious mineral resources around you.
+ac.ability.electro_master.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
+ac.ability.electro_master.mag_movement.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
+ac.ability.electro_master.iron_sand.desc=Separate and manipulate the iron sand to creative a changeable and dangerous attack effect.
+ac.ability.electro_master.charging.desc=Charge to the thing in your hand and electric blocks in the world.
+ac.ability.electro_master.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
+ac.ability.electro_master.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
+ac.ability.electro_master.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and cause the second damage.
 
 # Teleporter
-ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
-
 
 ## TP Skills
+ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
 
 ac.gui.loctele.tag0=Recorded Locations
 ac.gui.loctele.tag1=Add Location
@@ -260,6 +271,11 @@ ac.gui.loctele.dim=Dimension: #
 ac.gui.loctele.warn0=[CP not enough.]
 ac.gui.loctele.warn1=You can't record this location now.
 ac.gui.loctele.teleport=Teleport!
+
+# Generic Skills
+ac.ability.generic.brain_course.name=Brain Course
+ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
+ac.ability.generic.mind_course.name=Mind Course
 
 # Knowledge
 ac.knowledge.bubble.name=Bubble Master
