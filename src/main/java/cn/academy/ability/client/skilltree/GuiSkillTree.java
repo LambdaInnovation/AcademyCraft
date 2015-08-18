@@ -77,7 +77,7 @@ public class GuiSkillTree extends LIGuiScreen {
 		CRL_WARNING = new Color().setColor4i(240, 51, 51, 255),
 		CRL_SKILL_DESC_1 = new Color().setColor4i(222, 222, 222, 255);
 	
-	static final ResourceLocation
+	public static final ResourceLocation
 		TEX_EXPPROG_BACK = tex("expprog_back"),
 		TEX_EXPPROG_GLOW = tex("expprog_glow"),
 		TEX_LVL_GLOW = Resources.getTexture("guis/mark/mark_ball_highlighted"),
@@ -135,7 +135,7 @@ public class GuiSkillTree extends LIGuiScreen {
 		}
 		
 		initPlayerInfo();
-		TextBox.get(windowMachine.getWidget("dev_type")).content = Localization.machineType(type);
+		TextBox.get(windowMachine.getWidget("dev_type")).content = SkillTreeLocal.machineType(type);
 		
 		gui.addWidget("window", window);
 		EventLoader.load(gui, this);
@@ -176,10 +176,10 @@ public class GuiSkillTree extends LIGuiScreen {
 	
 	private void initPlayerInfo() {
 		TextBox.get(windowEsper.getWidget("text_user")).content = player.getDisplayName();
-		TextBox.get(windowEsper.getWidget("text_level")).content = Localization.levelDesc(aData.getLevel());
+		TextBox.get(windowEsper.getWidget("text_level")).content = SkillTreeLocal.levelDesc(aData.getLevel());
 		
 		Category cat = aData.getCategory();
-		TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? Localization.unknown() : cat.getDisplayName();
+		TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? SkillTreeLocal.unknown() : cat.getDisplayName();
 		DrawTexture.get(windowEsper.getWidget("icon_cat")).texture = cat == null ? TEX_UNKNOWN_CAT : cat.getIcon();
 	}
 	
@@ -414,10 +414,10 @@ public class GuiSkillTree extends LIGuiScreen {
 				public void handleEvent(Widget w, FrameEvent event) {
 					if(event.hovering) {
 						if(level <= aData.getLevel())
-							Font.font.draw(Localization.levelDesc(level),
+							Font.font.draw(SkillTreeLocal.levelDesc(level),
 									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
 						else if(LearningHelper.canLevelUp(aData) && level == aData.getLevel() + 1)
-							Font.font.draw(level == 1 ? Localization.acquire() : Localization.upgradeTo(level),
+							Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
 									-10, -10, 37, 0xe0ffffff, Align.RIGHT);
 					}
 				}
@@ -495,8 +495,8 @@ public class GuiSkillTree extends LIGuiScreen {
 					
 					Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
 					color2.a = blendfac(500);
-					Font.font.draw(learned ? Localization.acquiredProg(aData.getSkillExp(skill)) : Localization.notAcquired(), 
-							120, 50, 35, color2.asHexColor());
+					Font.font.draw(learned ? SkillTreeLocal.acquiredProg(aData.getSkillExp(skill)) : SkillTreeLocal.notAcquired(), 
+							122, 50, 36, color2.asHexColor());
 					glPopMatrix();
 				}
 				
@@ -511,14 +511,14 @@ public class GuiSkillTree extends LIGuiScreen {
 	
 	public class SkillHint extends Widget {
 		
-		static final double FONT_SIZE = 33;
+		static final double FONT_SIZE = 38;
 		final String text;
 		long ct = GameTimer.getTime();
 		double width = 420;
 		
 		public SkillHint(WidgetSkillDesc _skill) {
 			Skill skill = _skill.handler.skill;
-			text = aData.isSkillLearned(skill) ? skill.getDescription() : Localization.unknownSkill();
+			text = aData.isSkillLearned(skill) ? skill.getDescription() : SkillTreeLocal.unknownSkill();
 			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
 					width = Math.max(width, _skill.width - 50));
 			transform.setSize(vec.x, vec.y);

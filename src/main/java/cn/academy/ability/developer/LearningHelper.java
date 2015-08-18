@@ -37,4 +37,12 @@ public class LearningHelper {
 					(skill.getParent() == null || data.isSkillLearned(skill.getParent())));
 	}
 	
+	public static boolean canLearn(AbilityData data, Skill skill) {
+		for(IDevCondition cond : skill.getDevConditions()) {
+			if(!cond.accepts(data, skill))
+				return false;
+		}
+		return true;
+	}
+	
 }

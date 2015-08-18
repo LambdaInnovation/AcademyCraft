@@ -13,6 +13,7 @@
 package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * An IDevelopType represents a single kind of process to be performed in Developer.
@@ -21,9 +22,9 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public interface IDevelopType {
 	
-	int getStimulations();
+	int getStimulations(EntityPlayer player);
 	
-	DeveloperType getMinimumType();
+	DeveloperType getMinimumType(EntityPlayer player);
 	
 	/**
 	 * @return Whether the action can be REALLY started/performed at the moment.
@@ -31,6 +32,19 @@ public interface IDevelopType {
 	 */
 	boolean validate(EntityPlayer player);
 	
+	/**
+	 * The action performed when really learned the develop type.
+	 */
 	void onLearned(EntityPlayer player);
+	
+	/**
+	 * @return The icon displayed in develop progress screen
+	 */
+	ResourceLocation getIcon(EntityPlayer player);
+	
+	/**=
+	 * @return The name displayed in develop progress screen
+	 */
+	String getName(EntityPlayer player);
 	
 }

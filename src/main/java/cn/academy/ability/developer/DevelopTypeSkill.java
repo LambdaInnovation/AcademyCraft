@@ -13,12 +13,12 @@
 package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.learning.LearningHelper;
 
 /**
- * Maybe the only IDevelopType. Learn a specific kind of skill.
+ * Learn a specific kind of skill.
  * @author WeAthFolD
  */
 public class DevelopTypeSkill implements IDevelopType {
@@ -30,7 +30,7 @@ public class DevelopTypeSkill implements IDevelopType {
 	}
 
 	@Override
-	public int getStimulations() {
+	public int getStimulations(EntityPlayer player) {
 		return skill.getLearningStims();
 	}
 
@@ -41,12 +41,22 @@ public class DevelopTypeSkill implements IDevelopType {
 
 	@Override
 	public boolean validate(EntityPlayer player) {
-		return LearningHelper.canLearnSkill(player, skill);
+		return LearningHelper.canLearn(AbilityData.get(player), skill);
 	}
 
 	@Override
-	public DeveloperType getMinimumType() {
+	public DeveloperType getMinimumType(EntityPlayer player) {
 		return skill.getMinimumDeveloperType();
+	}
+
+	@Override
+	public ResourceLocation getIcon(EntityPlayer player) {
+		return skill.getHintIcon();
+	}
+
+	@Override
+	public String getName(EntityPlayer player) {
+		return skill.getDisplayName();
 	}
 
 }

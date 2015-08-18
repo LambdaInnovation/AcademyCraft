@@ -60,7 +60,7 @@ public abstract class Developer {
 		
 		current = type;
 		tickThisStim = stim = 0;
-		maxStim = type.getStimulations();
+		maxStim = type.getStimulations(getUser());
 	}
 	
 	public void reset() {

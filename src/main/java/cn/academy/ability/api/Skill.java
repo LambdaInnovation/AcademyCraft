@@ -11,9 +11,9 @@ import org.lwjgl.util.vector.Vector2f;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.learning.LearningCondition;
-import cn.academy.ability.api.learning.RootLearningCondition;
+import cn.academy.ability.developer.DevConditionDep;
 import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.developer.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.liutils.ripple.ScriptFunction;
@@ -42,7 +42,7 @@ public abstract class Skill extends Controllable {
 	
 	private Category category;
 	
-	private final List<LearningCondition> learningConditions = new ArrayList();
+	private final List<IDevCondition> learningConditions = new ArrayList();
 	
 	private String fullName;
 	
@@ -93,8 +93,6 @@ public abstract class Skill extends Controllable {
 		this.id = id;
 		
 		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
-		
-		addLearningCondition(new RootLearningCondition());
 		
 		fullName = (isGeneric ? "generic" : category.getName()) + "." + name;
 		
@@ -184,7 +182,12 @@ public abstract class Skill extends Controllable {
 	
 	//--- Learning
 	public void setParent(Skill skill) {
+		setParent(skill, 0.0f);
+	}
+	
+	public void setParent(Skill skill, float requiredExp) {
 		parent = skill;
+		this.addDevCondition(new DevConditionDep(parent, requiredExp));
 	}
 	
 	public Skill getParent() {
@@ -195,14 +198,14 @@ public abstract class Skill extends Controllable {
 		return parent == null;
 	}
 	
-	protected void addLearningCondition(LearningCondition cond) {
+	protected void addDevCondition(IDevCondition cond) {
 		learningConditions.add(cond);
 	}
 	
 	/**
 	 * Returns an immutable list of learning conditions of this skill.
 	 */
-	public List<LearningCondition> getLearningConditions() {
+	public List<IDevCondition> getDevConditions() {
 		return ImmutableList.copyOf(learningConditions);
 	}
 	
