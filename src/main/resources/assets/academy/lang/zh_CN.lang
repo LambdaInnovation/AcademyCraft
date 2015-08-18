@@ -88,7 +88,7 @@ ac.gui.preset_edit.tag=预设 #
 ac.terminal.notinstalled=你没有安装数据终端.
 ac.terminal.alrdy_installed=你已经安装了数据终端.
 
-ac.gui.terminal.installing= 安装中...
+ac.gui.terminal.installing=安装中...
 ac.gui.terminal.appcount=%d 应用
 
 ac.terminal.app_alrdy_installed=你已经安装了%s.
@@ -125,12 +125,16 @@ ac.skill_tree.notacquired=能力未获得.
 
 ac.skill_tree.espinfo_title=个人信息
 
-ac.skill_tree.macinfo_title=机器信息
+ac.skill_tree.macinfo_title=开发机信息
 ac.skill_tree.energy=能量
 ac.skill_tree.syncrate=同步率
 
 ac.skill_tree.acquireprog=已获得 %.0f%%
 ac.skill_tree.not_acquired=未获得
+ac.skill_tree.uplevel=升级到 %s
+ac.skill_tree.acquire=获得能力!
+ac.skill_tree.unknown_skill=<错误 0x5f3759df 未知的能力>
+ac.skill_tree.unknown=[未知]
 
 # 设置
 ac.settings.cat.generic=常规
@@ -138,6 +142,10 @@ ac.settings.prop.attackPlayer=开启PvP (玩家vs玩家)
 ac.settings.prop.destroyBlocks=开启方块破坏
 
 ac.settings.cat.keys=键位
+ac.settings.prop.ability_activation=激活能力
+ac.settings.prop.edit_preset=设置技能预设
+ac.settings.prop.switch_preset=切换技能预设
+ac.settings.prop.open_data_terminal=打开数据终端
 ac.settings.prop.ability_0=能力 #1
 ac.settings.prop.ability_1=能力 #2
 ac.settings.prop.ability_2=能力 #3
@@ -213,7 +221,7 @@ ac.media.level5_judgelight.desc=《某科学的超电磁炮》 OP2
 ac.media.sisters_noise.name=Sister's Noise
 ac.media.sisters_noise.desc=《某科学的超电磁炮S》 OP1
 
-# Ability Generic
+# 能力通用
 ac.ability.level0=无能力者
 ac.ability.level1=低能力者
 ac.ability.level2=异能力者
@@ -264,6 +272,18 @@ ac.ability.teleporter.name=传送使
 
 ## 传送使 技能
 ac.ability.teleporter.flesh_ripping.name=肌体撕裂
+ac.ability.teleporter.threatening_teleport.name=危险传送
+ac.ability.teleporter.dim_folding_theoreom.name=折叠空间概论
+ac.ability.teleporter.shift_tp.name=转移传送
+ac.ability.teleporter.space_fluct.name=空间波动
+ac.ability.teleporter.flashing.name=高速闪现
+
+ac.ability.teleporter.flesh_ripping.desc=锁定某个生物，将其身体部分血肉直接撕裂并传送出体外，但是因为过于血腥的杀伤效果，可能在使用技能之后产生反胃。
+ac.ability.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有时候，只需要一小块体内的碎片就可以对生物造成巨大伤害。 
+ac.ability.teleporter.dim_folding_theoreom.desc=通过传送时不稳定的微弱空间折叠现象来对自己的空间跳跃类攻击进行一次概率性的空间分裂，来对敌人造成更高程度的伤害。
+ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的方式高速发射出去，因为其运动方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力。
+ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃类攻击的分裂性扩大，来造成更高的杀伤。
+ac.ability.teleporter.flashing.desc=远超标记传送机动性的新传送方式，极高的传送速度与速度的重置能让你实现灵活的空中机动。
 
 ac.gui.loctele.tag0=已记录坐标
 ac.gui.loctele.tag1=添加坐标
@@ -279,6 +299,10 @@ ac.gui.loctele.teleport=传送！
 ac.ability.generic.brain_course.name=大脑训练课程
 ac.ability.generic.brain_course_advanced.name=大脑训练课程 (高级)
 ac.ability.generic.mind_course.name=思维修养课程
+
+ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。
+ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力，强化能力的短期续航时间与长期消耗的耐性。
+ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想，加快计算力的恢复速度。
 
 # 知识
 ac.knowledge.bubble.name=泡泡大师
@@ -327,7 +351,6 @@ ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: 编辑编�
 ac.command.preset.list=/preset list: 显示当前所有可用Controllable.
 ac.command.preset.nobind=未绑定.
 ac.command.preset.list2=可用Controllable: 
-
 
 # 成就
 achievement.ac_phase_liquid=神秘的物质

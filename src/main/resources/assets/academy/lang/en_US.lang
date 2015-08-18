@@ -142,6 +142,10 @@ ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
 
 ac.settings.cat.keys=Keys
+ac.settings.prop.ability_activation=Activate Ability
+ac.settings.prop.edit_preset=Edit Preset
+ac.settings.prop.switch_preset=Switch Preset
+ac.settings.prop.open_data_terminal=Open Data Terminal
 ac.settings.prop.ability_0=Ability #1
 ac.settings.prop.ability_1=Ability #2
 ac.settings.prop.ability_2=Ability #3
@@ -268,6 +272,18 @@ ac.ability.teleporter.name=Teleporter
 
 ## TP Skills
 ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
+ac.ability.teleporter.threatening_teleport.name=Threatening Teleport
+ac.ability.teleporter.dim_folding_theoreom.name=Dimension Folding Theorem
+ac.ability.teleporter.shift_tp.name=Shift Teleport
+ac.ability.teleporter.space_fluct.name=Space Fluctuate
+ac.ability.teleporter.flashing.name=High-speed Flashing
+
+ac.ability.teleporter.flesh_ripping.desc=Lock a living thing and drag its viscus out. It's so violent that could cause serious nausea.
+ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
+ac.ability.teleporter.dim_folding_theoreom.desc=Cause a possible space division to your space jumping attack with the unstable weak space folding phenomenon when you're teleporting, to cause higher damage to enemies. 
+ac.ability.teleporter.shift_tp.desc=High-speeded shoot the blocks out with teleporting. Its mass and speed won't wenken the damage because the block isn't be pushed by kinetic energy, but be teleported.
+ac.ability.teleporter.space_fluct.desc=Use the fluctuation of space, expand the division of space jumping attack, to cause more damage.
+ac.ability.teleporter.flashing.desc=A new way to teleport that far better than mark teleporting. Very high speed and the reset of speed can help you do air mobility.
 
 ac.gui.loctele.tag0=Recorded Locations
 ac.gui.loctele.tag1=Add Location
@@ -283,6 +299,10 @@ ac.gui.loctele.teleport=Teleport!
 ac.ability.generic.brain_course.name=Brain Course
 ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
 ac.ability.generic.mind_course.name=Mind Course
+
+ac.ability.generic.brain_course.desc=Get a practice for your brain, it will let you be able to keep your skill longer.
+ac.ability.generic.brain_course_advanced.desc=More deeply and effectively develop the thinking ability of your brain. Improve skill keep time and patience.
+ac.ability.generic.mind_course.desc=Learn how to relax your brain better, to accelerate recovery speed of CP.
 
 # Knowledge
 ac.knowledge.bubble.name=Bubble Master

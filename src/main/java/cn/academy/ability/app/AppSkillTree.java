@@ -32,7 +32,6 @@ public class AppSkillTree extends App {
 
 	public AppSkillTree() {
 		super("skill_tree");
-		setPreInstalled();
 	}
 
 	@Override
