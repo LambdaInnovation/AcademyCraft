@@ -30,7 +30,6 @@ public class AppMediaPlayer extends App {
 
 	AppMediaPlayer() {
 		super("media_player");
-		setPreInstalled();
 	}
 
 	@Override

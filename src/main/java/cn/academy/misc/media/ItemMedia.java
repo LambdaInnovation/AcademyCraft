@@ -47,12 +47,12 @@ public class ItemMedia extends ACItem {
 			int mID = stack.getItemDamage();
 			
 			if(data.isMediaInstalled(mID)) {
-				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getName()));
+				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getDisplayName()));
 			} else {
 				data.installMedia(mID);
 				if(!player.capabilities.isCreativeMode)
 					stack.stackSize--;
-				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getName()));
+				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getDisplayName()));
 			}
 		}
         return stack;
