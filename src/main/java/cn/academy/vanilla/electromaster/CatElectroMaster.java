@@ -61,26 +61,40 @@ public class CatElectroMaster extends Category {
 		colorStyle.setColor4i(20, 113, 208, 100);
 		
 		addSkill(arcGen = new ArcGen());
+		addSkill(currentCharging = new CurrentCharging());
+		addSkill(magMovement = new MagMovement());
 		addSkill(magManip = new MagManip());
 		addSkill(mineDetect = new MineDetect());
-		addSkill(railgun = new Railgun());
-		addSkill(magMovement = new MagMovement());
 		addSkill(ironSand = new IronSand());
-		addSkill(currentCharging = new CurrentCharging());
 		addSkill(bodyIntensify = new BodyIntensify());
 		addSkill(thunderBolt = new ThunderBolt());
+		addSkill(railgun = new Railgun());
 		addSkill(thunderClap = new ThunderClap());
+		
 		ModuleVanilla.addGenericSkills(this);
 		
-		currentCharging.setParent(arcGen);
+		// Assign deps
+		currentCharging.setParent(arcGen, 0.3f);
+		
 		magMovement.setParent(arcGen);
-		magManip.setParent(magMovement);
-		bodyIntensify.setParent(arcGen);
-		mineDetect.setParent(magManip);
+		magMovement.addSkillDep(currentCharging, 0.7f);
+		
+		magManip.setParent(magMovement, 0.5f);
+		
+		bodyIntensify.setParent(arcGen, 1f);
+		bodyIntensify.addSkillDep(currentCharging, 1f);
+		
+		mineDetect.setParent(magManip, 1f);
+		
 		thunderBolt.setParent(arcGen);
-		railgun.setParent(thunderBolt);
-		ironSand.setParent(magManip);
-		thunderClap.setParent(thunderBolt);
+		thunderBolt.addSkillDep(currentCharging, 0.7f);
+		
+		railgun.setParent(thunderBolt, 0.3f);
+		railgun.addSkillDep(magManip, 1f);
+		
+		ironSand.setParent(magManip, 1f);
+		
+		thunderClap.setParent(thunderBolt, 1f);
 		
 		KnowledgeData.addKnowledges(new String[] {
 			"em_basic_volt",

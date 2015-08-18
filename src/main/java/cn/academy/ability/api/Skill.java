@@ -198,8 +198,12 @@ public abstract class Skill extends Controllable {
 		return parent == null;
 	}
 	
-	protected void addDevCondition(IDevCondition cond) {
+	public void addDevCondition(IDevCondition cond) {
 		learningConditions.add(cond);
+	}
+	
+	public void addSkillDep(Skill skill, float exp) {
+		addDevCondition(new DevConditionDep(skill, exp));
 	}
 	
 	/**

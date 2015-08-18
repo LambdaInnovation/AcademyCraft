@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.client.render.RenderDeveloper;
 import cn.academy.ability.developer.Developer;
+import cn.academy.ability.developer.DeveloperBlock;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
@@ -46,9 +47,10 @@ public class TileDeveloper extends TileReceiverBase {
 	@RegTileEntity.Render
 	public static RenderDeveloper renderer;
 	
-	public final Developer developer;
+	public Developer developer;
 	
-	static InstanceSerializer<EntityPlayer> ser = SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
+	static InstanceSerializer<EntityPlayer> ser = 
+		SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
 
 	@SideOnly(Side.CLIENT)
 	public boolean isDevelopingDisplay;
@@ -67,33 +69,13 @@ public class TileDeveloper extends TileReceiverBase {
 	
 	public TileDeveloper() {
 		super("ability_developer", 2, 100000, 300);
-		developer = new Developer() {
-
-			@Override
-			public EntityPlayer getUser() {
-				return user;
-			}
-
-			@Override
-			public int getTPS() {
-				return TileDeveloper.this.getTPS();
-			}
-
-			@Override
-			public boolean pullEnergy(double amt) {
-				return TileDeveloper.this.pullEnergy(amt) == amt;
-			}
-
-			@Override
-			public double getCPS() {
-				return getConsumePerStim();
-			}
-			
-		};
 	}
 
 	@Override
 	public void updateEntity() {
+		if(developer == null)
+			developer = new DeveloperBlock(this);
+		
 		if(!worldObj.isRemote) {
 			
 			developer.tick();
@@ -101,7 +83,6 @@ public class TileDeveloper extends TileReceiverBase {
 		} else {
 			
 			// Sync faster when developing.
-			// TODO: Better off syncing those in Container
 			if(++syncCD == (isDevelopingDisplay ? 5 : 20)) {
 				syncCD = 0;
 				doSync();
@@ -150,7 +131,7 @@ public class TileDeveloper extends TileReceiverBase {
 		return getType().toString().toLowerCase() + "." + val;
 	}
 	
-	private DeveloperType getType() {
+	public DeveloperType getType() {
 		Block blockType = getBlockType();
 		DeveloperType type = blockType instanceof BlockDeveloper ? ((BlockDeveloper)blockType).type : DeveloperType.PORTABLE;
 		return type;

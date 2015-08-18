@@ -25,12 +25,20 @@ public class SkillTreeLocal {
 		return local("acquire");
 	}
 	
+	public static String required() {
+		return local("required");
+	}
+	
 	public static String unknownSkill() {
 		return local("unknown_skill");
 	}
 	
 	public static String unknown() {
 		return local("unknown");
+	}
+	
+	public static String learnSkill() {
+		return local("learn_skill");
 	}
 	
 	public static String machineType(DeveloperType type) {

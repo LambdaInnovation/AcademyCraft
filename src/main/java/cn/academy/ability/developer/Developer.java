@@ -12,12 +12,21 @@
  */
 package cn.academy.ability.developer;
 
-import cn.academy.core.AcademyCraft;
 import net.minecraft.entity.player.EntityPlayer;
+import cn.academy.core.AcademyCraft;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.liutils.ripple.ScriptNamespace;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * This class represents actions performed by the Developer. 
  * Separated from TileEntity to be used in both Portable and Block version.
+ * 
+ * Subclasses should provide an InstanceSerializer, so
+ * 	we can synchronize the state and start the work in server side.
  * @author WeAthFolD
  */
 public abstract class Developer {
@@ -25,14 +34,20 @@ public abstract class Developer {
 	public enum DevState { IDLE, FAILED, DEVELOPING };
 	
 	IDevelopType current;
+	
+	// Synced states
 	int stim;
 	int maxStim;
+	private DevState state = DevState.IDLE;
+	// Synced states end
 	
 	int tickThisStim;
 	
-	private DevState state = DevState.IDLE;
+	public final DeveloperType type;
 
-	public Developer() {}
+	public Developer(DeveloperType _type) {
+		type = _type;
+	}
 	
 	public DevState getState() {
 		return state;
@@ -55,12 +70,20 @@ public abstract class Developer {
 		}
 	}
 	
-	void startDevelop(IDevelopType type) {
+	/**
+	 * Must be called from SERVER. Start the develop action.
+	 * @return Whether the action can really be started
+	 */
+	public boolean startDevelop(IDevelopType type) {
+		if(!type.validate(getUser()))
+			return false;
+		
 		reset();
 		
 		current = type;
 		tickThisStim = stim = 0;
 		maxStim = type.getStimulations(getUser());
+		return true;
 	}
 	
 	public void reset() {
@@ -102,17 +125,32 @@ public abstract class Developer {
 	/**
 	 * @return Ticks per stimulation. (i.e. develop speed)
 	 */
-	public abstract int getTPS();
+	public final int getTPS() {
+		return type.getTPS();
+	}
 	
 	/**
 	 * @return IF consume per stimulation.
 	 */
-	public abstract double getCPS();
+	public final double getCPS() {
+		return type.getCPS();
+	}
 	
 	/**
 	 * Consume some amount of energy
 	 * @return Whether the comsume action is successful.
 	 */
 	public abstract boolean pullEnergy(double amt);
+	
+	private void doSync() {
+		synced(maxStim, stim, state);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void synced(@Data Integer _maxStim, @Data Integer _stim, @Instance DevState _state) {
+		maxStim = _maxStim;
+		stim = _stim;
+		state = _state;
+	}
 	
 }

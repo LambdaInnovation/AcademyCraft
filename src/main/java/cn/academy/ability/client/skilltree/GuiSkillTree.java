@@ -60,7 +60,7 @@ import cn.liutils.util.helper.GameTimer;
  */
 @Registrant
 @RegInit
-public class GuiSkillTree extends LIGuiScreen {
+public abstract class GuiSkillTree extends LIGuiScreen {
 	
 	static ShaderMono shader;
 	static LIGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/skill_tree.xml"));
@@ -75,7 +75,8 @@ public class GuiSkillTree extends LIGuiScreen {
 		CRL_SDESC_LEARNED = new Color(),
 		CRL_SDESC_NOTLEARNED = new Color().setColor4i(117, 117, 117, 255),
 		CRL_WARNING = new Color().setColor4i(240, 51, 51, 255),
-		CRL_SKILL_DESC_1 = new Color().setColor4i(222, 222, 222, 255);
+		CRL_SKILL_DESC_1 = new Color().setColor4i(222, 222, 222, 255),
+		CRL_BACKGRND = new Color().setColor4i(42, 42, 42, 180);
 	
 	public static final ResourceLocation
 		TEX_EXPPROG_BACK = tex("expprog_back"),

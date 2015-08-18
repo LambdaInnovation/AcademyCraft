@@ -46,7 +46,7 @@ public class DevConditionDep implements IDevCondition {
 
 	@Override
 	public String getHintText() {
-		return dependency.getDisplayName() + String.format(": %.0f%%", requiredExp);
+		return dependency.getDisplayName() + String.format(": %.0f%%", requiredExp * 100);
 	}
 
 }
