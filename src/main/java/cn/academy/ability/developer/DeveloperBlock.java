@@ -39,4 +39,9 @@ public class DeveloperBlock extends Developer {
 		return tile.pullEnergy(amt) == amt;
 	}
 
+	@Override
+	public double getEnergy() {
+		return tile.getEnergy();
+	}
+
 }

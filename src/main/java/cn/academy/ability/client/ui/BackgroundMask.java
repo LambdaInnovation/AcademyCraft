@@ -84,10 +84,11 @@ public class BackgroundMask extends AuxGui {
 		}
 		
 		if(ca != 0 || a != 0) {
-			r = balanceTo(r, cr, time);
-			g = balanceTo(g, cg, time);
-			b = balanceTo(b, cb, time);
-			a = balanceTo(a, ca, time);
+			long dt = lastFrame == 0 ? 0 : time - lastFrame;
+			r = balanceTo(r, cr, dt);
+			g = balanceTo(g, cg, dt);
+			b = balanceTo(b, cb, dt);
+			a = balanceTo(a, ca, dt);
 			
 			GL11.glColor4d(r, g, b, a);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -104,9 +105,8 @@ public class BackgroundMask extends AuxGui {
 		lastFrame = time;
 	}
 
-	private double balanceTo(double from, double to, long time) {
+	private double balanceTo(double from, double to, long dt) {
 		double delta = to - from;
-		long dt = lastFrame == 0 ? 0 : time - lastFrame;
 		delta = Math.signum(delta) * Math.min(Math.abs(delta), dt / 1000.0 * CHANGE_PER_SEC);
 		return from + delta;
 	}

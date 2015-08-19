@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.client.skilltree.SkillTreeLocal;
 
 /**
  * Learn a specific kind of skill.
@@ -56,7 +57,7 @@ public class DevelopTypeSkill implements IDevelopType {
 
 	@Override
 	public String getName(EntityPlayer player) {
-		return skill.getDisplayName();
+		return SkillTreeLocal.learnSkill() + " " + skill.getDisplayName();
 	}
 
 }

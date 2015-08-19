@@ -78,4 +78,9 @@ public class DeveloperPortable extends Developer {
 		
 	}
 
+	@Override
+	public double getEnergy() {
+		return IFItemManager.instance.getEnergy(stack);
+	}
+
 }

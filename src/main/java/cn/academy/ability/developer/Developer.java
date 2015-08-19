@@ -86,6 +86,11 @@ public abstract class Developer {
 		return true;
 	}
 	
+	public double getEstmCons(IDevelopType type) {
+		// TODO
+		return 0;
+	}
+	
 	public void reset() {
 		current = null;
 		state = DevState.IDLE;
@@ -141,6 +146,8 @@ public abstract class Developer {
 	 * @return Whether the comsume action is successful.
 	 */
 	public abstract boolean pullEnergy(double amt);
+	
+	public abstract double getEnergy();
 	
 	private void doSync() {
 		synced(maxStim, stim, state);

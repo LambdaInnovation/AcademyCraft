@@ -143,6 +143,17 @@ ac.skill_tree.unknown=[UNKNOWN]
 ac.skill_tree.learn_skill=Learn
 ac.skill_tree.required=Required: 
 
+ac.skill_tree.perf=You are about to perform:
+ac.skill_tree.perf2=Proceed?
+ac.skill_tree.consumption=Consumption: %.0fIF
+ac.skill_tree.start=Start
+ac.skill_tree.cancel=Cancel
+
+ac.skill_tree.tracker=Progress Tracker
+ac.skill_tree.ok=OK
+ac.skill_tree.progress=Progress: %.1f%%
+ac.skill_tree.aborted=Progress: ABORTED.
+
 # Settings
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP

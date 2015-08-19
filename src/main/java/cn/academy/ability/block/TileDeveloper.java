@@ -113,20 +113,6 @@ public class TileDeveloper extends TileReceiverBase {
 		developer.reset();
 	}
 	
-	/**
-	 * Get the "Tick per stimulation" param.
-	 */
-	public int getTPS() {
-		return script.getInteger(propPath("tps"));
-	}
-	
-	/**
-	 * TODO: Implement modules
-	 */
-	public double getConsumePerStim() {
-		return 1000;
-	}
-	
 	private String propPath(String val) {
 		return getType().toString().toLowerCase() + "." + val;
 	}

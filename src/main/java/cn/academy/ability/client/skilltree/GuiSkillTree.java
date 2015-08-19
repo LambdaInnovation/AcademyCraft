@@ -417,10 +417,11 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 						if(level <= aData.getLevel())
 							Font.font.draw(SkillTreeLocal.levelDesc(level),
 									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
-						else if(LearningHelper.canLevelUp(aData) && level == aData.getLevel() + 1)
-							Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
-									-10, -10, 37, 0xe0ffffff, Align.RIGHT);
 					}
+					
+					if(LearningHelper.canLevelUp(aData) && level == aData.getLevel() + 1)
+						Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
+								-10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
 				}
 	 			
 	 		});

@@ -45,6 +45,18 @@ public class SkillTreeLocal {
 		return local("type_" + type.toString().toLowerCase());
 	}
 	
+	public static String estmCons(double amt) {
+		return local("consumption", amt);
+	}
+	
+	public static String progress(double amt) {
+		return local("progress", amt);
+	}
+	
+	public static String progressAborted() {
+		return local("aborted");
+	}
+	
 	public static String local(String key) {
 		return StatCollector.translateToLocal("ac.skill_tree." + key);
 	}

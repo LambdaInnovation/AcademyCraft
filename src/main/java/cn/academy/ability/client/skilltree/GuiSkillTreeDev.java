@@ -13,11 +13,17 @@
 package cn.academy.ability.client.skilltree;
 
 import static org.lwjgl.opengl.GL11.*;
+
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.developer.DevelopTypeSkill;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.IDevCondition;
+import cn.academy.ability.developer.IDevelopType;
+import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.component.Glow;
 import cn.academy.core.client.glsl.ShaderMono;
 import cn.liutils.cgui.gui.Widget;
@@ -39,6 +45,8 @@ import cn.liutils.util.helper.Font;
 public class GuiSkillTreeDev extends GuiSkillTree {
 	
 	final Developer developer;
+	
+	Overlay overlay;
 
 	public GuiSkillTreeDev(EntityPlayer _player, Developer _developer) {
 		super(_player, _developer.type);
@@ -54,7 +62,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		if(aData.isSkillLearned(skill)) {
 			ret.addWidget(new GuiSkillTree.SkillHint(ret));
 		} else {
-			{ // Dep display
+			List<IDevCondition> devConditions = skill.getDevConditions();
+			if(!devConditions.isEmpty()){ // Dep display
 				Widget area = new Widget();
 				area.transform.setSize(450, 50);
 				area.transform.doesListenKey = false;
@@ -125,14 +134,22 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				area.transform.doesListenKey = false;
 				
 				LearnButton button = new LearnButton();
-				button.regEventHandler(new MouseDownHandler() {
-
-					@Override
-					public void handleEvent(Widget w, MouseDownEvent event) {
-						// TODO
-					}
-					
-				});
+				
+				boolean can = LearningHelper.canLearn(aData, skill);
+				if(can) {
+					button.regEventHandler(new MouseDownHandler() {
+	
+						@Override
+						public void handleEvent(Widget w, MouseDownEvent event) {
+							overlay = new Overlay();
+							window.addWidget(overlay);
+							window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill)));
+						}
+						
+					});
+				} else {
+					button.setDisabled();
+				}
 				area.addWidget(button);
 				
 				ret.addWidget(area);
@@ -142,22 +159,78 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		return ret;
 	}
 	
+	Widget createConfirmWidget(IDevelopType type) {
+		Widget ret = loaded.getWidget("widgets/window_confirm").copy();
+		
+		double estmCons = developer.getEstmCons(type);
+		boolean can = developer.getEstmCons(type) <= developer.getEnergy();
+		
+		Widget startButton = ret.getWidget("button_start");
+		if(!can) {
+			startButton.transform.doesListenKey = false;
+			TextBox.get(startButton).color.setColor4d(.6, .6, .6, 1);
+			TextBox.get(ret.getWidget("text_cons")).color.setColor4i(255, 66, 58, 255);
+		} else {
+			startButton.regEventHandler(new MouseDownHandler() {
+
+				@Override
+				public void handleEvent(Widget w, MouseDownEvent event) {
+					ret.dispose();
+					window.addWidget(createProgressTracker(type));
+				}
+				
+			});
+		}
+		
+		TextBox.get(ret.getWidget("text_cons")).setContent(SkillTreeLocal.estmCons(estmCons));
+		TextBox.get(ret.getWidget("text_content")).setContent(type.getName(player));
+		
+		ret.getWidget("button_cancel").regEventHandler(new MouseDownHandler() {
+
+			@Override
+			public void handleEvent(Widget w, MouseDownEvent event) {
+				overlay.dispose();
+				overlay = null;
+				ret.dispose();
+			}
+			
+		});
+		
+		return ret;
+	}
+	
+	/**
+	 * Will NOT start the action at SERVER side. Do it on your own.
+	 */
+	Widget createProgressTracker(IDevelopType type) {
+		Widget ret = loaded.getWidget("widgets/window_tracker").copy();
+		DrawTexture.get(ret.getWidget("icon_track")).setTex(type.getIcon(player));
+		TextBox.get(ret.getWidget("text_content")).setContent(type.getName(player));
+		TextBox progText = TextBox.get(ret.getWidget("text_progress"));
+		progText.setContent(SkillTreeLocal.progress(0));
+		
+		return ret;
+	}
+	
 	class LearnButton extends Widget {
+		
+		TextBox text;
+		Glow glow;
 		
 		public LearnButton() {
 			transform.setSize(142, 50);
 			transform.alignWidth = WidthAlign.CENTER;
 			transform.alignHeight = HeightAlign.BOTTOM;
 			
-			Glow glow = new Glow();
+			glow = new Glow();
 			glow.color.setColor4i(255, 255, 255, 128);
 			glow.glowSize = 12;
 			
 			Tint tint = new Tint();
-			tint.idleColor.setColor4i(57, 57, 57, 255);
+			tint.idleColor.setColor4i(40, 40, 40, 255);
 			tint.hoverColor.setColor4i(80, 80, 80, 255);
 			
-			TextBox text = new TextBox();
+			text = new TextBox();
 			text.heightAlign = HeightAlign.CENTER;
 			text.widthAlign = WidthAlign.CENTER;
 			text.size = 40;
@@ -166,6 +239,27 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			addComponent(glow);
 			addComponent(tint);
 			addComponent(text);
+		}
+		
+		void setDisabled() {
+			transform.doesListenKey = false;
+			text.color.setColor4d(.6, .6, .6, 1);
+			glow.color.setColor4d(1, 1, 1, 0.2);
+		}
+		
+	}
+	
+	class Overlay extends Widget {
+		
+		Overlay() {
+			transform.setSize(2000, 2000);
+			transform.setCenteredAlign();
+			
+			DrawTexture dt = new DrawTexture();
+			dt.texture = new ResourceLocation("<null>");
+			dt.color.setColor4d(0, 0, 0, 0.3);
+			
+			addComponent(dt);
 		}
 		
 	}
