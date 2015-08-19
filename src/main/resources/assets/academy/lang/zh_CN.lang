@@ -123,6 +123,10 @@ ac.skill_tree.title=技能树
 ac.skill_tree.version=版本: 1.0β1
 ac.skill_tree.notacquired=能力未获得.
 
+ac.skill_tree.type_portable=便携式开发机
+ac.skill_tree.type_normal=基础开发机
+ac.skill_tree.type_advanced=高级开发机
+
 ac.skill_tree.espinfo_title=个人信息
 
 ac.skill_tree.macinfo_title=开发机信息
@@ -135,6 +139,9 @@ ac.skill_tree.uplevel=升级到 %s
 ac.skill_tree.acquire=获得能力!
 ac.skill_tree.unknown_skill=<错误 0x5f3759df 未知的能力>
 ac.skill_tree.unknown=[未知]
+
+ac.skill_tree.learn_skill=学习
+ac.skill_tree.required=需要: 
 
 # 设置
 ac.settings.cat.generic=常规
@@ -294,6 +301,26 @@ ac.gui.loctele.dim=维度: #
 ac.gui.loctele.warn0=[CP不足.]
 ac.gui.loctele.warn1=你现在无法记录此坐标.
 ac.gui.loctele.teleport=传送！
+
+# 原子崩坏
+ac.ability.melt_downer.name=Melt Downer
+
+## 原子崩坏 技能
+ac.ability.melt_downer.ray_barrage.name=散射光束雨
+ac.ability.melt_downer.scatter_bomb.name=电子弹散射
+ac.ability.melt_downer.light_shield.name=光盾
+ac.ability.melt_downer.jet_engine.name=突击喷射
+ac.ability.melt_downer.mine_ray_basic.name=基础采集光束
+ac.ability.melt_downer.mine_ray_expert.name=采集光束精修
+ac.ability.melt_downer.mine_ray_luck.name=采集光束精修 - 时运
+
+ac.ability.melt_downer.ray_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但是电子弹无法形成弹幕，难以应对全方位的饱和攻击，因此通过“扩散支援半导体”来应对能力无法大规模攻击的缺点。
+ac.ability.melt_downer.scatter_bomb.desc=复数的操控电子团放射来进行攻击，作为复数操控的代价，你无法精准的控制落点。
+ac.ability.melt_downer.light_shield.desc=将电子团横截面扩大形成护盾，高速运动的电子将会摧毁来犯物质，并伤害任何近距离接触自己的东西。
+ac.ability.melt_downer.jet_engine.desc=将电子用类似火箭引擎喷射的原理激发出去，利用反作用力来产生极速的位移，过程中周身产生短暂的光盾保护自己。
+ac.ability.melt_downer.mine_ray_basic.desc=经过锻炼的电子射流，能够在不毁灭瞄准物的情况下将其采集出来。
+ac.ability.melt_downer.mine_ray_expert.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的对矿物进行采集。
+ac.ability.melt_downer.mine_ray_luck.desc=经过长久的锻炼，你已经可以以较高的几率将矿物中蕴含的矿物完美的采集出来。
 
 # 常规技能
 ac.ability.generic.brain_course.name=大脑训练课程
