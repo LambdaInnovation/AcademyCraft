@@ -40,10 +40,7 @@ buildscript {
 }
 
 apply plugin: 'litebuilder'
-apply plugin: 'me.tatarka.retrolambda'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.7
+//apply plugin: 'me.tatarka.retrolambda'
 
 litebuilder {
     name = "AcademyCraft"
