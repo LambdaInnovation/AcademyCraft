@@ -12,8 +12,6 @@
  */
 package cn.academy.ability.developer;
 
-import com.sun.xml.internal.stream.Entity;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;

@@ -25,10 +25,6 @@ IndustrialCraft [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/
 
 Redstone Flux API [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API).
 
-CoFHCore [3.0.3-303](http://minecraft.curseforge.com/mc-mods/69162-cofhcore/files/2246919).
-
-Thermal Foundation [1.2.0-102](http://minecraft.curseforge.com/mc-mods/222880-thermal-foundation/files/2246921).
-
 Thermal Expasion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
 
 

@@ -23,30 +23,39 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-        maven {
-            name = "forgemaven"
-            url = "https://raw.github.com/LambdaInnovation/ForgeMaven/mvn-repo"
+		maven {
+            name = "lidev"
+            url = "http://maven.li-dev.cn/"
+        }
+		maven {
+            name = "lidev-dev"
+            url = "http://maven.li-dev.cn/dev/"
         }
     }
     dependencies {
-        classpath 'cn.li:ForgeMaven:1.0'
-		classpath 'me.tatarka:gradle-retrolambda:3.1.0'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'cn.lidev:LIteBuilder:1.0.0'
+		classpath 'me.tatarka:gradle-retrolambda:3.2.2'
     }
 }
 
-apply plugin: 'cn.li.forgemaven'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'litebuilder'
+//apply plugin: 'me.tatarka.retrolambda'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.7
-
-forgemaven {
+litebuilder {
     name = "AcademyCraft"
     group = "cn.academy"
-    commitVersionPrefix = "BUILD RELEASE"
 
-    forgeVersion = "1.7.2-10.12.2.1121"
-    gitUrl = 'https://github.com/LambdaInnovation/AcademyCraft.git'
+    //The bucket name of OSS to upload.
+    ossBucket = "libuild"
+    //The folder name of OSS to upload.
+    //You can also put / into the string to upload to a child folder
+    uploadDir = "dev"
+
+    forgeVersion = "1.7.10-10.13.4.1448-1.7.10"
+	
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
     jarClasses {
         exclude 'cn/annoreg/**/*'
@@ -57,12 +66,7 @@ forgemaven {
         plugin = 'cn.academy.core.ACCorePlugin'
         containsFMLMod = true
     }
-
-    gitUser {
-        username = 'LI Github'
-        email = 'github@li-dev.cn'
-    }
-
+	
     pom {
         groupId = project.group
         version = project.version
@@ -98,22 +102,23 @@ forgemaven {
 }
 
 repositories {
-    maven {
+    mavenCentral()
+	maven {
+        name = "lidev"
+        url = "http://maven.li-dev.cn/"
+    }
+	maven {
+        name = "lidev-dev"
+        url = "http://maven.li-dev.cn/dev/"
+    }
+	maven {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
     }
-    maven {
-        name = "annoreg"
-        url = "https://raw.github.com/LambdaInnovation/AnnotationRegistry/mvn-repo/AnnotationRegistry"
-    }
-    maven {
-        name = "liutils"
-        url = "https://raw.github.com/LambdaInnovation/LIUtils/mvn-repo/LIUtils"
-    }
 }
-
 dependencies {
-    //dependencies needed in compilation
-    modCompile 'cn.annoreg:AnnotationRegistry:[1.7.2.1,1.7.3.0):sources'
-    modCompile 'cn.liutils:LIUtils:[1.7.2.1,1.7.3.0):sources'
+	compile 'cn.annoreg:AnnotationRegistry:d1.0b1:dev'
+	compile 'cn.liutils:LIUtils:d1.0b1:dev'
+	compile 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev'
+	modReobf 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:api'
 }

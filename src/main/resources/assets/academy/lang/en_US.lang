@@ -313,6 +313,26 @@ ac.gui.loctele.warn0=[CP not enough.]
 ac.gui.loctele.warn1=You can't record this location now.
 ac.gui.loctele.teleport=Teleport!
 
+# Melt Downer
+ac.ability.melt_downer.name=Melt Downer
+
+## MD Skills
+ac.ability.melt_downer.ray_barrage.name=Ray Barrage
+ac.ability.melt_downer.scatter_bomb.name=Scattering Electron Bomb
+ac.ability.melt_downer.light_shield.name=Light Shield
+ac.ability.melt_downer.jet_engine.name=Jet Engine
+ac.ability.melt_downer.mine_ray_basic.name=Basic Mining Ray
+ac.ability.melt_downer.mine_ray_expert.name=Expert Mining Ray
+ac.ability.melt_downer.mine_ray_luck.name=Expert Mining Ray - Luck
+
+ac.ability.melt_downer.ray_barrage.desc=Though you can generate some electron bomb to attack, they can't turn into barrage. It's difficult to do a omnibearing attack. In order to solve this problem, you can through the Silicon Barn to make a barrage damage.
+ac.ability.melt_downer.scatter_bomb.desc=Manipulate more than one electronics group to attack. As a result, you can't control the impact point accurately. 
+ac.ability.melt_downer.light_shield.desc=Turn many electronics into a shield. High-speed moving electronics will destroy all things attack you, and damage all things touch you closely.    
+ac.ability.melt_downer.jet_engine.desc=Shoot out the electronics like rocket engine jetting. Use reaction force to make a very high-speed movement. In this process, the light shields around you will protect you.
+ac.ability.melt_downer.mine_ray_basic.desc=After a long time practice, you can make your electronic stream suitably to collect minerals without destroy them.
+ac.ability.melt_downer.mine_ray_expert.desc=With continious practice on mining basics, you have a unique understanding about how to use electronic stream collect material.
+ac.ability.melt_downer.mine_ray_luck.desc=Keeping mining and lumbering with your ability makes you be able to collect the mineral with a much higher rate.
+
 # Generic Skills
 ac.ability.generic.brain_course.name=Brain Course
 ac.ability.generic.brain_course_advanced.name=Brain Course Advanced

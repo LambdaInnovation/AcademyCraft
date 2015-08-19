@@ -53,7 +53,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author acaly, WeathFolD, KS
  *
  */
-@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION)
+@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION, dependencies="required-after:LIUtils")
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 public class AcademyCraft {
