@@ -173,11 +173,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 							window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill), 
 								() -> {
 									developer.reset();
-									Syncs.startLearningSkill(developer, skill, 
-									Future.create((Boolean res) -> {
-										if(!res) 
-											developer.abort();
-									}));
+									Syncs.startLearningSkill(developer, skill);
 								}));
 						}
 						

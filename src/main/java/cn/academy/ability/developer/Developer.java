@@ -91,8 +91,10 @@ public abstract class Developer {
 	 * @return Whether the action can really be started
 	 */
 	public boolean startDevelop(IDevelopType type) {
-		if(!type.validate(getUser()))
+		if(!type.validate(getUser())) {
+			state = DevState.FAILED;
 			return false;
+		}
 		
 		reset();
 		

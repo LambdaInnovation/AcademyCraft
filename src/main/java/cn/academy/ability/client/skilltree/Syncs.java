@@ -15,13 +15,13 @@ import cpw.mods.fml.relauncher.Side;
 public class Syncs {
 	
 	@RegNetworkCall(side = Side.SERVER)
-	static void startLearningSkill(@Instance Developer developer, @Instance Skill skill, @Data Future future) {
-		future.setAndSync(developer.startDevelop(new DevelopTypeSkill(skill)));
+	static void startLearningSkill(@Instance Developer developer, @Instance Skill skill) {
+		developer.startDevelop(new DevelopTypeSkill(skill));
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	static void startUpgradingLevel(@Instance Developer developer, @Data Future future) {
-		future.setAndSync(developer.startDevelop(new DevelopTypeLevel()));
+	static void startUpgradingLevel(@Instance Developer developer) {
+		developer.startDevelop(new DevelopTypeLevel());
 	}
 
 }
