@@ -23,5 +23,10 @@ public class Syncs {
 	static void startUpgradingLevel(@Instance Developer developer) {
 		developer.startDevelop(new DevelopTypeLevel());
 	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	static void abort(@Instance Developer developer) {
+		developer.abort();
+	}
 
 }
