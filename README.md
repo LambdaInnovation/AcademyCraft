@@ -25,8 +25,9 @@ IndustrialCraft [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/
 
 Redstone Flux API [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API).
 
-Thermal Expasion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
+Thermal Expansion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
 
+Not Enough Items [1.0.3.74](http://chickenbones.net/Pages/links.html).
 
 
 The mod requires Java 8 to compile and execute. Officially we use [RetroLamba](https://github.com/orfjackal/retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.

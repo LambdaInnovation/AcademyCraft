@@ -53,6 +53,10 @@ public class ImagFusorRecipes {
 		return null;
 	}
 	
+	public List<IFRecipe> getAllRecipe() {
+		return recipeList;
+	}
+	
 	/**
 	 * The match rule only applies for stackable, non-damageable type.
 	 * Currently the machine will IGNORE item damage and treat all item with different damage equally.
