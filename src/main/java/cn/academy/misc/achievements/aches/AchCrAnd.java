@@ -3,7 +3,7 @@ package cn.academy.misc.achievements.aches;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import cn.academy.misc.achievements.AchDispatcher;
+import cn.academy.misc.achievements.DispatcherAch;
 import cn.academy.misc.achievements.conds.ConItemCrafted;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.block.Block;
@@ -11,32 +11,39 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 
-public class AchCAnd extends ACAchievement {
+/**
+ * @author EAirPeter
+ */
+public final class AchCrAnd extends AchEvItemCrafted {
 
-	public AchCAnd(String id, int x, int y, Item display, Achievement parent) {
+	public AchCrAnd(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
-	public AchCAnd(String id, int x, int y, Block display, Achievement parent) {
+	public AchCrAnd(String id, int x, int y, Block display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
-	public AchCAnd(String id, int x, int y, ItemStack display, Achievement parent) {
+	public AchCrAnd(String id, int x, int y, ItemStack display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
 	
 	private HashMap<Item, ConItemCrafted> cIT = new HashMap<Item, ConItemCrafted>();
 	
 	@Override
-	public ACAchievement rgItemCrafted(ConItemCrafted cit) {
-		cIT.put(cit.item, cit);
-		AchDispatcher.INSTANCE.rgItemCrafted(cit.item, this);
-		return this;
-	}
-
-	@Override
-	public void urItemCrafted() {
+	public void registerAll() {
 		for (ConItemCrafted cit : cIT.values())
-			AchDispatcher.INSTANCE.urItemCrafted(cit.item, this);
-		cIT.clear();
+			DispatcherAch.INSTANCE.rgItemCrafted(cit.item, this);
+	}
+	
+	@Override
+	public void unregisterAll() {
+		for (ConItemCrafted cit : cIT.values())
+			DispatcherAch.INSTANCE.urItemCrafted(cit.item, this);
+	}
+	
+	@Override
+	public ACAchievement adItemCrafted(ConItemCrafted cit) {
+		cIT.put(cit.item, cit);
+		return this;
 	}
 
 	@Override

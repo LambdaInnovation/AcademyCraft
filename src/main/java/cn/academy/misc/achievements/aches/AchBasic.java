@@ -7,7 +7,10 @@ import net.minecraft.stats.Achievement;
 import cn.academy.misc.achievements.conds.ConItemCrafted;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
-public class AchBasic extends ACAchievement {
+/**
+ * @author EAirPeter
+ */
+public final class AchBasic extends ACAchievement {
 
 	public AchBasic(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
@@ -20,17 +23,11 @@ public class AchBasic extends ACAchievement {
 	}
 	
 	@Override
-	public ACAchievement rgItemCrafted(ConItemCrafted cit) {
-		return this;
+	public void registerAll() {
 	}
-
+	
 	@Override
-	public void urItemCrafted() {
-	}
-
-	@Override
-	public boolean acItemCrafted(ItemCraftedEvent event) {
-		return false;
+	public void unregisterAll() {
 	}
 
 }
