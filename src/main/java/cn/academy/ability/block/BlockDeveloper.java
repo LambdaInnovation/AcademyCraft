@@ -44,7 +44,7 @@ public class BlockDeveloper extends ACBlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileDeveloper();
+		return type == DeveloperType.NORMAL ? new TileDeveloper.Normal() : new TileDeveloper.Advanced();
 	}
 
 }

@@ -14,11 +14,12 @@ package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.core.AcademyCraft;
+import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.liutils.ripple.ScriptNamespace;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -29,6 +30,7 @@ import cpw.mods.fml.relauncher.Side;
  * 	we can synchronize the state and start the work in server side.
  * @author WeAthFolD
  */
+@Registrant
 public abstract class Developer {
 	
 	public enum DevState { IDLE, FAILED, DEVELOPING };
@@ -36,12 +38,14 @@ public abstract class Developer {
 	IDevelopType current;
 	
 	// Synced states
-	int stim;
-	int maxStim;
+	public int stim;
+	public int maxStim;
 	private DevState state = DevState.IDLE;
 	// Synced states end
 	
 	int tickThisStim;
+	
+	int tSync = 10;
 	
 	public final DeveloperType type;
 
@@ -54,7 +58,9 @@ public abstract class Developer {
 	}
 
 	public void tick() {
-		if(isDeveloping()) {
+		EntityPlayer user = getUser();
+		
+		if(isDeveloping() && !user.worldObj.isRemote) {
 			if(++tickThisStim >= getTPS()) {
 				tickThisStim = 0;
 				
@@ -64,8 +70,18 @@ public abstract class Developer {
 						endDevelop();
 					}
 				} else {
+					System.err.println("Consume energy failed aborting.");
 					abort();
 				}
+			}
+		}
+		
+		if(user != null && !user.worldObj.isRemote) {
+			if(tSync-- == 0) {
+				System.out.println("Scheduling sync...");
+				//Thread.dumpStack();
+				tSync = 10;
+				doSync();
 			}
 		}
 	}
@@ -81,6 +97,7 @@ public abstract class Developer {
 		reset();
 		
 		current = type;
+		state = DevState.DEVELOPING;
 		tickThisStim = stim = 0;
 		maxStim = type.getStimulations(getUser());
 		return true;
@@ -149,15 +166,19 @@ public abstract class Developer {
 	
 	public abstract double getEnergy();
 	
+	public abstract double getMaxEnergy();
+	
 	private void doSync() {
-		synced(maxStim, stim, state);
+		synced(getUser(), maxStim, stim, state);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void synced(@Data Integer _maxStim, @Data Integer _stim, @Instance DevState _state) {
+	private void synced(@Target EntityPlayer target, @Data Integer _maxStim, @Data Integer _stim, @Instance DevState _state) {
 		maxStim = _maxStim;
 		stim = _stim;
 		state = _state;
+		
+		System.out.println("Received sync " + target.worldObj.isRemote + ", state= " + state);
 	}
 	
 }

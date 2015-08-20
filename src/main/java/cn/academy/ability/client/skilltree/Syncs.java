@@ -12,7 +12,7 @@ import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
 
 @Registrant
-class Syncs {
+public class Syncs {
 	
 	@RegNetworkCall(side = Side.SERVER)
 	static void startLearningSkill(@Instance Developer developer, @Instance Skill skill, @Data Future future) {

@@ -47,6 +47,8 @@ public class PortableDevData extends DataPart {
 	
 	@Override
 	public void tick() {
+		if(developer != null && developer.stack != getPlayer().getCurrentEquippedItem())
+			developer = null;
 		if(developer != null)
 			developer.tick();
 	}

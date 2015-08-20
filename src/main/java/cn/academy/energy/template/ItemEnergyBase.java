@@ -40,6 +40,7 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 	public final double bandwidth;
 	
 	IIcon iconEmpty, iconHalf, iconFull;
+	public boolean useMultipleIcon = true;
 	
 	public ItemEnergyBase(String _name, double _maxEnergy, double _bandwidth) {
 		super(_name);
@@ -53,13 +54,20 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 	
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister ir) {
-    	iconEmpty = ir.registerIcon("academy:" + name + "_empty");
-    	iconHalf = ir.registerIcon("academy:" + name + "_half");
-    	iconFull = ir.registerIcon("academy:" + name + "_full");
+    	if(useMultipleIcon) {
+	    	iconEmpty = ir.registerIcon("academy:" + name + "_empty");
+	    	iconHalf = ir.registerIcon("academy:" + name + "_half");
+	    	iconFull = ir.registerIcon("academy:" + name + "_full");
+    	} else {
+    		super.registerIcons(ir);
+    	}
     }
 
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int damage) {
+    	if(!useMultipleIcon)
+    		return super.getIconFromDamage(damage);
+    	
     	if(damage < 3) {
     		return iconFull;
     	}

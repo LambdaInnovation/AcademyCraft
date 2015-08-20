@@ -3,7 +3,7 @@ ac {
         learning {
             # 学习一个技能的消耗。 返回值：刺激数（被约到整数），参数：技能等级
             learning_cost(skillLevel) {
-                round(3 + skillLevel * skillLevel * 0.5)
+                floor(3 + skillLevel * skillLevel * 0.5)
             }
 			# 升级消耗。返回值：刺激数，参数：到达等级
 			uplevel_cost(level) {

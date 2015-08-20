@@ -5,17 +5,17 @@ ac {
 		# cps: 每次刺激所消耗的IF
 		portable {
 			energy { 10000 }
-			tps { 10 }
+			tps { 50 }
 			cps { 750 }
 		}
 		normal {
 			energy { 50000 }
-			tps { 8 }
+			tps { 40 }
 			cps { 700 }
 		}
 		advanced {
 			energy { 200000 }
-			tps { 5 }
+			tps { 30 }
 			cps { 600 }
 		}
 	}

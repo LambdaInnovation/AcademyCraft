@@ -41,13 +41,33 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegInit
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileDeveloper extends TileReceiverBase {
+public abstract class TileDeveloper extends TileReceiverBase {
+	
+	@RegTileEntity
+	public static class Normal extends TileDeveloper {
+
+		@Override
+		public DeveloperType getType() {
+			return DeveloperType.NORMAL;
+		}
+		
+	}
+	
+	@RegTileEntity
+	public static class Advanced extends TileDeveloper {
+
+		@Override
+		public DeveloperType getType() {
+			return DeveloperType.ADVANCED;
+		}
+		
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
 	public static RenderDeveloper renderer;
 	
-	public Developer developer;
+	public DeveloperBlock developer;
 	
 	static InstanceSerializer<EntityPlayer> ser = 
 		SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
@@ -76,19 +96,7 @@ public class TileDeveloper extends TileReceiverBase {
 		if(developer == null)
 			developer = new DeveloperBlock(this);
 		
-		if(!worldObj.isRemote) {
-			
-			developer.tick();
-			
-		} else {
-			
-			// Sync faster when developing.
-			if(++syncCD == (isDevelopingDisplay ? 5 : 20)) {
-				syncCD = 0;
-				doSync();
-			}
-			
-		}
+		developer.tick();
 	}
 	
 	public Developer getDeveloper() {
@@ -117,54 +125,6 @@ public class TileDeveloper extends TileReceiverBase {
 		return getType().toString().toLowerCase() + "." + val;
 	}
 	
-	public DeveloperType getType() {
-		Block blockType = getBlockType();
-		DeveloperType type = blockType instanceof BlockDeveloper ? ((BlockDeveloper)blockType).type : DeveloperType.PORTABLE;
-		return type;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private void doSync() {
-		Future future = Future.create((Object ret) -> {
-			NBTTagCompound tag = (NBTTagCompound) ret;
-			isDevelopingDisplay = tag.getBoolean("d");
-			devProgressDisplay = tag.getDouble("p");
-			
-//			NBTBase tag2 = tag.getTag("a");
-//			if(tag2 != null) {
-//				user = ret.
-//			}
-		});
-		sync(future);
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	private void sync(@Data Future future) {
-		NBTTagCompound ret = new NBTTagCompound();
-		
-		boolean dev;
-		double devProg;
-		
-		if(developer == null) {
-			dev = false;
-			devProg = 0;
-		} else {
-			dev = developer.isDeveloping();
-			devProg = developer.getDevelopProgress();
-		}
-		
-		ret.setBoolean("d", dev);
-		ret.setDouble("p", devProg);
-		
-//		if(getUser() != null) {
-//			try {
-//				ret.setTag("a", ser.writeInstance(getUser()));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-		
-		future.setAndSync(ret);
-	}
+	public abstract DeveloperType getType();
 	
 }

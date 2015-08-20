@@ -13,8 +13,8 @@
 package cn.academy.ability;
 
 import cn.academy.ability.block.BlockDeveloper;
-import cn.academy.ability.block.ItemDeveloper;
 import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.item.ItemDeveloper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;

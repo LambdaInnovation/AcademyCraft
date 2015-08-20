@@ -121,8 +121,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		window = loaded.getWidget("window").copy();
 		treeArea = window.getWidget("tree_area");
 		
-		window.addWidget(windowEsper = loaded.getWidget("widgets/window_esper").copy());
-		window.addWidget(windowMachine = loaded.getWidget("widgets/window_machine").copy());
+		window.addWidget("window_esper", windowEsper = loaded.getWidget("widgets/window_esper").copy());
+		window.addWidget("window_machine", windowMachine = loaded.getWidget("widgets/window_machine").copy());
 		
 		for(int i = 1; i <= 5; ++i) {
 			Widget ball = treeArea.getWidget("ball" + i);

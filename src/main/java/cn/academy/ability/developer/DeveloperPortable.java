@@ -47,12 +47,22 @@ public class DeveloperPortable extends Developer {
 
 	@Override
 	public boolean pullEnergy(double amt) {
-		return IFItemManager.instance.pull(stack, amt, false) == amt;
+		return IFItemManager.instance.pull(stack, amt, true) == amt;
 	}
 	
 	static boolean validate(EntityPlayer player) {
 		ItemStack stack = player.getCurrentEquippedItem();
 		return stack != null && stack.getItem() == ModuleAbility.developerPortable;
+	}
+	
+	@Override
+	public double getEnergy() {
+		return IFItemManager.instance.getEnergy(stack);
+	}
+
+	@Override
+	public double getMaxEnergy() {
+		return IFItemManager.instance.getMaxEnergy(stack);
 	}
 	
 	public static class Serializer implements InstanceSerializer<DeveloperPortable> {
@@ -74,11 +84,6 @@ public class DeveloperPortable extends Developer {
 			return SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
 		}
 		
-	}
-
-	@Override
-	public double getEnergy() {
-		return IFItemManager.instance.getEnergy(stack);
 	}
 
 }

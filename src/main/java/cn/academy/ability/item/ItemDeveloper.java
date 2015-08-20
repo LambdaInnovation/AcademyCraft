@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.block;
+package cn.academy.ability.item;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,23 +19,21 @@ import net.minecraft.world.World;
 import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.DeveloperPortable;
 import cn.academy.ability.developer.DeveloperType;
-import cn.academy.core.item.ACItem;
+import cn.academy.ability.developer.PortableDevData;
 import cn.academy.energy.IFConstants;
-import cn.academy.energy.api.item.ImagEnergyItem;
+import cn.academy.energy.template.ItemEnergyBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
-public class ItemDeveloper extends ACItem implements ImagEnergyItem {
+public class ItemDeveloper extends ItemEnergyBase {
 	
-	public final DeveloperType type = DeveloperType.PORTABLE;
+	public static final DeveloperType type = DeveloperType.PORTABLE;
 
 	public ItemDeveloper() {
-		super("developer_portable");
-		setMaxDamage(13);
-		setMaxStackSize(1);
+		super("developer_portable", type.getEnergy(), type.getBandwidth());
 	}
 	
 	@Override
@@ -49,7 +47,7 @@ public class ItemDeveloper extends ACItem implements ImagEnergyItem {
 	
 	@SideOnly(Side.CLIENT)
 	private void displayGui(EntityPlayer player) {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, new DeveloperPortable(player)));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player).get()));
 	}
 
 	@Override
@@ -59,7 +57,7 @@ public class ItemDeveloper extends ACItem implements ImagEnergyItem {
 
 	@Override
 	public double getBandwidth() {
-		return IFConstants.LATENCY_MK1;
+		return type.getBandwidth();
 	}
 
 }

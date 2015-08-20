@@ -13,13 +13,19 @@
 package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.tileentity.TileEntity;
 import cn.academy.ability.block.TileDeveloper;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.s11n.InstanceSerializer;
+import cn.annoreg.mc.s11n.RegSerializable;
+import cn.annoreg.mc.s11n.SerializationManager;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
+@RegSerializable(instance = DeveloperBlock.Serializer.class)
 public class DeveloperBlock extends Developer {
 	
 	final TileDeveloper tile;
@@ -42,6 +48,30 @@ public class DeveloperBlock extends Developer {
 	@Override
 	public double getEnergy() {
 		return tile.getEnergy();
+	}
+	
+	@Override
+	public double getMaxEnergy() {
+		return tile.getMaxEnergy();
+	}
+	
+	public static class Serializer implements InstanceSerializer<DeveloperBlock> {
+
+		@Override
+		public DeveloperBlock readInstance(NBTBase nbt) throws Exception {
+			TileEntity te = tileSer().readInstance(nbt);
+			return te instanceof TileDeveloper ? ((TileDeveloper) te).developer : null;
+		}
+
+		@Override
+		public NBTBase writeInstance(DeveloperBlock obj) throws Exception {
+			return tileSer().writeInstance(obj.tile);
+		}
+		
+		private InstanceSerializer<TileEntity> tileSer() {
+			return SerializationManager.INSTANCE.getInstanceSerializer(TileEntity.class);
+		}
+		
 	}
 
 }

@@ -217,7 +217,8 @@ public abstract class Skill extends Controllable {
 	 * @return The stimulation in the developer required in order to learn this skill
 	 */
 	public int getLearningStims() {
-		return AcademyCraft.getFunction("ability.learning_cost").callInteger(level);
+		return AcademyCraft.getFunction("ability.learning.learning_cost")
+				.callInteger(level);
 	}
 	
 	/**
