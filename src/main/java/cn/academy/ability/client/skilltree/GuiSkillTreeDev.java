@@ -19,9 +19,11 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.developer.DevelopTypeLevel;
 import cn.academy.ability.developer.DevelopTypeSkill;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.Developer.DevState;
@@ -33,6 +35,7 @@ import cn.academy.core.client.glsl.ShaderMono;
 import cn.annoreg.mc.network.Future;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
+import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.ProgressBar;
 import cn.liutils.cgui.gui.component.TextBox;
@@ -66,18 +69,37 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		developer = _developer;
 		
 		EventLoader.load(gui, this);
+		
+		if(LearningHelper.canLevelUp(aData)) {
+			treeArea.getWidget("ball" + (aData.getLevel() + 1)).regEventHandler(
+			new MouseDownHandler() {
+
+				@Override
+				public void handleEvent(Widget w, MouseDownEvent event) {
+					overlay = new Overlay();
+					window.addWidget(overlay);
+					window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
+						() -> {
+							developer.reset();
+							Syncs.startUpgradingLevel(developer);
+						}));
+				}
+				
+			});
+		}
 	}
 	
 	@GuiCallback("window/window_machine/p_energy")
 	public void updateEnergy(Widget w, FrameEvent event) {
 		ProgressBar bar = ProgressBar.get(w);
 		bar.progress = developer.getEnergy() / developer.getMaxEnergy();
-		
-		if(event.hovering) {
-			RenderingHelper.drawTextBox(
-				String.format("%.0f/%.0fIF", developer.getEnergy(), developer.getMaxEnergy()), 
-				event.mx, event.my, 40);
-		}
+	}
+	
+	@GuiCallback("window/window_machine/t_energy")
+	public void updateEnergyText(Widget w, FrameEvent event) {
+		TextBox text = TextBox.get(w);
+		text.setContent(SkillTreeLocal.energyDesc(
+			developer.getEnergy(), developer.getMaxEnergy()));
 	}
 	
 	@Override
@@ -244,15 +266,76 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		TextBox progText = TextBox.get(wProgText);
 		progText.setContent(SkillTreeLocal.progress(0));
 		
-		ret.regEventHandler(new FrameEventHandler() {
+		Widget button = ret.getWidget("button");
+		TextBox buttonText = TextBox.get(button);
+		
+		ProgressBar progbar = ProgressBar.get(ret.getWidget("prog"));
+		
+		ret.addComponent(
+		new Component("Tracker") {
 			
-			DevState state = DevState.IDLE;
+			int state = 0;
 			
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				progText.setContent(developer.getState().toString());
+			{
+				addEventHandler(new FrameEventHandler() {
+					@Override
+					public void handleEvent(Widget w, FrameEvent event) {
+						DevState dstate = developer.getState();
+						if(dstate == DevState.FAILED && state != 2) {
+							state = 2;
+							buttonText.setContent(SkillTreeLocal.ok());
+							progText.setContent(SkillTreeLocal.aborted());
+							progbar.color.setColor4i(244, 40, 40, 255);
+						} else {
+							if(state == 0 && dstate == DevState.DEVELOPING) {
+								state = 1;
+							}
+							if(state == 1 && dstate == DevState.DEVELOPING) {
+								progText.setContent(
+									SkillTreeLocal.progress((double) developer.stim / developer.maxStim));
+							}
+							if(state == 1 && dstate == DevState.IDLE) {
+								state = 3;
+								progText.setContent(SkillTreeLocal.successful());
+								buttonText.setContent(SkillTreeLocal.ok());
+							}
+						}
+					}
+					
+				});
+				
+				button.regEventHandler(new MouseDownHandler() {
+
+					@Override
+					public void handleEvent(Widget w, MouseDownEvent event) {
+						if(state == 2) {
+							overlay.dispose();
+							overlay = null;
+							ret.dispose();
+						} else if(state == 3) {
+							// Dispose this gui completely and open a new one!
+							Minecraft.getMinecraft().displayGuiScreen(
+									new GuiSkillTreeDev(player, developer));
+						} else {
+							Syncs.abort(developer);
+						}
+					}
+					
+				});
+				
+				progbar.widget.regEventHandler(new FrameEventHandler() {
+
+					@Override
+					public void handleEvent(Widget w, FrameEvent event) {
+						if(state == 1) {
+							progbar.progress = (double) developer.stim / developer.maxStim;
+						} else if(state == 3) {
+							progbar.progress = 1;
+						}
+					}
+					
+				});
 			}
-			
 		});
 		
 		return ret;

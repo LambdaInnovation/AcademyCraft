@@ -15,13 +15,19 @@ package cn.academy.ability.developer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.ModuleAbility;
 import cn.academy.energy.api.IFItemManager;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.SerializationManager;
-
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.Target;
+import cpw.mods.fml.relauncher.Side;
+	
 /**
  * @author WeAthFolD
  */
@@ -30,14 +36,12 @@ import cn.annoreg.mc.s11n.SerializationManager;
 public class DeveloperPortable extends Developer {
 	
 	final EntityPlayer player;
-	final ItemStack stack;
 
 	public DeveloperPortable(EntityPlayer _player) {
 		super(DeveloperType.PORTABLE);
 		player = _player;
 		if(!validate(player))
 			throw new IllegalStateException("Not holding a portable developer");
-		stack = player.getCurrentEquippedItem();
 	}
 	
 	@Override
@@ -47,7 +51,7 @@ public class DeveloperPortable extends Developer {
 
 	@Override
 	public boolean pullEnergy(double amt) {
-		return IFItemManager.instance.pull(stack, amt, true) == amt;
+		return IFItemManager.instance.pull(player.getCurrentEquippedItem(), amt, true) == amt;
 	}
 	
 	static boolean validate(EntityPlayer player) {
@@ -57,12 +61,16 @@ public class DeveloperPortable extends Developer {
 	
 	@Override
 	public double getEnergy() {
-		return IFItemManager.instance.getEnergy(stack);
+		return IFItemManager.instance.getEnergy(stack());
 	}
 
 	@Override
 	public double getMaxEnergy() {
-		return IFItemManager.instance.getMaxEnergy(stack);
+		return IFItemManager.instance.getMaxEnergy(stack());
+	}
+	
+	public ItemStack stack() {
+		return player.getCurrentEquippedItem();
 	}
 	
 	public static class Serializer implements InstanceSerializer<DeveloperPortable> {

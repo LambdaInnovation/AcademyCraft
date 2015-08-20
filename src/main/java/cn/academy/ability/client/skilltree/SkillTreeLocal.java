@@ -50,11 +50,31 @@ public class SkillTreeLocal {
 	}
 	
 	public static String progress(double amt) {
-		return local("progress", amt);
+		return local("progress", amt * 100);
 	}
 	
 	public static String progressAborted() {
 		return local("aborted");
+	}
+	
+	public static String successful() {
+		return local("successful");
+	}
+	
+	public static String ok() {
+		return local("ok");
+	}
+	
+	public static String abort() {
+		return local("abort");
+	}
+	
+	public static String aborted() {
+		return local("aborted");
+	}
+	
+	public static String energyDesc(double energy, double maxEnergy) {
+		return String.format("%s: %.0f/%.0fIF", local("energy"), energy, maxEnergy);
 	}
 	
 	public static String local(String key) {

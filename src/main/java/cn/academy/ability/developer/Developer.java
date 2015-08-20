@@ -45,7 +45,7 @@ public abstract class Developer {
 	
 	int tickThisStim;
 	
-	int tSync = 10;
+	int tSync = 5;
 	
 	public final DeveloperType type;
 
@@ -70,7 +70,6 @@ public abstract class Developer {
 						endDevelop();
 					}
 				} else {
-					System.err.println("Consume energy failed aborting.");
 					abort();
 				}
 			}
@@ -78,9 +77,7 @@ public abstract class Developer {
 		
 		if(user != null && !user.worldObj.isRemote) {
 			if(tSync-- == 0) {
-				System.out.println("Scheduling sync...");
-				//Thread.dumpStack();
-				tSync = 10;
+				tSync = 5;
 				doSync();
 			}
 		}
@@ -170,7 +167,7 @@ public abstract class Developer {
 	
 	public abstract double getMaxEnergy();
 	
-	private void doSync() {
+	protected void doSync() {
 		synced(getUser(), maxStim, stim, state);
 	}
 	

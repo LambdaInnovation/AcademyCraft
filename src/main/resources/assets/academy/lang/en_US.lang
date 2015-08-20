@@ -153,6 +153,9 @@ ac.skill_tree.tracker=Progress Tracker
 ac.skill_tree.ok=OK
 ac.skill_tree.progress=Progress: %.1f%%
 ac.skill_tree.aborted=Progress: ABORTED.
+ac.skill_tree.successful=Action successful.
+ac.skill_tree.abort=Abort
+ac.skill_tree.aborted=Action Aborted.
 
 # Settings
 ac.settings.cat.generic=Generic
