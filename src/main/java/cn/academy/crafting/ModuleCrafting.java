@@ -32,10 +32,12 @@ import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.crafting.block.BlockMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.crafting.world.ACWorldGen;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
+import cn.annoreg.mc.RegWorldGen;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
 /**
@@ -130,6 +132,9 @@ public class ModuleCrafting {
 	@RegItem
 	@RecipeName("conv_comp")
 	public static Item convComp = new ACItem("energy_convert_component");
+	
+	@RegWorldGen(2)
+	public static ACWorldGen worldGen;
 	
 	public static Fluid fluidImagProj = new Fluid("imagProj");
     static {
