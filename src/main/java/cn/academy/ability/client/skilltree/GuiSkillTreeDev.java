@@ -87,6 +87,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				
 			});
 		}
+		
+		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.type.syncRate;
 	}
 	
 	@GuiCallback("window/window_machine/p_energy")
@@ -112,7 +114,16 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			ret.addWidget(new GuiSkillTree.SkillHint(ret));
 		} else {
 			List<IDevCondition> devConditions = skill.getDevConditions();
-			if(!devConditions.isEmpty()){ // Dep display
+			
+			boolean show = false;
+			for(IDevCondition c : devConditions) {
+				if(c.getIcon() != null) {
+					show = true;
+					break;
+				}
+			}
+			
+			if(show){ // Dep display
 				Widget area = new Widget();
 				area.transform.setSize(450, 50);
 				area.transform.doesListenKey = false;
@@ -127,10 +138,16 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				text.size = 38;
 				wtext.addComponent(text);
 				
+				BlendIn blend = new BlendIn();
+				blend.timeOffset = -550;
+				wtext.addComponent(blend);
+				
 				area.addWidget(wtext);
 				
 				double x = Font.font.strLen(text.content, text.size) + 10;
-				for(IDevCondition cond : skill.getDevConditions()) {
+				
+				int i = 0;
+				for(IDevCondition cond : devConditions) {
 					ResourceLocation tex = cond.getIcon();
 					if(tex != null) {
 						Widget dep = new Widget();
@@ -168,9 +185,15 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 							
 						});
 						
+						BlendIn bi = new BlendIn();
+						bi.timeOffset = -600 - i * 200;
+						dep.addComponent(bi);
+						
 						area.addWidget(dep);
 						
 						x += 60;
+						
+						i++;
 					}
 				}
 				
@@ -182,9 +205,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				area.transform.setSize(450, 90);
 				area.transform.doesListenKey = false;
 				
-				LearnButton button = new LearnButton();
-				
 				boolean can = LearningHelper.canLearn(aData, skill);
+				LearnButton button = new LearnButton(!can);
 				if(can) {
 					button.regEventHandler(new MouseDownHandler() {
 	
@@ -200,9 +222,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						}
 						
 					});
-				} else {
-					button.setDisabled();
 				}
+				
 				area.addWidget(button);
 				
 				ret.addWidget(area);
@@ -346,7 +367,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		TextBox text;
 		Glow glow;
 		
-		public LearnButton() {
+		public LearnButton(boolean disabled) {
 			transform.setSize(142, 50);
 			transform.alignWidth = WidthAlign.CENTER;
 			transform.alignHeight = HeightAlign.BOTTOM;
@@ -365,12 +386,20 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			text.size = 40;
 			text.content = SkillTreeLocal.local("learn_skill");
 			
+			BlendIn blend = new BlendIn();
+			blend.timeOffset = -700;
+			
 			addComponent(glow);
 			addComponent(tint);
 			addComponent(text);
+			
+			if(disabled)
+				setDisabled();
+			
+			addComponent(blend);
 		}
 		
-		void setDisabled() {
+		private void setDisabled() {
 			transform.doesListenKey = false;
 			text.color.setColor4d(.6, .6, .6, 1);
 			glow.color.setColor4d(1, 1, 1, 0.2);

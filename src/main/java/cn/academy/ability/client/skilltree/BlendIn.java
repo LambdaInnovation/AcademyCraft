@@ -12,10 +12,12 @@
  */
 package cn.academy.ability.client.skilltree;
 
+import cn.academy.core.client.component.Glow;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
+import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.generic.MathUtils;
@@ -27,9 +29,9 @@ import cn.liutils.util.helper.GameTimer;
 public class BlendIn extends Component {
 	
 	public int timeOffset = 0;
-	public int blendTime = 300;
-
-	private double targetAlpha = 1.0;
+	public int blendTime = 240;
+	
+	double dta, tba, ta, ga;
 
 	public BlendIn() {
 		super("BlendIn");
@@ -37,32 +39,42 @@ public class BlendIn extends Component {
 	
 	@Override
 	public void onAdded() {
-		targetAlpha = getAlpha();
+		DrawTexture dt = DrawTexture.get(widget);
+		TextBox tb = TextBox.get(widget);
+		Tint t = Tint.get(widget);
+		Glow g = Glow.get(widget);
+		if(dt != null) dta = dt.color.a;
+		if(tb != null) tba = tb.color.a;
+		if(t != null) ta = t.idleColor.a;
+		if(g != null) ga = g.color.a;
+		
+		setAlpha(0);
 		
 		long time = GameTimer.getTime();
-		widget.regEventHandler(new FrameEventHandler() {
+		addEventHandler(new FrameEventHandler() {
 
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
 				long dt = GameTimer.getTime() - time + timeOffset;
 				double factor = MathUtils.wrapd(0, 1, (double) dt / blendTime);
 				setAlpha(factor);
+				
+				if(factor == 1) 
+					BlendIn.this.enabled = false;
 			}
 			
 		});
 	}
 	
-	private double getAlpha() {
-		DrawTexture dt = DrawTexture.get(widget);
-		if(dt != null) return dt.color.a;
-		else return TextBox.get(widget).color.a;
-	}
-	
 	private void setAlpha(double value) {
 		DrawTexture dt = DrawTexture.get(widget);
 		TextBox tb = TextBox.get(widget);
-		if(dt != null) dt.color.a = value;
-		if(tb != null) tb.color.a = value;
+		Tint t = Tint.get(widget);
+		Glow g = Glow.get(widget);
+		if(dt != null) dt.color.a = dta * value;
+		if(tb != null) tb.color.a = .1 + .9 * tba * value;
+		if(t != null) t.idleColor.a = t.hoverColor.a = ta * value;
+		if(g != null) g.color.a = ga * value;
 	}
 
 }

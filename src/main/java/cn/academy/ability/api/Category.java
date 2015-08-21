@@ -13,12 +13,11 @@
 package cn.academy.ability.api;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.Resources;
 import cn.liutils.util.helper.Color;
 
@@ -143,6 +142,22 @@ public class Category {
 	
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("ac.ability." + name + ".name");
+	}
+	
+	// Learning API
+	
+	/**
+	 * @param data Ability Data of the player, is guaranteed to have the same category.
+	 * @return Whether the player can level up currently
+	 */
+	public boolean canLevelUp(AbilityData data) {
+		if(data.getLevel() == 5)
+			return false;
+		for(Skill s : getSkillsOfLevel(data.getLevel())) {
+			if(data.getSkillExp(s) < 0.66f)
+				return false;
+		}
+		return true;
 	}
 	
 }

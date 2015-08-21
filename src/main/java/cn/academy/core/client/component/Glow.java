@@ -43,6 +43,10 @@ public class Glow extends Component {
 		// Register for editing
 		CGUIEditor.addComponent(new Glow());
 	}
+	
+	public static Glow get(Widget w) {
+		return w.getComponent("Glow");
+	}
 
 	public Glow() {
 		super("Glow");

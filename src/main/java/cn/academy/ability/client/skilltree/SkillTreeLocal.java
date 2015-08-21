@@ -74,7 +74,7 @@ public class SkillTreeLocal {
 	}
 	
 	public static String energyDesc(double energy, double maxEnergy) {
-		return String.format("%s: %.0f/%.0fIF", local("energy"), energy, maxEnergy);
+		return String.format("%.0f/%.0fIF", energy, maxEnergy);
 	}
 	
 	public static String local(String key) {

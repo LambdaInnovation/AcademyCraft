@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.developer.DevConditionDep;
+import cn.academy.ability.developer.DevConditionLevel;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.IDevCondition;
 import cn.academy.core.AcademyCraft;
@@ -27,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
  * and can be activated/controlled via the Preset system. <br/>
- * A skill must be added into a Category, otherwise its instance is meaningless. <br/>
+ * A skill must be added into a Category, otherwise its presence is meaningless. <br/>
  * 
  * A skill can be specified to not appear in Preset Edit screen. This kind of skills usually serve as 'passive' skills and provide
  *  pipeline functions inside to affect the skill damage or other values. <br/>
@@ -86,6 +87,8 @@ public abstract class Skill extends Controllable {
 		fullName = "<unassigned>." + name;
 		
 		AcademyCraft.pipeline.register(this);
+		
+		addDevCondition(new DevConditionLevel());
 	}
 	
 	final void addedSkill(Category _category, int id) {
@@ -186,6 +189,8 @@ public abstract class Skill extends Controllable {
 	}
 	
 	public void setParent(Skill skill, float requiredExp) {
+		if(parent != null)
+			throw new IllegalStateException("You can't set the parent twice!");
 		parent = skill;
 		this.addDevCondition(new DevConditionDep(parent, requiredExp));
 	}
