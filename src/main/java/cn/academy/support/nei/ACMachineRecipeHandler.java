@@ -20,20 +20,21 @@ import net.minecraft.item.ItemStack;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
+/**
+ * 
+ * @author KSkun
+ *
+ */
 public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	
 	@Override
 	public abstract String getRecipeName();
-	
-	public abstract String getRecipeId();
+	public abstract String getMachineName();
 	
 	@Override
 	public abstract String getGuiTexture();
-	
 	@Override
 	public abstract Class<? extends GuiContainer> getGuiClass();
-	
-	public abstract List getRecipeList();
 	
 	public abstract int getInputX();
 	public abstract int getInputY();
@@ -50,11 +51,8 @@ public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadTransferRects() {
 		transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(
-				getTransferRectsRectangle(), getRecipeId()));
+				getTransferRectsRectangle(), getMachineName()));
 	}
-	
-	@Override
-	public abstract void loadCraftingRecipes(String outputId, Object... results);
 	
 	@Override
 	public abstract void loadCraftingRecipes(ItemStack result);
@@ -62,22 +60,14 @@ public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	@Override
 	public abstract void loadUsageRecipes(ItemStack ingredient);
 	
-	public class ACCachedRecipe extends TemplateRecipeHandler.CachedRecipe {
+	public class ACCachedRecipe extends CachedRecipe {
 		
 		private final PositionedStack ingredient;
 		private final PositionedStack result;
-		private final PositionedStack otherStack;
 		
 		public ACCachedRecipe(ItemStack input, ItemStack output) {
 			ingredient = new PositionedStack(input, getInputX(), getInputY());
 			result = new PositionedStack(output, getOutputX(), getOutputY());
-			otherStack = null;
-		}
-		
-		public ACCachedRecipe(ItemStack input, ItemStack output, ItemStack other) {
-			ingredient = new PositionedStack(input, getInputX(), getInputY());
-			result = new PositionedStack(output, getOutputX(), getOutputY());
-			otherStack = new PositionedStack(other, getOtherX(), getOtherY());
 		}
 		
 		@Override
@@ -88,11 +78,6 @@ public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 		@Override
 		public PositionedStack getResult() {
 			return result;
-		}
-		
-		@Override
-		public PositionedStack getOtherStack() {
-			return otherStack;
 		}
 		
 	}

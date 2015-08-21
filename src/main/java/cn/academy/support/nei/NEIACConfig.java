@@ -13,13 +13,22 @@
 package cn.academy.support.nei;
 
 import cn.academy.core.AcademyCraft;
+import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
+/**
+ * 
+ * @author KSkun
+ *
+ */
 public class NEIACConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
-		
+		API.registerRecipeHandler(new FusorRecipeHandler());
+		API.registerUsageHandler(new FusorRecipeHandler());
+		API.registerRecipeHandler(new MetalFormerRecipeHandler());
+		API.registerUsageHandler(new MetalFormerRecipeHandler());
 	}
 
 	@Override

@@ -69,6 +69,10 @@ public enum MetalFormerRecipes {
 		return null;
 	}
 	
+	public List<RecipeObject> getAllRecipes() {
+		return objects;
+	}
+	
 	public static class RecipeSerializer implements InstanceSerializer<RecipeObject> {
 
 		@Override
