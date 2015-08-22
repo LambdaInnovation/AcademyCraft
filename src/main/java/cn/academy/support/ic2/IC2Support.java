@@ -13,7 +13,6 @@
 package cn.academy.support.ic2;
 
 import ic2.api.item.IC2Items;
-import ic2.core.Ic2Items;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cn.academy.crafting.ModuleCrafting;
