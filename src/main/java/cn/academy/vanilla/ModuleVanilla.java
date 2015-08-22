@@ -15,7 +15,6 @@ import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.generic.skill.SkillBrainCourse;
 import cn.academy.vanilla.generic.skill.SkillBrainCourseAdvanced;
 import cn.academy.vanilla.generic.skill.SkillMindCourse;
-import cn.academy.vanilla.heatmaster.CatHeatMatser;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
@@ -51,9 +50,6 @@ public class ModuleVanilla {
 	
 	@RegCategory
 	public static CatTeleporter teleporter;
-	
-	@RegCategory
-	public static CatHeatMatser heatmaster;
 
 	public static void init() {
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate), new ItemStack(needle, 6), Mode.INCISE);

@@ -14,13 +14,13 @@ public abstract class AchEvItemCrafted extends ACAchievement {
 
 	//AchCr
 	
-	public AchEvItemCrafted(String id, int x, int y, Item display, Achievement parent) {
+	protected AchEvItemCrafted(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
-	public AchEvItemCrafted(String id, int x, int y, Block display, Achievement parent) {
+	protected AchEvItemCrafted(String id, int x, int y, Block display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
-	public AchEvItemCrafted(String id, int x, int y, ItemStack display, Achievement parent) {
+	protected AchEvItemCrafted(String id, int x, int y, ItemStack display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
 	

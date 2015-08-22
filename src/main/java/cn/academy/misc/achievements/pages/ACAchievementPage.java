@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.AchievementPage;
 
 /**
@@ -25,9 +26,12 @@ public abstract class ACAchievementPage extends AchievementPage {
 	private LinkedList<ACAchievement> list = new LinkedList();
 	private List<Achievement> wrapped = new LinkedList<Achievement>();
 	
-	public ACAchievementPage(String pName) {
-		super(pName);
-		this.name = pName;
+	ACAchievementPage(String id) {
+		super("dummy call");
+		if (id.equals("default"))
+			name = "AcademyCraft";
+		else
+			name = "ac.achievementpage." + id;
 	}
 
 	protected final void add(ACAchievement... aches) {
@@ -40,7 +44,7 @@ public abstract class ACAchievementPage extends AchievementPage {
 	
 	@Override
 	public String getName() {
-		return name;
+		return StatCollector.translateToLocal(name);
 	}
 	
 	@Override

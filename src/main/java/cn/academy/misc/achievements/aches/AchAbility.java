@@ -11,23 +11,32 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 /**
  * @author EAirPeter
  */
-public abstract class AchAbility extends ACAchievement {
+public class AchAbility extends ACAchievement {
 
+	//Ach
 	//AchEv
 	
 	protected final Category category;
 	
 	public AchAbility(Category cat, String id, int x, int y, Item display, Achievement parent) {
-		super(cat.getName() + "_" + id, x, y, display, parent);
+		super(cat.getName() + "." + id, x, y, display, parent);
 		category = cat;
 	}
 	public AchAbility(Category cat, String id, int x, int y, Block display, Achievement parent) {
-		super(cat.getName() + "_" + id, x, y, display, parent);
+		super(cat.getName() + "." + id, x, y, display, parent);
 		category = cat;
 	}
 	public AchAbility(Category cat, String id, int x, int y, ItemStack display, Achievement parent) {
-		super(cat.getName() + "_" + id, x, y, display, parent);
+		super(cat.getName() + "." + id, x, y, display, parent);
 		category = cat;
+	}
+	
+	@Override
+	public void registerAll() {
+	}
+	
+	@Override
+	public void unregisterAll() {
 	}
 	
 }
