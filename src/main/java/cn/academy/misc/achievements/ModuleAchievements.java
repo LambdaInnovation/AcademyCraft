@@ -5,7 +5,9 @@ import java.util.HashSet;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.AchievementPage;
+import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.pages.PageCtElectroMaster;
 import cn.academy.misc.achievements.pages.PageCtMeltDowner;
@@ -15,6 +17,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegEventHandler.Bus;
+import cn.annoreg.mc.RegItem;
 
 /**
  * @author EAirPeter
@@ -28,9 +31,13 @@ public final class ModuleAchievements {
 	private static PageCtMeltDowner pageCtMeltDowner;
 	private static PageCtTeleporter pageCtTeleporter;
 	
+	@RegItem
+	@RegItem.HasRender
+	public static ItemAchievement DUMMY_ITEM;
+	
 	public static void init() {
 		DispatcherAch.init();
-		
+
 		AchievementPage.registerAchievementPage(pageDefault = new PageDefault());
 		
 		AchievementPage.registerAchievementPage(pageCtElectroMaster = new PageCtElectroMaster());
@@ -47,6 +54,8 @@ public final class ModuleAchievements {
 		ACAchievement ach = ACAchievement.getById(achid);
 		if (ach != null)
 			player.triggerAchievement(ach);
+		else
+			AcademyCraft.log.warn("No such achievement found: " + achid);
 	}
 	
 }

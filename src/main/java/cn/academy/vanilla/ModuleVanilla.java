@@ -15,7 +15,7 @@ import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.generic.skill.SkillBrainCourse;
 import cn.academy.vanilla.generic.skill.SkillBrainCourseAdvanced;
 import cn.academy.vanilla.generic.skill.SkillMindCourse;
-import cn.academy.vanilla.meltdowner.CatMeltdowner;
+import cn.academy.vanilla.meltdowner.CatMeltDowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
 import cn.annoreg.core.Registrant;
@@ -46,7 +46,7 @@ public class ModuleVanilla {
 	public static CatElectroMaster electroMaster;
 	
 	@RegCategory
-	public static CatMeltdowner meltdowner;
+	public static CatMeltDowner meltdowner;
 	
 	@RegCategory
 	public static CatTeleporter teleporter;

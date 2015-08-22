@@ -5,11 +5,12 @@ import cn.academy.ability.api.CategoryManager;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
+import cn.academy.vanilla.meltdowner.CatMeltDowner;
 
 /**
  * @author EAirPeter
  */
-public final class PageCtMeltDowner extends PageCategory {
+public final class PageCtMeltDowner extends PageCategory<CatMeltDowner> {
 
 	private final ACAchievement aLv1;
 	private final ACAchievement aSkill;
@@ -19,7 +20,7 @@ public final class PageCtMeltDowner extends PageCategory {
 	private final ACAchievement aLv5;
 
 	public PageCtMeltDowner() {
-		super(CategoryManager.INSTANCE.getCategory("melt_downer"));
+		super((CatMeltDowner) CategoryManager.INSTANCE.getCategory("melt_downer"));
 		add(new ACAchievement[] {
 			aLv1 = new AchEvLevelChange(1, category, "lv1", 0, 0, ModuleAbility.developerNormal, null),
 			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ModuleAbility.developerNormal, aLv1),

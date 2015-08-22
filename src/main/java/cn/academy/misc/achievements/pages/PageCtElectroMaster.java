@@ -7,16 +7,18 @@ import net.minecraft.stats.Achievement;
 import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.misc.achievements.ItemAchievement;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchBasic;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
+import cn.academy.vanilla.electromaster.CatElectroMaster;
 
 /**
  * @author EAirPeter
  */
-public final class PageCtElectroMaster extends PageCategory {
+public final class PageCtElectroMaster extends PageCategory<CatElectroMaster> {
 
 	private final ACAchievement aLv1;
 	private final ACAchievement aSkill;
@@ -29,14 +31,14 @@ public final class PageCtElectroMaster extends PageCategory {
 	private final ACAchievement aAtCreeper;
 	private final ACAchievement aMagnetic;
 	private final ACAchievement aBodyIntensify;
-	private final ACAchievement aIronSand;
+	//private final ACAchievement aIronSand;
 	private final ACAchievement aMineDetect;
 	private final ACAchievement aThunderBolt;
 	private final ACAchievement aRailgun;
 	private final ACAchievement aThunderClap;
 
 	public PageCtElectroMaster() {
-		super(CategoryManager.INSTANCE.getCategory("electro_master"));
+		super((CatElectroMaster) CategoryManager.INSTANCE.getCategory("electro_master"));
 		add(new ACAchievement[] {
 			aLv1 = new AchEvLevelChange(1, category, "lv1", 0, 0, ModuleAbility.developerNormal, null),
 			aSkill = new AchEvSkillLearn(category, "skill", 0, -2, ModuleAbility.developerNormal, aLv1),
@@ -46,15 +48,15 @@ public final class PageCtElectroMaster extends PageCategory {
 			aLv5 = new AchEvLevelChange(5, category, "lv5", 8, 0, ModuleAbility.developerNormal, aLv4),
 		});
 		add(new ACAchievement[] {
-			aArcGen = new AchAbility(category, "arc_gen", 0, 2, ModuleAbility.developerNormal, null),
-			aAtCreeper = new AchAbility(category, "attack_creeper", 2, 2, ModuleAbility.developerNormal, null),
-			aMagnetic = new AchAbility(category, "magnetic", 4, 2, ModuleAbility.developerNormal, null),
-			aBodyIntensify = new AchAbility(category, "body_intensify", 6, 2, ModuleAbility.developerNormal, null),
-			aIronSand = new AchAbility(category, "iron_sand", 8, 2, ModuleAbility.developerNormal, null),
-			aMineDetect = new AchAbility(category, "mine_detect", 0, 4, ModuleAbility.developerNormal, null),
-			aThunderBolt = new AchAbility(category, "thunder_bolt", 2, 4, ModuleAbility.developerNormal, null),
-			aRailgun = new AchAbility(category, "railgun", 4, 4, ModuleAbility.developerNormal, null),
-			aThunderClap = new AchAbility(category, "thunder_clap", 6, 4, ModuleAbility.developerNormal, null),
+			aArcGen = new AchAbility(category.arcGen, "arc_gen", 0, 2, null),
+			aAtCreeper = new AchAbility(category.thunderBolt, "attack_creeper", 2, 2, null),
+			aMagnetic = new AchAbility(category.magMovement, "magnetic", 4, 2, null),
+			aBodyIntensify = new AchAbility(category.bodyIntensify, "body_intensify", 6, 2, null),
+			//aIronSand = new AchAbility(category.ironSand, "iron_sand", 8, 2, null),
+			aMineDetect = new AchAbility(category.mineDetect, "mine_detect", 0, 4, null),
+			aThunderBolt = new AchAbility(category.thunderBolt, "thunder_bolt", 2, 4, null),
+			aRailgun = new AchAbility(category.railgun, "railgun", 4, 4, null),
+			aThunderClap = new AchAbility(category.thunderClap, "thunder_clap", 6, 4, null),
 		});
 	}
 	

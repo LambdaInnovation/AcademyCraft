@@ -1,5 +1,6 @@
 package cn.academy.misc.achievements.pages;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,8 +24,8 @@ import net.minecraftforge.common.AchievementPage;
 public abstract class ACAchievementPage extends AchievementPage {
 	
 	private String name;
-	private LinkedList<ACAchievement> list = new LinkedList();
-	private List<Achievement> wrapped = new LinkedList<Achievement>();
+	private LinkedList<ACAchievement> list = new LinkedList<ACAchievement>();
+	private ArrayList<Achievement> wrapped = new ArrayList<Achievement>();
 	
 	ACAchievementPage(String id) {
 		super("dummy call");

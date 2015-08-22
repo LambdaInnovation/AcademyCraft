@@ -19,7 +19,7 @@ import cn.academy.vanilla.meltdowner.skill.*;
 /**
  * @author WeAthFolD
  */
-public class CatMeltdowner extends Category {
+public class CatMeltDowner extends Category {
 	
 	public static RayBarrage rayBarrage;
 	public static ScatterBomb scatterBomb;
@@ -29,7 +29,7 @@ public class CatMeltdowner extends Category {
 	public static MineRayExpert mineRayExpert;
 	public static MineRayLuck mineRayLuck;
 
-	public CatMeltdowner() {
+	public CatMeltDowner() {
 		super("melt_downer");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
