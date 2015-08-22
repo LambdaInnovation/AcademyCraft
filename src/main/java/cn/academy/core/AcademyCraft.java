@@ -188,13 +188,15 @@ public class AcademyCraft {
     		scriptLoaded = true;
     		
     		// Load the scripts
-    		script = new ScriptProgram();
+    		ScriptProgram repl = new ScriptProgram();
             String[] scripts = {
             	"generic", "ability", "electro_master", "teleporter", "melt_downer",
             	"generic_skills"
             };
             for(String s : scripts)
-            	script.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
+            	repl.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
+            
+            script = repl;
     	}
     }
     

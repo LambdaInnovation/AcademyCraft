@@ -12,25 +12,33 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
+import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.Cooldown;
+import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.entity.EntityBlock;
+import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
+import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEntity;
+import cn.liutils.entityx.event.CollideEvent;
+import cn.liutils.entityx.event.CollideEvent.CollideHandler;
+import cn.liutils.entityx.handlers.Rigidbody;
+import cn.liutils.util.helper.EntitySyncer;
+import cn.liutils.util.helper.EntitySyncer.Synchronized;
+import cn.liutils.util.helper.Motion3D;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.entity.EntityBlock;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.util.helper.EntitySyncer;
-import cn.liutils.util.helper.EntitySyncer.Synchronized;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
 
 /**
  * Magnet manipulation
@@ -46,10 +54,19 @@ public class MagManip extends Skill {
 		instance = this;
 	}
 	
-	public static boolean accepts(AbilityData data, ItemStack stack) {
-		if(stack == null)
+	static boolean accepts(AbilityData data, ItemStack stack) {
+		Block block; 
+		if(stack == null || (block = Block.getBlockFromItem(stack.getItem())) == null)
 			return false;
-		return Block.getBlockFromItem(stack.getItem()) != null;
+		return CatElectroMaster.isWeakMetalBlock(block);
+	}
+	
+	static float getDamage(AbilityData data) {
+		return instance.callFloatWithExp("damage", data);
+	}
+	
+	static float getExpIncr() {
+		return instance.getFloat("expincr");
 	}
 	
 	@Override
@@ -57,9 +74,7 @@ public class MagManip extends Skill {
 		return new SkillInstance().addChild(new ManipAction());
 	}
 	
-	public static class ManipAction extends SyncAction {
-		
-		AbilityData aData;
+	public static class ManipAction extends SkillSyncAction {
 
 		public ManipAction() {
 			super(-1);
@@ -67,10 +82,13 @@ public class MagManip extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
+			super.onStart();
 			
 			if(!isRemote && !checkItem())
 				ActionManager.abortAction(this);
+			
+			if(isRemote)
+				startEffect();
 		}
 		
 		@Override
@@ -79,19 +97,24 @@ public class MagManip extends Skill {
 				if(!checkItem()) {
 					ActionManager.abortAction(this);
 				}
-			}
-			
+				
+				if(cpData.getCP() < instance.getConsumption(aData))
+					ActionManager.abortAction(this);
+			} else
+				updateEffect();
 		}
 		
 		@Override
 		public void onEnd() {
 			if(!isRemote) {
 				if(checkItem()) {
+					cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
+					
 					ItemStack stack = player.getCurrentEquippedItem();
-					EntityBlock entity = new ManipEntityBlock(player);
+					EntityBlock entity = new ManipEntityBlock(player, getDamage(aData));
 					
 					entity.fromItemStack(stack);
-					new Motion3D(player, true).applyToEntity(entity);
+					new Motion3D(player, true).multiplyMotionBy(1.6).applyToEntity(entity);
 					
 					if(entity.isAvailable()) {
 						if(!player.capabilities.isCreativeMode) {
@@ -101,20 +124,49 @@ public class MagManip extends Skill {
 						}
 						player.worldObj.spawnEntityInWorld(entity);
 					}
+					
+					aData.addSkillExp(instance, getExpIncr());
 				}
 			}
+			
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@Override
-		public void onAbort() {
-			
+		public void onFinalize() {
+			if(isRemote)
+				endEffect();
 		}
 		
 		private boolean checkItem() {
 			return accepts(aData, player.getCurrentEquippedItem());
 		}
 		
+		// CLIENT
+		@SideOnly(Side.CLIENT)
+		EntitySurroundArc arc;
+		
+		@SideOnly(Side.CLIENT)
+		private void startEffect() {
+			arc = new EntitySurroundArc(player);
+			arc.setArcType(ArcType.NORMAL);
+			arc.life = 233333;
+			player.worldObj.spawnEntityInWorld(arc);
+			player.capabilities.setPlayerWalkSpeed(0.05f);
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void updateEffect() {
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void endEffect() {
+			player.capabilities.setPlayerWalkSpeed(0.1f);
+			arc.setDead();
+		}
+		
 	}
+	
 	
 	@RegEntity
 	public static class ManipEntityBlock extends EntityBlock {
@@ -124,9 +176,12 @@ public class MagManip extends Skill {
 		@Synchronized
 		EntityPlayer player;
 		
-		public ManipEntityBlock(EntityPlayer _player) {
+		float damage;
+		
+		public ManipEntityBlock(EntityPlayer _player, float _damage) {
 			super(_player);
 			player = _player;
+			damage = _damage;
 		}
 
 		public ManipEntityBlock(World world) {
@@ -145,7 +200,30 @@ public class MagManip extends Skill {
 					return target != player;
 				}
 			};
-			rb.gravity = 0.02;
+			rb.gravity = 0.05;
+			
+			this.regEventHandler(new CollideHandler() {
+
+				@Override
+				public void onEvent(CollideEvent event) {
+					if(!worldObj.isRemote && 
+						event.result != null && 
+						event.result.entityHit != null)
+						event.result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
+				}
+				
+			});
+			
+			if(worldObj.isRemote)
+				startClient();
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private void startClient() {
+			EntitySurroundArc surrounder = new EntitySurroundArc(this);
+			surrounder.life = 30;
+			surrounder.setArcType(ArcType.THIN);
+			worldObj.spawnEntityInWorld(surrounder);
 		}
 		
 		public void onUpdate() {

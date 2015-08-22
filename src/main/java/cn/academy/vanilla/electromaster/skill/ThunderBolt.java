@@ -65,6 +65,11 @@ public class ThunderBolt extends Skill {
 		return instance.callFloatWithExp("damage", aData);
 	}
 	
+	static float getExpIncr(boolean effective) {
+		return instance.getFunc("expincr" + (effective ? "effective" : "ineffective"))
+				.callFloat(effective);
+	}
+	
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
 		return new SkillInstanceInstant().addExecution(new ThunderBoltAction());
@@ -86,7 +91,10 @@ public class ThunderBolt extends Skill {
 				AttackData ad = getAttackData();
 				float exp = aData.getSkillExp(instance);
 				
+				boolean effective = false;
+				
 				if(ad.target != null) {
+					effective = true;
 					DamageHelper.attack(ad.target, DamageSource.causePlayerDamage(player), getDamage(aData));
 					if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
 						((EntityLivingBase) ad.target)
@@ -95,6 +103,7 @@ public class ThunderBolt extends Skill {
 				}
 				
 				for(Entity e : ad.aoes) {
+					effective = true;
 					DamageHelper.attack(e, DamageSource.causePlayerDamage(player), getAOEDamage(aData));
 					
 					if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
@@ -102,6 +111,8 @@ public class ThunderBolt extends Skill {
 							.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 20, 3));
 					}
 				}
+				
+				aData.addSkillExp(instance, getExpIncr(effective));
 			}
 			
 			Cooldown.setCooldown(instance, instance.getCooldown(aData));

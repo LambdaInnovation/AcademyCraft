@@ -67,7 +67,7 @@ public class ArcGen extends Skill {
 	}
 	
 	private static float getExpIncr(AbilityData data, boolean effectiveHit) {
-		return instance.getFunc("exp_incr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
+		return instance.getFunc("expincr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
 	}
 	
 	private static double getFishProb(AbilityData data) {
@@ -99,8 +99,10 @@ public class ArcGen extends Skill {
 				MovingObjectPosition result = Raytrace.traceLiving(player, 20, null, BlockFilters.filNothing);
 
 				if(result != null) {
+					float expincr;
 					if(result.typeOfHit == MovingObjectType.ENTITY) {
 						DamageHelper.attack(result.entityHit, DamageSource.causePlayerDamage(player), getDamage(aData));
+						expincr = getExpIncr(aData, true);
 					} else { //BLOCK
 						int hx = result.blockX, hy = result.blockY, hz = result.blockZ;
 						Block block = player.worldObj.getBlock(hx, hy, hz);
@@ -114,14 +116,15 @@ public class ArcGen extends Skill {
 									new ItemStack(Items.cooked_fished)));
 							}
 						} else {
-							System.out.println("Hah " + getIgniteProb(aData));
 							if(RandUtils.ranged(0, 1) < getIgniteProb(aData)) {
 								if(world.getBlock(hx, hy + 1, hz) == Blocks.air) {
 									world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03);
 								}
 							}
 						}
+						expincr = getExpIncr(aData, false);
 					}
+					aData.addSkillExp(instance, expincr);
 				}
 			} else {
 				spawnEffects();

@@ -86,7 +86,7 @@ public class DebugConsole extends AuxGui {
 		CPData cpData = CPData.get(player);
 		if(!aData.isLearned()) {
 			texts.add(new Text("Ability not acquired"));
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_NUMPAD0)) {
+		} else if(Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
 			texts.add(new Text("Skill status"));
 			Category cat = aData.getCategory();
 			for(Skill s : cat.getSkillList()) {
@@ -131,7 +131,7 @@ public class DebugConsole extends AuxGui {
 		}
 		
 		texts.add(new Text(""));
-		texts.add(new Text("[NUMPAD0]: Skill info", 10, 0x95a6ff));
+		texts.add(new Text("[BACKSPACE]: Skill info", 10, 0x95a6ff));
 		
 		double x = 10, y = 10;
 		for(Text text : texts) {
