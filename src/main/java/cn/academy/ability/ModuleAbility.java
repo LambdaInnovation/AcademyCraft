@@ -29,6 +29,7 @@ import cn.annoreg.mc.RegItem;
 public class ModuleAbility {
 	
 	@RegItem
+	@RegItem.HasRender
 	public static ItemDeveloper
 		developerPortable;
 	

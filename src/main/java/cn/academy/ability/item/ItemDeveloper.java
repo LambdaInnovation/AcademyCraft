@@ -12,28 +12,33 @@
  */
 package cn.academy.ability.item;
 
+import cn.academy.ability.client.render.RenderDeveloperPortable;
+import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
+import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.developer.PortableDevData;
+import cn.academy.energy.template.ItemEnergyBase;
+import cn.annoreg.mc.RegItem;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
-import cn.academy.ability.developer.DeveloperPortable;
-import cn.academy.ability.developer.DeveloperType;
-import cn.academy.ability.developer.PortableDevData;
-import cn.academy.energy.IFConstants;
-import cn.academy.energy.template.ItemEnergyBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
 public class ItemDeveloper extends ItemEnergyBase {
 	
+	@SideOnly(Side.CLIENT)
+	@RegItem.Render
+	public static RenderDeveloperPortable renderer;
+	
 	public static final DeveloperType type = DeveloperType.PORTABLE;
 
 	public ItemDeveloper() {
 		super("developer_portable", type.getEnergy(), type.getBandwidth());
+		this.bFull3D = true;
 	}
 	
 	@Override
