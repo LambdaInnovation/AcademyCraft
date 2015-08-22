@@ -66,7 +66,7 @@ public class ThunderBolt extends Skill {
 	}
 	
 	static float getExpIncr(boolean effective) {
-		return instance.getFunc("expincr" + (effective ? "effective" : "ineffective"))
+		return instance.getFunc("expincr_" + (effective ? "effective" : "ineffective"))
 				.callFloat(effective);
 	}
 	
