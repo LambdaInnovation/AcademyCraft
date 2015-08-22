@@ -12,7 +12,7 @@
  */
 package cn.academy.support.ic2;
 
-import ic2.core.Ic2Items;
+import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cn.academy.crafting.ModuleCrafting;
@@ -36,12 +36,10 @@ public class IC2Support {
 		
 		GameRegistry.addRecipe(new ItemStack(euInput), "   ", "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', Ic2Items.insulatedCopperCableBlock.getItem(), 
-				'd', ModuleCrafting.convComp);
+				'c', IC2Items.getItem("insulatedCopperCableBlock"), 'd', ModuleCrafting.convComp);
 		GameRegistry.addRecipe(new ItemStack(euOutput), "   ", "abc", " d ",
-				'a', Ic2Items.batBox.getItem(), 'b', ModuleCrafting.machineFrame,
-				'c', Ic2Items.insulatedCopperCableBlock.getItem(),
-				'd', ModuleCrafting.convComp);
+				'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
+				'c', IC2Items.getItem("insulatedCopperCableBlock"), 'd', ModuleCrafting.convComp);
 	}
 
 }

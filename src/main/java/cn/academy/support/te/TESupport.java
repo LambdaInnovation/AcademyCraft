@@ -21,10 +21,10 @@ public class TESupport {
 		
 		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', TEItems.powerCoilGold.getItem(), 'd', ModuleCrafting.convComp);
+				'c', TEItems.powerCoilGold, 'd', ModuleCrafting.convComp);
 		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', BlockCell.cellBasic.getItem(), 'd', ModuleCrafting.convComp);
+				'c', BlockCell.cellBasic, 'd', ModuleCrafting.convComp);
 	}
 	
 }
