@@ -15,15 +15,6 @@ package cn.academy.vanilla.electromaster;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockOre;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.ModuleVanilla;
@@ -37,6 +28,16 @@ import cn.academy.vanilla.electromaster.skill.Railgun;
 import cn.academy.vanilla.electromaster.skill.ThunderBolt;
 import cn.academy.vanilla.electromaster.skill.ThunderClap;
 import cn.academy.vanilla.electromaster.skill.ironsand.IronSand;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * @author WeAthFolD
@@ -65,7 +66,10 @@ public class CatElectroMaster extends Category {
 		addSkill(magMovement = new MagMovement());
 		addSkill(magManip = new MagManip());
 		addSkill(mineDetect = new MineDetect());
-		addSkill(ironSand = new IronSand());
+		
+		// TODO: Not added in 1.0 version
+		// addSkill(ironSand = new IronSand());
+		
 		addSkill(bodyIntensify = new BodyIntensify());
 		addSkill(thunderBolt = new ThunderBolt());
 		addSkill(railgun = new Railgun());
@@ -92,7 +96,7 @@ public class CatElectroMaster extends Category {
 		railgun.setParent(thunderBolt, 0.3f);
 		railgun.addSkillDep(magManip, 1f);
 		
-		ironSand.setParent(magManip, 1f);
+		// ironSand.setParent(magManip, 1f);
 		
 		thunderClap.setParent(thunderBolt, 1f);
 		
@@ -133,6 +137,7 @@ public class CatElectroMaster extends Category {
 			Blocks.iron_door,
 			Blocks.iron_ore,
 			Blocks.activator_rail,
+			Blocks.piston
 		}));
 	}
 	
@@ -144,7 +149,12 @@ public class CatElectroMaster extends Category {
 	}
 	
 	public static boolean isMetalBlock(Block block) {
-		return metalBlocks.contains(block);
+		return metalBlocks.contains(block); 
+	}
+	
+	public static boolean isWeakMetalBlock(Block block) {
+		Material mat = block.getMaterial();
+		return mat == Material.rock || mat == Material.anvil;
 	}
 	
 	public static boolean isEntityMetallic(Entity ent) {

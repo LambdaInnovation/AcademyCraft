@@ -60,13 +60,13 @@ public class MagMovement extends Skill {
 	}
 	
 	private static float getExpIncr(double distance) {
-		return instance.getFunc("exp_incr").callFloat(distance);
+		return instance.getFunc("expincr").callFloat(distance);
 	}
 	
 	private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {
 		if(pos.typeOfHit == MovingObjectType.BLOCK) {
 			Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
-			if(aData.getSkillExp(instance) < 0.5f && !CatElectroMaster.isMetalBlock(block))
+			if(aData.getSkillExp(instance) < 0.6f && !CatElectroMaster.isMetalBlock(block))
 				return null;
 			if(block.getMaterial() != Material.rock && block.getMaterial() != Material.anvil)
 				return null;

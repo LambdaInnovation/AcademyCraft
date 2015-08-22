@@ -80,6 +80,10 @@ public class SkillInstance implements IConsumptionHintProvider {
 	void ctrlTick() {
 		++ticks;
 		onTick();
+		
+		for(SyncAction act : childs)
+			if(act.getState() != SyncAction.State.STARTED)
+				this.abortSkill();
 	}
 	
 	void ctrlEnded() { 

@@ -16,22 +16,23 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.LevelChangeEvent;
+import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -174,8 +175,10 @@ public class AbilityData extends DataPart {
 			skillExps[skill.getID()] += amt;
 			if(skillExps[skill.getID()] > 1.0f)
 				skillExps[skill.getID()] = 1.0f;
-			if(!isRemote())
+			if(!isRemote()) {
+				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill));
 				scheduleUpdate(25);
+			}
 		}
 	}
 	

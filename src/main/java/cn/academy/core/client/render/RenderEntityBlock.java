@@ -81,11 +81,13 @@ public class RenderEntityBlock extends Render {
 		if(entity.tileEntity != null) {
 			entity.tileEntity.blockType = entity.block;
 			TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance.getSpecialRenderer(entity.tileEntity);
-			try {
-				tesr.renderTileEntityAt(entity.tileEntity, x - 0.5, y, z - 0.5, a);
-			} catch(Exception ex) {
-				AcademyCraft.log.error("Error handling EntityBlock TE rendering: " + tesr.getClass());
-				ex.printStackTrace();
+			if(tesr != null) {
+				try {
+					tesr.renderTileEntityAt(entity.tileEntity, x - 0.5, y, z - 0.5, a);
+				} catch(Exception ex) {
+					AcademyCraft.log.error("Error handling EntityBlock TE rendering: " + tesr.getClass());
+					ex.printStackTrace();
+				}
 			}
 		}
 	}

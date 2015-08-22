@@ -11,10 +11,10 @@ ac {
 		  overload(exp) { lerp(15, 10, exp) } 
 		  p_ignite(exp) { lerp(0, 0.6, exp) } 
 		  
-		  exp_incr_effective(exp) { 
+		  expincr_effective(exp) { 
 		      0.00008 * lerp(60, 90, exp)
 		  }
-		  exp_incr_ineffective(exp) {
+		  expincr_ineffective(exp) {
 		      0.00003 * lerp(60, 90, exp)
 		  }
 		}
@@ -26,8 +26,8 @@ ac {
 		  consumption(exp) { lerp(3, 7, exp) }
 		  overload(exp) { lerp(65, 48, exp) }
 		  
-		  exp_incr_effective(exp) { lerp(3, 7, exp) * 0.0008 }
-		  exp_incr_ineffective(exp) { lerp(3, 7, exp) * 0.0003 }
+		  expincr_effective(exp) { lerp(3, 7, exp) * 0.0008 }
+		  expincr_ineffective(exp) { lerp(3, 7, exp) * 0.0003 }
 		}
 		
 		# ct: charge time (range: [10, 40])
@@ -55,7 +55,7 @@ ac {
 		  x { 501 } y { 177 }
 		  consumption(exp) { lerp(15, 10, exp) } # per tick
 		  overload(exp) { lerp(3, 2, exp) } # per tick
-		  exp_incr(distance) { distance * 0.00015 }
+		  expincr(distance) { distance * 0.00015 }
 		}
 		
 		thunder_bolt {
@@ -65,6 +65,12 @@ ac {
 			consumption(exp) { lerp(100, 200, exp) }
 			overload(exp) { lerp(30, 27, exp) }
 			cooldown(exp) { floor(20 * lerp(4, 1.5, exp)) }
+			expincr_effective { 
+              0.003
+            }
+            expincr_ineffective {
+               0.005
+            }
 		}
 		
 		railgun {
@@ -72,6 +78,7 @@ ac {
 		  consumption(exp) { lerp(200, 500, exp) }
 		  overload(exp) { lerp(120, 80, exp) }
 		  cooldown(exp) { lerp(300, 160, exp) }
+		  expincr { 0.005 }
 		}
 		
 		thunder_clap {
@@ -81,6 +88,7 @@ ac {
 		  consumption(exp) { lerp(100, 120, exp) }
 		  overload(exp) { lerp(400, 350, exp) }
 		  cooldown(exp, ct) { ct * lerp(18, 10, exp) }
+		  expincr { 0.003 }
 		}
 		
 		iron_sand {
@@ -89,6 +97,11 @@ ac {
 		
 		mag_manip {
 		  x { 713 } y { 165 }
+		  damage(exp) { lerp(8, 15, exp) }
+		  consumption(exp) { lerp(140, 270, exp) }
+		  overload(exp) { lerp(35, 20, exp) }
+		  cooldown(exp) { 20 * lerp(2, 1, exp) }
+		  expincr { 0.001 }
 		}
 	}
 }
