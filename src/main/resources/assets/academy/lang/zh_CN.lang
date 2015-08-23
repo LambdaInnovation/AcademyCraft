@@ -143,6 +143,20 @@ ac.skill_tree.unknown=[未知]
 ac.skill_tree.learn_skill=学习
 ac.skill_tree.required=需要: 
 
+ac.skill_tree.perf=将要执行:
+ac.skill_tree.perf2=执行?
+ac.skill_tree.consumption=预计消耗: %.0fIF
+ac.skill_tree.start=开始
+ac.skill_tree.cancel=取消
+
+ac.skill_tree.tracker=进度追踪
+ac.skill_tree.ok=OK
+ac.skill_tree.progress=进度: %.1f%%
+ac.skill_tree.aborted=进度: 已取消.
+ac.skill_tree.successful=执行成功.
+ac.skill_tree.abort=取消
+ac.skill_tree.aborted=已取消.
+
 # 设置
 ac.settings.cat.generic=常规
 ac.settings.prop.attackPlayer=开启PvP (玩家vs玩家)

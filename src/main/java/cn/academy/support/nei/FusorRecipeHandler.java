@@ -38,7 +38,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public String getGuiTexture() {
-		return "academy:textures/guis/window_imagFuser.png";
+		return "academy:textures/guis/nei_fusor.png";
 	}
 	
 	@Override
@@ -48,22 +48,22 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public int getInputX() {
-		return 21;
+		return 32;
 	}
 
 	@Override
 	public int getInputY() {
-		return 50;
+		return 44;
 	}
 
 	@Override
 	public int getOutputX() {
-		return 113;
+		return 120;
 	}
 
 	@Override
 	public int getOutputY() {
-		return 50;
+		return 44;
 	}
 
 	@Override
