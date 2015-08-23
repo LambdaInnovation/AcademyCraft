@@ -82,7 +82,8 @@ public class SkillInstance implements IConsumptionHintProvider {
 		onTick();
 		
 		for(SyncAction act : childs)
-			if(act.getState() != SyncAction.State.STARTED)
+			if(act.getState() == SyncAction.State.ABORTED || 
+				act.getState() == SyncAction.State.ENDED)
 				this.abortSkill();
 	}
 	

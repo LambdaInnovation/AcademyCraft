@@ -23,6 +23,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -62,16 +63,14 @@ public class ArcGen extends Skill {
 	}
 	
 	private static double getIgniteProb(AbilityData data) {
-		//if(true) return 1.0;
 		return instance.getFunc("p_ignite").callFloat(data.getSkillExp(instance));
 	}
 	
 	private static float getExpIncr(AbilityData data, boolean effectiveHit) {
-		return instance.getFunc("expincr" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
+		return instance.getFunc("expincr_" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
 	}
 	
 	private static double getFishProb(AbilityData data) {
-		//if(true) return 1.0;
 		return data.getSkillExp(instance) > 0.5f ? 0.1 : 0;
 	}
 	
@@ -129,6 +128,8 @@ public class ArcGen extends Skill {
 			} else {
 				spawnEffects();
 			}
+			
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)

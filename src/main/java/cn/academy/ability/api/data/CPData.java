@@ -12,9 +12,6 @@
  */
 package cn.academy.ability.api.data;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.CategoryChangeEvent;
@@ -32,8 +29,15 @@ import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 
 /**
  * CP but more than CP. CPData stores rather dynamic part of player ability data, 
@@ -234,6 +238,15 @@ public class CPData extends DataPart {
 			dataDirty = true;
 	}
 	
+	/***
+	 * A pre test to judge whether the skill can be performed.
+	 * @return Whether the player can perform the ability with the given consumption currently,
+	 * 	takes account of creative mode.
+	 */
+	public boolean canPerform(float cp) {
+		return getPlayer().capabilities.isCreativeMode || this.getCP() >= cp;
+	}
+	
 	/**
 	 * Should only be called in SERVER. Add the player's maxCP.
 	 */
@@ -307,6 +320,18 @@ public class CPData extends DataPart {
 		if(!isRemote())
 			sync();
 		
+	}
+	
+	/**
+	 * Effective in SERVER. Recover all the cp and overload.
+	 */
+	public void recoverAll() {
+		if(!isRemote()) {
+			currentCP = maxCP;
+			overload = 0;
+			canUseAbility = false;
+			sync();
+		}
 	}
 	
 	@Override
@@ -401,6 +426,18 @@ public class CPData extends DataPart {
 		public void changedLevel(LevelChangeEvent event) {
 			CPData cpData = CPData.get(event.player);
 			cpData.recalcMaxValue();
+		}
+		
+		@SubscribeEvent
+		public void playerWakeup(PlayerWakeUpEvent event) {
+			CPData.get(event.entityPlayer).recoverAll();
+		}
+		
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public void playerDeath(LivingDeathEvent event) {
+			if(!event.isCanceled() && event.entityLiving instanceof EntityPlayer) {
+				CPData.get((EntityPlayer) event.entityLiving).recoverAll();
+			}
 		}
 		
 	}

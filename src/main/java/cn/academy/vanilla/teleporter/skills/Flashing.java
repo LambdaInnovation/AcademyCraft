@@ -159,7 +159,7 @@ public class Flashing extends SpecialSkill {
 			if(isRemote) {
 				updateEffects();
 			} else {
-				if(cpData.getCP() < instance.getConsumption(aData))
+				if(!cpData.canPerform(instance.getConsumption(aData)))
 					ActionManager.abortAction(this);
 			}
 		}

@@ -74,7 +74,7 @@ public class MineDetect extends Skill {
 	}
 	
 	public static boolean isAdvanced(AbilityData data) {
-		return data.getSkillExp(instance) > 0.5f;
+		return data.getSkillExp(instance) > 0.5f && data.getLevel() >= 4;
 	}
 	
 	@Override
@@ -100,6 +100,7 @@ public class MineDetect extends Skill {
 			
 			if(!isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.blindness.id, TIME));
+				aData.addSkillExp(instance, instance.getFloat("expincr"));
 			}
 		}
 		

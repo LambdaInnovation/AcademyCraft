@@ -58,6 +58,7 @@ public class MagManip extends Skill {
 		Block block; 
 		if(stack == null || (block = Block.getBlockFromItem(stack.getItem())) == null)
 			return false;
+		
 		return CatElectroMaster.isWeakMetalBlock(block);
 	}
 	
@@ -84,8 +85,9 @@ public class MagManip extends Skill {
 		public void onStart() {
 			super.onStart();
 			
-			if(!isRemote && !checkItem())
+			if(!isRemote && !checkItem()) {
 				ActionManager.abortAction(this);
+			}
 			
 			if(isRemote)
 				startEffect();
@@ -94,12 +96,9 @@ public class MagManip extends Skill {
 		@Override
 		public void onTick() {
 			if(!isRemote) {
-				if(!checkItem()) {
+				if(!checkItem() || !cpData.canPerform(instance.getConsumption(aData))) {
 					ActionManager.abortAction(this);
 				}
-				
-				if(cpData.getCP() < instance.getConsumption(aData))
-					ActionManager.abortAction(this);
 			} else
 				updateEffect();
 		}

@@ -21,6 +21,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
@@ -46,7 +47,7 @@ public class CurrentCharging extends Skill {
 	static CurrentCharging instance;
 	
 	public CurrentCharging() {
-		super("charging", 2);
+		super("charging", 1);
 		instance = this;
 	}
 	
@@ -209,10 +210,7 @@ public class CurrentCharging extends Skill {
 	}
 	
 	// TODO: Add hand render effect
-	public static class ActionChargeItem extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class ActionChargeItem extends SkillSyncAction {
 
 		public ActionChargeItem() {
 			super(-1);
@@ -220,8 +218,9 @@ public class CurrentCharging extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
+			if(isRemote)
+				startEffects();
 		}
 		
 		@Override
@@ -240,26 +239,29 @@ public class CurrentCharging extends Skill {
 		}
 		
 		@Override
-		public void onAbort() {
-			if(isRemote) endEffects();
-		}
-		
-		@Override
-		public void onEnd() {
-			if(isRemote) endEffects();
+		public void onFinalize() {
+			if(isRemote)
+				endEffects();
 		}
 		
 		@SideOnly(Side.CLIENT)
 		FollowEntitySound sound;
 		
 		@SideOnly(Side.CLIENT)
+		EntitySurroundArc surround;
+		
+		@SideOnly(Side.CLIENT)
 		private void startEffects() {
 			ACSounds.playClient(sound = new FollowEntitySound(player, SOUND).setLoop());
+			surround = new EntitySurroundArc(player);
+			surround.setArcType(ArcType.THIN);
+			world.spawnEntityInWorld(surround);
 		}	
 		
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
-			if(sound != null) sound.stop();
+			sound.stop();
+			surround.setDead();
 		}
 	}
 

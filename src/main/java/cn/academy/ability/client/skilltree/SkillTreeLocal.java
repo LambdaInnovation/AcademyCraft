@@ -10,7 +10,8 @@ public class SkillTreeLocal {
 	}
 	
 	public static String acquiredProg(float skillexp) {
-		return StatCollector.translateToLocalFormatted("ac.skill_tree.acquireprog", skillexp * 100);
+		// FUCK YOU MOJANG WHY IN THE HELL DO YOU REPLACE %.0f to %s ARE YOU ASSHOLE OR SOMETHING???
+		return StatCollector.translateToLocalFormatted("ac.skill_tree.acquireprog", String.format("%.1f", skillexp * 100));
 	}
 	
 	public static String upgradeTo(int level) {
@@ -50,7 +51,7 @@ public class SkillTreeLocal {
 	}
 	
 	public static String progress(double amt) {
-		return local("progress", amt * 100);
+		return local("progress", String.format("%.1f", amt * 100));
 	}
 	
 	public static String progressAborted() {

@@ -147,10 +147,20 @@ public class AbilityData extends DataPart {
 		learnSkill(s.getID());
 	}
 	
-	/**
-	 * Should ONLY be called in SERVER. Learn the specified skill.
-	 */
 	public void learnSkill(int id) {
+		setSkillLearnState(id, true);
+	}
+	
+	public void setSkillLearnState(Skill s, boolean value) {
+		if(s.getCategory() != getCategory())
+			return;
+		setSkillLearnState(s.getID(), true);
+	}
+	
+	/**
+	 * Should ONLY be called in SERVER. Change skill's learn state.
+	 */
+	public void setSkillLearnState(int id, boolean value) {
 		Category cat = getCategory();
 		if(id >= cat.getSkillCount()) {
 			AcademyCraft.log.warn("Skill ID overflow when learning skill " + id);
@@ -175,6 +185,20 @@ public class AbilityData extends DataPart {
 			skillExps[skill.getID()] += amt;
 			if(skillExps[skill.getID()] > 1.0f)
 				skillExps[skill.getID()] = 1.0f;
+			if(!isRemote()) {
+				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill));
+				scheduleUpdate(25);
+			}
+		}
+	}
+	
+	/**
+	 * Brutely set the skill exp. This should only used by commands.
+	 */
+	public void setSkillExp(Skill skill, float exp) {
+		if(skill.getCategory() == getCategory()) {
+			learnSkill(skill);
+			skillExps[skill.getID()] = exp;
 			if(!isRemote()) {
 				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill));
 				scheduleUpdate(25);

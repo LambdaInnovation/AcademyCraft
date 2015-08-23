@@ -76,7 +76,7 @@ public class Category {
 	}
 	
 	public Skill getSkill(int id) {
-		return id >= skillList.size() ? null : skillList.get(id);
+		return (id >= skillList.size() || id < 0) ? null : skillList.get(id);
 	}
 	
 	public boolean containsSkill(Skill skill) {

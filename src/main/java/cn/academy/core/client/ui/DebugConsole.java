@@ -30,11 +30,13 @@ import cn.academy.ability.api.ctrl.Cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.api.gui.AuxGuiHandler;
 import cn.liutils.util.helper.Font;
+import cn.liutils.util.helper.KeyHandler;
 
 /**
  * The overall debug console. use NUMPAD keys to switch between different states.
@@ -64,12 +66,23 @@ public class DebugConsole extends AuxGui {
 		}
 	}
 	
+	static DebugConsole INSTANCE;
+	
 	public static void init() {
-		if(AcademyCraft.DEBUG_MODE)
-			AuxGuiHandler.instance.register(new DebugConsole());
+		AuxGuiHandler.instance.register(INSTANCE = new DebugConsole());
+		ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
+			@Override
+			public void onKeyDown() {
+				INSTANCE.enabled = !INSTANCE.enabled;
+			}
+		});
 	}
 	
-	private DebugConsole() {}
+	boolean enabled = AcademyCraft.DEBUG_MODE;
+	
+	private DebugConsole() {
+		
+	}
 	
 	@Override
 	public boolean isForeground() {
@@ -78,6 +91,9 @@ public class DebugConsole extends AuxGui {
 
 	@Override
 	public void draw(ScaledResolution sr) {
+		if(!enabled)
+			return;
+		
 		List<Text> texts = new ArrayList();
 		texts.add(new Text("AcademyCraft developer info"));
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -94,7 +110,7 @@ public class DebugConsole extends AuxGui {
 				for(int i = 0; i < 30 - s.getName().length(); ++i)
 					sb.append(' ');
 				if(aData.isSkillLearned(s)) {
-					sb.append(aData.getSkillExp(s));
+					sb.append(String.format("%.1f", aData.getSkillExp(s) * 100)).append('%');
 				} else {
 					sb.append("[not learned]");
 				}

@@ -6,10 +6,11 @@ ac {
 	electro_master {
 		arc_gen {
 		  x { 112 } y { 230 }
-		  damage(exp) { lerp(3, 7, exp) } 
+		  damage(exp) { lerp(4, 9, exp) } 
 		  consumption(exp) { lerp(60, 90, exp) } 
 		  overload(exp) { lerp(15, 10, exp) } 
 		  p_ignite(exp) { lerp(0, 0.6, exp) } 
+		  cooldown(exp) { lerp(6, 3, exp) }
 		  
 		  expincr_effective(exp) { 
 		      0.00008 * lerp(60, 90, exp)
@@ -20,19 +21,19 @@ ac {
 		}
 		
 		charging {
-		  x { 317 } y { 159 }
+		  x { 217 } y { 89 }
 		  # IF/tick
-		  speed(exp) { lerp(5, 15, exp) } 
-		  consumption(exp) { lerp(3, 7, exp) }
+		  speed(exp) { lerp(10, 30, exp) } 
+		  consumption(exp) { lerp(6, 14, exp) }
 		  overload(exp) { lerp(65, 48, exp) }
 		  
-		  expincr_effective(exp) { lerp(3, 7, exp) * 0.0008 }
-		  expincr_ineffective(exp) { lerp(3, 7, exp) * 0.0003 }
+		  expincr_effective(exp) { 0.0001 }
+		  expincr_ineffective(exp) { 0.00003 }
 		}
 		
 		# ct: charge time (range: [10, 40])
 		body_intensify { 
-		  x { 427 } y { 53 }
+		  x { 357 } y { 77 }
 		  probability(ct) { (ct - 10.0) / 18.0 } 
 		  time(exp, ct) { floor(4 * lerp(1.5, 2.5, exp) * range_double(1, 2) * ct) } 
 		  level(exp, ct) { floor( lerp(0.5, 1, exp) * (ct / 18.0) ) } 
@@ -41,6 +42,7 @@ ac {
 		  consumption(exp) { lerp(20, 15, exp) }
 		  cooldown(exp) { lerp(45, 30, exp) }
 		  overload(exp) { lerp(200, 120, exp) }
+		  expincr { 0.01 }
 		}
 		
 		mine_detect { 
@@ -49,19 +51,20 @@ ac {
 		  overload(exp) { lerp(200, 180, exp) }
 		  cooldown(exp) { lerp(900, 400, exp) }
 		  range(exp) { lerp(15, 30, exp) } 
+		  expincr { 0.008 }
 		}
 		
 		mag_movement { 
-		  x { 501 } y { 177 }
+		  x { 490 } y { 177 }
 		  consumption(exp) { lerp(15, 10, exp) } # per tick
 		  overload(exp) { lerp(3, 2, exp) } # per tick
-		  expincr(distance) { distance * 0.00015 }
+		  expincr(distance) { distance * 0.0011 }
 		}
 		
 		thunder_bolt {
 		    x { 321 } y { 334 }
-			damage(exp) { lerp(10, 18, exp) }
-			aoe_damage(exp) { 0.2 * lerp(10, 18, exp) }
+			damage(exp) { lerp(15, 25, exp) }
+			aoe_damage(exp) { 0.4 * lerp(15, 25, exp) }
 			consumption(exp) { lerp(100, 200, exp) }
 			overload(exp) { lerp(30, 27, exp) }
 			cooldown(exp) { floor(20 * lerp(4, 1.5, exp)) }
