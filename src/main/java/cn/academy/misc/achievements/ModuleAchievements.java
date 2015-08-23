@@ -49,13 +49,14 @@ public final class ModuleAchievements {
 	 * Trigger an event
 	 * @param player The player
 	 * @param achname The name of the achievement
+	 * @return true if succeeded
 	 */
-	public static void trigger(EntityPlayer player, String achid) {
+	public static boolean trigger(EntityPlayer player, String achid) {
 		ACAchievement ach = ACAchievement.getById(achid);
-		if (ach != null)
-			player.triggerAchievement(ach);
-		else
-			AcademyCraft.log.warn("No such achievement found: " + achid);
+		if (ach == null)
+			return false;
+		player.triggerAchievement(ach);
+		return true;
 	}
 	
 }

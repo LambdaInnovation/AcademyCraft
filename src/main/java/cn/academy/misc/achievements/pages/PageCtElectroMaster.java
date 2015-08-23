@@ -41,22 +41,22 @@ public final class PageCtElectroMaster extends PageCategory<CatElectroMaster> {
 		super((CatElectroMaster) CategoryManager.INSTANCE.getCategory("electro_master"));
 		add(new ACAchievement[] {
 			aLv1 = new AchEvLevelChange(1, category, "lv1", 0, 0, ModuleAbility.developerNormal, null),
-			aSkill = new AchEvSkillLearn(category, "skill", 0, -2, ModuleAbility.developerNormal, aLv1),
-			aLv2 = new AchEvLevelChange(2, category, "lv2", 2, 0, ModuleAbility.developerNormal, aSkill),
-			aLv3 = new AchEvLevelChange(3, category, "lv3", 4, 0, ModuleAbility.developerNormal, aLv2),
-			aLv4 = new AchEvLevelChange(4, category, "lv4", 6, 0, ModuleAbility.developerNormal, aLv3),
-			aLv5 = new AchEvLevelChange(5, category, "lv5", 8, 0, ModuleAbility.developerNormal, aLv4),
+			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ModuleAbility.developerNormal, aLv1),
+			aLv2 = new AchEvLevelChange(2, category, "lv2", 2, 2, ModuleAbility.developerNormal, aSkill),
+			aLv3 = new AchEvLevelChange(3, category, "lv3", 0, 2, ModuleAbility.developerNormal, aLv2),
+			aLv4 = new AchEvLevelChange(4, category, "lv4", -2, 2, ModuleAbility.developerNormal, aLv3),
+			aLv5 = new AchEvLevelChange(5, category, "lv5", -2, 0, ModuleAbility.developerNormal, aLv4),
 		});
 		add(new ACAchievement[] {
-			aArcGen = new AchAbility(category.arcGen, "arc_gen", 0, 2, null),
-			aAtCreeper = new AchAbility(category.thunderBolt, "attack_creeper", 2, 2, null),
-			aMagnetic = new AchAbility(category.magMovement, "magnetic", 4, 2, null),
-			aBodyIntensify = new AchAbility(category.bodyIntensify, "body_intensify", 6, 2, null),
-			//aIronSand = new AchAbility(category.ironSand, "iron_sand", 8, 2, null),
-			aMineDetect = new AchAbility(category.mineDetect, "mine_detect", 0, 4, null),
-			aThunderBolt = new AchAbility(category.thunderBolt, "thunder_bolt", 2, 4, null),
-			aRailgun = new AchAbility(category.railgun, "railgun", 4, 4, null),
-			aThunderClap = new AchAbility(category.thunderClap, "thunder_clap", 6, 4, null),
+			aArcGen = new AchAbility(category.arcGen, "arc_gen", -3, -1, null),
+			aAtCreeper = new AchAbility(category.thunderBolt, "attack_creeper", -3, 1, aArcGen),
+			aMagnetic = new AchAbility(category.magMovement, "magnetic", -3, 3, aAtCreeper),
+			aBodyIntensify = new AchAbility(category.bodyIntensify, "body_intensify", -1, 3, aMagnetic),
+			//aIronSand = new AchAbility(category.ironSand, "iron_sand", 1, 3, null),
+			aMineDetect = new AchAbility(category.mineDetect, "mine_detect", 3, 3, aBodyIntensify),
+			aThunderBolt = new AchAbility(category.thunderBolt, "thunder_bolt", 3, 1, aMineDetect),
+			aRailgun = new AchAbility(category.railgun, "railgun", 3, -1, aThunderBolt),
+			aThunderClap = new AchAbility(category.thunderClap, "thunder_clap", 1, -1, aRailgun),
 		});
 	}
 	

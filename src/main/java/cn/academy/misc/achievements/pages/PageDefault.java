@@ -32,16 +32,16 @@ public final class PageDefault extends ACAchievementPage {
 		super("default");
 		add(new ACAchievement[] {
 			aPhaseLiquid = new AchEvMatterUnitHarvest("phase_liquid", 0, 0, ModuleCrafting.imagPhase, null, ModuleCrafting.imagPhase),
-			aMatrix1 = new AchCrSingle("matrix1", 2, 0, ModuleEnergy.matrix, aPhaseLiquid).adItemCrafted(ModuleEnergy.matrix),
-			aMatrix2 = new AchCrSingle("matrix2", 4, 0, ModuleEnergy.matrixCore, aMatrix1).adItemCrafted(ModuleEnergy.matrixCore),
-			aNode = new AchCrSingle("node", 2, 2, ModuleEnergy.nodeBasic, aPhaseLiquid).adItemCrafted(ModuleEnergy.nodeBasic),
-			aDeveloper1 = new AchCrSingle("developer1", 4, 2, ModuleAbility.developerPortable, aNode).adItemCrafted(ModuleAbility.developerPortable),
-			aDeveloper2 = new AchCrSingle("developer2", 6, 2, ModuleAbility.developerNormal, aDeveloper1).adItemCrafted(ModuleAbility.developerNormal),
-			aDeveloper3 = new AchCrSingle("developer3", 8, 2, ModuleAbility.developerAdvanced, aDeveloper2).adItemCrafted(ModuleAbility.developerAdvanced),
-			aPhaseGen = new AchCrSingle("phasegen", 2, 4, ModuleEnergy.phaseGen, aPhaseLiquid).adItemCrafted(ModuleEnergy.phaseGen),
-			aSolarGen = new AchCrSingle("solargen", 4, 4, ModuleEnergy.solarGen, aPhaseGen).adItemCrafted(ModuleEnergy.solarGen),
-			aWindGen = new AchCrSingle("windgen", 6, 4, ModuleEnergy.windgenFan, aSolarGen).adItemCrafted(ModuleEnergy.windgenMain),
-			aCrystal = new AchCrSingle("crystal", 0, 6, ModuleCrafting.crystalLow, null).adItemCrafted(ModuleCrafting.crystalLow),
+			aMatrix1 = new AchCrSingle("matrix1", -2, 0, ModuleEnergy.matrix, aPhaseLiquid).adItemCrafted(ModuleEnergy.matrix),
+			aMatrix2 = new AchCrSingle("matrix2", -2, -2, ModuleEnergy.matrixCore, aMatrix1).adItemCrafted(ModuleEnergy.matrixCore),
+			aNode = new AchCrSingle("node", 0, -2, ModuleEnergy.nodeBasic, aPhaseLiquid).adItemCrafted(ModuleEnergy.nodeBasic),
+			aDeveloper1 = new AchCrSingle("developer1", 2, -2, ModuleAbility.developerPortable, aNode).adItemCrafted(ModuleAbility.developerPortable),
+			aDeveloper2 = new AchCrSingle("developer2", 4, -2, ModuleAbility.developerNormal, aDeveloper1).adItemCrafted(ModuleAbility.developerNormal),
+			aDeveloper3 = new AchCrSingle("developer3", 4, 0, ModuleAbility.developerAdvanced, aDeveloper2).adItemCrafted(ModuleAbility.developerAdvanced),
+			aPhaseGen = new AchCrSingle("phasegen", 0, 2, ModuleEnergy.phaseGen, aPhaseLiquid).adItemCrafted(ModuleEnergy.phaseGen),
+			aSolarGen = new AchCrSingle("solargen", 2, 2, ModuleEnergy.solarGen, aPhaseGen).adItemCrafted(ModuleEnergy.solarGen),
+			aWindGen = new AchCrSingle("windgen", 4, 2, ModuleEnergy.windgenFan, aSolarGen).adItemCrafted(ModuleEnergy.windgenMain),
+			aCrystal = new AchCrSingle("crystal", 2, 0, ModuleCrafting.crystalLow, null).adItemCrafted(ModuleCrafting.crystalLow),
 		});
 	}
 	

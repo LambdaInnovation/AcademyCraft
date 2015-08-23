@@ -24,10 +24,10 @@ public final class PageCtMeltDowner extends PageCategory<CatMeltDowner> {
 		add(new ACAchievement[] {
 			aLv1 = new AchEvLevelChange(1, category, "lv1", 0, 0, ModuleAbility.developerNormal, null),
 			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ModuleAbility.developerNormal, aLv1),
-			aLv2 = new AchEvLevelChange(2, category, "lv2", 4, 0, ModuleAbility.developerNormal, aSkill),
-			aLv3 = new AchEvLevelChange(3, category, "lv3", 6, 0, ModuleAbility.developerNormal, aLv2),
-			aLv4 = new AchEvLevelChange(4, category, "lv4", 8, 0, ModuleAbility.developerNormal, aLv3),
-			aLv5 = new AchEvLevelChange(5, category, "lv5", 10, 0, ModuleAbility.developerNormal, aLv4),
+			aLv2 = new AchEvLevelChange(2, category, "lv2", 2, 2, ModuleAbility.developerNormal, aSkill),
+			aLv3 = new AchEvLevelChange(3, category, "lv3", 0, 2, ModuleAbility.developerNormal, aLv2),
+			aLv4 = new AchEvLevelChange(4, category, "lv4", -2, 2, ModuleAbility.developerNormal, aLv3),
+			aLv5 = new AchEvLevelChange(5, category, "lv5", -2, 0, ModuleAbility.developerNormal, aLv4),
 		});
 	}
 	
