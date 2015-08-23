@@ -15,12 +15,6 @@ package cn.academy.vanilla.electromaster.skill;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -28,12 +22,25 @@ import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.data.PresetData;
 import cn.academy.core.util.RangedRayDamage;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
+import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
+import cn.liutils.util.client.renderhook.DummyRenderData;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -74,13 +81,34 @@ public class Railgun extends Skill {
 	
 	// ----
 	
-	static final int MAX_CHARGE_TIME = 40, CHARGE_ACCEPT_TIME = 20;
+	static final int MAX_CHARGE_TIME = 25, CHARGE_ACCEPT_TIME = 15;
 	
 	static Railgun instance;
 	
 	public Railgun() {
 		super("railgun", 4);
 		instance = this;
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onThrowCoin(CoinThrowEvent event) {
+		if(!event.entityPlayer.worldObj.isRemote)
+			return;
+		CPData cpData = CPData.get(event.entityPlayer);
+		PresetData pData = PresetData.get(event.entityPlayer);
+		if(cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this)) {
+			DummyRenderData.get(event.entityPlayer).addRenderHook(new RailgunHandEffect());
+		}
+	}
+	
+	static float getDamage(AbilityData aData) {
+		return instance.callFloatWithExp("damage", aData);
+	}
+	
+	static float getEnergy(AbilityData aData) {
+		return instance.callFloatWithExp("energy", aData);
 	}
 	
 	@Override
@@ -94,6 +122,7 @@ public class Railgun extends Skill {
 				
 				if(coin != null) {
 					if(checkRailgunQTETime(coin)) {
+						//player.addChatMessage(new ChatComponentTranslation("P=" + coin.getProgress()));
 						ActionManager.startAction(new ActionShootCoin(coin));
 						this.endSkill();
 					} else {
@@ -126,7 +155,7 @@ public class Railgun extends Skill {
 	}
 	
 	private boolean checkRailgunQTETime(EntityCoinThrowing coin) {
-		return true;
+		return coin.getProgress() > 0.7 && coin.getProgress() < 0.95;
 	}
 	
 	public static class ActionShootCoin extends SyncActionInstant {
@@ -157,7 +186,8 @@ public class Railgun extends Skill {
 			if(isRemote) {
 				spawnRay();
 			} else {
-				RangedRayDamage damage = new RangedRayDamage(player, 2, 1000);
+				RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
+				damage.startDamage = instance.callFloatWithExp("damage", aData);
 				damage.perform();
 				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);
 				if(coin != null) {
@@ -205,13 +235,16 @@ public class Railgun extends Skill {
 		public void onStart() {
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
+			
+			if(isRemote)
+				startEffect();
 		}
 		
 		@Override
 		public void onTick() {
 			tick++;
 			if(tick > MAX_CHARGE_TIME)
-				ActionManager.abortAction(this);
+				ActionManager.endAction(this);
 			
 			if(checkItem() == null) {
 				ActionManager.abortAction(this);
@@ -233,19 +266,30 @@ public class Railgun extends Skill {
 			ItemStack stack = checkItem();
 			if(tick >= CHARGE_ACCEPT_TIME && stack != null) {
 				if(cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
-					
-					if(stack.stackSize-- == 0) {
-						player.setCurrentItemOrArmor(0, null);
+					if(!player.capabilities.isCreativeMode) {
+						if(stack.stackSize-- == 0) {
+							player.setCurrentItemOrArmor(0, null);
+						}
 					}
 					
 					if(isRemote) {
 						spawnRay();
 					} else {
-						// TODO: Implement attack logic
+						// TODO: I don't want bother with seperate effects in 1.0, just use
+						// standard routine now~
+						RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
+						damage.startDamage = instance.callFloatWithExp("damage", aData);
+						damage.perform();
 					}
 					
 				}
 			}
+		}
+		
+		// CLIENT
+		@SideOnly(Side.CLIENT)
+		private void startEffect() {
+			DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
 		}
 		
 		@SideOnly(Side.CLIENT)

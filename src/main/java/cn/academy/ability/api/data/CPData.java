@@ -140,7 +140,7 @@ public class CPData extends DataPart {
 	}
 	
 	public boolean canUseAbility() {
-		return canUseAbility;
+		return activated && canUseAbility;
 	}
 	
 	public void activate() {

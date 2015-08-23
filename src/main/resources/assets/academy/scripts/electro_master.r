@@ -81,6 +81,8 @@ ac {
 		  consumption(exp) { lerp(200, 500, exp) }
 		  overload(exp) { lerp(120, 80, exp) }
 		  cooldown(exp) { lerp(300, 160, exp) }
+		  damage(exp) { lerp(25, 45, exp) }
+		  energy(exp) { lerp(900, 2000, exp) }
 		  expincr { 0.005 }
 		}
 		
