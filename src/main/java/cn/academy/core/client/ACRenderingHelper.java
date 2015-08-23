@@ -12,9 +12,6 @@
  */
 package cn.academy.core.client;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.annoreg.core.Registrant;
@@ -25,6 +22,9 @@ import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 
 /**
  * Some drawing utils.
@@ -65,6 +65,7 @@ public class ACRenderingHelper {
 	 * Draws a circular progress bar at (0, 0) with radius 1
 	 */
 	public static void drawCircularProgbar(ResourceLocation texture, double progress) {
+		
 		progress *= 360;
 		if(progress > 360)
 			progress %= 360;
@@ -72,7 +73,6 @@ public class ACRenderingHelper {
 		Tessellator t = Tessellator.instance;
 		
 		GL11.glPushMatrix();
-		GL11.glRotated(-90, 0, 0, 1);
 		RenderUtils.loadTexture(texture);
 		for(int i = 0; i < 4; ++i) {
 			double angle = Math.min(90, progress - 90 * i);
@@ -86,20 +86,39 @@ public class ACRenderingHelper {
 				v1 = 0;
 			} else {
 				u1 = 1;
-				v1 = Math.tan(MathUtils.toRadians(90 - angle));
+				v1 = 0;
 				
+				double x = Math.tan(MathUtils.toRadians(90 - angle));
+				t.addVertexWithUV(1, -1, 0, 1, 0);
 				t.addVertexWithUV(0, 0, 0, 0, 1);
-				t.addVertexWithUV(1, 0, 0, 1, 1);
-				t.addVertexWithUV(u1, 1 - v1, 0, u1, v1);
+				t.addVertexWithUV(1, -x, 0, 1, 1 - x);
 			}
 			
-			t.addVertexWithUV(0, 1, 0, 0, 0);
+			t.addVertexWithUV(0, -1, 0, 0, 0);
 			t.addVertexWithUV(0, 0, 0, 0, 1);
-			t.addVertexWithUV(u1, 1 - v1, 0, u1, v1);
+			t.addVertexWithUV(u1,  -1 -v1, 0, u1, v1);
 			t.draw();
 			
 			GL11.glRotated(90, 0, 0, 1);
 		}
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static void lineSegment(double x0, double y0, double x1, double y1, float width) {
+		float hw = width / 2;
+		Tessellator t = Tessellator.instance;
+		double dy = y1 - y0, dx = x1 - x0, len = Math.sqrt(dy * dy + dx * dx);
+		double theta = MathUtils.toAngle(Math.atan2(dy, dx));
+		GL11.glPushMatrix();
+		GL11.glTranslated(x0, y0, 0);
+		GL11.glRotated(theta, 0, 0, 1);
+		t.startDrawingQuads();
+		t.addVertex(0, -hw, 0);
+		t.addVertex(0, hw, 0);
+		t.addVertex(len, hw, 0);
+		t.addVertex(len, -hw, 0);
+		t.draw();
 		GL11.glPopMatrix();
 	}
 	

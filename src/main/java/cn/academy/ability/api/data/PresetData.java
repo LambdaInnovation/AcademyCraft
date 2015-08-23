@@ -269,6 +269,18 @@ public class PresetData extends DataPart {
 			return cat.getControllable(mapping);
 		}
 		
+		public boolean hasControllable(Controllable c) {
+			AbilityData adata = getAbilityData();
+			Category cat = adata.getCategory();
+			if(cat == null)
+				return false;
+			for(byte b : data) {
+				if(cat.getControllable(b) == c)
+					return true;
+			}
+			return false;
+		}
+		
 		NBTTagCompound toNBT() {
 			NBTTagCompound ret = new NBTTagCompound();
 			ret.setByteArray("l", data);

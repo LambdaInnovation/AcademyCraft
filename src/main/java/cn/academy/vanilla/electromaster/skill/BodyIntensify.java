@@ -163,6 +163,7 @@ public class BodyIntensify extends Skill {
 					player.addPotionEffect(new PotionEffect(Potion.hunger.id, getHungerBuffTime(tick), 2));
 				}
 				
+				aData.addSkillExp(instance, instance.getFloat("expincr"));
 				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 				
 				if(isRemote) 

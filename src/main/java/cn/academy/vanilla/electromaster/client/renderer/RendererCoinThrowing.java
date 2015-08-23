@@ -52,7 +52,6 @@ public class RendererCoinThrowing extends Render {
 			return;
 		if(etc.posY < player.posY)
 			return;
-		//System.err.println("Hey we're rendering" + (player == Minecraft.getMinecraft().thePlayer));
 		GL11.glPushMatrix(); {
 			x = player.posX - RenderManager.renderPosX;
 			y = etc.posY - RenderManager.renderPosY;

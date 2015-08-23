@@ -14,9 +14,6 @@ package cn.academy.ability.command;
 
 import java.util.List;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
@@ -25,6 +22,10 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
+import cn.liutils.util.generic.MathUtils;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * @author WeAthFolD
@@ -96,7 +97,7 @@ public abstract class CommandAIMBase extends ACCommand {
 		"help", "cat", "catlist", 
 		"learn", "learn_all", "reset",
 		"learned", "skills", "fullcp",
-		"level"
+		"level", "exp"
 	};
 
 	public CommandAIMBase(String name) {
@@ -152,29 +153,27 @@ public abstract class CommandAIMBase extends ACCommand {
 				return;
 			}
 			
-			if(pars.length != 2)
+			Skill s = tryParseSkill(cat, pars[1]);
+			if(s == null) {
+				sendChat(ics, getLoc("noskill"));
+			} else {
+				aData.learnSkill(s);
+			}
+			return;
+		}
+		
+		case "unlearn": {
+			Category cat = aData.getCategory();
+			if(cat == null) {
+				sendChat(ics, getLoc("nocat"));
 				return;
-			else {
-				Integer i = null;
-				try {
-					i = Integer.valueOf(pars[1]);
-				} catch(NumberFormatException e) {}
-				if(i != null) { // Parse as id
-					if(i < 0 || i >= cat.getSkillCount()) {
-						sendChat(ics, getLoc("noskill"));
-						return;
-					}
-					aData.learnSkill(i);
-					sendChat(ics, locSuccessful());
-				} else { // Using skill name
-					Skill s = cat.getSkill(pars[1]);
-					if(s != null) {
-						aData.learnSkill(s);
-						sendChat(ics, locSuccessful());
-					} else {
-						sendChat(ics, getLoc("noskill"));
-					}
-				}
+			}
+			
+			Skill s = tryParseSkill(cat, pars[1]);
+			if(s == null) {
+				sendChat(ics, getLoc("noskill"));
+			} else {
+				aData.setSkillLearnState(s, false);
 			}
 			return;
 		}
@@ -244,9 +243,60 @@ public abstract class CommandAIMBase extends ACCommand {
 			sendChat(ics, locSuccessful());
 			return;
 		}
+		
+		case "exp": {
+			Category cat = aData.getCategory();
+			if(cat == null) {
+				sendChat(ics, getLoc("nocat"));
+				return;
+			}
+			
+			Skill skill = tryParseSkill(cat, pars[1]);
+			
+			if(skill == null) {
+				sendChat(ics, getLoc("noskill"));
+			} else {
+				if(pars.length == 2) {
+					sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
+				} else if(pars.length == 3) {
+					Float exp = tryParseFloat(pars[2]);
+					aData.setSkillExp(skill, exp);
+					sendChat(ics, this.locSuccessful());
+				} else {
+					sendChat(ics, this.locInvalid());
+				}
+			}
+			
+			return;
+		}
 		}
 		
 		return;
+	}
+	
+	private Integer tryParseInt(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch(NumberFormatException e) {
+			return null;
+		}
+	}
+	
+	private Float tryParseFloat(String str) {
+		try {
+			return Float.parseFloat(str);
+		} catch(NumberFormatException e) {
+			return null;
+		}
+	}
+	
+	private Skill tryParseSkill(Category cat, String str) {
+		if(cat == null)
+			return null;
+		Integer i = tryParseInt(str);
+		if(i != null)
+			return cat.getSkill(i);
+		return cat.getSkill(str);
 	}
 
 }

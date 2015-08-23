@@ -15,13 +15,10 @@ package cn.academy.vanilla.electromaster.item;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
+import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.mc.StackUtils;
@@ -30,6 +27,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * 
@@ -75,6 +77,8 @@ public class ItemCoin extends ACItem {
     	
     	player.playSound("academy:entity.flipcoin", 0.5F, 1.0F);
     	getMap(player).put(player, etc);
+    	
+    	MinecraftForge.EVENT_BUS.post(new CoinThrowEvent(player, etc));
     	if(!player.capabilities.isCreativeMode) {
     		--stack.stackSize;
     	}

@@ -68,7 +68,7 @@ public class MagMovement extends Skill {
 			Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 			if(aData.getSkillExp(instance) < 0.6f && !CatElectroMaster.isMetalBlock(block))
 				return null;
-			if(block.getMaterial() != Material.rock && block.getMaterial() != Material.anvil)
+			if(!CatElectroMaster.isWeakMetalBlock(block))
 				return null;
 			return new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord);
 		} else {

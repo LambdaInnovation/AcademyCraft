@@ -201,10 +201,10 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 				CRL_LINE.bind();
 			else
 				CRL_LINE_DISABLED.bind();
-			glLineWidth(2f);
+			glPushMatrix();
+			glTranslated(0, 0, zLevel);
 			glDisable(GL_TEXTURE_2D);
 			glDisable(GL_DEPTH_TEST);
-			glBegin(GL_LINES);
 			
 			double x0 = a.transform.x, y0 = a.transform.y, x1 = b.transform.x, y1 = b.transform.y;
 			double dy = y1 - y0, dx = x1 - x0;
@@ -217,11 +217,11 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			float alpha = ((SkillHandler) a.getComponent("SkillHandler")).getAlpha();
 			x0 = x1 + (x0 - x1) * alpha; y0 = y1 + (y0 - y1) * alpha;
 			
-			glVertex3d(x0, y0, zLevel);
-			glVertex3d(x1, y1, zLevel);
-			glEnd();
+			ACRenderingHelper.lineSegment(x0, y0, x1, y1, 2.2f);
+			
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_TEXTURE_2D);
+			glPopMatrix();
 		}
 		
 	}
@@ -522,7 +522,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			Skill skill = _skill.handler.skill;
 			text = aData.isSkillLearned(skill) ? skill.getDescription() : SkillTreeLocal.unknownSkill();
 			Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
-					width = Math.max(width, _skill.width - 50));
+					width = Math.max(width, _skill.width - 30));
 			transform.setSize(vec.x, vec.y);
 			transform.doesListenKey = false;
 			

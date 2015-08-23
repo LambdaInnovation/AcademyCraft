@@ -44,18 +44,18 @@ public class Resources {
     public static ResourceLocation
     	ARC_SMALL[] = getEffectSeq("arcs", 10);
     
-    private static Map<String, IModelCustom> createdModels = new HashMap();
+    private static Map<String, IModelCustom> cachedModels = new HashMap();
     
     /**
      * Get the model instance of the given name. If the name is
      * first queried, will load that resource from the file system.
      */
     public static IModelCustom getModel(String mdlName) {
-    	IModelCustom ret = createdModels.get(mdlName);
+    	IModelCustom ret = cachedModels.get(mdlName);
     	if(ret != null)
     		return ret;
     	ret = AdvancedModelLoader.loadModel(res("models/" + mdlName + ".obj"));
-    	createdModels.put(mdlName, ret);
+    	cachedModels.put(mdlName, ret);
     	return ret;
     }
     

@@ -86,7 +86,7 @@ public class JetEngine extends Skill {
 			if(isRemote)
 				updateEffects();
 			
-			if(cpData.getCP() < instance.getConsumption(aData))
+			if(!cpData.canPerform(instance.getConsumption(aData)))
 				ActionManager.abortAction(this);
 		}
 		

@@ -133,7 +133,7 @@ ac.skill_tree.macinfo_title=开发机信息
 ac.skill_tree.energy=能量
 ac.skill_tree.syncrate=同步率
 
-ac.skill_tree.acquireprog=已获得 %.0f%%
+ac.skill_tree.acquireprog=已获得 %1.1f%%
 ac.skill_tree.not_acquired=未获得
 ac.skill_tree.uplevel=升级到 %s
 ac.skill_tree.acquire=获得能力!
