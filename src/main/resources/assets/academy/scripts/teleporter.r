@@ -1,79 +1,113 @@
+# AcademyCraft Ripple Script file
+# Electro Master
+# 炮姐什么的最喜欢啦啦啦啦啦啦! >3<
+
 ac {
-    teleporter {
-		_crithit {
-			incr_0 { 2.5 }
-			incr_1 { 1.75 }
-			incr_2 { 1.4 }
-		}
-	
-        location_teleport {
-            # 单次传送消耗。 参数：(距离, 跨维度惩罚(1 or 2), 技能经验)
-            consumption(dist, dimfac, exp) { 
-                lerp(200, 150, exp) * dimfac * max(8, sqrt( min(800, dist) ))
+    electro_master {
+        arc_gen {
+            x { 112 } y { 230 }
+            damage(exp) { lerp(4, 9, exp) } 
+            consumption(exp) { lerp(60, 90, exp) } 
+            overload(exp) { lerp(15, 10, exp) } 
+            p_ignite(exp) { lerp(0, 0.6, exp) } 
+            cooldown(exp) { lerp(6, 3, exp) }
+          
+            expincr_effective(exp) { 
+                0.00008 * lerp(60, 90, exp)
             }
-            # 最多附加传送几个实体
-            entities(exp) {
-                round(lerp(3, 7, exp))
+            
+            expincr_ineffective(exp) {
+              0.00003 * lerp(60, 90, exp)
             }
-            # 传送距离
-            range { 4 }
-            overload(exp) { 240 }
-			expincr(distance) {
-				switch(distance) {
-					when >= 200: 0.08;
-					default: 0.05
-				}
-			}
-        }
-		
-		mark_teleport {
-			range(exp) { lerp(25, 60, exp) }
-			consumption(exp) { lerp(15, 9, exp) }
-			overload(exp) { lerp(40, 20, exp) }
-			expincr(dist) { 0.0001 * dist }
-		}
-        
-        penetrate_teleport {
-            cooldown(exp) { lerp(120, 60, exp) }
-            max_distance(exp) { lerp(10, 35, exp) }
-            consumption(exp) { lerp(20, 14, exp) }
-            overload(exp) { lerp(80, 50, exp) }
-			expincr(distance) {
-				0.00008 * distance
-			}
         }
         
-        threatening_teleport {
-            range(exp) { lerp(8, 15, exp) }
-            damage(exp) { lerp(3, 6, exp) }
-            consumption(exp) { lerp(35, 150, exp) }
-            overload(exp) { lerp(18, 13, exp) }
-			expincr { 0.005 }
+        charging {
+            x { 217 } y { 89 }
+            # IF/tick
+            speed(exp) { lerp(10, 30, exp) } 
+            consumption(exp) { lerp(6, 14, exp) }
+            overload(exp) { lerp(65, 48, exp) }
+            
+            expincr_effective(exp) { 0.0001 }
+            expincr_ineffective(exp) { 0.00003 }
         }
         
-        shift_tp {
-            damage(exp) { lerp(15, 30, exp) }
-            consumption(exp) { lerp(160, 320, exp) }
-            overload(exp) { lerp(80, 50, exp) }
-            range(exp) { lerp(25, 35, exp) }
-			expincr(entities) { (1 + entities) * 0.003 }
+        # ct: charge time (range: [10, 40])
+        body_intensify { 
+            x { 357 } y { 77 }
+            probability(ct) { (ct - 10.0) / 18.0 } 
+            time(exp, ct) { floor(4 * lerp(1.5, 2.5, exp) * range_double(1, 2) * ct) } 
+            level(exp, ct) { floor( lerp(0.5, 1, exp) * (ct / 18.0) ) } 
+            hunger_time(ct) { ct * 5 / 4 } 
+            
+            consumption(exp) { lerp(20, 15, exp) }
+            cooldown(exp) { lerp(45, 30, exp) }
+            overload(exp) { lerp(200, 120, exp) }
+            expincr { 0.01 }
         }
-		
-		flesh_ripping {
-			range(exp) { lerp(6, 14, exp) }
-			damage(exp) { lerp(5, 15, exp) }
-			consumption(exp) { lerp(130, 150, exp) }
-			overload(exp) { lerp(60, 50, exp) }
-			cooldown(exp) { floor(20 * lerp(5, 3, exp)) }
-			disgust_prob { 0.05 }
-			expincr { 0.005 }
-		}
-		
-		flashing {
-			range(exp) { lerp(12, 18, exp) }
-			consumption(exp) { lerp(100, 70, exp) }
-			overload(exp) { lerp(250, 180, exp) }
-			expincr { 0.002 }
-		}
+        
+        mine_detect { 
+            x { 786 } y { 60 }
+            consumption(exp) { lerp(1800, 1400, exp) }
+            overload(exp) { lerp(200, 180, exp) }
+            cooldown(exp) { lerp(900, 400, exp) }
+            range(exp) { lerp(15, 30, exp) } 
+            expincr { 0.008 }
+        }
+        
+        mag_movement { 
+            x { 490 } y { 177 }
+            consumption(exp) { lerp(15, 10, exp) } # per tick
+            overload(exp) { lerp(3, 2, exp) } # per tick
+            expincr(distance) { distance * 0.0011 }
+        }
+        
+        thunder_bolt {
+            x { 321 } y { 334 }
+            damage(exp) { lerp(15, 25, exp) }
+            aoe_damage(exp) { 0.4 * lerp(15, 25, exp) }
+            consumption(exp) { lerp(100, 200, exp) }
+            overload(exp) { lerp(30, 27, exp) }
+            cooldown(exp) { floor(20 * lerp(4, 1.5, exp)) }
+            expincr_effective { 
+                0.003
+            }
+            expincr_ineffective {
+               0.005
+            }
+        }
+        
+        railgun {
+            x { 581 } y { 295 }
+            consumption(exp) { lerp(200, 500, exp) }
+            overload(exp) { lerp(120, 80, exp) }
+            cooldown(exp) { lerp(300, 160, exp) }
+            damage(exp) { lerp(25, 45, exp) }
+            energy(exp) { lerp(900, 2000, exp) }
+            expincr { 0.005 }
+        }
+        
+        thunder_clap {
+            x { 714 } y { 400 }
+            damage(exp, ct) { lerp(40, 70, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
+            range(exp) { 2 * lerp(5, 10, exp) }
+            consumption(exp) { lerp(100, 120, exp) }
+            overload(exp) { lerp(400, 350, exp) }
+            cooldown(exp, ct) { ct * lerp(18, 10, exp) }
+            expincr { 0.003 }
+        }
+        
+        iron_sand {
+            x { 844 } y { 271 }
+        }
+        
+        mag_manip {
+            x { 713 } y { 165 }
+            damage(exp) { lerp(8, 15, exp) }
+            consumption(exp) { lerp(140, 270, exp) }
+            overload(exp) { lerp(35, 20, exp) }
+            cooldown(exp) { 20 * lerp(2, 1, exp) }
+            expincr { 0.001 }
+        }
     }
 }
