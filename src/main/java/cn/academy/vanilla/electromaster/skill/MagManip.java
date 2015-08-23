@@ -59,6 +59,8 @@ public class MagManip extends Skill {
 		if(stack == null || (block = Block.getBlockFromItem(stack.getItem())) == null)
 			return false;
 		
+		// Originally I want to strenghten this limit, but this skill would be too useless then.
+		// So currently, just blocks with rock | anvil material can be used.
 		return CatElectroMaster.isWeakMetalBlock(block);
 	}
 	
