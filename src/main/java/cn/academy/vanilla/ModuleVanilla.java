@@ -1,7 +1,5 @@
 package cn.academy.vanilla;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
@@ -12,6 +10,7 @@ import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
+import cn.academy.vanilla.electromaster.item.ItemMagHook;
 import cn.academy.vanilla.generic.skill.SkillBrainCourse;
 import cn.academy.vanilla.generic.skill.SkillBrainCourseAdvanced;
 import cn.academy.vanilla.generic.skill.SkillMindCourse;
@@ -22,6 +21,8 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 @Registrant
 @RegInit
@@ -32,6 +33,11 @@ public class ModuleVanilla {
 	@RegItem.HasRender
 	@RecipeName("coin")
 	public static ItemCoin coin;
+	
+	@RegItem
+	@RegItem.HasRender
+	@RecipeName("mag_hook")
+	public static ItemMagHook magHook;
 	
 	@RegItem
 	@RegItem.HasRender

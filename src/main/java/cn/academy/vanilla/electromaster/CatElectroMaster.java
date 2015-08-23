@@ -18,6 +18,7 @@ import java.util.HashSet;
 import cn.academy.ability.api.Category;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.academy.vanilla.electromaster.skill.ArcGen;
 import cn.academy.vanilla.electromaster.skill.BodyIntensify;
 import cn.academy.vanilla.electromaster.skill.CurrentCharging;
@@ -144,7 +145,7 @@ public class CatElectroMaster extends Category {
 	private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();
 	static {
 		metalEntities.add(EntityMinecart.class);
-		//metalEntities.add(EntityMagHook.class);
+		metalEntities.add(EntityMagHook.class);
 		metalEntities.add(EntityIronGolem.class);
 	}
 	
