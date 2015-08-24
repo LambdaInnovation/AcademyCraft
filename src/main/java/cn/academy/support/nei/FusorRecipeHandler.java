@@ -70,7 +70,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 	public void loadCraftingRecipes(ItemStack result) {
 		for(IFRecipe r : ImagFusorRecipes.INSTANCE.getAllRecipe()) {
 			if(r.output.getItem().equals(result.getItem())) {
-				arecipes.add(new ACCachedRecipe(r.consumeType, r.output));
+				arecipes.add(new IFCachedRecipe(r.consumeType, r.output, r.consumeLiquid));
 				break;
 			}	
 		}
@@ -80,7 +80,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		for(IFRecipe r : ImagFusorRecipes.INSTANCE.getAllRecipe()) {
 			if(r.consumeType.getItem().equals(ingredient.getItem())) {
-				arecipes.add(new ACCachedRecipe(r.consumeType, r.output));
+				arecipes.add(new IFCachedRecipe(r.consumeType, r.output, r.consumeLiquid));
 				break;
 			}	
 		}
@@ -88,12 +88,27 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public Rectangle getTransferRectsRectangle() {
-		return new Rectangle(0, 0, 0, 0);
+		return new Rectangle(55, 42, 55, 20);
 	}
 
 	@Override
 	public String getMachineName() {
 		return "fusor";
+	}
+	
+	private class IFCachedRecipe extends ACCachedRecipe {
+		
+		private final int liquid;
+
+		private IFCachedRecipe(ItemStack input, ItemStack output, int liquid) {
+			super(input, output);
+			this.liquid = liquid;
+		}
+		
+		public int getLiquidAmount() {
+			return liquid;
+		}
+		
 	}
 
 }
