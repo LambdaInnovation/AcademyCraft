@@ -16,6 +16,7 @@ import java.awt.Rectangle;
 
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
+import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.client.gui.GuiMetalFormer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
@@ -40,7 +41,7 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public String getGuiTexture() {
-		return "academy:textures/guis/window_metalformer.png";
+		return "academy:textures/guis/nei_metalformer.png";
 	}
 
 	@Override
@@ -50,34 +51,34 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public int getInputX() {
-		return 0;
+		return 42;
 	}
 
 	@Override
 	public int getInputY() {
-		return 0;
+		return 38;
 	}
 
 	@Override
 	public int getOutputX() {
-		return 0;
+		return 108;
 	}
 
 	@Override
 	public int getOutputY() {
-		return 0;
+		return 38;
 	}
 
 	@Override
 	public Rectangle getTransferRectsRectangle() {
-		return new Rectangle(0, 0, 0, 0);
+		return new Rectangle(63, 38, 40, 15);
 	}
 
 	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		for(RecipeObject r : MetalFormerRecipes.INSTANCE.getAllRecipes()) {
 			if(r.output.getItem().equals(result.getItem())) {
-				arecipes.add(new ACCachedRecipe(r.input, r.output));
+				arecipes.add(new MFCachedRecipe(r.input, r.output, r.mode));
 			}
 		}
 	}
@@ -86,9 +87,24 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 	public void loadUsageRecipes(ItemStack ingredient) {
 		for(RecipeObject r : MetalFormerRecipes.INSTANCE.getAllRecipes()) {
 			if(r.input.getItem().equals(ingredient.getItem())) {
-				arecipes.add(new ACCachedRecipe(r.input, r.output));
+				arecipes.add(new MFCachedRecipe(r.input, r.output, r.mode));
 			}
 		}
+	}
+	
+	private class MFCachedRecipe extends ACCachedRecipe {
+		
+		private final Mode mode;
+
+		public MFCachedRecipe(ItemStack input, ItemStack output, Mode mode) {
+			super(input, output);
+			this.mode = mode;
+		}
+		
+		public Mode getMode() {
+			return mode;
+		}
+		
 	}
 
 }

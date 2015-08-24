@@ -60,12 +60,12 @@ public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	@Override
 	public abstract void loadUsageRecipes(ItemStack ingredient);
 	
-	public class ACCachedRecipe extends CachedRecipe {
+	protected class ACCachedRecipe extends CachedRecipe {
 		
 		private final PositionedStack ingredient;
 		private final PositionedStack result;
 		
-		public ACCachedRecipe(ItemStack input, ItemStack output) {
+		protected ACCachedRecipe(ItemStack input, ItemStack output) {
 			ingredient = new PositionedStack(input, getInputX(), getInputY());
 			result = new PositionedStack(output, getOutputX(), getOutputY());
 		}
