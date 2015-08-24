@@ -64,7 +64,8 @@ public class FleshRipping extends Skill {
 	
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new FRAction());
+		return new SkillInstance().addChild(new FRAction())
+			.setEstmCP(instance.getConsumption(AbilityData.get(player)));
 	}
 	
 	public static class FRAction extends SkillSyncAction {

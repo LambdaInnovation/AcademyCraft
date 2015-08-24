@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.developer.DevConditionDep;
+import cn.academy.ability.developer.DevConditionDeveloperType;
 import cn.academy.ability.developer.DevConditionLevel;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.IDevCondition;
@@ -95,10 +96,10 @@ public abstract class Skill extends Controllable {
 		category = _category;
 		this.id = id;
 		
-		icon = Resources.getTexture("abilities/" + category.getName() + "/skills/" + name);
+		String catloc = (isGeneric ? "generic" : category.getName());
 		
-		fullName = (isGeneric ? "generic" : category.getName()) + "." + name;
-		
+		icon = Resources.getTexture("abilities/" + catloc + "/skills/" + name);
+		fullName = catloc + "." + name;
 		script = AcademyCraft.getScript().at("ac." + fullName);
 		
 		try {
@@ -192,6 +193,7 @@ public abstract class Skill extends Controllable {
 		if(parent != null)
 			throw new IllegalStateException("You can't set the parent twice!");
 		parent = skill;
+		this.addDevCondition(new DevConditionDeveloperType(getMinimumDeveloperType()));
 		this.addDevCondition(new DevConditionDep(parent, requiredExp));
 	}
 	
@@ -230,9 +232,9 @@ public abstract class Skill extends Controllable {
 	 * @return The minimum developer type that this skill will appear on
 	 */
 	public DeveloperType getMinimumDeveloperType() {
-		if(level <= 1) // Level 1 and 2
+		if(level <= 2) // Level 1 and 2
 			return DeveloperType.PORTABLE;
-		if(level <= 2) // Level 3
+		if(level <= 3) // Level 3
 			return DeveloperType.NORMAL;
 		else // Level 4 and 5
 			return DeveloperType.ADVANCED;

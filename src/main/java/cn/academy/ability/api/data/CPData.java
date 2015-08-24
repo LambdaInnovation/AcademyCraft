@@ -234,6 +234,9 @@ public class CPData extends DataPart {
 		
 		if(overload > getMaxOverload()) canUseAbility = false;
 		
+		untilRecover = RECOVER_COOLDOWN;
+		untilOverloadRecover = OVERLOAD_COOLDOWN;
+		
 		if(!isRemote())
 			dataDirty = true;
 	}
@@ -399,13 +402,13 @@ public class CPData extends DataPart {
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void activateAtServer() {
-		System.out.println("ActivateAtServer called");
+		//System.out.println("ActivateAtServer called");
 		activate();
 	}
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void deactivateAtServer() {
-		System.out.println("DeactivateAtServer called");
+		//System.out.println("DeactivateAtServer called");
 		deactivate();
 	}
 	

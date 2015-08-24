@@ -60,6 +60,9 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		void invoke();
 	}
 	
+	// A bit of hack. When reloading gui doesn't call developer#onGuiClosed callback
+	boolean closeLock;
+	
 	final Developer developer;
 	
 	Overlay overlay;
@@ -70,7 +73,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		
 		EventLoader.load(gui, this);
 		
-		if(LearningHelper.canLevelUp(aData)) {
+		if(LearningHelper.canLevelUp(developer.type, aData)) {
 			treeArea.getWidget("ball" + (aData.getLevel() + 1)).regEventHandler(
 			new MouseDownHandler() {
 
@@ -89,6 +92,12 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		}
 		
 		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.type.syncRate;
+	}
+	
+	@Override
+	public void onGuiClosed() {
+		if(!closeLock)
+			developer.onGuiClosed();
 	}
 	
 	@GuiCallback("window/window_machine/p_energy")
@@ -156,7 +165,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						dep.transform.alignHeight = HeightAlign.BOTTOM;
 						
 						DrawTexture dt = new DrawTexture();
-						if(!cond.accepts(aData, skill))
+						if(!cond.accepts(aData, developer, skill))
 							dt.setShaderId(ShaderMono.instance().getProgramID());
 						dt.setTex(tex);
 						dep.addComponent(dt);
@@ -205,7 +214,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				area.transform.setSize(450, 90);
 				area.transform.doesListenKey = false;
 				
-				boolean can = LearningHelper.canLearn(aData, skill);
+				boolean can = LearningHelper.canLearn(aData, developer, skill);
 				LearnButton button = new LearnButton(!can);
 				if(can) {
 					button.regEventHandler(new MouseDownHandler() {
@@ -335,6 +344,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 							ret.dispose();
 						} else if(state == 3) {
 							// Dispose this gui completely and open a new one!
+							closeLock = true;
 							Minecraft.getMinecraft().displayGuiScreen(
 									new GuiSkillTreeDev(player, developer));
 						} else {

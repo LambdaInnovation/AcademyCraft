@@ -23,6 +23,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -188,9 +189,12 @@ public class MarkTeleport extends Skill {
 				if(!isRemote) {
 					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
 					aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
+					player.fallDistance = 0;
 				} else {
 					ACSounds.playAtEntityClient(player, "tp.tp", .5f);
 				}
+				
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 			}
 			
 			if(isRemote) {

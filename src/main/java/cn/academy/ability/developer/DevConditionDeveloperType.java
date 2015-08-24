@@ -12,28 +12,35 @@
  */
 package cn.academy.ability.developer;
 
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.client.skilltree.SkillTreeLocal;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
  */
-public class DevConditionLevel implements IDevCondition {
+public class DevConditionDeveloperType implements IDevCondition {
+	
+	final DeveloperType type;
+	
+	public DevConditionDeveloperType(DeveloperType _type) {
+		type = _type;
+	}
 
 	@Override
 	public boolean accepts(AbilityData data, Developer developer, Skill skill) {
-		return data.getLevel() >= skill.getLevel();
+		return developer.type.ordinal() >= type.ordinal();
 	}
 	
 	@Override
 	public ResourceLocation getIcon() {
-		return null;
+		return type.texture;
 	}
 
 	@Override
 	public String getHintText() {
-		return null;
+		return SkillTreeLocal.machineType(type);
 	}
 
 }

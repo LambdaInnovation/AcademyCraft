@@ -24,13 +24,13 @@ public interface IDevelopType {
 	
 	int getStimulations(EntityPlayer player);
 	
-	DeveloperType getMinimumType(EntityPlayer player);
-	
 	/**
+	 * @param player Target player
+	 * @param developer The developer that is performing this action
 	 * @return Whether the action can be REALLY started/performed at the moment.
 	 * This should be some constraints to player's current state.
 	 */
-	boolean validate(EntityPlayer player);
+	boolean validate(EntityPlayer player, Developer developer);
 	
 	/**
 	 * The action performed when really learned the develop type.

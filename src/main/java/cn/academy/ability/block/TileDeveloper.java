@@ -12,10 +12,8 @@
  */
 package cn.academy.ability.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.client.render.RenderDeveloper;
+import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.DeveloperBlock;
 import cn.academy.ability.developer.DeveloperType;
@@ -24,14 +22,20 @@ import cn.academy.core.block.TileReceiverBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegTileEntity;
-import cn.annoreg.mc.network.Future;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.SerializationManager;
-import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.ripple.ScriptNamespace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
 
 /**
  * @author WeAthFolD
@@ -96,7 +100,13 @@ public abstract class TileDeveloper extends TileReceiverBase {
 		if(developer == null)
 			developer = new DeveloperBlock(this);
 		
+		super.updateEntity();
 		developer.tick();
+		
+		if(++syncCD == 20) {
+			syncCD = 0;
+			syncTheUser(this, user);
+		}
 	}
 	
 	public Developer getDeveloper() {
@@ -107,16 +117,33 @@ public abstract class TileDeveloper extends TileReceiverBase {
 		return user;
 	}
 	
+	/**
+	 * SERVER only. Start let the player use the developer, if currently no user is using it.
+	 */
 	public boolean use(EntityPlayer player) {
-		if(user == null) {
+		if(user == null || !user.isEntityAlive()) {
+			player.addChatMessage(new ChatComponentTranslation("www"));
 			user = player;
 			developer.reset();
+			openGuiAtClient(player);
 			return true;
 		}
 		return player.equals(user);
 	}
 	
-	public void unuse() {
+	/**
+	 * Is effective in BOTH CLIENT AND SERVER. Let the current player(if is equal to argument) go away from the developer.
+	 */
+	public void unuse(EntityPlayer p) {
+		if(getWorldObj().isRemote) {
+			unuseAtServer(p);
+			return;
+		}
+		if(user != null && user.equals(p))
+			unuse();
+	}
+	
+	private void unuse() {
 		user = null;
 		developer.reset();
 	}
@@ -126,5 +153,29 @@ public abstract class TileDeveloper extends TileReceiverBase {
 	}
 	
 	public abstract DeveloperType getType();
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	private void unuseAtServer(@Instance EntityPlayer player) {
+		unuse(player);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void openGuiAtClient(@Instance EntityPlayer player) {
+		doOpenGui(player);
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+	private void syncTheUser(
+			@RangedTarget(range = 5) TileEntity me, 
+			@Instance(nullable = true) EntityPlayer player) {
+		this.user = player;
+	}
+	
+	// Sync the player on the fly to prevent bad lookup
+	@SideOnly(Side.CLIENT)
+	private void doOpenGui(@Target EntityPlayer player) {
+		this.user = player;
+		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, developer));
+	}
 	
 }

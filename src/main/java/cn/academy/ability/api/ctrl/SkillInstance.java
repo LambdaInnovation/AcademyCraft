@@ -146,6 +146,11 @@ public class SkillInstance implements IConsumptionHintProvider {
 		return this;
 	}
 	
+	public SkillInstance setEstmCP(float amt) {
+		this.estimatedCP = amt;
+		return this;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	protected EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;

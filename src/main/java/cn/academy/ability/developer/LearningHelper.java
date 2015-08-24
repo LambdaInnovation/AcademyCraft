@@ -26,11 +26,11 @@ public class LearningHelper {
 	/**
 	 * @return Whether the given player can level up currently
 	 */
-	public static boolean canLevelUp(AbilityData aData) {
+	public static boolean canLevelUp(DeveloperType type, AbilityData aData) {
 		Category c = aData.getCategory();
 		if(c == null)
 			return true;
-		return c.canLevelUp(aData);
+		return c.canLevelUp(type, aData);
 	}
 	
 	/**
@@ -45,9 +45,9 @@ public class LearningHelper {
 	/**
 	 * @return Whether the given skill can be learned.
 	 */
-	public static boolean canLearn(AbilityData data, Skill skill) {
+	public static boolean canLearn(AbilityData data, Developer dev, Skill skill) {
 		for(IDevCondition cond : skill.getDevConditions()) {
-			if(!cond.accepts(data, skill))
+			if(!cond.accepts(data, dev, skill))
 				return false;
 		}
 		return true;

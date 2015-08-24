@@ -21,9 +21,9 @@ import cn.liutils.util.generic.MathUtils;
 /**
  * @author WeAthFolD
  */
-public class DimFoldingTheoreom extends Skill {
+public class DimFoldingTheorem extends Skill {
 
-	public DimFoldingTheoreom() {
+	public DimFoldingTheorem() {
 		super("dim_folding_theoreom", 1);
 		this.canControl = false;
 	}

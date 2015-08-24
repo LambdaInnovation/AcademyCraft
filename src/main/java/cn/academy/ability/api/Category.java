@@ -18,6 +18,7 @@ import java.util.List;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.client.Resources;
 import cn.liutils.util.helper.Color;
 
@@ -45,11 +46,6 @@ public class Category {
 	public Category(String _name) {
 		name = _name;
 		icon = Resources.getTexture("abilities/" + name + "/icon");
-	}
-	
-	
-	public String getTypeName(String type) {
-		return StatCollector.translateToLocal("ac.ability." + name + ".type." + type + ".desc");
 	}
 	
 	public Color getColorStyle() {
@@ -147,16 +143,24 @@ public class Category {
 	// Learning API
 	
 	/**
+	 * Used in judgment in skill tree UI & developer.
 	 * @param data Ability Data of the player, is guaranteed to have the same category.
 	 * @return Whether the player can level up currently
 	 */
-	public boolean canLevelUp(AbilityData data) {
+	public boolean canLevelUp(DeveloperType type, AbilityData data) {
 		if(data.getLevel() == 5)
 			return false;
 		for(Skill s : getSkillsOfLevel(data.getLevel())) {
-			if(data.getSkillExp(s) < 0.66f)
+			if(s.canControl() && data.getSkillExp(s) < 0.66f)
 				return false;
 		}
+		int nextlv = data.getLevel() + 1;
+		if(nextlv == 1 || nextlv == 2)
+			return type == DeveloperType.PORTABLE;
+		if(nextlv == 3)
+			return type == DeveloperType.NORMAL || type == DeveloperType.ADVANCED;
+		if(nextlv == 4 || nextlv == 5)
+			return type == DeveloperType.ADVANCED;
 		return true;
 	}
 	

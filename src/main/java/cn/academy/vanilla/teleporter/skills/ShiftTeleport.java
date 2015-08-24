@@ -26,6 +26,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -75,7 +76,7 @@ public class ShiftTeleport extends Skill {
 	
 	@Override
 	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new ShiftTPAction());
+		return new SkillInstance().addChild(new ShiftTPAction()).setEstmCP(instance.getConsumption(AbilityData.get(player)));
 	}
 	
 	public static class ShiftTPAction extends SyncAction {
@@ -91,6 +92,12 @@ public class ShiftTeleport extends Skill {
 		public void onStart() {
 			aData = AbilityData.get(player);
 			cpData = CPData.get(player);
+			
+			ItemStack stack = player.getCurrentEquippedItem();
+			if(!(stack != null && 
+					  stack.getItem() instanceof ItemBlock && 
+					  (Block.getBlockFromItem(stack.getItem())) != null))
+				ActionManager.abortAction(this);
 			
 			if(isRemote) startEffects();
 		}
@@ -111,16 +118,10 @@ public class ShiftTeleport extends Skill {
 					  (block = Block.getBlockFromItem(stack.getItem())) != null &&
 					  cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 			
-			if(isRemote) endEffects();
-			
 			if(attacked && !isRemote) {
 				MovingObjectPosition position = getTracePosition();
 				
-				if(stack != null && 
-				  stack.getItem() instanceof ItemBlock && 
-				  (block = Block.getBlockFromItem(stack.getItem())) != null &&
-				  cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
-					
+				if(attacked) {
 					ItemBlock item = (ItemBlock) stack.getItem();
 					item.placeBlockAt(stack, player, player.worldObj,
 							position.blockX, position.blockY, position.blockZ, position.sideHit, 
@@ -147,6 +148,12 @@ public class ShiftTeleport extends Skill {
 					}
 				}
 			}
+		}
+		
+		@Override
+		public void onFinalize() {
+			if(isRemote)
+				endEffects();
 		}
 		
 		// TODO: Some boilerplate... Clean this up in case you aren't busy

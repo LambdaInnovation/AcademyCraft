@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -159,11 +160,13 @@ public class PenetrateTeleport extends Skill {
 			if(isRemote) {
 				player.setPosition(x, y, z);
 				ACSounds.playAtEntityClient(player, "tp.tp", .5f);
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 			} else {
 				cpData.performWithForce(instance.getOverload(aData), (float) (distance * instance.getConsumption(aData)));
 				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
 				
 				player.setPositionAndUpdate(x, y, z);
+				player.fallDistance = 0;
 			}
 		}
 		

@@ -88,7 +88,7 @@ public abstract class Developer {
 	 * @return Whether the action can really be started
 	 */
 	public boolean startDevelop(IDevelopType type) {
-		if(!type.validate(getUser())) {
+		if(getUser() == null || !type.validate(getUser(), this)) {
 			state = DevState.FAILED;
 			return false;
 		}
@@ -102,9 +102,8 @@ public abstract class Developer {
 		return true;
 	}
 	
-	public double getEstmCons(IDevelopType type) {
-		// TODO
-		return 0;
+	public double getEstmCons(IDevelopType dtype) {
+		return dtype.getStimulations(getUser()) * type.getCPS();
 	}
 	
 	public void reset() {
@@ -140,6 +139,11 @@ public abstract class Developer {
 	public double getDevelopProgress() {
 		return (double) stim / maxStim;
 	}
+	
+	/**
+	 * Called at CLIENT when the player closed skill tree gui.
+	 */
+	public void onGuiClosed() {}
 	
 	public abstract EntityPlayer getUser();
 	
@@ -177,7 +181,7 @@ public abstract class Developer {
 		stim = _stim;
 		state = _state;
 		
-		System.out.println("Received sync " + target.worldObj.isRemote + ", state= " + state);
+		//System.out.println("Received sync " + target.worldObj.isRemote + ", state= " + state);
 	}
 	
 }

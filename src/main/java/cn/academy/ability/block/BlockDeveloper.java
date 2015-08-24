@@ -12,17 +12,26 @@
  */
 package cn.academy.ability.block;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.block.ACBlockContainer;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
  *
  */
+@Registrant
 public class BlockDeveloper extends ACBlockContainer {
 	
 	public final DeveloperType type;
@@ -30,6 +39,10 @@ public class BlockDeveloper extends ACBlockContainer {
 	public BlockDeveloper(DeveloperType _type) {
 		super("developer", Material.rock, null);
 		type = _type;
+		
+		String tmp = type.toString().toLowerCase();
+		setBlockName("ac_developer_" + tmp);
+		setBlockTextureName("academy:developer_" + tmp);
 	}
 	
 	@Override
@@ -41,6 +54,22 @@ public class BlockDeveloper extends ACBlockContainer {
 	public boolean isOpaqueCube() {
 		return false;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
+            float tx, float ty, float tz) {
+        if(!world.isRemote && !player.isSneaking()) {
+        	TileEntity te = world.getTileEntity(x, y, z);
+			if(te instanceof TileDeveloper) {
+				TileDeveloper td = (TileDeveloper) te;
+				if(td.getUser() == null)
+					td.use(player);
+			}
+            return true;
+        }
+        return false;
+    }
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {

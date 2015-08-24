@@ -34,7 +34,7 @@ public class DevConditionDep implements IDevCondition {
 	}
 
 	@Override
-	public boolean accepts(AbilityData data, Skill skill) {
+	public boolean accepts(AbilityData data, Developer developer, Skill skill) {
 		return data.isSkillLearned(dependency) &&
 				data.getSkillExp(dependency) >= requiredExp;
 	}

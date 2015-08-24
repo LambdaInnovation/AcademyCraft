@@ -20,6 +20,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -143,9 +144,10 @@ public class ThreateningTeleport extends Skill {
 						player.worldObj.spawnEntityInWorld(
 							new EntityItem(player.worldObj, result.x, result.y, result.z, drop));
 					}
-					
 					aData.addSkillExp(instance, getExpIncr(attacked));
 				}
+				
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 			}
 			
 			if(isRemote) endEffects();

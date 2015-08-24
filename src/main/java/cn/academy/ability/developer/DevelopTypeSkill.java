@@ -41,13 +41,8 @@ public class DevelopTypeSkill implements IDevelopType {
 	}
 
 	@Override
-	public boolean validate(EntityPlayer player) {
-		return LearningHelper.canLearn(AbilityData.get(player), skill);
-	}
-
-	@Override
-	public DeveloperType getMinimumType(EntityPlayer player) {
-		return skill.getMinimumDeveloperType();
+	public boolean validate(EntityPlayer player, Developer developer) {
+		return LearningHelper.canLearn(AbilityData.get(player), developer, skill);
 	}
 
 	@Override

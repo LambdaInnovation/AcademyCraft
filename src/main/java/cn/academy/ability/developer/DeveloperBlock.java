@@ -12,14 +12,17 @@
  */
 package cn.academy.ability.developer;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.ability.block.TileDeveloper;
 import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 import cn.annoreg.mc.s11n.SerializationManager;
+import cn.annoreg.mc.s11n.StorageOption;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * @author WeAthFolD
@@ -53,6 +56,16 @@ public class DeveloperBlock extends Developer {
 	@Override
 	public double getMaxEnergy() {
 		return tile.getMaxEnergy();
+	}
+	
+	@Override
+	public void onGuiClosed() {
+		unuseAtServer();
+	}
+	
+	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
+	private void unuseAtServer() {
+		tile.unuse(getUser());
 	}
 	
 	public static class Serializer implements InstanceSerializer<DeveloperBlock> {

@@ -3,6 +3,7 @@ package cn.academy.vanilla;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
+import cn.academy.ability.developer.DevConditionAnySkillOfLevel;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
@@ -68,8 +69,14 @@ public class ModuleVanilla {
 		category.addSkill(bc = new SkillBrainCourse());
 		category.addSkill(bca = new SkillBrainCourseAdvanced());
 		category.addSkill(mc = new SkillMindCourse());
+		
+		bc.addDevCondition(new DevConditionAnySkillOfLevel(4));
+		
 		bca.setParent(bc);
+		bca.addDevCondition(new DevConditionAnySkillOfLevel(5));
+		
 		mc.setParent(bca);
+		mc.addDevCondition(new DevConditionAnySkillOfLevel(5));
 	}
 	
 }

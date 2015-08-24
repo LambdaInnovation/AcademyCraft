@@ -35,20 +35,8 @@ public class DevelopTypeLevel implements IDevelopType {
 	}
 
 	@Override
-	public DeveloperType getMinimumType(EntityPlayer player) {
-		AbilityData aData = AbilityData.get(player);
-		if(aData.getLevel() == 0)
-			return DeveloperType.PORTABLE;
-		if(aData.getLevel() <= 3)
-			return DeveloperType.NORMAL;
-		if(aData.getLevel() <= 5)
-			return DeveloperType.ADVANCED;
-		throw new IllegalStateException("What you think you can reach level 6?");
-	}
-
-	@Override
-	public boolean validate(EntityPlayer player) {
-		return LearningHelper.canLevelUp(AbilityData.get(player));
+	public boolean validate(EntityPlayer player, Developer developer) {
+		return LearningHelper.canLevelUp(developer.type, AbilityData.get(player));
 	}
 
 	@Override
