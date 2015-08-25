@@ -18,7 +18,6 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.annoreg.core.Registrant;
@@ -27,12 +26,10 @@ import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -109,7 +106,7 @@ public class ElectronBomb extends Skill {
 	}
 	
 	static Vec3 getDest(EntityPlayer player) {
-		return new Motion3D(player, true).move(DISTANCE).getPosVec();
+		return Raytrace.getLookingPos(player, DISTANCE, EntitySelectors.living).getLeft();
 	}
 
 }

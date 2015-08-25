@@ -27,7 +27,11 @@ public class SkillSyncAction extends SyncAction {
 	public CPData cpData;
 	public World world;
 
-	protected SkillSyncAction(int interval) {
+	public SkillSyncAction() {
+		super(-1);
+	}
+	
+	public SkillSyncAction(int interval) {
 		super(interval);
 	}
 	

@@ -64,6 +64,16 @@ ac {
             expincr { 0.0003 }
         }
         
+        melt_downer {
+            range(exp) { lerp(3, 6, exp) }
+            energy(exp) { lerp(800, 1600, exp) }
+            damage(exp) { lerp(18, 45, exp) }
+            overload(exp) { lerp(200, 170, exp) }
+            consumption(exp) { 40 * lerp(10, 13, exp) }
+            cooldown(exp) { 20 * lerp(15, 6, exp) }
+            expincr { 0.002 }
+        }
+        
         mine_ray_luck {
             range { 20 }
             harvest_level { 5 }
@@ -82,6 +92,17 @@ ac {
             overload(exp) { lerp(6, 5, exp) }
             cooldown(exp) { lerp(60, 30, exp) }
             expincr { 0.0003 }
+        }
+        
+        electron_missile {
+            range(exp) { lerp(7, 12, exp) }
+            consumption(exp) { lerp(20, 15, exp) }
+            overload(exp) { lerp(2, 1.5, exp) }
+            overload_attacked(exp) { lerp(70, 60, exp)}
+            consumption_attacked(exp) { lerp(500, 700, exp) }
+            cooldown(ticks) { min(300, max(100, ticks)) }
+            damage(exp) { lerp(14, 22, exp) }
+            expincr { 0.001 } 
         }
     }
 }

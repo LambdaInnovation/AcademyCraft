@@ -12,12 +12,9 @@
  */
 package cn.academy.ability.client.ui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.ctrl.ClientController;
@@ -27,6 +24,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.Resources;
+import cn.academy.core.client.glsl.ShaderMono;
 import cn.academy.core.client.ui.ACHud;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -41,6 +39,9 @@ import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
 import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -67,6 +68,7 @@ public class KeyHintUI extends Widget {
 	
 	long lastFrameTime, showTime;
 	double mAlpha;
+	boolean canUseAbility;
 	
 	private KeyHintUI() {
 		transform.alignWidth = WidthAlign.RIGHT;
@@ -85,7 +87,10 @@ public class KeyHintUI extends Widget {
 			public void handleEvent(Widget w, FrameEvent event) {
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				
-				PresetData pData = PresetData.get(Minecraft.getMinecraft().thePlayer);
+				PresetData pData = PresetData.get(player);
+				CPData cpData = CPData.get(player);
+				
+				canUseAbility = cpData.canUseAbility();
 				
 				long time = GameTimer.getTime();
 				if(time - lastFrameTime > 300L) {
@@ -124,14 +129,21 @@ public class KeyHintUI extends Widget {
 		ResourceLocation icon = c.getHintIcon();
 		String text = c.getHintText();
 		
+		CooldownData data = Cooldown.getCooldownData(c);
+		
 		// Back
 		RenderUtils.loadTexture(TEX_BACK);
 		color4d(1, 1, 1, 1);
 		HudUtils.rect(122, 0, 185, 83);
 		
+		
 		// KeyHint
 		{
 			double wx = 184, wy = 27;
+			if(!canUseAbility || data != null) {
+				color4d(0.7, 0.7, 0.7, 1);
+				ShaderMono.instance().useProgram();
+			}
 			
 			if(keyCode >= 0) {
 				String name = Keyboard.getKeyName(keyCode);
@@ -154,6 +166,9 @@ public class KeyHintUI extends Widget {
 				}
 				
 			}
+			
+			color4d(1, 1, 1, 1);
+			GL20.glUseProgram(0);
 		}
 		
 		// Logo
@@ -161,7 +176,6 @@ public class KeyHintUI extends Widget {
 		RenderUtils.loadTexture(TEX_ICON_BACK);
 		HudUtils.rect(216, 5, 72, 72);
 		
-		CooldownData data = Cooldown.getCooldownData(c);
 		float prog = data == null ? 0.0f : ((float) data.getTickLeft() / data.getMaxTick());
 		float alpha = prog == 0.0f ? 1.0f : 0.4f;
 		

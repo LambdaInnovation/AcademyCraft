@@ -70,7 +70,7 @@ public class MDDamageHelper {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void syncStartMark(@RangedTarget(range = 10) Entity e, @Instance Entity e2, @Data Integer value) {
+	static void syncStartMark(@RangedTarget(range = 15) Entity e, @Instance Entity e2, @Data Integer value) {
 		setMarkTick(e2, value);
 	}
 	
@@ -89,8 +89,14 @@ public class MDDamageHelper {
 			Entity e = event.entity;
 			if(e.worldObj.isRemote) {
 				if(getMarkTick(e) > 0) {
-					if(RandUtils.nextFloat() < 0.9f) {
-						Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY + e.getEyeHeight(), e.posZ), VecUtils.random());
+					int times = RandUtils.rangei(3, 5);
+					while(times --> 0) {
+						double r = RandUtils.ranged(.6, .7) * e.width;
+						double theta = RandUtils.nextDouble() * 2 * Math.PI;
+						double h = RandUtils.ranged(0, e.height);
+						
+						Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY, e.posZ), 
+							VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
 						Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.04);
 						e.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.worldObj, pos, vel));
 					}

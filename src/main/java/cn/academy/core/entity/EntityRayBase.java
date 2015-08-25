@@ -69,6 +69,10 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		ignoreFrustumCheck = true;
 	}
 	
+	public void setFromTo(Vec3 from, Vec3 to) {
+		setFromTo(from.xCoord, from.yCoord, from.zCoord, to.xCoord, to.yCoord, to.zCoord);
+	}
+	
 	public void setFromTo(double x0, double y0, double z0, double x1, double y1, double z1) {
 		setPosition(x0, y0, z0);
 		
