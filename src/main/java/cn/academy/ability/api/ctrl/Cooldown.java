@@ -22,12 +22,15 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.liutils.util.client.ClientUtils;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 /**
  * Class that handles cooldown. Currently, the cooldown in SERVER will be completely ignored, counting only
@@ -82,6 +85,13 @@ public class Cooldown {
     	if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
 			updateCooldown();
 		}
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+	public void playerDeath(LivingDeathEvent event) {
+    	if(event.entityLiving.equals(Minecraft.getMinecraft().thePlayer))
+    		cooldown.clear();
     }
     
     @SubscribeEvent

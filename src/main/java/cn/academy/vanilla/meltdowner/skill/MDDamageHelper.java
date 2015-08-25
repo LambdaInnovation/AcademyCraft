@@ -97,7 +97,7 @@ public class MDDamageHelper {
 						
 						Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY, e.posZ), 
 							VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
-						Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.04);
+						Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.02);
 						e.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.worldObj, pos, vel));
 					}
 				}

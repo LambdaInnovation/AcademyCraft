@@ -42,7 +42,7 @@ public class ElectronBomb extends Skill {
 	
 	static ElectronBomb instance;
 
-	static final int LIFE = 20;
+	static final int LIFE = 20, LIFE_IMPROVED = 5;
 	static final double DISTANCE = 15;
 	
 	public ElectronBomb() {
@@ -69,11 +69,8 @@ public class ElectronBomb extends Skill {
 
 		@Override
 		public void execute() {
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
-			aData.addSkillExp(instance, instance.getFloat("expincr"));
-			
 			if(!isRemote) {
-				EntityMdBall ball = new EntityMdBall(player, LIFE, 
+				EntityMdBall ball = new EntityMdBall(player, aData.getSkillExp(instance) >= 0.8f ? LIFE_IMPROVED : LIFE, 
 				new EntityCallback<EntityMdBall>() {
 
 					@Override
@@ -89,13 +86,15 @@ public class ElectronBomb extends Skill {
 				});
 				world.spawnEntityInWorld(ball);
 			}
+			
+			aData.addSkillExp(instance, instance.getFloat("expincr"));
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	static void actionClient(@Target EntityPlayer player, @Instance EntityMdBall ball) {
-		System.out.println("Player: " + player);
 		World world = player.worldObj;
 		EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
 		raySmall.viewOptimize = false;

@@ -25,7 +25,7 @@ import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
 public class MineRayBasic extends MineRaysBase {
 
 	public MineRayBasic() {
-		super("basic", 2);
+		super("basic", 3);
 	}
 
 	@Override

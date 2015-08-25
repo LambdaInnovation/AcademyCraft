@@ -43,6 +43,10 @@ public class CategoryManager {
 		return ImmutableList.copyOf(catList);
 	}
 	
+	public int getCategoryCount() {
+		return catList.size();
+	}
+	
 	public Category getCategory(String name) {
 		//This is a very small list so looping is acceptable
 		for(Category c : catList) {

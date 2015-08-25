@@ -139,8 +139,10 @@ public class LightShield extends Skill {
 						}
 					}, EntitySelectors.excludeOf(player)));
 				for(Entity e : candidates) {
-					if(cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData)))
+					if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData))) {
 						MDDamageHelper.attack(e, player, getTouchDamage(aData));
+						aData.addSkillExp(instance, instance.getFloat("expincr"));
+					}
 				}
 			}
 		}
@@ -157,7 +159,7 @@ public class LightShield extends Skill {
 		}
 		
 		public float handleAttacked(DamageSource src, float damage) {
-			if(lastAbsorb != -1 && ticks - lastAbsorb <= ACTION_INTERVAL)
+			if(damage == 0 || lastAbsorb != -1 && ticks - lastAbsorb <= ACTION_INTERVAL)
 				return damage;
 			
 			Entity entity = src.getSourceOfDamage();
@@ -177,6 +179,7 @@ public class LightShield extends Skill {
 				}
 			}
 			
+			aData.addSkillExp(instance, instance.getFloat("expincr"));
 			return damage;
 		}
 		

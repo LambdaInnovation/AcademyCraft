@@ -28,7 +28,7 @@ public class CatMeltDowner extends Category {
 	public static LightShield lightShield;
 	public static MeltDowner meltDowner;
 	public static JetEngine jetEngine;
-	public static MineRayBasic minerayBasic;
+	public static MineRayBasic mineRayBasic;
 	public static MineRayExpert mineRayExpert;
 	public static MineRayLuck mineRayLuck;
 	public static ElectronMissile electronMissile;
@@ -37,19 +37,41 @@ public class CatMeltDowner extends Category {
 		super("melt_downer");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
+		// Lv1
 		this.addSkill(electronBomb = new ElectronBomb());
 		this.addSkill(radIntensify = new RadiationIntensify());
-		this.addSkill(rayBarrage = new RayBarrage());
+		
+		// Lv2
 		this.addSkill(scatterBomb = new ScatterBomb());
 		this.addSkill(lightShield = new LightShield());
+		
+		// Lv3
 		this.addSkill(meltDowner = new MeltDowner());
+		this.addSkill(mineRayBasic = new MineRayBasic());
+		
+		// Lv4
+		this.addSkill(rayBarrage = new RayBarrage());
 		this.addSkill(jetEngine = new JetEngine());
-		this.addSkill(minerayBasic = new MineRayBasic());
 		this.addSkill(mineRayExpert = new MineRayExpert());
+		
+		// Lv5
 		this.addSkill(mineRayLuck = new MineRayLuck());
 		this.addSkill(electronMissile = new ElectronMissile());
 		
 		ModuleVanilla.addGenericSkills(this);
+		
+		// Deps
+		scatterBomb.setParent(electronBomb, 0.8f);
+		radIntensify.setParent(electronBomb, 0.5f);
+		lightShield.setParent(electronBomb, 1.0f);
+		meltDowner.setParent(scatterBomb, 0.8f);
+		meltDowner.addSkillDep(lightShield, 0.8f);
+		mineRayBasic.setParent(meltDowner, 0.3f);
+		rayBarrage.setParent(meltDowner, 0.5f);
+		jetEngine.setParent(meltDowner, 1.0f);
+		mineRayExpert.setParent(mineRayBasic, 0.8f);
+		mineRayLuck.setParent(mineRayExpert, 1.0f);
+		electronMissile.setParent(jetEngine, 0.3f);
 	}
 
 }

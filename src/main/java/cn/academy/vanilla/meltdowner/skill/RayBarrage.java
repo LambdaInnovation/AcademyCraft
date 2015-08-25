@@ -57,7 +57,7 @@ public class RayBarrage extends Skill {
 	static RayBarrage instance;
 
 	public RayBarrage() {
-		super("ray_barrage", 3);
+		super("ray_barrage", 4);
 		
 		instance = this;
 		FMLCommonHandler.instance().bus().register(this);
@@ -178,7 +178,7 @@ public class RayBarrage extends Skill {
 				if(!isRemote) {
 					MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
 					if(result != null && result.entityHit != null) {
-						DamageHelper.attack(result.entityHit, DamageSource.causePlayerDamage(player), getPlainDamage(aData));
+						MDDamageHelper.attack(result.entityHit, player, getPlainDamage(aData));
 					}
 				}
 				
@@ -189,6 +189,7 @@ public class RayBarrage extends Skill {
 			}
 			
 			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		
 		@SideOnly(Side.CLIENT)

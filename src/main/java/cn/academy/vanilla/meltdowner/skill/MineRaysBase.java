@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
@@ -102,7 +103,8 @@ public abstract class MineRaysBase extends Skill {
 		
 		@Override
 		public void onTick() {
-			if(!cpData.perform(skill.getOverload(aData), skill.getConsumption(aData)));
+			if(!cpData.perform(skill.getOverload(aData), skill.getConsumption(aData)) && !isRemote)
+				ActionManager.abortAction(this);
 			
 			MovingObjectPosition result = Raytrace.traceLiving(player, skill.getFloat("range"), EntitySelectors.nothing);
 			if(result != null) {

@@ -93,7 +93,7 @@ ac {
             range(exp) { 2 * lerp(5, 10, exp) }
             consumption(exp) { lerp(100, 120, exp) }
             overload(exp) { lerp(400, 350, exp) }
-            cooldown(exp, ct) { ct * lerp(18, 10, exp) }
+            cooldown(exp, ct) { ct * lerp(9, 5, exp) }
             expincr { 0.003 }
         }
         

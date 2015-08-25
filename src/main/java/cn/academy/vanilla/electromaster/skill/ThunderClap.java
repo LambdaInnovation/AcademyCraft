@@ -12,28 +12,29 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
+import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MovingObjectPosition;
 
 /**
  * @author WeAthFolD
@@ -66,10 +67,7 @@ public class ThunderClap extends Skill {
 		return new SkillInstance().addChild(new ThunderClapAction());
 	}
 	
-	public static class ThunderClapAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class ThunderClapAction extends SkillSyncAction {
 		
 		int ticks;
 		double hitX, hitY, hitZ;
@@ -80,6 +78,8 @@ public class ThunderClap extends Skill {
 		
 		@Override
 		public void onStart() {
+			super.onStart();
+			
 			if(isRemote)
 				startEffects();
 			
@@ -107,7 +107,7 @@ public class ThunderClap extends Skill {
 			}
 
 			ticks++;
-			if(!cpData.perform(0, instance.getConsumption(aData)))
+			if(ticks <= MIN_TICKS && !cpData.perform(0, instance.getConsumption(aData)))
 				ActionManager.abortAction(this);
 			if(!isRemote) {
 				if(ticks >= MAX_TICKS) {
@@ -162,12 +162,22 @@ public class ThunderClap extends Skill {
 		}
 		
 		//CLIENT
+		@SideOnly(Side.CLIENT)
 		EntitySurroundArc surroundArc;
+		
+		@SideOnly(Side.CLIENT)
+		EntityRippleMark mark;
 		
 		@SideOnly(Side.CLIENT)
 		private void startEffects() {
 			surroundArc = new EntitySurroundArc(player).setArcType(ArcType.BOLD);
 			player.worldObj.spawnEntityInWorld(surroundArc);
+			
+			if(isLocal()) {
+				world.spawnEntityInWorld(mark = new EntityRippleMark(world));
+				mark.color.setColor4d(0.8, 0.8, 0.8, 0.7);
+				mark.setPosition(hitX, hitY, hitZ);
+			}
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -175,6 +185,7 @@ public class ThunderClap extends Skill {
 			if(isLocal()) {
 				final float max = 0.1f, min = 0.001f;
 				player.capabilities.setPlayerWalkSpeed(Math.max(min, max - (max - min) / 60 * ticks));
+				mark.setPosition(hitX, hitY, hitZ);
 			}
 		}
 		
@@ -188,6 +199,10 @@ public class ThunderClap extends Skill {
 						target.setDead();
 					}
 				}, 10);
+			
+			if(isLocal()) {
+				mark.setDead();
+			}
 		}
 		
 	}

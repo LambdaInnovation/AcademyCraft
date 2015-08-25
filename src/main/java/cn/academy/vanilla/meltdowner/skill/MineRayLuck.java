@@ -25,7 +25,7 @@ import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
 public class MineRayLuck extends MineRaysBase {
 
 	public MineRayLuck() {
-		super("luck", 4);
+		super("luck", 5);
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public class JetEngine extends Skill {
 	
 	public static class JETriggerAction extends SkillSyncAction {
 		
-		static final float TIME = 8, LIFETIME = 20;
+		static final float TIME = 5, LIFETIME = 15;
 		
 		Vec3 target;
 		Vec3 start;

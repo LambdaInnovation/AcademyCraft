@@ -12,13 +12,15 @@
  */
 package cn.academy.ability.developer;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.client.skilltree.SkillTreeLocal;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.liutils.util.generic.RandUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -42,6 +44,12 @@ public class DevelopTypeLevel implements IDevelopType {
 	@Override
 	public void onLearned(EntityPlayer player) {
 		AbilityData aData = AbilityData.get(player);
+		if(aData.getCategory() == null) {
+			// WELCOME TO THE WORLD OF ESPER! >)
+			CategoryManager man = CategoryManager.INSTANCE;
+			Category cat = man.getCategory(RandUtils.nextInt(man.getCategoryCount()));
+			aData.setCategory(cat);
+		}
 		aData.setLevel(aData.getLevel() + 1);
 	}
 
