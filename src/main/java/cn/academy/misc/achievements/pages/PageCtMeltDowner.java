@@ -2,6 +2,7 @@ package cn.academy.misc.achievements.pages;
 
 import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.misc.achievements.ItemAchievement;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
@@ -22,12 +23,12 @@ public final class PageCtMeltDowner extends PageCategory<CatMeltDowner> {
 	public PageCtMeltDowner() {
 		super((CatMeltDowner) CategoryManager.INSTANCE.getCategory("melt_downer"));
 		add(new ACAchievement[] {
-			aLv1 = new AchEvLevelChange(1, category, "lv1", 0, 0, ModuleAbility.developerNormal, null),
-			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ModuleAbility.developerNormal, aLv1),
-			aLv2 = new AchEvLevelChange(2, category, "lv2", 2, 2, ModuleAbility.developerNormal, aSkill),
-			aLv3 = new AchEvLevelChange(3, category, "lv3", 0, 2, ModuleAbility.developerNormal, aLv2),
-			aLv4 = new AchEvLevelChange(4, category, "lv4", -2, 2, ModuleAbility.developerNormal, aLv3),
-			aLv5 = new AchEvLevelChange(5, category, "lv5", -2, 0, ModuleAbility.developerNormal, aLv4),
+			aLv1 = new AchEvLevelChange(1, category.electronBomb, "lv1", 0, 0, null),
+			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ItemAchievement.getStack(category.getIcon()), aLv1),
+			aLv2 = new AchEvLevelChange(2, category.lightShield, "lv2", 2, 2, aSkill),
+			aLv3 = new AchEvLevelChange(3, category.meltDowner, "lv3", 0, 2, aLv2),
+			aLv4 = new AchEvLevelChange(4, category.jetEngine, "lv4", -2, 2, aLv3),
+			aLv5 = new AchEvLevelChange(5, category.electronMissile, "lv5", -2, 0, aLv4),
 		});
 	}
 	
