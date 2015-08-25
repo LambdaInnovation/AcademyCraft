@@ -15,10 +15,19 @@ package cn.academy.support.nei;
 import java.awt.Rectangle;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import cn.academy.core.client.Resources;
+import cn.academy.core.client.glsl.ShaderMono;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.client.gui.GuiImagFusor;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.Font;
+import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -48,7 +57,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public int getInputX() {
-		return 32;
+		return 30;
 	}
 
 	@Override
@@ -58,7 +67,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
 	@Override
 	public int getOutputX() {
-		return 120;
+		return 118;
 	}
 
 	@Override
@@ -85,28 +94,25 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 			}	
 		}
 	}
-
+	
 	@Override
-	public Rectangle getTransferRectsRectangle() {
-		return new Rectangle(55, 42, 55, 20);
-	}
-
-	@Override
-	public String getMachineName() {
-		return "fusor";
+	public void drawExtras(int recipe) {
+		if(tick >= 50) tick = 0;
+		Font.font.draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid), 75, 7, 13, 3618615);
+		ShaderMono.instance().useProgram();
+		GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
+		RenderUtils.loadTexture(Resources.getTexture("/guis/progress/progress_fuser"));
+		HudUtils.rect(56, 45, 0, 0, 51d * (tick / 50d), 15, 64d * (tick / 50d), 16);
+		GL20.glUseProgram(0);
 	}
 	
 	private class IFCachedRecipe extends ACCachedRecipe {
 		
-		private final int liquid;
+		public final int liquid;
 
 		private IFCachedRecipe(ItemStack input, ItemStack output, int liquid) {
 			super(input, output);
 			this.liquid = liquid;
-		}
-		
-		public int getLiquidAmount() {
-			return liquid;
 		}
 		
 	}

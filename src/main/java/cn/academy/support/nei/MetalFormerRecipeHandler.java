@@ -14,10 +14,18 @@ package cn.academy.support.nei;
 
 import java.awt.Rectangle;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import cn.academy.core.client.Resources;
+import cn.academy.core.client.glsl.ShaderMono;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.client.gui.GuiMetalFormer;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.helper.Font;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -32,11 +40,6 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 	@Override
 	public String getRecipeName() {
 		return StatCollector.translateToLocal("tile.ac_metal_former.name");
-	}
-
-	@Override
-	public String getMachineName() {
-		return "metal_former";
 	}
 
 	@Override
@@ -70,11 +73,6 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 	}
 
 	@Override
-	public Rectangle getTransferRectsRectangle() {
-		return new Rectangle(63, 38, 40, 15);
-	}
-
-	@Override
 	public void loadCraftingRecipes(ItemStack result) {
 		for(RecipeObject r : MetalFormerRecipes.INSTANCE.getAllRecipes()) {
 			if(r.output.getItem().equals(result.getItem())) {
@@ -92,17 +90,25 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 		}
 	}
 	
+	@Override
+	public void drawExtras(int recipe) {
+		if(tick >= 50) tick = 0;
+		ShaderMono.instance().useProgram();
+		GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
+		RenderUtils.loadTexture(((MFCachedRecipe) arecipes.get(recipe)).mode.texture);
+		HudUtils.rect(76, 14, 0, 0, 14, 14, 24, 24);
+		RenderUtils.loadTexture(Resources.getTexture("/guis/progress/progress_former"));
+		HudUtils.rect(68, 43, 0, 0, 30d * (tick / 50d), 6, 30d * (tick / 50d), 6);
+		GL20.glUseProgram(0);
+	}
+	
 	private class MFCachedRecipe extends ACCachedRecipe {
 		
-		private final Mode mode;
+		public final Mode mode;
 
 		public MFCachedRecipe(ItemStack input, ItemStack output, Mode mode) {
 			super(input, output);
 			this.mode = mode;
-		}
-		
-		public Mode getMode() {
-			return mode;
 		}
 		
 	}

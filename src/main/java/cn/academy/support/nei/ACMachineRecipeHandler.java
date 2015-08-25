@@ -27,9 +27,10 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
  */
 public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	
+	protected int tick;
+	
 	@Override
 	public abstract String getRecipeName();
-	public abstract String getMachineName();
 	
 	@Override
 	public abstract String getGuiTexture();
@@ -40,25 +41,17 @@ public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
 	public abstract int getInputY();
 	public abstract int getOutputX();
 	public abstract int getOutputY();
-	public int getOtherX() {
-		return 0;
-	}
-	public int getOtherY() {
-		return 0;
-	}
-	public abstract Rectangle getTransferRectsRectangle();
-	
-	@Override
-	public void loadTransferRects() {
-		transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(
-				getTransferRectsRectangle(), getMachineName()));
-	}
 	
 	@Override
 	public abstract void loadCraftingRecipes(ItemStack result);
-	
 	@Override
 	public abstract void loadUsageRecipes(ItemStack ingredient);
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		++tick;
+	}
 	
 	protected class ACCachedRecipe extends CachedRecipe {
 		
