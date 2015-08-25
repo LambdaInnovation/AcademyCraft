@@ -21,6 +21,8 @@ import cn.academy.vanilla.meltdowner.skill.*;
  */
 public class CatMeltDowner extends Category {
 	
+	public static ElectronBomb electronBomb;
+	public static RadiationIntensify radIntensify;
 	public static RayBarrage rayBarrage;
 	public static ScatterBomb scatterBomb;
 	public static LightShield lightShield;
@@ -33,6 +35,8 @@ public class CatMeltDowner extends Category {
 		super("melt_downer");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
+		this.addSkill(electronBomb = new ElectronBomb());
+		this.addSkill(radIntensify = new RadiationIntensify());
 		this.addSkill(rayBarrage = new RayBarrage());
 		this.addSkill(scatterBomb = new ScatterBomb());
 		this.addSkill(lightShield = new LightShield());

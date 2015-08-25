@@ -140,7 +140,7 @@ public class LightShield extends Skill {
 					}, EntitySelectors.excludeOf(player)));
 				for(Entity e : candidates) {
 					if(cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData)))
-						DamageHelper.attack(e, DamageSource.causePlayerDamage(player), getTouchDamage(aData));
+						MDDamageHelper.attack(e, player, getTouchDamage(aData));
 				}
 			}
 		}

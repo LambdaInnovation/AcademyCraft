@@ -14,15 +14,8 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import java.util.List;
 
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -43,6 +36,14 @@ import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 
 /**
  * @author WeAthFolD
@@ -62,15 +63,14 @@ public class RayBarrage extends Skill {
 		FMLCommonHandler.instance().bus().register(this);
 	}
 	
-	//TODO Script integration
 	//TODO Sounds
 	
 	private static float getPlainDamage(AbilityData data) {
-		return 10.0f;
+		return instance.callFloatWithExp("plain_damage", data);
 	}
 	
 	private static float getScatteredDamage(AbilityData data) {
-		return 8.0f;
+		return instance.callFloatWithExp("scatter_damage", data);
 	}
 	
 	@Override
@@ -130,7 +130,6 @@ public class RayBarrage extends Skill {
 					spawnBarrage();
 				} else {
 					// Do the damage
-					// TODO Add probability
 					float range = 55;
 					
 					float yaw = player.rotationYaw;
@@ -165,7 +164,7 @@ public class RayBarrage extends Skill {
 						float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
 						
 						if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
-							DamageHelper.attack(e, DamageSource.causePlayerDamage(player), getScatteredDamage(aData));
+							MDDamageHelper.attack(e, player, getScatteredDamage(aData));
 						}
 					}
 				}
@@ -188,6 +187,8 @@ public class RayBarrage extends Skill {
 			if(isRemote) {
 				spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
 			}
+			
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)

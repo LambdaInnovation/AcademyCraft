@@ -193,8 +193,7 @@ public class JetEngine extends Skill {
 					EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living)
 				);
 				if(pos != null && pos.entityHit != null) {
-					DamageHelper.attack(pos.entityHit, 
-						DamageSource.causePlayerDamage(player), getDamage(aData));
+					MDDamageHelper.attack(pos.entityHit, player, getDamage(aData));
 				}
 			}
 		}
