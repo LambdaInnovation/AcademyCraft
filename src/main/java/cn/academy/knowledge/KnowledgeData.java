@@ -130,6 +130,7 @@ public class KnowledgeData extends DataPart {
 	 * If the knowledge is not previously acquired, this is a effective call,
 	 * and will trigger a KnowledgeAcquiredEvent in both CLIENT and SERVER.
 	 */
+	@SuppressWarnings("unused")
 	public void learn(int id) {
 		// Disable the functionality
 		if(true)
