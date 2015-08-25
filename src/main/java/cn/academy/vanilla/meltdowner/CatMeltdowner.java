@@ -19,22 +19,22 @@ import cn.academy.vanilla.meltdowner.skill.*;
 /**
  * @author WeAthFolD
  */
-public class CatMeltDowner extends Category {
+public class CatMeltdowner extends Category {
 	
 	public static ElectronBomb electronBomb;
 	public static RadiationIntensify radIntensify;
 	public static RayBarrage rayBarrage;
 	public static ScatterBomb scatterBomb;
 	public static LightShield lightShield;
-	public static MeltDowner meltDowner;
+	public static Meltdowner meltdowner;
 	public static JetEngine jetEngine;
 	public static MineRayBasic mineRayBasic;
 	public static MineRayExpert mineRayExpert;
 	public static MineRayLuck mineRayLuck;
 	public static ElectronMissile electronMissile;
 
-	public CatMeltDowner() {
-		super("melt_downer");
+	public CatMeltdowner() {
+		super("meltdowner");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 		
 		// Lv1
@@ -46,7 +46,7 @@ public class CatMeltDowner extends Category {
 		this.addSkill(lightShield = new LightShield());
 		
 		// Lv3
-		this.addSkill(meltDowner = new MeltDowner());
+		this.addSkill(meltdowner = new Meltdowner());
 		this.addSkill(mineRayBasic = new MineRayBasic());
 		
 		// Lv4
@@ -64,11 +64,11 @@ public class CatMeltDowner extends Category {
 		scatterBomb.setParent(electronBomb, 0.8f);
 		radIntensify.setParent(electronBomb, 0.5f);
 		lightShield.setParent(electronBomb, 1.0f);
-		meltDowner.setParent(scatterBomb, 0.8f);
-		meltDowner.addSkillDep(lightShield, 0.8f);
-		mineRayBasic.setParent(meltDowner, 0.3f);
-		rayBarrage.setParent(meltDowner, 0.5f);
-		jetEngine.setParent(meltDowner, 1.0f);
+		meltdowner.setParent(scatterBomb, 0.8f);
+		meltdowner.addSkillDep(lightShield, 0.8f);
+		mineRayBasic.setParent(meltdowner, 0.3f);
+		rayBarrage.setParent(meltdowner, 0.5f);
+		jetEngine.setParent(meltdowner, 1.0f);
 		mineRayExpert.setParent(mineRayBasic, 0.8f);
 		mineRayLuck.setParent(mineRayExpert, 1.0f);
 		electronMissile.setParent(jetEngine, 0.3f);

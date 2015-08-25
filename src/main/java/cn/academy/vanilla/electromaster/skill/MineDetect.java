@@ -37,7 +37,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
@@ -137,7 +137,7 @@ public class MineDetect extends Skill {
 
 			@Override
 			public boolean accepts(World world, int x, int y, int z, Block block) {
-				return CatElectroMaster.isOreBlock(block);
+				return CatElectromaster.isOreBlock(block);
 			}
 			
 		};

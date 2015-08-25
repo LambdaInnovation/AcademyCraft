@@ -27,7 +27,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.util.generic.MathUtils;
@@ -66,13 +66,13 @@ public class MagMovement extends Skill {
 	private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {
 		if(pos.typeOfHit == MovingObjectType.BLOCK) {
 			Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
-			if(aData.getSkillExp(instance) < 0.6f && !CatElectroMaster.isMetalBlock(block))
+			if(aData.getSkillExp(instance) < 0.6f && !CatElectromaster.isMetalBlock(block))
 				return null;
-			if(!CatElectroMaster.isWeakMetalBlock(block))
+			if(!CatElectromaster.isWeakMetalBlock(block))
 				return null;
 			return new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord);
 		} else {
-			if(CatElectroMaster.isEntityMetallic(pos.entityHit))
+			if(CatElectromaster.isEntityMetallic(pos.entityHit))
 				return new EntityTarget(pos.entityHit);
 			else
 				return null;

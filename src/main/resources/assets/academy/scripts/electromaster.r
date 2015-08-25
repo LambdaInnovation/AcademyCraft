@@ -1,9 +1,9 @@
 # AcademyCraft Ripple Script file
-# Electro Master
-# ç‚®å§ä»€ä¹ˆçš„æœ€å–œæ¬¢å•¦å•¦å•¦å•¦å•¦å•¦! >3<
+# Electromaster
+# ÅÚ½ãÊ²Ã´µÄ×îÏ²»¶À²À²À²À²À²À²! >3<
 
 ac {
-    electro_master {
+    electromaster {
         arc_gen {
             x { 112 } y { 230 }
             damage(exp) { lerp(4, 9, exp) } 

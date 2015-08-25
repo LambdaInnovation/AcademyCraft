@@ -19,7 +19,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.entity.EntityBlock;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
 import cn.annoreg.core.Registrant;
@@ -61,7 +61,7 @@ public class MagManip extends Skill {
 		
 		// Originally I want to strenghten this limit, but this skill would be too useless then.
 		// So currently, just blocks with rock | anvil material can be used.
-		return CatElectroMaster.isWeakMetalBlock(block);
+		return CatElectromaster.isWeakMetalBlock(block);
 	}
 	
 	static float getDamage(AbilityData data) {

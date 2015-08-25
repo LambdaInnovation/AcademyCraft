@@ -251,8 +251,8 @@ ac.ability.level3=Level 3
 ac.ability.level4=Level 4
 ac.ability.level5=Level 5
 
-# Electro Master
-ac.ability.electro_master.name=Electro Master
+# Electromaster
+ac.ability.electromaster.name=Electromaster
 
 ## EM Knowledges
 ac.knowledge.em_basic_volt.name=Basic Voltage Control
@@ -263,31 +263,31 @@ ac.knowledge.em_projectile_master.name=Magnet Projectile Master
 ac.knowledge.highenergy.name=High Energy Theory
 
 ## EM Skills
-ac.ability.electro_master.arc_gen.name=Arc Generation
-ac.ability.electro_master.mag_manip.name=Magnet Manipulation
-ac.ability.electro_master.mine_detect.name=Mine Detection
-ac.ability.electro_master.railgun.name=Railgun
-ac.ability.electro_master.mag_movement.name=Magnet Movement
-ac.ability.electro_master.iron_sand.name=Iron Sand Control
-ac.ability.electro_master.iron_sand.sword.name=Iron Sand Sword
-ac.ability.electro_master.iron_sand.whip.name=Iron Sand Whip
-ac.ability.electro_master.iron_sand.storm.name=Iron Sand Storm
-ac.ability.electro_master.iron_sand.cone.name=Iron Sand Cone
-ac.ability.electro_master.charging.name=Current Charging
-ac.ability.electro_master.body_intensify.name=Body Intensify
-ac.ability.electro_master.thunder_clap.name=Thunderclap
-ac.ability.electro_master.thunder_bolt.name=Thunder Bolt
+ac.ability.electromaster.arc_gen.name=Arc Generation
+ac.ability.electromaster.mag_manip.name=Magnet Manipulation
+ac.ability.electromaster.mine_detect.name=Mine Detection
+ac.ability.electromaster.railgun.name=Railgun
+ac.ability.electromaster.mag_movement.name=Magnet Movement
+ac.ability.electromaster.iron_sand.name=Iron Sand Control
+ac.ability.electromaster.iron_sand.sword.name=Iron Sand Sword
+ac.ability.electromaster.iron_sand.whip.name=Iron Sand Whip
+ac.ability.electromaster.iron_sand.storm.name=Iron Sand Storm
+ac.ability.electromaster.iron_sand.cone.name=Iron Sand Cone
+ac.ability.electromaster.charging.name=Current Charging
+ac.ability.electromaster.body_intensify.name=Body Intensify
+ac.ability.electromaster.thunder_clap.name=Thunderclap
+ac.ability.electromaster.thunder_bolt.name=Thunder Bolt
 
-ac.ability.electro_master.arc_gen.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
-ac.ability.electro_master.mag_manip.desc=Manipulate and move magnetizable things with the magnetic force, even throw them out to damage enemies.
-ac.ability.electro_master.mine_detect.desc=Close your eyes and feel the flowing of magnetic line, and you will be able to see a hint of precious mineral resources around you.
-ac.ability.electro_master.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
-ac.ability.electro_master.mag_movement.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
-ac.ability.electro_master.iron_sand.desc=Separate and manipulate the iron sand to creative a changeable and dangerous attack effect.
-ac.ability.electro_master.charging.desc=Charge to the thing in your hand and electric blocks in the world.
-ac.ability.electro_master.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
-ac.ability.electro_master.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
-ac.ability.electro_master.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and cause the second damage.
+ac.ability.electromaster.arc_gen.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
+ac.ability.electromaster.mag_manip.desc=Manipulate and move magnetizable things with the magnetic force, even throw them out to damage enemies.
+ac.ability.electromaster.mine_detect.desc=Close your eyes and feel the flowing of magnetic line, and you will be able to see a hint of precious mineral resources around you.
+ac.ability.electromaster.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
+ac.ability.electromaster.mag_movement.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
+ac.ability.electromaster.iron_sand.desc=Separate and manipulate the iron sand to creative a changeable and dangerous attack effect.
+ac.ability.electromaster.charging.desc=Charge to the thing in your hand and electric blocks in the world.
+ac.ability.electromaster.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
+ac.ability.electromaster.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
+ac.ability.electromaster.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and cause the second damage.
 
 # Teleporter
 ac.ability.teleporter.name=Teleporter
@@ -317,25 +317,25 @@ ac.gui.loctele.warn0=[CP not enough.]
 ac.gui.loctele.warn1=You can't record this location now.
 ac.gui.loctele.teleport=Teleport!
 
-# Melt Downer
-ac.ability.melt_downer.name=Melt Downer
+# Meltdowner
+ac.ability.meltdowner.name=Meltdowner
 
 ## MD Skills
-ac.ability.melt_downer.ray_barrage.name=Ray Barrage
-ac.ability.melt_downer.scatter_bomb.name=Scattering Electron Bomb
-ac.ability.melt_downer.light_shield.name=Light Shield
-ac.ability.melt_downer.jet_engine.name=Jet Engine
-ac.ability.melt_downer.mine_ray_basic.name=Basic Mining Ray
-ac.ability.melt_downer.mine_ray_expert.name=Expert Mining Ray
-ac.ability.melt_downer.mine_ray_luck.name=Expert Mining Ray - Luck
+ac.ability.meltdowner.ray_barrage.name=Ray Barrage
+ac.ability.meltdowner.scatter_bomb.name=Scattering Electron Bomb
+ac.ability.meltdowner.light_shield.name=Light Shield
+ac.ability.meltdowner.jet_engine.name=Jet Engine
+ac.ability.meltdowner.mine_ray_basic.name=Basic Mining Ray
+ac.ability.meltdowner.mine_ray_expert.name=Expert Mining Ray
+ac.ability.meltdowner.mine_ray_luck.name=Expert Mining Ray - Luck
 
-ac.ability.melt_downer.ray_barrage.desc=Though you can generate some electron bomb to attack, they can't turn into barrage. It's difficult to do a omnibearing attack. In order to solve this problem, you can through the Silicon Barn to make a barrage damage.
-ac.ability.melt_downer.scatter_bomb.desc=Manipulate more than one electronics group to attack. As a result, you can't control the impact point accurately. 
-ac.ability.melt_downer.light_shield.desc=Turn many electronics into a shield. High-speed moving electronics will destroy all things attack you, and damage all things touch you closely.    
-ac.ability.melt_downer.jet_engine.desc=Shoot out the electronics like rocket engine jetting. Use reaction force to make a very high-speed movement. In this process, the light shields around you will protect you.
-ac.ability.melt_downer.mine_ray_basic.desc=After a long time practice, you can make your electronic stream suitably to collect minerals without destroy them.
-ac.ability.melt_downer.mine_ray_expert.desc=With continious practice on mining basics, you have a unique understanding about how to use electronic stream collect material.
-ac.ability.melt_downer.mine_ray_luck.desc=Keeping mining and lumbering with your ability makes you be able to collect the mineral with a much higher rate.
+ac.ability.meltdowner.ray_barrage.desc=Though you can generate some electron bomb to attack, they can't turn into barrage. It's difficult to do a omnibearing attack. In order to solve this problem, you can through the Silicon Barn to make a barrage damage.
+ac.ability.meltdowner.scatter_bomb.desc=Manipulate more than one electronics group to attack. As a result, you can't control the impact point accurately. 
+ac.ability.meltdowner.light_shield.desc=Turn many electronics into a shield. High-speed moving electronics will destroy all things attack you, and damage all things touch you closely.    
+ac.ability.meltdowner.jet_engine.desc=Shoot out the electronics like rocket engine jetting. Use reaction force to make a very high-speed movement. In this process, the light shields around you will protect you.
+ac.ability.meltdowner.mine_ray_basic.desc=After a long time practice, you can make your electronic stream suitably to collect minerals without destroy them.
+ac.ability.meltdowner.mine_ray_expert.desc=With continious practice on mining basics, you have a unique understanding about how to use electronic stream collect material.
+ac.ability.meltdowner.mine_ray_luck.desc=Keeping mining and lumbering with your ability makes you be able to collect the mineral with a much higher rate.
 
 # Generic Skills
 ac.ability.generic.brain_course.name=Brain Course
@@ -426,51 +426,51 @@ ac.command.preset.list2=Available controllables:
 #achievement.ac_node_basic=Basic Storage
 #achievement.ac_node_basic.desc=Craft a Basic Wireless Node to hold and transmit energy.
 
-ac.achievementpage.cat_electro_master=Electro Master
-achievement.ac_electro_master.lv1=Fluctuating Current
-achievement.ac_electro_master.lv1.desc=Can't even generate a stable current, outranked!
-achievement.ac_electro_master.lv2=Imperfect Electricity
-achievement.ac_electro_master.lv2.desc=Still with such low voltage, weak!
-achievement.ac_electro_master.lv3=Irradiating Arc
-achievement.ac_electro_master.lv3.desc=Come on, control your current!
-achievement.ac_electro_master.lv4=High-Freq Lightning
-achievement.ac_electro_master.lv4.desc=Burst out your potential of destruction!
-achievement.ac_electro_master.lv5=Railgun Queen
-achievement.ac_electro_master.lv5.desc=Only My Railgun!
-achievement.ac_electro_master.skill=
-achievement.ac_electro_master.skill.desc=
-achievement.ac_electro_master.arc_gen=Food Shortage
-achievement.ac_electro_master.arc_gen.desc=Starved. Hmmm, some fish in the water?
-achievement.ac_electro_master.attack_creeper=Self Destruction
-achievement.ac_electro_master.attack_creeper.desc=It is heard that creeper is vunlunerable to electricity
-achievement.ac_electro_master.magnetic=Lift Yourself!
-achievement.ac_electro_master.magnetic.desc=You don’t have to walk on feet if there are some magnetizable metals.
-achievement.ac_electro_master.body_intensify=Don’t have to exercise.
-achievement.ac_electro_master.body_intensify.desc=It’s better than exercise to electric yourself.
-achievement.ac_electro_master.iron_sand=Dancing with your iron sand!
-achievement.ac_electro_master.iron_sand.desc=Stay away from me or get hurt!
-achievement.ac_electro_master.mine_detect=you can use the sense of magnetic force.
-achievement.ac_electro_master.mine_detect.desc=Who can tell you why the magnetic can see the carbon.
-achievement.ac_electro_master.thunder_bolt=It’s the continuous lightning!
-achievement.ac_electro_master.thunder_bolt.desc=Use lightning as your arm. Come on! I want to hit ten!
-achievement.ac_electro_master.railgun=You are the self-propelled battery.
-achievement.ac_electro_master.railgun.desc=Use your body like cannon and your coins as bullet.
-achievement.ac_electro_master.thunder_clap=You are the human-like thunderstorm.
-achievement.ac_electro_master.thunder_clap.desc=The thundercloud always follow me.
+ac.achievementpage.cat_electromaster=Electromaster
+achievement.ac_electromaster.lv1=Fluctuating Current
+achievement.ac_electromaster.lv1.desc=Can't even generate a stable current, outranked!
+achievement.ac_electromaster.lv2=Imperfect Electricity
+achievement.ac_electromaster.lv2.desc=Still with such low voltage, weak!
+achievement.ac_electromaster.lv3=Irradiating Arc
+achievement.ac_electromaster.lv3.desc=Come on, control your current!
+achievement.ac_electromaster.lv4=High-Freq Lightning
+achievement.ac_electromaster.lv4.desc=Burst out your potential of destruction!
+achievement.ac_electromaster.lv5=Railgun Queen
+achievement.ac_electromaster.lv5.desc=Only My Railgun!
+achievement.ac_electromaster.skill=
+achievement.ac_electromaster.skill.desc=
+achievement.ac_electromaster.arc_gen=Food Shortage
+achievement.ac_electromaster.arc_gen.desc=Starved. Hmmm, some fish in the water?
+achievement.ac_electromaster.attack_creeper=Self Destruction
+achievement.ac_electromaster.attack_creeper.desc=It is heard that creeper is vunlunerable to electricity
+achievement.ac_electromaster.magnetic=Lift Yourself!
+achievement.ac_electromaster.magnetic.desc=You don’t have to walk on feet if there are some magnetizable metals.
+achievement.ac_electromaster.body_intensify=Don’t have to exercise.
+achievement.ac_electromaster.body_intensify.desc=It’s better than exercise to electric yourself.
+achievement.ac_electromaster.iron_sand=Dancing with your iron sand!
+achievement.ac_electromaster.iron_sand.desc=Stay away from me or get hurt!
+achievement.ac_electromaster.mine_detect=you can use the sense of magnetic force.
+achievement.ac_electromaster.mine_detect.desc=Who can tell you why the magnetic can see the carbon.
+achievement.ac_electromaster.thunder_bolt=It’s the continuous lightning!
+achievement.ac_electromaster.thunder_bolt.desc=Use lightning as your arm. Come on! I want to hit ten!
+achievement.ac_electromaster.railgun=You are the self-propelled battery.
+achievement.ac_electromaster.railgun.desc=Use your body like cannon and your coins as bullet.
+achievement.ac_electromaster.thunder_clap=You are the human-like thunderstorm.
+achievement.ac_electromaster.thunder_clap.desc=The thundercloud always follow me.
 
-ac.achievementpage.cat_melt_downer=Melt Downer
-achievement.ac_melt_downer.lv1=Electron Current
-achievement.ac_melt_downer.lv1.desc=Are you using a water gun or something?
-achievement.ac_melt_downer.lv2=Destructive Beam
-achievement.ac_melt_downer.lv2.desc=Decompose that block at your front
-achievement.ac_melt_downer.lv3=Igniting Irradiation
-achievement.ac_melt_downer.lv3.desc=Hyperthermia works well on destroying things
-achievement.ac_melt_downer.lv4=Collapsing Barrage
-achievement.ac_melt_downer.lv4.desc=No matter can survive your beam
-achievement.ac_melt_downer.lv5=Melt Downer
-achievement.ac_melt_downer.lv5.desc=Destroy everything, in the atom perspective
-achievement.ac_melt_downer.skill=
-achievement.ac_melt_downer.skill.desc=
+ac.achievementpage.cat_meltdowner=Meltdowner
+achievement.ac_meltdowner.lv1=Electron Current
+achievement.ac_meltdowner.lv1.desc=Are you using a water gun or something?
+achievement.ac_meltdowner.lv2=Destructive Beam
+achievement.ac_meltdowner.lv2.desc=Decompose that block at your front
+achievement.ac_meltdowner.lv3=Igniting Irradiation
+achievement.ac_meltdowner.lv3.desc=Hyperthermia works well on destroying things
+achievement.ac_meltdowner.lv4=Collapsing Barrage
+achievement.ac_meltdowner.lv4.desc=No matter can survive your beam
+achievement.ac_meltdowner.lv5=Meltdowner
+achievement.ac_meltdowner.lv5.desc=Destroy everything, in the atom perspective
+achievement.ac_meltdowner.skill=
+achievement.ac_meltdowner.skill.desc=
 
 ac.achievementpage.cat_teleporter=Teleporter
 achievement.ac_teleporter.lv1=Coordinate Analysis

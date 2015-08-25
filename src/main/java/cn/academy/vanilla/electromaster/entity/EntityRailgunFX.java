@@ -52,7 +52,7 @@ public class EntityRailgunFX extends EntityRayBase {
 	
 	static final int ARC_SIZE = 15;
 	
-	@RegACKeyHandler(defaultKey = Keyboard.KEY_L, name = "MeltDowner")
+	@RegACKeyHandler(defaultKey = Keyboard.KEY_L, name = "Meltdowner")
 	public static KH keyHandler;
 	
 	@RegEntity.Render

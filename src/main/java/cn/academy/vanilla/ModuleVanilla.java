@@ -9,13 +9,13 @@ import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.academy.vanilla.electromaster.item.ItemMagHook;
 import cn.academy.vanilla.generic.skill.SkillBrainCourse;
 import cn.academy.vanilla.generic.skill.SkillBrainCourseAdvanced;
 import cn.academy.vanilla.generic.skill.SkillMindCourse;
-import cn.academy.vanilla.meltdowner.CatMeltDowner;
+import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
 import cn.annoreg.core.Registrant;
@@ -50,10 +50,10 @@ public class ModuleVanilla {
 	public static Item needle = new ACItem("needle");
 	
 	@RegCategory
-	public static CatElectroMaster electroMaster;
+	public static CatElectromaster electromaster;
 	
 	@RegCategory
-	public static CatMeltDowner meltdowner;
+	public static CatMeltdowner meltdowner;
 	
 	@RegCategory
 	public static CatTeleporter teleporter;

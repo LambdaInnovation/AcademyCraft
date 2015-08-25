@@ -252,7 +252,7 @@ ac.ability.level4=大能力者
 ac.ability.level5=超能力者
 
 # 電擊使
-ac.ability.electro_master.name=電擊使
+ac.ability.electromaster.name=電擊使
 
 ## 電擊使 知識
 ac.knowledge.em_basic_volt.name=基礎電壓控制
@@ -263,47 +263,40 @@ ac.knowledge.em_projectile_master.name=磁場精通
 ac.knowledge.highenergy.name=高能理論
 
 ## 電擊使 技能
-ac.ability.electro_master.arc_gen.name=電弧激發
-ac.ability.electro_master.mag_manip.name=磁場控制
-ac.ability.electro_master.mine_detect.name=礦物探測
-ac.ability.electro_master.railgun.name=超電磁炮
-ac.ability.electro_master.mag_movement.name=電磁牽引
-ac.ability.electro_master.iron_sand.name=鐵砂操作
-ac.ability.electro_master.iron_sand.sword.name=鐵砂長劍
-ac.ability.electro_master.iron_sand.whip.name=鐵砂長鞭
-ac.ability.electro_master.iron_sand.storm.name=鐵砂風暴
-ac.ability.electro_master.iron_sand.cone.name=鐵椎
-ac.ability.electro_master.charging.name=電流回沖
-ac.ability.electro_master.body_intensify.name=生物電強化
-ac.ability.electro_master.thunder_clap.name=終極落雷
-ac.ability.electro_master.thunder_bolt.name=雷擊之槍
+ac.ability.electromaster.arc_gen.name=電弧激發
+ac.ability.electromaster.mag_manip.name=磁場控制
+ac.ability.electromaster.mine_detect.name=礦物探測
+ac.ability.electromaster.railgun.name=超電磁炮
+ac.ability.electromaster.mag_movement.name=電磁牽引
+ac.ability.electromaster.iron_sand.namelectromasterlity.electromaster.iron_sand.sword.name=鐵砂長劍
+ac.ability.electromaster.iron_sand.whip.name=鐵砂長鞭
+ac.ability.electromaster.iron_sand.storm.name=鐵砂風暴
+ac.ability.electromaster.iron_sand.cone.name=鐵椎
+ac.ability.electromaster.charging.name=電流回沖
+ac.ability.electromaster.body_intensify.name=生物電強化
+ac.abilelectromasterster.thunder_clap.name=終極落雷
+ac.abelectromastermaster.thunder_bolt.name=雷擊之槍
 
-ac.ability.electro_master.arc_gen.desc=激發出一道較微弱的電弧，會在落點處擴散來造成傷害，如果直擊到易燃方塊，可能會將其點燃。
-ac.ability.electro_master.mag_manip.desc=使用電磁力操縱並且移動世界中的可磁化物體，甚至將它們投擲出去殺傷敵人。
-ac.ability.electro_master.mine_detect.desc=閉上眼睛感受周圍的磁力線流動，可以讓你看到身旁珍惜礦物資源的痕跡。
-ac.ability.electro_master.railgun.desc=利用電磁誘導原理，將硬幣高速射出，在全力一擊的情況下有恐怖的破壞力。
-ac.ability.electro_master.mag_movement.desc=向外界的某個可磁化物體釋放電磁力，使自己的身體快速移動。
-ac.ability.electro_master.iron_sand.desc=通過分離和操縱身體周圍的鐵砂，創造出變化多端而又極其危險的攻擊效果。
-ac.ability.electro_master.charging.desc=對手持的物品或世界中的電力方塊進行充能。
-ac.ability.electro_master.body_intensify.desc=操縱自身生物電，在短時間內強化身體素質。
-ac.ability.electro_master.thunder_clap.desc=操縱大氣中的電磁場氛圍，催化出雷雲，並牽引其中的電力產生一次破壞性的落雷。
-ac.ability.electro_master.thunder_bolt.desc=生成海量的電力，將其約束成柱形發射。擊中實體後，猛烈的電流會爆發出去產生第二次傷害。
+acelectromasterro_master.arc_gen.desc=激發出一道較微弱的電弧，會在electromaster擊到易燃方塊，可能會將其點燃。
+ac.ability.electelectromastermanip.desc=使用電磁力操縱並且移動世界中的可磁化物體，甚至將它們投electromasterbility.electromaster.mine_detect.delectromaster力線流動，可以讓你看到身旁珍惜礦物資源的痕跡。
+ac.ability.electelectromastergun.desc=利用電磁誘導原理，將硬幣高速射出，在全力一擊的情況下有恐怖的破electromastery.electromaster.mag_movement.desc=向外界的某個electromaster的身體快速移動。
+ac.ability.electromaster.ielectromaster通過分離和操縱身體周圍的鐵砂，創造出變化多端而又極其危險的攻擊效果。electromasterlectro_master.charging.desc=對手持的物品或世界中的電力方electromasterlity.electromaster.body_intensify.deselectromaster內強化身體素質。
+ac.ability.electromaster.thunelectromaster操縱大氣中的電磁場氛圍，催化出雷雲，並牽引其中的電力產生一次破壞性的落雷。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的電力，將其electromaster猛烈的電流會爆發出去產生第二次傷害。
 
 # 傳送使
 ac.ability.teleporter.name=傳送使
 
 ## 傳送使 技能
-ac.ability.teleporter.flesh_ripping.name=肌體撕裂
+ac.abilitelectromasterlesh_ripping.name=肌體撕裂
 ac.ability.teleporter.threatening_teleport.name=危險傳送
-ac.ability.teleporter.dim_folding_theoreom.name=折疊空間概論
-ac.ability.teleporter.shift_tp.name=轉移傳送
-ac.ability.teleporter.space_fluct.name=空間波動
+ac.electromasterrter.dim_folding_theoreom.name=折疊空間概論
+ac.ability.teleporter.shift_tp.name=轉移傳送electromasterleporter.space_fluct.name=空間波動
 ac.ability.teleporter.flashing.name=高速閃現
 
-ac.ability.teleporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。
-ac.ability.teleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候，只需要一小塊體內的碎片就可以對生物造成巨大傷害。 
-ac.ability.teleporter.dim_folding_theoreom.desc=通過傳送時不穩定的微弱空間折疊現象來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
-ac.ability.teleporter.shift_tp.desc=將方塊運用坐標移動的方式高速發射出去，因為其運動方式並非動能推動而是坐標改變，所以並不會因為其速度與質量而影響破壞力。
+electromastereporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。electromastereleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候electromaster以對生物造成巨大傷害。 
+ac.ability.teleporter.dim_folding_theoreom.desc=通過傳electromaster來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
+ac.ability.teleporter.shift_tp.desc=將方塊運用坐標移動的方式electromaster並非動能推動而是坐標改變，所以並不會因為其速度與質量而影響破壞力。
 ac.ability.teleporter.space_fluct.desc=利用空間的波動，將空間跳躍類攻擊的分裂性擴大，來造成更高的殺傷。
 ac.ability.teleporter.flashing.desc=遠超標記傳送機動性的新傳送方式，極高的傳送速度與速度的重置能讓你實現靈活的空中機動。
 
@@ -318,24 +311,24 @@ ac.gui.loctele.warn1=你現在無法記錄此坐標.
 ac.gui.loctele.teleport=傳送！
 
 # 原子崩壞
-ac.ability.melt_downer.name=Melt Downer
+ac.ability.meltdowner.name=Meltdowner
 
 ## 原子崩壞 技能
-ac.ability.melt_downer.ray_barrage.name=散射光束雨
-ac.ability.melt_downer.scatter_bomb.name=電子彈散射
-ac.ability.melt_downer.light_shield.name=光盾
-ac.ability.melt_downer.jet_engine.name=突擊噴射
-ac.ability.melt_downer.mine_ray_basic.name=基礎采集光束
-ac.ability.melt_downer.mine_ray_expert.name=采集光束精修
-ac.ability.melt_downer.mine_ray_luck.name=采集光束精修 - 時運
+ac.ability.meltdowner.ray_barrage.name=散射光束雨
+ac.ability.meltdowner.scatter_bomb.name=電子彈散射
+ac.ability.meltdowner.light_shield.name=光盾
+ac.ability.meltdowner.jet_engine.name=突擊噴射
+ac.ability.meltdowner.mine_ray_basic.name=基礎采集光束
+ac.ability.meltdowner.mine_ray_expert.name=采集光束精修
+ac.ability.meltdowner.mine_ray_luck.name=采集光束精修 - 時運
 
-ac.ability.melt_downer.ray_barrage.desc=雖然可以從掌心制造出多個電子彈進行攻擊，但是電子彈無法形成彈幕，難以應對全方位的飽和攻擊，因此通過“擴散支援半導體”來應對能力無法大規模攻擊的缺點。
-ac.ability.melt_downer.scatter_bomb.desc=復數的操控電子團放射來進行攻擊，作為復數操控的代價，你無法精準的控制落點。
-ac.ability.melt_downer.light_shield.desc=將電子團橫截面擴大形成護盾，高速運動的電子將會摧毀來犯物質，並傷害任何近距離接觸自己的東西。
-ac.ability.melt_downer.jet_engine.desc=將電子用類似火箭引擎噴射的原理激發出去，利用反作用力來產生極速的位移，過程中周身產生短暫的光盾保護自己。
-ac.ability.melt_downer.mine_ray_basic.desc=經過鍛煉的電子射流，能夠在不毀滅瞄準物的情況下將其采集出來。
-ac.ability.melt_downer.mine_ray_expert.desc=持續的使用原子崩壞能力去參與挖礦與伐木等活動，讓你對如何使用破壞性的電子束收集素材有了自己獨特的理解，能夠更有效的對礦物進行采集。
-ac.ability.melt_downer.mine_ray_luck.desc=經過長久的鍛煉，你已經可以以較高的幾率將礦物中蘊含的礦物完美的采集出來。
+ac.ability.meltdowner.ray_barrage.desc=雖然可以從掌心制造出多個電子彈進行攻擊，但是電子彈無法形成彈幕，難以應對全方位的飽和攻擊，因此通過“擴散支援半導體”來應對能力無法大規模攻擊的缺點。
+ac.ability.meltdowner.scatter_bomb.desc=復數的操控電子團放射來進行攻擊，作為復數操控的代價，你無法精準的控制落點。
+ac.ability.meltdowner.light_shield.desc=將電子團橫截面擴大形成護盾，高速運動的電子將會摧毀來犯物質，並傷害任何近距離接觸自己的東西。
+ac.ability.meltdowner.jet_engine.desc=將電子用類似火箭引擎噴射的原理激發出去，利用反作用力來產生極速的位移，過程中周身產生短暫的光盾保護自己。
+ac.ability.meltdowner.mine_ray_basic.desc=經過鍛煉的電子射流，能夠在不毀滅瞄準物的情況下將其采集出來。
+ac.ability.meltdowner.mine_ray_expert.desc=持續的使用原子崩壞能力去參與挖礦與伐木等活動，讓你對如何使用破壞性的電子束收集素材有了自己獨特的理解，能夠更有效的對礦物進行采集。
+ac.ability.meltdowner.mine_ray_luck.desc=經過長久的鍛煉，你已經可以以較高的幾率將礦物中蘊含的礦物完美的采集出來。
 
 # 常規技能
 ac.ability.generic.brain_course.name=大腦訓練課程
@@ -423,62 +416,55 @@ ac.command.preset.list2=可用Controllable:
 #achievement.ac_node_basic=基礎存儲
 #achievement.ac_node_basic.desc=合成一個虛能矩陣以存儲和傳輸能量.
 
-ac.achievementpage.cat_electro_master=電氣使
-achievement.ac_electro_master.lv1=波動電流
-achievement.ac_electro_master.lv1.desc=電壓時大時小，不及格
-achievement.ac_electro_master.lv2=缺陷電氣
-achievement.ac_electro_master.lv2.desc=如此微弱的電壓，貧弱
-achievement.ac_electro_master.lv3=逸散電弧
-achievement.ac_electro_master.lv3.desc=來吧，將電弧激發出去 
-achievement.ac_electro_master.lv4=高頻閃電
-achievement.ac_electro_master.lv4.desc=不要松懈，增強你的電 
-achievement.ac_electro_master.lv5=超電磁炮
-achievement.ac_electro_master.lv5.desc=天下唯我，超電磁炮！
-achievement.ac_electro_master.skill=
-achievement.ac_electro_master.skill.desc=
-achievement.ac_electro_master.arc_gen=缺少食物
-achievement.ac_electro_master.arc_gen.desc=好餓啊，咦？水裏有魚
-achievement.ac_electro_master.attack_creeper=自尋死路
-achievement.ac_electro_master.attack_creeper.desc=聽老師說爬行者遇電會被秒殺
-achievement.ac_electro_master.magnetic=舉起自己
-achievement.ac_electro_master.magnetic.desc=只要有可磁化金屬，我就不用走路啦！
-achievement.ac_electro_master.body_intensify=無需鍛煉
-achievement.ac_electro_master.body_intensify.desc=鍛煉什麽的，還不如給自己電一下
-achievement.ac_electro_master.iron_sand=鐵砂狂舞
-achievement.ac_electro_master.iron_sand.desc=不要隨便靠近我的身邊，會受傷的
-achievement.ac_electro_master.mine_detect=磁感視界
-achievement.ac_electro_master.mine_detect.desc=誰來告訴我磁場為什麽能看見碳
-achievement.ac_electro_master.thunder_bolt=連鎖閃電
-achievement.ac_electro_master.thunder_bolt.desc=閃電如臂驅使，來吧，我要打十個
-achievement.ac_electro_master.railgun=自走炮臺
-achievement.ac_electro_master.railgun.desc=以身為炮，硬幣為彈
-achievement.ac_electro_master.thunder_clap=人形雷暴
-achievement.ac_electro_master.thunder_clap.desc=我在哪裏，雷雲就在哪裏
+ac.achievementpage.cat_electromaster=電氣使
+achievement.ac_electromaster.lv1=波動電流
+achievement.ac_electromaster.lv1.desc=電壓時大時小，不及格
+achievement.ac_electromaster.lv2=缺陷電氣
+achievement.ac_electromaster.lv2.desc=如此微弱的電壓，貧弱
+achievement.ac_electromaster.lv3=逸散電弧
+achievement.ac_electromaster.lv3.desc=來吧，將電弧激發出去 
+achievement.ac_electromaster.lv4=高頻閃電
+achievement.ac_electromaster.lv4.desc=不要松懈，增強你的電 
+achievement.ac_electromaster.lv5=超電磁炮
+achievement.ac_electromaster.lv5.desc=天下唯我，超電磁炮！
+achievement.ac_electromaster.skill=
+achievement.ac_electromaster.skill.desc=
+achievement.ac_electromaster.arc_gen=缺少食物
+achievement.ac_electromaster.arc_gen.desc=好餓啊，咦？水裏有魚
+achievement.ac_electromaster.attack_creeper=自尋死路
+achievement.ac_electromaster.attack_creeper.desc=聽老師說爬行者遇電會被秒殺
+achievement.ac_electromaster.magnetic=舉起自己
+achievement.ac_electromaster.magnetic.desc=只要有可磁化金屬，我就不用走路啦！
+achievement.ac_electromaster.body_intensify=無需鍛煉
+achievement.ac_electromaster.body_intensify.desc=鍛煉什麽的，還不如給自己電一下
+achievement.ac_electromaster.iron_sand=鐵砂狂舞
+achievement.ac_electromaster.iron_sand.desc=不要隨便靠近我的身邊，會受傷的
+achievement.ac_electromaster.mine_detect=磁感視界
+achievement.ac_electromaster.mine_detect.desc=誰來告訴我磁場為什麽能看見碳
+achievement.ac_electromaster.thunder_bolt=連鎖閃電
+achievement.ac_electromaster.thunder_bolt.desc=閃電如臂驅使，來吧，我要打十個
+achievement.ac_electromaster.railgun=自走炮臺
+achievement.ac_electromaster.railgun.desc=以身為炮，硬幣為彈
+achievement.ac_electro_masteelectromaster=人形雷暴
+achievement.ac_eelectromasterthunder_clap.desc=我在哪裏，雷雲就在哪electromasterementpage.cat_meltdowner=原子崩壞
+achievemenelectromasterer.lv1=沖流電子
+achievement.ac_electromaster1.desc=你這能力是沒勁的水柱嗎 
+achievement.ac_melt_delectromaster
+achievement.ac_meltdownerelectromaster方的障礙，差生 
+achievement.ac_meltdowner.lv3=灼熱照electromaster.ac_meltdowner.lv3.desc=高溫是electromasterievement.ac_meltdowner.lv4=毀壞沖流
+achievemeelectromasterner.lv4.desc=不要讓任何物質攔截住你 
+aelectromastermeltdowner.lv5=原子崩壞
+achievement.ac_melt_electromasterc=破壞它，連他的原子一起 
+achievemelectromasterwner.skill=
+achievement.ac_melectromasterll.desc=
 
-ac.achievementpage.cat_melt_downer=原子崩壞
-achievement.ac_melt_downer.lv1=沖流電子
-achievement.ac_melt_downer.lv1.desc=你這能力是沒勁的水柱嗎 
-achievement.ac_melt_downer.lv2=撞毀射流
-achievement.ac_melt_downer.lv2.desc=擊碎你前方的障礙，差生 
-achievement.ac_melt_downer.lv3=灼熱照射
-achievement.ac_melt_downer.lv3.desc=高溫是非常好的破壞方式 
-achievement.ac_melt_downer.lv4=毀壞沖流
-achievement.ac_melt_downer.lv4.desc=不要讓任何物質攔截住你 
-achievement.ac_melt_downer.lv5=原子崩壞
-achievement.ac_melt_downer.lv5.desc=破壞它，連他的原子一起 
-achievement.ac_melt_downer.skill=
-achievement.ac_melt_downer.skill.desc=
-
-ac.achievementpage.cat_teleporter=空間移動
+ac.achievementpage.celectromaster空間移動
 achievement.ac_teleporter.lv1=坐標分析
-achievement.ac_teleporter.lv1.desc=掌握空間移動的基礎原理
-achievement.ac_teleporter.lv2=維度扭曲
-achievement.ac_teleporter.lv2.desc=時空不是絕對的，學渣！ 
-achievement.ac_teleporter.lv3=空間折疊
-achievement.ac_teleporter.lv3.desc=上升到第四維度，瞬間移動！
-achievement.ac_teleporter.lv4=超弦操作
-achievement.ac_teleporter.lv4.desc=探求空間的基本組成 
-achievement.ac_teleporter.lv5=奇點觸摸
-achievement.ac_teleporter.lv5.desc=掌握空間的究極法則 
-achievement.ac_teleporter.skill=
-achievement.ac_teleporter.skill.desc=
+achielectromastereporter.lv1.desc=掌握空間移動的基礎原理
+achievemeelectromasterer.lv2=維度扭曲
+achievement.ac_teleporter.lv2.desc=時空不是絕對的，學渣！electromaster.ac_teleporter.lv3=空間折疊
+achievemelectromasterter.lv3.desc=上升到第四維度，瞬間移動！
+achievement.ac_teleporter.lv4=electromasterent.ac_teleporter.lv4.desc=探求空間的基本組成 
+electromaster_teleporter.lv5=奇點觸摸
+achievement.ac_teleporter.lv5.desc=掌握空間的electromasterment.ac_teleporter.skill=
+achieveelectromasterrter.skill.desc=

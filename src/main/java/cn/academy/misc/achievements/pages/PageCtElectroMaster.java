@@ -13,12 +13,12 @@ import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchBasic;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 
 /**
  * @author EAirPeter
  */
-public final class PageCtElectroMaster extends PageCategory<CatElectroMaster> {
+public final class PageCtElectromaster extends PageCategory<CatElectromaster> {
 
 	private final ACAchievement aLv1;
 	private final ACAchievement aSkill;
@@ -37,8 +37,8 @@ public final class PageCtElectroMaster extends PageCategory<CatElectroMaster> {
 	private final ACAchievement aRailgun;
 	private final ACAchievement aThunderClap;
 
-	public PageCtElectroMaster() {
-		super((CatElectroMaster) CategoryManager.INSTANCE.getCategory("electro_master"));
+	public PageCtElectromaster() {
+		super((CatElectromaster) CategoryManager.INSTANCE.getCategory("electromaster"));
 		add(new ACAchievement[] {
 			aLv1 = new AchEvLevelChange(1, category.currentCharging, "lv1", 0, 0, null),
 			aSkill = new AchEvSkillLearn(category, "skill", 2, 0, ItemAchievement.getStack(category.getIcon()), aLv1),

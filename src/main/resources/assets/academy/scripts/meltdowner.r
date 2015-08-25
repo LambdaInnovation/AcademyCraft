@@ -1,5 +1,5 @@
 ac {
-    melt_downer {
+    meltdowner {
         electron_bomb {
             x { 106 } y { 202 }
             damage(exp) { lerp(5, 10, exp) }
@@ -34,7 +34,7 @@ ac {
             absorb_damage(exp) { lerp(8, 25, exp) }
         }
         
-        melt_downer {
+        meltdowner {
             x { 488 } y { 166 }
             range(exp) { lerp(3, 6, exp) }
             energy(exp) { lerp(800, 1600, exp) }

@@ -33,14 +33,14 @@ import net.minecraft.util.Vec3;
 /**
  * @author WeAthFolD
  */
-public class MeltDowner extends Skill {
+public class Meltdowner extends Skill {
 	
 	static final int TICKS_MIN = 20, TICKS_TOLE = 100;
 
-	static MeltDowner instance;
+	static Meltdowner instance;
 	
-	public MeltDowner() {
-		super("melt_downer", 3);
+	public Meltdowner() {
+		super("meltdowner", 3);
 		instance = this;
 	}
 	
