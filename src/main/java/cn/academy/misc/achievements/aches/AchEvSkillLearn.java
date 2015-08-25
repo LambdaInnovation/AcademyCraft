@@ -10,15 +10,17 @@ import cn.academy.misc.achievements.DispatcherAch;
 /**
  * @author EAirPeter
  */
-public final class AchEvSkillLearn extends AchAbility {
+public final class AchEvSkillLearn<Cat extends Category> extends AchAbility<Cat> {
 
-	public AchEvSkillLearn(Category cat, String id, int x, int y, Item display, Achievement parent) {
+	public AchEvSkillLearn(Cat cat, String id, int x, int y, Item display, Achievement parent) {
 		super(cat, id, x, y, display, parent);
 	}
-	public AchEvSkillLearn(Category cat, String id, int x, int y, Block display, Achievement parent) {
+	
+	public AchEvSkillLearn(Cat cat, String id, int x, int y, Block display, Achievement parent) {
 		super(cat, id, x, y, display, parent);
 	}
-	public AchEvSkillLearn(Category cat, String id, int x, int y, ItemStack display, Achievement parent) {
+	
+	public AchEvSkillLearn(Cat cat, String id, int x, int y, ItemStack display, Achievement parent) {
 		super(cat, id, x, y, display, parent);
 	}
 	

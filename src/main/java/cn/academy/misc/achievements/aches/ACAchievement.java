@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cn.academy.misc.achievements.DispatcherAch;
-import cn.academy.misc.achievements.conds.ConItemCrafted;
+import cn.academy.misc.achievements.conds.CondItemCrafted;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,9 +21,11 @@ public abstract class ACAchievement extends Achievement {
 	protected ACAchievement(String id, int x, int y, Item display, Achievement parent) {
 		this(id, x, y, new ItemStack(display), parent);
 	}
+	
 	protected ACAchievement(String id, int x, int y, Block display, Achievement parent) {
 		this(id, x, y, new ItemStack(display), parent);
 	}
+	
 	protected ACAchievement(String id, int x, int y, ItemStack display, Achievement parent) {
 		super("achievement.ac_" + id, "ac_" + id, x, y, display, parent);
 		if (parent == null)

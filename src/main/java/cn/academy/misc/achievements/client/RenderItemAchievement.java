@@ -1,5 +1,7 @@
 package cn.academy.misc.achievements.client;
 
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.misc.achievements.ItemAchievement;
@@ -28,7 +30,10 @@ public class RenderItemAchievement implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		RenderUtils.loadTexture(ItemAchievement.getTexture(item.getItemDamage()));
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		HudUtils.rect(16, 16);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 }
