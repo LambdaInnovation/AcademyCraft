@@ -2,7 +2,7 @@ package cn.academy.misc.achievements.aches;
 
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cn.academy.misc.achievements.DispatcherAch;
-import cn.academy.misc.achievements.conds.ConItemCrafted;
+import cn.academy.misc.achievements.conds.CondItemCrafted;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,14 +16,16 @@ public final class AchCrSingle extends AchEvItemCrafted {
 	public AchCrSingle(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	public AchCrSingle(String id, int x, int y, Block display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	public AchCrSingle(String id, int x, int y, ItemStack display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
 	
-	private ConItemCrafted cIT = null;
+	private CondItemCrafted cIT = null;
 	
 	@Override
 	public void registerAll() {
@@ -38,7 +40,7 @@ public final class AchCrSingle extends AchEvItemCrafted {
 	}
 	
 	@Override
-	public AchCrSingle adItemCrafted(ConItemCrafted cit) {
+	public AchCrSingle adItemCrafted(CondItemCrafted cit) {
 		cIT = cit;
 		return this;
 	}

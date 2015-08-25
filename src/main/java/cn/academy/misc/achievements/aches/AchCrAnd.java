@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import cn.academy.misc.achievements.DispatcherAch;
-import cn.academy.misc.achievements.conds.ConItemCrafted;
+import cn.academy.misc.achievements.conds.CondItemCrafted;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -19,43 +19,45 @@ public final class AchCrAnd extends AchEvItemCrafted {
 	public AchCrAnd(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	public AchCrAnd(String id, int x, int y, Block display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	public AchCrAnd(String id, int x, int y, ItemStack display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
 	
-	private HashMap<Item, ConItemCrafted> cIT = new HashMap<Item, ConItemCrafted>();
+	private HashMap<Item, CondItemCrafted> cIT = new HashMap<Item, CondItemCrafted>();
 	
 	@Override
 	public void registerAll() {
-		for (ConItemCrafted cit : cIT.values())
+		for (CondItemCrafted cit : cIT.values())
 			DispatcherAch.INSTANCE.rgItemCrafted(cit.item, this);
 	}
 	
 	@Override
 	public void unregisterAll() {
-		for (ConItemCrafted cit : cIT.values())
+		for (CondItemCrafted cit : cIT.values())
 			DispatcherAch.INSTANCE.urItemCrafted(cit.item, this);
 	}
 	
 	@Override
-	public ACAchievement adItemCrafted(ConItemCrafted cit) {
+	public ACAchievement adItemCrafted(CondItemCrafted cit) {
 		cIT.put(cit.item, cit);
 		return this;
 	}
 
 	@Override
 	public boolean acItemCrafted(ItemCraftedEvent event) {
-		ConItemCrafted cit = cIT.get(event.crafting.getItem());
+		CondItemCrafted cit = cIT.get(event.crafting.getItem());
 		if (cit == null || !cit.acItemStack(event.crafting))
 			return false;
 		int ac = 1;
-		HashSet<ConItemCrafted> set = new HashSet<ConItemCrafted>();
+		HashSet<CondItemCrafted> set = new HashSet<CondItemCrafted>();
 		set.add(cit);
 		for (ItemStack is : event.player.inventory.mainInventory) {
-			ConItemCrafted cur = cIT.get(is.getItem());
+			CondItemCrafted cur = cIT.get(is.getItem());
 			if (cur != null && cur.acItemStack(is))
 				set.add(cur);
 		}

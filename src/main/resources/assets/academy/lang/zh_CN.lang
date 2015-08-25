@@ -42,6 +42,7 @@ item.ac_windgen_fan.name=风力能量发生机 - 扇叶
 item.ac_coin.name=硬币
 item.ac_silbarn.name=扩散性支援半导体
 item.ac_needle.name=钢针
+item.ac_maghook.name=磁力钩
 
 item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
@@ -356,7 +357,7 @@ ac.command.notlearned=玩家还未学习任何能力.
 ac.command.knowledge.usage=/knowledge <command>|<help> [参数...]
 ac.command.knowledge.help=/knowledge help: 显示帮助信息.
 ac.command.knowledge.stat=/knowledge stat: 显示玩家知识的统计信息.
-ac.command.knowledge.clear=/knowledge clear: 清楚任何知识信息，从头再来.
+ac.command.knowledge.clear=/knowledge clear: 清除任何知识信息，从头再来.
 ac.command.knowledge.getall=/knowledge getall: 立刻学习所有知识.
 ac.command.knowledge.list=/knowledge list: 列出所有可用知识.
 ac.command.knowledge.learn=/knowledge learn [知识名称]: 学习指定的知识.

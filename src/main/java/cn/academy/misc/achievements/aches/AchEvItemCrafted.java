@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
-import cn.academy.misc.achievements.conds.ConItemCrafted;
+import cn.academy.misc.achievements.conds.CondItemCrafted;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 /**
@@ -17,31 +17,33 @@ public abstract class AchEvItemCrafted extends ACAchievement {
 	protected AchEvItemCrafted(String id, int x, int y, Item display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	protected AchEvItemCrafted(String id, int x, int y, Block display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
+	
 	protected AchEvItemCrafted(String id, int x, int y, ItemStack display, Achievement parent) {
 		super(id, x, y, display, parent);
 	}
 	
 	public final ACAchievement adItemCrafted(Block block) {
-		return adItemCrafted(new ConItemCrafted(block));
+		return adItemCrafted(new CondItemCrafted(block));
 	}
 	public final ACAchievement adItemCrafted(Item item) {
-		return adItemCrafted(new ConItemCrafted(item));
+		return adItemCrafted(new CondItemCrafted(item));
 	}
 	public final ACAchievement adItemCrafted(Block block, int meta) {
-		return adItemCrafted(new ConItemCrafted(block, meta));
+		return adItemCrafted(new CondItemCrafted(block, meta));
 	}
 	public final ACAchievement adItemCrafted(Item item, int meta) {
-		return adItemCrafted(new ConItemCrafted(item, meta));
+		return adItemCrafted(new CondItemCrafted(item, meta));
 	}
 	public final ACAchievement adItemCrafted(Block block, int meta, int amount) {
-		return adItemCrafted(new ConItemCrafted(block, meta, amount));
+		return adItemCrafted(new CondItemCrafted(block, meta, amount));
 	}
 	public final ACAchievement adItemCrafted(Item item, int meta, int amount) {
-		return adItemCrafted(new ConItemCrafted(item, meta, amount));
+		return adItemCrafted(new CondItemCrafted(item, meta, amount));
 	}
-	public abstract ACAchievement adItemCrafted(ConItemCrafted cit);
+	public abstract ACAchievement adItemCrafted(CondItemCrafted cit);
 	public abstract boolean acItemCrafted(ItemCraftedEvent event);
 }
