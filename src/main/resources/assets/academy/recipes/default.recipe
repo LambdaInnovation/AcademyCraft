@@ -176,4 +176,10 @@ shaped(app_freq_transmitter) {
     [info_comp]
 }
 
+shaped(mag_hook) {
+    [nil, plateIron, nil]
+    [plateIron, plateIron, plateIron]
+    [nil, plateIron, nil]
+}
+
 ; developer pending.

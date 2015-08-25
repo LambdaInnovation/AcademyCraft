@@ -42,6 +42,7 @@ item.ac_windgen_fan.name=Wind Generator Fan
 item.ac_coin.name=Coin
 item.ac_silbarn.name=Silicon Barn
 item.ac_needle.name=Needle
+item.ac_maghook.name=Magnetic Hook
 
 item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer
