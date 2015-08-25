@@ -268,34 +268,42 @@ ac.ability.electromaster.mag_manip.name=磁场控制
 ac.ability.electromaster.mine_detect.name=矿物探测
 ac.ability.electromaster.railgun.name=超电磁炮
 ac.ability.electromaster.mag_movement.name=电磁牵引
-ac.ability.electromaster.iron_sand.naelectromasterility.electromaster.iron_sand.sword.name=铁砂长剑
+ac.ability.electromaster.iron_sand.name=铁砂操作
+ac.ability.electromaster.iron_sand.sword.name=铁砂长剑
 ac.ability.electromaster.iron_sand.whip.name=铁砂长鞭
 ac.ability.electromaster.iron_sand.storm.name=铁砂风暴
 ac.ability.electromaster.iron_sand.cone.name=铁椎
 ac.ability.electromaster.charging.name=电流回冲
 ac.ability.electromaster.body_intensify.name=生物电强化
-ac.abielectromasteraster.thunder_clap.name=终极落雷
-ac.aelectromaster_master.thunder_bolt.name=雷击之枪
+ac.ability.electromaster.thunder_clap.name=终极落雷
+ac.ability.electromaster.thunder_bolt.name=雷击之枪
 
-aelectromastertro_master.arc_gen.desc=激发出一道较微弱的电弧，会electromaster直击到易燃方块，可能会将其点燃。
-ac.ability.elecelectromaster_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体，甚至将它们electromasterability.electromaster.mine_detect.electromaster磁力线流动，可以让你看到身旁珍惜矿物资源的痕迹。
-ac.ability.elecelectromasterlgun.desc=利用电磁诱导原理，将硬币高速射出，在全力一击的情况下有恐怖的electromasterty.electromaster.mag_movement.desc=向外界的某electromaster己的身体快速移动。
-ac.ability.electromaster.electromaster=通过分离和操纵身体周围的铁砂，创造出变化多端而又极其危险的攻击效果electromasterelectromaster.charging.desc=对手持的物品或世界中的电力electromasterility.electromaster.body_intensify.deelectromaster间内强化身体素质。
-ac.ability.electromaster.thuelectromaster=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
-ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将electromaster，猛烈的电流会爆发出去产生第二次伤害。
+ac.ability.electromaster.arc_gen.desc=激发出一道较微弱的电弧，会在落点处扩散来造成伤害，如果直击到易燃方块，可能会将其点燃。
+ac.ability.electromaster.mag_manip.desc=使用电磁力操纵并且移动世界中的可磁化物体，甚至将它们投掷出去杀伤敌人。
+ac.ability.electromaster.mine_detect.desc=闭上眼睛感受周围的磁力线流动，可以让你看到身旁珍惜矿物资源的痕迹。
+ac.ability.electromaster.railgun.desc=利用电磁诱导原理，将硬币高速射出，在全力一击的情况下有恐怖的破坏力。
+ac.ability.electromaster.mag_movement.desc=向外界的某个可磁化物体释放电磁力，使自己的身体快速移动。
+ac.ability.electromaster.iron_sand.desc=通过分离和操纵身体周围的铁砂，创造出变化多端而又极其危险的攻击效果。
+ac.ability.electromaster.charging.desc=对手持的物品或世界中的电力方块进行充能。
+ac.ability.electromaster.body_intensify.desc=操纵自身生物电，在短时间内强化身体素质。
+ac.ability.electromaster.thunder_clap.desc=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
 # 传送使
 ac.ability.teleporter.name=传送使
 
 ## 传送使 技能
-ac.abilielectromasterflesh_ripping.name=肌体撕裂
+ac.ability.teleporter.flesh_ripping.name=肌体撕裂
 ac.ability.teleporter.threatening_teleport.name=危险传送
-acelectromasterorter.dim_folding_theoreom.name=折叠空间概论
-ac.ability.teleporter.shift_tp.name=转移传送electromastereleporter.space_fluct.name=空间波动
+ac.ability.teleporter.dim_folding_theoreom.name=折叠空间概论
+ac.ability.teleporter.shift_tp.name=转移传送
+ac.ability.teleporter.space_fluct.name=空间波动
 ac.ability.teleporter.flashing.name=高速闪现
-electromastereleporter.flesh_ripping.desc=锁定某个生物，将其身体部分血肉直接撕裂并传送出体外，但是因为过于血腥的杀伤效果，可能在使用技能之后产生反electromaster.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有electromaster就可以对生物造成巨大伤害。 
-ac.ability.teleporter.dim_folding_theoreom.desc=通electromaster现象来对自己的空间跳跃类攻击进行一次概率性的空间分裂，来对敌人造成更高程度的伤害。
-ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的electromaster方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力。
+
+ac.ability.teleporter.flesh_ripping.desc=锁定某个生物，将其身体部分血肉直接撕裂并传送出体外，但是因为过于血腥的杀伤效果，可能在使用技能之后产生反胃。
+ac.ability.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有时候，只需要一小块体内的碎片就可以对生物造成巨大伤害。 
+ac.ability.teleporter.dim_folding_theoreom.desc=通过传送时不稳定的微弱空间折叠现象来对自己的空间跳跃类攻击进行一次概率性的空间分裂，来对敌人造成更高程度的伤害。
+ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的方式高速发射出去，因为其运动方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力。
 ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃类攻击的分裂性扩大，来造成更高的杀伤。
 ac.ability.teleporter.flashing.desc=远超标记传送机动性的新传送方式，极高的传送速度与速度的重置能让你实现灵活的空中机动。
 
@@ -310,7 +318,7 @@ ac.gui.loctele.warn1=你现在无法记录此坐标.
 ac.gui.loctele.teleport=传送！
 
 # 原子崩坏
-ac.ability.meltdowner.name=Meltdowner
+ac.ability.meltdowner.name=Melt Downer
 
 ## 原子崩坏 技能
 ac.ability.meltdowner.ray_barrage.name=散射光束雨
@@ -387,33 +395,28 @@ ac.command.preset.nobind=未绑定.
 ac.command.preset.list2=可用Controllable: 
 
 # 成就
-#achievement.ac_crystal=
-#achievement.ac_crystal.desc=
-#achievement.ac_developer1=
-#achievement.ac_developer1.desc=
-#achievement.ac_developer2=
-#achievement.ac_developer2.desc=
-#achievement.ac_developer3=
-#achievement.ac_developer3.desc=
-#achievement.ac_matrix1=
-#achievement.ac_matrix1.desc=
-#achievement.ac_matrix2=
-#achievement.ac_matrix2.desc=
-#achievement.ac_node=
-#achievement.ac_node.desc=
-#achievement.ac_phase_liquid=
-#achievement.ac_phase_liquid.desc=
-#achievement.ac_phasegen=
-#achievement.ac_phasegen.desc=
-#achievement.ac_solargen=
-#achievement.ac_solargen.desc=
-#achievement.ac_windgen=
-#achievement.ac_windgen.desc=
-
-#achievement.ac_phase_liquid=神秘的物质
-#achievement.ac_phase_liquid.desc=收集一些虚相位液体, 然后思考如何用它们创造能量.
-#achievement.ac_node_basic=基础存储
-#achievement.ac_node_basic.desc=合成一个虚能矩阵以存储和传输能量.
+achievement.ac_crystal=
+achievement.ac_crystal.desc=
+achievement.ac_developer1=
+achievement.ac_developer1.desc=
+achievement.ac_developer2=
+achievement.ac_developer2.desc=
+achievement.ac_developer3=
+achievement.ac_developer3.desc=
+achievement.ac_matrix1=
+achievement.ac_matrix1.desc=
+achievement.ac_matrix2=
+achievement.ac_matrix2.desc=
+achievement.ac_node=
+achievement.ac_node.desc=
+achievement.ac_phase_liquid=
+achievement.ac_phase_liquid.desc=
+achievement.ac_phasegen=
+achievement.ac_phasegen.desc=
+achievement.ac_solargen=
+achievement.ac_solargen.desc=
+achievement.ac_windgen=
+achievement.ac_windgen.desc=
 
 ac.achievementpage.cat_electromaster=电气使
 achievement.ac_electromaster.lv1=波动电流
@@ -444,25 +447,33 @@ achievement.ac_electromaster.thunder_bolt=连锁闪电
 achievement.ac_electromaster.thunder_bolt.desc=闪电如臂驱使，来吧，我要打十个
 achievement.ac_electromaster.railgun=自走炮台
 achievement.ac_electromaster.railgun.desc=以身为炮，硬币为弹
-achievement.ac_electro_melectromasterclap=人形雷暴
-achievement.electromasterter.thunder_clap.desc=我在哪里，雷electromasterhievementpage.cat_meltdowner=原子崩坏
-achievelectromasterdowner.lv1=冲流电子
-achievementelectromasterr.lv1.desc=你这能力是没劲的水柱吗 
-achievement.ac_meelectromaster撞毁射流
-achievement.ac_melt_doelectromaster击碎你前方的障碍，差生 
-achievement.ac_meltdowner.lv3electromasterment.ac_meltdowner.lv3.descelectromaster
-achievement.ac_meltdowner.lv4=毁坏冲流
-achieelectromaster_downer.lv4.desc=不要让任何物质拦截住你electromaster.ac_meltdowner.lv5=原子崩坏
-achievement.ac_melectromaster.desc=破坏它，连他的原子一起 
-achielectromastert_downer.skill=
-achievement.electromaster.skill.desc=
+achievement.ac_electromaster.thunder_clap=人形雷暴
+achievement.ac_electromaster.thunder_clap.desc=我在哪里，雷云就在哪里
 
-ac.achievementpaelectromasterter=空间移动
+ac.achievementpage.cat_meltdowner=原子崩坏
+achievement.ac_meltdowner.lv1=冲流电子
+achievement.ac_meltdowner.lv1.desc=你这能力是没劲的水柱吗 
+achievement.ac_meltdowner.lv2=撞毁射流
+achievement.ac_meltdowner.lv2.desc=击碎你前方的障碍，差生 
+achievement.ac_meltdowner.lv3=灼热照射
+achievement.ac_meltdowner.lv3.desc=高温是非常好的破坏方式 
+achievement.ac_meltdowner.lv4=毁坏冲流
+achievement.ac_meltdowner.lv4.desc=不要让任何物质拦截住你 
+achievement.ac_meltdowner.lv5=原子崩坏
+achievement.ac_meltdowner.lv5.desc=破坏它，连他的原子一起 
+achievement.ac_meltdowner.skill=
+achievement.ac_meltdowner.skill.desc=
+
+ac.achievementpage.cat_teleporter=空间移动
 achievement.ac_teleporter.lv1=坐标分析
-electromaster_teleporter.lv1.desc=掌握空间移动的基础原理
-achieelectromasterporter.lv2=维度扭曲
-achievement.ac_teleporter.lv2.desc=时空不是绝对的electromasterment.ac_teleporter.lv3=空间折叠
-achielectromastereporter.lv3.desc=上升到第四维度，瞬间移动！
-achievement.ac_teleporter.electromasterevement.ac_teleporter.lv4.desc=探求空间的基本组electromastert.ac_teleporter.lv5=奇点触摸
-achievement.ac_teleporter.lv5.desc=掌electromasterievement.ac_teleporter.skill=
-achelectromasterleporter.skill.desc=
+achievement.ac_teleporter.lv1.desc=掌握空间移动的基础原理
+achievement.ac_teleporter.lv2=维度扭曲
+achievement.ac_teleporter.lv2.desc=时空不是绝对的，学渣！ 
+achievement.ac_teleporter.lv3=空间折叠
+achievement.ac_teleporter.lv3.desc=上升到第四维度，瞬间移动！
+achievement.ac_teleporter.lv4=超弦操作
+achievement.ac_teleporter.lv4.desc=探求空间的基本组成 
+achievement.ac_teleporter.lv5=奇点触摸
+achievement.ac_teleporter.lv5.desc=掌握空间的究极法则 
+achievement.ac_teleporter.skill=
+achievement.ac_teleporter.skill.desc=

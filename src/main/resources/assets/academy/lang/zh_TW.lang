@@ -268,35 +268,42 @@ ac.ability.electromaster.mag_manip.name=磁場控制
 ac.ability.electromaster.mine_detect.name=礦物探測
 ac.ability.electromaster.railgun.name=超電磁炮
 ac.ability.electromaster.mag_movement.name=電磁牽引
-ac.ability.electromaster.iron_sand.namelectromasterlity.electromaster.iron_sand.sword.name=鐵砂長劍
+ac.ability.electromaster.iron_sand.name=鐵砂操作
+ac.ability.electromaster.iron_sand.sword.name=鐵砂長劍
 ac.ability.electromaster.iron_sand.whip.name=鐵砂長鞭
 ac.ability.electromaster.iron_sand.storm.name=鐵砂風暴
 ac.ability.electromaster.iron_sand.cone.name=鐵椎
 ac.ability.electromaster.charging.name=電流回沖
 ac.ability.electromaster.body_intensify.name=生物電強化
-ac.abilelectromasterster.thunder_clap.name=終極落雷
-ac.abelectromastermaster.thunder_bolt.name=雷擊之槍
+ac.ability.electromaster.thunder_clap.name=終極落雷
+ac.ability.electromaster.thunder_bolt.name=雷擊之槍
 
-acelectromasterro_master.arc_gen.desc=激發出一道較微弱的電弧，會在electromaster擊到易燃方塊，可能會將其點燃。
-ac.ability.electelectromastermanip.desc=使用電磁力操縱並且移動世界中的可磁化物體，甚至將它們投electromasterbility.electromaster.mine_detect.delectromaster力線流動，可以讓你看到身旁珍惜礦物資源的痕跡。
-ac.ability.electelectromastergun.desc=利用電磁誘導原理，將硬幣高速射出，在全力一擊的情況下有恐怖的破electromastery.electromaster.mag_movement.desc=向外界的某個electromaster的身體快速移動。
-ac.ability.electromaster.ielectromaster通過分離和操縱身體周圍的鐵砂，創造出變化多端而又極其危險的攻擊效果。electromasterlectro_master.charging.desc=對手持的物品或世界中的電力方electromasterlity.electromaster.body_intensify.deselectromaster內強化身體素質。
-ac.ability.electromaster.thunelectromaster操縱大氣中的電磁場氛圍，催化出雷雲，並牽引其中的電力產生一次破壞性的落雷。
-ac.ability.electromaster.thunder_bolt.desc=生成海量的電力，將其electromaster猛烈的電流會爆發出去產生第二次傷害。
+ac.ability.electromaster.arc_gen.desc=激發出一道較微弱的電弧，會在落點處擴散來造成傷害，如果直擊到易燃方塊，可能會將其點燃。
+ac.ability.electromaster.mag_manip.desc=使用電磁力操縱並且移動世界中的可磁化物體，甚至將它們投擲出去殺傷敵人。
+ac.ability.electromaster.mine_detect.desc=閉上眼睛感受周圍的磁力線流動，可以讓你看到身旁珍惜礦物資源的痕跡。
+ac.ability.electromaster.railgun.desc=利用電磁誘導原理，將硬幣高速射出，在全力一擊的情況下有恐怖的破壞力。
+ac.ability.electromaster.mag_movement.desc=向外界的某個可磁化物體釋放電磁力，使自己的身體快速移動。
+ac.ability.electromaster.iron_sand.desc=通過分離和操縱身體周圍的鐵砂，創造出變化多端而又極其危險的攻擊效果。
+ac.ability.electromaster.charging.desc=對手持的物品或世界中的電力方塊進行充能。
+ac.ability.electromaster.body_intensify.desc=操縱自身生物電，在短時間內強化身體素質。
+ac.ability.electromaster.thunder_clap.desc=操縱大氣中的電磁場氛圍，催化出雷雲，並牽引其中的電力產生一次破壞性的落雷。
+ac.ability.electromaster.thunder_bolt.desc=生成海量的電力，將其約束成柱形發射。擊中實體後，猛烈的電流會爆發出去產生第二次傷害。
 
 # 傳送使
 ac.ability.teleporter.name=傳送使
 
 ## 傳送使 技能
-ac.abilitelectromasterlesh_ripping.name=肌體撕裂
+ac.ability.teleporter.flesh_ripping.name=肌體撕裂
 ac.ability.teleporter.threatening_teleport.name=危險傳送
-ac.electromasterrter.dim_folding_theoreom.name=折疊空間概論
-ac.ability.teleporter.shift_tp.name=轉移傳送electromasterleporter.space_fluct.name=空間波動
+ac.ability.teleporter.dim_folding_theoreom.name=折疊空間概論
+ac.ability.teleporter.shift_tp.name=轉移傳送
+ac.ability.teleporter.space_fluct.name=空間波動
 ac.ability.teleporter.flashing.name=高速閃現
 
-electromastereporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。electromastereleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候electromaster以對生物造成巨大傷害。 
-ac.ability.teleporter.dim_folding_theoreom.desc=通過傳electromaster來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
-ac.ability.teleporter.shift_tp.desc=將方塊運用坐標移動的方式electromaster並非動能推動而是坐標改變，所以並不會因為其速度與質量而影響破壞力。
+ac.ability.teleporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。
+ac.ability.teleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候，只需要一小塊體內的碎片就可以對生物造成巨大傷害。 
+ac.ability.teleporter.dim_folding_theoreom.desc=通過傳送時不穩定的微弱空間折疊現象來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
+ac.ability.teleporter.shift_tp.desc=將方塊運用坐標移動的方式高速發射出去，因為其運動方式並非動能推動而是坐標改變，所以並不會因為其速度與質量而影響破壞力。
 ac.ability.teleporter.space_fluct.desc=利用空間的波動，將空間跳躍類攻擊的分裂性擴大，來造成更高的殺傷。
 ac.ability.teleporter.flashing.desc=遠超標記傳送機動性的新傳送方式，極高的傳送速度與速度的重置能讓你實現靈活的空中機動。
 
@@ -311,7 +318,7 @@ ac.gui.loctele.warn1=你現在無法記錄此坐標.
 ac.gui.loctele.teleport=傳送！
 
 # 原子崩壞
-ac.ability.meltdowner.name=Meltdowner
+ac.ability.meltdowner.name=Melt Downer
 
 ## 原子崩壞 技能
 ac.ability.meltdowner.ray_barrage.name=散射光束雨
@@ -445,26 +452,33 @@ achievement.ac_electromaster.thunder_bolt=連鎖閃電
 achievement.ac_electromaster.thunder_bolt.desc=閃電如臂驅使，來吧，我要打十個
 achievement.ac_electromaster.railgun=自走炮臺
 achievement.ac_electromaster.railgun.desc=以身為炮，硬幣為彈
-achievement.ac_electro_masteelectromaster=人形雷暴
-achievement.ac_eelectromasterthunder_clap.desc=我在哪裏，雷雲就在哪electromasterementpage.cat_meltdowner=原子崩壞
-achievemenelectromasterer.lv1=沖流電子
-achievement.ac_electromaster1.desc=你這能力是沒勁的水柱嗎 
-achievement.ac_melt_delectromaster
-achievement.ac_meltdownerelectromaster方的障礙，差生 
-achievement.ac_meltdowner.lv3=灼熱照electromaster.ac_meltdowner.lv3.desc=高溫是electromasterievement.ac_meltdowner.lv4=毀壞沖流
-achievemeelectromasterner.lv4.desc=不要讓任何物質攔截住你 
-aelectromastermeltdowner.lv5=原子崩壞
-achievement.ac_melt_electromasterc=破壞它，連他的原子一起 
-achievemelectromasterwner.skill=
-achievement.ac_melectromasterll.desc=
+achievement.ac_electromaster.thunder_clap=人形雷暴
+achievement.ac_electromaster.thunder_clap.desc=我在哪裏，雷雲就在哪裏
 
-ac.achievementpage.celectromaster空間移動
+ac.achievementpage.cat_meltdowner=原子崩壞
+achievement.ac_meltdowner.lv1=沖流電子
+achievement.ac_meltdowner.lv1.desc=你這能力是沒勁的水柱嗎 
+achievement.ac_meltdowner.lv2=撞毀射流
+achievement.ac_meltdowner.lv2.desc=擊碎你前方的障礙，差生 
+achievement.ac_meltdowner.lv3=灼熱照射
+achievement.ac_meltdowner.lv3.desc=高溫是非常好的破壞方式 
+achievement.ac_meltdowner.lv4=毀壞沖流
+achievement.ac_meltdowner.lv4.desc=不要讓任何物質攔截住你 
+achievement.ac_meltdowner.lv5=原子崩壞
+achievement.ac_meltdowner.lv5.desc=破壞它，連他的原子一起 
+achievement.ac_meltdowner.skill=
+achievement.ac_meltdowner.skill.desc=
+
+ac.achievementpage.cat_teleporter=空間移動
 achievement.ac_teleporter.lv1=坐標分析
-achielectromastereporter.lv1.desc=掌握空間移動的基礎原理
-achievemeelectromasterer.lv2=維度扭曲
-achievement.ac_teleporter.lv2.desc=時空不是絕對的，學渣！electromaster.ac_teleporter.lv3=空間折疊
-achievemelectromasterter.lv3.desc=上升到第四維度，瞬間移動！
-achievement.ac_teleporter.lv4=electromasterent.ac_teleporter.lv4.desc=探求空間的基本組成 
-electromaster_teleporter.lv5=奇點觸摸
-achievement.ac_teleporter.lv5.desc=掌握空間的electromasterment.ac_teleporter.skill=
-achieveelectromasterrter.skill.desc=
+achievement.ac_teleporter.lv1.desc=掌握空間移動的基礎原理
+achievement.ac_teleporter.lv2=維度扭曲
+achievement.ac_teleporter.lv2.desc=時空不是絕對的，學渣！ 
+achievement.ac_teleporter.lv3=空間折疊
+achievement.ac_teleporter.lv3.desc=上升到第四維度，瞬間移動！
+achievement.ac_teleporter.lv4=超弦操作
+achievement.ac_teleporter.lv4.desc=探求空間的基本組成 
+achievement.ac_teleporter.lv5=奇點觸摸
+achievement.ac_teleporter.lv5.desc=掌握空間的究極法則 
+achievement.ac_teleporter.skill=
+achievement.ac_teleporter.skill.desc=
