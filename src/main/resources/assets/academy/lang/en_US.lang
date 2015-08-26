@@ -47,6 +47,8 @@ item.ac_maghook.name=Magnetic Hook
 item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer
 
+item.ac_developer_portable.name=Portable Developer
+
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
@@ -71,7 +73,8 @@ tile.ac_eu_output.name=Energy Bridge (IC2 EU Out)
 tile.ac_eu_input.name=Energy Bridge (IC2 EU In)
 tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
 tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
-tile.ac_developer.name=Ability Developer
+tile.ac_developer_normal.name=Normal Ability Developer
+tile.ac_developer_advanced.name=Advanced Ability Developer
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon
@@ -120,7 +123,7 @@ ac.app.freq_transmitter.e6=Link successful.
 ac.knowledge.acquired=Acquired Knowledge
 
 # Skill Tree
-ac.skill_tree.title=Skill Tree
+ac.skill_tree.name=Skill Tree
 ac.skill_tree.version=Version: 1.0β1
 ac.skill_tree.notacquired=Ability not acquired.
 
@@ -284,28 +287,34 @@ ac.ability.electromaster.mine_detect.desc=Close your eyes and feel the flowing o
 ac.ability.electromaster.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
 ac.ability.electromaster.mag_movement.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
 ac.ability.electromaster.iron_sand.desc=Separate and manipulate the iron sand to creative a changeable and dangerous attack effect.
-ac.ability.electromaster.charging.desc=Charge to the thing in your hand and electric blocks in the world.
+ac.ability.electromaster.charging.desc=Generate electric currents to charge the thing in your hand or electric blocks in the world.
 ac.ability.electromaster.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
 ac.ability.electromaster.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
-ac.ability.electromaster.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and cause the second damage.
+ac.ability.electromaster.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and hurt everything around.
 
 # Teleporter
 ac.ability.teleporter.name=Teleporter
 
 ## TP Skills
-ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
 ac.ability.teleporter.threatening_teleport.name=Threatening Teleport
-ac.ability.teleporter.dim_folding_theoreom.name=Dimension Folding Theorem
+ac.ability.teleporter.dim_folding_theoreom.name=Dimension Folding Theoreom
+ac.ability.teleporter.penetrate_teleport.name=Penetrate Teleport
+ac.ability.teleporter.mark_teleport.name=Mark Teleport
+ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
+ac.ability.teleporter.location_teleport.name=Location Teleport
 ac.ability.teleporter.shift_tp.name=Shift Teleport
-ac.ability.teleporter.space_fluct.name=Space Fluctuate
-ac.ability.teleporter.flashing.name=High-speed Flashing
+ac.ability.teleporter.space_fluct.name=Space Fluctuation
+ac.ability.teleporter.flashing.name=Flashing
 
-ac.ability.teleporter.flesh_ripping.desc=Lock a living thing and drag its viscus out. It's so violent that could cause serious nausea.
 ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
-ac.ability.teleporter.dim_folding_theoreom.desc=Cause a possible space division to your space jumping attack with the unstable weak space folding phenomenon when you're teleporting, to cause higher damage to enemies. 
-ac.ability.teleporter.shift_tp.desc=High-speeded shoot the blocks out with teleporting. Its mass and speed won't wenken the damage because the block isn't be pushed by kinetic energy, but be teleported.
-ac.ability.teleporter.space_fluct.desc=Use the fluctuation of space, expand the division of space jumping attack, to cause more damage.
-ac.ability.teleporter.flashing.desc=A new way to teleport that far better than mark teleporting. Very high speed and the reset of speed can help you do air mobility.
+ac.ability.teleporter.dim_folding_theoreom.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.
+ac.ability.teleporter.penetrate_teleport.desc=Derive the obstacle thickness in front of you, and straightly teleport through it.
+ac.ability.teleporter.mark_teleport.desc=Mark where your eye is looking at as your destination and teleport to there.
+ac.ability.teleporter.flesh_ripping.desc=Rip apart your enemy’s inside and cause deadly damage. But the over-bloody effect may make you feel uncomfortable. 
+ac.ability.teleporter.location_teleport.desc=Memorize the current location and teleport back from anywhere far away afterwards.
+ac.ability.teleporter.shift_tp.desc=Teleport a block with the means of coordinate teleport. The space folding phonemonon will hurt any entity on the teleportation path. 
+ac.ability.teleporter.space_fluct.desc=Strenghen your space-folding ability to cause more dangerous critical damage.
+ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver in the air.
 
 ac.gui.loctele.tag0=Recorded Locations
 ac.gui.loctele.tag1=Add Location
@@ -321,21 +330,29 @@ ac.gui.loctele.teleport=Teleport!
 ac.ability.meltdowner.name=Meltdowner
 
 ## MD Skills
+ac.ability.meltdowner.electron_bomb.name=Electron Bomb
+ac.ability.meltdowner.rad_intensify.name=β Radiation Intensify
 ac.ability.meltdowner.ray_barrage.name=Ray Barrage
-ac.ability.meltdowner.scatter_bomb.name=Scattering Electron Bomb
+ac.ability.meltdowner.scatter_bomb.name=Scattering Bomb
+ac.ability.meltdowner.meltdowner.name=Meltdowner
 ac.ability.meltdowner.light_shield.name=Light Shield
 ac.ability.meltdowner.jet_engine.name=Jet Engine
 ac.ability.meltdowner.mine_ray_basic.name=Basic Mining Ray
 ac.ability.meltdowner.mine_ray_expert.name=Expert Mining Ray
-ac.ability.meltdowner.mine_ray_luck.name=Expert Mining Ray - Luck
+ac.ability.meltdowner.mine_ray_luck.name=Luck Mining Ray
+ac.ability.meltdowner.electron_missile.name=Electron Missile
 
-ac.ability.meltdowner.ray_barrage.desc=Though you can generate some electron bomb to attack, they can't turn into barrage. It's difficult to do a omnibearing attack. In order to solve this problem, you can through the Silicon Barn to make a barrage damage.
+ac.ability.meltdowner.electron_bomb.desc=Make together small amount of electrons to generate a threatening beam. 
+ac.ability.meltdowner.rad_intensify.desc=Because of the high-intensity radiation, the target hit by beam is doubly vunlunerable in a few seconds. 
+ac.ability.meltdowner.ray_barrage.desc=Use your high-energy ray with the Silicon Barn to create a ray barrage that destroys everything in front of you. 
 ac.ability.meltdowner.scatter_bomb.desc=Manipulate more than one electronics group to attack. As a result, you can't control the impact point accurately. 
+ac.ability.meltdowner.meltdowner.desc=Extreme high-energy electron beam that melts down walls and metals. 
 ac.ability.meltdowner.light_shield.desc=Turn many electronics into a shield. High-speed moving electronics will destroy all things attack you, and damage all things touch you closely.    
-ac.ability.meltdowner.jet_engine.desc=Shoot out the electronics like rocket engine jetting. Use reaction force to make a very high-speed movement. In this process, the light shields around you will protect you.
+ac.ability.meltdowner.jet_engine.desc=Use the propulsive force of electrons launch yourself into the air. Will generate a light-shield to protect yourself in the flight. 
 ac.ability.meltdowner.mine_ray_basic.desc=After a long time practice, you can make your electronic stream suitably to collect minerals without destroy them.
-ac.ability.meltdowner.mine_ray_expert.desc=With continious practice on mining basics, you have a unique understanding about how to use electronic stream collect material.
-ac.ability.meltdowner.mine_ray_luck.desc=Keeping mining and lumbering with your ability makes you be able to collect the mineral with a much higher rate.
+ac.ability.meltdowner.mine_ray_expert.desc=Understanding how to control the intensity of electrons better, You can now harvest mineral resources more efficiently.
+ac.ability.meltdowner.mine_ray_luck.desc=After a long time of practice, you can almost harvest the useful resources in the ore perfectly.
+ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electron cloud and use a small amount of it to attack each time.
 
 # Generic Skills
 ac.ability.generic.brain_course.name=Brain Course

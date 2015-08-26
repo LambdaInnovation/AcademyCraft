@@ -49,8 +49,8 @@ public class DevelopTypeLevel implements IDevelopType {
 			CategoryManager man = CategoryManager.INSTANCE;
 			Category cat = man.getCategory(RandUtils.nextInt(man.getCategoryCount()));
 			aData.setCategory(cat);
-		}
-		aData.setLevel(aData.getLevel() + 1);
+		} else
+			aData.setLevel(aData.getLevel() + 1);
 	}
 
 	@Override

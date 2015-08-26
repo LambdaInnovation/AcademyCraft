@@ -47,6 +47,8 @@ item.ac_maghook.name=磁力钩
 item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
 
+item.ac_developer_portable.name=便携能力开发机
+
 # 方块
 tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
@@ -72,6 +74,8 @@ tile.ac_rf_output.name=能源桥 (CoFH RF输出)
 tile.ac_rf_input.name=能源桥 (CoFH RF输入)
 tile.ac_developer.name=能力开发机
 tile.ac_machine_frame.name=机械框架
+tile.ac_developer_normal.name=基础能力开发机
+tile.ac_developer_advanced.name=高级能力开发机
 
 # 常规知识
 ac.knowledge.marathon.name=长跑
@@ -120,7 +124,7 @@ ac.app.freq_transmitter.e6=连接成功.
 ac.knowledge.acquired=习得知识
 
 # 技能树
-ac.skill_tree.title=技能树
+ac.skill_tree.name=技能树
 ac.skill_tree.version=版本: 1.0β1
 ac.skill_tree.notacquired=能力未获得.
 
@@ -293,18 +297,24 @@ ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束�
 ac.ability.teleporter.name=传送使
 
 ## 传送使 技能
-ac.ability.teleporter.flesh_ripping.name=肌体撕裂
 ac.ability.teleporter.threatening_teleport.name=危险传送
 ac.ability.teleporter.dim_folding_theoreom.name=折叠空间概论
+ac.ability.teleporter.penetrate_teleport.name=穿透传送
+ac.ability.teleporter.mark_teleport.name=标记传送
+ac.ability.teleporter.flesh_ripping.name=肌体撕裂
+ac.ability.teleporter.location_teleport.name=定位传送
 ac.ability.teleporter.shift_tp.name=转移传送
 ac.ability.teleporter.space_fluct.name=空间波动
-ac.ability.teleporter.flashing.name=高速闪现
+ac.ability.teleporter.flashing.name=高速闪现 
 
-ac.ability.teleporter.flesh_ripping.desc=锁定某个生物，将其身体部分血肉直接撕裂并传送出体外，但是因为过于血腥的杀伤效果，可能在使用技能之后产生反胃。
-ac.ability.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有时候，只需要一小块体内的碎片就可以对生物造成巨大伤害。 
+ac.ability.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有时候，只需要一小块体内的碎片就可以对生物造成巨大伤害。
 ac.ability.teleporter.dim_folding_theoreom.desc=通过传送时不稳定的微弱空间折叠现象来对自己的空间跳跃类攻击进行一次概率性的空间分裂，来对敌人造成更高程度的伤害。
-ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的方式高速发射出去，因为其运动方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力。
-ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃类攻击的分裂性扩大，来造成更高的杀伤。
+ac.ability.teleporter.penetrate_teleport.desc=对于空间的奇妙感觉能让你大致推演出前方障碍物的厚度，并穿过障碍物达到对面。
+ac.ability.teleporter.mark_teleport.desc=以肉眼确认一个实体，确认实体某个面为自己的传送坐标，并进行传送。
+ac.ability.teleporter.flesh_ripping.desc=锁定某个生物，将其身体部分血肉直接撕裂并传送出体外，但是因为过于血腥的杀伤效果，可能在使用技能之后产生反胃。
+ac.ability.teleporter.location_teleport.desc=记忆下当前的坐标，如有必要可发动超远程范围传送来到该坐标，可将较近距离的生物一起传送，计算力消耗极大。
+ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的方式高速发射出去，因为其运动方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力 。 
+ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃类攻击的分裂性扩大，来造成更高的杀伤 。
 ac.ability.teleporter.flashing.desc=远超标记传送机动性的新传送方式，极高的传送速度与速度的重置能让你实现灵活的空中机动。
 
 ac.gui.loctele.tag0=已记录坐标
@@ -318,24 +328,32 @@ ac.gui.loctele.warn1=你现在无法记录此坐标.
 ac.gui.loctele.teleport=传送！
 
 # 原子崩坏
-ac.ability.meltdowner.name=Melt Downer
+ac.ability.meltdowner.name=原子崩坏
 
 ## 原子崩坏 技能
+ac.ability.meltdowner.electron_bomb.name=电子光束
+ac.ability.meltdowner.rad_intensify.name=β射线强化
 ac.ability.meltdowner.ray_barrage.name=散射光束雨
 ac.ability.meltdowner.scatter_bomb.name=电子弹散射
+ac.ability.meltdowner.meltdowner.name=粒机波形炮
 ac.ability.meltdowner.light_shield.name=光盾
 ac.ability.meltdowner.jet_engine.name=突击喷射
-ac.ability.meltdowner.mine_ray_basic.name=基础采集光束
+ac.ability.meltdowner.mine_ray_basic.name=采集光束
 ac.ability.meltdowner.mine_ray_expert.name=采集光束精修
-ac.ability.meltdowner.mine_ray_luck.name=采集光束精修 - 时运
+ac.ability.meltdowner.mine_ray_luck.name=采集光束精修-时运
+ac.ability.meltdowner.electron_missile.name=电子光标
 
-ac.ability.meltdowner.ray_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但是电子弹无法形成弹幕，难以应对全方位的饱和攻击，因此通过“扩散支援半导体”来应对能力无法大规模攻击的缺点。
-ac.ability.meltdowner.scatter_bomb.desc=复数的操控电子团放射来进行攻击，作为复数操控的代价，你无法精准的控制落点。
-ac.ability.meltdowner.light_shield.desc=将电子团横截面扩大形成护盾，高速运动的电子将会摧毁来犯物质，并伤害任何近距离接触自己的东西。
-ac.ability.meltdowner.jet_engine.desc=将电子用类似火箭引擎喷射的原理激发出去，利用反作用力来产生极速的位移，过程中周身产生短暂的光盾保护自己。
+ac.ability.meltdowner.electron_bomb.desc=聚集少量电子形成球形，延迟极短时间后从光球中射出光束，若击中物体将会对该物体造成破坏。 
+ac.ability.meltdowner.rad_intensify.desc=高速的电子射流中携带的β射线会损害被照射生物的身体机能，使其更加脆弱 。
+ac.ability.meltdowner.ray_barrage.desc=虽然可以从掌心制造出多个电子弹进行攻击，但是电子弹无法形成弹幕，难以应对全方位的饱和攻击，因此你通过“扩散支援半导体”来应对能力无法大规模攻击的缺点 
+ac.ability.meltdowner.scatter_bomb.desc=复数的操控电子团放射来进行攻击，作为复数操控的代价，你无法精准的控制落点 。
+ac.ability.meltdowner.meltdowner.desc=以雷击之势所放出的特殊电子线，可以将金属像纸屑般吹散，厚实的墙壁溶解，连同障碍物与敌人一起贯穿。然而由于能力过于强大与不稳定，高出力的原子崩坏可能会伤害自己 。
+ac.ability.meltdowner.light_shield.desc=将电子团横截面扩大形成护盾，高速运动的电子将会摧毁来犯物质，并伤害任何近距离接触自己的东西 。    
+ac.ability.meltdowner.jet_engine.desc=将电子用类似火箭引擎喷射的原理激发出去，利用反作用力来产生极速的位移，过程中周身产生短暂的光盾保护自己 。
 ac.ability.meltdowner.mine_ray_basic.desc=经过锻炼的电子射流，能够在不毁灭瞄准物的情况下将其采集出来。
-ac.ability.meltdowner.mine_ray_expert.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的对矿物进行采集。
+ac.ability.meltdowner.mine_ray_expert.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的对矿物进行采集 。
 ac.ability.meltdowner.mine_ray_luck.desc=经过长久的锻炼，你已经可以以较高的几率将矿物中蕴含的矿物完美的采集出来。
+ac.ability.meltdowner.electron_missile.desc=为了能独立形成足够强度的弹幕攻击，你开始产生制造大块的电子团，但是每次只发射小部分进行攻击，可惜稳定大块电子团的时候你无法分辨敌我。
 
 # 常规技能
 ac.ability.generic.brain_course.name=大脑训练课程
@@ -373,18 +391,21 @@ ac.command.aim.help=/aim help: 显示帮助信息.
 ac.command.aim.cat=/aim cat [能力名称]: 改变指定玩家的能力或是显示当前能力.
 ac.command.aim.catlist=/aim catlist: 列出所有可用能力.
 ac.command.aim.learn=/aim learn <id>|<技能名称>: 无视所有要求学习指定技能.
+ac.command.aim.unlearn=/aim unlearn <id>|<技能名>: 取消学习某个技能.
 ac.command.aim.learn_all=/aim learn_all: 学习所有技能.
 ac.command.aim.reset=/aim reset: 清空你的能力信息.
 ac.command.aim.learned=/aim learned: 显示已学习的技能.
 ac.command.aim.skills=/aim skills: 显示玩家当前能力的所有技能.
 ac.command.aim.fullcp=/aim fullcp: 将当前玩家CP恢复至满.
 ac.command.aim.level=/aim level: 设置当前玩家的能力等级.
+ac.command.aim.exp=/aim exp <id>|<技能名> [值]: 设置或者修改某技能的经验。
 ac.command.aim.nocat=该能力不存在.
 ac.command.aim.cats=当前可用能力: 
 ac.command.aim.curcat=玩家当前能力: %s
 ac.command.aim.nonecat=无能力
 ac.command.aim.noskill=该技能不存在.
 ac.command.aim.learned.format=已习得技能: %s
+ac.command.aim.curexp=技能 %s的当前经验: %.0f%%.
 
 ac.command.preset.usage=/preset <command>|<help> [参数...]
 ac.command.preset.help=/preset help: 显示帮助信息.
