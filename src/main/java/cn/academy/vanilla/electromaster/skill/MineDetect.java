@@ -37,6 +37,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
@@ -101,6 +102,7 @@ public class MineDetect extends Skill {
 			if(!isRemote) {
 				player.addPotionEffect(new PotionEffect(Potion.blindness.id, TIME));
 				aData.addSkillExp(instance, instance.getFloat("expincr"));
+				instance.triggerAchievement(player);
 			}
 		}
 		

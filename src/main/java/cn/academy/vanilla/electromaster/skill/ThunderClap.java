@@ -153,6 +153,7 @@ public class ThunderClap extends Skill {
 			
 			Cooldown.setCooldown(instance, getCooldown(aData, ticks));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
+			instance.triggerAchievement(player);
 		}
 		
 		@Override

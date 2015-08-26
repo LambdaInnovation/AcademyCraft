@@ -193,6 +193,7 @@ public class Railgun extends Skill {
 				if(coin != null) {
 					coin.setDead();
 				}
+				instance.triggerAchievement(player);
 			}
 		}
 		
@@ -280,6 +281,7 @@ public class Railgun extends Skill {
 						RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
 						damage.startDamage = instance.callFloatWithExp("damage", aData);
 						damage.perform();
+						instance.triggerAchievement(player);
 					}
 					
 				}

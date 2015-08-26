@@ -31,6 +31,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.util.DamageHelper;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
@@ -100,7 +101,7 @@ public class ArcGen extends Skill {
 				if(result != null) {
 					float expincr;
 					if(result.typeOfHit == MovingObjectType.ENTITY) {
-						DamageHelper.attack(result.entityHit, DamageSource.causePlayerDamage(player), getDamage(aData));
+						EMDamageHelper.attack(result.entityHit, player, getDamage(aData));
 						expincr = getExpIncr(aData, true);
 					} else { //BLOCK
 						int hx = result.blockX, hy = result.blockY, hz = result.blockZ;
@@ -113,6 +114,7 @@ public class ArcGen extends Skill {
 									result.hitVec.yCoord,
 									result.hitVec.zCoord,
 									new ItemStack(Items.cooked_fished)));
+								instance.triggerAchievement(player);
 							}
 						} else {
 							if(RandUtils.ranged(0, 1) < getIgniteProb(aData)) {

@@ -94,7 +94,7 @@ public class ThunderBolt extends Skill {
 				
 				if(ad.target != null) {
 					effective = true;
-					DamageHelper.attack(ad.target, DamageSource.causePlayerDamage(player), getDamage(aData));
+					EMDamageHelper.attack(ad.target, player, getDamage(aData));
 					if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
 						((EntityLivingBase) ad.target)
 							.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 40, 3));
@@ -103,7 +103,7 @@ public class ThunderBolt extends Skill {
 				
 				for(Entity e : ad.aoes) {
 					effective = true;
-					DamageHelper.attack(e, DamageSource.causePlayerDamage(player), getAOEDamage(aData));
+					EMDamageHelper.attack(e, player, getAOEDamage(aData));
 					
 					if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
 						((EntityLivingBase) ad.target)

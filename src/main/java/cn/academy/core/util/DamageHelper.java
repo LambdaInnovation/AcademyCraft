@@ -94,6 +94,10 @@ public class DamageHelper {
 		}
 	}
 	
+	public static void attack(Entity e, EntityPlayer player, float dmg) {
+		attack(e, DamageSource.causePlayerDamage(player), dmg);
+	}
+	
 	/**
 	 * A delegation to the normal attack function. if e is a player and the config doesn't allow PvP the attack will be ignored.
 	 * 	ALL skills should use this approach when applying damage.

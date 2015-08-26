@@ -27,6 +27,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.electromaster.CatElectroMaster;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
@@ -173,6 +174,7 @@ public class MagMovement extends Skill {
 				double traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ);
 				AbilityData aData = AbilityData.get(player);
 				aData.addSkillExp(instance, getExpIncr(traveledDistance));
+				instance.triggerAchievement(player);
 			}
 		}
 		

@@ -18,6 +18,7 @@ import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.ripple.ScriptNamespace;
 
@@ -304,6 +305,14 @@ public abstract class Skill extends Controllable {
     
     protected int getCooldown(AbilityData data) {
     	return pipeInt("cooldown", callIntWithExp("cooldown", data), data.getPlayer());
+    }
+    
+    /**
+     * Trigger the achievement in vanilla achievement page, if any.
+     * @param player
+     */
+    protected void triggerAchievement(EntityPlayer player) {
+    	ModuleAchievements.trigger(player, getFullName());
     }
     
 }
