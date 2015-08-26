@@ -28,6 +28,7 @@ import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Font;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 /**
@@ -97,7 +98,7 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 		GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
 		RenderUtils.loadTexture(((MFCachedRecipe) arecipes.get(recipe)).mode.texture);
 		HudUtils.rect(76, 14, 0, 0, 14, 14, 24, 24);
-		RenderUtils.loadTexture(Resources.getTexture("/guis/progress/progress_former"));
+		new ResourceLocation("academy:textures/guis/progress/progress_former.png");
 		HudUtils.rect(68, 43, 0, 0, 30d * (tick / 50d), 6, 30d * (tick / 50d), 6);
 		GL20.glUseProgram(0);
 	}

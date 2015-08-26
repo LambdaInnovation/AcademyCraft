@@ -34,7 +34,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		classpath 'cn.lidev:LIteBuilder:1.0.0'
+		classpath 'cn.lidev:LIteBuilder:1.0.4'
 //		classpath 'me.tatarka:gradle-retrolambda:3.2.2'
     }
 }

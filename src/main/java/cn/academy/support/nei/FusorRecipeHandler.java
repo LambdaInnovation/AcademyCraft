@@ -30,6 +30,7 @@ import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -101,7 +102,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 		Font.font.draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid), 75, 7, 13, 3618615);
 		ShaderMono.instance().useProgram();
 		GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
-		RenderUtils.loadTexture(Resources.getTexture("/guis/progress/progress_fuser"));
+		RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fuser.png"));
 		HudUtils.rect(56, 45, 0, 0, 51d * (tick / 50d), 15, 64d * (tick / 50d), 16);
 		GL20.glUseProgram(0);
 	}
