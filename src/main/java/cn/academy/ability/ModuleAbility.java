@@ -15,10 +15,12 @@ package cn.academy.ability;
 import cn.academy.ability.block.BlockDeveloper;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.item.ItemDeveloper;
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
+import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
 /**
  * The ability module init class.
@@ -26,16 +28,22 @@ import cn.annoreg.mc.RegItem;
  */
 @Registrant
 @RegInit
+@RegACRecipeNames
 public class ModuleAbility {
 	
 	@RegItem
 	@RegItem.HasRender
-	public static ItemDeveloper
-		developerPortable;
+	@RecipeName("dev_portable")
+	public static ItemDeveloper developerPortable;
 	
 	@RegBlock
+	@RecipeName("dev_normal")
 	public static BlockDeveloper 
-		developerNormal = new BlockDeveloper(DeveloperType.NORMAL),
+		developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
+	
+	@RegBlock
+	@RecipeName("dev_advanced")
+	public static BlockDeveloper 
 		developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
 	
 	public static void init() {
