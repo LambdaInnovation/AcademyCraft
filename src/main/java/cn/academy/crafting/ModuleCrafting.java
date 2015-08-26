@@ -150,8 +150,8 @@ public class ModuleCrafting {
 		oreCrystal.setDropData(crystalLow, 1, 3);
 		machineFrame.setHarvestLevel("pickaxe", 3);
 		
-		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 1000, new ItemStack(crystalNormal));
-		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 2000, new ItemStack(crystalPure));
+		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 3000, new ItemStack(crystalNormal));
+		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
 		
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(wafer), new ItemStack(dataChip, 4), Mode.INCISE);
