@@ -197,5 +197,5 @@ shaped(dev_normal) {
 shaped(dev_advanced) {
     [nil, nil, nil]
     [nil, dev_normal, beacon]
-    [node1, crystal2, restone]
+    [node1, crystal2, redstone]
 }

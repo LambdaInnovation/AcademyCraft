@@ -121,8 +121,8 @@ repositories {
 	}
 }
 dependencies {
-	compile 'cn.annoreg:AnnotationRegistry:d1.0b1:dev'
-	compile 'cn.liutils:LIUtils:d1.0b3:dev'
+	compile 'cn.annoreg:AnnotationRegistry:1.0a-0001:dev'
+	compile 'cn.liutils:LIUtils:1.0a-0001:dev'
 	compile 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev'
 	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
 	modReobf 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:api'
