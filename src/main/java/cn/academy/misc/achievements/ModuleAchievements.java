@@ -9,8 +9,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.AchievementPage;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
-import cn.academy.misc.achievements.pages.PageCtElectroMaster;
-import cn.academy.misc.achievements.pages.PageCtMeltDowner;
+import cn.academy.misc.achievements.pages.PageCtElectromaster;
+import cn.academy.misc.achievements.pages.PageCtMeltdowner;
 import cn.academy.misc.achievements.pages.PageCtTeleporter;
 import cn.academy.misc.achievements.pages.PageDefault;
 import cn.annoreg.core.Registrant;
@@ -27,8 +27,8 @@ import cn.annoreg.mc.RegItem;
 public final class ModuleAchievements {
 
 	private static PageDefault pageDefault;
-	private static PageCtElectroMaster pageCtElectroMaster;
-	private static PageCtMeltDowner pageCtMeltDowner;
+	private static PageCtElectromaster pageCtElectromaster;
+	private static PageCtMeltdowner pageCtMeltdowner;
 	private static PageCtTeleporter pageCtTeleporter;
 	
 	@RegItem
@@ -40,8 +40,8 @@ public final class ModuleAchievements {
 
 		AchievementPage.registerAchievementPage(pageDefault = new PageDefault());
 		
-		AchievementPage.registerAchievementPage(pageCtElectroMaster = new PageCtElectroMaster());
-		AchievementPage.registerAchievementPage(pageCtMeltDowner = new PageCtMeltDowner());
+		AchievementPage.registerAchievementPage(pageCtElectromaster = new PageCtElectromaster());
+		AchievementPage.registerAchievementPage(pageCtMeltdowner = new PageCtMeltdowner());
 		AchievementPage.registerAchievementPage(pageCtTeleporter = new PageCtTeleporter());
 	}
 	

@@ -15,17 +15,6 @@ package cn.academy.vanilla.electromaster.skill;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Skill;
@@ -37,8 +26,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.misc.achievements.ModuleAchievements;
-import cn.academy.vanilla.electromaster.CatElectroMaster;
+import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
@@ -54,6 +42,16 @@ import cn.liutils.util.mc.IBlockFilter;
 import cn.liutils.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -139,7 +137,7 @@ public class MineDetect extends Skill {
 
 			@Override
 			public boolean accepts(World world, int x, int y, int z, Block block) {
-				return CatElectroMaster.isOreBlock(block);
+				return CatElectromaster.isOreBlock(block);
 			}
 			
 		};

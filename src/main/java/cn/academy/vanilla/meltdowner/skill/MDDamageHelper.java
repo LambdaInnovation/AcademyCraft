@@ -14,7 +14,7 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.util.DamageHelper;
-import cn.academy.vanilla.meltdowner.CatMeltDowner;
+import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
@@ -51,7 +51,7 @@ public class MDDamageHelper {
 	static void attack(Entity e, EntityPlayer player, float dmg) {
 		DamageHelper.attack(e, DamageSource.causePlayerDamage(player), dmg);
 		AbilityData aData = AbilityData.get(player);
-		if(aData.isSkillLearned(CatMeltDowner.radIntensify)) {
+		if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
 			int marktick = getMarkTick(player);
 			setMarkTick(e, marktick = Math.max(60, marktick));
 			syncStartMark(e, e, marktick);

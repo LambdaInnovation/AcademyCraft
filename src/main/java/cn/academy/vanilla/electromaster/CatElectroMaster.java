@@ -44,7 +44,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * @author WeAthFolD
  *
  */
-public class CatElectroMaster extends Category {
+public class CatElectromaster extends Category {
 	
 	public ArcGen arcGen;
 	public MagManip magManip;
@@ -57,8 +57,8 @@ public class CatElectroMaster extends Category {
 	public ThunderBolt thunderBolt;
 	public ThunderClap thunderClap;
 
-	public CatElectroMaster() {
-		super("electro_master");
+	public CatElectromaster() {
+		super("electromaster");
 		
 		colorStyle.setColor4i(20, 113, 208, 100);
 		

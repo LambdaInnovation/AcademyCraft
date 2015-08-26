@@ -44,6 +44,10 @@ public class AchAbility<Cat extends Category> extends ACAchievement {
 		this((Cat) skill.getCategory(), id, x, y, ItemAchievement.getStack(skill.getHintIcon()), parent);
 	}
 	
+	public AchAbility(Skill skill, int x, int y, Achievement parent) {
+		this(skill, skill.getName(), x, y, parent);
+	}
+	
 	@Override
 	public void registerAll() {
 	}

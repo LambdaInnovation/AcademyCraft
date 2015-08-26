@@ -39,7 +39,7 @@ public class ValuePipeline {
 	 * Current supported wildcard(s):
 	 * 
 	 * ? -- one of any keyword. 
-	 * 	e.g. "electro_master.?.consumption" matches "electro_master.arcgen.consumption", "electro_master.railgun.consumption" and so on.
+	 * 	e.g. "electromaster.?.consumption" matches "electromaster.arcgen.consumption", "electromaster.railgun.consumption" and so on.
 	 */
 	
 	private enum Type { INT, FLOAT, DOUBLE };

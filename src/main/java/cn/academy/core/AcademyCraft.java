@@ -190,7 +190,7 @@ public class AcademyCraft {
     		// Load the scripts
     		ScriptProgram repl = new ScriptProgram();
             String[] scripts = {
-            	"generic", "ability", "electro_master", "teleporter", "melt_downer",
+            	"generic", "ability", "electromaster", "teleporter", "meltdowner",
             	"generic_skills"
             };
             for(String s : scripts)
