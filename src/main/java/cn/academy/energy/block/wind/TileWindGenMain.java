@@ -151,12 +151,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-    	Block block = getBlockType();
-    	if(block instanceof BlockMulti) {
-    		return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
-    	} else {
-    		return super.getRenderBoundingBox();
-    	}
+    	return INFINITE_EXTENT_AABB;
     }
 	
 	public boolean isCompleteStructure() {
