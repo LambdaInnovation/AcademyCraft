@@ -49,13 +49,17 @@ public class WirelessSystem {
 	
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
-		//System.out.println("---");
+		//System.out.println("{");
 		for(WorldServer ws : MinecraftServer.getServer().worldServers) {
-			if(ws.getClass() == WorldServer.class) //FIX: WorldServerMulti instance cause lookup loss.
-				//TODO: Investigate why.
-				WiWorldData.get(ws).tick();
+			//System.out.println(ws + "/" + ws.provider.dimensionId);
+			//if(ws.getClass() != WorldServer.class) continue;
+			WiWorldData data = WiWorldData.getNonCreate(ws);
+
+			if(data != null) {
+				data.tick();
+			}
 		}
-		//System.out.println("---");
+		//System.out.println("}");
 	}
 	
 	@SubscribeEvent

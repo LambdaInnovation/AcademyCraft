@@ -49,13 +49,17 @@ import cn.liutils.util.mc.WorldUtils;
  */
 public class WiWorldData extends WorldSavedData {
 	
-	public static final String ID = "AC_WEN";
+	public static final String ID = "AC_WEN_";
+	
+	static String getID(World world) {
+		return ID + world.provider.dimensionId;
+	}
 	
 	//Set by get method, which should be the ONLY way to access WiWorldData
 	World world;
 
-	public WiWorldData(String www) {
-		super(ID);
+	public WiWorldData(String fuckyoumojang) {
+		super(fuckyoumojang);
 	}
 	
 	//-----WEN-----
@@ -155,7 +159,6 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	private void doRemoveNetwork(WirelessNet net) {
-		debug("DoRemoveNet" + net.ssid);
 		netList.remove(net);
 		net.onCleanup(this);
 	}
@@ -172,8 +175,6 @@ public class WiWorldData extends WorldSavedData {
 			WirelessNet net = new WirelessNet(this, tag2);
 			doAddNetwork(net);
 		}
-		debug("WEN: Loaded " + list.tagCount() + " nets in " + world);
-		
 	}
 	
 	private void saveNetwork(NBTTagCompound tag) {
@@ -213,6 +214,8 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	private void tickNode() {
+		//if(true) return;
+		
 		for(NodeConn nc : nToRemove) {
 			doRemoveNode(nc);
 		}
@@ -258,14 +261,13 @@ public class WiWorldData extends WorldSavedData {
 	
 	//-----Generic-----
 	public void tick() {
-		this.markDirty();
-		
 		tickNetwork();
 		tickNode();
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
+		
 		NBTTagCompound tag1 = (NBTTagCompound) tag.getTag("net");
 		if(tag1 != null)
 			loadNetwork(tag1);
@@ -290,13 +292,25 @@ public class WiWorldData extends WorldSavedData {
 		if(world.isRemote) {
 			throw new RuntimeException("Not allowed to create WiWorldData in client");
 		}
-		WiWorldData ret = (WiWorldData) world.loadItemData(WiWorldData.class, WiWorldData.ID);
+		String id = getID(world);
+		WiWorldData ret = (WiWorldData) world.loadItemData(WiWorldData.class, id);
 		if(ret == null) {
-			world.setItemData(ID, ret = new WiWorldData(ID));
+			world.setItemData(id, ret = new WiWorldData(id));
 		}
 		ret.world = world;
 		return ret;
 	}
+	
+	public static WiWorldData getNonCreate(World world) {
+		WiWorldData data = (WiWorldData) world.loadItemData(WiWorldData.class, getID(world));
+		if(data != null) data.world = world;
+		return data;
+	}
+	
+	@Override
+    public boolean isDirty() {
+    	return true;
+    }
 	
 	private class ChunkCoord {
 		int cx, cz;

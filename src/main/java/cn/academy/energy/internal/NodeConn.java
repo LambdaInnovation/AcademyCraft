@@ -61,9 +61,9 @@ public class NodeConn {
 			addReceiver(new VNReceiver(list.getCompoundTagAt(i)));
 		}
 		
-		list = (NBTTagList) tag.getTag("generators");
-		for(int i = 0; i < list.tagCount(); ++i) {
-			addGenerator(new VNGenerator(list.getCompoundTagAt(i)));
+		NBTTagList list2 = (NBTTagList) tag.getTag("generators");
+		for(int i = 0; i < list2.tagCount(); ++i) {
+			addGenerator(new VNGenerator(list2.getCompoundTagAt(i)));
 		}
 	}
 	
@@ -277,6 +277,10 @@ public class NodeConn {
 		World world = getWorld();
 		IWirelessNode inode = world == null ? null : node.get(getWorld());
 		return inode == null ? Integer.MAX_VALUE : inode.getCapacity();
+	}
+	
+	private void log(String str) {
+		AcademyCraft.log.info("[NodeConn] " + str);
 	}
 	
 }
