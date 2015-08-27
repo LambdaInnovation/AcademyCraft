@@ -190,7 +190,7 @@ shaped(dev_portable) {
 
 shaped(dev_normal) {
     [nil, nil, nil]
-    [mat_core*0, bed, piston]
+    [mat_core#0, bed, piston]
     [frame, crystal1, redstone]
 }
 
@@ -198,4 +198,16 @@ shaped(dev_advanced) {
     [nil, nil, nil]
     [nil, dev_normal, beacon]
     [node1, crystal2, redstone]
+}
+
+shapeless(wafer) {
+    [imagsil_ingot]
+}
+
+shapeless(data_chip*2) {
+    [wafer]
+}
+
+shapeless(calc_chip) {
+    [data_chip, data_chip]
 }
