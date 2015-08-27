@@ -141,7 +141,7 @@ ac.skill_tree.acquireprog=已获得 %1.1f%%
 ac.skill_tree.not_acquired=未获得
 ac.skill_tree.uplevel=升级到 %s
 ac.skill_tree.acquire=获得能力!
-ac.skill_tree.unknown_skill=<错误 0x5f3759df 未知的能力>
+ac.skill_tree.unknown_skill=<错误 0x5f3759df：未知的能力>
 ac.skill_tree.unknown=[未知]
 
 ac.skill_tree.learn_skill=学习

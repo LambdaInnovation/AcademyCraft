@@ -351,7 +351,7 @@ public class FreqTransmitterUI extends AuxGui {
 			for(int i = 0; i < pass.length(); ++i)
 				sb.append('*');
 			
-			Font.font.draw(String.format("SSID: %s", "test"), 10, 5, 10, 0xbfbfbf);
+			Font.font.draw(String.format("SSID: %s", ssid), 10, 5, 10, 0xbfbfbf);
 			Font.font.draw(String.format("PASS: %s", sb.toString()), 10, 15, 10, 0xffffff);
 			Font.font.draw(local("s1_0"), 10, 25, 10, 0x30ffff);
 			GL11.glPopMatrix();

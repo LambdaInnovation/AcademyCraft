@@ -229,9 +229,12 @@ public class CurrentCharging extends Skill {
 			if(stack != null) {
 				float cp = instance.getConsumption(aData);
 				float amt = getChargingSpeed(aData);
-				if(EnergyItemHelper.isSupported(stack))
+				
+				boolean good = EnergyItemHelper.isSupported(stack);
+				if(good)
 					EnergyItemHelper.charge(stack, amt, false);
 				
+				aData.addSkillExp(instance, getExpIncr(aData, good));
 				cpData.perform(0, cp);
 			} else {
 				ActionManager.endAction(this);
