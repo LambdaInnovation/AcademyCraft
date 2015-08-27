@@ -12,16 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -30,16 +20,24 @@ import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.core.util.DamageHelper;
-import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.mc.BlockFilters;
+import cn.liutils.util.mc.IBlockFilter;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -48,6 +46,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ArcGen extends Skill {
 	
 	static ArcGen instance;
+	
+	static IBlockFilter blockFilter = new IBlockFilter() {
+
+		@Override
+		public boolean accepts(World world, int x, int y, int z, Block block) {
+			return block == Blocks.water || block == Blocks.flowing_water || 
+					BlockFilters.filNormal.accepts(world, x, y, z, block);
+		}
+		
+	};
 
 	public ArcGen() {
 		super("arc_gen", 1);
@@ -96,7 +104,7 @@ public class ArcGen extends Skill {
 			
 			if(!isRemote) {
 				// Perform ray trace
-				MovingObjectPosition result = Raytrace.traceLiving(player, 20, null, BlockFilters.filNothing);
+				MovingObjectPosition result = Raytrace.traceLiving(player, 20, null, blockFilter);
 
 				if(result != null) {
 					float expincr;
