@@ -32,6 +32,8 @@ ac {
             
             touch_damage(exp) { lerp(2, 6, exp) }
             absorb_damage(exp) { lerp(8, 25, exp) }
+            
+            expincr { 0.001 }
         }
         
         meltdowner {

@@ -210,7 +210,9 @@ public class AbilityData extends DataPart {
 	 * Learn all the skills. SERVER only.
 	 */
 	public void learnAllSkills() {
-		learnedSkills.set(0, learnedSkills.size(), true);
+		if(getCategory() == null)
+			return;
+		learnedSkills.set(0, getCategory().getSkillCount(), true);
 		if(!isRemote())
 			sync();
 	}

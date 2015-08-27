@@ -99,17 +99,6 @@ public class PresetEditUI extends GuiScreen {
 		template = loaded.getWidget("template");
 	}
 	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		
-		@SideOnly(Side.CLIENT)
-		@Override
-		protected GuiScreen getClientGui() {
-			return new PresetEditUI();
-		}
-		
-	};
-	
 	final EntityPlayer player;
 	final PresetData data;
 	

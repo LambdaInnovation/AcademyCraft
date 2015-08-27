@@ -12,11 +12,13 @@
  */
 package cn.academy.misc.media;
 
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.annoreg.core.Registrant;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 
 /**
  * @author WeAthFolD
@@ -35,9 +37,10 @@ public class AppMediaPlayer extends App {
 	@Override
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
+			@SideOnly(Side.CLIENT)
 			@Override
 			public void onStart() {
-				GuiMediaPlayer.guiHandler.openClientGui();
+				Minecraft.getMinecraft().displayGuiScreen(new GuiMediaPlayer());
 			}
 		};
 	}

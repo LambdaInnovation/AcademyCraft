@@ -24,7 +24,7 @@ import cn.liutils.util.generic.VecUtils;
  * @author WeAthFolD
  */
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 public class EntityIntensifyEffect extends EntitySurroundArc {
 
 	public EntityIntensifyEffect(EntityPlayer player) {

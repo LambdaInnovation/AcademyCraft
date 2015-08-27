@@ -12,20 +12,22 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import net.minecraft.world.World;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Color;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
  *
  */
+@SideOnly(Side.CLIENT)
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityBarrageRayPre extends EntityRayBase {
 	

@@ -55,8 +55,9 @@ public class LocationTeleport extends Skill {
 	public SkillInstance createSkillInstance(EntityPlayer player) {
 		return new SkillInstanceInstant() {
 			@Override
+			@SideOnly(Side.CLIENT)
 			public void execute() {
-				LocTeleportUI.handler.openClientGui();
+				Minecraft.getMinecraft().displayGuiScreen(new LocTeleportUI());
 				
 				CPBar.setHintProvider(new IConsumptionHintProvider() {
 

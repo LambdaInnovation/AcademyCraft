@@ -32,7 +32,7 @@ import net.minecraft.util.Vec3;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityMDRay extends EntityRayBase {
 	

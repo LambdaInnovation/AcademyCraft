@@ -83,7 +83,8 @@ public class Flashing extends SpecialSkill {
 		
 		@Override
 		public void onSkillTick() {
-			updateClient();
+			if(isRemote)
+				updateClient();
 		}
 		
 		@SideOnly(Side.CLIENT)

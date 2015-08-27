@@ -12,12 +12,14 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
+import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
 
 /**
  * @author WeAthFolD
@@ -35,6 +37,7 @@ public class MineRayBasic extends MineRaysBase {
 		world.setBlock(x, y, z, Blocks.air);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	protected Entity createRay(EntityPlayer player) {
 		return new EntityMineRayBasic(player);

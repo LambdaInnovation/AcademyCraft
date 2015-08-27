@@ -37,15 +37,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class LocTeleportUI extends LIGuiScreen {
 	
-	@RegGuiHandler
-	public static GuiHandlerBase handler = new GuiHandlerBase() {	
-		@Override
-		@SideOnly(Side.CLIENT)
-		protected GuiScreen getClientGui() {
-			return new LocTeleportUI();
-		}
-	};
-	
 	static LIGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/loctele.xml"));

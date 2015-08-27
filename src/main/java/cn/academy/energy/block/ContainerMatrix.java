@@ -91,7 +91,8 @@ public class ContainerMatrix extends Container {
             				new ItemStack(ModuleEnergy.matrixCore, 1, stack1.getItemDamage()));
             		}
             		stack = null;
-            	}
+            	} else 
+            		return null;
             }
 
             if (stack1.stackSize == 0) {

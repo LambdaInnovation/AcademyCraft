@@ -54,7 +54,6 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
      * Client-only flag. Only *roughly* indicates whether the block is linked.
      * Used for just rendering.
      */
-    @SideOnly(Side.CLIENT)
     public boolean enabled = false;
     
     public boolean chargingIn = false;

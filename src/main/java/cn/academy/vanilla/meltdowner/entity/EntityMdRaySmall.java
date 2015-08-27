@@ -13,6 +13,7 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import net.minecraft.world.World;
+import cn.academy.ability.api.SpecialSkill.SpecialSkillAction;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -29,7 +30,7 @@ import cn.liutils.util.helper.Motion3D;
  * @author WeAthFolD
  */
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityMdRaySmall extends EntityRayBase {
 	
@@ -38,7 +39,6 @@ public class EntityMdRaySmall extends EntityRayBase {
 
 	public EntityMdRaySmall(World world) {
 		super(world);
-		
 		this.blendInTime = 200;
 		this.blendOutTime = 400;
 		this.life = 14;

@@ -45,14 +45,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class GuiMediaPlayer extends LIGuiScreen {
 	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		@SideOnly(Side.CLIENT)
-		protected GuiScreen getClientGui() {
-			return new GuiMediaPlayer();
-		}
-	};
-	
 	static final ResourceLocation 
 		T_PLAY = Resources.getTexture("guis/apps/media_player/play"),
 		T_PAUSE = Resources.getTexture("guis/apps/media_player/pause");

@@ -38,7 +38,7 @@ public class AppKnowledgeRecord extends App {
 		return new AppEnvironment() {
 			@Override
 			public void onStart() {
-				LifeRecordUI.guiHandler.openClientGui();
+				//LifeRecordUI.guiHandler.openClientGui();
 			}
 		};
 	}

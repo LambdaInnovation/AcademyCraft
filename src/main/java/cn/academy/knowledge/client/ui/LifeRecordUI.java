@@ -50,14 +50,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class LifeRecordUI extends LIGuiScreen {
 	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		@SideOnly(Side.CLIENT)
-		protected GuiScreen getClientGui() {
-			return new LifeRecordUI(KnowledgeData.get(Minecraft.getMinecraft().thePlayer));
-		}
-	};
-	
 	static final LIGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/life_record.xml"));
 	
 	final Color temp = new Color();

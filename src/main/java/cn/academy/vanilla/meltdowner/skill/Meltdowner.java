@@ -107,7 +107,8 @@ public class Meltdowner extends Skill {
 		}
 		
 		public void onFinalize() {
-			player.capabilities.setPlayerWalkSpeed(0.1f);
+			if(isRemote)
+				endEffect();
 		}
 		
 		// CLIENT
@@ -132,6 +133,13 @@ public class Meltdowner extends Skill {
 				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
 				Vec3 vel = VecUtils.vec(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03));
 				world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
+			}
+		}
+		
+		@SideOnly(Side.CLIENT)
+		void endEffect() {
+			if(isLocal()) {
+				player.capabilities.setPlayerWalkSpeed(0.1f);
 			}
 		}
 		

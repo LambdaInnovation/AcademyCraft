@@ -209,13 +209,14 @@ public class ShiftTeleport extends Skill {
 		EntityMarker blockMarker;
 		
 		@SideOnly(Side.CLIENT)
-		List<EntityMarker> targetMarkers = new ArrayList();
+		List<EntityMarker> targetMarkers;
 		
 		@SideOnly(Side.CLIENT)
 		int effTicker;
 		
 		@SideOnly(Side.CLIENT)
 		void startEffects() {
+			targetMarkers = new ArrayList();
 			if(isLocal()) {
 				blockMarker = new EntityMarker(player.worldObj);
 				blockMarker.ignoreDepth = true;

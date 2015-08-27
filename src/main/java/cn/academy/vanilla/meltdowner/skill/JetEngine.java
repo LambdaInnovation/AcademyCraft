@@ -106,9 +106,7 @@ public class JetEngine extends Skill {
 		}
 		
 		Vec3 getDest() {
-			double dist = 20.0;
-			MovingObjectPosition result = Raytrace.traceLiving(player, dist, EntitySelectors.nothing);
-			return (result == null ? new Motion3D(player, true).move(dist).getPosVec() : result.hitVec);
+			return Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft();
 		}
 		
 		// CLIENT
@@ -142,7 +140,7 @@ public class JetEngine extends Skill {
 	
 	public static class JETriggerAction extends SkillSyncAction {
 		
-		static final float TIME = 5, LIFETIME = 15;
+		static final float TIME = 8, LIFETIME = 15;
 		
 		Vec3 target;
 		Vec3 start;
@@ -199,10 +197,7 @@ public class JetEngine extends Skill {
 		}
 		
 		@Override
-		public void onFinalize() {
-			player.capabilities.setPlayerWalkSpeed(0.1f);
-			
-			if(isRemote)
+		public void onFinalize() {if(isRemote)
 				endEffects();
 		}
 		
@@ -241,6 +236,9 @@ public class JetEngine extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
+			if(isLocal()) {
+				player.capabilities.setPlayerWalkSpeed(0.1f);
+			}
 			entity.setDead();
 		}
 		

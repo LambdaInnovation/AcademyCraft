@@ -317,8 +317,8 @@ public class CPData extends DataPart {
 		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
 			"ability.maxo", getFunc("init_overload").callFloat(data.getLevel()), getPlayer());
 		
-		currentCP = MathUtils.wrapf(0, maxCP, currentCP);
-		overload = MathUtils.wrapf(0, maxOverload, overload);
+		currentCP = maxCP;
+		overload = 0;
 		
 		if(!isRemote())
 			sync();

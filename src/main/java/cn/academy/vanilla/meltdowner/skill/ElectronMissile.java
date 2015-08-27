@@ -148,7 +148,7 @@ public class ElectronMissile extends Skill {
 		// CLIENT
 		@SideOnly(Side.CLIENT)
 		void updateEffect() {
-			int count = rangei(3, 4);
+			int count = rangei(1, 3);
 			while(count --> 0) {
 				double r = ranged(0.5, 1);
 				double theta = ranged(0, Math.PI * 2);
@@ -163,6 +163,11 @@ public class ElectronMissile extends Skill {
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	static void spawnRay(@RangedTarget(range = 15) EntityPlayer _player, @Instance World world, @Data Vec3 from, @Data Vec3 to) {
+		jobSpawnRay(world, from, to);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	static void jobSpawnRay(World world, Vec3 from, Vec3 to) {
 		EntityMdRaySmall ray = new EntityMdRaySmall(world);
 		ray.setFromTo(from, to);
 		world.spawnEntityInWorld(ray);

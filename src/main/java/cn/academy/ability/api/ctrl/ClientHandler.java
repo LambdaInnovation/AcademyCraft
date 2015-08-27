@@ -139,7 +139,6 @@ public final class ClientHandler {
     		AbilityData aData = AbilityData.get(player);
     		
     		if(aData.isLearned()) {
-    			System.out.println("www " + getActivateHandler().getHint());
     			getActivateHandler().onKeyDown(player);
     		}
     	}
@@ -152,7 +151,7 @@ public final class ClientHandler {
 		public void onKeyDown() {
 			PresetData data = PresetData.get(Minecraft.getMinecraft().thePlayer);
 			if(data.isActive()) {
-				PresetEditUI.guiHandler.openClientGui();
+				Minecraft.getMinecraft().displayGuiScreen(new PresetEditUI());
 			}
 		}
 	};

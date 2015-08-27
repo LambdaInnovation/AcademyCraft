@@ -28,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@RegEntity
+@RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityMdRayBarrage extends EntityRayBase {
 	

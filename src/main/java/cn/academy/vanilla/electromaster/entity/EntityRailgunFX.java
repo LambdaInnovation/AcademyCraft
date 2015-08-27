@@ -45,7 +45,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @SideOnly(Side.CLIENT)
 @RegEntity.HasRender
 public class EntityRailgunFX extends EntityRayBase {

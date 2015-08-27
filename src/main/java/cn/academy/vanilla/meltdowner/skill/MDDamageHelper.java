@@ -89,7 +89,7 @@ public class MDDamageHelper {
 			Entity e = event.entity;
 			if(e.worldObj.isRemote) {
 				if(getMarkTick(e) > 0) {
-					int times = RandUtils.rangei(3, 5);
+					int times = RandUtils.rangei(2, 4);
 					while(times --> 0) {
 						double r = RandUtils.ranged(.6, .7) * e.width;
 						double theta = RandUtils.nextDouble() * 2 * Math.PI;

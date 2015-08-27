@@ -49,6 +49,7 @@ public abstract class MineRaysBase extends Skill {
 	
 	protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
 	
+	@SideOnly(Side.CLIENT)
 	protected abstract Entity createRay(EntityPlayer player);
 	
 	@Override

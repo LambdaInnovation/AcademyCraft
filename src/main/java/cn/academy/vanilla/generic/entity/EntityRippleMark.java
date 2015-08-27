@@ -28,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegEntity
+@RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityRippleMark extends EntityAdvanced {
 	

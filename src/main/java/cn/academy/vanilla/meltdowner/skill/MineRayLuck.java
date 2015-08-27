@@ -18,6 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -35,6 +37,7 @@ public class MineRayLuck extends MineRaysBase {
 		world.setBlock(x, y, z, Blocks.air);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	protected Entity createRay(EntityPlayer player) {
 		return new EntityMineRayExpert(player);

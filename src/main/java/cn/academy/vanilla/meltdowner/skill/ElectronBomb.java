@@ -29,6 +29,7 @@ import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -95,12 +96,17 @@ public class ElectronBomb extends Skill {
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	static void actionClient(@Target EntityPlayer player, @Instance EntityMdBall ball) {
-		World world = player.worldObj;
-		EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
-		raySmall.viewOptimize = false;
 		Vec3 dest = getDest(player);
-		raySmall.setFromTo(ball.posX, ball.posY, ball.posZ,
+		spawnRay(player.worldObj, ball.posX, ball.posY, ball.posZ,
 			dest.xCoord, dest.yCoord, dest.zCoord);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private static void spawnRay(World world, double x0, double y0, double z0, double x1, double y1, double z1) {
+		EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
+		raySmall.setFromTo(x0, y0, z0,
+				x1, y1, z1);
+		raySmall.viewOptimize = false;
 		world.spawnEntityInWorld(raySmall);
 	}
 	

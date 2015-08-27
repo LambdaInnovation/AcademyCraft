@@ -201,7 +201,6 @@ public abstract class SpecialSkill extends Skill {
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public static final class ExecuteAction extends SyncActionInstant {
 		
 		static final InstanceSerializer<Controllable> ctrlSer = new ControllableSerializer();
@@ -236,6 +235,7 @@ public abstract class SpecialSkill extends Skill {
 			return skill.validateExecution(player);
 		}
 
+		@SideOnly(Side.CLIENT)
 		@Override
 		public void execute() {
 			PresetData pData = PresetData.get(player);

@@ -37,6 +37,7 @@ ac {
 			consumption(exp) { lerp(14, 8, exp) }
 			overload(exp) { lerp(40, 20, exp) }
 			expincr(dist) { 0.00018 * dist }
+			cooldown(exp) { lerp(70, 20, exp) }
 		}
 		
 		flesh_ripping {
