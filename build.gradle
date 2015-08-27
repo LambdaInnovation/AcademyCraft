@@ -61,11 +61,6 @@ litebuilder {
         exclude 'cn/annoreg/**/*'
         exclude 'cn/liutils/**/*'
     }
-
-    coremod {
-        plugin = 'cn.academy.core.ACCorePlugin'
-        containsFMLMod = true
-    }
 	
     pom {
         groupId = project.group
