@@ -26,6 +26,12 @@ ac {
             # 在过载时CP和过载消耗（增量）所乘的倍数。
             overload_cp_mul { 2.5 }
             overload_o_mul { 1.5 }
+			
+			# CP消耗和最大值CP增加的转换
+			maxcp_rate(cp) { cp / 90.0 }
+			
+			# 过载和最大过载值增加的转换
+			maxo_rate(o) { o / 300.0 }
             
             # 各个等级初始CP值
             init_cp(level) {
@@ -38,6 +44,18 @@ ac {
                     5: 8000
                 }
             }
+			
+			# 各个等级最大提高的CP值
+			add_cp(level) {
+				switch(level) {
+					0: 0;
+					1: 900;
+					2: 1000;
+					3: 1500;
+					4: 1700;
+					5: 12000
+				}
+			}
             
             # 各个等级初始过载值
             init_overload(level) {
@@ -50,6 +68,18 @@ ac {
                     5: 500
                 }
             }
+			
+			# 各个等级最大提高的过载值
+			add_overload(level) {
+				switch(level) {
+					0: 0;
+					1: 40;
+					2: 70;
+					3: 80;
+					4: 100;
+					5: 500
+				}
+			}
         }
     }
 }

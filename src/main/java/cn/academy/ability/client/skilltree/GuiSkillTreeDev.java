@@ -73,22 +73,25 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		
 		EventLoader.load(gui, this);
 		
-		if(LearningHelper.canLevelUp(developer.type, aData)) {
-			treeArea.getWidget("ball" + (aData.getLevel() + 1)).regEventHandler(
-			new MouseDownHandler() {
+		for(int i = 1; i <= 5; ++i) {
+			final int j = i;
+			treeArea.getWidget("ball" + i).regEventHandler(
+					new MouseDownHandler() {
 
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					overlay = new Overlay();
-					window.addWidget(overlay);
-					window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
-						() -> {
-							developer.reset();
-							Syncs.startUpgradingLevel(developer);
-						}));
-				}
-				
-			});
+						@Override
+						public void handleEvent(Widget w, MouseDownEvent event) {
+							if(j == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
+								overlay = new Overlay();
+								window.addWidget(overlay);
+								window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
+									() -> {
+										developer.reset();
+										Syncs.startUpgradingLevel(developer);
+									}));
+							}
+						}
+						
+					});
 		}
 		
 		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.type.syncRate;
@@ -277,6 +280,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				overlay.dispose();
 				overlay = null;
 				ret.dispose();
+				System.out.println("CANCELED");
 			}
 			
 		});

@@ -16,6 +16,7 @@ import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.LevelChangeEvent;
+import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -26,7 +27,6 @@ import cn.annoreg.mc.s11n.StorageOption;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.ripple.Path;
 import cn.liutils.ripple.ScriptFunction;
-import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -36,7 +36,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 
 /**
@@ -69,9 +68,11 @@ public class CPData extends DataPart {
 	
 	private float currentCP;
 	private float maxCP = 100.0f;
+	private float addMaxCP = 0.0f; // The CP added out of ability usage.
 	
 	private float overload;
 	private float maxOverload = 100.0f;
+	private float addMaxOverload = 0.0f; // The Overload added out of ability usage.
 	
 	private boolean canUseAbility = true;
 	
@@ -102,17 +103,17 @@ public class CPData extends DataPart {
 		if(aData.isLearned()) {
 			if(untilRecover == 0) {
 				float recover = (float) getFunc("recover_speed")
-						.callDouble(currentCP, maxCP);
+						.callDouble(currentCP, getMaxCP());
 				currentCP += recover;
-				if(currentCP > maxCP)
-					currentCP = maxCP;
+				if(currentCP > getMaxCP())
+					currentCP = getMaxCP();
 			} else {
 				untilRecover--;
 			}
 			
 			if(untilOverloadRecover == 0) {
 				float recover = (float) getFunc("overload_recover_speed")
-						.callDouble(overload, maxOverload);
+						.callDouble(overload, getMaxOverload());
 				
 				overload -= recover;
 				if(overload <= 0) {
@@ -171,20 +172,28 @@ public class CPData extends DataPart {
 		}
 	}
 	
-	public float getCP() {
-		return currentCP;
-	}
-	
 	public void setCP(float cp) {
 		currentCP = cp;
 		if(currentCP < 0) currentCP = 0;
-		if(currentCP > maxCP) currentCP = maxCP;
+		if(currentCP > getMaxCP()) currentCP = getMaxCP();
 		if(!isRemote())
 			dataDirty = true;
 	}
 	
+	public float getCP() {
+		return currentCP;
+	}
+	
 	public float getMaxCP() {
+		return maxCP + addMaxCP;
+	}
+	
+	public float getRawMaxCP() {
 		return maxCP;
+	}
+	
+	public float getAddMaxCP() {
+		return addMaxCP;
 	}
 	
 	public float getOverload() {
@@ -192,7 +201,15 @@ public class CPData extends DataPart {
 	}
 	
 	public float getMaxOverload() {
+		return maxOverload + addMaxOverload;
+	}
+	
+	public float getRawMaxOverload() {
 		return maxOverload;
+	}
+	
+	public float getAddMaxOverload() {
+		return addMaxOverload;
 	}
 	
 	/**
@@ -202,10 +219,11 @@ public class CPData extends DataPart {
 	 * @param cpToAdd Amount of CP
 	 */
 	public boolean perform(float overloadToAdd, float cpToAdd) {
-		
-		if(getPlayer().capabilities.isCreativeMode)
+		if(getPlayer().capabilities.isCreativeMode) {
+			addMaxCP(cpToAdd);
+			addMaxOverload(overloadToAdd);
 			return true;
-		
+		}
 		if(currentCP - cpToAdd < 0)
 			return false;
 		
@@ -237,6 +255,9 @@ public class CPData extends DataPart {
 		untilRecover = RECOVER_COOLDOWN;
 		untilOverloadRecover = OVERLOAD_COOLDOWN;
 		
+		addMaxCP(cp);
+		addMaxOverload(overload);
+		
 		if(!isRemote())
 			dataDirty = true;
 	}
@@ -250,12 +271,28 @@ public class CPData extends DataPart {
 		return getPlayer().capabilities.isCreativeMode || this.getCP() >= cp;
 	}
 	
-	/**
-	 * Should only be called in SERVER. Add the player's maxCP.
-	 */
-	public void addMaxCP(float amt) {
-		maxCP += amt;
-		sync();
+	private void addMaxCP(float consumedCP) {
+		AbilityData aData = AbilityData.get(getPlayer());
+		float max = getFunc("add_cp").callFloat(aData.getLevel());
+		addMaxCP += getFunc("maxcp_rate").callFloat(consumedCP);
+		if(addMaxCP > max)
+			addMaxCP = max;
+	}
+	
+	private void addMaxOverload(float overload) {
+		AbilityData aData = AbilityData.get(getPlayer());
+		float max = getFunc("add_overload").callFloat(aData.getLevel());
+		addMaxOverload += getFunc("maxo_rate").callFloat(overload);
+		if(addMaxOverload > max)
+			addMaxOverload = max;
+	}
+	
+	public boolean canLevelUp() {
+		return AbilityData.get(getPlayer()).getLevel() < 5 && getLevelProgress() == 1;
+	}
+	
+	public float getLevelProgress() {
+		return addMaxCP / getFunc("add_cp").callFloat(AbilityData.get(getPlayer()).getLevel());
 	}
 	
 	/**
@@ -271,6 +308,8 @@ public class CPData extends DataPart {
 			return false;
 		currentCP -= amt;
 		untilRecover = RECOVER_COOLDOWN;
+		
+		addMaxCP(amt);
 		
 		if(!isRemote())
 			dataDirty = true;
@@ -288,17 +327,19 @@ public class CPData extends DataPart {
 			return;
 		
 		overload += amt;
-		if(overload > 2 * maxOverload)
-			overload = 2 * maxOverload;
+		if(overload > 2 * getMaxOverload())
+			overload = 2 * getMaxOverload();
 		
 		untilOverloadRecover = OVERLOAD_COOLDOWN;
+		
+		addMaxOverload(amt);
 		
 		if(!isRemote())
 			dataDirty = true;
 	}
 	
 	public boolean isOverloaded() {
-		return overload > maxOverload;
+		return overload > getMaxOverload();
 	}
 	
 	/**
@@ -312,12 +353,11 @@ public class CPData extends DataPart {
 		
 		this.maxCP = AcademyCraft.pipeline.pipeFloat
 			("ability.maxcp", getFunc("init_cp").callFloat(data.getLevel()), getPlayer());
-		currentCP = 0;
 		
 		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
 			"ability.maxo", getFunc("init_overload").callFloat(data.getLevel()), getPlayer());
 		
-		currentCP = maxCP;
+		currentCP = getMaxCP();
 		overload = 0;
 		
 		if(!isRemote())
@@ -330,7 +370,7 @@ public class CPData extends DataPart {
 	 */
 	public void recoverAll() {
 		if(!isRemote()) {
-			currentCP = maxCP;
+			currentCP = getMaxCP();
 			overload = 0;
 			canUseAbility = false;
 			sync();
@@ -353,6 +393,9 @@ public class CPData extends DataPart {
 		
 		tag.setBoolean("B", canUseAbility);
 		
+		tag.setFloat("1", addMaxCP);
+		tag.setFloat("2", addMaxOverload);
+		
 		return tag;
 	}
 
@@ -370,6 +413,9 @@ public class CPData extends DataPart {
 		untilOverloadRecover = tag.getInteger("J");
 		
 		canUseAbility = tag.getBoolean("B");
+		
+		addMaxCP = tag.getFloat("1");
+		addMaxOverload = tag.getFloat("2");
 		
 		if(isRemote()) {
 			if(lastActivated ^ activated) {
@@ -426,8 +472,14 @@ public class CPData extends DataPart {
 		}
 		
 		@SubscribeEvent
+		public void learnedSkill(SkillLearnEvent event) {
+			CPData.get(event.player).recalcMaxValue();
+		}
+		
+		@SubscribeEvent
 		public void changedLevel(LevelChangeEvent event) {
 			CPData cpData = CPData.get(event.player);
+			cpData.addMaxCP = cpData.addMaxOverload = 0;
 			cpData.recalcMaxValue();
 		}
 		

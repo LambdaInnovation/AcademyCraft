@@ -15,6 +15,7 @@ package cn.academy.ability.developer;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
 
 /**
  * All sorts of judging utilities about ability learning.
@@ -30,7 +31,7 @@ public class LearningHelper {
 		Category c = aData.getCategory();
 		if(c == null)
 			return true;
-		return c.canLevelUp(type, aData);
+		return CPData.get(aData.getPlayer()).canLevelUp();
 	}
 	
 	/**

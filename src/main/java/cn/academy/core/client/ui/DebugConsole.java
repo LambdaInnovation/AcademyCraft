@@ -122,10 +122,11 @@ public class DebugConsole extends AuxGui {
 			texts.add(new Text(aData.getCategory().getName()));
 			
 			texts.add(new Text("Level " + aData.getLevel()));
-			texts.add(new Text(String.format("CP:       %.0f/%.0f", cpData.getCP(), cpData.getMaxCP())));
-			texts.add(new Text(String.format("Overload: %.0f/%.0f", cpData.getOverload(), cpData.getMaxOverload())));
+			texts.add(new Text(String.format("CP:       %.0f/%.0f(%.1f+%.1f)", cpData.getCP(), cpData.getMaxCP(), cpData.getRawMaxCP(), cpData.getAddMaxCP())));
+			texts.add(new Text(String.format("Overload: %.0f/%.0f(%.1f+%.1f)", cpData.getOverload(), cpData.getMaxOverload(), cpData.getRawMaxOverload(), cpData.getAddMaxOverload())));
 			texts.add(new Text("CPData.canUseAbility: " + cpData.canUseAbility()));
 			texts.add(new Text("CPData.activated: " + cpData.isActivated()));
+			texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
 			
 			if(Cooldown.cooldown.size() != 0) {
 				texts.add(new Text("Cooldown: "));

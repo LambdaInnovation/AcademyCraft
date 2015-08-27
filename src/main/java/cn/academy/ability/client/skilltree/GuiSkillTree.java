@@ -409,7 +409,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	 	public LevelHandler(int _level) {
 	 		super("LevelHandler");
 	 		level = _level;
-	 		this.addEventHandler(new FrameEventHandler() {
+	 		addEventHandler(new FrameEventHandler() {
 
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
@@ -419,40 +419,63 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
 					}
 					
-					if(LearningHelper.canLevelUp(type, aData) && level == aData.getLevel() + 1)
+					if(LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData) && level == aData.getLevel() + 1) {
+						glPushMatrix();
+						glTranslated(0, 0, 15);
 						Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
 								-10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
+						glPopMatrix();
+					}
 				}
 	 			
 	 		});
+	 		
+	 		addEventHandler(new FrameEventHandler() {
+	 			
+	 			boolean checked;
+
+				@Override
+				public void handleEvent(Widget w, FrameEvent event) {
+					if(!checked && level == aData.getLevel() + 1 && LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData)) {
+						checked = true;
+						
+						double original = widget.transform.width, now = 60;
+			 			widget.transform.setSize(now, now);
+			 			double offset = -(now - original) / 2;
+			 			widget.transform.x += offset;
+			 			widget.transform.y += offset;
+			 			widget.dirty = true;
+			 			
+			 			Tint tint = Tint.get(w);
+			 			Color color = CRL_LVL_CANREACH;
+			 			tint.idleColor = color.copy();
+			 			tint.hoverColor = color.copy();
+			 			
+			 			tint.idleColor.a = 0.8;
+				 		tint.hoverColor.a = 1;
+			 			
+			 			DrawTexture dt = DrawTexture.get(widget);
+			 			dt.setTex(TEX_LVL_GLOW);
+			 			
+			 			widget.regEventHandler(new FrameEventHandler() {
+
+							@Override
+							public void handleEvent(Widget w, FrameEvent event) {
+								dt.color.a = (event.hovering ? 1.0 : 0.8) * (0.4 + 0.3 * (1 + Math.sin(GameTimer.getTime() / 300.0)));
+							}
+			 				
+			 			});
+					}
+				}
+ 				
+ 			});
 	 	}
 
 	 	public void onAdded() {
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
 	 		Color color;
-	 		if(level == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
-	 			double original = widget.transform.width, now = 60;
-	 			widget.transform.setSize(now, now);
-	 			double offset = -(now - original) / 2;
-	 			widget.transform.x += offset;
-	 			widget.transform.y += offset;
-	 			color = CRL_LVL_CANREACH;
-	 			
-	 			DrawTexture dt = DrawTexture.get(widget);
-	 			dt.setTex(TEX_LVL_GLOW);
-	 			
-	 			widget.removeComponent("Tint");
-	 			widget.regEventHandler(new FrameEventHandler() {
-
-					@Override
-					public void handleEvent(Widget w, FrameEvent event) {
-						dt.color.a = (event.hovering ? 1.0 : 0.8) * (0.4 + 0.3 * (1 + Math.sin(GameTimer.getTime() / 300.0)));
-					}
-	 				
-	 			});
-	 			
-	 		} else if(level <= aData.getLevel()) {
+	 		if(level <= aData.getLevel()) {
 	 			color = CRL_LVL_ACQUIRED;
 	 		} else {
 	 			color = CRL_LVL_UNREACHED;

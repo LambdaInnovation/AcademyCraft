@@ -140,28 +140,4 @@ public class Category {
 		return StatCollector.translateToLocal("ac.ability." + name + ".name");
 	}
 	
-	// Learning API
-	
-	/**
-	 * Used in judgment in skill tree UI & developer.
-	 * @param data Ability Data of the player, is guaranteed to have the same category.
-	 * @return Whether the player can level up currently
-	 */
-	public boolean canLevelUp(DeveloperType type, AbilityData data) {
-		if(data.getLevel() == 5)
-			return false;
-		for(Skill s : getSkillsOfLevel(data.getLevel())) {
-			if(s.canControl() && data.getSkillExp(s) < 0.66f)
-				return false;
-		}
-		int nextlv = data.getLevel() + 1;
-		if(nextlv == 1 || nextlv == 2)
-			return type == DeveloperType.PORTABLE;
-		if(nextlv == 3)
-			return type == DeveloperType.NORMAL || type == DeveloperType.ADVANCED;
-		if(nextlv == 4 || nextlv == 5)
-			return type == DeveloperType.ADVANCED;
-		return true;
-	}
-	
 }

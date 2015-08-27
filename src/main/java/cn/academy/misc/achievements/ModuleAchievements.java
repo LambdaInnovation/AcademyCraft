@@ -53,8 +53,10 @@ public final class ModuleAchievements {
 	 */
 	public static boolean trigger(EntityPlayer player, String achid) {
 		ACAchievement ach = ACAchievement.getById(achid);
-		if (ach == null)
+		if (ach == null) {
+			AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
 			return false;
+		}
 		player.triggerAchievement(ach);
 		return true;
 	}
