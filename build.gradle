@@ -1,124 +1,85 @@
-//This build script can upload built jars to a maven repo.
-//
-//Usage:
-//  Use task 'uploadGithubAndClean'. It will build, generate jars and publish them.
-//  gradle params:
-//    -PnewMavenRepo=1
-//      Create a new maven repo, instead of reading from Github.
-//    -PpublishVersion=<string>
-//      Use the given string as the project version.
-//    -Dorg.ajoberstar.grgit.auth.username=<string>
-//      The username in authentication to Github repo.
-//    -Dorg.ajoberstar.grgit.auth.password=<string>
-//      The password in authentication to Github repo.
-
 buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+	repositories {
+		mavenCentral()
 		maven {
-            name = "lidev"
-            url = "http://maven.li-dev.cn/"
-        }
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
 		maven {
-            name = "lidev-dev"
-            url = "http://maven.li-dev.cn/dev/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		classpath 'cn.lidev:LIteBuilder:1.0.4'
-//		classpath 'me.tatarka:gradle-retrolambda:3.2.2'
-    }
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
 }
 
-apply plugin: 'litebuilder'
-//apply plugin: 'me.tatarka.retrolambda'
+ext.configFile = file "build.properties"
 
-litebuilder {
-    name = "AcademyCraft"
-    group = "cn.academy"
+configFile.withReader {
+	def prop = new Properties()
+	prop.load(it)
+	project.ext.config = new ConfigSlurper().parse prop
+}
 
-    //The bucket name of OSS to upload.
-    ossBucket = "libuild"
-    //The folder name of OSS to upload.
-    //You can also put / into the string to upload to a child folder
-    uploadDir = "dev"
+apply plugin: 'forge'
 
-    forgeVersion = "1.7.10-10.13.4.1448-1.7.10"
-	
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+version				= config.mod_ver
+group				= config.mod_group
+archivesBaseName	= config.mod_name
 
-    jarClasses {
-        exclude 'cn/annoreg/**/*'
-        exclude 'cn/liutils/**/*'
-    }
-	
-    pom {
-        groupId = project.group
-        version = project.version
-        artifactId = project.archivesBaseName
-        project {
-            name project.archivesBaseName
-            packaging 'jar'
-            description 'A Minecraft mod about superability, including its aquiring, upgrading and using.'
-            url 'https://github.com/LambdaInnovation/AcademyCraft'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-            issueManagement {
-                system 'github'
-                url 'https://github.com/LambdaInnovation/AcademyCraft/issues'
-            }
-
-            licenses {
-                license {
-                    name 'GNU General Public License.'
-                    url 'http://www.gnu.org/licenses/gpl.html'
-                    distribution 'repo'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'LambdaInnovation'
-                    name 'LambdaInnovation'
-                    roles { role 'developer' }
-                }
-            }
-        }
-    }
+minecraft {
+	version = "${config.mc_ver}-${config.forge_ver}"
+	runDir = "eclipse"
 }
 
 repositories {
-    mavenCentral()
-	maven {
-        name = "lidev"
-        url = "http://maven.li-dev.cn/"
-    }
-	maven {
-        name = "lidev-dev"
-        url = "http://maven.li-dev.cn/dev/"
-    }
-	maven {
-        name = "ic2"
-        url = "http://maven.ic2.player.to/"
-    }
-	maven {
-		name = "chickenbones"
-		url = "http://chickenbones.net/maven/"
+	mavenLocal()
+}
+
+dependencies {
+	compile "cn.annoreg:AnnotationRegistry:${config.annoreg_ver}:dev"
+	compile "cn.liutils:LIUtils:${config.liutils_ver}:dev"
+}
+
+processResources
+{
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
 	}
 }
-dependencies {
-	compile 'cn.annoreg:AnnotationRegistry:[1.0a-0001,1.0a-9999):dev'
-	compile 'cn.liutils:LIUtils:[1.0a-0001,1.0a-9999):dev'
-	compile 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev'
-	compile 'codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev'
-	modReobf 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:api'
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
 }
+
+jar {
+	manifest {
+		attributes 'FMLCorePluginContainsFMLMod' : 'true'
+		attributes 'FMLCorePlugin' : 'cn.annoreg.AnnoRegCorePlugin'
+	}
+}
+
+task deobfJar(type: Jar, dependsOn: 'jar') {
+	manifest {
+		attributes 'FMLCorePluginContainsFMLMod' : 'true'
+		attributes 'FMLCorePlugin' : 'cn.annoreg.AnnoRegCorePlugin'
+	}
+	from 'build/classes/main'
+	from 'build/resources/main'
+	classifier 'dev'
+}
+
+artifacts {
+	archives deobfJar
+}
+
