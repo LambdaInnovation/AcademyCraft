@@ -7,7 +7,7 @@ buildscript {
 		}
 		maven {
 			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+			url = "https://oss.sonatype.org/content/repositories/snapshots"
 		}
 	}
 	dependencies {
@@ -39,15 +39,24 @@ minecraft {
 
 repositories {
 	mavenLocal()
+	maven {
+		name = "chickenbones"
+		url = "http://chickenbones.net/maven"
+	}
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to"
+	}
 }
 
 dependencies {
 	compile "cn.annoreg:AnnotationRegistry:${config.annoreg_ver}:dev"
 	compile "cn.liutils:LIUtils:${config.liutils_ver}:dev"
+	compile "codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev"
+	compile "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
 }
 
-processResources
-{
+processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
 		expand 'version':project.version, 'mcversion':project.minecraft.version
@@ -62,24 +71,19 @@ tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 
-jar {
-	manifest {
-		attributes 'FMLCorePluginContainsFMLMod' : 'true'
-		attributes 'FMLCorePlugin' : 'cn.annoreg.AnnoRegCorePlugin'
-	}
-}
-
 task deobfJar(type: Jar, dependsOn: 'jar') {
-	manifest {
-		attributes 'FMLCorePluginContainsFMLMod' : 'true'
-		attributes 'FMLCorePlugin' : 'cn.annoreg.AnnoRegCorePlugin'
-	}
-	from 'build/classes/main'
-	from 'build/resources/main'
 	classifier 'dev'
+	from sourceSets.main.output
 }
 
 artifacts {
 	archives deobfJar
 }
+
+task getLibs << {
+	ant.mkdir(dir: 'libs')
+	ant.get(src: 'http://addons-origin.cursecdn.com/files/2246/932/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', dest: 'libs/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', skipexisting: 'true')
+}
+
+sourceMainJava.dependsOn getLibs
 
