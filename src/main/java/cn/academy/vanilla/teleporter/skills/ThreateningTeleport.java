@@ -12,12 +12,6 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
@@ -35,9 +29,17 @@ import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
+import cn.liutils.util.mc.BlockFilters;
+import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 
 /**
  * @author WeAthFolD
@@ -160,7 +162,11 @@ public class ThreateningTeleport extends Skill {
 		
 		TraceResult calcDropPos() {
 			double range = getRange(aData);
-			MovingObjectPosition pos = Raytrace.traceLiving(player, range);
+			
+			MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living, BlockFilters.filEverything);
+			if(pos == null)
+				pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+			
 			TraceResult ret = new TraceResult();
 			if(pos == null) {
 				Motion3D mo = new Motion3D(player, true).move(range);

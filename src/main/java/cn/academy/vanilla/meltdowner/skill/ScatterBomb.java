@@ -134,7 +134,7 @@ public class ScatterBomb extends Skill {
 						MDDamageHelper.attack(traceResult.entityHit, player, getDamage(aData));
 					}
 				}
-				aData.addSkillExp(instance, instance.getFloat("expincr"));
+				aData.addSkillExp(instance, instance.getFloat("expincr") * balls.size());
 			}
 		}
 		

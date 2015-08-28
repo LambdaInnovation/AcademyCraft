@@ -22,7 +22,7 @@ ac {
 		
 		penetrate_teleport {
 			x { 315 } y { 332 }
-            cooldown(exp) { lerp(120, 60, exp) }
+            cooldown(exp) { lerp(70, 40, exp) }
             max_distance(exp) { lerp(10, 35, exp) }
             consumption(exp) { lerp(15, 10, exp) }
             overload(exp) { lerp(80, 50, exp) }
@@ -37,7 +37,7 @@ ac {
 			consumption(exp) { lerp(14, 8, exp) }
 			overload(exp) { lerp(40, 20, exp) }
 			expincr(dist) { 0.00018 * dist }
-			cooldown(exp) { lerp(70, 20, exp) }
+			cooldown(exp) { lerp(50, 20, exp) }
 		}
 		
 		flesh_ripping {
@@ -79,6 +79,7 @@ ac {
             overload(exp) { lerp(80, 50, exp) }
             range(exp) { lerp(25, 35, exp) }
 			expincr(entities) { (1 + entities) * 0.002 }
+			cooldown(exp) { lerp(20, 5, exp) }
         }
 		
 		space_fluct {

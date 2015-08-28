@@ -1,6 +1,6 @@
 # AcademyCraft Ripple Script file
 # Electromaster
-# ÅÚ½ãÊ²Ã´µÄ×îÏ²»¶À²À²À²À²À²À²! >3<
+# ï¿½Ú½ï¿½Ê²Ã´ï¿½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! >3<
 
 ac {
     electromaster {
@@ -107,7 +107,7 @@ ac {
             consumption(exp) { lerp(140, 270, exp) }
             overload(exp) { lerp(35, 20, exp) }
             cooldown(exp) { 20 * lerp(2, 1, exp) }
-            expincr { 0.001 }
+            expincr { 0.0025 }
         }
     }
 }

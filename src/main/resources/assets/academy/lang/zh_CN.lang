@@ -90,12 +90,13 @@ ac.gui.preset_edit.tag=预设 #
 
 # 数据终端
 ac.terminal.notinstalled=你没有安装数据终端.
-ac.terminal.alrdy_installed=你已经安装了数据终端.
+ac.terminal.alrdy_installed=你已经安装过了数据终端.
+ac.terminal.key_hint=成功安装数据终端。使用%s键来开/关数据终端界面。
 
 ac.gui.terminal.installing=安装中...
 ac.gui.terminal.appcount=%d 应用
 
-ac.terminal.app_alrdy_installed=你已经安装了%s.
+ac.terminal.app_alrdy_installed=你已经安装过了%s.
 ac.terminal.app_installed=成功安装%s.
 
 # 应用
@@ -163,14 +164,15 @@ ac.skill_tree.aborted=已取消.
 
 # 设置
 ac.settings.cat.generic=常规
-ac.settings.prop.attackPlayer=开启PvP (玩家vs玩家)
+ac.settings.prop.attackPlayer=开启PvP (玩家伤害)
 ac.settings.prop.destroyBlocks=开启方块破坏
 
 ac.settings.cat.keys=键位
 ac.settings.prop.ability_activation=激活能力
 ac.settings.prop.edit_preset=设置技能预设
 ac.settings.prop.switch_preset=切换技能预设
-ac.settings.prop.open_data_terminal=打开数据终端
+ac.settings.prop.open_data_terminal=开/关数据终端
+ac.settings.prop.debug_console=开/关调试信息
 ac.settings.prop.ability_0=能力 #1
 ac.settings.prop.ability_1=能力 #2
 ac.settings.prop.ability_2=能力 #3

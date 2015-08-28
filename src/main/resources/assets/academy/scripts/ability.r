@@ -17,7 +17,7 @@ ac {
                 0.0001 * maxcp * lerp(1, 2, cp / maxcp)
             }
             
-            overload_cooldown { 40 } # 技能使用后，过载恢复开始的冷却时间。
+            overload_cooldown { 32 } # 技能使用后，过载恢复开始的冷却时间。
             overload_recover_speed(o, maxo) { # 过载的恢复速度。 参数：当前过载，最大过载
                 max(0.002 * maxo, 
                     0.007 * maxo * lerp(1, 0.5, o / (maxo * 2)))

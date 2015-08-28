@@ -27,6 +27,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -121,32 +122,32 @@ public class ShiftTeleport extends Skill {
 			if(attacked && !isRemote) {
 				MovingObjectPosition position = getTracePosition();
 				
-				if(attacked) {
-					ItemBlock item = (ItemBlock) stack.getItem();
-					item.placeBlockAt(stack, player, player.worldObj,
-							position.blockX, position.blockY, position.blockZ, position.sideHit, 
-							(float) position.hitVec.xCoord, (float) position.hitVec.yCoord, (float) position.hitVec.zCoord, 
-							stack.getItemDamage());
-					if(!player.capabilities.isCreativeMode) {
-						if(--stack.stackSize == 0) {
-							player.setCurrentItemOrArmor(0, null);
-						}
-					}
-				
-					List<Entity> list = getTargetsInLine();
-					for(Entity target : list) {
-						TPAttackHelper.attack(player, instance, target, getDamage(aData));
-					}
-					
-					player.worldObj.playSoundAtEntity(player, "academy:tp.tp", 0.5f, 1f);
-					aData.addSkillExp(instance, getExpIncr(list.size()));
-					
-					if(!player.capabilities.isCreativeMode) {
-						if(stack.stackSize-- == 0) {
-							player.setCurrentItemOrArmor(0, null);
-						}
+				ItemBlock item = (ItemBlock) stack.getItem();
+				item.placeBlockAt(stack, player, player.worldObj,
+						position.blockX, position.blockY, position.blockZ, position.sideHit, 
+						(float) position.hitVec.xCoord, (float) position.hitVec.yCoord, (float) position.hitVec.zCoord, 
+						stack.getItemDamage());
+				if(!player.capabilities.isCreativeMode) {
+					if(--stack.stackSize == 0) {
+						player.setCurrentItemOrArmor(0, null);
 					}
 				}
+			
+				List<Entity> list = getTargetsInLine();
+				for(Entity target : list) {
+					TPAttackHelper.attack(player, instance, target, getDamage(aData));
+				}
+				
+				player.worldObj.playSoundAtEntity(player, "academy:tp.tp", 0.5f, 1f);
+				aData.addSkillExp(instance, getExpIncr(list.size()));
+				
+				if(!player.capabilities.isCreativeMode) {
+					if(stack.stackSize-- == 0) {
+						player.setCurrentItemOrArmor(0, null);
+					}
+				}
+				
+				Cooldown.setCooldown(instance, instance.getCooldown(aData));
 			}
 		}
 		

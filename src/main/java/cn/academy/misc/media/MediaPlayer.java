@@ -13,31 +13,30 @@
 package cn.academy.misc.media;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.util.ResourceLocation;
-import paulscode.sound.SoundSystem;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.liutils.util.client.ClientUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.RegistryUtils;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.MusicTicker;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.SoundManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import paulscode.sound.SoundSystem;
 
 /**
  * No gui yet, pre-programming
@@ -79,7 +78,6 @@ public class MediaPlayer {
 	public void startPlay() {
 		if(lastMedia == null)
 			lastMedia = playerMedias.isEmpty() ? null : playerMedias.get(0);
-		System.out.println(lastMedia);
 		if(lastMedia != null)
 			startPlay(lastMedia);
 	}
@@ -91,7 +89,19 @@ public class MediaPlayer {
 		playingSounds = ((HashBiMap<String, ISound>) RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
 		sndSystem = RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
 		
-		Minecraft.getMinecraft().theWorld.playAuxSFX(1005, 0, 0, 0, 0);
+		try {
+			MusicTicker musicTicker = RegistryUtils.getFieldInstance(Minecraft.class, Minecraft.getMinecraft(), "mcMusicTicker", "field_147126_aw");
+			ISound playing = RegistryUtils.getFieldInstance(MusicTicker.class, musicTicker, "field_147678_c");
+			if(playing != null) {
+				Minecraft.getMinecraft().getSoundHandler().stopSound(playing);
+			}
+		} catch(Exception e) {
+			AcademyCraft.log.error("Failed to stop vanilla music", e);
+		}
+		
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		Minecraft.getMinecraft().theWorld.playRecord(null, 
+			(int) player.posX, (int) player.posY, (int) player.posZ);
 		
 		mediaInst = new MediaInstance(media);
 		soundManager.sndHandler.playSound(mediaInst);

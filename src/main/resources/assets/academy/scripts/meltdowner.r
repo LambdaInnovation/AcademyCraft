@@ -18,7 +18,7 @@ ac {
             damage(exp) { lerp(5, 9, exp) }
             consumption(exp) { lerp(3, 6, exp) }
             overload(exp) { lerp(100, 80, exp) }
-            expincr { 0.003 }
+            expincr { 0.001 }
         }
         
         light_shield {
@@ -38,8 +38,8 @@ ac {
         
         meltdowner {
             x { 488 } y { 166 }
-            range(exp) { lerp(3, 6, exp) }
-            energy(exp) { lerp(800, 1600, exp) }
+            range(exp) { lerp(2, 4.5, exp) }
+            energy(exp) { lerp(600, 1300, exp) }
             damage(exp) { lerp(18, 45, exp) }
             overload(exp) { lerp(200, 170, exp) }
             consumption(exp) { 40 * lerp(10, 13, exp) }
@@ -107,6 +107,7 @@ ac {
             overload_attacked(exp) { lerp(50, 35, exp)}
             consumption_attacked(exp) { lerp(300, 500, exp) }
             cooldown(ticks) { min(300, max(100, ticks)) }
+            time_limit(exp) { 20 * lerp(7, 20, exp) }
             damage(exp) { lerp(14, 22, exp) }
             expincr { 0.001 } 
         }

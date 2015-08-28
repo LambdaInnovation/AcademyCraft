@@ -66,7 +66,7 @@ public class CatTeleporter extends Category {
 		ModuleVanilla.addGenericSkills(this);
 		
 		// Assign deps
-		dimFolding.setParent(threateningTP, 0.8f);
+		dimFolding.setParent(threateningTP, 0.2f);
 		penetrateTP.setParent(threateningTP, 0.5f);
 		markTP.setParent(threateningTP, 0.4f);
 		fleshRipping.setParent(markTP, 0.5f);

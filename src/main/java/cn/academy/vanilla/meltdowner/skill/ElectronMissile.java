@@ -82,6 +82,9 @@ public class ElectronMissile extends Skill {
 				ActionManager.abortAction(this);
 			
 			if(!isRemote) {
+				if(ticks > instance.callFloatWithExp("time_limit", aData))
+					ActionManager.abortAction(this);
+				
 				if(ticks % 10 == 0) {
 					if(active.size() < MAX_HOLD) {
 						EntityMdBall ball = new EntityMdBall(player);

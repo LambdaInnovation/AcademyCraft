@@ -12,8 +12,7 @@
  */
 package cn.academy.terminal.client;
 
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
+import cn.academy.core.ModuleCoreClient;
 import cn.liutils.api.gui.AuxGui;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.Widget;
@@ -25,6 +24,11 @@ import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.liutils.util.helper.KeyManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -106,6 +110,8 @@ public class TerminalInstallEffect extends AuxGui {
 		if(this.getTimeActive() >= ANIM_LENGTH + WAIT) {
 			dispose();
 			TerminalUI.keyHandler.onKeyDown();
+			Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentTranslation("ac.terminal.key_hint", 
+				KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(TerminalUI.keyHandler))));
 		}
 		
 		if(prog > 1.0) {

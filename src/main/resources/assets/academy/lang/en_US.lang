@@ -91,6 +91,7 @@ ac.gui.preset_edit.tag=Preset #
 # Data Terminal
 ac.terminal.notinstalled=You have not yet installed Data Terminal.
 ac.terminal.alrdy_installed=You have already installed Data Terminal.
+ac.terminal.key_hint=Successfully installed the data terminal. Use the %s key to open/close the terminal UI.
 
 ac.gui.terminal.installing= Installing...
 ac.gui.terminal.appcount=%d Applications
@@ -175,6 +176,7 @@ ac.settings.prop.ability_0=Ability #1
 ac.settings.prop.ability_1=Ability #2
 ac.settings.prop.ability_2=Ability #3
 ac.settings.prop.ability_3=Ability #4
+ac.settings.prop.debug_console=Debug Console
 
 # Media
 ac.media.acquired=You have installed media %s
