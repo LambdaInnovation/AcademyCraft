@@ -49,7 +49,7 @@ class MediaInstance extends MovingSound {
 	}
 	
 	public boolean isDisposed() {
-		return disposed;
+		return disposed || donePlaying;
 	}
 	
 	public void dispose() {

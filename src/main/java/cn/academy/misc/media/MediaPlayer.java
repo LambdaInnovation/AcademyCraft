@@ -24,9 +24,11 @@ import cn.annoreg.core.Registrant;
 import cn.liutils.util.client.ClientUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.RegistryUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -39,7 +41,7 @@ import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
 
 /**
- * No gui yet, pre-programming
+ * Backend of GuiMediaPlayer.
  * @author WeAthFolD
  */
 @Registrant
@@ -73,7 +75,9 @@ public class MediaPlayer {
 	
 	MediaInstance mediaInst;
 	
-	MediaPlayer() {}
+	MediaPlayer() {
+		FMLCommonHandler.instance().bus().register(this);
+	}
 	
 	public void startPlay() {
 		if(lastMedia == null)
@@ -108,6 +112,8 @@ public class MediaPlayer {
 		mediaInst.mediaUUID = playingSounds.get(mediaInst);
 		
 		lastMedia = media;
+		
+		checkMedia();
 	}
 	
 	public void startPlay(String name) {
@@ -131,6 +137,7 @@ public class MediaPlayer {
 	}
 	
 	public void pause() {
+		checkMedia();
 		if(mediaInst != null) {
 			sndSystem.pause(mediaInst.mediaUUID);
 			mediaInst.isPaused = true;
@@ -138,6 +145,7 @@ public class MediaPlayer {
 	}
 	
 	public void resume() {
+		checkMedia();
 		if(mediaInst != null) {
 			sndSystem.play(mediaInst.mediaUUID);
 			mediaInst.isPaused = false;
@@ -145,6 +153,7 @@ public class MediaPlayer {
 	}
 	
 	public void stop() {
+		checkMedia();
 		if(mediaInst != null) {
 			mediaInst.dispose();
 			mediaInst = null;
@@ -168,7 +177,15 @@ public class MediaPlayer {
 	}
 	
 	public MediaInstance getPlayingMedia() {
+		checkMedia();
 		return mediaInst;
+	}
+	
+	private void checkMedia() {
+		if(mediaInst != null && playingSounds != null) {
+			if(!playingSounds.containsKey(mediaInst))
+				mediaInst = null;
+		}
 	}
 	
 	@SubscribeEvent
@@ -181,6 +198,15 @@ public class MediaPlayer {
 			if(next != null)
 				startPlay(next);
 		}
+		
+		if(mediaInst != null && mediaInst.isPaused) {
+			sndSystem.pause(mediaInst.mediaUUID);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onDisconnect(ClientDisconnectionFromServerEvent event) {
+		stop();
 	}
 	
 }
