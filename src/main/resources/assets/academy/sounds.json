@@ -1,5 +1,6 @@
 {
 "ability.deny": {"category": "master", "sounds": [{"name": "ability/deny", "stream": false}]},
+"ability.preset_switch": {"category": "master", "sounds": [{"name": "ability/preset_switch", "stream": false}]},
 
 "em.arc_weak": {"category": "master", "sounds": [{"name": "em/arc_weak", "stream": false}]},
 "em.arc_strong": {"category": "master", "sounds": [{"name": "em/arc_strong", "stream": false}]},

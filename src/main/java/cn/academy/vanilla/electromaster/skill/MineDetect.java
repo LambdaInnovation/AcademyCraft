@@ -108,7 +108,7 @@ public class MineDetect extends Skill {
 		private void spawnEffects(AbilityData aData) {
 			player.worldObj.spawnEntityInWorld(
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
-			ACSounds.playAtEntityClient(player, "em.minedetect", 0.5f);
+			ACSounds.playClient(player, "em.minedetect", 0.5f);
 			
 			Cooldown.setCooldown(instance, instance.getCooldown(aData));
 		}

@@ -26,7 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ACSounds {
 	
 	@SideOnly(Side.CLIENT)
-	public static void playAtEntityClient(Entity target, String name, float volume) {
+	public static void playClient(Entity target, String name, float volume) {
 		playClient(new FollowEntitySound(target, name).setVolume(volume));
 	}
 	

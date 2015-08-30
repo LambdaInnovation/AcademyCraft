@@ -206,7 +206,7 @@ public class ThreateningTeleport extends Skill {
 		void endEffects() {
 			marker.setDead();
 			if(attacked) {
-				ACSounds.playAtEntityClient(player, "tp.tp", 0.5f);
+				ACSounds.playClient(player, "tp.tp", 0.5f);
 				
 				TraceResult dropPos = calcDropPos();
 				double dx = dropPos.x + .5 - player.posX,

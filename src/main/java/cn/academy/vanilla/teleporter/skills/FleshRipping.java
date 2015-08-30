@@ -178,7 +178,7 @@ public class FleshRipping extends Skill {
 				marker.setDead();
 			
 			if(target != null && target.target != null) {
-				ACSounds.playAtEntityClient(player, "tp.guts", 0.6f);
+				ACSounds.playClient(player, "tp.guts", 0.6f);
 				
 				Entity e = target.target;
 				int count = RandUtils.rangei(4, 6);

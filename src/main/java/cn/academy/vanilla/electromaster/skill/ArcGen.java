@@ -151,7 +151,7 @@ public class ArcGen extends Skill {
 			arc.addMotionHandler(new Life(10));
 			
 			player.worldObj.spawnEntityInWorld(arc);
-			ACSounds.playAtEntityClient(player, "em.arc_weak", 0.5f);
+			ACSounds.playClient(player, "em.arc_weak", 0.5f);
 		}
 		
 	}

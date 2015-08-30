@@ -191,7 +191,7 @@ public class MarkTeleport extends Skill {
 					aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
 					player.fallDistance = 0;
 				} else {
-					ACSounds.playAtEntityClient(player, "tp.tp", .5f);
+					ACSounds.playClient(player, "tp.tp", .5f);
 				}
 				
 				Cooldown.setCooldown(instance, instance.getCooldown(aData));

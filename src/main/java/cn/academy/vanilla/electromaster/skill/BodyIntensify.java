@@ -215,7 +215,7 @@ public class BodyIntensify extends Skill {
 			}
 			
 			if(performed) {
-				ACSounds.playAtEntityClient(player, ACTIVATE_SOUND, 0.5f);
+				ACSounds.playClient(player, ACTIVATE_SOUND, 0.5f);
 				player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player));
 			}
 		}

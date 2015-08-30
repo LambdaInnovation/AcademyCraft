@@ -12,7 +12,8 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.liutils.util.generic.RandUtils.*;
+import static cn.liutils.util.generic.RandUtils.ranged;
+import static cn.liutils.util.generic.RandUtils.rangei;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
@@ -20,6 +21,8 @@ import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.core.util.RangedRayDamage;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay;
@@ -59,6 +62,8 @@ public class Meltdowner extends Skill {
 		@Override
 		public void onStart() {
 			super.onStart();
+			
+			if(isRemote) startEffect();
 		}
 		
 		@Override
@@ -112,10 +117,21 @@ public class Meltdowner extends Skill {
 		}
 		
 		// CLIENT
+		
+		@SideOnly(Side.CLIENT)
+		FollowEntitySound sound;
+		
 		@SideOnly(Side.CLIENT)
 		void spawnRay() {
 			EntityMDRay ray = new EntityMDRay(player);
+			ACSounds.playClient(player, "md.meltdowner", 0.5f);
 			world.spawnEntityInWorld(ray);
+		}
+		
+		@SideOnly(Side.CLIENT)
+		void startEffect() {
+			sound = new FollowEntitySound(player, "md.md_charge").setVolume(1.0f);
+			ACSounds.playClient(sound);
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -141,6 +157,8 @@ public class Meltdowner extends Skill {
 			if(isLocal()) {
 				player.capabilities.setPlayerWalkSpeed(0.1f);
 			}
+			
+			sound.stop();
 		}
 		
 	}

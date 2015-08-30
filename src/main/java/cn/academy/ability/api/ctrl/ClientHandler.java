@@ -17,6 +17,7 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -166,6 +167,7 @@ public final class ClientHandler {
 			if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
 				int next = (data.getCurrentID() + 1) % 4;
 				data.switchCurrent(next);
+				ACSounds.playClient(getPlayer(), "ability.switch_preset", 1.0f);
 				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));
 			}
 		}

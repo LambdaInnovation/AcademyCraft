@@ -16,19 +16,14 @@ import static cn.liutils.util.generic.RandUtils.ranged;
 
 import java.util.List;
 
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.util.DamageHelper;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
 import cn.liutils.render.particle.Particle;
@@ -41,6 +36,12 @@ import cn.liutils.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 /**
  * @author WeAthFolD
@@ -188,8 +189,13 @@ public class LightShield extends Skill {
 		EntityMdShield shield;
 		
 		@SideOnly(Side.CLIENT)
+		FollowEntitySound loopSound;
+		
+		@SideOnly(Side.CLIENT)
 		public void startEffects() {
 			world.spawnEntityInWorld(shield = new EntityMdShield(player));
+			ACSounds.playClient(player, "md.shield_startup", 0.8f);
+			ACSounds.playClient(loopSound = new FollowEntitySound(player, "md.shield_loop").setLoop());
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -212,6 +218,7 @@ public class LightShield extends Skill {
 		@SideOnly(Side.CLIENT)
 		public void endEffects() {
 			shield.setDead();
+			loopSound.stop();
 		}
 		
 	}

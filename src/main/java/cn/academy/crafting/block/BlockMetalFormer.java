@@ -61,6 +61,9 @@ public class BlockMetalFormer extends ACBlockContainer {
     
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+    	// Fix for the mystery 32767 metadata passed in when crafting.
+    	meta %= 4;
+    	
         if(side == 1)
         	return topIcon;
         if(side == 0)
@@ -68,6 +71,7 @@ public class BlockMetalFormer extends ACBlockContainer {
         
         final int offsets[] = { 2, 3, 1, 0 };
         
+        System.out.println("Meta: " + meta + ", Side: " + side);
         return sideIcons[(offsets[meta] + side) % 4];
     }
 	

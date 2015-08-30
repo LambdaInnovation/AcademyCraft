@@ -137,7 +137,7 @@ public class ThunderBolt extends Skill {
 				player.worldObj.spawnEntityInWorld(aoeArc);
 			}
 			
-			ACSounds.playAtEntityClient(player, "em.arc_strong", 0.6f);
+			ACSounds.playClient(player, "em.arc_strong", 0.6f);
 		}
 		
 		private AttackData getAttackData() {
