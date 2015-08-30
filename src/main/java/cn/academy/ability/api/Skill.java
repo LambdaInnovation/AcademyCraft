@@ -64,7 +64,7 @@ public abstract class Skill extends Controllable {
 	 * The place this skill is at in the Skill Tree UI. This field is automatically loaded from script from field
 	 * "x" and "y"
 	 */
-	public final Vector2f guiPosition = new Vector2f(100, 100);
+	public double guiX, guiY;
 	
 	/**
 	 * Whether this skill can be controlled (i.e. appear in preset edit ui).
@@ -103,7 +103,8 @@ public abstract class Skill extends Controllable {
 		
 		try {
 			float x = script.getFloat("x"), y = script.getFloat("y");
-			guiPosition.set(x, y);
+			guiX = x;
+			guiY = y;
 		} catch(Exception e) {
 			AcademyCraft.log.error("Failed to load gui position of skill " + fullName);
 		}

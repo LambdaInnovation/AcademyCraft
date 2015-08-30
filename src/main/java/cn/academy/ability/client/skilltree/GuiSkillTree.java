@@ -231,7 +231,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		DrawTexture.get(ret.getWidget("back")).color = aData.isSkillLearned(skill) ? CRL_SKILL_ENABLED : CRL_SKILL_DISABLED;
 		DrawTexture.get(ret.getWidget("skill_icon")).setTex(skill.getHintIcon());
 		ret.addComponent(new SkillHandler(skill, i));
-		ret.transform.setPos(skill.guiPosition.x, skill.guiPosition.y);
+		ret.transform.setPos(skill.guiX, skill.guiY);
 		return ret;
 	}
 	
