@@ -49,6 +49,8 @@ public class BlockPhaseGen extends ACBlockContainer {
 
 	public BlockPhaseGen() {
 		super("phase_generator", Material.rock, guiHandler);
+		setHardness(2.5f);
+        setHarvestLevel("pickaxe", 1);
 	}
 	
 	@Override

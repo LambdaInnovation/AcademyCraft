@@ -24,6 +24,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cn.academy.core.item.ACItem;
+import cn.academy.terminal.TerminalData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,9 +45,13 @@ public class ItemMedia extends ACItem {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)  {
 		if(!player.worldObj.isRemote) {
 			MediaData data = MediaData.get(player);
+			TerminalData tData = TerminalData.get(player);
+			
 			int mID = stack.getItemDamage();
 			
-			if(data.isMediaInstalled(mID)) {
+			if(!tData.isInstalled(AppMediaPlayer.instance)) {
+				player.addChatMessage(new ChatComponentTranslation("ac.media.notinstalled"));
+			} else if(data.isMediaInstalled(mID)) {
 				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getDisplayName()));
 			} else {
 				data.installMedia(mID);

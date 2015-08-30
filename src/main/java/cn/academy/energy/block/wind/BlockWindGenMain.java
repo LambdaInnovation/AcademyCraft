@@ -58,6 +58,8 @@ public class BlockWindGenMain extends ACBlockMulti {
 
 	public BlockWindGenMain() {
 		super("windgen_main", Material.rock);
+		setHardness(4.0f);
+		setHarvestLevel("pickaxe", 2);
 		this.addSubBlock(new int[][] {
 			{ 0, 0, -1 },
 			{ 0, 0, 1 }

@@ -359,7 +359,7 @@ public class TerminalUI extends AuxGui {
 			TerminalData tData = TerminalData.get(player);
 			
 			if(tData.isTerminalInstalled()) {
-				if(current != null || (current != null && current.isDisposed())) {
+				if(current != null) {
 					current.dispose();
 					current = null;
 				} else {

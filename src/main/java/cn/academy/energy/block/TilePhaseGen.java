@@ -173,7 +173,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     
     @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
     private void syncLiquid(
-    		@RangedTarget(range = 5) TileEntity te,
+    		@RangedTarget(range = 12) TileEntity te,
     		@Data Integer liq) {
     	tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, liq));
     }

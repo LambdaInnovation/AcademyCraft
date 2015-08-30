@@ -59,6 +59,8 @@ public class BlockNode extends ACBlockContainer {
         super("node", Material.rock, guiHandler);
         setCreativeTab(AcademyCraft.cct);
         setBlockName("ac_node_" + _type.name);
+        setHardness(2.5f);
+        setHarvestLevel("pickaxe", 1);
         
         type = _type;
     }

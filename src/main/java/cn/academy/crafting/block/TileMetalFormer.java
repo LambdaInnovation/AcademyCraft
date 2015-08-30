@@ -145,7 +145,7 @@ public class TileMetalFormer extends TileReceiverBase {
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncData(
-			@RangedTarget(range = 5) TileMetalFormer target,
+			@RangedTarget(range = 12) TileMetalFormer target,
 			@Data Integer counter, 
 			@Instance(nullable = true) RecipeObject recipe,
 			@Instance Mode mode) {

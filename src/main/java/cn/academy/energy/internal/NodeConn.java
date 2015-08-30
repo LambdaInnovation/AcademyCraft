@@ -185,16 +185,14 @@ public class NodeConn {
 			if(counter == 0) {
 				counter = UPDATE_INTERVAL;
 				checkIsActive();
+				checkAvailability();
 			}
 			return;
 		}
 		
 		IWirelessNode iNode = node.get(world);
 		if(iNode == null) {
-			if(!node.isLoaded(world)) {
-				System.out.println(node + " destroyed, destroy NodeConn...");
-				dispose();
-			}
+			checkAvailability();
 			return;
 		}
 		
@@ -258,6 +256,19 @@ public class NodeConn {
 		// Kill dummy networks
 		if(generators.size() == 0 && receivers.size() == 0) {
 			dispose();
+		}
+	}
+	
+	private void checkAvailability() {
+		World world = getWorld();
+		IWirelessNode iNode = node.get(world);
+		
+		if(iNode == null || (generators.size() == 0 && receivers.size() == 0)) {
+			if(node.isLoaded(world)) {
+				System.out.println(node + " destroyed, destroy NodeConn...");
+				dispose();
+			}
+			return;
 		}
 	}
 	

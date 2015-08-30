@@ -39,6 +39,8 @@ public class BlockDeveloper extends ACBlockContainer {
 	public BlockDeveloper(DeveloperType _type) {
 		super("developer", Material.rock, null);
 		type = _type;
+		setHardness(4.0f);
+		setHarvestLevel("pickaxe", 2);
 		
 		String tmp = type.toString().toLowerCase();
 		setBlockName("ac_developer_" + tmp);
@@ -63,7 +65,7 @@ public class BlockDeveloper extends ACBlockContainer {
         	TileEntity te = world.getTileEntity(x, y, z);
 			if(te instanceof TileDeveloper) {
 				TileDeveloper td = (TileDeveloper) te;
-				if(td.getUser() == null)
+				if(td.getUser() == null) 
 					td.use(player);
 			}
             return true;

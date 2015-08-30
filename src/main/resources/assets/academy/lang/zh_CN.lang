@@ -181,6 +181,7 @@ ac.settings.prop.ability_3=能力 #4
 # 媒体
 ac.media.acquired=你已获得媒体  %s
 ac.media.haveone=你已经获得了媒体  %s
+ac.media.notinstalled=你还没有安装媒体播放器App！
 
 # 常规
 ac.gui.loading_lowercase.desc=加载中...

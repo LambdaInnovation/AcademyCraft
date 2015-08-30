@@ -181,6 +181,7 @@ ac.settings.prop.debug_console=Debug Console
 # Media
 ac.media.acquired=You have installed media %s
 ac.media.haveone=You have already installed media %s
+ac.media.notinstalled=You have not yet installed the Media Player app.
 
 # Generic
 ac.gui.loading_lowercase.desc=loading...

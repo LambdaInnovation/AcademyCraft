@@ -189,7 +189,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncInventory(
-			@RangedTarget(range = 8) TileMatrix matrix,
+			@RangedTarget(range = 15) TileMatrix matrix,
 			@Data ItemStack s0, @Data ItemStack s1, @Data ItemStack s2, @Data ItemStack s3) {
 		this.setInventorySlotContents(0, s0);
 		this.setInventorySlotContents(1, s1);

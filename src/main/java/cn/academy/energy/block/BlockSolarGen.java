@@ -28,6 +28,9 @@ public class BlockSolarGen extends ACBlockMulti {
 		super("solar_gen", Material.rock);
 		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
 		this.finishInit();
+		
+		setHardness(1.5f);
+        setHarvestLevel("pickaxe", 1);
 	}
 	
 	@Override

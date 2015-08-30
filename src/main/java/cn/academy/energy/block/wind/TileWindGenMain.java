@@ -194,7 +194,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncTheStack(
-		@RangedTarget(range = 16) TileEntity te, 
+		@RangedTarget(range = 50) TileEntity te, 
 		@Data ItemStack stack) {
 		this.setInventorySlotContents(0, stack);
 	}

@@ -47,6 +47,8 @@ public class BlockMetalFormer extends ACBlockContainer {
 
 	public BlockMetalFormer() {
 		super("metal_former", Material.rock, guiHandler);
+		setHardness(3.0f);
+		setHarvestLevel("pickaxe", 1);
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -71,7 +73,6 @@ public class BlockMetalFormer extends ACBlockContainer {
         
         final int offsets[] = { 2, 3, 1, 0 };
         
-        System.out.println("Meta: " + meta + ", Side: " + side);
         return sideIcons[(offsets[meta] + side) % 4];
     }
 	

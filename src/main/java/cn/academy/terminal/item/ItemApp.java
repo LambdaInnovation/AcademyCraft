@@ -63,7 +63,9 @@ public class ItemApp extends ACItem {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if(!world.isRemote) {
 			TerminalData terminalData = TerminalData.get(player);
-			if(terminalData.isInstalled(app)) {
+			if(!terminalData.isTerminalInstalled()) {
+				player.addChatMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
+			} else if(terminalData.isInstalled(app)) {
 				player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
 			} else {
 				if(!player.capabilities.isCreativeMode)

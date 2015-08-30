@@ -42,6 +42,8 @@ public class BlockImagFusor extends ACBlockContainer {
 
 	public BlockImagFusor() {
 		super("imag_fusor", Material.rock, guiHandler);
+		setHardness(3.0f);
+		setHarvestLevel("pickaxe", 1);
 	}
 	
     @SideOnly(Side.CLIENT)

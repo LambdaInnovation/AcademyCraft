@@ -26,6 +26,8 @@ public class BlockWindGenPillar extends ACBlockContainer {
 
 	public BlockWindGenPillar() {
 		super("windgen_pillar", Material.rock, null);
+		setHardness(4.0f);
+		setHarvestLevel("pickaxe", 2);
 	}
 	
 	@Override

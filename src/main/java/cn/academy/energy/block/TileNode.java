@@ -162,7 +162,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	public void receiveSyncMessage(
-		@RangedTarget(range = 5) TileEntity te,
+		@RangedTarget(range = 12) TileEntity te,
 		@Data Boolean enabled, 
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 

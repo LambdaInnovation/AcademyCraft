@@ -49,8 +49,9 @@ public class LinkToNodeSyncs {
 		if(te instanceof IWirelessUser) {
 			IWirelessUser user = (IWirelessUser) te;
 			NodeConn conn = WirelessHelper.getNodeConn(user);
+			IWirelessNode node = conn == null ? null : conn.getNode();
 			
-			future.setAndSync(conn == null ? "" : conn.getNode().getNodeName());
+			future.setAndSync(node == null ? "" : node.getNodeName());
 		} else {
 			future.setAndSync("");
 		}
