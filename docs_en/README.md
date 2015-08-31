@@ -1,9 +1,9 @@
-# Documentation Of The Specification Of AcademyCraft
+# DOCUMENTATION OF THE SPECIFICATION OF ACADEMYCRAFT
 ## The Structure Of The Source Code And The Convention
 
 Author: WeAthFolD
 
-This documentation of the specification mainly explained the source code specification when we develop the AcademyCraft.
+This documentation of the specification mainly explained the source code specification when we develop AcademyCraft.
 Please consult the [Google Java Style](http://google-styleguide.googlecode.com/svn/trunk/javaguide.html) and the [Code Conventions for the Java TM Programming Language](http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html) when this specification don't get involved.
 
 The Structures Of Packages
