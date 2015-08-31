@@ -16,22 +16,17 @@ import cn.academy.ability.api.Skill;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Fired when a skill's exp is formally added using AbilityData#addSkillExp.
+ * Fired in SERVER only, when the specified skill's exp is being ADDED.
+ * When change category or sth else the event won't get fired.
  * @author WeAthFolD
  */
-public class SkillExpAddedEvent extends AbilityEvent {
+public class SkillExpChangedEvent extends AbilityEvent {
 	
 	public final Skill skill;
-	
-	/**
-	 * The amount INTENTED to be added. is directly the argument passed in.
-	 */
-	public final float amount;
 
-	public SkillExpAddedEvent(EntityPlayer _player, Skill _skill, float _amount) {
+	public SkillExpChangedEvent(EntityPlayer _player, Skill _skill) {
 		super(_player);
 		skill = _skill;
-		amount = _amount;
 	}
 
 }

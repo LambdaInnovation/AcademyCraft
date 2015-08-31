@@ -67,6 +67,13 @@ public abstract class Skill extends Controllable {
 	public double guiX, guiY;
 	
 	/**
+	 * Whether this skill has customized experience definition(display).
+	 * If this is set to true, getSkillExp() will be called whenever
+	 * 	querying experience of skill.
+	 */
+	public boolean expCustomized = false;
+	
+	/**
 	 * Whether this skill can be controlled (i.e. appear in preset edit ui).
 	 */
 	protected boolean canControl = true;
@@ -175,6 +182,16 @@ public abstract class Skill extends Controllable {
 	
 	protected String getLocalized(String key) {
 		return StatCollector.translateToLocal("ac.ability." + getFullName() + "." + key);
+	}
+	
+	//--- Hooks
+	/**
+	 * Get called when set expCustomize=true, to query the experience of the skill.
+	 * @param data
+	 * @return exp value in [0, 1]
+	 */
+	public float getSkillExp(AbilityData data) {
+		return 0.0f;
 	}
 	
 	//--- Ctrl

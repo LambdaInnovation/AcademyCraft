@@ -13,9 +13,12 @@
 package cn.academy.vanilla.generic.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.core.util.SubscribePipeline;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Generic skill: Advanced Brain Course.
@@ -27,6 +30,8 @@ public class SkillBrainCourseAdvanced extends Skill {
 		super("brain_course_advanced", 5);
 		this.canControl = false;
 		this.isGeneric = true;
+		
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@SubscribePipeline("ability.maxcp")
@@ -41,6 +46,13 @@ public class SkillBrainCourseAdvanced extends Skill {
 		if(AbilityData.get(player).isSkillLearned(this))
 			maxo += 100;
 		return maxo;
+	}
+	
+	@SubscribeEvent
+	public void onExpAdded(SkillExpAddedEvent event) {
+		if(event.skill.canControl()) {
+			event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+		}
 	}
 
 }

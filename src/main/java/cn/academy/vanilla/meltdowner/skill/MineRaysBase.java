@@ -98,13 +98,14 @@ public abstract class MineRaysBase extends Skill {
 		public void onStart() {
 			super.onStart();
 			
+			cpData.perform(skill.getOverload(aData), 0);
 			if(isRemote)
 				startEffects();
 		}
 		
 		@Override
 		public void onTick() {
-			if(!cpData.perform(skill.getOverload(aData), skill.getConsumption(aData)) && !isRemote)
+			if(!cpData.perform(0, skill.getConsumption(aData)) && !isRemote)
 				ActionManager.abortAction(this);
 			
 			MovingObjectPosition result = Raytrace.traceLiving(player, skill.getFloat("range"), EntitySelectors.nothing);

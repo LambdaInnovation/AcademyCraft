@@ -18,6 +18,7 @@ ac {
 		
 		dim_folding_theoreom {
 			x { 157 } y { 375 }
+			incr_rate { 0.6 }
 		}
 		
 		penetrate_teleport {
@@ -84,6 +85,7 @@ ac {
 		
 		space_fluct {
 			x { 886 } y { 412 }
+			incr_rate { 0.4 }
 		}
 		
 		flashing {

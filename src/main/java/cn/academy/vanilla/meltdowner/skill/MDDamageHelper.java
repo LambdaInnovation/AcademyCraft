@@ -42,7 +42,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 @RegInit
 public class MDDamageHelper {
 	
-	static final String MARKID = "md_marktick";
+	static final String MARKID = "md_marktick", RATEID = "md_markrate";
 	
 	public static void init() {
 		MinecraftForge.EVENT_BUS.register(new Events());
@@ -54,6 +54,7 @@ public class MDDamageHelper {
 		if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
 			int marktick = getMarkTick(player);
 			setMarkTick(e, marktick = Math.max(60, marktick));
+			setMarkRate(e, CatMeltdowner.radIntensify.getRate(aData));
 			syncStartMark(e, e, marktick);
 		}
 	}
@@ -63,6 +64,17 @@ public class MDDamageHelper {
 			return player.getEntityData().getInteger(MARKID);
 		else
 			return 0;
+	}
+	
+	static float getMarkRate(Entity entity) {
+		if(entity.getEntityData().hasKey(RATEID))
+			return entity.getEntityData().getFloat(RATEID);
+		else
+			return 0;
+	}
+	
+	static void setMarkRate(Entity entity, float amt) {
+		entity.getEntityData().setFloat(RATEID, amt);
 	}
 	
 	static void setMarkTick(Entity player, int ticks) {
@@ -107,7 +119,7 @@ public class MDDamageHelper {
 		@SubscribeEvent
 		public void onLivingAttack(LivingHurtEvent event) {
 			if(getMarkTick(event.entityLiving) > 0) {
-				event.ammount *= 1.5f;
+				event.ammount *= getMarkRate(event.entityLiving);
 			}
 		}
 		

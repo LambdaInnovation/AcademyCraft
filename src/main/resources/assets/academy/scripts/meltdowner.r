@@ -53,7 +53,7 @@ ac {
             harvest_level { 2 }
             speed(exp) { 0.1 * lerp(1, 2, exp) }
             consumption(exp) { lerp(15, 20, exp) }
-            overload(exp) { lerp(1.5, 0.7, exp) }
+            overload(exp) { lerp(150, 70, exp) }
             cooldown(exp) { lerp(60, 30, exp) }
             expincr { 0.0005 }
         }
@@ -83,7 +83,7 @@ ac {
             harvest_level { 5 }
             speed(exp) { 0.5 * lerp(1, 2, exp) }
             consumption(exp) { lerp(18, 12, exp) }
-            overload(exp) { lerp(2, 1.1, exp) }
+            overload(exp) { lerp(200, 110, exp) }
             cooldown(exp) { lerp(60, 30, exp) }
             expincr { 0.0003 }
         }
@@ -94,7 +94,7 @@ ac {
             harvest_level { 5 }
             speed(exp) { 0.5 * lerp(1, 2, exp) }
             consumption(exp) { lerp(20, 15, exp) }
-            overload(exp) { lerp(2.5, 1.6, exp) }
+            overload(exp) { lerp(250, 160, exp) }
             cooldown(exp) { lerp(60, 30, exp) }
             expincr { 0.0003 }
         }

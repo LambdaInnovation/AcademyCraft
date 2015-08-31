@@ -13,8 +13,9 @@
 package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.Skill;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
+import cn.liutils.util.generic.MathUtils;
 
 /**
  * Just a placeholder. implementation is in MDDamageHelper.
@@ -25,6 +26,17 @@ public class RadiationIntensify extends Skill {
 	public RadiationIntensify() {
 		super("rad_intensify", 1);
 		this.canControl = false;
+		this.expCustomized = true;
+	}
+	
+	@Override
+	public float getSkillExp(AbilityData data) {
+		CPData cpData = CPData.get(data.getPlayer());
+		return MathUtils.wrapf(0, 1, cpData.getCP() / CPData.getInitCP(5));
 	}
 
+	public float getRate(AbilityData data) {
+		return this.callFloatWithExp("rate", data);
+	}
+	
 }

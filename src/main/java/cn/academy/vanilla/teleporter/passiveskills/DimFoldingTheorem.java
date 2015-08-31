@@ -12,11 +12,14 @@
  */
 package cn.academy.vanilla.teleporter.passiveskills;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.core.util.SubscribePipeline;
 import cn.liutils.util.generic.MathUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -26,6 +29,7 @@ public class DimFoldingTheorem extends Skill {
 	public DimFoldingTheorem() {
 		super("dim_folding_theoreom", 1);
 		this.canControl = false;
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@SubscribePipeline("ac.teleporter.?.damage")
@@ -44,6 +48,13 @@ public class DimFoldingTheorem extends Skill {
 			return prob + MathUtils.lerpf(0.1f, 0.2f, aData.getSkillExp(this));
 		}
 		return prob;
+	}
+	
+	@SubscribeEvent
+	public void onExpAdded(SkillExpAddedEvent event) {
+		if(event.skill.canControl()) {
+			event.getAbilityData().addSkillExp(this, event.amount * getFloat("incr_rate"));
+		}
 	}
 
 }

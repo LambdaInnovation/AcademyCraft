@@ -22,6 +22,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.ability.api.event.SkillExpAddedEvent;
+import cn.academy.ability.api.event.SkillExpChangedEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
@@ -176,17 +177,22 @@ public class AbilityData extends DataPart {
 	}
 	
 	public float getSkillExp(Skill skill) {
-		return skill.getCategory() == getCategory() ? this.skillExps[skill.getID()] : 0.0f;
+		return skill.getCategory() == getCategory() ? 
+			(skill.expCustomized ? skill.getSkillExp(this) : this.skillExps[skill.getID()]) : 
+			0.0f;
 	}
 	
 	public void addSkillExp(Skill skill, float amt) {
 		if(skill.getCategory() == getCategory()) {
 			learnSkill(skill);
-			skillExps[skill.getID()] += amt;
-			if(skillExps[skill.getID()] > 1.0f)
-				skillExps[skill.getID()] = 1.0f;
-			if(!isRemote()) {
-				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill));
+			
+			int id = skill.getID();
+			float added = Math.min(1.0f - skillExps[id], amt);
+			skillExps[skill.getID()] += added;
+			
+			if(!isRemote() && added != 0) {
+				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getPlayer(), skill));
+				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill, amt));
 				scheduleUpdate(25);
 			}
 		}
@@ -200,7 +206,7 @@ public class AbilityData extends DataPart {
 			learnSkill(skill);
 			skillExps[skill.getID()] = exp;
 			if(!isRemote()) {
-				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill));
+				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getPlayer(), skill));
 				scheduleUpdate(25);
 			}
 		}

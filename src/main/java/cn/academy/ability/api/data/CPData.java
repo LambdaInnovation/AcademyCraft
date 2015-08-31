@@ -352,10 +352,10 @@ public class CPData extends DataPart {
 		AbilityData data = AbilityData.get(getPlayer());
 		
 		this.maxCP = AcademyCraft.pipeline.pipeFloat
-			("ability.maxcp", getFunc("init_cp").callFloat(data.getLevel()), getPlayer());
+			("ability.maxcp", getInitCP(data.getLevel()), getPlayer());
 		
 		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
-			"ability.maxo", getFunc("init_overload").callFloat(data.getLevel()), getPlayer());
+			"ability.maxo", getInitOverload(data.getLevel()), getPlayer());
 		
 		currentCP = getMaxCP();
 		overload = 0;
@@ -363,6 +363,14 @@ public class CPData extends DataPart {
 		if(!isRemote())
 			sync();
 		
+	}
+	
+	public static float getInitCP(int level) {
+		return getFunc("init_cp").callFloat(level);
+	}
+	
+	public static float getInitOverload(int level) {
+		return getFunc("init_overload").callFloat(level);
 	}
 	
 	/**
@@ -459,6 +467,7 @@ public class CPData extends DataPart {
 	}
 	
 	@RegEventHandler(Bus.Forge)
+	
 	public static class Events {
 		
 		@SubscribeEvent

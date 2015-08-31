@@ -13,9 +13,12 @@
 package cn.academy.vanilla.generic.skill;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.core.util.SubscribePipeline;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Generic passive skill: Mind Training Course
@@ -27,6 +30,8 @@ public class SkillMindCourse extends Skill {
 		super("mind_course", 5);
 		this.canControl = false;
 		this.isGeneric = true;
+		
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@SubscribePipeline("ability.cp_recover_speed")
@@ -35,6 +40,13 @@ public class SkillMindCourse extends Skill {
 			speed *= 1.2f;
 		}
 		return speed;
+	}
+	
+	@SubscribeEvent
+	public void onExpAdded(SkillExpAddedEvent event) {
+		if(event.skill.canControl()) {
+			event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+		}
 	}
 
 }

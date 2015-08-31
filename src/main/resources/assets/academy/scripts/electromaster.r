@@ -1,6 +1,6 @@
 # AcademyCraft Ripple Script file
 # Electromaster
-# �ڽ�ʲô����ϲ��������������! >3<
+# 炮姐什么的最喜欢了! >3<
 
 ac {
     electromaster {
