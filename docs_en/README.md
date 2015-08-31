@@ -6,11 +6,11 @@ Author: WeAthFolD
 This documentation of the specification mainly explained the source code specification when we develop the AcademyCraft.
 Please consult the [Google Java Style](http://google-styleguide.googlecode.com/svn/trunk/javaguide.html) and the [Code Conventions for the Java TM Programming Language](http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html) when this specification don't get involved.
 
-The Structure Of Packages
+The Structures Of Packages
 ===
 
 The root package： ```cn.academy```
-The universal format of the name of package： ```cn.academy.<模块包>.[功能包1].[功能包2]. ...```
+The universal format of the name of package： ```cn.academy.<Module>.[Function1].[Function2]. ...```
 
 The list of the single-stage sub package of the root package, the package of module: (We will not change it in version 1.0)
 
@@ -37,14 +37,14 @@ The major things：
 	This is the sub module of the ability system. It's the basic structure which support the whole ability system. The Ability-Developer, the ability User-Interface of the main interface and the operating controller system are all in this package.
 
 * __vanilla__
-	This is the implementation module of department of ability. We expect there will be electro_master, melt_downer, teleporter and vector_controller. (e.g.```vanilla.electromaster```)
+	This is the implementation module of department of ability. We expect there will be electro_master, melt_downer, teleporter. (e.g.```vanilla.electromaster```)
 
 The secondary things：
 
 * __crafting__
 	This is the module of synthesising. There is the content about recipe in survival mode. There are some machine about synthesising(e.g.Etcher), the sythesising recipe and the Items and Blocks which is **only** used as synthesising.
 * __misc__
-	This is the miscellaneous module. It cantains 
+	This is the miscellaneous module. It cantains Easter Egg.
 * __support__
 	This is the module which can support the party products. We will develop the universal adapter about the energy and NEI support.
 * __test__
@@ -52,51 +52,49 @@ The secondary things：
 
 Under each module package, we classify each Class by function category. Such as ```block```, ```tile``` and ```client.render```.
 
-The Organizing Principle Of Classes
+The Organizing Principles Of Classes
 ===
 
-在每个模块包内，应该存在一个名为ModuleXXX的主类。在这个主类中使用AR的```@RegInit```注解完成必要的初始化工作。
-Under each module package. There should be a major Class and it should be named "ModuleXXX". In this Class, we use a AR annotation, ```@RegInit``` to finish some 
+Under each module package. There should be a major Class and it should be named "ModuleXXX". In this Class, we use a AR annotation, ```@RegInit``` to finish some necessary initialization.
 
-不过，在AC中提倡使用分散实现和注册的方法。应该有效的利用AR提供的功能实现子系统的分别注册，而非在一个统一的类中加载。
-Item和Block是个例外。它们由于经常被全局访问，应该在每个模块主类中被注册。其他一些需要提供全局访问的实例，也应该在每个模块主类中被注册。
+But in AcademyCraft, we advocate distributed implement and distributed register. You should effective use the function AR provide to implement the distributed registry of the sub system, instead of load them in a uniform Class. But Item and Block is exceptional. You should registering them in the major Class of each each module, because they are usually globally visited. Others instance which need to provide globally visiting should also be registering in the major Class of each module.
 
-代码原则
+The Principles Of The Source Code
 ===
 
-* 暴露的接口处提供充分的注释和说明
-* 将接口和实现明确分开
-* 高度模块化和分别注册
-* 善用事件系统进行去耦
-* 纯装饰物品和方块尽量使用JsonLoader进行加载
+* Provide plenary notes and discribes in the public interface.
+* Separate the interface and the implement clearly.
+* Highly modular and registering respectively.
+* Use Event System and decoupling.
+* Use JsonLoader to load the Item/Block only for decorative as much as possible.
 
-惯例
+Conventions
 ===
 
-* 尽量使用core包提供的包装和抽象，少造轮子，造轮子之前检查有没有重复
-* 客户端的很多渲染和声音相关资源可以从```Resource```类获取。
-* Item的基类是```ACItem```
-* Block的基类是```ACBlock```和```ACBlockContainer```
-* Command的基类是```ACCommand```
-* 带物品栏的方块```TileEntity```基类是```TileInventory```
+* Use the Wrapper Class and Abstract Class as much as possible and make wheels as less as possible. Check repeat things before make wheels.
+* You can get a lot of resource about render and voice from the Class ```Resource```.
+* The Base Class of Item is ```ACItem```.
+* The Base Class of Block is ```ACBlock``` and ```ACBlockContainer```.
+* The Base Class of Command is ```ACCommand```.
+* The Base Class of the Block with Item Bar, ```TileEntity``` is ```TileInventory```.
 
-分支规则
+The Rules Of Branches
 ===
 
-目前可以无脑推送到```master```。在接下来应该会引入更严谨的git协作组织规则。
+At this time we just need to push them to ```master``` branch directly. But we should introduce some more rigorous rules to organize the git cooperating.
 
-Ripple脚本集成
+Integrated Script Of Ripple
 ===
 
-AC中有很多数据很重的实现部分。为了将数据和实现解耦，我们使用了LIUtils提供的Ripple脚本语言。任何数据量很大又经常修改的内容，都应该考虑使用脚本来实现。能力实现部分强制使用Ripple编写数据。
+There are a lot of implement with very heavy data. In order to decoupling the data and the implement, we use the script language named Ripple provided by LIUtils. Any content with large data and will be usually modified should be implemented by the script. We are forced to use the Ripple to write data for the implement of the ability module. 
 
-在脚本摆放计算值或者脚本所必须遵守的命名范例如下：
+You should follow the following naming conventions when you put the value or script in the script:
 
-* 脚本文件存放在assets/academy/scripts
-* 必须在"ac"命名空间之内。
-* 可以直接在第一级子命名空间摆放内容。 例如 ac { developer { } }
-* 在上一条使用过程中出现名称冲突的情况，考虑直接更名。
-* 对能力系的脚本摆放有特殊的要求。格式如下：
+* The script file should be put in assets/academy/scripts.
+* You have to put things in the namespace named "ac".
+* You can put the content in the first sub namespace directly. Such as ac { developer { } }.
+* Consider change the name directly when the last rule has a naming conflict.
+* There are some special requirements of putting the scripts of the ablity departments. Format is as follows:
 ```
 ac {
 	<category_name> {
@@ -108,21 +106,21 @@ ac {
 	}
 }
 ```
-* 杂项数值可以放置在"generic.r"中。
-* 能力系通用数值放置在"ability.r"中。
-* 每个能力系技能相关数值单独新建一个脚本。（"electro_master.r", "melt_downer.r"）
-* 如果有很多数值同属于一个分类，考虑为那个分类单独新建一个脚本文件。
+* The miscellaneous value can be put in "generic.r".
+* The universal value of ability department be put in "ability.r".
+* Create a new script for the value about each department of ability. (e.g."electro_master.r", "melt_downer.r")
+* If there are a lot of value belongs to the same category, consider to create a new script file for that category.
 
-在调用和加载脚本时：
+When you call and load the scripts:
 
-* 在AcademtCraft#preInit方法内加载所有脚本文件。
-* 使用AcademyCraft#getValue,getDouble,getFunction获取方法。也可以使用Academy.script.xxx。
+* Load all of the script files in the method AcademyCraft@preInit.
+* Use AcademyCraft#getValue,getDouble,getFunction to get methods. You can also use Academy.script.xxx.
 
-其它文档
+Others Documentations
 ===
 
-每一个模块会在同目录下提供一个单独的md文档，来索引它所具有的基本功能，以及提供该模块的阅读/使用/开发思路和基本用法。
+Each module will provide a single md documentation to index all of its basic functions and provide the reading/using/developing thingking and basic usage of this module.
 
-文档索引：
+The index of documentations:
 
-* 补完中……
+* Working in progress.
