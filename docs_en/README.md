@@ -42,7 +42,7 @@ The major things：
 The secondary things：
 
 * __crafting__
-	This is the module of synthesising. There is the content about recipe in survival mode. There are some machine about synthesising(e.g.Etcher), the sythesising recipe and the Items and Blocks which is **only** used as synthesising.
+	This is the module of synthesising. There is the content about recipe in survival mode. There are some machine about synthesising(e.g.Metal Former), the sythesising recipe and the Items and Blocks which is **only** used as synthesising.
 * __misc__
 	This is the miscellaneous module. It cantains Easter Egg.
 * __support__
@@ -57,7 +57,7 @@ The Organizing Principles Of Classes
 
 Under each module package. There should be a major Class and it should be named "ModuleXXX". In this Class, we use a AR annotation, ```@RegInit``` to finish some necessary initialization.
 
-But in AcademyCraft, we advocate distributed implement and distributed register. You should effective use the function AR provide to implement the distributed registry of the sub system, instead of load them in a uniform Class. But Item and Block is exceptional. You should registering them in the major Class of each each module, because they are usually globally visited. Others instance which need to provide globally visiting should also be registering in the major Class of each module.
+But in AcademyCraft, we advocate distributed implementation and distributed register. You should effectively use the function AR provide to implement the distributed registry of the sub system, instead of load them in a uniform Class. But Item and Block is exceptional. You should registering them in the major Class of each each module, because they are usually globally visited. Others instance which need to provide globally visiting should also be registering in the major Class of each module.
 
 The Principles Of The Source Code
 ===
