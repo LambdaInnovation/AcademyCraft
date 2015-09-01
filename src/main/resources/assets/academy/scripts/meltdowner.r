@@ -11,6 +11,7 @@ ac {
         
         rad_intensify {
             x { 212 } y { 315 }
+            rate(exp) { lerp(1.4, 2, exp) }
         }
     
         scatter_bomb {
