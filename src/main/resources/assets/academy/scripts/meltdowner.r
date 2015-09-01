@@ -51,7 +51,7 @@ ac {
             x { 524 } y { 390 }
             range { 10 }
             harvest_level { 2 }
-            speed(exp) { 0.1 * lerp(1, 2, exp) }
+            speed(exp) { 0.2 * lerp(1, 2, exp) }
             consumption(exp) { lerp(15, 20, exp) }
             overload(exp) { lerp(150, 70, exp) }
             cooldown(exp) { lerp(60, 30, exp) }

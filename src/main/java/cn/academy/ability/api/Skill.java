@@ -116,6 +116,8 @@ public abstract class Skill extends Controllable {
 			AcademyCraft.log.error("Failed to load gui position of skill " + fullName);
 		}
 		
+		this.addDevCondition(new DevConditionDeveloperType(getMinimumDeveloperType()));
+		
 		initSkill();
 	}
 	
@@ -210,7 +212,6 @@ public abstract class Skill extends Controllable {
 		if(parent != null)
 			throw new IllegalStateException("You can't set the parent twice!");
 		parent = skill;
-		this.addDevCondition(new DevConditionDeveloperType(getMinimumDeveloperType()));
 		this.addDevCondition(new DevConditionDep(parent, requiredExp));
 	}
 	
