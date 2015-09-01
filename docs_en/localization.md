@@ -33,7 +33,6 @@ Please pay attention to facilitate maintenance and artistic of the code when you
 
 You need to understand something about arranging of fields and sorting/mackuping of maintenance. In a task of CGUI package of LIUtils,
 I found that bad localization loader doesn't support the blank placeholders(half space). We lost a way to make the localized fields ordered. But this make using better specification more important.
-在该Localization作业中，我使用的格式规范如下。
 In this task of Localization, the specification I used are as follows:
 
 ```
