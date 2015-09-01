@@ -41,6 +41,7 @@ public class BlockDeveloper extends ACBlockContainer {
 		type = _type;
 		setHardness(4.0f);
 		setHarvestLevel("pickaxe", 2);
+		setCreativeTab(null);
 		
 		String tmp = type.toString().toLowerCase();
 		setBlockName("ac_developer_" + tmp);

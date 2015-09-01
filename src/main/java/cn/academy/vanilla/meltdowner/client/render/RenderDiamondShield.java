@@ -67,6 +67,7 @@ public class RenderDiamondShield extends Render {
 		
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_ALPHA_TEST);
+		glDisable(GL_DEPTH_TEST);
 		glPushMatrix();
 		
 		glTranslated(x, y, z);
@@ -81,6 +82,7 @@ public class RenderDiamondShield extends Render {
 		glPopMatrix();
 		glEnable(GL_ALPHA_TEST);
 		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
 	}
 	
 	@Override

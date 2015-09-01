@@ -75,7 +75,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
 	public static RendererCoinThrowing renderer;
 	
 	private static final int MAXLIFE = 120;
-	private static final double INITVEL = 0.85;
+	private static final double INITVEL = 0.92;
 	
 	private EntitySyncer syncer;
 	

@@ -20,6 +20,8 @@ import cn.liutils.render.mesh.Mesh;
 import cn.liutils.render.mesh.MeshUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.renderhook.PlayerRenderHook;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -27,7 +29,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class RailgunHandEffect extends PlayerRenderHook {
 	
-	static final int PER_FRAME = 120, COUNT = 9;
+	static final int PER_FRAME = 40, COUNT = 40;
 	ResourceLocation[] textures;
 	Mesh mesh;
 	SimpleMaterial mat;
@@ -54,7 +56,10 @@ public class RailgunHandEffect extends PlayerRenderHook {
 			glTranslated(.26, -.12, -.24);
 			glScalef(.4f, .4f, 1f);
 		} else {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			glTranslated(0, 0.2, -1);
+			glRotated(-player.rotationPitch, 1, 0, 0);
+			System.out.println(player.rotationPitch);
 		}
 		mat.mainTexture = textures[frame];
 		mesh.draw(mat);
