@@ -104,6 +104,7 @@ public class Railgun extends Skill {
 	}
 	
 	static float getDamage(AbilityData aData) {
+		if(true) return 2333;
 		return instance.callFloatWithExp("damage", aData);
 	}
 	
