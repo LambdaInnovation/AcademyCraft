@@ -188,7 +188,7 @@ public class Railgun extends Skill {
 				spawnRay();
 			} else {
 				RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
-				damage.startDamage = instance.callFloatWithExp("damage", aData);
+				damage.startDamage = getDamage(aData);
 				damage.perform();
 				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);
 				if(coin != null) {
@@ -280,7 +280,7 @@ public class Railgun extends Skill {
 						// TODO: I don't want bother with seperate effects in 1.0, just use
 						// standard routine now~
 						RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
-						damage.startDamage = instance.callFloatWithExp("damage", aData);
+						damage.startDamage = getDamage(aData);
 						damage.perform();
 						instance.triggerAchievement(player);
 					}
