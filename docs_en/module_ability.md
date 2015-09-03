@@ -41,19 +41,18 @@ This is the pre-sets data of player. It stores all of the pre-set information an
 
 ### client.event.*
 There are a lot of internal operations of mod conduct by the Event System of MinecraftForge.
-在此包内创建了一系列和能力操作相关的事件。你可以通过侦听```MinecraftForge.EVENT_BUS```获取这些
-事件的回调。
+In this package, we created a lot of event about ability operations. You can get the callback of those events by listening ```MinecraftForge.EVENT_BUS```.
 
-内部实现
+Internal Implementations
 ---
-* 能力开发机： ```.block.*```, ```developer.*```
-* 超能力指令： ```.command.*```
-* 界面： ```.client.ui.*```
-* 技能树App： ```.api.app.*```
+* The Ability Developer: ```.block.*```, ```developer.*```
+* The Commands of Superability: ```.command.*```
+* The UI: ```.client.ui.*```
+* The Application of the Tree of Skills: ```.api.app.*```
 
-技能实现和脚本集成
+the Implementation of Skills and Integration of the Script
 ---
-由于技能操作部分数据很重，为了调试的方便**强制采用**ripple脚本编写数据。为此，我们已经在Skill内做了脚本值/函数读取的集成。
+In order to debug easily, we use Ripple Script to write datas compulsively because the data of skill operations is very heavy. To this end, we have integrated the machanism about reading the value/function of script in Class Skill.
 
 通常，一个技能所对应的SkillInstance和SyncAction应该分别写为内部类和静态内部类，并且每一个```Skill```在本类中存放一个静态单例。
 
