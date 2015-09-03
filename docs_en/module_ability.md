@@ -54,38 +54,38 @@ the Implementation of Skills and Integration of the Script
 ---
 In order to debug easily, we use Ripple Script to write datas compulsively because the data of skill operations is very heavy. To this end, we have integrated the machanism about reading the value/function of script in Class Skill.
 
-通常，一个技能所对应的SkillInstance和SyncAction应该分别写为内部类和静态内部类，并且每一个```Skill```在本类中存放一个静态单例。
+Usually, the Class SkillInstance and SyncAction should be defined as Internal Class and Static Internal Class respectively. And each ```Skill``` should store a static single-instance of them.
 
-这样，就可以在SyncAction和SkillInstance中访问到Skill的脚本集成了。详细的实现请参考源代码中已实现的技能。（电气使和原子崩坏）
+If you do like that, then you can visit the integrated script in SyncAction and SkillInstance. Please refer to the functions which has been implemented in the source code for details. (e.g.electro_master and melt_downer)
 
 
-被动技能
+the Passive Skills
 ---
 
-被动技能同样用Skill类解决。通过设置```canControl=false```让这个技能不在预设设置里出现。然后就可以用一般的```@SubscribePipeline```
-写法来写数值逻辑了。Skill类会在构造器里自动往AC的全局pipeline注册，所以不用手动注册。
+You can also use the Class Skill to implement the passive skill. By setting ```canControl=false```, you can make this skill disappear in the pre-sets. And then, you can use simple code, ```@SubscribePipeline``` to write the number logic. The Class Skill will regiter it to the universal pipeline of AcademyCraft in the constructor, so you needn't to register it by yourself.
 
-详见.vanilla.generic包的几个技能。
+Please refer to a few skills in the Package .vanilla.generic for details.
 
 
-特殊技能
+the Special Skills
 ---
-特殊技能通过SpecialSkill配合SubSkill类来实现。在特殊技能执行的阶段，会有一个SpecialSkillAction持续活跃。你可以通过这个SpecialSkillAction来操纵
-特殊技能对操纵的重载情况。具体的实现方法详见javadoc。
+You can use the Class SpecialSkill and SubSkill to implement the special skill. There will be a sustained active SpecialSkillAction when the special skills are executing. You can control the controlling overriding of the special skills by this SpecialSkillAction. Please refer to JavaDoc for details.
 
-SyncAction用法详述
+the Usage of SyncAction
 ---
-Vio快来填坑~
+Please be quickly to complete this, Vio.
 
-调试指令
+the Debug Commands
 ---
-* /preset 和玩家操作预设有关的指令。
-* /aim 玩家能力相关的综合指令。可以设置能力系、能力等级等等。
+* /preset is the command about the pre-sets of the player.
+* /aim is the omnibus command of player's ability. It can set the ability department, the ability level and so on.
 
 TODO
 ---
 
-* 实现BUFF（被动）技能
-* 实现技能树App和各个等级的能力开发机
-* 进一步进行SkillInstance和SyncAction的包装
-* 实现特殊技能
+* Implement BUFF(passive) skills
+* Implement the App of the skill tree and the ability developer of each level
+* Do more pakeing for SkillInstance and SyncAction
+* Implement the special skills
+
+Translator: GISDYT
