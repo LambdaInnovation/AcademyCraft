@@ -28,7 +28,7 @@ Skill means a simple operatable skill. It must be added in a ```Category``` to b
 Skill Instance is a Class which discribes a skill operation. More specifically, it discribes the action when player press/tick/release a key. SkillInstance would only be created in client. You should use SkillInstance and ```SyncAction``` together to affect the server. We implement a simple CD(Cooling-off Period) system. ```api.ctrl.instance.*``` provides some usual Packaged Class of SkillInstance.
 
 ### SyncAction, ActionManager
-Please be quickly to complete this, Vio.
+Please complete this quickly, Vio.
 
 ### AbilityData
 This is a basic ability data of a player. It stores the ability department information and the skills which player learned of the player in this time.
@@ -73,7 +73,7 @@ You can use the Class SpecialSkill and SubSkill to implement the special skill. 
 
 the Usage of SyncAction
 ---
-Please be quickly to complete this, Vio.
+Please complete this quickly, Vio.
 
 the Debug Commands
 ---
