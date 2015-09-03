@@ -17,6 +17,7 @@ import java.util.List;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
@@ -104,7 +105,6 @@ public class Railgun extends Skill {
 	}
 	
 	static float getDamage(AbilityData aData) {
-		if(true) return 2333;
 		return instance.callFloatWithExp("damage", aData);
 	}
 	
@@ -168,14 +168,6 @@ public class Railgun extends Skill {
 		}
 		
 		public ActionShootCoin() {}
-		
-		@Override
-		public void writeNBTStart(NBTTagCompound tag) {
-		}
-		
-		@Override
-		public void readNBTStart(NBTTagCompound tag) {
-		}
 
 		@Override
 		public boolean validate() {
@@ -184,6 +176,9 @@ public class Railgun extends Skill {
 
 		@Override
 		public void execute() {
+			if(!cpData.perform(instance.getOverload(aData), instance.getConsumption(aData)))
+				return;
+			
 			if(isRemote) {
 				spawnRay();
 			} else {
@@ -196,6 +191,9 @@ public class Railgun extends Skill {
 				}
 				instance.triggerAchievement(player);
 			}
+			
+			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -285,6 +283,8 @@ public class Railgun extends Skill {
 						instance.triggerAchievement(player);
 					}
 					
+					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}
 		}

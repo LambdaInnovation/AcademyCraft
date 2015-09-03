@@ -46,7 +46,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity.HasRender
 public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 	
-	public static double MAX_GENERATION_SPEED = 100;
+	public static double MAX_GENERATION_SPEED = 15;
 	
 	private static final IFItemManager itemManager = IFItemManager.instance;
 	
@@ -74,8 +74,8 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 	public double getSimulatedGeneration() {
 		if(complete && noObstacle) {
 			int y = mainTile.yCoord;
-			double heightFactor = MathUtils.lerp(0.3, 1, 
-				MathUtils.wrapd(0, 1, (y - 20.0) / 90.0));
+			double heightFactor = MathUtils.lerp(0.5, 1, 
+				MathUtils.wrapd(0, 1, (y - 70.0) / 90.0));
 			return heightFactor * MAX_GENERATION_SPEED;
 		} else {
 			return 0.0;

@@ -38,7 +38,6 @@ public class ItemDeveloper extends ItemEnergyBase {
 
 	public ItemDeveloper() {
 		super("developer_portable", type.getEnergy(), type.getBandwidth());
-		setCreativeTab(null);
 		this.bFull3D = true;
 	}
 	

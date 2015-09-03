@@ -1,4 +1,4 @@
-; AcademyCraft Recipe language file
+; AcademyCraft recipe script file
 
 shaped(phase_gen) {
     [nil, nil, nil]
@@ -189,7 +189,7 @@ shaped(dev_portable) {
 }
 
 shaped(dev_normal) {
-    [nil, nil, nil]
+    [nil, dev_portable, nil]
     [mat_core#0, bed, piston]
     [frame, crystal1, redstone]
 }
@@ -204,7 +204,7 @@ shapeless(wafer) {
     [imagsil_ingot]
 }
 
-shapeless(data_chip*2) {
+shapeless(data_chip) {
     [wafer]
 }
 
