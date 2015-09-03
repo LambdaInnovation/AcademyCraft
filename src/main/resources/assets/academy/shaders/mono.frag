@@ -1,7 +1,7 @@
 #version 120
 
-in vec4 Color;
-in vec2 UV;
+varying vec4 Color;
+varying vec2 UV;
 
 uniform sampler2D sampler;
 
