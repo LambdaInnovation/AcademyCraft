@@ -147,6 +147,8 @@ public class AMServer implements IActionManager {
 		for (Map<UUID, SyncAction>  m : map.values())
 			for (Iterator<SyncAction> i = m.values().iterator(); i.hasNext(); ) {
 				SyncAction action = i.next();
+				if (action.player != null && action.player.getHealth() <= 0)
+					abortAction(action);
 				switch (action.getState()) {
 				case CREATED:
 					throw new IllegalStateException();

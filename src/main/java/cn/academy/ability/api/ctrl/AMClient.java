@@ -153,8 +153,7 @@ public class AMClient implements IActionManager {
 	public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent event) {
 		for (Iterator<SyncAction> i = map.values().iterator(); i.hasNext(); ) {
 			SyncAction action = i.next();
-			action.onAbort();
-			action.onFinalize();
+			action.abort();
 			i.remove();
 		}
 		set.clear();
