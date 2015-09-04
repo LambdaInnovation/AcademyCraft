@@ -160,7 +160,6 @@ public class ArcFactory {
 		double width;
 		
 		public Point(Vec3 _pt, double _w) {
-			
 			pt = _pt;
 			width = _w;
 		}

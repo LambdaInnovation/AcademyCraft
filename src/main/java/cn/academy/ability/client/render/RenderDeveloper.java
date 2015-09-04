@@ -32,8 +32,8 @@ public class RenderDeveloper extends TileEntitySpecialRenderer {
 	ResourceLocation texture;
 	
 	public RenderDeveloper() {
-		model = Resources.getModel("developer");
-		texture = Resources.getTexture("models/developer");
+		model = Resources.getModel("developer_normal");
+		texture = Resources.getTexture("models/developer_normal");
 	}
 
 	@Override

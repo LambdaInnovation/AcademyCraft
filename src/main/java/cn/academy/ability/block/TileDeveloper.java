@@ -122,7 +122,6 @@ public abstract class TileDeveloper extends TileReceiverBase {
 	 */
 	public boolean use(EntityPlayer player) {
 		if(user == null || !user.isEntityAlive()) {
-			player.addChatMessage(new ChatComponentTranslation("www"));
 			user = player;
 			developer.reset();
 			openGuiAtClient(player);
