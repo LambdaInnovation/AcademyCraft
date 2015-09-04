@@ -138,7 +138,7 @@ public class CPBar extends Widget {
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				CPData cpData = CPData.get(player);
 				
-				//System.out.println("chProvider: "+ chProvider);
+				boolean active = cpData.isActivated();
 				
 				// Calculate alpha
 				long time = GameTimer.getTime();
@@ -147,13 +147,12 @@ public class CPBar extends Widget {
 				}
 				
 				long deltaTime = Math.min(100L, time - lastDrawTime);
-				lastDrawTime = time;
 				
 				final long BLENDIN_TIME = 200L;
-				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME : 1.0f;
+				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME :
+					(active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
 				
-				
-				if(cpData.isActivated()) {
+				if(mAlpha > 0) {
 					/* Draw CPBar */ {
 						float poverload = cpData.getOverload() / cpData.getMaxOverload();
 						bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
@@ -202,6 +201,9 @@ public class CPBar extends Widget {
 					
 					drawActivateKeyHint();
 				}
+				
+				if(active)
+					lastDrawTime = time;
 				
 				GL11.glColor4d(1, 1, 1, 1);
 			}
@@ -280,7 +282,7 @@ public class CPBar extends Widget {
 			GL11.glVertex3d(WIDTH * 1.0, HEIGHT * 1.0, 0.0);
 		  
 			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 1.0f);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 1.0f);
+			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 		  1.0f);
 			GL11.glVertex3d(WIDTH * 1.0, 0.0, 0.0);
 		GL11.glEnd();
 		

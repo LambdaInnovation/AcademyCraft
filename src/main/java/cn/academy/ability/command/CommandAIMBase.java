@@ -22,7 +22,8 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
-import cn.liutils.util.generic.MathUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -33,8 +34,15 @@ import net.minecraft.server.MinecraftServer;
 @Registrant
 public abstract class CommandAIMBase extends ACCommand {
 	
+	/**
+	 * This is the command used by the client, doesn't specify the player and works on the user.
+	 * This command will display a warning before you can use it.
+	 */
+	@SideOnly(Side.CLIENT)
 	@RegCommand
 	public static class CommandAIM extends CommandAIMBase {
+		
+		static final String ID = "aim_cheats";
 
 		public CommandAIM() {
 			super("aim");
@@ -42,8 +50,28 @@ public abstract class CommandAIMBase extends ACCommand {
 		
 		@Override
 		public void processCommand(ICommandSender commandSender, String[] pars) {
-			if(pars.length == 0)
-			{
+			EntityPlayer player = super.getCommandSenderAsPlayer(commandSender);
+			if(pars.length == 1) {
+				switch(pars[0]) {
+				case "cheats_on":
+					setActive(player, true);
+					sendChat(commandSender, locSuccessful());
+					sendChat(commandSender, getLoc("warning"));
+					return;
+				case "cheats_off":
+					setActive(player, false);
+					sendChat(commandSender, locSuccessful());
+					return;
+				}
+			}
+			
+			if(!isActive(player)) {
+				sendChat(commandSender, getLoc("notactive"));
+				sendChat(commandSender, getLoc("warning"));
+				return;
+			}
+			
+			if(pars.length == 0) {
 				sendChat(commandSender, getLoc("help"));
 				return;
 			}
@@ -51,8 +79,19 @@ public abstract class CommandAIMBase extends ACCommand {
 			matchCommands(commandSender, this.getCommandSenderAsPlayer(commandSender), pars);
 		}
 		
+		private void setActive(EntityPlayer player, boolean data) {
+			player.getEntityData().setBoolean(ID, data);
+		}
+		
+		private boolean isActive(EntityPlayer player) {
+			return player.getEntityData().getBoolean(ID);
+		}
+		
 	}
 	
+	/**
+	 * This is the command for the OPs and server console. You must specify the player name.
+	 */
 	@RegCommand
 	public static class CommandAIMP extends CommandAIMBase {
 

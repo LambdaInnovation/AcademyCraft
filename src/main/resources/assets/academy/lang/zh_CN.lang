@@ -370,9 +370,9 @@ ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想�
 ac.knowledge.bubble.name=泡泡大师
 
 # 指令
-ac.command.invalid=无效输入，请再次尝试.
-ac.command.successful=指令已执行.
-ac.command.notlearned=玩家还未学习任何能力.
+ac.command.invalid=§c无效输入，请再次尝试.
+ac.command.successful=§2指令已执行.
+ac.command.notlearned=§6玩家还未学习任何能力.
 
 ac.command.knowledge.usage=/knowledge <command>|<help> [参数...]
 ac.command.knowledge.help=/knowledge help: 显示帮助信息.
@@ -387,6 +387,8 @@ ac.command.knowledge.stat3=知识已发现: %s
 ac.command.knowledge.notfound=名称为  %s 的知识不存在.
 ac.command.knowledge.all=所有知识: 
 ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定的知识.
+ac.command.aim.notactive=/aim指令当前未被开启。使用/aim cheats_on或/aim cheats_off来改变开启状态。
+ac.command.aim.warning=§c警告：使用/aim指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
 
 ac.command.aim.usage=/aim <command>|<help> [参数...]
 ac.command.aim.help=/aim help: 显示帮助信息.

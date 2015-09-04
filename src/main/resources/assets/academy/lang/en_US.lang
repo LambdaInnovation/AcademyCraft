@@ -370,9 +370,9 @@ ac.ability.generic.mind_course.desc=Learn how to relax your brain better, to acc
 ac.knowledge.bubble.name=Bubble Master
 
 # Command
-ac.command.invalid=Invalid input, please try again.
-ac.command.successful=Command sucessfully performed.
-ac.command.notlearned=The player has not learned any ability yet.
+ac.command.invalid=§cInvalid input, please try again.
+ac.command.successful=§2Command sucessfully performed.
+ac.command.notlearned=§6The player has not learned any ability yet.
 
 ac.command.knowledge.usage=/knowledge <command>|<help> [parameters...]
 ac.command.knowledge.help=/knowledge help: Display the help message.
@@ -408,6 +408,8 @@ ac.command.aim.nonecat=No ability
 ac.command.aim.noskill=No such skill was found.
 ac.command.aim.learned.format=Learned skills: %s
 ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
+ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
+ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
 
 ac.command.preset.usage=/preset <command>|<help> [parameters...]
 ac.command.preset.help=/preset help: Display the help message.
