@@ -81,7 +81,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 	@SideOnly(Side.CLIENT)
     @Override
     public int getRenderBlockPass() {
-        return 0;
+        return 1;
     }
 	
 	@Override

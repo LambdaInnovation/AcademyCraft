@@ -12,17 +12,12 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
@@ -33,11 +28,14 @@ import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.render.particle.Particle;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 
 /**
  * @author WeAthFolD
@@ -157,6 +155,18 @@ public class JetEngine extends Skill {
 		}
 		
 		@Override
+		public void writeNBTStart(NBTTagCompound tag) {
+			tag.setFloat("x", (float) start.xCoord);
+			tag.setFloat("y", (float) start.yCoord);
+			tag.setFloat("z", (float) start.zCoord);
+		}
+		
+		@Override
+		public void readNBTStart(NBTTagCompound tag) {
+			start = VecUtils.vec(tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
+		}
+		
+		@Override
 		public void onStart() {
 			super.onStart();
 			if(isRemote) {
@@ -197,7 +207,8 @@ public class JetEngine extends Skill {
 		}
 		
 		@Override
-		public void onFinalize() {if(isRemote)
+		public void onFinalize() {
+			if(isRemote)
 				endEffects();
 		}
 		
