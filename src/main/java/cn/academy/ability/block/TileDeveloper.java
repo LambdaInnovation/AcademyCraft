@@ -12,7 +12,8 @@
  */
 package cn.academy.ability.block;
 
-import cn.academy.ability.client.render.RenderDeveloper;
+import cn.academy.ability.client.render.RenderDeveloperAdvanced;
+import cn.academy.ability.client.render.RenderDeveloperNormal;
 import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.DeveloperBlock;
@@ -30,12 +31,17 @@ import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.ripple.ScriptNamespace;
+import cn.liutils.template.block.BlockMulti;
+import cn.liutils.template.block.IMultiTile;
+import cn.liutils.template.block.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.AxisAlignedBB;
 
 /**
  * @author WeAthFolD
@@ -44,11 +50,15 @@ import net.minecraft.util.ChatComponentTranslation;
 @Registrant
 @RegInit
 @RegTileEntity
-@RegTileEntity.HasRender
-public abstract class TileDeveloper extends TileReceiverBase {
+public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile {
 	
 	@RegTileEntity
+	@RegTileEntity.HasRender
 	public static class Normal extends TileDeveloper {
+		
+		@SideOnly(Side.CLIENT)
+		@RegTileEntity.Render
+		public static RenderDeveloperNormal renderer;
 
 		@Override
 		public DeveloperType getType() {
@@ -58,7 +68,12 @@ public abstract class TileDeveloper extends TileReceiverBase {
 	}
 	
 	@RegTileEntity
+	@RegTileEntity.HasRender
 	public static class Advanced extends TileDeveloper {
+		
+		@SideOnly(Side.CLIENT)
+		@RegTileEntity.Render
+		public static RenderDeveloperAdvanced renderer;
 
 		@Override
 		public DeveloperType getType() {
@@ -69,7 +84,7 @@ public abstract class TileDeveloper extends TileReceiverBase {
 	
 	@SideOnly(Side.CLIENT)
 	@RegTileEntity.Render
-	public static RenderDeveloper renderer;
+	public static RenderDeveloperNormal renderer;
 	
 	public DeveloperBlock developer;
 	
@@ -97,15 +112,21 @@ public abstract class TileDeveloper extends TileReceiverBase {
 
 	@Override
 	public void updateEntity() {
-		if(developer == null)
-			developer = new DeveloperBlock(this);
+		if(info != null) {
+			info.update();
+			if(info.getSubID() != 0)
+				return;
 		
-		super.updateEntity();
-		developer.tick();
-		
-		if(++syncCD == 20) {
-			syncCD = 0;
-			syncTheUser(this, user);
+			if(developer == null)
+				developer = new DeveloperBlock(this);
+			
+			super.updateEntity();
+			developer.tick();
+			
+			if(++syncCD == 20) {
+				syncCD = 0;
+				syncTheUser(this, user);
+			}
 		}
 	}
 	
@@ -121,6 +142,10 @@ public abstract class TileDeveloper extends TileReceiverBase {
 	 * SERVER only. Start let the player use the developer, if currently no user is using it.
 	 */
 	public boolean use(EntityPlayer player) {
+		if(info.getSubID() != 0) {
+			TileDeveloper te = getOrigin();
+			return te == null ? false : te.use(player);
+		}
 		if(user == null || !user.isEntityAlive()) {
 			user = player;
 			developer.reset();
@@ -130,10 +155,23 @@ public abstract class TileDeveloper extends TileReceiverBase {
 		return player.equals(user);
 	}
 	
+	private TileDeveloper getOrigin() {
+		BlockDeveloper dev = (BlockDeveloper) getBlockType();
+		TileEntity te = dev.getOriginTile(this);
+		
+		return te instanceof TileDeveloper ? (TileDeveloper) te : null;
+	}
+	
 	/**
 	 * Is effective in BOTH CLIENT AND SERVER. Let the current player(if is equal to argument) go away from the developer.
 	 */
 	public void unuse(EntityPlayer p) {
+		if(info.getSubID() != 0) {
+			TileDeveloper te = getOrigin();
+			if(te != null) te.unuse(p);
+			return;
+		}
+		
 		if(getWorldObj().isRemote) {
 			unuseAtServer(p);
 			return;
@@ -176,5 +214,40 @@ public abstract class TileDeveloper extends TileReceiverBase {
 		this.user = player;
 		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, developer));
 	}
+	
+	InfoBlockMulti info = new InfoBlockMulti(this);
+	
+	@Override
+	public InfoBlockMulti getBlockInfo() {
+		return info;
+	}
+
+	@Override
+	public void setBlockInfo(InfoBlockMulti i) {
+		info = i;
+	}
+
+	@Override
+    public void readFromNBT(NBTTagCompound nbt) {
+    	super.readFromNBT(nbt);
+    	info = new InfoBlockMulti(this, nbt);
+    }
+    
+	@Override
+    public void writeToNBT(NBTTagCompound nbt) {
+    	super.writeToNBT(nbt);
+    	info.save(nbt);
+    }
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+    	Block block = getBlockType();
+    	if(block instanceof BlockMulti) {
+    		return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+    	} else {
+    		return super.getRenderBoundingBox();
+    	}
+    }
 	
 }

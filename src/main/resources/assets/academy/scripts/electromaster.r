@@ -90,7 +90,7 @@ ac {
         thunder_clap {
             x { 714 } y { 400 }
             damage(exp, ct) { lerp(40, 70, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
-            range(exp) { 2 * lerp(5, 10, exp) }
+            range(exp) { 3 * lerp(5, 10, exp) }
             consumption(exp) { lerp(100, 120, exp) }
             overload(exp) { lerp(400, 350, exp) }
             cooldown(exp, ct) { ct * lerp(9, 5, exp) }

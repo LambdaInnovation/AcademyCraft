@@ -21,6 +21,9 @@ import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 
 /**
  * The ability module init class.
@@ -47,6 +50,15 @@ public class ModuleAbility {
 		developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
 	
 	public static void init() {
+	}
+	
+	@SubscribeEvent
+	public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+		if(event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
+			if(event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ)
+					instanceof BlockDeveloper)
+				event.setCanceled(true);
+		}
 	}
 	
 }

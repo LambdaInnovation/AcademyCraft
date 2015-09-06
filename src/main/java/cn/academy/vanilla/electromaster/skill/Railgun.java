@@ -156,7 +156,7 @@ public class Railgun extends Skill {
 	}
 	
 	private boolean checkRailgunQTETime(EntityCoinThrowing coin) {
-		return coin.getProgress() > 0.7 && coin.getProgress() < 0.95;
+		return coin.getProgress() > 0.66 && coin.getProgress() < 1;
 	}
 	
 	public static class ActionShootCoin extends SyncActionInstant {

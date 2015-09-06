@@ -39,7 +39,7 @@ ac {
         
         meltdowner {
             x { 488 } y { 166 }
-            range(exp) { lerp(2, 4.5, exp) }
+            range(exp) { lerp(2, 3, exp) }
             energy(exp) { lerp(600, 1300, exp) }
             damage(exp) { lerp(18, 45, exp) }
             overload(exp) { lerp(200, 170, exp) }

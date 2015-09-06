@@ -55,7 +55,7 @@ public class EntityBarrageRayPre extends EntityRayBase {
 		int blendTime = 500;
 
 		if(dt > this.life * 50 - blendTime) {
-			return MathUtils.lerp(1, 0, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
+			return 1 - MathUtils.wrapd(1, 0, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
 		}
 		
 		return 1.0;

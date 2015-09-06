@@ -12,32 +12,32 @@
  */
 package cn.academy.ability.block;
 
-import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.DeveloperType;
-import cn.academy.core.block.ACBlockContainer;
+import cn.academy.core.block.ACBlockMulti;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
  *
  */
 @Registrant
-public class BlockDeveloper extends ACBlockContainer {
+public class BlockDeveloper extends ACBlockMulti {
 	
 	public final DeveloperType type;
 
 	public BlockDeveloper(DeveloperType _type) {
-		super("developer", Material.rock, null);
+		super("developer", Material.rock);
 		type = _type;
 		setHardness(4.0f);
 		setHarvestLevel("pickaxe", 2);
@@ -45,6 +45,20 @@ public class BlockDeveloper extends ACBlockContainer {
 		String tmp = type.toString().toLowerCase();
 		setBlockName("ac_developer_" + tmp);
 		setBlockTextureName("academy:developer_" + tmp);
+		
+		if(type == DeveloperType.NORMAL) {
+			this.addSubBlock(0, 1, 0);
+			this.addSubBlock(0, 0, 1);
+			this.addSubBlock(0, 1, 1);
+			this.addSubBlock(0, 2, 1);
+			this.addSubBlock(0, 0, 2);
+			this.addSubBlock(0, 1, 2);
+			this.addSubBlock(0, 2, 2);
+		} else if(type == DeveloperType.ADVANCED) {
+			
+		}
+		
+		finishInit();
 	}
 	
 	@Override
@@ -76,6 +90,14 @@ public class BlockDeveloper extends ACBlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return type == DeveloperType.NORMAL ? new TileDeveloper.Normal() : new TileDeveloper.Advanced();
+	}
+
+	@Override
+	public double[] getRotCenter() {
+		if(type == DeveloperType.NORMAL)
+			return new double[] { 0.5, 0, 0.5 };
+		else
+			return new double[] { 0, 0, 0 };
 	}
 
 }
