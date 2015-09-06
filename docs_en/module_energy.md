@@ -1,4 +1,4 @@
-#. SPECIFICATION DOCUMENTATION OF ACADEMYCRAFT
+# SPECIFICATION DOCUMENTATION OF ACADEMYCRAFT
 ## MODULE ENERGY
 
 The energy module is the wireless energy network module of AcademyCraft. It also includes the default support content of energy network(the matrix, the node, the three kinds of basic generator and others things) and whole API of wireless energy.
