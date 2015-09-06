@@ -2,9 +2,9 @@
 ## MODULE ENERGY
 
 The energy module is the wireless energy network module of AcademyCraft. It also includes the default support content of energy network(the matrix, the node, the three kinds of basic generator and others things) and whole API of wireless energy.
-The energy system in AcademyCraft takes IF as its independent energy unit.
+The energy system in AcademyCraft takes IF as its special energy unit.
 
-The documentation which are as follows will ignore all the internal implementations. We only introduce the APIs.
+Here and after wouldn't include all the internal implementations. We only introduce the APIs.
 
 
 
@@ -15,11 +15,11 @@ the Wireless Energy Network
 The wireless energy network is constructed by the following kinds of member block.
 
 * Matrix isn't able to store electricity. Its function is linking the nodes in the certain distance and balance the energy between the nodes. You can use Matrix to construct the huge energy network.          
-* Nobe is able to store electricity. Every nodes can link to a Matrix(its SSID) and be linked by generator and receiver.
+* Node is able to store electricity. Every nodes can link to a Matrix(its SSID) and be linked by generator and receiver.
 * Generator can link to a node and provide electricity to it.
 * Receiver can link to a node and draw electricity.
 
-Their corresponding interfaces are as follows:
+The interfaces to them are as follows:
 
 * Matrix——`IWirelessMatrix` <- `IWirelessTile`
 * Node——`IWirelessNode` <- `IWirelessTile`
@@ -32,10 +32,10 @@ You should implement those interfaces in the TileEntity of the corresponding blo
 
 The connection of wireless energy network is divided into the following two categories: **the WEN/Wireless Energy Network** and **the Node Connection**.
 
-The matrix network is take a matrix as the core, and the multiple nodes connect to this network. This network must to be initialized by user, and be provided a world unique SSID and the logic
-password of this energy network from user. If any node want to connect to this network, in addition to be in the signal range, but also to provide the right password.
+The matrix network takes a matrix as the core, and the multiple nodes connect to this network. This network must to be initialized by user, and be provided a world unique SSID and the logic
+password of this energy network from user. If any node want to connect to this network, not only need to be in the signal range of matrix, but also need to provide the right password.
 
-Nodes network is teke a node as the core, and be connected by multiple generators or receivers. This network needn't to be loaded explicitly. As long as the node exists,
+Nodes network takes a node as the core, and be connected by multiple generators or receivers. This network needn't to be loaded explicitly. As long as the node exists,
 this network will be created automatically when the generators and receivers connect to.
 
 
