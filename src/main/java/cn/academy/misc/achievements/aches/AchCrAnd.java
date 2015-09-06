@@ -49,7 +49,7 @@ public final class AchCrAnd extends AchEvItemCrafted {
 	}
 
 	@Override
-	public boolean acItemCrafted(ItemCraftedEvent event) {
+	public boolean accept(ItemCraftedEvent event) {
 		CondItemCrafted cit = cIT.get(event.crafting.getItem());
 		if (cit == null || !cit.acItemStack(event.crafting))
 			return false;

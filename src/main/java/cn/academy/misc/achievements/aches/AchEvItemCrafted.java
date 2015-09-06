@@ -10,7 +10,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 /**
  * @author EAirPeter
  */
-public abstract class AchEvItemCrafted extends ACAchievement {
+public abstract class AchEvItemCrafted extends ACAchievement implements IAchEventDriven<ItemCraftedEvent> {
 
 	//AchCr
 	
@@ -45,5 +45,5 @@ public abstract class AchEvItemCrafted extends ACAchievement {
 		return adItemCrafted(new CondItemCrafted(item, meta, amount));
 	}
 	public abstract ACAchievement adItemCrafted(CondItemCrafted cit);
-	public abstract boolean acItemCrafted(ItemCraftedEvent event);
+	
 }

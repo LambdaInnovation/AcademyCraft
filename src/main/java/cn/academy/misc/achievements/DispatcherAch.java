@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
@@ -53,7 +54,7 @@ public final class DispatcherAch {
 		HashSet<AchEvItemCrafted> set = hcItemCrafted.get(event.crafting.getItem());
 		if (set != null)
 			for (AchEvItemCrafted a : set)
-				if (a.acItemCrafted(event))
+				if (a.accept(event))
 					event.player.triggerAchievement(a);
 	}
 	
@@ -83,7 +84,7 @@ public final class DispatcherAch {
 		AbilityData data = AbilityData.get(event.player);
 		int xlv = data.getLevel() - 1;
 		AchEvLevelChange[] arr = hcLevelChange.get(data.getCategory());
-		if (arr != null && xlv >= 0 && arr[xlv] != null)
+		if (arr != null && xlv >= 0 && arr[xlv] != null && arr[xlv].accept(event))
 			event.player.triggerAchievement(arr[xlv]);
 	}
 	
@@ -103,27 +104,27 @@ public final class DispatcherAch {
 	@SubscribeEvent
 	public void onMatterUnitHarvest(MatterUnitHarvestEvent event) {
 		AchEvMatterUnitHarvest ach = hcMatterUnitHarvest.get(event.mat.block);
-		if (ach != null)
+		if (ach != null && ach.accept(event))
 			event.player.triggerAchievement(ach);
 	}
 	
 	
 	//cn.academy.ability.api.event.SkillLearnEvent
 	
-	private HashMap<Category, AchEvSkillLearn> hcSkillLearn = new HashMap<Category, AchEvSkillLearn>();
+	private HashMap<Skill, AchEvSkillLearn> hcSkillLearn = new HashMap<Skill, AchEvSkillLearn>();
 	
-	public void rgSkillLearn(Category cat, AchEvSkillLearn ach) {
-		hcSkillLearn.put(cat, ach);
+	public void rgSkillLearn(Skill skill, AchEvSkillLearn ach) {
+		hcSkillLearn.put(skill, ach);
 	}
 	
-	public void urSkillLearn(Category cat) {
-		hcSkillLearn.remove(cat);
+	public void urSkillLearn(Skill skill) {
+		hcSkillLearn.remove(skill);
 	}
 	
 	@SubscribeEvent
 	public void onSkillLearn(SkillLearnEvent event) {
-		AchEvSkillLearn ach = hcSkillLearn.get(event.skill.getCategory());
-		if (ach != null)
+		AchEvSkillLearn ach = hcSkillLearn.get(event.skill);//CHANGED HERE
+		if (ach != null && ach.accept(event))
 			event.player.triggerAchievement(ach);
 	}
 	

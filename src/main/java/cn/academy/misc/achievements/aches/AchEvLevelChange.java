@@ -6,12 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.misc.achievements.DispatcherAch;
 
 /**
  * @author EAirPeter
  */
-public final class AchEvLevelChange<Cat extends Category> extends AchAbility<Cat> {
+public final class AchEvLevelChange<Cat extends Category> extends AchAbility<Cat> implements IAchEventDriven<LevelChangeEvent> {
 
 	private final int level;
 	
@@ -43,6 +44,11 @@ public final class AchEvLevelChange<Cat extends Category> extends AchAbility<Cat
 	@Override
 	public void unregisterAll() {
 		DispatcherAch.INSTANCE.urLevelChange(category, level);
+	}
+	
+	@Override
+	public boolean accept(LevelChangeEvent event) {
+		return event.getAbilityData().getLevel() == level;
 	}
 
 }

@@ -46,7 +46,7 @@ public final class AchCrSingle extends AchEvItemCrafted {
 	}
 
 	@Override
-	public boolean acItemCrafted(ItemCraftedEvent event) {
+	public boolean accept(ItemCraftedEvent event) {
 		return cIT.acItemStack(event.crafting);
 	}
 
