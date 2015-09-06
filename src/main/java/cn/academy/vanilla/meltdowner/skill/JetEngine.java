@@ -156,14 +156,14 @@ public class JetEngine extends Skill {
 		
 		@Override
 		public void writeNBTStart(NBTTagCompound tag) {
-			tag.setFloat("x", (float) start.xCoord);
-			tag.setFloat("y", (float) start.yCoord);
-			tag.setFloat("z", (float) start.zCoord);
+			tag.setFloat("x", (float) target.xCoord);
+			tag.setFloat("y", (float) target.yCoord);
+			tag.setFloat("z", (float) target.zCoord);
 		}
 		
 		@Override
 		public void readNBTStart(NBTTagCompound tag) {
-			start = VecUtils.vec(tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
+			target = VecUtils.vec(tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
 		}
 		
 		@Override

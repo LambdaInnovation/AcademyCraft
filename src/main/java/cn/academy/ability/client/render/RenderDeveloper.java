@@ -43,12 +43,14 @@ public class RenderDeveloper extends TileEntitySpecialRenderer {
 		
 		GL11.glPushMatrix(); {
 			
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glTranslated(x, y, z);
+			GL11.glFrontFace(GL11.GL_CW);
+			GL11.glTranslated(x, y + 0.01, z);
+			GL11.glColor4f(1, 1, 1, 1);
 			RenderUtils.loadTexture(texture);
 			GL11.glScalef(scale, scale, scale);
+			GL11.glRotated(270, 0, 1, 0);
 			model.renderAll();
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glFrontFace(GL11.GL_CCW);
 			
 		} GL11.glPopMatrix();
 	}
