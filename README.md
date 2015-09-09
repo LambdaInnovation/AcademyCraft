@@ -17,7 +17,10 @@ visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 
 ### Requirements
 
-Current Forge version: 1.7.10-10.13.4.1448.
+Used Forge version: 1.7.10-10.13.4.1448.
+
+Required dependencies: 
+[LIUtils][liu], [AnnotationRegistry][ar]
 
 ### Supported Mods (Compile-Time Dependencies)
 
@@ -32,7 +35,7 @@ Not Enough Items [1.0.3.74](http://chickenbones.net/Pages/links.html).
 
 The mod requires Java 8 to compile and execute. Officially we use [RetroLamba](https://github.com/orfjackal/retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
 
-Currently AcademyCraft is under heavy developement, so it is almost always up to date with its dependency mods([LIUtils][liu] and [AnnotationRegistry][ar]).
+
 
 You must add the two mods mentioned above into your workspace and then add AcademyCraft.
 
