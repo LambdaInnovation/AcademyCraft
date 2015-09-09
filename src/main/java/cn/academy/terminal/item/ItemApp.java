@@ -39,10 +39,12 @@ public class ItemApp extends ACItem {
 	
 	public static void registerItems() {
 		for(App app : AppRegistry.enumeration()) {
-			ItemApp item = new ItemApp(app);
-			GameRegistry.registerItem(item, "ac_app_" + app.getName());
-			AcademyCraft.recipes.map("app_" + app.getName(), item);
-			items.put(app, item);
+			if(!app.isPreInstalled()) {
+				ItemApp item = new ItemApp(app);
+				GameRegistry.registerItem(item, "ac_app_" + app.getName());
+				AcademyCraft.recipes.map("app_" + app.getName(), item);
+				items.put(app, item);
+			}
 		}
 	}
 	

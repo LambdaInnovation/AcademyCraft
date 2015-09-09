@@ -96,7 +96,6 @@ public class LifeRecordUI extends LIGuiScreen {
 			
 			if(++count == L_COLUMNS) {
 				count = 0;
-				System.out.println("Add");
 				list.addWidget(row);
 				row = new AcquiredRow();
 			}

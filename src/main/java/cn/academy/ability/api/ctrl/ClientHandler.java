@@ -96,10 +96,8 @@ public final class ClientHandler {
 			public void onKeyDown(EntityPlayer player) {
 				CPData cpData = CPData.get(player);
 				if(cpData.isActivated()) {
-					System.out.println("deactivate");
 					cpData.deactivate();
 				} else {
-					System.out.println("activate");
 					cpData.activate();
 				}
 			}
@@ -167,7 +165,7 @@ public final class ClientHandler {
 			if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
 				int next = (data.getCurrentID() + 1) % 4;
 				data.switchCurrent(next);
-				ACSounds.playClient(getPlayer(), "ability.switch_preset", 1.0f);
+				ACSounds.playClient(getPlayer(), "ability.preset_switch", 1.0f);
 				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));
 			}
 		}

@@ -175,19 +175,19 @@ public abstract class SpecialSkill extends Skill {
 		 */
 		
 		protected void onSkillStart() {
-			System.out.println("[SS]Started");
+			//System.out.println("[SS]Started");
 		}
 		
 		protected void onSkillTick() {
-			System.out.println("[SS]Ticked");
+			//System.out.println("[SS]Ticked");
 		}
 		
 		protected void onSkillEnd() {
-			System.out.println("[SS]Ended");
+			//System.out.println("[SS]Ended");
 		}
 		
 		protected void onSkillAbort() {
-			System.out.println("[SS]Aborted");
+			//System.out.println("[SS]Aborted");
 		}
 	}
 	

@@ -59,7 +59,6 @@ public class RailgunHandEffect extends PlayerRenderHook {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			glTranslated(0, 0.2, -1);
 			glRotated(-player.rotationPitch, 1, 0, 0);
-			System.out.println(player.rotationPitch);
 		}
 		mat.mainTexture = textures[frame];
 		mesh.draw(mat);

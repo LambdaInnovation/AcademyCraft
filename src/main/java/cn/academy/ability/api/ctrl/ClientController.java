@@ -163,7 +163,7 @@ public class ClientController {
     	}
     	//System.out.println("{");
     	if(cpData.isActivated()) {
-    		//System.out.println("	IsActivated");
+    		System.out.println("RIsActivated");
 	    	Preset preset = pdata.getCurrentPreset();
 	    	if(preset != null) {
 	    		List<Integer> list = new ArrayList();

@@ -88,7 +88,7 @@ public class TerminalData extends DataPart {
 			@Override
 			public void onReady(Object val) {
 				callback.onReady(val);
-				fromNBT((NBTTagCompound) val);
+				fromNBTSync((NBTTagCompound) val);
 			}
 			
 		}));
@@ -156,7 +156,7 @@ public class TerminalData extends DataPart {
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void doQuerySync(@Data Future future) {
-		future.setAndSync(toNBT());
+		future.setAndSync(toNBTSync());
 	}
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)

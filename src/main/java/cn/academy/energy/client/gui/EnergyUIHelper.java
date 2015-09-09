@@ -72,7 +72,6 @@ public class EnergyUIHelper {
 		
 		EnergyUISyncs.syncIsLinked((TileEntity) target, 
 			Future.<Boolean>create((Boolean o) -> {
-				System.out.println(o);
 				if(o) {
 					DrawTexture.get(theButton).texture = BTN_WIFI;
 				}

@@ -29,7 +29,7 @@ public class GuiSkillTreeApp extends GuiSkillTree {
 		COLOR_PROG_NONO1 = new Color().setColor4i(127, 127, 127, 255);
 
 	public GuiSkillTreeApp(EntityPlayer _player) {
-		super(_player, DeveloperType.PORTABLE);
+		super(_player, DeveloperType.PORTABLE, true);
 		initAppPage();
 	}
 	

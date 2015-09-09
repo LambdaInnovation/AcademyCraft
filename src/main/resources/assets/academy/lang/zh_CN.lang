@@ -124,7 +124,8 @@ ac.app.freq_transmitter.e6=连接成功.
 ac.knowledge.acquired=习得知识
 
 # 技能树
-ac.skill_tree.name=技能树
+ac.app.skill_tree.title0=技能树
+ac.app.skill_tree.title1=能力开发机
 ac.skill_tree.version=版本: 1.0β1
 ac.skill_tree.notacquired=能力未获得.
 

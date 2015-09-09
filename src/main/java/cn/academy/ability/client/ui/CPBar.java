@@ -152,14 +152,14 @@ public class CPBar extends Widget {
 				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME :
 					(active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
 				
+				float poverload = mAlpha > 0 ? cpData.getOverload() / cpData.getMaxOverload() : 0;
+				bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
+				
+				float pcp = mAlpha > 0 ? cpData.getCP() / cpData.getMaxCP() : 0;
+				bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
+				
 				if(mAlpha > 0) {
 					/* Draw CPBar */ {
-						float poverload = cpData.getOverload() / cpData.getMaxOverload();
-						bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
-						
-						float pcp = cpData.getCP() / cpData.getMaxCP();
-						bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
-						
 						if(bufferedOverload < 1.0) {
 							drawNormal(bufferedOverload);
 						} else {

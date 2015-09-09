@@ -66,7 +66,6 @@ public class CurrentCharging extends Skill {
 					action = new ActionChargeItem();
 				}
 				
-				System.out.println("Starting Action");
 				this.addChild(action);
 			}
 		};

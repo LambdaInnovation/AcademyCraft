@@ -184,7 +184,6 @@ public class LocTeleportUI extends LIGuiScreen {
 			list.addWidget(single);
 			
 			Tint tint = single.getComponent("Tint");
-			System.out.println(tint);
 		}
 		
 		area.addComponent(list);

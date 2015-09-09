@@ -15,15 +15,6 @@ package cn.academy.terminal.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MouseHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -32,6 +23,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.registry.RegACKeyHandler;
+import cn.academy.core.util.ControlOverrider;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
@@ -54,6 +46,14 @@ import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MouseHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -107,7 +107,6 @@ public class TerminalUI extends AuxGui {
 		oldHelper = mc.mouseHelper;
 		mc.mouseHelper = helper = new TerminalMouseHelper();
 		
-		//ControlOverrider.override(KeyManager.MOUSE_LEFT);
 		ModuleCoreClient.dynKeyManager.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
 	}
 	
@@ -116,7 +115,6 @@ public class TerminalUI extends AuxGui {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.mouseHelper = oldHelper;
 		
-		//ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
 		ModuleCoreClient.dynKeyManager.removeKeyHandler("terminal_click");
 	}
 

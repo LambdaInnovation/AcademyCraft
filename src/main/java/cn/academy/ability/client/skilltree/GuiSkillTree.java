@@ -96,6 +96,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	final AbilityData aData;
 	final CPData cpData;
 	final DeveloperType type;
+	final boolean isApp;
 	
 	Widget window;
 	Widget treeArea;
@@ -105,9 +106,10 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	List<Widget> skillWidgets;
 	List<int[]> connections;
 	
-	public GuiSkillTree(EntityPlayer _player, DeveloperType _type) {
+	public GuiSkillTree(EntityPlayer _player, DeveloperType _type, boolean _isApp) {
 		player = _player;
 		type = _type;
+		isApp = _isApp;
 		aData = AbilityData.get(player);
 		cpData = CPData.get(player);
 		initPages();
@@ -123,6 +125,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		
 		window.addWidget("window_esper", windowEsper = loaded.getWidget("widgets/window_esper").copy());
 		window.addWidget("window_machine", windowMachine = loaded.getWidget("widgets/window_machine").copy());
+		
+		TextBox.get(window.getWidget("title")).content = "ac.skill_tree.title" + (isApp ? 0 : 1);
 		
 		for(int i = 1; i <= 5; ++i) {
 			Widget ball = treeArea.getWidget("ball" + i);
@@ -413,19 +417,18 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
+					glPushMatrix();
+					glTranslated(0, 0, 15);
 					if(event.hovering) {
 						if(level <= aData.getLevel())
 							Font.font.draw(SkillTreeLocal.levelDesc(level),
 									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
 					}
-					
 					if(LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData) && level == aData.getLevel() + 1) {
-						glPushMatrix();
-						glTranslated(0, 0, 15);
 						Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
 								-10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
-						glPopMatrix();
 					}
+					glPopMatrix();
 				}
 	 			
 	 		});

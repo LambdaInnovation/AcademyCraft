@@ -30,6 +30,7 @@ import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
+import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.liutils.util.client.renderhook.DummyRenderData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -40,7 +41,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -118,7 +118,7 @@ public class Railgun extends Skill {
 			
 			@Override
 			public void onStart() {
-				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);
+				EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
 				AbilityData aData = AbilityData.get(player);
 				
 				if(coin != null) {
@@ -185,7 +185,7 @@ public class Railgun extends Skill {
 				RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
 				damage.startDamage = getDamage(aData);
 				damage.perform();
-				EntityCoinThrowing coin = ModuleVanilla.coin.getPlayerCoin(player);
+				EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
 				if(coin != null) {
 					coin.setDead();
 				}

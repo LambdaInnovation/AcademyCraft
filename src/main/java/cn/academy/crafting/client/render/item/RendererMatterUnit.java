@@ -75,7 +75,6 @@ public class RendererMatterUnit implements IItemRenderer {
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			
 			GL11.glColorMask(false, false, false, false);
 			GL11.glDepthMask(true);
 			RenderUtils.loadTexture(texMask);

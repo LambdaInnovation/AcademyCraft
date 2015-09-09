@@ -59,8 +59,6 @@ public class WirelessNet {
 		
 		this.ssid = ssid;
 		this.password = pass;
-		
-		System.out.println("Directly creating " + ssid);
 	}
 	
 	public WirelessNet(WiWorldData data, NBTTagCompound tag) {

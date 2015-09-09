@@ -17,13 +17,16 @@ import cn.annoreg.core.Registrant;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
- */
+ */	
+@SideOnly(Side.CLIENT)
 @Registrant
 public class CriticalHitEffect {
 

@@ -150,7 +150,6 @@ public class WiWorldData extends WorldSavedData {
 	}
 	
 	public WirelessNet getNetwork(IWirelessMatrix matrix) {
-		System.out.println(matrix);
 		return netLookup.get(new VWMatrix(matrix));
 	}
 	

@@ -44,7 +44,8 @@ public class ItemCoin extends ACItem {
 	@SideOnly(Side.CLIENT)
 	public static RendererCoinThrowing.ItemRender renderCoin;
 	
-	Map<EntityPlayer, EntityCoinThrowing> client = new HashMap(), server = new HashMap();
+	// Key: PlayerName
+	static Map<String, EntityCoinThrowing> client = new HashMap(), server = new HashMap();
 	
 	public ItemCoin() {
 		super("coin");
@@ -55,18 +56,19 @@ public class ItemCoin extends ACItem {
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
     	EntityPlayer player = event.player;
-		Map<EntityPlayer, EntityCoinThrowing> map = getMap(player);
-		if(map.containsKey(player)) {
-			if(map.get(player).isDead) {
-				map.remove(player);
+		Map<String, EntityCoinThrowing> map = getMap(player);
+		EntityCoinThrowing etc = getPlayerCoin(player);
+		if(etc != null) {
+			if(etc.isDead || 
+				etc.worldObj.provider.dimensionId != player.worldObj.provider.dimensionId) {
+				map.remove(player.getCommandSenderName());
 			}
 		}
     }
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(getMap(player).containsKey(player)) {
-			System.err.println(player.getDisplayName());
+		if(getPlayerCoin(player) != null) {
 			return stack;
 		}
 		
@@ -76,7 +78,7 @@ public class ItemCoin extends ACItem {
     	world.spawnEntityInWorld(etc);
     	
     	player.playSound("academy:entity.flipcoin", 0.5F, 1.0F);
-    	getMap(player).put(player, etc);
+    	setPlayerCoin(player, etc);
     	
     	MinecraftForge.EVENT_BUS.post(new CoinThrowEvent(player, etc));
     	if(!player.capabilities.isCreativeMode) {
@@ -85,11 +87,19 @@ public class ItemCoin extends ACItem {
         return stack;
     }
 	
-	public EntityCoinThrowing getPlayerCoin(EntityPlayer player) {
-		return getMap(player).get(player);
+	public static EntityCoinThrowing getPlayerCoin(EntityPlayer player) {
+		EntityCoinThrowing etc = getMap(player).get(player.getCommandSenderName());
+		if(etc != null && !etc.isDead)
+			return etc;
+		return null;
 	}
 	
-	private Map<EntityPlayer, EntityCoinThrowing> getMap(EntityPlayer player) {
+	public static void setPlayerCoin(EntityPlayer player, EntityCoinThrowing etc) {
+		Map<String, EntityCoinThrowing> map = getMap(player);
+		map.put(player.getCommandSenderName(), etc);
+	}
+	
+	private static Map<String, EntityCoinThrowing> getMap(EntityPlayer player) {
 		return player.worldObj.isRemote ? client : server;
 	}
 

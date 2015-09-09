@@ -80,7 +80,6 @@ public class BlockImagFusor extends ACBlockContainer {
     	int l = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
     	l = (l + 2) % 4;
     	world.setBlockMetadataWithNotify(x, y, z, l, 0x03);
-    	System.out.println(l);
 	}
 	
 	static final int[] map = { 2, 0, 1, 3 };

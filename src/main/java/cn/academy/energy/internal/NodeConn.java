@@ -17,9 +17,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessNode;
@@ -27,6 +24,9 @@ import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -265,7 +265,7 @@ public class NodeConn {
 		
 		if(iNode == null || (generators.size() == 0 && receivers.size() == 0)) {
 			if(node.isLoaded(world)) {
-				System.out.println(node + " destroyed, destroy NodeConn...");
+				AcademyCraft.log.debug(node + " destroyed, destroy NodeConn...");
 				dispose();
 			}
 			return;

@@ -223,7 +223,6 @@ public class MarkTeleport extends Skill {
 		@SideOnly(Side.CLIENT)
 		private void updateEffects(Vec3 dest) {
 			if(isLocal()) {
-				System.out.println(this);
 				mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
 			}
 		}

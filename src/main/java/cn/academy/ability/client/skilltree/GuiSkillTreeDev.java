@@ -68,7 +68,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 	Overlay overlay;
 
 	public GuiSkillTreeDev(EntityPlayer _player, Developer _developer) {
-		super(_player, _developer.type);
+		super(_player, _developer.type, false);
 		developer = _developer;
 		
 		EventLoader.load(gui, this);
@@ -280,7 +280,6 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				overlay.dispose();
 				overlay = null;
 				ret.dispose();
-				System.out.println("CANCELED");
 			}
 			
 		});

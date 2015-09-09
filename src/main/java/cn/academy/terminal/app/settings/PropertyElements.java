@@ -115,7 +115,6 @@ public class PropertyElements {
 
 				@Override
 				public void handleEvent(Widget w, GainFocusEvent event) {
-					System.out.println("StartEditing");
 					startEditing();
 				}
 				

@@ -185,7 +185,6 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     
     private boolean isOutputSlotAvailable() {
     	ItemStack stack = getStackInSlot(SLOT_LIQUID_OUT);
-    	if(stack != null) System.out.println(ModuleCrafting.matterUnit.getMaterial(stack));
     	return stack == null || (stack.getItem() == ModuleCrafting.matterUnit && 
     			ModuleCrafting.matterUnit.getMaterial(stack) == ItemMatterUnit.NONE && stack.stackSize < stack.getMaxStackSize());
     }

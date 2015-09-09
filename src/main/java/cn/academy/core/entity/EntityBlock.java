@@ -48,9 +48,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity.HasRender
 public class EntityBlock extends EntityAdvanced {
 	
-	// For debug
-	public int c;
-	
 	@SideOnly(Side.CLIENT)
 	@RegEntity.Render
 	public static RenderEntityBlock renderer;
@@ -152,7 +149,6 @@ public class EntityBlock extends EntityAdvanced {
 		}
 		
 		if(!worldObj.isRemote && tileEntity != null) {
-			System.out.println("Sending te sync");
 			try {
 				NBTTagCompound tag = new NBTTagCompound();
 				tileEntity.writeToNBT(tag);
@@ -217,7 +213,6 @@ public class EntityBlock extends EntityAdvanced {
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncTileEntity(@Data String klassName, @Data NBTTagCompound initTag) {
-		System.out.println("SyncTileEntity");
 		try {
 			TileEntity te = (TileEntity) Class.forName(klassName).newInstance();
 			te.readFromNBT(initTag);

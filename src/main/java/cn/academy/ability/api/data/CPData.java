@@ -127,7 +127,7 @@ public class CPData extends DataPart {
 			// Do the sync. Only sync when player activated ability to avoid waste
 			if(!isRemote() && activated) {
 				++tickSync;
-				if(tickSync >= (dataDirty ? 4 : 25)) {
+				if(tickSync >= (dataDirty ? 4 : 10)) {
 					dataDirty = false;
 					tickSync = 0;
 					sync();
@@ -386,10 +386,15 @@ public class CPData extends DataPart {
 	}
 	
 	@Override
+	public NBTTagCompound toNBTSync() {
+		NBTTagCompound tag = toNBT();
+		tag.setBoolean("A", activated);
+		return tag;
+	}
+	
+	@Override
 	public NBTTagCompound toNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
-		
-		tag.setBoolean("A", activated);
 		
 		tag.setFloat("C", currentCP);
 		tag.setFloat("M", maxCP);

@@ -38,7 +38,6 @@ public abstract class CommandAIMBase extends ACCommand {
 	 * This is the command used by the client, doesn't specify the player and works on the user.
 	 * This command will display a warning before you can use it.
 	 */
-	@SideOnly(Side.CLIENT)
 	@RegCommand
 	public static class CommandAIM extends CommandAIMBase {
 		

@@ -14,21 +14,11 @@ package cn.academy.energy.client.app;
 
 import javax.vecmath.Vector2d;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.util.ControlOverrider;
 import cn.academy.energy.api.block.IWirelessMatrix;
@@ -49,6 +39,16 @@ import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -208,7 +208,7 @@ public class FreqTransmitterUI extends AuxGui {
 					}
 				}
 			} else {
-				System.err.println("Human is dead. Mismatch.");
+				AcademyCraft.log.error("Human is dead. Mismatch.");
 				this.setDead();
 			}
 			return true;
@@ -246,7 +246,7 @@ public class FreqTransmitterUI extends AuxGui {
 		@Override
 		public void handleDraw(double w, double h) {
 			super.handleDraw(w, h);
-			if(this.getDeltaTime() > 2500L) {
+			if(this.getDeltaTime() > 1000L) {
 				dispose();
 			}
 		}
@@ -264,7 +264,7 @@ public class FreqTransmitterUI extends AuxGui {
 		@Override
 		public void handleDraw(double w, double h) {
 			super.handleDraw(w, h);
-			if(this.getDeltaTime() > 2500L) {
+			if(this.getDeltaTime() > 700L) {
 				setState(toSwitch);
 			}
 		}
@@ -419,7 +419,6 @@ public class FreqTransmitterUI extends AuxGui {
 					if(FreqTransmitterUI.this.current == state) {
 						boolean res = (boolean) o;
 						if(res) {
-							System.out.println("Link successful!");
 							setState(new StateNotifyAndReturn("e6", StateDoMatrixLink.this));
 						} else {
 							setState(new StateNotifyAndQuit("e2"));

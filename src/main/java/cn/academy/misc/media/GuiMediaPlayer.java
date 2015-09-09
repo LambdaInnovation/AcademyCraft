@@ -166,7 +166,6 @@ public class GuiMediaPlayer extends LIGuiScreen {
 	}
 	
 	private void updatePopState() {
-		System.out.println(player.isPlaying());
 		DrawTexture.get(pageMain.getWidget("pop")).texture = (player.isPlaying() && !player.isPaused()) ? T_PAUSE : T_PLAY;
 	}
 	

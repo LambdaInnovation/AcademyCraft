@@ -42,7 +42,6 @@ public class SubArc2D {
 		templateCount = _templateCount;
 		this.x = x;
 		this.y = y;
-		System.out.println("[" + x + ", " + y + "]");
 		texID = rand.nextInt(templateCount);
 	}
 	

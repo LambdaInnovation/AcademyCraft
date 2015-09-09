@@ -149,7 +149,6 @@ public class EntityMdBall extends EntityAdvanced {
 				Entity e = worldObj.getEntityByID(eid);
 				if(e instanceof EntityPlayer) {
 					spawner = (EntityPlayer) e;
-					System.out.println("Rec entity sync");
 				}
 				
 			} else {
@@ -158,7 +157,6 @@ public class EntityMdBall extends EntityAdvanced {
 					subY = dataWatcher.getWatchableObjectFloat(5);
 					subZ = dataWatcher.getWatchableObjectFloat(6);
 					life = dataWatcher.getWatchableObjectInt(7);
-					System.out.println("Rec pos sync");
 				} else {
 					updatePosition();
 				}

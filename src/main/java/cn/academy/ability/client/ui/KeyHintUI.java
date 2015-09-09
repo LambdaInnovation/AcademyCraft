@@ -168,13 +168,14 @@ public class KeyHintUI extends Widget {
 			}
 			
 			color4d(1, 1, 1, 1);
-			GL20.glUseProgram(0);
 		}
 		
 		// Logo
 		color4d(1, 1, 1, 1);
 		RenderUtils.loadTexture(TEX_ICON_BACK);
 		HudUtils.rect(216, 5, 72, 72);
+		
+		
 		
 		float prog = data == null ? 0.0f : ((float) data.getTickLeft() / data.getMaxTick());
 		float alpha = prog == 0.0f ? 1.0f : 0.4f;
@@ -183,6 +184,8 @@ public class KeyHintUI extends Widget {
 		color4d(1, 1, 1, alpha);
 		RenderUtils.loadTexture(icon);
 		HudUtils.rect(221, 10, ICON_SIZE, ICON_SIZE);
+		
+		GL20.glUseProgram(0);
 		
 		if(prog != 0) {
 			color4d(0.6, 0.6, 0.6, .3);

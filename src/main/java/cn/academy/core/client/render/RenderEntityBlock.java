@@ -40,10 +40,6 @@ public class RenderEntityBlock extends Render {
 	public void doRender(Entity e, double x, double y,
 			double z, float a, float b) {
 		EntityBlock entity = (EntityBlock) e;
-		if(++entity.c == 50) {
-			entity.c = 0;
-			System.out.println("Rendering " + entity.block + ", " + entity.tileEntity);
-		}
 		
 		if(entity.block != null) {
 			GL11.glPushMatrix(); {

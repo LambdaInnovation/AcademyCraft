@@ -127,11 +127,6 @@ public class PresetData extends DataPart {
 	
 	@Override
 	public void tick() {}
-	
-	@Override
-	public void preSaving() {
-		endOverride();
-	}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
@@ -151,15 +146,24 @@ public class PresetData extends DataPart {
 
 	@Override
 	public NBTTagCompound toNBT() {
+		return toNBTGeneric(false);
+	}
+	
+	@Override
+	public NBTTagCompound toNBTSync() {
+		return toNBTGeneric(true);
+	}
+	
+	public NBTTagCompound toNBTGeneric(boolean sync) {
 		NBTTagCompound ret = new NBTTagCompound();
 		ret.setByte("cur", (byte) presetID);
 		for(int i = 0; i < MAX_PRESETS; ++i) {
 			ret.setTag("" + i, presets[i].toNBT());
 		}
-		
-		ret.setBoolean("l", locked);
-		if(locked) ret.setTag("k", specialPreset.toNBT());
-		
+		if(sync) {
+			ret.setBoolean("l", locked);
+			if(locked) ret.setTag("k", specialPreset.toNBT());
+		}
 		return ret;
 	}
 	
