@@ -130,7 +130,7 @@ public class ThreateningTeleport extends Skill {
 					if(result.target != null) {
 						attacked = true;
 						TPAttackHelper.attack(player, instance, result.target, getDamage(aData, curStack));
-						
+						instance.triggerAchievement(player);
 						dropProb = 0.3;
 					}
 					

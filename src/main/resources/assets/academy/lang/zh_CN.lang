@@ -124,8 +124,8 @@ ac.app.freq_transmitter.e6=连接成功.
 ac.knowledge.acquired=习得知识
 
 # 技能树
-ac.app.skill_tree.title0=技能树
-ac.app.skill_tree.title1=能力开发机
+ac.skill_tree.title0=技能树
+ac.skill_tree.title1=能力开发机
 ac.skill_tree.version=版本: 1.0β1
 ac.skill_tree.notacquired=能力未获得.
 
@@ -162,6 +162,8 @@ ac.skill_tree.aborted=进度: 已取消.
 ac.skill_tree.successful=执行成功.
 ac.skill_tree.abort=取消
 ac.skill_tree.aborted=已取消.
+
+ac.skill_tree.level_prg=升级进度：%s
 
 # 设置
 ac.settings.cat.generic=常规
@@ -319,6 +321,7 @@ ac.ability.teleporter.location_teleport.desc=记忆下当前的坐标，如有�
 ac.ability.teleporter.shift_tp.desc=将方块运用坐标移动的方式高速发射出去，因为其运动方式并非动能推动而是坐标改变，所以并不会因为其速度与质量而影响破坏力 。 
 ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃类攻击的分裂性扩大，来造成更高的杀伤 。
 ac.ability.teleporter.flashing.desc=远超标记传送机动性的新传送方式，极高的传送速度与速度的重置能让你实现灵活的空中机动。
+ac.ability.teleporter.crithit=达成%fx暴击！
 
 ac.gui.loctele.tag0=已记录坐标
 ac.gui.loctele.tag1=添加坐标

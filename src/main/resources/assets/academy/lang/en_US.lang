@@ -129,6 +129,8 @@ ac.skill_tree.title1=Ability Developer
 ac.skill_tree.version=Version: 1.0β1
 ac.skill_tree.notacquired=Ability not acquired.
 
+ac.skill_tree.level_prg=Progress: %s
+
 ac.skill_tree.type_portable=Portable Developer
 ac.skill_tree.type_normal=Normal Developer
 ac.skill_tree.type_advanced=Advanced Developer
@@ -309,6 +311,7 @@ ac.ability.teleporter.location_teleport.name=Location Teleport
 ac.ability.teleporter.shift_tp.name=Shift Teleport
 ac.ability.teleporter.space_fluct.name=Space Fluctuation
 ac.ability.teleporter.flashing.name=Flashing
+ac.ability.teleporter.crithit=%fx critical hit!
 
 ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
 ac.ability.teleporter.dim_folding_theoreom.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.

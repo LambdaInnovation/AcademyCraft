@@ -94,6 +94,7 @@ public class JetEngine extends Skill {
 				startTriggerAction(player, getDest().addVector(0, 1.65, 0));
 				aData.addSkillExp(instance, getExpIncr(aData));
 				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				instance.triggerAchievement(player);
 			}
 		}
 		

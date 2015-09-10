@@ -1,7 +1,9 @@
 package cn.academy.ability.client.skilltree;
 
-import net.minecraft.util.StatCollector;
+import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.developer.DeveloperType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.StatCollector;
 
 public class SkillTreeLocal {
 	
@@ -76,6 +78,10 @@ public class SkillTreeLocal {
 	
 	public static String energyDesc(double energy, double maxEnergy) {
 		return String.format("%.0f/%.0fIF", energy, maxEnergy);
+	}
+	
+	public static String levelPrg(EntityPlayer player) {
+		return local("level_prg", String.format("%.2f%%", CPData.get(player).getLevelProgress() * 100));
 	}
 	
 	public static String local(String key) {

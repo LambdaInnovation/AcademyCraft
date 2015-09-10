@@ -17,8 +17,10 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
@@ -147,6 +149,8 @@ public class LocationTeleport extends Skill {
 			
 			double dist = player.getDistance(dest.x, dest.y, dest.z);
 			aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(dist));
+			ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
+			TPAttackHelper.incrTPCount(player);
 		}
 	}
 

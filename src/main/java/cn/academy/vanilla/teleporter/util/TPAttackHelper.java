@@ -12,15 +12,12 @@
  */
 package cn.academy.vanilla.teleporter.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.util.DamageHelper;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
@@ -28,12 +25,27 @@ import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
 public class TPAttackHelper {
+	
+	static final String TPC_ID = "ac_tpcount";
+	
+	public static void incrTPCount(EntityPlayer player) {
+		int i = player.getEntityData().getInteger(TPC_ID) + 1;
+		if(i >= 400) {
+			ModuleAchievements.trigger(player, "teleporter.mastery");
+		}
+		player.getEntityData().setInteger(TPC_ID, i);
+	}
 
 	/**
 	 * You should use this in SERVER only. the critical hit event will be post at client if a critical hit happened.
@@ -45,10 +57,11 @@ public class TPAttackHelper {
 		for(int i = 0; i < 3; ++i) {
 			float prob = AcademyCraft.pipeline.pipeFloat(
 				"ac.teleporter.crit_prob." + i, 0, player);
-			System.out.printf("p%d: %f\n", i, prob);
 			if(RandUtils.nextFloat() < prob) {
-				damage *= AcademyCraft.getFloat("teleporter._crithit.incr_" + i);
-				//System.out.println("We have a crit hit !");
+				float multiply = AcademyCraft.getFloat("teleporter._crithit.incr_" + i);
+				damage *= multiply;
+				player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", multiply));
+				ModuleAchievements.trigger(player, "teleporter.critical_attack");
 				chLevel = i;
 				break;
 			}

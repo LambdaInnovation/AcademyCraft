@@ -31,8 +31,10 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
+import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.VecUtils;
@@ -174,6 +176,8 @@ public class Flashing extends SpecialSkill {
 				
 				cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 				aData.addSkillExp(instance, instance.getFloat("expincr"));
+				instance.triggerAchievement(player);
+				TPAttackHelper.incrTPCount(player);
 			} else {
 				Cooldown.setCooldown(movement, 5);
 			}

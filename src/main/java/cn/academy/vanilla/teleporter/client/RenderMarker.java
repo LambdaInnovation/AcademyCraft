@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.liutils.util.client.shader.ShaderNotex;
 import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.renderer.Tessellator;
@@ -63,7 +64,7 @@ public class RenderMarker extends Render {
 			height = marker.height;
 		}
 		
-		ShaderSimple.instance().useProgram();
+		ShaderNotex.instance().useProgram();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		if(marker.ignoreDepth)
 			GL11.glDisable(GL11.GL_DEPTH_TEST);

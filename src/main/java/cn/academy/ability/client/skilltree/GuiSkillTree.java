@@ -182,6 +182,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	private void initPlayerInfo() {
 		TextBox.get(windowEsper.getWidget("text_user")).content = player.getDisplayName();
 		TextBox.get(windowEsper.getWidget("text_level")).content = SkillTreeLocal.levelDesc(aData.getLevel());
+		TextBox.get(windowEsper.getWidget("text_prg")).content = SkillTreeLocal.levelPrg(player);
 		
 		Category cat = aData.getCategory();
 		TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? SkillTreeLocal.unknown() : cat.getDisplayName();
