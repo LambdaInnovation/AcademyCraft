@@ -17,7 +17,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
+import cn.academy.vanilla.meltdowner.entity.EntityMineRayLuck;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,6 +30,7 @@ public class MineRayLuck extends MineRaysBase {
 
 	public MineRayLuck() {
 		super("luck", 5);
+		this.particleTexture = Resources.getTexture("effects/md_particle_luck");
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class MineRayLuck extends MineRaysBase {
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected Entity createRay(EntityPlayer player) {
-		return new EntityMineRayExpert(player);
+		return new EntityMineRayLuck(player);
 	}
 
 }

@@ -41,13 +41,7 @@ import static org.lwjgl.opengl.GL44.*;
  */
 public class GLSLMesh extends Mesh {
 	
-	int VBO;
-	int IBO;
-	
-	public GLSLMesh() {
-		VBO = glGenBuffers();
-		IBO = glGenBuffers();
-	}
+	public GLSLMesh() {}
 	
 	public void draw(ShaderProgram program) {
 		draw(program.getProgramID());

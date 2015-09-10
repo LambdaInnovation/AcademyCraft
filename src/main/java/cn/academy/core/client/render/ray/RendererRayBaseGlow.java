@@ -13,6 +13,7 @@
 package cn.academy.core.client.render.ray;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
 
 import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.RenderUtils;
@@ -42,29 +43,36 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		
 		Minecraft mc = Minecraft.getMinecraft();
 		
-		GL11.glPushMatrix();
+		glPushMatrix();
 		
 		doTransform(ray);
 		
 		Vec3 position = ray.getPosition();
 		Vec3 relativePosition = VecUtils.subtract(position, 
 				VecUtils.vec(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
-		GL11.glTranslated(x, y, z);
+		glTranslated(x, y, z);
 		
 		//Calculate the most appropriate 'billboard-up' direction.
-		
 		//The ray viewing direction.
 		Vec3 dir = new Motion3D(entity, true).getMotionVec();
 		//Pick two far enough start and end point.
-		Vec3 start = VecUtils.multiply(dir, ray.getStartFix()), end = VecUtils.add(start, VecUtils.multiply(dir, ray.getLength() - ray.getStartFix()));
-		//Get closest point for view judging.
-		Vec3 pt = VecUtils.vec(0, 0, 0);
+		Vec3 start = VecUtils.multiply(dir, ray.getStartFix()), 
+			end = VecUtils.add(start, VecUtils.multiply(dir, ray.getLength() - ray.getStartFix()));
 		
-		//The player viewing direction towards pt.
-		Vec3 perpViewDir = VecUtils.add(pt, relativePosition);
-		
-		// cross product to get the 'up' vector
-		Vec3 upDir = VecUtils.crossProduct(perpViewDir, dir);
+		Vec3 upDir;
+		boolean firstPerson = ViewOptimize.isFirstPerson(ray);
+		if(firstPerson) {
+			upDir = VecUtils.vec(0, 1, -0.5);
+		} else {
+			//Get closest point for view judging.
+			Vec3 pt = VecUtils.vec(0, 0, 0);
+			
+			//The player viewing direction towards pt.
+			Vec3 perpViewDir = VecUtils.add(pt, relativePosition);
+			
+			// cross product to get the 'up' vector
+			upDir = VecUtils.crossProduct(perpViewDir, dir);
+		}
 		
 		upDir = upDir.normalize();
 		
@@ -97,7 +105,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 		//Now delegate to the render itself~
 		draw(ray, start, end, upDir);
 		
-		GL11.glPopMatrix();
+		glPopMatrix();
 	}
 	
 	protected void doPostTransform(T ray) {}
@@ -113,19 +121,20 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
 			v4 = VecUtils.add(end,   VecUtils.multiply(upDir, width));
 		
 		Tessellator t = Tessellator.instance;
-		t.startDrawingQuads();
-		t.setBrightness(15728880);
-		RenderUtils.addVertex(v1, 0, 1);
-		RenderUtils.addVertex(v2, 0, 0);
-		RenderUtils.addVertex(v3, 1, 0);
-		RenderUtils.addVertex(v4, 1, 1);
-		t.draw();
+		
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+		glBegin(GL_QUADS);
+		RenderUtils.addVertexLegacy(v1, 0, 1);
+		RenderUtils.addVertexLegacy(v2, 0, 0);
+		RenderUtils.addVertexLegacy(v3, 1, 0);
+		RenderUtils.addVertexLegacy(v4, 1, 1);
+		glEnd();
 	}
 	
 	/**
 	 * Draw the ray at the origin. The ray's heading direction should be toward x+, 
 	 * and normal is always in z direction.
-	 * @param start THe start point
+	 * @param start The start point
 	 * @param end The end point
 	 * @param sideDir the suggested billboard-up direction. You can ignore this if not drawing a billboard.
 	 */

@@ -12,6 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import cn.academy.core.client.render.ray.RendererRayComposite;
@@ -66,7 +67,7 @@ public class EntityMineRayExpert extends EntityRayBase {
 	public static class ExpertRayRenderer extends RendererRayComposite {
 
 		public ExpertRayRenderer() {
-			super("mdray_small");
+			super("mdray_expert");
 			this.cylinderIn.width = 0.045;
 			this.cylinderIn.color.setColor4i(216, 248, 216, 230);
 			
@@ -75,6 +76,19 @@ public class EntityMineRayExpert extends EntityRayBase {
 			
 			this.glow.width = 0.5;
 			this.glow.color.a = 0.7;
+		}
+		
+		@Override
+		public void doRender(Entity ent, double x,
+				double y, double z, float a, float b) {
+			this.cylinderIn.width = 0.045;
+			this.cylinderIn.color.setColor4i(216, 248, 216, 180);
+			
+			this.cylinderOut.width = 0.056;
+			this.cylinderOut.color.setColor4i(106, 242, 106, 50);
+			
+			this.glow.color.a = 0.5;
+			super.doRender(ent, x, y, z, a ,b);
 		}
 		
 	}

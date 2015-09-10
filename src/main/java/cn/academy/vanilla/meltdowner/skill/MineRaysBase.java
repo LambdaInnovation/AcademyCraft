@@ -14,12 +14,6 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import static cn.liutils.util.generic.RandUtils.ranged;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
@@ -37,11 +31,20 @@ import cn.liutils.util.mc.EntitySelectors;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
  */
 public abstract class MineRaysBase extends Skill {
+	
+	protected ResourceLocation particleTexture;
 
 	public MineRaysBase(String postfix, int atLevel) {
 		super("mine_ray_" + postfix, atLevel);
@@ -172,6 +175,11 @@ public abstract class MineRaysBase extends Skill {
 				Particle p = MdParticleFactory.INSTANCE.next(world,
 						VecUtils.vec(_x, _y, _z),
 						VecUtils.vec(ranged(-.06, .06), ranged(-.06, .06), ranged(-.06, .06)));
+				if(skill.particleTexture != null) {
+					System.out.println("HasCT");
+					p.texture = skill.particleTexture;
+				}
+				
 				p.needRigidbody = false;
 				Rigidbody rb = new Rigidbody();
 				rb.gravity = 0.01;

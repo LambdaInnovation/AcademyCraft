@@ -63,10 +63,10 @@ public class EntityTPMarking extends EntityAdvanced {
 		rotationPitch = player.rotationPitch;
 		rotationYaw = player.rotationYaw;
 		
-		if(available) {
+		if(available && rand.nextDouble() < 0.4) {
 			particleFac.setPosition(
 				posX + RandUtils.ranged(-1, 1), 
-				posY + RandUtils.ranged(0, 1), 
+				posY + RandUtils.ranged(0.2, 1.6) - 1.6, 
 				posZ + RandUtils.ranged(-1, 1));
 			particleFac.setVelocity(
 				RandUtils.ranged(-.03, .03),
