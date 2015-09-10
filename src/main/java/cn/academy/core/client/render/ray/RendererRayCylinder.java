@@ -20,10 +20,10 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import cn.academy.core.client.glsl.GLSLMesh;
-import cn.academy.core.client.glsl.ShaderNotex;
 import cn.academy.core.entity.IRay;
 import cn.liutils.render.material.SimpleMaterial;
+import cn.liutils.util.client.shader.GLSLMesh;
+import cn.liutils.util.client.shader.ShaderNotex;
 import cn.liutils.util.helper.Color;
 
 /**

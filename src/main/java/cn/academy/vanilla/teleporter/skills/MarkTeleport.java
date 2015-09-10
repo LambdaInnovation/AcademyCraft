@@ -30,6 +30,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Motion3D;
@@ -195,6 +196,7 @@ public class MarkTeleport extends Skill {
 				}
 				
 				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				TPAttackHelper.incrTPCount(player);
 			}
 			
 			if(isRemote) {

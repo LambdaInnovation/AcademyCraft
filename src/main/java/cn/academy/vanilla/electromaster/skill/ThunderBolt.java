@@ -112,6 +112,7 @@ public class ThunderBolt extends Skill {
 				}
 				
 				aData.addSkillExp(instance, getExpIncr(effective));
+				instance.triggerAchievement(player);
 			}
 			
 			Cooldown.setCooldown(instance, instance.getCooldown(aData));

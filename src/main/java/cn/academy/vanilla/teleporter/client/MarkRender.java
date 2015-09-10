@@ -19,11 +19,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.liutils.api.render.IDrawable;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderSimple;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,8 +53,7 @@ public class MarkRender extends Render {
 			
 			GL11.glRotated(-mark.rotationYaw, 0, 1, 0);
 			GL11.glScaled(-1, -1, 1);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-			Tessellator.instance.setBrightness(15728880);
+			ShaderSimple.instance().useProgram();
 			RenderUtils.loadTexture(tex[texID]);
 			
 			if(!mark.available) {
@@ -62,6 +63,7 @@ public class MarkRender extends Render {
 			}
 			
 			model.draw();
+			GL20.glUseProgram(0);
 		} GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

@@ -30,7 +30,6 @@ import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
-import cn.academy.core.client.glsl.ShaderMono;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.LIGui;
@@ -49,6 +48,7 @@ import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
@@ -182,6 +182,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	private void initPlayerInfo() {
 		TextBox.get(windowEsper.getWidget("text_user")).content = player.getDisplayName();
 		TextBox.get(windowEsper.getWidget("text_level")).content = SkillTreeLocal.levelDesc(aData.getLevel());
+		TextBox.get(windowEsper.getWidget("text_prg")).content = SkillTreeLocal.levelPrg(player);
 		
 		Category cat = aData.getCategory();
 		TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? SkillTreeLocal.unknown() : cat.getDisplayName();

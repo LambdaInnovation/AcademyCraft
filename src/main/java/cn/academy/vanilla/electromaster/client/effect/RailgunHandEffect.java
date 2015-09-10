@@ -14,13 +14,18 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
 import cn.academy.core.client.Resources;
 import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
 import cn.liutils.render.mesh.MeshUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.renderhook.PlayerRenderHook;
+import cn.liutils.util.client.shader.GLSLMesh;
+import cn.liutils.util.client.shader.ShaderSimple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -31,14 +36,12 @@ public class RailgunHandEffect extends PlayerRenderHook {
 	
 	static final int PER_FRAME = 40, COUNT = 40;
 	ResourceLocation[] textures;
-	Mesh mesh;
-	SimpleMaterial mat;
+	GLSLMesh mesh;
 	
 	public RailgunHandEffect() {
 		textures = Resources.getEffectSeq("arc_burst", COUNT);
-		mesh = MeshUtils.createBillboard(mesh, -1, -1, 1, 1);
-		mat = new SimpleMaterial(null);
-		mat.ignoreLight = true;
+		mesh = new GLSLMesh();
+		mesh = (GLSLMesh) MeshUtils.createBillboard(mesh, -1, -1, 1, 1);
 	}
 
 	public void renderHand(boolean firstPerson) {
@@ -49,8 +52,13 @@ public class RailgunHandEffect extends PlayerRenderHook {
 		}
 		
 		int frame = (int) (dt / PER_FRAME);
-		glDisable(GL_ALPHA_TEST);
+		
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
 		glDisable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
 		glPushMatrix();
 		if(firstPerson) {
 			glTranslated(.26, -.12, -.24);
@@ -60,11 +68,12 @@ public class RailgunHandEffect extends PlayerRenderHook {
 			glTranslated(0, 0.2, -1);
 			glRotated(-player.rotationPitch, 1, 0, 0);
 		}
-		mat.mainTexture = textures[frame];
-		mesh.draw(mat);
+		RenderUtils.loadTexture(textures[frame]);
+		mesh.draw(ShaderSimple.instance());
 		glPopMatrix();
+		
+		glAlphaFunc(GL_GEQUAL, 0.1f);
 		glEnable(GL_CULL_FACE);
-		glEnable(GL_ALPHA_TEST);
 	}
 	
 }

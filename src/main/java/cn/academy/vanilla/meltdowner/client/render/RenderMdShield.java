@@ -12,33 +12,31 @@
  */
 package cn.academy.vanilla.meltdowner.client.render;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
 import cn.liutils.render.mesh.MeshUtils;
+import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.GLSLMesh;
+import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
  */
 public class RenderMdShield extends Render {
 
-	Mesh mesh;
-	SimpleMaterial material;
+	GLSLMesh mesh;
+	ResourceLocation texture;
 	
 	public RenderMdShield() {
-		material = new SimpleMaterial(Resources.getTexture("effects/mdshield"));
-		material.ignoreLight = true;
-		mesh = MeshUtils.createBillboard(null, -0.5, -0.5, 0.5, 0.5);
+		texture = Resources.getTexture("effects/mdshield");
+		mesh = MeshUtils.createBillboard(new GLSLMesh(), -0.5, -0.5, 0.5, 0.5);
 	}
 	
 	@Override
@@ -57,7 +55,9 @@ public class RenderMdShield extends Render {
 		if(entity.rotation >= 360f) entity.rotation -= 360f;
 		
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.05f);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glPushMatrix();
 		
 		GL11.glTranslated(x, y, z);
@@ -70,12 +70,13 @@ public class RenderMdShield extends Render {
 		
 		GL11.glScalef(size, size, 1);
 		
-		material.color.a = alpha;
-		mesh.draw(material);
+		RenderUtils.loadTexture(texture);
+		mesh.draw(ShaderSimple.instance());
 		
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.1f);
 		
 		entity.lastRender = time;
 	}

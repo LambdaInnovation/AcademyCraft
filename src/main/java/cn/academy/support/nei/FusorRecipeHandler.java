@@ -19,13 +19,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
-import cn.academy.core.client.glsl.ShaderMono;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.client.gui.GuiImagFusor;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.gui.inventory.GuiContainer;
