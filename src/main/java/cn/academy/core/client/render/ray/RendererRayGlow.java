@@ -18,11 +18,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.core.entity.IRay;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.helper.Color;
 
@@ -56,17 +59,16 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 
 	@Override
 	protected void draw(T ray, Vec3 start, Vec3 end, Vec3 dir) {
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glDepthMask(false);
+		glDisable(GL_CULL_FACE);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glDisable(GL_LIGHTING);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glDepthMask(false);
+		ShaderSimple.instance().useProgram();
 
 		Tessellator t = Tessellator.instance;
 		
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.defaultTexUnit, 240f, 240f);
-		t.setBrightness(15728880);
 		Vec3 look = VecUtils.subtract(end, start).normalize();
 		
 		end = VecUtils.add(end, VecUtils.multiply(look, endFix));
@@ -91,11 +93,12 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		RenderUtils.loadTexture(blendOut);
 		this.drawBoard(mid2, end, dir, width);
 		
-		GL11.glDepthMask(true);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GL20.glUseProgram(0);
+		glDepthMask(true);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_CULL_FACE);
+		glAlphaFunc(GL_GEQUAL, 0.1f);
+		glEnable(GL_LIGHTING);
 	}
 	
 	public static RendererRayGlow createFromName(String name) {

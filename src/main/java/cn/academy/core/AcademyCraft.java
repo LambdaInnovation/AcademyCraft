@@ -24,7 +24,6 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-import cn.academy.core.client.glsl.ShaderProgram;
 import cn.academy.core.util.ValuePipeline;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.core.RegistrationManager;
@@ -35,6 +34,7 @@ import cn.liutils.crafting.CustomMappingHelper;
 import cn.liutils.crafting.RecipeRegistry;
 import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.ripple.ScriptProgram;
+import cn.liutils.util.client.shader.ShaderProgram;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

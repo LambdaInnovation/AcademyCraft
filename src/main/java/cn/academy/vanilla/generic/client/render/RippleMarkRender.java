@@ -61,7 +61,7 @@ public class RippleMarkRender extends Render {
 		
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
 		GL11.glDepthMask(false);
 		GL11.glPushMatrix();
 		
@@ -84,6 +84,7 @@ public class RippleMarkRender extends Render {
 		
 		GL11.glPopMatrix();
 		GL11.glDepthMask(true);
+		GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.1f);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

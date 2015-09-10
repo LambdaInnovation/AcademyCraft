@@ -18,13 +18,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
-import cn.academy.core.client.glsl.ShaderMono;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.client.gui.GuiMetalFormer;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.helper.Font;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;

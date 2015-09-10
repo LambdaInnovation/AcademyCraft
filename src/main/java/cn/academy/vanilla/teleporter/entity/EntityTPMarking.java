@@ -22,6 +22,7 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.entityx.EntityAdvanced;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.helper.Motion3D;
 import cn.liutils.util.raytrace.Raytrace;

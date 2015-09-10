@@ -12,16 +12,16 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import net.minecraft.client.renderer.OpenGlHelper;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.liutils.util.client.shader.ShaderSimple;
+import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.liutils.util.helper.GameTimer;
 
 /**
  * @author WeathFolD
@@ -63,7 +63,7 @@ public class RenderMarker extends Render {
 			height = marker.height;
 		}
 		
-		GL11.glDisable(GL11.GL_LIGHTING);
+		ShaderSimple.instance().useProgram();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		if(marker.ignoreDepth)
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -75,8 +75,8 @@ public class RenderMarker extends Render {
 		
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL20.glUseProgram(0);
 	}
 	
 	protected void renderMark(float width, float height) {
@@ -89,7 +89,6 @@ public class RenderMarker extends Render {
 			GL11.glTranslated(sx, sy, sz);
 			GL11.glRotated(rotArray[i], 0, 1, 0);
 			GL11.glLineWidth(3f);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 			t.startDrawing(GL11.GL_LINES);
 			t.setBrightness(15728880);
 			t.addVertex(0, 0, 0);

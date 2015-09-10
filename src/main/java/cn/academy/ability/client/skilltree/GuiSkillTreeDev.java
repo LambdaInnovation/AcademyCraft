@@ -31,7 +31,6 @@ import cn.academy.ability.developer.IDevCondition;
 import cn.academy.ability.developer.IDevelopType;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.component.Glow;
-import cn.academy.core.client.glsl.ShaderMono;
 import cn.annoreg.mc.network.Future;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
@@ -48,6 +47,7 @@ import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.helper.Font;
 
 

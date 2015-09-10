@@ -12,6 +12,21 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import cn.academy.core.client.Resources;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegEntity;
+import cn.liutils.entityx.EntityAdvanced;
+import cn.liutils.entityx.EntityCallback;
+import cn.liutils.template.client.render.entity.RenderIcon;
+import cn.liutils.util.client.shader.ShaderSimple;
+import cn.liutils.util.generic.MathUtils;
+import cn.liutils.util.generic.RandUtils;
+import cn.liutils.util.helper.GameTimer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,25 +34,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.client.Resources;
-import cn.academy.core.registry.RegACKeyHandler;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.entityx.EntityCallback;
-import cn.liutils.template.client.render.entity.RenderIcon;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.helper.GameTimer;
-import cn.liutils.util.helper.KeyHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -270,6 +266,7 @@ public class EntityMdBall extends EntityAdvanced {
 			super(null);
 			textures = Resources.getEffectSeq("mdball", MAX_TETXURES);
 			glowTexture = Resources.getTexture("effects/mdball/glow");
+			this.minTolerateAlpha = 0.05f;
 		}
 		
 		@Override
@@ -288,11 +285,9 @@ public class EntityMdBall extends EntityAdvanced {
 				z = ent.posZ - clientPlayer.posZ;
 			}
 			
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glDepthMask(false);
 			GL11.glPushMatrix();
 			{
-			
+				ShaderSimple.instance().useProgram();
 				GL11.glTranslated(ent.offsetX, ent.offsetY, ent.offsetZ);
 				
 				double alpha = ent.getAlpha();
@@ -304,18 +299,16 @@ public class EntityMdBall extends EntityAdvanced {
 				this.icon = glowTexture;
 				this.setSize(0.7f * size);
 				super.doRender(par1Entity, x, y, z, par8, par9);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				//Core
 				this.color.a = alpha * (0.8 + 0.2 * ent.alphaWiggle);
 				this.icon = textures[ent.texID];
 				this.setSize(0.5f * size);
 				super.doRender(par1Entity, x, y, z, par8, par9);
-				
+				GL20.glUseProgram(0);
 			}
 			GL11.glPopMatrix();
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
 		
 	}

@@ -22,19 +22,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
-
-import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.
@@ -198,13 +198,17 @@ public class ArcFactory {
 		}
 		
 		public void draw() {
+			ShaderSimple.instance().useProgram();
 			doPreWork();
 			GL11.glCallList(listId);
 			doPostWork();
+			GL20.glUseProgram(0);
 		}
 		
 		public void draw(double length) {
+			ShaderSimple.instance().useProgram();
 			draw(length, true);
+			GL20.glUseProgram(0);
 		}
 		
 		private void draw(double length, boolean really) {
@@ -262,7 +266,6 @@ public class ArcFactory {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glDisable(GL11.GL_LIGHTING);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glLineWidth(0.4f);
 		}
