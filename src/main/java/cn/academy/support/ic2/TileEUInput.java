@@ -28,7 +28,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
 	private boolean isRegistered  = false;
 	/** The convert rate (EU * RATE = IF) */
-	private static final float RATE = 1f; 
+	private static final float RATE = IC2Support.CONV_RATE;
 
 	public TileEUInput() {
 		super("ac_eu_input", 0, 2000, 100);

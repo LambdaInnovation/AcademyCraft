@@ -12,17 +12,23 @@
  */
 package cn.academy.support.ic2;
 
-import ic2.api.item.IC2Items;
-import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
+import cn.academy.support.EnergyBlockHelper;
+import cpw.mods.fml.common.registry.GameRegistry;
+import ic2.api.item.IC2Items;
+import net.minecraft.item.ItemStack;
 
 /**
  * 
  * @author KSkun
  */
 public class IC2Support {
+	
+	/**
+	 * The convert rate from EU to IF(EU * CONV_RATE = IF).
+	 */
+	public static final float CONV_RATE = 1f;
 	
 	public static void init() {
 		BlockEUInput euInput = new BlockEUInput();
@@ -33,6 +39,9 @@ public class IC2Support {
 		
 		GameRegistry.registerTileEntity(TileEUInput.class, "eu_input");
 		GameRegistry.registerTileEntity(TileEUOutput.class, "eu_output");
+		
+		EnergyBlockHelper.register(new EUSinkManager());
+		EnergyBlockHelper.register(new EUSourceManager());
 		
 		GameRegistry.addRecipe(new ItemStack(euInput), "   ", "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,

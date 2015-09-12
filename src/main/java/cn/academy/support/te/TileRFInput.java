@@ -19,7 +19,7 @@ import cn.academy.core.block.TileGeneratorBase;
 public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
 
 	/** The convert rate (RF * RATE = IF) */
-	private static final float RATE = 1f; 
+	private static final float RATE = TESupport.CONV_RATE;
 	
 	public TileRFInput() {
 		super("ac_rf_input", 0, 2000, 100);

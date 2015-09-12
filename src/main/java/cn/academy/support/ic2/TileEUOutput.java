@@ -28,7 +28,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	private boolean isRegistered = false;
 	/** The convert rate (EU * RATE = IF) */
-	private static final float RATE = 1f; 
+	private static final float RATE = IC2Support.CONV_RATE;
 
 	public TileEUOutput() {
 		super("ac_eu_output", 0, 2000, 100);
