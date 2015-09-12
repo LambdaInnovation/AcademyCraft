@@ -139,7 +139,6 @@ public class RayBarrage extends Skill {
 					float minPitch = pitch - range, maxPitch = pitch + range;
 					
 					IEntitySelector selector = EntitySelectors.combine(
-						EntitySelectors.excludeType(EntityRayBase.class),
 						EntitySelectors.excludeOf(silbarn, player)
 					);
 					

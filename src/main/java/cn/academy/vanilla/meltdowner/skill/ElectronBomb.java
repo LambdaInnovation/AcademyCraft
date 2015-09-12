@@ -23,7 +23,7 @@ import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.util.generic.VecUtils;
 import cn.liutils.util.mc.EntitySelectors;
@@ -81,7 +81,7 @@ public class ElectronBomb extends Skill {
 						if(trace != null && trace.entityHit != null) {
 							MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
 						}
-						actionClient(player, ball);
+						actionClient(player, player, ball);
 					}
 					
 				});
@@ -95,7 +95,7 @@ public class ElectronBomb extends Skill {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void actionClient(@Target EntityPlayer player, @Instance EntityMdBall ball) {
+	static void actionClient(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player, @Instance EntityMdBall ball) {
 		Vec3 dest = getDest(player);
 		spawnRay(player.worldObj, ball.posX, ball.posY, ball.posZ,
 			dest.xCoord, dest.yCoord, dest.zCoord);

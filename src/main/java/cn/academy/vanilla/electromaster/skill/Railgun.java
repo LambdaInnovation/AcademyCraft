@@ -25,16 +25,20 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.core.util.RangedRayDamage;
-import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.util.client.renderhook.DummyRenderData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -46,6 +50,7 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class Railgun extends Skill {
 	
 	public static List<SupportedItem> supportedItems = new ArrayList();
@@ -92,16 +97,30 @@ public class Railgun extends Skill {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onThrowCoin(CoinThrowEvent event) {
-		if(!event.entityPlayer.worldObj.isRemote)
-			return;
 		CPData cpData = CPData.get(event.entityPlayer);
 		PresetData pData = PresetData.get(event.entityPlayer);
-		if(cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this)) {
-			DummyRenderData.get(event.entityPlayer).addRenderHook(new RailgunHandEffect());
+		boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this) && !Cooldown.isInCooldown(instance);
+		
+		if(spawn) {
+			if(event.entityPlayer.worldObj.isRemote) {
+				doSpawnCE(event.entityPlayer);
+			} else { // Inform other clients
+				spawnChargeEffect(event.entityPlayer, event.entityPlayer);
+			}
 		}
+	}
+	
+	@RegNetworkCall(side = Side.CLIENT)
+	private void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player) {
+		if(!Minecraft.getMinecraft().thePlayer.equals(player))
+			doSpawnCE(player);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void doSpawnCE(EntityPlayer player) {
+		DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
 	}
 	
 	static float getDamage(AbilityData aData) {

@@ -12,21 +12,15 @@
  */
 package cn.academy.test;
 
+import java.io.StringReader;
 import java.util.Random;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.liutils.ripple.ScriptProgram;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.util.ChatComponentTranslation;
 
 /**
  * DEBUG COMMAND
@@ -35,7 +29,6 @@ import cn.liutils.util.raytrace.Raytrace;
 @Registrant
 @RegCommand
 public class CommandGenChest extends ACCommand {
-	
 	Random rnd = new Random();
 
 	public CommandGenChest() {
@@ -44,28 +37,11 @@ public class CommandGenChest extends ACCommand {
 
 	@Override
 	public void processCommand(ICommandSender ics, String[] str) {
-		EntityPlayer player = this.getCommandSenderAsPlayer(ics);
-		String cat = str[0];
-		ChestGenHooks hooks = ChestGenHooks.getInfo(cat);
-		
-		MovingObjectPosition result = Raytrace.traceLiving(player, 10, EntitySelectors.nothing);
-		int x, y, z;
-		if(result != null) {
-			x = result.blockX;
-			y = result.blockY;
-			z = result.blockZ;
-		} else {
-			Motion3D mo = new Motion3D(player, true).move(5);
-			x = (int) mo.px;
-			y = (int) mo.py;
-			z = (int) mo.pz;
-		}
-		
-		for(int i = x - 10; i <= x + 10; i += 2) {
-			player.worldObj.setBlock(i, y, z, Blocks.chest);
-			TileEntityChest tile = (TileEntityChest) player.worldObj.getTileEntity(i, y, z);
-			WeightedRandomChestContent.generateChestContents(rnd, hooks.getItems(rnd), tile, 10);
-		}
+		String a = "val(x) { 5 } ns { gadd(x) { x + val(x) } }";
+		ScriptProgram program = new ScriptProgram();
+		program.loadScript(new StringReader(a));
+		ics.addChatMessage(new ChatComponentTranslation(
+			"" + program.root.getFunction("ns.gadd").callInteger(5)));
 	}
 
 }

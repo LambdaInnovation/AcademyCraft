@@ -30,12 +30,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
 /**
- * TODO: Filter blocks according to skill experience
  * @author WeAthFolD
  */
 public class MagMovement extends Skill {
@@ -102,16 +102,37 @@ public class MagMovement extends Skill {
 		Target target;
 		
 		public MovementAction(Target _target) {
-			super(5);
+			super(-1);
 			target = _target;
 		}
 
 		public MovementAction() {
-			super(5);
+			super(-1);
+		}
+		
+		@Override
+		public void writeNBTStart(NBTTagCompound tag) {
+			writeTarget(tag);
+		}
+		
+		@Override
+		public void readNBTStart(NBTTagCompound tag) {
+			readTarget(tag);
+		}
+		
+		private void writeTarget(NBTTagCompound tag) {
+			tag.setDouble("x", target.x);
+			tag.setDouble("y", target.y);
+			tag.setDouble("z", target.z);
+		}	
+		
+		private void readTarget(NBTTagCompound tag) {
+			target = new DummyTarget(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
 		}
 		
 		@Override
 		public void onStart() {
+			System.out.println("OnStart " + isRemote);
 			if(isRemote) {
 				startEffect();
 			} else {
@@ -152,28 +173,28 @@ public class MagMovement extends Skill {
 			
 			if(isRemote) {
 				updateEffect();
+			} else {
+				if((target != null && !target.alive()) || 
+					!cpData.perform(instance.getOverload(aData), instance.getConsumption(aData)))
+					ActionManager.abortAction(this);
 			}
-			
-			if((target != null && !target.alive()) || !cpData.perform(
-					instance.getOverload(aData), instance.getConsumption(aData)))
-				ActionManager.abortAction(this);
-		}
-		
-		@Override
-		public void onAbort() {
-			if(isRemote) endEffect();
+					
 		}
 		
 		@Override
 		public void onEnd() {
-			if(isRemote) {
-				endEffect();
-			} else {
+			if(!isRemote) {
 				double traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ);
 				AbilityData aData = AbilityData.get(player);
 				aData.addSkillExp(instance, getExpIncr(traveledDistance));
 				instance.triggerAchievement(player);
 			}
+		}
+		
+		@Override
+		public void onFinalize() {
+			if(isRemote)
+				endEffect();
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -262,6 +283,24 @@ public class MagMovement extends Skill {
 		@Override
 		boolean alive() {
 			return !target.isDead;
+		}
+		
+	}
+	
+	private static class DummyTarget extends Target {
+
+		public DummyTarget(double _x, double _y, double _z) {
+			x = _x;
+			y = _y;
+			z = _z;
+		}
+		
+		@Override
+		void tick() {}
+
+		@Override
+		boolean alive() {
+			return true;
 		}
 		
 	}

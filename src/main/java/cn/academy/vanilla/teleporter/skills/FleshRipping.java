@@ -139,8 +139,7 @@ public class FleshRipping extends Skill {
 		// CLIENT
 		@SideOnly(Side.CLIENT)
 		EntityMarker marker;
-		
-		@SideOnly(Side.CLIENT)
+
 		static final Color
 			DISABLED_COLOR = new Color().setColor4i(74, 74, 74, 160),
 			THREATENING_COLOR = new Color().setColor4i(185, 25, 25, 180);
