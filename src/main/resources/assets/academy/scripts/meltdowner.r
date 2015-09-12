@@ -39,13 +39,14 @@ ac {
         
         meltdowner {
             x { 488 } y { 166 }
+            rate(time) { lerp(0.8, 1.2, (time - 20.0) / 20.0) }
             range(exp) { lerp(2, 3, exp) }
-            energy(exp) { lerp(600, 1300, exp) }
-            damage(exp) { lerp(18, 45, exp) }
+            energy(exp, time) { rate(time) * lerp(600, 1300, exp) }
+            damage(exp, time) { rate(time) * lerp(18, 45, exp) }
             overload(exp) { lerp(200, 170, exp) }
-            consumption(exp) { 40 * lerp(10, 13, exp) }
-            cooldown(exp) { 20 * lerp(15, 6, exp) }
-            expincr { 0.002 }
+            consumption(exp) { lerp(10, 13, exp) }
+            cooldown(exp, time) { rate(time) * 20 * lerp(15, 6, exp) }
+            expincr(time) { rate(time) * 0.002 }
         }
         
         mine_ray_basic {

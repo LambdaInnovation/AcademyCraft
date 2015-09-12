@@ -15,20 +15,15 @@ package cn.academy.ability.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import cn.academy.ability.api.Category;
 import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
@@ -48,6 +43,12 @@ import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
 import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -105,6 +106,8 @@ public class CPBar extends Widget {
 	float bufferedCP;
 	float bufferedOverload;
 
+	ResourceLocation overlayTexture;
+	
 	private CPBar() {
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.2f;
@@ -137,6 +140,9 @@ public class CPBar extends Widget {
 				
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				CPData cpData = CPData.get(player);
+				AbilityData aData = AbilityData.get(player);
+				Category c = aData.getCategory();
+				overlayTexture = c == null ? null : c.getOverlayIcon();
 				
 				boolean active = cpData.isActivated();
 				
@@ -345,6 +351,13 @@ public class CPBar extends Widget {
 		t.draw();
 		
 		GL11.glCullFace(GL11.GL_BACK);
+		
+		// Overlay
+		if(overlayTexture != null) {
+			RenderUtils.loadTexture(overlayTexture);
+			color4d(1, 1, 1, 1);
+			HudUtils.rect(857, 43, 65, 65);
+		}
 	}
 	
 	

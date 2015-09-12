@@ -44,7 +44,9 @@ public class RendererCoinThrowing extends Render {
 		EntityPlayer player = etc.player;
 		boolean fp = player == Minecraft.getMinecraft().thePlayer 
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
-		double dt = GameTimer.getTime();
+		
+		double dt = GameTimer.getTime() % 150;
+		
 		if(etc.player == null)
 			return;
 		//If synced and in client computer, do not render
@@ -53,9 +55,9 @@ public class RendererCoinThrowing extends Render {
 		if(etc.posY < player.posY)
 			return;
 		GL11.glPushMatrix(); {
-			x = player.posX - RenderManager.renderPosX;
-			y = etc.posY - RenderManager.renderPosY;
-			z = player.posZ - RenderManager.renderPosZ;
+			//x = player.posX - RenderManager.renderPosX;
+			//y = etc.posY - RenderManager.renderPosY;
+			//z = player.posZ - RenderManager.renderPosZ;
 			if(player == Minecraft.getMinecraft().thePlayer) {
 				x = z = 0;
 			}
@@ -68,7 +70,7 @@ public class RendererCoinThrowing extends Render {
 			float scale = 0.3F;
 			GL11.glScalef(scale, scale, scale);
 			GL11.glTranslated(0.5, 0.5, 0);
-			GL11.glRotated((dt % 360.0) * 1.6, etc.axis.xCoord, etc.axis.yCoord, etc.axis.zCoord);
+			GL11.glRotated((dt * 360.0 / 300.0), etc.axis.xCoord, etc.axis.yCoord, etc.axis.zCoord);
 			GL11.glTranslated(-0.5, -0.5, 0);
 			RenderUtils.drawEquippedItem(0.0625, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
 		} GL11.glPopMatrix();

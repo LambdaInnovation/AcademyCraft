@@ -16,14 +16,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
+import cn.academy.energy.api.event.wen.UnlinkNodeEvent;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.WirelessNet;
 import cn.annoreg.core.Registrant;
@@ -33,6 +28,12 @@ import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -76,8 +77,17 @@ public class GuiNodeSync {
 		queryList(Minecraft.getMinecraft().thePlayer, target);
 	}
 	
+	public static void doDisconnect(TileNode target) {
+		disconnect(target);
+	}
+	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void queryInfo(@Instance EntityPlayer player, @Instance TileNode target) {
+	private static void disconnect(@Instance TileNode target) {
+		MinecraftForge.EVENT_BUS.post(new UnlinkNodeEvent(target));
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	private static void queryInfo(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
 		WirelessNet net = WirelessHelper.getWirelessNet(target);
@@ -85,7 +95,7 @@ public class GuiNodeSync {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	public static void receiveInfo(
+	private static void receiveInfo(
 			@Target EntityPlayer player, 
 			@Instance TileNode target, 
 			@Data Integer load, 
@@ -99,7 +109,7 @@ public class GuiNodeSync {
 	
 	//List
 	@RegNetworkCall(side = Side.SERVER)
-	public static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
+	private static void queryList(@Instance EntityPlayer player, @Instance TileNode target) {
 		if(target == null)
 			return;
 		Collection<WirelessNet> nets = WirelessHelper.getNetInRange(
@@ -114,7 +124,7 @@ public class GuiNodeSync {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	public static void receiveList(@Target EntityPlayer player, @Instance TileNode target, @Data List<String> ssids) {
+	private static void receiveList(@Target EntityPlayer player, @Instance TileNode target, @Data List<String> ssids) {
 		GuiNode gui = locate(target);
 		if(gui != null) {
 			gui.receivedListSync(ssids);
@@ -128,7 +138,7 @@ public class GuiNodeSync {
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void rename(@Instance TileNode tile, @Data String newName) {
+	private static void rename(@Instance TileNode tile, @Data String newName) {
 		if(tile != null)
 			tile.setNodeName(newName);
 	}
@@ -140,7 +150,7 @@ public class GuiNodeSync {
 	}
 	
 	@RegNetworkCall(side = Side.SERVER)
-	public static void login(
+	private static void login(
 			@Instance EntityPlayer player, 
 			@Instance TileNode target, 
 			@Data String ssid, 
@@ -159,7 +169,7 @@ public class GuiNodeSync {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	public static void receiveResult(
+	private static void receiveResult(
 			@Target EntityPlayer player, 
 			@Instance TileNode target, 
 			@Instance CheckState state) {

@@ -15,9 +15,6 @@ package cn.academy.energy.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.node.GuiNode;
@@ -30,10 +27,15 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.util.helper.Font.Align;
 import cn.liutils.util.helper.GameTimer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -67,9 +69,7 @@ public class GuiLinkToNode extends LIGuiScreen {
 		
 		LinkToNodeSyncs.retrieveCurrentLink(tile, Future.<String>create(
 				(String o) -> {
-					if("".equals(o))
-						o = GuiNode.local("not_connected");
-					TextBox.get(main.getWidget("text_currentnet2")).content = o;
+					updateSSID(o);
 				}
 			));
 	}
@@ -107,6 +107,12 @@ public class GuiLinkToNode extends LIGuiScreen {
     	if(msg == null)
     		super.mouseClicked(mx, my, btn);
     }
+    
+    private void updateSSID(String o) {
+    	if("".equals(o))
+			o = GuiNode.local("not_connected");
+		TextBox.get(main.getWidget("text_currentnet2")).content = o;
+    }
 	
 	private void initWidgets() {
 		main = GuiNode.loaded.getWidget("window_ssidselect").copy();
@@ -131,6 +137,16 @@ public class GuiLinkToNode extends LIGuiScreen {
 			@Override
 			public void handleEvent(Widget w, MouseDownEvent event) {
 				Minecraft.getMinecraft().displayGuiScreen(null);
+			}
+			
+		});
+		
+		main.getWidget("btn_disconnect").regEventHandler(new MouseDownHandler() {
+
+			@Override
+			public void handleEvent(Widget w, MouseDownEvent event) {
+				updateSSID("");
+				LinkToNodeSyncs.disconnect(tile);
 			}
 			
 		});

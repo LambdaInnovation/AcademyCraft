@@ -36,7 +36,7 @@ public class Category {
 	
 	int catID = -1;
 	
-	protected ResourceLocation icon;
+	protected ResourceLocation icon, overlay;
 	
 	/**
 	 * The color style of this category. Used in many various places for rendering.
@@ -46,6 +46,7 @@ public class Category {
 	public Category(String _name) {
 		name = _name;
 		icon = Resources.getTexture("abilities/" + name + "/icon");
+		overlay = Resources.getTexture("abilities/" + name + "/icon_overlay");
 	}
 	
 	public Color getColorStyle() {
@@ -130,6 +131,10 @@ public class Category {
 	
 	public ResourceLocation getIcon() {
 		return icon;
+	}
+	
+	public ResourceLocation getOverlayIcon() {
+		return overlay;
 	}
 	
 	public String getName() {

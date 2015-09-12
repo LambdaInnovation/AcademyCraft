@@ -59,7 +59,7 @@ public class RenderMatrix extends RenderBlockMulti {
 	private void drawShields(TileMatrix mat) {
 		int shieldCount = mat.getPlateCount();
 		long time = GameTimer.getTime();
-		double dtheta = 360.0 / shieldCount, phase = (time / 20.0) % (2 * Math.PI);
+		double dtheta = 360.0 / shieldCount, phase = (time / 20.0) % 360;
 		double htPhaseOff = 40.0;
 		for(int i = 0; i < shieldCount; ++i) {
 			GL11.glPushMatrix();

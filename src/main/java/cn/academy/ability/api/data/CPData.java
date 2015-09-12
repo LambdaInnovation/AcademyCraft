@@ -27,6 +27,7 @@ import cn.annoreg.mc.s11n.StorageOption;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.ripple.Path;
 import cn.liutils.ripple.ScriptFunction;
+import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -282,7 +283,8 @@ public class CPData extends DataPart {
 	private void addMaxOverload(float overload) {
 		AbilityData aData = AbilityData.get(getPlayer());
 		float max = getFunc("add_overload").callFloat(aData.getLevel());
-		addMaxOverload += getFunc("maxo_rate").callFloat(overload);
+		float add = MathUtils.wrapf(0, 10, getFunc("maxo_rate").callFloat(overload));
+		addMaxOverload += add;
 		if(addMaxOverload > max)
 			addMaxOverload = max;
 	}

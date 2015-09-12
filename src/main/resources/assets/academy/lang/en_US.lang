@@ -211,6 +211,7 @@ ac.gui.node.ssid.desc=SSID:
 ac.gui.node.password.desc=Password: 
 ac.gui.node.current_ssid.desc=Current Linked: 
 ac.gui.node.not_connected.desc=<Not Connected>
+ac.gui.node.rename.desc=Rename
 
 ac.gui.node.mark.loading.desc=LOADING
 ac.gui.node.mark.idle.desc=IDLE
@@ -238,6 +239,9 @@ ac.gui.imagfusor.flux.desc=Imag Flux
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing
 ac.gui.metal_former.mode.incise=Incising
+
+ac.network.link=Link
+ac.network.search=Search networks
 
 # Cat Engine
 ac.cat_engine.unlink=Unlinked from the node meow~

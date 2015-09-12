@@ -31,11 +31,13 @@ import cn.annoreg.mc.RegEntity;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
+import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.entityx.event.CollideEvent.CollideHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
 import cn.liutils.render.particle.Particle;
 import cn.liutils.render.particle.ParticleFactory;
+import cn.liutils.render.particle.decorators.ParticleDecorator;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.helper.GameTimer;
@@ -65,8 +67,37 @@ public class EntitySilbarn extends EntityAdvanced {
 		p.texture = Resources.getTexture("entities/silbarn_frag");
 		p.size = 0.1f;
 		p.gravity = 0.03f;
+		p.customRotation = true;
 		
 		particles = new ParticleFactory(p);
+		particles.addDecorator(new ParticleDecorator() {
+			
+			double vx, vy;
+			final double fac = 25;
+			{
+				double phi = RandUtils.nextDouble() * Math.PI * 2;
+				vx = Math.sin(phi);
+				vy = Math.cos(phi);
+			}
+
+			@Override
+			public void decorate(Particle particle) {
+				particle.addMotionHandler(new MotionHandler() {
+					public String getID() { return "Rotator"; }
+					public void onStart() {
+						particle.rotationYaw = RandUtils.nextFloat() * 360;
+						particle.rotationPitch = RandUtils.rangef(-90, 90);
+					}
+
+					@Override
+					public void onUpdate() {
+						particle.rotationYaw += vx * fac;
+						particle.rotationPitch += vy * fac;
+					}
+				});
+			}
+			
+		});
 	}
 	
 	boolean hit;
@@ -130,15 +161,17 @@ public class EntitySilbarn extends EntityAdvanced {
 		this.regEventHandler(new CollideHandler() {
 			@Override
 			public void onEvent(CollideEvent event) {
+				if(!hit) {
+					MovingObjectPosition res = event.result;
+					ForgeDirection dir = ForgeDirection.getOrientation(res.sideHit);
+					final double mul = 0.1;
+					double tx = res.hitVec.xCoord + dir.offsetX * mul, 
+						ty = res.hitVec.yCoord + dir.offsetY * mul, 
+						tz = res.hitVec.zCoord + dir.offsetZ * mul;
+					spawnEffects(tx, ty, tz);
+					setDead();
+				}
 				hit = true;
-				MovingObjectPosition res = event.result;
-				ForgeDirection dir = ForgeDirection.getOrientation(res.sideHit);
-				final double mul = 0.1;
-				double tx = res.hitVec.xCoord + dir.offsetX * mul, 
-					ty = res.hitVec.yCoord + dir.offsetY * mul, 
-					tz = res.hitVec.zCoord + dir.offsetZ * mul;
-				spawnEffects(tx, ty, tz);
-				setDead();
 			}
 		});
 		

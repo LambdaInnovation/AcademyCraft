@@ -38,7 +38,7 @@ import net.minecraft.util.Vec3;
  */
 public class Meltdowner extends Skill {
 	
-	static final int TICKS_MIN = 20, TICKS_TOLE = 100;
+	static final int TICKS_MIN = 20, TICKS_MAX = 40, TICKS_TOLE = 100;
 
 	static Meltdowner instance;
 	
@@ -71,9 +71,8 @@ public class Meltdowner extends Skill {
 			ticks++;
 			if(isRemote)
 				updateEffect();
-			if(!isRemote)
-				if(!cpData.canPerform(instance.getConsumption(aData)))
-					ActionManager.abortAction(this);
+			if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
+				ActionManager.abortAction(this);
 			
 			if(ticks > TICKS_TOLE)
 				ActionManager.abortAction(this);
@@ -94,26 +93,31 @@ public class Meltdowner extends Skill {
 			if(ticks < TICKS_MIN) {
 				// N/A
 			} else {
-				cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
+				cpData.perform(instance.getOverload(aData), 0);
+				int ct = toChargeTicks();
 				
 				if(isRemote) {
 					spawnRay();
 				} else {
 					RangedRayDamage rrd = new RangedRayDamage(player, 
-						instance.callFloatWithExp("range", aData),
-						instance.callFloatWithExp("energy", aData));
-					rrd.startDamage = instance.callFloatWithExp("damage", aData);
+						instance.getFunc("range").callFloat(aData.getSkillExp(instance)),
+						instance.getFunc("energy").callFloat(aData.getSkillExp(instance), ct));
+					rrd.startDamage = instance.getFunc("damage").callFloat(aData.getSkillExp(instance), ct);
 					rrd.perform();
 				}
 				
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
-				aData.addSkillExp(instance, instance.getFloat("expincr"));
+				Cooldown.setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
+				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
 			}
 		}
 		
 		public void onFinalize() {
 			if(isRemote)
 				endEffect();
+		}
+		
+		private int toChargeTicks() {
+			return Math.min(ticks, TICKS_MAX);
 		}
 		
 		// CLIENT

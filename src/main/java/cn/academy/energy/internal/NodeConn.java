@@ -21,6 +21,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.academy.energy.internal.VBlocks.VBlock;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
@@ -103,7 +104,7 @@ public class NodeConn {
 	}
 	
 	boolean addReceiver(VNReceiver receiver) {
-		if(getLoad() >= getCapacity())
+		if(getLoad() >= getCapacity() || !checkRange(receiver))
 			return false;
 		
 		World world = getWorld();
@@ -126,7 +127,7 @@ public class NodeConn {
 	}
 	
 	boolean addGenerator(VNGenerator gen) {
-		if(getLoad() >= getCapacity())
+		if(getLoad() >= getCapacity() || !checkRange(gen))
 			return false;
 		
 		World world = getWorld();
@@ -156,6 +157,12 @@ public class NodeConn {
 			data.nodeLookup.remove(gen);
 		for(VNReceiver rec : receivers)
 			data.nodeLookup.remove(rec);
+	}
+	
+	private boolean checkRange(VBlock<?> block) {
+		IWirelessNode inode = node.get(getWorld());
+		double range = inode == null ? 0 : inode.getRange();
+		return block.distSq(node) <= range * range;
 	}
 	
 	private void checkIsActive() {

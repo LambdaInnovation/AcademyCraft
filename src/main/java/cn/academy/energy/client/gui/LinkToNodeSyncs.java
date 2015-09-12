@@ -18,8 +18,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
+import cn.academy.energy.api.block.IWirelessTile;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.api.event.node.LinkUserEvent;
+import cn.academy.energy.api.event.node.UnlinkUserEvent;
+import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.NodeConn;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;
@@ -64,6 +67,13 @@ public class LinkToNodeSyncs {
 				new LinkUserEvent((IWirelessUser) te, (IWirelessNode) node)));
 		} else {
 			future.setAndSync(false);
+		}
+	}
+	
+	@RegNetworkCall(side = Side.SERVER)
+	public static void disconnect(@Instance TileEntity te) {
+		if(te instanceof IWirelessUser) {
+			MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent((IWirelessTile) te));
 		}
 	}
 	

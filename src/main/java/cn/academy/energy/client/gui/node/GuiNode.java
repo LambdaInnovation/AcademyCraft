@@ -110,6 +110,15 @@ public class GuiNode extends LIGuiContainer {
 			case "progress_imag":
 				text = String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy());
 				break;
+			case "btn_edit":
+				text = local("rename");
+				break;
+			case "button_confirm":
+				text = StatCollector.translateToLocal("ac.network.link");
+				break;
+			case "button_config":
+				text = StatCollector.translateToLocal("ac.network.search");
+				break;
 			}
 			
 			if(text != null) {
@@ -266,9 +275,9 @@ public class GuiNode extends LIGuiContainer {
     		}
     	}
     	
-    	@GuiCallback("input_name")
-    	public void rename(Widget w, ConfirmInputEvent event) {
-    		GuiNodeSync.doRename(GuiNode.this, TextBox.get(w).content);
+    	@GuiCallback("btn_edit")
+    	public void rename(Widget w, MouseDownEvent event) {
+    		GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
     	}
     	
     	private Widget getWidget(String name) {
@@ -301,7 +310,7 @@ public class GuiNode extends LIGuiContainer {
     	 * Called each time the select page is opened.
     	 */
     	public void init() {
-    		TextBox.get(getWidget("text_currentnet2")).content = ssid.equals("") ? local("not_connected") : ssid;
+    		updateCurrentNet();
     		
     		Widget slide = getWidget("button_slide");
     		VerticalDragBar.get(slide).setProgress(slide, 0);
@@ -334,11 +343,22 @@ public class GuiNode extends LIGuiContainer {
     		closeSelect();
     	}
     	
+    	@GuiCallback("btn_disconnect")
+    	public void disconnect(Widget w, MouseDownEvent event) {
+    		ssid = "";
+    		GuiNodeSync.doDisconnect(tile);
+    		updateCurrentNet();
+    	}
+    	
     	/**
     	 * Called each time the page is closed.
     	 */
     	public void cleanup() {
     		getWidget("list").removeComponent("ElementList");
+    	}
+    	
+    	private void updateCurrentNet() {
+    		TextBox.get(getWidget("text_currentnet2")).content = ssid.equals("") ? local("not_connected") : ssid;
     	}
     	
     	private Widget getWidget(String name) {

@@ -2,10 +2,6 @@ package cn.academy.energy.client.gui;
 
 import javax.vecmath.Vector2d;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
@@ -14,12 +10,19 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.annoreg.mc.network.Future;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.DrawTexture;
+import cn.liutils.cgui.gui.component.Tint;
+import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 
 
@@ -70,6 +73,14 @@ public class EnergyUIHelper {
 	public static void initNodeLinkButton(IWirelessUser target, Widget theButton) {
 		DrawTexture.get(theButton).texture = BTN_WIFI_N;
 		
+		if(theButton.getComponent("Tint") == null) {
+			Tint tint = new Tint();
+			tint.affectTexture = true;
+			tint.idleColor.setColor4i(255, 255, 255, 180);
+			tint.hoverColor.setColor4i(255, 255, 255, 255);
+			theButton.addComponent(tint);
+		}
+		
 		EnergyUISyncs.syncIsLinked((TileEntity) target, 
 			Future.<Boolean>create((Boolean o) -> {
 				if(o) {
@@ -82,6 +93,16 @@ public class EnergyUIHelper {
 			@Override
 			public void handleEvent(Widget w, MouseDownEvent event) {
 				Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target));
+			}
+			
+		});
+		
+		theButton.regEventHandler(new FrameEventHandler() {
+
+			@Override
+			public void handleEvent(Widget w, FrameEvent event) {
+				if(event.hovering)
+					drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 18);
 			}
 			
 		});

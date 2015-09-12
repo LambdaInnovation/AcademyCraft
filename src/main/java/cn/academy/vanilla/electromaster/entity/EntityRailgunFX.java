@@ -52,9 +52,6 @@ public class EntityRailgunFX extends EntityRayBase {
 	
 	static final int ARC_SIZE = 15;
 	
-	@RegACKeyHandler(defaultKey = Keyboard.KEY_L, name = "Meltdowner")
-	public static KH keyHandler;
-	
 	@RegEntity.Render
 	public static RailgunRender renderer;
 	
@@ -121,16 +118,6 @@ public class EntityRailgunFX extends EntityRayBase {
 			arcHandler.clear();
 		
 		arcHandler.tick();
-	}
-	
-	public static class KH extends KeyHandler {
-		
-		@Override
-		public void onKeyDown() {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player));
-		}
-		
 	}
 	
 	public static class RailgunRender extends RendererRayComposite {

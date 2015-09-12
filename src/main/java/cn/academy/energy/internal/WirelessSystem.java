@@ -125,11 +125,11 @@ public class WirelessSystem {
 		if(event.type == UserType.GENERATOR) {
 			IWirelessGenerator gen = event.getAsGenerator();
 			NodeConn conn = data.getNodeConnection(gen);
-			conn.removeGenerator(new VNGenerator(gen));
+			if(conn != null) conn.removeGenerator(new VNGenerator(gen));
 		} else { //RECEIVER
 			IWirelessReceiver rec = event.getAsReceiver();
 			NodeConn conn = data.getNodeConnection(rec);
-			conn.removeReceiver(new VNReceiver(rec));
+			if(conn != null) conn.removeReceiver(new VNReceiver(rec));
 		}
 	}
 	

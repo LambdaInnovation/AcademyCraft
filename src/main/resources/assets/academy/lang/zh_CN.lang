@@ -211,6 +211,7 @@ ac.gui.node.ssid.desc=SSID:
 ac.gui.node.password.desc=密码: 
 ac.gui.node.current_ssid.desc=当前连接: 
 ac.gui.node.not_connected.desc=<未连接>
+ac.gui.node.rename.desc=重命名
 
 ac.gui.node.mark.loading.desc=加载中
 ac.gui.node.mark.idle.desc=待机
@@ -238,6 +239,9 @@ ac.gui.imagfusor.flux.desc=虚能
 ac.gui.metal_former.mode.etch=蚀刻
 ac.gui.metal_former.mode.plate=冲压
 ac.gui.metal_former.mode.incise=切割
+
+ac.network.link=发起连接
+ac.network.search=搜寻网络
 
 # 吐司猫
 ac.cat_engine.unlink=已经和节点断开了连接喵~
