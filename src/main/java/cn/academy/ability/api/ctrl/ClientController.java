@@ -187,9 +187,17 @@ public class ClientController {
     
     static class AbilityKey extends KeyHandler {
     	
+    	static final int COOLDOWN = 3;
+    	
     	final int internalID;
     	
     	SkillInstance instance;
+    	
+    	// Out of the nature of SyncAction, it's possible that cooldown is arrived BEFORE another key is pressed.
+    	// This could affect balance because player has chance in a short interval(like 2ticks) to use the skill again.
+    	// So we make a built-in key cooldown to not let this happen.
+    	// It's not perfect in VERY LAGGY networks, but works mostly :)
+    	int keyCooldown = 0; 
     	
     	public AbilityKey(int id) {
     		internalID = id;
@@ -203,16 +211,19 @@ public class ClientController {
     		}
     		
     		CPData cpData = CPData.get(getPlayer());
-    		if(cpData.isActivated() && cpData.canUseAbility()) {
+    		if(keyCooldown == 0 && cpData.isActivated() && cpData.canUseAbility()) {
 	    		instance = locate();
 	    		if(instance != null) {
 	    			instance.ctrlStarted();
 	    		}
+	    		keyCooldown = COOLDOWN;
     		}
     	}
     	
     	@Override
     	public void onKeyTick() {
+    		if(keyCooldown > 0) --keyCooldown;
+    		
     		if(instance != null) {
     			if(instance.state == State.ENDED) {
     				instance.ctrlEnded();
@@ -223,6 +234,7 @@ public class ClientController {
     			} else {
     				instance.ctrlTick();
     			}
+    			keyCooldown = COOLDOWN;
     		}
     	}
     	
@@ -231,6 +243,7 @@ public class ClientController {
     		if(instance != null) {
     			instance.ctrlEnded();
     			instance = null;
+    			keyCooldown = COOLDOWN;
     		}
     	}
     	
@@ -239,6 +252,7 @@ public class ClientController {
     		if(instance != null) {
     			instance.ctrlAborted();
     			instance = null;
+    			keyCooldown = COOLDOWN;
     		}
     	}
     	

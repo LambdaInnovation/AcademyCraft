@@ -12,14 +12,16 @@
  */
 package cn.academy.core.block;
 
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * BaseClass that should be used on all energy receivers.
@@ -47,7 +49,7 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 		if(!getWorldObj().isRemote) {
 			if(++updateTicker == UPDATE_WAIT) {
 				updateTicker = 0;
-				syncEnergy(energy);
+				syncEnergy(this, energy);
 			}
 		}
 	}
@@ -92,7 +94,7 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
     }
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncEnergy(@Data Double e) {
+	private void syncEnergy(@RangedTarget(range = 15) TileEntity te, @Data Double e) {
 		energy = e;
 	}
 

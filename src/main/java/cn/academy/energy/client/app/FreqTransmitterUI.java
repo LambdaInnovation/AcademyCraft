@@ -29,6 +29,7 @@ import cn.liutils.api.gui.AuxGui;
 import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
 import cn.liutils.core.event.eventhandler.LIHandler;
 import cn.liutils.template.block.BlockMulti;
+import cn.liutils.template.block.IMultiTile;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Color;
@@ -304,10 +305,14 @@ public class FreqTransmitterUI extends AuxGui {
 				
 				started = true;
 				IWirelessMatrix mat = (IWirelessMatrix) te;
-				// BAD CODING STYLE: Hard coded BlockMulti processing
+				// Hard coded BlockMulti processing
 				Block block = world.getBlock(hx, hy, hz);
 				if(block instanceof BlockMulti) {
 					mat = (IWirelessMatrix) ((BlockMulti)block).getOriginTile(te);
+					if(mat == null) {
+						setState(new StateNotifyAndQuit("e0"));
+						return;
+					}
 				}
 				
 				final IWirelessMatrix mat2 = mat;
@@ -453,6 +458,10 @@ public class FreqTransmitterUI extends AuxGui {
 			}
 			
 			TileEntity tile = world.getTileEntity(r.blockX, r.blockY, r.blockZ);
+			Block block = tile.getBlockType();
+			if(block instanceof BlockMulti) {
+				tile = ((BlockMulti) block).getOriginTile(tile);
+			}
 			
 			if(tile instanceof IWirelessUser) {
 				State state = new StateNotify("e5");

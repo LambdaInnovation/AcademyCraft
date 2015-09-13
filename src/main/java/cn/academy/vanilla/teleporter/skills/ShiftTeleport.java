@@ -95,6 +95,7 @@ public class ShiftTeleport extends Skill {
 			cpData = CPData.get(player);
 			
 			ItemStack stack = player.getCurrentEquippedItem();
+			Block block;
 			if(!(stack != null && 
 					  stack.getItem() instanceof ItemBlock && 
 					  (Block.getBlockFromItem(stack.getItem())) != null))
@@ -112,25 +113,29 @@ public class ShiftTeleport extends Skill {
 		
 		@Override
 		public void onEnd() {
+			if(isRemote) return;
+			
 			Block block;
 			ItemStack stack = player.getCurrentEquippedItem();
 			attacked = stack != null && 
 					  stack.getItem() instanceof ItemBlock && 
-					  (block = Block.getBlockFromItem(stack.getItem())) != null &&
-					  cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+					  (block = Block.getBlockFromItem(stack.getItem())) != null;
+			if(!attacked) return;
 			
-			if(attacked && !isRemote) {
-				MovingObjectPosition position = getTracePosition();
+			ItemBlock item = (ItemBlock) stack.getItem();
+			MovingObjectPosition position = getTracePosition();
+			
+			if(item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
+					&& cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
 				
-				ItemBlock item = (ItemBlock) stack.getItem();
 				item.placeBlockAt(stack, player, player.worldObj,
 						position.blockX, position.blockY, position.blockZ, position.sideHit, 
 						(float) position.hitVec.xCoord, (float) position.hitVec.yCoord, (float) position.hitVec.zCoord, 
 						stack.getItemDamage());
+				
 				if(!player.capabilities.isCreativeMode) {
-					if(--stack.stackSize == 0) {
+					if(--stack.stackSize == 0)
 						player.setCurrentItemOrArmor(0, null);
-					}
 				}
 			
 				List<Entity> list = getTargetsInLine();

@@ -146,6 +146,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 			TileDeveloper te = getOrigin();
 			return te == null ? false : te.use(player);
 		}
+		
 		if(user == null || !user.isEntityAlive()) {
 			user = player;
 			developer.reset();

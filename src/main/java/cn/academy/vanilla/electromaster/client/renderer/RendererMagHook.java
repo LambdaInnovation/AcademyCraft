@@ -20,6 +20,7 @@ import cn.liutils.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
@@ -40,6 +41,9 @@ public class RendererMagHook extends Render {
 		if (hook.isHit) {
 			realModel = model_open;
 			hook.preRender();
+			x = hook.posX - RenderManager.renderPosX;
+			y = hook.posY - RenderManager.renderPosY;
+			z = hook.posZ - renderManager.renderPosZ;
 		}
 		
 		GL11.glPushMatrix();

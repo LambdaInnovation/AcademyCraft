@@ -82,7 +82,7 @@ public class EntityRailgunFX extends EntityRayBase {
 		this.widthWiggleRadius = 0.3;
 		this.maxWiggleSpeed = 0.8;
 		this.blendOutTime = 1000;
-		this.length = 30.0;
+		this.length = 45.0;
 		
 		ignoreFrustumCheck = true;
 		

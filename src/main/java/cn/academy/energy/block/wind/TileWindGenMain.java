@@ -71,9 +71,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 	@RegTileEntity.Render
 	public static RenderWindGenMain renderer;
 	
-	@SideOnly(Side.CLIENT)
 	public long lastFrame = -1;
-	@SideOnly(Side.CLIENT)
 	public float lastRotation;
 	
 	public boolean complete;
