@@ -82,7 +82,7 @@ public class Cooldown {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onClientTick(ClientTickEvent event) {
-    	if(event.phase == Phase.END && ClientUtils.isPlayerInGame()) {
+    	if(event.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
 			updateCooldown();
 		}
     }
