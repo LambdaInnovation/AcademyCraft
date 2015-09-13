@@ -32,6 +32,7 @@ public class BlockEUOutput extends BlockContainer {
 		setHarvestLevel("pickaxe", 0);
 		setHardness(2.5f);
 		setBlockName("ac_eu_output");
+		setBlockTextureName("academy:eu_output");
 	}
 	
 	@Override

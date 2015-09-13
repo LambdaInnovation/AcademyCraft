@@ -132,7 +132,6 @@ public class MagMovement extends Skill {
 		
 		@Override
 		public void onStart() {
-			System.out.println("OnStart " + isRemote);
 			if(isRemote) {
 				startEffect();
 			} else {
