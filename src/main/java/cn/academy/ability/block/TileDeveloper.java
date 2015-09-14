@@ -56,29 +56,26 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	@RegTileEntity.HasRender
 	public static class Normal extends TileDeveloper {
 		
+		public Normal() {
+			super(DeveloperType.NORMAL);
+		}
+		
 		@SideOnly(Side.CLIENT)
 		@RegTileEntity.Render
 		public static RenderDeveloperNormal renderer;
-
-		@Override
-		public DeveloperType getType() {
-			return DeveloperType.NORMAL;
-		}
-		
 	}
 	
 	@RegTileEntity
 	@RegTileEntity.HasRender
 	public static class Advanced extends TileDeveloper {
 		
+		public Advanced() {
+			super(DeveloperType.ADVANCED);
+		}
+		
 		@SideOnly(Side.CLIENT)
 		@RegTileEntity.Render
 		public static RenderDeveloperAdvanced renderer;
-
-		@Override
-		public DeveloperType getType() {
-			return DeveloperType.ADVANCED;
-		}
 		
 	}
 	
@@ -98,6 +95,8 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	
 	private static ScriptNamespace script;
 	
+	public final DeveloperType type;
+	
 	public static void init() {
 		script = AcademyCraft.getScript().at("ac.developer");
 	}
@@ -106,8 +105,9 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	
 	EntityPlayer user;
 	
-	public TileDeveloper() {
-		super("ability_developer", 2, 100000, 300);
+	public TileDeveloper(DeveloperType _type) {
+		super("ability_developer", 2, _type.getEnergy(), _type.getBandwidth());
+		type = _type;
 	}
 
 	@Override
@@ -190,7 +190,9 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 		return getType().toString().toLowerCase() + "." + val;
 	}
 	
-	public abstract DeveloperType getType();
+	public final DeveloperType getType() {
+		return type;
+	}
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void unuseAtServer(@Instance EntityPlayer player) {

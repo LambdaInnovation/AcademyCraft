@@ -183,18 +183,18 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	}
 	
 	private void syncInventory() {
-		syncInventory(this, this.getStackInSlot(0), this.getStackInSlot(1), 
-				this.getStackInSlot(2), this.getStackInSlot(3));
+		syncInventory(this, inventory[0], inventory[1], 
+				inventory[2], inventory[3]);
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncInventory(
 			@RangedTarget(range = 15) TileMatrix matrix,
 			@Data ItemStack s0, @Data ItemStack s1, @Data ItemStack s2, @Data ItemStack s3) {
-		this.setInventorySlotContents(0, s0);
-		this.setInventorySlotContents(1, s1);
-		this.setInventorySlotContents(2, s2);
-		this.setInventorySlotContents(3, s3);
+		inventory[0] = s0;
+		inventory[1] = s1;
+		inventory[2] = s2;
+		inventory[3] = s3;
 	}
 	
 	private static ScriptFunction getFunc(String name) {

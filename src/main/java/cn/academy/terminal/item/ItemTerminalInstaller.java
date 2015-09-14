@@ -12,10 +12,6 @@
  */
 package cn.academy.terminal.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.World;
 import cn.academy.core.item.ACItem;
 import cn.academy.terminal.TerminalData;
 import cn.academy.terminal.client.TerminalInstallEffect;
@@ -23,9 +19,14 @@ import cn.academy.terminal.client.TerminalInstallerRenderer;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.network.RegNetworkCall;
+import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.api.gui.AuxGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -54,14 +55,14 @@ public class ItemTerminalInstaller extends ACItem {
 				if(!player.capabilities.isCreativeMode)
 					stack.stackSize--;
 				tData.install();
-				startInstalling();
+				startInstalling(player);
 			}
 		}
         return stack;
     }
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private static void startInstalling() {
+	private static void startInstalling(@Target EntityPlayer player) {
 		install();
 	}
 	

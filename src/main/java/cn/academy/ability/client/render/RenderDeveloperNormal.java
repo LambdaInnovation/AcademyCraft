@@ -36,7 +36,6 @@ public class RenderDeveloperNormal extends RenderBlockMultiModel {
 	@Override
 	public void drawAtOrigin(TileEntity te) {
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glTranslated(0, 0, -.8);
 		super.drawAtOrigin(te);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}

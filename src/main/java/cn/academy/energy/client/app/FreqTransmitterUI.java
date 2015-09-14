@@ -452,12 +452,12 @@ public class FreqTransmitterUI extends AuxGui {
 
 		@Override
 		void handleClicking(MovingObjectPosition r) {
-			if(r == null) {
+			TileEntity tile;
+			if(r == null || (tile = world.getTileEntity(r.blockX, r.blockY, r.blockZ)) == null) {
 				setState(new StateNotifyAndQuit("e4"));
 				return;
 			}
 			
-			TileEntity tile = world.getTileEntity(r.blockX, r.blockY, r.blockZ);
 			Block block = tile.getBlockType();
 			if(block instanceof BlockMulti) {
 				tile = ((BlockMulti) block).getOriginTile(tile);
