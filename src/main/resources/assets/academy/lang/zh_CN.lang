@@ -350,8 +350,8 @@ ac.ability.meltdowner.light_shield.name=光盾
 ac.ability.meltdowner.jet_engine.name=突击喷射
 ac.ability.meltdowner.mine_ray_basic.name=采集光束
 ac.ability.meltdowner.mine_ray_expert.name=采集光束精修
-ac.ability.meltdowner.mine_ray_luck.name=采集光束精修-时运
-ac.ability.meltdowner.electron_missile.name=电子光标
+ac.ability.meltdowner.mine_ray_luck.name=采集光束-时运
+ac.ability.meltdowner.electron_missile.name=巡航光束炮
 
 ac.ability.meltdowner.electron_bomb.desc=聚集少量电子形成球形，延迟极短时间后从光球中射出光束，若击中物体将会对该物体造成破坏。 
 ac.ability.meltdowner.rad_intensify.desc=高速的电子射流中携带的β射线会损害被照射生物的身体机能，使其更加脆弱 。

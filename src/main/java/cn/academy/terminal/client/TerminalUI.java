@@ -22,6 +22,7 @@ import org.lwjgl.util.glu.GLU;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.core.util.ControlOverrider;
 import cn.academy.terminal.App;
@@ -239,9 +240,7 @@ public class TerminalUI extends AuxGui {
 					root.removeWidget("icon_loading");
 					createTime = GameTimer.getTime();
 					isSynced = true;
-					AcademyCraft.log.info("Received TerminalUI callback!");
-				} else {
-					AcademyCraft.log.warn("Received unidentified TerminalUI callback!");
+					AcademyCraft.log.debug("Received TerminalUI callback!");
 				}
 			}
     		
@@ -380,6 +379,8 @@ public class TerminalUI extends AuxGui {
 		TextBox text;
 		DrawTexture icon;
 		
+		boolean lastSelected = true;
+		
 		public AppHandler(int _id, App _app) {
 			super("AppHandler");
 			id = _id;
@@ -390,8 +391,12 @@ public class TerminalUI extends AuxGui {
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
 					double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
+					boolean selected = getSelectedApp() == w;
 					
-					if(w == getSelectedApp()) {
+					if(selected) {
+						if(!lastSelected) {
+							ACSounds.playClient(Minecraft.getMinecraft().thePlayer, "terminal.select", 0.2f);
+						}
 						drawer.texture = APP_BACK_HDR;
 						
 						drawer.zLevel = text.zLevel = icon.zLevel = 40;
@@ -408,6 +413,8 @@ public class TerminalUI extends AuxGui {
 						icon.color.a = 0.6 * mAlpha;
 						text.color.a = 0.10 + 0.1 * mAlpha;
 					}
+					
+					lastSelected = selected;
 				}
 				
 			});
@@ -440,6 +447,7 @@ public class TerminalUI extends AuxGui {
 				env.app = handler.app;
 				env.terminal = TerminalUI.this;
 				
+				//ACSounds.playClient(getPlayer(), "terminal.confirm", 0.5f);
 				env.onStart();
 			}
 		}

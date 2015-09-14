@@ -37,7 +37,7 @@ public class MdParticleFactory extends ParticleFactory {
 
 			@Override
 			public void decorate(Particle particle) {
-				int life = RandUtils.rangei(30, 80);
+				int life = RandUtils.rangei(25, 55);
 				particle.fadeAfter(life, 20);
 				particle.color.a = RandUtils.ranged(0.3, 0.6);
 				particle.size = RandUtils.rangef(0.05f, 0.07f);

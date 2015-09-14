@@ -46,17 +46,13 @@ public class BlockDeveloper extends ACBlockMulti {
 		setBlockName("ac_developer_" + tmp);
 		setBlockTextureName("academy:developer_" + tmp);
 		
-		if(type == DeveloperType.NORMAL) {
-			this.addSubBlock(0, 1, 0);
-			this.addSubBlock(0, 0, 1);
-			this.addSubBlock(0, 1, 1);
-			this.addSubBlock(0, 2, 1);
-			this.addSubBlock(0, 0, 2);
-			this.addSubBlock(0, 1, 2);
-			this.addSubBlock(0, 2, 2);
-		} else if(type == DeveloperType.ADVANCED) {
-			
-		}
+		this.addSubBlock(0, 1, 0);
+		this.addSubBlock(0, 0, 1);
+		this.addSubBlock(0, 1, 1);
+		this.addSubBlock(0, 2, 1);
+		this.addSubBlock(0, 0, 2);
+		this.addSubBlock(0, 1, 2);
+		this.addSubBlock(0, 2, 2);
 		
 		finishInit();
 	}
@@ -94,10 +90,7 @@ public class BlockDeveloper extends ACBlockMulti {
 
 	@Override
 	public double[] getRotCenter() {
-		if(type == DeveloperType.NORMAL)
-			return new double[] { 0.5, 0, 0.5 };
-		else
-			return new double[] { 0, 0, 0 };
+		return new double[] { 0.5, 0, 0.5 };
 	}
 
 }

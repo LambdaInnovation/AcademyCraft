@@ -143,7 +143,7 @@ public class ShiftTeleport extends Skill {
 					TPAttackHelper.attack(player, instance, target, getDamage(aData));
 				}
 				
-				player.worldObj.playSoundAtEntity(player, "academy:tp.tp", 0.5f, 1f);
+				player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f);
 				aData.addSkillExp(instance, getExpIncr(list.size()));
 				
 				if(!player.capabilities.isCreativeMode) {

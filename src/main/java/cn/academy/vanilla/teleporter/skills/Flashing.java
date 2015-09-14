@@ -270,7 +270,7 @@ public class Flashing extends SpecialSkill {
 				marking.setDead();
 			}
 			if(this.getState() == State.ENDED) {
-				ACSounds.playClient(player, "tp.tp", 1.0f);
+				ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
 				FlashingAction env = ActionManager.findAction(player, FlashingAction.class);
 				if(env != null) {
 					if(env.cancellor != null) env.cancellor.setDead();

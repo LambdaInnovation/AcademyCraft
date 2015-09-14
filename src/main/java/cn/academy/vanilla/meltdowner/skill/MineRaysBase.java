@@ -20,6 +20,8 @@ import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.SerializationManager;
@@ -45,9 +47,12 @@ import net.minecraft.world.World;
 public abstract class MineRaysBase extends Skill {
 	
 	protected ResourceLocation particleTexture;
+	
+	final String postfix;
 
-	public MineRaysBase(String postfix, int atLevel) {
-		super("mine_ray_" + postfix, atLevel);
+	public MineRaysBase(String _postfix, int atLevel) {
+		super("mine_ray_" + _postfix, atLevel);
+		postfix = _postfix;
 	}
 	
 	protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
@@ -153,11 +158,17 @@ public abstract class MineRaysBase extends Skill {
 		}
 		
 		// CLIENT
+		@SideOnly(Side.CLIENT)
+		static FollowEntitySound loopSound;
+		
 		Entity ray;
 		
 		@SideOnly(Side.CLIENT)
 		public void startEffects() {
 			world.spawnEntityInWorld(ray = skill.createRay(player));
+			loopSound = new FollowEntitySound(player, "md.mine_loop").setLoop().setVolume(0.3f);
+			ACSounds.playClient(loopSound);
+			ACSounds.playClient(player, "md.mine_" + skill.postfix + "_startup", 0.4f);
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -176,7 +187,6 @@ public abstract class MineRaysBase extends Skill {
 						VecUtils.vec(_x, _y, _z),
 						VecUtils.vec(ranged(-.06, .06), ranged(-.06, .06), ranged(-.06, .06)));
 				if(skill.particleTexture != null) {
-					System.out.println("HasCT");
 					p.texture = skill.particleTexture;
 				}
 				
@@ -194,6 +204,7 @@ public abstract class MineRaysBase extends Skill {
 		@SideOnly(Side.CLIENT)
 		public void endEffects() {
 			ray.setDead();
+			loopSound.stop();
 		}
 		
 	}
