@@ -1,3 +1,5 @@
+[![Build Status](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/badge/icon)](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/)
+
 ﻿![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo_resized.png)  
 
 ## Introduction
@@ -12,8 +14,6 @@ AcademyCraft is licensed under the [GPL license](http://www.gnu.org/licenses/gpl
 ## Downloads&Installation
 
 Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
-
-[![Build Status](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/badge/icon)](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/)
 
 ## Dev Setup
 
