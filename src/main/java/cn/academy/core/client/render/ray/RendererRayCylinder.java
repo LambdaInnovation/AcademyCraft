@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.entity.IRay;
 import cn.liutils.render.material.SimpleMaterial;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.shader.GLSLMesh;
 import cn.liutils.util.client.shader.ShaderNotex;
 import cn.liutils.util.helper.Color;
@@ -146,6 +147,9 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 
 	@Override
 	protected void draw(Entity entity, double len) {
+		if(RenderUtils.isInShadowPass())
+			return;
+		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		

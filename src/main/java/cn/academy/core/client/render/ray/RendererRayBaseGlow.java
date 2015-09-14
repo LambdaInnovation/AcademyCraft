@@ -35,6 +35,10 @@ import cn.liutils.util.helper.Motion3D;
  * @author WeAthFolD
  */
 public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
+	
+	{
+		this.shadowOpaque = 0;
+	}
 
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, 

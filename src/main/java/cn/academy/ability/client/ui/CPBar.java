@@ -15,11 +15,9 @@ package cn.academy.ability.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.ARBMultitexture;
-import org.lwjgl.opengl.ContextCapabilities;
-import org.lwjgl.opengl.EXTTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.ctrl.ClientHandler;
@@ -38,13 +36,13 @@ import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
+import cn.liutils.util.client.shader.ShaderProgram;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.Font.Align;
 import cn.liutils.util.helper.GameTimer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -84,12 +82,6 @@ public class CPBar extends Widget {
 		TEX_MASK = tex("mask");
 	
 	List<ProgColor> cpColors = new ArrayList(), overrideColors = new ArrayList();
-	
-	static boolean supportARB;
-	static {
-		ContextCapabilities contextcapabilities = GLContext.getCapabilities();
-		supportARB = contextcapabilities.GL_ARB_multitexture;
-	}
 	
 	public interface IConsumptionHintProvider {
 		boolean alive();
@@ -166,14 +158,10 @@ public class CPBar extends Widget {
 				
 				if(mAlpha > 0) {
 					/* Draw CPBar */ {
-						if(bufferedOverload < 1.0) {
+						if(bufferedOverload < 1) {
 							drawNormal(bufferedOverload);
 						} else {
-							if(supportARB) {
-								drawOverload(bufferedOverload);
-							} else {
-								drawOverloadLegacy(bufferedOverload);
-							}
+							drawOverload(bufferedOverload);
 						}
 						
 						if(chProvider != null && !chProvider.alive())
@@ -216,100 +204,37 @@ public class CPBar extends Widget {
 		});
 	}
 	
-	/**
-	 * Draw the overload without ARB blending, when the machine does not support it.
-	 */
-	private void drawOverloadLegacy(float overload) {
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		
+	private void drawOverload(float overload) {
 		//Draw plain background
 		color4d(1, 1, 1, 0.8);
 		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
 		HudUtils.rect(WIDTH, HEIGHT);
 		
-		//Start drawing blend
+		// Draw back
+		color4d(1, 1, 1, 1);
+		shaderOverloaded.useProgram();
+		shaderOverloaded.updateTexOffset((GameTimer.getTime() % 10000L) / 10000.0f);
+		
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		RenderUtils.loadTexture(TEX_MASK);
+		
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
-		float uOffset = GameTimer.getTime() / 10000.0f * WIDTH;
-		color4d(1, 1, 1, 0.8);
 		
 		final double x0 = 30, width2 = WIDTH - x0 - 20;
-		HudUtils.rect(x0, 0, uOffset, 0, width2, HEIGHT, width2, HEIGHT);
-		//End drawing blend
+		HudUtils.rect(x0, 0, 0, 0, width2, HEIGHT, width2, HEIGHT);
 		
-		//Draw Highlight
-		color4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
-		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
-		HudUtils.rect(WIDTH, HEIGHT);
-		
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-	}
-	
-	private void drawOverload(float overload) {
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		
-		//Draw plain background
-		color4d(1, 1, 1, 0.8);
-		RenderUtils.loadTexture(TEX_BACK_OVERLOAD);
-		HudUtils.rect(WIDTH, HEIGHT);
-		
-		//Start drawing blend
-		RenderUtils.loadTexture(TEX_MASK);
-		int maskID = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-		RenderUtils.loadTexture(TEX_FRONT_OVERLOAD);
-		int frontID = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-		
-		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		
-		ARBMultitexture.glActiveTextureARB(ARBMultitexture.GL_TEXTURE2_ARB);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, frontID);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, EXTTextureEnvCombine.GL_COMBINE_EXT);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_RGB_EXT, GL11.GL_REPLACE);
+		GL20.glUseProgram(0);
 		
-		ARBMultitexture.glActiveTextureARB(ARBMultitexture.GL_TEXTURE3_ARB);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, maskID);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, EXTTextureEnvCombine.GL_COMBINE_ALPHA_EXT, GL11.GL_REPLACE);
-		
-		double uOffset = (GameTimer.getTime() % 10000L) / 10000.0d;
-		color4d(1, 1, 1, 0.8);
-		GL11.glBegin(GL11.GL_QUADS);
-			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 1.0f);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 0.0f, 1.0f);  
-			GL11.glVertex3d(0.0f, 0.0f, 0.0f);
-		  
-			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 0.0f + uOffset, 0.0f);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 0.0f, 0.0f);
-			GL11.glVertex3d(0.0, HEIGHT * 1.0, 0.0);
-		  
-			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 0.0f);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 0.0f); 
-			GL11.glVertex3d(WIDTH * 1.0, HEIGHT * 1.0, 0.0);
-		  
-			ARBMultitexture.glMultiTexCoord2dARB(ARBMultitexture.GL_TEXTURE2_ARB, 1.0f + uOffset, 1.0f);
-			ARBMultitexture.glMultiTexCoord2fARB(ARBMultitexture.GL_TEXTURE3_ARB, 1.0f, 		  1.0f);
-			GL11.glVertex3d(WIDTH * 1.0, 0.0, 0.0);
-		GL11.glEnd();
-		
-		//Restore texture states
-		ARBMultitexture.glActiveTextureARB(ARBMultitexture.GL_TEXTURE2_ARB);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
-		ARBMultitexture.glActiveTextureARB(ARBMultitexture.GL_TEXTURE3_ARB);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
-		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
-		//End drawing blend
-		
-		//Draw Highlight
+		// Highlight
 		color4d(1, 1, 1, 0.3 + 0.35 * (Math.sin(GameTimer.getTime() / 200.0) + 1));
 		RenderUtils.loadTexture(TEX_OVERLOAD_HIGHLIGHT);
 		HudUtils.rect(WIDTH, HEIGHT);
-		
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 	
 	private void drawNormal(float overload) {
@@ -329,10 +254,10 @@ public class CPBar extends Widget {
 	}
 	
 	private void drawCPBar(float prog) {
-		RenderUtils.loadTexture(TEX_CP);
+		if(overlayTexture == null)
+			return;
 		
 		//We need a cut-angle effect so this must be done manually
-		
 		autoLerp(cpColors, prog);
 		
 		prog = 0.16f + prog * 0.8f;
@@ -341,7 +266,14 @@ public class CPBar extends Widget {
 		Tessellator t = Tessellator.instance;
 		double len = WIDTH * prog, len2 = len - OFF;
 		
-		GL11.glCullFace(GL11.GL_BACK);
+		shaderCPBar.useProgram();
+		
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		RenderUtils.loadTexture(overlayTexture);
+		
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		RenderUtils.loadTexture(TEX_CP);
 		
 		t.startDrawingQuads();
 		addVertex(X0 + (WIDTH - len), Y0);
@@ -350,17 +282,12 @@ public class CPBar extends Widget {
 		addVertex(X0 + WIDTH, Y0);
 		t.draw();
 		
-		GL11.glCullFace(GL11.GL_BACK);
+		GL20.glUseProgram(0);
 		
-		// Overlay
-		if(overlayTexture != null) {
-			RenderUtils.loadTexture(overlayTexture);
-			color4d(1, 1, 1, 1);
-			HudUtils.rect(857, 43, 65, 65);
-		}
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 	}
-	
-	
 	
 	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160),
 			CRL_P_FORE = new Color().setColor4i(255, 255, 255, 200);
@@ -487,5 +414,46 @@ public class CPBar extends Widget {
 			color = _c;
 		}
 	}
+	
+	private static class ShaderOverloaded extends ShaderProgram {
+		
+		final int locTexOffset;
+		
+		private ShaderOverloaded() {
+			this.linkShader(new ResourceLocation("liutils:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+			this.linkShader(new ResourceLocation("academy:shaders/cpbar_overload.frag"), GL20.GL_FRAGMENT_SHADER);
+			this.compile();
+			
+			useProgram();
+			GL20.glUniform1i(getUniformLocation("samplerTex"), 0);
+			GL20.glUniform1i(getUniformLocation("samplerMask"), 4);
+			GL20.glUseProgram(0);
+			
+			locTexOffset = getUniformLocation("texOffset");
+		}
+		
+		public void updateTexOffset(float val) {
+			GL20.glUniform1f(locTexOffset, val);
+		}
+		
+	}
+	
+	private static class ShaderCPBar extends ShaderProgram {
+		
+		private ShaderCPBar() {
+			this.linkShader(new ResourceLocation("liutils:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+			this.linkShader(new ResourceLocation("academy:shaders/cpbar_cp.frag"), GL20.GL_FRAGMENT_SHADER);
+			this.compile();
+			
+			useProgram();
+			GL20.glUniform1i(getUniformLocation("samplerTex"), 0);
+			GL20.glUniform1i(getUniformLocation("samplerIcon"), 4);
+			GL20.glUseProgram(0);
+		}
+		
+	}
+	
+	static ShaderCPBar shaderCPBar = new ShaderCPBar();
+	static ShaderOverloaded shaderOverloaded = new ShaderOverloaded();
 	
 }

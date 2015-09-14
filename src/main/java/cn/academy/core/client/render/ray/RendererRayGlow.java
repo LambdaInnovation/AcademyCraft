@@ -59,12 +59,13 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 
 	@Override
 	protected void draw(T ray, Vec3 start, Vec3 end, Vec3 dir) {
+		if(RenderUtils.isInShadowPass()) {
+			return;
+		}
+		
 		glDisable(GL_CULL_FACE);
-		glAlphaFunc(GL_GREATER, 0.0f);
-		glDisable(GL_LIGHTING);
+		glAlphaFunc(GL_GREATER, 0.05f);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		glDepthMask(false);
 		ShaderSimple.instance().useProgram();
 
 		Tessellator t = Tessellator.instance;
@@ -94,11 +95,8 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 		this.drawBoard(mid2, end, dir, width);
 		
 		GL20.glUseProgram(0);
-		glDepthMask(true);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_CULL_FACE);
 		glAlphaFunc(GL_GEQUAL, 0.1f);
-		glEnable(GL_LIGHTING);
 	}
 	
 	public static RendererRayGlow createFromName(String name) {

@@ -21,6 +21,7 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.template.client.render.entity.RenderIcon;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
@@ -266,12 +267,18 @@ public class EntityMdBall extends EntityAdvanced {
 			super(null);
 			textures = Resources.getEffectSeq("mdball", MAX_TETXURES);
 			glowTexture = Resources.getTexture("effects/mdball/glow");
-			this.minTolerateAlpha = 0.05f;
+			//this.minTolerateAlpha = 0.05f;
+			this.shadowOpaque = 0;
 		}
 		
 		@Override
 		public void doRender(Entity par1Entity, double x, double y,
 				double z, float par8, float par9) {
+			if(RenderUtils.isInShadowPass()) {
+				System.out.println("ESCAPE");
+				return;
+			}
+			
 			EntityMdBall ent = (EntityMdBall) par1Entity;
 			if(!ent.updateRenderTick())
 				return;
@@ -294,13 +301,11 @@ public class EntityMdBall extends EntityAdvanced {
 				float size = ent.getSize();
 				
 				//Glow texture
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 				this.color.a = alpha * (0.3 + ent.alphaWiggle * 0.7);
 				this.icon = glowTexture;
 				this.setSize(0.7f * size);
 				super.doRender(par1Entity, x, y, z, par8, par9);
 				
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				//Core
 				this.color.a = alpha * (0.8 + 0.2 * ent.alphaWiggle);
 				this.icon = textures[ent.texID];

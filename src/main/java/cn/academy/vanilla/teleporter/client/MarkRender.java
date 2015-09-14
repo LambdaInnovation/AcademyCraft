@@ -32,11 +32,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class MarkRender extends Render {
 	
+	{
+		shadowOpaque = 0;
+	}
+	
 	protected ResourceLocation[] tex = Resources.getEffectSeq("tp_mark", 7);
 	protected IDrawable model = new SimpleModelBiped();
 
 	@Override
 	public void doRender(Entity ent, double x, double y, double z, float var8, float var9) {
+		if(RenderUtils.isInShadowPass()) return;
+		
 		EntityTPMarking mark = (EntityTPMarking) ent;
 		if(!mark.firstUpdated())
 			return;

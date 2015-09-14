@@ -13,6 +13,7 @@
 package cn.academy.vanilla.meltdowner.client.render;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
@@ -37,11 +38,16 @@ public class RenderMdShield extends Render {
 	public RenderMdShield() {
 		texture = Resources.getTexture("effects/mdshield");
 		mesh = MeshUtils.createBillboard(new GLSLMesh(), -0.5, -0.5, 0.5, 0.5);
+		this.shadowOpaque = 0;
 	}
 	
 	@Override
 	public void doRender(Entity _entity, double x,
 			double y, double z, float a, float b) {
+		if(RenderUtils.isInShadowPass()) {
+			return;
+		}
+		
 		long time = GameTimer.getTime();
 		EntityMdShield entity = (EntityMdShield) _entity;
 		
@@ -54,10 +60,11 @@ public class RenderMdShield extends Render {
 		entity.rotation += rotationSpeed * dt;
 		if(entity.rotation >= 360f) entity.rotation -= 360f;
 		
+		ShaderSimple.instance().useProgram();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.05f);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPushMatrix();
 		
 		GL11.glTranslated(x, y, z);
@@ -75,8 +82,8 @@ public class RenderMdShield extends Render {
 		
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.1f);
+		GL20.glUseProgram(0);
 		
 		entity.lastRender = time;
 	}

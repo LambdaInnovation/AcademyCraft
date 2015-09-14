@@ -45,6 +45,8 @@ public class RailgunHandEffect extends PlayerRenderHook {
 	}
 
 	public void renderHand(boolean firstPerson) {
+		if(RenderUtils.isInShadowPass()) return;
+		
 		long dt = getDeltaTime();
 		if(dt >= PER_FRAME * COUNT) {
 			dispose();
@@ -58,7 +60,7 @@ public class RailgunHandEffect extends PlayerRenderHook {
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
+		ShaderSimple.instance().useProgram();
 		glPushMatrix();
 		if(firstPerson) {
 			glTranslated(.26, -.12, -.24);
@@ -71,7 +73,7 @@ public class RailgunHandEffect extends PlayerRenderHook {
 		RenderUtils.loadTexture(textures[frame]);
 		mesh.draw(ShaderSimple.instance());
 		glPopMatrix();
-		
+		GL20.glUseProgram(0);
 		glAlphaFunc(GL_GEQUAL, 0.1f);
 		glEnable(GL_CULL_FACE);
 	}

@@ -198,6 +198,7 @@ public class ArcFactory {
 		}
 		
 		public void draw() {
+			if(RenderUtils.isInShadowPass()) return;
 			ShaderSimple.instance().useProgram();
 			doPreWork();
 			GL11.glCallList(listId);
@@ -206,6 +207,7 @@ public class ArcFactory {
 		}
 		
 		public void draw(double length) {
+			if(RenderUtils.isInShadowPass()) return;
 			ShaderSimple.instance().useProgram();
 			draw(length, true);
 			GL20.glUseProgram(0);

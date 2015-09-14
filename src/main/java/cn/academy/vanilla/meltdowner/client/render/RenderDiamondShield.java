@@ -12,16 +12,25 @@
  */
 package cn.academy.vanilla.meltdowner.client.render;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslated;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
 import cn.liutils.render.material.SimpleMaterial;
 import cn.liutils.render.mesh.Mesh;
+import cn.liutils.util.client.RenderUtils;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -61,6 +70,9 @@ public class RenderDiamondShield extends Render {
 	@Override
 	public void doRender(Entity _entity, double x,
 			double y, double z, float a, float b) {
+		if(RenderUtils.isInShadowPass())
+			return;
+		
 		EntityDiamondShield entity = (EntityDiamondShield) _entity;
 		if(!entity.firstUpdated())
 			return;

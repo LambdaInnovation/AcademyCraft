@@ -31,6 +31,10 @@ import cn.liutils.util.helper.Motion3D;
  */
 public abstract class RendererRayBaseSimple extends Render {
 
+	{
+		this.shadowOpaque = 0;
+	}
+	
 	@Override
 	public void doRender(Entity ent, 
 		double x, double y, double z, float a, float b) {
