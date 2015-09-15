@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import cn.academy.ability.api.ctrl.ClientController;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -29,9 +26,10 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
-import cn.liutils.cgui.gui.event.global.GlobalMouseEvent;
-import cn.liutils.cgui.gui.event.global.GlobalMouseEvent.GlobalMouseHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -45,15 +43,15 @@ public class SettingsUI extends LIGuiScreen {
 	
 	private static Map<String, List<UIProperty>> properties = new HashMap();
 	static {
-		addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true);
-		addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true);
+		addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
+		addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
 	}
 	
-	public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue) {
+	public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {
 		List<UIProperty> list = properties.get(cat);
 		if(list == null)
 			properties.put(cat, list = new ArrayList());
-		list.add(new UIProperty(elem, cat, id, defValue));
+		list.add(new UIProperty(elem, cat, id, defValue, singlePlayer));
 	}
 	
 	public SettingsUI() {
@@ -65,6 +63,8 @@ public class SettingsUI extends LIGuiScreen {
 		
 		Widget area = main.getWidget("area");
 		
+		boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
+		
 		ElementList list = new ElementList(); 
 		{
 			for(Entry<String, List<UIProperty>> entry : properties.entrySet()) {
@@ -73,7 +73,8 @@ public class SettingsUI extends LIGuiScreen {
 				list.addWidget(head);
 				
 				for(UIProperty prop : entry.getValue()) {
-					list.addWidget(prop.element.getWidget(prop));
+					if(!prop.singlePlayer || singlePlayer)
+						list.addWidget(prop.element.getWidget(prop));
 				}
 				
 				Widget placeholder = new Widget();

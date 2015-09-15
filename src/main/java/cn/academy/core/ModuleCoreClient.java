@@ -63,7 +63,7 @@ public class ModuleCoreClient {
 		public void addKeyHandler(String name, String keyDesc, int defKeyID, 
 				boolean global, KeyHandler handler) {
 			super.addKeyHandler(name, keyDesc, defKeyID, global, handler);
-			SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID);
+			SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID, false);
 		}
 	}
 	

@@ -86,7 +86,10 @@ ac.knowledge.trajectory.name=Trajectory Master
 ac.knowledge.baseball.name=Homerun!!
 ac.knowledge.anatomy.name=Anatomist
 
+ac.gui.preset_edit.name=Preset Edit
 ac.gui.preset_edit.tag=Preset #
+ac.gui.preset_edit.skill_remove=Remove Current
+ac.gui.preset_edit.skill_select=Select Skill
 
 # Data Terminal
 ac.terminal.notinstalled=You have not yet installed Data Terminal.

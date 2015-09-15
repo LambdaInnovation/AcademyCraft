@@ -226,7 +226,8 @@ public class TerminalUI extends AuxGui {
     	
     	createTime = GameTimer.getTime();
     	
-    	updateAppList(data);
+    	TextBox.get(root.getWidget("text_appcount")).content = 
+        		StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
     	
     	TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
     	

@@ -86,7 +86,10 @@ ac.knowledge.trajectory.name=弹道学
 ac.knowledge.baseball.name=打棒球
 ac.knowledge.anatomy.name=解剖学
 
-ac.gui.preset_edit.tag=预设 #
+ac.gui.preset_edit.name=预设编辑
+ac.gui.preset_edit.tag=预设  #
+ac.gui.preset_edit.skill_remove=移除当前技能
+ac.gui.preset_edit.skill_select=选择技能
 
 # 数据终端
 ac.terminal.notinstalled=你没有安装数据终端.
@@ -314,7 +317,7 @@ ac.ability.teleporter.flesh_ripping.name=肌体撕裂
 ac.ability.teleporter.location_teleport.name=定位传送
 ac.ability.teleporter.shift_tp.name=转移传送
 ac.ability.teleporter.space_fluct.name=空间波动
-ac.ability.teleporter.flashing.name=高速闪现 
+ac.ability.teleporter.flashing.name=高速闪现
 
 ac.ability.teleporter.threatening_teleport.desc=将小质量的物品移动到自己附近的某个位置。有时候，只需要一小块体内的碎片就可以对生物造成巨大伤害。
 ac.ability.teleporter.dim_folding_theoreom.desc=通过传送时不稳定的微弱空间折叠现象来对自己的空间跳跃类攻击进行一次概率性的空间分裂，来对敌人造成更高程度的伤害。

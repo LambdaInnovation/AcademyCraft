@@ -61,8 +61,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class PresetEditUI extends GuiScreen {
 	
 	static final Color 
-		CRL_BACK = new Color().setColor4i(49, 49, 49, 160),
-		CRL_WHITE = new Color(1, 1, 1, 0.6);
+		CRL_BACK = new Color().setColor4i(49, 49, 49, 200),
+		CRL_WHITE = new Color(1, 1, 1, 0.6),
+		CRL_GLOW = new Color(1, 1, 1, 0.2);
 	
 	static LIGui loaded;
 	static Widget template;
@@ -468,7 +469,7 @@ public class PresetEditUI extends GuiScreen {
     		}
     		
     		List<SelectionProvider> providers = new ArrayList();
-    		providers.add(new SelectionProvider(-1, Resources.getTexture("guis/preset_settings/cancel"), ""));
+    		providers.add(new SelectionProvider(-1, Resources.getTexture("guis/preset_settings/cancel"), local("skill_remove")));
     		for(Skill s : available)
     			providers.add(new SelectionProvider(s.getControlID(), s.getHintIcon(), s.getDisplayName()));
     		
@@ -476,7 +477,7 @@ public class PresetEditUI extends GuiScreen {
     		width = available.size() < MAX_PER_ROW ? 
     			MARGIN * 2 + SIZE + STEP * (providers.size() - 1) : 
     			MARGIN * 2 + SIZE + STEP * (MAX_PER_ROW - 1);
-    		
+    			
     		transform.setSize(width, height);
     		
     		// Build the window and the widget
@@ -490,11 +491,21 @@ public class PresetEditUI extends GuiScreen {
 					CRL_BACK.bind();
 					HudUtils.colorRect(0, 0, width, height);
 					
+					String str; 
 					Widget hovering = foreground.getHoveringWidget();
 					if(hovering != null && hovering.getName().contains("_sel")) {
 						SelHandler sh = hovering.getComponent("_sel");
-						Font.font.draw(sh.selection.hint, 0, -10, 10, 0xffffff);
+						str = sh.selection.hint;
+					} else {
+						str = local("skill_select");
 					}
+					
+					double len = Font.font.strLen(str, 9);
+					CRL_BACK.bind();
+					HudUtils.colorRect(0, -13.5, len + 6, 11.5);
+					ACRenderingHelper.drawGlow(0, -13.5, len + 6, 11.5, 1, CRL_GLOW);
+					
+					Font.font.draw(str, 3, -12, 9, 0xbbbbbb);
 					
 					GL11.glColor4d(1, 1, 1, 1);
 				}
