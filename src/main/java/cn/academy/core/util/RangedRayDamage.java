@@ -70,7 +70,7 @@ public class RangedRayDamage {
 	}
 	
 	public RangedRayDamage(Entity entity, double _range, float _energy) {
-		this(entity.worldObj, new Motion3D(entity, true).move(1), _range, _energy);
+		this(entity.worldObj, new Motion3D(entity, true).move(0.3), _range, _energy);
 		if(entity instanceof EntityLivingBase) {
 			dmgSrc = DamageSource.causeMobDamage((EntityLivingBase) entity);
 		}

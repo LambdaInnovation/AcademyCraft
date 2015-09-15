@@ -30,6 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -67,7 +68,7 @@ public class MagMovement extends Skill {
 			Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 			if(aData.getSkillExp(instance) < 0.6f && !CatElectromaster.isMetalBlock(block))
 				return null;
-			if(!CatElectromaster.isWeakMetalBlock(block))
+			if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block))
 				return null;
 			return new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord);
 		} else {
@@ -85,6 +86,8 @@ public class MagMovement extends Skill {
 		MovingObjectPosition result = Raytrace.traceLiving(player, getMaxDistance(aData));
 		
 		if(result != null) {
+			World world = player.worldObj;
+			
 			Target t = toTarget(aData, player.worldObj, result);
 			if(t != null) {
 				return new SkillInstance().addChild(new MovementAction(t));
@@ -117,7 +120,8 @@ public class MagMovement extends Skill {
 		
 		@Override
 		public void readNBTStart(NBTTagCompound tag) {
-			readTarget(tag);
+			if(!isLocal())
+				readTarget(tag);
 		}
 		
 		private void writeTarget(NBTTagCompound tag) {

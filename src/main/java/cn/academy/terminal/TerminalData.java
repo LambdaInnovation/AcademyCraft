@@ -48,7 +48,9 @@ public class TerminalData extends DataPart {
 	private boolean isInstalled;
 	
 	public TerminalData() {
-		int size = AppRegistry.enumeration().size();
+		for(App app : AppRegistry.enumeration()) {
+			if(app.isPreInstalled()) installedList.add(app.getID());
+		}
 	}
 	
 	public List<Integer> getInstalledApps() {
@@ -121,21 +123,8 @@ public class TerminalData extends DataPart {
 		isInstalled = tag.getBoolean("i");
 		
 		int[] arr = tag.getIntArray("learned");
-		if(arr.length == 0) {
-			// Build the pre-install app list
-			for(App a : AppRegistry.enumeration()) {
-				if(a.isPreInstalled()) {
-					installedList.add(a.appid);
-				}
-			}
-		} else {
-			for(int i = 0; i < arr.length; ++i)
-				installedList.add(arr[i]);
-		}
-		
-		NBTTagList list = (NBTTagList) tag.getTag("data");
-		if(list == null)
-			return;
+		for(int i = 0; i < arr.length; ++i)
+			installedList.add(arr[i]);
 	}
 
 	@Override

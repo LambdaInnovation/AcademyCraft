@@ -15,9 +15,6 @@ package cn.academy.ability.api.ctrl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.Controllable;
@@ -32,17 +29,17 @@ import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.util.ControlOverrider;
-import cn.academy.terminal.app.settings.PropertyElements;
-import cn.academy.terminal.app.settings.SettingsUI;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegInit;
 import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.KeyManager;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class handles the ability key and their controlling, 
@@ -111,6 +108,13 @@ public class ClientController {
     			return key;
     	}
     	return null;
+    }
+    
+    @SubscribeEvent
+    public void clientTick(ClientTickEvent event) {
+    	for(AbilityKey key : handlers)
+    		if(key.keyCooldown > 0) 
+    			--key.keyCooldown;
     }
     
     /**
@@ -210,20 +214,20 @@ public class ClientController {
     			instance = null;
     		}
     		
+    		System.out.print(keyCooldown);
+    		
     		CPData cpData = CPData.get(getPlayer());
     		if(keyCooldown == 0 && cpData.isActivated() && cpData.canUseAbility()) {
 	    		instance = locate();
 	    		if(instance != null) {
 	    			instance.ctrlStarted();
+	    			keyCooldown = COOLDOWN;
 	    		}
-	    		keyCooldown = COOLDOWN;
     		}
     	}
     	
     	@Override
     	public void onKeyTick() {
-    		if(keyCooldown > 0) --keyCooldown;
-    		
     		if(instance != null) {
     			if(instance.state == State.ENDED) {
     				instance.ctrlEnded();

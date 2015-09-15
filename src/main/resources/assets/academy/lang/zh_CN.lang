@@ -87,7 +87,7 @@ ac.knowledge.baseball.name=打棒球
 ac.knowledge.anatomy.name=解剖学
 
 ac.gui.preset_edit.name=预设编辑
-ac.gui.preset_edit.tag=预设  #
+ac.gui.preset_edit.tag=预设 #
 ac.gui.preset_edit.skill_remove=移除当前技能
 ac.gui.preset_edit.skill_select=选择技能
 

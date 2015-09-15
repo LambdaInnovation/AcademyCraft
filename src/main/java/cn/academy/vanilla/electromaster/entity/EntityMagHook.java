@@ -173,7 +173,7 @@ public class EntityMagHook extends EntityAdvanced {
     private void realSetStill() {	
     	motionX = motionY = motionZ = 0;
     	if(worldObj != null) {
-    		worldObj.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
+    		//worldObj.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
     	}
     	this.setSize(1f, 1f);
     	this.removeMotionHandlers();

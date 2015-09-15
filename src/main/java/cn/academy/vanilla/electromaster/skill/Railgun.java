@@ -140,7 +140,10 @@ public class Railgun extends Skill {
 				EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
 				AbilityData aData = AbilityData.get(player);
 				
+				System.out.println(coin);
+				
 				if(coin != null) {
+					//System.out.println("Find the coin!");
 					if(checkRailgunQTETime(coin)) {
 						//player.addChatMessage(new ChatComponentTranslation("P=" + coin.getProgress()));
 						ActionManager.startAction(new ActionShootCoin(coin));
@@ -149,6 +152,7 @@ public class Railgun extends Skill {
 						this.abortSkill();
 					}
 				} else {
+					//System.out.println("Coin not found!");
 					ItemStack stack = player.getCurrentEquippedItem();
 					boolean execute = false;
 					
@@ -175,7 +179,8 @@ public class Railgun extends Skill {
 	}
 	
 	private boolean checkRailgunQTETime(EntityCoinThrowing coin) {
-		return coin.getProgress() > 0.66 && coin.getProgress() < 1;
+		double p = coin.getProgress();
+		return p > 0.7;
 	}
 	
 	public static class ActionShootCoin extends SyncActionInstant {
