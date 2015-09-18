@@ -29,7 +29,7 @@ public class BlockRFOutput extends BlockContainer {
 		setHarvestLevel("pickaxe", 0);
 		setHardness(2.5f);
 		setBlockName("ac_rf_output");
-		setBlockTextureName("acadmey:rf_output");
+		setBlockTextureName("academy:rf_output");
 	}
 	
 	@Override

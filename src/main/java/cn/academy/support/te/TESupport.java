@@ -4,12 +4,15 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class TESupport {
 	
 	/** The convert rate (RF * RATE = IF) */
 	public static final float CONV_RATE = 1f;
+	
+	private static Block rfInput, rfOutput;
 	
 	public static void init() {
 		BlockRFInput rfInput = new BlockRFInput();
@@ -24,14 +27,16 @@ public class TESupport {
 		EnergyBlockHelper.register(new RFProviderManager());
 		EnergyBlockHelper.register(new RFReceiverManager());
 		
-		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
-				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', GameRegistry.findItem("ThermalExpansion", "powerCoilGold"), 'd', ModuleCrafting.convComp);
+		ItemStack coilGoldStack = new ItemStack(GameRegistry.findItem("ThermalExpansion", "material"), 1, 1),
+				leadFrameStack = new ItemStack(GameRegistry.findItem("ThermalExpansion", "Frame"), 1, 4);
 		
-		
-		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
+		GameRegistry.addRecipe(new ItemStack(rfInput), "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', GameRegistry.findItem("ThermalExpansion", "cellBasic"), 'd', ModuleCrafting.convComp);
+				'c', coilGoldStack, 'd', ModuleCrafting.convComp);
+		
+		GameRegistry.addRecipe(new ItemStack(rfInput), "abc", " d ",
+				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
+				'c', leadFrameStack, 'd', ModuleCrafting.convComp);
 	}
 	
 }

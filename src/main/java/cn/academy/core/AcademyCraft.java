@@ -92,6 +92,8 @@ public class AcademyCraft {
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
             .newSimpleChannel("academy-network");
     
+    public static boolean ic2SupportPresent, teSupportPresent;
+    
     @RegItem
     @RegItem.UTName("logo")
     public static Item logo;
@@ -134,6 +136,7 @@ public class AcademyCraft {
         	Class.forName("ic2.core.IC2");
         	try {
         		Class.forName("cn.academy.support.ic2.IC2Support").getMethod("init").invoke(this);
+        		ic2SupportPresent = true;
         	} catch (Throwable e) {
         		log.error("Failed to initialize IC2 support", e);
         	}
@@ -143,6 +146,7 @@ public class AcademyCraft {
         	Class.forName("cofh.thermalexpansion.ThermalExpansion");
         	try {
         		Class.forName("cn.academy.support.te.TESupport").getMethod("init").invoke(this);
+        		teSupportPresent = true;
         	} catch (Throwable e) {
         		log.error("Failed to initialize TE support", e);
         	}

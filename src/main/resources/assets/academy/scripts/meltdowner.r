@@ -29,7 +29,7 @@ ac {
             cooldown(exp) { lerp(80, 60, exp) }
             
             absorb_consumption(exp) { lerp(50, 30, exp) }
-            absorb_overload(exp) { lerp(20, 15, exp) }
+            absorb_overload(exp) { lerp(15, 10, exp) }
             
             touch_damage(exp) { lerp(2, 6, exp) }
             absorb_damage(exp) { lerp(8, 25, exp) }

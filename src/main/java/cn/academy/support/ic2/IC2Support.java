@@ -43,12 +43,12 @@ public class IC2Support {
 		EnergyBlockHelper.register(new EUSinkManager());
 		EnergyBlockHelper.register(new EUSourceManager());
 		
-		GameRegistry.addRecipe(new ItemStack(euInput), "   ", "abc", " d ",
+		GameRegistry.addRecipe(new ItemStack(euInput), "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', IC2Items.getItem("insulatedCopperCableBlock"), 'd', ModuleCrafting.convComp);
-		GameRegistry.addRecipe(new ItemStack(euOutput), "   ", "abc", " d ",
+				'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
+		GameRegistry.addRecipe(new ItemStack(euOutput), "abc", " d ",
 				'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
-				'c', IC2Items.getItem("insulatedCopperCableBlock"), 'd', ModuleCrafting.convComp);
+				'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
 	}
 
 }
