@@ -12,19 +12,19 @@
  */
 package cn.academy.crafting.client.render.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
+import cn.academy.core.client.render.shader.ShaderMask;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.GameTimer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 
 /**
  * @author WeAthFolD
@@ -66,36 +66,40 @@ public class RendererMatterUnit implements IItemRenderer {
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			} GL11.glPopMatrix();
 		} else {
-			RenderUtils.renderItemInventory(stack);
-			
-			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, 10);
-			
-			GL11.glColor4d(1, 1, 1, 1);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glColorMask(false, false, false, false);
-			GL11.glDepthMask(true);
-			RenderUtils.loadTexture(texMask);
-			HudUtils.rect(16, 16);
-			GL11.glColorMask(true, true, true, true);
+			ShaderMask shader = ShaderMask.instance;
+			float du = -(GameTimer.getAbsTime() % 10000L) / 1e4f, dv = (GameTimer.getAbsTime() % 10000L) / 1e4f;
 			
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
-			GL11.glColor4d(1, 1, 1, 1);
-			GL11.glDepthMask(false);
-			GL11.glDepthFunc(GL11.GL_EQUAL);
+			RenderUtils.renderItemInventory(stack);
+			
+			shader.start(texMask);
 			RenderUtils.loadTexture(item.getMaterial(stack).texture);
-			double du = -(GameTimer.getAbsTime() / 100000.0) % 1.0, dv = (GameTimer.getAbsTime() / 10000.0) % 1.0;
-			HudUtils.rawRect(0, 0, du, dv, 16, 16, 1, 1);
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-			GL11.glDepthMask(true);
 			
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glBegin(GL11.GL_QUADS);
 			
-			GL11.glPopMatrix();
+			GL11.glTexCoord2f(0 + du, 0 + dv);
+			shader.maskTexCoord(0, 0);
+			GL11.glVertex2f(0, 0);
+			
+			GL11.glTexCoord2f(0 + du, 1 + dv);
+			shader.maskTexCoord(0, 1);
+			GL11.glVertex2f(0, 16);
+			
+			GL11.glTexCoord2f(1 + du, 1 + dv);
+			shader.maskTexCoord(1, 1);
+			GL11.glVertex2f(16, 16);
+			
+			GL11.glTexCoord2f(1 + du, 0 + dv);
+			shader.maskTexCoord(1, 0);
+			GL11.glVertex2f(16, 0);
+			
+			GL11.glEnd();
+			
+			shader.end();
+			
+			GL11.glDisable(GL11.GL_BLEND);
 		}
 	}
 
