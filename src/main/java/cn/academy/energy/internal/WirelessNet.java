@@ -303,7 +303,8 @@ public class WirelessNet {
 	}
 	
 	private void debug(Object msg) {
-		AcademyCraft.log.info("WN:" + msg);
+		if(AcademyCraft.DEBUG_MODE) 
+			AcademyCraft.log.info("WN:" + msg);
 	}
 	
 }

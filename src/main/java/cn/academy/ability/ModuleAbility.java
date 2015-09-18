@@ -18,6 +18,8 @@ import cn.academy.ability.item.ItemDeveloper;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
@@ -32,6 +34,7 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 @Registrant
 @RegInit
 @RegACRecipeNames
+@RegEventHandler(Bus.Forge)
 public class ModuleAbility {
 	
 	@RegItem

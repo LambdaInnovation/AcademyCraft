@@ -170,7 +170,7 @@ public abstract class SpecialSkill extends Skill {
 		
 		/*
 		 * EVENT DELEGATES
-		 * Those methods works exactly the same as SyncActions.
+		 * Those methods works exactly the same as those in SyncAction.
 		 * extend and override them
 		 */
 		

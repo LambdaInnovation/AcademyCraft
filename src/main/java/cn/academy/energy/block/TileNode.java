@@ -70,8 +70,8 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     		++updateTicker;
     		if(updateTicker == 10) {
     			updateTicker = 0;
-    			boolean b = WirelessHelper.isNodeLinked(this);
-    			receiveSyncMessage(this, b, chargingIn, chargingOut, energy);
+    			receiveSyncMessage(this, WirelessHelper.isNodeLinked(this), 
+    				chargingIn, chargingOut, energy, name);
     		}
     		
     		updateChargeIn();
@@ -166,11 +166,13 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		@Data Boolean enabled, 
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
-		@Data Double energy) {
+		@Data Double energy,
+		@Data String name) {
 		this.enabled = enabled;
 		this.chargingIn = chargingIn;
 		this.chargingOut = chargingOut;
 		this.energy = energy;
+		this.name = name;
 	}
 
 	@Override

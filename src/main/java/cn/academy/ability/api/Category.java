@@ -25,6 +25,8 @@ import cn.liutils.util.helper.Color;
 import com.google.common.collect.ImmutableList;
 
 /**
+ * An Ability Category. Describes the skills that this category contains and the various other info.
+ * You should use {@link CategoryManager#register(Category)} at mod init stage to register a category.
  * @author WeAthFolD
  */
 public class Category {
@@ -36,17 +38,18 @@ public class Category {
 	
 	int catID = -1;
 	
+	// icon is displayed in developer and many other places, and overlay icon is used for culling effect on the CPBar.
 	protected ResourceLocation icon, overlay;
 	
 	/**
-	 * The color style of this category. Used in many various places for rendering.
+	 * The color style of this category. Used in many various places for rendering, like screen overlay.
 	 */
 	protected Color colorStyle = Color.WHITE();
 	
 	public Category(String _name) {
 		name = _name;
-		icon = Resources.getTexture("abilities/" + name + "/icon");
-		overlay = Resources.getTexture("abilities/" + name + "/icon_overlay");
+		icon = initIcon();
+		overlay = initOverlayIcon();
 	}
 	
 	public Color getColorStyle() {
@@ -54,7 +57,6 @@ public class Category {
 	}
 	
 	public void addSkill(Skill skill) {
-		// TODO Can remove when release
 		if(getSkill(skill.getName()) != null)
 			throw new RuntimeException("Duplicating skill " + skill.getName() + "!!");
 		
@@ -137,6 +139,9 @@ public class Category {
 		return overlay;
 	}
 	
+	/**
+	 * @return The internal name (or identifier) of this Category.
+	 */
 	public String getName() {
 		return name;
 	}
@@ -144,5 +149,15 @@ public class Category {
 	public String getDisplayName() {
 		return StatCollector.translateToLocal("ac.ability." + name + ".name");
 	}
+	
+	// Path init
+	protected ResourceLocation initIcon() {
+		return Resources.getTexture("abilities/" + name + "/icon");
+	}
+	
+	protected ResourceLocation initOverlayIcon() {
+		return Resources.getTexture("abilities/" + name + "/icon_overlay");
+	}
+	
 	
 }

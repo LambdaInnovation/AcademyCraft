@@ -12,7 +12,7 @@ import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
 
 /**
- * Means this class has ability to create a SkillInstance to override
+ * This class has ability to create a SkillInstance to override
  * a specific ability key. Used in Skill for indexing.
  * @author WeAthFolD
  */

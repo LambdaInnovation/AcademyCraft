@@ -14,13 +14,6 @@ package cn.academy.core;
 
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.config.Configuration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
@@ -30,6 +23,7 @@ import cn.annoreg.core.RegistrationManager;
 import cn.annoreg.core.RegistrationMod;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegMessageHandler;
+import cn.liutils.check.ResourceCheck;
 import cn.liutils.crafting.CustomMappingHelper;
 import cn.liutils.crafting.RecipeRegistry;
 import cn.liutils.ripple.ScriptFunction;
@@ -47,6 +41,12 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.config.Configuration;
 
 /**
  * Academy Craft Mod Main Class
@@ -66,6 +66,11 @@ public class AcademyCraft {
 	public static final String VERSION = "1.0a";
 
     public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
+    
+    static final String[] scripts = {
+        "generic", "ability", "electromaster", "teleporter", "meltdowner",
+        "generic_skills"
+    };
     
     public static Configuration config;
     
@@ -106,7 +111,12 @@ public class AcademyCraft {
         
         config = new Configuration(event.getSuggestedConfigurationFile());
         
-        reloadScript();
+        script = new ScriptProgram();
+        for(String s : scripts) {
+        	ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
+        	ResourceCheck.add(res);
+        	script.loadScript(res);
+        }
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
@@ -178,26 +188,6 @@ public class AcademyCraft {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
     	config.save();
-    }
-    
-    /**
-     * Reload all the scripts. Used for debugging.
-     */
-    public static void reloadScript() {
-    	if(!scriptLoaded || DEBUG_MODE) {
-    		scriptLoaded = true;
-    		
-    		// Load the scripts
-    		ScriptProgram repl = new ScriptProgram();
-            String[] scripts = {
-            	"generic", "ability", "electromaster", "teleporter", "meltdowner",
-            	"generic_skills"
-            };
-            for(String s : scripts)
-            	repl.loadScript(new ResourceLocation("academy:scripts/" + s + ".r"));
-            
-            script = repl;
-    	}
     }
     
     public static ScriptProgram getScript() {

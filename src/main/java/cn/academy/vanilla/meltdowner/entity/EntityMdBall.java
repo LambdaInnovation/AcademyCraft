@@ -275,7 +275,6 @@ public class EntityMdBall extends EntityAdvanced {
 		public void doRender(Entity par1Entity, double x, double y,
 				double z, float par8, float par9) {
 			if(RenderUtils.isInShadowPass()) {
-				System.out.println("ESCAPE");
 				return;
 			}
 			

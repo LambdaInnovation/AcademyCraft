@@ -241,7 +241,7 @@ public class TerminalUI extends AuxGui {
 					root.removeWidget("icon_loading");
 					createTime = GameTimer.getTime();
 					isSynced = true;
-					AcademyCraft.log.debug("Received TerminalUI callback!");
+					// AcademyCraft.log.debug("Received TerminalUI callback!");
 				}
 			}
     		

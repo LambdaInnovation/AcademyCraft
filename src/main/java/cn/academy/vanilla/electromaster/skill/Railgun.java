@@ -140,8 +140,6 @@ public class Railgun extends Skill {
 				EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
 				AbilityData aData = AbilityData.get(player);
 				
-				System.out.println(coin);
-				
 				if(coin != null) {
 					//System.out.println("Find the coin!");
 					if(checkRailgunQTETime(coin)) {

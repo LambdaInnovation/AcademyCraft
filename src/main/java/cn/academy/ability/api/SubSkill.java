@@ -63,12 +63,20 @@ public abstract class SubSkill extends Controllable {
 	}
 	
 	final void addedInto(SpecialSkill skill) {
-		fullName = skill.getFullName() + "." + name;
+		parent = skill;
 		
-		// academy:abilities/<category>/<parent>/<name>.png
-		icon = Resources.getTexture(
-			"abilities/" + skill.getCategory().getName() + "/" + 
-			skill.getName() + "/" + name);
+		fullName = initFullName();
+		icon = initIcon();
+	}
+	
+	protected String initFullName() {
+		return parent.getFullName() + "." + name;
+	}
+	
+	protected ResourceLocation initIcon() {
+		return Resources.getTexture(
+				"abilities/" + parent.getCategory().getName() + "/" + 
+						parent.getName() + "/" + name);
 	}
 
 	public SpecialSkill getParent() {

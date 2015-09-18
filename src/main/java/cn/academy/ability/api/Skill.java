@@ -37,6 +37,8 @@ import net.minecraft.util.StatCollector;
  * method so that the skill control will take effect.
  * 
  * @see cn.academy.core.util.ValuePipeline
+ * @see cn.academy.ability.api.ctrl.SkillInstance
+ * @see cn.academy.ability.api.ctrl.SyncAction
  * @author WeAthFolD
  */
 public abstract class Skill extends Controllable {
@@ -67,7 +69,7 @@ public abstract class Skill extends Controllable {
 	public double guiX, guiY;
 	
 	/**
-	 * Whether this skill has customized experience definition(display).
+	 * Whether this skill has customized experience definition.
 	 * If this is set to true, getSkillExp() will be called whenever
 	 * 	querying experience of skill.
 	 */
@@ -102,11 +104,9 @@ public abstract class Skill extends Controllable {
 		category = _category;
 		this.id = id;
 		
-		String catloc = (isGeneric ? "generic" : category.getName());
-		
-		icon = Resources.getTexture("abilities/" + catloc + "/skills/" + name);
-		fullName = catloc + "." + name;
-		script = AcademyCraft.getScript().at("ac." + fullName);
+		icon = initIcon();
+		fullName = initFullName();
+		script = initScript();
 		
 		try {
 			float x = script.getFloat("x"), y = script.getFloat("y");
@@ -122,7 +122,7 @@ public abstract class Skill extends Controllable {
 	}
 	
 	/**
-	 * Called AFTER the skill is added into the category.
+	 * Callback that is called AFTER the skill is added into the category.
 	 */
 	protected void initSkill() {}
 	
@@ -184,6 +184,33 @@ public abstract class Skill extends Controllable {
 	
 	protected String getLocalized(String key) {
 		return StatCollector.translateToLocal("ac.ability." + getFullName() + "." + key);
+	}
+	
+	//--- Path init
+	protected String getCategoryLocation() {
+		return (isGeneric ? "generic" : category.getName());
+	}
+	
+	/**
+	 * @return The init full name. Is guaranteed to be called AFTER the Category is assigned.
+	 */
+	protected String initFullName() {
+		return getCategoryLocation() + "." + name;
+	}
+	
+	/**
+	 * @return The icon of this skill. Is guaranteed to be called AFTER the Category is assigned.
+	 */
+	protected ResourceLocation initIcon() {
+		return icon = Resources.getTexture("abilities/" + getCategoryLocation() + "/skills/" + name);
+	}
+	
+	/**
+	 * @return The ScriptNamespace of this skill. 
+	 * 	Is guaranteed to be called AFTER the full name of the skill is assigned.
+	 */
+	protected ScriptNamespace initScript() {
+		return AcademyCraft.getScript().at("ac." + fullName);
 	}
 	
 	//--- Hooks

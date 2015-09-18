@@ -79,8 +79,8 @@ ac {
         
         railgun {
             x { 581 } y { 295 }
-            consumption(exp) { lerp(200, 500, exp) }
-            overload(exp) { lerp(120, 80, exp) }
+            consumption(exp) { lerp(1200, 800, exp) }
+            overload(exp) { 3 * lerp(120, 80, exp) }
             cooldown(exp) { lerp(300, 160, exp) }
             damage(exp) { lerp(25, 45, exp) }
             energy(exp) { lerp(900, 2000, exp) }

@@ -210,11 +210,9 @@ public class ClientController {
     	@Override
     	public void onKeyDown() {
     		if(instance != null) {
-    			instance.onAbort();
+    			instance.ctrlAborted();
     			instance = null;
     		}
-    		
-    		System.out.print(keyCooldown);
     		
     		CPData cpData = CPData.get(getPlayer());
     		if(keyCooldown == 0 && cpData.isActivated() && cpData.canUseAbility()) {
@@ -273,7 +271,7 @@ public class ClientController {
     			instance = null;
     		
     		if(instance == null) {
-    			AcademyCraft.log.warn("NULL SkillInstance for " + cc);
+    			// AcademyCraft.log.warn("NULL SkillInstance for " + cc);
     		} else
     			instance.controllable = cc;
     		
