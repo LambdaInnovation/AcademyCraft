@@ -1,12 +1,10 @@
 package cn.academy.support.te;
 
-import cofh.thermalexpansion.block.cell.BlockCell;
-import cofh.thermalexpansion.item.TEItems;
-import net.minecraft.item.ItemStack;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemStack;
 
 public class TESupport {
 	
@@ -28,12 +26,12 @@ public class TESupport {
 		
 		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', TEItems.powerCoilGold, 'd', ModuleCrafting.convComp);
+				'c', GameRegistry.findItem("ThermalExpansion", "powerCoilGold"), 'd', ModuleCrafting.convComp);
 		
 		
 		GameRegistry.addRecipe(new ItemStack(rfInput), "   ", "abc", "d",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', BlockCell.cellBasic, 'd', ModuleCrafting.convComp);
+				'c', GameRegistry.findItem("ThermalExpansion", "cellBasic"), 'd', ModuleCrafting.convComp);
 	}
 	
 }
