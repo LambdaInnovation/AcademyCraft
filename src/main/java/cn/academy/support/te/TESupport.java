@@ -28,15 +28,15 @@ public class TESupport {
 		EnergyBlockHelper.register(new RFReceiverManager());
 		
 		ItemStack coilGoldStack = new ItemStack(GameRegistry.findItem("ThermalExpansion", "material"), 1, 1),
-				leadFrameStack = new ItemStack(GameRegistry.findItem("ThermalExpansion", "Frame"), 1, 4);
+				coilSilverStack = new ItemStack(GameRegistry.findItem("ThermalExpansion", "material"), 1, 2);
 		
 		GameRegistry.addRecipe(new ItemStack(rfInput), "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
 				'c', coilGoldStack, 'd', ModuleCrafting.convComp);
 		
-		GameRegistry.addRecipe(new ItemStack(rfInput), "abc", " d ",
+		GameRegistry.addRecipe(new ItemStack(rfOutput), "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-				'c', leadFrameStack, 'd', ModuleCrafting.convComp);
+				'c', coilSilverStack, 'd', ModuleCrafting.convComp);
 	}
 	
 }
