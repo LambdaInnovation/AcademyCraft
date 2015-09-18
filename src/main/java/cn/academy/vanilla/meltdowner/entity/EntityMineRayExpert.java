@@ -15,6 +15,7 @@ package cn.academy.vanilla.meltdowner.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -55,7 +56,7 @@ public class EntityMineRayExpert extends EntityRayBase {
 		super.onUpdate();
 		EntityPlayer player = getPlayer();
 		Vec3 end = new Motion3D(player, true).move(15).getPosVec();
-		this.setFromTo(player.posX, player.posY, player.posZ, end.xCoord, end.yCoord, end.zCoord);
+		this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ, end.xCoord, end.yCoord, end.zCoord);
 		if(RandUtils.nextDouble() < 0.6) {
 			Particle p = MdParticleFactory.INSTANCE.next(worldObj,
 					new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),

@@ -12,6 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
@@ -56,7 +57,7 @@ public class EntityMineRayLuck extends EntityRayBase {
 		super.onUpdate();
 		EntityPlayer player = getPlayer();
 		Vec3 end = new Motion3D(player, true).move(15).getPosVec();
-		this.setFromTo(player.posX, player.posY, player.posZ, end.xCoord, end.yCoord, end.zCoord);
+		this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ, end.xCoord, end.yCoord, end.zCoord);
 		
 		if(RandUtils.nextDouble() < 0.6) {
 			Particle p = MdParticleFactory.INSTANCE.next(worldObj,

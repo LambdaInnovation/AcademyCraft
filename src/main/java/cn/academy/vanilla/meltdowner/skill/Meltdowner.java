@@ -21,6 +21,7 @@ import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.core.util.RangedRayDamage;
@@ -150,7 +151,9 @@ public class Meltdowner extends Skill {
 				double r = ranged(0.7, 1);
 				double theta = ranged(0, Math.PI * 2);
 				double h = ranged(-1.2, 0);
-				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, 
+					player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ), 
+					VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
 				Vec3 vel = VecUtils.vec(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03));
 				world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
 			}

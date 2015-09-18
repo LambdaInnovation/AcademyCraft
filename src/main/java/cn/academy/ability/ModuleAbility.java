@@ -24,6 +24,8 @@ import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 
@@ -55,6 +57,7 @@ public class ModuleAbility {
 	public static void init() {
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
 		if(event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {

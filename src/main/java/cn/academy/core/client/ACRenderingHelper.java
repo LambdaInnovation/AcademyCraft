@@ -22,9 +22,10 @@ import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 /**
  * Some drawing utils.
@@ -59,6 +60,14 @@ public class ACRenderingHelper {
 		gdraw(GLOW_RD, x + width, y + height, s, 	 s);
 		gdraw(GLOW_LU, x - s, 	  y - s, 	  s, 	 s);
 		gdraw(GLOW_LD, x - s, 	  y + height, s, 	 s);
+	}
+	
+	public static boolean isThePlayer(EntityPlayer p) {
+		return p.equals(Minecraft.getMinecraft().thePlayer);
+	}
+	
+	public static double getHeightFix(EntityPlayer p) {
+		return isThePlayer(p) ? 0.0 : 1.6;
 	}
 	
 	/**

@@ -25,6 +25,7 @@ import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityBloodSplash;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
@@ -183,6 +184,7 @@ public class FleshRipping extends Skill {
 				int count = RandUtils.rangei(4, 6);
 				while(count-- > 0) {
 					double y = e.posY + RandUtils.ranged(0, 1) * e.height;
+					if(e instanceof EntityPlayer) y += ACRenderingHelper.getHeightFix((EntityPlayer) e);
 					
 					double theta = RandUtils.ranged(0, Math.PI * 2);
 					double r = 0.5 * RandUtils.ranged(0.8 * e.width, e.width);

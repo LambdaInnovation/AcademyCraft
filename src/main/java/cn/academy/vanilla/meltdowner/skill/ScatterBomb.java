@@ -27,6 +27,7 @@ import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
@@ -140,12 +141,13 @@ public class ScatterBomb extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void burstRaysClient() {
+			double yoff = ACRenderingHelper.isThePlayer(player) ? 0 : 1.6;
 			for(EntityMdBall ball : balls) {
 				// Spawn a ray for the ball
 				EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
 				raySmall.viewOptimize = false;
 				Vec3 dest = newDest();
-				raySmall.setFromTo(ball.posX, ball.posY, ball.posZ,
+				raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ,
 					dest.xCoord, dest.yCoord, dest.zCoord);
 				world.spawnEntityInWorld(raySmall);
 			}

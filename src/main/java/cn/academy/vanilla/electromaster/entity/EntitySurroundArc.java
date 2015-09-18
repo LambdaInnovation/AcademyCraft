@@ -12,14 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.IPointFactory;
@@ -32,6 +24,14 @@ import cn.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 /**
  * Spawn a surround arc effect around the specific entity or block.
@@ -228,7 +228,7 @@ public class EntitySurroundArc extends EntityAdvanced {
 		
 		public EntityPos(Entity e) {
 			entity = e;
-			isPlayer = e instanceof EntityPlayer;
+			isPlayer = e instanceof EntityPlayer && e.equals(Minecraft.getMinecraft().thePlayer);
 		}
 		
 		@Override

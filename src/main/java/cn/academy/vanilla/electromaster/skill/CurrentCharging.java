@@ -24,6 +24,7 @@ import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.support.EnergyBlockHelper;
@@ -189,7 +190,7 @@ public class CurrentCharging extends Skill {
 				y = mo.py;
 				z = mo.pz;
 			}
-			arc.setFromTo(player.posX, player.posY, player.posZ, x, y, z);
+			arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, x, y, z);
 			
 			if(isGood) {
 				surround.updatePos(res.blockX + 0.5, res.blockY, res.blockZ + 0.5);

@@ -90,11 +90,13 @@ public class JetEngine extends Skill {
 		
 		@Override
 		public void onEnd() {
-			if(!isRemote && cpData.perform(instance.getConsumption(aData), instance.getOverload(aData))) {
-				startTriggerAction(player, getDest().addVector(0, 1.65, 0));
-				aData.addSkillExp(instance, getExpIncr(aData));
+			if(cpData.perform(instance.getConsumption(aData), instance.getOverload(aData))) {
+				if(!isRemote) {
+					startTriggerAction(player, getDest().addVector(0, 1.65, 0));
+					aData.addSkillExp(instance, getExpIncr(aData));
+					instance.triggerAchievement(player);
+				}
 				Cooldown.setCooldown(instance, instance.getCooldown(aData));
-				instance.triggerAchievement(player);
 			}
 		}
 		

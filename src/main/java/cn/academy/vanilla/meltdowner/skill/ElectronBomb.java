@@ -18,6 +18,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.annoreg.core.Registrant;
@@ -97,14 +98,14 @@ public class ElectronBomb extends Skill {
 	@RegNetworkCall(side = Side.CLIENT)
 	static void actionClient(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player, @Instance EntityMdBall ball) {
 		Vec3 dest = getDest(player);
-		spawnRay(player.worldObj, ball.posX, ball.posY, ball.posZ,
+		spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
 			dest.xCoord, dest.yCoord, dest.zCoord);
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private static void spawnRay(World world, double x0, double y0, double z0, double x1, double y1, double z1) {
+	private static void spawnRay(World world, EntityPlayer player, double x0, double y0, double z0, double x1, double y1, double z1) {
 		EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
-		raySmall.setFromTo(x0, y0, z0,
+		raySmall.setFromTo(x0, y0 + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), z0,
 				x1, y1, z1);
 		raySmall.viewOptimize = false;
 		world.spawnEntityInWorld(raySmall);

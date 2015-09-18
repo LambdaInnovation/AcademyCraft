@@ -18,6 +18,7 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.electromaster.CatElectromaster;
@@ -221,7 +222,7 @@ public class MagMovement extends Skill {
 		
 		@SideOnly(Side.CLIENT)
 		private void updateEffect() {
-			arc.setFromTo(player.posX, player.posY, player.posZ, target.x, target.y, target.z);
+			arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, target.x, target.y, target.z);
 		}
 		
 		@SideOnly(Side.CLIENT)

@@ -23,6 +23,7 @@ import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
@@ -156,7 +157,7 @@ public class ElectronMissile extends Skill {
 				double r = ranged(0.5, 1);
 				double theta = ranged(0, Math.PI * 2);
 				double h = ranged(-1.2, 0);
-				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
 				Vec3 vel = VecUtils.vec(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02));
 				world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
 			}

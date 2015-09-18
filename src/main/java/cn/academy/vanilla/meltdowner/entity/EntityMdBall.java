@@ -15,6 +15,7 @@ package cn.academy.vanilla.meltdowner.entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
@@ -289,6 +290,9 @@ public class EntityMdBall extends EntityAdvanced {
 				x = ent.posX - clientPlayer.posX;
 				y = ent.posY - clientPlayer.posY;
 				z = ent.posZ - clientPlayer.posZ;
+				
+				if(!ACRenderingHelper.isThePlayer(ent.getSpawner()))
+					y += 1.6;
 			}
 			
 			GL11.glPushMatrix();
