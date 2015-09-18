@@ -63,7 +63,7 @@ public class AcademyCraft {
     
 	public static final boolean DEBUG_MODE = false;
 	
-	public static final String VERSION = "1.0a";
+	public static final String VERSION = "1.0pr1";
 
     public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     
@@ -119,6 +119,8 @@ public class AcademyCraft {
         	ResourceCheck.add(res);
         	script.loadScript(res);
         }
+        
+        ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
         
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
