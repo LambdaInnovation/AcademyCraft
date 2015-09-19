@@ -453,6 +453,8 @@ achievement.ac_windgen=洁净能源
 achievement.ac_windgen.desc=制造风力发电机
 achievement.ac_crystal=璀璨晶体
 achievement.ac_crystal.desc=挖到能源水晶
+achievement.ac_terminal=无须卖肾
+achievement.ac_terminal.desc=制作一个数据终端
 
 ac.achievementpage.cat_electromaster=电气使
 achievement.ac_electromaster.lv1=波动电流

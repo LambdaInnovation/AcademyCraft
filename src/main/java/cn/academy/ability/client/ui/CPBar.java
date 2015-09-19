@@ -25,6 +25,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.ui.ACHud;
 import cn.annoreg.core.Registrant;
@@ -98,9 +99,19 @@ public class CPBar extends Widget {
 	float bufferedCP;
 	float bufferedOverload;
 
+	boolean shaderLoaded = false;
+	
 	ResourceLocation overlayTexture;
 	
 	private CPBar() {
+		try { // Safety check. If loading failed, fallback to not using shader.
+			this.shaderCPBar = new ShaderCPBar();
+			this.shaderOverloaded = new ShaderOverloaded();
+			shaderLoaded = true;
+		} catch(Exception e) {
+			AcademyCraft.log.error("Errow while loading CPBar shader", e);
+		}
+		
 		transform.setSize(WIDTH, HEIGHT);
 		transform.scale = 0.2f;
 		transform.alignWidth = WidthAlign.RIGHT;
@@ -212,8 +223,11 @@ public class CPBar extends Widget {
 		
 		// Draw back
 		color4d(1, 1, 1, 1);
-		shaderOverloaded.useProgram();
-		shaderOverloaded.updateTexOffset((GameTimer.getTime() % 10000L) / 10000.0f);
+		
+		if(shaderLoaded) {
+			shaderOverloaded.useProgram();
+			shaderOverloaded.updateTexOffset((GameTimer.getTime() % 10000L) / 10000.0f);
+		}
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -266,7 +280,9 @@ public class CPBar extends Widget {
 		Tessellator t = Tessellator.instance;
 		double len = WIDTH * prog, len2 = len - OFF;
 		
-		shaderCPBar.useProgram();
+		if(shaderLoaded) {
+			shaderCPBar.useProgram();
+		}
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -453,7 +469,7 @@ public class CPBar extends Widget {
 		
 	}
 	
-	static ShaderCPBar shaderCPBar = new ShaderCPBar();
-	static ShaderOverloaded shaderOverloaded = new ShaderOverloaded();
+	ShaderCPBar shaderCPBar;
+	ShaderOverloaded shaderOverloaded;
 	
 }

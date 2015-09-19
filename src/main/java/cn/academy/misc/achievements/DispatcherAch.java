@@ -2,6 +2,7 @@ package cn.academy.misc.achievements;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
@@ -10,15 +11,18 @@ import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.misc.achievements.aches.AchEvItemCrafted;
+import cn.academy.misc.achievements.aches.AchEvItemPickup;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvMatterUnitHarvest;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author EAirPeter
@@ -128,6 +132,22 @@ public final class DispatcherAch {
 			event.player.triggerAchievement(ach);
 	}
 	
+	//cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent
+	
+	private Map<Item, AchEvItemPickup> hcPlayerPickup = new HashMap();
+	
+	public void rgPlayerPickup(ItemStack stack, AchEvItemPickup ach) {
+		hcPlayerPickup.put(stack.getItem(), ach);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerPickup(PlayerEvent.ItemPickupEvent event) {
+		ItemStack stack = event.pickedUp.getEntityItem();
+		AchEvItemPickup ach = hcPlayerPickup.get(stack.getItem());
+		if(ach != null && ach.accept(event)) {
+			event.player.triggerAchievement(ach);
+		}
+	}
 	
 	//Init
 	

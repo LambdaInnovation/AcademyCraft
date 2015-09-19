@@ -112,7 +112,7 @@ shaped(mat_core#0) {
 }
 
 shaped(mat_core#1) {
-    [ender_eye]
+    [ender_pearl]
     [crystal1]
     [mat_core#0]
 }
@@ -155,7 +155,7 @@ shaped(reso_comp) {
 shaped(conv_comp) {
     [calc_chip]
     [ene_unit]
-    [ender_eye]
+    [ender_pearl]
 }
 
 shaped(app_skill_tree) {

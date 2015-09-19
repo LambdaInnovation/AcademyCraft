@@ -1,15 +1,14 @@
 package cn.academy.misc.achievements.pages;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.ModuleAbility;
-import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchCrSingle;
+import cn.academy.misc.achievements.aches.AchEvItemPickup;
 import cn.academy.misc.achievements.aches.AchEvMatterUnitHarvest;
+import cn.academy.terminal.ModuleTerminal;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author EAirPeter
@@ -27,6 +26,7 @@ public final class PageDefault extends ACAchievementPage {
 	private final ACAchievement aSolarGen;
 	private final ACAchievement aWindGen;
 	private final ACAchievement aCrystal;
+	private final ACAchievement aTerminal;
 	
 	public PageDefault() {
 		super("default");
@@ -41,7 +41,8 @@ public final class PageDefault extends ACAchievementPage {
 			aPhaseGen = new AchCrSingle("phasegen", 0, 2, ModuleEnergy.phaseGen, aPhaseLiquid).adItemCrafted(ModuleEnergy.phaseGen),
 			aSolarGen = new AchCrSingle("solargen", 2, 2, ModuleEnergy.solarGen, aPhaseGen).adItemCrafted(ModuleEnergy.solarGen),
 			aWindGen = new AchCrSingle("windgen", 4, 2, ModuleEnergy.windgenFan, aSolarGen).adItemCrafted(ModuleEnergy.windgenMain),
-			aCrystal = new AchCrSingle("crystal", 2, 0, ModuleCrafting.crystalLow, null).adItemCrafted(ModuleCrafting.crystalLow),
+			aCrystal = new AchEvItemPickup("crystal", 2, 0, ModuleCrafting.crystalLow, null).setTrigger(new ItemStack(ModuleCrafting.crystalLow)),
+			aTerminal = new AchCrSingle("terminal", -2, 2, ModuleTerminal.terminalInstaller, null).adItemCrafted(ModuleTerminal.terminalInstaller)
 		});
 	}
 	

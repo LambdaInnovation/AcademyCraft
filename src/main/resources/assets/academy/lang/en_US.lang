@@ -453,6 +453,8 @@ achievement.ac_windgen=The Clean Energy
 achievement.ac_windgen.desc=Craft a Wind Generator
 achievement.ac_crystal=Crystal!
 achievement.ac_crystal.desc=Acquire Imag Crystal
+achievement.ac_terminal=Kidney Free
+achievement.ac_terminal.desc=Craft a Data Terminal
 
 ac.achievementpage.cat_electromaster=Electromaster
 achievement.ac_electromaster.lv1=Fluctuating Current
