@@ -92,7 +92,9 @@ public class GuiNode extends LIGuiContainer {
     
     @Override
     protected boolean containerAcceptsKey(int key) {
-    	return key == Keyboard.KEY_ESCAPE;
+    	Widget focus = gui.getFocus();
+    	boolean isinput = focus != null && focus.getName().equals("input_name");
+    	return key == Keyboard.KEY_ESCAPE || !isinput;
     }
     
 	@Override
