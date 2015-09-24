@@ -20,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.util.ControlOverrider;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
@@ -30,6 +29,7 @@ import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
 import cn.liutils.core.event.eventhandler.LIHandler;
 import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
+import cn.liutils.util.client.ControlOverrider;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.helper.Color;
