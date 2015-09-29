@@ -14,6 +14,10 @@ public class ACTutorialUtils{
 	@Target(ElementType.FIELD)
 	public @interface RegTutorial{}
 	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface RegTutorialSet{}
+	
 	public static final int TUTORIAL_NUM=ACTutorialList.list.size();
 	
 	public static boolean isLoaded(EntityPlayer p,ACTutorial tutorial){
