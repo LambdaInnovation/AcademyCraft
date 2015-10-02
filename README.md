@@ -22,7 +22,7 @@ Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 Used Forge version: 1.7.10-10.13.4.1448.
 
 Required dependencies: 
-[LIUtils][liu], [AnnotationRegistry][ar]
+[LambdaLib][llib] ___dev___ branch
 
 ### Supported Mods (Compile-Time Dependencies)
 
@@ -44,5 +44,4 @@ You must add the two mods mentioned above into your workspace and then add Acade
 ## Documents
 We are working on filling up the documents of AC codes. You can check out the Chinese version of API document at [HERE](https://github.com/LambdaInnovation/AcademyCraft/tree/master/docs_cn "Chinese Documents"). Pull requests are welcomed.
 
-[ar]: https://github.com/LambdaInnovation/AnnotationRegistry
-[liu]: https://github.com/LambdaInnovation/LIUtils
+[llib]: https://github.com/LambdaInnovation/LambdaLib
