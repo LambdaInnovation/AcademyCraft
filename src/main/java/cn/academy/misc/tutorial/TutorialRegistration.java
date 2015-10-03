@@ -3,6 +3,7 @@ package cn.academy.misc.tutorial;
 import cn.academy.misc.tutorial.ACTutorialUtils.RegTutorial;
 import cn.annoreg.base.RegistrationFieldSimple;
 import cn.annoreg.core.LoadStage;
+import cn.annoreg.core.RegistryTypeDecl;
 @RegistryTypeDecl
 public class TutorialRegistration extends RegistrationFieldSimple<RegTutorial, ACTutorial> {
 

@@ -25,7 +25,7 @@ public class TutorialSetRegistration extends RegistrationClassSimple<RegTutorial
 	protected void register(Class clazz, RegTutorialSet anno) throws Exception {
 		// TODO Auto-generated method stub
 		Field[] fields=clazz.getDeclaredFields();
-		for(Field f:fields){
+		for(Field f : fields){
 			if(f.getType().isAssignableFrom(ACTutorial.class)){
 				ACTutorial t=(ACTutorial)f.get(null);
 				if(t==null)t=new ACTutorial(f.getName());

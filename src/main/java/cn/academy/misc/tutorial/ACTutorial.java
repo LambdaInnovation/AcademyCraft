@@ -24,11 +24,11 @@ public class ACTutorial {
 		if(StatCollector.canTranslate(key))
 			return StatCollector.translateToLocal(key);
 		else
-			//我随便写的
+			//鎴戠瀻鍐欑殑
 			return "Lang Missing!";
 	}
 	/**
-	 * 将自己注册至{@link ACTutorialList#list}
+	 * 娉ㄥ唽鍒皗@link ACTutorialList#list}
 	 */
 	public void regist(){
 		ACTutorialList.regist(this);
