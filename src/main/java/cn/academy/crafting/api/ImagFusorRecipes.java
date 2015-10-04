@@ -46,6 +46,14 @@ public class ImagFusorRecipes {
 		recipe.id = recipeList.size() - 1;
 	}
 	
+	public void removeRecipe(Item item) {
+		for (IFRecipe r : recipeList) {
+			if (r.consumeType.getItem() == item) {
+				recipeList.remove(r);
+			}
+		}
+	}
+	
 	public IFRecipe getRecipe(Item item) {
 		for(IFRecipe r : recipeList)
 			if(r.consumeType.getItem() == item)

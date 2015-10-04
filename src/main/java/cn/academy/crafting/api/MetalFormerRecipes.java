@@ -15,9 +15,11 @@ package cn.academy.crafting.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
+import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.s11n.InstanceSerializer;
@@ -59,6 +61,14 @@ public enum MetalFormerRecipes {
 		RecipeObject add = new RecipeObject(in, out, mode);
 		add.id = objects.size();
 		objects.add(add);
+	}
+	
+	public void remove(ItemStack item, Mode mode) {
+		for (RecipeObject r : objects) {
+			if (r.input == item && r.mode == mode) {
+				objects.remove(r);
+			}
+		}
 	}
 	
 	public RecipeObject getRecipe(ItemStack input, Mode mode) {

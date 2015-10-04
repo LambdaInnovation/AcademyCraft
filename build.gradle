@@ -52,6 +52,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to"
 	}
+	ivy {
+        name "MineTweaker3"
+        artifactPattern "http://minetweaker3.powerofbytes.com/download/[module]-[classifier]-[revision].[ext]"
+    }
 }
 
 dependencies {
@@ -59,6 +63,7 @@ dependencies {
 	compile "cn.liutils:LIUtils:${config.liutils_ver}:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev"
 	compile "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
+	compile name: "MineTweaker3", version: "1.7.10-3.0.9C", classifier: "Dev"
 
 	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
