@@ -1,18 +1,24 @@
 package cn.academy.misc.tutorial2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+import cn.annoreg.core.Registrant;
+import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
+import cn.liutils.util.helper.PlayerData;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+@Registrant
 public class ACTutorial {
 	static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
+	private static final ACTutorialDataPart data = new ACTutorialDataPart();
 	String id;
-	List<Condition> conditions = new ArrayList<Condition>();
-	
+	List<Boolean> andConditions = new ArrayList<Boolean>();
+	List<Boolean> orConditions = new ArrayList<Boolean>();
 	public static void addTutorials(ACTutorial...tutorial) throws Exception{
 		for(ACTutorial t : tutorial){
 			if(tutorials.containsKey(t.id))throw new Exception("Already　has a tutorial with this id:"+t.id);
@@ -32,15 +38,6 @@ public class ACTutorial {
 		addTutorials(acTu);
 	}
 	
-	public static void addConditions(String TutorialID,Condition...c) throws Exception{
-		try {
-			tutorials.get(TutorialID).addConditions(c);
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			throw new Exception("No such a tutorial:"+TutorialID);
-		}
-	}
-	
 	public static String getKey(ACTutorial t){
 		return getKey(t.id);
 	}
@@ -49,26 +46,35 @@ public class ACTutorial {
 		return "ac.gui.tutorial."+id;
 	}
 	
+	public static ACTutorial getTutorial(String s) throws Exception{
+		ACTutorial t;
+		if(!tutorials.containsKey(s))throw new Exception("No such a tutorial;");
+		t=tutorials.get(s);
+		return t;
+	}
 	
-	public static class ACTutorialDataPart extends DataPart{
-		public void update(Condition c,boolean b){
-			for(ACTutorial t : tutorials.values()){
-				for(Condition c0 : t.conditions){
-					if(c0.equals(c))c0.update(b);
-				}
-			}
+	@RegDataPart("ACTutorial")
+	static class ACTutorialDataPart extends DataPart{
+		public void update(){
+			sync();
 		}
-
+		
 		@Override
 		public void fromNBT(NBTTagCompound tag) {
 			// TODO Auto-generated method stub
 			for(ACTutorial t : tutorials.values()){
 				NBTTagCompound tag0 = (NBTTagCompound) tag.getTag(t.id);
-				int i=0;
-				for(Condition c : t.conditions){
+				Set<String> set=tag0.func_150296_c();
+				for(String s : set){
 					try {
-						c.update(tag0.getBoolean(String.valueOf(i++)));
-					} catch (Exception e) {
+						if(s.startsWith("AND")){
+							int i=Integer.parseInt(s.substring(3));
+							t.andConditions.set(i, tag0.getBoolean(s));
+						}else if(s.startsWith("OR")){
+							int i=Integer.parseInt(s.substring(2));
+							t.orConditions.set(i, tag0.getBoolean(s));
+						}
+					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -83,25 +89,42 @@ public class ACTutorial {
 			for(ACTutorial t : tutorials.values()){
 				NBTTagCompound tag0 = new NBTTagCompound();
 				int i=0;
-				for(Condition c : t.conditions){
-					tag0.setBoolean(String.valueOf(i++), c.exam());
+				for(Boolean b : t.andConditions){
+					tag0.setBoolean("AND"+i++, b);
 				}
-				tag.setTag(t.id,tag0);;
+				i=0;
+				for(Boolean b : t.orConditions){
+					tag0.setBoolean("OR"+i++, b);
+				}
+				tag.setTag(t.id, tag0);
 			}
 			return tag;
 		}
 		
 	}
 	
-	
-	
-	public void addConditions(Condition...c){
-		this.conditions.addAll(Arrays.asList(c));
-	}
-	
 	public boolean getIsLoad(){
 		boolean b = true;
-		for(Condition c : conditions)b &= c.exam();
+
+		for(Boolean b0 : orConditions)
+			if(b0){
+				b = true;
+				break;
+			}else{
+				b = false;
+			}
+		
+		if(b)for(Boolean b0 : andConditions)
+			if(!b0){
+				b = false;
+				break;
+			}
+		
 		return b;
+	}
+
+	public void update(EntityPlayer p,int i){
+		this.andConditions.set(i,Boolean.TRUE);
+		PlayerData.get(p).getPart(ACTutorialDataPart.class).update();
 	}
 }
