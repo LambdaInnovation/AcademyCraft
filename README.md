@@ -19,10 +19,9 @@ Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 
 ### Requirements
 
-Used Forge version: 1.7.10-10.13.4.1448.
-
-Required dependencies: 
-[LambdaLib][llib] ___dev___ branch
+* JDK8 and 1.8 project compilance level
+* MinecraftForge 1.7.10-10.13.4.1448.
+* [LambdaLib][llib] ___dev___ branch
 
 ### Supported Mods (Compile-Time Dependencies)
 
@@ -34,14 +33,14 @@ Thermal Expansion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-th
 
 Not Enough Items [1.0.3.74](http://chickenbones.net/Pages/links.html).
 
+### Build
 
-The mod requires Java 8 to compile and execute. Officially we use [RetroLamba](https://github.com/orfjackal/retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
+The mod requires Java 8 to compile. Officially we use [RetorLamba](https://github.com/evant/gradle-retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
 
-
-
-You must add the two mods mentioned above into your workspace and then add AcademyCraft.
+Use ``gradle clean install`` to build locally.
 
 ## Documents
+
 We are working on filling up the documents of AC codes. You can check out the Chinese version of API document at [HERE](https://github.com/LambdaInnovation/AcademyCraft/tree/master/docs_cn "Chinese Documents"). Pull requests are welcomed.
 
 [llib]: https://github.com/LambdaInnovation/LambdaLib
