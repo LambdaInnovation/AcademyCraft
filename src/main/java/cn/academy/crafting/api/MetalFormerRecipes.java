@@ -15,11 +15,9 @@ package cn.academy.crafting.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
-import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.s11n.InstanceSerializer;
