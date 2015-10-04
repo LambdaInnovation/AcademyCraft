@@ -35,6 +35,7 @@ import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
+import cn.liutils.util.generic.DebugUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -92,7 +93,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		if(info != null)
 			info.update();
 		
-		if(++updateTicker == 20) {
+		if(info.getSubID() != 0)
+			return;
+		if(!getWorldObj().isRemote && ++updateTicker == 20) {
 			updateTicker = 0;
 			this.syncPlates();
 		}
