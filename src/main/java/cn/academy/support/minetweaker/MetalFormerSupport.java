@@ -29,7 +29,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class MetalFormerSupport {
 	
 	@ZenMethod
-	public static void addRecipe(IItemStack input, IItemStack output, String _mode) {
+	public static void addRecipe(IItemStack output, IItemStack input, String _mode) {
 		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, _mode));
 	}
 	

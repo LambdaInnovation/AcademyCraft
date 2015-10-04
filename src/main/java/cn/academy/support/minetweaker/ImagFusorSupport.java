@@ -28,13 +28,13 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class ImagFusorSupport {
 
 	@ZenMethod
-	public static void addRecipe(IItemStack input, IItemStack output, int liquidAmount) {
+	public static void addRecipe(IItemStack output, IItemStack input, int liquidAmount) {
 		MineTweakerAPI.apply(new AddImagFusorRecipe(input, output, liquidAmount));
 	}
 	
 	@ZenMethod
 	public static void removeRecipe(IItemStack input) {
-		
+		MineTweakerAPI.apply(new RemoveImagFusorRecipe(input));
 	}
 	
 	private static class AddImagFusorRecipe extends OneWayAction {
@@ -64,7 +64,7 @@ public class ImagFusorSupport {
 		
 	}
 	
-	static class RemoveImagFusorRecipe extends OneWayAction {
+	private static class RemoveImagFusorRecipe extends OneWayAction {
 		ItemStack input;
 		
 		public RemoveImagFusorRecipe(IItemStack input) {
