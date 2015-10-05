@@ -12,15 +12,15 @@
  */
 package cn.academy.energy.block;
 
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.block.SlotMatterUnit;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.energy.api.IFItemManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.SlotMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.energy.ModuleEnergy;
 
 /**
  * @author WeAthFolD
@@ -72,12 +72,13 @@ public class ContainerPhaseGen extends Container {
                 if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
                     return null;
             } else { 
-            	if (ModuleCrafting.matterUnit.getMaterial(stack1) != ModuleCrafting.imagPhase.mat || !this.mergeItemStack(stack1, 0, 1, false))
-            		return null;
-            	if (stack1.getItem() != ModuleCrafting.matterUnit || ModuleCrafting.matterUnit.getMaterial(stack1) != ItemMatterUnit.NONE || 
-            			!this.mergeItemStack(stack1, 1, 2, false))
-            		return null;
-            	if (!this.mergeItemStack(stack1, 2, 3, false))
+            	if(IFItemManager.instance.isSupported(stack1)) {
+            		if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_OUTPUT, TilePhaseGen.SLOT_OUTPUT + 1, false))
+            			return null;
+            	} else if(ModuleCrafting.matterUnit.getMaterial(stack1) == ModuleCrafting.imagPhase.mat) {
+            		if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_LIQUID_IN, TilePhaseGen.SLOT_LIQUID_IN + 1, false))
+            			return null;
+            	} else
             		return null;
             }
 

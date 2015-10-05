@@ -87,10 +87,11 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 				if(stack != null && isPhaseLiquid(stack) && isOutputSlotAvailable() && 
 						(getTankSize() - getLiquidAmount() > PER_UNIT)) {
 					
-					tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
-					
-					--stack.stackSize;
-					if(stack.stackSize == 0)
+					if(stack.stackSize > 0) {
+						tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
+						--stack.stackSize;
+					}
+					if(stack.stackSize <= 0)
 						setInventorySlotContents(0, null);
 					
 					ItemStack output = getStackInSlot(SLOT_LIQUID_OUT);

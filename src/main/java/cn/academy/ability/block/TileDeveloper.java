@@ -150,7 +150,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 		if(user == null || !user.isEntityAlive()) {
 			user = player;
 			developer.reset();
-			openGuiAtClient(player);
+			openGuiAtClient(player, player);
 			return true;
 		}
 		return player.equals(user);
@@ -200,7 +200,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void openGuiAtClient(@Instance EntityPlayer player) {
+	private void openGuiAtClient(@Target EntityPlayer _player, @Instance EntityPlayer player) {
 		doOpenGui(player);
 	}
 	

@@ -92,6 +92,8 @@ public class ItemMatterUnit extends ACItem {
 	}
 	
 	public MatterMaterial getMaterial(ItemStack stack) {
+		if(stack.getItem() != this)
+			return NONE;
 		String name = StackUtils.loadTag(stack).getString("material");
 		MatterMaterial mat = nameMap.get(name);
 		if(mat == null) {

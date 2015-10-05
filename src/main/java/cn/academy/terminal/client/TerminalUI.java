@@ -438,7 +438,7 @@ public class TerminalUI extends AuxGui {
 	private class LeftClickHandler extends KeyHandler {
 		
 		@Override
-		public void onKeyDown() {
+		public void onKeyUp() {
 			Widget app = getSelectedApp();
 			if(app != null) {
 				AppHandler handler = getHandler(app);
