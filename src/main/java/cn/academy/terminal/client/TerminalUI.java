@@ -101,7 +101,7 @@ public class TerminalUI extends AuxGui {
 		gui = new LIGui();
 		gui.addWidget(root = loaded.getWidget("back").copy());
 		
-		mouseX = mouseY = 200;
+		buffX = buffY = mouseX = mouseY = 150;
 		
 		initGui();
 	}
