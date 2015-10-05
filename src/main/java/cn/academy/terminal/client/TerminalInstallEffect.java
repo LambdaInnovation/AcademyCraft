@@ -109,7 +109,7 @@ public class TerminalInstallEffect extends AuxGui {
 		double prog = (double) this.getTimeActive() / ANIM_LENGTH;
 		if(this.getTimeActive() >= ANIM_LENGTH + WAIT) {
 			dispose();
-			TerminalUI.keyHandler.onKeyDown();
+			TerminalUI.keyHandler.onKeyUp();
 			Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentTranslation("ac.terminal.key_hint", 
 				KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(TerminalUI.keyHandler))));
 		}

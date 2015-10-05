@@ -43,6 +43,8 @@ import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.ControlOverrider;
+import cn.liutils.util.client.HudUtils;
+import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
 import cn.liutils.util.helper.KeyHandler;
@@ -65,7 +67,7 @@ public class TerminalUI extends AuxGui {
 	private static final double BALANCE_SPEED = 3; //pixel/ms
 	public static final int MAX_MX = 605, MAX_MY = 740;
 	
-	static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight");
+	static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight"), CURSOR = tex("cursor");
 	
 	final double SENSITIVITY = 0.7;
 
@@ -99,6 +101,8 @@ public class TerminalUI extends AuxGui {
 		gui = new LIGui();
 		gui.addWidget(root = loaded.getWidget("back").copy());
 		
+		mouseX = mouseY = 200;
+		
 		initGui();
 	}
 	
@@ -109,6 +113,7 @@ public class TerminalUI extends AuxGui {
 		mc.mouseHelper = helper = new TerminalMouseHelper();
 		
 		ModuleCoreClient.dynKeyManager.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
+		ControlOverrider.override(KeyManager.MOUSE_LEFT);
 	}
 	
 	@Override
@@ -117,6 +122,7 @@ public class TerminalUI extends AuxGui {
 		mc.mouseHelper = oldHelper;
 		
 		ModuleCoreClient.dynKeyManager.removeKeyHandler("terminal_click");
+		ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
 	}
 
 	@Override
@@ -135,11 +141,11 @@ public class TerminalUI extends AuxGui {
 		selection = (int)((mouseY - 0.01) / MAX_MY * 3) * 3 + (int)((mouseX - 0.01) / MAX_MX * 3);
 		
 		if(mouseY == 0) {
-			mouseY = 20;
+			mouseY = 1;
 			if(scroll > 0) scroll--;
 		}
 		if(mouseY == MAX_MY) {
-			mouseY -= 20;
+			mouseY -= 1;
 			if(scroll < getMaxScroll()) scroll++;
 		}
 		
@@ -184,8 +190,8 @@ public class TerminalUI extends AuxGui {
         GL11.glTranslated(1, -1.8, 0);
         
         GL11.glRotated(-1.6, 0, 0, 1);
-        GL11.glRotated(-18 - 2 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);
-        GL11.glRotated(7 + 2 * (buffY / MAX_MY - 0.5), 1, 0, 0);
+        GL11.glRotated(-18 - 4 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);
+        GL11.glRotated(7 + 4 * (buffY / MAX_MY - 0.5), 1, 0, 0);
         
         //DEBUG CODE
 //        GL11.glPointSize(20);
@@ -201,6 +207,20 @@ public class TerminalUI extends AuxGui {
         GL11.glScaled(scale, -scale, scale);
         
         gui.draw(mouseX, mouseY);
+        
+        {
+        	GL11.glPushMatrix();
+        	double csize = (getSelectedApp() == null ? 1 : 1.3) * (20 + Math.sin(time / 300.0) * 2);
+        	RenderUtils.loadTexture(CURSOR);
+        	
+        	GL11.glColor4d(1, 1, 1, .4);
+        	GL11.glTranslated(0, 0, -2);
+        	GL11.glDisable(GL11.GL_ALPHA_TEST);
+        	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        	HudUtils.rect(-csize/2 + buffX, -csize/2 + buffY + 120, csize, csize);
+        	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        	GL11.glPopMatrix();
+        }
         
         GL11.glPopMatrix();
         
@@ -352,7 +372,7 @@ public class TerminalUI extends AuxGui {
 		
 		TerminalUI current;
 		
-		public void onKeyDown() {
+		public void onKeyUp() {
 			EntityPlayer player = getPlayer();
 			TerminalData tData = TerminalData.get(player);
 			
@@ -438,7 +458,7 @@ public class TerminalUI extends AuxGui {
 	private class LeftClickHandler extends KeyHandler {
 		
 		@Override
-		public void onKeyDown() {
+		public void onKeyUp() {
 			Widget app = getSelectedApp();
 			if(app != null) {
 				AppHandler handler = getHandler(app);
