@@ -35,6 +35,7 @@ import cn.liutils.ripple.ScriptFunction;
 import cn.liutils.template.block.BlockMulti;
 import cn.liutils.template.block.IMultiTile;
 import cn.liutils.template.block.InfoBlockMulti;
+import cn.liutils.util.generic.DebugUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -61,6 +62,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 	@RegTileEntity.Render
 	@SideOnly(Side.CLIENT)
 	public static RenderMatrix renderer;
+	
+	// Client-only for display
+	public int plateCount;
 	
 	int updateTicker;
 	
@@ -89,9 +93,11 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		if(info != null)
 			info.update();
 		
-		if(++updateTicker == 20) {
+		if(info.getSubID() != 0)
+			return;
+		if(!getWorldObj().isRemote && ++updateTicker == 20) {
 			updateTicker = 0;
-			this.syncInventory();
+			this.syncPlates();
 		}
 	}
 
@@ -134,6 +140,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     }
 
 	//WEN
+    /**
+     * Server only.
+     */
 	public int getPlateCount() {
 		int count = 0;
 		for(int i = 0; i < 3; ++i) {
@@ -182,19 +191,15 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		return getFunc(propName).callDouble(N, L);
 	}
 	
-	private void syncInventory() {
-		syncInventory(this, inventory[0], inventory[1], 
-				inventory[2], inventory[3]);
+	private void syncPlates() {
+		syncInventory(this, getPlateCount());
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
 	private void syncInventory(
 			@RangedTarget(range = 15) TileMatrix matrix,
-			@Data ItemStack s0, @Data ItemStack s1, @Data ItemStack s2, @Data ItemStack s3) {
-		inventory[0] = s0;
-		inventory[1] = s1;
-		inventory[2] = s2;
-		inventory[3] = s3;
+			@Data Integer plateCount) {
+		this.plateCount = plateCount;
 	}
 	
 	private static ScriptFunction getFunc(String name) {

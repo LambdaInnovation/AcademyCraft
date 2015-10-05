@@ -11,6 +11,7 @@ ac {
             overload(exp) { lerp(15, 10, exp) } 
             p_ignite(exp) { lerp(0, 0.6, exp) } 
             cooldown(exp) { lerp(6, 3, exp) }
+            range(exp) { lerp(6, 15, exp) }
           
             expincr_effective(exp) { 
                 0.00008 * lerp(60, 90, exp)

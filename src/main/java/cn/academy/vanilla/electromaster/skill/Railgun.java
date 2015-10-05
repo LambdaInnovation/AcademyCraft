@@ -289,7 +289,7 @@ public class Railgun extends Skill {
 			if(tick >= CHARGE_ACCEPT_TIME && stack != null) {
 				if(cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
 					if(!player.capabilities.isCreativeMode) {
-						if(stack.stackSize-- == 0) {
+						if(--stack.stackSize == 0) {
 							player.setCurrentItemOrArmor(0, null);
 						}
 					}
