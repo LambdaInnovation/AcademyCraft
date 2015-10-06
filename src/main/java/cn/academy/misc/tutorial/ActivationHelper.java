@@ -1,4 +1,4 @@
-package cn.academy.misc.tutorial2;
+package cn.academy.misc.tutorial;
 
 import java.util.HashMap;
 
@@ -12,15 +12,6 @@ public class ActivationHelper {
 	static HashMap<Item,Condition> craftMap = new HashMap<Item,Condition>();
 	static HashMap<Item,Condition> pickupMap = new HashMap<Item,Condition>();
 	static HashMap<Item,Condition> smeltMap = new HashMap<Item,Condition>();
-	
-	private static class Condition{
-		ACTutorial tutorial;
-		int index;
-		Condition(ACTutorial t){
-			this.tutorial=t;
-			this.index=t.andConditions.size();
-		}
-	}
 	
 	public static void andActivateItemCraft(String TutorialID,Item...items) throws Exception{
 		int i = 0;

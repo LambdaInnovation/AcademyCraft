@@ -1,4 +1,4 @@
-package cn.academy.misc.tutorial2;
+package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
 import net.minecraft.init.Items;
