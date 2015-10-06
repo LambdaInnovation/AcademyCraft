@@ -24,8 +24,8 @@ import net.minecraft.item.ItemStack;
 public class MTSupport {
 	
 	public static void init() {
-		MineTweakerAPI.registerClassRegistry(ImagFusorSupport.class);
-		MineTweakerAPI.registerClassRegistry(MetalFormerSupport.class);
+		MineTweakerAPI.registerClass(ImagFusorSupport.class);
+		MineTweakerAPI.registerClass(MetalFormerSupport.class);
 	}
 	
 	public static ItemStack toStack(IItemStack s) {

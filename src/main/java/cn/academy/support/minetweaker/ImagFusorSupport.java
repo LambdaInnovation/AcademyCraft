@@ -32,11 +32,6 @@ public class ImagFusorSupport {
 		MineTweakerAPI.apply(new AddImagFusorRecipe(input, output, liquidAmount));
 	}
 	
-	@ZenMethod
-	public static void removeRecipe(IItemStack input) {
-		MineTweakerAPI.apply(new RemoveImagFusorRecipe(input));
-	}
-	
 	private static class AddImagFusorRecipe extends OneWayAction {
 		ItemStack input, output;
 		int liquidAmount;
@@ -54,31 +49,7 @@ public class ImagFusorSupport {
 
 		@Override
 		public String describe() {
-			return "Add extra ImagFusor recipe for" + input.getUnlocalizedName();
-		}
-
-		@Override
-		public Object getOverrideKey() {
-			return null;
-		}
-		
-	}
-	
-	private static class RemoveImagFusorRecipe extends OneWayAction {
-		ItemStack input;
-		
-		public RemoveImagFusorRecipe(IItemStack input) {
-			this.input = toStack(input);
-		}
-		
-		@Override
-		public void apply() {
-			INSTANCE.removeRecipe(input.getItem());
-		}
-
-		@Override
-		public String describe() {
-			return "Remove ImagFusor recipe for" + input.getUnlocalizedName();
+			return "Add extra ImagFusor recipe for " + input.getUnlocalizedName();
 		}
 
 		@Override

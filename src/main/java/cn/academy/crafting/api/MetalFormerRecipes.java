@@ -13,6 +13,7 @@
 package cn.academy.crafting.api;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -59,14 +60,6 @@ public enum MetalFormerRecipes {
 		RecipeObject add = new RecipeObject(in, out, mode);
 		add.id = objects.size();
 		objects.add(add);
-	}
-	
-	public void remove(ItemStack item, Mode mode) {
-		for (RecipeObject r : objects) {
-			if (r.input == item && r.mode == mode) {
-				objects.remove(r);
-			}
-		}
 	}
 	
 	public RecipeObject getRecipe(ItemStack input, Mode mode) {

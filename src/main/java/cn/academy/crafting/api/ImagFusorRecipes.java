@@ -13,6 +13,7 @@
 package cn.academy.crafting.api;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.Item;
@@ -44,14 +45,6 @@ public class ImagFusorRecipes {
 		}
 		recipeList.add(recipe);
 		recipe.id = recipeList.size() - 1;
-	}
-	
-	public void removeRecipe(Item item) {
-		for (IFRecipe r : recipeList) {
-			if (r.consumeType.getItem() == item) {
-				recipeList.remove(r);
-			}
-		}
 	}
 	
 	public IFRecipe getRecipe(Item item) {

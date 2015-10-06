@@ -29,13 +29,18 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class MetalFormerSupport {
 	
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IItemStack input, String _mode) {
-		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, _mode));
+	public static void addEtchRecipe(IItemStack output, IItemStack input) {
+		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
 	}
 	
 	@ZenMethod
-	public static void removeRecipe(IItemStack input, String _mode) {
-		MineTweakerAPI.apply(new RemoveMetalFormerRecipe(input, _mode));
+	public static void addInciseRecipe(IItemStack output, IItemStack input) {
+		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
+	}
+	
+	@ZenMethod
+	public static void addPlateRecipe(IItemStack output, IItemStack input) {
+		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
 	}
 	
 	private static class AddMetalFormerRecipe extends OneWayAction {
@@ -43,10 +48,10 @@ public class MetalFormerSupport {
 		ItemStack input, output;
 		Mode mode;
 		
-		public AddMetalFormerRecipe(IItemStack input, IItemStack output, String mode) {
+		public AddMetalFormerRecipe(IItemStack input, IItemStack output, Mode mode) {
 			this.input = toStack(input);
 			this.output = toStack(output);
-			this.mode = Mode.valueOf(mode);
+			this.mode = mode;
 		}
 		
 		@Override
@@ -56,34 +61,7 @@ public class MetalFormerSupport {
 
 		@Override
 		public String describe() {
-			return "Add extra MetalFormer recipe for" + input.getUnlocalizedName();
-		}
-
-		@Override
-		public Object getOverrideKey() {
-			return null;
-		}
-		
-	}
-	
-	private static class RemoveMetalFormerRecipe extends OneWayAction {
-
-		ItemStack input;
-		Mode mode;
-		
-		public RemoveMetalFormerRecipe(IItemStack input, String mode) {
-			this.input = toStack(input);
-			this.mode = Mode.valueOf(mode);
-		}
-		
-		@Override
-		public void apply() {
-			INSTANCE.remove(input, mode);
-		}
-
-		@Override
-		public String describe() {
-			return "Remove MetalFormer recipe for" + input.getUnlocalizedName();
+			return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
 		}
 
 		@Override
