@@ -44,7 +44,8 @@ public class SkillMindCourse extends Skill {
 	
 	@SubscribeEvent
 	public void onExpAdded(SkillExpAddedEvent event) {
-		if(event.skill.canControl()) {
+		AbilityData aData = event.getAbilityData();
+		if(event.skill.canControl() && aData.isSkillLearned(this)) {
 			event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
 		}
 	}

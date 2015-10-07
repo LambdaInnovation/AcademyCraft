@@ -55,8 +55,7 @@ repositories {
 }
 
 dependencies {
-	compile "cn.annoreg:AnnotationRegistry:${config.annoreg_ver}:dev"
-	compile "cn.liutils:LIUtils:${config.liutils_ver}:dev"
+	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev"
 	compile "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
 
