@@ -17,7 +17,8 @@ public class ACTutorial {
 	static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
 	private static final ACTutorialDataPart data = new ACTutorialDataPart();
 	String id;
-	List<Boolean> conditions = new ArrayList<Boolean>();
+	List<Condition> savedConditions = new ArrayList<Condition>();
+	List<Condition> conditions = new ArrayList<Condition>();
 	public static void addTutorials(ACTutorial...tutorial) throws Exception{
 		for(ACTutorial t : tutorial){
 			if(tutorials.containsKey(t.id))throw new Exception("Already　has a tutorial with this id:"+t.id);
@@ -35,6 +36,14 @@ public class ACTutorial {
 			i++;
 		}
 		addTutorials(acTu);
+	}
+	
+	public ACTutorial addCondition(Condition...conditions){
+		for(Condition c : conditions){
+			this.conditions.add(c);
+			c.addAllNeedSavingChildrenToTutorial(this);
+		}
+		return this;
 	}
 	
 	public static String getKey(ACTutorial t){
@@ -66,8 +75,7 @@ public class ACTutorial {
 				Set<String> set=tag0.func_150296_c();
 				for(String s : set){
 					try {
-						int i=Integer.parseInt(s);
-						t.conditions.set(i, tag0.getBoolean(s));
+						t.savedConditions.get(Integer.parseInt(s)).result=tag0.getBoolean(s);
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -83,8 +91,8 @@ public class ACTutorial {
 			for(ACTutorial t : tutorials.values()){
 				NBTTagCompound tag0 = new NBTTagCompound();
 				int i=0;
-				for(Boolean b : t.conditions){
-					tag0.setBoolean(String.valueOf(i++), b);
+				for(Condition c : t.savedConditions){
+					tag0.setBoolean(String.valueOf(i++), c.exam());
 				}
 				tag.setTag(t.id, tag0);
 			}
@@ -95,8 +103,8 @@ public class ACTutorial {
 	
 	public boolean getIsLoad(){
 		boolean b = true;
-		if(b)for(Boolean b0 : conditions)
-			if(!b0){
+		if(b)for(Condition b0 : conditions)
+			if(!b0.exam()){
 				b = false;
 				break;
 			}

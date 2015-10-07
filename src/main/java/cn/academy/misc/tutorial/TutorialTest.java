@@ -9,13 +9,17 @@ public class TutorialTest {
 		try {
 			ACTutorial.addTutorials("aaa","bbb","ccc","ddd");
 			
-			ActivationHelper.andActivateItemCraft("aaa", Items.bed,Item.getItemFromBlock(ModuleAbility.developerNormal));
-			ActivationHelper.orActivateItemPickup("bbb", Items.bed,Item.getItemFromBlock(ModuleAbility.developerNormal));
-			//条件为and&&or
-			//cc的条件为获得床且获得普通开发及且（获得铁锭或者获得便携开发机）
-			ActivationHelper.andActivateItemCraft("ccc", Items.bed,Item.getItemFromBlock(ModuleAbility.developerNormal));
-			ActivationHelper.orActivateItemPickup("ccc", Items.iron_ingot,ModuleAbility.developerPortable);
-			//ddd的教程条件为预装
+			ActivationHelper.addConditions("大餐", 
+					Condition.or(
+							Condition.and(
+									Condition.itemsCrafted(Items.cooked_beef,Items.baked_potato)
+									/*
+									 * 等效于
+									 * Condition.itemCrafted(Items.cooked_beef),
+									 * Condition.itemCrafted(baked_potato)
+									 */
+									),
+							Condition.itemCrafted(Items.cake)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
