@@ -22,8 +22,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.liutils.util.helper.PlayerDataTag;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -79,11 +78,11 @@ public abstract class CommandAIMBase extends ACCommand {
 		}
 		
 		private void setActive(EntityPlayer player, boolean data) {
-			player.getEntityData().setBoolean(ID, data);
+			PlayerDataTag.get(player).getTag().setBoolean(ID, data);
 		}
 		
 		private boolean isActive(EntityPlayer player) {
-			return player.getEntityData().getBoolean(ID);
+			return PlayerDataTag.get(player).getTag().getBoolean(ID);
 		}
 		
 	}

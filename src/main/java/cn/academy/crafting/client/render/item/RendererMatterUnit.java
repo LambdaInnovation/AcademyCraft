@@ -54,8 +54,12 @@ public class RendererMatterUnit implements IItemRenderer {
 		ItemMatterUnit item = ModuleCrafting.matterUnit;
 		GL11.glColor4d(1, 1, 1, 1);
 		if(type != ItemRenderType.INVENTORY) {
-			RenderUtils.drawEquippedItem(stack, 0.0625f);
 			GL11.glPushMatrix(); {
+				if(type == ItemRenderType.ENTITY)
+					GL11.glTranslated(-.5, -0.1, 0);
+				
+				RenderUtils.drawEquippedItem(stack, 0.0625f);
+				
 				GL11.glColorMask(false,false,false,false);
 				RenderUtils.drawEquippedItem(0.0626f, texMask, texMask);
 				GL11.glColorMask(true, true, true, true);

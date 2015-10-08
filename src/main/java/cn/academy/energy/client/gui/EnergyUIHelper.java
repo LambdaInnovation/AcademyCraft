@@ -44,7 +44,6 @@ public class EnergyUIHelper {
 	
 	public static void drawBox(double x, double y, double width, double height, boolean mono) {
 		Color back, glow;
-		System.out.println("mono=" + mono);
 		if(mono) {
 			back = CRL_BACK_MONO;
 			glow = CRL_GLOW_MONO;
