@@ -95,7 +95,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 					});
 		}
 		
-		// TODO: Bad style here, instanceof is definetly bad hard-coding.
+		// FIXME Bad style here, instanceof is definetly not-cute hardcoding.
 		// Used Developer class to abstract item and block away but now need to do some specific stuffs.
 		// If possible make this part better in the future xD
 		if(developer instanceof DeveloperBlock) {
@@ -103,7 +103,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			double size = 70;
 			Widget w = new Widget();
 			w.transform.alignWidth = WidthAlign.RIGHT;
-			w.transform.setPos(-80, 30).setSize(size, size);
+			w.transform.setPos(-80, 70).setSize(size, size);
 			DrawTexture dt = new DrawTexture();
 			dt.setShaderId(ShaderMono.instance().getProgramID());
 			w.addComponent(dt);

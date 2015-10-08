@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Implement particle and fog effect
+ * TODO Implement particle and fog effect
  * @author WeAthFolD
  */
 @Registrant
