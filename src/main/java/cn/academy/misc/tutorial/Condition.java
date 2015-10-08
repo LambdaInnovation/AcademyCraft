@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
 import cn.annoreg.mc.RegEventHandler.Bus;
@@ -11,6 +17,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 
 public abstract class Condition {
@@ -33,12 +40,40 @@ public abstract class Condition {
 		}
 	}
 	
+	static class skillCondition extends Condition{
+		int level;
+		Category skill;
+		
+		public skillCondition(int level) {
+			// TODO Auto-generated constructor stub
+			this(null,level);
+		}
+		
+		public skillCondition(Category skill,int level) {
+			// TODO Auto-generated constructor stub
+			this.skill=skill;
+			this.level=level;
+		}
+		@Override
+		public boolean exam() {
+			// TODO Auto-generated method stub
+			return result;
+		}
+		@Override
+		public boolean equals(Object o){
+			if(o instanceof skillCondition && ((skillCondition) o).level==this.level)
+				return true;
+			return false;
+		}
+	}
+	
 	@Registrant
 	@RegEventHandler(Bus.Forge)
 	static class HandleEvent{
 		static HashMap<Item,Condition> craftMap = new HashMap<Item,Condition>();
 		static HashMap<Item,Condition> pickupMap = new HashMap<Item,Condition>();
 		static HashMap<Item,Condition> smeltMap = new HashMap<Item,Condition>();
+		static HashMap<Category,skillCondition[]> skillMap = new HashMap<Category,skillCondition[]>();
 		
 		@SubscribeEvent
 		public void onItemCrafted(ItemCraftedEvent e){
@@ -56,6 +91,17 @@ public abstract class Condition {
 		public void onItemSmelted(ItemSmeltedEvent e){
 			Item i = e.smelting.getItem();
 			if(craftMap.containsKey(i))craftMap.get(i).result=true;
+		}
+		
+		@SubscribeEvent
+		public void onSkillLevelChanged(LevelChangeEvent e){
+			EntityPlayer p=e.player;
+			AbilityData data=AbilityData.get(p);
+			Category cat = data.getCategory();
+			int l = data.getLevel();
+			skillCondition c=skillMap.get(cat)[l-1];
+			if(skillMap.containsKey(cat)&& c != null)
+				if(l>=c.level&&(c.skill==null||c.skill.equals(cat)))c.result=true;
 		}
 	}
 	
@@ -200,6 +246,20 @@ public abstract class Condition {
 			c=new itemCondition();
 			HandleEvent.smeltMap.put(item, c);
 		}
+		return c;
+	}
+
+	//=============================================================================
+	
+	public static Condition skillLevelChanged(Category cat,int level) throws Exception{
+		skillCondition c = new skillCondition(cat,level);
+		if(!HandleEvent.skillMap.containsKey(c.skill)){
+			HandleEvent.skillMap.put(c.skill, new skillCondition[5]);
+		}
+		if(HandleEvent.skillMap.get(c.skill)[level-1] != null)
+			c = HandleEvent.skillMap.get(c.skill)[level-1];
+		else
+			HandleEvent.skillMap.get(c.skill)[level-1]=c;
 		return c;
 	}
 	

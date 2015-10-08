@@ -14,11 +14,20 @@ import net.minecraft.nbt.NBTTagCompound;
 
 @Registrant
 public class ACTutorial {
-	static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
+	private static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
 	private static final ACTutorialDataPart data = new ACTutorialDataPart();
 	String id;
 	List<Condition> savedConditions = new ArrayList<Condition>();
 	List<Condition> conditions = new ArrayList<Condition>();
+	
+	public ACTutorial(){
+		
+	}
+	
+	public ACTutorial(String id){
+		this.id=id;
+	}
+	
 	public static void addTutorials(ACTutorial...tutorial) throws Exception{
 		for(ACTutorial t : tutorial){
 			if(tutorials.containsKey(t.id))throw new Exception("Already　has a tutorial with this id:"+t.id);
@@ -26,19 +35,25 @@ public class ACTutorial {
 		}
 	}
 
+	public static ACTutorial addTutorial(String string) throws Exception {
+		// TODO Auto-generated method stub
+		ACTutorial t=new ACTutorial(string);
+		addTutorials(t);
+		return t;
+	}
+	
 	public static void addTutorials(String...string) throws Exception {
 		// TODO Auto-generated method stub
 		ACTutorial[] acTu=new ACTutorial[string.length];
 		int i = 0;
 		for(String s : string){
-			acTu[i] = new ACTutorial();
-			acTu[i].id = s;
+			acTu[i] = new ACTutorial(s);
 			i++;
 		}
 		addTutorials(acTu);
 	}
 	
-	public ACTutorial addCondition(Condition...conditions){
+	public ACTutorial addConditions(Condition...conditions){
 		for(Condition c : conditions){
 			this.conditions.add(c);
 			c.addAllNeedSavingChildrenToTutorial(this);
