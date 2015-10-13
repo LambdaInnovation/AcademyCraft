@@ -17,7 +17,8 @@ public class ACTutorial {
 	private static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
 	private static final ACTutorialDataPart data = new ACTutorialDataPart();
 	String id;
-	List<Condition> savedConditions = new ArrayList<Condition>();
+	static List<Condition> savedConditions = new ArrayList<Condition>();
+	
 	List<Condition> conditions = new ArrayList<Condition>();
 	
 	public ACTutorial(){
@@ -56,7 +57,7 @@ public class ACTutorial {
 	public ACTutorial addConditions(Condition...conditions){
 		for(Condition c : conditions){
 			this.conditions.add(c);
-			c.addAllNeedSavingChildrenToTutorial(this);
+			c.addNeedSavingToTutorial(this);
 		}
 		return this;
 	}
@@ -78,6 +79,15 @@ public class ACTutorial {
 	
 	@RegDataPart("ACTutorial")
 	static class ACTutorialDataPart extends DataPart{
+		List<Boolean> allSaved;
+		
+		void init(){
+			allSaved = new ArrayList<Boolean>();
+			for(Condition c : ACTutorial.savedConditions){
+				allSaved.add(c.exam(this.getPlayer()));
+			}
+		}
+		
 		public void update(){
 			sync();
 		}
@@ -85,16 +95,14 @@ public class ACTutorial {
 		@Override
 		public void fromNBT(NBTTagCompound tag) {
 			// TODO Auto-generated method stub
-			for(ACTutorial t : tutorials.values()){
-				NBTTagCompound tag0 = (NBTTagCompound) tag.getTag(t.id);
-				Set<String> set=tag0.func_150296_c();
-				for(String s : set){
-					try {
-						t.savedConditions.get(Integer.parseInt(s)).result=tag0.getBoolean(s);
-					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			if(allSaved==null)init();
+			Set<String> set=tag.func_150296_c();
+			for(String s : set){
+				try {
+					allSaved.set(Integer.parseInt(s), tag.getBoolean(s));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -103,23 +111,18 @@ public class ACTutorial {
 		public NBTTagCompound toNBT() {
 			// TODO Auto-generated method stub
 			NBTTagCompound tag = new NBTTagCompound();
-			for(ACTutorial t : tutorials.values()){
-				NBTTagCompound tag0 = new NBTTagCompound();
-				int i=0;
-				for(Condition c : t.savedConditions){
-					tag0.setBoolean(String.valueOf(i++), c.exam());
-				}
-				tag.setTag(t.id, tag0);
+			for(int i=0;i<allSaved.size();i++){
+				tag.setBoolean(String.valueOf(i), allSaved.get(i));
 			}
 			return tag;
 		}
 		
 	}
 	
-	public boolean getIsLoad(){
+	public boolean getIsLoad(EntityPlayer player){
 		boolean b = true;
 		if(b)for(Condition b0 : conditions)
-			if(!b0.exam()){
+			if(!b0.exam(player)){
 				b = false;
 				break;
 			}
@@ -127,7 +130,4 @@ public class ACTutorial {
 		return b;
 	}
 
-	public void update(EntityPlayer p,int i){
-		PlayerData.get(p).getPart(ACTutorialDataPart.class).update();
-	}
 }
