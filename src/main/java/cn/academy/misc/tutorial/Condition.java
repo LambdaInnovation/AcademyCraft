@@ -37,12 +37,12 @@ public abstract class Condition {
 		@Override
 		public boolean exam(EntityPlayer player) {
 			// TODO Auto-generated method stub
-			return PlayerData.get(player).getPart(ACTutorialDataPart.class).allSaved.get(index);
+			return PlayerData.get(player).getPart(ACTutorialDataPart.class).allSaved[index];
 		}
 		
 		public void pass(EntityPlayer player){
 			ACTutorialDataPart data = PlayerData.get(player).getPart(ACTutorialDataPart.class);
-			data.allSaved.set(index, Boolean.TRUE);
+			data.allSaved[index]=true;
 			data.update();
 		}
 	}
@@ -102,9 +102,11 @@ public abstract class Condition {
 	}
 	
 	void addNeedSavingToTutorial(ACTutorial t){
-		if(this.needSaveNBT)if(!t.savedConditions.contains(this)){
-			this.index=t.savedConditions.size();
-			t.savedConditions.add(this);
+		if(this.needSaveNBT){
+			if(!t.savedConditions.contains(this)){
+				this.index=t.savedConditions.size();
+				t.savedConditions.add(this);
+			}
 		}
 		if(this.children!=null){
 			for(Condition c : this.children)
@@ -127,14 +129,14 @@ public abstract class Condition {
 			@Override
 			public boolean exam(EntityPlayer player) {
 				// TODO Auto-generated method stub
-				for(Condition c : children){
-					if(!c.exam(player)){
+				for(Condition c0 : children){
+					if(!c0.exam(player)){
 						return false;
 					}
 				}
 				return true;
 			}
-		};
+		}.addChildren(c);
 	}
 	
 	//=============================================================================
@@ -145,19 +147,19 @@ public abstract class Condition {
 			@Override
 			public boolean exam(EntityPlayer player) {
 				// TODO Auto-generated method stub
-				for(Condition c : children){
-					if(c.exam(player)){
+				for(Condition c0 : children){
+					if(c0.exam(player)){
 						return true;
 					}
 				}
 				return false;
 			}
-		};
+		}.addChildren(c);
 	}
 	
 	//=============================================================================
 	
-	public static ItemCondition[] itemsCrafted(Item...items) throws Exception{
+	public static Condition[] itemsCrafted(Item...items) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
 		for(Item item : items){
 			if(HandleEvent.craftMap.containsKey(item)){
@@ -168,23 +170,23 @@ public abstract class Condition {
 				HandleEvent.craftMap.put(item, c0);
 			}
 		}
-		return (ItemCondition[])c.toArray();
+		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static ItemCondition itemCrafted(Item item) throws Exception{
+	public static Condition itemCrafted(Item item) throws Exception{
 		ItemCondition c;
 		if(HandleEvent.craftMap.containsKey(item)){
 			c=HandleEvent.craftMap.get(item);
 		}else{
 			c=new ItemCondition();
-			HandleEvent.craftMap.put(item, c);
+			HandleEvent.craftMap.put(item,c);
 		}
 		return c;
 	}
 	
 	//=============================================================================
 	
-	public static ItemCondition[] itemsPickup(Item...items) throws Exception{
+	public static Condition[] itemsPickup(Item...items) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
 		for(Item item : items){
 			if(HandleEvent.pickupMap.containsKey(item)){
@@ -195,10 +197,10 @@ public abstract class Condition {
 				HandleEvent.pickupMap.put(item, c0);
 			}
 		}
-		return (ItemCondition[])c.toArray();
+		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static ItemCondition itemPickup(Item item) throws Exception{
+	public static Condition itemPickup(Item item) throws Exception{
 		ItemCondition c;
 		if(HandleEvent.pickupMap.containsKey(item)){
 			c=HandleEvent.pickupMap.get(item);
@@ -211,7 +213,7 @@ public abstract class Condition {
 	
 	//=============================================================================
 	
-	public static ItemCondition[] itemsSmelted(Item...items) throws Exception{
+	public static Condition[] itemsSmelted(Item...items) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
 		for(Item item : items){
 			if(HandleEvent.smeltMap.containsKey(item)){
@@ -222,10 +224,10 @@ public abstract class Condition {
 				HandleEvent.smeltMap.put(item, c0);
 			}
 		}
-		return (ItemCondition[])c.toArray();
+		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static ItemCondition itemSmelted(Item item) throws Exception{
+	public static Condition itemSmelted(Item item) throws Exception{
 		ItemCondition c;
 		if(HandleEvent.smeltMap.containsKey(item)){
 			c=HandleEvent.smeltMap.get(item);

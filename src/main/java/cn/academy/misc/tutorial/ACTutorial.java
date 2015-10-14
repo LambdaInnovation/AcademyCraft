@@ -16,14 +16,12 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ACTutorial {
 	private static HashMap<String,ACTutorial> tutorials=new HashMap<String,ACTutorial>();
 	private static final ACTutorialDataPart data = new ACTutorialDataPart();
-	String id;
+	public String id;
 	static List<Condition> savedConditions = new ArrayList<Condition>();
 	
 	List<Condition> conditions = new ArrayList<Condition>();
 	
-	public ACTutorial(){
-		
-	}
+	public ACTutorial(){}
 	
 	public ACTutorial(String id){
 		this.id=id;
@@ -78,13 +76,14 @@ public class ACTutorial {
 	}
 	
 	@RegDataPart("ACTutorial")
-	static class ACTutorialDataPart extends DataPart{
-		List<Boolean> allSaved;
+	public static class ACTutorialDataPart extends DataPart{
+		boolean[] allSaved=null;
 		
 		void init(){
-			allSaved = new ArrayList<Boolean>();
+			allSaved = new boolean[ACTutorial.savedConditions.size()];
+			int i=0;
 			for(Condition c : ACTutorial.savedConditions){
-				allSaved.add(c.exam(this.getPlayer()));
+				allSaved[i]=c.exam(this.getPlayer());
 			}
 		}
 		
@@ -99,7 +98,7 @@ public class ACTutorial {
 			Set<String> set=tag.func_150296_c();
 			for(String s : set){
 				try {
-					allSaved.set(Integer.parseInt(s), tag.getBoolean(s));
+					allSaved[Integer.parseInt(s)]= tag.getBoolean(s);
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -110,9 +109,10 @@ public class ACTutorial {
 		@Override
 		public NBTTagCompound toNBT() {
 			// TODO Auto-generated method stub
+			if(allSaved==null)init();
 			NBTTagCompound tag = new NBTTagCompound();
-			for(int i=0;i<allSaved.size();i++){
-				tag.setBoolean(String.valueOf(i), allSaved.get(i));
+			for(int i=0;i<allSaved.length;i++){
+				tag.setBoolean(String.valueOf(i), allSaved[i]);
 			}
 			return tag;
 		}
