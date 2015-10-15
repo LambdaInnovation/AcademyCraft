@@ -170,7 +170,6 @@ public class ModuleCrafting {
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Post event) {
 		fluidImagProj.setIcons(imagPhase.fluidIcon);
-		System.out.println("FLUID ICON: " + imagPhase.fluidIcon);
 	}
 	
 }
