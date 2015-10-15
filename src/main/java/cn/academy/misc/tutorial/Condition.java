@@ -10,6 +10,8 @@ import com.google.common.collect.Multimap;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.LevelChangeEvent;
+import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
+import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;
@@ -69,10 +71,11 @@ public abstract class Condition {
 	
 	@Registrant
 	@RegEventHandler(Bus.Forge)
-	static class HandleEvent{
+	public static class HandleEvent{
 		static HashMap<Item,ItemCondition> craftMap = new HashMap<Item,ItemCondition>();
 		static HashMap<Item,ItemCondition> pickupMap = new HashMap<Item,ItemCondition>();
 		static HashMap<Item,ItemCondition> smeltMap = new HashMap<Item,ItemCondition>();
+		static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<MatterMaterial,ItemCondition>();
 		
 		@SubscribeEvent
 		public void onItemCrafted(ItemCraftedEvent e){
@@ -90,6 +93,12 @@ public abstract class Condition {
 		public void onItemSmelted(ItemSmeltedEvent e){
 			Item i = e.smelting.getItem();
 			if(craftMap.containsKey(i))craftMap.get(i).pass(e.player);;
+		}
+		
+		@SubscribeEvent
+		public void onMatterUnitHarvest(MatterUnitHarvestEvent e){
+			MatterMaterial m = e.mat;
+			if(matterUnitMap.containsKey(m))craftMap.get(m).pass(e.player);;
 		}
 	}
 	
@@ -242,6 +251,19 @@ public abstract class Condition {
 	
 	public static Condition abilityLevel(Category cat,int level) throws Exception{
 		return new AbilityLevelCondition(cat,level);
+	}
+
+	//=============================================================================
+	
+	public static Condition harvestLiquid(MatterMaterial mat) throws Exception{
+		ItemCondition c;
+		if(HandleEvent.matterUnitMap.containsKey(mat)){
+			c=HandleEvent.matterUnitMap.get(mat);
+		}else{
+			c=new ItemCondition();
+			HandleEvent.matterUnitMap.put(mat, c);
+		}
+		return c;
 	}
 	
 }

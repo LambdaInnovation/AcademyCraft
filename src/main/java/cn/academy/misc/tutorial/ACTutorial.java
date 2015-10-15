@@ -19,7 +19,7 @@ public class ACTutorial {
 	public String id;
 	static List<Condition> savedConditions = new ArrayList<Condition>();
 	
-	List<Condition> conditions = new ArrayList<Condition>();
+	Condition condition;
 	
 	public ACTutorial(){}
 	
@@ -52,11 +52,9 @@ public class ACTutorial {
 		addTutorials(acTu);
 	}
 	
-	public ACTutorial addConditions(Condition...conditions){
-		for(Condition c : conditions){
-			this.conditions.add(c);
-			c.addNeedSavingToTutorial(this);
-		}
+	public ACTutorial addCondition(Condition condition){
+		this.condition=condition;
+		condition.addNeedSavingToTutorial(this);
 		return this;
 	}
 	
@@ -120,14 +118,8 @@ public class ACTutorial {
 	}
 	
 	public boolean getIsLoad(EntityPlayer player){
-		boolean b = true;
-		if(b)for(Condition b0 : conditions)
-			if(!b0.exam(player)){
-				b = false;
-				break;
-			}
-		
-		return b;
+		if(this.condition!=null)return this.condition.exam(player);
+		return true;
 	}
 
 }
