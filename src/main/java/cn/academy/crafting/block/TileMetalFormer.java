@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.core.block.TileReceiverBase;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.PositionedSound;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
@@ -19,6 +21,7 @@ import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -108,6 +111,8 @@ public class TileMetalFormer extends TileReceiverBase {
 				updateCounter = 0;
 				sync();
 			}
+		} else {
+			updateSounds();
 		}
 	}
 	
@@ -153,5 +158,22 @@ public class TileMetalFormer extends TileReceiverBase {
 		this.current = recipe;
 		this.mode = mode;
 	}
+	
+    // --- CLIENT EFFECTS
+    
+    @SideOnly(Side.CLIENT)
+    private PositionedSound sound;
+    
+    @SideOnly(Side.CLIENT)
+    private void updateSounds() {
+    	if(sound != null && !isWorkInProgress()) {
+    		sound.stop();
+    		sound = null;
+    	} else if(sound == null && isWorkInProgress()) {
+    		sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
+    				"machine.machine_work").setLoop().setVolume(0.6f);
+    		ACSounds.playClient(sound);
+    	}
+    }
 
 }

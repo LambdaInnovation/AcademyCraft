@@ -12,17 +12,10 @@
  */
 package cn.academy.crafting.block;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import cn.academy.core.block.TileReceiverBase;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.PositionedSound;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
@@ -38,6 +31,15 @@ import cn.annoreg.mc.s11n.StorageOption.Target;
 import cn.liutils.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  * @author WeAthFolD
@@ -47,8 +49,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity.HasRender
 public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 	
-	static final double WORK_SPEED = 1.0 / 80;
-	static final double CONSUME_PER_TICK = 15;
+	static final double WORK_SPEED = 1.0 / 120;
+	static final double CONSUME_PER_TICK = 12;
 	static final int SYNC_INTV = 5;
 	
 	@RegTileEntity.Render
@@ -130,7 +132,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 			// Match the work in server
 			if(!worldObj.isRemote) {
 				
-				if(--checkCooldown == 0) {
+				if(--checkCooldown <= 0) {
 					checkCooldown = 10;
 					if(inventory[0] != null) {
 						IFRecipe recipe = 
@@ -165,12 +167,13 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 		// Synchronization
 		if(worldObj.isRemote) {
 			syncClient();
+			updateSounds();
 		}
 	}
 	
 	@SideOnly(Side.CLIENT)
 	private void syncClient() {
-		if(--syncCooldown == 0) {
+		if(--syncCooldown <= 0) {
 			syncCooldown = SYNC_INTV;
 			query(Minecraft.getMinecraft().thePlayer);
 		}
@@ -223,6 +226,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 		
 		workProgress = 0.0;
 		currentRecipe = null;
+		checkCooldown = 0; // Avoid work pausing
 	}
 	
 	private void abortWorking() {
@@ -277,6 +281,23 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     	tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
     	workProgress = progress;
     	currentRecipe = recipe;
+    }
+    
+    // --- CLIENT EFFECTS
+    
+    @SideOnly(Side.CLIENT)
+    private PositionedSound sound;
+    
+    @SideOnly(Side.CLIENT)
+    private void updateSounds() {
+    	if(sound != null && !isWorking()) {
+    		sound.stop();
+    		sound = null;
+    	} else if(sound == null && isWorking()) {
+    		sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
+    				"machine.imag_fusor_work").setLoop().setVolume(0.6f);
+    		ACSounds.playClient(sound);
+    	}
     }
 
 }
