@@ -134,7 +134,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
 					checkCooldown = 10;
 					if(inventory[0] != null) {
 						IFRecipe recipe = 
-							ImagFusorRecipes.INSTANCE.getRecipe(inventory[0].getItem());
+							ImagFusorRecipes.INSTANCE.getRecipe(inventory[0]);
 						if(recipe != null) {
 							startWorking(recipe);
 						}

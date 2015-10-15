@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagInt;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.RegSerializable;
+import cn.liutils.util.mc.StackUtils;
 
 /**
  * Recipe holder of ImagFusor.
@@ -39,17 +40,22 @@ public class ImagFusorRecipes {
 	}
 	
 	public void addRecipe(IFRecipe recipe) {
-		if(getRecipe(recipe.consumeType.getItem()) != null) {
-			throw new RuntimeException("Can't register multiple recipes for same item " + recipe.consumeType.getItem() + "!!");
+		for(IFRecipe r : recipeList) {
+			if(r.matches(recipe.consumeType)) {
+				throw new RuntimeException("Can't register multiple recipes for same item " + recipe.consumeType.getItem() + 
+						"(#" + recipe.consumeType.getItemDamage() + ")!!");
+			}
 		}
+		
 		recipeList.add(recipe);
 		recipe.id = recipeList.size() - 1;
 	}
 	
-	public IFRecipe getRecipe(Item item) {
-		for(IFRecipe r : recipeList)
-			if(r.consumeType.getItem() == item)
+	public IFRecipe getRecipe(ItemStack input) {
+		for(IFRecipe r : recipeList) {
+			if(r.matches(input))
 				return r;
+		}
 		return null;
 	}
 	
@@ -57,11 +63,6 @@ public class ImagFusorRecipes {
 		return recipeList;
 	}
 	
-	/**
-	 * The match rule only applies for stackable, non-damageable type.
-	 * Currently the machine will IGNORE item damage and treat all item with different damage equally.
-	 * @author WeAthFolD
-	 */
 	@RegSerializable(instance = RecipeSerializer.class)
 	public static class IFRecipe {
 		
@@ -74,6 +75,10 @@ public class ImagFusorRecipes {
 			consumeType = stack;
 			consumeLiquid = liq;
 			output = _output;
+		}
+		
+		public boolean matches(ItemStack input) {
+			return consumeType.getItem() == input.getItem() && consumeType.getItemDamage() == input.getItemDamage();
 		}
 		
 		public int getID() {
