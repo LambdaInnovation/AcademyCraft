@@ -85,28 +85,24 @@ public abstract class Condition {
 		public void onItemCrafted(ItemCraftedEvent e){
 			Item i = e.crafting.getItem();
 			if(craftMap.containsKey(i.getUnlocalizedName()))craftMap.get(i.getUnlocalizedName()).pass(e.player);
-			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onItemPickup(ItemPickupEvent e){
 			Item i = e.pickedUp.getEntityItem().getItem();
 			if(pickupMap.containsKey(i.getUnlocalizedName()))pickupMap.get(i.getUnlocalizedName()).pass(e.player);
-			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onItemSmelted(ItemSmeltedEvent e){
 			Item i = e.smelting.getItem();
 			if(smeltMap.containsKey(i.getUnlocalizedName()))smeltMap.get(i.getUnlocalizedName()).pass(e.player);
-			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onMatterUnitHarvest(MatterUnitHarvestEvent e){
 			MatterMaterial m = e.mat;
 			if(matterUnitMap.containsKey(m))matterUnitMap.get(m).pass(e.player);
-			ACTutorial.debug(e.player);
 		}
 	}
 	
