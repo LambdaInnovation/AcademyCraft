@@ -7,12 +7,12 @@ ac {
 		# 电弧激发
         arc_gen {
             x { 112 } y { 230 }
-            damage(exp) { lerp(4, 9, exp) } 
-            consumption(exp) { lerp(60, 90, exp) } 
-            overload(exp) { lerp(15, 10, exp) }
+            damage(exp) { lerp(9, 15, exp) } 
+            consumption(exp) { lerp(117, 135, exp) } 
+            overload(exp) { lerp(36, 16, exp) }
             # 点燃方块的概率 
             p_ignite(exp) { lerp(0, 0.6, exp) } 
-            cooldown(exp) { lerp(6, 3, exp) }
+            cooldown(exp) { lerp(40, 15, exp) }
             range(exp) { lerp(6, 15, exp) }
 			
 			# 击中敌人时经验增长
@@ -78,12 +78,12 @@ ac {
 		# 雷击之枪
         thunder_bolt {
             x { 321 } y { 334 }
-            damage(exp) { lerp(15, 25, exp) }
+            damage(exp) { lerp(16, 29, exp) }
 			# 扩散的电弧伤害值
-            aoe_damage(exp) { 0.4 * lerp(15, 25, exp) }
-            consumption(exp) { lerp(100, 200, exp) }
-            overload(exp) { lerp(30, 27, exp) }
-            cooldown(exp) { floor(20 * lerp(4, 1.5, exp)) }
+            aoe_damage(exp) { 0.6 * lerp(16, 29, exp) }
+            consumption(exp) { lerp(340, 455, exp) }
+            overload(exp) { lerp(64, 32, exp) }
+            cooldown(exp) { floor(20 * lerp(4, 2, exp)) }
             expincr_effective { 
                 0.003
             }
@@ -95,10 +95,10 @@ ac {
 		# 超电磁炮
         railgun {
             x { 581 } y { 295 }
-            consumption(exp) { lerp(1200, 800, exp) }
-            overload(exp) { 3 * lerp(120, 80, exp) }
+            consumption(exp) { lerp(340, 455, exp) }
+            overload(exp) { lerp(160, 110, exp) }
             cooldown(exp) { lerp(300, 160, exp) }
-            damage(exp) { lerp(25, 45, exp) }
+            damage(exp) { lerp(40, 100, exp) }
 			# 方块破坏能量（最大可破坏的方块的硬度值的和）
             energy(exp) { lerp(900, 2000, exp) }
             expincr { 0.005 }
@@ -107,11 +107,11 @@ ac {
 		# 最后的落雷
         thunder_clap {
             x { 714 } y { 400 }
-            damage(exp, ct) { lerp(40, 70, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
+            damage(exp, ct) { lerp(36, 72, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
             range(exp) { 3 * lerp(5, 10, exp) }
             consumption(exp) { lerp(100, 120, exp) }
-            overload(exp) { lerp(400, 350, exp) }
-            cooldown(exp, ct) { ct * lerp(9, 5, exp) }
+            overload(exp) { lerp(504, 252, exp) }
+            cooldown(exp, ct) { ct * lerp(10, 6, exp) }
             expincr { 0.003 }
         }
         
@@ -122,10 +122,10 @@ ac {
 		# 磁力操纵
         mag_manip {
             x { 713 } y { 165 }
-            damage(exp) { lerp(8, 15, exp) }
-            consumption(exp) { lerp(140, 270, exp) }
-            overload(exp) { lerp(35, 20, exp) }
-            cooldown(exp) { 20 * lerp(2, 1, exp) }
+            damage(exp) { lerp(18, 30, exp) }
+            consumption(exp) { lerp(225, 275, exp) }
+            overload(exp) { lerp(72, 33, exp) }
+            cooldown(exp) { 20 * lerp(3, 2, exp) }
             expincr { 0.0025 }
         }
     }
