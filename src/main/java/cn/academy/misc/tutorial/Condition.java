@@ -10,6 +10,8 @@ import com.google.common.collect.Multimap;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.LevelChangeEvent;
+import cn.academy.core.AcademyCraft;
+import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
@@ -24,7 +26,9 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 
+@Registrant
 public abstract class Condition {
 	int index;
 	Condition[] children;
@@ -69,37 +73,40 @@ public abstract class Condition {
 		}
 		
 	}
-	
-	@Registrant
-	@RegEventHandler(Bus.Forge)
+
+	@RegEventHandler()
 	public static class HandleEvent{
-		static HashMap<Item,ItemCondition> craftMap = new HashMap<Item,ItemCondition>();
-		static HashMap<Item,ItemCondition> pickupMap = new HashMap<Item,ItemCondition>();
-		static HashMap<Item,ItemCondition> smeltMap = new HashMap<Item,ItemCondition>();
+		static HashMap<String,ItemCondition> craftMap = new HashMap<String,ItemCondition>();
+		static HashMap<String,ItemCondition> pickupMap = new HashMap<String,ItemCondition>();
+		static HashMap<String,ItemCondition> smeltMap = new HashMap<String,ItemCondition>();
 		static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<MatterMaterial,ItemCondition>();
 		
 		@SubscribeEvent
 		public void onItemCrafted(ItemCraftedEvent e){
 			Item i = e.crafting.getItem();
-			if(craftMap.containsKey(i))craftMap.get(i).pass(e.player);;
+			if(craftMap.containsKey(i.getUnlocalizedName()))craftMap.get(i.getUnlocalizedName()).pass(e.player);
+			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onItemPickup(ItemPickupEvent e){
 			Item i = e.pickedUp.getEntityItem().getItem();
-			if(craftMap.containsKey(i))craftMap.get(i).pass(e.player);;
+			if(pickupMap.containsKey(i.getUnlocalizedName()))pickupMap.get(i.getUnlocalizedName()).pass(e.player);
+			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onItemSmelted(ItemSmeltedEvent e){
 			Item i = e.smelting.getItem();
-			if(craftMap.containsKey(i))craftMap.get(i).pass(e.player);;
+			if(smeltMap.containsKey(i.getUnlocalizedName()))smeltMap.get(i.getUnlocalizedName()).pass(e.player);
+			ACTutorial.debug(e.player);
 		}
 		
 		@SubscribeEvent
 		public void onMatterUnitHarvest(MatterUnitHarvestEvent e){
 			MatterMaterial m = e.mat;
-			if(matterUnitMap.containsKey(m))craftMap.get(m).pass(e.player);;
+			if(matterUnitMap.containsKey(m))matterUnitMap.get(m).pass(e.player);
+			ACTutorial.debug(e.player);
 		}
 	}
 	
@@ -179,12 +186,12 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			if(HandleEvent.craftMap.containsKey(item)){
-				c.add(HandleEvent.craftMap.get(item));
+			if(HandleEvent.craftMap.containsKey(item.getUnlocalizedName())){
+				c.add(HandleEvent.craftMap.get(item.getUnlocalizedName()));
 			}else{
 				ItemCondition c0=new ItemCondition();
 				c.add(c0);
-				HandleEvent.craftMap.put(item, c0);
+				HandleEvent.craftMap.put(item.getUnlocalizedName(), c0);
 			}
 		}
 		return c.toArray(new Condition[c.size()]);
@@ -192,11 +199,11 @@ public abstract class Condition {
 	
 	public static Condition itemCrafted(Item item) throws Exception{
 		ItemCondition c;
-		if(HandleEvent.craftMap.containsKey(item)){
-			c=HandleEvent.craftMap.get(item);
+		if(HandleEvent.craftMap.containsKey(item.getUnlocalizedName())){
+			c=HandleEvent.craftMap.get(item.getUnlocalizedName());
 		}else{
 			c=new ItemCondition();
-			HandleEvent.craftMap.put(item,c);
+			HandleEvent.craftMap.put(item.getUnlocalizedName(),c);
 		}
 		return c;
 	}
@@ -218,12 +225,12 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			if(HandleEvent.pickupMap.containsKey(item)){
-				c.add(HandleEvent.pickupMap.get(item));
+			if(HandleEvent.pickupMap.containsKey(item.getUnlocalizedName())){
+				c.add(HandleEvent.pickupMap.get(item.getUnlocalizedName()));
 			}else{
 				ItemCondition c0=new ItemCondition();
 				c.add(c0);
-				HandleEvent.pickupMap.put(item, c0);
+				HandleEvent.pickupMap.put(item.getUnlocalizedName(), c0);
 			}
 		}
 		return c.toArray(new Condition[c.size()]);
@@ -231,11 +238,11 @@ public abstract class Condition {
 	
 	public static Condition itemPickup(Item item) throws Exception{
 		ItemCondition c;
-		if(HandleEvent.pickupMap.containsKey(item)){
-			c=HandleEvent.pickupMap.get(item);
+		if(HandleEvent.pickupMap.containsKey(item.getUnlocalizedName())){
+			c=HandleEvent.pickupMap.get(item.getUnlocalizedName());
 		}else{
 			c=new ItemCondition();
-			HandleEvent.pickupMap.put(item, c);
+			HandleEvent.pickupMap.put(item.getUnlocalizedName(), c);
 		}
 		return c;
 	}
@@ -256,12 +263,12 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			if(HandleEvent.smeltMap.containsKey(item)){
-				c.add(HandleEvent.smeltMap.get(item));
+			if(HandleEvent.smeltMap.containsKey(item.getUnlocalizedName())){
+				c.add(HandleEvent.smeltMap.get(item.getUnlocalizedName()));
 			}else{
 				ItemCondition c0=new ItemCondition();
 				c.add(c0);
-				HandleEvent.smeltMap.put(item, c0);
+				HandleEvent.smeltMap.put(item.getUnlocalizedName(), c0);
 			}
 		}
 		return c.toArray(new Condition[c.size()]);
@@ -269,11 +276,11 @@ public abstract class Condition {
 	
 	public static Condition itemSmelted(Item item) throws Exception{
 		ItemCondition c;
-		if(HandleEvent.smeltMap.containsKey(item)){
-			c=HandleEvent.smeltMap.get(item);
+		if(HandleEvent.smeltMap.containsKey(item.getUnlocalizedName())){
+			c=HandleEvent.smeltMap.get(item.getUnlocalizedName());
 		}else{
 			c=new ItemCondition();
-			HandleEvent.smeltMap.put(item, c);
+			HandleEvent.smeltMap.put(item.getUnlocalizedName(), c);
 		}
 		return c;
 	}

@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import cn.academy.core.AcademyCraft;
 import cn.annoreg.core.Registrant;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import scala.actors.threadpool.Arrays;
 
 @Registrant
 public class ACTutorial {
@@ -79,10 +81,7 @@ public class ACTutorial {
 		
 		void init(){
 			allSaved = new boolean[ACTutorial.savedConditions.size()];
-			int i=0;
-			for(Condition c : ACTutorial.savedConditions){
-				allSaved[i]=c.exam(this.getPlayer());
-			}
+			Arrays.fill(allSaved, false);
 		}
 		
 		public void update(){
@@ -122,4 +121,14 @@ public class ACTutorial {
 		return true;
 	}
 
+	public static void debug(EntityPlayer player){
+		AcademyCraft.log.info("DEBUG:");
+		for(ACTutorial t : tutorials.values()){
+			AcademyCraft.log.info(t.id+" : "+t.getIsLoad(player));
+		}
+		for(Condition c : savedConditions){
+			AcademyCraft.log.info(c.index+" : "+c.exam(player));
+		}
+	}
+	
 }
