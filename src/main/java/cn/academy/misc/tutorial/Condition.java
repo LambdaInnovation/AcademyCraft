@@ -21,6 +21,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 
@@ -63,7 +64,7 @@ public abstract class Condition {
 		public boolean exam(EntityPlayer player) {
 			// TODO Auto-generated method stub
 			AbilityData data=AbilityData.get(player);
-			if(data.getLevel()>this.level&&(this.skillType==null||data.getCategory().equals(skillType)))return true;
+			if(data.getLevel()>=this.level&&(this.skillType==null||data.getCategory().equals(skillType)))return true;
 			return false;
 		}
 		
@@ -168,9 +169,16 @@ public abstract class Condition {
 	
 	//=============================================================================
 	
-	public static Condition[] itemsCrafted(Item...items) throws Exception{
+	public static Condition[] itemsCrafted(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
-		for(Item item : items){
+		for(Object IorB : itemsOrBlocks){
+			Item item = null;
+			//java sucks?
+			if(IorB instanceof Item)item = (Item) IorB;
+			else if(IorB instanceof Block)item = Item.getItemFromBlock((Block) IorB);
+			else{
+				throw new Exception("Not an Item or Block: "+IorB);
+			}
 			if(HandleEvent.craftMap.containsKey(item)){
 				c.add(HandleEvent.craftMap.get(item));
 			}else{
@@ -193,11 +201,23 @@ public abstract class Condition {
 		return c;
 	}
 	
+	public static Condition itemCrafted(Block block) throws Exception{
+		Item item = Item.getItemFromBlock(block);
+		return itemCrafted(item);
+	}
+	
 	//=============================================================================
 	
-	public static Condition[] itemsPickup(Item...items) throws Exception{
+	public static Condition[] itemsPickup(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
-		for(Item item : items){
+		for(Object IorB : itemsOrBlocks){
+			Item item = null;
+			//java sucks?
+			if(IorB instanceof Item)item = (Item) IorB;
+			else if(IorB instanceof Block)item = Item.getItemFromBlock((Block) IorB);
+			else{
+				throw new Exception("Not an Item or Block: "+IorB);
+			}
 			if(HandleEvent.pickupMap.containsKey(item)){
 				c.add(HandleEvent.pickupMap.get(item));
 			}else{
@@ -220,11 +240,22 @@ public abstract class Condition {
 		return c;
 	}
 	
+	public static Condition itemPickup(Block block) throws Exception{
+		Item item = Item.getItemFromBlock(block);
+		return itemPickup(item);
+	}
 	//=============================================================================
 	
-	public static Condition[] itemsSmelted(Item...items) throws Exception{
+	public static Condition[] itemsSmelted(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
-		for(Item item : items){
+		for(Object IorB : itemsOrBlocks){
+			Item item = null;
+			//java sucks?
+			if(IorB instanceof Item)item = (Item) IorB;
+			else if(IorB instanceof Block)item = Item.getItemFromBlock((Block) IorB);
+			else{
+				throw new Exception("Not an Item or Block: "+IorB);
+			}
 			if(HandleEvent.smeltMap.containsKey(item)){
 				c.add(HandleEvent.smeltMap.get(item));
 			}else{
@@ -247,6 +278,10 @@ public abstract class Condition {
 		return c;
 	}
 
+	public static Condition itemSmelted(Block block) throws Exception{
+		Item item = Item.getItemFromBlock(block);
+		return itemSmelted(item);
+	}
 	//=============================================================================
 	
 	public static Condition abilityLevel(Category cat,int level) throws Exception{
@@ -265,5 +300,24 @@ public abstract class Condition {
 		}
 		return c;
 	}
+
+	//=============================================================================
 	
+	public static Condition onTutorial(ACTutorial t) throws Exception{
+		return new Condition(){
+
+			@Override
+			public boolean exam(EntityPlayer player) {
+				// TODO Auto-generated method stub
+				return t.getIsLoad(player);
+			}
+			
+		};
+	}	
+	
+	public static Condition onTutorial(String tutorialID) throws Exception{
+		ACTutorial t = ACTutorial.getTutorial(tutorialID);
+		return onTutorial(t);
+	}
+
 }
