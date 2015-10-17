@@ -24,9 +24,9 @@ shapeless(calc_chip){
 
 
 shaped(plateIron*2){
-	[iron_ignot]
-	[iron_ignot]
-	[iron_ignot]
+	[iron_ingot]
+	[iron_ingot]
+	[iron_ingot]
 }
 
 shaped(frame) {
@@ -166,7 +166,7 @@ shaped(mat_core#1) {
 
 shaped(mat_core#2) {
     [glowstone,glowstone,glowstone]
-    [reso_crystal, enderpearl, reso_crystal]
+    [reso_crystal, ender_pearl, reso_crystal]
     [nil, mat_core#1, nil]
 }
 

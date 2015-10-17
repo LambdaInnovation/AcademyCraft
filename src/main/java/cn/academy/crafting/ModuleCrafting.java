@@ -90,7 +90,7 @@ public class ModuleCrafting {
 	
 	@RegBlock
 	@RecipeName("cons_ore")
-	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 2);
+	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 1);
 	
 	@RegBlock
 	@RecipeName("crystal_ore")
@@ -132,6 +132,22 @@ public class ModuleCrafting {
 	@RegItem
 	@RecipeName("conv_comp")
 	public static Item convComp = new ACItem("energy_convert_component");
+	
+	@RegItem
+	@RecipeName("si_piece")
+	public static Item silPiece = new ACItem("imag_silicon_piece");
+	
+	@RegItem
+	@RecipeName("reso_crystal")
+	public static Item resonanceCrystal = new ACItem("resonance_crystal");
+	
+	@RegItem
+	@RecipeName("chip_base")
+	public static Item chipBase = new ACItem("chip_base");
+	
+	@RegBlock
+	@RecipeName("reso_ore")
+	public static Block resoCrystalOre = new BlockGenericOre("reso_crystal_ore", 2f, 2);
 	
 	@RegWorldGen(2)
 	public static ACWorldGen worldGen;
