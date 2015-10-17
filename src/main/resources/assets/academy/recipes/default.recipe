@@ -1,6 +1,6 @@
 ; AcademyCraft recipe script file
 
-shapeless(sipiece*2){
+shapeless(si_piece*2){
 	[wafer]
 }
 
@@ -11,7 +11,7 @@ shaped(data_chip){
 
 shaped(data_chip){
 	[redstone,redstone,redstone]
-	[nil,chipbase,nil]
+	[nil,chip_base,nil]
 }
 
 shapeless(calc_chip){
@@ -149,7 +149,7 @@ shaped(metal_former) {
 shaped(mat) {
     [nil, reso_crystal, nil]
     [redstone, frame, redstone]
-    [data_chip, 能量单元, data_chip]
+    [data_chip, reso_crystal, data_chip]
 }
 
 shaped(mat_core#0) {
@@ -235,7 +235,7 @@ shaped(dev_portable) {
 }
 
 shapeless(silbarn){
-	[sipiece,sipiece]
+	[si_piece,si_piece]
 }
 
 shaped(dev_normal) {
