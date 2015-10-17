@@ -40,7 +40,7 @@ We would love the help if you are willing to submit a translation of your langua
 
 You can find .lang files [HERE](src/main/resources/assets/academy/lang).
 
-NOTE: The `zh_TW` language file are machine-translated and is somewhat inaccurate. Feel free to send a patch.
+NOTE: The `zh_TW` language file is machine-translated and is somewhat inaccurate. Feel free to send a patch.
 
 ## Documents
 
