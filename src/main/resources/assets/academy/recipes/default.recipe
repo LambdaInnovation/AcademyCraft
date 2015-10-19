@@ -11,7 +11,7 @@ shaped(data_chip){
 
 shaped(data_chip){
 	[redstone,redstone,redstone]
-	[nil,chip_base,nil]
+	[nil,si_piece,nil]
 }
 
 shapeless(calc_chip){
@@ -23,7 +23,7 @@ shapeless(calc_chip){
 }
 
 
-shaped(plateIron*2){
+shaped(plateIron *2){
 	[iron_ingot]
 	[iron_ingot]
 	[iron_ingot]
