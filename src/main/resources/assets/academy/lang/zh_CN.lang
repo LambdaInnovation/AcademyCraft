@@ -20,7 +20,7 @@ item.ac_constraint_ingot.name=束能金属锭
 item.ac_constraint_plate.name=束能金属板
 item.ac_imag_silicon_ingot.name=虚像硅锭
 item.ac_wafer.name=虚像硅晶圆
-item.ac_imag_silicon_piece.name=虚像硅晶圆
+item.ac_imag_silicon_piece.name=硅晶片
 item.ac_reso_crystal.name=谐振水晶
 
 item.ac_brain_component.name=脑波分析模块
