@@ -40,10 +40,8 @@ public class CustomWorldGen {
     }
     
     public void generate(World world, Random rand, int chunkMinX, int chunkMinZ) {
-        if(!canGen(world, chunkMinX, chunkMinZ)) {
-        	AcademyCraft.log.info("Skilled spawn of " + gen);
+        if(!canGen(world, chunkMinX, chunkMinZ))
             return;
-        }
         for(int i = 0; i < densityPerChunk; ++i) {
             int x = chunkMinX + rand.nextInt(16),
                 y = rand.nextInt(yLimit),

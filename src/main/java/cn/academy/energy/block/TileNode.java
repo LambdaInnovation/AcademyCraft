@@ -142,12 +142,14 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energy = tag.getDouble("energy");
+        name = tag.getString("nodeName");
     }
     
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
+        tag.setString("nodeName", name);
     }
 
     String name = "Unnamed";

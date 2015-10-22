@@ -161,7 +161,7 @@ public class NodeConn {
 	
 	private boolean checkRange(VBlock<?> block) {
 		IWirelessNode inode = node.get(getWorld());
-		double range = inode == null ? 0 : inode.getRange();
+		double range = inode == null ? 1000 : inode.getRange();
 		return block.distSq(node) <= range * range;
 	}
 	
@@ -272,7 +272,7 @@ public class NodeConn {
 		
 		if(iNode == null || (generators.size() == 0 && receivers.size() == 0)) {
 			if(node.isLoaded(world)) {
-				AcademyCraft.log.debug(node + " destroyed, destroy NodeConn...");
+				log(node + " destroyed, destroy NodeConn...");
 				dispose();
 			}
 			return;
@@ -298,7 +298,8 @@ public class NodeConn {
 	}
 	
 	private void log(String str) {
-		AcademyCraft.log.info("[NodeConn] " + str);
+		if(AcademyCraft.DEBUG_MODE)
+			AcademyCraft.log.info("[NodeConn] " + str);
 	}
 	
 }
