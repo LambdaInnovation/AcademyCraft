@@ -93,9 +93,9 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
 		tag.setDouble("energy", energy);
     }
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncEnergy(@RangedTarget(range = 15) TileEntity te, @Data Double e) {
-		energy = e;
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncEnergy(@RangedTarget(range = 15) TileReceiverBase te, @Data Double e) {
+		te.energy = e;
 	}
 
 	@Override

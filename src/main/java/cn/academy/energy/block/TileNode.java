@@ -160,19 +160,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		this.name = name;
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	public void receiveSyncMessage(
-		@RangedTarget(range = 12) TileEntity te,
+	@RegNetworkCall(side = Side.CLIENT)
+	public static void receiveSyncMessage(
+		@RangedTarget(range = 12) TileNode te,
 		@Data Boolean enabled, 
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
 		@Data Double energy,
 		@Data String name) {
-		this.enabled = enabled;
-		this.chargingIn = chargingIn;
-		this.chargingOut = chargingOut;
-		this.energy = energy;
-		this.name = name;
+		te.enabled = enabled;
+		te.chargingIn = chargingIn;
+		te.chargingOut = chargingOut;
+		te.energy = energy;
+		te.name = name;
 	}
 
 	@Override

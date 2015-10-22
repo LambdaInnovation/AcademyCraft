@@ -196,11 +196,11 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
 		syncInventory(this, getPlateCount());
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncInventory(
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncInventory(
 			@RangedTarget(range = 15) TileMatrix matrix,
 			@Data Integer plateCount) {
-		this.plateCount = plateCount;
+		matrix.plateCount = plateCount;
 	}
 	
 	private static ScriptFunction getFunc(String name) {

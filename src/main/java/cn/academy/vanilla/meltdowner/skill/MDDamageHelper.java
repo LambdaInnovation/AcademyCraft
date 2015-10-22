@@ -55,7 +55,7 @@ public class MDDamageHelper {
 			int marktick = getMarkTick(player);
 			setMarkTick(e, marktick = Math.max(60, marktick));
 			setMarkRate(e, CatMeltdowner.radIntensify.getRate(aData));
-			syncStartMark(e, e, marktick);
+			syncStartMark(e, marktick);
 		}
 	}
 	
@@ -82,8 +82,8 @@ public class MDDamageHelper {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void syncStartMark(@RangedTarget(range = 15) Entity e, @Instance Entity e2, @Data Integer value) {
-		setMarkTick(e2, value);
+	static void syncStartMark(@RangedTarget(range = 15) Entity e, @Data Integer value) {
+		setMarkTick(e, value);
 	}
 	
 	public static class Events {

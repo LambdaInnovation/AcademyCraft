@@ -148,15 +148,15 @@ public class TileMetalFormer extends TileReceiverBase {
 		return isWorkInProgress() ? (double) workCounter / WORK_TICKS : 0;
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncData(
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncData(
 			@RangedTarget(range = 12) TileMetalFormer target,
 			@Data Integer counter, 
 			@Instance(nullable = true) RecipeObject recipe,
 			@Instance Mode mode) {
-		this.workCounter = counter;
-		this.current = recipe;
-		this.mode = mode;
+		target.workCounter = counter;
+		target.current = recipe;
+		target.mode = mode;
 	}
 	
     // --- CLIENT EFFECTS

@@ -107,13 +107,13 @@ public class Railgun extends Skill {
 			if(event.entityPlayer.worldObj.isRemote) {
 				doSpawnCE(event.entityPlayer);
 			} else { // Inform other clients
-				spawnChargeEffect(event.entityPlayer, event.entityPlayer);
+				spawnChargeEffect(event.entityPlayer);
 			}
 		}
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player) {
+	private void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer player) {
 		if(!Minecraft.getMinecraft().thePlayer.equals(player))
 			doSpawnCE(player);
 	}

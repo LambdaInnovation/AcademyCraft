@@ -82,7 +82,7 @@ public class ElectronBomb extends Skill {
 						if(trace != null && trace.entityHit != null) {
 							MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
 						}
-						actionClient(player, player, ball);
+						actionClient(player, ball);
 					}
 					
 				});
@@ -96,7 +96,7 @@ public class ElectronBomb extends Skill {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void actionClient(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player, @Instance EntityMdBall ball) {
+	static void actionClient(@RangedTarget(range = 20) EntityPlayer player, @Instance EntityMdBall ball) {
 		Vec3 dest = getDest(player);
 		spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
 			dest.xCoord, dest.yCoord, dest.zCoord);
