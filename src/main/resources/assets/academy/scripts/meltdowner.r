@@ -3,7 +3,7 @@ ac {
 		# 电子光束
         electron_bomb {
             x { 106 } y { 202 }
-            damage(exp) { lerp(9, 14, exp) }
+            damage(exp) { lerp(12, 20, exp) }
             consumption(exp) { lerp(117, 135, exp) }
             overload(exp) { lerp(39, 17, exp) }
             cooldown(exp) { lerp(20, 10, exp) }
