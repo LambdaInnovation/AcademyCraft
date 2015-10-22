@@ -12,15 +12,6 @@
  */
 package cn.academy.crafting;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.block.ACBlock;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
@@ -36,16 +27,32 @@ import cn.academy.crafting.world.ACWorldGen;
 import cn.academy.energy.ModuleEnergy;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
+import cn.annoreg.mc.RegEventHandler;
+import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.annoreg.mc.RegWorldGen;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
 @RegInit
+@RegEventHandler(Bus.Forge)
 @RegACRecipeNames
 public class ModuleCrafting {
 	
@@ -181,6 +188,12 @@ public class ModuleCrafting {
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil,2), Mode.REFINE);
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst,2), Mode.REFINE);
 		//TODO more ore
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Post event) {
+		fluidImagProj.setIcons(imagPhase.fluidIcon);
 	}
 	
 }

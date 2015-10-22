@@ -92,7 +92,7 @@ public class AcademyCraft {
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
             .newSimpleChannel("academy-network");
     
-    public static boolean ic2SupportPresent, teSupportPresent;
+    public static boolean ic2SupportPresent, teSupportPresent, mtSupportPresent;
     
     @RegItem
     @RegItem.UTName("logo")
@@ -153,6 +153,17 @@ public class AcademyCraft {
         		log.error("Failed to initialize TE support", e);
         	}
         } catch(Throwable e) {}
+        
+        try {
+        	Class.forName("minetweaker.mc1710.MineTweakerMod");
+        	Class.forName("minetweaker.MineTweakerAPI");
+        	try {
+        		Class.forName("cn.academy.support.minetweaker.MTSupport").getMethod("init").invoke(this);
+        		mtSupportPresent = true;
+        	} catch (Throwable e) {
+        		log.error("Failed to initialize MineTweaker3 support", e);
+        	}
+        } catch (Throwable e) {}
         
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
         

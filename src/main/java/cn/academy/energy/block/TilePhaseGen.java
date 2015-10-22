@@ -74,12 +74,12 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 	public void updateEntity() {
 		super.updateEntity();
 		
-		if(++untilSync == 10) {
-			untilSync = 0;
-			syncLiquid(this, getLiquidAmount());
-		}
-		
 		if(!getWorldObj().isRemote) {
+			if(++untilSync == 10) {
+				untilSync = 0;
+				syncLiquid(this, getLiquidAmount());
+			}
+			
 			ItemStack stack;
 			{ // Sink in liquid
 				stack = getStackInSlot(SLOT_LIQUID_IN);
