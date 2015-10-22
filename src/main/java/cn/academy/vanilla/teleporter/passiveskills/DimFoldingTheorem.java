@@ -32,7 +32,7 @@ public class DimFoldingTheorem extends Skill {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	@SubscribePipeline("ac.teleporter.?.damage")
+	@SubscribePipeline("teleporter.?.$damage")
 	public float addDamage(float dmg, EntityPlayer player) {
 		AbilityData aData = AbilityData.get(player);
 		if(aData.isSkillLearned(this)) {

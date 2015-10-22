@@ -24,7 +24,7 @@ import cn.liutils.util.generic.DebugUtils;
  * 	<code>[ns1].[ns2]. ... . [key]</code> <br>
  * each keyword in '[' and ']' must only consists of alphabetic letters or '_' or '-' or numbers.
  * 
- * And by which the Listener can use wildcard matching on keys. 
+ * And thus the Listener can use wildcard matching on keys using other characters. 
  * this allows them to perform operations on more than one key. <br>
  * 
  * You are expected to register all the listeners before 
@@ -40,6 +40,9 @@ public class ValuePipeline {
 	 * 
 	 * ? -- one of any keyword. 
 	 * 	e.g. "electromaster.?.consumption" matches "electromaster.arcgen.consumption", "electromaster.railgun.consumption" and so on.
+	 * 
+	 * $<keyword> -- contains the following keyword.
+	 *  e.g. "lol.$233" matches "lol.233", "lol.23333", "lol.44423333" and so on.
 	 */
 	
 	private enum Type { INT, FLOAT, DOUBLE };
@@ -74,6 +77,20 @@ public class ValuePipeline {
 		
 	}
 	
+	private class NodeContains implements RuleNode {
+		final String kwd;
+		
+		public NodeContains(String _kwd) {
+			checkKeyword(_kwd);
+			kwd = _kwd;
+		}
+		
+		@Override
+		public boolean accepts(String keyword) {
+			return keyword.contains(kwd);
+		}
+	}
+	
 	private class Rule {
 		
 		List<RuleNode> rules = new ArrayList();
@@ -85,6 +102,8 @@ public class ValuePipeline {
 			for(String s : strs) {
 				if(s.equals("?")) {
 					rules.add(new NodeAny());
+				} else if(s.charAt(0) == '$'){
+					rules.add(new NodeContains(s.substring(1)));
 				} else {
 					rules.add(new NodeKeyword(s));
 				}

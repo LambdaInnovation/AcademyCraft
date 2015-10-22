@@ -68,7 +68,7 @@ public class ArcGen extends Skill {
 	}
 	
 	private static float getDamage(AbilityData data) {
-		return instance.getFunc("damage").callFloat(data.getSkillExp(instance));
+		return instance.callFloatWithExp("damage", data);
 	}
 	
 	private static double getIgniteProb(AbilityData data) {
