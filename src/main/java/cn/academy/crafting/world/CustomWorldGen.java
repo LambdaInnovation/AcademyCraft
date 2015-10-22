@@ -15,6 +15,7 @@ package cn.academy.crafting.world;
 
 import java.util.Random;
 
+import cn.academy.core.AcademyCraft;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -39,8 +40,10 @@ public class CustomWorldGen {
     }
     
     public void generate(World world, Random rand, int chunkMinX, int chunkMinZ) {
-        if(!canGen(world, chunkMinX, chunkMinZ))
+        if(!canGen(world, chunkMinX, chunkMinZ)) {
+        	AcademyCraft.log.info("Skilled spawn of " + gen);
             return;
+        }
         for(int i = 0; i < densityPerChunk; ++i) {
             int x = chunkMinX + rand.nextInt(16),
                 y = rand.nextInt(yLimit),
