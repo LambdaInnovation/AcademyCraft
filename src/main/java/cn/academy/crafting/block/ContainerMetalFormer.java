@@ -49,7 +49,7 @@ public class ContainerMetalFormer extends Container {
 		
 		this.addSlotToContainer(new Slot(tile, 0, 15, 35));
     	this.addSlotToContainer(new Slot(tile, 1, 79, 35));
-        this.addSlotToContainer(new SlotIFItem(tile, 2, 38, 72));
+        this.addSlotToContainer(new SlotIFItem(tile, 2, 38, 71));
         
         int STEP = 18;
         
