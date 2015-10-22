@@ -11,9 +11,9 @@ ac {
 		threatening_teleport {
 			x { 85 } y { 239 }
 			range(exp) { lerp(8, 15, exp) }
-            damage(exp) { lerp(3, 6, exp) }
-            consumption(exp) { lerp(35, 150, exp) }
-            overload(exp) { lerp(20, 15, exp) }
+            damage(exp) { lerp(6, 9, exp) }
+            consumption(exp) { lerp(129, 149, exp) }
+            overload(exp) { lerp(26, 11, exp) }
 			cooldown(exp) { lerp(18, 10, exp) }
 			expincr { 0.003 }
         }
@@ -42,7 +42,7 @@ ac {
 		mark_teleport {
 			x { 304 } y { 143 }
 			range(exp) { lerp(25, 60, exp) }
-			consumption(exp) { lerp(14, 8, exp) }
+			consumption(exp) { lerp(13, 5, exp) }
 			overload(exp) { lerp(40, 20, exp) }
 			expincr(dist) { 0.00018 * dist }
 			cooldown(exp) { lerp(50, 20, exp) }
@@ -52,8 +52,8 @@ ac {
 		flesh_ripping {
 			x { 554 } y { 119 }
 			range(exp) { lerp(6, 14, exp) }
-			damage(exp) { lerp(12, 22, exp) }
-			consumption(exp) { lerp(260, 320, exp) }
+			damage(exp) { lerp(9, 15, exp) }
+			consumption(exp) { lerp(247, 302, exp) }
 			overload(exp) { lerp(60, 50, exp) }
 			cooldown(exp) { floor(20 * lerp(5, 3, exp)) }
 			# 恶心buff出现概率
@@ -87,9 +87,9 @@ ac {
 		# 转移传送
         shift_tp {
 			x { 740 } y { 330 }
-            damage(exp) { lerp(15, 30, exp) }
-            consumption(exp) { lerp(300, 320, exp) }
-            overload(exp) { lerp(80, 50, exp) }
+            damage(exp) { lerp(16, 27, exp) }
+            consumption(exp) { lerp(374, 500, exp) }
+            overload(exp) { lerp(38, 27, exp) }
             range(exp) { lerp(25, 35, exp) }
 			
 			# @param entities: 攻击路径上攻击到的实体数量
