@@ -224,7 +224,6 @@ public class WiWorldData extends WorldSavedData {
 		while(iter.hasNext()) {
 			NodeConn conn = iter.next();
 			if(conn.isDisposed()) {
-				debug("disposed " + conn.node);
 				nToRemove.add(conn);
 			} else {
 				conn.tick();
@@ -252,14 +251,11 @@ public class WiWorldData extends WorldSavedData {
 	
 	private void saveNode(NBTTagCompound tag) {
 		NBTTagList list = new NBTTagList();
-		int cc = 0;
 		for(NodeConn c : nodeList) {
 			if(!c.isDisposed()) {
 				list.appendTag(c.toNBT());
-				cc++;
 			}
 		}
-		debug("SaveNode " + cc);
 		tag.setTag("list", list);
 	}
 	

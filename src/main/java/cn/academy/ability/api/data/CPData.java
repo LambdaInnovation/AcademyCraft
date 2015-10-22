@@ -474,7 +474,6 @@ public class CPData extends DataPart {
 	}
 	
 	@RegEventHandler(Bus.Forge)
-	
 	public static class Events {
 		
 		@SubscribeEvent
@@ -501,7 +500,8 @@ public class CPData extends DataPart {
 		
 		@SubscribeEvent
 		public void playerWakeup(PlayerWakeUpEvent event) {
-			CPData.get(event.entityPlayer).recoverAll();
+			if(!event.wakeImmediatly && !event.updateWorld && event.setSpawn)
+				CPData.get(event.entityPlayer).recoverAll();
 		}
 		
 		@SubscribeEvent(priority = EventPriority.LOWEST)
