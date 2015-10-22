@@ -31,7 +31,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileMetalFormer extends TileReceiverBase {
 	
 	public enum Mode { 
-		PLATE, INCISE, ETCH; 
+		PLATE, INCISE, ETCH, REFINE; 
 		
 		public final ResourceLocation texture;
 		private Mode() {

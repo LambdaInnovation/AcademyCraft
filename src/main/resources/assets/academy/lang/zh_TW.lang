@@ -20,6 +20,8 @@ item.ac_constraint_ingot.name=束能金屬錠
 item.ac_constraint_plate.name=束能金屬板
 item.ac_imag_silicon_ingot.name=虛像矽錠
 item.ac_wafer.name=虛像矽晶圓
+#item.ac_imag_silicon_piece.name=硅晶片
+#item.ac_reso_crystal.name=谐振水晶
 
 item.ac_brain_component.name=腦波分析模組
 item.ac_info_component.name=資訊處理模組
@@ -53,6 +55,7 @@ item.ac_developer_portable.name=便攜能力開發機
 tile.ac_constraint_metal_ore.name=束能金屬礦
 tile.ac_crystal_ore.name=虛能水晶礦
 tile.ac_imag_silicon_ore.name=虛像矽礦
+#tile.ac_reso_crystal_ore.name=谐振水晶矿
 tile.ac_machine_frame.name=機械框架
 
 tile.ac_phase_liquid.name=虛相位液體
@@ -242,6 +245,7 @@ ac.gui.imagfusor.flux.desc=虛能
 ac.gui.metal_former.mode.etch=蝕刻
 ac.gui.metal_former.mode.plate=衝壓
 ac.gui.metal_former.mode.incise=切割
+#ac.gui.metal_former.mode.refine=洗练
 
 ac.network.link=發起連線
 ac.network.search=搜尋網路

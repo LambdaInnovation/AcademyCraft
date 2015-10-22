@@ -20,6 +20,8 @@ item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
 item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
+item.ac_imag_silicon_piece.name=Imag Silicon Piece
+item.ac_reso_crystal.name=Resonant Crystal
 
 item.ac_brain_component.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
@@ -53,6 +55,7 @@ item.ac_developer_portable.name=Portable Developer
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
 tile.ac_imag_silicon_ore.name=Imag Silicon Ore
+tile.ac_reso_crystal_ore.name=Resonant Crystal Ore
 tile.ac_machine_frame.name=Machine Frame
 
 tile.ac_phase_liquid.name=Imag Phase Liquid
@@ -242,6 +245,7 @@ ac.gui.imagfusor.flux.desc=Imag Flux
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing
 ac.gui.metal_former.mode.incise=Incising
+ac.gui.metal_former.mode.refine=Refining
 
 ac.network.link=Link
 ac.network.search=Search networks

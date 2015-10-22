@@ -24,6 +24,7 @@ import cn.academy.crafting.block.BlockMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.world.ACWorldGen;
+import cn.academy.energy.ModuleEnergy;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegBlock;
 import cn.annoreg.mc.RegEventHandler;
@@ -97,7 +98,7 @@ public class ModuleCrafting {
 	
 	@RegBlock
 	@RecipeName("cons_ore")
-	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 2);
+	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 1);
 	
 	@RegBlock
 	@RecipeName("crystal_ore")
@@ -140,6 +141,22 @@ public class ModuleCrafting {
 	@RecipeName("conv_comp")
 	public static Item convComp = new ACItem("energy_convert_component");
 	
+	@RegItem
+	@RecipeName("si_piece")
+	public static Item silPiece = new ACItem("imag_silicon_piece");
+	
+	@RegItem
+	@RecipeName("reso_crystal")
+	public static Item resoCrystal = new ACItem("reso_crystal");
+	
+//	@RegItem
+//	@RecipeName("chip_base")
+//	public static Item chipBase = new ACItem("chip_base");
+	
+	@RegBlock
+	@RecipeName("reso_ore")
+	public static Block resoCrystalOre = new BlockGenericOre("reso_crystal_ore", 2f, 2);
+	
 	@RegWorldGen(2)
 	public static ACWorldGen worldGen;
 	
@@ -161,9 +178,16 @@ public class ModuleCrafting {
 		ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
 		
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
-		MetalFormerRecipes.INSTANCE.add(new ItemStack(wafer), new ItemStack(dataChip, 4), Mode.INCISE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(wafer), new ItemStack(silPiece, 4), Mode.INCISE);
+		
 		MetalFormerRecipes.INSTANCE.add(new ItemStack(dataChip), new ItemStack(calcChip), Mode.ETCH);
-		MetalFormerRecipes.INSTANCE.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate, 2), Mode.PLATE);
+		
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate), Mode.PLATE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotConst), new ItemStack(ModuleEnergy.constPlate), Mode.PLATE);
+		
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil,2), Mode.REFINE);
+		MetalFormerRecipes.INSTANCE.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst,2), Mode.REFINE);
+		//TODO more ore
 	}
 	
 	@SubscribeEvent
