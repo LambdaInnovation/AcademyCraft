@@ -14,6 +14,8 @@ package cn.academy.support.ic2;
 
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
+import cn.academy.misc.tutorial.ACTutorial;
+import cn.academy.misc.tutorial.Condition;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ic2.api.item.IC2Items;
@@ -33,6 +35,12 @@ public class IC2Support {
 	public static void init() {
 		BlockEUInput euInput = new BlockEUInput();
 		BlockEUOutput euOutput = new BlockEUOutput();
+		
+		try {
+			ACTutorial.addTutorial("energy_bridge_eu").addCondition(Condition.or(Condition.itemsCrafted(euInput,euOutput)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		GameRegistry.registerBlock(euInput, "eu_input");
 		GameRegistry.registerBlock(euOutput, "eu_output");
