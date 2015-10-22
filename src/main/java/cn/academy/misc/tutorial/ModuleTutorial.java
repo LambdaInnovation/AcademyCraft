@@ -14,8 +14,8 @@ import cn.annoreg.mc.RegInit;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-@Registrant
-@RegInit
+//@Registrant
+//@RegInit
 public class ModuleTutorial {
 	public static void init(){
 		try {

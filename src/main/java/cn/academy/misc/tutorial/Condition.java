@@ -28,7 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
-@Registrant
+//@Registrant
 public abstract class Condition {
 	int index;
 	Condition[] children;

@@ -21,7 +21,7 @@ public class TESupport {
 		BlockRFOutput rfOutput = new BlockRFOutput();
 		
 		try {
-			ACTutorial.addTutorial("energy_bridge_rf").addCondition(Condition.or(Condition.itemsCrafted(rfInput,rfOutput)));
+			// ACTutorial.addTutorial("energy_bridge_rf").addCondition(Condition.or(Condition.itemsCrafted(rfInput,rfOutput)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
