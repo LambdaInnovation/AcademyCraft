@@ -413,12 +413,25 @@ public class CPData extends DataPart {
 		
 		return tag;
 	}
-
+	
 	@Override
-	public void fromNBT(NBTTagCompound tag) {
+	public void fromNBTSync(NBTTagCompound tag) {
+		fromNBT(tag);
+		
 		boolean lastActivated = activated;
 		activated = tag.getBoolean("A");
 		
+		if(isRemote()) {
+			if(lastActivated ^ activated) {
+				MinecraftForge.EVENT_BUS.post(activated ? 
+					new AbilityActivateEvent(getPlayer()) :
+					new AbilityDeactivateEvent(getPlayer()));
+			}
+		}
+	}
+
+	@Override
+	public void fromNBT(NBTTagCompound tag) {
 		currentCP = tag.getFloat("C");
 		maxCP = tag.getFloat("M");
 		untilRecover = tag.getInteger("I");
@@ -431,14 +444,6 @@ public class CPData extends DataPart {
 		
 		addMaxCP = tag.getFloat("1");
 		addMaxOverload = tag.getFloat("2");
-		
-		if(isRemote()) {
-			if(lastActivated ^ activated) {
-				MinecraftForge.EVENT_BUS.post(activated ? 
-					new AbilityActivateEvent(getPlayer()) :
-					new AbilityDeactivateEvent(getPlayer()));
-			}
-		}
 	}
 	
 	private static double getDoubleParam(String name) {
