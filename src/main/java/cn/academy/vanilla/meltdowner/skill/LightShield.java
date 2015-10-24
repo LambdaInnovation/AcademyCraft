@@ -52,7 +52,7 @@ public class LightShield extends Skill {
 	static LightShield instance;
 	
 	static final int ACTION_INTERVAL = 18;
-	static IEntitySelector basicSelector = EntitySelectors.living;
+	static IEntitySelector basicSelector = EntitySelectors.everything;
 
 	public LightShield() {
 		super("light_shield", 2);

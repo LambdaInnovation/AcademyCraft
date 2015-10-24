@@ -12,12 +12,16 @@
  */
 package cn.academy.energy.block;
 
+import cn.academy.core.block.ACBlockMulti;
+import cn.academy.energy.client.gui.GuiLinkToNode;
+import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.block.ACBlockMulti;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD
@@ -52,5 +56,20 @@ public class BlockSolarGen extends ACBlockMulti {
 	public double[] getRotCenter() {
 		return new double[] { 0.5, 0, 0.5 };
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
+    		float hx, float hy, float hz) {
+		if(world.isRemote) {
+			TileEntity te = world.getTileEntity(x, y, z);
+			if(te instanceof TileSolarGen) {
+				Minecraft.getMinecraft().displayGuiScreen(
+						new GuiLinkToNode((TileSolarGen) te));
+				return true;
+			}
+		}
+        return false;
+    }
 
 }

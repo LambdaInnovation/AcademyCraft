@@ -66,9 +66,9 @@ public class TileCatEngine extends TileGeneratorBase {
 		return (thisTickGen = Math.min(required, 500));
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncGen(@RangedTarget(range = 10) TileEntity te, @Data Double amt) {
-		thisTickGen = amt;
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncGen(@RangedTarget(range = 10) TileCatEngine te, @Data Double amt) {
+		te.thisTickGen = amt;
 	}
 
 }

@@ -243,6 +243,7 @@ public class WiWorldData extends WorldSavedData {
 	
 	private void loadNode(NBTTagCompound tag) {
 		NBTTagList list = (NBTTagList) tag.getTag("list");
+		debug("LoadNode " + list + ((list == null) ? "null" : list.tagCount()));
 		for(int i = 0; i < list.tagCount(); ++i) {
 			doAddNode(new NodeConn(this, list.getCompoundTagAt(i)));
 		}

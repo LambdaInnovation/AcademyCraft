@@ -138,9 +138,7 @@ public class RayBarrage extends Skill {
 					float minYaw = yaw - range / 2, maxYaw = yaw + range / 2;
 					float minPitch = pitch - range, maxPitch = pitch + range;
 					
-					IEntitySelector selector = EntitySelectors.combine(
-						EntitySelectors.excludeOf(silbarn, player)
-					);
+					IEntitySelector selector = EntitySelectors.excludeOf(silbarn, player);
 					
 					Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ);
 					

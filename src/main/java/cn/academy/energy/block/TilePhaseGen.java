@@ -74,12 +74,12 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 	public void updateEntity() {
 		super.updateEntity();
 		
-		if(++untilSync == 10) {
-			untilSync = 0;
-			syncLiquid(this, getLiquidAmount());
-		}
-		
 		if(!getWorldObj().isRemote) {
+			if(++untilSync == 10) {
+				untilSync = 0;
+				syncLiquid(this, getLiquidAmount());
+			}
+			
 			ItemStack stack;
 			{ // Sink in liquid
 				stack = getStackInSlot(SLOT_LIQUID_IN);
@@ -87,10 +87,11 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 				if(stack != null && isPhaseLiquid(stack) && isOutputSlotAvailable() && 
 						(getTankSize() - getLiquidAmount() > PER_UNIT)) {
 					
-					tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
-					
-					--stack.stackSize;
-					if(stack.stackSize == 0)
+					if(stack.stackSize > 0) {
+						tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
+						--stack.stackSize;
+					}
+					if(stack.stackSize <= 0)
 						setInventorySlotContents(0, null);
 					
 					ItemStack output = getStackInSlot(SLOT_LIQUID_OUT);
@@ -171,11 +172,11 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
         tank.writeToNBT(tag);
     }
     
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void syncLiquid(
-    		@RangedTarget(range = 12) TileEntity te,
+    @RegNetworkCall(side = Side.CLIENT)
+    private static void syncLiquid(
+    		@RangedTarget(range = 12) TilePhaseGen te,
     		@Data Integer liq) {
-    	tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, liq));
+    	te.tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, liq));
     }
     
     private boolean isPhaseLiquid(ItemStack stack) {

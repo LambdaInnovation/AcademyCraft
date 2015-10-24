@@ -134,7 +134,7 @@ public class ShiftTeleport extends Skill {
 						stack.getItemDamage());
 				
 				if(!player.capabilities.isCreativeMode) {
-					if(--stack.stackSize == 0)
+					if(--stack.stackSize <= 0)
 						player.setCurrentItemOrArmor(0, null);
 				}
 			

@@ -63,7 +63,7 @@ public class ScatterBomb extends Skill {
 		
 		List<EntityMdBall> balls = new ArrayList();
 		
-		static IEntitySelector basicSelector = EntitySelectors.living;
+		static IEntitySelector basicSelector = EntitySelectors.everything;
 		static final int MAX_TICKS = 80, MOD = 10;
 		static final double RAY_RANGE = 15;
 		int ticks;

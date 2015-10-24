@@ -56,26 +56,24 @@ public class BlockCatEngine extends ACBlockContainer {
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
-		if(world.isRemote)
-			return false;
-		
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te instanceof TileCatEngine) {
-			TileCatEngine gen = (TileCatEngine) te;
-			if(WirelessHelper.isGeneratorLinked(gen)) {
-				MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent(gen));
-				player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.unlink"));
-			} else {
-				List<IWirelessNode> nodes = WirelessHelper.getNodesInRange(world, x, y, z);
-				if(nodes.isEmpty()) {
-					player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.notfound"));
+			if(!world.isRemote) {
+				TileCatEngine gen = (TileCatEngine) te;
+				if(WirelessHelper.isGeneratorLinked(gen)) {
+					MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent(gen));
+					player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.unlink"));
 				} else {
-					IWirelessNode node = nodes.get(RandUtils.rangei(0, nodes.size()));
-					player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.linked", node.getNodeName()));
-					MinecraftForge.EVENT_BUS.post(new LinkUserEvent(gen, node));
+					List<IWirelessNode> nodes = WirelessHelper.getNodesInRange(world, x, y, z);
+					if(nodes.isEmpty()) {
+						player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.notfound"));
+					} else {
+						IWirelessNode node = nodes.get(RandUtils.rangei(0, nodes.size()));
+						player.addChatMessage(new ChatComponentTranslation("ac.cat_engine.linked", node.getNodeName()));
+						MinecraftForge.EVENT_BUS.post(new LinkUserEvent(gen, node));
+					}
 				}
 			}
-			
 			return true;
 		}
 		

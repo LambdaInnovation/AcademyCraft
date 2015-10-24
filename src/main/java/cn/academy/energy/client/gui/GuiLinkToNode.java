@@ -32,6 +32,7 @@ import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.util.helper.Font.Align;
+import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -58,9 +59,13 @@ public class GuiLinkToNode extends LIGuiScreen {
 	Callback callback;
 	
 	public GuiLinkToNode(IWirelessUser _user) {
+		this(_user, false);
+	}
+	
+	public GuiLinkToNode(IWirelessUser _user, boolean mono) {
 		tile = (TileEntity) _user;
 		
-		initWidgets();
+		initWidgets(mono);
 		LinkToNodeSyncs.retrieveNearbyNetworks(tile, Future.create(
 			(Object o) -> {
 				nodes = (List<IWirelessNode>) o;
@@ -114,8 +119,11 @@ public class GuiLinkToNode extends LIGuiScreen {
 		TextBox.get(main.getWidget("text_currentnet2")).content = o;
     }
 	
-	private void initWidgets() {
+	private void initWidgets(boolean mono) {
 		main = GuiNode.loaded.getWidget("window_ssidselect").copy();
+		
+		///if(mono)
+		//	DrawTexture.get(main).setShaderId(ShaderMono.instance().getProgramID());
 		
 		final Widget slide = main.getWidget("button_slide");
 		GuiNode.wrapButton(slide, 0.5);

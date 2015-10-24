@@ -35,7 +35,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * TODO: Implement particle and fog effect
+ * TODO Implement particle and fog effect
  * @author WeAthFolD
  */
 @Registrant
@@ -63,6 +63,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 	}
 	
 	public final MatterMaterial mat;
+	public IIcon fluidIcon;
 	
 	public BlockImagPhase() {
 		super(ModuleCrafting.fluidImagProj, Material.water);
@@ -77,6 +78,14 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(IIconRegister ir) {
+    	super.registerBlockIcons(ir);
+    	fluidIcon = ir.registerIcon("academy:phase_liquid");
+    }
+	
 	
 	@SideOnly(Side.CLIENT)
     @Override

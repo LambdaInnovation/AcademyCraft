@@ -200,7 +200,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void openGuiAtClient(@Instance EntityPlayer player) {
+	private void openGuiAtClient(@Target EntityPlayer player) {
 		doOpenGui(player);
 	}
 	

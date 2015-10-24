@@ -70,7 +70,7 @@ public class TPAttackHelper {
 		// Post event
 		if(chLevel != -1) {
 			MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, target, chLevel));
-			postAtClient(player, player, target, chLevel);
+			postAtClient(player, target, chLevel);
 		}
 		
 		DamageHelper.attack(target, DamageSource.causePlayerDamage(player), damage);
@@ -78,9 +78,8 @@ public class TPAttackHelper {
 	
 	@RegNetworkCall(side = Side.CLIENT)
 	public static void postAtClient(
-		@Target EntityPlayer player,
-		@Instance EntityPlayer player2, @Instance Entity attackee, @Data Integer level) {
-		MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player2, attackee, level));
+		@Target EntityPlayer player, @Instance Entity attackee, @Data Integer level) {
+		MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, attackee, level));
 	}
 	
 	/**
