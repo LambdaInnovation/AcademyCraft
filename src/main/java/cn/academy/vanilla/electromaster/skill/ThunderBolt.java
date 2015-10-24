@@ -142,7 +142,7 @@ public class ThunderBolt extends Skill {
 		}
 		
 		private AttackData getAttackData() {
-			MovingObjectPosition result = Raytrace.traceLiving(player, RANGE, EntitySelectors.living);
+			MovingObjectPosition result = Raytrace.traceLiving(player, RANGE);
 			Vec3 end;
 			if(result == null) {
 				end = new Motion3D(player).move(RANGE).getPosVec();
