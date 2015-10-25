@@ -19,11 +19,11 @@ import cn.liutils.cgui.gui.Widget;
 /**
  * @author WeAthFolD
  */
-public interface IPropertyElement {
+public abstract class IPropertyElement {
 	
-	Widget getWidget(UIProperty prop);
+	public abstract Widget getWidget(UIProperty prop);
 	
-	default Configuration getConfig() {
+	public Configuration getConfig() {
 		return AcademyCraft.config;
 	}
 	
