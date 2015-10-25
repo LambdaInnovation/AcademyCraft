@@ -14,7 +14,12 @@ package cn.academy.support.minetweaker;
 import static cn.academy.crafting.api.ImagFusorRecipes.INSTANCE;
 import static cn.academy.support.minetweaker.MTSupport.toStack;
 
+import minetweaker.MineTweakerAPI;
+import minetweaker.OneWayAction;
+import minetweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * 
  * @author 3TUSK
