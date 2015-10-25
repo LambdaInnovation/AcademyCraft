@@ -2,6 +2,7 @@ package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.terminal.ModuleTerminal;
@@ -9,12 +10,15 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
+import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
 @Registrant
 @RegInit
+@RegACRecipeNames
 public class ModuleTutorial {
 	
 	@RegItem
+	@RecipeName("tutorial")
 	public static ItemTutorial item;
 	
 	public static void init(){

@@ -9,6 +9,8 @@ ac.activate_key.deactivate.desc=解除能力
 ac.activate_key.endspecial.desc=结束特殊技能模式
 ac.activate_key.endskill.desc=停止技能
 
+ac.coming_soon=即将推出
+
 # 创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
