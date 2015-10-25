@@ -144,16 +144,6 @@ public class AcademyCraft {
         	}
         } catch(Throwable e) {}
         
-        try { 
-        	Class.forName("cofh.thermalexpansion.ThermalExpansion");
-        	try {
-        		Class.forName("cn.academy.support.te.TESupport").getMethod("init").invoke(this);
-        		teSupportPresent = true;
-        	} catch (Throwable e) {
-        		log.error("Failed to initialize TE support", e);
-        	}
-        } catch(Throwable e) {}
-        
         try {
         	Class.forName("minetweaker.mc1710.MineTweakerMod");
         	Class.forName("minetweaker.MineTweakerAPI");

@@ -1,15 +1,31 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegInit;
+import cn.annoreg.mc.RegItem;
+import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
-//@Registrant
-//@RegInit
+@Registrant
+@RegInit
+@RegACRecipeNames
 public class ModuleTutorial {
+	
+	@RegItem
+	@RecipeName("tutorial")
+	public static ItemTutorial item;
+	
 	public static void init(){
+		// initConditions();
+	}
+	
+	private void initConditions() {
 		try {
 			ACTutorial.addTutorial("phase_liquid").addCondition(Condition.harvestLiquid(ModuleCrafting.imagPhase.mat));
 			ACTutorial.addTutorial("constraint_metal").addCondition(Condition.itemPickup(ModuleCrafting.oreConstraintMetal));
@@ -23,7 +39,7 @@ public class ModuleTutorial {
 							)
 					));
 			ACTutorial.addTutorial("matrix").addCondition(Condition.itemCrafted(ModuleEnergy.matrix));
-			ACTutorial.addTutorial("WiFi").addCondition(
+			ACTutorial.addTutorial("wifi").addCondition(
 					Condition.or(
 							Condition.onTutorial("matrix"),
 							Condition.onTutorial("node")
@@ -46,7 +62,7 @@ public class ModuleTutorial {
 			ACTutorial.addTutorial("ability_meltdowner").addCondition(Condition.abilityLevel(ModuleVanilla.meltdowner, 1));
 			ACTutorial.addTutorial("ability_teleporter").addCondition(Condition.abilityLevel(ModuleVanilla.teleporter, 1));
 		} catch (Exception e) {
-			e.printStackTrace();
+			AcademyCraft.log.error("Registering AC tutorial conditions", e);
 		}
 	}
 }

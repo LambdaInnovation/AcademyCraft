@@ -10,7 +10,7 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.support.te;
+package cn.academy.support.rf;
 
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
 import cofh.api.energy.IEnergyReceiver;
@@ -36,7 +36,7 @@ public class RFReceiverManager implements IEnergyBlockManager {
 	@Override
 	public double getEnergy(TileEntity tile) {
 		IEnergyReceiver rec = asReceiver(tile);
-		return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * TESupport.CONV_RATE;
+		return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * RFSupport.CONV_RATE;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class RFReceiverManager implements IEnergyBlockManager {
 	@Override
 	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
 		IEnergyReceiver rec = asReceiver(tile);
-		return rec == null ? 0 : amt - rec.receiveEnergy(DEFAULT_DIR, (int) (amt / TESupport.CONV_RATE), false) * TESupport.CONV_RATE;
+		return rec == null ? 0 : amt - rec.receiveEnergy(DEFAULT_DIR, (int) (amt / RFSupport.CONV_RATE), false) * RFSupport.CONV_RATE;
 	}
 
 	@Override

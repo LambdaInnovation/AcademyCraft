@@ -9,6 +9,8 @@ ac.activate_key.deactivate.desc=Deactivate Ability
 ac.activate_key.endspecial.desc=End Special Skill Mode
 ac.activate_key.endskill.desc=Abort Skill
 
+ac.coming_soon=Coming Soon
+
 # CreativeTab
 itemGroup.AcademyCraft=AcademyCraft
 
@@ -51,6 +53,8 @@ item.ac_apps.name=App Installer
 
 item.ac_developer_portable.name=Portable Developer
 
+item.ac_tutorial.name=Research Note
+
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
@@ -78,6 +82,8 @@ tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
 tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
 tile.ac_developer_normal.name=Normal Ability Developer
 tile.ac_developer_advanced.name=Advanced Ability Developer
+
+ac.converter.desc_template=Converts %s to %s
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon

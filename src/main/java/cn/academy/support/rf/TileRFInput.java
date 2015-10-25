@@ -10,19 +10,25 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.support.te;
+package cn.academy.support.rf;
 
+import cn.academy.core.block.TileGeneratorBase;
+import cn.annoreg.core.RegWithName;
+import cn.annoreg.core.Registrant;
+import cn.annoreg.mc.RegTileEntity;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.energy.IEnergyProvider;
-import cn.academy.core.block.TileReceiverBase;
 
-public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
-	
+@Registrant
+@RegTileEntity
+@RegWithName("rf_input")
+public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
+
 	/** The convert rate (RF * RATE = IF) */
-	private static final float RATE = TESupport.CONV_RATE;
-
-	public TileRFOutput() {
-		super("ac_rf_output", 0, 2000, 100);
+	private static final float RATE = RFSupport.CONV_RATE;
+	
+	public TileRFInput() {
+		super("ac_rf_input", 0, 2000, 100);
 	}
 
 	@Override
@@ -31,17 +37,15 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract,
+	public int receiveEnergy(ForgeDirection from, int maxReceive,
 			boolean simulate) {
-		int e = (int) energy;
-		energy -= maxExtract / RATE;
-		if(energy < 0d) energy = 0d;
-		return (int) Math.min(e / RATE, maxExtract);
+		int amount = (int) (maxReceive * RATE);
+		return (int) (maxReceive - addEnergy(amount, simulate) / RATE);
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) (energy / RATE);
+		return (int) (getEnergy() / RATE);
 	}
 
 	@Override
@@ -49,4 +53,9 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 		return (int) (2000 / RATE);
 	}
 
+	@Override
+	public double getGeneration(double required) {
+		return 0;
+	}
+	
 }
