@@ -4,8 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
-import cn.academy.misc.achievements.conds.CondItemCrafted;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 /**
  * @author EAirPeter

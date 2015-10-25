@@ -205,7 +205,8 @@ public class GuiMatrix extends LIGuiContainer {
     	return pageMain.transform.doesListenKey;
     }
 	
-    protected boolean containerAcceptsKey(int key) {
+    @Override
+	protected boolean containerAcceptsKey(int key) {
     	return false;
     }
 	
@@ -257,8 +258,8 @@ public class GuiMatrix extends LIGuiContainer {
 		@GuiCallback
 		public void onFrame(Widget w, FrameEvent event) {
 			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / tile.getCapacity());
-			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
-			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) tile.getRange() / TileMatrix.MAX_RANGE);
+			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = (tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
+			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = (tile.getRange() / TileMatrix.MAX_RANGE);
 		}
 		
 	}

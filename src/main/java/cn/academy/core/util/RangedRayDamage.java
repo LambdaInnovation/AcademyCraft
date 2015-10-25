@@ -184,8 +184,8 @@ public class RangedRayDamage {
 					world.getBlockMetadata(x, y, z), dropProb, 0);
 				
 				if(snd && RandUtils.ranged(0, 1) < 0.1) {
-					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), 
-	                		(double)((float)z + 0.5F), 
+					world.playSoundEffect(x + 0.5F, y + 0.5F, 
+	                		z + 0.5F, 
 	                		block.stepSound.getBreakSound(), 
 	                		(block.stepSound.getVolume() + 1.0F) / 2.0F, 
 	                		block.stepSound.getPitch());
@@ -201,7 +201,7 @@ public class RangedRayDamage {
 		Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
 		float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
 		
-		float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, (float) dist / maxIncrement);
+		float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, dist / maxIncrement);
 		DamageHelper.attack(target, dmgSrc, realDmg);
 	}
 	

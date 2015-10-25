@@ -63,7 +63,8 @@ public class ContainerMatrix extends Container {
 		return true;
 	}
 	
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 
@@ -75,11 +76,11 @@ public class ContainerMatrix extends Container {
                 if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
                     return null;
             } else {
-            	if(stack.getItem() == ModuleEnergy.constPlate) {
+            	if(stack.getItem() == ModuleCrafting.constPlate) {
             		for(int s = 0; s < 3; ++s) {
             			if(tile.getStackInSlot(s) == null) {
             				stack1.stackSize--;
-            				tile.setInventorySlotContents(s, new ItemStack(ModuleEnergy.constPlate));
+            				tile.setInventorySlotContents(s, new ItemStack(ModuleCrafting.constPlate));
             				break;
             			}
             		}
@@ -126,7 +127,7 @@ public class ContainerMatrix extends Container {
 		
 		@Override
 	    public boolean isItemValid(ItemStack stack) {
-	        return stack != null && stack.getItem() == ModuleEnergy.constPlate;
+	        return stack != null && stack.getItem() == ModuleCrafting.constPlate;
 	    }
 		
 	}

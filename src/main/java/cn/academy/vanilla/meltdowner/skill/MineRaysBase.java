@@ -22,6 +22,7 @@ import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
+import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.annoreg.mc.s11n.InstanceSerializer;
 import cn.annoreg.mc.s11n.SerializationManager;
@@ -40,6 +41,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -121,7 +123,8 @@ public abstract class MineRaysBase extends Skill {
 				int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
 				if(tx != x || ty != y || tz != z) {
 					Block block = world.getBlock(tx, ty, tz);
-					if(block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
+					if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player.worldObj, tx, ty, tz)) && 
+							block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
 						x = tx; y = ty; z = tz;
 						hardnessLeft = block.getBlockHardness(world, tx, ty, tz);
 						

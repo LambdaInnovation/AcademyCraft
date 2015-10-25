@@ -40,7 +40,8 @@ public class TerminalInstallerRenderer extends RenderModelItem {
 		this.stdRotation.zCoord = 5;
 		this.stdOffset.yCoord = 0.0;
 		this.entityItemScale = 1.1; 
-		this.entityItemRotation.xCoord = 15;
+		this.entityItemOffset.xCoord = -0.1;
+		this.entityItemRotation.yCoord = 180;
 		this.equipRotation.xCoord = 0;
 		this.equipRotation.yCoord = -15;
 		this.equipRotation.zCoord = 90;

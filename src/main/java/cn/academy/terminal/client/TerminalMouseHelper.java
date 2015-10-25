@@ -23,7 +23,8 @@ public class TerminalMouseHelper extends MouseHelper {
 	
 	public int dx, dy;
 	
-    public void mouseXYChange() {
+    @Override
+	public void mouseXYChange() {
         this.dx = Mouse.getDX();
         this.dy = Mouse.getDY();
     }

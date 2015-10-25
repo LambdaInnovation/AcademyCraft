@@ -9,7 +9,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import cn.academy.energy.ModuleEnergy;
 
 public class WorldGenPhaseLiq extends WorldGenerator {
 	
@@ -19,7 +18,8 @@ public class WorldGenPhaseLiq extends WorldGenerator {
         this.theBlock = ModuleCrafting.imagPhase;
     }
 
-    public boolean generate(World world, Random random, int x, int y, int z) {
+    @Override
+	public boolean generate(World world, Random random, int x, int y, int z) {
         for (x -= 8, z -= 8; y > 5 && world.isAirBlock(x, y, z); --y); // Find a non-air-block as origin to generate.
 
         if (y <= 4)
@@ -43,9 +43,9 @@ public class WorldGenPhaseLiq extends WorldGenerator {
                 {
                     for (int l = 1; l < 7; ++l)
                     {
-                        double d6 = ((double)j - d3) / (d0 / 2.0D);
-                        double d7 = ((double)l - d4) / (d1 / 2.0D);
-                        double d8 = ((double)k - d5) / (d2 / 2.0D);
+                        double d6 = (j - d3) / (d0 / 2.0D);
+                        double d7 = (l - d4) / (d1 / 2.0D);
+                        double d8 = (k - d5) / (d2 / 2.0D);
                         double d9 = d6 * d6 + d7 * d7 + d8 * d8;
 
                         if (d9 < 0.6D)

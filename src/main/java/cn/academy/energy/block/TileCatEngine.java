@@ -12,13 +12,11 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.client.render.block.RenderCatEngine;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
@@ -66,9 +64,9 @@ public class TileCatEngine extends TileGeneratorBase {
 		return (thisTickGen = Math.min(required, 500));
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncGen(@RangedTarget(range = 10) TileEntity te, @Data Double amt) {
-		thisTickGen = amt;
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncGen(@RangedTarget(range = 10) TileCatEngine te, @Data Double amt) {
+		te.thisTickGen = amt;
 	}
 
 }

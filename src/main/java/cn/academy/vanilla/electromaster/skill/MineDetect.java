@@ -182,6 +182,7 @@ public class MineDetect extends Skill {
 			updateBlocks();
 		}
 		
+		@Override
 		public void onUpdate() {
 			super.onUpdate();
 			

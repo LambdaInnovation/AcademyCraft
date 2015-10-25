@@ -15,8 +15,6 @@ package cn.academy.knowledge.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -24,8 +22,6 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -40,8 +36,6 @@ import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD

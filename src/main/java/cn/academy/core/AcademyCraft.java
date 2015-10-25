@@ -63,7 +63,7 @@ public class AcademyCraft {
     
 	public static final boolean DEBUG_MODE = false;
 	
-	public static final String VERSION = "1.0pr1";
+	public static final String VERSION = "1.0pr2";
 
     public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     
@@ -141,16 +141,6 @@ public class AcademyCraft {
         		ic2SupportPresent = true;
         	} catch (Throwable e) {
         		log.error("Failed to initialize IC2 support", e);
-        	}
-        } catch(Throwable e) {}
-        
-        try { 
-        	Class.forName("cofh.thermalexpansion.ThermalExpansion");
-        	try {
-        		Class.forName("cn.academy.support.te.TESupport").getMethod("init").invoke(this);
-        		teSupportPresent = true;
-        	} catch (Throwable e) {
-        		log.error("Failed to initialize TE support", e);
         	}
         } catch(Throwable e) {}
         

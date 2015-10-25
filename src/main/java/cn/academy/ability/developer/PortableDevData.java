@@ -36,10 +36,10 @@ public class PortableDevData extends DataPart {
 	public DeveloperPortable get() {
 		EntityPlayer player = getPlayer();
 		if(developer == null) {
-			if(developer.validate(player))
+			if(DeveloperPortable.validate(player))
 				developer = new DeveloperPortable(player);
 		} else {
-			if(!developer.validate(player))
+			if(!DeveloperPortable.validate(player))
 				developer = null;
 		}
 		return developer;
@@ -47,7 +47,7 @@ public class PortableDevData extends DataPart {
 	
 	@Override
 	public void tick() {
-		if(developer != null && developer.validate(getPlayer()))
+		if(developer != null && DeveloperPortable.validate(getPlayer()))
 			developer.tick();
 		else
 			developer = null;

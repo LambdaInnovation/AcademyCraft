@@ -31,7 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 @RegSerializable(instance = DeveloperBlock.Serializer.class)
 public class DeveloperBlock extends Developer {
 	
-	final TileDeveloper tile;
+	public final TileDeveloper tile;
 
 	public DeveloperBlock(TileDeveloper _tile) {
 		super(_tile.getType());

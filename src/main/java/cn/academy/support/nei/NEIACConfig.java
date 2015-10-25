@@ -13,8 +13,6 @@
 package cn.academy.support.nei;
 
 import cn.academy.core.AcademyCraft;
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
 
 /**
  * 

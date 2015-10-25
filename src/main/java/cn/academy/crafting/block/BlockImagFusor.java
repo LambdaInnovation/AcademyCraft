@@ -46,7 +46,8 @@ public class BlockImagFusor extends ACBlockContainer {
 		setHarvestLevel("pickaxe", 1);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
     	bottom = ricon(ir, "machine_bottom");
     	top = ricon(ir, "machine_top");
@@ -58,7 +59,8 @@ public class BlockImagFusor extends ACBlockContainer {
     	}
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
     	TileImagFusor te = check(world, x, y, z);
     	

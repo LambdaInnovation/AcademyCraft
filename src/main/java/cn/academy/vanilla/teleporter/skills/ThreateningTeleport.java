@@ -135,7 +135,7 @@ public class ThreateningTeleport extends Skill {
 					}
 					
 					if(!player.capabilities.isCreativeMode) {
-						if(--curStack.stackSize == 0) {
+						if(--curStack.stackSize <= 0) {
 							player.setCurrentItemOrArmor(0, null);
 						}
 					}

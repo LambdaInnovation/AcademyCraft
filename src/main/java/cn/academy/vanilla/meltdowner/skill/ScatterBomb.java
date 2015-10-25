@@ -28,7 +28,6 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.liutils.util.generic.VecUtils;
@@ -63,7 +62,7 @@ public class ScatterBomb extends Skill {
 		
 		List<EntityMdBall> balls = new ArrayList();
 		
-		static IEntitySelector basicSelector = EntitySelectors.living;
+		static IEntitySelector basicSelector = EntitySelectors.everything;
 		static final int MAX_TICKS = 80, MOD = 10;
 		static final double RAY_RANGE = 15;
 		int ticks;

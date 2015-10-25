@@ -12,7 +12,6 @@
  */
 package cn.academy.core.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -84,6 +83,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
 		length = Math.sqrt(dxzsq + dy * dy);
 	}
 	
+	@Override
 	protected void onFirstUpdate() {
 		executeAfter(new EntityCallback() {
 			@Override

@@ -31,7 +31,6 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
@@ -70,6 +69,7 @@ public class Flashing extends SpecialSkill {
 		m.id = movements.size() - 1;
 	}
 	
+	@Override
 	protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
 		return new FlashingAction();
 	}

@@ -78,11 +78,11 @@ public class ElectronBomb extends Skill {
 					@Override
 					public void execute(EntityMdBall ball) {
 						MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
-							EntitySelectors.combine(EntitySelectors.living, EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
+							EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
 						if(trace != null && trace.entityHit != null) {
 							MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
 						}
-						actionClient(player, player, ball);
+						actionClient(player, ball);
 					}
 					
 				});
@@ -96,7 +96,7 @@ public class ElectronBomb extends Skill {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	static void actionClient(@RangedTarget(range = 20) EntityPlayer _player, @Instance EntityPlayer player, @Instance EntityMdBall ball) {
+	static void actionClient(@RangedTarget(range = 20) EntityPlayer player, @Instance EntityMdBall ball) {
 		Vec3 dest = getDest(player);
 		spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
 			dest.xCoord, dest.yCoord, dest.zCoord);
@@ -112,7 +112,7 @@ public class ElectronBomb extends Skill {
 	}
 	
 	static Vec3 getDest(EntityPlayer player) {
-		return Raytrace.getLookingPos(player, DISTANCE, EntitySelectors.living).getLeft();
+		return Raytrace.getLookingPos(player, DISTANCE).getLeft();
 	}
 
 }

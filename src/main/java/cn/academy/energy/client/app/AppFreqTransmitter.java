@@ -36,6 +36,7 @@ public class AppFreqTransmitter extends App {
 	@Override
 	public AppEnvironment createEnvironment() {
 		return new AppEnvironment() {
+			@Override
 			@SideOnly(Side.CLIENT)
 			public void onStart() {
 				AuxGuiHandler.register(new FreqTransmitterUI());

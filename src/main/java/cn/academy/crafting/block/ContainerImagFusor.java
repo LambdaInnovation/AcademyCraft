@@ -41,8 +41,8 @@ public class ContainerImagFusor extends Container {
     private void initInventory(InventoryPlayer inv) {
     	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
     	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, 2, 32, 72));
-        this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 72));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, 2, 32, 71));
+        this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 71));
         
         int STEP = 18;
         
@@ -58,7 +58,8 @@ public class ContainerImagFusor extends Container {
         }
     }
     
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 

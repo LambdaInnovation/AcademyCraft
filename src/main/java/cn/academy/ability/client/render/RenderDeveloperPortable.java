@@ -13,13 +13,9 @@
 package cn.academy.ability.client.render;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.api.render.model.IItemModel;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 import cn.liutils.util.generic.VecUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 /**
  * @author WeAthFolD
@@ -33,6 +29,8 @@ public class RenderDeveloperPortable extends RenderModelItem {
 		this.scale = 6;
 		this.equipRotation = VecUtils.vec(0, -10, -5);
 		this.equipOffset = VecUtils.vec(0.6, 0, -.2);
+		this.entityItemOffset.zCoord = 0.2;
+		this.entityItemRotation.xCoord = 15;
 		this.thirdPersonScale = 0.6;
 		this.thirdPersonOffset = VecUtils.vec(0.1, 0.05, 0.2);
 	}

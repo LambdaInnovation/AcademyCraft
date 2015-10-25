@@ -23,6 +23,7 @@ import cn.annoreg.mc.RegEventHandler.Bus;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cn.liutils.template.block.ItemBlockMulti;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,12 +45,12 @@ public class ModuleAbility {
 	@RecipeName("dev_portable")
 	public static ItemDeveloper developerPortable;
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockMulti.class)
 	@RecipeName("dev_normal")
 	public static BlockDeveloper 
 		developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
 	
-	@RegBlock
+	@RegBlock(item = ItemBlockMulti.class)
 	@RecipeName("dev_advanced")
 	public static BlockDeveloper 
 		developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);

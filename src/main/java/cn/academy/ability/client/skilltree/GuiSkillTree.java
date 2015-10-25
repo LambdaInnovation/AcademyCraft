@@ -98,8 +98,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	final DeveloperType type;
 	final boolean isApp;
 	
-	Widget window;
-	Widget treeArea;
+	protected Widget window;
+	protected Widget treeArea;
 	
 	Widget windowEsper, windowMachine;
 	
@@ -475,7 +475,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
  			});
 	 	}
 
-	 	public void onAdded() {
+	 	@Override
+		public void onAdded() {
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
 	 		Color color;

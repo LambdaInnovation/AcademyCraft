@@ -68,7 +68,7 @@ public class ArcGen extends Skill {
 	}
 	
 	private static float getDamage(AbilityData data) {
-		return instance.getFunc("damage").callFloat(data.getSkillExp(instance));
+		return instance.callFloatWithExp("damage", data);
 	}
 	
 	private static double getIgniteProb(AbilityData data) {
@@ -85,6 +85,10 @@ public class ArcGen extends Skill {
 	
 	private static boolean canStunEnemy(AbilityData data) {
 		return data.getSkillExp(instance) >= 1.0f;
+	}
+	
+	private static float getRange(AbilityData data) {
+		return instance.callFloatWithExp("range", data);
 	}
 	
 	public static class ArcGenAction extends SyncActionInstant {
@@ -104,7 +108,7 @@ public class ArcGen extends Skill {
 			
 			if(!isRemote) {
 				// Perform ray trace
-				MovingObjectPosition result = Raytrace.traceLiving(player, 20, null, blockFilter);
+				MovingObjectPosition result = Raytrace.traceLiving(player, getRange(aData), null, blockFilter);
 
 				if(result != null) {
 					float expincr;
@@ -149,6 +153,8 @@ public class ArcGen extends Skill {
 			arc.showWiggle = 0.1;
 			arc.hideWiggle = 0.4;
 			arc.addMotionHandler(new Life(10));
+			arc.lengthFixed = false;
+			arc.length = getRange(aData);
 			
 			player.worldObj.spawnEntityInWorld(arc);
 			ACSounds.playClient(player, "em.arc_weak", 0.5f);

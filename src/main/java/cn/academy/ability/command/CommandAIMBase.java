@@ -22,8 +22,8 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.liutils.util.helper.PlayerDataTag;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -75,15 +75,15 @@ public abstract class CommandAIMBase extends ACCommand {
 				return;
 			}
 			
-			matchCommands(commandSender, this.getCommandSenderAsPlayer(commandSender), pars);
+			matchCommands(commandSender, CommandBase.getCommandSenderAsPlayer(commandSender), pars);
 		}
 		
 		private void setActive(EntityPlayer player, boolean data) {
-			player.getEntityData().setBoolean(ID, data);
+			PlayerDataTag.get(player).getTag().setBoolean(ID, data);
 		}
 		
 		private boolean isActive(EntityPlayer player) {
-			return player.getEntityData().getBoolean(ID);
+			return PlayerDataTag.get(player).getTag().getBoolean(ID);
 		}
 		
 	}
@@ -175,12 +175,11 @@ public abstract class CommandAIMBase extends ACCommand {
 		
 		case "catlist": {
 			sendChat(ics, getLoc("cats"));
-			StringBuilder sb = new StringBuilder();
 			List<Category> catList = CategoryManager.INSTANCE.getCategories();
 			for(int i = 0; i < catList.size(); ++i) {
-				sb.append(catList.get(i).getName()).append(i == catList.size() - 1 ? "" : ", ");
+				Category cat = catList.get(i);
+				sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
 			}
-			sendChat(ics, sb.toString());
 			return;
 		}
 		
@@ -253,7 +252,7 @@ public abstract class CommandAIMBase extends ACCommand {
 			}
 			
 			for(Skill s : cat.getSkillList()) {
-				sendChat(ics, s.getName() + " [" + s.getID() + "]");
+				sendChat(ics, "#" + s.getID() + " " + s.getName() + ": " + s.getDisplayName());
 			}
 			return;
 		}
@@ -268,7 +267,7 @@ public abstract class CommandAIMBase extends ACCommand {
 					aData.setLevel(lv);
 					sendChat(ics, locSuccessful());
 				} else {
-					sendChat(ics, locInvalid());
+					sendChat(ics, this.getLoc("outofrange"), 1, 5);
 				}
 			}
 			
@@ -298,8 +297,12 @@ public abstract class CommandAIMBase extends ACCommand {
 					sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
 				} else if(pars.length == 3) {
 					Float exp = tryParseFloat(pars[2]);
-					aData.setSkillExp(skill, exp);
-					sendChat(ics, this.locSuccessful());
+					if(exp < 0 || exp > 1) {
+						sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
+					} else {
+						aData.setSkillExp(skill, exp);
+						sendChat(ics, this.locSuccessful());
+					}
 				} else {
 					sendChat(ics, this.locInvalid());
 				}

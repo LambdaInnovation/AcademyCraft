@@ -9,6 +9,8 @@ ac.activate_key.deactivate.desc=Deactivate Ability
 ac.activate_key.endspecial.desc=End Special Skill Mode
 ac.activate_key.endskill.desc=Abort Skill
 
+ac.coming_soon=Coming Soon
+
 # CreativeTab
 itemGroup.AcademyCraft=AcademyCraft
 
@@ -20,6 +22,8 @@ item.ac_constraint_ingot.name=Constraint Metal Ingot
 item.ac_constraint_plate.name=Constraint Metal Plate
 item.ac_imag_silicon_ingot.name=Imag Silicon Ingot
 item.ac_wafer.name=Imag Silicon Wafer
+item.ac_imag_silicon_piece.name=Imag Silicon Piece
+item.ac_reso_crystal.name=Resonant Crystal
 
 item.ac_brain_component.name=Brainwave Analyzer
 item.ac_info_component.name=Information Processor
@@ -49,10 +53,13 @@ item.ac_apps.name=App Installer
 
 item.ac_developer_portable.name=Portable Developer
 
+item.ac_tutorial.name=Research Note
+
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
 tile.ac_imag_silicon_ore.name=Imag Silicon Ore
+tile.ac_reso_crystal_ore.name=Resonant Crystal Ore
 tile.ac_machine_frame.name=Machine Frame
 
 tile.ac_phase_liquid.name=Imag Phase Liquid
@@ -75,6 +82,8 @@ tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
 tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
 tile.ac_developer_normal.name=Normal Ability Developer
 tile.ac_developer_advanced.name=Advanced Ability Developer
+
+ac.converter.desc_template=Converts %s to %s
 
 # Generic Knowledges
 ac.knowledge.marathon.name=Marathon
@@ -242,6 +251,7 @@ ac.gui.imagfusor.flux.desc=Imag Flux
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing
 ac.gui.metal_former.mode.incise=Incising
+ac.gui.metal_former.mode.refine=Refining
 
 ac.network.link=Link
 ac.network.search=Search networks
@@ -377,9 +387,6 @@ ac.ability.generic.brain_course.desc=Get a practice for your brain, it will let 
 ac.ability.generic.brain_course_advanced.desc=More deeply and effectively develop the thinking ability of your brain. Improve skill keep time and patience.
 ac.ability.generic.mind_course.desc=Learn how to relax your brain better, to accelerate recovery speed of CP.
 
-# Knowledge
-ac.knowledge.bubble.name=Bubble Master
-
 # Command
 ac.command.invalid=§cInvalid input, please try again.
 ac.command.successful=§2Command sucessfully performed.
@@ -412,23 +419,16 @@ ac.command.aim.skills=/aim skills: Display all skills in player's current catego
 ac.command.aim.fullcp=/aim fullcp: Restore full cp of the player.
 ac.command.aim.level=/aim level: Set the player's ability level.
 ac.command.aim.exp=/aim exp <id>|<skillName> [exp]: Set or view the skill's experience level.
-ac.command.aim.nocat=Specified category not found.
+ac.command.aim.nocat=Specified category not found. Use /aim catlist to list all categories.
 ac.command.aim.cats=Currently available categories: 
 ac.command.aim.curcat=Player current category: %s
 ac.command.aim.nonecat=No ability
-ac.command.aim.noskill=No such skill was found.
+ac.command.aim.noskill=No such skill was found. Use /aim skills to list all skills in current category.
 ac.command.aim.learned.format=Learned skills: %s
 ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
 ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
 ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
-
-ac.command.preset.usage=/preset <command>|<help> [parameters...]
-ac.command.preset.help=/preset help: Display the help message.
-ac.command.preset.view=/preset view <id>: View the preset info with given ID.
-ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: Edit the preset with given ID. Mapping is controllable id.
-ac.command.preset.list=/preset list: View all currently available controllables.
-ac.command.preset.nobind=No bindings.
-ac.command.preset.list2=Available controllables:
+ac.command.aim.outofrange=§cInput out of range: §fMust be a value between %s and %s.
 
 # Achievements
 achievement.ac_phase_liquid=New Energy

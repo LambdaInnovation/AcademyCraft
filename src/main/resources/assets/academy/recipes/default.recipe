@@ -1,7 +1,41 @@
 ; AcademyCraft recipe script file
 
+shapeless(si_piece*2){
+	[wafer]
+}
+
+shaped(data_chip){
+	[redstone,redstone,redstone]
+	[nil,plateIron,nil]
+}
+
+shaped(data_chip){
+	[redstone,redstone,redstone]
+	[nil,si_piece,nil]
+}
+
+shapeless(calc_chip){
+	[data_chip,quartz,quartz]
+}
+
+shapeless(calc_chip){
+	[data_chip,reso_crystal]
+}
+
+
+shaped(plateIron *2){
+	[iron_ingot]
+	[iron_ingot]
+	[iron_ingot]
+}
+
+shaped(frame) {
+    [nil, plateIron, nil]
+    [plateIron, redstone, plateIron]
+    [nil, plateIron, nil]
+}
+
 shaped(phase_gen) {
-    [nil, nil, nil]
     [crystal0, frame, crystal0]
     [matter_unit, nil, matter_unit]
 }
@@ -13,15 +47,15 @@ shaped(solar_gen) {
 }
 
 shaped(windgen_base) {
-    [nil, iron_ingot, nil]
-    [nil, frame, nil]
-    [nil, conv_comp, nil]
+    [iron_ingot]
+    [frame]
+    [conv_comp]
 }
 
 shaped(windgen_pillar) {
-    [nil, iron_bars, nil]
-    [nil, redstone, nil]
-    [nil, iron_bars, nil]
+    [iron_bars]
+    [redstone]
+    [iron_bars]
 }
 
 shaped(windgen_main) {
@@ -39,30 +73,42 @@ shaped(windgen_fan) {
 shaped(node0) { 
     [nil, calc_chip, nil]
     [iron_ingot, frame, iron_ingot]
-    [crystal0, reso_comp, crystal0] 
+    [crystal0, reso_crystal, crystal0] 
 }
 
 shaped(node1) {
     [nil, crystal1, nil]
-    [calc_chip, beacon, calc_chip]
+    [calc_chip, conv_comp, calc_chip]
     [nil, node0, nil]
 }
 
 shaped(node2) {
-    [nil, crystal2, nil]
-    [nil, ender_pearl, nil]
-    [nil, node1, nil]
+    [crystal2]
+    [reso_comp]
+    [node1]
 }
 
-shaped(matter_unit*2) {
+shaped(matter_unit*4) {
     [nil, cons_plate, nil]
-    [cons_plate, glass_pane, cons_plate]
+    [cons_plate, glass, cons_plate]
     [nil, cons_plate, nil]
 }
 
 shaped(ene_unit) {
     [nil, cons_plate, nil]
     [cons_plate, crystal0, cons_plate]
+    [nil, data_chip, nil]
+}
+
+shaped(ene_unit*2) {
+    [nil, cons_plate, nil]
+    [cons_plate, crystal1, cons_plate]
+    [nil, data_chip, nil]
+}
+
+shaped(ene_unit*4) {
+    [nil, cons_plate, nil]
+    [cons_plate, crystal2, cons_plate]
     [nil, data_chip, nil]
 }
 
@@ -73,7 +119,7 @@ shaped(cons_plate*2) {
 shaped(terminal) {
     [data_chip, glass_pane, data_chip]
     [plateIron, brain_comp, plateIron]
-    [info_comp, calc_chip, redstone]
+    [info_comp, redstone_block, info_comp]
 }
 
 shaped(fusor) {
@@ -82,45 +128,46 @@ shaped(fusor) {
     [cons_plate, matter_unit, cons_plate]
 }
 
+shaped(fusor) {
+    [nil, crystal0, nil]
+    [calc_chip, frame, conv_comp]
+    [nil, matter_unit, nil]
+}
+
+shaped(fusor) {
+    [nil, crystal0, nil]
+    [conv_comp, frame, calc_chip]
+    [nil, matter_unit, nil]
+}
+
 shaped(metal_former) {
-    [cons_plate, shears, cons_plate]
+    [nil, shears, nil]
     [calc_chip, frame, calc_chip]
     [cons_plate, matter_unit, cons_plate]
 }
 
-shaped(plateIron*2) {
-    [iron_ingot, iron_ingot]
-    [iron_ingot, iron_ingot]
-}
-
-shaped(frame) {
-    [nil, plateIron, nil]
-    [plateIron, redstone, plateIron]
-    [nil, plateIron, nil]
-}
-
 shaped(mat) {
-    [nil, redstone, nil]
+    [nil, reso_crystal, nil]
     [redstone, frame, redstone]
-    [data_chip, redstone, data_chip]
+    [data_chip, reso_crystal, data_chip]
 }
 
 shaped(mat_core#0) {
-    [crystal0]
-    [calc_chip]
-    [conv_comp]
+    [nil, crystal0, nil]
+    [calc_chip, reso_crystal, data_chip]
+    [nil, conv_comp, nil]
 }
 
 shaped(mat_core#1) {
-    [ender_pearl]
+    [reso_crystal]
     [crystal1]
     [mat_core#0]
 }
 
 shaped(mat_core#2) {
-    [glowstone]
-    [beacon]
-    [mat_core#1]
+    [glowstone,glowstone,glowstone]
+    [reso_crystal, ender_pearl, reso_crystal]
+    [nil, mat_core#1, nil]
 }
 
 smelting(imagsil_ingot)[0.8] {
@@ -147,15 +194,14 @@ shaped(brain_comp) {
 }
 
 shaped(reso_comp) {
-    [nil, calc_chip, nil]
-    [nil, redstone, nil]
-    [cons_plate, mat_core#0, cons_plate]
+    [cons_plate,reso_crystal,cons_plate]
+    [nil,redstone,nil]
 }
 
 shaped(conv_comp) {
     [calc_chip]
     [ene_unit]
-    [ender_pearl]
+    [reso_crystal]
 }
 
 shaped(app_skill_tree) {
@@ -165,9 +211,9 @@ shaped(app_skill_tree) {
 }
 
 shaped(app_media_player) {
-    [jukebox]
-    [data_chip]
-    [info_comp]
+    [noteblock,noteblock,noteblock]
+    [nil,data_chip,nil]
+    [nil,info_comp,nil]
 }
 
 shaped(app_freq_transmitter) {
@@ -176,7 +222,7 @@ shaped(app_freq_transmitter) {
     [info_comp]
 }
 
-shaped(mag_hook) {
+shaped(mag_hook*3) {
     [nil, plateIron, nil]
     [plateIron, plateIron, plateIron]
     [nil, plateIron, nil]
@@ -188,26 +234,32 @@ shaped(dev_portable) {
     [cons_plate, crystal0, cons_plate]
 }
 
+shapeless(silbarn){
+	[si_piece,si_piece]
+}
+
 shaped(dev_normal) {
     [nil, dev_portable, nil]
     [mat_core#0, bed, piston]
-    [frame, crystal1, redstone]
+    [crystal1, frame, redstone]
+}
+
+shaped(dev_normal) {
+    [brain_comp, info_comp, conv_comp]
+    [mat_core#0, bed, piston]
+    [crystal1, frame, redstone]
 }
 
 shaped(dev_advanced) {
-    [nil, nil, nil]
-    [nil, dev_normal, beacon]
-    [node1, crystal2, redstone]
+    [cons_plate, cons_plate, cons_plate]
+    [glowstone, dev_normal, glowstone]
+    [node1, crystal2, reso_crystal]
 }
 
 shapeless(wafer) {
     [imagsil_ingot]
 }
 
-shapeless(data_chip) {
-    [wafer]
-}
-
-shapeless(calc_chip) {
-    [data_chip, data_chip]
+shapeless(tutorial) {
+	[book, crystal0]
 }

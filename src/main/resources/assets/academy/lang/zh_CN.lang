@@ -9,6 +9,8 @@ ac.activate_key.deactivate.desc=解除能力
 ac.activate_key.endspecial.desc=结束特殊技能模式
 ac.activate_key.endskill.desc=停止技能
 
+ac.coming_soon=即将推出
+
 # 创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
@@ -20,6 +22,8 @@ item.ac_constraint_ingot.name=束能金属锭
 item.ac_constraint_plate.name=束能金属板
 item.ac_imag_silicon_ingot.name=虚像硅锭
 item.ac_wafer.name=虚像硅晶圆
+item.ac_imag_silicon_piece.name=硅晶片
+item.ac_reso_crystal.name=谐振水晶
 
 item.ac_brain_component.name=脑波分析模块
 item.ac_info_component.name=信息处理模块
@@ -49,10 +53,15 @@ item.ac_apps.name=应用安装器
 
 item.ac_developer_portable.name=便携能力开发机
 
+item.ac_tutorial.name=研究记录
+
+ac.converter.desc_template=转换%s到%s
+
 # 方块
 tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
 tile.ac_imag_silicon_ore.name=虚像硅矿
+tile.ac_reso_crystal_ore.name=谐振水晶矿
 tile.ac_machine_frame.name=机械框架
 
 tile.ac_phase_liquid.name=虚相位液体
@@ -242,6 +251,7 @@ ac.gui.imagfusor.flux.desc=虚能
 ac.gui.metal_former.mode.etch=蚀刻
 ac.gui.metal_former.mode.plate=冲压
 ac.gui.metal_former.mode.incise=切割
+ac.gui.metal_former.mode.refine=洗练
 
 ac.network.link=发起连接
 ac.network.search=搜寻网络
@@ -337,7 +347,7 @@ ac.gui.loctele.location=坐标:
 ac.gui.loctele.distance=距离: 
 ac.gui.loctele.dim=维度: #
 ac.gui.loctele.warn0=[CP不足.]
-ac.gui.loctele.warn1=你现在无法记录此坐标.
+ac.gui.loctele.warn1=你现在无法记录此坐标。
 ac.gui.loctele.teleport=传送！
 
 # 原子崩坏
@@ -377,9 +387,6 @@ ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的�
 ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力，强化能力的短期续航时间与长期消耗的耐性。
 ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想，加快计算力的恢复速度。
 
-# 知识
-ac.knowledge.bubble.name=泡泡大师
-
 # 指令
 ac.command.invalid=§c无效输入，请再次尝试.
 ac.command.successful=§2指令已执行.
@@ -400,35 +407,28 @@ ac.command.knowledge.all=所有知识:
 ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定的知识.
 ac.command.aim.notactive=/aim指令当前未被开启。使用/aim cheats_on或/aim cheats_off来改变开启状态。
 ac.command.aim.warning=§c警告：使用/aim指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
+ac.command.aim.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
 
 ac.command.aim.usage=/aim <command>|<help> [参数...]
-ac.command.aim.help=/aim help: 显示帮助信息.
-ac.command.aim.cat=/aim cat [能力名称]: 改变指定玩家的能力或是显示当前能力.
-ac.command.aim.catlist=/aim catlist: 列出所有可用能力.
-ac.command.aim.learn=/aim learn <id>|<技能名称>: 无视所有要求学习指定技能.
-ac.command.aim.unlearn=/aim unlearn <id>|<技能名>: 取消学习某个技能.
-ac.command.aim.learn_all=/aim learn_all: 学习所有技能.
-ac.command.aim.reset=/aim reset: 清空你的能力信息.
-ac.command.aim.learned=/aim learned: 显示已学习的技能.
-ac.command.aim.skills=/aim skills: 显示玩家当前能力的所有技能.
-ac.command.aim.fullcp=/aim fullcp: 将当前玩家CP恢复至满.
-ac.command.aim.level=/aim level: 设置当前玩家的能力等级.
+ac.command.aim.help=/aim help: 显示帮助信息。
+ac.command.aim.cat=/aim cat [能力名称]: 改变指定玩家的能力或是显示当前能力。
+ac.command.aim.catlist=/aim catlist: 列出所有可用能力。
+ac.command.aim.learn=/aim learn <id>|<技能名称>: 无视所有要求学习指定技能。
+ac.command.aim.unlearn=/aim unlearn <id>|<技能名>: 取消学习某个技能。
+ac.command.aim.learn_all=/aim learn_all: 学习所有技能。
+ac.command.aim.reset=/aim reset: 清空你的能力信息。
+ac.command.aim.learned=/aim learned: 显示已学习的技能。
+ac.command.aim.skills=/aim skills: 显示玩家当前能力的所有技能。
+ac.command.aim.fullcp=/aim fullcp: 将当前玩家CP恢复至满。
+ac.command.aim.level=/aim level: 设置当前玩家的能力等级。
 ac.command.aim.exp=/aim exp <id>|<技能名> [值]: 设置或者修改某技能的经验。
-ac.command.aim.nocat=该能力不存在.
+ac.command.aim.nocat=该能力不存在。使用 /aim catlist 以列出所有能力。
 ac.command.aim.cats=当前可用能力: 
 ac.command.aim.curcat=玩家当前能力: %s
 ac.command.aim.nonecat=无能力
-ac.command.aim.noskill=该技能不存在.
+ac.command.aim.noskill=该技能不存在。使用 /aim skills 以列出当前能力系的所有技能。
 ac.command.aim.learned.format=已习得技能: %s
 ac.command.aim.curexp=技能 %s的当前经验: %.0f%%.
-
-ac.command.preset.usage=/preset <command>|<help> [参数...]
-ac.command.preset.help=/preset help: 显示帮助信息.
-ac.command.preset.view=/preset view <id>: 显示编号为<id>的键位信息.
-ac.command.preset.edit=/preset edit <id> [map0, [map1, [map2, ...]]]: 编辑编号为<id>的键位设置. Mapping是Controllable ID.
-ac.command.preset.list=/preset list: 显示当前所有可用Controllable.
-ac.command.preset.nobind=未绑定.
-ac.command.preset.list2=可用Controllable: 
 
 # 成就
 achievement.ac_phase_liquid=新能源

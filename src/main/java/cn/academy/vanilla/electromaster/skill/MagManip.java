@@ -227,6 +227,7 @@ public class MagManip extends Skill {
 			worldObj.spawnEntityInWorld(surrounder);
 		}
 		
+		@Override
 		public void onUpdate() {
 			super.onUpdate();
 			syncer.update();

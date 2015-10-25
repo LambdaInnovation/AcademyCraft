@@ -112,6 +112,7 @@ public class Meltdowner extends Skill {
 			}
 		}
 		
+		@Override
 		public void onFinalize() {
 			if(isRemote)
 				endEffect();

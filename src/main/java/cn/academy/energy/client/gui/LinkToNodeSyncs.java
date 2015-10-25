@@ -22,7 +22,6 @@ import cn.academy.energy.api.block.IWirelessTile;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.node.UnlinkUserEvent;
-import cn.academy.energy.block.TileNode;
 import cn.academy.energy.internal.NodeConn;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.Future;

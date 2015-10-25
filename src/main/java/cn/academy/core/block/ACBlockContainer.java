@@ -33,6 +33,10 @@ public abstract class ACBlockContainer extends BlockContainer {
 	
 	final GuiHandlerBase guiHandler;
 
+	public ACBlockContainer(String name, Material mat) {
+		this(name, mat, null);
+	}
+	
 	public ACBlockContainer(String name, Material mat, GuiHandlerBase _guiHandler) {
 		super(mat);
 		guiHandler = _guiHandler;
@@ -48,8 +52,9 @@ public abstract class ACBlockContainer extends BlockContainer {
 	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
-        if(!world.isRemote && guiHandler != null && !player.isSneaking()) {
-        	guiHandler.openGuiContainer(player, world, x, y, z);
+        if(guiHandler != null && !player.isSneaking()) {
+        	if(!world.isRemote)
+        		guiHandler.openGuiContainer(player, world, x, y, z);
             return true;
         }
         return false;

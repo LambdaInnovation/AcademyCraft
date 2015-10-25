@@ -12,8 +12,6 @@
  */
 package cn.academy.energy.client.gui.wind;
 
-import java.util.Arrays;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.item.ItemStack;
@@ -130,7 +128,7 @@ public class GuiWindGenBase extends LIGuiContainer {
 	@GuiCallback("prog_speed")
 	public void updateSpeed(Widget w, FrameEvent event) {
 		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = tile.getSimulatedGeneration() / tile.MAX_GENERATION_SPEED;
+		bar.progress = tile.getSimulatedGeneration() / TileWindGenBase.MAX_GENERATION_SPEED;
 	}
 	
 	@GuiCallback("prog_buffer")

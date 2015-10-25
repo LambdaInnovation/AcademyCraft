@@ -215,6 +215,7 @@ public class KnowledgeData extends DataPart {
 				!learned.get(id);
 	}
 	
+	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		try {
 			learned = bitsetSer.readData(tag.getTag("l"), null);
@@ -224,6 +225,7 @@ public class KnowledgeData extends DataPart {
 		}
 	}
 	
+	@Override
 	public NBTTagCompound toNBT() {
 		try {
 			NBTTagCompound ret = new NBTTagCompound();

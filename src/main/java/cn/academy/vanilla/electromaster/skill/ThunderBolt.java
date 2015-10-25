@@ -20,7 +20,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
@@ -31,7 +30,6 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.liutils.entityx.handlers.Life;
@@ -142,7 +140,7 @@ public class ThunderBolt extends Skill {
 		}
 		
 		private AttackData getAttackData() {
-			MovingObjectPosition result = Raytrace.traceLiving(player, RANGE, EntitySelectors.living);
+			MovingObjectPosition result = Raytrace.traceLiving(player, RANGE);
 			Vec3 end;
 			if(result == null) {
 				end = new Motion3D(player).move(RANGE).getPosVec();

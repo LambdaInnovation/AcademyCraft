@@ -15,12 +15,7 @@ import static cn.academy.crafting.api.MetalFormerRecipes.INSTANCE;
 import static cn.academy.support.minetweaker.MTSupport.toStack;
 
 import cn.academy.crafting.block.TileMetalFormer.Mode;
-import minetweaker.MineTweakerAPI;
-import minetweaker.OneWayAction;
-import minetweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * 
  * @author 3TUSK

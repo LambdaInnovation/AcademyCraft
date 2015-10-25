@@ -12,9 +12,7 @@
  */
 package cn.academy.crafting.world;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -41,11 +39,12 @@ public class ACWorldGen implements IWorldGenerator {
 		}
 	}
 	
-	private List<CustomWorldGen> generators = new ArrayList(Arrays.asList(new CustomWorldGen[] {
+	private List<CustomWorldGen> generators = Arrays.asList(new CustomWorldGen[] {
+			new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreResoCrystal, 0, 4, Blocks.stone), 60, 18),
 	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreConstraintMetal, 0, 4, Blocks.stone), 60, 24),
-	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreCrystal, 0, 3, Blocks.stone), 60, 24),
-	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagSil, 0, 3, Blocks.stone), 60, 26),
-	}));
+	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreCrystal, 0, 3, Blocks.stone), 60, 48),
+	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagSil, 0, 4, Blocks.stone), 60, 22)
+	});
 	
 	private void genOverworld(World world, Random random, int x, int z) {
 		for(CustomWorldGen gen : generators) {

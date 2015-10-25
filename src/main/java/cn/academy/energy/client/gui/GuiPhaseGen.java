@@ -12,8 +12,6 @@
  */
 package cn.academy.energy.client.gui;
 
-import java.util.Arrays;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.util.ResourceLocation;

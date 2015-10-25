@@ -24,7 +24,6 @@ import cn.academy.energy.api.event.wen.ChangePassEvent;
 import cn.academy.energy.api.event.wen.CreateNetworkEvent;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.internal.WirelessNet;
-import cn.academy.energy.internal.WirelessSystem;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;

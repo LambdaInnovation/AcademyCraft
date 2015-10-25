@@ -69,7 +69,7 @@ public class DebugConsole extends AuxGui {
 	static DebugConsole INSTANCE;
 	
 	public static void init() {
-		AuxGuiHandler.instance.register(INSTANCE = new DebugConsole());
+		AuxGuiHandler.register(INSTANCE = new DebugConsole());
 		ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
 			@Override
 			public void onKeyDown() {

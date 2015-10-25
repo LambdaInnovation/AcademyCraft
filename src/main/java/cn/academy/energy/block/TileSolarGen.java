@@ -59,11 +59,13 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 		info.update();
 	}
 	
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		info = new InfoBlockMulti(this, tag);
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		info.save(tag);

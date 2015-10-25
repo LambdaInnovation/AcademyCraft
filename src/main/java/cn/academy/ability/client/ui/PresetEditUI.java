@@ -33,8 +33,6 @@ import cn.academy.ability.api.data.PresetData.PresetEditor;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
@@ -51,8 +49,6 @@ import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.GameTimer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -127,6 +123,7 @@ public class PresetEditUI extends GuiScreen {
 		init();
 	}
 	
+	@Override
 	public void onGuiClosed() {
 		editor.save();
 	}
@@ -186,7 +183,8 @@ public class PresetEditUI extends GuiScreen {
 		return ret;
 	}
 	
-    protected void mouseClicked(int mx, int my, int button) {
+    @Override
+	protected void mouseClicked(int mx, int my, int button) {
     	if(button == 0) {
     		if(!transiting) {
     			foreground.mouseClicked(mx, my, button);
@@ -194,7 +192,8 @@ public class PresetEditUI extends GuiScreen {
     	}
     }
 	
-    public void drawScreen(int mx, int my, float partialTicks) {
+    @Override
+	public void drawScreen(int mx, int my, float partialTicks) {
     	LIGui.drawBlackout();
     	
     	if(transiting) {

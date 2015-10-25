@@ -15,7 +15,6 @@ package cn.academy.energy.block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
@@ -25,7 +24,6 @@ import cn.academy.energy.block.BlockNode.NodeType;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
@@ -142,16 +140,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energy = tag.getDouble("energy");
+        name = tag.getString("nodeName");
     }
     
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
+        tag.setString("nodeName", name);
     }
 
     String name = "Unnamed";
     
+	@Override
 	public String getNodeName() {
 		return name;
 	}
@@ -160,19 +161,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 		this.name = name;
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	public void receiveSyncMessage(
-		@RangedTarget(range = 12) TileEntity te,
+	@RegNetworkCall(side = Side.CLIENT)
+	public static void receiveSyncMessage(
+		@RangedTarget(range = 12) TileNode te,
 		@Data Boolean enabled, 
 		@Data Boolean chargingIn,
 		@Data Boolean chargingOut, 
 		@Data Double energy,
 		@Data String name) {
-		this.enabled = enabled;
-		this.chargingIn = chargingIn;
-		this.chargingOut = chargingOut;
-		this.energy = energy;
-		this.name = name;
+		te.enabled = enabled;
+		te.chargingIn = chargingIn;
+		te.chargingOut = chargingOut;
+		te.energy = energy;
+		te.name = name;
 	}
 
 	@Override

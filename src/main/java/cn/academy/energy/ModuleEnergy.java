@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.energy.block.BlockCatEngine;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
@@ -99,11 +98,7 @@ public class ModuleEnergy {
     @RecipeName("windgen_fan")
     public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
     
-    @RegItem
-	@RecipeName("cons_plate")
-	public static Item constPlate = new ACItem("constraint_plate");
-	
-	public static void init() {
+    public static void init() {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
 			EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
 	}

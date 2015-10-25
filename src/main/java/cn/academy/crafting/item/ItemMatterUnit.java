@@ -12,10 +12,17 @@
  */
 package cn.academy.crafting.item;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import cn.academy.core.client.Resources;
+import cn.academy.core.item.ACItem;
+import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
+import cn.academy.crafting.client.render.item.RendererMatterUnit;
+import cn.annoreg.mc.RegItem;
+import cn.liutils.util.mc.PlayerUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,15 +34,6 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import cn.academy.core.client.Resources;
-import cn.academy.core.item.ACItem;
-import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
-import cn.academy.crafting.client.render.item.RendererMatterUnit;
-import cn.annoreg.mc.RegItem;
-import cn.liutils.util.mc.PlayerUtils;
-import cn.liutils.util.mc.StackUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * The matter unit class. Have a simple material system for registration.
@@ -52,6 +50,7 @@ public class ItemMatterUnit extends ACItem {
 		public final String name;
 		public final ResourceLocation texture;
 		public final Block block;
+		private int id;
 		
 		public MatterMaterial(String _name, Block block) {
 			this(_name, block, Resources.getTexture("items/matter_unit/" + _name + "_mat"));
@@ -65,7 +64,7 @@ public class ItemMatterUnit extends ACItem {
 		
 	}
 	
-	private static Map<String, MatterMaterial> nameMap = new HashMap();
+	private static List<MatterMaterial> materials = new ArrayList();
 	
 	public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.air);
 	static {
@@ -73,14 +72,20 @@ public class ItemMatterUnit extends ACItem {
 	}
 	
 	public static void addMatterMaterial(MatterMaterial mat) {
-		if(nameMap.containsKey(mat.name)) {
-			throw new RuntimeException("Duplicate MatterMaterial Key " + mat.name);
+		for(MatterMaterial prev : materials) {
+			if(prev.name.equals(mat.name))
+				throw new RuntimeException("Duplicate MatterMaterial Key " + mat.name);
 		}
-		nameMap.put(mat.name, mat);
+		mat.id = materials.size();
+		materials.add(mat);
 	}
 	
 	public static MatterMaterial getMatterMaterial(String name) {
-		return nameMap.get(name);
+		for(MatterMaterial mat : materials) {
+			if(mat.name.equals(name))
+				return mat;
+		}
+		return null;
 	}
 
 	//------
@@ -89,20 +94,40 @@ public class ItemMatterUnit extends ACItem {
 	public ItemMatterUnit() {
 		super("matter_unit");
 		setMaxStackSize(16);
+		hasSubtypes = true;
 	}
 	
 	public MatterMaterial getMaterial(ItemStack stack) {
-		String name = StackUtils.loadTag(stack).getString("material");
-		MatterMaterial mat = nameMap.get(name);
+		if(stack.getItem() != this || stack.getItemDamage() >= materials.size())
+			return null;
+		MatterMaterial mat = materials.get(stack.getItemDamage());
 		if(mat == null) {
 			setMaterial(stack, NONE);
 			return NONE;
 		}
 		return mat;
 	}
+
+	public void setMaterial(ItemStack stack, MatterMaterial mat) {
+		stack.setItemDamage(mat.id);
+	}
 	
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-    {
+	public void setMaterial(ItemStack stack, String name) {
+		setMaterial(stack, getMatterMaterial(name));
+	}
+	
+	public ItemStack create(String name) {
+		return create(getMatterMaterial(name));
+	}
+	
+	public ItemStack create(MatterMaterial mat) {
+		ItemStack ret = new ItemStack(this);
+		setMaterial(ret, mat);
+		return ret;
+	}
+	
+	@Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         boolean isNone = getMaterial(stack) == NONE;
         MovingObjectPosition mop = 
         	this.getMovingObjectPositionFromPlayer(world, player, true);
@@ -126,7 +151,7 @@ public class ItemMatterUnit extends ACItem {
                     }
                     
                     Block b = world.getBlock(i, j, k);
-                    for(MatterMaterial m : nameMap.values()) {
+                    for(MatterMaterial m : materials) {
                     	if(m.block == b) {
                     		// Match, merge the stack.
                     		ItemStack newStack = new ItemStack(this);
@@ -152,24 +177,6 @@ public class ItemMatterUnit extends ACItem {
             return stack;
         }
     }
-
-	public void setMaterial(ItemStack stack, MatterMaterial mat) {
-		StackUtils.loadTag(stack).setString("material", mat.name);
-	}
-	
-	public void setMaterial(ItemStack stack, String name) {
-		setMaterial(stack, getMatterMaterial(name));
-	}
-	
-	public ItemStack create(String name) {
-		return create(getMatterMaterial(name));
-	}
-	
-	public ItemStack create(MatterMaterial mat) {
-		ItemStack ret = new ItemStack(this);
-		setMaterial(ret, mat);
-		return ret;
-	}
 	
 	@Override
     public String getUnlocalizedName(ItemStack stack) {
@@ -179,7 +186,7 @@ public class ItemMatterUnit extends ACItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item instance, CreativeTabs cct, List list) {
-        for(MatterMaterial mat : nameMap.values()) {
+        for(MatterMaterial mat : materials) {
         	ItemStack stack = new ItemStack(this);
         	setMaterial(stack, mat);
         	list.add(stack);

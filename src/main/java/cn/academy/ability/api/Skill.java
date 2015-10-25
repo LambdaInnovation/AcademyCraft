@@ -3,8 +3,6 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.vecmath.Vector2f;
-
 import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.ctrl.SkillInstance;

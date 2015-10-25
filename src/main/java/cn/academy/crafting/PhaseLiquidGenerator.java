@@ -16,8 +16,6 @@ import java.util.Random;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenLakes;
-import cn.academy.energy.ModuleEnergy;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;

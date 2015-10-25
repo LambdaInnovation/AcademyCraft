@@ -15,14 +15,13 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import com.google.common.collect.ImmutableList;
+
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.client.Resources;
 import cn.liutils.util.helper.Color;
-
-import com.google.common.collect.ImmutableList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * An Ability Category. Describes the skills that this category contains and the various other info.
@@ -159,5 +158,19 @@ public class Category {
 		return Resources.getTexture("abilities/" + name + "/icon_overlay");
 	}
 	
+	// Misc
+	
+	// WARNING: Those interfaces are temporary and are subject to change. Don't use them recently.
+	public float getDamageRate(AbilityData data) {
+		return 0.9f + data.getLevel() * 0.1f;
+	}
+	
+	public float getConsumptionRate(AbilityData data) {
+		return 0.8f + data.getLevel() * 0.2f;
+	}
+	
+	public float getOverloadRate(AbilityData data) {
+		return 0.8f + data.getLevel() * 0.2f;
+	}
 	
 }

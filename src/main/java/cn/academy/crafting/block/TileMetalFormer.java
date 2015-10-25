@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.core.block.TileReceiverBase;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.core.client.sound.PositionedSound;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
@@ -14,11 +16,11 @@ import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -28,7 +30,7 @@ import cpw.mods.fml.relauncher.Side;
 public class TileMetalFormer extends TileReceiverBase {
 	
 	public enum Mode { 
-		PLATE, INCISE, ETCH; 
+		PLATE, INCISE, ETCH, REFINE; 
 		
 		public final ResourceLocation texture;
 		private Mode() {
@@ -60,6 +62,7 @@ public class TileMetalFormer extends TileReceiverBase {
 		super("metal_former", 3, 3000, IFConstants.LATENCY_MK1);
 	}
 	
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		
@@ -108,6 +111,8 @@ public class TileMetalFormer extends TileReceiverBase {
 				updateCounter = 0;
 				sync();
 			}
+		} else {
+			updateSounds();
 		}
 	}
 	
@@ -143,15 +148,32 @@ public class TileMetalFormer extends TileReceiverBase {
 		return isWorkInProgress() ? (double) workCounter / WORK_TICKS : 0;
 	}
 	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncData(
+	@RegNetworkCall(side = Side.CLIENT)
+	private static void syncData(
 			@RangedTarget(range = 12) TileMetalFormer target,
 			@Data Integer counter, 
 			@Instance(nullable = true) RecipeObject recipe,
 			@Instance Mode mode) {
-		this.workCounter = counter;
-		this.current = recipe;
-		this.mode = mode;
+		target.workCounter = counter;
+		target.current = recipe;
+		target.mode = mode;
 	}
+	
+    // --- CLIENT EFFECTS
+    
+    @SideOnly(Side.CLIENT)
+    private PositionedSound sound;
+    
+    @SideOnly(Side.CLIENT)
+    private void updateSounds() {
+    	if(sound != null && !isWorkInProgress()) {
+    		sound.stop();
+    		sound = null;
+    	} else if(sound == null && isWorkInProgress()) {
+    		sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
+    				"machine.machine_work").setLoop().setVolume(0.6f);
+    		ACSounds.playClient(sound);
+    	}
+    }
 
 }

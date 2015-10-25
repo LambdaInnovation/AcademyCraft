@@ -13,7 +13,6 @@
 package cn.academy.energy.client.gui.node;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +38,6 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
-import cn.liutils.cgui.gui.event.ConfirmInputEvent;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;

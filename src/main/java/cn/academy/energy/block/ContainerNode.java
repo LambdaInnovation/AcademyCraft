@@ -12,8 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -38,8 +36,8 @@ public class ContainerNode extends Container {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotIFItem(node, 0, 38, 72));
-        this.addSlotToContainer(new SlotIFItem(node, 1, 78, 72));
+        this.addSlotToContainer(new SlotIFItem(node, 0, 38, 71));
+        this.addSlotToContainer(new SlotIFItem(node, 1, 78, 71));
         
         int STEP = 18;
         
@@ -58,7 +56,8 @@ public class ContainerNode extends Container {
     /**
      * This already become a template...
      */
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 

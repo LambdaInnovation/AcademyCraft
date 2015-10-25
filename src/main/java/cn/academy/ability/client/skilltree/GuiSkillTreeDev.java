@@ -19,19 +19,17 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.developer.DevelopTypeLevel;
 import cn.academy.ability.developer.DevelopTypeSkill;
 import cn.academy.ability.developer.Developer;
 import cn.academy.ability.developer.Developer.DevState;
+import cn.academy.ability.developer.DeveloperBlock;
 import cn.academy.ability.developer.IDevCondition;
 import cn.academy.ability.developer.IDevelopType;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.component.Glow;
-import cn.annoreg.mc.network.Future;
+import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.annotations.GuiCallback;
 import cn.liutils.cgui.gui.component.Component;
@@ -49,6 +47,9 @@ import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.shader.ShaderMono;
 import cn.liutils.util.helper.Font;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 
 /**
@@ -92,6 +93,23 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						}
 						
 					});
+		}
+		
+		// FIXME Bad style here, instanceof is definetly not-cute hardcoding.
+		// Used Developer class to abstract item and block away but now need to do some specific stuffs.
+		// If possible make this part better in the future xD
+		if(developer instanceof DeveloperBlock) {
+			DeveloperBlock db = (DeveloperBlock) developer;
+			double size = 70;
+			Widget w = new Widget();
+			w.transform.alignWidth = WidthAlign.RIGHT;
+			w.transform.setPos(-80, 70).setSize(size, size);
+			DrawTexture dt = new DrawTexture();
+			dt.setShaderId(ShaderMono.instance().getProgramID());
+			w.addComponent(dt);
+			
+			window.addWidget(w);
+			EnergyUIHelper.initNodeLinkButton(db.tile, w, true);
 		}
 		
 		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.type.syncRate;
