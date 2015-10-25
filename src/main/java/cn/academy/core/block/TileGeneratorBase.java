@@ -64,8 +64,13 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
 	 * @return Energy not consumed
 	 */
 	public double addEnergy(double amt) {
+		return addEnergy(amt, false);
+	}
+	
+	public double addEnergy(double amt, boolean simulate) {
 		double add = Math.min(bufferSize - energy, amt);
-		energy += add;
+		if(!simulate)
+			energy += add;
 		return amt - add;
 	}
 

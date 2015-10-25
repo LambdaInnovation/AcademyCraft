@@ -53,6 +53,8 @@ item.ac_developer_portable.name=便携能力开发机
 
 item.ac_tutorial.name=研究记录
 
+ac.converter.desc_template=转换%s到%s
+
 # 方块
 tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿

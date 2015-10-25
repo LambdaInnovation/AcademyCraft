@@ -12,10 +12,7 @@
  */
 package cn.academy.support.ic2;
 
-import cn.academy.core.AcademyCraft;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
+import cn.academy.support.BlockConverterBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -23,16 +20,10 @@ import net.minecraft.world.World;
  * 
  * @author KSkun
  */
-public class BlockEUInput extends BlockContainer {
+public class BlockEUInput extends BlockConverterBase {
 
 	public BlockEUInput() {
-		super(Material.rock);
-		setCreativeTab(AcademyCraft.cct);
-		setStepSound(Block.soundTypeStone);
-		setHarvestLevel("pickaxe", 0);
-		setHardness(2.5f);
-		setBlockName("ac_eu_input");
-		setBlockTextureName("academy:eu_input");
+		super("eu_input", "EU", "IF", TileEUInput.class);
 	}
 
 	@Override
