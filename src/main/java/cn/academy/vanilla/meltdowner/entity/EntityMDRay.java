@@ -15,7 +15,6 @@ package cn.academy.vanilla.meltdowner.entity;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
-import cn.academy.vanilla.meltdowner.entity.EntityMDRay.MDRayRender;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEntity;
 import cn.liutils.render.particle.Particle;

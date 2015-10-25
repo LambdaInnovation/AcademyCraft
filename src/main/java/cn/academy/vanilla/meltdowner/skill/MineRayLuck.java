@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
-import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayLuck;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

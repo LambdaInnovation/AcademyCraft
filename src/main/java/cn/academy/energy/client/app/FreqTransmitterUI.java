@@ -28,7 +28,6 @@ import cn.liutils.api.gui.AuxGui;
 import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
 import cn.liutils.core.event.eventhandler.LIHandler;
 import cn.liutils.template.block.BlockMulti;
-import cn.liutils.template.block.IMultiTile;
 import cn.liutils.util.client.ControlOverrider;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;

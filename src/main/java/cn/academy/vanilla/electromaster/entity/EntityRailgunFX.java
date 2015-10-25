@@ -12,18 +12,15 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
-import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
@@ -34,8 +31,6 @@ import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.KeyHandler;
 import cn.liutils.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -14,7 +14,6 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

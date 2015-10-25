@@ -13,13 +13,9 @@
 package cn.academy.ability.client.render;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.api.render.model.IItemModel;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 import cn.liutils.util.generic.VecUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 /**
  * @author WeAthFolD

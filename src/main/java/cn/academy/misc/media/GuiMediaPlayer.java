@@ -15,12 +15,9 @@ package cn.academy.misc.media;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -36,8 +33,6 @@ import cn.liutils.cgui.gui.event.GuiEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -108,7 +103,8 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		return ret;
 	}
 	
-    public boolean doesGuiPauseGame() {
+    @Override
+	public boolean doesGuiPauseGame() {
         return false;
     }
 	

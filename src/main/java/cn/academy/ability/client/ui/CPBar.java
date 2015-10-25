@@ -179,7 +179,7 @@ public class CPBar extends Widget {
 							chProvider = null;
 						
 						float estmCons = chProvider == null ? 0 : chProvider.getConsumption() * 
-							(cpData.isOverloaded() ? cpData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
+							(cpData.isOverloaded() ? CPData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
 						//System.out.println(chProvider + "/" + estmCons);
 						if(estmCons != 0) {
 							float ncp = Math.max(0, cpData.getCP() - estmCons);

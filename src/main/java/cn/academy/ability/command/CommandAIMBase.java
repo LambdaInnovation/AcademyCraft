@@ -23,6 +23,7 @@ import cn.academy.core.command.ACCommand;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegCommand;
 import cn.liutils.util.helper.PlayerDataTag;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -74,7 +75,7 @@ public abstract class CommandAIMBase extends ACCommand {
 				return;
 			}
 			
-			matchCommands(commandSender, this.getCommandSenderAsPlayer(commandSender), pars);
+			matchCommands(commandSender, CommandBase.getCommandSenderAsPlayer(commandSender), pars);
 		}
 		
 		private void setActive(EntityPlayer player, boolean data) {

@@ -12,9 +12,6 @@
  */
 package cn.academy.support.minetweaker;
 
-import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IItemStack;
-import minetweaker.api.minecraft.MineTweakerMC;
 import net.minecraft.item.ItemStack;
 
 /**

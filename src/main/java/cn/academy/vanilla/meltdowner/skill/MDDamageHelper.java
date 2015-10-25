@@ -20,7 +20,6 @@ import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegInit;
 import cn.annoreg.mc.network.RegNetworkCall;
 import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;

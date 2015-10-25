@@ -13,7 +13,6 @@
 package cn.academy.support.te;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.support.ic2.TileEUOutput;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

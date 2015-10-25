@@ -55,7 +55,8 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 	    	icon = ir.registerIcon("academy:phase_liquid");
 	    }
 		
-	    @SideOnly(Side.CLIENT)
+	    @Override
+		@SideOnly(Side.CLIENT)
 	    public IIcon getIconFromDamage(int meta) {
 	        return icon;
 	    }

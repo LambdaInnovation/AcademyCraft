@@ -7,8 +7,6 @@ import net.minecraft.stats.Achievement;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.misc.achievements.ItemAchievement;
-import cn.academy.misc.achievements.conds.CondItemCrafted;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 /**
  * @author EAirPeter

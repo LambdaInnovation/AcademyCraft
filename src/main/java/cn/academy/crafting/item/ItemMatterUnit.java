@@ -21,7 +21,6 @@ import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;
 import cn.annoreg.mc.RegItem;
 import cn.liutils.util.mc.PlayerUtils;
-import cn.liutils.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

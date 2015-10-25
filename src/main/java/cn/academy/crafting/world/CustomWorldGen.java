@@ -15,7 +15,6 @@ package cn.academy.crafting.world;
 
 import java.util.Random;
 
-import cn.academy.core.AcademyCraft;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.feature.WorldGenerator;

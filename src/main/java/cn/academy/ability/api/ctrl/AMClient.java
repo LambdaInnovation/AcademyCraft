@@ -13,8 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.mc.network.Future;
-import cn.annoreg.mc.network.Future.FutureCallback;
 import cn.liutils.api.event.OpenAuxGuiEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

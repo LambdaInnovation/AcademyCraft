@@ -4,7 +4,6 @@
 package cn.academy.vanilla.teleporter.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -12,8 +11,6 @@ import cn.academy.vanilla.teleporter.data.LocTeleData;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
 import cn.liutils.cgui.gui.LIGui;
 import cn.liutils.cgui.gui.LIGuiScreen;
 import cn.liutils.cgui.gui.Widget;
@@ -28,8 +25,6 @@ import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
 import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD

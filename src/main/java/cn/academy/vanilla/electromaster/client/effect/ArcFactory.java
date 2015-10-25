@@ -31,7 +31,6 @@ import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.shader.ShaderSimple;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;

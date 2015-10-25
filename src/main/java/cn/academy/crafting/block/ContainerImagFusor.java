@@ -58,7 +58,8 @@ public class ContainerImagFusor extends Container {
         }
     }
     
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 

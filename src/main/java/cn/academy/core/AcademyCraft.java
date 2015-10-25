@@ -63,7 +63,7 @@ public class AcademyCraft {
     
 	public static final boolean DEBUG_MODE = false;
 	
-	public static final String VERSION = "1.0pr2_a";
+	public static final String VERSION = "1.0pr2";
 
     public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
     

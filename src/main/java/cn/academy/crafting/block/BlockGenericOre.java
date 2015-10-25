@@ -52,6 +52,7 @@ public class BlockGenericOre extends ACBlock {
 		return RandUtils.rangei(rangeFrom, rangeTo);
 	}
 	
+	@Override
 	public Item getItemDropped(int a, Random b, int c) {
 		if(itemDropped == null)
 			itemDropped = Item.getItemFromBlock(this);

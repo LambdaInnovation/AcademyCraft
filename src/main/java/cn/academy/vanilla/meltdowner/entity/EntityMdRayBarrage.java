@@ -55,6 +55,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
 			subrays[i] = new SubRay(range);
 	}
 	
+	@Override
 	protected void onFirstUpdate() {
 		super.onFirstUpdate();
 		worldObj.playSound(posX, posY, posZ, "academy:md.ray_small", 0.5f, 1.0f, false);

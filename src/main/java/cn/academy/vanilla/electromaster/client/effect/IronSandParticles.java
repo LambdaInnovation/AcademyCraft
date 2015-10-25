@@ -10,8 +10,6 @@ import cn.liutils.entityx.MotionHandler;
 import cn.liutils.render.particle.Particle;
 import cn.liutils.render.particle.ParticleFactory;
 import cn.liutils.util.generic.RandUtils;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

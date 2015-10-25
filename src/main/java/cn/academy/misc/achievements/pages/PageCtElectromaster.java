@@ -1,18 +1,9 @@
 package cn.academy.misc.achievements.pages;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import cn.academy.ability.ModuleAbility;
-import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
-import cn.academy.misc.achievements.ItemAchievement;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
-import cn.academy.misc.achievements.aches.AchBasic;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
-import cn.academy.misc.achievements.aches.AchEvSkillLearn;
 import cn.academy.vanilla.electromaster.CatElectromaster;
 
 /**

@@ -13,7 +13,6 @@
 package cn.academy.ability.api.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.common.eventhandler.Event;
 
 /**
  * Fired in both sides, when the player category has just changed.

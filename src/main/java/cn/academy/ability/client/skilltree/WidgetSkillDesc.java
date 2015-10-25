@@ -17,7 +17,6 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 import cn.academy.ability.client.skilltree.GuiSkillTree.SkillHandler;
 import cn.academy.core.client.component.Glow;
 import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.event.FrameEvent;
 import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.LostFocusEvent;
@@ -70,6 +69,7 @@ public class WidgetSkillDesc extends Widget {
 		return super.addWidget(w);
 	}
 	
+	@Override
 	public void onAdded() {
 		getGui().gainFocus(this);
 		

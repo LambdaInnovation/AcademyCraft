@@ -475,7 +475,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
  			});
 	 	}
 
-	 	public void onAdded() {
+	 	@Override
+		public void onAdded() {
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
 	 		Color color;

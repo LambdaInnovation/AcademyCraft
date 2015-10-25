@@ -13,7 +13,6 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import net.minecraft.world.World;
-import cn.academy.ability.api.SpecialSkill.SpecialSkillAction;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -23,7 +22,6 @@ import cn.liutils.render.particle.Particle;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Motion3D;
 
 /**

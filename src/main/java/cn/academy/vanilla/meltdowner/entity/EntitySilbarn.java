@@ -83,7 +83,9 @@ public class EntitySilbarn extends EntityAdvanced {
 			@Override
 			public void decorate(Particle particle) {
 				particle.addMotionHandler(new MotionHandler() {
+					@Override
 					public String getID() { return "Rotator"; }
+					@Override
 					public void onStart() {
 						particle.rotationYaw = RandUtils.nextFloat() * 360;
 						particle.rotationPitch = RandUtils.rangef(-90, 90);

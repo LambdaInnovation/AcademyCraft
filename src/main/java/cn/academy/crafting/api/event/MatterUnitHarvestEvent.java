@@ -13,7 +13,6 @@
 package cn.academy.crafting.api.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cpw.mods.fml.common.eventhandler.Event;
 

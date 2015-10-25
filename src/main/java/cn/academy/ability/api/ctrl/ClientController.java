@@ -26,7 +26,6 @@ import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.ability.api.event.AbilityDeactivateEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegEventHandler;

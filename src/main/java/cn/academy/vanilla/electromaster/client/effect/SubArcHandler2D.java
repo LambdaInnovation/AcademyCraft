@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.DebugUtils;
 
 public class SubArcHandler2D {
 

@@ -15,7 +15,6 @@ package cn.academy.energy.block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
@@ -25,7 +24,6 @@ import cn.academy.energy.block.BlockNode.NodeType;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
@@ -154,6 +152,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 
     String name = "Unnamed";
     
+	@Override
 	public String getNodeName() {
 		return name;
 	}

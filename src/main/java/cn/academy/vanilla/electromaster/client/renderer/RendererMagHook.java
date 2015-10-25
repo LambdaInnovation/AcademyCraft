@@ -43,7 +43,7 @@ public class RendererMagHook extends Render {
 			hook.preRender();
 			x = hook.posX - RenderManager.renderPosX;
 			y = hook.posY - RenderManager.renderPosY;
-			z = hook.posZ - renderManager.renderPosZ;
+			z = hook.posZ - RenderManager.renderPosZ;
 		}
 		
 		GL11.glPushMatrix();

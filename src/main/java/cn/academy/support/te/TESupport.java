@@ -2,8 +2,6 @@ package cn.academy.support.te;
 
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.misc.tutorial.ACTutorial;
-import cn.academy.misc.tutorial.Condition;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;

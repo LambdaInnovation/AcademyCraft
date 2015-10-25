@@ -32,7 +32,6 @@ import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
 import cn.liutils.util.client.renderhook.DummyRenderData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

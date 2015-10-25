@@ -1,18 +1,10 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
-import cn.academy.ability.api.Category;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.knowledge.ModuleKnowledge;
-import cn.academy.misc.ModuleMisc;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.electromaster.CatElectromaster;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 
 //@Registrant
 //@RegInit

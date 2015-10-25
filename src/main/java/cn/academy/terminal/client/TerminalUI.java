@@ -19,7 +19,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
@@ -372,6 +371,7 @@ public class TerminalUI extends AuxGui {
 		
 		TerminalUI current;
 		
+		@Override
 		public void onKeyUp() {
 			EntityPlayer player = getPlayer();
 			TerminalData tData = TerminalData.get(player);

@@ -12,10 +12,8 @@
  */
 package cn.academy.ability.api;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 

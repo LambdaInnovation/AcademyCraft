@@ -79,7 +79,8 @@ public class ItemApp extends ACItem {
         return stack;
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
     	list.add(app.getDisplayName());
     }

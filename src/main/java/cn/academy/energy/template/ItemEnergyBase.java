@@ -52,7 +52,8 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 		setMaxDamage(13);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister ir) {
     	if(useMultipleIcon) {
 	    	iconEmpty = ir.registerIcon("academy:" + name + "_empty");
@@ -63,7 +64,8 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
     	}
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int damage) {
     	if(!useMultipleIcon)
     		return super.getIconFromDamage(damage);
@@ -87,7 +89,8 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
 		return bandwidth;
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs cct, List list) {
     	ItemStack is = new ItemStack(this);
     	list.add(is);
@@ -98,7 +101,8 @@ public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
     	list.add(is);
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
     	list.add(itemManager.getDescription(stack));
     }

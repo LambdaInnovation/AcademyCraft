@@ -21,8 +21,6 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.entity.EntityRayBase;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
@@ -41,7 +39,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
@@ -97,6 +94,7 @@ public class RayBarrage extends Skill {
 			return cData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 		}
 		
+		@Override
 		public void readNBTFinal(NBTTagCompound tag) {
 			hit = tag.getBoolean("h");
 			if(hit) {
@@ -104,6 +102,7 @@ public class RayBarrage extends Skill {
 			}
 		}
 		
+		@Override
 		public void writeNBTFinal(NBTTagCompound tag) {
 			tag.setBoolean("h", hit);
 			if(hit) {

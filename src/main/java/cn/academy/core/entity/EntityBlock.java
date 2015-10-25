@@ -35,7 +35,6 @@ import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.entityx.event.CollideEvent.CollideHandler;
 import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.template.block.BlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -14,7 +14,6 @@ package cn.academy.energy.block;
 
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.block.SlotMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.api.IFItemManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

@@ -18,7 +18,6 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.terminal.event.TerminalInstalledEvent;
 import cn.annoreg.core.Registrant;

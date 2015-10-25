@@ -59,7 +59,7 @@ public class AuxGuiMediaPlayer {
 		@GuiCallback("time")
 		public void updateTime(Widget w, FrameEvent event) {
 			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-			TextBox.get(w).content = inst.media.getPlayingTime(inst.getPlayTime());
+			TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
 		}
 		
 	}

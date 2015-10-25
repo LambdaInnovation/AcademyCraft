@@ -77,6 +77,7 @@ public class VBlocks {
 			return tag;
 		}
 		
+		@Override
 		public int hashCode() {
 			return x ^ y ^ z;
 		}

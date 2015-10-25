@@ -16,7 +16,6 @@ import cn.academy.support.EnergyItemHelper;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
 import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
 import cn.annoreg.mc.s11n.StorageOption.Data;
 import cn.annoreg.mc.s11n.StorageOption.Instance;
 import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
@@ -63,6 +62,7 @@ public class TileMetalFormer extends TileReceiverBase {
 		super("metal_former", 3, 3000, IFConstants.LATENCY_MK1);
 	}
 	
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		

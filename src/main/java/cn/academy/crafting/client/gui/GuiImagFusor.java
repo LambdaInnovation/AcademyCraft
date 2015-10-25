@@ -113,7 +113,7 @@ public class GuiImagFusor extends LIGuiContainer {
 		public void frameUpdate(Widget w, FrameEvent event) {
 			progressProduct.progress = tile.getWorkProgress();
 			progressProj.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
-			progressImag.progress = (double) tile.getEnergy() / tile.getMaxEnergy();
+			progressImag.progress = tile.getEnergy() / tile.getMaxEnergy();
 			
 			String str;
 			IFRecipe recipe = tile.getCurrentRecipe();
