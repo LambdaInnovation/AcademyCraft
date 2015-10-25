@@ -32,6 +32,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import codechicken.nei.recipe.TemplateRecipeHandler;
 
 /**
  * 
