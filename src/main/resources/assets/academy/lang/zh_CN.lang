@@ -9,6 +9,8 @@ ac.activate_key.deactivate.desc=解除能力
 ac.activate_key.endspecial.desc=结束特殊技能模式
 ac.activate_key.endskill.desc=停止技能
 
+ac.coming_soon=即将推出
+
 # 创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
@@ -50,6 +52,10 @@ item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
 
 item.ac_developer_portable.name=便携能力开发机
+
+item.ac_tutorial.name=研究记录
+
+ac.converter.desc_template=转换%s到%s
 
 # 方块
 tile.ac_constraint_metal_ore.name=束能金属矿

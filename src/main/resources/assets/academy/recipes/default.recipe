@@ -259,3 +259,7 @@ shaped(dev_advanced) {
 shapeless(wafer) {
     [imagsil_ingot]
 }
+
+shapeless(tutorial) {
+	[book, crystal0]
+}

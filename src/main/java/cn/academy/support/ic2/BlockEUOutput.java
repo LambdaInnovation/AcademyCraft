@@ -13,9 +13,16 @@
 package cn.academy.support.ic2;
 
 import cn.academy.core.AcademyCraft;
+import cn.academy.energy.client.gui.GuiLinkToNode;
+import cn.academy.support.BlockConverterBase;
+import cn.liutils.util.mc.WorldUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -23,16 +30,10 @@ import net.minecraft.world.World;
  * 
  * @author KSkun
  */
-public class BlockEUOutput extends BlockContainer {
+public class BlockEUOutput extends BlockConverterBase {
 
 	public BlockEUOutput() {
-		super(Material.rock);
-		setCreativeTab(AcademyCraft.cct);
-		setStepSound(Block.soundTypeStone);
-		setHarvestLevel("pickaxe", 0);
-		setHardness(2.5f);
-		setBlockName("ac_eu_output");
-		setBlockTextureName("academy:eu_output");
+		super("eu_output", "IF", "EU", TileEUOutput.class);
 	}
 	
 	@Override

@@ -33,6 +33,10 @@ public abstract class ACBlockContainer extends BlockContainer {
 	
 	final GuiHandlerBase guiHandler;
 
+	public ACBlockContainer(String name, Material mat) {
+		this(name, mat, null);
+	}
+	
 	public ACBlockContainer(String name, Material mat, GuiHandlerBase _guiHandler) {
 		super(mat);
 		guiHandler = _guiHandler;

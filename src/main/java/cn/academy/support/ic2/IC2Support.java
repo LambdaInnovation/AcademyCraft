@@ -16,6 +16,7 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.Condition;
+import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ic2.api.item.IC2Items;
@@ -42,8 +43,8 @@ public class IC2Support {
 			e.printStackTrace();
 		}
 		
-		GameRegistry.registerBlock(euInput, "eu_input");
-		GameRegistry.registerBlock(euOutput, "eu_output");
+		GameRegistry.registerBlock(euInput, BlockConverterBase.Item.class, "eu_input");
+		GameRegistry.registerBlock(euOutput, BlockConverterBase.Item.class, "eu_output");
 		
 		GameRegistry.registerTileEntity(TileEUInput.class, "eu_input");
 		GameRegistry.registerTileEntity(TileEUOutput.class, "eu_output");

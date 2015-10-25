@@ -10,31 +10,35 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.support.te;
+package cn.academy.support.rf;
+
+import java.util.List;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.support.ic2.TileEUOutput;
+import cn.academy.energy.client.gui.GuiLinkToNode;
+import cn.academy.support.BlockConverterBase;
+import cn.liutils.util.mc.WorldUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockRFOutput extends BlockContainer {
-
-	public BlockRFOutput() {
-		super(Material.rock);
-		setCreativeTab(AcademyCraft.cct);
-		setStepSound(Block.soundTypeStone);
-		setHarvestLevel("pickaxe", 0);
-		setHardness(2.5f);
-		setBlockName("ac_rf_output");
-		setBlockTextureName("academy:rf_output");
-	}
+public class BlockRFInput extends BlockConverterBase {
 	
+	public BlockRFInput() {
+		super("rf_input", "RF", "IF", TileRFInput.class);
+	}
+
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileRFOutput();
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileRFInput();
 	}
 	
 }
