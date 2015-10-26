@@ -12,7 +12,6 @@ buildscript {
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		classpath 'me.tatarka:gradle-retrolambda:3.1.0'
 	}
 }
 
@@ -28,7 +27,6 @@ configurations {
 	deployerJars
 }
 
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'forge'
 
 version				= config.mod_ver

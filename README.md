@@ -30,8 +30,6 @@ Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 
 ### Build
 
-The mod requires Java 8 to compile. Officially we use [RetroLamba](https://github.com/evant/gradle-retrolambda) to compile the mod, and any use of stream API is seriously forbiddened.
-
 Use ``gradle clean install`` to build locally.
 
 ## Localization
