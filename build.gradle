@@ -52,17 +52,12 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to"
 	}
-	ivy {
-        name "MineTweaker3"
-        artifactPattern "http://minetweaker3.powerofbytes.com/download/[module]-[classifier]-[revision].[ext]"
-    }
 }
 
 dependencies {
 	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev"
 	compile "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
-	compile name: "MineTweaker3", version: "1.7.10-3.0.9C", classifier: "Dev"
 
 	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
@@ -106,6 +101,7 @@ artifacts {
 task getLibs << {
 	ant.mkdir(dir: 'libs')
 	ant.get(src: 'http://addons-origin.cursecdn.com/files/2246/932/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', dest: 'libs/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', skipexisting: 'true')
+	ant.get(src: 'http://minetweaker.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar', dest: 'libs/MineTweaker3-Dev-1.7.10-3.0.9C.jar', skipexisting: 'true')
 }
 
 sourceMainJava.dependsOn getLibs
