@@ -87,8 +87,6 @@ public abstract class Condition {
 			String key=i.getUnlocalizedName();
 			if(i.getItem().getHasSubtypes())
 				key+=i.getItemDamage();
-			else
-				key+="0";
 			return key;
 		}
 		
@@ -150,8 +148,6 @@ public abstract class Condition {
 		String key=i.getUnlocalizedName();
 		if(i.getHasSubtypes())
 			key+=subID;
-		else
-			key+="0";
 		return key;
 	}
 	
