@@ -27,9 +27,17 @@ import net.minecraft.item.ItemStack;
 public class IC2Support {
 	
 	/**
-	 * The convert rate from EU to IF(EU * CONV_RATE = IF).
+	 * The convert rate from EU to IF(1IF = <CONV_RATE>EU).
 	 */
-	public static final float CONV_RATE = 1f;
+	public static final double CONV_RATE = 1;
+	
+	public static double eu2if(double euEnergy) {
+		return euEnergy / CONV_RATE;
+	}
+	
+	public static double if2eu(double ifEnergy) {
+		return ifEnergy * CONV_RATE;
+	}
 	
 	public static void init() {
 		BlockEUInput euInput = new BlockEUInput();
