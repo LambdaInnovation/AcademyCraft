@@ -60,6 +60,9 @@ public class RFSupport {
 		GameRegistry.addRecipe(new ItemStack(rfOutput), "abc", " d ",
 				'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
 				'c', ModuleCrafting.resoCrystal, 'd', ModuleCrafting.convComp);
+		
+		GameRegistry.addRecipe(new ItemStack(rfInput), "X",'X',new ItemStack(rfOutput));
+		GameRegistry.addRecipe(new ItemStack(rfOutput), "X",'X',new ItemStack(rfInput));
 	}
 	
 }
