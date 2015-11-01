@@ -20,6 +20,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.block.TileGeneratorBase;
 
+import static cn.academy.support.ic2.IC2Support.eu2if;
+import static cn.academy.support.ic2.IC2Support.if2eu;
+
 /**
  * 
  * @author KSkun
@@ -27,8 +30,6 @@ import cn.academy.core.block.TileGeneratorBase;
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 	
 	private boolean isRegistered  = false;
-	/** The convert rate (EU * RATE = IF) */
-	private static final float RATE = IC2Support.CONV_RATE;
 
 	public TileEUInput() {
 		super("ac_eu_input", 0, 2000, 100);
@@ -56,7 +57,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
 
 	@Override
 	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-		return addEnergy(amount * RATE);
+		return if2eu(addEnergy(eu2if(amount)));
 	}
 	
 	@Override

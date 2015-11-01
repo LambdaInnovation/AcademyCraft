@@ -19,13 +19,13 @@ import cn.annoreg.mc.RegTileEntity;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static cn.academy.support.rf.RFSupport.if2rf;
+import static cn.academy.support.rf.RFSupport.rf2if;
+
 @Registrant
 @RegTileEntity
 @RegWithName("rf_input")
 public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
-
-	/** The convert rate (RF * RATE = IF) */
-	private static final float RATE = RFSupport.CONV_RATE;
 	
 	public TileRFInput() {
 		super("ac_rf_input", 0, 2000, 100);
@@ -39,18 +39,18 @@ public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive,
 			boolean simulate) {
-		int amount = (int) (maxReceive * RATE);
-		return (int) (maxReceive - addEnergy(amount, simulate) / RATE);
+		int amount = (int) rf2if(maxReceive);
+		return (int) (maxReceive - if2rf(addEnergy(amount, simulate)));
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) (getEnergy() / RATE);
+		return if2rf(getEnergy());
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return (int) (2000 / RATE);
+		return (int) if2rf(2000);
 	}
 
 	@Override

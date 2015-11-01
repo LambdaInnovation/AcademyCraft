@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 @RegInit
 public class RFSupport {
 	
-	/** The convert rate (RF * RATE = IF) */
-	public static final float CONV_RATE = 1f;
+	/** The convert rate (1IF = <CONV_RATE> RF) */
+	public static final double CONV_RATE = 4;
 	
 	@RegBlock(item = BlockConverterBase.Item.class)
 	@RegWithName("rf_input")
@@ -27,6 +27,20 @@ public class RFSupport {
 	@RegBlock(item = BlockConverterBase.Item.class)
 	@RegWithName("rf_output")
 	public static Block rfOutput = new BlockRFOutput();
+	
+	// Convert macros, dividing by hand is error-prone
+	/**
+	 * Converts RF to equivalent amount of IF.
+	 */
+	public static double rf2if(int rfEnergy) {
+		return rfEnergy / CONV_RATE;
+	}
+	/**
+	 * Converts IF to equivalent amount of RF.
+	 */
+	public static int if2rf(double ifEnergy) {
+		return (int) (ifEnergy * CONV_RATE);
+	}
 	
 	public static void init() {
 		

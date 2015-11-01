@@ -20,6 +20,9 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
 import cn.academy.core.block.TileReceiverBase;
 
+import static cn.academy.support.ic2.IC2Support.eu2if;
+import static cn.academy.support.ic2.IC2Support.if2eu;
+
 /**
  * 
  * @author KSkun
@@ -27,8 +30,6 @@ import cn.academy.core.block.TileReceiverBase;
 public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 	
 	private boolean isRegistered = false;
-	/** The convert rate (EU * RATE = IF) */
-	private static final float RATE = IC2Support.CONV_RATE;
 
 	public TileEUOutput() {
 		super("ac_eu_output", 0, 2000, 100);
@@ -41,12 +42,12 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
 
 	@Override
 	public double getOfferedEnergy() {
-		return energy / RATE;
+		return if2eu(energy);
 	}
 
 	@Override
 	public void drawEnergy(double amount) {
-		energy -= (amount / RATE);
+		energy -= eu2if(amount);
 		if(energy < 0d) energy = 0d;
 	}
 

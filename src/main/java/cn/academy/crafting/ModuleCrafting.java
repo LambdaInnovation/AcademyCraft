@@ -62,27 +62,27 @@ public class ModuleCrafting {
     public static BlockImagPhase imagPhase;
     
 	@RegBlock
-	@RegBlock.OreDict("machine_frame")
+	@RegBlock.OreDict("machineFrame")
 	@RecipeName("frame")
 	public static Block machineFrame = new ACBlock("machine_frame", Material.rock).setHardness(4.0f);
 	
 	@RegBlock
-	@RegBlock.OreDict("constraint_metal_ore")
+	@RegBlock.OreDict("oreConstraintMetal")
 	@RecipeName("cons_ore")
 	public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 1);
 	
 	@RegBlock
-	@RegBlock.OreDict("crystal_ore")
+	@RegBlock.OreDict("oreImagCrystal")
 	@RecipeName("crystal_ore")
-	public static BlockGenericOre oreCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
+	public static BlockGenericOre oreImagCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
 	
 	@RegBlock
-	@RegBlock.OreDict("imag_silicon_ore")
+	@RegBlock.OreDict("oreImagSilicon")
 	@RecipeName("imagsil_ore")
 	public static BlockGenericOre oreImagSil = new BlockGenericOre("imag_silicon_ore", 2.75f, 2);
 	
 	@RegBlock
-	@RegBlock.OreDict("resonant_crystal_ore")
+	@RegBlock.OreDict("oreResonantCrystal")
 	@RecipeName("reso_ore")
 	public static BlockGenericOre oreResoCrystal = new BlockGenericOre("reso_crystal_ore", 2f, 2);
 	
@@ -98,27 +98,27 @@ public class ModuleCrafting {
 	// ITEMS
 	// BASIC MATERIALS
 	@RegItem
-	@RegItem.OreDict("imag_crystal_low")
+	@RegItem.OreDict("gemImagCrystalLow")
 	@RecipeName("crystal0")
 	public static Item crystalLow = new ACItem("crystal_low");
 	
 	@RegItem
-	@RegItem.OreDict("imag_crystal_normal")
+	@RegItem.OreDict("gemImagCrystalNormal")
 	@RecipeName("crystal1")
 	public static Item crystalNormal = new ACItem("crystal_normal");
 	
 	@RegItem
-	@RegItem.OreDict("imag_crystal_pure")
+	@RegItem.OreDict("gemImagCrystalPure")
 	@RecipeName("crystal2")
 	public static Item crystalPure = new ACItem("crystal_pure");
 	
 	@RegItem
-	@RegItem.OreDict("calc_chip")
+	@RegItem.OreDict("calcChip")
 	@RecipeName("calc_chip")
 	public static Item calcChip = new ACItem("calc_chip");
 	
 	@RegItem
-	@RegItem.OreDict("data_chip")
+	@RegItem.OreDict("dataChip")
 	@RecipeName("data_chip")
 	public static Item dataChip = new ACItem("data_chip");
 	
@@ -128,12 +128,12 @@ public class ModuleCrafting {
 	public static Item wafer = new ACItem("wafer");
 	
 	@RegItem
-	@RegItem.OreDict("energy_constraint_ingot")
+	@RegItem.OreDict("ingotConstraintMetal")
 	@RecipeName("cons_ingot")
 	public static Item ingotConst = new ACItem("constraint_ingot");
 	
 	@RegItem
-	@RegItem.OreDict("imag_silicon_ingot")
+	@RegItem.OreDict("ingotImagSilicon")
 	@RecipeName("imagsil_ingot")
 	public static Item ingotImagSil = new ACItem("imag_silicon_ingot");
 	
@@ -143,17 +143,17 @@ public class ModuleCrafting {
 	public static Item rfIronPlate = new ACItem("reinforced_iron_plate");
 	
 	@RegItem
-	@RegItem.OreDict("imag_silicon_piece")
+	@RegItem.OreDict("pieceImagSilicon")
 	@RecipeName("si_piece")
 	public static Item silPiece = new ACItem("imag_silicon_piece");
 	
 	@RegItem
-	@RegItem.OreDict("resonant_crystal")
+	@RegItem.OreDict("gemResonantCrystal")
 	@RecipeName("reso_crystal")
 	public static Item resoCrystal = new ACItem("reso_crystal");
 	
 	@RegItem
-	@RegItem.OreDict("constraint_metal_plate")
+	@RegItem.OreDict("plateConstraintMetal")
 	@RecipeName("cons_plate")
 	public static Item constPlate = new ACItem("constraint_plate");
 	
@@ -194,7 +194,7 @@ public class ModuleCrafting {
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000), 
 			matterUnit.create("phase_liquid"), matterUnit.create("none"));
 		
-		oreCrystal.setDropData(crystalLow, 1, 3);
+		oreImagCrystal.setDropData(crystalLow, 1, 3);
 		oreResoCrystal.setDropData(resoCrystal, 1, 2);
 		
 		machineFrame.setHarvestLevel("pickaxe", 3);
