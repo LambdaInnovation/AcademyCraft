@@ -24,9 +24,10 @@ Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
 ### Supported Mods (Compile-Time Dependencies)
 
 * IndustrialCraft [2.2.717](http://jenkins.ic2.player.to/job/IC2_experimental/717/).
+* Mine Tweaker [3.0.9C](http://minetweaker.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar)
+* Not Enough Items [1.0.3.74](http://chickenbones.net/Pages/links.html).
 * Redstone Flux API [1.7.10R1.0.2](https://github.com/CoFH/RedstoneFlux-API).
 * Thermal Expansion [4.0.3B1-218](http://minecraft.curseforge.com/mc-mods/69163-thermalexpansion/files/2246924).
-* Not Enough Items [1.0.3.74](http://chickenbones.net/Pages/links.html).
 
 ### Build
 
