@@ -70,7 +70,7 @@ public abstract class BlockConverterBase extends ACBlockContainer {
             float tx, float ty, float tz) {
 		TileEntity te = WorldUtils.getTileEntity(world, x, y, z, tileType);
 		if(te != null && !player.isSneaking()) {
-			if(!world.isRemote) {
+			if(world.isRemote) {
 				displayGui(te);
 			}
 			return true;
