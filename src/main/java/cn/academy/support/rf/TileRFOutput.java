@@ -12,15 +12,20 @@
  */
 package cn.academy.support.rf;
 
-import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.energy.IEnergyProvider;
+import static cn.academy.support.rf.RFSupport.if2rf;
+import static cn.academy.support.rf.RFSupport.rf2if;
+
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.annoreg.core.RegWithName;
 import cn.annoreg.core.Registrant;
 import cn.annoreg.mc.RegTileEntity;
-
-import static cn.academy.support.rf.RFSupport.if2rf;
-import static cn.academy.support.rf.RFSupport.rf2if;
+import cn.liutils.util.generic.DebugUtils;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 @Registrant
 @RegTileEntity
@@ -29,6 +34,29 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 
 	public TileRFOutput() {
 		super("ac_rf_output", 0, 2000, 100);
+	}
+	
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		World world = getWorldObj();
+		if(!world.isRemote) {
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+				int x = xCoord + dir.offsetX,
+					y = yCoord + dir.offsetY,
+					z = zCoord + dir.offsetZ;
+				TileEntity te = world.getTileEntity(x, y, z);
+				if(te instanceof IEnergyReceiver && energy > 0) {
+					IEnergyReceiver receiver = (IEnergyReceiver) te;
+					ForgeDirection rev = dir.getOpposite();
+					if(receiver.canConnectEnergy(rev)) {
+						int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
+						req = Math.min(if2rf(energy), req);
+						energy -= rf2if(receiver.receiveEnergy(rev, req, false));
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -42,7 +70,7 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 		int e = (int) energy;
 		if(!simulate) {
 			energy -= rf2if(maxExtract);
-			if(energy < 0d) energy = 0d;
+			if(energy < 0) energy = 0;
 		}
 		return (int) Math.min(if2rf(e), maxExtract);
 	}
