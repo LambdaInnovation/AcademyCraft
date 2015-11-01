@@ -64,6 +64,9 @@ public class IC2Support {
 		GameRegistry.addRecipe(new ItemStack(euOutput), "abc", " d ",
 				'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
 				'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
+		
+		GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
+		GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
 	}
 
 }
