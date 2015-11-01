@@ -20,6 +20,7 @@ import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
@@ -213,7 +214,7 @@ public class Railgun extends Skill {
 				instance.triggerAchievement(player);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		
@@ -224,12 +225,9 @@ public class Railgun extends Skill {
 		
 	}
 	
-	public static class ActionShootItem extends SyncAction {
+	public static class ActionShootItem extends SkillSyncAction {
 		
 		SupportedItem item;
-		
-		AbilityData aData;
-		CPData cpData;
 		
 		int tick;
 		
@@ -254,8 +252,7 @@ public class Railgun extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
 			if(isRemote)
 				startEffect();
@@ -304,7 +301,7 @@ public class Railgun extends Skill {
 						instance.triggerAchievement(player);
 					}
 					
-					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					setCooldown(instance, instance.getCooldown(aData));
 					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}

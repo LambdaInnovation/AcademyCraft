@@ -137,7 +137,7 @@ public class ElectronMissile extends Skill {
 		
 		@Override
 		public void onEnd() {
-			Cooldown.setCooldown(instance, instance.getFunc("cooldown").callInteger(ticks));
+			setCooldown(instance, instance.getFunc("cooldown").callInteger(ticks));
 		}
 		
 		@Override

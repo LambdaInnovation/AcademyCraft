@@ -130,7 +130,7 @@ public class MagManip extends Skill {
 				}
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@Override

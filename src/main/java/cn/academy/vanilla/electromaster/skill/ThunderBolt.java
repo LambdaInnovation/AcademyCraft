@@ -113,7 +113,7 @@ public class ThunderBolt extends Skill {
 				instance.triggerAchievement(player);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)

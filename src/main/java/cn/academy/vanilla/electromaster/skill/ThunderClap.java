@@ -151,7 +151,7 @@ public class ThunderClap extends Skill {
 					DamageSource.causePlayerDamage(player), EntitySelectors.excludeOf(player));
 			}
 			
-			Cooldown.setCooldown(instance, getCooldown(aData, ticks));
+			setCooldown(instance, getCooldown(aData, ticks));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 			instance.triggerAchievement(player);
 		}

@@ -184,7 +184,7 @@ public class RayBarrage extends Skill {
 				spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		

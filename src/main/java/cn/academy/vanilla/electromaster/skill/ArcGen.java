@@ -143,7 +143,7 @@ public class ArcGen extends Skill {
 				spawnEffects();
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)

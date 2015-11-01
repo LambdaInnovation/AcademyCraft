@@ -12,10 +12,12 @@
  */
 package cn.academy.ability.api.ctrl.action;
 
-import net.minecraft.world.World;
+import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import net.minecraft.world.World;
 
 /**
  * A simple wrapper that setup the commonly used data and sandbox methods for Skill SyncActions.
@@ -40,6 +42,15 @@ public class SkillSyncAction extends SyncAction {
 		aData = AbilityData.get(player);
 		cpData = CPData.get(player);
 		world = player.worldObj;
+	}
+	
+	/**
+	 * Add cooldown to a skill if the currently the SyncAction is local.
+	 */
+	public void setCooldown(Controllable c, int time) {
+		if(isLocal()) {
+			Cooldown.setCooldown(c, time);
+		}
 	}
 	
 }

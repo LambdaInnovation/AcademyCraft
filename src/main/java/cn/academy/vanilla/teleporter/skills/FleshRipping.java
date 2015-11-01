@@ -119,7 +119,7 @@ public class FleshRipping extends Skill {
 						player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					
-					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					setCooldown(instance, instance.getCooldown(aData));
 					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}

@@ -90,7 +90,7 @@ public class ElectronBomb extends Skill {
 			}
 			
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 	}

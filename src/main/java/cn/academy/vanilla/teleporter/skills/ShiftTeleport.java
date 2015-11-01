@@ -15,23 +15,11 @@ package cn.academy.vanilla.teleporter.skills;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
@@ -46,6 +34,16 @@ import cn.liutils.util.mc.WorldUtils;
 import cn.liutils.util.raytrace.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * @author WeAthFolD
@@ -80,19 +78,15 @@ public class ShiftTeleport extends Skill {
 		return new SkillInstance().addChild(new ShiftTPAction()).setEstmCP(instance.getConsumption(AbilityData.get(player)));
 	}
 	
-	public static class ShiftTPAction extends SyncAction {
+	public static class ShiftTPAction extends SkillSyncAction {
 		
-		AbilityData aData;
-		CPData cpData;
-
 		public ShiftTPAction() {
 			super(-1);
 		}
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
 			ItemStack stack = player.getCurrentEquippedItem();
 			Block block;
@@ -152,7 +146,7 @@ public class ShiftTeleport extends Skill {
 					}
 				}
 				
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 			}
 		}
 		

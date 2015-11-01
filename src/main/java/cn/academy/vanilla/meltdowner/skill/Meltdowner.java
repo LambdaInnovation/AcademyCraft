@@ -107,7 +107,7 @@ public class Meltdowner extends Skill {
 					rrd.perform();
 				}
 				
-				Cooldown.setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
+				setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
 				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
 			}
 		}

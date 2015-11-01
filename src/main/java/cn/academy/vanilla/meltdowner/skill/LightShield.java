@@ -150,7 +150,7 @@ public class LightShield extends Skill {
 		
 		@Override
 		public void onEnd() {
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@Override

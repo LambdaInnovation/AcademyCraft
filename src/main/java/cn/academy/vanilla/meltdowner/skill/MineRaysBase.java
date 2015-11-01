@@ -157,7 +157,7 @@ public abstract class MineRaysBase extends Skill {
 		public void onFinalize() {
 			if(isRemote)
 				endEffects();
-			Cooldown.setCooldown(skill, skill.callIntWithExp("cooldown", aData));
+			setCooldown(skill, skill.callIntWithExp("cooldown", aData));
 		}
 		
 		// CLIENT

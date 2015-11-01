@@ -14,9 +14,8 @@ package cn.academy.vanilla.teleporter.skills;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
@@ -85,10 +84,7 @@ public class ThreateningTeleport extends Skill {
 		}.addChild(new ThreateningAction());
 	}
 	
-	public static class ThreateningAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class ThreateningAction extends SkillSyncAction {
 		
 		boolean attacked;
 
@@ -98,21 +94,26 @@ public class ThreateningTeleport extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
-			if(!isRemote && player.getCurrentEquippedItem() == null)
+			if(!isRemote && player.getCurrentEquippedItem() == null){
 				ActionManager.abortAction(this);
+			}
 			
-			if(isRemote) startEffects();
+			if(isRemote) {
+				startEffects();
+			}
 		}
 		
 		@Override
 		public void onTick() {
-			if(isRemote) updateEffects();
+			if(isRemote) {
+				updateEffects();
+			}
 			
-			if(!isRemote && player.getCurrentEquippedItem() == null)
+			if(!isRemote && player.getCurrentEquippedItem() == null) {
 				ActionManager.abortAction(this);
+			}
 		}
 		
 		@Override
@@ -149,15 +150,19 @@ public class ThreateningTeleport extends Skill {
 					aData.addSkillExp(instance, getExpIncr(attacked));
 				}
 				
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 			}
 			
-			if(isRemote) endEffects();
+			if(isRemote) {
+				endEffects();
+			}
 		}
 		
 		@Override
 		public void onAbort() {
-			if(isRemote) endEffects();
+			if(isRemote) {
+				endEffects();
+			}
 		}
 		
 		TraceResult calcDropPos() {

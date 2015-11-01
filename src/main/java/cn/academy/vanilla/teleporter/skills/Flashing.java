@@ -179,7 +179,7 @@ public class Flashing extends SpecialSkill {
 				instance.triggerAchievement(player);
 				TPAttackHelper.incrTPCount(player);
 			} else {
-				Cooldown.setCooldown(movement, 5);
+				setCooldown(movement, 5);
 			}
 		}
 		

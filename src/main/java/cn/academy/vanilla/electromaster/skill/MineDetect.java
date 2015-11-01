@@ -110,7 +110,7 @@ public class MineDetect extends Skill {
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
 			ACSounds.playClient(player, "em.minedetect", 0.5f);
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 	}
