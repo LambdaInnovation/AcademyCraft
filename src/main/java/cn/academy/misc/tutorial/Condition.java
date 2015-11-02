@@ -83,29 +83,46 @@ public abstract class Condition {
 		static HashMap<String,ItemCondition> smeltMap = new HashMap<String,ItemCondition>();
 		static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<MatterMaterial,ItemCondition>();
 		
-		static String getKeyFromItemStack(ItemStack i){
-			String key=i.getUnlocalizedName();
-			if(i.getItem().getHasSubtypes())
-				key+=i.getItemDamage();
-			return key;
-		}
-		
 		@SubscribeEvent
 		public void onItemCrafted(ItemCraftedEvent e){
-			String key=getKeyFromItemStack(e.crafting);
-			if(craftMap.containsKey(key))craftMap.get(key).pass(e.player);
+			String key=e.crafting.getItem().getUnlocalizedName();
+			try{
+				craftMap.get(key).pass(e.player);
+			}catch(NullPointerException err){}
+			try{
+				if(e.crafting.getItem().getHasSubtypes()){
+					key+=e.crafting.getItemDamage();
+					craftMap.get(key).pass(e.player);
+				}
+			}catch(NullPointerException err){}
 		}
 		
 		@SubscribeEvent
 		public void onItemPickup(ItemPickupEvent e){
-			String key=getKeyFromItemStack(e.pickedUp.getEntityItem());
-			if(pickupMap.containsKey(key))pickupMap.get(key).pass(e.player);
+			String key=e.pickedUp.getEntityItem().getItem().getUnlocalizedName();
+			try{
+				pickupMap.get(key).pass(e.player);
+			}catch(NullPointerException err){}
+			try {
+				if(e.pickedUp.getEntityItem().getItem().getHasSubtypes()){
+					key+=e.pickedUp.getEntityItem().getItemDamage();
+					pickupMap.get(key).pass(e.player);
+				}
+			} catch (NullPointerException err) {}
 		}
 		
 		@SubscribeEvent
 		public void onItemSmelted(ItemSmeltedEvent e){
-			String key=getKeyFromItemStack(e.smelting);
-			if(smeltMap.containsKey(key))smeltMap.get(key).pass(e.player);
+			String key=e.smelting.getItem().getUnlocalizedName();
+			try{
+				smeltMap.get(key).pass(e.player);
+			}catch(NullPointerException err){}
+			try{
+				if(e.smelting.getItem().getHasSubtypes()){
+					key+=e.smelting.getItemDamage();
+					smeltMap.get(key).pass(e.player);
+				}
+			}catch(NullPointerException err){}
 		}
 		
 		@SubscribeEvent
@@ -144,16 +161,20 @@ public abstract class Condition {
 	}
 	
 
-	static String getKeyFromItem(Item i,int subID){
+	static String getKeyFromItem(Item i,boolean checkID, int subID){
 		String key=i.getUnlocalizedName();
-		if(i.getHasSubtypes())
+		if(i.getHasSubtypes()&&checkID)
 			key+=subID;
 		return key;
 	}
 	
 	//=============================================================================
-	
-	public static Condition and(Condition...c) throws Exception{
+	/**
+	 * 用于和的条件组合
+	 * @param c 子条件
+	 * @return 作为子条件的和组合的条件
+	 */
+	public static Condition and(Condition...c){
 		return new Condition() {
 			
 			@Override
@@ -167,11 +188,14 @@ public abstract class Condition {
 				return true;
 			}
 		}.addChildren(c);
-	}
-	
+	}	
 	//=============================================================================
-	
-	public static Condition or(Condition...c) throws Exception{
+	/**
+	 * 用于或的条件组合
+	 * @param c 子条件
+	 * @return 作为子条件的或组合的条件
+	 */
+	public static Condition or(Condition...c){
 		return new Condition() {
 			
 			@Override
@@ -186,13 +210,13 @@ public abstract class Condition {
 			}
 		}.addChildren(c);
 	}
-	
 	//=============================================================================
 	/**
-	 * 仅限传入的Item和Block不需要区分damageID或者meta或者对应的值是0的时候可以用这个来简tou化lan
-	 * @param itemsOrBlocks
-	 * @return
-	 * @throws Exception
+	 * 批量的物品/方块合成条件
+	 * 仅限传入的Item和Block不需要区分damageID或者meta的时候可以用这个来简tou化lan
+	 * @param itemsOrBlocks 物品/方块
+	 * @return 一组条件分别对应每个物品/方块
+	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
 	public static Condition[] itemsCrafted(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
@@ -206,7 +230,7 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			String key=getKeyFromItem(item, 0);
+			String key=getKeyFromItem(item,false,0);
 			if(HandleEvent.craftMap.containsKey(key)){
 				c.add(HandleEvent.craftMap.get(key));
 			}else{
@@ -218,9 +242,9 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static Condition itemCrafted(Item item,int damageID) throws Exception{
+	private static Condition itemCrafted(Item item,boolean checkID,int damageID){
 		ItemCondition c;
-		String key=getKeyFromItem(item, damageID);
+		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.craftMap.containsKey(key)){
 			c=HandleEvent.craftMap.get(key);
 		}else{
@@ -230,25 +254,31 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemCrafted(Item item) throws Exception{
-		return itemCrafted(item, 0);
+	public static Condition itemCrafted(Item item,int id){
+		return itemCrafted(item,true,id);
+	}
+	public static Condition itemCrafted(Item item){
+		return itemCrafted(item,false,0);
 	}
 	
-	public static Condition itemCrafted(Block block,int meta) throws Exception{
+	private static Condition itemCrafted(Block block,boolean checkMeta,int meta){
 		Item item = Item.getItemFromBlock(block);
-		return itemCrafted(item,meta);
+		return itemCrafted(item,checkMeta,meta);
 	}
-	
-	public static Condition itemCrafted(Block block) throws Exception{
-		return itemCrafted(block, 0);
+	public static Condition itemCrafted(Block block,int meta){
+		return itemCrafted(block,true,meta);
+	}
+	public static Condition itemCrafted(Block block){
+		return itemCrafted(block,false,0);
 	}
 	
 	//=============================================================================
 	/**
+	 * 批量的物品/方块捡起的条件
 	 * 仅限传入的Item和Block不需要区分damageID或者meta或者对应的值是0的时候可以用这个来简tou化lan
-	 * @param itemsOrBlocks
-	 * @return
-	 * @throws Exception
+	 * @param itemsOrBlocks 物品/方块
+	 * @return 一组条件分别对应每个物品/方块
+	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
 	public static Condition[] itemsPickup(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
@@ -262,7 +292,7 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			String key=getKeyFromItem(item, 0);
+			String key=getKeyFromItem(item,false,0);
 			if(HandleEvent.pickupMap.containsKey(key)){
 				c.add(HandleEvent.pickupMap.get(key));
 			}else{
@@ -274,9 +304,9 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static Condition itemPickup(Item item,int damageID) throws Exception{
+	private static Condition itemPickup(Item item,boolean checkID,int damageID){
 		ItemCondition c;
-		String key=getKeyFromItem(item, damageID);
+		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.pickupMap.containsKey(key)){
 			c=HandleEvent.pickupMap.get(key);
 		}else{
@@ -286,24 +316,30 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemPickup(Item item) throws Exception{
-		return itemPickup(item, 0);
+	public static Condition itemPickup(Item item,int id){
+		return itemPickup(item,true,id);
+	}
+	public static Condition itemPickup(Item item){
+		return itemPickup(item,false,0);
 	}
 	
-	public static Condition itemPickup(Block block,int meta) throws Exception{
+	private static Condition itemPickup(Block block,boolean checkMeta,int meta){
 		Item item = Item.getItemFromBlock(block);
-		return itemPickup(item,meta);
+		return itemPickup(item,checkMeta,meta);
 	}
-	
-	public static Condition itemPickup(Block block) throws Exception{
-		return itemPickup(block,0);
+	public static Condition itemPickup(Block block,int meta){
+		return itemPickup(block,true,meta);
+	}
+	public static Condition itemPickup(Block block){
+		return itemPickup(block,false,0);
 	}
 	//=============================================================================
 	/**
-	 * 仅限传入的Item和Block不需要区分damageID或者meta或者对应的值是0的时候可以用这个来简tou化lan
-	 * @param itemsOrBlocks
-	 * @return
-	 * @throws Exception
+	 * 批量的物品/方块烧制条件
+	 * 仅限传入的Item和Block不需要区分damageID或者meta的时候可以用这个来简tou化lan
+	 * @param itemsOrBlocks 物品/方块
+	 * @return 一组条件分别对应每个物品/方块
+	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
 	public static Condition[] itemsSmelted(Object...itemsOrBlocks) throws Exception{
 		List<Condition> c=new ArrayList<Condition>();
@@ -317,7 +353,7 @@ public abstract class Condition {
 			else{
 				throw new Exception("Not an Item or Block: "+IorB);
 			}
-			String key=getKeyFromItem(item, 0);
+			String key=getKeyFromItem(item,false,0);
 			if(HandleEvent.smeltMap.containsKey(key)){
 				c.add(HandleEvent.smeltMap.get(key));
 			}else{
@@ -329,9 +365,9 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	public static Condition itemSmelted(Item item,int damageID) throws Exception{
+	private static Condition itemSmelted(Item item,boolean checkID,int damageID){
 		ItemCondition c;
-		String key=getKeyFromItem(item, damageID);
+		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.smeltMap.containsKey(key)){
 			c=HandleEvent.smeltMap.get(key);
 		}else{
@@ -341,27 +377,32 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemSmelted(Item item) throws Exception{
-		return itemSmelted(item, 0);
+	public static Condition itemSmelted(Item item,int id){
+		return itemSmelted(item,true,id);
+	}
+	public static Condition itemSmelted(Item item){
+		return itemSmelted(item,false,0);
 	}
 
-	public static Condition itemSmelted(Block block,int meta) throws Exception{
+	private static Condition itemSmelted(Block block,boolean checkMeta,int meta){
 		Item item = Item.getItemFromBlock(block);
-		return itemSmelted(item,meta);
+		return itemSmelted(item,checkMeta,meta);
 	}
-	
-	public static Condition itemSmelted(Block block) throws Exception{
-		return itemSmelted(block, 0);
+	public static Condition itemSmelted(Block block,int meta){
+		return itemSmelted(block,true,meta);
+	}
+	public static Condition itemSmelted(Block block){
+		return itemSmelted(block,false,0);
 	}
 	//=============================================================================
 	
-	public static Condition abilityLevel(Category cat,int level) throws Exception{
+	public static Condition abilityLevel(Category cat,int level){
 		return new AbilityLevelCondition(cat,level);
 	}
 
 	//=============================================================================
 	
-	public static Condition harvestLiquid(MatterMaterial mat) throws Exception{
+	public static Condition harvestLiquid(MatterMaterial mat){
 		ItemCondition c;
 		if(HandleEvent.matterUnitMap.containsKey(mat)){
 			c=HandleEvent.matterUnitMap.get(mat);
@@ -371,21 +412,25 @@ public abstract class Condition {
 		}
 		return c;
 	}
-
 	//=============================================================================
 	
-	public static Condition onTutorial(ACTutorial t) throws Exception{
+	public static Condition onTutorial(ACTutorial t){
 		return new Condition(){
 
 			@Override
 			public boolean exam(EntityPlayer player) {
-				// TODO Auto-generated method stub
 				return t.getIsLoad(player);
 			}
 			
 		};
-	}	
+	}
 	
+	/**
+	 * 
+	 * @param tutorialID 前置教程的id
+	 * @return 以前置教程状态判断的条件
+	 * @throws Exception 没有这个id的教程
+	 */
 	public static Condition onTutorial(String tutorialID) throws Exception{
 		ACTutorial t = ACTutorial.getTutorial(tutorialID);
 		return onTutorial(t);

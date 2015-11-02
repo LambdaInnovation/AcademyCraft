@@ -55,7 +55,8 @@ public class ModuleTutorial {
 					Condition.itemsCrafted(
 							ModuleAbility.developerNormal,
 							ModuleAbility.developerPortable,
-							ModuleAbility.developerAdvanced)
+							ModuleAbility.developerAdvanced
+							)
 					));
 			ACTutorial.addTutorial("ability").addCondition(Condition.abilityLevel(null, 1));
 			ACTutorial.addTutorial("ability_electromaster").addCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));
