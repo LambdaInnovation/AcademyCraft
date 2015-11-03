@@ -39,7 +39,6 @@ import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.ControlOverrider;
 import cn.liutils.util.client.HudUtils;
@@ -266,32 +265,28 @@ public class TerminalUI extends AuxGui {
     		
     	});
     	
-    	root.getWidget("arrow_up").regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).enabled = scroll > 0;
-			}
-    		
+    	root.getWidget("arrow_up").listen(FrameEvent.class, 
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll > 0;
     	});
     	
-    	root.getWidget("arrow_down").regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).enabled = scroll < getMaxScroll();
-			}
-    		
+    	root.getWidget("arrow_up").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll > 0;
     	});
     	
-    	root.getWidget("icon_loading").regEventHandlerAtBegin(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
-			}
+    	root.getWidget("arrow_down").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll < getMaxScroll();
     	});
     	
-    	root.getWidget("text_loading").regEventHandlerAtBegin(FrameEvent.class, (Widget w, FrameEvent event) -> {
+    	root.getWidget("icon_loading").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
+    	});
+    	
+    	root.getWidget("text_loading").listen(FrameEvent.class,
+    	(w, e) -> {
     		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
     	});
     }
@@ -407,37 +402,32 @@ public class TerminalUI extends AuxGui {
 			id = _id;
 			app = _app;
 			
-			this.addEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
-					boolean selected = getSelectedApp() == w;
-					
-					if(selected) {
-						if(!lastSelected) {
-							ACSounds.playClient(Minecraft.getMinecraft().thePlayer, "terminal.select", 0.2f);
-						}
-						drawer.texture = APP_BACK_HDR;
-						
-						drawer.zLevel = text.zLevel = icon.zLevel = 40;
-						
-						drawer.color.a = mAlpha;
-						icon.color.a = 0.8 * mAlpha;
-						text.color.a = 0.1 + 0.72 * mAlpha;
-					} else {
-						drawer.texture = APP_BACK;
-						
-						drawer.zLevel = text.zLevel = icon.zLevel = 10;
-						
-						drawer.color.a = mAlpha;
-						icon.color.a = 0.6 * mAlpha;
-						text.color.a = 0.10 + 0.1 * mAlpha;
+			addEventHandler(FrameEvent.class, (w, e) -> {
+				double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
+				boolean selected = getSelectedApp() == w;
+				
+				if(selected) {
+					if(!lastSelected) {
+						ACSounds.playClient(Minecraft.getMinecraft().thePlayer, "terminal.select", 0.2f);
 					}
+					drawer.texture = APP_BACK_HDR;
 					
-					lastSelected = selected;
+					drawer.zLevel = text.zLevel = icon.zLevel = 40;
+					
+					drawer.color.a = mAlpha;
+					icon.color.a = 0.8 * mAlpha;
+					text.color.a = 0.1 + 0.72 * mAlpha;
+				} else {
+					drawer.texture = APP_BACK;
+					
+					drawer.zLevel = text.zLevel = icon.zLevel = 10;
+					
+					drawer.color.a = mAlpha;
+					icon.color.a = 0.6 * mAlpha;
+					text.color.a = 0.10 + 0.1 * mAlpha;
 				}
 				
+				lastSelected = selected;
 			});
 		}
 		

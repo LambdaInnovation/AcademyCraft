@@ -34,7 +34,6 @@ import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.shader.ShaderProgram;
@@ -137,81 +136,78 @@ public class CPBar extends Widget {
 	}
 	
 	private void initEvents() {
-		regEventHandler(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-				CPData cpData = CPData.get(player);
-				AbilityData aData = AbilityData.get(player);
-				Category c = aData.getCategory();
-				overlayTexture = c == null ? null : c.getOverlayIcon();
-				
-				boolean active = cpData.isActivated();
-				
-				// Calculate alpha
-				long time = GameTimer.getTime();
-				if(time - lastDrawTime > 300L) {
-					showTime = time;
-				}
-				
-				long deltaTime = Math.min(100L, time - lastDrawTime);
-				
-				final long BLENDIN_TIME = 200L;
-				mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME :
-					(active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
-				
-				float poverload = mAlpha > 0 ? cpData.getOverload() / cpData.getMaxOverload() : 0;
-				bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
-				
-				float pcp = mAlpha > 0 ? cpData.getCP() / cpData.getMaxCP() : 0;
-				bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
-				
-				if(mAlpha > 0) {
-					/* Draw CPBar */ {
-						if(bufferedOverload < 1) {
-							drawNormal(bufferedOverload);
-						} else {
-							drawOverload(bufferedOverload);
-						}
-						
-						if(chProvider != null && !chProvider.alive())
-							chProvider = null;
-						
-						float estmCons = chProvider == null ? 0 : chProvider.getConsumption() * 
-							(cpData.isOverloaded() ? CPData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
-						//System.out.println(chProvider + "/" + estmCons);
-						if(estmCons != 0) {
-							float ncp = Math.max(0, cpData.getCP() - estmCons);
-							
-							float oldAlpha = mAlpha;
-							mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
-							
-							drawCPBar(pcp);
-							
-							mAlpha = oldAlpha;
-							
-							drawCPBar(ncp / cpData.getMaxCP());
-						} else {
-							drawCPBar(bufferedCP);
-						}
-					}
-					
-					/* Draw Preset Hint */ {
-						final long preset_wait = 2000L;
-						if(time - presetChangeTime < preset_wait)
-							drawPresetHint((double)(time - presetChangeTime) / preset_wait,
-								time - lastPresetTime);
-					}
-					
-					drawActivateKeyHint();
-				}
-				
-				if(active)
-					lastDrawTime = time;
-				
-				GL11.glColor4d(1, 1, 1, 1);
+		listen(FrameEvent.class, (w, e) -> 
+		{
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			CPData cpData = CPData.get(player);
+			AbilityData aData = AbilityData.get(player);
+			Category c = aData.getCategory();
+			overlayTexture = c == null ? null : c.getOverlayIcon();
+			
+			boolean active = cpData.isActivated();
+			
+			// Calculate alpha
+			long time = GameTimer.getTime();
+			if(time - lastDrawTime > 300L) {
+				showTime = time;
 			}
+			
+			long deltaTime = Math.min(100L, time - lastDrawTime);
+			
+			final long BLENDIN_TIME = 200L;
+			mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME :
+				(active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
+			
+			float poverload = mAlpha > 0 ? cpData.getOverload() / cpData.getMaxOverload() : 0;
+			bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
+			
+			float pcp = mAlpha > 0 ? cpData.getCP() / cpData.getMaxCP() : 0;
+			bufferedCP = balance(bufferedCP, pcp, deltaTime * 1E-3f * CP_BALANCE_SPEED);
+			
+			if(mAlpha > 0) {
+				/* Draw CPBar */ {
+					if(bufferedOverload < 1) {
+						drawNormal(bufferedOverload);
+					} else {
+						drawOverload(bufferedOverload);
+					}
+					
+					if(chProvider != null && !chProvider.alive())
+						chProvider = null;
+					
+					float estmCons = chProvider == null ? 0 : chProvider.getConsumption() * 
+						(cpData.isOverloaded() ? CPData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
+					//System.out.println(chProvider + "/" + estmCons);
+					if(estmCons != 0) {
+						float ncp = Math.max(0, cpData.getCP() - estmCons);
+						
+						float oldAlpha = mAlpha;
+						mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
+						
+						drawCPBar(pcp);
+						
+						mAlpha = oldAlpha;
+						
+						drawCPBar(ncp / cpData.getMaxCP());
+					} else {
+						drawCPBar(bufferedCP);
+					}
+				}
+				
+				/* Draw Preset Hint */ {
+					final long preset_wait = 2000L;
+					if(time - presetChangeTime < preset_wait)
+						drawPresetHint((double)(time - presetChangeTime) / preset_wait,
+							time - lastPresetTime);
+				}
+				
+				drawActivateKeyHint();
+			}
+			
+			if(active)
+				lastDrawTime = time;
+			
+			GL11.glColor4d(1, 1, 1, 1);
 		});
 	}
 	

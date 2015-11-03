@@ -21,7 +21,7 @@ import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.ProgressBar;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.cgui.gui.event.IGuiEventHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.KeyManager;
@@ -68,8 +68,7 @@ public class TerminalInstallEffect extends AuxGui {
 	}
 	
 	private void initBlender(Widget w) {
-		w.regEventHandler(new FrameEventHandler() {
-			
+		w.listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
 			DrawTexture tex = DrawTexture.get(w);
 			TextBox text = TextBox.get(w);
 			ProgressBar bar = ProgressBar.get(w);
@@ -100,8 +99,7 @@ public class TerminalInstallEffect extends AuxGui {
 				if(text != null) text.color.a = 0.1 + 0.9 * textA * alpha;
 				if(bar != null) bar.color.a = barA * alpha;
 			}
-			
-		});	
+		});
 	}
 	
 	@GuiCallback("main/progbar")

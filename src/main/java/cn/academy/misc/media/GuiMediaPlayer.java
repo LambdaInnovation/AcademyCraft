@@ -93,7 +93,7 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		TextBox.get(ret.getWidget("desc")).content = media.getDesc();
 		TextBox.get(ret.getWidget("time")).content = media.getLengthStr();
 		
-		ret.regEventHandler(MouseDownEvent.class, (Widget w, MouseDownEvent event) -> {
+		ret.listen(MouseDownEvent.class, (w, e) -> {
 			if(w.isFocused()) {
 				player.startPlay(media);
 				gui.postEvent(new UpdateMediaEvent());

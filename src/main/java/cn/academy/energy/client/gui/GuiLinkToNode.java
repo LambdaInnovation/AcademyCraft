@@ -26,9 +26,7 @@ import cn.liutils.cgui.gui.component.ElementList;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.util.helper.Font.Align;
 import cn.liutils.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
@@ -125,35 +123,22 @@ public class GuiLinkToNode extends LIGuiScreen {
 		final Widget slide = main.getWidget("button_slide");
 		GuiNode.wrapButton(slide, 0.5);
 		
-		slide.regEventHandler(new DraggedHandler() {
-
-			@Override
-			public void handleEvent(Widget w, DraggedEvent event) {
-				VerticalDragBar db = VerticalDragBar.get(w);
-				ElementList elist = ElementList.get(main.getWidget("list"));
-				elist.setProgress((int) Math.round((db.getProgress() * elist.getMaxProgress())));
-			}
-			
+		slide.listen(DraggedEvent.class, (w, e) -> {
+			VerticalDragBar db = VerticalDragBar.get(w);
+			ElementList elist = ElementList.get(main.getWidget("list"));
+			elist.setProgress((int) Math.round((db.getProgress() * elist.getMaxProgress())));
 		});
 		
 		GuiNode.wrapButton(main.getWidget("button_close"), 0.5);
-		main.getWidget("button_close").regEventHandler(new MouseDownHandler() {
-
-			@Override
-			public void handleEvent(Widget w, MouseDownEvent event) {
-				Minecraft.getMinecraft().displayGuiScreen(null);
-			}
-			
+		main.getWidget("button_close").listen(MouseDownEvent.class, (w, e) ->
+		{
+			Minecraft.getMinecraft().displayGuiScreen(null);
 		});
 		
-		main.getWidget("btn_disconnect").regEventHandler(new MouseDownHandler() {
-
-			@Override
-			public void handleEvent(Widget w, MouseDownEvent event) {
-				updateSSID("");
-				LinkToNodeSyncs.disconnect(tile);
-			}
-			
+		main.getWidget("btn_disconnect").listen(MouseDownEvent.class, (w, e) ->
+		{
+			updateSSID("");
+			LinkToNodeSyncs.disconnect(tile);
 		});
 		
 		gui.addWidget(main);
@@ -168,15 +153,12 @@ public class GuiLinkToNode extends LIGuiScreen {
 			single.addComponent(new DrawTexture().setTex(null));
 			
 			TextBox.get(single).content = node.getNodeName();
-			single.regEventHandler(new MouseDownHandler() {
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					showMessage("Linking", 10000, null);
-					LinkToNodeSyncs.startLink(tile, (TileEntity) node, 
-						Future.create((Boolean b) -> {
-							showMessage(b ? "successful" : "failed", 2000, GuiLinkToNode.this::closeGui);
-						}));
-				}
+			single.listen(MouseDownEvent.class, (w, e) -> {
+				showMessage("Linking", 10000, null);
+				LinkToNodeSyncs.startLink(tile, (TileEntity) node, 
+					Future.create((Boolean b) -> {
+						showMessage(b ? "successful" : "failed", 2000, GuiLinkToNode.this::closeGui);
+					}));
 			});
 			GuiNode.wrapButton(single, 0.0, 0.3);
 			

@@ -20,7 +20,6 @@ import cn.annoreg.mc.RegInit;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.CGUIEditor;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
@@ -51,19 +50,14 @@ public class Glow extends Component {
 	public Glow() {
 		super("Glow");
 		
-		this.addEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				if(!writeDepth)
-					GL11.glDepthMask(false);
-				GL11.glPushMatrix();
-				GL11.glTranslated(0, 0, zLevel);
-				ACRenderingHelper.drawGlow(0, 0, w.transform.width, w.transform.height, glowSize, color);
-				GL11.glPopMatrix();
-				GL11.glDepthMask(true);
-			}
-			
+		addEventHandler(FrameEvent.class, (w, event) -> {
+			if(!writeDepth)
+				GL11.glDepthMask(false);
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, 0, zLevel);
+			ACRenderingHelper.drawGlow(0, 0, w.transform.width, w.transform.height, glowSize, color);
+			GL11.glPopMatrix();
+			GL11.glDepthMask(true);
 		});
 	}
 

@@ -3,10 +3,6 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import cn.academy.vanilla.teleporter.data.LocTeleData;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
@@ -19,12 +15,13 @@ import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -52,6 +49,8 @@ public class LocTeleportUI extends LIGuiScreen {
 		init();
 	}
 	
+	int wait1, wait2;
+	
 	private void init() {
 		pageInspect = loaded.getWidget("inspect").copy();
 		pageAdd = loaded.getWidget("add").copy();
@@ -65,77 +64,48 @@ public class LocTeleportUI extends LIGuiScreen {
 			rebuildInspectPanel();
 			
 			Widget dragbar = pageInspect.getWidget("dragbar");
-			dragbar.regEventHandler(new DraggedHandler() {
-
-				@Override
-				public void handleEvent(Widget w, DraggedEvent event) {
-					ElementList list = ElementList.get(area);
-					list.setProgress((int) 
-						(VerticalDragBar.get(w).getProgress() * list.getMaxProgress()));
-				}
-				
+			dragbar.listen(DraggedEvent.class, (w, e) -> {
+				ElementList list = ElementList.get(area);
+				list.setProgress((int) 
+					(VerticalDragBar.get(w).getProgress() * list.getMaxProgress()));
 			});
 		}
 		
 		/* Add */ {
 			
 			Widget area = pageAdd.getWidget("back");
-			area.regEventHandler(new FrameEventHandler() {
-				
-				int wait = 0;
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					if(wait == 0) {
-						wait = 100;
-						w.getWidget("text_disabled").transform.doesDraw = !canRecordLocation();
-					} else {
-						wait--;
-					}
+			area.listen(FrameEvent.class, (w, event) -> {
+				if(wait1 == 0) {
+					wait1 = 100;
+					w.getWidget("text_disabled").transform.doesDraw = !canRecordLocation();
+				} else {
+					wait1--;
 				}
-				
 			});
 			
-			area.getWidget("button").regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					if(canRecordLocation()) {
-						data.add(LocationTeleport.toLocation(player, TextBox.get(pageAdd.getWidget("back/text_input")).content));
-						player.closeScreen();
-					}
+			area.getWidget("button").listen(MouseDownEvent.class, (w, event) -> {
+				if(canRecordLocation()) {
+					data.add(LocationTeleport.toLocation(player, TextBox.get(pageAdd.getWidget("back/text_input")).content));
+					player.closeScreen();
 				}
-				
 			});
 			
 			TextBox.get(area.getWidget("text_coord")).setContent(local("location") + LocationTeleport.toLocation(player, "def").formatCoords());
 		}
 		
 		/* Action */ {
-			pageAction.regEventHandler(new FrameEventHandler() {
-				
-				int wait = 0;
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					if(wait == 0) {
-						wait = 100;
-						w.getWidget("text_nocp").transform.doesDraw = !LocationTeleport.canPerform(player, selection);
-					} else {
-						wait--;
-					}
+			pageAction.listen(FrameEvent.class, (w, event) -> {
+				if(wait2 == 0) {
+					wait2 = 100;
+					w.getWidget("text_nocp").transform.doesDraw = !LocationTeleport.canPerform(player, selection);
+				} else {
+					wait2--;
 				}
-				
 			});
 			
-			pageAction.getWidget("button").regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					LocationTeleport.performAction(player, selection);
-					player.closeScreen();
-				}
-				
+			pageAction.getWidget("button").listen(MouseDownEvent.class, (w, e) -> {
+				LocationTeleport.performAction(player, selection);
+				player.closeScreen();
 			});
 			
 		}
@@ -161,19 +131,14 @@ public class LocTeleportUI extends LIGuiScreen {
 			
 			TextBox.get(single.getWidget("text")).setContent(l.name);
 			
-			single.getWidget("cancel").regEventHandler(MouseDownEvent.class,
+			single.getWidget("cancel").listen(MouseDownEvent.class,
 				(Widget w, MouseDownEvent e) -> {
 					data.removeAt(id);
 					rebuildInspectPanel();
 				});
 			
-			single.regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					updateSelection(l);
-				}
-				
+			single.listen(MouseDownEvent.class, (w, e) -> {
+				updateSelection(l);
 			});
 			
 			list.addWidget(single);

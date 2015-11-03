@@ -14,13 +14,13 @@ package cn.academy.ability.client.skilltree;
 
 import static org.lwjgl.opengl.GL11.glColor4d;
 import static org.lwjgl.opengl.GL11.glDepthMask;
+
 import cn.academy.ability.client.skilltree.GuiSkillTree.SkillHandler;
 import cn.academy.core.client.component.Glow;
 import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.cgui.gui.event.IGuiEventHandler;
 import cn.liutils.cgui.gui.event.LostFocusEvent;
-import cn.liutils.cgui.gui.event.LostFocusEvent.LostFocusHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
@@ -73,11 +73,11 @@ public class WidgetSkillDesc extends Widget {
 	public void onAdded() {
 		getGui().gainFocus(this);
 		
-		this.regEventHandler(new FrameEventHandler() {
-
+		listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
+			
 			long startTime = GameTimer.getTime();
 			double blendTime = 200.0;
-			
+
 			@Override
 			public void handleEvent(Widget w, FrameEvent event) {
 				double tw = width + MARGIN * 2,
@@ -96,16 +96,13 @@ public class WidgetSkillDesc extends Widget {
 				glColor4d(1, 1, 1, 1);
 				glDepthMask(true);
 			}
+			
 		});
 		
-		regEventHandler(new LostFocusHandler() {
-
-			@Override
-			public void handleEvent(Widget w, LostFocusEvent event) {
-				handler.deactive();
-				w.dispose();
-			}
-			
+		listen(LostFocusEvent.class, (w, e) -> 
+		{
+			handler.deactive();
+			w.dispose();
 		});
 	}
 	

@@ -15,12 +15,10 @@ package cn.academy.energy.client.gui.node;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.EnergyUIHelper;
@@ -37,14 +35,13 @@ import cn.liutils.cgui.gui.component.ProgressBar;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.Color;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeathFolD
@@ -169,13 +166,9 @@ public class GuiNode extends LIGuiContainer {
     	state = CheckState.LOADING;
     	maxLoad = tile.getCapacity();
     	
-    	pageSelect.regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				LIGui.drawBlackout();
-			}
-    		 
+    	pageSelect.listen(FrameEvent.class, (w, e) ->
+    	{
+    		LIGui.drawBlackout();
     	});
     	
     	//Callback
@@ -191,11 +184,10 @@ public class GuiNode extends LIGuiContainer {
     	final DrawTexture drawer = DrawTexture.get(button);
     	final Color idle = new Color(1, 1, 1, alpha0), active = new Color(1, 1, 1, alpha1);
     	drawer.color = idle;
-    	button.regEventHandler(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				drawer.color = event.hovering ? active : idle;
-			}
+    	
+    	button.listen(FrameEvent.class, (w, event) ->
+    	{
+    		drawer.color = event.hovering ? active : idle;
     	});
     }
     
@@ -233,6 +225,7 @@ public class GuiNode extends LIGuiContainer {
     		state = nstate;
     		DrawTexture.get(getWidget("mark_state2")).texture = nstate.texture;
     		TextBox.get(getWidget("text_state")).content = nstate.getDisplayName();
+    		AcademyCraft.log.info("ChangeState " + state);
     	}
     	
     	public void receivedInit() {
@@ -291,15 +284,11 @@ public class GuiNode extends LIGuiContainer {
     		final Widget slide = getWidget("button_slide");
     		wrapButton(slide, 0.5);
     		//slide.addComponent(new VerticalDragBar().setArea(*, _y1));
-    		slide.regEventHandler(new DraggedHandler() {
-
-				@Override
-				public void handleEvent(Widget w, DraggedEvent event) {
-					VerticalDragBar db = VerticalDragBar.get(w);
-					ElementList elist = ElementList.get(getWidget("list"));
-					elist.setProgress((int) Math.round((db.getProgress() * elist.getMaxProgress())));
-				}
-    			
+    		slide.listen(DraggedEvent.class, (w, e) -> 
+    		{
+    			VerticalDragBar db = VerticalDragBar.get(w);
+				ElementList elist = ElementList.get(getWidget("list"));
+				elist.setProgress((int) Math.round((db.getProgress() * elist.getMaxProgress())));
     		});
     		
     		wrapButton(getWidget("button_close"), 0.6);
@@ -324,13 +313,13 @@ public class GuiNode extends LIGuiContainer {
     			single.addComponent(new DrawTexture().setTex(null));
     			
     			TextBox.get(single).content = s;
-    			single.regEventHandler(new MouseDownHandler() {
-					@Override
-					public void handleEvent(Widget w, MouseDownEvent event) {
-						mainHandler.updateSSID(TextBox.get(w).content);
-						closeSelect();
-					}
+    			
+    			single.listen(MouseDownEvent.class, (w, e) -> 
+    			{
+    				mainHandler.updateSSID(TextBox.get(w).content);
+					closeSelect();
     			});
+    			
     			wrapButton(single, 0.0, 0.3);
     			
     			eList.addWidget(single);

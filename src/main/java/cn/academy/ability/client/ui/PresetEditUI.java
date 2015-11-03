@@ -15,12 +15,6 @@ package cn.academy.ability.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Category;
@@ -40,15 +34,19 @@ import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
+import cn.liutils.cgui.gui.event.IGuiEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
 import cn.liutils.util.helper.GameTimer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -142,7 +140,8 @@ public class PresetEditUI extends GuiScreen {
 			TextBox.get(normal.getWidget("title")).setContent(local("tag") + (i + 1));
 			
 			for(int j = 0; j < 4; ++j) {
-				normal.getWidget("" + j).addComponent(new HintHandler(j));
+				Widget ww = normal.getWidget(String.valueOf(j));
+				normal.getWidget(String.valueOf(j)).addComponent(new HintHandler(j));
 			}
 			normal.addComponent(new ForegroundPage(i));
 			add(i, foreground, normal);
@@ -178,7 +177,7 @@ public class PresetEditUI extends GuiScreen {
 		Widget ret = template.copy();
 		for(Widget w : ret.getDrawList()) {
 			for(Widget w2 : w.getDrawList())
-				w2.regEventHandlerAtBegin(new AlphaAssign());
+				w2.listen(FrameEvent.class, new AlphaAssign(), -1);
 		}
 		return ret;
 	}
@@ -338,36 +337,27 @@ public class PresetEditUI extends GuiScreen {
 			super("Hint");
 			keyid = _keyid;
 			
-			addEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					Page page = getPage(w.getWidgetParent());
-					DrawTexture dt = DrawTexture.get(w);
-					dt.enabled = page.id == active && event.hovering;
-					dt.color.a = page.alpha;
-				}
-				
+			addEventHandler(FrameEvent.class, (w, event) -> 
+			{
+				Page page = getPage(w.getWidgetParent());
+				DrawTexture dt = DrawTexture.get(w);
+				dt.enabled = page.id == active && event.hovering;
+				dt.color.a = page.alpha;
 			});
 			
-			addEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					Page page = getPage(w.getWidgetParent());
-					if(selector != null && !selector.disposed) {
-						selector.dispose();
-						selector = null;
-					} else if(page.id == active) {
-						// Open the selector
-						selector = new Selector(keyid);
-						selector.transform.setPos(foreground.mouseX, foreground.mouseY);
-						foreground.addWidget(selector);
-					} else {
-						startTransit(page.id);
-					}
+			addEventHandler(MouseDownEvent.class, (w, e) -> {
+				Page page = getPage(w.getWidgetParent());
+				if(selector != null && !selector.disposed) {
+					selector.dispose();
+					selector = null;
+				} else if(page.id == active) {
+					// Open the selector
+					selector = new Selector(keyid);
+					selector.transform.setPos(foreground.mouseX, foreground.mouseY);
+					foreground.addWidget(selector);
+				} else {
+					startTransit(page.id);
 				}
-				
 			});
 		}
     	
@@ -386,13 +376,9 @@ public class PresetEditUI extends GuiScreen {
 		public TransitPage(int _id) {
 			super(_id);
 			
-			this.addEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					DrawTexture.get(w).color.a = alpha;
-				}
-				
+			addEventHandler(FrameEvent.class, (w, e) -> 
+			{
+				DrawTexture.get(w).color.a = alpha;
 			});
 		}
 		
@@ -430,7 +416,7 @@ public class PresetEditUI extends GuiScreen {
     	
     }
     
-    private class AlphaAssign extends FrameEventHandler {
+    private class AlphaAssign implements IGuiEventHandler<FrameEvent> {
 
 		@Override
 		public void handleEvent(Widget w, FrameEvent event) {
@@ -480,35 +466,30 @@ public class PresetEditUI extends GuiScreen {
     		transform.setSize(width, height);
     		
     		// Build the window and the widget
-    		regEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					CRL_WHITE.bind();
-					ACRenderingHelper.drawGlow(0, 0, width, height, 1, CRL_WHITE);
-					
-					CRL_BACK.bind();
-					HudUtils.colorRect(0, 0, width, height);
-					
-					String str; 
-					Widget hovering = foreground.getHoveringWidget();
-					if(hovering != null && hovering.getName().contains("_sel")) {
-						SelHandler sh = hovering.getComponent("_sel");
-						str = sh.selection.hint;
-					} else {
-						str = local("skill_select");
-					}
-					
-					double len = Font.font.strLen(str, 9);
-					CRL_BACK.bind();
-					HudUtils.colorRect(0, -13.5, len + 6, 11.5);
-					ACRenderingHelper.drawGlow(0, -13.5, len + 6, 11.5, 1, CRL_GLOW);
-					
-					Font.font.draw(str, 3, -12, 9, 0xbbbbbb);
-					
-					GL11.glColor4d(1, 1, 1, 1);
+    		listen(FrameEvent.class, (w, e) -> {
+    			CRL_WHITE.bind();
+				ACRenderingHelper.drawGlow(0, 0, width, height, 1, CRL_WHITE);
+				
+				CRL_BACK.bind();
+				HudUtils.colorRect(0, 0, width, height);
+				
+				String str; 
+				Widget hovering = foreground.getHoveringWidget();
+				if(hovering != null && hovering.getName().contains("_sel")) {
+					SelHandler sh = hovering.getComponent("_sel");
+					str = sh.selection.hint;
+				} else {
+					str = local("skill_select");
 				}
-    			
+				
+				double len = Font.font.strLen(str, 9);
+				CRL_BACK.bind();
+				HudUtils.colorRect(0, -13.5, len + 6, 11.5);
+				ACRenderingHelper.drawGlow(0, -13.5, len + 6, 11.5, 1, CRL_GLOW);
+				
+				Font.font.draw(str, 3, -12, 9, 0xbbbbbb);
+				
+				GL11.glColor4d(1, 1, 1, 1);
     		});
     		
     		// Build all the skills that can be set
@@ -534,15 +515,10 @@ public class PresetEditUI extends GuiScreen {
 			public SelHandler(SelectionProvider _selection) {
 				super("_sel");
 				selection = _selection;
-				this.addEventHandler(new MouseDownHandler() {
-
-					@Override
-					public void handleEvent(Widget w, MouseDownEvent event) {
-						onEdit(keyid, selection.id);
-						Selector.this.dispose();
-					}
-    				
-    			});
+				addEventHandler(MouseDownEvent.class, (w, e) -> {
+					onEdit(keyid, selection.id);
+					Selector.this.dispose();
+				});
 			}
     		
     	}

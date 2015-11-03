@@ -99,7 +99,7 @@ public class LifeRecordUI extends LIGuiScreen {
 		
 		back.getWidget("area").addComponent(list);
 		
-		back.getWidget("scrollbar").regEventHandler(DraggedEvent.class, (Widget w, DraggedEvent e) -> {
+		back.getWidget("scrollbar").listen(DraggedEvent.class, (Widget w, DraggedEvent e) -> {
 			list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
 		});
 		gui.addWidget(back);
@@ -184,7 +184,7 @@ public class LifeRecordUI extends LIGuiScreen {
 			tint.hoverColor.setColor4d(0, 0, 0, 0.2);
 			addComponent(tint);
 			
-			regEventHandler(FrameEvent.class, (Widget w, FrameEvent e) -> {
+			listen(FrameEvent.class, (Widget w, FrameEvent e) -> {
 				if(e.hovering) {
 					drawHoveringText(knowledge, e.mx, e.my);
 				}

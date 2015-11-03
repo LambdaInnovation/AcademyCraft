@@ -13,13 +13,11 @@
 package cn.academy.ability.client.skilltree;
 
 import cn.academy.core.client.component.Glow;
-import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.Component;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
 
@@ -51,18 +49,14 @@ public class BlendIn extends Component {
 		setAlpha(0);
 		
 		long time = GameTimer.getTime();
-		addEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				long dt = GameTimer.getTime() - time + timeOffset;
-				double factor = MathUtils.wrapd(0, 1, (double) dt / blendTime);
-				setAlpha(factor);
-				
-				if(factor == 1) 
-					BlendIn.this.enabled = false;
-			}
+		addEventHandler(FrameEvent.class, (w, event) -> 
+		{
+			long delta = GameTimer.getTime() - time + timeOffset;
+			double factor = MathUtils.wrapd(0, 1, (double) delta / blendTime);
+			setAlpha(factor);
 			
+			if(factor == 1) 
+				BlendIn.this.enabled = false;
 		});
 	}
 	

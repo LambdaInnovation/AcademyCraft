@@ -25,7 +25,6 @@ import cn.liutils.cgui.gui.component.ElementList;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.component.VerticalDragBar;
 import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedHandler;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -85,13 +84,9 @@ public class SettingsUI extends LIGuiScreen {
 		area.addComponent(list);
 		
 		Widget bar = main.getWidget("scrollbar");
-		bar.regEventHandler(new DraggedHandler() {
-
-			@Override
-			public void handleEvent(Widget w, DraggedEvent event) {
-				list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
-			}
-			
+		bar.listen(DraggedEvent.class, (w, e) ->
+		{
+			list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
 		});
 		
 		gui.addWidget(main);

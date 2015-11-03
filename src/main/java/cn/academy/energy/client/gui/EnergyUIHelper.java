@@ -12,9 +12,7 @@ import cn.liutils.cgui.gui.Widget;
 import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.helper.Color;
 import cn.liutils.util.helper.Font;
@@ -115,24 +113,16 @@ public class EnergyUIHelper {
 				}
 			}));
 		
-		theButton.regEventHandler(new MouseDownHandler() {
-
-			@Override
-			public void handleEvent(Widget w, MouseDownEvent event) {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
-			}
-			
+		theButton.listen(MouseDownEvent.class, (w, e) -> 
+		{
+			Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
 		});
 		
-		theButton.regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				if(event.hovering)
-					drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 10 / w.scale, 
-							233333, Align.LEFT, mono);
-			}
-			
+		theButton.listen(FrameEvent.class, (w, event) ->
+		{
+			if(event.hovering)
+				drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 10 / w.scale, 
+						233333, Align.LEFT, mono);
 		});
 	}
 	

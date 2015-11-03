@@ -12,8 +12,6 @@
  */
 package cn.academy.crafting.client.gui;
 
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
@@ -30,10 +28,10 @@ import cn.liutils.cgui.gui.component.DrawTexture;
 import cn.liutils.cgui.gui.component.ProgressBar;
 import cn.liutils.cgui.gui.component.TextBox;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.cgui.loader.xml.CGUIDocLoader;
 import cn.liutils.util.helper.Color;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -60,11 +58,9 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	private void wrapButton(final Widget but) {
 		final Color idle = new Color(1, 1, 1, 0.3), hover = new Color(1, 1, 1, 1);
-		but.regEventHandler(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(but).color = event.hovering ? hover : idle;
-			}
+		but.listen(FrameEvent.class, (w, event) -> 
+		{
+			DrawTexture.get(but).color = event.hovering ? hover : idle;
 		});
 	}
 	

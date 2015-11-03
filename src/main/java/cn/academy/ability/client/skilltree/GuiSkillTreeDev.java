@@ -40,9 +40,7 @@ import cn.liutils.cgui.gui.component.Tint;
 import cn.liutils.cgui.gui.component.Transform.HeightAlign;
 import cn.liutils.cgui.gui.component.Transform.WidthAlign;
 import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
 import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
 import cn.liutils.cgui.loader.EventLoader;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.shader.ShaderMono;
@@ -76,23 +74,18 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		
 		for(int i = 1; i <= 5; ++i) {
 			final int j = i;
-			treeArea.getWidget("ball" + i).regEventHandler(
-					new MouseDownHandler() {
-
-						@Override
-						public void handleEvent(Widget w, MouseDownEvent event) {
-							if(j == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
-								overlay = new Overlay();
-								window.addWidget(overlay);
-								window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
-									() -> {
-										developer.reset();
-										Syncs.startUpgradingLevel(developer);
-									}));
-							}
-						}
-						
-					});
+			treeArea.getWidget("ball" + i).listen(MouseDownEvent.class, (w, e) -> 
+			{
+				if(j == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
+					overlay = new Overlay();
+					window.addWidget(overlay);
+					window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
+						() -> {
+							developer.reset();
+							Syncs.startUpgradingLevel(developer);
+						}));
+				}
+			});
 		}
 		
 		// FIXME Bad style here, instanceof is definetly not-cute hardcoding.
@@ -191,16 +184,13 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						dt.setTex(tex);
 						dep.addComponent(dt);
 						
-						dep.regEventHandler(new FrameEventHandler() {
-
-							final String text = cond.getHintText();
-							
-							@Override
-							public void handleEvent(Widget w, FrameEvent event) {
+						{
+							final String txt = cond.getHintText();
+							dep.listen(FrameEvent.class, (w, event) -> {
 								if(event.hovering) {
 									glPushMatrix();
 									final float fsize = 35;
-									double flen = Font.font.strLen(text, fsize);
+									double flen = Font.font.strLen(txt, fsize);
 									
 									glTranslated(-flen / 2, -30, 11);
 									
@@ -208,12 +198,11 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 									HudUtils.colorRect(0, 0, flen + 20, fsize + 20);
 									
 									glColor4f(1, 1, 1, 1);
-									Font.font.draw(text, 10, 10, fsize, 0xffffffff);
+									Font.font.draw(txt, 10, 10, fsize, 0xffffffff);
 									glPopMatrix();
 								}
-							}
-							
-						});
+							});
+						}
 						
 						BlendIn bi = new BlendIn();
 						bi.timeOffset = -600 - i * 200;
@@ -238,19 +227,15 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				boolean can = LearningHelper.canLearn(aData, developer, skill);
 				LearnButton button = new LearnButton(!can);
 				if(can) {
-					button.regEventHandler(new MouseDownHandler() {
-	
-						@Override
-						public void handleEvent(Widget w, MouseDownEvent event) {
-							overlay = new Overlay();
-							window.addWidget(overlay);
-							window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill), 
-								() -> {
-									developer.reset();
-									Syncs.startLearningSkill(developer, skill);
-								}));
-						}
-						
+					button.listen(MouseDownEvent.class, (w, e) -> 
+					{
+						overlay = new Overlay();
+						window.addWidget(overlay);
+						window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill), 
+							() -> {
+								developer.reset();
+								Syncs.startLearningSkill(developer, skill);
+							}));
 					});
 				}
 				
@@ -275,31 +260,23 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			TextBox.get(startButton).color.setColor4d(.6, .6, .6, 1);
 			TextBox.get(ret.getWidget("text_cons")).color.setColor4i(255, 66, 58, 255);
 		} else {
-			startButton.regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					ret.dispose();
-					
-					callback.invoke();
-					window.addWidget(createProgressTracker(type));
-				}
+			startButton.listen(MouseDownEvent.class, (w, e) -> 
+			{
+				ret.dispose();
 				
+				callback.invoke();
+				window.addWidget(createProgressTracker(type));
 			});
 		}
 		
 		TextBox.get(ret.getWidget("text_cons")).setContent(SkillTreeLocal.estmCons(estmCons));
 		TextBox.get(ret.getWidget("text_content")).setContent(type.getName(player));
 		
-		ret.getWidget("button_cancel").regEventHandler(new MouseDownHandler() {
-
-			@Override
-			public void handleEvent(Widget w, MouseDownEvent event) {
-				overlay.dispose();
-				overlay = null;
-				ret.dispose();
-			}
-			
+		ret.getWidget("button_cancel").listen(MouseDownEvent.class, (w, e) -> 
+		{
+			overlay.dispose();
+			overlay = null;
+			ret.dispose();
 		});
 		
 		return ret;
@@ -328,64 +305,52 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			int state = 0;
 			
 			{
-				addEventHandler(new FrameEventHandler() {
-					@Override
-					public void handleEvent(Widget w, FrameEvent event) {
-						DevState dstate = developer.getState();
-						if(dstate == DevState.FAILED && state != 2) {
-							state = 2;
+				addEventHandler(FrameEvent.class, (w, e) -> 
+				{
+					DevState dstate = developer.getState();
+					if(dstate == DevState.FAILED && state != 2) {
+						state = 2;
+						buttonText.setContent(SkillTreeLocal.ok());
+						progText.setContent(SkillTreeLocal.aborted());
+						progbar.color.setColor4i(244, 40, 40, 255);
+					} else {
+						if(state == 0 && dstate == DevState.DEVELOPING) {
+							state = 1;
+						}
+						if(state == 1 && dstate == DevState.DEVELOPING) {
+							progText.setContent(
+								SkillTreeLocal.progress((double) developer.stim / developer.maxStim));
+						}
+						if(state == 1 && dstate == DevState.IDLE) {
+							state = 3;
+							progText.setContent(SkillTreeLocal.successful());
 							buttonText.setContent(SkillTreeLocal.ok());
-							progText.setContent(SkillTreeLocal.aborted());
-							progbar.color.setColor4i(244, 40, 40, 255);
-						} else {
-							if(state == 0 && dstate == DevState.DEVELOPING) {
-								state = 1;
-							}
-							if(state == 1 && dstate == DevState.DEVELOPING) {
-								progText.setContent(
-									SkillTreeLocal.progress((double) developer.stim / developer.maxStim));
-							}
-							if(state == 1 && dstate == DevState.IDLE) {
-								state = 3;
-								progText.setContent(SkillTreeLocal.successful());
-								buttonText.setContent(SkillTreeLocal.ok());
-							}
 						}
 					}
-					
 				});
 				
-				button.regEventHandler(new MouseDownHandler() {
-
-					@Override
-					public void handleEvent(Widget w, MouseDownEvent event) {
-						if(state == 2) {
-							overlay.dispose();
-							overlay = null;
-							ret.dispose();
-						} else if(state == 3) {
-							// Dispose this gui completely and open a new one!
-							closeLock = true;
-							Minecraft.getMinecraft().displayGuiScreen(
-									new GuiSkillTreeDev(player, developer));
-						} else {
-							Syncs.abort(developer);
-						}
+				button.listen(MouseDownEvent.class, (w, event) -> {
+					if(state == 2) {
+						overlay.dispose();
+						overlay = null;
+						ret.dispose();
+					} else if(state == 3) {
+						// Dispose this gui completely and open a new one!
+						closeLock = true;
+						Minecraft.getMinecraft().displayGuiScreen(
+								new GuiSkillTreeDev(player, developer));
+					} else {
+						Syncs.abort(developer);
 					}
-					
 				});
 				
-				progbar.widget.regEventHandler(new FrameEventHandler() {
-
-					@Override
-					public void handleEvent(Widget w, FrameEvent event) {
-						if(state == 1) {
-							progbar.progress = (double) developer.stim / developer.maxStim;
-						} else if(state == 3) {
-							progbar.progress = 1;
-						}
+				progbar.widget.listen(FrameEvent.class, (w, event) -> 
+				{
+					if(state == 1) {
+						progbar.progress = (double) developer.stim / developer.maxStim;
+					} else if(state == 3) {
+						progbar.progress = 1;
 					}
-					
 				});
 			}
 		});
