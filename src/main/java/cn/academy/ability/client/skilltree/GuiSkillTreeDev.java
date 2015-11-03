@@ -305,7 +305,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			int state = 0;
 			
 			{
-				addEventHandler(FrameEvent.class, (w, e) -> 
+				listen(FrameEvent.class, (w, e) -> 
 				{
 					DevState dstate = developer.getState();
 					if(dstate == DevState.FAILED && state != 2) {

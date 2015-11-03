@@ -402,7 +402,7 @@ public class TerminalUI extends AuxGui {
 			id = _id;
 			app = _app;
 			
-			addEventHandler(FrameEvent.class, (w, e) -> {
+			listen(FrameEvent.class, (w, e) -> {
 				double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
 				boolean selected = getSelectedApp() == w;
 				

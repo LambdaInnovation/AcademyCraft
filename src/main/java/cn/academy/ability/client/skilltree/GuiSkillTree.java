@@ -412,7 +412,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	 		super("LevelHandler");
 	 		level = _level;
 	 		
-	 		addEventHandler(FrameEvent.class, (w, event) -> {
+	 		listen(FrameEvent.class, (w, event) -> {
 	 			glPushMatrix();
 				glTranslated(0, 0, 15);
 				if(event.hovering) {
@@ -427,7 +427,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 				glPopMatrix();
 	 		});
 	 		
-	 		addEventHandler(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
+	 		listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
 	 			
 	 			boolean checked = false;
 

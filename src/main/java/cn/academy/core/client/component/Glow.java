@@ -50,7 +50,7 @@ public class Glow extends Component {
 	public Glow() {
 		super("Glow");
 		
-		addEventHandler(FrameEvent.class, (w, event) -> {
+		listen(FrameEvent.class, (w, event) -> {
 			if(!writeDepth)
 				GL11.glDepthMask(false);
 			GL11.glPushMatrix();

@@ -49,7 +49,7 @@ public class BlendIn extends Component {
 		setAlpha(0);
 		
 		long time = GameTimer.getTime();
-		addEventHandler(FrameEvent.class, (w, event) -> 
+		listen(FrameEvent.class, (w, event) -> 
 		{
 			long delta = GameTimer.getTime() - time + timeOffset;
 			double factor = MathUtils.wrapd(0, 1, (double) delta / blendTime);

@@ -337,7 +337,7 @@ public class PresetEditUI extends GuiScreen {
 			super("Hint");
 			keyid = _keyid;
 			
-			addEventHandler(FrameEvent.class, (w, event) -> 
+			listen(FrameEvent.class, (w, event) -> 
 			{
 				Page page = getPage(w.getWidgetParent());
 				DrawTexture dt = DrawTexture.get(w);
@@ -345,7 +345,7 @@ public class PresetEditUI extends GuiScreen {
 				dt.color.a = page.alpha;
 			});
 			
-			addEventHandler(MouseDownEvent.class, (w, e) -> {
+			listen(MouseDownEvent.class, (w, e) -> {
 				Page page = getPage(w.getWidgetParent());
 				if(selector != null && !selector.disposed) {
 					selector.dispose();
@@ -376,7 +376,7 @@ public class PresetEditUI extends GuiScreen {
 		public TransitPage(int _id) {
 			super(_id);
 			
-			addEventHandler(FrameEvent.class, (w, e) -> 
+			listen(FrameEvent.class, (w, e) -> 
 			{
 				DrawTexture.get(w).color.a = alpha;
 			});
@@ -515,7 +515,7 @@ public class PresetEditUI extends GuiScreen {
 			public SelHandler(SelectionProvider _selection) {
 				super("_sel");
 				selection = _selection;
-				addEventHandler(MouseDownEvent.class, (w, e) -> {
+				listen(MouseDownEvent.class, (w, e) -> {
 					onEdit(keyid, selection.id);
 					Selector.this.dispose();
 				});

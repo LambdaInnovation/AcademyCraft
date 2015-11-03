@@ -88,14 +88,14 @@ public class PropertyElements {
 			
 			prop = _prop;
 			
-			addEventHandler(KeyEvent.class, (w, event) -> 
+			listen(KeyEvent.class, (w, event) -> 
 			{
 				if(editing) {
 					endEditing(event.keyCode);
 				}
 			});
 			
-			addEventHandler(GainFocusEvent.class, (w, e) ->
+			listen(GainFocusEvent.class, (w, e) ->
 			{
 				startEditing();
 			});
