@@ -25,10 +25,10 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.liutils.entityx.EntityCallback;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.entityx.EntityCallback;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,7 +78,7 @@ public class ElectronBomb extends Skill {
 					@Override
 					public void execute(EntityMdBall ball) {
 						MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
-							EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
+							EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
 						if(trace != null && trace.entityHit != null) {
 							MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
 						}

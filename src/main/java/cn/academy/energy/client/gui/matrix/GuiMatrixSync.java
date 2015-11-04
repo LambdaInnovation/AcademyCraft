@@ -29,7 +29,7 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

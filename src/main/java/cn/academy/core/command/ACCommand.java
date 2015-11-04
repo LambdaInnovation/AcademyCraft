@@ -12,8 +12,8 @@
  */
 package cn.academy.core.command;
 
+import cn.lambdalib.template.command.LICommandBase;
 import net.minecraft.command.ICommandSender;
-import cn.liutils.template.command.LICommandBase;
 
 /**
  * @author WeAthFolD

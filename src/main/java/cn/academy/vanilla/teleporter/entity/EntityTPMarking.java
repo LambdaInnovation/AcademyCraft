@@ -19,8 +19,8 @@ import cn.academy.vanilla.teleporter.client.MarkRender;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

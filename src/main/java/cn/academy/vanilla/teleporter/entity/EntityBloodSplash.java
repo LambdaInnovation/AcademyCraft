@@ -19,10 +19,10 @@ import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.template.client.render.entity.RenderIcon;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.template.client.render.entity.RenderIcon;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

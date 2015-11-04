@@ -18,11 +18,11 @@ import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD

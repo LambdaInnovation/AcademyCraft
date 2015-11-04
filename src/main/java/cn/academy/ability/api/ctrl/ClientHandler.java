@@ -20,8 +20,8 @@ import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.util.key.KeyHandler;
+import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

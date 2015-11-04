@@ -28,8 +28,8 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

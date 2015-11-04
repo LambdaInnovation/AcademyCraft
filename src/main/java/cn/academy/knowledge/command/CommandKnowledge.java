@@ -21,7 +21,7 @@ import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
-import cn.liutils.template.command.LICommandBase;
+import cn.lambdalib.template.command.LICommandBase;
 
 /**
  * @author WeAthFolD

@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import cn.academy.core.entity.EntityRayBase;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

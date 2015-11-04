@@ -15,7 +15,7 @@ package cn.academy.energy.api;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * @author WeathFolD

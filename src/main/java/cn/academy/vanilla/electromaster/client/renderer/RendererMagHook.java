@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;

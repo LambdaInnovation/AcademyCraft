@@ -13,9 +13,9 @@
 package cn.academy.ability.client.render;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.api.render.model.ItemModelCustom;
-import cn.liutils.template.client.render.item.RenderModelItem;
-import cn.liutils.util.generic.VecUtils;
+import cn.lambdalib.template.client.render.item.RenderModelItem;
+import cn.lambdalib.util.deprecated.ItemModelCustom;
+import cn.lambdalib.util.generic.VecUtils;
 
 /**
  * @author WeAthFolD

@@ -12,7 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.liutils.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.RandUtils.ranged;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
@@ -26,12 +26,12 @@ import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib.networkcall.s11n.InstanceSerializer;
 import cn.lambdalib.networkcall.s11n.SerializationManager;
-import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.util.entityx.handlers.Rigidbody;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

@@ -22,10 +22,10 @@ import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.ShaderSimple;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Color;
 
 /**
  * @author WeAthFolD

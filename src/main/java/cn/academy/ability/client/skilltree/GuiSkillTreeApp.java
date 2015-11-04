@@ -17,7 +17,7 @@ import cn.academy.ability.developer.DeveloperType;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.helper.Color;
 
 /**
  * @author WeAthFolD

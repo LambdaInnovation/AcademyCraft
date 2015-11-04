@@ -20,7 +20,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
-import cn.liutils.util.helper.Font;
+import cn.lambdalib.util.helper.Font;
 
 /**
  * The core resource utils of AC.

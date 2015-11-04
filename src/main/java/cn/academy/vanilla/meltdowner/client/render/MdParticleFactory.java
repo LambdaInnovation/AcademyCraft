@@ -13,10 +13,10 @@
 package cn.academy.vanilla.meltdowner.client.render;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.render.particle.ParticleFactory;
-import cn.liutils.render.particle.decorators.ParticleDecorator;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.particle.ParticleFactory;
+import cn.lambdalib.particle.decorators.ParticleDecorator;
+import cn.lambdalib.util.generic.RandUtils;
 
 /**
  * @author WeAthFolD

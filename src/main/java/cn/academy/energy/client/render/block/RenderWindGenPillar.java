@@ -13,8 +13,8 @@
 package cn.academy.energy.client.render.block;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.api.render.model.TileEntityModelCustom;
-import cn.liutils.template.client.render.block.RenderTileEntityModel;
+import cn.lambdalib.template.client.render.block.RenderTileEntityModel;
+import cn.lambdalib.util.deprecated.TileEntityModelCustom;
 
 /**
  * @author WeAthFolD

@@ -25,11 +25,11 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -201,7 +201,7 @@ public class JetEngine extends Skill {
 				MovingObjectPosition pos = Raytrace.perform(world, 
 					VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
 					VecUtils.vec(player.posX, player.posY, player.posZ),
-					EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living)
+					EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living)
 				);
 				if(pos != null && pos.entityHit != null) {
 					MDDamageHelper.attack(pos.entityHit, player, getDamage(aData));

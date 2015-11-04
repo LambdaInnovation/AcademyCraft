@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.lambdalib.multiblock.RenderBlockMultiModel;
-import cn.liutils.api.render.model.TileEntityModelCustom;
+import cn.lambdalib.util.deprecated.TileEntityModelCustom;
 
 /**
  * @author WeAthFolD

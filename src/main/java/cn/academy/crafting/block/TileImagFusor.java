@@ -28,7 +28,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

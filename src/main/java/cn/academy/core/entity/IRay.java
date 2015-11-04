@@ -1,7 +1,7 @@
 package cn.academy.core.entity;
 
+import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
 import net.minecraft.util.Vec3;
-import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
 
 /**
  * States used in RenderRay classes.

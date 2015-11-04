@@ -12,18 +12,19 @@
  */
 package cn.academy.core.client.render.ray;
 
-import static cn.liutils.util.generic.VecUtils.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
+import static cn.lambdalib.util.generic.VecUtils.*;
+
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.client.ViewOptimize;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.util.deprecated.ViewOptimize;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Motion3D;
 
 /**
  * @author WeAthFolD

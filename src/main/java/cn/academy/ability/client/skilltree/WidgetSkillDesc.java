@@ -21,10 +21,10 @@ import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.LostFocusEvent;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD

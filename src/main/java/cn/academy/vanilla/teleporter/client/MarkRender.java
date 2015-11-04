@@ -12,20 +12,18 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
-import cn.liutils.api.render.IDrawable;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.ShaderSimple;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
 public class MarkRender extends Render {
@@ -35,7 +33,7 @@ public class MarkRender extends Render {
 	}
 	
 	protected ResourceLocation[] tex = Resources.getEffectSeq("tp_mark", 7);
-	protected IDrawable model = new SimpleModelBiped();
+	protected SimpleModelBiped model = new SimpleModelBiped();
 
 	@Override
 	public void doRender(Entity ent, double x, double y, double z, float var8, float var9) {

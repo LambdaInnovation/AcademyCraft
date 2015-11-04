@@ -19,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.multiblock.BlockMulti;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * @author WeAthFolD

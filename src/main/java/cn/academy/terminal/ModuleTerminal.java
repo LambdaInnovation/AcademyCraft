@@ -6,7 +6,7 @@ import cn.academy.terminal.item.ItemTerminalInstaller;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
-import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 
 @Registrant
 @RegInit

@@ -25,7 +25,7 @@ import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.helper.Font.Align;
+import cn.lambdalib.util.helper.Font.Align;
 
 /**
  * @author WeAthFolD

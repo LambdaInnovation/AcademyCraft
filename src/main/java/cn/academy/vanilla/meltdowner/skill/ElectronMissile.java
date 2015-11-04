@@ -12,7 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.liutils.util.generic.RandUtils.*;
+import static cn.lambdalib.util.generic.RandUtils.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,9 +32,9 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -95,7 +95,7 @@ public class ElectronMissile extends Skill {
 				}
 				if(ticks != 0 && ticks % 8 == 0) {
 					List<Entity> list = WorldUtils.getEntities(player, instance.callFloatWithExp("range", aData), 
-						EntitySelectors.combine(EntitySelectors.excludeOf(player), EntitySelectors.living));
+						EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living));
 					if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
 						instance.callFloatWithExp("overload_attacked", aData), 
 						instance.callFloatWithExp("consumption_attacked", aData))) {

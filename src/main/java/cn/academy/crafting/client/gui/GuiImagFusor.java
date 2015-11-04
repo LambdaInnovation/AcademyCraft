@@ -30,7 +30,7 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
 
 /**

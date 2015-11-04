@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

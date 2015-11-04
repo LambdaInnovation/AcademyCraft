@@ -25,12 +25,12 @@ import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.liutils.entityx.event.CollideEvent;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.entityx.event.CollideEvent;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -147,7 +147,7 @@ public class RayBarrage extends Skill {
 						v3 = mo.clone().fromRotation(maxYaw, maxPitch).move(RAY_DIST).getPosVec(),
 						v4 = mo.clone().fromRotation(maxYaw, minPitch).move(RAY_DIST).getPosVec();
 					
-					AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4);
+					AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4);
 					
 					List<Entity> list = WorldUtils.getEntities(player.worldObj, aabb, selector);
 					for(Entity e : list) {

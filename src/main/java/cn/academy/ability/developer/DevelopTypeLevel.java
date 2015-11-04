@@ -18,7 +18,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.client.skilltree.SkillTreeLocal;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.generic.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 

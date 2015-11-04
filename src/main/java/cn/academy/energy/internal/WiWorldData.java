@@ -38,9 +38,9 @@ import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.liutils.util.helper.BlockPos;
-import cn.liutils.util.mc.IBlockFilter;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.helper.BlockPos;
+import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.WorldUtils;
 
 /**
  * @author WeAthFolD

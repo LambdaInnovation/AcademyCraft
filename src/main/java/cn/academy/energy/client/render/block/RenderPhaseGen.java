@@ -21,8 +21,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.TilePhaseGen;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.generic.MathUtils;
 
 /**
  * @author WeAthFolD

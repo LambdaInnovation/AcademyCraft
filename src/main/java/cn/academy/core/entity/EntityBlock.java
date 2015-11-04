@@ -31,10 +31,10 @@ import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.entityx.event.CollideEvent;
-import cn.liutils.entityx.event.CollideEvent.CollideHandler;
-import cn.liutils.entityx.handlers.Rigidbody;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.entityx.event.CollideEvent;
+import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
+import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

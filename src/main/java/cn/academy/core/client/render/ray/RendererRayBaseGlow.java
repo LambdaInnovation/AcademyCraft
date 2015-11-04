@@ -24,10 +24,10 @@ import net.minecraft.util.Vec3;
 import static org.lwjgl.opengl.GL11.*;
 
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.ViewOptimize;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.deprecated.ViewOptimize;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
 
 /**
  * Renderer to draw glow texture

@@ -25,9 +25,9 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.deprecated.Mesh;
+import cn.lambdalib.util.deprecated.SimpleMaterial;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

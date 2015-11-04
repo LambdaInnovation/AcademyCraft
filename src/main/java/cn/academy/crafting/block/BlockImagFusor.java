@@ -27,7 +27,7 @@ import cn.academy.crafting.client.gui.GuiImagFusor;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -25,8 +25,8 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.node.UnlinkUserEvent;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.util.generic.RandUtils;
 
 /**
  * @author WeAthFolD

@@ -16,7 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 
 /**
  * @author WeAthFolD

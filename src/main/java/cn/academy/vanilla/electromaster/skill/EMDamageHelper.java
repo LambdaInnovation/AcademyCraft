@@ -2,7 +2,7 @@ package cn.academy.vanilla.electromaster.skill;
 
 import cn.academy.core.util.DamageHelper;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.generic.RandUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;

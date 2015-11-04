@@ -27,9 +27,9 @@ import cn.lambdalib.networkcall.Future.FutureCallback;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.liutils.registry.RegDataPart;
-import cn.liutils.util.helper.DataPart;
-import cn.liutils.util.helper.PlayerData;
+import cn.lambdalib.util.datapart.DataPart;
+import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.RegDataPart;
 
 import com.google.common.collect.ImmutableList;
 

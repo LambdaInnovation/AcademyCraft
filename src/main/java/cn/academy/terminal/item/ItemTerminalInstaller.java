@@ -20,7 +20,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.liutils.api.gui.AuxGuiHandler;
+import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

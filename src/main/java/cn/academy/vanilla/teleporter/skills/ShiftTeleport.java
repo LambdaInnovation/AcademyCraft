@@ -24,14 +24,14 @@ import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -188,7 +188,7 @@ public class ShiftTeleport extends Skill {
 			int[] dest = getTraceDest();
 			Vec3 v0 = VecUtils.vec(player.posX, player.posY, player.posZ), v1 = VecUtils.vec(dest[0] + .5, dest[1] + .5, dest[2] + .5);
 			
-			AxisAlignedBB area = WorldUtils.ofPoints(v0, v1);
+			AxisAlignedBB area = WorldUtils.minimumBounds(v0, v1);
 			IEntitySelector selector = new IEntitySelector() {
 
 				@Override
@@ -201,7 +201,7 @@ public class ShiftTeleport extends Skill {
 				
 			};
 			return WorldUtils.getEntities(player.worldObj, area, 
-				EntitySelectors.combine(EntitySelectors.living, EntitySelectors.excludeOf(player), selector));
+				EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player), selector));
 		}
 		
 		// CLIENT

@@ -21,7 +21,7 @@ import cn.academy.energy.client.gui.GuiPhaseGen;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

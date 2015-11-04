@@ -24,11 +24,11 @@ import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.client.ViewOptimize;
-import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.util.deprecated.ViewOptimize;
+import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

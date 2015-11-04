@@ -18,8 +18,8 @@ import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD

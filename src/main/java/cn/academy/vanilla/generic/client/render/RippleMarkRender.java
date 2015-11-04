@@ -20,10 +20,10 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.deprecated.Mesh;
+import cn.lambdalib.util.deprecated.SimpleMaterial;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD

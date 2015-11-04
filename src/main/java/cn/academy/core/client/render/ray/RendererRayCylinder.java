@@ -19,10 +19,10 @@ import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 import cn.academy.core.entity.IRay;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.GLSLMesh;
-import cn.liutils.util.client.shader.ShaderNotex;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.GLSLMesh;
+import cn.lambdalib.util.client.shader.ShaderNotex;
+import cn.lambdalib.util.helper.Color;
 
 /**
  * Renderer to draw the concrete cylinder

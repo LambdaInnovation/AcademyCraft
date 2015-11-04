@@ -19,7 +19,7 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.GuiLinkToNode;
 import cn.academy.support.ic2.TileEUOutput;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

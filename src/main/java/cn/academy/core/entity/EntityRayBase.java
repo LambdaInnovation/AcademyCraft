@@ -17,10 +17,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.entityx.EntityCallback;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.entityx.EntityCallback;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

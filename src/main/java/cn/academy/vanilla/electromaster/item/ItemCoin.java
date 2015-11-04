@@ -21,7 +21,7 @@ import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;

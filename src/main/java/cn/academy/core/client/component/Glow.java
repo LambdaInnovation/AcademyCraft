@@ -21,7 +21,7 @@ import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.loader.CGUIEditor;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -34,12 +34,12 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.liutils.core.event.eventhandler.LIFMLGameEventDispatcher;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.deprecated.LIFMLGameEventDispatcher;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -201,7 +201,7 @@ public class Flashing extends SpecialSkill {
 				dir.xCoord, dir.yCoord, dir.zCoord);
 			
 			MovingObjectPosition mop = Raytrace.perform(world, mo.getPosVec(), mo.move(dist).getPosVec(), 
-					EntitySelectors.combine(EntitySelectors.living, EntitySelectors.excludeOf(player)));
+					EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
 			
 			double x, y, z;
 			

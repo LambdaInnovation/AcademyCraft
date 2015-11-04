@@ -16,7 +16,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.core.util.SubscribePipeline;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;

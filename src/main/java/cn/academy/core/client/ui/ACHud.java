@@ -19,8 +19,8 @@ import net.minecraft.client.gui.ScaledResolution;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.LIGui;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.liutils.api.gui.AuxGui;
-import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
+import cn.lambdalib.util.client.auxgui.AuxGui;
+import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
 
 /**
  * AC global HUD drawing dispatcher.

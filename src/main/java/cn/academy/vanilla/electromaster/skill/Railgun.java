@@ -34,7 +34,7 @@ import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.liutils.util.client.renderhook.DummyRenderData;
+import cn.lambdalib.util.client.renderhook.DummyRenderData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

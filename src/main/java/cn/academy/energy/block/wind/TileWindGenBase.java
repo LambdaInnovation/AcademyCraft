@@ -27,7 +27,7 @@ import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -31,7 +31,7 @@ import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegWorldGen;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

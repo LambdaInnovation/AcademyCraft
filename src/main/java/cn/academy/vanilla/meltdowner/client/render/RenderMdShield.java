@@ -17,12 +17,12 @@ import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
-import cn.liutils.render.mesh.MeshUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.GLSLMesh;
-import cn.liutils.util.client.shader.ShaderSimple;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.GLSLMesh;
+import cn.lambdalib.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.deprecated.MeshUtils;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

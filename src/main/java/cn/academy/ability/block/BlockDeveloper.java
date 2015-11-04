@@ -15,7 +15,7 @@ package cn.academy.ability.block;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.core.block.ACBlockMulti;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

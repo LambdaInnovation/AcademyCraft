@@ -22,7 +22,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
-import cn.liutils.util.helper.PlayerDataTag;
+import cn.lambdalib.util.datapart.PlayerDataTag;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

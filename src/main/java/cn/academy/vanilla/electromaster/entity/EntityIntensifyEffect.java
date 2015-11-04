@@ -16,9 +16,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.vanilla.electromaster.client.effect.SubArc;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityCallback;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
+import cn.lambdalib.util.entityx.EntityCallback;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
 
 /**
  * @author WeAthFolD

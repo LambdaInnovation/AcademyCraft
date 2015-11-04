@@ -12,10 +12,10 @@
  */
 package cn.academy.core.util;
 
-import static cn.liutils.util.generic.VecUtils.add;
-import static cn.liutils.util.generic.VecUtils.multiply;
-import static cn.liutils.util.generic.VecUtils.subtract;
-import static cn.liutils.util.generic.VecUtils.vec;
+import static cn.lambdalib.util.generic.VecUtils.add;
+import static cn.lambdalib.util.generic.VecUtils.multiply;
+import static cn.lambdalib.util.generic.VecUtils.subtract;
+import static cn.lambdalib.util.generic.VecUtils.vec;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,12 +33,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.event.BlockDestroyEvent;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.WorldUtils;
 
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,
@@ -135,7 +135,7 @@ public class RangedRayDamage {
 				v5 = add(v1, multiply(slope, maxIncrement)),
 				v6 = add(v2, multiply(slope, maxIncrement)),
 				v7 = add(v3, multiply(slope, maxIncrement));
-			AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4, v5, v6, v7);
+			AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
 			
 			IEntitySelector areaSelector = new IEntitySelector() {
 
@@ -147,7 +147,7 @@ public class RangedRayDamage {
 				}
 				
 			};
-			List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.combine(entitySelector, areaSelector));
+			List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.and(entitySelector, areaSelector));
 			for(Entity e : targets) {
 				attackEntity(e);
 			}

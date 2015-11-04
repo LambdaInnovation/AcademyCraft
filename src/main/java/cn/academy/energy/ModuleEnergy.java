@@ -34,8 +34,8 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
 import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.multiblock.ItemBlockMulti;
-import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
 /**
  * @author WeAthFolD

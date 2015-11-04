@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.entity.EntityBlock;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.RenderUtils;
 
 /**
  * @author WeAthFolD

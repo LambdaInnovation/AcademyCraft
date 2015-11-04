@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import cn.academy.core.AcademyCraft;
-import cn.liutils.registry.RegDataPart;
-import cn.liutils.util.helper.DataPart;
+import cn.lambdalib.util.datapart.DataPart;
+import cn.lambdalib.util.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import scala.actors.threadpool.Arrays;

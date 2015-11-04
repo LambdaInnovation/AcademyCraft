@@ -16,10 +16,10 @@ import org.lwjgl.opengl.GL11;
 
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

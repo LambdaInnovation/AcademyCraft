@@ -12,20 +12,18 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import cn.liutils.api.render.IDrawable;
 import net.minecraft.client.model.ModelBiped;
 
 /**
  * @author WeathFolD
  *
  */
-public class SimpleModelBiped extends ModelBiped implements IDrawable {
+public class SimpleModelBiped extends ModelBiped {
 
 	public SimpleModelBiped() {
 		super(0.0f);
 	}
 
-	@Override
 	public void draw() {
 		float par7 = 0.0625f;
 		this.bipedHead.render(par7);

@@ -20,7 +20,7 @@ import cn.academy.core.block.TileReceiverBase;
 import cn.lambdalib.annoreg.core.RegWithName;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.liutils.util.generic.DebugUtils;
+import cn.lambdalib.util.generic.DebugUtils;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;

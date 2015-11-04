@@ -21,8 +21,8 @@ import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
-import cn.liutils.api.render.model.ItemModelCustom;
-import cn.liutils.template.client.render.item.RenderModelItem;
+import cn.lambdalib.template.client.render.item.RenderModelItem;
+import cn.lambdalib.util.deprecated.ItemModelCustom;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
