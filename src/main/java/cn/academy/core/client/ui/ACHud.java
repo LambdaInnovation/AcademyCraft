@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.ScaledResolution;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.Widget;
 import cn.liutils.api.gui.AuxGui;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.Widget;
 import cn.liutils.registry.AuxGuiRegistry.RegAuxGui;
 
 /**

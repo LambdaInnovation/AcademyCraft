@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.client.shader.ShaderProgram;
 import net.minecraft.util.ResourceLocation;

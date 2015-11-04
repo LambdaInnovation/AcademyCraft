@@ -5,8 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import cn.academy.core.command.ACCommand;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegCommand;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegCommand;
 
 /**
  * @author EAirPeter

@@ -18,16 +18,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
 import cn.academy.core.util.ValuePipeline;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.core.RegistrationManager;
-import cn.annoreg.core.RegistrationMod;
-import cn.annoreg.mc.RegItem;
-import cn.annoreg.mc.RegMessageHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.RegistrationManager;
+import cn.lambdalib.annoreg.core.RegistrationMod;
+import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegMessageHandler;
+import cn.lambdalib.ripple.ScriptFunction;
+import cn.lambdalib.ripple.ScriptProgram;
 import cn.liutils.check.ResourceCheck;
 import cn.liutils.crafting.CustomMappingHelper;
 import cn.liutils.crafting.RecipeRegistry;
-import cn.liutils.ripple.ScriptFunction;
-import cn.liutils.ripple.ScriptProgram;
 import cn.liutils.util.client.shader.ShaderProgram;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -53,7 +53,7 @@ import net.minecraftforge.common.config.Configuration;
  * @author acaly, WeathFolD, KS
  *
  */
-@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION, dependencies="required-after:LIUtils")
+@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION, dependencies="required-after:LambdaLib")
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 public class AcademyCraft {

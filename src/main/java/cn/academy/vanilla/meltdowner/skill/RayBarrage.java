@@ -24,7 +24,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.liutils.entityx.event.CollideEvent;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Motion3D;

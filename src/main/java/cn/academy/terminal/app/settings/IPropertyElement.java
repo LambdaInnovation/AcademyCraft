@@ -14,7 +14,7 @@ package cn.academy.terminal.app.settings;
 
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.AcademyCraft;
-import cn.liutils.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.Widget;
 
 /**
  * @author WeAthFolD

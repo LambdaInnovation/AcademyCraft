@@ -14,8 +14,8 @@ package cn.academy.energy.block.wind;
 
 import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.client.render.block.RenderWindGenPillar;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -23,7 +23,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.generic.RandUtils;
 import cn.liutils.util.generic.VecUtils;

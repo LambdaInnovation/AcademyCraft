@@ -13,12 +13,12 @@
 package cn.academy.ability.developer;
 
 import cn.academy.ability.block.TileDeveloper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.InstanceSerializer;
-import cn.annoreg.mc.s11n.RegSerializable;
-import cn.annoreg.mc.s11n.SerializationManager;
-import cn.annoreg.mc.s11n.StorageOption;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.InstanceSerializer;
+import cn.lambdalib.networkcall.s11n.RegSerializable;
+import cn.lambdalib.networkcall.s11n.SerializationManager;
+import cn.lambdalib.networkcall.s11n.StorageOption;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;

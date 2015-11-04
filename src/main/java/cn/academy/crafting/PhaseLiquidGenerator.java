@@ -14,10 +14,10 @@ package cn.academy.crafting;
 
 import java.util.Random;
 
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegWorldGen;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 
 /**

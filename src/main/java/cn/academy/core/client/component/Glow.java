@@ -15,12 +15,12 @@ package cn.academy.core.client.component;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.Component;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.loader.CGUIEditor;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.Component;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.loader.CGUIEditor;
 import cn.liutils.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

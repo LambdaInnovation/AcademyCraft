@@ -13,11 +13,11 @@
 package cn.academy.ability.client.skilltree;
 
 import cn.academy.core.client.component.Glow;
-import cn.liutils.cgui.gui.component.Component;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.component.Tint;
-import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.component.Component;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.GameTimer;
 

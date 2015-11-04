@@ -28,8 +28,8 @@ import cn.academy.energy.api.event.wen.UnlinkNodeEvent;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 

@@ -25,7 +25,7 @@ import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.ability.api.event.SkillExpChangedEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;

@@ -4,11 +4,11 @@ import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.Future;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.Future;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
 
 @Registrant

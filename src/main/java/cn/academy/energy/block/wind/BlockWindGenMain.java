@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.gui.wind.GuiWindGenMain;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

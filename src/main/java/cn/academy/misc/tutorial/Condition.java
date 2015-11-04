@@ -9,7 +9,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
-import cn.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.liutils.util.helper.PlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;

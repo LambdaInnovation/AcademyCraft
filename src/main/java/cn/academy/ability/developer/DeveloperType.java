@@ -3,7 +3,7 @@ package cn.academy.ability.developer;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.IFConstants;
-import cn.liutils.ripple.ScriptNamespace;
+import cn.lambdalib.ripple.ScriptNamespace;
 import net.minecraft.util.ResourceLocation;
 
 public enum DeveloperType {

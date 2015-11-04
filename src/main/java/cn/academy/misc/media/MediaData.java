@@ -18,7 +18,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.liutils.registry.RegDataPart;
 import cn.liutils.util.helper.DataPart;
 import cn.liutils.util.helper.PlayerData;

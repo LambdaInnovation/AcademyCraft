@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
-import cn.annoreg.base.RegistrationFieldSimple;
-import cn.annoreg.core.LoadStage;
-import cn.annoreg.core.RegistryTypeDecl;
+import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
+import cn.lambdalib.annoreg.core.LoadStage;
+import cn.lambdalib.annoreg.core.RegistryTypeDecl;
 
 @RegistryTypeDecl
 public class AppRegistration extends RegistrationFieldSimple<RegApp, App> {

@@ -12,8 +12,8 @@
  */
 package cn.academy.knowledge;
 
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
 
 /**
  * @author WeAthFolD

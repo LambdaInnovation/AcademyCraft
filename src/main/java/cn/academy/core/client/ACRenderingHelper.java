@@ -14,8 +14,8 @@ package cn.academy.core.client;
 
 import org.lwjgl.opengl.GL11;
 
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.ForcePreloadTexture;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.MathUtils;

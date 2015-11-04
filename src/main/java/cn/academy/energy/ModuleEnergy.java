@@ -30,12 +30,12 @@ import cn.academy.energy.block.wind.BlockWindGenPillar;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegBlock;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegBlock;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.multiblock.ItemBlockMulti;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
-import cn.liutils.template.block.ItemBlockMulti;
 
 /**
  * @author WeAthFolD

@@ -17,9 +17,9 @@ import static cn.academy.support.rf.RFSupport.rf2if;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
-import cn.annoreg.core.RegWithName;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
+import cn.lambdalib.annoreg.core.RegWithName;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.liutils.util.generic.DebugUtils;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;

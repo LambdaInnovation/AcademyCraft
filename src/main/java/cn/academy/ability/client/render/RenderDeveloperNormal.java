@@ -15,8 +15,8 @@ package cn.academy.ability.client.render;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
+import cn.lambdalib.multiblock.RenderBlockMultiModel;
 import cn.liutils.api.render.model.TileEntityModelCustom;
-import cn.liutils.template.block.RenderBlockMultiModel;
 import net.minecraft.tileentity.TileEntity;
 
 /**

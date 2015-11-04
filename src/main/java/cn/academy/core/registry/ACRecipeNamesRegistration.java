@@ -18,10 +18,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.AnnotationData;
-import cn.annoreg.core.LoadStage;
-import cn.annoreg.core.RegistryType;
-import cn.annoreg.core.RegistryTypeDecl;
+import cn.lambdalib.annoreg.core.AnnotationData;
+import cn.lambdalib.annoreg.core.LoadStage;
+import cn.lambdalib.annoreg.core.RegistryType;
+import cn.lambdalib.annoreg.core.RegistryTypeDecl;
 
 /**
  * @author WeAthFolD

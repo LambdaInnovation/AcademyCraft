@@ -2,8 +2,8 @@ package cn.academy.ability.api.data;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.util.SubscribePipeline;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
 import net.minecraft.entity.player.EntityPlayer;
 
 @Registrant

@@ -19,9 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.s11n.InstanceSerializer;
-import cn.annoreg.mc.s11n.RegSerializable;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.s11n.InstanceSerializer;
+import cn.lambdalib.networkcall.s11n.RegSerializable;
 
 /**
  * @author WeAthFolD

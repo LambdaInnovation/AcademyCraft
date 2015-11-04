@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 
 /**
  * @author WeAthFolD

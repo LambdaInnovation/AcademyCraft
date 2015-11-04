@@ -22,9 +22,9 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.misc.media.ItemMedia;
 import cn.academy.misc.media.MediaRegistry;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
 
 /**
  * @author WeAthFolD

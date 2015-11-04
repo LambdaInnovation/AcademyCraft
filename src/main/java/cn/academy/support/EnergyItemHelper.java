@@ -18,8 +18,8 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.IFItemManager;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
 
 /**
  * A generic-typed item energy helper.

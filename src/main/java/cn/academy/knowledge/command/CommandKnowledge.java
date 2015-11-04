@@ -19,8 +19,8 @@ import net.minecraft.command.ICommandSender;
 import cn.academy.core.command.ACCommand;
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegCommand;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegCommand;
 import cn.liutils.template.command.LICommandBase;
 
 /**

@@ -17,8 +17,8 @@ import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.template.client.render.entity.RenderIcon;

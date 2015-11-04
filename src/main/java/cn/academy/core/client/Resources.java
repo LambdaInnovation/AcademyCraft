@@ -18,8 +18,8 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.ForcePreloadTexture;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.liutils.util.helper.Font;
 
 /**

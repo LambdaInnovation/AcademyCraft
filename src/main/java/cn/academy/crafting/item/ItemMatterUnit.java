@@ -19,7 +19,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegItem;
 import cn.liutils.util.mc.PlayerUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

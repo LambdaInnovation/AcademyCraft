@@ -29,7 +29,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
-import cn.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.core.Registrant;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

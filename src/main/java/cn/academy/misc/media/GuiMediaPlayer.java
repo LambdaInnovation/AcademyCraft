@@ -17,22 +17,22 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiScreen;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ElementList;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.component.VerticalDragBar;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.GuiEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ElementList;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.GuiEvent;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD

@@ -19,11 +19,11 @@ import net.minecraft.world.World;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderSolarGen;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
-import cn.liutils.template.block.BlockMulti;
-import cn.liutils.template.block.IMultiTile;
-import cn.liutils.template.block.InfoBlockMulti;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.multiblock.BlockMulti;
+import cn.lambdalib.multiblock.IMultiTile;
+import cn.lambdalib.multiblock.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

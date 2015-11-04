@@ -15,7 +15,7 @@ package cn.academy.vanilla.electromaster.item;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegItem;
 import cn.liutils.api.render.model.ItemModelCustom;
 import cn.liutils.template.client.render.item.RenderModelItem;
 import cpw.mods.fml.relauncher.Side;

@@ -22,7 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.liutils.util.mc.StackUtils;
 
 /**

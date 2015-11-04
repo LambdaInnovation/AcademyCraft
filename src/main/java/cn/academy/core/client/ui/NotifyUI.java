@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.client.RenderUtils;
 import cn.liutils.util.generic.VecUtils;

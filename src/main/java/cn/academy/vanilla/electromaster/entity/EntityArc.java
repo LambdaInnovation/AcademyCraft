@@ -22,8 +22,8 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.util.client.ViewOptimize;
 import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;

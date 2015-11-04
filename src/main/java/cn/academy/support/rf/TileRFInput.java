@@ -13,9 +13,9 @@
 package cn.academy.support.rf;
 
 import cn.academy.core.block.TileGeneratorBase;
-import cn.annoreg.core.RegWithName;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
+import cn.lambdalib.annoreg.core.RegWithName;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.util.ForgeDirection;
 

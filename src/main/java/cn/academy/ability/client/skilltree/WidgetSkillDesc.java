@@ -17,10 +17,10 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 
 import cn.academy.ability.client.skilltree.GuiSkillTree.SkillHandler;
 import cn.academy.core.client.component.Glow;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.IGuiEventHandler;
-import cn.liutils.cgui.gui.event.LostFocusEvent;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
+import cn.lambdalib.cgui.gui.event.LostFocusEvent;
 import cn.liutils.util.client.HudUtils;
 import cn.liutils.util.generic.MathUtils;
 import cn.liutils.util.helper.Color;

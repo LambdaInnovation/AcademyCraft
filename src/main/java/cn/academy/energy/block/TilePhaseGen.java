@@ -25,11 +25,11 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderPhaseGen;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

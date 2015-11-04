@@ -3,9 +3,9 @@ package cn.academy.terminal;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.terminal.item.ItemApp;
 import cn.academy.terminal.item.ItemTerminalInstaller;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
 import cn.liutils.crafting.CustomMappingHelper.RecipeName;
 
 @Registrant

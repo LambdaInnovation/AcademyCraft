@@ -1,8 +1,8 @@
 package cn.academy.core.debug;
 
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;

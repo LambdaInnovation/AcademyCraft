@@ -26,9 +26,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.mc.RegInit;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.EntityCallback;
 import cn.liutils.entityx.MotionHandler;

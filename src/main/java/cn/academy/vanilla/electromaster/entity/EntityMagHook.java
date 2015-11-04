@@ -14,8 +14,8 @@ package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererMagHook;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.liutils.entityx.EntityAdvanced;
 import cn.liutils.entityx.MotionHandler;
 import cn.liutils.entityx.event.CollideEvent;

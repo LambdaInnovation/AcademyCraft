@@ -18,7 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.liutils.template.block.BlockMulti;
+import cn.lambdalib.multiblock.BlockMulti;
 import cn.liutils.util.mc.StackUtils;
 
 /**

@@ -16,10 +16,10 @@ import net.minecraft.item.ItemStack;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cpw.mods.fml.relauncher.Side;
 
 /**
