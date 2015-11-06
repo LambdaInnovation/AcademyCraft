@@ -119,6 +119,8 @@ public class ACRenderingHelper {
 		Tessellator t = Tessellator.instance;
 		double dy = y1 - y0, dx = x1 - x0, len = Math.sqrt(dy * dy + dx * dx);
 		double theta = MathUtils.toAngle(Math.atan2(dy, dx));
+		boolean pre = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x0, y0, 0);
 		GL11.glRotated(theta, 0, 0, 1);
@@ -129,6 +131,8 @@ public class ACRenderingHelper {
 		t.addVertex(len, -hw, 0);
 		t.draw();
 		GL11.glPopMatrix();
+		if(pre) 
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 	private static void gdraw(ResourceLocation tex, double x, double y, double width, double height) {
