@@ -20,7 +20,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
@@ -31,15 +30,14 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
-import cn.liutils.entityx.handlers.Life;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.entityx.handlers.Life;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -115,7 +113,7 @@ public class ThunderBolt extends Skill {
 				instance.triggerAchievement(player);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)
@@ -159,7 +157,7 @@ public class ThunderBolt extends Skill {
 			Entity target = hitEntity ? result.entityHit : null;
 			List<Entity> aoes = WorldUtils.getEntities(
 				player.worldObj, end.xCoord, end.yCoord, end.zCoord,
-				AOE_RANGE, EntitySelectors.combine(EntitySelectors.living, exclusion));
+				AOE_RANGE, EntitySelectors.and(EntitySelectors.living, exclusion));
 			
 			return new AttackData(aoes, target, end);
 		}

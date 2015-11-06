@@ -12,26 +12,24 @@
  */
 package cn.academy.core.client.ui;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Font;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Font;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
@@ -68,55 +66,50 @@ public class NotifyUI extends Widget {
 	}
 	
 	public void addDrawing() {
-		regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				GL11.glDisable(GL11.GL_ALPHA_TEST);
-				if(lastNotify != null) {
-					long dt = GameTimer.getTime() - lastReceiveTime;
-					GL11.glEnable(GL11.GL_BLEND);
+		listen(FrameEvent.class, (w, e) -> {
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			if(lastNotify != null) {
+				long dt = GameTimer.getTime() - lastReceiveTime;
+				GL11.glEnable(GL11.GL_BLEND);
+				
+				if(dt < BLEND_IN_TIME) {
+					drawBack(Math.min(dt / 300.0, 1));
 					
-					if(dt < BLEND_IN_TIME) {
-						drawBack(Math.min(dt / 300.0, 1));
-						
-						//Draw the icon
-						double iconAlpha = Math.max(0, Math.min(1, (dt - 200) / 300.0));
-						drawIcon(start, iconAlpha);
-						
-						
-					} else if(dt < SCAN_TIME + BLEND_IN_TIME) { //Slide-In stage
-						
-						double scanProgress = (dt - BLEND_IN_TIME) / SCAN_TIME;
-						scanProgress = Math.sin(scanProgress * Math.PI / 2); //Use sin to simulation speed-down effect
-						
-						drawBack(1);
-						drawIcon(VecUtils.lerp(start, end, scanProgress), 1);
-						drawText(scanProgress);
-						
-					} else if(dt < KEEP_TIME - BLEND_OUT_TIME) {
-						
-						drawBack(1);
-						drawIcon(end, 1);
-						drawText(1);
-						
-					} else if(dt < KEEP_TIME) { 
-						
-						double alpha = 1 - (dt - (KEEP_TIME - BLEND_OUT_TIME)) / BLEND_OUT_TIME;
-						drawBack(alpha);
-						drawIcon(end, alpha);
-						drawText(alpha);
-						
-					} else {
-						//Blah, kill it
-						lastNotify = null;
-					}
+					//Draw the icon
+					double iconAlpha = Math.max(0, Math.min(1, (dt - 200) / 300.0));
+					drawIcon(start, iconAlpha);
 					
-					GL11.glColor4d(1, 1, 1, 1);
+					
+				} else if(dt < SCAN_TIME + BLEND_IN_TIME) { //Slide-In stage
+					
+					double scanProgress = (dt - BLEND_IN_TIME) / SCAN_TIME;
+					scanProgress = Math.sin(scanProgress * Math.PI / 2); //Use sin to simulation speed-down effect
+					
+					drawBack(1);
+					drawIcon(VecUtils.lerp(start, end, scanProgress), 1);
+					drawText(scanProgress);
+					
+				} else if(dt < KEEP_TIME - BLEND_OUT_TIME) {
+					
+					drawBack(1);
+					drawIcon(end, 1);
+					drawText(1);
+					
+				} else if(dt < KEEP_TIME) { 
+					
+					double alpha = 1 - (dt - (KEEP_TIME - BLEND_OUT_TIME)) / BLEND_OUT_TIME;
+					drawBack(alpha);
+					drawIcon(end, alpha);
+					drawText(alpha);
+					
+				} else {
+					//Blah, kill it
+					lastNotify = null;
 				}
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				
+				GL11.glColor4d(1, 1, 1, 1);
 			}
-			
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		});
 	}
 	

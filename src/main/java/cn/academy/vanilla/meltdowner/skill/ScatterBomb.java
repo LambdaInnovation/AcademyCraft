@@ -28,13 +28,12 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -129,7 +128,7 @@ public class ScatterBomb extends Skill {
 					Vec3 dest = newDest();
 					MovingObjectPosition traceResult = Raytrace.perform(world,
 						VecUtils.vec(ball.posX, ball.posY, ball.posZ), dest,
-						EntitySelectors.combine(basicSelector, EntitySelectors.excludeOf(player)));
+						EntitySelectors.and(basicSelector, EntitySelectors.excludeOf(player)));
 					if(traceResult != null && traceResult.entityHit != null) {
 						traceResult.entityHit.hurtResistantTime = -1;
 						MDDamageHelper.attack(traceResult.entityHit, player, getDamage(aData));

@@ -1,11 +1,6 @@
 package cn.academy.misc.achievements;
 
-import java.util.HashSet;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.AchievementPage;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
@@ -13,11 +8,9 @@ import cn.academy.misc.achievements.pages.PageCtElectromaster;
 import cn.academy.misc.achievements.pages.PageCtMeltdowner;
 import cn.academy.misc.achievements.pages.PageCtTeleporter;
 import cn.academy.misc.achievements.pages.PageDefault;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
 
 /**
  * @author EAirPeter

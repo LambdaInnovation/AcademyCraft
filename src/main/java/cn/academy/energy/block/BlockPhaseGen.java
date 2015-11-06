@@ -18,10 +18,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.GuiPhaseGen;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

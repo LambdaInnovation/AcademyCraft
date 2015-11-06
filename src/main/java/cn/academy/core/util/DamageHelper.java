@@ -24,12 +24,12 @@ import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.core.event.ConfigModifyEvent;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

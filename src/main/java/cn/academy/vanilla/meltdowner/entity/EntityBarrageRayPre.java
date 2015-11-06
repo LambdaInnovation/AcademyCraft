@@ -14,9 +14,9 @@ package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.World;

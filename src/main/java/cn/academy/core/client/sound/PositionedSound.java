@@ -13,7 +13,6 @@
 package cn.academy.core.client.sound;
 
 import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**

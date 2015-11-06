@@ -12,25 +12,24 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
@@ -104,10 +103,7 @@ public class PenetrateTeleport extends Skill {
 		}.addChild(action);
 	}
 	
-	public static class PenetrateAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class PenetrateAction extends SkillSyncAction {
 		
 		// Final calculated dest
 		Dest dest;
@@ -118,8 +114,7 @@ public class PenetrateTeleport extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
 			if(isRemote) startEffects();
 		}
@@ -162,7 +157,7 @@ public class PenetrateTeleport extends Skill {
 			if(isRemote) {
 				player.setPosition(x, y, z);
 				ACSounds.playClient(player, "tp.tp", .5f);
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 			} else {
 				cpData.performWithForce(instance.getOverload(aData), (float) (distance * instance.getConsumption(aData)));
 				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));

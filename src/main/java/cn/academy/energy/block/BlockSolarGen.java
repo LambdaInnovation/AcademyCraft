@@ -14,7 +14,7 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.client.gui.GuiLinkToNode;
-import cn.liutils.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;

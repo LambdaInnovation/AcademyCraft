@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.misc.achievements.ItemAchievement;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 

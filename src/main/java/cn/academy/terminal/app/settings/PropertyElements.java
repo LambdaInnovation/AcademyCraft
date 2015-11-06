@@ -1,29 +1,24 @@
 package cn.academy.terminal.app.settings;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.client.Resources;
 import cn.academy.core.event.ConfigModifyEvent;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.Component;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.GainFocusEvent;
-import cn.liutils.cgui.gui.event.GainFocusEvent.GainFocusHandler;
-import cn.liutils.cgui.gui.event.GuiEventHandler;
-import cn.liutils.cgui.gui.event.KeyEvent;
-import cn.liutils.cgui.gui.event.KeyEvent.KeyEventHandler;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
-import cn.liutils.cgui.gui.event.global.GlobalMouseEvent;
-import cn.liutils.cgui.gui.event.global.GlobalMouseEvent.GlobalMouseHandler;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.Component;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.event.GainFocusEvent;
+import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
+import cn.lambdalib.cgui.gui.event.KeyEvent;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.global.GlobalMouseEvent;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.key.KeyManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 public class PropertyElements {
 	
@@ -44,16 +39,11 @@ public class PropertyElements {
 			Widget check = ret.getWidget("box");
 			DrawTexture.get(check).setTex(p.getBoolean() ? CHECK_TRUE : CHECK_FALSE);
 			
-			check.regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					boolean b = !p.getBoolean();
-					p.set(b);
-					DrawTexture.get(check).setTex(b ? CHECK_TRUE : CHECK_FALSE);
-					MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(p));
-				}
-				
+			check.listen(MouseDownEvent.class, (w, e) -> {
+				boolean b = !p.getBoolean();
+				p.set(b);
+				DrawTexture.get(check).setTex(b ? CHECK_TRUE : CHECK_FALSE);
+				MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(p));
 			});
 			
 			return ret;
@@ -85,7 +75,7 @@ public class PropertyElements {
 			CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
 			CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
 		
-		GuiEventHandler gMouseHandler;
+		IGuiEventHandler<GlobalMouseEvent> gMouseHandler;
 		
 		final Property prop;
 
@@ -98,26 +88,16 @@ public class PropertyElements {
 			
 			prop = _prop;
 			
-			this.addEventHandler(new KeyEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, KeyEvent event) {
-					if(editing) {
-						endEditing(event.keyCode);
-					}
+			listen(KeyEvent.class, (w, event) -> 
+			{
+				if(editing) {
+					endEditing(event.keyCode);
 				}
-				
 			});
 			
-			TextBox tb;
-			
-			this.addEventHandler(new GainFocusHandler() {
-
-				@Override
-				public void handleEvent(Widget w, GainFocusEvent event) {
-					startEditing();
-				}
-				
+			listen(GainFocusEvent.class, (w, e) ->
+			{
+				startEditing();
 			});
 		}
 		
@@ -136,13 +116,10 @@ public class PropertyElements {
 			editing = true;
 			textBox.setContent("PRESS");
 			textBox.color = CRL_EDIT;
-			widget.getGui().regEventHandler(gMouseHandler = new GlobalMouseHandler() {
-
-				@Override
-				public void handleEvent(Widget w, GlobalMouseEvent event) {
-					endEditing(event.key - 100);
-				}
-				
+			
+			widget.getGui().eventBus.listen(GlobalMouseEvent.class, 
+			gMouseHandler = (w, event) -> {
+				endEditing(event.key - 100);
 			});
 		}
 		
@@ -158,7 +135,7 @@ public class PropertyElements {
 			}
 			
 			updateKeyName();
-			widget.getGui().removeEventHandler(gMouseHandler);
+			widget.getGui().eventBus.unlisten(GlobalMouseEvent.class, gMouseHandler);
 			MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(prop));
 		}
 		

@@ -13,7 +13,7 @@
 package cn.academy.vanilla.teleporter.util;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.liutils.core.event.eventhandler.LIHandler;
+import cn.lambdalib.util.deprecated.LIHandler;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 /**

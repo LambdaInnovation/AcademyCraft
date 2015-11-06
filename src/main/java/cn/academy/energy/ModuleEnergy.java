@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.block.BlockImagPhase;
 import cn.academy.energy.block.BlockCatEngine;
 import cn.academy.energy.block.BlockMatrix;
 import cn.academy.energy.block.BlockNode;
@@ -31,12 +30,12 @@ import cn.academy.energy.block.wind.BlockWindGenPillar;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegBlock;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegItem;
-import cn.liutils.crafting.CustomMappingHelper.RecipeName;
-import cn.liutils.template.block.ItemBlockMulti;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegBlock;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.multiblock.ItemBlockMulti;
 
 /**
  * @author WeAthFolD

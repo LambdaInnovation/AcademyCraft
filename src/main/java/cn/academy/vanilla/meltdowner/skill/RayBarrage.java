@@ -21,18 +21,16 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.entity.EntityRayBase;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
-import cn.annoreg.core.Registrant;
-import cn.liutils.entityx.event.CollideEvent;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.entityx.event.CollideEvent;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,7 +39,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
@@ -97,6 +94,7 @@ public class RayBarrage extends Skill {
 			return cData.perform(instance.getOverload(aData), instance.getConsumption(aData));
 		}
 		
+		@Override
 		public void readNBTFinal(NBTTagCompound tag) {
 			hit = tag.getBoolean("h");
 			if(hit) {
@@ -104,6 +102,7 @@ public class RayBarrage extends Skill {
 			}
 		}
 		
+		@Override
 		public void writeNBTFinal(NBTTagCompound tag) {
 			tag.setBoolean("h", hit);
 			if(hit) {
@@ -148,7 +147,7 @@ public class RayBarrage extends Skill {
 						v3 = mo.clone().fromRotation(maxYaw, maxPitch).move(RAY_DIST).getPosVec(),
 						v4 = mo.clone().fromRotation(maxYaw, minPitch).move(RAY_DIST).getPosVec();
 					
-					AxisAlignedBB aabb = WorldUtils.ofPoints(v0, v1, v2, v3, v4);
+					AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4);
 					
 					List<Entity> list = WorldUtils.getEntities(player.worldObj, aabb, selector);
 					for(Entity e : list) {
@@ -185,7 +184,7 @@ public class RayBarrage extends Skill {
 				spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		

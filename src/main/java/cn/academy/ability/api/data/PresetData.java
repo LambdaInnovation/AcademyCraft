@@ -21,12 +21,12 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.liutils.registry.RegDataPart;
-import cn.liutils.util.helper.DataPart;
-import cn.liutils.util.helper.PlayerData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.util.datapart.DataPart;
+import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.RegDataPart;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 /**

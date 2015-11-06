@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.node.GuiNode;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -65,7 +65,8 @@ public class BlockNode extends ACBlockContainer {
         type = _type;
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
         iconTop_disabled = ir.registerIcon("academy:node_top_0");
         iconTop_enabled = ir.registerIcon("academy:node_top_1");
@@ -75,7 +76,8 @@ public class BlockNode extends ACBlockContainer {
         }
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
     }
@@ -126,13 +128,15 @@ public class BlockNode extends ACBlockContainer {
     
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-        @SideOnly(Side.CLIENT)
+        @Override
+		@SideOnly(Side.CLIENT)
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerNode c = (ContainerNode) getServerContainer(player, world, x, y, z);
             return c == null ? null : new GuiNode(c);
         }
         
-        protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+        @Override
+		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
             TileNode te = check(world, x, y, z);
             return te == null ? null : new ContainerNode(te, player);
         }

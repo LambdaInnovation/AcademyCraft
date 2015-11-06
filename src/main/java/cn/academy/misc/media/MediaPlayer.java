@@ -20,10 +20,10 @@ import com.google.common.collect.HashBiMap;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.liutils.util.client.ClientUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.RegistryUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.client.ClientUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.RegistryUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;

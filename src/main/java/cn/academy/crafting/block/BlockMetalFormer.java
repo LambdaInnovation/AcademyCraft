@@ -14,9 +14,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.gui.GuiMetalFormer;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,7 +51,8 @@ public class BlockMetalFormer extends ACBlockContainer {
 		setHarvestLevel("pickaxe", 1);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir)  {
     	sideIcons[0] = this.ricon(ir, "metal_former_front");
     	sideIcons[1] = this.ricon(ir, "metal_former_right");
@@ -61,7 +62,8 @@ public class BlockMetalFormer extends ACBlockContainer {
     	bottomIcon   = this.ricon(ir, "metal_former_bottom");
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
     	// Fix for the mystery 32767 metadata passed in when crafting.
     	meta %= 4;

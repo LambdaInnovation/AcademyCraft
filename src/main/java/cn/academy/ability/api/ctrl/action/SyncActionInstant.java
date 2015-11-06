@@ -13,7 +13,6 @@
 package cn.academy.ability.api.ctrl.action;
 
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.SyncAction;
 
 /**
  * SyncAction that only does something on creation but needs additional validation in both sides.

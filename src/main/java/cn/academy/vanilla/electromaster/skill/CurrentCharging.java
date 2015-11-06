@@ -33,8 +33,8 @@ import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

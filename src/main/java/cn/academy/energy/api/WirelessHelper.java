@@ -27,9 +27,9 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
-import cn.liutils.util.helper.BlockPos;
-import cn.liutils.util.mc.IBlockFilter;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.util.helper.BlockPos;
+import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.WorldUtils;
 
 /**
  * All kinds of funcs about wireless system.

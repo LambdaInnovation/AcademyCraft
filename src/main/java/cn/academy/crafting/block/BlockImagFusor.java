@@ -24,10 +24,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.gui.GuiImagFusor;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -46,7 +46,8 @@ public class BlockImagFusor extends ACBlockContainer {
 		setHarvestLevel("pickaxe", 1);
 	}
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
     	bottom = ricon(ir, "machine_bottom");
     	top = ricon(ir, "machine_top");
@@ -58,7 +59,8 @@ public class BlockImagFusor extends ACBlockContainer {
     	}
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
     	TileImagFusor te = check(world, x, y, z);
     	

@@ -14,8 +14,8 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import java.util.Random;
 
+import cn.lambdalib.util.generic.RandUtils;
 import net.minecraft.util.Vec3;
-import cn.liutils.util.generic.RandUtils;
 
 /**
  * A generic handling logic for fragmented arc.

@@ -14,8 +14,6 @@ package cn.academy.support.ic2;
 
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.misc.tutorial.ACTutorial;
-import cn.academy.misc.tutorial.Condition;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -29,9 +27,17 @@ import net.minecraft.item.ItemStack;
 public class IC2Support {
 	
 	/**
-	 * The convert rate from EU to IF(EU * CONV_RATE = IF).
+	 * The convert rate from EU to IF(1IF = <CONV_RATE>EU).
 	 */
-	public static final float CONV_RATE = 1f;
+	public static final double CONV_RATE = 1;
+	
+	public static double eu2if(double euEnergy) {
+		return euEnergy / CONV_RATE;
+	}
+	
+	public static double if2eu(double ifEnergy) {
+		return ifEnergy * CONV_RATE;
+	}
 	
 	public static void init() {
 		BlockEUInput euInput = new BlockEUInput();
@@ -58,6 +64,9 @@ public class IC2Support {
 		GameRegistry.addRecipe(new ItemStack(euOutput), "abc", " d ",
 				'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
 				'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
+		
+		GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
+		GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
 	}
 
 }

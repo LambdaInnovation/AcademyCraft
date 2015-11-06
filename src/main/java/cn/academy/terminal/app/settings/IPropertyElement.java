@@ -14,16 +14,16 @@ package cn.academy.terminal.app.settings;
 
 import net.minecraftforge.common.config.Configuration;
 import cn.academy.core.AcademyCraft;
-import cn.liutils.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.Widget;
 
 /**
  * @author WeAthFolD
  */
-public interface IPropertyElement {
+public abstract class IPropertyElement {
 	
-	Widget getWidget(UIProperty prop);
+	public abstract Widget getWidget(UIProperty prop);
 	
-	default Configuration getConfig() {
+	public Configuration getConfig() {
 		return AcademyCraft.config;
 	}
 	

@@ -15,10 +15,10 @@ package cn.academy.vanilla.meltdowner.entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.vanilla.meltdowner.client.render.RenderDiamondShield;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

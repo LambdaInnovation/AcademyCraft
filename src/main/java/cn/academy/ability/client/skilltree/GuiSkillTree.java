@@ -12,7 +12,18 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDepthMask;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslated;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.util.ArrayList;
@@ -20,8 +31,6 @@ import java.util.List;
 
 import javax.vecmath.Vector2d;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
@@ -30,30 +39,31 @@ import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiScreen;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.Component;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.component.Tint;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.ShaderMono;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Font;
-import cn.liutils.util.helper.Font.Align;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.Component;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.ShaderMono;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Font;
+import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.helper.Font.Align;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -292,116 +302,103 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		public void onAdded() {
 			Widget back = widget.getWidget("back");
 			
-			back.regEventHandler(new MouseDownHandler() {
-
-				@Override
-				public void handleEvent(Widget w, MouseDownEvent event) {
-					Widget menu = createDesc(SkillHandler.this);
-					if(menu != null) {
-						active();
-						menu.transform.x += widget.transform.x;
-						menu.transform.y += widget.transform.y;
-						
-						// To make the draw order correct, we used a bit of hack to re-add the current skill
-						// widget and menu widget to the last of the draw list.
-						treeArea.forceRemoveWidget(widget);
-						widget.disposed = false;
-						treeArea.addWidget(menu);
-						treeArea.addWidget(widget);
-					}
+			back.listen(MouseDownEvent.class, (w, event) -> 
+			{
+				Widget menu = createDesc(SkillHandler.this);
+				if(menu != null) {
+					active();
+					menu.transform.x += widget.transform.x;
+					menu.transform.y += widget.transform.y;
+					
+					// To make the draw order correct, we used a bit of hack to re-add the current skill
+					// widget and menu widget to the last of the draw list.
+					treeArea.forceRemoveWidget(widget);
+					widget.disposed = false;
+					treeArea.addWidget(menu);
+					treeArea.addWidget(widget);
 				}
-				
 			});
 			
 			if(!aData.isSkillLearned(skill)) {
 				Widget icon = widget.getWidget("skill_icon");
 				icon.removeComponent("DrawTexture");
-				icon.regEventHandler(new FrameEventHandler() {
-
-					@Override
-					public void handleEvent(Widget w, FrameEvent event) {
-						glColor4f(1, 1, 1, getAlpha());
-						shader.useProgram();
-						glDepthMask(active);
-						RenderUtils.loadTexture(skill.getHintIcon());
-						HudUtils.pushZLevel();
-						HudUtils.zLevel = active ? 11 : 1;
-						HudUtils.rect(0, 0, w.transform.width, w.transform.height);
-						HudUtils.popZLevel();
-						glDepthMask(true);
-						glUseProgram(0);
-					}
-					
+				icon.listen(FrameEvent.class, (w, event) -> {
+					glColor4f(1, 1, 1, getAlpha());
+					shader.useProgram();
+					glDepthMask(active);
+					RenderUtils.loadTexture(skill.getHintIcon());
+					HudUtils.pushZLevel();
+					HudUtils.zLevel = active ? 11 : 1;
+					HudUtils.rect(0, 0, w.transform.width, w.transform.height);
+					HudUtils.popZLevel();
+					glDepthMask(true);
+					glUseProgram(0);
 				});
 			}
 			
-			back.regEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					double zLevel = active ? 11 : 1;
-					float alpha = getAlpha();
-					
-					DrawTexture dt1 = DrawTexture.get(widget.getWidget("skill_icon"));
-					if(dt1 != null) {
-						dt1.zLevel = zLevel;
-						dt1.writeDepth = active;
-						dt1.color.a = alpha;
-					}
-					dt1 = DrawTexture.get(w);
+			back.listen(FrameEvent.class, (w, event) -> 
+			{
+				double zLevel = active ? 11 : 1;
+				float alpha = getAlpha();
+				
+				DrawTexture dt1 = DrawTexture.get(widget.getWidget("skill_icon"));
+				if(dt1 != null) {
 					dt1.zLevel = zLevel;
 					dt1.writeDepth = active;
 					dt1.color.a = alpha;
-					
-					// Size update
-					if(current != null) {
-						long dt = GameTimer.getTime() - lastEvent;
-						double prog = Math.min(1.0, (double) dt / scaleTime);
-						if(current == ScaleState.IN) {
-							widget.transform.scale = MathUtils.lerp(1, maxScale, prog);
-						} else {
-							widget.transform.scale = MathUtils.lerp(maxScale, 1, prog);
-						}
-						if(prog >= 1.0)
-							current = null;
-						widget.dirty = true;
+				}
+				dt1 = DrawTexture.get(w);
+				dt1.zLevel = zLevel;
+				dt1.writeDepth = active;
+				dt1.color.a = alpha;
+				
+				// Size update
+				if(current != null) {
+					long dt = GameTimer.getTime() - lastEvent;
+					double prog = Math.min(1.0, (double) dt / scaleTime);
+					if(current == ScaleState.IN) {
+						widget.transform.scale = MathUtils.lerp(1, maxScale, prog);
 					} else {
-						if(queued != null) {
-							startScale(queued);
-							queued = null;
-						}
+						widget.transform.scale = MathUtils.lerp(maxScale, 1, prog);
 					}
-					
-					if(!active && (event.hovering ^ lastHovering)) {
-						startScale(event.hovering ? ScaleState.IN : ScaleState.OUT);
-					}
-					
-					lastHovering = event.hovering;
-					
-					// Draw the progress bar
-					glPushMatrix();
-					glDepthMask(false);
-					glDisable(GL_CULL_FACE);
-					glTranslated(w.transform.width / 2, w.transform.height / 2, zLevel);
-					final float size = 70;
-					glColor4d(1, 1, 1, alpha * (event.hovering ? 1 : 0.8));
-					glScalef(size, size, 1);
-					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_BACK, 1);
-					ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_GLOW, aData.getSkillExp(skill));
-					glEnable(GL_CULL_FACE);
-					glDepthMask(true);
-					glPopMatrix();
-					glColor4d(1, 1, 1, 1);
-					
-					// Draw the skill name
-					if(event.hovering && !active && alpha == 1.0f) {
-						glPushMatrix();
-						glTranslated(0, 0, 10);
-						Font.font.draw(skill.getDisplayName(), 20, -5, 40, 0xbbbbbb, Align.RIGHT);
-						glPopMatrix();
+					if(prog >= 1.0)
+						current = null;
+					widget.dirty = true;
+				} else {
+					if(queued != null) {
+						startScale(queued);
+						queued = null;
 					}
 				}
 				
+				if(!active && (event.hovering ^ lastHovering)) {
+					startScale(event.hovering ? ScaleState.IN : ScaleState.OUT);
+				}
+				
+				lastHovering = event.hovering;
+				
+				// Draw the progress bar
+				glPushMatrix();
+				glDepthMask(false);
+				glDisable(GL_CULL_FACE);
+				glTranslated(w.transform.width / 2, w.transform.height / 2, zLevel);
+				final float size = 70;
+				glColor4d(1, 1, 1, alpha * (event.hovering ? 1 : 0.8));
+				glScalef(size, size, 1);
+				ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_BACK, 1);
+				ACRenderingHelper.drawCircularProgbar(TEX_EXPPROG_GLOW, aData.getSkillExp(skill));
+				glEnable(GL_CULL_FACE);
+				glDepthMask(true);
+				glPopMatrix();
+				glColor4d(1, 1, 1, 1);
+				
+				// Draw the skill name
+				if(event.hovering && !active && alpha == 1.0f) {
+					glPushMatrix();
+					glTranslated(0, 0, 10);
+					Font.font.draw(skill.getDisplayName(), 20, -5, 40, 0xbbbbbb, Align.RIGHT);
+					glPopMatrix();
+				}
 			});
 		}
 		
@@ -414,29 +411,25 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 	 	public LevelHandler(int _level) {
 	 		super("LevelHandler");
 	 		level = _level;
-	 		addEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					glPushMatrix();
-					glTranslated(0, 0, 15);
-					if(event.hovering) {
-						if(level <= aData.getLevel())
-							Font.font.draw(SkillTreeLocal.levelDesc(level),
-									-10, -10, 37, 0xb0ffffff, Align.RIGHT);
-					}
-					if(LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData) && level == aData.getLevel() + 1) {
-						Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
-								-10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
-					}
-					glPopMatrix();
+	 		
+	 		listen(FrameEvent.class, (w, event) -> {
+	 			glPushMatrix();
+				glTranslated(0, 0, 15);
+				if(event.hovering) {
+					if(level <= aData.getLevel())
+						Font.font.draw(SkillTreeLocal.levelDesc(level),
+								-10, -10, 37, 0xb0ffffff, Align.RIGHT);
 				}
-	 			
+				if(LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData) && level == aData.getLevel() + 1) {
+					Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
+							-10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
+				}
+				glPopMatrix();
 	 		});
 	 		
-	 		addEventHandler(new FrameEventHandler() {
+	 		listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
 	 			
-	 			boolean checked;
+	 			boolean checked = false;
 
 				@Override
 				public void handleEvent(Widget w, FrameEvent event) {
@@ -461,21 +454,19 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			 			DrawTexture dt = DrawTexture.get(widget);
 			 			dt.setTex(TEX_LVL_GLOW);
 			 			
-			 			widget.regEventHandler(new FrameEventHandler() {
-
-							@Override
-							public void handleEvent(Widget w, FrameEvent event) {
-								dt.color.a = (event.hovering ? 1.0 : 0.8) * (0.4 + 0.3 * (1 + Math.sin(GameTimer.getTime() / 300.0)));
-							}
-			 				
+			 			widget.listen(FrameEvent.class, (ww, e) -> {
+			 				dt.color.a = (event.hovering ? 1.0 : 0.8) * (0.4 + 0.3 * (1 + Math.sin(GameTimer.getTime() / 300.0)));
 			 			});
 					}
 				}
- 				
- 			});
+	 			
+	 		});
 	 	}
 
-	 	public void onAdded() {
+	 	@Override
+		public void onAdded() {
+	 		super.onAdded();
+	 		
 	 		Tint tint = new Tint();
 	 		tint.affectTexture = true;
 	 		Color color;
@@ -507,33 +498,33 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			double width1 = Font.font.strLen(skill.getDisplayName(), 50);
 			transform.setSize(Math.max(180 + width1, 450), 115);
 			transform.doesListenKey = false;
-			
-			regEventHandler(new FrameEventHandler() {
+			{
+				Long time = GameTimer.getTime();
+				listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
 
-				long time = GameTimer.getTime();
-				
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					glPushMatrix();
-					glTranslated(0, 0, 10);
-					color.a = blendfac(300);
-					Font.font.draw(skill.getDisplayName(), 120, -6, 50, color.asHexColor());
-					color.a = blendfac(400);
-					Font.font.draw("Lv" + skill.getLevel(), 
-						w.getWidgetParent().transform.width - 50, -1, 44, color.asHexColor(), Align.RIGHT);
+					@Override
+					public void handleEvent(Widget w, FrameEvent event) {
+						glPushMatrix();
+						glTranslated(0, 0, 10);
+						color.a = blendfac(300);
+						Font.font.draw(skill.getDisplayName(), 120, -6, 50, color.asHexColor());
+						color.a = blendfac(400);
+						Font.font.draw("Lv" + skill.getLevel(), 
+							w.getWidgetParent().transform.width - 50, -1, 44, color.asHexColor(), Align.RIGHT);
+						
+						Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
+						color2.a = blendfac(500);
+						Font.font.draw(learned ? SkillTreeLocal.acquiredProg(aData.getSkillExp(skill)) : SkillTreeLocal.notAcquired(), 
+								122, 50, 36, color2.asHexColor());
+						glPopMatrix();
+					}
 					
-					Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
-					color2.a = blendfac(500);
-					Font.font.draw(learned ? SkillTreeLocal.acquiredProg(aData.getSkillExp(skill)) : SkillTreeLocal.notAcquired(), 
-							122, 50, 36, color2.asHexColor());
-					glPopMatrix();
-				}
-				
-				private double blendfac(int offset) {
-					return .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - time - offset) / 200.0d);
-				}
-				
-			});
+					private double blendfac(int offset) {
+						return .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - time - offset) / 200.0d);
+					}
+					
+				});
+			}
 		}
 		
 	}
@@ -553,18 +544,14 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			transform.setSize(vec.x, vec.y);
 			transform.doesListenKey = false;
 			
-			regEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					glPushMatrix();
-					glTranslated(0, 0, 10);
-					double a = .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
-					CRL_SKILL_DESC_1.a = a;
-					Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
-					glPopMatrix();
-				}
-				
+			listen(FrameEvent.class, (w, e) -> 
+			{
+				glPushMatrix();
+				glTranslated(0, 0, 10);
+				double a = .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
+				CRL_SKILL_DESC_1.a = a;
+				Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
+				glPopMatrix();
 			});
 		}
 		

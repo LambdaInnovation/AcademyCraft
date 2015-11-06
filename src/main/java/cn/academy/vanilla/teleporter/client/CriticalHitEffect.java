@@ -13,9 +13,9 @@
 package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.vanilla.teleporter.util.TPAttackHelper.TPCritHitEvent;
-import cn.annoreg.core.Registrant;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

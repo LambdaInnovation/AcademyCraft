@@ -22,11 +22,11 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
-import cn.liutils.entityx.handlers.Life;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.mc.BlockFilters;
-import cn.liutils.util.mc.IBlockFilter;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.entityx.handlers.Life;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.mc.BlockFilters;
+import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -143,7 +143,7 @@ public class ArcGen extends Skill {
 				spawnEffects();
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@SideOnly(Side.CLIENT)

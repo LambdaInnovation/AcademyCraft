@@ -128,13 +128,6 @@ public class SkillInstance implements IConsumptionHintProvider {
 	}
 	
 	/**
-	 * Set a specific cooldown time for this controllable.
-	 */
-	protected final void setCooldown(int ticks) {
-		Cooldown.setCooldown(controllable, ticks);
-	}
-	
-	/**
 	 * Add a sub SyncAction to be automatically started at SI execution and 
 	 *  end(abort)ed at end.
 	 */

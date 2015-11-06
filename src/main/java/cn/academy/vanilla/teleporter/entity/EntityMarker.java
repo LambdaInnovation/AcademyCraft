@@ -16,10 +16,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.vanilla.teleporter.client.RenderMarker;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

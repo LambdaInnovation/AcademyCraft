@@ -3,8 +3,6 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.vecmath.Vector2f;
-
 import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -17,8 +15,8 @@ import cn.academy.ability.developer.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.liutils.ripple.ScriptFunction;
-import cn.liutils.ripple.ScriptNamespace;
+import cn.lambdalib.ripple.ScriptFunction;
+import cn.lambdalib.ripple.ScriptNamespace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

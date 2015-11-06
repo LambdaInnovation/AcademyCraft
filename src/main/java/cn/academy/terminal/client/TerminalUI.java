@@ -19,7 +19,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
@@ -28,27 +27,26 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.annoreg.mc.network.Future.FutureCallback;
-import cn.liutils.api.gui.AuxGui;
-import cn.liutils.api.gui.AuxGuiHandler;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.Component;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.client.ControlOverrider;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.GameTimer;
-import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.Component;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.networkcall.Future.FutureCallback;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.auxgui.AuxGui;
+import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.key.KeyHandler;
+import cn.lambdalib.util.key.KeyManager;
+import cn.lambdalib.util.mc.ControlOverrider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -267,32 +265,28 @@ public class TerminalUI extends AuxGui {
     		
     	});
     	
-    	root.getWidget("arrow_up").regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).enabled = scroll > 0;
-			}
-    		
+    	root.getWidget("arrow_up").listen(FrameEvent.class, 
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll > 0;
     	});
     	
-    	root.getWidget("arrow_down").regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).enabled = scroll < getMaxScroll();
-			}
-    		
+    	root.getWidget("arrow_up").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll > 0;
     	});
     	
-    	root.getWidget("icon_loading").regEventHandlerAtBegin(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
-			}
+    	root.getWidget("arrow_down").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).enabled = scroll < getMaxScroll();
     	});
     	
-    	root.getWidget("text_loading").regEventHandlerAtBegin(FrameEvent.class, (Widget w, FrameEvent event) -> {
+    	root.getWidget("icon_loading").listen(FrameEvent.class,
+    	(w, e) -> {
+    		DrawTexture.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
+    	});
+    	
+    	root.getWidget("text_loading").listen(FrameEvent.class,
+    	(w, e) -> {
     		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
     	});
     }
@@ -372,6 +366,7 @@ public class TerminalUI extends AuxGui {
 		
 		TerminalUI current;
 		
+		@Override
 		public void onKeyUp() {
 			EntityPlayer player = getPlayer();
 			TerminalData tData = TerminalData.get(player);
@@ -407,37 +402,32 @@ public class TerminalUI extends AuxGui {
 			id = _id;
 			app = _app;
 			
-			this.addEventHandler(new FrameEventHandler() {
-
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
-					boolean selected = getSelectedApp() == w;
-					
-					if(selected) {
-						if(!lastSelected) {
-							ACSounds.playClient(Minecraft.getMinecraft().thePlayer, "terminal.select", 0.2f);
-						}
-						drawer.texture = APP_BACK_HDR;
-						
-						drawer.zLevel = text.zLevel = icon.zLevel = 40;
-						
-						drawer.color.a = mAlpha;
-						icon.color.a = 0.8 * mAlpha;
-						text.color.a = 0.1 + 0.72 * mAlpha;
-					} else {
-						drawer.texture = APP_BACK;
-						
-						drawer.zLevel = text.zLevel = icon.zLevel = 10;
-						
-						drawer.color.a = mAlpha;
-						icon.color.a = 0.6 * mAlpha;
-						text.color.a = 0.10 + 0.1 * mAlpha;
+			listen(FrameEvent.class, (w, e) -> {
+				double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
+				boolean selected = getSelectedApp() == w;
+				
+				if(selected) {
+					if(!lastSelected) {
+						ACSounds.playClient(Minecraft.getMinecraft().thePlayer, "terminal.select", 0.2f);
 					}
+					drawer.texture = APP_BACK_HDR;
 					
-					lastSelected = selected;
+					drawer.zLevel = text.zLevel = icon.zLevel = 40;
+					
+					drawer.color.a = mAlpha;
+					icon.color.a = 0.8 * mAlpha;
+					text.color.a = 0.1 + 0.72 * mAlpha;
+				} else {
+					drawer.texture = APP_BACK;
+					
+					drawer.zLevel = text.zLevel = icon.zLevel = 10;
+					
+					drawer.color.a = mAlpha;
+					icon.color.a = 0.6 * mAlpha;
+					text.color.a = 0.10 + 0.1 * mAlpha;
 				}
 				
+				lastSelected = selected;
 			});
 		}
 		

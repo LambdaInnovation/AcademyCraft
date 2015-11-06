@@ -31,12 +31,12 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.api.gui.AuxGui;
-import cn.liutils.api.gui.AuxGuiHandler;
-import cn.liutils.util.helper.Font;
-import cn.liutils.util.helper.KeyHandler;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.util.client.auxgui.AuxGui;
+import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib.util.helper.Font;
+import cn.lambdalib.util.key.KeyHandler;
 
 /**
  * The overall debug console. use NUMPAD keys to switch between different states.
@@ -69,7 +69,7 @@ public class DebugConsole extends AuxGui {
 	static DebugConsole INSTANCE;
 	
 	public static void init() {
-		AuxGuiHandler.instance.register(INSTANCE = new DebugConsole());
+		AuxGuiHandler.register(INSTANCE = new DebugConsole());
 		ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
 			@Override
 			public void onKeyDown() {

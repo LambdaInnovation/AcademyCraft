@@ -14,10 +14,10 @@ package cn.academy.ability.client.skilltree;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.developer.DeveloperType;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.util.helper.Color;
 
 /**
  * @author WeAthFolD

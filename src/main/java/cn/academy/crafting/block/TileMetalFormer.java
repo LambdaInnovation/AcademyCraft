@@ -13,13 +13,12 @@ import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -63,6 +62,7 @@ public class TileMetalFormer extends TileReceiverBase {
 		super("metal_former", 3, 3000, IFConstants.LATENCY_MK1);
 	}
 	
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		

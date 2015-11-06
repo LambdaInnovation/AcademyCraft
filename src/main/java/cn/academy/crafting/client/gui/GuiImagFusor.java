@@ -12,28 +12,26 @@
  */
 package cn.academy.crafting.client.gui;
 
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.block.ContainerImagFusor;
 import cn.academy.crafting.block.TileImagFusor;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiContainer;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.helper.Color;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
@@ -60,11 +58,9 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	private void wrapButton(final Widget but) {
 		final Color idle = new Color(1, 1, 1, 0.3), hover = new Color(1, 1, 1, 1);
-		but.regEventHandler(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture.get(but).color = event.hovering ? hover : idle;
-			}
+		but.listen(FrameEvent.class, (w, event) -> 
+		{
+			DrawTexture.get(but).color = event.hovering ? hover : idle;
 		});
 	}
 	
@@ -113,7 +109,7 @@ public class GuiImagFusor extends LIGuiContainer {
 		public void frameUpdate(Widget w, FrameEvent event) {
 			progressProduct.progress = tile.getWorkProgress();
 			progressProj.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
-			progressImag.progress = (double) tile.getEnergy() / tile.getMaxEnergy();
+			progressImag.progress = tile.getEnergy() / tile.getMaxEnergy();
 			
 			String str;
 			IFRecipe recipe = tile.getCurrentRecipe();

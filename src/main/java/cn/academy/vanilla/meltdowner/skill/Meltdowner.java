@@ -12,8 +12,8 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.liutils.util.generic.RandUtils.ranged;
-import static cn.liutils.util.generic.RandUtils.rangei;
+import static cn.lambdalib.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.RandUtils.rangei;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
@@ -27,7 +27,7 @@ import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.core.util.RangedRayDamage;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay;
-import cn.liutils.util.generic.VecUtils;
+import cn.lambdalib.util.generic.VecUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -107,11 +107,12 @@ public class Meltdowner extends Skill {
 					rrd.perform();
 				}
 				
-				Cooldown.setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
+				setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
 				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
 			}
 		}
 		
+		@Override
 		public void onFinalize() {
 			if(isRemote)
 				endEffect();

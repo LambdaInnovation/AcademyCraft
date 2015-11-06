@@ -20,7 +20,7 @@ import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.block.IWirelessTile;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.util.generic.MathUtils;
 
 /**
  * @author WeAthFolD
@@ -77,6 +77,7 @@ public class VBlocks {
 			return tag;
 		}
 		
+		@Override
 		public int hashCode() {
 			return x ^ y ^ z;
 		}

@@ -16,7 +16,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 
 /**

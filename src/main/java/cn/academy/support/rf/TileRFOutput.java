@@ -12,23 +12,51 @@
  */
 package cn.academy.support.rf;
 
-import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.energy.IEnergyProvider;
+import static cn.academy.support.rf.RFSupport.if2rf;
+import static cn.academy.support.rf.RFSupport.rf2if;
+
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
-import cn.annoreg.core.RegWithName;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
+import cn.lambdalib.annoreg.core.RegWithName;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.util.generic.DebugUtils;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 @Registrant
 @RegTileEntity
 @RegWithName("rf_output")
 public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
-	
-	/** The convert rate (RF * RATE = IF) */
-	private static final float RATE = RFSupport.CONV_RATE;
 
 	public TileRFOutput() {
 		super("ac_rf_output", 0, 2000, 100);
+	}
+	
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		World world = getWorldObj();
+		if(!world.isRemote) {
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+				int x = xCoord + dir.offsetX,
+					y = yCoord + dir.offsetY,
+					z = zCoord + dir.offsetZ;
+				TileEntity te = world.getTileEntity(x, y, z);
+				if(te instanceof IEnergyReceiver && energy > 0) {
+					IEnergyReceiver receiver = (IEnergyReceiver) te;
+					ForgeDirection rev = dir.getOpposite();
+					if(receiver.canConnectEnergy(rev)) {
+						int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
+						req = Math.min(if2rf(energy), req);
+						energy -= rf2if(receiver.receiveEnergy(rev, req, false));
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -41,20 +69,20 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 			boolean simulate) {
 		int e = (int) energy;
 		if(!simulate) {
-			energy -= maxExtract * RATE;
-			if(energy < 0d) energy = 0d;
+			energy -= rf2if(maxExtract);
+			if(energy < 0) energy = 0;
 		}
-		return (int) Math.min(e / RATE, maxExtract);
+		return (int) Math.min(if2rf(e), maxExtract);
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return (int) (energy / RATE);
+		return if2rf(energy);
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return (int) (2000 / RATE);
+		return if2rf(2000);
 	}
 
 }

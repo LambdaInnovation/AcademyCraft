@@ -13,18 +13,18 @@
 package cn.academy.terminal.client;
 
 import cn.academy.core.ModuleCoreClient;
-import cn.liutils.api.gui.AuxGui;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.client.auxgui.AuxGui;
+import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ChatComponentTranslation;
@@ -68,8 +68,7 @@ public class TerminalInstallEffect extends AuxGui {
 	}
 	
 	private void initBlender(Widget w) {
-		w.regEventHandler(new FrameEventHandler() {
-			
+		w.listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
 			DrawTexture tex = DrawTexture.get(w);
 			TextBox text = TextBox.get(w);
 			ProgressBar bar = ProgressBar.get(w);
@@ -100,8 +99,7 @@ public class TerminalInstallEffect extends AuxGui {
 				if(text != null) text.color.a = 0.1 + 0.9 * textA * alpha;
 				if(bar != null) bar.color.a = barA * alpha;
 			}
-			
-		});	
+		});
 	}
 	
 	@GuiCallback("main/progbar")

@@ -21,13 +21,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.block.SlotIFItem;
 import cn.academy.support.EnergyItemHelper;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.event.FrameEvent;
 
 /**
  * @author WeAthFolD

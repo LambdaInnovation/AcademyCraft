@@ -20,6 +20,7 @@ import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
@@ -30,11 +31,10 @@ import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
-import cn.liutils.util.client.renderhook.DummyRenderData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.util.client.renderhook.DummyRenderData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -214,7 +214,7 @@ public class Railgun extends Skill {
 				instance.triggerAchievement(player);
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 		}
 		
@@ -225,12 +225,9 @@ public class Railgun extends Skill {
 		
 	}
 	
-	public static class ActionShootItem extends SyncAction {
+	public static class ActionShootItem extends SkillSyncAction {
 		
 		SupportedItem item;
-		
-		AbilityData aData;
-		CPData cpData;
 		
 		int tick;
 		
@@ -255,8 +252,7 @@ public class Railgun extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
 			if(isRemote)
 				startEffect();
@@ -305,7 +301,7 @@ public class Railgun extends Skill {
 						instance.triggerAchievement(player);
 					}
 					
-					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					setCooldown(instance, instance.getCooldown(aData));
 					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}

@@ -21,7 +21,7 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.liutils.util.client.RenderUtils;
+import cn.lambdalib.util.client.RenderUtils;
 
 /**
  * Create one for each entity that you wanna use to draw subArc. Provide the template pre-generated and

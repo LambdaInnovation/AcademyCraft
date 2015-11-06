@@ -6,12 +6,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
-import cn.liutils.entityx.MotionHandler;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.render.particle.ParticleFactory;
-import cn.liutils.util.generic.RandUtils;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.particle.ParticleFactory;
+import cn.lambdalib.util.entityx.MotionHandler;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -12,10 +12,10 @@
  */
 package cn.academy.misc.tutorial.client;
 
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiScreen;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import net.minecraft.util.ResourceLocation;
 
 /**

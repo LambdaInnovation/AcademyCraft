@@ -4,21 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.event.LevelChangeEvent;
-import cn.academy.core.AcademyCraft;
-import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegEventHandler.Bus;
-import cn.liutils.util.helper.PlayerData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.util.datapart.PlayerData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
@@ -26,10 +19,8 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
-//@Registrant
+@Registrant
 public abstract class Condition {
 	int index;
 	Condition[] children;
@@ -142,9 +133,9 @@ public abstract class Condition {
 	
 	void addNeedSavingToTutorial(ACTutorial t){
 		if(this.needSaveNBT){
-			if(!t.savedConditions.contains(this)){
-				this.index=t.savedConditions.size();
-				t.savedConditions.add(this);
+			if(!ACTutorial.savedConditions.contains(this)){
+				this.index=ACTutorial.savedConditions.size();
+				ACTutorial.savedConditions.add(this);
 			}
 		}
 		if(this.children!=null){

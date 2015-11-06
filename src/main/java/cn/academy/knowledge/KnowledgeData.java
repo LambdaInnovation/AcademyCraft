@@ -21,15 +21,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import cn.academy.core.AcademyCraft;
 import cn.academy.knowledge.event.KnowledgeLearnedEvent;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.DataSerializer;
-import cn.annoreg.mc.s11n.SerializationManager;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.liutils.registry.RegDataPart;
-import cn.liutils.util.helper.DataPart;
-import cn.liutils.util.helper.PlayerData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.DataSerializer;
+import cn.lambdalib.networkcall.s11n.SerializationManager;
+import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.util.datapart.DataPart;
+import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.RegDataPart;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -215,6 +215,7 @@ public class KnowledgeData extends DataPart {
 				!learned.get(id);
 	}
 	
+	@Override
 	public void fromNBT(NBTTagCompound tag) {
 		try {
 			learned = bitsetSer.readData(tag.getTag("l"), null);
@@ -224,6 +225,7 @@ public class KnowledgeData extends DataPart {
 		}
 	}
 	
+	@Override
 	public NBTTagCompound toNBT() {
 		try {
 			NBTTagCompound ret = new NBTTagCompound();

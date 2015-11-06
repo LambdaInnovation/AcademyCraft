@@ -14,9 +14,6 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import java.util.Random;
 
-import net.minecraft.util.Vec3;
-import cn.liutils.util.generic.RandUtils;
-
 /**
  * @author WeAthFolD
  */

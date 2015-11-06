@@ -12,28 +12,23 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.client.ClientUtils;
-import cn.liutils.util.client.ViewOptimize;
-import cn.liutils.util.client.ViewOptimize.IAssociatePlayer;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.deprecated.ViewOptimize;
+import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

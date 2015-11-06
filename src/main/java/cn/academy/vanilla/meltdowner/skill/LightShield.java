@@ -12,7 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.liutils.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.RandUtils.ranged;
 
 import java.util.List;
 
@@ -26,14 +26,13 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
-import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
-import cn.liutils.render.particle.Particle;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.particle.Particle;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -134,7 +133,7 @@ public class LightShield extends Skill {
 			if(!isRemote) {
 				// Find the entities that are 'colliding' with the shield.
 				List<Entity> candidates = WorldUtils.getEntities(player, 3, 
-					EntitySelectors.combine(basicSelector, new IEntitySelector() {
+					EntitySelectors.and(basicSelector, new IEntitySelector() {
 						@Override
 						public boolean isEntityApplicable(Entity e) {
 							return isEntityReachable(player, e);
@@ -151,7 +150,7 @@ public class LightShield extends Skill {
 		
 		@Override
 		public void onEnd() {
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@Override

@@ -17,7 +17,7 @@ import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.developer.DeveloperType;
 import cn.academy.ability.developer.PortableDevData;
 import cn.academy.energy.template.ItemEnergyBase;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

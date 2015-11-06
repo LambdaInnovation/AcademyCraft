@@ -18,11 +18,9 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.ForcePreloadTexture;
-import cn.liutils.render.material.Material;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.util.helper.Font;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
+import cn.lambdalib.util.helper.Font;
 
 /**
  * The core resource utils of AC.

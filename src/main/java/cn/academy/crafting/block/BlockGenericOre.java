@@ -17,7 +17,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import cn.academy.core.block.ACBlock;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.generic.RandUtils;
 
 /**
  * @author WeAthFolD
@@ -52,6 +52,7 @@ public class BlockGenericOre extends ACBlock {
 		return RandUtils.rangei(rangeFrom, rangeTo);
 	}
 	
+	@Override
 	public Item getItemDropped(int a, Random b, int c) {
 		if(itemDropped == null)
 			itemDropped = Item.getItemFromBlock(this);

@@ -25,7 +25,7 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
-import cn.annoreg.mc.s11n.InstanceSerializer;
+import cn.lambdalib.networkcall.s11n.InstanceSerializer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

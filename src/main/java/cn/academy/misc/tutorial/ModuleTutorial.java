@@ -7,10 +7,10 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.annoreg.mc.RegItem;
-import cn.liutils.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 
 @Registrant
 @RegInit
@@ -22,10 +22,10 @@ public class ModuleTutorial {
 	public static ItemTutorial item;
 	
 	public static void init(){
-		// initConditions();
+		initConditions();
 	}
 	
-	private void initConditions() {
+	private static void initConditions() {
 		try {
 			ACTutorial.addTutorial("phase_liquid").addCondition(Condition.harvestLiquid(ModuleCrafting.imagPhase.mat));
 			ACTutorial.addTutorial("constraint_metal").addCondition(Condition.itemPickup(ModuleCrafting.oreConstraintMetal));

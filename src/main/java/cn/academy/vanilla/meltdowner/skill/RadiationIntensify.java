@@ -15,7 +15,7 @@ package cn.academy.vanilla.meltdowner.skill;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.liutils.util.generic.MathUtils;
+import cn.lambdalib.util.generic.MathUtils;
 
 /**
  * Just a placeholder. implementation is in MDDamageHelper.

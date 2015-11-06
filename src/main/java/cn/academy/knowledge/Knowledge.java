@@ -48,6 +48,7 @@ public class Knowledge {
 		return StatCollector.translateToLocal("ac.knowledge." + name + ".name");
 	}
 	
+	@Override
 	public String toString() {
 		return name;
 	}

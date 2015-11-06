@@ -20,11 +20,11 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.internal.WirelessNet;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.Future;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.Future;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
 
 /**

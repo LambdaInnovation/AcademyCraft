@@ -21,12 +21,12 @@ import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,7 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class LocationTeleport extends Skill {
 	
 	static LocationTeleport instance;
-	static IEntitySelector basicSelector = EntitySelectors.combine(EntitySelectors.living, new IEntitySelector() {
+	static IEntitySelector basicSelector = EntitySelectors.and(EntitySelectors.living, new IEntitySelector() {
 
 		@Override
 		public boolean isEntityApplicable(Entity entity) {
@@ -130,7 +130,7 @@ public class LocationTeleport extends Skill {
 		
 		if(cpData.perform(getOverload(player), getConsumption(player, dest))) {
 			List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5, 
-				EntitySelectors.combine(
+				EntitySelectors.and(
 					EntitySelectors.excludeOf(player), basicSelector));
 			entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
 			

@@ -14,18 +14,15 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.core.client.Resources;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.MeshUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.renderhook.PlayerRenderHook;
-import cn.liutils.util.client.shader.GLSLMesh;
-import cn.liutils.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.renderhook.PlayerRenderHook;
+import cn.lambdalib.util.client.shader.GLSLMesh;
+import cn.lambdalib.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.deprecated.MeshUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -41,9 +38,10 @@ public class RailgunHandEffect extends PlayerRenderHook {
 	public RailgunHandEffect() {
 		textures = Resources.getEffectSeq("arc_burst", COUNT);
 		mesh = new GLSLMesh();
-		mesh = (GLSLMesh) MeshUtils.createBillboard(mesh, -1, -1, 1, 1);
+		mesh = MeshUtils.createBillboard(mesh, -1, -1, 1, 1);
 	}
 
+	@Override
 	public void renderHand(boolean firstPerson) {
 		if(RenderUtils.isInShadowPass()) return;
 		

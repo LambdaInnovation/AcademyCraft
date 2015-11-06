@@ -30,12 +30,12 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityBloodSplash;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -119,7 +119,7 @@ public class FleshRipping extends Skill {
 						player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
 					}
 					
-					Cooldown.setCooldown(instance, instance.getCooldown(aData));
+					setCooldown(instance, instance.getCooldown(aData));
 					aData.addSkillExp(instance, instance.getFloat("expincr"));
 				}
 			}

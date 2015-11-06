@@ -12,7 +12,6 @@
  */
 package cn.academy.terminal;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.core.client.Resources;

@@ -20,9 +20,9 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.wind.TileWindGenMain;
-import cn.liutils.template.block.RenderBlockMulti;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.multiblock.RenderBlockMulti;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD

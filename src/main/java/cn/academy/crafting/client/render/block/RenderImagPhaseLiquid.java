@@ -26,9 +26,9 @@ import net.minecraftforge.fluids.RenderBlockFluid;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * @author WeAthFolD

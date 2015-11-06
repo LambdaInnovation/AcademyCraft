@@ -15,29 +15,24 @@ package cn.academy.misc.media;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiScreen;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ElementList;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.component.VerticalDragBar;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.GuiEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ElementList;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.GuiEvent;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
@@ -98,7 +93,7 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		TextBox.get(ret.getWidget("desc")).content = media.getDesc();
 		TextBox.get(ret.getWidget("time")).content = media.getLengthStr();
 		
-		ret.regEventHandler(MouseDownEvent.class, (Widget w, MouseDownEvent event) -> {
+		ret.listen(MouseDownEvent.class, (w, e) -> {
 			if(w.isFocused()) {
 				player.startPlay(media);
 				gui.postEvent(new UpdateMediaEvent());
@@ -108,7 +103,8 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		return ret;
 	}
 	
-    public boolean doesGuiPauseGame() {
+    @Override
+	public boolean doesGuiPauseGame() {
         return false;
     }
 	

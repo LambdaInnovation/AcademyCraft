@@ -27,19 +27,19 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.CatElectromaster;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.render.material.Material;
-import cn.liutils.render.material.SimpleMaterial;
-import cn.liutils.render.mesh.Mesh;
-import cn.liutils.render.mesh.MeshUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.helper.BlockPos;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.mc.IBlockFilter;
-import cn.liutils.util.mc.WorldUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.deprecated.Material;
+import cn.lambdalib.util.deprecated.Mesh;
+import cn.lambdalib.util.deprecated.MeshUtils;
+import cn.lambdalib.util.deprecated.SimpleMaterial;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.BlockPos;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -110,7 +110,7 @@ public class MineDetect extends Skill {
 					new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
 			ACSounds.playClient(player, "em.minedetect", 0.5f);
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 	}
@@ -182,6 +182,7 @@ public class MineDetect extends Skill {
 			updateBlocks();
 		}
 		
+		@Override
 		public void onUpdate() {
 			super.onUpdate();
 			

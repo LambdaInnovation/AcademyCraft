@@ -1,9 +1,9 @@
 package cn.academy.crafting.client.gui;
 
 import cn.academy.crafting.block.TileMetalFormer;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
 
 @Registrant

@@ -12,11 +12,11 @@
  */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import static cn.liutils.util.generic.VecUtils.add;
-import static cn.liutils.util.generic.VecUtils.crossProduct;
-import static cn.liutils.util.generic.VecUtils.multiply;
-import static cn.liutils.util.generic.VecUtils.subtract;
-import static cn.liutils.util.generic.VecUtils.vec;
+import static cn.lambdalib.util.generic.VecUtils.add;
+import static cn.lambdalib.util.generic.VecUtils.crossProduct;
+import static cn.lambdalib.util.generic.VecUtils.multiply;
+import static cn.lambdalib.util.generic.VecUtils.subtract;
+import static cn.lambdalib.util.generic.VecUtils.vec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +27,10 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.ShaderSimple;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import net.minecraft.client.renderer.OpenGlHelper;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.ShaderSimple;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;

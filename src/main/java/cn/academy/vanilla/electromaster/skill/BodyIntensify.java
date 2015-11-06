@@ -16,26 +16,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
-import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD;
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect;
-import cn.liutils.api.gui.AuxGuiHandler;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
 /**
  * Body Intensify/生物电强化
@@ -89,10 +87,7 @@ public class BodyIntensify extends Skill {
 		return instance.getFunc("level").callInteger(data.getSkillExp(instance), ct);
 	}
 	
-	public static class IntensifyAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class IntensifyAction extends SkillSyncAction {
 		
 		int tick;
 		float consumption;
@@ -103,8 +98,7 @@ public class BodyIntensify extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			consumption = instance.getConsumption(aData);
 			
 			cpData.perform(instance.getOverload(aData), 0);
@@ -166,7 +160,7 @@ public class BodyIntensify extends Skill {
 				}
 				
 				aData.addSkillExp(instance, instance.getFloat("expincr"));
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 				
 				if(isRemote) 
 					endEffect(true);

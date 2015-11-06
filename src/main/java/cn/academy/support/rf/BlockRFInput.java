@@ -12,21 +12,7 @@
  */
 package cn.academy.support.rf;
 
-import java.util.List;
-
-import cn.academy.core.AcademyCraft;
-import cn.academy.energy.client.gui.GuiLinkToNode;
 import cn.academy.support.BlockConverterBase;
-import cn.liutils.util.mc.WorldUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

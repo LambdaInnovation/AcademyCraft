@@ -16,9 +16,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.liutils.util.client.shader.ShaderNotex;
-import cn.liutils.util.client.shader.ShaderSimple;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.util.client.shader.ShaderNotex;
+import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

@@ -22,14 +22,14 @@ import cn.academy.core.entity.EntityBlock;
 import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.event.CollideEvent;
-import cn.liutils.entityx.event.CollideEvent.CollideHandler;
-import cn.liutils.entityx.handlers.Rigidbody;
-import cn.liutils.util.helper.EntitySyncer;
-import cn.liutils.util.helper.EntitySyncer.Synchronized;
-import cn.liutils.util.helper.Motion3D;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.entityx.event.CollideEvent;
+import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
+import cn.lambdalib.util.entityx.handlers.Rigidbody;
+import cn.lambdalib.util.helper.EntitySyncer;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -130,7 +130,7 @@ public class MagManip extends Skill {
 				}
 			}
 			
-			Cooldown.setCooldown(instance, instance.getCooldown(aData));
+			setCooldown(instance, instance.getCooldown(aData));
 		}
 		
 		@Override
@@ -227,6 +227,7 @@ public class MagManip extends Skill {
 			worldObj.spawnEntityInWorld(surrounder);
 		}
 		
+		@Override
 		public void onUpdate() {
 			super.onUpdate();
 			syncer.update();

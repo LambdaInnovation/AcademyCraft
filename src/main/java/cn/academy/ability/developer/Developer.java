@@ -14,12 +14,12 @@ package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.Instance;
-import cn.annoreg.mc.s11n.StorageOption.Target;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cpw.mods.fml.relauncher.Side;
 
 /**

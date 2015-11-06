@@ -15,9 +15,9 @@ package cn.academy.vanilla.meltdowner.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import cn.academy.core.entity.EntityRayBase;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.util.generic.RandUtils;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -55,6 +55,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
 			subrays[i] = new SubRay(range);
 	}
 	
+	@Override
 	protected void onFirstUpdate() {
 		super.onFirstUpdate();
 		worldObj.playSound(posX, posY, posZ, "academy:md.ray_small", 0.5f, 1.0f, false);

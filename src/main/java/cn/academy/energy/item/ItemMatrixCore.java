@@ -19,10 +19,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.item.ACItem;
-import cn.annoreg.core.Registrant;
-import cn.liutils.crafting.RecipeRegistry;
+import cn.lambdalib.annoreg.core.Registrant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,7 +39,8 @@ public class ItemMatrixCore extends ACItem {
 		this.setHasSubtypes(true);
 	}
 	
-    public String getUnlocalizedName(ItemStack stack) {
+    @Override
+	public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName(stack) + "_" + stack.getItemDamage();
     }
 	
@@ -59,7 +58,8 @@ public class ItemMatrixCore extends ACItem {
         return icons[meta];
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs cct, List list) {
     	for(int i = 0; i < LEVELS; ++i)
     		list.add(new ItemStack(this, 1, i));

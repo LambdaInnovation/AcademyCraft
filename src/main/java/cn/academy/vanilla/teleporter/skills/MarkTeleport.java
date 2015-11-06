@@ -12,33 +12,27 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.Entity;
+import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.ctrl.Cooldown;
+import cn.academy.ability.api.ctrl.SkillInstance;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.CPData;
+import cn.academy.core.client.sound.ACSounds;
+import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
+import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.Raytrace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
-import cn.academy.core.client.sound.ACSounds;
-import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.mc.WorldUtils;
-import cn.liutils.util.raytrace.Raytrace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -135,10 +129,7 @@ public class MarkTeleport extends Skill {
 		}.addChild(action);
 	}
 	
-	public static class MTAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class MTAction extends SkillSyncAction {
 		
 		int ticks;
 
@@ -149,8 +140,7 @@ public class MarkTeleport extends Skill {
 		@Override
 		public void onStart() {
 			//if(true) return;
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
 			if(isRemote) {
 				startEffects();
@@ -195,7 +185,7 @@ public class MarkTeleport extends Skill {
 					ACSounds.playClient(player, "tp.tp", .5f);
 				}
 				
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 				TPAttackHelper.incrTPCount(player);
 			}
 			

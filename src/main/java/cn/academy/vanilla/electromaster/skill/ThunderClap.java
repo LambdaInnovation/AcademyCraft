@@ -23,10 +23,10 @@ import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
-import cn.liutils.entityx.EntityCallback;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.entityx.EntityCallback;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -151,7 +151,7 @@ public class ThunderClap extends Skill {
 					DamageSource.causePlayerDamage(player), EntitySelectors.excludeOf(player));
 			}
 			
-			Cooldown.setCooldown(instance, getCooldown(aData, ticks));
+			setCooldown(instance, getCooldown(aData, ticks));
 			aData.addSkillExp(instance, instance.getFloat("expincr"));
 			instance.triggerAchievement(player);
 		}

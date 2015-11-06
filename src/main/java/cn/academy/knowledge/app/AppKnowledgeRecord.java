@@ -12,12 +12,9 @@
  */
 package cn.academy.knowledge.app;
 
-import net.minecraft.nbt.NBTTagCompound;
-import cn.academy.knowledge.client.ui.LifeRecordUI;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
-import cn.annoreg.core.Registrant;
 
 /**
  * @author WeAthFolD

@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.Resources;
-import cn.liutils.util.helper.Color;
+import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 

@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
-import cn.annoreg.base.RegistrationFieldSimple;
-import cn.annoreg.core.LoadStage;
-import cn.annoreg.core.RegistryTypeDecl;
+import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
+import cn.lambdalib.annoreg.core.LoadStage;
+import cn.lambdalib.annoreg.core.RegistryTypeDecl;
 
 /**
  * Use this anno to register category on the fly.

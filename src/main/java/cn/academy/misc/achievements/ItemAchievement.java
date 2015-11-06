@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.achievements.client.RenderItemAchievement;
-import cn.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

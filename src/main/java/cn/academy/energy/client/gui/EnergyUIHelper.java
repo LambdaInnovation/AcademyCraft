@@ -7,18 +7,16 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.api.block.IWirelessUser;
-import cn.annoreg.mc.network.Future;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.Tint;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.gui.event.MouseDownEvent.MouseDownHandler;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Font;
-import cn.liutils.util.helper.Font.Align;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.networkcall.Future;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Font;
+import cn.lambdalib.util.helper.Font.Align;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -115,24 +113,16 @@ public class EnergyUIHelper {
 				}
 			}));
 		
-		theButton.regEventHandler(new MouseDownHandler() {
-
-			@Override
-			public void handleEvent(Widget w, MouseDownEvent event) {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
-			}
-			
+		theButton.listen(MouseDownEvent.class, (w, e) -> 
+		{
+			Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
 		});
 		
-		theButton.regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				if(event.hovering)
-					drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 10 / w.scale, 
-							233333, Align.LEFT, mono);
-			}
-			
+		theButton.listen(FrameEvent.class, (w, event) ->
+		{
+			if(event.hovering)
+				drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 10 / w.scale, 
+						233333, Align.LEFT, mono);
 		});
 	}
 	

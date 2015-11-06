@@ -1,19 +1,10 @@
 package cn.academy.misc.achievements.pages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
-import cn.academy.misc.achievements.aches.AchBasic;
-import cn.academy.misc.achievements.aches.AchCrAnd;
-import cn.academy.misc.achievements.aches.AchCrSingle;
-import cn.academy.misc.achievements.aches.AchEvMatterUnitHarvest;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.AchievementPage;

@@ -25,20 +25,19 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.ui.ACHud;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.Transform.HeightAlign;
-import cn.liutils.cgui.gui.component.Transform.WidthAlign;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.client.RenderUtils;
-import cn.liutils.util.client.shader.ShaderMono;
-import cn.liutils.util.helper.Font;
-import cn.liutils.util.helper.Font.Align;
-import cn.liutils.util.helper.GameTimer;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
+import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.shader.ShaderMono;
+import cn.lambdalib.util.helper.Font;
+import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.helper.Font.Align;
+import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -81,47 +80,42 @@ public class KeyHintUI extends Widget {
 	}
 	
 	private void addDrawing() {
-		this.regEventHandler(new FrameEventHandler() {
-
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-				
-				PresetData pData = PresetData.get(player);
-				CPData cpData = CPData.get(player);
-				
-				canUseAbility = cpData.canUseAbility();
-				
-				long time = GameTimer.getTime();
-				if(time - lastFrameTime > 300L) {
-					showTime = time;
-				}
-				
-				if((time - showTime) < 300L) {
-					mAlpha = (time - showTime) / 300.0;
-				} else {
-					mAlpha = 1.0;
-				}
-				
-				double curY = 0, yStep = 92;
-				if(pData.isActive()) {
-					Preset p = pData.getCurrentPreset();
-					for(int i = 0; i < PresetData.MAX_KEYS; ++i) {
-						Controllable c = p.getControllable(i);
-						if(c != null) {
-							GL11.glPushMatrix();
-							GL11.glTranslated(-200, curY, 0);
-							drawSingle(ClientController.getKeyMapping(i), c);
-							GL11.glPopMatrix();
-							curY += yStep;
-						}
-					}
-				}
-				
-				lastFrameTime = time;
-				GL11.glColor4d(1, 1, 1, 1);
+		listen(FrameEvent.class, (w, e) -> {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			
+			PresetData pData = PresetData.get(player);
+			CPData cpData = CPData.get(player);
+			
+			canUseAbility = cpData.canUseAbility();
+			
+			long time = GameTimer.getTime();
+			if(time - lastFrameTime > 300L) {
+				showTime = time;
 			}
 			
+			if((time - showTime) < 300L) {
+				mAlpha = (time - showTime) / 300.0;
+			} else {
+				mAlpha = 1.0;
+			}
+			
+			double curY = 0, yStep = 92;
+			if(pData.isActive()) {
+				Preset p = pData.getCurrentPreset();
+				for(int i = 0; i < PresetData.MAX_KEYS; ++i) {
+					Controllable c = p.getControllable(i);
+					if(c != null) {
+						GL11.glPushMatrix();
+						GL11.glTranslated(-200, curY, 0);
+						drawSingle(ClientController.getKeyMapping(i), c);
+						GL11.glPopMatrix();
+						curY += yStep;
+					}
+				}
+			}
+			
+			lastFrameTime = time;
+			GL11.glColor4d(1, 1, 1, 1);
 		});
 	}
 	

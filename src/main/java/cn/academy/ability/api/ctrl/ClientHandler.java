@@ -17,13 +17,11 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.ModuleCoreClient;
-import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.registry.RegACKeyHandler;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEventHandler;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.util.key.KeyHandler;
+import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

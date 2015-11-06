@@ -22,8 +22,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * BaseClass for typical block containers. will automatically try to open the container gui.

@@ -12,15 +12,16 @@
  */
 package cn.academy.knowledge.command;
 
-import java.util.BitSet;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import cn.academy.core.command.ACCommand;
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegCommand;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegCommand;
+import cn.lambdalib.template.command.LICommandBase;
 
 /**
  * @author WeAthFolD
@@ -48,11 +49,11 @@ public class CommandKnowledge extends ACCommand {
 			
 			//Display the help message.
 			for(String c : cmds) {
-				this.sendChat(ics, getLoc(c));
+				LICommandBase.sendChat(ics, getLoc(c));
 			}
 			
 		} else {
-			KnowledgeData data = KnowledgeData.get(this.getCommandSenderAsPlayer(ics));
+			KnowledgeData data = KnowledgeData.get(CommandBase.getCommandSenderAsPlayer(ics));
 			
 			switch(pars[0]) {
 			
@@ -65,20 +66,20 @@ public class CommandKnowledge extends ACCommand {
 				boolean first = true;
 				for(int i = 0; i < KnowledgeData.getKnowledgeCount(); ++i) {
 					if(data.isLearned(i)) {
-						sb.append(first ? "" : ",").append(data.getKnowledge(i));
+						sb.append(first ? "" : ",").append(KnowledgeData.getKnowledge(i));
 						first = false;
 					}
 					if(data.isDiscovered(i)) {
-						sb2.append(first ? "" : ",").append(data.getKnowledge(i));
+						sb2.append(first ? "" : ",").append(KnowledgeData.getKnowledge(i));
 					}
 				}
-				this.sendChat(ics, getLoc("stat2"), sb.toString());
-				this.sendChat(ics, getLoc("stat3"), sb2.toString());
+				LICommandBase.sendChat(ics, getLoc("stat2"), sb.toString());
+				LICommandBase.sendChat(ics, getLoc("stat3"), sb2.toString());
 				break;
 			}
 			case "list":
 			{
-				this.sendChat(ics, getLoc("all"));
+				LICommandBase.sendChat(ics, getLoc("all"));
 				StringBuilder sb = new StringBuilder();
 				List<Knowledge> list = KnowledgeData.getKnowledgeList();
 				
@@ -88,54 +89,54 @@ public class CommandKnowledge extends ACCommand {
 					if(i != list.size() - 1)
 						sb.append(",");
 				}
-				this.sendChat(ics, sb.toString());
+				LICommandBase.sendChat(ics, sb.toString());
 				break;
 			}
 			case "learn":
 			{
-				if(data.hasKnowledge(pars[1])) {
+				if(KnowledgeData.hasKnowledge(pars[1])) {
 					data.learn(pars[1]);
-					this.sendChat(ics, locSuccessful());
+					LICommandBase.sendChat(ics, locSuccessful());
 				} else {
-					this.sendChat(ics, getLoc("notfound"), pars[1]);
+					LICommandBase.sendChat(ics, getLoc("notfound"), pars[1]);
 				}
 				break;
 			}
 			case "getall":
 			{
 				data.learnAll();
-				this.sendChat(ics, locSuccessful());
+				LICommandBase.sendChat(ics, locSuccessful());
 				break;
 			}
 			case "unlearn":
 			{
-				if(data.hasKnowledge(pars[1])) {
+				if(KnowledgeData.hasKnowledge(pars[1])) {
 					data.unlearn(pars[1]);
-					this.sendChat(ics, locSuccessful());
+					LICommandBase.sendChat(ics, locSuccessful());
 				} else {
-					this.sendChat(ics, getLoc("notfound"), pars[1]);
+					LICommandBase.sendChat(ics, getLoc("notfound"), pars[1]);
 				}
 				break;
 			}
 			case "clear":
 			{
 				data.unlearnAll();
-				this.sendChat(ics, locSuccessful());
+				LICommandBase.sendChat(ics, locSuccessful());
 				break;
 			}
 			case "discover":
 			{
-				if(data.hasKnowledge(pars[1])) {
+				if(KnowledgeData.hasKnowledge(pars[1])) {
 					data.discover(pars[1]);
-					this.sendChat(ics, locSuccessful());
+					LICommandBase.sendChat(ics, locSuccessful());
 				} else {
-					this.sendChat(ics, getLoc("notfound"), pars[1]);
+					LICommandBase.sendChat(ics, getLoc("notfound"), pars[1]);
 				}
 				break;
 			}
 			default:
 			{
-				this.sendChat(ics, locInvalid());
+				LICommandBase.sendChat(ics, locInvalid());
 			}
 			}
 		}

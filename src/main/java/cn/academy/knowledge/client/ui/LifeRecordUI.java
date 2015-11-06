@@ -15,33 +15,27 @@ package cn.academy.knowledge.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.gui.GuiHandlerBase;
-import cn.annoreg.mc.gui.RegGuiHandler;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiScreen;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ElementList;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.component.Tint;
-import cn.liutils.cgui.gui.component.VerticalDragBar;
-import cn.liutils.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.client.HudUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Font;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ElementList;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Font;
 
 /**
  * @author WeAthFolD
@@ -105,7 +99,7 @@ public class LifeRecordUI extends LIGuiScreen {
 		
 		back.getWidget("area").addComponent(list);
 		
-		back.getWidget("scrollbar").regEventHandler(DraggedEvent.class, (Widget w, DraggedEvent e) -> {
+		back.getWidget("scrollbar").listen(DraggedEvent.class, (Widget w, DraggedEvent e) -> {
 			list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
 		});
 		gui.addWidget(back);
@@ -190,7 +184,7 @@ public class LifeRecordUI extends LIGuiScreen {
 			tint.hoverColor.setColor4d(0, 0, 0, 0.2);
 			addComponent(tint);
 			
-			regEventHandler(FrameEvent.class, (Widget w, FrameEvent e) -> {
+			listen(FrameEvent.class, (Widget w, FrameEvent e) -> {
 				if(e.hovering) {
 					drawHoveringText(knowledge, e.mx, e.my);
 				}

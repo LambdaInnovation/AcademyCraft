@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,16 +26,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegTileEntity;
-import cn.annoreg.mc.network.RegNetworkCall;
-import cn.annoreg.mc.s11n.StorageOption;
-import cn.annoreg.mc.s11n.StorageOption.Data;
-import cn.annoreg.mc.s11n.StorageOption.RangedTarget;
-import cn.liutils.template.block.BlockMulti;
-import cn.liutils.template.block.IMultiTile;
-import cn.liutils.template.block.InfoBlockMulti;
-import cn.liutils.template.block.BlockMulti.SubBlockPos;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.multiblock.BlockMulti;
+import cn.lambdalib.multiblock.IMultiTile;
+import cn.lambdalib.multiblock.InfoBlockMulti;
+import cn.lambdalib.multiblock.BlockMulti.SubBlockPos;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -121,11 +120,13 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
 		}
 	}
 	
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		info = new InfoBlockMulti(this, tag);
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		info.save(tag);

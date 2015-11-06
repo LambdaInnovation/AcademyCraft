@@ -7,9 +7,9 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.s11n.InstanceSerializer;
-import cn.annoreg.mc.s11n.RegSerializable;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.s11n.InstanceSerializer;
+import cn.lambdalib.networkcall.s11n.RegSerializable;
 
 /**
  * This class has ability to create a SkillInstance to override

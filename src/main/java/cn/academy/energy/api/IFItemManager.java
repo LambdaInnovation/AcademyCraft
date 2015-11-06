@@ -15,7 +15,7 @@ package cn.academy.energy.api;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
-import cn.liutils.util.mc.StackUtils;
+import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * @author WeathFolD
@@ -26,7 +26,8 @@ public final class IFItemManager implements EnergyItemManager {
 	
 	private IFItemManager() {}
     
-    public double getEnergy(ItemStack stack) {
+    @Override
+	public double getEnergy(ItemStack stack) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
 		return StackUtils.loadTag(stack).getDouble("energy");
     }
@@ -36,7 +37,8 @@ public final class IFItemManager implements EnergyItemManager {
 		return item.getMaxEnergy();
     }
     
-    public void setEnergy(ItemStack stack, double amt) {
+    @Override
+	public void setEnergy(ItemStack stack, double amt) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
 		amt = Math.min(item.getMaxEnergy(), amt);
 		StackUtils.loadTag(stack).setDouble("energy", amt);
@@ -58,7 +60,8 @@ public final class IFItemManager implements EnergyItemManager {
      * @param ignoreBandwidth
      * @return How much energy NOT transfered into stack
      */
-    public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
+    @Override
+	public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
     	ImagEnergyItem item = (ImagEnergyItem) stack.getItem();
 		double lim = ignoreBandwidth ? Double.MAX_VALUE : item.getBandwidth();
 		double cur = getEnergy(stack);

@@ -13,11 +13,11 @@
 package cn.academy.core.registry;
 
 import cn.academy.core.ModuleCoreClient;
-import cn.annoreg.base.RegistrationFieldSimple;
-import cn.annoreg.core.LoadStage;
-import cn.annoreg.core.RegistryTypeDecl;
-import cn.liutils.util.helper.KeyHandler;
-import cn.liutils.util.helper.KeyManager;
+import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
+import cn.lambdalib.annoreg.core.LoadStage;
+import cn.lambdalib.annoreg.core.RegistryTypeDecl;
+import cn.lambdalib.util.key.KeyHandler;
+import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

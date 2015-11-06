@@ -15,11 +15,11 @@ package cn.academy.vanilla.generic.entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cn.academy.vanilla.generic.client.render.RippleMarkRender;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegEntity;
-import cn.liutils.entityx.EntityAdvanced;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.util.entityx.EntityAdvanced;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

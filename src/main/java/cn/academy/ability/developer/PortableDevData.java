@@ -14,10 +14,10 @@ package cn.academy.ability.developer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import cn.annoreg.core.Registrant;
-import cn.liutils.registry.RegDataPart;
-import cn.liutils.util.helper.DataPart;
-import cn.liutils.util.helper.PlayerData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.datapart.DataPart;
+import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.RegDataPart;
 
 /**
  * The Developer instance for portable developer attached one per player.
@@ -36,10 +36,10 @@ public class PortableDevData extends DataPart {
 	public DeveloperPortable get() {
 		EntityPlayer player = getPlayer();
 		if(developer == null) {
-			if(developer.validate(player))
+			if(DeveloperPortable.validate(player))
 				developer = new DeveloperPortable(player);
 		} else {
-			if(!developer.validate(player))
+			if(!DeveloperPortable.validate(player))
 				developer = null;
 		}
 		return developer;
@@ -47,7 +47,7 @@ public class PortableDevData extends DataPart {
 	
 	@Override
 	public void tick() {
-		if(developer != null && developer.validate(getPlayer()))
+		if(developer != null && DeveloperPortable.validate(getPlayer()))
 			developer.tick();
 		else
 			developer = null;

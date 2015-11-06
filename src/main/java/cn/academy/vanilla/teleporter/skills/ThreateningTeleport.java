@@ -14,9 +14,8 @@ package cn.academy.vanilla.teleporter.skills;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
@@ -24,14 +23,14 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
-import cn.liutils.util.generic.MathUtils;
-import cn.liutils.util.generic.RandUtils;
-import cn.liutils.util.generic.VecUtils;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.Motion3D;
-import cn.liutils.util.mc.BlockFilters;
-import cn.liutils.util.mc.EntitySelectors;
-import cn.liutils.util.raytrace.Raytrace;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.BlockFilters;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -85,10 +84,7 @@ public class ThreateningTeleport extends Skill {
 		}.addChild(new ThreateningAction());
 	}
 	
-	public static class ThreateningAction extends SyncAction {
-		
-		AbilityData aData;
-		CPData cpData;
+	public static class ThreateningAction extends SkillSyncAction {
 		
 		boolean attacked;
 
@@ -98,21 +94,26 @@ public class ThreateningTeleport extends Skill {
 		
 		@Override
 		public void onStart() {
-			aData = AbilityData.get(player);
-			cpData = CPData.get(player);
+			super.onStart();
 			
-			if(!isRemote && player.getCurrentEquippedItem() == null)
+			if(!isRemote && player.getCurrentEquippedItem() == null){
 				ActionManager.abortAction(this);
+			}
 			
-			if(isRemote) startEffects();
+			if(isRemote) {
+				startEffects();
+			}
 		}
 		
 		@Override
 		public void onTick() {
-			if(isRemote) updateEffects();
+			if(isRemote) {
+				updateEffects();
+			}
 			
-			if(!isRemote && player.getCurrentEquippedItem() == null)
+			if(!isRemote && player.getCurrentEquippedItem() == null) {
 				ActionManager.abortAction(this);
+			}
 		}
 		
 		@Override
@@ -149,15 +150,19 @@ public class ThreateningTeleport extends Skill {
 					aData.addSkillExp(instance, getExpIncr(attacked));
 				}
 				
-				Cooldown.setCooldown(instance, instance.getCooldown(aData));
+				setCooldown(instance, instance.getCooldown(aData));
 			}
 			
-			if(isRemote) endEffects();
+			if(isRemote) {
+				endEffects();
+			}
 		}
 		
 		@Override
 		public void onAbort() {
-			if(isRemote) endEffects();
+			if(isRemote) {
+				endEffects();
+			}
 		}
 		
 		TraceResult calcDropPos() {

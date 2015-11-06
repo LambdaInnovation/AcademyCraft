@@ -14,35 +14,33 @@ package cn.academy.energy.client.gui.matrix;
 
 import java.util.Arrays;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
-import cn.annoreg.core.Registrant;
-import cn.annoreg.mc.RegInit;
-import cn.liutils.cgui.gui.LIGui;
-import cn.liutils.cgui.gui.LIGuiContainer;
-import cn.liutils.cgui.gui.Widget;
-import cn.liutils.cgui.gui.annotations.GuiCallback;
-import cn.liutils.cgui.gui.component.DrawTexture;
-import cn.liutils.cgui.gui.component.ProgressBar;
-import cn.liutils.cgui.gui.component.TextBox;
-import cn.liutils.cgui.gui.event.FrameEvent;
-import cn.liutils.cgui.gui.event.FrameEvent.FrameEventHandler;
-import cn.liutils.cgui.gui.event.MouseDownEvent;
-import cn.liutils.cgui.loader.EventLoader;
-import cn.liutils.cgui.loader.xml.CGUIDocLoader;
-import cn.liutils.util.helper.Color;
-import cn.liutils.util.helper.GameTimer;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.annotations.GuiCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.ProgressBar;
+import cn.lambdalib.cgui.gui.component.TextBox;
+import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.loader.EventLoader;
+import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.helper.Color;
+import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -205,7 +203,8 @@ public class GuiMatrix extends LIGuiContainer {
     	return pageMain.transform.doesListenKey;
     }
 	
-    protected boolean containerAcceptsKey(int key) {
+    @Override
+	protected boolean containerAcceptsKey(int key) {
     	return false;
     }
 	
@@ -214,12 +213,8 @@ public class GuiMatrix extends LIGuiContainer {
 		final Color hoverColor = new Color(1, 1, 1, 1), idleColor = new Color(1, 1, 1, 0.3);
 		drawer.color = idleColor;
 		
-		w.regEventHandler(new FrameEventHandler() {
-			@Override
-			public void handleEvent(Widget w, FrameEvent event) {
-				DrawTexture drawer = w.getComponent("DrawTexture");
-				drawer.color = event.hovering ? hoverColor : idleColor;
-			}
+		w.listen(FrameEvent.class, (ww, event) -> {
+			drawer.color = event.hovering ? hoverColor : idleColor;
 		});
 	}
 	
@@ -257,8 +252,8 @@ public class GuiMatrix extends LIGuiContainer {
 		@GuiCallback
 		public void onFrame(Widget w, FrameEvent event) {
 			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / tile.getCapacity());
-			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = ((double) tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
-			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = ((double) tile.getRange() / TileMatrix.MAX_RANGE);
+			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = (tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
+			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = (tile.getRange() / TileMatrix.MAX_RANGE);
 		}
 		
 	}
@@ -266,12 +261,10 @@ public class GuiMatrix extends LIGuiContainer {
 	public class SSIDCallback {
 		
 		public SSIDCallback() {
-			pageSSID.regEventHandlerAtBegin(new FrameEventHandler() {
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					if(!pageMain.transform.doesListenKey) {
-						LIGui.drawBlackout();
-					}
+			pageSSID.listen(FrameEvent.class, (w, event) -> 
+			{
+				if(!pageMain.transform.doesListenKey) {
+					LIGui.drawBlackout();
 				}
 			});
 		}
@@ -322,12 +315,10 @@ public class GuiMatrix extends LIGuiContainer {
 			markDrawer = pageCheck.getWidget("mark_check2");
 			info = pageCheck.getWidget("test_info");
 			
-			pageCheck.regEventHandlerAtBegin(new FrameEventHandler() {
-				@Override
-				public void handleEvent(Widget w, FrameEvent event) {
-					if(!pageMain.transform.doesListenKey) {
-						LIGui.drawBlackout();
-					}
+			pageCheck.listen(FrameEvent.class, (w, event) -> 
+			{
+				if(!pageMain.transform.doesListenKey) {
+					LIGui.drawBlackout();
 				}
 			});
 		}
