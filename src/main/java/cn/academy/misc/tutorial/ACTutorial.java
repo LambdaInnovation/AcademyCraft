@@ -1,9 +1,12 @@
 package cn.academy.misc.tutorial;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableList;
 
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -11,6 +14,7 @@ import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import scala.actors.threadpool.Arrays;
 
 @Registrant
@@ -36,14 +40,12 @@ public class ACTutorial {
 	}
 
 	public static ACTutorial addTutorial(String string) throws Exception {
-		// TODO Auto-generated method stub
 		ACTutorial t=new ACTutorial(string);
 		addTutorials(t);
 		return t;
 	}
 	
 	public static void addTutorials(String...string) throws Exception {
-		// TODO Auto-generated method stub
 		ACTutorial[] acTu=new ACTutorial[string.length];
 		int i = 0;
 		for(String s : string){
@@ -59,12 +61,20 @@ public class ACTutorial {
 		return this;
 	}
 	
-	public static String getKey(ACTutorial t){
-		return getKey(t.id);
+	public String getContentKey(){
+		return "ac.gui.tutorial." + id;
 	}
 	
-	public static String getKey(String id){
-		return "ac.gui.tutorial."+id;
+	public String getContent() {
+		return StatCollector.translateToLocal(getContentKey());
+	}
+	
+	public String getTitleKey() {
+		return "ac.gui.tutorial." + id + ".desc";
+	}
+	
+	public String getTitle() {
+		return StatCollector.translateToLocal(getTitleKey());
 	}
 	
 	public static ACTutorial getTutorial(String s) throws Exception{
@@ -72,6 +82,26 @@ public class ACTutorial {
 		if(!tutorials.containsKey(s))throw new Exception("No such a tutorial;");
 		t=tutorials.get(s);
 		return t;
+	}
+	
+	/**
+	 * Get a collection of tutorial learned by the player.
+	 */
+	public static Collection<ACTutorial> getLearned(EntityPlayer player) {
+		List<ACTutorial> ret = new ArrayList();
+		for(ACTutorial tut : tutorials.values()) {
+			if(tut.getIsLoad(player)) {
+				ret.add(tut);
+			}
+		}
+		return ret;
+	}
+	
+	/**
+	 * Get a immutable enumeration of all registered tutorial.
+	 */
+	public static Collection<ACTutorial> enumeration() {
+		return ImmutableList.copyOf(tutorials.values());
 	}
 	
 	@RegDataPart("ACTutorial")
