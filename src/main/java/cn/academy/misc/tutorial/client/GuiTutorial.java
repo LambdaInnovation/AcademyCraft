@@ -67,7 +67,7 @@ public class GuiTutorial extends LIGuiScreen {
 	
 	Widget showWindow, rightWindow, centerPart;
 	
-	Widget logo0, logo1, logo2;
+	Widget logo0, logo1, logo2, logo3;
 
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
@@ -91,6 +91,7 @@ public class GuiTutorial extends LIGuiScreen {
 		logo0 = rightPart.getWidget("logo0");
 		logo1 = rightPart.getWidget("logo1");
 		logo2 = rightPart.getWidget("logo2");
+		logo3 = rightPart.getWidget("logo3");
 		
 		showWindow.transform.doesDraw = false;
 		rightWindow.transform.doesDraw = false;
@@ -106,23 +107,28 @@ public class GuiTutorial extends LIGuiScreen {
 			blend(logo0, 1.75, 0.3);
 			blend(leftPart, 1.75, 0.3);
 			blend(logo1, 1.3, 0.3);
+			blend(logo3, 0.1, 0.3);
+			blendy(logo3, 0.7, 0.4, 63, -36);
 			
 			long startTime = GameTimer.getAbsTime();
 			logo1.listen(FrameEvent.class, (__, e) -> {
 				final float ht = 5;
 				final double 
-					ln = 500, ln2 = 300, // Height and length
+					ln = 500, ln2 = 300, cl = 50, // Height and length
 					b1 = 0.3, // Blend stage 1
-					b2 = 0.3; // Blend stage 2
+					b2 = 0.2; // Blend stage 2
 				
 				glPushMatrix();
 				glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
-				double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.2;
+				double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
 				if(dt < 0) dt = 0;
 				if(dt < b1) {
 					if(dt > 0) {
 						double len = MathUtils.lerp(0, ln, dt / b1);
-						lineglow(-len, len, ht);
+						if(len > cl) {
+							lineglow(cl, len, ht);
+							lineglow(-len, -cl, ht);
+						}
 					}
 				} else {
 					double ldt = dt - b1;
@@ -130,7 +136,7 @@ public class GuiTutorial extends LIGuiScreen {
 						ldt = b2;
 					}
 					double len = ln;
-					double len2 = MathUtils.lerp(ln, ln2, ldt / b2);
+					double len2 = MathUtils.lerp(ln - 2 * cl, ln2, ldt / b2);
 					lineglow(ln - len2, len, ht);
 					lineglow(-len, -(ln - len2), ht);
 				}
@@ -180,6 +186,20 @@ public class GuiTutorial extends LIGuiScreen {
 			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
 			double alpha = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
 			dt.color.a = alpha;
+		});
+	}
+	
+	private void blendy(Widget w, double start, double tin, double y0, double y1) {
+		long startTime = GameTimer.getAbsTime();
+		w.transform.y = y0;
+		w.dirty = true;
+		
+		w.listen(FrameEvent.class, (__, e) ->
+		{
+			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
+			double lambda = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
+			w.transform.y = MathUtils.lerp(y0, y1, lambda);
+			w.dirty = true;
 		});
 	}
 	
