@@ -38,7 +38,7 @@ import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.BlockPos;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -133,7 +133,7 @@ public class MineDetect extends Skill {
 		@RegEntity.Render
 		public static HandlerRender renderer;
 		
-		static final IBlockFilter blockFilter = new IBlockFilter() {
+		static final IBlockSelector blockFilter = new IBlockSelector() {
 
 			@Override
 			public boolean accepts(World world, int x, int y, int z, Block block) {

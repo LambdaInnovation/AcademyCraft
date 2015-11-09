@@ -36,9 +36,10 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -168,7 +169,7 @@ public class GuiNode extends LIGuiContainer {
     	
     	pageSelect.listen(FrameEvent.class, (w, e) ->
     	{
-    		LIGui.drawBlackout();
+    		RenderUtils.drawBlackout();
     	});
     	
     	//Callback
@@ -256,20 +257,20 @@ public class GuiNode extends LIGuiContainer {
     	}
     	
     	@GuiCallback("button_confirm")
-    	public void onConfirm(Widget w, MouseDownEvent event) {
+    	public void onConfirm(Widget w, LeftClickEvent event) {
     		startLink(TextBox.get(getWidget("input_ssid")).content, 
     			TextBox.get(getWidget("input_pw")).content);
     	}
     	
     	@GuiCallback("button_config")
-    	public void onConfig(Widget w, MouseDownEvent event) {
+    	public void onConfig(Widget w, LeftClickEvent event) {
     		if(infoSynced && listSynced) {
     			openSelect();
     		}
     	}
     	
     	@GuiCallback("btn_edit")
-    	public void rename(Widget w, MouseDownEvent event) {
+    	public void rename(Widget w, LeftClickEvent event) {
     		GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
     	}
     	
@@ -314,7 +315,7 @@ public class GuiNode extends LIGuiContainer {
     			
     			TextBox.get(single).content = s;
     			
-    			single.listen(MouseDownEvent.class, (w, e) -> 
+    			single.listen(LeftClickEvent.class, (w, e) -> 
     			{
     				mainHandler.updateSSID(TextBox.get(w).content);
 					closeSelect();
@@ -328,12 +329,12 @@ public class GuiNode extends LIGuiContainer {
     	}
     	
     	@GuiCallback("button_close")
-    	public void close(Widget w, MouseDownEvent event) {
+    	public void close(Widget w, LeftClickEvent event) {
     		closeSelect();
     	}
     	
     	@GuiCallback("btn_disconnect")
-    	public void disconnect(Widget w, MouseDownEvent event) {
+    	public void disconnect(Widget w, LeftClickEvent event) {
     		ssid = "";
     		GuiNodeSync.doDisconnect(tile);
     		updateCurrentNet();

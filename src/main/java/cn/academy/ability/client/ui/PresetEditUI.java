@@ -35,9 +35,10 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.Font;
@@ -193,7 +194,7 @@ public class PresetEditUI extends GuiScreen {
 	
     @Override
 	public void drawScreen(int mx, int my, float partialTicks) {
-    	LIGui.drawBlackout();
+    	RenderUtils.drawBlackout();
     	
     	if(transiting) {
     		updateTransit();
@@ -345,7 +346,7 @@ public class PresetEditUI extends GuiScreen {
 				dt.color.a = page.alpha;
 			});
 			
-			listen(MouseDownEvent.class, (w, e) -> {
+			listen(LeftClickEvent.class, (w, e) -> {
 				Page page = getPage(w.getWidgetParent());
 				if(selector != null && !selector.disposed) {
 					selector.dispose();
@@ -515,7 +516,7 @@ public class PresetEditUI extends GuiScreen {
 			public SelHandler(SelectionProvider _selection) {
 				super("_sel");
 				selection = _selection;
-				listen(MouseDownEvent.class, (w, e) -> {
+				listen(LeftClickEvent.class, (w, e) -> {
 					onEdit(keyid, selection.id);
 					Selector.this.dispose();
 				});

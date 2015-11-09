@@ -25,7 +25,7 @@ import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.networkcall.Future;
 import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.helper.Font.Align;
@@ -130,12 +130,12 @@ public class GuiLinkToNode extends LIGuiScreen {
 		});
 		
 		GuiNode.wrapButton(main.getWidget("button_close"), 0.5);
-		main.getWidget("button_close").listen(MouseDownEvent.class, (w, e) ->
+		main.getWidget("button_close").listen(LeftClickEvent.class, (w, e) ->
 		{
 			Minecraft.getMinecraft().displayGuiScreen(null);
 		});
 		
-		main.getWidget("btn_disconnect").listen(MouseDownEvent.class, (w, e) ->
+		main.getWidget("btn_disconnect").listen(LeftClickEvent.class, (w, e) ->
 		{
 			updateSSID("");
 			LinkToNodeSyncs.disconnect(tile);
@@ -153,7 +153,7 @@ public class GuiLinkToNode extends LIGuiScreen {
 			single.addComponent(new DrawTexture().setTex(null));
 			
 			TextBox.get(single).content = node.getNodeName();
-			single.listen(MouseDownEvent.class, (w, e) -> {
+			single.listen(LeftClickEvent.class, (w, e) -> {
 				showMessage("Linking", 10000, null);
 				LinkToNodeSyncs.startLink(tile, (TileEntity) node, 
 					Future.create((Boolean b) -> {

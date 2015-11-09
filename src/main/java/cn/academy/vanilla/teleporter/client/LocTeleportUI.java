@@ -16,7 +16,7 @@ import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -83,7 +83,7 @@ public class LocTeleportUI extends LIGuiScreen {
 				}
 			});
 			
-			area.getWidget("button").listen(MouseDownEvent.class, (w, event) -> {
+			area.getWidget("button").listen(LeftClickEvent.class, (w, event) -> {
 				if(canRecordLocation()) {
 					data.add(LocationTeleport.toLocation(player, TextBox.get(pageAdd.getWidget("back/text_input")).content));
 					player.closeScreen();
@@ -103,7 +103,7 @@ public class LocTeleportUI extends LIGuiScreen {
 				}
 			});
 			
-			pageAction.getWidget("button").listen(MouseDownEvent.class, (w, e) -> {
+			pageAction.getWidget("button").listen(LeftClickEvent.class, (w, e) -> {
 				LocationTeleport.performAction(player, selection);
 				player.closeScreen();
 			});
@@ -131,13 +131,13 @@ public class LocTeleportUI extends LIGuiScreen {
 			
 			TextBox.get(single.getWidget("text")).setContent(l.name);
 			
-			single.getWidget("cancel").listen(MouseDownEvent.class,
-				(Widget w, MouseDownEvent e) -> {
+			single.getWidget("cancel").listen(LeftClickEvent.class,
+				(Widget w, LeftClickEvent e) -> {
 					data.removeAt(id);
 					rebuildInspectPanel();
 				});
 			
-			single.listen(MouseDownEvent.class, (w, e) -> {
+			single.listen(LeftClickEvent.class, (w, e) -> {
 				updateSelection(l);
 			});
 			

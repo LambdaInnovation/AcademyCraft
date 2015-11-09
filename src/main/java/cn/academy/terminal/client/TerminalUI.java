@@ -403,7 +403,7 @@ public class TerminalUI extends AuxGui {
 			app = _app;
 			
 			listen(FrameEvent.class, (w, e) -> {
-				double mAlpha = MathUtils.wrapd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
+				double mAlpha = MathUtils.clampd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
 				boolean selected = getSelectedApp() == w;
 				
 				if(selected) {

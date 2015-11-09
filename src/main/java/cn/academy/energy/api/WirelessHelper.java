@@ -28,7 +28,7 @@ import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.util.helper.BlockPos;
-import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.WorldUtils;
 
 /**
@@ -111,7 +111,7 @@ public class WirelessHelper {
 	 */
 	public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z) {
 		double range = 20.0;
-		List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockFilter() {
+		List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockSelector() {
 
 			@Override
 			public boolean accepts(World world, int x, int y, int z, Block block) {

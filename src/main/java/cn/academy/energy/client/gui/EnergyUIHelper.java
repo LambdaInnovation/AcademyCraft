@@ -11,7 +11,7 @@ import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.networkcall.Future;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.helper.Color;
@@ -113,7 +113,7 @@ public class EnergyUIHelper {
 				}
 			}));
 		
-		theButton.listen(MouseDownEvent.class, (w, e) -> 
+		theButton.listen(LeftClickEvent.class, (w, e) -> 
 		{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
 		});

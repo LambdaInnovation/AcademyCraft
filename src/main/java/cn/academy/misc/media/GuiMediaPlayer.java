@@ -30,7 +30,7 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
@@ -82,7 +82,7 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		EventLoader.load(pageMain, this);
 		gui.addWidget(pageMain);
 		
-		gui.postEvent(new UpdateMediaEvent());
+		gui.postEventHierarchically(new UpdateMediaEvent());
 	}
 	
 	
@@ -93,10 +93,10 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		TextBox.get(ret.getWidget("desc")).content = media.getDesc();
 		TextBox.get(ret.getWidget("time")).content = media.getLengthStr();
 		
-		ret.listen(MouseDownEvent.class, (w, e) -> {
+		ret.listen(LeftClickEvent.class, (w, e) -> {
 			if(w.isFocused()) {
 				player.startPlay(media);
-				gui.postEvent(new UpdateMediaEvent());
+				gui.postEventHierarchically(new UpdateMediaEvent());
 			}
 		});
 		
@@ -117,7 +117,7 @@ public class GuiMediaPlayer extends LIGuiScreen {
 	}
 	
 	@GuiCallback("pop")
-	public void onPopDown(Widget w, MouseDownEvent event) {
+	public void onPopDown(Widget w, LeftClickEvent event) {
 		if(player.isPlaying()) {
 			if(player.isPaused())
 				player.resume();
@@ -128,13 +128,13 @@ public class GuiMediaPlayer extends LIGuiScreen {
 		}
 		
 		updatePopState();
-		gui.postEvent(new UpdateMediaEvent());
+		gui.postEventHierarchically(new UpdateMediaEvent());
 	}
 	
 	@GuiCallback("stop")
-	public void onStop(Widget w, MouseDownEvent event) {
+	public void onStop(Widget w, LeftClickEvent event) {
 		player.stop();
-		gui.postEvent(new UpdateMediaEvent());
+		gui.postEventHierarchically(new UpdateMediaEvent());
 	}
 	
 	@GuiCallback("progress")

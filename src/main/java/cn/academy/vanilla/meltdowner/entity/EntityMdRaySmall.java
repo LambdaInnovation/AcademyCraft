@@ -64,7 +64,7 @@ public class EntityMdRaySmall extends EntityRayBase {
 		int blendTime = 500;
 
 		if(dt > this.life * 50 - blendTime) {
-			double timeFactor = MathUtils.wrapd(0, 1, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
+			double timeFactor = MathUtils.clampd(0, 1, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
 			return 1 - timeFactor;
 		}
 		

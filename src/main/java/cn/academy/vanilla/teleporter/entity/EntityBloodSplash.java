@@ -79,7 +79,7 @@ public class EntityBloodSplash extends EntityAdvanced {
 		public void doRender(Entity entity, double x, double y,
 				double z, float a, float b) {
 			EntityBloodSplash splash = (EntityBloodSplash) entity;
-			icon = (SPLASH[MathUtils.wrapi(0, SPLASH.length - 1, splash.frame)]);
+			icon = (SPLASH[MathUtils.clampi(0, SPLASH.length - 1, splash.frame)]);
 			this.size = splash.width;
 			super.doRender(entity, x, y, z, a, b);
 		}

@@ -283,7 +283,7 @@ public class CPData extends DataPart {
 	private void addMaxOverload(float overload) {
 		AbilityData aData = AbilityData.get(getPlayer());
 		float max = getFunc("add_overload").callFloat(aData.getLevel());
-		float add = MathUtils.wrapf(0, 10, getFunc("maxo_rate").callFloat(overload));
+		float add = MathUtils.clampf(0, 10, getFunc("maxo_rate").callFloat(overload));
 		addMaxOverload += add;
 		if(addMaxOverload > max)
 			addMaxOverload = max;

@@ -33,7 +33,7 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.HudUtils;
@@ -205,7 +205,7 @@ public class GuiTutorial extends LIGuiScreen {
 	
 	// Search area
 	@GuiCallback("leftPart/search")
-	public void mouseDown(Widget w, MouseDownEvent event) {
+	public void mouseDown(Widget w, LeftClickEvent event) {
 		TextBox t = TextBox.get(w);
 		if(t.color.a != 1) {
 			t.color.a = 1;

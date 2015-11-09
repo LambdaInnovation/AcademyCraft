@@ -25,7 +25,7 @@ import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
@@ -94,7 +94,7 @@ public class GuiMetalFormer extends LIGuiContainer {
 	}
 	
 	@GuiCallback("mark_former")
-	public void cycleMode(Widget w, MouseDownEvent event) {
+	public void cycleMode(Widget w, LeftClickEvent event) {
 		tile.cycleMode();
 		MetalFormerSyncs.cycle(tile);
 	}

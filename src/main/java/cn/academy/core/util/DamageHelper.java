@@ -88,7 +88,7 @@ public class DamageHelper {
 		List<Entity> list = WorldUtils.getEntities(world, x, y, z, range, entitySelector);
 		for(Entity ent : list) {
 			double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);
-			float factor = 1 - MathUtils.wrapf(0, 1, (float) (dist / range));
+			float factor = 1 - MathUtils.clampf(0, 1, (float) (dist / range));
 			float appliedDamage = MathUtils.lerpf(0, damage, factor);
 			attack(ent, dmgSrc, appliedDamage);
 		}

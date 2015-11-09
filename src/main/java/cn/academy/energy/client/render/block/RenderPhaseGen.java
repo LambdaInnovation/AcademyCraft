@@ -44,7 +44,7 @@ public class RenderPhaseGen extends TileEntitySpecialRenderer {
 		
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
-		int tid = MathUtils.wrapi(0, 4, 
+		int tid = MathUtils.clampi(0, 4, 
 			(int) Math.round(4.0 * gen.getLiquidAmount() / gen.getTankSize()));
 		RenderUtils.loadTexture(textures[tid]);
 		model.renderAll();

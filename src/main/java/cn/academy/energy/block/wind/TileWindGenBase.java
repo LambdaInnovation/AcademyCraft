@@ -68,7 +68,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
 		if(complete && noObstacle) {
 			int y = mainTile.yCoord;
 			double heightFactor = MathUtils.lerp(0.5, 1, 
-				MathUtils.wrapd(0, 1, (y - 70.0) / 90.0));
+				MathUtils.clampd(0, 1, (y - 70.0) / 90.0));
 			return heightFactor * MAX_GENERATION_SPEED;
 		} else {
 			return 0.0;

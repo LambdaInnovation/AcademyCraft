@@ -40,7 +40,7 @@ import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.shader.ShaderMono;
@@ -74,7 +74,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		
 		for(int i = 1; i <= 5; ++i) {
 			final int j = i;
-			treeArea.getWidget("ball" + i).listen(MouseDownEvent.class, (w, e) -> 
+			treeArea.getWidget("ball" + i).listen(LeftClickEvent.class, (w, e) -> 
 			{
 				if(j == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
 					overlay = new Overlay();
@@ -227,7 +227,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				boolean can = LearningHelper.canLearn(aData, developer, skill);
 				LearnButton button = new LearnButton(!can);
 				if(can) {
-					button.listen(MouseDownEvent.class, (w, e) -> 
+					button.listen(LeftClickEvent.class, (w, e) -> 
 					{
 						overlay = new Overlay();
 						window.addWidget(overlay);
@@ -260,7 +260,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			TextBox.get(startButton).color.setColor4d(.6, .6, .6, 1);
 			TextBox.get(ret.getWidget("text_cons")).color.setColor4i(255, 66, 58, 255);
 		} else {
-			startButton.listen(MouseDownEvent.class, (w, e) -> 
+			startButton.listen(LeftClickEvent.class, (w, e) -> 
 			{
 				ret.dispose();
 				
@@ -272,7 +272,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		TextBox.get(ret.getWidget("text_cons")).setContent(SkillTreeLocal.estmCons(estmCons));
 		TextBox.get(ret.getWidget("text_content")).setContent(type.getName(player));
 		
-		ret.getWidget("button_cancel").listen(MouseDownEvent.class, (w, e) -> 
+		ret.getWidget("button_cancel").listen(LeftClickEvent.class, (w, e) -> 
 		{
 			overlay.dispose();
 			overlay = null;
@@ -329,7 +329,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 					}
 				});
 				
-				button.listen(MouseDownEvent.class, (w, event) -> {
+				button.listen(LeftClickEvent.class, (w, event) -> {
 					if(state == 2) {
 						overlay.dispose();
 						overlay = null;

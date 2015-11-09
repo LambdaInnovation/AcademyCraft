@@ -28,7 +28,7 @@ import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.BlockFilters;
+import cn.lambdalib.util.mc.BlockSelectors;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
@@ -168,7 +168,7 @@ public class ThreateningTeleport extends Skill {
 		TraceResult calcDropPos() {
 			double range = getRange(aData);
 			
-			MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living, BlockFilters.filEverything);
+			MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living, BlockSelectors.filEverything);
 			if(pos == null)
 				pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
 			

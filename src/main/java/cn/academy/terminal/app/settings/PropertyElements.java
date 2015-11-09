@@ -11,8 +11,8 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.GainFocusEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.KeyEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
-import cn.lambdalib.cgui.gui.event.global.GlobalMouseEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.gui.event.MouseClickEvent;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +39,7 @@ public class PropertyElements {
 			Widget check = ret.getWidget("box");
 			DrawTexture.get(check).setTex(p.getBoolean() ? CHECK_TRUE : CHECK_FALSE);
 			
-			check.listen(MouseDownEvent.class, (w, e) -> {
+			check.listen(LeftClickEvent.class, (w, e) -> {
 				boolean b = !p.getBoolean();
 				p.set(b);
 				DrawTexture.get(check).setTex(b ? CHECK_TRUE : CHECK_FALSE);
@@ -75,7 +75,7 @@ public class PropertyElements {
 			CRL_NORMAL = new Color().setColor4i(200, 200, 200, 200),
 			CRL_EDIT = new Color().setColor4i(251, 133, 37, 200);
 		
-		IGuiEventHandler<GlobalMouseEvent> gMouseHandler;
+		IGuiEventHandler<MouseClickEvent> gMouseHandler;
 		
 		final Property prop;
 
@@ -117,9 +117,9 @@ public class PropertyElements {
 			textBox.setContent("PRESS");
 			textBox.color = CRL_EDIT;
 			
-			widget.getGui().eventBus.listen(GlobalMouseEvent.class, 
+			widget.getGui().eventBus.listen(MouseClickEvent.class, 
 			gMouseHandler = (w, event) -> {
-				endEditing(event.key - 100);
+				endEditing(event.button - 100);
 			});
 		}
 		
@@ -135,7 +135,7 @@ public class PropertyElements {
 			}
 			
 			updateKeyName();
-			widget.getGui().eventBus.unlisten(GlobalMouseEvent.class, gMouseHandler);
+			widget.getGui().eventBus.unlisten(MouseClickEvent.class, gMouseHandler);
 			MinecraftForge.EVENT_BUS.post(new ConfigModifyEvent(prop));
 		}
 		

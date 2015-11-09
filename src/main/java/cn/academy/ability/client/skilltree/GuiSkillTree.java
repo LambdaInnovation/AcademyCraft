@@ -51,7 +51,7 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.HudUtils;
@@ -295,14 +295,14 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		
 		float getAlpha() {
 			long dt = GameTimer.getTime() - create;
-			return MathUtils.wrapf(0, 1, (float)(dt - timeOffset) / 200);
+			return MathUtils.clampf(0, 1, (float)(dt - timeOffset) / 200);
 		}
 		
 		@Override
 		public void onAdded() {
 			Widget back = widget.getWidget("back");
 			
-			back.listen(MouseDownEvent.class, (w, event) -> 
+			back.listen(LeftClickEvent.class, (w, event) -> 
 			{
 				Widget menu = createDesc(SkillHandler.this);
 				if(menu != null) {
@@ -520,7 +520,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 					}
 					
 					private double blendfac(int offset) {
-						return .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - time - offset) / 200.0d);
+						return .1 + .9 * MathUtils.clampd(0, 1, (GameTimer.getTime() - time - offset) / 200.0d);
 					}
 					
 				});
@@ -548,7 +548,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 			{
 				glPushMatrix();
 				glTranslated(0, 0, 10);
-				double a = .1 + .9 * MathUtils.wrapd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
+				double a = .1 + .9 * MathUtils.clampd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
 				CRL_SKILL_DESC_1.a = a;
 				Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
 				glPopMatrix();

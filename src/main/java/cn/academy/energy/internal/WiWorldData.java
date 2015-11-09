@@ -39,7 +39,7 @@ import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.lambdalib.util.helper.BlockPos;
-import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.WorldUtils;
 
 /**
@@ -63,7 +63,7 @@ public class WiWorldData extends WorldSavedData {
 	
 	//-----WEN-----
 	
-	private IBlockFilter filterWirelessBlocks = new IBlockFilter() {
+	private IBlockSelector filterWirelessBlocks = new IBlockSelector() {
 
 		@Override
 		public boolean accepts(World world, int x, int y, int z, Block block) {

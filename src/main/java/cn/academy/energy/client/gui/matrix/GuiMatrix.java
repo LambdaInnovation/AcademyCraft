@@ -29,9 +29,10 @@ import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.MouseDownEvent;
+import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
@@ -244,7 +245,7 @@ public class GuiMatrix extends LIGuiContainer {
 	public class MainCallback {
 		
 		@GuiCallback("button_config")
-		public void openDialogue(Widget w, MouseDownEvent event) {
+		public void openDialogue(Widget w, LeftClickEvent event) {
 			if(receivedSync)
 				openInitWindow();
 		}
@@ -264,13 +265,13 @@ public class GuiMatrix extends LIGuiContainer {
 			pageSSID.listen(FrameEvent.class, (w, event) -> 
 			{
 				if(!pageMain.transform.doesListenKey) {
-					LIGui.drawBlackout();
+					RenderUtils.drawBlackout();
 				}
 			});
 		}
 		
 		@GuiCallback("button_yes")
-		public void yesDown(Widget w, MouseDownEvent event) {
+		public void yesDown(Widget w, LeftClickEvent event) {
 			startWaiting();
 			
 			if(!isLoaded) {
@@ -295,7 +296,7 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 		
 		@GuiCallback("button_no")
-		public void noDown(Widget w, MouseDownEvent event) {
+		public void noDown(Widget w, LeftClickEvent event) {
 			//Close without doing anything
 			pageSSID.transform.doesDraw = false;
 			pageMain.transform.doesListenKey = true;
@@ -318,7 +319,7 @@ public class GuiMatrix extends LIGuiContainer {
 			pageCheck.listen(FrameEvent.class, (w, event) -> 
 			{
 				if(!pageMain.transform.doesListenKey) {
-					LIGui.drawBlackout();
+					RenderUtils.drawBlackout();
 				}
 			});
 		}
@@ -335,7 +336,7 @@ public class GuiMatrix extends LIGuiContainer {
 		}
 		
 		@GuiCallback("button_close")
-		public void close(Widget w, MouseDownEvent event) {
+		public void close(Widget w, LeftClickEvent event) {
 			pageCheck.transform.doesDraw = false;
 			pageMain.transform.doesListenKey = true;
 		}

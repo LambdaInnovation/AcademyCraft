@@ -24,8 +24,8 @@ import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
 import cn.lambdalib.util.entityx.handlers.Life;
 import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.mc.BlockFilters;
-import cn.lambdalib.util.mc.IBlockFilter;
+import cn.lambdalib.util.mc.BlockSelectors;
+import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,12 +47,12 @@ public class ArcGen extends Skill {
 	
 	static ArcGen instance;
 	
-	static IBlockFilter blockFilter = new IBlockFilter() {
+	static IBlockSelector blockFilter = new IBlockSelector() {
 
 		@Override
 		public boolean accepts(World world, int x, int y, int z, Block block) {
 			return block == Blocks.water || block == Blocks.flowing_water || 
-					BlockFilters.filNormal.accepts(world, x, y, z, block);
+					BlockSelectors.filNormal.accepts(world, x, y, z, block);
 		}
 		
 	};
