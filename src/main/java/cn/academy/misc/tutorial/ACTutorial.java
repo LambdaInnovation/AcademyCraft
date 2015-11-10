@@ -26,13 +26,13 @@ public class ACTutorial {
 	
 	Condition condition;
 	
-	public ACTutorial(){}
+	public ACTutorial() {}
 	
-	public ACTutorial(String id){
+	public ACTutorial(String id) {
 		this.id=id;
 	}
 	
-	public static void addTutorials(ACTutorial...tutorial) throws Exception{
+	public static void addTutorials(ACTutorial...tutorial) throws Exception {
 		for(ACTutorial t : tutorial){
 			if(tutorials.containsKey(t.id))throw new Exception("Already　has a tutorial with this id:"+t.id);
 			tutorials.put(t.id, t);
@@ -55,13 +55,13 @@ public class ACTutorial {
 		addTutorials(acTu);
 	}
 	
-	public ACTutorial addCondition(Condition condition){
+	public ACTutorial addCondition(Condition condition) {
 		this.condition=condition;
 		condition.addNeedSavingToTutorial(this);
 		return this;
 	}
 	
-	public String getContentKey(){
+	public String getContentKey() {
 		return "ac.gui.tutorial." + id;
 	}
 	
@@ -77,7 +77,7 @@ public class ACTutorial {
 		return StatCollector.translateToLocal(getTitleKey());
 	}
 	
-	public static ACTutorial getTutorial(String s) throws Exception{
+	public static ACTutorial getTutorial(String s) throws Exception {
 		ACTutorial t;
 		if(!tutorials.containsKey(s))throw new Exception("No such a tutorial;");
 		t=tutorials.get(s);
@@ -108,25 +108,23 @@ public class ACTutorial {
 	public static class ACTutorialDataPart extends DataPart{
 		boolean[] allSaved=null;
 		
-		void init(){
+		void init() {
 			allSaved = new boolean[ACTutorial.savedConditions.size()];
 			Arrays.fill(allSaved, false);
 		}
 		
-		public void update(){
+		public void update() {
 			sync();
 		}
 		
 		@Override
 		public void fromNBT(NBTTagCompound tag) {
-			// TODO Auto-generated method stub
 			if(allSaved==null)init();
 			Set<String> set=tag.func_150296_c();
 			for(String s : set){
 				try {
 					allSaved[Integer.parseInt(s)]= tag.getBoolean(s);
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -134,7 +132,6 @@ public class ACTutorial {
 
 		@Override
 		public NBTTagCompound toNBT() {
-			// TODO Auto-generated method stub
 			if(allSaved==null)init();
 			NBTTagCompound tag = new NBTTagCompound();
 			for(int i=0;i<allSaved.length;i++){
@@ -145,12 +142,13 @@ public class ACTutorial {
 		
 	}
 	
-	public boolean getIsLoad(EntityPlayer player){
-		if(this.condition!=null)return this.condition.exam(player);
+	public boolean getIsLoad(EntityPlayer player) {
+		if(this.condition!=null)
+			return this.condition.exam(player);
 		return true;
 	}
 
-	public static void debug(EntityPlayer player){
+	public static void debug(EntityPlayer player) {
 		AcademyCraft.log.info("DEBUG:");
 		for(ACTutorial t : tutorials.values()){
 			AcademyCraft.log.info(t.id+" : "+t.getIsLoad(player));
