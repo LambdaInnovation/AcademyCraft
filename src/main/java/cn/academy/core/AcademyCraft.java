@@ -15,7 +15,6 @@ package cn.academy.core;
 import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
 
 import cn.academy.core.util.ValuePipeline;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -47,6 +46,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Academy Craft Mod Main Class
@@ -61,11 +61,11 @@ public class AcademyCraft {
 	@Instance("academy-craft")
     public static AcademyCraft INSTANCE;
     
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 	
-	public static final String VERSION = "1.0pr2_1";
+	public static final String VERSION = "1.0pr3_dev";
 
-    public static final Logger log = (Logger) LogManager.getLogger("AcademyCraft");
+    public static final Logger log = LogManager.getLogger("AcademyCraft");
     
     static final String[] scripts = {
         "generic", "ability", "electromaster", "teleporter", "meltdowner",
@@ -79,8 +79,6 @@ public class AcademyCraft {
      */
     private static ScriptProgram script;
     
-    private static boolean scriptLoaded;
-    
     /**
      * The globally used value pipeline.
      */
@@ -91,8 +89,6 @@ public class AcademyCraft {
     @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE
             .newSimpleChannel("academy-network");
-    
-    public static boolean ic2SupportPresent, teSupportPresent, mtSupportPresent;
     
     @RegItem
     @RegItem.UTName("logo")
@@ -110,50 +106,24 @@ public class AcademyCraft {
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2015");
         log.info("http://ac.li-dev.cn/");
-        
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        
-        script = new ScriptProgram();
-        for(String s : scripts) {
-        	ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
-        	ResourceCheck.add(res);
-        	script.loadScript(res);
-        }
-        
-        ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
-        
-        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
-    }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        RegistrationManager.INSTANCE.registerAll(this, "Init");
+        config = new Configuration(event.getSuggestedConfigurationFile());
+
+        script = new ScriptProgram();
+        for (String s : scripts) {
+            ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
+            ResourceCheck.add(res);
+            script.loadScript(res);
+        }
+
+        ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
+
+        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
-        
-        try { 
-        	Class.forName("ic2.core.IC2");
-        	try {
-        		Class.forName("cn.academy.support.ic2.IC2Support").getMethod("init").invoke(this);
-        		ic2SupportPresent = true;
-        	} catch (Throwable e) {
-        		log.error("Failed to initialize IC2 support", e);
-        	}
-        } catch(Throwable e) {}
-        
-        try {
-        	Class.forName("minetweaker.mc1710.MineTweakerMod");
-        	Class.forName("minetweaker.MineTweakerAPI");
-        	try {
-        		Class.forName("cn.academy.support.minetweaker.MTSupport").getMethod("init").invoke(this);
-        		mtSupportPresent = true;
-        	} catch (Throwable e) {
-        		log.error("Failed to initialize MineTweaker3 support", e);
-        	}
-        } catch (Throwable e) {}
         
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
         

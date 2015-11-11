@@ -34,7 +34,7 @@ public class ACRecipeNamesRegistration extends RegistryType {
 	public @interface RegACRecipeNames {}
 
 	public ACRecipeNamesRegistration() {
-		super(RegACRecipeNames.class, "ac_recipeNames");
+		super(RegACRecipeNames.class, "AC_RecipeNames");
 		setLoadStage(LoadStage.POST_INIT);
 	}
 
@@ -46,7 +46,7 @@ public class ACRecipeNamesRegistration extends RegistryType {
 
 	@Override
 	public boolean registerField(AnnotationData data) throws Exception {
-		return false;
+		return true;
 	}
 
 }

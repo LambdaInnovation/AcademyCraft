@@ -12,10 +12,14 @@
  */
 package cn.academy.support.ic2;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
@@ -24,12 +28,15 @@ import net.minecraft.item.ItemStack;
  * 
  * @author KSkun
  */
+@Registrant
 public class IC2Support {
 	
 	/**
 	 * The convert rate from EU to IF(1IF = <CONV_RATE>EU).
 	 */
 	public static final double CONV_RATE = 1;
+
+	private static final String MODID = "IC2";
 	
 	public static double eu2if(double euEnergy) {
 		return euEnergy / CONV_RATE;
@@ -38,7 +45,9 @@ public class IC2Support {
 	public static double if2eu(double ifEnergy) {
 		return ifEnergy * CONV_RATE;
 	}
-	
+
+    @Optional.Method(modid=MODID)
+    @RegInitCallback
 	public static void init() {
 		BlockEUInput euInput = new BlockEUInput();
 		BlockEUOutput euOutput = new BlockEUOutput();
@@ -67,6 +76,8 @@ public class IC2Support {
 		
 		GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
 		GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
+
+        AcademyCraft.log.info("IC2 API Support has been loaded.");
 	}
 
 }
