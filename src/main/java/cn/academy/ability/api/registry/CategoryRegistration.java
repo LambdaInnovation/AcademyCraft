@@ -32,7 +32,7 @@ import cn.lambdalib.annoreg.core.RegistryTypeDecl;
 public class CategoryRegistration extends RegistrationFieldSimple<RegCategory, Category> {
 	
 	public CategoryRegistration() {
-		super(RegCategory.class, "ac_Category");
+		super(RegCategory.class, "AC_Category");
 		setLoadStage(LoadStage.PRE_INIT);
 	}
 

@@ -122,6 +122,11 @@ public class AcademyCraft {
     }
 
     @EventHandler
+    public void init(FMLInitializationEvent event) {
+        RegistrationManager.INSTANCE.registerAll(this, "Init");
+    }
+
+    @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
         
