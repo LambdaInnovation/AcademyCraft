@@ -10,9 +10,10 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.action;
 
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.IDeveloper;
+import cn.academy.ability.develop.LearningHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
@@ -23,11 +24,11 @@ import cn.academy.ability.client.skilltree.SkillTreeLocal;
  * Learn a specific kind of skill.
  * @author WeAthFolD
  */
-public class DevelopTypeSkill implements IDevelopType {
+public class DevelopActionSkill implements IDevelopAction {
 	
 	Skill skill;
 
-	public DevelopTypeSkill(Skill _skill) {
+	public DevelopActionSkill(Skill _skill) {
 		skill = _skill;
 	}
 

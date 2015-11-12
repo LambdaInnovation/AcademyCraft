@@ -1,6 +1,4 @@
-package cn.academy.ability.developer.refactor;
-
-import cn.academy.ability.developer.DeveloperType;
+package cn.academy.ability.develop;
 
 /**
  * Abstract interface for developer, used by DevelopData.

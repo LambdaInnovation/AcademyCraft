@@ -14,8 +14,8 @@ package cn.academy.ability.item;
 
 import cn.academy.ability.client.render.RenderDeveloperPortable;
 import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
-import cn.academy.ability.developer.DeveloperType;
-import cn.academy.ability.developer.PortableDevData;
+import cn.academy.ability.develop.DeveloperType;
+import cn.academy.ability.develop.PortableDevData;
 import cn.academy.energy.template.ItemEnergyBase;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;
@@ -52,7 +52,7 @@ public class ItemDeveloper extends ItemEnergyBase {
 	
 	@SideOnly(Side.CLIENT)
 	private void displayGui(EntityPlayer player) {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player).get()));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player)));
 	}
 
 	@Override

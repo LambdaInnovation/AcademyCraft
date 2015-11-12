@@ -1,7 +1,7 @@
 package cn.academy.ability.client.skilltree;
 
 import cn.academy.ability.api.data.CPData;
-import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.develop.DeveloperType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 

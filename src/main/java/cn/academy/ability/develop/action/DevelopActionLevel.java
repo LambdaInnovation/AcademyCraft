@@ -10,13 +10,14 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.action;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.client.skilltree.SkillTreeLocal;
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.IDeveloper;
+import cn.academy.ability.develop.LearningHelper;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.generic.RandUtils;
@@ -26,7 +27,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * @author WeAthFolD
  */
-public class DevelopTypeLevel implements IDevelopType {
+public class DevelopActionLevel implements IDevelopAction {
 	
 	static final ResourceLocation TEX_CATNF = Resources.getTexture("guis/skill_tree/cat_not_found");
 	

@@ -13,7 +13,7 @@
 package cn.academy.ability;
 
 import cn.academy.ability.block.BlockDeveloper;
-import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.item.ItemDeveloper;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.lambdalib.annoreg.core.Registrant;

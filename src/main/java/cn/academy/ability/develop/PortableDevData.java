@@ -10,9 +10,12 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop;
 
+import cn.academy.ability.ModuleAbility;
+import cn.academy.energy.api.IFItemManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
@@ -25,30 +28,10 @@ import cn.lambdalib.util.datapart.RegDataPart;
  */
 @Registrant
 @RegDataPart("PortableDeveloper")
-public class PortableDevData extends DataPart {
+public class PortableDevData extends DataPart implements IDeveloper {
 	
 	public static PortableDevData get(EntityPlayer player) {
 		return PlayerData.get(player).getPart(PortableDevData.class);
-	}
-	
-	private DeveloperPortable developer;
-	
-	public DeveloperPortable get() {
-		EntityPlayer player = getPlayer();
-		if(developer == null) {
-			if(DeveloperPortable.validate(player))
-				developer = new DeveloperPortable(player);
-		} else {
-			if(!DeveloperPortable.validate(player))
-				developer = null;
-		}
-		return developer;
-	}
-	
-	@Override
-	public void tick() {
-		if(developer == null || !DeveloperPortable.validate(getPlayer()))
-            developer = null;
 	}
 
 	@Override
@@ -59,4 +42,33 @@ public class PortableDevData extends DataPart {
 		return new NBTTagCompound();
 	}
 
+	private ItemStack stack() {
+		ItemStack stack = getPlayer().getCurrentEquippedItem();
+		return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
+	}
+
+	@Override
+	public DeveloperType getType() {
+		return DeveloperType.PORTABLE;
+	}
+
+	@Override
+	public boolean tryPullEnergy(double amount) {
+		ItemStack stack = stack();
+		if(stack == null)
+			return false;
+		return IFItemManager.instance.pull(stack, amount, true) == amount;
+	}
+
+	@Override
+	public double getEnergy() {
+		ItemStack stack = stack();
+		return stack == null ? 0 : IFItemManager.instance.getEnergy(stack);
+	}
+
+	@Override
+	public double getMaxEnergy() {
+		ItemStack stack = stack();
+		return stack == null ? 0 : IFItemManager.instance.getMaxEnergy(stack);
+	}
 }

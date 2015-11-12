@@ -10,39 +10,44 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.condition;
 
+import cn.academy.ability.develop.IDeveloper;
+import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.skilltree.SkillTreeLocal;
-import cn.academy.ability.developer.refactor.IDeveloper;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
  */
-public class DevConditionDeveloperType implements IDevCondition {
+public class DevConditionDep implements IDevCondition {
 	
-	final DeveloperType type;
+	public final Skill dependency;
+	public final float requiredExp;
 	
-	public DevConditionDeveloperType(DeveloperType _type) {
-		type = _type;
+	public DevConditionDep(Skill _dep) {
+		this(_dep, 0.0f);
+	}
+	
+	public DevConditionDep(Skill _dep, float _requiredExp) {
+		dependency = _dep;
+		requiredExp = _requiredExp;
 	}
 
 	@Override
 	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		return developer.getType().ordinal() >= type.ordinal();
+		return data.isSkillLearned(dependency) &&
+				data.getSkillExp(dependency) >= requiredExp;
 	}
-	
+
 	@Override
 	public ResourceLocation getIcon() {
-		if(true) return null;
-		return type.texture;
+		return dependency.getHintIcon();
 	}
 
 	@Override
 	public String getHintText() {
-		return SkillTreeLocal.machineType(type);
+		return dependency.getDisplayName() + String.format(": %.0f%%", requiredExp * 100);
 	}
 
 }

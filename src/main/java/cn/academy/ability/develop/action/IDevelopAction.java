@@ -10,18 +10,18 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.action;
 
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.IDeveloper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * An IDevelopType represents a single kind of process to be performed in Developer.
+ * An IDevelopAction represents a single kind of process to be performed in Developer.
  * You have to provide the stimulation count and the learned callback.
  * @author WeAthFolD
  */
-public interface IDevelopType {
+public interface IDevelopAction {
 	
 	int getStimulations(EntityPlayer player);
 	

@@ -10,23 +10,36 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.condition;
 
-import cn.academy.ability.developer.refactor.IDeveloper;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.develop.IDeveloper;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
  */
-public class DevConditionLevel implements IDevCondition {
+public class DevConditionAnySkillOfLevel implements IDevCondition {
+	
+	int level;
 
-	@Override
-	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		return data.getLevel() >= skill.getLevel();
+	public DevConditionAnySkillOfLevel(int _level) {
+		level = _level;
 	}
 	
+	@Override
+	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+		if(data.getCategory() == null)
+			return false;
+		for(Skill s : data.getCategory().getSkillsOfLevel(level)) {
+			if(data.isSkillLearned(s))
+				return true;
+		}
+		return false;
+	}
+
+	// TODO
 	@Override
 	public ResourceLocation getIcon() {
 		return null;

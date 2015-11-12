@@ -7,11 +7,11 @@ import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.developer.DevConditionDep;
-import cn.academy.ability.developer.DevConditionDeveloperType;
-import cn.academy.ability.developer.DevConditionLevel;
-import cn.academy.ability.developer.DeveloperType;
-import cn.academy.ability.developer.IDevCondition;
+import cn.academy.ability.develop.condition.DevConditionDep;
+import cn.academy.ability.develop.condition.DevConditionDeveloperType;
+import cn.academy.ability.develop.condition.DevConditionLevel;
+import cn.academy.ability.develop.DeveloperType;
+import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.achievements.ModuleAchievements;

@@ -1,4 +1,4 @@
-package cn.academy.ability.developer;
+package cn.academy.ability.develop;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
