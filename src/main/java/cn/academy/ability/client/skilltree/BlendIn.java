@@ -48,6 +48,8 @@ public class BlendIn extends Component {
 
 	@Override
 	public void onAdded() {
+        super.onAdded();
+
 		DrawTexture dt = DrawTexture.get(widget);
 		TextBox tb = TextBox.get(widget);
 		Tint t = Tint.get(widget);

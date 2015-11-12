@@ -311,13 +311,10 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 					
 					// To make the draw order correct, we used a bit of hack to re-add the current skill
 					// widget and menu widget to the last of the draw list.
-					// treeArea.forceRemoveWidget(widget);
-					// widget.disposed = false;
-
+					treeArea.forceRemoveWidget(widget);
+                    widget.disposed = false;
 					treeArea.addWidget(menu);
-					// treeArea.addWidget(widget);
-                    System.out.println("Added " + menu);
-                    System.out.println(menu.x + "," + menu.y + "," + menu.scale);
+					treeArea.addWidget(widget);
 				}
 			});
 			

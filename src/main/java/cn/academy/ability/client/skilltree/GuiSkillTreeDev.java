@@ -49,6 +49,7 @@ import cn.lambdalib.util.helper.Font;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 
 /**
@@ -162,6 +163,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				text.content = SkillTreeLocal.required();
 				text.heightAlign = HeightAlign.CENTER;
 				text.size = 38;
+                text.zLevel = 10;
 				wtext.addComponent(text);
 				
 				BlendIn blend = new BlendIn();
@@ -177,7 +179,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 					ResourceLocation tex = cond.getIcon();
 					if(tex != null) {
 						Widget dep = new Widget();
-						dep.transform.x = x;
+						dep.transform.setPos(x, 15);
 						dep.transform.setSize(50, 50);
 						dep.transform.alignHeight = HeightAlign.BOTTOM;
 						
@@ -195,7 +197,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 									final float fsize = 35;
 									double flen = Font.font.strLen(txt, fsize);
 									
-									glTranslated(-flen / 2, -30, 11);
+									glTranslated(-flen / 2, -40, 11);
 									
 									CRL_BACKGRND.bind();
 									HudUtils.colorRect(0, 0, flen + 20, fsize + 20);
@@ -387,14 +389,17 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			
 			BlendIn blend = new BlendIn();
 			blend.timeOffset = -700;
-			
+
+            glow.zLevel = tint.zLevel = 12.0;
+            text.zLevel = 13.0;
+
 			addComponent(glow);
 			addComponent(tint);
 			addComponent(text);
 			
 			if(disabled)
 				setDisabled();
-			
+
 			addComponent(blend);
 		}
 		
