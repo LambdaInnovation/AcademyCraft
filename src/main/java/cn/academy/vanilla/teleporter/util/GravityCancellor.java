@@ -20,11 +20,11 @@ import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
  * @author WeAthFolD
  */
 public class GravityCancellor extends LIHandler<ClientTickEvent> {
-	
+
 	final EntityPlayer p;
 	final int ticks;
 	int ticker = 0;
-	
+
 	public GravityCancellor(EntityPlayer _p, int _ticks) {
 		p = _p;
 		ticks = _ticks;
@@ -32,11 +32,11 @@ public class GravityCancellor extends LIHandler<ClientTickEvent> {
 
 	@Override
 	protected boolean onEvent(ClientTickEvent event) {
-		if(p.isDead || (++ticker == ticks)) {
+		if (p.isDead || (++ticker == ticks)) {
 			this.setDead();
 		} else {
-			if(!p.capabilities.isFlying) {
-				if(!p.onGround) {
+			if (!p.capabilities.isFlying) {
+				if (!p.onGround) {
 					p.motionY += 0.036;
 				}
 			}

@@ -44,63 +44,63 @@ import cn.lambdalib.multiblock.ItemBlockMulti;
 @RegInit
 @RegACRecipeNames
 public class ModuleEnergy {
-	
+
 	// BLOCKS
-    @RegBlock
-    @RecipeName("node0")
-    public static BlockNode nodeBasic = new BlockNode(NodeType.BASIC);
-    
-    @RegBlock
-    @RecipeName("node1")
-    public static BlockNode nodeStandard = new BlockNode(NodeType.STANDARD);
-    
-    @RegBlock
-    @RecipeName("node2")
-    public static BlockNode nodeAdvanced = new BlockNode(NodeType.ADVANCED);
-    
-    @RegBlock(item = ItemBlockMulti.class)
-    @RecipeName("mat")
-    public static BlockMatrix matrix = new BlockMatrix();
-    
-    @RegBlock
-    public static BlockCatEngine infiniteGen;
-    
-    @RegBlock
-    @RecipeName("solar_gen")
-    public static BlockSolarGen solarGen;
-    
-    @RegBlock
-    @RecipeName("phase_gen")
-    public static BlockPhaseGen phaseGen;
-    
-    @RegBlock(item = ItemBlockMulti.class)
-    @RecipeName("windgen_base")
-    public static BlockWindGenBase windgenBase;
-    
-    @RegBlock
-    @RecipeName("windgen_pillar")
-    public static BlockWindGenPillar windgenPillar;
-    
-    @RegBlock(item = ItemBlockMulti.class)
-    @RecipeName("windgen_main")
-    public static BlockWindGenMain windgenMain;
-    
-    // ITEMS
-    @RegItem
-    @RecipeName("ene_unit")
-    public static Item energyUnit = new ItemEnergyBase("energy_unit", 10000, 20);
-    
-    @RegItem
-    @RecipeName("mat_core")
-    public static ItemMatrixCore matrixCore;
-    
-    @RegItem
-    @RecipeName("windgen_fan")
-    public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
-    
-    public static void init() {
-		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000), 
-			EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
+	@RegBlock
+	@RecipeName("node0")
+	public static BlockNode nodeBasic = new BlockNode(NodeType.BASIC);
+
+	@RegBlock
+	@RecipeName("node1")
+	public static BlockNode nodeStandard = new BlockNode(NodeType.STANDARD);
+
+	@RegBlock
+	@RecipeName("node2")
+	public static BlockNode nodeAdvanced = new BlockNode(NodeType.ADVANCED);
+
+	@RegBlock(item = ItemBlockMulti.class)
+	@RecipeName("mat")
+	public static BlockMatrix matrix = new BlockMatrix();
+
+	@RegBlock
+	public static BlockCatEngine infiniteGen;
+
+	@RegBlock
+	@RecipeName("solar_gen")
+	public static BlockSolarGen solarGen;
+
+	@RegBlock
+	@RecipeName("phase_gen")
+	public static BlockPhaseGen phaseGen;
+
+	@RegBlock(item = ItemBlockMulti.class)
+	@RecipeName("windgen_base")
+	public static BlockWindGenBase windgenBase;
+
+	@RegBlock
+	@RecipeName("windgen_pillar")
+	public static BlockWindGenPillar windgenPillar;
+
+	@RegBlock(item = ItemBlockMulti.class)
+	@RecipeName("windgen_main")
+	public static BlockWindGenMain windgenMain;
+
+	// ITEMS
+	@RegItem
+	@RecipeName("ene_unit")
+	public static Item energyUnit = new ItemEnergyBase("energy_unit", 10000, 20);
+
+	@RegItem
+	@RecipeName("mat_core")
+	public static ItemMatrixCore matrixCore;
+
+	@RegItem
+	@RecipeName("windgen_fan")
+	public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
+
+	public static void init() {
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000),
+				EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
 	}
-	
+
 }

@@ -22,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class AppEnvironment {
-	
+
 	/*
 	 * Instances to be injected when startup
 	 */
@@ -30,21 +30,23 @@ public class AppEnvironment {
 	public TerminalUI terminal;
 
 	/**
-	 * Called just before environment is activated on client side. Load the data.
+	 * Called just before environment is activated on client side. Load the
+	 * data.
 	 */
-	public void onStart() {}
-	
+	public void onStart() {
+	}
+
 	protected App getApp() {
 		return app;
 	}
-	
+
 	protected TerminalUI getTerminal() {
 		return terminal;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	protected EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}
-	
+
 }

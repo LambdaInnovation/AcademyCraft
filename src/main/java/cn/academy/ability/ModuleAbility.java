@@ -32,6 +32,7 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 
 /**
  * The ability module init class.
+ * 
  * @author WeAthFolD
  */
 @Registrant
@@ -39,33 +40,31 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 @RegACRecipeNames
 @RegEventHandler(Bus.Forge)
 public class ModuleAbility {
-	
+
 	@RegItem
 	@RegItem.HasRender
 	@RecipeName("dev_portable")
 	public static ItemDeveloper developerPortable;
-	
+
 	@RegBlock(item = ItemBlockMulti.class)
 	@RecipeName("dev_normal")
-	public static BlockDeveloper 
-		developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
-	
+	public static BlockDeveloper developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
+
 	@RegBlock(item = ItemBlockMulti.class)
 	@RecipeName("dev_advanced")
-	public static BlockDeveloper 
-		developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
-	
+	public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
+
 	public static void init() {
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-		if(event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
-			if(event.player.worldObj.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ)
-					instanceof BlockDeveloper)
+		if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
+			if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
+					event.target.blockZ) instanceof BlockDeveloper)
 				event.setCanceled(true);
 		}
 	}
-	
+
 }

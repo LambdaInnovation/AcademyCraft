@@ -45,7 +45,7 @@ import net.minecraftforge.oredict.OreDictionary;
  *
  */
 public class CatElectromaster extends Category {
-	
+
 	public ArcGen arcGen;
 	public MagManip magManip;
 	public MineDetect mineDetect;
@@ -59,108 +59,95 @@ public class CatElectromaster extends Category {
 
 	public CatElectromaster() {
 		super("electromaster");
-		
+
 		colorStyle.setColor4i(20, 113, 208, 100);
-		
+
 		addSkill(arcGen = new ArcGen());
 		addSkill(currentCharging = new CurrentCharging());
 		addSkill(magMovement = new MagMovement());
 		addSkill(magManip = new MagManip());
 		addSkill(mineDetect = new MineDetect());
-		
+
 		// TODO: Not added in 1.0 version
 		// addSkill(ironSand = new IronSand());
-		
+
 		addSkill(bodyIntensify = new BodyIntensify());
 		addSkill(thunderBolt = new ThunderBolt());
 		addSkill(railgun = new Railgun());
 		addSkill(thunderClap = new ThunderClap());
-		
+
 		ModuleVanilla.addGenericSkills(this);
-		
+
 		// Assign deps
 		currentCharging.setParent(arcGen, 0.3f);
-		
+
 		magMovement.setParent(arcGen);
 		magMovement.addSkillDep(currentCharging, 0.7f);
-		
+
 		magManip.setParent(magMovement, 0.5f);
-		
+
 		bodyIntensify.setParent(arcGen, 1f);
 		bodyIntensify.addSkillDep(currentCharging, 1f);
-		
+
 		mineDetect.setParent(magManip, 1f);
-		
+
 		thunderBolt.setParent(arcGen);
 		thunderBolt.addSkillDep(currentCharging, 0.7f);
-		
+
 		railgun.setParent(thunderBolt, 0.3f);
 		railgun.addSkillDep(magManip, 1f);
-		
+
 		// ironSand.setParent(magManip, 1f);
-		
+
 		thunderClap.setParent(thunderBolt, 1f);
-		
-		KnowledgeData.addKnowledges(new String[] {
-			"em_basic_volt",
-			"em_improved_volt",
-			"em_high_volt",
-			"em_mag_ctrl",
-			"em_projectile_master",
-			"em_highenergy"
-		});
+
+		KnowledgeData.addKnowledges(new String[] { "em_basic_volt", "em_improved_volt", "em_high_volt", "em_mag_ctrl",
+				"em_projectile_master", "em_highenergy" });
 	}
-	
+
 	public static boolean isOreBlock(Block block) {
-		if(block instanceof BlockOre) {
+		if (block instanceof BlockOre) {
 			return true;
 		}
-		
-		if(Item.getItemFromBlock(block) == null)
+
+		if (Item.getItemFromBlock(block) == null)
 			return false;
 		ItemStack stack = new ItemStack(block);
 		int[] val = OreDictionary.getOreIDs(stack);
-		for(int i : val) {
-			if(OreDictionary.getOreName(i).contains("ore"))
+		for (int i : val) {
+			if (OreDictionary.getOreName(i).contains("ore"))
 				return true;
 		}
 		return false;
 	}
-	
+
 	private static HashSet<Block> metalBlocks = new HashSet();
+
 	static {
-		metalBlocks.addAll(Arrays.asList(new Block[] {
-			Blocks.rail,
-			Blocks.dispenser,
-			Blocks.hopper,
-			Blocks.iron_bars,
-			Blocks.iron_block,
-			Blocks.iron_door,
-			Blocks.iron_ore,
-			Blocks.activator_rail,
-			Blocks.piston
-		}));
+		metalBlocks.addAll(Arrays.asList(new Block[] { Blocks.rail, Blocks.dispenser, Blocks.hopper, Blocks.iron_bars,
+				Blocks.iron_block, Blocks.iron_door, Blocks.iron_ore, Blocks.activator_rail, Blocks.piston }));
 	}
-	
+
 	private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();
+
 	static {
 		metalEntities.add(EntityMinecart.class);
 		metalEntities.add(EntityMagHook.class);
 		metalEntities.add(EntityIronGolem.class);
 	}
-	
+
 	public static boolean isMetalBlock(Block block) {
-		return metalBlocks.contains(block); 
+		return metalBlocks.contains(block);
 	}
-	
+
 	public static boolean isWeakMetalBlock(Block block) {
 		Material mat = block.getMaterial();
 		return mat == Material.rock || mat == Material.anvil;
 	}
-	
+
 	public static boolean isEntityMetallic(Entity ent) {
-		for(Class<? extends Entity> cl : metalEntities) {
-			if(cl.isInstance(ent))
+		for (Class<? extends Entity> cl : metalEntities) {
+			if (cl.isInstance(ent))
 				return true;
 		}
 		return false;

@@ -23,16 +23,16 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public class FormulaParticleFactory extends ParticleFactory {
-	
+
 	public static final FormulaParticleFactory instance = new FormulaParticleFactory();
-	
+
 	static ResourceLocation[] textures = Resources.getEffectSeq("formula", 10);
 
 	private FormulaParticleFactory() {
 		super(new Particle());
 		this.template.color.setColor4i(220, 220, 220, 255);
 		this.template.hasLight = false;
-		
+
 		this.addDecorator(new ParticleDecorator() {
 
 			@Override
@@ -43,7 +43,7 @@ public class FormulaParticleFactory extends ParticleFactory {
 				particle.fadeInTime = 2;
 				particle.fadeAfter(RandUtils.rangei(10, 15), 20);
 			}
-			
+
 		});
 	}
 

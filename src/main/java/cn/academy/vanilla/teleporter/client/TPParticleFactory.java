@@ -23,21 +23,22 @@ import cn.lambdalib.util.generic.RandUtils;
  *
  */
 public class TPParticleFactory extends ParticleFactory {
-	
+
 	static Particle template = new Particle();
+
 	static {
 		template.texture = Resources.getTexture("effects/tp_particle");
 		template.size = 0.1f;
 		template.hasLight = false;
 		template.color.setColor4d(1, 1, 1, 1);
 	}
-	
+
 	public static TPParticleFactory instance = new TPParticleFactory();
 
 	public TPParticleFactory() {
 		super(template);
 	}
-	
+
 	@Override
 	public Particle next(World world) {
 		Particle ret = super.next(world);

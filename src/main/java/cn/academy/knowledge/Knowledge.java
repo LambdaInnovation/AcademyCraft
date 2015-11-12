@@ -23,34 +23,35 @@ public class Knowledge {
 
 	final String name;
 	protected ResourceLocation icon;
-	
+
 	public Knowledge(String _name) {
 		name = _name;
-		
+
 		icon = Resources.getTexture("knowledge/" + name.replace('.', '/'));
 	}
-	
+
 	public ResourceLocation getIcon() {
 		return icon;
 	}
-	
+
 	/**
-	 * Get the description text of this knowledge. Usually the way to acquire this knowledge.
+	 * Get the description text of this knowledge. Usually the way to acquire
+	 * this knowledge.
 	 */
 	public String getDesc() {
 		return StatCollector.translateToLocal("ac.knowledge." + name + ".desc");
 	}
-	
+
 	/**
 	 * Get the name of this knowledge.
 	 */
 	public String getName() {
 		return StatCollector.translateToLocal("ac.knowledge." + name + ".name");
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
 	}
-	
+
 }

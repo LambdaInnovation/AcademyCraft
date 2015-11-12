@@ -23,16 +23,9 @@ import cn.lambdalib.annoreg.mc.RegInit;
 public class ModuleKnowledge {
 
 	public static void init() {
-		String[] vanillaKnowledges = {
-			"marathon",
-			"iron_feet",
-			"intheknee",
-			"bouncer",
-			"trajectory",
-			"baseball",
-			"anatomy"
-		};
-		
+		String[] vanillaKnowledges = { "marathon", "iron_feet", "intheknee", "bouncer", "trajectory", "baseball",
+				"anatomy" };
+
 		KnowledgeData.addKnowledges(vanillaKnowledges);
 	}
 

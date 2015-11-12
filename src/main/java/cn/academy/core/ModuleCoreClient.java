@@ -33,38 +33,37 @@ import net.minecraftforge.common.config.Configuration;
 @SideOnly(Side.CLIENT)
 @Registrant
 public class ModuleCoreClient {
-	
-	public static KeyManager keyManager= new ACKeyManager();
-	
+
+	public static KeyManager keyManager = new ACKeyManager();
+
 	public static KeyManager dynKeyManager = new KeyManager();
-	
+
 	@RegInitCallback
 	public static void init() {
 		ACHud.instance.addElement(new NotifyUI(), () -> true);
 	}
-	
+
 	public static class ACKeyManager extends KeyManager {
 		{
 			MinecraftForge.EVENT_BUS.register(this);
 		}
-		
+
 		@Override
 		protected Configuration getConfig() {
 			return AcademyCraft.config;
 		}
-		
+
 		@SubscribeEvent
 		public void onConfigModified(ConfigModifyEvent event) {
-			if(event.property.isIntValue())
+			if (event.property.isIntValue())
 				resetBindingKey(event.property.getName(), event.property.getInt());
 		}
-		
+
 		@Override
-		public void addKeyHandler(String name, String keyDesc, int defKeyID, 
-				boolean global, KeyHandler handler) {
+		public void addKeyHandler(String name, String keyDesc, int defKeyID, boolean global, KeyHandler handler) {
 			super.addKeyHandler(name, keyDesc, defKeyID, global, handler);
 			SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID, false);
 		}
 	}
-	
+
 }

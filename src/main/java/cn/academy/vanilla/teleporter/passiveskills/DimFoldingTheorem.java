@@ -31,28 +31,28 @@ public class DimFoldingTheorem extends Skill {
 		this.canControl = false;
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@SubscribePipeline("teleporter.?.$damage")
 	public float addDamage(float dmg, EntityPlayer player) {
 		AbilityData aData = AbilityData.get(player);
-		if(aData.isSkillLearned(this)) {
+		if (aData.isSkillLearned(this)) {
 			return dmg * 1.2f;
 		}
 		return dmg;
 	}
-	
+
 	@SubscribePipeline("ac.teleporter.crit_prob.2")
 	public float addCritHitProbability(float prob, EntityPlayer player) {
 		AbilityData aData = AbilityData.get(player);
-		if(aData.isSkillLearned(this)) {
+		if (aData.isSkillLearned(this)) {
 			return prob + MathUtils.lerpf(0.1f, 0.2f, aData.getSkillExp(this));
 		}
 		return prob;
 	}
-	
+
 	@SubscribeEvent
 	public void onExpAdded(SkillExpAddedEvent event) {
-		if(event.skill.canControl()) {
+		if (event.skill.canControl()) {
 			event.getAbilityData().addSkillExp(this, event.amount * getFloat("incr_rate"));
 		}
 	}

@@ -20,7 +20,7 @@ import cn.academy.vanilla.meltdowner.skill.*;
  * @author WeAthFolD
  */
 public class CatMeltdowner extends Category {
-	
+
 	public static ElectronBomb electronBomb;
 	public static RadiationIntensify radIntensify;
 	public static RayBarrage rayBarrage;
@@ -36,30 +36,30 @@ public class CatMeltdowner extends Category {
 	public CatMeltdowner() {
 		super("meltdowner");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
-		
+
 		// Lv1
 		this.addSkill(electronBomb = new ElectronBomb());
 		this.addSkill(radIntensify = new RadiationIntensify());
-		
+
 		// Lv2
 		this.addSkill(scatterBomb = new ScatterBomb());
 		this.addSkill(lightShield = new LightShield());
-		
+
 		// Lv3
 		this.addSkill(meltdowner = new Meltdowner());
 		this.addSkill(mineRayBasic = new MineRayBasic());
-		
+
 		// Lv4
 		this.addSkill(rayBarrage = new RayBarrage());
 		this.addSkill(jetEngine = new JetEngine());
 		this.addSkill(mineRayExpert = new MineRayExpert());
-		
+
 		// Lv5
 		this.addSkill(mineRayLuck = new MineRayLuck());
 		this.addSkill(electronMissile = new ElectronMissile());
-		
+
 		ModuleVanilla.addGenericSkills(this);
-		
+
 		// Deps
 		scatterBomb.setParent(electronBomb, 0.8f);
 		radIntensify.setParent(electronBomb, 0.5f);

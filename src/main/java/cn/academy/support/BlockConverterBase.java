@@ -36,26 +36,27 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 public abstract class BlockConverterBase extends ACBlockContainer {
-	
+
 	public static class Item extends ItemBlock {
-		
+
 		BlockConverterBase converter;
 
 		public Item(Block block) {
 			super(block);
 			converter = (BlockConverterBase) block;
 		}
-		
+
 		@SideOnly(Side.CLIENT)
-	    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean idk) {
-			list.add(StatCollector.translateToLocalFormatted("ac.converter.desc_template", converter.from, converter.to));
+		public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean idk) {
+			list.add(StatCollector.translateToLocalFormatted("ac.converter.desc_template", converter.from,
+					converter.to));
 		}
-		
+
 	}
 
 	public final Class<? extends TileEntity> tileType;
 	public final String from, to;
-	
+
 	public BlockConverterBase(String name, String _from, String _to, Class<? extends TileEntity> _tileType) {
 		super(name, Material.rock);
 		from = _from;
@@ -66,18 +67,18 @@ public abstract class BlockConverterBase extends ACBlockContainer {
 	}
 
 	@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float tx, float ty, float tz) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float tx, float ty,
+			float tz) {
 		TileEntity te = WorldUtils.getTileEntity(world, x, y, z, tileType);
-		if(te != null && !player.isSneaking()) {
-			if(world.isRemote) {
+		if (te != null && !player.isSneaking()) {
+			if (world.isRemote) {
 				displayGui(te);
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private void displayGui(TileEntity te) {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode((IWirelessUser) te));

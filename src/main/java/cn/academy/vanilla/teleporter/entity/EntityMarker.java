@@ -34,26 +34,26 @@ public class EntityMarker extends EntityAdvanced {
 
 	@RegEntity.Render
 	public static RenderMarker renderer;
-	
+
 	public Entity target = null;
 	public Color color = Color.WHITE();
 	public boolean ignoreDepth = false;
-	
+
 	public EntityMarker(Entity entity) {
 		this(entity.worldObj);
 		setPosition(entity.posX, entity.posY, entity.posZ);
 		setSize(0.5f, 0.5f);
 		target = entity;
 	}
-	
+
 	public EntityMarker(World world) {
 		super(world);
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(target != null)
+		if (target != null)
 			setPosition(target.posX, target.posY, target.posZ);
 	}
 
@@ -63,6 +63,7 @@ public class EntityMarker extends EntityAdvanced {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {}
+	protected void writeEntityToNBT(NBTTagCompound tag) {
+	}
 
 }

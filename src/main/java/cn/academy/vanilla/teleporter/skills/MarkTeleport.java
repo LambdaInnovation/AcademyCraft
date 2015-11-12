@@ -38,60 +38,70 @@ import net.minecraft.util.Vec3;
  * @author WeAthFolD
  */
 public class MarkTeleport extends Skill {
-	
+
 	private static MarkTeleport instance;
-	
+
 	private static double MINIMUM_VALID_DISTANCE = 3.0;
 
 	public MarkTeleport() {
 		super("mark_teleport", 2);
 		instance = this;
 	}
-	
+
 	public static double getMaxDist(AbilityData data, CPData cpData, int ticks) {
 		double max = instance.callFloatWithExp("range", data);
 		double cplim = cpData.getCP() / getCPB(data);
-		
+
 		return Math.min((ticks + 1) * 2, Math.min(max, cplim));
 	}
-	
+
 	/**
 	 * @return Consumption per block
 	 */
 	public static float getCPB(AbilityData data) {
 		return instance.getConsumption(data);
 	}
-	
+
 	private static Vec3 getDest(EntityPlayer player, int ticks) {
 		double dist = getMaxDist(AbilityData.get(player), CPData.get(player), ticks);
 		MovingObjectPosition mop = Raytrace.traceLiving(player, dist);
-		
+
 		double x, y, z;
-		
-		if(mop != null) {
+
+		if (mop != null) {
 			x = mop.hitVec.xCoord;
-			y= mop.hitVec.yCoord;
-			z= mop.hitVec.zCoord;
-			
-			if(mop.typeOfHit == MovingObjectType.BLOCK) {
-				switch(mop.sideHit) {
+			y = mop.hitVec.yCoord;
+			z = mop.hitVec.zCoord;
+
+			if (mop.typeOfHit == MovingObjectType.BLOCK) {
+				switch (mop.sideHit) {
 				case 0:
-					y -= 1.0; break;
+					y -= 1.0;
+					break;
 				case 1:
-					y += 1.8; break;
+					y += 1.8;
+					break;
 				case 2:
-					z -= .6; y = mop.blockY + 1.7; break;
+					z -= .6;
+					y = mop.blockY + 1.7;
+					break;
 				case 3:
-					z += .6; y = mop.blockY + 1.7;  break;
+					z += .6;
+					y = mop.blockY + 1.7;
+					break;
 				case 4:
-					x -= .6; y = mop.blockY + 1.7;  break;
-				case 5: 
-					x += .6; y = mop.blockY + 1.7;  break;
+					x -= .6;
+					y = mop.blockY + 1.7;
+					break;
+				case 5:
+					x += .6;
+					y = mop.blockY + 1.7;
+					break;
 				}
-				//check head
-				if(mop.sideHit > 1) {
+				// check head
+				if (mop.sideHit > 1) {
 					int hx = (int) x, hy = (int) (y + 1), hz = (int) z;
-					if(!player.worldObj.isAirBlock(hx, hy, hz)) {
+					if (!player.worldObj.isAirBlock(hx, hy, hz)) {
 						y -= 1.25;
 					}
 				}
@@ -104,127 +114,126 @@ public class MarkTeleport extends Skill {
 			y = mo.py;
 			z = mo.pz;
 		}
-		
+
 		return VecUtils.vec(x, y, z);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public SkillInstance createSkillInstance(EntityPlayer player) {
 		MTAction action = new MTAction();
 		AbilityData data = AbilityData.get(player);
-		
-		return new SkillInstance() { 
+
+		return new SkillInstance() {
 			@Override
 			public void onTick() {
-				if(action.mark == null) {
+				if (action.mark == null) {
 					return;
 				}
-				
-				float distance = (float) MathUtils.distance(
-					action.mark.posX, action.mark.posY, action.mark.posZ,
-					player.posX, player.posY, player.posZ);
+
+				float distance = (float) MathUtils.distance(action.mark.posX, action.mark.posY, action.mark.posZ,
+						player.posX, player.posY, player.posZ);
 				this.estimatedCP = distance * getCPB(data);
 			}
 		}.addChild(action);
 	}
-	
+
 	public static class MTAction extends SkillSyncAction {
-		
+
 		int ticks;
 
 		public MTAction() {
 			super(-1);
 		}
-		
+
 		@Override
 		public void onStart() {
-			//if(true) return;
+			// if(true) return;
 			super.onStart();
-			
-			if(isRemote) {
+
+			if (isRemote) {
 				startEffects();
 			}
 		}
-		
+
 		@Override
 		public void onTick() {
 			ticks++;
-			
-			if(isRemote) {
+
+			if (isRemote) {
 				updateEffects(getDest(player, ticks));
 			}
 		}
-		
+
 		@Override
 		public void writeNBTFinal(NBTTagCompound tag) {
 			tag.setShort("t", (short) ticks);
 		}
-		
+
 		@Override
 		public void readNBTFinal(NBTTagCompound tag) {
 			ticks = tag.getShort("t");
 		}
-		
+
 		@Override
 		public void onEnd() {
 			Vec3 dest = getDest(player, ticks);
 			float distance = (float) dest.distanceTo(VecUtils.vec(player.posX, player.posY, player.posZ));
-			if(distance < MINIMUM_VALID_DISTANCE) {
+			if (distance < MINIMUM_VALID_DISTANCE) {
 				// TODO: Play abort sound
 				;
 			} else {
-			
+
 				cpData.performWithForce(instance.getOverload(aData), distance * getCPB(aData));
-				
-				if(!isRemote) {
-					((EntityPlayerMP)player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+
+				if (!isRemote) {
+					((EntityPlayerMP) player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
 					aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
 					player.fallDistance = 0;
 				} else {
 					ACSounds.playClient(player, "tp.tp", .5f);
 				}
-				
+
 				setCooldown(instance, instance.getCooldown(aData));
 				TPAttackHelper.incrTPCount(player);
 			}
-			
-			if(isRemote) {
+
+			if (isRemote) {
 				endEffects();
 			}
 		}
-		
+
 		@Override
 		public void onAbort() {
-			if(isRemote) {
+			if (isRemote) {
 				endEffects();
 			}
 		}
-		
+
 		// CLIENT
 		@SideOnly(Side.CLIENT)
 		EntityTPMarking mark;
-		
+
 		@SideOnly(Side.CLIENT)
 		private void startEffects() {
-			if(isLocal()) {
+			if (isLocal()) {
 				player.worldObj.spawnEntityInWorld(mark = new EntityTPMarking(player));
 			}
 		}
-		
+
 		@SideOnly(Side.CLIENT)
 		private void updateEffects(Vec3 dest) {
-			if(isLocal()) {
+			if (isLocal()) {
 				mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
 			}
 		}
-		
+
 		@SideOnly(Side.CLIENT)
 		private void endEffects() {
-			if(isLocal())
+			if (isLocal())
 				mark.setDead();
 		}
-		
+
 	}
 
 }

@@ -21,50 +21,50 @@ import cn.academy.vanilla.teleporter.passiveskills.*;
  * @author WeAthFolD
  */
 public class CatTeleporter extends Category {
-	
+
 	public static DimFoldingTheorem dimFolding;
-	
+
 	public static SpaceFluctuation spaceFluct;
 
 	public static MarkTeleport markTP;
-	
+
 	public static LocationTeleport locTP;
-	
+
 	public static PenetrateTeleport penetrateTP;
-	
+
 	public static ThreateningTeleport threateningTP;
-	
+
 	public static ShiftTeleport shiftTP;
-	
+
 	public static FleshRipping fleshRipping;
-	
+
 	public static Flashing flashing;
-	
+
 	public CatTeleporter() {
 		super("teleporter");
 		colorStyle.setColor4i(164, 164, 164, 145);
-		
+
 		// Lv1
 		this.addSkill(threateningTP = new ThreateningTeleport());
 		this.addSkill(dimFolding = new DimFoldingTheorem());
-		
+
 		// Lv2
 		this.addSkill(penetrateTP = new PenetrateTeleport());
 		this.addSkill(markTP = new MarkTeleport());
-		
+
 		// Lv3
 		this.addSkill(fleshRipping = new FleshRipping());
 		this.addSkill(locTP = new LocationTeleport());
-		
+
 		// Lv4
 		this.addSkill(shiftTP = new ShiftTeleport());
 		this.addSkill(spaceFluct = new SpaceFluctuation());
-		
+
 		// Lv5
 		this.addSkill(flashing = new Flashing());
-		
+
 		ModuleVanilla.addGenericSkills(this);
-		
+
 		// Assign deps
 		dimFolding.setParent(threateningTP, 0.2f);
 		penetrateTP.setParent(threateningTP, 0.5f);
