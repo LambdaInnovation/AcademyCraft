@@ -16,6 +16,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.client.skilltree.SkillTreeLocal;
+import cn.academy.ability.developer.refactor.IDeveloper;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.generic.RandUtils;
@@ -37,8 +38,8 @@ public class DevelopTypeLevel implements IDevelopType {
 	}
 
 	@Override
-	public boolean validate(EntityPlayer player, Developer developer) {
-		return LearningHelper.canLevelUp(developer.type, AbilityData.get(player));
+	public boolean validate(EntityPlayer player, IDeveloper developer) {
+		return LearningHelper.canLevelUp(developer.getType(), AbilityData.get(player));
 	}
 
 	@Override

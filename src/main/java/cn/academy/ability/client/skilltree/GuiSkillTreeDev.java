@@ -20,14 +20,15 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 import java.util.List;
 
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.block.TileDeveloper;
 import cn.academy.ability.developer.DevelopTypeLevel;
 import cn.academy.ability.developer.DevelopTypeSkill;
-import cn.academy.ability.developer.Developer;
-import cn.academy.ability.developer.Developer.DevState;
-import cn.academy.ability.developer.DeveloperBlock;
 import cn.academy.ability.developer.IDevCondition;
 import cn.academy.ability.developer.IDevelopType;
 import cn.academy.ability.developer.LearningHelper;
+import cn.academy.ability.developer.refactor.DevelopData;
+import cn.academy.ability.developer.refactor.DevelopData.DevState;
+import cn.academy.ability.developer.refactor.IDeveloper;
 import cn.academy.core.client.component.Glow;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
@@ -62,13 +63,15 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 	// A bit of hack. When reloading gui doesn't call developer#onGuiClosed callback
 	boolean closeLock;
 	
-	final Developer developer;
-	
+	final IDeveloper developer;
+	final DevelopData developData;
+
 	Overlay overlay;
 
-	public GuiSkillTreeDev(EntityPlayer _player, Developer _developer) {
-		super(_player, _developer.type, false);
+	public GuiSkillTreeDev(EntityPlayer _player, IDeveloper _developer) {
+		super(_player, _developer.getType(), false);
 		developer = _developer;
+        developData = DevelopData.get(player);
 		
 		EventLoader.load(gui, this);
 		
@@ -81,8 +84,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 					window.addWidget(overlay);
 					window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
 						() -> {
-							developer.reset();
-							Syncs.startUpgradingLevel(developer);
+							developData.reset();
+							Syncs.startUpgradingLevel(player, developer);
 						}));
 				}
 			});
@@ -91,8 +94,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		// FIXME Bad style here, instanceof is definetly not-cute hardcoding.
 		// Used Developer class to abstract item and block away but now need to do some specific stuffs.
 		// If possible make this part better in the future xD
-		if(developer instanceof DeveloperBlock) {
-			DeveloperBlock db = (DeveloperBlock) developer;
+		if(developer instanceof TileDeveloper) {
+            TileDeveloper db = (TileDeveloper) developer;
 			double size = 70;
 			Widget w = new Widget();
 			w.transform.alignWidth = WidthAlign.RIGHT;
@@ -102,10 +105,10 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			w.addComponent(dt);
 			
 			window.addWidget(w);
-			EnergyUIHelper.initNodeLinkButton(db.tile, w, true);
+			EnergyUIHelper.initNodeLinkButton(db, w, true);
 		}
 		
-		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.type.syncRate;
+		ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.getType().syncRate;
 	}
 	
 	@Override
@@ -233,8 +236,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						window.addWidget(overlay);
 						window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill), 
 							() -> {
-								developer.reset();
-								Syncs.startLearningSkill(developer, skill);
+								developData.reset();
+								Syncs.startLearningSkill(player, developer, skill);
 							}));
 					});
 				}
@@ -251,8 +254,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 	Widget createConfirmWidget(IDevelopType type, ICallback callback) {
 		Widget ret = loaded.getWidget("widgets/window_confirm").copy();
 		
-		double estmCons = developer.getEstmCons(type);
-		boolean can = developer.getEstmCons(type) <= developer.getEnergy();
+		double estmCons = LearningHelper.getEstimatedConsumption(player, developer.getType(), type);
+		boolean can = estmCons <= developer.getEnergy();
 		
 		Widget startButton = ret.getWidget("button_start");
 		if(!can) {
@@ -307,7 +310,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			{
 				listen(FrameEvent.class, (w, e) -> 
 				{
-					DevState dstate = developer.getState();
+					DevState dstate = developData.getState();
 					if(dstate == DevState.FAILED && state != 2) {
 						state = 2;
 						buttonText.setContent(SkillTreeLocal.ok());
@@ -319,7 +322,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						}
 						if(state == 1 && dstate == DevState.DEVELOPING) {
 							progText.setContent(
-								SkillTreeLocal.progress((double) developer.stim / developer.maxStim));
+								SkillTreeLocal.progress((double) developData.getStim() / developData.getMaxStim()));
 						}
 						if(state == 1 && dstate == DevState.IDLE) {
 							state = 3;
@@ -340,14 +343,14 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 						Minecraft.getMinecraft().displayGuiScreen(
 								new GuiSkillTreeDev(player, developer));
 					} else {
-						Syncs.abort(developer);
+						Syncs.abort(player);
 					}
 				});
 				
 				progbar.widget.listen(FrameEvent.class, (w, event) -> 
 				{
 					if(state == 1) {
-						progbar.progress = (double) developer.stim / developer.maxStim;
+						progbar.progress = (double) developData.getStim() / developData.getMaxStim();
 					} else if(state == 3) {
 						progbar.progress = 1;
 					}

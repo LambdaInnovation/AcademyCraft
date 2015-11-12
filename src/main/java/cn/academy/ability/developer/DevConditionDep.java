@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.developer;
 
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
@@ -34,7 +35,7 @@ public class DevConditionDep implements IDevCondition {
 	}
 
 	@Override
-	public boolean accepts(AbilityData data, Developer developer, Skill skill) {
+	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
 		return data.isSkillLearned(dependency) &&
 				data.getSkillExp(dependency) >= requiredExp;
 	}

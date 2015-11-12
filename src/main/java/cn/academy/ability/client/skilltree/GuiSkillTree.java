@@ -41,6 +41,7 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.LIGui;
 import cn.lambdalib.cgui.gui.LIGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
@@ -69,7 +70,6 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public abstract class GuiSkillTree extends LIGuiScreen {
 	
 	static ShaderMono shader;
@@ -93,7 +93,8 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		TEX_EXPPROG_GLOW = tex("expprog_glow"),
 		TEX_LVL_GLOW = Resources.getTexture("guis/mark/mark_ball_highlighted"),
 		TEX_UNKNOWN_CAT = tex("cat_not_found");
-	
+
+    @RegInitCallback
 	public static void init() {
 		shader = ShaderMono.instance();
 	}
@@ -125,9 +126,7 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		initPages();
 	}
 	
-	protected Widget createDesc(SkillHandler handler) {
-		return null;
-	}
+	protected abstract Widget createDesc(SkillHandler handler);
 	
 	private void initPages() {
 		window = loaded.getWidget("window").copy();
@@ -312,10 +311,13 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 					
 					// To make the draw order correct, we used a bit of hack to re-add the current skill
 					// widget and menu widget to the last of the draw list.
-					treeArea.forceRemoveWidget(widget);
-					widget.disposed = false;
+					// treeArea.forceRemoveWidget(widget);
+					// widget.disposed = false;
+
 					treeArea.addWidget(menu);
-					treeArea.addWidget(widget);
+					// treeArea.addWidget(widget);
+                    System.out.println("Added " + menu);
+                    System.out.println(menu.x + "," + menu.y + "," + menu.scale);
 				}
 			});
 			

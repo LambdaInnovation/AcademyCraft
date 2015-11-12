@@ -14,6 +14,7 @@ package cn.academy.ability.developer;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -28,7 +29,7 @@ public class DevConditionAnySkillOfLevel implements IDevCondition {
 	}
 	
 	@Override
-	public boolean accepts(AbilityData data, Developer developer, Skill skill) {
+	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
 		if(data.getCategory() == null)
 			return false;
 		for(Skill s : data.getCategory().getSkillsOfLevel(level)) {

@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.developer;
 
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -27,24 +28,25 @@ import cn.lambdalib.networkcall.s11n.SerializationManager;
  */
 @Registrant
 @RegSerializable(instance = DeveloperPortable.Serializer.class)
-public class DeveloperPortable extends Developer {
+public class DeveloperPortable implements IDeveloper {
 	
 	final EntityPlayer player;
 
 	public DeveloperPortable(EntityPlayer _player) {
-		super(DeveloperType.PORTABLE);
 		player = _player;
 		if(!validate(player))
 			throw new IllegalStateException("Not holding a portable developer");
 	}
 	
 	@Override
-	public EntityPlayer getUser() {
-		return player;
-	}
+	public DeveloperType getType() {
+        return DeveloperType.PORTABLE;
+    }
 
 	@Override
-	public boolean pullEnergy(double amt) {
+	public boolean tryPullEnergy(double amt) {
+        if(!validate(player))
+            return false;
 		return IFItemManager.instance.pull(player.getCurrentEquippedItem(), amt, true) == amt;
 	}
 	

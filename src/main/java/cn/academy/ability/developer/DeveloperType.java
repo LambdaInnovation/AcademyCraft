@@ -29,7 +29,8 @@ public enum DeveloperType {
 	public double getEnergy() {
 		return script().getDouble("energy");
 	}
-	
+
+    // Consumption per stimulation
 	public double getCPS() {
 		return script().getDouble("cps");
 	}
@@ -37,7 +38,8 @@ public enum DeveloperType {
 	public double getBandwidth() {
 		return bandwidth;
 	}
-	
+
+    // Tick per stimulation
 	public int getTPS() {
 		return script().getInteger("tps");
 	}

@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.developer;
 
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,7 +31,7 @@ public interface IDevelopType {
 	 * @return Whether the action can be REALLY started/performed at the moment.
 	 * This should be some constraints to player's current state.
 	 */
-	boolean validate(EntityPlayer player, Developer developer);
+	boolean validate(EntityPlayer player, IDeveloper developer);
 	
 	/**
 	 * The action performed when really learned the develop type.

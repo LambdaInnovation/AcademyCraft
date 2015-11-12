@@ -25,16 +25,27 @@ import cn.lambdalib.util.helper.GameTimer;
  * @author WeAthFolD
  */
 public class BlendIn extends Component {
-	
+
 	public int timeOffset = 0;
 	public int blendTime = 240;
-	
+
 	double dta, tba, ta, ga;
 
 	public BlendIn() {
 		super("BlendIn");
+
+        long time = GameTimer.getTime();
+        listen(FrameEvent.class, (w, event) ->
+        {
+            long delta = GameTimer.getTime() - time + timeOffset;
+            double factor = MathUtils.clampd(0, 1, (double) delta / blendTime);
+            setAlpha(factor);
+
+            if(factor == 1)
+                BlendIn.this.enabled = false;
+        });
 	}
-	
+
 	@Override
 	public void onAdded() {
 		DrawTexture dt = DrawTexture.get(widget);
@@ -45,21 +56,10 @@ public class BlendIn extends Component {
 		if(tb != null) tba = tb.color.a;
 		if(t != null) ta = t.idleColor.a;
 		if(g != null) ga = g.color.a;
-		
+
 		setAlpha(0);
-		
-		long time = GameTimer.getTime();
-		listen(FrameEvent.class, (w, event) -> 
-		{
-			long delta = GameTimer.getTime() - time + timeOffset;
-			double factor = MathUtils.clampd(0, 1, (double) delta / blendTime);
-			setAlpha(factor);
-			
-			if(factor == 1) 
-				BlendIn.this.enabled = false;
-		});
 	}
-	
+
 	private void setAlpha(double value) {
 		DrawTexture dt = DrawTexture.get(widget);
 		TextBox tb = TextBox.get(widget);

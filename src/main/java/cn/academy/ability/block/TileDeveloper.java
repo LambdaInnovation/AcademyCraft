@@ -15,9 +15,8 @@ package cn.academy.ability.block;
 import cn.academy.ability.client.render.RenderDeveloperAdvanced;
 import cn.academy.ability.client.render.RenderDeveloperNormal;
 import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
-import cn.academy.ability.developer.Developer;
-import cn.academy.ability.developer.DeveloperBlock;
 import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.developer.refactor.IDeveloper;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -50,7 +49,7 @@ import net.minecraft.util.AxisAlignedBB;
 @Registrant
 @RegInit
 @RegTileEntity
-public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile {
+public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
 	
 	@RegTileEntity
 	@RegTileEntity.HasRender
@@ -83,8 +82,6 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	@RegTileEntity.Render
 	public static RenderDeveloperNormal renderer;
 	
-	public DeveloperBlock developer;
-	
 	static InstanceSerializer<EntityPlayer> ser = 
 		SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
 
@@ -116,22 +113,14 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 			info.update();
 			if(info.getSubID() != 0)
 				return;
-		
-			if(developer == null)
-				developer = new DeveloperBlock(this);
 			
 			super.updateEntity();
-			developer.tick();
 			
 			if(++syncCD == 20) {
 				syncCD = 0;
 				syncTheUser(this, user);
 			}
 		}
-	}
-	
-	public Developer getDeveloper() {
-		return developer;
 	}
 	
 	public EntityPlayer getUser() {
@@ -149,7 +138,6 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 		
 		if(user == null || !user.isEntityAlive()) {
 			user = player;
-			developer.reset();
 			openGuiAtClient(player);
 			return true;
 		}
@@ -183,12 +171,20 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	
 	private void unuse() {
 		user = null;
-		developer.reset();
 	}
-	
-	private String propPath(String val) {
-		return getType().toString().toLowerCase() + "." + val;
-	}
+
+    @Override
+    public boolean tryPullEnergy(double amount) {
+        if(energy < amount)
+            return false;
+        pullEnergy(amount);
+        return true;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        unuseAtServer(user);
+    }
 	
 	public final DeveloperType getType() {
 		return type;
@@ -215,7 +211,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 	@SideOnly(Side.CLIENT)
 	private void doOpenGui(@Target EntityPlayer player) {
 		this.user = player;
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, developer));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, this));
 	}
 	
 	InfoBlockMulti info = new InfoBlockMulti(this);

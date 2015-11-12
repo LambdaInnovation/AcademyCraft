@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.developer;
 
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
@@ -27,7 +28,7 @@ public interface IDevCondition {
 	 * @param developer The develope that performs this action
 	 * @return Whether the player can learn the given skill
 	 */
-	boolean accepts(AbilityData data, Developer developer, Skill skill);
+	boolean accepts(AbilityData data, IDeveloper developer, Skill skill);
 	
 	/**
 	 * @return The icon displayed in skill desc page

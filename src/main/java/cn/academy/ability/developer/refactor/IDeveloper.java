@@ -10,10 +10,12 @@ public interface IDeveloper {
 
     DeveloperType getType();
 
-    boolean pullEnergy(double amount);
+    boolean tryPullEnergy(double amount);
 
     double getEnergy();
 
     double getMaxEnergy();
+
+    default void onGuiClosed() {}
 
 }

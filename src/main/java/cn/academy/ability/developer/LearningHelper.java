@@ -16,6 +16,8 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.developer.refactor.IDeveloper;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * All sorts of judging utilities about ability learning.
@@ -46,12 +48,16 @@ public class LearningHelper {
 	/**
 	 * @return Whether the given skill can be learned.
 	 */
-	public static boolean canLearn(AbilityData data, Developer dev, Skill skill) {
+	public static boolean canLearn(AbilityData data, IDeveloper dev, Skill skill) {
 		for(IDevCondition cond : skill.getDevConditions()) {
 			if(!cond.accepts(data, dev, skill))
 				return false;
 		}
 		return true;
 	}
+
+    public static double getEstimatedConsumption(EntityPlayer player, DeveloperType blktype, IDevelopType type) {
+        return blktype.getCPS() * type.getStimulations(player);
+    }
 	
 }

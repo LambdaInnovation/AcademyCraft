@@ -47,10 +47,8 @@ public class PortableDevData extends DataPart {
 	
 	@Override
 	public void tick() {
-		if(developer != null && DeveloperPortable.validate(getPlayer()))
-			developer.tick();
-		else
-			developer = null;
+		if(developer == null || !DeveloperPortable.validate(getPlayer()))
+            developer = null;
 	}
 
 	@Override

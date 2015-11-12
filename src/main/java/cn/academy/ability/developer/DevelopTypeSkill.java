@@ -12,6 +12,7 @@
  */
 package cn.academy.ability.developer;
 
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
@@ -41,7 +42,7 @@ public class DevelopTypeSkill implements IDevelopType {
 	}
 
 	@Override
-	public boolean validate(EntityPlayer player, Developer developer) {
+	public boolean validate(EntityPlayer player, IDeveloper developer) {
 		return LearningHelper.canLearn(AbilityData.get(player), developer, skill);
 	}
 

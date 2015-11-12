@@ -15,6 +15,7 @@ package cn.academy.ability.developer;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.client.skilltree.SkillTreeLocal;
+import cn.academy.ability.developer.refactor.IDeveloper;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -29,8 +30,8 @@ public class DevConditionDeveloperType implements IDevCondition {
 	}
 
 	@Override
-	public boolean accepts(AbilityData data, Developer developer, Skill skill) {
-		return developer.type.ordinal() >= type.ordinal();
+	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+		return developer.getType().ordinal() >= type.ordinal();
 	}
 	
 	@Override
