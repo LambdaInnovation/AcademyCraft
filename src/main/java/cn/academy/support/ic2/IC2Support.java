@@ -53,7 +53,7 @@ public class IC2Support {
 		BlockEUOutput euOutput = new BlockEUOutput();
 		
 		try {
-			// ACTutorial.addTutorial("energy_bridge_eu").addCondition(Condition.or(Condition.itemsCrafted(euInput,euOutput)));
+			// ACTutorial.addTutorial("energy_bridge_eu").setCondition(Condition.or(Condition.itemsCrafted(euInput,euOutput)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

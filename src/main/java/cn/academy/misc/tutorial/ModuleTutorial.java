@@ -9,59 +9,60 @@ import cn.academy.terminal.ModuleTerminal;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 
 @Registrant
-@RegInit
 @RegACRecipeNames
 public class ModuleTutorial {
 	
 	@RegItem
 	@RecipeName("tutorial")
 	public static ItemTutorial item;
-	
+
+	@RegInitCallback
 	public static void init(){
 		initConditions();
 	}
 	
 	private static void initConditions() {
 		try {
-			ACTutorial.addTutorial("phase_liquid").addCondition(Condition.harvestLiquid(ModuleCrafting.imagPhase.mat));
-			ACTutorial.addTutorial("constraint_metal").addCondition(Condition.itemPickup(ModuleCrafting.oreConstraintMetal));
-			ACTutorial.addTutorial("crystal").addCondition(Condition.itemPickup(ModuleCrafting.crystalLow));
-			ACTutorial.addTutorial("imag_silicon").addCondition(Condition.itemPickup(ModuleCrafting.oreImagSil));
-			ACTutorial.addTutorial("node").addCondition(Condition.or(
+			ACTutorial.addTutorial("phase_liquid").setCondition(Condition.harvestLiquid(ModuleCrafting.imagPhase.mat));
+			ACTutorial.addTutorial("constraint_metal").setCondition(Condition.itemPickup(ModuleCrafting.oreConstraintMetal));
+			ACTutorial.addTutorial("crystal").setCondition(Condition.itemPickup(ModuleCrafting.crystalLow));
+			ACTutorial.addTutorial("imag_silicon").setCondition(Condition.itemPickup(ModuleCrafting.oreImagSil));
+			ACTutorial.addTutorial("node").setCondition(Condition.or(
 					Condition.itemsCrafted(
 							ModuleEnergy.nodeBasic,
 							ModuleEnergy.nodeStandard,
 							ModuleEnergy.nodeAdvanced
 							)
 					));
-			ACTutorial.addTutorial("matrix").addCondition(Condition.itemCrafted(ModuleEnergy.matrix));
-			ACTutorial.addTutorial("wifi").addCondition(
+			ACTutorial.addTutorial("matrix").setCondition(Condition.itemCrafted(ModuleEnergy.matrix));
+			ACTutorial.addTutorial("wifi").setCondition(
 					Condition.or(
 							Condition.onTutorial("matrix"),
 							Condition.onTutorial("node")
 							)
 					);
-			ACTutorial.addTutorial("phase_generator").addCondition(Condition.itemCrafted(ModuleEnergy.phaseGen));
-			ACTutorial.addTutorial("solar_gen").addCondition(Condition.itemCrafted(ModuleEnergy.solarGen));
-			ACTutorial.addTutorial("wind_gen").addCondition(Condition.itemCrafted(ModuleEnergy.windgenMain));
-			ACTutorial.addTutorial("metal_former").addCondition(Condition.itemCrafted(ModuleCrafting.metalFormer));
-			ACTutorial.addTutorial("imag_fusor").addCondition(Condition.itemCrafted(ModuleCrafting.imagFusor));
-			ACTutorial.addTutorial("terminal").addCondition(Condition.itemCrafted(ModuleTerminal.terminalInstaller));
-			ACTutorial.addTutorial("ability_developer").addCondition(Condition.or(
+			ACTutorial.addTutorial("phase_generator").setCondition(Condition.itemCrafted(ModuleEnergy.phaseGen));
+			ACTutorial.addTutorial("solar_gen").setCondition(Condition.itemCrafted(ModuleEnergy.solarGen));
+			ACTutorial.addTutorial("wind_gen").setCondition(Condition.itemCrafted(ModuleEnergy.windgenMain));
+			ACTutorial.addTutorial("metal_former").setCondition(Condition.itemCrafted(ModuleCrafting.metalFormer));
+			ACTutorial.addTutorial("imag_fusor").setCondition(Condition.itemCrafted(ModuleCrafting.imagFusor));
+			ACTutorial.addTutorial("terminal").setCondition(Condition.itemCrafted(ModuleTerminal.terminalInstaller));
+			ACTutorial.addTutorial("ability_developer").setCondition(Condition.or(
 					Condition.itemsCrafted(
 							ModuleAbility.developerNormal,
 							ModuleAbility.developerPortable,
 							ModuleAbility.developerAdvanced
 							)
 					));
-			ACTutorial.addTutorial("ability").addCondition(Condition.abilityLevel(null, 1));
-			ACTutorial.addTutorial("ability_electromaster").addCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));
-			ACTutorial.addTutorial("ability_meltdowner").addCondition(Condition.abilityLevel(ModuleVanilla.meltdowner, 1));
-			ACTutorial.addTutorial("ability_teleporter").addCondition(Condition.abilityLevel(ModuleVanilla.teleporter, 1));
+			ACTutorial.addTutorial("ability").setCondition(Condition.abilityLevel(null, 1));
+			ACTutorial.addTutorial("ability_electromaster").setCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));
+			ACTutorial.addTutorial("ability_meltdowner").setCondition(Condition.abilityLevel(ModuleVanilla.meltdowner, 1));
+			ACTutorial.addTutorial("ability_teleporter").setCondition(Condition.abilityLevel(ModuleVanilla.teleporter, 1));
 		} catch (Exception e) {
 			AcademyCraft.log.error("Registering AC tutorial conditions", e);
 		}
