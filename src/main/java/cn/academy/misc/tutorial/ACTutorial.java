@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import cn.lambdalib.util.client.article.ArticleCompiler;
 import cn.lambdalib.util.client.article.ArticlePlotter;
 import com.google.common.collect.ImmutableList;
 
@@ -121,26 +122,19 @@ public class ACTutorial {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public ArticlePlotter getBriefPlotter() {
+	public ArticlePlotter getBriefPlotter(double defWidth, float fontSize) {
 		if(cachedBrief == null) {
-			cachedBrief = plotter(getBrief(), 1);
+			cachedBrief = new ArticleCompiler(getBrief()).setWidth(defWidth).setFontSize(fontSize).compile();
 		}
 		return cachedBrief;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public ArticlePlotter getContentPlotter() {
+	public ArticlePlotter getContentPlotter(double defWidth, float fontSize) {
 		if(cachedContent == null) {
-			cachedContent = plotter(getContent(), 0.7);
+			cachedContent = new ArticleCompiler(getContent()).setWidth(defWidth).setFontSize(fontSize).compile();
 		}
 		return cachedContent;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private ArticlePlotter plotter(String lang, double scale) {
-		ArticlePlotter ret = ArticlePlotter.fromLang(lang);
-		ret.scale = scale;
-		return ret;
 	}
 
 	private String key(String str) {
