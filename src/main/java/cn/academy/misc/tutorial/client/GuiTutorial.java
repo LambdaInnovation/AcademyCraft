@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 
 import java.util.Collection;
 
+import cn.lambdalib.util.client.article.ArticlePlotter;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
@@ -69,6 +70,11 @@ public class GuiTutorial extends LIGuiScreen {
 	
 	Widget logo0, logo1, logo2, logo3;
 
+	Widget centerText, briefText;
+
+	// Current displayed tutorial
+	ACTutorial currentTut = null;
+
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
 		tutlist = ACTutorial.getLearned(player);
@@ -92,6 +98,9 @@ public class GuiTutorial extends LIGuiScreen {
 		logo1 = rightPart.getWidget("logo1");
 		logo2 = rightPart.getWidget("logo2");
 		logo3 = rightPart.getWidget("logo3");
+
+		centerText = centerPart.getWidget("text");
+		briefText = rightPart.getWidget("text");
 		
 		showWindow.transform.doesDraw = false;
 		rightWindow.transform.doesDraw = false;
@@ -160,8 +169,22 @@ public class GuiTutorial extends LIGuiScreen {
 			
 			TextBox box = new TextBox();
 			box.content = t.getTitle();
+			box.localized = true;
 			box.size = 10;
 			box.heightAlign = HeightAlign.CENTER;
+
+			w.listen(LeftClickEvent.class, (__, e) ->
+			{
+				if(currentTut == null) {
+					// Start blending view area!
+					for(Widget old : new Widget[] { logo2, logo0, logo1, logo3 }) {
+						blend(old, 0, 0.3, true);
+					}
+					centerPart.transform.doesDraw = true;
+					rightWindow.transform.doesDraw = true;
+				}
+				currentTut = t;
+			});
 			
 			w.addComponent(box);
 			el.addWidget(w);
@@ -174,17 +197,28 @@ public class GuiTutorial extends LIGuiScreen {
 		glColor4d(1, 1, 1, 1);
 		ACRenderingHelper.lineSegment(x0, 0, x1, 0, ht);
 	}
-	
+
 	private void blend(Widget w, double start, double tin) {
+		blend(w, start, tin, false);
+	}
+	
+	private void blend(Widget w, double start, double tin, boolean reverse) {
 		DrawTexture dt = DrawTexture.get(w);
-		dt.color.a = 0;
 		long startTime = GameTimer.getAbsTime();
 		double startAlpha = dt.color.a;
+		dt.color.a = reverse ? startAlpha : 0;
 		
 		w.listen(FrameEvent.class, (__, e) -> 
 		{
 			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
-			double alpha = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
+			double alpha = startAlpha *
+					MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
+			if(reverse) {
+				alpha = 1 - alpha;
+				if(alpha == 0) {
+					w.dispose();
+				}
+			}
 			dt.color.a = alpha;
 		});
 	}
@@ -213,6 +247,26 @@ public class GuiTutorial extends LIGuiScreen {
 		}
 	}
 	
-	
+	@GuiCallback("rightPart/centerPart/text")
+	public void drawContent(Widget w, FrameEvent event) {
+		if(currentTut != null) {
+			ArticlePlotter plotter = currentTut.getContentPlotter();
+			plotter.dx = 4.0;
+			plotter.widthLimit = 150.0;
+			plotter.heightLimit = 200.0;
+			plotter.draw();
+		}
+	}
+
+	@GuiCallback("rightPart/rightWindow/text")
+	public void drawBrief(Widget w, FrameEvent event) {
+		if(currentTut != null) {
+			ArticlePlotter plotter = currentTut.getBriefPlotter();
+			plotter.widthLimit = 130.0;
+			plotter.scale = 0.85;
+			plotter.dx = plotter.dy = 5;
+			plotter.draw();
+		}
+	}
 	
 }

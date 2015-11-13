@@ -123,7 +123,7 @@ public class ACTutorial {
 	@SideOnly(Side.CLIENT)
 	public ArticlePlotter getBriefPlotter() {
 		if(cachedBrief == null) {
-			cachedBrief = ArticlePlotter.fromLang(getBrief());
+			cachedBrief = plotter(getBrief(), 1);
 		}
 		return cachedBrief;
 	}
@@ -131,9 +131,16 @@ public class ACTutorial {
 	@SideOnly(Side.CLIENT)
 	public ArticlePlotter getContentPlotter() {
 		if(cachedContent == null) {
-			cachedContent = ArticlePlotter.fromLang(getContent());
+			cachedContent = plotter(getContent(), 0.7);
 		}
 		return cachedContent;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private ArticlePlotter plotter(String lang, double scale) {
+		ArticlePlotter ret = ArticlePlotter.fromLang(lang);
+		ret.scale = scale;
+		return ret;
 	}
 
 	private String key(String str) {
