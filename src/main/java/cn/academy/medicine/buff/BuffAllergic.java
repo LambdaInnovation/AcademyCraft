@@ -51,7 +51,7 @@ public class BuffAllergic extends PotionEffect {
 		this.setCurativeItems(new ArrayList<ItemStack>());
 	}
 	
-	private class BuffHandler extends LIHandler<PlayerTickEvent>{
+	private static class BuffHandler extends LIHandler<PlayerTickEvent>{
 		final EntityPlayer p;
 		int ticks = 10*60*20;
 		int ticker = 0;
@@ -99,20 +99,20 @@ public class BuffAllergic extends PotionEffect {
 		p = (EntityPlayer) entity;
 		if(onCombine){
 			switch(level){
-				case 0:
+				case 1:
 					p.addPotionEffect(new PotionEffect(Potion.hunger.id, 3*20));
 					p.attackEntityFrom(DamageSource.magic, Math.min(3, entity.getHealth()-1));
 					break;
-				case 1:
-					p.addPotionEffect(new PotionEffect(Potion.hunger.id, 15*20));
+				case 2:
+					p.addPotionEffect(new PotionEffect(Potion.blindness.id, 15*20));
 					p.attackEntityFrom(DamageSource.magic, 5);
 					break;
-				case 2:
+				case 3:
 					p.attackEntityFrom(DamageSource.magic, 10);
-					CPData.get(p).addOverload(80);
+					CPData.get(p).perform(80, 0);
 					LIFMLGameEventDispatcher.INSTANCE.registerPlayerTick(new BuffHandler(p));
 					break;
-				case 3:
+				case 4:
 					p.setDead();
 					break;
 			}
