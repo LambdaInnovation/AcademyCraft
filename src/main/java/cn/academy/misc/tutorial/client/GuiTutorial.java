@@ -90,7 +90,7 @@ public class GuiTutorial extends LIGuiScreen {
 
 	@Override
 	public void drawScreen(int mx, int my, float w) {
-		if(cachedWidth != -1 && cachedWidth != width) {
+		if(cachedWidth != width) {
 			double newScale = width / REF_WIDTH;
 			frame.transform.scale = newScale;
 			frame.dirty = true;
@@ -170,7 +170,7 @@ public class GuiTutorial extends LIGuiScreen {
 				
 				glPopMatrix();
 				
-				listArea.transform.doesDraw = dt > 2.3;
+				listArea.transform.doesDraw = dt > 2.0;
 			});
 		}
 		
@@ -189,6 +189,7 @@ public class GuiTutorial extends LIGuiScreen {
 			box.content = t.getTitle();
 			box.localized = true;
 			box.size = 10;
+			box.emit = true;
 			box.heightAlign = HeightAlign.CENTER;
 
 			w.listen(LeftClickEvent.class, (__, e) ->
@@ -333,8 +334,8 @@ public class GuiTutorial extends LIGuiScreen {
 		glTranslated(
 				-1 + 2.0 * (w.scale + w.x) / width,
 				1 - 2.0 * (w.scale + w.y) / height,
-				.5);
-		GL11.glScaled(scale, -scale * aspect, 1);
+				0);
+		GL11.glScaled(scale, -scale * aspect, -0.5);
 
 		GLU.gluPerspective(50, 1, 1f, 100);
 
@@ -342,7 +343,8 @@ public class GuiTutorial extends LIGuiScreen {
 		glPushMatrix();
 		glLoadIdentity();
 
-		glDisable(GL11.GL_DEPTH_TEST);
+		// glCullFace(GL_FRONT);
+		// glDisable(GL11.GL_DEPTH_TEST);
 		glDisable(GL11.GL_ALPHA_TEST);
 		glEnable(GL11.GL_BLEND);
 		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -350,12 +352,22 @@ public class GuiTutorial extends LIGuiScreen {
 
 		glTranslated(0, 0, -4);
 
-		glTranslated(.5, 0, .5);
+		glTranslated(.55, .55, .5);
 		// glRotated((GameTimer.getAbsTime() / 50.0) % 360.0, 0, 1, 0);
-		glTranslated(-.5, 0, -.5);
 
-		// testMesh.draw(testMat);
+		// FOR DEBUG
+		/*
+		glScaled(2, 2, 1);
+		glTranslated(-1, 0, 0);
+		*/
+		// DEBUG END
+
+		// debug(currentTut.curHandler());
+
+		glScaled(.75, -.75, .75);
+
 		currentTut.curHandler().draw();
+		// testMesh.draw(testMat);
 
 		glPopMatrix();
 
@@ -387,6 +399,8 @@ public class GuiTutorial extends LIGuiScreen {
 			Widget w = curHandler().getDelegateWidget();
 			if(w != null)
 				showArea.addWidget("delegate", w);
+
+			debug(curHandler());
 		}
 
 		IPreviewHandler curHandler() {

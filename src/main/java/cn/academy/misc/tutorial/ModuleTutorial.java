@@ -61,7 +61,8 @@ public class ModuleTutorial {
 
 		ACTutorial.addTutorial("ability")
 				.setCondition(Condition.abilityLevel(null, 1))
-				.setPreview(PreviewHandlers.drawsItem(null), PreviewHandlers.drawsBlock(null), PreviewHandlers.nothing);
+				.setPreview(PreviewHandlers.drawsItem(ModuleCrafting.brainComp),
+						PreviewHandlers.drawsBlock(ModuleCrafting.metalFormer, 2), PreviewHandlers.nothing);
 
 		ACTutorial.addTutorial("ability_electromaster")
 				.setCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));

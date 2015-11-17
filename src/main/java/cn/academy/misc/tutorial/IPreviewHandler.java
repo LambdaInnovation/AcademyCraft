@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public interface IPreviewHandler {
 
 	/**
-	 * Draw the preview artifact. Range; (0, 0, 0) -> (1, 1, 1)
+	 * Draw the preview artifact. Range; (-0.5, -0.5, -0.5) -> (0.5, 0.5, 0.5)
 	 */
 	default void draw() {}
 
