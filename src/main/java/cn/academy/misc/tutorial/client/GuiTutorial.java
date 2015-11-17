@@ -16,10 +16,14 @@ import java.util.Collection;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.tutorial.IPreviewHandler;
+import cn.academy.terminal.client.TerminalUI;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.util.client.article.ArticlePlotter;
+import cn.lambdalib.util.deprecated.Material;
+import cn.lambdalib.util.deprecated.Mesh;
+import cn.lambdalib.util.deprecated.MeshUtils;
+import cn.lambdalib.util.deprecated.SimpleMaterial;
 import cn.lambdalib.util.helper.Font;
-import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.misc.tutorial.ACTutorial;
@@ -40,6 +44,8 @@ import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -52,8 +58,11 @@ public class GuiTutorial extends LIGuiScreen {
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/tutorial.xml"));
 	}
-	
+
+	static final double REF_WIDTH = 480;
 	static final Color GLOW_COLOR = Color.WHITE();
+
+	double cachedWidth = -1;
 	
 	final EntityPlayer player;
 	final Collection<ACTutorial> tutlist;
@@ -66,8 +75,8 @@ public class GuiTutorial extends LIGuiScreen {
 	Widget showWindow, rightWindow, centerPart;
 	
 	Widget logo0, logo1, logo2, logo3;
-
 	Widget centerText, briefText;
+	Widget showArea;
 
 	// Current displayed tutorial
 	TutInfo currentTut = null;
@@ -77,6 +86,17 @@ public class GuiTutorial extends LIGuiScreen {
 		tutlist = ACTutorial.getLearned(player);
 		
 		initUI();
+	}
+
+	@Override
+	public void drawScreen(int mx, int my, float w) {
+		if(cachedWidth != -1 && cachedWidth != width) {
+			double newScale = width / REF_WIDTH;
+			frame.transform.scale = newScale;
+			frame.dirty = true;
+		}
+		cachedWidth = width;
+		super.drawScreen(mx, my, w);
 	}
 	
 	private void initUI() {
@@ -97,6 +117,8 @@ public class GuiTutorial extends LIGuiScreen {
 
 		centerText = centerPart.getWidget("text");
 		briefText = rightPart.getWidget("text");
+
+		showArea = showWindow.getWidget("area");
 		
 		showWindow.transform.doesDraw = false;
 		rightWindow.transform.doesDraw = false;
@@ -285,20 +307,70 @@ public class GuiTutorial extends LIGuiScreen {
 
 	@GuiCallback("rightPart/showWindow/button_left")
 	public void cycleLeft(Widget w, LeftClickEvent event) {
-		if(currentTut != null) {
-			currentTut.cycle(-1);
-		}
+		currentTut.cycle(-1);
 	}
 
 	@GuiCallback("rightPart/showWindow/button_right")
 	public void cycleRight(Widget w, LeftClickEvent event) {
-		if(currentTut != null) {
-			currentTut.cycle(1);
-		}
+		currentTut.cycle(1);
+	}
+
+	// TODO Debug usage, remove when finished
+	Mesh testMesh = MeshUtils.createBoxWithUV(null, 0, 0, 0, 1, 1, 1);
+	Material testMat = new SimpleMaterial(DrawTexture.MISSING);
+
+	@GuiCallback("rightPart/showWindow/area")
+	public void drawPreview(Widget w, FrameEvent event) {
+		testMat.color.setColor4d(1, 1, 1, .5);
+
+		glMatrixMode(GL11.GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+
+		double scale = 366.0 / width * frame.scale;
+		float aspect = (float) mc.displayWidth / mc.displayHeight;
+
+		glTranslated(
+				-1 + 2.0 * (w.scale + w.x) / width,
+				1 - 2.0 * (w.scale + w.y) / height,
+				.5);
+		GL11.glScaled(scale, -scale * aspect, 1);
+
+		GLU.gluPerspective(50, 1, 1f, 100);
+
+		glMatrixMode(GL11.GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+
+		glDisable(GL11.GL_DEPTH_TEST);
+		glDisable(GL11.GL_ALPHA_TEST);
+		glEnable(GL11.GL_BLEND);
+		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glColor4d(1, 1, 1, 1);
+
+		glTranslated(0, 0, -4);
+
+		glTranslated(.5, 0, .5);
+		// glRotated((GameTimer.getAbsTime() / 50.0) % 360.0, 0, 1, 0);
+		glTranslated(-.5, 0, -.5);
+
+		// testMesh.draw(testMat);
+		currentTut.curHandler().draw();
+
+		glPopMatrix();
+
+		glMatrixMode(GL11.GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL11.GL_MODELVIEW);
+
+		glEnable(GL11.GL_DEPTH_TEST);
+		glEnable(GL11.GL_ALPHA_TEST);
+		glCullFace(GL11.GL_BACK);
 	}
 
 	private class TutInfo {
-		public final ACTutorial tut;
+		final ACTutorial tut;
 		int selection;
 
 		TutInfo(ACTutorial _tut) {
@@ -310,7 +382,11 @@ public class GuiTutorial extends LIGuiScreen {
 			selection += delta;
 			if(selection >= len) selection = 0;
 			else if(selection < 0) selection = len - 1;
-			debug(selection);
+
+			showArea.removeWidget("delegate");
+			Widget w = curHandler().getDelegateWidget();
+			if(w != null)
+				showArea.addWidget("delegate", w);
 		}
 
 		IPreviewHandler curHandler() {

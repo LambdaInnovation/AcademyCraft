@@ -82,6 +82,7 @@ public class ACTutorial {
 	// Static registry end
 
 	private static IPreviewHandler[] defaultHandlers = new IPreviewHandler[] { PreviewHandlers.nothing };
+	public static final boolean SHOW_ALL = true;
 
 	public final String id;
 	
@@ -150,6 +151,8 @@ public class ACTutorial {
 	}
 
 	public boolean getIsLoad(EntityPlayer player) {
+		if(SHOW_ALL)
+			return true;
 		if(this.condition!=null)
 			return this.condition.exam(player);
 		return true;

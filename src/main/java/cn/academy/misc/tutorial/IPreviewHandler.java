@@ -1,5 +1,6 @@
 package cn.academy.misc.tutorial;
 
+import cn.lambdalib.cgui.gui.Widget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -11,7 +12,14 @@ public interface IPreviewHandler {
 	/**
 	 * Draw the preview artifact. Range; (0, 0, 0) -> (1, 1, 1)
 	 */
+	default void draw() {}
+
+	/**
+	 * @return A delegating widget to draw the preview area.
+	 */
 	@SideOnly(Side.CLIENT)
-	void draw();
+	default Widget getDelegateWidget() {
+		return null;
+	}
 
 }
