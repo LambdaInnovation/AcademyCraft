@@ -14,6 +14,8 @@ package cn.academy.misc.tutorial.client;
 
 import java.util.Collection;
 
+import cn.academy.core.AcademyCraft;
+import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.util.client.article.ArticlePlotter;
 import cn.lambdalib.util.helper.Font;
@@ -68,7 +70,7 @@ public class GuiTutorial extends LIGuiScreen {
 	Widget centerText, briefText;
 
 	// Current displayed tutorial
-	ACTutorial currentTut = null;
+	TutInfo currentTut = null;
 
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
@@ -176,8 +178,9 @@ public class GuiTutorial extends LIGuiScreen {
 					}
 					centerPart.transform.doesDraw = true;
 					rightWindow.transform.doesDraw = true;
+					showWindow.transform.doesDraw = true;
 				}
-				currentTut = t;
+				setCurrentTut(t);
 			});
 			
 			w.addComponent(box);
@@ -230,11 +233,19 @@ public class GuiTutorial extends LIGuiScreen {
 			w.dirty = true;
 		});
 	}
+
+	private void setCurrentTut(ACTutorial tut) {
+		currentTut = new TutInfo(tut);
+		boolean cycleable = tut.getPreview().length > 1;
+		showWindow.getWidget("button_left").transform.doesDraw
+				= showWindow.getWidget("button_right").transform.doesDraw
+				= cycleable;
+	}
 	
 	@GuiCallback("rightPart/centerPart/text")
 	public void drawContent(Widget w, FrameEvent event) {
 		if(currentTut != null) {
-			ArticlePlotter plotter = currentTut.getContentPlotter(w.transform.width - 10, 8);
+			ArticlePlotter plotter = currentTut.tut.getContentPlotter(w.transform.width - 10, 8);
 
 			glPushMatrix();
 			glTranslated(0, 0, 10);
@@ -262,14 +273,53 @@ public class GuiTutorial extends LIGuiScreen {
 	@GuiCallback("rightPart/rightWindow/text")
 	public void drawBrief(Widget w, FrameEvent event) {
 		if(currentTut != null) {
-			Font.font.draw("§l" + currentTut.getTitle(), 3, 3, 10, 0xffffff);
+			Font.font.draw("§l" + currentTut.tut.getTitle(), 3, 3, 10, 0xffffff);
 
 			glPushMatrix();
 			glTranslated(3, 18, 0);
-			ArticlePlotter plotter = currentTut.getBriefPlotter(w.transform.width - 15, 8);
+			ArticlePlotter plotter = currentTut.tut.getBriefPlotter(w.transform.width - 15, 8);
 			plotter.draw();
 			glPopMatrix();
 		}
 	}
-	
+
+	@GuiCallback("rightPart/showWindow/button_left")
+	public void cycleLeft(Widget w, LeftClickEvent event) {
+		if(currentTut != null) {
+			currentTut.cycle(-1);
+		}
+	}
+
+	@GuiCallback("rightPart/showWindow/button_right")
+	public void cycleRight(Widget w, LeftClickEvent event) {
+		if(currentTut != null) {
+			currentTut.cycle(1);
+		}
+	}
+
+	private class TutInfo {
+		public final ACTutorial tut;
+		int selection;
+
+		TutInfo(ACTutorial _tut) {
+			tut = _tut;
+		}
+
+		void cycle(int delta) {
+			int len = tut.getPreview().length;
+			selection += delta;
+			if(selection >= len) selection = 0;
+			else if(selection < 0) selection = len - 1;
+			debug(selection);
+		}
+
+		IPreviewHandler curHandler() {
+			return tut.getPreview()[selection];
+		}
+	}
+
+	private void debug(Object msg) {
+		AcademyCraft.log.info("[Tut] " + msg);
+	}
+
 }

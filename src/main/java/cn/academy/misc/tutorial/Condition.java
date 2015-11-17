@@ -202,7 +202,7 @@ public abstract class Condition {
 	 * @return 一组条件分别对应每个物品/方块
 	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
-	public static Condition[] itemsCrafted(Object...itemsOrBlocks) throws Exception {
+	public static Condition[] itemsCrafted(Object...itemsOrBlocks) {
 		List<Condition> c=new ArrayList<Condition>();
 		for(Object IorB : itemsOrBlocks){
 			Item item = null;
@@ -212,7 +212,7 @@ public abstract class Condition {
 			else if(IorB instanceof Block)
 				item = Item.getItemFromBlock((Block) IorB);
 			else{
-				throw new Exception("Not an Item or Block: "+IorB);
+				throw new RuntimeException("Not an Item or Block: "+IorB);
 			}
 			String key=getKeyFromItem(item,false,0);
 			if(HandleEvent.craftMap.containsKey(key)){
@@ -422,7 +422,7 @@ public abstract class Condition {
 	 * @return result
 	 * @throws Exception Throw if no such a tutorial.
 	 */
-	public static Condition onTutorial(String tutorialID) throws Exception {
+	public static Condition onTutorial(String tutorialID) {
 		ACTutorial t = ACTutorial.getTutorial(tutorialID);
 		return onTutorial(t);
 	}

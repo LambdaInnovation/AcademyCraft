@@ -30,20 +30,21 @@ public class ACTutorial {
 	private static final ACTutorialDataPart data = new ACTutorialDataPart();
 	static List<Condition> savedConditions = new ArrayList<Condition>();
 
-	public static void addTutorials(ACTutorial...tutorial) throws Exception {
+	public static void addTutorials(ACTutorial...tutorial) {
 		for(ACTutorial t : tutorial){
-			if(tutorials.containsKey(t.id))throw new Exception("Already　has a tutorial with this id:"+t.id);
+			if(tutorials.containsKey(t.id))
+				throw new RuntimeException("Alreadyhas a tutorial with this id:" + t.id);
 			tutorials.put(t.id, t);
 		}
 	}
 
-	public static ACTutorial addTutorial(String string) throws Exception {
+	public static ACTutorial addTutorial(String string) {
 		ACTutorial t=new ACTutorial(string);
 		addTutorials(t);
 		return t;
 	}
 
-	public static void addTutorials(String...string) throws Exception {
+	public static void addTutorials(String...string) {
 		ACTutorial[] acTu=new ACTutorial[string.length];
 		int i = 0;
 		for(String s : string){
@@ -53,10 +54,10 @@ public class ACTutorial {
 		addTutorials(acTu);
 	}
 
-	public static ACTutorial getTutorial(String s) throws Exception {
+	public static ACTutorial getTutorial(String s) {
 		ACTutorial t;
 		if(!tutorials.containsKey(s))
-			throw new Exception("No such a tutorial;");
+			throw new RuntimeException("No such a tutorial;");
 		t=tutorials.get(s);
 		return t;
 	}
@@ -80,15 +81,18 @@ public class ACTutorial {
 	}
 	// Static registry end
 
+	private static IPreviewHandler[] defaultHandlers = new IPreviewHandler[] { PreviewHandlers.nothing };
+
 	public final String id;
 	
 	private Condition condition;
-	private IPreviewHandler handler = PreviewHandlers.nothing;
 
 	// Client: Cached ArticlePlotters
 	// TODO: Currently doesn't support runtime lang change. Support it?
 	@SideOnly(Side.CLIENT)
 	private ArticlePlotter cachedBrief, cachedContent;
+
+	private IPreviewHandler[] previewHandlers = defaultHandlers;
 
 	public ACTutorial(String id) {
 		this.id=id;
@@ -100,13 +104,13 @@ public class ACTutorial {
 		return this;
 	}
 
-	public ACTutorial setPreview(IPreviewHandler _handler) {
-		handler = _handler;
+	public ACTutorial setPreview(IPreviewHandler ...handlers) {
+		previewHandlers = handlers;
 		return this;
 	}
 
-	public IPreviewHandler getPreview() {
-		return handler;
+	public IPreviewHandler[] getPreview() {
+		return previewHandlers;
 	}
 
 	public String getBrief() {
