@@ -21,14 +21,12 @@ import java.util.List;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.block.TileDeveloper;
-import cn.academy.ability.developer.DevelopTypeLevel;
-import cn.academy.ability.developer.DevelopTypeSkill;
-import cn.academy.ability.developer.IDevCondition;
-import cn.academy.ability.developer.IDevelopType;
-import cn.academy.ability.developer.LearningHelper;
-import cn.academy.ability.developer.refactor.DevelopData;
-import cn.academy.ability.developer.refactor.DevelopData.DevState;
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.*;
+import cn.academy.ability.develop.action.DevelopActionLevel;
+import cn.academy.ability.develop.action.DevelopActionSkill;
+import cn.academy.ability.develop.action.IDevelopAction;
+import cn.academy.ability.develop.DevelopData.DevState;
+import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.component.Glow;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
@@ -49,7 +47,6 @@ import cn.lambdalib.util.helper.Font;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 
 /**
@@ -83,7 +80,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				if(j == aData.getLevel() + 1 && LearningHelper.canLevelUp(type, aData)) {
 					overlay = new Overlay();
 					window.addWidget(overlay);
-					window.addWidget(createConfirmWidget(new DevelopTypeLevel(), 
+					window.addWidget(createConfirmWidget(new DevelopActionLevel(),
 						() -> {
 							developData.reset();
 							Syncs.startUpgradingLevel(player, developer);
@@ -236,7 +233,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 					{
 						overlay = new Overlay();
 						window.addWidget(overlay);
-						window.addWidget(createConfirmWidget(new DevelopTypeSkill(skill), 
+						window.addWidget(createConfirmWidget(new DevelopActionSkill(skill),
 							() -> {
 								developData.reset();
 								Syncs.startLearningSkill(player, developer, skill);
@@ -253,7 +250,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		return ret;
 	}
 	
-	Widget createConfirmWidget(IDevelopType type, ICallback callback) {
+	Widget createConfirmWidget(IDevelopAction type, ICallback callback) {
 		Widget ret = loaded.getWidget("widgets/window_confirm").copy();
 		
 		double estmCons = LearningHelper.getEstimatedConsumption(player, developer.getType(), type);
@@ -290,7 +287,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 	/**
 	 * Will NOT start the action at SERVER side. Do it on your own.
 	 */
-	Widget createProgressTracker(IDevelopType type) {
+	Widget createProgressTracker(IDevelopAction type) {
 		Widget ret = loaded.getWidget("widgets/window_tracker").copy();
 		DrawTexture.get(ret.getWidget("icon_track")).setTex(type.getIcon(player));
 		TextBox.get(ret.getWidget("text_content")).setContent(type.getName(player));

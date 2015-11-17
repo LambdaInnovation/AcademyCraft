@@ -26,40 +26,36 @@ public abstract class Condition {
 	Condition[] children;
 	boolean needSaveNBT=false;
 	
-	static class ItemCondition extends Condition{
+	static class ItemCondition extends Condition {
 		ItemCondition() {
 			super();
 			this.needSaveNBT=true;
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
 		public boolean exam(EntityPlayer player) {
-			// TODO Auto-generated method stub
 			return PlayerData.get(player).getPart(ACTutorialDataPart.class).allSaved[index];
 		}
 		
-		public void pass(EntityPlayer player){
+		public void pass(EntityPlayer player) {
 			ACTutorialDataPart data = PlayerData.get(player).getPart(ACTutorialDataPart.class);
-			data.allSaved[index]=true;
+			data.allSaved[index] = true;
 			data.update();
 		}
 		
 	}
 
-	static class AbilityLevelCondition extends Condition{
+	static class AbilityLevelCondition extends Condition {
 		int level;
 		Category skillType;
 		
 		public AbilityLevelCondition(Category skillType,int level) {
-			// TODO Auto-generated constructor stub
 			this.skillType=skillType;
 			this.level=level;
 		}
 		
 		@Override
 		public boolean exam(EntityPlayer player) {
-			// TODO Auto-generated method stub
 			AbilityData data=AbilityData.get(player);
 			if(data.getLevel()>=this.level&&(this.skillType==null||data.getCategory().equals(skillType)))return true;
 			return false;
@@ -68,32 +64,32 @@ public abstract class Condition {
 	}
 
 	@RegEventHandler()
-	public static class HandleEvent{
+	public static class HandleEvent {
 		static HashMap<String,ItemCondition> craftMap = new HashMap<String,ItemCondition>();
 		static HashMap<String,ItemCondition> pickupMap = new HashMap<String,ItemCondition>();
 		static HashMap<String,ItemCondition> smeltMap = new HashMap<String,ItemCondition>();
 		static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<MatterMaterial,ItemCondition>();
 		
 		@SubscribeEvent
-		public void onItemCrafted(ItemCraftedEvent e){
+		public void onItemCrafted(ItemCraftedEvent e) {
 			String key=e.crafting.getItem().getUnlocalizedName();
 			try{
 				craftMap.get(key).pass(e.player);
-			}catch(NullPointerException err){}
+			} catch(NullPointerException err) {}
 			try{
 				if(e.crafting.getItem().getHasSubtypes()){
 					key+=e.crafting.getItemDamage();
 					craftMap.get(key).pass(e.player);
 				}
-			}catch(NullPointerException err){}
+			} catch(NullPointerException err) {}
 		}
 		
 		@SubscribeEvent
-		public void onItemPickup(ItemPickupEvent e){
+		public void onItemPickup(ItemPickupEvent e) {
 			String key=e.pickedUp.getEntityItem().getItem().getUnlocalizedName();
 			try{
 				pickupMap.get(key).pass(e.player);
-			}catch(NullPointerException err){}
+			} catch(NullPointerException err) {}
 			try {
 				if(e.pickedUp.getEntityItem().getItem().getHasSubtypes()){
 					key+=e.pickedUp.getEntityItem().getItemDamage();
@@ -103,35 +99,34 @@ public abstract class Condition {
 		}
 		
 		@SubscribeEvent
-		public void onItemSmelted(ItemSmeltedEvent e){
+		public void onItemSmelted(ItemSmeltedEvent e) {
 			String key=e.smelting.getItem().getUnlocalizedName();
 			try{
 				smeltMap.get(key).pass(e.player);
-			}catch(NullPointerException err){}
+			} catch(NullPointerException err) {}
 			try{
 				if(e.smelting.getItem().getHasSubtypes()){
 					key+=e.smelting.getItemDamage();
 					smeltMap.get(key).pass(e.player);
 				}
-			}catch(NullPointerException err){}
+			} catch(NullPointerException err) {}
 		}
 		
 		@SubscribeEvent
-		public void onMatterUnitHarvest(MatterUnitHarvestEvent e){
+		public void onMatterUnitHarvest(MatterUnitHarvestEvent e) {
 			MatterMaterial m = e.mat;
 			if(matterUnitMap.containsKey(m))matterUnitMap.get(m).pass(e.player);
 		}
 	}
 	
-	Condition(){
-	}
+	Condition() {}
 	
-	Condition addChildren(Condition...condition){
+	Condition addChildren(Condition...condition) {
 		children=condition;
 		return this;
 	}
 	
-	void addNeedSavingToTutorial(ACTutorial t){
+	void addNeedSavingToTutorial(ACTutorial t) {
 		if(this.needSaveNBT){
 			if(!ACTutorial.savedConditions.contains(this)){
 				this.index=ACTutorial.savedConditions.size();
@@ -146,13 +141,13 @@ public abstract class Condition {
 	
 	public abstract boolean exam(EntityPlayer player);
 	
-	Condition setSaveToNBT(){
+	Condition setSaveToNBT() {
 		this.needSaveNBT=true;
 		return this;
 	}
 	
 
-	static String getKeyFromItem(Item i,boolean checkID, int subID){
+	static String getKeyFromItem(Item i,boolean checkID, int subID) {
 		String key=i.getUnlocalizedName();
 		if(i.getHasSubtypes()&&checkID)
 			key+=subID;
@@ -161,16 +156,15 @@ public abstract class Condition {
 	
 	//=============================================================================
 	/**
-	 * 用于和的条件组合
-	 * @param c 子条件
-	 * @return 作为子条件的和组合的条件
+	 * AND
+	 * @param c children condition
+	 * @return result
 	 */
-	public static Condition and(Condition...c){
+	public static Condition and(Condition...c) {
 		return new Condition() {
 			
 			@Override
 			public boolean exam(EntityPlayer player) {
-				// TODO Auto-generated method stub
 				for(Condition c0 : children){
 					if(!c0.exam(player)){
 						return false;
@@ -182,16 +176,15 @@ public abstract class Condition {
 	}	
 	//=============================================================================
 	/**
-	 * 用于或的条件组合
-	 * @param c 子条件
-	 * @return 作为子条件的或组合的条件
+	 * OR
+	 * @param c children condition
+	 * @return result
 	 */
-	public static Condition or(Condition...c){
+	public static Condition or(Condition...c) {
 		return new Condition() {
 			
 			@Override
 			public boolean exam(EntityPlayer player) {
-				// TODO Auto-generated method stub
 				for(Condition c0 : children){
 					if(c0.exam(player)){
 						return true;
@@ -209,7 +202,7 @@ public abstract class Condition {
 	 * @return 一组条件分别对应每个物品/方块
 	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
-	public static Condition[] itemsCrafted(Object...itemsOrBlocks) throws Exception{
+	public static Condition[] itemsCrafted(Object...itemsOrBlocks) throws Exception {
 		List<Condition> c=new ArrayList<Condition>();
 		for(Object IorB : itemsOrBlocks){
 			Item item = null;
@@ -233,7 +226,7 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	private static Condition itemCrafted(Item item,boolean checkID,int damageID){
+	private static Condition itemCrafted(Item item,boolean checkID,int damageID) {
 		ItemCondition c;
 		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.craftMap.containsKey(key)){
@@ -245,21 +238,22 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemCrafted(Item item,int id){
+	public static Condition itemCrafted(Item item,int id) {
 		return itemCrafted(item,true,id);
 	}
-	public static Condition itemCrafted(Item item){
+	public static Condition itemCrafted(Item item) {
 		return itemCrafted(item,false,0);
 	}
 	
-	private static Condition itemCrafted(Block block,boolean checkMeta,int meta){
+	private static Condition itemCrafted(Block block,boolean checkMeta,int meta) {
 		Item item = Item.getItemFromBlock(block);
 		return itemCrafted(item,checkMeta,meta);
 	}
-	public static Condition itemCrafted(Block block,int meta){
+	
+	public static Condition itemCrafted(Block block,int meta) {
 		return itemCrafted(block,true,meta);
 	}
-	public static Condition itemCrafted(Block block){
+	public static Condition itemCrafted(Block block) {
 		return itemCrafted(block,false,0);
 	}
 	
@@ -271,7 +265,7 @@ public abstract class Condition {
 	 * @return 一组条件分别对应每个物品/方块
 	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
-	public static Condition[] itemsPickup(Object...itemsOrBlocks) throws Exception{
+	public static Condition[] itemsPickup(Object...itemsOrBlocks) throws Exception {
 		List<Condition> c=new ArrayList<Condition>();
 		for(Object IorB : itemsOrBlocks){
 			Item item = null;
@@ -295,7 +289,7 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	private static Condition itemPickup(Item item,boolean checkID,int damageID){
+	private static Condition itemPickup(Item item,boolean checkID,int damageID) {
 		ItemCondition c;
 		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.pickupMap.containsKey(key)){
@@ -307,21 +301,22 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemPickup(Item item,int id){
+	public static Condition itemPickup(Item item,int id) {
 		return itemPickup(item,true,id);
 	}
-	public static Condition itemPickup(Item item){
+	public static Condition itemPickup(Item item) {
 		return itemPickup(item,false,0);
 	}
 	
-	private static Condition itemPickup(Block block,boolean checkMeta,int meta){
+	private static Condition itemPickup(Block block,boolean checkMeta,int meta) {
 		Item item = Item.getItemFromBlock(block);
 		return itemPickup(item,checkMeta,meta);
 	}
-	public static Condition itemPickup(Block block,int meta){
+	
+	public static Condition itemPickup(Block block,int meta) {
 		return itemPickup(block,true,meta);
 	}
-	public static Condition itemPickup(Block block){
+	public static Condition itemPickup(Block block) {
 		return itemPickup(block,false,0);
 	}
 	//=============================================================================
@@ -332,7 +327,7 @@ public abstract class Condition {
 	 * @return 一组条件分别对应每个物品/方块
 	 * @throws Exception 传入的参数不是方块或者物品类型
 	 */
-	public static Condition[] itemsSmelted(Object...itemsOrBlocks) throws Exception{
+	public static Condition[] itemsSmelted(Object...itemsOrBlocks) throws Exception {
 		List<Condition> c=new ArrayList<Condition>();
 		for(Object IorB : itemsOrBlocks){
 			Item item = null;
@@ -356,7 +351,7 @@ public abstract class Condition {
 		return c.toArray(new Condition[c.size()]);
 	}
 	
-	private static Condition itemSmelted(Item item,boolean checkID,int damageID){
+	private static Condition itemSmelted(Item item,boolean checkID,int damageID) {
 		ItemCondition c;
 		String key=getKeyFromItem(item,checkID,damageID);
 		if(HandleEvent.smeltMap.containsKey(key)){
@@ -368,32 +363,33 @@ public abstract class Condition {
 		return c;
 	}
 	
-	public static Condition itemSmelted(Item item,int id){
+	public static Condition itemSmelted(Item item,int id) {
 		return itemSmelted(item,true,id);
 	}
-	public static Condition itemSmelted(Item item){
+	public static Condition itemSmelted(Item item) {
 		return itemSmelted(item,false,0);
 	}
 
-	private static Condition itemSmelted(Block block,boolean checkMeta,int meta){
+	private static Condition itemSmelted(Block block,boolean checkMeta,int meta) {
 		Item item = Item.getItemFromBlock(block);
 		return itemSmelted(item,checkMeta,meta);
 	}
-	public static Condition itemSmelted(Block block,int meta){
+	
+	public static Condition itemSmelted(Block block,int meta) {
 		return itemSmelted(block,true,meta);
 	}
-	public static Condition itemSmelted(Block block){
+	public static Condition itemSmelted(Block block) {
 		return itemSmelted(block,false,0);
 	}
 	//=============================================================================
 	
-	public static Condition abilityLevel(Category cat,int level){
+	public static Condition abilityLevel(Category cat,int level) {
 		return new AbilityLevelCondition(cat,level);
 	}
 
 	//=============================================================================
 	
-	public static Condition harvestLiquid(MatterMaterial mat){
+	public static Condition harvestLiquid(MatterMaterial mat) {
 		ItemCondition c;
 		if(HandleEvent.matterUnitMap.containsKey(mat)){
 			c=HandleEvent.matterUnitMap.get(mat);
@@ -404,8 +400,12 @@ public abstract class Condition {
 		return c;
 	}
 	//=============================================================================
-	
-	public static Condition onTutorial(ACTutorial t){
+	/**
+	 * 
+	 * @param t The tutorial
+	 * @return result
+	 */
+	public static Condition onTutorial(ACTutorial t) {
 		return new Condition(){
 
 			@Override
@@ -418,11 +418,11 @@ public abstract class Condition {
 	
 	/**
 	 * 
-	 * @param tutorialID 前置教程的id
-	 * @return 以前置教程状态判断的条件
-	 * @throws Exception 没有这个id的教程
+	 * @param tutorialID ID of the tutorial
+	 * @return result
+	 * @throws Exception Throw if no such a tutorial.
 	 */
-	public static Condition onTutorial(String tutorialID) throws Exception{
+	public static Condition onTutorial(String tutorialID) throws Exception {
 		ACTutorial t = ACTutorial.getTutorial(tutorialID);
 		return onTutorial(t);
 	}

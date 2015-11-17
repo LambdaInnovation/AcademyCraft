@@ -12,13 +12,11 @@
  */
 package cn.academy.misc.tutorial.client;
 
-import static org.lwjgl.opengl.GL11.glColor4d;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glTranslated;
-
 import java.util.Collection;
 
+import cn.lambdalib.cgui.gui.component.*;
+import cn.lambdalib.util.client.article.ArticlePlotter;
+import cn.lambdalib.util.helper.Font;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
@@ -27,10 +25,6 @@ import cn.lambdalib.cgui.gui.LIGui;
 import cn.lambdalib.cgui.gui.LIGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.annotations.GuiCallback;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
@@ -44,6 +38,8 @@ import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD
@@ -63,11 +59,16 @@ public class GuiTutorial extends LIGuiScreen {
 	Widget frame;
 	Widget leftPart, rightPart;
 	
-	Widget listArea, searchArea;
+	Widget listArea;
 	
 	Widget showWindow, rightWindow, centerPart;
 	
 	Widget logo0, logo1, logo2, logo3;
+
+	Widget centerText, briefText;
+
+	// Current displayed tutorial
+	ACTutorial currentTut = null;
 
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
@@ -81,7 +82,6 @@ public class GuiTutorial extends LIGuiScreen {
 		
 		leftPart = frame.getWidget("leftPart");
 		listArea = leftPart.getWidget("list");
-		searchArea = leftPart.getWidget("search");
 		
 		rightPart = frame.getWidget("rightPart");
 		
@@ -92,6 +92,9 @@ public class GuiTutorial extends LIGuiScreen {
 		logo1 = rightPart.getWidget("logo1");
 		logo2 = rightPart.getWidget("logo2");
 		logo3 = rightPart.getWidget("logo3");
+
+		centerText = centerPart.getWidget("text");
+		briefText = rightPart.getWidget("text");
 		
 		showWindow.transform.doesDraw = false;
 		rightWindow.transform.doesDraw = false;
@@ -100,7 +103,7 @@ public class GuiTutorial extends LIGuiScreen {
 		rebuildList(tutlist);
 		EventLoader.load(frame, this);
 		
-		searchArea.transform.doesDraw = listArea.transform.doesDraw = false;
+		listArea.transform.doesDraw = false;
 		
 		/* Start animation controller */ {
 			blend(logo2, 0.65, 0.3);
@@ -143,7 +146,7 @@ public class GuiTutorial extends LIGuiScreen {
 				
 				glPopMatrix();
 				
-				searchArea.transform.doesDraw = listArea.transform.doesDraw = dt > 2.3;
+				listArea.transform.doesDraw = dt > 2.3;
 			});
 		}
 		
@@ -160,8 +163,22 @@ public class GuiTutorial extends LIGuiScreen {
 			
 			TextBox box = new TextBox();
 			box.content = t.getTitle();
+			box.localized = true;
 			box.size = 10;
 			box.heightAlign = HeightAlign.CENTER;
+
+			w.listen(LeftClickEvent.class, (__, e) ->
+			{
+				if(currentTut == null) {
+					// Start blending view area!
+					for(Widget old : new Widget[] { logo2, logo0, logo1, logo3 }) {
+						blend(old, 0, 0.3, true);
+					}
+					centerPart.transform.doesDraw = true;
+					rightWindow.transform.doesDraw = true;
+				}
+				currentTut = t;
+			});
 			
 			w.addComponent(box);
 			el.addWidget(w);
@@ -174,17 +191,28 @@ public class GuiTutorial extends LIGuiScreen {
 		glColor4d(1, 1, 1, 1);
 		ACRenderingHelper.lineSegment(x0, 0, x1, 0, ht);
 	}
-	
+
 	private void blend(Widget w, double start, double tin) {
+		blend(w, start, tin, false);
+	}
+	
+	private void blend(Widget w, double start, double tin, boolean reverse) {
 		DrawTexture dt = DrawTexture.get(w);
-		dt.color.a = 0;
 		long startTime = GameTimer.getAbsTime();
 		double startAlpha = dt.color.a;
+		dt.color.a = reverse ? startAlpha : 0;
 		
 		w.listen(FrameEvent.class, (__, e) -> 
 		{
 			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
-			double alpha = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
+			double alpha = startAlpha *
+					MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
+			if(reverse) {
+				alpha = 1 - alpha;
+				if(alpha == 0) {
+					w.dispose();
+				}
+			}
 			dt.color.a = alpha;
 		});
 	}
@@ -203,16 +231,45 @@ public class GuiTutorial extends LIGuiScreen {
 		});
 	}
 	
-	// Search area
-	@GuiCallback("leftPart/search")
-	public void mouseDown(Widget w, LeftClickEvent event) {
-		TextBox t = TextBox.get(w);
-		if(t.color.a != 1) {
-			t.color.a = 1;
-			t.content = "";
+	@GuiCallback("rightPart/centerPart/text")
+	public void drawContent(Widget w, FrameEvent event) {
+		if(currentTut != null) {
+			ArticlePlotter plotter = currentTut.getContentPlotter(w.transform.width - 10, 8);
+
+			glPushMatrix();
+			glTranslated(0, 0, 10);
+
+			glColorMask(false, false, false, false);
+			glDepthMask(true);
+			HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
+			glColorMask(true, true, true, true);
+
+			double ht = Math.max(0, plotter.getMaxHeight() - w.transform.height + 10);
+			double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
+			glTranslated(3, 3 - delta, 0);
+			glDepthFunc(GL_EQUAL);
+			plotter.draw();
+			glDepthFunc(GL_LEQUAL);
+			glPopMatrix();
 		}
 	}
-	
-	
+
+	@GuiCallback("rightPart/centerPart/scroll_2")
+	public void onScroll(Widget w, LeftClickEvent event) {
+		System.out.println("Yahoo!");
+	}
+
+	@GuiCallback("rightPart/rightWindow/text")
+	public void drawBrief(Widget w, FrameEvent event) {
+		if(currentTut != null) {
+			Font.font.draw("§l" + currentTut.getTitle(), 3, 3, 10, 0xffffff);
+
+			glPushMatrix();
+			glTranslated(3, 18, 0);
+			ArticlePlotter plotter = currentTut.getBriefPlotter(w.transform.width - 15, 8);
+			plotter.draw();
+			glPopMatrix();
+		}
+	}
 	
 }

@@ -13,7 +13,7 @@
 package cn.academy.ability.client.skilltree;
 
 import net.minecraft.entity.player.EntityPlayer;
-import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.develop.DeveloperType;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;

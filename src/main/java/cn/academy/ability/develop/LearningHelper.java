@@ -10,13 +10,14 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.action.IDevelopAction;
+import cn.academy.ability.develop.condition.IDevCondition;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -56,7 +57,7 @@ public class LearningHelper {
 		return true;
 	}
 
-    public static double getEstimatedConsumption(EntityPlayer player, DeveloperType blktype, IDevelopType type) {
+    public static double getEstimatedConsumption(EntityPlayer player, DeveloperType blktype, IDevelopAction type) {
         return blktype.getCPS() * type.getStimulations(player);
     }
 	

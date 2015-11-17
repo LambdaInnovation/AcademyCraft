@@ -10,9 +10,9 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer;
+package cn.academy.ability.develop.condition;
 
-import cn.academy.ability.developer.refactor.IDeveloper;
+import cn.academy.ability.develop.IDeveloper;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;

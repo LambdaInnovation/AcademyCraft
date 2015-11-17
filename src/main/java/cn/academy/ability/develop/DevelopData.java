@@ -10,10 +10,9 @@
  * 在遵照该协议的情况下，您可以自由传播和修改。
  * http://www.gnu.org/licenses/gpl.html
  */
-package cn.academy.ability.developer.refactor;
+package cn.academy.ability.develop;
 
-import cn.academy.ability.developer.DeveloperType;
-import cn.academy.ability.developer.IDevelopType;
+import cn.academy.ability.develop.action.IDevelopAction;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.networkcall.s11n.StorageOption;
@@ -37,7 +36,7 @@ public class DevelopData extends DataPart {
     private boolean dirty = false;
 
     private IDeveloper developer;
-    private IDevelopType type;
+    private IDevelopAction type;
 
 
     // Synced states
@@ -54,7 +53,7 @@ public class DevelopData extends DataPart {
      * Make the player start developing with given Developer and Type.
      * If currently is developing the previous action will be overridden.
      */
-    public void startDeveloping(IDeveloper _developer, IDevelopType _type) {
+    public void startDeveloping(IDeveloper _developer, IDevelopAction _type) {
         resetProgress(false);
         developer = _developer;
         type = _type;
@@ -80,7 +79,7 @@ public class DevelopData extends DataPart {
     /**
      * @return Current developer type or null if not developing
      */
-    public IDevelopType getDevelopType() {
+    public IDevelopAction getDevelopType() {
         return type;
     }
 
@@ -162,7 +161,7 @@ public class DevelopData extends DataPart {
     public NBTTagCompound toNBTSync() {
         NBTTagCompound ret = new NBTTagCompound();
         SerializationManager ser = SerializationManager.INSTANCE;
-        NBTBase tagDeveloper = ser.serialize(developer, StorageOption.Option.INSTANCE);
+        NBTBase tagDeveloper = ser.serialize(developer, StorageOption.Option.NULLABLE_INSTANCE);
         ret.setTag("d", tagDeveloper);
 
         ret.setInteger("0", stim);

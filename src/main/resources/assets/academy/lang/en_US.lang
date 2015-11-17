@@ -531,3 +531,9 @@ achievement.ac_teleporter.flashing=Flashing and Flashing
 achievement.ac_teleporter.flashing.desc=While low form beings still move on their foot
 achievement.ac_teleporter.mastery=Dimension Traveler
 achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimensions
+
+# Tutorials
+
+ac.gui.tutorial.ability_developer.title=Ability Developer
+ac.gui.tutorial.ability_developer.brief=pending...
+ac.gui.tutorial.ability_developer.content=pending...

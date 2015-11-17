@@ -12,7 +12,7 @@
  */
 package cn.academy.ability.block;
 
-import cn.academy.ability.developer.DeveloperType;
+import cn.academy.ability.develop.DeveloperType;
 import cn.academy.core.block.ACBlockMulti;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
