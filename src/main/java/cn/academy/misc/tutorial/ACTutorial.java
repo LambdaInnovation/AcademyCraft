@@ -1,10 +1,6 @@
 package cn.academy.misc.tutorial;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.lambdalib.util.client.article.ArticleCompiler;
@@ -20,7 +16,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import scala.actors.threadpool.Arrays;
 
 @Registrant
 public class ACTutorial {
@@ -85,7 +80,7 @@ public class ACTutorial {
 	public static final boolean SHOW_ALL = true;
 
 	public final String id;
-	
+
 	private Condition condition;
 
 	// Client: Cached ArticlePlotters
@@ -98,7 +93,7 @@ public class ACTutorial {
 	public ACTutorial(String id) {
 		this.id=id;
 	}
-	
+
 	public ACTutorial setCondition(Condition condition) {
 		this.condition=condition;
 		condition.addNeedSavingToTutorial(this);
@@ -117,11 +112,11 @@ public class ACTutorial {
 	public String getBrief() {
 		return local("brief");
 	}
-	
+
 	public String getContent() {
 		return local("content");
 	}
-	
+
 	public String getTitle() {
 		return local("title");
 	}
