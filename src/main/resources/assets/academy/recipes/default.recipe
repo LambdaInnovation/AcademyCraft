@@ -5,13 +5,13 @@ shapeless(si_piece*2){
 }
 
 shaped(data_chip){
-	[redstone,redstone,redstone]
-	[nil,plateIron,nil]
+	[dustRedstone,dustRedstone,dustRedstone]
+	[nil,         plateIron,   nil]
 }
 
 shaped(data_chip){
-	[redstone,redstone,redstone]
-	[nil,si_piece,nil]
+	[dustRedstone,dustRedstone,dustRedstone]
+	[nil,         si_piece,    nil]
 }
 
 shapeless(calc_chip){
@@ -24,62 +24,62 @@ shapeless(calc_chip){
 
 
 shaped(plateIron *2){
-	[iron_ingot]
-	[iron_ingot]
-	[iron_ingot]
+	[ingotIron]
+	[ingotIron]
+	[ingotIron]
 }
 
 shaped(frame) {
-    [nil, plateIron, nil]
-    [plateIron, redstone, plateIron]
-    [nil, plateIron, nil]
+    [nil,       plateIron,    nil]
+    [plateIron, dustRedstone, plateIron]
+    [nil,       plateIron,    nil]
 }
 
 shaped(phase_gen) {
-    [crystal0, frame, crystal0]
-    [matter_unit, nil, matter_unit]
+    [crystal0,    frame, crystal0]
+    [matter_unit, nil,   matter_unit]
 }
 
 shaped(solar_gen) {
     [glass_pane, glass_pane, glass_pane]
-    [nil, wafer, nil]
-    [conv_comp, frame, conv_comp]
+    [nil,        wafer,      nil]
+    [conv_comp,  frame,      conv_comp]
 }
 
 shaped(windgen_base) {
-    [iron_ingot]
+    [ingotIron]
     [frame]
     [conv_comp]
 }
 
 shaped(windgen_pillar) {
     [iron_bars]
-    [redstone]
+    [dustRedstone]
     [iron_bars]
 }
 
 shaped(windgen_main) {
-    [nil, frame, nil]
+    [nil,        frame,     nil]
     [cons_plate, conv_comp, cons_plate]
-    [nil, frame, nil]
+    [nil,        frame,     nil]
 }
 
 shaped(windgen_fan) {
-    [nil, plateIron, nil]
+    [nil,       plateIron, nil]
     [plateIron, iron_bars, plateIron]
-    [nil, plateIron, nil]
+    [nil,       plateIron, nil]
 }
 
 shaped(node0) { 
-    [nil, calc_chip, nil]
-    [iron_ingot, frame, iron_ingot]
-    [crystal0, reso_crystal, crystal0] 
+    [nil,       calc_chip,    nil]
+    [ingotIron, frame,        ingotIron]
+    [crystal0,  reso_crystal, crystal0]
 }
 
 shaped(node1) {
-    [nil, crystal1, nil]
+    [nil,       crystal1,  nil]
     [calc_chip, conv_comp, calc_chip]
-    [nil, node0, nil]
+    [nil,       node0,     nil]
 }
 
 shaped(node2) {
@@ -89,27 +89,27 @@ shaped(node2) {
 }
 
 shaped(matter_unit*4) {
-    [nil, cons_plate, nil]
-    [cons_plate, glass, cons_plate]
-    [nil, cons_plate, nil]
+    [nil,        cons_plate, nil]
+    [cons_plate, glass,      cons_plate]
+    [nil,        cons_plate, nil]
 }
 
 shaped(ene_unit) {
-    [nil, cons_plate, nil]
-    [cons_plate, crystal0, cons_plate]
-    [nil, data_chip, nil]
+    [nil,        cons_plate, nil]
+    [cons_plate, crystal0,   cons_plate]
+    [nil,        data_chip,  nil]
 }
 
 shaped(ene_unit*2) {
-    [nil, cons_plate, nil]
-    [cons_plate, crystal1, cons_plate]
-    [nil, data_chip, nil]
+    [nil,        cons_plate, nil]
+    [cons_plate, crystal1,   cons_plate]
+    [nil,        data_chip,  nil]
 }
 
 shaped(ene_unit*4) {
-    [nil, cons_plate, nil]
-    [cons_plate, crystal2, cons_plate]
-    [nil, data_chip, nil]
+    [nil,        cons_plate, nil]
+    [cons_plate, crystal2,   cons_plate]
+    [nil,        data_chip,  nil]
 }
 
 shaped(cons_plate*2) {
@@ -119,43 +119,43 @@ shaped(cons_plate*2) {
 shaped(terminal) {
     [data_chip, glass_pane, data_chip]
     [plateIron, brain_comp, plateIron]
-    [info_comp, redstone_block, info_comp]
+    [info_comp, blockRedstone, info_comp]
 }
 
 shaped(fusor) {
-    [cons_plate, crystal0, cons_plate]
-    [calc_chip, frame, calc_chip]
+    [cons_plate, crystal0,    cons_plate]
+    [calc_chip,  frame,       calc_chip]
     [cons_plate, matter_unit, cons_plate]
 }
 
 shaped(fusor) {
-    [nil, crystal0, nil]
-    [calc_chip, frame, conv_comp]
-    [nil, matter_unit, nil]
+    [nil,       crystal0,    nil]
+    [calc_chip, frame,       conv_comp]
+    [nil,       matter_unit, nil]
 }
 
 shaped(fusor) {
-    [nil, crystal0, nil]
-    [conv_comp, frame, calc_chip]
-    [nil, matter_unit, nil]
+    [nil,       crystal0,    nil]
+    [conv_comp, frame,       calc_chip]
+    [nil,       matter_unit, nil]
 }
 
 shaped(metal_former) {
-    [nil, shears, nil]
-    [calc_chip, frame, calc_chip]
+    [nil,        shears,      nil]
+    [calc_chip,  frame,       calc_chip]
     [cons_plate, matter_unit, cons_plate]
 }
 
 shaped(mat) {
-    [nil, reso_crystal, nil]
-    [redstone, frame, redstone]
-    [data_chip, reso_crystal, data_chip]
+    [nil,          reso_crystal, nil]
+    [dustRedstone, frame,        dustRedstone]
+    [data_chip,    reso_crystal, data_chip]
 }
 
 shaped(mat_core#0) {
-    [nil, crystal0, nil]
+    [nil,       crystal0,     nil]
     [calc_chip, reso_crystal, data_chip]
-    [nil, conv_comp, nil]
+    [nil,       conv_comp,    nil]
 }
 
 shaped(mat_core#1) {
@@ -165,9 +165,9 @@ shaped(mat_core#1) {
 }
 
 shaped(mat_core#2) {
-    [glowstone,glowstone,glowstone]
-    [reso_crystal, ender_pearl, reso_crystal]
-    [nil, mat_core#1, nil]
+    [dustGlowstone,dustGlowstone,dustGlowstone]
+    [reso_crystal, ender_pearl,  reso_crystal]
+    [nil,          mat_core#1,   nil]
 }
 
 smelting(imagsil_ingot)[0.8] {
@@ -183,19 +183,19 @@ smelting(crystal0)[0.8] {
 }
 
 shaped(info_comp) {
-    [glowstone_dust]
+    [dustGlowstone]
     [data_chip]
 }
 
 shaped(brain_comp) {
-    [nil, gold_nugget, nil]
-    [redstone, calc_chip, redstone]
-    [nil, gold_nugget, nil]
+    [nil,          nuggetGold, nil]
+    [dustRedstone, calc_chip,  dustRedstone]
+    [nil,          nuggetGold, nil]
 }
 
 shaped(reso_comp) {
-    [cons_plate,reso_crystal,cons_plate]
-    [nil,redstone,nil]
+    [cons_plate, reso_crystal, cons_plate]
+    [nil,        dustRedstone, nil]
 }
 
 shaped(conv_comp) {
@@ -211,9 +211,9 @@ shaped(app_skill_tree) {
 }
 
 shaped(app_media_player) {
-    [noteblock,noteblock,noteblock]
-    [nil,data_chip,nil]
-    [nil,info_comp,nil]
+    [noteblock, noteblock, noteblock]
+    [nil,       data_chip, nil]
+    [nil,       info_comp, nil]
 }
 
 shaped(app_freq_transmitter) {
@@ -223,15 +223,15 @@ shaped(app_freq_transmitter) {
 }
 
 shaped(mag_hook*3) {
-    [nil, plateIron, nil]
+    [nil,       plateIron, nil]
     [plateIron, plateIron, plateIron]
-    [nil, plateIron, nil]
+    [nil,       plateIron, nil]
 }
 
 shaped(dev_portable) {
-    [data_chip, glass_pane, calc_chip]
-    [brain_comp, info_comp, conv_comp]
-    [cons_plate, crystal0, cons_plate]
+    [data_chip,  glass_pane, calc_chip]
+    [brain_comp, info_comp,  conv_comp]
+    [cons_plate, crystal0,   cons_plate]
 }
 
 shapeless(silbarn){
@@ -239,21 +239,21 @@ shapeless(silbarn){
 }
 
 shaped(dev_normal) {
-    [nil, dev_portable, nil]
-    [mat_core#0, bed, piston]
-    [crystal1, frame, redstone]
+    [nil,        dev_portable, nil]
+    [mat_core#0, bed,          piston]
+    [crystal1,   frame,        dustRedstone]
 }
 
 shaped(dev_normal) {
     [brain_comp, info_comp, conv_comp]
-    [mat_core#0, bed, piston]
-    [crystal1, frame, redstone]
+    [mat_core#0, bed,       piston]
+    [crystal1,   frame,     dustRedstone]
 }
 
 shaped(dev_advanced) {
     [cons_plate, cons_plate, cons_plate]
-    [glowstone, dev_normal, glowstone]
-    [node1, crystal2, reso_crystal]
+    [glowstone,  dev_normal, glowstone]
+    [node1,      crystal2,   reso_crystal]
 }
 
 shapeless(wafer) {
