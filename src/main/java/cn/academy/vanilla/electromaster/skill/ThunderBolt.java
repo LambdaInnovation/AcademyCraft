@@ -48,11 +48,10 @@ public class ThunderBolt extends Skill {
 	
 	static final double RANGE = 20, AOE_RANGE = 8;
 	
-	static ThunderBolt instance;
+	public static final ThunderBolt instance = new ThunderBolt();
 
-	public ThunderBolt() {
+	private ThunderBolt() {
 		super("thunder_bolt", 4);
-		instance = this;
 	}
 	
 	static float getAOEDamage(AbilityData aData) {

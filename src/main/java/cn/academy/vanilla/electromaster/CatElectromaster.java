@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.knowledge.KnowledgeData;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
@@ -46,35 +47,36 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class CatElectromaster extends Category {
 
-	public ArcGen arcGen;
-	public MagManip magManip;
-	public MineDetect mineDetect;
-	public Railgun railgun;
-	public MagMovement magMovement;
-	public IronSand ironSand;
-	public CurrentCharging currentCharging;
-	public BodyIntensify bodyIntensify;
-	public ThunderBolt thunderBolt;
-	public ThunderClap thunderClap;
+	public static final Skill
+		arcGen = ArcGen.instance,
+		magManip = MagManip.instance,
+		mineDetect = MineDetect.instance,
+		railgun = Railgun.instance,
+		magMovement = MagMovement.instance,
+		currentCharging = CurrentCharging.instance,
+		bodyIntensify = BodyIntensify.instance,
+		thunderBolt = ThunderBolt.instance,
+		thunderClap = ThunderClap.instance
+		/* ironSand = ??? */;
 
 	public CatElectromaster() {
 		super("electromaster");
 
 		colorStyle.setColor4i(20, 113, 208, 100);
 
-		addSkill(arcGen = new ArcGen());
-		addSkill(currentCharging = new CurrentCharging());
-		addSkill(magMovement = new MagMovement());
-		addSkill(magManip = new MagManip());
-		addSkill(mineDetect = new MineDetect());
+		addSkill(arcGen);
+		addSkill(currentCharging);
+		addSkill(magMovement);
+		addSkill(magManip);
+		addSkill(mineDetect);
 
-		// TODO: Not added in 1.0 version
+		// TODO Finish the skill
 		// addSkill(ironSand = new IronSand());
 
-		addSkill(bodyIntensify = new BodyIntensify());
-		addSkill(thunderBolt = new ThunderBolt());
-		addSkill(railgun = new Railgun());
-		addSkill(thunderClap = new ThunderClap());
+		addSkill(bodyIntensify);
+		addSkill(thunderBolt);
+		addSkill(railgun);
+		addSkill(thunderClap);
 
 		ModuleVanilla.addGenericSkills(this);
 
@@ -101,8 +103,8 @@ public class CatElectromaster extends Category {
 
 		thunderClap.setParent(thunderBolt, 1f);
 
-		KnowledgeData.addKnowledges(new String[] { "em_basic_volt", "em_improved_volt", "em_high_volt", "em_mag_ctrl",
-				"em_projectile_master", "em_highenergy" });
+		KnowledgeData.addKnowledges("em_basic_volt", "em_improved_volt", "em_high_volt", "em_mag_ctrl",
+				"em_projectile_master", "em_highenergy");
 	}
 
 	public static boolean isOreBlock(Block block) {
@@ -124,8 +126,8 @@ public class CatElectromaster extends Category {
 	private static HashSet<Block> metalBlocks = new HashSet();
 
 	static {
-		metalBlocks.addAll(Arrays.asList(new Block[] { Blocks.rail, Blocks.dispenser, Blocks.hopper, Blocks.iron_bars,
-				Blocks.iron_block, Blocks.iron_door, Blocks.iron_ore, Blocks.activator_rail, Blocks.piston }));
+		metalBlocks.addAll(Arrays.asList(Blocks.rail, Blocks.dispenser, Blocks.hopper, Blocks.iron_bars,
+				Blocks.iron_block, Blocks.iron_door, Blocks.iron_ore, Blocks.activator_rail, Blocks.piston));
 	}
 
 	private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();

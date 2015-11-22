@@ -48,11 +48,10 @@ public class ThreateningTeleport extends Skill {
 	static final Color COLOR_NORMAL = new Color().fromHexColor(0xbabababa),
 			COLOR_THREATENING = new Color().fromHexColor(0xbab2232a);
 
-	static ThreateningTeleport instance;
+	public static final ThreateningTeleport instance = new ThreateningTeleport();
 
 	public ThreateningTeleport() {
 		super("threatening_teleport", 1);
-		instance = this;
 	}
 
 	public static float getRange(AbilityData data) {

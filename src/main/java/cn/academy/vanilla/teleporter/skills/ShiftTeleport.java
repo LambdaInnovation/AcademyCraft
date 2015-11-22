@@ -54,11 +54,10 @@ public class ShiftTeleport extends Skill {
 	static final Color CRL_BLOCK_MARKER = new Color().setColor4i(139, 139, 139, 180),
 			CRL_ENTITY_MARKER = new Color().setColor4i(235, 81, 81, 180);
 
-	static ShiftTeleport instance;
+	public static final ShiftTeleport instance = new ShiftTeleport();
 
-	public ShiftTeleport() {
+	private ShiftTeleport() {
 		super("shift_tp", 4);
-		instance = this;
 	}
 
 	static float getExpIncr(int attackEntities) {

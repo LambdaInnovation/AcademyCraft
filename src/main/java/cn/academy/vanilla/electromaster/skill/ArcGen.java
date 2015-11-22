@@ -45,7 +45,7 @@ import net.minecraft.world.World;
  */
 public class ArcGen extends Skill {
 	
-	static ArcGen instance;
+	public static final ArcGen instance = new ArcGen();
 	
 	static IBlockSelector blockFilter = new IBlockSelector() {
 
@@ -57,9 +57,8 @@ public class ArcGen extends Skill {
 		
 	};
 
-	public ArcGen() {
+	private ArcGen() {
 		super("arc_gen", 1);
-		instance = this;
 	}
 	
 	@Override

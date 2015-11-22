@@ -26,7 +26,9 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class DimFoldingTheorem extends Skill {
 
-	public DimFoldingTheorem() {
+	public static final DimFoldingTheorem instance = new DimFoldingTheorem();
+
+	private DimFoldingTheorem() {
 		super("dim_folding_theoreom", 1);
 		this.canControl = false;
 		MinecraftForge.EVENT_BUS.register(this);

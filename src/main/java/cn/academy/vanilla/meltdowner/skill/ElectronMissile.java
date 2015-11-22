@@ -48,13 +48,12 @@ import net.minecraft.world.World;
 @Registrant
 public class ElectronMissile extends Skill {
 	
-	static ElectronMissile instance;
+	public static final ElectronMissile instance = new ElectronMissile();
 	
 	static int MAX_HOLD = 5;
 
-	public ElectronMissile() {
+	private ElectronMissile() {
 		super("electron_missile", 5);
-		instance = this;
 	}
 
 	@Override

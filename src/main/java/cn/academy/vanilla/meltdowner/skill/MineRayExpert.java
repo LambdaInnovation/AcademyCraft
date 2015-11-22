@@ -26,7 +26,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class MineRayExpert extends MineRaysBase {
 
-	public MineRayExpert() {
+	public static final MineRayExpert instance = new MineRayExpert();
+
+	private MineRayExpert() {
 		super("expert", 4);
 	}
 

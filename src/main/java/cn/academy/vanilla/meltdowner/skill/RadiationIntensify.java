@@ -23,7 +23,9 @@ import cn.lambdalib.util.generic.MathUtils;
  */
 public class RadiationIntensify extends Skill {
 
-	public RadiationIntensify() {
+	public static final RadiationIntensify instance = new RadiationIntensify();
+
+	private RadiationIntensify() {
 		super("rad_intensify", 1);
 		this.canControl = false;
 		this.expCustomized = true;

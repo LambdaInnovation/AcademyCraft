@@ -53,15 +53,14 @@ public class BodyIntensify extends Skill {
 		effects.add(new PotionEffect(Potion.resistance.id, 0, 1));
 	}
 	
-	static BodyIntensify instance;
+	public static final BodyIntensify instance = new BodyIntensify();
 	
 	private static PotionEffect createEffect(PotionEffect effect, int level, int duration) {
 		return new PotionEffect(effect.getPotionID(), duration, Math.min(level, effect.getAmplifier()), effect.getIsAmbient());
 	}
 
-	public BodyIntensify() {
+	private BodyIntensify() {
 		super("body_intensify", 3);
-		instance = this;
 	}
 	
 	@Override

@@ -13,6 +13,7 @@
 package cn.academy.vanilla.teleporter;
 
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.skills.*;
 import cn.academy.vanilla.teleporter.passiveskills.*;
@@ -22,46 +23,39 @@ import cn.academy.vanilla.teleporter.passiveskills.*;
  */
 public class CatTeleporter extends Category {
 
-	public static DimFoldingTheorem dimFolding;
-
-	public static SpaceFluctuation spaceFluct;
-
-	public static MarkTeleport markTP;
-
-	public static LocationTeleport locTP;
-
-	public static PenetrateTeleport penetrateTP;
-
-	public static ThreateningTeleport threateningTP;
-
-	public static ShiftTeleport shiftTP;
-
-	public static FleshRipping fleshRipping;
-
-	public static Flashing flashing;
+	public static final Skill
+		dimFolding = DimFoldingTheorem.instance,
+		spaceFluct = SpaceFluctuation.instance,
+		markTP = MarkTeleport.instance,
+		locTP = LocationTeleport.instance,
+		penetrateTP = PenetrateTeleport.instance,
+		threateningTP = ThreateningTeleport.instance,
+		shiftTP = ShiftTeleport.instance,
+		fleshRipping = FleshRipping.instance,
+		flashing = Flashing.instance;
 
 	public CatTeleporter() {
 		super("teleporter");
 		colorStyle.setColor4i(164, 164, 164, 145);
 
 		// Lv1
-		this.addSkill(threateningTP = new ThreateningTeleport());
-		this.addSkill(dimFolding = new DimFoldingTheorem());
+		this.addSkill(threateningTP);
+		this.addSkill(dimFolding);
 
 		// Lv2
-		this.addSkill(penetrateTP = new PenetrateTeleport());
-		this.addSkill(markTP = new MarkTeleport());
+		this.addSkill(penetrateTP);
+		this.addSkill(markTP);
 
 		// Lv3
-		this.addSkill(fleshRipping = new FleshRipping());
-		this.addSkill(locTP = new LocationTeleport());
+		this.addSkill(fleshRipping);
+		this.addSkill(locTP);
 
 		// Lv4
-		this.addSkill(shiftTP = new ShiftTeleport());
-		this.addSkill(spaceFluct = new SpaceFluctuation());
+		this.addSkill(shiftTP);
+		this.addSkill(spaceFluct);
 
 		// Lv5
-		this.addSkill(flashing = new Flashing());
+		this.addSkill(flashing);
 
 		ModuleVanilla.addGenericSkills(this);
 

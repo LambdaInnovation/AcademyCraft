@@ -13,6 +13,7 @@
 package cn.academy.vanilla.meltdowner;
 
 import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.meltdowner.skill.*;
 
@@ -21,42 +22,43 @@ import cn.academy.vanilla.meltdowner.skill.*;
  */
 public class CatMeltdowner extends Category {
 
-	public static ElectronBomb electronBomb;
-	public static RadiationIntensify radIntensify;
-	public static RayBarrage rayBarrage;
-	public static ScatterBomb scatterBomb;
-	public static LightShield lightShield;
-	public static Meltdowner meltdowner;
-	public static JetEngine jetEngine;
-	public static MineRayBasic mineRayBasic;
-	public static MineRayExpert mineRayExpert;
-	public static MineRayLuck mineRayLuck;
-	public static ElectronMissile electronMissile;
+	public static final Skill
+		electronBomb = ElectronBomb.instance,
+		radIntensify = RadiationIntensify.instance,
+		rayBarrage = RayBarrage.instance,
+		scatterBomb = ScatterBomb.instance,
+		lightShield = LightShield.instance,
+		meltdowner = Meltdowner.instance,
+		jetEngine = JetEngine.instance,
+		mineRayBasic = MineRayBasic.instance,
+		mineRayExpert = MineRayExpert.instance,
+		mineRayLuck = MineRayLuck.instance,
+		electronMissile = ElectronMissile.instance;
 
 	public CatMeltdowner() {
 		super("meltdowner");
 		this.colorStyle.setColor4i(126, 255, 132, 80);
 
 		// Lv1
-		this.addSkill(electronBomb = new ElectronBomb());
-		this.addSkill(radIntensify = new RadiationIntensify());
+		this.addSkill(electronBomb);
+		this.addSkill(radIntensify);
 
 		// Lv2
-		this.addSkill(scatterBomb = new ScatterBomb());
-		this.addSkill(lightShield = new LightShield());
+		this.addSkill(scatterBomb);
+		this.addSkill(lightShield);
 
 		// Lv3
-		this.addSkill(meltdowner = new Meltdowner());
-		this.addSkill(mineRayBasic = new MineRayBasic());
+		this.addSkill(meltdowner);
+		this.addSkill(mineRayBasic);
 
 		// Lv4
-		this.addSkill(rayBarrage = new RayBarrage());
-		this.addSkill(jetEngine = new JetEngine());
-		this.addSkill(mineRayExpert = new MineRayExpert());
+		this.addSkill(rayBarrage);
+		this.addSkill(jetEngine);
+		this.addSkill(mineRayExpert);
 
 		// Lv5
-		this.addSkill(mineRayLuck = new MineRayLuck());
-		this.addSkill(electronMissile = new ElectronMissile());
+		this.addSkill(mineRayLuck);
+		this.addSkill(electronMissile);
 
 		ModuleVanilla.addGenericSkills(this);
 

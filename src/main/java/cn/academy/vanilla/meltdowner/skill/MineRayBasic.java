@@ -26,7 +26,9 @@ import net.minecraft.world.World;
  */
 public class MineRayBasic extends MineRaysBase {
 
-	public MineRayBasic() {
+	public static final MineRayBasic instance = new MineRayBasic();
+
+	private MineRayBasic() {
 		super("basic", 3);
 	}
 

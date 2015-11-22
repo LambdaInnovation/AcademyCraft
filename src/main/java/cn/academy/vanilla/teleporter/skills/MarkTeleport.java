@@ -39,13 +39,12 @@ import net.minecraft.util.Vec3;
  */
 public class MarkTeleport extends Skill {
 
-	private static MarkTeleport instance;
+	public static final MarkTeleport instance = new MarkTeleport();
 
 	private static double MINIMUM_VALID_DISTANCE = 3.0;
 
-	public MarkTeleport() {
+	private MarkTeleport() {
 		super("mark_teleport", 2);
-		instance = this;
 	}
 
 	public static double getMaxDist(AbilityData data, CPData cpData, int ticks) {

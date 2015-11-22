@@ -26,7 +26,9 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class SpaceFluctuation extends Skill {
 
-	public SpaceFluctuation() {
+	public static final SpaceFluctuation instance = new SpaceFluctuation();
+
+	private SpaceFluctuation() {
 		super("space_fluct", 4);
 		this.canControl = false;
 		MinecraftForge.EVENT_BUS.register(this);

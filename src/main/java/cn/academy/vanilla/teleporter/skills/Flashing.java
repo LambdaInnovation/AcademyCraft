@@ -48,12 +48,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class Flashing extends SpecialSkill {
 
-	static Flashing instance;
+	public static final Flashing instance = new Flashing();
 	static List<Movement> movements = new ArrayList();
 
-	public Flashing() {
+	private Flashing() {
 		super("flashing", 5);
-		instance = this;
 		this.addSubSkill(new Movement(Keyboard.KEY_A, "a", VecUtils.vec(0, 0, -1)));
 		this.addSubSkill(new Movement(Keyboard.KEY_D, "d", VecUtils.vec(0, 0, 1)));
 		this.addSubSkill(new Movement(Keyboard.KEY_W, "w", VecUtils.vec(1, 0, 0)));

@@ -47,11 +47,10 @@ import net.minecraft.world.World;
 @Registrant
 public class MagManip extends Skill {
 
-	static MagManip instance;
+	public static final MagManip instance = new MagManip();
 	
-	public MagManip() {
+	private MagManip() {
 		super("mag_manip", 2);
-		instance = this;
 	}
 	
 	static boolean accepts(AbilityData data, ItemStack stack) {
