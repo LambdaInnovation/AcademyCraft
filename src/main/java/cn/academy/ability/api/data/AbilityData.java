@@ -15,6 +15,8 @@ package cn.academy.ability.api.data;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
@@ -27,8 +29,9 @@ import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
@@ -40,7 +43,7 @@ import net.minecraftforge.common.MinecraftForge;
  */
 @Registrant
 @RegDataPart("ability")
-public class AbilityData extends DataPart {
+public class AbilityData extends DataPart<EntityPlayer> {
 	
 	private int catID = -1;
 	private BitSet learnedSkills;
@@ -53,6 +56,8 @@ public class AbilityData extends DataPart {
 	public AbilityData() {
 		learnedSkills = new BitSet(32);
 		skillExps = new float[32];
+
+		setTick();
 	}
 	
 	/**
@@ -123,20 +128,12 @@ public class AbilityData extends DataPart {
 		return getSkillListFiltered((Skill s) -> (s.canControl() && isSkillLearned(s)));
 	}
 	
-	private List<Skill> getSkillListFiltered(SkillFilter filter) {
+	private List<Skill> getSkillListFiltered(Predicate<Skill> predicate) {
 		Category c = getCategory();
 		if(c == null)
-			return new ArrayList();
-		
-		List<Skill> ret = new ArrayList();
-		for(Skill s : c.getSkillList())
-			if(filter.accepts(s))
-				ret.add(s);
-		return ret;
-	}
-	
-	private interface SkillFilter {
-		boolean accepts(Skill skill);
+			return new ArrayList<>();
+
+		return c.getSkillList().stream().filter(predicate).collect(Collectors.toList());
 	}
 	
 	/**
@@ -155,7 +152,7 @@ public class AbilityData extends DataPart {
 	public void setSkillLearnState(Skill s, boolean value) {
 		if(s.getCategory() != getCategory())
 			return;
-		setSkillLearnState(s.getID(), true);
+		setSkillLearnState(s.getID(), value);
 	}
 	
 	/**
@@ -169,7 +166,7 @@ public class AbilityData extends DataPart {
 		}
 		if(!learnedSkills.get(id)) {
 			MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(id)));
-			learnedSkills.set(id);
+			learnedSkills.set(id, value);
 			
 			if(!isRemote())
 				sync();
@@ -289,9 +286,9 @@ public class AbilityData extends DataPart {
 		
 		return tag;
 	}
-	
+
 	public static AbilityData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(AbilityData.class);
+		return  EntityData.get(player).getPart(AbilityData.class);
 	}
 
 }

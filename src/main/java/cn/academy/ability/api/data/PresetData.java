@@ -25,7 +25,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,7 +34,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 @Registrant
 @RegDataPart("preset")
-public class PresetData extends DataPart {
+public class PresetData extends DataPart<EntityPlayer> {
 	
 	public static final int MAX_KEYS = 8, MAX_PRESETS = 4;
 	
@@ -172,7 +172,7 @@ public class PresetData extends DataPart {
 	}
 	
 	public static PresetData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(PresetData.class);
+		return EntityData.get(player).getPart(PresetData.class);
 	}
 	
 	public class PresetEditor {

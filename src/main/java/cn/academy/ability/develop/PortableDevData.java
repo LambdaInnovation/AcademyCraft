@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 
 /**
@@ -28,10 +28,10 @@ import cn.lambdalib.util.datapart.RegDataPart;
  */
 @Registrant
 @RegDataPart("PortableDeveloper")
-public class PortableDevData extends DataPart implements IDeveloper {
+public class PortableDevData extends DataPart<EntityPlayer> implements IDeveloper {
 	
 	public static PortableDevData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(PortableDevData.class);
+		return EntityData.get(player).getPart(PortableDevData.class);
 	}
 
 	@Override

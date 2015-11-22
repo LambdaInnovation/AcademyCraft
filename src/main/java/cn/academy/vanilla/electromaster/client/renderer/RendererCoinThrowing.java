@@ -48,7 +48,7 @@ public class RendererCoinThrowing extends Render {
 		
 		if(etc.player == null)
 			return;
-		//If synced and in client computer, do not render
+		//If syncedSingle and in client computer, do not render
 		if(etc.isSync && player == Minecraft.getMinecraft().thePlayer)
 			return;
 		if(etc.posY < player.posY)

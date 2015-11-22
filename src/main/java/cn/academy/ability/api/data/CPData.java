@@ -27,7 +27,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.ripple.Path;
 import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -47,7 +47,7 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 @Registrant
 @RegInit
 @RegDataPart("CP")
-public class CPData extends DataPart {
+public class CPData extends DataPart<EntityPlayer> {
 	
 	public static int 
 		RECOVER_COOLDOWN,
@@ -90,10 +90,12 @@ public class CPData extends DataPart {
 	
 	private int tickSync;
 
-	public CPData() {}
+	public CPData() {
+		setTick();
+	}
 	
 	public static CPData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(CPData.class);
+		return EntityData.get(player).getPart(CPData.class);
 	}
 
 	@Override
