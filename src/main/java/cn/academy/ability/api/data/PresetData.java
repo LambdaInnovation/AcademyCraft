@@ -57,7 +57,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 	}
 	
 	private AbilityData getAbilityData() {
-		return AbilityData.get(getPlayer());
+		return AbilityData.get(getEntity());
 	}
 	
 	public boolean isOverriding() {
@@ -74,7 +74,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 			sync();
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 	}
 	
 	public void endOverride() {
@@ -86,7 +86,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 				sync();
 			}
 			
-			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 			specialPreset.fromNBT(tag.getCompoundTag("k"));
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 	}
 
 	@Override
@@ -216,7 +216,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 		
 		public void save() {
 			target.setData(display);
-			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 			
 			sync();
 		}
@@ -300,7 +300,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 		
 		public String formatDetail() {
 			StringBuilder sb = new StringBuilder();
-			Category cat = AbilityData.get(getPlayer()).getCategory();
+			Category cat = AbilityData.get(getEntity()).getCategory();
 			List<Controllable> ctrlList = cat.getControllableList();
 			
 			for(int i = 0; i < MAX_KEYS; ++i) {
@@ -318,7 +318,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append("Preset[").append(getPlayer().getCommandSenderName()).append("] <");
+			sb.append("Preset[").append(getEntity().getCommandSenderName()).append("] <");
 			for(int i = 0; i < MAX_KEYS; ++i) {
 				sb.append(data[i]).append(i == MAX_KEYS - 1 ? ">" : ",");
 			}

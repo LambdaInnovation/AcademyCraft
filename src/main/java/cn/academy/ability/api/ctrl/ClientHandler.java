@@ -129,7 +129,7 @@ public final class ClientHandler {
      */
     @RegACKeyHandler(name = KEY_ACTIVATE_ABILITY, defaultKey = Keyboard.KEY_V)
     public static KeyHandler keyActivate = new KeyHandler() {
-    	
+
     	@Override
     	public void onKeyDown() {
     		EntityPlayer player = getPlayer();
@@ -164,7 +164,7 @@ public final class ClientHandler {
 				int next = (data.getCurrentID() + 1) % 4;
 				data.switchCurrent(next);
 				// ACSounds.playClient(getPlayer(), "ability.preset_switch", 1.0f);
-				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getPlayer()));
+				MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getEntity()));
 			}
 		}
 	};

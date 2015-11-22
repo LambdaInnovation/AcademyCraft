@@ -52,7 +52,7 @@ public class PenetrateTeleport extends Skill {
 	}
 
 	static Dest getDest(AbilityData data) {
-		EntityPlayer player = data.getPlayer();
+		EntityPlayer player = data.getEntity();
 		CPData cpData = CPData.get(player);
 		World world = player.worldObj;
 		double dist = getMaxDistance(data);

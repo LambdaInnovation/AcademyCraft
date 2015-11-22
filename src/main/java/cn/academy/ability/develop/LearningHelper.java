@@ -34,7 +34,7 @@ public class LearningHelper {
 		Category c = aData.getCategory();
 		if(c == null)
 			return true;
-		return CPData.get(aData.getPlayer()).canLevelUp();
+		return CPData.get(aData.getEntity()).canLevelUp();
 	}
 	
 	/**

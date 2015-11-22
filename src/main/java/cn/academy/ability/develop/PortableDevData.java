@@ -43,7 +43,7 @@ public class PortableDevData extends DataPart<EntityPlayer> implements IDevelope
 	}
 
 	private ItemStack stack() {
-		ItemStack stack = getPlayer().getCurrentEquippedItem();
+		ItemStack stack = getEntity().getCurrentEquippedItem();
 		return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
 	}
 

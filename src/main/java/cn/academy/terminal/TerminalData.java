@@ -75,8 +75,8 @@ public class TerminalData extends DataPart<EntityPlayer> {
 			isInstalled = true;
 			sync();
 
-			MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getPlayer()));
-			informInstallAtClient(getPlayer());
+			MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getEntity()));
+			informInstallAtClient(getEntity());
 		}
 	}
 

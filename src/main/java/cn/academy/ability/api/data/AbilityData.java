@@ -31,7 +31,6 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
@@ -86,7 +85,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 			
 			if(!isRemote())
 				sync();
-			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
 		}
 	}
 	
@@ -102,7 +101,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 		if(!isRemote()) {
 			if(level != lv) {
 				level = lv;
-				MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getPlayer()));
+				MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));
 				sync();
 			}
 		}
@@ -165,7 +164,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 			return;
 		}
 		if(!learnedSkills.get(id)) {
-			MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getPlayer(), cat.getSkill(id)));
+			MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getEntity(), cat.getSkill(id)));
 			learnedSkills.set(id, value);
 			
 			if(!isRemote())
@@ -188,8 +187,8 @@ public class AbilityData extends DataPart<EntityPlayer> {
 			skillExps[skill.getID()] += added;
 			
 			if(!isRemote() && added != 0) {
-				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getPlayer(), skill));
-				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getPlayer(), skill, amt));
+				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
+				MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getEntity(), skill, amt));
 				scheduleUpdate(25);
 			}
 		}
@@ -203,7 +202,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 			learnSkill(skill);
 			skillExps[skill.getID()] = exp;
 			if(!isRemote()) {
-				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getPlayer(), skill));
+				MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
 				scheduleUpdate(25);
 			}
 		}
@@ -262,7 +261,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 		}
 		
 		if(lastcat != catID) {
-			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
 		}
 	}
 

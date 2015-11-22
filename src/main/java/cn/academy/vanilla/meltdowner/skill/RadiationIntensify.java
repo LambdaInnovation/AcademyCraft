@@ -31,7 +31,7 @@ public class RadiationIntensify extends Skill {
 	
 	@Override
 	public float getSkillExp(AbilityData data) {
-		CPData cpData = CPData.get(data.getPlayer());
+		CPData cpData = CPData.get(data.getEntity());
 		return MathUtils.clampf(0, 1, cpData.getMaxCP() / CPData.getInitCP(5));
 	}
 

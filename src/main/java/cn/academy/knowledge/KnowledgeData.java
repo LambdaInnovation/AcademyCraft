@@ -260,7 +260,7 @@ public class KnowledgeData extends DataPart<EntityPlayer> {
 
 	private void doLearnKnowledge(int id) {
 		learned.set(id, true);
-		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getPlayer(), id));
+		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getEntity(), id));
 	}
 
 }

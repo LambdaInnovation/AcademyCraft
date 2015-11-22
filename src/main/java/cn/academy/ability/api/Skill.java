@@ -312,11 +312,11 @@ public abstract class Skill extends Controllable {
      * The most commonly used script operation. Pass the skill exp of this skill as argument into the function [name].
      */
     protected float callFloatWithExp(String name, AbilityData data) {
-    	return getFloatPiped(name, data.getPlayer(), data.getSkillExp(this));
+    	return getFloatPiped(name, data.getEntity(), data.getSkillExp(this));
     }
     
     protected int callIntWithExp(String name, AbilityData data) {
-    	return getIntPiped(name, data.getPlayer(), data.getSkillExp(this));
+    	return getIntPiped(name, data.getEntity(), data.getSkillExp(this));
     }
     
     protected float getFloat(String name) {
@@ -338,15 +338,15 @@ public abstract class Skill extends Controllable {
     
     // Subclass sandbox
     protected float getConsumption(AbilityData data) {
-    	return pipeFloat("cp", callFloatWithExp("consumption", data), data.getPlayer());
+    	return pipeFloat("cp", callFloatWithExp("consumption", data), data.getEntity());
     }
     
     protected float getOverload(AbilityData data) {
-    	return pipeFloat("overload", callFloatWithExp("overload", data), data.getPlayer());
+    	return pipeFloat("overload", callFloatWithExp("overload", data), data.getEntity());
     }
     
     protected int getCooldown(AbilityData data) {
-    	return pipeInt("cooldown", callIntWithExp("cooldown", data), data.getPlayer());
+    	return pipeInt("cooldown", callIntWithExp("cooldown", data), data.getEntity());
     }
     
     /**

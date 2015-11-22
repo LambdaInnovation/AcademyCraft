@@ -62,7 +62,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
         developer = _developer;
         type = _type;
         state = DevState.DEVELOPING;
-        maxStim = type.getStimulations(getPlayer());
+        maxStim = type.getStimulations(getEntity());
         dirty = true;
     }
 
@@ -122,7 +122,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
     @Override
     public void tick() {
         if(!isRemote()) {
-            EntityPlayer player = getPlayer();
+            EntityPlayer player = getEntity();
 
             if(dirty) {
                 sync();
