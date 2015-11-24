@@ -4,7 +4,6 @@ package cn.academy.misc.tutorial.client;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.LIGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
@@ -13,15 +12,12 @@ import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -30,8 +26,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -44,6 +38,7 @@ import java.util.stream.IntStream;
 
 import static org.lwjgl.opengl.GL11.*;
 
+// TODO Add ImagFusor and MetalFormer handlers
 public enum RecipeHandler {
 	instance;
 
@@ -112,7 +107,6 @@ public enum RecipeHandler {
 		}
 
 		private void rebuild() {
-			AcademyCraft.log.info("Rebuild");
 			active.forEach(this::removeWidget);
 			active.clear();
 

@@ -1,10 +1,8 @@
 package cn.academy.misc.tutorial;
 
-import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.misc.tutorial.client.RecipeHandler;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -15,8 +13,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.IItemRenderer;
 
 import java.util.Random;
 
