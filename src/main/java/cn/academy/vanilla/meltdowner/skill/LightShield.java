@@ -47,15 +47,14 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  * @author WeAthFolD
  */
 public class LightShield extends Skill {
-	
-	static LightShield instance;
+
+	public static final LightShield instance = new LightShield();
 	
 	static final int ACTION_INTERVAL = 18;
 	static IEntitySelector basicSelector = EntitySelectors.everything;
 
-	public LightShield() {
+	private LightShield() {
 		super("light_shield", 2);
-		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	

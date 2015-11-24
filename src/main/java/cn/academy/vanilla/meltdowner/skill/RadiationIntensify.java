@@ -23,7 +23,9 @@ import cn.lambdalib.util.generic.MathUtils;
  */
 public class RadiationIntensify extends Skill {
 
-	public RadiationIntensify() {
+	public static final RadiationIntensify instance = new RadiationIntensify();
+
+	private RadiationIntensify() {
 		super("rad_intensify", 1);
 		this.canControl = false;
 		this.expCustomized = true;
@@ -31,7 +33,7 @@ public class RadiationIntensify extends Skill {
 	
 	@Override
 	public float getSkillExp(AbilityData data) {
-		CPData cpData = CPData.get(data.getPlayer());
+		CPData cpData = CPData.get(data.getEntity());
 		return MathUtils.clampf(0, 1, cpData.getMaxCP() / CPData.getInitCP(5));
 	}
 

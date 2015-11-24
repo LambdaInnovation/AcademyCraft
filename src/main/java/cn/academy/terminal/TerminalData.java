@@ -28,7 +28,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 
 import com.google.common.collect.ImmutableList;
@@ -41,7 +41,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 @RegDataPart("terminal")
-public class TerminalData extends DataPart {
+public class TerminalData extends DataPart<EntityPlayer> {
 
 	private Set<Integer> installedList = new HashSet();
 	private boolean isInstalled;
@@ -75,8 +75,8 @@ public class TerminalData extends DataPart {
 			isInstalled = true;
 			sync();
 
-			MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getPlayer()));
-			informInstallAtClient(getPlayer());
+			MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getEntity()));
+			informInstallAtClient(getEntity());
 		}
 	}
 
@@ -112,7 +112,7 @@ public class TerminalData extends DataPart {
 	}
 
 	public static TerminalData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(TerminalData.class);
+		return EntityData.get(player).getPart(TerminalData.class);
 	}
 
 	@Override

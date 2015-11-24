@@ -11,7 +11,7 @@ import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
@@ -34,11 +34,11 @@ public abstract class Condition {
 
 		@Override
 		public boolean exam(EntityPlayer player) {
-			return PlayerData.get(player).getPart(ACTutorialDataPart.class).allSaved[index];
+			return EntityData.get(player).getPart(ACTutorialDataPart.class).allSaved[index];
 		}
 		
 		public void pass(EntityPlayer player) {
-			ACTutorialDataPart data = PlayerData.get(player).getPart(ACTutorialDataPart.class);
+			ACTutorialDataPart data = EntityData.get(player).getPart(ACTutorialDataPart.class);
 			data.allSaved[index] = true;
 			data.update();
 		}

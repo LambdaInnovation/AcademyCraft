@@ -61,11 +61,10 @@ public class MineDetect extends Skill {
 	
 	static final int TIME = 100;
 	
-	static MineDetect instance;
+	public static final MineDetect instance = new MineDetect();
 
-	public MineDetect() {
+	private MineDetect() {
 		super("mine_detect", 3);
-		instance = this;
 	}
 	
 	public static float getRange(AbilityData data) {

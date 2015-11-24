@@ -41,12 +41,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class ScatterBomb extends Skill {
-	
-	static ScatterBomb instance;
 
-	public ScatterBomb() {
+	public static final ScatterBomb instance = new ScatterBomb();
+
+	private ScatterBomb() {
 		super("scatter_bomb", 2);
-		instance = this;
 	}
 	
 	static float getDamage(AbilityData aData) {

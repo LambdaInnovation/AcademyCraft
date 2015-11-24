@@ -53,7 +53,7 @@ public class MDDamageHelper {
 		if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
 			int marktick = getMarkTick(player);
 			setMarkTick(e, marktick = Math.max(60, marktick));
-			setMarkRate(e, CatMeltdowner.radIntensify.getRate(aData));
+			setMarkRate(e, RadiationIntensify.instance.getRate(aData));
 			syncStartMark(e, marktick);
 		}
 	}

@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 
 /**
@@ -35,7 +35,7 @@ public class MediaData extends DataPart {
 	public MediaData() {}
 	
 	public static MediaData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(MediaData.class);
+		return EntityData.get(player).getPart(MediaData.class);
 	}
 	
 	/**
@@ -66,9 +66,6 @@ public class MediaData extends DataPart {
 				ret.add(MediaRegistry.getMedia(i));
 		return ret;
 	}
-
-	@Override
-	public void tick() {}
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {

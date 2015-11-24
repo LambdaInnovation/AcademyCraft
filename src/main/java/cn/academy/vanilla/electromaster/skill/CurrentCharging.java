@@ -39,17 +39,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Current charging/电流回充
+ * Current charging
  * @author WeAthFolD
  */
 public class CurrentCharging extends Skill {
 
 	static final String SOUND = "em.charge_loop";
-	static CurrentCharging instance;
+	public static final CurrentCharging instance = new CurrentCharging();
 	
-	public CurrentCharging() {
+	private CurrentCharging() {
 		super("charging", 1);
-		instance = this;
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -12,6 +12,7 @@
  */
 package cn.academy.crafting;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlock;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
@@ -27,10 +28,10 @@ import cn.academy.crafting.world.ACWorldGen;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegWorldGen;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -53,10 +54,12 @@ import net.minecraftforge.fluids.FluidStack;
  * @author WeAthFolD, Shielian, KS
  */
 @Registrant
-@RegInit
 @RegEventHandler(Bus.Forge)
 @RegACRecipeNames
 public class ModuleCrafting {
+	
+	// CONFIGS
+	public static boolean GENERATE_ORES, GENERATE_PHASE_LIQUID;
 
 	// MATERIAL BLOCKS
 	@RegBlock(item = BlockImagPhase.ItemPhaseLiq.class)
@@ -191,7 +194,11 @@ public class ModuleCrafting {
 		FluidRegistry.registerFluid(fluidImagProj);
 	}
 
+	@RegInitCallback
 	public static void init() {
+		GENERATE_ORES = AcademyCraft.config.getBoolean("genOres", "generic", true, "Whether the ores will be generated in overworld.");
+		GENERATE_PHASE_LIQUID = AcademyCraft.config.getBoolean("genPhaseLiquid", "generic", true, "Whether phase liquid will be generated in overworld.");
+		
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidImagProj, 1000),
 				matterUnit.create("phase_liquid"), matterUnit.create("none"));
 

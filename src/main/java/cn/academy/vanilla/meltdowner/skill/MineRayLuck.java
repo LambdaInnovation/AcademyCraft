@@ -27,7 +27,9 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class MineRayLuck extends MineRaysBase {
 
-	public MineRayLuck() {
+	public static final MineRayLuck instance = new MineRayLuck();
+
+	private MineRayLuck() {
 		super("luck", 5);
 		this.particleTexture = Resources.getTexture("effects/md_particle_luck");
 	}

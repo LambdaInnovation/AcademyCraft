@@ -44,11 +44,10 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class FleshRipping extends Skill {
 
-	static FleshRipping instance;
+	public static final FleshRipping instance = new FleshRipping();
 
-	public FleshRipping() {
+	private FleshRipping() {
 		super("flesh_ripping", 3);
-		instance = this;
 	}
 
 	public static float getDamage(AbilityData data) {

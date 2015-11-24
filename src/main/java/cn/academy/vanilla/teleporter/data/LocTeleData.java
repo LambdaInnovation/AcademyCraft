@@ -14,7 +14,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.DataSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 
 /**
@@ -27,16 +27,12 @@ import cn.lambdalib.util.datapart.RegDataPart;
  */
 @Registrant
 @RegDataPart("loctele")
-public class LocTeleData extends DataPart {
+public class LocTeleData extends DataPart<EntityPlayer> {
 
 	private List<Location> locationList = new ArrayList();
 
-	@Override
-	public void tick() {
-	}
-
 	public static LocTeleData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(LocTeleData.class);
+		return EntityData.get(player).getPart(LocTeleData.class);
 	}
 
 	public int getLocCount() {

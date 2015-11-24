@@ -28,7 +28,7 @@ import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 
 import com.google.common.collect.BiMap;
@@ -43,7 +43,7 @@ import cpw.mods.fml.relauncher.Side;
  */
 @Registrant
 @RegDataPart("knowledge")
-public class KnowledgeData extends DataPart {
+public class KnowledgeData extends DataPart<EntityPlayer> {
 
 	// STATIC REGISTRY PART
 	private static List<Knowledge> knowledgeList = new ArrayList();
@@ -51,7 +51,7 @@ public class KnowledgeData extends DataPart {
 	private static BiMap<String, Integer> idMap = HashBiMap.create();
 
 	public static KnowledgeData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(KnowledgeData.class);
+		return EntityData.get(player).getPart(KnowledgeData.class);
 	}
 
 	public static List<Knowledge> getKnowledgeList() {
@@ -260,7 +260,7 @@ public class KnowledgeData extends DataPart {
 
 	private void doLearnKnowledge(int id) {
 		learned.set(id, true);
-		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getPlayer(), id));
+		MinecraftForge.EVENT_BUS.post(new KnowledgeLearnedEvent(getEntity(), id));
 	}
 
 }

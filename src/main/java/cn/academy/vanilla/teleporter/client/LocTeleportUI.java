@@ -44,7 +44,7 @@ public class LocTeleportUI extends LIGuiScreen {
 
 	public LocTeleportUI() {
 		data = LocTeleData.get(Minecraft.getMinecraft().thePlayer);
-		player = data.getPlayer();
+		player = data.getEntity();
 		drawBack = false;
 
 		init();

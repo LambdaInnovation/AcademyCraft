@@ -42,12 +42,11 @@ import net.minecraft.util.Vec3;
  */
 @Registrant
 public class JetEngine extends Skill {
-	
-	static JetEngine instance;
 
-	public JetEngine() {
+	public static final JetEngine instance = new JetEngine();
+
+	private JetEngine() {
 		super("jet_engine", 4);
-		instance = this;
 	}
 	
 	static float getExpIncr(AbilityData data) {

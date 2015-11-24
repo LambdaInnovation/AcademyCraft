@@ -48,12 +48,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class Flashing extends SpecialSkill {
 
-	static Flashing instance;
-	static List<Movement> movements = new ArrayList();
+	public static final Flashing instance = new Flashing();
 
-	public Flashing() {
+	private List<Movement> movements = new ArrayList<>();
+
+	private Flashing() {
 		super("flashing", 5);
-		instance = this;
 		this.addSubSkill(new Movement(Keyboard.KEY_A, "a", VecUtils.vec(0, 0, -1)));
 		this.addSubSkill(new Movement(Keyboard.KEY_D, "d", VecUtils.vec(0, 0, 1)));
 		this.addSubSkill(new Movement(Keyboard.KEY_W, "w", VecUtils.vec(1, 0, 0)));
@@ -64,7 +64,7 @@ public class Flashing extends SpecialSkill {
 		return instance.callFloatWithExp("range", aData);
 	}
 
-	private static void addMovement(Movement m) {
+	private void addMovement(Movement m) {
 		movements.add(m);
 		m.id = movements.size() - 1;
 	}
@@ -97,7 +97,7 @@ public class Flashing extends SpecialSkill {
 
 	}
 
-	static class Movement extends SubSkill {
+	class Movement extends SubSkill {
 
 		int id;
 		final Vec3 direction;
@@ -146,7 +146,7 @@ public class Flashing extends SpecialSkill {
 
 		@Override
 		public void readNBTStart(NBTTagCompound tag) {
-			movement = movements.get(tag.getByte("i"));
+			movement = instance.movements.get(tag.getByte("i"));
 		}
 
 		@Override

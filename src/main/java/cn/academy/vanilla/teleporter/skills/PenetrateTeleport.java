@@ -36,11 +36,10 @@ import net.minecraft.world.World;
  */
 public class PenetrateTeleport extends Skill {
 
-	private static PenetrateTeleport instance;
+	public static final PenetrateTeleport instance = new PenetrateTeleport();
 
-	public PenetrateTeleport() {
+	private PenetrateTeleport() {
 		super("penetrate_teleport", 2);
-		instance = this;
 	}
 
 	private static boolean hasPlace(World world, double x, double y, double z) {
@@ -52,7 +51,7 @@ public class PenetrateTeleport extends Skill {
 	}
 
 	static Dest getDest(AbilityData data) {
-		EntityPlayer player = data.getPlayer();
+		EntityPlayer player = data.getEntity();
 		CPData cpData = CPData.get(player);
 		World world = player.worldObj;
 		double dist = getMaxDistance(data);

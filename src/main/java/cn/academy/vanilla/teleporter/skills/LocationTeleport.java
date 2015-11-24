@@ -39,7 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class LocationTeleport extends Skill {
 
-	static LocationTeleport instance;
+	public static final LocationTeleport instance = new LocationTeleport();
 	static IEntitySelector basicSelector = EntitySelectors.and(EntitySelectors.living, new IEntitySelector() {
 
 		@Override
@@ -49,9 +49,8 @@ public class LocationTeleport extends Skill {
 
 	});
 
-	public LocationTeleport() {
+	private LocationTeleport() {
 		super("location_teleport", 3);
-		instance = this;
 	}
 
 	@Override

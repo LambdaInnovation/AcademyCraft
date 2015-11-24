@@ -17,7 +17,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -25,10 +25,10 @@ import net.minecraft.nbt.NBTTagCompound;
 
 @Registrant
 @RegDataPart("AC_DevelopData")
-public class DevelopData extends DataPart {
+public class DevelopData extends DataPart<EntityPlayer> {
 
     public static DevelopData get(EntityPlayer player) {
-        return PlayerData.get(player).getPart(DevelopData.class);
+        return EntityData.get(player).getPart(DevelopData.class);
     }
 
     public enum DevState { IDLE, FAILED, DEVELOPING }
@@ -48,6 +48,10 @@ public class DevelopData extends DataPart {
     private int tickThisStim;
     private int tickSync;
 
+	public DevelopData() {
+		setTick();
+	}
+
     // API
     /**
      * Make the player start developing with given Developer and Type.
@@ -58,7 +62,7 @@ public class DevelopData extends DataPart {
         developer = _developer;
         type = _type;
         state = DevState.DEVELOPING;
-        maxStim = type.getStimulations(getPlayer());
+        maxStim = type.getStimulations(getEntity());
         dirty = true;
     }
 
@@ -118,7 +122,7 @@ public class DevelopData extends DataPart {
     @Override
     public void tick() {
         if(!isRemote()) {
-            EntityPlayer player = getPlayer();
+            EntityPlayer player = getEntity();
 
             if(dirty) {
                 sync();

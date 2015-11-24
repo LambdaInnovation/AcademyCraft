@@ -89,11 +89,10 @@ public class Railgun extends Skill {
 	
 	static final int MAX_CHARGE_TIME = 25, CHARGE_ACCEPT_TIME = 15;
 	
-	static Railgun instance;
+	public static final Railgun instance = new Railgun();
 	
-	public Railgun() {
+	private Railgun() {
 		super("railgun", 4);
-		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	

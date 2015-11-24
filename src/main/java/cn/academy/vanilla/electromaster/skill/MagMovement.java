@@ -44,11 +44,10 @@ public class MagMovement extends Skill {
 	final static double ACCEL = 0.08d;
 
 	static final String SOUND = "em.move_loop";
-	private static MagMovement instance;
+	public static final MagMovement instance = new MagMovement();
 
-	public MagMovement() {
+	private MagMovement() {
 		super("mag_movement", 2);
-		instance = this;
 	}
 	
 	private static double getMaxDistance(AbilityData data) {

@@ -25,7 +25,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,7 +34,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 @Registrant
 @RegDataPart("preset")
-public class PresetData extends DataPart {
+public class PresetData extends DataPart<EntityPlayer> {
 	
 	public static final int MAX_KEYS = 8, MAX_PRESETS = 4;
 	
@@ -57,7 +57,7 @@ public class PresetData extends DataPart {
 	}
 	
 	private AbilityData getAbilityData() {
-		return AbilityData.get(getPlayer());
+		return AbilityData.get(getEntity());
 	}
 	
 	public boolean isOverriding() {
@@ -74,7 +74,7 @@ public class PresetData extends DataPart {
 			sync();
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 	}
 	
 	public void endOverride() {
@@ -86,7 +86,7 @@ public class PresetData extends DataPart {
 				sync();
 			}
 			
-			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class PresetData extends DataPart {
 			specialPreset.fromNBT(tag.getCompoundTag("k"));
 		}
 		
-		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+		MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class PresetData extends DataPart {
 	}
 	
 	public static PresetData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(PresetData.class);
+		return EntityData.get(player).getPart(PresetData.class);
 	}
 	
 	public class PresetEditor {
@@ -216,7 +216,7 @@ public class PresetData extends DataPart {
 		
 		public void save() {
 			target.setData(display);
-			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
 			
 			sync();
 		}
@@ -300,7 +300,7 @@ public class PresetData extends DataPart {
 		
 		public String formatDetail() {
 			StringBuilder sb = new StringBuilder();
-			Category cat = AbilityData.get(getPlayer()).getCategory();
+			Category cat = AbilityData.get(getEntity()).getCategory();
 			List<Controllable> ctrlList = cat.getControllableList();
 			
 			for(int i = 0; i < MAX_KEYS; ++i) {
@@ -318,7 +318,7 @@ public class PresetData extends DataPart {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append("Preset[").append(getPlayer().getCommandSenderName()).append("] <");
+			sb.append("Preset[").append(getEntity().getCommandSenderName()).append("] <");
 			for(int i = 0; i < MAX_KEYS; ++i) {
 				sb.append(data[i]).append(i == MAX_KEYS - 1 ? ">" : ",");
 			}

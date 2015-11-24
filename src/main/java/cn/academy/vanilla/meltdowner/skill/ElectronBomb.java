@@ -42,14 +42,13 @@ import net.minecraft.world.World;
 @Registrant
 public class ElectronBomb extends Skill {
 	
-	static ElectronBomb instance;
+	public static final ElectronBomb instance = new ElectronBomb();
 
 	static final int LIFE = 20, LIFE_IMPROVED = 5;
 	static final double DISTANCE = 15;
 	
-	public ElectronBomb() {
+	private ElectronBomb() {
 		super("electron_bomb", 1);
-		instance = this;
 	}
 	
 	static float getDamage(AbilityData data) {

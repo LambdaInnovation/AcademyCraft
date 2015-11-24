@@ -51,12 +51,11 @@ public class RayBarrage extends Skill {
 	static final double DISPLAY_RAY_DIST = 20;
 	static final double RAY_DIST = 20;
 	
-	static RayBarrage instance;
+	public static final RayBarrage instance = new RayBarrage();
 
-	public RayBarrage() {
+	private RayBarrage() {
 		super("ray_barrage", 4);
-		
-		instance = this;
+
 		FMLCommonHandler.instance().bus().register(this);
 	}
 	

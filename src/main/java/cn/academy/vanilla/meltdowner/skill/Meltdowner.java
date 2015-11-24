@@ -41,11 +41,10 @@ public class Meltdowner extends Skill {
 	
 	static final int TICKS_MIN = 20, TICKS_MAX = 40, TICKS_TOLE = 100;
 
-	static Meltdowner instance;
+	public static final Meltdowner instance = new Meltdowner();
 	
-	public Meltdowner() {
+	private Meltdowner() {
 		super("meltdowner", 3);
-		instance = this;
 	}
 	
 	@Override

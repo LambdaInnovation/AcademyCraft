@@ -27,7 +27,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.ripple.Path;
 import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.PlayerData;
+import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -47,7 +47,7 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 @Registrant
 @RegInit
 @RegDataPart("CP")
-public class CPData extends DataPart {
+public class CPData extends DataPart<EntityPlayer> {
 	
 	public static int 
 		RECOVER_COOLDOWN,
@@ -90,16 +90,18 @@ public class CPData extends DataPart {
 	
 	private int tickSync;
 
-	public CPData() {}
+	public CPData() {
+		setTick();
+	}
 	
 	public static CPData get(EntityPlayer player) {
-		return PlayerData.get(player).getPart(CPData.class);
+		return EntityData.get(player).getPart(CPData.class);
 	}
 
 	@Override
 	public void tick() {
 		if(aData == null)
-			aData = AbilityData.get(getPlayer());
+			aData = AbilityData.get(getEntity());
 		
 		if(aData.isLearned()) {
 			if(untilRecover == 0) {
@@ -151,9 +153,9 @@ public class CPData extends DataPart {
 			return;
 		}
 		
-		if(AbilityData.get(getPlayer()).isLearned() && !activated) {
+		if(AbilityData.get(getEntity()).isLearned() && !activated) {
 			activated = true;
-			MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new AbilityActivateEvent(getEntity()));
 			sync();
 		} else {
 			AcademyCraft.log.warn("Trying to activate ability when player doesn't have one");
@@ -168,7 +170,7 @@ public class CPData extends DataPart {
 		
 		if(activated) {
 			activated = false;
-			MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getPlayer()));
+			MinecraftForge.EVENT_BUS.post(new AbilityDeactivateEvent(getEntity()));
 			sync();
 		}
 	}
@@ -220,7 +222,7 @@ public class CPData extends DataPart {
 	 * @param cpToAdd Amount of CP
 	 */
 	public boolean perform(float overloadToAdd, float cpToAdd) {
-		if(getPlayer().capabilities.isCreativeMode) {
+		if(getEntity().capabilities.isCreativeMode) {
 			addMaxCP(cpToAdd);
 			addMaxOverload(overloadToAdd);
 			return true;
@@ -242,7 +244,7 @@ public class CPData extends DataPart {
 	 * Consume the CP and does the overload without any validation. This should be used WITH CAUTION.
 	 */
 	public void performWithForce(float overload, float cp) {
-		if(getPlayer().capabilities.isCreativeMode)
+		if(getEntity().capabilities.isCreativeMode)
 			return;
 		
 		this.overload += overload;
@@ -269,11 +271,11 @@ public class CPData extends DataPart {
 	 * 	takes account of creative mode.
 	 */
 	public boolean canPerform(float cp) {
-		return getPlayer().capabilities.isCreativeMode || this.getCP() >= cp;
+		return getEntity().capabilities.isCreativeMode || this.getCP() >= cp;
 	}
 	
 	private void addMaxCP(float consumedCP) {
-		AbilityData aData = AbilityData.get(getPlayer());
+		AbilityData aData = AbilityData.get(getEntity());
 		float max = getFunc("add_cp").callFloat(aData.getLevel());
 		addMaxCP += getFunc("maxcp_rate").callFloat(consumedCP);
 		if(addMaxCP > max)
@@ -281,7 +283,7 @@ public class CPData extends DataPart {
 	}
 	
 	private void addMaxOverload(float overload) {
-		AbilityData aData = AbilityData.get(getPlayer());
+		AbilityData aData = AbilityData.get(getEntity());
 		float max = getFunc("add_overload").callFloat(aData.getLevel());
 		float add = MathUtils.clampf(0, 10, getFunc("maxo_rate").callFloat(overload));
 		addMaxOverload += add;
@@ -290,11 +292,11 @@ public class CPData extends DataPart {
 	}
 	
 	public boolean canLevelUp() {
-		return AbilityData.get(getPlayer()).getLevel() < 5 && getLevelProgress() == 1;
+		return AbilityData.get(getEntity()).getLevel() < 5 && getLevelProgress() == 1;
 	}
 	
 	public float getLevelProgress() {
-		return addMaxCP / getFunc("add_cp").callFloat(AbilityData.get(getPlayer()).getLevel());
+		return addMaxCP / getFunc("add_cp").callFloat(AbilityData.get(getEntity()).getLevel());
 	}
 	
 	/**
@@ -325,7 +327,7 @@ public class CPData extends DataPart {
 	 * stay at 2*maxo)
 	 */
 	public void addOverload(float amt) {
-		if(getPlayer().capabilities.isCreativeMode)
+		if(getEntity().capabilities.isCreativeMode)
 			return;
 		
 		overload += amt;
@@ -351,13 +353,13 @@ public class CPData extends DataPart {
 	 * currently learned buff skills and level.
 	 */
 	public void recalcMaxValue() {
-		AbilityData data = AbilityData.get(getPlayer());
+		AbilityData data = AbilityData.get(getEntity());
 		
 		this.maxCP = AcademyCraft.pipeline.pipeFloat
-			("ability.maxcp", getInitCP(data.getLevel()), getPlayer());
+			("ability.maxcp", getInitCP(data.getLevel()), getEntity());
 		
 		this.maxOverload = AcademyCraft.pipeline.pipeFloat(
-			"ability.maxo", getInitOverload(data.getLevel()), getPlayer());
+			"ability.maxo", getInitOverload(data.getLevel()), getEntity());
 		
 		currentCP = getMaxCP();
 		overload = 0;
@@ -424,8 +426,8 @@ public class CPData extends DataPart {
 		if(isRemote()) {
 			if(lastActivated ^ activated) {
 				MinecraftForge.EVENT_BUS.post(activated ? 
-					new AbilityActivateEvent(getPlayer()) :
-					new AbilityDeactivateEvent(getPlayer()));
+					new AbilityActivateEvent(getEntity()) :
+					new AbilityDeactivateEvent(getEntity()));
 			}
 		}
 	}

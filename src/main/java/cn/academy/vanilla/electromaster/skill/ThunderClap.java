@@ -43,11 +43,10 @@ public class ThunderClap extends Skill {
 	
 	static final int MIN_TICKS = 40, MAX_TICKS = 60;
 	
-	private static ThunderClap instance;
+	public static final ThunderClap instance = new ThunderClap();
 
-	public ThunderClap() {
+	private ThunderClap() {
 		super("thunder_clap", 5);
-		instance = this;
 	}
 	
 	private static float getDamage(AbilityData data, int ticks) {
