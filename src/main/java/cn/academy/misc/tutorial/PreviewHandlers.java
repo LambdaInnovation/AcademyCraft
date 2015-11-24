@@ -82,17 +82,13 @@ public final class PreviewHandlers {
 		};
 	}
 
-	public static IPreviewHandler withWidget(Widget w) {
+	public static IPreviewHandler recipesOfStack(ItemStack stack) {
 		return new IPreviewHandler() {
 			@Override
 			public Widget getDelegateWidget() {
-				return w;
+				return RecipeHandler.instance.recipeOfStack(stack);
 			}
 		};
-	}
-
-	public static IPreviewHandler recipesOfStack(ItemStack stack) {
-		return withWidget(RecipeHandler.instance.recipeOfStack(stack));
 	}
 
 }

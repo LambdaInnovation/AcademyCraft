@@ -533,6 +533,9 @@ achievement.ac_teleporter.mastery=维度行者
 achievement.ac_teleporter.mastery.desc=我行走在空间之上
 
 # 教程项
+ac.gui.crafttype.shaped=有序合成
+ac.gui.crafttype.shapeless=无序合成
+
 ac.gui.tutorial.ability_developer.title=能力开发机
 ac.gui.tutorial.ability_developer.brief=能力开发机可用于开发能力与学习技能。
 ac.gui.tutorial.ability_developer.content=能力开发机分为三种：便携、普通与高级能力开发机。它们的内部控制面板和工作原理是相同的，不同的地方在于存在[em]方式[/em]和[em]同步率[/em]（与能力开发与学习中消耗的能量有关）等。[br]在能力开发机的内部控制面板中，若未获得能力则可以进行开发能力。在获得能力后，可以查看当前的能力信息和技能信息，并进行技能的学习与能力的升级。[br]便携能力开发机为物品形式，手持可以打开。由于其结构较为简单，同步率较低，仅能进行能力的开发与level 1、level 2技能的学习。充能需要在节点或能量发生机的OUT栏中进行。[br]普通和高级能力开发机为方块形式，需放置才能打开内部控制面板。相对来说结构较复杂，普通能力开发机可以进行level3及以下的技能学习与能力升级，而高级能力开发机则支持所有等级的能力开发与学习。由于具有方块结构，这两种开发机需要接入频道才能获取能量。
