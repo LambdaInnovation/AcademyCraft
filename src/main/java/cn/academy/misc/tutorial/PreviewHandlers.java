@@ -1,6 +1,8 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.client.render.block.RenderDynamicBlock;
+import cn.academy.misc.tutorial.client.RecipeHandler;
+import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.block.Block;
@@ -78,6 +80,19 @@ public final class PreviewHandlers {
 				glDepthFunc(GL_LEQUAL);
 			}
 		};
+	}
+
+	public static IPreviewHandler withWidget(Widget w) {
+		return new IPreviewHandler() {
+			@Override
+			public Widget getDelegateWidget() {
+				return w;
+			}
+		};
+	}
+
+	public static IPreviewHandler recipesOfStack(ItemStack stack) {
+		return withWidget(RecipeHandler.instance.recipeOfStack(stack));
 	}
 
 }

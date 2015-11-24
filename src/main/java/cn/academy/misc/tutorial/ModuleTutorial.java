@@ -12,6 +12,7 @@ import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import net.minecraft.item.ItemStack;
 
 @Registrant
 @RegACRecipeNames
@@ -62,7 +63,8 @@ public class ModuleTutorial {
 		ACTutorial.addTutorial("ability")
 				.setCondition(Condition.abilityLevel(null, 1))
 				.setPreview(PreviewHandlers.drawsItem(ModuleCrafting.brainComp),
-						PreviewHandlers.drawsBlock(ModuleCrafting.metalFormer, 2), PreviewHandlers.nothing);
+						PreviewHandlers.drawsBlock(ModuleCrafting.metalFormer, 2),
+						PreviewHandlers.recipesOfStack(new ItemStack(ModuleCrafting.dataChip)));
 
 		ACTutorial.addTutorial("ability_electromaster")
 				.setCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));
