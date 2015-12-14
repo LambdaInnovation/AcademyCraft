@@ -20,15 +20,13 @@ import cn.academy.crafting.block.TileImagFusor;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
@@ -38,9 +36,9 @@ import net.minecraft.util.ResourceLocation;
  */
 @Registrant
 @RegInit
-public class GuiImagFusor extends LIGuiContainer {
+public class GuiImagFusor extends CGuiScreenContainer {
 	
-	static LIGui loaded;
+	static CGui loaded;
 	
 	public static void init() {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/imagfusor.xml"));
@@ -89,28 +87,18 @@ public class GuiImagFusor extends LIGuiContainer {
 	
 	private void load() {
 		gui.addWidget(page = loaded.getWidget("window_main"));
-		
-		EventLoader.load(page, new Handler());
-	}
-	
-	public class Handler {
-		
-		ProgressBar progressProduct, progressProj, progressImag;
-		
-		public Handler() {
-			progressProduct = ProgressBar.get(page.getWidget("progress_pro"));
-			progressProj = ProgressBar.get(page.getWidget("progress_proj"));
-			progressImag = ProgressBar.get(page.getWidget("progress_imag"));
-			
-			EnergyUIHelper.initNodeLinkButton(tile, page.getWidget("btn_link"));
-		}
-		
-		@GuiCallback
-		public void frameUpdate(Widget w, FrameEvent event) {
+
+		ProgressBar progressProduct = ProgressBar.get(page.getWidget("progress_pro")),
+				progressProj = ProgressBar.get(page.getWidget("progress_proj")),
+				progressImag = ProgressBar.get(page.getWidget("progress_imag"));
+
+		EnergyUIHelper.initNodeLinkButton(tile, page.getWidget("btn_link"));
+
+		page.listen(FrameEvent.class, (w, event) -> {
 			progressProduct.progress = tile.getWorkProgress();
 			progressProj.progress = (double) tile.getLiquidAmount() / tile.getTankSize();
 			progressImag.progress = tile.getEnergy() / tile.getMaxEnergy();
-			
+
 			String str;
 			IFRecipe recipe = tile.getCurrentRecipe();
 			if(recipe == null) {
@@ -118,9 +106,9 @@ public class GuiImagFusor extends LIGuiContainer {
 			} else {
 				str = "" + recipe.consumeLiquid;
 			}
-			
+
 			TextBox.get(w.getWidget("text_req")).content = str;
-		}
+		});
 	}
 
 }

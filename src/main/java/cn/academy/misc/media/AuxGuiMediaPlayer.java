@@ -17,11 +17,9 @@ import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,31 +35,23 @@ public class AuxGuiMediaPlayer {
 	
 	public static void init() {
 		Widget w = CGUIDocLoader.load(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
-		EventLoader.load(w, new Events());
-		
-		ACHud.instance.addElement(w, () -> MediaPlayer.instance.isPlaying());
-	}
-	
-	public static class Events {
-		
-		@GuiCallback("progress")
-		public void updateProgress(Widget w, FrameEvent event) {
+
+		w.getWidget("progress").listen(FrameEvent.class, (__, e) -> {
 			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
 			ProgressBar.get(w).progress = (double) inst.getPlayTime() / inst.media.length;
-		}
-		
-		@GuiCallback("title")
-		public void updateTitle(Widget w, FrameEvent event) {
+		});
+
+		w.getWidget("title").listen(FrameEvent.class, (__, e) -> {
 			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
 			TextBox.get(w).content = inst.media.getDisplayName();
-		}
-		
-		@GuiCallback("time")
-		public void updateTime(Widget w, FrameEvent event) {
+		});
+
+		w.getWidget("time").listen(FrameEvent.class, (__, e) -> {
 			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
 			TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
-		}
-		
+		});
+
+		ACHud.instance.addElement(w, () -> MediaPlayer.instance.isPlaying());
 	}
 
 }

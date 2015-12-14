@@ -41,10 +41,9 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
@@ -52,7 +51,6 @@ import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
@@ -69,10 +67,10 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 @Registrant
-public abstract class GuiSkillTree extends LIGuiScreen {
+public abstract class GuiSkillTree extends CGuiScreen {
 	
 	static ShaderMono shader;
-	static LIGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/skill_tree.xml"));
+	static CGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/skill_tree.xml"));
 	static final Color
 		CRL_SKILL_ENABLED = new Color().setColor4i(74, 74, 74, 255),
 		CRL_SKILL_DISABLED = new Color().setColor4i(48, 48, 48, 48),
@@ -149,9 +147,43 @@ public abstract class GuiSkillTree extends LIGuiScreen {
 		
 		initPlayerInfo();
 		TextBox.get(windowMachine.getWidget("dev_type")).content = SkillTreeLocal.machineType(type);
-		
+
+		window.getWidget("tree_area").listen(FrameEvent.class, (w, e) -> {
+			if(connections == null)
+				return;
+			final double zLevel = 0.5;
+			for(int[] c : connections) {
+				Widget a = skillWidgets.get(c[0]), b = skillWidgets.get(c[1]);
+				Skill me = ((SkillHandler) a.getComponent("SkillHandler")).skill;
+				if(aData.isSkillLearned(me))
+					CRL_LINE.bind();
+				else
+					CRL_LINE_DISABLED.bind();
+				glPushMatrix();
+				glTranslated(0, 0, zLevel);
+				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_DEPTH_TEST);
+
+				double x0 = a.transform.x, y0 = a.transform.y, x1 = b.transform.x, y1 = b.transform.y;
+				double dy = y1 - y0, dx = x1 - x0;
+				double len = Math.sqrt(dx * dx + dy * dy);
+				final double move = 45;
+				dx *= move / len; dy *= move / len;
+
+				x0 += dx * a.transform.scale; y0 += dy * a.transform.scale;
+				x1 -= dx * b.transform.scale; y1 -= dy * b.transform.scale;
+				float alpha = ((SkillHandler) a.getComponent("SkillHandler")).getAlpha();
+				x0 = x1 + (x0 - x1) * alpha; y0 = y1 + (y0 - y1) * alpha;
+
+				ACRenderingHelper.lineSegment(x0, y0, x1, y1, 2.2f);
+
+				glEnable(GL_DEPTH_TEST);
+				glEnable(GL_TEXTURE_2D);
+				glPopMatrix();
+			}
+		});
+
 		gui.addWidget("window", window);
-		EventLoader.load(gui, this);
 	}
 	
 	private void initSkillTree() {
@@ -201,43 +233,6 @@ public abstract class GuiSkillTree extends LIGuiScreen {
     public boolean doesGuiPauseGame() {
         return false;
     }
-	
-	@GuiCallback("window/tree_area")
-	public void drawConnections(Widget w, FrameEvent event) {
-		if(connections == null)
-			return;
-		final double zLevel = 0.5;
-		for(int[] c : connections) {
-			Widget a = skillWidgets.get(c[0]), b = skillWidgets.get(c[1]);
-			Skill me = ((SkillHandler) a.getComponent("SkillHandler")).skill;
-			if(aData.isSkillLearned(me))
-				CRL_LINE.bind();
-			else
-				CRL_LINE_DISABLED.bind();
-			glPushMatrix();
-			glTranslated(0, 0, zLevel);
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_DEPTH_TEST);
-			
-			double x0 = a.transform.x, y0 = a.transform.y, x1 = b.transform.x, y1 = b.transform.y;
-			double dy = y1 - y0, dx = x1 - x0;
-			double len = Math.sqrt(dx * dx + dy * dy);
-			final double move = 45;
-			dx *= move / len; dy *= move / len;
-			
-			x0 += dx * a.transform.scale; y0 += dy * a.transform.scale;
-			x1 -= dx * b.transform.scale; y1 -= dy * b.transform.scale;
-			float alpha = ((SkillHandler) a.getComponent("SkillHandler")).getAlpha();
-			x0 = x1 + (x0 - x1) * alpha; y0 = y1 + (y0 - y1) * alpha;
-			
-			ACRenderingHelper.lineSegment(x0, y0, x1, y1, 2.2f);
-			
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_TEXTURE_2D);
-			glPopMatrix();
-		}
-		
-	}
 	
 	private Widget createSkillWidget(Skill skill, int i) {
 		Widget ret = loaded.getWidget("widgets/single_skill").copy();

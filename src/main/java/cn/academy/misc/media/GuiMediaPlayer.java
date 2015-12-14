@@ -18,10 +18,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
@@ -31,20 +30,19 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
-public class GuiMediaPlayer extends LIGuiScreen {
+public class GuiMediaPlayer extends CGuiScreen {
 	
 	static final ResourceLocation 
 		T_PLAY = Resources.getTexture("guis/apps/media_player/play"),
 		T_PAUSE = Resources.getTexture("guis/apps/media_player/pause");
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/media_player.xml"));	
 	}
@@ -78,8 +76,50 @@ public class GuiMediaPlayer extends LIGuiScreen {
 			
 			area.addComponent(list);
 		}
-		
-		EventLoader.load(pageMain, this);
+
+		pageMain.getWidget("scroll_bar").listen(DraggedEvent.class, (w, e) -> {
+			VerticalDragBar vdb = VerticalDragBar.get(w);
+
+			ElementList list = ElementList.get(pageMain.getWidget("area"));
+			list.setProgress((int) (vdb.getProgress() * list.getMaxProgress()));
+		});
+
+		pageMain.getWidget("pop").listen(LeftClickEvent.class, (w, e) -> {
+			if(player.isPlaying()) {
+				if(player.isPaused())
+					player.resume();
+				else
+					player.pause();
+			} else {
+				player.startPlay();
+			}
+
+			updatePopState();
+			gui.postEventHierarchically(new UpdateMediaEvent());
+		});
+
+		pageMain.getWidget("stop").listen(LeftClickEvent.class, (w, e) -> {
+			player.stop();
+			gui.postEventHierarchically(new UpdateMediaEvent());
+		});
+
+		pageMain.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
+			MediaInstance mi = player.getPlayingMedia();
+			ProgressBar.get(w).progress = mi == null ? 0.0 : (double)mi.getPlayTime() / mi.media.length;
+		});
+
+		pageMain.getWidget("play_time").listen(FrameEvent.class, (w, e) -> {
+			MediaInstance mi = player.getPlayingMedia();
+			TextBox.get(w).content = mi == null ? "" : Media.getPlayingTime(mi.getPlayTime());
+		});
+
+		pageMain.getWidget("title").listen(UpdateMediaEvent.class, (w, e) -> {
+			MediaInstance mi = player.getPlayingMedia();
+			TextBox.get(w).content = mi == null ? "" : mi.media.getDisplayName();
+		});
+
+		pageMain.listen(UpdateMediaEvent.class, (w, e) -> updatePopState());
+
 		gui.addWidget(pageMain);
 		
 		gui.postEventHierarchically(new UpdateMediaEvent());
@@ -107,59 +147,6 @@ public class GuiMediaPlayer extends LIGuiScreen {
 	public boolean doesGuiPauseGame() {
         return false;
     }
-	
-	@GuiCallback("scroll_bar")
-	public void onProgressChange(Widget w, DraggedEvent event) {
-		VerticalDragBar vdb = VerticalDragBar.get(w);
-		
-		ElementList list = ElementList.get(pageMain.getWidget("area"));
-		list.setProgress((int) (vdb.getProgress() * list.getMaxProgress()));
-	}
-	
-	@GuiCallback("pop")
-	public void onPopDown(Widget w, LeftClickEvent event) {
-		if(player.isPlaying()) {
-			if(player.isPaused())
-				player.resume();
-			else
-				player.pause();
-		} else {
-			player.startPlay();
-		}
-		
-		updatePopState();
-		gui.postEventHierarchically(new UpdateMediaEvent());
-	}
-	
-	@GuiCallback("stop")
-	public void onStop(Widget w, LeftClickEvent event) {
-		player.stop();
-		gui.postEventHierarchically(new UpdateMediaEvent());
-	}
-	
-	@GuiCallback("progress")
-	public void updateProgress(Widget w, FrameEvent event) {
-		MediaInstance mi = player.getPlayingMedia();
-		ProgressBar.get(w).progress = mi == null ? 0.0 : (double)mi.getPlayTime() / mi.media.length;
-	}
-	
-	@GuiCallback("play_time")
-	public void updateTime(Widget w, FrameEvent event) {
-		MediaInstance mi = player.getPlayingMedia();
-		TextBox.get(w).content = mi == null ? "" : Media.getPlayingTime(mi.getPlayTime());
-	}
-	
-	@GuiCallback("title")
-	public void updateTitle(Widget w, UpdateMediaEvent event) {
-		MediaInstance mi = player.getPlayingMedia();
-		
-		TextBox.get(w).content = mi == null ? "" : mi.media.getDisplayName();
-	}
-	
-	@GuiCallback
-	public void ups(Widget w, UpdateMediaEvent event) {
-		updatePopState();
-	}
 	
 	private void updatePopState() {
 		DrawTexture.get(pageMain.getWidget("pop")).texture = (player.isPlaying() && !player.isPaused()) ? T_PAUSE : T_PLAY;

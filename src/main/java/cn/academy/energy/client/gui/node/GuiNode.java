@@ -25,10 +25,9 @@ import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
@@ -37,7 +36,6 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
@@ -50,9 +48,9 @@ import net.minecraft.util.StatCollector;
  */
 @Registrant
 @RegInit(side = RegInit.Side.CLIENT_ONLY)
-public class GuiNode extends LIGuiContainer {
+public class GuiNode extends CGuiScreenContainer {
 	
-	public static LIGui loaded;
+	public static CGui loaded;
 	
 	final ContainerNode container;
 	final TileNode tile;
@@ -173,8 +171,8 @@ public class GuiNode extends LIGuiContainer {
     	});
     	
     	//Callback
-    	EventLoader.load(pageMain, mainHandler = new MainHandler());
-    	EventLoader.load(pageSelect, selectHandler = new SelectHandler());
+		mainHandler = new MainHandler();
+		selectHandler = new SelectHandler();
     }
     
     public static void wrapButton(Widget button, double alpha0) {
@@ -220,6 +218,27 @@ public class GuiNode extends LIGuiContainer {
     		wrapButton(getWidget("button_confirm"), 0.6);
     		
     		changeState(CheckState.LOADING);
+
+			// Init events
+			pageMain.listen(FrameEvent.class, (w, e) -> {
+				ProgressBar bar = ProgressBar.get(getWidget("progress_imag"));
+				bar.progress = bar.progressDisplay = tile.getEnergy() / tile.getMaxEnergy();
+			});
+
+			pageMain.getWidget("button_confirm").listen(LeftClickEvent.class, (w, e) ->
+					startLink(TextBox.get(getWidget("input_ssid")).content,
+							TextBox.get(getWidget("input_pw")).content)
+			);
+
+			pageMain.getWidget("button_config").listen(LeftClickEvent.class, (w, e) -> {
+				if(infoSynced && listSynced) {
+					openSelect();
+				}
+			});
+
+			pageMain.getWidget("btn_edit").listen(LeftClickEvent.class, (w, e) -> {
+				GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
+			});
     	}
     	
     	public void changeState(CheckState nstate) {
@@ -250,30 +269,6 @@ public class GuiNode extends LIGuiContainer {
     		GuiNodeSync.doLogin(GuiNode.this, ssid, pass);
     	}
     	
-    	@GuiCallback
-    	public void onFrame(Widget w, FrameEvent event) {
-    		ProgressBar bar = ProgressBar.get(getWidget("progress_imag"));
-    		bar.progress = bar.progressDisplay = tile.getEnergy() / tile.getMaxEnergy();
-    	}
-    	
-    	@GuiCallback("button_confirm")
-    	public void onConfirm(Widget w, LeftClickEvent event) {
-    		startLink(TextBox.get(getWidget("input_ssid")).content, 
-    			TextBox.get(getWidget("input_pw")).content);
-    	}
-    	
-    	@GuiCallback("button_config")
-    	public void onConfig(Widget w, LeftClickEvent event) {
-    		if(infoSynced && listSynced) {
-    			openSelect();
-    		}
-    	}
-    	
-    	@GuiCallback("btn_edit")
-    	public void rename(Widget w, LeftClickEvent event) {
-    		GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
-    	}
-    	
     	private Widget getWidget(String name) {
     		return pageMain.getWidget(name);
     	}
@@ -293,7 +288,13 @@ public class GuiNode extends LIGuiContainer {
     		});
     		
     		wrapButton(getWidget("button_close"), 0.6);
-    		
+
+			pageSelect.getWidget("button_close").listen(LeftClickEvent.class, (w, e) -> closeSelect());
+			pageSelect.getWidget("btn_disconnect").listen(LeftClickEvent.class, (w, e) -> {
+				ssid = "";
+				GuiNodeSync.doDisconnect(tile);
+				updateCurrentNet();
+			});
     	}
     	
     	/**
@@ -303,7 +304,7 @@ public class GuiNode extends LIGuiContainer {
     		updateCurrentNet();
     		
     		Widget slide = getWidget("button_slide");
-    		VerticalDragBar.get(slide).setProgress(slide, 0);
+    		VerticalDragBar.get(slide).setProgress(0);
     		
     		Widget list = getWidget("list");
     		ElementList eList = new ElementList();
@@ -326,18 +327,6 @@ public class GuiNode extends LIGuiContainer {
     			eList.addWidget(single);
     		}
     		list.addComponent(eList);
-    	}
-    	
-    	@GuiCallback("button_close")
-    	public void close(Widget w, LeftClickEvent event) {
-    		closeSelect();
-    	}
-    	
-    	@GuiCallback("btn_disconnect")
-    	public void disconnect(Widget w, LeftClickEvent event) {
-    		ssid = "";
-    		GuiNodeSync.doDisconnect(tile);
-    		updateCurrentNet();
     	}
     	
     	/**

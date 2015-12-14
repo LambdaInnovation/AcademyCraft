@@ -21,16 +21,14 @@ import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInit;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
@@ -49,18 +47,15 @@ import net.minecraft.util.StatCollector;
 @Registrant
 @SideOnly(Side.CLIENT)
 @RegInit
-public class GuiMatrix extends LIGuiContainer {
+public class GuiMatrix extends CGuiScreenContainer {
 	
-	static LIGui loaded;
+	static CGui loaded;
 	
 	public static void init() {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/matrix.xml"));
 	}
 	
 	//--------
-	
-	//Callbacks
-	CheckCallback checkCallback;
 	
 	//Synced states
 	boolean receivedSync;
@@ -82,6 +77,8 @@ public class GuiMatrix extends LIGuiContainer {
 	final EntityPlayer player;
 	
 	Widget pageMain, pageSSID, pageCheck;
+
+	Widget check_info, check_markDrawer;
 	
 	long syncedTime = -1;
 
@@ -151,7 +148,7 @@ public class GuiMatrix extends LIGuiContainer {
 		waitingForResult = true;
 		result = ActionResult.WAITING;
 		
-		checkCallback.updateCheckState();
+		updateCheckState();
 		pageCheck.transform.doesDraw = true;
 		pageMain.transform.doesListenKey = false;
 	}
@@ -164,7 +161,7 @@ public class GuiMatrix extends LIGuiContainer {
 			waitingForResult = false;
 			this.result = result;
 			resultReceivedTime = GameTimer.getAbsTime();
-			checkCallback.updateCheckState();
+			updateCheckState();
 			
 			if(needSync) {
 				GuiMatrixSync.sendSyncRequest(this);
@@ -175,10 +172,13 @@ public class GuiMatrix extends LIGuiContainer {
 	private void load() {
 		GuiMatrixSync.sendSyncRequest(this);
 		
-		LIGui gui = getGui();
+		CGui gui = getGui();
 		pageMain = loaded.getWidget("window_main").copy();
 		pageSSID = loaded.getWidget("window_init").copy();
 		pageCheck = loaded.getWidget("window_check").copy();
+
+		check_markDrawer = pageCheck.getWidget("mark_check2");
+		check_info = pageCheck.getWidget("test_info");
 		
 		gui.addWidget(pageMain);
 		gui.addWidget(pageSSID);
@@ -193,10 +193,87 @@ public class GuiMatrix extends LIGuiContainer {
 		wrapButton(pageSSID.getWidget("button_no"));
 		
 		wrapButton(pageCheck.getWidget("button_close"));
-		
-		EventLoader.load(pageMain, new MainCallback());
-		EventLoader.load(pageSSID, new SSIDCallback());
-		EventLoader.load(pageCheck, checkCallback = new CheckCallback());
+
+		/* Main Events */ {
+			pageMain.getWidget("button_config").listen(LeftClickEvent.class, (w, e) -> {
+				if (receivedSync) {
+					openInitWindow();
+				}
+			});
+
+			pageMain.listen(FrameEvent.class, (w, e) -> {
+				ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / tile.getCapacity());
+				ProgressBar.get(pageMain.getWidget("progress_lat")).progress = (tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
+				ProgressBar.get(pageMain.getWidget("progress_ran")).progress = (tile.getRange() / TileMatrix.MAX_RANGE);
+			});
+		}
+
+		/* SSID input events */ {
+			pageSSID.listen(FrameEvent.class, (w, event) ->
+			{
+				if(!pageMain.transform.doesListenKey) {
+					RenderUtils.drawBlackout();
+				}
+			});
+
+			pageSSID.getWidget("button_yes").listen(LeftClickEvent.class, (w, e) -> {
+				startWaiting();
+
+				if(!isLoaded) {
+					//Do init
+					String ssid = ssidContent(1), pw1 = ssidContent(2), pw2 = ssidContent(3);
+					if(pw1.equals(pw2) && !ssid.isEmpty()) {
+						GuiMatrixSync.fullInit(player, tile, ssid, pw1);
+					} else {
+						receiveActionResult(ActionResult.INVALID_INPUT, false);
+					}
+				} else {
+					//Update pass
+					String oldpw = ssidContent(1), pw1 = ssidContent(2), pw2 = ssidContent(3);
+					if(pw1.equals(pw2)) {
+						GuiMatrixSync.passwordUpdate(player, tile, oldpw, pw1);
+					} else {
+						receiveActionResult(ActionResult.INVALID_INPUT, false);
+					}
+				}
+
+				pageSSID.transform.doesDraw = false;
+			});
+
+			pageSSID.getWidget("button_no").listen(LeftClickEvent.class, (w, e) -> {
+				//Close without doing anything
+				pageSSID.transform.doesDraw = false;
+				pageMain.transform.doesListenKey = true;
+			});
+		}
+
+		/* Check page events */ {
+			Widget markBorder = pageCheck.getWidget("mark_check1");
+
+			pageCheck.listen(FrameEvent.class, (w, event) ->
+			{
+				if(!pageMain.transform.doesListenKey) {
+					RenderUtils.drawBlackout();
+				}
+			});
+
+			pageCheck.getWidget("mark_check1").listen(FrameEvent.class, (w, e) -> {
+				double alpha = 0.7 * 0.5 * (1 + Math.sin(GameTimer.getAbsTime() / 600.0)) + 0.3;
+				DrawTexture.get(markBorder).color.a = alpha;
+			});
+
+			pageCheck.getWidget("button_close").listen(LeftClickEvent.class, (w, e) -> {
+				pageCheck.transform.doesDraw = false;
+				pageMain.transform.doesListenKey = true;
+			});
+		}
+	}
+
+	/**
+	 * Gets the content of three tex boxes in pageSSID
+	 */
+	private String ssidContent(int iid) {
+		return TextBox.get(pageSSID.getWidget("text_" + iid)).content;
 	}
 	
 	@Override
@@ -208,6 +285,11 @@ public class GuiMatrix extends LIGuiContainer {
 	protected boolean containerAcceptsKey(int key) {
     	return false;
     }
+
+	private void updateCheckState() {
+		DrawTexture.get(check_markDrawer).texture = result.markSrc;
+		TextBox.get(check_info).content = result.getDescription();
+	}
 	
 	private void wrapButton(Widget w) {
 		DrawTexture drawer = w.getComponent("DrawTexture");
@@ -240,107 +322,6 @@ public class GuiMatrix extends LIGuiContainer {
 		
 		pageMain.transform.doesListenKey = false;
 		pageSSID.transform.doesDraw = true;
-	}
-	
-	public class MainCallback {
-		
-		@GuiCallback("button_config")
-		public void openDialogue(Widget w, LeftClickEvent event) {
-			if(receivedSync)
-				openInitWindow();
-		}
-		
-		@GuiCallback
-		public void onFrame(Widget w, FrameEvent event) {
-			ProgressBar.get(pageMain.getWidget("progress_cap")).progress = ((double) nodes / tile.getCapacity());
-			ProgressBar.get(pageMain.getWidget("progress_lat")).progress = (tile.getBandwidth() / TileMatrix.MAX_BANDWIDTH);
-			ProgressBar.get(pageMain.getWidget("progress_ran")).progress = (tile.getRange() / TileMatrix.MAX_RANGE);
-		}
-		
-	}
-
-	public class SSIDCallback {
-		
-		public SSIDCallback() {
-			pageSSID.listen(FrameEvent.class, (w, event) -> 
-			{
-				if(!pageMain.transform.doesListenKey) {
-					RenderUtils.drawBlackout();
-				}
-			});
-		}
-		
-		@GuiCallback("button_yes")
-		public void yesDown(Widget w, LeftClickEvent event) {
-			startWaiting();
-			
-			if(!isLoaded) {
-				//Do init
-				String ssid = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
-				if(pw1.equals(pw2) && !ssid.isEmpty()) {
-					GuiMatrixSync.fullInit(player, tile, ssid, pw1);
-				} else {
-					receiveActionResult(ActionResult.INVALID_INPUT, false);
-				}
-			} else {
-				//Update pass
-				String oldpw = getContent(1), pw1 = getContent(2), pw2 = getContent(3);
-				if(pw1.equals(pw2)) {
-					GuiMatrixSync.passwordUpdate(player, tile, oldpw, pw1);
-				} else {
-					receiveActionResult(ActionResult.INVALID_INPUT, false);
-				}
-			}
-			
-			pageSSID.transform.doesDraw = false;
-		}
-		
-		@GuiCallback("button_no")
-		public void noDown(Widget w, LeftClickEvent event) {
-			//Close without doing anything
-			pageSSID.transform.doesDraw = false;
-			pageMain.transform.doesListenKey = true;
-		}
-		
-		private String getContent(int iid) {
-			return TextBox.get(pageSSID.getWidget("text_" + iid)).content;
-		}
-		
-	}
-	
-	public class CheckCallback {
-		Widget markDrawer, info, markBorder;
-		
-		public CheckCallback() {
-			markBorder = pageCheck.getWidget("mark_check1");
-			markDrawer = pageCheck.getWidget("mark_check2");
-			info = pageCheck.getWidget("test_info");
-			
-			pageCheck.listen(FrameEvent.class, (w, event) -> 
-			{
-				if(!pageMain.transform.doesListenKey) {
-					RenderUtils.drawBlackout();
-				}
-			});
-		}
-		
-		public void updateCheckState() {
-			DrawTexture.get(markDrawer).texture = result.markSrc;
-			TextBox.get(info).content = result.getDescription();
-		}
-		
-		@GuiCallback("mark_check1")
-		public void updateAlpha(Widget w, FrameEvent event) {
-			double alpha = 0.7 * 0.5 * (1 + Math.sin(GameTimer.getAbsTime() / 600.0)) + 0.3;
-			DrawTexture.get(markBorder).color.a = alpha;
-		}
-		
-		@GuiCallback("button_close")
-		public void close(Widget w, LeftClickEvent event) {
-			pageCheck.transform.doesDraw = false;
-			pageMain.transform.doesListenKey = true;
-		}
-		
 	}
 	
 }

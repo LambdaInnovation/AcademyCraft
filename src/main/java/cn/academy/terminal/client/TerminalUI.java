@@ -30,7 +30,7 @@ import cn.academy.terminal.TerminalData;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -69,12 +69,12 @@ public class TerminalUI extends AuxGui {
 	
 	final double SENSITIVITY = 0.7;
 
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/terminal.xml"));
 	}
 	
-	LIGui gui;
+	CGui gui;
 	
 	Widget root;
 	
@@ -96,7 +96,7 @@ public class TerminalUI extends AuxGui {
 	boolean isSynced;
 	
 	public TerminalUI() {
-		gui = new LIGui();
+		gui = new CGui();
 		gui.addWidget(root = loaded.getWidget("back").copy());
 		
 		buffX = buffY = mouseX = mouseY = 150;

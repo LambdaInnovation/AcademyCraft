@@ -16,22 +16,19 @@ import java.util.Collection;
 
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.util.client.article.ArticlePlotter;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Font;
-import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.misc.tutorial.ACTutorial;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
@@ -44,9 +41,9 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
-public class GuiTutorial extends LIGuiScreen {
+public class GuiTutorial extends CGuiScreen {
 
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/tutorial.xml"));
 	}
@@ -101,7 +98,44 @@ public class GuiTutorial extends LIGuiScreen {
 		centerPart.transform.doesDraw = false;
 		
 		rebuildList(tutlist);
-		EventLoader.load(frame, this);
+
+		centerPart.getWidget("text").listen(FrameEvent.class, (w, e) -> {
+			if(currentTut != null) {
+				ArticlePlotter plotter = currentTut.getContentPlotter(w.transform.width - 10, 8);
+
+				glPushMatrix();
+				glTranslated(0, 0, 10);
+
+				glColorMask(false, false, false, false);
+				glDepthMask(true);
+				HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
+				glColorMask(true, true, true, true);
+
+				double ht = Math.max(0, plotter.getMaxHeight() - w.transform.height + 10);
+				double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
+				glTranslated(3, 3 - delta, 0);
+				glDepthFunc(GL_EQUAL);
+				plotter.draw();
+				glDepthFunc(GL_LEQUAL);
+				glPopMatrix();
+			}
+		});
+
+		centerPart.getWidget("scroll_2").listen(LeftClickEvent.class, (w, e) -> {
+			System.out.println("Yahoo!");
+		});
+
+		rightWindow.getWidget("text").listen(FrameEvent.class, (w, e) -> {
+			if(currentTut != null) {
+				Font.font.draw("§l" + currentTut.getTitle(), 3, 3, 10, 0xffffff);
+
+				glPushMatrix();
+				glTranslated(3, 18, 0);
+				ArticlePlotter plotter = currentTut.getBriefPlotter(w.transform.width - 15, 8);
+				plotter.draw();
+				glPopMatrix();
+			}
+		});
 		
 		listArea.transform.doesDraw = false;
 		
@@ -161,10 +195,9 @@ public class GuiTutorial extends LIGuiScreen {
 			w.transform.setSize(72, 12);
 			w.addComponent(new Tint());
 			
-			TextBox box = new TextBox();
+			TextBox box = new TextBox(new FontOption(10));
 			box.content = t.getTitle();
 			box.localized = true;
-			box.size = 10;
 			box.heightAlign = HeightAlign.CENTER;
 
 			w.listen(LeftClickEvent.class, (__, e) ->
@@ -229,47 +262,6 @@ public class GuiTutorial extends LIGuiScreen {
 			w.transform.y = MathUtils.lerp(y0, y1, lambda);
 			w.dirty = true;
 		});
-	}
-	
-	@GuiCallback("rightPart/centerPart/text")
-	public void drawContent(Widget w, FrameEvent event) {
-		if(currentTut != null) {
-			ArticlePlotter plotter = currentTut.getContentPlotter(w.transform.width - 10, 8);
-
-			glPushMatrix();
-			glTranslated(0, 0, 10);
-
-			glColorMask(false, false, false, false);
-			glDepthMask(true);
-			HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
-			glColorMask(true, true, true, true);
-
-			double ht = Math.max(0, plotter.getMaxHeight() - w.transform.height + 10);
-			double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
-			glTranslated(3, 3 - delta, 0);
-			glDepthFunc(GL_EQUAL);
-			plotter.draw();
-			glDepthFunc(GL_LEQUAL);
-			glPopMatrix();
-		}
-	}
-
-	@GuiCallback("rightPart/centerPart/scroll_2")
-	public void onScroll(Widget w, LeftClickEvent event) {
-		System.out.println("Yahoo!");
-	}
-
-	@GuiCallback("rightPart/rightWindow/text")
-	public void drawBrief(Widget w, FrameEvent event) {
-		if(currentTut != null) {
-			Font.font.draw("§l" + currentTut.getTitle(), 3, 3, 10, 0xffffff);
-
-			glPushMatrix();
-			glTranslated(3, 18, 0);
-			ArticlePlotter plotter = currentTut.getBriefPlotter(w.transform.width - 15, 8);
-			plotter.draw();
-			glPopMatrix();
-		}
 	}
 	
 }

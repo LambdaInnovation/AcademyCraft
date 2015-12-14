@@ -13,21 +13,19 @@
 package cn.academy.terminal.client;
 
 import cn.academy.core.ModuleCoreClient;
-import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.key.KeyManager;
+import cn.lambdalib.util.mc.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -39,16 +37,29 @@ public class TerminalInstallEffect extends AuxGui {
 	static final long WAIT = 700L;
 	static final long BLEND_IN = 200L, BLEND_OUT = 200L;
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/terminal_installing.xml"));
 	}
 	
-	LIGui gui = new LIGui();
+	CGui gui = new CGui();
 	
 	public TerminalInstallEffect() {
 		gui.addWidget("main", loaded.getWidget("main").copy());
-		EventLoader.load(gui, this);
+		gui.getWidget("main/progbar").listen(FrameEvent.class, (w, e) -> {
+			double prog = (double) this.getTimeActive() / ANIM_LENGTH;
+			if(this.getTimeActive() >= ANIM_LENGTH + WAIT) {
+				dispose();
+				TerminalUI.keyHandler.onKeyUp();
+				PlayerUtils.sendChat(Minecraft.getMinecraft().thePlayer, "ac.terminal.key_hint",
+						KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(TerminalUI.keyHandler)));
+			}
+
+			if(prog > 1.0) {
+				prog = 1.0;
+			}
+			ProgressBar.get(w).progress = prog;
+		});
 		
 		Widget main = gui.getWidget("main");
 		initBlender(main);
@@ -100,22 +111,6 @@ public class TerminalInstallEffect extends AuxGui {
 				if(bar != null) bar.color.a = barA * alpha;
 			}
 		});
-	}
-	
-	@GuiCallback("main/progbar")
-	public void onFrame(Widget w, FrameEvent event) {
-		double prog = (double) this.getTimeActive() / ANIM_LENGTH;
-		if(this.getTimeActive() >= ANIM_LENGTH + WAIT) {
-			dispose();
-			TerminalUI.keyHandler.onKeyUp();
-			Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentTranslation("ac.terminal.key_hint", 
-				KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(TerminalUI.keyHandler))));
-		}
-		
-		if(prog > 1.0) {
-			prog = 1.0;
-		}
-		ProgressBar.get(w).progress = prog;
 	}
 
 }

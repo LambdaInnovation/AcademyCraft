@@ -18,7 +18,7 @@ import java.util.List;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.node.GuiNode;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ElementList;
@@ -36,7 +36,7 @@ import net.minecraft.util.StatCollector;
 /**
  * @author WeAthFolD
  */
-public class GuiLinkToNode extends LIGuiScreen {
+public class GuiLinkToNode extends CGuiScreen {
 	
 	private interface Callback {
 		void invoke();

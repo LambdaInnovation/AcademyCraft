@@ -17,6 +17,7 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslated;
 
+import java.awt.*;
 import java.util.List;
 
 import cn.academy.ability.api.Skill;
@@ -30,7 +31,6 @@ import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.component.Glow;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
@@ -40,8 +40,9 @@ import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderMono;
 import cn.lambdalib.util.helper.Font;
 import net.minecraft.client.Minecraft;
@@ -70,8 +71,17 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		super(_player, _developer.getType(), false);
 		developer = _developer;
         developData = DevelopData.get(player);
-		
-		EventLoader.load(gui, this);
+
+		Widget windowMachine = gui.getWidget("window/window_machine");
+		windowMachine.getWidget("p_energy").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = developer.getEnergy() / developer.getMaxEnergy();
+		});
+		windowMachine.getWidget("t_energy").listen(FrameEvent.class, (w, e) -> {
+			TextBox text = TextBox.get(w);
+			text.setContent(SkillTreeLocal.energyDesc(
+					developer.getEnergy(), developer.getMaxEnergy()));
+		});
 		
 		for(int i = 1; i <= 5; ++i) {
 			final int j = i;
@@ -115,19 +125,6 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			developer.onGuiClosed();
 	}
 	
-	@GuiCallback("window/window_machine/p_energy")
-	public void updateEnergy(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = developer.getEnergy() / developer.getMaxEnergy();
-	}
-	
-	@GuiCallback("window/window_machine/t_energy")
-	public void updateEnergyText(Widget w, FrameEvent event) {
-		TextBox text = TextBox.get(w);
-		text.setContent(SkillTreeLocal.energyDesc(
-			developer.getEnergy(), developer.getMaxEnergy()));
-	}
-	
 	@Override
 	protected Widget createDesc(SkillHandler handler) {
 		Skill skill = handler.skill;
@@ -155,11 +152,10 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				Widget wtext = new Widget();
 				wtext.transform.alignHeight = HeightAlign.BOTTOM;
 				
-				TextBox text = new TextBox();
+				TextBox text = new TextBox(new FontOption(38));
 				text.allowEdit = false;
 				text.content = SkillTreeLocal.required();
 				text.heightAlign = HeightAlign.CENTER;
-				text.size = 38;
                 text.zLevel = 10;
 				wtext.addComponent(text);
 				
@@ -169,7 +165,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 				
 				area.addWidget(wtext);
 				
-				double x = Font.font.strLen(text.content, text.size) + 10;
+				double x = text.font.getTextWidth(text.content, text.option) + 10;
 				
 				int i = 0;
 				for(IDevCondition cond : devConditions) {
@@ -378,10 +374,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 			tint.idleColor.setColor4i(40, 40, 40, 255);
 			tint.hoverColor.setColor4i(80, 80, 80, 255);
 			
-			text = new TextBox();
+			text = new TextBox(new FontOption(40, FontAlign.CENTER));
 			text.heightAlign = HeightAlign.CENTER;
-			text.widthAlign = WidthAlign.CENTER;
-			text.size = 40;
 			text.content = SkillTreeLocal.local("learn_skill");
 			
 			BlendIn blend = new BlendIn();

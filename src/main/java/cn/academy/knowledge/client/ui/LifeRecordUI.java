@@ -22,8 +22,8 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.knowledge.Knowledge;
 import cn.academy.knowledge.KnowledgeData;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ElementList;
@@ -42,9 +42,9 @@ import cn.lambdalib.util.helper.Font;
  *
  */
 @Registrant
-public class LifeRecordUI extends LIGuiScreen {
+public class LifeRecordUI extends CGuiScreen {
 	
-	static final LIGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/life_record.xml"));
+	static final CGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/life_record.xml"));
 	
 	final Color temp = new Color();
 	
