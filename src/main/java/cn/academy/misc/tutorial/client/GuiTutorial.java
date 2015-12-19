@@ -19,7 +19,7 @@ import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
-import cn.lambdalib.cgui.loader.xml.CGUIDocument;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.article.ArticlePlotter;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Font;
