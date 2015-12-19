@@ -17,22 +17,20 @@ import net.minecraft.util.StatCollector;
 import cn.academy.energy.block.wind.ContainerWindGenMain;
 import cn.academy.energy.block.wind.TileWindGenMain;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.helper.Font.Align;
 
 /**
  * @author WeAthFolD
  */
-public class GuiWindGenMain extends LIGuiContainer {
+public class GuiWindGenMain extends CGuiScreenContainer {
 	
-	public static LIGui loaded;
+	public static CGui loaded;
 	static {
 		try {
 			loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/wind_main.xml"));
@@ -56,22 +54,19 @@ public class GuiWindGenMain extends LIGuiContainer {
 		main = loaded.getWidget("main").copy();
 		
 		gui.addWidget(main);
-		
-		EventLoader.load(main, this);
-	}
-	
-	@GuiCallback("disabled")
-	public void onDefFrame(Widget w, FrameEvent event) {
-		DrawTexture dt = DrawTexture.get(w);
-		dt.enabled = !tile.complete;
-		
-		if(!tile.complete) {
-			String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-			EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
-		} else if(!tile.noObstacle) {
-			String text = StatCollector.translateToLocal("ac.gui.wind.obstacle");
-			EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
-		}
+
+		main.listen(FrameEvent.class, (w, e) -> {
+			DrawTexture dt = DrawTexture.get(w);
+			dt.enabled = !tile.complete;
+
+			if(!tile.complete) {
+				String text = StatCollector.translateToLocal("ac.gui.wind.structure");
+				EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+			} else if(!tile.noObstacle) {
+				String text = StatCollector.translateToLocal("ac.gui.wind.obstacle");
+				EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+			}
+		});
 	}
 
 }

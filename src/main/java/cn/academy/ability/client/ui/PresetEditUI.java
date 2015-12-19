@@ -27,7 +27,7 @@ import cn.academy.ability.api.data.PresetData.PresetEditor;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -60,7 +60,7 @@ public class PresetEditUI extends GuiScreen {
 		CRL_WHITE = new Color(1, 1, 1, 0.6),
 		CRL_GLOW = new Color(1, 1, 1, 0.2);
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static Widget template;
 	
 	static final double STEP = 125;
@@ -83,12 +83,12 @@ public class PresetEditUI extends GuiScreen {
 	/**
 	 * Drawer when nothing happened
 	 */
-	LIGui foreground = new LIGui();
+	CGui foreground = new CGui();
 	
 	/**
 	 * Drawer of transition
 	 */
-	LIGui transitor = new LIGui();
+	CGui transitor = new CGui();
 	
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/preset_edit.xml"));
@@ -218,11 +218,11 @@ public class PresetEditUI extends GuiScreen {
     	return getXFor(i, active);
     }
     
-    private void add(int i, LIGui gui, Widget w) {
+    private void add(int i, CGui gui, Widget w) {
     	gui.addWidget("" + i, w);
     }
     
-    private Widget get(LIGui gui, int i) {
+    private Widget get(CGui gui, int i) {
     	return gui.getWidget("" + i);
     }
     
@@ -272,7 +272,7 @@ public class PresetEditUI extends GuiScreen {
     }
 
     // Utils
-    private void updateInfo(LIGui gui) {
+    private void updateInfo(CGui gui) {
     	for(int i = 0; i < 4; ++i) {
     		Widget page = get(gui, i);
     		getPage(page).updateInfo();

@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.TextBox;
@@ -33,9 +33,9 @@ import net.minecraft.util.StatCollector;
 /**
  * @author WeAthFolD
  */
-public class SettingsUI extends LIGuiScreen {
+public class SettingsUI extends CGuiScreen {
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/settings.xml"));
 	}

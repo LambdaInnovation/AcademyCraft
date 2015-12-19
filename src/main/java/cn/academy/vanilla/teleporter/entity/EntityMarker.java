@@ -36,7 +36,7 @@ public class EntityMarker extends EntityAdvanced {
 	public static RenderMarker renderer;
 
 	public Entity target = null;
-	public Color color = Color.WHITE();
+	public Color color = Color.white();
 	public boolean ignoreDepth = false;
 
 	public EntityMarker(Entity entity) {

@@ -17,7 +17,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.ScaledResolution;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.LIGui;
+import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
@@ -35,7 +35,7 @@ public class ACHud extends AuxGui {
 	
 	List<Node> nodes = new ArrayList();
 	
-	LIGui gui = new LIGui();
+	CGui gui = new CGui();
 
 	ACHud() {}
 

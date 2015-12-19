@@ -43,7 +43,7 @@ public class Category {
 	/**
 	 * The color style of this category. Used in many various places for rendering, like screen overlay.
 	 */
-	protected Color colorStyle = Color.WHITE();
+	protected Color colorStyle = Color.white();
 	
 	public Category(String _name) {
 		name = _name;

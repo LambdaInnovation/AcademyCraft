@@ -18,23 +18,21 @@ import net.minecraft.util.StatCollector;
 import cn.academy.crafting.block.ContainerMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
-public class GuiMetalFormer extends LIGuiContainer {
+public class GuiMetalFormer extends CGuiScreenContainer {
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/metalformer.xml"));
 	}
@@ -56,47 +54,42 @@ public class GuiMetalFormer extends LIGuiContainer {
 		main = loaded.getWidget("window_main").copy();
 		
 		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
-		EventLoader.load(main, this);
+
+		main.getWidget("progress_pro").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = tile.getWorkProgress();
+			if(bar.progress == 0)
+				bar.progressDisplay = 0;
+		});
+
+		main.getWidget("progress_imag").listen(FrameEvent.class, (w, event) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = tile.getEnergy() / tile.getMaxEnergy();
+
+			if(event.hovering) {
+				EnergyUIHelper.drawTextBox(
+						String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy()),
+						event.mx + 10, event.my, 18);
+			}
+		});
+
+		main.getWidget("mark_former").listen(FrameEvent.class, (w, event) -> {
+			DrawTexture.get(w).texture = tile.mode.texture;
+
+			if(event.hovering) {
+				EnergyUIHelper.drawTextBox(
+						String.format(StatCollector.translateToLocal("ac.gui.metal_former.mode." + tile.mode.toString().toLowerCase()),
+								tile.getEnergy(), tile.getMaxEnergy()),
+						event.mx + 5, event.my, 9);
+			}
+		});
+
+		main.getWidget("mark_former").listen(LeftClickEvent.class, (w, event) -> {
+			tile.cycleMode();
+			MetalFormerSyncs.cycle(tile);
+		});
 		
 		gui.addWidget(main);
-	}
-	
-	@GuiCallback("progress_pro")
-	public void updateProgress(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = tile.getWorkProgress();
-		if(bar.progress == 0)
-			bar.progressDisplay = 0;
-	}
-	
-	@GuiCallback("progress_imag")
-	public void updateEnergy(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = tile.getEnergy() / tile.getMaxEnergy();
-		
-		if(event.hovering) {
-			EnergyUIHelper.drawTextBox(
-				String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy()), 
-				event.mx + 10, event.my, 18);
-		}
-	}
-	
-	@GuiCallback("mark_former")
-	public void updateIcon(Widget w, FrameEvent event) {
-		DrawTexture.get(w).texture = tile.mode.texture;
-		
-		if(event.hovering) {
-			EnergyUIHelper.drawTextBox(
-				String.format(StatCollector.translateToLocal("ac.gui.metal_former.mode." + tile.mode.toString().toLowerCase()), 
-					tile.getEnergy(), tile.getMaxEnergy()), 
-					event.mx + 5, event.my, 9);
-		}
-	}
-	
-	@GuiCallback("mark_former")
-	public void cycleMode(Widget w, LeftClickEvent event) {
-		tile.cycleMode();
-		MetalFormerSyncs.cycle(tile);
 	}
 	
 }

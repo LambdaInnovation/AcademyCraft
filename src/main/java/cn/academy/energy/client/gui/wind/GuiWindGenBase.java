@@ -22,26 +22,24 @@ import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.block.wind.ContainerWindGenBase;
 import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
-public class GuiWindGenBase extends LIGuiContainer {
+public class GuiWindGenBase extends CGuiScreenContainer {
 	
 	static final ResourceLocation
 		T_CORE_OK = Resources.getTexture("guis/button/core_blue"),
 		T_CORE_RED = Resources.getTexture("guis/button/core_red");
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/wind_base.xml"));
 	}
@@ -61,7 +59,30 @@ public class GuiWindGenBase extends LIGuiContainer {
 		main = loaded.getWidget("main").copy();
 		
 		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
-		EventLoader.load(main, this);
+
+		main.getWidget("core").listen(FrameEvent.class, (w, event) -> {
+			DrawTexture dt = DrawTexture.get(w);
+			dt.texture = tile.complete ? T_CORE_OK : T_CORE_RED;
+			if(!tile.complete && event.hovering) {
+				String text = StatCollector.translateToLocal("ac.gui.wind.structure");
+				EnergyUIHelper.drawTextBox(text, -70, -100, 18);
+			}
+		});
+
+		main.getWidget("prog_fancap").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = (double) getFanCap() / ModuleEnergy.windgenFan.getMaxDamage();
+		});
+
+		main.getWidget("prog_speed").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = tile.getSimulatedGeneration() / TileWindGenBase.MAX_GENERATION_SPEED;
+		});
+
+		main.getWidget("prog_buffer").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar bar = ProgressBar.get(w);
+			bar.progress = tile.getEnergy() / tile.bufferSize;
+		});
 		
 		gui.addWidget(main);
 	}
@@ -96,22 +117,6 @@ public class GuiWindGenBase extends LIGuiContainer {
 		GL11.glPopMatrix();
 	}
 	
-	@GuiCallback("core")
-	public void changeTexture(Widget w, FrameEvent event) {
-		DrawTexture dt = DrawTexture.get(w);
-		dt.texture = tile.complete ? T_CORE_OK : T_CORE_RED;
-		if(!tile.complete && event.hovering) {
-			String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-			EnergyUIHelper.drawTextBox(text, -70, -100, 18);
-		}
-	}
-	
-	@GuiCallback("prog_fancap")
-	public void updateFanCapacity(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = (double) getFanCap() / ModuleEnergy.windgenFan.getMaxDamage();
-	}
-	
 	private int getFanCap() {
 		if(tile.mainTile == null) {
 			return 0;
@@ -123,18 +128,6 @@ public class GuiWindGenBase extends LIGuiContainer {
 				return 0;
 			}
 		}
-	}
-	
-	@GuiCallback("prog_speed")
-	public void updateSpeed(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = tile.getSimulatedGeneration() / TileWindGenBase.MAX_GENERATION_SPEED;
-	}
-	
-	@GuiCallback("prog_buffer")
-	public void updateBuffer(Widget w, FrameEvent event) {
-		ProgressBar bar = ProgressBar.get(w);
-		bar.progress = tile.getEnergy() / tile.bufferSize;
 	}
 	
 }

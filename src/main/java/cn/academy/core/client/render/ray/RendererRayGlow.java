@@ -38,7 +38,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 	
 	public double startFix = 0.0, endFix = 0.0; //How many units of offset does we go. Used to align with cylinder renderer.
 	
-	public Color color = Color.WHITE();
+	public Color color = Color.white();
 	
 	ResourceLocation blendIn, tile, blendOut;
 	

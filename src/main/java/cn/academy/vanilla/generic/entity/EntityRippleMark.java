@@ -35,7 +35,7 @@ public class EntityRippleMark extends EntityAdvanced {
 	@RegEntity.Render
 	public static RippleMarkRender renderer;
 	
-	public final Color color = Color.WHITE();
+	public final Color color = Color.white();
 	public final long creationTime = GameTimer.getTime();
 
 	public EntityRippleMark(World world) {

@@ -20,7 +20,6 @@ import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.CGUIEditor;
 import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,8 +38,6 @@ public class Glow extends Component {
 	public boolean writeDepth = true;
 	
 	public static void init() {
-		// Register for editing
-		CGUIEditor.addComponent(new Glow());
 	}
 	
 	public static Glow get(Widget w) {

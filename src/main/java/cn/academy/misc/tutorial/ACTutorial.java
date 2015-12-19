@@ -154,7 +154,6 @@ public class ACTutorial {
 	}
 
 	public static void debug(EntityPlayer player) {
-		AcademyCraft.log.info("DEBUG:");
 		for(ACTutorial t : tutorials.values()){
 			AcademyCraft.log.info(t.id+" : "+t.getIsLoad(player));
 		}
@@ -179,7 +178,7 @@ public class ACTutorial {
 		@Override
 		public void fromNBT(NBTTagCompound tag) {
 			if(allSaved==null)init();
-			Set<String> set=tag.func_150296_c();
+			Set<String> set= tag.func_150296_c();
 			for(String s : set){
 				try {
 					allSaved[Integer.parseInt(s)]= tag.getBoolean(s);

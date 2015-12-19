@@ -17,21 +17,19 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.energy.block.ContainerPhaseGen;
 import cn.academy.energy.block.TilePhaseGen;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiContainer;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.annotations.GuiCallback;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.EventLoader;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
-public class GuiPhaseGen extends LIGuiContainer {
+public class GuiPhaseGen extends CGuiScreenContainer {
 	
-	static LIGui loaded;
+	static CGui loaded;
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/phase_gen.xml"));
 	}
@@ -48,7 +46,15 @@ public class GuiPhaseGen extends LIGuiContainer {
 	
 	void init() {
 		main = loaded.getWidget("main").copy();
-		EventLoader.load(main, this);
+
+		main.getWidget("prog_liquid").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar.get(w).progress = (double) tile.getLiquidAmount() / tile.getTankSize();
+		});
+
+		main.getWidget("prog_buffer").listen(FrameEvent.class, (w, e) -> {
+			ProgressBar.get(w).progress = tile.getEnergy() / tile.bufferSize;
+		});
+
 		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
 		
 		gui.addWidget(main);
@@ -79,16 +85,6 @@ public class GuiPhaseGen extends LIGuiContainer {
 		}
 		
 		GL11.glPopMatrix();
-	}
-	
-	@GuiCallback("prog_liquid")
-	public void updateLiquid(Widget w, FrameEvent event) {
-		ProgressBar.get(w).progress = (double) tile.getLiquidAmount() / tile.getTankSize();
-	}
-	
-	@GuiCallback("prog_buffer")
-	public void updateBuffer(Widget w, FrameEvent event) {
-		ProgressBar.get(w).progress = tile.getEnergy() / tile.bufferSize;
 	}
 
 }

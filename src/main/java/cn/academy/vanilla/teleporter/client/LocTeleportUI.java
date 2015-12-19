@@ -7,8 +7,8 @@ import cn.academy.vanilla.teleporter.data.LocTeleData;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.LIGui;
-import cn.lambdalib.cgui.gui.LIGuiScreen;
+import cn.lambdalib.cgui.gui.CGui;
+import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.TextBox;
@@ -27,9 +27,9 @@ import net.minecraft.util.StatCollector;
  * @author WeAthFolD
  */
 @Registrant
-public class LocTeleportUI extends LIGuiScreen {
+public class LocTeleportUI extends CGuiScreen {
 
-	static LIGui loaded;
+	static CGui loaded;
 
 	static {
 		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/loctele.xml"));
