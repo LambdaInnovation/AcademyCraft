@@ -17,7 +17,6 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslated;
 
-import java.awt.*;
 import java.util.List;
 
 import cn.academy.ability.api.Skill;
