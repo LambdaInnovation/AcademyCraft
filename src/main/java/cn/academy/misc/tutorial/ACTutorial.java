@@ -3,8 +3,10 @@ package cn.academy.misc.tutorial;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import cn.academy.core.client.Resources;
 import cn.lambdalib.util.client.article.ArticleCompiler;
 import cn.lambdalib.util.client.article.ArticlePlotter;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import com.google.common.collect.ImmutableList;
 
 import cn.academy.core.AcademyCraft;
@@ -124,7 +126,11 @@ public class ACTutorial {
 	@SideOnly(Side.CLIENT)
 	public ArticlePlotter getBriefPlotter(double defWidth, float fontSize) {
 		if(cachedBrief == null) {
-			cachedBrief = new ArticleCompiler(getBrief()).setWidth(defWidth).setFontSize(fontSize).compile();
+			cachedBrief = new ArticleCompiler(getBrief())
+					.setFont(Resources.font())
+					.setWidth(defWidth)
+					.setFontOption(new FontOption(fontSize))
+					.compile();
 		}
 		return cachedBrief;
 	}
@@ -132,7 +138,11 @@ public class ACTutorial {
 	@SideOnly(Side.CLIENT)
 	public ArticlePlotter getContentPlotter(double defWidth, float fontSize) {
 		if(cachedContent == null) {
-			cachedContent = new ArticleCompiler(getContent()).setWidth(defWidth).setFontSize(fontSize).compile();
+			cachedContent = new ArticleCompiler(getContent())
+					.setFont(Resources.font())
+					.setWidth(defWidth)
+					.setFontOption(new FontOption(fontSize))
+					.compile();
 		}
 		return cachedContent;
 	}

@@ -12,15 +12,18 @@
  */
 package cn.academy.core.client;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.TrueTypeFont;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
-import cn.lambdalib.util.helper.Font;
 
 /**
  * The core resource utils of AC.
@@ -31,6 +34,7 @@ import cn.lambdalib.util.helper.Font;
 public class Resources {
     
 	// PUBLICLY USED RESOURCES
+	// TODO Move textures that are not public to their own place
 	
     public static ResourceLocation
     	TEX_COIN_FRONT = res("textures/items/coin_front.png"),
@@ -87,21 +91,28 @@ public class Resources {
     	ResourceLocation r3 = new ResourceLocation("academy:textures/effects/" + name + "/blend_out.png");
     	return new ResourceLocation[] { r1, r2, r3 };
     }
-    
-    public static Font font() {
-        return Font.font;
+
+	@RegInitCallback
+	public static void init() {
+		font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
+				new String[] { "微软雅黑", "黑体", "STHeiti", "Consolas", "Monospace", "Arial" });
+		fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
+		fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
+	}
+
+	private static TrueTypeFont font, fontBold, fontItalic;
+    public static IFont font() {
+		return font;
     }
+	public static IFont fontBold() {
+		return fontBold;
+	}
+	public static IFont fontItalic() {
+		return fontItalic;
+	}
     
     private static ResourceLocation res(String loc) {
         return new ResourceLocation("academy:" + loc);
-    }
-    
-    private static ResourceLocation gui(String loc) {
-        return res("textures/guis/" + loc + ".png");
-    }
-
-    private static ResourceLocation phone(String gloc) {
-        return res("textures/phone/" + gloc + ".png");
     }
     
 }

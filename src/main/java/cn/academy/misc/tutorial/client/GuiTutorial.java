@@ -15,14 +15,15 @@ package cn.academy.misc.tutorial.client;
 import java.util.Collection;
 
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.Resources;
 import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.article.ArticlePlotter;
+import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontOption;
-import cn.lambdalib.util.helper.Font;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.misc.tutorial.ACTutorial;
@@ -47,13 +48,17 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class GuiTutorial extends CGuiScreen {
 
+	static final IFont font = Resources.font(), fontBold = Resources.fontBold();
+
 	static WidgetContainer loaded;
 	static {
 		loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
 	}
 
 	static final double REF_WIDTH = 480;
-	static final Color GLOW_COLOR = Color.white();
+
+	final Color GLOW_COLOR = Color.white();
+	final FontOption fo_descTitle = new FontOption(10);
 
 	double cachedWidth = -1;
 
@@ -142,7 +147,7 @@ public class GuiTutorial extends CGuiScreen {
 
 		rightWindow.getWidget("text").listen(FrameEvent.class, (w, e) -> {
 			if(currentTut != null) {
-				Font.font.draw("§l" + currentTut.tut.getTitle(), 3, 3, 10, 0xffffff);
+				font.draw(currentTut.tut.getTitle(), 3, 3, fo_descTitle);
 
 				glPushMatrix();
 				glTranslated(3, 18, 0);
