@@ -1,8 +1,8 @@
 Tutorials
----
+=====
 
-English Desc
----
+English
+=====
 This is the source folder of all tutorial texts in AcademyCraft. They are source files for .lang files, and will get compiled into it before release for in-game rendering.
 
 ## Rule
@@ -41,13 +41,13 @@ Currently the script depends on the C++ lib md2lang (Whose source is given), and
 
 
 中文说明
----
+=====
 
 这里是AcademyCraft所有教程文案的源文件夹。它们相当于.lang文件的源文件，在版本发布之前会被编译到.lang文件中，以备运行时渲染。
 
 ## 规则
 
-在本文件夹内的所有文件夹都代表一个语言，并且直接对应于 `<folder_name>.lang`。在每一个文件夹中存放了一系列的`txt`文件，每个都代表一个教程项。文件名是教程项的id名。
+在本文件夹内的所有文件夹都代表一个语言，并且直接对应于 `<文件夹名>.lang`。在每一个文件夹中存放了一系列的`txt`文件，每个都代表一个教程项。文件名是教程项的id名。
 
 一个教程的文字表示规范如下：
 
