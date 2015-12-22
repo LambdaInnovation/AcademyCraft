@@ -44,7 +44,7 @@ def is_tutorial_content(line):
     return False
     
 def build_kv(key, postfix, content):
-    return _tutorial_prefix + key + '.' + postfix + '=' + md2lang.md2lang(content) + '\n'
+    return _tutorial_prefix + key + '.' + postfix + '=' + content + '\n'
 
 def rebuild_lang(lang):
     lang_path = lang + '\\'
@@ -89,7 +89,7 @@ def rebuild_lang(lang):
         
             lines.append(build_kv(lang_key, _title_postfix, title))
             lines.append(build_kv(lang_key, _brief_postfix, brief))
-            lines.append(build_kv(lang_key, _content_postfix, content))
+            lines.append(build_kv(lang_key, _content_postfix, md2lang.md2lang(content)))
         except:
             print('Processing file %s failed. Please check your format specification.' % file)
         
