@@ -39,6 +39,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * CP but more than CP. CPData stores rather dynamic part of player ability data, 
  * 	for example, whether the player is using ability, current CP and overload, etc.
@@ -59,7 +64,8 @@ public class CPData extends DataPart<EntityPlayer> {
 		TAG_UNTIL_OVERLOAD_RECOVER = "5",
 		TAG_OVERLOAD_FINE = "6",
 		TAG_ADD_MAXCP = "7",
-		TAG_ADD_MAX_OVERLOAD = "8";
+		TAG_ADD_MAX_OVERLOAD = "8",
+        TAG_INTERFERING = "9";
 
 	public interface IInterfSource {
 		/**
@@ -83,6 +89,8 @@ public class CPData extends DataPart<EntityPlayer> {
 	}
 	
 	private AbilityData aData;
+
+    private Map<String, IInterfSource> interfSources = new HashMap<>();
 	
 	private boolean activated = false;
 	
@@ -93,8 +101,9 @@ public class CPData extends DataPart<EntityPlayer> {
 	private float overload;
 	private float maxOverload = 100.0f;
 	private float addMaxOverload = 0.0f; // The Overload added out of ability usage.
-	
+
 	private boolean overloadFine = true;
+    private boolean interfering = false; // Cached value
 	
 	/**
 	 * Tick counter for cp recover.
@@ -121,11 +130,13 @@ public class CPData extends DataPart<EntityPlayer> {
 	public void tick() {
 		if(aData == null)
 			aData = AbilityData.get(getEntity());
-		
+
+        boolean remote = isRemote();
+
 		if(aData.isLearned()) {
 			if(untilRecover == 0) {
-				float recover = (float) getFunc("recover_speed")
-						.callDouble(currentCP, getMaxCP());
+				float recover = getFunc("recover_speed")
+						.callFloat(currentCP, getMaxCP());
 				currentCP += recover;
 				if(currentCP > getMaxCP())
 					currentCP = getMaxCP();
@@ -134,8 +145,8 @@ public class CPData extends DataPart<EntityPlayer> {
 			}
 			
 			if(untilOverloadRecover == 0) {
-				float recover = (float) getFunc("overload_recover_speed")
-						.callDouble(overload, getMaxOverload());
+				float recover = getFunc("overload_recover_speed")
+						.callFloat(overload, getMaxOverload());
 				
 				overload -= recover;
 				if(overload <= 0) {
@@ -145,9 +156,27 @@ public class CPData extends DataPart<EntityPlayer> {
 			} else {
 				untilOverloadRecover--;
 			}
+
+            // Update interefering
+            if (!remote) {
+                Iterator<Entry<String, IInterfSource>> iter = interfSources.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Entry<String, IInterfSource> entry = iter.next();
+                    if (!entry.getValue().interfering()) {
+                        iter.remove();
+                    }
+                }
+
+                boolean newInterf = !interfSources.isEmpty();
+                if (newInterf != interfering) {
+                    dataDirty = true;
+                }
+
+                interfering = newInterf;
+            }
 			
 			// Do the sync. Only sync when player activated ability to avoid waste
-			if(!isRemote() && activated) {
+			if(!remote && activated) {
 				++tickSync;
 				if(tickSync >= (dataDirty ? 4 : 10)) {
 					dataDirty = false;
@@ -167,7 +196,7 @@ public class CPData extends DataPart<EntityPlayer> {
 	 * 	e.g. whether the skills can be executed by pressing ability keys.
 	 */
 	public boolean canUseAbility() {
-		return activated && overloadFine;
+		return activated && overloadFine && !interfering;
 	}
 	
 	public void activate() {
@@ -400,43 +429,47 @@ public class CPData extends DataPart<EntityPlayer> {
      * @return If the ability is being intefered.
      */
     boolean isInterfering() {
-        return false;
+        return interfering;
     }
 
     /**
      * @return Whether the interference source with given name is present.
      */
     boolean hasInterferer(String name) {
-        return false;
+        return interfSources.containsKey(name);
     }
 
     // Modifiers
 
     /**
-     * Adds a interference source.
+     * Adds a interference source. SERVER only.
      * @param id The unique id of the source. If the source with same id previously exists, it will be discarded.
      * @param interferer The source
      */
     public void addInterf(String id, IInterfSource interferer) {
+        assertSide(Side.SERVER);
 
+        interfSources.put(id, interferer);
     }
 
     /**
-     * Removes all inteference source.
+     * Removes all inteference source. SERVER only.
      */
     public void removeInterf() {
-        
+        assertSide(Side.SERVER);
+
+        interfSources.clear();
     }
 
     /**
-     * Removes the given interference source, if any.
+     * Removes the given interference source, if any. SERVER only.
      * @param name The name of given interference
      */
     public void removeInterf(String name) {
+        assertSide(Side.SERVER);
 
+        interfSources.remove(name);
     }
-
-
 
     // Inteference API end
 	
@@ -483,6 +516,8 @@ public class CPData extends DataPart<EntityPlayer> {
 		
 		tag.setFloat(TAG_ADD_MAXCP,                addMaxCP);
 		tag.setFloat(TAG_ADD_MAX_OVERLOAD, 	       addMaxOverload);
+
+        tag.setBoolean(TAG_INTERFERING,            interfering);
 		
 		return tag;
 	}
@@ -517,6 +552,8 @@ public class CPData extends DataPart<EntityPlayer> {
 
         addMaxCP = tag.getFloat(TAG_ADD_MAXCP);
         addMaxOverload = tag.getFloat(TAG_ADD_MAX_OVERLOAD);
+
+        interfering = tag.getBoolean(TAG_INTERFERING);
 	}
 	
 	private static double getDoubleParam(String name) {
