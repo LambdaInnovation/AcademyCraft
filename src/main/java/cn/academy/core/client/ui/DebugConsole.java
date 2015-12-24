@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import cn.academy.core.client.Resources;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import cn.lambdalib.util.helper.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,18 +48,15 @@ import cn.lambdalib.util.key.KeyHandler;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class DebugConsole extends AuxGui {
 	
 	private static class Text {
 		final String text;
-		final float size;
-		final int color;
+		final FontOption option;
 		
 		public Text(String _text, float _size, int _color) {
 			text = _text;
-			size = _size;
-			color = _color;
+			option = new FontOption(_size, new Color(_color));
 		}
 		
 		public Text(String _text, float _size) {
@@ -67,7 +69,8 @@ public class DebugConsole extends AuxGui {
 	}
 	
 	static DebugConsole INSTANCE;
-	
+
+    @RegInitCallback
 	public static void init() {
 		AuxGuiHandler.register(INSTANCE = new DebugConsole());
 		ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
@@ -94,7 +97,7 @@ public class DebugConsole extends AuxGui {
 		if(!enabled)
 			return;
 		
-		List<Text> texts = new ArrayList();
+		List<Text> texts = new ArrayList<>();
 		texts.add(new Text("AcademyCraft developer info"));
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		
@@ -127,6 +130,7 @@ public class DebugConsole extends AuxGui {
 			texts.add(new Text("CPData.canUseAbility: " + cpData.canUseAbility()));
 			texts.add(new Text("CPData.activated: " + cpData.isActivated()));
 			texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
+            texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
 			
 			if(Cooldown.cooldown.size() != 0) {
 				texts.add(new Text("Cooldown: "));
@@ -151,10 +155,11 @@ public class DebugConsole extends AuxGui {
 		texts.add(new Text("[BACKSPACE]: Skill info", 10, 0x95a6ff));
 		
 		double x = 10, y = 10;
+        IFont font = Resources.font();
 		for(Text text : texts) {
-			Font.font.draw(text.text, x, y, text.size, text.color);
+			font.draw(text.text, x, y, text.option);
 			
-			y += text.size;
+			y += text.option.fontSize;
 		}
 	}
 
