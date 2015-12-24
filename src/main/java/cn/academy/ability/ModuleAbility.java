@@ -12,6 +12,7 @@
  */
 package cn.academy.ability;
 
+import cn.academy.ability.block.AbilityInterferer;
 import cn.academy.ability.block.BlockDeveloper;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.item.ItemDeveloper;
@@ -53,6 +54,9 @@ public class ModuleAbility {
 	@RegBlock(item = ItemBlockMulti.class)
 	@RecipeName("dev_advanced")
 	public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
+
+    @RegBlock
+    public static AbilityInterferer abilityInterferer;
 
 	public static void init() {
 	}
