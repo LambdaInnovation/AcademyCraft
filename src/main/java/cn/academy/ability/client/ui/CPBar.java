@@ -15,6 +15,11 @@ package cn.academy.ability.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.academy.core.client.Resources;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -30,7 +35,6 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
@@ -38,9 +42,7 @@ import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderProgram;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.helper.Font.Align;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -52,18 +54,18 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 @ForcePreloadTexture
 public class CPBar extends Widget {
 	
 	static final float WIDTH = 964, HEIGHT = 147;
+
+    static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
 	
-	static double sin41 = Math.sin(44.0 / 180 * Math.PI);
-	
-	static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
+	static double sin41 = Math.sin(Math.toRadians(44.0));
 	
 	static IConsumptionHintProvider chProvider;
-	
+
+    @RegInitCallback
 	public static void init() {
 		ACHud.instance.addElement(new CPBar(), () -> true);
 	}
@@ -81,13 +83,13 @@ public class CPBar extends Widget {
 		TEX_OVERLOAD_HIGHLIGHT = tex("highlight_overload"),
 		TEX_MASK = tex("mask");
 	
-	List<ProgColor> cpColors = new ArrayList(), overrideColors = new ArrayList();
+	List<ProgColor> cpColors = new ArrayList<>(), overrideColors = new ArrayList<>();
 	
 	public interface IConsumptionHintProvider {
 		boolean alive();
 		float getConsumption();
 	}
-	
+
 	long presetChangeTime, lastPresetTime;
 	
 	long lastDrawTime;
@@ -304,7 +306,9 @@ public class CPBar extends Widget {
 	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160),
 			CRL_P_FORE = new Color().setColor4i(255, 255, 255, 200);
 	final Color temp = new Color();
-	
+
+    FontOption fo_PresetHint = new FontOption(46, FontAlign.CENTER);
+
 	private void drawPresetHint(double progress, long untilLast) {
 		final double x0 = 580, y0 = 136;
 		final double size = 52, step = size + 10;
@@ -330,14 +334,13 @@ public class CPBar extends Widget {
 			HudUtils.colorRect(x, y, size, size);
 			
 			temp.a = Math.max(0.05, alpha * 0.8);
-			
-			//TODO: This approach seems to be buggy in SOME machines :(
-			Font.font.draw("§L" + (i + 1), x + 2 + size / 2, y + 5, 46, temp.asHexColor(), Align.CENTER);
+
+            fo_PresetHint.color = temp;
+            Resources.fontBold().draw(String.valueOf(i + 1), x + size / 2, y + 5, fo_PresetHint);
 			
 			temp.bind();
 			if(i == cur) {
 				ACRenderingHelper.drawGlow(x, y, size, size, 5, CRL_P_FORE);
-				//HudUtils.drawRectOutline(x, y, size, size, 3);
 			}
 			
 			x += step;
@@ -348,17 +351,21 @@ public class CPBar extends Widget {
 	static final Color 
 		CRL_KH_BACK = new Color().setColor4i(65, 65, 65, 70), 
 		CRL_KH_GLOW = new Color().setColor4i(255, 255, 255, 40);
-	
+
+    FontOption fo_ActivateHint = new FontOption(44, FontAlign.RIGHT, new Color(0xa0ffffff));
+
 	private void drawActivateKeyHint() {
 		String str = ClientHandler.getActivateKeyHint();
 		
 		if(str != null) {
-			final double x0 = 500, y0 = 140, fsize = 44, MARGIN = 8;
+			final double x0 = 500, y0 = 140, MARGIN = 8;
 			CRL_KH_BACK.bind();
-			double len = Font.font.strLen(str, fsize);
-			HudUtils.colorRect(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, fsize + MARGIN * 2);
-			ACRenderingHelper.drawGlow(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, fsize + MARGIN * 2, 5, CRL_KH_GLOW);
-			Font.font.draw(str, x0, y0, fsize, 0xa0ffffff, Align.RIGHT);
+
+            IFont font = Resources.font();
+			double len = font.getTextWidth(str, fo_ActivateHint);
+			HudUtils.colorRect(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, 44 + MARGIN * 2);
+			ACRenderingHelper.drawGlow(x0 - MARGIN - len, y0 - MARGIN, len + MARGIN * 2, 44 + MARGIN * 2, 5, CRL_KH_GLOW);
+            font.draw(str, x0, y0, fo_ActivateHint);
 		}
 	}
 	
