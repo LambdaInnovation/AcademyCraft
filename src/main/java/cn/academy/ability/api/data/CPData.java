@@ -48,7 +48,28 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 @RegInit
 @RegDataPart("CP")
 public class CPData extends DataPart<EntityPlayer> {
-	
+
+    // Names are very short for serialization efficiency
+	static final String
+		TAG_CURCP = "0",
+		TAG_MAXCP = "1",
+		TAG_UNTILRECOVER = "2",
+		TAG_OVERLOAD = "3",
+		TAG_MAX_OVERLOAD = "4",
+		TAG_UNTIL_OVERLOAD_RECOVER = "5",
+		TAG_OVERLOAD_FINE = "6",
+		TAG_ADD_MAXCP = "7",
+		TAG_ADD_MAX_OVERLOAD = "8";
+
+
+	@FunctionalInterface
+	public interface IAbilityInterferer {
+		/**
+		 * @return Whether the inteference should still be applied. If not the interferer will be removed.
+		 */
+		boolean interfering();
+	}
+
 	public static int 
 		RECOVER_COOLDOWN,
 		OVERLOAD_COOLDOWN;
@@ -63,7 +84,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
 	}
 	
-	AbilityData aData;
+	private AbilityData aData;
 	
 	private boolean activated = false;
 	
@@ -75,7 +96,7 @@ public class CPData extends DataPart<EntityPlayer> {
 	private float maxOverload = 100.0f;
 	private float addMaxOverload = 0.0f; // The Overload added out of ability usage.
 	
-	private boolean canUseAbility = true;
+	private boolean overloadFine = true;
 	
 	/**
 	 * Tick counter for cp recover.
@@ -120,7 +141,7 @@ public class CPData extends DataPart<EntityPlayer> {
 				
 				overload -= recover;
 				if(overload <= 0) {
-					canUseAbility = true;
+					overloadFine = true;
 					overload = 0;
 				}
 			} else {
@@ -142,9 +163,13 @@ public class CPData extends DataPart<EntityPlayer> {
 	public boolean isActivated() {
 		return activated;
 	}
-	
+
+	/**
+	 * @return Whether the player can use ability currently.
+	 * 	e.g. whether the skills can be executed by pressing ability keys.
+	 */
 	public boolean canUseAbility() {
-		return activated && canUseAbility;
+		return activated && overloadFine;
 	}
 	
 	public void activate() {
@@ -234,7 +259,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		consumeCP(cpToAdd);
 		
 		if(overload > getMaxOverload()) {
-			canUseAbility = false;
+			overloadFine = false;
 		}
 		
 		return true;
@@ -253,7 +278,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		if(currentCP < 0) currentCP = 0;
 		if(overload > getMaxOverload() * 2) overload = getMaxOverload() * 2;
 		
-		if(overload > getMaxOverload()) canUseAbility = false;
+		if(overload > getMaxOverload()) overloadFine = false;
 		
 		untilRecover = RECOVER_COOLDOWN;
 		untilOverloadRecover = OVERLOAD_COOLDOWN;
@@ -384,7 +409,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		if(!isRemote()) {
 			currentCP = getMaxCP();
 			overload = 0;
-			canUseAbility = false;
+			overloadFine = false;
 			sync();
 		}
 	}
@@ -400,18 +425,18 @@ public class CPData extends DataPart<EntityPlayer> {
 	public NBTTagCompound toNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
 		
-		tag.setFloat("C", currentCP);
-		tag.setFloat("M", maxCP);
-		tag.setInteger("I", untilRecover);
+		tag.setFloat(TAG_CURCP, 		           currentCP);
+		tag.setFloat(TAG_MAXCP,                    maxCP);
+		tag.setInteger(TAG_UNTILRECOVER,           untilRecover);
 		
-		tag.setFloat("D", overload);
-		tag.setFloat("N", maxOverload);
-		tag.setInteger("J", untilOverloadRecover);
+		tag.setFloat(TAG_OVERLOAD,                 overload);
+		tag.setFloat(TAG_MAX_OVERLOAD,             maxOverload);
+		tag.setInteger(TAG_UNTIL_OVERLOAD_RECOVER, untilOverloadRecover);
 		
-		tag.setBoolean("B", canUseAbility);
+		tag.setBoolean(TAG_OVERLOAD_FINE,          overloadFine);
 		
-		tag.setFloat("1", addMaxCP);
-		tag.setFloat("2", addMaxOverload);
+		tag.setFloat(TAG_ADD_MAXCP,                addMaxCP);
+		tag.setFloat(TAG_ADD_MAX_OVERLOAD, 	       addMaxOverload);
 		
 		return tag;
 	}
@@ -434,18 +459,18 @@ public class CPData extends DataPart<EntityPlayer> {
 
 	@Override
 	public void fromNBT(NBTTagCompound tag) {
-		currentCP = tag.getFloat("C");
-		maxCP = tag.getFloat("M");
-		untilRecover = tag.getInteger("I");
-		
-		overload = tag.getFloat("D");
-		maxOverload = tag.getFloat("N");
-		untilOverloadRecover = tag.getInteger("J");
-		
-		canUseAbility = tag.getBoolean("B");
-		
-		addMaxCP = tag.getFloat("1");
-		addMaxOverload = tag.getFloat("2");
+        currentCP = tag.getFloat(TAG_CURCP);
+        maxCP = tag.getFloat(TAG_MAXCP);
+        untilRecover = tag.getInteger(TAG_UNTILRECOVER);
+
+        overload = tag.getFloat(TAG_OVERLOAD);
+        maxOverload = tag.getFloat(TAG_MAX_OVERLOAD);
+        untilOverloadRecover = tag.getInteger(TAG_UNTIL_OVERLOAD_RECOVER);
+
+        overloadFine = tag.getBoolean(TAG_OVERLOAD_FINE);
+
+        addMaxCP = tag.getFloat(TAG_ADD_MAXCP);
+        addMaxOverload = tag.getFloat(TAG_ADD_MAX_OVERLOAD);
 	}
 	
 	private static double getDoubleParam(String name) {
@@ -470,13 +495,11 @@ public class CPData extends DataPart<EntityPlayer> {
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void activateAtServer() {
-		//System.out.println("ActivateAtServer called");
 		activate();
 	}
 	
 	@RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
 	private void deactivateAtServer() {
-		//System.out.println("DeactivateAtServer called");
 		deactivate();
 	}
 	
