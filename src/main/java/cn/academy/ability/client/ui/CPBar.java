@@ -20,6 +20,10 @@ import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.vis.curve.CubicCurve;
+import com.sun.scenario.effect.Offset;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -49,6 +53,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+
+import javax.vecmath.Vector2d;
 
 /**
  * @author WeAthFolD
@@ -101,9 +107,58 @@ public class CPBar extends Widget {
 	float bufferedOverload;
 
 	boolean shaderLoaded = false;
-	
+
 	ResourceLocation overlayTexture;
-	
+
+    // Inteference display
+
+    long maxtime;
+    List<OffsetKeyframe> frames = new ArrayList<>();
+    CubicCurve alphaCurve = new CubicCurve();
+
+    class OffsetKeyframe {
+        long time;
+        Vector2d direction;
+    }
+
+    {
+        final float aspect = WIDTH / HEIGHT, offsetMax = 9;
+        final int iteration = 60;
+
+        alphaCurve.addPoint(0, RandUtils.ranged(0.2, 0.8));
+
+        int sum = 0;
+        for (int i = 0; i < iteration; ++i) {
+            OffsetKeyframe frame = new OffsetKeyframe();
+            int thistime = RandUtils.rangei(80, 400);
+            float offsetNorm = RandUtils.rangef(0, 1);
+            float theta = RandUtils.rangef(0, MathUtils.PI_F * 2);
+            offsetNorm = offsetNorm * offsetNorm * offsetNorm;
+
+            sum += thistime;
+
+            frame.time = sum;
+            frame.direction = new Vector2d(
+                    Math.sin(theta) * offsetNorm * offsetMax * aspect,
+                    Math.cos(theta) * offsetNorm * offsetMax);
+            frames.add(frame);
+
+            alphaCurve.addPoint(sum, RandUtils.ranged(0.4, 0.7));
+        }
+
+        maxtime = sum;
+    }
+
+    OffsetKeyframe int_get() {
+        long timeInput = GameTimer.getAbsTime() % maxtime;
+        return frames.stream()
+                .filter(f -> f.time > timeInput)
+                .findFirst().get();
+    }
+
+    //
+
+
 	private CPBar() {
 		try { // Safety check. If loading failed, fallback to not using shader.
 			this.shaderCPBar = new ShaderCPBar();
@@ -153,12 +208,25 @@ public class CPBar extends Widget {
 			if(time - lastDrawTime > 300L) {
 				showTime = time;
 			}
-			
+
+            // Takes account of interference
 			long deltaTime = Math.min(100L, time - lastDrawTime);
 			
 			final long BLENDIN_TIME = 200L;
 			mAlpha = (time - showTime < BLENDIN_TIME) ? (float) (time - showTime) / BLENDIN_TIME :
 				(active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
+
+            boolean interf = cpData.isInterfering();
+
+            if (interf) {
+                OffsetKeyframe frame = int_get();
+                GL11.glTranslated(frame.direction.x, frame.direction.y, 0);
+                long timeInput = GameTimer.getAbsTime() % maxtime;
+                timeInput = (timeInput / 10) * 10; // Lower the precision to produce 'jagged' effect
+                mAlpha *= alphaCurve.valueAt(timeInput);
+            }
+
+            GL11.glPushMatrix(); // PUSH 1
 			
 			float poverload = mAlpha > 0 ? cpData.getOverload() / cpData.getMaxOverload() : 0;
 			bufferedOverload = balance(bufferedOverload, poverload, deltaTime * 1E-3f * O_BALANCE_SPEED);
@@ -179,20 +247,20 @@ public class CPBar extends Widget {
 					
 					float estmCons = chProvider == null ? 0 : chProvider.getConsumption() * 
 						(cpData.isOverloaded() ? CPData.OVERLOAD_CP_MUL : 1); // Takes account of overloading
-					//System.out.println(chProvider + "/" + estmCons);
+
 					if(estmCons != 0) {
 						float ncp = Math.max(0, cpData.getCP() - estmCons);
 						
 						float oldAlpha = mAlpha;
 						mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
 						
-						drawCPBar(pcp);
+						drawCPBar(pcp, interf);
 						
 						mAlpha = oldAlpha;
 						
-						drawCPBar(ncp / cpData.getMaxCP());
+						drawCPBar(ncp / cpData.getMaxCP(), interf);
 					} else {
-						drawCPBar(bufferedCP);
+						drawCPBar(bufferedCP, interf);
 					}
 				}
 				
@@ -210,6 +278,7 @@ public class CPBar extends Widget {
 				lastDrawTime = time;
 			
 			GL11.glColor4d(1, 1, 1, 1);
+            GL11.glPopMatrix(); // Pop 1
 		});
 	}
 	
@@ -265,10 +334,15 @@ public class CPBar extends Widget {
 		subHud(X0 + WIDTH - len, Y0, len, HEIGHT);
 	}
 	
-	private void drawCPBar(float prog) {
+	private void drawCPBar(float prog, boolean interfered) {
 		if(overlayTexture == null)
 			return;
-		
+
+        float pre_mAlpha = mAlpha;
+        if (interfered) {
+            mAlpha *= 0.3f;
+        }
+
 		//We need a cut-angle effect so this must be done manually
 		autoLerp(cpColors, prog);
 		
@@ -301,6 +375,8 @@ public class CPBar extends Widget {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+
+        mAlpha = pre_mAlpha;
 	}
 	
 	final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160),

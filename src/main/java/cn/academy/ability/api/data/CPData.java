@@ -428,14 +428,14 @@ public class CPData extends DataPart<EntityPlayer> {
     /**
      * @return If the ability is being intefered.
      */
-    boolean isInterfering() {
+    public boolean isInterfering() {
         return interfering;
     }
 
     /**
      * @return Whether the interference source with given name is present.
      */
-    boolean hasInterferer(String name) {
+    public boolean hasInterfSource(String name) {
         return interfSources.containsKey(name);
     }
 

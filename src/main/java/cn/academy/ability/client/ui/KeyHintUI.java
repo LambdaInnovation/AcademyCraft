@@ -12,6 +12,10 @@
  */
 package cn.academy.ability.client.ui;
 
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import cn.lambdalib.util.helper.Color;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -34,9 +38,7 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderMono;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,11 +65,11 @@ public class KeyHintUI extends Widget {
 		TEX_MOUSE_R = tex("mouse_right"), 
 		TEX_MOUSE_GENERIC = tex("mouse_generic");
 	
-	Font font = Font.font;
-	
 	long lastFrameTime, showTime;
 	double mAlpha;
 	boolean canUseAbility;
+
+    final FontOption option = new FontOption(32, FontAlign.CENTER, new Color(0xff194246));
 	
 	private KeyHintUI() {
 		transform.alignWidth = WidthAlign.RIGHT;
@@ -129,11 +131,12 @@ public class KeyHintUI extends Widget {
 		RenderUtils.loadTexture(TEX_BACK);
 		color4d(1, 1, 1, 1);
 		HudUtils.rect(122, 0, 185, 83);
-		
+
+        IFont font = Resources.font();
 		
 		// KeyHint
 		{
-			double wx = 184, wy = 27;
+			double wx = 180, wy = 27;
 			if(!canUseAbility || data != null) {
 				color4d(0.7, 0.7, 0.7, 1);
 				ShaderMono.instance().useProgram();
@@ -146,8 +149,8 @@ public class KeyHintUI extends Widget {
 				} else {
 					drawBack(TEX_KEY_LONG);
 				}
-				
-				font.draw(name, wx, wy, 32, 0x194246, Align.CENTER);
+
+                font.draw(name, wx, wy, option);
 			} else {
 				
 				if(keyCode == KeyManager.MOUSE_LEFT) {
@@ -156,7 +159,7 @@ public class KeyHintUI extends Widget {
 					drawBack(TEX_MOUSE_R);
 				} else {
 					drawBack(TEX_MOUSE_GENERIC);
-					font.draw("" + (keyCode + 100), wx, wy, 32, 0x194246, Align.CENTER);
+                    font.draw("" + (keyCode + 100), wx, wy, option);
 				}
 				
 			}
