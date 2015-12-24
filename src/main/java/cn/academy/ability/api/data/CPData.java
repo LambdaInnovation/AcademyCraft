@@ -61,9 +61,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		TAG_ADD_MAXCP = "7",
 		TAG_ADD_MAX_OVERLOAD = "8";
 
-
-	@FunctionalInterface
-	public interface IAbilityInterferer {
+	public interface IInterfSource {
 		/**
 		 * @return Whether the inteference should still be applied. If not the interferer will be removed.
 		 */
@@ -393,6 +391,54 @@ public class CPData extends DataPart<EntityPlayer> {
 			sync();
 		
 	}
+
+    // Inteference API
+
+    // Observers
+
+    /**
+     * @return If the ability is being intefered.
+     */
+    boolean isInterfering() {
+        return false;
+    }
+
+    /**
+     * @return Whether the interference source with given name is present.
+     */
+    boolean hasInterferer(String name) {
+        return false;
+    }
+
+    // Modifiers
+
+    /**
+     * Adds a interference source.
+     * @param id The unique id of the source. If the source with same id previously exists, it will be discarded.
+     * @param interferer The source
+     */
+    public void addInterf(String id, IInterfSource interferer) {
+
+    }
+
+    /**
+     * Removes all inteference source.
+     */
+    public void removeInterf() {
+        
+    }
+
+    /**
+     * Removes the given interference source, if any.
+     * @param name The name of given interference
+     */
+    public void removeInterf(String name) {
+
+    }
+
+
+
+    // Inteference API end
 	
 	public static float getInitCP(int level) {
 		return getFunc("init_cp").callFloat(level);
