@@ -14,7 +14,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -78,13 +80,13 @@ public final class PreviewHandlers {
 		};
 	}
 
-	public static IPreviewHandler recipesOfStack(ItemStack stack) {
-		return new IPreviewHandler() {
-			@Override
-			public Widget getDelegateWidget() {
-				return RecipeHandler.instance.recipeOfStack(stack);
-			}
-		};
+	public static Collection<IPreviewHandler> recipesOfStack(ItemStack stack) {
+        return RecipeHandler.instance.recipeOfStack(stack).stream().map(w -> new IPreviewHandler() {
+            @Override
+            public Widget getDelegateWidget() {
+                return w;
+            }
+        }).collect(Collectors.toList());
 	}
 
 }

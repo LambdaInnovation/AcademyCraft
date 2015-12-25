@@ -17,6 +17,7 @@ import java.util.Collection;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.tutorial.IPreviewHandler;
+import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
@@ -81,7 +82,7 @@ public class GuiTutorial extends CGuiScreen {
 
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
-		tutlist = ACTutorial.getLearned(player);
+		tutlist = TutorialRegistry.getLearned(player);
 
 		initUI();
 	}

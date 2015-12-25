@@ -63,67 +63,43 @@ public enum RecipeHandler {
 	}
 
 	/**
-	 * This class displays a 3x3 crafting grid. Possible multiple recipes alternating.
+	 * This class displays a 3x3 crafting grid of a recipe.
 	 */
 	static class CraftingGridDisplay extends Widget {
 
-		static final long ALTERNATE_TIME = 2000;
 		static final int STEP = 43;
 
-		private final List<StackDisplay[]> alternations;
-		private final List<String> description;
-		private final List<Widget> active = new ArrayList<>();
+		private final StackDisplay[] stacks;
+		private final String description;
 
-		private long lastAlternate;
-		private int current;
-
-		CraftingGridDisplay(List<StackDisplay[]> alt, List<String> desc) {
-			alternations = alt;
+		CraftingGridDisplay(StackDisplay[] _stacks, String desc) {
 			description = desc;
+            stacks = _stacks;
 
 			transform.setSize(128, 128);
 			transform.setCenteredAlign();
 			transform.scale = 0.6;
-			lastAlternate = GameTimer.getAbsTime();
 
-			if(alternations.size() != 0) {
-				rebuild();
-				listen(FrameEvent.class, (w, e) ->
-				{
-					long time = GameTimer.getAbsTime();
-					long dt = time - lastAlternate;
-					if(dt > ALTERNATE_TIME) {
-						lastAlternate = time;
-						current = (current + 1) % alternations.size();
-						rebuild();
-					}
+            for(int i = 0; i < stacks.length; ++i) {
+                int col = i % 3, row = i / 3;
 
-					// Renders recipe type hint
-					String str = StatCollector.translateToLocal("ac.gui.crafttype." + description.get(current));
-					Font.font.draw(str, transform.width / 2, -22, 17, 0xffffff, Align.CENTER);
-				});
-			}
+                StackDisplay original = stacks[i];
+                if(original != null) {
+                    original.disposed = false;
+                    original.dirty = true;
+
+                    original.transform.setPos(5 + col * STEP, 5 + row * STEP);
+                    addWidget(original);
+                }
+            }
+
+            listen(FrameEvent.class, (w, e) ->
+            {
+                // Renders recipe type hint
+                String str = StatCollector.translateToLocal("ac.gui.crafttype." + description);
+                Font.font.draw(str, transform.width / 2, -22, 17, 0xffffff, Align.CENTER);
+            });
 			addComponent(new DrawTexture().setTex(instance.tex));
-		}
-
-		private void rebuild() {
-			active.forEach(this::removeWidget);
-			active.clear();
-
-			StackDisplay[] display = alternations.get(current);
-			for(int i = 0; i < display.length; ++i) {
-				int col = i % 3, row = i / 3;
-
-				StackDisplay original = display[i];
-				if(original != null) {
-					original.disposed = false;
-					original.dirty = true;
-
-					original.transform.setPos(5 + col * STEP, 5 + row * STEP);
-					active.add(original);
-					addWidget(original);
-				}
-			}
 		}
 
 	}
@@ -252,28 +228,35 @@ public enum RecipeHandler {
 		return s1.getItem() == s2.getItem();
 	}
 
-	public Widget recipeOfStack(ItemStack stack) {
-		List<StackDisplay[]> displays = new ArrayList<>();
-		List<String> descriptions = new ArrayList<>();
+	public Collection<Widget> recipeOfStack(ItemStack stack) {
+        List<Widget> ret = new ArrayList<>();
+
 		for(IRecipe o : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
 			if(matchStack(o.getRecipeOutput(), stack)) {
 				AcademyCraft.log.info("Match " + o);
+                StackDisplay[] arr;
+                String desc;
+
 				if(o instanceof ShapedOreRecipe) {
-					displays.add(toDisplay((ShapedOreRecipe) o));
-					descriptions.add("shaped");
+                    arr = toDisplay((ShapedOreRecipe) o);
+                    desc = "shaped";
 				} else if(o instanceof ShapedRecipes) {
-					displays.add(toDisplay((ShapedRecipes) o));
-					descriptions.add("shaped");
+                    arr = toDisplay((ShapedRecipes) o);
+                    desc = "shaped";
 				} else if(o instanceof ShapelessRecipes) {
-					displays.add(toDisplay((ShapelessRecipes) o));
-					descriptions.add("shapeless");
+                    arr = toDisplay((ShapelessRecipes) o);
+                    desc = "shapeless";
 				} else if(o instanceof ShapelessOreRecipe) {
-					displays.add(toDisplay((ShapelessOreRecipe) o));
-					descriptions.add("shapeless");
-				}
+                    arr = toDisplay((ShapelessOreRecipe) o);
+                    desc = "shapeless";
+				} else {
+                    throw new RuntimeException("Invalid recipe");
+                }
+
+                ret.add(new CraftingGridDisplay(arr, desc));
 			}
 		}
-		return new CraftingGridDisplay(displays, descriptions);
+		return ret;
 	}
 
 }
