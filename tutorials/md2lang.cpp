@@ -235,8 +235,8 @@ DLLEXPORT const cn_char* md2lang(const cn_char* input)
 	pdefault(out, input);
 
 	const cn_char* cstr = out.c_str();
-
+    
+    std::fill(buf2, buf2 + 9999, '\0');
 	std::copy(cstr, cstr + out.length(), buf2);
-	buf2[out.size()] = '\0';
 	return buf2;
 }

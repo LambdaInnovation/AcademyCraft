@@ -356,6 +356,7 @@ public class GuiTutorial extends CGuiScreen {
 		currentTut = new TutInfo(tut);
 		boolean cycleable = tut.getPreview().size() > 1;
         showArea.removeWidget("delegate");
+        VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
 		showWindow.getWidget("button_left").transform.doesDraw
 				= showWindow.getWidget("button_right").transform.doesDraw
 				= cycleable;
