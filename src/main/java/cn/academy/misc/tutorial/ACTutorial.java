@@ -34,6 +34,11 @@ public class ACTutorial {
 	private ArticlePlotter cachedBrief, cachedContent;
 
 	private List<IPreviewHandler> previewHandlers = new ArrayList<>();
+    private boolean previewInit = false;
+
+    {
+        previewHandlers.add(PreviewHandlers.nothing);
+    }
 
 	public ACTutorial(String id) {
 		this.id=id;
@@ -45,12 +50,17 @@ public class ACTutorial {
 	}
 
 	public ACTutorial addPreview(IPreviewHandler ...handlers) {
+        if (!previewInit) {
+            previewInit = true;
+            previewHandlers.clear();
+        }
 		previewHandlers.addAll(Arrays.asList(handlers));
 		return this;
 	}
 
-	public IPreviewHandler[] getPreview() {
-		return previewHandlers.toArray(new IPreviewHandler[previewHandlers.size()]);
+	public List<IPreviewHandler> getPreview() {
+
+		return previewHandlers;
 	}
 
 	public String getBrief() {

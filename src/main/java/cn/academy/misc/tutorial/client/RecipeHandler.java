@@ -1,17 +1,26 @@
 package cn.academy.misc.tutorial.client;
 
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.crafting.api.ImagFusorRecipes;
+import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
+import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
+import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.helper.GameTimer;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -34,14 +43,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.lwjgl.opengl.GL11.*;
 
 // TODO Add ImagFusor and MetalFormer handlers
+@SideOnly(Side.CLIENT)
 public enum RecipeHandler {
 	instance;
 
+    private WidgetContainer windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
 	private ResourceLocation tex = Resources.getTexture("guis/tutorial/crafting_grid");
 
 	private Field _$ShapedOreRecipe$fieldWidth;
@@ -67,18 +79,20 @@ public enum RecipeHandler {
 	 */
 	static class CraftingGridDisplay extends Widget {
 
+        static final FontOption option = new FontOption(24, FontAlign.CENTER, Color.white());
+
 		static final int STEP = 43;
 
 		private final StackDisplay[] stacks;
+        private final StackDisplay output;
 		private final String description;
 
-		CraftingGridDisplay(StackDisplay[] _stacks, String desc) {
-			description = desc;
+		CraftingGridDisplay(StackDisplay _output, StackDisplay[] _stacks, String desc) {
             stacks = _stacks;
+            output = _output;
+            description = desc;
 
-			transform.setSize(128, 128);
-			transform.setCenteredAlign();
-			transform.scale = 0.6;
+            size(196, 128).centered().scale(0.6);
 
             for(int i = 0; i < stacks.length; ++i) {
                 int col = i % 3, row = i / 3;
@@ -88,16 +102,19 @@ public enum RecipeHandler {
                     original.disposed = false;
                     original.dirty = true;
 
-                    original.transform.setPos(5 + col * STEP, 5 + row * STEP);
+                    original.pos(5 + col * STEP, 5 + row * STEP);
                     addWidget(original);
                 }
             }
+
+            output.pos(148 + 5, 44 + 5);
+            addWidget(output);
 
             listen(FrameEvent.class, (w, e) ->
             {
                 // Renders recipe type hint
                 String str = StatCollector.translateToLocal("ac.gui.crafttype." + description);
-                Font.font.draw(str, transform.width / 2, -22, 17, 0xffffff, Align.CENTER);
+                Resources.font().draw(str, transform.width / 2 - 30, -28, option);
             });
 			addComponent(new DrawTexture().setTex(instance.tex));
 		}
@@ -225,17 +242,54 @@ public enum RecipeHandler {
 		if(s1 == null || s2 == null) {
 			return false;
 		}
-		return s1.getItem() == s2.getItem();
+		return s1.getItem() == s2.getItem() &&
+                (!s1.getItem().getHasSubtypes() || s1.getItemDamage() == s2.getItemDamage());
 	}
 
-	public Collection<Widget> recipeOfStack(ItemStack stack) {
+    private Widget drawMFRecipe(MetalFormerRecipes.RecipeObject recipe) {
+        // CGUI Rocks
+        Widget ret = windows.getWidget("MetalFormer").copy();
+        ret.getWidget("slot_in").addWidget(new StackDisplay(recipe.input).centered());
+        ret.getWidget("slot_out").addWidget(new StackDisplay(recipe.output).centered());
+        DrawTexture.get(ret.getWidget("mode")).setTex(recipe.mode.texture);
+        return ret;
+    }
+
+    private Widget drawIFRecipe(IFRecipe recipe) {
+        Widget ret = windows.getWidget("ImagFuser").copy();
+        ret.getWidget("slot_in").addWidget(new StackDisplay(recipe.consumeType).centered());
+        ret.getWidget("slot_out").addWidget(new StackDisplay(recipe.output).centered());
+        TextBox.get(ret.getWidget("amount")).setContent(String.valueOf(recipe.consumeLiquid));
+
+        return ret;
+    }
+
+    public Widget[] recipeOfBlock(Block block) {
+        return recipeOfItem(Item.getItemFromBlock(block));
+    }
+
+    public Widget[] recipeOfItem(Item item) {
+        List<ItemStack> lst = new ArrayList<>();
+        if (item.getHasSubtypes()) {
+            lst.addAll(IntStream.range(0, item.getMaxDamage())
+                    .mapToObj(i -> new ItemStack(item, 1, i))
+                    .collect(Collectors.toList()));
+        } else {
+            lst.add(new ItemStack(item));
+        }
+
+        return lst.stream().flatMap(stk -> Arrays.stream(recipeOfStack(stk))).toArray(Widget[]::new);
+    }
+
+	public Widget[] recipeOfStack(ItemStack stack) {
         List<Widget> ret = new ArrayList<>();
 
 		for(IRecipe o : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
 			if(matchStack(o.getRecipeOutput(), stack)) {
-				AcademyCraft.log.info("Match " + o);
                 StackDisplay[] arr;
                 String desc;
+
+                System.out.println("[][]Match " + stack);
 
 				if(o instanceof ShapedOreRecipe) {
                     arr = toDisplay((ShapedOreRecipe) o);
@@ -253,10 +307,23 @@ public enum RecipeHandler {
                     throw new RuntimeException("Invalid recipe");
                 }
 
-                ret.add(new CraftingGridDisplay(arr, desc));
+                ret.add(new CraftingGridDisplay(new StackDisplay(o.getRecipeOutput()), arr, desc));
 			}
 		}
-		return ret;
+        { // IF Recipes
+            IFRecipe recipe = ImagFusorRecipes.INSTANCE.getRecipe(stack);
+            if (recipe != null) {
+                ret.add(drawIFRecipe(recipe));
+            }
+        }
+        { // MF Recipes
+            MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
+                    .findFirst()
+                    .ifPresent(r -> ret.add(drawMFRecipe(r)));
+        }
+
+
+		return ret.toArray(new Widget[ret.size()]);
 	}
 
 }

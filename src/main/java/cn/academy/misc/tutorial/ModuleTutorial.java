@@ -7,9 +7,12 @@ import cn.academy.energy.ModuleEnergy;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+
+import static cn.academy.misc.tutorial.Condition.*;
+import static cn.academy.misc.tutorial.PreviewHandlers.*;
 
 @Registrant
 @RegACRecipeNames
@@ -19,42 +22,58 @@ public class ModuleTutorial {
 	@RecipeName("tutorial")
 	public static ItemTutorial item;
 
-	@RegInitCallback
-	public static void init(){
-		initConditions();
-	}
-
     private static ACTutorial defnTut(String name) {
         return TutorialRegistry.addTutorial(name);
     }
 
-	private static void initConditions() {
-		defnTut("phase_liquid").setCondition(Condition.harvestLiquid(ModuleCrafting.imagPhase.mat));
-        defnTut("constraint_metal").setCondition(Condition.itemPickup(ModuleCrafting.oreConstraintMetal));
-        defnTut("crystal").setCondition(Condition.itemPickup(ModuleCrafting.crystalLow));
-        defnTut("imag_silicon").setCondition(Condition.itemPickup(ModuleCrafting.oreImagSil));
-        defnTut("node").setCondition(Condition.or(
-				Condition.itemsCrafted(
+    @RegPostInitCallback
+	public static void initConditions() {
+
+		defnTut("phase_liquid").setCondition(harvestLiquid(ModuleCrafting.imagPhase.mat));
+
+        defnTut("constraint_metal").setCondition(itemPickup(ModuleCrafting.oreConstraintMetal));
+
+        defnTut("crystal").setCondition(itemPickup(ModuleCrafting.crystalLow))
+                .addPreview(PreviewHandlers.plainDisplay(ModuleCrafting.crystalLow));
+
+        defnTut("imag_silicon") .setCondition(itemPickup(ModuleCrafting.oreImagSil));
+
+        defnTut("node") .setCondition(or(
+				itemsCrafted(
 						ModuleEnergy.nodeBasic,
 						ModuleEnergy.nodeStandard,
 						ModuleEnergy.nodeAdvanced
 				)
-		));
-        defnTut("matrix").setCondition(Condition.itemCrafted(ModuleEnergy.matrix));
-        defnTut("wifi").setCondition(
-				Condition.or(
-						Condition.onTutorial("matrix"),
-						Condition.onTutorial("node")
-				)
-		);
-        defnTut("phase_generator").setCondition(Condition.itemCrafted(ModuleEnergy.phaseGen));
-        defnTut("solar_gen").setCondition(Condition.itemCrafted(ModuleEnergy.solarGen));
+		)).addPreview(plainDisplay(ModuleEnergy.nodeBasic))
+        .addPreview(plainDisplay(ModuleEnergy.nodeStandard))
+        .addPreview(plainDisplay(ModuleEnergy.nodeAdvanced));
+
+        defnTut("matrix")
+                .setCondition(itemCrafted(ModuleEnergy.matrix))
+                .addPreview(plainDisplay(ModuleEnergy.matrix));
+
+        defnTut("wifi")
+                .setCondition(or(onTutorial("matrix"), onTutorial("node")))
+                .addPreview(plainDisplay(ModuleEnergy.matrix));
+
+        defnTut("phase_generator")
+                .setCondition(itemCrafted(ModuleEnergy.phaseGen))
+                .addPreview(plainDisplay(ModuleEnergy.phaseGen));
+
+        defnTut("solar_gen")
+                .setCondition(Condition.itemCrafted(ModuleEnergy.solarGen))
+                .addPreview(plainDisplay(ModuleEnergy.solarGen));
+
         defnTut("wind_gen").setCondition(Condition.itemCrafted(ModuleEnergy.windgenMain));
+
         defnTut("metal_former").setCondition(Condition.itemCrafted(ModuleCrafting.metalFormer));
+
         defnTut("imag_fusor").setCondition(Condition.itemCrafted(ModuleCrafting.imagFusor));
+
         defnTut("terminal").setCondition(Condition.itemCrafted(ModuleTerminal.terminalInstaller));
-        defnTut("ability_developer").setCondition(Condition.or(
-				Condition.itemsCrafted(
+
+        defnTut("ability_developer").setCondition(or(
+				itemsCrafted(
 						ModuleAbility.developerNormal,
 						ModuleAbility.developerPortable,
 						ModuleAbility.developerAdvanced
@@ -62,11 +81,13 @@ public class ModuleTutorial {
 		));
 
         defnTut("ability")
-                .setCondition(Condition.abilityLevel(null, 1));
+                .setCondition(abilityLevel(null, 1));
 
         defnTut("ability_electromaster")
-				.setCondition(Condition.abilityLevel(ModuleVanilla.electromaster, 1));
-        defnTut("ability_meltdowner").setCondition(Condition.abilityLevel(ModuleVanilla.meltdowner, 1));
-        defnTut("ability_teleporter").setCondition(Condition.abilityLevel(ModuleVanilla.teleporter, 1));
+				.setCondition(abilityLevel(ModuleVanilla.electromaster, 1));
+
+        defnTut("ability_meltdowner").setCondition(abilityLevel(ModuleVanilla.meltdowner, 1));
+
+        defnTut("ability_teleporter").setCondition(abilityLevel(ModuleVanilla.teleporter, 1));
 	}
 }

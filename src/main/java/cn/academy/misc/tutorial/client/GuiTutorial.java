@@ -354,7 +354,8 @@ public class GuiTutorial extends CGuiScreen {
 
 	private void setCurrentTut(ACTutorial tut) {
 		currentTut = new TutInfo(tut);
-		boolean cycleable = tut.getPreview().length > 1;
+		boolean cycleable = tut.getPreview().size() > 1;
+        showArea.removeWidget("delegate");
 		showWindow.getWidget("button_left").transform.doesDraw
 				= showWindow.getWidget("button_right").transform.doesDraw
 				= cycleable;
@@ -369,7 +370,7 @@ public class GuiTutorial extends CGuiScreen {
 		}
 
 		void cycle(int delta) {
-			int len = tut.getPreview().length;
+			int len = tut.getPreview().size();
 			selection += delta;
 			if(selection >= len) selection = 0;
 			else if(selection < 0) selection = len - 1;
@@ -383,7 +384,7 @@ public class GuiTutorial extends CGuiScreen {
 		}
 
 		IPreviewHandler curHandler() {
-			return tut.getPreview()[selection];
+			return tut.getPreview().get(selection);
 		}
 	}
 
