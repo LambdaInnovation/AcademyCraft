@@ -30,7 +30,6 @@ class TileAbilityInterferer extends TileEntity {
 
   scheduler.every(10).atOnly(Side.SERVER).run(new Runnable {
     override def run() = {
-      println("Running...")
       val rangeVal = range
       val players = WorldUtils.getEntities(TileAbilityInterferer.this, rangeVal, EntitySelectors.survivalPlayer)
       players foreach {
