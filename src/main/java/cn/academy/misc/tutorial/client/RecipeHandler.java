@@ -175,9 +175,10 @@ public enum RecipeHandler {
 					glPopMatrix();
 
 					glPushMatrix();
-					glTranslated(0, 0, 10);
+					glTranslated(0, 0, 20);
 					if (e.hovering) {
-						EnergyUIHelper.drawTextBox(stack.getDisplayName(), e.mx + 10, e.my - 17, 17, 1000, Align.LEFT, true);
+						EnergyUIHelper.drawTextBox(stack.getDisplayName(), e.mx + 10, e.my - 17,
+                                10 / w.scale, 1000, Align.LEFT, true);
 					}
 					glPopMatrix();
 				});
@@ -318,6 +319,7 @@ public enum RecipeHandler {
         }
         { // MF Recipes
             MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
+                    .filter(r -> r.accepts(stack, r.mode))
                     .findFirst()
                     .ifPresent(r -> ret.add(drawMFRecipe(r)));
         }

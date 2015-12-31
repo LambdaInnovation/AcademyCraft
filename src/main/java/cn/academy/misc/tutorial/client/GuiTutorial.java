@@ -186,26 +186,18 @@ public class GuiTutorial extends CGuiScreen {
 			glDisable(GL11.GL_ALPHA_TEST);
 			glEnable(GL11.GL_BLEND);
 			glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            glCullFace(GL_FRONT);
 			glColor4d(1, 1, 1, 1);
 
 			glTranslated(0, 0, -4);
 
 			glTranslated(.55, .55, .5);
-			// glRotated((GameTimer.getAbsTime() / 50.0) % 360.0, 0, 1, 0);
-
-			// FOR DEBUG
-			/*
-			glScaled(2, 2, 1);
-			glTranslated(-1, 0, 0);
-			*/
-			// DEBUG END
-
-			// debug(currentTut.curHandler());
 
 			glScaled(.75, -.75, .75);
 
+            glRotated(-20, 1, 0, 0.1);
+
 			currentTut.curHandler().draw();
-			// testMesh.draw(testMat);
 
 			glPopMatrix();
 
@@ -298,7 +290,10 @@ public class GuiTutorial extends CGuiScreen {
 					rightWindow.transform.doesDraw = true;
 					showWindow.transform.doesDraw = true;
 				}
-				setCurrentTut(t);
+
+                if (currentTut == null || currentTut.tut != t) {
+                    setCurrentTut(t);
+                }
 			});
 
 			w.addComponent(box);
@@ -360,6 +355,7 @@ public class GuiTutorial extends CGuiScreen {
 		showWindow.getWidget("button_left").transform.doesDraw
 				= showWindow.getWidget("button_right").transform.doesDraw
 				= cycleable;
+        currentTut.cycle(0);
 	}
 
 	private class TutInfo {

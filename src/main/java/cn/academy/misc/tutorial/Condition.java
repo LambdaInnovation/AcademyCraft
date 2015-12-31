@@ -3,6 +3,7 @@ package cn.academy.misc.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
@@ -74,9 +75,9 @@ public abstract class Condition {
 
     static class AbilityLevelCondition extends Condition {
         int level;
-        Category skillType;
+        Optional<Category> skillType;
 
-        public AbilityLevelCondition(Category skillType,int level) {
+        public AbilityLevelCondition(Optional<Category> skillType, int level) {
             super(false);
             this.skillType=skillType;
             this.level=level;
@@ -86,7 +87,7 @@ public abstract class Condition {
         public boolean exam(EntityPlayer player) {
             AbilityData data=AbilityData.get(player);
             return data.getLevel() >= this.level &&
-                    (this.skillType == null || data.getCategory() == skillType);
+                    (!this.skillType.isPresent() || data.getCategory() == skillType.get());
         }
 
     }
@@ -360,7 +361,7 @@ public abstract class Condition {
 	}
 	//=============================================================================
 	
-	public static Condition abilityLevel(Category cat,int level) {
+	public static Condition abilityLevel(Optional<Category> cat,int level) {
 		return new AbilityLevelCondition(cat,level);
 	}
 
