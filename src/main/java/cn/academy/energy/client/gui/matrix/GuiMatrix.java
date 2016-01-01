@@ -14,6 +14,8 @@ package cn.academy.energy.client.gui.matrix;
 
 import java.util.Arrays;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.energy.block.ContainerMatrix;
@@ -49,11 +51,7 @@ import net.minecraft.util.StatCollector;
 @RegInit
 public class GuiMatrix extends CGuiScreenContainer {
 	
-	static CGui loaded;
-	
-	public static void init() {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/matrix.xml"));
-	}
+	static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/matrix.xml"));
 	
 	//--------
 	
@@ -173,9 +171,9 @@ public class GuiMatrix extends CGuiScreenContainer {
 		GuiMatrixSync.sendSyncRequest(this);
 		
 		CGui gui = getGui();
-		pageMain = loaded.getWidget("window_main").copy();
-		pageSSID = loaded.getWidget("window_init").copy();
-		pageCheck = loaded.getWidget("window_check").copy();
+		pageMain = document.getWidget("window_main").copy();
+		pageSSID = document.getWidget("window_init").copy();
+		pageCheck = document.getWidget("window_check").copy();
 
 		check_markDrawer = pageCheck.getWidget("mark_check2");
 		check_info = pageCheck.getWidget("test_info");

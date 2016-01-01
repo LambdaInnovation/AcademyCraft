@@ -12,27 +12,24 @@
  */
 package cn.academy.energy.client.gui;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.util.ResourceLocation;
 import cn.academy.energy.block.ContainerPhaseGen;
 import cn.academy.energy.block.TilePhaseGen;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
  */
 public class GuiPhaseGen extends CGuiScreenContainer {
 	
-	static CGui loaded;
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/phase_gen.xml"));
-	}
+	static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/phase_gen.xml"));
 
 	public final TilePhaseGen tile;
 	
@@ -45,7 +42,7 @@ public class GuiPhaseGen extends CGuiScreenContainer {
 	}
 	
 	void init() {
-		main = loaded.getWidget("main").copy();
+		main = document.getWidget("main").copy();
 
 		main.getWidget("prog_liquid").listen(FrameEvent.class, (w, e) -> {
 			ProgressBar.get(w).progress = (double) tile.getLiquidAmount() / tile.getTankSize();

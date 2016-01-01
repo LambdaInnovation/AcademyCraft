@@ -15,6 +15,8 @@ package cn.academy.ability.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.ability.api.Category;
@@ -60,7 +62,7 @@ public class PresetEditUI extends GuiScreen {
 		CRL_WHITE = new Color(1, 1, 1, 0.6),
 		CRL_GLOW = new Color(1, 1, 1, 0.2);
 	
-	static CGui loaded;
+	static WidgetContainer loaded;
 	static Widget template;
 	
 	static final double STEP = 125;
@@ -91,7 +93,7 @@ public class PresetEditUI extends GuiScreen {
 	CGui transitor = new CGui();
 	
 	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/preset_edit.xml"));
+		loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/preset_edit.xml"));
 		template = loaded.getWidget("template");
 	}
 	

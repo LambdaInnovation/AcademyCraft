@@ -12,6 +12,8 @@
  */
 package cn.academy.energy.client.gui.wind;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.item.ItemStack;
@@ -39,10 +41,7 @@ public class GuiWindGenBase extends CGuiScreenContainer {
 		T_CORE_OK = Resources.getTexture("guis/button/core_blue"),
 		T_CORE_RED = Resources.getTexture("guis/button/core_red");
 	
-	static CGui loaded;
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/wind_base.xml"));
-	}
+	static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/wind_base.xml"));
 	
 	final TileWindGenBase tile;
 	
