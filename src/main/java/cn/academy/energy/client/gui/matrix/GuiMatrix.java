@@ -48,7 +48,6 @@ import net.minecraft.util.StatCollector;
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@RegInit
 public class GuiMatrix extends CGuiScreenContainer {
 	
 	static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/matrix.xml"));

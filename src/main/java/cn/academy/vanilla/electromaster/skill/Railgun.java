@@ -112,13 +112,13 @@ public class Railgun extends Skill {
 	}
 	
 	@RegNetworkCall(side = Side.CLIENT)
-	private void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer player) {
+	private static void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer player) {
 		if(!Minecraft.getMinecraft().thePlayer.equals(player))
 			doSpawnCE(player);
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private void doSpawnCE(EntityPlayer player) {
+	private static void doSpawnCE(EntityPlayer player) {
 		DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
 	}
 	
