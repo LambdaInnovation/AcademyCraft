@@ -12,6 +12,8 @@
  */
 package cn.academy.energy.client.gui.wind;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import cn.academy.energy.block.wind.ContainerWindGenMain;
@@ -30,14 +32,7 @@ import cn.lambdalib.util.helper.Font.Align;
  */
 public class GuiWindGenMain extends CGuiScreenContainer {
 	
-	public static CGui loaded;
-	static {
-		try {
-			loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/wind_main.xml"));
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/wind_main.xml"));
 	
 	TileWindGenMain tile;
 	
@@ -55,7 +50,7 @@ public class GuiWindGenMain extends CGuiScreenContainer {
 		
 		gui.addWidget(main);
 
-		main.listen(FrameEvent.class, (w, e) -> {
+		main.getWidget("disabled").listen(FrameEvent.class, (w, e) -> {
 			DrawTexture dt = DrawTexture.get(w);
 			dt.enabled = !tile.complete;
 

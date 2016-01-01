@@ -12,6 +12,8 @@
  */
 package cn.academy.crafting.client.gui;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -32,9 +34,9 @@ import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
  */
 public class GuiMetalFormer extends CGuiScreenContainer {
 	
-	static CGui loaded;
+	static WidgetContainer document;
 	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/metalformer.xml"));
+		document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/metalformer.xml"));
 	}
 	
 	final EntityPlayer player;
@@ -51,7 +53,7 @@ public class GuiMetalFormer extends CGuiScreenContainer {
 	}
 	
 	private void initPages() {
-		main = loaded.getWidget("window_main").copy();
+		main = document.getWidget("window_main").copy();
 		
 		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
 

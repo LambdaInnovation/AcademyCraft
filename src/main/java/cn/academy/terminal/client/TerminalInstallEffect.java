@@ -15,12 +15,14 @@ package cn.academy.terminal.client;
 import cn.academy.core.ModuleCoreClient;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.PlayerUtils;
@@ -37,9 +39,9 @@ public class TerminalInstallEffect extends AuxGui {
 	static final long WAIT = 700L;
 	static final long BLEND_IN = 200L, BLEND_OUT = 200L;
 	
-	static CGui loaded;
+	static WidgetContainer loaded;
 	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/terminal_installing.xml"));
+		loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal_installing.xml"));
 	}
 	
 	CGui gui = new CGui();

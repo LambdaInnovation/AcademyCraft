@@ -7,9 +7,9 @@ import cn.academy.vanilla.teleporter.data.LocTeleData;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.Tint;
@@ -18,6 +18,7 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -29,11 +30,7 @@ import net.minecraft.util.StatCollector;
 @Registrant
 public class LocTeleportUI extends CGuiScreen {
 
-	static CGui loaded;
-
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/loctele.xml"));
-	}
+	static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/loctele.xml"));
 
 	Widget pageInspect, pageAdd, pageAction;
 
@@ -53,9 +50,9 @@ public class LocTeleportUI extends CGuiScreen {
 	int wait1, wait2;
 
 	private void init() {
-		pageInspect = loaded.getWidget("inspect").copy();
-		pageAdd = loaded.getWidget("add").copy();
-		pageAction = loaded.getWidget("action").copy();
+		pageInspect = document.getWidget("inspect").copy();
+		pageAdd = document.getWidget("add").copy();
+		pageAction = document.getWidget("action").copy();
 
 		pageAction.transform.doesDraw = false;
 

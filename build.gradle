@@ -27,6 +27,7 @@ configurations {
 	deployerJars
 }
 
+apply plugin: 'scala'
 apply plugin: 'forge'
 
 version				= config.mod_ver
@@ -62,6 +63,11 @@ dependencies {
 	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
 
+sourceSets.main {
+    java.srcDirs = []
+    scala.srcDirs =  ['src/main/java', 'src/main/scala']
+}
+
 processResources {
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
@@ -73,9 +79,8 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
+compileJava.options.encoding = "UTF-8"
+compileScala.options.encoding = "UTF-8"
 
 task deobfJar(type: Jar, dependsOn: 'jar') {
 	classifier 'dev'

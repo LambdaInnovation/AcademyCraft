@@ -46,7 +46,7 @@ public class GuiLinkToNode extends CGuiScreen {
 	
 	Widget main;
 	
-	List<IWirelessNode> nodes = new ArrayList();
+	List<IWirelessNode> nodes = new ArrayList<>();
 	
 	String msg;
 	long msgLength;
@@ -115,7 +115,7 @@ public class GuiLinkToNode extends CGuiScreen {
     }
 	
 	private void initWidgets(boolean mono) {
-		main = GuiNode.loaded.getWidget("window_ssidselect").copy();
+		main = GuiNode.document.getWidget("window_ssidselect").copy();
 		
 		///if(mono)
 		//	DrawTexture.get(main).setShaderId(ShaderMono.instance().getProgramID());

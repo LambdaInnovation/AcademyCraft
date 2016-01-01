@@ -44,6 +44,7 @@ import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
@@ -52,6 +53,7 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderMono;
@@ -70,7 +72,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class GuiSkillTree extends CGuiScreen {
 	
 	static ShaderMono shader;
-	static CGui loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/skill_tree.xml"));
+	static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/skill_tree.xml"));
 	static final Color
 		CRL_SKILL_ENABLED = new Color().setColor4i(74, 74, 74, 255),
 		CRL_SKILL_DISABLED = new Color().setColor4i(48, 48, 48, 48),
@@ -190,9 +192,9 @@ public abstract class GuiSkillTree extends CGuiScreen {
 		Category cat = aData.getCategory();
 		
 		List<Skill> list = cat.getSkillList();
-		List<Skill> list2 = new ArrayList();
+		List<Skill> list2 = new ArrayList<>();
 		
-		skillWidgets = new ArrayList();
+		skillWidgets = new ArrayList<>();
 		
 		int i = 0;
 		for(Skill s : list) {
@@ -204,7 +206,7 @@ public abstract class GuiSkillTree extends CGuiScreen {
 			}
 		}
 		
-		connections = new ArrayList();
+		connections = new ArrayList<>();
 		for(i = 0; i < list2.size(); ++i) {
 			Skill s = list2.get(i);
 			Skill parent = s.getParent();

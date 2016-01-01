@@ -14,11 +14,12 @@ package cn.academy.misc.media;
 
 import java.util.List;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -30,7 +31,6 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 
 /**
  * @author WeAthFolD
@@ -42,10 +42,7 @@ public class GuiMediaPlayer extends CGuiScreen {
 		T_PLAY = Resources.getTexture("guis/apps/media_player/play"),
 		T_PAUSE = Resources.getTexture("guis/apps/media_player/pause");
 	
-	static CGui loaded;
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/media_player.xml"));	
-	}
+	static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player.xml"));
 	
 	Widget pageMain;
 	
@@ -60,7 +57,7 @@ public class GuiMediaPlayer extends CGuiScreen {
 	}
 	
 	private void init() {
-		pageMain = loaded.getWidget("back").copy();
+		pageMain = document.getWidget("back").copy();
 		
 		List<Media> installedMedias = data.getInstalledMediaList();
 		
@@ -127,7 +124,7 @@ public class GuiMediaPlayer extends CGuiScreen {
 	
 	
 	private Widget createMedia(Media media) {
-		Widget ret = loaded.getWidget("t_one").copy();
+		Widget ret = document.getWidget("t_one").copy();
 		DrawTexture.get(ret.getWidget("icon")).texture = media.cover;
 		TextBox.get(ret.getWidget("title")).content = media.getDisplayName();
 		TextBox.get(ret.getWidget("desc")).content = media.getDesc();

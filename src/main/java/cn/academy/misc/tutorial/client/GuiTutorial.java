@@ -13,15 +13,17 @@
 package cn.academy.misc.tutorial.client;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.tutorial.IPreviewHandler;
+import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.xml.CGUIDocument;
-import cn.lambdalib.util.client.article.ArticlePlotter;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 
@@ -35,6 +37,8 @@ import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.markdown.GLMarkdownRenderer;
+import cn.lambdalib.util.markdown.MarkdownParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -48,7 +52,9 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class GuiTutorial extends CGuiScreen {
 
-	static final IFont font = Resources.font(), fontBold = Resources.fontBold();
+	static final IFont font = Resources.font(),
+            fontBold = Resources.fontBold(),
+            fontItalic = Resources.fontItalic();
 
 	static WidgetContainer loaded;
 	static {
@@ -79,9 +85,67 @@ public class GuiTutorial extends CGuiScreen {
 	// Current displayed tutorial
 	TutInfo currentTut = null;
 
+    class CachedRenderInfo {
+        final String title, rawBrief, rawContent;
+        private GLMarkdownRenderer brief_;
+        private GLMarkdownRenderer content_;
+
+        CachedRenderInfo(String _title, String _brief, String _content) {
+            title = _title;
+            rawBrief = _brief;
+            rawContent = _content;
+        }
+
+        GLMarkdownRenderer getBrief() {
+            if (brief_ == null) {
+                GLMarkdownRenderer renderer = new GLMarkdownRenderer();
+                renderer.setFonts(font, fontBold, fontItalic);
+                renderer.widthLimit_$eq(130);
+                renderer.fontSize_$eq(8);
+                MarkdownParser.accept(rawBrief, renderer);
+
+                brief_ = renderer;
+            }
+            return brief_;
+        }
+
+        GLMarkdownRenderer getContent() {
+            if (content_ == null) {
+                GLMarkdownRenderer renderer = new GLMarkdownRenderer();
+                renderer.setFonts(font, fontBold, fontItalic);
+                renderer.widthLimit_$eq(150);
+                renderer.fontSize_$eq(8);
+                MarkdownParser.accept(rawContent, renderer);
+
+                content_ = renderer;
+            }
+            return content_;
+        }
+    }
+
+    private Map<ACTutorial, CachedRenderInfo> cached = new HashMap<>();
+
+    private CachedRenderInfo renderInfo(ACTutorial tut) {
+        if (!cached.containsKey(tut)) {
+            String raw = tut.getContent();
+            int i1 = raw.indexOf("![title]"),
+                    i2 = raw.indexOf("![brief]"),
+                    i3 = raw.indexOf("![content]");
+            if (i1 < i2 && i2 < i3 && i1 != -1) {
+                String title = raw.substring(i1+8, i2),
+                        brief = raw.substring(i2+8, i3),
+                        content = raw.substring(i3+10);
+                cached.put(tut, new CachedRenderInfo(title, brief, content));
+            } else {
+                throw new RuntimeException("Malformed tutorial " + tut.id);
+            }
+        }
+        return cached.get(tut);
+    }
+
 	public GuiTutorial() {
 		player = Minecraft.getMinecraft().thePlayer;
-		tutlist = ACTutorial.getLearned(player);
+		tutlist = TutorialRegistry.getLearned(player);
 
 		initUI();
 	}
@@ -125,7 +189,7 @@ public class GuiTutorial extends CGuiScreen {
 		// Event handlers
 		centerPart.getWidget("text").listen(FrameEvent.class, (w, e) -> {
 			if(currentTut != null) {
-				ArticlePlotter plotter = currentTut.tut.getContentPlotter(w.transform.width - 10, 8);
+                GLMarkdownRenderer renderer = renderInfo(currentTut.tut).getContent();
 
 				glPushMatrix();
 				glTranslated(0, 0, 10);
@@ -135,11 +199,11 @@ public class GuiTutorial extends CGuiScreen {
 				HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
 				glColorMask(true, true, true, true);
 
-				double ht = Math.max(0, plotter.getMaxHeight() - w.transform.height + 10);
+				double ht = Math.max(0, renderer.getMaxHeight() - w.transform.height + 10);
 				double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
 				glTranslated(3, 3 - delta, 0);
 				glDepthFunc(GL_EQUAL);
-				plotter.draw();
+				renderer.render();
 				glDepthFunc(GL_LEQUAL);
 				glPopMatrix();
 			}
@@ -147,12 +211,13 @@ public class GuiTutorial extends CGuiScreen {
 
 		rightWindow.getWidget("text").listen(FrameEvent.class, (w, e) -> {
 			if(currentTut != null) {
-				font.draw(currentTut.tut.getTitle(), 3, 3, fo_descTitle);
+                CachedRenderInfo info = renderInfo(currentTut.tut);
+
+				font.draw(info.title, 3, 3, fo_descTitle);
 
 				glPushMatrix();
 				glTranslated(3, 18, 0);
-				ArticlePlotter plotter = currentTut.tut.getBriefPlotter(w.transform.width - 15, 8);
-				plotter.draw();
+                info.getBrief().render();
 				glPopMatrix();
 			}
 		});
@@ -185,26 +250,18 @@ public class GuiTutorial extends CGuiScreen {
 			glDisable(GL11.GL_ALPHA_TEST);
 			glEnable(GL11.GL_BLEND);
 			glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            glCullFace(GL_FRONT);
 			glColor4d(1, 1, 1, 1);
 
 			glTranslated(0, 0, -4);
 
 			glTranslated(.55, .55, .5);
-			// glRotated((GameTimer.getAbsTime() / 50.0) % 360.0, 0, 1, 0);
-
-			// FOR DEBUG
-			/*
-			glScaled(2, 2, 1);
-			glTranslated(-1, 0, 0);
-			*/
-			// DEBUG END
-
-			// debug(currentTut.curHandler());
 
 			glScaled(.75, -.75, .75);
 
+            glRotated(-20, 1, 0, 0.1);
+
 			currentTut.curHandler().draw();
-			// testMesh.draw(testMat);
 
 			glPopMatrix();
 
@@ -281,7 +338,7 @@ public class GuiTutorial extends CGuiScreen {
 			w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
 
 			TextBox box = new TextBox(new FontOption(10));
-			box.content = t.getTitle();
+			box.content = renderInfo(t).title;
 			box.localized = true;
 			box.emit = true;
 			box.heightAlign = HeightAlign.CENTER;
@@ -297,7 +354,10 @@ public class GuiTutorial extends CGuiScreen {
 					rightWindow.transform.doesDraw = true;
 					showWindow.transform.doesDraw = true;
 				}
-				setCurrentTut(t);
+
+                if (currentTut == null || currentTut.tut != t) {
+                    setCurrentTut(t);
+                }
 			});
 
 			w.addComponent(box);
@@ -353,10 +413,13 @@ public class GuiTutorial extends CGuiScreen {
 
 	private void setCurrentTut(ACTutorial tut) {
 		currentTut = new TutInfo(tut);
-		boolean cycleable = tut.getPreview().length > 1;
+		boolean cycleable = tut.getPreview().size() > 1;
+        showArea.removeWidget("delegate");
+        VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
 		showWindow.getWidget("button_left").transform.doesDraw
 				= showWindow.getWidget("button_right").transform.doesDraw
 				= cycleable;
+        currentTut.cycle(0);
 	}
 
 	private class TutInfo {
@@ -368,7 +431,7 @@ public class GuiTutorial extends CGuiScreen {
 		}
 
 		void cycle(int delta) {
-			int len = tut.getPreview().length;
+			int len = tut.getPreview().size();
 			selection += delta;
 			if(selection >= len) selection = 0;
 			else if(selection < 0) selection = len - 1;
@@ -382,7 +445,7 @@ public class GuiTutorial extends CGuiScreen {
 		}
 
 		IPreviewHandler curHandler() {
-			return tut.getPreview()[selection];
+			return tut.getPreview().get(selection);
 		}
 	}
 

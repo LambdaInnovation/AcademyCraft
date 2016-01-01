@@ -15,6 +15,8 @@ package cn.academy.terminal.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -69,10 +71,7 @@ public class TerminalUI extends AuxGui {
 	
 	final double SENSITIVITY = 0.7;
 
-	static CGui loaded;
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/terminal.xml"));
-	}
+	static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal.xml"));
 	
 	CGui gui;
 	

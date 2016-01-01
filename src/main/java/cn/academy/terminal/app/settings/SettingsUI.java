@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.ElementList;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -35,12 +35,9 @@ import net.minecraft.util.StatCollector;
  */
 public class SettingsUI extends CGuiScreen {
 	
-	static CGui loaded;
-	static {
-		loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/settings.xml"));
-	}
+	static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
 	
-	private static Map<String, List<UIProperty>> properties = new HashMap();
+	private static Map<String, List<UIProperty>> properties = new HashMap<>();
 	static {
 		addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
 		addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
@@ -49,7 +46,7 @@ public class SettingsUI extends CGuiScreen {
 	public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {
 		List<UIProperty> list = properties.get(cat);
 		if(list == null)
-			properties.put(cat, list = new ArrayList());
+			properties.put(cat, list = new ArrayList<>());
 		list.add(new UIProperty(elem, cat, id, defValue, singlePlayer));
 	}
 	
@@ -58,7 +55,7 @@ public class SettingsUI extends CGuiScreen {
 	}
 	
 	private void initPages() {
-		Widget main = loaded.getWidget("main").copy();
+		Widget main = document.getWidget("main").copy();
 		
 		Widget area = main.getWidget("area");
 		
@@ -67,7 +64,7 @@ public class SettingsUI extends CGuiScreen {
 		ElementList list = new ElementList(); 
 		{
 			for(Entry<String, List<UIProperty>> entry : properties.entrySet()) {
-				Widget head = loaded.getWidget("t_cathead").copy();
+				Widget head = document.getWidget("t_cathead").copy();
 				TextBox.get(head.getWidget("text")).setContent(local("cat." + entry.getKey()));
 				list.addWidget(head);
 				

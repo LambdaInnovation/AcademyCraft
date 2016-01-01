@@ -12,6 +12,8 @@
  */
 package cn.academy.misc.media;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -30,11 +32,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@RegInit
 public class AuxGuiMediaPlayer {
-	
+
+    @RegInitCallback
 	public static void init() {
-		Widget w = CGUIDocLoader.load(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
+		Widget w = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
 
 		w.getWidget("progress").listen(FrameEvent.class, (__, e) -> {
 			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();

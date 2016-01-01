@@ -15,6 +15,8 @@ package cn.academy.energy.client.gui.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -24,8 +26,6 @@ import cn.academy.energy.block.TileNode;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -36,7 +36,6 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
@@ -47,10 +46,9 @@ import net.minecraft.util.StatCollector;
  *
  */
 @Registrant
-@RegInit(side = RegInit.Side.CLIENT_ONLY)
 public class GuiNode extends CGuiScreenContainer {
 	
-	public static CGui loaded;
+	public static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/node.xml"));
 	
 	final ContainerNode container;
 	final TileNode tile;
@@ -71,7 +69,7 @@ public class GuiNode extends CGuiScreenContainer {
 	private String ssid;
 	
 	// Sync list info
-	private List<String> networks = new ArrayList();
+	private List<String> networks = new ArrayList<>();
     
     public GuiNode(ContainerNode c) {
         super(c);
@@ -154,8 +152,8 @@ public class GuiNode extends CGuiScreenContainer {
     
     private void create() {
     	//Basic init
-    	pageMain = loaded.getWidget("window_main").copy();
-    	pageSelect = loaded.getWidget("window_ssidselect").copy();
+    	pageMain = document.getWidget("window_main").copy();
+    	pageSelect = document.getWidget("window_ssidselect").copy();
     	
     	gui.addWidget(pageMain);
     	gui.addWidget(pageSelect);
@@ -205,10 +203,6 @@ public class GuiNode extends CGuiScreenContainer {
 	@Override
     public boolean isSlotActive() {
     	return pageMain.transform.doesListenKey;
-    }
-
-    public static void init() {
-    	loaded = CGUIDocLoader.load(new ResourceLocation("academy:guis/node.xml"));
     }
     
     public class MainHandler {

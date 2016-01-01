@@ -33,7 +33,7 @@ public class PropertyElements {
 			Configuration cfg = getConfig();
 			Property p = cfg.get(prop.category, prop.id, (boolean) prop.defValue);
 			
-			Widget ret = SettingsUI.loaded.getWidget("t_checkbox").copy();
+			Widget ret = SettingsUI.document.getWidget("t_checkbox").copy();
 			TextBox.get(ret.getWidget("text")).setContent(prop.getDisplayID());
 			
 			Widget check = ret.getWidget("box");
@@ -58,7 +58,7 @@ public class PropertyElements {
 			Configuration cfg = getConfig();
 			Property p = cfg.get(prop.category, prop.id, (int) prop.defValue);
 			
-			Widget ret = SettingsUI.loaded.getWidget("t_key").copy();
+			Widget ret = SettingsUI.document.getWidget("t_key").copy();
 			TextBox.get(ret.getWidget("text")).setContent(prop.getDisplayID());
 			
 			Widget key = ret.getWidget("key");
