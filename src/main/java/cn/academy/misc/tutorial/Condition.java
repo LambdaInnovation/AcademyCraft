@@ -3,12 +3,12 @@ package cn.academy.misc.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
-import cn.academy.misc.tutorial.ACTutorial.ACTutorialDataPart;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.util.datapart.EntityData;
@@ -19,133 +19,40 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 @Registrant
 public abstract class Condition {
-	int index;
+
+    /**
+     * The index of this Condition.
+     */
+	final int index;
 	Condition[] children;
-	boolean needSaveNBT=false;
 	
-	static class ItemCondition extends Condition {
-		ItemCondition() {
-			super();
-			this.needSaveNBT=true;
-		}
-
-		@Override
-		public boolean exam(EntityPlayer player) {
-			return EntityData.get(player).getPart(ACTutorialDataPart.class).allSaved[index];
-		}
-		
-		public void pass(EntityPlayer player) {
-			ACTutorialDataPart data = EntityData.get(player).getPart(ACTutorialDataPart.class);
-			data.allSaved[index] = true;
-			data.update();
-		}
-		
-	}
-
-	static class AbilityLevelCondition extends Condition {
-		int level;
-		Category skillType;
-		
-		public AbilityLevelCondition(Category skillType,int level) {
-			this.skillType=skillType;
-			this.level=level;
-		}
-		
-		@Override
-		public boolean exam(EntityPlayer player) {
-			AbilityData data=AbilityData.get(player);
-			if(data.getLevel()>=this.level&&(this.skillType==null||data.getCategory().equals(skillType)))return true;
-			return false;
-		}
-		
-	}
-
-	@RegEventHandler()
-	public static class HandleEvent {
-		static HashMap<String,ItemCondition> craftMap = new HashMap<String,ItemCondition>();
-		static HashMap<String,ItemCondition> pickupMap = new HashMap<String,ItemCondition>();
-		static HashMap<String,ItemCondition> smeltMap = new HashMap<String,ItemCondition>();
-		static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<MatterMaterial,ItemCondition>();
-		
-		@SubscribeEvent
-		public void onItemCrafted(ItemCraftedEvent e) {
-			String key=e.crafting.getItem().getUnlocalizedName();
-			try{
-				craftMap.get(key).pass(e.player);
-			} catch(NullPointerException err) {}
-			try{
-				if(e.crafting.getItem().getHasSubtypes()){
-					key+=e.crafting.getItemDamage();
-					craftMap.get(key).pass(e.player);
-				}
-			} catch(NullPointerException err) {}
-		}
-		
-		@SubscribeEvent
-		public void onItemPickup(ItemPickupEvent e) {
-			String key=e.pickedUp.getEntityItem().getItem().getUnlocalizedName();
-			try{
-				pickupMap.get(key).pass(e.player);
-			} catch(NullPointerException err) {}
-			try {
-				if(e.pickedUp.getEntityItem().getItem().getHasSubtypes()){
-					key+=e.pickedUp.getEntityItem().getItemDamage();
-					pickupMap.get(key).pass(e.player);
-				}
-			} catch (NullPointerException err) {}
-		}
-		
-		@SubscribeEvent
-		public void onItemSmelted(ItemSmeltedEvent e) {
-			String key=e.smelting.getItem().getUnlocalizedName();
-			try{
-				smeltMap.get(key).pass(e.player);
-			} catch(NullPointerException err) {}
-			try{
-				if(e.smelting.getItem().getHasSubtypes()){
-					key+=e.smelting.getItemDamage();
-					smeltMap.get(key).pass(e.player);
-				}
-			} catch(NullPointerException err) {}
-		}
-		
-		@SubscribeEvent
-		public void onMatterUnitHarvest(MatterUnitHarvestEvent e) {
-			MatterMaterial m = e.mat;
-			if(matterUnitMap.containsKey(m))matterUnitMap.get(m).pass(e.player);
-		}
-	}
+	public Condition(boolean requireSaving) {
+        if (requireSaving) {
+            index = lastIndex++;
+        } else {
+            index = -1;
+        }
+    }
 	
-	Condition() {}
-	
-	Condition addChildren(Condition...condition) {
+	public Condition withChild(Condition...condition) {
 		children=condition;
 		return this;
 	}
-	
-	void addNeedSavingToTutorial(ACTutorial t) {
-		if(this.needSaveNBT){
-			if(!ACTutorial.savedConditions.contains(this)){
-				this.index=ACTutorial.savedConditions.size();
-				ACTutorial.savedConditions.add(this);
-			}
-		}
-		if(this.children!=null){
-			for(Condition c : this.children)
-				c.addNeedSavingToTutorial(t);
-		}
-	}
-	
+
+    /**
+     * Examine if the player satisfies the given condition.
+     */
 	public abstract boolean exam(EntityPlayer player);
 	
-	Condition setSaveToNBT() {
-		this.needSaveNBT=true;
-		return this;
-	}
-	
+
+
+
+
+    static int lastIndex = 0;
 
 	static String getKeyFromItem(Item i,boolean checkID, int subID) {
 		String key=i.getUnlocalizedName();
@@ -153,6 +60,79 @@ public abstract class Condition {
 			key+=subID;
 		return key;
 	}
+
+    static class ItemCondition extends Condition {
+        ItemCondition() {
+            super(true);
+        }
+
+        @Override
+        public boolean exam(EntityPlayer player) {
+            return EntityData.get(player).getPart(TutorialConditionData.class).getActivate(this);
+        }
+
+    }
+
+    static class AbilityLevelCondition extends Condition {
+        int level;
+        Optional<Category> skillType;
+
+        public AbilityLevelCondition(Optional<Category> skillType, int level) {
+            super(false);
+            this.skillType=skillType;
+            this.level=level;
+        }
+
+        @Override
+        public boolean exam(EntityPlayer player) {
+            AbilityData data=AbilityData.get(player);
+            return data.getLevel() >= this.level &&
+                    (!this.skillType.isPresent() || data.getCategory() == skillType.get());
+        }
+
+    }
+
+    @RegEventHandler
+    public static class HandleEvent {
+        static HashMap<String,ItemCondition> craftMap = new HashMap<>();
+        static HashMap<String,ItemCondition> pickupMap = new HashMap<>();
+        static HashMap<String,ItemCondition> smeltMap = new HashMap<>();
+        static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<>();
+
+        private void tryActivate(EntityPlayer player, ItemCondition c) {
+            if (c != null) {
+                TutorialConditionData.get(player).setActivate(c);
+            }
+        }
+
+        @SubscribeEvent
+        public void onItemCrafted(ItemCraftedEvent e) {
+            String key = e.crafting.getItem().getUnlocalizedName();
+            tryActivate(e.player, craftMap.get(key));
+            tryActivate(e.player, craftMap.get(key + e.crafting.getItemDamage()));
+        }
+
+        @SubscribeEvent
+        public void onItemPickup(ItemPickupEvent e) {
+            ItemStack stack = e.pickedUp.getEntityItem();
+            String key = stack.getItem().getUnlocalizedName();
+            tryActivate(e.player, pickupMap.get(key));
+            tryActivate(e.player, pickupMap.get(key + stack.getItemDamage()));
+        }
+
+        @SubscribeEvent
+        public void onItemSmelted(ItemSmeltedEvent e) {
+            ItemStack stack = e.smelting;
+            String key = stack.getItem().getUnlocalizedName();
+            tryActivate(e.player, pickupMap.get(key));
+            tryActivate(e.player, pickupMap.get(key + stack.getItemDamage()));
+        }
+
+        @SubscribeEvent
+        public void onMatterUnitHarvest(MatterUnitHarvestEvent e) {
+            tryActivate(e.player, matterUnitMap.get(e.mat));
+        }
+    }
 	
 	//=============================================================================
 	/**
@@ -161,8 +141,7 @@ public abstract class Condition {
 	 * @return result
 	 */
 	public static Condition and(Condition...c) {
-		return new Condition() {
-			
+		return new Condition(false) {
 			@Override
 			public boolean exam(EntityPlayer player) {
 				for(Condition c0 : children){
@@ -172,7 +151,7 @@ public abstract class Condition {
 				}
 				return true;
 			}
-		}.addChildren(c);
+		}.withChild(c);
 	}	
 	//=============================================================================
 	/**
@@ -181,8 +160,7 @@ public abstract class Condition {
 	 * @return result
 	 */
 	public static Condition or(Condition...c) {
-		return new Condition() {
-			
+		return new Condition(false) {
 			@Override
 			public boolean exam(EntityPlayer player) {
 				for(Condition c0 : children){
@@ -192,7 +170,7 @@ public abstract class Condition {
 				}
 				return false;
 			}
-		}.addChildren(c);
+		}.withChild(c);
 	}
 	//=============================================================================
 	/**
@@ -383,7 +361,7 @@ public abstract class Condition {
 	}
 	//=============================================================================
 	
-	public static Condition abilityLevel(Category cat,int level) {
+	public static Condition abilityLevel(Optional<Category> cat,int level) {
 		return new AbilityLevelCondition(cat,level);
 	}
 
@@ -401,30 +379,30 @@ public abstract class Condition {
 	}
 	//=============================================================================
 	/**
-	 * 
-	 * @param t The tutorial
-	 * @return result
+	 * True if the given tutorial is learned.
 	 */
 	public static Condition onTutorial(ACTutorial t) {
-		return new Condition(){
-
+		return new Condition(false) {
 			@Override
 			public boolean exam(EntityPlayer player) {
-				return t.getIsLoad(player);
+				return t.isActivated(player);
 			}
-			
 		};
 	}
-	
-	/**
-	 * 
-	 * @param tutorialID ID of the tutorial
-	 * @return result
-	 * @throws Exception Throw if no such a tutorial.
-	 */
+
+    /**
+     * True if tutorial with given ID is learned. Undefined if the given tutorial doesn't exist.
+     */
 	public static Condition onTutorial(String tutorialID) {
-		ACTutorial t = ACTutorial.getTutorial(tutorialID);
+		ACTutorial t = TutorialRegistry.getTutorial(tutorialID);
 		return onTutorial(t);
 	}
+
+    public static final Condition TRUE = new Condition(false) {
+        @Override
+        public boolean exam(EntityPlayer player) {
+            return true;
+        }
+    };
 
 }

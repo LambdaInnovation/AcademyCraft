@@ -8,7 +8,6 @@ AcademyCraft is a Minecraft mod about superability, including its aquiring, upgr
 
 AcademyCraft is licensed under the [GPL license](http://www.gnu.org/licenses/gpl.html "gpl license")
 
-
 ## Downloads&Installation
 
 Visit our [Website](http://ac.li-dev.cn/) to get the latest release.
