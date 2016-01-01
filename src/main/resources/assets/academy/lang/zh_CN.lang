@@ -255,6 +255,7 @@ ac.gui.metal_former.mode.refine=洗练
 
 # 能力干扰方块
 ac.gui.ability_interf.switch=开关
+ac.ability_interf.cantuse=你无法使用这个能力干扰方块。
 
 ac.network.link=发起连接
 ac.network.search=搜寻网络

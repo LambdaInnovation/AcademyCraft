@@ -7,8 +7,9 @@ import cn.academy.ability.api.data.CPData
 import cn.academy.ability.api.data.CPData.IInterfSource
 import cn.academy.core.block.ACBlockContainer
 import cn.academy.core.client.Resources
+import cn.academy.core.client.render.block.RenderDynamicBlock
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegTileEntity
+import cn.lambdalib.annoreg.mc.{TileEntityRegistration, RegInitCallback, RegTileEntity}
 import cn.lambdalib.cgui.gui.CGuiScreen
 import cn.lambdalib.cgui.gui.component.DragBar.DraggedEvent
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
@@ -18,10 +19,11 @@ import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.networkcall.Future.FutureCallback
 import cn.lambdalib.networkcall.s11n.StorageOption
 import cn.lambdalib.networkcall.{Future, RegNetworkCall}
-import cn.lambdalib.networkcall.s11n.StorageOption.{RangedTarget, Instance, Data, Target}
-import cn.lambdalib.util.generic.MathUtils
+import cn.lambdalib.networkcall.s11n.StorageOption.{RangedTarget, Data}
+import cn.lambdalib.util.generic.{VecUtils, MathUtils}
 import cn.lambdalib.util.helper.TickScheduler
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib.util.mc.{PlayerUtils, EntitySelectors, WorldUtils}
+import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
@@ -29,15 +31,21 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ResourceLocation, IIcon}
 import net.minecraft.world.{World, IBlockAccess}
 
 import scala.collection.JavaConversions._
 
+@Registrant
 object AbilityInterf {
   val minRange = 10.0
   val maxRange = 100.0
+
+  @SideOnly(Side.CLIENT)
+  @RegInitCallback
+  def regClient() = ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAbilityInterferer], new RenderDynamicBlock)
 }
 
 @Registrant
@@ -48,6 +56,9 @@ class TileAbilityInterferer extends TileEntity {
   val scheduler = new TickScheduler
 
   lazy val sourceName = s"interferer@${getWorldObj.provider.dimensionId}($xCoord,$yCoord,$zCoord)"
+  def testBB = WorldUtils.minimumBounds(
+    VecUtils.vec(xCoord + 0.5 - range_, yCoord + 0.5 - range_, zCoord + 0.5 - range_),
+    VecUtils.vec(xCoord + 0.5 + range_, yCoord + 0.5 + range_, zCoord + 0.5 + range_))
 
   private var enabled_ = false
   private var placer_ : Option[String] = None
@@ -77,12 +88,13 @@ class TileAbilityInterferer extends TileEntity {
   }).run(new Runnable {
     override def run() = {
       val rangeVal = range
-      val players = WorldUtils.getEntities(TileAbilityInterferer.this, rangeVal, EntitySelectors.survivalPlayer)
+      val boundingBox = testBB
+      val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
       players foreach {
         case player: EntityPlayer =>
           CPData.get(player).addInterf(sourceName, new IInterfSource {
             override def interfering(): Boolean =
-              player.getDistanceSq(xCoord+0.5, yCoord+0.5, zCoord+0.5) < rangeVal * rangeVal &&
+              boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
                 !TileAbilityInterferer.this.isInvalid &&
                 !player.capabilities.isCreativeMode &&
                 enabled
@@ -119,15 +131,30 @@ class TileAbilityInterferer extends TileEntity {
 
   @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
   def syncSetEnabled(@Data state: java.lang.Boolean, @Data future: Future) = {
-    println("SetEnabled")
     setEnabled(state)
     future.setAndSync(state)
   }
 
   @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
   def syncSetRange(@Data range: java.lang.Double) = {
-    println("SetRange")
     setRange(range)
+  }
+
+  override def readFromNBT(tag: NBTTagCompound) = {
+    super.readFromNBT(tag)
+    enabled_ = tag.getBoolean("enabled_")
+    placer_ = if(tag.hasKey("placer_")) Some(tag.getString("placer_")) else None
+    range_ = tag.getFloat("range_")
+  }
+
+  override def writeToNBT(tag: NBTTagCompound) = {
+    super.writeToNBT(tag)
+    tag.setBoolean("enabled_", enabled_)
+    placer_ match {
+      case Some(name) => tag.setString("placer_", name)
+      case _ =>
+    }
+    tag.setFloat("range_", range_.toFloat)
   }
 
 }
@@ -153,13 +180,19 @@ class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.
     }
 
 
-  override def getIcon(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) =
+  override def getIcon(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = {
     world.getTileEntity(x, y, z) match {
       case tile: TileAbilityInterferer => if (tile.enabled) iconOn else iconOff
-      case _ => iconOff
+      case _ => iconOn
     }
+  }
 
   override def getIcon(side: Int, meta: Int) = iconOff
+
+  @SideOnly(Side.CLIENT)
+  override def getRenderBlockPass = -1
+
+  override def isOpaqueCube = false
 
   @SideOnly(Side.CLIENT)
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int,
@@ -168,9 +201,12 @@ class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.
     if (world.isRemote) {
       world.getTileEntity(x, y, z) match {
         case tile: TileAbilityInterferer =>
+          // Client side verification might be dangerous, but its really OK in here.
           if (player.capabilities.isCreativeMode ||
             Option(player.getCommandSenderName) == tile.placer) {
             Minecraft.getMinecraft.displayGuiScreen(new GuiAbilityInterferer(tile))
+          } else {
+            PlayerUtils.sendChat(player, "ac.ability_interf.cantuse")
           }
           true
         case _ => false

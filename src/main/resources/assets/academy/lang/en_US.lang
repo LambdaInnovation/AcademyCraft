@@ -255,6 +255,7 @@ ac.gui.metal_former.mode.refine=Refining
 
 # Ability interference block
 ac.gui.ability_interf.switch=Switch
+ac.ability_interf.cantuse=You can't use this interference block.
 
 ac.network.link=Link
 ac.network.search=Search networks
