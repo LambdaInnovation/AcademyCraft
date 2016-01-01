@@ -253,6 +253,9 @@ ac.gui.metal_former.mode.plate=Plate Crushing
 ac.gui.metal_former.mode.incise=Incising
 ac.gui.metal_former.mode.refine=Refining
 
+# Ability interference block
+ac.gui.ability_interf.switch=Switch
+
 ac.network.link=Link
 ac.network.search=Search networks
 

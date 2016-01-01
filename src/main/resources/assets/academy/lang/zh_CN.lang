@@ -253,6 +253,9 @@ ac.gui.metal_former.mode.plate=冲压
 ac.gui.metal_former.mode.incise=切割
 ac.gui.metal_former.mode.refine=洗练
 
+# 能力干扰方块
+ac.gui.ability_interf.switch=开关
+
 ac.network.link=发起连接
 ac.network.search=搜寻网络
 
