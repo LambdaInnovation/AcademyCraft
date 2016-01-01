@@ -16,4 +16,4 @@
 
 # 指令
 
-输入/aim help即可查看能力帮助。/aim指令开关：/aim cheats_on与/aim cheats_off。
+输入/aim help即可查看能力帮助。在游戏中，/aim指令拥有单独的指令开关：/aim cheats_on与/aim cheats_off。

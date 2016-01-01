@@ -1,23 +1,17 @@
 package cn.academy.misc.tutorial;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import cn.academy.core.client.Resources;
-import cn.lambdalib.util.client.article.ArticleCompiler;
-import cn.lambdalib.util.client.article.ArticlePlotter;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import com.google.common.collect.ImmutableList;
-
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib.util.generic.RegistryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ResourceLocation;
+import org.apache.commons.io.IOUtils;
 
 @Registrant
 public class ACTutorial {
@@ -27,11 +21,6 @@ public class ACTutorial {
 	public final String id;
 
 	private Condition condition = Condition.TRUE;
-
-	// Client: Cached ArticlePlotters
-	// TODO: Currently doesn't support runtime lang change. Support it?
-	@SideOnly(Side.CLIENT)
-	private ArticlePlotter cachedBrief, cachedContent;
 
 	private List<IPreviewHandler> previewHandlers = new ArrayList<>();
     private boolean previewInit = false;
@@ -59,53 +48,31 @@ public class ACTutorial {
 	}
 
 	public List<IPreviewHandler> getPreview() {
-
 		return previewHandlers;
 	}
 
-	public String getBrief() {
-		return local("brief");
-	}
-
+    @SideOnly(Side.CLIENT)
 	public String getContent() {
-		return local("content");
-	}
+        final String unknown = "![title]\nUNKNOWN \n![brief]\n![content]\n ";
+        try {
+            String lang = Minecraft.getMinecraft().gameSettings.language;
+            InputStream stream = RegistryUtils.getResourceStream(location(lang));
+            if (stream == null) { // Make en_US the default fallback
+                stream = RegistryUtils.getResourceStream(location("en_US"));
+            }
+            if (stream == null) {
+                return unknown;
+            } else {
+                return IOUtils.toString(stream);
+            }
+        } catch (NullPointerException|IOException e) {
+            return unknown;
+        }
+    }
 
-	public String getTitle() {
-		return local("title");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public ArticlePlotter getBriefPlotter(double defWidth, float fontSize) {
-		if(cachedBrief == null) {
-			cachedBrief = new ArticleCompiler(getBrief())
-					.setFont(Resources.font())
-					.setWidth(defWidth)
-					.setFontOption(new FontOption(fontSize))
-					.compile();
-		}
-		return cachedBrief;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public ArticlePlotter getContentPlotter(double defWidth, float fontSize) {
-		if(cachedContent == null) {
-			cachedContent = new ArticleCompiler(getContent())
-					.setFont(Resources.font())
-					.setWidth(defWidth)
-					.setFontOption(new FontOption(fontSize))
-					.compile();
-		}
-		return cachedContent;
-	}
-
-	private String key(String str) {
-		return "ac.gui.tutorial." + id + "." + str;
-	}
-
-	private String local(String str) {
-		return StatCollector.translateToLocal(key(str));
-	}
+    private ResourceLocation location(String lang) {
+        return new ResourceLocation("academy:tutorials/" + lang + "/" + id + ".md");
+    }
 
 	public boolean isActivated(EntityPlayer player) {
 		if (SHOW_ALL)
