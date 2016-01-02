@@ -3,7 +3,6 @@ package cn.academy.misc.tutorial;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.tutorial.client.RecipeHandler;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
@@ -18,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,9 +57,8 @@ public final class PreviewHandlers {
     }
 
     public static IPreviewHandler[] recipes(Item item) {
-        return Arrays.stream(RecipeHandler.instance.recipeOfItem(item))
-                .map(PreviewHandlers::toPreview)
-                .toArray(IPreviewHandler[]::new);
+        if (client()) return recipesImpl(item);
+        return new IPreviewHandler[] { nothing };
     }
 
     public static IPreviewHandler[] recipes(Block block) {
@@ -104,6 +101,13 @@ public final class PreviewHandlers {
     }
 
     @SideOnly(Side.CLIENT)
+    private static IPreviewHandler[] recipesImpl(Item item) {
+        return Arrays.stream(RecipeHandler.instance.recipeOfItem(item))
+                .map(PreviewHandlers::toPreview)
+                .toArray(IPreviewHandler[]::new);
+    }
+
+    @SideOnly(Side.CLIENT)
     private static IPreviewHandler displayModelImpl(String mdl, String texture, CompTransform transform) {
         IModelCustom model = Resources.getModel(mdl);
         ResourceLocation res_tex = Resources.getTexture("models/" + texture);
@@ -123,14 +127,16 @@ public final class PreviewHandlers {
 
     @SideOnly(Side.CLIENT)
     private static IPreviewHandler drawsBlockImpl(Block block, int metadata) {
-        Minecraft mc = Minecraft.getMinecraft();
         return new IPreviewHandler() {
             @SideOnly(Side.CLIENT)
             @Override
             public void draw() {
-                RenderBlocks renderer = RenderBlocks.getInstance();
-                renderer.blockAccess = mc.theWorld;
-                Tessellator tes = Tessellator.instance;
+                final Minecraft mc = Minecraft.getMinecraft();
+                final RenderBlocks renderer = RenderBlocks.getInstance();
+                final Tessellator tes = Tessellator.instance;
+
+                renderer.blockAccess = Minecraft.getMinecraft().theWorld;
+
                 mc.theWorld.setBlock(0, 0, 0, block, metadata, 0x00);
                 RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
                 glCullFace(GL_BACK);

@@ -12,10 +12,13 @@
  */
 package cn.academy.ability.client.ui;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -47,10 +50,11 @@ import net.minecraft.util.ResourceLocation;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 @Registrant
-@RegInit
 public class KeyHintUI extends Widget {
-	
+
+    @RegInitCallback
 	public static void init() {
 		ACHud.instance.addElement(new KeyHintUI(), 
 			() -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated());

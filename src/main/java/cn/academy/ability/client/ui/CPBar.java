@@ -24,6 +24,8 @@ import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.vis.curve.CubicCurve;
 import com.sun.scenario.effect.Offset;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -59,6 +61,7 @@ import javax.vecmath.Vector2d;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 @Registrant
 @ForcePreloadTexture
 public class CPBar extends Widget {

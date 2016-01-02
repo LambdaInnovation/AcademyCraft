@@ -19,6 +19,8 @@ import java.util.Map;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.TrueTypeFont;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
@@ -92,6 +94,7 @@ public class Resources {
     	return new ResourceLocation[] { r1, r2, r3 };
     }
 
+    @SideOnly(Side.CLIENT)
 	@RegInitCallback
 	public static void init() {
 		font = TrueTypeFont.withFallback2(Font.PLAIN, 32,

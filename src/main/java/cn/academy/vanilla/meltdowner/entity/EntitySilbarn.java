@@ -12,6 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +52,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 @Registrant
-@RegInit(side = RegInit.Side.CLIENT_ONLY)
 @RegEntity
 @RegEntity.HasRender
 public class EntitySilbarn extends EntityAdvanced {
@@ -59,9 +59,12 @@ public class EntitySilbarn extends EntityAdvanced {
 	@SideOnly(Side.CLIENT)
 	@RegEntity.Render
 	public static RenderSibarn render;
-	
+
+    @SideOnly(Side.CLIENT)
 	static ParticleFactory particles;
+
 	@SideOnly(Side.CLIENT)
+    @RegInitCallback
 	public static void init() {
 		Particle p = new Particle();
 		p.texture = Resources.getTexture("entities/silbarn_frag");
@@ -80,6 +83,7 @@ public class EntitySilbarn extends EntityAdvanced {
 				vy = Math.cos(phi);
 			}
 
+            @SideOnly(Side.CLIENT)
 			@Override
 			public void decorate(Particle particle) {
 				particle.addMotionHandler(new MotionHandler() {

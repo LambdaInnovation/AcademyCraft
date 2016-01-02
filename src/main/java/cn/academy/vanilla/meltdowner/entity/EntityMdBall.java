@@ -44,9 +44,9 @@ import net.minecraft.world.World;
 @RegEntity
 @RegEntity.HasRender
 public class EntityMdBall extends EntityAdvanced {
-	
+
+    @SideOnly(Side.CLIENT)
 	@RegEntity.Render
-	@SideOnly(Side.CLIENT)
 	public static R renderer;
 	
 	static final int MAX_TETXURES = 5;
