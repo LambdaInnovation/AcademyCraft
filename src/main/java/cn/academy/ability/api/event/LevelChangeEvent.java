@@ -19,9 +19,9 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 public class LevelChangeEvent extends AbilityEvent {
-	
-	public LevelChangeEvent(EntityPlayer p) {
-		super(p);
-	}
-	
+    
+    public LevelChangeEvent(EntityPlayer p) {
+        super(p);
+    }
+    
 }

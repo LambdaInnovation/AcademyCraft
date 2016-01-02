@@ -24,20 +24,20 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class ACSounds {
-	
-	@SideOnly(Side.CLIENT)
-	public static void playClient(Entity target, String name, float volume) {
-		playClient(new FollowEntitySound(target, name).setVolume(volume));
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void playClient(World world, double x, double y, double z, String name, float vol, float pitch) {
-		world.playSound(x, y, z, "academy:" + name, vol, pitch, false);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void playClient(ISound sound) {
-		Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-	}
+    
+    @SideOnly(Side.CLIENT)
+    public static void playClient(Entity target, String name, float volume) {
+        playClient(new FollowEntitySound(target, name).setVolume(volume));
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static void playClient(World world, double x, double y, double z, String name, float vol, float pitch) {
+        world.playSound(x, y, z, "academy:" + name, vol, pitch, false);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static void playClient(ISound sound) {
+        Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+    }
 
 }

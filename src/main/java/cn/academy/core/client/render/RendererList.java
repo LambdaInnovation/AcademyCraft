@@ -24,29 +24,29 @@ import net.minecraft.util.ResourceLocation;
  *
  */
 public class RendererList extends Render {
-	
-	List<Render> renderers = new ArrayList();
-	
-	public RendererList(Render ...rs) {
-		for(Render r : rs)
-			renderers.add(r);
-	}
-	
-	public RendererList append(Render e) {
-		renderers.add(e);
-		return this;
-	}
+    
+    List<Render> renderers = new ArrayList();
+    
+    public RendererList(Render ...rs) {
+        for(Render r : rs)
+            renderers.add(r);
+    }
+    
+    public RendererList append(Render e) {
+        renderers.add(e);
+        return this;
+    }
 
-	@Override
-	public void doRender(Entity ent, double x,
-			double y, double z, float a, float b) {
-		for(Render r : renderers)
-			r.doRender(ent, x, y, z, a, b);
-	}
+    @Override
+    public void doRender(Entity ent, double x,
+            double y, double z, float a, float b) {
+        for(Render r : renderers)
+            r.doRender(ent, x, y, z, a, b);
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
-		return null;
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(Entity entity) {
+        return null;
+    }
 
 }

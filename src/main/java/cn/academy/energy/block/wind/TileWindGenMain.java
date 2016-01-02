@@ -46,156 +46,156 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileWindGenMain extends TileInventory implements IMultiTile {
-	
-	static List<SubBlockPos>[] checkAreas = new ArrayList[6];
-	static {
-		List<SubBlockPos> checkArea = new ArrayList();
-		for(int i = -6; i <= 6; ++i) {
-			for(int j = -6; j <= 6; ++j) {
-				if(i != 0 || j != 0)
-					checkArea.add(new SubBlockPos(i, j, -1));
-			}
-		}
-		
-		for(int i = 2; i < 6; ++i) {
-			List list = (checkAreas[i] = new ArrayList());
-			for(SubBlockPos pos : checkArea) {
-				list.add(BlockMulti.rotate(pos, ForgeDirection.values()[i]));
-			}
-		}
-	}
-	
-	// State for render
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderWindGenMain renderer;
-	
-	public long lastFrame = -1;
-	public float lastRotation;
-	
-	public boolean complete;
-	public boolean noObstacle;
-	
-	int updateWait, updateWait2;
-	
-	public TileWindGenMain() {
-		super("windgen_main", 1);
-	}
-
-	// Spin logic
-	public boolean isFanInstalled() {
-		ItemStack stack = this.getStackInSlot(0);
-		return stack != null && stack.getItem() == ModuleEnergy.windgenFan;
-	}
-	
-	/**
-	 * Unit: Degree per second
-	 */
-	@SideOnly(Side.CLIENT)
-	public double getSpinSpeed() {
-		return complete ? 60.0 : 0;
-	}
-
-	// InfoBlockMulti delegates
-	InfoBlockMulti info = new InfoBlockMulti(this);
-	
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		info.update();
-		
-		if(info.getSubID() == 0) {
-			if(++updateWait == 10) {
-				updateWait = 0;
-				complete = isCompleteStructure();
-				noObstacle = complete && isNoObstacle();
-			}
-			
-			if(!getWorldObj().isRemote) {
-				if(++updateWait2 == 20) {
-					updateWait2 = 0;
-					this.syncTheStack(this, this.getStackInSlot(0));
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		info = new InfoBlockMulti(this, tag);
-	}
-	
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		info.save(tag);
-	}
-
-	@Override
-	public InfoBlockMulti getBlockInfo() {
-		return info;
-	}
-
-	@Override
-	public void setBlockInfo(InfoBlockMulti i) {
-		info = i;
-	}
-	
-	@Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-    	return slot != 0 || (stack != null && stack.getItem() == ModuleEnergy.windgenFan);
+    
+    static List<SubBlockPos>[] checkAreas = new ArrayList[6];
+    static {
+        List<SubBlockPos> checkArea = new ArrayList();
+        for(int i = -6; i <= 6; ++i) {
+            for(int j = -6; j <= 6; ++j) {
+                if(i != 0 || j != 0)
+                    checkArea.add(new SubBlockPos(i, j, -1));
+            }
+        }
+        
+        for(int i = 2; i < 6; ++i) {
+            List list = (checkAreas[i] = new ArrayList());
+            for(SubBlockPos pos : checkArea) {
+                list.add(BlockMulti.rotate(pos, ForgeDirection.values()[i]));
+            }
+        }
     }
-	
+    
+    // State for render
+    @SideOnly(Side.CLIENT)
+    @RegTileEntity.Render
+    public static RenderWindGenMain renderer;
+    
+    public long lastFrame = -1;
+    public float lastRotation;
+    
+    public boolean complete;
+    public boolean noObstacle;
+    
+    int updateWait, updateWait2;
+    
+    public TileWindGenMain() {
+        super("windgen_main", 1);
+    }
+
+    // Spin logic
+    public boolean isFanInstalled() {
+        ItemStack stack = this.getStackInSlot(0);
+        return stack != null && stack.getItem() == ModuleEnergy.windgenFan;
+    }
+    
+    /**
+     * Unit: Degree per second
+     */
+    @SideOnly(Side.CLIENT)
+    public double getSpinSpeed() {
+        return complete ? 60.0 : 0;
+    }
+
+    // InfoBlockMulti delegates
+    InfoBlockMulti info = new InfoBlockMulti(this);
+    
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        info.update();
+        
+        if(info.getSubID() == 0) {
+            if(++updateWait == 10) {
+                updateWait = 0;
+                complete = isCompleteStructure();
+                noObstacle = complete && isNoObstacle();
+            }
+            
+            if(!getWorldObj().isRemote) {
+                if(++updateWait2 == 20) {
+                    updateWait2 = 0;
+                    this.syncTheStack(this, this.getStackInSlot(0));
+                }
+            }
+        }
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        info = new InfoBlockMulti(this, tag);
+    }
+    
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        info.save(tag);
+    }
+
+    @Override
+    public InfoBlockMulti getBlockInfo() {
+        return info;
+    }
+
+    @Override
+    public void setBlockInfo(InfoBlockMulti i) {
+        info = i;
+    }
+    
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return slot != 0 || (stack != null && stack.getItem() == ModuleEnergy.windgenFan);
+    }
+    
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-    	return INFINITE_EXTENT_AABB;
+        return INFINITE_EXTENT_AABB;
     }
-	
-	public boolean isCompleteStructure() {
-		int[] origin = ModuleEnergy.windgenMain.getOrigin(this);
-		if(origin == null)
-			return false;
-		
-		int x = origin[0], y = origin[1] - 1, z = origin[2];
-		int state = 1;
-		int pillars = 0;
-		
-		for(; state < 2; --y) {
-			Block block = worldObj.getBlock(x, y, z);
-			if(state == 1) {
-				if(block == ModuleEnergy.windgenPillar) {
-					++pillars;
-					if(pillars > WindGenerator.MAX_PILLARS)
-						break;
-				} else if(block == ModuleEnergy.windgenBase){
-					state = 2;
-				} else {
-					state = 3;
-				}
-			}
-		}
-		return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
-	}
-	
-	public boolean isNoObstacle() {
-		int x = xCoord, y = yCoord, z = zCoord;
-		InfoBlockMulti info = getBlockInfo();
-		World world = getWorldObj();
-		List<SubBlockPos> arr = checkAreas[info.getDir().ordinal()];
-		for(SubBlockPos sbp : arr) {
-			if(world.getBlock(x + sbp.dx, y + sbp.dy, z + sbp.dz).getMaterial() != Material.air)
-				return false;
-		}
-		return true;
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-	private void syncTheStack(
-		@RangedTarget(range = 50) TileEntity te, 
-		@Data ItemStack stack) {
-		this.setInventorySlotContents(0, stack);
-	}
-	
+    
+    public boolean isCompleteStructure() {
+        int[] origin = ModuleEnergy.windgenMain.getOrigin(this);
+        if(origin == null)
+            return false;
+        
+        int x = origin[0], y = origin[1] - 1, z = origin[2];
+        int state = 1;
+        int pillars = 0;
+        
+        for(; state < 2; --y) {
+            Block block = worldObj.getBlock(x, y, z);
+            if(state == 1) {
+                if(block == ModuleEnergy.windgenPillar) {
+                    ++pillars;
+                    if(pillars > WindGenerator.MAX_PILLARS)
+                        break;
+                } else if(block == ModuleEnergy.windgenBase){
+                    state = 2;
+                } else {
+                    state = 3;
+                }
+            }
+        }
+        return state == 2 && pillars >= WindGenerator.MIN_PILLARS;
+    }
+    
+    public boolean isNoObstacle() {
+        int x = xCoord, y = yCoord, z = zCoord;
+        InfoBlockMulti info = getBlockInfo();
+        World world = getWorldObj();
+        List<SubBlockPos> arr = checkAreas[info.getDir().ordinal()];
+        for(SubBlockPos sbp : arr) {
+            if(world.getBlock(x + sbp.dx, y + sbp.dy, z + sbp.dz).getMaterial() != Material.air)
+                return false;
+        }
+        return true;
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
+    private void syncTheStack(
+        @RangedTarget(range = 50) TileEntity te, 
+        @Data ItemStack stack) {
+        this.setInventorySlotContents(0, stack);
+    }
+    
 }

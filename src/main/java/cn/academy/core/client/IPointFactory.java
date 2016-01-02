@@ -18,7 +18,7 @@ import net.minecraft.util.Vec3;
  * @author WeathFolD
  */
 public interface IPointFactory {
-	
-	public Vec3 next();
-	
+    
+    public Vec3 next();
+    
 }

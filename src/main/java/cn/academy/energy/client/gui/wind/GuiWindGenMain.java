@@ -31,37 +31,37 @@ import cn.lambdalib.util.helper.Font.Align;
  * @author WeAthFolD
  */
 public class GuiWindGenMain extends CGuiScreenContainer {
-	
+    
     static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/wind_main.xml"));
-	
-	TileWindGenMain tile;
-	
-	Widget main;
+    
+    TileWindGenMain tile;
+    
+    Widget main;
 
-	public GuiWindGenMain(ContainerWindGenMain c) {
-		super(c);
-		tile = c.tile;
-		
-		initScene();
-	}
-	
-	void initScene() {
-		main = loaded.getWidget("main").copy();
-		
-		gui.addWidget(main);
+    public GuiWindGenMain(ContainerWindGenMain c) {
+        super(c);
+        tile = c.tile;
+        
+        initScene();
+    }
+    
+    void initScene() {
+        main = loaded.getWidget("main").copy();
+        
+        gui.addWidget(main);
 
-		main.getWidget("disabled").listen(FrameEvent.class, (w, e) -> {
-			DrawTexture dt = DrawTexture.get(w);
-			dt.enabled = !tile.complete;
+        main.getWidget("disabled").listen(FrameEvent.class, (w, e) -> {
+            DrawTexture dt = DrawTexture.get(w);
+            dt.enabled = !tile.complete;
 
-			if(!tile.complete) {
-				String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-				EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
-			} else if(!tile.noObstacle) {
-				String text = StatCollector.translateToLocal("ac.gui.wind.obstacle");
-				EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
-			}
-		});
-	}
+            if(!tile.complete) {
+                String text = StatCollector.translateToLocal("ac.gui.wind.structure");
+                EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+            } else if(!tile.noObstacle) {
+                String text = StatCollector.translateToLocal("ac.gui.wind.obstacle");
+                EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+            }
+        });
+    }
 
 }

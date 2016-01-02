@@ -22,11 +22,11 @@ import cn.lambdalib.annoreg.mc.RegInit;
 @RegInit
 public class ModuleKnowledge {
 
-	public static void init() {
-		String[] vanillaKnowledges = { "marathon", "iron_feet", "intheknee", "bouncer", "trajectory", "baseball",
-				"anatomy" };
+    public static void init() {
+        String[] vanillaKnowledges = { "marathon", "iron_feet", "intheknee", "bouncer", "trajectory", "baseball",
+                "anatomy" };
 
-		KnowledgeData.addKnowledges(vanillaKnowledges);
-	}
+        KnowledgeData.addKnowledges(vanillaKnowledges);
+    }
 
 }

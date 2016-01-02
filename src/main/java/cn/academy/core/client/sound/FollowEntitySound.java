@@ -21,35 +21,35 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public class FollowEntitySound extends MovingSound {
-	
-	public final Entity entity;
+    
+    public final Entity entity;
 
-	public FollowEntitySound(Entity _entity, String name) {
-		super(new ResourceLocation("academy:" + name));
-		entity = _entity;
-		
-		update();
-	}
-	
-	public FollowEntitySound setVolume(float volume) {
-		this.volume = volume;
-		return this;
-	}
-	
-	public FollowEntitySound setLoop() {
-		this.repeat = true;
-		return this;
-	}
-	
-	public void stop() {
-		this.donePlaying = true;
-	}
+    public FollowEntitySound(Entity _entity, String name) {
+        super(new ResourceLocation("academy:" + name));
+        entity = _entity;
+        
+        update();
+    }
+    
+    public FollowEntitySound setVolume(float volume) {
+        this.volume = volume;
+        return this;
+    }
+    
+    public FollowEntitySound setLoop() {
+        this.repeat = true;
+        return this;
+    }
+    
+    public void stop() {
+        this.donePlaying = true;
+    }
 
-	@Override
-	public void update() {
-		this.xPosF = (float) entity.posX;
-		this.yPosF = (float) entity.posY;
-		this.zPosF = (float) entity.posZ;
-	}
+    @Override
+    public void update() {
+        this.xPosF = (float) entity.posX;
+        this.yPosF = (float) entity.posY;
+        this.zPosF = (float) entity.posZ;
+    }
 
 }

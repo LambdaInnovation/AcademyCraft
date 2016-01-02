@@ -29,27 +29,27 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class ItemMatrixCore extends ACItem {
-	
-	int LEVELS = 3;
-	
-	IIcon icons[] = new IIcon[LEVELS];
+    
+    int LEVELS = 3;
+    
+    IIcon icons[] = new IIcon[LEVELS];
 
-	public ItemMatrixCore() {
-		super("matrix_core");
-		this.setHasSubtypes(true);
-	}
-	
+    public ItemMatrixCore() {
+        super("matrix_core");
+        this.setHasSubtypes(true);
+    }
+    
     @Override
-	public String getUnlocalizedName(ItemStack stack) {
+    public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName(stack) + "_" + stack.getItemDamage();
     }
-	
+    
     @SideOnly(Side.CLIENT)
     @Override
     public void registerIcons(IIconRegister ir) {
-    	for(int i = 0; i < LEVELS; ++i) {
-    		icons[i] = ir.registerIcon("academy:matrix_core_" + i);
-    	}
+        for(int i = 0; i < LEVELS; ++i) {
+            icons[i] = ir.registerIcon("academy:matrix_core_" + i);
+        }
     }
     
     @SideOnly(Side.CLIENT)
@@ -59,10 +59,10 @@ public class ItemMatrixCore extends ACItem {
     }
     
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs cct, List list) {
-    	for(int i = 0; i < LEVELS; ++i)
-    		list.add(new ItemStack(this, 1, i));
+        for(int i = 0; i < LEVELS; ++i)
+            list.add(new ItemStack(this, 1, i));
     }
 
 }

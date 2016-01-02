@@ -38,96 +38,96 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class GuiMatrixSync {
-	
-	public enum ActionResult {
-		WAITING("loading"), //Should never send this one.
-		INVALID_INPUT("reject"),
-		SUCCESS("confirmed"),
-		FAIL("reject");
-		
-		public final ResourceLocation markSrc;
-		private final String translateKey;
-		
-		public String getDescription() {
-			return StatCollector.translateToLocal(translateKey);
-		}
-		
-		ActionResult(String logo) {
-			markSrc = new ResourceLocation("academy:textures/guis/mark/mark_" + logo + ".png");
-			translateKey = "ac.gui.matrix.mark." + this.toString().toLowerCase() + ".desc";
-		}
-	}
+    
+    public enum ActionResult {
+        WAITING("loading"), //Should never send this one.
+        INVALID_INPUT("reject"),
+        SUCCESS("confirmed"),
+        FAIL("reject");
+        
+        public final ResourceLocation markSrc;
+        private final String translateKey;
+        
+        public String getDescription() {
+            return StatCollector.translateToLocal(translateKey);
+        }
+        
+        ActionResult(String logo) {
+            markSrc = new ResourceLocation("academy:textures/guis/mark/mark_" + logo + ".png");
+            translateKey = "ac.gui.matrix.mark." + this.toString().toLowerCase() + ".desc";
+        }
+    }
 
-	@SideOnly(Side.CLIENT)
-	public static void sendSyncRequest(GuiMatrix gui) {
-		gui.syncedTime = GameTimer.getTime();
-		receivedRequest(Minecraft.getMinecraft().thePlayer, gui.tile);
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void fullInit(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String ssid, @Data String password) {
-		if(MinecraftForge.EVENT_BUS.post(new CreateNetworkEvent(matrix, ssid, password))) {
-			result(player, matrix, ActionResult.FAIL);
-		} else {
-			result(player, matrix, ActionResult.SUCCESS);
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void passwordUpdate(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String oldPass, @Data String newPass) {
-		if(MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, oldPass, newPass))) {
-			result(player, matrix, ActionResult.FAIL);
-		} else {
-			result(player, matrix, ActionResult.SUCCESS);
-		}
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	public static void result(@Target EntityPlayer player, @Instance TileMatrix matrix, @Instance ActionResult result) {
-		GuiMatrix gui = locate(matrix);
-		if(gui != null)
-			gui.receiveActionResult(result, true);
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void receivedRequest(@Instance EntityPlayer player, @Instance TileMatrix matrix) {
-		if(matrix == null)
-			return;
-		//Extract out the stuffs
-		NBTTagCompound tag = new NBTTagCompound();
-		boolean loaded = WirelessHelper.isMatrixActive(matrix);
-		tag.setBoolean("loaded", loaded);
-		tag.setByte("nodes", (byte) 0);
-		
-		if(loaded) {
-			WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-			String ssid = net.getSSID();
-			
-			tag.setString("ssid", ssid);
-			tag.setByte("nodes", (byte) net.getLoad());
-		}
-		
-		//Throw to client
-		receivedReply(player, matrix, tag);
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	public static void receivedReply(@Target EntityPlayer player, @Instance TileMatrix matrix, @Data NBTTagCompound tag) {
-		GuiMatrix gui = locate(matrix);
-		if(gui != null)
-			gui.receiveSync(tag);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private static GuiMatrix locate(TileMatrix matrix) {
-		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
-		if(screen instanceof GuiMatrix) {
-			GuiMatrix mat = (GuiMatrix) screen;
-			if(mat.tile == matrix) { //Double-check tile instance
-				return mat;
-			}
-		}
-		return null;
-	}
-	
+    @SideOnly(Side.CLIENT)
+    public static void sendSyncRequest(GuiMatrix gui) {
+        gui.syncedTime = GameTimer.getTime();
+        receivedRequest(Minecraft.getMinecraft().thePlayer, gui.tile);
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void fullInit(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String ssid, @Data String password) {
+        if(MinecraftForge.EVENT_BUS.post(new CreateNetworkEvent(matrix, ssid, password))) {
+            result(player, matrix, ActionResult.FAIL);
+        } else {
+            result(player, matrix, ActionResult.SUCCESS);
+        }
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void passwordUpdate(@Instance EntityPlayer player, @Instance TileMatrix matrix, @Data String oldPass, @Data String newPass) {
+        if(MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, oldPass, newPass))) {
+            result(player, matrix, ActionResult.FAIL);
+        } else {
+            result(player, matrix, ActionResult.SUCCESS);
+        }
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    public static void result(@Target EntityPlayer player, @Instance TileMatrix matrix, @Instance ActionResult result) {
+        GuiMatrix gui = locate(matrix);
+        if(gui != null)
+            gui.receiveActionResult(result, true);
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void receivedRequest(@Instance EntityPlayer player, @Instance TileMatrix matrix) {
+        if(matrix == null)
+            return;
+        //Extract out the stuffs
+        NBTTagCompound tag = new NBTTagCompound();
+        boolean loaded = WirelessHelper.isMatrixActive(matrix);
+        tag.setBoolean("loaded", loaded);
+        tag.setByte("nodes", (byte) 0);
+        
+        if(loaded) {
+            WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+            String ssid = net.getSSID();
+            
+            tag.setString("ssid", ssid);
+            tag.setByte("nodes", (byte) net.getLoad());
+        }
+        
+        //Throw to client
+        receivedReply(player, matrix, tag);
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    public static void receivedReply(@Target EntityPlayer player, @Instance TileMatrix matrix, @Data NBTTagCompound tag) {
+        GuiMatrix gui = locate(matrix);
+        if(gui != null)
+            gui.receiveSync(tag);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static GuiMatrix locate(TileMatrix matrix) {
+        GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+        if(screen instanceof GuiMatrix) {
+            GuiMatrix mat = (GuiMatrix) screen;
+            if(mat.tile == matrix) { //Double-check tile instance
+                return mat;
+            }
+        }
+        return null;
+    }
+    
 }

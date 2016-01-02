@@ -26,9 +26,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileWindGenPillar extends TileEntity {
-	
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderWindGenPillar renderer;
-	
+    
+    @SideOnly(Side.CLIENT)
+    @RegTileEntity.Render
+    public static RenderWindGenPillar renderer;
+    
 }

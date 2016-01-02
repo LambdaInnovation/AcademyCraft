@@ -32,29 +32,29 @@ import cpw.mods.fml.relauncher.Side;
  */
 @Registrant
 public class Syncs {
-	
-	@RegNetworkCall(side = Side.SERVER)
-	static void querySSID(@Instance IWirelessMatrix matrix, @Data Future future) {
-		WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-		future.setAndSync(net != null ? net.getSSID() : null);
-	}
+    
+    @RegNetworkCall(side = Side.SERVER)
+    static void querySSID(@Instance IWirelessMatrix matrix, @Data Future future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.setAndSync(net != null ? net.getSSID() : null);
+    }
 
-	@RegNetworkCall(side = Side.SERVER)
-	static void authorizeMatrix(@Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
-		WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-		future.setAndSync(net != null && net.getPassword().equals(password));
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	static void linkNodeToMatrix(@Instance IWirelessNode node, @Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
-		WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-		future.setAndSync(net == null ? false :
-				!MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, net.getSSID(), password)));
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	static void linkUserToNode(@Instance IWirelessUser user, @Instance IWirelessNode node, @Data Future future) {
-		future.setAndSync(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
-	}
-	
+    @RegNetworkCall(side = Side.SERVER)
+    static void authorizeMatrix(@Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.setAndSync(net != null && net.getPassword().equals(password));
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    static void linkNodeToMatrix(@Instance IWirelessNode node, @Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.setAndSync(net == null ? false :
+                !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, net.getSSID(), password)));
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    static void linkUserToNode(@Instance IWirelessUser user, @Instance IWirelessNode node, @Data Future future) {
+        future.setAndSync(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
+    }
+    
 }

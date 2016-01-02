@@ -8,10 +8,10 @@ import cpw.mods.fml.relauncher.Side;
 
 @Registrant
 public class MetalFormerSyncs {
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void cycle(@Instance TileMetalFormer former) {
-		former.cycleMode();
-	}
-	
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void cycle(@Instance TileMetalFormer former) {
+        former.cycleMode();
+    }
+    
 }

@@ -21,9 +21,9 @@ import cn.lambdalib.util.deprecated.TileEntityModelCustom;
  */
 public class RenderWindGenPillar extends RenderTileEntityModel {
 
-	public RenderWindGenPillar() {
-		super(new TileEntityModelCustom(Resources.getModel("windgen_pillar")), 
-				Resources.getTexture("models/windgen_pillar"));
-	}
+    public RenderWindGenPillar() {
+        super(new TileEntityModelCustom(Resources.getModel("windgen_pillar")), 
+                Resources.getTexture("models/windgen_pillar"));
+    }
 
 }

@@ -29,46 +29,46 @@ import cn.lambdalib.util.datapart.RegDataPart;
 @Registrant
 @RegDataPart("PortableDeveloper")
 public class PortableDevData extends DataPart<EntityPlayer> implements IDeveloper {
-	
-	public static PortableDevData get(EntityPlayer player) {
-		return EntityData.get(player).getPart(PortableDevData.class);
-	}
+    
+    public static PortableDevData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(PortableDevData.class);
+    }
 
-	@Override
-	public void fromNBT(NBTTagCompound tag) {}
+    @Override
+    public void fromNBT(NBTTagCompound tag) {}
 
-	@Override
-	public NBTTagCompound toNBT() {
-		return new NBTTagCompound();
-	}
+    @Override
+    public NBTTagCompound toNBT() {
+        return new NBTTagCompound();
+    }
 
-	private ItemStack stack() {
-		ItemStack stack = getEntity().getCurrentEquippedItem();
-		return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
-	}
+    private ItemStack stack() {
+        ItemStack stack = getEntity().getCurrentEquippedItem();
+        return stack != null && stack.getItem() == ModuleAbility.developerPortable ? stack : null;
+    }
 
-	@Override
-	public DeveloperType getType() {
-		return DeveloperType.PORTABLE;
-	}
+    @Override
+    public DeveloperType getType() {
+        return DeveloperType.PORTABLE;
+    }
 
-	@Override
-	public boolean tryPullEnergy(double amount) {
-		ItemStack stack = stack();
-		if(stack == null)
-			return false;
-		return IFItemManager.instance.pull(stack, amount, true) == amount;
-	}
+    @Override
+    public boolean tryPullEnergy(double amount) {
+        ItemStack stack = stack();
+        if(stack == null)
+            return false;
+        return IFItemManager.instance.pull(stack, amount, true) == amount;
+    }
 
-	@Override
-	public double getEnergy() {
-		ItemStack stack = stack();
-		return stack == null ? 0 : IFItemManager.instance.getEnergy(stack);
-	}
+    @Override
+    public double getEnergy() {
+        ItemStack stack = stack();
+        return stack == null ? 0 : IFItemManager.instance.getEnergy(stack);
+    }
 
-	@Override
-	public double getMaxEnergy() {
-		ItemStack stack = stack();
-		return stack == null ? 0 : IFItemManager.instance.getMaxEnergy(stack);
-	}
+    @Override
+    public double getMaxEnergy() {
+        ItemStack stack = stack();
+        return stack == null ? 0 : IFItemManager.instance.getMaxEnergy(stack);
+    }
 }

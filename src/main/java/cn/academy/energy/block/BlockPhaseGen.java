@@ -30,42 +30,42 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class BlockPhaseGen extends ACBlockContainer {
-	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		@SideOnly(Side.CLIENT)
-		@Override
-		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
-			ContainerPhaseGen container = (ContainerPhaseGen) getServerContainer(player, world, x, y, z);
-			return container == null ? null : new GuiPhaseGen(container);
-		}
-		
-		@Override
-		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-			TileEntity te = world.getTileEntity(x, y, z);
-			return te instanceof TilePhaseGen ? new ContainerPhaseGen(player, (TilePhaseGen) te) : null;
-		}
-	};
+    
+    @RegGuiHandler
+    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+        @SideOnly(Side.CLIENT)
+        @Override
+        protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+            ContainerPhaseGen container = (ContainerPhaseGen) getServerContainer(player, world, x, y, z);
+            return container == null ? null : new GuiPhaseGen(container);
+        }
+        
+        @Override
+        protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            return te instanceof TilePhaseGen ? new ContainerPhaseGen(player, (TilePhaseGen) te) : null;
+        }
+    };
 
-	public BlockPhaseGen() {
-		super("phase_generator", Material.rock, guiHandler);
-		setHardness(2.5f);
+    public BlockPhaseGen() {
+        super("phase_generator", Material.rock, guiHandler);
+        setHardness(2.5f);
         setHarvestLevel("pickaxe", 1);
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-	
-	@Override
-	public int getRenderType() {
-		return RenderEmptyBlock.id;
-	}
+    }
+    
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+    
+    @Override
+    public int getRenderType() {
+        return RenderEmptyBlock.id;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TilePhaseGen();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TilePhaseGen();
+    }
 
 }

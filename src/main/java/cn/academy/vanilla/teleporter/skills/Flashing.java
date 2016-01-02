@@ -48,249 +48,249 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class Flashing extends SpecialSkill {
 
-	public static final Flashing instance = new Flashing();
+    public static final Flashing instance = new Flashing();
 
-	private List<Movement> movements = new ArrayList<>();
+    private List<Movement> movements = new ArrayList<>();
 
-	private Flashing() {
-		super("flashing", 5);
-		this.addSubSkill(new Movement(Keyboard.KEY_A, "a", VecUtils.vec(0, 0, -1)));
-		this.addSubSkill(new Movement(Keyboard.KEY_D, "d", VecUtils.vec(0, 0, 1)));
-		this.addSubSkill(new Movement(Keyboard.KEY_W, "w", VecUtils.vec(1, 0, 0)));
-		this.addSubSkill(new Movement(Keyboard.KEY_S, "s", VecUtils.vec(-1, 0, 0)));
-	}
+    private Flashing() {
+        super("flashing", 5);
+        this.addSubSkill(new Movement(Keyboard.KEY_A, "a", VecUtils.vec(0, 0, -1)));
+        this.addSubSkill(new Movement(Keyboard.KEY_D, "d", VecUtils.vec(0, 0, 1)));
+        this.addSubSkill(new Movement(Keyboard.KEY_W, "w", VecUtils.vec(1, 0, 0)));
+        this.addSubSkill(new Movement(Keyboard.KEY_S, "s", VecUtils.vec(-1, 0, 0)));
+    }
 
-	public static float getRange(AbilityData aData) {
-		return instance.callFloatWithExp("range", aData);
-	}
+    public static float getRange(AbilityData aData) {
+        return instance.callFloatWithExp("range", aData);
+    }
 
-	private void addMovement(Movement m) {
-		movements.add(m);
-		m.id = movements.size() - 1;
-	}
+    private void addMovement(Movement m) {
+        movements.add(m);
+        m.id = movements.size() - 1;
+    }
 
-	@Override
-	protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
-		return new FlashingAction();
-	}
+    @Override
+    protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
+        return new FlashingAction();
+    }
 
-	public static class FlashingAction extends SpecialSkillAction {
+    public static class FlashingAction extends SpecialSkillAction {
 
-		@SideOnly(Side.CLIENT)
-		GravityCancellor cancellor;
+        @SideOnly(Side.CLIENT)
+        GravityCancellor cancellor;
 
-		public FlashingAction() {
-			super(instance, -1);
-		}
+        public FlashingAction() {
+            super(instance, -1);
+        }
 
-		@Override
-		public void onSkillTick() {
-			if (isRemote)
-				updateClient();
-		}
+        @Override
+        public void onSkillTick() {
+            if (isRemote)
+                updateClient();
+        }
 
-		@SideOnly(Side.CLIENT)
-		private void updateClient() {
-			if (cancellor != null && cancellor.isDead())
-				cancellor = null;
-		}
+        @SideOnly(Side.CLIENT)
+        private void updateClient() {
+            if (cancellor != null && cancellor.isDead())
+                cancellor = null;
+        }
 
-	}
+    }
 
-	class Movement extends SubSkill {
+    class Movement extends SubSkill {
 
-		int id;
-		final Vec3 direction;
+        int id;
+        final Vec3 direction;
 
-		public Movement(int key, String _name, Vec3 _dir) {
-			super(_name);
-			setRemapped(key);
-			direction = _dir;
-			addMovement(this);
-		}
+        public Movement(int key, String _name, Vec3 _dir) {
+            super(_name);
+            setRemapped(key);
+            direction = _dir;
+            addMovement(this);
+        }
 
-		@Override
-		public SkillInstance createSkillInstance(EntityPlayer player) {
-			return new SkillInstance() {
-				@Override
-				public void onStart() {
-					addChild(new MovementAction(Movement.this));
-				}
-			};
-		}
+        @Override
+        public SkillInstance createSkillInstance(EntityPlayer player) {
+            return new SkillInstance() {
+                @Override
+                public void onStart() {
+                    addChild(new MovementAction(Movement.this));
+                }
+            };
+        }
 
-		@Override
-		public boolean shouldOverrideKey() {
-			return false;
-		}
+        @Override
+        public boolean shouldOverrideKey() {
+            return false;
+        }
 
-	}
+    }
 
-	public static class MovementAction extends SkillSyncAction {
+    public static class MovementAction extends SkillSyncAction {
 
-		Movement movement;
+        Movement movement;
 
-		public MovementAction(Movement _m) {
-			super(-1);
-			movement = _m;
-		}
+        public MovementAction(Movement _m) {
+            super(-1);
+            movement = _m;
+        }
 
-		public MovementAction() {
-			super(-1);
-		}
+        public MovementAction() {
+            super(-1);
+        }
 
-		@Override
-		public void writeNBTStart(NBTTagCompound tag) {
-			tag.setByte("i", (byte) movement.id);
-		}
+        @Override
+        public void writeNBTStart(NBTTagCompound tag) {
+            tag.setByte("i", (byte) movement.id);
+        }
 
-		@Override
-		public void readNBTStart(NBTTagCompound tag) {
-			movement = instance.movements.get(tag.getByte("i"));
-		}
+        @Override
+        public void readNBTStart(NBTTagCompound tag) {
+            movement = instance.movements.get(tag.getByte("i"));
+        }
 
-		@Override
-		public void onStart() {
-			super.onStart();
+        @Override
+        public void onStart() {
+            super.onStart();
 
-			if (isRemote) {
-				startEffects();
-			}
-		}
+            if (isRemote) {
+                startEffects();
+            }
+        }
 
-		@Override
-		public void onTick() {
-			if (isRemote) {
-				updateEffects();
-			} else {
-				if (!cpData.canPerform(instance.getConsumption(aData)))
-					ActionManager.abortAction(this);
-			}
-		}
+        @Override
+        public void onTick() {
+            if (isRemote) {
+                updateEffects();
+            } else {
+                if (!cpData.canPerform(instance.getConsumption(aData)))
+                    ActionManager.abortAction(this);
+            }
+        }
 
-		@Override
-		public void onEnd() {
-			if (!isRemote) {
-				Vec3 dest = getDest();
-				player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
-				player.fallDistance = 0.0f;
+        @Override
+        public void onEnd() {
+            if (!isRemote) {
+                Vec3 dest = getDest();
+                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+                player.fallDistance = 0.0f;
 
-				cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
-				aData.addSkillExp(instance, instance.getFloat("expincr"));
-				instance.triggerAchievement(player);
-				TPAttackHelper.incrTPCount(player);
-			} else {
-				setCooldown(movement, 5);
-			}
-		}
+                cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+                aData.addSkillExp(instance, instance.getFloat("expincr"));
+                instance.triggerAchievement(player);
+                TPAttackHelper.incrTPCount(player);
+            } else {
+                setCooldown(movement, 5);
+            }
+        }
 
-		@Override
-		public void onFinalize() {
-			if (isRemote) {
-				endEffects();
-			}
-		}
+        @Override
+        public void onFinalize() {
+            if (isRemote) {
+                endEffects();
+            }
+        }
 
-		private Vec3 getDest() {
-			double dist = getRange(aData);
+        private Vec3 getDest() {
+            double dist = getRange(aData);
 
-			Vec3 dir = VecUtils.copy(movement.direction);
-			dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
-			dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
+            Vec3 dir = VecUtils.copy(movement.direction);
+            dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
+            dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
-			Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ, dir.xCoord, dir.yCoord, dir.zCoord);
+            Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ, dir.xCoord, dir.yCoord, dir.zCoord);
 
-			MovingObjectPosition mop = Raytrace.perform(world, mo.getPosVec(), mo.move(dist).getPosVec(),
-					EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
+            MovingObjectPosition mop = Raytrace.perform(world, mo.getPosVec(), mo.move(dist).getPosVec(),
+                    EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
 
-			double x, y, z;
+            double x, y, z;
 
-			if (mop != null) {
-				x = mop.hitVec.xCoord;
-				y = mop.hitVec.yCoord;
-				z = mop.hitVec.zCoord;
+            if (mop != null) {
+                x = mop.hitVec.xCoord;
+                y = mop.hitVec.yCoord;
+                z = mop.hitVec.zCoord;
 
-				if (mop.typeOfHit == MovingObjectType.BLOCK) {
-					switch (mop.sideHit) {
-					case 0:
-						y -= 1.0;
-						break;
-					case 1:
-						y += 1.8;
-						break;
-					case 2:
-						z -= .6;
-						y = mop.blockY + 1.7;
-						break;
-					case 3:
-						z += .6;
-						y = mop.blockY + 1.7;
-						break;
-					case 4:
-						x -= .6;
-						y = mop.blockY + 1.7;
-						break;
-					case 5:
-						x += .6;
-						y = mop.blockY + 1.7;
-						break;
-					}
-					// check head
-					if (mop.sideHit > 1) {
-						int hx = (int) x, hy = (int) (y + 1), hz = (int) z;
-						if (!player.worldObj.isAirBlock(hx, hy, hz)) {
-							y -= 1.25;
-						}
-					}
-				} else {
-					y += mop.entityHit.getEyeHeight();
-				}
-			} else {
-				x = mo.px;
-				y = mo.py;
-				z = mo.pz;
-			}
+                if (mop.typeOfHit == MovingObjectType.BLOCK) {
+                    switch (mop.sideHit) {
+                    case 0:
+                        y -= 1.0;
+                        break;
+                    case 1:
+                        y += 1.8;
+                        break;
+                    case 2:
+                        z -= .6;
+                        y = mop.blockY + 1.7;
+                        break;
+                    case 3:
+                        z += .6;
+                        y = mop.blockY + 1.7;
+                        break;
+                    case 4:
+                        x -= .6;
+                        y = mop.blockY + 1.7;
+                        break;
+                    case 5:
+                        x += .6;
+                        y = mop.blockY + 1.7;
+                        break;
+                    }
+                    // check head
+                    if (mop.sideHit > 1) {
+                        int hx = (int) x, hy = (int) (y + 1), hz = (int) z;
+                        if (!player.worldObj.isAirBlock(hx, hy, hz)) {
+                            y -= 1.25;
+                        }
+                    }
+                } else {
+                    y += mop.entityHit.getEyeHeight();
+                }
+            } else {
+                x = mo.px;
+                y = mo.py;
+                z = mo.pz;
+            }
 
-			return VecUtils.vec(x, y, z);
-		}
+            return VecUtils.vec(x, y, z);
+        }
 
-		// CLIENT
-		@SideOnly(Side.CLIENT)
-		EntityTPMarking marking;
+        // CLIENT
+        @SideOnly(Side.CLIENT)
+        EntityTPMarking marking;
 
-		@SideOnly(Side.CLIENT)
-		private void startEffects() {
-			if (isLocal()) {
-				marking = new EntityTPMarking(player);
-				world.spawnEntityInWorld(marking);
-			}
-		}
+        @SideOnly(Side.CLIENT)
+        private void startEffects() {
+            if (isLocal()) {
+                marking = new EntityTPMarking(player);
+                world.spawnEntityInWorld(marking);
+            }
+        }
 
-		@SideOnly(Side.CLIENT)
-		private void updateEffects() {
-			if (isLocal()) {
-				Vec3 dest = getDest();
-				marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
-			}
-		}
+        @SideOnly(Side.CLIENT)
+        private void updateEffects() {
+            if (isLocal()) {
+                Vec3 dest = getDest();
+                marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+            }
+        }
 
-		@SideOnly(Side.CLIENT)
-		private void endEffects() {
-			if (isLocal()) {
-				marking.setDead();
-			}
-			if (this.getState() == State.ENDED) {
-				ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
-				FlashingAction env = ActionManager.findAction(player, FlashingAction.class);
-				if (env != null) {
-					if (env.cancellor != null)
-						env.cancellor.setDead();
-					LIFMLGameEventDispatcher.INSTANCE
-							.registerClientTick(env.cancellor = new GravityCancellor(player, 40));
-				}
-			}
-		}
+        @SideOnly(Side.CLIENT)
+        private void endEffects() {
+            if (isLocal()) {
+                marking.setDead();
+            }
+            if (this.getState() == State.ENDED) {
+                ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
+                FlashingAction env = ActionManager.findAction(player, FlashingAction.class);
+                if (env != null) {
+                    if (env.cancellor != null)
+                        env.cancellor.setDead();
+                    LIFMLGameEventDispatcher.INSTANCE
+                            .registerClientTick(env.cancellor = new GravityCancellor(player, 40));
+                }
+            }
+        }
 
-	}
+    }
 
 }

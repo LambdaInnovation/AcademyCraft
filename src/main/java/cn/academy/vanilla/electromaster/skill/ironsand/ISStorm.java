@@ -21,15 +21,15 @@ import cn.academy.ability.api.ctrl.SkillInstance;
  */
 public class ISStorm extends SubSkill {
 
-	public ISStorm() {
-		super("storm");
-	}
+    public ISStorm() {
+        super("storm");
+    }
 
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new ISInstanceBase("storm") {
-			
-		};
-	}
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new ISInstanceBase("storm") {
+            
+        };
+    }
 
 }

@@ -42,127 +42,127 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class ScatterBomb extends Skill {
 
-	public static final ScatterBomb instance = new ScatterBomb();
+    public static final ScatterBomb instance = new ScatterBomb();
 
-	private ScatterBomb() {
-		super("scatter_bomb", 2);
-	}
-	
-	static float getDamage(AbilityData aData) {
-		return instance.callFloatWithExp("damage", aData);
-	}
-	
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new SBAction());
-	};
-	
-	public static class SBAction extends SkillSyncAction {
-		
-		List<EntityMdBall> balls = new ArrayList();
-		
-		static IEntitySelector basicSelector = EntitySelectors.everything;
-		static final int MAX_TICKS = 80, MOD = 10;
-		static final double RAY_RANGE = 15;
-		int ticks;
+    private ScatterBomb() {
+        super("scatter_bomb", 2);
+    }
+    
+    static float getDamage(AbilityData aData) {
+        return instance.callFloatWithExp("damage", aData);
+    }
+    
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new SBAction());
+    };
+    
+    public static class SBAction extends SkillSyncAction {
+        
+        List<EntityMdBall> balls = new ArrayList();
+        
+        static IEntitySelector basicSelector = EntitySelectors.everything;
+        static final int MAX_TICKS = 80, MOD = 10;
+        static final double RAY_RANGE = 15;
+        int ticks;
 
-		public SBAction() {
-			super(-1);
-		}
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			cpData.perform(instance.getOverload(aData), 0);
-		}
-		
-		@Override
-		public void onTick() {
-			ticks++;
-			
-			if(!isRemote) {
-				if(ticks <= 80) {
-					if(ticks >= 20 && ticks % MOD == 0) {
-						EntityMdBall ball = new EntityMdBall(player);
-						world.spawnEntityInWorld(ball);
-						balls.add(ball);
-					}
-					
-					if(!cpData.perform(0, instance.getConsumption(aData)))
-						ActionManager.endAction(this);
-				}
-				
-				if(ticks == 200) {
-					player.attackEntityFrom(DamageSource.causePlayerDamage(player), 6);
-					ActionManager.abortAction(this);
-				}
-			}
-		}
-		
-		// Synchronize ball list
-		@Override
-		public void writeNBTFinal(NBTTagCompound tag) {
-			tag.setInteger("c", balls.size());
-			for(int i = 0; i < balls.size(); ++i) {
-				tag.setInteger("" + i, balls.get(i).getEntityId());
-			}
-		}
-		
-		@Override
-		public void readNBTFinal(NBTTagCompound tag) {
-			int n = tag.getInteger("c");
-			while(n-- > 0) {
-				Entity e = world.getEntityByID(tag.getInteger("" + n));
-				if(e instanceof EntityMdBall)
-					balls.add((EntityMdBall) e);
-			}
-		}
-		
-		@Override
-		public void onEnd() {
-			if(isRemote) {
-				burstRaysClient();
-			} else {
-				for(EntityMdBall ball : balls) {
-					Vec3 dest = newDest();
-					MovingObjectPosition traceResult = Raytrace.perform(world,
-						VecUtils.vec(ball.posX, ball.posY, ball.posZ), dest,
-						EntitySelectors.and(basicSelector, EntitySelectors.excludeOf(player)));
-					if(traceResult != null && traceResult.entityHit != null) {
-						traceResult.entityHit.hurtResistantTime = -1;
-						MDDamageHelper.attack(traceResult.entityHit, player, getDamage(aData));
-					}
-				}
-				aData.addSkillExp(instance, instance.getFloat("expincr") * balls.size());
-			}
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void burstRaysClient() {
-			double yoff = ACRenderingHelper.isThePlayer(player) ? 0 : 1.6;
-			for(EntityMdBall ball : balls) {
-				// Spawn a ray for the ball
-				EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
-				raySmall.viewOptimize = false;
-				Vec3 dest = newDest();
-				raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ,
-					dest.xCoord, dest.yCoord, dest.zCoord);
-				world.spawnEntityInWorld(raySmall);
-			}
-		}
-		
-		Vec3 newDest() {
-			return new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec();
-		}
-		
-		@Override
-		public void onFinalize() {
-			if(!isRemote) {
-				for(EntityMdBall e : balls)
-					e.setDead();
-			}
-		}
-		
-	}
+        public SBAction() {
+            super(-1);
+        }
+        
+        @Override
+        public void onStart() {
+            super.onStart();
+            cpData.perform(instance.getOverload(aData), 0);
+        }
+        
+        @Override
+        public void onTick() {
+            ticks++;
+            
+            if(!isRemote) {
+                if(ticks <= 80) {
+                    if(ticks >= 20 && ticks % MOD == 0) {
+                        EntityMdBall ball = new EntityMdBall(player);
+                        world.spawnEntityInWorld(ball);
+                        balls.add(ball);
+                    }
+                    
+                    if(!cpData.perform(0, instance.getConsumption(aData)))
+                        ActionManager.endAction(this);
+                }
+                
+                if(ticks == 200) {
+                    player.attackEntityFrom(DamageSource.causePlayerDamage(player), 6);
+                    ActionManager.abortAction(this);
+                }
+            }
+        }
+        
+        // Synchronize ball list
+        @Override
+        public void writeNBTFinal(NBTTagCompound tag) {
+            tag.setInteger("c", balls.size());
+            for(int i = 0; i < balls.size(); ++i) {
+                tag.setInteger("" + i, balls.get(i).getEntityId());
+            }
+        }
+        
+        @Override
+        public void readNBTFinal(NBTTagCompound tag) {
+            int n = tag.getInteger("c");
+            while(n-- > 0) {
+                Entity e = world.getEntityByID(tag.getInteger("" + n));
+                if(e instanceof EntityMdBall)
+                    balls.add((EntityMdBall) e);
+            }
+        }
+        
+        @Override
+        public void onEnd() {
+            if(isRemote) {
+                burstRaysClient();
+            } else {
+                for(EntityMdBall ball : balls) {
+                    Vec3 dest = newDest();
+                    MovingObjectPosition traceResult = Raytrace.perform(world,
+                        VecUtils.vec(ball.posX, ball.posY, ball.posZ), dest,
+                        EntitySelectors.and(basicSelector, EntitySelectors.excludeOf(player)));
+                    if(traceResult != null && traceResult.entityHit != null) {
+                        traceResult.entityHit.hurtResistantTime = -1;
+                        MDDamageHelper.attack(traceResult.entityHit, player, getDamage(aData));
+                    }
+                }
+                aData.addSkillExp(instance, instance.getFloat("expincr") * balls.size());
+            }
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void burstRaysClient() {
+            double yoff = ACRenderingHelper.isThePlayer(player) ? 0 : 1.6;
+            for(EntityMdBall ball : balls) {
+                // Spawn a ray for the ball
+                EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
+                raySmall.viewOptimize = false;
+                Vec3 dest = newDest();
+                raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ,
+                    dest.xCoord, dest.yCoord, dest.zCoord);
+                world.spawnEntityInWorld(raySmall);
+            }
+        }
+        
+        Vec3 newDest() {
+            return new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec();
+        }
+        
+        @Override
+        public void onFinalize() {
+            if(!isRemote) {
+                for(EntityMdBall e : balls)
+                    e.setDead();
+            }
+        }
+        
+    }
 
 }

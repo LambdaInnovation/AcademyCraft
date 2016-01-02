@@ -32,38 +32,38 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity.HasRender
 public class EntityMarker extends EntityAdvanced {
 
-	@RegEntity.Render
-	public static RenderMarker renderer;
+    @RegEntity.Render
+    public static RenderMarker renderer;
 
-	public Entity target = null;
-	public Color color = Color.white();
-	public boolean ignoreDepth = false;
+    public Entity target = null;
+    public Color color = Color.white();
+    public boolean ignoreDepth = false;
 
-	public EntityMarker(Entity entity) {
-		this(entity.worldObj);
-		setPosition(entity.posX, entity.posY, entity.posZ);
-		setSize(0.5f, 0.5f);
-		target = entity;
-	}
+    public EntityMarker(Entity entity) {
+        this(entity.worldObj);
+        setPosition(entity.posX, entity.posY, entity.posZ);
+        setSize(0.5f, 0.5f);
+        target = entity;
+    }
 
-	public EntityMarker(World world) {
-		super(world);
-	}
+    public EntityMarker(World world) {
+        super(world);
+    }
 
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if (target != null)
-			setPosition(target.posX, target.posY, target.posZ);
-	}
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (target != null)
+            setPosition(target.posX, target.posY, target.posZ);
+    }
 
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {
-		setDead();
-	}
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tag) {
+        setDead();
+    }
 
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {
-	}
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tag) {
+    }
 
 }

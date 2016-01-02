@@ -20,39 +20,39 @@ import cn.academy.ability.api.ctrl.ActionManager;
  */
 public abstract class SyncActionInstant extends SkillSyncAction {
 
-	public SyncActionInstant() {
-		super(-1);
-	}
-	
-	@Override
-	public final void onStart() {
-		super.onStart();
-		if(!isRemote) {
-			if(!validate()) {
-				ActionManager.abortAction(this);
-			} else {
-				ActionManager.endAction(this);
-			}
-		}
-	}
-	
-	@Override
-	public final void onEnd() {
-		execute();
-	}
-	
-	/**
-	 * Check if this action is to be executed.
-	 */
-	public abstract boolean validate();
-	
-	/**
-	 * Execute the action.
-	 */
-	public void execute() {}
-	
-	protected void debug(Object o) {
-		System.out.println("SA: " + o);
-	}
+    public SyncActionInstant() {
+        super(-1);
+    }
+    
+    @Override
+    public final void onStart() {
+        super.onStart();
+        if(!isRemote) {
+            if(!validate()) {
+                ActionManager.abortAction(this);
+            } else {
+                ActionManager.endAction(this);
+            }
+        }
+    }
+    
+    @Override
+    public final void onEnd() {
+        execute();
+    }
+    
+    /**
+     * Check if this action is to be executed.
+     */
+    public abstract boolean validate();
+    
+    /**
+     * Execute the action.
+     */
+    public void execute() {}
+    
+    protected void debug(Object o) {
+        System.out.println("SA: " + o);
+    }
 
 }

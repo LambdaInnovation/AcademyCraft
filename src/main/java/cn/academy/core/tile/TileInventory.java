@@ -24,32 +24,32 @@ import net.minecraft.tileentity.TileEntity;
  * @author WeAthFolD
  */
 public class TileInventory extends TileEntity implements IInventory {
-	
-	protected final ItemStack[] inventory;
-	
-	private final String invName;
-	
-	public TileInventory(String _invName, int size) {
-		inventory = new ItemStack[size];
-		invName = _invName;
-	}
-	
-	public ItemStack[] getInventory() {
-		return inventory;
-	}
+    
+    protected final ItemStack[] inventory;
+    
+    private final String invName;
+    
+    public TileInventory(String _invName, int size) {
+        inventory = new ItemStack[size];
+        invName = _invName;
+    }
+    
+    public ItemStack[] getInventory() {
+        return inventory;
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return inventory.length;
-	}
+    @Override
+    public int getSizeInventory() {
+        return inventory.length;
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inventory[slot];
-	}
-	
-	@Override
-	public ItemStack decrStackSize(int slot, int count) {
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        return inventory[slot];
+    }
+    
+    @Override
+    public ItemStack decrStackSize(int slot, int count) {
         if (inventory[slot] != null) {
             ItemStack itemstack;
 
@@ -68,10 +68,10 @@ public class TileInventory extends TileEntity implements IInventory {
         } else {
             return null;
         }
-	}
+    }
 
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot) {
         if (inventory[slot] != null) {
             ItemStack itemstack = inventory[slot];
             inventory[slot] = null;
@@ -79,75 +79,75 @@ public class TileInventory extends TileEntity implements IInventory {
         } else {
             return null;
         }
-	}
+    }
 
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
-		inventory[slot] = stack;
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack) {
+        inventory[slot] = stack;
 
         if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
             stack.stackSize = this.getInventoryStackLimit();
         }
 
         this.markDirty();
-	}
-	
-	@Override
+    }
+    
+    @Override
     public void readFromNBT(NBTTagCompound nbt) {
-    	super.readFromNBT(nbt);
-    	NBTTagCompound tag = nbt.getCompoundTag("inventory");
-    	for(int i = 0; i < inventory.length; ++i) {
-    		String name = "" + i;
-    		if(tag.hasKey(name)) {
-    			inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(name));
-    		}
-    	}
+        super.readFromNBT(nbt);
+        NBTTagCompound tag = nbt.getCompoundTag("inventory");
+        for(int i = 0; i < inventory.length; ++i) {
+            String name = "" + i;
+            if(tag.hasKey(name)) {
+                inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(name));
+            }
+        }
     }
     
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
-    	super.writeToNBT(nbt);
-    	NBTTagCompound tag = new NBTTagCompound();
-    	for(int i = 0; i < inventory.length; ++i) {
-    		if(inventory[i] != null) {
-    			NBTTagCompound tag2 = new NBTTagCompound();
-    			inventory[i].writeToNBT(tag2);
-    			tag.setTag("" + i, tag2);
-    		}
-    	}
-    	
-    	nbt.setTag("inventory", tag);
+        super.writeToNBT(nbt);
+        NBTTagCompound tag = new NBTTagCompound();
+        for(int i = 0; i < inventory.length; ++i) {
+            if(inventory[i] != null) {
+                NBTTagCompound tag2 = new NBTTagCompound();
+                inventory[i].writeToNBT(tag2);
+                tag.setTag("" + i, tag2);
+            }
+        }
+        
+        nbt.setTag("inventory", tag);
     }
 
-	@Override
-	public String getInventoryName() {
-		return invName;
-	}
+    @Override
+    public String getInventoryName() {
+        return invName;
+    }
 
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
+    @Override
+    public boolean hasCustomInventoryName() {
+        return false;
+    }
 
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return 64;
+    }
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return true;
-	}
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return true;
+    }
 
-	@Override
-	public void openInventory() {}
+    @Override
+    public void openInventory() {}
 
-	@Override
-	public void closeInventory() {}
+    @Override
+    public void closeInventory() {}
 
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return true;
-	}
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return true;
+    }
 
 }

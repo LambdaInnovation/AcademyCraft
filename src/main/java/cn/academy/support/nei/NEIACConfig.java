@@ -23,22 +23,22 @@ import codechicken.nei.api.IConfigureNEI;
  */
 public class NEIACConfig implements IConfigureNEI {
 
-	@Override
-	public void loadConfig() {
-		API.registerRecipeHandler(new FusorRecipeHandler());
-		API.registerUsageHandler(new FusorRecipeHandler());
-		API.registerRecipeHandler(new MetalFormerRecipeHandler());
-		API.registerUsageHandler(new MetalFormerRecipeHandler());
-	}
+    @Override
+    public void loadConfig() {
+        API.registerRecipeHandler(new FusorRecipeHandler());
+        API.registerUsageHandler(new FusorRecipeHandler());
+        API.registerRecipeHandler(new MetalFormerRecipeHandler());
+        API.registerUsageHandler(new MetalFormerRecipeHandler());
+    }
 
-	@Override
-	public String getName() {
-		return "AcademyCraft";
-	}
+    @Override
+    public String getName() {
+        return "AcademyCraft";
+    }
 
-	@Override
-	public String getVersion() {
-		return AcademyCraft.VERSION;
-	}
+    @Override
+    public String getVersion() {
+        return AcademyCraft.VERSION;
+    }
 
 }

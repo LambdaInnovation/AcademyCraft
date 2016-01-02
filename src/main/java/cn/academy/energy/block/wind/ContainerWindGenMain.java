@@ -23,18 +23,18 @@ import net.minecraft.item.ItemStack;
  * @author WeAthFolD
  */
 public class ContainerWindGenMain extends Container {
-	
-	public final TileWindGenMain tile;
-	public final EntityPlayer player;
-	
-	public ContainerWindGenMain(EntityPlayer _player, TileWindGenMain _tile) {
-		tile = _tile;
-		player = _player;
-		
-		initInventory();
-	}
-	
-	void initInventory() {
+    
+    public final TileWindGenMain tile;
+    public final EntityPlayer player;
+    
+    public ContainerWindGenMain(EntityPlayer _player, TileWindGenMain _tile) {
+        tile = _tile;
+        player = _player;
+        
+        initInventory();
+    }
+    
+    void initInventory() {
         this.addSlotToContainer(new SlotFan(tile, 0, 80, 32));
         
         InventoryPlayer inv = player.inventory;
@@ -50,9 +50,9 @@ public class ContainerWindGenMain extends Container {
                 addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
-	}
-	
-	@Override
+    }
+    
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
@@ -65,7 +65,7 @@ public class ContainerWindGenMain extends Container {
                 if (!this.mergeItemStack(stack1, 1, this.inventorySlots.size(), true))
                     return null;
             } else if(stack1.getItem() != ModuleEnergy.windgenFan || 
-            	!this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
+                !this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
                 return null;
             }
 
@@ -79,9 +79,9 @@ public class ContainerWindGenMain extends Container {
         return stack;
     }
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
-	}
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return true;
+    }
 
 }

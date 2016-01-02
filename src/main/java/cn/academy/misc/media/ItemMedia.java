@@ -32,44 +32,44 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class ItemMedia extends ACItem {
-	
-	IIcon[] icons;
+    
+    IIcon[] icons;
 
-	public ItemMedia() {
-		super("media");
-		setMaxStackSize(1);
-		hasSubtypes = true;
-	}
-	
-	@Override
+    public ItemMedia() {
+        super("media");
+        setMaxStackSize(1);
+        hasSubtypes = true;
+    }
+    
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)  {
-		if(!player.worldObj.isRemote) {
-			MediaData data = MediaData.get(player);
-			TerminalData tData = TerminalData.get(player);
-			
-			int mID = stack.getItemDamage();
-			
-			if(!tData.isInstalled(AppMediaPlayer.instance)) {
-				player.addChatMessage(new ChatComponentTranslation("ac.media.notinstalled"));
-			} else if(data.isMediaInstalled(mID)) {
-				player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getDisplayName()));
-			} else {
-				data.installMedia(mID);
-				if(!player.capabilities.isCreativeMode)
-					stack.stackSize--;
-				player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getDisplayName()));
-			}
-		}
+        if(!player.worldObj.isRemote) {
+            MediaData data = MediaData.get(player);
+            TerminalData tData = TerminalData.get(player);
+            
+            int mID = stack.getItemDamage();
+            
+            if(!tData.isInstalled(AppMediaPlayer.instance)) {
+                player.addChatMessage(new ChatComponentTranslation("ac.media.notinstalled"));
+            } else if(data.isMediaInstalled(mID)) {
+                player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getDisplayName()));
+            } else {
+                data.installMedia(mID);
+                if(!player.capabilities.isCreativeMode)
+                    stack.stackSize--;
+                player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getDisplayName()));
+            }
+        }
         return stack;
     }
-	
+    
     @SideOnly(Side.CLIENT)
     @Override
     public void registerIcons(IIconRegister ir) {
-    	icons = new IIcon[MediaRegistry.getMediaCount()];
-    	for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
-    		icons[i] = ir.registerIcon("academy:media_" + MediaRegistry.getMedia(i).name);
-    	}
+        icons = new IIcon[MediaRegistry.getMediaCount()];
+        for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
+            icons[i] = ir.registerIcon("academy:media_" + MediaRegistry.getMedia(i).name);
+        }
     }
     
     @SideOnly(Side.CLIENT)
@@ -80,20 +80,20 @@ public class ItemMedia extends ACItem {
     
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-    	return StatCollector.translateToLocal(MediaRegistry.getMedia(stack.getItemDamage()).getDisplayName());
+        return StatCollector.translateToLocal(MediaRegistry.getMedia(stack.getItemDamage()).getDisplayName());
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-    	list.add(MediaRegistry.getMedia(stack.getItemDamage()).getDesc());
+        list.add(MediaRegistry.getMedia(stack.getItemDamage()).getDesc());
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
-        	list.add(new ItemStack(this, 1, i));
+            list.add(new ItemStack(this, 1, i));
         }
     }
 

@@ -28,25 +28,25 @@ import cn.lambdalib.annoreg.core.RegistryTypeDecl;
  */
 @RegistryTypeDecl
 public class ACRecipeNamesRegistration extends RegistryType {
-	
-	@Target(ElementType.TYPE)
-	@Retention(RetentionPolicy.RUNTIME)
-	public @interface RegACRecipeNames {}
+    
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RegACRecipeNames {}
 
-	public ACRecipeNamesRegistration() {
-		super(RegACRecipeNames.class, "AC_RecipeNames");
-		setLoadStage(LoadStage.POST_INIT);
-	}
+    public ACRecipeNamesRegistration() {
+        super(RegACRecipeNames.class, "AC_RecipeNames");
+        setLoadStage(LoadStage.POST_INIT);
+    }
 
-	@Override
-	public boolean registerClass(AnnotationData data) throws Exception {
-		AcademyCraft.addToRecipe(data.getTheClass());
-		return true;
-	}
+    @Override
+    public boolean registerClass(AnnotationData data) throws Exception {
+        AcademyCraft.addToRecipe(data.getTheClass());
+        return true;
+    }
 
-	@Override
-	public boolean registerField(AnnotationData data) throws Exception {
-		return true;
-	}
+    @Override
+    public boolean registerField(AnnotationData data) throws Exception {
+        return true;
+    }
 
 }

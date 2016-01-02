@@ -34,55 +34,55 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public class ItemApp extends ACItem {
-	
-	static Map<App, ItemApp> items = new HashMap();
-	
-	public static void registerItems() {
-		for(App app : AppRegistry.enumeration()) {
-			if(!app.isPreInstalled()) {
-				ItemApp item = new ItemApp(app);
-				GameRegistry.registerItem(item, "ac_app_" + app.getName());
-				AcademyCraft.recipes.map("app_" + app.getName(), item);
-				items.put(app, item);
-			}
-		}
-	}
-	
-	public static ItemApp getItemForApp(App app) {
-		return items.get(app);
-	}
-	
-	public final App app;
+    
+    static Map<App, ItemApp> items = new HashMap();
+    
+    public static void registerItems() {
+        for(App app : AppRegistry.enumeration()) {
+            if(!app.isPreInstalled()) {
+                ItemApp item = new ItemApp(app);
+                GameRegistry.registerItem(item, "ac_app_" + app.getName());
+                AcademyCraft.recipes.map("app_" + app.getName(), item);
+                items.put(app, item);
+            }
+        }
+    }
+    
+    public static ItemApp getItemForApp(App app) {
+        return items.get(app);
+    }
+    
+    public final App app;
 
-	private ItemApp(App _app) {
-		super("apps");
-		app = _app;
-		setTextureName("academy:app_" + app.getName());
-		this.setHasSubtypes(true);
-	}
-	
-	@Override
+    private ItemApp(App _app) {
+        super("apps");
+        app = _app;
+        setTextureName("academy:app_" + app.getName());
+        this.setHasSubtypes(true);
+    }
+    
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(!world.isRemote) {
-			TerminalData terminalData = TerminalData.get(player);
-			if(!terminalData.isTerminalInstalled()) {
-				player.addChatMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
-			} else if(terminalData.isInstalled(app)) {
-				player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
-			} else {
-				if(!player.capabilities.isCreativeMode)
-					stack.stackSize--;
-				terminalData.installApp(app);
-				player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
-			}
-		}
+        if(!world.isRemote) {
+            TerminalData terminalData = TerminalData.get(player);
+            if(!terminalData.isTerminalInstalled()) {
+                player.addChatMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
+            } else if(terminalData.isInstalled(app)) {
+                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
+            } else {
+                if(!player.capabilities.isCreativeMode)
+                    stack.stackSize--;
+                terminalData.installApp(app);
+                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
+            }
+        }
         return stack;
     }
     
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-    	list.add(app.getDisplayName());
+        list.add(app.getDisplayName());
     }
     
 }

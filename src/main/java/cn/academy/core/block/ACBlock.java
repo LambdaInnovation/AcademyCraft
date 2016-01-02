@@ -21,11 +21,11 @@ import cn.academy.core.AcademyCraft;
  */
 public class ACBlock extends Block {
 
-	public ACBlock(String name, Material mat) {
-		super(mat);
-		setCreativeTab(AcademyCraft.cct);
-		setBlockTextureName("academy:" + name);
-		setBlockName("ac_" + name);
-	}
+    public ACBlock(String name, Material mat) {
+        super(mat);
+        setCreativeTab(AcademyCraft.cct);
+        setBlockTextureName("academy:" + name);
+        setBlockName("ac_" + name);
+    }
 
 }

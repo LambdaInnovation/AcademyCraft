@@ -20,11 +20,11 @@ import cpw.mods.fml.common.eventhandler.Event;
  * @author WeAthFolD
  */
 public class ConfigModifyEvent extends Event {
-	
-	public final Property property;
-	
-	public ConfigModifyEvent(Property _prop) {
-		property = _prop;
-	}
-	
+    
+    public final Property property;
+    
+    public ConfigModifyEvent(Property _prop) {
+        property = _prop;
+    }
+    
 }

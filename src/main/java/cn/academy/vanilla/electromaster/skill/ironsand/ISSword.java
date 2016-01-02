@@ -21,25 +21,25 @@ import cn.academy.ability.api.ctrl.SkillInstance;
  */
 public class ISSword extends SubSkill implements ISStateCallback {
 
-	public ISSword() {
-		super("sword");
-	}
+    public ISSword() {
+        super("sword");
+    }
 
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new ISInstanceBase("sword") {
-			
-		};
-	}
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new ISInstanceBase("sword") {
+            
+        };
+    }
 
-	@Override
-	public void startState(EntityPlayer player) {
-		System.out.println("Sword state started");
-	}
+    @Override
+    public void startState(EntityPlayer player) {
+        System.out.println("Sword state started");
+    }
 
-	@Override
-	public void endState(EntityPlayer player) {
-		System.out.println("Sword state ended");
-	}
+    @Override
+    public void endState(EntityPlayer player) {
+        System.out.println("Sword state ended");
+    }
 
 }

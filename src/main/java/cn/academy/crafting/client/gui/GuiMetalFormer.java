@@ -33,65 +33,65 @@ import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
  * @author WeAthFolD
  */
 public class GuiMetalFormer extends CGuiScreenContainer {
-	
-	static WidgetContainer document;
-	static {
-		document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/metalformer.xml"));
-	}
-	
-	final EntityPlayer player;
-	final TileMetalFormer tile;
-	
-	Widget main;
-	
-	public GuiMetalFormer(ContainerMetalFormer container) {
-		super(container);
-		tile = container.tile;
-		player = container.player;
-		
-		initPages();
-	}
-	
-	private void initPages() {
-		main = document.getWidget("window_main").copy();
-		
-		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
+    
+    static WidgetContainer document;
+    static {
+        document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/metalformer.xml"));
+    }
+    
+    final EntityPlayer player;
+    final TileMetalFormer tile;
+    
+    Widget main;
+    
+    public GuiMetalFormer(ContainerMetalFormer container) {
+        super(container);
+        tile = container.tile;
+        player = container.player;
+        
+        initPages();
+    }
+    
+    private void initPages() {
+        main = document.getWidget("window_main").copy();
+        
+        EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
 
-		main.getWidget("progress_pro").listen(FrameEvent.class, (w, e) -> {
-			ProgressBar bar = ProgressBar.get(w);
-			bar.progress = tile.getWorkProgress();
-			if(bar.progress == 0)
-				bar.progressDisplay = 0;
-		});
+        main.getWidget("progress_pro").listen(FrameEvent.class, (w, e) -> {
+            ProgressBar bar = ProgressBar.get(w);
+            bar.progress = tile.getWorkProgress();
+            if(bar.progress == 0)
+                bar.progressDisplay = 0;
+        });
 
-		main.getWidget("progress_imag").listen(FrameEvent.class, (w, event) -> {
-			ProgressBar bar = ProgressBar.get(w);
-			bar.progress = tile.getEnergy() / tile.getMaxEnergy();
+        main.getWidget("progress_imag").listen(FrameEvent.class, (w, event) -> {
+            ProgressBar bar = ProgressBar.get(w);
+            bar.progress = tile.getEnergy() / tile.getMaxEnergy();
 
-			if(event.hovering) {
-				EnergyUIHelper.drawTextBox(
-						String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy()),
-						event.mx + 10, event.my, 18);
-			}
-		});
+            if(event.hovering) {
+                EnergyUIHelper.drawTextBox(
+                        String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy()),
+                        event.mx + 10, event.my, 18);
+            }
+        });
 
-		main.getWidget("mark_former").listen(FrameEvent.class, (w, event) -> {
-			DrawTexture.get(w).texture = tile.mode.texture;
+        main.getWidget("mark_former").listen(FrameEvent.class, (w, event) -> {
+            DrawTexture.get(w).texture = tile.mode.texture;
 
-			if(event.hovering) {
-				EnergyUIHelper.drawTextBox(
-						String.format(StatCollector.translateToLocal("ac.gui.metal_former.mode." + tile.mode.toString().toLowerCase()),
-								tile.getEnergy(), tile.getMaxEnergy()),
-						event.mx + 5, event.my, 9);
-			}
-		});
+            if(event.hovering) {
+                EnergyUIHelper.drawTextBox(
+                        String.format(StatCollector.translateToLocal("ac.gui.metal_former.mode." + tile.mode.toString().toLowerCase()),
+                                tile.getEnergy(), tile.getMaxEnergy()),
+                        event.mx + 5, event.my, 9);
+            }
+        });
 
-		main.getWidget("mark_former").listen(LeftClickEvent.class, (w, event) -> {
-			tile.cycleMode();
-			MetalFormerSyncs.cycle(tile);
-		});
-		
-		gui.addWidget(main);
-	}
-	
+        main.getWidget("mark_former").listen(LeftClickEvent.class, (w, event) -> {
+            tile.cycleMode();
+            MetalFormerSyncs.cycle(tile);
+        });
+        
+        gui.addWidget(main);
+    }
+    
 }

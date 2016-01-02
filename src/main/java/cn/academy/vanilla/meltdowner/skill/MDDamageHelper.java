@@ -40,87 +40,87 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 @Registrant
 @RegInit
 public class MDDamageHelper {
-	
-	static final String MARKID = "md_marktick", RATEID = "md_markrate";
-	
-	public static void init() {
-		MinecraftForge.EVENT_BUS.register(new Events());
-	}
-	
-	static void attack(Entity e, EntityPlayer player, float dmg) {
-		DamageHelper.attack(e, DamageSource.causePlayerDamage(player), dmg);
-		AbilityData aData = AbilityData.get(player);
-		if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
-			int marktick = getMarkTick(player);
-			setMarkTick(e, marktick = Math.max(60, marktick));
-			setMarkRate(e, RadiationIntensify.instance.getRate(aData));
-			syncStartMark(e, marktick);
-		}
-	}
-	
-	static int getMarkTick(Entity player) {
-		if(player.getEntityData().hasKey(MARKID))
-			return player.getEntityData().getInteger(MARKID);
-		else
-			return 0;
-	}
-	
-	static float getMarkRate(Entity entity) {
-		if(entity.getEntityData().hasKey(RATEID))
-			return entity.getEntityData().getFloat(RATEID);
-		else
-			return 0;
-	}
-	
-	static void setMarkRate(Entity entity, float amt) {
-		entity.getEntityData().setFloat(RATEID, amt);
-	}
-	
-	static void setMarkTick(Entity player, int ticks) {
-		player.getEntityData().setInteger(MARKID, ticks);
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	static void syncStartMark(@RangedTarget(range = 15) Entity e, @Data Integer value) {
-		setMarkTick(e, value);
-	}
-	
-	public static class Events {
-		
-		@SubscribeEvent
-		public void onLivingUpdate(LivingUpdateEvent event) {
-			int tick = getMarkTick(event.entity);
-			if(tick > 0)
-				setMarkTick(event.entity, tick - 1);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		@SubscribeEvent
-		public void onUpdateClient(LivingUpdateEvent event) {
-			Entity e = event.entity;
-			if(e.worldObj.isRemote) {
-				if(getMarkTick(e) > 0) {
-					int times = RandUtils.rangei(0, 3);
-					while(times --> 0) {
-						double r = RandUtils.ranged(.6, .7) * e.width;
-						double theta = RandUtils.nextDouble() * 2 * Math.PI;
-						double h = RandUtils.ranged(0, e.height);
-						
-						Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY, e.posZ), 
-							VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
-						Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.02);
-						e.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.worldObj, pos, vel));
-					}
-				}
-			}
-		}
-		
-		@SubscribeEvent
-		public void onLivingAttack(LivingHurtEvent event) {
-			if(getMarkTick(event.entityLiving) > 0) {
-				event.ammount *= getMarkRate(event.entityLiving);
-			}
-		}
-		
-	}
+    
+    static final String MARKID = "md_marktick", RATEID = "md_markrate";
+    
+    public static void init() {
+        MinecraftForge.EVENT_BUS.register(new Events());
+    }
+    
+    static void attack(Entity e, EntityPlayer player, float dmg) {
+        DamageHelper.attack(e, DamageSource.causePlayerDamage(player), dmg);
+        AbilityData aData = AbilityData.get(player);
+        if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
+            int marktick = getMarkTick(player);
+            setMarkTick(e, marktick = Math.max(60, marktick));
+            setMarkRate(e, RadiationIntensify.instance.getRate(aData));
+            syncStartMark(e, marktick);
+        }
+    }
+    
+    static int getMarkTick(Entity player) {
+        if(player.getEntityData().hasKey(MARKID))
+            return player.getEntityData().getInteger(MARKID);
+        else
+            return 0;
+    }
+    
+    static float getMarkRate(Entity entity) {
+        if(entity.getEntityData().hasKey(RATEID))
+            return entity.getEntityData().getFloat(RATEID);
+        else
+            return 0;
+    }
+    
+    static void setMarkRate(Entity entity, float amt) {
+        entity.getEntityData().setFloat(RATEID, amt);
+    }
+    
+    static void setMarkTick(Entity player, int ticks) {
+        player.getEntityData().setInteger(MARKID, ticks);
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    static void syncStartMark(@RangedTarget(range = 15) Entity e, @Data Integer value) {
+        setMarkTick(e, value);
+    }
+    
+    public static class Events {
+        
+        @SubscribeEvent
+        public void onLivingUpdate(LivingUpdateEvent event) {
+            int tick = getMarkTick(event.entity);
+            if(tick > 0)
+                setMarkTick(event.entity, tick - 1);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onUpdateClient(LivingUpdateEvent event) {
+            Entity e = event.entity;
+            if(e.worldObj.isRemote) {
+                if(getMarkTick(e) > 0) {
+                    int times = RandUtils.rangei(0, 3);
+                    while(times --> 0) {
+                        double r = RandUtils.ranged(.6, .7) * e.width;
+                        double theta = RandUtils.nextDouble() * 2 * Math.PI;
+                        double h = RandUtils.ranged(0, e.height);
+                        
+                        Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY, e.posZ), 
+                            VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+                        Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.02);
+                        e.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.worldObj, pos, vel));
+                    }
+                }
+            }
+        }
+        
+        @SubscribeEvent
+        public void onLivingAttack(LivingHurtEvent event) {
+            if(getMarkTick(event.entityLiving) > 0) {
+                event.ammount *= getMarkRate(event.entityLiving);
+            }
+        }
+        
+    }
 }

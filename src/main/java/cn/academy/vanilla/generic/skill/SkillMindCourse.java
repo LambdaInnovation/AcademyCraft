@@ -26,28 +26,28 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 public class SkillMindCourse extends Skill {
 
-	public SkillMindCourse() {
-		super("mind_course", 5);
-		this.canControl = false;
-		this.isGeneric = true;
-		
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	@SubscribePipeline("ability.cp_recover_speed")
-	public float addCPRecoverSpeed(float speed, EntityPlayer player) {
-		if(AbilityData.get(player).isSkillLearned(this)) {
-			speed *= 1.2f;
-		}
-		return speed;
-	}
-	
-	@SubscribeEvent
-	public void onExpAdded(SkillExpAddedEvent event) {
-		AbilityData aData = event.getAbilityData();
-		if(event.skill.canControl() && aData.isSkillLearned(this)) {
-			event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
-		}
-	}
+    public SkillMindCourse() {
+        super("mind_course", 5);
+        this.canControl = false;
+        this.isGeneric = true;
+        
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    @SubscribePipeline("ability.cp_recover_speed")
+    public float addCPRecoverSpeed(float speed, EntityPlayer player) {
+        if(AbilityData.get(player).isSkillLearned(this)) {
+            speed *= 1.2f;
+        }
+        return speed;
+    }
+    
+    @SubscribeEvent
+    public void onExpAdded(SkillExpAddedEvent event) {
+        AbilityData aData = event.getAbilityData();
+        if(event.skill.canControl() && aData.isSkillLearned(this)) {
+            event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+        }
+    }
 
 }

@@ -34,62 +34,62 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
-	
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderSolarGen renderer;
+    
+    @SideOnly(Side.CLIENT)
+    @RegTileEntity.Render
+    public static RenderSolarGen renderer;
 
-	public TileSolarGen() {
-		super("solar_generator", 1, 1000, IFConstants.LATENCY_MK2);
-	}
+    public TileSolarGen() {
+        super("solar_generator", 1, 1000, IFConstants.LATENCY_MK2);
+    }
 
-	@Override
-	public double getGeneration(double required) {
+    @Override
+    public double getGeneration(double required) {
         World theWorld = this.getWorldObj();
         double brightLev = theWorld.isDaytime() && theWorld.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord) ? 1.0 : 0.0;
-		return Math.min(required, brightLev * 3.0);
-	}
-	
-	// InfoBlockMulti delegates
-	InfoBlockMulti info = new InfoBlockMulti(this);
-	
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		info.update();
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		info = new InfoBlockMulti(this, tag);
-	}
-	
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		info.save(tag);
-	}
+        return Math.min(required, brightLev * 3.0);
+    }
+    
+    // InfoBlockMulti delegates
+    InfoBlockMulti info = new InfoBlockMulti(this);
+    
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        info.update();
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        info = new InfoBlockMulti(this, tag);
+    }
+    
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        info.save(tag);
+    }
 
-	@Override
-	public InfoBlockMulti getBlockInfo() {
-		return info;
-	}
+    @Override
+    public InfoBlockMulti getBlockInfo() {
+        return info;
+    }
 
-	@Override
-	public void setBlockInfo(InfoBlockMulti i) {
-		info = i;
-	}
-	
+    @Override
+    public void setBlockInfo(InfoBlockMulti i) {
+        info = i;
+    }
+    
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-    	Block block = getBlockType();
-    	if(block instanceof BlockMulti) {
-    		return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
-    	} else {
-    		return super.getRenderBoundingBox();
-    	}
+        Block block = getBlockType();
+        if(block instanceof BlockMulti) {
+            return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+        } else {
+            return super.getRenderBoundingBox();
+        }
     }
 
 }

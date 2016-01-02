@@ -20,18 +20,18 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 public class SkillExpAddedEvent extends AbilityEvent {
-	
-	public final Skill skill;
-	
-	/**
-	 * The amount INTENTED to be added. is directly the argument passed in.
-	 */
-	public final float amount;
+    
+    public final Skill skill;
+    
+    /**
+     * The amount INTENTED to be added. is directly the argument passed in.
+     */
+    public final float amount;
 
-	public SkillExpAddedEvent(EntityPlayer _player, Skill _skill, float _amount) {
-		super(_player);
-		skill = _skill;
-		amount = _amount;
-	}
+    public SkillExpAddedEvent(EntityPlayer _player, Skill _skill, float _amount) {
+        super(_player);
+        skill = _skill;
+        amount = _amount;
+    }
 
 }

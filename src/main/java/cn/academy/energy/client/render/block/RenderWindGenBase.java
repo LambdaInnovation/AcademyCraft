@@ -23,21 +23,21 @@ import cn.lambdalib.util.deprecated.TileEntityModelCustom;
  * @author WeAthFolD
  */
 public class RenderWindGenBase extends RenderBlockMultiModel {
-	
-	ResourceLocation 
-		TEX_NORMAL = Resources.getTexture("models/windgen_base"),
-		TEX_DISABLED = Resources.getTexture("models/windgen_base_disabled");
+    
+    ResourceLocation 
+        TEX_NORMAL = Resources.getTexture("models/windgen_base"),
+        TEX_DISABLED = Resources.getTexture("models/windgen_base_disabled");
 
-	public RenderWindGenBase() {
-		super(new TileEntityModelCustom(Resources.getModel("windgen_base")),
-				null);
-	}
-	
-	@Override
-	public void drawAtOrigin(TileEntity te) {
-		TileWindGenBase tile = (TileWindGenBase) te;
-		this.tex = tile.complete ? TEX_NORMAL : TEX_DISABLED;
-		super.drawAtOrigin(te);
-	}
-	
+    public RenderWindGenBase() {
+        super(new TileEntityModelCustom(Resources.getModel("windgen_base")),
+                null);
+    }
+    
+    @Override
+    public void drawAtOrigin(TileEntity te) {
+        TileWindGenBase tile = (TileWindGenBase) te;
+        this.tex = tile.complete ? TEX_NORMAL : TEX_DISABLED;
+        super.drawAtOrigin(te);
+    }
+    
 }

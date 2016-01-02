@@ -24,33 +24,33 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 public class SkillSyncAction extends SyncAction {
-	
-	public AbilityData aData;
-	public CPData cpData;
-	public World world;
+    
+    public AbilityData aData;
+    public CPData cpData;
+    public World world;
 
-	public SkillSyncAction() {
-		super(-1);
-	}
-	
-	public SkillSyncAction(int interval) {
-		super(interval);
-	}
-	
-	@Override
-	public void onStart() {
-		aData = AbilityData.get(player);
-		cpData = CPData.get(player);
-		world = player.worldObj;
-	}
-	
-	/**
-	 * Add cooldown to a skill if the currently the SyncAction is local.
-	 */
-	public void setCooldown(Controllable c, int time) {
-		if(isLocal()) {
-			Cooldown.setCooldown(c, time);
-		}
-	}
-	
+    public SkillSyncAction() {
+        super(-1);
+    }
+    
+    public SkillSyncAction(int interval) {
+        super(interval);
+    }
+    
+    @Override
+    public void onStart() {
+        aData = AbilityData.get(player);
+        cpData = CPData.get(player);
+        world = player.worldObj;
+    }
+    
+    /**
+     * Add cooldown to a skill if the currently the SyncAction is local.
+     */
+    public void setCooldown(Controllable c, int time) {
+        if(isLocal()) {
+            Cooldown.setCooldown(c, time);
+        }
+    }
+    
 }

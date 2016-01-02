@@ -9,17 +9,17 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public interface IPreviewHandler {
 
-	/**
-	 * Draw the preview artifact. Range; (-0.5, -0.5, -0.5) -> (0.5, 0.5, 0.5)
-	 */
-	default void draw() {}
+    /**
+     * Draw the preview artifact. Range; (-0.5, -0.5, -0.5) -> (0.5, 0.5, 0.5)
+     */
+    default void draw() {}
 
-	/**
-	 * @return A delegating widget to draw the preview area.
-	 */
-	@SideOnly(Side.CLIENT)
-	default Widget getDelegateWidget() {
-		return null;
-	}
+    /**
+     * @return A delegating widget to draw the preview area.
+     */
+    @SideOnly(Side.CLIENT)
+    default Widget getDelegateWidget() {
+        return null;
+    }
 
 }

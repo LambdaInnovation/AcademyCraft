@@ -35,118 +35,118 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 public class NotifyUI extends Widget {
-	
-	final double KEEP_TIME = 4000;
-	final double BLEND_IN_TIME = 500, SCAN_TIME = 500, BLEND_OUT_TIME = 300;
-	
-	ResourceLocation texture;
-	
-	Vec3 
-		start = VecUtils.vec(420, 42, 0),
-		end = VecUtils.vec(34, 42, 0);
-	
-	Font font = Font.font;
-	
-	INotification lastNotify;
-	long lastReceiveTime;
-	
-	/**
-	 * Just a buffer
-	 */
-	Color color = new Color();
+    
+    final double KEEP_TIME = 4000;
+    final double BLEND_IN_TIME = 500, SCAN_TIME = 500, BLEND_OUT_TIME = 300;
+    
+    ResourceLocation texture;
+    
+    Vec3 
+        start = VecUtils.vec(420, 42, 0),
+        end = VecUtils.vec(34, 42, 0);
+    
+    Font font = Font.font;
+    
+    INotification lastNotify;
+    long lastReceiveTime;
+    
+    /**
+     * Just a buffer
+     */
+    Color color = new Color();
 
-	public NotifyUI() {
-		addDrawing();
-		
-		texture = Resources.getTexture("guis/notification/back");
-		transform.scale = 0.25f;
-		transform.setPos(0, 15);
-		
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	public void addDrawing() {
-		listen(FrameEvent.class, (w, e) -> {
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			if(lastNotify != null) {
-				long dt = GameTimer.getTime() - lastReceiveTime;
-				GL11.glEnable(GL11.GL_BLEND);
-				
-				if(dt < BLEND_IN_TIME) {
-					drawBack(Math.min(dt / 300.0, 1));
-					
-					//Draw the icon
-					double iconAlpha = Math.max(0, Math.min(1, (dt - 200) / 300.0));
-					drawIcon(start, iconAlpha);
-					
-					
-				} else if(dt < SCAN_TIME + BLEND_IN_TIME) { //Slide-In stage
-					
-					double scanProgress = (dt - BLEND_IN_TIME) / SCAN_TIME;
-					scanProgress = Math.sin(scanProgress * Math.PI / 2); //Use sin to simulation speed-down effect
-					
-					drawBack(1);
-					drawIcon(VecUtils.lerp(start, end, scanProgress), 1);
-					drawText(scanProgress);
-					
-				} else if(dt < KEEP_TIME - BLEND_OUT_TIME) {
-					
-					drawBack(1);
-					drawIcon(end, 1);
-					drawText(1);
-					
-				} else if(dt < KEEP_TIME) { 
-					
-					double alpha = 1 - (dt - (KEEP_TIME - BLEND_OUT_TIME)) / BLEND_OUT_TIME;
-					drawBack(alpha);
-					drawIcon(end, alpha);
-					drawText(alpha);
-					
-				} else {
-					//Blah, kill it
-					lastNotify = null;
-				}
-				
-				GL11.glColor4d(1, 1, 1, 1);
-			}
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-		});
-	}
-	
-	private void drawText(double alpha) {
-		if(alpha < 1E-1) alpha = 1E-1;
-		//alpha = 0;
-		color.a = alpha;
-		
-		font.draw(lastNotify.getTitle(), 137, 32, 38, color.asHexColor());
-		font.draw(lastNotify.getContent(), 137, 81, 54, color.asHexColor());
-	}
-	
-	private void drawBack(double alpha) {
-		GL11.glColor4d(1, 1, 1, alpha);
-		RenderUtils.loadTexture(texture);
-		HudUtils.rect(517, 170);
-	}
-	
-	private void drawIcon(Vec3 p, double alpha) {
-		GL11.glColor4d(1, 1, 1, alpha);
-		GL11.glPushMatrix();
-		RenderUtils.glTranslate(p);
-		RenderUtils.loadTexture(lastNotify.getIcon());
-		HudUtils.rect(83, 83);
-		GL11.glPopMatrix();
-	}
-	
-	private void notify(INotification n) {
-		lastNotify = n;
-		lastReceiveTime = GameTimer.getTime();
-	}
-	
-	@SubscribeEvent
-	public void onLearned(KnowledgeLearnedEvent event) {
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			notify(new NotifyKnowledge(event.getKnowledge()));
-		}
-	}
-	
+    public NotifyUI() {
+        addDrawing();
+        
+        texture = Resources.getTexture("guis/notification/back");
+        transform.scale = 0.25f;
+        transform.setPos(0, 15);
+        
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    public void addDrawing() {
+        listen(FrameEvent.class, (w, e) -> {
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            if(lastNotify != null) {
+                long dt = GameTimer.getTime() - lastReceiveTime;
+                GL11.glEnable(GL11.GL_BLEND);
+                
+                if(dt < BLEND_IN_TIME) {
+                    drawBack(Math.min(dt / 300.0, 1));
+                    
+                    //Draw the icon
+                    double iconAlpha = Math.max(0, Math.min(1, (dt - 200) / 300.0));
+                    drawIcon(start, iconAlpha);
+                    
+                    
+                } else if(dt < SCAN_TIME + BLEND_IN_TIME) { //Slide-In stage
+                    
+                    double scanProgress = (dt - BLEND_IN_TIME) / SCAN_TIME;
+                    scanProgress = Math.sin(scanProgress * Math.PI / 2); //Use sin to simulation speed-down effect
+                    
+                    drawBack(1);
+                    drawIcon(VecUtils.lerp(start, end, scanProgress), 1);
+                    drawText(scanProgress);
+                    
+                } else if(dt < KEEP_TIME - BLEND_OUT_TIME) {
+                    
+                    drawBack(1);
+                    drawIcon(end, 1);
+                    drawText(1);
+                    
+                } else if(dt < KEEP_TIME) { 
+                    
+                    double alpha = 1 - (dt - (KEEP_TIME - BLEND_OUT_TIME)) / BLEND_OUT_TIME;
+                    drawBack(alpha);
+                    drawIcon(end, alpha);
+                    drawText(alpha);
+                    
+                } else {
+                    //Blah, kill it
+                    lastNotify = null;
+                }
+                
+                GL11.glColor4d(1, 1, 1, 1);
+            }
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+        });
+    }
+    
+    private void drawText(double alpha) {
+        if(alpha < 1E-1) alpha = 1E-1;
+        //alpha = 0;
+        color.a = alpha;
+        
+        font.draw(lastNotify.getTitle(), 137, 32, 38, color.asHexColor());
+        font.draw(lastNotify.getContent(), 137, 81, 54, color.asHexColor());
+    }
+    
+    private void drawBack(double alpha) {
+        GL11.glColor4d(1, 1, 1, alpha);
+        RenderUtils.loadTexture(texture);
+        HudUtils.rect(517, 170);
+    }
+    
+    private void drawIcon(Vec3 p, double alpha) {
+        GL11.glColor4d(1, 1, 1, alpha);
+        GL11.glPushMatrix();
+        RenderUtils.glTranslate(p);
+        RenderUtils.loadTexture(lastNotify.getIcon());
+        HudUtils.rect(83, 83);
+        GL11.glPopMatrix();
+    }
+    
+    private void notify(INotification n) {
+        lastNotify = n;
+        lastReceiveTime = GameTimer.getTime();
+    }
+    
+    @SubscribeEvent
+    public void onLearned(KnowledgeLearnedEvent event) {
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+            notify(new NotifyKnowledge(event.getKnowledge()));
+        }
+    }
+    
 }

@@ -20,11 +20,11 @@ import cn.lambdalib.cgui.gui.Widget;
  * @author WeAthFolD
  */
 public abstract class IPropertyElement {
-	
-	public abstract Widget getWidget(UIProperty prop);
-	
-	public Configuration getConfig() {
-		return AcademyCraft.config;
-	}
-	
+    
+    public abstract Widget getWidget(UIProperty prop);
+    
+    public Configuration getConfig() {
+        return AcademyCraft.config;
+    }
+    
 }

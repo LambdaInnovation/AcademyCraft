@@ -21,33 +21,33 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public class DevConditionAnySkillOfLevel implements IDevCondition {
-	
-	int level;
+    
+    int level;
 
-	public DevConditionAnySkillOfLevel(int _level) {
-		level = _level;
-	}
-	
-	@Override
-	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		if(data.getCategory() == null)
-			return false;
-		for(Skill s : data.getCategory().getSkillsOfLevel(level)) {
-			if(data.isSkillLearned(s))
-				return true;
-		}
-		return false;
-	}
+    public DevConditionAnySkillOfLevel(int _level) {
+        level = _level;
+    }
+    
+    @Override
+    public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+        if(data.getCategory() == null)
+            return false;
+        for(Skill s : data.getCategory().getSkillsOfLevel(level)) {
+            if(data.isSkillLearned(s))
+                return true;
+        }
+        return false;
+    }
 
-	// TODO
-	@Override
-	public ResourceLocation getIcon() {
-		return null;
-	}
+    // TODO
+    @Override
+    public ResourceLocation getIcon() {
+        return null;
+    }
 
-	@Override
-	public String getHintText() {
-		return null;
-	}
+    @Override
+    public String getHintText() {
+        return null;
+    }
 
 }

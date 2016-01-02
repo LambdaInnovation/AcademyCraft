@@ -25,22 +25,22 @@ import net.minecraft.item.ItemStack;
  * @author WeAthFolD
  */
 public class ContainerPhaseGen extends Container {
-	
-	public static final int SLOT_LIQUID_IN = 0, SLOT_LIQUID_OUT = 1, SLOT_OUTPUT = 2;
-	
-	public final TilePhaseGen tile;
-	public final EntityPlayer player;
+    
+    public static final int SLOT_LIQUID_IN = 0, SLOT_LIQUID_OUT = 1, SLOT_OUTPUT = 2;
+    
+    public final TilePhaseGen tile;
+    public final EntityPlayer player;
 
-	public ContainerPhaseGen(EntityPlayer _player, TilePhaseGen _tile) {
-		player = _player;
-		tile = _tile;
-		
-		initInventory();
-	}
-	
-	private void initInventory() {
-		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 15, 4));
-		this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 81, 44));
+    public ContainerPhaseGen(EntityPlayer _player, TilePhaseGen _tile) {
+        player = _player;
+        tile = _tile;
+        
+        initInventory();
+    }
+    
+    private void initInventory() {
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 15, 4));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 81, 44));
         this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 78, 71));
         
         InventoryPlayer inv = player.inventory;
@@ -56,9 +56,9 @@ public class ContainerPhaseGen extends Container {
                 addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
-	}
-	
-	@Override
+    }
+    
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
@@ -71,14 +71,14 @@ public class ContainerPhaseGen extends Container {
                 if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
                     return null;
             } else { 
-            	if(IFItemManager.instance.isSupported(stack1)) {
-            		if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_OUTPUT, TilePhaseGen.SLOT_OUTPUT + 1, false))
-            			return null;
-            	} else if(ModuleCrafting.matterUnit.getMaterial(stack1) == ModuleCrafting.imagPhase.mat) {
-            		if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_LIQUID_IN, TilePhaseGen.SLOT_LIQUID_IN + 1, false))
-            			return null;
-            	} else
-            		return null;
+                if(IFItemManager.instance.isSupported(stack1)) {
+                    if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_OUTPUT, TilePhaseGen.SLOT_OUTPUT + 1, false))
+                        return null;
+                } else if(ModuleCrafting.matterUnit.getMaterial(stack1) == ModuleCrafting.imagPhase.mat) {
+                    if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_LIQUID_IN, TilePhaseGen.SLOT_LIQUID_IN + 1, false))
+                        return null;
+                } else
+                    return null;
             }
 
             if (stack1.stackSize == 0) {
@@ -90,10 +90,10 @@ public class ContainerPhaseGen extends Container {
 
         return stack;
     }
-	
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
-	}
+    
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return true;
+    }
 
 }

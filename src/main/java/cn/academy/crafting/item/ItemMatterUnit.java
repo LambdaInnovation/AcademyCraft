@@ -40,97 +40,97 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 public class ItemMatterUnit extends ACItem {
-	
-	@RegItem.Render
-	@SideOnly(Side.CLIENT)
-	public static RendererMatterUnit renderer;
-	
-	public static class MatterMaterial {
-		
-		public final String name;
-		public final ResourceLocation texture;
-		public final Block block;
-		private int id;
-		
-		public MatterMaterial(String _name, Block block) {
-			this(_name, block, Resources.getTexture("items/matter_unit/" + _name + "_mat"));
-		}
-		
-		public MatterMaterial(String _name, Block _block, ResourceLocation tex) {
-			name = _name;
-			texture = tex;
-			block = _block;
-		}
-		
-	}
-	
-	private static List<MatterMaterial> materials = new ArrayList();
-	
-	public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.air);
-	static {
-		addMatterMaterial(NONE);
-	}
-	
-	public static void addMatterMaterial(MatterMaterial mat) {
-		for(MatterMaterial prev : materials) {
-			if(prev.name.equals(mat.name))
-				throw new RuntimeException("Duplicate MatterMaterial Key " + mat.name);
-		}
-		mat.id = materials.size();
-		materials.add(mat);
-	}
-	
-	public static MatterMaterial getMatterMaterial(String name) {
-		for(MatterMaterial mat : materials) {
-			if(mat.name.equals(name))
-				return mat;
-		}
-		return null;
-	}
+    
+    @RegItem.Render
+    @SideOnly(Side.CLIENT)
+    public static RendererMatterUnit renderer;
+    
+    public static class MatterMaterial {
+        
+        public final String name;
+        public final ResourceLocation texture;
+        public final Block block;
+        private int id;
+        
+        public MatterMaterial(String _name, Block block) {
+            this(_name, block, Resources.getTexture("items/matter_unit/" + _name + "_mat"));
+        }
+        
+        public MatterMaterial(String _name, Block _block, ResourceLocation tex) {
+            name = _name;
+            texture = tex;
+            block = _block;
+        }
+        
+    }
+    
+    private static List<MatterMaterial> materials = new ArrayList();
+    
+    public static final MatterMaterial NONE = new MatterMaterial("none", Blocks.air);
+    static {
+        addMatterMaterial(NONE);
+    }
+    
+    public static void addMatterMaterial(MatterMaterial mat) {
+        for(MatterMaterial prev : materials) {
+            if(prev.name.equals(mat.name))
+                throw new RuntimeException("Duplicate MatterMaterial Key " + mat.name);
+        }
+        mat.id = materials.size();
+        materials.add(mat);
+    }
+    
+    public static MatterMaterial getMatterMaterial(String name) {
+        for(MatterMaterial mat : materials) {
+            if(mat.name.equals(name))
+                return mat;
+        }
+        return null;
+    }
 
-	//------
-	
-	
-	public ItemMatterUnit() {
-		super("matter_unit");
-		setMaxStackSize(16);
-		hasSubtypes = true;
-	}
-	
-	public MatterMaterial getMaterial(ItemStack stack) {
-		if(stack.getItem() != this || stack.getItemDamage() >= materials.size())
-			return null;
-		MatterMaterial mat = materials.get(stack.getItemDamage());
-		if(mat == null) {
-			setMaterial(stack, NONE);
-			return NONE;
-		}
-		return mat;
-	}
+    //------
+    
+    
+    public ItemMatterUnit() {
+        super("matter_unit");
+        setMaxStackSize(16);
+        hasSubtypes = true;
+    }
+    
+    public MatterMaterial getMaterial(ItemStack stack) {
+        if(stack.getItem() != this || stack.getItemDamage() >= materials.size())
+            return null;
+        MatterMaterial mat = materials.get(stack.getItemDamage());
+        if(mat == null) {
+            setMaterial(stack, NONE);
+            return NONE;
+        }
+        return mat;
+    }
 
-	public void setMaterial(ItemStack stack, MatterMaterial mat) {
-		stack.setItemDamage(mat.id);
-	}
-	
-	public void setMaterial(ItemStack stack, String name) {
-		setMaterial(stack, getMatterMaterial(name));
-	}
-	
-	public ItemStack create(String name) {
-		return create(getMatterMaterial(name));
-	}
-	
-	public ItemStack create(MatterMaterial mat) {
-		ItemStack ret = new ItemStack(this);
-		setMaterial(ret, mat);
-		return ret;
-	}
-	
-	@Override
+    public void setMaterial(ItemStack stack, MatterMaterial mat) {
+        stack.setItemDamage(mat.id);
+    }
+    
+    public void setMaterial(ItemStack stack, String name) {
+        setMaterial(stack, getMatterMaterial(name));
+    }
+    
+    public ItemStack create(String name) {
+        return create(getMatterMaterial(name));
+    }
+    
+    public ItemStack create(MatterMaterial mat) {
+        ItemStack ret = new ItemStack(this);
+        setMaterial(ret, mat);
+        return ret;
+    }
+    
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         boolean isNone = getMaterial(stack) == NONE;
         MovingObjectPosition mop = 
-        	this.getMovingObjectPositionFromPlayer(world, player, true);
+            this.getMovingObjectPositionFromPlayer(world, player, true);
 
         if (mop == null) {
             return stack;
@@ -152,24 +152,24 @@ public class ItemMatterUnit extends ACItem {
                     
                     Block b = world.getBlock(i, j, k);
                     for(MatterMaterial m : materials) {
-                    	if(m.block == b) {
-                    		// Match, merge the stack.
-                    		ItemStack newStack = new ItemStack(this);
-                    		this.setMaterial(newStack, m);
-                    		int left = PlayerUtils.mergeStackable(player.inventory, newStack);
-                    		if(left > 0 && !world.isRemote) {
-                    			newStack.stackSize = left;
-                    			player.dropPlayerItemWithRandomChoice(newStack, false);
-                    		}
-                    		// --stackSize
-                    		if(!player.capabilities.isCreativeMode) {
-                    			stack.stackSize--;
-                    		}
-                    		// Clear block
-                    		world.setBlockToAir(i, j, k);
-                    		MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, m));
-                    		break;
-                    	}
+                        if(m.block == b) {
+                            // Match, merge the stack.
+                            ItemStack newStack = new ItemStack(this);
+                            this.setMaterial(newStack, m);
+                            int left = PlayerUtils.mergeStackable(player.inventory, newStack);
+                            if(left > 0 && !world.isRemote) {
+                                newStack.stackSize = left;
+                                player.dropPlayerItemWithRandomChoice(newStack, false);
+                            }
+                            // --stackSize
+                            if(!player.capabilities.isCreativeMode) {
+                                stack.stackSize--;
+                            }
+                            // Clear block
+                            world.setBlockToAir(i, j, k);
+                            MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, m));
+                            break;
+                        }
                     }
                 }
             }
@@ -177,20 +177,20 @@ public class ItemMatterUnit extends ACItem {
             return stack;
         }
     }
-	
-	@Override
+    
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return getUnlocalizedName() + "_" + getMaterial(stack).name;
     }
-	
+    
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item instance, CreativeTabs cct, List list) {
         for(MatterMaterial mat : materials) {
-        	ItemStack stack = new ItemStack(this);
-        	setMaterial(stack, mat);
-        	list.add(stack);
+            ItemStack stack = new ItemStack(this);
+            setMaterial(stack, mat);
+            list.add(stack);
         }
     }
-	
+    
 }

@@ -21,23 +21,23 @@ import cn.academy.terminal.registry.AppRegistration.RegApp;
  */
 //@Registrant
 public class AppKnowledgeRecord extends App {
-	
-	@RegApp
-	public static AppKnowledgeRecord instance = new AppKnowledgeRecord();
+    
+    @RegApp
+    public static AppKnowledgeRecord instance = new AppKnowledgeRecord();
 
-	private AppKnowledgeRecord() {
-		super("knowledge_record");
-		setPreInstalled();
-	}
+    private AppKnowledgeRecord() {
+        super("knowledge_record");
+        setPreInstalled();
+    }
 
-	@Override
-	public AppEnvironment createEnvironment() {
-		return new AppEnvironment() {
-			@Override
-			public void onStart() {
-				//LifeRecordUI.guiHandler.openClientGui();
-			}
-		};
-	}
+    @Override
+    public AppEnvironment createEnvironment() {
+        return new AppEnvironment() {
+            @Override
+            public void onStart() {
+                //LifeRecordUI.guiHandler.openClientGui();
+            }
+        };
+    }
 
 }

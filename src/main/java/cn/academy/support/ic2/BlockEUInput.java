@@ -22,13 +22,13 @@ import net.minecraft.world.World;
  */
 public class BlockEUInput extends BlockConverterBase {
 
-	public BlockEUInput() {
-		super("eu_input", "EU", "IF", TileEUInput.class);
-	}
+    public BlockEUInput() {
+        super("eu_input", "EU", "IF", TileEUInput.class);
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileEUInput();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new TileEUInput();
+    }
 
 }

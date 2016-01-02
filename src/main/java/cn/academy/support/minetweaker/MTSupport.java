@@ -28,19 +28,19 @@ import net.minecraft.item.ItemStack;
 @Registrant
 public class MTSupport {
 
-	private static final String MODID = "MineTweaker3";
+    private static final String MODID = "MineTweaker3";
 
-	@RegInitCallback
-	@Optional.Method(modid=MODID)
-	public static void init() {
-		MineTweakerAPI.registerClass(ImagFusorSupport.class);
-		MineTweakerAPI.registerClass(MetalFormerSupport.class);
-		AcademyCraft.log.info("MineTweaker API support has been loaded.");
-	}
+    @RegInitCallback
+    @Optional.Method(modid=MODID)
+    public static void init() {
+        MineTweakerAPI.registerClass(ImagFusorSupport.class);
+        MineTweakerAPI.registerClass(MetalFormerSupport.class);
+        AcademyCraft.log.info("MineTweaker API support has been loaded.");
+    }
 
-	@Optional.Method(modid=MODID)
-	public static ItemStack toStack(IItemStack s) {
-		return MineTweakerMC.getItemStack(s);
-	}
+    @Optional.Method(modid=MODID)
+    public static ItemStack toStack(IItemStack s) {
+        return MineTweakerMC.getItemStack(s);
+    }
 
 }

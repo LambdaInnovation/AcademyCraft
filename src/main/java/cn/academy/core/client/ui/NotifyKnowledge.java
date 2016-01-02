@@ -22,25 +22,25 @@ import cn.academy.knowledge.Knowledge;
  */
 public class NotifyKnowledge implements INotification {
 
-	public final Knowledge knowledge;
-	
-	public NotifyKnowledge(Knowledge k) {
-		knowledge = k;
-	}
-	
-	@Override
-	public ResourceLocation getIcon() {
-		return knowledge.getIcon();
-	}
-	
-	@Override
-	public String getTitle() {
-		return StatCollector.translateToLocal("ac.knowledge.acquired");
-	}
+    public final Knowledge knowledge;
+    
+    public NotifyKnowledge(Knowledge k) {
+        knowledge = k;
+    }
+    
+    @Override
+    public ResourceLocation getIcon() {
+        return knowledge.getIcon();
+    }
+    
+    @Override
+    public String getTitle() {
+        return StatCollector.translateToLocal("ac.knowledge.acquired");
+    }
 
-	@Override
-	public String getContent() {
-		return knowledge.getName();
-	}
+    @Override
+    public String getContent() {
+        return knowledge.getName();
+    }
 
 }

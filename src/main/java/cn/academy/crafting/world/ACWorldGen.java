@@ -29,29 +29,29 @@ import cpw.mods.fml.common.IWorldGenerator;
  */
 public class ACWorldGen implements IWorldGenerator {
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world,
-			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		if(ModuleCrafting.GENERATE_ORES) {
-			switch(world.provider.dimensionId) {
-			case 0:
-				genOverworld(world, random, chunkX * 16, chunkZ * 16);
-				break;
-			}
-		}
-	}
-	
-	private List<CustomWorldGen> generators = Arrays.asList(new CustomWorldGen[] {
-			new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreResoCrystal, 0, 4, Blocks.stone), 60, 18),
-	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreConstraintMetal, 0, 4, Blocks.stone), 60, 24),
-	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagCrystal, 0, 3, Blocks.stone), 60, 48),
-	        new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagSil, 0, 4, Blocks.stone), 60, 22)
-	});
-	
-	private void genOverworld(World world, Random random, int x, int z) {
-		for(CustomWorldGen gen : generators) {
-		    gen.generate(world, random, x, z);
-		}
-	}
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world,
+            IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+        if(ModuleCrafting.GENERATE_ORES) {
+            switch(world.provider.dimensionId) {
+            case 0:
+                genOverworld(world, random, chunkX * 16, chunkZ * 16);
+                break;
+            }
+        }
+    }
+    
+    private List<CustomWorldGen> generators = Arrays.asList(new CustomWorldGen[] {
+            new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreResoCrystal, 0, 4, Blocks.stone), 60, 18),
+            new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreConstraintMetal, 0, 4, Blocks.stone), 60, 24),
+            new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagCrystal, 0, 3, Blocks.stone), 60, 48),
+            new CustomWorldGen(new WorldGenMinable(ModuleCrafting.oreImagSil, 0, 4, Blocks.stone), 60, 22)
+    });
+    
+    private void genOverworld(World world, Random random, int x, int z) {
+        for(CustomWorldGen gen : generators) {
+            gen.generate(world, random, x, z);
+        }
+    }
 
 }

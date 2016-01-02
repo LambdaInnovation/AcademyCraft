@@ -27,48 +27,48 @@ import stanhebben.zenscript.annotations.ZenMethod;
  */
 @ZenClass("mods.academycraft.MetalFormer")
 public class MetalFormerSupport {
-	
-	@ZenMethod
-	public static void addEtchRecipe(IItemStack output, IItemStack input) {
-		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
-	}
-	
-	@ZenMethod
-	public static void addInciseRecipe(IItemStack output, IItemStack input) {
-		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
-	}
-	
-	@ZenMethod
-	public static void addPlateRecipe(IItemStack output, IItemStack input) {
-		MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
-	}
-	
-	private static class AddMetalFormerRecipe extends OneWayAction {
+    
+    @ZenMethod
+    public static void addEtchRecipe(IItemStack output, IItemStack input) {
+        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.ETCH));
+    }
+    
+    @ZenMethod
+    public static void addInciseRecipe(IItemStack output, IItemStack input) {
+        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.INCISE));
+    }
+    
+    @ZenMethod
+    public static void addPlateRecipe(IItemStack output, IItemStack input) {
+        MineTweakerAPI.apply(new AddMetalFormerRecipe(input, output, Mode.PLATE));
+    }
+    
+    private static class AddMetalFormerRecipe extends OneWayAction {
 
-		ItemStack input, output;
-		Mode mode;
-		
-		public AddMetalFormerRecipe(IItemStack input, IItemStack output, Mode mode) {
-			this.input = toStack(input);
-			this.output = toStack(output);
-			this.mode = mode;
-		}
-		
-		@Override
-		public void apply() {
-			INSTANCE.add(input, output, mode);
-		}
+        ItemStack input, output;
+        Mode mode;
+        
+        public AddMetalFormerRecipe(IItemStack input, IItemStack output, Mode mode) {
+            this.input = toStack(input);
+            this.output = toStack(output);
+            this.mode = mode;
+        }
+        
+        @Override
+        public void apply() {
+            INSTANCE.add(input, output, mode);
+        }
 
-		@Override
-		public String describe() {
-			return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
-		}
+        @Override
+        public String describe() {
+            return "Add extra metal former etching recipe for " + input.getUnlocalizedName();
+        }
 
-		@Override
-		public Object getOverrideKey() {
-			return null;
-		}
-		
-	}
+        @Override
+        public Object getOverrideKey() {
+            return null;
+        }
+        
+    }
 
 }

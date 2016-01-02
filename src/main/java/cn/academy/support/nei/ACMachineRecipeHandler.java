@@ -26,53 +26,53 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
  *
  */
 public abstract class ACMachineRecipeHandler extends TemplateRecipeHandler {
-	
-	protected int tick;
-	
-	@Override
-	public abstract String getRecipeName();
-	
-	@Override
-	public abstract String getGuiTexture();
-	@Override
-	public abstract Class<? extends GuiContainer> getGuiClass();
-	
-	public abstract int getInputX();
-	public abstract int getInputY();
-	public abstract int getOutputX();
-	public abstract int getOutputY();
-	
-	@Override
-	public abstract void loadCraftingRecipes(ItemStack result);
-	@Override
-	public abstract void loadUsageRecipes(ItemStack ingredient);
-	
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		++tick;
-	}
-	
-	protected class ACCachedRecipe extends CachedRecipe {
-		
-		private final PositionedStack ingredient;
-		private final PositionedStack result;
-		
-		protected ACCachedRecipe(ItemStack input, ItemStack output) {
-			ingredient = new PositionedStack(input, getInputX(), getInputY());
-			result = new PositionedStack(output, getOutputX(), getOutputY());
-		}
-		
-		@Override
-		public PositionedStack getIngredient() {
-			return ingredient;
-		}
+    
+    protected int tick;
+    
+    @Override
+    public abstract String getRecipeName();
+    
+    @Override
+    public abstract String getGuiTexture();
+    @Override
+    public abstract Class<? extends GuiContainer> getGuiClass();
+    
+    public abstract int getInputX();
+    public abstract int getInputY();
+    public abstract int getOutputX();
+    public abstract int getOutputY();
+    
+    @Override
+    public abstract void loadCraftingRecipes(ItemStack result);
+    @Override
+    public abstract void loadUsageRecipes(ItemStack ingredient);
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        ++tick;
+    }
+    
+    protected class ACCachedRecipe extends CachedRecipe {
+        
+        private final PositionedStack ingredient;
+        private final PositionedStack result;
+        
+        protected ACCachedRecipe(ItemStack input, ItemStack output) {
+            ingredient = new PositionedStack(input, getInputX(), getInputY());
+            result = new PositionedStack(output, getOutputX(), getOutputY());
+        }
+        
+        @Override
+        public PositionedStack getIngredient() {
+            return ingredient;
+        }
 
-		@Override
-		public PositionedStack getResult() {
-			return result;
-		}
-		
-	}
+        @Override
+        public PositionedStack getResult() {
+            return result;
+        }
+        
+    }
 
 }

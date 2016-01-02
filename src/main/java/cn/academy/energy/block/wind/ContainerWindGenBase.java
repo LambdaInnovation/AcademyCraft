@@ -24,18 +24,18 @@ import cn.academy.energy.block.SlotIFItem;
  * @author WeAthFolD
  */
 public class ContainerWindGenBase extends Container {
-	
-	public final EntityPlayer player;
-	public final TileWindGenBase tile;
-	
-	public ContainerWindGenBase(EntityPlayer _player, TileWindGenBase _tile) {
-		player = _player;
-		tile = _tile;
-		
-		initInventory();
-	}
-	
-	private void initInventory() {
+    
+    public final EntityPlayer player;
+    public final TileWindGenBase tile;
+    
+    public ContainerWindGenBase(EntityPlayer _player, TileWindGenBase _tile) {
+        player = _player;
+        tile = _tile;
+        
+        initInventory();
+    }
+    
+    private void initInventory() {
         this.addSlotToContainer(new SlotIFItem(tile, 0, 78, 71));
         
         InventoryPlayer inv = player.inventory;
@@ -51,9 +51,9 @@ public class ContainerWindGenBase extends Container {
                 addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
-	}
-	
-	@Override
+    }
+    
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
@@ -67,10 +67,10 @@ public class ContainerWindGenBase extends Container {
                     return null;
                 }
             } else {
-            	if(!IFItemManager.instance.isSupported(stack1) || 
-            			!this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
-            		return null;
-            	}
+                if(!IFItemManager.instance.isSupported(stack1) || 
+                        !this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
+                    return null;
+                }
             }
 
             if (stack1.stackSize == 0) {
@@ -83,9 +83,9 @@ public class ContainerWindGenBase extends Container {
         return stack;
     }
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
-	}
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return true;
+    }
 
 }

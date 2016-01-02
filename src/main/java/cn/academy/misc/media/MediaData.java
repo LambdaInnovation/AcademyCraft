@@ -29,55 +29,55 @@ import cn.lambdalib.util.datapart.RegDataPart;
 @Registrant
 @RegDataPart("media")
 public class MediaData extends DataPart {
-	
-	BitSet learned = new BitSet(32);
-	
-	public MediaData() {}
-	
-	public static MediaData get(EntityPlayer player) {
-		return EntityData.get(player).getPart(MediaData.class);
-	}
-	
-	/**
-	 * Should be called in SERVER only. Install the media to the player.
-	 * @return Whether the media is successfully installed
-	 */
-	public boolean installMedia(int mediaID) {
-		if(isRemote())
-			throw new RuntimeException("Wrong side");
-		
-		if(learned.get(mediaID))
-			return false;
-		
-		learned.set(mediaID);
-		
-		sync();
-		return true;
-	}
-	
-	public boolean isMediaInstalled(int mediaID) {
-		return learned.get(mediaID);
-	}
-	
-	public List<Media> getInstalledMediaList() {
-		List<Media> ret = new ArrayList();
-		for(int i = 0; i < MediaRegistry.getMediaCount(); ++i)
-			if(isMediaInstalled(i))
-				ret.add(MediaRegistry.getMedia(i));
-		return ret;
-	}
+    
+    BitSet learned = new BitSet(32);
+    
+    public MediaData() {}
+    
+    public static MediaData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(MediaData.class);
+    }
+    
+    /**
+     * Should be called in SERVER only. Install the media to the player.
+     * @return Whether the media is successfully installed
+     */
+    public boolean installMedia(int mediaID) {
+        if(isRemote())
+            throw new RuntimeException("Wrong side");
+        
+        if(learned.get(mediaID))
+            return false;
+        
+        learned.set(mediaID);
+        
+        sync();
+        return true;
+    }
+    
+    public boolean isMediaInstalled(int mediaID) {
+        return learned.get(mediaID);
+    }
+    
+    public List<Media> getInstalledMediaList() {
+        List<Media> ret = new ArrayList();
+        for(int i = 0; i < MediaRegistry.getMediaCount(); ++i)
+            if(isMediaInstalled(i))
+                ret.add(MediaRegistry.getMedia(i));
+        return ret;
+    }
 
-	@Override
-	public void fromNBT(NBTTagCompound tag) {
-		learned = BitSet.valueOf(tag.getByteArray("l"));
-	}
+    @Override
+    public void fromNBT(NBTTagCompound tag) {
+        learned = BitSet.valueOf(tag.getByteArray("l"));
+    }
 
-	@Override
-	public NBTTagCompound toNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setByteArray("l", learned.toByteArray());
-		
-		return tag;	
-	}
+    @Override
+    public NBTTagCompound toNBT() {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setByteArray("l", learned.toByteArray());
+        
+        return tag;    
+    }
 
 }

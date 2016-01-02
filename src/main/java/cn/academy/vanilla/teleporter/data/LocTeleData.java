@@ -29,105 +29,105 @@ import cn.lambdalib.util.datapart.RegDataPart;
 @RegDataPart("loctele")
 public class LocTeleData extends DataPart<EntityPlayer> {
 
-	private List<Location> locationList = new ArrayList();
+    private List<Location> locationList = new ArrayList();
 
-	public static LocTeleData get(EntityPlayer player) {
-		return EntityData.get(player).getPart(LocTeleData.class);
-	}
+    public static LocTeleData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(LocTeleData.class);
+    }
 
-	public int getLocCount() {
-		return locationList.size();
-	}
+    public int getLocCount() {
+        return locationList.size();
+    }
 
-	public void removeAt(int id) {
-		locationList.remove(id);
-		sync();
-	}
+    public void removeAt(int id) {
+        locationList.remove(id);
+        sync();
+    }
 
-	public void rename(int id, String newName) {
-		Location original = locationList.get(id);
-		locationList.set(id, new Location(newName, original.dimension, original.x, original.y, original.z));
-		sync();
-	}
+    public void rename(int id, String newName) {
+        Location original = locationList.get(id);
+        locationList.set(id, new Location(newName, original.dimension, original.x, original.y, original.z));
+        sync();
+    }
 
-	public void add(Location l) {
-		locationList.add(l);
-		sync();
-	}
+    public void add(Location l) {
+        locationList.add(l);
+        sync();
+    }
 
-	public Location get(int id) {
-		return locationList.get(id);
-	}
+    public Location get(int id) {
+        return locationList.get(id);
+    }
 
-	@Override
-	public void fromNBT(NBTTagCompound tag) {
-		locationList.clear();
-		NBTTagList list = (NBTTagList) tag.getTag("l");
+    @Override
+    public void fromNBT(NBTTagCompound tag) {
+        locationList.clear();
+        NBTTagList list = (NBTTagList) tag.getTag("l");
 
-		for (int i = 0; i < list.tagCount(); ++i) {
-			locationList.add(new Location(list.getCompoundTagAt(i)));
-		}
-	}
+        for (int i = 0; i < list.tagCount(); ++i) {
+            locationList.add(new Location(list.getCompoundTagAt(i)));
+        }
+    }
 
-	@Override
-	public NBTTagCompound toNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
+    @Override
+    public NBTTagCompound toNBT() {
+        NBTTagCompound tag = new NBTTagCompound();
 
-		NBTTagList nList = new NBTTagList();
-		for (int i = 0; i < locationList.size(); ++i) {
-			nList.appendTag(locationList.get(i).toNBT());
-		}
-		tag.setTag("l", nList);
-		return tag;
-	}
+        NBTTagList nList = new NBTTagList();
+        for (int i = 0; i < locationList.size(); ++i) {
+            nList.appendTag(locationList.get(i).toNBT());
+        }
+        tag.setTag("l", nList);
+        return tag;
+    }
 
-	@RegSerializable(data = LocationSerializer.class)
-	public static class Location {
-		public final String name;
-		public final int dimension;
-		public final float x, y, z;
+    @RegSerializable(data = LocationSerializer.class)
+    public static class Location {
+        public final String name;
+        public final int dimension;
+        public final float x, y, z;
 
-		public Location(String _name, int dim, float _x, float _y, float _z) {
-			name = _name;
-			dimension = dim;
-			x = _x;
-			y = _y;
-			z = _z;
-		}
+        public Location(String _name, int dim, float _x, float _y, float _z) {
+            name = _name;
+            dimension = dim;
+            x = _x;
+            y = _y;
+            z = _z;
+        }
 
-		public Location(NBTTagCompound tag) {
-			this(tag.getString("n"), tag.getByte("d"), tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
-		}
+        public Location(NBTTagCompound tag) {
+            this(tag.getString("n"), tag.getByte("d"), tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
+        }
 
-		public String formatCoords() {
-			return String.format("(%.1f, %.1f, %.1f)", x, y, z);
-		}
+        public String formatCoords() {
+            return String.format("(%.1f, %.1f, %.1f)", x, y, z);
+        }
 
-		NBTTagCompound toNBT() {
-			NBTTagCompound ret = new NBTTagCompound();
+        NBTTagCompound toNBT() {
+            NBTTagCompound ret = new NBTTagCompound();
 
-			ret.setString("n", name);
-			ret.setByte("d", (byte) dimension);
-			ret.setFloat("x", x);
-			ret.setFloat("y", y);
-			ret.setFloat("z", z);
+            ret.setString("n", name);
+            ret.setByte("d", (byte) dimension);
+            ret.setFloat("x", x);
+            ret.setFloat("y", y);
+            ret.setFloat("z", z);
 
-			return ret;
-		}
-	}
+            return ret;
+        }
+    }
 
-	public static class LocationSerializer implements DataSerializer<Location> {
+    public static class LocationSerializer implements DataSerializer<Location> {
 
-		@Override
-		public Location readData(NBTBase nbt, Location obj) throws Exception {
-			return new Location((NBTTagCompound) nbt);
-		}
+        @Override
+        public Location readData(NBTBase nbt, Location obj) throws Exception {
+            return new Location((NBTTagCompound) nbt);
+        }
 
-		@Override
-		public NBTBase writeData(Location obj) throws Exception {
-			return obj.toNBT();
-		}
+        @Override
+        public NBTBase writeData(Location obj) throws Exception {
+            return obj.toNBT();
+        }
 
-	}
+    }
 
 }

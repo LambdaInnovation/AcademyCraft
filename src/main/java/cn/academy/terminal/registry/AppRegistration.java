@@ -27,23 +27,23 @@ import cn.lambdalib.annoreg.core.RegistryTypeDecl;
 @RegistryTypeDecl
 public class AppRegistration extends RegistrationFieldSimple<RegApp, App> {
 
-	public AppRegistration() {
-		super(RegApp.class, "ac_App");
-		setLoadStage(LoadStage.PRE_INIT);
-	}
+    public AppRegistration() {
+        super(RegApp.class, "ac_App");
+        setLoadStage(LoadStage.PRE_INIT);
+    }
 
-	/**
-	 * Register an App field into AppRegistry.
-	 * @author WeAthFolD
-	 */
-	@Target(ElementType.FIELD)
-	@Retention(RetentionPolicy.RUNTIME)
-	public static @interface RegApp {}
+    /**
+     * Register an App field into AppRegistry.
+     * @author WeAthFolD
+     */
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public static @interface RegApp {}
 
-	@Override
-	protected void register(App value, RegApp anno, String field)
-			throws Exception {
-		AppRegistry.INSTANCE.register(value);
-	}
-	
+    @Override
+    protected void register(App value, RegApp anno, String field)
+            throws Exception {
+        AppRegistry.INSTANCE.register(value);
+    }
+    
 }

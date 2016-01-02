@@ -26,23 +26,23 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class MineRayExpert extends MineRaysBase {
 
-	public static final MineRayExpert instance = new MineRayExpert();
+    public static final MineRayExpert instance = new MineRayExpert();
 
-	private MineRayExpert() {
-		super("expert", 4);
-	}
+    private MineRayExpert() {
+        super("expert", 4);
+    }
 
-	@Override
-	protected void onBlockBreak(World world, int x, int y, int z, Block block) {
-		world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound(), .5f, 1f);
-		block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0);
-		world.setBlock(x, y, z, Blocks.air);
-	}
+    @Override
+    protected void onBlockBreak(World world, int x, int y, int z, Block block) {
+        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound(), .5f, 1f);
+        block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0);
+        world.setBlock(x, y, z, Blocks.air);
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	protected Entity createRay(EntityPlayer player) {
-		return new EntityMineRayExpert(player);
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected Entity createRay(EntityPlayer player) {
+        return new EntityMineRayExpert(player);
+    }
 
 }

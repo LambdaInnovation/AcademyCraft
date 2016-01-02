@@ -66,7 +66,7 @@ public class BlockNode extends ACBlockContainer {
     }
     
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
         iconTop_disabled = ir.registerIcon("academy:node_top_0");
         iconTop_enabled = ir.registerIcon("academy:node_top_1");
@@ -77,7 +77,7 @@ public class BlockNode extends ACBlockContainer {
     }
     
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
     }
@@ -129,14 +129,14 @@ public class BlockNode extends ACBlockContainer {
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
         @Override
-		@SideOnly(Side.CLIENT)
+        @SideOnly(Side.CLIENT)
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerNode c = (ContainerNode) getServerContainer(player, world, x, y, z);
             return c == null ? null : new GuiNode(c);
         }
         
         @Override
-		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+        protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
             TileNode te = check(world, x, y, z);
             return te == null ? null : new ContainerNode(te, player);
         }

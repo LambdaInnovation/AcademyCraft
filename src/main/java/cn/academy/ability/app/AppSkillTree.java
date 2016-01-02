@@ -26,23 +26,23 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class AppSkillTree extends App {
-	
-	@RegApp
-	public static AppSkillTree instance = new AppSkillTree();
+    
+    @RegApp
+    public static AppSkillTree instance = new AppSkillTree();
 
-	public AppSkillTree() {
-		super("skill_tree");
-	}
+    public AppSkillTree() {
+        super("skill_tree");
+    }
 
-	@Override
-	public AppEnvironment createEnvironment() {
-		return new AppEnvironment() {
-			@SideOnly(Side.CLIENT)
-			@Override
-			public void onStart() {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeApp(getPlayer()));
-			}
-		};
-	}
+    @Override
+    public AppEnvironment createEnvironment() {
+        return new AppEnvironment() {
+            @SideOnly(Side.CLIENT)
+            @Override
+            public void onStart() {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeApp(getPlayer()));
+            }
+        };
+    }
 
 }

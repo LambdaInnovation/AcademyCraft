@@ -59,73 +59,73 @@ import org.apache.logging.log4j.Logger;
 @Registrant
 public class AcademyCraft {
 
-	@Instance("academy-craft")
-	public static AcademyCraft INSTANCE;
+    @Instance("academy-craft")
+    public static AcademyCraft INSTANCE;
 
-	public static final boolean DEBUG_MODE = false;
+    public static final boolean DEBUG_MODE = false;
 
-	public static final String VERSION = "1.0pr3_alpha";
+    public static final String VERSION = "1.0pr3_alpha";
 
-	public static final Logger log = LogManager.getLogger("AcademyCraft");
+    public static final Logger log = LogManager.getLogger("AcademyCraft");
 
-	static final String[] scripts = { "generic", "ability", "electromaster", "teleporter", "meltdowner",
-			"generic_skills" };
+    static final String[] scripts = { "generic", "ability", "electromaster", "teleporter", "meltdowner",
+            "generic_skills" };
 
-	public static Configuration config;
+    public static Configuration config;
 
-	/**
-	 * The globally used script program.
-	 */
-	private static ScriptProgram script;
+    /**
+     * The globally used script program.
+     */
+    private static ScriptProgram script;
 
-	/**
-	 * The globally used value pipeline.
-	 */
-	public static final ValuePipeline pipeline = new ValuePipeline();
+    /**
+     * The globally used value pipeline.
+     */
+    public static final ValuePipeline pipeline = new ValuePipeline();
 
-	public static RecipeRegistry recipes = new RecipeRegistry();
+    public static RecipeRegistry recipes = new RecipeRegistry();
 
-	@RegMessageHandler.WrapperInstance
-	public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
+    @RegMessageHandler.WrapperInstance
+    public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
-	@RegItem
-	@RegItem.UTName("logo")
-	public static Item logo;
+    @RegItem
+    @RegItem.UTName("logo")
+    public static Item logo;
 
-	public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
-		@Override
-		public Item getTabIconItem() {
-			return logo;
-		}
-	};
+    public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
+        @Override
+        public Item getTabIconItem() {
+            return logo;
+        }
+    };
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		log.info("Starting AcademyCraft");
-		log.info("Copyright (c) Lambda Innovation, 2013-2015");
-		log.info("http://ac.li-dev.cn/");
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        log.info("Starting AcademyCraft");
+        log.info("Copyright (c) Lambda Innovation, 2013-2015");
+        log.info("http://ac.li-dev.cn/");
 
-		config = new Configuration(event.getSuggestedConfigurationFile());
+        config = new Configuration(event.getSuggestedConfigurationFile());
 
-		script = new ScriptProgram();
-		for (String s : scripts) {
-			ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
-			ResourceCheck.add(res);
-			script.loadScript(res);
-		}
+        script = new ScriptProgram();
+        for (String s : scripts) {
+            ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
+            ResourceCheck.add(res);
+            script.loadScript(res);
+        }
 
-		ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
+        ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
 
-		RegistrationManager.INSTANCE.registerAll(this, "PreInit");
-	}
+        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
+    }
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		RegistrationManager.INSTANCE.registerAll(this, "Init");
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        RegistrationManager.INSTANCE.registerAll(this, "Init");
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
         // Finally we are hit by annoreg's loading order problem ..
         // Below is a kinda hacking solution to manullay override loading order, but clearly a better
         //  mechanism is needed
@@ -134,74 +134,74 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
 
         // Load script, where names now are available
-		recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
+        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
         // PostInit stage, including tutorial init, depends on registered recipes
         // NOTE: Defer tutorial registration to even later stage? hmm...
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 
-		if (DEBUG_MODE) {
-			System.out.printf("|-------------------------------------------------------\n");
-			System.out.printf("| AC Recipe Name Mappings\n");
-			System.out.printf("|--------------------------|----------------------------\n");
-			System.out.printf(String.format("| %-25s| Object Name\n", "Recipe Name"));
-			System.out.printf("|--------------------------|----------------------------\n");
-			for (Entry<String, Object> entry : recipes.nameMapping.entrySet()) {
-				Object obj = entry.getValue();
-				String str1 = entry.getKey(), str2;
-				if (obj instanceof Item) {
-					str2 = StatCollector.translateToLocal(((Item) obj).getUnlocalizedName() + ".name");
-				} else if (obj instanceof Block) {
-					str2 = StatCollector.translateToLocal(((Block) obj).getUnlocalizedName() + ".name");
-				} else {
-					str2 = obj.toString();
-				}
-				System.out.printf(String.format("| %-25s| %s\n", str1, str2));
-			}
-			System.out.printf("|-------------------------------------------------------\n");
-		}
+        if (DEBUG_MODE) {
+            System.out.printf("|-------------------------------------------------------\n");
+            System.out.printf("| AC Recipe Name Mappings\n");
+            System.out.printf("|--------------------------|----------------------------\n");
+            System.out.printf(String.format("| %-25s| Object Name\n", "Recipe Name"));
+            System.out.printf("|--------------------------|----------------------------\n");
+            for (Entry<String, Object> entry : recipes.nameMapping.entrySet()) {
+                Object obj = entry.getValue();
+                String str1 = entry.getKey(), str2;
+                if (obj instanceof Item) {
+                    str2 = StatCollector.translateToLocal(((Item) obj).getUnlocalizedName() + ".name");
+                } else if (obj instanceof Block) {
+                    str2 = StatCollector.translateToLocal(((Block) obj).getUnlocalizedName() + ".name");
+                } else {
+                    str2 = obj.toString();
+                }
+                System.out.printf(String.format("| %-25s| %s\n", str1, str2));
+            }
+            System.out.printf("|-------------------------------------------------------\n");
+        }
 
-		recipes = null; // Release and have fun GC
-	}
+        recipes = null; // Release and have fun GC
+    }
 
-	@SideOnly(Side.CLIENT)
-	@EventHandler
-	public void postInit2(FMLPostInitializationEvent event) {
-		ShaderProgram.releaseResources();
-	}
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void postInit2(FMLPostInitializationEvent event) {
+        ShaderProgram.releaseResources();
+    }
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
-		RegistrationManager.INSTANCE.registerAll(this, "StartServer");
-	}
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+    }
 
-	@EventHandler
-	public void serverStopping(FMLServerStoppingEvent event) {
-		config.save();
-	}
+    @EventHandler
+    public void serverStopping(FMLServerStoppingEvent event) {
+        config.save();
+    }
 
-	public static ScriptProgram getScript() {
-		return script;
-	}
+    public static ScriptProgram getScript() {
+        return script;
+    }
 
-	public static void addToRecipe(Class klass) {
-		CustomMappingHelper.addMapping(recipes, klass);
-	}
+    public static void addToRecipe(Class klass) {
+        CustomMappingHelper.addMapping(recipes, klass);
+    }
 
-	public static ScriptFunction getFunction(String name) {
-		return script.root.getFunction("ac." + name);
-	}
+    public static ScriptFunction getFunction(String name) {
+        return script.root.getFunction("ac." + name);
+    }
 
-	public static double getDouble(String name) {
-		return script.root.getDouble("ac." + name);
-	}
+    public static double getDouble(String name) {
+        return script.root.getDouble("ac." + name);
+    }
 
-	public static double getInt(String name) {
-		return script.root.getInteger("ac." + name);
-	}
+    public static double getInt(String name) {
+        return script.root.getInteger("ac." + name);
+    }
 
-	public static float getFloat(String name) {
-		return script.root.getFloat("ac." + name);
-	}
+    public static float getFloat(String name) {
+        return script.root.getFloat("ac." + name);
+    }
 
 }

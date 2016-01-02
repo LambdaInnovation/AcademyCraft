@@ -25,24 +25,24 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class AppFreqTransmitter extends App {
-	
-	@RegApp
-	public static AppFreqTransmitter instance = new AppFreqTransmitter();
+    
+    @RegApp
+    public static AppFreqTransmitter instance = new AppFreqTransmitter();
 
-	private AppFreqTransmitter() {
-		super("freq_transmitter");
-	}
+    private AppFreqTransmitter() {
+        super("freq_transmitter");
+    }
 
-	@Override
-	public AppEnvironment createEnvironment() {
-		return new AppEnvironment() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public void onStart() {
-				AuxGuiHandler.register(new FreqTransmitterUI());
-				this.getTerminal().dispose();
-			}
-		};
-	}
+    @Override
+    public AppEnvironment createEnvironment() {
+        return new AppEnvironment() {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public void onStart() {
+                AuxGuiHandler.register(new FreqTransmitterUI());
+                this.getTerminal().dispose();
+            }
+        };
+    }
 
 }

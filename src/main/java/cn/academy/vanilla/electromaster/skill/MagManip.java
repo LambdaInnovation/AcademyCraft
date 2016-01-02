@@ -47,191 +47,191 @@ import net.minecraft.world.World;
 @Registrant
 public class MagManip extends Skill {
 
-	public static final MagManip instance = new MagManip();
-	
-	private MagManip() {
-		super("mag_manip", 2);
-	}
-	
-	static boolean accepts(AbilityData data, ItemStack stack) {
-		Block block; 
-		if(stack == null || (block = Block.getBlockFromItem(stack.getItem())) == null)
-			return false;
-		
-		// Originally I want to strenghten this limit, but this skill would be too useless then.
-		// So currently, just blocks with rock | anvil material can be used.
-		return CatElectromaster.isWeakMetalBlock(block);
-	}
-	
-	static float getDamage(AbilityData data) {
-		return instance.callFloatWithExp("damage", data);
-	}
-	
-	static float getExpIncr() {
-		return instance.getFloat("expincr");
-	}
-	
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new ManipAction());
-	}
-	
-	public static class ManipAction extends SkillSyncAction {
+    public static final MagManip instance = new MagManip();
+    
+    private MagManip() {
+        super("mag_manip", 2);
+    }
+    
+    static boolean accepts(AbilityData data, ItemStack stack) {
+        Block block; 
+        if(stack == null || (block = Block.getBlockFromItem(stack.getItem())) == null)
+            return false;
+        
+        // Originally I want to strenghten this limit, but this skill would be too useless then.
+        // So currently, just blocks with rock | anvil material can be used.
+        return CatElectromaster.isWeakMetalBlock(block);
+    }
+    
+    static float getDamage(AbilityData data) {
+        return instance.callFloatWithExp("damage", data);
+    }
+    
+    static float getExpIncr() {
+        return instance.getFloat("expincr");
+    }
+    
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new ManipAction());
+    }
+    
+    public static class ManipAction extends SkillSyncAction {
 
-		public ManipAction() {
-			super(-1);
-		}
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			
-			if(!isRemote && !checkItem()) {
-				ActionManager.abortAction(this);
-			}
-			
-			if(isRemote)
-				startEffect();
-		}
-		
-		@Override
-		public void onTick() {
-			if(!isRemote) {
-				if(!checkItem() || !cpData.canPerform(instance.getConsumption(aData))) {
-					ActionManager.abortAction(this);
-				}
-			} else
-				updateEffect();
-		}
-		
-		@Override
-		public void onEnd() {
-			if(!isRemote) {
-				if(checkItem()) {
-					cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
-					
-					ItemStack stack = player.getCurrentEquippedItem();
-					EntityBlock entity = new ManipEntityBlock(player, getDamage(aData));
-					
-					entity.fromItemStack(stack);
-					new Motion3D(player, true).multiplyMotionBy(1.6).applyToEntity(entity);
-					
-					if(entity.isAvailable()) {
-						if(!player.capabilities.isCreativeMode) {
-							if(--stack.stackSize == 0) {
-								player.setCurrentItemOrArmor(0, null);
-							}
-						}
-						player.worldObj.spawnEntityInWorld(entity);
-					}
-					
-					aData.addSkillExp(instance, getExpIncr());
-				}
-			}
-			
-			setCooldown(instance, instance.getCooldown(aData));
-		}
-		
-		@Override
-		public void onFinalize() {
-			if(isRemote)
-				endEffect();
-		}
-		
-		private boolean checkItem() {
-			return accepts(aData, player.getCurrentEquippedItem());
-		}
-		
-		// CLIENT
-		@SideOnly(Side.CLIENT)
-		EntitySurroundArc arc;
-		
-		@SideOnly(Side.CLIENT)
-		private void startEffect() {
-			arc = new EntitySurroundArc(player);
-			arc.setArcType(ArcType.NORMAL);
-			arc.life = 233333;
-			player.worldObj.spawnEntityInWorld(arc);
-			player.capabilities.setPlayerWalkSpeed(0.05f);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void updateEffect() {
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void endEffect() {
-			player.capabilities.setPlayerWalkSpeed(0.1f);
-			arc.setDead();
-		}
-		
-	}
-	
-	
-	@RegEntity
-	public static class ManipEntityBlock extends EntityBlock {
-		
-		EntitySyncer syncer;
-		
-		@Synchronized
-		EntityPlayer player;
-		
-		float damage;
-		
-		public ManipEntityBlock(EntityPlayer _player, float _damage) {
-			super(_player);
-			player = _player;
-			damage = _damage;
-		}
+        public ManipAction() {
+            super(-1);
+        }
+        
+        @Override
+        public void onStart() {
+            super.onStart();
+            
+            if(!isRemote && !checkItem()) {
+                ActionManager.abortAction(this);
+            }
+            
+            if(isRemote)
+                startEffect();
+        }
+        
+        @Override
+        public void onTick() {
+            if(!isRemote) {
+                if(!checkItem() || !cpData.canPerform(instance.getConsumption(aData))) {
+                    ActionManager.abortAction(this);
+                }
+            } else
+                updateEffect();
+        }
+        
+        @Override
+        public void onEnd() {
+            if(!isRemote) {
+                if(checkItem()) {
+                    cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
+                    
+                    ItemStack stack = player.getCurrentEquippedItem();
+                    EntityBlock entity = new ManipEntityBlock(player, getDamage(aData));
+                    
+                    entity.fromItemStack(stack);
+                    new Motion3D(player, true).multiplyMotionBy(1.6).applyToEntity(entity);
+                    
+                    if(entity.isAvailable()) {
+                        if(!player.capabilities.isCreativeMode) {
+                            if(--stack.stackSize == 0) {
+                                player.setCurrentItemOrArmor(0, null);
+                            }
+                        }
+                        player.worldObj.spawnEntityInWorld(entity);
+                    }
+                    
+                    aData.addSkillExp(instance, getExpIncr());
+                }
+            }
+            
+            setCooldown(instance, instance.getCooldown(aData));
+        }
+        
+        @Override
+        public void onFinalize() {
+            if(isRemote)
+                endEffect();
+        }
+        
+        private boolean checkItem() {
+            return accepts(aData, player.getCurrentEquippedItem());
+        }
+        
+        // CLIENT
+        @SideOnly(Side.CLIENT)
+        EntitySurroundArc arc;
+        
+        @SideOnly(Side.CLIENT)
+        private void startEffect() {
+            arc = new EntitySurroundArc(player);
+            arc.setArcType(ArcType.NORMAL);
+            arc.life = 233333;
+            player.worldObj.spawnEntityInWorld(arc);
+            player.capabilities.setPlayerWalkSpeed(0.05f);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void updateEffect() {
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void endEffect() {
+            player.capabilities.setPlayerWalkSpeed(0.1f);
+            arc.setDead();
+        }
+        
+    }
+    
+    
+    @RegEntity
+    public static class ManipEntityBlock extends EntityBlock {
+        
+        EntitySyncer syncer;
+        
+        @Synchronized
+        EntityPlayer player;
+        
+        float damage;
+        
+        public ManipEntityBlock(EntityPlayer _player, float _damage) {
+            super(_player);
+            player = _player;
+            damage = _damage;
+        }
 
-		public ManipEntityBlock(World world) {
-			super(world);
-		}
-		
-		@Override
-		public void onFirstUpdate() {
-			super.onFirstUpdate();
-			(syncer = new EntitySyncer(this)).init();
-			
-			Rigidbody rb = this.getMotionHandler(Rigidbody.class);
-			rb.entitySel = new IEntitySelector() {
-				@Override
-				public boolean isEntityApplicable(Entity target) {
-					return target != player;
-				}
-			};
-			rb.gravity = 0.05;
-			
-			this.regEventHandler(new CollideHandler() {
+        public ManipEntityBlock(World world) {
+            super(world);
+        }
+        
+        @Override
+        public void onFirstUpdate() {
+            super.onFirstUpdate();
+            (syncer = new EntitySyncer(this)).init();
+            
+            Rigidbody rb = this.getMotionHandler(Rigidbody.class);
+            rb.entitySel = new IEntitySelector() {
+                @Override
+                public boolean isEntityApplicable(Entity target) {
+                    return target != player;
+                }
+            };
+            rb.gravity = 0.05;
+            
+            this.regEventHandler(new CollideHandler() {
 
-				@Override
-				public void onEvent(CollideEvent event) {
-					if(!worldObj.isRemote && 
-						event.result != null && 
-						event.result.entityHit != null)
-						event.result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
-				}
-				
-			});
-			
-			if(worldObj.isRemote)
-				startClient();
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void startClient() {
-			EntitySurroundArc surrounder = new EntitySurroundArc(this);
-			surrounder.life = 30;
-			surrounder.setArcType(ArcType.THIN);
-			worldObj.spawnEntityInWorld(surrounder);
-		}
-		
-		@Override
-		public void onUpdate() {
-			super.onUpdate();
-			syncer.update();
-		}
-		
-	}
+                @Override
+                public void onEvent(CollideEvent event) {
+                    if(!worldObj.isRemote && 
+                        event.result != null && 
+                        event.result.entityHit != null)
+                        event.result.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
+                }
+                
+            });
+            
+            if(worldObj.isRemote)
+                startClient();
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void startClient() {
+            EntitySurroundArc surrounder = new EntitySurroundArc(this);
+            surrounder.life = 30;
+            surrounder.setArcType(ArcType.THIN);
+            worldObj.spawnEntityInWorld(surrounder);
+        }
+        
+        @Override
+        public void onUpdate() {
+            super.onUpdate();
+            syncer.update();
+        }
+        
+    }
 
 }

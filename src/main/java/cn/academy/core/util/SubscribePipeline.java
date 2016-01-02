@@ -17,14 +17,14 @@ import java.lang.annotation.Target;
  * <br/>
  * Currently supported types are int, float, double.
  * The given parameters are matched into subscriber methods in order. If the pars doesn't match, 
- * 	ValuePipeline will trigger an warning.
+ *     ValuePipeline will trigger an warning.
  * @author WeAthFolD
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SubscribePipeline {
-	/**
-	 * @return The key name that this process method wants to listen to.
-	 */
-	String value();
+    /**
+     * @return The key name that this process method wants to listen to.
+     */
+    String value();
 }

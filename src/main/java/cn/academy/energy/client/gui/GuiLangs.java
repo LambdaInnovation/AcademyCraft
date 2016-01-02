@@ -20,16 +20,16 @@ import net.minecraft.util.StatCollector;
  */
 public class GuiLangs {
 
-	public static final String loadingUppercase() {
-		return local("loading_uppercase");
-	}
-	
-	public static final String loadingLowercase() {
-		return local("loading_lowercase");
-	}
-	
-	private static final String local(String name) {
-		return StatCollector.translateToLocal("ac.gui." + name + ".desc");
-	}
-	
+    public static final String loadingUppercase() {
+        return local("loading_uppercase");
+    }
+    
+    public static final String loadingLowercase() {
+        return local("loading_lowercase");
+    }
+    
+    private static final String local(String name) {
+        return StatCollector.translateToLocal("ac.gui." + name + ".desc");
+    }
+    
 }

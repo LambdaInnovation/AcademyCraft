@@ -41,77 +41,77 @@ import net.minecraft.world.World;
  */
 @Registrant
 public class ElectronBomb extends Skill {
-	
-	public static final ElectronBomb instance = new ElectronBomb();
+    
+    public static final ElectronBomb instance = new ElectronBomb();
 
-	static final int LIFE = 20, LIFE_IMPROVED = 5;
-	static final double DISTANCE = 15;
-	
-	private ElectronBomb() {
-		super("electron_bomb", 1);
-	}
-	
-	static float getDamage(AbilityData data) {
-		return instance.callFloatWithExp("damage", data);
-	}
-	
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstanceInstant().addChild(new EBAction());
-	}
-	
-	public static class EBAction extends SyncActionInstant {
+    static final int LIFE = 20, LIFE_IMPROVED = 5;
+    static final double DISTANCE = 15;
+    
+    private ElectronBomb() {
+        super("electron_bomb", 1);
+    }
+    
+    static float getDamage(AbilityData data) {
+        return instance.callFloatWithExp("damage", data);
+    }
+    
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstanceInstant().addChild(new EBAction());
+    }
+    
+    public static class EBAction extends SyncActionInstant {
 
-		@Override
-		public boolean validate() {
-			return cpData.perform(instance.getOverload(aData), 
-					instance.getConsumption(aData));
-		}
+        @Override
+        public boolean validate() {
+            return cpData.perform(instance.getOverload(aData), 
+                    instance.getConsumption(aData));
+        }
 
-		@Override
-		public void execute() {
-			if(!isRemote) {
-				EntityMdBall ball = new EntityMdBall(player, aData.getSkillExp(instance) >= 0.8f ? LIFE_IMPROVED : LIFE, 
-				new EntityCallback<EntityMdBall>() {
+        @Override
+        public void execute() {
+            if(!isRemote) {
+                EntityMdBall ball = new EntityMdBall(player, aData.getSkillExp(instance) >= 0.8f ? LIFE_IMPROVED : LIFE, 
+                new EntityCallback<EntityMdBall>() {
 
-					@Override
-					public void execute(EntityMdBall ball) {
-						MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
-							EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
-						if(trace != null && trace.entityHit != null) {
-							MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
-						}
-						actionClient(player, ball);
-					}
-					
-				});
-				world.spawnEntityInWorld(ball);
-			}
-			
-			aData.addSkillExp(instance, instance.getFloat("expincr"));
-			setCooldown(instance, instance.getCooldown(aData));
-		}
-		
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	static void actionClient(@RangedTarget(range = 20) EntityPlayer player, @Instance EntityMdBall ball) {
-		Vec3 dest = getDest(player);
-		spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
-			dest.xCoord, dest.yCoord, dest.zCoord);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private static void spawnRay(World world, EntityPlayer player, double x0, double y0, double z0, double x1, double y1, double z1) {
-		EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
-		raySmall.setFromTo(x0, y0 + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), z0,
-				x1, y1, z1);
-		raySmall.viewOptimize = false;
-		world.spawnEntityInWorld(raySmall);
-	}
-	
-	static Vec3 getDest(EntityPlayer player) {
-		return Raytrace.getLookingPos(player, DISTANCE).getLeft();
-	}
+                    @Override
+                    public void execute(EntityMdBall ball) {
+                        MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
+                            EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
+                        if(trace != null && trace.entityHit != null) {
+                            MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
+                        }
+                        actionClient(player, ball);
+                    }
+                    
+                });
+                world.spawnEntityInWorld(ball);
+            }
+            
+            aData.addSkillExp(instance, instance.getFloat("expincr"));
+            setCooldown(instance, instance.getCooldown(aData));
+        }
+        
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    static void actionClient(@RangedTarget(range = 20) EntityPlayer player, @Instance EntityMdBall ball) {
+        Vec3 dest = getDest(player);
+        spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
+            dest.xCoord, dest.yCoord, dest.zCoord);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static void spawnRay(World world, EntityPlayer player, double x0, double y0, double z0, double x1, double y1, double z1) {
+        EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
+        raySmall.setFromTo(x0, y0 + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), z0,
+                x1, y1, z1);
+        raySmall.viewOptimize = false;
+        world.spawnEntityInWorld(raySmall);
+    }
+    
+    static Vec3 getDest(EntityPlayer player) {
+        return Raytrace.getLookingPos(player, DISTANCE).getLeft();
+    }
 
 }

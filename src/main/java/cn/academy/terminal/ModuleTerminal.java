@@ -13,13 +13,13 @@ import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 @RegACRecipeNames
 public class ModuleTerminal {
 
-	@RegItem
-	@RegItem.HasRender
-	@RecipeName("terminal")
-	public static ItemTerminalInstaller terminalInstaller;
+    @RegItem
+    @RegItem.HasRender
+    @RecipeName("terminal")
+    public static ItemTerminalInstaller terminalInstaller;
 
-	public static void init() {
-		ItemApp.registerItems();
-	}
+    public static void init() {
+        ItemApp.registerItems();
+    }
 
 }

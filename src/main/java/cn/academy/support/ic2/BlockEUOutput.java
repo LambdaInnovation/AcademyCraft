@@ -32,13 +32,13 @@ import net.minecraft.world.World;
  */
 public class BlockEUOutput extends BlockConverterBase {
 
-	public BlockEUOutput() {
-		super("eu_output", "IF", "EU", TileEUOutput.class);
-	}
-	
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileEUOutput();
-	}
+    public BlockEUOutput() {
+        super("eu_output", "IF", "EU", TileEUOutput.class);
+    }
+    
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new TileEUOutput();
+    }
 
 }

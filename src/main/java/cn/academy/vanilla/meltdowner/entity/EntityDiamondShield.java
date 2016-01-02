@@ -30,41 +30,41 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityDiamondShield extends EntityAdvanced {
-	
-	@RegEntity.Render
-	public static RenderDiamondShield renderer;
-	
-	public static final float SIZE = 1.8f;
-	
-	final EntityPlayer player;
+    
+    @RegEntity.Render
+    public static RenderDiamondShield renderer;
+    
+    public static final float SIZE = 1.8f;
+    
+    final EntityPlayer player;
 
-	public EntityDiamondShield(EntityPlayer _player) {
-		super(_player.worldObj);
-		player = _player;
-		this.setSize(SIZE, SIZE);
-	}
-	
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		
-		Motion3D mo = new Motion3D(player, true).move(1);
-		mo.py -= 0.5;
-		setPosition(mo.px, mo.py, mo.pz);
-		
-		this.rotationYaw = player.rotationYawHead;
-		this.rotationPitch = player.rotationPitch;
-	}
-	
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
+    public EntityDiamondShield(EntityPlayer _player) {
+        super(_player.worldObj);
+        player = _player;
+        this.setSize(SIZE, SIZE);
+    }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        
+        Motion3D mo = new Motion3D(player, true).move(1);
+        mo.py -= 0.5;
+        setPosition(mo.px, mo.py, mo.pz);
+        
+        this.rotationYaw = player.rotationYawHead;
+        this.rotationPitch = player.rotationPitch;
+    }
+    
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 1;
+    }
 
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {}
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tag) {}
 
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {}
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tag) {}
 
 }

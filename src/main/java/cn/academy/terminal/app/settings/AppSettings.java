@@ -27,22 +27,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class AppSettings extends App {
 
-	@RegApp
-	public static AppSettings instance = new AppSettings();
-	
-	private AppSettings() {
-		super("settings");
-		setPreInstalled();
-	}
+    @RegApp
+    public static AppSettings instance = new AppSettings();
+    
+    private AppSettings() {
+        super("settings");
+        setPreInstalled();
+    }
 
-	@Override
-	public AppEnvironment createEnvironment() {
-		return new AppEnvironment() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public void onStart() {
-				Minecraft.getMinecraft().displayGuiScreen(new SettingsUI());
-			}
-		};
-	}
+    @Override
+    public AppEnvironment createEnvironment() {
+        return new AppEnvironment() {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public void onStart() {
+                Minecraft.getMinecraft().displayGuiScreen(new SettingsUI());
+            }
+        };
+    }
 }

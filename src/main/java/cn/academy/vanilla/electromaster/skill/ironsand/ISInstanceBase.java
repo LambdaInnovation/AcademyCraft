@@ -20,34 +20,34 @@ import cn.academy.vanilla.electromaster.skill.ironsand.IronSand.IronSandAction;
  * @author WeAthFolD
  */
 public abstract class ISInstanceBase extends SkillInstance {
-	
-	final String name;
-	
-	public ISInstanceBase(String _name) {
-		name = _name;
-	}
-	
-	@Override
-	public final void onStart() {
-		IronSandAction env = getEnv();
-		if(env == null) {
-			this.abortSkill();
-			return;
-		}
-		
-		if(!env.getCurrentType().equals(name)) {
-			env.setCurrentType(name);
-			abortSkill();
-			return;
-		}
-		
-		startSkill();
-	}
-	
-	public void startSkill() {}
-	
-	protected IronSandAction getEnv() {
-		return ActionManager.findAction(getPlayer(), IronSandAction.class);
-	}
-	
+    
+    final String name;
+    
+    public ISInstanceBase(String _name) {
+        name = _name;
+    }
+    
+    @Override
+    public final void onStart() {
+        IronSandAction env = getEnv();
+        if(env == null) {
+            this.abortSkill();
+            return;
+        }
+        
+        if(!env.getCurrentType().equals(name)) {
+            env.setCurrentType(name);
+            abortSkill();
+            return;
+        }
+        
+        startSkill();
+    }
+    
+    public void startSkill() {}
+    
+    protected IronSandAction getEnv() {
+        return ActionManager.findAction(getPlayer(), IronSandAction.class);
+    }
+    
 }

@@ -21,33 +21,33 @@ import cn.academy.ability.api.data.AbilityData;
  * @author WeAthFolD
  */
 public class DevConditionDep implements IDevCondition {
-	
-	public final Skill dependency;
-	public final float requiredExp;
-	
-	public DevConditionDep(Skill _dep) {
-		this(_dep, 0.0f);
-	}
-	
-	public DevConditionDep(Skill _dep, float _requiredExp) {
-		dependency = _dep;
-		requiredExp = _requiredExp;
-	}
+    
+    public final Skill dependency;
+    public final float requiredExp;
+    
+    public DevConditionDep(Skill _dep) {
+        this(_dep, 0.0f);
+    }
+    
+    public DevConditionDep(Skill _dep, float _requiredExp) {
+        dependency = _dep;
+        requiredExp = _requiredExp;
+    }
 
-	@Override
-	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		return data.isSkillLearned(dependency) &&
-				data.getSkillExp(dependency) >= requiredExp;
-	}
+    @Override
+    public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+        return data.isSkillLearned(dependency) &&
+                data.getSkillExp(dependency) >= requiredExp;
+    }
 
-	@Override
-	public ResourceLocation getIcon() {
-		return dependency.getHintIcon();
-	}
+    @Override
+    public ResourceLocation getIcon() {
+        return dependency.getHintIcon();
+    }
 
-	@Override
-	public String getHintText() {
-		return dependency.getDisplayName() + String.format(": %.0f%%", requiredExp * 100);
-	}
+    @Override
+    public String getHintText() {
+        return dependency.getDisplayName() + String.format(": %.0f%%", requiredExp * 100);
+    }
 
 }

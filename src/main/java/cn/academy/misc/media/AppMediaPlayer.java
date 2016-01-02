@@ -26,23 +26,23 @@ import net.minecraft.client.Minecraft;
  */
 @Registrant
 public class AppMediaPlayer extends App {
-	
-	@RegApp
-	public static AppMediaPlayer instance = new AppMediaPlayer();
+    
+    @RegApp
+    public static AppMediaPlayer instance = new AppMediaPlayer();
 
-	AppMediaPlayer() {
-		super("media_player");
-	}
+    AppMediaPlayer() {
+        super("media_player");
+    }
 
-	@Override
-	public AppEnvironment createEnvironment() {
-		return new AppEnvironment() {
-			@SideOnly(Side.CLIENT)
-			@Override
-			public void onStart() {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiMediaPlayer());
-			}
-		};
-	}
+    @Override
+    public AppEnvironment createEnvironment() {
+        return new AppEnvironment() {
+            @SideOnly(Side.CLIENT)
+            @Override
+            public void onStart() {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiMediaPlayer());
+            }
+        };
+    }
 
 }

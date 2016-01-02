@@ -23,13 +23,13 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotIFItem extends Slot {
 
-	public SlotIFItem(IInventory inv, int slot, int x, int y) {
-		super(inv, slot, x, y);
-	}
+    public SlotIFItem(IInventory inv, int slot, int x, int y) {
+        super(inv, slot, x, y);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack stack) {
-		return (stack != null && IFItemManager.instance.isSupported(stack));
-	}
+    @Override
+    public boolean isItemValid(ItemStack stack) {
+        return (stack != null && IFItemManager.instance.isSupported(stack));
+    }
 
 }

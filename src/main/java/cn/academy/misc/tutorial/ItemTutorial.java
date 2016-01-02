@@ -29,22 +29,22 @@ import net.minecraft.world.World;
  */
 public class ItemTutorial extends ACItem {
 
-	public ItemTutorial() {
-		super("tutorial");
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
+    public ItemTutorial() {
+        super("tutorial");
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(world.isRemote) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
-		}
+        if(world.isRemote) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
+        }
         return stack;
     }
 
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		list.add(StatCollector.translateToLocal("ac.coming_soon"));
-	}
-	
+        list.add(StatCollector.translateToLocal("ac.coming_soon"));
+    }
+    
 }

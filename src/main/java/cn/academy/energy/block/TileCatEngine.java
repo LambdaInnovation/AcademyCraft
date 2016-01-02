@@ -30,43 +30,43 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileCatEngine extends TileGeneratorBase {
-	
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderCatEngine renderer;
-	
-	// Sync
-	int syncTicker;
-	
-	// Intrusive render parameters
-	public double thisTickGen;
-	public double rotation;
-	public long lastRender;
+    
+    @SideOnly(Side.CLIENT)
+    @RegTileEntity.Render
+    public static RenderCatEngine renderer;
+    
+    // Sync
+    int syncTicker;
+    
+    // Intrusive render parameters
+    public double thisTickGen;
+    public double rotation;
+    public long lastRender;
 
-	public TileCatEngine() {
-		super("infinite_generator", 0, 2000, 200);
-	}
+    public TileCatEngine() {
+        super("infinite_generator", 0, 2000, 200);
+    }
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		
-		if(!getWorldObj().isRemote) {
-			if(++syncTicker == 20) {
-				syncTicker = 0;
-				syncGen(this, thisTickGen);
-			}
-		}
-	}
-	
-	@Override
-	public double getGeneration(double required) {
-		return (thisTickGen = Math.min(required, 500));
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	private static void syncGen(@RangedTarget(range = 10) TileCatEngine te, @Data Double amt) {
-		te.thisTickGen = amt;
-	}
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        
+        if(!getWorldObj().isRemote) {
+            if(++syncTicker == 20) {
+                syncTicker = 0;
+                syncGen(this, thisTickGen);
+            }
+        }
+    }
+    
+    @Override
+    public double getGeneration(double required) {
+        return (thisTickGen = Math.min(required, 500));
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    private static void syncGen(@RangedTarget(range = 10) TileCatEngine te, @Data Double amt) {
+        te.thisTickGen = amt;
+    }
 
 }

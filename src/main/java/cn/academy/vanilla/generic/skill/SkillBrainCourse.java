@@ -26,26 +26,26 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class SkillBrainCourse extends Skill {
 
-	public SkillBrainCourse() {
-		super("brain_course", 4);
-		this.canControl = false;
-		this.isGeneric = true;
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	@SubscribePipeline("ability.maxcp")
-	public float addMaxCP(float cp, EntityPlayer player) {
-		if(AbilityData.get(player).isSkillLearned(this))
-			cp += 1000;
-		return cp;
-	}
-	
-	@SubscribeEvent
-	public void onExpAdded(SkillExpAddedEvent event) {
-		AbilityData aData = event.getAbilityData();
-		if(event.skill.canControl() && aData.isSkillLearned(this)) {
-			aData.addSkillExp(this, event.amount * this.getFloat("incr_rate"));
-		}
-	}
+    public SkillBrainCourse() {
+        super("brain_course", 4);
+        this.canControl = false;
+        this.isGeneric = true;
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    @SubscribePipeline("ability.maxcp")
+    public float addMaxCP(float cp, EntityPlayer player) {
+        if(AbilityData.get(player).isSkillLearned(this))
+            cp += 1000;
+        return cp;
+    }
+    
+    @SubscribeEvent
+    public void onExpAdded(SkillExpAddedEvent event) {
+        AbilityData aData = event.getAbilityData();
+        if(event.skill.canControl() && aData.isSkillLearned(this)) {
+            aData.addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+        }
+    }
 
 }

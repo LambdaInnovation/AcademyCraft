@@ -52,38 +52,38 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class GuiTutorial extends CGuiScreen {
 
-	static final IFont font = Resources.font(),
+    static final IFont font = Resources.font(),
             fontBold = Resources.fontBold(),
             fontItalic = Resources.fontItalic();
 
-	static WidgetContainer loaded;
-	static {
-		loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
-	}
+    static WidgetContainer loaded;
+    static {
+        loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
+    }
 
-	static final double REF_WIDTH = 480;
+    static final double REF_WIDTH = 480;
 
-	final Color GLOW_COLOR = Color.white();
-	final FontOption fo_descTitle = new FontOption(10);
+    final Color GLOW_COLOR = Color.white();
+    final FontOption fo_descTitle = new FontOption(10);
 
-	double cachedWidth = -1;
+    double cachedWidth = -1;
 
-	final EntityPlayer player;
-	final Collection<ACTutorial> tutlist;
+    final EntityPlayer player;
+    final Collection<ACTutorial> tutlist;
 
-	Widget frame;
-	Widget leftPart, rightPart;
+    Widget frame;
+    Widget leftPart, rightPart;
 
-	Widget listArea;
+    Widget listArea;
 
-	Widget showWindow, rightWindow, centerPart;
+    Widget showWindow, rightWindow, centerPart;
 
-	Widget logo0, logo1, logo2, logo3;
-	Widget centerText, briefText;
-	Widget showArea;
+    Widget logo0, logo1, logo2, logo3;
+    Widget centerText, briefText;
+    Widget showArea;
 
-	// Current displayed tutorial
-	TutInfo currentTut = null;
+    // Current displayed tutorial
+    TutInfo currentTut = null;
 
     class CachedRenderInfo {
         final String title, rawBrief, rawContent;
@@ -143,314 +143,314 @@ public class GuiTutorial extends CGuiScreen {
         return cached.get(tut);
     }
 
-	public GuiTutorial() {
-		player = Minecraft.getMinecraft().thePlayer;
-		tutlist = TutorialRegistry.getLearned(player);
+    public GuiTutorial() {
+        player = Minecraft.getMinecraft().thePlayer;
+        tutlist = TutorialRegistry.getLearned(player);
 
-		initUI();
-	}
+        initUI();
+    }
 
-	@Override
-	public void drawScreen(int mx, int my, float w) {
-		// Make the whole screen scale with width, for better display effect
-		if(cachedWidth != width) {
-			frame.transform.scale = width / REF_WIDTH;
-			frame.dirty = true;
-		}
-		cachedWidth = width;
-		super.drawScreen(mx, my, w);
-	}
+    @Override
+    public void drawScreen(int mx, int my, float w) {
+        // Make the whole screen scale with width, for better display effect
+        if(cachedWidth != width) {
+            frame.transform.scale = width / REF_WIDTH;
+            frame.dirty = true;
+        }
+        cachedWidth = width;
+        super.drawScreen(mx, my, w);
+    }
 
-	private void initUI() {
-		frame = loaded.getWidget("frame").copy();
+    private void initUI() {
+        frame = loaded.getWidget("frame").copy();
 
-		leftPart = frame.getWidget("leftPart");
-		listArea = leftPart.getWidget("list");
+        leftPart = frame.getWidget("leftPart");
+        listArea = leftPart.getWidget("list");
 
-		rightPart = frame.getWidget("rightPart");
+        rightPart = frame.getWidget("rightPart");
 
-		showWindow = rightPart.getWidget("showWindow");
-		rightWindow = rightPart.getWidget("rightWindow");
-		centerPart = rightPart.getWidget("centerPart");
-		logo0 = rightPart.getWidget("logo0");
-		logo1 = rightPart.getWidget("logo1");
-		logo2 = rightPart.getWidget("logo2");
-		logo3 = rightPart.getWidget("logo3");
+        showWindow = rightPart.getWidget("showWindow");
+        rightWindow = rightPart.getWidget("rightWindow");
+        centerPart = rightPart.getWidget("centerPart");
+        logo0 = rightPart.getWidget("logo0");
+        logo1 = rightPart.getWidget("logo1");
+        logo2 = rightPart.getWidget("logo2");
+        logo3 = rightPart.getWidget("logo3");
 
-		centerText = centerPart.getWidget("text");
-		briefText = rightPart.getWidget("text");
+        centerText = centerPart.getWidget("text");
+        briefText = rightPart.getWidget("text");
 
-		showArea = showWindow.getWidget("area");
+        showArea = showWindow.getWidget("area");
 
-		showWindow.transform.doesDraw = false;
-		rightWindow.transform.doesDraw = false;
-		centerPart.transform.doesDraw = false;
+        showWindow.transform.doesDraw = false;
+        rightWindow.transform.doesDraw = false;
+        centerPart.transform.doesDraw = false;
 
-		// Event handlers
-		centerPart.getWidget("text").listen(FrameEvent.class, (w, e) -> {
-			if(currentTut != null) {
+        // Event handlers
+        centerPart.getWidget("text").listen(FrameEvent.class, (w, e) -> {
+            if(currentTut != null) {
                 GLMarkdownRenderer renderer = renderInfo(currentTut.tut).getContent();
 
-				glPushMatrix();
-				glTranslated(0, 0, 10);
+                glPushMatrix();
+                glTranslated(0, 0, 10);
 
-				glColorMask(false, false, false, false);
-				glDepthMask(true);
-				HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
-				glColorMask(true, true, true, true);
+                glColorMask(false, false, false, false);
+                glDepthMask(true);
+                HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
+                glColorMask(true, true, true, true);
 
-				double ht = Math.max(0, renderer.getMaxHeight() - w.transform.height + 10);
-				double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
-				glTranslated(3, 3 - delta, 0);
-				glDepthFunc(GL_EQUAL);
-				renderer.render();
-				glDepthFunc(GL_LEQUAL);
-				glPopMatrix();
-			}
-		});
+                double ht = Math.max(0, renderer.getMaxHeight() - w.transform.height + 10);
+                double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
+                glTranslated(3, 3 - delta, 0);
+                glDepthFunc(GL_EQUAL);
+                renderer.render();
+                glDepthFunc(GL_LEQUAL);
+                glPopMatrix();
+            }
+        });
 
-		rightWindow.getWidget("text").listen(FrameEvent.class, (w, e) -> {
-			if(currentTut != null) {
+        rightWindow.getWidget("text").listen(FrameEvent.class, (w, e) -> {
+            if(currentTut != null) {
                 CachedRenderInfo info = renderInfo(currentTut.tut);
 
-				font.draw(info.title, 3, 3, fo_descTitle);
+                font.draw(info.title, 3, 3, fo_descTitle);
 
-				glPushMatrix();
-				glTranslated(3, 18, 0);
+                glPushMatrix();
+                glTranslated(3, 18, 0);
                 info.getBrief().render();
-				glPopMatrix();
-			}
-		});
+                glPopMatrix();
+            }
+        });
 
-		showWindow.getWidget("button_left").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(-1));
-		showWindow.getWidget("button_right").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(1));
+        showWindow.getWidget("button_left").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(-1));
+        showWindow.getWidget("button_right").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(1));
 
-		showArea.listen(FrameEvent.class, (w, e) -> {
-			glMatrixMode(GL11.GL_PROJECTION);
-			glPushMatrix();
-			glLoadIdentity();
+        showArea.listen(FrameEvent.class, (w, e) -> {
+            glMatrixMode(GL11.GL_PROJECTION);
+            glPushMatrix();
+            glLoadIdentity();
 
-			double scale = 366.0 / width * frame.scale;
-			float aspect = (float) mc.displayWidth / mc.displayHeight;
+            double scale = 366.0 / width * frame.scale;
+            float aspect = (float) mc.displayWidth / mc.displayHeight;
 
-			glTranslated(
-					-1 + 2.0 * (w.scale + w.x) / width,
-					1 - 2.0 * (w.scale + w.y) / height,
-					0);
-			GL11.glScaled(scale, -scale * aspect, -0.5);
+            glTranslated(
+                    -1 + 2.0 * (w.scale + w.x) / width,
+                    1 - 2.0 * (w.scale + w.y) / height,
+                    0);
+            GL11.glScaled(scale, -scale * aspect, -0.5);
 
-			GLU.gluPerspective(50, 1, 1f, 100);
+            GLU.gluPerspective(50, 1, 1f, 100);
 
-			glMatrixMode(GL11.GL_MODELVIEW);
-			glPushMatrix();
-			glLoadIdentity();
+            glMatrixMode(GL11.GL_MODELVIEW);
+            glPushMatrix();
+            glLoadIdentity();
 
-			// glCullFace(GL_FRONT);
-			// glDisable(GL11.GL_DEPTH_TEST);
-			glDisable(GL11.GL_ALPHA_TEST);
-			glEnable(GL11.GL_BLEND);
-			glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            // glCullFace(GL_FRONT);
+            // glDisable(GL11.GL_DEPTH_TEST);
+            glDisable(GL11.GL_ALPHA_TEST);
+            glEnable(GL11.GL_BLEND);
+            glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             glCullFace(GL_FRONT);
-			glColor4d(1, 1, 1, 1);
+            glColor4d(1, 1, 1, 1);
 
-			glTranslated(0, 0, -4);
+            glTranslated(0, 0, -4);
 
-			glTranslated(.55, .55, .5);
+            glTranslated(.55, .55, .5);
 
-			glScaled(.75, -.75, .75);
+            glScaled(.75, -.75, .75);
 
             glRotated(-20, 1, 0, 0.1);
 
-			currentTut.curHandler().draw();
+            currentTut.curHandler().draw();
 
-			glPopMatrix();
+            glPopMatrix();
 
-			glMatrixMode(GL11.GL_PROJECTION);
-			glPopMatrix();
+            glMatrixMode(GL11.GL_PROJECTION);
+            glPopMatrix();
 
-			glMatrixMode(GL11.GL_MODELVIEW);
+            glMatrixMode(GL11.GL_MODELVIEW);
 
-			glEnable(GL11.GL_DEPTH_TEST);
-			glEnable(GL11.GL_ALPHA_TEST);
-			glCullFace(GL11.GL_BACK);
-		});
-		//
+            glEnable(GL11.GL_DEPTH_TEST);
+            glEnable(GL11.GL_ALPHA_TEST);
+            glCullFace(GL11.GL_BACK);
+        });
+        //
 
 
-		rebuildList(tutlist);
+        rebuildList(tutlist);
 
-		listArea.transform.doesDraw = false;
+        listArea.transform.doesDraw = false;
 
-		/* Start animation controller */ {
-			blend(logo2, 0.65, 0.3);
-			blend(logo0, 1.75, 0.3);
-			blend(leftPart, 1.75, 0.3);
-			blend(logo1, 1.3, 0.3);
-			blend(logo3, 0.1, 0.3);
-			blendy(logo3, 0.7, 0.4, 63, -36);
+        /* Start animation controller */ {
+            blend(logo2, 0.65, 0.3);
+            blend(logo0, 1.75, 0.3);
+            blend(leftPart, 1.75, 0.3);
+            blend(logo1, 1.3, 0.3);
+            blend(logo3, 0.1, 0.3);
+            blendy(logo3, 0.7, 0.4, 63, -36);
 
-			long startTime = GameTimer.getAbsTime();
-			logo1.listen(FrameEvent.class, (__, e) -> {
-				final float ht = 5;
-				final double
-						ln = 500, ln2 = 300, cl = 50, // Height and length
-						b1 = 0.3, // Blend stage 1
-						b2 = 0.2; // Blend stage 2
+            long startTime = GameTimer.getAbsTime();
+            logo1.listen(FrameEvent.class, (__, e) -> {
+                final float ht = 5;
+                final double
+                        ln = 500, ln2 = 300, cl = 50, // Height and length
+                        b1 = 0.3, // Blend stage 1
+                        b2 = 0.2; // Blend stage 2
 
-				glPushMatrix();
-				glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
-				double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
-				if(dt < 0) dt = 0;
-				if(dt < b1) {
-					if(dt > 0) {
-						double len = MathUtils.lerp(0, ln, dt / b1);
-						if(len > cl) {
-							lineglow(cl, len, ht);
-							lineglow(-len, -cl, ht);
-						}
-					}
-				} else {
-					double ldt = dt - b1;
-					if(ldt > b2) {
-						ldt = b2;
-					}
-					double len = ln;
-					double len2 = MathUtils.lerp(ln - 2 * cl, ln2, ldt / b2);
-					lineglow(ln - len2, len, ht);
-					lineglow(-len, -(ln - len2), ht);
-				}
+                glPushMatrix();
+                glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
+                double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
+                if(dt < 0) dt = 0;
+                if(dt < b1) {
+                    if(dt > 0) {
+                        double len = MathUtils.lerp(0, ln, dt / b1);
+                        if(len > cl) {
+                            lineglow(cl, len, ht);
+                            lineglow(-len, -cl, ht);
+                        }
+                    }
+                } else {
+                    double ldt = dt - b1;
+                    if(ldt > b2) {
+                        ldt = b2;
+                    }
+                    double len = ln;
+                    double len2 = MathUtils.lerp(ln - 2 * cl, ln2, ldt / b2);
+                    lineglow(ln - len2, len, ht);
+                    lineglow(-len, -(ln - len2), ht);
+                }
 
-				glPopMatrix();
+                glPopMatrix();
 
-				listArea.transform.doesDraw = dt > 2.0;
-			});
-		}
+                listArea.transform.doesDraw = dt > 2.0;
+            });
+        }
 
-		gui.addWidget("frame", frame);
-	}
+        gui.addWidget("frame", frame);
+    }
 
-	private void rebuildList(Collection<ACTutorial> list) {
-		listArea.removeComponent("ElementList");
-		ElementList el = new ElementList();
-		for(ACTutorial t : list) {
-			Widget w = new Widget();
-			w.transform.setSize(72, 12);
-			w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
+    private void rebuildList(Collection<ACTutorial> list) {
+        listArea.removeComponent("ElementList");
+        ElementList el = new ElementList();
+        for(ACTutorial t : list) {
+            Widget w = new Widget();
+            w.transform.setSize(72, 12);
+            w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
 
-			TextBox box = new TextBox(new FontOption(10));
-			box.content = renderInfo(t).title;
-			box.localized = true;
-			box.emit = true;
-			box.heightAlign = HeightAlign.CENTER;
+            TextBox box = new TextBox(new FontOption(10));
+            box.content = renderInfo(t).title;
+            box.localized = true;
+            box.emit = true;
+            box.heightAlign = HeightAlign.CENTER;
 
-			w.listen(LeftClickEvent.class, (__, e) ->
-			{
-				if(currentTut == null) {
-					// Start blending view area!
-					for(Widget old : new Widget[] { logo2, logo0, logo1, logo3 }) {
-						blend(old, 0, 0.3, true);
-					}
-					centerPart.transform.doesDraw = true;
-					rightWindow.transform.doesDraw = true;
-					showWindow.transform.doesDraw = true;
-				}
+            w.listen(LeftClickEvent.class, (__, e) ->
+            {
+                if(currentTut == null) {
+                    // Start blending view area!
+                    for(Widget old : new Widget[] { logo2, logo0, logo1, logo3 }) {
+                        blend(old, 0, 0.3, true);
+                    }
+                    centerPart.transform.doesDraw = true;
+                    rightWindow.transform.doesDraw = true;
+                    showWindow.transform.doesDraw = true;
+                }
 
                 if (currentTut == null || currentTut.tut != t) {
                     setCurrentTut(t);
                 }
-			});
+            });
 
-			w.addComponent(box);
-			el.addWidget(w);
-		}
-		listArea.addComponent(el);
-	}
+            w.addComponent(box);
+            el.addWidget(w);
+        }
+        listArea.addComponent(el);
+    }
 
-	private void lineglow(double x0, double x1, float ht) {
-		ACRenderingHelper.drawGlow(x0, -1, x1-x0, ht-2, 5, GLOW_COLOR);
-		glColor4d(1, 1, 1, 1);
-		ACRenderingHelper.lineSegment(x0, 0, x1, 0, ht);
-	}
+    private void lineglow(double x0, double x1, float ht) {
+        ACRenderingHelper.drawGlow(x0, -1, x1-x0, ht-2, 5, GLOW_COLOR);
+        glColor4d(1, 1, 1, 1);
+        ACRenderingHelper.lineSegment(x0, 0, x1, 0, ht);
+    }
 
-	private void blend(Widget w, double start, double tin) {
-		blend(w, start, tin, false);
-	}
+    private void blend(Widget w, double start, double tin) {
+        blend(w, start, tin, false);
+    }
 
-	private void blend(Widget w, double start, double tin, boolean reverse) {
-		DrawTexture dt = DrawTexture.get(w);
-		long startTime = GameTimer.getAbsTime();
-		double startAlpha = dt.color.a;
-		dt.color.a = reverse ? startAlpha : 0;
+    private void blend(Widget w, double start, double tin, boolean reverse) {
+        DrawTexture dt = DrawTexture.get(w);
+        long startTime = GameTimer.getAbsTime();
+        double startAlpha = dt.color.a;
+        dt.color.a = reverse ? startAlpha : 0;
 
-		w.listen(FrameEvent.class, (__, e) ->
-		{
-			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
-			double alpha = startAlpha *
-					MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
-			if(reverse) {
-				alpha = 1 - alpha;
-				if(alpha == 0) {
-					w.dispose();
-				}
-			}
-			dt.color.a = alpha;
-		});
-	}
+        w.listen(FrameEvent.class, (__, e) ->
+        {
+            double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
+            double alpha = startAlpha *
+                    MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
+            if(reverse) {
+                alpha = 1 - alpha;
+                if(alpha == 0) {
+                    w.dispose();
+                }
+            }
+            dt.color.a = alpha;
+        });
+    }
 
-	private void blendy(Widget w, double start, double tin, double y0, double y1) {
-		long startTime = GameTimer.getAbsTime();
-		w.transform.y = y0;
-		w.dirty = true;
+    private void blendy(Widget w, double start, double tin, double y0, double y1) {
+        long startTime = GameTimer.getAbsTime();
+        w.transform.y = y0;
+        w.dirty = true;
 
-		w.listen(FrameEvent.class, (__, e) ->
-		{
-			double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
-			double lambda = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
-			w.transform.y = MathUtils.lerp(y0, y1, lambda);
-			w.dirty = true;
-		});
-	}
+        w.listen(FrameEvent.class, (__, e) ->
+        {
+            double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
+            double lambda = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
+            w.transform.y = MathUtils.lerp(y0, y1, lambda);
+            w.dirty = true;
+        });
+    }
 
-	private void setCurrentTut(ACTutorial tut) {
-		currentTut = new TutInfo(tut);
-		boolean cycleable = tut.getPreview().size() > 1;
+    private void setCurrentTut(ACTutorial tut) {
+        currentTut = new TutInfo(tut);
+        boolean cycleable = tut.getPreview().size() > 1;
         showArea.removeWidget("delegate");
         VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
-		showWindow.getWidget("button_left").transform.doesDraw
-				= showWindow.getWidget("button_right").transform.doesDraw
-				= cycleable;
+        showWindow.getWidget("button_left").transform.doesDraw
+                = showWindow.getWidget("button_right").transform.doesDraw
+                = cycleable;
         currentTut.cycle(0);
-	}
+    }
 
-	private class TutInfo {
-		final ACTutorial tut;
-		int selection;
+    private class TutInfo {
+        final ACTutorial tut;
+        int selection;
 
-		TutInfo(ACTutorial _tut) {
-			tut = _tut;
-		}
+        TutInfo(ACTutorial _tut) {
+            tut = _tut;
+        }
 
-		void cycle(int delta) {
-			int len = tut.getPreview().size();
-			selection += delta;
-			if(selection >= len) selection = 0;
-			else if(selection < 0) selection = len - 1;
+        void cycle(int delta) {
+            int len = tut.getPreview().size();
+            selection += delta;
+            if(selection >= len) selection = 0;
+            else if(selection < 0) selection = len - 1;
 
-			showArea.removeWidget("delegate");
-			Widget w = curHandler().getDelegateWidget();
-			if(w != null)
-				showArea.addWidget("delegate", w);
+            showArea.removeWidget("delegate");
+            Widget w = curHandler().getDelegateWidget();
+            if(w != null)
+                showArea.addWidget("delegate", w);
 
-			debug(curHandler());
-		}
+            debug(curHandler());
+        }
 
-		IPreviewHandler curHandler() {
-			return tut.getPreview().get(selection);
-		}
-	}
+        IPreviewHandler curHandler() {
+            return tut.getPreview().get(selection);
+        }
+    }
 
-	private void debug(Object msg) {
-		AcademyCraft.log.info("[Tut] " + msg);
-	}
+    private void debug(Object msg) {
+        AcademyCraft.log.info("[Tut] " + msg);
+    }
 
 }

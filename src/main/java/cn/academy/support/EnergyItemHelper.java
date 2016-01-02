@@ -30,85 +30,85 @@ import cn.lambdalib.annoreg.mc.RegInit;
 @RegInit
 public class EnergyItemHelper {
 
-	static List<EnergyItemManager> supported = new ArrayList();
+    static List<EnergyItemManager> supported = new ArrayList();
 
-	public static void init() {
-		supported.add(IFItemManager.instance);
-	}
+    public static void init() {
+        supported.add(IFItemManager.instance);
+    }
 
-	public static boolean isSupported(ItemStack stack) {
-		for (EnergyItemManager m : supported) {
-			if (m.isSupported(stack))
-				return true;
-		}
-		return false;
-	}
+    public static boolean isSupported(ItemStack stack) {
+        for (EnergyItemManager m : supported) {
+            if (m.isSupported(stack))
+                return true;
+        }
+        return false;
+    }
 
-	public static double getEnergy(ItemStack stack) {
-		for (EnergyItemManager m : supported) {
-			if (m.isSupported(stack))
-				return m.getEnergy(stack);
-		}
-		return 0.0;
-	}
+    public static double getEnergy(ItemStack stack) {
+        for (EnergyItemManager m : supported) {
+            if (m.isSupported(stack))
+                return m.getEnergy(stack);
+        }
+        return 0.0;
+    }
 
-	public static void setEnergy(ItemStack stack, double energy) {
-		for (EnergyItemManager m : supported) {
-			if (m.isSupported(stack)) {
-				m.setEnergy(stack, energy);
-				return;
-			}
-		}
-	}
+    public static void setEnergy(ItemStack stack, double energy) {
+        for (EnergyItemManager m : supported) {
+            if (m.isSupported(stack)) {
+                m.setEnergy(stack, energy);
+                return;
+            }
+        }
+    }
 
-	public static double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
-		for (EnergyItemManager m : supported) {
-			if (m.isSupported(stack)) {
-				return m.charge(stack, amt, ignoreBandwidth);
-			}
-		}
-		return amt;
-	}
+    public static double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
+        for (EnergyItemManager m : supported) {
+            if (m.isSupported(stack)) {
+                return m.charge(stack, amt, ignoreBandwidth);
+            }
+        }
+        return amt;
+    }
 
-	public static double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
-		for (EnergyItemManager m : supported) {
-			if (m.isSupported(stack)) {
-				return m.pull(stack, amt, ignoreBandwidth);
-			}
-		}
-		return 0;
-	}
+    public static double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
+        for (EnergyItemManager m : supported) {
+            if (m.isSupported(stack)) {
+                return m.pull(stack, amt, ignoreBandwidth);
+            }
+        }
+        return 0;
+    }
 
-	public static ItemStack createEmptyItem(Item item) {
-		ItemStack ret = new ItemStack(item);
-		charge(ret, 0, true);
-		return ret;
-	}
+    public static ItemStack createEmptyItem(Item item) {
+        ItemStack ret = new ItemStack(item);
+        charge(ret, 0, true);
+        return ret;
+    }
 
-	public static ItemStack createFullItem(Item item) {
-		ItemStack ret = new ItemStack(item);
-		charge(ret, Integer.MAX_VALUE, true);
-		return ret;
-	}
+    public static ItemStack createFullItem(Item item) {
+        ItemStack ret = new ItemStack(item);
+        charge(ret, Integer.MAX_VALUE, true);
+        return ret;
+    }
 
-	public interface EnergyItemManager {
+    public interface EnergyItemManager {
 
-		boolean isSupported(ItemStack stack);
+        boolean isSupported(ItemStack stack);
 
-		double getEnergy(ItemStack stack);
+        double getEnergy(ItemStack stack);
 
-		void setEnergy(ItemStack stack, double energy);
+        void setEnergy(ItemStack stack, double energy);
 
-		/**
-		 * @return How much energy not transfered into stack(left)
-		 */
-		double charge(ItemStack stack, double amt, boolean ignoreBandwidth);
+        /**
+         * @return How much energy not transfered into stack(left)
+         */
+        double charge(ItemStack stack, double amt, boolean ignoreBandwidth);
 
-		/**
-		 * @return How much energy pulled out of stack
-		 */
-		double pull(ItemStack stack, double amt, boolean ignoreBandwidth);
+        /**
+         * @return How much energy pulled out of stack
+         */
+        double pull(ItemStack stack, double amt, boolean ignoreBandwidth);
 
-	}
+    }
 
 }

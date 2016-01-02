@@ -21,39 +21,39 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @author WeAthFolD
  */
 public class RFReceiverManager implements IEnergyBlockManager {
-	
-	static final ForgeDirection DEFAULT_DIR = ForgeDirection.UP;
+    
+    static final ForgeDirection DEFAULT_DIR = ForgeDirection.UP;
 
-	@Override
-	public boolean isSupported(TileEntity tile) {
-		return asReceiver(tile) != null;
-	}
-	
-	private IEnergyReceiver asReceiver(TileEntity tile) {
-		return tile instanceof IEnergyReceiver ? (IEnergyReceiver) tile : null;
-	}
-	
-	@Override
-	public double getEnergy(TileEntity tile) {
-		IEnergyReceiver rec = asReceiver(tile);
-		return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * RFSupport.CONV_RATE;
-	}
+    @Override
+    public boolean isSupported(TileEntity tile) {
+        return asReceiver(tile) != null;
+    }
+    
+    private IEnergyReceiver asReceiver(TileEntity tile) {
+        return tile instanceof IEnergyReceiver ? (IEnergyReceiver) tile : null;
+    }
+    
+    @Override
+    public double getEnergy(TileEntity tile) {
+        IEnergyReceiver rec = asReceiver(tile);
+        return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * RFSupport.CONV_RATE;
+    }
 
-	@Override
-	public void setEnergy(TileEntity tile, double energy) {
-		// NOT SUPPORTED
-	}
+    @Override
+    public void setEnergy(TileEntity tile, double energy) {
+        // NOT SUPPORTED
+    }
 
-	@Override
-	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		IEnergyReceiver rec = asReceiver(tile);
-		return rec == null ? 0 : amt - rec.receiveEnergy(DEFAULT_DIR, (int) (amt / RFSupport.CONV_RATE), false) * RFSupport.CONV_RATE;
-	}
+    @Override
+    public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        IEnergyReceiver rec = asReceiver(tile);
+        return rec == null ? 0 : amt - rec.receiveEnergy(DEFAULT_DIR, (int) (amt / RFSupport.CONV_RATE), false) * RFSupport.CONV_RATE;
+    }
 
-	@Override
-	public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		// NOT SUPPORTED
-		return 0;
-	}
+    @Override
+    public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        // NOT SUPPORTED
+        return 0;
+    }
 
 }

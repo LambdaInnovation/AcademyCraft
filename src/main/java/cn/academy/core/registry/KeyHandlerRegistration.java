@@ -29,16 +29,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class KeyHandlerRegistration extends RegistrationFieldSimple<RegACKeyHandler, KeyHandler> {
 
-	public KeyHandlerRegistration() {
-		super(RegACKeyHandler.class, "ACKeyHandler");
-		setLoadStage(LoadStage.INIT);
-	}
+    public KeyHandlerRegistration() {
+        super(RegACKeyHandler.class, "ACKeyHandler");
+        setLoadStage(LoadStage.INIT);
+    }
 
-	@Override
-	protected void register(KeyHandler value, RegACKeyHandler anno, String field)
-			throws Exception {
-		KeyManager target = anno.dynamic() ? ModuleCoreClient.dynKeyManager : ModuleCoreClient.keyManager;
-		target.addKeyHandler(anno.name(), anno.desc(), anno.defaultKey(), value);
-	}
+    @Override
+    protected void register(KeyHandler value, RegACKeyHandler anno, String field)
+            throws Exception {
+        KeyManager target = anno.dynamic() ? ModuleCoreClient.dynKeyManager : ModuleCoreClient.keyManager;
+        target.addKeyHandler(anno.name(), anno.desc(), anno.defaultKey(), value);
+    }
 
 }

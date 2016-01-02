@@ -23,40 +23,40 @@ import cn.lambdalib.util.generic.RandUtils;
  * @author WeAthFolD
  */
 public class BlockGenericOre extends ACBlock {
-	
-	int rangeFrom = 1, rangeTo = 2;
-	Item itemDropped;
+    
+    int rangeFrom = 1, rangeTo = 2;
+    Item itemDropped;
 
-	public BlockGenericOre(String name, float hardness, int harvestLevel) {
-		super(name, Material.rock);
-		this.setHardness(hardness);
-		this.setHarvestLevel("pickaxe", harvestLevel);
-	}
-	
-	public BlockGenericOre setDropData(Item item) {
-		itemDropped = item;
-		
-		return this;
-	}
-	
-	public BlockGenericOre setDropData(Item item, int from, int to) {
-		itemDropped = item;
-		rangeFrom = from;
-		rangeTo = to;
-		
-		return this;
-	}
-	
-	@Override
-	public int quantityDropped(Random r) {
-		return RandUtils.rangei(rangeFrom, rangeTo);
-	}
-	
-	@Override
-	public Item getItemDropped(int a, Random b, int c) {
-		if(itemDropped == null)
-			itemDropped = Item.getItemFromBlock(this);
-		return itemDropped;
-	}
+    public BlockGenericOre(String name, float hardness, int harvestLevel) {
+        super(name, Material.rock);
+        this.setHardness(hardness);
+        this.setHarvestLevel("pickaxe", harvestLevel);
+    }
+    
+    public BlockGenericOre setDropData(Item item) {
+        itemDropped = item;
+        
+        return this;
+    }
+    
+    public BlockGenericOre setDropData(Item item, int from, int to) {
+        itemDropped = item;
+        rangeFrom = from;
+        rangeTo = to;
+        
+        return this;
+    }
+    
+    @Override
+    public int quantityDropped(Random r) {
+        return RandUtils.rangei(rangeFrom, rangeTo);
+    }
+    
+    @Override
+    public Item getItemDropped(int a, Random b, int c) {
+        if(itemDropped == null)
+            itemDropped = Item.getItemFromBlock(this);
+        return itemDropped;
+    }
 
 }

@@ -21,13 +21,13 @@ import cpw.mods.fml.common.eventhandler.Event;
  * @author WeAthFolD
  */
 public class AppInstalledEvent extends Event {
-	
-	public final EntityPlayer player;
-	public final App app;
-	
-	public AppInstalledEvent(EntityPlayer _player, App _app) {
-		player = _player;
-		app = _app;
-	}
-	
+    
+    public final EntityPlayer player;
+    public final App app;
+    
+    public AppInstalledEvent(EntityPlayer _player, App _app) {
+        player = _player;
+        app = _app;
+    }
+    
 }

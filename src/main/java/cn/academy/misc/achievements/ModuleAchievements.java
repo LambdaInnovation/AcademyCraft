@@ -19,39 +19,39 @@ import cn.lambdalib.annoreg.mc.RegItem;
 @RegInit
 public final class ModuleAchievements {
 
-	private static PageDefault pageDefault;
-	private static PageCtElectromaster pageCtElectromaster;
-	private static PageCtMeltdowner pageCtMeltdowner;
-	private static PageCtTeleporter pageCtTeleporter;
-	
-	@RegItem
-	@RegItem.HasRender
-	public static ItemAchievement DUMMY_ITEM;
-	
-	public static void init() {
-		DispatcherAch.init();
+    private static PageDefault pageDefault;
+    private static PageCtElectromaster pageCtElectromaster;
+    private static PageCtMeltdowner pageCtMeltdowner;
+    private static PageCtTeleporter pageCtTeleporter;
+    
+    @RegItem
+    @RegItem.HasRender
+    public static ItemAchievement DUMMY_ITEM;
+    
+    public static void init() {
+        DispatcherAch.init();
 
-		AchievementPage.registerAchievementPage(pageDefault = new PageDefault());
-		
-		AchievementPage.registerAchievementPage(pageCtElectromaster = new PageCtElectromaster());
-		AchievementPage.registerAchievementPage(pageCtMeltdowner = new PageCtMeltdowner());
-		AchievementPage.registerAchievementPage(pageCtTeleporter = new PageCtTeleporter());
-	}
-	
-	/**
-	 * Trigger an event
-	 * @param player The player
-	 * @param achname The name of the achievement
-	 * @return true if succeeded
-	 */
-	public static boolean trigger(EntityPlayer player, String achid) {
-		ACAchievement ach = ACAchievement.getById(achid);
-		if (ach == null) {
-			AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
-			return false;
-		}
-		player.triggerAchievement(ach);
-		return true;
-	}
-	
+        AchievementPage.registerAchievementPage(pageDefault = new PageDefault());
+        
+        AchievementPage.registerAchievementPage(pageCtElectromaster = new PageCtElectromaster());
+        AchievementPage.registerAchievementPage(pageCtMeltdowner = new PageCtMeltdowner());
+        AchievementPage.registerAchievementPage(pageCtTeleporter = new PageCtTeleporter());
+    }
+    
+    /**
+     * Trigger an event
+     * @param player The player
+     * @param achname The name of the achievement
+     * @return true if succeeded
+     */
+    public static boolean trigger(EntityPlayer player, String achid) {
+        ACAchievement ach = ACAchievement.getById(achid);
+        if (ach == null) {
+            AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
+            return false;
+        }
+        player.triggerAchievement(ach);
+        return true;
+    }
+    
 }

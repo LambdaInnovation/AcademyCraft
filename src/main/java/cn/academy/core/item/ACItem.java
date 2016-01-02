@@ -21,10 +21,10 @@ import cn.academy.core.AcademyCraft;
  */
 public class ACItem extends Item {
 
-	public ACItem(String name) {
-		setUnlocalizedName("ac_" + name);
-		setTextureName("academy:" + name);
-		setCreativeTab(AcademyCraft.cct);
-	}
-	
+    public ACItem(String name) {
+        setUnlocalizedName("ac_" + name);
+        setTextureName("academy:" + name);
+        setCreativeTab(AcademyCraft.cct);
+    }
+    
 }

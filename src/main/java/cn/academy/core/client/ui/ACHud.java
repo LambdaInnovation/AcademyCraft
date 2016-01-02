@@ -29,48 +29,48 @@ import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
  */
 @Registrant
 public class ACHud extends AuxGui {
-	
-	@RegAuxGui
-	public static ACHud instance = new ACHud();
-	
-	List<Node> nodes = new ArrayList();
-	
-	CGui gui = new CGui();
+    
+    @RegAuxGui
+    public static ACHud instance = new ACHud();
+    
+    List<Node> nodes = new ArrayList();
+    
+    CGui gui = new CGui();
 
-	ACHud() {}
+    ACHud() {}
 
-	@Override
-	public boolean isForeground() {
-		return false;
-	}
+    @Override
+    public boolean isForeground() {
+        return false;
+    }
 
-	@Override
-	public void draw(ScaledResolution sr) {
-		gui.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
-		for(Node n : nodes) {
-			n.w.transform.doesDraw = n.cond.shows();
-		}
-		
-		gui.draw();
-	}
-	
-	public void addElement(Widget w, Condition showCondition) {
-		nodes.add(new Node(w, showCondition));
-		gui.addWidget(w);
-	}
-	
-	public interface Condition {
-		boolean shows();
-	}
-	
-	private class Node {
-		Widget w;
-		Condition cond;
-		
-		public Node(Widget wi, Condition c) {
-			w = wi;
-			cond = c;
-		}
-	}
+    @Override
+    public void draw(ScaledResolution sr) {
+        gui.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
+        for(Node n : nodes) {
+            n.w.transform.doesDraw = n.cond.shows();
+        }
+        
+        gui.draw();
+    }
+    
+    public void addElement(Widget w, Condition showCondition) {
+        nodes.add(new Node(w, showCondition));
+        gui.addWidget(w);
+    }
+    
+    public interface Condition {
+        boolean shows();
+    }
+    
+    private class Node {
+        Widget w;
+        Condition cond;
+        
+        public Node(Widget wi, Condition c) {
+            w = wi;
+            cond = c;
+        }
+    }
 
 }

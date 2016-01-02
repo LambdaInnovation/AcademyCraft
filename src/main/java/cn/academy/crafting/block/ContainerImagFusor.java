@@ -28,19 +28,19 @@ import cn.academy.energy.block.SlotIFItem;
  */
 public class ContainerImagFusor extends Container {
 
-	public final TileImagFusor tile;
-	public final EntityPlayer player;
-	
-	public ContainerImagFusor(TileImagFusor _tile, EntityPlayer _player) {
-		tile = _tile;
-		player = _player;
-		
-		initInventory(player.inventory);
-	}
-	
+    public final TileImagFusor tile;
+    public final EntityPlayer player;
+    
+    public ContainerImagFusor(TileImagFusor _tile, EntityPlayer _player) {
+        tile = _tile;
+        player = _player;
+        
+        initInventory(player.inventory);
+    }
+    
     private void initInventory(InventoryPlayer inv) {
-    	this.addSlotToContainer(new Slot(tile, 0, 15, 31));
-    	this.addSlotToContainer(new Slot(tile, 1, 79, 31));
+        this.addSlotToContainer(new Slot(tile, 0, 15, 31));
+        this.addSlotToContainer(new Slot(tile, 1, 79, 31));
         this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, 2, 32, 71));
         this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 71));
         
@@ -59,7 +59,7 @@ public class ContainerImagFusor extends Container {
     }
     
     @Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 
@@ -73,17 +73,17 @@ public class ContainerImagFusor extends Container {
                 if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
                     return null;
             } else {
-            	//playerInv->tileInv
-            	if(unit.getMaterial(stack) == ModuleCrafting.imagPhase.mat) {
-            		if (!this.mergeItemStack(stack1, 2, 3, false))  
-                		return null;
-            	} else if(IFItemManager.instance.isSupported(stack)) {
-            		if(!this.mergeItemStack(stack1, 3, 4, false))
-            			return null;
-            	} else {
-            		if (!this.mergeItemStack(stack1, 0, 1, false))
-                		return null;
-            	}
+                //playerInv->tileInv
+                if(unit.getMaterial(stack) == ModuleCrafting.imagPhase.mat) {
+                    if (!this.mergeItemStack(stack1, 2, 3, false))  
+                        return null;
+                } else if(IFItemManager.instance.isSupported(stack)) {
+                    if(!this.mergeItemStack(stack1, 3, 4, false))
+                        return null;
+                } else {
+                    if (!this.mergeItemStack(stack1, 0, 1, false))
+                        return null;
+                }
             }
 
             if (stack1.stackSize == 0) {
@@ -95,10 +95,10 @@ public class ContainerImagFusor extends Container {
 
         return stack;
     }
-	
-	@Override
-	public boolean canInteractWith(EntityPlayer p_75145_1_) {
-		return player.getDistanceSq(tile.xCoord + .5, tile.yCoord + .5, tile.zCoord + .5) < 64;
-	}
+    
+    @Override
+    public boolean canInteractWith(EntityPlayer p_75145_1_) {
+        return player.getDistanceSq(tile.xCoord + .5, tile.yCoord + .5, tile.zCoord + .5) < 64;
+    }
 
 }

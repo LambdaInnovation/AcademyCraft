@@ -22,8 +22,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class PresetSwitchEvent extends AbilityEvent {
 
-	public PresetSwitchEvent(EntityPlayer _player) {
-		super(_player);
-	}
+    public PresetSwitchEvent(EntityPlayer _player) {
+        super(_player);
+    }
 
 }

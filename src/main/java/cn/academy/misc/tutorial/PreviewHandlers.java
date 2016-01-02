@@ -34,9 +34,9 @@ public final class PreviewHandlers {
 
     // This class used a SideOnly hack to make user be able to specify display on init without considering side only issue.
 
-	private static Random random = new Random();
+    private static Random random = new Random();
 
-	public static final IPreviewHandler nothing = new IPreviewHandler() {};
+    public static final IPreviewHandler nothing = new IPreviewHandler() {};
 
     public static IPreviewHandler drawsBlock(Block block) {
         return drawsBlock(block, 0);
@@ -47,9 +47,9 @@ public final class PreviewHandlers {
         return nothing;
     }
 
-	public static IPreviewHandler drawsItem(Item item) {
-		return drawsItem(item, 0);
-	}
+    public static IPreviewHandler drawsItem(Item item) {
+        return drawsItem(item, 0);
+    }
 
     public static IPreviewHandler drawsItem(Item item, int metadata) {
         if (client()) return drawsItemImpl(item, metadata);
@@ -153,32 +153,32 @@ public final class PreviewHandlers {
     }
 
     @SideOnly(Side.CLIENT)
-	private static IPreviewHandler drawsItemImpl(Item item, int metadata) {
-		ItemStack stack = new ItemStack(item, 1, metadata);
-		return new IPreviewHandler() {
+    private static IPreviewHandler drawsItemImpl(Item item, int metadata) {
+        ItemStack stack = new ItemStack(item, 1, metadata);
+        return new IPreviewHandler() {
             @SideOnly(Side.CLIENT)
-			@Override
-			public void draw() {
-				glDepthFunc(GL_ALWAYS);
-				RenderItem.renderInFrame = true;
-				glTranslated(0.54, 0.5, 0);
+            @Override
+            public void draw() {
+                glDepthFunc(GL_ALWAYS);
+                RenderItem.renderInFrame = true;
+                glTranslated(0.54, 0.5, 0);
                 glScaled(-1/16.0, -1/16.0, 1);
                 RenderUtils.loadTexture(TextureMap.locationItemsTexture);
-				RenderUtils.renderItemInventory(stack);
-				glDepthFunc(GL_LEQUAL);
-			}
-		};
-	}
+                RenderUtils.renderItemInventory(stack);
+                glDepthFunc(GL_LEQUAL);
+            }
+        };
+    }
 
     @SideOnly(Side.CLIENT)
-	private static Collection<IPreviewHandler> recipesOfStackImpl(ItemStack stack) {
+    private static Collection<IPreviewHandler> recipesOfStackImpl(ItemStack stack) {
         return Arrays.stream(RecipeHandler.instance.recipeOfStack(stack)).map(w -> new IPreviewHandler() {
             @Override
             public Widget getDelegateWidget() {
                 return w;
             }
         }).collect(Collectors.toList());
-	}
+    }
 
     private static IPreviewHandler toPreview(Widget delegate) {
         return new IPreviewHandler() {

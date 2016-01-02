@@ -31,31 +31,31 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 @RegInit
 public class Glow extends Component {
-	
-	public Color color = new Color();
-	public double glowSize = 10.0;
-	public double zLevel = 0.0;
-	public boolean writeDepth = true;
-	
-	public static void init() {
-	}
-	
-	public static Glow get(Widget w) {
-		return w.getComponent("Glow");
-	}
+    
+    public Color color = new Color();
+    public double glowSize = 10.0;
+    public double zLevel = 0.0;
+    public boolean writeDepth = true;
+    
+    public static void init() {
+    }
+    
+    public static Glow get(Widget w) {
+        return w.getComponent("Glow");
+    }
 
-	public Glow() {
-		super("Glow");
-		
-		listen(FrameEvent.class, (w, event) -> {
-			if(!writeDepth)
-				GL11.glDepthMask(false);
-			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, zLevel);
-			ACRenderingHelper.drawGlow(0, 0, w.transform.width, w.transform.height, glowSize, color);
-			GL11.glPopMatrix();
-			GL11.glDepthMask(true);
-		});
-	}
+    public Glow() {
+        super("Glow");
+        
+        listen(FrameEvent.class, (w, event) -> {
+            if(!writeDepth)
+                GL11.glDepthMask(false);
+            GL11.glPushMatrix();
+            GL11.glTranslated(0, 0, zLevel);
+            ACRenderingHelper.drawGlow(0, 0, w.transform.width, w.transform.height, glowSize, color);
+            GL11.glPopMatrix();
+            GL11.glDepthMask(true);
+        });
+    }
 
 }

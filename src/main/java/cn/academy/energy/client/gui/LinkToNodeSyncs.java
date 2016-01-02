@@ -35,45 +35,45 @@ import cpw.mods.fml.relauncher.Side;
  */
 @Registrant
 public class LinkToNodeSyncs {
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void retrieveNearbyNetworks(@Instance TileEntity te, @Instance Future future) {
-		if(te instanceof IWirelessUser) {
-			IWirelessUser user = (IWirelessUser) te;
-			future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 0.5, te.zCoord + 0.5));
-		} else {
-			future.setAndSync(new ArrayList());
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void retrieveCurrentLink(@Instance TileEntity te, @Data Future future) {
-		if(te instanceof IWirelessUser) {
-			IWirelessUser user = (IWirelessUser) te;
-			NodeConn conn = WirelessHelper.getNodeConn(user);
-			IWirelessNode node = conn == null ? null : conn.getNode();
-			
-			future.setAndSync(node == null ? "" : node.getNodeName());
-		} else {
-			future.setAndSync("");
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void startLink(@Instance TileEntity te, @Instance TileEntity node, @Data Future future) {
-		if(te instanceof IWirelessUser && node instanceof IWirelessNode) {
-			future.setAndSync(!MinecraftForge.EVENT_BUS.post(
-				new LinkUserEvent((IWirelessUser) te, (IWirelessNode) node)));
-		} else {
-			future.setAndSync(false);
-		}
-	}
-	
-	@RegNetworkCall(side = Side.SERVER)
-	public static void disconnect(@Instance TileEntity te) {
-		if(te instanceof IWirelessUser) {
-			MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent((IWirelessTile) te));
-		}
-	}
-	
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void retrieveNearbyNetworks(@Instance TileEntity te, @Instance Future future) {
+        if(te instanceof IWirelessUser) {
+            IWirelessUser user = (IWirelessUser) te;
+            future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 0.5, te.zCoord + 0.5));
+        } else {
+            future.setAndSync(new ArrayList());
+        }
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void retrieveCurrentLink(@Instance TileEntity te, @Data Future future) {
+        if(te instanceof IWirelessUser) {
+            IWirelessUser user = (IWirelessUser) te;
+            NodeConn conn = WirelessHelper.getNodeConn(user);
+            IWirelessNode node = conn == null ? null : conn.getNode();
+            
+            future.setAndSync(node == null ? "" : node.getNodeName());
+        } else {
+            future.setAndSync("");
+        }
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void startLink(@Instance TileEntity te, @Instance TileEntity node, @Data Future future) {
+        if(te instanceof IWirelessUser && node instanceof IWirelessNode) {
+            future.setAndSync(!MinecraftForge.EVENT_BUS.post(
+                new LinkUserEvent((IWirelessUser) te, (IWirelessNode) node)));
+        } else {
+            future.setAndSync(false);
+        }
+    }
+    
+    @RegNetworkCall(side = Side.SERVER)
+    public static void disconnect(@Instance TileEntity te) {
+        if(te instanceof IWirelessUser) {
+            MinecraftForge.EVENT_BUS.post(new UnlinkUserEvent((IWirelessTile) te));
+        }
+    }
+    
 }

@@ -20,11 +20,11 @@ import net.minecraft.util.MouseHelper;
  * @author WeAthFolD
  */
 public class TerminalMouseHelper extends MouseHelper {
-	
-	public int dx, dy;
-	
+    
+    public int dx, dy;
+    
     @Override
-	public void mouseXYChange() {
+    public void mouseXYChange() {
         this.dx = Mouse.getDX();
         this.dy = Mouse.getDY();
     }

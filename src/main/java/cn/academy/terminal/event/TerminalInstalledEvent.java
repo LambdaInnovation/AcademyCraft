@@ -20,11 +20,11 @@ import cpw.mods.fml.common.eventhandler.Event;
  * @author WeAthFolD
  */
 public class TerminalInstalledEvent extends Event {
-	
-	final EntityPlayer player;
-	
-	public TerminalInstalledEvent(EntityPlayer _player) {
-		player = _player;
-	}
-	
+    
+    final EntityPlayer player;
+    
+    public TerminalInstalledEvent(EntityPlayer _player) {
+        player = _player;
+    }
+    
 }

@@ -12,8 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class AbilityDeactivateEvent extends AbilityEvent {
 
-	public AbilityDeactivateEvent(EntityPlayer _player) {
-		super(_player);
-	}
+    public AbilityDeactivateEvent(EntityPlayer _player) {
+        super(_player);
+    }
 
 }

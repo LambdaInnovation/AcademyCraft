@@ -20,12 +20,12 @@ import cn.academy.ability.api.Skill;
  * @author WeAthFolD
  */
 public class SkillLearnEvent extends AbilityEvent {
-	
-	public final Skill skill;
+    
+    public final Skill skill;
 
-	public SkillLearnEvent(EntityPlayer player, Skill _skill) {
-		super(player);
-		skill = _skill;
-	}
+    public SkillLearnEvent(EntityPlayer player, Skill _skill) {
+        super(player);
+        skill = _skill;
+    }
 
 }

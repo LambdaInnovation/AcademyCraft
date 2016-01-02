@@ -28,22 +28,22 @@ import cn.academy.support.EnergyItemHelper;
  * @author WeAthFolD
  */
 public class ContainerMetalFormer extends Container {
-	
-	public final TileMetalFormer tile;
-	public final EntityPlayer player;
-	
-	public ContainerMetalFormer(TileMetalFormer _tile, EntityPlayer _player) {
-		tile = _tile;
-		player = _player;
-		
-		initInventory();
-	}
-	
-	private void initInventory() {
-		InventoryPlayer inv = player.inventory;
-		
-		this.addSlotToContainer(new Slot(tile, 0, 15, 35));
-    	this.addSlotToContainer(new Slot(tile, 1, 79, 35));
+    
+    public final TileMetalFormer tile;
+    public final EntityPlayer player;
+    
+    public ContainerMetalFormer(TileMetalFormer _tile, EntityPlayer _player) {
+        tile = _tile;
+        player = _player;
+        
+        initInventory();
+    }
+    
+    private void initInventory() {
+        InventoryPlayer inv = player.inventory;
+        
+        this.addSlotToContainer(new Slot(tile, 0, 15, 35));
+        this.addSlotToContainer(new Slot(tile, 1, 79, 35));
         this.addSlotToContainer(new SlotIFItem(tile, 2, 38, 71));
         
         int STEP = 18;
@@ -58,9 +58,9 @@ public class ContainerMetalFormer extends Container {
                 addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
-	}
+    }
 
-	@Override
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
@@ -75,13 +75,13 @@ public class ContainerMetalFormer extends Container {
                 if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
                     return null;
             } else {
-            	if(EnergyItemHelper.isSupported(stack)) {
-            		if (!this.mergeItemStack(stack1, SLOT_BATTERY, SLOT_BATTERY + 1, false))  
-                		return null;
-            	} else {
-            		if (!this.mergeItemStack(stack1, SLOT_IN, SLOT_IN + 1, false))  
-                		return null;
-            	}
+                if(EnergyItemHelper.isSupported(stack)) {
+                    if (!this.mergeItemStack(stack1, SLOT_BATTERY, SLOT_BATTERY + 1, false))  
+                        return null;
+                } else {
+                    if (!this.mergeItemStack(stack1, SLOT_IN, SLOT_IN + 1, false))  
+                        return null;
+                }
             }
 
             if (stack1.stackSize == 0) {
@@ -93,10 +93,10 @@ public class ContainerMetalFormer extends Container {
 
         return stack;
     }
-	
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
-	}
+    
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return true;
+    }
 
 }

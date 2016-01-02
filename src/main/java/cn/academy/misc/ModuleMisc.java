@@ -33,19 +33,19 @@ import cn.lambdalib.annoreg.mc.RegItem;
 @RegInit
 public class ModuleMisc {
 
-	@RegItem
-	public static ItemMedia itemMedia;
+    @RegItem
+    public static ItemMedia itemMedia;
 
-	public static void init() {
-		String[] mediaApperance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
-				DUNGEON_CHEST };
+    public static void init() {
+        String[] mediaApperance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
+                DUNGEON_CHEST };
 
-		for (String s : mediaApperance) {
-			for (int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
-				ItemStack stack = new ItemStack(itemMedia, 1, i);
-				ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
-			}
-		}
-	}
+        for (String s : mediaApperance) {
+            for (int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
+                ItemStack stack = new ItemStack(itemMedia, 1, i);
+                ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+            }
+        }
+    }
 
 }

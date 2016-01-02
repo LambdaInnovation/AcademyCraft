@@ -35,25 +35,25 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class AuxGuiMediaPlayer {
 
     @RegInitCallback
-	public static void init() {
-		Widget base = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
+    public static void init() {
+        Widget base = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
 
         base.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
-			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-			ProgressBar.get(w).progress = (double) inst.getPlayTime() / inst.media.length;
-		});
+            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
+            ProgressBar.get(w).progress = (double) inst.getPlayTime() / inst.media.length;
+        });
 
         base.getWidget("title").listen(FrameEvent.class, (w, e) -> {
-			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-			TextBox.get(w).content = inst.media.getDisplayName();
-		});
+            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
+            TextBox.get(w).content = inst.media.getDisplayName();
+        });
 
         base.getWidget("time").listen(FrameEvent.class, (w, e) -> {
-			MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-			TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
-		});
+            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
+            TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
+        });
 
-		ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying());
-	}
+        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying());
+    }
 
 }

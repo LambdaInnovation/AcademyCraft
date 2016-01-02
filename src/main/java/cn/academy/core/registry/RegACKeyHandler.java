@@ -24,11 +24,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegACKeyHandler {
-	
-	String name();
-	int defaultKey();
-	boolean global() default false;
-	boolean dynamic() default false;
-	String desc() default "";
-	
+    
+    String name();
+    int defaultKey();
+    boolean global() default false;
+    boolean dynamic() default false;
+    String desc() default "";
+    
 }

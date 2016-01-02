@@ -48,215 +48,215 @@ import net.minecraftforge.fluids.IFluidHandler;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
-	
-	static final double WORK_SPEED = 1.0 / 120;
-	static final double CONSUME_PER_TICK = 12;
-	static final int SYNC_INTV = 5;
-	
-	@RegTileEntity.Render
-	@SideOnly(Side.CLIENT)
-	public static RenderDynamicBlock renderer;
-	
-	static final int TANK_SIZE = 8000;
-	static final int PER_UNIT = 1000;
-	
-	//Inventory id:
-	// 0: Input
-	// 1: Output
-	// 2: Imag input
-	// 3: Energy input
-	
-	protected FluidTank tank = new FluidTank(TANK_SIZE);
-	
-	private IFRecipe currentRecipe;
-	private double workProgress;
-	
-	private int checkCooldown = 10, syncCooldown = SYNC_INTV;
+    
+    static final double WORK_SPEED = 1.0 / 120;
+    static final double CONSUME_PER_TICK = 12;
+    static final int SYNC_INTV = 5;
+    
+    @RegTileEntity.Render
+    @SideOnly(Side.CLIENT)
+    public static RenderDynamicBlock renderer;
+    
+    static final int TANK_SIZE = 8000;
+    static final int PER_UNIT = 1000;
+    
+    //Inventory id:
+    // 0: Input
+    // 1: Output
+    // 2: Imag input
+    // 3: Energy input
+    
+    protected FluidTank tank = new FluidTank(TANK_SIZE);
+    
+    private IFRecipe currentRecipe;
+    private double workProgress;
+    
+    private int checkCooldown = 10, syncCooldown = SYNC_INTV;
 
-	public TileImagFusor() {
-		super("imag_fusor", 4, 2000, IFConstants.LATENCY_MK1);
-	}
+    public TileImagFusor() {
+        super("imag_fusor", 4, 2000, IFConstants.LATENCY_MK1);
+    }
 
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if(resource.getFluid() != ModuleCrafting.fluidImagProj) {
-			return 0;
-		}
-		return tank.fill(resource, doFill);
-	}
-	
-	public int getTankSize() {
-		return tank.getCapacity();
-	}
-	
-	public int getLiquidAmount() {
-		return tank.getFluidAmount();
-	}
-	
-	/**
-	 * As has discussed, this should perform a fake drain-energy effect when crafting, and restore to the real energy when not.
-	 * @return The energy for client-side display purpose.
-	 */
-	public double getEnergyForDisplay() {
-		return getEnergy();
-	}
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+        if(resource.getFluid() != ModuleCrafting.fluidImagProj) {
+            return 0;
+        }
+        return tank.fill(resource, doFill);
+    }
+    
+    public int getTankSize() {
+        return tank.getCapacity();
+    }
+    
+    public int getLiquidAmount() {
+        return tank.getFluidAmount();
+    }
+    
+    /**
+     * As has discussed, this should perform a fake drain-energy effect when crafting, and restore to the real energy when not.
+     * @return The energy for client-side display purpose.
+     */
+    public double getEnergyForDisplay() {
+        return getEnergy();
+    }
 
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource,
-			boolean doDrain) {
-		return tank.drain(resource.amount, doDrain);
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource,
+            boolean doDrain) {
+        return tank.drain(resource.amount, doDrain);
+    }
 
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+        return tank.drain(maxDrain, doDrain);
+    }
 
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid == ModuleCrafting.fluidImagProj;
-	}
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
+        return fluid == ModuleCrafting.fluidImagProj;
+    }
 
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return fluid == ModuleCrafting.fluidImagProj;
-	}
-	
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		
-		if(isWorking()) {
-			updateWork();
-		} else {
-			// Match the work in server
-			if(!worldObj.isRemote) {
-				
-				if(--checkCooldown <= 0) {
-					checkCooldown = 10;
-					if(inventory[0] != null) {
-						IFRecipe recipe = 
-							ImagFusorRecipes.INSTANCE.getRecipe(inventory[0]);
-						if(recipe != null) {
-							startWorking(recipe);
-						}
-					}
-				}
-				
-			}
-			
-		}
-		
-		// Update liquid
-		if(inventory[2] != null) {
-			if(getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
-				this.tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
-				inventory[2].stackSize--;
-				if(inventory[2].stackSize == 0)
-					inventory[2] = null;
-			}
-		}
-		
-		// Update energy
-		if(inventory[3] != null) {
-			double gain = EnergyItemHelper
-					.pull(inventory[3], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
-			this.injectEnergy(gain);
-		}
-		
-		// Synchronization
-		if(worldObj.isRemote) {
-			syncClient();
-			updateSounds();
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private void syncClient() {
-		if(--syncCooldown <= 0) {
-			syncCooldown = SYNC_INTV;
-			query(Minecraft.getMinecraft().thePlayer);
-		}
-	}
-	
-	//---Work API
-	/**
-	 * @return The working progress, or 0.0 if isn't crafting
-	 */
-	public double getWorkProgress() {
-		return isWorking() ? workProgress : 0.0;
-	}
-	
-	private void startWorking(IFRecipe recipe) {
-		currentRecipe = recipe;
-		workProgress = 0.0;
-	}
-	
-	private void updateWork() {
-		// Check the input stack, and abort if item isnt there
-		if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
-				|| this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK) {
-			abortWorking();
-			return;
-		}
-		
-		if(!isActionBlocked()) {
-			workProgress += WORK_SPEED;
-			if(workProgress >= 1.0) {
-				endWorking();
-			}
-		}
-	}
-	
-	private void endWorking() {
-		if(isWorking()) {
-			int drained = tank.drain(currentRecipe.consumeLiquid, true).amount;
-			if(!worldObj.isRemote) {
-				inventory[0].stackSize -= currentRecipe.consumeType.stackSize;
-				if(inventory[0].stackSize <= 0)
-					inventory[0] = null;
-				
-				if(inventory[1] != null) {
-					inventory[1].stackSize += currentRecipe.output.stackSize;
-				} else {
-					inventory[1] = currentRecipe.output.copy();
-				}
-			}
-		}
-		
-		workProgress = 0.0;
-		currentRecipe = null;
-		checkCooldown = 0; // Avoid work pausing
-	}
-	
-	private void abortWorking() {
-		workProgress = 0.0;
-		currentRecipe = null ;
-	}
-	
-	public boolean isWorking() {
-		return currentRecipe != null;
-	}
-	
-	public boolean isActionBlocked() {
-		return !isWorking() || 
-			(inventory[0].stackSize < currentRecipe.consumeType.stackSize) ||
-			(inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) || 
-			inventory[1].stackSize + currentRecipe.output.stackSize > inventory[1].getMaxStackSize())) ||
-			currentRecipe.consumeLiquid > this.getLiquidAmount();
-	}
-	
-	public IFRecipe getCurrentRecipe() {
-		return currentRecipe;
-	}
-	
-	//---
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+        return fluid == ModuleCrafting.fluidImagProj;
+    }
+    
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        
+        if(isWorking()) {
+            updateWork();
+        } else {
+            // Match the work in server
+            if(!worldObj.isRemote) {
+                
+                if(--checkCooldown <= 0) {
+                    checkCooldown = 10;
+                    if(inventory[0] != null) {
+                        IFRecipe recipe = 
+                            ImagFusorRecipes.INSTANCE.getRecipe(inventory[0]);
+                        if(recipe != null) {
+                            startWorking(recipe);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        
+        // Update liquid
+        if(inventory[2] != null) {
+            if(getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
+                this.tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
+                inventory[2].stackSize--;
+                if(inventory[2].stackSize == 0)
+                    inventory[2] = null;
+            }
+        }
+        
+        // Update energy
+        if(inventory[3] != null) {
+            double gain = EnergyItemHelper
+                    .pull(inventory[3], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
+            this.injectEnergy(gain);
+        }
+        
+        // Synchronization
+        if(worldObj.isRemote) {
+            syncClient();
+            updateSounds();
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private void syncClient() {
+        if(--syncCooldown <= 0) {
+            syncCooldown = SYNC_INTV;
+            query(Minecraft.getMinecraft().thePlayer);
+        }
+    }
+    
+    //---Work API
+    /**
+     * @return The working progress, or 0.0 if isn't crafting
+     */
+    public double getWorkProgress() {
+        return isWorking() ? workProgress : 0.0;
+    }
+    
+    private void startWorking(IFRecipe recipe) {
+        currentRecipe = recipe;
+        workProgress = 0.0;
+    }
+    
+    private void updateWork() {
+        // Check the input stack, and abort if item isnt there
+        if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
+                || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK) {
+            abortWorking();
+            return;
+        }
+        
+        if(!isActionBlocked()) {
+            workProgress += WORK_SPEED;
+            if(workProgress >= 1.0) {
+                endWorking();
+            }
+        }
+    }
+    
+    private void endWorking() {
+        if(isWorking()) {
+            int drained = tank.drain(currentRecipe.consumeLiquid, true).amount;
+            if(!worldObj.isRemote) {
+                inventory[0].stackSize -= currentRecipe.consumeType.stackSize;
+                if(inventory[0].stackSize <= 0)
+                    inventory[0] = null;
+                
+                if(inventory[1] != null) {
+                    inventory[1].stackSize += currentRecipe.output.stackSize;
+                } else {
+                    inventory[1] = currentRecipe.output.copy();
+                }
+            }
+        }
+        
+        workProgress = 0.0;
+        currentRecipe = null;
+        checkCooldown = 0; // Avoid work pausing
+    }
+    
+    private void abortWorking() {
+        workProgress = 0.0;
+        currentRecipe = null ;
+    }
+    
+    public boolean isWorking() {
+        return currentRecipe != null;
+    }
+    
+    public boolean isActionBlocked() {
+        return !isWorking() || 
+            (inventory[0].stackSize < currentRecipe.consumeType.stackSize) ||
+            (inventory[1] != null && (!StackUtils.isStackDataEqual(inventory[1], currentRecipe.output) || 
+            inventory[1].stackSize + currentRecipe.output.stackSize > inventory[1].getMaxStackSize())) ||
+            currentRecipe.consumeLiquid > this.getLiquidAmount();
+    }
+    
+    public IFRecipe getCurrentRecipe() {
+        return currentRecipe;
+    }
+    
+    //---
 
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
-	}
-	
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        return new FluidTankInfo[] { tank.getInfo() };
+    }
+    
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -271,16 +271,16 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     
     @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
     private void query(@Instance EntityPlayer player) {
-    	if(player != null)
-    		syncBack(player, currentRecipe, workProgress, tank.getFluidAmount());
+        if(player != null)
+            syncBack(player, currentRecipe, workProgress, tank.getFluidAmount());
     }
     
     @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
     private void syncBack(@Target EntityPlayer player, @Instance IFRecipe recipe, 
-    	@Data Double progress, @Data Integer fluidAmount) {
-    	tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
-    	workProgress = progress;
-    	currentRecipe = recipe;
+        @Data Double progress, @Data Integer fluidAmount) {
+        tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
+        workProgress = progress;
+        currentRecipe = recipe;
     }
     
     // --- CLIENT EFFECTS
@@ -290,14 +290,14 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     
     @SideOnly(Side.CLIENT)
     private void updateSounds() {
-    	if(sound != null && !isWorking()) {
-    		sound.stop();
-    		sound = null;
-    	} else if(sound == null && isWorking()) {
-    		sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
-    				"machine.imag_fusor_work").setLoop().setVolume(0.6f);
-    		ACSounds.playClient(sound);
-    	}
+        if(sound != null && !isWorking()) {
+            sound.stop();
+            sound = null;
+        } else if(sound == null && isWorking()) {
+            sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
+                    "machine.imag_fusor_work").setLoop().setVolume(0.6f);
+            ACSounds.playClient(sound);
+        }
     }
 
 }

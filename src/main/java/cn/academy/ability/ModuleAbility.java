@@ -42,33 +42,33 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 @RegEventHandler(Bus.Forge)
 public class ModuleAbility {
 
-	@RegItem
-	@RegItem.HasRender
-	@RecipeName("dev_portable")
-	public static ItemDeveloper developerPortable;
+    @RegItem
+    @RegItem.HasRender
+    @RecipeName("dev_portable")
+    public static ItemDeveloper developerPortable;
 
-	@RegBlock(item = ItemBlockMulti.class)
-	@RecipeName("dev_normal")
-	public static BlockDeveloper developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("dev_normal")
+    public static BlockDeveloper developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
 
-	@RegBlock(item = ItemBlockMulti.class)
-	@RecipeName("dev_advanced")
-	public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("dev_advanced")
+    public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
 
     @RegBlock
     public static AbilityInterferer abilityInterferer;
 
-	public static void init() {
-	}
+    public static void init() {
+    }
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-		if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
-			if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
-					event.target.blockZ) instanceof BlockDeveloper)
-				event.setCanceled(true);
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+        if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
+            if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
+                    event.target.blockZ) instanceof BlockDeveloper)
+                event.setCanceled(true);
+        }
+    }
 
 }

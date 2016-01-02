@@ -25,116 +25,116 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class IronSand extends SpecialSkill {
 
-	static IronSand instance;
-	
-	public IronSand() {
-		super("iron_sand", 4);
-		
-		instance = this;
-		
-		addSubSkill(new ISSword());
-		addSubSkill(new ISWhip());
-		addSubSkill(new ISStorm());
-		addSubSkill(new ISCone());
-	}
-	
-	/**
-	 * Called when player started SpecialSkill. Validate at SERVER to proceed.
-	 * @param player
-	 * @return
-	 */
-	@Override
-	public boolean validateExecution(EntityPlayer player) {
-		return true;
-	}
-	
-	@Override
-	protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
-		return new IronSandAction();
-	}
-	
-	public static class IronSandAction extends SpecialSkillAction {
-		
-		public IronSandAction() {
-			super(instance, -1);
-		}
-		
-		@Override
-		protected void onSkillStart() {
-			if(isRemote)
-				startEffects();
-		}
-		
-		@Override
-		protected void onSkillTick() {
-			if(isRemote)
-				updateEffects();
-		}
-		
-		@Override
-		protected void onSkillEnd() {
-			if(isRemote) {
-				endEffects();
-				endCurrentType();
-			}
-		}
-		
-		@Override
-		protected void onSkillAbort() {
-			if(isRemote) {
-				endEffects();
-				endCurrentType();
-			}
-		}
-		
-		// CLIENT ONLY, type API
-		private String currentType = "idle";
-		
-		public void setCurrentType(String type) {
-			endCurrentType();
-			currentType = type;
-			startCurrentType();
-		}
-		
-		public String getCurrentType() {
-			return currentType;
-		}
-		
-		private void endCurrentType() {
-			SubSkill ss = instance.getSubSkill(currentType);
-			if(ss != null && ss instanceof ISStateCallback) {
-				((ISStateCallback)ss).endState(player);
-			}
-		}
-		
-		private void startCurrentType() {
-			SubSkill ss = instance.getSubSkill(currentType);
-			if(ss != null && ss instanceof ISStateCallback) {
-				((ISStateCallback)ss).startState(player);
-			}
-		}
-				
-		// ------------------
-		
-		// CLIENT EFFS
-		
-		@SideOnly(Side.CLIENT)
-		IronSandParticles particles;
-		
-		@SideOnly(Side.CLIENT)
-		private void startEffects() {
-			particles = new IronSandParticles(player);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void updateEffects() {
-			particles.tick();
-		}
-		
-		@SideOnly(Side.CLIENT)
-		private void endEffects() {
-		}
-		
-	}
+    static IronSand instance;
+    
+    public IronSand() {
+        super("iron_sand", 4);
+        
+        instance = this;
+        
+        addSubSkill(new ISSword());
+        addSubSkill(new ISWhip());
+        addSubSkill(new ISStorm());
+        addSubSkill(new ISCone());
+    }
+    
+    /**
+     * Called when player started SpecialSkill. Validate at SERVER to proceed.
+     * @param player
+     * @return
+     */
+    @Override
+    public boolean validateExecution(EntityPlayer player) {
+        return true;
+    }
+    
+    @Override
+    protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
+        return new IronSandAction();
+    }
+    
+    public static class IronSandAction extends SpecialSkillAction {
+        
+        public IronSandAction() {
+            super(instance, -1);
+        }
+        
+        @Override
+        protected void onSkillStart() {
+            if(isRemote)
+                startEffects();
+        }
+        
+        @Override
+        protected void onSkillTick() {
+            if(isRemote)
+                updateEffects();
+        }
+        
+        @Override
+        protected void onSkillEnd() {
+            if(isRemote) {
+                endEffects();
+                endCurrentType();
+            }
+        }
+        
+        @Override
+        protected void onSkillAbort() {
+            if(isRemote) {
+                endEffects();
+                endCurrentType();
+            }
+        }
+        
+        // CLIENT ONLY, type API
+        private String currentType = "idle";
+        
+        public void setCurrentType(String type) {
+            endCurrentType();
+            currentType = type;
+            startCurrentType();
+        }
+        
+        public String getCurrentType() {
+            return currentType;
+        }
+        
+        private void endCurrentType() {
+            SubSkill ss = instance.getSubSkill(currentType);
+            if(ss != null && ss instanceof ISStateCallback) {
+                ((ISStateCallback)ss).endState(player);
+            }
+        }
+        
+        private void startCurrentType() {
+            SubSkill ss = instance.getSubSkill(currentType);
+            if(ss != null && ss instanceof ISStateCallback) {
+                ((ISStateCallback)ss).startState(player);
+            }
+        }
+                
+        // ------------------
+        
+        // CLIENT EFFS
+        
+        @SideOnly(Side.CLIENT)
+        IronSandParticles particles;
+        
+        @SideOnly(Side.CLIENT)
+        private void startEffects() {
+            particles = new IronSandParticles(player);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void updateEffects() {
+            particles.tick();
+        }
+        
+        @SideOnly(Side.CLIENT)
+        private void endEffects() {
+        }
+        
+    }
 
 }

@@ -20,15 +20,15 @@ import cpw.mods.fml.common.eventhandler.Event;
  * @author WeAthFolD
  */
 public abstract class AbilityEvent extends Event {
-	
-	public final EntityPlayer player;
-	
-	public AbilityEvent(EntityPlayer _player) {
-		player = _player;
-	}
-	
-	public AbilityData getAbilityData() {
-		return AbilityData.get(player);
-	}
-	
+    
+    public final EntityPlayer player;
+    
+    public AbilityEvent(EntityPlayer _player) {
+        player = _player;
+    }
+    
+    public AbilityData getAbilityData() {
+        return AbilityData.get(player);
+    }
+    
 }

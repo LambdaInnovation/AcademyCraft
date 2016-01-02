@@ -23,8 +23,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class PresetUpdateEvent extends AbilityEvent {
 
-	public PresetUpdateEvent(EntityPlayer _player) {
-		super(_player);
-	}
+    public PresetUpdateEvent(EntityPlayer _player) {
+        super(_player);
+    }
 
 }

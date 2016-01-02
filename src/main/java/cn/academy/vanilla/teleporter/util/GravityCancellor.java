@@ -21,27 +21,27 @@ import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
  */
 public class GravityCancellor extends LIHandler<ClientTickEvent> {
 
-	final EntityPlayer p;
-	final int ticks;
-	int ticker = 0;
+    final EntityPlayer p;
+    final int ticks;
+    int ticker = 0;
 
-	public GravityCancellor(EntityPlayer _p, int _ticks) {
-		p = _p;
-		ticks = _ticks;
-	}
+    public GravityCancellor(EntityPlayer _p, int _ticks) {
+        p = _p;
+        ticks = _ticks;
+    }
 
-	@Override
-	protected boolean onEvent(ClientTickEvent event) {
-		if (p.isDead || (++ticker == ticks)) {
-			this.setDead();
-		} else {
-			if (!p.capabilities.isFlying) {
-				if (!p.onGround) {
-					p.motionY += 0.036;
-				}
-			}
-		}
-		return true;
-	}
+    @Override
+    protected boolean onEvent(ClientTickEvent event) {
+        if (p.isDead || (++ticker == ticks)) {
+            this.setDead();
+        } else {
+            if (!p.capabilities.isFlying) {
+                if (!p.onGround) {
+                    p.motionY += 0.036;
+                }
+            }
+        }
+        return true;
+    }
 
 }

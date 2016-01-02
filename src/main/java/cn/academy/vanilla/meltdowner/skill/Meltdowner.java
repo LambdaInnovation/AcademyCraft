@@ -38,136 +38,136 @@ import net.minecraft.util.Vec3;
  * @author WeAthFolD
  */
 public class Meltdowner extends Skill {
-	
-	static final int TICKS_MIN = 20, TICKS_MAX = 40, TICKS_TOLE = 100;
+    
+    static final int TICKS_MIN = 20, TICKS_MAX = 40, TICKS_TOLE = 100;
 
-	public static final Meltdowner instance = new Meltdowner();
-	
-	private Meltdowner() {
-		super("meltdowner", 3);
-	}
-	
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new MDAction()).setEstmCP(
-			instance.getConsumption(AbilityData.get(player)));
-	}
-	
-	public static class MDAction extends SkillSyncAction {
-		
-		int ticks;
+    public static final Meltdowner instance = new Meltdowner();
+    
+    private Meltdowner() {
+        super("meltdowner", 3);
+    }
+    
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new MDAction()).setEstmCP(
+            instance.getConsumption(AbilityData.get(player)));
+    }
+    
+    public static class MDAction extends SkillSyncAction {
+        
+        int ticks;
 
-		public MDAction() {}
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			
-			if(isRemote) startEffect();
-		}
-		
-		@Override
-		public void onTick() {
-			ticks++;
-			if(isRemote)
-				updateEffect();
-			if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
-				ActionManager.abortAction(this);
-			
-			if(ticks > TICKS_TOLE)
-				ActionManager.abortAction(this);
-		}
-		
-		@Override
-		public void writeNBTFinal(NBTTagCompound tag) {
-			tag.setInteger("t", ticks);
-		}
-		
-		@Override
-		public void readNBTFinal(NBTTagCompound tag) {
-			ticks = tag.getInteger("t");
-		}
-		
-		@Override
-		public void onEnd() {
-			if(ticks < TICKS_MIN) {
-				// N/A
-			} else {
-				cpData.perform(instance.getOverload(aData), 0);
-				int ct = toChargeTicks();
-				
-				if(isRemote) {
-					spawnRay();
-				} else {
-					RangedRayDamage rrd = new RangedRayDamage(player, 
-						instance.getFunc("range").callFloat(aData.getSkillExp(instance)),
-						instance.getFunc("energy").callFloat(aData.getSkillExp(instance), ct));
-					rrd.startDamage = instance.getFunc("damage").callFloat(aData.getSkillExp(instance), ct);
-					rrd.perform();
-				}
-				
-				setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
-				aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
-			}
-		}
-		
-		@Override
-		public void onFinalize() {
-			if(isRemote)
-				endEffect();
-		}
-		
-		private int toChargeTicks() {
-			return Math.min(ticks, TICKS_MAX);
-		}
-		
-		// CLIENT
-		
-		@SideOnly(Side.CLIENT)
-		FollowEntitySound sound;
-		
-		@SideOnly(Side.CLIENT)
-		void spawnRay() {
-			EntityMDRay ray = new EntityMDRay(player);
-			ACSounds.playClient(player, "md.meltdowner", 0.5f);
-			world.spawnEntityInWorld(ray);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		void startEffect() {
-			sound = new FollowEntitySound(player, "md.md_charge").setVolume(1.0f);
-			ACSounds.playClient(sound);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		void updateEffect() {
-			if(isLocal()) {
-				player.capabilities.setPlayerWalkSpeed(0.1f - ticks * 0.001f);
-			}
-			
-			// Particles surrounding player
-			int count = rangei(2, 3);
-			while(count --> 0) {
-				double r = ranged(0.7, 1);
-				double theta = ranged(0, Math.PI * 2);
-				double h = ranged(-1.2, 0);
-				Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, 
-					player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ), 
-					VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
-				Vec3 vel = VecUtils.vec(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03));
-				world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
-			}
-		}
-		
-		@SideOnly(Side.CLIENT)
-		void endEffect() {
-			if(isLocal()) {
-				player.capabilities.setPlayerWalkSpeed(0.1f);
-			}
-			
-			sound.stop();
-		}
-		
-	}
+        public MDAction() {}
+        
+        @Override
+        public void onStart() {
+            super.onStart();
+            
+            if(isRemote) startEffect();
+        }
+        
+        @Override
+        public void onTick() {
+            ticks++;
+            if(isRemote)
+                updateEffect();
+            if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
+                ActionManager.abortAction(this);
+            
+            if(ticks > TICKS_TOLE)
+                ActionManager.abortAction(this);
+        }
+        
+        @Override
+        public void writeNBTFinal(NBTTagCompound tag) {
+            tag.setInteger("t", ticks);
+        }
+        
+        @Override
+        public void readNBTFinal(NBTTagCompound tag) {
+            ticks = tag.getInteger("t");
+        }
+        
+        @Override
+        public void onEnd() {
+            if(ticks < TICKS_MIN) {
+                // N/A
+            } else {
+                cpData.perform(instance.getOverload(aData), 0);
+                int ct = toChargeTicks();
+                
+                if(isRemote) {
+                    spawnRay();
+                } else {
+                    RangedRayDamage rrd = new RangedRayDamage(player, 
+                        instance.getFunc("range").callFloat(aData.getSkillExp(instance)),
+                        instance.getFunc("energy").callFloat(aData.getSkillExp(instance), ct));
+                    rrd.startDamage = instance.getFunc("damage").callFloat(aData.getSkillExp(instance), ct);
+                    rrd.perform();
+                }
+                
+                setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
+                aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
+            }
+        }
+        
+        @Override
+        public void onFinalize() {
+            if(isRemote)
+                endEffect();
+        }
+        
+        private int toChargeTicks() {
+            return Math.min(ticks, TICKS_MAX);
+        }
+        
+        // CLIENT
+        
+        @SideOnly(Side.CLIENT)
+        FollowEntitySound sound;
+        
+        @SideOnly(Side.CLIENT)
+        void spawnRay() {
+            EntityMDRay ray = new EntityMDRay(player);
+            ACSounds.playClient(player, "md.meltdowner", 0.5f);
+            world.spawnEntityInWorld(ray);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        void startEffect() {
+            sound = new FollowEntitySound(player, "md.md_charge").setVolume(1.0f);
+            ACSounds.playClient(sound);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        void updateEffect() {
+            if(isLocal()) {
+                player.capabilities.setPlayerWalkSpeed(0.1f - ticks * 0.001f);
+            }
+            
+            // Particles surrounding player
+            int count = rangei(2, 3);
+            while(count --> 0) {
+                double r = ranged(0.7, 1);
+                double theta = ranged(0, Math.PI * 2);
+                double h = ranged(-1.2, 0);
+                Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, 
+                    player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ), 
+                    VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+                Vec3 vel = VecUtils.vec(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03));
+                world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
+            }
+        }
+        
+        @SideOnly(Side.CLIENT)
+        void endEffect() {
+            if(isLocal()) {
+                player.capabilities.setPlayerWalkSpeed(0.1f);
+            }
+            
+            sound.stop();
+        }
+        
+    }
 
 }

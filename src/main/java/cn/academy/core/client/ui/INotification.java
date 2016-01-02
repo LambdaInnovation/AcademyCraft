@@ -19,17 +19,17 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public interface INotification {
-	
-	ResourceLocation getIcon();
-	
-	/**
-	 * The title string to be directly displayed.
-	 */
-	String getTitle();
-	
-	/**
-	 * The content string to be directly displayed.
-	 */
-	String getContent();
-	
+    
+    ResourceLocation getIcon();
+    
+    /**
+     * The title string to be directly displayed.
+     */
+    String getTitle();
+    
+    /**
+     * The content string to be directly displayed.
+     */
+    String getContent();
+    
 }

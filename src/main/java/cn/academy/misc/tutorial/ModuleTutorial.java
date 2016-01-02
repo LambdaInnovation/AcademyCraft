@@ -22,18 +22,18 @@ import static cn.academy.misc.tutorial.PreviewHandlers.*;
 @Registrant
 @RegACRecipeNames
 public class ModuleTutorial {
-	
-	@RegItem
-	@RecipeName("tutorial")
-	public static ItemTutorial item;
+    
+    @RegItem
+    @RecipeName("tutorial")
+    public static ItemTutorial item;
 
     private static ACTutorial defnTut(String name) {
         return TutorialRegistry.addTutorial(name);
     }
 
     @RegPostInitCallback
-	public static void initConditions() {
-		defnTut("phase_liquid")
+    public static void initConditions() {
+        defnTut("phase_liquid")
             // .setCondition(harvestLiquid(ModuleCrafting.imagPhase.mat))
             .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
                                 new Vector2f(0, 0), 1, Color.white()))
@@ -63,12 +63,12 @@ public class ModuleTutorial {
                 .addPreview(recipes(ModuleCrafting.oreImagSil));
 
         defnTut("node").setCondition(or(
-				itemsCrafted(
-						ModuleEnergy.nodeBasic,
-						ModuleEnergy.nodeStandard,
-						ModuleEnergy.nodeAdvanced
-				)
-		)).addPreview(drawsBlock(ModuleEnergy.nodeBasic))
+                itemsCrafted(
+                        ModuleEnergy.nodeBasic,
+                        ModuleEnergy.nodeStandard,
+                        ModuleEnergy.nodeAdvanced
+                )
+        )).addPreview(drawsBlock(ModuleEnergy.nodeBasic))
         .addPreview(recipes(ModuleEnergy.nodeBasic))
         .addPreview(recipes(ModuleEnergy.nodeStandard))
         .addPreview(recipes(ModuleEnergy.nodeAdvanced));
@@ -119,12 +119,12 @@ public class ModuleTutorial {
                 .addPreview(recipes(ModuleTerminal.terminalInstaller));
 
         defnTut("ability_developer").setCondition(or(
-				itemsCrafted(
-						ModuleAbility.developerNormal,
-						ModuleAbility.developerPortable,
-						ModuleAbility.developerAdvanced
-				)
-		)).addPreview(drawsItem(ModuleAbility.developerPortable))
+                itemsCrafted(
+                        ModuleAbility.developerNormal,
+                        ModuleAbility.developerPortable,
+                        ModuleAbility.developerAdvanced
+                )
+        )).addPreview(drawsItem(ModuleAbility.developerPortable))
             .addPreview(displayModel("developer_advanced",
                     new CompTransform().setScale(0.16).setTransform(0, -0.4, -0.3)))
             .addPreview(recipes(ModuleAbility.developerPortable))
@@ -133,5 +133,5 @@ public class ModuleTutorial {
 
         defnTut("ability")
                 .setCondition(abilityLevel(Optional.empty(), 1));
-	}
+    }
 }

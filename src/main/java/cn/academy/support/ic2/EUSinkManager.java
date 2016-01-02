@@ -22,40 +22,40 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class EUSinkManager implements IEnergyBlockManager {
 
-	@Override
-	public boolean isSupported(TileEntity tile) {
-		return asSink(tile) != null;
-	}
+    @Override
+    public boolean isSupported(TileEntity tile) {
+        return asSink(tile) != null;
+    }
 
-	IEnergySink asSink(TileEntity tile) {
-		return tile instanceof IEnergySink ? (IEnergySink) tile : null;
-	}
+    IEnergySink asSink(TileEntity tile) {
+        return tile instanceof IEnergySink ? (IEnergySink) tile : null;
+    }
 
-	@Override
-	public double getEnergy(TileEntity tile) {
-		// NOT SUPPORTED
-		return 0;
-	}
+    @Override
+    public double getEnergy(TileEntity tile) {
+        // NOT SUPPORTED
+        return 0;
+    }
 
-	@Override
-	public void setEnergy(TileEntity tile, double energy) {
-		// NOT SUPPORTED
-		return;
-	}
+    @Override
+    public void setEnergy(TileEntity tile, double energy) {
+        // NOT SUPPORTED
+        return;
+    }
 
-	@Override
-	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		IEnergySink sink = asSink(tile);
-		if(sink != null) {
-			return IC2Support.CONV_RATE * sink.injectEnergy(ForgeDirection.UP, amt / IC2Support.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
-		}
-		return amt;
-	}
+    @Override
+    public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        IEnergySink sink = asSink(tile);
+        if(sink != null) {
+            return IC2Support.CONV_RATE * sink.injectEnergy(ForgeDirection.UP, amt / IC2Support.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
+        }
+        return amt;
+    }
 
-	@Override
-	public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		// NOT SUPPORTED
-		return 0;
-	}
+    @Override
+    public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        // NOT SUPPORTED
+        return 0;
+    }
 
 }

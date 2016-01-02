@@ -30,20 +30,20 @@ import cn.lambdalib.annoreg.core.RegistryTypeDecl;
  */
 @RegistryTypeDecl
 public class CategoryRegistration extends RegistrationFieldSimple<RegCategory, Category> {
-	
-	public CategoryRegistration() {
-		super(RegCategory.class, "AC_Category");
-		setLoadStage(LoadStage.PRE_INIT);
-	}
+    
+    public CategoryRegistration() {
+        super(RegCategory.class, "AC_Category");
+        setLoadStage(LoadStage.PRE_INIT);
+    }
 
-	@Target(ElementType.FIELD)
-	@Retention(RetentionPolicy.RUNTIME)
-	public @interface RegCategory {}
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RegCategory {}
 
-	@Override
-	protected void register(Category value, RegCategory anno, String field)
-			throws Exception {
-		CategoryManager.INSTANCE.register(value);
-	}
-	
+    @Override
+    protected void register(Category value, RegCategory anno, String field)
+            throws Exception {
+        CategoryManager.INSTANCE.register(value);
+    }
+    
 }

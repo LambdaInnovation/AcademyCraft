@@ -26,34 +26,34 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
  */
 public class SkillBrainCourseAdvanced extends Skill {
 
-	public SkillBrainCourseAdvanced() {
-		super("brain_course_advanced", 5);
-		this.canControl = false;
-		this.isGeneric = true;
-		
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	@SubscribePipeline("ability.maxcp")
-	public float addMaxCP(float maxcp, EntityPlayer player) {
-		if(AbilityData.get(player).isSkillLearned(this))
-			maxcp += 1500;
-		return maxcp;
-	}
-	
-	@SubscribePipeline("ability.maxo")
-	public float addMaxO(float maxo, EntityPlayer player) {
-		if(AbilityData.get(player).isSkillLearned(this))
-			maxo += 100;
-		return maxo;
-	}
-	
-	@SubscribeEvent
-	public void onExpAdded(SkillExpAddedEvent event) {
-		AbilityData aData = event.getAbilityData();
-		if(event.skill.canControl() && aData.isSkillLearned(this)) {
-			event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
-		}
-	}
+    public SkillBrainCourseAdvanced() {
+        super("brain_course_advanced", 5);
+        this.canControl = false;
+        this.isGeneric = true;
+        
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    @SubscribePipeline("ability.maxcp")
+    public float addMaxCP(float maxcp, EntityPlayer player) {
+        if(AbilityData.get(player).isSkillLearned(this))
+            maxcp += 1500;
+        return maxcp;
+    }
+    
+    @SubscribePipeline("ability.maxo")
+    public float addMaxO(float maxo, EntityPlayer player) {
+        if(AbilityData.get(player).isSkillLearned(this))
+            maxo += 100;
+        return maxo;
+    }
+    
+    @SubscribeEvent
+    public void onExpAdded(SkillExpAddedEvent event) {
+        AbilityData aData = event.getAbilityData();
+        if(event.skill.canControl() && aData.isSkillLearned(this)) {
+            event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+        }
+    }
 
 }

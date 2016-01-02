@@ -48,178 +48,178 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  */
 public class LightShield extends Skill {
 
-	public static final LightShield instance = new LightShield();
-	
-	static final int ACTION_INTERVAL = 18;
-	static IEntitySelector basicSelector = EntitySelectors.everything;
+    public static final LightShield instance = new LightShield();
+    
+    static final int ACTION_INTERVAL = 18;
+    static IEntitySelector basicSelector = EntitySelectors.everything;
 
-	private LightShield() {
-		super("light_shield", 2);
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	static float getAbsorbDamage(AbilityData data) {
-		return instance.callFloatWithExp("absorb_damage", data);
-	}
-	
-	static float getTouchDamage(AbilityData data) {
-		return instance.callFloatWithExp("touch_damage", data);
-	}
-	
-	static float getAbsorbOverload(AbilityData data) {
-		return instance.callFloatWithExp("absorb_overload", data);
-	}
-	
-	static float getAbsorbConsumption(AbilityData data) {
-		return instance.callFloatWithExp("absorb_consumption", data);
-	}
-	
-	static boolean isEntityReachable(EntityPlayer player, Entity e) {
-		double dx = e.posX - player.posX, 
-				dy = e.posY - player.posY, 
-				dz = e.posZ - player.posZ;
-		double yaw = -MathUtils.toAngle(Math.atan2(dx, dz));
-		return Math.abs(yaw - player.rotationYaw) % 360 < 60;
-	}
-	
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new LSAction());
-	}
-	
-	@SubscribeEvent
-	public void onPlayerAttacked(LivingHurtEvent event) {
-		if(event.entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.entityLiving;
-			LSAction action = ActionManager.findAction(player, LSAction.class);
-			if(action != null) {
-				event.ammount = action.handleAttacked(event.source, event.ammount);
-				if(event.ammount == 0)
-					event.setCanceled(true);
-			}
-		}
-	}
-	
-	public static class LSAction extends SkillSyncAction {
+    private LightShield() {
+        super("light_shield", 2);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    static float getAbsorbDamage(AbilityData data) {
+        return instance.callFloatWithExp("absorb_damage", data);
+    }
+    
+    static float getTouchDamage(AbilityData data) {
+        return instance.callFloatWithExp("touch_damage", data);
+    }
+    
+    static float getAbsorbOverload(AbilityData data) {
+        return instance.callFloatWithExp("absorb_overload", data);
+    }
+    
+    static float getAbsorbConsumption(AbilityData data) {
+        return instance.callFloatWithExp("absorb_consumption", data);
+    }
+    
+    static boolean isEntityReachable(EntityPlayer player, Entity e) {
+        double dx = e.posX - player.posX, 
+                dy = e.posY - player.posY, 
+                dz = e.posZ - player.posZ;
+        double yaw = -MathUtils.toAngle(Math.atan2(dx, dz));
+        return Math.abs(yaw - player.rotationYaw) % 360 < 60;
+    }
+    
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new LSAction());
+    }
+    
+    @SubscribeEvent
+    public void onPlayerAttacked(LivingHurtEvent event) {
+        if(event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            LSAction action = ActionManager.findAction(player, LSAction.class);
+            if(action != null) {
+                event.ammount = action.handleAttacked(event.source, event.ammount);
+                if(event.ammount == 0)
+                    event.setCanceled(true);
+            }
+        }
+    }
+    
+    public static class LSAction extends SkillSyncAction {
 
-		int ticks;
-		int lastAbsorb = -1; // The tick last the shield absorbed damage.
-		
-		public LSAction() {
-			super(-1);
-		}
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			
-			cpData.perform(instance.getOverload(aData), 0);
-			if(isRemote)
-				startEffects();
-		}
-		
-		@Override
-		public void onTick() {
-			++ticks;
-			
-			if(isRemote)
-				updateEffects();
-			
-			if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
-				ActionManager.endAction(this);
-			aData.addSkillExp(instance, 1e-6f);
-			
-			if(!isRemote) {
-				// Find the entities that are 'colliding' with the shield.
-				List<Entity> candidates = WorldUtils.getEntities(player, 3, 
-					EntitySelectors.and(basicSelector, new IEntitySelector() {
-						@Override
-						public boolean isEntityApplicable(Entity e) {
-							return isEntityReachable(player, e);
-						}
-					}, EntitySelectors.excludeOf(player)));
-				for(Entity e : candidates) {
-					if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData))) {
-						MDDamageHelper.attack(e, player, getTouchDamage(aData));
-						aData.addSkillExp(instance, instance.getFloat("expincr"));
-					}
-				}
-			}
-		}
-		
-		@Override
-		public void onEnd() {
-			setCooldown(instance, instance.getCooldown(aData));
-		}
-		
-		@Override
-		public void onFinalize() {
-			if(isRemote)
-				endEffects();
-		}
-		
-		public float handleAttacked(DamageSource src, float damage) {
-			if(damage == 0 || lastAbsorb != -1 && ticks - lastAbsorb <= ACTION_INTERVAL)
-				return damage;
-			
-			Entity entity = src.getSourceOfDamage();
-			boolean perform = false;
-			if(entity instanceof Entity) {
-				if(isEntityReachable(player, entity))
-					perform = true;
-			} else {
-				perform = true;
-			}
-			
-			if(perform) {
-				lastAbsorb = ticks;
-				if(cpData.perform(getAbsorbConsumption(aData), getAbsorbOverload(aData))) {
-					float amt = getAbsorbDamage(aData);
-					damage -= Math.min(damage, amt);
-				}
-			}
-			
-			aData.addSkillExp(instance, instance.getFloat("expincr"));
-			return damage;
-		}
-		
-		//CLIENT
-		@SideOnly(Side.CLIENT)
-		EntityMdShield shield;
-		
-		@SideOnly(Side.CLIENT)
-		FollowEntitySound loopSound;
-		
-		@SideOnly(Side.CLIENT)
-		public void startEffects() {
-			world.spawnEntityInWorld(shield = new EntityMdShield(player));
-			ACSounds.playClient(player, "md.shield_startup", 0.8f);
-			ACSounds.playClient(loopSound = new FollowEntitySound(player, "md.shield_loop").setLoop());
-		}
-		
-		@SideOnly(Side.CLIENT)
-		public void updateEffects() {
-			if(RandUtils.nextFloat() < 0.3f) {
-				Motion3D mo = new Motion3D(player, true).move(1);
-				final double s = 0.5;
-				mo.px += ranged(-s, s);
-				mo.py += ranged(-s, s);
-				mo.pz += ranged(-s, s);
-				
-				Particle p = MdParticleFactory.INSTANCE.next(world, 
-					VecUtils.vec(mo.px, mo.py, mo.pz),
-					VecUtils.vec(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)));
-				
-				world.spawnEntityInWorld(p);
-			}
-		}
-		
-		@SideOnly(Side.CLIENT)
-		public void endEffects() {
-			shield.setDead();
-			loopSound.stop();
-		}
-		
-	}
+        int ticks;
+        int lastAbsorb = -1; // The tick last the shield absorbed damage.
+        
+        public LSAction() {
+            super(-1);
+        }
+        
+        @Override
+        public void onStart() {
+            super.onStart();
+            
+            cpData.perform(instance.getOverload(aData), 0);
+            if(isRemote)
+                startEffects();
+        }
+        
+        @Override
+        public void onTick() {
+            ++ticks;
+            
+            if(isRemote)
+                updateEffects();
+            
+            if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
+                ActionManager.endAction(this);
+            aData.addSkillExp(instance, 1e-6f);
+            
+            if(!isRemote) {
+                // Find the entities that are 'colliding' with the shield.
+                List<Entity> candidates = WorldUtils.getEntities(player, 3, 
+                    EntitySelectors.and(basicSelector, new IEntitySelector() {
+                        @Override
+                        public boolean isEntityApplicable(Entity e) {
+                            return isEntityReachable(player, e);
+                        }
+                    }, EntitySelectors.excludeOf(player)));
+                for(Entity e : candidates) {
+                    if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData))) {
+                        MDDamageHelper.attack(e, player, getTouchDamage(aData));
+                        aData.addSkillExp(instance, instance.getFloat("expincr"));
+                    }
+                }
+            }
+        }
+        
+        @Override
+        public void onEnd() {
+            setCooldown(instance, instance.getCooldown(aData));
+        }
+        
+        @Override
+        public void onFinalize() {
+            if(isRemote)
+                endEffects();
+        }
+        
+        public float handleAttacked(DamageSource src, float damage) {
+            if(damage == 0 || lastAbsorb != -1 && ticks - lastAbsorb <= ACTION_INTERVAL)
+                return damage;
+            
+            Entity entity = src.getSourceOfDamage();
+            boolean perform = false;
+            if(entity instanceof Entity) {
+                if(isEntityReachable(player, entity))
+                    perform = true;
+            } else {
+                perform = true;
+            }
+            
+            if(perform) {
+                lastAbsorb = ticks;
+                if(cpData.perform(getAbsorbConsumption(aData), getAbsorbOverload(aData))) {
+                    float amt = getAbsorbDamage(aData);
+                    damage -= Math.min(damage, amt);
+                }
+            }
+            
+            aData.addSkillExp(instance, instance.getFloat("expincr"));
+            return damage;
+        }
+        
+        //CLIENT
+        @SideOnly(Side.CLIENT)
+        EntityMdShield shield;
+        
+        @SideOnly(Side.CLIENT)
+        FollowEntitySound loopSound;
+        
+        @SideOnly(Side.CLIENT)
+        public void startEffects() {
+            world.spawnEntityInWorld(shield = new EntityMdShield(player));
+            ACSounds.playClient(player, "md.shield_startup", 0.8f);
+            ACSounds.playClient(loopSound = new FollowEntitySound(player, "md.shield_loop").setLoop());
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public void updateEffects() {
+            if(RandUtils.nextFloat() < 0.3f) {
+                Motion3D mo = new Motion3D(player, true).move(1);
+                final double s = 0.5;
+                mo.px += ranged(-s, s);
+                mo.py += ranged(-s, s);
+                mo.pz += ranged(-s, s);
+                
+                Particle p = MdParticleFactory.INSTANCE.next(world, 
+                    VecUtils.vec(mo.px, mo.py, mo.pz),
+                    VecUtils.vec(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)));
+                
+                world.spawnEntityInWorld(p);
+            }
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public void endEffects() {
+            shield.setDead();
+            loopSound.stop();
+        }
+        
+    }
 
 }

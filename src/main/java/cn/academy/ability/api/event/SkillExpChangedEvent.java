@@ -21,12 +21,12 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 public class SkillExpChangedEvent extends AbilityEvent {
-	
-	public final Skill skill;
+    
+    public final Skill skill;
 
-	public SkillExpChangedEvent(EntityPlayer _player, Skill _skill) {
-		super(_player);
-		skill = _skill;
-	}
+    public SkillExpChangedEvent(EntityPlayer _player, Skill _skill) {
+        super(_player);
+        skill = _skill;
+    }
 
 }

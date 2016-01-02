@@ -32,57 +32,57 @@ import net.minecraftforge.common.util.ForgeDirection;
 @RegWithName("rf_output")
 public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 
-	public TileRFOutput() {
-		super("ac_rf_output", 0, 2000, 100);
-	}
-	
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		World world = getWorldObj();
-		if(!world.isRemote) {
-			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-				int x = xCoord + dir.offsetX,
-					y = yCoord + dir.offsetY,
-					z = zCoord + dir.offsetZ;
-				TileEntity te = world.getTileEntity(x, y, z);
-				if(te instanceof IEnergyReceiver && energy > 0) {
-					IEnergyReceiver receiver = (IEnergyReceiver) te;
-					ForgeDirection rev = dir.getOpposite();
-					if(receiver.canConnectEnergy(rev)) {
-						int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
-						req = Math.min(if2rf(energy), req);
-						energy -= rf2if(receiver.receiveEnergy(rev, req, false));
-					}
-				}
-			}
-		}
-	}
+    public TileRFOutput() {
+        super("ac_rf_output", 0, 2000, 100);
+    }
+    
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        World world = getWorldObj();
+        if(!world.isRemote) {
+            for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                int x = xCoord + dir.offsetX,
+                    y = yCoord + dir.offsetY,
+                    z = zCoord + dir.offsetZ;
+                TileEntity te = world.getTileEntity(x, y, z);
+                if(te instanceof IEnergyReceiver && energy > 0) {
+                    IEnergyReceiver receiver = (IEnergyReceiver) te;
+                    ForgeDirection rev = dir.getOpposite();
+                    if(receiver.canConnectEnergy(rev)) {
+                        int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
+                        req = Math.min(if2rf(energy), req);
+                        energy -= rf2if(receiver.receiveEnergy(rev, req, false));
+                    }
+                }
+            }
+        }
+    }
 
-	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
-		return true;
-	}
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from) {
+        return true;
+    }
 
-	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract,
-			boolean simulate) {
-		int e = (int) energy;
-		if(!simulate) {
-			energy -= rf2if(maxExtract);
-			if(energy < 0) energy = 0;
-		}
-		return (int) Math.min(if2rf(e), maxExtract);
-	}
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract,
+            boolean simulate) {
+        int e = (int) energy;
+        if(!simulate) {
+            energy -= rf2if(maxExtract);
+            if(energy < 0) energy = 0;
+        }
+        return (int) Math.min(if2rf(e), maxExtract);
+    }
 
-	@Override
-	public int getEnergyStored(ForgeDirection from) {
-		return if2rf(energy);
-	}
+    @Override
+    public int getEnergyStored(ForgeDirection from) {
+        return if2rf(energy);
+    }
 
-	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
-		return if2rf(2000);
-	}
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from) {
+        return if2rf(2000);
+    }
 
 }

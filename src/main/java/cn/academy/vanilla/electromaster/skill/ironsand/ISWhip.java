@@ -21,15 +21,15 @@ import cn.academy.ability.api.ctrl.SkillInstance;
  */
 public class ISWhip extends SubSkill {
 
-	public ISWhip() {
-		super("whip");
-	}
+    public ISWhip() {
+        super("whip");
+    }
 
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new ISInstanceBase("whip") {
-			
-		};
-	}
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new ISInstanceBase("whip") {
+            
+        };
+    }
 
 }

@@ -33,42 +33,42 @@ import net.minecraft.world.World;
  */
 @Registrant
 public class ItemTerminalInstaller extends ACItem {
-	
-	@SideOnly(Side.CLIENT)
-	@RegItem.Render
-	public static TerminalInstallerRenderer renderer;
+    
+    @SideOnly(Side.CLIENT)
+    @RegItem.Render
+    public static TerminalInstallerRenderer renderer;
 
-	public ItemTerminalInstaller() {
-		super("terminal_installer");
-		this.bFull3D = true;
-		this.maxStackSize = 1;
-	}
-	
-	@Override
+    public ItemTerminalInstaller() {
+        super("terminal_installer");
+        this.bFull3D = true;
+        this.maxStackSize = 1;
+    }
+    
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		TerminalData tData = TerminalData.get(player);
-		if(tData.isTerminalInstalled()) {
-			if(!world.isRemote)
-				player.addChatMessage(new ChatComponentTranslation("ac.terminal.alrdy_installed"));
-		} else {
-			if(!world.isRemote) {
-				if(!player.capabilities.isCreativeMode)
-					stack.stackSize--;
-				tData.install();
-				startInstalling(player);
-			}
-		}
+        TerminalData tData = TerminalData.get(player);
+        if(tData.isTerminalInstalled()) {
+            if(!world.isRemote)
+                player.addChatMessage(new ChatComponentTranslation("ac.terminal.alrdy_installed"));
+        } else {
+            if(!world.isRemote) {
+                if(!player.capabilities.isCreativeMode)
+                    stack.stackSize--;
+                tData.install();
+                startInstalling(player);
+            }
+        }
         return stack;
     }
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	private static void startInstalling(@Target EntityPlayer player) {
-		install();
-	}
-	
-	@SideOnly(Side.CLIENT)
-	private static void install() {
-		AuxGuiHandler.register(new TerminalInstallEffect());
-	}
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    private static void startInstalling(@Target EntityPlayer player) {
+        install();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static void install() {
+        AuxGuiHandler.register(new TerminalInstallEffect());
+    }
 
 }

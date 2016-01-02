@@ -20,8 +20,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class CategoryChangeEvent extends AbilityEvent {
 
-	public CategoryChangeEvent(EntityPlayer _player) {
-		super(_player);
-	}
-	
+    public CategoryChangeEvent(EntityPlayer _player) {
+        super(_player);
+    }
+    
 }

@@ -28,36 +28,36 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @Registrant
 public class ItemSilbarn extends ACItem {
-	
-	@SideOnly(Side.CLIENT)
-	@RegItem.Render
-	public static RenderSilbarn render;
-	
-	public ItemSilbarn() {
-		super("silbarn");
-	}
-	
+    
+    @SideOnly(Side.CLIENT)
+    @RegItem.Render
+    public static RenderSilbarn render;
+    
+    public ItemSilbarn() {
+        super("silbarn");
+    }
+    
     @Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-    	if(!world.isRemote) {
-    		world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-    		world.spawnEntityInWorld(new EntitySilbarn(player));
-    	}
-    	if(!player.capabilities.isCreativeMode)
-			--stack.stackSize;
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        if(!world.isRemote) {
+            world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+            world.spawnEntityInWorld(new EntitySilbarn(player));
+        }
+        if(!player.capabilities.isCreativeMode)
+            --stack.stackSize;
         return stack;
     }
-	
+    
     public static class RenderSilbarn extends RenderModelItem {
 
-		public RenderSilbarn() {
-			super(new ItemModelCustom(Resources.getModel("silbarn")), Resources.getTexture("models/silbarn"));
-			this.renderInventory = false;
-			this.setStdRotation(90, 0, 0);
-			this.setEquipRotation(0, 90, 0);
-			this.setEquipOffset(.5, 0.1, -.2);
-		}
-    	
+        public RenderSilbarn() {
+            super(new ItemModelCustom(Resources.getModel("silbarn")), Resources.getTexture("models/silbarn"));
+            this.renderInventory = false;
+            this.setStdRotation(90, 0, 0);
+            this.setEquipRotation(0, 90, 0);
+            this.setEquipOffset(.5, 0.1, -.2);
+        }
+        
     }
     
 }

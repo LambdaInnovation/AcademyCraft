@@ -34,63 +34,63 @@ import net.minecraft.util.StatCollector;
  * @author WeAthFolD
  */
 public class SettingsUI extends CGuiScreen {
-	
-	static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
-	
-	private static Map<String, List<UIProperty>> properties = new HashMap<>();
-	static {
-		addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
-		addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
-	}
-	
-	public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {
-		List<UIProperty> list = properties.get(cat);
-		if(list == null)
-			properties.put(cat, list = new ArrayList<>());
-		list.add(new UIProperty(elem, cat, id, defValue, singlePlayer));
-	}
-	
-	public SettingsUI() {
-		initPages();
-	}
-	
-	private void initPages() {
-		Widget main = document.getWidget("main").copy();
-		
-		Widget area = main.getWidget("area");
-		
-		boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
-		
-		ElementList list = new ElementList(); 
-		{
-			for(Entry<String, List<UIProperty>> entry : properties.entrySet()) {
-				Widget head = document.getWidget("t_cathead").copy();
-				TextBox.get(head.getWidget("text")).setContent(local("cat." + entry.getKey()));
-				list.addWidget(head);
-				
-				for(UIProperty prop : entry.getValue()) {
-					if(!prop.singlePlayer || singlePlayer)
-						list.addWidget(prop.element.getWidget(prop));
-				}
-				
-				Widget placeholder = new Widget();
-				placeholder.transform.setSize(10, 20);
-				list.addWidget(placeholder);
-			}
-		} 
-		area.addComponent(list);
-		
-		Widget bar = main.getWidget("scrollbar");
-		bar.listen(DraggedEvent.class, (w, e) ->
-		{
-			list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
-		});
-		
-		gui.addWidget(main);
-	}
-	
-	private String local(String id) {
-		return StatCollector.translateToLocal("ac.settings." + id);
-	}
-	
+    
+    static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
+    
+    private static Map<String, List<UIProperty>> properties = new HashMap<>();
+    static {
+        addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
+        addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
+    }
+    
+    public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {
+        List<UIProperty> list = properties.get(cat);
+        if(list == null)
+            properties.put(cat, list = new ArrayList<>());
+        list.add(new UIProperty(elem, cat, id, defValue, singlePlayer));
+    }
+    
+    public SettingsUI() {
+        initPages();
+    }
+    
+    private void initPages() {
+        Widget main = document.getWidget("main").copy();
+        
+        Widget area = main.getWidget("area");
+        
+        boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
+        
+        ElementList list = new ElementList(); 
+        {
+            for(Entry<String, List<UIProperty>> entry : properties.entrySet()) {
+                Widget head = document.getWidget("t_cathead").copy();
+                TextBox.get(head.getWidget("text")).setContent(local("cat." + entry.getKey()));
+                list.addWidget(head);
+                
+                for(UIProperty prop : entry.getValue()) {
+                    if(!prop.singlePlayer || singlePlayer)
+                        list.addWidget(prop.element.getWidget(prop));
+                }
+                
+                Widget placeholder = new Widget();
+                placeholder.transform.setSize(10, 20);
+                list.addWidget(placeholder);
+            }
+        } 
+        area.addComponent(list);
+        
+        Widget bar = main.getWidget("scrollbar");
+        bar.listen(DraggedEvent.class, (w, e) ->
+        {
+            list.setProgress((int) (list.getMaxProgress() * VerticalDragBar.get(w).getProgress()));
+        });
+        
+        gui.addWidget(main);
+    }
+    
+    private String local(String id) {
+        return StatCollector.translateToLocal("ac.settings." + id);
+    }
+    
 }

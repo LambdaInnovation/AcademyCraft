@@ -21,15 +21,15 @@ import cn.academy.ability.api.ctrl.SkillInstance;
  */
 public class ISCone extends SubSkill {
 
-	public ISCone() {
-		super("cone");
-	}
+    public ISCone() {
+        super("cone");
+    }
 
-	@Override
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new ISInstanceBase("cone") {
-			
-		};
-	}
+    @Override
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new ISInstanceBase("cone") {
+            
+        };
+    }
 
 }

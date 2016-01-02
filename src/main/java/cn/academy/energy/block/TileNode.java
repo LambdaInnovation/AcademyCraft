@@ -37,12 +37,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileNode extends TileInventory implements IWirelessNode, IInventory {
-	
-	static IFItemManager itemManager = IFItemManager.instance;
-	
-	@SideOnly(Side.CLIENT)
-	@RegTileEntity.Render
-	public static RenderDynamicBlock renderer;
+    
+    static IFItemManager itemManager = IFItemManager.instance;
+    
+    @SideOnly(Side.CLIENT)
+    @RegTileEntity.Render
+    public static RenderDynamicBlock renderer;
 
     protected double energy;
     
@@ -59,52 +59,52 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public boolean chargingOut = false;
     
     public TileNode() {
-    	super("wireless_node", 2);
+        super("wireless_node", 2);
     }
     
     @Override
     public void updateEntity() {
-    	if(!getWorldObj().isRemote) {
-    		++updateTicker;
-    		if(updateTicker == 10) {
-    			updateTicker = 0;
-    			receiveSyncMessage(this, WirelessHelper.isNodeLinked(this), 
-    				chargingIn, chargingOut, energy, name);
-    		}
-    		
-    		updateChargeIn();
-    		updateChargeOut();
-    	}
+        if(!getWorldObj().isRemote) {
+            ++updateTicker;
+            if(updateTicker == 10) {
+                updateTicker = 0;
+                receiveSyncMessage(this, WirelessHelper.isNodeLinked(this), 
+                    chargingIn, chargingOut, energy, name);
+            }
+            
+            updateChargeIn();
+            updateChargeOut();
+        }
     }
     
     private void updateChargeIn() {
-    	ItemStack stack = this.getStackInSlot(0);
-    	if(stack != null && itemManager.isSupported(stack)) {
-    		//Charge into the node.
-    		double req = Math.min(getBandwidth(), getMaxEnergy() - energy);
-    		double pull = itemManager.pull(stack, req, false);
-    		
-    		chargingIn = pull != 0;
-    		this.setEnergy(energy + pull);
-    	} else {
-    		chargingIn = false;
-    	}
+        ItemStack stack = this.getStackInSlot(0);
+        if(stack != null && itemManager.isSupported(stack)) {
+            //Charge into the node.
+            double req = Math.min(getBandwidth(), getMaxEnergy() - energy);
+            double pull = itemManager.pull(stack, req, false);
+            
+            chargingIn = pull != 0;
+            this.setEnergy(energy + pull);
+        } else {
+            chargingIn = false;
+        }
     }
     
     private void updateChargeOut() {
-    	ItemStack stack = this.getStackInSlot(1);
-    	if(stack != null && itemManager.isSupported(stack)) {
-    		double cur = getEnergy();
-    		if(cur > 0) {
-    			cur = Math.min(getBandwidth(), cur);
-    			double left = itemManager.charge(stack, cur);
-    			
-    			chargingOut = left != cur;
-    			this.setEnergy(getEnergy() - (cur - left));
-    		}
-    	} else {
-    		chargingOut = false;
-    	}
+        ItemStack stack = this.getStackInSlot(1);
+        if(stack != null && itemManager.isSupported(stack)) {
+            double cur = getEnergy();
+            if(cur > 0) {
+                cur = Math.min(getBandwidth(), cur);
+                double left = itemManager.charge(stack, cur);
+                
+                chargingOut = left != cur;
+                this.setEnergy(getEnergy() - (cur - left));
+            }
+        } else {
+            chargingOut = false;
+        }
     }
 
     @Override
@@ -152,33 +152,33 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 
     String name = "Unnamed";
     
-	@Override
-	public String getNodeName() {
-		return name;
-	}
+    @Override
+    public String getNodeName() {
+        return name;
+    }
 
-	public void setNodeName(String name) {
-		this.name = name;
-	}
-	
-	@RegNetworkCall(side = Side.CLIENT)
-	public static void receiveSyncMessage(
-		@RangedTarget(range = 12) TileNode te,
-		@Data Boolean enabled, 
-		@Data Boolean chargingIn,
-		@Data Boolean chargingOut, 
-		@Data Double energy,
-		@Data String name) {
-		te.enabled = enabled;
-		te.chargingIn = chargingIn;
-		te.chargingOut = chargingOut;
-		te.energy = energy;
-		te.name = name;
-	}
+    public void setNodeName(String name) {
+        this.name = name;
+    }
+    
+    @RegNetworkCall(side = Side.CLIENT)
+    public static void receiveSyncMessage(
+        @RangedTarget(range = 12) TileNode te,
+        @Data Boolean enabled, 
+        @Data Boolean chargingIn,
+        @Data Boolean chargingOut, 
+        @Data Double energy,
+        @Data String name) {
+        te.enabled = enabled;
+        te.chargingIn = chargingIn;
+        te.chargingOut = chargingOut;
+        te.energy = energy;
+        te.name = name;
+    }
 
-	@Override
-	public int getCapacity() {
-		return getType().capacity;
-	}
+    @Override
+    public int getCapacity() {
+        return getType().capacity;
+    }
 
 }

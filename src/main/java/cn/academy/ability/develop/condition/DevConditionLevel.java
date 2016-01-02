@@ -22,19 +22,19 @@ import cn.academy.ability.api.data.AbilityData;
  */
 public class DevConditionLevel implements IDevCondition {
 
-	@Override
-	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		return data.getLevel() >= skill.getLevel();
-	}
-	
-	@Override
-	public ResourceLocation getIcon() {
-		return null;
-	}
+    @Override
+    public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+        return data.getLevel() >= skill.getLevel();
+    }
+    
+    @Override
+    public ResourceLocation getIcon() {
+        return null;
+    }
 
-	@Override
-	public String getHintText() {
-		return null;
-	}
+    @Override
+    public String getHintText() {
+        return null;
+    }
 
 }

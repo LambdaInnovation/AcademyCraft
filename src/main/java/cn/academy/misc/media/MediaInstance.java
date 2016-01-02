@@ -22,53 +22,53 @@ import net.minecraft.util.ResourceLocation;
  *
  */
 class MediaInstance extends MovingSound {
-	
-	final EntityPlayer player;
-	
-	final Media media;
-	
-	boolean disposed = false;
-	
-	int tick;
-	
-	String mediaUUID;
-	boolean isPaused;
-	
-	protected MediaInstance(Media _media) {
-		super(new ResourceLocation("academy:media." + _media.name));
-		this.media = _media;
-		player = Minecraft.getMinecraft().thePlayer;
-		xPosF = (float) player.posX;
+    
+    final EntityPlayer player;
+    
+    final Media media;
+    
+    boolean disposed = false;
+    
+    int tick;
+    
+    String mediaUUID;
+    boolean isPaused;
+    
+    protected MediaInstance(Media _media) {
+        super(new ResourceLocation("academy:media." + _media.name));
+        this.media = _media;
+        player = Minecraft.getMinecraft().thePlayer;
+        xPosF = (float) player.posX;
         yPosF = (float) player.posY;
         zPosF = (float) player.posZ;
-	}
-	
-	public int getPlayTime() {
-		return tick / 20;
-	}
-	
-	public boolean isDisposed() {
-		return disposed || donePlaying;
-	}
-	
-	public void dispose() {
-		disposed = true;
-		donePlaying = true;
-	}
+    }
+    
+    public int getPlayTime() {
+        return tick / 20;
+    }
+    
+    public boolean isDisposed() {
+        return disposed || donePlaying;
+    }
+    
+    public void dispose() {
+        disposed = true;
+        donePlaying = true;
+    }
 
-	@Override
-	public void update() {
-		if (!player.isDead && !disposed) {
+    @Override
+    public void update() {
+        if (!player.isDead && !disposed) {
             xPosF = (float) player.posX;
             yPosF = (float) player.posY;
             zPosF = (float) player.posZ;
             
             if(!isPaused)
-            	++tick;
+                ++tick;
         } else {
-        	disposed = true;
+            disposed = true;
             this.donePlaying = true;
         }
-	}
-	
+    }
+    
 }

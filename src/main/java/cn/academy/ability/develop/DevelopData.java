@@ -48,9 +48,9 @@ public class DevelopData extends DataPart<EntityPlayer> {
     private int tickThisStim;
     private int tickSync;
 
-	public DevelopData() {
-		setTick();
-	}
+    public DevelopData() {
+        setTick();
+    }
 
     // API
     /**

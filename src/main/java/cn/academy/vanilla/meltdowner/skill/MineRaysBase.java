@@ -47,168 +47,168 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 public abstract class MineRaysBase extends Skill {
-	
-	protected ResourceLocation particleTexture;
-	
-	final String postfix;
+    
+    protected ResourceLocation particleTexture;
+    
+    final String postfix;
 
-	public MineRaysBase(String _postfix, int atLevel) {
-		super("mine_ray_" + _postfix, atLevel);
-		postfix = _postfix;
-	}
-	
-	protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
-	
-	@SideOnly(Side.CLIENT)
-	protected abstract Entity createRay(EntityPlayer player);
-	
-	@Override
-	public final SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstance().addChild(new MRAction(this));	
-	}
-	
-	public static class MRAction extends SkillSyncAction {
+    public MineRaysBase(String _postfix, int atLevel) {
+        super("mine_ray_" + _postfix, atLevel);
+        postfix = _postfix;
+    }
+    
+    protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
+    
+    @SideOnly(Side.CLIENT)
+    protected abstract Entity createRay(EntityPlayer player);
+    
+    @Override
+    public final SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new MRAction(this));    
+    }
+    
+    public static class MRAction extends SkillSyncAction {
 
-		InstanceSerializer<Skill> skillSer;
-		
-		MineRaysBase skill;
-		
-		int x = -1, y = -1, z = -1;
-		float hardnessLeft = Float.MAX_VALUE;
-		
-		public MRAction(MineRaysBase _skill) {
-			this();
-			skill = _skill;
-		}
-		
-		public MRAction() {
-			super(5);
-			skillSer = SerializationManager.INSTANCE.getInstanceSerializer(Skill.class);
-		}
-		
-		@Override
-		public void writeNBTStart(NBTTagCompound tag) {
-			try {
-				tag.setTag("s", skillSer.writeInstance(skill));
-			} catch (Exception e) {
-				AcademyCraft.log.error("skill serialization", e);
-			}
-		}
-		
-		@Override
-		public void readNBTStart(NBTTagCompound tag) {
-			try {
-				skill = (MineRaysBase) skillSer.readInstance(tag.getTag("s"));
-			} catch (Exception e) {
-				AcademyCraft.log.error("skill deserialization", e);
-			}
-		}
-		
-		@Override
-		public void onStart() {
-			super.onStart();
-			
-			cpData.perform(skill.getOverload(aData), 0);
-			if(isRemote)
-				startEffects();
-		}
-		
-		@Override
-		public void onTick() {
-			if(!cpData.perform(0, skill.getConsumption(aData)) && !isRemote)
-				ActionManager.abortAction(this);
-			
-			MovingObjectPosition result = Raytrace.traceLiving(player, skill.getFloat("range"), EntitySelectors.nothing);
-			if(result != null) {
-				int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
-				if(tx != x || ty != y || tz != z) {
-					Block block = world.getBlock(tx, ty, tz);
-					if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player.worldObj, tx, ty, tz)) && 
-							block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
-						x = tx; y = ty; z = tz;
-						hardnessLeft = block.getBlockHardness(world, tx, ty, tz);
-						
-						if(hardnessLeft < 0)
-							hardnessLeft = Float.MAX_VALUE;
-					} else {
-						x = y = z = -1;
-					}
-				} else {
-					hardnessLeft -= skill.callFloatWithExp("speed", aData);
-					if(hardnessLeft <= 0) {
-						if(!isRemote) {
-							skill.onBlockBreak(world, x, y, z, world.getBlock(x, y, z));
-							aData.addSkillExp(skill, skill.getFloat("expincr"));
-						}
-						x = y = z = -1;
-					}
-					if(isRemote)
-						spawnParticles();
-				}
-			} else {
-				x = y = z = -1;
-			}
-			
-			if(isRemote)
-				updateEffects();
-		}
-		
-		@Override
-		public void onFinalize() {
-			if(isRemote)
-				endEffects();
-			setCooldown(skill, skill.callIntWithExp("cooldown", aData));
-		}
-		
-		// CLIENT
-		@SideOnly(Side.CLIENT)
-		static FollowEntitySound loopSound;
-		
-		Entity ray;
-		
-		@SideOnly(Side.CLIENT)
-		public void startEffects() {
-			world.spawnEntityInWorld(ray = skill.createRay(player));
-			loopSound = new FollowEntitySound(player, "md.mine_loop").setLoop().setVolume(0.3f);
-			ACSounds.playClient(loopSound);
-			ACSounds.playClient(player, "md.mine_" + skill.postfix + "_startup", 0.4f);
-		}
-		
-		@SideOnly(Side.CLIENT)
-		public void updateEffects() {
-			
-		}
-		
-		@SideOnly(Side.CLIENT)
-		public void spawnParticles() {
-			for(int i = 0, max = RandUtils.rangei(2, 3); i < max; ++i) {
-				double _x = x + ranged(-.2, 1.2),
-						_y = y + ranged(-.2, 1.2),
-						_z = z + ranged(-.2, 1.2);
-				
-				Particle p = MdParticleFactory.INSTANCE.next(world,
-						VecUtils.vec(_x, _y, _z),
-						VecUtils.vec(ranged(-.06, .06), ranged(-.06, .06), ranged(-.06, .06)));
-				if(skill.particleTexture != null) {
-					p.texture = skill.particleTexture;
-				}
-				
-				p.needRigidbody = false;
-				Rigidbody rb = new Rigidbody();
-				rb.gravity = 0.01;
-				rb.entitySel = null;
-				rb.blockFil = null;
-				p.addMotionHandler(rb);
-				
-				world.spawnEntityInWorld(p);
-			}
-		}
-		
-		@SideOnly(Side.CLIENT)
-		public void endEffects() {
-			ray.setDead();
-			loopSound.stop();
-		}
-		
-	}
+        InstanceSerializer<Skill> skillSer;
+        
+        MineRaysBase skill;
+        
+        int x = -1, y = -1, z = -1;
+        float hardnessLeft = Float.MAX_VALUE;
+        
+        public MRAction(MineRaysBase _skill) {
+            this();
+            skill = _skill;
+        }
+        
+        public MRAction() {
+            super(5);
+            skillSer = SerializationManager.INSTANCE.getInstanceSerializer(Skill.class);
+        }
+        
+        @Override
+        public void writeNBTStart(NBTTagCompound tag) {
+            try {
+                tag.setTag("s", skillSer.writeInstance(skill));
+            } catch (Exception e) {
+                AcademyCraft.log.error("skill serialization", e);
+            }
+        }
+        
+        @Override
+        public void readNBTStart(NBTTagCompound tag) {
+            try {
+                skill = (MineRaysBase) skillSer.readInstance(tag.getTag("s"));
+            } catch (Exception e) {
+                AcademyCraft.log.error("skill deserialization", e);
+            }
+        }
+        
+        @Override
+        public void onStart() {
+            super.onStart();
+            
+            cpData.perform(skill.getOverload(aData), 0);
+            if(isRemote)
+                startEffects();
+        }
+        
+        @Override
+        public void onTick() {
+            if(!cpData.perform(0, skill.getConsumption(aData)) && !isRemote)
+                ActionManager.abortAction(this);
+            
+            MovingObjectPosition result = Raytrace.traceLiving(player, skill.getFloat("range"), EntitySelectors.nothing);
+            if(result != null) {
+                int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
+                if(tx != x || ty != y || tz != z) {
+                    Block block = world.getBlock(tx, ty, tz);
+                    if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player.worldObj, tx, ty, tz)) && 
+                            block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
+                        x = tx; y = ty; z = tz;
+                        hardnessLeft = block.getBlockHardness(world, tx, ty, tz);
+                        
+                        if(hardnessLeft < 0)
+                            hardnessLeft = Float.MAX_VALUE;
+                    } else {
+                        x = y = z = -1;
+                    }
+                } else {
+                    hardnessLeft -= skill.callFloatWithExp("speed", aData);
+                    if(hardnessLeft <= 0) {
+                        if(!isRemote) {
+                            skill.onBlockBreak(world, x, y, z, world.getBlock(x, y, z));
+                            aData.addSkillExp(skill, skill.getFloat("expincr"));
+                        }
+                        x = y = z = -1;
+                    }
+                    if(isRemote)
+                        spawnParticles();
+                }
+            } else {
+                x = y = z = -1;
+            }
+            
+            if(isRemote)
+                updateEffects();
+        }
+        
+        @Override
+        public void onFinalize() {
+            if(isRemote)
+                endEffects();
+            setCooldown(skill, skill.callIntWithExp("cooldown", aData));
+        }
+        
+        // CLIENT
+        @SideOnly(Side.CLIENT)
+        static FollowEntitySound loopSound;
+        
+        Entity ray;
+        
+        @SideOnly(Side.CLIENT)
+        public void startEffects() {
+            world.spawnEntityInWorld(ray = skill.createRay(player));
+            loopSound = new FollowEntitySound(player, "md.mine_loop").setLoop().setVolume(0.3f);
+            ACSounds.playClient(loopSound);
+            ACSounds.playClient(player, "md.mine_" + skill.postfix + "_startup", 0.4f);
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public void updateEffects() {
+            
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public void spawnParticles() {
+            for(int i = 0, max = RandUtils.rangei(2, 3); i < max; ++i) {
+                double _x = x + ranged(-.2, 1.2),
+                        _y = y + ranged(-.2, 1.2),
+                        _z = z + ranged(-.2, 1.2);
+                
+                Particle p = MdParticleFactory.INSTANCE.next(world,
+                        VecUtils.vec(_x, _y, _z),
+                        VecUtils.vec(ranged(-.06, .06), ranged(-.06, .06), ranged(-.06, .06)));
+                if(skill.particleTexture != null) {
+                    p.texture = skill.particleTexture;
+                }
+                
+                p.needRigidbody = false;
+                Rigidbody rb = new Rigidbody();
+                rb.gravity = 0.01;
+                rb.entitySel = null;
+                rb.blockFil = null;
+                p.addMotionHandler(rb);
+                
+                world.spawnEntityInWorld(p);
+            }
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public void endEffects() {
+            ray.setDead();
+            loopSound.stop();
+        }
+        
+    }
 }

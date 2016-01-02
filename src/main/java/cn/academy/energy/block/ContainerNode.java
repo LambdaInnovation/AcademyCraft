@@ -32,7 +32,7 @@ public class ContainerNode extends Container {
     
     @Override
     public void detectAndSendChanges() {
-    	super.detectAndSendChanges();
+        super.detectAndSendChanges();
     }
     
     private void initInventory(InventoryPlayer inv) {
@@ -57,7 +57,7 @@ public class ContainerNode extends Container {
      * This already become a template...
      */
     @Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 

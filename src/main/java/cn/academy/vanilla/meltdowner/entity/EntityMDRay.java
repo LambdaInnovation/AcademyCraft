@@ -34,46 +34,46 @@ import net.minecraft.util.Vec3;
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityMDRay extends EntityRayBase {
-	
-	@RegEntity.Render
-	public static MDRayRender renderer;
-	
-	public EntityMDRay(EntityPlayer _player) {
-		super(_player);
-		
-		Motion3D mo = new Motion3D(_player, true);
-		Vec3 start = mo.getPosVec(), end = mo.move(25).getPosVec();
-		this.setFromTo(start, end);
-		this.blendInTime = 200;
-		this.blendOutTime = 700;
-		this.life = 50;
-		this.length = 30.0;
-	}
-	
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if(RandUtils.nextDouble() < 0.8) {
-			Particle p = MdParticleFactory.INSTANCE.next(worldObj,
-					new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
-					VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
-			worldObj.spawnEntityInWorld(p);
-		}
-	}
-	
-	public static class MDRayRender extends RendererRayComposite {
+    
+    @RegEntity.Render
+    public static MDRayRender renderer;
+    
+    public EntityMDRay(EntityPlayer _player) {
+        super(_player);
+        
+        Motion3D mo = new Motion3D(_player, true);
+        Vec3 start = mo.getPosVec(), end = mo.move(25).getPosVec();
+        this.setFromTo(start, end);
+        this.blendInTime = 200;
+        this.blendOutTime = 700;
+        this.life = 50;
+        this.length = 30.0;
+    }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if(RandUtils.nextDouble() < 0.8) {
+            Particle p = MdParticleFactory.INSTANCE.next(worldObj,
+                    new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
+                    VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
+            worldObj.spawnEntityInWorld(p);
+        }
+    }
+    
+    public static class MDRayRender extends RendererRayComposite {
 
-		public MDRayRender() {
-		super("mdray");
-			this.cylinderIn.width = 0.17;
-			this.cylinderIn.color.setColor4i(216, 248, 216, 230);
-			
-			this.cylinderOut.width = 0.22;
-			this.cylinderOut.color.setColor4i(106, 242, 106, 50);
-			
-			this.glow.width = 1.5;
-			this.glow.color.a = 0.8;
-		}
-		
-	}
+        public MDRayRender() {
+        super("mdray");
+            this.cylinderIn.width = 0.17;
+            this.cylinderIn.color.setColor4i(216, 248, 216, 230);
+            
+            this.cylinderOut.width = 0.22;
+            this.cylinderOut.color.setColor4i(106, 242, 106, 50);
+            
+            this.glow.width = 1.5;
+            this.glow.color.a = 0.8;
+        }
+        
+    }
 }

@@ -14,15 +14,15 @@ import cpw.mods.fml.relauncher.Side;
 @Registrant
 public class EnergyUISyncs {
 
-	@RegNetworkCall(side = Side.SERVER)
-	public static void syncIsLinked(@Instance TileEntity te, @Data Future future) {
-		if(te instanceof IWirelessGenerator) {
-			future.setAndSync(WirelessHelper.isGeneratorLinked((IWirelessGenerator) te));
-		} else if(te instanceof IWirelessReceiver) {
-			future.setAndSync(WirelessHelper.isReceiverLinked((IWirelessReceiver) te));
-		} else {
-			future.setAndSync(false);
-		}
-	}
-	
+    @RegNetworkCall(side = Side.SERVER)
+    public static void syncIsLinked(@Instance TileEntity te, @Data Future future) {
+        if(te instanceof IWirelessGenerator) {
+            future.setAndSync(WirelessHelper.isGeneratorLinked((IWirelessGenerator) te));
+        } else if(te instanceof IWirelessReceiver) {
+            future.setAndSync(WirelessHelper.isReceiverLinked((IWirelessReceiver) te));
+        } else {
+            future.setAndSync(false);
+        }
+    }
+    
 }

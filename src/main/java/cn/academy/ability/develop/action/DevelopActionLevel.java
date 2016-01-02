@@ -28,42 +28,42 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public class DevelopActionLevel implements IDevelopAction {
-	
-	static final ResourceLocation TEX_CATNF = Resources.getTexture("guis/skill_tree/cat_not_found");
-	
-	@Override
-	public int getStimulations(EntityPlayer player) {
-		AbilityData aData = AbilityData.get(player);
-		return AcademyCraft.getScript().at("ac.ability.learning")
-				.getFunction("uplevel_cost").callInteger(aData.getLevel() + 1);
-	}
+    
+    static final ResourceLocation TEX_CATNF = Resources.getTexture("guis/skill_tree/cat_not_found");
+    
+    @Override
+    public int getStimulations(EntityPlayer player) {
+        AbilityData aData = AbilityData.get(player);
+        return AcademyCraft.getScript().at("ac.ability.learning")
+                .getFunction("uplevel_cost").callInteger(aData.getLevel() + 1);
+    }
 
-	@Override
-	public boolean validate(EntityPlayer player, IDeveloper developer) {
-		return LearningHelper.canLevelUp(developer.getType(), AbilityData.get(player));
-	}
+    @Override
+    public boolean validate(EntityPlayer player, IDeveloper developer) {
+        return LearningHelper.canLevelUp(developer.getType(), AbilityData.get(player));
+    }
 
-	@Override
-	public void onLearned(EntityPlayer player) {
-		AbilityData aData = AbilityData.get(player);
-		if(aData.getCategory() == null) {
-			// WELCOME TO THE WORLD OF ESPER! >)
-			CategoryManager man = CategoryManager.INSTANCE;
-			Category cat = man.getCategory(RandUtils.nextInt(man.getCategoryCount()));
-			aData.setCategory(cat);
-		} else
-			aData.setLevel(aData.getLevel() + 1);
-	}
+    @Override
+    public void onLearned(EntityPlayer player) {
+        AbilityData aData = AbilityData.get(player);
+        if(aData.getCategory() == null) {
+            // WELCOME TO THE WORLD OF ESPER! >)
+            CategoryManager man = CategoryManager.INSTANCE;
+            Category cat = man.getCategory(RandUtils.nextInt(man.getCategoryCount()));
+            aData.setCategory(cat);
+        } else
+            aData.setLevel(aData.getLevel() + 1);
+    }
 
-	@Override
-	public ResourceLocation getIcon(EntityPlayer player) {
-		Category cat = AbilityData.get(player).getCategory();
-		return cat == null ? TEX_CATNF : cat.getIcon();
-	}
+    @Override
+    public ResourceLocation getIcon(EntityPlayer player) {
+        Category cat = AbilityData.get(player).getCategory();
+        return cat == null ? TEX_CATNF : cat.getIcon();
+    }
 
-	@Override
-	public String getName(EntityPlayer player) {
-		return SkillTreeLocal.upgradeTo(AbilityData.get(player).getLevel() + 1);
-	}
+    @Override
+    public String getName(EntityPlayer player) {
+        return SkillTreeLocal.upgradeTo(AbilityData.get(player).getLevel() + 1);
+    }
 
 }

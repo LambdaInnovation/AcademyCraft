@@ -18,8 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 public interface ISStateCallback {
-	
-	void startState(EntityPlayer player);
-	void endState(EntityPlayer player);
-	
+    
+    void startState(EntityPlayer player);
+    void endState(EntityPlayer player);
+    
 }

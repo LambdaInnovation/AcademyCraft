@@ -38,11 +38,11 @@ public class WirelessUserEvent extends WirelessEvent {
     }
     
     public IWirelessGenerator getAsGenerator() {
-    	return (IWirelessGenerator) tile;
+        return (IWirelessGenerator) tile;
     }
     
     public IWirelessReceiver getAsReceiver() {
-    	return (IWirelessReceiver) tile;
+        return (IWirelessReceiver) tile;
     }
 
 }

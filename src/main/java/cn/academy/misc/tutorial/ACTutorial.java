@@ -16,43 +16,43 @@ import org.apache.commons.io.IOUtils;
 @Registrant
 public class ACTutorial {
 
-	public static final boolean SHOW_ALL = true;
+    public static final boolean SHOW_ALL = true;
 
-	public final String id;
+    public final String id;
 
-	private Condition condition = Condition.TRUE;
+    private Condition condition = Condition.TRUE;
 
-	private List<IPreviewHandler> previewHandlers = new ArrayList<>();
+    private List<IPreviewHandler> previewHandlers = new ArrayList<>();
     private boolean previewInit = false;
 
     {
         previewHandlers.add(PreviewHandlers.nothing);
     }
 
-	public ACTutorial(String id) {
-		this.id=id;
-	}
+    public ACTutorial(String id) {
+        this.id=id;
+    }
 
-	public ACTutorial setCondition(Condition condition) {
-		this.condition=condition;
-		return this;
-	}
+    public ACTutorial setCondition(Condition condition) {
+        this.condition=condition;
+        return this;
+    }
 
-	public ACTutorial addPreview(IPreviewHandler ...handlers) {
+    public ACTutorial addPreview(IPreviewHandler ...handlers) {
         if (!previewInit) {
             previewInit = true;
             previewHandlers.clear();
         }
-		previewHandlers.addAll(Arrays.asList(handlers));
-		return this;
-	}
+        previewHandlers.addAll(Arrays.asList(handlers));
+        return this;
+    }
 
-	public List<IPreviewHandler> getPreview() {
-		return previewHandlers;
-	}
+    public List<IPreviewHandler> getPreview() {
+        return previewHandlers;
+    }
 
     @SideOnly(Side.CLIENT)
-	public String getContent() {
+    public String getContent() {
         final String unknown = "![title]\nUNKNOWN \n![brief]\n![content]\n ";
         try {
             String lang = Minecraft.getMinecraft().gameSettings.language;
@@ -74,10 +74,10 @@ public class ACTutorial {
         return new ResourceLocation("academy:tutorials/" + lang + "/" + id + ".md");
     }
 
-	public boolean isActivated(EntityPlayer player) {
-		if (SHOW_ALL)
-			return true;
+    public boolean isActivated(EntityPlayer player) {
+        if (SHOW_ALL)
+            return true;
         return this.condition.exam(player);
-	}
+    }
 
 }

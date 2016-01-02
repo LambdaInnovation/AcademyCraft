@@ -23,25 +23,25 @@ import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
  */
 public class BlockWindGenPillar extends ACBlockContainer {
 
-	public BlockWindGenPillar() {
-		super("windgen_pillar", Material.rock, null);
-		setHardness(4.0f);
-		setHarvestLevel("pickaxe", 2);
-	}
-	
-	@Override
-	public int getRenderType() {
-		return RenderEmptyBlock.id;
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
+    public BlockWindGenPillar() {
+        super("windgen_pillar", Material.rock, null);
+        setHardness(4.0f);
+        setHarvestLevel("pickaxe", 2);
+    }
+    
+    @Override
+    public int getRenderType() {
+        return RenderEmptyBlock.id;
+    }
+    
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileWindGenPillar();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TileWindGenPillar();
+    }
 
 }

@@ -28,60 +28,60 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
  * @author WeAthFolD
  */
 public class GuiPhaseGen extends CGuiScreenContainer {
-	
-	static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/phase_gen.xml"));
+    
+    static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/phase_gen.xml"));
 
-	public final TilePhaseGen tile;
-	
-	Widget main;
-	
-	public GuiPhaseGen(ContainerPhaseGen c) {
-		super(c);
-		tile = c.tile;
-		init();
-	}
-	
-	void init() {
-		main = document.getWidget("main").copy();
+    public final TilePhaseGen tile;
+    
+    Widget main;
+    
+    public GuiPhaseGen(ContainerPhaseGen c) {
+        super(c);
+        tile = c.tile;
+        init();
+    }
+    
+    void init() {
+        main = document.getWidget("main").copy();
 
-		main.getWidget("prog_liquid").listen(FrameEvent.class, (w, e) -> {
-			ProgressBar.get(w).progress = (double) tile.getLiquidAmount() / tile.getTankSize();
-		});
+        main.getWidget("prog_liquid").listen(FrameEvent.class, (w, e) -> {
+            ProgressBar.get(w).progress = (double) tile.getLiquidAmount() / tile.getTankSize();
+        });
 
-		main.getWidget("prog_buffer").listen(FrameEvent.class, (w, e) -> {
-			ProgressBar.get(w).progress = tile.getEnergy() / tile.bufferSize;
-		});
+        main.getWidget("prog_buffer").listen(FrameEvent.class, (w, e) -> {
+            ProgressBar.get(w).progress = tile.getEnergy() / tile.bufferSize;
+        });
 
-		EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
-		
-		gui.addWidget(main);
-	}
-	
-	@Override
-	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(-guiLeft, -guiTop, 0);
-		
-		Widget w = gui.getTopWidget(x, y);
-		if(w != null) {
-			String text = null;
-			switch(w.getName()) {
-			case "prog_liquid":
-				text = tile.getLiquidAmount() + "/" + tile.getTankSize() + "mB";
-				break;
-			case "prog_buffer":
-				text = String.format("%.1f/%.1fIF", tile.getEnergy(), tile.bufferSize);
-				break;
-			}
-			
-			if(text != null) {
-				//int offsetX = -160, offsetY = -45;
-				GL11.glEnable(GL11.GL_BLEND);
-				EnergyUIHelper.drawTextBox(text, x + 5, y + 5, 10);
-			}
-		}
-		
-		GL11.glPopMatrix();
-	}
+        EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
+        
+        gui.addWidget(main);
+    }
+    
+    @Override
+    protected void drawGuiContainerForegroundLayer(int x, int y) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(-guiLeft, -guiTop, 0);
+        
+        Widget w = gui.getTopWidget(x, y);
+        if(w != null) {
+            String text = null;
+            switch(w.getName()) {
+            case "prog_liquid":
+                text = tile.getLiquidAmount() + "/" + tile.getTankSize() + "mB";
+                break;
+            case "prog_buffer":
+                text = String.format("%.1f/%.1fIF", tile.getEnergy(), tile.bufferSize);
+                break;
+            }
+            
+            if(text != null) {
+                //int offsetX = -160, offsetY = -45;
+                GL11.glEnable(GL11.GL_BLEND);
+                EnergyUIHelper.drawTextBox(text, x + 5, y + 5, 10);
+            }
+        }
+        
+        GL11.glPopMatrix();
+    }
 
 }

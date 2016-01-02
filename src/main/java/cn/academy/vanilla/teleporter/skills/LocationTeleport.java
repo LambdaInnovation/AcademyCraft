@@ -39,120 +39,120 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Registrant
 public class LocationTeleport extends Skill {
 
-	public static final LocationTeleport instance = new LocationTeleport();
-	static IEntitySelector basicSelector = EntitySelectors.and(EntitySelectors.living, new IEntitySelector() {
+    public static final LocationTeleport instance = new LocationTeleport();
+    static IEntitySelector basicSelector = EntitySelectors.and(EntitySelectors.living, new IEntitySelector() {
 
-		@Override
-		public boolean isEntityApplicable(Entity entity) {
-			return entity.width * entity.width * entity.height < 80f;
-		}
+        @Override
+        public boolean isEntityApplicable(Entity entity) {
+            return entity.width * entity.width * entity.height < 80f;
+        }
 
-	});
+    });
 
-	private LocationTeleport() {
-		super("location_teleport", 3);
-	}
+    private LocationTeleport() {
+        super("location_teleport", 3);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public SkillInstance createSkillInstance(EntityPlayer player) {
-		return new SkillInstanceInstant() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public void execute() {
-				Minecraft.getMinecraft().displayGuiScreen(new LocTeleportUI());
+    @Override
+    @SideOnly(Side.CLIENT)
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstanceInstant() {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public void execute() {
+                Minecraft.getMinecraft().displayGuiScreen(new LocTeleportUI());
 
-				CPBar.setHintProvider(new IConsumptionHintProvider() {
+                CPBar.setHintProvider(new IConsumptionHintProvider() {
 
-					@Override
-					public boolean alive() {
-						return locate() != null;
-					}
+                    @Override
+                    public boolean alive() {
+                        return locate() != null;
+                    }
 
-					@Override
-					public float getConsumption() {
-						LocTeleportUI ui = locate();
-						if (ui == null || ui.selection == null)
-							return 0;
-						return LocationTeleport.getConsumption(player, ui.selection);
-					}
+                    @Override
+                    public float getConsumption() {
+                        LocTeleportUI ui = locate();
+                        if (ui == null || ui.selection == null)
+                            return 0;
+                        return LocationTeleport.getConsumption(player, ui.selection);
+                    }
 
-					private LocTeleportUI locate() {
-						GuiScreen screen = Minecraft.getMinecraft().currentScreen;
-						return screen instanceof LocTeleportUI ? ((LocTeleportUI) screen) : null;
-					}
+                    private LocTeleportUI locate() {
+                        GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+                        return screen instanceof LocTeleportUI ? ((LocTeleportUI) screen) : null;
+                    }
 
-				});
-			}
-		};
-	}
+                });
+            }
+        };
+    }
 
-	/**
-	 * Determine whether player can record the current location.
-	 */
-	public static boolean canRecord(EntityPlayer player) {
-		AbilityData aData = AbilityData.get(player);
-		return player.worldObj.provider.dimensionId == 0 || aData.getSkillExp(instance) >= 0.3f;
-	}
+    /**
+     * Determine whether player can record the current location.
+     */
+    public static boolean canRecord(EntityPlayer player) {
+        AbilityData aData = AbilityData.get(player);
+        return player.worldObj.provider.dimensionId == 0 || aData.getSkillExp(instance) >= 0.3f;
+    }
 
-	public static Location toLocation(EntityPlayer player, String name) {
-		return new Location(name, player.worldObj.provider.dimensionId, (float) player.posX, (float) player.posY,
-				(float) player.posZ);
-	}
+    public static Location toLocation(EntityPlayer player, String name) {
+        return new Location(name, player.worldObj.provider.dimensionId, (float) player.posX, (float) player.posY,
+                (float) player.posZ);
+    }
 
-	public static float getConsumption(EntityPlayer player, Location dest) {
-		AbilityData data = AbilityData.get(player);
-		double distance = player.getDistance(dest.x, dest.y, dest.z);
-		double dimPenalty = player.worldObj.provider.dimensionId != dest.dimension ? 2 : 1;
-		return instance.getFunc("consumption").callFloat(distance, dimPenalty, data.getSkillExp(instance));
-	}
+    public static float getConsumption(EntityPlayer player, Location dest) {
+        AbilityData data = AbilityData.get(player);
+        double distance = player.getDistance(dest.x, dest.y, dest.z);
+        double dimPenalty = player.worldObj.provider.dimensionId != dest.dimension ? 2 : 1;
+        return instance.getFunc("consumption").callFloat(distance, dimPenalty, data.getSkillExp(instance));
+    }
 
-	public static float getOverload(EntityPlayer player) {
-		return instance.getOverload(AbilityData.get(player));
-	}
+    public static float getOverload(EntityPlayer player) {
+        return instance.getOverload(AbilityData.get(player));
+    }
 
-	public static boolean canPerform(EntityPlayer player, Location dest) {
-		CPData cpData = CPData.get(player);
-		return cpData.getCP() >= getConsumption(player, dest);
-	}
+    public static boolean canPerform(EntityPlayer player, Location dest) {
+        CPData cpData = CPData.get(player);
+        return cpData.getCP() >= getConsumption(player, dest);
+    }
 
-	private static float getRange() {
-		return instance.getFloat("range");
-	}
+    private static float getRange() {
+        return instance.getFloat("range");
+    }
 
-	@SideOnly(Side.CLIENT)
-	public static void performAction(EntityPlayer player, Location dest) {
-		performAtServer(player, dest);
-	}
+    @SideOnly(Side.CLIENT)
+    public static void performAction(EntityPlayer player, Location dest) {
+        performAtServer(player, dest);
+    }
 
-	@RegNetworkCall(side = Side.SERVER)
-	private static void performAtServer(@Instance EntityPlayer player, @Data Location dest) {
-		AbilityData aData = AbilityData.get(player);
-		CPData cpData = CPData.get(player);
+    @RegNetworkCall(side = Side.SERVER)
+    private static void performAtServer(@Instance EntityPlayer player, @Data Location dest) {
+        AbilityData aData = AbilityData.get(player);
+        CPData cpData = CPData.get(player);
 
-		if (cpData.perform(getOverload(player), getConsumption(player, dest))) {
-			List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5,
-					EntitySelectors.and(EntitySelectors.excludeOf(player), basicSelector));
-			entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
+        if (cpData.perform(getOverload(player), getConsumption(player, dest))) {
+            List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5,
+                    EntitySelectors.and(EntitySelectors.excludeOf(player), basicSelector));
+            entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
 
-			if (player.worldObj.provider.dimensionId != dest.dimension) {
-				player.travelToDimension(dest.dimension);
-				for (Entity e : entitiesToTeleport) {
-					e.travelToDimension(dest.dimension);
-				}
-			}
+            if (player.worldObj.provider.dimensionId != dest.dimension) {
+                player.travelToDimension(dest.dimension);
+                for (Entity e : entitiesToTeleport) {
+                    e.travelToDimension(dest.dimension);
+                }
+            }
 
-			for (Entity e : entitiesToTeleport) {
-				double dx = e.posX - player.posX, dy = e.posY - player.posY, dz = e.posZ - player.posZ;
-				e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz);
-			}
-			player.setPositionAndUpdate(dest.x, dest.y, dest.z);
+            for (Entity e : entitiesToTeleport) {
+                double dx = e.posX - player.posX, dy = e.posY - player.posY, dz = e.posZ - player.posZ;
+                e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz);
+            }
+            player.setPositionAndUpdate(dest.x, dest.y, dest.z);
 
-			double dist = player.getDistance(dest.x, dest.y, dest.z);
-			aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(dist));
-			ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
-			TPAttackHelper.incrTPCount(player);
-		}
-	}
+            double dist = player.getDistance(dest.x, dest.y, dest.z);
+            aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(dist));
+            ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
+            TPAttackHelper.incrTPCount(player);
+        }
+    }
 
 }

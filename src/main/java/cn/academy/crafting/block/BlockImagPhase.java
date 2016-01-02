@@ -40,79 +40,79 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @Registrant
 public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProvider {
-	
-	public static class ItemPhaseLiq extends ItemBlock {
-		
-		IIcon icon;
+    
+    public static class ItemPhaseLiq extends ItemBlock {
+        
+        IIcon icon;
 
-		public ItemPhaseLiq(Block block) {
-			super(block);
-		}
-		
-		@Override
-	    @SideOnly(Side.CLIENT)
-	    public void registerIcons(IIconRegister ir) {
-	    	icon = ir.registerIcon("academy:phase_liquid");
-	    }
-		
-	    @Override
-		@SideOnly(Side.CLIENT)
-	    public IIcon getIconFromDamage(int meta) {
-	        return icon;
-	    }
-		
-	}
-	
-	public final MatterMaterial mat;
-	public IIcon fluidIcon;
-	
-	public BlockImagPhase() {
-		super(ModuleCrafting.fluidImagProj, Material.water);
-		setCreativeTab(AcademyCraft.cct);
-		setBlockName("ac_phase_liquid");
-		setBlockTextureName("academy:black");
-		
-		this.setQuantaPerBlock(3);
-		
-		mat = new MatterMaterial("phase_liquid", this);
-		ItemMatterUnit.addMatterMaterial(mat);
-		
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
+        public ItemPhaseLiq(Block block) {
+            super(block);
+        }
+        
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerIcons(IIconRegister ir) {
+            icon = ir.registerIcon("academy:phase_liquid");
+        }
+        
+        @Override
+        @SideOnly(Side.CLIENT)
+        public IIcon getIconFromDamage(int meta) {
+            return icon;
+        }
+        
+    }
+    
+    public final MatterMaterial mat;
+    public IIcon fluidIcon;
+    
+    public BlockImagPhase() {
+        super(ModuleCrafting.fluidImagProj, Material.water);
+        setCreativeTab(AcademyCraft.cct);
+        setBlockName("ac_phase_liquid");
+        setBlockTextureName("academy:black");
+        
+        this.setQuantaPerBlock(3);
+        
+        mat = new MatterMaterial("phase_liquid", this);
+        ItemMatterUnit.addMatterMaterial(mat);
+        
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister ir) {
-    	super.registerBlockIcons(ir);
-    	fluidIcon = ir.registerIcon("academy:phase_liquid");
+        super.registerBlockIcons(ir);
+        fluidIcon = ir.registerIcon("academy:phase_liquid");
     }
-	
-	
-	@SideOnly(Side.CLIENT)
+    
+    
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderBlockPass() {
         return 1;
     }
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
+    
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileImagPhase();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int metadata) {
+        return new TileImagPhase();
+    }
 
-	@SubscribeEvent
-	public void onInteract(PlayerInteractEvent event) {
-		if(event.action == Action.RIGHT_CLICK_BLOCK) {
-			Block b = event.world.getBlock(event.x, event.y, event.z);
-			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-			if(b == this && stack != null && stack.getItem() == ModuleCrafting.matterUnit) {
-				ModuleCrafting.matterUnit.setMaterial(stack, mat);
-			}
-		}
-	}
-	
+    @SubscribeEvent
+    public void onInteract(PlayerInteractEvent event) {
+        if(event.action == Action.RIGHT_CLICK_BLOCK) {
+            Block b = event.world.getBlock(event.x, event.y, event.z);
+            ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+            if(b == this && stack != null && stack.getItem() == ModuleCrafting.matterUnit) {
+                ModuleCrafting.matterUnit.setMaterial(stack, mat);
+            }
+        }
+    }
+    
 }

@@ -29,40 +29,40 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 public class ItemDeveloper extends ItemEnergyBase {
-	
-	@SideOnly(Side.CLIENT)
-	@RegItem.Render
-	public static RenderDeveloperPortable renderer;
-	
-	public static final DeveloperType type = DeveloperType.PORTABLE;
+    
+    @SideOnly(Side.CLIENT)
+    @RegItem.Render
+    public static RenderDeveloperPortable renderer;
+    
+    public static final DeveloperType type = DeveloperType.PORTABLE;
 
-	public ItemDeveloper() {
-		super("developer_portable", type.getEnergy(), type.getBandwidth());
-		this.bFull3D = true;
-	}
-	
-	@Override
+    public ItemDeveloper() {
+        super("developer_portable", type.getEnergy(), type.getBandwidth());
+        this.bFull3D = true;
+    }
+    
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(player.worldObj.isRemote) {
-			displayGui(player);
-		}
-		
+        if(player.worldObj.isRemote) {
+            displayGui(player);
+        }
+        
         return stack;
     }
-	
-	@SideOnly(Side.CLIENT)
-	private void displayGui(EntityPlayer player) {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player)));
-	}
+    
+    @SideOnly(Side.CLIENT)
+    private void displayGui(EntityPlayer player) {
+        Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player)));
+    }
 
-	@Override
-	public double getMaxEnergy() {
-		return type.getEnergy();
-	}
+    @Override
+    public double getMaxEnergy() {
+        return type.getEnergy();
+    }
 
-	@Override
-	public double getBandwidth() {
-		return type.getBandwidth();
-	}
+    @Override
+    public double getBandwidth() {
+        return type.getBandwidth();
+    }
 
 }

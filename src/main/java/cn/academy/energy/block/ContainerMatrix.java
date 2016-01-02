@@ -26,17 +26,17 @@ import cn.academy.energy.ModuleEnergy;
  *
  */
 public class ContainerMatrix extends Container {
-	
-	public final TileMatrix tile;
-	public final EntityPlayer player;
-	
-	public ContainerMatrix(TileMatrix _tile, EntityPlayer _player) {
-		tile = _tile;
-		player = _player;
-		
-		initInventory(player.inventory);
-	}
-	
+    
+    public final TileMatrix tile;
+    public final EntityPlayer player;
+    
+    public ContainerMatrix(TileMatrix _tile, EntityPlayer _player) {
+        tile = _tile;
+        player = _player;
+        
+        initInventory(player.inventory);
+    }
+    
     private void initInventory(InventoryPlayer inv) {
         this.addSlotToContainer(new SlotPlate(tile, 0, 27, 65));
         this.addSlotToContainer(new SlotPlate(tile, 1, 76, 65));
@@ -58,13 +58,13 @@ public class ContainerMatrix extends Container {
         }
     }
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
-	}
-	
     @Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int id) {
+    public boolean canInteractWith(EntityPlayer player) {
+        return true;
+    }
+    
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
         ItemStack stack = null;
         Slot slot = (Slot)this.inventorySlots.get(id);
 
@@ -76,24 +76,24 @@ public class ContainerMatrix extends Container {
                 if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
                     return null;
             } else {
-            	if(stack.getItem() == ModuleCrafting.constPlate) {
-            		for(int s = 0; s < 3; ++s) {
-            			if(tile.getStackInSlot(s) == null) {
-            				stack1.stackSize--;
-            				tile.setInventorySlotContents(s, new ItemStack(ModuleCrafting.constPlate));
-            				break;
-            			}
-            		}
-            		stack = null;
-            	} else if(stack.getItem() == ModuleEnergy.matrixCore) {
-            		if(tile.getStackInSlot(3) == null) {
-            			stack1.stackSize--;
-            			tile.setInventorySlotContents(3, 
-            				new ItemStack(ModuleEnergy.matrixCore, 1, stack1.getItemDamage()));
-            		}
-            		stack = null;
-            	} else 
-            		return null;
+                if(stack.getItem() == ModuleCrafting.constPlate) {
+                    for(int s = 0; s < 3; ++s) {
+                        if(tile.getStackInSlot(s) == null) {
+                            stack1.stackSize--;
+                            tile.setInventorySlotContents(s, new ItemStack(ModuleCrafting.constPlate));
+                            break;
+                        }
+                    }
+                    stack = null;
+                } else if(stack.getItem() == ModuleEnergy.matrixCore) {
+                    if(tile.getStackInSlot(3) == null) {
+                        stack1.stackSize--;
+                        tile.setInventorySlotContents(3, 
+                            new ItemStack(ModuleEnergy.matrixCore, 1, stack1.getItemDamage()));
+                    }
+                    stack = null;
+                } else 
+                    return null;
             }
 
             if (stack1.stackSize == 0) {
@@ -105,31 +105,31 @@ public class ContainerMatrix extends Container {
 
         return stack;
     }
-	
-	public static class SlotCore extends Slot {
+    
+    public static class SlotCore extends Slot {
 
-		public SlotCore(IInventory inv, int slot, int x, int y) {
-			super(inv, slot, x, y);
-		}
-		
-		@Override
-	    public boolean isItemValid(ItemStack stack) {
-	        return stack != null && stack.getItem() == ModuleEnergy.matrixCore;
-	    }
-		
-	}
-	
-	public static class SlotPlate extends Slot {
+        public SlotCore(IInventory inv, int slot, int x, int y) {
+            super(inv, slot, x, y);
+        }
+        
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return stack != null && stack.getItem() == ModuleEnergy.matrixCore;
+        }
+        
+    }
+    
+    public static class SlotPlate extends Slot {
 
-		public SlotPlate(IInventory inv, int slot, int x, int y) {
-			super(inv, slot, x, y);
-		}
-		
-		@Override
-	    public boolean isItemValid(ItemStack stack) {
-	        return stack != null && stack.getItem() == ModuleCrafting.constPlate;
-	    }
-		
-	}
+        public SlotPlate(IInventory inv, int slot, int x, int y) {
+            super(inv, slot, x, y);
+        }
+        
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return stack != null && stack.getItem() == ModuleCrafting.constPlate;
+        }
+        
+    }
 
 }

@@ -23,27 +23,27 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public class DevConditionDeveloperType implements IDevCondition {
-	
-	final DeveloperType type;
-	
-	public DevConditionDeveloperType(DeveloperType _type) {
-		type = _type;
-	}
+    
+    final DeveloperType type;
+    
+    public DevConditionDeveloperType(DeveloperType _type) {
+        type = _type;
+    }
 
-	@Override
-	public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-		return developer.getType().ordinal() >= type.ordinal();
-	}
-	
-	@Override
-	public ResourceLocation getIcon() {
-		if(true) return null;
-		return type.texture;
-	}
+    @Override
+    public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
+        return developer.getType().ordinal() >= type.ordinal();
+    }
+    
+    @Override
+    public ResourceLocation getIcon() {
+        if(true) return null;
+        return type.texture;
+    }
 
-	@Override
-	public String getHintText() {
-		return SkillTreeLocal.machineType(type);
-	}
+    @Override
+    public String getHintText() {
+        return SkillTreeLocal.machineType(type);
+    }
 
 }

@@ -23,16 +23,16 @@ import cpw.mods.fml.common.eventhandler.Event;
  */
 public class KnowledgeLearnedEvent extends Event {
 
-	public final EntityPlayer player;
-	public final int id;
-	
-	public KnowledgeLearnedEvent(EntityPlayer p, int i) {
-		player = p;
-		id = i;
-	}
-	
-	public Knowledge getKnowledge() {
-		return KnowledgeData.getKnowledge(id);
-	}
-	
+    public final EntityPlayer player;
+    public final int id;
+    
+    public KnowledgeLearnedEvent(EntityPlayer p, int i) {
+        player = p;
+        id = i;
+    }
+    
+    public Knowledge getKnowledge() {
+        return KnowledgeData.getKnowledge(id);
+    }
+    
 }

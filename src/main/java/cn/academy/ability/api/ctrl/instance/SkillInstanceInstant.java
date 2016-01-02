@@ -24,39 +24,39 @@ import cn.academy.ability.api.ctrl.SyncAction;
  * @author WeAthFolD
  */
 public class SkillInstanceInstant extends SkillInstance {
-	
-	List<SyncAction> actions;
+    
+    List<SyncAction> actions;
 
-	public SkillInstanceInstant() {
-		setNonMutex();
-	}
-	
-	@Override
-	public final void onStart() {
-		if(actions != null) {
-			for(SyncAction act : actions)
-				ActionManager.startAction(act);
-		}
-		
-		execute();
-		this.endSkill();
-	}
-	
-	/**
-	 * Called when this SkillInstance is executed. You can do additional stuff in player's client.
-	 */
-	public void execute() {}
-	
-	/**
-	 * Automatically exeute this action on instance start.
-	 * @param action
-	 */
-	public SkillInstanceInstant addExecution(SyncAction action) {
-		if(actions == null) {
-			actions = new ArrayList();
-		}
-		actions.add(action);
-		return this;
-	}
+    public SkillInstanceInstant() {
+        setNonMutex();
+    }
+    
+    @Override
+    public final void onStart() {
+        if(actions != null) {
+            for(SyncAction act : actions)
+                ActionManager.startAction(act);
+        }
+        
+        execute();
+        this.endSkill();
+    }
+    
+    /**
+     * Called when this SkillInstance is executed. You can do additional stuff in player's client.
+     */
+    public void execute() {}
+    
+    /**
+     * Automatically exeute this action on instance start.
+     * @param action
+     */
+    public SkillInstanceInstant addExecution(SyncAction action) {
+        if(actions == null) {
+            actions = new ArrayList();
+        }
+        actions.add(action);
+        return this;
+    }
 
 }

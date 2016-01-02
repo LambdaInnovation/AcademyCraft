@@ -23,36 +23,36 @@ import cn.lambdalib.annoreg.core.Registrant;
  */
 @Registrant
 public class IFReceiverManager implements IEnergyBlockManager {
-	
-	public static IFReceiverManager instance = new IFReceiverManager();
-	
-	private IFReceiverManager() {
-		EnergyBlockHelper.register(this);
-	}
+    
+    public static IFReceiverManager instance = new IFReceiverManager();
+    
+    private IFReceiverManager() {
+        EnergyBlockHelper.register(this);
+    }
 
-	@Override
-	public boolean isSupported(TileEntity tile) {
-		return tile instanceof IWirelessReceiver;
-	}
+    @Override
+    public boolean isSupported(TileEntity tile) {
+        return tile instanceof IWirelessReceiver;
+    }
 
-	@Override
-	public double getEnergy(TileEntity tile) {
-		return 0;
-	}
+    @Override
+    public double getEnergy(TileEntity tile) {
+        return 0;
+    }
 
-	@Override
-	public void setEnergy(TileEntity tile, double energy) {
-		// throw new UnsupportedOperationException();
-	}
+    @Override
+    public void setEnergy(TileEntity tile, double energy) {
+        // throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		return ((IWirelessReceiver) tile).injectEnergy(amt);
-	}
+    @Override
+    public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        return ((IWirelessReceiver) tile).injectEnergy(amt);
+    }
 
-	@Override
-	public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
-		return ((IWirelessReceiver) tile).pullEnergy(amt);
-	}
+    @Override
+    public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
+        return ((IWirelessReceiver) tile).pullEnergy(amt);
+    }
 
 }

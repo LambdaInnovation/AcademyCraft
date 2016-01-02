@@ -13,23 +13,23 @@ import cpw.mods.fml.common.eventhandler.Event;
 @Cancelable
 public final class BlockDestroyEvent extends Event {
 
-	public final World world;
-	public final EntityPlayer player;
-	public final int x, y, z;
-	
-	public BlockDestroyEvent(World pWorld, int pX, int pY, int pZ) {
-		world = pWorld;
-		player = null;
-		x = pX;
-		y = pY;
-		z = pZ;
-	}
-	
-	public BlockDestroyEvent(EntityPlayer pPlayer, int pX, int pY, int pZ) {
-		world = pPlayer.worldObj;
-		player = pPlayer;
-		x = pX;
-		y = pY;
-		z = pZ;
-	}
+    public final World world;
+    public final EntityPlayer player;
+    public final int x, y, z;
+    
+    public BlockDestroyEvent(World pWorld, int pX, int pY, int pZ) {
+        world = pWorld;
+        player = null;
+        x = pX;
+        y = pY;
+        z = pZ;
+    }
+    
+    public BlockDestroyEvent(EntityPlayer pPlayer, int pX, int pY, int pZ) {
+        world = pPlayer.worldObj;
+        player = pPlayer;
+        x = pX;
+        y = pY;
+        z = pZ;
+    }
 }

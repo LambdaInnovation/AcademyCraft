@@ -33,60 +33,60 @@ import net.minecraft.world.World;
  */
 @Registrant
 public class BlockWindGenBase extends ACBlockMulti {
-	
-	@RegGuiHandler
-	public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
-		@SideOnly(Side.CLIENT)
-		@Override
-		protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
-			ContainerWindGenBase container = (ContainerWindGenBase) getServerContainer(player, world, x, y, z);
-			return container == null ? null : new GuiWindGenBase(container);
-		}
-		
-		@Override
-		protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-			TileWindGenBase tile = locate(world, x, y, z);
-			return tile == null ? null : new ContainerWindGenBase(player, tile);
-		}
-		
-		private TileWindGenBase locate(World world, int x, int y, int z) {
-			Block b = world.getBlock(x, y, z);
-			if(!(b == ModuleEnergy.windgenBase))
-				return null;
-			
-			TileEntity te = ModuleEnergy.windgenBase.getOriginTile(world, x, y, z);
-			return te instanceof TileWindGenBase ? (TileWindGenBase) te : null;
-		}
-	};
+    
+    @RegGuiHandler
+    public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
+        @SideOnly(Side.CLIENT)
+        @Override
+        protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
+            ContainerWindGenBase container = (ContainerWindGenBase) getServerContainer(player, world, x, y, z);
+            return container == null ? null : new GuiWindGenBase(container);
+        }
+        
+        @Override
+        protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
+            TileWindGenBase tile = locate(world, x, y, z);
+            return tile == null ? null : new ContainerWindGenBase(player, tile);
+        }
+        
+        private TileWindGenBase locate(World world, int x, int y, int z) {
+            Block b = world.getBlock(x, y, z);
+            if(!(b == ModuleEnergy.windgenBase))
+                return null;
+            
+            TileEntity te = ModuleEnergy.windgenBase.getOriginTile(world, x, y, z);
+            return te instanceof TileWindGenBase ? (TileWindGenBase) te : null;
+        }
+    };
 
-	public BlockWindGenBase() {
-		super("windgen_base", Material.rock);
-		setHardness(4.0f);
-		setHarvestLevel("pickaxe", 2);
-		addSubBlock(new int[][] {
-			{ 0, 1, 0 }
-		});
-		finishInit();
-	}
+    public BlockWindGenBase() {
+        super("windgen_base", Material.rock);
+        setHardness(4.0f);
+        setHarvestLevel("pickaxe", 2);
+        addSubBlock(new int[][] {
+            { 0, 1, 0 }
+        });
+        finishInit();
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileWindGenBase();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TileWindGenBase();
+    }
 
-	@Override
-	public double[] getRotCenter() {
-		return new double[] { 0.5, 0, 0.5 };
-	}
-	
-	@Override
+    @Override
+    public double[] getRotCenter() {
+        return new double[] { 0.5, 0, 0.5 };
+    }
+    
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
-		ItemStack stack = player.getCurrentEquippedItem();
-		if(stack != null && stack.getItem() == Item.getItemFromBlock(ModuleEnergy.windgenPillar))
-			return false;
+        ItemStack stack = player.getCurrentEquippedItem();
+        if(stack != null && stack.getItem() == Item.getItemFromBlock(ModuleEnergy.windgenPillar))
+            return false;
         if(!world.isRemote && !player.isSneaking()) {
-        	guiHandler.openGuiContainer(player, world, x, y, z);
+            guiHandler.openGuiContainer(player, world, x, y, z);
             return true;
         }
         return false;

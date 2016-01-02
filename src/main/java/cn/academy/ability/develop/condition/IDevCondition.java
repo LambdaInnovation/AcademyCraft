@@ -23,21 +23,21 @@ import cn.academy.ability.api.data.AbilityData;
  * @author WeAthFolD
  */
 public interface IDevCondition {
-	
-	/**
-	 * @param developer The develope that performs this action
-	 * @return Whether the player can learn the given skill
-	 */
-	boolean accepts(AbilityData data, IDeveloper developer, Skill skill);
-	
-	/**
-	 * @return The icon displayed in skill desc page
-	 */
-	ResourceLocation getIcon();
-	
-	/**
-	 * @return The hovering text displayed in skill desc page
-	 */
-	String getHintText();
-	
+    
+    /**
+     * @param developer The develope that performs this action
+     * @return Whether the player can learn the given skill
+     */
+    boolean accepts(AbilityData data, IDeveloper developer, Skill skill);
+    
+    /**
+     * @return The icon displayed in skill desc page
+     */
+    ResourceLocation getIcon();
+    
+    /**
+     * @return The hovering text displayed in skill desc page
+     */
+    String getHintText();
+    
 }

@@ -11,12 +11,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileImagPhase extends TileEntity {
-	@RegTileEntity.Render
-	@SideOnly(Side.CLIENT)
-	public static RenderImagPhaseLiquid renderer;
-	
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
+    @RegTileEntity.Render
+    @SideOnly(Side.CLIENT)
+    public static RenderImagPhaseLiquid renderer;
+    
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 1;
+    }
 }

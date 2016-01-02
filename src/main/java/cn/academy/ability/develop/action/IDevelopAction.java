@@ -22,30 +22,30 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 public interface IDevelopAction {
-	
-	int getStimulations(EntityPlayer player);
-	
-	/**
-	 * @param player Target player
-	 * @param developer The developer that is performing this action
-	 * @return Whether the action can be REALLY started/performed at the moment.
-	 * This should be some constraints to player's current state.
-	 */
-	boolean validate(EntityPlayer player, IDeveloper developer);
-	
-	/**
-	 * The action performed when really learned the develop type.
-	 */
-	void onLearned(EntityPlayer player);
-	
-	/**
-	 * @return The icon displayed in develop progress screen
-	 */
-	ResourceLocation getIcon(EntityPlayer player);
-	
-	/**=
-	 * @return The name displayed in develop progress screen
-	 */
-	String getName(EntityPlayer player);
-	
+    
+    int getStimulations(EntityPlayer player);
+    
+    /**
+     * @param player Target player
+     * @param developer The developer that is performing this action
+     * @return Whether the action can be REALLY started/performed at the moment.
+     * This should be some constraints to player's current state.
+     */
+    boolean validate(EntityPlayer player, IDeveloper developer);
+    
+    /**
+     * The action performed when really learned the develop type.
+     */
+    void onLearned(EntityPlayer player);
+    
+    /**
+     * @return The icon displayed in develop progress screen
+     */
+    ResourceLocation getIcon(EntityPlayer player);
+    
+    /**=
+     * @return The name displayed in develop progress screen
+     */
+    String getName(EntityPlayer player);
+    
 }

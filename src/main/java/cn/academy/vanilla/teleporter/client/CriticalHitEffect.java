@@ -30,28 +30,28 @@ import net.minecraftforge.common.MinecraftForge;
 @Registrant
 public class CriticalHitEffect {
 
-	private static CriticalHitEffect instance = new CriticalHitEffect();
+    private static CriticalHitEffect instance = new CriticalHitEffect();
 
-	private CriticalHitEffect() {
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    private CriticalHitEffect() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	@SubscribeEvent
-	public void onTPCritHit(TPCritHitEvent event) {
-		World world = event.player.worldObj;
-		Entity t = event.target;
-		if (world.isRemote) {
-			int count = RandUtils.rangei(5, 8);
-			while (count-- > 0) {
-				double angle = RandUtils.ranged(0, Math.PI * 2);
-				double r = RandUtils.ranged(t.width * .5, t.width * .7);
-				double h = RandUtils.ranged(0, 1) * event.target.height;
+    @SubscribeEvent
+    public void onTPCritHit(TPCritHitEvent event) {
+        World world = event.player.worldObj;
+        Entity t = event.target;
+        if (world.isRemote) {
+            int count = RandUtils.rangei(5, 8);
+            while (count-- > 0) {
+                double angle = RandUtils.ranged(0, Math.PI * 2);
+                double r = RandUtils.ranged(t.width * .5, t.width * .7);
+                double h = RandUtils.ranged(0, 1) * event.target.height;
 
-				world.spawnEntityInWorld(FormulaParticleFactory.instance.next(world,
-						VecUtils.vec(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
-						VecUtils.multiply(VecUtils.random(), 0.03)));
-			}
-		}
-	}
+                world.spawnEntityInWorld(FormulaParticleFactory.instance.next(world,
+                        VecUtils.vec(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
+                        VecUtils.multiply(VecUtils.random(), 0.03)));
+            }
+        }
+    }
 
 }

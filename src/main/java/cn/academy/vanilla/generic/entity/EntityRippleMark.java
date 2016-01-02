@@ -31,27 +31,27 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityRippleMark extends EntityAdvanced {
-	
-	@RegEntity.Render
-	public static RippleMarkRender renderer;
-	
-	public final Color color = Color.white();
-	public final long creationTime = GameTimer.getTime();
+    
+    @RegEntity.Render
+    public static RippleMarkRender renderer;
+    
+    public final Color color = Color.white();
+    public final long creationTime = GameTimer.getTime();
 
-	public EntityRippleMark(World world) {
-		super(world);
-		setSize(2, 2);
-	}
-	
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
-	
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) {}
+    public EntityRippleMark(World world) {
+        super(world);
+        setSize(2, 2);
+    }
+    
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 1;
+    }
+    
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tag) {}
 
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) {}
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tag) {}
 
 }
