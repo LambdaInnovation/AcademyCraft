@@ -55,17 +55,19 @@ import java.util.Map.Entry;
 public class CPData extends DataPart<EntityPlayer> {
 
     // Names are very short for serialization efficiency
+    // And random characters because.. IDK 233
 	static final String
-		TAG_CURCP = "0",
-		TAG_MAXCP = "1",
-		TAG_UNTILRECOVER = "2",
-		TAG_OVERLOAD = "3",
-		TAG_MAX_OVERLOAD = "4",
-		TAG_UNTIL_OVERLOAD_RECOVER = "5",
-		TAG_OVERLOAD_FINE = "6",
-		TAG_ADD_MAXCP = "7",
-		TAG_ADD_MAX_OVERLOAD = "8",
-        TAG_INTERFERING = "9";
+		TAG_CURCP = "C",
+		TAG_MAXCP = "M",
+		TAG_UNTILRECOVER = "I",
+		TAG_OVERLOAD = "D",
+		TAG_MAX_OVERLOAD = "N",
+		TAG_UNTIL_OVERLOAD_RECOVER = "J",
+		TAG_OVERLOAD_FINE = "B",
+		TAG_ADD_MAXCP = "1",
+		TAG_ADD_MAX_OVERLOAD = "2",
+        TAG_INTERFERING = "3",
+        TAG_ACTIVATED = "A";
 
 	public interface IInterfSource {
 		/**
@@ -496,7 +498,7 @@ public class CPData extends DataPart<EntityPlayer> {
 	@Override
 	public NBTTagCompound toNBTSync() {
 		NBTTagCompound tag = toNBT();
-		tag.setBoolean("A", activated);
+		tag.setBoolean(TAG_ACTIVATED, activated);
 		return tag;
 	}
 	
@@ -527,7 +529,7 @@ public class CPData extends DataPart<EntityPlayer> {
 		fromNBT(tag);
 		
 		boolean lastActivated = activated;
-		activated = tag.getBoolean("A");
+		activated = tag.getBoolean(TAG_ACTIVATED);
 		
 		if(isRemote()) {
 			if(lastActivated ^ activated) {
