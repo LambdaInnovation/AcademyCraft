@@ -36,7 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockNode extends ACBlockContainer {
 
     public enum NodeType {
-        BASIC("basic", 15000, 150, 9, 5), 
+        BASIC("basic", 15000, 150, 9, 5),
         STANDARD("standard", 50000, 300, 12, 10), 
         ADVANCED("advanced", 200000, 900, 19, 20);
         

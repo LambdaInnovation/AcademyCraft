@@ -254,7 +254,6 @@ class GuiAbilityInterferer(tile: TileAbilityInterferer) extends CGuiScreen {
   textRange.listens((w, evt: ConfirmInputEvent) => {
     val textBox = TextBox.get(w)
     try {
-      val dragbar = DragBar.get(bar)
       val input = MathUtils.clampd(minRange, maxRange, textBox.content.toDouble)
       updateRange(input)
       syncRange_()

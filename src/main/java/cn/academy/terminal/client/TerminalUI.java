@@ -90,7 +90,7 @@ public class TerminalUI extends AuxGui {
 	
 	int selection = 0;
 	int scroll = 0;
-	List<Widget> apps = new ArrayList();
+	List<Widget> apps = new ArrayList<>();
 	
 	boolean isSynced;
 	
@@ -286,7 +286,7 @@ public class TerminalUI extends AuxGui {
     	
     	root.getWidget("text_loading").listen(FrameEvent.class,
     	(w, e) -> {
-    		TextBox.get(w).color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
+    		TextBox.get(w).option.color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
     	});
     }
     
@@ -345,10 +345,10 @@ public class TerminalUI extends AuxGui {
     
     private Widget createAppWidget(int id, App app) {
     	Widget ret = root.getWidget("app_template").copy();
-    	Widget icon = ret.getWidget("icon");
-    	Widget text = ret.getWidget("text");
-    	DrawTexture.get(icon).texture = app.getIcon();
-    	TextBox.get(text).content = "§L" + app.getDisplayName(); //Enforce bold
+        ret.transform.doesDraw = true;
+
+    	DrawTexture.get(ret.getWidget("icon")).texture = app.getIcon();
+    	TextBox.get(ret.getWidget("text")).content = app.getDisplayName();
     	
     	ret.addComponent(new AppHandler(id, app));
     	
@@ -400,7 +400,7 @@ public class TerminalUI extends AuxGui {
 			super("AppHandler");
 			id = _id;
 			app = _app;
-			
+
 			listen(FrameEvent.class, (w, e) -> {
 				double mAlpha = MathUtils.clampd(0.0, 1.0, (getLifetime() - ((id + 1) * 100)) / 400.0);
 				boolean selected = getSelectedApp() == w;
@@ -415,7 +415,7 @@ public class TerminalUI extends AuxGui {
 					
 					drawer.color.a = mAlpha;
 					icon.color.a = 0.8 * mAlpha;
-					text.color.a = 0.1 + 0.72 * mAlpha;
+					text.option.color.a = 0.1 + 0.72 * mAlpha;
 				} else {
 					drawer.texture = APP_BACK;
 					
@@ -423,20 +423,23 @@ public class TerminalUI extends AuxGui {
 					
 					drawer.color.a = mAlpha;
 					icon.color.a = 0.6 * mAlpha;
-					text.color.a = 0.10 + 0.1 * mAlpha;
+					text.option.color.a = 0.10 + 0.1 * mAlpha;
 				}
 				
 				lastSelected = selected;
 			});
+
 		}
 		
 		@Override
 		public void onAdded() {
+            super.onAdded();
+
 			drawer = DrawTexture.get(widget);
 			text = TextBox.get(widget.getWidget("text"));
 			icon = DrawTexture.get(widget.getWidget("icon"));
 			drawer.color.a = icon.color.a = 0;
-			text.color.a = 0.1;
+			text.option.color.a = 0.1;
 		}
 	}
 	

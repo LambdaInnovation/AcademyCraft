@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -166,7 +167,7 @@ public class GuiNode extends CGuiScreenContainer {
     	pageSelect.listen(FrameEvent.class, (w, e) ->
     	{
     		RenderUtils.drawBlackout();
-    	});
+    	}, -1);
     	
     	//Callback
 		mainHandler = new MainHandler();
@@ -230,10 +231,13 @@ public class GuiNode extends CGuiScreenContainer {
 				}
 			});
 
-			pageMain.getWidget("btn_edit").listen(LeftClickEvent.class, (w, e) -> {
-				GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
-			});
+			pageMain.getWidget("btn_edit").listen(LeftClickEvent.class, (w, e) -> doRename());
+            getWidget("input_name").listen(ConfirmInputEvent.class, (w, e) -> doRename());
     	}
+
+        private void doRename() {
+            GuiNodeSync.doRename(GuiNode.this, TextBox.get(getWidget("input_name")).content);
+        }
     	
     	public void changeState(CheckState nstate) {
     		state = nstate;

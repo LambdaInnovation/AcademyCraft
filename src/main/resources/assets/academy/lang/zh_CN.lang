@@ -84,6 +84,7 @@ tile.ac_rf_output.name=能源桥 (CoFH RF输出)
 tile.ac_rf_input.name=能源桥 (CoFH RF输入)
 tile.ac_developer_normal.name=基础能力开发机
 tile.ac_developer_advanced.name=高级能力开发机
+tile.ac_ability_interferer.name=能力干涉方块
 
 # 常规知识
 ac.knowledge.marathon.name=长跑

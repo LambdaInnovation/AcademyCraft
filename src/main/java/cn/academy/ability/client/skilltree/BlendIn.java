@@ -55,7 +55,7 @@ public class BlendIn extends Component {
 		Tint t = Tint.get(widget);
 		Glow g = Glow.get(widget);
 		if(dt != null) dta = dt.color.a;
-		if(tb != null) tba = tb.color.a;
+		if(tb != null) tba = tb.option.color.a;
 		if(t != null) ta = t.idleColor.a;
 		if(g != null) ga = g.color.a;
 
@@ -68,7 +68,7 @@ public class BlendIn extends Component {
 		Tint t = Tint.get(widget);
 		Glow g = Glow.get(widget);
 		if(dt != null) dt.color.a = dta * value;
-		if(tb != null) tb.color.a = .1 + .9 * tba * value;
+		if(tb != null) tb.option.color.a = .1 + .9 * tba * value;
 		if(t != null) t.idleColor.a = t.hoverColor.a = ta * value;
 		if(g != null) g.color.a = ga * value;
 	}

@@ -68,7 +68,7 @@ public class PresetEditUI extends GuiScreen {
 	static final double STEP = 125;
 	static final long TRANSIT_TIME = 350;
 	static final double MAX_ALPHA = 1, MIN_ALPHA = 0.3;
-	static final double MAX_SCALE = 0.27, MIN_SCALE = 0.22;
+	static final double MAX_SCALE = 1, MIN_SCALE = 0.8;
 	
 	static class SelectionProvider {
 		public final int id;
@@ -211,9 +211,9 @@ public class PresetEditUI extends GuiScreen {
     
     private double getXFor(int i, int active) {
     	if(i == active) {
-    		return width / 2;
+    		return 0;
     	}
-    	return width / 2 + STEP * (i - active);
+    	return STEP * (i - active);
     }
     
     private double getXFor(int i) {
@@ -428,7 +428,7 @@ public class PresetEditUI extends GuiScreen {
 			if(dt != null) {
 				dt.color.a = masterAlpha;
 			} else {
-				TextBox.get(w).color.a = masterAlpha;
+				TextBox.get(w).option.color.a = masterAlpha;
 			}
 		}
     	
@@ -505,7 +505,7 @@ public class PresetEditUI extends GuiScreen {
     			
     			DrawTexture tex = new DrawTexture().setTex(selection.texture);
     			single.addComponent(tex);
-    			single.addComponent(new Tint());
+    			single.addComponent(new Tint(Color.monoBlend(1, 0), Color.monoBlend(1, 0.2), false));
     			single.addComponent(new SelHandler(selection));
     			addWidget("_sel" + i, single);
     		}

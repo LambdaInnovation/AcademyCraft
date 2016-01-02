@@ -295,6 +295,8 @@ public abstract class GuiSkillTree extends CGuiScreen {
 		
 		@Override
 		public void onAdded() {
+            super.onAdded();
+
 			Widget back = widget.getWidget("back");
 			
 			back.listen(LeftClickEvent.class, (w, event) -> 

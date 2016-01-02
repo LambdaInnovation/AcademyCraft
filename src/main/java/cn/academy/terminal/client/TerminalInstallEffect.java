@@ -89,7 +89,7 @@ public class TerminalInstallEffect extends AuxGui {
 			double texA, textA, barA;
 			{
 				if(tex != null) texA = tex.color.a;
-				if(text != null) textA = text.color.a;
+				if(text != null) textA = text.option.color.a;
 				if(bar != null) barA = bar.color.a;
 			}
 
@@ -109,7 +109,7 @@ public class TerminalInstallEffect extends AuxGui {
 				TextBox text = TextBox.get(w);
 				ProgressBar bar = ProgressBar.get(w);
 				if(tex != null) tex.color.a = texA * alpha;
-				if(text != null) text.color.a = 0.1 + 0.9 * textA * alpha;
+				if(text != null) text.option.color.a = 0.1 + 0.9 * textA * alpha;
 				if(bar != null) bar.color.a = barA * alpha;
 			}
 		});

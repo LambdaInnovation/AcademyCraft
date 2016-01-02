@@ -43,7 +43,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @RegDataPart("terminal")
 public class TerminalData extends DataPart<EntityPlayer> {
 
-	private Set<Integer> installedList = new HashSet();
+	private Set<Integer> installedList = new HashSet<>();
 	private boolean isInstalled;
 
 	public TerminalData() {

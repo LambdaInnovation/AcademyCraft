@@ -254,8 +254,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		Widget startButton = ret.getWidget("button_start");
 		if(!can) {
 			startButton.transform.doesListenKey = false;
-			TextBox.get(startButton).color.setColor4d(.6, .6, .6, 1);
-			TextBox.get(ret.getWidget("text_cons")).color.setColor4i(255, 66, 58, 255);
+			TextBox.get(startButton).option.color.setColor4d(.6, .6, .6, 1);
+			TextBox.get(ret.getWidget("text_cons")).option.color.setColor4i(255, 66, 58, 255);
 		} else {
 			startButton.listen(LeftClickEvent.class, (w, e) -> 
 			{
@@ -395,7 +395,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
 		
 		private void setDisabled() {
 			transform.doesListenKey = false;
-			text.color.setColor4d(.6, .6, .6, 1);
+			text.option.color.setColor4d(.6, .6, .6, 1);
 			glow.color.setColor4d(1, 1, 1, 0.2);
 		}
 		

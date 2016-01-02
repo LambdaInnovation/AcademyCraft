@@ -103,6 +103,8 @@ public class PropertyElements {
 		
 		@Override
 		public void onAdded() {
+            super.onAdded();
+
 			textBox = TextBox.get(widget);
 			widget.transform.doesListenKey = true;
 			updateKeyName();
@@ -115,7 +117,7 @@ public class PropertyElements {
 		private void startEditing() {
 			editing = true;
 			textBox.setContent("PRESS");
-			textBox.color = CRL_EDIT;
+			textBox.option.color = CRL_EDIT;
 			
 			widget.getGui().eventBus.listen(MouseClickEvent.class, 
 			gMouseHandler = (w, event) -> {
@@ -125,7 +127,7 @@ public class PropertyElements {
 		
 		private void endEditing(int key) {
 			editing = false;
-			textBox.color = CRL_NORMAL;
+			textBox.option.color = CRL_NORMAL;
 			widget.getGui().removeFocus();
 			
 			if(key == Keyboard.KEY_ESCAPE) {

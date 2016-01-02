@@ -82,6 +82,7 @@ tile.ac_rf_output.name=Energy Bridge (CoFH RF Out)
 tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
 tile.ac_developer_normal.name=Normal Ability Developer
 tile.ac_developer_advanced.name=Advanced Ability Developer
+tile.ac_ability_interferer.name=Ability Interferer
 
 ac.converter.desc_template=Converts %s to %s
 
