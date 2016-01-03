@@ -28,7 +28,7 @@
 
 你可以通过**预设系统**来轻松的管理大量技能的操作，并且随时更换你的技能操作设置。
 
-你需要通过**能力激活键** ![key id="ability_activate"] 开启能力使用。开启能力使用后，游戏的UI会发生一定的变化：
+你需要通过**能力激活键** ![key id="ability_activation"] 开启能力使用。开启能力使用后，游戏的UI会发生一定的变化：
 
 ![能力模式(部分)](academy:textures/tutorial/ability_ui.png)
 
@@ -40,11 +40,11 @@
 
 预设系统可以让你管理各个操作键位所对应的能力。一个玩家可以管理4份预设，并且随时在它们之间轮换。
 
-你可以使用 ![key id="preset_edit"] 键来打开预设编辑界面。
+你可以使用 ![key id="edit_preset"] 键来打开预设编辑界面。
 
 ![预设编辑界面](academy:textures/tutorial/preset_selection_ui.png)
 
-在能力激活的状态下，通过使用 ![key id="preset_switch"] 来切换当前预设。你可以看到UI上的键位提示发生相应的变化。
+在能力激活的状态下，通过使用 ![key id="switch_preset"] 来切换当前预设。你可以看到UI上的键位提示发生相应的变化。
 
 P.S. 超能力所使用的四个键位可以通过数据终端中的**设置App**来编辑。
 
