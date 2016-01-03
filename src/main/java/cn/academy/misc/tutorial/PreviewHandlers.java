@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 
-import javax.vecmath.Vector2f;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,7 +79,8 @@ public final class PreviewHandlers {
 
     public static IPreviewHandler displayIcon(
             String icon,
-            Vector2f offset, float scale, Color color) {
+            float dx, float dy, 
+            float scale, Color color) {
         ResourceLocation icon_res = Resources.getTexture(icon);
         return new IPreviewHandler() {
             @SideOnly(Side.CLIENT)
@@ -91,7 +91,7 @@ public final class PreviewHandlers {
 
                 glDepthFunc(GL_ALWAYS);
                 glPushMatrix();
-                glTranslatef(offset.x, offset.y, 0);
+                glTranslatef(dx, dy, 0);
                 glScalef(scale, scale, 1);
                 HudUtils.rect(-.5, -.5, 1, 1);
                 glPopMatrix();

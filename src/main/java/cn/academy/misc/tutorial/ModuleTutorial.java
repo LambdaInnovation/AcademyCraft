@@ -12,8 +12,6 @@ import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.vis.model.CompTransform;
 
-import javax.vecmath.Vector2f;
-
 import java.util.Optional;
 
 import static cn.academy.misc.tutorial.Condition.*;
@@ -38,7 +36,8 @@ public class ModuleTutorial {
         defnTut("phase_liquid")
             // .setCondition(harvestLiquid(ModuleCrafting.imagPhase.mat))
             .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
-                                new Vector2f(0, 0), 1, Color.white()))
+                                0, 0, 
+                                1, Color.white()))
             .addPreview(recipes(ModuleCrafting.matterUnit));
 
         defnTut("constraint_metal")
