@@ -18,7 +18,7 @@ import org.apache.commons.io.IOUtils;
 @Registrant
 public class ACTutorial {
 
-    public static final boolean SHOW_ALL = true;
+    public static final boolean SHOW_ALL = false;
 
     public final String id;
 

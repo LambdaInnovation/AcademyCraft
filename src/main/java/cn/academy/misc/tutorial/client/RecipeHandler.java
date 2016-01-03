@@ -289,8 +289,6 @@ public enum RecipeHandler {
                 StackDisplay[] arr;
                 String desc;
 
-                System.out.println("[][]Match " + stack);
-
                 if(o instanceof ShapedOreRecipe) {
                     arr = toDisplay((ShapedOreRecipe) o);
                     desc = "shaped";

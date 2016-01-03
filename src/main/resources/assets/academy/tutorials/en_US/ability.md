@@ -2,22 +2,22 @@
 Ability Basics
 
 ![brief]
-After using Ability Developer, everyone will be given a unique ability due to his/her personal reality. You must learn and practice skills in order
+After using Ability Developer, everyone will be given a unique ability due to his/her personal reality. You must learn and practice skills in order 
 to become a strong ESPer.
 
 ![content]
 
 # Learning Ability
 
-You can checkout your ability learning status through __Ability Developer__ or __Skill Tree App__ in the Data Terminal. Within the skill tree you
+You can checkout your ability learning status through __Ability Developer__ or __Skill Tree App__ in the Data Terminal. Within the skill tree you 
 can see your current skills' experience, your level upgrading status and all visible skills' learning status.
 
 ![Skill Tree](academy:textures/tutorial/skill_tree_ui.png)
 
 ## Learning Skills
 
-You can see all the skills available for you to learn in Ability Developer. Different from skills you have already learned, they are marked as grey. Your first skill
-does not need any other prerequisites, but some other skills will have certain requirements to your abilility level, class of Ability Developer and other skills' experience.
+You can see all the skills available for you to learn in Ability Developer. Different from skills you have already learned, they are marked as grey. Your first skill 
+does not need any other prerequisites, but some other skills will have certain requirements to your abilility level, class of Ability Developer and other skills' experience. 
 Every time you learn something, energy will be consumed from the developer.
 
 ## Skill Experience
@@ -26,7 +26,7 @@ By continiously using skills, their experience will grow. When the experience ex
 
 ## Upgrading
 
-Throught usage of ability, your maxium CP (Calculation Point) will grow. When the CP reaches the high threshod of current level, you can upgrade to next level.
+Throught usage of ability, your maxium CP (Calculation Point) will grow. When the CP reaches the high threshod of current level, you can upgrade to next level. 
 Your upgrade status can be revealed in Ability Developer. Upgrading will require a large amount of energy, and might require more advanced class of developer.
 
 # Using Ability
@@ -57,10 +57,10 @@ P.S. You can change the ability using key from **Settings App**.
 
 ## CP and Overload
 
-Every time you use any skill, a certain amount of CP (Calculation Point) is consumed. CP measures how tired your brain is out of ability usage.
+Every time you use any skill, a certain amount of CP (Calculation Point) is consumed. CP measures how tired your brain is out of ability usage. 
 The consuming and recovering of CP are both slow.
 
-Also, using ability will cause dramatic workload in a short time, which is measured as **Overload**. It is displayed in the background layer
+Also, using ability will cause dramatic workload in a short time, which is measured as **Overload**. It is displayed in the background layer 
 of the CP bar. When overload exceeds the max value, You have to stop using ability until fully recover.
 
 ![Overload UI](academy:textures/tutorial/overload.png)

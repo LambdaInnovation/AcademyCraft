@@ -6,10 +6,10 @@ Matrix is core of a large wireless network.
 
 ![content]
 
-Matrix connects multiple Wireless Node to construct a large energy network, and exchange energy between the ndoes.
+Matrix connects multiple Wireless Node to construct a large energy network, and exchange energy between the nodes.
 
 The parameters of matrix (transmit distance, IF per tick, max loads) are determined by two factors:
-   
+
 * The amount of constraint metal plates placed in matrix
 * The level of matrix core
 

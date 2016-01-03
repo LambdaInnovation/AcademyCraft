@@ -6,7 +6,7 @@ A special semiconductor for Imag Flux.
 
 ![content]
 
-Imag Silicon is a special semiconductor for Imag Flux. Like what silicon is in electric worlds, Imag
+Imag Silicon is a special semiconductor for Imag Flux. Like what silicon is in electric worlds, Imag 
 Silicon is frequently used for crafting chips.
 
 # Imag Silicon Ore
