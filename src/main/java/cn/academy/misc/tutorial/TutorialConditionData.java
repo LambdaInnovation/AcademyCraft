@@ -1,5 +1,6 @@
 package cn.academy.misc.tutorial;
 
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
@@ -13,6 +14,7 @@ import java.util.BitSet;
 /**
  * This class simply stores activate data that trigger-type condition needs.
  */
+@Registrant
 @RegDataPart("AC_TutorialCondition")
 public class TutorialConditionData extends DataPart {
 

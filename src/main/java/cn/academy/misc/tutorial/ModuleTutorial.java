@@ -33,6 +33,8 @@ public class ModuleTutorial {
 
     @RegPostInitCallback
     public static void initConditions() {
+        defnTut("welcome");
+
         defnTut("phase_liquid")
             // .setCondition(harvestLiquid(ModuleCrafting.imagPhase.mat))
             .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",

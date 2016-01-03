@@ -2,8 +2,9 @@ package cn.academy.misc.tutorial;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.player.EntityPlayer;
-import java.util.Collection;
-import java.util.HashMap;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class TutorialRegistry {
 
-    private static HashMap<String,ACTutorial> tutorials=new HashMap<>();
+    private static HashMap<String,ACTutorial> tutorials=new LinkedHashMap<>();
 
     public static void addTutorials(ACTutorial...tutorial) {
         for(ACTutorial t : tutorial){
@@ -54,6 +55,24 @@ public class TutorialRegistry {
                 .stream()
                 .filter(t -> t.isActivated(player))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Get two list of tutorials, one is the set of learned, another the set of unlearned.
+     */
+    public static Pair<List<ACTutorial>, List<ACTutorial>> groupByLearned(EntityPlayer player) {
+        List<ACTutorial> learned = new ArrayList<>();
+        List<ACTutorial> unlearned = new ArrayList<>();
+
+        for (ACTutorial tut : tutorials.values()) {
+            if (tut.isActivated(player)) {
+                learned.add(tut);
+            } else {
+                unlearned.add(tut);
+            }
+        }
+
+        return Pair.of(learned, unlearned);
     }
 
     /**

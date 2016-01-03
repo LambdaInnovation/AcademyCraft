@@ -14,10 +14,12 @@ package cn.academy.misc.tutorial.client;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.core.util.ACMarkdownRenderer;
 import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.lambdalib.cgui.gui.CGuiScreen;
@@ -42,6 +44,7 @@ import cn.lambdalib.util.markdown.MarkdownParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -69,7 +72,7 @@ public class GuiTutorial extends CGuiScreen {
     double cachedWidth = -1;
 
     final EntityPlayer player;
-    final Collection<ACTutorial> tutlist;
+    final List<ACTutorial> learned, unlearned;
 
     Widget frame;
     Widget leftPart, rightPart;
@@ -98,7 +101,7 @@ public class GuiTutorial extends CGuiScreen {
 
         GLMarkdownRenderer getBrief() {
             if (brief_ == null) {
-                GLMarkdownRenderer renderer = new GLMarkdownRenderer();
+                GLMarkdownRenderer renderer = new ACMarkdownRenderer();
                 renderer.setFonts(font, fontBold, fontItalic);
                 renderer.widthLimit_$eq(130);
                 renderer.fontSize_$eq(8);
@@ -111,7 +114,7 @@ public class GuiTutorial extends CGuiScreen {
 
         GLMarkdownRenderer getContent() {
             if (content_ == null) {
-                GLMarkdownRenderer renderer = new GLMarkdownRenderer();
+                GLMarkdownRenderer renderer = new ACMarkdownRenderer();
                 renderer.setFonts(font, fontBold, fontItalic);
                 renderer.widthLimit_$eq(150);
                 renderer.fontSize_$eq(8);
@@ -145,7 +148,9 @@ public class GuiTutorial extends CGuiScreen {
 
     public GuiTutorial() {
         player = Minecraft.getMinecraft().thePlayer;
-        tutlist = TutorialRegistry.getLearned(player);
+        Pair<List<ACTutorial>, List<ACTutorial>> p = TutorialRegistry.groupByLearned(player);
+        learned = p.getLeft();
+        unlearned = p.getRight();
 
         initUI();
     }
@@ -196,6 +201,7 @@ public class GuiTutorial extends CGuiScreen {
 
                 glColorMask(false, false, false, false);
                 glDepthMask(true);
+
                 HudUtils.colorRect(0, 0, w.transform.width, w.transform.height);
                 glColorMask(true, true, true, true);
 
@@ -277,7 +283,7 @@ public class GuiTutorial extends CGuiScreen {
         //
 
 
-        rebuildList(tutlist);
+        rebuildList();
 
         listArea.transform.doesDraw = false;
 
@@ -329,15 +335,14 @@ public class GuiTutorial extends CGuiScreen {
         gui.addWidget("frame", frame);
     }
 
-    private void rebuildList(Collection<ACTutorial> list) {
-        listArea.removeComponent("ElementList");
-        ElementList el = new ElementList();
+    private void _build(ElementList e1, List<ACTutorial> list, boolean learned) {
         for(ACTutorial t : list) {
             Widget w = new Widget();
             w.transform.setSize(72, 12);
             w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
 
-            TextBox box = new TextBox(new FontOption(10));
+            TextBox box = new TextBox(new FontOption(10, learned ? Color.white() : Color.mono(0.6)));
+            box.xOffset = 3;
             box.content = renderInfo(t).title;
             box.localized = true;
             box.emit = true;
@@ -350,7 +355,7 @@ public class GuiTutorial extends CGuiScreen {
                     for(Widget old : new Widget[] { logo2, logo0, logo1, logo3 }) {
                         blend(old, 0, 0.3, true);
                     }
-                    centerPart.transform.doesDraw = true;
+                    centerPart.transform.doesDraw = learned;
                     rightWindow.transform.doesDraw = true;
                     showWindow.transform.doesDraw = true;
                 }
@@ -361,8 +366,15 @@ public class GuiTutorial extends CGuiScreen {
             });
 
             w.addComponent(box);
-            el.addWidget(w);
+            e1.addWidget(w);
         }
+    }
+
+    private void rebuildList() {
+        listArea.removeComponent("ElementList");
+        ElementList el = new ElementList();
+        _build(el, learned, true);
+        _build(el, unlearned, false);
         listArea.addComponent(el);
     }
 
@@ -412,22 +424,26 @@ public class GuiTutorial extends CGuiScreen {
     }
 
     private void setCurrentTut(ACTutorial tut) {
-        currentTut = new TutInfo(tut);
+        currentTut = new TutInfo(tut, tut.isActivated(player));
         boolean cycleable = tut.getPreview().size() > 1;
         showArea.removeWidget("delegate");
         VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
         showWindow.getWidget("button_left").transform.doesDraw
                 = showWindow.getWidget("button_right").transform.doesDraw
                 = cycleable;
+        centerPart.transform.doesDraw = tut.isActivated(player);
         currentTut.cycle(0);
     }
 
     private class TutInfo {
         final ACTutorial tut;
+        final boolean learned;
+
         int selection;
 
-        TutInfo(ACTutorial _tut) {
+        TutInfo(ACTutorial _tut, boolean _learned) {
             tut = _tut;
+            learned = _learned;
         }
 
         void cycle(int delta) {

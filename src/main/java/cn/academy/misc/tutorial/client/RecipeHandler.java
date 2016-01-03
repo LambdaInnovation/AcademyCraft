@@ -20,7 +20,6 @@ import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.helper.GameTimer;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

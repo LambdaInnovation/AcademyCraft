@@ -68,7 +68,7 @@ public abstract class Condition {
 
         @Override
         public boolean exam(EntityPlayer player) {
-            return EntityData.get(player).getPart(TutorialConditionData.class).getActivate(this);
+            return TutorialConditionData.get(player).getActivate(this);
         }
 
     }

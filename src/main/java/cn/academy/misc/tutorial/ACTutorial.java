@@ -2,6 +2,8 @@ package cn.academy.misc.tutorial;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import cn.lambdalib.annoreg.core.Registrant;
@@ -63,7 +65,7 @@ public class ACTutorial {
             if (stream == null) {
                 return unknown;
             } else {
-                return IOUtils.toString(stream);
+                return IOUtils.toString(new InputStreamReader(stream, Charset.forName("UTF-8").newDecoder()));
             }
         } catch (NullPointerException|IOException e) {
             return unknown;
