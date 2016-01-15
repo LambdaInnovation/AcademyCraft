@@ -54,7 +54,8 @@ import org.apache.logging.log4j.Logger;
  * @author acaly, WeathFolD, KS
  *
  */
-@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION, dependencies = "required-after:LambdaLib@1.1.0")
+@Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
+     dependencies = "required-after:LambdaLib@[1.1.0]") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 public class AcademyCraft {
