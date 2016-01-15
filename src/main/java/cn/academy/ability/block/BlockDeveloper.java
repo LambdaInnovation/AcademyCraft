@@ -16,6 +16,8 @@ import cn.academy.ability.develop.DeveloperType;
 import cn.academy.core.block.ACBlockMulti;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -50,7 +52,8 @@ public class BlockDeveloper extends ACBlockMulti {
         
         finishInit();
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
         return RenderEmptyBlock.id;
