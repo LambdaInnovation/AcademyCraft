@@ -3,11 +3,19 @@ package cn.academy.ability.api.ctrl;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.data.PresetData.Preset;
+import cn.academy.core.AcademyCraft;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraftforge.common.config.Configuration;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.ctrl.ClientController.AbilityKey;
@@ -30,15 +38,45 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegEventHandler
+@RegEventHandler(Bus.Forge)
 public final class ClientHandler {
-    
+
     // Name constants for looking up keys in ACKeyHandler.
     public static final String
         KEY_SWITCH_PRESET = "switch_preset",
         KEY_EDIT_PRESET = "edit_preset",
         KEY_ACTIVATE_ABILITY = "ability_activation";
-    
+
+    private static final int[] defaultKeysInit = new int[] {
+            KeyManager.MOUSE_LEFT,
+            KeyManager.MOUSE_RIGHT,
+            Keyboard.KEY_R,
+            Keyboard.KEY_F
+    };
+
+    private static final int[] defaultKeys = new int[defaultKeysInit.length];
+
+    @RegInitCallback
+    public static void init() {
+        updateAbilityKeys();
+    }
+
+    private static void updateAbilityKeys() {
+        Configuration cfg = AcademyCraft.config;
+        for (int i = 0; i < getKeyCount(); ++i) {
+            defaultKeys[i] = cfg.getInt("keys", "ability_" + i,
+                    defaultKeysInit[i], -1000, 1000, "Ability control key #" + i);
+        }
+    }
+
+    public static int getKeyMapping(int id) {
+        return defaultKeys[id];
+    }
+
+    public static int getKeyCount() {
+        return defaultKeysInit.length;
+    }
+
     private interface IActivateHandler {
         
         boolean handles(EntityPlayer player);
@@ -47,7 +85,7 @@ public final class ClientHandler {
         
     }
     
-    private static List<IActivateHandler> activateHandlers = new ArrayList();
+    private static List<IActivateHandler> activateHandlers = new ArrayList<>();
     static {
         activateHandlers.add(new IActivateHandler() {
             @Override
@@ -163,10 +201,26 @@ public final class ClientHandler {
             if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
                 int next = (data.getCurrentID() + 1) % 4;
                 data.switchCurrent(next);
-                // ACSounds.playClient(getPlayer(), "ability.preset_switch", 1.0f);
                 MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getEntity()));
             }
         }
     };
-    
+
+    @SubscribeEvent
+    public void onPresetSwitch(PresetSwitchEvent evt) {
+        if (!evt.player.worldObj.isRemote) return;
+
+        final ClientRuntime rt = ClientRuntime.instance();
+        final Preset preset = PresetData.get(evt.player).getCurrentPreset();
+
+        rt.clearKeys(ClientRuntime.DEFAULT_GROUP);
+
+        for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
+            if (preset.hasMapping(i)) {
+                Controllable c = preset.getControllable(i);
+                c.activate(rt, getKeyMapping(i));
+            }
+        }
+    }
+
 }

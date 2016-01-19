@@ -46,29 +46,12 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
-@RegInit
-@RegEventHandler
+// @Registrant
+// @RegInit
+// @RegEventHandler
 public class ClientController {
     
     public static final int MAX_KEYS = PresetData.MAX_KEYS, STATIC_KEYS = 4;
-    
-    private static AbilityKey[] handlers = new AbilityKey[MAX_KEYS];
-    
-    public static final int[] defaultMapping = new int[] { 
-        KeyManager.MOUSE_LEFT, 
-        KeyManager.MOUSE_RIGHT, 
-        Keyboard.KEY_R, 
-        Keyboard.KEY_F 
-    };
-    
-    public static int getKeyMapping(int kid) {
-        if(kid < STATIC_KEYS) {
-            return ModuleCoreClient.keyManager.getKeyID(handlers[kid]);
-        } else {
-            return ModuleCoreClient.dynKeyManager.getKeyID(handlers[kid]);
-        }
-    }
     
     /**
      * Remaps a Special Key.
@@ -79,41 +62,18 @@ public class ClientController {
         ModuleCoreClient.dynKeyManager.resetBindingKey("ability_" + (id + 4), keyID);
     }
     
-    public static void init() {
-        for(int i = 0; i < STATIC_KEYS; ++i) {
-            ModuleCoreClient.keyManager.addKeyHandler("ability_" + i, defaultMapping[i], handlers[i] = new AbilityKey(i));
-        }
-        
-        for(int i = STATIC_KEYS; i < MAX_KEYS; ++i) {
-            ModuleCoreClient.dynKeyManager.addKeyHandler("ability_" + i, 0, handlers[i] = new AbilityKey(i));
-        }
-    }
-    
+    public static void init() { }
+
     private static boolean hasMutexInstance() {
-        return getMutexInstance() != null;
+        return false;
     }
-    
+
     public static SkillInstance getMutexInstance() {
-        for(AbilityKey key : handlers) {
-            if(key.instance != null && key.instance.isMutex)
-                return key.instance;
-        }
         return null;
     }
-    
+
     static AbilityKey getMutexHandler() {
-        for(AbilityKey key : handlers) {
-            if(key.instance != null && key.instance.isMutex)
-                return key;
-        }
         return null;
-    }
-    
-    @SubscribeEvent
-    public void clientTick(ClientTickEvent event) {
-        for(AbilityKey key : handlers)
-            if(key.keyCooldown > 0) 
-                --key.keyCooldown;
     }
     
     /**
@@ -168,13 +128,13 @@ public class ClientController {
         if(cpData.isActivated()) {
             Preset preset = pdata.getCurrentPreset();
             if(preset != null) {
-                List<Integer> list = new ArrayList();
+                List<Integer> list = new ArrayList<>();
                 //System.out.println("    NotNull");
                 for(int i = 0; i < MAX_KEYS; ++i) {
                     if(preset.hasMapping(i)) {
                         Controllable c = preset.getControllable(i);
                         if(c.shouldOverrideKey()) {
-                            int mapping = getKeyMapping(i);
+                            int mapping = -1;
                             
                             list.add(mapping);
                             ControlOverrider.override(mapping);
@@ -187,95 +147,11 @@ public class ClientController {
         }
         //System.out.println("}");
     }
-    
+
     static class AbilityKey extends KeyHandler {
-        
-        static final int COOLDOWN = 3;
-        
-        final int internalID;
-        
-        SkillInstance instance;
-        
-        // Out of the nature of SyncAction, it's possible that cooldown is arrived BEFORE another key is pressed.
-        // This could affect balance because player has chance in a short interval(like 2ticks) to use the skill again.
-        // So we make a built-in key cooldown to not let this happen.
-        // It's not perfect in VERY LAGGY networks, but works mostly :)
-        int keyCooldown = 0; 
-        
+
         public AbilityKey(int id) {
-            internalID = id;
         }
-        
-        @Override
-        public void onKeyDown() {
-            if(instance != null) {
-                instance.ctrlAborted();
-                instance = null;
-            }
-            
-            CPData cpData = CPData.get(getPlayer());
-            if(keyCooldown == 0 && cpData.isActivated() && cpData.canUseAbility()) {
-                instance = locate();
-                if(instance != null) {
-                    instance.ctrlStarted();
-                    keyCooldown = COOLDOWN;
-                }
-            }
-        }
-        
-        @Override
-        public void onKeyTick() {
-            if(instance != null) {
-                if(instance.state == State.ENDED) {
-                    instance.ctrlEnded();
-                    instance = null;
-                } else if(instance.state == State.ABORTED) {
-                    instance.ctrlAborted();
-                    instance = null;
-                } else {
-                    instance.ctrlTick();
-                }
-                keyCooldown = COOLDOWN;
-            }
-        }
-        
-        @Override
-        public void onKeyUp() {
-            if(instance != null) {
-                instance.ctrlEnded();
-                instance = null;
-                keyCooldown = COOLDOWN;
-            }
-        }
-        
-        @Override
-        public void onKeyAbort() {
-            if(instance != null) {
-                instance.ctrlAborted();
-                instance = null;
-                keyCooldown = COOLDOWN;
-            }
-        }
-        
-        private SkillInstance locate() {
-            PresetData pdata = PresetData.get(getPlayer());
-            if(!pdata.isActive())
-                return null;
-            
-            Controllable cc = pdata.getCurrentPreset().getControllable(internalID);
-            if(Cooldown.isInCooldown(cc) || cc == null) return null;
-            
-            SkillInstance instance = cc.createSkillInstance(getPlayer());
-            if(instance != null && instance.isMutex && hasMutexInstance())
-                instance = null;
-            
-            if(instance == null) {
-                // AcademyCraft.log.warn("NULL SkillInstance for " + cc);
-            } else
-                instance.controllable = cc;
-            
-            return instance;
-        }
-        
+
     }
 }

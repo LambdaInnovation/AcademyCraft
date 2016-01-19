@@ -204,4 +204,13 @@ public class AcademyCraft {
         return script.root.getFloat("ac." + name);
     }
 
+    /**
+     * Simply a fast route to print debug message.
+     */
+    public static void debug(Object msg) {
+        if (DEBUG_MODE) {
+            log.info(msg);
+        }
+    }
+
 }

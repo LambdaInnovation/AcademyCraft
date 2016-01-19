@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
@@ -31,7 +32,6 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.Cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
