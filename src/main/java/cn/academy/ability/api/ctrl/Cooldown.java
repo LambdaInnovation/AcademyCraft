@@ -24,6 +24,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.util.client.ClientUtils;
+import com.sun.deploy.util.SessionState.Client;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -44,16 +45,12 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 @Deprecated
 public class Cooldown {
     
-    /**
-     * The current cooldown data map. Direct manipulation should be avoided, this
-     *  is opened just for visit of reading (like UI drawings)
-     */
-    public static final Map<Controllable, CooldownData> cooldown = new HashMap();
-    
-    public static void setCooldown(Controllable c, int cd) {}
+    public static void setCooldown(Controllable c, int cd) {
+        ClientRuntime.instance().setCooldownRaw(c, cd);
+    }
     
     public static boolean isInCooldown(Controllable c) {
-        return cooldown.containsKey(c);
+        return ClientRuntime.instance().isInCooldownRaw(c);
     }
     
     public static CooldownData getCooldownData(Controllable c) {

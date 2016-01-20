@@ -4,42 +4,48 @@ import cn.academy.ability.api.context.Context.Status;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.SideHelper;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.s11n.network.NetworkMessage.NetworkListener;
+import cn.lambdalib.core.LambdaLib;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.helper.GameTimer;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static cn.lambdalib.s11n.network.NetworkMessage.*;
 
+/**
+ * Global manager of {@link Context}. Connections are handled through it.
+ */
 @Registrant
 public enum ContextManager {
     instance;
 
-    static final long
+    private static final long
             T_FIRST_KA_TOL = 2000L, // Time tolerance from creating the context in client to first KeepAlive packet
             T_KA_TOL = 1500L, // Tile tolerance of receiving keepAlive packets
             T_KA = 500L; // Time interval between sending KeepAlive packets
 
     //API
+
+    /**
+     * Activate the context, which establish the connection of C/S.
+     */
     public void activate(Context ctx) {
         Preconditions.checkState(ctx.getStatus() == Status.CONSTRUCTED, "Can't activate same context multiple times");
 
@@ -47,6 +53,9 @@ public enum ContextManager {
         else          activate_s(ctx, true);
     }
 
+    /**
+     * Terminate this Context. Links between server and clients are ripped apart, and the terminate message is invoked.
+     */
     public void terminate(Context ctx) {
         if (ctx.getStatus() == Status.ALIVE) {
             if(remote()) terminate_c(ctx);
@@ -55,13 +64,19 @@ public enum ContextManager {
     }
 
     public <T extends Context> Optional<T> find(Class<T> type) {
-        // TODO
-        return Optional.empty();
+        if(remote()) return find_c(type);
+        else         return find_s(type);
     }
 
-    public <T extends Context> Collection<T> findAll(Class<T> type) {
-        // TODO
-        return Collections.emptyList();
+    private <T extends Context> Optional<T> find_s(Class<T> type) {
+        return sharedFind(type, alive().values().stream().map(i -> i.ctx)).findAny();
+    }
+
+    private <T extends Context> Optional<T> find_c(Class<T> type) {
+        Optional<T> sRes = find_s(type);
+        return sRes.isPresent() ?
+                sRes :
+                sharedFind(type, clientSuspended.values().stream().map(s -> s.ctx)).findAny();
     }
 
     // Internal
@@ -75,10 +90,18 @@ public enum ContextManager {
         KEEPALIVE = "7",
         KEEPALIVE_SERVER = "8";
 
+    private <T extends Context> Stream<T> sharedFind(Class<T> type, Stream<Context> source) {
+        return source
+                .filter(ctx -> type.isAssignableFrom(ctx.getClass()))
+                .map(ctx -> (T) ctx);
+    }
+
     private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(HashMap::new);
 
-    @SideOnly(Side.CLIENT)
-    private Map<Integer, Context> waitToMakeAlive = new HashMap<>();
+    // Those created in client but yet to handshake with server.
+    // They are recon as alive in client.
+    // @SideOnly(Side.CLIENT)
+    private Map<Integer, ClientSuspended> clientSuspended = new HashMap<>();
 
     // Server global context ID incrementor
     // Runtime local
@@ -122,7 +145,7 @@ public enum ContextManager {
     @SideOnly(Side.CLIENT)
     private void activate_c(Context ctx) {
         final int clientID = clientCreateIncrem;
-        waitToMakeAlive.put(clientID, ctx);
+        clientSuspended.put(clientID, new ClientSuspended(ctx));
         clientCreateIncrem++;
 
         sendToServer(this, MAKE_ALIVE, Minecraft.getMinecraft().thePlayer, clientID, ctx.getClass().getName());
@@ -199,10 +222,62 @@ public enum ContextManager {
         return false;
     }
 
-    // Message handlers
-    // TODO null check
+    // Messaging
 
-    @NetworkListener(value=MAKE_ALIVE, side=Side.SERVER)
+    void mToServer(Context ctx, String cn, Object[] args) {
+        _mCheck(ctx, true);
+
+        if (ctx.getStatus() == Status.ALIVE) {
+            sendToServer(ctx, cn, args);
+        } else { // Suspend call
+            checkSuspended(ctx).get().suspendedCalls.add(new MessageCall(cn, args));
+        }
+    }
+
+    void mToLocal(Context ctx, String cn, Object[] args) {
+        _mCheck(ctx, false);
+
+        sendTo((EntityPlayerMP) ctx.getPlayer(), ctx, cn, args);
+    }
+
+    void mToExceptLocal(Context ctx, String cn, Object[] args) {
+        _mCheck(ctx, false);
+
+        EntityPlayer localPlayer = ctx.getPlayer();
+        EntityPlayerMP[] players = getInfoS(ctx.networkID).client.stream()
+                .filter(p -> p != localPlayer).toArray(EntityPlayerMP[]::new);
+        sendToPlayers(players, ctx, cn, args);
+    }
+
+    void mToClient(Context ctx, String cn, Object[] args) {
+        _mCheck(ctx, false);
+
+        sendToPlayers(Iterables.toArray(getInfoS(ctx.networkID).client, EntityPlayerMP.class), ctx, cn, args);
+    }
+
+    private void _mCheck(Context ctx, boolean requiredRemote) {
+        if (!LambdaLib.DEBUG) return;
+
+        Preconditions.checkState(remote() == requiredRemote, "Invalid messaging side");
+        if (requiredRemote) {
+            Preconditions.checkState(
+                ctx.getStatus() == Status.ALIVE ||
+                checkSuspended(ctx).isPresent(), "Context not alive");
+            Preconditions.checkState(ctx.isLocal(), "Context must be local");
+        } else {
+            Preconditions.checkState(ctx.getStatus() == Status.ALIVE, "Context not alive");
+        }
+    }
+
+    private Optional<ClientSuspended> checkSuspended(Context ctx) {
+        return clientSuspended.values().stream().filter(cs -> cs.ctx == ctx).findFirst();
+    }
+
+    //
+
+    // Message handlers
+
+    @Listener(channel=MAKE_ALIVE, side=Side.SERVER)
     private void hMakeAlive(EntityPlayerMP player, int clientID, String className) {
         Context ctx = createContext(className, player);
 
@@ -212,19 +287,24 @@ public enum ContextManager {
         sendTo(player, this, AFTER_MAKE_ALIVE, clientID, ctx.networkID);
     }
 
-    @NetworkListener(value=AFTER_MAKE_ALIVE, side=Side.CLIENT)
+    @Listener(channel=AFTER_MAKE_ALIVE, side=Side.CLIENT)
     private void hAfterMadeAlive(int clientID, int networkID) {
-        if (waitToMakeAlive.containsKey(clientID)) {
-            Context ctx = waitToMakeAlive.remove(clientID);
+        if (clientSuspended.containsKey(clientID)) {
+            ClientSuspended susp = clientSuspended.remove(clientID);
+            Context ctx = susp.ctx;
 
             debug("AfterMadeAlive " + ctx);
             ctx.networkID = networkID;
             makeAlivePost(ctx);
 
+            for (MessageCall call : susp.suspendedCalls) {
+                sendToServer(ctx, call.channel, call.args);
+            }
+
         } // { else makeAlive not successful, shall we do something about it? }
     }
 
-    @NetworkListener(value=HANDSHAKE, side=Side.SERVER)
+    @Listener(channel=HANDSHAKE, side=Side.SERVER)
     private void hHandshake(int networkID, EntityPlayerMP player) {
         final ServerInfo info = getInfoS(networkID);
         if (info != null) {
@@ -234,7 +314,7 @@ public enum ContextManager {
     }
 
     @SideOnly(Side.CLIENT)
-    @NetworkListener(value=ACTIVATE_AT_CLIENT, side=Side.CLIENT)
+    @Listener(channel=ACTIVATE_AT_CLIENT, side=Side.CLIENT)
     private void hActivateAtClient(int networkID, String className) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         Preconditions.checkNotNull(player, "Invalid context: player is null");
@@ -247,25 +327,25 @@ public enum ContextManager {
         sendToServer(this, HANDSHAKE, networkID, player);
     }
 
-    @NetworkListener(value=KEEPALIVE, side=Side.CLIENT)
+    @Listener(channel=KEEPALIVE, side=Side.CLIENT)
     private void hKeepAlive(int networkID) {
         ClientInfo info = getInfoC(networkID);
         if (info != null) {
-            debug("KeepAliveC " + networkID);
+            // debug("KeepAliveC " + networkID);
             info.lastKeepAlive = time();
         }
     }
 
-    @NetworkListener(value=KEEPALIVE_SERVER, side=Side.SERVER)
+    @Listener(channel =KEEPALIVE_SERVER, side=Side.SERVER)
     private void hKeepAliveServer(int networkID) {
         ServerInfo info = getInfoS(networkID);
         if (info != null) {
-            debug("KeepAliveS " + networkID);
+            // debug("KeepAliveS " + networkID);
             info.lastKeepAlive = time();
         }
     }
 
-    @NetworkListener(value=TERMINATE_AT_CLIENT, side=Side.CLIENT)
+    @Listener(channel=TERMINATE_AT_CLIENT, side=Side.CLIENT)
     private void hTerminateAtClient(Context ctx) {
         debug("TerminateAtClient " + ctx);
 
@@ -273,7 +353,7 @@ public enum ContextManager {
             terminatePost(ctx);
     }
 
-    @NetworkListener(value=TERMINATE_AT_SERVER, side=Side.SERVER)
+    @Listener(channel=TERMINATE_AT_SERVER, side=Side.SERVER)
     private void hTerminateAtServer(Context ctx) {
         debug("TerminateAtServer " + ctx);
         terminate_s(ctx);
@@ -350,6 +430,25 @@ public enum ContextManager {
         ContextInfo(Context _ctx) {
             ctx = _ctx;
             createTime = GameTimer.getAbsTime();
+        }
+    }
+
+    private class MessageCall {
+        final String channel;
+        final Object[] args;
+
+        public MessageCall(String msg, Object[] _args) {
+            channel = msg;
+            args = _args;
+        }
+    }
+
+    private class ClientSuspended {
+        final Context ctx;
+        final List<MessageCall> suspendedCalls = new ArrayList<>();
+
+        public ClientSuspended(Context _ctx) {
+            ctx = _ctx;
         }
     }
 

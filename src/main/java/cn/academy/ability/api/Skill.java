@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.Context;
-import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.context.SkillContext;
-import cn.lambdalib.s11n.network.NetworkMessage;
 import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -28,8 +24,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-
-import static cn.lambdalib.s11n.network.NetworkMessage.*;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
@@ -236,44 +230,49 @@ public abstract class Skill extends Controllable {
         return null;
     }
 
-    public SkillContext createContext(EntityPlayer player) {
-        return null;
-    }
-
     @Override
     public void activate(ClientRuntime rt, int keyID) {
-        // Default delegate, delegates to single context
+        // Obsolete SkillInstance support
         rt.addKey(keyID, new KeyDelegate() {
-            SkillContext ctx;
+            SkillInstance inst;
 
             @Override
             public void onKeyDown() {
-                if (ctx == null || ctx.getStatus() != Status.ALIVE) {
-                    ctx = createContext(rt.getEntity());
-                }
+                inst = createSkillInstance(rt.getEntity());
+                if (inst != null)
+                    inst.ctrlStarted();
+            }
 
-                if (ctx != null) {
-                    sendToSelf(ctx, SkillContext.MSG_KEYDOWN);
-                }
+            @Override
+            public void onKeyTick() {
+                if (inst != null)
+                    inst.ctrlTick();
             }
 
             @Override
             public void onKeyUp() {
-                if (ctx != null) {
-                    sendToSelf(ctx, SkillContext.MSG_KEYUP);
+                if (inst != null) {
+                    inst.ctrlEnded();
+                    inst = null;
                 }
             }
 
             @Override
             public void onKeyAbort() {
-                if (ctx != null) {
-                    sendToSelf(ctx, SkillContext.MSG_KEYABORT);
+                if (inst != null) {
+                    inst.ctrlAborted();
+                    inst = null;
                 }
             }
 
             @Override
             public ResourceLocation getIcon() {
                 return getHintIcon();
+            }
+
+            @Override
+            public Object createID() {
+                return Skill.this;
             }
         });
     }

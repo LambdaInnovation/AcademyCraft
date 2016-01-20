@@ -2,10 +2,9 @@ package cn.academy.test;
 
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.s11n.network.NetworkMessage.NetworkListener;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.relauncher.Side;
@@ -25,16 +24,16 @@ public class ContextTest {
             super(player);
         }
 
-        @NetworkListener(Context.MSG_TICK)
+        @Listener(channel = Context.MSG_TICK)
         void onTick() {
         }
 
-        @NetworkListener(Context.MSG_MADEALIVE)
+        @Listener(channel = Context.MSG_MADEALIVE)
         void onMakeAlive() {
             debug("Made alive " + remoteToSide(isRemote()));
         }
 
-        @NetworkListener(Context.MSG_TERMINATED)
+        @Listener(channel = Context.MSG_TERMINATED)
         void onTerminate() {
             debug("Terminate " + remoteToSide(isRemote()));
         }

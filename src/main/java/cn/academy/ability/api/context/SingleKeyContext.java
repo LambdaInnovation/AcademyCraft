@@ -2,7 +2,7 @@ package cn.academy.ability.api.context;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public class SkillContext extends Context {
+public class SingleKeyContext extends Context {
 
     // Key messages for single key context.
     public static final String
@@ -10,7 +10,7 @@ public class SkillContext extends Context {
         MSG_KEYUP = "kdu",
         MSG_KEYABORT = "kab";
 
-    public SkillContext(EntityPlayer player) {
+    public SingleKeyContext(EntityPlayer player) {
         super(player);
     }
 

@@ -23,6 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  the end(or abort) event will be automatically sent to those SyncActions.
  * @author WeAthFolD
  */
+@Deprecated
 public class SkillInstance implements IConsumptionHintProvider {
     
     enum State { CONSTRUCTED, FINE, ENDED, ABORTED };
@@ -31,7 +32,7 @@ public class SkillInstance implements IConsumptionHintProvider {
     
     Controllable controllable;
     
-    private List<SyncAction> childs;
+    private final List<SyncAction> childs = new ArrayList<>();
     
     private int ticks;
     
@@ -65,7 +66,7 @@ public class SkillInstance implements IConsumptionHintProvider {
     
     public void onAbort() {}
     
-    void ctrlStarted() {
+    public final void ctrlStarted() {
         state = State.FINE;
         
         CPBar.setHintProvider(this);
@@ -77,7 +78,7 @@ public class SkillInstance implements IConsumptionHintProvider {
         }
     }
     
-    void ctrlTick() {
+    public final void ctrlTick() {
         ++ticks;
         onTick();
         
@@ -87,7 +88,7 @@ public class SkillInstance implements IConsumptionHintProvider {
                 this.abortSkill();
     }
     
-    void ctrlEnded() { 
+    public final void ctrlEnded() {
         onEnd();
         
         //System.out.println("SI#ENDED");
@@ -98,7 +99,7 @@ public class SkillInstance implements IConsumptionHintProvider {
         }
     }
     
-    void ctrlAborted() { 
+    public final void ctrlAborted() {
         onAbort();
         
         //System.out.println("SI#ABORTED");
@@ -132,9 +133,6 @@ public class SkillInstance implements IConsumptionHintProvider {
      *  end(abort)ed at end.
      */
     public SkillInstance addChild(SyncAction action) {
-        if(childs == null)
-            childs = new ArrayList();
-        
         childs.add(action);
         return this;
     }

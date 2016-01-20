@@ -1,30 +1,21 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.common.config.Configuration;
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.ctrl.ClientController.AbilityKey;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
-import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
@@ -76,90 +67,6 @@ public final class ClientHandler {
     public static int getKeyCount() {
         return defaultKeysInit.length;
     }
-
-    private interface IActivateHandler {
-        
-        boolean handles(EntityPlayer player);
-        void onKeyDown(EntityPlayer player);
-        String getHint();
-        
-    }
-    
-    private static List<IActivateHandler> activateHandlers = new ArrayList<>();
-    static {
-        activateHandlers.add(new IActivateHandler() {
-            @Override
-            public boolean handles(EntityPlayer player) {
-                AbilityKey mutexHandler = ClientController.getMutexHandler();
-                return mutexHandler != null;
-            }
-
-            @Override
-            public void onKeyDown(EntityPlayer player) {
-                ClientController.getMutexHandler().onKeyAbort();
-            }
-
-            @Override
-            public String getHint() {
-                return "endskill";
-            }
-        });
-        
-        activateHandlers.add(new IActivateHandler() {
-            @Override
-            public boolean handles(EntityPlayer player) {
-                return PresetData.get(player).isOverriding();
-            }
-
-            @Override
-            public void onKeyDown(EntityPlayer player) {
-                PresetData.get(player).endOverride();
-            }
-
-            @Override
-            public String getHint() {
-                return "endspecial";
-            }
-        });
-        
-        activateHandlers.add(new IActivateHandler() {
-            @Override
-            public boolean handles(EntityPlayer player) {
-                return true;
-            }
-
-            @Override
-            public void onKeyDown(EntityPlayer player) {
-                CPData cpData = CPData.get(player);
-                if(cpData.isActivated()) {
-                    cpData.deactivate();
-                } else {
-                    cpData.activate();
-                }
-            }
-
-            @Override
-            public String getHint() {
-                return null;
-            }
-        });
-    }
-    
-    public static String getActivateKeyHint() {
-        String kname = KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(keyActivate));
-        String hint = getActivateHandler().getHint();
-        return hint == null ? null : ("[" + kname + "]: " + StatCollector.translateToLocal(
-            "ac.activate_key." + hint + ".desc"));
-    }
-    
-    private static IActivateHandler getActivateHandler() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        for(IActivateHandler h : activateHandlers) {
-            if(h.handles(player))
-                return h;
-        }
-        throw new RuntimeException();
-    }
     
     /**
      * The key to activate and deactivate the ability, might have other uses in certain circumstances,
@@ -174,7 +81,7 @@ public final class ClientHandler {
             AbilityData aData = AbilityData.get(player);
             
             if(aData.isLearned()) {
-                getActivateHandler().onKeyDown(player);
+                ClientRuntime.instance().getActivateHandler().onKeyDown(player);
             }
         }
         
@@ -198,29 +105,12 @@ public final class ClientHandler {
             PresetData data = PresetData.get(getPlayer());
             CPData cpData = CPData.get(getPlayer());
             
-            if(cpData.isActivated() && !data.isOverriding() &&  data.isActive()) {
+            if(cpData.isActivated() && data.isActive()) {
                 int next = (data.getCurrentID() + 1) % 4;
                 data.switchCurrent(next);
                 MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getEntity()));
             }
         }
     };
-
-    @SubscribeEvent
-    public void onPresetSwitch(PresetSwitchEvent evt) {
-        if (!evt.player.worldObj.isRemote) return;
-
-        final ClientRuntime rt = ClientRuntime.instance();
-        final Preset preset = PresetData.get(evt.player).getCurrentPreset();
-
-        rt.clearKeys(ClientRuntime.DEFAULT_GROUP);
-
-        for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
-            if (preset.hasMapping(i)) {
-                Controllable c = preset.getControllable(i);
-                c.activate(rt, getKeyMapping(i));
-            }
-        }
-    }
 
 }

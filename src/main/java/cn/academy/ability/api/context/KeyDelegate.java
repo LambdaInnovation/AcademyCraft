@@ -7,10 +7,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * A KeyDelegate is provided by a skill and handles key delegation of ONE key.
+ * {@link KeyDelegate} is provided by a skill and handles key delegation of ONE key.
  * @author WeAthFolD
  */
 public abstract class KeyDelegate {
+    
+    private Object identifier;
 
     public void onKeyDown() {}
 
@@ -21,12 +23,12 @@ public abstract class KeyDelegate {
     public void onKeyTick() {}
 
     @SideOnly(Side.CLIENT)
-    protected Minecraft getMC() {
+    protected final Minecraft getMC() {
         return Minecraft.getMinecraft();
     }
 
     @SideOnly(Side.CLIENT)
-    protected EntityPlayer getPlayer() {
+    protected final EntityPlayer getPlayer() {
         return getMC().thePlayer;
     }
 
@@ -34,8 +36,6 @@ public abstract class KeyDelegate {
      * @return The icon displayed in the key hint UI.
      */
     public abstract ResourceLocation getIcon();
-
-    private Object identifier;
 
     /**
      * @return The identifier used in cooldown
@@ -47,7 +47,7 @@ public abstract class KeyDelegate {
     /**
      * @return The identifier of this KeyDelegate used in cooldown
      */
-    public Object getIdentifier() {
+    public final Object getIdentifier() {
         if (identifier == null) {
             identifier = createID();
         }

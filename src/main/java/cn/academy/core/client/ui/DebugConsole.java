@@ -131,24 +131,6 @@ public class DebugConsole extends AuxGui {
             texts.add(new Text("CPData.activated: " + cpData.isActivated()));
             texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
             texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
-            
-            if(Cooldown.cooldown.size() != 0) {
-                texts.add(new Text("Cooldown: "));
-                for(Entry<Controllable, CooldownData> entry : Cooldown.cooldown.entrySet()) {
-                    Controllable c = entry.getKey();
-                    CooldownData data = entry.getValue();
-                    String name = c.getHintText();
-                    StringBuilder sb = new StringBuilder(name);
-                    
-                    for(int i = 0; i < 30 - name.length(); ++i)
-                        sb.append(' ');
-                    sb.append(String.format("%d/%dtick (%.1f/%.1fs)", 
-                        data.getTickLeft(), data.getMaxTick(),
-                        data.getTickLeft() / 20f, data.getMaxTick() / 20f));
-                    
-                    texts.add(new Text(sb.toString()));
-                }
-            }
         }
         
         texts.add(new Text(""));
