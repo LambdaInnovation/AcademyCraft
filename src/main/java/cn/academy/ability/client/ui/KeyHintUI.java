@@ -21,6 +21,7 @@ import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
+import com.google.common.collect.Multimap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -44,6 +45,10 @@ import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author WeAthFolD
@@ -101,16 +106,33 @@ public class KeyHintUI extends Widget {
             } else {
                 mAlpha = 1.0;
             }
-            
-            double curY = 0, yStep = 92;
+
             if(pData.isActive()) {
                 ClientRuntime rt = ClientRuntime.instance();
-                for (DelegateNode node : rt.getDelegateRawData()) {
-                    GL11.glPushMatrix();
-                    GL11.glTranslated(-200, curY, 0);
-                    drawSingle(node.keyID, node.delegate, rt.getCooldown(node.delegate));
-                    GL11.glPopMatrix();
-                    curY += yStep;
+
+                Multimap<String, DelegateNode> map = rt.getDelegateRawData();
+                List<String> groups = new ArrayList<>(map.keySet());
+                groups.sort((s1, s2) -> {
+                    if (s1.equals(ClientRuntime.DEFAULT_GROUP))      return -1;
+                    else if (s2.equals(ClientRuntime.DEFAULT_GROUP)) return 1;
+                    else return s1.compareTo(s2);
+                });
+
+                int availIdx = 0;
+                for (int i = 0; i < groups.size(); ++i) {
+                    Collection<DelegateNode> nodes = map.get(groups.get(i));
+                    if (!nodes.isEmpty()) {
+                        final double x = -200 - availIdx * 200;
+                        double y = 0;
+                        for (DelegateNode node : nodes) {
+                            GL11.glPushMatrix();
+                            GL11.glTranslated(x, y, 0);
+                            drawSingle(node.keyID, node.delegate, rt.getCooldown(node.delegate));
+                            GL11.glPopMatrix();
+                            y += 92;
+                        }
+                        availIdx++;
+                    }
                 }
             }
             

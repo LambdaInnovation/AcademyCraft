@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
@@ -135,6 +136,9 @@ public class Flashing extends Skill {
         @SideOnly(Side.CLIENT)
         GravityCancellor cancellor;
 
+        @SideOnly(Side.CLIENT)
+        IActivateHandler activateHandler;
+
         final AbilityData aData;
         final CPData cpData;
 
@@ -143,6 +147,28 @@ public class Flashing extends Skill {
 
             aData = aData();
             cpData = cpData();
+        }
+
+        @SideOnly(Side.CLIENT)
+        @Listener(channel=Context.MSG_MADEALIVE, side=Side.CLIENT)
+        void localMakeAlive() {
+            if (isLocal()) {
+                activateHandler = new IActivateHandler() {
+                    @Override
+                    public boolean handles(EntityPlayer player) {
+                        return true;
+                    }
+                    @Override
+                    public void onKeyDown(EntityPlayer player) {
+                        terminate();
+                    }
+                    @Override
+                    public String getHint() {
+                        return ENDSPECIAL;
+                    }
+                };
+                clientRuntime().addActivateHandler(activateHandler);
+            }
         }
 
         @SideOnly(Side.CLIENT)
@@ -224,6 +250,7 @@ public class Flashing extends Skill {
         @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
         void localTerminate() {
             if (isLocal()) {
+                clientRuntime().removeActiveHandler(activateHandler);
                 clientRuntime().clearKeys(KEY_GROUP);
                 endEffects();
             }

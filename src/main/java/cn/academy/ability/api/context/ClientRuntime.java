@@ -171,8 +171,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     /**
      * @return A view of raw delegate data. Modifying yields undefined results.
      */
-    public Collection<DelegateNode> getDelegateRawData() {
-        return ImmutableSet.copyOf(delegates.values());
+    public Multimap<String, DelegateNode> getDelegateRawData() {
+        return delegateGroups;
     }
 
     /**
@@ -473,6 +473,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     public interface IActivateHandler {
+        String ENDSPECIAL = "endspecial";
 
         boolean handles(EntityPlayer player);
         void onKeyDown(EntityPlayer player);
