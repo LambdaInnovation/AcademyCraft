@@ -194,24 +194,28 @@ class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.
 
   override def isOpaqueCube = false
 
-  @SideOnly(Side.CLIENT)
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int,
                                 player: EntityPlayer, side: Int,
                                 tx: Float, ty: Float, tz: Float) =
-    if (world.isRemote) {
-      world.getTileEntity(x, y, z) match {
-        case tile: TileAbilityInterferer =>
-          // Client side verification might be dangerous, but its really OK in here.
-          if (player.capabilities.isCreativeMode ||
-            Option(player.getCommandSenderName) == tile.placer) {
-            Minecraft.getMinecraft.displayGuiScreen(new GuiAbilityInterferer(tile))
-          } else {
-            PlayerUtils.sendChat(player, "ac.ability_interf.cantuse")
-          }
-          true
-        case _ => false
-      }
-    } else false
+    world.getTileEntity(x, y, z) match {
+      case tile: TileAbilityInterferer =>
+        // Client side verification might be dangerous, but its really OK in here.
+        if (world.isRemote) {
+          handleClient(player, tile)
+        }
+        true
+      case _ => false
+    }
+
+  @SideOnly(Side.CLIENT)
+  private def handleClient(player: EntityPlayer, tile: TileAbilityInterferer) = {
+    if (player.capabilities.isCreativeMode ||
+      Option(player.getCommandSenderName) == tile.placer) {
+      Minecraft.getMinecraft.displayGuiScreen(new GuiAbilityInterferer(tile))
+    } else {
+      PlayerUtils.sendChat(player, "ac.ability_interf.cantuse")
+    }
+  }
 
 }
 
