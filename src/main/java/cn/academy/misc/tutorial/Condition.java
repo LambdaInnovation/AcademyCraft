@@ -7,11 +7,13 @@ import java.util.Optional;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.util.datapart.EntityData;
+import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
@@ -47,10 +49,6 @@ public abstract class Condition {
      * Examine if the player satisfies the given condition.
      */
     public abstract boolean exam(EntityPlayer player);
-    
-
-
-
 
     static int lastIndex = 0;
 
@@ -100,9 +98,9 @@ public abstract class Condition {
         static HashMap<MatterMaterial,ItemCondition> matterUnitMap = new HashMap<>();
 
         private void tryActivate(EntityPlayer player, ItemCondition c) {
-            if (c != null) {
+            if (c != null && player != null) {
                 TutorialConditionData.get(player).setActivate(c);
-            }
+            } // It's actually not good style to discard null... leave this be temporarily
         }
 
         @SubscribeEvent
