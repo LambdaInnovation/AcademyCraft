@@ -67,9 +67,9 @@ public class BlockDeveloper extends ACBlockMulti {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
-        if(!world.isRemote && !player.isSneaking()) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if(te instanceof TileDeveloper) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te instanceof TileDeveloper && !player.isSneaking()) {
+            if(!world.isRemote) {
                 TileDeveloper td = (TileDeveloper) te;
                 if(td.getUser() == null) {
                     td.use(player);

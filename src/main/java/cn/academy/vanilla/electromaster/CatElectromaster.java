@@ -29,7 +29,6 @@ import cn.academy.vanilla.electromaster.skill.MineDetect;
 import cn.academy.vanilla.electromaster.skill.Railgun;
 import cn.academy.vanilla.electromaster.skill.ThunderBolt;
 import cn.academy.vanilla.electromaster.skill.ThunderClap;
-import cn.academy.vanilla.electromaster.skill.ironsand.IronSand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
@@ -123,14 +122,14 @@ public class CatElectromaster extends Category {
         return false;
     }
 
-    private static HashSet<Block> metalBlocks = new HashSet();
+    private static HashSet<Block> metalBlocks = new HashSet<>();
 
     static {
         metalBlocks.addAll(Arrays.asList(Blocks.rail, Blocks.dispenser, Blocks.hopper, Blocks.iron_bars,
                 Blocks.iron_block, Blocks.iron_door, Blocks.iron_ore, Blocks.activator_rail, Blocks.piston));
     }
 
-    private static HashSet<Class<? extends Entity>> metalEntities = new HashSet();
+    private static HashSet<Class<? extends Entity>> metalEntities = new HashSet<>();
 
     static {
         metalEntities.add(EntityMinecart.class);

@@ -15,12 +15,10 @@ package cn.academy.support.rf;
 import static cn.academy.support.rf.RFSupport.if2rf;
 import static cn.academy.support.rf.RFSupport.rf2if;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.lambdalib.annoreg.core.RegWithName;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.util.generic.DebugUtils;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;

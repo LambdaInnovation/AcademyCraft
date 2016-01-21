@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
@@ -31,7 +32,6 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.Cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
@@ -131,24 +131,6 @@ public class DebugConsole extends AuxGui {
             texts.add(new Text("CPData.activated: " + cpData.isActivated()));
             texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
             texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
-            
-            if(Cooldown.cooldown.size() != 0) {
-                texts.add(new Text("Cooldown: "));
-                for(Entry<Controllable, CooldownData> entry : Cooldown.cooldown.entrySet()) {
-                    Controllable c = entry.getKey();
-                    CooldownData data = entry.getValue();
-                    String name = c.getHintText();
-                    StringBuilder sb = new StringBuilder(name);
-                    
-                    for(int i = 0; i < 30 - name.length(); ++i)
-                        sb.append(' ');
-                    sb.append(String.format("%d/%dtick (%.1f/%.1fs)", 
-                        data.getTickLeft(), data.getMaxTick(),
-                        data.getTickLeft() / 20f, data.getMaxTick() / 20f));
-                    
-                    texts.add(new Text(sb.toString()));
-                }
-            }
         }
         
         texts.add(new Text(""));

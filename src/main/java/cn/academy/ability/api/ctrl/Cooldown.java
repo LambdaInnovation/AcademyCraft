@@ -18,10 +18,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.util.client.ClientUtils;
+import com.sun.deploy.util.SessionState.Client;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -36,90 +39,22 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
  * Class that handles cooldown. Currently, the cooldown in SERVER will be completely ignored, counting only
  *     client cooldown on SkillInstance startup. But you can still visit the method to avoid side dependency.
  * @author WeAthFolD
+ * @deprecated implementation moved to {@link ClientRuntime}
  */
 @Registrant
-@RegEventHandler(Bus.FML)
+@Deprecated
 public class Cooldown {
     
-    /**
-     * The current cooldown data map. Direct manipulation should be avoided, this
-     *  is opened just for visit of reading (like UI drawings)
-     */
-    public static final Map<Controllable, CooldownData> cooldown = new HashMap();
-    
     public static void setCooldown(Controllable c, int cd) {
-        if(isInCooldown(c)) {
-            CooldownData data = cooldown.get(c);
-            if(data.max < cd) data.max = cd;
-            data.current = Math.max(cd, data.current);
-        } else {
-            cooldown.put(c, new CooldownData(cd));
-        }
+        ClientRuntime.instance().setCooldownRaw(c, cd);
     }
     
     public static boolean isInCooldown(Controllable c) {
-        return cooldown.containsKey(c);
+        return ClientRuntime.instance().isInCooldownRaw(c);
     }
     
     public static CooldownData getCooldownData(Controllable c) {
-        return cooldown.get(c);
-    }
-    
-    private static void updateCooldown() {
-        Iterator< Entry<Controllable, CooldownData> > iter = cooldown.entrySet().iterator();
-        
-        while(iter.hasNext()) {
-            Entry< Controllable, CooldownData > entry = iter.next();
-            CooldownData data = entry.getValue();
-            if(data.current <= 0) {
-                iter.remove();
-            } else {
-                data.current -= 1;
-            }
-        }
-    }
-    
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onClientTick(ClientTickEvent event) {
-        if(event.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
-            updateCooldown();
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void playerDeath(LivingDeathEvent event) {
-        if(event.entityLiving.equals(Minecraft.getMinecraft().thePlayer))
-            cooldown.clear();
-    }
-    
-    @SubscribeEvent
-    public void onDisconnect(ClientDisconnectionFromServerEvent event) {
-        cooldown.clear();
-    }
-    
-    public static class CooldownData {
-        private int current;
-        private int max;
-        
-        public CooldownData(int time) {
-            current = max = time;
-        }
-        
-        /**
-         * @return How many ticks until the cooldown is end
-         */
-        public int getTickLeft() {
-            return current;
-        }
-        
-        /**
-         * @return the cooldown time specified at the start of the cooldown progress.
-         */
-        public int getMaxTick() {
-            return max;
-        }
+        return null;
     }
 
 }

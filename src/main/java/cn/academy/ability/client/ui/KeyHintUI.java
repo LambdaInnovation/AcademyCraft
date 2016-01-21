@@ -12,6 +12,10 @@
  */
 package cn.academy.ability.client.ui;
 
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ClientRuntime.CooldownData;
+import cn.academy.ability.api.context.ClientRuntime.DelegateNode;
+import cn.academy.ability.api.context.KeyDelegate;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
@@ -23,17 +27,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.ctrl.ClientController;
-import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.Cooldown.CooldownData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
-import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
@@ -76,11 +74,10 @@ public class KeyHintUI extends Widget {
     final FontOption option = new FontOption(32, FontAlign.CENTER, new Color(0xff194246));
     
     private KeyHintUI() {
-        transform.alignWidth = WidthAlign.RIGHT;
-        transform.alignHeight = HeightAlign.CENTER;
-        transform.x = 0;
-        transform.width = 140;
-        transform.scale = 0.23;
+        walign(WidthAlign.RIGHT);
+        halign(HeightAlign.CENTER);
+        size(140, 0);
+        scale(0.23);
         
         addDrawing();
     }
@@ -107,16 +104,13 @@ public class KeyHintUI extends Widget {
             
             double curY = 0, yStep = 92;
             if(pData.isActive()) {
-                Preset p = pData.getCurrentPreset();
-                for(int i = 0; i < PresetData.MAX_KEYS; ++i) {
-                    Controllable c = p.getControllable(i);
-                    if(c != null) {
-                        GL11.glPushMatrix();
-                        GL11.glTranslated(-200, curY, 0);
-                        drawSingle(ClientController.getKeyMapping(i), c);
-                        GL11.glPopMatrix();
-                        curY += yStep;
-                    }
+                ClientRuntime rt = ClientRuntime.instance();
+                for (DelegateNode node : rt.getDelegateRawData()) {
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(-200, curY, 0);
+                    drawSingle(node.keyID, node.delegate, rt.getCooldown(node.delegate));
+                    GL11.glPopMatrix();
+                    curY += yStep;
                 }
             }
             
@@ -125,11 +119,8 @@ public class KeyHintUI extends Widget {
         });
     }
     
-    private void drawSingle(int keyCode, Controllable c) {
-        ResourceLocation icon = c.getHintIcon();
-        String text = c.getHintText();
-        
-        CooldownData data = Cooldown.getCooldownData(c);
+    private void drawSingle(int keyCode, KeyDelegate c, CooldownData data) {
+        ResourceLocation icon = c.getIcon();
         
         // Back
         RenderUtils.loadTexture(TEX_BACK);

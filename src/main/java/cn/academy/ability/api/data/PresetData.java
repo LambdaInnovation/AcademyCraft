@@ -35,15 +35,14 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 @Registrant
 @RegDataPart("preset")
 public class PresetData extends DataPart<EntityPlayer> {
-    
-    public static final int MAX_KEYS = 8, MAX_PRESETS = 4;
+
+    @Deprecated
+    public static final int MAX_KEYS = 8;
+
+    public static final int MAX_PRESETS = 4;
     
     int presetID = 0;
     Preset[] presets = new Preset[4];
-
-    //Hooks that are related to SpecialSkill
-    boolean locked = false;
-    Preset specialPreset;
     
     /*
      * Notify: Unlike normal DataParts, PresetData is
@@ -58,36 +57,6 @@ public class PresetData extends DataPart<EntityPlayer> {
     
     private AbilityData getAbilityData() {
         return AbilityData.get(getEntity());
-    }
-    
-    public boolean isOverriding() {
-        return locked;
-    }
-    
-    public void override(Preset special) {
-        if(special.getPData() != this) {
-            throw new IllegalArgumentException("Try to inject a preset of another player");
-        }
-        locked = true;
-        specialPreset = special;
-        if(isRemote()) {
-            sync();
-        }
-        
-        MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
-    }
-    
-    public void endOverride() {
-        if(locked) {
-            locked = false;
-            specialPreset = null;
-            
-            if(isRemote()) {
-                sync();
-            }
-            
-            MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
-        }
     }
     
     public void clear() {
@@ -108,7 +77,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     public Preset getPreset(int id) {
         return presets[id];
     }
-    
+
     public void switchCurrent(int nid) {
         presetID = nid;
         sync();
@@ -122,7 +91,7 @@ public class PresetData extends DataPart<EntityPlayer> {
         if(!isActive()) {
             return null;
         }
-        return locked ? specialPreset : presets[presetID];
+        return presets[presetID];
     }
     
     @Override
@@ -133,12 +102,6 @@ public class PresetData extends DataPart<EntityPlayer> {
         presetID = tag.getByte("cur");
         for(int i = 0; i < MAX_PRESETS; ++i) {
             presets[i].fromNBT(tag.getCompoundTag("" + i));
-        }
-        
-        locked = tag.getBoolean("l");
-        if(locked)  {
-            specialPreset = new Preset();
-            specialPreset.fromNBT(tag.getCompoundTag("k"));
         }
         
         MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
@@ -159,10 +122,6 @@ public class PresetData extends DataPart<EntityPlayer> {
         ret.setByte("cur", (byte) presetID);
         for(int i = 0; i < MAX_PRESETS; ++i) {
             ret.setTag("" + i, presets[i].toNBT());
-        }
-        if(sync) {
-            ret.setBoolean("l", locked);
-            if(locked) ret.setTag("k", specialPreset.toNBT());
         }
         return ret;
     }
@@ -227,10 +186,20 @@ public class PresetData extends DataPart<EntityPlayer> {
      * @return A preset that is in the scope of the same Player. 
      * Probably used for overriding control.
      */
+    @Deprecated
     public Preset createPreset() {
         return new Preset();
     }
-    
+
+    @Deprecated
+    public boolean isOverriding() {
+        return false;
+    }
+    @Deprecated
+    public void override(Preset special) {}
+    @Deprecated
+    public void endOverride() {}
+
     public class Preset {
         
         /**

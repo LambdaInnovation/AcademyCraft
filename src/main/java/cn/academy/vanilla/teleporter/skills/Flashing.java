@@ -12,23 +12,28 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
+import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.Context;
+import cn.academy.ability.api.context.ContextManager;
+import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.event.FlushControlEvent;
+import cn.academy.core.client.Resources;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import com.google.common.base.Preconditions;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
-import cn.academy.ability.api.SpecialSkill;
-import cn.academy.ability.api.SubSkill;
-import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
@@ -46,161 +51,215 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
-public class Flashing extends SpecialSkill {
+public class Flashing extends Skill {
 
     public static final Flashing instance = new Flashing();
 
-    private List<Movement> movements = new ArrayList<>();
+    private static final String
+        MSG_PERFORM = "perform",
+        KEY_GROUP = "TP_Flashing";
 
     private Flashing() {
         super("flashing", 5);
-        this.addSubSkill(new Movement(Keyboard.KEY_A, "a", VecUtils.vec(0, 0, -1)));
-        this.addSubSkill(new Movement(Keyboard.KEY_D, "d", VecUtils.vec(0, 0, 1)));
-        this.addSubSkill(new Movement(Keyboard.KEY_W, "w", VecUtils.vec(1, 0, 0)));
-        this.addSubSkill(new Movement(Keyboard.KEY_S, "s", VecUtils.vec(-1, 0, 0)));
     }
 
-    public static float getRange(AbilityData aData) {
+    private static float getRange(AbilityData aData) {
         return instance.callFloatWithExp("range", aData);
     }
 
-    private void addMovement(Movement m) {
-        movements.add(m);
-        m.id = movements.size() - 1;
-    }
-
     @Override
-    protected SpecialSkillAction getSpecialAction(EntityPlayer player) {
-        return new FlashingAction();
+    public void activate(ClientRuntime rt, int keyID) {
+        rt.addKey(keyID, new KeyDelegate() {
+            @Override
+            public void onKeyDown() {
+                Optional<MainContext> opt = ContextManager.instance.find(MainContext.class);
+                if (!opt.isPresent()) {
+                    ContextManager.instance.activate(new MainContext(getPlayer()));
+                } else {
+                    opt.get().terminate();
+                }
+
+                MinecraftForge.EVENT_BUS.post(new FlushControlEvent());
+            }
+
+            @Override
+            public ResourceLocation getIcon() {
+                return instance.getHintIcon();
+            }
+        });
+
+        Optional<MainContext> opt = ContextManager.instance.find(MainContext.class);
+        if (opt.isPresent()) {
+            final MainContext ctx = opt.get();
+
+            final String[] strs = new String[] { "a", "d", "w", "s"};
+            final int[] keys = new int[] { Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
+            for (int i = 0; i < 4; ++i) {
+                final int localid = i;
+                rt.addKey(KEY_GROUP, keys[i], new KeyDelegate() {
+                    @Override
+                    public void onKeyDown() {
+                        ctx.localStart(localid);
+                    }
+                    @Override
+                    public void onKeyUp() {
+                        ctx.localEnd(localid);
+                    }
+                    @Override
+                    public void onKeyAbort() {
+                        ctx.localAbort(localid);
+                    }
+                    @Override
+                    public ResourceLocation getIcon() {
+                        return Resources.getTexture("abilities/teleporter/flashing/" + strs[localid]);
+                    }
+                });
+            }
+        }
     }
 
-    public static class FlashingAction extends SpecialSkillAction {
+    static final Vec3[] dirs = new Vec3[] {
+            VecUtils.vec(0, 0, -1),
+            VecUtils.vec(0, 0, 1),
+            VecUtils.vec(1, 0, 0),
+            VecUtils.vec(-1, 0, 0)
+    };
+
+    public static class MainContext extends Context {
+
+        int performingKey = -1;
+
+        @SideOnly(Side.CLIENT)
+        EntityTPMarking marking;
 
         @SideOnly(Side.CLIENT)
         GravityCancellor cancellor;
 
-        public FlashingAction() {
-            super(instance, -1);
-        }
+        final AbilityData aData;
+        final CPData cpData;
 
-        @Override
-        public void onSkillTick() {
-            if (isRemote)
-                updateClient();
+        public MainContext(EntityPlayer player) {
+            super(player);
+
+            aData = aData();
+            cpData = cpData();
         }
 
         @SideOnly(Side.CLIENT)
-        private void updateClient() {
-            if (cancellor != null && cancellor.isDead())
-                cancellor = null;
+        void localStart(int keyid) {
+            performingKey = keyid;
+
+            startEffects();
         }
 
-    }
-
-    class Movement extends SubSkill {
-
-        int id;
-        final Vec3 direction;
-
-        public Movement(int key, String _name, Vec3 _dir) {
-            super(_name);
-            setRemapped(key);
-            direction = _dir;
-            addMovement(this);
-        }
-
-        @Override
-        public SkillInstance createSkillInstance(EntityPlayer player) {
-            return new SkillInstance() {
-                @Override
-                public void onStart() {
-                    addChild(new MovementAction(Movement.this));
-                }
-            };
-        }
-
-        @Override
-        public boolean shouldOverrideKey() {
-            return false;
-        }
-
-    }
-
-    public static class MovementAction extends SkillSyncAction {
-
-        Movement movement;
-
-        public MovementAction(Movement _m) {
-            super(-1);
-            movement = _m;
-        }
-
-        public MovementAction() {
-            super(-1);
-        }
-
-        @Override
-        public void writeNBTStart(NBTTagCompound tag) {
-            tag.setByte("i", (byte) movement.id);
-        }
-
-        @Override
-        public void readNBTStart(NBTTagCompound tag) {
-            movement = instance.movements.get(tag.getByte("i"));
-        }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-
-            if (isRemote) {
-                startEffects();
+        @SideOnly(Side.CLIENT)
+        void localEnd(int keyid) {
+            if (keyid != performingKey) {
+                return;
             }
+
+            endEffects();
+
+            sendToServer(MSG_PERFORM, performingKey);
+
+            performingKey = -1;
         }
 
-        @Override
-        public void onTick() {
-            if (isRemote) {
-                updateEffects();
-            } else {
-                if (!cpData.canPerform(instance.getConsumption(aData)))
-                    ActionManager.abortAction(this);
-            }
-        }
-
-        @Override
-        public void onEnd() {
-            if (!isRemote) {
-                Vec3 dest = getDest();
-                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
-                player.fallDistance = 0.0f;
-
-                cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
-                aData.addSkillExp(instance, instance.getFloat("expincr"));
-                instance.triggerAchievement(player);
-                TPAttackHelper.incrTPCount(player);
-            } else {
-                setCooldown(movement, 5);
-            }
-        }
-
-        @Override
-        public void onFinalize() {
-            if (isRemote) {
+        @SideOnly(Side.CLIENT)
+        void localAbort(int localid) {
+            if (performingKey == localid) {
+                performingKey = -1;
                 endEffects();
             }
         }
 
-        private Vec3 getDest() {
-            double dist = getRange(aData);
+        @SideOnly(Side.CLIENT)
+        @Listener(channel=MSG_TICK, side=Side.CLIENT)
+        void localTick() {
+            if (isLocal()) {
+                if (performingKey != -1 && !consume(true)) {
+                    performingKey = -1;
+                    endEffects();
+                } else {
+                    if (marking != null) {
+                        Vec3 dest = getDest(performingKey);
+                        marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+                    }
+                }
 
-            Vec3 dir = VecUtils.copy(movement.direction);
+                if (cancellor != null && cancellor.isDead())
+                    cancellor = null;
+            }
+        }
+
+        @Listener(channel=MSG_PERFORM, side=Side.SERVER)
+        void serverPerform(int keyid) {
+            if (cpData().perform(instance.getOverload(aData), instance.getConsumption(aData))) {
+                Vec3 dest = getDest(keyid);
+                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+                player.fallDistance = 0.0f;
+
+                aData.addSkillExp(instance, instance.getFloat("expincr"));
+                instance.triggerAchievement(player);
+                TPAttackHelper.incrTPCount(player);
+
+                sendToClient(MSG_PERFORM);
+            }
+        }
+
+        @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
+        void clientPerform() {
+            ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
+            if (isLocal()) {
+                if (cancellor != null) {
+                    cancellor.setDead();
+                    cancellor = null;
+                }
+                cancellor = new GravityCancellor(player, 40);
+                LIFMLGameEventDispatcher.INSTANCE.registerClientTick(cancellor);
+                clientRuntime().setCooldownRaw(Flashing.instance, 5);
+            }
+        }
+
+        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        void localTerminate() {
+            if (isLocal()) {
+                clientRuntime().clearKeys(KEY_GROUP);
+                endEffects();
+            }
+        }
+
+        @SideOnly(Side.CLIENT)
+        private void startEffects() {
+            marking = new EntityTPMarking(player);
+            world().spawnEntityInWorld(marking);
+        }
+
+        @SideOnly(Side.CLIENT)
+        private void endEffects() {
+            if (marking != null) {
+                marking.setDead();
+                marking = null;
+            }
+        }
+
+        private boolean consume(boolean simulate) {
+            float consumption = instance.getConsumption(aData);
+            return simulate ? cpData.canPerform(consumption) : cpData.perform(instance.getOverload(aData), consumption);
+        }
+
+        private Vec3 getDest(int keyid) {
+            Preconditions.checkState(keyid != -1);
+
+            double dist = Flashing.getRange(aData);
+
+            Vec3 dir = VecUtils.copy(dirs[keyid]);
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
             dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
             Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ, dir.xCoord, dir.yCoord, dir.zCoord);
 
-            MovingObjectPosition mop = Raytrace.perform(world, mo.getPosVec(), mo.move(dist).getPosVec(),
+            MovingObjectPosition mop = Raytrace.perform(player.worldObj, mo.getPosVec(), mo.move(dist).getPosVec(),
                     EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
 
             double x, y, z;
@@ -252,43 +311,6 @@ public class Flashing extends SpecialSkill {
             }
 
             return VecUtils.vec(x, y, z);
-        }
-
-        // CLIENT
-        @SideOnly(Side.CLIENT)
-        EntityTPMarking marking;
-
-        @SideOnly(Side.CLIENT)
-        private void startEffects() {
-            if (isLocal()) {
-                marking = new EntityTPMarking(player);
-                world.spawnEntityInWorld(marking);
-            }
-        }
-
-        @SideOnly(Side.CLIENT)
-        private void updateEffects() {
-            if (isLocal()) {
-                Vec3 dest = getDest();
-                marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
-            }
-        }
-
-        @SideOnly(Side.CLIENT)
-        private void endEffects() {
-            if (isLocal()) {
-                marking.setDead();
-            }
-            if (this.getState() == State.ENDED) {
-                ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
-                FlashingAction env = ActionManager.findAction(player, FlashingAction.class);
-                if (env != null) {
-                    if (env.cancellor != null)
-                        env.cancellor.setDead();
-                    LIFMLGameEventDispatcher.INSTANCE
-                            .registerClientTick(env.cancellor = new GravityCancellor(player, 40));
-                }
-            }
         }
 
     }

@@ -70,9 +70,9 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float tx, float ty,
             float tz) {
         TileEntity te = WorldUtils.getTileEntity(world, x, y, z, tileType);
-        if (te != null && !player.isSneaking()) {
+        if (te != null && te instanceof IWirelessUser && !player.isSneaking()) {
             if (world.isRemote) {
-                displayGui(te);
+                displayGui((IWirelessUser) te);
             }
             return true;
         }
@@ -80,8 +80,8 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     }
 
     @SideOnly(Side.CLIENT)
-    private void displayGui(TileEntity te) {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode((IWirelessUser) te));
+    private void displayGui(IWirelessUser te) {
+        Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
     }
 
 }

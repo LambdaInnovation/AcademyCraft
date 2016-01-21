@@ -63,7 +63,7 @@ public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static final boolean DEBUG_MODE = false;
+    public static final boolean DEBUG_MODE = true;
 
     public static final String VERSION = "1.0pr3";
 
@@ -203,6 +203,15 @@ public class AcademyCraft {
 
     public static float getFloat(String name) {
         return script.root.getFloat("ac." + name);
+    }
+
+    /**
+     * Simply a fast route to print debug message.
+     */
+    public static void debug(Object msg) {
+        if (DEBUG_MODE) {
+            log.info(msg);
+        }
     }
 
 }

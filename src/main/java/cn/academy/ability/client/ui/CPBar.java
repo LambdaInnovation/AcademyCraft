@@ -14,7 +14,9 @@ package cn.academy.ability.client.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
@@ -434,9 +436,11 @@ public class CPBar extends Widget {
     FontOption fo_ActivateHint = new FontOption(44, FontAlign.RIGHT, new Color(0xa0ffffff));
 
     private void drawActivateKeyHint() {
-        String str = ClientHandler.getActivateKeyHint();
+        Optional<String> hint = ClientRuntime.instance().getActivateHandler().getHintTranslated();
         
-        if(str != null) {
+        if(hint.isPresent()) {
+            String str = hint.get();
+
             final double x0 = 500, y0 = 140, MARGIN = 8;
             CRL_KH_BACK.bind();
 

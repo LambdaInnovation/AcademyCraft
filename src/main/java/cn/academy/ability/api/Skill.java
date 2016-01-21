@@ -3,6 +3,8 @@ package cn.academy.ability.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.KeyDelegate;
 import com.google.common.collect.ImmutableList;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -227,7 +229,54 @@ public abstract class Skill extends Controllable {
     public SkillInstance createSkillInstance(EntityPlayer player) {
         return null;
     }
-    
+
+    @Override
+    public void activate(ClientRuntime rt, int keyID) {
+        // Obsolete SkillInstance support
+        rt.addKey(keyID, new KeyDelegate() {
+            SkillInstance inst;
+
+            @Override
+            public void onKeyDown() {
+                inst = createSkillInstance(rt.getEntity());
+                if (inst != null)
+                    inst.ctrlStarted();
+            }
+
+            @Override
+            public void onKeyTick() {
+                if (inst != null)
+                    inst.ctrlTick();
+            }
+
+            @Override
+            public void onKeyUp() {
+                if (inst != null) {
+                    inst.ctrlEnded();
+                    inst = null;
+                }
+            }
+
+            @Override
+            public void onKeyAbort() {
+                if (inst != null) {
+                    inst.ctrlAborted();
+                    inst = null;
+                }
+            }
+
+            @Override
+            public ResourceLocation getIcon() {
+                return getHintIcon();
+            }
+
+            @Override
+            public Object createID() {
+                return Skill.this;
+            }
+        });
+    }
+
     //--- Learning
     public void setParent(Skill skill) {
         setParent(skill, 0.0f);
@@ -356,5 +405,7 @@ public abstract class Skill extends Controllable {
     protected void triggerAchievement(EntityPlayer player) {
         ModuleAchievements.trigger(player, getFullName());
     }
-    
+
+
+
 }

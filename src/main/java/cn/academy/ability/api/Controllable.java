@@ -1,5 +1,6 @@
 package cn.academy.ability.api;
 
+import cn.academy.ability.api.context.ClientRuntime;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +40,18 @@ public abstract class Controllable {
     }
 
     @SideOnly(Side.CLIENT)
-    public abstract SkillInstance createSkillInstance(EntityPlayer player);
+    @Deprecated
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return null;
+    }
+
+    /**
+     * Invoked when given {@link Controllable} was activated. (e.g. The skill was in the switched preset),
+     *  register the KeyDelegates into the runtime.
+     *
+     *  @param keyID The key ID associated with the skill currently
+     */
+    public /*abstract*/ void activate(ClientRuntime rt, int keyID) {}
     
     /**
      * Return the icon of this controllable. Used in KeyHint display UI.

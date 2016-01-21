@@ -11,7 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @author EAirPeter
+ * @deprecated Use {@link cn.academy.ability.api.context.Context} instead.
  */
+@Deprecated
 public abstract class SyncAction {
 
     protected UUID uuid;

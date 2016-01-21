@@ -56,20 +56,24 @@ public class BlockSolarGen extends ACBlockMulti {
     public double[] getRotCenter() {
         return new double[] { 0.5, 0, 0.5 };
     }
-    
-    @SideOnly(Side.CLIENT)
+
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float hx, float hy, float hz) {
-        if(world.isRemote) {
-            TileEntity te = world.getTileEntity(x, y, z);
-            if(te instanceof TileSolarGen) {
-                Minecraft.getMinecraft().displayGuiScreen(
-                        new GuiLinkToNode((TileSolarGen) te));
-                return true;
+        TileEntity te = world.getTileEntity(x, y, z);
+        if(te instanceof TileSolarGen) {
+            if (world.isRemote) {
+                openGui((TileSolarGen) te);
             }
+            return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void openGui(TileSolarGen te) {
+        Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
     }
 
 }
