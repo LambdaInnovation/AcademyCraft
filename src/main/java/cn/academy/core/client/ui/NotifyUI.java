@@ -12,21 +12,20 @@
  */
 package cn.academy.core.client.ui;
 
+import cn.academy.misc.tutorial.TutorialActivatedEvent;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.Resources;
-import cn.academy.knowledge.event.KnowledgeLearnedEvent;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,16 +35,14 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class NotifyUI extends Widget {
     
-    final double KEEP_TIME = 4000;
+    final double KEEP_TIME = 6000;
     final double BLEND_IN_TIME = 500, SCAN_TIME = 500, BLEND_OUT_TIME = 300;
     
     ResourceLocation texture;
-    
+
     Vec3 
         start = VecUtils.vec(420, 42, 0),
         end = VecUtils.vec(34, 42, 0);
-    
-    Font font = Font.font;
     
     INotification lastNotify;
     long lastReceiveTime;
@@ -115,11 +112,15 @@ public class NotifyUI extends Widget {
     
     private void drawText(double alpha) {
         if(alpha < 1E-1) alpha = 1E-1;
-        //alpha = 0;
         color.a = alpha;
+
+        FontOption optTitle = new FontOption(38, color);
+        FontOption optContent = new FontOption(54, color);
+
+        IFont font = Resources.font();
         
-        font.draw(lastNotify.getTitle(), 137, 32, 38, color.asHexColor());
-        font.draw(lastNotify.getContent(), 137, 81, 54, color.asHexColor());
+        font.draw(lastNotify.getTitle(), 137, 32, optTitle);
+        font.draw(lastNotify.getContent(), 137, 81, optContent);
     }
     
     private void drawBack(double alpha) {
@@ -143,10 +144,24 @@ public class NotifyUI extends Widget {
     }
     
     @SubscribeEvent
-    public void onLearned(KnowledgeLearnedEvent event) {
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            notify(new NotifyKnowledge(event.getKnowledge()));
-        }
+    public void onAcquiredKnowledge(TutorialActivatedEvent evt) {
+        String title = evt.tutorial.getTitle();
+        notify(new INotification() {
+            @Override
+            public ResourceLocation getIcon() {
+                return Resources.getTexture("tutorial/update_notify");
+            }
+
+            @Override
+            public String getTitle() {
+                return "Research note updated!";
+            }
+
+            @Override
+            public String getContent() {
+                return title;
+            }
+        });
     }
     
 }

@@ -72,6 +72,17 @@ public class ACTutorial {
         }
     }
 
+    /**
+     * Note that this method currently requires IO and is inefficient. Don't call it too often.
+     */
+    @SideOnly(Side.CLIENT)
+    public String getTitle() {
+        String raw = getContent();
+        int i1 = raw.indexOf("![title]"),
+                i2 = raw.indexOf("![brief]");
+        return raw.substring(i1+8, i2).trim();
+    }
+
     private ResourceLocation location(String lang) {
         return new ResourceLocation("academy:tutorials/" + lang + "/" + id + ".md");
     }
@@ -80,6 +91,10 @@ public class ACTutorial {
         if (SHOW_ALL)
             return true;
         return this.condition.exam(player);
+    }
+
+    public boolean isDefaultInstalled() {
+        return condition == Condition.TRUE;
     }
 
 }
