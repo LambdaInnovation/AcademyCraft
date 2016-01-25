@@ -186,7 +186,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
             float added = Math.min(1.0f - skillExps[id], amt);
             skillExps[skill.getID()] += added;
             
-            if(!isRemote() && added != 0) {
+            if(!isRemote()) {
                 MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
                 MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getEntity(), skill, amt));
                 scheduleUpdate(25);
