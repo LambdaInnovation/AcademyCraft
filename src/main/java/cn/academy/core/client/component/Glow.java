@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
@@ -29,16 +28,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegInit
 public class Glow extends Component {
     
     public Color color = new Color();
     public double glowSize = 10.0;
     public double zLevel = 0.0;
     public boolean writeDepth = true;
-    
-    public static void init() {
-    }
     
     public static Glow get(Widget w) {
         return w.getComponent("Glow");

@@ -2,7 +2,7 @@ package cn.academy.core.debug;
 
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +15,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class DebugHelper {
 
+    @RegInitCallback
     public static void init() {
         if(AcademyCraft.DEBUG_MODE) {
             MinecraftForge.EVENT_BUS.register(new DebugHelper());

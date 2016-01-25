@@ -29,18 +29,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.key.KeyHandler;
 
 /**
@@ -83,9 +79,7 @@ public class DebugConsole extends AuxGui {
     
     boolean enabled = AcademyCraft.DEBUG_MODE;
     
-    private DebugConsole() {
-        
-    }
+    private DebugConsole() {}
     
     @Override
     public boolean isForeground() {

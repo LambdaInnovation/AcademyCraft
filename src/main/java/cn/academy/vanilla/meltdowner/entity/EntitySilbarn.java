@@ -29,7 +29,6 @@ import org.lwjgl.opengl.GL11;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
 import cn.lambdalib.particle.decorators.ParticleDecorator;
@@ -49,7 +48,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
- *
  */
 @Registrant
 @RegEntity

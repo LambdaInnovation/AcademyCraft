@@ -1,5 +1,6 @@
 package cn.academy.misc.achievements;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.AchievementPage;
 import cn.academy.core.AcademyCraft;
@@ -9,14 +10,12 @@ import cn.academy.misc.achievements.pages.PageCtMeltdowner;
 import cn.academy.misc.achievements.pages.PageCtTeleporter;
 import cn.academy.misc.achievements.pages.PageDefault;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
 
 /**
  * @author EAirPeter
  */
 @Registrant
-@RegInit
 public final class ModuleAchievements {
 
     private static PageDefault pageDefault;
@@ -27,7 +26,8 @@ public final class ModuleAchievements {
     @RegItem
     @RegItem.HasRender
     public static ItemAchievement DUMMY_ITEM;
-    
+
+    @RegInitCallback
     public static void init() {
         DispatcherAch.init();
 

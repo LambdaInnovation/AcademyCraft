@@ -19,7 +19,7 @@ import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
@@ -39,7 +39,6 @@ import net.minecraft.util.AxisAlignedBB;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
@@ -48,7 +47,8 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         MAX_CAPACITY, 
         MAX_BANDWIDTH, 
         MAX_RANGE;
-    
+
+    @RegInitCallback
     public static void init() {
         MAX_CAPACITY = getCapacity(3, 3);
         MAX_BANDWIDTH = getBandwidth(3, 3);

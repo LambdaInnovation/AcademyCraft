@@ -522,7 +522,7 @@ public class CPBar extends Widget {
         final int locTexOffset;
         
         private ShaderOverloaded() {
-            this.linkShader(new ResourceLocation("liutils:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+            this.linkShader(new ResourceLocation("lambdalib:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
             this.linkShader(new ResourceLocation("academy:shaders/cpbar_overload.frag"), GL20.GL_FRAGMENT_SHADER);
             this.compile();
             
@@ -543,7 +543,7 @@ public class CPBar extends Widget {
     private static class ShaderCPBar extends ShaderProgram {
         
         private ShaderCPBar() {
-            this.linkShader(new ResourceLocation("liutils:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
+            this.linkShader(new ResourceLocation("lambdalib:shaders/simple.vert"), GL20.GL_VERTEX_SHADER);
             this.linkShader(new ResourceLocation("academy:shaders/cpbar_cp.frag"), GL20.GL_FRAGMENT_SHADER);
             this.compile();
             

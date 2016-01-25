@@ -13,15 +13,15 @@
 package cn.academy.knowledge;
 
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class ModuleKnowledge {
 
+    // @RegInitCallback
     public static void init() {
         String[] vanillaKnowledges = { "marathon", "iron_feet", "intheknee", "bouncer", "trajectory", "baseball",
                 "anatomy" };

@@ -1,6 +1,5 @@
 package cn.academy.support.rf;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
@@ -8,13 +7,12 @@ import cn.academy.support.EnergyBlockHelper;
 import cn.lambdalib.annoreg.core.RegWithName;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 @Registrant
-@RegInit
 public class RFSupport {
     
     /** The convert rate (1IF = <CONV_RATE> RF) */
@@ -41,15 +39,9 @@ public class RFSupport {
     public static int if2rf(double ifEnergy) {
         return (int) (ifEnergy * CONV_RATE);
     }
-    
+
+    @RegInitCallback
     public static void init() {
-        
-        try {
-            // ACTutorial.addTutorial("energy_bridge_rf").setCondition(Condition.or(Condition.itemsCrafted(rfInput,rfOutput)));
-        } catch (Exception e) {
-            AcademyCraft.log.error(e);
-        }
-        
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());
         

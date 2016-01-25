@@ -20,7 +20,7 @@ import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
@@ -37,7 +37,6 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 @RegACRecipeNames
 @RegEventHandler(Bus.Forge)
 public class ModuleAbility {
@@ -57,9 +56,6 @@ public class ModuleAbility {
 
     @RegBlock
     public static AbilityInterferer abilityInterferer;
-
-    public static void init() {
-    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent

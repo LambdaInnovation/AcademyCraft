@@ -17,7 +17,7 @@ import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
@@ -38,11 +38,11 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class MDDamageHelper {
     
     static final String MARKID = "md_marktick", RATEID = "md_markrate";
-    
+
+    @RegInitCallback
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new Events());
     }

@@ -17,25 +17,26 @@ import static net.minecraftforge.common.ChestGenHooks.MINESHAFT_CORRIDOR;
 import static net.minecraftforge.common.ChestGenHooks.PYRAMID_DESERT_CHEST;
 import static net.minecraftforge.common.ChestGenHooks.PYRAMID_JUNGLE_CHEST;
 import static net.minecraftforge.common.ChestGenHooks.STRONGHOLD_LIBRARY;
+
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.misc.media.ItemMedia;
 import cn.academy.misc.media.MediaRegistry;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class ModuleMisc {
 
     @RegItem
     public static ItemMedia itemMedia;
 
+    @RegInitCallback
     public static void init() {
         String[] mediaApperance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
                 DUNGEON_CHEST };

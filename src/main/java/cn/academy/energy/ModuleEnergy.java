@@ -12,6 +12,7 @@
  */
 package cn.academy.energy;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,7 +33,6 @@ import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.multiblock.ItemBlockMulti;
@@ -41,7 +41,6 @@ import cn.lambdalib.multiblock.ItemBlockMulti;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 @RegACRecipeNames
 public class ModuleEnergy {
 
@@ -98,6 +97,7 @@ public class ModuleEnergy {
     @RecipeName("windgen_fan")
     public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
 
+    @RegInitCallback
     public static void init() {
         FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000),
                 EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));

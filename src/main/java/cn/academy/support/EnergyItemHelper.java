@@ -15,11 +15,11 @@ package cn.academy.support;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.IFItemManager;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
 
 /**
  * A generic-typed item energy helper.
@@ -27,11 +27,11 @@ import cn.lambdalib.annoreg.mc.RegInit;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 public class EnergyItemHelper {
 
-    static List<EnergyItemManager> supported = new ArrayList();
+    static List<EnergyItemManager> supported = new ArrayList<>();
 
+    @RegInitCallback
     public static void init() {
         supported.add(IFItemManager.instance);
     }

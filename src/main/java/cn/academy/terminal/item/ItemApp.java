@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
@@ -33,10 +35,12 @@ import cpw.mods.fml.relauncher.SideOnly;
  * ItemInstaller app
  * @author WeAthFolD
  */
+@Registrant
 public class ItemApp extends ACItem {
     
-    static Map<App, ItemApp> items = new HashMap();
-    
+    static Map<App, ItemApp> items = new HashMap<>();
+
+    @RegInitCallback
     public static void registerItems() {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {

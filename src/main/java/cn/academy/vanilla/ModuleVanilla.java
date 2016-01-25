@@ -19,7 +19,7 @@ import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import net.minecraft.block.Block;
@@ -27,7 +27,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 @Registrant
-@RegInit
 @RegACRecipeNames
 public class ModuleVanilla {
 
@@ -59,6 +58,7 @@ public class ModuleVanilla {
     @RegCategory
     public static CatTeleporter teleporter;
 
+    @RegInitCallback
     public static void init() {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate), new ItemStack(needle, 6),
                 Mode.INCISE);

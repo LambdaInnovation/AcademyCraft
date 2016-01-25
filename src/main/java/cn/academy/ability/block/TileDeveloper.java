@@ -20,7 +20,7 @@ import cn.academy.ability.develop.IDeveloper;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInit;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
@@ -47,7 +47,6 @@ import net.minecraft.util.AxisAlignedBB;
  *
  */
 @Registrant
-@RegInit
 @RegTileEntity
 public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
     
@@ -93,7 +92,8 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     private static ScriptNamespace script;
     
     public final DeveloperType type;
-    
+
+    @RegInitCallback
     public static void init() {
         script = AcademyCraft.getScript().at("ac.developer");
     }

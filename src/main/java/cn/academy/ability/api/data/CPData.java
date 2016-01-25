@@ -20,8 +20,8 @@ import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegInit;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.ripple.Path;
@@ -50,7 +50,6 @@ import java.util.Map.Entry;
  * @author WeAthFolD
  */
 @Registrant
-@RegInit
 @RegDataPart("CP")
 public class CPData extends DataPart<EntityPlayer> {
 
@@ -82,7 +81,8 @@ public class CPData extends DataPart<EntityPlayer> {
     public static float 
         OVERLOAD_O_MUL,
         OVERLOAD_CP_MUL;
-    
+
+    @RegInitCallback
     public static void init() {
         RECOVER_COOLDOWN = getIntParam("recover_cooldown");
         OVERLOAD_COOLDOWN = getIntParam("overload_cooldown");
