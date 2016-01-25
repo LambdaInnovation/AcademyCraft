@@ -74,6 +74,8 @@ public class GuiTutorial extends CGuiScreen {
     final EntityPlayer player;
     final List<ACTutorial> learned, unlearned;
 
+    final boolean firstOpen;
+
     Widget frame;
     Widget leftPart, rightPart;
 
@@ -151,6 +153,10 @@ public class GuiTutorial extends CGuiScreen {
         Pair<List<ACTutorial>, List<ACTutorial>> p = TutorialRegistry.groupByLearned(player);
         learned = p.getLeft();
         unlearned = p.getRight();
+
+        final String tagName = "AC_Tutorial_Open";
+        firstOpen = !player.getEntityData().getBoolean(tagName);
+        player.getEntityData().setBoolean(tagName, true);
 
         initUI();
     }
@@ -285,51 +291,61 @@ public class GuiTutorial extends CGuiScreen {
 
         rebuildList();
 
-        listArea.transform.doesDraw = false;
-
-        /* Start animation controller */ {
-            blend(logo2, 0.65, 0.3);
-            blend(logo0, 1.75, 0.3);
-            blend(leftPart, 1.75, 0.3);
-            blend(logo1, 1.3, 0.3);
-            blend(logo3, 0.1, 0.3);
-            blendy(logo3, 0.7, 0.4, 63, -36);
-
-            long startTime = GameTimer.getAbsTime();
-            logo1.listen(FrameEvent.class, (__, e) -> {
-                final float ht = 5;
-                final double
-                        ln = 500, ln2 = 300, cl = 50, // Height and length
-                        b1 = 0.3, // Blend stage 1
-                        b2 = 0.2; // Blend stage 2
-
+        final double ln = 500, ln2 = 300, cl = 50;
+        final float ht = 5;
+        if (!firstOpen) {
+            logo1.listen(FrameEvent.class, (w, e) -> {
                 glPushMatrix();
                 glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
-                double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
-                if(dt < 0) dt = 0;
-                if(dt < b1) {
-                    if(dt > 0) {
-                        double len = MathUtils.lerp(0, ln, dt / b1);
-                        if(len > cl) {
-                            lineglow(cl, len, ht);
-                            lineglow(-len, -cl, ht);
-                        }
-                    }
-                } else {
-                    double ldt = dt - b1;
-                    if(ldt > b2) {
-                        ldt = b2;
-                    }
-                    double len = ln;
-                    double len2 = MathUtils.lerp(ln - 2 * cl, ln2, ldt / b2);
-                    lineglow(ln - len2, len, ht);
-                    lineglow(-len, -(ln - len2), ht);
-                }
-
+                lineglow(ln - ln2, ln, ht);
+                lineglow(-ln, -(ln - ln2), ht);
                 glPopMatrix();
-
-                listArea.transform.doesDraw = dt > 2.0;
             });
+        } else {
+            listArea.transform.doesDraw = false;
+
+            /* Start animation controller */ {
+                blend(logo2, 0.65, 0.3);
+                blend(logo0, 1.75, 0.3);
+                blend(leftPart, 1.75, 0.3);
+                blend(logo1, 1.3, 0.3);
+                blend(logo3, 0.1, 0.3);
+                blendy(logo3, 0.7, 0.4, 63, -36);
+
+                long startTime = GameTimer.getAbsTime();
+                logo1.listen(FrameEvent.class, (__, e) -> {
+                    final double
+                            b1 = 0.3, // Blend stage 1
+                            b2 = 0.2; // Blend stage 2
+
+                    glPushMatrix();
+                    glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
+                    double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
+                    if(dt < 0) dt = 0;
+                    if(dt < b1) {
+                        if(dt > 0) {
+                            double len = MathUtils.lerp(0, ln, dt / b1);
+                            if(len > cl) {
+                                lineglow(cl, len, ht);
+                                lineglow(-len, -cl, ht);
+                            }
+                        }
+                    } else {
+                        double ldt = dt - b1;
+                        if(ldt > b2) {
+                            ldt = b2;
+                        }
+                        double len = ln;
+                        double len2 = MathUtils.lerp(ln - 2 * cl, ln2, ldt / b2);
+                        lineglow(ln - len2, len, ht);
+                        lineglow(-len, -(ln - len2), ht);
+                    }
+
+                    glPopMatrix();
+
+                    listArea.transform.doesDraw = dt > 2.0;
+                });
+            }
         }
 
         gui.addWidget("frame", frame);

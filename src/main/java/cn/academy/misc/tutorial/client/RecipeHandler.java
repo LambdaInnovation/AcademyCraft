@@ -20,6 +20,8 @@ import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.mc.StackUtils;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -28,20 +30,14 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -264,6 +260,15 @@ public enum RecipeHandler {
         return ret;
     }
 
+    private Widget drawSmeltRecipe(ItemStack in, ItemStack out) {
+        Widget ret = windows.getWidget("Smelting").copy();
+
+        ret.getWidget("slot_in").addWidget(new StackDisplay(in).centered());
+        ret.getWidget("slot_out").addWidget(new StackDisplay(out).centered());
+
+        return ret;
+    }
+
     public Widget[] recipeOfBlock(Block block) {
         return recipeOfItem(Item.getItemFromBlock(block));
     }
@@ -281,6 +286,7 @@ public enum RecipeHandler {
         return lst.stream().flatMap(stk -> Arrays.stream(recipeOfStack(stk))).toArray(Widget[]::new);
     }
 
+    @SuppressWarnings("unchecked")
     public Widget[] recipeOfStack(ItemStack stack) {
         List<Widget> ret = new ArrayList<>();
 
@@ -320,7 +326,18 @@ public enum RecipeHandler {
                     .findFirst()
                     .ifPresent(r -> ret.add(drawMFRecipe(r)));
         }
-
+        { // Smelting
+            Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.smelting().getSmeltingList();
+            smeltingList.entrySet()
+                    .stream()
+                    .filter(entry -> {
+                        ItemStack stack2 = entry.getValue();
+                        return stack2.getItem() == stack.getItem() &&
+                                (stack2.getItemDamage() == 32767 ||
+                                 stack2.getItemDamage() == stack.getItemDamage());
+                    })
+                    .forEach(entry -> ret.add(drawSmeltRecipe(entry.getKey(), stack)));
+        }
 
         return ret.toArray(new Widget[ret.size()]);
     }
