@@ -44,10 +44,18 @@ public class SettingsUI extends CGuiScreen {
     }
     
     public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {
+        add(cat, new UIProperty.Config(elem, cat, id, defValue, singlePlayer));
+    }
+
+    public static void addCallback(String id, String cat, Runnable callback, boolean singlePlayer) {
+        add(cat, new UIProperty.Callback(PropertyElements.CALLBACK, id, callback, singlePlayer));
+    }
+
+    private static void add(String cat, UIProperty prop) {
         List<UIProperty> list = properties.get(cat);
         if(list == null)
             properties.put(cat, list = new ArrayList<>());
-        list.add(new UIProperty(elem, cat, id, defValue, singlePlayer));
+        list.add(prop);
     }
     
     public SettingsUI() {

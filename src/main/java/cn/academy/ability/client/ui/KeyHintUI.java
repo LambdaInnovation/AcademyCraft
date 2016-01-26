@@ -17,6 +17,7 @@ import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.academy.ability.api.context.ClientRuntime.DelegateNode;
 import cn.academy.ability.api.context.KeyDelegate;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
@@ -57,10 +58,23 @@ import java.util.List;
 @Registrant
 public class KeyHintUI extends Widget {
 
+    static final double SCALE = 0.23;
+
     @RegInitCallback
     public static void init() {
+        Widget child = new Widget()
+                .size(128, 193)
+                .addComponent(new DrawTexture()
+                        .setTex(Resources.getTexture("guis/edit_preview/key_hint")));
+        Widget display = new Widget()
+                .size(140, 210)
+                .scale(SCALE * 2)
+                .walign(WidthAlign.RIGHT)
+                .halign(HeightAlign.CENTER);
+        display.addWidget(child);
+
         ACHud.instance.addElement(new KeyHintUI(), 
-            () -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated());
+            () -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated(), "keyhint", display);
     }
     
     ResourceLocation 
@@ -81,8 +95,9 @@ public class KeyHintUI extends Widget {
     private KeyHintUI() {
         walign(WidthAlign.RIGHT);
         halign(HeightAlign.CENTER);
-        size(140, 0);
-        scale(0.23);
+        size(140, 210);
+        pos(0, 30);
+        scale(SCALE);
         
         addDrawing();
     }

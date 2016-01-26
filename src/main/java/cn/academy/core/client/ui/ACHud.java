@@ -15,12 +15,16 @@ package cn.academy.core.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.academy.core.AcademyCraft;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.ScaledResolution;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 /**
  * AC global HUD drawing dispatcher.
@@ -33,9 +37,9 @@ public class ACHud extends AuxGui {
     @RegAuxGui
     public static ACHud instance = new ACHud();
     
-    List<Node> nodes = new ArrayList();
+    private List<Node> nodes = new ArrayList<>();
     
-    CGui gui = new CGui();
+    private CGui gui = new CGui();
 
     ACHud() {}
 
@@ -54,22 +58,60 @@ public class ACHud extends AuxGui {
         gui.draw();
     }
     
-    public void addElement(Widget w, Condition showCondition) {
-        nodes.add(new Node(w, showCondition));
+    public void addElement(Widget w, Condition showCondition, String name, Widget preview) {
+        Node node = new Node(w, showCondition, name, preview);
+        nodes.add(node);
+        node.updatePosition();
+
         gui.addWidget(w);
+    }
+
+    public List<Node> getNodes() {
+        return ImmutableList.copyOf(nodes);
     }
     
     public interface Condition {
         boolean shows();
     }
     
-    private class Node {
-        Widget w;
-        Condition cond;
+    class Node {
+        final Widget w;
+        final Condition cond;
+        final String name;
+        final float defaultX, defaultY;
+        final Widget preview;
         
-        public Node(Widget wi, Condition c) {
-            w = wi;
-            cond = c;
+        public Node(Widget _w, Condition _cond, String _name, Widget _preview) {
+            w = _w;
+            cond = _cond;
+            name = _name;
+            defaultX = (float) w.transform.x;
+            defaultY = (float) w.transform.y;
+            preview = _preview;
+        }
+
+        double[] getPosition() {
+            return prop().getDoubleList();
+        }
+
+        void updatePosition() {
+            double[] pos = getPosition();
+            w.pos(pos[0], pos[1]);
+            w.dirty = true;
+        }
+
+        void setPosition(double newX, double newY) {
+            Property prop = prop();
+            prop.set(new double[] { newX, newY });
+            updatePosition();
+        }
+
+        private Property prop() {
+            return conf().get("gui", name, new double[] { defaultX, defaultY });
+        }
+
+        private Configuration conf() {
+            return AcademyCraft.config;
         }
     }
 

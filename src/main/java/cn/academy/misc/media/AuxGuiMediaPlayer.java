@@ -34,7 +34,10 @@ public class AuxGuiMediaPlayer {
 
     @RegInitCallback
     public static void init() {
+
         Widget base = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
+
+        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying(), "media", base.copy());
 
         base.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
             MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
@@ -50,8 +53,6 @@ public class AuxGuiMediaPlayer {
             MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
             TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
         });
-
-        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying());
     }
 
 }

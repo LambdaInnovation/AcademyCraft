@@ -19,9 +19,9 @@ import cn.lambdalib.cgui.gui.Widget;
 /**
  * @author WeAthFolD
  */
-public abstract class IPropertyElement {
+public abstract class IPropertyElement<T extends UIProperty> {
     
-    public abstract Widget getWidget(UIProperty prop);
+    public abstract Widget getWidget(T prop);
     
     public Configuration getConfig() {
         return AcademyCraft.config;

@@ -19,6 +19,7 @@ import java.util.Optional;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
@@ -68,7 +69,8 @@ import javax.vecmath.Vector2d;
 @ForcePreloadTexture
 public class CPBar extends Widget {
     
-    static final float WIDTH = 964, HEIGHT = 147;
+    static final double WIDTH = 964, HEIGHT = 147;
+    static final double SCALE = 0.2;
 
     static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
     
@@ -78,7 +80,11 @@ public class CPBar extends Widget {
 
     @RegInitCallback
     public static void init() {
-        ACHud.instance.addElement(new CPBar(), () -> true);
+        ACHud.instance.addElement(new CPBar(), () -> true, "cpbar",
+                new Widget().size(WIDTH, HEIGHT)
+                        .scale(SCALE)
+                        .walign(WidthAlign.RIGHT)
+                        .addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
     }
     
     public static void setHintProvider(IConsumptionHintProvider provider) {
@@ -127,7 +133,7 @@ public class CPBar extends Widget {
     }
 
     {
-        final float aspect = WIDTH / HEIGHT, offsetMax = 9;
+        final double aspect = WIDTH / HEIGHT, offsetMax = 9;
         final int iteration = 60;
 
         alphaCurve.addPoint(0, RandUtils.ranged(0.2, 0.8));
@@ -174,7 +180,7 @@ public class CPBar extends Widget {
         }
         
         transform.setSize(WIDTH, HEIGHT);
-        transform.scale = 0.2f;
+        transform.scale = SCALE;
         transform.alignWidth = WidthAlign.RIGHT;
         transform.setPos(-12, 12);
         

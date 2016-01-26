@@ -194,6 +194,9 @@ ac.settings.prop.ability_2=Ability #3
 ac.settings.prop.ability_3=Ability #4
 ac.settings.prop.debug_console=Debug Console
 
+ac.settings.cat.misc=Misc
+ac.settings.prop.edit_ui=Customize UI
+
 # Media
 ac.media.acquired=You have installed media %s
 ac.media.haveone=You have already installed media %s
@@ -257,6 +260,14 @@ ac.gui.metal_former.mode.refine=Refining
 # Ability interference block
 ac.gui.ability_interf.switch=Switch
 ac.ability_interf.cantuse=You can't use this interference block.
+
+# UI Editing
+ac.gui.uiedit.elements=Elements
+
+ac.gui.uiedit.elm.cpbar=CP Indicator
+ac.gui.uiedit.elm.keyhint=Control Hint
+ac.gui.uiedit.elm.notification=Notification
+ac.gui.uiedit.elm.media=Media Player
 
 ac.network.link=Link
 ac.network.search=Search networks
@@ -540,7 +551,3 @@ achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimension
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
-
-ac.gui.tutorial.ability_developer.title=Ability Developer
-ac.gui.tutorial.ability_developer.brief=pending...
-ac.gui.tutorial.ability_developer.content=pending...

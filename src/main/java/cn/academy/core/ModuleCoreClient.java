@@ -12,13 +12,10 @@
  */
 package cn.academy.core;
 
-import cn.academy.core.client.ui.ACHud;
-import cn.academy.core.client.ui.NotifyUI;
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.terminal.app.settings.PropertyElements;
 import cn.academy.terminal.app.settings.SettingsUI;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -37,11 +34,6 @@ public class ModuleCoreClient {
     public static KeyManager keyManager = new ACKeyManager();
 
     public static KeyManager dynKeyManager = new KeyManager();
-
-    @RegInitCallback
-    public static void init() {
-        ACHud.instance.addElement(new NotifyUI(), () -> true);
-    }
 
     public static class ACKeyManager extends KeyManager {
         {

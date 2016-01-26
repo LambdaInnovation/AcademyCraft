@@ -1,5 +1,8 @@
 package cn.academy.terminal.app.settings;
 
+import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
+import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import org.lwjgl.input.Keyboard;
 
 import cn.academy.core.client.Resources;
@@ -22,14 +25,14 @@ import net.minecraftforge.common.config.Property;
 
 public class PropertyElements {
     
-    public static IPropertyElement CHECKBOX = new IPropertyElement() {
+    public static IPropertyElement CHECKBOX = new IPropertyElement<UIProperty.Config>() {
         
         final ResourceLocation 
             CHECK_TRUE = Resources.getTexture("guis/check_true"),
             CHECK_FALSE = Resources.getTexture("guis/check_false");
 
         @Override
-        public Widget getWidget(UIProperty prop) {
+        public Widget getWidget(UIProperty.Config prop) {
             Configuration cfg = getConfig();
             Property p = cfg.get(prop.category, prop.id, (boolean) prop.defValue);
             
@@ -51,10 +54,10 @@ public class PropertyElements {
         
     },
     
-    KEY = new IPropertyElement() {
+    KEY = new IPropertyElement<UIProperty.Config>() {
         
         @Override
-        public Widget getWidget(UIProperty prop) {
+        public Widget getWidget(UIProperty.Config prop) {
             Configuration cfg = getConfig();
             Property p = cfg.get(prop.category, prop.id, (int) prop.defValue);
             
@@ -67,6 +70,16 @@ public class PropertyElements {
             return ret;
         }
         
+    },
+
+    CALLBACK = new IPropertyElement<UIProperty.Callback>() {
+        @Override
+        public Widget getWidget(UIProperty.Callback prop) {
+            Widget ret = SettingsUI.document.getWidget("t_callback").copy();
+            TextBox.get(ret.getWidget("text")).setContent(prop.getDisplayID());
+            ret.getWidget("button").listen(LeftClickEvent.class, (w, e) -> prop.action.run());
+            return ret;
+        }
     };
     
     private static class EditKey extends Component {
