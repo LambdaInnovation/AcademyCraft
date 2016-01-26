@@ -138,7 +138,6 @@ public class AcademyCraft {
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
         // PostInit stage, including tutorial init, depends on registered recipes
-        // NOTE: Defer tutorial registration to even later stage? hmm...
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 
         if (DEBUG_MODE) {
@@ -163,6 +162,7 @@ public class AcademyCraft {
         }
 
         recipes = null; // Release and have fun GC
+        config.save();
     }
 
     @SideOnly(Side.CLIENT)

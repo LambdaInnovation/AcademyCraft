@@ -55,7 +55,7 @@ public final class ClientHandler {
     private static void updateAbilityKeys() {
         Configuration cfg = AcademyCraft.config;
         for (int i = 0; i < getKeyCount(); ++i) {
-            defaultKeys[i] = cfg.getInt("keys", "ability_" + i,
+            defaultKeys[i] = cfg.getInt("ability_" + i, "keys",
                     defaultKeysInit[i], -1000, 1000, "Ability control key #" + i);
         }
     }
