@@ -28,6 +28,7 @@ import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.ripple.ScriptProgram;
 import cn.lambdalib.util.client.shader.ShaderProgram;
 import cn.lambdalib.util.reschk.ResourceCheck;
+import cn.lambdalib.util.version.VersionUpdateUrl;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -46,6 +47,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
+
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -58,6 +60,7 @@ import org.apache.logging.log4j.Logger;
      dependencies = "required-after:LambdaLib@[1.1.1_alpha]") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
+@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
 public class AcademyCraft {
 
     @Instance("academy-craft")
