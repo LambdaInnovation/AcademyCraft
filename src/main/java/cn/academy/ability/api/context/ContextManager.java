@@ -12,6 +12,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.core.LambdaLib;
 import cn.lambdalib.s11n.network.NetworkMessage.*;
 import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.mc.SideHelper;
@@ -487,7 +488,11 @@ public enum ContextManager {
             public Context read(ByteBuf buf) {
                 int idx = buf.readInt();
                 ContextInfo info = instance.alive().get(idx);
-                return info == null ? null : info.ctx;
+                if (info == null) {
+                    throw new ContextException("No such context");
+                } else {
+                    return info.ctx;
+                }
             }
         });
 

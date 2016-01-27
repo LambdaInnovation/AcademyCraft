@@ -57,6 +57,7 @@ public abstract class Controllable {
      *
      *  @param keyID The key ID associated with the skill currently
      */
+    @SideOnly(Side.CLIENT)
     public /*abstract*/ void activate(ClientRuntime rt, int keyID) {}
     
     /**

@@ -8,6 +8,8 @@ package cn.academy.energy.block.wind;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -22,7 +24,8 @@ public class BlockWindGenPillar extends ACBlockContainer {
         setHardness(4.0f);
         setHarvestLevel("pickaxe", 2);
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
         return RenderEmptyBlock.id;

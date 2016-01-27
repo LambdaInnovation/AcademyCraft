@@ -59,6 +59,7 @@ public class Flashing extends Skill {
         return instance.callFloatWithExp("range", aData);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyID) {
         rt.addKey(keyID, new KeyDelegate() {

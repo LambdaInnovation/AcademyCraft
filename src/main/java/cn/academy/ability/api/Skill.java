@@ -236,6 +236,7 @@ public abstract class Skill extends Controllable {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void activate(ClientRuntime rt, int keyID) {
         // Obsolete SkillInstance support
         rt.addKey(keyID, new KeyDelegate() {
@@ -392,15 +393,15 @@ public abstract class Skill extends Controllable {
     
     // Subclass sandbox
     protected float getConsumption(AbilityData data) {
-        return pipeFloat("cp", callFloatWithExp("consumption", data), data.getEntity());
+        return callFloatWithExp("consumption", data);
     }
     
     protected float getOverload(AbilityData data) {
-        return pipeFloat("overload", callFloatWithExp("overload", data), data.getEntity());
+        return callFloatWithExp("overload", data);
     }
     
     protected int getCooldown(AbilityData data) {
-        return pipeInt("cooldown", callIntWithExp("cooldown", data), data.getEntity());
+        return callIntWithExp("cooldown", data);
     }
     
     /**

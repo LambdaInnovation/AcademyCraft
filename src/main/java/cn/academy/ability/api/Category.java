@@ -163,7 +163,7 @@ public class Category {
     }
     
     public float getOverloadRate(AbilityData data) {
-        return 0.8f + data.getLevel() * 0.2f;
+        return 0.8f + data.getLevel() * 0.1f;
     }
     
 }

@@ -30,7 +30,8 @@ public class BlockSolarGen extends ACBlockMulti {
         setHardness(1.5f);
         setHarvestLevel("pickaxe", 1);
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
         return RenderEmptyBlock.id;

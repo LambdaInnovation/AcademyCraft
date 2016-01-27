@@ -51,7 +51,8 @@ public class BlockPhaseGen extends ACBlockContainer {
     public boolean isOpaqueCube() {
         return false;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
         return RenderEmptyBlock.id;

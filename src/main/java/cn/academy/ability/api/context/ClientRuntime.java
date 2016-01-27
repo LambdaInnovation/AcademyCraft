@@ -110,6 +110,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         delegateGroups.removeAll(group);
 
         ctrlDirty = true;
+
+        rebuildOverrides();
     }
 
     public void clearAllKeys() {
@@ -119,6 +121,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         for (String s : all) {
             clearKeys(s);
         }
+
+        rebuildOverrides();
     }
 
     public boolean hasActiveDelegate() {

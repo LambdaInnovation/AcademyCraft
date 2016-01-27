@@ -20,6 +20,8 @@ import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 @Registrant
 public class NotifyUI extends Widget {
 

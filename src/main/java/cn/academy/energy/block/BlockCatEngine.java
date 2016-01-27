@@ -13,6 +13,8 @@ import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.node.UnlinkUserEvent;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cn.lambdalib.util.generic.RandUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -40,7 +42,8 @@ public class BlockCatEngine extends ACBlockContainer {
     public boolean isOpaqueCube() {
         return false;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @Override
     public int getRenderType() {
         return RenderEmptyBlock.id;
