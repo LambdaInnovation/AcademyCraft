@@ -12,20 +12,16 @@
  */
 package cn.academy.misc;
 
-import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
-import static net.minecraftforge.common.ChestGenHooks.MINESHAFT_CORRIDOR;
-import static net.minecraftforge.common.ChestGenHooks.PYRAMID_DESERT_CHEST;
-import static net.minecraftforge.common.ChestGenHooks.PYRAMID_JUNGLE_CHEST;
-import static net.minecraftforge.common.ChestGenHooks.STRONGHOLD_LIBRARY;
-
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import cn.academy.misc.media.ItemMedia;
 import cn.academy.misc.media.MediaRegistry;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+
+import static net.minecraftforge.common.ChestGenHooks.*;
 
 /**
  * @author WeAthFolD

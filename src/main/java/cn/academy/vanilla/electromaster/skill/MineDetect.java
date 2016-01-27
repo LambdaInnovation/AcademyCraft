@@ -12,13 +12,7 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -52,6 +46,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

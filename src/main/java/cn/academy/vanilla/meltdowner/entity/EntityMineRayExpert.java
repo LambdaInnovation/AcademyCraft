@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
@@ -27,6 +24,9 @@ import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Vec3;
 
 /**
  * @author WeAthFolD

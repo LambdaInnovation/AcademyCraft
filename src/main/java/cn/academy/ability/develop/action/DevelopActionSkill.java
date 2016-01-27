@@ -12,13 +12,13 @@
  */
 package cn.academy.ability.develop.action;
 
+import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.client.skilltree.SkillTreeLocal;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.skilltree.SkillTreeLocal;
 
 /**
  * Learn a specific kind of skill.

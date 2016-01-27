@@ -12,6 +12,11 @@
  */
 package cn.academy.core.client.render.ray;
 
+import cn.academy.core.entity.IRay;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.deprecated.ViewOptimize;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,12 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 
 import static org.lwjgl.opengl.GL11.*;
-
-import cn.academy.core.entity.IRay;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.deprecated.ViewOptimize;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
 
 /**
  * Renderer to draw glow texture

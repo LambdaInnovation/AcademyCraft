@@ -12,9 +12,9 @@
  */
 package cn.academy.terminal.event;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.terminal.App;
 import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Fired in both client and server when any app is installed, disregarding pre-installed apps.

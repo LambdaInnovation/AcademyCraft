@@ -12,10 +12,10 @@
  */
 package cn.academy.energy.api;
 
-import net.minecraft.item.ItemStack;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
 import cn.lambdalib.util.mc.StackUtils;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author WeathFolD

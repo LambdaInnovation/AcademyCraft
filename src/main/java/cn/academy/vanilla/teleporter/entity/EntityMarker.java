@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.teleporter.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import cn.academy.vanilla.teleporter.client.RenderMarker;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
@@ -22,6 +19,9 @@ import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

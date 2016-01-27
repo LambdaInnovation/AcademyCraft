@@ -1,16 +1,16 @@
 package cn.academy.support.bukkit;
 
-import java.lang.reflect.Method;
-import java.util.UUID;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.BlockDestroyEvent;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.lang.reflect.Method;
+import java.util.UUID;
 
 @SideOnly(Side.SERVER)
 public final class ResidenceAdapter {

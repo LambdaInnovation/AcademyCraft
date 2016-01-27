@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.client.render;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
 import cn.lambdalib.util.client.RenderUtils;
@@ -26,6 +23,8 @@ import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD

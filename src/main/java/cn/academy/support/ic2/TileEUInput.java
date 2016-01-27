@@ -12,13 +12,13 @@
  */
 package cn.academy.support.ic2;
 
+import cn.academy.core.block.TileGeneratorBase;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import cn.academy.core.block.TileGeneratorBase;
 
 import static cn.academy.support.ic2.IC2Support.eu2if;
 import static cn.academy.support.ic2.IC2Support.if2eu;

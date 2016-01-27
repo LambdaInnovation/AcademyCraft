@@ -12,15 +12,6 @@
  */
 package cn.academy.terminal.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
@@ -34,11 +25,12 @@ import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.networkcall.Future.FutureCallback;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
@@ -52,11 +44,13 @@ import cn.lambdalib.util.mc.ControlOverrider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MouseHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

@@ -12,15 +12,13 @@
  */
 package cn.academy.core.util;
 
-import static cn.lambdalib.util.generic.VecUtils.add;
-import static cn.lambdalib.util.generic.VecUtils.multiply;
-import static cn.lambdalib.util.generic.VecUtils.subtract;
-import static cn.lambdalib.util.generic.VecUtils.vec;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import cn.academy.core.event.BlockDestroyEvent;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.EntitySelectors;
+import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
@@ -32,13 +30,12 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import cn.academy.core.event.BlockDestroyEvent;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.EntitySelectors;
-import cn.lambdalib.util.mc.WorldUtils;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static cn.lambdalib.util.generic.VecUtils.*;
 
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,

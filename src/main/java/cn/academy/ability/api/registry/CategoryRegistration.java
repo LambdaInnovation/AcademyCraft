@@ -12,17 +12,17 @@
  */
 package cn.academy.ability.api.registry;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
 import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
 import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.RegistryTypeDecl;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Use this anno to register category on the fly.

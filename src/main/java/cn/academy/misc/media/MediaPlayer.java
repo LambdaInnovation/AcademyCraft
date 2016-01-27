@@ -12,18 +12,14 @@
  */
 package cn.academy.misc.media;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.RegistryUtils;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -39,6 +35,9 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Backend of GuiMediaPlayer.

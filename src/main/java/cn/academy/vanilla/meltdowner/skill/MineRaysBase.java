@@ -12,11 +12,8 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.lambdalib.util.generic.RandUtils.ranged;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.core.AcademyCraft;
@@ -42,6 +39,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import static cn.lambdalib.util.generic.RandUtils.ranged;
 
 /**
  * @author WeAthFolD

@@ -12,14 +12,9 @@
  */
 package cn.academy.energy.client.app;
 
-import javax.vecmath.Vector2d;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
+import cn.academy.core.client.Resources;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
@@ -28,10 +23,12 @@ import cn.lambdalib.networkcall.Future;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.Extent;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.deprecated.LIFMLGameEventDispatcher;
 import cn.lambdalib.util.deprecated.LIHandler;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.ControlOverrider;
@@ -49,6 +46,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
@@ -84,6 +84,8 @@ public class FreqTransmitterUI extends AuxGui {
         GLOW_COLOR = new Color().setColor4i(0, 255, 251, 130);
     
     private static final double GLOW_SIZE = 2;
+
+    final IFont font = Resources.font();
     
     EntityPlayer player;
     World world;
@@ -155,9 +157,10 @@ public class FreqTransmitterUI extends AuxGui {
             GL11.glTranslated(15, 15, 0);
             
             final float isize = 18;
-            final float fsize = 10;
+            final FontOption option = new FontOption(10);
+
             String str = app.getDisplayName();
-            double len = Font.font.strLen(str, fsize);
+            double len = font.getTextWidth(str, option);
             
             drawBox(0, 0, 30 + len, 18);
             
@@ -166,7 +169,7 @@ public class FreqTransmitterUI extends AuxGui {
             GL11.glColor4d(1, 1, 1, 1);
             HudUtils.rect(2, 0, isize, isize);
             
-            Font.font.draw(str, isize + 6, 4, fsize, 0xffffff);
+            font.draw(str, isize + 6, 4, option);
         
         } GL11.glPopMatrix();
         
@@ -182,13 +185,14 @@ public class FreqTransmitterUI extends AuxGui {
         ACRenderingHelper.drawGlow(x, y, width, height, GLOW_SIZE, GLOW_COLOR);
     }
      
-    private static void drawTextBox(String str, double x, double y) {
-        final double trimLength = 120, size = 10;
-        Vector2d vec = Font.font.simDrawWrapped(str, size, trimLength);
+    private void drawTextBox(String str, double x, double y) {
+        final double trimLength = 120;
+        final FontOption option = new FontOption(10);
+        Extent extent = font.drawSeperated_Sim(str, trimLength, option);
         final double X0 = x, Y0 = y, MARGIN = 5;
         
-        drawBox(X0, Y0, MARGIN * 2 + vec.x + 25, MARGIN * 2 + vec.y);
-        Font.font.drawWrapped(str, X0 + MARGIN, Y0 + MARGIN, size, 0xffffff, trimLength);
+        drawBox(X0, Y0, MARGIN * 2 + extent.width + 25, MARGIN * 2 + extent.height);
+        font.drawSeperated(str, X0 + MARGIN, Y0 + MARGIN, trimLength, option);
     }
     
     private class KeyEventDispatcher extends LIHandler<InputEvent> {
@@ -355,9 +359,9 @@ public class FreqTransmitterUI extends AuxGui {
             for(int i = 0; i < pass.length(); ++i)
                 sb.append('*');
             
-            Font.font.draw(String.format("SSID: %s", ssid), 10, 5, 10, 0xbfbfbf);
-            Font.font.draw(String.format("PASS: %s", sb.toString()), 10, 15, 10, 0xffffff);
-            Font.font.draw(local("s1_0"), 10, 25, 10, 0x30ffff);
+            font.draw(String.format("SSID: %s", ssid), 10, 5, new FontOption(10, 0xffbfbfbf));
+            font.draw(String.format("PASS: %s", sb.toString()), 10, 15, new FontOption(10, 0xffffffff));
+            font.draw(local("s1_0"), 10, 25, new FontOption(10, 0xff30ffff));
             GL11.glPopMatrix();
         }
 

@@ -12,35 +12,20 @@
  */
 package cn.academy.energy.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import cn.academy.core.AcademyCraft;
+import cn.academy.energy.api.block.*;
+import cn.academy.energy.internal.VBlocks.*;
+import cn.lambdalib.util.helper.BlockPos;
+import cn.lambdalib.util.mc.IBlockSelector;
+import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import cn.academy.core.AcademyCraft;
-import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.academy.energy.api.block.IWirelessMatrix;
-import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.academy.energy.api.block.IWirelessUser;
-import cn.academy.energy.internal.VBlocks.VNGenerator;
-import cn.academy.energy.internal.VBlocks.VNNode;
-import cn.academy.energy.internal.VBlocks.VNReceiver;
-import cn.academy.energy.internal.VBlocks.VWMatrix;
-import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.lambdalib.util.helper.BlockPos;
-import cn.lambdalib.util.mc.IBlockSelector;
-import cn.lambdalib.util.mc.WorldUtils;
+
+import java.util.*;
 
 /**
  * @author WeAthFolD

@@ -12,10 +12,10 @@
  */
 package cn.academy.energy.block.wind;
 
+import cn.academy.energy.ModuleEnergy;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cn.academy.energy.ModuleEnergy;
 
 /**
  * @author WeAthFolD

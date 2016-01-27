@@ -12,17 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.client.render;
 
-import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTranslated;
-
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
 import cn.lambdalib.util.client.RenderUtils;
@@ -31,6 +20,8 @@ import cn.lambdalib.util.deprecated.SimpleMaterial;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD

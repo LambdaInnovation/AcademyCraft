@@ -14,7 +14,6 @@ package cn.academy.vanilla.electromaster.skill;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -28,8 +27,8 @@ import cn.lambdalib.util.entityx.event.CollideEvent;
 import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cn.lambdalib.util.helper.EntitySyncer;
-import cn.lambdalib.util.helper.Motion3D;
 import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
+import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

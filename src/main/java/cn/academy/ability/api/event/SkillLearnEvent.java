@@ -12,8 +12,8 @@
  */
 package cn.academy.ability.api.event;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Fired in BOTH CLIENT AND SERVER, when an Skill is newly learned by the player.

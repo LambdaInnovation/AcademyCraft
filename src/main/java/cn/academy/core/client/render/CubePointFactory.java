@@ -12,11 +12,11 @@
  */
 package cn.academy.core.client.render;
 
-import java.util.Random;
-
-import net.minecraft.util.Vec3;
 import cn.academy.core.client.IPointFactory;
 import cn.lambdalib.util.generic.VecUtils;
+import net.minecraft.util.Vec3;
+
+import java.util.Random;
 
 /**
  * Randomly gens a point on face of a cube with size(w, h, l). (placed at 0, 0, 0)

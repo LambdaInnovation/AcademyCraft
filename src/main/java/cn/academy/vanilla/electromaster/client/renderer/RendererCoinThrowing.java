@@ -12,6 +12,10 @@
  */
 package cn.academy.vanilla.electromaster.client.renderer;
 
+import cn.academy.core.client.Resources;
+import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
+import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -20,13 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.client.Resources;
-import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.helper.GameTimer;
 
 /**
  * 

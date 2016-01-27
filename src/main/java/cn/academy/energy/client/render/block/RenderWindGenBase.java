@@ -12,12 +12,12 @@
  */
 package cn.academy.energy.client.render.block;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.lambdalib.multiblock.RenderBlockMultiModel;
 import cn.lambdalib.util.deprecated.TileEntityModelCustom;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD

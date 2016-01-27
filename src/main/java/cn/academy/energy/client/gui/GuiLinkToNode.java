@@ -12,9 +12,6 @@
  */
 package cn.academy.energy.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.node.GuiNode;
@@ -27,11 +24,15 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.networkcall.Future;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.helper.Font.Align;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD
@@ -97,7 +98,7 @@ public class GuiLinkToNode extends CGuiScreen {
                     callback.invoke();
                 }
             } else {
-                EnergyUIHelper.drawTextBox(msg, width / 2, height / 2 - 3, 8, 120, Align.CENTER);
+                EnergyUIHelper.drawTextBox(msg, width / 2, height / 2 - 3, 120, new FontOption(8, FontAlign.CENTER));
             }
         }
     }

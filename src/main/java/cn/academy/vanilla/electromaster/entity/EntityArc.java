@@ -12,14 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -31,6 +23,12 @@ import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

@@ -12,16 +12,8 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -38,6 +30,13 @@ import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 
 /**
  * @author WeAthFolD

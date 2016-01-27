@@ -17,7 +17,6 @@ import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;

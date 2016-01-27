@@ -1,19 +1,11 @@
 package cn.academy.misc.tutorial;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.util.datapart.EntityData;
-import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
@@ -22,6 +14,11 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Registrant
 public abstract class Condition {

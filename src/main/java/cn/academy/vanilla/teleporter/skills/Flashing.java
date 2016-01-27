@@ -12,42 +12,39 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import java.util.Optional;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.FlushControlEvent;
 import cn.academy.core.client.Resources;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import com.google.common.base.Preconditions;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
-
-import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.input.Keyboard;
-
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.deprecated.LIFMLGameEventDispatcher;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.Raytrace;
+import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.input.Keyboard;
+
+import java.util.Optional;
 
 /**
  * @author WeAthFolD

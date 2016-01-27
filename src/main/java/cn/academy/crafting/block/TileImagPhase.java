@@ -1,11 +1,11 @@
 package cn.academy.crafting.block;
 
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.crafting.client.render.block.RenderImagPhaseLiquid;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.tileentity.TileEntity;
 
 @Registrant
 @RegTileEntity

@@ -1,14 +1,15 @@
 package cn.academy.ability.client.skilltree;
 
-import javax.vecmath.Vector2d;
+import cn.academy.core.client.ACRenderingHelper;
+import cn.academy.core.client.Resources;
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.Extent;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import cn.lambdalib.util.helper.Color;
 
 import static org.lwjgl.opengl.GL11.*;
-
-import cn.academy.core.client.ACRenderingHelper;
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
-import cn.lambdalib.util.helper.Font.Align;
 
 class RenderingHelper {
     
@@ -27,31 +28,28 @@ class RenderingHelper {
         glPopMatrix();
     }
     
-    public static void drawTextBox(String str, double x, double y, double size) {
+    public static void drawTextBox(String str, double x, double y, FontOption option) {
         glEnable(GL_BLEND);
-        drawTextBox(str, x, y, size, 233333, Align.LEFT);
+        drawTextBox(str, x, y, 233333, option);
     }
     
-    public static void drawTextBox(String str, double x, double y, double size, double limit) {
-        glEnable(GL_BLEND);
-        drawTextBox(str, x, y, size, limit, Align.LEFT);
-    }
-    
-    public static void drawTextBox(String str, double x, double y, double size, double limit, Align align) {
-        Vector2d vec = Font.font.simDrawWrapped(str, size, limit);
-        double X0 = x, Y0 = y, MARGIN = Math.min(5, size * 0.3);
+    public static void drawTextBox(String str, double x, double y, double limit, FontOption option) {
+        final IFont font = Resources.font();
+        final Extent extent = font.drawSeperated_Sim(str, limit, option);
+
+        double X0 = x, Y0 = y, MARGIN = Math.min(5, option.fontSize * 0.3);
         
-        if(align == Align.CENTER) {
-            X0 -= vec.x / 2;
-        } else if(align == Align.RIGHT) {
-            X0 -= vec.x;
+        if(option.align == FontAlign.CENTER) {
+            X0 -= extent.width / 2;
+        } else if(option.align == FontAlign.RIGHT) {
+            X0 -= extent.height;
         }
         
-        drawBox(X0, Y0, MARGIN * 2 + vec.x, MARGIN * 2 + vec.y);
+        drawBox(X0, Y0, MARGIN * 2 + extent.width, MARGIN * 2 + extent.height);
         
         glPushMatrix();
         glTranslated(0, 0, ZLEV);
-        Font.font.drawWrapped(str, X0 + MARGIN, Y0 + MARGIN, size, 0xffffff, limit);
+        font.drawSeperated(str, x + MARGIN, Y0 + MARGIN, limit, option);
         glPopMatrix();
     }
     

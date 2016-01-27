@@ -12,17 +12,17 @@
  */
 package cn.academy.terminal.registry;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
 import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.RegistryTypeDecl;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @RegistryTypeDecl
 public class AppRegistration extends RegistrationFieldSimple<RegApp, App> {

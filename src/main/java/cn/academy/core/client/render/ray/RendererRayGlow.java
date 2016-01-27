@@ -12,20 +12,18 @@
  */
 package cn.academy.core.client.render.ray;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
-
-import static org.lwjgl.opengl.GL11.*;
-
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
 import cn.academy.core.entity.IRay;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderSimple;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL20;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD

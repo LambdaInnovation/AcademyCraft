@@ -17,11 +17,7 @@ import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
-import cn.lambdalib.util.helper.Font.Align;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.mc.StackUtils;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -172,8 +168,9 @@ public enum RecipeHandler {
                     glPushMatrix();
                     glTranslated(0, 0, 20);
                     if (e.hovering) {
-                        EnergyUIHelper.drawTextBox(stack.getDisplayName(), e.mx + 10, e.my - 17,
-                                10 / w.scale, 1000, Align.LEFT, true);
+                        EnergyUIHelper.drawTextBox(stack.getDisplayName(),
+                                e.mx + 10, e.my - 17, 1000,
+                                new FontOption(10 / w.scale, FontAlign.LEFT), true);
                     }
                     glPopMatrix();
                 });

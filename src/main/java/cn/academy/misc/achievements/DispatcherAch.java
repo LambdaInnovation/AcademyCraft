@@ -1,20 +1,12 @@
 package cn.academy.misc.achievements;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.LevelChangeEvent;
 import cn.academy.ability.api.event.SkillLearnEvent;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
-import cn.academy.misc.achievements.aches.AchEvItemCrafted;
-import cn.academy.misc.achievements.aches.AchEvItemPickup;
-import cn.academy.misc.achievements.aches.AchEvLevelChange;
-import cn.academy.misc.achievements.aches.AchEvMatterUnitHarvest;
-import cn.academy.misc.achievements.aches.AchEvSkillLearn;
+import cn.academy.misc.achievements.aches.*;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -23,6 +15,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author EAirPeter

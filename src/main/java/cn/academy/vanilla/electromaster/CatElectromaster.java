@@ -12,22 +12,11 @@
  */
 package cn.academy.vanilla.electromaster;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.academy.vanilla.electromaster.skill.ArcGen;
-import cn.academy.vanilla.electromaster.skill.BodyIntensify;
-import cn.academy.vanilla.electromaster.skill.CurrentCharging;
-import cn.academy.vanilla.electromaster.skill.MagManip;
-import cn.academy.vanilla.electromaster.skill.MagMovement;
-import cn.academy.vanilla.electromaster.skill.MineDetect;
-import cn.academy.vanilla.electromaster.skill.Railgun;
-import cn.academy.vanilla.electromaster.skill.ThunderBolt;
-import cn.academy.vanilla.electromaster.skill.ThunderClap;
+import cn.academy.vanilla.electromaster.skill.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
@@ -38,6 +27,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * @author WeAthFolD

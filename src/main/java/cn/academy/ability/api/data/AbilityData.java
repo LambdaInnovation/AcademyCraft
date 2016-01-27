@@ -12,20 +12,10 @@
  */
 package cn.academy.ability.api.data;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.event.CategoryChangeEvent;
-import cn.academy.ability.api.event.LevelChangeEvent;
-import cn.academy.ability.api.event.SkillExpAddedEvent;
-import cn.academy.ability.api.event.SkillExpChangedEvent;
-import cn.academy.ability.api.event.SkillLearnEvent;
+import cn.academy.ability.api.event.*;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
@@ -36,6 +26,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author WeAthFolD

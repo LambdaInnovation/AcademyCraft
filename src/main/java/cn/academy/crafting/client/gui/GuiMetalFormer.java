@@ -12,22 +12,21 @@
  */
 package cn.academy.crafting.client.gui;
 
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import cn.academy.crafting.block.ContainerMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -71,7 +70,7 @@ public class GuiMetalFormer extends CGuiScreenContainer {
             if(event.hovering) {
                 EnergyUIHelper.drawTextBox(
                         String.format("%.1f/%.1fIF", tile.getEnergy(), tile.getMaxEnergy()),
-                        event.mx + 10, event.my, 18);
+                        event.mx + 10, event.my, new FontOption(18));
             }
         });
 
@@ -82,7 +81,7 @@ public class GuiMetalFormer extends CGuiScreenContainer {
                 EnergyUIHelper.drawTextBox(
                         String.format(StatCollector.translateToLocal("ac.gui.metal_former.mode." + tile.mode.toString().toLowerCase()),
                                 tile.getEnergy(), tile.getMaxEnergy()),
-                        event.mx + 5, event.my, 9);
+                        event.mx + 5, event.my, new FontOption(9));
             }
         });
 

@@ -12,17 +12,17 @@
  */
 package cn.academy.energy.client.gui;
 
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.util.ResourceLocation;
 import cn.academy.energy.block.ContainerPhaseGen;
 import cn.academy.energy.block.TilePhaseGen;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
@@ -77,7 +77,7 @@ public class GuiPhaseGen extends CGuiScreenContainer {
             if(text != null) {
                 //int offsetX = -160, offsetY = -45;
                 GL11.glEnable(GL11.GL_BLEND);
-                EnergyUIHelper.drawTextBox(text, x + 5, y + 5, 10);
+                EnergyUIHelper.drawTextBox(text, x + 5, y + 5, new FontOption(10));
             }
         }
         

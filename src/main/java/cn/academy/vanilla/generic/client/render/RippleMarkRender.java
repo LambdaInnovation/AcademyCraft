@@ -12,18 +12,16 @@
  */
 package cn.academy.vanilla.generic.client.render;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.lambdalib.util.deprecated.Mesh;
 import cn.lambdalib.util.deprecated.SimpleMaterial;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

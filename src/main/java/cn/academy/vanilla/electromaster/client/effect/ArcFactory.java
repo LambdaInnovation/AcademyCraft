@@ -12,21 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import static cn.lambdalib.util.generic.VecUtils.add;
-import static cn.lambdalib.util.generic.VecUtils.crossProduct;
-import static cn.lambdalib.util.generic.VecUtils.multiply;
-import static cn.lambdalib.util.generic.VecUtils.subtract;
-import static cn.lambdalib.util.generic.VecUtils.vec;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderSimple;
 import cn.lambdalib.util.generic.RandUtils;
@@ -34,6 +19,16 @@ import cn.lambdalib.util.generic.VecUtils;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static cn.lambdalib.util.generic.VecUtils.*;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.

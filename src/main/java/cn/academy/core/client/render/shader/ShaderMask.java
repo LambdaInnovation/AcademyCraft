@@ -12,15 +12,14 @@
  */
 package cn.academy.core.client.render.shader;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderProgram;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD

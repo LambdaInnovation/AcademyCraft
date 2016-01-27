@@ -13,9 +13,6 @@
  */
 package cn.academy.vanilla.meltdowner.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
@@ -25,6 +22,9 @@ import cn.lambdalib.template.client.render.item.RenderModelItem;
 import cn.lambdalib.util.deprecated.ItemModelCustom;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 @Registrant
 public class ItemSilbarn extends ACItem {

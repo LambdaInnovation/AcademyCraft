@@ -12,13 +12,13 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.vanilla.electromaster.client.effect.SubArc;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.util.entityx.EntityCallback;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author WeAthFolD

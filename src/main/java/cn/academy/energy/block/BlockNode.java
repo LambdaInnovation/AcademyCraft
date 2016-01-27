@@ -12,13 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.node.GuiNode;
@@ -27,6 +20,13 @@ import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * Wireless Node block.

@@ -12,18 +12,6 @@
  */
 package cn.academy.core.entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderEntityBlock;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -37,6 +25,18 @@ import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * An entity that renders block.

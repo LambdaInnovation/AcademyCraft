@@ -3,19 +3,19 @@
  */
 package cn.academy.vanilla.teleporter.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.DataSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The data of player's location teleport skill. Note that the data editing to

@@ -12,8 +12,6 @@
  */
 package cn.academy.crafting.client.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.render.shader.ShaderMask;
 import cn.academy.crafting.ModuleCrafting;
@@ -24,6 +22,7 @@ import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

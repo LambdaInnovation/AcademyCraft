@@ -12,11 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -37,6 +32,11 @@ import cn.lambdalib.util.helper.Motion3D;
 import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 
 /**
  * Current charging

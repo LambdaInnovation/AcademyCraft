@@ -12,7 +12,6 @@
  */
 package cn.academy.core.block;
 
-import net.minecraft.item.ItemStack;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.block.IWirelessGenerator;
@@ -21,6 +20,7 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author WeAthFolD

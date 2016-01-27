@@ -12,13 +12,10 @@
  */
 package cn.academy.support.nei;
 
-import java.awt.Rectangle;
-import java.util.List;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
 
 /**
  * 

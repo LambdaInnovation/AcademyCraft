@@ -12,9 +12,6 @@
  */
 package cn.academy.crafting.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.core.client.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
@@ -34,6 +31,9 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The matter unit class. Have a simple material system for registration.

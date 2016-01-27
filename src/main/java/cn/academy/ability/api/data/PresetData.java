@@ -12,11 +12,6 @@
  */
 package cn.academy.ability.api.data;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
@@ -28,6 +23,11 @@ import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

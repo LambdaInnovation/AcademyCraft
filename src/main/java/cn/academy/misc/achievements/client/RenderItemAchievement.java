@@ -1,14 +1,13 @@
 package cn.academy.misc.achievements.client;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import cn.academy.misc.achievements.ItemAchievement;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author EAirPeter

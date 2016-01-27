@@ -1,27 +1,19 @@
 package cn.academy.terminal.app.settings;
 
-import cn.lambdalib.cgui.gui.component.Tint;
-import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
-import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
-import org.lwjgl.input.Keyboard;
-
 import cn.academy.core.client.Resources;
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.event.GainFocusEvent;
-import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
-import cn.lambdalib.cgui.gui.event.KeyEvent;
-import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.gui.event.MouseClickEvent;
+import cn.lambdalib.cgui.gui.event.*;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.key.KeyManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.lwjgl.input.Keyboard;
 
 public class PropertyElements {
     

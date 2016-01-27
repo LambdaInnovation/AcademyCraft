@@ -1,9 +1,9 @@
 package cn.academy.terminal;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
 
 public class AppRegistry {
 

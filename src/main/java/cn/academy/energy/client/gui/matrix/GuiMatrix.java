@@ -12,12 +12,6 @@
  */
 package cn.academy.energy.client.gui.matrix;
 
-import java.util.Arrays;
-
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.energy.block.ContainerMatrix;
 import cn.academy.energy.block.TileMatrix;
 import cn.academy.energy.client.gui.matrix.GuiMatrixSync.ActionResult;
@@ -25,11 +19,13 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
@@ -40,6 +36,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
 
 /**
  * @author WeAthFolD

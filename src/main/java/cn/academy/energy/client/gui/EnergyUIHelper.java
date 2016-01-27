@@ -1,9 +1,5 @@
 package cn.academy.energy.client.gui;
 
-import javax.vecmath.Vector2d;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.api.block.IWirelessUser;
@@ -14,13 +10,16 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.networkcall.Future;
 import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.Extent;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
-import cn.lambdalib.util.helper.Font.Align;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 
 
 
@@ -49,42 +48,36 @@ public class EnergyUIHelper {
             back = CRL_BACK;
             glow = CRL_GLOW;
         }
-        
+
         back.bind();
         HudUtils.colorRect(x, y, width, height);
         
         ACRenderingHelper.drawGlow(x, y, width, height, 3, glow);
     }
     
-    public static void drawTextBox(String str, double x, double y, double size) {
+    public static void drawTextBox(String str, double x, double y, FontOption option) {
+        drawTextBox(str, x, y, 233333, option);
+    }
+    
+    public static void drawTextBox(String str, double x, double y, double limit, FontOption option) {
+        drawTextBox(str, x, y, limit, option, false);
+    }
+    
+    public static void drawTextBox(String str, double x, double y, double limit, FontOption option, boolean mono) {
         GL11.glEnable(GL11.GL_BLEND);
-        drawTextBox(str, x, y, size, 233333, Align.LEFT);
-    }
-    
-    public static void drawTextBox(String str, double x, double y, double size, double limit) {
-        drawTextBox(str, x, y, size, limit, Align.LEFT);
-    }
-    
-    public static void drawTextBox(String str, double x, double y, double size, double limit, Align align) {
-        drawTextBox(str, x, y, size, limit, align, false);
-    }
-    
-    public static void drawTextBox(String str, double x, double y, double size, double limit, Align align, boolean mono) {
-        GL11.glEnable(GL11.GL_BLEND);
-        
-        Vector2d vec = Font.font.simDrawWrapped(str, size, limit);
-        double X0 = x, Y0 = y, MARGIN = Math.min(5, size * 0.3);
-        
-        if(align == Align.CENTER) {
-            X0 -= vec.x / 2;
-        } else if(align == Align.RIGHT) {
-            X0 -= vec.x;
+        final IFont font = Resources.font();
+
+        Extent extent = font.drawSeperated_Sim(str, limit, option);
+        if (extent.linesDrawn == 0) {
+            extent.height = option.fontSize;
         }
-        
-        drawBox(X0, Y0, MARGIN * 2 + vec.x, MARGIN * 2 + vec.y, mono);
+        double X0 = x, Y0 = y, MARGIN = Math.min(5, option.fontSize * 0.3);
+        X0 -= extent.width * option.align.lenOffset;
+
+        drawBox(X0, Y0, MARGIN * 2 + extent.width, MARGIN * 2 + extent.height, mono);
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, 1);
-        Font.font.drawWrapped(str, X0 + MARGIN, Y0 + MARGIN, size, 0xffffff, limit);
+        font.drawSeperated(str, x + MARGIN, Y0 + MARGIN, limit, option);
         GL11.glPopMatrix();
     }
     
@@ -117,12 +110,16 @@ public class EnergyUIHelper {
         {
             Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
         });
-        
+
+        final FontOption option = new FontOption();
         theButton.listen(FrameEvent.class, (w, event) ->
         {
-            if(event.hovering)
-                drawTextBox(StatCollector.translateToLocal("ac.network.search"), event.mx + 10, event.my - 5, 10 / w.scale, 
-                        233333, Align.LEFT, mono);
+            if(event.hovering) {
+                option.fontSize = 10 / w.scale;
+                drawTextBox(StatCollector.translateToLocal("ac.network.search"),
+                        event.mx + 10, event.my - 5,
+                        233333, option, mono);
+            }
         });
     }
     

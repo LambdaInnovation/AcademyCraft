@@ -12,11 +12,6 @@
  */
 package cn.academy.energy.internal;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessNode;
@@ -28,6 +23,11 @@ import cn.academy.energy.internal.VBlocks.VNReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

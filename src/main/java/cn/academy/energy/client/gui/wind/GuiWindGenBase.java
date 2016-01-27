@@ -12,25 +12,23 @@
  */
 package cn.academy.energy.client.gui.wind;
 
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import cn.academy.core.client.Resources;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.block.wind.ContainerWindGenBase;
 import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
@@ -64,7 +62,7 @@ public class GuiWindGenBase extends CGuiScreenContainer {
             dt.texture = tile.complete ? T_CORE_OK : T_CORE_RED;
             if(!tile.complete && event.hovering) {
                 String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-                EnergyUIHelper.drawTextBox(text, -70, -100, 18);
+                EnergyUIHelper.drawTextBox(text, -70, -100, new FontOption(18));
             }
         });
 
@@ -109,7 +107,7 @@ public class GuiWindGenBase extends CGuiScreenContainer {
             
             if(text != null) {
                 //int offsetX = -160, offsetY = -45;
-                EnergyUIHelper.drawTextBox(text, x + 5, y, 10);
+                EnergyUIHelper.drawTextBox(text, x + 5, y, new FontOption(10));
             }
         }
         

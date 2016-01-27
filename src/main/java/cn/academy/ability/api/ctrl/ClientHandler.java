@@ -1,28 +1,26 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.core.AcademyCraft;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.common.config.Configuration;
-import org.lwjgl.input.Keyboard;
-
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import org.lwjgl.input.Keyboard;
 
 /**
  * Misc key event listener for skill events.

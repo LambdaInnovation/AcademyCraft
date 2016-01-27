@@ -12,16 +12,16 @@
  */
 package cn.academy.misc.media;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 
 /**
  * @author WeAthFolD

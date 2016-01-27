@@ -12,13 +12,13 @@
  */
 package cn.academy.crafting;
 
-import java.util.Random;
-
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegWorldGen;
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import cpw.mods.fml.common.IWorldGenerator;
+
+import java.util.Random;
 
 /**
  * @author WeAthFolD

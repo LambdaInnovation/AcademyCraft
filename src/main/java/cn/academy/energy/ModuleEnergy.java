@@ -12,19 +12,11 @@
  */
 package cn.academy.energy;
 
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.item.Item;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
-import cn.academy.energy.block.BlockCatEngine;
-import cn.academy.energy.block.BlockMatrix;
-import cn.academy.energy.block.BlockNode;
+import cn.academy.energy.block.*;
 import cn.academy.energy.block.BlockNode.NodeType;
-import cn.academy.energy.block.BlockPhaseGen;
-import cn.academy.energy.block.BlockSolarGen;
 import cn.academy.energy.block.wind.BlockWindGenBase;
 import cn.academy.energy.block.wind.BlockWindGenMain;
 import cn.academy.energy.block.wind.BlockWindGenPillar;
@@ -33,9 +25,13 @@ import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.multiblock.ItemBlockMulti;
+import net.minecraft.item.Item;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * @author WeAthFolD

@@ -12,29 +12,20 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glTranslated;
-
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.block.TileDeveloper;
-import cn.academy.ability.develop.*;
+import cn.academy.ability.develop.DevelopData;
+import cn.academy.ability.develop.DevelopData.DevState;
+import cn.academy.ability.develop.IDeveloper;
+import cn.academy.ability.develop.LearningHelper;
 import cn.academy.ability.develop.action.DevelopActionLevel;
 import cn.academy.ability.develop.action.DevelopActionSkill;
 import cn.academy.ability.develop.action.IDevelopAction;
-import cn.academy.ability.develop.DevelopData.DevState;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.component.Glow;
 import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.Component;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ProgressBar;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.Tint;
+import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
@@ -43,10 +34,13 @@ import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderMono;
-import cn.lambdalib.util.helper.Font;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
 
 
 /**
@@ -186,16 +180,16 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                             dep.listen(FrameEvent.class, (w, event) -> {
                                 if(event.hovering) {
                                     glPushMatrix();
-                                    final float fsize = 35;
-                                    double flen = Font.font.strLen(txt, fsize);
+                                    final FontOption option = new FontOption(35);
+                                    double flen = font.getTextWidth(txt, option);
                                     
                                     glTranslated(-flen / 2, -40, 11);
                                     
                                     CRL_BACKGRND.bind();
-                                    HudUtils.colorRect(0, 0, flen + 20, fsize + 20);
+                                    HudUtils.colorRect(0, 0, flen + 20, option.fontSize + 20);
                                     
                                     glColor4f(1, 1, 1, 1);
-                                    Font.font.draw(txt, 10, 10, fsize, 0xffffffff);
+                                    font.draw(txt, 10, 10, option);
                                     glPopMatrix();
                                 }
                             });

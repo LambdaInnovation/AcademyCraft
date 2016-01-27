@@ -15,8 +15,9 @@ package cn.academy.vanilla.teleporter;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
+import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.academy.vanilla.teleporter.skills.*;
-import cn.academy.vanilla.teleporter.passiveskills.*;
 
 /**
  * @author WeAthFolD

@@ -12,13 +12,8 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.lambdalib.util.generic.RandUtils.ranged;
-
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -42,6 +37,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+import java.util.List;
+
+import static cn.lambdalib.util.generic.RandUtils.ranged;
 
 /**
  * @author WeAthFolD

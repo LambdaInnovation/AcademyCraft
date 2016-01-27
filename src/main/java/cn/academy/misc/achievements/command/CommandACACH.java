@@ -1,12 +1,12 @@
 package cn.academy.misc.achievements.command;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import cn.academy.core.command.ACCommand;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * @author EAirPeter

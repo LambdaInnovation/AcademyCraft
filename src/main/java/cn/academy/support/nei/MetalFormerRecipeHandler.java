@@ -12,12 +12,6 @@
  */
 package cn.academy.support.nei;
 
-import java.awt.Rectangle;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
-import cn.academy.core.client.Resources;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
@@ -25,11 +19,12 @@ import cn.academy.crafting.client.gui.GuiMetalFormer;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderMono;
-import cn.lambdalib.util.helper.Font;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 /**
  * 

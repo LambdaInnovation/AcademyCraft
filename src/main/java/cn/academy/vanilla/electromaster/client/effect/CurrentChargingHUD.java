@@ -12,18 +12,16 @@
  */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

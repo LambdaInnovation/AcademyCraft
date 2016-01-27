@@ -12,17 +12,15 @@
  */
 package cn.academy.energy.client.render.block;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.TileCatEngine;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

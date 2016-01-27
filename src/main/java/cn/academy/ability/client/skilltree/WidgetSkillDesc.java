@@ -12,9 +12,6 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.glColor4d;
-import static org.lwjgl.opengl.GL11.glDepthMask;
-
 import cn.academy.ability.client.skilltree.GuiSkillTree.SkillHandler;
 import cn.academy.core.client.component.Glow;
 import cn.lambdalib.cgui.gui.Widget;
@@ -25,6 +22,9 @@ import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glDepthMask;
 
 /**
  * @author WeAthFolD

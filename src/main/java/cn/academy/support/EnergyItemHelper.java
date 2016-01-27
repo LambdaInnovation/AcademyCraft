@@ -12,14 +12,14 @@
  */
 package cn.academy.support;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.academy.energy.api.IFItemManager;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A generic-typed item energy helper.

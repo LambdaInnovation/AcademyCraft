@@ -12,10 +12,10 @@
  */
 package cn.academy.core.client.render.ray;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.render.RendererList;
 import cn.academy.core.entity.IRay;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD

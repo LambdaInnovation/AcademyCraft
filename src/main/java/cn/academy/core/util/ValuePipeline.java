@@ -3,13 +3,13 @@
  */
 package cn.academy.core.util;
 
+import cn.academy.core.AcademyCraft;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cn.academy.core.AcademyCraft;
 
 /**
  * ValuePipeline receives value as input and returns the same type of value as output.

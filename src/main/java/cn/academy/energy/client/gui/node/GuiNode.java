@@ -12,15 +12,6 @@
  */
 package cn.academy.energy.client.gui.node;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.block.ContainerNode;
 import cn.academy.energy.block.TileNode;
@@ -29,18 +20,23 @@ import cn.academy.energy.client.gui.node.GuiNodeSync.CheckState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.ProgressBar;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.gui.component.*;
+import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeathFolD
@@ -117,7 +113,7 @@ public class GuiNode extends CGuiScreenContainer {
             }
             
             if(text != null) {
-                EnergyUIHelper.drawTextBox(text, x + 5, y, 9);
+                EnergyUIHelper.drawTextBox(text, x + 5, y, new FontOption(9));
             }
         }
         

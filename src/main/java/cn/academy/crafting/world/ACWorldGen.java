@@ -12,16 +12,16 @@
  */
 package cn.academy.crafting.world;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import cn.academy.crafting.ModuleCrafting;
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-import cpw.mods.fml.common.IWorldGenerator;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * AC Ore Generator

@@ -1,15 +1,15 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.UUID;
-
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.UUID;
 
 /**
  * @author EAirPeter

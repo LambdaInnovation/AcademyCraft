@@ -12,12 +12,12 @@
  */
 package cn.academy.ability.api.ctrl.instance;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A wrapping for skills that just do something on click.

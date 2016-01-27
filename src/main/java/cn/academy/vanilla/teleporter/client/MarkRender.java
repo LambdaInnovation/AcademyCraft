@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.lambdalib.util.client.RenderUtils;
@@ -24,6 +21,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 @SideOnly(Side.CLIENT)
 public class MarkRender extends Render {

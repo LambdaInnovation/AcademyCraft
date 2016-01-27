@@ -12,11 +12,11 @@
  */
 package cn.academy.vanilla.teleporter.client;
 
-import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
 import cn.lambdalib.util.generic.RandUtils;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

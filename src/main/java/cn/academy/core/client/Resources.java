@@ -12,10 +12,8 @@
  */
 package cn.academy.core.client;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.TrueTypeFont;
@@ -24,8 +22,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The core resource utils of AC.

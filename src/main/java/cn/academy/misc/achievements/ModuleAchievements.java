@@ -1,8 +1,5 @@
 package cn.academy.misc.achievements;
 
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.AchievementPage;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.pages.PageCtElectromaster;
@@ -10,7 +7,10 @@ import cn.academy.misc.achievements.pages.PageCtMeltdowner;
 import cn.academy.misc.achievements.pages.PageCtTeleporter;
 import cn.academy.misc.achievements.pages.PageDefault;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.AchievementPage;
 
 /**
  * @author EAirPeter

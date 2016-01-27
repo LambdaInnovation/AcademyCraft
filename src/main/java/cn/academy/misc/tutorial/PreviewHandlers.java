@@ -23,7 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static org.lwjgl.opengl.GL11.*;

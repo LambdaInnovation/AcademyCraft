@@ -12,9 +12,9 @@
  */
 package cn.academy.core.block;
 
+import cn.academy.core.AcademyCraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import cn.academy.core.AcademyCraft;
 
 /**
  * @author WeAthFolD

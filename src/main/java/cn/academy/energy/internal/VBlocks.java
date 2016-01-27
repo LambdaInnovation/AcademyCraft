@@ -12,15 +12,11 @@
  */
 package cn.academy.energy.internal;
 
+import cn.academy.energy.api.block.*;
+import cn.lambdalib.util.generic.MathUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.academy.energy.api.block.IWirelessMatrix;
-import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.academy.energy.api.block.IWirelessTile;
-import cn.lambdalib.util.generic.MathUtils;
 
 /**
  * @author WeAthFolD

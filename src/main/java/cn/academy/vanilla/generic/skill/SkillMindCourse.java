@@ -12,13 +12,13 @@
  */
 package cn.academy.vanilla.generic.skill;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.SkillExpAddedEvent;
 import cn.academy.core.util.SubscribePipeline;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Generic passive skill: Mind Training Course

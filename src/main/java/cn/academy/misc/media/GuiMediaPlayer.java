@@ -12,25 +12,21 @@
  */
 package cn.academy.misc.media;
 
-import java.util.List;
-
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.ProgressBar;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib.cgui.gui.WidgetContainer;
+import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

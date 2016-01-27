@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.Cooldown;
@@ -46,6 +43,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

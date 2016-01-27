@@ -12,9 +12,9 @@
  */
 package cn.academy.vanilla.teleporter.util;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.lambdalib.util.deprecated.LIHandler;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author WeAthFolD

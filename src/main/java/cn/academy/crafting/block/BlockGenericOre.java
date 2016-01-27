@@ -12,12 +12,12 @@
  */
 package cn.academy.crafting.block;
 
-import java.util.Random;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import cn.academy.core.block.ACBlock;
 import cn.lambdalib.util.generic.RandUtils;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+
+import java.util.Random;
 
 /**
  * @author WeAthFolD

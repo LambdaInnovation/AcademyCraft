@@ -12,17 +12,18 @@
  */
 package cn.academy.crafting.block;
 
-import static cn.academy.crafting.block.TileMetalFormer.*;
-
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.energy.block.SlotIFItem;
+import cn.academy.support.EnergyItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.energy.block.SlotIFItem;
-import cn.academy.support.EnergyItemHelper;
+
+import static cn.academy.crafting.block.TileMetalFormer.SLOT_BATTERY;
+import static cn.academy.crafting.block.TileMetalFormer.SLOT_IN;
 
 /**
  * @author WeAthFolD

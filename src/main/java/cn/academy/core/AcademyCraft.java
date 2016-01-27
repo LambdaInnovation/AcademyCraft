@@ -12,10 +12,6 @@
  */
 package cn.academy.core;
 
-import java.util.Map.Entry;
-
-import org.apache.logging.log4j.LogManager;
-
 import cn.academy.core.util.ValuePipeline;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
@@ -32,11 +28,7 @@ import cn.lambdalib.util.version.VersionUpdateUrl;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
@@ -47,8 +39,10 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Map.Entry;
 
 /**
  * Academy Craft Mod Main Class

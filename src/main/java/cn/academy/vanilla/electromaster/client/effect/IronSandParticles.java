@@ -1,10 +1,5 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
@@ -12,6 +7,11 @@ import cn.lambdalib.util.entityx.MotionHandler;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class IronSandParticles {

@@ -12,9 +12,10 @@
  */
 package cn.academy.ability.api;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Handler of all category instances. You must register all the categories here.

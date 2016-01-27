@@ -12,54 +12,50 @@
  */
 package cn.academy.ability.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.core.client.Resources;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontAlign;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.vis.curve.CubicCurve;
-import com.sun.scenario.effect.Offset;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.ability.api.Category;
-import cn.academy.ability.api.ctrl.ClientHandler;
+import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
+import cn.academy.core.client.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.Transform.WidthAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderProgram;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.vis.curve.CubicCurve;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 
 import javax.vecmath.Vector2d;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author WeAthFolD

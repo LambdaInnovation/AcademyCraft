@@ -12,7 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import net.minecraft.world.World;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -23,6 +22,7 @@ import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

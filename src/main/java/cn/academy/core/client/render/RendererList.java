@@ -12,12 +12,12 @@
  */
 package cn.academy.core.client.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

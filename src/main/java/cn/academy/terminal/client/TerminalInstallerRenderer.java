@@ -12,14 +12,12 @@
  */
 package cn.academy.terminal.client;
 
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.template.client.render.item.RenderModelItem;
 import cn.lambdalib.util.deprecated.ItemModelCustom;
 import cn.lambdalib.util.generic.VecUtils;
+import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

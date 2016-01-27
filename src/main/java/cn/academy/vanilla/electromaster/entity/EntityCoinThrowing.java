@@ -12,12 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -31,6 +25,12 @@ import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
 import cn.lambdalib.util.mc.PlayerUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  * 

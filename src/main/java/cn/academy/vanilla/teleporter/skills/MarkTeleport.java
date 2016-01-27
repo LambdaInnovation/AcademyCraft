@@ -13,7 +13,6 @@
 package cn.academy.vanilla.teleporter.skills;
 
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;

@@ -1,13 +1,13 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.UUID;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.UUID;
 
 /**
  * @author EAirPeter

@@ -12,8 +12,6 @@
  */
 package cn.academy.core.client;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.util.client.HudUtils;
@@ -26,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Some drawing utils.

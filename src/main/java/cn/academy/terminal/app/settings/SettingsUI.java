@@ -12,12 +12,6 @@
  */
 package cn.academy.terminal.app.settings;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -29,6 +23,12 @@ import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author WeAthFolD

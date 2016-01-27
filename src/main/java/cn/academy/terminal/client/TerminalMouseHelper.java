@@ -12,9 +12,8 @@
  */
 package cn.academy.terminal.client;
 
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.util.MouseHelper;
+import org.lwjgl.input.Mouse;
 
 /**
  * @author WeAthFolD

@@ -12,10 +12,6 @@
  */
 package cn.academy.energy.client.gui.node;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.api.event.wen.UnlinkNodeEvent;
@@ -34,6 +30,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author WeAthFolD

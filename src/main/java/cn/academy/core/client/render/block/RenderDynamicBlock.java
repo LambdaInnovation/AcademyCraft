@@ -12,6 +12,10 @@
  */
 package cn.academy.core.client.render.block;
 
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.util.client.RenderUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -20,13 +24,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
-
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.client.RenderUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Vanilla mc block rendering pipeline caches block rendering. If you want to render some block

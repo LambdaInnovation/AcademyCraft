@@ -12,10 +12,7 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -41,6 +38,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

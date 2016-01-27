@@ -12,11 +12,7 @@
  */
 package cn.academy.ability.api.data;
 
-import cn.academy.ability.api.event.AbilityActivateEvent;
-import cn.academy.ability.api.event.AbilityDeactivateEvent;
-import cn.academy.ability.api.event.CategoryChangeEvent;
-import cn.academy.ability.api.event.LevelChangeEvent;
-import cn.academy.ability.api.event.SkillLearnEvent;
+import cn.academy.ability.api.event.*;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;

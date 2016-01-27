@@ -12,20 +12,19 @@
  */
 package cn.academy.energy.client.gui.wind;
 
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import cn.academy.energy.block.wind.ContainerWindGenMain;
 import cn.academy.energy.block.wind.TileWindGenMain;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreenContainer;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
-import cn.lambdalib.util.helper.Font.Align;
+import cn.lambdalib.cgui.xml.CGUIDocument;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
@@ -56,10 +55,10 @@ public class GuiWindGenMain extends CGuiScreenContainer {
 
             if(!tile.complete) {
                 String text = StatCollector.translateToLocal("ac.gui.wind.structure");
-                EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+                EnergyUIHelper.drawTextBox(text, 10, -40, 233333, new FontOption(20, FontAlign.CENTER));
             } else if(!tile.noObstacle) {
                 String text = StatCollector.translateToLocal("ac.gui.wind.obstacle");
-                EnergyUIHelper.drawTextBox(text, 10, -40, 20, 233333, Align.CENTER);
+                EnergyUIHelper.drawTextBox(text, 10, -40, 233333, new FontOption(20, FontAlign.CENTER));
             }
         });
     }

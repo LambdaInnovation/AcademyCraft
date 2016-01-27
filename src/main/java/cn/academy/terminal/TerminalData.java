@@ -12,29 +12,27 @@
  */
 package cn.academy.terminal;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.terminal.event.TerminalInstalledEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.Future;
-import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.Future.FutureCallback;
+import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
-
 import com.google.common.collect.ImmutableList;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author WeAthFolD

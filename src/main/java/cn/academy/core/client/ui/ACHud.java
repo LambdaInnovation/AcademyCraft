@@ -12,19 +12,19 @@
  */
 package cn.academy.core.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.core.AcademyCraft;
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.gui.ScaledResolution;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AC global HUD drawing dispatcher.

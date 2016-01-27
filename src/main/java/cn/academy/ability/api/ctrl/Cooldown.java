@@ -12,28 +12,10 @@
  */
 package cn.academy.ability.api.ctrl;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.util.client.ClientUtils;
-import com.sun.deploy.util.SessionState.Client;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 /**
  * Class that handles cooldown. Currently, the cooldown in SERVER will be completely ignored, counting only

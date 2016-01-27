@@ -1,6 +1,5 @@
 package cn.academy.energy.client.gui;
 
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessReceiver;
@@ -10,6 +9,7 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.tileentity.TileEntity;
 
 @Registrant
 public class EnergyUISyncs {

@@ -12,12 +12,8 @@
  */
 package cn.academy.vanilla.meltdowner.skill;
 
-import static cn.lambdalib.util.generic.RandUtils.ranged;
-import static cn.lambdalib.util.generic.RandUtils.rangei;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
@@ -33,6 +29,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
+
+import static cn.lambdalib.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.RandUtils.rangei;
 
 /**
  * @author WeAthFolD

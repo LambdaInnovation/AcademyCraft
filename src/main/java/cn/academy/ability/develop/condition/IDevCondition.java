@@ -12,10 +12,10 @@
  */
 package cn.academy.ability.develop.condition;
 
-import cn.academy.ability.develop.IDeveloper;
-import net.minecraft.util.ResourceLocation;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.develop.IDeveloper;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Skill development constraint. This should represent a single atomic constraint on player.

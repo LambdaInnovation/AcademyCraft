@@ -17,7 +17,6 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

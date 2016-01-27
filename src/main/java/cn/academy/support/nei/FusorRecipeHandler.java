@@ -12,27 +12,21 @@
  */
 package cn.academy.support.nei;
 
-import java.awt.Rectangle;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
-import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.client.gui.GuiImagFusor;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderMono;
-import cn.lambdalib.util.helper.Font;
-import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.helper.Color;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import codechicken.nei.recipe.TemplateRecipeHandler;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 /**
  * 
@@ -99,7 +93,8 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
     @Override
     public void drawExtras(int recipe) {
         if(tick >= 50) tick = 0;
-        Font.font.draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid), 75, 7, 13, 3618615);
+        Resources.font().draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid),
+                75, 7, new FontOption(13, new Color(3618615)));
         ShaderMono.instance().useProgram();
         GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
         RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fuser.png"));

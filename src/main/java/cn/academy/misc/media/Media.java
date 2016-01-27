@@ -12,9 +12,9 @@
  */
 package cn.academy.misc.media;
 
+import cn.academy.core.client.Resources;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import cn.academy.core.client.Resources;
 
 /**
  * @author WeAthFolD

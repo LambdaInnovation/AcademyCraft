@@ -12,16 +12,14 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.IPointFactory;
 import cn.academy.core.client.render.CubePointFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -32,6 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Spawn a surround arc effect around the specific entity or block.

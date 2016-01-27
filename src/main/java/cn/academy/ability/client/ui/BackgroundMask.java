@@ -12,13 +12,6 @@
  */
 package cn.academy.ability.client.ui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
@@ -30,6 +23,11 @@ import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

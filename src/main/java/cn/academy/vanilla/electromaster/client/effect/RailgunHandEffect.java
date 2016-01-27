@@ -12,10 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.renderhook.PlayerRenderHook;
@@ -25,6 +21,9 @@ import cn.lambdalib.util.deprecated.MeshUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL20;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD

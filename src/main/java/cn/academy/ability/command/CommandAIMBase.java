@@ -12,8 +12,6 @@
  */
 package cn.academy.ability.command;
 
-import java.util.List;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
@@ -27,6 +25,8 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

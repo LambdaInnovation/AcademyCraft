@@ -12,13 +12,9 @@
  */
 package cn.academy.support;
 
-import java.util.List;
-
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.client.gui.GuiLinkToNode;
-import cn.academy.support.ic2.TileEUOutput;
-import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,6 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

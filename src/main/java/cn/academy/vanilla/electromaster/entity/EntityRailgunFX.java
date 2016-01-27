@@ -12,17 +12,11 @@
  */
 package cn.academy.vanilla.electromaster.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
+import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.util.deprecated.ViewOptimize;
@@ -31,9 +25,13 @@ import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
-import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

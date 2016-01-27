@@ -12,11 +12,11 @@
  */
 package cn.academy.energy.api;
 
-import net.minecraft.tileentity.TileEntity;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyBlockHelper.IEnergyBlockManager;
 import cn.lambdalib.annoreg.core.Registrant;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * @author WeAthFolD

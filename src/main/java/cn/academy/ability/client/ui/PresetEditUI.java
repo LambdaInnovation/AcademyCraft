@@ -12,13 +12,6 @@
  */
 package cn.academy.ability.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
@@ -31,6 +24,7 @@ import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.Component;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
@@ -38,18 +32,23 @@ import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD
@@ -99,7 +98,9 @@ public class PresetEditUI extends GuiScreen {
     
     final EntityPlayer player;
     final PresetData data;
-    
+
+    final IFont font = Resources.font();
+
     // lastActive is the preset ID before the transition.
     int lastActive, active;
     /**
@@ -484,13 +485,16 @@ public class PresetEditUI extends GuiScreen {
                 } else {
                     str = local("skill_select");
                 }
-                
-                double len = Font.font.strLen(str, 9);
+
+                FontOption opt = new FontOption(9, new Color(0xffbbbbbb));
+                double     len = font.getTextWidth(str, opt);
+
                 CRL_BACK.bind();
                 HudUtils.colorRect(0, -13.5, len + 6, 11.5);
+
                 ACRenderingHelper.drawGlow(0, -13.5, len + 6, 11.5, 1, CRL_GLOW);
                 
-                Font.font.draw(str, 3, -12, 9, 0xbbbbbb);
+                font.draw(str, 3, -12, opt);
                 
                 GL11.glColor4d(1, 1, 1, 1);
             });

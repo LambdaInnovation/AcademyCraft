@@ -1,9 +1,9 @@
 package cn.academy.support;
 
+import net.minecraft.tileentity.TileEntity;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * A generic typed energyBlock helper.

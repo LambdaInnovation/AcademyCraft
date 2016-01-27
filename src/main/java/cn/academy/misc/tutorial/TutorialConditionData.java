@@ -1,6 +1,5 @@
 package cn.academy.misc.tutorial;
 
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
@@ -17,7 +16,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**

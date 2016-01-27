@@ -12,16 +12,15 @@
  */
 package cn.academy.ability.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.helper.Color;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An Ability Category. Describes the skills that this category contains and the various other info.

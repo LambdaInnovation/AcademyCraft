@@ -12,8 +12,6 @@
  */
 package cn.academy.core.client.component;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.ACRenderingHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.Widget;
@@ -22,6 +20,7 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

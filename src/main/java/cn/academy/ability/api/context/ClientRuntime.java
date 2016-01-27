@@ -8,18 +8,22 @@ import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.ability.api.event.*;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
+import cn.academy.terminal.client.TerminalUI;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.util.mc.SideHelper;
 import cn.lambdalib.util.client.ClientUtils;
+import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.ControlOverrider;
+import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -322,6 +326,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             if (ClientRuntime.available()) {
                 final ClientRuntime rt = ClientRuntime.instance();
                 final Set<Integer> availKeys = rt.delegates.keySet();
+                final CPData cpData = CPData.get(rt.getEntity());
 
                 Iterator<Entry<Integer, KeyState>> itr = rt.keyStates.entrySet().iterator();
                 while (itr.hasNext()) {
@@ -337,7 +342,11 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
                         if (avail) {
                             DelegateNode node = rt.delegates.get(keyid);
-                            boolean shouldAbort = !ClientUtils.isPlayerInGame() || rt.isInCooldown(node.delegate);
+                            // TODO a more elegant way to handle key disabling?
+                            boolean shouldAbort =
+                                    !ClientUtils.isPlayerInGame() || rt.isInCooldown(node.delegate) ||
+                                            !cpData.canUseAbility() ||
+                                            AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
                             final KeyDelegate delegate = node.delegate;
 
                             if (keyDown && state.state && !shouldAbort) {

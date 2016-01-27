@@ -12,8 +12,8 @@
  */
 package cn.academy.core.item;
 
-import net.minecraft.item.Item;
 import cn.academy.core.AcademyCraft;
+import net.minecraft.item.Item;
 
 /**
  * Base class for all hard-coded item in AC.

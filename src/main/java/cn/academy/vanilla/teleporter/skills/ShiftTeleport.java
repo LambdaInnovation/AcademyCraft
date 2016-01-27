@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -44,6 +41,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

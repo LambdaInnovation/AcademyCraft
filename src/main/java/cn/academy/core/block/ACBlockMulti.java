@@ -12,14 +12,14 @@
  */
 package cn.academy.core.block;
 
+import cn.academy.core.AcademyCraft;
+import cn.lambdalib.multiblock.BlockMulti;
+import cn.lambdalib.util.mc.StackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
-import cn.lambdalib.multiblock.BlockMulti;
-import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * @author WeAthFolD

@@ -12,8 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.lambdalib.util.client.RenderUtils;
@@ -24,6 +22,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RendererMagHook extends Render {

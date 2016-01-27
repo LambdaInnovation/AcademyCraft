@@ -12,24 +12,24 @@
  */
 package cn.academy.terminal.item;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.World;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.item.ACItem;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ItemInstaller app

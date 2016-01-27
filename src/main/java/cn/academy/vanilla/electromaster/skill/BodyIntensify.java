@@ -12,16 +12,11 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD;
@@ -34,6 +29,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Body Intensify/生物电强化

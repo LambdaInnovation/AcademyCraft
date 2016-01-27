@@ -12,25 +12,6 @@
  */
 package cn.academy.ability.client.skilltree;
 
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glColor4d;
-import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glDepthMask;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTranslated;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.vecmath.Vector2d;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
@@ -39,9 +20,9 @@ import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
+import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -52,18 +33,25 @@ import cn.lambdalib.cgui.gui.component.Tint;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.Extent;
+import cn.lambdalib.util.client.font.IFont.FontAlign;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderMono;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.Font;
 import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.helper.Font.Align;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 /**
  * @author WeAthFolD
@@ -107,7 +95,9 @@ public abstract class GuiSkillTree extends CGuiScreen {
     final CPData cpData;
     final DeveloperType type;
     final boolean isApp;
-    
+
+    final IFont font = Resources.font();
+
     protected Widget window;
     protected Widget treeArea;
     
@@ -393,7 +383,9 @@ public abstract class GuiSkillTree extends CGuiScreen {
                 if(event.hovering && !active && alpha == 1.0f) {
                     glPushMatrix();
                     glTranslated(0, 0, 10);
-                    Font.font.draw(skill.getDisplayName(), 20, -5, 40, 0xbbbbbb, Align.RIGHT);
+                    glDepthMask(false);
+                    font.draw(skill.getDisplayName(), 20, -5, new FontOption(40, FontAlign.RIGHT, new Color(0xffbbbbbb)));
+                    glDepthMask(true);
                     glPopMatrix();
                 }
             });
@@ -412,14 +404,14 @@ public abstract class GuiSkillTree extends CGuiScreen {
              listen(FrameEvent.class, (w, event) -> {
                  glPushMatrix();
                 glTranslated(0, 0, 15);
-                if(event.hovering) {
-                    if(level <= aData.getLevel())
-                        Font.font.draw(SkillTreeLocal.levelDesc(level),
-                                -10, -10, 37, 0xb0ffffff, Align.RIGHT);
+                if(event.hovering && level <= aData.getLevel()) {
+                    font.draw(SkillTreeLocal.levelDesc(level),
+                            -10, -10, new FontOption(37, FontAlign.RIGHT, new Color(0xb0ffffff)));
                 }
                 if(LearningHelper.canLevelUp(DeveloperType.ADVANCED, aData) && level == aData.getLevel() + 1) {
-                    Font.font.draw(level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level),
-                            -10, -10, 37, event.hovering ? 0xf0ffffff : 0xa0ffffff, Align.RIGHT);
+                    String content = level == 1 ? SkillTreeLocal.acquire() : SkillTreeLocal.upgradeTo(level);
+                    Color color = new Color(event.hovering ? 0xf0ffffff : 0xa0ffffff);
+                    font.draw(content, -10, -10, new FontOption(37, FontAlign.RIGHT, color));
                 }
                 glPopMatrix();
              });
@@ -484,17 +476,25 @@ public abstract class GuiSkillTree extends CGuiScreen {
      }
 
     public class SkillLevelDesc extends Widget {
+
+        final FontOption
+            optSkillName = new FontOption(50),
+            optLevel = new FontOption(44, FontAlign.RIGHT),
+            optProg = new FontOption(36);
         
         final Skill skill;
         final Color color;
         
         public SkillLevelDesc(Skill _skill) {
             skill = _skill;
-            boolean learned = aData.isSkillLearned(skill);
+
+            boolean learned = aData.isSkillLearned(_skill);
             color = learned ? CRL_SDESC_LEARNED : CRL_SDESC_NOTLEARNED;
-            double width1 = Font.font.strLen(skill.getDisplayName(), 50);
-            transform.setSize(Math.max(180 + width1, 450), 115);
+
+            double nameLength = font.getTextWidth(skill.getDisplayName(), optSkillName);
+            transform.setSize(Math.max(180 + nameLength, 450), 115);
             transform.doesListenKey = false;
+
             {
                 Long time = GameTimer.getTime();
                 listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
@@ -503,16 +503,22 @@ public abstract class GuiSkillTree extends CGuiScreen {
                     public void handleEvent(Widget w, FrameEvent event) {
                         glPushMatrix();
                         glTranslated(0, 0, 10);
+
                         color.a = blendfac(300);
-                        Font.font.draw(skill.getDisplayName(), 120, -6, 50, color.asHexColor());
+                        optSkillName.color.from(color);
+                        optSkillName.color.from(color);
+                        font.draw(skill.getDisplayName(), 120, -6, optSkillName);
+
                         color.a = blendfac(400);
-                        Font.font.draw("Lv" + skill.getLevel(), 
-                            w.getWidgetParent().transform.width - 50, -1, 44, color.asHexColor(), Align.RIGHT);
+                        optLevel.color.from(color);
+                        font.draw("Lv" + skill.getLevel(), w.getWidgetParent().transform.width - 80, -1, optLevel);
                         
                         Color color2 = learned ? CRL_SKILL_DESC_1 : CRL_WARNING;
                         color2.a = blendfac(500);
-                        Font.font.draw(learned ? SkillTreeLocal.acquiredProg(aData.getSkillExp(skill)) : SkillTreeLocal.notAcquired(), 
-                                122, 50, 36, color2.asHexColor());
+                        optProg.color.from(color2);
+                        font.draw(learned ? SkillTreeLocal.acquiredProg(aData.getSkillExp(skill)) : SkillTreeLocal.notAcquired(),
+                                122, 50, optProg);
+
                         glPopMatrix();
                     }
                     
@@ -527,27 +533,29 @@ public abstract class GuiSkillTree extends CGuiScreen {
     }
     
     public class SkillHint extends Widget {
-        
-        static final double FONT_SIZE = 38;
+
         final String text;
-        long ct = GameTimer.getTime();
+        final FontOption option = new FontOption(38, CRL_SKILL_DESC_1);
+
+        long createTime = GameTimer.getTime();
         double width = 420;
         
-        public SkillHint(WidgetSkillDesc _skill) {
-            Skill skill = _skill.handler.skill;
+        public SkillHint(WidgetSkillDesc skillDesc) {
+            Skill skill = skillDesc.handler.skill;
+
             text = aData.isSkillLearned(skill) ? skill.getDescription() : SkillTreeLocal.unknownSkill();
-            Vector2d vec = Font.font.simDrawWrapped(text, FONT_SIZE, 
-                    width = Math.max(width, _skill.width - 30));
-            transform.setSize(vec.x, vec.y);
+            width = Math.max(width, skillDesc.width - 30);
+
+            Extent extent = font.drawSeperated_Sim(text, width - 30, option);
+            transform.setSize(extent.width, extent.height);
             transform.doesListenKey = false;
             
             listen(FrameEvent.class, (w, e) -> 
             {
                 glPushMatrix();
                 glTranslated(0, 0, 10);
-                double a = .1 + .9 * MathUtils.clampd(0, 1, (GameTimer.getTime() - ct - 700.0) / 200.0);
-                CRL_SKILL_DESC_1.a = a;
-                Font.font.drawWrapped(text, 0, 0, FONT_SIZE, CRL_SKILL_DESC_1.asHexColor(), width);
+                option.color.a = .1 + .9 * MathUtils.clampd(0, 1, (GameTimer.getTime() - createTime - 700.0) / 200.0);
+                font.drawSeperated(text, 0, 0, width - 30, option);
                 glPopMatrix();
             });
         }

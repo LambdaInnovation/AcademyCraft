@@ -12,14 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import java.util.List;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
@@ -27,6 +19,14 @@ import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.node.UnlinkUserEvent;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cn.lambdalib.util.generic.RandUtils;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

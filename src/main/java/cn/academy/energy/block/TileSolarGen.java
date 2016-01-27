@@ -12,10 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderSolarGen;
@@ -26,6 +22,10 @@ import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

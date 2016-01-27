@@ -12,16 +12,16 @@
  */
 package cn.academy.core.registry;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.AnnotationData;
 import cn.lambdalib.annoreg.core.LoadStage;
 import cn.lambdalib.annoreg.core.RegistryType;
 import cn.lambdalib.annoreg.core.RegistryTypeDecl;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author WeAthFolD

@@ -12,8 +12,6 @@
  */
 package cn.academy.vanilla.teleporter.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.MarkRender;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
@@ -23,6 +21,8 @@ import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Spawn a position mark indicating where the player would be teleport to. You

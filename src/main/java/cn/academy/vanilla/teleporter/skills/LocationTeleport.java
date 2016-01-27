@@ -3,13 +3,6 @@
  */
 package cn.academy.vanilla.teleporter.skills;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -29,6 +22,13 @@ import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 /**
  * Location teleport. This is the skill plus the synchronization&logic needed

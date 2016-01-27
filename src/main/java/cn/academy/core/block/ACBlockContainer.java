@@ -12,6 +12,9 @@
  */
 package cn.academy.core.block;
 
+import cn.academy.core.AcademyCraft;
+import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
+import cn.lambdalib.util.mc.StackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,9 +24,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cn.academy.core.AcademyCraft;
-import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
-import cn.lambdalib.util.mc.StackUtils;
 
 /**
  * BaseClass for typical block containers. will automatically try to open the container gui.

@@ -12,13 +12,13 @@
  */
 package cn.academy.terminal.app.settings;
 
-import net.minecraft.client.Minecraft;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.lambdalib.annoreg.core.Registrant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 
 /**
  * @author WeAthFolD

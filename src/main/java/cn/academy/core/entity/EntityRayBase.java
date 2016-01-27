@@ -12,17 +12,17 @@
  */
 package cn.academy.core.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.entityx.EntityCallback;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

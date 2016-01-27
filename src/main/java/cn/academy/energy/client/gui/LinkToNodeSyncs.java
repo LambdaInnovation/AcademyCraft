@@ -12,10 +12,6 @@
  */
 package cn.academy.energy.client.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessTile;
@@ -29,6 +25,10 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
 
 /**
  * @author WeAthFolD

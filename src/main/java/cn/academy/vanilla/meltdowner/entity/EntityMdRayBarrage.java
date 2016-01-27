@@ -12,14 +12,14 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
 import cn.academy.core.entity.EntityRayBase;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
 /**
  * This class uses some little hacks. By rendering all the barrage rays within a 

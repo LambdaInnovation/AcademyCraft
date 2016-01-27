@@ -12,9 +12,21 @@
  */
 package cn.academy.energy.block.wind;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.academy.core.tile.TileInventory;
+import cn.academy.energy.ModuleEnergy;
+import cn.academy.energy.client.render.block.RenderWindGenMain;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegTileEntity;
+import cn.lambdalib.multiblock.BlockMulti;
+import cn.lambdalib.multiblock.BlockMulti.SubBlockPos;
+import cn.lambdalib.multiblock.IMultiTile;
+import cn.lambdalib.multiblock.InfoBlockMulti;
+import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -23,21 +35,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import cn.academy.core.tile.TileInventory;
-import cn.academy.energy.ModuleEnergy;
-import cn.academy.energy.client.render.block.RenderWindGenMain;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.multiblock.BlockMulti;
-import cn.lambdalib.multiblock.IMultiTile;
-import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.multiblock.BlockMulti.SubBlockPos;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author WeAthFolD

@@ -12,8 +12,6 @@
  */
 package cn.academy.misc.tutorial;
 
-import java.util.List;
-
 import cn.academy.core.item.ACItem;
 import cn.academy.misc.tutorial.client.GuiTutorial;
 import cpw.mods.fml.relauncher.Side;
@@ -21,7 +19,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 /**

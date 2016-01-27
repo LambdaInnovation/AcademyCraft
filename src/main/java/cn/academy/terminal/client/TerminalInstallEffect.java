@@ -21,7 +21,6 @@ import cn.lambdalib.cgui.gui.component.ProgressBar;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.IGuiEventHandler;
-import cn.lambdalib.cgui.loader.xml.CGUIDocLoader;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.key.KeyManager;

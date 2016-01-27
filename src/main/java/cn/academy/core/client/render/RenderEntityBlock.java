@@ -12,6 +12,9 @@
  */
 package cn.academy.core.client.render;
 
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.entity.EntityBlock;
+import cn.lambdalib.util.client.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
@@ -22,12 +25,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.entity.EntityBlock;
-import cn.lambdalib.util.client.RenderUtils;
 
 /**
  * @author WeAthFolD

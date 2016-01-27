@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -36,6 +33,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD

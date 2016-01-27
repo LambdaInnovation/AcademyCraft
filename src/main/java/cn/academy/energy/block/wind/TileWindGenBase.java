@@ -12,11 +12,6 @@
  */
 package cn.academy.energy.block.wind;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.ModuleEnergy;
@@ -30,6 +25,11 @@ import cn.lambdalib.multiblock.InfoBlockMulti;
 import cn.lambdalib.util.generic.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 
 /**
  * @author WeAthFolD

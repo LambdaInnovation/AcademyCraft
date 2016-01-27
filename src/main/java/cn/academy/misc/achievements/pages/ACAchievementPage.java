@@ -1,13 +1,13 @@
 package cn.academy.misc.achievements.pages;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import cn.academy.misc.achievements.aches.ACAchievement;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.AchievementPage;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author EAirPeter

@@ -12,17 +12,15 @@
  */
 package cn.academy.energy.client.render.block;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.academy.energy.block.wind.TileWindGenMain;
 import cn.lambdalib.multiblock.RenderBlockMulti;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModelCustom;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

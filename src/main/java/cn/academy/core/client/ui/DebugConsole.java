@@ -12,32 +12,27 @@
  */
 package cn.academy.core.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
-import cn.academy.ability.api.context.ClientRuntime.CooldownData;
-import cn.academy.core.client.Resources;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import cn.lambdalib.util.helper.Color;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.input.Keyboard;
-
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
+import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.key.KeyHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The overall debug console. use NUMPAD keys to switch between different states.
@@ -77,7 +72,7 @@ public class DebugConsole extends AuxGui {
         });
     }
     
-    boolean enabled = AcademyCraft.DEBUG_MODE;
+    boolean enabled = false;
     
     private DebugConsole() {}
     

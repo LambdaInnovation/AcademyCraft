@@ -12,8 +12,6 @@
  */
 package cn.academy.core.util;
 
-import java.util.List;
-
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.core.event.ConfigModifyEvent;
@@ -31,6 +29,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

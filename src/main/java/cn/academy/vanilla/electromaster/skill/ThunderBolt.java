@@ -12,19 +12,7 @@
  */
 package cn.academy.vanilla.electromaster.skill;
 
-import java.util.List;
-
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.Cooldown;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -40,6 +28,17 @@ import cn.lambdalib.util.mc.Raytrace;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.Vec3;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

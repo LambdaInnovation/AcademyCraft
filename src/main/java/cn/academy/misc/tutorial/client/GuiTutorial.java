@@ -12,30 +12,24 @@
  */
 package cn.academy.misc.tutorial.client;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.core.util.ACMarkdownRenderer;
+import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.lambdalib.cgui.gui.CGuiScreen;
+import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-
-import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.misc.tutorial.ACTutorial;
-import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
@@ -47,6 +41,10 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 

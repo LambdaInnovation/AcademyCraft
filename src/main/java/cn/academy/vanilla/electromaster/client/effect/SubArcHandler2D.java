@@ -1,15 +1,13 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
+import cn.lambdalib.util.client.HudUtils;
+import cn.lambdalib.util.client.RenderUtils;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
 
 public class SubArcHandler2D {
 

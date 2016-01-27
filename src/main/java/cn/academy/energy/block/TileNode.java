@@ -12,9 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
@@ -28,6 +25,9 @@ import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @author WeathFolD

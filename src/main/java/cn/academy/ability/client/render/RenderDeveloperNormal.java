@@ -12,12 +12,11 @@
  */
 package cn.academy.ability.client.render;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.multiblock.RenderBlockMultiModel;
 import cn.lambdalib.util.deprecated.TileEntityModelCustom;
 import net.minecraft.tileentity.TileEntity;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

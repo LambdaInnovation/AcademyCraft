@@ -12,8 +12,10 @@
  */
 package cn.academy.misc.media;
 
-import java.util.List;
-
+import cn.academy.core.item.ACItem;
+import cn.academy.terminal.TerminalData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,10 +25,8 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import cn.academy.core.item.ACItem;
-import cn.academy.terminal.TerminalData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * @author WeAthFolD

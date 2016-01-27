@@ -12,6 +12,14 @@
  */
 package cn.academy.crafting.block;
 
+import cn.academy.core.AcademyCraft;
+import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
+import cn.lambdalib.annoreg.core.Registrant;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -25,14 +33,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import cn.academy.core.AcademyCraft;
-import cn.academy.crafting.ModuleCrafting;
-import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
-import cn.lambdalib.annoreg.core.Registrant;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * TODO Implement particle and fog effect

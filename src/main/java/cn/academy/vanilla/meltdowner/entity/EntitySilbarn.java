@@ -12,23 +12,10 @@
  */
 package cn.academy.vanilla.meltdowner.entity;
 
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
 import cn.lambdalib.particle.decorators.ParticleDecorator;
@@ -45,6 +32,17 @@ import cn.lambdalib.util.helper.Motion3D;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeathFolD

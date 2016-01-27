@@ -12,9 +12,9 @@
  */
 package cn.academy.ability.api.event;
 
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.data.AbilityData;
 import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author WeAthFolD

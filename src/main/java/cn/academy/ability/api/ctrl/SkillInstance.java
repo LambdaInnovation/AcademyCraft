@@ -1,15 +1,15 @@
 package cn.academy.ability.api.ctrl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <code>SkillInstance</code> represents a single time of ability control. <br>

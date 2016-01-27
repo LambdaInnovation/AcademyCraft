@@ -12,15 +12,15 @@
  */
 package cn.academy.crafting.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.InstanceSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Recipe holder of ImagFusor.

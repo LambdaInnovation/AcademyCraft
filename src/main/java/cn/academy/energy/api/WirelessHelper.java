@@ -12,24 +12,20 @@
  */
 package cn.academy.energy.api;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.academy.energy.api.block.IWirelessMatrix;
-import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.academy.energy.api.block.IWirelessUser;
+import cn.academy.energy.api.block.*;
 import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.util.helper.BlockPos;
 import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.WorldUtils;
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * All kinds of funcs about wireless system.

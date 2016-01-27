@@ -12,18 +12,16 @@
  */
 package cn.academy.core.client.ui;
 
+import cn.academy.core.client.Resources;
 import cn.academy.misc.tutorial.TutorialActivatedEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import org.lwjgl.opengl.GL11;
-
-import cn.academy.core.client.Resources;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
@@ -31,6 +29,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD

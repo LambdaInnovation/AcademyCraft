@@ -1,29 +1,28 @@
 package cn.academy.ability.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.KeyDelegate;
-import com.google.common.collect.ImmutableList;
-
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.DevConditionDep;
 import cn.academy.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.ability.develop.condition.DevConditionLevel;
-import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.ripple.ScriptNamespace;
+import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer

@@ -1,8 +1,5 @@
 package cn.academy.misc.achievements.aches;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import cn.academy.misc.achievements.DispatcherAch;
 import cn.academy.misc.achievements.conds.CondItemCrafted;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -10,6 +7,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @author EAirPeter

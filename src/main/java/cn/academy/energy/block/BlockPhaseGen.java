@@ -12,10 +12,6 @@
  */
 package cn.academy.energy.block;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.GuiPhaseGen;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -24,6 +20,10 @@ import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD

@@ -12,8 +12,8 @@
  */
 package cn.academy.core.event;
 
-import net.minecraftforge.common.config.Property;
 import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.common.config.Property;
 
 /**
  * Fired whenever a specific property in AC config has been edited.

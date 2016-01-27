@@ -11,8 +11,6 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 package cn.academy.support.minetweaker;
-import static cn.academy.crafting.api.MetalFormerRecipes.INSTANCE;
-import static cn.academy.support.minetweaker.MTSupport.toStack;
 
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import minetweaker.MineTweakerAPI;
@@ -21,6 +19,9 @@ import minetweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import static cn.academy.crafting.api.MetalFormerRecipes.INSTANCE;
+import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 
  * @author 3TUSK

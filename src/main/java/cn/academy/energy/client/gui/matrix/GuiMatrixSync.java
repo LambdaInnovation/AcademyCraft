@@ -12,13 +12,6 @@
  */
 package cn.academy.energy.client.gui.matrix;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.MinecraftForge;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.event.wen.ChangePassEvent;
 import cn.academy.energy.api.event.wen.CreateNetworkEvent;
@@ -32,6 +25,13 @@ import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.util.helper.GameTimer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD

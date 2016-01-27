@@ -13,11 +13,11 @@
  */
 package cn.academy.crafting.world;
 
-import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 /**
  * @author WeathFolD

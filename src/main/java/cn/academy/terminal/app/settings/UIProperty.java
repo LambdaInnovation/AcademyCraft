@@ -2,8 +2,6 @@ package cn.academy.terminal.app.settings;
 
 import net.minecraft.util.StatCollector;
 
-import java.util.function.Consumer;
-
 public class UIProperty {
 
     public static class Config extends UIProperty {

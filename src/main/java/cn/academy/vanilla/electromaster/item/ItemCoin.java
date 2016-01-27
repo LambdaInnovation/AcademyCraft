@@ -12,9 +12,6 @@
  */
 package cn.academy.vanilla.electromaster.item;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
@@ -32,6 +29,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
