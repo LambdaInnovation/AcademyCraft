@@ -110,7 +110,7 @@ ac {
             damage(exp, ct) { lerp(36, 72, exp) * lerp(1, 1.2, (ct - 40.0) / 60.0) }
             range(exp) { 3 * lerp(5, 10, exp) }
             consumption(exp) { lerp(100, 120, exp) }
-            overload(exp) { lerp(504, 252, exp) }
+            overload(exp) { lerp(390, 252, exp) }
             cooldown(exp, ct) { ct * lerp(10, 6, exp) }
             expincr { 0.003 }
         }

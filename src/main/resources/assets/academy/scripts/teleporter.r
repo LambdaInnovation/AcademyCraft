@@ -107,7 +107,7 @@ ac {
 			x { 839 } y { 226 }
 			range(exp) { lerp(12, 18, exp) }
 			consumption(exp) { lerp(100, 70, exp) }
-			overload(exp) { lerp(100, 80, exp) }
+			overload(exp) { lerp(90, 70, exp) }
 			expincr { 0.002 }
 		}
     }
