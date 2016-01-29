@@ -7,6 +7,15 @@ A Minecraft mod about superability, including its aquiring, upgrading and using.
 Visit [AcademyCraft's Website](http://ac.li-dev.cn/) to get the latest release and 
 know more about it.
 
+Developement
+===========
+
+A java8 dev environment with scala compatibility is required. Please refer to buildscript for Forge version and dependencies.
+
+to build the mod you must first build [LambdaLib][lambdalib] locally (use `gradlew install`).
+
+If you encounter `Unknown constant: 18` error, `gradlew build` again and it should be fine.
+
 Localization
 ============
 

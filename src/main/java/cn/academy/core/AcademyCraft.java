@@ -45,7 +45,7 @@ import java.util.Map.Entry;
  *
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:LambdaLib@[1.1.1_alpha2]") // LambdaLib is currently unstable. Supports only one version.
+     dependencies = "required-after:LambdaLib@[1.1.1]") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 @VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
@@ -54,9 +54,9 @@ public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static final boolean DEBUG_MODE = true;
+    public static final boolean DEBUG_MODE = false;
 
-    public static final String VERSION = "1.0pr3_1_alpha2";
+    public static final String VERSION = "1.0pr3_1";
 
     public static final Logger log = LogManager.getLogger("AcademyCraft");
 
