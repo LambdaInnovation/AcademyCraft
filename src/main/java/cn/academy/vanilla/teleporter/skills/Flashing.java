@@ -83,6 +83,8 @@ public class Flashing extends Skill {
 
         Optional<MainContext> opt = ContextManager.instance.find(MainContext.class);
         if (opt.isPresent()) {
+            rt.clearKeys(KEY_GROUP);
+
             final MainContext ctx = opt.get();
 
             final String[] strs = new String[] { "a", "d", "w", "s"};

@@ -14,6 +14,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.*;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
+import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
@@ -23,6 +24,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -513,9 +515,10 @@ public enum ContextManager {
 
         private final ContextManager m = ContextManager.instance;
 
+        @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public void onClientTick(ClientTickEvent evt) {
-            if (evt.phase != Phase.START)
+            if (evt.phase != Phase.START || !ClientUtils.isInWorld())
                 return;
 
             final long time = m.time();
@@ -549,6 +552,13 @@ public enum ContextManager {
             }
 
             toRemove.forEach(m::killServer);
+        }
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onClientDisconnect(ClientDisconnectionFromServerEvent evt) {
+            instance.aliveLocal.get().clear();
+            instance.clientSuspended.clear();
         }
 
     }

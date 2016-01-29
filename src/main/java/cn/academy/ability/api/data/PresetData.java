@@ -36,13 +36,13 @@ public class PresetData extends DataPart<EntityPlayer> {
     public static final int MAX_PRESETS = 4;
     
     int presetID = 0;
-    Preset[] presets = new Preset[4];
+    final Preset emptyPreset = new Preset(); // Dummy value to prevent null return
+    final Preset[] presets = new Preset[4];
     
     /*
      * Notify: Unlike normal DataParts, PresetData is
      * client-major after the initial creation.
      */
-    
     public PresetData() {
         for(int i = 0; i < MAX_PRESETS; ++i) {
             presets[i] = new Preset();
@@ -83,7 +83,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     
     public Preset getCurrentPreset() {
         if(!isActive()) {
-            return null;
+            return emptyPreset;
         }
         return presets[presetID];
     }
@@ -206,7 +206,7 @@ public class PresetData extends DataPart<EntityPlayer> {
                 data[i] = -1;
             }
         }
-        
+
         public Preset(byte[] _data) {
             setData(_data);
         }

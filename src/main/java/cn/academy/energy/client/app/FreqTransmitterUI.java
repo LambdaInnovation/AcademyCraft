@@ -48,7 +48,9 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  */
 public class FreqTransmitterUI extends AuxGui {
-    
+
+    private static final String OVERRIDE_GROUP = "AC_FreqTransmitter";
+
     private abstract class State {
         
         boolean handlesKey;
@@ -96,9 +98,8 @@ public class FreqTransmitterUI extends AuxGui {
         LIFMLGameEventDispatcher.INSTANCE.registerMouseInput(keyDispatcher);
         
         setState(new StateStart());
-        
-        ControlOverrider.override(KeyManager.MOUSE_LEFT);
-        ControlOverrider.override(KeyManager.MOUSE_RIGHT);
+
+        ControlOverrider.override(OVERRIDE_GROUP, KeyManager.MOUSE_LEFT, KeyManager.MOUSE_RIGHT);
     }
     
     @Override
@@ -131,9 +132,8 @@ public class FreqTransmitterUI extends AuxGui {
     @Override
     public void onDisposed() {
         keyDispatcher.setDead();
-        
-        ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
-        ControlOverrider.removeOverride(KeyManager.MOUSE_RIGHT);
+
+        ControlOverrider.endOverride(OVERRIDE_GROUP);
     }
 
     @Override

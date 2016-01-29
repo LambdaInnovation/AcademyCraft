@@ -51,7 +51,9 @@ import java.util.List;
  */
 @Registrant
 public class TerminalUI extends AuxGui {
-    
+
+    private static final String OVERRIDE_GROUP = "AC_Terminal";
+
     private static final double BALANCE_SPEED = 3; //pixel/ms
     public static final int MAX_MX = 605, MAX_MY = 740;
     
@@ -98,7 +100,7 @@ public class TerminalUI extends AuxGui {
         mc.mouseHelper = helper = new TerminalMouseHelper();
         
         ModuleCoreClient.dynKeyManager.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
-        ControlOverrider.override(KeyManager.MOUSE_LEFT);
+        ControlOverrider.override(OVERRIDE_GROUP, KeyManager.MOUSE_LEFT);
     }
     
     @Override
@@ -107,7 +109,7 @@ public class TerminalUI extends AuxGui {
         mc.mouseHelper = oldHelper;
         
         ModuleCoreClient.dynKeyManager.removeKeyHandler("terminal_click");
-        ControlOverrider.removeOverride(KeyManager.MOUSE_LEFT);
+        ControlOverrider.endOverride(OVERRIDE_GROUP);
     }
 
     @Override

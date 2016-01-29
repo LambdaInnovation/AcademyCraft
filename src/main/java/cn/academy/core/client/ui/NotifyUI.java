@@ -23,6 +23,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.GL11;
@@ -172,7 +173,7 @@ public class NotifyUI extends Widget {
 
             @Override
             public String getTitle() {
-                return "Research note updated!";
+                return StatCollector.translateToLocal("ac.tutorial.update");
             }
 
             @Override

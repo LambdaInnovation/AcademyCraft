@@ -94,7 +94,9 @@ public class Railgun extends Skill {
     public void onThrowCoin(CoinThrowEvent event) {
         CPData cpData = CPData.get(event.entityPlayer);
         PresetData pData = PresetData.get(event.entityPlayer);
-        boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this) && !Cooldown.isInCooldown(instance);
+        // TODO should add Cooldown#isCooldown, but that info is currently only in client and there's
+        //  no way to do anything. maybe sync the cooldn data.
+        boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this);
         
         if(spawn) {
             if(event.entityPlayer.worldObj.isRemote) {

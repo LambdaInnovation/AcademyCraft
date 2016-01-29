@@ -551,3 +551,4 @@ achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimension
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
+ac.tutorial.update=Research note updated

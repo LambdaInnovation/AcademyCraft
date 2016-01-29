@@ -551,3 +551,4 @@ achievement.ac_teleporter.mastery.desc=我行走在空间之上
 # 教程项
 ac.gui.crafttype.shaped=有序合成
 ac.gui.crafttype.shapeless=无序合成
+ac.tutorial.update=研究笔记更新

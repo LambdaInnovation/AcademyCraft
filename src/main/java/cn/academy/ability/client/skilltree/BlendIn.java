@@ -62,7 +62,7 @@ public class BlendIn extends Component {
         Tint t = Tint.get(widget);
         Glow g = Glow.get(widget);
         if(dt != null) dt.color.a = dta * value;
-        if(tb != null) tb.option.color.a = .1 + .9 * tba * value;
+        if(tb != null) tb.option.color.a = tba * value;
         if(t != null) t.idleColor.a = t.hoverColor.a = ta * value;
         if(g != null) g.color.a = ga * value;
     }

@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 public class ClientRuntime extends DataPart<EntityPlayer> {
 
     public static final String DEFAULT_GROUP = "def";
+    private static final String OVERRIDE_GROUP = "AC_ClientRuntime";
 
     public static ClientRuntime instance() {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -278,14 +279,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         ctrlDirty = false;
 
-        for(int i : lastOverrides)
-            ControlOverrider.removeOverride(i);
-
-        Set<Integer> set = delegates.values().stream().map(n -> n.keyID).collect(Collectors.toSet());
-        lastOverrides = set.toArray(new Integer[set.size()]);
-
-        for(int i : lastOverrides)
-            ControlOverrider.override(i);
+        int[] set = delegates.values().stream().mapToInt(n -> n.keyID).toArray();
+        ControlOverrider.override(OVERRIDE_GROUP, set);
     }
 
     @Override

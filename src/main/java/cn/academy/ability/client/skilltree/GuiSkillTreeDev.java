@@ -131,18 +131,20 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                 }
             }
             
-            if(show){ // Dep display
+            if (show) { // Dep display
                 Widget area = new Widget();
                 area.transform.setSize(450, 50);
                 area.transform.doesListenKey = false;
                 
-                Widget wtext = new Widget();
-                wtext.transform.alignHeight = HeightAlign.BOTTOM;
+                Widget wtext = new Widget()
+                        .size(40, 0)
+                        .pos(0, -30)
+                        .halign(HeightAlign.BOTTOM);
                 
                 TextBox text = new TextBox(new FontOption(38));
                 text.allowEdit = false;
                 text.content = SkillTreeLocal.required();
-                text.heightAlign = HeightAlign.CENTER;
+                text.heightAlign = HeightAlign.BOTTOM;
                 text.zLevel = 10;
                 wtext.addComponent(text);
                 

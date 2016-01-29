@@ -522,7 +522,7 @@ public class CPData extends DataPart<EntityPlayer> {
         activated = tag.getBoolean(TAG_ACTIVATED);
         
         if(isRemote()) {
-            if(lastActivated ^ activated) {
+            if(lastActivated != activated) {
                 MinecraftForge.EVENT_BUS.post(activated ? 
                     new AbilityActivateEvent(getEntity()) :
                     new AbilityDeactivateEvent(getEntity()));
@@ -611,7 +611,7 @@ public class CPData extends DataPart<EntityPlayer> {
         
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void playerDeath(LivingDeathEvent event) {
-            if(!event.isCanceled() && event.entityLiving instanceof EntityPlayer) {
+            if(event.entityLiving instanceof EntityPlayer) {
                 CPData.get((EntityPlayer) event.entityLiving).recoverAll();
             }
         }

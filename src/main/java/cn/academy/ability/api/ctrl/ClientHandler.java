@@ -10,16 +10,21 @@ import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
+import cn.academy.ability.api.event.FlushControlEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.core.registry.RegACKeyHandler;
+import cn.academy.terminal.app.settings.PropertyElements;
+import cn.academy.terminal.app.settings.SettingsUI;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -54,6 +59,9 @@ public final class ClientHandler {
     @RegInitCallback
     public static void init() {
         updateAbilityKeys();
+        for (int i = 0; i < defaultKeysInit.length; ++i) {
+            SettingsUI.addProperty(PropertyElements.KEY, "keys", "ability_" + i, defaultKeysInit[i], false);
+        }
     }
 
     private static void updateAbilityKeys() {
@@ -62,6 +70,8 @@ public final class ClientHandler {
             defaultKeys[i] = cfg.getInt("ability_" + i, "keys",
                     defaultKeysInit[i], -1000, 1000, "Ability control key #" + i);
         }
+
+        MinecraftForge.EVENT_BUS.post(new FlushControlEvent());
     }
 
     public static int getKeyMapping(int id) {
@@ -116,5 +126,10 @@ public final class ClientHandler {
             }
         }
     };
+
+    @SubscribeEvent
+    public void onConfigModify(ConfigModifyEvent evt) {
+        updateAbilityKeys();
+    }
 
 }
