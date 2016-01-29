@@ -212,7 +212,7 @@ public class ModuleCrafting {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil, 2), Mode.REFINE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst, 2), Mode.REFINE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal,2), Mode.REFINE);
-        // TODO add more ores
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
     }
 
     @SubscribeEvent

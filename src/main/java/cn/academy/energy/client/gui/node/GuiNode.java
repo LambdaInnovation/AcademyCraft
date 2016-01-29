@@ -72,14 +72,7 @@ public class GuiNode extends CGuiScreenContainer {
         GuiNodeSync.doQueryInfo(tile);
         GuiNodeSync.doQueryList(tile);
     }
-    
-    @Override
-    protected boolean containerAcceptsKey(int key) {
-        Widget focus = gui.getFocus();
-        boolean isinput = focus != null && focus.getName().equals("input_name");
-        return key == Keyboard.KEY_ESCAPE || !isinput;
-    }
-    
+
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
         GL11.glPushMatrix();

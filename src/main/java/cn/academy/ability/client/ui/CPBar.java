@@ -99,6 +99,7 @@ public class CPBar extends Widget {
 
     long presetChangeTime, lastPresetTime;
     
+    boolean lastFrameActive;
     long lastDrawTime;
     long showTime;
     
@@ -206,7 +207,7 @@ public class CPBar extends Widget {
             
             // Calculate alpha
             long time = GameTimer.getTime();
-            if(time - lastDrawTime > 300L) {
+            if(!lastFrameActive && active) {
                 showTime = time;
             }
 
@@ -275,8 +276,11 @@ public class CPBar extends Widget {
                 drawActivateKeyHint();
             }
             
-            if(active)
+            if(active) {
                 lastDrawTime = time;
+            }
+
+            lastFrameActive = active;
             
             GL11.glColor4d(1, 1, 1, 1);
             GL11.glPopMatrix(); // Pop 1
