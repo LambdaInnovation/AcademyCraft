@@ -105,7 +105,6 @@ artifacts {
 
 task getLibs << {
 	ant.mkdir(dir: 'libs')
-	ant.get(src: 'http://addons-origin.cursecdn.com/files/2246/932/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', dest: 'libs/ThermalExpansion-[1.7.10]4.0.3B1-218-dev.jar', skipexisting: 'true')
 	ant.get(src: 'http://minetweaker.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar', dest: 'libs/MineTweaker3-Dev-1.7.10-3.0.9C.jar', skipexisting: 'true')
 }
 
