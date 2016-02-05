@@ -10,34 +10,45 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.*;
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import com.google.common.base.Preconditions;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * @author WeAthFolD
+ * This DataPart handles player category, player learned skills and respective skill exps.
  */
 @Registrant
-@RegDataPart("ability")
+@RegDataPart(EntityPlayer.class)
 public class AbilityData extends DataPart<EntityPlayer> {
-    
+
+    public static AbilityData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(AbilityData.class);
+    }
+
+    private static final String MSG_CAT_CHANGE = "cat_change";
+
+    @SerializeIncluded
     private int catID = -1;
+    @SerializeIncluded
     private BitSet learnedSkills;
+    @SerializeIncluded
     private float[] skillExps;
-    
+    @SerializeIncluded
     private int level;
     
     private int updateTicker = 0;
@@ -46,141 +57,153 @@ public class AbilityData extends DataPart<EntityPlayer> {
         learnedSkills = new BitSet(32);
         skillExps = new float[32];
 
-        setTick();
+        setTick(true);
+        setNBTStorage();
+        setClientNeedSync();
     }
     
     /**
-     * Only effective in server. If c==null then set the player state to unlearned.
+     * Server only. Changes player's category.
+     * @param c The category. If null, sets player to no category.
      */
     public void setCategory(Category c) {
-        setCategoryID(c == null ? -1 : c.getCategoryID());
-    }
-    
-    /**
-     * Only effective in server. If id==-1 then set the player state to unlearned.
-     */
-    public void setCategoryID(int id) {
-        if(id != catID && !isRemote()) {
+        checkSide(Side.SERVER);
+
+        int id = c == null ? -1 : c.getCategoryID();
+        if(id != catID) {
             catID = id;
+
+            // Resets the level
             if(catID != -1 && level == 0) {
                 setLevel(1);
             }
             if(catID == -1 && level != 0) {
                 setLevel(0);
             }
-            
+
             for(int i = 0; i < skillExps.length; ++i)
                 skillExps[i] = 0.0f;
             learnedSkills.set(0, learnedSkills.size(), false);
-            
-            if(!isRemote())
-                sync();
-            MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
+
+            sync();
+
+            informCategoryChange();
+            sendMessage(MSG_CAT_CHANGE);
         }
     }
-    
-    public boolean isLearned() {
+
+    /**
+     * @return The player's current category. Never null.
+     * @throws IllegalStateException if player currently doesn't have category
+     */
+    public Category getCategory() {
+        Preconditions.checkState(catID != -1);
+        return CategoryManager.INSTANCE.getCategory(catID);
+    }
+
+    public Category getCategoryNullable() {
+        return hasCategory() ? getCategory() : null;
+    }
+
+    /**
+     * @return Whether the player has ability category (learned skill)
+     */
+    public boolean hasCategory() {
         return catID >= 0;
     }
-    
+
+    /**
+     * @return Player's current level
+     */
     public int getLevel() {
         return level;
     }
-    
+
+    /**
+     * Server only. Sets player's current level.
+     * @param lv The new level, currently must be in [1, 5]
+     * @throws IllegalStateException if in client
+     */
     public void setLevel(int lv) {
-        if(!isRemote()) {
-            if(level != lv) {
-                level = lv;
-                MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));
-                sync();
-            }
+        checkSide(Side.SERVER);
+        checkLearned();
+
+        if(level != lv) {
+            level = lv;
+            MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));
+            sync();
         }
     }
     
-    public Category getCategory() {
-        if(catID == -1)
-            return null;
-        return CategoryManager.INSTANCE.getCategory(catID);
-    }
-    
     /**
-     * Get all the learned skills. This method creates a new list.
+     * Get all the learned skills.
      */
     public List<Skill> getLearnedSkillList() {
-        return getSkillListFiltered((Skill s) -> isSkillLearned(s));
+        return getSkillListFiltered(this::isSkillLearned);
     }
     
     /**
-     * Get all the learned and controllable skills. This method creates a new list.
+     * Get all the learned and controllable skills.
      */
     public List<Skill> getControllableSkillList() {
-        return getSkillListFiltered((Skill s) -> (s.canControl() && isSkillLearned(s)));
-    }
-    
-    private List<Skill> getSkillListFiltered(Predicate<Skill> predicate) {
-        Category c = getCategory();
-        if(c == null)
-            return new ArrayList<>();
-
-        return c.getSkillList().stream().filter(predicate).collect(Collectors.toList());
+        return getSkillListFiltered(s -> (s.canControl() && isSkillLearned(s)));
     }
     
     /**
-     * Should ONLY be called in SERVER. Learn the specified skill.
+     * Server only. Learn the specified skill.
      */
     public void learnSkill(Skill s) {
-        if(s.getCategory() != getCategory())
-            return;
-        learnSkill(s.getID());
+        checkSide(Side.SERVER);
+        checkSkill(s);
+
+        setSkillLearnState(s, true);
     }
-    
-    public void learnSkill(int id) {
-        setSkillLearnState(id, true);
-    }
-    
-    public void setSkillLearnState(Skill s, boolean value) {
-        if(s.getCategory() != getCategory())
-            return;
-        setSkillLearnState(s.getID(), value);
-    }
-    
+
     /**
-     * Should ONLY be called in SERVER. Change skill's learn state.
+     * Server only. Set a skill's learning state.
      */
-    public void setSkillLearnState(int id, boolean value) {
+    public void setSkillLearnState(Skill s, boolean value) {
+        checkSide(Side.SERVER);
+        checkSkill(s);
+
+        int id = s.getID();
         Category cat = getCategory();
-        if(id >= cat.getSkillCount()) {
-            AcademyCraft.log.warn("Skill ID overflow when learning skill " + id);
-            return;
-        }
         if(!learnedSkills.get(id)) {
             MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getEntity(), cat.getSkill(id)));
             learnedSkills.set(id, value);
-            
-            if(!isRemote())
-                sync();
+
+            sync();
         }
     }
-    
+
+    /**
+     * Gets exp of a skill. If skill isn't in player's category return 0.
+     */
     public float getSkillExp(Skill skill) {
-        return skill.getCategory() == getCategory() ? 
-            (skill.expCustomized ? skill.getSkillExp(this) : this.skillExps[skill.getID()]) : 
-            0.0f;
+        if (!checkSkillSoft(skill)) {
+            return 0.0f;
+        } else {
+            return skill.expCustomized ? skill.getSkillExp(this) : this.skillExps[skill.getID()];
+        }
     }
-    
+
+    /**
+     * Adds exp to specified skill. Muted in client.
+     */
     public void addSkillExp(Skill skill, float amt) {
-        if(skill.getCategory() == getCategory()) {
+        if (checkSideSoft(Side.SERVER)) {
+            checkSide(Side.SERVER);
+            checkSkill(skill);
+
             learnSkill(skill);
-            
+
             int id = skill.getID();
             float added = Math.min(1.0f - skillExps[id], amt);
             skillExps[skill.getID()] += added;
-            
-            if(!isRemote()) {
-                MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
-                MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getEntity(), skill, amt));
-                scheduleUpdate(25);
-            }
+
+            MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
+            MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getEntity(), skill, amt));
+            scheduleUpdate(25);
         }
     }
     
@@ -188,29 +211,45 @@ public class AbilityData extends DataPart<EntityPlayer> {
      * Brutely set the skill exp. This should only used by commands.
      */
     public void setSkillExp(Skill skill, float exp) {
-        if(skill.getCategory() == getCategory()) {
-            learnSkill(skill);
-            skillExps[skill.getID()] = exp;
-            if(!isRemote()) {
-                MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
-                scheduleUpdate(25);
-            }
+        checkSide(Side.SERVER);
+        checkSkill(skill);
+
+        learnSkill(skill);
+        skillExps[skill.getID()] = exp;
+        if(!isClient()) {
+            MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
+            scheduleUpdate(25);
         }
     }
-    
+
     /**
-     * Learn all the skills. SERVER only.
+     * Server only. Learn all the skills.
      */
     public void learnAllSkills() {
-        if(getCategory() == null)
-            return;
-        learnedSkills.set(0, getCategory().getSkillCount(), true);
-        if(!isRemote())
+        checkSide(Side.SERVER);
+
+        if(hasCategory()) {
+            learnedSkills.set(0, getCategory().getSkillCount(), true);
             sync();
+        }
     }
-    
+
+    /**
+     * Check whether a skill is learned.
+     */
     public boolean isSkillLearned(Skill s) {
-        return s.getCategory() == getCategory() && learnedSkills.get(s.getID());
+        return checkSkillSoft(s) && learnedSkills.get(s.getID());
+    }
+
+    private List<Skill> getSkillListFiltered(Predicate<Skill> predicate) {
+        if (!hasCategory()) {
+            return Collections.emptyList();
+        } else {
+            return getCategory().getSkillList()
+                    .stream()
+                    .filter(predicate)
+                    .collect(Collectors.toList());
+        }
     }
     
     private void scheduleUpdate(int ticks) {
@@ -219,10 +258,27 @@ public class AbilityData extends DataPart<EntityPlayer> {
         else if(updateTicker != 1)
             updateTicker -= 1;
     }
-    
+
+    private void checkSkill(Skill s) {
+        Preconditions.checkState(checkSkillSoft(s), "Skill " + s + " not in category #" + catID);
+    }
+
+    private boolean checkSkillSoft(Skill s) {
+        return s.getCategory().getCategoryID() == catID;
+    }
+
+    private void checkLearned() {
+        Preconditions.checkState(hasCategory(), "Player doesn't have category");
+    }
+
+    @Listener(channel=MSG_CAT_CHANGE, side={Side.CLIENT,Side.SERVER})
+    private void informCategoryChange() {
+        MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
+    }
+
     @Override
     public void tick() {
-        if(!isRemote()) {
+        if(!isClient()) {
             if(updateTicker > 0) {
                 if(--updateTicker == 0) {
                     sync();
@@ -233,51 +289,12 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
     @Override
     public void fromNBT(NBTTagCompound tag) {
-        catID = tag.getByte("c");
-        
-        int lastcat = catID;
-        
-        byte[] arr = tag.getByteArray("l");
-        learnedSkills = BitSet.valueOf(arr);
-        
-        level = tag.getInteger("v");
-        
-        NBTTagList list = (NBTTagList) tag.getTag("s");
-        Category c = getCategory();
-        if(c != null && list != null) {
-            for(int i = 0; i < c.getSkillCount(); ++i) {
-                skillExps[i] = list.func_150308_e(i);
-            }
-        }
-        
-        if(lastcat != catID) {
-            MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
-        }
+        NBTS11n.read(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        
-        tag.setByte("c", (byte) catID); //There cant be more than 128 categories yeah? >)
-        tag.setByteArray("l", learnedSkills.toByteArray());
-        
-        tag.setInteger("v", level);
-        
-        Category c = getCategory();
-        if(c != null) {
-            NBTTagList list = new NBTTagList();
-            for(int i = 0; i < c.getSkillCount(); ++i) {
-                list.appendTag(new NBTTagFloat(skillExps[i]));
-            }
-            tag.setTag("s", list);
-        }
-        
-        return tag;
-    }
-
-    public static AbilityData get(EntityPlayer player) {
-        return  EntityData.get(player).getPart(AbilityData.class);
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
 
 }

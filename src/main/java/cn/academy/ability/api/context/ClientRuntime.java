@@ -38,20 +38,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 /**
  * Handles objects in client that is player-local and dynamic - Ability keys, cooldown and stuff.
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@RegDataPart("AC_ClientRuntime")
+@RegDataPart(value=EntityPlayer.class, side=Side.CLIENT)
 public class ClientRuntime extends DataPart<EntityPlayer> {
 
     public static final String DEFAULT_GROUP = "def";
@@ -76,6 +74,10 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     private final LinkedList<IActivateHandler> activateHandlers = new LinkedList<>();
 
     private boolean ctrlDirty = true;
+
+    {
+        setTick(true);
+    }
 
     /**
      * Adds a key delegate into default group
@@ -224,33 +226,12 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             @Override
             public void onKeyDown(EntityPlayer player) {
                 CPData cpData = CPData.get(player);
-                if(cpData.isActivated()) {
-                    cpData.deactivate();
-                } else {
-                    cpData.activate();
-                }
+                cpData.setActivateState(!cpData.isActivated());
             }
 
             @Override
             public String getHint() {
                 return null;
-            }
-        });
-
-        addActivateHandler(new IActivateHandler() {
-            @Override
-            public boolean handles(EntityPlayer player) {
-                return PresetData.get(player).isOverriding();
-            }
-
-            @Override
-            public void onKeyDown(EntityPlayer player) {
-                PresetData.get(player).endOverride();
-            }
-
-            @Override
-            public String getHint() {
-                return "endspecial";
             }
         });
 
@@ -281,14 +262,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         int[] set = delegates.values().stream().mapToInt(n -> n.keyID).toArray();
         ControlOverrider.override(OVERRIDE_GROUP, set);
-    }
-
-    @Override
-    public void fromNBT(NBTTagCompound tag) {}
-
-    @Override
-    public NBTTagCompound toNBT() {
-        return null;
     }
 
     private class KeyState {

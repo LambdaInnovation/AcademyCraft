@@ -115,7 +115,7 @@ public class KeyHintUI extends Widget {
                 mAlpha = 1.0;
             }
 
-            if(pData.isActive()) {
+            if(cpData.isActivated()) {
                 ClientRuntime rt = ClientRuntime.instance();
 
                 Multimap<String, DelegateNode> map = rt.getDelegateRawData();

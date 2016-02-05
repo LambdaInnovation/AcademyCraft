@@ -25,10 +25,7 @@ public class LearningHelper {
      * @return Whether the given player can level up currently
      */
     public static boolean canLevelUp(DeveloperType type, AbilityData aData) {
-        Category c = aData.getCategory();
-        if(c == null)
-            return true;
-        return CPData.get(aData.getEntity()).canLevelUp();
+        return !aData.hasCategory() || CPData.get(aData.getEntity()).canLevelUp();
     }
     
     /**

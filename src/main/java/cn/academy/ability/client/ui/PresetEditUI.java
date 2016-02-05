@@ -12,7 +12,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
-import cn.academy.ability.api.data.PresetData.PresetEditor;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -92,15 +91,12 @@ public class PresetEditUI extends GuiScreen {
     
     final EntityPlayer player;
     final PresetData data;
+    final AbilityData aData;
 
     final IFont font = Resources.font();
 
     // lastActive is the preset ID before the transition.
     int lastActive, active;
-    /**
-     * The preset editor of the current active selection. Always not null.
-     */
-    PresetEditor editor;
     
     boolean transiting;
     long transitStartTime;
@@ -112,17 +108,13 @@ public class PresetEditUI extends GuiScreen {
     public PresetEditUI() {
         player = Minecraft.getMinecraft().thePlayer;
         data = PresetData.get(player);
-        if(!data.isActive()) {
-            throw new RuntimeException("Cannot open preset edit gui when data is dirty");
-        }
+        aData = AbilityData.get(player);
         
         init();
     }
     
     @Override
-    public void onGuiClosed() {
-        editor.save();
-    }
+    public void onGuiClosed() { }
     
     private String local(String key) {
         return StatCollector.translateToLocal("ac.gui.preset_edit." + key);
@@ -161,16 +153,8 @@ public class PresetEditUI extends GuiScreen {
         updateInfo(transitor);
         
         updatePosForeground();
-        
-        updateEditor();
     }
-    
-    private void updateEditor() {
-        if(editor != null)
-            editor.save();
-        editor = data.createEditor(active);
-    }
-    
+
     private Widget createCopy() {
         Widget ret = template.copy();
         for(Widget w : ret.getDrawList()) {
@@ -235,17 +219,17 @@ public class PresetEditUI extends GuiScreen {
     
     private void finishTransit() {
         updatePosForeground();
-        updateEditor();
     }
     
     // Foreground page
-    private void onEdit(int keyID, int cid) {
-        editor.edit(keyID, cid);
-        getPage(get(foreground, active)).updateInfo();
-    }
-    
-    private void saveEdit() {
-        editor.save();
+    private void onEdit(int keyID, Controllable controllable) {
+        Preset last = data.getPreset(active);
+        Controllable[] arr = last.copyData();
+        arr[keyID] = controllable;
+
+        Preset newPreset = new Preset(arr);
+        data.setPresetFromClient(active, newPreset);
+        getPage(get(foreground, active)).updateInfo(newPreset);
     }
     
     // Transition page
@@ -257,7 +241,7 @@ public class PresetEditUI extends GuiScreen {
             transitProgress = 1;
         }
         
-        for(int i = 0; i < 4; ++i) {
+        for(int i = 0; i < PresetData.MAX_PRESETS; ++i) {
             Widget page = get(transitor, i);
             getPage(page).updatePosition();
         }
@@ -270,9 +254,9 @@ public class PresetEditUI extends GuiScreen {
 
     // Utils
     private void updateInfo(CGui gui) {
-        for(int i = 0; i < 4; ++i) {
+        for(int i = 0; i < PresetData.MAX_PRESETS; ++i) {
             Widget page = get(gui, i);
-            getPage(page).updateInfo();
+            getPage(page).updateInfo(data.getPreset(i));
         }
     }
     
@@ -297,14 +281,9 @@ public class PresetEditUI extends GuiScreen {
             id = _id;
         }
         
-        public void updateInfo() {
-            
-            Preset p = data.getPreset(id);
-            byte[] pdata = (id == active && editor != null) ? editor.display : p.getData();
-            
-            for(int i = 0; i < 4; ++i) {
-                Category cat = AbilityData.get(player).getCategory();
-                Controllable c = cat.getControllable(pdata[i]);
+        public void updateInfo(Preset preset) {
+            for(int i = 0; i < PresetData.MAX_PRESETS; ++i) {
+                Controllable c = preset.getControllable(i);
                 Widget main = widget.getWidget("" + i);
                 DrawTexture.get(main.getWidget("icon")).texture = c == null ? Resources.TEX_EMPTY : c.getHintIcon();
                 TextBox.get(main.getWidget("text")).content = c == null ? "" : c.getHintText();
@@ -442,19 +421,18 @@ public class PresetEditUI extends GuiScreen {
             keyid = _keyid;
             
             AbilityData aData = AbilityData.get(player);
-            Category c = aData.getCategory();
             
             for(Skill s : aData.getControllableSkillList()) {
-                int cid = s.getControlID();
-                if(!editor.hasMapping(cid)) {
+                if(!data.getPreset(active).hasControllable(s)) {
                     available.add(s);
                 }
             }
             
-            List<SelectionProvider> providers = new ArrayList();
+            List<SelectionProvider> providers = new ArrayList<>();
             providers.add(new SelectionProvider(-1, Resources.getTexture("guis/preset_settings/cancel"), local("skill_remove")));
-            for(Skill s : available)
+            for(Skill s : available) {
                 providers.add(new SelectionProvider(s.getControlID(), s.getHintIcon(), s.getDisplayName()));
+            }
             
             height = MARGIN * 2 + SIZE + STEP * (ldiv(providers.size(), MAX_PER_ROW) - 1);
             width = available.size() < MAX_PER_ROW ? 
@@ -517,7 +495,7 @@ public class PresetEditUI extends GuiScreen {
                 super("_sel");
                 selection = _selection;
                 listen(LeftClickEvent.class, (w, e) -> {
-                    onEdit(keyid, selection.id);
+                    onEdit(keyid, aData.getCategory().getControllable(selection.id));
                     Selector.this.dispose();
                 });
             }

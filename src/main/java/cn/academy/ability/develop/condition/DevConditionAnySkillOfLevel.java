@@ -24,8 +24,9 @@ public class DevConditionAnySkillOfLevel implements IDevCondition {
     
     @Override
     public boolean accepts(AbilityData data, IDeveloper developer, Skill skill) {
-        if(data.getCategory() == null)
+        if(!data.hasCategory())
             return false;
+
         for(Skill s : data.getCategory().getSkillsOfLevel(level)) {
             if(data.isSkillLearned(s))
                 return true;

@@ -7,6 +7,9 @@
 package cn.academy.misc.tutorial;
 
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.datapart.DataPart;
@@ -31,7 +34,7 @@ import java.util.stream.IntStream;
  * This class simply stores activate data that trigger-type condition needs.
  */
 @Registrant
-@RegDataPart("AC_TutorialCondition")
+@RegDataPart(EntityPlayer.class)
 public class TutorialConditionData extends DataPart<EntityPlayer> {
 
     public static TutorialConditionData get(EntityPlayer player) {
@@ -40,13 +43,18 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
 
     private static final String MSG_ACTIVATE = "activate";
 
+    @SerializeIncluded
     private BitSet savedConditions = new BitSet();
-    private Set<String> activatedTuts = new HashSet<>();
+    @SerializeIncluded
+    private HashSet<String> activatedTuts = new HashSet<>();
     private final TickScheduler scheduler = new TickScheduler();
     private boolean dirty;
 
     public TutorialConditionData() {
-        setTick();
+        setTick(true);
+        setClientNeedSync();
+        setNBTStorage();
+
         scheduler.every(3).atOnly(Side.SERVER).run(() ->
         {
             if (dirty) {
@@ -84,29 +92,13 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
     }
 
     @Override
-    public void fromNBT(NBTTagCompound tag) {
-        savedConditions = BitSet.valueOf(tag.getByteArray("s"));
-
-        NBTTagList tutsTag = (NBTTagList) tag.getTag("t");
-        if (tutsTag != null) {
-            IntStream.range(0, tutsTag.tagCount())
-                    .mapToObj(tutsTag::getStringTagAt)
-                    .forEach(str -> activatedTuts.add(str));
-        }
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        NBTTagCompound ret = new NBTTagCompound();
-        ret.setByteArray("s", savedConditions.toByteArray());
-
-        NBTTagList tutsTag = new NBTTagList();
-        for (String s : activatedTuts) {
-            tutsTag.appendTag(new NBTTagString(s));
-        }
-        ret.setTag("t", tutsTag);
-
-        return ret;
+    public void fromNBT(NBTTagCompound tag) {
+        NBTS11n.read(tag, this);
     }
 
     @Listener(channel=MSG_ACTIVATE, side={Side.CLIENT, Side.SERVER})

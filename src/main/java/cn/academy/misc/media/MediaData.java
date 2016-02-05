@@ -7,9 +7,13 @@
 package cn.academy.misc.media;
 
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,10 +25,11 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
-@RegDataPart("media")
+@RegDataPart(EntityPlayer.class)
 public class MediaData extends DataPart {
-    
-    BitSet learned = new BitSet(32);
+
+    @SerializeIncluded
+    private BitSet learned = new BitSet(32);
     
     public MediaData() {}
     
@@ -37,8 +42,7 @@ public class MediaData extends DataPart {
      * @return Whether the media is successfully installed
      */
     public boolean installMedia(int mediaID) {
-        if(isRemote())
-            throw new RuntimeException("Wrong side");
+        checkSide(Side.CLIENT);
         
         if(learned.get(mediaID))
             return false;
@@ -54,7 +58,7 @@ public class MediaData extends DataPart {
     }
     
     public List<Media> getInstalledMediaList() {
-        List<Media> ret = new ArrayList();
+        List<Media> ret = new ArrayList<>();
         for(int i = 0; i < MediaRegistry.getMediaCount(); ++i)
             if(isMediaInstalled(i))
                 ret.add(MediaRegistry.getMedia(i));
@@ -63,15 +67,12 @@ public class MediaData extends DataPart {
 
     @Override
     public void fromNBT(NBTTagCompound tag) {
-        learned = BitSet.valueOf(tag.getByteArray("l"));
+        NBTS11n.read(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setByteArray("l", learned.toByteArray());
-        
-        return tag;    
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
 
 }

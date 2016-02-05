@@ -6,14 +6,20 @@
 */
 package cn.academy.terminal;
 
+import cn.academy.terminal.event.AppInstalledEvent;
 import cn.academy.terminal.event.TerminalInstalledEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.Future;
 import cn.lambdalib.networkcall.Future.FutureCallback;
 import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
@@ -21,142 +27,110 @@ import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
-@RegDataPart("terminal")
+@RegDataPart(EntityPlayer.class)
 public class TerminalData extends DataPart<EntityPlayer> {
 
-    private Set<Integer> installedList = new HashSet<>();
+    public static TerminalData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(TerminalData.class);
+    }
+
+    @SerializeIncluded
+    private BitSet installedList = new BitSet();
+    @SerializeIncluded
     private boolean isInstalled;
 
     public TerminalData() {
+        setClientNeedSync();
+        setNBTStorage();
+
         for (App app : AppRegistry.enumeration()) {
             if (app.isPreInstalled())
-                installedList.add(app.getID());
+                installedList.set(app.appid);
         }
     }
 
-    public List<Integer> getInstalledApps() {
-        return ImmutableList.copyOf(installedList);
-    }
-
-    public boolean isInstalled(int appid) {
-        return installedList.contains(appid);
+    public List<App> getInstalledApps() {
+        return IntStream.range(0, installedList.size())
+                .filter(idx -> installedList.get(idx))
+                .mapToObj(idx -> AppRegistry.get(idx))
+                .collect(Collectors.toList());
     }
 
     public boolean isInstalled(App app) {
-        return isInstalled(app.getID());
+        return installedList.get(app.getID());
     }
 
     public boolean isTerminalInstalled() {
         return isInstalled;
     }
 
+    /**
+     * Server only. Installs the data terminal.
+     */
     public void install() {
-        checkSide(false);
+        checkSide(Side.SERVER);
+
         if (!isInstalled) {
             isInstalled = true;
+
             sync();
 
-            MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getEntity()));
-            informInstallAtClient(getEntity());
+            informTerminalInstall();
+            NetworkMessage.sendTo(getEntity(), this, "terminal_inst");
         }
     }
 
     /**
-     * Make a sync query from client and call the callback when received sync.
+     * Server only. Installs the given app.
      */
-    @SideOnly(Side.CLIENT)
-    public void querySync(final FutureCallback callback) {
-        doQuerySync(Future.create(new FutureCallback() {
-
-            @Override
-            public void onReady(Object val) {
-                callback.onReady(val);
-                fromNBTSync((NBTTagCompound) val);
-            }
-
-        }));
-    }
-
     public void installApp(App app) {
-        installApp(app.getID());
-    }
+        checkSide(Side.SERVER);
 
-    /**
-     * Must called in SERVER side.
-     */
-    public void installApp(int appid) {
-        if (isRemote()) {
-            throw new RuntimeException("Not allowed in client side!");
+        if (!isInstalled(app)) {
+            int id = app.getID();
+
+            installedList.set(id, true);
+
+            informAppInstall(id);
+            NetworkMessage.sendTo(getEntity(), this, "app_inst", id);
+
+            sync();
         }
-        doInstall(appid);
-        installSync(appid);
-    }
-
-    public static TerminalData get(EntityPlayer player) {
-        return EntityData.get(player).getPart(TerminalData.class);
-    }
-
-    @Override
-    public void tick() {
     }
 
     @Override
     public void fromNBT(NBTTagCompound tag) {
-        isInstalled = tag.getBoolean("i");
-
-        int[] arr = tag.getIntArray("learned");
-        for (int i = 0; i < arr.length; ++i)
-            installedList.add(arr[i]);
+        NBTS11n.read(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        NBTTagCompound ret = new NBTTagCompound();
-
-        Integer[] iarr = installedList.toArray(new Integer[0]);
-        int[] arr = new int[iarr.length];
-        for (int i = 0; i < arr.length; ++i)
-            arr[i] = iarr[i];
-
-        ret.setIntArray("learned", arr);
-
-        ret.setBoolean("i", isInstalled);
-
-        return ret;
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
 
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void doQuerySync(@Data Future future) {
-        future.setAndSync(toNBTSync());
+    @Listener(channel="terminal_inst", side=Side.CLIENT)
+    private void informTerminalInstall() {
+        MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getEntity()));
     }
 
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    public void clientSync(@Target EntityPlayer player, @Data NBTTagCompound tag) {
-        fromNBT(tag);
+    @Listener(channel="app_inst", side=Side.CLIENT)
+    private void informAppInstall(int appid) {
+        MinecraftForge.EVENT_BUS.post(new AppInstalledEvent(getEntity(), AppRegistry.enumeration().get(appid)));
     }
 
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void installSync(@Data Integer appid) {
-        doInstall(appid);
-    }
-
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void informInstallAtClient(@Target EntityPlayer player) {
-        MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(player));
-    }
-
-    private void doInstall(Integer appid) {
-        installedList.add(appid);
-    }
 }

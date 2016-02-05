@@ -94,7 +94,7 @@ public final class ClientHandler {
             EntityPlayer player = getPlayer();
             AbilityData aData = AbilityData.get(player);
             
-            if(aData.isLearned()) {
+            if(aData.hasCategory()) {
                 ClientRuntime.instance().getActivateHandler().onKeyDown(player);
             }
         }
@@ -105,8 +105,7 @@ public final class ClientHandler {
     public static KeyHandler keyEditPreset = new KeyHandler() {
         @Override
         public void onKeyDown() {
-            PresetData data = PresetData.get(Minecraft.getMinecraft().thePlayer);
-            if(data.isActive()) {
+            if(AbilityData.get(getPlayer()).hasCategory()) {
                 Minecraft.getMinecraft().displayGuiScreen(new PresetEditUI());
             }
         }
@@ -119,9 +118,9 @@ public final class ClientHandler {
             PresetData data = PresetData.get(getPlayer());
             CPData cpData = CPData.get(getPlayer());
             
-            if(cpData.isActivated() && data.isActive()) {
-                int next = (data.getCurrentID() + 1) % 4;
-                data.switchCurrent(next);
+            if(cpData.isActivated()) {
+                int next = (data.getCurrentID() + 1) % PresetData.MAX_PRESETS;
+                data.switchFromClient(next);
                 MinecraftForge.EVENT_BUS.post(new PresetSwitchEvent(data.getEntity()));
             }
         }

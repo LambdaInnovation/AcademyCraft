@@ -86,7 +86,7 @@ public class DebugConsole extends AuxGui {
         
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
-        if(!aData.isLearned()) {
+        if(!aData.hasCategory()) {
             texts.add(new Text("Ability not acquired"));
         } else if(Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
             texts.add(new Text("Skill status"));

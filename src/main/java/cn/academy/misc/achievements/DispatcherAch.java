@@ -67,7 +67,7 @@ public final class DispatcherAch {
     
     //cn.academy.ability.api.event.LevelChangeEvent
     
-    private HashMap<Category, AchEvLevelChange[]> hcLevelChange = new HashMap<Category, AchEvLevelChange[]>();
+    private HashMap<Category, AchEvLevelChange[]> hcLevelChange = new HashMap<>();
     
     public void rgLevelChange(Category cat, int lv, AchEvLevelChange ach) {
         if (hcLevelChange.containsKey(cat))
@@ -88,10 +88,12 @@ public final class DispatcherAch {
     @SubscribeEvent
     public void onLevelChange(LevelChangeEvent event) {
         AbilityData data = AbilityData.get(event.player);
-        int xlv = data.getLevel() - 1;
-        AchEvLevelChange[] arr = hcLevelChange.get(data.getCategory());
-        if (arr != null && xlv >= 0 && arr[xlv] != null && arr[xlv].accept(event))
-            event.player.triggerAchievement(arr[xlv]);
+        if (data.hasCategory()) {
+            int xlv = data.getLevel() - 1;
+            AchEvLevelChange[] arr = hcLevelChange.get(data.getCategory());
+            if (arr != null && xlv >= 0 && arr[xlv] != null && arr[xlv].accept(event))
+                event.player.triggerAchievement(arr[xlv]);
+        }
     }
     
     

@@ -40,7 +40,7 @@ public class DevelopActionLevel implements IDevelopAction {
     @Override
     public void onLearned(EntityPlayer player) {
         AbilityData aData = AbilityData.get(player);
-        if(aData.getCategory() == null) {
+        if(!aData.hasCategory()) {
             // WELCOME TO THE WORLD OF ESPER! >)
             CategoryManager man = CategoryManager.INSTANCE;
             Category cat = man.getCategory(RandUtils.nextInt(man.getCategoryCount()));
@@ -51,8 +51,8 @@ public class DevelopActionLevel implements IDevelopAction {
 
     @Override
     public ResourceLocation getIcon(EntityPlayer player) {
-        Category cat = AbilityData.get(player).getCategory();
-        return cat == null ? TEX_CATNF : cat.getIcon();
+        AbilityData adata = AbilityData.get(player);
+        return adata.hasCategory() ? adata.getCategory().getIcon() : TEX_CATNF;
     }
 
     @Override

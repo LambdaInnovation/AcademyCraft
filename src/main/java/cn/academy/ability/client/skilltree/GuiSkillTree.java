@@ -14,7 +14,6 @@ import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
-import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
@@ -125,7 +124,7 @@ public abstract class GuiSkillTree extends CGuiScreen {
             ball.addComponent(new LevelHandler(i));
         }
         
-        if(aData.isLearned()) {
+        if(aData.hasCategory()) {
             initSkillTree();
         } else {
             window.addWidget(loaded.getWidget("widgets/not_acquired").copy());
@@ -209,10 +208,18 @@ public abstract class GuiSkillTree extends CGuiScreen {
         TextBox.get(windowEsper.getWidget("text_user")).content = player.getDisplayName();
         TextBox.get(windowEsper.getWidget("text_level")).content = SkillTreeLocal.levelDesc(aData.getLevel());
         TextBox.get(windowEsper.getWidget("text_prg")).content = SkillTreeLocal.levelPrg(player);
-        
-        Category cat = aData.getCategory();
-        TextBox.get(windowEsper.getWidget("text_cat")).content = cat == null ? SkillTreeLocal.unknown() : cat.getDisplayName();
-        DrawTexture.get(windowEsper.getWidget("icon_cat")).texture = cat == null ? TEX_UNKNOWN_CAT : cat.getIcon();
+
+        TextBox catBox = TextBox.get(windowEsper.getWidget("text_cat"));
+        DrawTexture catIcon = DrawTexture.get(windowEsper.getWidget("icon_cat"));
+
+        if (aData.hasCategory()) {
+            Category cat = aData.getCategory();
+            catBox.content = cat.getDisplayName();
+            catIcon.texture = cat.getIcon();
+        } else {
+            catBox.content = SkillTreeLocal.unknown();
+            catIcon.texture = TEX_UNKNOWN_CAT;
+        }
     }
     
     @Override

@@ -9,12 +9,20 @@ package cn.academy.ability.api;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.networkcall.s11n.InstanceSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
+import cn.lambdalib.s11n.nbt.NBTS11n;
+import cn.lambdalib.s11n.nbt.NBTS11n.BaseSerializer;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,9 +32,41 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 @Registrant
-@RegSerializable(instance = Controllable.ControllableSerializer.class)
 public abstract class Controllable {
-    
+
+    @RegInitCallback
+    public static void init() {
+        NetworkS11n.addDirect(Controllable.class, new NetS11nAdaptor<Controllable>() {
+            @Override
+            public void write(ByteBuf buf, Controllable obj) {
+                buf.writeByte(obj.getCategory().getCategoryID());
+                buf.writeByte(obj.getControlID());
+            }
+
+            @Override
+            public Controllable read(ByteBuf buf) throws ContextException {
+                Category cat = CategoryManager.INSTANCE.getCategory(buf.readByte());
+                return cat.getControllable(buf.readByte());
+            }
+        });
+        NBTS11n.addBase(Controllable.class, new BaseSerializer<NBTBase, Controllable>() {
+            @Override
+            public NBTBase write(Controllable value) {
+                return new NBTTagByteArray(new byte[] {
+                        (byte) value.getCategory().getCategoryID(),
+                        (byte) value.getControlID()
+                });
+            }
+
+            @Override
+            public Controllable read(NBTBase tag, Class<? extends Controllable> type) {
+                byte[] bytes = ((NBTTagByteArray) tag).func_150292_c();
+                Category cat = CategoryManager.INSTANCE.getCategory(bytes[0]);
+                return cat.getControllable(bytes[1]);
+            }
+        });
+    }
+
     private Category category;
     private int id;
     
@@ -75,22 +115,6 @@ public abstract class Controllable {
      */
     public boolean shouldOverrideKey() {
         return true;
-    }
-    
-    public static class ControllableSerializer implements InstanceSerializer<Controllable> {
-
-        @Override
-        public Controllable readInstance(NBTBase nbt) throws Exception {
-            int[] arr = ((NBTTagIntArray)nbt).func_150302_c();
-            return CategoryManager.INSTANCE.getCategory(arr[0]).getControllable(arr[1]);
-        }
-
-        @Override
-        public NBTBase writeInstance(Controllable obj) throws Exception {
-            return new NBTTagIntArray(new int[] { 
-                obj.getCategory().getCategoryID(), obj.getControlID() });
-        }
-        
     }
     
 }

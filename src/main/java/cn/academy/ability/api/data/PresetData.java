@@ -13,283 +13,247 @@ import cn.academy.ability.api.event.PresetUpdateEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
+import cn.lambdalib.s11n.nbt.NBTS11n.BaseSerializer;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
+ * Handles preset.
  * @author WeAthFolD
  */
 @Registrant
-@RegDataPart("preset")
+@RegDataPart(EntityPlayer.class)
 public class PresetData extends DataPart<EntityPlayer> {
 
-    @Deprecated
-    public static final int MAX_KEYS = 8;
+    @RegInitCallback
+    public static void init() {
+        NBTS11n.addBase(Preset.class, new BaseSerializer<NBTBase, Preset>() {
+            @Override
+            public NBTBase write(Preset value) {
+                NBTTagCompound tag = new NBTTagCompound();
+                IntStream.range(0, MAX_KEYS).forEach(idx -> {
+                    Controllable ctrl = value.data[idx];
+                    if (ctrl != null) {
+                        tag.setTag(String.valueOf(idx), NBTS11n.writeBase(ctrl, Controllable.class));
+                    }
+                });
+                return tag;
+            }
+            @Override
+            public Preset read(NBTBase tag_, Class<? extends Preset> type) {
+                NBTTagCompound tag = (NBTTagCompound) tag_;
 
+                Controllable[] data = new Controllable[MAX_KEYS];
+                IntStream.range(0, MAX_KEYS).forEach(idx -> {
+                    String tagName = String.valueOf(idx);
+                    if (tag.hasKey(tagName)) {
+                        data[idx] = NBTS11n.readBase(tag.getTag(tagName), Controllable.class);
+                    }
+                });
+
+                return new Preset(data);
+            }
+        });
+
+        NetworkS11n.addDirect(Preset.class, new NetS11nAdaptor<Preset>() {
+            @Override
+            public void write(ByteBuf buf, Preset obj) {
+                int count = (int) IntStream.range(0, MAX_KEYS).filter(idx -> obj.hasMapping(idx)).count();
+                buf.writeByte(count);
+
+                IntStream.range(0, MAX_KEYS).forEach(idx -> {
+                    if (obj.hasMapping(idx)) {
+                        buf.writeByte(idx);
+                        NetworkS11n.serializeWithHint(buf, obj.getControllable(idx), Controllable.class);
+                    }
+                });
+            }
+            @Override
+            public Preset read(ByteBuf buf) throws ContextException {
+                Preset ret = new Preset();
+                int count = buf.readByte();
+                while (count-- > 0) {
+                    int id = buf.readByte();
+                    ret.data[id] = NetworkS11n.deserializeWithHint(buf, Controllable.class);
+                }
+                return ret;
+            }
+        });
+    }
+
+    public static final int MAX_KEYS = 4;
     public static final int MAX_PRESETS = 4;
-    
+
+    private static final String
+        MSG_SYNC_SWITCH = "switch",
+        MSG_SYNC_UPDATE = "update";
+
+    @SerializeIncluded
     int presetID = 0;
-    final Preset emptyPreset = new Preset(); // Dummy value to prevent null return
-    final Preset[] presets = new Preset[4];
-    
-    /*
-     * Notify: Unlike normal DataParts, PresetData is
-     * client-major after the initial creation.
-     */
+    @SerializeIncluded
+    Preset[] presets = new Preset[4];
+
     public PresetData() {
         for(int i = 0; i < MAX_PRESETS; ++i) {
             presets[i] = new Preset();
         }
+
+        setNBTStorage();
+        setClientNeedSync();
     }
-    
-    private AbilityData getAbilityData() {
-        return AbilityData.get(getEntity());
-    }
-    
+
+    // Modifier
+
     public void clear() {
-        endOverride();
+        checkSide(Side.SERVER);
+
         for(int i = 0; i < 4; ++i)
             presets[i] = new Preset();
-        if(!isRemote())
-            sync();
     }
-    
-    /**
-     * Create a instance that have capability to edit a fixed preset.
-     */
-    public PresetEditor createEditor(int presetID) {
-        return new PresetEditor(presets[presetID]);
+
+    public void setPreset(int id, Preset p) {
+        checkSide(Side.SERVER);
+
+        presets[id] = p;
+        sync();
     }
-    
+
+    public void switchCurrent(int nid) {
+        Preconditions.checkElementIndex(nid, MAX_PRESETS);
+        checkSide(Side.SERVER);
+
+        presetID = nid;
+        sync();
+    }
+
+    // Cross-network
+
+    public void switchFromClient(int id) {
+        Preconditions.checkElementIndex(id, MAX_PRESETS);
+        checkSide(Side.CLIENT);
+
+        presetID = id;
+        sendMessage(MSG_SYNC_SWITCH, id);
+    }
+
+    public void setPresetFromClient(int id, Preset p) {
+        checkSide(Side.CLIENT);
+
+        presets[id] = p;
+        sendMessage(MSG_SYNC_UPDATE, id, p);
+    }
+
+    //
+
+    // Observer
+
     public Preset getPreset(int id) {
         return presets[id];
     }
 
-    public void switchCurrent(int nid) {
-        presetID = nid;
-        sync();
-    }
-    
     public int getCurrentID() {
         return presetID;
     }
     
     public Preset getCurrentPreset() {
-        if(!isActive()) {
-            return emptyPreset;
-        }
         return presets[presetID];
     }
-    
-    @Override
-    public void tick() {}
+
+    //
 
     @Override
     public void fromNBT(NBTTagCompound tag) {
-        presetID = tag.getByte("cur");
-        for(int i = 0; i < MAX_PRESETS; ++i) {
-            presets[i].fromNBT(tag.getCompoundTag("" + i));
-        }
-        
-        MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
+        NBTS11n.read(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        return toNBTGeneric(false);
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
-    
-    @Override
-    public NBTTagCompound toNBTSync() {
-        return toNBTGeneric(true);
+
+    @Listener(channel=MSG_SYNC_SWITCH, side=Side.SERVER)
+    private void handleSwitch(int idx) {
+        switchCurrent(idx);
     }
-    
-    public NBTTagCompound toNBTGeneric(boolean sync) {
-        NBTTagCompound ret = new NBTTagCompound();
-        ret.setByte("cur", (byte) presetID);
-        for(int i = 0; i < MAX_PRESETS; ++i) {
-            ret.setTag("" + i, presets[i].toNBT());
-        }
-        return ret;
+
+    @Listener(channel=MSG_SYNC_UPDATE, side=Side.SERVER)
+    private void handleSet(int idx, Preset mapping) {
+        debug("HandleSet " + mapping);
+        setPreset(idx, mapping);
     }
-    
-    public boolean isActive() {
-        return getAbilityData().isLearned();
-    }
-    
+
     public static PresetData get(EntityPlayer player) {
         return EntityData.get(player).getPart(PresetData.class);
     }
-    
-    public class PresetEditor {
-        
-        /**
-         * NO DIRECT EDITING
-         */
-        public final byte display[] = new byte[MAX_KEYS];
-        
-        public final Preset target;
-        
-        public PresetEditor(Preset _target) {
-            target = _target;
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                display[i] = target.data[i];
-            }
-        }
-        
-        public void edit(int key, int newMapping) {
-            display[key] = (byte) newMapping;
-        }
-        
-        /**
-         * Return whether current edit state has the cid specified as mapping.
-         */
-        public boolean hasMapping(int cid) {
-            for(byte b : display)
-                if(b == cid)
-                    return true;
-            
-            return false;
-        }
-        
-        public boolean hasChanged() {
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                if(display[i] != target.data[i])
-                    return true;
-            }
-            return false;
-        }
-        
-        public void save() {
-            target.setData(display);
-            MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
-            
-            sync();
-        }
-        
-    }
-    
-    /**
-     * @return A preset that is in the scope of the same Player. 
-     * Probably used for overriding control.
-     */
-    @Deprecated
-    public Preset createPreset() {
-        return new Preset();
-    }
 
-    @Deprecated
-    public boolean isOverriding() {
-        return false;
-    }
-    @Deprecated
-    public void override(Preset special) {}
-    @Deprecated
-    public void endOverride() {}
+    public static class Preset {
 
-    public class Preset {
+        private final Controllable[] data;
         
-        /**
-         * Warning: Direct edit will cause sync loss.
-         */
-        public final byte data[] = new byte[MAX_KEYS];
-        
+        public Preset(Controllable[] _data) {
+            data = Arrays.copyOf(_data, MAX_KEYS);
+        }
+
         public Preset() {
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                data[i] = -1;
-            }
-        }
-
-        public Preset(byte[] _data) {
-            setData(_data);
-        }
-        
-        void setData(byte[] _data) {
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                data[i] = _data[i];
-            }
-        }
-        
-        public byte[] getData() {
-            return data;
+            data = new Controllable[MAX_KEYS];
+            Arrays.fill(data, null);
         }
         
         public boolean hasMapping(int key) {
             return getControllable(key) != null;
         }
-        
+
+        /**
+         * @return The controllable that maps to this key, or null if not present
+         */
         public Controllable getControllable(int key) {
-            int mapping = data[key];
-            if(mapping == -1) {
-                return null;
-            }
-            AbilityData data = getAbilityData();
-            Category cat = data.getCategory();
-            if(cat == null) return null;
-            return cat.getControllable(mapping);
+            return key >= data.length ? null : data[key];
         }
         
         public boolean hasControllable(Controllable c) {
-            AbilityData adata = getAbilityData();
-            Category cat = adata.getCategory();
-            if(cat == null)
-                return false;
-            for(byte b : data) {
-                if(cat.getControllable(b) == c)
+            for (Controllable cc : data) {
+                if (cc == c) {
                     return true;
+                }
             }
             return false;
         }
-        
-        NBTTagCompound toNBT() {
-            NBTTagCompound ret = new NBTTagCompound();
-            ret.setByteArray("l", data);
-            return ret;
-        }
-        
-        void fromNBT(NBTTagCompound tag) {
-            byte[] d = tag.getByteArray("l");
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                data[i] = d[i];
-            }
-        }
-        
-        public String formatDetail() {
-            StringBuilder sb = new StringBuilder();
-            Category cat = AbilityData.get(getEntity()).getCategory();
-            List<Controllable> ctrlList = cat.getControllableList();
-            
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                Controllable c = null;
-                if(data[i] != -1) {
-                    c = ctrlList.get(data[i]);
-                }
-                if(c != null) {
-                    sb.append(i + " => " + c.toString() + "(" + data[i] + ")\n");
-                }
-            }
-            return sb.toString();
+
+        public Controllable[] copyData() {
+            return Arrays.copyOf(data, MAX_KEYS);
         }
         
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Preset[").append(getEntity().getCommandSenderName()).append("] <");
-            for(int i = 0; i < MAX_KEYS; ++i) {
-                sb.append(data[i]).append(i == MAX_KEYS - 1 ? ">" : ",");
+            ToStringHelper helper = Objects.toStringHelper(this);
+
+            for (int i = 0; i < data.length; ++i) {
+                helper.add("#" + i, data[i]);
             }
-            return sb.toString();
-        }
-        
-        private PresetData getPData() {
-            return PresetData.this;
+
+            return helper.toString();
         }
         
     }

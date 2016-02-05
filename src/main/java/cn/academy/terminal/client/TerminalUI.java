@@ -66,8 +66,7 @@ public class TerminalUI extends AuxGui {
     CGui gui;
     
     Widget root;
-    
-    boolean isActivated = false;
+
     TerminalMouseHelper helper;
     MouseHelper oldHelper;
     LeftClickHandler clickHandler;
@@ -81,8 +80,6 @@ public class TerminalUI extends AuxGui {
     int selection = 0;
     int scroll = 0;
     List<Widget> apps = new ArrayList<>();
-    
-    boolean isSynced;
     
     public TerminalUI() {
         gui = new CGui();
@@ -237,22 +234,14 @@ public class TerminalUI extends AuxGui {
                 StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
         
         TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
-        
-        data.querySync(new FutureCallback() {
 
-            @Override
-            public void onReady(Object val) {
-                if(!isSynced) {
-                    updateAppList(data);
-                    root.removeWidget("text_loading");
-                    root.removeWidget("icon_loading");
-                    createTime = GameTimer.getTime();
-                    isSynced = true;
-                    // AcademyCraft.log.debug("Received TerminalUI callback!");
-                }
-            }
-            
-        });
+        // Obsolete stuff
+        root.removeWidget("text_loading");
+        root.removeWidget("icon_loading");
+
+        updateAppList(data);
+
+        createTime = GameTimer.getTime();
         
         root.getWidget("arrow_up").listen(FrameEvent.class, 
         (w, e) -> {
@@ -284,8 +273,8 @@ public class TerminalUI extends AuxGui {
         for(Widget w : apps)
             w.dispose();
         apps.clear();
-        for(Integer i : data.getInstalledApps()) {
-            Widget w = createAppWidget(apps.size(), AppRegistry.INSTANCE.get(i));
+        for(App app : data.getInstalledApps()) {
+            Widget w = createAppWidget(apps.size(), app);
             root.addWidget(w);
             apps.add(w);
         }

@@ -88,7 +88,7 @@ public abstract class Condition {
         public boolean exam(EntityPlayer player) {
             AbilityData data=AbilityData.get(player);
             return data.getLevel() >= this.level &&
-                    (!this.skillType.isPresent() || data.getCategory() == skillType.get());
+                    (!this.skillType.isPresent() || data.getCategoryNullable() == skillType.get());
         }
 
     }

@@ -13,28 +13,25 @@ import java.util.List;
 
 public class AppRegistry {
 
-    public static AppRegistry INSTANCE = new AppRegistry();
+    private static List<App> appList = new ArrayList<>();
 
-    private AppRegistry() {
-    }
-
-    List<App> appList = new ArrayList();
-
-    public void register(App app) {
+    public static void register(App app) {
         appList.add(app);
         app.appid = appList.size() - 1;
     }
 
-    public App get(int id) {
+    public static App get(int id) {
         return appList.get(id);
     }
 
-    public int size() {
+    public static int size() {
         return appList.size();
     }
 
     public static List<App> enumeration() {
-        return ImmutableList.copyOf(INSTANCE.appList);
+        return ImmutableList.copyOf(appList);
     }
+
+    private AppRegistry() {}
 
 }

@@ -10,15 +10,18 @@ import cn.academy.ability.develop.action.IDevelopAction;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 @Registrant
-@RegDataPart("AC_DevelopData")
+@RegDataPart(EntityPlayer.class)
 public class DevelopData extends DataPart<EntityPlayer> {
 
     public static DevelopData get(EntityPlayer player) {
@@ -29,21 +32,22 @@ public class DevelopData extends DataPart<EntityPlayer> {
 
     private boolean dirty = false;
 
+    @SerializeIncluded
     private IDeveloper developer;
     private IDevelopAction type;
 
-
-    // Synced states
+    @SerializeIncluded
     private int stim;
+    @SerializeIncluded
     private int maxStim;
+    @SerializeIncluded
     private DevState state = DevState.IDLE;
-    // Sync states end
 
     private int tickThisStim;
     private int tickSync;
 
     public DevelopData() {
-        setTick();
+        setTick(true);
     }
 
     // API
@@ -52,6 +56,8 @@ public class DevelopData extends DataPart<EntityPlayer> {
      * If currently is developing the previous action will be overridden.
      */
     public void startDeveloping(IDeveloper _developer, IDevelopAction _type) {
+        checkSide(Side.SERVER);
+
         resetProgress(false);
         developer = _developer;
         type = _type;
@@ -94,12 +100,16 @@ public class DevelopData extends DataPart<EntityPlayer> {
     }
 
     public void abort() {
+        checkSide(Side.SERVER);
+
         if(state == DevState.DEVELOPING) {
             resetProgress(true);
         }
     }
 
     public void reset() {
+        checkSide(Side.SERVER);
+
         resetProgress(false);
     }
 
@@ -115,10 +125,11 @@ public class DevelopData extends DataPart<EntityPlayer> {
 
     @Override
     public void tick() {
-        if(!isRemote()) {
+        if(!isClient()) {
             EntityPlayer player = getEntity();
 
             if(dirty) {
+                dirty = false;
                 sync();
             }
 
@@ -154,34 +165,5 @@ public class DevelopData extends DataPart<EntityPlayer> {
             }
         }
     }
-
-    @Override
-    public NBTTagCompound toNBTSync() {
-        NBTTagCompound ret = new NBTTagCompound();
-        SerializationManager ser = SerializationManager.INSTANCE;
-        NBTBase tagDeveloper = ser.serialize(developer, StorageOption.Option.NULLABLE_INSTANCE);
-        ret.setTag("d", tagDeveloper);
-
-        ret.setInteger("0", stim);
-        ret.setInteger("1", maxStim);
-        ret.setInteger("2", state.ordinal());
-        return ret;
-    }
-
-    @Override
-    public void fromNBTSync(NBTTagCompound tag) {
-        developer = (IDeveloper) SerializationManager.INSTANCE.deserialize(null,
-                tag.getTag("d"), StorageOption.Option.NULLABLE_INSTANCE);
-
-        stim = tag.getInteger("0");
-        maxStim = tag.getInteger("1");
-        state = DevState.values()[tag.getInteger("2")];
-    }
-
-    @Override
-    public void fromNBT(NBTTagCompound tag) {}
-
-    @Override
-    public NBTTagCompound toNBT() { return null; }
 
 }

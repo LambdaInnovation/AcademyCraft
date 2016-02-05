@@ -200,8 +200,10 @@ public class CPBar extends Widget {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             CPData cpData = CPData.get(player);
             AbilityData aData = AbilityData.get(player);
+            if (!aData.hasCategory()) return;
+
             Category c = aData.getCategory();
-            overlayTexture = c == null ? null : c.getOverlayIcon();
+            overlayTexture = c.getOverlayIcon();
             
             boolean active = cpData.isActivated();
             

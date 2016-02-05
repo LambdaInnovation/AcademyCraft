@@ -150,8 +150,9 @@ public abstract class CommandAIMBase extends ACCommand {
         
         case "cat": {
             if(pars.length == 1) {
-                Category cat = aData.getCategory();
-                sendChat(ics, getLoc("curcat"), cat == null ? getLoc("nonecat") : cat.getDisplayName());
+                sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
+                        aData.getCategory().getDisplayName() :
+                        getLoc("nonecat"));
                 return;
             } else if(pars.length == 2) {
                 String catName = pars[1];
@@ -178,44 +179,41 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         case "learn": {
-            Category cat = aData.getCategory();
-            if(cat == null) {
-                sendChat(ics, getLoc("nocat"));
-                return;
-            }
-            
-            Skill s = tryParseSkill(cat, pars[1]);
-            if(s == null) {
-                sendChat(ics, getLoc("noskill"));
+            if (aData.hasCategory()) {
+                Skill s = tryParseSkill(aData.getCategory(), pars[1]);
+                if(s == null) {
+                    sendChat(ics, getLoc("noskill"));
+                } else {
+                    aData.learnSkill(s);
+                }
             } else {
-                aData.learnSkill(s);
+                sendChat(ics, getLoc("nocat"));
             }
             return;
         }
         
         case "unlearn": {
-            Category cat = aData.getCategory();
-            if(cat == null) {
-                sendChat(ics, getLoc("nocat"));
-                return;
-            }
-            
-            Skill s = tryParseSkill(cat, pars[1]);
-            if(s == null) {
-                sendChat(ics, getLoc("noskill"));
+            if (aData.hasCategory()) {
+                Category cat = aData.getCategory();
+                Skill s = tryParseSkill(cat, pars[1]);
+                if(s == null) {
+                    sendChat(ics, getLoc("noskill"));
+                } else {
+                    aData.setSkillLearnState(s, false);
+                }
             } else {
-                aData.setSkillLearnState(s, false);
+                sendChat(ics, getLoc("nocat"));
             }
             return;
         }
         
         case "learn_all": {
-            if(aData.getCategory() == null) {
+            if (aData.hasCategory()) {
+                aData.learnAllSkills();
+                sendChat(ics, locSuccessful());
+            } else {
                 sendChat(ics, getLoc("nocat"));
-                return;
             }
-            aData.learnAllSkills();
-            sendChat(ics, locSuccessful());
             return;
         }
         
@@ -239,14 +237,13 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         case "skills": {
-            Category cat = aData.getCategory();
-            if(cat == null) {
+            if (aData.hasCategory()) {
+                Category cat = aData.getCategory();
+                for(Skill s : cat.getSkillList()) {
+                    sendChat(ics, "#" + s.getID() + " " + s.getName() + ": " + s.getDisplayName());
+                }
+            } else {
                 sendChat(ics, getLoc("nocat"));
-                return;
-            }
-            
-            for(Skill s : cat.getSkillList()) {
-                sendChat(ics, "#" + s.getID() + " " + s.getName() + ": " + s.getDisplayName());
             }
             return;
         }
@@ -276,32 +273,31 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         case "exp": {
-            Category cat = aData.getCategory();
-            if(cat == null) {
-                sendChat(ics, getLoc("nocat"));
-                return;
-            }
-            
-            Skill skill = tryParseSkill(cat, pars[1]);
-            
-            if(skill == null) {
-                sendChat(ics, getLoc("noskill"));
-            } else {
-                if(pars.length == 2) {
-                    sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
-                } else if(pars.length == 3) {
-                    Float exp = tryParseFloat(pars[2]);
-                    if(exp < 0 || exp > 1) {
-                        sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
-                    } else {
-                        aData.setSkillExp(skill, exp);
-                        sendChat(ics, this.locSuccessful());
-                    }
+
+            if (aData.hasCategory()) {
+                Category cat = aData.getCategory();
+
+                Skill skill = tryParseSkill(cat, pars[1]);
+                if(skill == null) {
+                    sendChat(ics, getLoc("noskill"));
                 } else {
-                    sendChat(ics, this.locInvalid());
+                    if(pars.length == 2) {
+                        sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
+                    } else if(pars.length == 3) {
+                        Float exp = tryParseFloat(pars[2]);
+                        if(exp < 0 || exp > 1) {
+                            sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
+                        } else {
+                            aData.setSkillExp(skill, exp);
+                            sendChat(ics, this.locSuccessful());
+                        }
+                    } else {
+                        sendChat(ics, this.locInvalid());
+                    }
                 }
+            } else {
+                sendChat(ics, getLoc("nocat"));
             }
-            
             return;
         }
         }

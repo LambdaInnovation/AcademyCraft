@@ -37,7 +37,7 @@ public class AppRegistration extends RegistrationFieldSimple<RegApp, App> {
     @Override
     protected void register(App value, RegApp anno, String field)
             throws Exception {
-        AppRegistry.INSTANCE.register(value);
+        AppRegistry.register(value);
     }
     
 }

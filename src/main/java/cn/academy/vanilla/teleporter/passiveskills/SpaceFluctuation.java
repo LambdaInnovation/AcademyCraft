@@ -57,7 +57,7 @@ public class SpaceFluctuation extends Skill {
 
     @SubscribeEvent
     public void onExpAdded(SkillExpAddedEvent event) {
-        if (event.skill.canControl()) {
+        if (event.skill.canControl() && AbilityData.get(event.player).isSkillLearned(this)) {
             event.getAbilityData().addSkillExp(this, event.amount * getFloat("incr_rate"));
         }
     }

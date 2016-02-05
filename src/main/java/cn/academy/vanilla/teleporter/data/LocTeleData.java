@@ -9,6 +9,11 @@ package cn.academy.vanilla.teleporter.data;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.DataSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
+import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
+import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.SerializeType;
+import cn.lambdalib.s11n.nbt.NBTS11n;
+import cn.lambdalib.s11n.nbt.NBTS11n.CompoundSerializer;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
@@ -29,10 +34,11 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
-@RegDataPart("loctele")
+@RegDataPart(EntityPlayer.class)
 public class LocTeleData extends DataPart<EntityPlayer> {
 
-    private List<Location> locationList = new ArrayList();
+    @SerializeIncluded
+    private List<Location> locationList = new ArrayList<>();
 
     public static LocTeleData get(EntityPlayer player) {
         return EntityData.get(player).getPart(LocTeleData.class);
@@ -64,31 +70,19 @@ public class LocTeleData extends DataPart<EntityPlayer> {
 
     @Override
     public void fromNBT(NBTTagCompound tag) {
-        locationList.clear();
-        NBTTagList list = (NBTTagList) tag.getTag("l");
-
-        for (int i = 0; i < list.tagCount(); ++i) {
-            locationList.add(new Location(list.getCompoundTagAt(i)));
-        }
+        NBTS11n.read(tag, this);
     }
 
     @Override
-    public NBTTagCompound toNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-
-        NBTTagList nList = new NBTTagList();
-        for (int i = 0; i < locationList.size(); ++i) {
-            nList.appendTag(locationList.get(i).toNBT());
-        }
-        tag.setTag("l", nList);
-        return tag;
+    public void toNBT(NBTTagCompound tag) {
+        NBTS11n.write(tag, this);
     }
 
-    @RegSerializable(data = LocationSerializer.class)
+    @SerializeType
     public static class Location {
-        public final String name;
-        public final int dimension;
-        public final float x, y, z;
+        public String name;
+        public int dimension;
+        public float x, y, z;
 
         public Location(String _name, int dim, float _x, float _y, float _z) {
             name = _name;
@@ -98,6 +92,8 @@ public class LocTeleData extends DataPart<EntityPlayer> {
             z = _z;
         }
 
+        public Location() {}
+
         public Location(NBTTagCompound tag) {
             this(tag.getString("n"), tag.getByte("d"), tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z"));
         }
@@ -105,32 +101,6 @@ public class LocTeleData extends DataPart<EntityPlayer> {
         public String formatCoords() {
             return String.format("(%.1f, %.1f, %.1f)", x, y, z);
         }
-
-        NBTTagCompound toNBT() {
-            NBTTagCompound ret = new NBTTagCompound();
-
-            ret.setString("n", name);
-            ret.setByte("d", (byte) dimension);
-            ret.setFloat("x", x);
-            ret.setFloat("y", y);
-            ret.setFloat("z", z);
-
-            return ret;
-        }
-    }
-
-    public static class LocationSerializer implements DataSerializer<Location> {
-
-        @Override
-        public Location readData(NBTBase nbt, Location obj) throws Exception {
-            return new Location((NBTTagCompound) nbt);
-        }
-
-        @Override
-        public NBTBase writeData(Location obj) throws Exception {
-            return obj.toNBT();
-        }
-
     }
 
 }

@@ -21,19 +21,11 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author WeAthFolD
  */
 @Registrant
-@RegDataPart("PortableDeveloper")
+@RegDataPart(EntityPlayer.class)
 public class PortableDevData extends DataPart<EntityPlayer> implements IDeveloper {
     
     public static PortableDevData get(EntityPlayer player) {
         return EntityData.get(player).getPart(PortableDevData.class);
-    }
-
-    @Override
-    public void fromNBT(NBTTagCompound tag) {}
-
-    @Override
-    public NBTTagCompound toNBT() {
-        return new NBTTagCompound();
     }
 
     private ItemStack stack() {
