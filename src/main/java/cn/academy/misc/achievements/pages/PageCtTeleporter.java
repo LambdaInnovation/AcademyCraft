@@ -7,6 +7,7 @@
 package cn.academy.misc.achievements.pages;
 
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.misc.achievements.ItemAchievement;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
@@ -41,11 +42,13 @@ public final class PageCtTeleporter extends PageCategory<CatTeleporter> {
         add(new ACAchievement[] {
             aThreateningTeleport = new AchAbility(CatTeleporter.threateningTP, -3, -1, null),
             //Icon pending
-            aCriticalAttack = new AchAbility(category, "critical_attack", -3, 1, aThreateningTeleport),
+            aCriticalAttack = new AchAbility(category, "critical_attack", -3, 1,
+                ItemAchievement.getStack("achievements/tp_critical_attack"), aThreateningTeleport),
             aIgnoreBarrier = new AchAbility(CatTeleporter.penetrateTP, "ignore_barrier", -3, 3, aCriticalAttack),
             aFlashing = new AchAbility(CatTeleporter.flashing, -1, 3, aIgnoreBarrier),
             //Icon pending
-            aMastery = new AchAbility(category, "mastery", 1, 3, aFlashing),
+            aMastery = new AchAbility(category, "mastery", 1, 3,
+                ItemAchievement.getStack("achievements/tp_mastery"), aFlashing),
         });
     }
     

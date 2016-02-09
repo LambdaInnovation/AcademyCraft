@@ -7,6 +7,7 @@
 package cn.academy.misc.achievements.pages;
 
 import cn.academy.ability.api.CategoryManager;
+import cn.academy.misc.achievements.ItemAchievement;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
@@ -23,15 +24,15 @@ public final class PageCtElectromaster extends PageCategory<CatElectromaster> {
     private final ACAchievement aLv4;
     private final ACAchievement aLv5;
     
-    private final ACAchievement aArcGen;                //Manual
-    private final ACAchievement aAtCreeper;                //Manual
-    private final ACAchievement aMagnetic;                //Manual
-    private final ACAchievement aBodyIntensify;            //Manual
-    //private final ACAchievement aIronSand;            //Manual
-    private final ACAchievement aMineDetect;            //Manual
-    private final ACAchievement aThunderBolt;            //Manual
-    private final ACAchievement aRailgun;                //Manual
-    private final ACAchievement aThunderClap;            //Manual
+    private final ACAchievement aArcGen;                    //Manual
+    private final ACAchievement aAtCreeper;                 //Manual
+    private final ACAchievement aMagnetic;                  //Manual
+    private final ACAchievement aBodyIntensify;             //Manual
+    //private final ACAchievement aIronSand;                //Manual
+    private final ACAchievement aMineDetect;                //Manual
+    private final ACAchievement aThunderBolt;          	    //Manual
+    private final ACAchievement aRailgun;                   //Manual
+    private final ACAchievement aThunderClap;               //Manual
 
     public PageCtElectromaster() {
         super((CatElectromaster) CategoryManager.INSTANCE.getCategory("electromaster"));
@@ -45,7 +46,8 @@ public final class PageCtElectromaster extends PageCategory<CatElectromaster> {
         add(new ACAchievement[] {
             aArcGen = new AchAbility(category.arcGen, -3, -1, null),
             //Icon pending
-            aAtCreeper = new AchAbility(category.thunderBolt, "attack_creeper", -3, 1, aArcGen),
+            aAtCreeper = new AchAbility(category, "attack_creeper", -3, 1,
+                ItemAchievement.getStack("achievements/em_attack_creeper"), aArcGen),
             aMagnetic = new AchAbility(category.magMovement, -3, 3, aAtCreeper),
             aBodyIntensify = new AchAbility(category.bodyIntensify, -1, 3, aMagnetic),
             //aIronSand = new AchAbility(category.ironSand, 1, 3, null),
