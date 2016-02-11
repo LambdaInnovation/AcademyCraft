@@ -19,6 +19,7 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.WorldUtils;
@@ -90,7 +91,7 @@ public class ElectronMissile extends Skill {
                         EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living));
                     if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
                         instance.callFloatWithExp("overload_attacked", aData), 
-                        instance.callFloatWithExp("consumption_attacked", aData))) {
+                        instance.callFloatWithExp("cp_attacked", aData))) {
                         double min = Double.MAX_VALUE;
                         Entity result = null;
                         for(Entity e : list) {
@@ -129,7 +130,8 @@ public class ElectronMissile extends Skill {
         
         @Override
         public void onEnd() {
-            setCooldown(instance, instance.getFunc("cooldown").callInteger(ticks));
+            int cooldown = MathUtils.clampi(100, 300, ticks);
+            setCooldown(instance, cooldown);
         }
         
         @Override

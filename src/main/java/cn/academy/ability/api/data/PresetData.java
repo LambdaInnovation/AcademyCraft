@@ -24,6 +24,7 @@ import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -263,7 +264,9 @@ public class PresetData extends DataPart<EntityPlayer> {
         
         @SubscribeEvent
         public void onCategoryChanged(CategoryChangeEvent event) {
-            PresetData.get(event.player).clear();
+            if (!SideHelper.isClient()) {
+                PresetData.get(event.player).clear();
+            }
         }
         
     }

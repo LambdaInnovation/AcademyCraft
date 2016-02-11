@@ -8,6 +8,7 @@ package cn.academy.ability.develop;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.core.config.ConfigEnv;
 import cn.academy.energy.IFConstants;
 import cn.lambdalib.ripple.ScriptNamespace;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +18,8 @@ public enum DeveloperType {
     PORTABLE(IFConstants.LATENCY_MK1, 0.3, "items/developer_portable"), 
     NORMAL(IFConstants.LATENCY_MK2, 0.7, "blocks/developer_normal"), 
     ADVANCED(IFConstants.LATENCY_MK3, 1.0, "blocks/developer_advanced");
-    
+
+    private final ConfigEnv env = ConfigEnv.global.getEnv("ac.machines.developer." + this.name().toLowerCase());
     private final double bandwidth;
     public final double syncRate;
     public final ResourceLocation texture;
@@ -28,17 +30,13 @@ public enum DeveloperType {
         texture = Resources.getTexture(_tex);
     }
     
-    public ScriptNamespace script() {
-        return AcademyCraft.getScript().at("ac.developer." + toString().toLowerCase());
-    }
-    
     public double getEnergy() {
-        return script().getDouble("energy");
+        return env.getFloat("energy");
     }
 
     // Consumption per stimulation
     public double getCPS() {
-        return script().getDouble("cps");
+        return env.getFloat("cps");
     }
     
     public double getBandwidth() {
@@ -47,7 +45,7 @@ public enum DeveloperType {
 
     // Tick per stimulation
     public int getTPS() {
-        return script().getInteger("tps");
+        return env.getInt("tps");
     }
 
 }

@@ -10,8 +10,11 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.PlayerConfigEnv;
 import cn.academy.core.util.DamageHelper;
 import cn.academy.misc.achievements.ModuleAchievements;
+import cn.academy.vanilla.teleporter.TPPipes;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
@@ -46,13 +49,14 @@ public class TPAttackHelper {
      * at client if a critical hit happened.
      */
     public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
+        ConfigEnv env = PlayerConfigEnv.get(player);
         AbilityData aData = AbilityData.get(player);
         // Calculate 3 levels of crit hit
         int chLevel = -1;
         for (int i = 0; i < 3; ++i) {
-            float prob = AcademyCraft.pipeline.pipeFloat("ac.teleporter.crit_prob." + i, 0, player);
+            float prob = env.pipeFloat(TPPipes.pathCritProb(i), 0);
             if (RandUtils.nextFloat() < prob) {
-                float multiply = AcademyCraft.getFloat("teleporter._crithit.incr_" + i);
+                float multiply = env.getFloatArray("teleporter._crithit.incr")[i];
                 damage *= multiply;
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", multiply));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");

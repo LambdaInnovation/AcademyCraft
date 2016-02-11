@@ -80,7 +80,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                     window.addWidget(createConfirmWidget(new DevelopActionLevel(),
                         () -> {
                             developData.reset();
-                            Syncs.startUpgradingLevel(player, developer);
+                            Syncs.instance.startUpgradingLevel(player, developer);
                         }));
                 }
             });
@@ -221,7 +221,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                         window.addWidget(createConfirmWidget(new DevelopActionSkill(skill),
                             () -> {
                                 developData.reset();
-                                Syncs.startLearningSkill(player, developer, skill);
+                                Syncs.instance.startLearningSkill(player, developer, skill);
                             }));
                     });
                 }
@@ -327,7 +327,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                         Minecraft.getMinecraft().displayGuiScreen(
                                 new GuiSkillTreeDev(player, developer));
                     } else {
-                        Syncs.abort(player);
+                        Syncs.instance.abort(player);
                     }
                 });
                 

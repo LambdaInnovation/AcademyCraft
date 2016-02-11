@@ -16,6 +16,7 @@ import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD;
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect;
 import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,7 +38,7 @@ public class BodyIntensify extends Skill {
     static final int MIN_TIME = 10, MAX_TIME = 40, MAX_TOLERANT_TIME = 100;
     static final String LOOP_SOUND = "em.intensify_loop", ACTIVATE_SOUND = "em.intensify_activate";
     
-    static final List<PotionEffect> effects = new ArrayList();
+    static final List<PotionEffect> effects = new ArrayList<>();
     static {
         effects.add(new PotionEffect(Potion.moveSpeed.id, 0, 3));
         effects.add(new PotionEffect(Potion.jump.id, 0, 1));
@@ -64,19 +65,20 @@ public class BodyIntensify extends Skill {
     // CT: ChargeTime
     
     private static double getProbability(int ct) {
-        return instance.getFunc("probability").callDouble(ct);
+        return (ct - 10.0) / 18.0 * instance.env().getFloat("prob_scale");
     }
     
     private static int getBuffTime(AbilityData data, int ct) {
-        return instance.getFunc("time").callInteger(data.getSkillExp(instance), ct);
+        return (int) (4 * RandUtils.ranged(1, 2) * ct *
+                MathUtils.lerp(1.5, 2.5, data.getSkillExp(instance)));
     }
     
     private static int getHungerBuffTime(int ct) {
-        return instance.getFunc("hunger_time").callInteger(ct);
+        return (int) (instance.env().getFloat("hunger_time") * ct);
     }
     
     private static int getBuffLevel(AbilityData data, int ct) {
-        return instance.getFunc("level").callInteger(data.getSkillExp(instance), ct);
+        return (int) (MathUtils.lerp(0.5, 1, data.getSkillExp(instance)) * (ct / 18.0));
     }
     
     public static class IntensifyAction extends SkillSyncAction {

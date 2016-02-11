@@ -321,7 +321,7 @@ ac.ability.teleporter.name=転送使
 
 ## 転送使 技能
 ac.ability.teleporter.threatening_teleport.name=危険転送
-ac.ability.teleporter.dim_folding_theoreom.name=折り空間理論
+ac.ability.teleporter.dim_folding_theorem.name=折り空間理論
 ac.ability.teleporter.penetrate_teleport.name=貫通転送
 ac.ability.teleporter.mark_teleport.name=マーク転送
 ac.ability.teleporter.flesh_ripping.name=筋体が引き裂か
@@ -331,7 +331,7 @@ ac.ability.teleporter.space_fluct.name=空間変動
 ac.ability.teleporter.flashing.name=高速閃現
 
 ac.ability.teleporter.threatening_teleport.desc=あなたの周りのどこかに小さなものをテレポート。時には小さなかけらを敵に当て攻撃できます。
-ac.ability.teleporter.dim_folding_theoreom.desc=折り畳み式の確率をその空間に送り出すとき不安定な小さな空間をつかったジャンプ攻撃です。
+ac.ability.teleporter.dim_folding_theorem.desc=折り畳み式の確率をその空間に送り出すとき不安定な小さな空間をつかったジャンプ攻撃です。
 ac.ability.teleporter.penetrate_teleport.desc=あなたの前にある障害物の厚さを導出し、障害物をこえてテレポートできます。
 ac.ability.teleporter.mark_teleport.desc=あなたが目で見ているマークが目的地でその場所へテレポートできます。
 ac.ability.teleporter.flesh_ripping.desc=敵の肉を引き裂きその肉を直接送信、そして致命的な損傷を引き起こします。しかし、あまり使用しすぎるとあなたがとても不快な気分になるかもしれません。

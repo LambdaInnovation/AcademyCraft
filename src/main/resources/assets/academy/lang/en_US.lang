@@ -336,7 +336,7 @@ ac.ability.teleporter.name=Teleporter
 
 ## TP Skills
 ac.ability.teleporter.threatening_teleport.name=Threatening Teleport
-ac.ability.teleporter.dim_folding_theoreom.name=Dimension Folding Theoreom
+ac.ability.teleporter.dim_folding_theorem.name=Dimension Folding Theorem
 ac.ability.teleporter.penetrate_teleport.name=Penetrate Teleport
 ac.ability.teleporter.mark_teleport.name=Mark Teleport
 ac.ability.teleporter.flesh_ripping.name=Flesh Ripping
@@ -347,7 +347,7 @@ ac.ability.teleporter.flashing.name=Flashing
 ac.ability.teleporter.crithit=%fx critical hit!
 
 ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
-ac.ability.teleporter.dim_folding_theoreom.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.
+ac.ability.teleporter.dim_folding_theorem.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.
 ac.ability.teleporter.penetrate_teleport.desc=Derive the obstacle thickness in front of you, and straightly teleport through it.
 ac.ability.teleporter.mark_teleport.desc=Mark where your eye is looking at as your destination and teleport to there.
 ac.ability.teleporter.flesh_ripping.desc=Rip apart your enemy’s inside and cause deadly damage. But the over-bloody effect may make you feel uncomfortable. 

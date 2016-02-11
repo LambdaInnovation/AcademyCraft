@@ -21,6 +21,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -30,6 +31,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 
 import java.util.List;
 
@@ -105,9 +107,12 @@ public class LocationTeleport extends Skill {
 
     public static float getConsumption(EntityPlayer player, Location dest) {
         AbilityData data = AbilityData.get(player);
-        double distance = player.getDistance(dest.x, dest.y, dest.z);
-        double dimPenalty = player.worldObj.provider.dimensionId != dest.dimension ? 2 : 1;
-        return instance.getFunc("consumption").callFloat(distance, dimPenalty, data.getSkillExp(instance));
+        float distance = (float) player.getDistance(dest.x, dest.y, dest.z);
+        float dimPenalty = player.worldObj.provider.dimensionId != dest.dimension ? 2 : 1;
+
+        return MathUtils.lerpf(200, 150, data.getSkillExp(instance)) *
+                dimPenalty *
+                Math.max(8.0f, MathHelper.sqrt_float(Math.min(800.0f, distance)));
     }
 
     public static float getOverload(EntityPlayer player) {
@@ -152,7 +157,10 @@ public class LocationTeleport extends Skill {
             player.setPositionAndUpdate(dest.x, dest.y, dest.z);
 
             double dist = player.getDistance(dest.x, dest.y, dest.z);
-            aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(dist));
+
+            float expincr = dist >= 200 ? 0.08f : 0.05f;
+
+            aData.addSkillExp(instance, expincr);
             ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
             TPAttackHelper.incrTPCount(player);
         }

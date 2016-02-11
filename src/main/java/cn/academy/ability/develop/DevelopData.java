@@ -10,7 +10,9 @@ import cn.academy.ability.develop.action.IDevelopAction;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.networkcall.s11n.StorageOption;
+import cn.lambdalib.s11n.SerializeDynamic;
 import cn.lambdalib.s11n.SerializeIncluded;
+import cn.lambdalib.s11n.SerializeNullable;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
@@ -33,6 +35,8 @@ public class DevelopData extends DataPart<EntityPlayer> {
     private boolean dirty = false;
 
     @SerializeIncluded
+    @SerializeDynamic
+    @SerializeNullable
     private IDeveloper developer;
     private IDevelopAction type;
 
@@ -108,7 +112,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
     }
 
     public void reset() {
-        checkSide(Side.SERVER);
+//        checkSide(Side.SERVER);
 
         resetProgress(false);
     }
@@ -121,6 +125,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
         tickSync = 5;
         stim = maxStim = tickThisStim = 0;
         state = failed ? DevState.FAILED : DevState.IDLE;
+        dirty = true;
     }
 
     @Override

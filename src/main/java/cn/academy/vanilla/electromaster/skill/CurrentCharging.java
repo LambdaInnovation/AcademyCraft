@@ -66,15 +66,11 @@ public class CurrentCharging extends Skill {
     }
     
     public static float getChargingSpeed(AbilityData data) {
-        return call("speed", data);
+        return instance.callFloatWithExp("speed", data);
     }
     
     public static float getExpIncr(AbilityData data, boolean effective) {
-        return call("expincr_" + (effective ? "effective" : "ineffective"), data);
-    }
-    
-    private static float call(String name, AbilityData data) {
-        return instance.getFunc(name).callFloat(data.getSkillExp(instance));
+        return instance.callFloatWithExp("expincr_" + (effective ? "effective" : "ineffective"), data);
     }
     
     public static class ActionChargeBlock extends SyncAction {

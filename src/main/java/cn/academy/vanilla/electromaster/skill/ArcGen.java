@@ -64,11 +64,11 @@ public class ArcGen extends Skill {
     }
     
     private static double getIgniteProb(AbilityData data) {
-        return instance.getFunc("p_ignite").callFloat(data.getSkillExp(instance));
+        return instance.callFloatWithExp("p_ignite", data);
     }
     
     private static float getExpIncr(AbilityData data, boolean effectiveHit) {
-        return instance.getFunc("expincr_" + (effectiveHit ? "effective" : "ineffective")).callFloat(data.getSkillExp(instance));
+        return instance.callFloatWithExp("expincr_" + (effectiveHit ? "effective" : "ineffective"), data);
     }
     
     private static double getFishProb(AbilityData data) {

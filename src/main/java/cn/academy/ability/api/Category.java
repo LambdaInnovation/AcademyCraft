@@ -152,12 +152,12 @@ public class Category {
     }
     
     // Misc
-    
-    // WARNING: Those interfaces are temporary and are subject to change. Don't use them recently.
+
+    /* TODO CHECK WHETHER WE REALLY NEED THIS! This makes it hard to reason about real value of skills...
     public float getDamageRate(AbilityData data) {
         return 0.9f + data.getLevel() * 0.1f;
     }
-    
+
     public float getConsumptionRate(AbilityData data) {
         return 0.8f + data.getLevel() * 0.2f;
     }
@@ -165,5 +165,6 @@ public class Category {
     public float getOverloadRate(AbilityData data) {
         return 0.8f + data.getLevel() * 0.1f;
     }
+    */
     
 }
