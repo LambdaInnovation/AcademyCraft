@@ -75,10 +75,10 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
             // Resets the level
             if(catID != -1 && level == 0) {
-                setLevel(1);
+                level = 1;
             }
             if(catID == -1 && level != 0) {
-                setLevel(0);
+                level = 0;
             }
 
             for(int i = 0; i < skillExps.length; ++i)

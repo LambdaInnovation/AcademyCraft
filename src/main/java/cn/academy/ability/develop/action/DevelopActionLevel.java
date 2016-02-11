@@ -27,9 +27,7 @@ public class DevelopActionLevel implements IDevelopAction {
     
     @Override
     public int getStimulations(EntityPlayer player) {
-        AbilityData aData = AbilityData.get(player);
-        return AcademyCraft.getScript().at("ac.ability.learning")
-                .getFunction("uplevel_cost").callInteger(aData.getLevel() + 1);
+        return 5 * (AbilityData.get(player).getLevel() + 1);
     }
 
     @Override

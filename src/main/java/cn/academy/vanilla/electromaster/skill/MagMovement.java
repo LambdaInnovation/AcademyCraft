@@ -53,7 +53,7 @@ public class MagMovement extends Skill {
     }
     
     private static float getExpIncr(double distance) {
-        return instance.getFunc("expincr").callFloat(distance);
+        return instance.env().getFloat("expincr_scale") * (float) distance;
     }
     
     private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {

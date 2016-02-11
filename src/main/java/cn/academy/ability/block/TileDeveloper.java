@@ -83,14 +83,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     @SideOnly(Side.CLIENT)
     public double devProgressDisplay;
     
-    private static ScriptNamespace script;
-    
     public final DeveloperType type;
-
-    @RegInitCallback
-    public static void init() {
-        script = AcademyCraft.getScript().at("ac.developer");
-    }
     
     int syncCD;
     

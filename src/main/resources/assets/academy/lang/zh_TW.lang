@@ -320,7 +320,7 @@ ac.ability.teleporter.name=傳送使
 
 ## 傳送使 技能
 ac.ability.teleporter.threatening_teleport.name=危險傳送
-ac.ability.teleporter.dim_folding_theoreom.name=摺疊空間概論
+ac.ability.teleporter.dim_folding_theorem.name=摺疊空間概論
 ac.ability.teleporter.penetrate_teleport.name=穿透傳送
 ac.ability.teleporter.mark_teleport.name=標記傳送
 ac.ability.teleporter.flesh_ripping.name=肌體撕裂
@@ -330,7 +330,7 @@ ac.ability.teleporter.space_fluct.name=空間波動
 ac.ability.teleporter.flashing.name=高速閃現
 
 ac.ability.teleporter.threatening_teleport.desc=將小質量的物品移動到自己附近的某個位置。有時候，只需要一小塊體內的碎片就可以對生物造成巨大傷害。
-ac.ability.teleporter.dim_folding_theoreom.desc=通過傳送時不穩定的微弱空間摺疊現象來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
+ac.ability.teleporter.dim_folding_theorem.desc=通過傳送時不穩定的微弱空間摺疊現象來對自己的空間跳躍類攻擊進行一次概率性的空間分裂，來對敵人造成更高程度的傷害。
 ac.ability.teleporter.penetrate_teleport.desc=對於空間的奇妙感覺能讓你大致推演出前方障礙物的厚度，並穿過障礙物達到對面。
 ac.ability.teleporter.mark_teleport.desc=以肉眼確認一個實體，確認實體某個面為自己的傳送座標，並進行傳送。
 ac.ability.teleporter.flesh_ripping.desc=鎖定某個生物，將其身體部分血肉直接撕裂並傳送出體外，但是因為過於血腥的殺傷效果，可能在使用技能之後產生反胃。

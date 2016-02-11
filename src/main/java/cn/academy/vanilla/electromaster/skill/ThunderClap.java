@@ -17,6 +17,7 @@ import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.lambdalib.util.entityx.EntityCallback;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.Raytrace;
@@ -43,7 +44,8 @@ public class ThunderClap extends Skill {
     }
     
     private static float getDamage(AbilityData data, int ticks) {
-        return instance.getFunc("damage").callFloat(data.getSkillExp(instance), ticks);
+        return instance.callFloatWithExp("thunder_clap", data) *
+                MathUtils.lerpf(1.0f, 1.2f, (ticks - 40.0f) / 60.0f);
     }
     
     private static float getRange(AbilityData data) {
@@ -51,7 +53,7 @@ public class ThunderClap extends Skill {
     }
     
     private static int getCooldown(AbilityData data, int ticks) {
-        return instance.getFunc("cooldown").callInteger(data.getSkillExp(instance), ticks);
+        return ticks * instance.callIntWithExp("cooldown_scale", data);
     }
     
     @Override

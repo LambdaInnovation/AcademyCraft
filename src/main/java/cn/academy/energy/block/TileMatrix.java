@@ -143,15 +143,15 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     }
     
     private static int getCapacity(int N, int L) {
-        return (int) getProp("capacity", N, L);
+        return (int) Math.sqrt(N) * L * 6;
     }
     
     private static double getBandwidth(int N, int L) {
-        return getProp("bandwidth", N, L);
+        return N * L * L * 20;
     }
     
     private static double getRange(int N, int L) {
-        return getProp("range", N, L);
+        return N * 8 * Math.sqrt(L);
     }
     
     public int getCoreLevel() {
@@ -177,10 +177,6 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         return getRange(N, L);
     }
     
-    private static double getProp(String propName, int N, int L) {
-        return getFunc(propName).callDouble(N, L);
-    }
-    
     private void syncPlates() {
         syncInventory(this, getPlateCount());
     }
@@ -190,9 +186,5 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
             @RangedTarget(range = 15) TileMatrix matrix,
             @Data Integer plateCount) {
         matrix.plateCount = plateCount;
-    }
-    
-    private static ScriptFunction getFunc(String name) {
-        return AcademyCraft.getFunction("matrix." + name);
     }
 }

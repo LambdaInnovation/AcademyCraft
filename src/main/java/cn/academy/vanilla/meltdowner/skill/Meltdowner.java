@@ -17,6 +17,7 @@ import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.core.util.RangedRayDamage;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -80,7 +81,27 @@ public class Meltdowner extends Skill {
         public void readNBTFinal(NBTTagCompound tag) {
             ticks = tag.getInteger("t");
         }
-        
+
+        private float timeRate(int ct) {
+            return MathUtils.lerpf(0.8f, 1.2f, (ct - 20.0f) / 20.0f);
+        }
+
+        private float getEnergy(int ct) {
+            return timeRate(ct) * MathUtils.lerpf(300, 700, aData.getSkillExp(instance));
+        }
+
+        private float getDamage(int ct) {
+            return timeRate(ct) * MathUtils.lerpf(20, 50, aData.getSkillExp(instance));
+        }
+
+        private int getCooldown(int ct) {
+            return (int)(timeRate(ct) * 20 * MathUtils.lerpf(15, 7, aData.getSkillExp(instance)));
+        }
+
+        private float getExpIncr(int ct) {
+            return timeRate(ct) * 0.002f;
+        }
+
         @Override
         public void onEnd() {
             if(ticks < TICKS_MIN) {
@@ -93,14 +114,14 @@ public class Meltdowner extends Skill {
                     spawnRay();
                 } else {
                     RangedRayDamage rrd = new RangedRayDamage(player, 
-                        instance.getFunc("range").callFloat(aData.getSkillExp(instance)),
-                        instance.getFunc("energy").callFloat(aData.getSkillExp(instance), ct));
-                    rrd.startDamage = instance.getFunc("damage").callFloat(aData.getSkillExp(instance), ct);
+                        instance.callFloatWithExp("range", aData),
+                        getEnergy(ct));
+                    rrd.startDamage = getDamage(ct);
                     rrd.perform();
                 }
                 
-                setCooldown(instance, instance.getFunc("cooldown").callInteger(aData.getSkillExp(instance), ct));
-                aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(ct));
+                setCooldown(instance, getCooldown(ct));
+                aData.addSkillExp(instance, getExpIncr(ct));
             }
         }
         

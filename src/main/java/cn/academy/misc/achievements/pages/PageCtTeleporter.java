@@ -10,6 +10,7 @@ import cn.academy.ability.api.CategoryManager;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
+import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.CatTeleporter;
 
 /**
@@ -30,7 +31,7 @@ public final class PageCtTeleporter extends PageCategory<CatTeleporter> {
     private final ACAchievement aMastery;
     
     public PageCtTeleporter() {
-        super((CatTeleporter) CategoryManager.INSTANCE.getCategory("teleporter"));
+        super(ModuleVanilla.teleporter);
         add(new ACAchievement[] {
             aLv1 = new AchEvLevelChange(1, CatTeleporter.dimFolding, "lv1", 0, 0, null),
             aLv2 = new AchEvLevelChange(2, CatTeleporter.penetrateTP, "lv2", 2, 0, aLv1),

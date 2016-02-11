@@ -179,8 +179,10 @@ public class MarkTeleport extends Skill {
                 cpData.performWithForce(instance.getOverload(aData), distance * getCPB(aData));
 
                 if (!isRemote) {
-                    ((EntityPlayerMP) player).setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
-                    aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
+                    player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+
+                    float expincr = 0.00018f * distance;
+                    aData.addSkillExp(instance, expincr);
                     player.fallDistance = 0;
                 } else {
                     ACSounds.playClient(player, "tp.tp", .5f);

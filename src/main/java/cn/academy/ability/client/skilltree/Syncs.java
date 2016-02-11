@@ -14,24 +14,41 @@ import cn.academy.ability.develop.action.DevelopActionSkill;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 
 @Registrant
-public class Syncs {
+@NetworkS11nType
+public enum Syncs {
+    instance;
+
+    void startLearningSkill(EntityPlayer player, IDeveloper developer, Skill skill) {
+        NetworkMessage.sendToServer(instance, "learn_skill", player, developer, skill);
+    }
+
+    void startUpgradingLevel(EntityPlayer player, IDeveloper developer) {
+        NetworkMessage.sendToServer(instance, "upgrade_level", player, developer);
+    }
+
+    void abort(EntityPlayer player) {
+        NetworkMessage.sendToServer(instance, "abort", player);
+    }
     
-    @RegNetworkCall(side = Side.SERVER)
-    static void startLearningSkill(@Instance EntityPlayer player, @Instance IDeveloper developer, @Instance Skill skill) {
+    @Listener(channel="learn_skill", side=Side.SERVER)
+    private void hStartLearningSkill(EntityPlayer player, IDeveloper developer, Skill skill) {
         data(player).startDeveloping(developer, new DevelopActionSkill(skill));
     }
     
-    @RegNetworkCall(side = Side.SERVER)
-    static void startUpgradingLevel(@Instance EntityPlayer player, @Instance IDeveloper developer) {
+    @Listener(channel="upgrade_level", side=Side.SERVER)
+    private void hStartUpgradingLevel(EntityPlayer player, IDeveloper developer) {
         data(player).startDeveloping(developer, new DevelopActionLevel());
     }
     
-    @RegNetworkCall(side = Side.SERVER)
-    static void abort(@Instance EntityPlayer player) {
+    @Listener(channel="abort", side=Side.SERVER)
+    private void hAbort(@Instance EntityPlayer player) {
         data(player).abort();
     }
 

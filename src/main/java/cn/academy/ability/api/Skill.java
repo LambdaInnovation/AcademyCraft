@@ -17,8 +17,9 @@ import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.PlayerConfigEnv;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.ripple.ScriptNamespace;
 import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
@@ -65,8 +66,6 @@ public abstract class Skill extends Controllable {
     
     private final int level;
     
-    private ScriptNamespace script;
-    
     /**
      * The place this skill is at in the Skill Tree UI. This field is automatically loaded from script from field
      * "x" and "y"
@@ -100,8 +99,6 @@ public abstract class Skill extends Controllable {
         level = atLevel;
         fullName = "<unassigned>." + name;
         
-        AcademyCraft.pipeline.register(this);
-        
         addDevCondition(new DevConditionLevel());
     }
     
@@ -111,14 +108,13 @@ public abstract class Skill extends Controllable {
         
         icon = initIcon();
         fullName = initFullName();
-        script = initScript();
         
         try {
-            float x = script.getFloat("x"), y = script.getFloat("y");
-            guiX = x;
-            guiY = y;
+            float[] pos = env().getFloatArray(buildPath("gui_pos"));
+            guiX = pos[0];
+            guiY = pos[1];
         } catch(Exception e) {
-            AcademyCraft.log.error("Failed to load gui position of skill " + fullName);
+            throw new RuntimeException("Failed to load gui position of skill " + fullName, e);
         }
         
         this.addDevCondition(new DevConditionDeveloperType(getMinimumDeveloperType()));
@@ -208,14 +204,6 @@ public abstract class Skill extends Controllable {
      */
     protected ResourceLocation initIcon() {
         return icon = Resources.getTexture("abilities/" + getCategoryLocation() + "/skills/" + name);
-    }
-    
-    /**
-     * @return The ScriptNamespace of this skill. 
-     *     Is guaranteed to be called AFTER the full name of the skill is assigned.
-     */
-    protected ScriptNamespace initScript() {
-        return AcademyCraft.getScript().at("ac." + fullName);
     }
     
     //--- Hooks
@@ -322,8 +310,7 @@ public abstract class Skill extends Controllable {
      * @return The stimulation in the developer required in order to learn this skill
      */
     public int getLearningStims() {
-        return AcademyCraft.getFunction("ability.learning.learning_cost")
-                .callInteger(level);
+        return (int) (3 + level * level * 0.5f);
     }
     
     /**
@@ -343,57 +330,43 @@ public abstract class Skill extends Controllable {
         return getFullName();
     }
     
-    //---Script integration
-    
-    protected ScriptFunction getFunc(String name) {
-        return script.getFunction(name);
-    }
-    
-    /**
-     * Fetch a float value from a function call in script and pipeline it.
-     * @param args the arguments passed into the SCRIPT FUNCTION
-     */
-    protected float getFloatPiped(String key, EntityPlayer player, Object... args) {
-        return AcademyCraft.pipeline.pipeFloat(getFullName() + "." + key, 
-            getFunc(key).callFloat(args), player);
-    }
-    
-    protected int getIntPiped(String key, EntityPlayer player, Object... args) {
-        return AcademyCraft.pipeline.pipeInt(getFullName() + "." + key, 
-            getFunc(key).callInteger(args), player);
-    }
+    //---Script integration (DEPRECATED PLEASE DONT USE)
     
     /**
      * The most commonly used script operation. Pass the skill exp of this skill as argument into the function [name].
      */
     protected float callFloatWithExp(String name, AbilityData data) {
-        return getFloatPiped(name, data.getEntity(), data.getSkillExp(this));
+        return env(data).lerpf(buildPath(name), data.getSkillExp(this));
     }
-    
+
     protected int callIntWithExp(String name, AbilityData data) {
-        return getIntPiped(name, data.getEntity(), data.getSkillExp(this));
+        return (int) env(data).lerpf(buildPath(name), data.getSkillExp(this));
     }
-    
+
     protected float getFloat(String name) {
-        return script.getFloat(name);
+        return ConfigEnv.global.getFloat(buildPath(name));
     }
-    
+
     protected int getInt(String name) {
-        return script.getInteger(name);
+        return ConfigEnv.global.getInt(buildPath(name));
     }
-    
-    //---Pipeline integration
-    protected float pipeFloat(String key, float value, Object ...params) {
-        return AcademyCraft.pipeline.pipeFloat(getFullName() + "." + key, value, params);
+
+    protected ConfigEnv env(AbilityData data) {
+        return PlayerConfigEnv.get(data.getEntity());
     }
-    
-    protected int pipeInt(String key, int value, Object ...params) {
-        return AcademyCraft.pipeline.pipeInt(getFullName() + "." + key, value, params);
+
+    protected ConfigEnv env() {
+        return ConfigEnv.global;
+    }
+
+    private String buildPath(String name) {
+        return "ac.category." + getCategoryLocation() +
+                ".skills." + this.name + "." + name;
     }
     
     // Subclass sandbox
     protected float getConsumption(AbilityData data) {
-        return callFloatWithExp("consumption", data);
+        return callFloatWithExp("cp", data);
     }
     
     protected float getOverload(AbilityData data) {
@@ -401,17 +374,14 @@ public abstract class Skill extends Controllable {
     }
     
     protected int getCooldown(AbilityData data) {
-        return callIntWithExp("cooldown", data);
+        return (int) callFloatWithExp("cooldown", data);
     }
     
     /**
      * Trigger the achievement in vanilla achievement page, if any.
-     * @param player
      */
     protected void triggerAchievement(EntityPlayer player) {
         ModuleAchievements.trigger(player, getFullName());
     }
-
-
 
 }

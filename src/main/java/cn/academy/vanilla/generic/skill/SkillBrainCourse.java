@@ -8,8 +8,10 @@ package cn.academy.vanilla.generic.skill;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.data.PipedValues;
 import cn.academy.ability.api.event.SkillExpAddedEvent;
-import cn.academy.core.util.SubscribePipeline;
+import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.PlayerConfigEnv.PlayerEnvRebuildEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,18 +29,19 @@ public class SkillBrainCourse extends Skill {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
-    @SubscribePipeline("ability.maxcp")
-    public float addMaxCP(float cp, EntityPlayer player) {
-        if(AbilityData.get(player).isSkillLearned(this))
-            cp += 1000;
-        return cp;
-    }
-    
     @SubscribeEvent
     public void onExpAdded(SkillExpAddedEvent event) {
         AbilityData aData = event.getAbilityData();
         if(event.skill.canControl() && aData.isSkillLearned(this)) {
             aData.addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+        }
+    }
+
+    @SubscribeEvent
+    public void onEnvRebuild(PlayerEnvRebuildEvent evt) {
+        AbilityData aData = AbilityData.get(evt.entityPlayer);
+        if (aData.isSkillLearned(this)) {
+            evt.env.addFloatPipe(ConfigEnv.path(PipedValues.MAXCP), cp -> cp + 1000);
         }
     }
 

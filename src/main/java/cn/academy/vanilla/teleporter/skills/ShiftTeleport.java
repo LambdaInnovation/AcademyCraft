@@ -55,7 +55,7 @@ public class ShiftTeleport extends Skill {
     }
 
     static float getExpIncr(int attackEntities) {
-        return instance.getFunc("expincr").callFloat(attackEntities);
+        return (1 + attackEntities) * 0.002f;
     }
 
     public static float getDamage(AbilityData data) {

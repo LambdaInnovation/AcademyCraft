@@ -10,6 +10,7 @@ import cn.academy.ability.api.CategoryManager;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
+import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.CatElectromaster;
 
 /**
@@ -34,7 +35,7 @@ public final class PageCtElectromaster extends PageCategory<CatElectromaster> {
     private final ACAchievement aThunderClap;            //Manual
 
     public PageCtElectromaster() {
-        super((CatElectromaster) CategoryManager.INSTANCE.getCategory("electromaster"));
+        super(ModuleVanilla.electromaster);
         add(new ACAchievement[] {
             aLv1 = new AchEvLevelChange(1, category.currentCharging, "lv1", 0, 0, null),
             aLv2 = new AchEvLevelChange(2, category.magManip, "lv2", 2, 0, aLv1),

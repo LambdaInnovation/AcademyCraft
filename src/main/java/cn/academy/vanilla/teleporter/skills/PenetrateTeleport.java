@@ -153,7 +153,10 @@ public class PenetrateTeleport extends Skill {
             } else {
                 cpData.performWithForce(instance.getOverload(aData),
                         (float) (distance * instance.getConsumption(aData)));
-                aData.addSkillExp(instance, instance.getFunc("expincr").callFloat(distance));
+
+                float expincr = 0.00014f * (float) distance;
+
+                aData.addSkillExp(instance, expincr);
                 ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
                 TPAttackHelper.incrTPCount(player);
 

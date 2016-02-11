@@ -6,7 +6,6 @@
 */
 package cn.academy.core;
 
-import cn.academy.core.util.ValuePipeline;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -65,16 +64,6 @@ public class AcademyCraft {
 
     public static Configuration config;
 
-    /**
-     * The globally used script program.
-     */
-    private static ScriptProgram script;
-
-    /**
-     * The globally used value pipeline.
-     */
-    public static final ValuePipeline pipeline = new ValuePipeline();
-
     public static RecipeRegistry recipes = new RecipeRegistry();
 
     @RegMessageHandler.WrapperInstance
@@ -98,15 +87,6 @@ public class AcademyCraft {
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());
-
-        script = new ScriptProgram();
-        for (String s : scripts) {
-            ResourceLocation res = new ResourceLocation("academy:scripts/" + s + ".r");
-            ResourceCheck.add(res);
-            script.loadScript(res);
-        }
-
-        ResourceCheck.add(new ResourceLocation("academy:recipes/default.recipe"));
 
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
@@ -172,30 +152,9 @@ public class AcademyCraft {
         config.save();
     }
 
-    public static ScriptProgram getScript() {
-        return script;
-    }
-
     public static void addToRecipe(Class klass) {
         CustomMappingHelper.addMapping(recipes, klass);
     }
-
-    public static ScriptFunction getFunction(String name) {
-        return script.root.getFunction("ac." + name);
-    }
-
-    public static double getDouble(String name) {
-        return script.root.getDouble("ac." + name);
-    }
-
-    public static double getInt(String name) {
-        return script.root.getInteger("ac." + name);
-    }
-
-    public static float getFloat(String name) {
-        return script.root.getFloat("ac." + name);
-    }
-
     /**
      * Simply a fast route to print debug message.
      */

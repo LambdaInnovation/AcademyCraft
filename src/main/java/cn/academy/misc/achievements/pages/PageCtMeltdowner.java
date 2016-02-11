@@ -12,6 +12,7 @@ import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.aches.AchAbility;
 import cn.academy.misc.achievements.aches.AchEvLevelChange;
 import cn.academy.misc.achievements.aches.AchEvSkillLearn;
+import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 
 /**
@@ -33,7 +34,7 @@ public final class PageCtMeltdowner extends PageCategory<CatMeltdowner> {
     private final ACAchievement aElectronMissile;
     
     public PageCtMeltdowner() {
-        super((CatMeltdowner) CategoryManager.INSTANCE.getCategory("meltdowner"));
+        super(ModuleVanilla.meltdowner);
         add(new ACAchievement[] {
             aLv1 = new AchEvLevelChange(1, CatMeltdowner.electronBomb, "lv1", 0, 0, null),
             aLv2 = new AchEvLevelChange(2, CatMeltdowner.lightShield, "lv2", 2, 0, aLv1),

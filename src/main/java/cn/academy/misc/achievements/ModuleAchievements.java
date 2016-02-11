@@ -47,7 +47,7 @@ public final class ModuleAchievements {
     /**
      * Trigger an event
      * @param player The player
-     * @param achname The name of the achievement
+     * @param achid The id of the achievement
      * @return true if succeeded
      */
     public static boolean trigger(EntityPlayer player, String achid) {

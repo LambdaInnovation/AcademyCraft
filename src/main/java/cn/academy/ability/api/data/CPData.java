@@ -8,15 +8,11 @@ package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.event.*;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.PlayerConfigEnv;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.ripple.Path;
-import cn.lambdalib.ripple.ScriptFunction;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.network.NetworkMessage;
@@ -30,7 +26,6 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -50,6 +45,8 @@ import java.util.Map.Entry;
 @RegDataPart(EntityPlayer.class)
 public class CPData extends DataPart<EntityPlayer> {
 
+    private ConfigEnv env;
+
     private static final String
         MSG_POST_EVENT = "post_event",
         MSG_ACTIVATE_SVR = "actv_svr";
@@ -59,21 +56,6 @@ public class CPData extends DataPart<EntityPlayer> {
          * @return Whether the inteference should still be applied. If not the interferer will be removed.
          */
         boolean interfering();
-    }
-
-    public static int 
-        RECOVER_COOLDOWN,
-        OVERLOAD_COOLDOWN;
-    public static float 
-        OVERLOAD_O_MUL,
-        OVERLOAD_CP_MUL;
-
-    @RegInitCallback
-    public static void init() {
-        RECOVER_COOLDOWN = getIntParam("recover_cooldown");
-        OVERLOAD_COOLDOWN = getIntParam("overload_cooldown");
-        OVERLOAD_O_MUL = getFloatParam("overload_o_mul");
-        OVERLOAD_CP_MUL = getFloatParam("overload_cp_mul");
     }
 
     private Map<String, IInterfSource> interfSources = new HashMap<>();
@@ -128,6 +110,11 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     @Override
+    public void wake() {
+       env = PlayerConfigEnv.get(getEntity());
+    }
+
+    @Override
     public void tick() {
         AbilityData aData = AbilityData.get(getEntity());
 
@@ -135,8 +122,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
         if(aData.hasCategory()) {
             if(untilRecover == 0) {
-                float recover = getFunc("recover_speed")
-                        .callFloat(currentCP, getMaxCP());
+                float recover = getCPRecoverSpeed();
                 currentCP += recover;
                 if(currentCP > getMaxCP())
                     currentCP = getMaxCP();
@@ -145,8 +131,7 @@ public class CPData extends DataPart<EntityPlayer> {
             }
             
             if(untilOverloadRecover == 0) {
-                float recover = getFunc("overload_recover_speed")
-                        .callFloat(overload, getMaxOverload());
+                float recover = getOverloadRecoverSpeed();
                 
                 overload -= recover;
                 if(overload <= 0) {
@@ -207,7 +192,7 @@ public class CPData extends DataPart<EntityPlayer> {
             activated = state; // Set client state in advance to prevent display lag
             NetworkMessage.sendToServer(this, MSG_ACTIVATE_SVR, state);
         } else {
-            Preconditions.checkState(AbilityData.get(getEntity()).hasCategory(),
+            Preconditions.checkState(!state || AbilityData.get(getEntity()).hasCategory(),
                     "Trying to activate ability when player doesn't have one");
 
             if (activated != state) {
@@ -295,6 +280,8 @@ public class CPData extends DataPart<EntityPlayer> {
     public void performWithForce(float overload, float cp) {
         if(getEntity().capabilities.isCreativeMode)
             return;
+        overload = estimateOverload(overload);
+        cp = estimateConsumption(cp);
         
         this.overload += overload;
         this.currentCP -= cp;
@@ -304,8 +291,8 @@ public class CPData extends DataPart<EntityPlayer> {
         
         if(overload > getMaxOverload()) overloadFine = false;
         
-        untilRecover = RECOVER_COOLDOWN;
-        untilOverloadRecover = OVERLOAD_COOLDOWN;
+        untilRecover = getInt("cp_recover_cooldown");
+        untilOverloadRecover = getInt("overload_recover_cooldown");
         
         addMaxCP(cp);
         addMaxOverload(overload);
@@ -324,20 +311,36 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     private void addMaxCP(float consumedCP) {
+        consumedCP = estimateConsumption(consumedCP);
+
         AbilityData aData = AbilityData.get(getEntity());
-        float max = getFunc("add_cp").callFloat(aData.getLevel());
-        addMaxCP += getFunc("maxcp_rate").callFloat(consumedCP);
+        float max = getMaxAddCP(aData.getLevel());
+        addMaxCP += consumedCP * getFloat("maxcp_incr_rate");
         if(addMaxCP > max)
             addMaxCP = max;
     }
     
     private void addMaxOverload(float overload) {
+        overload = estimateOverload(overload);
+
         AbilityData aData = AbilityData.get(getEntity());
-        float max = getFunc("add_overload").callFloat(aData.getLevel());
-        float add = MathUtils.clampf(0, 10, getFunc("maxo_rate").callFloat(overload));
+        float max = getMaxAddOverload(aData.getLevel());
+        float add = MathUtils.clampf(0, 10, overload * getFloat("maxo_incr_rate"));
         addMaxOverload += add;
         if(addMaxOverload > max)
             addMaxOverload = max;
+    }
+
+    private float getCPRecoverSpeed() {
+        return getFloat("cp_recover_speed") *
+                0.0001f * maxCP *
+                MathUtils.lerpf(1, 2, currentCP / maxCP);
+    }
+
+    private float getOverloadRecoverSpeed() {
+        return getFloat("overload_recover_speed") *
+                Math.max(0.002f * maxOverload,
+                        0.007f * maxOverload * MathUtils.lerpf(1, 0.5f, overload / maxOverload / 2));
     }
     
     public boolean canLevelUp() {
@@ -345,7 +348,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     public float getLevelProgress() {
-        return addMaxCP / getFunc("add_cp").callFloat(AbilityData.get(getEntity()).getLevel());
+        return addMaxCP / getMaxAddCP(AbilityData.get(getEntity()).getLevel());
     }
     
     /**
@@ -353,14 +356,12 @@ public class CPData extends DataPart<EntityPlayer> {
      * Will just make a simulation in client side.
      */
     public boolean consumeCP(float amt) {
-        if(isOverloaded()) {
-            amt *= OVERLOAD_CP_MUL;
-        }
+
         
         if(currentCP < amt)
             return false;
         currentCP -= amt;
-        untilRecover = RECOVER_COOLDOWN;
+        untilRecover = getInt("cp_recover_cooldown");
         
         addMaxCP(amt);
         
@@ -383,12 +384,26 @@ public class CPData extends DataPart<EntityPlayer> {
         if(overload > 2 * getMaxOverload())
             overload = 2 * getMaxOverload();
         
-        untilOverloadRecover = OVERLOAD_COOLDOWN;
+        untilOverloadRecover = getInt("overload_recover_cooldown");
         
         addMaxOverload(amt);
         
         if(!isClient())
             dataDirty = true;
+    }
+
+    public float estimateOverload(float amt) {
+        if(isOverloaded()) {
+            amt *= getFloat("overload_o_mul");
+        }
+        return amt;
+    }
+
+    public float estimateConsumption(float amt) {
+        if(isOverloaded()) {
+            amt *= getFloat("overload_cp_mul");
+        }
+        return amt;
     }
     
     public boolean isOverloaded() {
@@ -404,11 +419,8 @@ public class CPData extends DataPart<EntityPlayer> {
     public void recalcMaxValue() {
         AbilityData data = AbilityData.get(getEntity());
         
-        this.maxCP = AcademyCraft.pipeline.pipeFloat
-            ("ability.maxcp", getInitCP(data.getLevel()), getEntity());
-        
-        this.maxOverload = AcademyCraft.pipeline.pipeFloat(
-            "ability.maxo", getInitOverload(data.getLevel()), getEntity());
+        this.maxCP = env.pipeFloat(PipedValues.MAXCP, getInitCP(data.getLevel()));
+        this.maxOverload = env.pipeFloat(PipedValues.MAXOVERLOAD, getInitOverload(data.getLevel()));
         
         currentCP = getMaxCP();
         overload = 0;
@@ -468,15 +480,35 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     // Inteference API end
-    
-    public static float getInitCP(int level) {
-        return getFunc("init_cp").callFloat(level);
+
+    private int getInt(String name) {
+        return env.getInt(path(name));
     }
-    
-    public static float getInitOverload(int level) {
-        return getFunc("init_overload").callFloat(level);
+
+    private float getFloat(String name) {
+        return env.getFloat(path(name));
     }
-    
+
+    public float getInitCP(int level) {
+        return env.getFloatArray(path("init_cp"))[level];
+    }
+
+    public float getInitOverload(int level) {
+        return env.getFloatArray(path("init_overload"))[level];
+    }
+
+    public float getMaxAddCP(int level) {
+        return env.getFloatArray(path("add_cp"))[level];
+    }
+
+    public float getMaxAddOverload(int level) {
+        return env.getFloatArray(path("add_overload"))[level];
+    }
+
+    private String path(String name) {
+        return "ac.ability.data." + name;
+    }
+
     /**
      * Effective in SERVER. Recover all the cp and overload.
      */
@@ -497,26 +529,6 @@ public class CPData extends DataPart<EntityPlayer> {
     @Override
     public void fromNBT(NBTTagCompound tag) {
         NBTS11n.read(tag, this);
-    }
-    
-    private static double getDoubleParam(String name) {
-        return AcademyCraft.getScript().root.getDouble(path(name));
-    }
-    
-    private static int getIntParam(String name) {
-        return AcademyCraft.getScript().root.getInteger(path(name));
-    }
-    
-    private static float getFloatParam(String name) {
-        return AcademyCraft.getScript().root.getFloat(path(name));
-    }
-    
-    private static ScriptFunction getFunc(String name) {
-        return AcademyCraft.getScript().root.getFunction(path(name));
-    }
-    
-    private static Path path(String name) {
-        return new Path("ac.ability.cp." + name);
     }
     
     @Listener(channel=MSG_ACTIVATE_SVR, side=Side.SERVER)

@@ -28,6 +28,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import com.google.common.base.Throwables;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,13 +57,13 @@ public class ModuleVanilla {
     public static Item needle = new ACItem("needle");
 
     @RegCategory
-    public static CatElectromaster electromaster;
+    public static final CatElectromaster electromaster = new CatElectromaster();
 
     @RegCategory
-    public static CatMeltdowner meltdowner;
+    public static final CatMeltdowner meltdowner = new CatMeltdowner();
 
     @RegCategory
-    public static CatTeleporter teleporter;
+    public static final CatTeleporter teleporter = new CatTeleporter();
 
     @RegInitCallback
     public static void init() {
