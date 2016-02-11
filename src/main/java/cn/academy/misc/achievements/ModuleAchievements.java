@@ -45,7 +45,7 @@ public final class ModuleAchievements {
     }
     
     /**
-     * Trigger an event
+     * Trigger an achievement
      * @param player The player
      * @param achid The id of the achievement
      * @return true if succeeded

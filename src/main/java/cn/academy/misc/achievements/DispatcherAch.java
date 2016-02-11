@@ -36,7 +36,7 @@ public final class DispatcherAch {
     
     //cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent
     
-    private HashMap<Item, HashSet<AchEvItemCrafted>> hcItemCrafted = new HashMap<Item, HashSet<AchEvItemCrafted>>();
+    private final HashMap<Item, HashSet<AchEvItemCrafted>> hcItemCrafted = new HashMap<Item, HashSet<AchEvItemCrafted>>();
     
     public void rgItemCrafted(Item item, AchEvItemCrafted ach) {
         if (hcItemCrafted.containsKey(item))
@@ -67,7 +67,7 @@ public final class DispatcherAch {
     
     //cn.academy.ability.api.event.LevelChangeEvent
     
-    private HashMap<Category, AchEvLevelChange[]> hcLevelChange = new HashMap<>();
+    private final HashMap<Category, AchEvLevelChange[]> hcLevelChange = new HashMap<>();
     
     public void rgLevelChange(Category cat, int lv, AchEvLevelChange ach) {
         if (hcLevelChange.containsKey(cat))
@@ -99,7 +99,7 @@ public final class DispatcherAch {
     
     //cn.academy.crafting.api.event.MatterUnitHarvestEvent
     
-    private HashMap<Block, AchEvMatterUnitHarvest> hcMatterUnitHarvest = new HashMap<Block, AchEvMatterUnitHarvest>();
+    private final HashMap<Block, AchEvMatterUnitHarvest> hcMatterUnitHarvest = new HashMap<Block, AchEvMatterUnitHarvest>();
     
     public void rgMatterUnitHarvest(Block blo, AchEvMatterUnitHarvest ach) {
         hcMatterUnitHarvest.put(blo, ach);
@@ -119,7 +119,7 @@ public final class DispatcherAch {
     
     //cn.academy.ability.api.event.SkillLearnEvent
     
-    private HashMap<Skill, AchEvSkillLearn> hcSkillLearn = new HashMap<Skill, AchEvSkillLearn>();
+    private final HashMap<Skill, AchEvSkillLearn> hcSkillLearn = new HashMap<Skill, AchEvSkillLearn>();
     
     public void rgSkillLearn(Skill skill, AchEvSkillLearn ach) {
         hcSkillLearn.put(skill, ach);
@@ -138,7 +138,7 @@ public final class DispatcherAch {
     
     //cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent
     
-    private Map<Item, AchEvItemPickup> hcPlayerPickup = new HashMap();
+    private final Map<Item, AchEvItemPickup> hcPlayerPickup = new HashMap();
     
     public void rgPlayerPickup(ItemStack stack, AchEvItemPickup ach) {
         hcPlayerPickup.put(stack.getItem(), ach);

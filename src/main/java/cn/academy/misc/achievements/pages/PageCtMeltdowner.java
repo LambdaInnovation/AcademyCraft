@@ -46,7 +46,8 @@ public final class PageCtMeltdowner extends PageCategory<CatMeltdowner> {
             aRadIntensify = new AchEvSkillLearn(CatMeltdowner.radIntensify, -3, -1, null),
             aLightShield = new AchEvSkillLearn(CatMeltdowner.lightShield, -3, 1, aRadIntensify),
             aMeltdowner = new AchEvSkillLearn(CatMeltdowner.meltdowner, -3, 3, aLightShield),
-            aMineRay = new AchEvSkillLearn(CatMeltdowner.mineRayBasic, "mine_ray", -1, 3, ItemAchievement.getStack(CatMeltdowner.mineRayLuck.getHintIcon()), aMeltdowner),
+            aMineRay = new AchEvSkillLearn(CatMeltdowner.mineRayBasic, "mine_ray", -1, 3,
+                ItemAchievement.getStack(CatMeltdowner.mineRayLuck.getHintIcon()), aMeltdowner),
             aJetEngine = new AchAbility(CatMeltdowner.jetEngine, 1, 3, aMineRay),
             aElectronMissile = new AchEvSkillLearn(CatMeltdowner.electronMissile, 3, 3, aJetEngine),
         });
