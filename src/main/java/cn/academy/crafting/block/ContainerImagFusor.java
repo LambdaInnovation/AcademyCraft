@@ -68,4 +68,9 @@ public class ContainerImagFusor extends CleanContainer {
         this.addTransferRule(gRange(0, 4), inventoryGroup);
     }
 
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return player.getDistance(tile.xCoord, tile.yCoord, tile.zCoord) < 64;
+    }
+
 }
