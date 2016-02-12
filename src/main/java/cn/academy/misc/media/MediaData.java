@@ -42,7 +42,7 @@ public class MediaData extends DataPart {
      * @return Whether the media is successfully installed
      */
     public boolean installMedia(int mediaID) {
-        checkSide(Side.CLIENT);
+        checkSide(Side.SERVER);
         
         if(learned.get(mediaID))
             return false;
