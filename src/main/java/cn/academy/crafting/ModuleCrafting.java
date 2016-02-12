@@ -28,14 +28,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the main registry of all the crafting materials. Oredict name and
@@ -213,7 +219,53 @@ public class ModuleCrafting {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst, 2), Mode.REFINE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal, 3), Mode.REFINE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
+
+        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot));
+        addOreDictRefineRecipe("oreIron",new ItemStack(Items.iron_ingot,2));
+        addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.emerald,2));
+        addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.quartz,2));
+        addOreDictRefineRecipe("oreDiamond",new ItemStack(Items.diamond,2));
+        addOreDictRefineRecipe("oreRedstone",new ItemStack(Blocks.redstone_block));
+        addOreDictRefineRecipe("oreLapis",new ItemStack(Items.dye,12,4));
+        addOreDictRefineRecipe("oreCoal",new ItemStack(Items.coal,2));
+        addDefaultOreDictRefineRecipe("Copper");
+        addDefaultOreDictRefineRecipe("Tin");
+        addDefaultOreDictRefineRecipe("Lead");
+        addDefaultOreDictRefineRecipe("Platinum");
+        addDefaultOreDictRefineRecipe("Silver");
+        addDefaultOreDictRefineRecipe("Nickel");
     }
+
+    private static void addOreDictRefineRecipe(String orename,ItemStack output)
+    {
+        for(ItemStack ore:OreDictionary.getOres(orename))
+            MetalFormerRecipes.INSTANCE.add(ore,output,Mode.REFINE);
+    }
+
+    private static void addOreDictRefineRecipe(String orename,String outputname)
+    {
+        ArrayList<ItemStack> ingotlist=OreDictionary.getOres(outputname);
+        if(ingotlist==null||ingotlist.size()==0)
+            return;
+        ItemStack output=(ItemStack)ingotlist.get(0).copy();
+        List<ItemStack> ores=OreDictionary.getOres(orename);
+        if(ores==null||ores.size()==0)
+            return;
+        int outputsize=FurnaceRecipes.smelting().getSmeltingResult(ores.get(0)).stackSize;
+        outputsize=outputsize<32?(2*outputsize):64;
+        output.stackSize=outputsize;
+        for(ItemStack ore:ores)
+        {
+            MetalFormerRecipes.INSTANCE.add(ore,output,Mode.REFINE);
+        }
+    }
+
+    private static void addDefaultOreDictRefineRecipe(String orename)
+    {
+        addOreDictRefineRecipe("ore"+orename,"ingot"+orename);
+    }
+
+
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
