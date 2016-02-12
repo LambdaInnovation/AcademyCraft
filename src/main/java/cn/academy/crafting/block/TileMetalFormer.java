@@ -22,6 +22,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -160,6 +161,16 @@ public class TileMetalFormer extends TileReceiverBase {
         target.workCounter = counter;
         target.current = recipe;
         target.mode = mode;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        nbt.setInteger("mode", mode.ordinal());
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        mode = Mode.values()[nbt.getInteger("mode")];
     }
     
     // --- CLIENT EFFECTS

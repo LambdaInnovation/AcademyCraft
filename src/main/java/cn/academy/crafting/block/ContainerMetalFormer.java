@@ -37,8 +37,8 @@ public class ContainerMetalFormer extends Container {
     private void initInventory() {
         InventoryPlayer inv = player.inventory;
         
-        this.addSlotToContainer(new Slot(tile, 0, 15, 35));
-        this.addSlotToContainer(new Slot(tile, 1, 79, 35));
+        this.addSlotToContainer(new SlotMFItem(tile, 0, 15, 35));
+        this.addSlotToContainer(new SlotMFItem(tile, 1, 79, 35));
         this.addSlotToContainer(new SlotIFItem(tile, 2, 38, 71));
         
         int STEP = 18;
