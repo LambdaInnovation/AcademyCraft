@@ -71,7 +71,7 @@ public class LightShield extends Skill {
         double dx = e.posX - player.posX, 
                 dy = e.posY - player.posY, 
                 dz = e.posZ - player.posZ;
-        double yaw = -MathUtils.toAngle(Math.atan2(dx, dz));
+        double yaw = -MathUtils.toDegrees(Math.atan2(dx, dz));
         return Math.abs(yaw - player.rotationYaw) % 360 < 60;
     }
     

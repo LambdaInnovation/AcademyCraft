@@ -56,8 +56,8 @@ public abstract class RendererRayBaseSimple extends Render {
         
         Vec3 delta = subtract(end, start);
         double dxzsq = delta.xCoord * delta.xCoord + delta.zCoord * delta.zCoord;
-        double npitch = MathUtils.toAngle(Math.atan2(delta.yCoord, Math.sqrt(dxzsq)));
-        double nyaw = MathUtils.toAngle(Math.atan2(delta.xCoord, delta.zCoord));
+        double npitch = MathUtils.toDegrees(Math.atan2(delta.yCoord, Math.sqrt(dxzsq)));
+        double nyaw = MathUtils.toDegrees(Math.atan2(delta.xCoord, delta.zCoord));
         
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-90 + nyaw, 0, 1, 0);

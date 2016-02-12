@@ -111,7 +111,7 @@ public class ACRenderingHelper {
         float hw = width / 2;
         Tessellator t = Tessellator.instance;
         double dy = y1 - y0, dx = x1 - x0, len = Math.sqrt(dy * dy + dx * dx);
-        double theta = MathUtils.toAngle(Math.atan2(dy, dx));
+        double theta = MathUtils.toDegrees(Math.atan2(dy, dx));
         boolean pre = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glPushMatrix();
