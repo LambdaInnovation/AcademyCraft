@@ -113,6 +113,7 @@ public class ConfigEnv {
     }
 
     public void addFloatPipe(Predicate<String> pathSelector, FloatPipe pipe) {
+        floatPipeCache.invalidateAll();
         floatPipes.add(new Pipe<>(pathSelector, pipe));
     }
 

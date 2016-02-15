@@ -24,10 +24,13 @@ import cn.academy.vanilla.generic.skill.SkillMindCourse;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
+import cn.academy.vanilla.vecmanip.CatVecManip;
+import cn.academy.vanilla.vecmanip.CatVecManip$;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.s11n.network.NetworkS11n;
 import com.google.common.base.Throwables;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -65,6 +68,9 @@ public class ModuleVanilla {
     @RegCategory
     public static final CatTeleporter teleporter = new CatTeleporter();
 
+    @RegCategory
+    public static final CatVecManip$ vecManip = CatVecManip$.MODULE$;
+
     @RegInitCallback
     public static void init() {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate), new ItemStack(needle, 6),
@@ -74,6 +80,11 @@ public class ModuleVanilla {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate, 2), new ItemStack(coin, 3),
                 Mode.PLATE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.wafer), new ItemStack(silbarn), Mode.ETCH);
+
+        // Note this is currently an awkward hardcode for Groundshock skill's serialization, as there is
+        // no direct syntax mapping to int[][].class in scala. Will remove later.
+
+        NetworkS11n.register(int[][].class);
     }
 
     public static void addGenericSkills(Category category) {
