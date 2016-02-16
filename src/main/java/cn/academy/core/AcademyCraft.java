@@ -6,6 +6,8 @@
 */
 package cn.academy.core;
 
+import cn.academy.misc.media.MediaManager;
+import cn.academy.misc.media.OnlineMediaManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -131,6 +133,9 @@ public class AcademyCraft {
             }
             System.out.printf("|-------------------------------------------------------\n");
         }
+
+        MediaManager.INSTANCE.init();
+        OnlineMediaManager.INSTANCE.init();
 
         recipes = null; // Release and have fun GC
         config.save();
