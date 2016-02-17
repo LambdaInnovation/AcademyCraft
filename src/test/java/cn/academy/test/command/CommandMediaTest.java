@@ -7,8 +7,10 @@
 package cn.academy.test.command;
 
 import cn.academy.core.command.ACCommand;
+import cn.academy.misc.media.ACMedia;
 import cn.academy.misc.media.MediaManager;
 import cn.academy.misc.media.MediaUtils;
+import cn.academy.misc.media.OnlineMediaManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
 import net.minecraft.command.ICommandSender;
@@ -40,12 +42,21 @@ public class CommandMediaTest extends ACCommand {
             case "stop":
                 MediaUtils.stopMedia(MediaManager.INSTANCE.getMedia(pars[1]));
                 break;
-            case "rewind":
-                MediaUtils.rewindMedia(MediaManager.INSTANCE.getMedia(pars[1]));
-                break;
             case "medias":
                 ics.addChatMessage(new ChatComponentTranslation(MediaManager.INSTANCE.getMediaIds().toString()));
                 break;
+            case "download":
+                OnlineMediaManager.INSTANCE.downloadMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                break;
+            case "remove":
+                OnlineMediaManager.INSTANCE.removeLocalMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                break;
+            case "info":
+                ACMedia m = MediaManager.INSTANCE.getMedia(pars[1]);
+                ics.addChatMessage(new ChatComponentTranslation("====AcademyCraft Media System====\nAuthor: " + m.getAuthor() +
+                        "\nName: " + m.getName() + "\nFile: " + m.getFile().getPath() + "\nRemark: " + m.getRemark() +
+                        "\nCover Picture: " + m.getCoverPic().getPath() + "\n================================="));
+
         }
     }
 

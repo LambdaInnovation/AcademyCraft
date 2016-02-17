@@ -6,10 +6,14 @@
  */
 package cn.academy.misc.media;
 
+import cn.academy.core.client.sound.FollowEntitySound;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
@@ -23,7 +27,7 @@ import java.net.MalformedURLException;
 public class MediaUtils {
 
     private static SoundSystem sndSystem;
-    private static Library sndLibrary;
+//    private static Library sndLibrary;
 
     static {
         try {
@@ -33,16 +37,15 @@ public class MediaUtils {
             Field f2 = sndMgr.getClass().getDeclaredField("sndSystem");
             f2.setAccessible(true);
             sndSystem = (SoundSystem) f2.get(sndMgr);
-            System.out.println(((SoundSystem) sndSystem).getClass().getName());
-            Field f3 = SoundSystem.class.getDeclaredField("soundLibrary");
+/*            Field f3 = SoundSystem.class.getDeclaredField("soundLibrary");
             f3.setAccessible(true);
-            sndLibrary = (Library) f3.get(sndSystem);
+            sndLibrary = (Library) f3.get(sndSystem);*/
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    static void newSource(ACMedia media, boolean loop, int x, int y, int z) {
+/*    static void newSource(ACMedia media, boolean loop, int x, int y, int z) {
         try {
             sndSystem.newSource(true, media.getId(), media.getFile().toURI().toURL(), media.getFile().getName(), loop, x,
                     y, z, SoundSystemConfig.ATTENUATION_NONE, SoundSystemConfig.getDefaultAttenuation());
@@ -53,19 +56,18 @@ public class MediaUtils {
 
     static void removeSource(ACMedia media) {
         sndSystem.removeSource(media.getId());
-    }
+    }*/
 
     /**
      * Play the media file in game.
      * @param media The media to play.
      */
     public static void playMedia(ACMedia media, boolean loop) {
-        if(!sndLibrary.getSources().containsKey(media.getId())) {
-            newSource(media, loop, 0, 0, 0);
-        } else {
-            sndLibrary.setLooping(media.getId(), loop);
-        }
-        sndSystem.play(media.getId());
+        /*try {
+            ForgeHooksClient.playSound(sndSystem, new MovingSound(player,));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }*/
     }
 
     /**
