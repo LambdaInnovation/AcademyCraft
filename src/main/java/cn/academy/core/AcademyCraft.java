@@ -135,7 +135,7 @@ public class AcademyCraft {
         }
 
         MediaManager.INSTANCE.init();
-        OnlineMediaManager.INSTANCE.init();
+//        OnlineMediaManager.INSTANCE.init();
 
         recipes = null; // Release and have fun GC
         config.save();

@@ -6,8 +6,8 @@
  */
 package cn.academy.misc.media;
 
+import com.google.common.base.Throwables;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -30,8 +30,18 @@ public class ACMedia {
 
     private String remark;
 
-    public ACMedia(String _id) {
-        id = _id;
+    public ACMedia(File _file) {
+        file = _file;
+    }
+    public ACMedia(URL url) {
+        try {
+            new ACMedia(new File(url.toURI()));
+        } catch (URISyntaxException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+    public ACMedia(String path) {
+        new ACMedia(new File(path));
     }
 
     /**
@@ -55,7 +65,11 @@ public class ACMedia {
      * @return The display name.
      */
     public String getName() {
-        return name;
+        if(name != null) {
+            return name;
+        } else {
+            return file.getName().replace(".ogg", "");
+        }
     }
 
     /**
@@ -79,37 +93,20 @@ public class ACMedia {
      * @return The ID of the media.
      */
     public String getId() {
-        return id;
+        if(id != null) {
+            return id;
+        } else {
+            return file.getName().replace(".ogg", "");
+        }
     }
 
     /**
-     * Set the sound file of the media.
-     * @param path The path of the sound file.
-     * @return this
-     * @throws URISyntaxException
-     */
-    public ACMedia setFile(URL path) throws URISyntaxException {
-        setFile(new File(path.toURI()));
-        return this;
-    }
-
-    /**
-     * Set the sound file of the media.
-     * @param path The path of the sound file.
+     * Set the ID of the media.
+     * @param _id The ID to set.
      * @return this
      */
-    public ACMedia setFile(String path) {
-        setFile(new File(path));
-        return this;
-    }
-
-    /**
-     * Set the sound file of the media.
-     * @param _file The sound file.
-     * @return this
-     */
-    public ACMedia setFile(File _file) {
-        file = _file;
+    public ACMedia setId(String _id) {
+        id = _id;
         return this;
     }
 
@@ -172,15 +169,6 @@ public class ACMedia {
     public ACMedia setRemark(String _remark) {
         remark = _remark;
         return this;
-    }
-
-    /**
-     * Get the availability of the media.
-     * @param player The player to get.
-     * @return If the media is available.
-     */
-    public boolean isAvailable(EntityPlayer player) {
-        return true;
     }
 
 }

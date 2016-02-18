@@ -7,6 +7,7 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
+import com.google.common.base.Throwables;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -41,15 +42,30 @@ public class MediaManager {
             return;
         }
 
-        Config conf = ConfigFactory.parseFile(cfile);
-        for(String id : conf.getStringList("ac.media.medias")) {
-            ACMedia media = new ACMedia(id);
-            Config mediac = conf.getConfig("ac.media." + id);
-            if(mediac.hasPath("author")) media.setAuthor(mediac.getString("author"));
-            media.setName(mediac.getString("name"));
-            media.setFile(pathPrefix + mediac.getString("filename"));
-            if(mediac.hasPath("picfile")) media.setCoverPic(pathPrefix + mediac.getString("picfile"));
-            medias.put(id, media);
+        File mediaDir = new File(pathPrefix);
+        List<ACMedia> files = new ArrayList<ACMedia>();
+
+        if(!mediaDir.exists()) mediaDir.mkdir();
+        if(mediaDir.listFiles() != null) {
+            for (File f : mediaDir.listFiles()){
+                if(f.getName().contains(".ogg")) {
+                    files.add(new ACMedia(f));
+                }
+            }
+        }
+
+        for(ACMedia media : files) {
+            String pathname = "ac.media." + media.getFile().getName();
+            if(conf.hasPath(pathname)) {
+                Config mediac = conf.getConfig(pathname);
+                if(mediac.hasPath("author")) media.setAuthor(mediac.getString("author"));
+                if(mediac.hasPath("name")) media.setName(mediac.getString("name"));
+                if(mediac.hasPath("id")) media.setId(mediac.getString("id"));
+                if(mediac.hasPath("picfile")) media.setCoverPic(pathPrefix + mediac.getString("picfile"));
+                if(mediac.hasPath("remark")) media.setRemark(mediac.getString("remark"));
+            }
+            System.out.println(media.getId());
+            medias.put(media.getId(), media);
         }
     }
 
@@ -81,18 +97,9 @@ public class MediaManager {
     /**
      * Register your media into the manager (in code).
      * @param media Your media.
-     * @param id The ID of your media.
-     */
-    public void registerMedia(ACMedia media, String id) {
-        medias.put(id, media);
-    }
-
-    /**
-     * Register your media into the manager (in code).
-     * @param media Your media.
      */
     public void registerMedia(ACMedia media) {
-        registerMedia(media, media.getId());
+        medias.put(media.getId(), media);
     }
 
     protected boolean checkConf() {
@@ -101,8 +108,7 @@ public class MediaManager {
             try {
                 cfile.createNewFile();
             } catch(Exception e) {
-                e.printStackTrace();
-                return false;
+                throw Throwables.propagate(e);
             }
         }
         return true;

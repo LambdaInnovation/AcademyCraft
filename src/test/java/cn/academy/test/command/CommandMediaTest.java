@@ -53,10 +53,13 @@ public class CommandMediaTest extends ACCommand {
                 break;
             case "info":
                 ACMedia m = MediaManager.INSTANCE.getMedia(pars[1]);
-                ics.addChatMessage(new ChatComponentTranslation("====AcademyCraft Media System====\nAuthor: " + m.getAuthor() +
-                        "\nName: " + m.getName() + "\nFile: " + m.getFile().getPath() + "\nRemark: " + m.getRemark() +
-                        "\nCover Picture: " + m.getCoverPic().getPath() + "\n================================="));
-
+                ics.addChatMessage(new ChatComponentTranslation("====AcademyCraft Media System===="));
+                ics.addChatMessage(new ChatComponentTranslation("Author: " + m.getAuthor()));
+                ics.addChatMessage(new ChatComponentTranslation("Name: " + m.getName()));
+                ics.addChatMessage(new ChatComponentTranslation("File: " + m.getFile().getPath()));
+                ics.addChatMessage(new ChatComponentTranslation("Remark: " + m.getRemark()));
+                ics.addChatMessage(new ChatComponentTranslation("Cover Picture: " + m.getCoverPic().getPath()));
+                ics.addChatMessage(new ChatComponentTranslation("================================="));
         }
     }
 

@@ -7,6 +7,7 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
+import com.google.common.base.Throwables;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.*;
@@ -38,9 +39,8 @@ public class OnlineMediaManager extends MediaManager {
     public boolean downloadMedia(ACMedia media) {
         try {
             return getOnlineFile(new URL(source + media.getFile().getName()), media.getFile());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            throw Throwables.propagate(e);
         }
     }
 
@@ -56,15 +56,16 @@ public class OnlineMediaManager extends MediaManager {
     @Override
     protected boolean checkConf() {
         if(!cfile.exists()) {
-            AcademyCraft.log.info("Online media config File not found!");
+            AcademyCraft.log.error("Online media config File not found!");
             try {
-                getOnlineFile(new URL(source + "media.conf"), new File(this.pathPrefix + "media.conf"));
+                if(!getOnlineFile(new URL(source + "media.conf"), new File(this.pathPrefix + "media.conf"))) {
+                    AcademyCraft.log.error("Can't download online media config from server! Ignore loading online resource.");
+                }
             } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return false;
+                throw Throwables.propagate(e);
             }
         }
-        return true;
+            return true;
     }
 
     private boolean getOnlineFile(URL url, File local) {
@@ -73,7 +74,7 @@ public class OnlineMediaManager extends MediaManager {
             try {
                 local.createNewFile();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw Throwables.propagate(e);
             }
         }
         HttpURLConnection conn = null;
@@ -98,8 +99,6 @@ public class OnlineMediaManager extends MediaManager {
                 }
             } else {
                 try {
-                    is.close();
-                    os.close();
                     conn.disconnect();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -107,18 +106,25 @@ public class OnlineMediaManager extends MediaManager {
                 }
                 return false;
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            throw Throwables.propagate(e);
+        } catch (IOException e) {
+            //Exceptions will be thrown when no Internet or other network problems, and it is no reason to crash it.
             e.printStackTrace();
             return false;
         } finally {
             try {
-                is.close();
-                os.close();
-                conn.disconnect();
-            } catch (Exception e) {
+                if (is != null) {
+                    is.close();
+                }
+                if (os != null) {
+                    os.close();
+                }
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
-                return false;
-
             }
         }
         return true;
