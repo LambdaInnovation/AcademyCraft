@@ -135,7 +135,7 @@ public enum ContextManager {
 
     private void terminatePost(Context ctx) {
         sendToSelf(ctx, Context.MSG_TERMINATED);
-        alive().remove(ctx.networkID);
+        // alive().remove(ctx.networkID);  NOTE: Suspended to next tick: prevent ConcurrentModification
         ctx.status = Status.TERMINATED;
     }
 
@@ -171,14 +171,13 @@ public enum ContextManager {
         ClientInfo info = getInfoC(networkID);
         if (info != null) {
             alive().remove(networkID);
-            sendToSelf(info.ctx, Context.MSG_TERMINATED);
         }
     }
 
     private void killServer(int networkID) {
         ServerInfo info = getInfoS(networkID);
         if (info != null) {
-            terminate_s(info.ctx);
+            alive().remove(networkID);
         }
     }
 
@@ -206,7 +205,7 @@ public enum ContextManager {
             sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
         }
 
-        if (checkKeepAlive(info, time)) {
+        if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
         }
 
@@ -223,7 +222,7 @@ public enum ContextManager {
                     this, KEEPALIVE, info.ctx.networkID);
         }
 
-        if (checkKeepAlive(info, time)) {
+        if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
         }
 

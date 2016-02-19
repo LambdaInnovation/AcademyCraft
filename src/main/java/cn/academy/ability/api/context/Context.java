@@ -9,6 +9,7 @@ package cn.academy.ability.api.context;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,9 +32,9 @@ import net.minecraft.world.World;
  */
 public class Context {
     public static final String
-        MSG_TERMINATED = "0",
-        MSG_MADEALIVE = "1",
-        MSG_TICK = "2";
+        MSG_TERMINATED = "i_term",
+        MSG_MADEALIVE = "i_alive",
+        MSG_TICK = "i_tick";
 
     public enum Status { CONSTRUCTED, ALIVE, TERMINATED }
 
@@ -50,6 +51,11 @@ public class Context {
      */
     public Context(EntityPlayer _player) {
         player = _player;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Context() {
+        this(Minecraft.getMinecraft().thePlayer);
     }
 
     EntityPlayer getPlayer() {
@@ -105,6 +111,8 @@ public class Context {
     public void sendToExceptLocal(String channel, Object ...args) {
         mgr.mToExceptLocal(this, channel, args);
     }
+
+    public void sendToSelf(String channel, Object ...args) { NetworkMessage.sendToSelf(this, channel, args); }
 
     //
 

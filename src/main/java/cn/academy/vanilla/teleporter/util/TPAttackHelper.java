@@ -56,7 +56,7 @@ public class TPAttackHelper {
         for (int i = 0; i < 3; ++i) {
             float prob = env.pipeFloat(TPPipes.pathCritProb(i), 0);
             if (RandUtils.nextFloat() < prob) {
-                float multiply = env.getFloatArray("teleporter._crithit.incr")[i];
+                float multiply = env.getFloatArray("ac.category.teleporter.crithit.incr")[i];
                 damage *= multiply;
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", multiply));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");

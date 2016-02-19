@@ -6,8 +6,7 @@
 */
 package cn.academy.ability.api;
 
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.context.*;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
@@ -27,9 +26,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import scala.Function0;
+import scala.Function1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
@@ -41,10 +43,6 @@ import java.util.List;
  * 
  * You should provide the SkillInstance for the skill via {@link Skill#createSkillInstance(EntityPlayer)}
  * method so that the skill control will take effect.
- * 
- * @see cn.academy.core.util.ValuePipeline
- * @see cn.academy.ability.api.ctrl.SkillInstance
- * @see cn.academy.ability.api.ctrl.SyncAction
  * @author WeAthFolD
  */
 public abstract class Skill extends Controllable {
@@ -267,6 +265,51 @@ public abstract class Skill extends Controllable {
             @Override
             public Object createID() {
                 return Skill.this;
+            }
+        });
+    }
+
+    protected void activateSingleKey(ClientRuntime rt, int keyID,
+                                     Function1<EntityPlayer, Context> contextSupplier) {
+        rt.addKey(keyID, new KeyDelegate() {
+            Context context;
+
+            @Override
+            public void onKeyDown() {
+                context = contextSupplier.apply(getPlayer());
+                ContextManager.instance.activate(context);
+
+                context.sendToSelf(SingleKeyContext.MSG_KEYDOWN);
+            }
+
+            @Override
+            public void onKeyTick() {
+                if (context != null) {
+                    context.sendToSelf(SingleKeyContext.MSG_KEYTICK);
+                }
+            }
+
+            @Override
+            public void onKeyUp() {
+                if (context != null) {
+                    context.sendToSelf(SingleKeyContext.MSG_KEYUP);
+                }
+
+                context = null;
+            }
+
+            @Override
+            public void onKeyAbort() {
+                if (context != null) {
+                    context.sendToSelf(SingleKeyContext.MSG_KEYABORT);
+                }
+
+                context = null;
+            }
+
+            @Override
+            public ResourceLocation getIcon() {
+                return getHintIcon();
             }
         });
     }
