@@ -8,12 +8,15 @@ package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
 import com.google.common.base.Throwables;
+import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author KSkun
@@ -28,7 +31,6 @@ public class OnlineMediaManager extends MediaManager {
     protected OnlineMediaManager() {
         pathPrefix = super.pathPrefix.concat("online/");
         cfile = new File(pathPrefix + "media.conf");
-        conf = ConfigFactory.parseFile(cfile);
     }
 
     /**
@@ -38,7 +40,8 @@ public class OnlineMediaManager extends MediaManager {
      */
     public boolean downloadMedia(ACMedia media) {
         try {
-            return getOnlineFile(new URL(source + media.getFile().getName()), media.getFile());
+            return getOnlineFile(new URL(source + media.getFile().getName()), media.getFile()) &&
+                    getOnlineFile(new URL(source + media.getCoverPic().getName()), media.getCoverPic());
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -129,4 +132,32 @@ public class OnlineMediaManager extends MediaManager {
         }
         return true;
     }
+
+    @Override
+    public void init() {
+        File mediaDir = new File(pathPrefix);
+        if(!mediaDir.exists()) mediaDir.mkdir();
+
+        if(!checkConf()) {
+            AcademyCraft.log.error(getClass().getName() + " can't be initialized!");
+            return;
+        }
+
+        conf = ConfigFactory.parseFile(cfile);
+
+        for(String id : conf.getStringList("ac.media.medias")) {
+            String pathname = "ac.media." + id;
+            Config mediac = conf.getConfig(pathname);
+            ACMedia media = new ACMedia(pathPrefix + mediac.getString("filename"));
+
+            if(mediac.hasPath("author")) media.setAuthor(mediac.getString("author"));
+            if(mediac.hasPath("name")) media.setName(mediac.getString("name"));
+            media.setId(id);
+            if(mediac.hasPath("picfile")) media.setCoverPic(pathPrefix + mediac.getString("picfile"));
+            if(mediac.hasPath("remark")) media.setRemark(mediac.getString("remark"));
+            if(mediac.hasPath("available")) media.available = mediac.getBoolean("available");
+            medias.put(media.getId(), media);
+        }
+    }
+
 }

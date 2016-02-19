@@ -31,28 +31,28 @@ public class CommandMediaTest extends ACCommand {
     public void processCommand(ICommandSender ics, String[] pars) {
         switch(pars[0]) {
             case "play":
-                MediaUtils.playMedia(MediaManager.INSTANCE.getMedia(pars[1]), false);
+                MediaUtils.playMedia(MediaUtils.getMedia(pars[1]), false);
                 break;
             case "pause":
-                MediaUtils.pauseMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                MediaUtils.pauseMedia(MediaUtils.getMedia(pars[1]));
                 break;
             case "volume":
-                MediaUtils.setMediaVolume(MediaManager.INSTANCE.getMedia(pars[1]), Float.valueOf(pars[2]));
+                MediaUtils.setMediaVolume(MediaUtils.getMedia(pars[1]), Float.valueOf(pars[2]));
                 break;
             case "stop":
-                MediaUtils.stopMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                MediaUtils.stopMedia(MediaUtils.getMedia(pars[1]));
                 break;
             case "medias":
-                ics.addChatMessage(new ChatComponentTranslation(MediaManager.INSTANCE.getMediaIds().toString()));
+                ics.addChatMessage(new ChatComponentTranslation(MediaUtils.getAllIds().toString()));
                 break;
             case "download":
-                OnlineMediaManager.INSTANCE.downloadMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                OnlineMediaManager.INSTANCE.downloadMedia(OnlineMediaManager.INSTANCE.getMedia(pars[1]));
                 break;
             case "remove":
-                OnlineMediaManager.INSTANCE.removeLocalMedia(MediaManager.INSTANCE.getMedia(pars[1]));
+                OnlineMediaManager.INSTANCE.removeLocalMedia(OnlineMediaManager.INSTANCE.getMedia(pars[1]));
                 break;
             case "info":
-                ACMedia m = MediaManager.INSTANCE.getMedia(pars[1]);
+                ACMedia m = MediaUtils.getMedia(pars[1]);
                 ics.addChatMessage(new ChatComponentTranslation("====AcademyCraft Media System===="));
                 ics.addChatMessage(new ChatComponentTranslation("Author: " + m.getAuthor()));
                 ics.addChatMessage(new ChatComponentTranslation("Name: " + m.getName()));

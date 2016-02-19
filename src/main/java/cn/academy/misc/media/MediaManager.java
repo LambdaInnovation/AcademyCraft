@@ -33,19 +33,18 @@ public class MediaManager {
 
     protected MediaManager() {
         cfile = new File(pathPrefix + "media.conf");
-        conf = ConfigFactory.parseFile(cfile);
     }
 
     public void init() {
+        File mediaDir = new File(pathPrefix);
+        if(!mediaDir.exists()) mediaDir.mkdir();
         if(!checkConf()) {
-            AcademyCraft.log.error("MediaManager can't be initialized!");
+            AcademyCraft.log.error(getClass().getName() + " can't be initialized!");
             return;
         }
 
-        File mediaDir = new File(pathPrefix);
         List<ACMedia> files = new ArrayList<ACMedia>();
 
-        if(!mediaDir.exists()) mediaDir.mkdir();
         if(mediaDir.listFiles() != null) {
             for (File f : mediaDir.listFiles()){
                 if(f.getName().contains(".ogg")) {
@@ -53,6 +52,8 @@ public class MediaManager {
                 }
             }
         }
+        
+        conf = ConfigFactory.parseFile(cfile);
 
         for(ACMedia media : files) {
             String pathname = "ac.media." + media.getFile().getName();
@@ -64,7 +65,6 @@ public class MediaManager {
                 if(mediac.hasPath("picfile")) media.setCoverPic(pathPrefix + mediac.getString("picfile"));
                 if(mediac.hasPath("remark")) media.setRemark(mediac.getString("remark"));
             }
-            System.out.println(media.getId());
             medias.put(media.getId(), media);
         }
     }

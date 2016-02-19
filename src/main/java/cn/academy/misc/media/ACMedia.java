@@ -30,18 +30,20 @@ public class ACMedia {
 
     private String remark;
 
+    public boolean available = true;
+
     public ACMedia(File _file) {
         file = _file;
     }
     public ACMedia(URL url) {
         try {
-            new ACMedia(new File(url.toURI()));
+            file = new File(url.toURI());
         } catch (URISyntaxException e) {
             throw Throwables.propagate(e);
         }
     }
     public ACMedia(String path) {
-        new ACMedia(new File(path));
+        file = new File(path);
     }
 
     /**

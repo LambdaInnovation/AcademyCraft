@@ -21,6 +21,8 @@ import paulscode.sound.SoundSystemConfig;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author KSkun
@@ -102,6 +104,42 @@ public class MediaUtils {
      */
     public static void stopMedia(ACMedia media) {
         sndSystem.stop(media.getId());
+    }
+
+    /**
+     * Get the media from both MediaManager and OnlineMediaManager.
+     * @param mediaId The ID of media to get.
+     * @return The media.
+     */
+    public static ACMedia getMedia(String mediaId) {
+        if(MediaManager.INSTANCE.getMediaIds().contains(mediaId)) {
+            return MediaManager.INSTANCE.getMedia(mediaId);
+        } else {
+            return OnlineMediaManager.INSTANCE.getMedia(mediaId);
+        }
+    }
+
+    /**
+     * Check if the media is registered.
+     * @param mediaId The ID of media to check.
+     * @return If the media is registered.
+     */
+    public static boolean hasMedia(String mediaId) {
+        return getMedia(mediaId) != null;
+    }
+
+    public static List<ACMedia> getAllMedias() {
+        List<ACMedia> list = new ArrayList<ACMedia>();
+        list.addAll(MediaManager.INSTANCE.getMedias());
+        list.addAll(OnlineMediaManager.INSTANCE.getMedias());
+        return list;
+    }
+
+    public static List<String> getAllIds() {
+        List<String> list = new ArrayList<String>();
+        list.addAll(MediaManager.INSTANCE.getMediaIds());
+        list.addAll(OnlineMediaManager.INSTANCE.getMediaIds());
+        return list;
     }
 
 }
