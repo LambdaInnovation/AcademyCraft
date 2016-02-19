@@ -13,7 +13,7 @@ import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
-import cn.academy.vanilla.teleporter.entity.EntityBloodSplash;
+import cn.academy.vanilla.generic.entity.EntityBloodSplash;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import cn.academy.vanilla.teleporter.util.TPAttackHelper;
 import cn.lambdalib.util.generic.RandUtils;

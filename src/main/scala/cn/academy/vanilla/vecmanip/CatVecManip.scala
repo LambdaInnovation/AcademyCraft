@@ -12,13 +12,10 @@ object CatVecManip extends Category("vecmanip") {
   addSkill(Groundshock)
 
   addSkill(VecAccel)
+  addSkill(VecDeviation)
 
-  try {
-    addSkill(StormWing)
-  } catch {
-    case e: Exception =>
-      e.printStackTrace()
-  }
+  addSkill(StormWing)
+  addSkill(BloodRetrograde)
 
   ModuleVanilla.addGenericSkills(this)
 

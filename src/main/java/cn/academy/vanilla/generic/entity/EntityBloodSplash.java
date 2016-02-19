@@ -4,7 +4,7 @@
 * https://github.com/LambdaInnovation/AcademyCraft
 * Licensed under GPLv3, see project root for more information.
 */
-package cn.academy.vanilla.teleporter.entity;
+package cn.academy.vanilla.generic.entity;
 
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -39,7 +39,15 @@ public class EntityBloodSplash extends EntityAdvanced {
     public EntityBloodSplash(World world) {
         super(world);
         ignoreFrustumCheck = true;
-        this.width = this.height = RandUtils.rangef(0.8f, 1.3f);
+        setSize(RandUtils.rangef(0.8f, 1.3f));
+    }
+
+    public void setSize(float size) {
+        this.width = this.height = size;
+    }
+
+    public float getSize() {
+        return this.width;
     }
 
     @Override
@@ -75,7 +83,7 @@ public class EntityBloodSplash extends EntityAdvanced {
         public void doRender(Entity entity, double x, double y, double z, float a, float b) {
             EntityBloodSplash splash = (EntityBloodSplash) entity;
             icon = (SPLASH[MathUtils.clampi(0, SPLASH.length - 1, splash.frame)]);
-            this.size = splash.width;
+            this.size = splash.getSize();
             super.doRender(entity, x, y, z, a, b);
         }
 
