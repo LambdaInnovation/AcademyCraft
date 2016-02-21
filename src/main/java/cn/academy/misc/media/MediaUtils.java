@@ -66,9 +66,9 @@ public class MediaUtils {
      * @param media The media to play.
      */
     public static void playMedia(ACMedia media, boolean loop) {
-        if(!sndLibrary.getSources().containsKey(media.getId())) {
+        if(!media.getFile().exists()) OnlineMediaManager.INSTANCE.downloadMedia(media);
+        if(!sndLibrary.getSources().containsKey(media.getId()))
             newSource(media, loop, 0, 0, 0);
-        }
         sndSystem.play(media.getId());
     }
 

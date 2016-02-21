@@ -58,7 +58,8 @@ public class CommandMediaTest extends ACCommand {
                 ics.addChatMessage(new ChatComponentTranslation("Name: " + m.getName()));
                 ics.addChatMessage(new ChatComponentTranslation("File: " + m.getFile().getPath()));
                 ics.addChatMessage(new ChatComponentTranslation("Remark: " + m.getRemark()));
-                ics.addChatMessage(new ChatComponentTranslation("Cover Picture: " + m.getCoverPic().getPath()));
+                ics.addChatMessage(new ChatComponentTranslation("Cover Picture: " + m.getCoverPic() == null ? null :
+                        m.getCoverPic().getPath()));
                 ics.addChatMessage(new ChatComponentTranslation("================================="));
         }
     }

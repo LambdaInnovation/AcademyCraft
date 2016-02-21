@@ -79,6 +79,12 @@ public class OnlineMediaManager extends MediaManager {
             } catch (Exception e) {
                 throw Throwables.propagate(e);
             }
+        } else {
+            try {
+                local.createNewFile();
+            } catch (IOException e) {
+                throw Throwables.propagate(e);
+            }
         }
         HttpURLConnection conn = null;
         InputStream is = null;
