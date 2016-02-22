@@ -7,6 +7,8 @@
 package cn.academy.misc.media;
 
 import com.google.common.base.Throwables;
+import com.jcraft.jorbis.JOrbisException;
+import com.jcraft.jorbis.VorbisFile;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.io.File;
@@ -171,6 +173,16 @@ public class ACMedia {
     public ACMedia setRemark(String _remark) {
         remark = _remark;
         return this;
+    }
+
+    public float getTotalLength() {
+        VorbisFile vf = null;
+        try {
+            vf = new VorbisFile(file.getPath());
+        } catch (JOrbisException e) {
+            throw Throwables.propagate(e);
+        }
+        return vf.time_total(-1);
     }
 
 }

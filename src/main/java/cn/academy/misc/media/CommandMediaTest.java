@@ -4,7 +4,7 @@
  * https://github.com/LambdaInnovation/AcademyCraft
  * Licensed under GPLv3, see project root for more information.
  */
-package cn.academy.test.command;
+package cn.academy.misc.media;
 
 import cn.academy.core.command.ACCommand;
 import cn.academy.misc.media.ACMedia;
@@ -61,6 +61,10 @@ public class CommandMediaTest extends ACCommand {
                 ics.addChatMessage(new ChatComponentTranslation("Cover Picture: " + m.getCoverPic() == null ? null :
                         m.getCoverPic().getPath()));
                 ics.addChatMessage(new ChatComponentTranslation("================================="));
+                break;
+            case "oplay":
+                MediaUtils.playOnline(MediaUtils.getMedia(pars[1]), false);
+                break;
         }
     }
 

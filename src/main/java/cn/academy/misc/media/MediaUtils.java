@@ -6,6 +6,7 @@
  */
 package cn.academy.misc.media;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.sound.FollowEntitySound;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,7 @@ import paulscode.sound.SoundSystemConfig;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,17 @@ public class MediaUtils {
             sndSystem.newStreamingSource(true, media.getId(), media.getFile().toURI().toURL(), media.getFile().getName(), loop, x,
                     y, z, SoundSystemConfig.ATTENUATION_NONE, SoundSystemConfig.getDefaultAttenuation());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw Throwables.propagate(e);
+        }
+    }
+
+    static void newOnlineSource(ACMedia media, boolean loop, int x, int y, int z) {
+        try {
+            sndSystem.newStreamingSource(true, "o" + media.getId(), new URL(OnlineMediaManager.source + media.getFile().getName()),
+                    media.getFile().getName(), loop, x, y, z, SoundSystemConfig.ATTENUATION_NONE,
+                    SoundSystemConfig.getDefaultAttenuation());
+        } catch (MalformedURLException e) {
+            throw Throwables.propagate(e);
         }
     }
 
@@ -66,7 +78,10 @@ public class MediaUtils {
      * @param media The media to play.
      */
     public static void playMedia(ACMedia media, boolean loop) {
-        if(!media.getFile().exists()) OnlineMediaManager.INSTANCE.downloadMedia(media);
+        if(!media.getFile().exists()) {
+            AcademyCraft.log.error("Can't play media" + media.getId());
+            return;
+        }
         if(!sndLibrary.getSources().containsKey(media.getId()))
             newSource(media, loop, 0, 0, 0);
         sndSystem.play(media.getId());
@@ -140,6 +155,34 @@ public class MediaUtils {
         list.addAll(MediaManager.INSTANCE.getMediaIds());
         list.addAll(OnlineMediaManager.INSTANCE.getMediaIds());
         return list;
+    }
+
+    public static boolean isPlaying(ACMedia media) {
+        return sndSystem.playing(media.getId());
+    }
+
+    public static boolean isPaused(ACMedia media) {
+        return sndLibrary.getSource(media.getId()).paused();
+    }
+
+    public static boolean isStopped(ACMedia media) {
+        return sndLibrary.getSource(media.getId()).stopped();
+    }
+
+    public static float getPlayedTime(ACMedia media) {
+        return sndLibrary.getSource(media.getId()).millisecondsPlayed() / 1000;
+    }
+
+    public static void playOnline(ACMedia media, boolean loop) {
+        if(!OnlineMediaManager.INSTANCE.getMedias().contains(media)) return;
+        if(!sndLibrary.getSources().containsKey("o" + media.getId()))
+            newOnlineSource(media, loop, 0, 0, 0);
+        sndSystem.play(media.getId());
+    }
+
+    public static String getDisplayTime(int seconds) {
+        int a = seconds / 60, b = seconds % 60;
+        return String.format((a < 10 ? "" : "") + a + ":" + (b < 10 ? "0" : "") + b);
     }
 
 }

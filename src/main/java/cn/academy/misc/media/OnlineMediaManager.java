@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class OnlineMediaManager extends MediaManager {
 
-    private final String source = "http://127.0.0.1/";
+    static final String source = "http://127.0.0.1/";
 
     /** The instance of OnlineMediaManager. */
     public static final OnlineMediaManager INSTANCE = new OnlineMediaManager();

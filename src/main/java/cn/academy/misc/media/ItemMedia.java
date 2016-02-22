@@ -35,7 +35,7 @@ public class ItemMedia extends ACItem {
         hasSubtypes = true;
     }
     
-    @Override
+/*    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)  {
         if(!player.worldObj.isRemote) {
             MediaData data = MediaData.get(player);
@@ -89,6 +89,6 @@ public class ItemMedia extends ACItem {
         for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
             list.add(new ItemStack(this, 1, i));
         }
-    }
+    }*/
 
 }

@@ -10,6 +10,8 @@ import cn.academy.core.AcademyCraft;
 import com.google.common.base.Throwables;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.io.File;
 import java.util.*;
@@ -17,6 +19,7 @@ import java.util.*;
 /**
  * @author KSkun
  */
+@SideOnly(Side.CLIENT)
 public class MediaManager {
 
     protected String pathPrefix = true ?
@@ -27,7 +30,7 @@ public class MediaManager {
                     .replaceAll("/mods/.+jar", "").concat("/acmedia/");
     protected File cfile;
     protected Config conf;
-    protected Map<String, ACMedia> medias = new HashMap<String, ACMedia>();
+    protected Map<String, ACMedia> medias = new LinkedHashMap<String, ACMedia>();
     /** The instance of MediaManager. */
     public static final MediaManager INSTANCE = new MediaManager();
 

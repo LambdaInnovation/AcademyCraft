@@ -35,12 +35,10 @@ public class GuiMediaPlayer extends CGuiScreen {
     static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player.xml"));
     
     Widget pageMain;
-    
-    final MediaData data;
+
     final MediaPlayer player;
     
     public GuiMediaPlayer() {
-        data = MediaData.get(Minecraft.getMinecraft().thePlayer);
         player = MediaPlayer.instance;
         
         init();
@@ -49,15 +47,15 @@ public class GuiMediaPlayer extends CGuiScreen {
     private void init() {
         pageMain = document.getWidget("back").copy();
         
-        List<Media> installedMedias = data.getInstalledMediaList();
+//        List<Media> installedMedias = data.getInstalledMediaList();
         
-        player.updatePlayerMedias(installedMedias);
+//        player.updatePlayerMedias(installedMedias);
         
         {
             Widget area = pageMain.getWidget("area");
             ElementList list = new ElementList();
             
-            for(Media m : installedMedias) {
+            for(ACMedia m : MediaUtils.getAllMedias()) {
                 list.addWidget(createMedia(m));
             }
             
@@ -91,18 +89,18 @@ public class GuiMediaPlayer extends CGuiScreen {
         });
 
         pageMain.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
-            MediaInstance mi = player.getPlayingMedia();
-            ProgressBar.get(w).progress = mi == null ? 0.0 : (double)mi.getPlayTime() / mi.media.length;
+            ACMedia mi = player.getPlayingMedia();
+            ProgressBar.get(w).progress = mi == null ? 0.0 : (double) MediaUtils.getPlayedTime(mi) / mi.getTotalLength();
         });
 
         pageMain.getWidget("play_time").listen(FrameEvent.class, (w, e) -> {
-            MediaInstance mi = player.getPlayingMedia();
-            TextBox.get(w).content = mi == null ? "" : Media.getPlayingTime(mi.getPlayTime());
+            ACMedia mi = player.getPlayingMedia();
+            TextBox.get(w).content = mi == null ? "" : MediaUtils.getDisplayTime((int) MediaUtils.getPlayedTime(mi));
         });
 
         pageMain.getWidget("title").listen(UpdateMediaEvent.class, (w, e) -> {
-            MediaInstance mi = player.getPlayingMedia();
-            TextBox.get(w).content = mi == null ? "" : mi.media.getDisplayName();
+            ACMedia mi = player.getPlayingMedia();
+            TextBox.get(w).content = mi == null ? "" : mi.getName();
         });
 
         pageMain.listen(UpdateMediaEvent.class, (w, e) -> updatePopState());
@@ -113,12 +111,12 @@ public class GuiMediaPlayer extends CGuiScreen {
     }
     
     
-    private Widget createMedia(Media media) {
+    private Widget createMedia(ACMedia media) {
         Widget ret = document.getWidget("t_one").copy();
-        DrawTexture.get(ret.getWidget("icon")).texture = media.cover;
-        TextBox.get(ret.getWidget("title")).content = media.getDisplayName();
-        TextBox.get(ret.getWidget("desc")).content = media.getDesc();
-        TextBox.get(ret.getWidget("time")).content = media.getLengthStr();
+//        DrawTexture.get(ret.getWidget("icon")).texture = media.cover;
+        TextBox.get(ret.getWidget("title")).content = media.getName();
+        TextBox.get(ret.getWidget("desc")).content = media.getRemark();
+        TextBox.get(ret.getWidget("time")).content = MediaUtils.getDisplayTime((int) media.getTotalLength());
         
         ret.listen(LeftClickEvent.class, (w, e) -> {
             if(w.isFocused()) {
