@@ -34,6 +34,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cn.lambdalib.s11n.network.NetworkMessage.*;
@@ -72,20 +74,45 @@ public enum ContextManager {
         } // else { emit? }
     }
 
-    public <T extends Context> Optional<T> find(Class<T> type) {
-        if(remote()) return find_c(type);
-        else         return find_s(type);
+    /**
+     * Finds a context of given type that is alive.
+     */
+    public <T> Optional<T> find(Class<T> type) {
+        return find(type, x -> true);
     }
 
-    private <T extends Context> Optional<T> find_s(Class<T> type) {
-        return sharedFind(type, alive().values().stream().map(i -> i.ctx)).findAny();
+    /**
+     * Finds a context that is created locally (by the client player) of given type.
+     */
+    @SideOnly(Side.CLIENT)
+    public <T> Optional<T> findLocal(Class<T> type) {
+        return find(type, ctx -> Minecraft.getMinecraft().thePlayer.equals(((Context)ctx).player));
     }
 
-    private <T extends Context> Optional<T> find_c(Class<T> type) {
-        Optional<T> sRes = find_s(type);
-        return sRes.isPresent() ?
-                sRes :
-                sharedFind(type, clientSuspended.values().stream().map(s -> s.ctx)).findAny();
+    /**
+     * Finds a context that is of given type and satifies the given precondition.
+     */
+    public <T> Optional<T> find(Class<T> type, Predicate<T> pred) {
+        return aliveStream().filter(ctx -> type.isInstance(ctx) && pred.test((T) ctx))
+                .map(x -> (T) x)
+                .findAny();
+    }
+
+    public List<Context> allAlive() {
+        return aliveStream().collect(Collectors.toList());
+    }
+
+    private Stream<Context> aliveStream() {
+        Stream<Context> orig = alive().values().stream().map(info -> info.ctx);
+        Stream<Context> stream;
+        if (remote()) {
+            stream = Stream.concat(
+                    clientSuspended.values().stream().map(sus -> sus.ctx),
+                    orig);
+        } else {
+            stream = orig;
+        }
+        return stream;
     }
 
     // Internal
@@ -98,12 +125,6 @@ public enum ContextManager {
         HANDSHAKE = "6",
         KEEPALIVE = "7",
         KEEPALIVE_SERVER = "8";
-
-    private <T extends Context> Stream<T> sharedFind(Class<T> type, Stream<Context> source) {
-        return source
-                .filter(ctx -> type.isAssignableFrom(ctx.getClass()))
-                .map(ctx -> (T) ctx);
-    }
 
     private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(HashMap::new);
 

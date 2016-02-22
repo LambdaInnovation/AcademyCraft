@@ -8,6 +8,8 @@ import cn.lambdalib.annoreg.core.Registrant
 @Registrant
 object CatVecManip extends Category("vecmanip") {
 
+  colorStyle.setColor4d(.5, .5, .5, .8)
+
   addSkill(DirectedBlastwave)
   addSkill(Groundshock)
 

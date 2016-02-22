@@ -311,6 +311,12 @@ public abstract class Skill extends Controllable {
             public ResourceLocation getIcon() {
                 return getHintIcon();
             }
+
+            @Override
+            protected Object createID() {
+                return Skill.this;
+            }
+
         });
     }
 

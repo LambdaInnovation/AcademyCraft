@@ -1,7 +1,7 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.ability.api.context.{IConsumptionProvider, ClientRuntime, Context}
 import cn.academy.core.util.Plotter
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
@@ -15,7 +15,7 @@ import net.minecraft.client.particle.EntityDiggingFX
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{DamageSource, AxisAlignedBB, Vec3}
+import net.minecraft.util.{MathHelper, DamageSource, AxisAlignedBB, Vec3}
 import net.minecraftforge.common.util.ForgeDirection
 
 @Registrant
@@ -42,13 +42,28 @@ import cn.lambdalib.util.mc.MCExtender._
 import collection.mutable
 import RandUtils._
 
-class GroundshockContext(p: EntityPlayer) extends Context(p) {
+class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
   import cn.academy.ability.api.AbilityAPIExt._
   import scala.collection.JavaConversions._
+  import cn.lambdalib.util.generic.MathUtils._
+
+  implicit val skill_ = Groundshock
+  implicit val adata_ = aData()
+
+  var localTick = 0
+
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  def l_tick() = {
+    localTick += 1
+  }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
-    sendToServer(MSG_PERFORM)
+    if (localTick >= 5) {
+      sendToServer(MSG_PERFORM)
+    } else {
+      terminate()
+    }
   }
 
   @SideOnly(Side.CLIENT)
@@ -56,7 +71,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) {
   def c_perform(affectedBlocks: Array[Array[Int]]) = {
     if (isLocal) {
       consume()
-      terminate()
+      addSkillCooldown(cooldown)
     }
 
     affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
@@ -64,7 +79,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) {
         def randvel() = ranged(-0.2, 0.2)
         val entity = new EntityDiggingFX(
           world,
-          pt.x + nextDouble(), pt.y + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
+          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
           randvel(), 0.1 + nextDouble() * 0.2, randvel(),
           world.getBlock(pt.x, pt.y, pt.z),
           ForgeDirection.UP.ordinal())
@@ -76,75 +91,104 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) {
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform() = {
-    def cvtpos(cvt: Double => Int) = Array(cvt(player.posX), player.posY.toInt - 1, cvt(player.posZ))
-
     if (player.onGround && consume()) {
+      val planeLook = player.getLookVec.normalize()
 
-      val begin0 = cvtpos(_.toInt)
-      val begin1 = cvtpos(math.ceil(_).toInt)
-      val look = player.getLookVec
-      look.yCoord = 0
-      val planeLook = look.normalize()
-      val plotter0 = new Plotter(begin0(0), begin0(1), begin0(2), planeLook.x, 0, planeLook.z)
-      val plotter1 = new Plotter(begin1(0), begin1(1), begin1(2), planeLook.x, 0, planeLook.z)
+      val plotter = new Plotter(player.posX.toInt, player.posY.toInt - 1,
+        player.posZ.toInt, planeLook.x, 0, planeLook.z)
+
+      var iter = 50
 
       var energy = initEnergy
-      val dejavu = mutable.Set[IVec]()
-      val dejavuEnt = mutable.Set[Entity]()
-      while (energy > 0) {
-        def process(plotter: Plotter) = {
-          val pt = IVec(plotter.next())
-          if (!dejavu.contains(pt)) {
-            dejavu += pt
-            val block = world.getBlock(pt.x, pt.y, pt.z)
-            block match {
-              case Blocks.stone =>
-                world.setBlock(pt.x, pt.y, pt.z, Blocks.cobblestone)
-                energy -= 0.4
-              case Blocks.grass =>
-                world.setBlock(pt.x, pt.y, pt.z, Blocks.dirt)
-                energy -= 0.2
-              case _ => energy -= 0.5
-            }
-            val hardness = block.getBlockHardness(world, pt.x, pt.y, pt.z)
-            if (RandUtils.nextDouble() < groundBreakProb && energy > hardness*0.4) {
-              energy -= hardness*0.4
-              world.setBlock(pt.x, pt.y, pt.z, Blocks.air)
-            }
+      val dejavu_blocks = mutable.Set[IVec]()
+      val dejavu_ent    = mutable.Set[Entity]()
 
-            val upper = world.getBlock(pt.x, pt.y + 1, pt.z)
-            if (upper.isReplaceable(world, pt.x, pt.y + 1, pt.z)) {
-              world.setBlock(pt.x, pt.y + 1, pt.z, Blocks.air)
-            }
+      val rot = planeLook.copy()
+      rot.rotateAroundY(90)
 
-            val aabb = AxisAlignedBB.getBoundingBox(pt.x-0.2, pt.y-0.2, pt.z-0.2, pt.x+1.4, pt.y+2.2, pt.z+1.4)
-            val entities = WorldUtils.getEntities(world, aabb, EntitySelectors.living)
-            entities.foreach(entity => {
-              if (!dejavuEnt.contains(entity)) {
-                dejavuEnt += entity
-                energy -= 1
-                entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage)
-              }
-            })
+      val deltas = List((rot, 0.7), (-rot, 0.7), (rot * 2, 0.3), (rot * -2, 0.3))
+
+      val selector = EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player))
+
+      while (energy > 0 && iter > 0) {
+        val next = plotter.next()
+        val (x, y, z) = (next(0), next(1), next(2))
+
+        iter -= 1
+
+        deltas.foreach { case (delta, prob) => {
+
+          val pt = IVec((x + delta.x).toInt, (y + delta.y).toInt, (z + delta.z).toInt)
+          val block = world.getBlock(pt.x, pt.y, pt.z)
+
+          def breakWithForce(x: Int, y: Int, z: Int) = {
+            val hardnessEnergy = math.max(0, block.getBlockHardness(world, x, y, z))
+            if (energy >= hardnessEnergy) {
+              energy -= hardnessEnergy
+              world.setBlock(x, y, z, Blocks.air)
+              world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+            }
           }
-        }
 
-        process(plotter0)
-        process(plotter1)
+          if (RNG.nextDouble() < prob) {
+            if (!dejavu_blocks.contains(pt)) {
+              dejavu_blocks += pt
 
-        sendToClient(MSG_PERFORM, dejavu.map(v => Array(v.x, v.y, v.z)).toArray)
+              block match {
+                case Blocks.stone =>
+                  world.setBlock(pt.x, pt.y, pt.z, Blocks.cobblestone)
+                  energy -= 0.4
+                case Blocks.grass =>
+                  world.setBlock(pt.x, pt.y, pt.z, Blocks.dirt)
+                  energy -= 0.2
+                case _ => energy -= 0.5
+              }
+
+              if (RNG.nextDouble() < groundBreakProb) {
+                breakWithForce(x, y, z)
+              }
+
+              val aabb = AxisAlignedBB.getBoundingBox(pt.x-0.2, pt.y-0.2, pt.z-0.2, pt.x+1.4, pt.y+2.2, pt.z+1.4)
+              val entities = WorldUtils.getEntities(world, aabb, selector)
+              entities.foreach(entity => {
+                if (!dejavu_ent.contains(entity)) {
+                  dejavu_ent += entity
+                  energy -= 1
+                  entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage)
+                  entity.motionY = ySpeed
+                  addSkillExp(0.002f)
+                }
+              })
+            }
+          }
+
+          breakWithForce(x, y+1, z)
+        }}
       }
+
+      addSkillExp(0.001f)
+      sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
     }
-
-
+    terminate()
   }
 
-  private def initEnergy: Double = 5
+  override def getConsumptionHint = consumption
 
-  private def damage: Float = 5
+  private def initEnergy: Double = lerpf(80, 120, skillExp)
 
-  private def consume(): Boolean = true
+  private def damage: Float = lerpf(7, 16, skillExp)
+
+  private def consumption: Float = lerpf(200, 180, skillExp)
+
+  private def overload: Float = lerpf(45, 30, skillExp)
+
+  // y speed given to mobs.
+  private def ySpeed: Float = rangef(1.0f, 1.2f) * lerpf(0.6f, 1.0f, skillExp)
+
+  private def consume(): Boolean = cpData.perform(overload, consumption)
 
   private def groundBreakProb: Double = 0.3
+
+  private def cooldown: Int = lerpf(45, 20, skillExp).toInt
 
 }

@@ -8,6 +8,8 @@ package cn.academy.ability.client.ui;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ContextManager;
+import cn.academy.ability.api.context.IConsumptionProvider;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -76,7 +78,11 @@ public class CPBar extends Widget {
                         .walign(WidthAlign.RIGHT)
                         .addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
     }
-    
+
+    /**
+     * Please use IConsumptionProvider with {@link cn.academy.ability.api.context.Context} instead.
+     */
+    @Deprecated
     public static void setHintProvider(IConsumptionHintProvider provider) {
         chProvider = provider;
     }
@@ -91,7 +97,8 @@ public class CPBar extends Widget {
         TEX_MASK = tex("mask");
     
     List<ProgColor> cpColors = new ArrayList<>(), overrideColors = new ArrayList<>();
-    
+
+    @Deprecated
     public interface IConsumptionHintProvider {
         boolean alive();
         float getConsumption();
@@ -248,8 +255,11 @@ public class CPBar extends Widget {
                     
                     if(chProvider != null && !chProvider.alive())
                         chProvider = null;
-                    
-                    float estmCons = chProvider == null ? 0 : cpData.estimateConsumption(chProvider.getConsumption());
+
+                    Optional<IConsumptionProvider> provider =
+                            ContextManager.instance.findLocal(IConsumptionProvider.class);
+
+                    float estmCons = provider.isPresent() ? provider.get().getConsumptionHint() : 0;
 
                     if(estmCons != 0) {
                         float ncp = Math.max(0, cpData.getCP() - estmCons);
