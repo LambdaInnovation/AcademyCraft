@@ -43,7 +43,7 @@ public abstract class CommandAIMBase extends ACCommand {
         
         @Override
         public void processCommand(ICommandSender commandSender, String[] pars) {
-            EntityPlayer player = super.getCommandSenderAsPlayer(commandSender);
+            EntityPlayer player = getCommandSenderAsPlayer(commandSender);
             if(pars.length == 1) {
                 switch(pars[0]) {
                 case "cheats_on":
@@ -268,6 +268,7 @@ public abstract class CommandAIMBase extends ACCommand {
         case "fullcp": {
             CPData cpData = CPData.get(player);
             cpData.setCP(cpData.getMaxCP());
+            cpData.setOverload(0);
             sendChat(ics, locSuccessful());
             return;
         }

@@ -8,6 +8,7 @@ package cn.academy.core.client.ui;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.ModuleCoreClient;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The overall debug console. use NUMPAD keys to switch between different states.
+ * The overall debug console. Use BACKSPACE to switch between states.
  * @author WeAthFolD
  */
 @Registrant
@@ -61,12 +62,15 @@ public class DebugConsole extends AuxGui {
         ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
             @Override
             public void onKeyDown() {
-                INSTANCE.enabled = !INSTANCE.enabled;
+                State[] states = State.values();
+                INSTANCE.state = states[(INSTANCE.state.ordinal() + 1) % states.length];
             }
         });
     }
-    
-    boolean enabled = false;
+
+    enum State { NONE, NORMAL, SHOW_EXP, SHOW_CONTEXTS }
+
+    State state = State.NONE;
     
     private DebugConsole() {}
     
@@ -77,7 +81,7 @@ public class DebugConsole extends AuxGui {
 
     @Override
     public void draw(ScaledResolution sr) {
-        if(!enabled)
+        if(state == State.NONE)
             return;
         
         List<Text> texts = new ArrayList<>();
@@ -86,44 +90,68 @@ public class DebugConsole extends AuxGui {
         
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
-        if(!aData.hasCategory()) {
-            texts.add(new Text("Ability not acquired"));
-        } else if(Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
-            texts.add(new Text("Skill status"));
-            Category cat = aData.getCategory();
-            for(Skill s : cat.getSkillList()) {
-                StringBuilder sb = new StringBuilder(s.getName());
-                for(int i = 0; i < 30 - s.getName().length(); ++i)
-                    sb.append(' ');
-                if(aData.isSkillLearned(s)) {
-                    sb.append(String.format("%.1f", aData.getSkillExp(s) * 100)).append('%');
-                } else {
-                    sb.append("[not learned]");
-                }
-                
-                texts.add(new Text(sb.toString()));
+
+        switch (state) {
+        case NORMAL:
+            if (!aData.hasCategory()) {
+                texts.add(new Text("Ability not acquired"));
+            } else {
+                texts.add(new Text(aData.getCategory().getName()));
+
+                texts.add(new Text("Level " + aData.getLevel()));
+                texts.add(new Text(String.format("CP:       %.0f/%.0f(%.1f+%.1f)", cpData.getCP(), cpData.getMaxCP(), cpData.getRawMaxCP(), cpData.getAddMaxCP())));
+                texts.add(new Text(String.format("Overload: %.0f/%.0f(%.1f+%.1f)", cpData.getOverload(), cpData.getMaxOverload(), cpData.getRawMaxOverload(), cpData.getAddMaxOverload())));
+                texts.add(new Text("CPData.canUseAbility: " + cpData.canUseAbility()));
+                texts.add(new Text("CPData.activated: " + cpData.isActivated()));
+                texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
+                texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
             }
-            
-        } else {
-            texts.add(new Text(aData.getCategory().getName()));
-            
-            texts.add(new Text("Level " + aData.getLevel()));
-            texts.add(new Text(String.format("CP:       %.0f/%.0f(%.1f+%.1f)", cpData.getCP(), cpData.getMaxCP(), cpData.getRawMaxCP(), cpData.getAddMaxCP())));
-            texts.add(new Text(String.format("Overload: %.0f/%.0f(%.1f+%.1f)", cpData.getOverload(), cpData.getMaxOverload(), cpData.getRawMaxOverload(), cpData.getAddMaxOverload())));
-            texts.add(new Text("CPData.canUseAbility: " + cpData.canUseAbility()));
-            texts.add(new Text("CPData.activated: " + cpData.isActivated()));
-            texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
-            texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
+            break;
+        case SHOW_EXP:
+            texts.add(new Text("Skill status"));
+            if (aData.hasCategory()) {
+                Category cat = aData.getCategory();
+                for(Skill s : cat.getSkillList()) {
+                    StringBuilder sb = new StringBuilder(s.getName());
+                    for(int i = 0; i < 30 - s.getName().length(); ++i)
+                        sb.append(' ');
+                    if(aData.isSkillLearned(s)) {
+                        sb.append(String.format("%.1f", aData.getSkillExp(s) * 100)).append('%');
+                    } else {
+                        sb.append("[not learned]");
+                    }
+
+                    texts.add(new Text(sb.toString()));
+                }
+            }
+            break;
+        case SHOW_CONTEXTS:
+            texts.add(new Text("Context status"));
+            ContextManager.instance.allAlive().forEach(ctx -> {
+                texts.add(new Text(ctx.toString(), 7, 0xff34e5ff));
+            });
+            break;
         }
         
-        texts.add(new Text(""));
-        texts.add(new Text("[BACKSPACE]: Skill info", 10, 0x95a6ff));
-        
-        double x = 10, y = 10;
+        iter(texts, 10.5, 10.5, 0.2);
+        iter(texts, 10, 10, 1);
+    }
+
+    private void iter(List<Text> texts, double x, double y, double lumMul) {
         IFont font = Resources.font();
         for(Text text : texts) {
+            Color crl = text.option.color;
+            double pr = crl.r, pg = crl.g, pb = crl.b;
+            crl.r *= lumMul;
+            crl.g *= lumMul;
+            crl.b *= lumMul;
+
             font.draw(text.text, x, y, text.option);
-            
+
+            crl.r = pr;
+            crl.g = pg;
+            crl.b = pb;
+
             y += text.option.fontSize;
         }
     }

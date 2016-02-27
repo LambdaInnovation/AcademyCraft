@@ -211,6 +211,12 @@ public class CPData extends DataPart<EntityPlayer> {
         markDirty();
     }
 
+    public void setOverload(float newOverload) {
+        overload = MathUtils.clampf(0, maxOverload, newOverload);
+
+        markDirty();
+    }
+
     private void markDirty() {
         if(!isClient()) {
             dataDirty = true;

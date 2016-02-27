@@ -92,7 +92,7 @@ public class Resources {
     @RegInitCallback
     public static void init() {
         font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
-                new String[] { "微软雅黑", "黑体", "STHeiti", "Consolas", "Monospace", "Arial" });
+                new String[] { "Microsoft YaHei", "Adobe Heiti Std R", "STHeiti", "Consolas", "Monospace", "Arial" });
         fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
         fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
     }

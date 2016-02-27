@@ -293,6 +293,8 @@ ac.ability.level3=强能力者
 ac.ability.level4=大能力者
 ac.ability.level5=超能力者
 
+death.attack.ac_skill=%1$s 被 %2$s 使用 %3$s 击杀了
+
 # 电击使
 ac.ability.electromaster.name=电击使
 
@@ -393,6 +395,20 @@ ac.ability.meltdowner.mine_ray_basic.desc=经过锻炼的电子射流，能够�
 ac.ability.meltdowner.mine_ray_expert.desc=持续的使用原子崩坏能力去参与挖矿与伐木等活动，让你对如何使用破坏性的电子束收集素材有了自己独特的理解，能够更有效的对矿物进行采集 。
 ac.ability.meltdowner.mine_ray_luck.desc=经过长久的锻炼，你已经可以以较高的几率将矿物中蕴含的矿物完美的采集出来。
 ac.ability.meltdowner.electron_missile.desc=为了能独立形成足够强度的弹幕攻击，你开始产生制造大块的电子团，但是每次只发射小部分进行攻击，可惜稳定大块电子团的时候你无法分辨敌我。
+
+# 矢量操作
+ac.ability.vecmanip.name=矢量操作
+
+# 矢量操作 技能
+ac.ability.vecmanip.dir_shock.name=定向冲力
+ac.ability.vecmanip.ground_shock.name=踏击导向
+ac.ability.vecmanip.vec_accel.name=矢量加速
+ac.ability.vecmanip.vec_deviation.name=矢量偏移
+ac.ability.vecmanip.dir_blast.name=集束冲击
+ac.ability.vecmanip.storm_wing.name=风之翼
+ac.ability.vecmanip.blood_retro.name=血源逆行
+ac.ability.vecmanip.vec_reflection.name=矢量反射
+ac.ability.vecmanip.plasma_cannon.name=电浆炮
 
 # 常规技能
 ac.ability.generic.brain_course.name=大脑训练课程

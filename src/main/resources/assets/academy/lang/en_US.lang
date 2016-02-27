@@ -293,16 +293,7 @@ ac.ability.level3=Level 3
 ac.ability.level4=Level 4
 ac.ability.level5=Level 5
 
-# Electromaster
-ac.ability.electromaster.name=Electromaster
-
-## EM Knowledges
-ac.knowledge.em_basic_volt.name=Basic Voltage Control
-ac.knowledge.em_improved_volt.name=Improved Volt Control
-ac.knowledge.em_high_volt.name=High Voltage Control
-ac.knowledge.mag_ctrl.name=Magnet Field Control
-ac.knowledge.em_projectile_master.name=Magnet Projectile Master
-ac.knowledge.highenergy.name=High Energy Theory
+death.attack.ac_skill=%1$s was killed by %2$s using %3$s
 
 ## EM Skills
 ac.ability.electromaster.arc_gen.name=Arc Generation
@@ -393,6 +384,20 @@ ac.ability.meltdowner.mine_ray_basic.desc=After a long time practice, you can ma
 ac.ability.meltdowner.mine_ray_expert.desc=Understanding how to control the intensity of electrons better, You can now harvest mineral resources more efficiently.
 ac.ability.meltdowner.mine_ray_luck.desc=After a long time of practice, you can almost harvest the useful resources in the ore perfectly.
 ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electron cloud and use a small amount of it to attack each time.
+
+# Vector Manipulation
+ac.ability.vecmanip.name=Vector Manip
+
+## VM skills
+ac.ability.vecmanip.dir_shock.name=Directed Shock
+ac.ability.vecmanip.ground_shock.name=Groundshock
+ac.ability.vecmanip.vec_accel.name=Vector Acceleration
+ac.ability.vecmanip.vec_deviation.name=Vector Deviation
+ac.ability.vecmanip.dir_blast.name=Directed Blastwave
+ac.ability.vecmanip.storm_wing.name=Storm Wing
+ac.ability.vecmanip.blood_retro.name=Blood Retrograde
+ac.ability.vecmanip.vec_reflection.name=Vector Reflection
+ac.ability.vecmanip.plasma_cannon.name=Plasma Cannon
 
 # Generic Skills
 ac.ability.generic.brain_course.name=Brain Course

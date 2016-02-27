@@ -80,8 +80,6 @@ class WaveEffectRenderer extends Render {
 
   override def doRender(entity: Entity, x: Double, y: Double, z: Double, v3: Float, v4: Float) = entity match {
     case effect: WaveEffect =>
-      println("Render")
-
       val maxAlpha = clampd(0, 1, alphaCurve.valueAt(effect.ticksExisted.toDouble / effect.life))
 
       glDisable(GL_CULL_FACE)

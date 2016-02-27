@@ -164,6 +164,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 
         presets[id] = p;
         sendMessage(MSG_SYNC_UPDATE, id, p);
+        firePresetUpdate();
     }
 
     //
@@ -201,8 +202,17 @@ public class PresetData extends DataPart<EntityPlayer> {
 
     @Listener(channel=MSG_SYNC_UPDATE, side=Side.SERVER)
     private void handleSet(int idx, Preset mapping) {
-        debug("HandleSet " + mapping);
         setPreset(idx, mapping);
+        firePresetUpdate();
+    }
+
+    @Override
+    protected void onSynchronized() {
+        firePresetUpdate();
+    }
+
+    private void firePresetUpdate() {
+        MinecraftForge.EVENT_BUS.post(new PresetUpdateEvent(getEntity()));
     }
 
     public static PresetData get(EntityPlayer player) {

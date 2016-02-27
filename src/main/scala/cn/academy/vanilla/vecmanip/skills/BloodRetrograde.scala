@@ -2,6 +2,7 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.RandUtils
@@ -28,6 +29,10 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
   import cn.lambdalib.util.mc.MCExtender._
   import RandUtils._
   import cn.lambdalib.util.generic.MathUtils._
+  import cn.academy.ability.api.AbilityPipeline._
+
+  implicit val aData_ = aData()
+  implicit val skill_ = BloodRetrograde
 
   var tick = 0
 
@@ -55,13 +60,30 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
 
       world.spawnEntityInWorld(splash)
     })
+
+    val headPos = targ.position
+    headPos.yCoord += targ.height * 0.6
+
+    List(0, 30, 45, 60, 80, -30, -45, -60, -80)
+      .map(angle => new EntityLook(player.rotationYawHead + rangef(-20, 20), angle).toVec3)
+      .map(look => implicitly[TraceResult](Raytrace.perform(world, headPos - look * 0.5, headPos + look * 5,
+        EntitySelectors.nothing, BlockSelectors.filReplacable)))
+      .foreach {
+        case BlockResult((x, y, z), side) =>
+          (0 until rangei(2, 3)).foreach(_ => {
+            val spray = new BloodSprayEffect(world, x, y, z, side)
+            world.spawnEntityInWorld(spray)
+          })
+        case _ =>
+      }
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(targ: EntityLivingBase) = {
     if (consume()) {
       sendToClient(MSG_PERFORM, targ)
-      targ.attackEntityFrom(DamageSource.causePlayerDamage(player), damage)
+      attack(player, BloodRetrograde, targ, damage)
+      addSkillExp(0.002f)
     }
 
     terminate()
@@ -83,8 +105,13 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
     player.capabilities.setPlayerWalkSpeed(0.1f)
   }
 
-  private def consume() = true
+  private def consume() = {
+    val overload = lerpf(100, 120, skillExp)
+    val consumption = lerpf(200, 180, skillExp)
 
-  private def damage = 10
+    cpData.perform(overload, consumption)
+  }
+
+  private def damage = lerpf(16, 27, skillExp)
 
 }

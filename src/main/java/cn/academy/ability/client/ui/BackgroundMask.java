@@ -58,7 +58,7 @@ public class BackgroundMask extends AuxGui {
         Color color = null;
         if(cpData.isOverloaded()) {
             color = CRL_OVERRIDE;
-        } else if (aData.hasCategory()) {
+        } else if (cpData.isActivated()) {
             color = aData.getCategory().getColorStyle();
         }
         
