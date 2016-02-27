@@ -98,7 +98,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   def s_perform() = {
     if (player.onGround && consume()) {
       val planeLook = player.getLookVec.normalize()
-
+      
       val plotter = new Plotter(player.posX.toInt, player.posY.toInt - 1,
         player.posZ.toInt, planeLook.x, 0, planeLook.z)
 
