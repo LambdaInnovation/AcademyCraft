@@ -194,8 +194,8 @@ ac.settings.prop.ability_2=能力 #3
 ac.settings.prop.ability_3=能力 #4
 
 # 媒體
-ac.media.acquired=你已獲得媒體  %s
-ac.media.haveone=你已經獲得了媒體  %s
+ac.media.acquired=你已安裝媒體  %s
+ac.media.haveone=你已經持有媒體  %s
 ac.media.notinstalled=你還沒有安裝媒體播放器App！
 
 # 常規其他

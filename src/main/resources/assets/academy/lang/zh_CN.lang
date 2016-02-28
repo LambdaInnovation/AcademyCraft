@@ -198,8 +198,8 @@ ac.settings.cat.misc=杂项
 ac.settings.prop.edit_ui=自定义UI
 
 # 媒体
-ac.media.acquired=你已获得媒体  %s
-ac.media.haveone=你已经获得了媒体  %s
+ac.media.acquired=你已安装媒体  %s
+ac.media.haveone=你已经持有媒体  %s
 ac.media.notinstalled=你还没有安装媒体播放器App！
 
 # 常规
