@@ -17,6 +17,7 @@ import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
+import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -40,7 +41,6 @@ public class GuiMediaPlayer extends CGuiScreen {
     
     public GuiMediaPlayer() {
         player = MediaPlayer.instance;
-        
         init();
     }
     
@@ -89,17 +89,17 @@ public class GuiMediaPlayer extends CGuiScreen {
         });
 
         pageMain.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
-            ACMedia mi = player.getPlayingMedia();
+            ACMedia mi = player.currentMedia;
             ProgressBar.get(w).progress = mi == null ? 0.0 : (double) MediaUtils.getPlayedTime(mi) / mi.getTotalLength();
         });
 
         pageMain.getWidget("play_time").listen(FrameEvent.class, (w, e) -> {
-            ACMedia mi = player.getPlayingMedia();
+            ACMedia mi = player.currentMedia;
             TextBox.get(w).content = mi == null ? "" : MediaUtils.getDisplayTime((int) MediaUtils.getPlayedTime(mi));
         });
 
         pageMain.getWidget("title").listen(UpdateMediaEvent.class, (w, e) -> {
-            ACMedia mi = player.getPlayingMedia();
+            ACMedia mi = player.currentMedia;
             TextBox.get(w).content = mi == null ? "" : mi.getName();
         });
 

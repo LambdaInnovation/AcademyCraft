@@ -8,6 +8,7 @@ package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.core.util.ACMarkdownRenderer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -29,6 +30,7 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
+import paulscode.sound.libraries.LibraryJavaSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ import java.util.List;
  * @author WeAthFolD, KSkun
  */
 @Registrant
-@SideOnly(Side.CLIENT)
+//@SideOnly(Side.CLIENT)
 public class MediaPlayer {
     
     public static final MediaPlayer instance = new MediaPlayer();
@@ -55,109 +57,106 @@ public class MediaPlayer {
         public ResourceLocation getIcon() {
             return icon;
         }
-    };
+    }
     
-    List<ACMedia> playerMedias = MediaUtils.getAllMedias();
+    List<ACMedia> medias = MediaUtils.getAllMedias();
     ACMedia lastMedia;
-    ACMedia mediaInst;
-    
+    ACMedia currentMedia;
     public PlayPref playPref = PlayPref.LOOP;
-    
+
     MediaPlayer() {
         FMLCommonHandler.instance().bus().register(this);
     }
-    
+
     public void startPlay() {
-        if(lastMedia == null)
-            lastMedia = playerMedias.isEmpty() ? null : playerMedias.get(0);
-        if(lastMedia != null)
+        if(lastMedia == null) {
+            lastMedia = medias.isEmpty() ? null : medias.get(0);
+        } else {
             startPlay(lastMedia);
+        }
     }
-    
+
     public void startPlay(ACMedia media) {
         stop();
+
         MediaUtils.playMedia(media, false);
+        currentMedia = media;
         lastMedia = media;
     }
-    
+
     public void startPlay(String id) {
         startPlay(MediaUtils.getMedia(id));
     }
-    
-    public void updatePlayerMedias(List<ACMedia> medias) {
-        this.playerMedias = medias;
-    }
-    
-    public boolean isPlaying() {
-        return MediaUtils.isPlaying(mediaInst);
-    }
-    
-    public boolean isPaused() {
-        return mediaInst == null ? false : MediaUtils.isPaused(mediaInst);
-    }
-    
-    public float getPlayedTime() {
-        return MediaUtils.getPlayedTime(mediaInst);
-    }
-    
+
     public void pause() {
-        if(mediaInst != null) {
-            MediaUtils.pauseMedia(mediaInst);
-        }
+        if(currentMedia != null) MediaUtils.pauseMedia(currentMedia);
     }
-    
+
     public void resume() {
-        if(mediaInst != null) {
-            MediaUtils.playMedia(mediaInst, false);
-        }
+        if(currentMedia != null) MediaUtils.playMedia(currentMedia, false);
     }
-    
+
     public void stop() {
-        if(mediaInst != null) {
-            MediaUtils.stopMedia(mediaInst);
-            mediaInst = null;
+        if(currentMedia != null) {
+            MediaUtils.stopMedia(currentMedia);
+            currentMedia = null;
         }
     }
-    
+
     private ACMedia nextMedia() {
         switch(playPref) {
-        case LOOP:
-            int index = playerMedias.indexOf(this.mediaInst);
-            return playerMedias.get((index + 1) % playerMedias.size());
-        case RANDOM:
-            return playerMedias.get(RandUtils.rangei(0, playerMedias.size()));
-        case SINGLE:
-            return null;
-        case SINGLE_LOOP:
-            return mediaInst;
-        default:
-            return null;
+            case LOOP:
+                int index = medias.indexOf(currentMedia);
+                return medias.get((index + 1) % medias.size());
+            case RANDOM:
+                return medias.get(RandUtils.rangei(0, medias.size()));
+            case SINGLE:
+                return null;
+            case SINGLE_LOOP:
+                return currentMedia;
+            default:
+                return null;
         }
     }
-    
-    public ACMedia getPlayingMedia() {
-        return mediaInst;
+
+    public ACMedia getCurrentMedia() {
+        return currentMedia;
     }
-    
-/*    @SubscribeEvent
+
+    @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        if(!ClientUtils.isPlayerInGame() || event.phase == Phase.START)
-            return;
-        
-            if(mediaInst != null && MediaUtils.isStopped(mediaInst)) {
+        if(!ClientUtils.isPlayerInGame() || event.phase == Phase.START) return;
+        if(currentMedia == null) {
             ACMedia next = nextMedia();
-            if(next != null)
-                startPlay(next);
-        }
-        
-        if(mediaInst != null && MediaUtils.isPaused(mediaInst)) {
-            MediaUtils.pauseMedia(mediaInst);
+            if(next != null) startPlay(next);
         }
     }
-    
+
     @SubscribeEvent
     public void onDisconnect(ClientDisconnectionFromServerEvent event) {
         stop();
-    }*/
+    }
+
+    public boolean isPlaying() {
+        if(currentMedia != null) {
+            if(MediaUtils.isPaused(currentMedia)) return false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isPaused() {
+        if(currentMedia != null) {
+            if(!MediaUtils.isPaused(currentMedia)) return false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isStopped() {
+        return currentMedia == null;
+    }
     
 }

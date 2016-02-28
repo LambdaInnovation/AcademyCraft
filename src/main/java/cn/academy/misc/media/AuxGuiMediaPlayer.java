@@ -34,17 +34,17 @@ public class AuxGuiMediaPlayer {
 //        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying(), "media", base.copy());
 
         base.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
-            ACMedia inst = MediaPlayer.instance.getPlayingMedia();
+            ACMedia inst = MediaPlayer.instance.currentMedia;
             ProgressBar.get(w).progress = (double) MediaUtils.getPlayedTime(inst) / inst.getTotalLength();
         });
 
         base.getWidget("title").listen(FrameEvent.class, (w, e) -> {
-            ACMedia inst = MediaPlayer.instance.getPlayingMedia();
+            ACMedia inst = MediaPlayer.instance.currentMedia;
             TextBox.get(w).content = inst.getName();
         });
 
         base.getWidget("time").listen(FrameEvent.class, (w, e) -> {
-            ACMedia inst = MediaPlayer.instance.getPlayingMedia();
+            ACMedia inst = MediaPlayer.instance.currentMedia;
             TextBox.get(w).content = MediaUtils.getDisplayTime((int) (MediaUtils.getPlayedTime(inst)));
         });
     }
