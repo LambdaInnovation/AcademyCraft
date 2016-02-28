@@ -97,9 +97,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         DelegateNode node = new DelegateNode(delegate, keyID);
         delegates.put(keyID, node);
         delegateGroups.put(group, node);
-        if (!keyStates.containsKey(keyID)) {
-            keyStates.put(keyID, new KeyState());
-        }
 
         ctrlDirty = true;
     }
@@ -129,7 +126,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     public boolean hasActiveDelegate() {
-        return delegates.values().stream().anyMatch(node -> keyStates.get(node.keyID).state);
+        return delegates.values().stream().anyMatch(node -> getKeyState(node.keyID).state);
     }
 
     public void abortDelegates() {
@@ -142,6 +139,16 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                         delegates.get(e.getKey()).delegate.onKeyAbort();
                     }
                 });
+    }
+
+    private KeyState getKeyState(int keyID) {
+        if (keyStates.containsKey(keyID)) {
+            return keyStates.get(keyID);
+        } else {
+            KeyState ret = new KeyState();
+            keyStates.put(keyID, ret);
+            return ret;
+        }
     }
 
     public void setCooldown(KeyDelegate delegate, int cd) {
@@ -303,48 +310,45 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
             if (ClientRuntime.available()) {
                 final ClientRuntime rt = ClientRuntime.instance();
-                final Set<Integer> availKeys = rt.delegates.keySet();
                 final CPData cpData = CPData.get(rt.getEntity());
 
-                Iterator<Entry<Integer, KeyState>> itr = rt.keyStates.entrySet().iterator();
-                while (itr.hasNext()) {
-                    Entry<Integer, KeyState> entry = itr.next();
-                    final KeyState state = entry.getValue();
-                    final int keyid = entry.getKey();
-                    final boolean avail = availKeys.contains(entry.getKey());
+                for (DelegateNode node : rt.delegates.values()) {
+                    final KeyState state = rt.getKeyState(node.keyID);
+                    final boolean keyDown = KeyManager.getKeyDown(node.keyID);
 
-                    if (!state.realState && !avail) {
-                        itr.remove();
-                    } else {
-                        final boolean keyDown = KeyManager.getKeyDown(keyid);
+                    boolean shouldAbort =
+                            !ClientUtils.isPlayerInGame() || rt.isInCooldown(node.delegate) ||
+                                    !cpData.canUseAbility() ||
+                                    AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
+                    final KeyDelegate delegate = node.delegate;
 
-                        if (avail) {
-                            DelegateNode node = rt.delegates.get(keyid);
-                            // TODO a more elegant way to handle key disabling?
-                            boolean shouldAbort =
-                                    !ClientUtils.isPlayerInGame() || rt.isInCooldown(node.delegate) ||
-                                            !cpData.canUseAbility() ||
-                                            AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
-                            final KeyDelegate delegate = node.delegate;
+                    if (keyDown && state.state && !shouldAbort) {
+                        delegate.onKeyTick();
+                    }
+                    if (keyDown && !state.state && !state.realState && !shouldAbort) {
+                        delegate.onKeyDown();
+                        state.state = true;
+                    }
+                    if (!keyDown && state.state && !shouldAbort) {
+                        delegate.onKeyUp();
+                        state.state = false;
+                    }
+                    if (state.state && shouldAbort) {
+                        delegate.onKeyAbort();
+                        state.state = false;
+                    }
 
-                            if (keyDown && state.state && !shouldAbort) {
-                                delegate.onKeyTick();
-                            }
-                            if (keyDown && !state.state && !state.realState && !shouldAbort) {
-                                delegate.onKeyDown();
-                                state.state = true;
-                            }
-                            if (!keyDown && state.state && !shouldAbort) {
-                                delegate.onKeyUp();
-                                state.state = false;
-                            }
-                            if (state.state && shouldAbort) {
-                                delegate.onKeyAbort();
-                                state.state = false;
-                            }
+                    state.realState = keyDown;
+                }
+
+                // Remove dead keys
+                {
+                    Iterator<Entry<Integer, KeyState>> iter = rt.keyStates.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Entry<Integer, KeyState> ent = iter.next();
+                        if (!ent.getValue().realState && !rt.delegates.containsKey(ent.getKey())) {
+                            iter.remove();
                         }
-
-                        state.realState = keyDown;
                     }
                 }
 
