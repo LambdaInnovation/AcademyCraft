@@ -2,6 +2,7 @@
 
 uniform int ballCount;
 uniform vec4 balls[16]; // xyz: position(in camera space) w: size
+uniform float alpha;
 
 varying vec3 camspace;
 
@@ -10,7 +11,7 @@ float f(vec3 position) {
     for (int i = 0; i < ballCount; ++i) {
         float distance = max(0.1, length(position - balls[i].xyz));
 
-        ret += balls[i].w / (distance * distance);
+        ret += alpha * balls[i].w / (distance * distance);
     }
     return clamp(ret, 0, 2);
 }
@@ -47,5 +48,7 @@ void main() {
     vec3 dir = normalize(cam);
 
     vec4 rc = rayMarch(cam - dir * 3, dir);
+    rc.a = clamp(rc.a, 0, 1) * (0.5 + alpha * 0.5);
+
 	gl_FragColor = rc;
 }

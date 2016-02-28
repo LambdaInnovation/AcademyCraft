@@ -1,6 +1,8 @@
 package cn.academy.vanilla.vecmanip.client.effect
 
+import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.entity.LocalEntity
+import cn.academy.vanilla.vecmanip.skills.PlasmaCannonContext
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.shader.{GLSLMesh, ShaderProgram}
@@ -10,6 +12,7 @@ import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.key.{KeyHandler, KeyManager}
 import cn.lambdalib.util.mc.{Vec3, Raytrace}
 import cpw.mods.fml.client.registry.RenderingRegistry
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.{RenderManager, Render}
 import net.minecraft.entity.Entity
 import net.minecraft.util.{MathHelper, ResourceLocation}
@@ -22,28 +25,17 @@ import org.lwjgl.opengl.GL20._
 import cn.lambdalib.util.mc.MCExtender._
 
 @Registrant
-object KeyTest_ {
+@SideOnly(Side.CLIENT)
+object PlasmaBodyEffect_ {
 
   @RegInitCallback
   def init() = {
-    KeyManager.dynamic.addKeyHandler("wa", Keyboard.KEY_M, new KeyHandler {
-      override def onKeyDown() = {
-        val player = getPlayer
-        val wrld = player.worldObj
-        val pos = player.position + player.lookVector * 3
-        val eff = new PlasmaBodyEffect(wrld)
-        eff.setPos(pos)
-
-        wrld.spawnEntityInWorld(eff)
-      }
-    })
-
     RenderingRegistry.registerEntityRenderingHandler(classOf[PlasmaBodyEffect], new PlasmaBodyRenderer)
   }
 
 }
 
-class PlasmaBodyEffect(world: World) extends LocalEntity(world) {
+class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends LocalEntity(world) {
   import collection.mutable
   import cn.lambdalib.util.generic.RandUtils._
 
@@ -82,9 +74,27 @@ class PlasmaBodyEffect(world: World) extends LocalEntity(world) {
 
   val initTime = GameTimer.getTime
 
+  var deathDelta: Float = -1
+
   def deltaTime = (GameTimer.getTime - initTime) / 1000.0f
 
-  override def onUpdate() = {}
+  def alpha = {
+    if (deltaTime < 5) deltaTime / 5f
+    else if (deathDelta != -1) 1 - (deltaTime - deathDelta) / 5f
+    else 1.0f
+  }
+
+  override def onUpdate() = {
+    if (ctx.getStatus == Status.TERMINATED) {
+      if (deathDelta == -1) {
+        deathDelta = deltaTime
+      }
+
+      if (deltaTime - deathDelta > 5f) {
+        setDead()
+      }
+    }
+  }
 
   override def shouldRenderInPass(pass: Int) = pass == 1
 }
@@ -100,6 +110,7 @@ class PlasmaBodyRenderer extends Render {
 
   val pos_ballCount = shader.getUniformLocation("ballCount")
   val pos_balls     = shader.getUniformLocation("balls")
+  val pos_alpha     = shader.getUniformLocation("alpha")
 
   def doRender(entity: Entity, x: Double, y: Double, z: Double, partialTicks: Float, wtf: Float) = entity match {
     case eff: PlasmaBodyEffect =>
@@ -123,6 +134,7 @@ class PlasmaBodyRenderer extends Render {
 
       // update ball location
       val deltaTime = eff.deltaTime
+      val alpha = math.pow(eff.alpha, 2).toFloat
 
       def updateBalls() = {
         glUniform1i(pos_ballCount, eff.balls.size)
@@ -144,6 +156,8 @@ class PlasmaBodyRenderer extends Render {
         }}
       }
       updateBalls()
+
+      glUniform1f(pos_alpha, alpha)
       //
 
       val campos = Vec3(-invert.m30, -invert.m31, -invert.m32)
@@ -167,8 +181,6 @@ class PlasmaBodyRenderer extends Render {
   }
 
   protected def getEntityTexture(entity: Entity) = null
-
-  private def playerPos = Vec3(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ)
 
   private def acquireMatrix(matrixType: Int, dst: Matrix4f) = {
     val buffer = BufferUtils.createFloatBuffer(16)

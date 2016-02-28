@@ -22,7 +22,7 @@ object TornadoEffect_ {
 
 import TornadoEffect_._
 
-class TornadoEffect(val ht: Double, val sz: Double) {
+class TornadoEffect(val ht: Double, val sz: Double, val density: Double = 1.0, val dscale: Double = 1.0) {
 
   case class Ring(y: Double, width: Double, phase: Double = RNG.nextDouble() * 360, sizeScale: Double = 1.0)
 
@@ -37,10 +37,12 @@ class TornadoEffect(val ht: Double, val sz: Double) {
     while (accum < ht) {
       accum += stdstep * (1.0 + RNG.nextGaussian() * 0.2)
 
-      rings += Ring(accum, stdstep * ranged(1.4, 1.8), RNG.nextDouble() * 360, ranged(0.9, 1.2))
+      if (RNG.nextDouble() < density) {
+        rings += Ring(accum, stdstep * ranged(1.8, 2.2), RNG.nextDouble() * 360, ranged(0.9, 1.2))
 
-      if (RNG.nextDouble() < 0.35) {
-        rings += Ring(accum, stdstep * ranged(1.4, 1.8), RNG.nextDouble() * 360, ranged(1.2, 1.7))
+        if (RNG.nextDouble() < 0.35) {
+          rings += Ring(accum, stdstep * ranged(1.8, 2.2), RNG.nextDouble() * 360, ranged(1.2, 1.7))
+        }
       }
     }
   }
@@ -113,6 +115,7 @@ object TornadoRenderer {
     RenderUtils.loadTexture(texture)
     glPushMatrix()
 
+    glDepthMask(false)
     glDisable(GL_CULL_FACE)
     glColor4d(1, 1, 1, eff.alpha * 0.7)
     glBegin(GL_QUADS)
@@ -123,8 +126,8 @@ object TornadoRenderer {
     eff.getRings.foreach(ring => {
       val ny = ring.y / eff.ht
       calcdx(ny, time, vdx)
-      vdx.update(0, vdx(0)*eff.sz)
-      vdx.update(1, vdx(1)*eff.sz)
+      vdx.update(0, vdx(0)*eff.sz*eff.dscale)
+      vdx.update(1, vdx(1)*eff.sz*eff.dscale)
       val vr  = r(ny, time) * eff.sz * ring.sizeScale
       drawRing(ring.y, ring.width, vdx, vr, rot(ny, time) + ring.phase)
     })
@@ -132,6 +135,7 @@ object TornadoRenderer {
     glEnd()
     glColor4f(1, 1, 1, 1)
     glEnable(GL_CULL_FACE)
+    glDepthMask(true)
     glPopMatrix()
   }
 
