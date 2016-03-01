@@ -222,12 +222,19 @@ public enum ContextManager {
      * @return Should remove this info
      */
     private boolean tickClient(ClientInfo info, long time) {
-        if (info.ctx.isLocal() && info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
+        if (info.ctx.player.isDead) {
+            if (info.ctx.getStatus() != Status.TERMINATED) {
+                terminate(info.ctx);
+            }
+            return true;
         }
 
         if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
+        }
+
+        if (info.ctx.isLocal() && info.lastSend == -1 || time - info.lastSend > T_KA) {
+            sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
         }
 
         sendToSelf(info.ctx, Context.MSG_TICK);
@@ -238,13 +245,20 @@ public enum ContextManager {
      * @return Should remove this info
      */
     private boolean tickServer(ServerInfo info, long time) {
-        if (info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToPlayers(info.client.toArray(new EntityPlayerMP[info.client.size()]),
-                    this, KEEPALIVE, info.ctx.networkID);
+        if (info.ctx.player.isDead) {
+            if (info.ctx.getStatus() != Status.TERMINATED) {
+                terminate(info.ctx);
+            }
+            return true;
         }
 
         if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
+        }
+
+        if (info.lastSend == -1 || time - info.lastSend > T_KA) {
+            sendToPlayers(info.client.toArray(new EntityPlayerMP[info.client.size()]),
+                    this, KEEPALIVE, info.ctx.networkID);
         }
 
         sendToSelf(info.ctx, Context.MSG_TICK);
@@ -254,7 +268,7 @@ public enum ContextManager {
     // Messaging
 
     void mToServer(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, true);
+        if (!_mCheck(ctx, true)) return;
 
         if (ctx.getStatus() == Status.ALIVE) {
             sendToServer(ctx, cn, args);
@@ -264,13 +278,13 @@ public enum ContextManager {
     }
 
     void mToLocal(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
-        sendTo((EntityPlayerMP) ctx.getPlayer(), ctx, cn, args);
+        sendTo(ctx.getPlayer(), ctx, cn, args);
     }
 
     void mToExceptLocal(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
         EntityPlayer localPlayer = ctx.getPlayer();
         EntityPlayerMP[] players = getInfoS(ctx.networkID).client.stream()
@@ -279,23 +293,20 @@ public enum ContextManager {
     }
 
     void mToClient(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
         sendToPlayers(Iterables.toArray(getInfoS(ctx.networkID).client, EntityPlayerMP.class), ctx, cn, args);
     }
 
-    private void _mCheck(Context ctx, boolean requiredRemote) {
-        if (!LambdaLib.DEBUG) return;
+    private boolean _mCheck(Context ctx, boolean requiredRemote) {
+        if (ctx.getStatus() != Status.ALIVE) return false;
 
         Preconditions.checkState(remote() == requiredRemote, "Invalid messaging side");
         if (requiredRemote) {
-            Preconditions.checkState(
-                ctx.getStatus() == Status.ALIVE ||
-                checkSuspended(ctx).isPresent(), "Context not alive");
             Preconditions.checkState(ctx.isLocal(), "Context must be local");
-        } else {
-            Preconditions.checkState(ctx.getStatus() == Status.ALIVE, "Context not alive");
         }
+
+        return true;
     }
 
     private Optional<ClientSuspended> checkSuspended(Context ctx) {
