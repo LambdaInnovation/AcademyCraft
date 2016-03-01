@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -583,7 +584,11 @@ public class CPData extends DataPart<EntityPlayer> {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void playerDeath(LivingDeathEvent event) {
             if(event.entityLiving instanceof EntityPlayer) {
-                CPData.get((EntityPlayer) event.entityLiving).recoverAll();
+                EntityPlayer player = (EntityPlayer) event.entityLiving;
+                CPData cpData = CPData.get(player);
+
+                cpData.recoverAll();
+                cpData.setActivateState(false);
             }
         }
         

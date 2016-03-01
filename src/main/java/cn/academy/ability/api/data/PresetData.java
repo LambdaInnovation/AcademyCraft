@@ -132,6 +132,8 @@ public class PresetData extends DataPart<EntityPlayer> {
 
         for(int i = 0; i < 4; ++i)
             presets[i] = new Preset();
+
+        sync();
     }
 
     public void setPreset(int id, Preset p) {
