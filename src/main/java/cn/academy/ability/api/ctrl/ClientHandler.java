@@ -12,6 +12,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.FlushControlEvent;
 import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.PresetEditUI;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.ConfigModifyEvent;
@@ -22,6 +23,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -89,14 +91,27 @@ public final class ClientHandler {
     @RegACKeyHandler(name = KEY_ACTIVATE_ABILITY, defaultKey = Keyboard.KEY_V)
     public static KeyHandler keyActivate = new KeyHandler() {
 
+        long lastKeyDown;
+
+        @Override
+        public void onKeyUp() {
+            long delta = GameTimer.getTime() - lastKeyDown;
+            if (delta < 300L) {
+                EntityPlayer player = getPlayer();
+                AbilityData aData = AbilityData.get(player);
+
+                if(aData.hasCategory()) {
+                    ClientRuntime.instance().getActivateHandler().onKeyDown(player);
+                }
+            }
+
+            CPBar.instance.stopDisplayNumbers();
+        }
+
         @Override
         public void onKeyDown() {
-            EntityPlayer player = getPlayer();
-            AbilityData aData = AbilityData.get(player);
-            
-            if(aData.hasCategory()) {
-                ClientRuntime.instance().getActivateHandler().onKeyDown(player);
-            }
+            lastKeyDown = GameTimer.getTime();
+            CPBar.instance.startDisplayNumbers();
         }
         
     };
