@@ -38,6 +38,9 @@ public class Resources {
     
     public static ResourceLocation
         TEX_EMPTY = getTexture("null");
+
+    public static ResourceLocation
+        TEX_GLOW_LINE = getTexture("effects/glow_line");
     
     public static ResourceLocation
         ARC_SMALL[] = getEffectSeq("arcs", 10);

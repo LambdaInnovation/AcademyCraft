@@ -61,7 +61,7 @@ public abstract class GuiSkillTree extends CGuiScreen {
         CRL_LVL_CANREACH = new Color().setColor4i(255, 255, 255, 0),
         CRL_LVL_UNREACHED = new Color().setColor4i(65, 65, 65, 0),
         CRL_LINE = new Color().setColor4i(178, 178, 178, 255),
-        CRL_LINE_DISABLED = new Color().setColor4i(132, 132, 132, 255),
+        CRL_LINE_DISABLED = new Color().setColor4i(80, 80, 80, 255),
         CRL_SDESC_LEARNED = new Color(),
         CRL_SDESC_NOTLEARNED = new Color().setColor4i(117, 117, 117, 255),
         CRL_WARNING = new Color().setColor4i(240, 51, 51, 255),
@@ -146,7 +146,7 @@ public abstract class GuiSkillTree extends CGuiScreen {
                     CRL_LINE_DISABLED.bind();
                 glPushMatrix();
                 glTranslated(0, 0, zLevel);
-                glDisable(GL_TEXTURE_2D);
+                // glDisable(GL_TEXTURE_2D);
                 glDisable(GL_DEPTH_TEST);
 
                 double x0 = a.transform.x, y0 = a.transform.y, x1 = b.transform.x, y1 = b.transform.y;
@@ -160,10 +160,10 @@ public abstract class GuiSkillTree extends CGuiScreen {
                 float alpha = ((SkillHandler) a.getComponent("SkillHandler")).getAlpha();
                 x0 = x1 + (x0 - x1) * alpha; y0 = y1 + (y0 - y1) * alpha;
 
-                ACRenderingHelper.lineSegment(x0, y0, x1, y1, 2.2f);
+                ACRenderingHelper.lineSegmentGlow(x0, y0, x1, y1, 9f);
 
                 glEnable(GL_DEPTH_TEST);
-                glEnable(GL_TEXTURE_2D);
+                // glEnable(GL_TEXTURE_2D);
                 glPopMatrix();
             }
         });
