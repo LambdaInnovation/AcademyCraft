@@ -136,12 +136,6 @@ public class AcademyCraft {
         config.save();
     }
 
-    @SideOnly(Side.CLIENT)
-    @EventHandler
-    public void postInit2(FMLPostInitializationEvent event) {
-        ShaderProgram.releaseResources();
-    }
-
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");

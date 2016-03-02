@@ -9,7 +9,7 @@ package cn.academy.vanilla.teleporter.util;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
-import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.ACConfig;
 import cn.academy.core.util.DamageHelper;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -18,6 +18,7 @@ import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.util.generic.RandUtils;
+import com.typesafe.config.Config;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,14 +48,14 @@ public class TPAttackHelper {
      * TODO rewrite
      */
     public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        ConfigEnv env = ConfigEnv.global; // PlayerConfigEnv.get(player);
+        Config conf = ACConfig.instance();
         AbilityData aData = AbilityData.get(player);
         // Calculate 3 levels of crit hit
         int chLevel = -1;
         for (int i = 0; i < 3; ++i) {
             float prob = 1.0f; //TODO
             if (RandUtils.nextFloat() < prob) {
-                float multiply = env.getFloatArray("ac.category.teleporter.crithit.incr")[i];
+                float multiply = (float) (double) conf.getDoubleList("ac.category.teleporter.crithit.incr").get(i);
                 damage *= multiply;
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", multiply));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");

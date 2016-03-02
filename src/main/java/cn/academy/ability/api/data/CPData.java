@@ -7,7 +7,7 @@
 package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.event.*;
-import cn.academy.core.config.ConfigEnv;
+import cn.academy.core.config.ACConfig;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
@@ -20,6 +20,7 @@ import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import cn.lambdalib.util.generic.MathUtils;
 import com.google.common.base.Preconditions;
+import com.typesafe.config.Config;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -43,7 +44,7 @@ import java.util.Map.Entry;
 @RegDataPart(EntityPlayer.class)
 public class CPData extends DataPart<EntityPlayer> {
 
-    private ConfigEnv env;
+    private Config config;
     private AbilityData abilityData;
 
     private static final String
@@ -110,7 +111,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
     @Override
     public void wake() {
-        env = ConfigEnv.global;
+        config = ACConfig.instance().getConfig("ac.ability.data");
         abilityData = AbilityData.get(getEntity());
     }
 
@@ -288,8 +289,6 @@ public class CPData extends DataPart<EntityPlayer> {
     public void performWithForce(float overload, float cp) {
         if(getEntity().capabilities.isCreativeMode)
             return;
-        overload = estimateOverload(overload);
-        cp = estimateConsumption(cp);
         
         this.overload += overload;
         this.currentCP -= cp;
@@ -319,8 +318,6 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     private void addMaxCP(float consumedCP) {
-        consumedCP = estimateConsumption(consumedCP);
-
         AbilityData aData = AbilityData.get(getEntity());
         float max = getMaxAddCP(aData.getLevel());
         addMaxCP += consumedCP * getFloat("maxcp_incr_rate");
@@ -329,8 +326,6 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     private void addMaxOverload(float overload) {
-        overload = estimateOverload(overload);
-
         AbilityData aData = AbilityData.get(getEntity());
         float max = getMaxAddOverload(aData.getLevel());
         float add = MathUtils.clampf(0, 10, overload * getFloat("maxo_incr_rate"));
@@ -364,8 +359,6 @@ public class CPData extends DataPart<EntityPlayer> {
      * Will just make a simulation in client side.
      */
     public boolean consumeCP(float amt) {
-
-        
         if(currentCP < amt)
             return false;
         currentCP -= amt;
@@ -399,20 +392,6 @@ public class CPData extends DataPart<EntityPlayer> {
         if(!isClient())
             dataDirty = true;
     }
-
-    public float estimateOverload(float amt) {
-        if(isOverloaded()) {
-            amt *= getFloat("overload_o_mul");
-        }
-        return amt;
-    }
-
-    public float estimateConsumption(float amt) {
-        if(isOverloaded()) {
-            amt *= getFloat("overload_cp_mul");
-        }
-        return amt;
-    }
     
     public boolean isOverloaded() {
         return overload > getMaxOverload();
@@ -427,8 +406,8 @@ public class CPData extends DataPart<EntityPlayer> {
     public void recalcMaxValue() {
         AbilityData data = AbilityData.get(getEntity());
         
-        this.maxCP = env.pipeFloat(PipedValues.MAXCP, getInitCP(data.getLevel()));
-        this.maxOverload = env.pipeFloat(PipedValues.MAXOVERLOAD, getInitOverload(data.getLevel()));
+        this.maxCP = getInitCP(data.getLevel());
+        this.maxOverload = getInitOverload(data.getLevel());
         
         currentCP = getMaxCP();
         overload = 0;
@@ -490,31 +469,27 @@ public class CPData extends DataPart<EntityPlayer> {
     // Inteference API end
 
     private int getInt(String name) {
-        return env.getInt(path(name));
+        return config.getInt(name);
     }
 
     private float getFloat(String name) {
-        return env.getFloat(path(name));
+        return (float) config.getDouble(name);
     }
 
     public float getInitCP(int level) {
-        return env.getFloatArray(path("init_cp"))[level];
+        return config.getDoubleList("init_cp").get(level).floatValue();
     }
 
     public float getInitOverload(int level) {
-        return env.getFloatArray(path("init_overload"))[level];
+        return config.getDoubleList("init_overload").get(level).floatValue();
     }
 
     public float getMaxAddCP(int level) {
-        return env.getFloatArray(path("add_cp"))[level];
+        return config.getDoubleList("add_cp").get(level).floatValue();
     }
 
     public float getMaxAddOverload(int level) {
-        return env.getFloatArray(path("add_overload"))[level];
-    }
-
-    private String path(String name) {
-        return "ac.ability.data." + name;
+        return config.getDoubleList("add_overload").get(level).floatValue();
     }
 
     /**

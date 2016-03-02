@@ -15,7 +15,6 @@ import cn.academy.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.Resources;
-import cn.academy.core.config.ConfigEnv;
 import cn.academy.misc.achievements.ModuleAchievements;
 import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
@@ -369,56 +368,7 @@ public abstract class Skill extends Controllable {
     public String toString() {
         return getFullName();
     }
-    
-    //---Script integration (DEPRECATED PLEASE DONT USE)
 
-    private ConfigEnv env() {
-        return ConfigEnv.global;
-    }
-
-    /*
-    protected float callFloatWithExp(String name, AbilityData data) {
-        return env(data).lerpf(buildPath(name), data.getSkillExp(this));
-    }
-
-    protected int callIntWithExp(String name, AbilityData data) {
-        return (int) env(data).lerpf(buildPath(name), data.getSkillExp(this));
-    }
-
-    protected float getFloat(String name) {
-        return ConfigEnv.global.getFloat(buildPath(name));
-    }
-
-    protected int getInt(String name) {
-        return ConfigEnv.global.getInt(buildPath(name));
-    }
-
-    protected ConfigEnv env(AbilityData data) {
-        return PlayerConfigEnv.get(data.getEntity());
-    }
-
-
-
-    */
-    private String buildPath(String name) {
-        return "ac.category." + getCategoryLocation() +
-                ".skills." + this.name + "." + name;
-    }
-    
-    // Subclass sandbox
-    /*
-    protected float getConsumption(AbilityData data) {
-        return callFloatWithExp("cp", data);
-    }
-    
-    protected float getOverload(AbilityData data) {
-        return callFloatWithExp("overload", data);
-    }
-    
-    protected int getCooldown(AbilityData data) {
-        return (int) callFloatWithExp("cooldown", data);
-    }
-    */
     /**
      * Trigger the achievement in vanilla achievement page, if any.
      */

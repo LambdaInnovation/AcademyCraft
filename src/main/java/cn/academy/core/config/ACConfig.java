@@ -35,7 +35,7 @@ public final class ACConfig {
         }
     }
 
-    public static Config getRawConfig() {
+    public static Config instance() {
         synchronized (ACConfig.class) {
             if (config == null) {
                 __init();
