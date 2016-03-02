@@ -7,9 +7,7 @@
 package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.event.*;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.config.ConfigEnv;
-import cn.academy.core.config.PlayerConfigEnv;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
@@ -25,7 +23,6 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -47,6 +44,7 @@ import java.util.Map.Entry;
 public class CPData extends DataPart<EntityPlayer> {
 
     private ConfigEnv env;
+    private AbilityData abilityData;
 
     private static final String
         MSG_POST_EVENT = "post_event",
@@ -112,7 +110,8 @@ public class CPData extends DataPart<EntityPlayer> {
 
     @Override
     public void wake() {
-       env = PlayerConfigEnv.get(getEntity());
+        env = ConfigEnv.global;
+        abilityData = AbilityData.get(getEntity());
     }
 
     @Override
@@ -174,7 +173,9 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     public boolean isActivated() {
-        return activated;
+        // At initialization stage, it's possible that activated become true, but AbilityData isn't
+        //  yet synchronized, so additional check is required.
+        return abilityData.hasCategory() && activated;
     }
 
     /**

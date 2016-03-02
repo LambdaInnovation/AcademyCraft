@@ -31,6 +31,8 @@ import net.minecraft.util.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -42,8 +44,8 @@ public class ScatterBomb extends Skill {
         super("scatter_bomb", 2);
     }
     
-    static float getDamage(AbilityData aData) {
-        return instance.callFloatWithExp("damage", aData);
+    static float getDamage(float exp) {
+        return lerpf(4, 6, exp);
     }
     
     @Override
@@ -53,12 +55,14 @@ public class ScatterBomb extends Skill {
     
     public static class SBAction extends SkillSyncAction {
         
-        List<EntityMdBall> balls = new ArrayList();
+        List<EntityMdBall> balls = new ArrayList<>();
         
         static IEntitySelector basicSelector = EntitySelectors.everything;
         static final int MAX_TICKS = 80, MOD = 10;
         static final double RAY_RANGE = 15;
         int ticks;
+
+        float exp;
 
         public SBAction() {
             super(-1);
@@ -67,7 +71,10 @@ public class ScatterBomb extends Skill {
         @Override
         public void onStart() {
             super.onStart();
-            cpData.perform(instance.getOverload(aData), 0);
+            exp = aData.getSkillExp(instance);
+
+            float overload = lerpf(185, 68, exp);
+            cpData.perform(overload, 0);
         }
         
         @Override
@@ -81,8 +88,9 @@ public class ScatterBomb extends Skill {
                         world.spawnEntityInWorld(ball);
                         balls.add(ball);
                     }
-                    
-                    if(!cpData.perform(0, instance.getConsumption(aData)))
+
+                    float cp = lerpf(7, 9, exp);
+                    if(!cpData.perform(0, cp))
                         ActionManager.endAction(this);
                 }
                 
@@ -124,10 +132,10 @@ public class ScatterBomb extends Skill {
                         EntitySelectors.and(basicSelector, EntitySelectors.excludeOf(player)));
                     if(traceResult != null && traceResult.entityHit != null) {
                         traceResult.entityHit.hurtResistantTime = -1;
-                        MDDamageHelper.attack(traceResult.entityHit, player, getDamage(aData));
+                        MDDamageHelper.attack(traceResult.entityHit, player, getDamage(exp));
                     }
                 }
-                aData.addSkillExp(instance, instance.getFloat("expincr") * balls.size());
+                aData.addSkillExp(instance, 0.001f * balls.size());
             }
         }
         

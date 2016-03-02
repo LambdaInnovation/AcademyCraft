@@ -40,6 +40,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.Optional;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -53,10 +55,6 @@ public class Flashing extends Skill {
 
     private Flashing() {
         super("flashing", 5);
-    }
-
-    private static float getRange(AbilityData aData) {
-        return instance.callFloatWithExp("range", aData);
     }
 
     @SideOnly(Side.CLIENT)
@@ -135,12 +133,16 @@ public class Flashing extends Skill {
 
         final AbilityData aData;
         final CPData cpData;
+        final float exp, consumption, overload;
 
         public MainContext(EntityPlayer player) {
             super(player);
 
             aData = aData();
             cpData = cpData();
+            exp = aData.getSkillExp(instance);
+            consumption = lerpf(100, 70, exp);
+            overload = lerpf(90, 70, exp);
         }
 
         @SideOnly(Side.CLIENT)
@@ -214,12 +216,12 @@ public class Flashing extends Skill {
 
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
-            if (cpData().perform(instance.getOverload(aData), instance.getConsumption(aData))) {
+            if (cpData().perform(overload, consumption)) {
                 Vec3 dest = getDest(keyid);
                 player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
                 player.fallDistance = 0.0f;
 
-                aData.addSkillExp(instance, instance.getFloat("expincr"));
+                aData.addSkillExp(instance, .002f);
                 instance.triggerAchievement(player);
                 TPAttackHelper.incrTPCount(player);
 
@@ -265,14 +267,13 @@ public class Flashing extends Skill {
         }
 
         private boolean consume(boolean simulate) {
-            float consumption = instance.getConsumption(aData);
-            return simulate ? cpData.canPerform(consumption) : cpData.perform(instance.getOverload(aData), consumption);
+            return simulate ? cpData.canPerform(consumption) : cpData.perform(overload, consumption);
         }
 
         private Vec3 getDest(int keyid) {
             Preconditions.checkState(keyid != -1);
 
-            double dist = Flashing.getRange(aData);
+            double dist = lerpf(8, 15, exp);
 
             Vec3 dir = VecUtils.copy(dirs[keyid]);
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);

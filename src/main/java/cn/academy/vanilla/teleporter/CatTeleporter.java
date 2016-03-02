@@ -33,6 +33,16 @@ public class CatTeleporter extends Category {
         super("teleporter");
         colorStyle.setColor4i(164, 164, 164, 145);
 
+        threateningTP.setPosition(85, 239);
+        dimFolding.setPosition(157, 375);
+        penetrateTP.setPosition(315, 332);
+        markTP.setPosition(304, 143);
+        fleshRipping.setPosition(554, 119);
+        locTP.setPosition(533, 317);
+        shiftTP.setPosition(740, 330);
+        spaceFluct.setPosition(886, 412);
+        flashing.setPosition(839, 226);
+
         // Lv1
         this.addSkill(threateningTP);
         this.addSkill(dimFolding);

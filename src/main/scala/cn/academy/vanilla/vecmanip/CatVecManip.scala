@@ -10,6 +10,16 @@ object CatVecManip extends Category("vecmanip") {
 
   colorStyle.setColor4d(.5, .5, .5, .8)
 
+  DirectedShock.setPosition(120, 240)
+  Groundshock.setPosition(280, 390)
+  VecAccel.setPosition(320, 245)
+  VecDeviation.setPosition(555, 242)
+  DirectedBlastwave.setPosition(520, 385)
+  StormWing.setPosition(604, 120)
+  BloodRetrograde.setPosition(780, 393)
+  VecReflection.setPosition(800, 245)
+  PlasmaCannon.setPosition(850, 90)
+
   // Level 1
   addSkill(DirectedShock)
   addSkill(Groundshock)

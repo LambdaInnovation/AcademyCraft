@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static cn.lambdalib.util.generic.RandUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -60,23 +61,35 @@ public class ElectronMissile extends Skill {
         LinkedList<EntityMdBall> active;
         
         int ticks;
+
+        float exp;
+        float overload, consumption;
+        float overload_attacked, consumption_attacked;
         
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
+            overload = lerpf(2, 1.5f, exp);
+            consumption = lerpf(20, 15, exp);
+
+            overload_attacked = lerpf(61, 32, exp);
+            consumption_attacked = lerpf(270, 405, exp);
             
             if(!isRemote) {
-                active = new LinkedList();
+                active = new LinkedList<>();
             }
         }
         
         @Override
         public void onTick() {
-            if(!cpData.perform(instance.getOverload(aData), instance.getConsumption(aData)) && !isRemote)
+            if(!cpData.perform(overload, consumption) && !isRemote)
                 ActionManager.abortAction(this);
             
             if(!isRemote) {
-                if(ticks > instance.callFloatWithExp("time_limit", aData))
+                int timeLimit = (int) lerpf(200, 400, exp);
+                if(ticks > timeLimit)
                     ActionManager.abortAction(this);
                 
                 if(ticks % 10 == 0) {
@@ -87,11 +100,12 @@ public class ElectronMissile extends Skill {
                     }
                 }
                 if(ticks != 0 && ticks % 8 == 0) {
-                    List<Entity> list = WorldUtils.getEntities(player, instance.callFloatWithExp("range", aData), 
+                    float range = lerpf(7, 12, exp);
+                    List<Entity> list = WorldUtils.getEntities(player, range,
                         EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living));
                     if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
-                        instance.callFloatWithExp("overload_attacked", aData), 
-                        instance.callFloatWithExp("cp_attacked", aData))) {
+                        overload_attacked,
+                        consumption_attacked)) {
                         double min = Double.MAX_VALUE;
                         Entity result = null;
                         for(Entity e : list) {
@@ -117,8 +131,10 @@ public class ElectronMissile extends Skill {
                         
                         // server action
                         result.hurtResistantTime = -1;
-                        MDDamageHelper.attack(result, player, instance.callFloatWithExp("damage", aData));
-                        aData.addSkillExp(instance, instance.getFloat("expincr"));
+
+                        float damage = lerpf(14, 27, exp);
+                        MDDamageHelper.attack(result, player, damage);
+                        aData.addSkillExp(instance, 0.001f);
                         ball.setDead();
                     }
                 }

@@ -41,15 +41,17 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
 @Registrant
 public class Railgun extends Skill {
     
-    public static List<SupportedItem> supportedItems = new ArrayList();
+    public static List<SupportedItem> supportedItems = new ArrayList<>();
     
-    public enum AttackType { EXPLOSIVE, PENETRATIVE };
+    public enum AttackType { EXPLOSIVE, PENETRATIVE }
     
     public static final class SupportedItem {
         
@@ -118,14 +120,26 @@ public class Railgun extends Skill {
         DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
     }
     
-    static float getDamage(AbilityData aData) {
-        return instance.callFloatWithExp("damage", aData);
+    static float getDamage(float exp) {
+        return lerpf(40, 100, exp);
     }
     
-    static float getEnergy(AbilityData aData) {
-        return instance.callFloatWithExp("energy", aData);
+    static float getEnergy(float exp) {
+        return lerpf(900, 2000, exp);
     }
-    
+
+    static float getConsumption(float exp) {
+        return lerpf(340, 455, exp);
+    }
+
+    static float getOverload(float exp) {
+        return lerpf(160, 110, exp);
+    }
+
+    static int getCooldown(float exp) {
+        return (int) lerpf(300, 160, exp);
+    }
+
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
         return new SkillInstance() {
@@ -156,7 +170,7 @@ public class Railgun extends Skill {
                                 
                                 this.addChild(action);
                                 
-                                this.estimatedCP = Railgun.this.getConsumption(aData);
+                                this.estimatedCP = Railgun.getConsumption(aData.getSkillExp(Railgun.instance));
                                 
                                 execute = true;
                                 break;
@@ -177,7 +191,7 @@ public class Railgun extends Skill {
     }
     
     public static class ActionShootCoin extends SyncActionInstant {
-        
+
         EntityCoinThrowing coin;
 
         public ActionShootCoin(EntityCoinThrowing _coin) {
@@ -193,14 +207,16 @@ public class Railgun extends Skill {
 
         @Override
         public void execute() {
-            if(!cpData.perform(instance.getOverload(aData), instance.getConsumption(aData)))
+            float exp = aData.getSkillExp(instance);
+
+            if(!cpData.perform(getOverload(exp), getConsumption(exp)))
                 return;
             
             if(isRemote) {
                 spawnRay();
             } else {
-                RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
-                damage.startDamage = getDamage(aData);
+                RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(exp));
+                damage.startDamage = getDamage(exp);
                 damage.perform();
                 EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
                 if(coin != null) {
@@ -208,9 +224,10 @@ public class Railgun extends Skill {
                 }
                 instance.triggerAchievement(player);
             }
-            
-            setCooldown(instance, instance.getCooldown(aData));
-            aData.addSkillExp(instance, instance.getFloat("expincr"));
+
+
+            setCooldown(instance, getCooldown(exp));
+            aData.addSkillExp(instance, .005f);
         }
         
         @SideOnly(Side.CLIENT)
@@ -277,8 +294,10 @@ public class Railgun extends Skill {
         @Override
         public void onEnd() {
             ItemStack stack = checkItem();
+            float exp = aData.getSkillExp(instance);
+
             if(tick >= CHARGE_ACCEPT_TIME && stack != null) {
-                if(cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
+                if(cpData.perform(getOverload(exp), getConsumption(exp))) {
                     if(!player.capabilities.isCreativeMode) {
                         if(--stack.stackSize == 0) {
                             player.setCurrentItemOrArmor(0, null);
@@ -290,14 +309,14 @@ public class Railgun extends Skill {
                     } else {
                         // TODO: I don't want bother with seperate effects in 1.0, just use
                         // standard routine now~
-                        RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(aData));
-                        damage.startDamage = getDamage(aData);
+                        RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(exp));
+                        damage.startDamage = getDamage(exp);
                         damage.perform();
                         instance.triggerAchievement(player);
                     }
                     
-                    setCooldown(instance, instance.getCooldown(aData));
-                    aData.addSkillExp(instance, instance.getFloat("expincr"));
+                    setCooldown(instance, getCooldown(exp));
+                    aData.addSkillExp(instance, 0.005f);
                 }
             }
         }

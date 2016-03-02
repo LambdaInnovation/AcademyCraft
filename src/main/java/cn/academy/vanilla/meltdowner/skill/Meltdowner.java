@@ -25,8 +25,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 
-import static cn.lambdalib.util.generic.RandUtils.ranged;
-import static cn.lambdalib.util.generic.RandUtils.rangei;
+import static cn.lambdalib.util.generic.RandUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -40,22 +40,30 @@ public class Meltdowner extends Skill {
     private Meltdowner() {
         super("meltdowner", 3);
     }
+
+    private static float getConsumption(float exp) {
+        return lerpf(15, 27, exp);
+    }
     
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
         return new SkillInstance().addChild(new MDAction()).setEstmCP(
-            instance.getConsumption(AbilityData.get(player)));
+            getConsumption(AbilityData.get(player).getSkillExp(instance)));
     }
     
     public static class MDAction extends SkillSyncAction {
         
         int ticks;
 
+        float exp;
+
         public MDAction() {}
         
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
             
             if(isRemote) startEffect();
         }
@@ -65,7 +73,7 @@ public class Meltdowner extends Skill {
             ticks++;
             if(isRemote)
                 updateEffect();
-            if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
+            if(!cpData.perform(0, getConsumption(exp)) && !isRemote)
                 ActionManager.abortAction(this);
             
             if(ticks > TICKS_TOLE)
@@ -107,14 +115,16 @@ public class Meltdowner extends Skill {
             if(ticks < TICKS_MIN) {
                 // N/A
             } else {
-                cpData.perform(instance.getOverload(aData), 0);
+                float overload = lerpf(300, 200, exp);
+
+                cpData.perform(overload, 0);
                 int ct = toChargeTicks();
                 
                 if(isRemote) {
                     spawnRay();
                 } else {
                     RangedRayDamage rrd = new RangedRayDamage(player, 
-                        instance.callFloatWithExp("range", aData),
+                        lerpf(2, 3, exp),
                         getEnergy(ct));
                     rrd.startDamage = getDamage(ct);
                     rrd.perform();

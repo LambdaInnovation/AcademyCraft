@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.generic.entity.EntityBloodSplash;
@@ -32,6 +31,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -43,24 +44,14 @@ public class FleshRipping extends Skill {
         super("flesh_ripping", 3);
     }
 
-    public static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
-    }
-
-    public static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
-    }
-
-    public static float getDisgustProb() {
-        return instance.getFloat("disgust_prob");
-    }
-
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
-        return new SkillInstance().addChild(new FRAction()).setEstmCP(instance.getConsumption(AbilityData.get(player)));
+        return new SkillInstance().addChild(new FRAction());
     }
 
     public static class FRAction extends SkillSyncAction {
+
+        float exp;
 
         public FRAction() {
             super(-1);
@@ -69,6 +60,9 @@ public class FleshRipping extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
+
             if (isRemote) {
                 startEffects();
             }
@@ -79,7 +73,7 @@ public class FleshRipping extends Skill {
             if (isRemote) {
                 updateEffects();
             } else {
-                if (!cpData.canPerform(instance.getConsumption(aData)))
+                if (!cpData.canPerform(getConsumption()))
                     ActionManager.abortAction(this);
             }
         }
@@ -103,14 +97,14 @@ public class FleshRipping extends Skill {
                 onAbort();
             } else {
                 if (!isRemote) {
-                    cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
-                    TPAttackHelper.attack(player, instance, target.target, getDamage(aData));
+                    cpData.performWithForce(getOverload(), getConsumption());
+                    TPAttackHelper.attack(player, instance, target.target, getDamage());
                     if (RandUtils.ranged(0, 1) < getDisgustProb()) {
                         player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
                     }
 
-                    setCooldown(instance, instance.getCooldown(aData));
-                    aData.addSkillExp(instance, instance.getFloat("expincr"));
+                    setCooldown(instance, (int) lerpf(100, 60, exp));
+                    aData.addSkillExp(instance, .005f);
                 }
             }
         }
@@ -125,6 +119,26 @@ public class FleshRipping extends Skill {
             if (isRemote) {
                 endEffects();
             }
+        }
+
+        private float getDamage() {
+            return lerpf(9, 15, exp);
+        }
+
+        private float getRange() {
+            return lerpf(6, 14, exp);
+        }
+
+        private float getDisgustProb() {
+            return .05f;
+        }
+
+        private float getConsumption() {
+            return lerpf(247, 302, exp);
+        }
+
+        private float getOverload() {
+            return lerpf(60, 50, exp);
         }
 
         // CLIENT
@@ -187,7 +201,7 @@ public class FleshRipping extends Skill {
         }
 
         private AttackTarget getAttackTarget() {
-            double range = getRange(aData);
+            double range = getRange();
             MovingObjectPosition trace = Raytrace.traceLiving(player, range, EntitySelectors.living);
 
             Entity target = null;

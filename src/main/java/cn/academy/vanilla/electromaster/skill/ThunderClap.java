@@ -30,6 +30,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -43,17 +45,17 @@ public class ThunderClap extends Skill {
         super("thunder_clap", 5);
     }
     
-    private static float getDamage(AbilityData data, int ticks) {
-        return instance.callFloatWithExp("thunder_clap", data) *
+    private static float getDamage(float exp, int ticks) {
+        return lerpf(36, 72, exp) *
                 MathUtils.lerpf(1.0f, 1.2f, (ticks - 40.0f) / 60.0f);
     }
     
-    private static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
+    private static float getRange(float exp) {
+        return lerpf(15, 30, exp);
     }
     
-    private static int getCooldown(AbilityData data, int ticks) {
-        return ticks * instance.callIntWithExp("cooldown_scale", data);
+    private static int getCooldown(float exp, int ticks) {
+        return (int) (ticks * lerpf(500, 300, exp));
     }
     
     @Override
@@ -62,6 +64,8 @@ public class ThunderClap extends Skill {
     }
     
     public static class ThunderClapAction extends SkillSyncAction {
+
+        float exp;
         
         int ticks;
         double hitX, hitY, hitZ;
@@ -79,7 +83,10 @@ public class ThunderClap extends Skill {
             
             aData = AbilityData.get(player);
             cpData = CPData.get(player);
-            cpData.perform(instance.getOverload(aData), 0);
+            exp = aData.getSkillExp(instance);
+
+            float overload = lerpf(390, 252, exp);
+            cpData.perform(overload, 0);
         }
         
         @Override
@@ -101,7 +108,9 @@ public class ThunderClap extends Skill {
             }
 
             ticks++;
-            if(ticks <= MIN_TICKS && !cpData.perform(0, instance.getConsumption(aData)))
+
+            float consumption = lerpf(100, 120, exp);
+            if(ticks <= MIN_TICKS && !cpData.perform(0, consumption))
                 ActionManager.abortAction(this);
             if(!isRemote) {
                 if(ticks >= MAX_TICKS) {
@@ -141,12 +150,12 @@ public class ThunderClap extends Skill {
             player.worldObj.spawnEntityInWorld(lightning);
             if(!isRemote) {
                 DamageHelper.applyRangeAttack(player.worldObj, 
-                    hitX, hitY, hitZ, getRange(aData), getDamage(aData, ticks), 
+                    hitX, hitY, hitZ, getRange(exp), getDamage(exp, ticks),
                     DamageSource.causePlayerDamage(player), EntitySelectors.excludeOf(player));
             }
             
-            setCooldown(instance, getCooldown(aData, ticks));
-            aData.addSkillExp(instance, instance.getFloat("expincr"));
+            setCooldown(instance, getCooldown(exp, ticks));
+            aData.addSkillExp(instance, 0.003f);
             instance.triggerAchievement(player);
         }
         

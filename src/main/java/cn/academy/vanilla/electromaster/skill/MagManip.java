@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * Magnet manipulation
  * @author WeAthFolD
@@ -56,12 +58,12 @@ public class MagManip extends Skill {
         return CatElectromaster.isWeakMetalBlock(block);
     }
     
-    static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
+    static float getDamage(float exp) {
+        return lerpf(18, 30, exp);
     }
     
     static float getExpIncr() {
-        return instance.getFloat("expincr");
+        return 0.0025f;
     }
     
     @Override
@@ -71,6 +73,8 @@ public class MagManip extends Skill {
     
     public static class ManipAction extends SkillSyncAction {
 
+        float exp;
+
         public ManipAction() {
             super(-1);
         }
@@ -78,6 +82,8 @@ public class MagManip extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
             
             if(!isRemote && !checkItem()) {
                 ActionManager.abortAction(this);
@@ -90,7 +96,7 @@ public class MagManip extends Skill {
         @Override
         public void onTick() {
             if(!isRemote) {
-                if(!checkItem() || !cpData.canPerform(instance.getConsumption(aData))) {
+                if(!checkItem() || !cpData.canPerform(getCP())) {
                     ActionManager.abortAction(this);
                 }
             } else
@@ -101,10 +107,10 @@ public class MagManip extends Skill {
         public void onEnd() {
             if(!isRemote) {
                 if(checkItem()) {
-                    cpData.performWithForce(instance.getOverload(aData), instance.getConsumption(aData));
+                    cpData.performWithForce(getOverload(), getCP());
                     
                     ItemStack stack = player.getCurrentEquippedItem();
-                    EntityBlock entity = new ManipEntityBlock(player, getDamage(aData));
+                    EntityBlock entity = new ManipEntityBlock(player, getDamage(exp));
                     
                     entity.fromItemStack(stack);
                     new Motion3D(player, true).multiplyMotionBy(1.6).applyToEntity(entity);
@@ -122,7 +128,7 @@ public class MagManip extends Skill {
                 }
             }
             
-            setCooldown(instance, instance.getCooldown(aData));
+            setCooldown(instance, getCooldown());
         }
         
         @Override
@@ -157,7 +163,19 @@ public class MagManip extends Skill {
             player.capabilities.setPlayerWalkSpeed(0.1f);
             arc.setDead();
         }
-        
+
+        private float getCP() {
+            return lerpf(225, 275, exp);
+        }
+
+        private float getOverload() {
+            return lerpf(72, 33, exp);
+        }
+
+        private int getCooldown() {
+            return (int) lerpf(60, 40, exp);
+        }
+
     }
     
     

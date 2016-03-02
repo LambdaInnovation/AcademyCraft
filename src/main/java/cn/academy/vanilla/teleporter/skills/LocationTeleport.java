@@ -115,8 +115,8 @@ public class LocationTeleport extends Skill {
                 Math.max(8.0f, MathHelper.sqrt_float(Math.min(800.0f, distance)));
     }
 
-    public static float getOverload(EntityPlayer player) {
-        return instance.getOverload(AbilityData.get(player));
+    private static float getOverload(EntityPlayer player) {
+        return 240;
     }
 
     public static boolean canPerform(EntityPlayer player, Location dest) {
@@ -125,7 +125,7 @@ public class LocationTeleport extends Skill {
     }
 
     private static float getRange() {
-        return instance.getFloat("range");
+        return 4;
     }
 
     @SideOnly(Side.CLIENT)

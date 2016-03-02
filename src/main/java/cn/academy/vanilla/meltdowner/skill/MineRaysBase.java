@@ -8,15 +8,11 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.core.event.BlockDestroyEvent;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
-import cn.lambdalib.networkcall.s11n.InstanceSerializer;
-import cn.lambdalib.networkcall.s11n.SerializationManager;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cn.lambdalib.util.generic.RandUtils;
@@ -27,14 +23,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import static cn.lambdalib.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -50,74 +45,41 @@ public abstract class MineRaysBase extends Skill {
         postfix = _postfix;
     }
     
-    protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
-    
-    @SideOnly(Side.CLIENT)
-    protected abstract Entity createRay(EntityPlayer player);
-    
-    @Override
-    public final SkillInstance createSkillInstance(EntityPlayer player) {
-        return new SkillInstance().addChild(new MRAction(this));    
-    }
-    
-    public static class MRAction extends SkillSyncAction {
-
-        InstanceSerializer<Skill> skillSer;
-        
-        MineRaysBase skill;
+    public static abstract class MRAction extends SkillSyncAction {
+        final MineRaysBase skill;
         
         int x = -1, y = -1, z = -1;
         float hardnessLeft = Float.MAX_VALUE;
+
+        float exp;
         
         public MRAction(MineRaysBase _skill) {
-            this();
             skill = _skill;
-        }
-        
-        public MRAction() {
-            super(5);
-            skillSer = SerializationManager.INSTANCE.getInstanceSerializer(Skill.class);
-        }
-        
-        @Override
-        public void writeNBTStart(NBTTagCompound tag) {
-            try {
-                tag.setTag("s", skillSer.writeInstance(skill));
-            } catch (Exception e) {
-                AcademyCraft.log.error("skill serialization", e);
-            }
-        }
-        
-        @Override
-        public void readNBTStart(NBTTagCompound tag) {
-            try {
-                skill = (MineRaysBase) skillSer.readInstance(tag.getTag("s"));
-            } catch (Exception e) {
-                AcademyCraft.log.error("skill deserialization", e);
-            }
         }
         
         @Override
         public void onStart() {
             super.onStart();
-            
-            cpData.perform(skill.getOverload(aData), 0);
+
+            exp = aData.getSkillExp(skill);
+
+            cpData.perform(lerpf(o_l, o_r, exp), 0);
             if(isRemote)
                 startEffects();
         }
         
         @Override
         public void onTick() {
-            if(!cpData.perform(0, skill.getConsumption(aData)) && !isRemote)
+            if(!cpData.perform(0, lerpf(cp_l, cp_r, exp)) && !isRemote)
                 ActionManager.abortAction(this);
             
-            MovingObjectPosition result = Raytrace.traceLiving(player, skill.getFloat("range"), EntitySelectors.nothing);
+            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
             if(result != null) {
                 int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
                 if(tx != x || ty != y || tz != z) {
                     Block block = world.getBlock(tx, ty, tz);
                     if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player.worldObj, tx, ty, tz)) && 
-                            block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= skill.getInt("harvest_level")) {
+                            block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= harvestLevel) {
                         x = tx; y = ty; z = tz;
                         hardnessLeft = block.getBlockHardness(world, tx, ty, tz);
                         
@@ -127,11 +89,11 @@ public abstract class MineRaysBase extends Skill {
                         x = y = z = -1;
                     }
                 } else {
-                    hardnessLeft -= skill.callFloatWithExp("speed", aData);
+                    hardnessLeft -= lerpf(speed_l, speed_r, exp);
                     if(hardnessLeft <= 0) {
                         if(!isRemote) {
-                            skill.onBlockBreak(world, x, y, z, world.getBlock(x, y, z));
-                            aData.addSkillExp(skill, skill.getFloat("expincr"));
+                            onBlockBreak(world, x, y, z, world.getBlock(x, y, z));
+                            aData.addSkillExp(skill, expincr);
                         }
                         x = y = z = -1;
                     }
@@ -150,7 +112,7 @@ public abstract class MineRaysBase extends Skill {
         public void onFinalize() {
             if(isRemote)
                 endEffects();
-            setCooldown(skill, skill.callIntWithExp("cooldown", aData));
+            setCooldown(skill, (int) lerpf(cd_l, cd_r, exp));
         }
         
         // CLIENT
@@ -161,7 +123,7 @@ public abstract class MineRaysBase extends Skill {
         
         @SideOnly(Side.CLIENT)
         public void startEffects() {
-            world.spawnEntityInWorld(ray = skill.createRay(player));
+            world.spawnEntityInWorld(ray = createRay());
             loopSound = new FollowEntitySound(player, "md.mine_loop").setLoop().setVolume(0.3f);
             ACSounds.playClient(loopSound);
             ACSounds.playClient(player, "md.mine_" + skill.postfix + "_startup", 0.4f);
@@ -202,6 +164,47 @@ public abstract class MineRaysBase extends Skill {
             ray.setDead();
             loopSound.stop();
         }
+
+        private float range;
+        private float speed_l, speed_r;
+        private float cp_l, cp_r;
+        private float o_l, o_r;
+        private float cd_l, cd_r;
+        private float expincr;
+        private int harvestLevel;
+
+        protected void setRange(float _range) {
+            range = _range;
+        }
+
+        protected void setHarvestLevel(int _level) {
+            harvestLevel = _level;
+        }
+
+        protected void setSpeed(float l, float r) {
+            speed_l = l; speed_r = r;
+        }
+
+        protected void setConsumption(float l, float r) {
+            cp_l = l; cp_r = r;
+        }
+
+        protected void setOverload(float l, float r) {
+            o_l = l; o_r = r;
+        }
+
+        protected void setCooldown(float l, float r) {
+            cd_l = l; cd_r = r;
+        }
+
+        protected void setExpIncr(float amt) {
+            expincr = amt;
+        }
+
+        protected abstract void onBlockBreak(World world, int x, int y, int z, Block block);
+
+        @SideOnly(Side.CLIENT)
+        protected abstract Entity createRay();
         
     }
 }
