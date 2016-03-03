@@ -134,7 +134,7 @@ public class AcademyCraft {
             System.out.printf("|-------------------------------------------------------\n");
         }
 
-        OnlineMediaManager.INSTANCE.init();
+        // OnlineMediaManager.INSTANCE.init();
 
         recipes = null; // Release and have fun GC
         config.save();
@@ -143,8 +143,8 @@ public class AcademyCraft {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit2(FMLPostInitializationEvent event) {
-        ShaderProgram.releaseResources();
-        MediaManager.INSTANCE.init();
+        // ShaderProgram.releaseResources();
+        // MediaManager.INSTANCE.init();
     }
 
     @EventHandler
