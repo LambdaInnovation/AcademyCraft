@@ -16,7 +16,7 @@ import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
@@ -162,7 +162,7 @@ public class LocationTeleport extends Skill {
 
             aData.addSkillExp(instance, expincr);
             ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
-            TPAttackHelper.incrTPCount(player);
+            TPSkillHelper.incrTPCount(player);
         }
     }
 

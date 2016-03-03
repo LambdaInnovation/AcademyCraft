@@ -19,7 +19,7 @@ import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.deprecated.LIFMLGameEventDispatcher;
 import cn.lambdalib.util.generic.MathUtils;
@@ -223,7 +223,7 @@ public class Flashing extends Skill {
 
                 aData.addSkillExp(instance, .002f);
                 instance.triggerAchievement(player);
-                TPAttackHelper.incrTPCount(player);
+                TPSkillHelper.incrTPCount(player);
 
                 sendToClient(MSG_PERFORM);
             }

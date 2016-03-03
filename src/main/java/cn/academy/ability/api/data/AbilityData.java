@@ -40,7 +40,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
         return EntityData.get(player).getPart(AbilityData.class);
     }
 
-    private static final String MSG_CAT_CHANGE = "cat_change";
+    private static final String MSG_CAT_CHANGE = "cat_change", MSG_SKILL_LEARNED = "skill_learned";
 
     @SerializeIncluded
     private int catID = -1;
@@ -167,13 +167,21 @@ public class AbilityData extends DataPart<EntityPlayer> {
         checkSkill(s);
 
         int id = s.getID();
-        Category cat = getCategory();
-        if(!learnedSkills.get(id)) {
-            MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getEntity(), cat.getSkill(id)));
-            learnedSkills.set(id, value);
+        boolean prevState = learnedSkills.get(id);
 
-            sync();
+        learnedSkills.set(id, value);
+
+        if (!prevState && value) {
+            fireSkillLearn(s);
+            sendToLocal(MSG_SKILL_LEARNED, s);
         }
+
+        sync();
+    }
+
+    @Listener(channel=MSG_SKILL_LEARNED, side=Side.CLIENT)
+    private void fireSkillLearn(Skill s) {
+        MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getEntity(), s));
     }
 
     /**
@@ -213,12 +221,12 @@ public class AbilityData extends DataPart<EntityPlayer> {
     public void setSkillExp(Skill skill, float exp) {
         checkSide(Side.SERVER);
         checkSkill(skill);
-
-        learnSkill(skill);
-        skillExps[skill.getID()] = exp;
-        if(!isClient()) {
-            MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
-            scheduleUpdate(25);
+        if (isSkillLearned(skill)) {
+            skillExps[skill.getID()] = exp;
+            if(!isClient()) {
+                MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
+                scheduleUpdate(25);
+            }
         }
     }
 

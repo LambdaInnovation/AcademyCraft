@@ -9,17 +9,22 @@ package cn.academy.ability.develop.condition;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
+import cn.academy.core.client.Resources;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 /**
  * @author WeAthFolD
  */
 public class DevConditionAnySkillOfLevel implements IDevCondition {
     
-    int level;
+    final int level;
+
+    final ResourceLocation res;
 
     public DevConditionAnySkillOfLevel(int _level) {
         level = _level;
+        res = Resources.getTexture("abilities/condition/any" + level);
     }
     
     @Override
@@ -34,15 +39,14 @@ public class DevConditionAnySkillOfLevel implements IDevCondition {
         return false;
     }
 
-    // TODO
     @Override
     public ResourceLocation getIcon() {
-        return null;
+        return res;
     }
 
     @Override
     public String getHintText() {
-        return null;
+        return StatCollector.translateToLocalFormatted("ac.skill_tree.anyskill", level);
     }
 
 }

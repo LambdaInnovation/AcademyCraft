@@ -10,7 +10,7 @@ import cn.academy.ability.api.Skill;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
- * TODO rewrite
+ * Dummy placeholder. Impl at {@link cn.academy.vanilla.teleporter.util.TPSkillHelper}
  * @author WeAthFolD
  */
 public class SpaceFluctuation extends Skill {
@@ -20,7 +20,6 @@ public class SpaceFluctuation extends Skill {
     private SpaceFluctuation() {
         super("space_fluct", 4);
         this.canControl = false;
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
 }

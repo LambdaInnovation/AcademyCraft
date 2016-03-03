@@ -14,7 +14,7 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.generic.entity.EntityBloodSplash;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
@@ -98,7 +98,7 @@ public class FleshRipping extends Skill {
             } else {
                 if (!isRemote) {
                     cpData.performWithForce(getOverload(), getConsumption());
-                    TPAttackHelper.attack(player, instance, target.target, getDamage());
+                    TPSkillHelper.attack(player, instance, target.target, getDamage());
                     if (RandUtils.ranged(0, 1) < getDisgustProb()) {
                         player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
                     }

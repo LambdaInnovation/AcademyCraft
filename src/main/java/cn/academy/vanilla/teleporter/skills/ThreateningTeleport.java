@@ -15,7 +15,7 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
@@ -135,7 +135,7 @@ public class ThreateningTeleport extends Skill {
 
                     if (result.target != null) {
                         attacked = true;
-                        TPAttackHelper.attack(player, instance, result.target, getDamage(aData, curStack));
+                        TPSkillHelper.attack(player, instance, result.target, getDamage(aData, curStack));
                         instance.triggerAchievement(player);
                         dropProb = 0.3;
                     }

@@ -96,14 +96,14 @@ public class ModuleVanilla {
         bca.setPosition(487, 510);
         mc.setPosition(750, 510);
 
-        category.addSkill(new SkillBrainCourse());
-        category.addSkill(new SkillBrainCourseAdvanced());
-        category.addSkill(new SkillMindCourse());
+        category.addSkill(bc);
+        category.addSkill(bca);
+        category.addSkill(mc);
 
-        bc.addDevCondition(new DevConditionAnySkillOfLevel(4));
+        bc.addDevCondition(new DevConditionAnySkillOfLevel(3));
 
         bca.setParent(bc);
-        bca.addDevCondition(new DevConditionAnySkillOfLevel(5));
+        bca.addDevCondition(new DevConditionAnySkillOfLevel(4));
 
         mc.setParent(bca);
         mc.addDevCondition(new DevConditionAnySkillOfLevel(5));

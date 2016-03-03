@@ -7,11 +7,13 @@
 package cn.academy.vanilla.generic.skill;
 
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.api.event.CalcEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Generic passive skill: Mind Training Course
- * TODO rewrite
  * @author WeAthFolD
  */
 public class SkillMindCourse extends Skill {
@@ -22,6 +24,13 @@ public class SkillMindCourse extends Skill {
         this.isGeneric = true;
         
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void recalcCPRecover(CalcEvent.CPRecoverSpeed evt) {
+        if (AbilityData.get(evt.player).isSkillLearned(this)) {
+            evt.value *= 1.2f;
+        }
     }
 
 }

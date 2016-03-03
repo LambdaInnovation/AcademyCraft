@@ -14,7 +14,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
@@ -168,7 +168,7 @@ public class PenetrateTeleport extends Skill {
 
                 aData.addSkillExp(instance, expincr);
                 ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
-                TPAttackHelper.incrTPCount(player);
+                TPSkillHelper.incrTPCount(player);
 
                 player.setPositionAndUpdate(x, y, z);
                 player.fallDistance = 0;

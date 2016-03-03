@@ -178,6 +178,8 @@ ac.skill_tree.aborted=已取消.
 
 ac.skill_tree.level_prg=升级进度：%s
 
+ac.skill_tree.anyskill=%d级的任意技能
+
 # 设置
 ac.settings.cat.generic=常规
 ac.settings.prop.attackPlayer=开启PvP (玩家伤害)
@@ -415,9 +417,9 @@ ac.ability.generic.brain_course.name=大脑训练课程
 ac.ability.generic.brain_course_advanced.name=大脑训练课程 (高级)
 ac.ability.generic.mind_course.name=思维修养课程
 
-ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。
-ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力，强化能力的短期续航时间与长期消耗的耐性。
-ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想，加快计算力的恢复速度。
+ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。提高最大计算力1000点。
+ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力。提高最大计算力1000点，最大过载100点。
+ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%。
 
 # 指令
 ac.command.invalid=§c无效输入，请再次尝试.

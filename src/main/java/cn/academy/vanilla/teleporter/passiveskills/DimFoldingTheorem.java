@@ -10,7 +10,7 @@ import cn.academy.ability.api.Skill;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
- * TODO Rewrite
+ * Dummy placeholder. Impl at {@link cn.academy.vanilla.teleporter.util.TPSkillHelper}
  * @author WeAthFolD
  */
 public class DimFoldingTheorem extends Skill {
@@ -20,7 +20,6 @@ public class DimFoldingTheorem extends Skill {
     private DimFoldingTheorem() {
         super("dim_folding_theorem", 1);
         this.canControl = false;
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
 }

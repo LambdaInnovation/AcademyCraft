@@ -158,7 +158,7 @@ ac.skill_tree.acquireprog=%1.0f%% acquired
 ac.skill_tree.not_acquired=Not acquired
 ac.skill_tree.uplevel=Upgrade to %s
 ac.skill_tree.acquire=Acquire Ability!
-ac.skill_tree.unknown_skill=<ERROR 0x5f3759df Unknown skill>
+ac.skill_tree.unknown_skill=<ERROR: Unknown skill>
 ac.skill_tree.unknown=[UNKNOWN]
 
 ac.skill_tree.learn_skill=Learn
@@ -177,6 +177,8 @@ ac.skill_tree.aborted=Progress: ABORTED.
 ac.skill_tree.successful=Action successful.
 ac.skill_tree.abort=Abort
 ac.skill_tree.aborted=Action Aborted.
+
+ac.skill_tree.anyskill=Any Skill of Level %d
 
 # Settings
 ac.settings.cat.generic=Generic
@@ -404,9 +406,9 @@ ac.ability.generic.brain_course.name=Brain Course
 ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
 ac.ability.generic.mind_course.name=Mind Course
 
-ac.ability.generic.brain_course.desc=Get a practice for your brain, it will let you be able to keep your skill longer.
-ac.ability.generic.brain_course_advanced.desc=More deeply and effectively develop the thinking ability of your brain. Improve skill keep time and patience.
-ac.ability.generic.mind_course.desc=Learn how to relax your brain better, to accelerate recovery speed of CP.
+ac.ability.generic.brain_course.desc=Get a practice for your brain. Adds Max CP by 1000.
+ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Adds Max CP by 1000 and adds Max Overload by 100.
+ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
 
 # Command
 ac.command.invalid=§cInvalid input, please try again.

@@ -13,7 +13,7 @@ import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -143,7 +143,7 @@ public class ShiftTeleport extends Skill {
 
                 List<Entity> list = getTargetsInLine();
                 for (Entity target : list) {
-                    TPAttackHelper.attack(player, instance, target, getDamage(exp));
+                    TPSkillHelper.attack(player, instance, target, getDamage(exp));
                 }
 
                 player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f);

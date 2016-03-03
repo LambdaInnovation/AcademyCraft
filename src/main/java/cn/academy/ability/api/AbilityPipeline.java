@@ -1,13 +1,13 @@
 package cn.academy.ability.api;
 
 import cn.academy.ability.SkillDamageSource;
-import cn.academy.ability.api.event.SkillAttackEvent;
+import cn.academy.ability.api.event.CalcEvent;
+import cn.academy.ability.api.event.CalcEvent.SkillAttack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
- * Uniform utils handling ability data processing.
+ * Uniform utils handling common actions of skills.
  */
 public class AbilityPipeline {
 
@@ -20,8 +20,9 @@ public class AbilityPipeline {
      * @param damage The amount of damage applied (raw)
      */
     public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        SkillAttackEvent evt = new SkillAttackEvent(player, skill, target, damage);
-        if (!MinecraftForge.EVENT_BUS.post(evt)) {
+        damage = CalcEvent.calc(new SkillAttack(player, skill, target, damage));
+
+        if (damage > 0) {
             target.attackEntityFrom(new SkillDamageSource(player, skill), damage);
         }
     }
