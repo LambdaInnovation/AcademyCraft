@@ -1,6 +1,6 @@
 package cn.academy.test
 
-import cn.academy.core.client.ui.TechUI
+import cn.academy.core.client.ui._
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.gui.CGuiScreen
@@ -19,13 +19,13 @@ object TechUITester {
       override def onKeyDown() = {
         val gui = new CGuiScreen()
 
-        val pages = TechUI.create(TechUI.createConfigPage(
-          Seq(TechUI.textProperty("23333333"),
-            TechUI.textProperty("hehehehhe"),
-            TechUI.textProperty("Neptune is moe")),
-          Seq(TechUI.HistoElement("www", new Color(0xffff98ed), () => 1.0f),
-            TechUI.HistoElement("www2", new Color(0xffff8989), () => 0.5f))),
-          TechUI.createWirelessPage())
+        val pages = TechUI(ConfigPage(
+          Seq(ConfigPage.textProperty("23333333"),
+            ConfigPage.textProperty("hehehehhe"),
+            ConfigPage.textProperty("Neptune is moe")),
+          Seq(ConfigPage.HistoElement("www", new Color(0xffff98ed), () => 1.0f),
+            ConfigPage.HistoElement("www2", new Color(0xffff8989), () => 0.5f))),
+          WirelessPage(null))
         gui.getGui.addWidget(pages)
 
         getMC.displayGuiScreen(gui)

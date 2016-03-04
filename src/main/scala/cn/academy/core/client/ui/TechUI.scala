@@ -1,6 +1,8 @@
 package cn.academy.core.client.ui
 
 import cn.academy.core.client.Resources
+import cn.academy.core.client.ui.TechUI.Page
+import cn.academy.energy.api.block.{IWirelessUser, IWirelessTile}
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.component.ProgressBar.Direction
 import cn.lambdalib.cgui.gui.component.{ProgressBar, TextBox, ElementList, DrawTexture}
@@ -13,88 +15,24 @@ import net.minecraft.util.{StatCollector, ResourceLocation}
 import cn.lambdalib.cgui.ScalaCGUI._
 import scala.collection.JavaConversions._
 
-object TechUI {
+private object Generic_ {
+  def readxml(loc: String) = CGUIDocument.panicRead(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
+}
 
-  private def readxml(loc: String) = CGUIDocument.panicRead(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
+import Generic_._
+
+object TechUI {
 
   private val pageButtonTemplate = readxml("pageselect").getWidget("main")
 
-  private val configPageTemplate = readxml("page_config").getWidget("main")
-
-  private val wirelessPageTemplate = readxml("page_wireless").getWidget("main")
-
   case class Page(id: String, window: Widget)
-
-  case class HistoElement(id: String, color: Color, progressProvider: () => Double)
-
-  def textProperty(content: String, color: Color = Color.white()) = {
-    val ret = new Widget().size(142, 12)
-    ret :+ new TextBox(new FontOption(10, color)).setContent(content)
-    ret
-  }
-
-  def createConfigPage(properties: Seq[Widget], histo: Seq[HistoElement]) = {
-    val widget = configPageTemplate.copy()
-
-    {
-      val elist = new ElementList
-      elist.spacing = 3.0
-      properties.foreach(elist.addWidget)
-
-      val panelConfig = widget.getWidget("panel_config")
-
-      val area = panelConfig.getWidget("zone_elementlist")
-      area :+ elist
-
-      panelConfig.getWidget("btn_arrow_up").listens[LeftClickEvent](() => elist.progressLast())
-      panelConfig.getWidget("btn_arrow_down").listens[LeftClickEvent](() => elist.progressNext())
-    }
-
-    {
-      val panelDiagram = widget.getWidget("panel_diagram")
-      val histZone = panelDiagram.getWidget("zone_histogram")
-      val elemList = panelDiagram.getWidget("zone_elementlist")
-
-      histo.zipWithIndex.foreach { case (elem, idx) =>
-          val barX = 10 + idx * 15
-          val bar = new Widget().halign(HeightAlign.BOTTOM).pos(barX, 0).size(10, 60)
-
-          val progress = new ProgressBar().setDirection(Direction.UP).setFluctRegion(0)
-          progress.color.from(elem.color)
-          bar :+ progress
-          bar.listens[FrameEvent](() => {
-            progress.progress = elem.progressProvider()
-          })
-
-          histZone :+ bar
-
-          val disp = elemList.getWidget("element").copy()
-          disp.transform.y += 10 + idx * 15
-          disp.transform.doesDraw = true
-
-          disp.getWidget("element_mark").getComponent(classOf[DrawTexture]).color.from(elem.color)
-          disp.getWidget("element_name").getComponent(classOf[TextBox])
-            .setContent(StatCollector.translateToLocal("ac.gui.histogram." + elem.id))
-
-          elemList :+ disp
-      }
-    }
-
-    Page("config_2", widget)
-  }
-
-  def createWirelessPage() = {
-    val widget = wirelessPageTemplate.copy()
-
-    Page("wireless", widget)
-  }
 
   /**
     * Creates a tech UI with specified pages.
     *
     * @param pages The pages of this UI. Must not be empty.
     */
-  def create(pages: Page*): Widget = {
+  def apply(pages: Page*): Widget = {
     val ret = new Widget
     ret.size(172, 187).centered()
 
@@ -133,6 +71,101 @@ object TechUI {
     ret
   }
 
+}
 
+object ConfigPage {
+  private val configPageTemplate = readxml("page_config").getWidget("main")
 
+  case class HistoElement(id: String, color: Color, progressProvider: () => Double)
+
+  def textProperty(content: String, color: Color = Color.white()) = {
+    val ret = new Widget().size(142, 12)
+    ret :+ new TextBox(new FontOption(10, color)).setContent(content)
+    ret
+  }
+
+  def apply(properties: Seq[Widget], histo: Seq[HistoElement]) = {
+    val widget = configPageTemplate.copy()
+
+    {
+      val elist = new ElementList
+      elist.spacing = 3.0
+      properties.foreach(elist.addWidget)
+
+      val panelConfig = widget.getWidget("panel_config")
+
+      val area = panelConfig.getWidget("zone_elementlist")
+      area :+ elist
+
+      panelConfig.getWidget("btn_arrow_up").listens[LeftClickEvent](() => elist.progressLast())
+      panelConfig.getWidget("btn_arrow_down").listens[LeftClickEvent](() => elist.progressNext())
+    }
+
+    {
+      val panelDiagram = widget.getWidget("panel_diagram")
+      val histZone = panelDiagram.getWidget("zone_histogram")
+      val elemList = panelDiagram.getWidget("zone_elementlist")
+
+      histo.zipWithIndex.foreach { case (elem, idx) =>
+        val barX = 10 + idx * 15
+        val bar = new Widget().halign(HeightAlign.BOTTOM).pos(barX, 0).size(10, 60)
+
+        val progress = new ProgressBar().setDirection(Direction.UP).setFluctRegion(0)
+        progress.color.from(elem.color)
+        bar :+ progress
+        bar.listens[FrameEvent](() => {
+          progress.progress = elem.progressProvider()
+        })
+
+        histZone :+ bar
+
+        val disp = elemList.getWidget("element").copy()
+        disp.transform.y += 10 + idx * 15
+        disp.transform.doesDraw = true
+
+        disp.getWidget("element_mark").getComponent(classOf[DrawTexture]).color.from(elem.color)
+        disp.getWidget("element_name").getComponent(classOf[TextBox])
+          .setContent(StatCollector.translateToLocal("ac.gui.histogram." + elem.id))
+
+        elemList :+ disp
+      }
+    }
+
+    Page("config_2", widget)
+  }
+}
+
+object WirelessPage {
+  private val wirelessPageTemplate = readxml("page_wireless").getWidget("main")
+
+  def apply(user: IWirelessUser) = createPage((list, template) => {
+      (0 until 10).foreach(idx => {
+        val instance = template.copy()
+
+        instance.getWidget("text_name").getComponent(classOf[TextBox]).setContent("Test " + idx)
+        list.addWidget(instance)
+      })
+    })
+
+  private def createPage(elemAction: (ElementList, Widget) => Any) = {
+    val widget = wirelessPageTemplate.copy()
+
+    val wirelessPanel = widget.getWidget("panel_wireless")
+
+    val wlist = wirelessPanel.getWidget("zone_elementlist")
+    val elist = new ElementList
+
+    wirelessPanel.getWidget("btn_arrowup").listens[LeftClickEvent](() => elist.progressLast())
+    wirelessPanel.getWidget("btn_arrowdown").listens[LeftClickEvent](() => elist.progressNext())
+
+    elemAction(elist, wlist.getWidget("element"))
+
+    wlist :+ elist
+
+    Page("wireless", widget)
+  }
+
+  private def gatherUserInfo() = {
+
+  }
 }
