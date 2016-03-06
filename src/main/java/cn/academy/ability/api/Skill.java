@@ -7,6 +7,7 @@
 package cn.academy.ability.api;
 
 import cn.academy.ability.api.context.*;
+import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
@@ -274,6 +275,8 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyTick() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYTICK);
                 }
@@ -281,6 +284,8 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyUp() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYUP);
                 }
@@ -290,11 +295,24 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyAbort() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYABORT);
                 }
 
                 context = null;
+            }
+
+            private void checkContext() {
+                if (context != null && context.getStatus() == Status.TERMINATED) {
+                    context = null;
+                }
+            }
+
+            @Override
+            public DelegateState getState() {
+                return context == null ? DelegateState.IDLE : DelegateState.ACTIVE;
             }
 
             @Override

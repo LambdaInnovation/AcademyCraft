@@ -6,7 +6,7 @@ import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegEntity}
 import cn.lambdalib.util.client.{HudUtils, RenderUtils}
 import cn.lambdalib.util.deprecated.{MeshUtils, SimpleMaterial, Mesh}
-import cn.lambdalib.util.generic.RandUtils
+import cn.lambdalib.util.generic.{MathUtils, RandUtils}
 import cn.lambdalib.vis.curve.CubicCurve
 import cpw.mods.fml.client.registry.RenderingRegistry
 import cpw.mods.fml.relauncher.{SideOnly, Side}
@@ -31,27 +31,22 @@ object WaveEffect {
 @Registrant
 class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEntity(world) {
 
-  class Ring(val life: Int, var offset: Double, var size: Double, var countdown: Int, var sizeVel: Double)
+  class Ring(val life: Int, var offset: Double, val size: Double, val timeOffset: Int)
 
   val ringList = new mutable.MutableList[Ring]
-  val life = 30
+  val life = 18
 
   (0 until rings).foreach(idx => {
     ringList += new Ring(
-      RandUtils.rangei(18, 25),
-      RandUtils.ranged(-.8, .8),
+      RandUtils.rangei(15, 18),
+      idx * 1.5 + RandUtils.ranged(-.3, .3),
       size * RandUtils.ranged(0.8, 1.2),
-      -(idx * 5 + RandUtils.rangei(-1, 2)),
-      RandUtils.ranged(0.01, 0.02))
+      idx * 5 + RandUtils.rangei(-1, 2))
   })
 
   ignoreFrustumCheck = true
 
   override def onUpdate() = {
-    ringList.foreach(ring => {
-      ring.countdown += 1
-      ring.size += ring.sizeVel
-    })
     if (ticksExisted >= life) {
       setDead()
     }
@@ -78,11 +73,18 @@ class WaveEffectRenderer extends Render {
   val material = new SimpleMaterial(texture).setIgnoreLight()
   MeshUtils.createBillboard(mesh, -.5, -.5, 1, 1)
 
+  val sizeCurve = new CubicCurve
+  sizeCurve.addPoint(0, 0.4)
+  sizeCurve.addPoint(0.2, 0.8)
+  sizeCurve.addPoint(2.5, 1.5)
+
+
   override def doRender(entity: Entity, x: Double, y: Double, z: Double, v3: Float, v4: Float) = entity match {
     case effect: WaveEffect =>
       val maxAlpha = clampd(0, 1, alphaCurve.valueAt(effect.ticksExisted.toDouble / effect.life))
 
       glDisable(GL_CULL_FACE)
+      glDisable(GL_DEPTH_TEST)
       glEnable(GL_BLEND)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
       glPushMatrix()
@@ -90,15 +92,21 @@ class WaveEffectRenderer extends Render {
       glRotated(-entity.rotationYaw, 0, 1, 0)
       glRotated(entity.rotationPitch, 1, 0, 0)
 
-      effect.ringList.foreach(ring => {
-        if (ring.countdown > 0) {
-          val alpha = clampd(0, 1, alphaCurve.valueAt(ring.countdown.toDouble / ring.life))
-          val realAlpha = Math.min(maxAlpha, alpha)
+      val zOffset = entity.ticksExisted / 40.0
 
+      glTranslated(0, 0, zOffset)
+
+      effect.ringList.foreach(ring => {
+        val alpha = clampd(0, 1, alphaCurve.valueAt((effect.ticksExisted - ring.timeOffset).toDouble / ring.life))
+        val realAlpha = Math.min(maxAlpha, alpha)
+
+        if (realAlpha > 0) {
           glPushMatrix()
           glTranslated(0, 0, ring.offset)
-          glScaled(ring.size, ring.size, 1)
-          material.color.a = realAlpha * 0.5
+
+          val sizeScale = sizeCurve.valueAt(MathUtils.clampd(0, 1.62, entity.ticksExisted / 20.0))
+          glScaled(ring.size * sizeScale, ring.size * sizeScale, 1)
+          material.color.a =  realAlpha * 0.7
           mesh.draw(material)
           glPopMatrix()
         }
@@ -106,6 +114,7 @@ class WaveEffectRenderer extends Render {
 
       glPopMatrix()
       glEnable(GL_CULL_FACE)
+      glEnable(GL_DEPTH_TEST)
   }
 
   override def getEntityTexture(entity: Entity) = null
