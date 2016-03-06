@@ -10,6 +10,7 @@ import cn.academy.ability.api.context.Context.Status;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.core.LambdaLib;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.*;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
@@ -68,10 +69,14 @@ public enum ContextManager {
      * Terminate this Context. Links between server and clients are ripped apart, and the terminate message is invoked.
      */
     public void terminate(Context ctx) {
-        if (ctx.getStatus() == Status.ALIVE) {
-            if(remote()) terminate_c(ctx);
-            else         terminate_s(ctx);
-        } // else { emit? }
+        Status stat = ctx.getStatus();
+        if (remote() && (stat == Status.ALIVE || stat == Status.CONSTRUCTED)) {
+            terminate_c(ctx);
+        } else if (!remote() && (stat == Status.ALIVE)) {
+            terminate_s(ctx);
+        } else {
+            throw new IllegalStateException("Can't terminate this context");
+        }
     }
 
     /**
@@ -150,7 +155,17 @@ public enum ContextManager {
         Preconditions.checkArgument(ctx.isLocal(), "Can't terminate context at non-local client");
         debug("terminate_c");
 
-        sendToServer(this, TERMINATE_AT_SERVER, ctx);
+        if (ctx.getStatus() == Status.CONSTRUCTED) {
+            clientSuspended.values().stream()
+                    .filter(sus -> sus.ctx == ctx)
+                    .findAny()
+                    .ifPresent(sus -> {
+                        sus.terminateSignal = true;
+                    });
+        } else {
+            sendToServer(this, TERMINATE_AT_SERVER, ctx);
+        }
+
         terminatePost(ctx);
     }
 
@@ -175,7 +190,7 @@ public enum ContextManager {
     @SideOnly(Side.CLIENT)
     private void activate_c(Context ctx) {
         final int clientID = clientCreateIncrem;
-        clientSuspended.put(clientID, new ClientSuspended(ctx));
+        clientSuspended.put(clientID, new ClientSuspended(ctx, clientID));
         clientCreateIncrem++;
 
         sendToServer(this, MAKE_ALIVE, Minecraft.getMinecraft().thePlayer, clientID, ctx.getClass().getName());
@@ -266,14 +281,26 @@ public enum ContextManager {
     }
 
     // Messaging
+    void mToSelf(Context ctx, String cn, Object[] args) {
+        if (ctx.getStatus() == Status.ALIVE ||
+                // It's possible that makealive hasn't yet happened. Allow some degree of uncertainty here.
+                // If user sends message in local constructed stage, it's handled by suspending the call in MakeAlive stage.
+           (ctx.getStatus() == Status.CONSTRUCTED && ctx.isLocal())) {
+            NetworkMessage.sendToSelf(ctx, cn, args);
+        } else {
+            throw new IllegalStateException("Try to sendToSelf after context is terminated");
+        }
+    }
 
     void mToServer(Context ctx, String cn, Object[] args) {
         if (!_mCheck(ctx, true)) return;
 
         if (ctx.getStatus() == Status.ALIVE) {
             sendToServer(ctx, cn, args);
-        } else { // Suspend call
+        } else if (ctx.getStatus() == Status.CONSTRUCTED) { // Suspend call
             checkSuspended(ctx).get().suspendedCalls.add(new MessageCall(cn, args));
+        } else {
+            throw new RuntimeException("Sending message after context is terminated");
         }
     }
 
@@ -337,8 +364,12 @@ public enum ContextManager {
             ctx.networkID = networkID;
             makeAlivePost(ctx);
 
-            for (MessageCall call : susp.suspendedCalls) {
-                sendToServer(ctx, call.channel, call.args);
+            if (susp.terminateSignal) {
+                terminate_c(ctx);
+            } else { // TODO: This doesn't represent actual order of sending messages. Check if it causes problems.
+                for (MessageCall call : susp.suspendedCalls) {
+                    sendToServer(ctx, call.channel, call.args);
+                }
             }
 
         } // { else makeAlive not successful, shall we do something about it? }
@@ -486,9 +517,13 @@ public enum ContextManager {
     private class ClientSuspended {
         final Context ctx;
         final List<MessageCall> suspendedCalls = new ArrayList<>();
+        final int cid;
 
-        public ClientSuspended(Context _ctx) {
+        boolean terminateSignal = false; // A small hack to handle client terminate at CONSTRUCTED stage.
+
+        public ClientSuspended(Context _ctx, int _cid) {
             ctx = _ctx;
+            cid = _cid;
         }
     }
 
