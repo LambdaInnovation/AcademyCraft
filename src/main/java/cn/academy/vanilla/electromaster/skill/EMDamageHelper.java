@@ -23,7 +23,7 @@ public class EMDamageHelper {
         if(e instanceof EntityCreeper) {
             if(RandUtils.nextFloat() < 0.3f) {
                 // Set the creeper to be powered
-                ((EntityCreeper) e).getDataWatcher().updateObject(17, (byte) 1);
+                e.getDataWatcher().updateObject(17, (byte) 1);
                 ModuleAchievements.trigger(player, "electromaster.attack_creeper");
             }
         }

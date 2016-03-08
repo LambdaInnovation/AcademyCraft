@@ -38,11 +38,14 @@ public class Resources {
     
     public static ResourceLocation
         TEX_EMPTY = getTexture("null");
+
+    public static ResourceLocation
+        TEX_GLOW_LINE = getTexture("effects/glow_line");
     
     public static ResourceLocation
         ARC_SMALL[] = getEffectSeq("arcs", 10);
     
-    private static Map<String, IModelCustom> cachedModels = new HashMap();
+    private static Map<String, IModelCustom> cachedModels = new HashMap<>();
     
     /**
      * Get the model instance of the given name. If the name is
@@ -88,24 +91,30 @@ public class Resources {
         return new ResourceLocation[] { r1, r2, r3 };
     }
 
-    @SideOnly(Side.CLIENT)
-    @RegInitCallback
-    public static void init() {
-        font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
-                new String[] { "微软雅黑", "黑体", "STHeiti", "Consolas", "Monospace", "Arial" });
-        fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
-        fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
-    }
-
+    private static boolean init = false;
     private static TrueTypeFont font, fontBold, fontItalic;
     public static IFont font() {
+        checkInit();
         return font;
     }
     public static IFont fontBold() {
+        checkInit();
         return fontBold;
     }
     public static IFont fontItalic() {
+        checkInit();
         return fontItalic;
+    }
+
+    private static void checkInit() {
+        if (!init) {
+            init = true;
+
+            font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
+                    new String[] { "Microsoft YaHei", "Adobe Heiti Std R", "STHeiti", "Consolas", "Monospace", "Arial" });
+            fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
+            fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
+        }
     }
     
     private static ResourceLocation res(String loc) {

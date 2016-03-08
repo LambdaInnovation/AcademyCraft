@@ -87,7 +87,8 @@ public class DamageHelper {
             attack(ent, dmgSrc, appliedDamage);
         }
     }
-    
+
+    @Deprecated
     public static void attack(Entity e, EntityPlayer player, float dmg) {
         attack(e, DamageSource.causePlayerDamage(player), dmg);
     }
@@ -95,7 +96,9 @@ public class DamageHelper {
     /**
      * A delegation to the normal attack function. if e is a player and the config doesn't allow PvP the attack will be ignored.
      *     ALL skills should use this approach when applying damage.
+     *     TODO integrate to ability pipeline
      */
+    @Deprecated
     public static void attack(Entity e, DamageSource src, float damage) {
         if(e instanceof EntityPlayer && !ATTACK_PLAYER)
             return;

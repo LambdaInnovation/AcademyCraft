@@ -6,21 +6,22 @@
 */
 package cn.academy.vanilla.teleporter.util;
 
+import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.config.ConfigEnv;
-import cn.academy.core.config.PlayerConfigEnv;
+import cn.academy.core.config.ACConfig;
 import cn.academy.core.util.DamageHelper;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.academy.vanilla.teleporter.TPPipes;
+import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
+import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.util.generic.RandUtils;
+import com.typesafe.config.Config;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
-public class TPAttackHelper {
+public class TPSkillHelper {
 
     static final String TPC_ID = "ac_tpcount";
 
@@ -49,34 +50,53 @@ public class TPAttackHelper {
      * at client if a critical hit happened.
      */
     public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        ConfigEnv env = PlayerConfigEnv.get(player);
         AbilityData aData = AbilityData.get(player);
         // Calculate 3 levels of crit hit
-        int chLevel = -1;
         for (int i = 0; i < 3; ++i) {
-            float prob = env.pipeFloat(TPPipes.pathCritProb(i), 0);
+            float prob = prob(aData, i);
             if (RandUtils.nextFloat() < prob) {
-                float multiply = env.getFloatArray("ac.category.teleporter.crithit.incr")[i];
-                damage *= multiply;
-                player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", multiply));
+                damage *= rates[i];
+                player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
-                chLevel = i;
+
+                fireCritAttack(player, target, i);
+                postAtClient(player, target, i);
                 break;
             }
         }
 
-        // Post event
-        if (chLevel != -1) {
-            MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, target, chLevel));
-            postAtClient(player, target, chLevel);
-        }
+        AbilityPipeline.attack(player, skill, target, damage);
+    }
 
-        DamageHelper.attack(target, DamageSource.causePlayerDamage(player), damage);
+    private static float prob(AbilityData data, int level) {
+        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? -1 : data.getSkillExp(DimFoldingTheorem.instance);
+        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? -1 : data.getSkillExp(SpaceFluctuation.instance);
+
+        switch (level) {
+        case 0:
+            return tryLerp(0.1f, 0.2f, dimFoldingExp) + tryLerp(0.18f, 0.25f, spaceFluctExp);
+        case 1:
+            return tryLerp(0.10f, 0.15f, spaceFluctExp);
+        case 2:
+            return tryLerp(0.01f, 0.03f, spaceFluctExp);
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private static float rates[] = { 1.3f, 1.6f, 2.6f };
+
+    private static float tryLerp(float a, float b, float l) {
+        if (l == -1) return 0;
+        return a + l * (b - a);
+    }
+
+    private static void fireCritAttack(EntityPlayer player, Entity target, int level) {
+        MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, target, level));
     }
 
     @RegNetworkCall(side = Side.CLIENT)
     public static void postAtClient(@Target EntityPlayer player, @Instance Entity attackee, @Data Integer level) {
-        MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, attackee, level));
+        fireCritAttack(player, attackee, level);
     }
 
     /**

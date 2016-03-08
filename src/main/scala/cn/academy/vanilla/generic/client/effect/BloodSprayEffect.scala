@@ -72,9 +72,9 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   val dir = ForgeDirection.values()(side)
   val textureID = RandUtils.rangei(0, 10)
 
-  val size = RandUtils.ranged(1.2, 1.5)
+  val size = RandUtils.ranged(1.1, 1.4) * (if (side == 0 || side == 1) 1.0 else 0.8)
   val rotation = RandUtils.ranged(0, 360)
-  val planeOffset = (rand.nextGaussian() * 0.2, rand.nextGaussian() * 0.2)
+  val planeOffset = (rand.nextGaussian() * 0.15, rand.nextGaussian() * 0.15)
 
   ignoreFrustumCheck = true
 
@@ -83,7 +83,7 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   this.setLook(sideToOrientation(dir))
 
   override def onUpdate() = {
-    if (ticksExisted > 3000 || world.getBlock(x, y, z) == Blocks.air) {
+    if (ticksExisted > 1200 || world.getBlock(x, y, z) == Blocks.air) {
       setDead()
     }
   }

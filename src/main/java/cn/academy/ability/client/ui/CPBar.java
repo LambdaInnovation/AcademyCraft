@@ -8,6 +8,8 @@ package cn.academy.ability.client.ui;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ContextManager;
+import cn.academy.ability.api.context.IConsumptionProvider;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -58,7 +60,9 @@ import java.util.Optional;
 @Registrant
 @ForcePreloadTexture
 public class CPBar extends Widget {
-    
+
+    public static final CPBar instance = new CPBar();
+
     static final double WIDTH = 964, HEIGHT = 147;
     static final double SCALE = 0.2;
 
@@ -70,13 +74,17 @@ public class CPBar extends Widget {
 
     @RegInitCallback
     public static void init() {
-        ACHud.instance.addElement(new CPBar(), () -> true, "cpbar",
+        ACHud.instance.addElement(instance, () -> true, "cpbar",
                 new Widget().size(WIDTH, HEIGHT)
                         .scale(SCALE)
                         .walign(WidthAlign.RIGHT)
                         .addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
     }
-    
+
+    /**
+     * Please use IConsumptionProvider with {@link cn.academy.ability.api.context.Context} instead.
+     */
+    @Deprecated
     public static void setHintProvider(IConsumptionHintProvider provider) {
         chProvider = provider;
     }
@@ -91,7 +99,8 @@ public class CPBar extends Widget {
         TEX_MASK = tex("mask");
     
     List<ProgColor> cpColors = new ArrayList<>(), overrideColors = new ArrayList<>();
-    
+
+    @Deprecated
     public interface IConsumptionHintProvider {
         boolean alive();
         float getConsumption();
@@ -102,6 +111,9 @@ public class CPBar extends Widget {
     boolean lastFrameActive;
     long lastDrawTime;
     long showTime;
+
+    boolean showingNumbers;
+    long lastShowValueChange;
     
     float mAlpha; //Master alpha, used for blending in.
     
@@ -193,6 +205,19 @@ public class CPBar extends Widget {
         lastPresetTime = presetChangeTime;
         presetChangeTime = GameTimer.getTime();
     }
+
+    public void startDisplayNumbers() {
+        showingNumbers = true;
+        lastShowValueChange = GameTimer.getTime();
+    }
+
+    public void stopDisplayNumbers() {
+        showingNumbers = false;
+        long time = GameTimer.getTime();
+        if (time - lastShowValueChange > 400) {
+            lastShowValueChange = time;
+        } else lastShowValueChange = 0;
+    }
     
     private void initEvents() {
         listen(FrameEvent.class, (w, e) -> 
@@ -248,8 +273,8 @@ public class CPBar extends Widget {
                     
                     if(chProvider != null && !chProvider.alive())
                         chProvider = null;
-                    
-                    float estmCons = chProvider == null ? 0 : cpData.estimateConsumption(chProvider.getConsumption());
+
+                    float estmCons = getConsumptionHint();
 
                     if(estmCons != 0) {
                         float ncp = Math.max(0, cpData.getCP() - estmCons);
@@ -272,6 +297,55 @@ public class CPBar extends Widget {
                     if(time - presetChangeTime < preset_wait)
                         drawPresetHint((double)(time - presetChangeTime) / preset_wait,
                             time - lastPresetTime);
+                }
+
+                // Draw data
+                {
+                    float alpha;
+                    long dt = lastShowValueChange == 0 ? Long.MAX_VALUE : time - lastShowValueChange;
+
+                    if (cpData.isOverloaded()) {
+                       alpha = 0.0f;
+                    } else if (showingNumbers) {
+                        alpha = MathUtils.clampf(0, 1, (dt - 200) / 400f); // Delay display by 200ms for visual pleasure
+                    } else if(dt < 300f) {
+                        alpha = 1 - dt / 300f;
+                    } else {
+                        alpha = 0.0f;
+                    }
+
+                    if (alpha > 0) {
+                        final double x0 = 110;
+
+                        IFont font = Resources.font();
+                        FontOption option = new FontOption(40);
+                        option.color.a = 0.6f * mAlpha * alpha;
+
+                        String str10 = "CP ";
+                        String str11 = String.format("%.0f", cpData.getCP());
+                        String str12 = String.format("/%.0f", cpData.getMaxCP());
+
+                        String str20 = "OL ";
+                        String str21 = String.format("%.0f", cpData.getOverload());
+                        String str22 = String.format("/%.0f", cpData.getMaxOverload());
+
+                        double len10 = font.getTextWidth(str10, option),
+                                len11 = font.getTextWidth(str11, option),
+                                len20 = font.getTextWidth(str20, option),
+                                len21 = font.getTextWidth(str21, option);
+
+                        double len0 = Math.max(len10, len20);
+                        double len1 = len0 + Math.max(len11, len21);
+
+                        font.draw(str10, x0, 55, option);
+                        font.draw(str12, x0+len1, 55, option);
+                        font.draw(str20, x0, 85, option);
+                        font.draw(str22, x0+len1, 85, option);
+
+                        option.align = FontAlign.RIGHT;
+                        font.draw(str11, x0+len1, 55, option);
+                        font.draw(str21, x0+len1, 85, option);
+                    }
                 }
                 
                 drawActivateKeyHint();
@@ -339,11 +413,18 @@ public class CPBar extends Widget {
         RenderUtils.loadTexture(TEX_MASK);
         subHud(X0 + WIDTH - len, Y0, len, HEIGHT);
     }
+
+    private float getConsumptionHint() {
+        Optional<IConsumptionProvider> provider =
+                ContextManager.instance.findLocal(IConsumptionProvider.class);
+
+        if (provider.isPresent()) return provider.get().getConsumptionHint();
+        if (chProvider != null) return chProvider.getConsumption(); // Legacy fallback
+
+        return 0;
+    }
     
     private void drawCPBar(float prog, boolean interfered) {
-        if(overlayTexture == null)
-            return;
-
         float pre_mAlpha = mAlpha;
         if (interfered) {
             mAlpha *= 0.3f;

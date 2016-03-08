@@ -13,7 +13,7 @@ import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -39,6 +39,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -58,21 +60,31 @@ public class ShiftTeleport extends Skill {
         return (1 + attackEntities) * 0.002f;
     }
 
-    public static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
+    private static float getDamage(float exp) {
+        return lerpf(16, 27, exp);
     }
 
-    public static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
+    private static float getRange(float exp) {
+        return lerpf(25, 35, exp);
+    }
+
+    private static float getConsumption(float exp) {
+        return lerpf(374, 500, exp);
+    }
+
+    private static float getOverload(float exp) {
+        return lerpf(38, 27, exp);
     }
 
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
         return new SkillInstance().addChild(new ShiftTPAction())
-                .setEstmCP(instance.getConsumption(AbilityData.get(player)));
+                .setEstmCP(getConsumption(AbilityData.get(player).getSkillExp(instance)));
     }
 
     public static class ShiftTPAction extends SkillSyncAction {
+
+        float exp;
 
         public ShiftTPAction() {
             super(-1);
@@ -81,6 +93,8 @@ public class ShiftTeleport extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
 
             ItemStack stack = player.getCurrentEquippedItem();
             Block block;
@@ -116,7 +130,7 @@ public class ShiftTeleport extends Skill {
             MovingObjectPosition position = getTracePosition();
 
             if (item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
-                    && cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
+                    && cpData.perform(getOverload(exp), getConsumption(exp))) {
 
                 item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ,
                         position.sideHit, (float) position.hitVec.xCoord, (float) position.hitVec.yCoord,
@@ -129,7 +143,7 @@ public class ShiftTeleport extends Skill {
 
                 List<Entity> list = getTargetsInLine();
                 for (Entity target : list) {
-                    TPAttackHelper.attack(player, instance, target, getDamage(aData));
+                    TPSkillHelper.attack(player, instance, target, getDamage(exp));
                 }
 
                 player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f);
@@ -141,7 +155,7 @@ public class ShiftTeleport extends Skill {
                     }
                 }
 
-                setCooldown(instance, instance.getCooldown(aData));
+                setCooldown(instance, (int) lerpf(20, 5, exp));
             }
         }
 
@@ -153,7 +167,7 @@ public class ShiftTeleport extends Skill {
 
         // TODO: Some boilerplate... Clean this up in case you aren't busy
         private int[] getTraceDest() {
-            double range = getRange(aData);
+            double range = getRange(exp);
             MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
             if (result != null) {
                 ForgeDirection dir = ForgeDirection.values()[result.sideHit];
@@ -165,7 +179,7 @@ public class ShiftTeleport extends Skill {
         }
 
         private MovingObjectPosition getTracePosition() {
-            double range = getRange(aData);
+            double range = getRange(exp);
             MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
             if (result != null) {
                 ForgeDirection dir = ForgeDirection.values()[result.sideHit];
@@ -180,7 +194,6 @@ public class ShiftTeleport extends Skill {
         }
 
         private List<Entity> getTargetsInLine() {
-            double range = getRange(aData);
             int[] dest = getTraceDest();
             Vec3 v0 = VecUtils.vec(player.posX, player.posY, player.posZ),
                     v1 = VecUtils.vec(dest[0] + .5, dest[1] + .5, dest[2] + .5);

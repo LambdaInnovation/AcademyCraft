@@ -13,7 +13,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
@@ -21,11 +21,12 @@ import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
+
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -40,9 +41,9 @@ public class MarkTeleport extends Skill {
         super("mark_teleport", 2);
     }
 
-    public static double getMaxDist(AbilityData data, CPData cpData, int ticks) {
-        double max = instance.callFloatWithExp("range", data);
-        double cplim = cpData.getCP() / getCPB(data);
+    public static double getMaxDist(float exp, float cp, int ticks) {
+        double max = lerpf(25, 60,exp);
+        double cplim = cp / getCPB(exp);
 
         return Math.min((ticks + 1) * 2, Math.min(max, cplim));
     }
@@ -50,12 +51,15 @@ public class MarkTeleport extends Skill {
     /**
      * @return Consumption per block
      */
-    public static float getCPB(AbilityData data) {
-        return instance.getConsumption(data);
+    public static float getCPB(float exp) {
+        return lerpf(13, 5, exp);
     }
 
     private static Vec3 getDest(EntityPlayer player, int ticks) {
-        double dist = getMaxDist(AbilityData.get(player), CPData.get(player), ticks);
+        AbilityData aData = AbilityData.get(player);
+        CPData cpData = CPData.get(player);
+
+        double dist = getMaxDist(aData.getSkillExp(instance), cpData.getCP(), ticks);
         MovingObjectPosition mop = Raytrace.traceLiving(player, dist);
 
         double x, y, z;
@@ -125,7 +129,7 @@ public class MarkTeleport extends Skill {
 
                 float distance = (float) MathUtils.distance(action.mark.posX, action.mark.posY, action.mark.posZ,
                         player.posX, player.posY, player.posZ);
-                this.estimatedCP = distance * getCPB(data);
+                this.estimatedCP = distance * getCPB(data.getSkillExp(instance));
             }
         }.addChild(action);
     }
@@ -133,6 +137,8 @@ public class MarkTeleport extends Skill {
     public static class MTAction extends SkillSyncAction {
 
         int ticks;
+
+        float exp;
 
         public MTAction() {
             super(-1);
@@ -142,6 +148,8 @@ public class MarkTeleport extends Skill {
         public void onStart() {
             // if(true) return;
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
 
             if (isRemote) {
                 startEffects();
@@ -176,7 +184,8 @@ public class MarkTeleport extends Skill {
                 ;
             } else {
 
-                cpData.performWithForce(instance.getOverload(aData), distance * getCPB(aData));
+                float overload = lerpf(40, 20, exp);
+                cpData.performWithForce(overload, distance * getCPB(exp));
 
                 if (!isRemote) {
                     player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
@@ -188,8 +197,8 @@ public class MarkTeleport extends Skill {
                     ACSounds.playClient(player, "tp.tp", .5f);
                 }
 
-                setCooldown(instance, instance.getCooldown(aData));
-                TPAttackHelper.incrTPCount(player);
+                setCooldown(instance, (int) lerpf(50, 20, exp));
+                TPSkillHelper.incrTPCount(player);
             }
 
             if (isRemote) {

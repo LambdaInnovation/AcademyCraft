@@ -273,6 +273,7 @@ public abstract class CommandAIMBase extends ACCommand {
         case "fullcp": {
             CPData cpData = CPData.get(player);
             cpData.setCP(cpData.getMaxCP());
+            cpData.setOverload(0);
             sendChat(ics, locSuccessful());
             return;
         }

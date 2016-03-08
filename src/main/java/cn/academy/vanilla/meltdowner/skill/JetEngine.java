@@ -30,6 +30,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -42,22 +44,21 @@ public class JetEngine extends Skill {
         super("jet_engine", 4);
     }
     
-    static float getExpIncr(AbilityData data) {
-        return instance.getFloat("expincr");
-    }
-    
-    static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
-    }
-    
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
         SkillInstance ret = new SkillInstance().addChild(new JEAction());
-        ret.estimatedCP = getConsumption(AbilityData.get(player));
+        ret.estimatedCP = getConsumption(AbilityData.get(player).getSkillExp(this));
         return ret;
+    }
+
+    private static float getConsumption(float exp) {
+        return lerpf(170, 140, exp);
     }
     
     public static class JEAction extends SkillSyncAction {
+
+        float exp;
+        float consumption, overload;
 
         public JEAction() {
             super(-1);
@@ -66,6 +67,10 @@ public class JetEngine extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
+            consumption = getConsumption(exp);
+            overload = lerpf(66, 42, exp);
             
             if(isRemote)
                 startEffects();
@@ -76,19 +81,19 @@ public class JetEngine extends Skill {
             if(isRemote)
                 updateEffects();
             
-            if(!cpData.canPerform(instance.getConsumption(aData)))
+            if(!cpData.canPerform(getConsumption(exp)))
                 ActionManager.abortAction(this);
         }
         
         @Override
         public void onEnd() {
-            if(cpData.perform(instance.getConsumption(aData), instance.getOverload(aData))) {
+            if(cpData.perform(getConsumption(exp), overload)) {
                 if(!isRemote) {
                     startTriggerAction(player, getDest().addVector(0, 1.65, 0));
-                    aData.addSkillExp(instance, getExpIncr(aData));
+                    aData.addSkillExp(instance, .004f);
                     instance.triggerAchievement(player);
                 }
-                setCooldown(instance, instance.getCooldown(aData));
+                setCooldown(instance, (int) (18 * lerpf(6, 3, exp)));
             }
         }
         
@@ -140,6 +145,8 @@ public class JetEngine extends Skill {
         Vec3 velocity;
         int ticks;
 
+        float exp;
+
         public JETriggerAction(Vec3 _target) {
             super(-1);
             target = _target;
@@ -164,6 +171,9 @@ public class JetEngine extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
+
             if(isRemote) {
                 startEffects();
                 
@@ -196,7 +206,7 @@ public class JetEngine extends Skill {
                     EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living)
                 );
                 if(pos != null && pos.entityHit != null) {
-                    MDDamageHelper.attack(pos.entityHit, player, getDamage(aData));
+                    MDDamageHelper.attack(pos.entityHit, player, lerpf(15, 35, exp));
                 }
             }
         }

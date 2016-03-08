@@ -8,11 +8,9 @@ package cn.academy.vanilla.generic.skill;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.PipedValues;
-import cn.academy.ability.api.event.SkillExpAddedEvent;
-import cn.academy.core.config.ConfigEnv;
-import cn.academy.core.config.PlayerConfigEnv.PlayerEnvRebuildEvent;
+import cn.academy.ability.api.event.CalcEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -22,28 +20,28 @@ import net.minecraftforge.common.MinecraftForge;
 public class SkillBrainCourseAdvanced extends Skill {
 
     public SkillBrainCourseAdvanced() {
-        super("brain_course_advanced", 5);
+        super("brain_course_advanced", 4);
         this.canControl = false;
         this.isGeneric = true;
         
         MinecraftForge.EVENT_BUS.register(this);
     }
-    
+
     @SubscribeEvent
-    public void onExpAdded(SkillExpAddedEvent event) {
-        AbilityData aData = event.getAbilityData();
-        if(event.skill.canControl() && aData.isSkillLearned(this)) {
-            event.getAbilityData().addSkillExp(this, event.amount * this.getFloat("incr_rate"));
+    public void recalcMaxCP(CalcEvent.MaxCP event) {
+        if (learned(event.player)) {
+            event.value += 1500;
         }
     }
 
     @SubscribeEvent
-    public void onRebuildEnv(PlayerEnvRebuildEvent evt) {
-        AbilityData aData = AbilityData.get(evt.entityPlayer);
-        if (aData.isSkillLearned(this)) {
-            evt.env.addFloatPipe(ConfigEnv.path(PipedValues.MAXCP), input -> input + 1500);
-            evt.env.addFloatPipe(ConfigEnv.path(PipedValues.MAXOVERLOAD), input -> input + 100);
+    public void recalcMaxOverload(CalcEvent.MaxOverload event) {
+        if (learned(event.player)) {
+            event.value += 100;
         }
     }
 
+    private boolean learned(EntityPlayer player) {
+        return AbilityData.get(player).isSkillLearned(this);
+    }
 }

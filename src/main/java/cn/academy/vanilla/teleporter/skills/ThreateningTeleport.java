@@ -15,7 +15,7 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -47,20 +49,28 @@ public class ThreateningTeleport extends Skill {
         super("threatening_teleport", 1);
     }
 
-    public static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
+    private static float getRange(float exp) {
+        return lerpf(8, 15, exp);
     }
 
-    public static float getExpIncr(boolean attacked) {
-        return (attacked ? 1 : 0.2f) * instance.getFloat("expincr");
+    private static float getExpIncr(boolean attacked) {
+        return (attacked ? 1 : 0.2f) * .003f;
     }
 
-    public static float getDamage(AbilityData data, ItemStack stack) {
-        float dmg = instance.callFloatWithExp("damage", data);
+    private static float getDamage(AbilityData data, ItemStack stack) {
+        float dmg = lerpf(6, 9, data.getSkillExp(instance));
         if (stack.getItem() == ModuleVanilla.needle) {
             dmg *= 1.5f;
         }
         return dmg;
+    }
+
+    private static float getConsumption(float exp) {
+        return lerpf(129, 149, exp);
+    }
+
+    private static float getOverload(float exp) {
+        return lerpf(26, 11, exp);
     }
 
     @Override
@@ -69,13 +79,16 @@ public class ThreateningTeleport extends Skill {
 
             @Override
             public void onStart() {
-                this.estimatedCP = instance.getConsumption(AbilityData.get(getPlayer()));
+                this.estimatedCP = ThreateningTeleport.
+                        getConsumption(AbilityData.get(getPlayer()).getSkillExp(instance));
             }
 
         }.addChild(new ThreateningAction());
     }
 
     public static class ThreateningAction extends SkillSyncAction {
+
+        float exp;
 
         boolean attacked;
 
@@ -86,6 +99,8 @@ public class ThreateningTeleport extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
 
             if (!isRemote && player.getCurrentEquippedItem() == null) {
                 ActionManager.abortAction(this);
@@ -110,7 +125,7 @@ public class ThreateningTeleport extends Skill {
         @Override
         public void onEnd() {
             ItemStack curStack = player.getCurrentEquippedItem();
-            if (curStack != null && cpData.perform(instance.getOverload(aData), instance.getConsumption(aData))) {
+            if (curStack != null && cpData.perform(getOverload(exp), getConsumption(exp))) {
                 attacked = true;
                 TraceResult result = calcDropPos();
 
@@ -120,7 +135,7 @@ public class ThreateningTeleport extends Skill {
 
                     if (result.target != null) {
                         attacked = true;
-                        TPAttackHelper.attack(player, instance, result.target, getDamage(aData, curStack));
+                        TPSkillHelper.attack(player, instance, result.target, getDamage(aData, curStack));
                         instance.triggerAchievement(player);
                         dropProb = 0.3;
                     }
@@ -140,7 +155,7 @@ public class ThreateningTeleport extends Skill {
                     aData.addSkillExp(instance, getExpIncr(attacked));
                 }
 
-                setCooldown(instance, instance.getCooldown(aData));
+                setCooldown(instance, (int) lerpf(18, 10, exp));
             }
 
             if (isRemote) {
@@ -156,7 +171,7 @@ public class ThreateningTeleport extends Skill {
         }
 
         TraceResult calcDropPos() {
-            double range = getRange(aData);
+            double range = getRange(exp);
 
             MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living,
                     BlockSelectors.filEverything);

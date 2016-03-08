@@ -112,7 +112,7 @@ public class Context {
         mgr.mToExceptLocal(this, channel, args);
     }
 
-    public void sendToSelf(String channel, Object ...args) { NetworkMessage.sendToSelf(this, channel, args); }
+    public void sendToSelf(String channel, Object ...args) { mgr.mToSelf(this, channel, args); }
 
     //
 

@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.client;
 
-import cn.academy.vanilla.teleporter.util.TPAttackHelper.TPCritHitEvent;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper.TPCritHitEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;

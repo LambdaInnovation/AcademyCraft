@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class Category {
 
-    private List<Skill> skillList = new ArrayList();
-    private List<Controllable> ctrlList = new ArrayList();
+    private List<Skill> skillList = new ArrayList<>();
+    private List<Controllable> ctrlList = new ArrayList<>();
     
     private final String name;
     
@@ -150,21 +150,5 @@ public class Category {
     protected ResourceLocation initOverlayIcon() {
         return Resources.getTexture("abilities/" + name + "/icon_overlay");
     }
-    
-    // Misc
-
-    /* TODO CHECK WHETHER WE REALLY NEED THIS! This makes it hard to reason about real value of skills...
-    public float getDamageRate(AbilityData data) {
-        return 0.9f + data.getLevel() * 0.1f;
-    }
-
-    public float getConsumptionRate(AbilityData data) {
-        return 0.8f + data.getLevel() * 0.2f;
-    }
-    
-    public float getOverloadRate(AbilityData data) {
-        return 0.8f + data.getLevel() * 0.1f;
-    }
-    */
     
 }

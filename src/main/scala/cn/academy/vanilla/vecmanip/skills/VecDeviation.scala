@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.Side
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.EntityArrow
+import net.minecraft.entity.projectile.{EntityFireball, EntityArrow}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingHurtEvent, LivingAttackEvent}
 
@@ -36,16 +36,25 @@ object VecDeviationContext {
 
   final val MSG_STOP_ENTITY = "stop_ent"
 
-  val acceptedTypes = List(classOf[EntityArrow])
+  val acceptedTypes = List(classOf[EntityArrow], classOf[EntityFireball])
 
   def shouldStop(e: Entity) = acceptedTypes.exists(_.isInstance(e))
 
-  def stop(e: Entity) = e match {
+  def stop(e: Entity, player: EntityPlayer) = e match {
     case ent: EntityArrow =>
       ent.motionX = 0
       ent.motionY = 0
       ent.motionZ = 0
       ent.setDamage(0)
+    case ent: EntityFireball =>
+      val dx = player.posX - e.posX
+      val dz = player.posZ - e.posZ
+      val nl = math.sqrt(dx*dx+dz*dz)
+
+      ent.motionX = -dx/nl * 0.3
+      ent.motionZ = -dz/nl * 0.3
+
+      ent.motionY = -0.5
   }
 
   val stopFilter = new IEntitySelector {
@@ -61,6 +70,10 @@ import VecDeviationContext._
 import scala.collection.JavaConversions._
 
 class VecDeviationContext(p: EntityPlayer) extends Context(p) {
+  import cn.lambdalib.util.generic.MathUtils._
+
+  private implicit val aData_ = aData()
+  private implicit val skill_ = VecDeviation
 
   val visited = mutable.Set[Entity]()
 
@@ -68,16 +81,25 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
   def l_keyDown() = {}
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  def l_keyUp() = {
-    terminate()
-  }
+  def l_keyUp() = terminate()
+
+  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  def l_keyAbort() = terminate()
 
   def reduceDamage(dmg: Float) = {
-    println("ReduceDamage")
-    dmg * 0.65f
+    val consumpRatio = 60.0f
+    val overloadRatio = 10.0f
+
+    val consumption = math.min(cpData.getCP, dmg * consumpRatio)
+    val acceptedDamage = consumption / consumpRatio
+    val absorbed = acceptedDamage * 0.75f
+
+    cpData.perform(consumption, acceptedDamage * overloadRatio)
+
+    dmg - absorbed
   }
 
-  def shouldStopEntity(ent: Entity) = true && shouldStop(ent)
+  def shouldStopEntity(ent: Entity) = shouldStop(ent)
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
@@ -86,8 +108,10 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     val entities = WorldUtils.getEntities(player, range, stopFilter)
     entities.removeAll(visited)
     entities foreach (entity => {
-      if (shouldStopEntity(entity)) {
-        stop(entity)
+      if (shouldStopEntity(entity) && consumeStop()) {
+        stop(entity, player)
+        addSkillExp(0.003f)
+
         sendToClient(MSG_STOP_ENTITY, entity)
       }
     })
@@ -95,9 +119,22 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     visited ++= entities
   }
 
+  @Listener(channel=MSG_TICK, side={Array(Side.CLIENT, Side.SERVER)})
+  def g_tick() = if (!isRemote || isLocal) {
+    val normConsume = lerpf(5, 2.5f, skillExp)
+    val normOverload = lerpf(0.5f, 0.2f, skillExp)
+    cpData.perform(normOverload, normConsume)
+  }
+
   @Listener(channel=MSG_STOP_ENTITY, side=Array(Side.CLIENT))
   def c_stopEntity(ent: Entity) = {
-    stop(ent)
+    stop(ent, player)
+  }
+
+  def consumeStop() = {
+    cpData.perform(
+      lerpf(30, 16, skillExp),
+      lerpf(500, 270, skillExp))
   }
 
 }

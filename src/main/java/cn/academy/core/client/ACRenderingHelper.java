@@ -106,28 +106,39 @@ public class ACRenderingHelper {
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
+
+    public static void lineSegmentGlow(double x0, double y0, double x1, double y1, float width) {
+        RenderUtils.loadTexture(Resources.TEX_GLOW_LINE);
+        dirQuad(x0, y0, x1, y1, width);
+    }
     
     public static void lineSegment(double x0, double y0, double x1, double y1, float width) {
+        boolean pre = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        dirQuad(x0, y0, x1, y1, width);
+
+        if(pre) GL11.glEnable(GL11.GL_TEXTURE_2D);
+    }
+
+    private static void dirQuad(double x0, double y0, double x1, double y1, float width) {
         float hw = width / 2;
         Tessellator t = Tessellator.instance;
         double dy = y1 - y0, dx = x1 - x0, len = Math.sqrt(dy * dy + dx * dx);
         double theta = MathUtils.toDegrees(Math.atan2(dy, dx));
-        boolean pre = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
         GL11.glPushMatrix();
         GL11.glTranslated(x0, y0, 0);
         GL11.glRotated(theta, 0, 0, 1);
         t.startDrawingQuads();
-        t.addVertex(0, -hw, 0);
-        t.addVertex(0, hw, 0);
-        t.addVertex(len, hw, 0);
-        t.addVertex(len, -hw, 0);
+        t.addVertexWithUV(0, -hw, 0, 0, 0);
+        t.addVertexWithUV(0, hw, 0, 0, 1);
+        t.addVertexWithUV(len, hw, 0, 1, 1);
+        t.addVertexWithUV(len, -hw, 0, 1, 0);
         t.draw();
         GL11.glPopMatrix();
-        if(pre) 
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
-    
+
     private static void gdraw(ResourceLocation tex, double x, double y, double width, double height) {
         RenderUtils.loadTexture(tex);
         HudUtils.rect(x, y, width, height);
