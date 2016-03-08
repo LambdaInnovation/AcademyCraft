@@ -31,21 +31,21 @@ public class AuxGuiMediaPlayer {
 
         Widget base = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player_aux.xml")).getWidget("base");
 
-        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying(), "media", base.copy());
+//        ACHud.instance.addElement(base, () -> MediaPlayer.instance.isPlaying(), "media", base.copy());
 
         base.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
-            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-            ProgressBar.get(w).progress = (double) inst.getPlayTime() / inst.media.length;
+            ACMedia inst = MediaPlayer.instance.currentMedia;
+            ProgressBar.get(w).progress = (double) MediaUtils.getPlayedTime(inst) / inst.getTotalLength();
         });
 
         base.getWidget("title").listen(FrameEvent.class, (w, e) -> {
-            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-            TextBox.get(w).content = inst.media.getDisplayName();
+            ACMedia inst = MediaPlayer.instance.currentMedia;
+            TextBox.get(w).content = inst.getName();
         });
 
         base.getWidget("time").listen(FrameEvent.class, (w, e) -> {
-            MediaInstance inst = MediaPlayer.instance.getPlayingMedia();
-            TextBox.get(w).content = Media.getPlayingTime(inst.getPlayTime());
+            ACMedia inst = MediaPlayer.instance.currentMedia;
+            TextBox.get(w).content = MediaUtils.getDisplayTime((int) (MediaUtils.getPlayedTime(inst)));
         });
     }
 

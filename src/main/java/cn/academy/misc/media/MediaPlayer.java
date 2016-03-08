@@ -8,6 +8,7 @@ package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
+import cn.academy.core.util.ACMarkdownRenderer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -29,16 +30,17 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import paulscode.sound.SoundSystem;
+import paulscode.sound.libraries.LibraryJavaSound;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Backend of GuiMediaPlayer.
- * @author WeAthFolD
+ * @author WeAthFolD, KSkun
  */
 @Registrant
-@SideOnly(Side.CLIENT)
+//@SideOnly(Side.CLIENT)
 public class MediaPlayer {
     
     public static final MediaPlayer instance = new MediaPlayer();
@@ -55,151 +57,106 @@ public class MediaPlayer {
         public ResourceLocation getIcon() {
             return icon;
         }
-    };
+    }
     
-    List<Media> playerMedias = new ArrayList();
-    Media lastMedia;
-    
+    List<ACMedia> medias = MediaUtils.getAllMedias();
+    ACMedia lastMedia;
+    ACMedia currentMedia;
     public PlayPref playPref = PlayPref.LOOP;
-    
-    SoundManager soundManager;
-    BiMap<ISound, String> playingSounds;
-    SoundSystem sndSystem;
-    
-    MediaInstance mediaInst;
-    
+
     MediaPlayer() {
         FMLCommonHandler.instance().bus().register(this);
     }
-    
+
     public void startPlay() {
-        if(lastMedia == null)
-            lastMedia = playerMedias.isEmpty() ? null : playerMedias.get(0);
-        if(lastMedia != null)
+        if(lastMedia == null) {
+            lastMedia = medias.isEmpty() ? null : medias.get(0);
+        } else {
             startPlay(lastMedia);
+        }
     }
-    
-    public void startPlay(Media media) {
+
+    public void startPlay(ACMedia media) {
         stop();
-        
-        soundManager = RegistryUtils.getFieldInstance(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), "sndManager", "field_147694_f");
-        playingSounds = ((HashBiMap<String, ISound>) RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "playingSounds", "field_148629_h")).inverse();
-        sndSystem = RegistryUtils.getFieldInstance(SoundManager.class, soundManager, "sndSystem", "field_148620_e");
-        
-        try {
-            MusicTicker musicTicker = RegistryUtils.getFieldInstance(Minecraft.class, Minecraft.getMinecraft(), "mcMusicTicker", "field_147126_aw");
-            ISound playing = RegistryUtils.getFieldInstance(MusicTicker.class, musicTicker, "field_147678_c");
-            if(playing != null) {
-                Minecraft.getMinecraft().getSoundHandler().stopSound(playing);
-            }
-        } catch(Exception e) {
-            AcademyCraft.log.error("Failed to stop vanilla music", e);
-        }
-        
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        Minecraft.getMinecraft().theWorld.playRecord(null, 
-            (int) player.posX, (int) player.posY, (int) player.posZ);
-        
-        mediaInst = new MediaInstance(media);
-        soundManager.sndHandler.playSound(mediaInst);
-        mediaInst.mediaUUID = playingSounds.get(mediaInst);
-        
+
+        MediaUtils.playMedia(media, false);
+        currentMedia = media;
         lastMedia = media;
-        
-        checkMedia();
     }
-    
-    public void startPlay(String name) {
-        startPlay(MediaRegistry.getMedia(name));
+
+    public void startPlay(String id) {
+        startPlay(MediaUtils.getMedia(id));
     }
-    
-    public void updatePlayerMedias(List<Media> medias) {
-        this.playerMedias = medias;
-    }
-    
-    public boolean isPlaying() {
-        return mediaInst != null && !mediaInst.disposed;
-    }
-    
-    public boolean isPaused() {
-        return mediaInst == null ? false : mediaInst.isPaused;
-    }
-    
-    public float getPlayedTime() {
-        return mediaInst.getPlayTime();
-    }
-    
+
     public void pause() {
-        checkMedia();
-        if(mediaInst != null) {
-            sndSystem.pause(mediaInst.mediaUUID);
-            mediaInst.isPaused = true;
-        }
+        if(currentMedia != null) MediaUtils.pauseMedia(currentMedia);
     }
-    
+
     public void resume() {
-        checkMedia();
-        if(mediaInst != null) {
-            sndSystem.play(mediaInst.mediaUUID);
-            mediaInst.isPaused = false;
-        }
+        if(currentMedia != null) MediaUtils.playMedia(currentMedia, false);
     }
-    
+
     public void stop() {
-        checkMedia();
-        if(mediaInst != null) {
-            mediaInst.dispose();
-            mediaInst = null;
+        if(currentMedia != null) {
+            MediaUtils.stopMedia(currentMedia);
+            currentMedia = null;
         }
     }
-    
-    private Media nextMedia() {
+
+    private ACMedia nextMedia() {
         switch(playPref) {
-        case LOOP:
-            int index = playerMedias.indexOf(this.mediaInst.media);
-            return playerMedias.get((index + 1) % playerMedias.size());
-        case RANDOM:
-            return playerMedias.get(RandUtils.rangei(0, playerMedias.size()));
-        case SINGLE:
-            return null;
-        case SINGLE_LOOP:
-            return mediaInst.media;
-        default:
-            return null;
+            case LOOP:
+                int index = medias.indexOf(currentMedia);
+                return medias.get((index + 1) % medias.size());
+            case RANDOM:
+                return medias.get(RandUtils.rangei(0, medias.size()));
+            case SINGLE:
+                return null;
+            case SINGLE_LOOP:
+                return currentMedia;
+            default:
+                return null;
         }
     }
-    
-    public MediaInstance getPlayingMedia() {
-        checkMedia();
-        return mediaInst;
+
+    public ACMedia getCurrentMedia() {
+        return currentMedia;
     }
-    
-    private void checkMedia() {
-        if(mediaInst != null && playingSounds != null) {
-            if(!playingSounds.containsKey(mediaInst))
-                mediaInst = null;
-        }
-    }
-    
+
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        if(!ClientUtils.isPlayerInGame() || event.phase == Phase.START)
-            return;
-        
-        if(mediaInst != null && mediaInst.disposed) {
-            Media next = nextMedia();
-            if(next != null)
-                startPlay(next);
-        }
-        
-        if(mediaInst != null && mediaInst.isPaused) {
-            sndSystem.pause(mediaInst.mediaUUID);
+        if(!ClientUtils.isPlayerInGame() || event.phase == Phase.START) return;
+        if(currentMedia == null) {
+            ACMedia next = nextMedia();
+            if(next != null) startPlay(next);
         }
     }
-    
+
     @SubscribeEvent
     public void onDisconnect(ClientDisconnectionFromServerEvent event) {
         stop();
+    }
+
+    public boolean isPlaying() {
+        if(currentMedia != null) {
+            if(MediaUtils.isPaused(currentMedia)) return false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isPaused() {
+        if(currentMedia != null) {
+            if(!MediaUtils.isPaused(currentMedia)) return false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isStopped() {
+        return currentMedia == null;
     }
     
 }

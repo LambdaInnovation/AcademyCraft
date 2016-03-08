@@ -6,6 +6,8 @@
 */
 package cn.academy.core;
 
+import cn.academy.misc.media.MediaManager;
+import cn.academy.misc.media.OnlineMediaManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -132,8 +134,16 @@ public class AcademyCraft {
             System.out.printf("|-------------------------------------------------------\n");
         }
 
+        // OnlineMediaManager.INSTANCE.init(); TODO
+
         recipes = null; // Release and have fun GC
         config.save();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void postInit2(FMLPostInitializationEvent event) {
+        // MediaManager.INSTANCE.init(); TODO make it work
     }
 
     @EventHandler
