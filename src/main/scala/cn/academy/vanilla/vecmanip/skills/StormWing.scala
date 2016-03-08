@@ -3,22 +3,19 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.{KeyDelegate, ContextManager, ClientRuntime, Context}
-import cn.academy.ability.api.event.FlushControlEvent
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
-import cn.lambdalib.s11n.network.NetworkMessage.{NullablePar, Listener}
+import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.mc.{Vec3 => MVec3}
+import cn.lambdalib.util.mc.{Vec3 => MVec3, EmptyResult, EntitySelectors, Raytrace, TraceResult}
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.util.{Vec3, ResourceLocation}
-import net.minecraftforge.common.MinecraftForge
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
 
 object StormWing extends Skill("storm_wing", 3) {
-
-  val KEY_GROUP = "vm_storm_wing"
 
   override def activate(rt: ClientRuntime, keyid: Int) = {
     rt.addKey(keyid, new KeyDelegate {
@@ -27,36 +24,8 @@ object StormWing extends Skill("storm_wing", 3) {
         if (opt.isPresent) {
           opt.get().terminate()
         } else {
-          val ctx = new StormWingContext(getPlayer)
+          val ctx = new StormWingContext(rt.getEntity)
           ContextManager.instance.activate(ctx)
-
-          def defkey(key: Int, dirFactory: () => Vec3) = {
-            rt.addKey(KEY_GROUP, key, new KeyDelegate {
-              override def onKeyDown() = {
-                ctx.sendToSelf(MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
-              }
-              override def onKeyUp() = {
-                ctx.sendToSelf(MSG_KEYUP, key.asInstanceOf[AnyRef])
-              }
-              override def onKeyAbort() = onKeyUp()
-              override def getIcon: ResourceLocation = StormWing.getHintIcon
-            })
-          }
-
-          def worldSpace(x: Double, y: Double, z: Double) = {
-            val moveDir = MVec3(x, y, z)
-            val player = rt.getEntity
-            val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
-            moveDir.rotateAroundX(-pitch)
-            moveDir.rotateAroundY(-yaw)
-            moveDir
-          }
-          defkey(Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
-          defkey(Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
-          defkey(Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
-          defkey(Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
-          defkey(Keyboard.KEY_SPACE,  () => MVec3(0, 1, 0))
-          defkey(Keyboard.KEY_LSHIFT, () => MVec3(0, -1, 0))
         }
       }
       override def getIcon: ResourceLocation = StormWing.getHintIcon
@@ -68,6 +37,12 @@ object StormWing extends Skill("storm_wing", 3) {
 object StormWingContext {
 
   final val MSG_UPDSTATE = "upd_state"
+  final val MSG_SYNC_STATE = "sync_state"
+
+  final val KEY_GROUP = "vm_storm_wing"
+
+  final val STATE_CHARGE = 0
+  final val STATE_ACTIVE = 1
 
   val ACCEL = 0.16
 
@@ -75,12 +50,17 @@ object StormWingContext {
 
 class StormWingContext(p: EntityPlayer) extends Context(p) {
   import cn.lambdalib.util.mc.MCExtender._
+  import cn.lambdalib.util.generic.RandUtils._
 
-  private def eq(a: Vec3, b: Vec3) = a.xCoord == b.xCoord && a.yCoord == b.yCoord && a.zCoord == b.zCoord
+  private implicit val skill = StormWing
+  private implicit val aData_ = aData
 
   private var currentDir: Option[() => Vec3] = None
   private var applying: Boolean = false
   private var keyid: Int = -1
+
+  private var state: Int = STATE_CHARGE
+  private var stateTick: Int = 0
 
   @SideOnly(Side.CLIENT)
   private var activateHandler: IActivateHandler = null
@@ -96,7 +76,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  def l_keyDown(dir: () => Vec3, _keyid: Int) = {
+  def l_keyDown(dir: () => Vec3, _keyid: Int) = if (state == STATE_ACTIVE) {
     currentDir = Some(dir)
     keyid = _keyid
     l_syncState()
@@ -137,31 +117,58 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
       case Some(dir) =>
         val moveDir = MVec3(dir())
 
-        val expectedVel = moveDir * 0.8
+        val expectedVel = moveDir * speed
         player.setVelocity(
           move(player.motionX, expectedVel.x, ACCEL),
           move(player.motionY, expectedVel.y, ACCEL),
           move(player.motionZ, expectedVel.z, ACCEL)
         )
-
-        player.fallDistance = 0
       case None =>
+        val res: TraceResult = Raytrace.perform(world, player.position + MVec3(0, 0.5, 0),
+          player.position + MVec3(0, -0.3, 0),
+          EntitySelectors.nothing)
+        res match {
+          case EmptyResult() => player.motionY += 0.06
+          case _ =>  player.motionY = 0.1 // Keep player floating on the air if near ground
+        }
+    }
+
+    player.fallDistance = 0
+
+    doConsume()
+
+    stateTick += 1
+    if (state == STATE_CHARGE && stateTick > chargeTime) {
+      state = STATE_ACTIVE
+      stateTick = 0
+      initKeys()
+      sendToServer(MSG_SYNC_STATE, state.asInstanceOf[AnyRef])
     }
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_terminate() = if(isLocal) {
-    println("TerminateLocal")
-    ClientRuntime.instance.clearKeys(StormWing.KEY_GROUP)
+    ClientRuntime.instance.clearKeys(KEY_GROUP)
     ClientRuntime.instance.removeActiveHandler(activateHandler)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
-    if (applying) {
+    player.fallDistance = 0
 
-    } else {
+    val checkArea = 10
+    (0 until 40).foreach(_ => {
+      def rval = ranged(-checkArea, checkArea)
+      val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
+      val block = world.getBlock(x, y, z)
+      if (block != Blocks.air && block.getBlockHardness(world, x, y, z) <= 0.3f) {
+        world.setBlock(x, y, z, Blocks.air)
+        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+      }
+    })
 
+    if (!doConsume()) {
+      terminate()
     }
   }
 
@@ -170,10 +177,62 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     world.spawnEntityInWorld(new StormWingEffect(this))
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  def c_terminate() = {
+  private def doConsume() = if (state == STATE_ACTIVE) {
+    aData.addSkillExp(StormWing, expincr)
 
+    cpData.perform(overload, consumption)
+  } else true
+
+  private def initKeys() = {
+    val rt = ClientRuntime.instance()
+
+    def defkey(key: Int, dirFactory: () => Vec3) = {
+      rt.addKey(KEY_GROUP, key, new KeyDelegate {
+        override def onKeyDown() = {
+          sendToSelf(MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
+        }
+        override def onKeyUp() = {
+          sendToSelf(MSG_KEYUP, key.asInstanceOf[AnyRef])
+        }
+        override def onKeyAbort() = onKeyUp()
+        override def getIcon: ResourceLocation = StormWing.getHintIcon
+      })
+    }
+
+    def worldSpace(x: Double, y: Double, z: Double) = {
+      val moveDir = MVec3(x, y, z)
+      val player = rt.getEntity
+      val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
+      moveDir.rotateAroundX(-pitch)
+      moveDir.rotateAroundY(-yaw)
+      moveDir
+    }
+    defkey(Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
+    defkey(Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
+    defkey(Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
+    defkey(Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
   }
+
+  @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))
+  private def syncState(state: Int) = {
+    this.state = state
+  }
+
+  def consumption = if (isApplying) lerpf(30, 20, skillExp) else lerpf(9, 6, skillExp)
+
+  lazy val overload = lerpf(3, 2, skillExp)
+
+  lazy val speed = lerpf(0.7f, 1.5f, skillExp)
+
+  val expincr = 0.00005f // per tick
+
+  lazy val chargeTime = lerpf(70, 30, skillExp)
+
+  def getState = state
+
+  def getStateTick = stateTick
+
+  def isApplying = applying
 
 }
 

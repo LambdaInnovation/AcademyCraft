@@ -35,6 +35,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import java.util.List;
 
 import static cn.lambdalib.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -51,20 +52,20 @@ public class LightShield extends Skill {
         MinecraftForge.EVENT_BUS.register(this);
     }
     
-    static float getAbsorbDamage(AbilityData data) {
-        return instance.callFloatWithExp("absorb_damage", data);
+    static float getAbsorbDamage(float exp) {
+        return lerpf(15, 50, exp);
     }
     
-    static float getTouchDamage(AbilityData data) {
-        return instance.callFloatWithExp("touch_damage", data);
+    static float getTouchDamage(float exp) {
+        return lerpf(3, 8, exp);
     }
     
-    static float getAbsorbOverload(AbilityData data) {
-        return instance.callFloatWithExp("absorb_overload", data);
+    static float getAbsorbOverload(float exp) {
+        return lerpf(15, 10, exp);
     }
     
-    static float getAbsorbConsumption(AbilityData data) {
-        return instance.callFloatWithExp("absorb_consumption", data);
+    static float getAbsorbConsumption(float exp) {
+        return lerpf(50, 30, exp);
     }
     
     static boolean isEntityReachable(EntityPlayer player, Entity e) {
@@ -97,6 +98,8 @@ public class LightShield extends Skill {
 
         int ticks;
         int lastAbsorb = -1; // The tick last the shield absorbed damage.
+
+        float exp;
         
         public LSAction() {
             super(-1);
@@ -105,8 +108,12 @@ public class LightShield extends Skill {
         @Override
         public void onStart() {
             super.onStart();
-            
-            cpData.perform(instance.getOverload(aData), 0);
+
+            exp = aData.getSkillExp(instance);
+
+            float overload = lerpf(198, 132, exp);
+            cpData.perform(overload, 0);
+
             if(isRemote)
                 startEffects();
         }
@@ -117,8 +124,9 @@ public class LightShield extends Skill {
             
             if(isRemote)
                 updateEffects();
-            
-            if(!cpData.perform(0, instance.getConsumption(aData)) && !isRemote)
+
+            float cp = lerpf(12, 7, exp);
+            if(!cpData.perform(0, cp) && !isRemote)
                 ActionManager.endAction(this);
             aData.addSkillExp(instance, 1e-6f);
             
@@ -132,9 +140,9 @@ public class LightShield extends Skill {
                         }
                     }, EntitySelectors.excludeOf(player)));
                 for(Entity e : candidates) {
-                    if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(aData), getAbsorbConsumption(aData))) {
-                        MDDamageHelper.attack(e, player, getTouchDamage(aData));
-                        aData.addSkillExp(instance, instance.getFloat("expincr"));
+                    if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(exp), getAbsorbConsumption(exp))) {
+                        MDDamageHelper.attack(e, player, getTouchDamage(exp));
+                        aData.addSkillExp(instance, .001f);
                     }
                 }
             }
@@ -142,7 +150,7 @@ public class LightShield extends Skill {
         
         @Override
         public void onEnd() {
-            setCooldown(instance, instance.getCooldown(aData));
+            setCooldown(instance, (int) lerpf(80, 60, exp));
         }
         
         @Override
@@ -157,7 +165,7 @@ public class LightShield extends Skill {
             
             Entity entity = src.getSourceOfDamage();
             boolean perform = false;
-            if(entity instanceof Entity) {
+            if(entity != null) {
                 if(isEntityReachable(player, entity))
                     perform = true;
             } else {
@@ -166,13 +174,13 @@ public class LightShield extends Skill {
             
             if(perform) {
                 lastAbsorb = ticks;
-                if(cpData.perform(getAbsorbConsumption(aData), getAbsorbOverload(aData))) {
-                    float amt = getAbsorbDamage(aData);
+                if(cpData.perform(getAbsorbConsumption(exp), getAbsorbOverload(exp))) {
+                    float amt = getAbsorbDamage(exp);
                     damage -= Math.min(damage, amt);
                 }
             }
             
-            aData.addSkillExp(instance, instance.getFloat("expincr"));
+            aData.addSkillExp(instance, .001f);
             return damage;
         }
         

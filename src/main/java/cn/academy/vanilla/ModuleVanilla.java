@@ -88,15 +88,22 @@ public class ModuleVanilla {
     }
 
     public static void addGenericSkills(Category category) {
-        Skill bc, bca, mc;
-        category.addSkill(bc = new SkillBrainCourse());
-        category.addSkill(bca = new SkillBrainCourseAdvanced());
-        category.addSkill(mc = new SkillMindCourse());
+        Skill bc = new SkillBrainCourse(),
+                bca = new SkillBrainCourseAdvanced(),
+                mc = new SkillMindCourse();
 
-        bc.addDevCondition(new DevConditionAnySkillOfLevel(4));
+        bc.setPosition(188, 510);
+        bca.setPosition(487, 510);
+        mc.setPosition(750, 510);
+
+        category.addSkill(bc);
+        category.addSkill(bca);
+        category.addSkill(mc);
+
+        bc.addDevCondition(new DevConditionAnySkillOfLevel(3));
 
         bca.setParent(bc);
-        bca.addDevCondition(new DevConditionAnySkillOfLevel(5));
+        bca.addDevCondition(new DevConditionAnySkillOfLevel(4));
 
         mc.setParent(bca);
         mc.addDevCondition(new DevConditionAnySkillOfLevel(5));

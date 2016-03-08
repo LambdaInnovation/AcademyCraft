@@ -30,6 +30,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -53,7 +55,7 @@ public class MagMovement extends Skill {
     }
     
     private static float getExpIncr(double distance) {
-        return instance.env().getFloat("expincr_scale") * (float) distance;
+        return 0.0011f * (float) distance;
     }
     
     private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {
@@ -96,6 +98,8 @@ public class MagMovement extends Skill {
         double sx, sy, sz;
         
         Target target;
+
+        float overload, cp;
         
         public MovementAction(Target _target) {
             super(-1);
@@ -129,6 +133,14 @@ public class MagMovement extends Skill {
         
         @Override
         public void onStart() {
+            AbilityData aData = AbilityData.get(player);
+            CPData cpData = CPData.get(player);
+
+            float exp = aData.getSkillExp(instance);
+
+            cp = lerpf(15, 10, exp);
+            overload = lerpf(3, 2, exp);
+
             if(isRemote) {
                 startEffect();
             } else {
@@ -171,7 +183,7 @@ public class MagMovement extends Skill {
                 updateEffect();
             } else {
                 if((target != null && !target.alive()) || 
-                    !cpData.perform(instance.getOverload(aData), instance.getConsumption(aData)))
+                    !cpData.perform(overload, cp))
                     ActionManager.abortAction(this);
             }
                     

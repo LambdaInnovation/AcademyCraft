@@ -16,7 +16,7 @@ import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
@@ -115,8 +115,8 @@ public class LocationTeleport extends Skill {
                 Math.max(8.0f, MathHelper.sqrt_float(Math.min(800.0f, distance)));
     }
 
-    public static float getOverload(EntityPlayer player) {
-        return instance.getOverload(AbilityData.get(player));
+    private static float getOverload(EntityPlayer player) {
+        return 240;
     }
 
     public static boolean canPerform(EntityPlayer player, Location dest) {
@@ -125,7 +125,7 @@ public class LocationTeleport extends Skill {
     }
 
     private static float getRange() {
-        return instance.getFloat("range");
+        return 4;
     }
 
     @SideOnly(Side.CLIENT)
@@ -162,7 +162,7 @@ public class LocationTeleport extends Skill {
 
             aData.addSkillExp(instance, expincr);
             ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
-            TPAttackHelper.incrTPCount(player);
+            TPSkillHelper.incrTPCount(player);
         }
     }
 

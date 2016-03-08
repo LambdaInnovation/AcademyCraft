@@ -32,6 +32,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * Current charging
  * @author WeAthFolD
@@ -65,17 +67,31 @@ public class CurrentCharging extends Skill {
         };
     }
     
-    public static float getChargingSpeed(AbilityData data) {
-        return instance.callFloatWithExp("speed", data);
+    private static float getChargingSpeed(float exp) {
+        return lerpf(10, 30, exp);
     }
     
-    public static float getExpIncr(AbilityData data, boolean effective) {
-        return instance.callFloatWithExp("expincr_" + (effective ? "effective" : "ineffective"), data);
+    private static float getExpIncr(boolean effective) {
+        if (effective)
+            return 0.0001f;
+        else
+            return 0.00003f;
+    }
+
+    private static float getConsumption(float exp) {
+        return lerpf(6, 14, exp);
+    }
+
+    private static float getOverload(float exp) {
+        return lerpf(65, 48, exp);
     }
     
     public static class ActionChargeBlock extends SyncAction {
         
         static final double DISTANCE = 15.0;
+
+        float exp;
+
         AbilityData aData;
         CPData cpData;
 
@@ -87,8 +103,9 @@ public class CurrentCharging extends Skill {
         public void onStart() {
             aData = AbilityData.get(player);
             cpData = CPData.get(player);
-            
-            cpData.perform(instance.getOverload(aData), 0);
+
+            cpData.perform(getOverload(exp), 0);
+            exp = aData.getSkillExp(instance);
             
             if(isRemote)
                 startEffects();
@@ -107,7 +124,7 @@ public class CurrentCharging extends Skill {
                     
                     // Very well, charge the block
                     if(!isRemote) {
-                        float charge = getChargingSpeed(aData);
+                        float charge = getChargingSpeed(exp);
                         EnergyBlockHelper.charge(tile, charge, true);
                     }
                 } else {
@@ -116,9 +133,9 @@ public class CurrentCharging extends Skill {
             } else {
                 good = false;
             }
-            
-            cpData.perform(0, instance.getConsumption(aData));
-            aData.addSkillExp(instance, getExpIncr(aData, good));
+
+            cpData.perform(0, getConsumption(exp));
+            aData.addSkillExp(instance, getExpIncr(good));
             
             if(isRemote) {
                 updateEffects(pos, good);
@@ -201,6 +218,8 @@ public class CurrentCharging extends Skill {
     // TODO: Add hand render effect
     public static class ActionChargeItem extends SkillSyncAction {
 
+        float exp;
+
         public ActionChargeItem() {
             super(-1);
         }
@@ -208,6 +227,9 @@ public class CurrentCharging extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
+
             if(isRemote)
                 startEffects();
         }
@@ -216,14 +238,14 @@ public class CurrentCharging extends Skill {
         public void onTick() {
             ItemStack stack = player.getCurrentEquippedItem();
             if(stack != null) {
-                float cp = instance.getConsumption(aData);
-                float amt = getChargingSpeed(aData);
+                float cp = getConsumption(exp);
+                float amt = getChargingSpeed(exp);
                 
                 boolean good = EnergyItemHelper.isSupported(stack);
                 if(good)
                     EnergyItemHelper.charge(stack, amt, false);
                 
-                aData.addSkillExp(instance, getExpIncr(aData, good));
+                aData.addSkillExp(instance, getExpIncr(good));
                 cpData.perform(0, cp);
             } else {
                 ActionManager.endAction(this);

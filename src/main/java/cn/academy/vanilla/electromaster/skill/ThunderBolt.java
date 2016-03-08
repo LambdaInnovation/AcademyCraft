@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns;
 import cn.academy.vanilla.electromaster.entity.EntityArc;
@@ -34,6 +33,8 @@ import net.minecraft.util.Vec3;
 
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -47,16 +48,16 @@ public class ThunderBolt extends Skill {
         super("thunder_bolt", 4);
     }
     
-    static float getAOEDamage(AbilityData aData) {
-        return instance.callFloatWithExp("aoe_damage", aData);
+    static float getAOEDamage(float exp) {
+        return lerpf(9.6f, 17.4f, exp);
     }
     
-    static float getDamage(AbilityData aData) {
-        return instance.callFloatWithExp("damage", aData);
+    static float getDamage(float exp) {
+        return lerpf(16f, 29f, exp);
     }
     
     static float getExpIncr(boolean effective) {
-        return instance.getFloat("expincr_" + (effective ? "effective" : "ineffective"));
+        return effective ? 0.005f : 0.003f;
     }
     
     @Override
@@ -68,23 +69,28 @@ public class ThunderBolt extends Skill {
 
         @Override
         public boolean validate() {
-            return cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+            float exp = aData.getSkillExp(instance);
+            float overload = lerpf(64, 32, exp);
+            float cp = (int) lerp(340, 455, exp);
+
+            return cpData.perform(overload, cp);
         }
 
         @Override
         public void execute() {
+            float exp = aData.getSkillExp(instance);
+
             if(isRemote) {
                 spawnEffects();
                 
             } else {
                 AttackData ad = getAttackData();
-                float exp = aData.getSkillExp(instance);
                 
                 boolean effective = false;
                 
                 if(ad.target != null) {
                     effective = true;
-                    EMDamageHelper.attack(ad.target, player, getDamage(aData));
+                    EMDamageHelper.attack(ad.target, player, getDamage(exp));
                     if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
                         ((EntityLivingBase) ad.target)
                             .addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 40, 3));
@@ -93,7 +99,7 @@ public class ThunderBolt extends Skill {
                 
                 for(Entity e : ad.aoes) {
                     effective = true;
-                    EMDamageHelper.attack(e, player, getAOEDamage(aData));
+                    EMDamageHelper.attack(e, player, getAOEDamage(exp));
                     
                     if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
                         ((EntityLivingBase) ad.target)
@@ -105,7 +111,7 @@ public class ThunderBolt extends Skill {
                 instance.triggerAchievement(player);
             }
             
-            setCooldown(instance, instance.getCooldown(aData));
+            setCooldown(instance, (int) lerpf(80f, 40f, exp));
         }
         
         @SideOnly(Side.CLIENT)

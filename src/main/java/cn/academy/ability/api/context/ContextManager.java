@@ -10,6 +10,7 @@ import cn.academy.ability.api.context.Context.Status;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.core.LambdaLib;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.*;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
@@ -34,6 +35,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cn.lambdalib.s11n.network.NetworkMessage.*;
@@ -66,26 +69,55 @@ public enum ContextManager {
      * Terminate this Context. Links between server and clients are ripped apart, and the terminate message is invoked.
      */
     public void terminate(Context ctx) {
-        if (ctx.getStatus() == Status.ALIVE) {
-            if(remote()) terminate_c(ctx);
-            else         terminate_s(ctx);
-        } // else { emit? }
+        Status stat = ctx.getStatus();
+        if (remote() && (stat == Status.ALIVE || stat == Status.CONSTRUCTED)) {
+            terminate_c(ctx);
+        } else if (!remote() && (stat == Status.ALIVE)) {
+            terminate_s(ctx);
+        } else {
+            throw new IllegalStateException("Can't terminate this context");
+        }
     }
 
-    public <T extends Context> Optional<T> find(Class<T> type) {
-        if(remote()) return find_c(type);
-        else         return find_s(type);
+    /**
+     * Finds a context of given type that is alive.
+     */
+    public <T> Optional<T> find(Class<T> type) {
+        return find(type, x -> true);
     }
 
-    private <T extends Context> Optional<T> find_s(Class<T> type) {
-        return sharedFind(type, alive().values().stream().map(i -> i.ctx)).findAny();
+    /**
+     * Finds a context that is created locally (by the client player) of given type.
+     */
+    @SideOnly(Side.CLIENT)
+    public <T> Optional<T> findLocal(Class<T> type) {
+        return find(type, ctx -> Minecraft.getMinecraft().thePlayer.equals(((Context)ctx).player));
     }
 
-    private <T extends Context> Optional<T> find_c(Class<T> type) {
-        Optional<T> sRes = find_s(type);
-        return sRes.isPresent() ?
-                sRes :
-                sharedFind(type, clientSuspended.values().stream().map(s -> s.ctx)).findAny();
+    /**
+     * Finds a context that is of given type and satifies the given precondition.
+     */
+    public <T> Optional<T> find(Class<T> type, Predicate<T> pred) {
+        return aliveStream().filter(ctx -> type.isInstance(ctx) && pred.test((T) ctx))
+                .map(x -> (T) x)
+                .findAny();
+    }
+
+    public List<Context> allAlive() {
+        return aliveStream().collect(Collectors.toList());
+    }
+
+    private Stream<Context> aliveStream() {
+        Stream<Context> orig = alive().values().stream().map(info -> info.ctx);
+        Stream<Context> stream;
+        if (remote()) {
+            stream = Stream.concat(
+                    clientSuspended.values().stream().map(sus -> sus.ctx),
+                    orig);
+        } else {
+            stream = orig;
+        }
+        return stream;
     }
 
     // Internal
@@ -98,12 +130,6 @@ public enum ContextManager {
         HANDSHAKE = "6",
         KEEPALIVE = "7",
         KEEPALIVE_SERVER = "8";
-
-    private <T extends Context> Stream<T> sharedFind(Class<T> type, Stream<Context> source) {
-        return source
-                .filter(ctx -> type.isAssignableFrom(ctx.getClass()))
-                .map(ctx -> (T) ctx);
-    }
 
     private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(HashMap::new);
 
@@ -129,7 +155,17 @@ public enum ContextManager {
         Preconditions.checkArgument(ctx.isLocal(), "Can't terminate context at non-local client");
         debug("terminate_c");
 
-        sendToServer(this, TERMINATE_AT_SERVER, ctx);
+        if (ctx.getStatus() == Status.CONSTRUCTED) {
+            clientSuspended.values().stream()
+                    .filter(sus -> sus.ctx == ctx)
+                    .findAny()
+                    .ifPresent(sus -> {
+                        sus.terminateSignal = true;
+                    });
+        } else {
+            sendToServer(this, TERMINATE_AT_SERVER, ctx);
+        }
+
         terminatePost(ctx);
     }
 
@@ -154,7 +190,7 @@ public enum ContextManager {
     @SideOnly(Side.CLIENT)
     private void activate_c(Context ctx) {
         final int clientID = clientCreateIncrem;
-        clientSuspended.put(clientID, new ClientSuspended(ctx));
+        clientSuspended.put(clientID, new ClientSuspended(ctx, clientID));
         clientCreateIncrem++;
 
         sendToServer(this, MAKE_ALIVE, Minecraft.getMinecraft().thePlayer, clientID, ctx.getClass().getName());
@@ -201,12 +237,19 @@ public enum ContextManager {
      * @return Should remove this info
      */
     private boolean tickClient(ClientInfo info, long time) {
-        if (info.ctx.isLocal() && info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
+        if (info.ctx.player.isDead) {
+            if (info.ctx.getStatus() != Status.TERMINATED) {
+                terminate(info.ctx);
+            }
+            return true;
         }
 
         if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
+        }
+
+        if (info.ctx.isLocal() && info.lastSend == -1 || time - info.lastSend > T_KA) {
+            sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
         }
 
         sendToSelf(info.ctx, Context.MSG_TICK);
@@ -217,13 +260,20 @@ public enum ContextManager {
      * @return Should remove this info
      */
     private boolean tickServer(ServerInfo info, long time) {
-        if (info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToPlayers(info.client.toArray(new EntityPlayerMP[info.client.size()]),
-                    this, KEEPALIVE, info.ctx.networkID);
+        if (info.ctx.player.isDead) {
+            if (info.ctx.getStatus() != Status.TERMINATED) {
+                terminate(info.ctx);
+            }
+            return true;
         }
 
         if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
             return true;
+        }
+
+        if (info.lastSend == -1 || time - info.lastSend > T_KA) {
+            sendToPlayers(info.client.toArray(new EntityPlayerMP[info.client.size()]),
+                    this, KEEPALIVE, info.ctx.networkID);
         }
 
         sendToSelf(info.ctx, Context.MSG_TICK);
@@ -231,25 +281,37 @@ public enum ContextManager {
     }
 
     // Messaging
+    void mToSelf(Context ctx, String cn, Object[] args) {
+        if (ctx.getStatus() == Status.ALIVE ||
+                // It's possible that makealive hasn't yet happened. Allow some degree of uncertainty here.
+                // If user sends message in local constructed stage, it's handled by suspending the call in MakeAlive stage.
+           (ctx.getStatus() == Status.CONSTRUCTED && ctx.isLocal())) {
+            NetworkMessage.sendToSelf(ctx, cn, args);
+        } else {
+            throw new IllegalStateException("Try to sendToSelf after context is terminated");
+        }
+    }
 
     void mToServer(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, true);
+        if (!_mCheck(ctx, true)) return;
 
         if (ctx.getStatus() == Status.ALIVE) {
             sendToServer(ctx, cn, args);
-        } else { // Suspend call
+        } else if (ctx.getStatus() == Status.CONSTRUCTED) { // Suspend call
             checkSuspended(ctx).get().suspendedCalls.add(new MessageCall(cn, args));
+        } else {
+            throw new RuntimeException("Sending message after context is terminated");
         }
     }
 
     void mToLocal(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
-        sendTo((EntityPlayerMP) ctx.getPlayer(), ctx, cn, args);
+        sendTo(ctx.getPlayer(), ctx, cn, args);
     }
 
     void mToExceptLocal(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
         EntityPlayer localPlayer = ctx.getPlayer();
         EntityPlayerMP[] players = getInfoS(ctx.networkID).client.stream()
@@ -258,23 +320,20 @@ public enum ContextManager {
     }
 
     void mToClient(Context ctx, String cn, Object[] args) {
-        _mCheck(ctx, false);
+        if (!_mCheck(ctx, false)) return;
 
         sendToPlayers(Iterables.toArray(getInfoS(ctx.networkID).client, EntityPlayerMP.class), ctx, cn, args);
     }
 
-    private void _mCheck(Context ctx, boolean requiredRemote) {
-        if (!LambdaLib.DEBUG) return;
+    private boolean _mCheck(Context ctx, boolean requiredRemote) {
+        if (ctx.getStatus() != Status.ALIVE) return false;
 
         Preconditions.checkState(remote() == requiredRemote, "Invalid messaging side");
         if (requiredRemote) {
-            Preconditions.checkState(
-                ctx.getStatus() == Status.ALIVE ||
-                checkSuspended(ctx).isPresent(), "Context not alive");
             Preconditions.checkState(ctx.isLocal(), "Context must be local");
-        } else {
-            Preconditions.checkState(ctx.getStatus() == Status.ALIVE, "Context not alive");
         }
+
+        return true;
     }
 
     private Optional<ClientSuspended> checkSuspended(Context ctx) {
@@ -305,8 +364,12 @@ public enum ContextManager {
             ctx.networkID = networkID;
             makeAlivePost(ctx);
 
-            for (MessageCall call : susp.suspendedCalls) {
-                sendToServer(ctx, call.channel, call.args);
+            if (susp.terminateSignal) {
+                terminate_c(ctx);
+            } else { // TODO: This doesn't represent actual order of sending messages. Check if it causes problems.
+                for (MessageCall call : susp.suspendedCalls) {
+                    sendToServer(ctx, call.channel, call.args);
+                }
             }
 
         } // { else makeAlive not successful, shall we do something about it? }
@@ -454,9 +517,13 @@ public enum ContextManager {
     private class ClientSuspended {
         final Context ctx;
         final List<MessageCall> suspendedCalls = new ArrayList<>();
+        final int cid;
 
-        public ClientSuspended(Context _ctx) {
+        boolean terminateSignal = false; // A small hack to handle client terminate at CONSTRUCTED stage.
+
+        public ClientSuspended(Context _ctx, int _cid) {
             ctx = _ctx;
+            cid = _cid;
         }
     }
 

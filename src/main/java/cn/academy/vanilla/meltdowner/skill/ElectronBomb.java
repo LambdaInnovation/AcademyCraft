@@ -29,6 +29,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -44,8 +46,8 @@ public class ElectronBomb extends Skill {
         super("electron_bomb", 1);
     }
     
-    static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
+    static float getDamage(float exp) {
+        return lerpf(12, 20, exp);
     }
     
     @Override
@@ -57,12 +59,17 @@ public class ElectronBomb extends Skill {
 
         @Override
         public boolean validate() {
-            return cpData.perform(instance.getOverload(aData), 
-                    instance.getConsumption(aData));
+            float exp = aData.getSkillExp(instance);
+            float overload = lerpf(39, 17, exp);
+            float cp = lerpf(117, 135, exp);
+
+            return cpData.perform(overload, cp);
         }
 
         @Override
         public void execute() {
+            float exp = aData.getSkillExp(instance);
+
             if(!isRemote) {
                 EntityMdBall ball = new EntityMdBall(player, aData.getSkillExp(instance) >= 0.8f ? LIFE_IMPROVED : LIFE, 
                 new EntityCallback<EntityMdBall>() {
@@ -72,7 +79,7 @@ public class ElectronBomb extends Skill {
                         MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
                             EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
                         if(trace != null && trace.entityHit != null) {
-                            MDDamageHelper.attack(trace.entityHit, player, getDamage(aData));
+                            MDDamageHelper.attack(trace.entityHit, player, getDamage(exp));
                         }
                         actionClient(player, ball);
                     }
@@ -81,8 +88,8 @@ public class ElectronBomb extends Skill {
                 world.spawnEntityInWorld(ball);
             }
             
-            aData.addSkillExp(instance, instance.getFloat("expincr"));
-            setCooldown(instance, instance.getCooldown(aData));
+            aData.addSkillExp(instance, .005f);
+            setCooldown(instance, (int) lerpf(20, 10, exp));
         }
         
     }

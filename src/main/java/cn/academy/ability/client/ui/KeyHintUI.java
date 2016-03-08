@@ -10,8 +10,10 @@ import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.academy.ability.api.context.ClientRuntime.DelegateNode;
 import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.context.KeyDelegate.DelegateState;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
+import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -35,6 +37,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -81,6 +84,7 @@ public class KeyHintUI extends Widget {
     
     long lastFrameTime, showTime;
     double mAlpha;
+    float sinAlpha; // Used when rendering active delegates
     boolean canUseAbility;
 
     final FontOption option = new FontOption(32, FontAlign.CENTER, new Color(0xff194246));
@@ -98,8 +102,7 @@ public class KeyHintUI extends Widget {
     private void addDrawing() {
         listen(FrameEvent.class, (w, e) -> {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            
-            PresetData pData = PresetData.get(player);
+
             CPData cpData = CPData.get(player);
             
             canUseAbility = cpData.canUseAbility();
@@ -114,6 +117,8 @@ public class KeyHintUI extends Widget {
             } else {
                 mAlpha = 1.0;
             }
+
+            sinAlpha = 0.6f + (1 + MathHelper.sin((time % 100000) / 50.0f)) * 0.2f;
 
             if(cpData.isActivated()) {
                 ClientRuntime rt = ClientRuntime.instance();
@@ -196,16 +201,29 @@ public class KeyHintUI extends Widget {
         color4d(1, 1, 1, 1);
         RenderUtils.loadTexture(TEX_ICON_BACK);
         HudUtils.rect(216, 5, 72, 72);
-        
-        
-        
+
+
+        DelegateState state = c.getState();
         float prog = data == null ? 0.0f : ((float) data.getTickLeft() / data.getMaxTick());
-        float alpha = prog == 0.0f ? 1.0f : 0.4f;
+
+        float thisSinAlpha = (state.sinEffect ? sinAlpha : 1);
+
+        float alpha;
+        if (prog == 0.0f) {
+            alpha = state.alpha * (0.4f + thisSinAlpha * 0.6f);
+        } else {
+            alpha = 0.4f;
+        }
         
         final double ICON_SIZE = 62;
         color4d(1, 1, 1, alpha);
         RenderUtils.loadTexture(icon);
         HudUtils.rect(221, 10, ICON_SIZE, ICON_SIZE);
+
+        double prevA = state.glowColor.a;
+        state.glowColor.a *= thisSinAlpha;
+        ACRenderingHelper.drawGlow(221, 10, ICON_SIZE, ICON_SIZE, 5, state.glowColor);
+        state.glowColor.a = prevA;
         
         GL20.glUseProgram(0);
         

@@ -6,6 +6,7 @@
 */
 package cn.academy.vanilla.meltdowner.skill;
 
+import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,16 +28,35 @@ public class MineRayBasic extends MineRaysBase {
     }
 
     @Override
-    protected void onBlockBreak(World world, int x, int y, int z, Block block) {
-        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound(), .5f, 1f);
-        block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0);
-        world.setBlock(x, y, z, Blocks.air);
+    @SideOnly(Side.CLIENT)
+    public SkillInstance createSkillInstance(EntityPlayer player) {
+        return new SkillInstance().addChild(new BasicRayAction());
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    protected Entity createRay(EntityPlayer player) {
-        return new EntityMineRayBasic(player);
+    public static class BasicRayAction extends MRAction {
+        public BasicRayAction() {
+            super(instance);
+
+            setRange(10);
+            setHarvestLevel(2);
+            setSpeed(0.2f, 0.4f);
+            setConsumption(15.0f, 8.0f);
+            setOverload(200f, 120f);
+            setExpIncr(0.0005f);
+        }
+
+        @Override
+        protected void onBlockBreak(World world, int x, int y, int z, Block block) {
+            world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound(), .5f, 1f);
+            block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0);
+            world.setBlock(x, y, z, Blocks.air);
+        }
+
+        @Override
+        protected Entity createRay() {
+            return new EntityMineRayBasic(player);
+        }
+
     }
 
 }

@@ -14,7 +14,7 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
-import cn.academy.vanilla.teleporter.util.TPAttackHelper;
+import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
 import cpw.mods.fml.relauncher.Side;
@@ -24,6 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -44,12 +46,16 @@ public class PenetrateTeleport extends Skill {
                 && !b2.canCollideCheck(world.getBlockMetadata(ix, iy + 1, iz), false);
     }
 
+    static float getConsumption(float exp) {
+        return lerpf(15, 10, exp);
+    }
+
     static Dest getDest(AbilityData data) {
         EntityPlayer player = data.getEntity();
         CPData cpData = CPData.get(player);
         World world = player.worldObj;
-        double dist = getMaxDistance(data);
-        double cplim = cpData.getCP() / instance.getConsumption(data);
+        double dist = getMaxDistance(data.getSkillExp(instance));
+        double cplim = cpData.getCP() / getConsumption(data.getSkillExp(instance));
         dist = Math.min(dist, cplim);
 
         final double STEP = 0.8;
@@ -73,8 +79,8 @@ public class PenetrateTeleport extends Skill {
         return new Dest(mo.getPosVec(), stage != 1);
     }
 
-    static float getMaxDistance(AbilityData data) {
-        return instance.callFloatWithExp("max_distance", data);
+    static float getMaxDistance(float exp) {
+        return lerpf(10, 35, exp);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class PenetrateTeleport extends Skill {
                     return;
                 if (action.mark.available) {
                     float dist = (float) getPlayer().getDistance(action.mark.posX, action.mark.posY, action.mark.posZ);
-                    estimatedCP = dist * instance.getConsumption(aData);
+                    estimatedCP = dist * PenetrateTeleport.getConsumption(aData.getSkillExp(instance));
                 } else {
                     estimatedCP = 0;
                 }
@@ -101,6 +107,7 @@ public class PenetrateTeleport extends Skill {
 
         // Final calculated dest
         Dest dest;
+        float exp;
 
         public PenetrateAction() {
             super(-1);
@@ -109,6 +116,8 @@ public class PenetrateTeleport extends Skill {
         @Override
         public void onStart() {
             super.onStart();
+
+            exp = aData.getSkillExp(instance);
 
             if (isRemote)
                 startEffects();
@@ -149,16 +158,17 @@ public class PenetrateTeleport extends Skill {
             if (isRemote) {
                 player.setPosition(x, y, z);
                 ACSounds.playClient(player, "tp.tp", .5f);
-                setCooldown(instance, instance.getCooldown(aData));
+                setCooldown(instance, (int) lerpf(70, 40, exp));
             } else {
-                cpData.performWithForce(instance.getOverload(aData),
-                        (float) (distance * instance.getConsumption(aData)));
+                float overload = lerpf(80, 50, exp);
+                cpData.performWithForce(overload,
+                        (float) (distance * getConsumption(exp)));
 
                 float expincr = 0.00014f * (float) distance;
 
                 aData.addSkillExp(instance, expincr);
                 ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
-                TPAttackHelper.incrTPCount(player);
+                TPSkillHelper.incrTPCount(player);
 
                 player.setPositionAndUpdate(x, y, z);
                 player.fallDistance = 0;

@@ -32,7 +32,7 @@ public class RadiationIntensify extends Skill {
     }
 
     public float getRate(AbilityData data) {
-        return this.callFloatWithExp("rate", data);
+        return MathUtils.lerpf(1.4f, 1.8f, data.getSkillExp(this));
     }
     
 }

@@ -35,6 +35,8 @@ import net.minecraft.util.Vec3;
 
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -51,15 +53,13 @@ public class RayBarrage extends Skill {
 
         FMLCommonHandler.instance().bus().register(this);
     }
-    
-    //TODO Sounds
-    
-    private static float getPlainDamage(AbilityData data) {
-        return instance.callFloatWithExp("plain_damage", data);
+
+    private static float getPlainDamage(float exp) {
+        return lerpf(25, 40, exp);
     }
     
-    private static float getScatteredDamage(AbilityData data) {
-        return instance.callFloatWithExp("scatter_damage", data);
+    private static float getScatteredDamage(float exp) {
+        return lerpf(12, 20, exp);
     }
     
     @Override
@@ -76,14 +76,17 @@ public class RayBarrage extends Skill {
         public boolean validate() {
             CPData cData = CPData.get(player);
             AbilityData aData = AbilityData.get(player);
-            
+
+            float exp = aData.getSkillExp(instance);
+
             MovingObjectPosition pos = Raytrace.traceLiving(player, DISPLAY_RAY_DIST);
             if(pos != null && pos.entityHit instanceof EntitySilbarn && !((EntitySilbarn)pos.entityHit).isHit()) {
                 hit = true;
                 silbarn = (EntitySilbarn) pos.entityHit;
             }
-            
-            return cData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+
+            float cp = lerpf(450, 340, exp), overload = lerpf(375, 160, exp);
+            return cData.perform(overload, cp);
         }
         
         @Override
@@ -105,6 +108,7 @@ public class RayBarrage extends Skill {
         @Override
         public void execute() {
             AbilityData aData = AbilityData.get(player);
+            float exp = aData.getSkillExp(instance);
             
             double tx, ty, tz;
             if(hit) {
@@ -152,7 +156,7 @@ public class RayBarrage extends Skill {
                         float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
                         
                         if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
-                            MDDamageHelper.attack(e, player, getScatteredDamage(aData));
+                            MDDamageHelper.attack(e, player, getScatteredDamage(exp));
                         }
                     }
                 }
@@ -166,7 +170,7 @@ public class RayBarrage extends Skill {
                 if(!isRemote) {
                     MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
                     if(result != null && result.entityHit != null) {
-                        MDDamageHelper.attack(result.entityHit, player, getPlainDamage(aData));
+                        MDDamageHelper.attack(result.entityHit, player, getPlainDamage(exp));
                     }
                 }
                 
@@ -176,8 +180,8 @@ public class RayBarrage extends Skill {
                 spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
             }
             
-            setCooldown(instance, instance.getCooldown(aData));
-            aData.addSkillExp(instance, instance.getFloat("expincr"));
+            setCooldown(instance, (int) lerpf(100, 160, exp));
+            aData.addSkillExp(instance, .005f);
         }
         
         @SideOnly(Side.CLIENT)

@@ -45,6 +45,8 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  */
@@ -59,8 +61,8 @@ public class MineDetect extends Skill {
         super("mine_detect", 3);
     }
     
-    public static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
+    public static float getRange(float exp) {
+        return lerpf(15, 30, exp);
     }
     
     public static boolean isAdvanced(AbilityData data) {
@@ -78,7 +80,13 @@ public class MineDetect extends Skill {
         public boolean validate() {
             AbilityData aData = AbilityData.get(player);
             CPData cpData = CPData.get(player);
-            return cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+
+            float exp = aData.getSkillExp(instance);
+
+            float cp = lerpf(1800, 1400, exp);
+            float overload = lerpf(200, 180, exp);
+
+            return cpData.perform(overload, cp);
         }
 
         @Override
@@ -90,18 +98,21 @@ public class MineDetect extends Skill {
             
             if(!isRemote) {
                 player.addPotionEffect(new PotionEffect(Potion.blindness.id, TIME));
-                aData.addSkillExp(instance, instance.getFloat("expincr"));
+                aData.addSkillExp(instance, 0.008f);
                 instance.triggerAchievement(player);
             }
         }
         
         @SideOnly(Side.CLIENT)
         private void spawnEffects(AbilityData aData) {
+            float exp = aData.getSkillExp(instance);
+
             player.worldObj.spawnEntityInWorld(
-                    new HandlerEntity(player, TIME, getRange(aData), isAdvanced(aData)));
+                    new HandlerEntity(player, TIME, getRange(exp), isAdvanced(aData)));
             ACSounds.playClient(player, "em.minedetect", 0.5f);
-            
-            setCooldown(instance, instance.getCooldown(aData));
+
+            int cooldown = (int) lerpf(900, 400, exp);
+            setCooldown(instance, cooldown);
         }
         
     }

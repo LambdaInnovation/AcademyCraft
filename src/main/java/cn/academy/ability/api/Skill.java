@@ -7,6 +7,7 @@
 package cn.academy.ability.api;
 
 import cn.academy.ability.api.context.*;
+import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
@@ -14,24 +15,18 @@ import cn.academy.ability.develop.condition.DevConditionDep;
 import cn.academy.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
-import cn.academy.core.config.ConfigEnv;
-import cn.academy.core.config.PlayerConfigEnv;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.lambdalib.ripple.ScriptNamespace;
 import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import scala.Function0;
 import scala.Function1;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
@@ -49,7 +44,7 @@ public abstract class Skill extends Controllable {
     
     private Category category;
     
-    private final List<IDevCondition> learningConditions = new ArrayList();
+    private final List<IDevCondition> learningConditions = new ArrayList<>();
     
     private String fullName;
     
@@ -65,8 +60,7 @@ public abstract class Skill extends Controllable {
     private final int level;
     
     /**
-     * The place this skill is at in the Skill Tree UI. This field is automatically loaded from script from field
-     * "x" and "y"
+     * The place this skill is at in the Skill Tree UI.
      */
     public double guiX, guiY;
     
@@ -107,17 +101,14 @@ public abstract class Skill extends Controllable {
         icon = initIcon();
         fullName = initFullName();
         
-        try {
-            float[] pos = env().getFloatArray(buildPath("gui_pos"));
-            guiX = pos[0];
-            guiY = pos[1];
-        } catch(Exception e) {
-            throw new RuntimeException("Failed to load gui position of skill " + fullName, e);
-        }
-        
         this.addDevCondition(new DevConditionDeveloperType(getMinimumDeveloperType()));
         
         initSkill();
+    }
+
+    public void setPosition(double x, double y) {
+        guiX = x;
+        guiY = y;
     }
     
     /**
@@ -284,6 +275,8 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyTick() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYTICK);
                 }
@@ -291,6 +284,8 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyUp() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYUP);
                 }
@@ -300,6 +295,8 @@ public abstract class Skill extends Controllable {
 
             @Override
             public void onKeyAbort() {
+                checkContext();
+
                 if (context != null) {
                     context.sendToSelf(SingleKeyContext.MSG_KEYABORT);
                 }
@@ -307,10 +304,27 @@ public abstract class Skill extends Controllable {
                 context = null;
             }
 
+            private void checkContext() {
+                if (context != null && context.getStatus() == Status.TERMINATED) {
+                    context = null;
+                }
+            }
+
+            @Override
+            public DelegateState getState() {
+                return context == null ? DelegateState.IDLE : DelegateState.ACTIVE;
+            }
+
             @Override
             public ResourceLocation getIcon() {
                 return getHintIcon();
             }
+
+            @Override
+            protected Object createID() {
+                return Skill.this;
+            }
+
         });
     }
 
@@ -372,54 +386,7 @@ public abstract class Skill extends Controllable {
     public String toString() {
         return getFullName();
     }
-    
-    //---Script integration (DEPRECATED PLEASE DONT USE)
-    
-    /**
-     * The most commonly used script operation. Pass the skill exp of this skill as argument into the function [name].
-     */
-    protected float callFloatWithExp(String name, AbilityData data) {
-        return env(data).lerpf(buildPath(name), data.getSkillExp(this));
-    }
 
-    protected int callIntWithExp(String name, AbilityData data) {
-        return (int) env(data).lerpf(buildPath(name), data.getSkillExp(this));
-    }
-
-    protected float getFloat(String name) {
-        return ConfigEnv.global.getFloat(buildPath(name));
-    }
-
-    protected int getInt(String name) {
-        return ConfigEnv.global.getInt(buildPath(name));
-    }
-
-    protected ConfigEnv env(AbilityData data) {
-        return PlayerConfigEnv.get(data.getEntity());
-    }
-
-    protected ConfigEnv env() {
-        return ConfigEnv.global;
-    }
-
-    private String buildPath(String name) {
-        return "ac.category." + getCategoryLocation() +
-                ".skills." + this.name + "." + name;
-    }
-    
-    // Subclass sandbox
-    protected float getConsumption(AbilityData data) {
-        return callFloatWithExp("cp", data);
-    }
-    
-    protected float getOverload(AbilityData data) {
-        return callFloatWithExp("overload", data);
-    }
-    
-    protected int getCooldown(AbilityData data) {
-        return (int) callFloatWithExp("cooldown", data);
-    }
-    
     /**
      * Trigger the achievement in vanilla achievement page, if any.
      */

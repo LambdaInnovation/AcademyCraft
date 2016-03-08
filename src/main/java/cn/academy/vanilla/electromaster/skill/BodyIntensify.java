@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * Body Intensify/生物电强化
  * @author WeAthFolD
@@ -65,7 +67,7 @@ public class BodyIntensify extends Skill {
     // CT: ChargeTime
     
     private static double getProbability(int ct) {
-        return (ct - 10.0) / 18.0 * instance.env().getFloat("prob_scale");
+        return (ct - 10.0) / 18.0;
     }
     
     private static int getBuffTime(AbilityData data, int ct) {
@@ -74,7 +76,7 @@ public class BodyIntensify extends Skill {
     }
     
     private static int getHungerBuffTime(int ct) {
-        return (int) (instance.env().getFloat("hunger_time") * ct);
+        return (int) (1.25f * ct);
     }
     
     private static int getBuffLevel(AbilityData data, int ct) {
@@ -84,6 +86,7 @@ public class BodyIntensify extends Skill {
     public static class IntensifyAction extends SkillSyncAction {
         
         int tick;
+        float exp;
         float consumption;
 
         public IntensifyAction() {
@@ -93,9 +96,13 @@ public class BodyIntensify extends Skill {
         @Override
         public void onStart() {
             super.onStart();
-            consumption = instance.getConsumption(aData);
-            
-            cpData.perform(instance.getOverload(aData), 0);
+
+            exp = aData.getSkillExp(instance);
+
+            consumption = lerpf(20, 15, exp);
+
+            float overload = lerpf(200, 120, exp);
+            cpData.perform(overload, 0);
             
             if(isRemote) 
                 startEffect();
@@ -152,9 +159,11 @@ public class BodyIntensify extends Skill {
                     player.addPotionEffect(new PotionEffect(Potion.hunger.id, getHungerBuffTime(tick), 2));
                     instance.triggerAchievement(player);
                 }
-                
-                aData.addSkillExp(instance, instance.getFloat("expincr"));
-                setCooldown(instance, instance.getCooldown(aData));
+
+                aData.addSkillExp(instance, 0.01f);
+
+                int cooldown = (int) lerpf(45, 30, exp);
+                setCooldown(instance, cooldown);
                 
                 if(isRemote) 
                     endEffect(true);

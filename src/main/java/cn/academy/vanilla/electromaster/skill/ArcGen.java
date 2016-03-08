@@ -32,6 +32,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
+import static cn.lambdalib.util.generic.MathUtils.*;
+
 /**
  * @author WeAthFolD
  *
@@ -60,15 +62,19 @@ public class ArcGen extends Skill {
     }
     
     private static float getDamage(AbilityData data) {
-        return instance.callFloatWithExp("damage", data);
+        return lerpf(9, 15, data.getSkillExp(instance));
     }
     
     private static double getIgniteProb(AbilityData data) {
-        return instance.callFloatWithExp("p_ignite", data);
+        return lerpf(0, 0.6f, data.getSkillExp(instance));
     }
     
     private static float getExpIncr(AbilityData data, boolean effectiveHit) {
-        return instance.callFloatWithExp("expincr_" + (effectiveHit ? "effective" : "ineffective"), data);
+        if (effectiveHit) {
+            return lerpf(0.0048f, 0.0072f, data.getSkillExp(instance));
+        } else {
+            return lerpf(0.0018f, 0.0027f, data.getSkillExp(instance));
+        }
     }
     
     private static double getFishProb(AbilityData data) {
@@ -80,7 +86,7 @@ public class ArcGen extends Skill {
     }
     
     private static float getRange(AbilityData data) {
-        return instance.callFloatWithExp("range", data);
+        return lerpf(6, 15, data.getSkillExp(instance));
     }
     
     public static class ArcGenAction extends SyncActionInstant {
@@ -89,8 +95,11 @@ public class ArcGen extends Skill {
         public boolean validate() {
             AbilityData aData = AbilityData.get(player);
             CPData cpData = CPData.get(player);
-            
-            return cpData.perform(instance.getOverload(aData), instance.getConsumption(aData));
+
+            float overload = lerpf(36, 16, aData.getSkillExp(instance));
+            float cp = lerpf(117, 135, aData.getSkillExp(instance));
+
+            return cpData.perform(overload, cp);
         }
 
         @Override
@@ -135,7 +144,7 @@ public class ArcGen extends Skill {
                 spawnEffects();
             }
             
-            setCooldown(instance, instance.getCooldown(aData));
+            setCooldown(instance, (int) lerpf(40, 15, aData.getSkillExp(instance)));
         }
         
         @SideOnly(Side.CLIENT)
