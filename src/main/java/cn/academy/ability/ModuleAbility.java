@@ -10,6 +10,8 @@ import cn.academy.ability.block.AbilityInterferer;
 import cn.academy.ability.block.BlockDeveloper;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.item.ItemDeveloper;
+import cn.academy.ability.item.ItemInductionFactor;
+import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
@@ -21,8 +23,13 @@ import cn.lambdalib.multiblock.ItemBlockMulti;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+
+import java.util.List;
 
 /**
  * The ability module init class.
@@ -49,6 +56,24 @@ public class ModuleAbility {
 
     @RegBlock
     public static AbilityInterferer abilityInterferer;
+
+    @RegItem
+    @RecipeName("magnetic_coil")
+    public static ACItem magneticCoil = new ACItem("magnetic_coil") {
+        {
+            setMaxStackSize(1);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
+            list.add(StatCollector.translateToLocal("item.ac_magnetic_coil.desc"));
+        }
+    };
+
+    @RegItem
+    @RecipeName("induction_factor")
+    public static ItemInductionFactor inductionFactor;
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent

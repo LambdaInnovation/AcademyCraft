@@ -52,7 +52,9 @@ item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
 
 item.ac_developer_portable.name=便携能力开发机
-
+item.ac_magnetic_coil.name=高压磁增幅线圈
+item.ac_magnetic_coil.desc=超载开发机以重置个人现实
+item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=研究记录
 
 ac.converter.desc_template=转换%s到%s
@@ -179,6 +181,10 @@ ac.skill_tree.aborted=已取消.
 ac.skill_tree.level_prg=升级进度：%s
 
 ac.skill_tree.anyskill=%d级的任意技能
+
+ac.skill_tree.reset=重置
+ac.skill_tree.cant_reset=无法重置
+ac.skill_tree.reset.desc=重置能力到 %s
 
 # 设置
 ac.settings.cat.generic=常规
