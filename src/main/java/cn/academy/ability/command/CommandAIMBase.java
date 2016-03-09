@@ -58,9 +58,8 @@ public abstract class CommandAIMBase extends ACCommand {
                 }
             }
             
-            if(!isActive(player)) {
+            if(!isActive(player) && !player.capabilities.isCreativeMode) {
                 sendChat(commandSender, getLoc("notactive"));
-                sendChat(commandSender, getLoc("warning"));
                 return;
             }
             

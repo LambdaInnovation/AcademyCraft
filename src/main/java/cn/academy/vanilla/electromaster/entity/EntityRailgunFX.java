@@ -59,7 +59,7 @@ public class EntityRailgunFX extends EntityRayBase {
     
     SubArcHandler arcHandler = new SubArcHandler(templates);
     
-    public EntityRailgunFX(EntityPlayer player) {
+    public EntityRailgunFX(EntityPlayer player, double length) {
         super(player);
         new Motion3D(player, true).applyToEntity(this);
         
@@ -69,7 +69,7 @@ public class EntityRailgunFX extends EntityRayBase {
         this.widthWiggleRadius = 0.3;
         this.maxWiggleSpeed = 0.8;
         this.blendOutTime = 1000;
-        this.length = 45.0;
+        this.length = length;
         
         ignoreFrustumCheck = true;
         

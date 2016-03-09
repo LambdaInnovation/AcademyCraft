@@ -123,12 +123,21 @@ public class Context {
         return ClientRuntime.instance();
     }
 
+    AbilityData cachedAData;
+    CPData cachedCPData;
+
     protected AbilityData aData() {
-        return AbilityData.get(player);
+        if (cachedAData == null) {
+            cachedAData = AbilityData.get(player);
+        }
+        return cachedAData;
     }
 
     protected CPData cpData() {
-        return CPData.get(player);
+        if (cachedCPData == null) {
+            cachedCPData = CPData.get(player);
+        }
+        return cachedCPData;
     }
 
     protected World world() {

@@ -2,6 +2,8 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ContextManager, Context, ClientRuntime}
+import cn.academy.vanilla.generic.client.effect.ReflectionShieldEffect
+import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -40,26 +42,33 @@ object VecDeviationContext {
 
   def shouldStop(e: Entity) = acceptedTypes.exists(_.isInstance(e))
 
-  def stop(e: Entity, player: EntityPlayer) = e match {
-    case ent: EntityArrow =>
-      ent.motionX = 0
-      ent.motionY = 0
-      ent.motionZ = 0
-      ent.setDamage(0)
-    case ent: EntityFireball =>
-      val dx = player.posX - e.posX
-      val dz = player.posZ - e.posZ
-      val nl = math.sqrt(dx*dx+dz*dz)
+  def stop(e: Entity, player: EntityPlayer) = {
+    e match {
+      case _ if isMarked(e) => // Do nothing if already deviated
+      case ent: EntityArrow =>
+        ent.motionX = 0
+        ent.motionY = 0
+        ent.motionZ = 0
+        ent.setDamage(0)
+      case ent: EntityFireball =>
+        val dx = player.posX - e.posX
+        val dz = player.posZ - e.posZ
+        val nl = math.sqrt(dx * dx + dz * dz)
 
-      ent.motionX = -dx/nl * 0.3
-      ent.motionZ = -dz/nl * 0.3
+        ent.motionX = -dx / nl * 0.3
+        ent.motionZ = -dz / nl * 0.3
 
-      ent.motionY = -0.5
+        ent.motionY = -0.5
+    }
+    mark(e)
   }
 
   val stopFilter = new IEntitySelector {
     override def isEntityApplicable(entity: Entity): Boolean = shouldStop(entity)
   }
+
+  def mark(targ: Entity) = targ.getEntityData.setBoolean("ac_vm_deviated", true)
+  def isMarked(targ: Entity) = targ.getEntityData.getBoolean("ac_vm_deviated")
 
 }
 
@@ -128,6 +137,15 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
 
   @Listener(channel=MSG_STOP_ENTITY, side=Array(Side.CLIENT))
   def c_stopEntity(ent: Entity) = {
+    if (!isMarked(ent)) {
+      val eff = new WaveEffect(world, 1, 0.6)
+      eff.setPos(ent.headPosition)
+      eff.rotationYaw = player.rotationYaw
+      eff.rotationPitch = player.rotationPitch
+
+      world.spawnEntityInWorld(eff)
+    }
+
     stop(ent, player)
   }
 

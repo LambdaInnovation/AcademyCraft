@@ -6,6 +6,8 @@
 */
 package cn.academy.core.util;
 
+import cn.academy.ability.api.AbilityPipeline;
+import cn.academy.ability.api.Skill;
 import cn.academy.core.event.BlockDestroyEvent;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -18,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
@@ -28,6 +31,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static cn.lambdalib.util.generic.VecUtils.*;
 
@@ -40,32 +44,31 @@ public class RangedRayDamage {
     
     static final double STEP = 0.9;
 
+    public final EntityPlayer player;
     public final World world;
     public final Motion3D motion;
+    public final Skill skill;
+
+
     public double range;
     public float totalEnergy; // decrements [hardness of block] when hit a block
     public int maxIncrement = 50;
     public float dropProb = 0.05f;
     
     public IEntitySelector entitySelector = EntitySelectors.everything;
-    public DamageSource dmgSrc = DamageSource.generic;
     public float startDamage = 10.0f; // ATTN: LINEAR 1.0*startDamage at dist 0; 0.2 * startDamage at maxIncrement
     
     private Vec3 start, slope;
     
-    public RangedRayDamage(World _world, Motion3D _motion, double _range, float _energy) {
-        world = _world;
-        motion = _motion;
-        range = _range;
-        totalEnergy = _energy;
-    }
-    
-    public RangedRayDamage(Entity entity, double _range, float _energy) {
-        this(entity.worldObj, new Motion3D(entity, true).move(0.3), _range, _energy);
-        if(entity instanceof EntityLivingBase) {
-            dmgSrc = DamageSource.causeMobDamage((EntityLivingBase) entity);
-        }
-        entitySelector = EntitySelectors.excludeOf(entity);
+    public RangedRayDamage(EntityPlayer player, Skill skill, double _range, float _energy) {
+        this.player = player;
+        this.motion = new Motion3D(player, true).move(0.1);
+        this.world = player.worldObj;
+        this.skill = skill;
+        this.range = _range;
+        this.totalEnergy = _energy;
+
+        entitySelector = EntitySelectors.excludeOf(player);
     }
     
     /**
@@ -88,12 +91,45 @@ public class RangedRayDamage {
         Vec3 vp1 = VecUtils.vec(0, 1, 0);
         vp1.rotateAroundZ(pitch);
         vp1.rotateAroundY(yaw);
+
+        double maxDistance = Double.MAX_VALUE;
         
-        
+        /* Apply Entity Damage */ {
+            Vec3 v0 = add(start, add(multiply(vp0, -range), multiply(vp1, -range))),
+                    v1 = add(start, add(multiply(vp0, range), multiply(vp1, -range))),
+                    v2 = add(start, add(multiply(vp0, range), multiply(vp1, range))),
+                    v3 = add(start, add(multiply(vp0, -range), multiply(vp1, range))),
+                    v4 = add(v0, multiply(slope, maxIncrement)),
+                    v5 = add(v1, multiply(slope, maxIncrement)),
+                    v6 = add(v2, multiply(slope, maxIncrement)),
+                    v7 = add(v3, multiply(slope, maxIncrement));
+            AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
+
+            IEntitySelector areaSelector = target -> {
+                Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+                Vec3 proj = dv.crossProduct(slope);
+                return proj.lengthVector() < range * 1.2;
+            };
+            List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.and(entitySelector, areaSelector));
+            targets.sort((lhs, rhs) -> {
+                double dist1 = player.getDistanceSq(lhs.posX, lhs.posY, lhs.posZ);
+                double dist2 = player.getDistanceSq(rhs.posX, rhs.posY, rhs.posZ);
+                return Double.valueOf(dist1).compareTo(dist2);
+            });
+
+            for(Entity e : targets) {
+                if (!attackEntity(e)) {
+                    maxDistance = e.getDistanceSqToEntity(player);
+                    break;
+                }
+            }
+        }
+
         if(DamageHelper.DESTROY_BLOCKS) {
             for(double s = -range; s <= range; s += STEP) {
                 for(double t = -range; t <= range; t += STEP) {
                     double rr = range * RandUtils.ranged(0.9, 1.1);
+
                     if(s * s + t * t > rr * rr)
                         continue;
                     
@@ -113,45 +149,25 @@ public class RangedRayDamage {
             float ave = totalEnergy / processed.size();
             for(int[] coords : processed) {
                 processLine(coords[0], coords[1], coords[2], 
-                    slope, ave * RandUtils.rangef(0.95f, 1.05f));
+                    slope, ave * RandUtils.rangef(0.95f, 1.05f), maxDistance);
             }
         }
         
-        /* Apply Entity Damage */ {
-            Vec3 v0 = add(start, add(multiply(vp0, -range), multiply(vp1, -range))),
-                v1 = add(start, add(multiply(vp0, range), multiply(vp1, -range))),
-                v2 = add(start, add(multiply(vp0, range), multiply(vp1, range))),
-                v3 = add(start, add(multiply(vp0, -range), multiply(vp1, range))),
-                v4 = add(v0, multiply(slope, maxIncrement)),
-                v5 = add(v1, multiply(slope, maxIncrement)),
-                v6 = add(v2, multiply(slope, maxIncrement)),
-                v7 = add(v3, multiply(slope, maxIncrement));
-            AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
-            
-            IEntitySelector areaSelector = new IEntitySelector() {
 
-                @Override
-                public boolean isEntityApplicable(Entity target) {
-                    Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
-                    Vec3 proj = dv.crossProduct(slope);
-                    return proj.lengthVector() < range * 1.2;
-                }
-                
-            };
-            List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.and(entitySelector, areaSelector));
-            for(Entity e : targets) {
-                attackEntity(e);
-            }
-        }
     }
     
-    private void processLine(int x0, int y0, int z0, Vec3 slope, float energy) {
+    private void processLine(int x0, int y0, int z0, Vec3 slope, float energy, double maxDistSq) {
         Plotter plotter = new Plotter(x0, y0, z0, slope.xCoord, slope.yCoord, slope.zCoord);
         int incrs = 0;
         for(int i = 0; i <= maxIncrement && energy > 0; ++i) {
             ++incrs;
             int[] coords = plotter.next();
             int x = coords[0], y = coords[1], z = coords[2];
+
+            int dx = x0 - x, dy = y0 - y, dz = z0 - z;
+            int dsq = dx*dx + dy*dy + dz*dz;
+            if (dsq > maxDistSq) break;
+
             boolean snd = incrs < 20;
             
             energy = destroyBlock(energy, x, y, z, snd);
@@ -161,7 +177,6 @@ public class RangedRayDamage {
                 energy = destroyBlock(energy, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, snd);
             }
         }
-        //System.out.println(String.format("%d increments", incrs));
     }
     
     private float destroyBlock(float energy, int x, int y, int z, boolean snd) {
@@ -187,13 +202,40 @@ public class RangedRayDamage {
         }
         return 0;
     }
-    
-    private void attackEntity(Entity target) {
+
+    protected boolean attackEntity(Entity target) {
         Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
         float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
         
         float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, dist / maxIncrement);
-        DamageHelper.attack(target, dmgSrc, realDmg);
+        return applyAttack(target, realDmg);
+    }
+
+    protected boolean applyAttack(Entity target, float damage) {
+        AbilityPipeline.attack(player, skill, target, damage);
+        return true;
+    }
+
+    public static class Reflectible extends RangedRayDamage {
+
+        public final Consumer<Entity> callback;
+
+        public Reflectible(EntityPlayer player, Skill skill,
+                           double _range, float _energy, Consumer<Entity> callback) {
+            super(player, skill, _range, _energy);
+            this.callback = callback;
+        }
+
+        @Override
+        protected boolean applyAttack(Entity target, float damage) {
+            boolean[] result = new boolean[] { true }; // for lambda modification
+            AbilityPipeline.attackReflect(player, skill, target, damage, () -> {
+                callback.accept(target);
+                result[0] = false;
+            });
+            return result[0];
+        }
+
     }
 
 }

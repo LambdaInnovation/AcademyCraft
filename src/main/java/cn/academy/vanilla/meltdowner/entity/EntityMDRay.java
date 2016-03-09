@@ -32,16 +32,19 @@ public class EntityMDRay extends EntityRayBase {
     @RegEntity.Render
     public static MDRayRender renderer;
     
-    public EntityMDRay(EntityPlayer _player) {
-        super(_player);
-        
-        Motion3D mo = new Motion3D(_player, true);
-        Vec3 start = mo.getPosVec(), end = mo.move(25).getPosVec();
+    public EntityMDRay(EntityPlayer _player, double length) {
+        this(_player, new Motion3D(_player, true), length);
+    }
+
+    public EntityMDRay(EntityPlayer spawner, Motion3D mo, double length) {
+        super(spawner);
+
+        Vec3 start = mo.getPosVec(), end = mo.move(length).getPosVec();
         this.setFromTo(start, end);
         this.blendInTime = 200;
         this.blendOutTime = 700;
         this.life = 50;
-        this.length = 30.0;
+        this.length = length;
     }
     
     @Override

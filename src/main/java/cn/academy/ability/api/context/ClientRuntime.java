@@ -43,6 +43,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * Handles objects in client that is player-local and dynamic - Ability keys, cooldown and stuff.
@@ -103,6 +104,12 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         }
 
         ctrlDirty = true;
+    }
+
+    public Collection<KeyDelegate> getDelegates(String group) {
+        return delegateGroups.get(group).stream()
+                .map(node -> node.delegate)
+                .collect(Collectors.toList());
     }
 
     public void clearKeys(String group) {

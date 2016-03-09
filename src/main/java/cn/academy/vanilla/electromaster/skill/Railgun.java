@@ -1,18 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.skill;
 
+import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.ctrl.ActionManager;
-import cn.academy.ability.api.ctrl.Cooldown;
-import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.ability.api.ctrl.SyncAction;
-import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.ability.api.ctrl.action.SyncActionInstant;
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.KeyDelegate;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -21,322 +12,261 @@ import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
-import cn.academy.vanilla.electromaster.item.ItemCoin;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.client.renderhook.DummyRenderData;
+import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib.util.mc.SideHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
-/**
- * @author WeAthFolD
- */
-@Registrant
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Railgun extends Skill {
-    
-    public static List<SupportedItem> supportedItems = new ArrayList<>();
-    
-    public enum AttackType { EXPLOSIVE, PENETRATIVE }
-    
-    public static final class SupportedItem {
-        
-        int id;
-        final Item instance;
-        final float dmgFactor;
-        final AttackType type;
-        
-        public SupportedItem(Item item, float _dmg, AttackType _type) {
-            this.instance = item;
-            this.dmgFactor = _dmg;
-            this.type = _type;
-        }
-        
-        boolean accepts(ItemStack stack) {
-            return stack.getItem() == instance;
-        }
-    }
-    
-    public static void addSupportedItem(SupportedItem obj) {
-        supportedItems.add(obj);
-        obj.id = supportedItems.size() - 1;
-    }
-    
-    static {
-        addSupportedItem(new SupportedItem(Items.iron_ingot, 5, AttackType.PENETRATIVE));
-        addSupportedItem(new SupportedItem(Item.getItemFromBlock(Blocks.iron_block), 5, AttackType.EXPLOSIVE));
-    }
-    
-    // ----
-    
-    static final int MAX_CHARGE_TIME = 25, CHARGE_ACCEPT_TIME = 15;
-    
+
     public static final Railgun instance = new Railgun();
-    
+
+    private static final String
+        MSG_CHARGE_EFFECT = "charge_eff",
+        MSG_PERFORM       = "perform",
+        MSG_REFLECT       = "reflect",
+        MSG_COIN_PERFORM  = "coin_perform",
+        MSG_ITEM_PERFORM  = "item_perform";
+
+    private static final double
+        REFLECT_DISTANCE = 15;
+
+    private Set<Item> acceptedItems = new HashSet<>();
+    {
+        acceptedItems.add(Items.iron_ingot);
+        acceptedItems.add(Item.getItemFromBlock(Blocks.iron_block));
+    }
+
     private Railgun() {
         super("railgun", 4);
         MinecraftForge.EVENT_BUS.register(this);
     }
-    
-    @SubscribeEvent
-    public void onThrowCoin(CoinThrowEvent event) {
-        CPData cpData = CPData.get(event.entityPlayer);
-        PresetData pData = PresetData.get(event.entityPlayer);
-        // TODO should add Cooldown#isCooldown, but that info is currently only in client and there's
-        //  no way to do anything. maybe sync the cooldn data.
-        boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this);
-        
-        if(spawn) {
-            if(event.entityPlayer.worldObj.isRemote) {
-                doSpawnCE(event.entityPlayer);
-            } else { // Inform other clients
-                spawnChargeEffect(event.entityPlayer);
-            }
-        }
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void spawnChargeEffect(@RangedTarget(range = 20) EntityPlayer player) {
-        if(!Minecraft.getMinecraft().thePlayer.equals(player))
-            doSpawnCE(player);
-    }
-    
-    @SideOnly(Side.CLIENT)
-    private static void doSpawnCE(EntityPlayer player) {
-        DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
-    }
-    
-    static float getDamage(float exp) {
-        return lerpf(40, 100, exp);
-    }
-    
-    static float getEnergy(float exp) {
-        return lerpf(900, 2000, exp);
-    }
 
-    static float getConsumption(float exp) {
-        return lerpf(340, 455, exp);
-    }
-
-    static float getOverload(float exp) {
-        return lerpf(160, 110, exp);
-    }
-
-    static int getCooldown(float exp) {
-        return (int) lerpf(300, 160, exp);
+    private boolean isAccepted(ItemStack stack) {
+        return stack != null && acceptedItems.contains(stack.getItem());
     }
 
     @Override
-    public SkillInstance createSkillInstance(EntityPlayer player) {
-        return new SkillInstance() {
-            
-            @Override
-            public void onStart() {
-                EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
-                AbilityData aData = AbilityData.get(player);
-                
-                if(coin != null) {
-                    //System.out.println("Find the coin!");
-                    if(checkRailgunQTETime(coin)) {
-                        //player.addChatMessage(new ChatComponentTranslation("P=" + coin.getProgress()));
-                        ActionManager.startAction(new ActionShootCoin(coin));
-                        this.endSkill();
-                    } else {
-                        this.abortSkill();
-                    }
-                } else {
-                    //System.out.println("Coin not found!");
-                    ItemStack stack = player.getCurrentEquippedItem();
-                    boolean execute = false;
-                    
-                    if(stack != null) {
-                        for(SupportedItem si : supportedItems) {
-                            if(si.accepts(stack)) {
-                                SyncAction action = new ActionShootItem(si);
-                                
-                                this.addChild(action);
-                                
-                                this.estimatedCP = Railgun.getConsumption(aData.getSkillExp(Railgun.instance));
-                                
-                                execute = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if(!execute)
-                        this.abortSkill();
-                }
+    @SideOnly(Side.CLIENT)
+    public void activate(ClientRuntime rt, int keyID) {
+        rt.addKey(keyID, new Delegate());
+    }
+
+    @SubscribeEvent
+    public void onThrowCoin(CoinThrowEvent evt) {
+        CPData cpData = CPData.get(evt.entityPlayer);
+        PresetData pData = PresetData.get(evt.entityPlayer);
+
+        boolean spawn = cpData.canUseAbility() &&
+                pData.getCurrentPreset().hasControllable(this);
+
+        if (spawn) {
+            if (SideHelper.isClient()) {
+                spawnClientEffect(evt.entityPlayer);
+
+                informDelegate(evt.coin);
+            } else {
+                NetworkMessage.sendToAllAround(
+                        TargetPointHelper.convert(evt.entityPlayer, 30),
+                        instance,
+                        MSG_CHARGE_EFFECT,
+                        evt.entityPlayer
+                );
             }
-        };
+        }
     }
-    
-    private boolean checkRailgunQTETime(EntityCoinThrowing coin) {
-        double p = coin.getProgress();
-        return p > 0.7;
+
+    private void informDelegate(EntityCoinThrowing coin) {
+        ClientRuntime rt = ClientRuntime.instance();
+        Collection<KeyDelegate> delegates = rt.getDelegates(ClientRuntime.DEFAULT_GROUP);
+        if (!delegates.isEmpty()) {
+            Delegate head = (Delegate) delegates.iterator().next();
+
+            head.informThrowCoin(coin);
+        }
     }
-    
-    public static class ActionShootCoin extends SyncActionInstant {
+
+    @SideOnly(Side.CLIENT)
+    @Listener(channel=MSG_CHARGE_EFFECT, side= Side.CLIENT)
+    private void hSpawnClientEffect(EntityPlayer target) {
+        spawnClientEffect(target);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Listener(channel=MSG_REFLECT, side=Side.CLIENT)
+    private void hReflectClient(EntityPlayer player, Entity reflector) {
+        EntityRailgunFX eff = new EntityRailgunFX(player, REFLECT_DISTANCE);
+
+        double dist = player.getDistanceToEntity(reflector);
+        Motion3D mo = new Motion3D(player, true).move(dist);
+
+        eff.setPosition(mo.px, mo.py, mo.pz);
+        eff.rotationYaw = reflector.getRotationYawHead();
+        eff.rotationPitch = reflector.rotationPitch;
+
+        player.worldObj.spawnEntityInWorld(eff);
+    }
+
+    private void reflectServer(EntityPlayer player, Entity reflector) {
+        MovingObjectPosition result = Raytrace.traceLiving(reflector, REFLECT_DISTANCE);
+        if (result != null && result.typeOfHit == MovingObjectType.ENTITY) {
+            AbilityPipeline.attack(player, instance, result.entityHit, 14);
+        }
+
+        NetworkMessage.sendToAllAround(TargetPointHelper.convert(player, 20),
+                instance, MSG_REFLECT, player, reflector);
+    }
+
+    private void spawnClientEffect(EntityPlayer target) {
+        DummyRenderData.get(target).addRenderHook(new RailgunHandEffect());
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
+    private void performClient(EntityPlayer player, double length) {
+        player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player, length));
+        if (SideHelper.getThePlayer().equals(player)) {
+            float exp = AbilityData.get(player).getSkillExp(instance);
+            ClientRuntime.instance().setCooldownRaw(instance, (int) lerpf(300, 160, exp));
+        }
+    }
+
+    private void performServer(EntityPlayer player) {
+        AbilityData aData  = AbilityData.get(player);
+        CPData      cpData = CPData.get(player);
+
+        final float exp = aData.getSkillExp(instance);
+
+        float cp     = lerpf(340, 455, exp);
+        float overload = lerpf(160, 110, exp);
+        if (cpData.perform(overload, cp)) {
+            float dmg = lerpf(40, 100, exp);
+            float energy = lerpf(900, 2000, exp);
+
+            double[] length = new double[] { 45 };
+            RangedRayDamage damage = new RangedRayDamage.Reflectible(player, instance, 2, energy, reflector -> {
+                reflectServer(player, reflector);
+                length[0] = Math.min(length[0], reflector.getDistanceToEntity(player));
+                NetworkMessage.sendToServer(instance, MSG_REFLECT, player, reflector);
+            });
+            damage.startDamage = dmg;
+            damage.perform();
+            instance.triggerAchievement(player);
+
+            NetworkMessage.sendToAllAround(
+                    TargetPointHelper.convert(player, 20),
+                    instance, MSG_PERFORM,
+                    player, length[0]);
+        }
+    }
+
+    @Listener(channel=MSG_COIN_PERFORM, side=Side.SERVER)
+    private void consumeCoinAtServer(EntityPlayer player, EntityCoinThrowing coin) {
+        coin.setDead();
+        performServer(player);
+    }
+
+    @Listener(channel=MSG_ITEM_PERFORM, side=Side.SERVER)
+    private void consumeItemAtServer(EntityPlayer player) {
+        ItemStack equipped = player.getCurrentEquippedItem();
+        if (isAccepted(equipped)) {
+            equipped.stackSize--;
+            if (equipped.stackSize == 0) {
+                player.setCurrentItemOrArmor(0, null);
+            }
+
+            performServer(player);
+        }
+    }
+
+    private static class Delegate extends KeyDelegate {
 
         EntityCoinThrowing coin;
 
-        public ActionShootCoin(EntityCoinThrowing _coin) {
-            coin = _coin;
-        }
-        
-        public ActionShootCoin() {}
+        int chargeTicks = -1;
 
-        @Override
-        public boolean validate() {
-            return true;
+        void informThrowCoin(EntityCoinThrowing coin) {
+            if (this.coin == null || this.coin.isDead) {
+                this.coin = coin;
+                onKeyAbort();
+            }
         }
 
         @Override
-        public void execute() {
-            float exp = aData.getSkillExp(instance);
-
-            if(!cpData.perform(getOverload(exp), getConsumption(exp)))
-                return;
-            
-            if(isRemote) {
-                spawnRay();
+        public void onKeyDown() {
+            if (coin == null) {
+                if (instance.isAccepted(getPlayer().getCurrentEquippedItem())) {
+                    instance.spawnClientEffect(getPlayer());
+                    chargeTicks = 20;
+                }
             } else {
-                RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(exp));
-                damage.startDamage = getDamage(exp);
-                damage.perform();
-                EntityCoinThrowing coin = ItemCoin.getPlayerCoin(player);
-                if(coin != null) {
-                    coin.setDead();
+                if (coin.getProgress() > 0.7) {
+                    NetworkMessage.sendToServer(instance,
+                            MSG_COIN_PERFORM, getPlayer(), coin);
                 }
-                instance.triggerAchievement(player);
-            }
 
-
-            setCooldown(instance, getCooldown(exp));
-            aData.addSkillExp(instance, .005f);
-        }
-        
-        @SideOnly(Side.CLIENT)
-        private void spawnRay() {
-            player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player));
-        }
-        
-    }
-    
-    public static class ActionShootItem extends SkillSyncAction {
-        
-        SupportedItem item;
-        
-        int tick;
-        
-        public ActionShootItem(SupportedItem _item) {
-            super(-1);
-            item = _item;
-        }
-        
-        public ActionShootItem() {
-            super(-1);
-        }
-        
-        @Override
-        public void writeNBTStart(NBTTagCompound tag) {
-            tag.setInteger("i", item.id);
-        }
-        
-        @Override
-        public void readNBTStart(NBTTagCompound tag) {
-            item = supportedItems.get(tag.getInteger("i"));
-        }
-        
-        @Override
-        public void onStart() {
-            super.onStart();
-            
-            if(isRemote)
-                startEffect();
-        }
-        
-        @Override
-        public void onTick() {
-            tick++;
-            if(tick > MAX_CHARGE_TIME)
-                ActionManager.endAction(this);
-            
-            if(checkItem() == null) {
-                ActionManager.abortAction(this);
+                coin = null; // Prevent second QTE judgement
             }
         }
-        
-        @Override
-        public void writeNBTFinal(NBTTagCompound tag) {
-            tag.setInteger("t", tick);
-        }
-        
-        @Override
-        public void readNBTFinal(NBTTagCompound tag) {
-            tick = tag.getInteger("t");
-        }
-        
-        @Override
-        public void onEnd() {
-            ItemStack stack = checkItem();
-            float exp = aData.getSkillExp(instance);
 
-            if(tick >= CHARGE_ACCEPT_TIME && stack != null) {
-                if(cpData.perform(getOverload(exp), getConsumption(exp))) {
-                    if(!player.capabilities.isCreativeMode) {
-                        if(--stack.stackSize == 0) {
-                            player.setCurrentItemOrArmor(0, null);
-                        }
-                    }
-                    
-                    if(isRemote) {
-                        spawnRay();
-                    } else {
-                        // TODO: I don't want bother with seperate effects in 1.0, just use
-                        // standard routine now~
-                        RangedRayDamage damage = new RangedRayDamage(player, 2, getEnergy(exp));
-                        damage.startDamage = getDamage(exp);
-                        damage.perform();
-                        instance.triggerAchievement(player);
-                    }
-                    
-                    setCooldown(instance, getCooldown(exp));
-                    aData.addSkillExp(instance, 0.005f);
+        @Override
+        public void onKeyTick() {
+            if (chargeTicks != -1) {
+                if (--chargeTicks == 0) {
+                    NetworkMessage.sendToServer(instance,
+                            MSG_ITEM_PERFORM, getPlayer());
                 }
             }
         }
-        
-        // CLIENT
-        @SideOnly(Side.CLIENT)
-        private void startEffect() {
-            DummyRenderData.get(player).addRenderHook(new RailgunHandEffect());
-        }
-        
-        @SideOnly(Side.CLIENT)
-        private void spawnRay() {
-            player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player));
-        }
-        
-        private ItemStack checkItem() {
-            ItemStack stack = player.getCurrentEquippedItem();
-            return (stack == null || !item.accepts(stack)) ? null : stack;
-        }
-        
-    }
 
+        @Override
+        public void onKeyUp() {
+            chargeTicks = -1;
+        }
+
+        @Override
+        public void onKeyAbort() {
+            chargeTicks = -1;
+        }
+
+        public DelegateState getState() {
+            if (coin != null && !coin.isDead) {
+                return coin.getProgress() < 0.6 ? DelegateState.CHARGE : DelegateState.ACTIVE;
+            } else {
+                return chargeTicks == -1 ? DelegateState.IDLE : DelegateState.CHARGE;
+            }
+        }
+
+        @Override
+        public ResourceLocation getIcon() {
+            return instance.getHintIcon();
+        }
+
+        @Override
+        protected Object createID() {
+            return instance;
+        }
+    }
 }

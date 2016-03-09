@@ -27,6 +27,7 @@ import scala.Function1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Skill is the basic control unit of an ESPer. A skill is learned through Ability Developer
@@ -260,8 +261,10 @@ public abstract class Skill extends Controllable {
         });
     }
 
-    protected void activateSingleKey(ClientRuntime rt, int keyID,
-                                     Function1<EntityPlayer, Context> contextSupplier) {
+    /**
+     * Java version
+     */
+    protected void activateSingleKey2(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
         rt.addKey(keyID, new KeyDelegate() {
             Context context;
 
@@ -326,6 +329,13 @@ public abstract class Skill extends Controllable {
             }
 
         });
+    }
+    /**
+     * Scala version
+     */
+    protected void activateSingleKey(ClientRuntime rt, int keyID,
+                                     Function1<EntityPlayer, Context> contextSupplier) {
+        activateSingleKey2(rt, keyID, contextSupplier::apply);
     }
 
     //--- Learning

@@ -8,8 +8,12 @@ package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
+import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.entityx.MotionHandler;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
@@ -19,6 +23,7 @@ import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
 import cn.lambdalib.util.mc.PlayerUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,6 +39,20 @@ import net.minecraft.world.World;
 @RegEntity
 @RegEntity.HasRender
 public class EntityCoinThrowing extends EntityAdvanced {
+
+    static {
+        NetworkS11n.addDirect(EntityCoinThrowing.class, new NetS11nAdaptor<EntityCoinThrowing>() {
+            @Override
+            public void write(ByteBuf buf, EntityCoinThrowing obj) {
+                NetworkS11n.serializeWithHint(buf, obj.player, EntityPlayer.class);
+            }
+
+            @Override
+            public EntityCoinThrowing read(ByteBuf buf) throws ContextException {
+                return ItemCoin.getPlayerCoin(NetworkS11n.deserializeWithHint(buf, EntityPlayer.class));
+            }
+        });
+    }
 
     double yOffset = 0.6;
     
