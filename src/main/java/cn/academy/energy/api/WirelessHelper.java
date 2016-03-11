@@ -93,13 +93,9 @@ public class WirelessHelper {
     
     /**
      * Get a list of IWirelessNode that can reach the given position.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
      * @return nodes in the area, does not guarantee any order
      */
-    public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z) {
+    public static List<IWirelessNode> getNodesInRange(World world, int x, int y, int z) {
         double range = 20.0;
         List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockSelector() {
 

@@ -15,8 +15,13 @@ import cn.academy.energy.block.BlockNode.NodeType;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.networkcall.TargetPointHelper.TargetPointConverter;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.inventory.IInventory;
@@ -33,6 +38,8 @@ import net.minecraft.nbt.NBTTagCompound;
 public class TileNode extends TileInventory implements IWirelessNode, IInventory {
     
     static IFItemManager itemManager = IFItemManager.instance;
+
+    static final String MSG_SYNC = "sync";
     
     @SideOnly(Side.CLIENT)
     @RegTileEntity.Render
@@ -41,6 +48,8 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     protected double energy;
     
     private int updateTicker;
+
+    private String password = "";
     
     /**
      * Client-only flag. Only *roughly* indicates whether the block is linked.
@@ -62,13 +71,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
             ++updateTicker;
             if(updateTicker == 10) {
                 updateTicker = 0;
-                receiveSyncMessage(this, WirelessHelper.isNodeLinked(this), 
-                    chargingIn, chargingOut, energy, name);
+
+                NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 20),
+                        this, MSG_SYNC,
+                        enabled, chargingIn, chargingOut, energy, name, password);
             }
             
             updateChargeIn();
             updateChargeOut();
         }
+    }
+    
+    public void setPassword(String _pass) {
+        password = _pass;
     }
     
     private void updateChargeIn() {
@@ -135,6 +150,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         super.readFromNBT(tag);
         energy = tag.getDouble("energy");
         name = tag.getString("nodeName");
+        password = tag.getString("password");
     }
     
     @Override
@@ -142,6 +158,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
         tag.setString("nodeName", name);
+        tag.setString("password", password);
     }
 
     String name = "Unnamed";
@@ -151,23 +168,24 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         return name;
     }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
     public void setNodeName(String name) {
         this.name = name;
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    public static void receiveSyncMessage(
-        @RangedTarget(range = 12) TileNode te,
-        @Data Boolean enabled, 
-        @Data Boolean chargingIn,
-        @Data Boolean chargingOut, 
-        @Data Double energy,
-        @Data String name) {
-        te.enabled = enabled;
-        te.chargingIn = chargingIn;
-        te.chargingOut = chargingOut;
-        te.energy = energy;
-        te.name = name;
+
+    @Listener(channel=MSG_SYNC, side=Side.CLIENT)
+    void hSync(boolean enabled, boolean chargingIn, boolean chargingOut,
+               double energy, String name, String pass) {
+        this.enabled = enabled;
+        this.chargingIn = chargingIn;
+        this.chargingOut = chargingOut;
+        this.energy = energy;
+        this.name = name;
+        this.password = pass;
     }
 
     @Override

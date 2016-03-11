@@ -48,7 +48,7 @@ public class Syncs {
     
     @RegNetworkCall(side = Side.SERVER)
     static void linkUserToNode(@Instance IWirelessUser user, @Instance IWirelessNode node, @Data Future future) {
-        future.setAndSync(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
+        // future.setAndSync(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
     }
     
 }

@@ -34,7 +34,8 @@ public class LinkToNodeSyncs {
     public static void retrieveNearbyNetworks(@Instance TileEntity te, @Instance Future future) {
         if(te instanceof IWirelessUser) {
             IWirelessUser user = (IWirelessUser) te;
-            future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 0.5, te.zCoord + 0.5));
+            future.setAndSync(WirelessHelper.getNodesInRange(te.getWorldObj(),
+                    te.xCoord, te.yCoord, te.zCoord));
         } else {
             future.setAndSync(new ArrayList());
         }
@@ -55,12 +56,7 @@ public class LinkToNodeSyncs {
     
     @RegNetworkCall(side = Side.SERVER)
     public static void startLink(@Instance TileEntity te, @Instance TileEntity node, @Data Future future) {
-        if(te instanceof IWirelessUser && node instanceof IWirelessNode) {
-            future.setAndSync(!MinecraftForge.EVENT_BUS.post(
-                new LinkUserEvent((IWirelessUser) te, (IWirelessNode) node)));
-        } else {
-            future.setAndSync(false);
-        }
+
     }
     
     @RegNetworkCall(side = Side.SERVER)

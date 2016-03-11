@@ -8,6 +8,7 @@ package cn.academy.energy.internal;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
+import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
 import cn.academy.energy.api.event.node.LinkUserEvent;
@@ -98,6 +99,13 @@ public class WirelessSystem {
     public void linkUser(LinkUserEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         NodeConn conn = data.getNodeConnection(event.node);
+
+        if (event.needAuth) {
+            if (!event.node.getPassword().equals(event.password)) {
+                event.setCanceled(true);
+                return;
+            }
+        }
         
         if(event.type == UserType.GENERATOR) {
             if(!conn.addGenerator(new VNGenerator(event.getAsGenerator())))

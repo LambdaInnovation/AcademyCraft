@@ -8,6 +8,7 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.GuiPhaseGen;
+import cn.academy.energy.client.ui.GuiPhaseGen2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -31,7 +32,7 @@ public class BlockPhaseGen extends ACBlockContainer {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerPhaseGen container = (ContainerPhaseGen) getServerContainer(player, world, x, y, z);
-            return container == null ? null : new GuiPhaseGen(container);
+            return container == null ? null : GuiPhaseGen2.apply(container);
         }
         
         @Override

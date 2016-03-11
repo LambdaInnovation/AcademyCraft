@@ -32,5 +32,10 @@ public interface IWirelessNode extends IWirelessTile {
      * @return the user custom name of the node
      */
     String getNodeName();
+
+    /**
+     * @return the password of the node
+     */
+    String getPassword();
     
 }
