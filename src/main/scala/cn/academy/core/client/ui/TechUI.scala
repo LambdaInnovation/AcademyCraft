@@ -6,6 +6,7 @@ import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessNode, IWirelessUser, IWirelessTile}
 import cn.academy.energy.api.event.node.{UnlinkUserEvent, LinkUserEvent}
 import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib.cgui.gui.{CGuiScreenContainer, Widget}
 import cn.lambdalib.cgui.gui.component.ProgressBar.Direction
@@ -49,10 +50,18 @@ object TechUI {
   def breathe(widget: Widget) = {
     val tex = widget.getComponent(classOf[DrawTexture])
     widget.listens[FrameEvent](() => {
-      val time = GameTimer.getTime
-      val sin = (1 + math.sin(time / 500.0)) * 0.5
-      tex.color.a = 0.5 + sin * 0.35
+      tex.color.a = breatheAlpha
     })
+  }
+
+  /**
+    * A global alpha value generator for producing uniform breathing effect.
+    */
+  def breatheAlpha = {
+    val time = GameTimer.getTime
+    val sin = (1 + math.sin(time / 500.0)) * 0.5
+
+    0.5 + sin * 0.35
   }
 
   class TechUIWidget(pages: Page*) extends Widget {
@@ -112,7 +121,14 @@ object ConfigPage {
 
   private val configPageTemplate = readxml("page_config").getWidget("main")
 
-  case class HistoElement(id: String, color: Color, progressProvider: () => Double)
+  private val histoDescOption = new FontOption(9, 0xffd2d2d2)
+
+  case class HistoElement(id: String, color: Color, progressProvider: () => Double, descProvider: () => String)
+
+  def histoEnergy(energyProvider: () => Double, maxEnergy: Double) = {
+    HistoElement("energy", COLOR_ENERGY, () => energyProvider() / maxEnergy,
+      () => "Energy: %.0f/%.0f".format(energyProvider(), maxEnergy))
+  }
 
   def textProperty(content: String, color: Color = Color.white()) = {
     val ret = new Widget().size(142, 12)
@@ -160,8 +176,13 @@ object ConfigPage {
         val progress = new ProgressBar().setDirection(Direction.UP).setFluctRegion(0)
         progress.color.from(elem.color)
         bar :+ progress
-        bar.listens[FrameEvent](() => {
+        bar.listens((evt: FrameEvent) => {
           progress.progress = elem.progressProvider()
+
+          if (evt.hovering && (1 - evt.my / bar.transform.height) <= progress.progress) {
+            val font = Resources.font()
+            font.draw(elem.descProvider(), evt.mx + 5, evt.my - 5, histoDescOption)
+          }
         })
 
         histZone :+ bar
@@ -312,7 +333,10 @@ object WirelessPage {
 object WirelessNetDelegate {
   import WirelessPage._
 
-  NetworkS11n.addDirectInstance(this)
+  @RegInitCallback
+  def __init() = {
+    NetworkS11n.addDirectInstance(WirelessNetDelegate)
+  }
 
   @Listener(channel=MSG_FIND_NODES, side=Array(Side.SERVER))
   private def hFindNodes(user: TileUser, fut: Future[UserData]) = {
@@ -357,11 +381,13 @@ object WirelessNetDelegate {
 object InventoryPage {
   private val template = readxml("page_inv").getWidget("main")
 
-  def apply(name: String) = {
-    val ret = template.copy()
+  def apply(name: String): Page = {
+    val ret = InventoryPage(template.copy())
+    ret.window.getWidget("ui_block").component[DrawTexture].setTex(Resources.getTexture("guis/ui/ui_" + name))
+    ret
+  }
 
-    ret.getWidget("ui_block").getComponent(classOf[DrawTexture]).setTex(Resources.getTexture("guis/ui/ui_" + name))
-
+  def apply(ret: Widget): Page = {
     TechUI.breathe(ret.getWidget("ui_inv"))
     TechUI.breathe(ret.getWidget("ui_block"))
 

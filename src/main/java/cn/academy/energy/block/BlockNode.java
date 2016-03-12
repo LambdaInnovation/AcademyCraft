@@ -9,6 +9,7 @@ package cn.academy.energy.block;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.gui.node.GuiNode;
+import cn.academy.energy.client.ui.GuiNode2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -126,7 +127,7 @@ public class BlockNode extends ACBlockContainer {
         @SideOnly(Side.CLIENT)
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerNode c = (ContainerNode) getServerContainer(player, world, x, y, z);
-            return c == null ? null : new GuiNode(c);
+            return c == null ? null : GuiNode2.apply(c);
         }
         
         @Override

@@ -7,13 +7,18 @@
 package cn.academy.crafting.block;
 
 import cn.academy.crafting.ModuleCrafting;
+import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.block.SlotIFItem;
 import cn.lambdalib.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
+import static cn.academy.crafting.block.TileImagFusor.*;
 
 /**
  * @author WeAthFolD
@@ -32,10 +37,11 @@ public class ContainerImagFusor extends CleanContainer {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotCrystal(tile, 0, 15, 31));
-        this.addSlotToContainer(new SlotCrystal(tile, 1, 79, 31));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, 2, 32, 71));
-        this.addSlotToContainer(new SlotIFItem(tile, 3, 67, 71));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, 15, 40));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 144, 40));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, 51, 28));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 109, 44));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 43, 71));
         
         int STEP = 18;
         
@@ -71,4 +77,27 @@ public class ContainerImagFusor extends CleanContainer {
         return player.getDistance(tile.xCoord, tile.yCoord, tile.zCoord) < 64;
     }
 
+    /**
+     * @author KSkun
+     */
+    private static class SlotCrystal extends Slot {
+
+        private int slot;
+
+        public SlotCrystal(IInventory inv, int _slot, int x, int y) {
+            super(inv, _slot, x, y);
+            slot = _slot;
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            if(slot == 0) {
+                for (ImagFusorRecipes.IFRecipe obj : ImagFusorRecipes.INSTANCE.getAllRecipe()) {
+                    if (obj.consumeType.getItem() == stack.getItem()) return true;
+                }
+            }
+            return false;
+        }
+
+    }
 }

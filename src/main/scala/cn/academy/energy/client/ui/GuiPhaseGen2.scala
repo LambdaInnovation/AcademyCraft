@@ -14,12 +14,10 @@ object GuiPhaseGen2 {
     val wirelessPage = WirelessPage(tile)
 
     val configPage = ConfigPage(
-      Seq(ConfigPage.textPropertyUpdated(() => "Energy: " + tile.getEnergy + "/" + tile.bufferSize)),
-      Seq(HistoElement("energy", ConfigPage.COLOR_ENERGY, () => tile.getEnergy / tile.bufferSize)))
+      Nil,
+      Seq(ConfigPage.histoEnergy(() => tile.getEnergy, tile.bufferSize)))
 
     val ret = new ContainerUI(container,  inventoryPage, configPage, wirelessPage)
-    ret.getGui.addWidget(new HierarchyDebugger)
-    // ret.getGui.setDebug()
 
     ret
   }
