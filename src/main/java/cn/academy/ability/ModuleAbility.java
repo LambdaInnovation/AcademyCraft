@@ -6,6 +6,8 @@
 */
 package cn.academy.ability;
 
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.block.AbilityInterferer;
 import cn.academy.ability.block.BlockDeveloper;
 import cn.academy.ability.develop.DeveloperType;
@@ -17,6 +19,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.multiblock.ItemBlockMulti;
@@ -27,9 +30,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.ChestGenHooks;
 
 import java.util.List;
+
+import static net.minecraftforge.common.ChestGenHooks.*;
 
 /**
  * The ability module init class.
@@ -82,6 +89,20 @@ public class ModuleAbility {
             if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
                     event.target.blockZ) instanceof BlockDeveloper)
                 event.setCanceled(true);
+        }
+    }
+
+    @RegInitCallback
+    public void __init() {
+        String[] factorAppearance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
+                DUNGEON_CHEST };
+
+        // TODO test generation density
+        for (String s : factorAppearance) {
+            for (Category c : CategoryManager.INSTANCE.getCategories()) {
+                ItemStack stack = inductionFactor.create(c);
+                ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+            }
         }
     }
 

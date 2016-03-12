@@ -6,10 +6,12 @@ import cn.academy.core.item.ACItem;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import java.util.List;
 
@@ -29,9 +31,27 @@ public class ItemInductionFactor extends ACItem {
         Preconditions.checkArgument(stack.getItem() instanceof ItemInductionFactor);
     }
 
+    private IIcon[] icons;
+
     public ItemInductionFactor() {
         super("induction_factor");
         setMaxStackSize(1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons(IIconRegister register) {
+        icons = new IIcon[CategoryManager.INSTANCE.getCategoryCount()];
+        for (int i = 0; i < icons.length; ++i) {
+            icons[i] = register.registerIcon("academy:factor_" +
+                    CategoryManager.INSTANCE.getCategory(i).getName());
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int meta) {
+        return icons[meta];
     }
 
     public ItemStack create(Category cat) {
