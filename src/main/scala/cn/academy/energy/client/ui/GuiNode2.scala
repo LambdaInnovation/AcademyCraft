@@ -3,17 +3,23 @@ package cn.academy.energy.client.ui
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.ConfigPage.HistoElement
 import cn.academy.core.client.ui.TechUI.ContainerUI
-import cn.academy.energy.block.ContainerNode
+import cn.academy.energy.block.{TileNode, ContainerNode}
 
 import cn.academy.core.client.ui._
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.event.FrameEvent
+import cn.lambdalib.s11n.network.{NetworkS11n, NetworkMessage}
+import cn.lambdalib.s11n.network.NetworkMessage.Listener
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.util.client.{RenderUtils, HudUtils}
 import cn.lambdalib.util.helper.GameTimer
+import cpw.mods.fml.relauncher.Side
 import org.lwjgl.opengl.GL11
 
 object GuiNode2 {
+  import NodeNetworkProxy._
 
   val STATE_LINKED = 0
   val STATE_UNLINKED = 1
@@ -48,11 +54,22 @@ object GuiNode2 {
     }
 
     val histograms = List(ConfigPage.histoEnergy(() => tile.getEnergy, tile.getMaxEnergy))
+    val properties = List(
+      ConfigPage.textBoxProperty("Node Name: ", tile.getNodeName, name => {
+        send(MSG_RENAME, tile, name)
+        true
+      })
+    )
 
-    val ret = new ContainerUI(container, invPage, ConfigPage(Nil, histograms)) //WirelessPage(tile))
+    val wirelessPage = WirelessPage.nodePage(tile)
+
+    val ret = new ContainerUI(container, invPage, ConfigPage(properties, histograms), wirelessPage)
 
     ret
   }
+
+  private def send(channel: String, pars: Any*) =
+    NetworkMessage.sendToServer(NodeNetworkProxy, channel, pars.map(_.asInstanceOf[AnyRef]): _*)
 
   case class StateContext(val state: State, var frame: Int) {
     var lastChange: Long = GameTimer.getTime
@@ -77,5 +94,19 @@ object GuiNode2 {
     }
   }
   case class State(val begin: Int, val frames: Int, val frameTime: Long)
+
+}
+
+@Registrant
+@NetworkS11nType
+object NodeNetworkProxy {
+  final val MSG_RENAME = "rename"
+
+  NetworkS11n.addDirectInstance(NodeNetworkProxy)
+
+  @Listener(channel=MSG_RENAME, side=Array(Side.SERVER))
+  def rename(node: TileNode, name: String) = {
+    node.setNodeName(name)
+  }
 
 }

@@ -24,10 +24,7 @@ public class LinkNodeEvent extends WirelessEvent {
     public LinkNodeEvent(IWirelessNode _node, String _ssid) {
         this(_node, _ssid, "");
     }
-    
-    /**
-     * @param _tile
-     */
+
     public LinkNodeEvent(IWirelessNode _node, String _ssid, String _pwd) {
         super(_node);
         node = _node;

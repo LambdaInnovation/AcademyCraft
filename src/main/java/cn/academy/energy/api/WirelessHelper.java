@@ -59,13 +59,6 @@ public class WirelessHelper {
     
     /**
      * Get a list of WirelessNet at the position within the given range.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param range
-     * @param max
-     * @return
      */
     public static Collection<WirelessNet> getNetInRange(World world, int x, int y, int z, double range, int max) {
         WiWorldData data = WiWorldData.get(world);
@@ -107,7 +100,7 @@ public class WirelessHelper {
             
         });
         
-        List<IWirelessNode> ret = new ArrayList();
+        List<IWirelessNode> ret = new ArrayList<>();
         for(BlockPos bp : list) {
             ret.add((IWirelessNode) bp.getTile());
         }

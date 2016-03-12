@@ -32,7 +32,7 @@ public class WirelessNet {
     final WiWorldData data;
     World world;
     
-    List<VWNode> nodes = new LinkedList();
+    List<VWNode> nodes = new LinkedList<>();
     
     VWMatrix matrix;
     
@@ -129,6 +129,10 @@ public class WirelessNet {
         World world = data.world;
         IWirelessMatrix imat = matrix.get(world);
         return imat == null ? 0 : imat.getCapacity();
+    }
+
+    public IWirelessMatrix getMatrix() {
+        return matrix.get(world);
     }
     
     /**

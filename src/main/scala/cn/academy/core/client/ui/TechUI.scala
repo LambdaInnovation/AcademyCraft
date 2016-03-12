@@ -3,17 +3,20 @@ package cn.academy.core.client.ui
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.api.block.{IWirelessNode, IWirelessUser, IWirelessTile}
+import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessUser, IWirelessTile}
 import cn.academy.energy.api.event.node.{UnlinkUserEvent, LinkUserEvent}
+import cn.academy.energy.api.event.wen.{UnlinkNodeEvent, LinkNodeEvent}
+import cn.academy.energy.internal.{NodeConn, WirelessNet}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
 import cn.lambdalib.cgui.gui.{CGuiScreenContainer, Widget}
 import cn.lambdalib.cgui.gui.component.ProgressBar.Direction
 import cn.lambdalib.cgui.gui.component._
 import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
 import cn.lambdalib.cgui.gui.event.{GainFocusEvent, LostFocusEvent, FrameEvent, LeftClickEvent}
 import cn.lambdalib.cgui.xml.CGUIDocument
+import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
 import cn.lambdalib.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.s11n.network.{NetworkS11n, Future, NetworkMessage}
@@ -25,8 +28,10 @@ import net.minecraft.inventory.Container
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{StatCollector, ResourceLocation}
 import cn.lambdalib.cgui.ScalaCGUI._
+import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import scala.collection.JavaConversions._
+import scala.reflect.ClassTag
 
 private object Generic_ {
   def readxml(loc: String) = CGUIDocument.panicRead(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
@@ -118,6 +123,8 @@ object TechUI {
 
 object ConfigPage {
   val COLOR_ENERGY = new Color(0xff25c4ff)
+  val ELEM_W = 142
+  val ELEM_H = 12
 
   private val configPageTemplate = readxml("page_config").getWidget("main")
 
@@ -131,18 +138,69 @@ object ConfigPage {
   }
 
   def textProperty(content: String, color: Color = Color.white()) = {
-    val ret = new Widget().size(142, 12)
+    val ret = pContainer()
     ret :+ new TextBox(new FontOption(10, color)).setContent(content)
     ret
   }
 
   def textPropertyUpdated(contentProvider: () => String, color: Color = Color.white()) = {
-    val ret = new Widget().size(142, 12)
+    val ret = pContainer()
     val textBox = new TextBox(new FontOption(10, color)).setContent(contentProvider())
     ret :+ textBox
     ret.listens[FrameEvent](() => textBox.setContent(contentProvider()))
 
     ret
+  }
+
+  def doubleProperty(name: String, initial: Double, editCallback: Double => Boolean) = {
+    textBoxProperty(name, String.valueOf(initial), (content: String) => {
+      try {
+        val parsed = content.toDouble
+        editCallback(parsed)
+      } catch {
+        case _: NumberFormatException => false
+      }
+    })
+  }
+
+  def textBoxProperty(name: String, initial: String, editCallback: String => Boolean) = {
+    val NORMAL_COLOR   = new Color(0xaa797979)
+    val MODIFIED_COLOR = new Color(0xaaa07d47)
+    val ERROR_COLOR    = new Color(0xaae36a52)
+
+    val editArea = new Widget().size(60, 12)
+
+    val back = new DrawTexture().setColor(NORMAL_COLOR).setTex(null)
+    val textBox = new TextBox().setContent(initial).allowEdit()
+
+    editArea :+ back
+    editArea :+ textBox
+
+    editArea.listens[ChangeContentEvent](() => {
+      back.setColor(MODIFIED_COLOR)
+    })
+    editArea.listens[ConfirmInputEvent](() => {
+      val result = editCallback(textBox.content)
+      back.setColor(if (result) NORMAL_COLOR else ERROR_COLOR)
+    })
+
+    kvpair(name, editArea)
+  }
+
+  private def pContainer() = new Widget().size(ELEM_W, ELEM_H)
+
+  def kvpair(name: String, valueWidget: Widget) = {
+    val container = pContainer()
+
+    val nameArea = new Widget(50, 12)
+    nameArea :+ new TextBox().setContent(name)
+
+    valueWidget.pos(50, 0)// .size(ELEM_W - 50, ELEM_H)
+
+    container :+ ("name", nameArea)
+    container :+ ("value", valueWidget)
+
+    container
   }
 
   def apply(properties: Seq[Widget], histo: Seq[HistoElement]) = {
@@ -205,18 +263,58 @@ object ConfigPage {
 
 @Registrant
 @NetworkS11nType
-private class UserData {
-  @SerializeIncluded
-  var nodes: Array[Array[Int]] = null
+private class UserResult {
   @SerializeIncluded
   @SerializeNullable
-  var connected: TileEntity with IWirelessNode = null
+  var linked: NodeData = null
+  @SerializeIncluded
+  var avail: Array[NodeData] = null
+}
+
+@Registrant
+@NetworkS11nType
+private class NodeResult {
+  @SerializeIncluded
+  @SerializeNullable
+  var linked: MatrixData = null
+  @SerializeIncluded
+  var avail: Array[MatrixData] = null
+}
+
+@Registrant
+@NetworkS11nType
+@SerializeStrategy(strategy=ExposeStrategy.ALL)
+private class MatrixData {
+  var x: Int = 0
+  var y: Int = 0
+  var z: Int = 0
+  var ssid: String = null
+
+  def tile(world: World) = world.getTileEntity(x, y, z) match {
+    case tile: IWirelessMatrix => Some(tile)
+    case _ => None
+  }
+}
+
+@Registrant
+@NetworkS11nType
+@SerializeStrategy(strategy=ExposeStrategy.ALL)
+private class NodeData {
+  var x: Int = 0
+  var y: Int = 0
+  var z: Int = 0
+
+  def tile(world: World) = world.getTileEntity(x, y, z) match {
+    case tile: IWirelessNode => Some(tile)
+    case _ => None
+  }
 }
 
 object WirelessPage {
   type TileUser = TileEntity with IWirelessUser
   type TileNode = TileEntity with IWirelessNode
   type TileBase = TileEntity with IWirelessTile
+  type TileMatrix = TileEntity with IWirelessMatrix
 
   private val wirelessPageTemplate = readxml("page_wireless").getWidget("main")
 
@@ -225,24 +323,140 @@ object WirelessPage {
 
   final val MSG_FIND_NODES = "find_nodes"
   final val MSG_USER_CONNECT = "user_connect"
-  final val MSG_UNLINK = "unlink"
+  final val MSG_USER_DISCONNECT = "unlink"
+  final val MSG_NODE_CONNECT = "node_connect"
+  final val MSG_NODE_DISCONNECT = "node_disconnect"
+  final val MSG_FIND_NETWORKS = "find_networks"
 
-  def apply(user: TileUser) = {
-    val page = createPage()
-
-    val connectIcon = page.window.getWidget("panel_wireless/elem_connected/icon_connect")
-    connectIcon.listens[LeftClickEvent](() => {
-      NetworkMessage.sendToServer(WirelessNetDelegate, MSG_UNLINK, user, Future.create((res: Boolean) => {
-        gatherUserInfo(page.window, user)
-      }))
-    })
-
-    gatherUserInfo(page.window, user)
-
-    page
+  trait Target {
+    def name: String
   }
 
-  private def createPage() = {
+  trait AvailTarget extends Target {
+    def connect(pass: String)
+  }
+
+  trait LinkedTarget extends Target {
+    def disconnect()
+  }
+
+  class LinkedInfo(var target: Option[LinkedTarget]) extends Component("LinkedInfo")
+
+  private def rebuildPage(window: Widget, linked: Option[LinkedTarget], avail: Seq[AvailTarget]) = {
+    val wlist = window.getWidget("panel_wireless/zone_elementlist")
+    wlist.removeComponent("ElementList")
+
+    val elist = new ElementList
+    val elemTemplate = wlist.getWidget("element")
+
+    {
+      val connectElem = window.getWidget("panel_wireless/elem_connected")
+
+      val (icon, name, alpha, tintEnabled) = linked match {
+        case Some(target) => (connectedIcon, target.name, 1.0, true)
+        case None => (unconnectedIcon, "Not Connected", 0.6, false)
+      }
+
+      connectElem.child("icon_connect").component[DrawTexture].texture = icon
+      connectElem.child("icon_connect").component[DrawTexture].color.a = alpha
+      connectElem.child("icon_connect").component[Tint].enabled = tintEnabled
+      connectElem.child("icon_logo").component[DrawTexture].color.a = alpha
+      connectElem.child("text_name").component[TextBox].setContent(name)
+
+      connectElem.child("icon_connect").component[LinkedInfo].target = linked
+    }
+
+    avail.foreach(target => {
+      val instance = elemTemplate.copy()
+
+      val passBox = instance.getWidget("input_pass")
+      val iconKey = instance.getWidget("icon_key")
+
+      def confirm() = {
+        val password = passBox.component[TextBox].content
+        target.connect(password)
+      }
+
+      instance.getWidget("text_name").component[TextBox].setContent(target.name)
+
+      passBox.listens[ConfirmInputEvent](() => confirm())
+      instance.getWidget("icon_connect").listens[LeftClickEvent](() => confirm())
+
+      passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
+      passBox.listens[LostFocusEvent](() => {
+        passBox.component[TextBox].setContent("")
+        iconKey.component[DrawTexture].color.a = 0.6
+      })
+
+      elist.addWidget(instance)
+    })
+
+    wlist :+ elist
+  }
+
+  def nodePage(node: TileNode): Page = {
+    val ret = WirelessPage()
+
+    val world = node.getWorldObj
+
+    def rebuild(): Unit = {
+      def newFuture() = Future.create((_: Boolean) => rebuild())
+
+      send(MSG_FIND_NETWORKS, node, Future.create((data: NodeResult) => {
+        val linked = Option(data.linked).map(matrix => new LinkedTarget {
+          override def disconnect() = {
+            send(MSG_NODE_DISCONNECT, node, newFuture())
+          }
+          override def name = matrix.ssid
+        })
+        val avail = data.avail.map(matrix => new AvailTarget {
+            override def connect(pass: String): Unit = {
+              send(MSG_NODE_CONNECT, node, matrix.ssid, pass, newFuture())
+            }
+            override def name: String = matrix.ssid
+          })
+
+        rebuildPage(ret.window, linked, avail)
+      }))
+    }
+
+    rebuild()
+
+    ret
+  }
+
+  def userPage(user: TileUser): Page = {
+    val ret = WirelessPage()
+
+    val world = user.getWorldObj
+
+    def rebuild(): Unit = {
+      def newFuture() = Future.create((result: Boolean) => rebuild())
+
+      send(MSG_FIND_NODES, user, Future.create((result: UserResult) => {
+        val linked = Option(result.linked).flatMap(_.tile(world)).map(node => new LinkedTarget {
+          override def disconnect() = send(MSG_USER_DISCONNECT, user, newFuture())
+          override def name: String = node.getNodeName
+        })
+
+        println(result.avail.toList)
+        val avail = result.avail.toList.flatMap(_.tile(world)).map(node => new AvailTarget {
+          override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
+          override def name: String = node.getNodeName
+        })
+
+        println(avail)
+
+        rebuildPage(ret.window, linked, avail)
+      }))
+    }
+
+    rebuild()
+
+    ret
+  }
+
+  private def apply(): Page = {
     val widget = wirelessPageTemplate.copy()
 
     TechUI.breathe(widget.getWidget("icon_logo"))
@@ -255,75 +469,18 @@ object WirelessPage {
     wirelessPanel.getWidget("btn_arrowup").listens[LeftClickEvent](() => elist.progressLast())
     wirelessPanel.getWidget("btn_arrowdown").listens[LeftClickEvent](() => elist.progressNext())
 
+    val connectIcon = widget.child("panel_wireless/elem_connected/icon_connect")
+    connectIcon :+ new LinkedInfo(None)
+    connectIcon.listens[LeftClickEvent](() => connectIcon.component[LinkedInfo].target match {
+      case Some(target) => target.disconnect()
+      case _ =>
+    })
+
     Page("wireless", widget)
   }
 
-  private def rebuildElements(widget: Widget, rebuildr: (ElementList, Widget) => Any) = {
-    val wlist = widget.getWidget("panel_wireless/zone_elementlist")
-    wlist.removeComponent("ElementList")
-
-    val elist = new ElementList
-    rebuildr(elist, wlist.getWidget("element"))
-
-    wlist :+ elist
-  }
-
-  private def gatherUserInfo(window: Widget, tile: TileUser): Unit = {
-    val fut = Future.create((inp: UserData) => {
-      println("Received results " + inp.connected + ", " + inp.nodes)
-      val nodes = inp.nodes.flatMap(arr => {
-        val world = tile.getWorldObj
-        val (x, y, z) = (arr(0), arr(1), arr(2))
-        val subtile = world.getTileEntity(x, y, z)
-        subtile match {
-          case node: IWirelessNode if node != inp.connected => Some(node)
-          case _ => None
-        }
-      })
-
-      val connectElem = window.getWidget("panel_wireless/elem_connected")
-      setConnectState(connectElem, inp.connected)
-
-      rebuildElements(window, (list, template) => {
-        nodes.foreach(node => {
-          val instance = template.copy()
-
-          val passBox = instance.getWidget("input_pass")
-          val iconKey = instance.getWidget("icon_key")
-          def confirm() = {
-            val future = Future.create((result: Boolean) => {
-              gatherUserInfo(window, tile)
-            })
-            NetworkMessage.sendToServer(WirelessNetDelegate, MSG_USER_CONNECT,
-              tile, node, passBox.component[TextBox].content, future)
-          }
-
-          instance.getWidget("text_name").component[TextBox].setContent(node.getNodeName)
-          passBox.listens[ConfirmInputEvent](() => confirm())
-
-          passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
-          passBox.listens[LostFocusEvent](() => {
-            passBox.component[TextBox].setContent("")
-            iconKey.component[DrawTexture].color.a = 0.6
-          })
-
-          instance.getWidget("icon_connect").listens[LeftClickEvent](() => confirm())
-
-          list.addWidget(instance)
-        })
-      })
-    })
-    println("findNodes")
-    NetworkMessage.sendToServer(WirelessNetDelegate, MSG_FIND_NODES, tile, fut)
-  }
-
-  private def setConnectState(element: Widget, targ: IWirelessNode) = {
-    val state = targ != null
-    element.getWidget("icon_connect").component[DrawTexture].setTex(if (state) connectedIcon else unconnectedIcon)
-    element.getWidget("icon_connect").component[DrawTexture].color.a = if (state) 1.0 else 0.6
-    element.getWidget("icon_connect").component[Tint].enabled = state
-    element.getWidget("icon_logo").component[DrawTexture].color.a = if (state) 1.0 else 0.6
-    element.getWidget("text_name").component[TextBox].content = if (state) targ.getNodeName else ""
+  private def send(msg: String, pars: Any*) = {
+    NetworkMessage.sendToServer(WirelessNetDelegate, msg, pars.map(_.asInstanceOf[AnyRef]): _*)
   }
 
 }
@@ -339,26 +496,64 @@ object WirelessNetDelegate {
   }
 
   @Listener(channel=MSG_FIND_NODES, side=Array(Side.SERVER))
-  private def hFindNodes(user: TileUser, fut: Future[UserData]) = {
+  private def hFindNodes(user: TileUser, fut: Future[UserResult]) = {
+    def cvt(conn: NodeConn) = {
+      val tile = conn.getNode.asInstanceOf[TileEntity]
+      val ret = new NodeData
+      ret.x = tile.xCoord
+      ret.y = tile.yCoord
+      ret.z = tile.zCoord
+      ret
+    }
+
+    val linked = Option(WirelessHelper.getNodeConn(user))
+
     val nodes = WirelessHelper.getNodesInRange(user.getWorldObj,
       user.xCoord, user.yCoord, user.zCoord)
-      .map(node => {
-        val tile = node.asInstanceOf[TileEntity]
-        Array(tile.xCoord, tile.yCoord, tile.zCoord)
-      }).toArray
-    println("hFindNdoes")
+      .map(WirelessHelper.getNodeConn)
+      .filter(!linked.contains(_))
 
-    val data = new UserData
-    data.connected = Option(WirelessHelper.getNodeConn(user))
-      .map(_.getNode)
-      .orNull.asInstanceOf[TileNode]
-    data.nodes = nodes
+    val data = new UserResult
+
+    data.linked = linked.map(cvt).orNull
+    data.avail = nodes.map(cvt).toArray
+
+    fut.sendResult(data)
+  }
+
+  @Listener(channel=MSG_FIND_NETWORKS, side=Array(Side.SERVER))
+  private def hFindNetworks(node: TileNode, fut: Future[NodeResult]) = {
+    println("hFindNetworks")
+
+    val linked = Option(WirelessHelper.getWirelessNet(node))
+
+    def cvt(net: WirelessNet) = {
+      val mat = net.getMatrix.asInstanceOf[TileEntity]
+      val ret = new MatrixData()
+
+      ret.x = mat.xCoord
+      ret.y = mat.yCoord
+      ret.z = mat.zCoord
+      ret.ssid = net.getSSID
+
+      ret
+    }
+
+    val networks = WirelessHelper.getNetInRange(node.getWorldObj,
+      node.xCoord, node.yCoord, node.zCoord,
+      node.getRange, 20)
+      .filter(!linked.contains(_))
+
+    val data = new NodeResult
+
+    data.linked = linked.map(cvt).orNull
+    data.avail = networks.map(cvt).toArray
 
     fut.sendResult(data)
   }
 
   @Listener(channel=MSG_USER_CONNECT, side=Array(Side.SERVER))
-  private def hConfirm(user: TileUser,
+  private def hUserConnect(user: TileUser,
                        target: TileNode,
                        password: String,
                        fut: Future[Boolean]) = {
@@ -368,12 +563,24 @@ object WirelessNetDelegate {
     fut.sendResult(result)
   }
 
-  @Listener(channel=MSG_UNLINK, side=Array(Side.SERVER))
-  private def hUnlink(user: TileBase, fut: Future[Boolean]) = {
+  @Listener(channel=MSG_USER_DISCONNECT, side=Array(Side.SERVER))
+  private def hUserDisconnect(user: TileBase, fut: Future[Boolean]) = {
     val evt = new UnlinkUserEvent(user)
     val result = !MinecraftForge.EVENT_BUS.post(evt)
 
     fut.sendResult(result)
+  }
+
+  @Listener(channel=MSG_NODE_CONNECT, side=Array(Side.SERVER))
+  private def hNodeConnect(node: TileNode, ssid: String, pwd: String, fut: Future[Boolean]) = {
+    val result = !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, ssid, pwd))
+    fut.sendResult(result)
+  }
+
+  @Listener(channel=MSG_NODE_DISCONNECT, side=Array(Side.SERVER))
+  private def hNodeDisconnect(node: TileNode, fut: Future[Boolean]) = {
+    MinecraftForge.EVENT_BUS.post(new UnlinkNodeEvent(node))
+    fut.sendResult(true)
   }
 
 }

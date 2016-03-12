@@ -11,7 +11,7 @@ object GuiPhaseGen2 {
   def apply(container: ContainerPhaseGen) = {
     val tile = container.tile
     val inventoryPage = InventoryPage("phasegen")
-    val wirelessPage = WirelessPage(tile)
+    val wirelessPage = WirelessPage.userPage(tile)
 
     val configPage = ConfigPage(
       Nil,
