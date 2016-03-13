@@ -8,6 +8,7 @@ package cn.academy.energy.block;
 
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
+import cn.lambdalib.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -19,7 +20,7 @@ import net.minecraft.item.ItemStack;
  * @author WeAthFolD
  *
  */
-public class ContainerMatrix extends Container {
+public class ContainerMatrix extends CleanContainer {
     
     public final TileMatrix tile;
     public final EntityPlayer player;
@@ -32,11 +33,11 @@ public class ContainerMatrix extends Container {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotPlate(tile, 0, 27, 65));
-        this.addSlotToContainer(new SlotPlate(tile, 1, 76, 65));
-        this.addSlotToContainer(new SlotPlate(tile, 2, 50, 6));
+        this.addSlotToContainer(new SlotPlate(tile, 0, 108, 2));
+        this.addSlotToContainer(new SlotPlate(tile, 1, 108, 26));
+        this.addSlotToContainer(new SlotPlate(tile, 2, 108, 50));
         
-        this.addSlotToContainer(new SlotCore(tile, 3, 50, 33));
+        this.addSlotToContainer(new SlotCore(tile, 3, 66, 25));
         
         int STEP = 18;
         
@@ -50,54 +51,17 @@ public class ContainerMatrix extends Container {
                 addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
             }
         }
+
+        SlotGroup invGroup = gRange(4, 4 + 36);
+
+        addTransferRule(invGroup, stack -> stack.getItem() == ModuleCrafting.constPlate, gSlots(0, 1, 2));
+        addTransferRule(invGroup, stack -> stack.getItem() == ModuleEnergy.matrixCore, gSlots(3));
+        addTransferRule(gRange(0, 4), invGroup);
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return true;
-    }
-    
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-        ItemStack stack = null;
-        Slot slot = (Slot)this.inventorySlots.get(id);
-
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
-            stack = stack1.copy();
-
-            if (id < 4) { //tileInv->playerInv
-                if (!this.mergeItemStack(stack1, 4, this.inventorySlots.size(), true))
-                    return null;
-            } else {
-                if(stack.getItem() == ModuleCrafting.constPlate) {
-                    for(int s = 0; s < 3; ++s) {
-                        if(tile.getStackInSlot(s) == null) {
-                            stack1.stackSize--;
-                            tile.setInventorySlotContents(s, new ItemStack(ModuleCrafting.constPlate));
-                            break;
-                        }
-                    }
-                    stack = null;
-                } else if(stack.getItem() == ModuleEnergy.matrixCore) {
-                    if(tile.getStackInSlot(3) == null) {
-                        stack1.stackSize--;
-                        tile.setInventorySlotContents(3, 
-                            new ItemStack(ModuleEnergy.matrixCore, 1, stack1.getItemDamage()));
-                    }
-                    stack = null;
-                } else 
-                    return null;
-            }
-
-            if (stack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            } else {
-                slot.onSlotChanged();
-            }
-        }
-
-        return stack;
     }
     
     public static class SlotCore extends Slot {

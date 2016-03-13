@@ -8,6 +8,7 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.client.gui.matrix.GuiMatrix;
+import cn.academy.energy.client.ui.GuiMatrix2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -52,11 +53,6 @@ public class BlockMatrix extends ACBlockMulti {
         return new double[] { 1.0, 0, 1.0};
     }
     
-//    @Override
-//    public int getRenderType() {
-//        return 0;
-//    }
-    
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
             float tx, float ty, float tz) {
@@ -75,8 +71,8 @@ public class BlockMatrix extends ACBlockMulti {
         @SideOnly(Side.CLIENT)
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
-            TileMatrix te = check(world, x, y, z);
-            return te == null ? null : new GuiMatrix(new ContainerMatrix(te, player));
+            ContainerMatrix container = (ContainerMatrix) getServerContainer(player, world, x, y, z);
+            return container == null ? null : GuiMatrix2.apply(container);
         }
         
         @Override

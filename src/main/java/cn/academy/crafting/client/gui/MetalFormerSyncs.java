@@ -17,7 +17,7 @@ public class MetalFormerSyncs {
     
     @RegNetworkCall(side = Side.SERVER)
     public static void cycle(@Instance TileMetalFormer former) {
-        former.cycleMode();
+        former.cycleMode(0);
     }
     
 }

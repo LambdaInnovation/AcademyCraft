@@ -26,7 +26,7 @@ object GuiImagFusor2 {
       val bar = progWidget.component[ProgressBar]
 
       progWidget.listens[FrameEvent](() => {
-        bar.progressDisplay = tile.getWorkProgress
+        bar.progress = tile.getWorkProgress
       })
     }
 

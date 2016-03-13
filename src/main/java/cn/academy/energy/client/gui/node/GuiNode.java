@@ -200,7 +200,7 @@ public class GuiNode extends CGuiScreenContainer {
             // Init events
             pageMain.listen(FrameEvent.class, (w, e) -> {
                 ProgressBar bar = ProgressBar.get(getWidget("progress_imag"));
-                bar.progress = bar.progressDisplay = tile.getEnergy() / tile.getMaxEnergy();
+                bar.progress = tile.getEnergy() / tile.getMaxEnergy();
             });
 
             pageMain.getWidget("button_confirm").listen(LeftClickEvent.class, (w, e) ->

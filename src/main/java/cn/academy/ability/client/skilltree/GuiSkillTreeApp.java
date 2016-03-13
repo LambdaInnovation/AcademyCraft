@@ -31,12 +31,10 @@ public class GuiSkillTreeApp extends GuiSkillTree {
         ProgressBar p = ProgressBar.get(windowMachine.getWidget("p_energy"));
         p.color = DrawTexture.get(windowMachine.getWidget("i_energy")).color 
             = COLOR_PROG_MONO0;
-        p.fluctRegion = 0;
         
         p = ProgressBar.get(windowMachine.getWidget("p_syncrate"));
         p.color = DrawTexture.get(windowMachine.getWidget("i_syncrate")).color
             = COLOR_PROG_NONO1;
-        p.fluctRegion = 0;
     }
     
     @Override

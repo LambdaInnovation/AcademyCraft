@@ -54,7 +54,7 @@ public class GuiMetalFormer extends CGuiScreenContainer {
             ProgressBar bar = ProgressBar.get(w);
             bar.progress = tile.getWorkProgress();
             if(bar.progress == 0)
-                bar.progressDisplay = 0;
+                bar.progress = 0;
         });
 
         main.getWidget("progress_imag").listen(FrameEvent.class, (w, event) -> {
@@ -80,7 +80,7 @@ public class GuiMetalFormer extends CGuiScreenContainer {
         });
 
         main.getWidget("mark_former").listen(LeftClickEvent.class, (w, event) -> {
-            tile.cycleMode();
+            tile.cycleMode(1);
             MetalFormerSyncs.cycle(tile);
         });
         
