@@ -9,6 +9,7 @@ package cn.academy.energy.block.wind;
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.gui.wind.GuiWindGenMain;
+import cn.academy.energy.client.ui.GuiWindGenMain2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -32,7 +33,7 @@ public class BlockWindGenMain extends ACBlockMulti {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerWindGenMain container = (ContainerWindGenMain) getServerContainer(player, world, x, y, z);
-            return container == null ? null : new GuiWindGenMain(container);
+            return container == null ? null : GuiWindGenMain2.apply(container);
         }
         
         @Override
