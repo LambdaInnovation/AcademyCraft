@@ -53,10 +53,13 @@ object TechUI {
   def apply(pages: Page*) = new TechUIWidget(pages: _*)
 
   def breathe(widget: Widget) = {
-    val tex = widget.getComponent(classOf[DrawTexture])
-    widget.listens[FrameEvent](() => {
-      tex.color.a = breatheAlpha
-    })
+    Option(widget.getComponent(classOf[DrawTexture])) match {
+      case Some(tex) =>
+        widget.listens[FrameEvent](() => {
+          tex.color.a = breatheAlpha
+        })
+      case _ =>
+    }
   }
 
   /**
@@ -653,8 +656,10 @@ object InventoryPage {
   }
 
   def apply(ret: Widget): Page = {
-    TechUI.breathe(ret.getWidget("ui_inv"))
-    TechUI.breathe(ret.getWidget("ui_block"))
+    ret.getDrawList.foreach {
+      case w if w.getName.startsWith("ui_") => TechUI.breathe(w)
+      case _ =>
+    }
 
     Page("inv", ret)
   }
