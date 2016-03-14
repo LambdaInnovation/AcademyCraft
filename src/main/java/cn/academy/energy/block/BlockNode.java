@@ -8,7 +8,6 @@ package cn.academy.energy.block;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
-import cn.academy.energy.client.gui.node.GuiNode;
 import cn.academy.energy.client.ui.GuiNode2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;

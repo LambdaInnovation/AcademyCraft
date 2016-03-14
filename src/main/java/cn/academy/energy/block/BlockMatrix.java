@@ -7,7 +7,6 @@
 package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
-import cn.academy.energy.client.gui.matrix.GuiMatrix;
 import cn.academy.energy.client.ui.GuiMatrix2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;

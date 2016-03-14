@@ -17,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import cn.lambdalib.cgui.ScalaCGUI._
 
 object GuiMatrix2 {
-  import MatrixNetDelegate._
+  import MatrixNetProxy._
 
   def apply(container: ContainerMatrix) = {
     val tile = container.tile
@@ -70,16 +70,16 @@ object GuiMatrix2 {
   }
 
   private def send(channel: String, args: Any*) = {
-    NetworkMessage.sendToServer(MatrixNetDelegate, channel, args.map(_.asInstanceOf[AnyRef]): _*)
+    NetworkMessage.sendToServer(MatrixNetProxy, channel, args.map(_.asInstanceOf[AnyRef]): _*)
   }
 
 }
 
 @Registrant
 @NetworkS11nType
-private object MatrixNetDelegate {
+private object MatrixNetProxy {
 
-  NetworkS11n.addDirectInstance(MatrixNetDelegate)
+  NetworkS11n.addDirectInstance(MatrixNetProxy)
   NetworkS11n.register(classOf[Array[String]])
 
   final val MSG_GATHER_INFO = "gather"

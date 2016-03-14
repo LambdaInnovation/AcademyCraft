@@ -1,18 +1,18 @@
-package cn.academy.energy.client.ui
+package cn.academy.crafting.client.ui
 
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
-import cn.academy.crafting.block.{TileMetalFormer, ContainerMetalFormer}
 import cn.academy.core.client.ui._
+import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
 import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.component.{DrawTexture, ProgressBar}
-import cn.lambdalib.cgui.gui.event.{LeftClickEvent, FrameEvent}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent}
 import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.{NetworkMessage, Future, NetworkS11n}
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cpw.mods.fml.relauncher.Side
 
 object GuiMetalFormer2 {

@@ -47,8 +47,6 @@ public class GuiMetalFormer extends CGuiScreenContainer {
     
     private void initPages() {
         main = document.getWidget("window_main").copy();
-        
-        EnergyUIHelper.initNodeLinkButton(tile, main.getWidget("btn_link"));
 
         main.getWidget("progress_pro").listen(FrameEvent.class, (w, e) -> {
             ProgressBar bar = ProgressBar.get(w);

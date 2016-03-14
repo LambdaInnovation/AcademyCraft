@@ -5,7 +5,7 @@ import cn.academy.energy.block.wind.ContainerWindGenBase
 
 import cn.academy.core.client.ui._
 
-object GuiWindGenBase2 {
+object GuiWindGenBase {
 
   def apply(container: ContainerWindGenBase) = {
     val tile = container.tile

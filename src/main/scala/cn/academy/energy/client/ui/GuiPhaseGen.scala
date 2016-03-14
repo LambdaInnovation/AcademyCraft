@@ -6,7 +6,7 @@ import cn.academy.energy.block.ContainerPhaseGen
 import cn.academy.core.client.ui._
 import cn.lambdalib.cgui.gui.HierarchyDebugger
 
-object GuiPhaseGen2 {
+object GuiPhaseGen {
 
   def apply(container: ContainerPhaseGen) = {
     val tile = container.tile

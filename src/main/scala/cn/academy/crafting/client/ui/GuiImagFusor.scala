@@ -1,16 +1,15 @@
-package cn.academy.energy.client.ui
+package cn.academy.crafting.client.ui
 
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
+import cn.academy.core.client.ui._
 import cn.academy.crafting.block.ContainerImagFusor
-import cn.lambdalib.cgui.gui.component.{TextBox, ProgressBar}
+import cn.lambdalib.cgui.ScalaCGUI._
+import cn.lambdalib.cgui.gui.component.{ProgressBar, TextBox}
 import cn.lambdalib.cgui.gui.event.FrameEvent
 import cn.lambdalib.cgui.xml.CGUIDocument
 
-import cn.academy.core.client.ui._
-import cn.lambdalib.cgui.ScalaCGUI._
-
-object GuiImagFusor2 {
+object GuiImagFusor {
 
   private val template = CGUIDocument.panicRead(Resources.getGui("rework/page_imagfusor")).getWidget("main")
 
