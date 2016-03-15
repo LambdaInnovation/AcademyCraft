@@ -1,8 +1,8 @@
 package cn.academy.energy.client.ui
 
 import cn.academy.core.client.Resources
-import cn.academy.core.client.ui.ConfigPage.HistoElement
 import cn.academy.core.client.ui.TechUI.ContainerUI
+import cn.academy.energy.block.BlockNode.NodeType
 import cn.academy.energy.block.{TileNode, ContainerNode}
 
 import cn.academy.core.client.ui._
@@ -14,7 +14,7 @@ import cn.lambdalib.s11n.network.{NetworkS11n, NetworkMessage}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.util.client.{RenderUtils, HudUtils}
-import cn.lambdalib.util.helper.GameTimer
+import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
 import org.lwjgl.opengl.GL11
 
@@ -53,17 +53,23 @@ object GuiNode2 {
       invPage.window :+ animArea
     }
 
-    val histograms = List(ConfigPage.histoEnergy(() => tile.getEnergy, tile.getMaxEnergy))
-    val properties = List(
-      ConfigPage.textBoxProperty("Node Name: ", tile.getNodeName, name => {
-        send(MSG_RENAME, tile, name)
-        true
-      })
-    )
-
     val wirelessPage = WirelessPage.nodePage(tile)
 
-    val ret = new ContainerUI(container, invPage, ConfigPage(properties, histograms), wirelessPage)
+    val ret = new ContainerUI(container, invPage, wirelessPage)
+
+    {
+      var currentCapacity = 1 // TODO: Send packet at init to retrieve that
+
+      ret.infoPage
+        .histogram(
+          TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy),
+          TechUI.HistElement("CAPACITY", new Color(0xffff6c00),
+            () => currentCapacity / tile.getCapacity, () => "%d/%d".format(currentCapacity, tile.getCapacity)),
+          TechUI.HistElement("RANGE", new Color(0xff7680de),
+            () => tile.getRange / NodeType.ADVANCED.range, () => "%.0f".format(tile.getRange))
+          )
+          .property("NAME", tile.getNodeName, newName => send(MSG_RENAME, newName))
+    }
 
     ret
   }

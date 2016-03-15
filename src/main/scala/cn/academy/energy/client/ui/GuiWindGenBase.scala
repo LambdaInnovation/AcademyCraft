@@ -1,9 +1,10 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.client.ui.TechUI.ContainerUI
+import cn.academy.core.client.ui.TechUI.{HistElement, ContainerUI}
 import cn.academy.energy.block.wind.ContainerWindGenBase
 
 import cn.academy.core.client.ui._
+import cn.lambdalib.util.helper.Color
 
 object GuiWindGenBase {
 
@@ -11,10 +12,18 @@ object GuiWindGenBase {
     val tile = container.tile
 
     val invPage = InventoryPage("windbase")
-    val configPage = ConfigPage(Nil, Nil)
     val wirelessPage = WirelessPage.userPage(tile)
 
-    new ContainerUI(container, invPage, configPage, wirelessPage)
+    val ret = new ContainerUI(container, invPage, wirelessPage)
+
+    ret.infoPage
+      .histogram(
+        TechUI.histBuffer(() => tile.getEnergy, tile.bufferSize)
+      )
+      .sepline("INFO")
+      .property("ALTITUDE", tile.yCoord)
+
+    ret
   }
 
 }

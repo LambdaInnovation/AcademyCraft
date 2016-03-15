@@ -34,8 +34,8 @@ public class BlockNode extends ACBlockContainer {
         STANDARD("standard", 50000, 300, 12, 10), 
         ADVANCED("advanced", 200000, 900, 19, 20);
         
-        final int maxEnergy, bandwidth, range, capacity;
-        final String name;
+        public final int maxEnergy, bandwidth, range, capacity;
+        public final String name;
         NodeType(String _name, int _maxEnergy, int _bandwidth, int _range, int _capacity) {
             name = _name;
             maxEnergy = _maxEnergy;

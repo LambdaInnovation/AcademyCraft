@@ -11,9 +11,12 @@ object GuiWindGenMain {
     val tile = container.tile
 
     val invPage = InventoryPage("windmain")
-    val configPage = ConfigPage(Nil, Nil)
 
-    new ContainerUI(container, invPage, configPage)
+    val ret = new ContainerUI(container, invPage)
+
+    ret.infoPage.property("ALTITUDE", tile.yCoord)
+
+    ret
   }
 
 }

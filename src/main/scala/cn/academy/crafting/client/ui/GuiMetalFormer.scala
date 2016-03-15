@@ -13,9 +13,11 @@ import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib.util.helper.Color
 import cpw.mods.fml.relauncher.Side
 
-object GuiMetalFormer2 {
+object GuiMetalFormer {
   import MFNetDelegate._
 
   private val template = CGUIDocument.panicRead(Resources.getGui("rework/page_metalformer")).getWidget("main")
@@ -36,13 +38,23 @@ object GuiMetalFormer2 {
 
       invWidget.child("btn_left").listens[LeftClickEvent](handleAlt(-1))
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
+
+      {
+        val option = new FontOption(10, FontAlign.CENTER, new Color(0xaaffffff))
+        invWidget.child("icon_mode").listens((w: Widget, evt: FrameEvent) => if (evt.hovering) {
+          TechUI.drawTextBox(tile.mode.toString, option, 6, -10)
+        })
+      }
     }
 
     val invPage = InventoryPage(invWidget)
-    val configPage = ConfigPage(Nil, Nil)
     val wirelessPage = WirelessPage.userPage(tile)
 
-    new ContainerUI(container, invPage, configPage, wirelessPage)
+    val ret = new ContainerUI(container, invPage, wirelessPage)
+
+    ret.infoPage.histogram(TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy))
+
+    ret
   }
 
   private def send(channel: String, args: Any*) = {

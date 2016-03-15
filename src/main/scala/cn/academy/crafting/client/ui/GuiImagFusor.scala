@@ -8,6 +8,7 @@ import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.component.{ProgressBar, TextBox}
 import cn.lambdalib.cgui.gui.event.FrameEvent
 import cn.lambdalib.cgui.xml.CGUIDocument
+import cn.lambdalib.util.helper.Color
 
 object GuiImagFusor {
 
@@ -18,7 +19,7 @@ object GuiImagFusor {
 
     val invPage = InventoryPage(template.copy())
 
-    val ret = new ContainerUI(container, invPage, ConfigPage(Nil, Nil), WirelessPage.userPage(tile))
+    val ret = new ContainerUI(container, invPage, WirelessPage.userPage(tile))
 
     { // Work progress display
       val progWidget = invPage.window.getWidget("progress")
@@ -40,6 +41,12 @@ object GuiImagFusor {
         text.content = if (recipe == null) "IDLE" else String.valueOf(recipe.consumeLiquid)
       })
     }
+
+    ret.infoPage.histogram(
+      TechUI.histEnergy(() => tile.getEnergyForDisplay, tile.getMaxEnergy),
+      TechUI.HistElement("IMAGFLUX", new Color(0xff7680de),
+        () => tile.getLiquidAmount.toDouble/tile.getTankSize,
+        () => "%d/%dIF".format(tile.getLiquidAmount, tile.getTankSize)))
 
     ret
   }

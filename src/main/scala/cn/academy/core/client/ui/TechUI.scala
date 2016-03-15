@@ -1,7 +1,7 @@
 package cn.academy.core.client.ui
 
 import cn.academy.core.client.Resources
-import cn.academy.core.client.ui.TechUI.Page
+import cn.academy.core.client.ui.TechUI.{BlendQuad, Page}
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessUser, IWirelessTile}
 import cn.academy.energy.api.event.node.{UnlinkUserEvent, LinkUserEvent}
@@ -21,7 +21,9 @@ import cn.lambdalib.s11n.{SerializeIncluded, SerializeNullable, SerializeStrateg
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.s11n.network.{NetworkS11n, Future, NetworkMessage}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
+import cn.lambdalib.util.client.{HudUtils, RenderUtils}
 import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.{GameTimer, Color}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.inventory.Container
@@ -31,7 +33,8 @@ import cn.lambdalib.cgui.ScalaCGUI._
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import scala.collection.JavaConversions._
-import scala.reflect.ClassTag
+import org.lwjgl.opengl.GL11._
+import collection.mutable
 
 private object Generic_ {
   def readxml(loc: String) = CGUIDocument.panicRead(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
@@ -42,8 +45,80 @@ import Generic_._
 object TechUI {
 
   private val pageButtonTemplate = readxml("pageselect").getWidget("main")
+  private val blendQuadTex = Resources.getTexture("guis/blend_quad")
+  private val histogramTex = Resources.getTexture("guis/histogram")
+  private val lineTex = Resources.getTexture("guis/line")
 
   case class Page(id: String, window: Widget)
+
+  class BlendQuad(var margin: Double = 4) extends Component("BlendQuad") {
+
+    val color = Color.monoBlend(0.0, 0.5)
+
+    this.listens[FrameEvent](() => {
+      RenderUtils.loadTexture(blendQuadTex)
+      color.bind()
+
+      def quad(col: Int, row: Int, x0: Double, y0: Double, x1: Double, y1: Double) = {
+        val u = col / 3.0
+        val v = row / 3.0
+        val step = 1.0 / 3.0
+
+        glTexCoord2d(u, v)
+        glVertex2d(x0, y0)
+
+        glTexCoord2d(u, v + step)
+        glVertex2d(x0, y1)
+
+        glTexCoord2d(u + step, v + step)
+        glVertex2d(x1, y1)
+
+        glTexCoord2d(u + step, v)
+        glVertex2d(x1, y0)
+      }
+
+      val (x, y, w, h) = (0, 0, widget.transform.width, widget.transform.height)
+      val xs = Array(x - margin, x, x + w, x + w + margin)
+      val ys = Array(y - margin, y, y + h, y + h + margin)
+
+      glBegin(GL_QUADS)
+
+      for {
+        i <- 0 until 3
+        j <- 0 until 3
+      } quad(i, j, xs(i), ys(j), xs(i+1), ys(j+1))
+
+      glEnd()
+
+      glColor4d(1, 1, 1, 1)
+      RenderUtils.loadTexture(lineTex)
+
+      val mrg = 3.2
+      HudUtils.rect(-mrg, -8.6, w + mrg*2, 12)
+      HudUtils.rect(-mrg, h - 2, w + mrg*2, 8)
+    })
+
+  }
+
+  def drawTextBox(content: String, option: FontOption,
+                  x: Double, y: Double,
+                  limit: Double = Double.MaxValue) = {
+    val wmargin = 5
+    val hmargin = 2
+
+    val font = Resources.font()
+    val extent = font.drawSeperated_Sim(content, limit, option)
+
+    glColor4f(0, 0, 0, 0.5f)
+    HudUtils.colorRect(x - extent.width * option.align.lenOffset, y,
+      extent.width + wmargin * 2 + 2, extent.height + hmargin * 2)
+
+    glColor4f(1, 1, 1, 0.8f)
+    font.drawSeperated(content, x + wmargin, y + hmargin, limit, option)
+
+    glColor4f(1, 1, 1, 1)
+  }
+
 
   /**
     * Creates a tech UI with specified pages.
@@ -112,8 +187,198 @@ object TechUI {
     def currentPage = currentPage_
   }
 
+  case class HistElement(id: String, color: Color,
+                         value: () => Double, desc: () => String)
+
+  def histEnergy(energy: () => Double, max: Double) = {
+    val color = new Color(0xff25c4ff)
+    HistElement("ENERGY", color, () => energy() / max, () => "%.0fIF".format(energy()))
+  }
+
+  def histBuffer(energy: () => Double, max: Double) = {
+    val color = new Color(0xff25f7ff)
+    HistElement("BUFFER", color, () => energy() / max, () => "%.0fIF".format(energy()))
+  }
+
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
+    class InfoArea extends Widget {
+      this :+ new BlendQuad()
+
+      private val keyLength = 40
+
+      private val expectWidth = 100.0
+      private var expectHeight = 50.0
+
+      this.size(expectWidth, 0)
+
+      private var lastFrameTime = GameTimer.getTime
+      private val blendStartTime = GameTimer.getTime
+
+      this.listens[FrameEvent](() => {
+        val dt = math.min(GameTimer.getTime - lastFrameTime, 500) / 1000.0
+        def move(fr: Double, to: Double): Double = {
+          val max = dt * 500
+          val delta = to - fr
+          fr + math.min(max, math.abs(delta)) * math.signum(delta)
+        }
+        transform.width = move(transform.width, expectWidth)
+        transform.height = move(transform.height, expectHeight)
+
+        val balpha = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 300) / 300.0)
+        uas foreach (ua => ua(balpha))
+
+        lastFrameTime = GameTimer.getTime
+      })
+
+      private var elemY: Double = 10
+      private val elements = mutable.ArrayBuffer[Widget]()
+
+      def histogram(elems: HistElement*) = {
+        val widget = new Widget().size(210, 210).scale(0.4)
+            .addComponent(blend(new DrawTexture(histogramTex)))
+
+        elems.zipWithIndex.foreach { case (elem, idx) => {
+          val bar = new Widget().size(16, 120).pos(56 + idx * 40, 78)
+          val progress = blend(new ProgressBar)
+          progress.color = elem.color
+          progress.dir = Direction.UP
+
+          bar.listens[FrameEvent](() => {
+            progress.progress = elem.value()
+          })
+          bar :+ progress
+
+          widget :+ bar
+        }}
+
+        blank(-30)
+        element(widget)
+
+        elems foreach (histProperty)
+
+        this
+      }
+
+      def sepline(id: String) = {
+        val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
+        widget :+ blend(new TextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(id)
+
+        blank(3)
+        element(widget)
+
+        this
+      }
+
+      def property[T](key: String, value: T,
+                      editCallback: String => Any = null) = {
+        val textBox = blend(new TextBox(new FontOption(8))).setContent(value.toString)
+        val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
+
+        if (editCallback != null) {
+          textBox.allowEdit = true
+          textBox.listens[ConfirmInputEvent](() => editCallback(textBox.content))
+        }
+
+        valueArea :+ textBox
+
+        kvpair(key, valueArea)
+
+        this
+      }
+
+      private def histProperty(elem: HistElement) = {
+        val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
+
+        val keyArea = new Widget().pos(4, 0).size(32, 8).halign(HeightAlign.CENTER)
+          .addComponent(blend(new TextBox(new FontOption(8))).setContent(elem.id))
+        val icon = new Widget().size(6, 6)
+          .halign(HeightAlign.CENTER).pos(-3, .5)
+          .addComponents(blend(new DrawTexture(null).setColor(elem.color)))
+        val valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(HeightAlign.CENTER)
+          .addComponent(blend(new TextBox(new FontOption(8))).setContent(elem.desc()))
+
+        valueArea.listens[FrameEvent](() => {
+          valueArea.component[TextBox].content = elem.desc()
+        })
+
+        widget :+ keyArea
+        widget :+ icon
+        widget :+ valueArea
+
+        element(widget)
+      }
+
+      private def kvpair(key: String, value: Widget) = {
+        val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
+        val keyArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
+          .addComponent(blend(new TextBox(new FontOption(8))).setContent(key))
+        value.pos(keyLength, 0)
+
+        widget :+ keyArea
+        widget :+ value
+
+        element(widget)
+      }
+
+      def element(elem: Widget) = {
+        elem.transform.y = elemY
+        elemY += elem.transform.height * elem.transform.scale
+
+        elements += elem
+        expectHeight = math.max(50.0, elemY + 8)
+        this :+ elem
+
+        this
+      }
+
+      def blank(ht: Double) = {
+        elemY += ht
+
+        this
+      }
+
+      def reset() = {
+        elements foreach (_.dispose())
+        elements.clear()
+        elemY = 10
+        uas foreach (_.clear())
+
+        this
+      }
+
+      private trait Updater[T] {
+        private val us = mutable.ArrayBuffer[T]()
+
+        def add(obj: T) = us += obj
+        def clear() = us.clear()
+        def apply(alpha: Double): Unit = us foreach (x => apply(x, alpha))
+        def apply(obj: T, alpha: Double): Unit
+      }
+      private implicit object DrawTexUpdater extends Updater[DrawTexture] {
+        override def apply(obj: DrawTexture, alpha: Double) = obj.color.a = alpha
+      }
+      private implicit object TextBoxUpdater extends Updater[TextBox] {
+        override def apply(obj: TextBox, alpha: Double) = obj.option.color.a = alpha
+      }
+      private implicit object ProgressBarUpdater extends Updater[ProgressBar] {
+        override def apply(obj: ProgressBar, alpha: Double) = obj.color.a = alpha
+      }
+      private val uas = List(DrawTexUpdater, TextBoxUpdater, ProgressBarUpdater)
+
+      private def blend[T](obj: T)(implicit ua: Updater[T]) = {
+        ua.add(obj)
+        obj
+      }
+
+    }
+
     val main = TechUI(pages: _*)
+    main.pos(-18, 0)
+
+    val infoPage = new InfoArea()
+    infoPage.pos(main.transform.width + 7, 5)
+
+    main :+ infoPage
 
     gui.addWidget(main)
 
@@ -122,204 +387,6 @@ object TechUI {
     override def isSlotActive = shouldDisplayInventory(main.currentPage)
   }
 
-}
-
-object ConfigPage {
-  val COLOR_ENERGY = new Color(0xff25c4ff)
-  val ELEM_W = 142
-  val ELEM_H = 10
-
-  private val configPageTemplate = readxml("page_config").getWidget("main")
-
-  private val histoDescOption = new FontOption(9, 0xffd2d2d2)
-
-  case class HistoElement(id: String, color: Color, progressProvider: () => Double, descProvider: () => String)
-
-  def histoEnergy(energyProvider: () => Double, maxEnergy: Double) = {
-    HistoElement("energy", COLOR_ENERGY, () => energyProvider() / maxEnergy,
-      () => "Energy: %.0f/%.0f".format(energyProvider(), maxEnergy))
-  }
-
-  def textProperty(content: String, color: Color = Color.white()) = {
-    val ret = pContainer()
-    ret :+ new TextBox(new FontOption(10, color)).setContent(content)
-    ret
-  }
-
-  def textPropertyUpdated(contentProvider: () => String, color: Color = Color.white()) = {
-    val ret = pContainer()
-    val textBox = new TextBox(new FontOption(10, color)).setContent(contentProvider())
-    ret :+ textBox
-    ret.listens[FrameEvent](() => textBox.setContent(contentProvider()))
-
-    ret
-  }
-
-  def doubleProperty(name: String, initial: Double, editCallback: Double => Boolean) = {
-    textBoxProperty(name, String.valueOf(initial), (content: String) => {
-      try {
-        val parsed = content.toDouble
-        editCallback(parsed)
-      } catch {
-        case _: NumberFormatException => false
-      }
-    })
-  }
-
-  def textBoxProperty(name: String, initial: String,
-                      editCallback: String => Boolean = _ => true,
-                      altColor: Boolean = true,
-                      canEdit: Boolean = true,
-                      password: Boolean = false) = {
-    val NORMAL_COLOR   = new Color(0xaa797979)
-    val MODIFIED_COLOR = new Color(0xaaa07d47)
-    val ERROR_COLOR    = new Color(0xaae36a52)
-
-    val editArea = new Widget().size(60, 8)
-
-    val back = new DrawTexture().setColor(NORMAL_COLOR).setTex(null)
-    val textBox = new TextBox(new FontOption(7)).setContent(initial).allowEdit()
-
-    textBox.allowEdit = canEdit
-    textBox.doesEcho = password
-
-    editArea :+ back
-    editArea :+ textBox
-
-    if (altColor) {
-      editArea.listens[ChangeContentEvent](() => back.setColor(MODIFIED_COLOR))
-    }
-
-    editArea.listens[ConfirmInputEvent](() => {
-      val result = editCallback(textBox.content)
-      if (altColor) {
-        back.setColor(if (result) NORMAL_COLOR else ERROR_COLOR)
-      }
-    })
-
-    kvpair(name, editArea)
-  }
-
-  def button(name: String, callback: () => Any) = {
-    val option = new FontOption(6.0, FontAlign.CENTER)
-    val back = new Tint(Color.mono(0.3), Color.mono(0.5))
-
-    val textBox = new TextBox(option)
-    textBox.heightAlign = HeightAlign.CENTER
-    textBox.content = name
-
-    val len = math.max(40, textBox.font.getTextWidth(name, option))
-
-    val ret = new Widget().size(len, 8)
-
-    ret :+ back
-    ret :+ textBox
-    ret.listens[LeftClickEvent](callback)
-
-    ret
-  }
-
-  def flowProperty(spacing: Double, elements: Widget*) = {
-    import collection.mutable
-
-    def width(w: Widget) = w.transform.scale * w.transform.width
-
-    val dp = mutable.ArrayBuffer(0.0)
-    elements.map(width).foreach(w => dp += (dp.last + w + spacing))
-
-    val total = dp.last - spacing
-    require (total < ELEM_W)
-
-    val begin = (ELEM_W - total) / 2
-
-    val area = pContainer()
-
-    elements.zip(dp).foreach { case (elem, x) =>
-      elem.transform.x = begin + x
-      area :+ elem
-    }
-
-    area
-  }
-
-  private def pContainer() = new Widget().size(ELEM_W, 8)
-
-  def kvpair(name: String, valueWidget: Widget) = {
-    val container = pContainer()
-
-    val nameArea = new Widget(60, 8)
-    nameArea :+ new TextBox(new FontOption(7)).setContent(name)
-
-    valueWidget.pos(60, 0)
-
-    container :+ ("name", nameArea)
-    container :+ ("value", valueWidget)
-
-    container
-  }
-
-  def updateElements(widget: Widget, properties: Seq[Widget]) = {
-    val elist = new ElementList
-    elist.spacing = 3.0
-    properties.foreach(elist.addWidget)
-
-    val panelConfig = widget.getWidget("panel_config")
-
-    val area = panelConfig.getWidget("zone_elementlist")
-    area.removeComponent("ElementList")
-    area :+ elist
-
-    panelConfig.getWidget("btn_arrow_up").listens[LeftClickEvent](() => elist.progressLast())
-    panelConfig.getWidget("btn_arrow_down").listens[LeftClickEvent](() => elist.progressNext())
-  }
-
-  def updateHistorgam(widget: Widget, histo: Seq[HistoElement]) = {
-    val panelDiagram = widget.getWidget("panel_diagram")
-    val histZone = panelDiagram.getWidget("zone_histogram")
-    val elemList = panelDiagram.getWidget("zone_elementlist")
-
-    elemList.getDrawList.foreach(_.dispose())
-
-    histo.zipWithIndex.foreach { case (elem, idx) =>
-      val barX = 10 + idx * 15
-      val bar = new Widget().halign(HeightAlign.BOTTOM).pos(barX, 0).size(10, 60)
-
-      val progress = new ProgressBar().setDirection(Direction.UP)
-      progress.color.from(elem.color)
-      bar :+ progress
-      bar.listens((evt: FrameEvent) => {
-        progress.progress = elem.progressProvider()
-
-        if (evt.hovering && (1 - evt.my / bar.transform.height) <= progress.progress) {
-          val font = Resources.font()
-          font.draw(elem.descProvider(), evt.mx + 5, evt.my - 5, histoDescOption)
-        }
-      })
-
-      histZone :+ bar
-
-      val disp = elemList.getWidget("element").copy()
-      disp.transform.y += 10 + idx * 15
-      disp.transform.doesDraw = true
-
-      disp.getWidget("element_mark").getComponent(classOf[DrawTexture]).color.from(elem.color)
-      disp.getWidget("element_name").getComponent(classOf[TextBox])
-        .setContent(StatCollector.translateToLocal("ac.gui.histogram." + elem.id))
-
-      elemList :+ disp
-    }
-  }
-
-  def apply(properties: Seq[Widget], histo: Seq[HistoElement]) = {
-    val widget = configPageTemplate.copy()
-
-    TechUI.breathe(widget.getWidget("ui_info"))
-
-    updateElements(widget, properties)
-    updateHistorgam(widget, histo)
-
-    Page("config_2", widget)
-  }
 }
 
 @Registrant

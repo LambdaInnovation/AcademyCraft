@@ -21,50 +21,9 @@ object GuiMatrix2 {
 
   def apply(container: ContainerMatrix) = {
     val tile = container.tile
-
     val invPage = InventoryPage("matrix")
 
-    val configPage = ConfigPage(Nil, Nil)
-
-    def refreshInfo(): Unit = {
-      println("A")
-
-      send(MSG_GATHER_INFO, tile, Future.create((arr: Array[String]) => {
-        println("C")
-
-        val (ssid, pwd) = (arr(0), arr(1))
-
-        def content(kv: Widget) = kv.child("value").component[TextBox].content
-
-        val elements =
-          if (ssid == null) {
-            val ssid = ConfigPage.textBoxProperty("SSID", "", altColor = false)
-            val pass = ConfigPage.textBoxProperty("PASS", "", altColor = false, password = true)
-            val passConfirm = ConfigPage.textBoxProperty("CONFIRM", "", altColor = false, password = true)
-
-            List(
-              ssid,
-              pass,
-              passConfirm,
-              ConfigPage.flowProperty(10, ConfigPage.button("INIT", () => {
-                if (content(pass) == content(passConfirm)) {
-                  send(MSG_INIT, tile, content(ssid), content(pass),
-                    Future.create((_: Boolean) => refreshInfo()))
-                }
-              })))
-          } else {
-            List(
-              ConfigPage.textBoxProperty("SSID", ssid, canEdit = false)
-            )
-          }
-
-        ConfigPage.updateElements(configPage.window, elements)
-      }))
-    }
-
-    refreshInfo()
-
-    val ret = new ContainerUI(container, invPage, configPage)
+    val ret = new ContainerUI(container, invPage)
 
     ret
   }
