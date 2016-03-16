@@ -192,12 +192,12 @@ object TechUI {
 
   def histEnergy(energy: () => Double, max: Double) = {
     val color = new Color(0xff25c4ff)
-    HistElement("ENERGY", color, () => energy() / max, () => "%.0fIF".format(energy()))
+    HistElement("ENERGY", color, () => energy() / max, () => "%.0f IF".format(energy()))
   }
 
   def histBuffer(energy: () => Double, max: Double) = {
     val color = new Color(0xff25f7ff)
-    HistElement("BUFFER", color, () => energy() / max, () => "%.0fIF".format(energy()))
+    HistElement("BUFFER", color, () => energy() / max, () => "%.0f IF".format(energy()))
   }
 
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
@@ -244,7 +244,7 @@ object TechUI {
           progress.dir = Direction.UP
 
           bar.listens[FrameEvent](() => {
-            progress.progress = elem.value()
+            progress.progress = MathUtils.clampd(0.03, 1, elem.value())
           })
           bar :+ progress
 
@@ -269,19 +269,72 @@ object TechUI {
         this
       }
 
-      def property[T](key: String, value: T,
-                      editCallback: String => Any = null) = {
+      def button(name: String, callback: () => Any) = {
+        val textBox = new TextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
+        val len = textBox.font.getTextWidth(name, textBox.option)
+
+        val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
+        widget.listens((evt: FrameEvent) => {
+          textBox.option.color.a = if (evt.hovering) 1.0 else 0.8
+        })
+        widget.listens[LeftClickEvent](callback)
+        widget :+ blend(textBox)
+
+        element(widget)
+      }
+
+      def property[T](key: String, value: =>T,
+                      editCallback: String => Any = null,
+                      password: Boolean = false,
+                      colorChange: Boolean = true,
+                      contentCell: Array[TextBox] = null) = { // Content cell is a temp hack to get the text component
+        val (idleColor, editColor) = (new Color(0xffffffff), new Color(0xff2180d8))
+
         val textBox = blend(new TextBox(new FontOption(8))).setContent(value.toString)
         val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
 
         if (editCallback != null) {
           textBox.allowEdit = true
-          textBox.listens[ConfirmInputEvent](() => editCallback(textBox.content))
+          textBox.option.color.from(idleColor)
+          valueArea.listens[ConfirmInputEvent](() => {
+            if (colorChange) {
+              textBox.option.color.from(idleColor)
+            }
+            editCallback(textBox.content)
+          })
+          valueArea.listens[ChangeContentEvent](() => {
+            if (colorChange) {
+              textBox.option.color.from(editColor)
+            }
+          })
+
+          def box(ch: String) = {
+            val ret = new Widget().size(10, 8)
+              .halign(HeightAlign.CENTER)
+              .addComponent(blend(new TextBox(new FontOption(8)).setContent(ch)))
+            ret
+          }
+
+          val (box0, box1) = (box("[").pos(-4, 0), box("]").pos(valueArea.transform.width + 2, 0))
+          box0.transform.doesListenKey = false
+          box1.transform.doesListenKey = false
+          valueArea :+ box0
+          valueArea :+ box1
+        } else {
+          valueArea.listens[FrameEvent](() => textBox.content = value.toString)
+        }
+
+        if (password) {
+          textBox.doesEcho = true
         }
 
         valueArea :+ textBox
 
         kvpair(key, valueArea)
+
+        if (contentCell != null) {
+          contentCell.update(0, textBox)
+        }
 
         this
       }
@@ -567,13 +620,10 @@ object WirelessPage {
           override def name: String = node.getNodeName
         })
 
-        println(result.avail.toList)
         val avail = result.avail.toList.flatMap(_.tile(world)).map(node => new AvailTarget {
           override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
           override def name: String = node.getNodeName
         })
-
-        println(avail)
 
         rebuildPage(ret.window, linked, avail)
       }))
@@ -651,8 +701,6 @@ object WirelessNetDelegate {
 
   @Listener(channel=MSG_FIND_NETWORKS, side=Array(Side.SERVER))
   private def hFindNetworks(node: TileNode, fut: Future[NodeResult]) = {
-    println("hFindNetworks")
-
     val linked = Option(WirelessHelper.getWirelessNet(node))
 
     def cvt(net: WirelessNet) = {

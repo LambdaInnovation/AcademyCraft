@@ -14,7 +14,9 @@ import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -63,6 +65,18 @@ public class BlockMatrix extends ACBlockMulti {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+        if (!world.isRemote && placer instanceof EntityPlayer) {
+            TileEntity tile = world.getTileEntity(x, y, z);
+            if (tile instanceof TileMatrix) {
+                ((TileMatrix) tile).setPlacer(((EntityPlayer) placer));
+            }
+        }
+
+        super.onBlockPlacedBy(world, x, y, z, placer, stack);
     }
     
     @RegGuiHandler

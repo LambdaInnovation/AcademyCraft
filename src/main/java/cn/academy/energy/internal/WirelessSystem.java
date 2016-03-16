@@ -72,7 +72,7 @@ public class WirelessSystem {
     public void changePass(ChangePassEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         WirelessNet net = data.getNetwork(event.mat);
-        if(net == null || !net.resetPassword(event.oldpwd, event.pwd)) {
+        if(net == null || !net.resetPassword(event.pwd)) {
             event.setCanceled(true);
         }
     }

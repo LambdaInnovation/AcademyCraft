@@ -33,21 +33,21 @@ public class ContainerPhaseGen extends Container {
     }
     
     private void initInventory() {
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 47, 3));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 114, 42));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 44, 71));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 29, 3));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 96, 42));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 26, 71));
         
         InventoryPlayer inv = player.inventory;
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
             }
         }
     }

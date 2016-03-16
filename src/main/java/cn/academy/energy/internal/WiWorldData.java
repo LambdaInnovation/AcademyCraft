@@ -165,9 +165,9 @@ public class WiWorldData extends WorldSavedData {
     }
     
     //-----NodeConn----
-    Map<Object, NodeConn> nodeLookup = new HashMap();
-    Set<NodeConn> nodeList = new HashSet();
-    List<NodeConn> nToRemove = new ArrayList();
+    Map<Object, NodeConn> nodeLookup = new HashMap<>();
+    Set<NodeConn> nodeList = new HashSet<>();
+    List<NodeConn> nToRemove = new ArrayList<>();
     
     /**
      * Get the node connection of a node. If not found will create a new one. Never returns null.

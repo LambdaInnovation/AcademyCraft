@@ -2,20 +2,24 @@ package cn.academy.energy.client.ui
 
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
+import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.block.BlockNode.NodeType
 import cn.academy.energy.block.{TileNode, ContainerNode}
 
 import cn.academy.core.client.ui._
 import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.s11n.network.{NetworkS11n, NetworkMessage}
+import cn.lambdalib.s11n.network.{Future, NetworkS11n, NetworkMessage}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.util.client.{RenderUtils, HudUtils}
 import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
+import net.minecraft.client.Minecraft
+import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.opengl.GL11
 
 object GuiNode2 {
@@ -32,6 +36,7 @@ object GuiNode2 {
 
   def apply(container: ContainerNode) = {
     val tile = container.node
+    val thePlayer = Minecraft.getMinecraft.thePlayer
 
     def getState = states(STATE_LINKED)
 
@@ -58,17 +63,28 @@ object GuiNode2 {
     val ret = new ContainerUI(container, invPage, wirelessPage)
 
     {
-      var currentCapacity = 1 // TODO: Send packet at init to retrieve that
+      var load = 1
+
+      send(MSG_INIT, tile, Future.create((cap: Int) => load = cap))
 
       ret.infoPage
         .histogram(
           TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy),
           TechUI.HistElement("CAPACITY", new Color(0xffff6c00),
-            () => currentCapacity / tile.getCapacity, () => "%d/%d".format(currentCapacity, tile.getCapacity)),
-          TechUI.HistElement("RANGE", new Color(0xff7680de),
-            () => tile.getRange / NodeType.ADVANCED.range, () => "%.0f".format(tile.getRange))
+            () => load.toDouble / tile.getCapacity, () => "%d/%d".format(load, tile.getCapacity))
           )
-          .property("NAME", tile.getNodeName, newName => send(MSG_RENAME, newName))
+          .sepline("INFO")
+          .property("RANGE", tile.getRange)
+          .property("OWNER", tile.getPlacerName)
+
+      if (tile.getPlacerName == thePlayer.getCommandSenderName) {
+        ret.infoPage
+          .property("NAME", tile.getNodeName, newName => send(MSG_RENAME, thePlayer, tile, newName))
+          .property("PASSWORD", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password=true)
+      } else {
+        ret.infoPage
+          .property("NAME", tile.getNodeName)
+      }
     }
 
     ret
@@ -107,12 +123,32 @@ object GuiNode2 {
 @NetworkS11nType
 object NodeNetworkProxy {
   final val MSG_RENAME = "rename"
+  final val MSG_CHANGE_PASS = "repass"
+  final val MSG_INIT   = "init"
 
-  NetworkS11n.addDirectInstance(NodeNetworkProxy)
+  @RegInitCallback
+  def __init() = {
+    NetworkS11n.addDirectInstance(NodeNetworkProxy)
+  }
 
   @Listener(channel=MSG_RENAME, side=Array(Side.SERVER))
-  def rename(node: TileNode, name: String) = {
-    node.setNodeName(name)
+  def rename(player: EntityPlayer, node: TileNode, name: String) = {
+    if (player.getCommandSenderName == node.getPlacerName) {
+      node.setNodeName(name)
+    }
+  }
+
+  @Listener(channel=MSG_CHANGE_PASS, side=Array(Side.SERVER))
+  def changePassword(player: EntityPlayer, node: TileNode, name: String) = {
+    if (player.getCommandSenderName == node.getPlacerName) {
+      node.setPassword(name)
+    }
+  }
+
+  @Listener(channel=MSG_INIT, side=Array(Side.SERVER))
+  def init(node: TileNode, future: Future[Int]) = {
+    val conn = WirelessHelper.getNodeConn(node)
+    future.sendResult(conn.getLoad)
   }
 
 }

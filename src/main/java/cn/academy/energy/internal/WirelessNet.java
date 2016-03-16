@@ -103,9 +103,7 @@ public class WirelessNet {
         return password;
     }
     
-    public boolean resetPassword(String p, String np) {
-        if(!p.equals(password))
-            return false;
+    public boolean resetPassword(String np) {
         password = np;
         return true;
     }

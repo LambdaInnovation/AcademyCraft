@@ -24,6 +24,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -60,9 +61,19 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public boolean chargingIn = false;
     
     public boolean chargingOut = false;
+
+    private String placerName = "";
     
     public TileNode() {
         super("wireless_node", 2);
+    }
+
+    public void setPlacer(EntityPlayer player) {
+        placerName = player.getCommandSenderName();
+    }
+
+    public String getPlacerName() {
+        return placerName;
     }
     
     @Override
@@ -74,7 +85,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 
                 NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 20),
                         this, MSG_SYNC,
-                        enabled, chargingIn, chargingOut, energy, name, password);
+                        enabled, chargingIn, chargingOut, energy, name, password, placerName);
             }
             
             updateChargeIn();
@@ -151,6 +162,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         energy = tag.getDouble("energy");
         name = tag.getString("nodeName");
         password = tag.getString("password");
+        placerName = tag.getString("placer");
     }
     
     @Override
@@ -159,6 +171,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         tag.setDouble("energy", energy);
         tag.setString("nodeName", name);
         tag.setString("password", password);
+        tag.setString("placer", placerName);
     }
 
     String name = "Unnamed";
@@ -179,13 +192,14 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
 
     @Listener(channel=MSG_SYNC, side=Side.CLIENT)
     void hSync(boolean enabled, boolean chargingIn, boolean chargingOut,
-               double energy, String name, String pass) {
+               double energy, String name, String pass, String placerName) {
         this.enabled = enabled;
         this.chargingIn = chargingIn;
         this.chargingOut = chargingOut;
         this.energy = energy;
         this.name = name;
         this.password = pass;
+        this.placerName = placerName;
     }
 
     @Override

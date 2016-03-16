@@ -30,19 +30,19 @@ public class ContainerNode extends Container {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotIFItem(node, 0, 44, 2));
-        this.addSlotToContainer(new SlotIFItem(node, 1, 44, 71));
+        this.addSlotToContainer(new SlotIFItem(node, 0, 26, 2));
+        this.addSlotToContainer(new SlotIFItem(node, 1, 26, 71));
         
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
             }
         }
     }

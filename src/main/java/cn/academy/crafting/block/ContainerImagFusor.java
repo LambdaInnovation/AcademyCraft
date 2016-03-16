@@ -37,22 +37,22 @@ public class ContainerImagFusor extends CleanContainer {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, 15, 40));
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 144, 40));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, 51, 28));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 109, 44));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 43, 71));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, -3, 40));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 126, 40));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, 33, 28));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 91, 44));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 25, 71));
         
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
             }
         }
 
