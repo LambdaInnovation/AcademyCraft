@@ -28,6 +28,7 @@ object GuiMatrix2 {
   def apply(container: ContainerMatrix) = {
     val tile = container.tile
     val thePlayer = Minecraft.getMinecraft.thePlayer
+    val isPlacer = tile.getPlacerName == thePlayer.getCommandSenderName
 
     val invPage = InventoryPage("matrix")
 
@@ -45,33 +46,45 @@ object GuiMatrix2 {
         )
 
         ret.infoPage.sepline("INFO")
-          .property("RANGE", tile.getRange)
-          .property("BANDWIDTH", tile.getBandwidth + " IF/T")
           .property("OWNER", tile.getPlacerName)
+          .property("RANGE", "%.0f".format(tile.getRange))
+          .property("BANDWIDTH", tile.getBandwidth + " IF/T")
 
         if (data.init) {
-          ret.infoPage
-            .sepline("WIRELESS INFO")
-            .property("SSID", data.ssid)
-            .sepline("CHANGE PASSWORD")
-            .property("PASSWORD", data.pass, password=true, editCallback = newPass => {
-              send(MSG_CHANGE_PASSWORD, tile, thePlayer, newPass)
-            })
+          ret.infoPage.sepline("WIRELESS INFO")
+          if (isPlacer) {
+            ret.infoPage
+              .property("SSID", data.ssid, editCallback = newSSID => {
+              send(MSG_CHANGE_SSID, tile, thePlayer, newSSID)
+              })
+              .sepline("CHANGE PASSWORD")
+              .property("PASSWORD", data.pass, password=true, editCallback = newPass => {
+                send(MSG_CHANGE_PASSWORD, tile, thePlayer, newPass)
+              })
+          } else {
+            ret.infoPage
+              .property("SSID", data.ssid)
+              .property("PASSWORD", data.pass, password=true)
+          }
         } else {
           val ssidCell = Array[TextBox](null)
           val passwordCell = Array[TextBox](null)
 
-          ret.infoPage
-            .sepline("WIRELESS INIT")
-            .property("SSID", "", _ => {}, contentCell=ssidCell, colorChange=false)
-            .property("PASSWORD", "", _ => {}, contentCell=passwordCell, password=true, colorChange=false)
-            .blank(1)
-            .button("INIT", () => {
-              val (ssidBox, passBox) = (ssidCell(0), passwordCell(0))
-              send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create((_: Boolean) =>
-                send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
-              ))
-            })
+          if (isPlacer) {
+            ret.infoPage
+              .sepline("WIRELESS INIT")
+              .property("SSID", "", _ => {}, contentCell=ssidCell, colorChange=false)
+              .property("PASSWORD", "", _ => {}, contentCell=passwordCell, password=true, colorChange=false)
+              .blank(1)
+              .button("INIT", () => {
+                val (ssidBox, passBox) = (ssidCell(0), passwordCell(0))
+                send(MSG_INIT, tile, ssidBox.content, passBox.content, Future.create((_: Boolean) =>
+                  send(MSG_GATHER_INFO, tile, Future.create((inf: InitData) => rebuildInfo(inf)))
+                ))
+              })
+          } else {
+            ret.infoPage.sepline("WIRELESS NET NOT INITIALIZED")
+          }
         }
       }
 
@@ -112,6 +125,7 @@ private object MatrixNetProxy {
   final val MSG_GATHER_INFO = "gather"
   final val MSG_INIT = "init"
   final val MSG_CHANGE_PASSWORD = "pass"
+  final val MSG_CHANGE_SSID = "ssid"
 
   @Listener(channel=MSG_GATHER_INFO, side=Array(Side.SERVER))
   def gatherInfo(matrix: TileMatrix, future: Future[InitData]) = {
@@ -139,6 +153,17 @@ private object MatrixNetProxy {
   def changePassword(matrix: TileMatrix, player: EntityPlayer, pwd: String) = {
     if (matrix.getPlacerName == player.getCommandSenderName) {
       MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, pwd))
+    }
+  }
+
+  @Listener(channel=MSG_CHANGE_SSID, side=Array(Side.SERVER))
+  def changeSSID(matrix: TileMatrix, player: EntityPlayer, newSSID: String) = {
+    if (matrix.getPlacerName == player.getCommandSenderName) {
+      Option(WirelessHelper.getWirelessNet(matrix)) match {
+        case Some(net) =>
+          net.setSSID(newSSID)
+        case _ =>
+      }
     }
   }
 

@@ -6,6 +6,7 @@
 */
 package cn.academy.energy.api.event.wen;
 
+import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.event.WirelessEvent;
 import cpw.mods.fml.common.eventhandler.Cancelable;
@@ -18,17 +19,17 @@ import cpw.mods.fml.common.eventhandler.Cancelable;
 public class LinkNodeEvent extends WirelessEvent {
     
     public final IWirelessNode node;
-    public final String ssid;
+    public final IWirelessMatrix matrix;
     public final String pwd;
     
-    public LinkNodeEvent(IWirelessNode _node, String _ssid) {
-        this(_node, _ssid, "");
+    public LinkNodeEvent(IWirelessNode _node, IWirelessMatrix _matrix) {
+        this(_node, _matrix, "");
     }
 
-    public LinkNodeEvent(IWirelessNode _node, String _ssid, String _pwd) {
+    public LinkNodeEvent(IWirelessNode _node, IWirelessMatrix _matrix, String _pwd) {
         super(_node);
         node = _node;
-        ssid = _ssid;
+        matrix = _matrix;
         pwd = _pwd;
     }
 

@@ -80,7 +80,7 @@ public class WirelessSystem {
     @SubscribeEvent
     public void linkNode(LinkNodeEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
-        WirelessNet net = data.getNetwork(event.ssid);
+        WirelessNet net = data.getNetwork(event.matrix);
         
         if(net == null || !net.addNode(new VWNode(event.node), event.pwd))
             event.setCanceled(true);

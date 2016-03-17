@@ -69,7 +69,7 @@ public class BlockMatrix extends ACBlockMulti {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
-        if (!world.isRemote && placer instanceof EntityPlayer) {
+        if (placer instanceof EntityPlayer) {
             TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TileMatrix) {
                 ((TileMatrix) tile).setPlacer(((EntityPlayer) placer));

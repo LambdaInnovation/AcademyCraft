@@ -124,6 +124,7 @@ ac.app.freq_transmitter.s1_0=Press ENTER to confirm
 ac.app.freq_transmitter.s1_1=Authorizing...
 ac.app.freq_transmitter.s2_0=Right click any wireless node nearby to establish link. Click any other blocks to quit.
 ac.app.freq_transmitter.s3_0=Right click any wireless receiver or generator nearby to esablish link. Click any other blocks to quit.
+ac.app.freq_transmitter.st=Action Timeout.
 
 ac.app.freq_transmitter.e0=The wireless matrix is not initialized.
 ac.app.freq_transmitter.e1=Authorization failed.

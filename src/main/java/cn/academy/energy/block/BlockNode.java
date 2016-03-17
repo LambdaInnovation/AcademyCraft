@@ -119,7 +119,7 @@ public class BlockNode extends ACBlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
-        if (!world.isRemote && placer instanceof EntityPlayer) {
+        if (placer instanceof EntityPlayer) {
             TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TileNode) {
                 ((TileNode) tile).setPlacer((EntityPlayer) placer);

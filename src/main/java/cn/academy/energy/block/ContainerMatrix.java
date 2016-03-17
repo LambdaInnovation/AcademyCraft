@@ -33,22 +33,22 @@ public class ContainerMatrix extends CleanContainer {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotPlate(tile, 0, 108, 2));
-        this.addSlotToContainer(new SlotPlate(tile, 1, 108, 26));
-        this.addSlotToContainer(new SlotPlate(tile, 2, 108, 50));
+        this.addSlotToContainer(new SlotPlate(tile, 0, 90, 2));
+        this.addSlotToContainer(new SlotPlate(tile, 1, 90, 26));
+        this.addSlotToContainer(new SlotPlate(tile, 2, 90, 50));
         
-        this.addSlotToContainer(new SlotCore(tile, 3, 66, 25));
+        this.addSlotToContainer(new SlotCore(tile, 3, 48, 25));
         
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
             }
         }
 

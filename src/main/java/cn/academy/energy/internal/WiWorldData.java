@@ -53,15 +53,15 @@ public class WiWorldData extends WorldSavedData {
     };
     
     /***
-     * Object valid for lookup: VWMatrix, VWNode, String ssid
+     * Object valid for lookup: VWMatrix, VWNode
      */
-    Map<Object, WirelessNet> netLookup = new HashMap();
-    Set<WirelessNet> netList = new HashSet();
+    Map<Object, WirelessNet> netLookup = new HashMap<>();
+    Set<WirelessNet> netList = new HashSet<>();
     
     /**
      * Internal, used to prevent concurrent modification.
      */
-    private List<WirelessNet> toRemove = new ArrayList();
+    private List<WirelessNet> toRemove = new ArrayList<>();
     
     private void tickNetwork() {
         for(WirelessNet net : toRemove) {
@@ -82,10 +82,6 @@ public class WiWorldData extends WorldSavedData {
     }
     
     boolean createNetwork(IWirelessMatrix matrix, String ssid, String password) {
-        if(netLookup.containsKey(ssid)) { //Doesn't allow ssid duplication
-            return false;
-        }
-        
         // Kill old net of the same matrix, if any
         VWMatrix vm = new VWMatrix(matrix);
         if(netLookup.containsKey(vm)) {
@@ -103,7 +99,7 @@ public class WiWorldData extends WorldSavedData {
     public Collection<WirelessNet> rangeSearch(int x, int y, int z, double range, int max) {
         Collection<BlockPos> bps = WorldUtils.getBlocksWithin(world, x, y, z, range, max, filterWirelessBlocks);
         
-        Set<WirelessNet> set = new HashSet();
+        Set<WirelessNet> set = new HashSet<>();
         for(BlockPos bp : bps) {
             TileEntity te = bp.getTile();
             WirelessNet net;
@@ -120,11 +116,8 @@ public class WiWorldData extends WorldSavedData {
                     return set;
             }
         }
+
         return set;
-    }
-    
-    public WirelessNet getNetwork(String ssid) {
-        return netLookup.get(ssid);
     }
     
     public WirelessNet getNetwork(IWirelessMatrix matrix) {

@@ -1,7 +1,7 @@
 package cn.academy.core.client.ui
 
 import cn.academy.core.client.Resources
-import cn.academy.core.client.ui.TechUI.{BlendQuad, Page}
+import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessUser, IWirelessTile}
 import cn.academy.energy.api.event.node.{UnlinkUserEvent, LinkUserEvent}
@@ -28,7 +28,7 @@ import cn.lambdalib.util.helper.{GameTimer, Color}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.inventory.Container
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{StatCollector, ResourceLocation}
+import net.minecraft.util.ResourceLocation
 import cn.lambdalib.cgui.ScalaCGUI._
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
@@ -275,7 +275,11 @@ object TechUI {
 
         val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
         widget.listens((evt: FrameEvent) => {
-          textBox.option.color.a = if (evt.hovering) 1.0 else 0.8
+          val lum = if (evt.hovering) 1.0 else 0.8
+          val color = textBox.option.color
+          color.r = lum
+          color.g = lum
+          color.b = lum
         })
         widget.listens[LeftClickEvent](callback)
         widget :+ blend(textBox)
@@ -470,6 +474,7 @@ private class MatrixData {
   var y: Int = 0
   var z: Int = 0
   var ssid: String = null
+  var encrypted: Boolean = false
 
   def tile(world: World) = world.getTileEntity(x, y, z) match {
     case tile: IWirelessMatrix => Some(tile)
@@ -484,6 +489,7 @@ private class NodeData {
   var x: Int = 0
   var y: Int = 0
   var z: Int = 0
+  var encrypted: Boolean = false
 
   def tile(world: World) = world.getTileEntity(x, y, z) match {
     case tile: IWirelessNode => Some(tile)
@@ -501,6 +507,7 @@ object WirelessPage {
 
   private val connectedIcon = Resources.getTexture("guis/icons/icon_connected")
   private val unconnectedIcon = Resources.getTexture("guis/icons/icon_unconnected")
+  private val toMatrixIcon = Resources.getTexture("guis/icons/icon_tomatrix")
 
   final val MSG_FIND_NODES = "find_nodes"
   final val MSG_USER_CONNECT = "user_connect"
@@ -515,6 +522,7 @@ object WirelessPage {
 
   trait AvailTarget extends Target {
     def connect(pass: String)
+    def encrypted: Boolean
   }
 
   trait LinkedTarget extends Target {
@@ -528,7 +536,8 @@ object WirelessPage {
     wlist.removeComponent("ElementList")
 
     val elist = new ElementList
-    val elemTemplate = wlist.getWidget("element")
+    wlist.getWidget("element").transform.doesDraw = false
+    val elemTemplate = wlist.getWidget("element").copy()
 
     {
       val connectElem = window.getWidget("panel_wireless/elem_connected")
@@ -560,14 +569,18 @@ object WirelessPage {
 
       instance.getWidget("text_name").component[TextBox].setContent(target.name)
 
-      passBox.listens[ConfirmInputEvent](() => confirm())
-      instance.getWidget("icon_connect").listens[LeftClickEvent](() => confirm())
+      if (target.encrypted) {
+        passBox.listens[ConfirmInputEvent](() => confirm())
+        passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
+        passBox.listens[LostFocusEvent](() => {
+          passBox.component[TextBox].setContent("")
+          iconKey.component[DrawTexture].color.a = 0.6
+        })
+      } else {
+        Array(passBox, iconKey).foreach(_.transform.doesDraw = false)
+      }
 
-      passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
-      passBox.listens[LostFocusEvent](() => {
-        passBox.component[TextBox].setContent("")
-        iconKey.component[DrawTexture].color.a = 0.6
-      })
+      instance.getWidget("icon_connect").listens[LeftClickEvent](() => confirm())
 
       elist.addWidget(instance)
     })
@@ -590,18 +603,26 @@ object WirelessPage {
           }
           override def name = matrix.ssid
         })
-        val avail = data.avail.map(matrix => new AvailTarget {
-            override def connect(pass: String): Unit = {
-              send(MSG_NODE_CONNECT, node, matrix.ssid, pass, newFuture())
+        val avail = data.avail
+            .map(matrix => (matrix, matrix.tile(world)))
+            .map {
+              case (matrix, Some(tile)) =>
+                new AvailTarget {
+                  override def connect(pass: String): Unit = {
+                    send(MSG_NODE_CONNECT, node, tile, pass, newFuture())
+                  }
+                  override def name: String = matrix.ssid
+                  override def encrypted = matrix.encrypted
+                }
             }
-            override def name: String = matrix.ssid
-          })
 
         rebuildPage(ret.window, linked, avail)
       }))
     }
 
     rebuild()
+
+    ret.window.child("icon_logo").component[DrawTexture].setTex(toMatrixIcon)
 
     ret
   }
@@ -620,10 +641,16 @@ object WirelessPage {
           override def name: String = node.getNodeName
         })
 
-        val avail = result.avail.toList.flatMap(_.tile(world)).map(node => new AvailTarget {
-          override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
-          override def name: String = node.getNodeName
-        })
+        val avail = result.avail.toList.map(a => (a.tile(world), a.encrypted))
+          .flatMap {
+          case (Some(node), enc) =>
+            Some[AvailTarget](new AvailTarget {
+              override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
+              override def name: String = node.getNodeName
+              override def encrypted = enc
+            })
+          case _ => None
+          }
 
         rebuildPage(ret.window, linked, avail)
       }))
@@ -676,11 +703,12 @@ object WirelessNetDelegate {
   @Listener(channel=MSG_FIND_NODES, side=Array(Side.SERVER))
   private def hFindNodes(user: TileUser, fut: Future[UserResult]) = {
     def cvt(conn: NodeConn) = {
-      val tile = conn.getNode.asInstanceOf[TileEntity]
+      val tile = conn.getNode.asInstanceOf[TileNode]
       val ret = new NodeData
       ret.x = tile.xCoord
       ret.y = tile.yCoord
       ret.z = tile.zCoord
+      ret.encrypted = !tile.getPassword.isEmpty
       ret
     }
 
@@ -711,6 +739,7 @@ object WirelessNetDelegate {
       ret.y = mat.yCoord
       ret.z = mat.zCoord
       ret.ssid = net.getSSID
+      ret.encrypted = !net.getPassword.isEmpty
 
       ret
     }
@@ -748,8 +777,8 @@ object WirelessNetDelegate {
   }
 
   @Listener(channel=MSG_NODE_CONNECT, side=Array(Side.SERVER))
-  private def hNodeConnect(node: TileNode, ssid: String, pwd: String, fut: Future[Boolean]) = {
-    val result = !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, ssid, pwd))
+  private def hNodeConnect(node: TileNode, mat: TileMatrix, pwd: String, fut: Future[Boolean]) = {
+    val result = !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, mat, pwd))
     fut.sendResult(result)
   }
 

@@ -14,10 +14,9 @@ import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.Future;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.s11n.network.Future;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkS11n;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -25,30 +24,69 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11n.NetworkS11nType
 public class Syncs {
-    
-    @RegNetworkCall(side = Side.SERVER)
-    static void querySSID(@Instance IWirelessMatrix matrix, @Data Future future) {
-        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-        future.setAndSync(net != null ? net.getSSID() : null);
+
+    private static final String
+            MSG_QUERY_SSID = "query_ssid",
+            MSG_AUTH_MATRIX = "auth_matrix",
+            MSG_AUTH_NODE   = "auth_node",
+            MSG_LINK_NODE = "link_node",
+            MSG_LINK_USER = "link_user";
+
+    private static Object delegate = NetworkMessage.staticCaller(Syncs.class);
+
+    static void querySSID(IWirelessMatrix matrix, Future<String> future) {
+        send(MSG_QUERY_SSID, matrix, future);
     }
 
-    @RegNetworkCall(side = Side.SERVER)
-    static void authorizeMatrix(@Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
-        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-        future.setAndSync(net != null && net.getPassword().equals(password));
+    static void authorizeMatrix(IWirelessMatrix matrix, String password, Future<Boolean> future) {
+        send(MSG_AUTH_MATRIX, matrix, password, future);
     }
-    
-    @RegNetworkCall(side = Side.SERVER)
-    static void linkNodeToMatrix(@Instance IWirelessNode node, @Instance IWirelessMatrix matrix, @Data String password, @Data Future future) {
-        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
-        future.setAndSync(net == null ? false :
-                !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, net.getSSID(), password)));
+
+    static void authorizeNode(IWirelessNode node, String password, Future<Boolean> future) {
+        send(MSG_AUTH_NODE, node, password, future);
     }
-    
-    @RegNetworkCall(side = Side.SERVER)
-    static void linkUserToNode(@Instance IWirelessUser user, @Instance IWirelessNode node, @Data Future future) {
-        // future.setAndSync(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
+
+    static void linkNodeToMatrix(IWirelessNode node, IWirelessMatrix matrix, String password, Future<Boolean> future) {
+        send(MSG_LINK_NODE, node, matrix, password, future);
+    }
+
+    static void linkUserToNode(IWirelessUser user, IWirelessNode node, Future<Boolean> future) {
+        send(MSG_LINK_USER, user, node, future);
+    }
+
+    @NetworkMessage.Listener(channel=MSG_QUERY_SSID, side=Side.SERVER)
+    static void hQuerySSID(IWirelessMatrix matrix, Future<String> future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.sendResult(net != null ? net.getSSID() : null);
+    }
+
+    @NetworkMessage.Listener(channel=MSG_AUTH_MATRIX, side=Side.SERVER)
+    static void hAuthorizeMatrix(IWirelessMatrix matrix, String password, Future<Boolean> future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.sendResult(net != null && net.getPassword().equals(password));
+    }
+
+    @NetworkMessage.Listener(channel=MSG_LINK_NODE, side=Side.SERVER)
+    static void hLinkNodeToMatrix(IWirelessNode node, IWirelessMatrix matrix, String password, Future<Boolean> future) {
+        WirelessNet net = WirelessHelper.getWirelessNet(matrix);
+        future.sendResult(net != null &&
+                !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, net.getMatrix(), password)));
+    }
+
+    @NetworkMessage.Listener(channel=MSG_LINK_USER, side=Side.SERVER)
+    static void hLinkUserToNode(IWirelessUser user, IWirelessNode node, Future<Boolean> future) {
+        future.sendResult(!MinecraftForge.EVENT_BUS.post(new LinkUserEvent(user, node)));
+    }
+
+    @NetworkMessage.Listener(channel=MSG_AUTH_NODE, side=Side.SERVER)
+    static void hAuthNode(IWirelessNode node, String pass, Future<Boolean> future) {
+        future.sendResult(node.getPassword().equals(pass));
+    }
+
+    private static void send(String channel, Object... args) {
+        NetworkMessage.sendToServer(delegate, channel, args);
     }
     
 }

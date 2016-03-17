@@ -29,10 +29,6 @@ public class WirelessHelper {
 
     //-----WirelessNetwork
     
-    public static WirelessNet getWirelessNet(World world, String ssid) {
-        return WiWorldData.get(world).getNetwork(ssid);
-    }
-    
     public static WirelessNet getWirelessNet(IWirelessMatrix matrix) {
         TileEntity tile = (TileEntity) matrix;
         return WiWorldData.get(tile.getWorldObj()).getNetwork(matrix);

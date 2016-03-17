@@ -102,6 +102,10 @@ public class WirelessNet {
     public String getPassword() {
         return password;
     }
+
+    public void setSSID(String ssid) {
+        this.ssid = ssid;
+    }
     
     public boolean resetPassword(String np) {
         password = np;
@@ -193,7 +197,6 @@ public class WirelessNet {
     }
     
     void onCreate(WiWorldData data) {
-        data.netLookup.put(ssid, this);
         data.netLookup.put(matrix, this);
     }
     

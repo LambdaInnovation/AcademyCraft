@@ -91,7 +91,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         info.update();
 
         if(info.getSubID() == 0) {
-            if(!getWorldObj().isRemote && ++updateTicker == 20) {
+            if(!getWorldObj().isRemote && ++updateTicker == 15) {
                 updateTicker = 0;
                 this.sync();
             }
@@ -113,7 +113,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         super.readFromNBT(nbt);
         info = new InfoBlockMulti(this, nbt);
 
-        nbt.setString("placer", placerName);
+        placerName = nbt.getString("placer");
     }
     
     @Override
@@ -121,7 +121,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         super.writeToNBT(nbt);
         info.save(nbt);
 
-        placerName = nbt.getString("placer");
+        nbt.setString("placer", placerName);
     }
     
     @Override
