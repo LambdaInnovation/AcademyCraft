@@ -67,7 +67,11 @@ public class Resources {
     public static ResourceLocation getShader(String loc) {
         return res("shaders/" + loc);
     }
-    
+
+    public static ResourceLocation getGui(String loc) {
+        return res("guis/" + loc + ".xml");
+    }
+
     public static ResourceLocation[] getTextureSeq(String loc, int n) {
         ResourceLocation[] ret = new ResourceLocation[n];
         for(int i = 0; i < n; ++i)

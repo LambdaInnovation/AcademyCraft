@@ -6,8 +6,6 @@
 */
 package cn.academy.core;
 
-import cn.academy.misc.media.MediaManager;
-import cn.academy.misc.media.OnlineMediaManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -15,10 +13,6 @@ import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegMessageHandler;
 import cn.lambdalib.crafting.CustomMappingHelper;
 import cn.lambdalib.crafting.RecipeRegistry;
-import cn.lambdalib.ripple.ScriptFunction;
-import cn.lambdalib.ripple.ScriptProgram;
-import cn.lambdalib.util.client.shader.ShaderProgram;
-import cn.lambdalib.util.reschk.ResourceCheck;
 import cn.lambdalib.util.version.VersionUpdateUrl;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -134,8 +128,6 @@ public class AcademyCraft {
             System.out.printf("|-------------------------------------------------------\n");
         }
 
-        // OnlineMediaManager.INSTANCE.init(); TODO
-
         recipes = null; // Release and have fun GC
         config.save();
     }
@@ -143,7 +135,6 @@ public class AcademyCraft {
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit2(FMLPostInitializationEvent event) {
-        // MediaManager.INSTANCE.init(); TODO make it work
     }
 
     @EventHandler

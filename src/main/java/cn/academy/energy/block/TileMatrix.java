@@ -6,7 +6,6 @@
 */
 package cn.academy.energy.block;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
@@ -18,13 +17,12 @@ import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.lambdalib.ripple.ScriptFunction;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -57,6 +55,8 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public int plateCount;
     
     int updateTicker;
+
+    private String placerName = "";
     
     public TileMatrix() {
         super("wireless_matrix", 4);
@@ -66,9 +66,9 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if(stack == null)
             return false;
-        if(0 <= slot && slot <= 2) {
+        if (0 <= slot && slot <= 2) {
             return stack.getItem() == ModuleCrafting.constPlate;
-        } else if(slot == 3) {
+        } else if (slot == 3) {
             return stack.getItem() == ModuleEnergy.matrixCore;
         } else {
             return false;
@@ -77,17 +77,24 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     //InfoBlockMulti delegation
     InfoBlockMulti info = new InfoBlockMulti(this);
+
+    public void setPlacer(EntityPlayer player) {
+        placerName = player.getCommandSenderName();
+    }
+
+    public String getPlacerName() {
+        return placerName;
+    }
     
     @Override
     public void updateEntity() {
-        if(info != null)
-            info.update();
-        
-        if(info.getSubID() != 0)
-            return;
-        if(!getWorldObj().isRemote && ++updateTicker == 20) {
-            updateTicker = 0;
-            this.syncPlates();
+        info.update();
+
+        if(info.getSubID() == 0) {
+            if(!getWorldObj().isRemote && ++updateTicker == 15) {
+                updateTicker = 0;
+                this.sync();
+            }
         }
     }
 
@@ -105,12 +112,16 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         info = new InfoBlockMulti(this, nbt);
+
+        placerName = nbt.getString("placer");
     }
     
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         info.save(nbt);
+
+        nbt.setString("placer", placerName);
     }
     
     @Override
@@ -177,14 +188,15 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         return getRange(N, L);
     }
     
-    private void syncPlates() {
-        syncInventory(this, getPlateCount());
+    private void sync() {
+        NetworkMessage.sendToAllAround(
+                TargetPointHelper.convert(this, 15),
+                this, "sync", getPlateCount(), placerName);
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void syncInventory(
-            @RangedTarget(range = 15) TileMatrix matrix,
-            @Data Integer plateCount) {
-        matrix.plateCount = plateCount;
+
+    @NetworkMessage.Listener(channel="sync", side=Side.CLIENT)
+    private void hSync(int plateCount2, String placerName2) {
+        plateCount = plateCount2;
+        placerName = placerName2;
     }
 }

@@ -87,46 +87,4 @@ public class EnergyUIHelper {
         GL11.glPopMatrix();
     }
     
-    public static void initNodeLinkButton(IWirelessUser target, Widget theButton) {
-        initNodeLinkButton(target, theButton, false);
-    }
-    
-    /**
-     * Add the callback to open the link node UI to the button.
-     */
-    public static void initNodeLinkButton(IWirelessUser target, Widget theButton, boolean mono) {
-        DrawTexture.get(theButton).texture = BTN_WIFI_N;
-        
-        if(theButton.getComponent("Tint") == null) {
-            Tint tint = new Tint();
-            tint.affectTexture = true;
-            tint.idleColor.setColor4i(255, 255, 255, 180);
-            tint.hoverColor.setColor4i(255, 255, 255, 255);
-            theButton.addComponent(tint);
-        }
-        
-        EnergyUISyncs.syncIsLinked((TileEntity) target, 
-            Future.<Boolean>create((Boolean o) -> {
-                if(o) {
-                    DrawTexture.get(theButton).texture = BTN_WIFI;
-                }
-            }));
-        
-        theButton.listen(LeftClickEvent.class, (w, e) -> 
-        {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(target, mono));
-        });
-
-        final FontOption option = new FontOption();
-        theButton.listen(FrameEvent.class, (w, event) ->
-        {
-            if(event.hovering) {
-                option.fontSize = 10 / w.scale;
-                drawTextBox(StatCollector.translateToLocal("ac.network.search"),
-                        event.mx + 10, event.my - 5,
-                        233333, option, mono);
-            }
-        });
-    }
-    
 }

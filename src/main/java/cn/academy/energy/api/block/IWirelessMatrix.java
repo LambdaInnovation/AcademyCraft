@@ -26,5 +26,5 @@ public interface IWirelessMatrix extends IWirelessTile {
      * @return the max range that this matrix can reach
      */
     double getRange();
-    
+
 }

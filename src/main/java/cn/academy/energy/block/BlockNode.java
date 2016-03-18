@@ -8,7 +8,7 @@ package cn.academy.energy.block;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
-import cn.academy.energy.client.gui.node.GuiNode;
+import cn.academy.energy.client.ui.GuiNode2;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -16,7 +16,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -34,8 +36,8 @@ public class BlockNode extends ACBlockContainer {
         STANDARD("standard", 50000, 300, 12, 10), 
         ADVANCED("advanced", 200000, 900, 19, 20);
         
-        final int maxEnergy, bandwidth, range, capacity;
-        final String name;
+        public final int maxEnergy, bandwidth, range, capacity;
+        public final String name;
         NodeType(String _name, int _maxEnergy, int _bandwidth, int _range, int _capacity) {
             name = _name;
             maxEnergy = _maxEnergy;
@@ -116,6 +118,16 @@ public class BlockNode extends ACBlockContainer {
     }
 
     @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+        if (placer instanceof EntityPlayer) {
+            TileEntity tile = world.getTileEntity(x, y, z);
+            if (tile instanceof TileNode) {
+                ((TileNode) tile).setPlacer((EntityPlayer) placer);
+            }
+        }
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
         return new TileNode();
     }
@@ -126,7 +138,7 @@ public class BlockNode extends ACBlockContainer {
         @SideOnly(Side.CLIENT)
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerNode c = (ContainerNode) getServerContainer(player, world, x, y, z);
-            return c == null ? null : new GuiNode(c);
+            return c == null ? null : GuiNode2.apply(c);
         }
         
         @Override

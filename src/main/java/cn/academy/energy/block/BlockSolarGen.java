@@ -7,7 +7,6 @@
 package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
-import cn.academy.energy.client.gui.GuiLinkToNode;
 import cn.lambdalib.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,7 +67,7 @@ public class BlockSolarGen extends ACBlockMulti {
 
     @SideOnly(Side.CLIENT)
     private void openGui(TileSolarGen te) {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
+        // Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
     }
 
 }

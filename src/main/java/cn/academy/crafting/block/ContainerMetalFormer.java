@@ -37,20 +37,20 @@ public class ContainerMetalFormer extends Container {
     private void initInventory() {
         InventoryPlayer inv = player.inventory;
         
-        this.addSlotToContainer(new SlotMFItem(tile, 0, 15, 35));
-        this.addSlotToContainer(new SlotMFItem(tile, 1, 79, 35));
-        this.addSlotToContainer(new SlotIFItem(tile, 2, 38, 71));
+        this.addSlotToContainer(new SlotMFItem(tile, 0, -3, 40));
+        this.addSlotToContainer(new SlotMFItem(tile, 1, 127, 40));
+        this.addSlotToContainer(new SlotIFItem(tile, 2, 26, 71));
         
         int STEP = 18;
         
         for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 8 + i * STEP, 153));
+            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
         }
         
         for(int i = 1; i < 4; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, 8 + j * STEP, 149 - i * STEP));
+                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
             }
         }
     }

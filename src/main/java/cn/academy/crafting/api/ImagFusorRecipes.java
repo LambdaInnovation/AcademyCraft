@@ -9,6 +9,10 @@ package cn.academy.crafting.api;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.s11n.InstanceSerializer;
 import cn.lambdalib.networkcall.s11n.RegSerializable;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
@@ -54,8 +58,7 @@ public class ImagFusorRecipes {
     public List<IFRecipe> getAllRecipe() {
         return recipeList;
     }
-    
-    @RegSerializable(instance = RecipeSerializer.class)
+
     public static class IFRecipe {
         
         int id;
@@ -79,18 +82,17 @@ public class ImagFusorRecipes {
         
     }
     
-    public static class RecipeSerializer implements InstanceSerializer<IFRecipe> {
-
-        @Override
-        public IFRecipe readInstance(NBTBase nbt) throws Exception {
-            return INSTANCE.recipeList.get(((NBTTagInt)nbt).func_150287_d());
-        }
-
-        @Override
-        public NBTBase writeInstance(IFRecipe obj) throws Exception {
-            return new NBTTagInt(obj.id);
-        }
-        
+    static {
+        NetworkS11n.addDirect(IFRecipe.class, new NetS11nAdaptor<IFRecipe>() {
+            @Override
+            public void write(ByteBuf buf, IFRecipe obj) {
+                buf.writeInt(obj.id);
+            }
+            @Override
+            public IFRecipe read(ByteBuf buf) throws ContextException {
+                return INSTANCE.recipeList.get(buf.readInt());
+            }
+        });
     }
     
 }

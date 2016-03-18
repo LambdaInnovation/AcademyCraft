@@ -8,7 +8,6 @@ package cn.academy.ability.client.skilltree;
 
 import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.block.TileDeveloper;
 import cn.academy.ability.develop.DevelopData;
 import cn.academy.ability.develop.DevelopData.DevState;
 import cn.academy.ability.develop.IDeveloper;
@@ -19,7 +18,6 @@ import cn.academy.ability.develop.action.DevelopActionSkill;
 import cn.academy.ability.develop.action.IDevelopAction;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.component.Glow;
-import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
@@ -129,7 +127,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                 }
             });
         }
-        
+
+        /*
         // FIXME Bad style here, instanceof is definetly not-cute hardcoding.
         // Used Developer class to abstract item and block away but now need to do some specific stuffs.
         // If possible make this part better in the future xD
@@ -145,7 +144,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
             
             window.addWidget(w);
             EnergyUIHelper.initNodeLinkButton(db, w, true);
-        }
+        }*/
         
         ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.getType().syncRate;
     }

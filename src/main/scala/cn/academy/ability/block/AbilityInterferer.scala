@@ -15,18 +15,16 @@ import cn.academy.core.block.ACBlockContainer
 import cn.academy.core.client.Resources
 import cn.academy.core.client.render.block.RenderDynamicBlock
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{TileEntityRegistration, RegInitCallback, RegTileEntity}
-import cn.lambdalib.cgui.gui.CGuiScreen
-import cn.lambdalib.cgui.gui.component.DragBar.DraggedEvent
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.component.{TextBox, DrawTexture, DragBar}
-import cn.lambdalib.cgui.gui.event.LeftClickEvent
+import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
+import cn.lambdalib.cgui.gui.component.{Component, ElementList, TextBox, DrawTexture}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, LostFocusEvent, GainFocusEvent, LeftClickEvent}
+import cn.lambdalib.cgui.gui.{Widget, HierarchyDebugger, CGuiScreen}
 import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.networkcall.Future.FutureCallback
-import cn.lambdalib.networkcall.s11n.StorageOption
-import cn.lambdalib.networkcall.{Future, RegNetworkCall}
-import cn.lambdalib.networkcall.s11n.StorageOption.{RangedTarget, Data}
-import cn.lambdalib.util.generic.{VecUtils, MathUtils}
+import cn.lambdalib.networkcall.TargetPointHelper
+import cn.lambdalib.s11n.nbt.NBTS11n
+import cn.lambdalib.s11n.network.{Future, NetworkMessage}
+import cn.lambdalib.s11n.network.NetworkMessage.Listener
+import cn.lambdalib.util.generic.{RandUtils, MathUtils, VecUtils}
 import cn.lambdalib.util.helper.TickScheduler
 import cn.lambdalib.util.mc.{PlayerUtils, EntitySelectors, WorldUtils}
 import cpw.mods.fml.client.registry.ClientRegistry
@@ -43,11 +41,17 @@ import net.minecraft.util.{ResourceLocation, IIcon}
 import net.minecraft.world.{World, IBlockAccess}
 
 import scala.collection.JavaConversions._
+import scala.collection.SortedSet
 
 @Registrant
 object AbilityInterf {
   val minRange = 10.0
   val maxRange = 100.0
+
+  final val MSG_SYNC = "sync"
+  final val MSG_UPDATE_RANGE = "set_range"
+  final val MSG_UPDATE_WHITELIST = "set_whitelist"
+  final val MSG_UPDATE_ENABLED = "set_enabled"
 
   @SideOnly(Side.CLIENT)
   @RegInitCallback
@@ -68,98 +72,105 @@ class TileAbilityInterferer extends TileEntity {
 
   private var enabled_ = false
   private var placer_ : Option[String] = None
+  private var whitelist_ = SortedSet[String]()
   private var range_ = minRange
 
   def enabled = enabled_
-  def setEnabled(value: Boolean) = {
-    enabled_ = value
-    sync()
-  }
 
   def range = range_
-  def setRange(value: Double) = {
-    range_ = value
-    sync()
-  }
+
+  def whitelist = whitelist_
 
   def placer = placer_
-  def setPlacer(player: EntityPlayer) = {
-    placer_ = Some(player.getCommandSenderName)
-    sync()
+
+  def setPlacer(p: EntityPlayer) = if (placer_.isEmpty) {
+    whitelist_ = whitelist + p.getCommandSenderName
+    placer_ = Some(p.getCommandSenderName)
+  }
+
+  private def send(channel: String, args: Any*) = {
+    val args2 = args.map(_.asInstanceOf[AnyRef])
+    if (getWorldObj.isRemote) {
+      NetworkMessage.sendToServer(this, channel, args2: _*)
+    } else {
+      NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 15), this, channel, args2: _*)
+    }
+  }
+
+  private def sync() = {
+    assert(!getWorldObj.isRemote)
+
+    send(MSG_SYNC, range, enabled, whitelist.toArray)
   }
 
   // Check player in the area and interfere them
   scheduler.every(10).atOnly(Side.SERVER).condition(new Supplier[lang.Boolean] {
     override def get(): lang.Boolean = enabled
-  }).run(new Runnable {
-    override def run() = {
-      val rangeVal = range
-      val boundingBox = testBB
-      val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
-      players foreach {
-        case player: EntityPlayer =>
-          CPData.get(player).addInterf(sourceName, new IInterfSource {
-            override def interfering(): Boolean =
-              boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
-                !TileAbilityInterferer.this.isInvalid &&
-                !player.capabilities.isCreativeMode &&
-                enabled
-          })
-      }
+  }).run(() => {
+    val boundingBox = testBB
+    val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
+    players foreach {
+      case player: EntityPlayer =>
+        CPData.get(player).addInterf(sourceName, new IInterfSource {
+          override def interfering(): Boolean =
+            boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
+              !TileAbilityInterferer.this.isInvalid &&
+              !player.capabilities.isCreativeMode &&
+              enabled
+        })
     }
   })
 
   // Sync data to client
-  scheduler.every(20).atOnly(Side.SERVER).run(new Runnable {
-    override def run() = {
-      sync()
-    }
-  })
+  scheduler.every(20).atOnly(Side.SERVER).run(() => sync())
 
   override def updateEntity() = scheduler.runTick()
 
-  def sync() = if (!getWorldObj.isRemote) {
-    syncFromServer(this, range, placer.orNull, enabled)
-  }
-
-  @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-  private def syncFromServer(
-          @RangedTarget(range = 20) me: TileAbilityInterferer,
-          @Data range2 : java.lang.Double,
-          @Data placer2 : String,
-          @Data enabled2: java.lang.Boolean) = {
+  @Listener(channel=MSG_SYNC, side=Array(Side.CLIENT))
+  private def hSync(range2: Double, enabled2: Boolean, whitelist2 : Array[String]) = {
     range_ = range2
-    placer_ = Option(placer2)
     enabled_ = enabled2
+    whitelist_ = SortedSet(whitelist2: _*)
   }
 
   // Network-cross modifiers
+  private def signalFuture(cb: () => Any) = Future.create((_: Any) => cb())
 
-  @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-  def syncSetEnabled(@Data state: java.lang.Boolean, @Data future: Future) = {
-    setEnabled(state)
-    future.setAndSync(state)
+  def setRangeClient(value: Double, callback: () => Any) = send(MSG_UPDATE_RANGE, value, signalFuture(callback))
+
+  def setEnabledClient(value: Boolean, callback: () => Any) = send(MSG_UPDATE_ENABLED, value, signalFuture(callback))
+
+  def setWhitelistClient(value: Iterable[String], callback: () => Any) = send(MSG_UPDATE_WHITELIST, value.toArray, signalFuture(callback))
+
+  @Listener(channel=MSG_UPDATE_RANGE, side=Array(Side.SERVER))
+  private def hSetRange(value: Double, fut: Future[Boolean]) = {
+    range_ = MathUtils.clampd(minRange, maxRange, value)
+    fut.sendResult(true)
   }
 
-  @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-  def syncSetRange(@Data range: java.lang.Double) = {
-    setRange(range)
+  @Listener(channel=MSG_UPDATE_ENABLED, side=Array(Side.SERVER))
+  private def hSetEnabled(value: Boolean, fut: Future[Boolean]) = {
+    enabled_ = value
+    fut.sendResult(true)
+  }
+
+  @Listener(channel=MSG_UPDATE_WHITELIST, side=Array(Side.SERVER))
+  private def hSetWhitelist(value: Array[String], fut: Future[Boolean]) = {
+    whitelist_ = SortedSet(value: _*)
+    fut.sendResult(true)
   }
 
   override def readFromNBT(tag: NBTTagCompound) = {
     super.readFromNBT(tag)
     enabled_ = tag.getBoolean("enabled_")
-    placer_ = if(tag.hasKey("placer_")) Some(tag.getString("placer_")) else None
+    whitelist_ = SortedSet(NBTS11n.readBase(tag.getTag("whitelist_"), classOf[Array[String]]): _*)
     range_ = tag.getFloat("range_")
   }
 
   override def writeToNBT(tag: NBTTagCompound) = {
     super.writeToNBT(tag)
     tag.setBoolean("enabled_", enabled_)
-    placer_ match {
-      case Some(name) => tag.setString("placer_", name)
-      case _ =>
-    }
+    tag.setTag("whitelist_", NBTS11n.writeBase(whitelist.toArray))
     tag.setFloat("range_", range_.toFloat)
   }
 
@@ -217,7 +228,7 @@ class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.
   private def handleClient(player: EntityPlayer, tile: TileAbilityInterferer) = {
     if (player.capabilities.isCreativeMode ||
       Option(player.getCommandSenderName) == tile.placer) {
-      Minecraft.getMinecraft.displayGuiScreen(new GuiAbilityInterferer(tile))
+      Minecraft.getMinecraft.displayGuiScreen(GuiAbilityInterferer(tile))
     } else {
       PlayerUtils.sendChat(player, "ac.ability_interf.cantuse")
     }
@@ -227,65 +238,126 @@ class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.
 
 @SideOnly(Side.CLIENT)
 object GuiAbilityInterferer {
-  val tex_switchOn = Resources.getTexture("guis/button/button_switchon")
-  val tex_switchOff = Resources.getTexture("guis/button/button_switchoff")
-}
 
-class GuiAbilityInterferer(tile: TileAbilityInterferer) extends CGuiScreen {
   import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.academy.core.client.ui._
   import AbilityInterf._
-  import GuiAbilityInterferer._
 
-  val main = CGUIDocument.panicRead(new ResourceLocation("academy:guis/ability_interf.xml")).getWidget("window_main")
-  val switch    = main.getWidget("btn_switch")
-  val bar       = main.getWidget("btn_point")
-  val textRange = main.getWidget("text_range")
+  val template = CGUIDocument.panicRead(Resources.getGui("rework/page_interfere")).getWidget("main")
 
-  updateRange(tile.range)
-  updateState(tile.enabled)
+  val buttonOn  = Resources.getTexture("guis/button/button_switch_on")
+  val buttonOff = Resources.getTexture("guis/button/button_switch_off")
 
-  switch.listens[LeftClickEvent](() => {
-    tile.syncSetEnabled(!tile.enabled, Future.create(new FutureCallback[Boolean] {
-      override def onReady(value: Boolean) = {
-        updateState(value)
+  def apply(tile: TileAbilityInterferer) = {
+    val window = template.copy()
+
+    {
+      case class Element(playerName: String) extends Component("Element")
+      class Area(var focus: Option[Widget]) extends Component("Area")
+
+      val listPanel = window.child("panel_whitelist")
+      val listArea = listPanel.child("zone_whitelist")
+
+      val element = listArea.child("element")
+      val area = new Area(None)
+
+      listArea.removeWidget("element")
+      listArea :+ area
+
+      def update(whitelist: Iterable[String]) = {
+        listArea.removeComponent("ElementList")
+        area.focus = None
+
+        val elist = new ElementList
+
+        whitelist.foreach(name => {
+          val instance = element.copy()
+          val dt = instance.component[DrawTexture]
+          dt.color.a = 0.7
+
+          instance.child("element_name").component[TextBox].content = name
+          instance.listens[FrameEvent](() => dt.color.a = area.focus match {
+            case Some(f) if f == instance => 1.0
+            case _ => 0.7
+          })
+          instance.listens[LeftClickEvent](() => area.focus = Some(instance))
+          instance :+ new Element(name)
+
+          elist.addWidget(instance)
+        })
+
+        listArea :+ elist
       }
-    }))
-  })
 
-  bar.listens[DraggedEvent](() => {
-    TextBox.get(textRange).setContent("%.1f".format(MathUtils.lerp(minRange, maxRange, DragBar.get(bar).getProgress)))
-  })
+      def sendUpdate(whitelist: Iterable[String]) = {
+        tile.setWhitelistClient(whitelist, () => update(whitelist))
+      }
 
-  main.getWidget("btn_confirm").listens[LeftClickEvent](() => {
-    syncRange_()
-    mc.displayGuiScreen(null)
-  })
+      listPanel.child("btn_up").listens[LeftClickEvent](() => listArea.component[ElementList].progressLast())
+      listPanel.child("btn_down").listens[LeftClickEvent](() => listArea.component[ElementList].progressNext())
+      listPanel.child("btn_add").listens[LeftClickEvent](() => sendUpdate(tile.whitelist + ("233333" + RandUtils.rangei(0, 100))))
+      listPanel.child("btn_remove").listens((w, e: LeftClickEvent) => {
+        listArea.component[Area].focus match {
+          case Some(widget) => {
+            val name = widget.component[Element].playerName
+            sendUpdate(tile.whitelist - name)
+          }
+          case None =>
+        }
+      })
 
-  textRange.listens((w, evt: ConfirmInputEvent) => {
-    val textBox = TextBox.get(w)
-    try {
-      val input = MathUtils.clampd(minRange, maxRange, textBox.content.toDouble)
-      updateRange(input)
-      syncRange_()
-    } catch {
-      case e: NumberFormatException =>
-        textBox.setContent(tile.range.toString)
+      update(tile.whitelist)
     }
-  })
 
-  gui.addWidget("main", main)
+    {
+      val button = window.child("panel_config/element_switch/element_btn_switch")
+      val texture = button.component[DrawTexture]
+      val color = texture.color
+      var state = tile.enabled
 
-  private def updateState(state: Boolean) = {
-    DrawTexture.get(switch).setTex(if (tile.enabled) tex_switchOn else tex_switchOff)
+      def setState(state2: Boolean) = {
+        state = state2
+
+        val lum = if (state) 1 else 0.6
+        color.r = lum
+        color.g = lum
+        color.b = lum
+
+        texture.texture = if (state) buttonOn else buttonOff
+      }
+
+      setState(state)
+
+      button.listens[LeftClickEvent](() => {
+        tile.setEnabledClient(!state, () => setState(!state))
+      })
+    }
+
+    {
+      val elemRange = window.child("panel_config/element_range")
+
+      def updateRange(value: Double) = elemRange.child("element_text_range").component[TextBox].content = value.toString
+      def handle(delta: Int) = () => {
+        val newValue = MathUtils.clampd(minRange, maxRange, tile.range + delta)
+        tile.setRangeClient(newValue, () => updateRange(newValue))
+      }
+
+      updateRange(tile.range)
+
+      elemRange.child("element_btn_left").listens[LeftClickEvent](handle(-10))
+      elemRange.child("element_btn_right").listens[LeftClickEvent](handle(10))
+    }
+
+    val ret = new CGuiScreen() {
+      override def doesGuiPauseGame = false
+    }
+
+    val invPage = InventoryPage(window)
+
+    val root = TechUI(invPage)
+    ret.gui.addWidget(root)
+    
+    ret
   }
-
-  private def updateRange(input: Double) = {
-    DragBar.get(bar).setProgress((input - minRange) / (maxRange - minRange))
-    TextBox.get(textRange).setContent("%.1f".format(input))
-  }
-
-  private def syncRange_() = tile.syncSetRange(MathUtils.lerp(minRange, maxRange, DragBar.get(bar).getProgress))
-
-  override def doesGuiPauseGame = false
 
 }

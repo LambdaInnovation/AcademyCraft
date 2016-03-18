@@ -1,188 +1,114 @@
-/**
- * Copyright (c) Lambda Innovation, 2013-2016
- * This file is part of the AcademyCraft mod.
- * https://github.com/LambdaInnovation/AcademyCraft
- * Licensed under GPLv3, see project root for more information.
- */
 package cn.academy.misc.media;
 
+import cn.academy.core.AcademyCraft;
 import com.google.common.base.Throwables;
 import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-/**
- * @author KSkun
- */
-public class ACMedia {
+public abstract class ACMedia {
 
-    private File file;
-
-    private String author;
-
-    private String name;
-
-    private File coverPic;
-
-    private String id;
-
-    private String remark;
-
-    public boolean available = true;
-
-    public ACMedia(File _file) {
-        file = _file;
-    }
-    public ACMedia(URL url) {
-        try {
-            file = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            throw Throwables.propagate(e);
-        }
-    }
-    public ACMedia(String path) {
-        file = new File(path);
+    public static void updateExternalName(ACMedia media, String name) {
+        extName(media).set(name);
     }
 
-    /**
-     * Get the sound file of the media.
-     * @return The sound file.
-     */
-    public File getFile() {
-        return file;
+    public static void updateExternalDesc(ACMedia media, String desc) {
+        extDesc(media).set(desc);
     }
 
-    /**
-     * Get the author of the media.
-     * @return The author.
-     */
-    public String getAuthor() {
-        return author;
+    private static Property extName(ACMedia media) {
+        return config().get("media", media.getID() + "_name", media.getID());
     }
 
-    /**
-     * Get the display name of the media.
-     * @return The display name.
-     */
-    public String getName() {
-        if(name != null) {
-            return name;
-        } else {
-            return file.getName().replace(".ogg", "");
-        }
+    private static Property extDesc(ACMedia media) {
+        return config().get("media", media.getID() + "_desc", "N/A");
     }
 
-    /**
-     * Get the cover picture of the record.
-     * @return The cover pic.
-     */
-    public File getCoverPic() {
-        return coverPic;
+    public static ACMedia newExternal(String id, URL url, String postfix) {
+        return new ACMedia(id, true, url, postfix) {
+            @Override
+            public String getName() {
+                return extName(this).getString();
+            }
+            @Override
+            public String getDesc() {
+                return extDesc(this).getString();
+            }
+        };
     }
 
-    /**
-     * Get the remark of the media.
-     * @return The remark of the media.
-     */
-    public String getRemark() {
-        return remark;
+    private static Configuration config() {
+        return AcademyCraft.config;
     }
 
-    /**
-     * Get the ID of the media.
-     * @return The ID of the media.
-     */
-    public String getId() {
-        if(id != null) {
-            return id;
-        } else {
-            return file.getName().replace(".ogg", "");
-        }
+    public static ACMedia newInternal(String id) {
+        URL url = ACMedia.class.getResource("/assets/academy/media/source/" + id + ".ogg");
+        return new ACMedia(id, false, url, ".ogg") {
+            @Override
+            public String getName() {
+                return StatCollector.translateToLocal("ac.media." + id + ".name");
+            }
+            @Override
+            public String getDesc() {
+                return StatCollector.translateToLocal("ac.media." + id + ".desc");
+            }
+        };
     }
 
-    /**
-     * Set the ID of the media.
-     * @param _id The ID to set.
-     * @return this
-     */
-    public ACMedia setId(String _id) {
+    private float length = -1;
+    private final String id;
+    private final URL source;
+    private final ResourceLocation cover;
+    private final String postfix;
+    private final boolean external;
+
+    ACMedia(String _id, boolean _external, URL _source, String _postfix) {
         id = _id;
-        return this;
+        source = _source;
+        cover = new ResourceLocation("academy:media/cover/" + id + ".png");
+        external = _external;
+        postfix = _postfix;
     }
 
-    /**
-     * Set the display name of the media.
-     * @param _name The display name.
-     * @return this
-     */
-    public ACMedia setName(String _name) {
-        name = _name;
-        return this;
+    public abstract String getName();
+    public abstract String getDesc();
+
+    public String getID() {
+        return id;
     }
 
-    /**
-     * Set the author of the media.
-     * @param _author The author.
-     * @return
-     */
-    public ACMedia setAuthor(String _author) {
-        author = _author;
-        return this;
+    public URL getSource() {
+        return source;
     }
 
-    /**
-     * Set the cover picture of the record.
-     * @param path The path of the cover pic.
-     * @return this
-     * @throws URISyntaxException
-     */
-    public ACMedia setCoverPic(URL path) throws URISyntaxException {
-        setCoverPic(new File(path.toURI()));
-        return this;
+    public boolean isExternal() {
+        return external;
     }
 
-    /**
-     * Set the cover picture of the record.
-     * @param path The path of the cover pic.
-     * @return this
-     */
-    public ACMedia setCoverPic(String path) {
-        setCoverPic(new File(path));
-        return this;
+    public ResourceLocation getCover() {
+        return cover;
     }
 
-    /**
-     * Set the cover picture of the record.
-     * @param _file The cover pic file.
-     * @return this
-     */
-    public ACMedia setCoverPic(File _file) {
-        coverPic = _file;
-        return this;
+    public String getFilePostfix() {
+        return postfix;
     }
 
-    /**
-     * Set the remark picture of the media.
-     * @param _remark The remark.
-     * @return this
-     */
-    public ACMedia setRemark(String _remark) {
-        remark = _remark;
-        return this;
-    }
-
-    public float getTotalLength() {
-        VorbisFile vf = null;
-        try {
-            vf = new VorbisFile(file.getPath());
-        } catch (JOrbisException e) {
-            throw Throwables.propagate(e);
+    public final float getLength() {
+        if (length == -1) {
+            try {
+                VorbisFile vf = new VorbisFile(getSource().getPath());
+                length = vf.time_total(-1);
+            } catch (JOrbisException e) {
+                throw Throwables.propagate(e);
+            }
         }
-        return vf.time_total(-1);
+
+        return length;
     }
 
 }

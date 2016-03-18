@@ -8,7 +8,6 @@ package cn.academy.support;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.api.block.IWirelessUser;
-import cn.academy.energy.client.gui.GuiLinkToNode;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -73,7 +72,7 @@ public abstract class BlockConverterBase extends ACBlockContainer {
 
     @SideOnly(Side.CLIENT)
     private void displayGui(IWirelessUser te) {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
+        // Minecraft.getMinecraft().displayGuiScreen(new GuiLinkToNode(te));
     }
 
 }
