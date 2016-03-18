@@ -19,9 +19,11 @@ import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.NetworkS11n;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -31,14 +33,15 @@ import net.minecraft.world.World;
 @Registrant
 @RegTileEntity
 public class TileMetalFormer extends TileReceiverBase {
-    
+
+    @NetworkS11n.NetworkS11nType
     public enum Mode { 
         PLATE, INCISE, ETCH, REFINE; 
         
         public final ResourceLocation texture;
-        private Mode() {
+        Mode() {
             texture = new ResourceLocation(
-                    "academy:textures/guis/mark/mark_former_" + 
+                    "academy:textures/guis/icons/icon_former_" +
                     this.toString().toLowerCase() + ".png");
         }
     }; 
@@ -120,8 +123,12 @@ public class TileMetalFormer extends TileReceiverBase {
     }
     
     // Cycle the mode. should be only called in SERVER.
-    public void cycleMode() {
-        mode = Mode.values()[(mode.ordinal() + 1) % Mode.values().length];
+    public void cycleMode(int delta) {
+        int nextOrd = mode.ordinal() + delta;
+        if (nextOrd >= Mode.values().length) nextOrd = 0;
+        else if (nextOrd < 0) nextOrd = Mode.values().length - 1;
+
+        mode = Mode.values()[nextOrd];
         sync();
     }
     
@@ -160,6 +167,16 @@ public class TileMetalFormer extends TileReceiverBase {
         target.workCounter = counter;
         target.current = recipe;
         target.mode = mode;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        nbt.setInteger("mode", mode.ordinal());
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt) {
+        mode = Mode.values()[nbt.getInteger("mode")];
     }
     
     // --- CLIENT EFFECTS

@@ -32,7 +32,7 @@ public class WirelessNet {
     final WiWorldData data;
     World world;
     
-    List<VWNode> nodes = new LinkedList();
+    List<VWNode> nodes = new LinkedList<>();
     
     VWMatrix matrix;
     
@@ -102,10 +102,12 @@ public class WirelessNet {
     public String getPassword() {
         return password;
     }
+
+    public void setSSID(String ssid) {
+        this.ssid = ssid;
+    }
     
-    public boolean resetPassword(String p, String np) {
-        if(!p.equals(password))
-            return false;
+    public boolean resetPassword(String np) {
         password = np;
         return true;
     }
@@ -129,6 +131,10 @@ public class WirelessNet {
         World world = data.world;
         IWirelessMatrix imat = matrix.get(world);
         return imat == null ? 0 : imat.getCapacity();
+    }
+
+    public IWirelessMatrix getMatrix() {
+        return matrix.get(world);
     }
     
     /**
@@ -191,7 +197,6 @@ public class WirelessNet {
     }
     
     void onCreate(WiWorldData data) {
-        data.netLookup.put(ssid, this);
         data.netLookup.put(matrix, this);
     }
     

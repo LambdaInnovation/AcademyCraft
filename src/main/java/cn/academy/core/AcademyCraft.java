@@ -13,10 +13,6 @@ import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegMessageHandler;
 import cn.lambdalib.crafting.CustomMappingHelper;
 import cn.lambdalib.crafting.RecipeRegistry;
-import cn.lambdalib.ripple.ScriptFunction;
-import cn.lambdalib.ripple.ScriptProgram;
-import cn.lambdalib.util.client.shader.ShaderProgram;
-import cn.lambdalib.util.reschk.ResourceCheck;
 import cn.lambdalib.util.version.VersionUpdateUrl;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -83,7 +79,7 @@ public class AcademyCraft {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         log.info("Starting AcademyCraft");
-        log.info("Copyright (c) Lambda Innovation, 2013-2015");
+        log.info("Copyright (c) Lambda Innovation, 2013-2016");
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());
@@ -134,6 +130,11 @@ public class AcademyCraft {
 
         recipes = null; // Release and have fun GC
         config.save();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void postInit2(FMLPostInitializationEvent event) {
     }
 
     @EventHandler

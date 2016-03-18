@@ -18,20 +18,8 @@ import cpw.mods.fml.common.eventhandler.Cancelable;
 public class CreateNetworkEvent extends WirelessEvent {
 
     public final IWirelessMatrix mat;
-    public final boolean isEncrypted;
     public final String ssid;
     public final String pwd;
-    
-    /**
-     * Non-encryption creation
-     */
-    public CreateNetworkEvent(IWirelessMatrix _mat, String _ssid) {
-        super(_mat);
-        mat = _mat;
-        ssid = _ssid;
-        isEncrypted = false;
-        pwd = "";
-    }
     
     /**
      * Encrypted creation
@@ -40,7 +28,6 @@ public class CreateNetworkEvent extends WirelessEvent {
         super(_mat);
         mat = _mat;
         ssid = _ssid;
-        isEncrypted = true;
         pwd = _pwd;
     }
     

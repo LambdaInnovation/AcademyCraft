@@ -7,7 +7,7 @@
 package cn.academy.misc;
 
 import cn.academy.misc.media.ItemMedia;
-import cn.academy.misc.media.MediaRegistry;
+import cn.academy.misc.media.MediaManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
@@ -32,7 +32,7 @@ public class ModuleMisc {
                 DUNGEON_CHEST };
 
         for (String s : mediaApperance) {
-            for (int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
+            for (int i = 0; i < MediaManager.internalMedias().size(); ++i) {
                 ItemStack stack = new ItemStack(itemMedia, 1, i);
                 ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
             }

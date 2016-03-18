@@ -20,10 +20,21 @@ import cpw.mods.fml.common.eventhandler.Cancelable;
 public class LinkUserEvent extends WirelessUserEvent {
 
     public final IWirelessNode node;
+    public final String password;
+    public final boolean needAuth;
     
+    public LinkUserEvent(IWirelessTile _tile, IWirelessNode _node, String _password) {
+        super(_tile);
+        node = _node;
+        password = _password;
+        needAuth = true;
+    }
+
     public LinkUserEvent(IWirelessTile _tile, IWirelessNode _node) {
         super(_tile);
         node = _node;
+        password = "invalid";
+        needAuth = false;
     }
 
 }

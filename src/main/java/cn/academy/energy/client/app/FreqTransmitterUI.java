@@ -13,7 +13,7 @@ import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.lambdalib.multiblock.BlockMulti;
-import cn.lambdalib.networkcall.Future;
+import cn.lambdalib.s11n.network.Future;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;
@@ -55,6 +55,7 @@ public class FreqTransmitterUI extends AuxGui {
         
         boolean handlesKey;
         final long createTime;
+        long timeout = 20000;
         
         public State(boolean _handlesKey) {
             handlesKey = _handlesKey;
@@ -73,13 +74,17 @@ public class FreqTransmitterUI extends AuxGui {
         final long getDeltaTime() {
             return GameTimer.getTime() - createTime;
         }
+
+        final void startTransmitting() {
+            timeout = 3000;
+        }
     }
     
     private static final Color
-        BG_COLOR = new Color().setColor4i(58, 77, 83, 100),
-        GLOW_COLOR = new Color().setColor4i(0, 255, 251, 130);
+        BG_COLOR = new Color(0x77272727),
+        GLOW_COLOR = new Color(0xaaffffff);
     
-    private static final double GLOW_SIZE = 2;
+    private static final double GLOW_SIZE = 1;
 
     final IFont font = Resources.font();
     
@@ -168,6 +173,12 @@ public class FreqTransmitterUI extends AuxGui {
         } GL11.glPopMatrix();
         
         current.handleDraw(width, height);
+
+        long dt = current.getDeltaTime();
+        System.out.println(dt + "," + current.timeout);
+        if (dt > current.timeout) {
+            setState(new StateNotifyAndQuit("st"));
+        }
         
         GL11.glColor4d(1, 1, 1, 1);
     }
@@ -296,7 +307,7 @@ public class FreqTransmitterUI extends AuxGui {
             TileEntity te = world.getTileEntity(hx, hy, hz);
             if(te instanceof IWirelessNode) {
                 
-                setState(new StateDoNodeLink((IWirelessNode) te));
+                setState(new StateAuthorizeNode((IWirelessNode) te));
                 
             } else if(te instanceof IWirelessMatrix) {
                 
@@ -313,12 +324,13 @@ public class FreqTransmitterUI extends AuxGui {
                 }
                 
                 final IWirelessMatrix mat2 = mat;
-                Syncs.querySSID(mat, Future.create((Object o) -> {
+                startTransmitting();
+                Syncs.querySSID(mat, Future.create(ssid -> {
                     if(current == StateStart.this) {
-                        if(o == null) {
+                        if(ssid == null) {
                             setState(new StateNotifyAndQuit("e0"));
                         } else {
-                            setState(new StateAuthorize(mat2, (String) o));
+                            setState(new StateAuthorize(mat2, ssid));
                         }
                     }
                 }));
@@ -371,9 +383,9 @@ public class FreqTransmitterUI extends AuxGui {
             } else if(kid == Keyboard.KEY_RETURN) {
                 State state = new StateNotify("s1_1");
                 setState(state);
-                Syncs.authorizeMatrix(matrix, pass, Future.create((Object o) -> {
+                state.startTransmitting();
+                Syncs.authorizeMatrix(matrix, pass, Future.create(result -> {
                     if(state == FreqTransmitterUI.this.current) {
-                        boolean result = (boolean) o;
                         if(result) {
                             setState(new StateDoMatrixLink(matrix, pass));
                         } else {
@@ -387,6 +399,65 @@ public class FreqTransmitterUI extends AuxGui {
             }
         }
         
+    }
+
+    private class StateAuthorizeNode extends State {
+
+        final IWirelessNode node;
+        final String name;
+        String pass = "";
+
+        public StateAuthorizeNode(IWirelessNode _node) {
+            super(true);
+            node = _node;
+            name = node.getNodeName();
+        }
+
+        @Override
+        void handleDraw(double w, double h) {
+            GL11.glPushMatrix();
+            GL11.glTranslated(w / 2 + 10, h / 2 - 10, 0);
+
+            drawBox(0, 0, 140, 40);
+
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < pass.length(); ++i)
+                sb.append('*');
+
+            font.draw(String.format("NAME: %s", name), 10, 5, new FontOption(10, 0xffbfbfbf));
+            font.draw(String.format("PASS: %s", sb.toString()), 10, 15, new FontOption(10, 0xffffffff));
+            font.draw(local("s1_1"), 10, 25, new FontOption(10, 0xff30ffff));
+            GL11.glPopMatrix();
+        }
+
+        @Override
+        void handleClicking(MovingObjectPosition result) {
+            // NO-OP
+        }
+
+        @Override
+        void handleKeyInput(char ch, int kid) {
+            if(ChatAllowedCharacters.isAllowedCharacter(ch)) {
+                pass = pass + ch;
+            } else if(kid == Keyboard.KEY_RETURN) {
+                State state = new StateNotify("s1_1");
+                setState(state);
+                state.startTransmitting();
+                Syncs.authorizeNode(node, pass, Future.create(result -> {
+                    if(state == FreqTransmitterUI.this.current) {
+                        if(result) {
+                            setState(new StateDoNodeLink(node, pass));
+                        } else {
+                            setState(new StateNotifyAndQuit("e1"));
+                        }
+                    }
+                }));
+            } else if(kid == Keyboard.KEY_BACK) {
+                if(pass.length() > 0)
+                    pass = pass.substring(0, pass.length() - 1);
+            }
+        }
+
     }
     
     //S2
@@ -417,9 +488,9 @@ public class FreqTransmitterUI extends AuxGui {
                 IWirelessNode node = (IWirelessNode) tile;
                 State state = new StateNotify("e5");
                 setState(state);
-                Syncs.linkNodeToMatrix(node, matrix, pass, Future.create((Object o) -> {
+                state.startTransmitting();
+                Syncs.linkNodeToMatrix(node, matrix, pass, Future.create(res -> {
                     if(FreqTransmitterUI.this.current == state) {
-                        boolean res = (boolean) o;
                         if(res) {
                             setState(new StateNotifyAndReturn("e6", StateDoMatrixLink.this));
                         } else {
@@ -436,10 +507,12 @@ public class FreqTransmitterUI extends AuxGui {
     private class StateDoNodeLink extends State {
         
         IWirelessNode node;
+        String pass;
 
-        public StateDoNodeLink(IWirelessNode _node) {
+        public StateDoNodeLink(IWirelessNode _node, String _pass) {
             super(false);
             node = _node;
+            pass = _pass;
         }
 
         @Override
@@ -463,9 +536,9 @@ public class FreqTransmitterUI extends AuxGui {
             if(tile instanceof IWirelessUser) {
                 State state = new StateNotify("e5");
                 setState(state);
-                Syncs.linkUserToNode((IWirelessUser) tile, node, Future.create((Object o) -> {
+                state.startTransmitting();
+                Syncs.linkUserToNode((IWirelessUser) tile, node, Future.create(res -> {
                     if(FreqTransmitterUI.this.current == state) {
-                        boolean res = (boolean) o;
                         if(res) {
                             setState(new StateNotifyAndReturn("e6", StateDoNodeLink.this));
                         } else {

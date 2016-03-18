@@ -52,7 +52,9 @@ item.ac_terminal_installer.name=Data Terminal
 item.ac_apps.name=App Installer
 
 item.ac_developer_portable.name=Portable Developer
-
+item.ac_magnetic_coil.name=High Voltage Magnetic Coil
+item.ac_magnetic_coil.desc=Overcharges the developer to rewrite personal reality
+item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=Research Note
 
 # Block
@@ -124,6 +126,7 @@ ac.app.freq_transmitter.s1_0=Press ENTER to confirm
 ac.app.freq_transmitter.s1_1=Authorizing...
 ac.app.freq_transmitter.s2_0=Right click any wireless node nearby to establish link. Click any other blocks to quit.
 ac.app.freq_transmitter.s3_0=Right click any wireless receiver or generator nearby to esablish link. Click any other blocks to quit.
+ac.app.freq_transmitter.st=Action Timeout.
 
 ac.app.freq_transmitter.e0=The wireless matrix is not initialized.
 ac.app.freq_transmitter.e1=Authorization failed.
@@ -179,6 +182,10 @@ ac.skill_tree.abort=Abort
 ac.skill_tree.aborted=Action Aborted.
 
 ac.skill_tree.anyskill=Any Skill of Level %d
+
+ac.skill_tree.reset=Reset
+ac.skill_tree.cant_reset=Can't Reset
+ac.skill_tree.reset.desc=Reset Ability to %s
 
 # Settings
 ac.settings.cat.generic=Generic

@@ -38,20 +38,20 @@ public class ItemMedia extends ACItem {
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)  {
         if(!player.worldObj.isRemote) {
-            MediaData data = MediaData.get(player);
+            MediaData data = MediaData.of(player);
             TerminalData tData = TerminalData.get(player);
             
-            int mID = stack.getItemDamage();
+            ACMedia media = getInternal(stack.getItemDamage());
             
             if(!tData.isInstalled(AppMediaPlayer.instance)) {
                 player.addChatMessage(new ChatComponentTranslation("ac.media.notinstalled"));
-            } else if(data.isMediaInstalled(mID)) {
-                player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", MediaRegistry.getMedia(mID).getDisplayName()));
+            } else if(data.isInstalled(media)) {
+                player.addChatMessage(new ChatComponentTranslation("ac.media.haveone", media.getName()));
             } else {
-                data.installMedia(mID);
+                data.install(media);
                 if(!player.capabilities.isCreativeMode)
                     stack.stackSize--;
-                player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", MediaRegistry.getMedia(mID).getDisplayName()));
+                player.addChatMessage(new ChatComponentTranslation("ac.media.acquired", media.getName()));
             }
         }
         return stack;
@@ -60,9 +60,10 @@ public class ItemMedia extends ACItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerIcons(IIconRegister ir) {
-        icons = new IIcon[MediaRegistry.getMediaCount()];
-        for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
-            icons[i] = ir.registerIcon("academy:media_" + MediaRegistry.getMedia(i).name);
+        List<ACMedia> internal = MediaManager.internalMedias();
+        icons = new IIcon[internal.size()];
+        for(int i = 0; i < internal.size(); ++i) {
+            icons[i] = ir.registerIcon("academy:media_" + internal.get(i).getID());
         }
     }
     
@@ -74,21 +75,25 @@ public class ItemMedia extends ACItem {
     
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return StatCollector.translateToLocal(MediaRegistry.getMedia(stack.getItemDamage()).getDisplayName());
+        return getInternal(stack.getItemDamage()).getName();
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-        list.add(MediaRegistry.getMedia(stack.getItemDamage()).getDesc());
+        list.add(getInternal(stack.getItemDamage()).getDesc());
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for(int i = 0; i < MediaRegistry.getMediaCount(); ++i) {
+        for(int i = 0; i < MediaManager.internalMedias().size(); ++i) {
             list.add(new ItemStack(this, 1, i));
         }
+    }
+
+    private ACMedia getInternal(int idx) {
+        return MediaManager.internalMedias().get(idx);
     }
 
 }

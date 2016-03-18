@@ -10,6 +10,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.develop.DevelopData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.action.DevelopActionLevel;
+import cn.academy.ability.develop.action.DevelopActionReset;
 import cn.academy.ability.develop.action.DevelopActionSkill;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
@@ -33,6 +34,10 @@ public enum Syncs {
         NetworkMessage.sendToServer(instance, "upgrade_level", player, developer);
     }
 
+    void startReset(EntityPlayer player, IDeveloper developer) {
+        NetworkMessage.sendToServer(instance, "reset", player, developer);
+    }
+
     void abort(EntityPlayer player) {
         NetworkMessage.sendToServer(instance, "abort", player);
     }
@@ -46,7 +51,12 @@ public enum Syncs {
     private void hStartUpgradingLevel(EntityPlayer player, IDeveloper developer) {
         data(player).startDeveloping(developer, new DevelopActionLevel());
     }
-    
+
+    @Listener(channel="reset", side=Side.SERVER)
+    private void hReset(EntityPlayer player, IDeveloper developer) {
+        data(player).startDeveloping(developer, new DevelopActionReset());
+    }
+
     @Listener(channel="abort", side=Side.SERVER)
     private void hAbort(@Instance EntityPlayer player) {
         data(player).abort();

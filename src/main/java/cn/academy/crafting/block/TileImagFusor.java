@@ -13,20 +13,27 @@ import cn.academy.core.client.sound.PositionedSound;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
+import cn.academy.crafting.item.ItemMatterUnit;
+import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.networkcall.TargetPointHelper.TargetPointConverter;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -51,10 +58,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     static final int PER_UNIT = 1000;
     
     //Inventory id:
-    // 0: Input
-    // 1: Output
-    // 2: Imag input
-    // 3: Energy input
+    public static final int
+        SLOT_INPUT = 0,
+        SLOT_OUTPUT = 1,
+        SLOT_IMAG_INPUT = 2,
+        SLOT_ENERGY_INPUT = 3,
+        SLOT_IMAG_OUTPUT = 4;
     
     protected FluidTank tank = new FluidTank(TANK_SIZE);
     
@@ -64,7 +73,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     private int checkCooldown = 10, syncCooldown = SYNC_INTV;
 
     public TileImagFusor() {
-        super("imag_fusor", 4, 2000, IFConstants.LATENCY_MK1);
+        super("imag_fusor", 5, 2000, IFConstants.LATENCY_MK1);
     }
 
     @Override
@@ -115,57 +124,68 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     @Override
     public void updateEntity() {
         super.updateEntity();
-        
-        if(isWorking()) {
-            updateWork();
-        } else {
+
+        if (!isWorking()) {
             // Match the work in server
             if(!worldObj.isRemote) {
-                
                 if(--checkCooldown <= 0) {
                     checkCooldown = 10;
-                    if(inventory[0] != null) {
-                        IFRecipe recipe = 
-                            ImagFusorRecipes.INSTANCE.getRecipe(inventory[0]);
+                    if(inventory[SLOT_INPUT] != null) {
+                        IFRecipe recipe = ImagFusorRecipes.INSTANCE.getRecipe(inventory[SLOT_INPUT]);
                         if(recipe != null) {
                             startWorking(recipe);
                         }
                     }
                 }
-                
+
             }
-            
+        }
+        
+        if(isWorking()) {
+            updateWork();
         }
         
         // Update liquid
-        if(inventory[2] != null) {
-            if(getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
+        {
+            ItemStack imagOutStack = inventory[SLOT_IMAG_OUTPUT];
+            if(inventory[SLOT_IMAG_INPUT] != null &&
+               (imagOutStack == null || imagOutStack.stackSize < imagOutStack.getMaxStackSize()) &&
+                getLiquidAmount() + PER_UNIT <= TANK_SIZE) {
+
                 this.tank.fill(new FluidStack(ModuleCrafting.fluidImagProj, PER_UNIT), true);
-                inventory[2].stackSize--;
-                if(inventory[2].stackSize == 0)
-                    inventory[2] = null;
+
+                inventory[SLOT_IMAG_INPUT].stackSize--;
+                if(inventory[SLOT_IMAG_INPUT].stackSize == 0)
+                    inventory[SLOT_IMAG_INPUT] = null;
+
+                if (imagOutStack == null) {
+                    inventory[SLOT_IMAG_OUTPUT] = ModuleCrafting.matterUnit.create(ItemMatterUnit.NONE);
+                } else {
+                    ++imagOutStack.stackSize;
+                }
+
             }
         }
         
         // Update energy
-        if(inventory[3] != null) {
+        if(inventory[SLOT_ENERGY_INPUT] != null) {
             double gain = EnergyItemHelper
-                    .pull(inventory[3], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
+                    .pull(inventory[SLOT_ENERGY_INPUT], Math.min(getMaxEnergy() - getEnergy(), getBandwidth()), false);
             this.injectEnergy(gain);
         }
         
         // Synchronization
-        if(worldObj.isRemote) {
-            syncClient();
-            updateSounds();
+        if (!worldObj.isRemote) {
+            if(--syncCooldown <= 0) {
+                syncCooldown = SYNC_INTV;
+                NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 15),
+                        this, "sync",
+                        currentRecipe, workProgress, getLiquidAmount());
+            }
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    private void syncClient() {
-        if(--syncCooldown <= 0) {
-            syncCooldown = SYNC_INTV;
-            query(Minecraft.getMinecraft().thePlayer);
+
+        if (worldObj.isRemote) {
+            updateSounds();
         }
     }
     
@@ -258,16 +278,9 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         super.writeToNBT(tag);
         tank.writeToNBT(tag);
     }
-    
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void query(@Instance EntityPlayer player) {
-        if(player != null)
-            syncBack(player, currentRecipe, workProgress, tank.getFluidAmount());
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void syncBack(@Target EntityPlayer player, @Instance IFRecipe recipe, 
-        @Data Double progress, @Data Integer fluidAmount) {
+
+    @Listener(channel="sync", side=Side.CLIENT)
+    private void hSync(IFRecipe recipe, double progress, int fluidAmount) {
         tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
         workProgress = progress;
         currentRecipe = recipe;
@@ -280,10 +293,12 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     
     @SideOnly(Side.CLIENT)
     private void updateSounds() {
-        if(sound != null && !isWorking()) {
+        boolean play = !isActionBlocked();
+
+        if(sound != null && !play) {
             sound.stop();
             sound = null;
-        } else if(sound == null && isWorking()) {
+        } else if(sound == null && play) {
             sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
                     "machine.imag_fusor_work").setLoop().setVolume(0.6f);
             ACSounds.playClient(sound);

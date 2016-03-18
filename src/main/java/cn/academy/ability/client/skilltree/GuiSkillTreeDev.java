@@ -6,18 +6,18 @@
 */
 package cn.academy.ability.client.skilltree;
 
+import cn.academy.ability.ModuleAbility;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.block.TileDeveloper;
 import cn.academy.ability.develop.DevelopData;
 import cn.academy.ability.develop.DevelopData.DevState;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.ability.develop.action.DevelopActionLevel;
+import cn.academy.ability.develop.action.DevelopActionReset;
 import cn.academy.ability.develop.action.DevelopActionSkill;
 import cn.academy.ability.develop.action.IDevelopAction;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.component.Glow;
-import cn.academy.energy.client.gui.EnergyUIHelper;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.gui.component.Transform.HeightAlign;
@@ -28,8 +28,12 @@ import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.shader.ShaderMono;
+import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.markdown.MarkdownParser.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -69,6 +73,44 @@ public class GuiSkillTreeDev extends GuiSkillTree {
             text.setContent(SkillTreeLocal.energyDesc(
                     developer.getEnergy(), developer.getMaxEnergy()));
         });
+
+        {
+            ItemStack equipped = player.getCurrentEquippedItem();
+            if (equipped != null && equipped.getItem() == ModuleAbility.magneticCoil) {
+
+                Widget windowEsper = gui.getWidget("window/window_esper");
+
+                windowEsper.getWidget("text_prg").transform.doesDraw = false;
+                windowEsper.getWidget("text_level").transform.doesDraw = false;
+
+                Widget resetButton = windowEsper.getWidget("btn_reset");
+                resetButton.transform.doesDraw = true;
+
+                if (DevelopActionReset.canReset(player, developer)) {
+                    Glow glow = resetButton.getComponent(Glow.class);
+                    TextBox text = resetButton.getComponent(TextBox.class);
+                    resetButton.listen(FrameEvent.class, (w, e) -> {
+                        float time = (GameTimer.getTime() % 200000) / 60.0f;
+                        float sin = 0.5f * (1 + MathHelper.sin(time));
+                        glow.color.a = 0.6f + sin * 0.4f;
+                        text.option.color.a = 0.8f + sin * 0.2f;
+                    });
+
+                    resetButton.listen(LeftClickEvent.class, (w, e) -> {
+                        overlay = new Overlay();
+                        window.addWidget(overlay);
+                        window.addWidget(createConfirmWidget(new DevelopActionReset(),
+                                () -> {
+                                    developData.reset();
+                                    Syncs.instance.startReset(player, developer);
+                                }));
+                    });
+                } else {
+                    resetButton.getComponent(Tint.class).enabled = false;
+                    resetButton.getComponent(TextBox.class).setContent("ac.skill_tree.cant_reset");
+                }
+            }
+        }
         
         for(int i = 1; i <= 5; ++i) {
             final int j = i;
@@ -85,7 +127,8 @@ public class GuiSkillTreeDev extends GuiSkillTree {
                 }
             });
         }
-        
+
+        /*
         // FIXME Bad style here, instanceof is definetly not-cute hardcoding.
         // Used Developer class to abstract item and block away but now need to do some specific stuffs.
         // If possible make this part better in the future xD
@@ -101,7 +144,7 @@ public class GuiSkillTreeDev extends GuiSkillTree {
             
             window.addWidget(w);
             EnergyUIHelper.initNodeLinkButton(db, w, true);
-        }
+        }*/
         
         ProgressBar.get(window.getWidget("window_machine/p_syncrate")).progress = developer.getType().syncRate;
     }

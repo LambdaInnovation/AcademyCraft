@@ -52,7 +52,9 @@ item.ac_terminal_installer.name=数据终端
 item.ac_apps.name=应用安装器
 
 item.ac_developer_portable.name=便携能力开发机
-
+item.ac_magnetic_coil.name=高压磁增幅线圈
+item.ac_magnetic_coil.desc=超载开发机以重置个人现实
+item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=研究记录
 
 ac.converter.desc_template=转换%s到%s
@@ -124,6 +126,7 @@ ac.app.freq_transmitter.s1_0=按下"回车"以确认
 ac.app.freq_transmitter.s1_1=验证中...
 ac.app.freq_transmitter.s2_0=右击附近的无线节点以建立连接.单击其他方块以退出.
 ac.app.freq_transmitter.s3_0=右击附近的无线能源接收对象或能源发生机以建立连接. 单击其他方块以退出.
+ac.app.freq_transmitter.st=操作超时.
 
 ac.app.freq_transmitter.e0=这个无线矩阵还未初始化.
 ac.app.freq_transmitter.e1=验证失败.
@@ -180,6 +183,10 @@ ac.skill_tree.level_prg=升级进度：%s
 
 ac.skill_tree.anyskill=%d级的任意技能
 
+ac.skill_tree.reset=重置
+ac.skill_tree.cant_reset=无法重置
+ac.skill_tree.reset.desc=重置能力到 %s
+
 # 设置
 ac.settings.cat.generic=常规
 ac.settings.prop.attackPlayer=开启PvP (玩家伤害)
@@ -200,8 +207,8 @@ ac.settings.cat.misc=杂项
 ac.settings.prop.edit_ui=自定义UI
 
 # 媒体
-ac.media.acquired=你已获得媒体  %s
-ac.media.haveone=你已经获得了媒体  %s
+ac.media.acquired=你已安装媒体  %s
+ac.media.haveone=你已经持有媒体  %s
 ac.media.notinstalled=你还没有安装媒体播放器App！
 
 # 常规

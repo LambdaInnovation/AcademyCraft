@@ -148,11 +148,11 @@ public class EntityCoinThrowing extends EntityAdvanced {
                 ++equipped.stackSize;
                 player.inventory.inventoryChanged = true;
             } else if(PlayerUtils.mergeStackable(player.inventory, new ItemStack(
-                    ModuleVanilla.coin)) > 0) {
+                    ModuleVanilla.coin)) == 0) {
                 ;
             } else {
                 //if fail...
-                worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY 
+                worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY
                     + yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
             }
         }

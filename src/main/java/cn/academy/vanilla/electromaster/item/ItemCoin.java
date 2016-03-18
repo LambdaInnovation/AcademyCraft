@@ -65,8 +65,7 @@ public class ItemCoin extends ACItem {
         if(getPlayerCoin(player) != null) {
             return stack;
         }
-        
-        NBTTagCompound nbt = StackUtils.loadTag(stack);
+
         //Spawn at both side, not syncing for render effect purpose
         EntityCoinThrowing etc = new EntityCoinThrowing(player, stack);
         world.spawnEntityInWorld(etc);

@@ -7,7 +7,7 @@
 package cn.academy.crafting.block;
 
 import cn.academy.core.block.ACBlockContainer;
-import cn.academy.crafting.client.gui.GuiImagFusor;
+import cn.academy.crafting.client.ui.GuiImagFusor;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -128,9 +128,9 @@ public class BlockImagFusor extends ACBlockContainer {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             TileImagFusor te = check(world, x, y, z);
-            return te == null ? null : new GuiImagFusor(new ContainerImagFusor(te, player));
+            return te == null ? null : GuiImagFusor.apply(new ContainerImagFusor(te, player));
         }
-        
+
         @Override
         protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
             TileImagFusor te = check(world, x, y, z);

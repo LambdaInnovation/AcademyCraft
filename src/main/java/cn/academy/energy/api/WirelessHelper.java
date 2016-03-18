@@ -29,10 +29,6 @@ public class WirelessHelper {
 
     //-----WirelessNetwork
     
-    public static WirelessNet getWirelessNet(World world, String ssid) {
-        return WiWorldData.get(world).getNetwork(ssid);
-    }
-    
     public static WirelessNet getWirelessNet(IWirelessMatrix matrix) {
         TileEntity tile = (TileEntity) matrix;
         return WiWorldData.get(tile.getWorldObj()).getNetwork(matrix);
@@ -59,13 +55,6 @@ public class WirelessHelper {
     
     /**
      * Get a list of WirelessNet at the position within the given range.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param range
-     * @param max
-     * @return
      */
     public static Collection<WirelessNet> getNetInRange(World world, int x, int y, int z, double range, int max) {
         WiWorldData data = WiWorldData.get(world);
@@ -93,13 +82,9 @@ public class WirelessHelper {
     
     /**
      * Get a list of IWirelessNode that can reach the given position.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
      * @return nodes in the area, does not guarantee any order
      */
-    public static List<IWirelessNode> getNodesInRange(World world, double x, double y, double z) {
+    public static List<IWirelessNode> getNodesInRange(World world, int x, int y, int z) {
         double range = 20.0;
         List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockSelector() {
 
@@ -111,7 +96,7 @@ public class WirelessHelper {
             
         });
         
-        List<IWirelessNode> ret = new ArrayList();
+        List<IWirelessNode> ret = new ArrayList<>();
         for(BlockPos bp : list) {
             ret.add((IWirelessNode) bp.getTile());
         }

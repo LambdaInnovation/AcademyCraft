@@ -7,7 +7,7 @@
 package cn.academy.crafting.block;
 
 import cn.academy.core.block.ACBlockContainer;
-import cn.academy.crafting.client.gui.GuiMetalFormer;
+import cn.academy.crafting.client.ui.GuiMetalFormer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -28,14 +28,14 @@ import net.minecraft.world.World;
  */
 @Registrant
 public class BlockMetalFormer extends ACBlockContainer {
-    
+
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
         @SideOnly(Side.CLIENT)
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerMetalFormer container = (ContainerMetalFormer) getServerContainer(player, world, x, y, z);
-            return container == null ? null : new GuiMetalFormer(container);
+            return container == null ? null : GuiMetalFormer.apply(container);
         }
         
         @Override
