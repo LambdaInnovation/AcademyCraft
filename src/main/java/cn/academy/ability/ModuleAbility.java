@@ -93,7 +93,7 @@ public class ModuleAbility {
     }
 
     @RegInitCallback
-    public void __init() {
+    public static void __init() {
         String[] factorAppearance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
                 DUNGEON_CHEST };
 

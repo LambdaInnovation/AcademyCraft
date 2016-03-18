@@ -15,9 +15,7 @@ import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.GuiEvent;
-import cn.lambdalib.cgui.gui.event.LeftClickEvent;
+import cn.lambdalib.cgui.gui.event.*;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
@@ -103,6 +101,8 @@ public class GuiMediaPlayer extends CGuiScreen {
             TextBox.get(w).content = mi == null ? "" : mi.getName();
         });
 
+        pageMain.getWidget("volume_bar").getComponent(DragBar.class).setProgress(MediaRuntime.getVolume());
+
         pageMain.getWidget("volume_bar").listen(DragBar.DraggedEvent.class, (w, e) -> {
             float volume = MathUtils.clampf(0, 1, (float) DragBar.get(w).getProgress());
             MediaRuntime.setVolume(volume);
@@ -165,13 +165,19 @@ public class GuiMediaPlayer extends CGuiScreen {
                 box.transform.doesListenKey = true;
             }
         });
-        box.listen(ConfirmInputEvent.class, (w, e) -> {
-            state[0] = false;
-            textBox.allowEdit = false;
-            box.transform.doesListenKey = false;
-            dt.color.a = 0;
-            callback.accept(textBox.content);
-        });
+
+        IGuiEventHandler handler = (w, e) -> {
+            if (state[0]) {
+                state[0] = false;
+                textBox.allowEdit = false;
+                box.transform.doesListenKey = false;
+                dt.color.a = 0;
+                callback.accept(textBox.content);
+            }
+        };
+
+        box.listen(ConfirmInputEvent.class, handler);
+        box.listen(LostFocusEvent.class, handler);
     }
     
     @Override
