@@ -6,34 +6,17 @@
 */
 package cn.academy.misc.media;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
-import cn.academy.core.util.ACMarkdownRenderer;
+import cn.academy.misc.media.MediaRuntime.PlayState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.RegistryUtils;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import paulscode.sound.SoundSystem;
-import paulscode.sound.libraries.LibraryJavaSound;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Backend of GuiMediaPlayer.
@@ -58,58 +41,50 @@ public class MediaPlayer {
             return icon;
         }
     }
-    
-    List<ACMedia> medias = MediaUtils.getAllMedias();
+
     ACMedia lastMedia;
     ACMedia currentMedia;
+
     public PlayPref playPref = PlayPref.LOOP;
 
     MediaPlayer() {
         FMLCommonHandler.instance().bus().register(this);
     }
 
-    public void startPlay() {
-        if(lastMedia == null) {
-            lastMedia = medias.isEmpty() ? null : medias.get(0);
-        } else {
-            startPlay(lastMedia);
-        }
-    }
-
     public void startPlay(ACMedia media) {
         stop();
 
-        MediaUtils.playMedia(media, false);
+        MediaRuntime.playMedia(media, playPref == PlayPref.LOOP);
         currentMedia = media;
         lastMedia = media;
     }
 
-    public void startPlay(String id) {
-        startPlay(MediaUtils.getMedia(id));
-    }
-
     public void pause() {
-        if(currentMedia != null) MediaUtils.pauseMedia(currentMedia);
+        if(currentMedia != null) MediaRuntime.pauseMedia(currentMedia);
     }
 
     public void resume() {
-        if(currentMedia != null) MediaUtils.playMedia(currentMedia, false);
+        if(currentMedia != null) MediaRuntime.playMedia(currentMedia, false);
     }
 
     public void stop() {
         if(currentMedia != null) {
-            MediaUtils.stopMedia(currentMedia);
+            MediaRuntime.stopMedia(currentMedia);
             currentMedia = null;
         }
     }
 
     private ACMedia nextMedia() {
+        if (currentMedia == null) {
+            return null;
+        }
+
         switch(playPref) {
             case LOOP:
-                int index = medias.indexOf(currentMedia);
-                return medias.get((index + 1) % medias.size());
+                int index = MediaManager.indexOf(currentMedia);
+                return MediaManager.get((index + 1) % MediaManager.mediasCount());
             case RANDOM:
-                return medias.get(RandUtils.rangei(0, medias.size()));
+                return MediaManager.get(RandUtils.rangei(0, MediaManager.mediasCount()));
             case SINGLE:
                 return null;
             case SINGLE_LOOP:
@@ -126,9 +101,11 @@ public class MediaPlayer {
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
         if(!ClientUtils.isPlayerInGame() || event.phase == Phase.START) return;
-        if(currentMedia == null) {
+        if(currentMedia == null || getState() == PlayState.STOPPED) {
             ACMedia next = nextMedia();
-            if(next != null) startPlay(next);
+            if(next != null) {
+                startPlay(next);
+            }
         }
     }
 
@@ -137,26 +114,11 @@ public class MediaPlayer {
         stop();
     }
 
-    public boolean isPlaying() {
-        if(currentMedia != null) {
-            if(MediaUtils.isPaused(currentMedia)) return false;
-            return true;
-        } else {
-            return false;
+    public PlayState getState() {
+        if (currentMedia == null) {
+            return PlayState.STOPPED;
         }
-    }
-
-    public boolean isPaused() {
-        if(currentMedia != null) {
-            if(!MediaUtils.isPaused(currentMedia)) return false;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isStopped() {
-        return currentMedia == null;
+        return MediaRuntime.getState(currentMedia);
     }
     
 }

@@ -6,69 +6,126 @@
  */
 package cn.academy.misc.media;
 
-import cn.academy.core.AcademyCraft;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.generic.RegistryUtils;
+import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Throwables;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.util.ResourceLocation;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
  * @author KSkun
  */
+@Registrant
 @SideOnly(Side.CLIENT)
 public class MediaManager {
 
-    protected String pathPrefix = true ?
-            MediaManager.class.getProtectionDomain().getCodeSource().getLocation().getPath()
-                    .replace("/out/production/forge-1.7.10-10.13.4.1517-1.7.10-src/cn/academy/misc/media/MediaManager.class",
-                            "/eclipse").concat("/acmedia/") :
-            MediaManager.class.getProtectionDomain().getCodeSource().getLocation().getPath()
-                    .replaceAll("/mods/.+jar", "").concat("/acmedia/");
-    protected File cfile;
-    protected Config conf;
-    protected Map<String, ACMedia> medias = new LinkedHashMap<String, ACMedia>();
-    /** The instance of MediaManager. */
-    public static final MediaManager INSTANCE = new MediaManager();
+    private static Map<String, ACMedia> medias = new LinkedHashMap<>();
+    private static List<ACMedia> mediasList = new ArrayList<>();
+    private static List<ACMedia> internalMediasList = new ArrayList<>();
 
-    protected MediaManager() {
-        cfile = new File(pathPrefix + "media.conf");
+    private MediaManager() {}
+
+    @RegInitCallback
+    public static void __init() {
+        parseDefaultConfig();
+
+        if (SideHelper.isClient()) {
+            parseCustomConfig();
+        }
     }
 
-    public void init() {
-        File mediaDir = new File(pathPrefix);
-        if(!mediaDir.exists()) mediaDir.mkdir();
-        if(!checkConf()) {
-            AcademyCraft.log.error(getClass().getName() + " can't be initialized!");
-            return;
+    private static void parseDefaultConfig() {
+        final String path = "/assets/academy/media/default.conf";
+
+        Config conf = ConfigFactory.parseResourcesAnySyntax(MediaManager.class, path);
+        for (String id : conf.getStringList("default_medias")) {
+            System.out.println("Register " + id);
+            register(ACMedia.newInternal(id));
+        }
+    }
+
+    private static void parseCustomConfig() {
+        File path = checkPath(new File(Minecraft.getMinecraft().mcDataDir, "acmedia"));
+
+        // Also copy the readme_template.txt to the folder.
+        {
+            Path dst = new File(path, "README.txt").toPath();
+            try {
+                Files.copy(RegistryUtils.getResourceStream(new ResourceLocation("academy:media/readme_template.txt")),
+                        dst, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                Throwables.propagate(ex);
+            }
         }
 
-        List<ACMedia> files = new ArrayList<ACMedia>();
+        File coverPath = checkPath(new File(path, "cover"));
+        File sourcePath = checkPath(new File(path, "source"));
 
-        if(mediaDir.listFiles() != null) {
-            for (File f : mediaDir.listFiles()){
-                if(f.getName().contains(".ogg")) {
-                    files.add(new ACMedia(f));
+        for (File sound : sourcePath.listFiles()) {
+            String fullname = sound.getName();
+            int dotidx = fullname.lastIndexOf('.');
+            if (dotidx == -1) {
+                throw new IllegalArgumentException("Invalid filename: " + fullname);
+            }
+
+            String id = fullname.substring(0, dotidx);
+            String postfix = fullname.substring(dotidx + 1);
+
+            try {
+                ACMedia media = ACMedia.newExternal(id, sound.toURI().toURL(), postfix);
+                ResourceLocation loc = media.getCover();
+                // Manually override the texture in the given path
+                {
+                    File coverFile = new File(coverPath, id + ".png");
+                    try {
+                        if (coverFile.isFile()) {
+                            InputStream stream = new FileInputStream(coverFile);
+                            BufferedImage buffer = ImageIO.read(stream);
+                            ITextureObject object = new DynamicTexture(buffer);
+
+                            Minecraft.getMinecraft().getTextureManager().loadTexture(loc, object);
+                        } else {
+                            System.out.println("File " + coverFile + "not exist");
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+
+                register(media);
+            } catch (MalformedURLException ex) {
+                Throwables.propagate(ex);
             }
         }
-        
-        conf = ConfigFactory.parseFile(cfile);
+    }
 
-        for(ACMedia media : files) {
-            String pathname = "ac.media." + media.getFile().getName();
-            if(conf.hasPath(pathname)) {
-                Config mediac = conf.getConfig(pathname);
-                if(mediac.hasPath("author")) media.setAuthor(mediac.getString("author"));
-                if(mediac.hasPath("name")) media.setName(mediac.getString("name"));
-                if(mediac.hasPath("id")) media.setId(mediac.getString("id"));
-                if(mediac.hasPath("picfile")) media.setCoverPic(pathPrefix + mediac.getString("picfile"));
-                if(mediac.hasPath("remark")) media.setRemark(mediac.getString("remark"));
-            }
-            medias.put(media.getId(), media);
+    private static File checkPath(File file) {
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        if (file.isDirectory()) {
+            return file;
+        } else {
+            throw new IllegalStateException("Not a directory");
         }
     }
 
@@ -76,47 +133,44 @@ public class MediaManager {
      * Get all the medias that has been registered.
      * @return The collection of all the medias.
      */
-    public Collection<ACMedia> getMedias() {
-        return medias.values();
+    public static List<ACMedia> medias() {
+        return mediasList;
     }
 
-    /**
-     * Get the media with given ID.
-     * @param id The ID of media.
-     * @return A instance of media with given ID.
-     */
-    public ACMedia getMedia(String id) {
-        return medias.get(id);
-    }
-
-    /**
-     * Get all the IDs of the medias.
-     * @return The collection of all the IDs.
-     */
-    public Collection<String> getMediaIds() {
-        return medias.keySet();
+    public static List<ACMedia> internalMedias() {
+        return internalMediasList;
     }
 
     /**
      * Register your media into the manager (in code).
-     * @param media Your media.
+     * @param media The media to register.
      */
-    public void registerMedia(ACMedia media) {
-        medias.put(media.getId(), media);
-    }
-
-    protected boolean checkConf() {
-        if(!cfile.exists()) {
-            AcademyCraft.log.info("Local media config File not found!");
-            try {
-                cfile.createNewFile();
-            } catch(Exception e) {
-                throw Throwables.propagate(e);
-            }
+    public static void register(ACMedia media) {
+        medias.put(media.getID(), media);
+        mediasList.add(media);
+        if (!media.isExternal()) {
+            internalMediasList.add(media);
         }
-        return true;
     }
 
-    //TODO: Do init NBT Datas when MediaPlayer is installed.
+    public static ACMedia get(String id) {
+        if (medias.containsKey(id)) {
+            return medias.get(id);
+        } else {
+            throw new IllegalArgumentException("No media with id " + id);
+        }
+    }
+
+    public static ACMedia get(int idx) {
+        return mediasList.get(idx);
+    }
+
+    public static int mediasCount() {
+        return mediasList.size();
+    }
+
+    public static int indexOf(ACMedia media) {
+        return mediasList.indexOf(media);
+    }
 
 }

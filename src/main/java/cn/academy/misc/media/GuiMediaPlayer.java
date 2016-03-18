@@ -7,21 +7,23 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.client.Resources;
+import cn.academy.misc.media.MediaRuntime.PlayState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.*;
+import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.GuiEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
-import com.google.common.base.Throwables;
-import net.minecraft.client.Minecraft;
+import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.Color;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author WeAthFolD
@@ -47,15 +49,11 @@ public class GuiMediaPlayer extends CGuiScreen {
     private void init() {
         pageMain = document.getWidget("back").copy();
         
-//        List<Media> installedMedias = data.getInstalledMediaList();
-        
-//        player.updatePlayerMedias(installedMedias);
-        
         {
             Widget area = pageMain.getWidget("area");
             ElementList list = new ElementList();
             
-            for(ACMedia m : MediaUtils.getAllMedias()) {
+            for(ACMedia m : MediaManager.medias()) {
                 list.addWidget(createMedia(m));
             }
             
@@ -70,16 +68,18 @@ public class GuiMediaPlayer extends CGuiScreen {
         });
 
         pageMain.getWidget("pop").listen(LeftClickEvent.class, (w, e) -> {
-            if(player.isPlaying()) {
-                if(player.isPaused())
-                    player.resume();
-                else
-                    player.pause();
+            PlayState state = player.getState();
+            if (state == PlayState.STOPPED) {
+                ACMedia firstMedia = MediaManager.get(0);
+                player.startPlay(firstMedia);
             } else {
-                player.startPlay();
+                if (state == PlayState.PAUSED) {
+                    player.resume();
+                } else {
+                    player.pause();
+                }
             }
 
-            updatePopState();
             gui.postEventHierarchically(new UpdateMediaEvent());
         });
 
@@ -90,17 +90,26 @@ public class GuiMediaPlayer extends CGuiScreen {
 
         pageMain.getWidget("progress").listen(FrameEvent.class, (w, e) -> {
             ACMedia mi = player.currentMedia;
-            ProgressBar.get(w).progress = mi == null ? 0.0 : (double) MediaUtils.getPlayedTime(mi) / mi.getTotalLength();
+            ProgressBar.get(w).progress = mi == null ? 0.0 : (double) MediaRuntime.getPlayedTime(mi) / mi.getLength();
         });
 
         pageMain.getWidget("play_time").listen(FrameEvent.class, (w, e) -> {
             ACMedia mi = player.currentMedia;
-            TextBox.get(w).content = mi == null ? "" : MediaUtils.getDisplayTime((int) MediaUtils.getPlayedTime(mi));
+            TextBox.get(w).content = mi == null ? "00:00" : MediaRuntime.getDisplayTime((int) MediaRuntime.getPlayedTime(mi));
         });
 
         pageMain.getWidget("title").listen(UpdateMediaEvent.class, (w, e) -> {
             ACMedia mi = player.currentMedia;
             TextBox.get(w).content = mi == null ? "" : mi.getName();
+        });
+
+        pageMain.getWidget("volume_bar").listen(DragBar.DraggedEvent.class, (w, e) -> {
+            float volume = MathUtils.clampf(0, 1, (float) DragBar.get(w).getProgress());
+            MediaRuntime.setVolume(volume);
+            ACMedia current = player.getCurrentMedia();
+            if (current != null) {
+                MediaRuntime.setMediaVolume(current, volume);
+            }
         });
 
         pageMain.listen(UpdateMediaEvent.class, (w, e) -> updatePopState());
@@ -112,11 +121,22 @@ public class GuiMediaPlayer extends CGuiScreen {
     
     
     private Widget createMedia(ACMedia media) {
-        Widget ret = document.getWidget("t_one").copy();
-//        DrawTexture.get(ret.getWidget("icon")).texture = media.cover;
+        Widget ret = document.getWidget("back/t_one").copy();
+        ret.transform.doesDraw = true;
+
+        DrawTexture.get(ret.getWidget("icon")).texture = media.getCover();
         TextBox.get(ret.getWidget("title")).content = media.getName();
-        TextBox.get(ret.getWidget("desc")).content = media.getRemark();
-        TextBox.get(ret.getWidget("time")).content = MediaUtils.getDisplayTime((int) media.getTotalLength());
+        TextBox.get(ret.getWidget("desc")).content = media.getDesc();
+        TextBox.get(ret.getWidget("time")).content = MediaRuntime.getDisplayTime((int) media.getLength());
+
+        if (media.isExternal()) {
+            wrapEdit(ret.getWidget("btn_edit_name"), ret.getWidget("title"), newName -> {
+                ACMedia.updateExternalName(media, newName);
+            });
+            wrapEdit(ret.getWidget("btn_edit_desc"), ret.getWidget("desc"), newDesc -> {
+                ACMedia.updateExternalDesc(media, newDesc);
+            });
+        }
         
         ret.listen(LeftClickEvent.class, (w, e) -> {
             if(w.isFocused()) {
@@ -127,6 +147,32 @@ public class GuiMediaPlayer extends CGuiScreen {
         
         return ret;
     }
+
+    private void wrapEdit(Widget button, Widget box, Consumer<String> callback) {
+        button.transform.doesDraw = true;
+
+        DrawTexture dt = new DrawTexture(null).setColor(Color.monoBlend(.4, 0));
+        TextBox textBox = box.getComponent(TextBox.class);
+        box.addComponent(dt);
+
+        boolean state[] = new boolean[1];
+        button.listen(LeftClickEvent.class, (w, e) -> {
+            if (!state[0]) {
+                state[0] = true;
+                dt.color.a = .2;
+                textBox.allowEdit = true;
+                box.gainFocus();
+                box.transform.doesListenKey = true;
+            }
+        });
+        box.listen(ConfirmInputEvent.class, (w, e) -> {
+            state[0] = false;
+            textBox.allowEdit = false;
+            box.transform.doesListenKey = false;
+            dt.color.a = 0;
+            callback.accept(textBox.content);
+        });
+    }
     
     @Override
     public boolean doesGuiPauseGame() {
@@ -134,7 +180,8 @@ public class GuiMediaPlayer extends CGuiScreen {
     }
     
     private void updatePopState() {
-        DrawTexture.get(pageMain.getWidget("pop")).texture = (player.isPlaying() && !player.isPaused()) ? T_PAUSE : T_PLAY;
+        PlayState state = player.getState();
+        DrawTexture.get(pageMain.getWidget("pop")).texture = (state == PlayState.PAUSED) ? T_PAUSE : T_PLAY;
     }
     
     private class UpdateMediaEvent implements GuiEvent {} 
