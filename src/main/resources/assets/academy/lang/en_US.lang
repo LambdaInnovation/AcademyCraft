@@ -449,6 +449,7 @@ ac.command.aim.skills=/aim skills: Display all skills in player's current catego
 ac.command.aim.fullcp=/aim fullcp: Restore full cp of the player.
 ac.command.aim.level=/aim level: Set the player's ability level.
 ac.command.aim.exp=/aim exp <id>|<skillName> [exp]: Set or view the skill's experience level.
+ac.command.aim.cd_clear=/aim cd_clear: Clear all skill cooldown.
 ac.command.aim.nocat=Specified category not found. Use /aim catlist to list all categories.
 ac.command.aim.cats=Currently available categories: 
 ac.command.aim.curcat=Player current category: %s

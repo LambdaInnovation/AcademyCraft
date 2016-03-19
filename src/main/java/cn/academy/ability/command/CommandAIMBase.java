@@ -9,12 +9,18 @@ package cn.academy.ability.command;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.datapart.PlayerDataTag;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,11 +28,16 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
 
+import static cn.lambdalib.core.LambdaLib.channel;
+
 /**
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public abstract class CommandAIMBase extends ACCommand {
+
+    private static final String MSG_CLEAR_COOLDOWN = "clearcd";
     
     /**
      * This is the command used by the client, doesn't specify the player and works on the user.
@@ -133,7 +144,7 @@ public abstract class CommandAIMBase extends ACCommand {
         "help", "cat", "catlist", 
         "learn", "learn_all", "reset",
         "learned", "skills", "fullcp",
-        "level", "exp"
+        "level", "exp", "cd_clear"
     };
 
     public CommandAIMBase(String name) {
@@ -305,9 +316,15 @@ public abstract class CommandAIMBase extends ACCommand {
             }
             return;
         }
+
+        case "cd_clear": {
+            NetworkMessage.sendTo(getCommandSenderAsPlayer(ics),
+                    NetworkMessage.staticCaller(CommandAIMBase.class),
+                    MSG_CLEAR_COOLDOWN);
+            sendChat(ics, locSuccessful());
+            return;
         }
-        
-        return;
+        }
     }
     
     private Integer tryParseInt(String str) {
@@ -333,6 +350,12 @@ public abstract class CommandAIMBase extends ACCommand {
         if(i != null)
             return cat.getSkill(i);
         return cat.getSkill(str);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Listener(channel=MSG_CLEAR_COOLDOWN, side=Side.CLIENT)
+    private static void hClearCooldown() {
+        ClientRuntime.instance().clearCooldown();
     }
 
 }

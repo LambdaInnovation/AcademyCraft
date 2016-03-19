@@ -463,6 +463,7 @@ ac.command.aim.skills=/aim skills: 显示玩家当前能力的所有技能。
 ac.command.aim.fullcp=/aim fullcp: 将当前玩家CP恢复至满。
 ac.command.aim.level=/aim level: 设置当前玩家的能力等级。
 ac.command.aim.exp=/aim exp <id>|<技能名> [值]: 设置或者修改某技能的经验。
+ac.command.aim.cd_clear=/aim cd_clear: 清除所有技能的冷却。
 ac.command.aim.nocat=该能力不存在。使用 /aim catlist 以列出所有能力。
 ac.command.aim.cats=当前可用能力: 
 ac.command.aim.curcat=玩家当前能力: %s
