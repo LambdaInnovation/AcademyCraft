@@ -399,7 +399,7 @@ public abstract class Skill extends Controllable {
         }
 
         @Override
-        public DelegateState getState() {
+        public KeyDelegate.DelegateState getState() {
             if (context == null) {
                 return DelegateState.IDLE;
             } else if (context instanceof IStateProvider) {

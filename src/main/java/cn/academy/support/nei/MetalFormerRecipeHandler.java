@@ -9,7 +9,7 @@ package cn.academy.support.nei;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
-import cn.academy.crafting.client.gui.GuiMetalFormer;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderMono;
@@ -39,7 +39,7 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return GuiMetalFormer.class;
+        return GuiContainer.class;
     }
 
     @Override

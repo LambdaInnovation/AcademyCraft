@@ -9,7 +9,6 @@ package cn.academy.support.nei;
 import cn.academy.core.client.Resources;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
-import cn.academy.crafting.client.gui.GuiImagFusor;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.font.IFont.FontOption;
@@ -41,7 +40,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
     
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return GuiImagFusor.class;
+        return GuiContainer.class;
     }
 
     @Override
