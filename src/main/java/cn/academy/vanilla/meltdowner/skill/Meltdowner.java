@@ -31,7 +31,6 @@ import net.minecraft.util.Vec3;
 
 import static cn.lambdalib.util.generic.RandUtils.*;
 import static cn.lambdalib.util.generic.MathUtils.*;
-import static cn.academy.ability.api.context.SingleKeyContext.*;
 
 /**
  * @author WeAthFolD
@@ -69,7 +68,7 @@ public class Meltdowner extends Skill {
             super(player);
         }
 
-        @Listener(channel=MSG_KEYUP, side=Side.CLIENT)
+        @Listener(channel=Context.MSG_KEYUP, side=Side.CLIENT)
         void l_keyUp() {
             if (ticks >= TICKS_MIN) {
                 sendToServer(MSG_PERFORM);
@@ -78,7 +77,7 @@ public class Meltdowner extends Skill {
             }
         }
 
-        @Listener(channel=MSG_KEYABORT, side=Side.CLIENT)
+        @Listener(channel=Context.MSG_KEYABORT, side=Side.CLIENT)
         void l_keyAbort() {
             terminate();
         }

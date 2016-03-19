@@ -1,8 +1,9 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.context.Context.Status
+import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.{AbilityPipeline, Skill}
-import cn.academy.ability.api.context.{Context, ClientRuntime}
+import cn.academy.ability.api.context.{IStateProvider, Context, ClientRuntime}
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.client.effect.{TornadoRenderer, TornadoEffect, PlasmaBodyEffect}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
@@ -48,7 +49,8 @@ import scala.collection.JavaConversions._
 import cn.lambdalib.util.generic.RandUtils._
 import net.minecraft.util.Vec3
 
-class PlasmaCannonContext(p: EntityPlayer) extends Context(p) {
+class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvider {
+  import cn.academy.ability.api.AbilityAPIExt._
 
   private implicit val skill_ = PlasmaCannon
   private implicit val aData_ = aData()
@@ -92,7 +94,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) {
     destination = Raytrace.getLookingPos(player, 100, EntitySelectors.living).getLeft
     state = STATE_GO
     localTicker = 0
-    ClientRuntime.instance.setCooldownRaw(PlasmaCannon, 2400)
+    addSkillCooldown(lerpf(500, 400, skillExp).toInt)
     sendToClient(MSG_STATECHG, destination)
   }
 
@@ -161,9 +163,9 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) {
   private def explode() = {
     WorldUtils.getEntities(world,
       destination.x, destination.y, destination.z,
-      12, EntitySelectors.everything)
+      10, EntitySelectors.everything)
           .foreach(entity => {
-            AbilityPipeline.attack(player, skill_, entity, rangef(0.8f, 1.2f) * lerpf(20, 40, skillExp))
+            AbilityPipeline.attack(player, skill_, entity, rangef(0.8f, 1.2f) * lerpf(80, 150, skillExp))
             entity.hurtResistantTime = -1
           })
 
@@ -181,15 +183,20 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) {
   lazy val chargeTime = lerpf(100, 60, skillExp)
 
   def consume() = {
-    val cp = consumption / chargeTime
-    val overload = lerpf(300f, 250f, skillExp) / chargeTime
+    val cp = lerpf(18, 25, skillExp)
+    val overload = lerpf(500f, 400f, skillExp) / chargeTime
 
     cpData.perform(overload, cp)
   }
 
   lazy val consumption = lerpf(3500, 2000, skillExp)
 
-  private def energy = 1000
+  override def getState = {
+    if (state == STATE_CHARGING)
+      if (localTicker < chargeTime) DelegateState.CHARGE else DelegateState.ACTIVE
+    else
+      DelegateState.ACTIVE
+  }
 
   private def tryMove(): Unit = {
     val rawDelta = destination - chargePosition
@@ -239,7 +246,6 @@ private class Tornado(val ctx: PlasmaCannonContext)
     }
 
     theTornado.alpha = alpha * 0.5f
-    println(dead)
   }
 
   def alpha = {

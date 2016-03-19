@@ -2,11 +2,12 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
+import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context.{KeyDelegate, ContextManager, ClientRuntime, Context}
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.mc.{Vec3 => MVec3, EmptyResult, EntitySelectors, Raytrace, TraceResult}
+import cn.lambdalib.util.mc.{Vec3 => MVec3, _}
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -19,15 +20,20 @@ object StormWing extends Skill("storm_wing", 3) {
 
   override def activate(rt: ClientRuntime, keyid: Int) = {
     rt.addKey(keyid, new KeyDelegate {
-      override def onKeyDown() = {
-        val opt = ContextManager.instance.find(classOf[StormWingContext])
-        if (opt.isPresent) {
-          opt.get().terminate()
-        } else {
-          val ctx = new StormWingContext(rt.getEntity)
-          ContextManager.instance.activate(ctx)
-        }
+      override def onKeyDown() = currentContext match {
+          case Some(ctx) => ctx.terminate()
+          case None      =>
+            val ctx = new StormWingContext(rt.getEntity)
+            ContextManager.instance.activate(ctx)
       }
+
+      override def getState = currentContext match {
+        case Some(ctx) =>
+          if (ctx.getState == StormWingContext.STATE_ACTIVE) DelegateState.ACTIVE else DelegateState.CHARGE
+        case _ => DelegateState.IDLE
+      }
+
+      private def currentContext = Option(ContextManager.instance.find(classOf[StormWingContext]).orElse(null))
       override def getIcon: ResourceLocation = StormWing.getHintIcon
     })
   }
@@ -51,6 +57,7 @@ object StormWingContext {
 class StormWingContext(p: EntityPlayer) extends Context(p) {
   import cn.lambdalib.util.mc.MCExtender._
   import cn.lambdalib.util.generic.RandUtils._
+  import scala.collection.JavaConversions._
 
   private implicit val skill = StormWing
   private implicit val aData_ = aData
@@ -142,7 +149,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
       state = STATE_ACTIVE
       stateTick = 0
       initKeys()
-      sendToServer(MSG_SYNC_STATE, state.asInstanceOf[AnyRef])
+      sendToServer(MSG_SYNC_STATE)
     }
   }
 
@@ -156,16 +163,19 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   def s_tick() = {
     player.fallDistance = 0
 
-    val checkArea = 10
-    (0 until 40).foreach(_ => {
-      def rval = ranged(-checkArea, checkArea)
-      val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
-      val block = world.getBlock(x, y, z)
-      if (block != Blocks.air && block.getBlockHardness(world, x, y, z) <= 0.3f) {
-        world.setBlock(x, y, z, Blocks.air)
-        world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
-      }
-    })
+    // Break blocks nearby player
+    if (skillExp < 0.15f) {
+      val checkArea = 10
+      (0 until 40).foreach(_ => {
+        def rval = ranged(-checkArea, checkArea)
+        val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
+        val block = world.getBlock(x, y, z)
+        if (block != Blocks.air && block.getBlockHardness(world, x, y, z) <= 0.3f) {
+          world.setBlock(x, y, z, Blocks.air)
+          world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+        }
+      })
+    }
 
     if (!doConsume()) {
       terminate()
@@ -196,6 +206,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
         }
         override def onKeyAbort() = onKeyUp()
         override def getIcon: ResourceLocation = StormWing.getHintIcon
+        override def getState: DelegateState = if (applying && keyid == key) DelegateState.ACTIVE else DelegateState.IDLE
       })
     }
 
@@ -214,15 +225,30 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   }
 
   @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))
-  private def syncState(state: Int) = {
-    this.state = state
+  private def syncState() = {
+    this.state = STATE_ACTIVE
+
+    if (skillExp == 1.0f) {
+      WorldUtils.getEntities(player, 6, EntitySelectors.everything)
+        .foreach(ent => {
+          def modifier = ranged(0.9, 1.2)
+
+          val delta = ent.headPosition - player.position
+          delta.xCoord *= modifier
+          delta.yCoord *= modifier
+          delta.zCoord *= modifier
+
+          val move = delta.normalize() * ranged(0.5f, 1.0f)
+          ent.setVel(move)
+        })
+    }
   }
 
-  def consumption = if (isApplying) lerpf(30, 20, skillExp) else lerpf(9, 6, skillExp)
+  def consumption = if (isApplying) lerpf(50, 30, skillExp) else lerpf(9, 6, skillExp)
 
   lazy val overload = lerpf(3, 2, skillExp)
 
-  lazy val speed = lerpf(0.7f, 1.5f, skillExp)
+  lazy val speed = (if (skillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, skillExp)
 
   val expincr = 0.00005f // per tick
 

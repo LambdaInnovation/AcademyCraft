@@ -36,6 +36,12 @@ public class Context {
         MSG_MADEALIVE = "i_alive",
         MSG_TICK = "i_tick";
 
+    // Key messages for single key context.
+    public static final String MSG_KEYDOWN = "keydown";
+    public static final String MSG_KEYTICK = "keytick";
+    public static final String MSG_KEYUP = "keyup";
+    public static final String MSG_KEYABORT = "keyabort";
+
     public enum Status { CONSTRUCTED, ALIVE, TERMINATED }
 
     final ContextManager mgr = ContextManager.instance;

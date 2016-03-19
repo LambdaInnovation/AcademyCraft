@@ -210,6 +210,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 
     @Override
     protected void onSynchronized() {
+        debug("OnSynchronized " + isClient() + " " + getCurrentPreset());
         firePresetUpdate();
     }
 

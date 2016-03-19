@@ -34,14 +34,14 @@ class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEn
   class Ring(val life: Int, var offset: Double, val size: Double, val timeOffset: Int)
 
   val ringList = new mutable.MutableList[Ring]
-  val life = 18
+  val life = 15
 
   (0 until rings).foreach(idx => {
     ringList += new Ring(
-      RandUtils.rangei(15, 18),
+      RandUtils.rangei(8, 12),
       idx * 1.5 + RandUtils.ranged(-.3, .3),
       size * RandUtils.ranged(0.8, 1.2),
-      idx * 5 + RandUtils.rangei(-1, 2))
+      idx * 2 + RandUtils.rangei(-1, 1))
   })
 
   ignoreFrustumCheck = true

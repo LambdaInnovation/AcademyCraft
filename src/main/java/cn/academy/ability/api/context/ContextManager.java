@@ -35,6 +35,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -131,7 +132,7 @@ public enum ContextManager {
         KEEPALIVE = "7",
         KEEPALIVE_SERVER = "8";
 
-    private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(HashMap::new);
+    private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(ConcurrentHashMap::new);
 
     // Those created in client but yet to handshake with server.
     // They are recon as alive in client.
@@ -483,7 +484,7 @@ public enum ContextManager {
     }
 
     private void debug(Object msg) {
-        log().info("[CM]" + msg);
+        // log().info("[CM]" + msg);
     }
 
     private Logger log() {
@@ -584,7 +585,7 @@ public enum ContextManager {
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public void onClientTick(ClientTickEvent evt) {
-            if (evt.phase != Phase.START || !ClientUtils.isInWorld())
+            if (evt.phase != Phase.START || !ClientUtils.isPlayerPlaying())
                 return;
 
             final long time = m.time();

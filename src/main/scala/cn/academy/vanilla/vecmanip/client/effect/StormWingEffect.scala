@@ -30,7 +30,7 @@ object StormWingEffect_ {
           glTranslated(x, y, z)
 
           glRotated(-eff.rotationYaw, 0, 1, 0)
-          glRotated(eff.rotationPitch*0.4, 1, 0, 0)
+          glRotated(eff.rotationPitch*0.2, 1, 0, 0)
           glRotated(-70, 1, 0, 0)
 
           glTranslated(0, 0.2, -0.5)
@@ -57,13 +57,13 @@ object StormWingEffect_ {
 class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.worldObj) {
 
   case class SubEffect(eff: TornadoEffect, trans: CompTransform)
-  val tornadoList = (0 until 4).map(_ => SubEffect(new TornadoEffect(1.4, 0.14), new CompTransform)).toVector
+  val tornadoList = (0 until 4).map(_ => SubEffect(new TornadoEffect(2, 0.16, dscale=2.0), new CompTransform)).toVector
 
   private val sep = 45
-  tornadoList(0).trans.setRotation(0, sep, sep)
-  tornadoList(1).trans.setRotation(0, -sep, -sep)
-  tornadoList(2).trans.setRotation(0, -sep, sep)
-  tornadoList(3).trans.setRotation(0, sep, -sep)
+  tornadoList(0).trans.setTransform(-0.1, -0.3, 0.1).setRotation(0, sep, sep)
+  tornadoList(1).trans.setTransform(0.1, -0.3, 0.1).setRotation(0, -sep, -sep)
+  tornadoList(2).trans.setTransform(-0.1, -0.5, -0.1).setRotation(0, -sep, sep)
+  tornadoList(3).trans.setTransform(0.1, -0.5, -0.1).setRotation(0, sep, -sep)
 
   val player = ctx.player.asInstanceOf[AbstractClientPlayer]
   setPosition(player.posX, player.posY, player.posZ)

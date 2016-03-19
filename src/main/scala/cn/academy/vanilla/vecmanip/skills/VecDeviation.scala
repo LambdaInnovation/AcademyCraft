@@ -2,7 +2,6 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ContextManager, Context, ClientRuntime}
-import cn.academy.vanilla.generic.client.effect.ReflectionShieldEffect
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
@@ -151,8 +150,8 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
 
   def consumeStop() = {
     cpData.perform(
-      lerpf(30, 16, skillExp),
-      lerpf(500, 270, skillExp))
+      lerpf(16, 10, skillExp),
+      lerpf(150, 100, skillExp))
   }
 
 }

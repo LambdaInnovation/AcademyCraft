@@ -405,6 +405,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         @SubscribeEvent
         public void presetEdit(PresetUpdateEvent evt) {
             if (SideHelper.isClient()) {
+                System.out.println("presetEdit");
                 updateDefaultGroup();
             }
         }
@@ -430,18 +431,15 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         private void updateDefaultGroup() {
             ClientRuntime rt = ClientRuntime.instance();
-            if (rt == null) return;
 
             rt.clearKeys(DEFAULT_GROUP);
 
-            if (CPData.get(rt.getEntity()).isActivated()) {
-                Preset preset = PresetData.get(rt.getEntity()).getCurrentPreset();
+            Preset preset = PresetData.get(rt.getEntity()).getCurrentPreset();
 
-                for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
-                    if (preset.hasMapping(i)) {
-                        Controllable c = preset.getControllable(i);
-                        c.activate(rt, ClientHandler.getKeyMapping(i));
-                    }
+            for (int i = 0; i < PresetData.MAX_PRESETS; ++i) {
+                if (preset.hasMapping(i)) {
+                    Controllable c = preset.getControllable(i);
+                    c.activate(rt, ClientHandler.getKeyMapping(i));
                 }
             }
         }

@@ -265,70 +265,7 @@ public abstract class Skill extends Controllable {
      * Java version
      */
     protected void activateSingleKey2(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
-        rt.addKey(keyID, new KeyDelegate() {
-            Context context;
-
-            @Override
-            public void onKeyDown() {
-                context = contextSupplier.apply(getPlayer());
-                ContextManager.instance.activate(context);
-
-                context.sendToSelf(SingleKeyContext.MSG_KEYDOWN);
-            }
-
-            @Override
-            public void onKeyTick() {
-                checkContext();
-
-                if (context != null) {
-                    context.sendToSelf(SingleKeyContext.MSG_KEYTICK);
-                }
-            }
-
-            @Override
-            public void onKeyUp() {
-                checkContext();
-
-                if (context != null) {
-                    context.sendToSelf(SingleKeyContext.MSG_KEYUP);
-                }
-
-                context = null;
-            }
-
-            @Override
-            public void onKeyAbort() {
-                checkContext();
-
-                if (context != null) {
-                    context.sendToSelf(SingleKeyContext.MSG_KEYABORT);
-                }
-
-                context = null;
-            }
-
-            private void checkContext() {
-                if (context != null && context.getStatus() == Status.TERMINATED) {
-                    context = null;
-                }
-            }
-
-            @Override
-            public DelegateState getState() {
-                return context == null ? DelegateState.IDLE : DelegateState.ACTIVE;
-            }
-
-            @Override
-            public ResourceLocation getIcon() {
-                return getHintIcon();
-            }
-
-            @Override
-            protected Object createID() {
-                return Skill.this;
-            }
-
-        });
+        rt.addKey(keyID, new SingleKeyDelegate(contextSupplier));
     }
     /**
      * Scala version
@@ -404,4 +341,83 @@ public abstract class Skill extends Controllable {
         ModuleAchievements.trigger(player, getFullName());
     }
 
+    public class SingleKeyDelegate extends KeyDelegate {
+        private final Function<EntityPlayer, Context> contextSupplier;
+        Context context;
+
+        public SingleKeyDelegate(Function<EntityPlayer, Context> contextSupplier) {
+            this.contextSupplier = contextSupplier;
+        }
+
+        public SingleKeyDelegate(Function1<EntityPlayer, Context> supplier) {
+            this((Function<EntityPlayer, Context>) supplier::apply);
+        }
+
+        @Override
+        public void onKeyDown() {
+            context = contextSupplier.apply(getPlayer());
+            ContextManager.instance.activate(context);
+
+            context.sendToSelf(Context.MSG_KEYDOWN);
+        }
+
+        @Override
+        public void onKeyTick() {
+            checkContext();
+
+            if (context != null) {
+                context.sendToSelf(Context.MSG_KEYTICK);
+            }
+        }
+
+        @Override
+        public void onKeyUp() {
+            checkContext();
+
+            if (context != null) {
+                context.sendToSelf(Context.MSG_KEYUP);
+            }
+
+            context = null;
+        }
+
+        @Override
+        public void onKeyAbort() {
+            checkContext();
+
+            if (context != null) {
+                context.sendToSelf(Context.MSG_KEYABORT);
+            }
+
+            context = null;
+        }
+
+        private void checkContext() {
+            if (context != null && context.getStatus() == Status.TERMINATED) {
+                context = null;
+            }
+        }
+
+        @Override
+        public DelegateState getState() {
+            if (context == null) {
+                return DelegateState.IDLE;
+            } else if (context instanceof IStateProvider) {
+                return ((IStateProvider) context).getState();
+            } else {
+                return DelegateState.ACTIVE;
+            }
+        }
+
+        @Override
+        public ResourceLocation getIcon() {
+            return getHintIcon();
+        }
+
+        @Override
+        protected Object createID() {
+            return Skill.this;
+        }
+
+    }
 }

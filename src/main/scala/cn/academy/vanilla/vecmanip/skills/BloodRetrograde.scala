@@ -2,6 +2,7 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
@@ -18,8 +19,6 @@ object BloodRetrograde extends Skill("blood_retro", 4) {
 
 }
 
-import cn.academy.ability.api.AbilityAPIExt._
-
 private object BloodRetroContext {
   final val MSG_PERFORM = "perform"
 }
@@ -30,6 +29,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
   import RandUtils._
   import cn.lambdalib.util.generic.MathUtils._
   import cn.academy.ability.api.AbilityPipeline._
+  import cn.academy.ability.api.AbilityAPIExt._
 
   implicit val aData_ = aData()
   implicit val skill_ = BloodRetrograde
@@ -76,6 +76,12 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
           })
         case _ =>
       }
+
+    ACSounds.playClient(player, "vecmanip.blood_retro", 1f)
+
+    if (isLocal) {
+      addSkillCooldown(lerpf(90, 40, skillExp).toInt)
+    }
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
@@ -106,12 +112,12 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
   }
 
   private def consume() = {
-    val overload = lerpf(100, 120, skillExp)
-    val consumption = lerpf(200, 180, skillExp)
+    val overload = lerpf(55, 40, skillExp)
+    val consumption = lerpf(280, 350, skillExp)
 
     cpData.perform(overload, consumption)
   }
 
-  private def damage = lerpf(16, 27, skillExp)
+  private def damage = lerpf(30, 60, skillExp)
 
 }

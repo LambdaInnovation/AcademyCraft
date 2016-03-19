@@ -2,6 +2,7 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{Context, ClientRuntime}
+import cn.academy.core.client.sound.ACSounds
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.mc._
@@ -93,7 +94,7 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
 
           addSkillExp(0.0035f)
         case _ =>
-          addSkillExp(0.0005f)
+          addSkillExp(0.0010f)
       }
     }
 
@@ -135,21 +136,25 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
 
     anim = createPunchAnim()
     anim.perform(0)
+
+    addSkillCooldown(lerpf(60, 20, skillExp).toInt)
   }
 
   @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
   def c_effect(ent: Entity) = {
     knockback(ent)
+
+    ACSounds.playClient(player, "vecmanip.directed_shock", 0.5f)
   }
 
   private def consume() = {
-    val cp = lerpf(100, 60, skillExp)
-    val overload = lerpf(24, 18, skillExp)
+    val cp = lerpf(50, 100, skillExp)
+    val overload = lerpf(18, 12, skillExp)
 
     cpData.perform(overload, cp)
   }
-  private def damage = lerpf(4, 10, skillExp)
-  private def knockback(targ: Entity) = if (skillExp < 0.5f) {
+  private def damage = lerpf(6, 12, skillExp)
+  private def knockback(targ: Entity) = if (skillExp >= 0.25f) {
     var delta = player.headPosition - targ.headPosition
     delta = delta.normalize()
     delta.yCoord = -0.6f
