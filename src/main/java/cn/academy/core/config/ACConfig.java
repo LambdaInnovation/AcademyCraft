@@ -1,13 +1,12 @@
 package cn.academy.core.config;
 
-import cn.academy.core.AcademyCraft;
-import com.google.common.base.Throwables;
+import cn.lambdalib.util.generic.RegistryUtils;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.apache.commons.io.IOUtils;
+import net.minecraft.util.ResourceLocation;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 public final class ACConfig {
 
@@ -16,23 +15,9 @@ public final class ACConfig {
     private static Config config;
 
     private static void __init() {
-        try {
-            String basePath = "/assets/academy/config/";
-
-            List<String> files = IOUtils.readLines(ACConfig.class.getResourceAsStream(basePath));
-            AcademyCraft.log.info("AC: Loading config files " + files);
-
-            for (String filename : files) {
-                Config conf = ConfigFactory.parseResourcesAnySyntax(ACConfig.class, basePath + filename);
-                if (config != null) {
-                    config = config.withFallback(conf);
-                } else {
-                    config = conf;
-                }
-            }
-        } catch (IOException ex) {
-            Throwables.propagate(ex);
-        }
+        Reader reader = new InputStreamReader(RegistryUtils.getResourceStream(
+                new ResourceLocation("academy:config/default.conf")));
+        config = ConfigFactory.parseReader(reader);
     }
 
     public static Config instance() {
@@ -40,8 +25,9 @@ public final class ACConfig {
             if (config == null) {
                 __init();
             }
+
+            return config;
         }
-        return config;
     }
 
 }
