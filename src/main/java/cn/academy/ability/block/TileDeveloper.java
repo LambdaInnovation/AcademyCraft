@@ -11,22 +11,16 @@ import cn.academy.ability.client.render.RenderDeveloperNormal;
 import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.TileReceiverBase;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.InstanceSerializer;
-import cn.lambdalib.networkcall.s11n.SerializationManager;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
-import cn.lambdalib.ripple.ScriptNamespace;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -43,6 +37,11 @@ import net.minecraft.util.AxisAlignedBB;
 @Registrant
 @RegTileEntity
 public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
+
+    private static final String
+        MSG_OPEN_GUI = "gui",
+        MSG_UNUSE = "unuse",
+        MSG_SYNC  = "sync";
     
     @RegTileEntity
     @RegTileEntity.HasRender
@@ -75,21 +74,13 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     @RegTileEntity.Render
     public static RenderDeveloperNormal renderer;
     
-    static InstanceSerializer<EntityPlayer> ser = 
-        SerializationManager.INSTANCE.getInstanceSerializer(EntityPlayer.class);
-
-    @SideOnly(Side.CLIENT)
-    public boolean isDevelopingDisplay;
-    @SideOnly(Side.CLIENT)
-    public double devProgressDisplay;
-    
     public final DeveloperType type;
     
-    int syncCD;
+    private int syncCD;
     
-    EntityPlayer user;
+    private EntityPlayer user;
     
-    public TileDeveloper(DeveloperType _type) {
+    private TileDeveloper(DeveloperType _type) {
         super("ability_developer", 2, _type.getEnergy(), _type.getBandwidth());
         type = _type;
     }
@@ -105,7 +96,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
             
             if(++syncCD == 20) {
                 syncCD = 0;
-                syncTheUser(this, user);
+                send(MSG_SYNC, user);
             }
         }
     }
@@ -118,6 +109,8 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
      * SERVER only. Start let the player use the developer, if currently no user is using it.
      */
     public boolean use(EntityPlayer player) {
+        Preconditions.checkState(!player.worldObj.isRemote);
+
         if(info.getSubID() != 0) {
             TileDeveloper te = getOrigin();
             return te == null ? false : te.use(player);
@@ -125,7 +118,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         
         if(user == null || !user.isEntityAlive()) {
             user = player;
-            openGuiAtClient(player);
+            send(MSG_OPEN_GUI, player);
             return true;
         }
         return player.equals(user);
@@ -144,16 +137,17 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     public void unuse(EntityPlayer p) {
         if(info.getSubID() != 0) {
             TileDeveloper te = getOrigin();
-            if(te != null) te.unuse(p);
-            return;
+            if(te != null) {
+                te.unuse(p);
+            }
+        } else {
+            if(getWorldObj().isRemote) {
+                send(MSG_UNUSE, p);
+            } else {
+                if(user != null && user.equals(p))
+                    unuse();
+            }
         }
-        
-        if(getWorldObj().isRemote) {
-            unuseAtServer(p);
-            return;
-        }
-        if(user != null && user.equals(p))
-            unuse();
     }
     
     private void unuse() {
@@ -170,38 +164,40 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 
     @Override
     public void onGuiClosed() {
-        unuseAtServer(user);
+        send(MSG_UNUSE, user);
+    }
+
+    private void send(String channel, Object ...args) {
+        if (getWorldObj().isRemote) {
+            NetworkMessage.sendToServer(this, channel, args);
+        } else {
+            NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 10), this, channel, args);
+        }
     }
     
     public final DeveloperType getType() {
         return type;
     }
-    
-    @RegNetworkCall(side = Side.SERVER, thisStorage = StorageOption.Option.INSTANCE)
-    private void unuseAtServer(@Instance EntityPlayer player) {
-        unuse(player);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void openGuiAtClient(@Target EntityPlayer player) {
-        doOpenGui(player);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void syncTheUser(
-            @RangedTarget(range = 5) TileEntity me, 
-            @Instance(nullable = true) EntityPlayer player) {
-        this.user = player;
-    }
-    
-    // Sync the player on the fly to prevent bad lookup
+
     @SideOnly(Side.CLIENT)
-    private void doOpenGui(@Target EntityPlayer player) {
+    @Listener(channel=MSG_OPEN_GUI, side=Side.CLIENT)
+    private void hOpenGui(EntityPlayer player) {
+        // Sync the player right away to prevent bad lookup
         this.user = player;
         Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, this));
     }
+
+    @Listener(channel=MSG_UNUSE, side=Side.SERVER)
+    private void hUnuse(EntityPlayer player) {
+        unuse(player);
+    }
+
+    @Listener(channel=MSG_SYNC, side=Side.CLIENT)
+    private void hSync(EntityPlayer player) {
+        this.user = player;
+    }
     
-    InfoBlockMulti info = new InfoBlockMulti(this);
+    private InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
     public InfoBlockMulti getBlockInfo() {
