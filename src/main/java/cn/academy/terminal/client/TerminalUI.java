@@ -35,6 +35,7 @@ import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.ControlOverrider;
+import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,6 +54,8 @@ import java.util.List;
 public class TerminalUI extends AuxGui {
 
     private static final String OVERRIDE_GROUP = "AC_Terminal";
+
+    private static AuxGui current = null;
 
     private static final double BALANCE_SPEED = 3; //pixel/ms
     public static final int MAX_MX = 605, MAX_MY = 740;
@@ -337,12 +340,17 @@ public class TerminalUI extends AuxGui {
     private static ResourceLocation tex(String name) {
         return Resources.getTexture("guis/data_terminal/" + name);
     }
+
+    public static void passOn(AuxGui newGui) {
+        Preconditions.checkNotNull(current);
+        current.dispose();
+        current = newGui;
+        AuxGuiHandler.register(current);
+    }
     
     @RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_LMENU)
     @RegEventHandler(Bus.Forge)
     public static KeyHandler keyHandler = new KeyHandler() {
-        
-        TerminalUI current;
         
         @Override
         public void onKeyUp() {
@@ -350,12 +358,12 @@ public class TerminalUI extends AuxGui {
             TerminalData tData = TerminalData.get(player);
             
             if(tData.isTerminalInstalled()) {
-                if(current != null) {
-                    current.dispose();
-                    current = null;
-                } else {
+                if(current == null || current .isDisposed()) {
                     current = new TerminalUI();
                     AuxGuiHandler.register(current);
+                } else if (current instanceof TerminalUI) {
+                    current.dispose();
+                    current = null;
                 }
             } else {
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));

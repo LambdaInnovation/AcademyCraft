@@ -8,6 +8,7 @@ package cn.academy.energy.client.app;
 
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.client.TerminalUI;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
@@ -33,8 +34,7 @@ public class AppFreqTransmitter extends App {
             @Override
             @SideOnly(Side.CLIENT)
             public void onStart() {
-                AuxGuiHandler.register(new FreqTransmitterUI());
-                this.getTerminal().dispose();
+                TerminalUI.passOn(new FreqTransmitterUI());
             }
         };
     }
