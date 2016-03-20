@@ -37,6 +37,7 @@ import static cn.lambdalib.util.generic.MathUtils.*;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Railgun extends Skill {
@@ -102,9 +103,13 @@ public class Railgun extends Skill {
         ClientRuntime rt = ClientRuntime.instance();
         Collection<KeyDelegate> delegates = rt.getDelegates(ClientRuntime.DEFAULT_GROUP);
         if (!delegates.isEmpty()) {
-            Delegate head = (Delegate) delegates.iterator().next();
-
-            head.informThrowCoin(coin);
+            for (Iterator<KeyDelegate> i = delegates.iterator(); i.hasNext(); ) {
+                KeyDelegate dele = i.next();
+                if (dele instanceof Delegate) {
+                    ((Delegate) dele).informThrowCoin(coin);
+                    return;
+                }
+            }
         }
     }
 
