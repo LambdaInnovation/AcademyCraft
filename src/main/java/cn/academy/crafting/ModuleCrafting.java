@@ -201,7 +201,7 @@ public class ModuleCrafting {
         oreImagCrystal.setDropData(crystalLow, 1, 3);
         oreResoCrystal.setDropData(resoCrystal, 1, 2);
 
-        machineFrame.setHarvestLevel("pickaxe", 3);
+        machineFrame.setHarvestLevel("pickaxe", 1);
 
         ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 3000, new ItemStack(crystalNormal));
         ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
