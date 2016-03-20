@@ -103,18 +103,6 @@ task deobfJar(type: Jar, dependsOn: 'jar') {
 	from sourceSets.main.output
 }
 
-task uploadJars(type: Upload, dependsOn: 'install') {
-	configuration = configurations.archives
-	repositories {
-		mavenDeployer {
-			configuration = configurations.deployerJars
-			repository(url: config.upload_url) {
-				authentication(userName: config.upload_user, password: config.upload_pass)
-			}
-		}
-	}
-}
-
 artifacts {
 	archives deobfJar
 }

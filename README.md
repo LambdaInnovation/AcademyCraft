@@ -10,11 +10,18 @@ know more about it.
 Developement
 ===========
 
-A java8 dev environment with scala compatibility is required. Please refer to buildscript for Forge version and dependencies.
+Before either build the mod or setup the workspace, you must first build [LambdaLib][lambdalib] 
+with the required version as specified in `build.properties` locally (using `gradlew install`).
 
-to build the mod you must first build [LambdaLib][lambdalib] locally (use `gradlew install`).
+## Build
 
-If you encounter `Unknown constant: 18` error, `gradlew build` again and it should be fine.
+Simply use `gradlew build`. If you encounter `Unknown constant: 18` error, `gradlew build` again and it should be fine.
+
+## Workspace
+
+An IDEA workspace with everything required can be set up using `gradlew idea`. You must have scala plugin installed.
+
+Eclipse workspace is not tested.
 
 Localization
 ============
