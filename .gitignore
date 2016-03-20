@@ -62,7 +62,11 @@ build/
 .project
 .classpath
 .settings/
+eclipse/
+logs/
 
+# IDEA
+.idea/
 
 # Custom
 # src/main/resources/assets/academy/sounds/media/

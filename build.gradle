@@ -29,6 +29,7 @@ configurations {
 
 apply plugin: 'scala'
 apply plugin: 'forge'
+apply plugin: 'idea'
 
 version				= config.mod_ver
 group				= config.mod_group
@@ -55,12 +56,27 @@ repositories {
 	}
 }
 
+
+configurations {
+    provided
+}
+
 dependencies {
 	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.3.74:dev"
-	compile "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
-
+	
+	provided "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
+  provided "codechicken:NotEnoughItems:${config.mc_ver}-${config.nei_ver}:dev"
+	
 	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
+}
+
+
+sourceSets.main.compileClasspath += [configurations.provided]
+
+idea {
+  module{
+    scopes.PROVIDED.plus += [configurations.provided]
+  }
 }
 
 sourceSets.main {
