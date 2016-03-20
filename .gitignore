@@ -63,6 +63,13 @@ build/
 .classpath
 .settings/
 
+# IDEA
+.idea/
+out/
+*.ipr
+*.iml
+*.iws
 
-# Custom
-# src/main/resources/assets/academy/sounds/media/
+# Runtime Generic
+eclipse/
+logs/
