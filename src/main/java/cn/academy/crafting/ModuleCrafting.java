@@ -238,25 +238,28 @@ public class ModuleCrafting {
 
     private static void addOreDictRefineRecipe(String orename,ItemStack output)
     {
-        for(ItemStack ore:OreDictionary.getOres(orename))
+        for (ItemStack ore : OreDictionary.getOres(orename))
             MetalFormerRecipes.INSTANCE.add(ore,output,Mode.REFINE);
     }
 
-    private static void addOreDictRefineRecipe(String orename,String outputname)
+    private static void addOreDictRefineRecipe(String orename, String outputname)
     {
-        ArrayList<ItemStack> ingotlist=OreDictionary.getOres(outputname);
-        if(ingotlist==null||ingotlist.size()==0)
+        ArrayList<ItemStack> ingotlist = OreDictionary.getOres(outputname);
+        if (ingotlist == null || ingotlist.size() == 0)
             return;
-        ItemStack output=(ItemStack)ingotlist.get(0).copy();
-        List<ItemStack> ores=OreDictionary.getOres(orename);
-        if(ores==null||ores.size()==0)
+        ItemStack output = ingotlist.get(0).copy();
+        List<ItemStack> ores = OreDictionary.getOres(orename);
+        if (ores == null || ores.size() == 0)
             return;
-        int outputsize=FurnaceRecipes.smelting().getSmeltingResult(ores.get(0)).stackSize;
-        outputsize=outputsize<32?(2*outputsize):64;
-        output.stackSize=outputsize;
-        for(ItemStack ore:ores)
+        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(ores.get(0));
+        if (stack == null)
+            return;
+        int outputsize = stack.stackSize;
+        outputsize = outputsize < 32 ? (2 * outputsize) : 64;
+        output.stackSize = outputsize;
+        for(ItemStack ore : ores)
         {
-            MetalFormerRecipes.INSTANCE.add(ore,output,Mode.REFINE);
+            MetalFormerRecipes.INSTANCE.add(ore, output, Mode.REFINE);
         }
     }
 
