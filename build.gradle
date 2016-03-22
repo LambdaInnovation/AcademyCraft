@@ -65,7 +65,10 @@ dependencies {
 	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
 	
 	provided "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
-  provided "codechicken:NotEnoughItems:${config.mc_ver}-${config.nei_ver}:dev"
+	
+	compile "codechicken:CodeChickenLib:1.7.10-${config.ccl_ver}:dev"
+  compile "codechicken:CodeChickenCore:1.7.10-${config.ccc_ver}:dev"
+  compile "codechicken:NotEnoughItems:1.7.10-${config.nei_ver}:dev"
 	
 	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
