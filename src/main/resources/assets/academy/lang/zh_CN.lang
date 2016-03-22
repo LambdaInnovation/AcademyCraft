@@ -191,6 +191,7 @@ ac.skill_tree.reset.desc=重置能力到 %s
 ac.settings.cat.generic=常规
 ac.settings.prop.attackPlayer=开启PvP (玩家伤害)
 ac.settings.prop.destroyBlocks=开启方块破坏
+ac.settings.prop.headsOrTails=开启猜硬币
 
 ac.settings.cat.keys=键位
 ac.settings.prop.ability_activation=激活能力
@@ -578,3 +579,7 @@ achievement.ac_teleporter.mastery.desc=我行走在空间之上
 ac.gui.crafttype.shaped=有序合成
 ac.gui.crafttype.shapeless=无序合成
 ac.tutorial.update=研究笔记更新
+
+# 猜硬币
+ac.headsOrTails.0=猜硬币结果是背面
+ac.headsOrTails.1=猜硬币结果是正面

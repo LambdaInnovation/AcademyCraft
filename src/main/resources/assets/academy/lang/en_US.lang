@@ -191,6 +191,7 @@ ac.skill_tree.reset.desc=Reset Ability to %s
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
+ac.settings.prop.headsOrTails=Play Heads or Tails
 
 ac.settings.cat.keys=Keys
 ac.settings.prop.ability_activation=Activate Ability
@@ -303,6 +304,9 @@ ac.ability.level4=Level 4
 ac.ability.level5=Level 5
 
 death.attack.ac_skill=%1$s was killed by %2$s using %3$s
+
+# Electromaster
+ac.ability.electromaster.name=Electromaster
 
 ## EM Skills
 ac.ability.electromaster.arc_gen.name=Arc Generation
@@ -567,3 +571,7 @@ achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimension
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
 ac.tutorial.update=Research note updated
+
+# Heads Or Tails
+ac.headsOrTails.0=The result is TAILS!
+ac.headsOrTails.1=The result is HEADS!

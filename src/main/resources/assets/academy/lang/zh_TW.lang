@@ -183,6 +183,7 @@ ac.skill_tree.anyskill=%d級的任意技能
 ac.settings.cat.generic=常規
 ac.settings.prop.attackPlayer=開啟PvP (玩家傷害)
 ac.settings.prop.destroyBlocks=開啟方塊破壞
+ac.settings.prop.headsOrTails=開啟猜硬幣
 
 ac.settings.cat.keys=鍵位
 ac.settings.prop.ability_activation=啟用能力
@@ -543,3 +544,7 @@ achievement.ac_teleporter.flashing=超速跳躍
 achievement.ac_teleporter.flashing.desc=靠自身移動的低階生物還想追上我？
 achievement.ac_teleporter.mastery=維度行者
 achievement.ac_teleporter.mastery.desc=我行走在空間之上
+
+# 猜硬幣
+ac.headsOrTails.0=猜硬幣結果是背面
+ac.headsOrTails.1=猜硬幣結果是正面

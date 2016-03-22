@@ -182,6 +182,7 @@ ac.skill_tree.level_prg=アップグレード进度：%s
 ac.settings.cat.generic=一般設定
 ac.settings.prop.attackPlayer=PvPを有効 (プレイヤーハート)
 ac.settings.prop.destroyBlocks=ブロックの破壊
+#ac.settings.prop.headsOrTails=(NEED TRANSLATION)
 
 ac.settings.cat.keys=キーズ
 ac.settings.prop.ability_activation=能力を起動
@@ -541,3 +542,7 @@ achievement.ac_teleporter.flashing=高速ジャンプ
 achievement.ac_teleporter.flashing.desc=下等生物は自分の足で歩きる。
 achievement.ac_teleporter.mastery=次元行者
 achievement.ac_teleporter.mastery.desc=私は空間の上を歩きます。
+
+## (NEED TRANSLATION)
+#ac.headsOrTails.0=(NEED TRANSLATION)
+#ac.headsOrTails.1=(NEED TRANSLATION)
