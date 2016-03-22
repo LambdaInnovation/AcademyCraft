@@ -191,7 +191,7 @@ ac.skill_tree.reset.desc=Reset Ability to %s
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
-ac.settings.prop.headsOrTails=Play Heads Or Tails
+ac.settings.prop.headsOrTails=Play Heads or Tails
 
 ac.settings.cat.keys=Keys
 ac.settings.prop.ability_activation=Activate Ability
