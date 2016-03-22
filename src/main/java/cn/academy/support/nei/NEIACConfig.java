@@ -55,8 +55,7 @@ public class NEIACConfig implements IConfigureNEI {
             @Override
             public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
                 ContainerUI ui = check(gui);
-                System.out.println("Checked");
-                return ui.getGui().getTopWidget(x, y) != null;
+                return ui != null && ui.getGui().getTopWidget(x, y) != null;
             }
 
             private ContainerUI check(GuiContainer gui) {
