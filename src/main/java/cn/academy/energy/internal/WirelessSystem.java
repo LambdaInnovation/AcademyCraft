@@ -8,7 +8,6 @@ package cn.academy.energy.internal;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.academy.energy.api.event.WirelessUserEvent.UserType;
 import cn.academy.energy.api.event.node.LinkUserEvent;
@@ -20,6 +19,7 @@ import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -40,6 +40,8 @@ public class WirelessSystem {
     
     @SubscribeEvent
     public void onServerTick(ServerTickEvent event) {
+        if (event.phase == Phase.START)
+            return;
         //System.out.println("{");
         for(WorldServer ws : MinecraftServer.getServer().worldServers) {
             //System.out.println(ws + "/" + ws.provider.dimensionId);
