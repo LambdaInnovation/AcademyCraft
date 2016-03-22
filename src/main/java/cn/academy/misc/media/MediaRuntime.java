@@ -9,8 +9,10 @@ package cn.academy.misc.media;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.generic.RegistryUtils;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.common.config.Property;
 import paulscode.sound.Library;
@@ -46,20 +48,23 @@ public class MediaRuntime {
             init = true;
 
             try {
-                Field f = Minecraft.getMinecraft().getSoundHandler().getClass().getDeclaredField("sndManager");
-                f.setAccessible(true);
-                SoundManager sndMgr = (SoundManager) f.get(Minecraft.getMinecraft().getSoundHandler());
-                Field f2 = sndMgr.getClass().getDeclaredField("sndSystem");
-                f2.setAccessible(true);
-                sndSystem = (SoundSystem) f2.get(sndMgr);
-                Field f3 = SoundSystem.class.getDeclaredField("soundLibrary");
-                f3.setAccessible(true);
-                sndLibrary = (Library) f3.get(sndSystem);
+                Field fSndManager = RegistryUtils.getObfField(SoundHandler.class, "sndManager", "field_147694_f");
+                SoundManager sndMgr = (SoundManager) fSndManager.get(Minecraft.getMinecraft().getSoundHandler());
+
+                Field fSndSystem = RegistryUtils.getObfField(SoundManager.class, "sndSystem", "field_148620_e");
+                fSndSystem.setAccessible(true);
+                sndSystem = (SoundSystem) fSndSystem.get(sndMgr);
+
+                Field fSndLibrary = SoundSystem.class.getDeclaredField("soundLibrary");
+                fSndLibrary.setAccessible(true);
+                sndLibrary = (Library) fSndLibrary.get(sndSystem);
             } catch(Exception e) {
                 throw Throwables.propagate(e);
             }
         }
     }
+
+
 
     private static void newSource(ACMedia media, boolean loop, int x, int y, int z) {
         sndSystem.newStreamingSource(true, media.getID(),
