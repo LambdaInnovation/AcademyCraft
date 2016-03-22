@@ -35,6 +35,7 @@ public class SettingsUI extends CGuiScreen {
     static {
         addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
         addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
+        addProperty(PropertyElements.CHECKBOX, "generic", "headsOrTails", false, false);
     }
     
     public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {

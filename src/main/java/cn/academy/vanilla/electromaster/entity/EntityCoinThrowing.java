@@ -6,21 +6,27 @@
 */
 package cn.academy.vanilla.electromaster.entity;
 
+import cn.academy.core.AcademyCraft;
+import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
+import cn.lambdalib.annoreg.mc.RegEventHandler;
+import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.entityx.MotionHandler;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
-import cn.lambdalib.util.helper.EntitySyncer;
+import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.EntitySyncer.SyncType;
 import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
 import cn.lambdalib.util.mc.PlayerUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -28,8 +34,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 
 /**
  * 
@@ -39,6 +48,8 @@ import net.minecraft.world.World;
 @RegEntity
 @RegEntity.HasRender
 public class EntityCoinThrowing extends EntityAdvanced {
+
+    public static boolean PLAY_HEADS_OR_TAILS;
 
     static {
         NetworkS11n.addDirect(EntityCoinThrowing.class, new NetS11nAdaptor<EntityCoinThrowing>() {
@@ -90,13 +101,13 @@ public class EntityCoinThrowing extends EntityAdvanced {
     private static final int MAXLIFE = 120;
     private static final double INITVEL = 0.92;
     
-    private EntitySyncer syncer;
+    //private EntitySyncer syncer;
     
-    @Synchronized(SyncType.ONCE)
+    //@Synchronized(SyncType.ONCE)
     private float initHt;
     private double maxHt;
     
-    @Synchronized(SyncType.ONCE)
+    //@Synchronized(SyncType.ONCE)
     public EntityPlayer player;
     
     public ItemStack stack;
@@ -122,8 +133,10 @@ public class EntityCoinThrowing extends EntityAdvanced {
     
     @Override
     public void onUpdate() {
-        if(!worldObj.isRemote || isSync)
-            syncer.update();
+        if (worldObj.isRemote && isSync)
+            setDead();
+        //if(!worldObj.isRemote || isSync)
+            //syncer.update();
         //System.out.println(initHt + " " + player + " " + worldObj.isRemote);
         super.onUpdate();
     }
@@ -156,6 +169,10 @@ public class EntityCoinThrowing extends EntityAdvanced {
                     + yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
             }
         }
+        if (worldObj.isRemote && PLAY_HEADS_OR_TAILS) {
+            player.addChatComponentMessage(new ChatComponentTranslation(
+                "ac.headsOrTails." + RandUtils.nextInt(2)));
+        }
         setDead();
     }
     
@@ -169,9 +186,9 @@ public class EntityCoinThrowing extends EntityAdvanced {
     
     @Override
     public void entityInit() {
-        syncer = new EntitySyncer(this);
+        //syncer = new EntitySyncer(this);
         
-        syncer.init();
+        //syncer.init();
     }
     
     @Override
@@ -190,6 +207,21 @@ public class EntityCoinThrowing extends EntityAdvanced {
     @Override
     protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
         
+    }
+
+    @RegEventHandler(Bus.Forge)
+    public static class EventListener {
+        @RegInitCallback
+        public static void init() {
+            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
+                "generic", false, "Show heads or tails after throwing a coin.");
+        }
+
+        @SubscribeEvent
+        public void onConfigModified(ConfigModifyEvent e) {
+            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
+                "generic", false, "Show heads or tails after throwing a coin.");
+        }
     }
 
 }

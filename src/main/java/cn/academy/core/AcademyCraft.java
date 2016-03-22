@@ -14,10 +14,13 @@ import cn.lambdalib.annoreg.mc.RegMessageHandler;
 import cn.lambdalib.crafting.CustomMappingHelper;
 import cn.lambdalib.crafting.RecipeRegistry;
 import cn.lambdalib.util.version.VersionUpdateUrl;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
@@ -90,6 +93,8 @@ public class AcademyCraft {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
+
+        FMLCommonHandler.instance().bus().register(this);
     }
 
     @EventHandler
@@ -144,6 +149,13 @@ public class AcademyCraft {
 
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
+        config.save();
+    }
+
+    @SubscribeEvent
+    public void onClientDisconnectionFromServer(
+        ClientDisconnectionFromServerEvent e)
+    {
         config.save();
     }
 

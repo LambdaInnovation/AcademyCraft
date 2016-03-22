@@ -191,6 +191,7 @@ ac.skill_tree.reset.desc=Reset Ability to %s
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
+ac.settings.prop.headsOrTails=Play Heads Or Tails
 
 ac.settings.cat.keys=Keys
 ac.settings.prop.ability_activation=Activate Ability
@@ -570,3 +571,7 @@ achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimension
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
 ac.tutorial.update=Research note updated
+
+# Heads Or Tails
+ac.headsOrTails.0=The result is TAILS!
+ac.headsOrTails.1=The result is HEADS!
