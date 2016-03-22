@@ -53,11 +53,11 @@ public class MediaManager {
     }
 
     private static void parseDefaultConfig() {
-        final String path = "/assets/academy/media/default.conf";
+        Reader reader = new InputStreamReader(
+                RegistryUtils.getResourceStream(new ResourceLocation("academy:media/default.conf")));
+        Config conf = ConfigFactory.parseReader(reader);
 
-        Config conf = ConfigFactory.parseResourcesAnySyntax(MediaManager.class, path);
         for (String id : conf.getStringList("default_medias")) {
-            System.out.println("Register " + id);
             register(ACMedia.newInternal(id));
         }
     }
