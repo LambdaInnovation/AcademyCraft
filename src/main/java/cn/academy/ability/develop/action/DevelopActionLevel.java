@@ -9,10 +9,9 @@ package cn.academy.ability.develop.action;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.skilltree.SkillTreeLocal;
+import cn.academy.ability.client.AbilityLocalization;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
-import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.generic.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +54,7 @@ public class DevelopActionLevel implements IDevelopAction {
 
     @Override
     public String getName(EntityPlayer player) {
-        return SkillTreeLocal.upgradeTo(AbilityData.get(player).getLevel() + 1);
+        return AbilityLocalization.instance.upgradeTo(AbilityData.get(player).getLevel() + 1);
     }
 
 }

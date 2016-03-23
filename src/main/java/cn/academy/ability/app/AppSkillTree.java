@@ -6,7 +6,7 @@
 */
 package cn.academy.ability.app;
 
-import cn.academy.ability.client.skilltree.GuiSkillTreeApp;
+import cn.academy.ability.client.ui.SkillTreeAppUI;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
@@ -34,7 +34,7 @@ public class AppSkillTree extends App {
             @SideOnly(Side.CLIENT)
             @Override
             public void onStart() {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeApp(getPlayer()));
+                Minecraft.getMinecraft().displayGuiScreen(SkillTreeAppUI.apply());
             }
         };
     }

@@ -8,7 +8,6 @@ package cn.academy.ability.block;
 
 import cn.academy.ability.client.render.RenderDeveloperAdvanced;
 import cn.academy.ability.client.render.RenderDeveloperNormal;
-import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.core.block.TileReceiverBase;
@@ -184,7 +183,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     private void hOpenGui(EntityPlayer player) {
         // Sync the player right away to prevent bad lookup
         this.user = player;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, this));
+        // Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, this));
     }
 
     @Listener(channel=MSG_UNUSE, side=Side.SERVER)
