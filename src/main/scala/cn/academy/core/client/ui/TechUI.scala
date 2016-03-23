@@ -142,9 +142,9 @@ object TechUI {
     */
   def breatheAlpha = {
     val time = GameTimer.getTime
-    val sin = (1 + math.sin(time / 500.0)) * 0.5
+    val sin = (1 + math.sin(time / 800.0)) * 0.5
 
-    0.5 + sin * 0.35
+    0.675 + sin * 0.175
   }
 
   class TechUIWidget(pages: Page*) extends Widget {

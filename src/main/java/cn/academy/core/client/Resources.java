@@ -122,6 +122,7 @@ public class Resources {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @RegInitCallback
     public static void __init() {
         checkInit();

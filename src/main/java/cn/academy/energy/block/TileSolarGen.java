@@ -17,6 +17,7 @@ import cn.lambdalib.multiblock.InfoBlockMulti;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -28,6 +29,12 @@ import net.minecraft.world.World;
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
+
+    public static final int SLOT_BATTERY = 0;
+
+    public enum SolarStatus {
+        STOPPED, WEAK, STRONG
+    }
     
     @SideOnly(Side.CLIENT)
     @RegTileEntity.Render
@@ -39,9 +46,27 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 
     @Override
     public double getGeneration(double required) {
-        World theWorld = this.getWorldObj();
-        double brightLev = theWorld.isDaytime() && theWorld.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord) ? 1.0 : 0.0;
+        World world = this.getWorldObj();
+        double brightLev =  canGenerate() ? 1.0 : 0.0;
+        brightLev *= world.isRaining() ? 0.2 : 1.0;
+
         return Math.min(required, brightLev * 3.0);
+    }
+
+    public SolarStatus getStatus() {
+        World world = getWorldObj();
+        if (canGenerate()) {
+            return world.isRaining() ? SolarStatus.WEAK : SolarStatus.STRONG;
+        } else {
+            return SolarStatus.STOPPED;
+        }
+    }
+
+    private boolean canGenerate() {
+        World world = getWorldObj();
+        long time = world.getWorldTime() % 24000;
+        boolean isDay = time >= 0 && time <= 12500;
+        return isDay && world.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
     }
     
     // InfoBlockMulti delegates
@@ -51,6 +76,11 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     public void updateEntity() {
         super.updateEntity();
         info.update();
+
+        ItemStack battery = getStackInSlot(SLOT_BATTERY);
+        if (battery != null) {
+            tryChargeStack(battery);
+        }
     }
     
     @Override
