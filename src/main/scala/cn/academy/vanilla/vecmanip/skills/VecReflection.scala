@@ -8,7 +8,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.mc.{Raytrace, Vec3, WorldUtils}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -20,6 +20,7 @@ object VecReflection extends Skill("vec_reflection", 4) {
 
   MinecraftForge.EVENT_BUS.register(this)
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new VecReflectionContext(p))
 
 }

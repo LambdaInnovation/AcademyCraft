@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer
 
 object VecAccel extends Skill("vec_accel", 2) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new VecAccelContext(p))
 
 }

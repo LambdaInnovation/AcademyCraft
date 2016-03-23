@@ -34,7 +34,6 @@ import java.util.*;
  * @author KSkun
  */
 @Registrant
-@SideOnly(Side.CLIENT)
 public class MediaManager {
 
     private static Map<String, ACMedia> medias = new LinkedHashMap<>();
@@ -62,6 +61,7 @@ public class MediaManager {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private static void parseCustomConfig() {
         File path = checkPath(new File(Minecraft.getMinecraft().mcDataDir, "acmedia"));
 

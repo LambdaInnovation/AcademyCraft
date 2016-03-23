@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer
 
 object DirectedShock extends Skill("dir_shock", 1) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new ShockContext(p))
 
 }

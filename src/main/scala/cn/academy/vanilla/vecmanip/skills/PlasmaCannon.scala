@@ -22,10 +22,12 @@ object PlasmaCannon extends Skill("plasma_cannon", 5) {
     register()
   }
 
+  @SideOnly(Side.CLIENT)
   private def register() = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[Tornado], TornadoEntityRenderer)
   }
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new PlasmaCannonContext(p))
 
 }
@@ -260,6 +262,7 @@ private class Tornado(val ctx: PlasmaCannonContext)
 
 }
 
+@SideOnly(Side.CLIENT)
 private object TornadoEntityRenderer extends Render {
   import org.lwjgl.opengl.GL11._
 

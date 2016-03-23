@@ -1,23 +1,24 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ContextManager, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntityFireball, EntityArrow}
+import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.entity.living.{LivingHurtEvent, LivingAttackEvent}
+import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
 
 object VecDeviation extends Skill("vec_deviation", 2) {
 
   MinecraftForge.EVENT_BUS.register(this)
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new VecDeviationContext(p))
 
   @SubscribeEvent

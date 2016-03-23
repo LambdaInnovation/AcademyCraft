@@ -264,12 +264,14 @@ public abstract class Skill extends Controllable {
     /**
      * Java version
      */
+    @SideOnly(Side.CLIENT)
     protected void activateSingleKey2(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
         rt.addKey(keyID, new SingleKeyDelegate(contextSupplier));
     }
     /**
      * Scala version
      */
+    @SideOnly(Side.CLIENT)
     protected void activateSingleKey(ClientRuntime rt, int keyID,
                                      Function1<EntityPlayer, Context> contextSupplier) {
         activateSingleKey2(rt, keyID, contextSupplier::apply);

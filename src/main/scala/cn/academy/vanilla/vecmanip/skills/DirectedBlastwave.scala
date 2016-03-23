@@ -18,6 +18,7 @@ import net.minecraft.util.Vec3
 
 object DirectedBlastwave extends Skill("dir_blast", 3) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
     activateSingleKey(rt, keyid, player => new BlastwaveContext(player))
   }

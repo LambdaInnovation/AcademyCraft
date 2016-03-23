@@ -18,6 +18,7 @@ import cn.academy.ability.api.AbilityAPIExt._
 
 object StormWing extends Skill("storm_wing", 3) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
     rt.addKey(keyid, new KeyDelegate {
       override def onKeyDown() = currentContext match {

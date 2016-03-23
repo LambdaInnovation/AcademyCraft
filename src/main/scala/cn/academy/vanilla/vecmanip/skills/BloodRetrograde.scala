@@ -15,6 +15,7 @@ import net.minecraft.util.DamageSource
 
 object BloodRetrograde extends Skill("blood_retro", 4) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new BloodRetroContext(p))
 
 }

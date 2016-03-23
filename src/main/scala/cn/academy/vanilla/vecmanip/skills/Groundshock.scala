@@ -24,6 +24,7 @@ import net.minecraftforge.common.util.ForgeDirection
 @Registrant
 object Groundshock extends Skill("ground_shock", 1) {
 
+  @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new GroundshockContext(p))
 
 }
