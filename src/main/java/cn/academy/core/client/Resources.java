@@ -9,6 +9,7 @@ package cn.academy.core.client;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.TrueTypeFont;
 import cpw.mods.fml.relauncher.Side;
@@ -119,6 +120,15 @@ public class Resources {
             fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
             fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
         }
+    }
+
+    @RegInitCallback
+    public static void __init() {
+        checkInit();
+
+        Fonts.register("AC_Normal", font());
+        Fonts.register("AC_Bold", fontBold());
+        Fonts.register("AC_Italic", fontItalic());
     }
     
     private static ResourceLocation res(String loc) {
