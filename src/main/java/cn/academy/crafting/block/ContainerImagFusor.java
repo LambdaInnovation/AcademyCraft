@@ -37,11 +37,11 @@ public class ContainerImagFusor extends CleanContainer {
     }
     
     private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, -3, 40));
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 126, 40));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, 33, 28));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 91, 44));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 25, 71));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, -3, 39));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 127, 39));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, -3, 0));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 127, 0));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 26, 70));
         
         int STEP = 18;
         

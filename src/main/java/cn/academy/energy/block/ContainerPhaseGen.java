@@ -33,9 +33,9 @@ public class ContainerPhaseGen extends Container {
     }
     
     private void initInventory() {
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 29, 3));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 96, 42));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 26, 71));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 29, 2));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 96, 41));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 26, 70));
         
         InventoryPlayer inv = player.inventory;
         int STEP = 18;
