@@ -11,6 +11,8 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.generic.RegistryUtils;
 import com.google.common.base.Throwables;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
@@ -27,6 +29,7 @@ import java.net.MalformedURLException;
  * @author KSkun
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class MediaRuntime {
 
     private static SoundSystem sndSystem;

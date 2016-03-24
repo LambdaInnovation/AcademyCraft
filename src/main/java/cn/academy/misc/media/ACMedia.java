@@ -4,6 +4,8 @@ import cn.academy.core.AcademyCraft;
 import com.google.common.base.Throwables;
 import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
@@ -104,6 +106,7 @@ public abstract class ACMedia {
         return postfix;
     }
 
+    @SideOnly(Side.CLIENT)
     public final float getLength() {
         if (length == -1) try {
             try (InputStream stream = getSource().openStream()) {
