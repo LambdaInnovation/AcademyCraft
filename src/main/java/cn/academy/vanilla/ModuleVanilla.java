@@ -92,9 +92,9 @@ public class ModuleVanilla {
                 bca = new SkillBrainCourseAdvanced(),
                 mc = new SkillMindCourse();
 
-        bc.setPosition(188, 510);
-        bca.setPosition(487, 510);
-        mc.setPosition(750, 510);
+        bc.setPosition(46, 102);
+        bca.setPosition(136, 102);
+        mc.setPosition(215, 102);
 
         category.addSkill(bc);
         category.addSkill(bca);

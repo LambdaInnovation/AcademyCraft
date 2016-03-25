@@ -31,7 +31,6 @@ public class DevConditionDeveloperType implements IDevCondition {
     
     @Override
     public ResourceLocation getIcon() {
-        if(true) return null;
         return type.texture;
     }
 

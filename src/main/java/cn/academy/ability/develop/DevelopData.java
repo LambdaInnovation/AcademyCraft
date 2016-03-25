@@ -81,7 +81,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
      * @return The develop progress [0, 1], 0.0 if not developing
      */
     public double getDevelopProgress() {
-        return 0.0;
+        return isDeveloping() ? (double) stim / maxStim : 0.0;
     }
 
     /**

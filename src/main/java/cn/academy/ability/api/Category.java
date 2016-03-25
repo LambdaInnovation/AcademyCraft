@@ -6,7 +6,6 @@
 */
 package cn.academy.ability.api;
 
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.util.helper.Color;
 import com.google.common.collect.ImmutableList;
@@ -31,7 +30,7 @@ public class Category {
     int catID = -1;
     
     // icon is displayed in developer and many other places, and overlay icon is used for culling effect on the CPBar.
-    protected ResourceLocation icon, overlay;
+    protected ResourceLocation icon, overlay, developerIcon;
     
     /**
      * The color style of this category. Used in many various places for rendering, like screen overlay.
@@ -42,6 +41,7 @@ public class Category {
         name = _name;
         icon = initIcon();
         overlay = initOverlayIcon();
+        developerIcon = initDeveloperIcon();
     }
     
     public Color getColorStyle() {
@@ -126,7 +126,11 @@ public class Category {
     public ResourceLocation getIcon() {
         return icon;
     }
-    
+
+    public ResourceLocation getDeveloperIcon() {
+        return developerIcon;
+    }
+
     public ResourceLocation getOverlayIcon() {
         return overlay;
     }
@@ -149,6 +153,10 @@ public class Category {
     
     protected ResourceLocation initOverlayIcon() {
         return Resources.getTexture("abilities/" + name + "/icon_overlay");
+    }
+
+    protected ResourceLocation initDeveloperIcon() {
+        return Resources.getTexture("guis/icons/icon_" + name);
     }
     
 }

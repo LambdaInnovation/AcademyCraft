@@ -33,5 +33,9 @@ public interface IDevCondition {
      * @return The hovering text displayed in skill desc page
      */
     String getHintText();
+
+    default boolean shouldDisplay() {
+        return true;
+    }
     
 }
