@@ -6,11 +6,11 @@ import cn.academy.ability.ModuleAbility
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.data.{AbilityData, CPData}
 import cn.academy.ability.block.TileDeveloper
-import cn.academy.ability.client.ui.Common.TreeScreen
+import cn.academy.ability.client.ui.Common.{RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
-import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionSkill}
+import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
-import cn.academy.ability.develop.{DevelopData, IDeveloper, LearningHelper}
+import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
 import cn.academy.core.AcademyCraft
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
 import cn.lambdalib.cgui.gui.component._
-import cn.lambdalib.cgui.gui.event.{FrameEvent, KeyEvent, LeftClickEvent}
+import cn.lambdalib.cgui.gui.event._
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
@@ -50,7 +50,16 @@ object DeveloperUI {
     }
     implicit val gui = ret.gui()
 
-    ret.getGui.addWidget(Common.initialize(tile))
+    def build() = {
+      ret.getGui.removeWidget("main")
+      ret.getGui.addWidget("main", Common.initialize(tile))
+    }
+
+    gui.eventBus.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
+      override def handleEvent(w: Widget, event: RebuildEvent): Unit = build()
+    })
+
+    build()
 
     ret
   }
@@ -138,6 +147,9 @@ private object Common {
   }
   glUseProgram(0)
 
+  // This event is posted on global GuiEventBus to query for widget reload. Each gui instance must by itself respond to it.
+  class RebuildEvent extends GuiEvent
+
   def player = Minecraft.getMinecraft.thePlayer
 
   def initialize(developer: IDeveloper = null)(implicit gui: CGui): Widget = {
@@ -152,7 +164,7 @@ private object Common {
     if (!aData.hasCategory) {
       initConsole(area)
     } else if (Option(player.getCurrentEquippedItem).exists(_.getItem == ModuleAbility.magneticCoil)) {
-
+      initReset(area)
     } else { // Initialize skill area
       val back_scale = 1.01
       val back_scale_inv = 1 / back_scale
@@ -483,8 +495,6 @@ private object Common {
           val CondIconStep = 16
           val len = CondIconStep * conditions.size
 
-          println(conditions)
-
           textArea.listens[FrameEvent](() => {
             Font.draw("Req.", -len/2 - 2, 26, foSkillReq)
           })
@@ -609,6 +619,8 @@ private object Common {
     glPopMatrix()
   }
 
+  private def fmt(x: Int) = if (x < 10) "0" + x else x
+
   private def initConsole(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
     implicit val console = new Console(false)
 
@@ -629,12 +641,52 @@ private object Common {
           if (data.getState == DevState.DONE) {
             console.output("Develop successful.\n")
           } else {
-            console.output("Develop failed." + data.getState + "\n")
+            console.output("Develop failed." + "\n")
           }
-        }
 
-        private def fmt(x: Int) = if (x < 10) "0" + x else x
+          console.pause(500)
+          console.enqueueRebuild()
+        }
       })
+    })
+
+    area :+ console
+  }
+
+  private def initReset(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
+    implicit val console = new Console(true)
+
+    console += Command("reset", () => {
+      if (DevelopActionReset.canReset(data.getEntity, developer)) {
+        console.enqueue(printTask("Try resetting ability ..."))
+        console.enqueue(printTask("Progress: 00%"))
+        send(NetDelegate.MSG_RESET, data, developer)
+        data.reset()
+
+        console.enqueue(new Task {
+          override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
+          override def update() = {
+            console.output("\b\b\b" + fmt((data.getDevelopProgress*100).toInt) + "%")
+          }
+          override def finish() = {
+            console.outputln()
+            if (data.getState == DevState.DONE) {
+              console.output("Reset successful.\n")
+            } else {
+              console.output("Reset failed.\n")
+            }
+
+            console.pause(500)
+            console.enqueueRebuild()
+          }
+        })
+      } else {
+        if (developer.getType != DeveloperType.ADVANCED) {
+          console.enqueue(printTask("Can't reset ability -- Advance Developer must be used.\n"))
+        } else {
+          console.enqueue(printTask("Can't reset ability -- either level is too low or induction factor not detected.\n"))
+        }
+      }
     })
 
     area :+ console
@@ -698,8 +750,9 @@ private object Common {
 
     private val Help3 =
       """|
-         |WARNING: System override! External installation package detected.
-         |HINT: Use `reset` command to reset player category.
+         |WARNING: System override! External injection detected.....
+         |
+         |ABILITY RESET: Use `reset` command to reset player category.
          |""".stripMargin
 
     private val ConsoleHead = "OS >"
@@ -708,9 +761,6 @@ private object Common {
   class Console(val emergency: Boolean)
     extends Component("Console") {
     import Console._
-
-    println(Help1)
-    println(Help2)
 
     private implicit val _self = this
 
@@ -732,7 +782,7 @@ private object Common {
     enqueue(slowPrintTask(Help1.format(Minecraft.getMinecraft.thePlayer.getCommandSenderName)))
     pause(400)
     animSequence(300, "10%", "20%", "30%", "40%", "50%", "60%", "64%", "Boot Failed.\n")
-    enqueue(slowPrintTask(Help2))
+    enqueue(slowPrintTask(if (emergency) Help3 else Help2))
 
     this.listens[FrameEvent](() => {
       if (currentTask != null && currentTask.isFinished) {
@@ -846,6 +896,11 @@ private object Common {
       override def life: Long = time
     })
 
+    def enqueueRebuild() = enqueue(new Task {
+      override def isFinished: Boolean = true
+      override def begin(): Unit = widget.getGui.eventBus.postEvent(null, new RebuildEvent)
+    })
+
     def += (command: Command) = {
       commands += command
     }
@@ -922,6 +977,7 @@ private object NetDelegate {
 
   final val MSG_START_SKILL = "start_skill"
   final val MSG_GET_NODE = "get_node"
+  final val MSG_RESET = "reset"
   final val MSG_START_LEVEL = "start_level"
 
   @RegInitCallback
@@ -945,6 +1001,11 @@ private object NetDelegate {
       case null => null
       case conn => conn.getNode.getNodeName
     })
+  }
+
+  @Listener(channel=MSG_RESET, side=Array(Side.SERVER))
+  private def hStartReset(data: DevelopData, developer: IDeveloper) = {
+    data.startDeveloping(developer, new DevelopActionReset)
   }
 
 }
