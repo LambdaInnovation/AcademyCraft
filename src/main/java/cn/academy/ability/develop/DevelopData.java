@@ -30,7 +30,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
         return EntityData.get(player).getPart(DevelopData.class);
     }
 
-    public enum DevState { IDLE, FAILED, DEVELOPING }
+    public enum DevState { IDLE, FAILED, DEVELOPING, DONE }
 
     private boolean dirty = false;
 
@@ -165,6 +165,9 @@ public class DevelopData extends DataPart<EntityPlayer> {
                             type.onLearned(player);
                         }
                         resetProgress(!success);
+                        if (success) {
+                            state = DevState.DONE;
+                        }
                     }
                 }
             }
