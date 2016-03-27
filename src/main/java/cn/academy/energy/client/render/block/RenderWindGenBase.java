@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class RenderWindGenBase extends RenderBlockMultiModel {
     
-    ResourceLocation 
+    private ResourceLocation
         TEX_NORMAL = Resources.getTexture("models/windgen_base"),
         TEX_DISABLED = Resources.getTexture("models/windgen_base_disabled");
 
@@ -30,7 +30,7 @@ public class RenderWindGenBase extends RenderBlockMultiModel {
     @Override
     public void drawAtOrigin(TileEntity te) {
         TileWindGenBase tile = (TileWindGenBase) te;
-        this.tex = tile.complete ? TEX_NORMAL : TEX_DISABLED;
+        this.tex = tile.isComplete() ? TEX_NORMAL : TEX_DISABLED;
         super.drawAtOrigin(te);
     }
     

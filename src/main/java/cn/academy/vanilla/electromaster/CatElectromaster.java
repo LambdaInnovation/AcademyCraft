@@ -48,15 +48,15 @@ public class CatElectromaster extends Category {
 
         colorStyle.setColor4i(20, 113, 208, 100);
 
-        arcGen.setPosition(112, 230);
-        currentCharging.setPosition(217, 89);
-        bodyIntensify.setPosition(357, 77);
-        mineDetect.setPosition(786, 60);
-        magMovement.setPosition(490, 177);
-        thunderBolt.setPosition(321, 334);
-        railgun.setPosition(581, 295);
-        thunderClap.setPosition(714, 400);
-        magManip.setPosition(713, 165);
+        arcGen.setPosition(24, 46);
+        currentCharging.setPosition(55, 18);
+        bodyIntensify.setPosition(97.1, 15);
+        mineDetect.setPosition(225, 12);
+        magMovement.setPosition(137, 35);
+        thunderBolt.setPosition(86, 67);
+        railgun.setPosition(164, 59);
+        thunderClap.setPosition(204, 80);
+        magManip.setPosition(204, 33);
 
         addSkill(arcGen);
         addSkill(currentCharging);

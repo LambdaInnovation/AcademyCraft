@@ -7,7 +7,7 @@
 package cn.academy.ability.item;
 
 import cn.academy.ability.client.render.RenderDeveloperPortable;
-import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
+import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.PortableDevData;
 import cn.academy.energy.template.ItemEnergyBase;
@@ -46,7 +46,7 @@ public class ItemDeveloper extends ItemEnergyBase {
     
     @SideOnly(Side.CLIENT)
     private void displayGui(EntityPlayer player) {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, PortableDevData.get(player)));
+        Minecraft.getMinecraft().displayGuiScreen(DeveloperUI.apply(PortableDevData.get(player)));
     }
 
     @Override

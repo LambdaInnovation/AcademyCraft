@@ -31,4 +31,9 @@ public class DevConditionLevel implements IDevCondition {
         return null;
     }
 
+    @Override
+    public boolean shouldDisplay() {
+        return false;
+    }
+
 }

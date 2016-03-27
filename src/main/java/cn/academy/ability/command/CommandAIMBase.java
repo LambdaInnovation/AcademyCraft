@@ -324,6 +324,15 @@ public abstract class CommandAIMBase extends ACCommand {
             sendChat(ics, locSuccessful());
             return;
         }
+
+        case "_readylevel": {
+            if (aData.hasCategory()) {
+                CPData cpData = CPData.get(player);
+                cpData.setAddMaxCP(Float.MAX_VALUE);
+                sendChat(ics, locSuccessful());
+            }
+            return;
+        }
         }
     }
     

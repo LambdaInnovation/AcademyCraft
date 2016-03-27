@@ -164,10 +164,12 @@ public class CPData extends DataPart<EntityPlayer> {
                 interfering = newInterf;
             }
             
-            // Do the sync. Only sync when player activated ability to avoid waste
-            if(!remote && activated) {
+            // Do the sync.
+            if(!remote) {
+                int interval = (activated ? 1 : 3) * (dataDirty ? 4 : 10);
+
                 ++tickSync;
-                if(tickSync >= (dataDirty ? 4 : 10)) {
+                if(tickSync >= interval) {
                     dataDirty = false;
                     tickSync = 0;
                     sync();
@@ -243,6 +245,14 @@ public class CPData extends DataPart<EntityPlayer> {
     
     public float getAddMaxCP() {
         return addMaxCP;
+    }
+
+    public void setAddMaxCP(float value) {
+        AbilityData aData = AbilityData.get(getEntity());
+        float max = getMaxAddCP(aData.getLevel());
+        addMaxCP = Math.min(max, value);
+
+        markDirty();
     }
     
     public float getOverload() {
@@ -336,11 +346,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     private void addMaxCP(float consumedCP) {
-        AbilityData aData = AbilityData.get(getEntity());
-        float max = getMaxAddCP(aData.getLevel());
-        addMaxCP += consumedCP * getFloat("maxcp_incr_rate");
-        if(addMaxCP > max)
-            addMaxCP = max;
+        setAddMaxCP(addMaxCP + consumedCP * getFloat("maxcp_incr_rate"));
     }
     
     private void addMaxOverload(float overload) {

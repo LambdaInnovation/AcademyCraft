@@ -17,6 +17,7 @@ import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
 import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib.util.helper.TickScheduler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -34,7 +35,11 @@ import net.minecraft.util.AxisAlignedBB;
 public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     
     public static double MAX_GENERATION_SPEED = 15;
-    
+
+    public enum Completeness {
+        BASE_ONLY, NO_TOP, COMPLETE, COMPLETE_NOT_WORKING
+    }
+
     private static final IFItemManager itemManager = IFItemManager.instance;
     
     @SideOnly(Side.CLIENT)
@@ -42,10 +47,18 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     public static RenderWindGenBase renderer;
     
     // CLIENT STATES
-    public TileWindGenMain mainTile;
-    public boolean complete;
-    public boolean noObstacle;
-    public int untilUpdate;
+    private TileWindGenMain mainTile;
+    private boolean noObstacle;
+    private Completeness completeness = Completeness.BASE_ONLY;
+
+    private TickScheduler scheduler = new TickScheduler();
+
+    {
+        scheduler.every(10).run(() -> {
+            updateMainTile();
+            noObstacle = (mainTile != null && mainTile.noObstacle);
+        });
+    }
     
     public TileWindGenBase() {
         super("windgen_base", 1, 20000, IFConstants.LATENCY_MK3);
@@ -59,7 +72,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     
     // TODO: Improve the fomula?
     public double getSimulatedGeneration() {
-        if(complete && noObstacle) {
+        if(shouldGenerate()) {
             int y = mainTile.yCoord;
             double heightFactor = MathUtils.lerp(0.5, 1, 
                 MathUtils.clampd(0, 1, (y - 70.0) / 90.0));
@@ -71,33 +84,36 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     
     private void updateChargeOut() {
         ItemStack stack = this.getStackInSlot(0);
-        if(stack != null && itemManager.isSupported(stack)) {
-            double cur = getEnergy();
-            if(cur > 0) {
-                cur = Math.min(getBandwidth(), cur);
-                double left = itemManager.charge(stack, cur);
-                
-                this.setEnergy(getEnergy() - (cur - left));
-            }
+        if (stack != null) {
+            tryChargeStack(stack);
         }
     }
     
     // InfoBlockMulti delegates
-    InfoBlockMulti info = new InfoBlockMulti(this);
+    private InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
     public void updateEntity() {
         super.updateEntity();
         info.update();
-        
-        if(++untilUpdate == 10) {
-            untilUpdate = 0;
-            mainTile = findMainTile();
-            complete = mainTile != null;
-            noObstacle = (mainTile != null && mainTile.noObstacle);
-        }
-        
+        scheduler.runTick();
         updateChargeOut();
+    }
+
+    public boolean isComplete() {
+        return completeness == Completeness.COMPLETE;
+    }
+
+    public Completeness getCompleteness() {
+        if (completeness == Completeness.COMPLETE) {
+            return shouldGenerate() ? Completeness.COMPLETE : Completeness.COMPLETE_NOT_WORKING;
+        } else {
+            return completeness;
+        }
+    }
+
+    private boolean shouldGenerate() {
+        return completeness == Completeness.COMPLETE && mainTile.complete && mainTile.isFanInstalled();
     }
     
     @Override
@@ -132,37 +148,43 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
             return super.getRenderBoundingBox();
         }
     }
-
-    public boolean isCompleteStructure() {
-        return findMainTile() != null;
-    }
     
-    private TileWindGenMain findMainTile() {
-        int state = 1;
+    private void updateMainTile() {
         int pillars = 0;
+
+        TileWindGenMain mainTile;
+        Completeness comp;
         
-        for(int y = yCoord + 2; state < 2; ++y) {
+        for(int y = yCoord + 2; ; ++y) {
             TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
             Block block = worldObj.getBlock(xCoord, y, zCoord);
-            if(state == 1) {
-                if(block == ModuleEnergy.windgenPillar) {
-                    ++pillars;
-                    if(pillars > WindGenerator.MAX_PILLARS)
-                        break;
-                } else if(te instanceof TileWindGenMain) {
-                    TileWindGenMain gen = (TileWindGenMain) te;
-                    if(gen.getBlockInfo().getSubID() == 0) {
-                        return pillars >= WindGenerator.MIN_PILLARS ? gen : null;
-                    } else {
-                        break;
-                    }
-                } else {
-                    state = 3;
+
+            if(block == ModuleEnergy.windgenPillar) {
+                ++pillars;
+                if(pillars > WindGenerator.MAX_PILLARS) {
+                    comp = Completeness.NO_TOP;
+                    mainTile = null;
                     break;
                 }
+            } else if(te instanceof TileWindGenMain) {
+                TileWindGenMain gen = (TileWindGenMain) te;
+                if(gen.getBlockInfo().getSubID() == 0 && pillars >= WindGenerator.MIN_PILLARS) {
+                    mainTile = gen;
+                    comp = Completeness.COMPLETE;
+                    break;
+                } else {
+                    comp = Completeness.NO_TOP;
+                    mainTile = null;
+                    break;
+                }
+            } else {
+                comp = pillars < WindGenerator.MIN_PILLARS ? Completeness.BASE_ONLY : Completeness.NO_TOP;
+                mainTile = null;
+                break;
             }
         }
         
-        return null;
+        this.mainTile = mainTile;
+        this.completeness = comp;
     }
 }

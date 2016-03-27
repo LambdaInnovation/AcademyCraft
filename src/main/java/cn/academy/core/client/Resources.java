@@ -9,17 +9,35 @@ package cn.academy.core.client;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.TrueTypeFont;
+import cn.lambdalib.util.generic.RegistryUtils;
+import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * The core resource utils of AC.
@@ -62,6 +80,64 @@ public class Resources {
     
     public static ResourceLocation getTexture(String loc) {
         return res("textures/" + loc + ".png");
+    }
+
+    /**
+     * Get the resource location for the texture path specified, and preload it in the MC texture manager with generated
+     *  mipmap.
+     * @throws RuntimeException when texture IO failed
+     */
+    @SideOnly(Side.CLIENT)
+    public static ResourceLocation preloadMipmapTexture(String loc) {
+        ResourceLocation ret = getTexture(loc);
+
+        try {
+            BufferedImage buffer = ImageIO.read(RegistryUtils.getResourceStream(ret));
+            Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new ITextureObject() {
+
+                final int textureID = glGenTextures();
+
+                {
+                    int width = buffer.getWidth(), height = buffer.getHeight();
+                    int[] data = new int[width * height];
+                    buffer.getRGB(0, 0, width, height, data, 0, width);
+                    IntBuffer buffer1 = BufferUtils.createIntBuffer(data.length);
+                    buffer1.put(data).flip();
+
+                    glBindTexture(GL_TEXTURE_2D, textureID);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buffer1);
+
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+                    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+                    GL30.glGenerateMipmap(GL_TEXTURE_2D);
+
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                }
+
+                @Override
+                public void loadTexture(IResourceManager man) throws IOException {}
+
+                @Override
+                public int getGlTextureId() {
+                    return textureID;
+                }
+            });
+        } catch (Exception ex) {
+            Throwables.propagate(ex);
+        }
+
+        return ret;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static ResourceLocation preloadTexture(String loc) {
+        ResourceLocation ret = getTexture(loc);
+        Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new SimpleTexture(ret));
+        return ret;
     }
     
     public static ResourceLocation getShader(String loc) {
@@ -119,6 +195,16 @@ public class Resources {
             fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
             fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @RegInitCallback
+    public static void __init() {
+        checkInit();
+
+        Fonts.register("AC_Normal", font());
+        Fonts.register("AC_Bold", fontBold());
+        Fonts.register("AC_Italic", fontItalic());
     }
     
     private static ResourceLocation res(String loc) {

@@ -32,9 +32,9 @@ public class LearningHelper {
      * Skills that can be potentially learned will be displayed on the Skill Tree gui.
      */
     public static boolean canBePotentiallyLearned(AbilityData data, Skill skill) {
-        return data.getLevel() >= skill.getLevel() &&
-                (!data.isSkillLearned(skill) && 
-                    (skill.getParent() == null || data.isSkillLearned(skill.getParent())));
+        return data.getLevel() >= skill.getLevel() ||
+                data.isSkillLearned(skill) ||
+                (skill.getParent() == null || data.isSkillLearned(skill.getParent()));
     }
     
     /**

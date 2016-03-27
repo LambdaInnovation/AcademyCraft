@@ -8,7 +8,7 @@ package cn.academy.ability.block;
 
 import cn.academy.ability.client.render.RenderDeveloperAdvanced;
 import cn.academy.ability.client.render.RenderDeveloperNormal;
-import cn.academy.ability.client.skilltree.GuiSkillTreeDev;
+import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.core.block.TileReceiverBase;
@@ -115,13 +115,14 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
             TileDeveloper te = getOrigin();
             return te == null ? false : te.use(player);
         }
-        
-        if(user == null || !user.isEntityAlive()) {
-            user = player;
-            send(MSG_OPEN_GUI, player);
-            return true;
+
+        if (user != null) {
+            unuse();
         }
-        return player.equals(user);
+
+        user = player;
+        send(MSG_OPEN_GUI, player);
+        return true;
     }
     
     private TileDeveloper getOrigin() {
@@ -184,7 +185,10 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     private void hOpenGui(EntityPlayer player) {
         // Sync the player right away to prevent bad lookup
         this.user = player;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiSkillTreeDev(player, this));
+
+        if (Minecraft.getMinecraft().thePlayer.equals(player)) {
+            Minecraft.getMinecraft().displayGuiScreen(DeveloperUI.apply(this));
+        }
     }
 
     @Listener(channel=MSG_UNUSE, side=Side.SERVER)

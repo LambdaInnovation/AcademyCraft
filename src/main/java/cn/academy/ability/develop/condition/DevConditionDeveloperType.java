@@ -8,7 +8,7 @@ package cn.academy.ability.develop.condition;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.skilltree.SkillTreeLocal;
+import cn.academy.ability.client.AbilityLocalization;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import net.minecraft.util.ResourceLocation;
@@ -31,13 +31,12 @@ public class DevConditionDeveloperType implements IDevCondition {
     
     @Override
     public ResourceLocation getIcon() {
-        if(true) return null;
         return type.texture;
     }
 
     @Override
     public String getHintText() {
-        return SkillTreeLocal.machineType(type);
+        return AbilityLocalization.instance.machineType(type);
     }
 
 }
