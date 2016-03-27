@@ -21,6 +21,7 @@ import cn.lambdalib.cgui.gui.{CGui, CGuiScreen, Widget}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import net.minecraft.client.Minecraft
 import cn.lambdalib.cgui.ScalaCGUI._
+import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
 import cn.lambdalib.cgui.gui.component._
 import cn.lambdalib.cgui.gui.event._
@@ -51,7 +52,7 @@ object DeveloperUI {
     implicit val gui = ret.gui()
 
     def build() = {
-      ret.getGui.removeWidget("main")
+      ret.getGui.clear()
       ret.getGui.addWidget("main", Common.initialize(tile))
     }
 
@@ -95,7 +96,54 @@ object SkillPosEditorUI {
     val ret = Common.newScreen()
     implicit val gui = ret.gui()
 
-    ret.getGui.addWidget(Common.initialize())
+    def build() = {
+      gui.clear()
+
+      val main = Common.initialize()
+
+      ret.getGui.addWidget(main)
+
+      main.removeWidget("parent_left")
+
+      val aData = AbilityData.get(Minecraft.getMinecraft.thePlayer)
+      if (aData.hasCategory) aData.getCategory.getSkillList.zipWithIndex foreach { case (skill, idx) =>
+        val y = 5 + idx * 12
+        val box0 = new Widget().size(40, 10).pos(20, y)
+          .addComponent(new TextBox(new FontOption(8)).setContent(skill.getName))
+
+        def box(init: Double, callback: Double => Any) = {
+          val text =  new TextBox(new FontOption(8)).setContent(init.toString)
+          text.allowEdit()
+
+          val ret = new Widget().size(20, 10)
+            .addComponent(new DrawTexture().setTex(null).setColor4d(.3, .3, .3, .3))
+            .addComponent(text)
+            .listens((evt: ConfirmInputEvent) => {
+              try {
+                val num = text.content.toDouble
+                callback(num)
+                gui.eventBus.postEvent(null, new RebuildEvent)
+              } catch {
+                case _: NumberFormatException =>
+              }
+            })
+
+          ret
+        }
+
+        val box1 = box(skill.guiX, newX => skill.guiX = newX).pos(70, y)
+        val box2 = box(skill.guiY, newY => skill.guiY = newY).pos(93, y)
+
+        gui.addWidget(box0)
+        gui.addWidget(box1)
+        gui.addWidget(box2)
+      }
+    }
+
+    build()
+    gui.eventBus.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
+      override def handleEvent(w: Widget, event: RebuildEvent): Unit = build()
+    })
 
     ret
   }
@@ -125,6 +173,8 @@ private object Common {
   private val foSkillReq = new FontOption(9, FontAlign.RIGHT, new Color(0xaaffffff))
   private val foSkillReqDetail = new FontOption(9, FontAlign.LEFT, new Color(0xeeffffff))
   private val foSkillReqDetail2 = new FontOption(9, FontAlign.LEFT, new Color(0xffee5858))
+  private val foLevelTitle = new FontOption(12, FontAlign.CENTER)
+  private val foLevelReq = new FontOption(9, FontAlign.CENTER)
 
   private val Font = Resources.font()
   private val FontBold = Resources.fontBold()
@@ -216,6 +266,12 @@ private object Common {
           val creationTime = GameTimer.getTime
           val blendOffset = idx * 80 + 100
 
+          val mAlpha = (learned, if (skill.getParent == null) true else aData.isSkillLearned(skill.getParent)) match {
+            case (true, _)  => 1.0
+            case (_, true)  => 0.7
+            case (_, false) => 0.25
+          }
+
           val lineDrawer = Option(skill.getParent).map(parent => {
             def center(x: Double, y: Double) = (x + WidgetSize / 2, y + WidgetSize / 2)
 
@@ -226,7 +282,7 @@ private object Common {
             val (dx, dy) = (px/norm*12.2, py/norm*12.2)
 
             drawLine(px + WidgetSize / 2 - dx, py + WidgetSize / 2 - dy,
-              WidgetSize / 2 + dx, WidgetSize / 2 + dy, 5.5)
+              WidgetSize / 2 + dx, WidgetSize / 2 + dy, 5.5, mAlpha * (if (learned) 1.0 else 0.4))
           })
 
           widget.pos(sx, sy).size(WidgetSize, WidgetSize)
@@ -254,8 +310,8 @@ private object Common {
             }
 
             val dt = math.max(0, (time - creationTime - blendOffset) / 1000.0)
-            val backAlpha = math.max(0, dt * 10.0)
-            val iconAlpha = math.max(0, (dt - 0.08) * 10.0)
+            val backAlpha = mAlpha * clampd(0, 1, dt * 10.0)
+            val iconAlpha = mAlpha * clampd(0, 1, (dt - 0.08) * 10.0)
             val progressBlend = clampd(0, 1, (dt - 0.12) * 2.0).toFloat
             val lineBlend = clampd(0, 1, dt * 5.0)
 
@@ -276,7 +332,7 @@ private object Common {
 
             // Draw outline back
             RenderUtils.loadTexture(texSkillOutline)
-            glColor4f(0.2f, 0.2f, 0.2f, 0.6f)
+            glColor4d(0.2, 0.2, 0.2, backAlpha * 0.6)
             HudUtils.rect(ProgAlign, ProgAlign, ProgSize, ProgSize)
             glColor4f(1, 1, 1, 1)
 
@@ -304,7 +360,11 @@ private object Common {
             glColor4d(1, 1, 1, iconAlpha)
             glDepthFunc(GL_EQUAL)
             RenderUtils.loadTexture(skill.getHintIcon)
+            if (!learned) {
+              glUseProgram(shaderMono.getProgramID)
+            }
             HudUtils.rect(Align, Align, IconSize, IconSize)
+            glUseProgram(0)
             glDepthFunc(GL_LEQUAL)
 
             // Progress bar (if learned)
@@ -367,10 +427,20 @@ private object Common {
       panel.child("text_abilityname").component[TextBox].setContent(name)
       panel.child("logo_progress").component[ProgressBar].progress = prog
       panel.child("text_level").component[TextBox].setContent(lvltext)
+
+      if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
+        val btn = panel.child("btn_upgrade")
+        btn.transform.doesDraw = true
+        btn.listens[LeftClickEvent](() => {
+          val cover = levelUpArea
+
+          gui.addWidget(cover)
+        })
+      }
     }
 
     { // Initialize machine panel
-      val panel = ret.child("parent_left")
+      val panel = ret.child("parent_left/panel_machine")
 
       val wProgPower = panel.child("progress_power")
       val progPower = wProgPower.component[ProgressBar]
@@ -395,7 +465,7 @@ private object Common {
               val cover = blackCover(gui)
               cover :+ wirelessPage
 
-              cover.listens[LeftClickEvent](() => cover.dispose())
+              cover.listens[LeftClickEvent](() => gui.eventBus.postEvent(null, new RebuildEvent))
 
               gui.addWidget(cover)
             })
@@ -404,15 +474,16 @@ private object Common {
             panel.child("text_wireless").transform.doesDraw = false
         }
 
-      } else { // TODO
-        // wProgPower.transform.doesDraw = false
+      } else {
+        panel.transform.doesDraw = false
       }
     }
 
     ret
   }
 
-  private def drawLine(x0: Double, y0: Double, x1: Double, y1: Double, width: Double): (Double)=>Any = {
+  private def drawLine(x0: Double, y0: Double, x1: Double, y1: Double,
+                       width: Double, alpha: Double): (Double)=>Any = {
     val (dx, dy) = (x1 - x0, y1 - y0)
     val norm = math.sqrt(dx * dx + dy * dy)
     val (nx, ny) = (-dy/norm/2*width, dx/norm/2*width)
@@ -421,7 +492,7 @@ private object Common {
       val (xx, yy) = (lerp(x0, x1, progress), lerp(y0, y1, progress))
 
       RenderUtils.loadTexture(texLine)
-      glColor4f(1, 1, 1, 1)
+      glColor4d(1, 1, 1, alpha)
 
       glBegin(GL_QUADS)
 
@@ -451,6 +522,86 @@ private object Common {
     ret
   }
 
+  private def levelUpArea(implicit data: AbilityData, gui: CGui, developer: IDeveloper): Widget = {
+    val ret = blackCover(gui)
+
+    {
+      val wid = new Widget
+      wid.centered().size(50, 50)
+
+      val action = new DevelopActionLevel()
+      val estmCons = LearningHelper.getEstimatedConsumption(player, developer.getType, action)
+
+      val textArea = new Widget().size(0, 10).centered().pos(0, 25)
+
+      var hint = "Continue?"
+      var progress: Double = 0
+      var canClose: Boolean = true
+      var shouldRebuild = false
+
+      val icon = Resources.getTexture("abilities/condition/any" + (data.getLevel+1))
+
+      wid.listens[FrameEvent](() => {
+        drawActionIcon(icon, progress, glow = progress == 1)
+      })
+
+      val lvltext = s"Upgrade to Level ${data.getLevel+1}"
+      val reqtext = s"Req. $estmCons"
+      textArea.listens[FrameEvent](() => {
+        Font.draw(lvltext, 0, 3, foLevelTitle)
+        Font.draw(reqtext, 0, 16, foLevelReq)
+        Font.draw(hint, 0, 26, foLevelReq)
+      })
+
+      val button = newButton().centered().pos(0, 40)
+      button.listens[LeftClickEvent](() => {
+        if (developer.getEnergy < estmCons) {
+          hint = "Not enough energy."
+        } else {
+          val devData = DevelopData.get(player)
+          devData.reset()
+          canClose = false
+
+          send(NetDelegate.MSG_START_LEVEL, devData, developer)
+          ret.listens[FrameEvent](() => devData.getState match {
+            case DevState.IDLE =>
+
+            case DevState.DEVELOPING =>
+              hint = "Developing..."
+              progress = devData.getDevelopProgress
+
+            case DevState.DONE =>
+              hint = "Develop successful."
+              progress = 1
+              canClose = true
+              shouldRebuild = true
+
+            case DevState.FAILED =>
+              hint = "Develop failed."
+              canClose = true
+          })
+        }
+
+        button.dispose()
+      })
+
+      textArea :+ button
+      ret :+ textArea
+      ret.listens[LeftClickEvent](() => {
+        if (canClose) {
+          if (shouldRebuild) {
+            gui.eventBus.postEvent(null, new RebuildEvent)
+          } else {
+            ret.component[Cover].end()
+          }
+        }
+      })
+      ret :+ wid
+    }
+
+    ret
+  }
+
   private def skillViewArea(skill: Skill)
                            (implicit data: AbilityData, gui: CGui, developer: IDeveloper=null): Widget = {
     val ret = blackCover(gui)
@@ -461,6 +612,7 @@ private object Common {
 
       val learned = data.isSkillLearned(skill)
       var canClose = true
+      var shouldRebuild = false
 
       val textArea = new Widget().size(0, 10).centered().pos(0, 25)
       if (learned) {
@@ -474,7 +626,6 @@ private object Common {
         })
       } else {
         var progress: Double = 0
-        var learning = false
         var message: Option[String] = None
 
         skillWid.listens[FrameEvent](() => {
@@ -539,10 +690,7 @@ private object Common {
                 0, 40, foSkillUnlearned2)
           })
 
-          val button = new Widget()
-            .size(64, 32).scale(.5).centered().pos(0, 55)
-            .addComponent(new DrawTexture(texButton))
-            .addComponent(new Tint(Color.monoBlend(1, .6), Color.monoBlend(1, 1), true))
+          val button = newButton().centered().pos(0, 55)
 
           button.listens[LeftClickEvent](() => {
             if (developer.getEnergy < estmCons) {
@@ -555,6 +703,7 @@ private object Common {
               devData.reset()
 
               send(NetDelegate.MSG_START_SKILL, devData, developer, skill)
+              canClose = false
               ret.listens[FrameEvent](() => {
                 devData.getState match {
                   case DevState.IDLE =>
@@ -563,8 +712,12 @@ private object Common {
                     progress = devData.getDevelopProgress
                   case DevState.DONE =>
                     message = Some("Develop successful.")
+                    shouldRebuild = true
                     progress = 1.0
+                    canClose = true
+
                   case DevState.FAILED =>
+                    canClose = true
                     message = Some("Develop failed.")
                 }
               })
@@ -581,16 +734,25 @@ private object Common {
       ret :+ skillWid
 
       ret.listens[LeftClickEvent](() => if (canClose) {
-        ret.component[Cover].end()
+        if (shouldRebuild) {
+          gui.eventBus.postEvent(null, new RebuildEvent)
+        } else {
+          ret.component[Cover].end()
+        }
       })
     }
 
     ret
   }
 
+  private def newButton() = new Widget()
+    .size(64, 32).scale(.5)
+    .addComponent(new DrawTexture(texButton))
+    .addComponent(new Tint(Color.monoBlend(1, .6), Color.monoBlend(1, 1), true))
+
   private def drawActionIcon(icon: ResourceLocation, progress: Double, glow: Boolean) = {
     val BackSize = 50
-    val IconSize = 30
+    val IconSize = 27
     val IconAlign = (BackSize - IconSize) / 2
 
     glPushMatrix()
