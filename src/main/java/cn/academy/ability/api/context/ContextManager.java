@@ -585,7 +585,7 @@ public enum ContextManager {
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public void onClientTick(ClientTickEvent evt) {
-            if (evt.phase != Phase.START || !ClientUtils.isPlayerPlaying())
+            if (evt.phase == Phase.START || !ClientUtils.isPlayerPlaying())
                 return;
 
             final long time = m.time();
@@ -604,7 +604,7 @@ public enum ContextManager {
 
         @SubscribeEvent
         public void onServerTick(ServerTickEvent evt) {
-            if (evt.phase != Phase.START)
+            if (evt.phase == Phase.START)
                 return;
 
             final long time = m.time();

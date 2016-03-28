@@ -254,7 +254,12 @@ public class Flashing extends Skill {
 
         @SideOnly(Side.CLIENT)
         private void startEffects() {
+            endEffects();
+
             marking = new EntityTPMarking(player);
+            Vec3 dest = getDest(performingKey);
+            marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+
             world().spawnEntityInWorld(marking);
         }
 
@@ -279,7 +284,8 @@ public class Flashing extends Skill {
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
             dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
-            Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ, dir.xCoord, dir.yCoord, dir.zCoord);
+            Motion3D mo = new Motion3D(player, true);
+            mo.setMotion(dir.xCoord, dir.yCoord, dir.zCoord);
 
             MovingObjectPosition mop = Raytrace.perform(player.worldObj, mo.getPosVec(), mo.move(dist).getPosVec(),
                     EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
