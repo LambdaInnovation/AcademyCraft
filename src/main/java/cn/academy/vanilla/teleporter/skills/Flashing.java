@@ -78,37 +78,6 @@ public class Flashing extends Skill {
                 return instance.getHintIcon();
             }
         });
-
-        Optional<MainContext> opt = ContextManager.instance.find(MainContext.class);
-        if (opt.isPresent()) {
-            rt.clearKeys(KEY_GROUP);
-
-            final MainContext ctx = opt.get();
-
-            final String[] strs = new String[] { "a", "d", "w", "s"};
-            final int[] keys = new int[] { Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
-            for (int i = 0; i < 4; ++i) {
-                final int localid = i;
-                rt.addKey(KEY_GROUP, keys[i], new KeyDelegate() {
-                    @Override
-                    public void onKeyDown() {
-                        ctx.localStart(localid);
-                    }
-                    @Override
-                    public void onKeyUp() {
-                        ctx.localEnd(localid);
-                    }
-                    @Override
-                    public void onKeyAbort() {
-                        ctx.localAbort(localid);
-                    }
-                    @Override
-                    public ResourceLocation getIcon() {
-                        return Resources.getTexture("abilities/teleporter/flashing/" + strs[localid]);
-                    }
-                });
-            }
-        }
     }
 
     static final Vec3[] dirs = new Vec3[] {
@@ -164,6 +133,30 @@ public class Flashing extends Skill {
                     }
                 };
                 clientRuntime().addActivateHandler(activateHandler);
+
+                final String[] strs = new String[] { "a", "d", "w", "s"};
+                final int[] keys = new int[] { Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
+                for (int i = 0; i < 4; ++i) {
+                    final int localid = i;
+                    clientRuntime().addKey(KEY_GROUP, keys[i], new KeyDelegate() {
+                        @Override
+                        public void onKeyDown() {
+                            localStart(localid);
+                        }
+                        @Override
+                        public void onKeyUp() {
+                            localEnd(localid);
+                        }
+                        @Override
+                        public void onKeyAbort() {
+                            localAbort(localid);
+                        }
+                        @Override
+                        public ResourceLocation getIcon() {
+                            return Resources.getTexture("abilities/teleporter/flashing/" + strs[localid]);
+                        }
+                    });
+                }
             }
         }
 
