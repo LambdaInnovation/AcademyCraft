@@ -33,17 +33,17 @@ public class CatMeltdowner extends Category {
         super("meltdowner");
         this.colorStyle.setColor4i(126, 255, 132, 80);
 
-        electronBomb.setPosition(106, 202);
-        radIntensify.setPosition(212, 315);
-        scatterBomb.setPosition(308, 70);
-        lightShield.setPosition(391, 266);
-        meltdowner.setPosition(488, 166);
-        mineRayBasic.setPosition(524, 390);
-        rayBarrage.setPosition(664, 66);
-        jetEngine.setPosition(654, 263);
-        mineRayExpert.setPosition(754, 362);
-        mineRayLuck.setPosition(946, 401);
-        electronMissile.setPosition(891, 120);
+        electronBomb.setPosition(15, 45);
+        radIntensify.setPosition(35, 75);
+        scatterBomb.setPosition(70, 50);
+        lightShield.setPosition(55, 15);
+        meltdowner.setPosition(115, 40);
+        mineRayBasic.setPosition(140, 70);
+        rayBarrage.setPosition(140, 10);
+        jetEngine.setPosition(170, 32);
+        mineRayExpert.setPosition(172, 70);
+        mineRayLuck.setPosition(205, 82);
+        electronMissile.setPosition(210, 35);
 
         // Lv1
         this.addSkill(electronBomb);
