@@ -68,7 +68,7 @@ public class DebugConsole extends AuxGui {
         });
     }
 
-    enum State { NONE, NORMAL, SHOW_EXP, SHOW_CONTEXTS }
+    enum State { NONE, NORMAL, SHOW_EXP }
 
     State state = State.NONE;
     
@@ -124,12 +124,6 @@ public class DebugConsole extends AuxGui {
                     texts.add(new Text(sb.toString()));
                 }
             }
-            break;
-        case SHOW_CONTEXTS:
-            texts.add(new Text("Context status"));
-            ContextManager.instance.allAlive().forEach(ctx -> {
-                texts.add(new Text(ctx.toString(), 7, 0xff34e5ff));
-            });
             break;
         }
         

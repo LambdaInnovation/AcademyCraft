@@ -44,13 +44,13 @@ public class Context {
 
     public enum Status { CONSTRUCTED, ALIVE, TERMINATED }
 
-    final ContextManager mgr = ContextManager.instance;
+    private final ContextManager mgr = ContextManager.instance;
 
     public final EntityPlayer player;
 
     Status status = Status.CONSTRUCTED;
 
-    int networkID = -1;
+    int serverID;
 
     /**
      * Default ctor, must be kept for reflection creation
@@ -129,8 +129,8 @@ public class Context {
         return ClientRuntime.instance();
     }
 
-    AbilityData cachedAData;
-    CPData cachedCPData;
+    private AbilityData cachedAData;
+    private CPData cachedCPData;
 
     protected AbilityData aData() {
         if (cachedAData == null) {

@@ -7,19 +7,20 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.context.Context.Status;
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.core.LambdaLib;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.*;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.client.ClientUtils;
 import cn.lambdalib.util.helper.GameTimer;
+import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.SideHelper;
+import cn.lambdalib.util.mc.WorldUtils;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Throwables;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -32,15 +33,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static cn.lambdalib.s11n.network.NetworkMessage.*;
 
 /**
  * Global manager of {@link Context}. Connections are handled through it.
@@ -50,9 +46,16 @@ public enum ContextManager {
     instance;
 
     private static final long
-            T_FIRST_KA_TOL = 2000L, // Time tolerance from creating the context in client to first KeepAlive packet
             T_KA_TOL = 1500L, // Tile tolerance of receiving keepAlive packets
             T_KA = 500L; // Time interval between sending KeepAlive packets
+
+    private static final String
+        M_BEGIN_LINK="l",
+        M_ESTABLISH_LINK="ld",
+        M_MAKEALIVE="m",
+        M_TERM_ATLOCAL="tl",
+        M_TERM_ATSERVER="ts",
+        M_KEEPALIVE="ka";
 
     //API
 
@@ -60,31 +63,34 @@ public enum ContextManager {
      * Activate the context, which establish the connection of C/S.
      */
     public void activate(Context ctx) {
-        Preconditions.checkState(ctx.getStatus() == Status.CONSTRUCTED, "Can't activate same context multiple times");
+        Preconditions.checkState(ctx.status == Status.CONSTRUCTED, "Can't activate one context multiple times");
+        Preconditions.checkState(ctx.isLocal(), "Can only activate context at local.");
 
-        if (remote()) activate_c(ctx);
-        else          activate_s(ctx, true);
+        LocalManager.instance.activate(ctx);
     }
 
     /**
-     * Terminate this Context. Links between server and clients are ripped apart, and the terminate message is invoked.
+     * Terminate this Context. Link between server and clients is ripped apart, and the terminate message is sent.
      */
     public void terminate(Context ctx) {
-        Status stat = ctx.getStatus();
-        if (remote() && (stat == Status.ALIVE || stat == Status.CONSTRUCTED)) {
-            terminate_c(ctx);
-        } else if (!remote() && (stat == Status.ALIVE)) {
-            terminate_s(ctx);
-        } else {
-            throw new IllegalStateException("Can't terminate this context");
-        }
+        if (!ctx.isRemote()) {
+            ServerManager.instance.terminate(ctx);
+        } else if (ctx.isLocal()) {
+            LocalManager.instance.terminate(ctx);
+        } else throw wrongSide();
     }
 
     /**
      * Finds a context of given type that is alive.
      */
     public <T> Optional<T> find(Class<T> type) {
-        return find(type, x -> true);
+        if (SideHelper.isClient()) {
+            Optional<T> test1 = findLocal(type);
+            if (test1.isPresent()) return test1;
+            return findIn(LocalManager.instance.alive.stream().map(d -> d.ctx), type);
+        } else {
+            return findIn(ServerManager.instance.alive.stream().map(d -> d.ctx), type);
+        }
     }
 
     /**
@@ -92,542 +98,530 @@ public enum ContextManager {
      */
     @SideOnly(Side.CLIENT)
     public <T> Optional<T> findLocal(Class<T> type) {
-        return find(type, ctx -> Minecraft.getMinecraft().thePlayer.equals(((Context)ctx).player));
+        return findIn(LocalManager.instance.alive.stream().map(d -> d.ctx), type);
     }
 
-    /**
-     * Finds a context that is of given type and satifies the given precondition.
-     */
-    public <T> Optional<T> find(Class<T> type, Predicate<T> pred) {
-        return aliveStream().filter(ctx -> type.isInstance(ctx) && pred.test((T) ctx))
-                .map(x -> (T) x)
+    @SuppressWarnings("unchecked")
+    private <T> Optional<T> findIn(Stream<Context> stream, Class<T> type) {
+        return (Optional) stream.filter(c -> type.isInstance(c.getClass()))
                 .findAny();
     }
 
     public List<Context> allAlive() {
-        return aliveStream().collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
-    private Stream<Context> aliveStream() {
-        Stream<Context> orig = alive().values().stream().map(info -> info.ctx);
-        Stream<Context> stream;
-        if (remote()) {
-            stream = Stream.concat(
-                    clientSuspended.values().stream().map(sus -> sus.ctx),
-                    orig);
-        } else {
-            stream = orig;
-        }
-        return stream;
+    void mToSelf(Context ctx, String channel, Object ...args) {
+        if (!ctx.isRemote()) {
+            ServerManager.instance.mToSelf(ctx, channel, args);
+        } else if (ctx.isLocal()) {
+            LocalManager.instance.mToSelf(ctx, channel, args);
+        } else throw wrongSide();
     }
 
-    // Internal
-    private static final String
-        TERMINATE_AT_CLIENT = "1",
-        TERMINATE_AT_SERVER = "2",
-        MAKE_ALIVE = "3",
-        AFTER_MAKE_ALIVE = "4",
-        ACTIVATE_AT_CLIENT = "5",
-        HANDSHAKE = "6",
-        KEEPALIVE = "7",
-        KEEPALIVE_SERVER = "8";
-
-    private ThreadLocal<Map<Integer, ContextInfo>> aliveLocal = ThreadLocal.withInitial(ConcurrentHashMap::new);
-
-    // Those created in client but yet to handshake with server.
-    // They are recon as alive in client.
-    // @SideOnly(Side.CLIENT)
-    private Map<Integer, ClientSuspended> clientSuspended = new HashMap<>();
-
-    // Server global context ID incrementor
-    // Runtime local
-    private int increm = 0;
-
-    // Client (temp) ID incrementor
-    // Runtime local
-    private int clientCreateIncrem = 0;
-
-    private void terminate_s(Context ctx) {
-        sendToAll(this, TERMINATE_AT_CLIENT, ctx);
-        terminatePost(ctx);
+    void mToServer(Context ctx, String channel, Object ...args) {
+        if (ctx.isLocal()) {
+            LocalManager.instance.mToServer(ctx, channel, args);
+        } else throw wrongSide();
     }
 
-    private void terminate_c(Context ctx) {
-        Preconditions.checkArgument(ctx.isLocal(), "Can't terminate context at non-local client");
-        debug("terminate_c");
-
-        if (ctx.getStatus() == Status.CONSTRUCTED) {
-            clientSuspended.values().stream()
-                    .filter(sus -> sus.ctx == ctx)
-                    .findAny()
-                    .ifPresent(sus -> {
-                        sus.terminateSignal = true;
-                    });
-        } else {
-            sendToServer(this, TERMINATE_AT_SERVER, ctx);
-        }
-
-        terminatePost(ctx);
+    void mToLocal(Context ctx, String channel, Object ...args) {
+        if (!ctx.isRemote()) {
+            ServerManager.instance.mToLocal(ctx, channel, args);
+        } else throw wrongSide();
     }
 
-    private void terminatePost(Context ctx) {
-        sendToSelf(ctx, Context.MSG_TERMINATED);
-        // alive().remove(ctx.networkID);  NOTE: Suspended to next tick: prevent ConcurrentModification
-        ctx.status = Status.TERMINATED;
+    void mToClient(Context ctx, String channel, Object ...args) {
+        if (!ctx.isRemote()) {
+            ServerManager.instance.mToClient(ctx, channel, args);
+        } else throw wrongSide();
     }
 
-    // Creates context at server and informs all client to activate
-    private void activate_s(Context ctx, boolean sendToCreator) {
-        ctx.networkID = increm;
-        ++increm;
-
-        makeAlivePost(ctx);
-
-        EntityPlayerMP[] players = getSendList(ctx, !sendToCreator);
-        // Handshake
-        sendToPlayers(players, this, ACTIVATE_AT_CLIENT, ctx.networkID, ctx.getClass().getName());
+    void mToExceptLocal(Context ctx, String channel, Object ...args) {
+        if (!ctx.isRemote()) {
+            ServerManager.instance.mToExceptLocal(ctx, channel, args);
+        } else throw wrongSide();
     }
 
-    @SideOnly(Side.CLIENT)
-    private void activate_c(Context ctx) {
-        final int clientID = clientCreateIncrem;
-        clientSuspended.put(clientID, new ClientSuspended(ctx, clientID));
-        clientCreateIncrem++;
-
-        sendToServer(this, MAKE_ALIVE, Minecraft.getMinecraft().thePlayer, clientID, ctx.getClass().getName());
+    private static IllegalStateException wrongSide() {
+        return new IllegalStateException("Wrong context side!");
     }
 
-    private void makeAlivePost(Context ctx) {
-        createInfo(ctx);
-        ctx.status = Status.ALIVE;
-
-        sendToSelf(ctx, Context.MSG_MADEALIVE);
+    private static IllegalStateException notAlive() {
+        return new IllegalStateException("Context is not alive, can't send message");
     }
 
-    private void killClient(int networkID) {
-        ClientInfo info = getInfoC(networkID);
-        if (info != null) {
-            alive().remove(networkID);
-        }
+    private static IllegalStateException notFound() {
+        return new IllegalStateException("Illegal state: alive context not found in data!");
     }
 
-    private void killServer(int networkID) {
-        ServerInfo info = getInfoS(networkID);
-        if (info != null) {
-            alive().remove(networkID);
-        }
+    private static Object writeContextType(Class<? extends Context> type) {
+        return type.getCanonicalName();
     }
 
-    /**
-     * @return Should remove this info because no KeepAlive package received
-     */
-    private boolean checkKeepAlive(ContextInfo info, long time) {
-        if (info.lastKeepAlive == -1) {
-            if (time - info.createTime > T_FIRST_KA_TOL) {
-                return true;
-            }
-        } else {
-            if (time - info.lastKeepAlive > T_KA_TOL) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @return Should remove this info
-     */
-    private boolean tickClient(ClientInfo info, long time) {
-        if (info.ctx.player.isDead) {
-            if (info.ctx.getStatus() != Status.TERMINATED) {
-                terminate(info.ctx);
-            }
-            return true;
-        }
-
-        if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
-            return true;
-        }
-
-        if (info.ctx.isLocal() && info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToServer(this, KEEPALIVE_SERVER, info.ctx.networkID);
-        }
-
-        sendToSelf(info.ctx, Context.MSG_TICK);
-        return false;
-    }
-
-    /**
-     * @return Should remove this info
-     */
-    private boolean tickServer(ServerInfo info, long time) {
-        if (info.ctx.player.isDead) {
-            if (info.ctx.getStatus() != Status.TERMINATED) {
-                terminate(info.ctx);
-            }
-            return true;
-        }
-
-        if (info.ctx.getStatus() == Status.TERMINATED || checkKeepAlive(info, time)) {
-            return true;
-        }
-
-        if (info.lastSend == -1 || time - info.lastSend > T_KA) {
-            sendToPlayers(info.client.toArray(new EntityPlayerMP[info.client.size()]),
-                    this, KEEPALIVE, info.ctx.networkID);
-        }
-
-        sendToSelf(info.ctx, Context.MSG_TICK);
-        return false;
-    }
-
-    // Messaging
-    void mToSelf(Context ctx, String cn, Object[] args) {
-        if (ctx.getStatus() == Status.ALIVE ||
-                // It's possible that makealive hasn't yet happened. Allow some degree of uncertainty here.
-                // If user sends message in local constructed stage, it's handled by suspending the call in MakeAlive stage.
-           (ctx.getStatus() == Status.CONSTRUCTED && ctx.isLocal())) {
-            NetworkMessage.sendToSelf(ctx, cn, args);
-        } else {
-            throw new IllegalStateException("Try to sendToSelf after context is terminated");
-        }
-    }
-
-    void mToServer(Context ctx, String cn, Object[] args) {
-        if (!_mCheck(ctx, true)) return;
-
-        if (ctx.getStatus() == Status.ALIVE) {
-            sendToServer(ctx, cn, args);
-        } else if (ctx.getStatus() == Status.CONSTRUCTED) { // Suspend call
-            checkSuspended(ctx).get().suspendedCalls.add(new MessageCall(cn, args));
-        } else {
-            throw new RuntimeException("Sending message after context is terminated");
-        }
-    }
-
-    void mToLocal(Context ctx, String cn, Object[] args) {
-        if (!_mCheck(ctx, false)) return;
-
-        sendTo(ctx.getPlayer(), ctx, cn, args);
-    }
-
-    void mToExceptLocal(Context ctx, String cn, Object[] args) {
-        if (!_mCheck(ctx, false)) return;
-
-        EntityPlayer localPlayer = ctx.getPlayer();
-        EntityPlayerMP[] players = getInfoS(ctx.networkID).client.stream()
-                .filter(p -> p != localPlayer).toArray(EntityPlayerMP[]::new);
-        sendToPlayers(players, ctx, cn, args);
-    }
-
-    void mToClient(Context ctx, String cn, Object[] args) {
-        if (!_mCheck(ctx, false)) return;
-
-        sendToPlayers(Iterables.toArray(getInfoS(ctx.networkID).client, EntityPlayerMP.class), ctx, cn, args);
-    }
-
-    private boolean _mCheck(Context ctx, boolean requiredRemote) {
-        if (ctx.getStatus() != Status.ALIVE) return false;
-
-        Preconditions.checkState(remote() == requiredRemote, "Invalid messaging side");
-        if (requiredRemote) {
-            Preconditions.checkState(ctx.isLocal(), "Context must be local");
-        }
-
-        return true;
-    }
-
-    private Optional<ClientSuspended> checkSuspended(Context ctx) {
-        return clientSuspended.values().stream().filter(cs -> cs.ctx == ctx).findFirst();
-    }
-
-    //
-
-    // Message handlers
-
-    @Listener(channel=MAKE_ALIVE, side=Side.SERVER)
-    private void hMakeAlive(EntityPlayerMP player, int clientID, String className) {
-        Context ctx = createContext(className, player);
-
-        activate_s(ctx, false); // Assign networkID
-        getInfoS(ctx.networkID).client.add(player); // Add connection to this client
-
-        sendTo(player, this, AFTER_MAKE_ALIVE, clientID, ctx.networkID);
-    }
-
-    @Listener(channel=AFTER_MAKE_ALIVE, side=Side.CLIENT)
-    private void hAfterMadeAlive(int clientID, int networkID) {
-        if (clientSuspended.containsKey(clientID)) {
-            ClientSuspended susp = clientSuspended.remove(clientID);
-            Context ctx = susp.ctx;
-
-            debug("AfterMadeAlive " + ctx);
-            ctx.networkID = networkID;
-            makeAlivePost(ctx);
-
-            if (susp.terminateSignal) {
-                terminate_c(ctx);
-            } else { // TODO: This doesn't represent actual order of sending messages. Check if it causes problems.
-                for (MessageCall call : susp.suspendedCalls) {
-                    sendToServer(ctx, call.channel, call.args);
-                }
-            }
-
-        } // { else makeAlive not successful, shall we do something about it? }
-    }
-
-    @Listener(channel=HANDSHAKE, side=Side.SERVER)
-    private void hHandshake(int networkID, EntityPlayerMP player) {
-        final ServerInfo info = getInfoS(networkID);
-        if (info != null) {
-            debug("Handshake from client " + player);
-            info.client.add(player);
-        } // {else omit}
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Listener(channel=ACTIVATE_AT_CLIENT, side=Side.CLIENT)
-    private void hActivateAtClient(int networkID, String className) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        Preconditions.checkNotNull(player, "Invalid context: player is null");
-
-        Context ctx = createContext(className, player);
-        ctx.networkID = networkID;
-
-        makeAlivePost(ctx);
-
-        sendToServer(this, HANDSHAKE, networkID, player);
-    }
-
-    @Listener(channel=KEEPALIVE, side=Side.CLIENT)
-    private void hKeepAlive(int networkID) {
-        ClientInfo info = getInfoC(networkID);
-        if (info != null) {
-            // debug("KeepAliveC " + networkID);
-            info.lastKeepAlive = time();
-        }
-    }
-
-    @Listener(channel =KEEPALIVE_SERVER, side=Side.SERVER)
-    private void hKeepAliveServer(int networkID) {
-        ServerInfo info = getInfoS(networkID);
-        if (info != null) {
-            // debug("KeepAliveS " + networkID);
-            info.lastKeepAlive = time();
-        }
-    }
-
-    @Listener(channel=TERMINATE_AT_CLIENT, side=Side.CLIENT)
-    private void hTerminateAtClient(Context ctx) {
-        debug("TerminateAtClient " + ctx);
-
-        if (ctx != null)
-            terminatePost(ctx);
-    }
-
-    @Listener(channel=TERMINATE_AT_SERVER, side=Side.SERVER)
-    private void hTerminateAtServer(Context ctx) {
-        debug("TerminateAtServer " + ctx);
-        terminate_s(ctx);
-    }
-    //
-
-    private EntityPlayerMP[] getSendList(Context ctx, boolean excludeCreator) {
-        final EntityPlayer creator = ctx.getPlayer();
-        final double range = ctx.getRange();
-        return Arrays.stream(SideHelper.getPlayerList())
-                .filter(x -> x instanceof EntityPlayerMP)
-                .map(x -> (EntityPlayerMP) x)
-                .filter(x -> !excludeCreator || !x.equals(creator) && creator.getDistanceSqToEntity(x) <= range)
-                .toArray(EntityPlayerMP[]::new);
+    private static void log(Object msg) {
+        // AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Context> T createContext(String className, EntityPlayer player) {
-        try {
-            return (T) Class.forName(className).getConstructor(EntityPlayer.class).newInstance(player);
-        } catch(Exception e) {
-            throw new RuntimeException("Failed to create context with type " + className, e);
+    private static Class<? extends Context> readContextType(Object in) {
+        try  {
+            return (Class) Class.forName((String) in);
+        } catch (ClassNotFoundException ex) {
+            throw Throwables.propagate(ex);
         }
     }
 
-    private void createInfo(Context ctx) {
-        Preconditions.checkState(!alive().containsKey(ctx.networkID), "ERR: Context info alrdy exists");
+    @NetworkS11nType
+    public enum LocalManager {
+        instance;
 
-        if (remote()) {
-            alive().put(ctx.networkID, new ClientInfo(ctx));
-        } else {
-            alive().put(ctx.networkID, new ServerInfo(ctx));
+        {
+            FMLCommonHandler.instance().bus().register(this);
+        }
+
+        Map<Integer, ContextData> suspended = new HashMap<>();
+        List<ContextData> alive = new LinkedList<>();
+
+        int nextClientID;
+
+        void activate(Context ctx) {
+            ContextData data = new ContextData();
+            data.ctx = ctx;
+
+            suspended.put(nextClientID, data);
+            NetworkMessage.sendToServer(ServerManager.instance, M_BEGIN_LINK,
+                    writeContextType(ctx.getClass()), player(), nextClientID);
+
+            nextClientID += 1;
+
+            log("[LOC] BeginLink");
+        }
+
+        void terminate(Context ctx) {
+            for (ContextData data : alive) if (data.ctx == ctx) {
+                    data.disposed = true;
+                }
+        }
+
+        void mToSelf(Context ctx, String channel, Object[] args) {
+            if (ctx.status == Status.CONSTRUCTED || ctx.status == Status.ALIVE) {
+                NetworkMessage.sendToSelf(ctx, channel, args);
+            } else throw notAlive();
+        }
+
+        void mToServer(Context ctx, String channel, Object[] args) {
+            if (ctx.status == Status.ALIVE) {
+                for (ContextData data : alive) {
+                    if (data.ctx == ctx) {
+                        NetworkMessage.sendToServer(ctx, channel, args);
+                        return;
+                    }
+                }
+                throw notFound();
+            } else if (ctx.status == Status.CONSTRUCTED) {
+                for (ContextData data : suspended.values()) {
+                    if (data.ctx == ctx) {
+                        Call call = new Call();
+                        call.msg = channel;
+                        call.args = args;
+                        data.calls.add(call);
+                        return;
+                    }
+                }
+                throw notFound();
+            } else throw notAlive();
+        }
+
+        private EntityPlayer player() {
+            return Minecraft.getMinecraft().thePlayer;
+        }
+
+        @Listener(channel=M_ESTABLISH_LINK, side=Side.CLIENT)
+        private void hEstablishLink(int clientID, int serverID) {
+            ContextData data = suspended.remove(clientID);
+            if (data != null) {
+                data.ctx.status = Status.ALIVE;
+                data.serverID = serverID;
+                data.ctx.serverID = serverID;
+
+                alive.add(data);
+                NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
+
+                for (Call call : data.calls) {
+                    mToServer(data.ctx, call.msg, call.args);
+                }
+                data.calls = null;
+
+                log("[LOC] EstablishLink");
+            }
+        }
+
+        @Listener(channel=M_TERM_ATSERVER, side=Side.CLIENT)
+        private void hTerminate(int serverID) {
+            Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
+
+            log("[LOC] Terminate At Server");
+        }
+
+        @Listener(channel=M_KEEPALIVE, side=Side.CLIENT)
+        private void hKeepAlive(int serverID) {
+            ContextData data = findOrNull(serverID);
+            if (data != null) {
+                data.lastKeepAlive = time();
+            }
+
+            log("[LOC] KeepAlive");
+        }
+
+        private ContextData findOrNull(int serverID) {
+            for (ContextData data : alive) {
+                if (data.serverID == serverID) return data;
+            }
+            return null;
+        }
+
+        private class ContextData {
+            Context ctx;
+            int serverID;
+
+            long lastKeepAlive = time();
+            long lastSentKeepAlive = time() - 500;
+            boolean disposed;
+
+            List<Call> calls = new ArrayList<>();
+        }
+
+        private class Call {
+            String msg;
+            Object[] args;
+        }
+
+        private long time() {
+            return GameTimer.getTime();
+        }
+
+        @SubscribeEvent
+        public void __onClientTick(ClientTickEvent evt) {
+            if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
+                long time = time();
+
+                for (ContextData data : alive) {
+                    if (time - data.lastKeepAlive > T_KA_TOL) {
+                        log("[LOC] Timeout");
+                        data.disposed = true;
+                    } else {
+                        if (time - data.lastSentKeepAlive > T_KA) {
+                            NetworkMessage.sendToServer(ServerManager.instance, M_KEEPALIVE, data.serverID);
+
+                            data.lastSentKeepAlive = time;
+                        }
+
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TICK);
+                    }
+                }
+
+                Iterator<ContextData> itr = alive.iterator();
+                while (itr.hasNext()) {
+                    ContextData data = itr.next();
+                    if (data.disposed) {
+                        data.ctx.status = Status.TERMINATED;
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TERMINATED);
+                        NetworkMessage.sendToServer(ServerManager.instance, M_TERM_ATLOCAL, data.serverID);
+                        itr.remove();
+
+                        log("[LOC] Dispose");
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public void __onDisconnect(ClientDisconnectionFromServerEvent evt) {
+            alive.clear();
+            suspended.clear();
         }
     }
 
-    private ContextInfo getInfo(int networkID) {
-        return alive().get(networkID);
-    }
+    @NetworkS11nType
+    public enum ServerManager {
+        instance;
 
-    private ClientInfo getInfoC(int networkID) {
-        return (ClientInfo) getInfo(networkID);
-    }
+        {
+            FMLCommonHandler.instance().bus().register(this);
+        }
 
-    private ServerInfo getInfoS(int networkID) {
-        return (ServerInfo) getInfo(networkID);
-    }
+        List<ContextData> alive = new LinkedList<>();
 
-    private long time() { return GameTimer.getAbsTime(); }
+        int nextServerID;
 
-    private boolean remote() {
-        return FMLCommonHandler.instance().getEffectiveSide().isClient();
-    }
+        void terminate(Context ctx) {
+            for (ContextData data : alive) if (data.ctx == ctx) {
+                data.disposed = true;
+            }
+        }
 
-    private Map<Integer, ContextInfo> alive() {
-        return aliveLocal.get();
-    }
+        void mToSelf(Context ctx, String channel, Object[] args) {
+            NetworkMessage.sendToSelf(ctx, channel, args);
+        }
 
-    private void debug(Object msg) {
-        // log().info("[CM]" + msg);
-    }
+        void mToLocal(Context ctx, String channel, Object[] args) {
+            ContextData data = find(ctx);
+            NetworkMessage.sendTo(data.ctx.player, ctx, channel, args);
+        }
 
-    private Logger log() {
-        return AcademyCraft.log;
-    }
+        void mToClient(Context ctx, String channel, Object[] args) {
+            ContextData data = find(ctx);
+            NetworkMessage.sendTo(data.ctx.player, ctx, channel, args);
+            NetworkMessage.sendToPlayers(data.targets, ctx, channel, args);
+        }
 
-    private class ContextInfo {
+        void mToExceptLocal(Context ctx, String channel, Object[] args) {
+            ContextData data = find(ctx);
+            NetworkMessage.sendToPlayers(data.targets, ctx, channel, args);
+        }
 
-        final long createTime;
-        final Context ctx;
+        private ContextData find(Context ctx) {
+            for (ContextData data : alive) if (data.ctx == ctx) {
+                return data;
+            }
+            throw new IllegalStateException("ContextData not present");
+        }
 
-        long lastSend = -1;
-        long lastKeepAlive = -1;
+        @Listener(channel=M_BEGIN_LINK, side=Side.SERVER)
+        @SuppressWarnings("unchecked")
+        private void hBeginLink(Object typein, EntityPlayerMP player, int clientID) {
+            try {
+                Class<? extends Context> type = readContextType(typein);
+                Context ctx = type.getConstructor(EntityPlayer.class).newInstance(player);
+                ContextData data = new ContextData();
+                data.ctx = ctx;
 
-        ContextInfo(Context _ctx) {
-            ctx = _ctx;
-            createTime = GameTimer.getAbsTime();
+                Set<EntityPlayerMP> players = new HashSet<>((List) WorldUtils.getEntities(player, 25, EntitySelectors.player));
+                players.remove(player);
+
+                data.targets = players.toArray(new EntityPlayerMP[players.size()]);
+
+                data.ctx.status = Status.ALIVE;
+                data.serverID = nextServerID;
+                data.ctx.serverID = nextServerID;
+
+                alive.add(data);
+                NetworkMessage.sendToSelf(data.ctx, M_MAKEALIVE);
+
+                NetworkMessage.sendTo(player, LocalManager.instance, M_ESTABLISH_LINK, clientID, nextServerID);
+                NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE,
+                        writeContextType(ctx.getClass()), player, nextServerID);
+
+                nextServerID += 1;
+
+                log("[SVR] BeginLink");
+            } catch (Exception ex) {
+                Throwables.propagate(ex);
+            }
+        }
+
+        @Listener(channel=M_TERM_ATLOCAL, side=Side.SERVER)
+        private void hTerminate(int serverID) {
+            Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
+        }
+
+        @Listener(channel=M_KEEPALIVE, side=Side.SERVER)
+        private void hKeepAlive(int serverID) {
+            ContextData data = findOrNull(serverID);
+            if (data != null) {
+                data.lastKeepAlive = time();
+
+                log("[SVR] KeepAlive");
+            }
+        }
+
+        private ContextData findOrNull(int serverID) {
+            for (ContextData data : alive) {
+                if (data.serverID == serverID) return data;
+            }
+            return null;
+        }
+
+        @SubscribeEvent
+        public void __onServerTick(ServerTickEvent evt) {
+            if (evt.phase == Phase.END) {
+                long time = time();
+
+                for (ContextData data : alive) {
+                    if (data.disposed || time - data.lastKeepAlive > T_KA_TOL) {
+                        data.disposed = true;
+                    } else {
+                        if (time - data.lastSentKeepAlive > T_KA) { // Send KeepAlive packets
+                            NetworkMessage.sendTo(data.ctx.player, LocalManager.instance, M_KEEPALIVE, data.serverID);
+                            NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_KEEPALIVE, data.serverID);
+
+                            data.lastSentKeepAlive = time;
+                            log("[SVR] SendKeepAlive");
+                        }
+
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TICK);
+                    }
+                }
+
+                Iterator<ContextData> itr = alive.iterator();
+                while (itr.hasNext()) {
+                    ContextData data = itr.next();
+                    if (data.disposed || data.ctx.player.isDead) {
+                        data.ctx.status = Status.TERMINATED;
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TERMINATED);
+
+                        NetworkMessage.sendTo(data.ctx.player, LocalManager.instance, M_TERM_ATSERVER, data.serverID);
+                        NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_TERM_ATSERVER, data.serverID);
+
+                        itr.remove();
+
+                        log("[SVR] Dispose");
+                    }
+                }
+
+            }
+        }
+
+        private class ContextData {
+            Context ctx;
+            EntityPlayerMP[] targets;
+            int serverID;
+            boolean disposed = false;
+
+            long lastKeepAlive = time();
+            long lastSentKeepAlive = time() - 500;
+        }
+
+        private long time() {
+            return GameTimer.getTime();
         }
     }
 
-    private class MessageCall {
-        final String channel;
-        final Object[] args;
+    @NetworkS11nType
+    public enum ClientManager {
+        instance;
 
-        public MessageCall(String msg, Object[] _args) {
-            channel = msg;
-            args = _args;
-        }
-    }
-
-    private class ClientSuspended {
-        final Context ctx;
-        final List<MessageCall> suspendedCalls = new ArrayList<>();
-        final int cid;
-
-        boolean terminateSignal = false; // A small hack to handle client terminate at CONSTRUCTED stage.
-
-        public ClientSuspended(Context _ctx, int _cid) {
-            ctx = _ctx;
-            cid = _cid;
-        }
-    }
-
-    private class ClientInfo extends ContextInfo {
-
-        ClientInfo(Context _ctx) {
-            super(_ctx);
+        {
+            FMLCommonHandler.instance().bus().register(this);
         }
 
-    }
+        List<ContextData> alive = new LinkedList<>();
 
-    private class ServerInfo extends ContextInfo {
+        @Listener(channel=M_MAKEALIVE, side=Side.CLIENT)
+        private void hMakeAlive(Object typein, EntityPlayer player, int serverID) {
+            try {
+                Class<? extends Context> type = readContextType(typein);
+                Context ctx = type.getConstructor(EntityPlayer.class).newInstance(player);
+                ContextData data = new ContextData();
 
-        final List<EntityPlayerMP> client = new ArrayList<>();
+                data.ctx = ctx;
+                data.serverID = serverID;
+                data.ctx.serverID = serverID;
+                data.ctx.status = Status.ALIVE;
+                data.lastKeepAlive = time();
 
-        ServerInfo(Context _ctx) {
-            super(_ctx);
+                alive.add(data);
+                NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
+
+                log("[CLI] MakeAlive");
+            } catch (Exception ex) {
+                Throwables.propagate(ex);
+            }
         }
 
+        @Listener(channel=M_KEEPALIVE, side=Side.CLIENT)
+        private void hKeepAlive(int serverID) {
+            ContextData data = findOrNull(serverID);
+            if (data != null) {
+                data.lastKeepAlive = time();
+
+                log("[CLI] KeepAlive");
+            }
+        }
+
+        @Listener(channel=M_TERM_ATSERVER, side=Side.CLIENT)
+        private void hTerminate(int serverID) {
+            Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
+            log("[CLI] TerminateAtServer");
+        }
+
+        private ContextData findOrNull(int serverID) {
+            for (ContextData data : alive) {
+                if (data.serverID == serverID) return data;
+            }
+            return null;
+        }
+
+        private class ContextData {
+            Context ctx;
+            int serverID;
+            long lastKeepAlive = time();
+            boolean disposed = false;
+        }
+
+        @SubscribeEvent
+        public void __onClientTick(ClientTickEvent evt) {
+            if (evt.phase == Phase.END && ClientUtils.isPlayerPlaying()) {
+                long time = time();
+
+                for (ContextData data : alive) {
+                    if (data.disposed || time - data.lastKeepAlive > T_KA_TOL) {
+                        data.disposed = true;
+                    } else {
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TICK);
+                    }
+                }
+
+                Iterator<ContextData> iter = alive.iterator();
+                while (iter.hasNext()) {
+                    ContextData data = iter.next();
+                    if (data.disposed) {
+                        data.ctx.status = Status.TERMINATED;
+                        NetworkMessage.sendToSelf(data.ctx, Context.MSG_TERMINATED);
+                        iter.remove();
+                        log("[CLI] Dispose");
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public void __onDisconnect(ClientDisconnectionFromServerEvent evt) {
+            alive.clear();
+        }
+
+        private long time() {
+            return GameTimer.getTime();
+        }
     }
 
     static {
-        // For serialization
         NetworkS11n.addDirect(Context.class, new NetS11nAdaptor<Context>() {
             @Override
             public void write(ByteBuf buf, Context obj) {
-                buf.writeInt(obj.networkID);
+                Preconditions.checkState(obj.serverID != -1);
+                buf.writeInt(obj.serverID);
             }
             @Override
-            public Context read(ByteBuf buf) {
-                int idx = buf.readInt();
-                ContextInfo info = instance.alive().get(idx);
-                if (info == null) {
-                    throw new ContextException("No such context");
+            public Context read(ByteBuf buf) throws ContextException {
+                int serverID = buf.readInt();
+                if (!SideHelper.isClient()) {
+                    ServerManager.ContextData data = ServerManager.instance.findOrNull(serverID);
+                    if (data != null) return data.ctx;
+                    else throw new ContextException("Can't find server context");
                 } else {
-                    return info.ctx;
+                    LocalManager.ContextData data0 = LocalManager.instance.findOrNull(serverID);
+                    if (data0 != null) return data0.ctx;
+                    else {
+                        ClientManager.ContextData data1 = ClientManager.instance.findOrNull(serverID);
+                        if (data1 != null) return data1.ctx;
+                        else throw new ContextException("Can't find client context");
+                    }
                 }
             }
         });
-
-        // For internal network messaging
-        NetworkS11n.addDirect(ContextManager.class, new NetS11nAdaptor<ContextManager>() {
-            @Override
-            public void write(ByteBuf buf, ContextManager obj) {}
-            @Override
-            public ContextManager read(ByteBuf buf) {
-                return ContextManager.instance;
-            }
-        });
-
-        FMLCommonHandler.instance().bus().register(new Events());
-    }
-
-    public static class Events {
-
-        private final ContextManager m = ContextManager.instance;
-
-        @SideOnly(Side.CLIENT)
-        @SubscribeEvent
-        public void onClientTick(ClientTickEvent evt) {
-            if (evt.phase == Phase.START || !ClientUtils.isPlayerPlaying())
-                return;
-
-            final long time = m.time();
-
-            Map<Integer, ContextInfo> alive = m.alive();
-            List<Integer> toRemove = new ArrayList<>();
-            for (ContextInfo inf : alive.values()) {
-                boolean shouldRemove = m.tickClient((ClientInfo) inf, time);
-                if (shouldRemove) {
-                    toRemove.add(inf.ctx.networkID);
-                }
-            }
-
-            toRemove.forEach(m::killClient);
-        }
-
-        @SubscribeEvent
-        public void onServerTick(ServerTickEvent evt) {
-            if (evt.phase == Phase.START)
-                return;
-
-            final long time = m.time();
-
-            Map<Integer, ContextInfo> alive = m.alive();
-            List<Integer> toRemove = new ArrayList<>();
-            for (ContextInfo inf : alive.values()) {
-                boolean shouldRemove = m.tickServer((ServerInfo) inf, time);
-                if (shouldRemove) {
-                    toRemove.add(inf.ctx.networkID);
-                }
-            }
-
-            toRemove.forEach(m::killServer);
-        }
-
-        @SideOnly(Side.CLIENT)
-        @SubscribeEvent
-        public void onClientDisconnect(ClientDisconnectionFromServerEvent evt) {
-            instance.aliveLocal.get().clear();
-            instance.clientSuspended.clear();
-        }
-
     }
 
 }
+
