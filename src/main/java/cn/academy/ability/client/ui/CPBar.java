@@ -246,6 +246,7 @@ public class CPBar extends Widget {
                 (active ? 1.0f : Math.max(0.0f, 1 - (time - lastDrawTime) / 200.0f));
 
             boolean interf = cpData.isInterfering();
+            boolean overloadRecovering = cpData.isOverloadRecovering();
 
             if (interf) {
                 OffsetKeyframe frame = int_get();
@@ -275,6 +276,7 @@ public class CPBar extends Widget {
                         chProvider = null;
 
                     float estmCons = getConsumptionHint();
+                    boolean low = interf || overloadRecovering;
 
                     if(estmCons != 0) {
                         float ncp = Math.max(0, cpData.getCP() - estmCons);
@@ -282,13 +284,13 @@ public class CPBar extends Widget {
                         float oldAlpha = mAlpha;
                         mAlpha *= 0.2f + 0.1f * (1 + Math.sin(time / 80.0f));
                         
-                        drawCPBar(pcp, interf);
+                        drawCPBar(pcp, low);
                         
                         mAlpha = oldAlpha;
                         
-                        drawCPBar(ncp / cpData.getMaxCP(), interf);
+                        drawCPBar(ncp / cpData.getMaxCP(), low);
                     } else {
-                        drawCPBar(bufferedCP, interf);
+                        drawCPBar(bufferedCP, low);
                     }
                 }
                 
@@ -424,9 +426,9 @@ public class CPBar extends Widget {
         return 0;
     }
     
-    private void drawCPBar(float prog, boolean interfered) {
+    private void drawCPBar(float prog, boolean cantuse) {
         float pre_mAlpha = mAlpha;
-        if (interfered) {
+        if (cantuse) {
             mAlpha *= 0.3f;
         }
 

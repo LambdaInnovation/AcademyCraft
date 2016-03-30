@@ -344,7 +344,11 @@ public class CPData extends DataPart<EntityPlayer> {
     public boolean canPerform(float cp) {
         return getEntity().capabilities.isCreativeMode || this.getCP() >= cp;
     }
-    
+
+    public boolean isOverloadRecovering() {
+        return !overloadFine;
+    }
+
     private void addMaxCP(float consumedCP) {
         setAddMaxCP(addMaxCP + consumedCP * getFloat("maxcp_incr_rate"));
     }
