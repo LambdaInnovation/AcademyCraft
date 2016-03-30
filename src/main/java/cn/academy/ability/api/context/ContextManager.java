@@ -87,7 +87,7 @@ public enum ContextManager {
         if (SideHelper.isClient()) {
             Optional<T> test1 = findLocal(type);
             if (test1.isPresent()) return test1;
-            return findIn(LocalManager.instance.alive.stream().map(d -> d.ctx), type);
+            return findIn(ClientManager.instance.alive.stream().map(d -> d.ctx), type);
         } else {
             return findIn(ServerManager.instance.alive.stream().map(d -> d.ctx), type);
         }
