@@ -266,7 +266,7 @@ public class CPBar extends Widget {
             
             if(mAlpha > 0) {
                 /* Draw CPBar */ {
-                    if(bufferedOverload < 1) {
+                    if(!cpData.isOverloaded()) {
                         drawNormal(bufferedOverload);
                     } else {
                         drawOverload(bufferedOverload);
