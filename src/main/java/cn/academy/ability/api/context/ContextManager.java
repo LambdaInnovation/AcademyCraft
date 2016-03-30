@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.context.Context.Status;
+import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.*;
@@ -35,7 +36,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -103,15 +103,12 @@ public enum ContextManager {
 
     @SuppressWarnings("unchecked")
     private <T> Optional<T> findIn(Stream<Context> stream, Class<T> type) {
-        return (Optional) stream.filter(c -> type.isInstance(c.getClass()))
+        return (Optional) stream.filter(type::isInstance)
                 .findAny();
     }
 
-    public List<Context> allAlive() {
-        return Collections.emptyList();
-    }
-
     void mToSelf(Context ctx, String channel, Object ...args) {
+        if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToSelf(ctx, channel, args);
         } else if (ctx.isLocal()) {
@@ -120,35 +117,37 @@ public enum ContextManager {
     }
 
     void mToServer(Context ctx, String channel, Object ...args) {
+        if (!checkStatus(ctx)) return;
         if (ctx.isLocal()) {
             LocalManager.instance.mToServer(ctx, channel, args);
         } else throw wrongSide();
     }
 
     void mToLocal(Context ctx, String channel, Object ...args) {
+        if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToLocal(ctx, channel, args);
         } else throw wrongSide();
     }
 
     void mToClient(Context ctx, String channel, Object ...args) {
+        if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToClient(ctx, channel, args);
         } else throw wrongSide();
     }
 
     void mToExceptLocal(Context ctx, String channel, Object ...args) {
+        if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToExceptLocal(ctx, channel, args);
         } else throw wrongSide();
     }
 
+    private boolean checkStatus(Context ctx) { return ctx.getStatus() != Status.TERMINATED; }
+
     private static IllegalStateException wrongSide() {
         return new IllegalStateException("Wrong context side!");
-    }
-
-    private static IllegalStateException notAlive() {
-        return new IllegalStateException("Context is not alive, can't send message");
     }
 
     private static IllegalStateException notFound() {
@@ -156,11 +155,11 @@ public enum ContextManager {
     }
 
     private static Object writeContextType(Class<? extends Context> type) {
-        return type.getCanonicalName();
+        return type.getName();
     }
 
     private static void log(Object msg) {
-        // AcademyCraft.log.info("CM: " + msg);
+        AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")
@@ -201,13 +200,16 @@ public enum ContextManager {
         void terminate(Context ctx) {
             for (ContextData data : alive) if (data.ctx == ctx) {
                     data.disposed = true;
+                    return;
                 }
         }
 
         void mToSelf(Context ctx, String channel, Object[] args) {
             if (ctx.status == Status.CONSTRUCTED || ctx.status == Status.ALIVE) {
                 NetworkMessage.sendToSelf(ctx, channel, args);
-            } else throw notAlive();
+            } else {
+                // Ignore terminated
+            }
         }
 
         void mToServer(Context ctx, String channel, Object[] args) {
@@ -230,7 +232,9 @@ public enum ContextManager {
                     }
                 }
                 throw notFound();
-            } else throw notAlive();
+            } else {
+                // Ignore terminated
+            }
         }
 
         private EntityPlayer player() {
@@ -407,7 +411,7 @@ public enum ContextManager {
                 data.ctx.serverID = nextServerID;
 
                 alive.add(data);
-                NetworkMessage.sendToSelf(data.ctx, M_MAKEALIVE);
+                NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
 
                 NetworkMessage.sendTo(player, LocalManager.instance, M_ESTABLISH_LINK, clientID, nextServerID);
                 NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE,

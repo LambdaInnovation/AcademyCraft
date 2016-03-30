@@ -34,7 +34,7 @@ object StormWing extends Skill("storm_wing", 3) {
         case _ => DelegateState.IDLE
       }
 
-      private def currentContext = Option(ContextManager.instance.find(classOf[StormWingContext]).orElse(null))
+      private def currentContext = Option(ContextManager.instance.findLocal(classOf[StormWingContext]).orElse(null))
       override def getIcon: ResourceLocation = StormWing.getHintIcon
     })
   }
@@ -171,7 +171,8 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
         def rval = ranged(-checkArea, checkArea)
         val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
         val block = world.getBlock(x, y, z)
-        if (block != Blocks.air && block.getBlockHardness(world, x, y, z) <= 0.3f) {
+        val hardness = block.getBlockHardness(world, x, y, z)
+        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f) {
           world.setBlock(x, y, z, Blocks.air)
           world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
         }
