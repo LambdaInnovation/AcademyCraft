@@ -237,6 +237,7 @@ public enum ContextManager {
             }
         }
 
+        @SideOnly(Side.CLIENT)
         private EntityPlayer player() {
             return Minecraft.getMinecraft().thePlayer;
         }

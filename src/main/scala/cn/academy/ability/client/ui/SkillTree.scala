@@ -34,7 +34,7 @@ import cn.lambdalib.util.key.{KeyHandler, KeyManager}
 import org.lwjgl.input.Keyboard
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.Side
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.util.{ChatAllowedCharacters, ResourceLocation}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL13._
@@ -43,6 +43,7 @@ import org.lwjgl.opengl.GL20._
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
+@SideOnly(Side.CLIENT)
 object DeveloperUI {
 
   def apply(tile: IDeveloper): CGuiScreen = {
@@ -67,6 +68,7 @@ object DeveloperUI {
 
 }
 
+@SideOnly(Side.CLIENT)
 object SkillTreeAppUI {
   def apply(): CGuiScreen = {
     val ret = Common.newScreen()
@@ -79,6 +81,7 @@ object SkillTreeAppUI {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 object SkillPosEditorUI {
 
   @RegInitCallback

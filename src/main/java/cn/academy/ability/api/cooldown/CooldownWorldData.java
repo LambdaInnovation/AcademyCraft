@@ -26,7 +26,8 @@ public class CooldownWorldData extends WorldSavedData {
         super(id);
     }
 
-    public void setCd(String name, int id, int cd) {;
+    public void setCd(String name, int id, int cd) {
+        System.out.println("CM::SETCD " + name + " " + id + " " + cd);
         CooldownPlayerData cpd = map.get(name);
         if (cpd == null) {
             cpd = new CooldownPlayerData(name);
@@ -38,12 +39,13 @@ public class CooldownWorldData extends WorldSavedData {
     }
 
     public boolean isInCd(String name, int id) {
+        System.out.println("CM::ISINCD " + name + " " + id);
         CooldownPlayerData cpd = map.get(name);
         return cpd != null && cpd.isInCd(id);
     }
 
     public void clearCd(String name) {
-        System.out.println("CLEARCD " + name);
+        System.out.println("CM::CLEARCD " + name);
         map.remove(name);
     }
 
