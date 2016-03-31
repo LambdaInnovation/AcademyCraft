@@ -34,6 +34,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
 
   implicit val aData_ = aData()
   implicit val skill_ = BloodRetrograde
+  implicit val player_ = p
 
   var tick = 0
 
@@ -80,14 +81,12 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
 
     ACSounds.playClient(player, "vecmanip.blood_retro", 1f)
 
-    if (isLocal) {
-      addSkillCooldown(lerpf(90, 40, skillExp).toInt)
-    }
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(targ: EntityLivingBase) = {
     if (consume()) {
+      addSkillCooldown(lerpf(90, 40, skillExp).toInt)
       sendToClient(MSG_PERFORM, targ)
       attack(player, BloodRetrograde, targ, damage)
       addSkillExp(0.002f)

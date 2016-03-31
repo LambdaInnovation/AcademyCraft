@@ -34,6 +34,7 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
 
   implicit val skill_ = DirectedShock
   implicit val aData_ = aData
+  implicit val player_ = p
 
   val MIN_TICKS = 6
   val MAX_ACCEPTED_TICKS = 50
@@ -88,6 +89,7 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
           attack(player, DirectedShock, entity, damage)
           knockback(entity)
 
+          addSkillCooldown(lerpf(60, 20, skillExp).toInt)
           sendToClient(MSG_GENERATE_EFFECT, entity)
 
           val delta = (entity.position - player.position).normalize() * 0.24
@@ -137,8 +139,6 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
 
     anim = createPunchAnim()
     anim.perform(0)
-
-    addSkillCooldown(lerpf(60, 20, skillExp).toInt)
   }
 
   @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))

@@ -12,6 +12,7 @@ import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.FlushControlEvent;
@@ -76,6 +77,10 @@ public class Flashing extends Skill {
             @Override
             public ResourceLocation getIcon() {
                 return instance.getHintIcon();
+            }
+            @Override
+            protected int createID() {
+                return CooldownManager.getCtrlId(instance);
             }
         });
     }
@@ -155,6 +160,10 @@ public class Flashing extends Skill {
                         public ResourceLocation getIcon() {
                             return Resources.getTexture("abilities/teleporter/flashing/" + strs[localid]);
                         }
+                        @Override
+                        protected int createID() {
+                            return CooldownManager.getCtrlId(instance, localid);
+                        }
                     });
                 }
             }
@@ -218,6 +227,7 @@ public class Flashing extends Skill {
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
+                CooldownManager.setCooldown(player, Flashing.instance, 5);
                 sendToClient(MSG_PERFORM);
             }
         }
@@ -232,7 +242,6 @@ public class Flashing extends Skill {
                 }
                 cancellor = new GravityCancellor(player, 40);
                 LIFMLGameEventDispatcher.INSTANCE.registerClientTick(cancellor);
-                clientRuntime().setCooldownRaw(Flashing.instance, 5);
             }
         }
 

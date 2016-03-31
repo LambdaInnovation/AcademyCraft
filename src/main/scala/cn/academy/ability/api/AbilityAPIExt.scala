@@ -1,7 +1,8 @@
 package cn.academy.ability.api
 
-import cn.academy.ability.api.context.ClientRuntime
+import cn.academy.ability.api.cooldown.CooldownManager
 import cn.academy.ability.api.data.AbilityData
+import net.minecraft.entity.player.EntityPlayer
 
 // Global extenders for scala ability programming.
 object AbilityAPIExt {
@@ -24,6 +25,6 @@ object AbilityAPIExt {
 
   def addSkillExp(amt: Float)(implicit data: AbilityData, skill: Skill) = data.addSkillExp(skill, amt)
 
-  def addSkillCooldown(time: Int)(implicit skill: Skill) = ClientRuntime.instance().setCooldownRaw(skill, time)
+  def addSkillCooldown(time: Int)(implicit player: EntityPlayer, skill: Skill) = CooldownManager.setCooldown(player, skill, time)
 
 }

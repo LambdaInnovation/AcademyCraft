@@ -53,6 +53,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
   implicit val skill_ = Groundshock
   implicit val adata_ = aData()
+  implicit val player_ = p
 
   var localTick = 0
 
@@ -80,7 +81,6 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   def c_perform(affectedBlocks: Array[Array[Int]]) = {
     if (isLocal) {
       consume()
-      addSkillCooldown(cooldown)
     }
 
     ACSounds.playClient(player, "vecmanip.groundshock", 2)
@@ -203,6 +203,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
       }
 
       addSkillExp(0.001f)
+      addSkillCooldown(cooldown)
       sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
     }
     terminate()

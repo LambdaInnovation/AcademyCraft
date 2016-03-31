@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -30,7 +31,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -39,7 +39,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -47,6 +46,7 @@ import java.util.stream.Collectors;
 
 /**
  * Handles objects in client that is player-local and dynamic - Ability keys, cooldown and stuff.
+ * @author EAirPeter, WeAthFolD
  */
 @Registrant
 @SideOnly(Side.CLIENT)
@@ -70,7 +70,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     private final Multimap<String, DelegateNode> delegateGroups = ArrayListMultimap.create();
     private final Map<Integer, KeyState> keyStates = new HashMap<>();
 
-    private final Map<Object, CooldownData> cooldown = new HashMap<>();
+    private final Map<Integer, CooldownData> cooldown = new HashMap<>();
+    private final Set<Integer> cooldownServer = new HashSet<>();
 
     private final LinkedList<IActivateHandler> activateHandlers = new LinkedList<>();
 
@@ -159,17 +160,18 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         }
     }
 
-    public void setCooldown(KeyDelegate delegate, int cd) {
-        setCooldownRaw(delegate.getIdentifier(), cd);
-    }
-
-    public void setCooldownRaw(Object id, int cd) {
-        if(isInCooldownRaw(id)) {
-            CooldownData data = cooldown.get(id);
-            if(data.max < cd) data.max = cd;
-            data.current = Math.max(cd, data.current);
-        } else {
-            cooldown.put(id, new CooldownData(cd));
+    public void setCooldownRawFromServer(int id, int cd) {
+        if (cd == 0)
+            cooldownServer.remove(id);
+        else {
+            cooldownServer.add(id);
+            if(isInCooldownRaw(id)) {
+                CooldownData data = cooldown.get(id);
+                if(data.max < cd) data.max = cd;
+                data.current = Math.max(cd, data.current);
+            } else {
+                cooldown.put(id, new CooldownData(cd));
+            }
         }
     }
 
@@ -181,11 +183,11 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         return getCooldownDataRaw(delegate.getIdentifier());
     }
 
-    public boolean isInCooldownRaw(Object id) {
+    public boolean isInCooldownRaw(int id) {
         return cooldown.containsKey(id);
     }
 
-    public CooldownData getCooldownDataRaw(Object id) {
+    public CooldownData getCooldownDataRaw(int id) {
         return cooldown.get(id);
     }
 
@@ -360,16 +362,16 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                     }
                 }
 
+                // TODO optimize
                 // Update cooldown
-                Iterator<Entry<Object, CooldownData>> iter = rt.cooldown.entrySet().iterator();
+                Iterator<Entry<Integer, CooldownData>> iter = rt.cooldown.entrySet().iterator();
                 while(iter.hasNext()) {
-                    Entry< Object, CooldownData > entry = iter.next();
+                    Entry<Integer, CooldownData> entry = iter.next();
                     CooldownData data = entry.getValue();
-                    if(data.current <= 0) {
+                    if (!rt.cooldownServer.contains(entry.getKey()))
                         iter.remove();
-                    } else {
-                        data.current -= 1;
-                    }
+                    else if(--data.current < 0)
+                        data.current = 0;
                 }
 
                 // Update override
@@ -381,19 +383,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                     requireFlush = false;
                     updateDefaultGroup();
                 }
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public void playerDeath(LivingDeathEvent event) {
-            if (SideHelper.isClient()) {
-                final EntityPlayer localPlayer = Minecraft.getMinecraft().thePlayer;
-                final ClientRuntime rt = ClientRuntime.instance();
-                if(rt != null && event.entityLiving.equals(localPlayer)) {
-                    rt.clearCooldown();
-                }
-
-                requireFlush = true;
             }
         }
 

@@ -7,7 +7,8 @@
 package cn.academy.ability.api.ctrl.action;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.ctrl.Cooldown;
+import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
@@ -42,9 +43,8 @@ public class SkillSyncAction extends SyncAction {
      * Add cooldown to a skill if the currently the SyncAction is local.
      */
     public void setCooldown(Controllable c, int time) {
-        if(isLocal()) {
-            Cooldown.setCooldown(c, time);
-        }
+        if (!isRemote)
+            CooldownManager.setCooldown(player, c, time);
     }
     
 }

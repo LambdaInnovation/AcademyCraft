@@ -44,6 +44,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
   implicit val skill_ = DirectedBlastwave
   implicit val aData_ = aData
+  implicit val player_ = p
 
   val MIN_TICKS = 6
   val MAX_ACCEPTED_TICKS = 50
@@ -97,6 +98,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
         case res if res.hasPosition => res.position
       }
 
+      addSkillCooldown(cooldown)
       sendToClient(MSG_PERFORM, position)
 
       var effective = false
@@ -192,8 +194,6 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
     anim = createPunchAnim()
     anim.perform(0)
-
-    addSkillCooldown(cooldown)
   }
 
   @Listener(channel=MSG_ATTACK_ENTITY, side=Array(Side.CLIENT))

@@ -1,9 +1,11 @@
 package cn.academy.vanilla.electromaster.skill;
 
 import cn.academy.ability.api.AbilityPipeline;
+import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.KeyDelegate;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -154,7 +156,6 @@ public class Railgun extends Skill {
         player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player, length));
         if (SideHelper.getThePlayer().equals(player)) {
             float exp = AbilityData.get(player).getSkillExp(instance);
-            ClientRuntime.instance().setCooldownRaw(instance, (int) lerpf(300, 160, exp));
         }
     }
 
@@ -180,6 +181,7 @@ public class Railgun extends Skill {
             damage.perform();
             instance.triggerAchievement(player);
 
+            CooldownManager.setCooldown(player, instance, (int) lerpf(300, 160, exp));
             NetworkMessage.sendToAllAround(
                     TargetPointHelper.convert(player, 20),
                     instance, MSG_PERFORM,
@@ -270,8 +272,8 @@ public class Railgun extends Skill {
         }
 
         @Override
-        protected Object createID() {
-            return instance;
+        protected int createID() {
+            return CooldownManager.getCtrlId(instance);
         }
     }
 }

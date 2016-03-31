@@ -143,7 +143,7 @@ public abstract class SyncAction {
     }
     
     @SideOnly(Side.CLIENT)
-    private boolean isLocalClient() {
+    protected boolean isLocalClient() {
         return Minecraft.getMinecraft().thePlayer.equals(player);
     }
     

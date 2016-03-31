@@ -56,6 +56,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
 
   private implicit val skill_ = PlasmaCannon
   private implicit val aData_ = aData()
+  private implicit val player_ = p
 
   var localTicker = 0
   var syncTicker  = 0

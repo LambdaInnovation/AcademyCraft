@@ -3,18 +3,19 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.context.{KeyDelegate, ContextManager, ClientRuntime, Context}
+import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager, KeyDelegate}
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.mc.{Vec3 => MVec3, _}
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{Vec3, ResourceLocation}
+import net.minecraft.util.{ResourceLocation, Vec3}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.ability.api.cooldown.CooldownManager
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -36,6 +37,7 @@ object StormWing extends Skill("storm_wing", 3) {
 
       private def currentContext = Option(ContextManager.instance.find(classOf[StormWingContext]).orElse(null))
       override def getIcon: ResourceLocation = StormWing.getHintIcon
+      override def createID: Int = CooldownManager.getCtrlId(StormWing)
     })
   }
 
@@ -197,7 +199,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   private def initKeys() = {
     val rt = ClientRuntime.instance()
 
-    def defkey(key: Int, dirFactory: () => Vec3) = {
+    def defkey(idx: Int, key: Int, dirFactory: () => Vec3) = {
       rt.addKey(KEY_GROUP, key, new KeyDelegate {
         override def onKeyDown() = {
           sendToSelf(MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
@@ -208,6 +210,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
         override def onKeyAbort() = onKeyUp()
         override def getIcon: ResourceLocation = StormWing.getHintIcon
         override def getState: DelegateState = if (applying && keyid == key) DelegateState.ACTIVE else DelegateState.IDLE
+        override def createID: Int = CooldownManager.getCtrlId(StormWing, idx)
       })
     }
 
@@ -219,10 +222,10 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
       moveDir.rotateAroundY(-yaw)
       moveDir
     }
-    defkey(Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
-    defkey(Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
-    defkey(Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
-    defkey(Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
+    defkey(0, Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
+    defkey(1, Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
+    defkey(2, Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
+    defkey(3, Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
   }
 
   @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))

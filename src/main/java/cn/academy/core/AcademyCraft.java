@@ -6,6 +6,7 @@
 */
 package cn.academy.core;
 
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -145,10 +146,12 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+        CooldownManager.INSTANCE.onServerStarting();
     }
 
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
+        CooldownManager.INSTANCE.onServerStopping();
         config.save();
     }
 

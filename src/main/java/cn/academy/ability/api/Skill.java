@@ -8,6 +8,7 @@ package cn.academy.ability.api;
 
 import cn.academy.ability.api.context.*;
 import cn.academy.ability.api.context.Context.Status;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
@@ -255,8 +256,8 @@ public abstract class Skill extends Controllable {
             }
 
             @Override
-            public Object createID() {
-                return Skill.this;
+            public int createID() {
+                return CooldownManager.getCtrlId(Skill.this);
             }
         });
     }
@@ -417,8 +418,8 @@ public abstract class Skill extends Controllable {
         }
 
         @Override
-        protected Object createID() {
-            return Skill.this;
+        protected int createID() {
+            return CooldownManager.getCtrlId(Skill.this);
         }
 
     }

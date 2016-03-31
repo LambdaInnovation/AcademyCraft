@@ -10,6 +10,7 @@ import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.Context;
+import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
@@ -154,6 +155,7 @@ public class Meltdowner extends Skill {
 
             aData().addSkillExp(instance, getExpIncr(ct));
 
+            CooldownManager.setCooldown(player, instance, getCooldown(ct));
             sendToClient(MSG_PERFORM, ct, length[0]);
 
             terminate();
@@ -161,10 +163,6 @@ public class Meltdowner extends Skill {
 
         @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
         void c_perform(int ct, double length) {
-            if (isLocal()) {
-                ClientRuntime.instance().setCooldownRaw(instance, getCooldown(ct));
-            }
-
             EntityMDRay ray = new EntityMDRay(player, length);
             ACSounds.playClient(player, "md.meltdowner", 0.5f);
             world().spawnEntityInWorld(ray);

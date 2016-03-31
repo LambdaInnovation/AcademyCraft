@@ -6,6 +6,7 @@
 */
 package cn.academy.ability.api.context;
 
+import cn.academy.ability.api.Controllable;
 import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.common.registry.RegistryDelegate.Delegate;
 import cpw.mods.fml.relauncher.Side;
@@ -35,8 +36,8 @@ public abstract class KeyDelegate {
             sinEffect = _sinEffect;
         }
     }
-    
-    private Object identifier;
+
+    private Integer identifier = null;
 
     public void onKeyDown() {}
 
@@ -64,14 +65,12 @@ public abstract class KeyDelegate {
     /**
      * @return The identifier used in cooldown
      */
-    protected Object createID() {
-        return this;
-    }
+    protected abstract int createID();
 
     /**
      * @return The identifier of this KeyDelegate used in cooldown
      */
-    public final Object getIdentifier() {
+    public final Integer getIdentifier() {
         if (identifier == null) {
             identifier = createID();
         }
