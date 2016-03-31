@@ -6,26 +6,28 @@
 */
 package cn.academy.core.client;
 
+import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
+import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.font.TrueTypeFont;
 import cn.lambdalib.util.generic.RegistryUtils;
 import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.common.config.Configuration;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import javax.imageio.ImageIO;
@@ -174,24 +176,56 @@ public class Resources {
     private static boolean init = false;
     private static TrueTypeFont font, fontBold, fontItalic;
     public static IFont font() {
-        checkInit();
+        checkFontInit();
         return font;
     }
     public static IFont fontBold() {
-        checkInit();
+        checkFontInit();
         return fontBold;
     }
     public static IFont fontItalic() {
-        checkInit();
+        checkFontInit();
         return fontItalic;
     }
 
-    private static void checkInit() {
+    /**
+     * @return A text box with AcademyCraft's mod font.
+     */
+    @SideOnly(Side.CLIENT)
+    public static TextBox newTextBox() {
+        TextBox ret = new TextBox();
+        ret.font = font();
+        return ret;
+    }
+
+    /**
+     * @return A text box with AcademyCraft's mod font.
+     */
+    @SideOnly(Side.CLIENT)
+    public static TextBox newTextBox(FontOption option) {
+        TextBox ret = new TextBox();
+        ret.font = font();
+        return ret;
+    }
+
+    private static void checkFontInit() {
         if (!init) {
             init = true;
 
+            // TODO: Add this to settings page, though it will require restart to take effect
+
+            Configuration config = AcademyCraft.config;
+            String userSpecified = config.getString("font", "gui", "Microsoft YaHei",
+                    "The font to be used. If not found in the system, default fonts will be used.");
+
             font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
-                    new String[] { "Microsoft YaHei", "Adobe Heiti Std R", "STHeiti", "Consolas", "Monospace", "Arial" });
+                    new String[] {
+                        userSpecified,
+                        "微软雅黑",
+                        "Microsoft YaHei",
+                        "SimHei",
+                        "Adobe Heiti Std R"
+                    });
             fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
             fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
         }
@@ -200,7 +234,7 @@ public class Resources {
     @SideOnly(Side.CLIENT)
     @RegInitCallback
     public static void __init() {
-        checkInit();
+        checkFontInit();
 
         Fonts.register("AC_Normal", font());
         Fonts.register("AC_Bold", fontBold());

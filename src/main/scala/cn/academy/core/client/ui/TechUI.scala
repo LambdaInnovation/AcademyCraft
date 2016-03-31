@@ -41,6 +41,7 @@ private object Generic_ {
 }
 
 import Generic_._
+import Resources.newTextBox
 
 object TechUI {
 
@@ -261,7 +262,7 @@ object TechUI {
 
       def sepline(id: String) = {
         val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
-        widget :+ blend(new TextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(id)
+        widget :+ blend(newTextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(id)
 
         blank(3)
         element(widget)
@@ -270,7 +271,7 @@ object TechUI {
       }
 
       def button(name: String, callback: () => Any) = {
-        val textBox = new TextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
+        val textBox = newTextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
         val len = textBox.font.getTextWidth(name, textBox.option)
 
         val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
@@ -294,7 +295,7 @@ object TechUI {
                       contentCell: Array[TextBox] = null) = { // Content cell is a temp hack to get the text component
         val (idleColor, editColor) = (new Color(0xffffffff), new Color(0xff2180d8))
 
-        val textBox = blend(new TextBox(new FontOption(8))).setContent(value.toString)
+        val textBox = blend(newTextBox(new FontOption(8))).setContent(value.toString)
         val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
 
         if (editCallback != null) {
@@ -315,7 +316,7 @@ object TechUI {
           def box(ch: String) = {
             val ret = new Widget().size(10, 8)
               .halign(HeightAlign.CENTER)
-              .addComponent(blend(new TextBox(new FontOption(8)).setContent(ch)))
+              .addComponent(blend(newTextBox(new FontOption(8)).setContent(ch)))
             ret
           }
 
@@ -347,12 +348,12 @@ object TechUI {
         val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
 
         val keyArea = new Widget().pos(4, 0).size(32, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(new TextBox(new FontOption(8))).setContent(elem.id))
+          .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.id))
         val icon = new Widget().size(6, 6)
           .halign(HeightAlign.CENTER).pos(-3, .5)
           .addComponents(blend(new DrawTexture(null).setColor(elem.color)))
         val valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(new TextBox(new FontOption(8))).setContent(elem.desc()))
+          .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.desc()))
 
         valueArea.listens[FrameEvent](() => {
           valueArea.component[TextBox].content = elem.desc()
@@ -368,7 +369,7 @@ object TechUI {
       private def kvpair(key: String, value: Widget) = {
         val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
         val keyArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(new TextBox(new FontOption(8))).setContent(key))
+          .addComponent(blend(newTextBox(new FontOption(8))).setContent(key))
         value.pos(keyLength, 0)
 
         widget :+ keyArea

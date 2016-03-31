@@ -112,10 +112,10 @@ object SkillPosEditorUI {
       if (aData.hasCategory) aData.getCategory.getSkillList.zipWithIndex foreach { case (skill, idx) =>
         val y = 5 + idx * 12
         val box0 = new Widget().size(40, 10).pos(20, y)
-          .addComponent(new TextBox(new FontOption(8)).setContent(skill.getName))
+          .addComponent(Resources.newTextBox(new FontOption(8)).setContent(skill.getName))
 
         def box(init: Double, callback: Double => Any) = {
-          val text =  new TextBox(new FontOption(8)).setContent(init.toString)
+          val text = Resources.newTextBox(new FontOption(8)).setContent(init.toString)
           text.allowEdit()
 
           val ret = new Widget().size(20, 10)

@@ -299,7 +299,7 @@ object GuiAbilityInterferer {
       listPanel.child("btn_add").listens[LeftClickEvent](() => {
         val box = new Widget().size(40, 10).pos(50, 5)
           .addComponent(new DrawTexture(null).setColor4i(255, 255, 255, 50))
-          .addComponent(new TextBox().allowEdit())
+          .addComponent(Resources.newTextBox().allowEdit())
 
         box.listens[ConfirmInputEvent](() => {
           box.component[TextBox].content match {

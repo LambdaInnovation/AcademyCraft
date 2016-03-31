@@ -349,7 +349,7 @@ public class GuiTutorial extends CGuiScreen {
             w.transform.setSize(72, 12);
             w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
 
-            TextBox box = new TextBox(new FontOption(10, learned ? Color.white() : Color.mono(0.6)));
+            TextBox box = Resources.newTextBox(new FontOption(10, learned ? Color.white() : Color.mono(0.6)));
             box.xOffset = 3;
             box.content = renderInfo(t).title;
             box.localized = true;
