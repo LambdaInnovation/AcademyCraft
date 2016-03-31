@@ -80,11 +80,6 @@ public class ModuleVanilla {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate, 2), new ItemStack(coin, 3),
                 Mode.PLATE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.wafer), new ItemStack(silbarn), Mode.ETCH);
-
-        // Note this is currently an awkward hardcode for Groundshock skill's serialization, as there is
-        // no direct syntax mapping to int[][].class in scala. Will remove later.
-
-        NetworkS11n.register(int[][].class);
     }
 
     public static void addGenericSkills(Category category) {

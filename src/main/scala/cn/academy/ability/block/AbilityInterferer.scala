@@ -16,19 +16,20 @@ import cn.academy.core.client.Resources
 import cn.academy.core.client.render.block.RenderDynamicBlock
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
-import cn.lambdalib.cgui.gui.component.{Component, ElementList, TextBox, DrawTexture}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LostFocusEvent, GainFocusEvent, LeftClickEvent}
-import cn.lambdalib.cgui.gui.{Widget, HierarchyDebugger, CGuiScreen}
+import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib.cgui.gui.{CGuiScreen, HierarchyDebugger, Widget}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.networkcall.TargetPointHelper
 import cn.lambdalib.s11n.nbt.NBTS11n
 import cn.lambdalib.s11n.network.{Future, NetworkMessage}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{RandUtils, MathUtils, VecUtils}
+import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
 import cn.lambdalib.util.helper.TickScheduler
-import cn.lambdalib.util.mc.{PlayerUtils, EntitySelectors, WorldUtils}
+import cn.lambdalib.util.mc.{EntitySelectors, PlayerUtils, WorldUtils}
 import cpw.mods.fml.client.registry.ClientRegistry
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -37,8 +38,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{ResourceLocation, IIcon}
-import net.minecraft.world.{World, IBlockAccess}
+import net.minecraft.util.{IIcon, ResourceLocation}
+import net.minecraft.world.{IBlockAccess, World}
 
 import scala.collection.JavaConversions._
 import scala.collection.SortedSet
@@ -295,7 +296,22 @@ object GuiAbilityInterferer {
 
       listPanel.child("btn_up").listens[LeftClickEvent](() => listArea.component[ElementList].progressLast())
       listPanel.child("btn_down").listens[LeftClickEvent](() => listArea.component[ElementList].progressNext())
-      listPanel.child("btn_add").listens[LeftClickEvent](() => sendUpdate(tile.whitelist + ("233333" + RandUtils.rangei(0, 100))))
+      listPanel.child("btn_add").listens[LeftClickEvent](() => {
+        val box = new Widget().size(40, 10).pos(50, 5)
+          .addComponent(new DrawTexture(null).setColor4i(255, 255, 255, 50))
+          .addComponent(new TextBox().allowEdit())
+
+        box.listens[ConfirmInputEvent](() => {
+          box.component[TextBox].content match {
+            case "" =>
+            case str => sendUpdate(tile.whitelist + str)
+          }
+          box.dispose()
+        })
+        box.listens[LostFocusEvent](() => box.dispose())
+        listPanel :+ box
+        box.gainFocus()
+      })
       listPanel.child("btn_remove").listens((w, e: LeftClickEvent) => {
         listArea.component[Area].focus match {
           case Some(widget) => {

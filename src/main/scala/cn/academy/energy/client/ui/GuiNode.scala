@@ -22,7 +22,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.opengl.GL11
 
-object GuiNode2 {
+object GuiNode {
   import NodeNetworkProxy._
 
   val STATE_LINKED = 0
@@ -38,7 +38,8 @@ object GuiNode2 {
     val tile = container.node
     val thePlayer = Minecraft.getMinecraft.thePlayer
 
-    def getState = states(STATE_LINKED)
+    var state = STATE_UNLINKED
+    def getState = states(state)
 
     val invPage = InventoryPage("node")
 
@@ -87,13 +88,24 @@ object GuiNode2 {
       }
     }
 
+    { // Update node status listener
+      var time = GameTimer.getTime - 2000
+      ret.main.listens[FrameEvent](() => {
+        val dt = GameTimer.getTime - time
+        if (dt > 2000) {
+          send(MSG_QUERY_LINK, tile, Future.create((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
+          time = GameTimer.getTime
+        }
+      })
+    }
+
     ret
   }
 
   private def send(channel: String, pars: Any*) =
     NetworkMessage.sendToServer(NodeNetworkProxy, channel, pars.map(_.asInstanceOf[AnyRef]): _*)
 
-  case class StateContext(val state: State, var frame: Int) {
+  case class StateContext(state: State, var frame: Int) {
     var lastChange: Long = GameTimer.getTime
 
     def updateAndDraw(w: Double, h: Double) = {
@@ -115,7 +127,7 @@ object GuiNode2 {
         1, 1.0 / ALL_FRAMES)
     }
   }
-  case class State(val begin: Int, val frames: Int, val frameTime: Long)
+  case class State(begin: Int, frames: Int, frameTime: Long)
 
 }
 
@@ -125,6 +137,7 @@ object NodeNetworkProxy {
   final val MSG_RENAME = "rename"
   final val MSG_CHANGE_PASS = "repass"
   final val MSG_INIT   = "init"
+  final val MSG_QUERY_LINK = "query_link"
 
   @RegInitCallback
   def __init() = {
@@ -143,6 +156,11 @@ object NodeNetworkProxy {
     if (player.getCommandSenderName == node.getPlacerName) {
       node.setPassword(name)
     }
+  }
+
+  @Listener(channel=MSG_QUERY_LINK, side=Array(Side.SERVER))
+  def queryIsLinked(node: TileNode, future: Future[Boolean]) = {
+    future.sendResult(WirelessHelper.isNodeLinked(node))
   }
 
   @Listener(channel=MSG_INIT, side=Array(Side.SERVER))

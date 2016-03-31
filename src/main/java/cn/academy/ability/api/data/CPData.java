@@ -220,7 +220,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     public void setOverload(float newOverload) {
-        curOverload = MathUtils.clampf(0, maxOverload, newOverload);
+        curOverload = MathUtils.clampf(0, getMaxOverload(), newOverload);
 
         markDirty();
     }
@@ -293,10 +293,6 @@ public class CPData extends DataPart<EntityPlayer> {
         addOverload(overloadToAdd);
         consumeCP(cpToAdd);
         
-        if(curOverload > getMaxOverload()) {
-            overloadFine = false;
-        }
-        
         return true;
     }
     
@@ -311,16 +307,8 @@ public class CPData extends DataPart<EntityPlayer> {
         if(getEntity().capabilities.isCreativeMode)
             return;
         
-        this.curOverload += overload;
-        this.curCP -= cp;
-        
-        if(curCP < 0) curCP = 0;
-        if(overload > getMaxOverload() * 2) overload = getMaxOverload() * 2;
-        
-        if(overload > getMaxOverload()) overloadFine = false;
-        
-        untilRecover = getInt("cp_recover_cooldown");
-        untilOverloadRecover = getInt("overload_recover_cooldown");
+        this.curOverload = Math.min(overload, getMaxOverload());
+        this.curCP = Math.max(0, curCP - cp);
         
         addMaxCP(cp);
         addMaxOverload(overload);
@@ -344,7 +332,11 @@ public class CPData extends DataPart<EntityPlayer> {
     public boolean canPerform(float cp) {
         return getEntity().capabilities.isCreativeMode || this.getCP() >= cp;
     }
-    
+
+    public boolean isOverloadRecovering() {
+        return !overloadFine;
+    }
+
     private void addMaxCP(float consumedCP) {
         setAddMaxCP(addMaxCP + consumedCP * getFloat("maxcp_incr_rate"));
     }
@@ -401,20 +393,20 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     /**
-     * Add a specific amount of overload. Note that the action will ALWAYS be
-     * successful, even if you try to overload over 2*maxOverload. (The value will
-     * stay at 2*maxo)
+     * Add a specific amount of overload.
      */
     public void addOverload(float amt) {
         if(getEntity().capabilities.isCreativeMode)
             return;
         
-        curOverload += amt;
-        if(curOverload > 2 * getMaxOverload())
-            curOverload = 2 * getMaxOverload();
+        curOverload = Math.min(getMaxOverload(), curOverload + amt);
         
         untilOverloadRecover = getInt("overload_recover_cooldown");
-        
+
+        if(curOverload == getMaxOverload()) {
+            overloadFine = false;
+        }
+
         addMaxOverload(amt);
         
         if(!isClient())
@@ -422,7 +414,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     public boolean isOverloaded() {
-        return curOverload > getMaxOverload();
+        return !overloadFine && untilOverloadRecover > 0;
     }
     
     /**

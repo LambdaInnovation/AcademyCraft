@@ -104,6 +104,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     val absorbed = acceptedDamage * 0.75f
 
     cpData.perform(consumption, acceptedDamage * overloadRatio)
+    addSkillExp(0.004f)
 
     dmg - absorbed
   }
@@ -119,7 +120,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     entities foreach (entity => {
       if (shouldStopEntity(entity) && consumeStop()) {
         stop(entity, player)
-        addSkillExp(0.003f)
+        addSkillExp(0.001f)
 
         sendToClient(MSG_STOP_ENTITY, entity)
       }
