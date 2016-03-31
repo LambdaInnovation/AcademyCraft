@@ -6,6 +6,8 @@
 */
 package cn.academy.terminal.app.settings;
 
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -27,15 +29,21 @@ import java.util.Map.Entry;
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class SettingsUI extends CGuiScreen {
     
-    static final WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
+    static WidgetContainer document;
     
     private static Map<String, List<UIProperty>> properties = new HashMap<>();
     static {
         addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
         addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
         addProperty(PropertyElements.CHECKBOX, "generic", "headsOrTails", false, false);
+    }
+
+    @RegInitCallback
+    public static void __init() {
+        document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
     }
     
     public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {

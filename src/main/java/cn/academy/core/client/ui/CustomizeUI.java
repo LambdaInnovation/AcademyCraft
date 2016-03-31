@@ -32,12 +32,14 @@ public class CustomizeUI extends CGuiScreen {
         SettingsUI.addCallback("edit_ui", "misc", () -> {
             Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
         }, false);
+
+        doc = CGUIDocument.panicRead(new ResourceLocation("academy:guis/ui_edit.xml"));
     }
 
-    static final WidgetContainer doc = CGUIDocument.panicRead(new ResourceLocation("academy:guis/ui_edit.xml"));
+    private static WidgetContainer doc;
 
-    Widget main;
-    Widget body;
+    private Widget main;
+    private Widget body;
 
     {
         main = doc.getWidget("main").copy();

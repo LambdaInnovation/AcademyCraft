@@ -10,6 +10,7 @@ import cn.academy.vanilla.teleporter.data.LocTeleData;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.skills.LocationTeleport;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -32,14 +33,19 @@ import net.minecraft.util.StatCollector;
 @Registrant
 public class LocTeleportUI extends CGuiScreen {
 
-    static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/loctele.xml"));
+    private static WidgetContainer document;
 
-    Widget pageInspect, pageAdd, pageAction;
+    @RegInitCallback
+    public static void __init() {
+        document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/loctele.xml"));
+    }
+
+    private Widget pageInspect, pageAdd, pageAction;
 
     public Location selection;
 
-    final LocTeleData data;
-    final EntityPlayer player;
+    private final LocTeleData data;
+    private final EntityPlayer player;
 
     public LocTeleportUI() {
         data = LocTeleData.get(Minecraft.getMinecraft().thePlayer);

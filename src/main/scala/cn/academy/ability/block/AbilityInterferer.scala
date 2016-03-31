@@ -244,7 +244,7 @@ object GuiAbilityInterferer {
   import cn.academy.core.client.ui._
   import AbilityInterf._
 
-  val template = CGUIDocument.panicRead(Resources.getGui("rework/page_interfere")).getWidget("main")
+  lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_interfere")).getWidget("main")
 
   val buttonOn  = Resources.getTexture("guis/button/button_switch_on")
   val buttonOff = Resources.getTexture("guis/button/button_switch_off")

@@ -12,6 +12,8 @@ import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.energy.client.gui.EnergyUIHelper;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -47,11 +49,17 @@ import static org.lwjgl.opengl.GL11.*;
 
 // TODO Add ImagFusor and MetalFormer handlers
 @SideOnly(Side.CLIENT)
+@Registrant
 public enum RecipeHandler {
     instance;
 
-    private WidgetContainer windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
+    private WidgetContainer windows;
     private ResourceLocation tex = Resources.getTexture("guis/tutorial/crafting_grid");
+
+    @RegInitCallback
+    public static void __init() {
+        instance.windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
+    }
 
     private Field _$ShapedOreRecipe$fieldWidth;
     {

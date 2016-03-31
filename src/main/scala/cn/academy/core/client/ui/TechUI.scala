@@ -45,7 +45,7 @@ import Resources.newTextBox
 
 object TechUI {
 
-  private val pageButtonTemplate = readxml("pageselect").getWidget("main")
+  private lazy val pageButtonTemplate = readxml("pageselect").getWidget("main")
   private val blendQuadTex = Resources.getTexture("guis/blend_quad")
   private val histogramTex = Resources.getTexture("guis/histogram")
   private val lineTex = Resources.getTexture("guis/line")
@@ -504,7 +504,7 @@ object WirelessPage {
   type TileBase = TileEntity with IWirelessTile
   type TileMatrix = TileEntity with IWirelessMatrix
 
-  private val wirelessPageTemplate = readxml("page_wireless").getWidget("main")
+  private lazy val wirelessPageTemplate = readxml("page_wireless").getWidget("main")
 
   private val connectedIcon = Resources.getTexture("guis/icons/icon_connected")
   private val unconnectedIcon = Resources.getTexture("guis/icons/icon_unconnected")
@@ -792,7 +792,7 @@ object WirelessNetDelegate {
 }
 
 object InventoryPage {
-  private val template = readxml("page_inv").getWidget("main")
+  private lazy val template = readxml("page_inv").getWidget("main")
 
   def apply(name: String): Page = {
     val ret = InventoryPage(template.copy())

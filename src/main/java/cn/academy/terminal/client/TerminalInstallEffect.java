@@ -7,6 +7,8 @@
 package cn.academy.terminal.client;
 
 import cn.academy.core.ModuleCoreClient;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -26,14 +28,16 @@ import net.minecraft.util.ResourceLocation;
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class TerminalInstallEffect extends AuxGui {
     
-    static final long ANIM_LENGTH = 4000L;
-    static final long WAIT = 700L;
-    static final long BLEND_IN = 200L, BLEND_OUT = 200L;
-    
-    static WidgetContainer loaded;
-    static {
+    private static final long ANIM_LENGTH = 4000L;
+    private static final long WAIT = 700L;
+    private static final long BLEND_IN = 200L, BLEND_OUT = 200L;
+
+    private static WidgetContainer loaded;
+    @RegInitCallback
+    public static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal_installing.xml"));
     }
     

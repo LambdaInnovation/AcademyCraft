@@ -9,6 +9,7 @@ package cn.academy.misc.media;
 import cn.academy.core.client.Resources;
 import cn.academy.misc.media.MediaRuntime.PlayState;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -29,15 +30,20 @@ import java.util.function.Consumer;
 @Registrant
 public class GuiMediaPlayer extends CGuiScreen {
     
-    static final ResourceLocation 
+    private static final ResourceLocation
         T_PLAY = Resources.getTexture("guis/apps/media_player/play"),
         T_PAUSE = Resources.getTexture("guis/apps/media_player/pause");
-    
-    static WidgetContainer document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player.xml"));
-    
-    Widget pageMain;
 
-    final MediaPlayer player;
+    private static WidgetContainer document;
+
+    @RegInitCallback
+    public static void __init() {
+        document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player.xml"));
+    }
+
+    private Widget pageMain;
+
+    private final MediaPlayer player;
     
     public GuiMediaPlayer() {
         player = MediaPlayer.instance;

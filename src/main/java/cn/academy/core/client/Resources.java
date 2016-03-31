@@ -10,6 +10,7 @@ import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
@@ -203,7 +204,7 @@ public class Resources {
      */
     @SideOnly(Side.CLIENT)
     public static TextBox newTextBox(FontOption option) {
-        TextBox ret = new TextBox();
+        TextBox ret = new TextBox(option);
         ret.font = font();
         return ret;
     }
@@ -232,9 +233,10 @@ public class Resources {
     }
 
     @SideOnly(Side.CLIENT)
-    @RegInitCallback
-    public static void __init() {
+    @RegPreInitCallback
+    public static void __preInit() {
         checkFontInit();
+        // TODO: Disaster if any ui initializes before preInit...
 
         Fonts.register("AC_Normal", font());
         Fonts.register("AC_Bold", fontBold());

@@ -12,7 +12,7 @@ import cn.lambdalib.util.helper.Color
 object GuiWindGenBase {
   import cn.lambdalib.cgui.ScalaCGUI._
 
-  private val template = CGUIDocument.panicRead(Resources.getGui("rework/page_windbase")).getWidget("main")
+  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_windbase")).getWidget("main")
 
   def apply(container: ContainerWindGenBase) = {
     val tile = container.tile
@@ -52,8 +52,6 @@ object GuiWindGenBase {
       )
       .sepline("INFO")
       .property("ALTITUDE", tile.yCoord)
-
-    ret.getGui.setDebug()
 
     ret
   }

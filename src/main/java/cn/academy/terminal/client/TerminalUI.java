@@ -17,6 +17,7 @@ import cn.academy.terminal.TerminalData;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -64,7 +65,12 @@ public class TerminalUI extends AuxGui {
     
     final double SENSITIVITY = 0.7;
 
-    static final WidgetContainer loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal.xml"));
+    private static WidgetContainer loaded;
+
+    @RegInitCallback
+    public static void __init() {
+        loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal.xml"));
+    }
     
     CGui gui;
     

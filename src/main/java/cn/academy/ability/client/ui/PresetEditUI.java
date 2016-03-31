@@ -15,6 +15,7 @@ import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -83,8 +84,9 @@ public class PresetEditUI extends GuiScreen {
      * Drawer of transition
      */
     CGui transitor = new CGui();
-    
-    static {
+
+    @RegInitCallback
+    public static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/preset_edit.xml"));
         template = loaded.getWidget("template");
     }

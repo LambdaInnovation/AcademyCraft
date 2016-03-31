@@ -13,6 +13,8 @@ import cn.academy.core.util.ACMarkdownRenderer;
 import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.academy.misc.tutorial.TutorialRegistry;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.WidgetContainer;
@@ -45,44 +47,47 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
+@Registrant
 public class GuiTutorial extends CGuiScreen {
 
-    static final IFont font = Resources.font(),
-            fontBold = Resources.fontBold(),
-            fontItalic = Resources.fontItalic();
+    private static IFont font, fontBold, fontItalic;
 
-    static WidgetContainer loaded;
-    static {
+    private static WidgetContainer loaded;
+    @RegInitCallback
+    public static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
+        font = Resources.font();
+        fontBold = Resources.fontBold();
+        fontItalic = Resources.fontItalic();
     }
 
-    static final double REF_WIDTH = 480;
+    private static final double REF_WIDTH = 480;
 
-    final Color GLOW_COLOR = Color.white();
-    final FontOption fo_descTitle = new FontOption(10);
+    private final Color GLOW_COLOR = Color.white();
+    private final FontOption fo_descTitle = new FontOption(10);
 
-    double cachedWidth = -1;
+    private double cachedWidth = -1;
 
-    final EntityPlayer player;
-    final List<ACTutorial> learned, unlearned;
+    private final EntityPlayer player;
+    private final List<ACTutorial> learned, unlearned;
 
-    final boolean firstOpen;
+    private final boolean firstOpen;
 
-    Widget frame;
-    Widget leftPart, rightPart;
+    private Widget frame;
+    private Widget leftPart, rightPart;
 
-    Widget listArea;
+    private Widget listArea;
 
-    Widget showWindow, rightWindow, centerPart;
+    private Widget showWindow, rightWindow, centerPart;
 
-    Widget logo0, logo1, logo2, logo3;
-    Widget centerText, briefText;
-    Widget showArea;
+    private Widget logo0, logo1, logo2, logo3;
+    private Widget centerText, briefText;
+    private Widget showArea;
 
     // Current displayed tutorial
-    TutInfo currentTut = null;
+    private TutInfo currentTut = null;
 
-    class CachedRenderInfo {
+    private class CachedRenderInfo {
         final String title, rawBrief, rawContent;
         private GLMarkdownRenderer brief_;
         private GLMarkdownRenderer content_;
