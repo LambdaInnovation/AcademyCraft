@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.context.Context.Status;
+import cn.academy.ability.api.event.OverloadEvent;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.NetworkMessage;
@@ -34,6 +35,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -354,6 +356,7 @@ public enum ContextManager {
 
         {
             FMLCommonHandler.instance().bus().register(this);
+            MinecraftForge.EVENT_BUS.register(this);
         }
 
         List<ContextData> alive = new LinkedList<>();
@@ -485,6 +488,15 @@ public enum ContextManager {
                     }
                 }
 
+            }
+        }
+
+        @SubscribeEvent
+        public void __onOverload(OverloadEvent evt) {
+            for (ContextData data : alive) {
+                if (data.ctx.player.equals(evt.player)) {
+                    data.disposed = true;
+                }
             }
         }
 

@@ -404,6 +404,7 @@ public class CPData extends DataPart<EntityPlayer> {
         untilOverloadRecover = getInt("overload_recover_cooldown");
 
         if(curOverload == getMaxOverload()) {
+            MinecraftForge.EVENT_BUS.post(new OverloadEvent(getEntity()));
             overloadFine = false;
         }
 
