@@ -136,6 +136,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     cpData.perform(normOverload, normConsume)
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_STOP_ENTITY, side=Array(Side.CLIENT))
   def c_stopEntity(ent: Entity) = {
     if (!isMarked(ent)) {

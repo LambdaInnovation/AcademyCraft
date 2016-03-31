@@ -86,6 +86,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
     MinecraftForge.EVENT_BUS.unregister(this)
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
   def reflectEffect(point: MCVec3) = {
     val eff = new WaveEffect(world, 2, 1.1)

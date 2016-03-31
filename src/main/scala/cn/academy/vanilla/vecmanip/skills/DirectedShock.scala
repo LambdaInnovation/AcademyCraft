@@ -47,10 +47,10 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
   var punchTicker = 0
 
   @SideOnly(Side.CLIENT)
-  var handEffect: HandRenderer = null
+  var handEffect: HandRenderer = _
 
   @SideOnly(Side.CLIENT)
-  var anim: CompTransformAnim = null
+  var anim: CompTransformAnim = _
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {

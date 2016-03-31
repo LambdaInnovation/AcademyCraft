@@ -73,8 +73,11 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   private var stateTick: Int = 0
 
   @SideOnly(Side.CLIENT)
-  private var activateHandler: IActivateHandler = null
+  private var activateHandler: IActivateHandler = _
 
+  private var prevAllowFlying: Boolean = _
+
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def l_makeAlive() = if(isLocal) {
     activateHandler = new IActivateHandler {
@@ -82,7 +85,13 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
       override def getHint: String = IActivateHandler.ENDSPECIAL
       override def onKeyDown(player: EntityPlayer): Unit = terminate()
     }
-    ClientRuntime.instance().addActivateHandler(activateHandler)
+    clientRuntime.addActivateHandler(activateHandler)
+  }
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  def s_makeAlive() = {
+    prevAllowFlying = player.capabilities.allowFlying
+    player.capabilities.allowFlying = true
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
@@ -121,6 +130,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     applying = _applying
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     currentDir match {
@@ -156,10 +166,16 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_terminate() = if(isLocal) {
-    ClientRuntime.instance.clearKeys(KEY_GROUP)
-    ClientRuntime.instance.removeActiveHandler(activateHandler)
+    clientRuntime.clearKeys(KEY_GROUP)
+    clientRuntime.removeActiveHandler(activateHandler)
+  }
+
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  def s_terminate() = {
+    player.capabilities.allowFlying = prevAllowFlying
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -186,6 +202,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def c_makealive() = {
     world.spawnEntityInWorld(new StormWingEffect(this))
@@ -197,9 +214,12 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     cpData.perform(overload, consumption)
   } else true
 
-  private def initKeys() = {
-    val rt = ClientRuntime.instance()
 
+  @SideOnly(Side.CLIENT)
+  private def initKeys() = {
+    val rt = clientRuntime()
+
+    @SideOnly(Side.CLIENT)
     def defkey(idx: Int, key: Int, dirFactory: () => Vec3) = {
       rt.addKey(KEY_GROUP, key, new KeyDelegate {
         override def onKeyDown() = {
@@ -215,18 +235,19 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
       })
     }
 
-    def worldSpace(x: Double, y: Double, z: Double) = {
-      val moveDir = MVec3(x, y, z)
-      val player = rt.getEntity
-      val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
-      moveDir.rotateAroundX(-pitch)
-      moveDir.rotateAroundY(-yaw)
-      moveDir
-    }
     defkey(0, Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
     defkey(1, Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
     defkey(2, Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
     defkey(3, Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
+  }
+
+  @SideOnly(Side.CLIENT)
+  private def worldSpace(x: Double, y: Double, z: Double) = {
+    val moveDir = MVec3(x, y, z)
+    val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
+    moveDir.rotateAroundX(-pitch)
+    moveDir.rotateAroundY(-yaw)
+    moveDir
   }
 
   @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))

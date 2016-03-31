@@ -57,10 +57,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
   var punchTicker = 0
 
   @SideOnly(Side.CLIENT)
-  var handEffect: HandRenderer = null
+  var handEffect: HandRenderer = _
 
   @SideOnly(Side.CLIENT)
-  var anim: CompTransformAnim = null
+  var anim: CompTransformAnim = _
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
@@ -159,6 +159,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
@@ -172,6 +173,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     HandRenderInterrupter(player).addInterrupt(handEffect)
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def l_handEffectTick() = if (isLocal) {
     if (!punched) {
@@ -183,11 +185,13 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
     HandRenderInterrupter(player).stopInterrupt(handEffect)
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   def l_effect() = if (isLocal) {
     punched = true
@@ -242,6 +246,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     targ.setVel(delta * -1.2f)
   }
 
+  @SideOnly(Side.CLIENT)
   private def effectAt(pos: Vec3) = {
     val effect = new WaveEffect(world, rangei(2, 3), 1)
     effect.setPos(util.mc.Vec3.lerp(player.headPosition, pos, 0.7))
