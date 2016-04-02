@@ -14,6 +14,8 @@ import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.common.config.Property;
@@ -85,7 +87,17 @@ public class MediaRuntime {
     public static void playMedia(ACMedia media, boolean loop) {
         checkInit();
 
-        System.out.println(sndLibrary + "," + media);
+        try {
+            MusicTicker musicTicker = RegistryUtils.getFieldInstance(Minecraft.class,
+                    Minecraft.getMinecraft(), "mcMusicTicker", "field_147126_aw");
+            ISound playing = RegistryUtils.getFieldInstance(MusicTicker.class, musicTicker, "field_147678_c");
+            if(playing != null) {
+                Minecraft.getMinecraft().getSoundHandler().stopSound(playing);
+            }
+        } catch(Exception e) {
+            AcademyCraft.log.error("Failed to stop vanilla music", e);
+        }
+
         if(sndLibrary.getSources() == null ||
                 !sndLibrary.getSources().containsKey(media.getID())) {
             newSource(media, loop, 0, 0, 0);
