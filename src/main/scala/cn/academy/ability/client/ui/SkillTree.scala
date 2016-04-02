@@ -50,6 +50,17 @@ object DeveloperUI {
   def apply(tile: IDeveloper): CGuiScreen = {
     val ret = new TreeScreen {
       override def onGuiClosed() = tile.onGuiClosed()
+      // Close the link page if we are opening that, otherwise delegate down
+      override def keyTyped(ch: Char, key: Int) = {
+        if (key == Keyboard.KEY_ESCAPE) {
+          Option(gui.getWidget("link_page")) match {
+            case Some(page) => page.dispose()
+            case None => super.keyTyped(ch, key)
+          }
+        } else {
+          super.keyTyped(ch, key)
+        }
+      }
     }
     implicit val gui = ret.gui()
 
@@ -474,7 +485,7 @@ private object Common {
 
               cover.listens[LeftClickEvent](() => gui.eventBus.postEvent(null, new RebuildEvent))
 
-              gui.addWidget(cover)
+              gui.addWidget("link_page", cover)
             })
           case _ =>
             panel.child("button_wireless").transform.doesDraw = false
