@@ -1,17 +1,7 @@
 # AcademyCraft lang file
-# Debug version
+# The file is majorly divided by content type (except for those that needs to interface with Minecraft).
 
-# Generic
-ac.generic.energy.desc=Energy
-ac.generic.load.desc=Load
-
-ac.activate_key.deactivate.desc=Deactivate Ability
-ac.activate_key.endspecial.desc=End Special Skill Mode
-ac.activate_key.endskill.desc=Abort Skill
-
-ac.coming_soon=Coming Soon
-
-# CreativeTab
+# Common
 itemGroup.AcademyCraft=AcademyCraft
 
 # Item
@@ -86,23 +76,6 @@ tile.ac_developer_normal.name=Normal Ability Developer
 tile.ac_developer_advanced.name=Advanced Ability Developer
 tile.ac_ability_interferer.name=Ability Interferer
 
-ac.converter.desc_template=Converts %s to %s
-
-# Generic Knowledges
-ac.knowledge.marathon.name=Marathon
-ac.knowledge.iron_feet.name=Iron Feet
-ac.knowledge.intheknee.name=Arrow in the Knee
-ac.knowledge.intheknee.desc=I used to be an adventurer like you...
-ac.knowledge.bouncer.name=Bouncer
-ac.knowledge.trajectory.name=Trajectory Master
-ac.knowledge.baseball.name=Homerun!!
-ac.knowledge.anatomy.name=Anatomist
-
-ac.gui.preset_edit.name=Preset Edit
-ac.gui.preset_edit.tag=Preset #
-ac.gui.preset_edit.skill_remove=Remove Current
-ac.gui.preset_edit.skill_select=Select Skill
-
 # Data Terminal
 ac.terminal.notinstalled=You have not yet installed Data Terminal.
 ac.terminal.alrdy_installed=You have already installed Data Terminal.
@@ -136,58 +109,7 @@ ac.app.freq_transmitter.e4=Action aborted.
 ac.app.freq_transmitter.e5=Transmitting...
 ac.app.freq_transmitter.e6=Link successful.
 
-# Knowledge UI
-ac.knowledge.acquired=Acquired Knowledge
-
-# Skill Tree
-ac.skill_tree.title0=Skill Tree
-ac.skill_tree.title1=Ability Developer
-ac.skill_tree.version=Version: 1.0β1
-ac.skill_tree.notacquired=Ability not acquired.
-
-ac.skill_tree.level_prg=Progress: %s
-
-ac.skill_tree.type_portable=Portable Developer
-ac.skill_tree.type_normal=Normal Developer
-ac.skill_tree.type_advanced=Advanced Developer
-
-ac.skill_tree.espinfo_title=ESPer info
-
-ac.skill_tree.macinfo_title=Machine Info
-ac.skill_tree.energy=Energy
-ac.skill_tree.syncrate=Sync Rate
-
-ac.skill_tree.acquireprog=%1.0f%% acquired
-ac.skill_tree.not_acquired=Not acquired
-ac.skill_tree.uplevel=Upgrade to %s
-ac.skill_tree.acquire=Acquire Ability!
-ac.skill_tree.unknown_skill=<ERROR: Unknown skill>
-ac.skill_tree.unknown=[UNKNOWN]
-
-ac.skill_tree.learn_skill=Learn
-ac.skill_tree.required=Required: 
-
-ac.skill_tree.perf=You are about to perform:
-ac.skill_tree.perf2=Proceed?
-ac.skill_tree.consumption=Consumption: %.0fIF
-ac.skill_tree.start=Start
-ac.skill_tree.cancel=Cancel
-
-ac.skill_tree.tracker=Progress Tracker
-ac.skill_tree.ok=OK
-ac.skill_tree.progress=Progress: %.1f%%
-ac.skill_tree.aborted=Progress: ABORTED.
-ac.skill_tree.successful=Action successful.
-ac.skill_tree.abort=Abort
-ac.skill_tree.aborted=Action Aborted.
-
-ac.skill_tree.anyskill=Any Skill of Level %d
-
-ac.skill_tree.reset=Reset
-ac.skill_tree.cant_reset=Can't Reset
-ac.skill_tree.reset.desc=Reset Ability to %s
-
-# Settings
+## Settings App
 ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
@@ -207,87 +129,13 @@ ac.settings.prop.debug_console=Debug Console
 ac.settings.cat.misc=Misc
 ac.settings.prop.edit_ui=Customize UI
 
-# Media
+## Media App
+## -> ac.app.media.*
 ac.media.acquired=You have installed media %s
 ac.media.haveone=You have already installed media %s
 ac.media.notinstalled=You have not yet installed the Media Player app.
 
-# Generic
-ac.gui.loading_lowercase.desc=loading...
-ac.gui.loading_uppercase.desc=LOADING...
-
-# Link UI
-ac.gui.link.transmitting=Transmitting...
-ac.gui.link.successful=Link Successful.
-ac.gui.link.failed=Link Failed.
-
-# Matrix
-ac.gui.matrix.mark.waiting.desc=Transmitting...
-ac.gui.matrix.mark.invalid_input.desc=Invalid input value.
-ac.gui.matrix.mark.success.desc=Action successful.
-ac.gui.matrix.mark.fail.desc=Action failed.
-ac.gui.matrix.bandwidth=Bandwidth
-ac.gui.matrix.range=Range
-ac.gui.matrix.capacity=Capacity
-
-# Node
-ac.gui.node.not_connected.desc=NOT CONNECTED
-ac.gui.node.node_name.desc=Node Name
-ac.gui.node.ssid.desc=SSID: 
-ac.gui.node.password.desc=Password: 
-ac.gui.node.current_ssid.desc=Current Linked: 
-ac.gui.node.not_connected.desc=<Not Connected>
-ac.gui.node.rename.desc=Rename
-
-ac.gui.node.mark.loading.desc=LOADING
-ac.gui.node.mark.idle.desc=IDLE
-ac.gui.node.mark.transmitting.desc=TRANSMITTING
-ac.gui.node.mark.successful.desc=SUCCESSFUL
-ac.gui.node.mark.failed.desc=FAILED
-
-# Phase Generator
-ac.gui.phase_gen.liquid=Liquid
-ac.gui.phase_gen.buffer=Buffer
-
-# Wind Generator
-ac.gui.wind_base.fancap=Fan Capacity
-ac.gui.wind_base.speed=Generation
-ac.gui.wind_base.buffer=Buffer
-
-ac.gui.wind.structure=Incomplete generator structure.
-ac.gui.wind.obstacle=Can't place generator fan.
-
-# Imag Fusor
-ac.gui.imagfusor.ion.desc=Proj Liquid
-ac.gui.imagfusor.flux.desc=Imag Flux
-
-# Metal Former
-ac.gui.metal_former.mode.etch=Etching
-ac.gui.metal_former.mode.plate=Plate Crushing
-ac.gui.metal_former.mode.incise=Incising
-ac.gui.metal_former.mode.refine=Refining
-
-# Ability interference block
-ac.gui.ability_interf.switch=Switch
-ac.ability_interf.cantuse=You can't use this interference block.
-
-# UI Editing
-ac.gui.uiedit.elements=Elements
-
-ac.gui.uiedit.elm.cpbar=CP Indicator
-ac.gui.uiedit.elm.keyhint=Control Hint
-ac.gui.uiedit.elm.notification=Notification
-ac.gui.uiedit.elm.media=Media Player
-
-ac.network.link=Link
-ac.network.search=Search networks
-
-# Cat Engine
-ac.cat_engine.unlink=Unlinked from the node meow~
-ac.cat_engine.notfound=Didn't found any node nearby meow~
-ac.cat_engine.linked=Linked to the node named %s meow~
-
-# Media
+### Medias
 ac.media.only_my_railgun.name=Only My Railgun
 ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
 ac.media.level5_judgelight.name=Level5 -Judgelight-
@@ -305,10 +153,28 @@ ac.ability.level5=Level 5
 
 death.attack.ac_skill=%1$s was killed by %2$s using %3$s
 
-# Electromaster
+ac.activate_key.deactivate.desc=Deactivate Ability
+ac.activate_key.endspecial.desc=End Special Skill Mode
+ac.activate_key.endskill.desc=Abort Skill
+
+ac.gui.preset_edit.name=Preset Edit
+ac.gui.preset_edit.tag=Preset #
+ac.gui.preset_edit.skill_remove=Remove Current
+ac.gui.preset_edit.skill_select=Select Skill
+
+## Generic Skills
+ac.ability.generic.brain_course.name=Brain Course
+ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
+ac.ability.generic.mind_course.name=Mind Course
+
+ac.ability.generic.brain_course.desc=Get a practice for your brain. Adds Max CP by 1000.
+ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Adds Max CP by 1000 and adds Max Overload by 100.
+ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
+
+## Electromaster
 ac.ability.electromaster.name=Electromaster
 
-## EM Skills
+### EM Skills
 ac.ability.electromaster.arc_gen.name=Arc Generation
 ac.ability.electromaster.mag_manip.name=Magnet Manipulation
 ac.ability.electromaster.mine_detect.name=Mine Detection
@@ -335,10 +201,10 @@ ac.ability.electromaster.body_intensify.desc=Fine-tune your bioelectricity to im
 ac.ability.electromaster.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
 ac.ability.electromaster.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and hurt everything around.
 
-# Teleporter
+## Teleporter
 ac.ability.teleporter.name=Teleporter
 
-## TP Skills
+### TP Skills
 ac.ability.teleporter.threatening_teleport.name=Threatening Teleport
 ac.ability.teleporter.dim_folding_theorem.name=Dimension Folding Theorem
 ac.ability.teleporter.penetrate_teleport.name=Penetrate Teleport
@@ -348,7 +214,6 @@ ac.ability.teleporter.location_teleport.name=Location Teleport
 ac.ability.teleporter.shift_tp.name=Shift Teleport
 ac.ability.teleporter.space_fluct.name=Space Fluctuation
 ac.ability.teleporter.flashing.name=Flashing
-ac.ability.teleporter.crithit=%fx critical hit!
 
 ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
 ac.ability.teleporter.dim_folding_theorem.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.
@@ -359,6 +224,7 @@ ac.ability.teleporter.location_teleport.desc=Memorize the current location and t
 ac.ability.teleporter.shift_tp.desc=Teleport a block with the means of coordinate teleport. The space folding phonemonon will hurt any entity on the teleportation path. 
 ac.ability.teleporter.space_fluct.desc=Strenghen your space-folding ability to cause more dangerous critical damage.
 ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver in the air.
+ac.ability.teleporter.crithit=%fx critical hit!
 
 ac.gui.loctele.tag0=Recorded Locations
 ac.gui.loctele.tag1=Add Location
@@ -370,10 +236,10 @@ ac.gui.loctele.warn0=[CP not enough.]
 ac.gui.loctele.warn1=You can't record this location now.
 ac.gui.loctele.teleport=Teleport!
 
-# Meltdowner
+## Meltdowner
 ac.ability.meltdowner.name=Meltdowner
 
-## MD Skills
+### MD Skills
 ac.ability.meltdowner.electron_bomb.name=Electron Bomb
 ac.ability.meltdowner.rad_intensify.name=β Radiation Intensify
 ac.ability.meltdowner.ray_barrage.name=Ray Barrage
@@ -421,15 +287,6 @@ ac.ability.vecmanip.storm_wing.desc=Manipulate the velocity of air to form four 
 ac.ability.vecmanip.blood_retro.desc=Stir the blood flow of organic enemies, making their vessel burst and die in extreme pain.
 ac.ability.vecmanip.vec_reflection.desc=Reflects the dangerous incoming attacks towards your line of sight, and make your opponent bear it.
 ac.ability.vecmanip.plasma_cannon.desc=Manipulate a large area of air flow with extreme precision to form a plasma body. Throw it out to cause a disastrous explosion.
-
-# Generic Skills
-ac.ability.generic.brain_course.name=Brain Course
-ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
-ac.ability.generic.mind_course.name=Mind Course
-
-ac.ability.generic.brain_course.desc=Get a practice for your brain. Adds Max CP by 1000.
-ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Adds Max CP by 1000 and adds Max Overload by 100.
-ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
 
 # Command
 ac.command.invalid=§cInvalid input, please try again.
@@ -577,11 +434,71 @@ achievement.ac_teleporter.flashing.desc=While low form beings still move on thei
 achievement.ac_teleporter.mastery=Dimension Traveler
 achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimensions
 
+# UI Commons
+ac.gui.common.pg_wireless.not_connected=Not Connected
+ac.gui.common.sep.info=Information
+ac.gui.common.sep.wireless_info=Wireless Information
+ac.gui.common.sep.wireless_init=Wireless Network Initialization
+ac.gui.common.sep.wireless_noinit=Wireless Network Not Initialized
+ac.gui.common.sep.change_pass=Change Password
+ac.gui.common.hist.energy=ENERGY
+ac.gui.common.hist.buffer=BUFFER
+ac.gui.common.hist.liquid=LIQUID
+ac.gui.common.hist.capacity=CAPACITY
+ac.gui.common.prop.range=Trans. Range
+ac.gui.common.prop.owner=Owner
+ac.gui.common.prop.node_name=Node Name
+ac.gui.common.prop.password=Password
+ac.gui.common.prop.bandwidth=Bandwidth
+ac.gui.common.prop.ssid=SSID
+ac.gui.common.prop.gen_speed=Gen. speed
+ac.gui.common.prop.altitude=Altitude
+
+# Skill Tree
+ac.skill_tree.dev_successful=Develop Successful.
+ac.skill_tree.dev_failed=Develop Failed.
+ac.skill_tree.progress=Progress
+ac.skill_tree.noenergy=Not enough energy.
+ac.skill_tree.condition_fail=Develop condition not satisfied.
+ac.skill_tree.learn_question=Learn? (Estm. Consumption：%s IF)
+ac.skill_tree.level_question=Continue?
+ac.skill_tree.req=Req.
+ac.skill_tree.skill_not_learned=Skill not learned.
+ac.skill_tree.skill_exp=Skill Experience:
+
+# Metal Former
+ac.gui.metal_former.mode.etch=Etching
+ac.gui.metal_former.mode.plate=Plate Crushing
+ac.gui.metal_former.mode.incise=Incising
+ac.gui.metal_former.mode.refine=Refining
+
+# Ability interference block
+ac.gui.ability_interf.switch=Switch
+ac.ability_interf.cantuse=You can't use this interference block.
+
+# UI Editing
+ac.gui.uiedit.elements=Elements
+
+ac.gui.uiedit.elm.cpbar=CP Indicator
+ac.gui.uiedit.elm.keyhint=Control Hint
+ac.gui.uiedit.elm.notification=Notification
+ac.gui.uiedit.elm.media=Media Player
+
+# Cat Engine
+ac.cat_engine.unlink=Unlinked from the node meow~
+ac.cat_engine.notfound=Didn't found any node nearby meow~
+ac.cat_engine.linked=Linked to the node named %s meow~
+
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
 ac.tutorial.update=Research note updated
 
 # Heads Or Tails
+# camelCase, really?
 ac.headsOrTails.0=The result is TAILS!
 ac.headsOrTails.1=The result is HEADS!
+
+# Converter Block
+ac.converter.desc_template=Converts %s to %s
+

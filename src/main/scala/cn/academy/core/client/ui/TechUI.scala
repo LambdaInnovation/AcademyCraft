@@ -1,11 +1,12 @@
 package cn.academy.core.client.ui
 
+import cn.academy.core.LocalHelper
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessUser, IWirelessTile}
-import cn.academy.energy.api.event.node.{UnlinkUserEvent, LinkUserEvent}
-import cn.academy.energy.api.event.wen.{UnlinkNodeEvent, LinkNodeEvent}
+import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
+import cn.academy.energy.api.event.node.{LinkUserEvent, UnlinkUserEvent}
+import cn.academy.energy.api.event.wen.{LinkNodeEvent, UnlinkNodeEvent}
 import cn.academy.energy.internal.{NodeConn, WirelessNet}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
@@ -14,17 +15,17 @@ import cn.lambdalib.cgui.gui.{CGuiScreenContainer, Widget}
 import cn.lambdalib.cgui.gui.component.ProgressBar.Direction
 import cn.lambdalib.cgui.gui.component._
 import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
-import cn.lambdalib.cgui.gui.event.{GainFocusEvent, LostFocusEvent, FrameEvent, LeftClickEvent}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
 import cn.lambdalib.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.s11n.network.{NetworkS11n, Future, NetworkMessage}
+import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.client.{HudUtils, RenderUtils}
 import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
 import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.{GameTimer, Color}
+import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.inventory.Container
 import net.minecraft.tileentity.TileEntity
@@ -32,8 +33,10 @@ import net.minecraft.util.ResourceLocation
 import cn.lambdalib.cgui.ScalaCGUI._
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
+
 import scala.collection.JavaConversions._
 import org.lwjgl.opengl.GL11._
+
 import collection.mutable
 
 private object Generic_ {
@@ -49,6 +52,11 @@ object TechUI {
   private val blendQuadTex = Resources.getTexture("guis/blend_quad")
   private val histogramTex = Resources.getTexture("guis/histogram")
   private val lineTex = Resources.getTexture("guis/line")
+
+  val local = LocalHelper.at("ac.gui.common")
+  val localSep = local.subPath("sep")
+  val localHist = local.subPath("hist")
+  val localProperty = local.subPath("prop")
 
   case class Page(id: String, window: Widget)
 
@@ -193,12 +201,22 @@ object TechUI {
 
   def histEnergy(energy: () => Double, max: Double) = {
     val color = new Color(0xff25c4ff)
-    HistElement("ENERGY", color, () => energy() / max, () => "%.0f IF".format(energy()))
+    HistElement(localHist.get("energy"), color, () => energy() / max, () => "%.0f IF".format(energy()))
   }
 
   def histBuffer(energy: () => Double, max: Double) = {
     val color = new Color(0xff25f7ff)
-    HistElement("BUFFER", color, () => energy() / max, () => "%.0f IF".format(energy()))
+    HistElement(localHist.get("buffer"), color, () => energy() / max, () => "%.0f IF".format(energy()))
+  }
+
+  def histPhaseLiquid(amt: () => Double, max: Double) = {
+    val color = new Color(0xff7680de)
+    HistElement(localHist.get("liquid"), color, () => amt() / max, () => "%.0f mB".format(amt()))
+  }
+
+  def histCapacity(amt: () => Int, max: Int) = {
+    val color = new Color(0xffff6c00)
+    HistElement(localHist.get("capacity"), color, () => amt().toDouble / max, () => s"${amt()}/$max")
   }
 
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
@@ -255,20 +273,22 @@ object TechUI {
         blank(-30)
         element(widget)
 
-        elems foreach (histProperty)
+        elems foreach histProperty
 
         this
       }
 
       def sepline(id: String) = {
         val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
-        widget :+ blend(newTextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(id)
+        widget :+ blend(newTextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(localSep.get(id))
 
         blank(3)
         element(widget)
 
         this
       }
+
+      def seplineInfo() = sepline("info")
 
       def button(name: String, callback: () => Any) = {
         val textBox = newTextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
@@ -369,7 +389,7 @@ object TechUI {
       private def kvpair(key: String, value: Widget) = {
         val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
         val keyArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(newTextBox(new FontOption(8))).setContent(key))
+          .addComponent(blend(newTextBox(new FontOption(8))).setContent(localProperty.get(key)))
         value.pos(keyLength, 0)
 
         widget :+ keyArea
@@ -510,6 +530,8 @@ object WirelessPage {
   private val unconnectedIcon = Resources.getTexture("guis/icons/icon_unconnected")
   private val toMatrixIcon = Resources.getTexture("guis/icons/icon_tomatrix")
 
+  private val local = TechUI.local.subPath("pg_wireless")
+
   final val MSG_FIND_NODES = "find_nodes"
   final val MSG_USER_CONNECT = "user_connect"
   final val MSG_USER_DISCONNECT = "unlink"
@@ -545,7 +567,7 @@ object WirelessPage {
 
       val (icon, name, alpha, tintEnabled) = linked match {
         case Some(target) => (connectedIcon, target.name, 1.0, true)
-        case None => (unconnectedIcon, "Not Connected", 0.6, false)
+        case None => (unconnectedIcon, local.get("not_connected"), 0.6, false)
       }
 
       connectElem.child("icon_connect").component[DrawTexture].texture = icon

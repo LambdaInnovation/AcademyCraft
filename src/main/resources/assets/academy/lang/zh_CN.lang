@@ -1,20 +1,10 @@
 # AcademyCraft 语言文件
-# 调试版本
+# 文件主要按内容分类和分节 (以需要和minecraft做交互的本地化名称作为例外).
 
 # 常规
-ac.generic.energy.desc=能量
-ac.generic.load.desc=负载
-
-ac.activate_key.deactivate.desc=解除能力
-ac.activate_key.endspecial.desc=结束特殊技能模式
-ac.activate_key.endskill.desc=停止技能
-
-ac.coming_soon=即将推出
-
-# 创造栏
 itemGroup.AcademyCraft=AcademyCraft
 
-# 物品
+# 物品名称
 item.ac_crystal_low.name=低纯度虚能水晶
 item.ac_crystal_normal.name=中纯度虚能水晶
 item.ac_crystal_pure.name=高纯度虚能水晶
@@ -57,9 +47,7 @@ item.ac_magnetic_coil.desc=超载开发机以重置个人现实
 item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=研究记录
 
-ac.converter.desc_template=转换%s到%s
-
-# 方块
+# 方块名称
 tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
 tile.ac_imag_silicon_ore.name=虚像硅矿
@@ -87,21 +75,6 @@ tile.ac_rf_input.name=能源桥 (CoFH RF输入)
 tile.ac_developer_normal.name=基础能力开发机
 tile.ac_developer_advanced.name=高级能力开发机
 tile.ac_ability_interferer.name=能力干涉方块
-
-# 常规知识
-ac.knowledge.marathon.name=长跑
-ac.knowledge.iron_feet.name=铁脚
-ac.knowledge.intheknee.name=膝盖中了一箭
-ac.knowledge.intheknee.desc=我曾经也是一个像你一样的探险家...
-ac.knowledge.bouncer.name=跳高
-ac.knowledge.trajectory.name=弹道学
-ac.knowledge.baseball.name=打棒球
-ac.knowledge.anatomy.name=解剖学
-
-ac.gui.preset_edit.name=预设编辑
-ac.gui.preset_edit.tag=预设 #
-ac.gui.preset_edit.skill_remove=移除当前技能
-ac.gui.preset_edit.skill_select=选择技能
 
 # 数据终端
 ac.terminal.notinstalled=你没有安装数据终端.
@@ -136,58 +109,7 @@ ac.app.freq_transmitter.e4=操作取消.
 ac.app.freq_transmitter.e5=传输中...
 ac.app.freq_transmitter.e6=连接成功.
 
-# 知识UI
-ac.knowledge.acquired=习得知识
-
-# 技能树
-ac.skill_tree.title0=技能树
-ac.skill_tree.title1=能力开发机
-ac.skill_tree.version=版本: 1.0β1
-ac.skill_tree.notacquired=能力未获得.
-
-ac.skill_tree.type_portable=便携式开发机
-ac.skill_tree.type_normal=基础开发机
-ac.skill_tree.type_advanced=高级开发机
-
-ac.skill_tree.espinfo_title=个人信息
-
-ac.skill_tree.macinfo_title=开发机信息
-ac.skill_tree.energy=能量
-ac.skill_tree.syncrate=同步率
-
-ac.skill_tree.acquireprog=已获得 %1.1f%%
-ac.skill_tree.not_acquired=未获得
-ac.skill_tree.uplevel=升级到 %s
-ac.skill_tree.acquire=获得能力!
-ac.skill_tree.unknown_skill=<错误 0x5f3759df：未知的能力>
-ac.skill_tree.unknown=[未知]
-
-ac.skill_tree.learn_skill=学习
-ac.skill_tree.required=需要: 
-
-ac.skill_tree.perf=将要执行:
-ac.skill_tree.perf2=执行?
-ac.skill_tree.consumption=预计消耗: %.0fIF
-ac.skill_tree.start=开始
-ac.skill_tree.cancel=取消
-
-ac.skill_tree.tracker=进度追踪
-ac.skill_tree.ok=OK
-ac.skill_tree.progress=进度: %.1f%%
-ac.skill_tree.aborted=进度: 已取消.
-ac.skill_tree.successful=执行成功.
-ac.skill_tree.abort=取消
-ac.skill_tree.aborted=已取消.
-
-ac.skill_tree.level_prg=升级进度：%s
-
-ac.skill_tree.anyskill=%d级的任意技能
-
-ac.skill_tree.reset=重置
-ac.skill_tree.cant_reset=无法重置
-ac.skill_tree.reset.desc=重置能力到 %s
-
-# 设置
+## 设置App
 ac.settings.cat.generic=常规
 ac.settings.prop.attackPlayer=开启PvP (玩家伤害)
 ac.settings.prop.destroyBlocks=开启方块破坏
@@ -207,87 +129,13 @@ ac.settings.prop.ability_3=能力 #4
 ac.settings.cat.misc=杂项
 ac.settings.prop.edit_ui=自定义UI
 
-# 媒体
+## 媒体App
+## -> ac.app.media.*
 ac.media.acquired=你已安装媒体  %s
 ac.media.haveone=你已经持有媒体  %s
 ac.media.notinstalled=你还没有安装媒体播放器App！
 
-# 常规
-ac.gui.loading_lowercase.desc=加载中...
-ac.gui.loading_uppercase.desc=加载中...
-
-# 连接UI
-ac.gui.link.transmitting=连接中...
-ac.gui.link.successful=连接成功.
-ac.gui.link.failed=连接失败.
-
-# 矩阵
-ac.gui.matrix.mark.waiting.desc=传输中...
-ac.gui.matrix.mark.invalid_input.desc=无效输入.
-ac.gui.matrix.mark.success.desc=操作已完成.
-ac.gui.matrix.mark.fail.desc=操作失败.
-ac.gui.matrix.bandwidth=带宽
-ac.gui.matrix.range=范围
-ac.gui.matrix.capacity=负载
-
-# 节点
-ac.gui.node.not_connected.desc=未连接
-ac.gui.node.node_name.desc=节点名
-ac.gui.node.ssid.desc=SSID: 
-ac.gui.node.password.desc=密码: 
-ac.gui.node.current_ssid.desc=当前连接: 
-ac.gui.node.not_connected.desc=<未连接>
-ac.gui.node.rename.desc=重命名
-
-ac.gui.node.mark.loading.desc=加载中
-ac.gui.node.mark.idle.desc=待机
-ac.gui.node.mark.transmitting.desc=连接中
-ac.gui.node.mark.successful.desc=成功
-ac.gui.node.mark.failed.desc=失败
-
-# 虚相位能量发生机
-ac.gui.phase_gen.liquid=虚相位液体
-ac.gui.phase_gen.buffer=能量缓存
-
-# 风力能量发生机
-ac.gui.wind_base.fancap=扇叶负载
-ac.gui.wind_base.speed=能量发生速率
-ac.gui.wind_base.buffer=能量缓存
-
-ac.gui.wind.structure=发生机结构缺失或损坏.
-ac.gui.wind.obstacle=不能放置扇叶.
-
-# 虚能融合机
-ac.gui.imagfusor.ion.desc=虚相液体
-ac.gui.imagfusor.flux.desc=虚能
-
-# 金属处理机
-ac.gui.metal_former.mode.etch=蚀刻
-ac.gui.metal_former.mode.plate=冲压
-ac.gui.metal_former.mode.incise=切割
-ac.gui.metal_former.mode.refine=洗练
-
-# 能力干扰方块
-ac.gui.ability_interf.switch=开关
-ac.ability_interf.cantuse=你无法使用这个能力干扰方块。
-
-ac.network.link=发起连接
-ac.network.search=搜寻网络
-
-# UI编辑界面
-ac.gui.uiedit.elements=控件
-
-ac.gui.uiedit.elm.cpbar=CP指示槽
-ac.gui.uiedit.elm.keyhint=操作提示
-ac.gui.uiedit.elm.notification=通知栏
-ac.gui.uiedit.elm.media=媒体播放器
-
-# 吐司猫
-ac.cat_engine.unlink=已经和节点断开了连接喵~
-ac.cat_engine.notfound=并没有在旁边找到任何节点喵~
-ac.cat_engine.linked=连接到了名字为%s的节点喵~
-
-# 媒体
+### 媒体名称
 ac.media.only_my_railgun.name=Only My Railgun
 ac.media.only_my_railgun.desc=《某科学的超电磁炮》 OP1
 ac.media.level5_judgelight.name=Level5 -Judgelight-
@@ -305,18 +153,28 @@ ac.ability.level5=超能力者
 
 death.attack.ac_skill=%1$s 被 %2$s 使用 %3$s 击杀了
 
-# 电击使
+ac.activate_key.deactivate.desc=解除能力
+ac.activate_key.endspecial.desc=结束特殊技能模式
+ac.activate_key.endskill.desc=停止技能
+
+ac.gui.preset_edit.name=预设编辑
+ac.gui.preset_edit.tag=预设 #
+ac.gui.preset_edit.skill_remove=移除当前技能
+ac.gui.preset_edit.skill_select=选择技能
+
+# 常规技能
+ac.ability.generic.brain_course.name=大脑训练课程
+ac.ability.generic.brain_course_advanced.name=大脑训练课程 (高级)
+ac.ability.generic.mind_course.name=思维修养课程
+
+ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。提高最大计算力1000点。
+ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力。提高最大计算力1000点，最大过载100点。
+ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%。
+
+## 电击使
 ac.ability.electromaster.name=电击使
 
-## 电击使 知识
-ac.knowledge.em_basic_volt.name=基础电压控制
-ac.knowledge.em_improved_volt.name=进阶电压控制
-ac.knowledge.em_high_volt.name=高级电压控制
-ac.knowledge.mag_ctrl.name=磁场控制
-ac.knowledge.em_projectile_master.name=磁场精通
-ac.knowledge.highenergy.name=高能理论
-
-## 电击使 技能
+### 电击使 技能
 ac.ability.electromaster.arc_gen.name=电弧激发
 ac.ability.electromaster.mag_manip.name=磁场控制
 ac.ability.electromaster.mine_detect.name=矿物探测
@@ -343,10 +201,10 @@ ac.ability.electromaster.body_intensify.desc=操纵自身生物电，在短时�
 ac.ability.electromaster.thunder_clap.desc=操纵大气中的电磁场氛围，催化出雷云，并牵引其中的电力产生一次破坏性的落雷。
 ac.ability.electromaster.thunder_bolt.desc=生成海量的电力，将其约束成柱形发射.击中实体后，猛烈的电流会爆发出去产生第二次伤害。
 
-# 传送使
+## 传送使
 ac.ability.teleporter.name=传送使
 
-## 传送使 技能
+### 传送使 技能
 ac.ability.teleporter.threatening_teleport.name=危险传送
 ac.ability.teleporter.dim_folding_theorem.name=折叠空间概论
 ac.ability.teleporter.penetrate_teleport.name=穿透传送
@@ -378,10 +236,10 @@ ac.gui.loctele.warn0=[CP不足.]
 ac.gui.loctele.warn1=你现在无法记录此坐标。
 ac.gui.loctele.teleport=传送！
 
-# 原子崩坏
+## 原子崩坏
 ac.ability.meltdowner.name=原子崩坏
 
-## 原子崩坏 技能
+### 原子崩坏 技能
 ac.ability.meltdowner.electron_bomb.name=电子光束
 ac.ability.meltdowner.rad_intensify.name=β射线强化
 ac.ability.meltdowner.ray_barrage.name=散射光束雨
@@ -406,10 +264,10 @@ ac.ability.meltdowner.mine_ray_expert.desc=持续的使用原子崩坏能力去�
 ac.ability.meltdowner.mine_ray_luck.desc=经过长久的锻炼，你已经可以以较高的几率将矿物中蕴含的矿物完美的采集出来。
 ac.ability.meltdowner.electron_missile.desc=为了能独立形成足够强度的弹幕攻击，你开始产生制造大块的电子团，但是每次只发射小部分进行攻击，可惜稳定大块电子团的时候你无法分辨敌我。
 
-# 矢量操作
+## 矢量操作
 ac.ability.vecmanip.name=矢量操作
 
-# 矢量操作 技能
+### 矢量操作 技能
 ac.ability.vecmanip.dir_shock.name=定向冲力
 ac.ability.vecmanip.ground_shock.name=踏击导向
 ac.ability.vecmanip.vec_accel.name=矢量加速
@@ -429,15 +287,6 @@ ac.ability.vecmanip.storm_wing.desc=操作空气的矢量，在背后展开四�
 ac.ability.vecmanip.blood_retro.desc=操作敌人的血液流向，使主动脉破裂并造成致死的伤害。
 ac.ability.vecmanip.vec_reflection.desc=将攻击自己的危险矢量向视线方向反转，让敌人自食其果。
 ac.ability.vecmanip.plasma_cannon.desc=操作极大范围的空气流动，将其压缩混合，变成一枚巨大的电浆体，并向前投掷。
-
-# 常规技能
-ac.ability.generic.brain_course.name=大脑训练课程
-ac.ability.generic.brain_course_advanced.name=大脑训练课程 (高级)
-ac.ability.generic.mind_course.name=思维修养课程
-
-ac.ability.generic.brain_course.desc=锻炼能力者的大脑，使其能力的有效持续时间延长。提高最大计算力1000点。
-ac.ability.generic.brain_course_advanced.desc=更深入有效的开发大脑的思维能力。提高最大计算力1000点，最大过载100点。
-ac.ability.generic.mind_course.desc=学习如何更好的放松自己的思想。计算力恢复速率提高20%。
 
 # 指令
 ac.command.invalid=§c无效输入，请再次尝试.
@@ -585,11 +434,75 @@ achievement.ac_teleporter.flashing.desc=靠自身移动的低级生物还想追�
 achievement.ac_teleporter.mastery=维度行者
 achievement.ac_teleporter.mastery.desc=我行走在空间之上
 
+# UI通用
+ac.gui.common.pg_wireless.not_connected=未连接
+ac.gui.common.sep.info=信息
+ac.gui.common.sep.wireless_info=无线网信息
+ac.gui.common.sep.wireless_init=无线网初始化
+ac.gui.common.sep.wireless_noinit=无线网还未初始化。
+ac.gui.common.sep.change_pass=更改密码
+ac.gui.common.hist.energy=能量
+ac.gui.common.hist.buffer=能量缓存
+ac.gui.common.hist.liquid=虚相液体
+ac.gui.common.hist.capacity=负载
+ac.gui.common.prop.range=传输范围
+ac.gui.common.prop.owner=所有者
+ac.gui.common.prop.node_name=节点名
+ac.gui.common.prop.password=密码
+ac.gui.common.prop.bandwidth=带宽
+ac.gui.common.prop.ssid=SSID
+ac.gui.common.prop.gen_speed=发电速率
+ac.gui.common.prop.altitude=海拔
+
+# 技能树
+ac.skill_tree.dev_developing=开发中...
+ac.skill_tree.dev_successful=开发成功。
+ac.skill_tree.dev_failed=开发失败。
+ac.skill_tree.progress=进度
+ac.skill_tree.noenergy=机器能量不足。
+ac.skill_tree.condition_fail=开发技能所需条件没有满足。
+ac.skill_tree.learn_question=是否学习？ (预计消耗：%s IF)
+ac.skill_tree.req=需求
+ac.skill_tree.skill_not_learned=技能未学习。
+ac.skill_tree.skill_exp=技能经验：
+ac.skill_tree.uplevel=升级到
+
+# 虚相位能量发生机
+
+# 虚能融合机
+
+# 金属处理机
+ac.gui.metal_former.mode.etch=蚀刻
+ac.gui.metal_former.mode.plate=冲压
+ac.gui.metal_former.mode.incise=切割
+ac.gui.metal_former.mode.refine=洗练
+
+# 能力干扰方块
+ac.gui.ability_interf.switch=开关
+ac.ability_interf.cantuse=你无法使用这个能力干扰方块。
+
+# UI编辑界面
+ac.gui.uiedit.elements=控件
+
+ac.gui.uiedit.elm.cpbar=CP指示槽
+ac.gui.uiedit.elm.keyhint=操作提示
+ac.gui.uiedit.elm.notification=通知栏
+ac.gui.uiedit.elm.media=媒体播放器
+
+# 吐司猫
+ac.cat_engine.unlink=已经和节点断开了连接喵~
+ac.cat_engine.notfound=并没有在旁边找到任何节点喵~
+ac.cat_engine.linked=连接到了名字为%s的节点喵~
+
 # 教程项
 ac.gui.crafttype.shaped=有序合成
 ac.gui.crafttype.shapeless=无序合成
 ac.tutorial.update=研究笔记更新
 
 # 猜硬币
-ac.headsOrTails.0=猜硬币结果是背面
-ac.headsOrTails.1=猜硬币结果是正面
+# 小驼峰邪教
+ac.headsOrTails.0=硬币正面朝上
+ac.headsOrTails.1=硬币反面朝上
+
+# 转换器方块
+ac.converter.desc_template=转换%s到%s

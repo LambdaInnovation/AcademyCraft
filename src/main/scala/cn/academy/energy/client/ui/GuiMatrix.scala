@@ -38,33 +38,30 @@ object GuiMatrix2 {
       def rebuildInfo(data: InitData): Unit = {
         ret.infoPage.reset()
 
-        val loadPct = if (tile.getCapacity == 0) 0 else data.load.toDouble / tile.getCapacity
-        val loadStr = "%d/%d".format(data.load, tile.getCapacity)
-
         ret.infoPage.histogram(
-          TechUI.HistElement("CAPACITY", new Color(0x5aa0e2), () => loadPct, () => loadStr)
+          TechUI.histCapacity(() => data.load, tile.getCapacity)
         )
 
-        ret.infoPage.sepline("INFO")
-          .property("OWNER", tile.getPlacerName)
-          .property("RANGE", "%.0f".format(tile.getRange))
-          .property("BANDWIDTH", tile.getBandwidth + " IF/T")
+        ret.infoPage.seplineInfo()
+          .property("owner", tile.getPlacerName)
+          .property("range", "%.0f".format(tile.getRange))
+          .property("bandwidth", tile.getBandwidth + " IF/T")
 
         if (data.init) {
-          ret.infoPage.sepline("WIRELESS INFO")
+          ret.infoPage.sepline("wireless_info")
           if (isPlacer) {
             ret.infoPage
-              .property("SSID", data.ssid, editCallback = newSSID => {
+              .property("ssid", data.ssid, editCallback = newSSID => {
               send(MSG_CHANGE_SSID, tile, thePlayer, newSSID)
               })
-              .sepline("CHANGE PASSWORD")
-              .property("PASSWORD", data.pass, password=true, editCallback = newPass => {
+              .sepline("change_pass")
+              .property("password", data.pass, password=true, editCallback = newPass => {
                 send(MSG_CHANGE_PASSWORD, tile, thePlayer, newPass)
               })
           } else {
             ret.infoPage
-              .property("SSID", data.ssid)
-              .property("PASSWORD", data.pass, password=true)
+              .property("ssid", data.ssid)
+              .property("password", data.pass, password=true)
           }
         } else {
           val ssidCell = Array[TextBox](null)
@@ -72,9 +69,9 @@ object GuiMatrix2 {
 
           if (isPlacer) {
             ret.infoPage
-              .sepline("WIRELESS INIT")
-              .property("SSID", "", _ => {}, contentCell=ssidCell, colorChange=false)
-              .property("PASSWORD", "", _ => {}, contentCell=passwordCell, password=true, colorChange=false)
+              .sepline("wireless_init")
+              .property("ssid", "", _ => {}, contentCell=ssidCell, colorChange=false)
+              .property("password", "", _ => {}, contentCell=passwordCell, password=true, colorChange=false)
               .blank(1)
               .button("INIT", () => {
                 val (ssidBox, passBox) = (ssidCell(0), passwordCell(0))
@@ -83,7 +80,7 @@ object GuiMatrix2 {
                 ))
               })
           } else {
-            ret.infoPage.sepline("WIRELESS NET NOT INITIALIZED")
+            ret.infoPage.sepline("wireless_noinit")
           }
         }
       }

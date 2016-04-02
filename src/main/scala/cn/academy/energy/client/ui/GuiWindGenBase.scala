@@ -50,8 +50,8 @@ object GuiWindGenBase {
       .histogram(
         TechUI.histBuffer(() => tile.getEnergy, tile.bufferSize)
       )
-      .sepline("INFO")
-      .property("ALTITUDE", tile.yCoord)
+      .seplineInfo()
+      .property("altitude", tile.yCoord)
 
     ret
   }

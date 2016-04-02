@@ -14,7 +14,7 @@ object GuiWindGenMain {
 
     val ret = new ContainerUI(container, invPage)
 
-    ret.infoPage.property("ALTITUDE", tile.yCoord)
+    ret.infoPage.property("altitude", tile.yCoord)
 
     ret
   }

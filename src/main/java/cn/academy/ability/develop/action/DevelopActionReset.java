@@ -20,13 +20,14 @@ public class DevelopActionReset implements IDevelopAction {
     public static boolean canReset(EntityPlayer player, IDeveloper developer) {
         AbilityData data = AbilityData.get(player);
         ItemStack equip = player.getCurrentEquippedItem();
+        Optional<ItemStack> factor = getFactor(player);
 
         int level = data.getLevel();
 
         return level >= 3 &&
                 developer.getType() == DeveloperType.ADVANCED &&
                 equip != null && equip.getItem() == ModuleAbility.magneticCoil &&
-                getFactor(player).isPresent();
+                factor.isPresent() && ItemInductionFactor.getCategory(factor.get()) != data.getCategory();
     }
 
     private static Optional<ItemStack> getFactor(EntityPlayer player) {
@@ -74,7 +75,6 @@ public class DevelopActionReset implements IDevelopAction {
 
     @Override
     public String getName(EntityPlayer player) {
-        return StatCollector.translateToLocalFormatted("ac.skill_tree.reset.desc",
-                getFactor(player).map(ItemInductionFactor::getCategory).get().getDisplayName());
+        throw new RuntimeException("Not Implemented");
     }
 }

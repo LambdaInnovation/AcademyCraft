@@ -11,7 +11,7 @@ import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.AcademyCraft
+import cn.academy.core.{AcademyCraft, LocalHelper}
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
@@ -33,6 +33,7 @@ import cn.lambdalib.util.client.{HudUtils, RenderUtils}
 import cn.lambdalib.util.key.{KeyHandler, KeyManager}
 import org.lwjgl.input.Keyboard
 import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib.util.generic.RandUtils
 import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.util.{ChatAllowedCharacters, ResourceLocation}
@@ -190,6 +191,8 @@ private object Common {
   private val shaderMono = ShaderMono.instance()
 
   private val posProgress = shaderProg.getUniformLocation("progress")
+
+  private val local = LocalHelper.at("ac.skill_tree")
 
   shaderProg.useProgram()
 
@@ -422,8 +425,9 @@ private object Common {
       val panel = ret.child("parent_left/panel_ability")
 
       val (icon, name, prog, lvltext) = Option(aData.getCategoryNullable) match {
-        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress), "Level " + aData.getLevel)
-        case None => (Resources.getTexture("guis/icons/icon_nonecat"), "No Category", 0.0f, "")
+        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress),
+          LocalHelper.root.get("ac.ability.level" + aData.getLevel))
+        case None => (Resources.getTexture("guis/icons/icon_nonecat"), "N/A", 0.0f, "")
       }
 
       panel.child("logo_ability").component[DrawTexture].setTex(icon)
@@ -537,7 +541,7 @@ private object Common {
 
       val textArea = new Widget().size(0, 10).centered().pos(0, 25)
 
-      var hint = "Continue?"
+      var hint = local.get("level_question")
       var progress: Double = 0
       var canClose: Boolean = true
       var shouldRebuild = false
@@ -548,8 +552,8 @@ private object Common {
         drawActionIcon(icon, progress, glow = progress == 1)
       })
 
-      val lvltext = s"Upgrade to Level ${data.getLevel+1}"
-      val reqtext = s"Req. $estmCons"
+      val lvltext = local.get("uplevel") + " " + LocalHelper.root.get("ac.ability.level" + (data.getLevel+1))
+      val reqtext = local.get("req") + " %.0f".format(estmCons)
       textArea.listens[FrameEvent](() => {
         Font.draw(lvltext, 0, 3, foLevelTitle)
         Font.draw(reqtext, 0, 16, foLevelReq)
@@ -559,7 +563,7 @@ private object Common {
       val button = newButton().centered().pos(0, 40)
       button.listens[LeftClickEvent](() => {
         if (developer.getEnergy < estmCons) {
-          hint = "Not enough energy."
+          hint = local.get("noenergy")
         } else {
           val devData = DevelopData.get(player)
           devData.reset()
@@ -570,17 +574,17 @@ private object Common {
             case DevState.IDLE =>
 
             case DevState.DEVELOPING =>
-              hint = "Developing..."
+              hint = local.get("dev_developing")
               progress = devData.getDevelopProgress
 
             case DevState.DONE =>
-              hint = "Develop successful."
+              hint = local.get("dev_successful")
               progress = 1
               canClose = true
               shouldRebuild = true
 
             case DevState.FAILED =>
-              hint = "Develop failed."
+              hint = local.get("dev_failed")
               canClose = true
           })
         }
@@ -624,7 +628,7 @@ private object Common {
         })
         textArea.listens[FrameEvent](() => {
           FontBold.draw(skill.getDisplayName, 0, 3, foSkillTitle)
-          Font.draw("Skill Experience: %.0f%%".format(data.getSkillExp(skill) * 100), 0, 15, foSkillProg)
+          Font.draw(local.get("skill_exp") + " %.0f%%".format(data.getSkillExp(skill) * 100), 0, 15, foSkillProg)
           Font.drawSeperated(skill.getDescription, 0, 24, 200, foSkillDesc)
         })
       } else {
@@ -637,7 +641,7 @@ private object Common {
 
         textArea.listens[FrameEvent](() => {
           FontBold.draw(skill.getDisplayName, 0, 3, foSkillTitle)
-          Font.draw("Skill Not Learned", 0, 15, foSkillUnlearned)
+          Font.draw(local.get("skill_not_learned"), 0, 15, foSkillUnlearned)
         })
 
         if (developer != null) {
@@ -650,7 +654,7 @@ private object Common {
           val len = CondIconStep * conditions.size
 
           textArea.listens[FrameEvent](() => {
-            Font.draw("Req.", -len/2 - 2, 26, foSkillReq)
+            Font.draw(local.get("req"), -len/2 - 2, 26, foSkillReq)
           })
 
           case class CondTag(cond: IDevCondition, accepted: Boolean) extends Component("CondTag")
@@ -689,7 +693,7 @@ private object Common {
             case Some(str) =>
               Font.draw(str, 0, 40, foSkillUnlearned2)
             case None =>
-              Font.draw("Learn? (Estm. Consumption: " + estmCons + ")",
+              Font.draw(local.get("learn_question").format("%.0f".format(estmCons)),
                 0, 40, foSkillUnlearned2)
           })
 
@@ -697,9 +701,9 @@ private object Common {
 
           button.listens[LeftClickEvent](() => {
             if (developer.getEnergy < estmCons) {
-              message = Some("Not enough energy.")
+              message = Some(local.get("noenergy"))
             } else if (!action.validate(player, developer)) {
-              message = Some("Develop condition not satisfied.")
+              message = Some(local.get("condition_fail"))
             } else {
               // start developing
               val devData = DevelopData.get(player)
@@ -711,17 +715,17 @@ private object Common {
                 devData.getState match {
                   case DevState.IDLE =>
                   case DevState.DEVELOPING =>
-                    message = Some("Progress %.0f%%".format(devData.getDevelopProgress * 100))
+                    message = Some(local.get("progress") + " %.0f%%".format(devData.getDevelopProgress * 100))
                     progress = devData.getDevelopProgress
                   case DevState.DONE =>
-                    message = Some("Develop successful.")
+                    message = Some(local.get("dev_successful"))
                     shouldRebuild = true
                     progress = 1.0
                     canClose = true
 
                   case DevState.FAILED =>
                     canClose = true
-                    message = Some("Develop failed.")
+                    message = Some(local.get("dev_failed"))
                 }
               })
             }
@@ -898,7 +902,7 @@ private object Common {
   }
 
   object Console {
-    private val MaxLines = 12
+    private val MaxLines = 10
     private val FO = new FontOption(8)
     private val Help1 =
       """|Welcome to Academy OS, Ver 1.0.0
@@ -946,7 +950,11 @@ private object Common {
 
     enqueue(slowPrintTask(Help1.format(Minecraft.getMinecraft.thePlayer.getCommandSenderName)))
     pause(400)
-    animSequence(300, "10%", "20%", "30%", "40%", "50%", "60%", "64%", "Boot Failed.\n")
+
+    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_.toString).toList :::
+      (64 + RandUtils.nextInt(4)).toString :: "Boot Failed.\n" :: Nil
+
+    animSequence(300, numSeq: _*)
     enqueue(slowPrintTask(if (emergency) Help3 else Help2))
 
     this.listens[FrameEvent](() => {
@@ -1007,7 +1015,6 @@ private object Common {
     }
 
     def output(content: String) = {
-      println(s"output $content, current=${outputs.peekLast()}" )
       def refresh() = new StringBuilder(if (outputs.isEmpty) "" else outputs.removeLast())
 
       var current = refresh()
@@ -1028,8 +1035,6 @@ private object Common {
       flush()
 
       while (outputs.size > MaxLines) outputs.removeFirst()
-
-      println(s"output2 $content, current=$outputs" )
     }
 
     def outputln(content: String) = {

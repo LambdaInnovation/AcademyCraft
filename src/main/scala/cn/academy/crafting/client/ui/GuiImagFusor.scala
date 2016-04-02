@@ -1,5 +1,6 @@
 package cn.academy.crafting.client.ui
 
+import cn.academy.core.LocalHelper
 import cn.academy.core.client.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
@@ -13,6 +14,7 @@ import cn.lambdalib.util.helper.Color
 object GuiImagFusor {
 
   private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_imagfusor")).getWidget("main")
+  private val local = LocalHelper.at("ac.imag_fusor")
 
   def apply(container: ContainerImagFusor) = {
     val tile = container.tile
@@ -44,9 +46,7 @@ object GuiImagFusor {
 
     ret.infoPage.histogram(
       TechUI.histEnergy(() => tile.getEnergyForDisplay, tile.getMaxEnergy),
-      TechUI.HistElement("IMAGFLUX", new Color(0xff7680de),
-        () => tile.getLiquidAmount.toDouble/tile.getTankSize,
-        () => "%d/%dIF".format(tile.getLiquidAmount, tile.getTankSize)))
+      TechUI.histPhaseLiquid(() => tile.getLiquidAmount, tile.getTankSize))
 
     ret
   }

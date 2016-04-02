@@ -71,20 +71,18 @@ object GuiNode {
       ret.infoPage
         .histogram(
           TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy),
-          TechUI.HistElement("CAPACITY", new Color(0xffff6c00),
-            () => load.toDouble / tile.getCapacity, () => "%d/%d".format(load, tile.getCapacity))
-          )
-          .sepline("INFO")
-          .property("RANGE", tile.getRange)
-          .property("OWNER", tile.getPlacerName)
+          TechUI.histCapacity(() => load, tile.getCapacity))
+          .seplineInfo()
+          .property("range", tile.getRange)
+          .property("owner", tile.getPlacerName)
 
       if (tile.getPlacerName == thePlayer.getCommandSenderName) {
         ret.infoPage
-          .property("NAME", tile.getNodeName, newName => send(MSG_RENAME, thePlayer, tile, newName))
-          .property("PASSWORD", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password=true)
+          .property("node_name", tile.getNodeName, newName => send(MSG_RENAME, thePlayer, tile, newName))
+          .property("password", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password=true)
       } else {
         ret.infoPage
-          .property("NAME", tile.getNodeName)
+          .property("node_name", tile.getNodeName)
       }
     }
 

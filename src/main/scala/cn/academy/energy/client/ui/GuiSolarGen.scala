@@ -42,8 +42,8 @@ object GuiSolarGen {
 
     ret.infoPage
       .histogram(TechUI.histBuffer(() => tile.getEnergy, tile.bufferSize))
-      .sepline("INFO")
-      .property("GENERATION", tile.getGeneration(1024) + " IF/T")
+      .seplineInfo()
+      .property("gen_speed", tile.getGeneration(1024) + " IF/T")
 
     ret
   }
