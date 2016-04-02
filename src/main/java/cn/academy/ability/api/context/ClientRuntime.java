@@ -394,7 +394,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         @SubscribeEvent
         public void presetEdit(PresetUpdateEvent evt) {
             if (SideHelper.isClient()) {
-                System.out.println("presetEdit");
                 updateDefaultGroup();
             }
         }

@@ -31,15 +31,6 @@ public interface IDevelopAction {
      * The action performed when really learned the develop type.
      */
     void onLearned(EntityPlayer player);
-    
-    /**
-     * @return The icon displayed in develop progress screen
-     */
-    ResourceLocation getIcon(EntityPlayer player);
-    
-    /**=
-     * @return The name displayed in develop progress screen
-     */
-    String getName(EntityPlayer player);
+
     
 }

@@ -41,14 +41,4 @@ public class DevelopActionSkill implements IDevelopAction {
         return LearningHelper.canLearn(AbilityData.get(player), developer, skill);
     }
 
-    @Override
-    public ResourceLocation getIcon(EntityPlayer player) {
-        return skill.getHintIcon();
-    }
-
-    @Override
-    public String getName(EntityPlayer player) {
-        return AbilityLocalization.instance.learnSkill() + " " + skill.getDisplayName();
-    }
-
 }

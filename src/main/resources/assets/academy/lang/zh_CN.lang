@@ -467,6 +467,10 @@ ac.skill_tree.skill_not_learned=技能未学习。
 ac.skill_tree.skill_exp=技能经验：
 ac.skill_tree.uplevel=升级到
 
+ac.skill_tree.type_portable=便携能力开发机
+ac.skill_tree.type_normal=普通能力开发机
+ac.skill_tree.type_advanced=高级能力开发机
+
 # 虚相位能量发生机
 
 # 虚能融合机

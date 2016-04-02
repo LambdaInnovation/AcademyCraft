@@ -29,7 +29,7 @@ public class LocalHelper {
     }
 
     private LocalHelper(String _path) {
-        if (_path.endsWith(".")) {
+        if (_path.isEmpty() || _path.endsWith(".")) {
             path = _path;
         } else {
             path = _path + ".";

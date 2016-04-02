@@ -30,7 +30,7 @@ public class DevelopActionReset implements IDevelopAction {
                 factor.isPresent() && ItemInductionFactor.getCategory(factor.get()) != data.getCategory();
     }
 
-    private static Optional<ItemStack> getFactor(EntityPlayer player) {
+    static Optional<ItemStack> getFactor(EntityPlayer player) {
         return Arrays.stream(player.inventory.mainInventory)
                 .filter(stack -> stack != null && stack.getItem() instanceof ItemInductionFactor)
                 .findAny();
@@ -64,17 +64,5 @@ public class DevelopActionReset implements IDevelopAction {
 
         int factorIdx = Arrays.asList(player.inventory.mainInventory).indexOf(factor);
         player.inventory.mainInventory[factorIdx] = null;
-    }
-
-    @Override
-    public ResourceLocation getIcon(EntityPlayer player) {
-        return getFactor(player)
-                .map(s -> ItemInductionFactor.getCategory(s).getIcon())
-                .orElseGet(null);
-    }
-
-    @Override
-    public String getName(EntityPlayer player) {
-        throw new RuntimeException("Not Implemented");
     }
 }

@@ -466,6 +466,10 @@ ac.skill_tree.req=Req.
 ac.skill_tree.skill_not_learned=Skill not learned.
 ac.skill_tree.skill_exp=Skill Experience:
 
+ac.skill_tree.type_portable=Portable Developer
+ac.skill_tree.type_normal=Normal Developer
+ac.skill_tree.type_advanced=Advanced Developer
+
 # Metal Former
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing

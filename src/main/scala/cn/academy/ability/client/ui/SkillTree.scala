@@ -6,6 +6,7 @@ import cn.academy.ability.ModuleAbility
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.data.{AbilityData, CPData}
 import cn.academy.ability.block.TileDeveloper
+import cn.academy.ability.client.AbilityLocalization
 import cn.academy.ability.client.ui.Common.{RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
@@ -435,16 +436,15 @@ private object Common {
     { // Initialize left ability panel
       val panel = ret.child("parent_left/panel_ability")
 
-      val (icon, name, prog, lvltext) = Option(aData.getCategoryNullable) match {
-        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress),
-          LocalHelper.root.get("ac.ability.level" + aData.getLevel))
-        case None => (Resources.getTexture("guis/icons/icon_nonecat"), "N/A", 0.0f, "")
+      val (icon, name, prog) = Option(aData.getCategoryNullable) match {
+        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress))
+        case None => (Resources.getTexture("guis/icons/icon_nonecat"), "N/A", 0.0f)
       }
 
       panel.child("logo_ability").component[DrawTexture].setTex(icon)
       panel.child("text_abilityname").component[TextBox].setContent(name)
       panel.child("logo_progress").component[ProgressBar].progress = prog
-      panel.child("text_level").component[TextBox].setContent(lvltext)
+      panel.child("text_level").component[TextBox].setContent(AbilityLocalization.instance.levelDesc(aData.getLevel))
 
       if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
         val btn = panel.child("btn_upgrade")
@@ -563,7 +563,7 @@ private object Common {
         drawActionIcon(icon, progress, glow = progress == 1)
       })
 
-      val lvltext = local.get("uplevel") + " " + LocalHelper.root.get("ac.ability.level" + (data.getLevel+1))
+      val lvltext = local.get("uplevel") + " " + AbilityLocalization.instance.levelDesc(data.getLevel+1)
       val reqtext = local.get("req") + " %.0f".format(estmCons)
       textArea.listens[FrameEvent](() => {
         Font.draw(lvltext, 0, 3, foLevelTitle)
