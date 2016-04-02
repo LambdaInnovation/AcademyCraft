@@ -16,9 +16,13 @@ import cn.lambdalib.multiblock.BlockMulti.SubBlockPos;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
 import cn.lambdalib.networkcall.RegNetworkCall;
+import cn.lambdalib.networkcall.TargetPointHelper;
 import cn.lambdalib.networkcall.s11n.StorageOption;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkMessage.NullablePar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -108,7 +112,10 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
             if(!getWorldObj().isRemote) {
                 if(++updateWait2 == 20) {
                     updateWait2 = 0;
-                    this.syncTheStack(this, this.getStackInSlot(0));
+                    NetworkMessage.sendToAllAround(
+                            TargetPointHelper.convert(this, 10),
+                            this, "sync", inventory[0]
+                    );
                 }
             }
         }
@@ -184,12 +191,10 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
         }
         return true;
     }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void syncTheStack(
-        @RangedTarget(range = 50) TileEntity te, 
-        @Data ItemStack stack) {
-        this.setInventorySlotContents(0, stack);
+
+    @Listener(channel="sync", side=Side.CLIENT)
+    private void syncStack(@NullablePar ItemStack stack) {
+        setInventorySlotContents(0, stack);
     }
     
 }
