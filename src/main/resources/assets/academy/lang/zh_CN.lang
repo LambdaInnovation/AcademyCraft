@@ -144,12 +144,12 @@ ac.media.sisters_noise.name=Sister's Noise
 ac.media.sisters_noise.desc=《某科学的超电磁炮S》 OP1
 
 # 能力通用
-ac.ability.level0=无能力者
-ac.ability.level1=低能力者
-ac.ability.level2=异能力者
-ac.ability.level3=强能力者
-ac.ability.level4=大能力者
-ac.ability.level5=超能力者
+ac.ability.level0=无能力者(LV0)
+ac.ability.level1=低能力者(LV1)
+ac.ability.level2=异能力者(LV2)
+ac.ability.level3=强能力者(LV3)
+ac.ability.level4=大能力者(LV4)
+ac.ability.level5=超能力者(LV5)
 
 death.attack.ac_skill=%1$s 被 %2$s 使用 %3$s 击杀了
 
@@ -466,6 +466,7 @@ ac.skill_tree.req=需求
 ac.skill_tree.skill_not_learned=技能未学习。
 ac.skill_tree.skill_exp=技能经验：
 ac.skill_tree.uplevel=升级到
+ac.skill_tree.anyskill=%d 级的任意技能
 
 ac.skill_tree.type_portable=便携能力开发机
 ac.skill_tree.type_normal=普通能力开发机

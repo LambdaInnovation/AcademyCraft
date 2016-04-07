@@ -438,7 +438,7 @@ private object Common {
 
       val (icon, name, prog) = Option(aData.getCategoryNullable) match {
         case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress))
-        case None => (Resources.getTexture("guis/icons/icon_nonecat"), "N/A", 0.0f)
+        case None => (Resources.getTexture("guis/icons/icon_nocategory"), "N/A", 0.0f)
       }
 
       panel.child("logo_ability").component[DrawTexture].setTex(icon)
@@ -493,6 +493,7 @@ private object Common {
         }
 
       } else {
+        ret.child("parent_left/ui_left").component[DrawTexture].setTex(Resources.getTexture("guis/ui/ui_developerleft_skilltree"))
         panel.transform.doesDraw = false
       }
     }
