@@ -270,14 +270,13 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         });
     }
 
-    private Integer[] lastOverrides = new Integer[0];
-
     private void rebuildOverrides() {
         AcademyCraft.debug("RebuildOverrides");
+        CPData cpData = CPData.get(getEntity());
 
         ctrlDirty = false;
 
-        int[] set = delegates.values().stream().mapToInt(n -> n.keyID).toArray();
+        int[] set = cpData.isActivated() ? delegates.values().stream().mapToInt(n -> n.keyID).toArray() : new int[0];
         ControlOverrider.override(OVERRIDE_GROUP, set);
     }
 
