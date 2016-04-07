@@ -104,7 +104,6 @@ public class WirelessSystem {
 
         if (event.needAuth) {
             if (!event.node.getPassword().equals(event.password)) {
-                event.setCanceled(true);
                 return;
             }
         }
