@@ -104,7 +104,7 @@ public class JetEngine extends Skill {
         }
         
         Vec3 getDest() {
-            return Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft();
+            return Raytrace.getLookingPos(player, 12, EntitySelectors.nothing()).getLeft();
         }
         
         // CLIENT
@@ -203,7 +203,7 @@ public class JetEngine extends Skill {
                 MovingObjectPosition pos = Raytrace.perform(world, 
                     VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
                     VecUtils.vec(player.posX, player.posY, player.posZ),
-                    EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living)
+                    EntitySelectors.exclude(player).and(EntitySelectors.living())
                 );
                 if(pos != null && pos.entityHit != null) {
                     MDDamageHelper.attack(pos.entityHit, player, lerpf(15, 35, exp));

@@ -76,8 +76,8 @@ public class ElectronBomb extends Skill {
 
                     @Override
                     public void execute(EntityMdBall ball) {
-                        MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player), 
-                            EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.excludeType(EntityMdBall.class)));
+                        MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player),
+                                EntitySelectors.exclude(player).and(EntitySelectors.of(EntityMdBall.class).negate()));
                         if(trace != null && trace.entityHit != null) {
                             MDDamageHelper.attack(trace.entityHit, player, getDamage(exp));
                         }

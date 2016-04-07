@@ -34,6 +34,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
@@ -133,7 +134,7 @@ public class RayBarrage extends Skill {
                     float minYaw = yaw - range / 2, maxYaw = yaw + range / 2;
                     float minPitch = pitch - range, maxPitch = pitch + range;
                     
-                    IEntitySelector selector = EntitySelectors.excludeOf(silbarn, player);
+                    Predicate<Entity> selector = EntitySelectors.exclude(silbarn, player);
                     
                     Motion3D mo = new Motion3D(player.posX, player.posY, player.posZ);
                     

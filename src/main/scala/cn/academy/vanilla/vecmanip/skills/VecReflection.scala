@@ -1,5 +1,7 @@
 package cn.academy.vanilla.vecmanip.skills
 
+import java.util.function.Predicate
+
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
 import cn.academy.ability.api.event.ReflectEvent
@@ -39,8 +41,8 @@ object VecReflectionContext {
 
   val acceptedTypes = List(classOf[EntityArrow], classOf[EntityFireball])
 
-  val filter = new IEntitySelector {
-    override def isEntityApplicable(entity: Entity): Boolean = shouldReflect(entity)
+  val filter = new Predicate[Entity] {
+    override def test(entity: Entity): Boolean = shouldReflect(entity)
   }
 
   def shouldReflect(e: Entity) = acceptedTypes.exists(_.isInstance(e))

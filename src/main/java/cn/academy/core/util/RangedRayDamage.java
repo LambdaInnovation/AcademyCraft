@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.VecUtils.*;
 
@@ -55,7 +56,7 @@ public class RangedRayDamage {
     public int maxIncrement = 50;
     public float dropProb = 0.05f;
     
-    public IEntitySelector entitySelector = EntitySelectors.everything;
+    public Predicate<Entity> entitySelector = EntitySelectors.everything();
     public float startDamage = 10.0f; // ATTN: LINEAR 1.0*startDamage at dist 0; 0.2 * startDamage at maxIncrement
     
     private Vec3 start, slope;
@@ -68,7 +69,7 @@ public class RangedRayDamage {
         this.range = _range;
         this.totalEnergy = _energy;
 
-        entitySelector = EntitySelectors.excludeOf(player);
+        entitySelector = EntitySelectors.exclude(player);
     }
     
     /**
@@ -105,12 +106,12 @@ public class RangedRayDamage {
                     v7 = add(v3, multiply(slope, maxIncrement));
             AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
 
-            IEntitySelector areaSelector = target -> {
+            Predicate<Entity> areaSelector = target -> {
                 Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
                 Vec3 proj = dv.crossProduct(slope);
                 return proj.lengthVector() < range * 1.2;
             };
-            List<Entity> targets = WorldUtils.getEntities(world, aabb, EntitySelectors.and(entitySelector, areaSelector));
+            List<Entity> targets = WorldUtils.getEntities(world, aabb, entitySelector.and(areaSelector));
             targets.sort((lhs, rhs) -> {
                 double dist1 = player.getDistanceSq(lhs.posX, lhs.posY, lhs.posZ);
                 double dist2 = player.getDistanceSq(rhs.posX, rhs.posY, rhs.posZ);

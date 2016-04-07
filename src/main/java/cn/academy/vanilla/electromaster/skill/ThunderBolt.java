@@ -32,6 +32,7 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
@@ -150,12 +151,11 @@ public class ThunderBolt extends Skill {
             }
             
             boolean hitEntity = !(result == null || result.entityHit == null);
-            IEntitySelector exclusion = !hitEntity ? EntitySelectors.excludeOf(player) :
-                EntitySelectors.excludeOf(player, result.entityHit);
+            Predicate<Entity> exclusion = !hitEntity ? EntitySelectors.exclude(player) : EntitySelectors.exclude(player, result.entityHit);
             Entity target = hitEntity ? result.entityHit : null;
             List<Entity> aoes = WorldUtils.getEntities(
                 player.worldObj, end.xCoord, end.yCoord, end.zCoord,
-                AOE_RANGE, EntitySelectors.and(EntitySelectors.living, exclusion));
+                AOE_RANGE, EntitySelectors.living().and(exclusion));
             
             return new AttackData(aoes, target, end);
         }

@@ -105,7 +105,7 @@ public class EntitySilbarn extends EntityAdvanced {
     {
         final Rigidbody rigidbody = new Rigidbody();
         rigidbody.linearDrag = 0.8;
-        rigidbody.entitySel = EntitySelectors.nothing;
+        rigidbody.entitySel = EntitySelectors.nothing();
         
         this.addMotionHandler(rigidbody);
         //this.addDaemonHandler(new GravityApply(this, 0.05));

@@ -290,7 +290,7 @@ public class Flashing extends Skill {
             mo.setMotion(dir.xCoord, dir.yCoord, dir.zCoord);
 
             MovingObjectPosition mop = Raytrace.perform(player.worldObj, mo.getPosVec(), mo.move(dist).getPosVec(),
-                    EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player)));
+                    EntitySelectors.living().and(EntitySelectors.exclude(player)));
 
             double x, y, z;
 

@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author WeAthFolD
@@ -78,7 +79,7 @@ public class DamageHelper {
     public static void applyRangeAttack(
         World world, double x, double y, double z, double range, 
         float damage, DamageSource dmgSrc, 
-        IEntitySelector entitySelector) {
+        Predicate<Entity> entitySelector) {
         List<Entity> list = WorldUtils.getEntities(world, x, y, z, range, entitySelector);
         for(Entity ent : list) {
             double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);

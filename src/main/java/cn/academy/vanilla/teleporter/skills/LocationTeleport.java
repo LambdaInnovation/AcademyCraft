@@ -34,6 +34,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Location teleport. This is the skill plus the synchronization&logic needed
@@ -45,14 +46,7 @@ import java.util.List;
 public class LocationTeleport extends Skill {
 
     public static final LocationTeleport instance = new LocationTeleport();
-    static IEntitySelector basicSelector = EntitySelectors.and(EntitySelectors.living, new IEntitySelector() {
-
-        @Override
-        public boolean isEntityApplicable(Entity entity) {
-            return entity.width * entity.width * entity.height < 80f;
-        }
-
-    });
+    static Predicate<Entity> basicSelector = EntitySelectors.living().and(entity -> entity.width * entity.width * entity.height < 80f);
 
     private LocationTeleport() {
         super("location_teleport", 3);
@@ -140,7 +134,7 @@ public class LocationTeleport extends Skill {
 
         if (cpData.perform(getOverload(player), getConsumption(player, dest))) {
             List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5,
-                    EntitySelectors.and(EntitySelectors.excludeOf(player), basicSelector));
+                    basicSelector.and(EntitySelectors.exclude(player)));
             entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
 
             if (player.worldObj.provider.dimensionId != dest.dimension) {

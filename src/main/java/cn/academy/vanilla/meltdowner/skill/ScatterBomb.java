@@ -30,6 +30,7 @@ import net.minecraft.util.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
@@ -57,7 +58,7 @@ public class ScatterBomb extends Skill {
         
         List<EntityMdBall> balls = new ArrayList<>();
         
-        static IEntitySelector basicSelector = EntitySelectors.everything;
+        static Predicate<Entity> basicSelector = EntitySelectors.everything();
         static final int MAX_TICKS = 80, MOD = 10;
         static final double RAY_RANGE = 15;
         int ticks;
@@ -129,7 +130,7 @@ public class ScatterBomb extends Skill {
                     Vec3 dest = newDest();
                     MovingObjectPosition traceResult = Raytrace.perform(world,
                         VecUtils.vec(ball.posX, ball.posY, ball.posZ), dest,
-                        EntitySelectors.and(basicSelector, EntitySelectors.excludeOf(player)));
+                        basicSelector.and(EntitySelectors.exclude(player)));
                     if(traceResult != null && traceResult.entityHit != null) {
                         traceResult.entityHit.hurtResistantTime = -1;
                         MDDamageHelper.attack(traceResult.entityHit, player, getDamage(exp));

@@ -106,7 +106,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
       // Hurt entities around
       val entities = WorldUtils.getEntities(world,
         position.xCoord, position.yCoord, position.zCoord,
-        3, EntitySelectors.excludeOf(player)).toList
+        3, EntitySelectors.exclude(player)).toList
 
       entities.foreach (entity => {
         attack(player, DirectedShock, entity, damage)

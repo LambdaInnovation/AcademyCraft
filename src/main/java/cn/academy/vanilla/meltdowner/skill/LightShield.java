@@ -33,6 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.RandUtils.ranged;
 import static cn.lambdalib.util.generic.MathUtils.*;
@@ -45,7 +46,7 @@ public class LightShield extends Skill {
     public static final LightShield instance = new LightShield();
     
     static final int ACTION_INTERVAL = 18;
-    static IEntitySelector basicSelector = EntitySelectors.everything;
+    static Predicate<Entity> basicSelector = EntitySelectors.everything();
 
     private LightShield() {
         super("light_shield", 2);
@@ -132,13 +133,8 @@ public class LightShield extends Skill {
             
             if(!isRemote) {
                 // Find the entities that are 'colliding' with the shield.
-                List<Entity> candidates = WorldUtils.getEntities(player, 3, 
-                    EntitySelectors.and(basicSelector, new IEntitySelector() {
-                        @Override
-                        public boolean isEntityApplicable(Entity e) {
-                            return isEntityReachable(player, e);
-                        }
-                    }, EntitySelectors.excludeOf(player)));
+                List<Entity> candidates = WorldUtils.getEntities(player, 3,
+                        basicSelector.and(entity -> isEntityReachable(player, entity)).and(EntitySelectors.exclude(player)));
                 for(Entity e : candidates) {
                     if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(exp), getAbsorbConsumption(exp))) {
                         MDDamageHelper.attack(e, player, getTouchDamage(exp));

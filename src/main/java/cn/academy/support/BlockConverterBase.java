@@ -60,12 +60,14 @@ public abstract class BlockConverterBase extends ACBlockContainer {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float tx, float ty,
             float tz) {
-        TileEntity te = WorldUtils.getTileEntity(world, x, y, z, tileType);
-        if (te != null && te instanceof IWirelessUser && !player.isSneaking()) {
-            if (world.isRemote) {
-                displayGui((IWirelessUser) te);
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te != null && tileType.isInstance(te)) {
+            if (te instanceof IWirelessUser && !player.isSneaking()) {
+                if (world.isRemote) {
+                    displayGui((IWirelessUser) te);
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }

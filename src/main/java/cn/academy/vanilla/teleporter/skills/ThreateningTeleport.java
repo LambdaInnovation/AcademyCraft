@@ -173,10 +173,10 @@ public class ThreateningTeleport extends Skill {
         TraceResult calcDropPos() {
             double range = getRange(exp);
 
-            MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living,
+            MovingObjectPosition pos = Raytrace.traceLiving(player, range, EntitySelectors.living(),
                     BlockSelectors.filEverything);
             if (pos == null)
-                pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+                pos = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
 
             TraceResult ret = new TraceResult();
             if (pos == null) {

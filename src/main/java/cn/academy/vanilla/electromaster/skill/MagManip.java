@@ -205,12 +205,7 @@ public class MagManip extends Skill {
             (syncer = new EntitySyncer(this)).init();
             
             Rigidbody rb = this.getMotionHandler(Rigidbody.class);
-            rb.entitySel = new IEntitySelector() {
-                @Override
-                public boolean isEntityApplicable(Entity target) {
-                    return target != player;
-                }
-            };
+            rb.entitySel = entity -> entity != player;
             rb.gravity = 0.05;
             
             this.regEventHandler(new CollideHandler() {

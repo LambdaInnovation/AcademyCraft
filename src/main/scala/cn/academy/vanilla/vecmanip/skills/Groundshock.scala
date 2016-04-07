@@ -119,7 +119,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
       val deltas = List((implicitly[Vec3]((0.0, 0.0, 0.0)), 1.0), (rot, 0.7), (-rot, 0.7), (rot * 2, 0.3), (rot * -2, 0.3))
 
-      val selector = EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player))
+      val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 
       def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean)(implicit block: Block) = {
         val hardnessEnergy = math.max(0, block.getBlockHardness(world, x, y, z))

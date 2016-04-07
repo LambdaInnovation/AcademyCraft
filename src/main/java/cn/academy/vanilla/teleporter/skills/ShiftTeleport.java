@@ -38,6 +38,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
@@ -168,7 +169,7 @@ public class ShiftTeleport extends Skill {
         // TODO: Some boilerplate... Clean this up in case you aren't busy
         private int[] getTraceDest() {
             double range = getRange(exp);
-            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
             if (result != null) {
                 ForgeDirection dir = ForgeDirection.values()[result.sideHit];
                 return new int[] { result.blockX + dir.offsetX, result.blockY + dir.offsetY,
@@ -180,7 +181,7 @@ public class ShiftTeleport extends Skill {
 
         private MovingObjectPosition getTracePosition() {
             double range = getRange(exp);
-            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
             if (result != null) {
                 ForgeDirection dir = ForgeDirection.values()[result.sideHit];
                 result.blockX += dir.offsetX;
@@ -199,19 +200,17 @@ public class ShiftTeleport extends Skill {
                     v1 = VecUtils.vec(dest[0] + .5, dest[1] + .5, dest[2] + .5);
 
             AxisAlignedBB area = WorldUtils.minimumBounds(v0, v1);
-            IEntitySelector selector = new IEntitySelector() {
 
-                @Override
-                public boolean isEntityApplicable(Entity entity) {
-                    double hw = entity.width / 2;
-                    return VecUtils.checkLineBox(VecUtils.vec(entity.posX - hw, entity.posY, entity.posZ - hw),
-                            VecUtils.vec(entity.posX + hw, entity.posY + entity.height, entity.posZ + hw), v0,
-                            v1) != null;
-                }
+            Predicate<Entity> pred = EntitySelectors.living()
+                    .and(EntitySelectors.exclude(player))
+                    .and(entity -> {
+                        double hw = entity.width / 2;
+                        return VecUtils.checkLineBox(VecUtils.vec(entity.posX - hw, entity.posY, entity.posZ - hw),
+                                VecUtils.vec(entity.posX + hw, entity.posY + entity.height, entity.posZ + hw), v0,
+                                v1) != null;
+                    });
 
-            };
-            return WorldUtils.getEntities(player.worldObj, area,
-                    EntitySelectors.and(EntitySelectors.living, EntitySelectors.excludeOf(player), selector));
+            return WorldUtils.getEntities(player.worldObj, area, pred);
         }
 
         // CLIENT

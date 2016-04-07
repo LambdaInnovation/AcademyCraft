@@ -202,7 +202,7 @@ public class FleshRipping extends Skill {
 
         private AttackTarget getAttackTarget() {
             double range = getRange();
-            MovingObjectPosition trace = Raytrace.traceLiving(player, range, EntitySelectors.living);
+            MovingObjectPosition trace = Raytrace.traceLiving(player, range, EntitySelectors.living());
 
             Entity target = null;
             Vec3 dest;

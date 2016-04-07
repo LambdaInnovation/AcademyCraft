@@ -208,7 +208,7 @@ public class FreqTransmitterUI extends AuxGui {
                 if(event instanceof MouseInputEvent) {
                     int mid = Mouse.getEventButton();
                     if(mid == 1 && Mouse.getEventButtonState()) {
-                        current.handleClicking(Raytrace.traceLiving(player, 4, EntitySelectors.nothing));
+                        current.handleClicking(Raytrace.traceLiving(player, 4, EntitySelectors.nothing()));
                     }
                 } else {
                     if(Keyboard.getEventKeyState()) {

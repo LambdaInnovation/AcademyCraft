@@ -405,7 +405,7 @@ public enum ContextManager {
                 ContextData data = new ContextData();
                 data.ctx = ctx;
 
-                Set<EntityPlayerMP> players = new HashSet<>((List) WorldUtils.getEntities(player, 25, EntitySelectors.player));
+                Set<EntityPlayerMP> players = new HashSet<>((List) WorldUtils.getEntities(player, 25, EntitySelectors.player()));
                 players.remove(player);
 
                 data.targets = players.toArray(new EntityPlayerMP[players.size()]);

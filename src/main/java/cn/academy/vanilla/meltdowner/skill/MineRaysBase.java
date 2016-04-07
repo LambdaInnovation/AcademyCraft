@@ -73,7 +73,7 @@ public abstract class MineRaysBase extends Skill {
             if(!cpData.perform(0, lerpf(cp_l, cp_r, exp)) && !isRemote)
                 ActionManager.abortAction(this);
             
-            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing);
+            MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
             if(result != null) {
                 int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
                 if(tx != x || ty != y || tz != z) {

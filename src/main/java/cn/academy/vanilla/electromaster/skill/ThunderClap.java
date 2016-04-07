@@ -95,7 +95,7 @@ public class ThunderClap extends Skill {
                 updateEffects();
 
             final double DISTANCE = 40.0;
-            MovingObjectPosition pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing);
+            MovingObjectPosition pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing());
             if(pos != null) {
                 hitX = pos.hitVec.xCoord;
                 hitY = pos.hitVec.yCoord;
@@ -151,7 +151,7 @@ public class ThunderClap extends Skill {
             if(!isRemote) {
                 DamageHelper.applyRangeAttack(player.worldObj, 
                     hitX, hitY, hitZ, getRange(exp), getDamage(exp, ticks),
-                    DamageSource.causePlayerDamage(player), EntitySelectors.excludeOf(player));
+                    DamageSource.causePlayerDamage(player), EntitySelectors.exclude(player));
             }
             
             setCooldown(instance, getCooldown(exp, ticks));

@@ -1,5 +1,7 @@
 package cn.academy.vanilla.vecmanip.skills
 
+import java.util.function.Predicate
+
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
@@ -63,8 +65,8 @@ object VecDeviationContext {
     mark(e)
   }
 
-  val stopFilter = new IEntitySelector {
-    override def isEntityApplicable(entity: Entity): Boolean = shouldStop(entity)
+  val stopFilter = new Predicate[Entity] {
+    override def test(entity: Entity): Boolean = shouldStop(entity)
   }
 
   def mark(targ: Entity) = targ.getEntityData.setBoolean("ac_vm_deviated", true)

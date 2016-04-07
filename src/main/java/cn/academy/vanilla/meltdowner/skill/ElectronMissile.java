@@ -101,8 +101,9 @@ public class ElectronMissile extends Skill {
                 }
                 if(ticks != 0 && ticks % 8 == 0) {
                     float range = lerpf(7, 12, exp);
+
                     List<Entity> list = WorldUtils.getEntities(player, range,
-                        EntitySelectors.and(EntitySelectors.excludeOf(player), EntitySelectors.living));
+                            EntitySelectors.exclude(player).and(EntitySelectors.living()));
                     if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
                         overload_attacked,
                         consumption_attacked)) {

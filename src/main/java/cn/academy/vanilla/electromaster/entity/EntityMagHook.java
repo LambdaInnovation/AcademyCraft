@@ -60,7 +60,7 @@ public class EntityMagHook extends EntityAdvanced {
         new Motion3D(player, true).multiplyMotionBy(2).applyToEntity(this);
         
         Rigidbody rb = this.getMotionHandler(Rigidbody.class);
-        rb.entitySel = EntitySelectors.excludeOf(player);
+        rb.entitySel = EntitySelectors.exclude(player);
         
         this.regEventHandler(new CollideHandler() {
 
