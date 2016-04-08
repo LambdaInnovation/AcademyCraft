@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.context.Context.Status;
+import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.OverloadEvent;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -493,10 +494,19 @@ public enum ContextManager {
 
         @SubscribeEvent
         public void __onOverload(OverloadEvent evt) {
-            for (ContextData data : alive) {
-                if (data.ctx.player.equals(evt.player)) {
-                    data.disposed = true;
-                }
+            disposePlayer(evt.player);
+        }
+
+        @SubscribeEvent
+        public void __onCategoryChange(CategoryChangeEvent evt) {
+            if (!evt.player.worldObj.isRemote) {
+                disposePlayer(evt.player);
+            }
+        }
+
+        private void disposePlayer(EntityPlayer p) {
+            for (ContextData d : alive) if (d.ctx.player.equals(p)) {
+                d.disposed = true;
             }
         }
 
