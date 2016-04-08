@@ -21,6 +21,10 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.WorldUtils;
@@ -43,7 +47,10 @@ import java.util.function.Predicate;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class LocationTeleport extends Skill {
+
+    private static final String MSG_PERFORM = "perform";
 
     public static final LocationTeleport instance = new LocationTeleport();
     static Predicate<Entity> basicSelector = EntitySelectors.living().and(entity -> entity.width * entity.width * entity.height < 80f);
@@ -122,13 +129,14 @@ public class LocationTeleport extends Skill {
         return 4;
     }
 
-    @SideOnly(Side.CLIENT)
     public static void performAction(EntityPlayer player, Location dest) {
-        performAtServer(player, dest);
+        NetworkMessage.sendToServer(
+                NetworkMessage.staticCaller(LocationTeleport.class),
+                MSG_PERFORM, player, dest);
     }
 
-    @RegNetworkCall(side = Side.SERVER)
-    private static void performAtServer(@Instance EntityPlayer player, @Data Location dest) {
+    @Listener(channel=MSG_PERFORM, side=Side.SERVER)
+    private static void hPerform(EntityPlayer player, Location dest) {
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
 

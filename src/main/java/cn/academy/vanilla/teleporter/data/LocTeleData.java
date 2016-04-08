@@ -14,6 +14,7 @@ import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.SerializeType;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.nbt.NBTS11n.CompoundSerializer;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
@@ -79,6 +80,7 @@ public class LocTeleData extends DataPart<EntityPlayer> {
     }
 
     @SerializeType
+    @NetworkS11nType
     public static class Location {
         public String name;
         public int dimension;
