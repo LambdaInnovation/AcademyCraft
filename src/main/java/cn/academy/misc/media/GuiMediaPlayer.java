@@ -114,7 +114,9 @@ public class GuiMediaPlayer extends CGuiScreen {
             MediaRuntime.setVolume(volume);
             ACMedia current = player.getCurrentMedia();
             if (current != null) {
-                MediaRuntime.setMediaVolume(current, volume);
+                MediaRuntime.setVolumeUpdate(current, volume);
+            } else {
+                MediaRuntime.setVolume(volume);
             }
         });
 

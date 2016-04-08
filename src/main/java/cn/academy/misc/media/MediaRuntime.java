@@ -69,8 +69,6 @@ public class MediaRuntime {
         }
     }
 
-
-
     private static void newSource(ACMedia media, boolean loop, int x, int y, int z) {
         sndSystem.newStreamingSource(true, media.getID(),
                 media.getSource(),
@@ -103,7 +101,7 @@ public class MediaRuntime {
             newSource(media, loop, 0, 0, 0);
         }
         sndSystem.play(media.getID());
-        setMediaVolume(media, getVolume());
+        sndSystem.setVolume(media.getID(), getVolume());
     }
 
     public static float getVolume() {
@@ -115,23 +113,12 @@ public class MediaRuntime {
     }
 
     /**
-     * Set the volume of given media.
-     * @param media The media to set.
-     * @param volume The volumn to set. 0.0F to 1.0F.
+     * FIXME Temp workaround
      */
-    public static void setMediaVolume(ACMedia media, float volume) {
+    public static void setVolumeUpdate(ACMedia media, float volume) {
         checkInit();
-        sndSystem.setVolume(media.getID(), volume);
-    }
-
-    /**
-     * Get the volume of given media.
-     * @param media The media to get.
-     * @return The volume of given media. 0.0F to 1.0F.
-     */
-    public static float getMediaVolume(ACMedia media) {
-        checkInit();
-        return sndSystem.getVolume(media.getID());
+        setVolume(volume);
+        sndSystem.setVolume(media.getID(), getVolume());
     }
 
     /**

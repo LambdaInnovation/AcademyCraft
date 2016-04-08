@@ -6,6 +6,7 @@
  */
 package cn.academy.misc.media;
 
+import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.generic.RegistryUtils;
@@ -72,7 +73,7 @@ public class MediaManager {
                 Files.copy(RegistryUtils.getResourceStream(new ResourceLocation("academy:media/readme_template.txt")),
                         dst, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ex) {
-                Throwables.propagate(ex);
+                AcademyCraft.log.error("Can't copy media readme file.");
             }
         }
 
