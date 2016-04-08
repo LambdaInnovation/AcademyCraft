@@ -55,7 +55,7 @@ public class ThunderClap extends Skill {
     }
     
     private static int getCooldown(float exp, int ticks) {
-        return (int) (ticks * lerpf(500, 300, exp));
+        return (int) (ticks * lerpf(10, 6, exp));
     }
     
     @Override

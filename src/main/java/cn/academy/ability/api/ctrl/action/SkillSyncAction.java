@@ -12,12 +12,21 @@ import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 /**
  * A simple wrapper that setup the commonly used data and sandbox methods for Skill SyncActions.
  * @author WeAthFolD
  */
+@Registrant
+@NetworkS11nType
 public class SkillSyncAction extends SyncAction {
     
     public AbilityData aData;
@@ -43,8 +52,27 @@ public class SkillSyncAction extends SyncAction {
      * Add cooldown to a skill if the currently the SyncAction is local.
      */
     public void setCooldown(Controllable c, int time) {
-        if (!isRemote)
+        if (!isRemote) {
             CooldownManager.setCooldown(player, c, time);
+        } else {
+            NetworkMessage.sendToServer(
+                    NetworkMessage.staticCaller(SkillSyncAction.class),
+                    "sync_cooldown",
+                    player, c, time
+            );
+            // Force override the client data. This prevents user from executing skill just before cooldown sync.
+            lSetCooldown(c, time);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void lSetCooldown(Controllable c, int time) {
+        ClientRuntime.instance().setCooldownRawFromServer(CooldownManager.getCtrlId(c), time);
+    }
+
+    @Listener(channel="sync_cooldown", side=Side.SERVER)
+    private static void hSetCooldown(EntityPlayer player,  Controllable c, int time) {
+        CooldownManager.setCooldown(player, c, time);
     }
     
 }

@@ -7,6 +7,9 @@ import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.networkcall.RegNetworkCall;
 import cn.lambdalib.networkcall.s11n.StorageOption.Data;
 import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -22,7 +25,10 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author EAirPeter
  */
 @Registrant
+@NetworkS11nType
 public class CooldownManager {
+
+    private static final String MSG_SYNCSET = "syncset";
 
     @RegEventHandler
     public static final CooldownManager INSTANCE = new CooldownManager();
@@ -111,13 +117,14 @@ public class CooldownManager {
         clearCooldown(event.player);
     }
 
-    @RegNetworkCall(side = Side.CLIENT)
-    public static void cNetSetCd(@Instance EntityPlayer player, @Data Integer id,
-        @Data Integer cd)
-    {
-        cIntSetCd(id, cd);
+    static void cNetSetCd(EntityPlayer player, int id, int cd) {
+        NetworkMessage.sendTo(
+                player,
+                NetworkMessage.staticCaller(CooldownManager.class),
+                MSG_SYNCSET, id, cd);
     }
 
+    @Listener(channel=MSG_SYNCSET, side=Side.CLIENT)
     @SideOnly(Side.CLIENT)
     private static void cIntSetCd(int id, int cd) {
         ClientRuntime.instance().setCooldownRawFromServer(id, cd);
