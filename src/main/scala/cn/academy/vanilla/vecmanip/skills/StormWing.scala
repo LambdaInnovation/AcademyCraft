@@ -122,8 +122,10 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_UPDSTATE, side=Array(Side.SERVER))
   def s_update(_applying: Boolean) = {
     applying = _applying
-    sendToExceptLocal(MSG_UPDSTATE, applying.asInstanceOf[AnyRef])
+    sendToExceptLocal(MSG_UPDSTATE, wrap(applying))
   }
+
+  private def wrap(x: Any):AnyRef = x.asInstanceOf[AnyRef]
 
   @Listener(channel=MSG_UPDSTATE, side=Array(Side.CLIENT))
   def c_update(_applying: Boolean) = {
@@ -157,13 +159,18 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
 
     doConsume()
 
-    stateTick += 1
     if (state == STATE_CHARGE && stateTick > chargeTime) {
       state = STATE_ACTIVE
       stateTick = 0
       initKeys()
       sendToServer(MSG_SYNC_STATE)
     }
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  def c_tick() = {
+    stateTick += 1
   }
 
   @SideOnly(Side.CLIENT)
@@ -205,6 +212,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def c_makealive() = {
+    println("makealive")
     world.spawnEntityInWorld(new StormWingEffect(this))
   }
 
@@ -267,6 +275,10 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
           val move = delta.normalize() * ranged(0.5f, 1.0f)
           ent.setVel(move)
         })
+    }
+
+    if (!isRemote) {
+      sendToExceptLocal(MSG_SYNC_STATE)
     }
   }
 

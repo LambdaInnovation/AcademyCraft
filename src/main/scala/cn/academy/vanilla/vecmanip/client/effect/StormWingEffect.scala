@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11._
+import cn.lambdalib.util.mc.MCExtender._
 
 @SideOnly(Side.CLIENT)
 @Registrant
@@ -66,9 +67,9 @@ class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.
   tornadoList(3).trans.setTransform(0.1, -0.5, -0.1).setRotation(0, sep, -sep)
 
   val player = ctx.player.asInstanceOf[AbstractClientPlayer]
-  setPosition(player.posX, player.posY, player.posZ)
-  setRotation(player.renderYawOffset, player.rotationPitch)
 
+  setRotation(player.renderYawOffset, player.rotationPitch)
+  updatePosition()
   ignoreFrustumCheck = true
 
   private val TERMINATE_TICK = 15
@@ -89,7 +90,7 @@ class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.
       }
     }
 
-    setPosition(player.posX, player.posY, player.posZ)
+    updatePosition()
     setRotation(player.renderYawOffset, player.rotationPitch)
 
     val alpha = if (ctx.getState == StormWingContext.STATE_CHARGE) {
@@ -101,6 +102,11 @@ class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.
     }
 
     tornadoList.foreach(_.eff.alpha = alpha)
+  }
+
+  private def updatePosition() = {
+    val pos = player.position
+    setPosition(pos.x, pos.y + 1.6, pos.z)
   }
 
   override def shouldRenderInPass(pass: Int) = pass == 1

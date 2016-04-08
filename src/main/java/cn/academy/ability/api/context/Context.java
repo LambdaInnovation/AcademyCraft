@@ -84,11 +84,11 @@ public class Context {
     //
 
     //
-    protected final boolean isRemote() {
+    public final boolean isRemote() {
         return FMLCommonHandler.instance().getEffectiveSide().isClient();
     }
 
-    protected final boolean isLocal() {
+    public final boolean isLocal() {
         if (isRemote()) {
             return isLocalClient_();
         } else {
