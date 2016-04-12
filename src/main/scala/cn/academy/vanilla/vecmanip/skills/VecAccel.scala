@@ -1,10 +1,12 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
+import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.mc._
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 
 object VecAccel extends Skill("vec_accel", 2) {
@@ -22,7 +24,6 @@ object VecAccelContext {
   final val PLAYER_ACCEL = -0.08
   final val DAMPING = 0.9
   final val LN_A = math.log(DAMPING)
-  final val INV_LN_A = 1.0 / LN_A
 }
 
 class VecAccelContext(p: EntityPlayer) extends Context(p) {
@@ -34,10 +35,16 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
 
   private implicit val skill_ = VecAccel
   private implicit val aData_ = aData
+  private implicit val player_ = player
 
   var ticker = 0
 
   var canPerform = true
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  def l_makeAlive() = {
+    world().spawnEntityInWorld(new ParabolaEffect(this))
+  }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = l_perform()
@@ -54,8 +61,8 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
 
   def l_perform() = {
     if (canPerform && consume()) {
-      val look = new EntityLook(player.rotationYawHead, player.rotationPitch - 10)
-      player.setVel(look.toVec3 * speed)
+      player.setVel(initSpeed())
+      addSkillCooldown(lerpf(25, 5, skillExp).toInt)
 
       sendToServer(MSG_PERFORM)
     }
@@ -68,6 +75,13 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
     consume()
     player.fallDistance = 0
     addSkillExp(0.002f)
+  }
+
+  def initSpeed(partialTicks: Float = 0.0f) = {
+    val look = new EntityLook(
+      MathUtils.lerpf(player.prevRotationYaw, player.rotationYaw, partialTicks),
+      MathUtils.lerpf(player.prevRotationPitch, player.rotationPitch, partialTicks) - 10).toVec3
+    look * speed
   }
 
   private def speed = {
@@ -90,7 +104,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
     val p0 = player.position
     val p1 = p0 - Vec3(0, 2, 0)
 
-    val traceResult: TraceResult = Raytrace.perform(world, p0, p1, EntitySelectors.nothing)
+    val traceResult: TraceResult = Raytrace.perform(world, p0, p1, EntitySelectors.nothing, BlockSelectors.filNothing)
     traceResult match {
       case BlockResult(_,_) => true
       case _ => false
