@@ -205,6 +205,13 @@ public enum ContextManager {
                     data.disposed = true;
                     return;
                 }
+
+            for (ContextData data : suspended.values()) if (data.ctx == ctx) {
+                data.disposed = true;
+                return;
+            }
+
+            throw new IllegalStateException("Not found");
         }
 
         void mToSelf(Context ctx, String channel, Object[] args) {
