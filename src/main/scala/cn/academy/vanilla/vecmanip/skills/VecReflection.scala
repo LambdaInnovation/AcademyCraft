@@ -34,20 +34,23 @@ import cn.lambdalib.util.mc.MCExtender._
 import scala.collection.JavaConversions._
 import collection.mutable
 import net.minecraft.util.{Vec3 => MCVec3}
+import VMSkillHelper._
 
 object VecReflectionContext {
   final val MSG_EFFECT = "effect"
   final val MSG_REFLECT_ENTITY = "reflect_ent"
 
-  val acceptedTypes = List(classOf[EntityArrow], classOf[EntityFireball])
-
   val filter = new Predicate[Entity] {
     override def test(entity: Entity): Boolean = shouldReflect(entity)
   }
 
-  def shouldReflect(e: Entity) = acceptedTypes.exists(_.isInstance(e))
+  def shouldReflect(e: Entity): Boolean = e match {
+    case e: EntityArrow if !e.isInGround => true
+    case _: EntityFireball => true
+    case _ => false
+  }
 
-  def reflect(e: Entity, player: EntityPlayer) = {
+  def reflect(e: Entity, player: EntityPlayer): Unit = {
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
     val speed = e match {
       case _ : EntityArrow => 2

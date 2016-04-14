@@ -16,6 +16,8 @@ import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
 
+import VMSkillHelper._
+
 object VecDeviation extends Skill("vec_deviation", 2) {
 
   MinecraftForge.EVENT_BUS.register(this)
@@ -40,9 +42,11 @@ object VecDeviationContext {
 
   final val MSG_STOP_ENTITY = "stop_ent"
 
-  val acceptedTypes = List(classOf[EntityArrow], classOf[EntityFireball])
-
-  def shouldStop(e: Entity) = acceptedTypes.exists(_.isInstance(e))
+  def shouldStop(e: Entity): Boolean = e match {
+    case e: EntityArrow if !e.isInGround => true
+    case e: EntityFireball => true
+    case _ => false
+  }
 
   def stop(e: Entity, player: EntityPlayer) = {
     e match {
