@@ -69,7 +69,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
       .map(angle => new EntityLook(player.rotationYawHead + rangef(-20, 20), angle).toVec3)
       .map(look => implicitly[TraceResult](Raytrace.perform(world, headPos - look * 0.5, headPos + look * 5,
-        EntitySelectors.nothing, BlockSelectors.filReplacable)))
+        EntitySelectors.nothing, BlockSelectors.filNormal)))
       .foreach {
         case BlockResult((x, y, z), side) =>
           (0 until rangei(2, 3)).foreach(_ => {

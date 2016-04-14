@@ -79,7 +79,29 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   ignoreFrustumCheck = true
 
   setSize(1.5f, 2.2f)
-  this.setPos(Vec3(x + 0.5, y + 0.5, z + 0.5) + Vec3(dir.offsetX *.51, dir.offsetY *.51, dir.offsetZ *.51))
+
+  {
+    val block = world.getBlock(x, y, z)
+    def m(x: Double, y: Double) = (x + y) / 2
+
+    block.setBlockBoundsBasedOnState(world, x, y, z)
+
+    val (dx, dy, dz) = (
+      block.getBlockBoundsMaxX - block.getBlockBoundsMinX,
+      block.getBlockBoundsMaxY - block.getBlockBoundsMinY,
+      block.getBlockBoundsMaxZ - block.getBlockBoundsMinZ
+      )
+    val (xm, ym, zm) = (m(block.getBlockBoundsMinX, block.getBlockBoundsMaxX),
+      m(block.getBlockBoundsMinY, block.getBlockBoundsMaxY),
+      m(block.getBlockBoundsMinZ, block.getBlockBoundsMaxZ))
+
+    this.setPos(Vec3(
+      x + xm + dir.offsetX * 0.51 * dx,
+      y + ym + dir.offsetY * 0.51 * dy,
+      z + zm + dir.offsetZ * 0.51 * dz
+    ))
+  }
+
   this.setLook(sideToOrientation(dir))
 
   override def onUpdate() = {
