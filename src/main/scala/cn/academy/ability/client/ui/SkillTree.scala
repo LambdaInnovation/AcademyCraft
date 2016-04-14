@@ -454,6 +454,10 @@ private object Common {
 
           gui.addWidget(cover)
         })
+        panel.child("text_exp").transform.doesDraw = false
+      } else {
+        val cpData = CPData.get(player)
+        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(cpData.getLevelProgress * 100))
       }
     }
 
@@ -803,39 +807,41 @@ private object Common {
   private def fmt(x: Int) = if (x < 10) "0" + x else x
 
   private def initConsole(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
-    implicit val console = new Console(false)
+    implicit val console = new Console(false, developer != null)
 
-    console += Command("learn", () => {
+    if (developer != null) {
+      console += Command("learn", () => {
 
-      console.enqueue(printTask("Start stimulation......\n"))
-      console.enqueue(printTask("Progress 00%"))
-      send(NetDelegate.MSG_START_LEVEL, data, developer)
-      data.reset()
+        console.enqueue(printTask("Start stimulation......\n"))
+        console.enqueue(printTask("Progress 00%"))
+        send(NetDelegate.MSG_START_LEVEL, data, developer)
+        data.reset()
 
-      console.enqueue(new Task {
-        override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
-        override def update() = {
-          console.output("\b\b\b" + fmt((data.getDevelopProgress*100).toInt) + "%")
-        }
-        override def finish() = {
-          console.outputln()
-          if (data.getState == DevState.DONE) {
-            console.output("Develop successful.\n")
-          } else {
-            console.output("Develop failed." + "\n")
+        console.enqueue(new Task {
+          override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
+          override def update() = {
+            console.output("\b\b\b" + fmt((data.getDevelopProgress*100).toInt) + "%")
           }
+          override def finish() = {
+            console.outputln()
+            if (data.getState == DevState.DONE) {
+              console.output("Develop successful.\n")
+            } else {
+              console.output("Develop failed." + "\n")
+            }
 
-          console.pause(500)
-          console.enqueueRebuild()
-        }
+            console.pause(500)
+            console.enqueueRebuild()
+          }
+        })
       })
-    })
+    }
 
     area :+ console
   }
 
   private def initReset(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
-    implicit val console = new Console(true)
+    implicit val console = new Console(true, true)
 
     console += Command("reset", () => {
       if (DevelopActionReset.canReset(data.getEntity, developer)) {
@@ -936,10 +942,16 @@ private object Common {
          |ABILITY RESET: Use `reset` command to reset player category.
          |""".stripMargin
 
+    private val Help4 =
+      """|
+         |FATAL: User's ability category is invalid, booting aborted.
+         |
+         |""".stripMargin
+
     private val ConsoleHead = "OS >"
   }
 
-  class Console(val emergency: Boolean)
+  class Console(val emergency: Boolean, val hasDeveloper: Boolean)
     extends Component("Console") {
     import Console._
 
@@ -967,7 +979,7 @@ private object Common {
       (64 + RandUtils.nextInt(4)).toString :: "Boot Failed.\n" :: Nil
 
     animSequence(300, numSeq: _*)
-    enqueue(slowPrintTask(if (emergency) Help3 else Help2))
+    enqueue(slowPrintTask(if (emergency) Help3 else if (hasDeveloper) Help2 else Help4))
 
     this.listens[FrameEvent](() => {
       if (currentTask != null && currentTask.isFinished) {

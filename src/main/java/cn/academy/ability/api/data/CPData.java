@@ -371,7 +371,9 @@ public class CPData extends DataPart<EntityPlayer> {
     }
     
     public float getLevelProgress() {
-        return addMaxCP / getMaxAddCP(AbilityData.get(getEntity()).getLevel());
+        AbilityData aData = AbilityData.get(getEntity());
+        if (!aData.hasCategory()) return 0;
+        else                      return addMaxCP / getMaxAddCP(AbilityData.get(getEntity()).getLevel());
     }
     
     /**
