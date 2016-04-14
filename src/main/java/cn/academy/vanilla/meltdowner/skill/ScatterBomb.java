@@ -133,7 +133,7 @@ public class ScatterBomb extends Skill {
                         basicSelector.and(EntitySelectors.exclude(player)));
                     if(traceResult != null && traceResult.entityHit != null) {
                         traceResult.entityHit.hurtResistantTime = -1;
-                        MDDamageHelper.attack(traceResult.entityHit, player, getDamage(exp));
+                        MDDamageHelper.attack(player, instance, traceResult.entityHit, getDamage(exp));
                     }
                 }
                 aData.addSkillExp(instance, 0.001f * balls.size());

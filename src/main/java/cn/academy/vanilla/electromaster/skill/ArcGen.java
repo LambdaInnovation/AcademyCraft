@@ -114,7 +114,7 @@ public class ArcGen extends Skill {
                 if(result != null) {
                     float expincr;
                     if(result.typeOfHit == MovingObjectType.ENTITY) {
-                        EMDamageHelper.attack(result.entityHit, player, getDamage(aData));
+                        EMDamageHelper.attack(player, instance, result.entityHit, getDamage(aData));
                         expincr = getExpIncr(aData, true);
                     } else { //BLOCK
                         int hx = result.blockX, hy = result.blockY, hz = result.blockZ;

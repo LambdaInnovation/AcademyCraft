@@ -1,6 +1,6 @@
 package cn.academy.vanilla.vecmanip.skills
 
-import cn.academy.ability.api.Skill
+import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager, KeyDelegate}
@@ -197,7 +197,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
         val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
         val block = world.getBlock(x, y, z)
         val hardness = block.getBlockHardness(world, x, y, z)
-        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f) {
+        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && AbilityPipeline.canBreakBlock(world, x, y, z)) {
           world.setBlock(x, y, z, Blocks.air)
           world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
         }
@@ -212,7 +212,6 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def c_makealive() = {
-    println("makealive")
     world.spawnEntityInWorld(new StormWingEffect(this))
   }
 

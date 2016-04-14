@@ -206,7 +206,7 @@ public class JetEngine extends Skill {
                     EntitySelectors.exclude(player).and(EntitySelectors.living())
                 );
                 if(pos != null && pos.entityHit != null) {
-                    MDDamageHelper.attack(pos.entityHit, player, lerpf(15, 35, exp));
+                    MDDamageHelper.attack(player, instance, pos.entityHit, lerpf(15, 35, exp));
                 }
             }
         }

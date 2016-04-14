@@ -6,15 +6,17 @@
 */
 package cn.academy.vanilla.meltdowner.skill;
 
+import cn.academy.ability.api.AbilityPipeline;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -22,9 +24,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -32,23 +34,29 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class MDDamageHelper {
     
-    static final String MARKID = "md_marktick", RATEID = "md_markrate";
+    private static final String MARKID = "md_marktick", RATEID = "md_markrate";
 
     @RegInitCallback
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new Events());
     }
     
-    static void attack(Entity e, EntityPlayer player, float dmg) {
-        DamageHelper.attack(e, DamageSource.causePlayerDamage(player), dmg);
+    static void attack(EntityPlayer player, Skill skill, Entity target, float dmg) {
+        AbilityPipeline.attack(player, skill, target, dmg);
         AbilityData aData = AbilityData.get(player);
         if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
-            int marktick = getMarkTick(player);
-            setMarkTick(e, marktick = Math.max(60, marktick));
-            setMarkRate(e, RadiationIntensify.instance.getRate(aData));
-            syncStartMark(e, marktick);
+            int marktick = Math.max(60, getMarkTick(player));
+
+            setMarkTick(target, marktick);
+            setMarkRate(target, RadiationIntensify.instance.getRate(aData));
+            NetworkMessage.sendToAllAround(
+                    TargetPointHelper.convert(player, 20),
+                    NetworkMessage.staticCaller(MDDamageHelper.class),
+                    "sync", player, marktick
+            );
         }
     }
     
@@ -69,14 +77,10 @@ public class MDDamageHelper {
     static void setMarkRate(Entity entity, float amt) {
         entity.getEntityData().setFloat(RATEID, amt);
     }
-    
+
+    @Listener(channel="sync", side=Side.CLIENT)
     static void setMarkTick(Entity player, int ticks) {
         player.getEntityData().setInteger(MARKID, ticks);
-    }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    static void syncStartMark(@RangedTarget(range = 15) Entity e, @Data Integer value) {
-        setMarkTick(e, value);
     }
     
     public static class Events {

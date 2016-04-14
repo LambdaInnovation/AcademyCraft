@@ -157,7 +157,7 @@ public class RayBarrage extends Skill {
                         float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
                         
                         if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
-                            MDDamageHelper.attack(e, player, getScatteredDamage(exp));
+                            MDDamageHelper.attack(player, instance, e, getScatteredDamage(exp));
                         }
                     }
                 }
@@ -171,7 +171,7 @@ public class RayBarrage extends Skill {
                 if(!isRemote) {
                     MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
                     if(result != null && result.entityHit != null) {
-                        MDDamageHelper.attack(result.entityHit, player, getPlainDamage(exp));
+                        MDDamageHelper.attack(player, instance, result.entityHit, getPlainDamage(exp));
                     }
                 }
                 

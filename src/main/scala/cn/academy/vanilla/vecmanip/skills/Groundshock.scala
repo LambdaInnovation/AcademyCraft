@@ -1,8 +1,8 @@
 package cn.academy.vanilla.vecmanip.skills
 
-import cn.academy.ability.api.Skill
+import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.context.{IStateProvider, IConsumptionProvider, ClientRuntime, Context}
+import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider, IStateProvider}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
 import cn.lambdalib.annoreg.core.Registrant
@@ -10,15 +10,15 @@ import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n
 import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils, Vec3}
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cn.lambdalib.util.mc.{EntitySelectors, Vec3, WorldUtils}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.EntityDiggingFX
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{MathHelper, DamageSource, AxisAlignedBB, Vec3}
+import net.minecraft.util.{AxisAlignedBB, DamageSource, MathHelper, Vec3}
 import net.minecraftforge.common.util.ForgeDirection
 
 @Registrant
@@ -122,16 +122,22 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
       val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 
       def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean)(implicit block: Block) = {
-        val hardnessEnergy = math.max(0, block.getBlockHardness(world, x, y, z))
-        if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
-          energy -= hardnessEnergy
-
-          if (drop && RNG.nextFloat() < dropRate) {
-            block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
+        if (AbilityPipeline.canBreakBlock(world, x, y, z)) {
+          var hardnessEnergy = block.getBlockHardness(world, x, y, z)
+          if (hardnessEnergy < 0) {
+            hardnessEnergy = Float.MaxValue
           }
 
-          world.setBlock(x, y, z, Blocks.air)
-          world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+          if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
+            energy -= hardnessEnergy
+
+            if (drop && RNG.nextFloat() < dropRate) {
+              block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
+            }
+
+            world.setBlock(x, y, z, Blocks.air)
+            world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+          }
         }
       }
 

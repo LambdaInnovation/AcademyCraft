@@ -6,6 +6,7 @@
 */
 package cn.academy.terminal.app.settings;
 
+import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
@@ -64,7 +65,13 @@ public class SettingsUI extends CGuiScreen {
     public SettingsUI() {
         initPages();
     }
-    
+
+    @Override
+    public void onGuiClosed() {
+        AcademyCraft.config.save();
+        super.onGuiClosed();
+    }
+
     private void initPages() {
         Widget main = document.getWidget("main").copy();
         

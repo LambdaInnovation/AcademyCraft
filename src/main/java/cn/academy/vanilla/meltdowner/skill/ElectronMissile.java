@@ -134,7 +134,7 @@ public class ElectronMissile extends Skill {
                         result.hurtResistantTime = -1;
 
                         float damage = lerpf(14, 27, exp);
-                        MDDamageHelper.attack(result, player, damage);
+                        MDDamageHelper.attack(player, instance, result, damage);
                         aData.addSkillExp(instance, 0.001f);
                         ball.setDead();
                     }

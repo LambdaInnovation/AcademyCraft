@@ -10,23 +10,17 @@ import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
-import cn.academy.core.config.ACConfig;
-import cn.academy.core.util.DamageHelper;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.generic.RandUtils;
-import com.typesafe.config.Config;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -60,7 +54,8 @@ public class TPSkillHelper {
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
 
                 fireCritAttack(player, target, i);
-                postAtClient(player, target, i);
+                NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
+                        "fire", player, target, i);
                 break;
             }
         }
@@ -90,14 +85,11 @@ public class TPSkillHelper {
         return a + l * (b - a);
     }
 
+    @Listener(channel="fire", side=Side.CLIENT)
     private static void fireCritAttack(EntityPlayer player, Entity target, int level) {
         MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, target, level));
     }
 
-    @RegNetworkCall(side = Side.CLIENT)
-    public static void postAtClient(@Target EntityPlayer player, @Instance Entity attackee, @Data Integer level) {
-        fireCritAttack(player, attackee, level);
-    }
 
     /**
      * Fired both client and server when player emits an critical hit.

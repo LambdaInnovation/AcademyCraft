@@ -6,6 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.skills;
 
+import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -48,7 +49,8 @@ import static cn.lambdalib.util.generic.MathUtils.*;
 @Registrant
 public class ShiftTeleport extends Skill {
 
-    static final Color CRL_BLOCK_MARKER = new Color().setColor4i(139, 139, 139, 180),
+    private static final Color
+            CRL_BLOCK_MARKER = new Color().setColor4i(139, 139, 139, 180),
             CRL_ENTITY_MARKER = new Color().setColor4i(235, 81, 81, 180);
 
     public static final ShiftTeleport instance = new ShiftTeleport();
@@ -131,6 +133,7 @@ public class ShiftTeleport extends Skill {
             MovingObjectPosition position = getTracePosition();
 
             if (item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
+                    && AbilityPipeline.canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
                     && cpData.perform(getOverload(exp), getConsumption(exp))) {
 
                 item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ,
