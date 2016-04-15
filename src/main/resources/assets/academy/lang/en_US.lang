@@ -467,6 +467,7 @@ ac.skill_tree.skill_not_learned=Skill not learned.
 ac.skill_tree.skill_exp=Skill Experience:
 ac.skill_tree.uplevel=Upgrade to
 ac.skill_tree.anyskill=Any skill learned for level %d
+ac.skill_tree.level_fail=You must reach level %d first.
 
 ac.skill_tree.type_portable=Portable Developer
 ac.skill_tree.type_normal=Normal Developer

@@ -467,6 +467,7 @@ ac.skill_tree.skill_not_learned=技能未学习。
 ac.skill_tree.skill_exp=技能经验：
 ac.skill_tree.uplevel=升级到
 ac.skill_tree.anyskill=%d 级的任意技能
+ac.skill_tree.level_fail=必须先达到 %d 级才能学习该技能。
 
 ac.skill_tree.type_portable=便携能力开发机
 ac.skill_tree.type_normal=普通能力开发机

@@ -6,7 +6,6 @@
 */
 package cn.academy.ability.develop;
 
-import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;

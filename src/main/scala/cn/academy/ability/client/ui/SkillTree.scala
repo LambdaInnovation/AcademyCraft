@@ -655,8 +655,9 @@ private object Common {
           drawActionIcon(skill.getHintIcon, progress, glow=progress == 1)
         })
 
+        val skillNameText = skill.getDisplayName + s" (LV${skill.getLevel})"
         textArea.listens[FrameEvent](() => {
-          FontBold.draw(skill.getDisplayName, 0, 3, foSkillTitle)
+          FontBold.draw(skillNameText, 0, 3, foSkillTitle)
           Font.draw(local.get("skill_not_learned"), 0, 15, foSkillUnlearned)
         })
 
@@ -670,7 +671,7 @@ private object Common {
           val len = CondIconStep * conditions.size
 
           textArea.listens[FrameEvent](() => {
-            Font.draw(local.get("req"), -len/2 - 2, 26, foSkillReq)
+            Font.draw(local.get("req"), -len/2 - 2, 28, foSkillReq)
           })
 
           case class CondTag(cond: IDevCondition, accepted: Boolean) extends Component("CondTag")
@@ -718,6 +719,8 @@ private object Common {
           button.listens[LeftClickEvent](() => {
             if (developer.getEnergy < estmCons) {
               message = Some(local.get("noenergy"))
+            } else if (skill.getLevel > data.getLevel) {
+              message = Some(local.getFormatted("level_fail", skill.getLevel.asInstanceOf[AnyRef]))
             } else if (!action.validate(player, developer)) {
               message = Some(local.get("condition_fail"))
             } else {
