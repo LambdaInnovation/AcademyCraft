@@ -39,6 +39,7 @@
   "vecmanip.directed_shock": {"category": "master", "sounds": [{"name": "vecmanip/directed_shock", "stream": false}]},
   "vecmanip.groundshock": {"category": "master", "sounds": [{"name": "vecmanip/groundshock", "stream": false}]},
   "vecmanip.directed_blast": {"category": "master", "sounds": [{"name": "vecmanip/directed_blast", "stream": false}]},
+  "vecmanip.vec_accel": {"category": "master", "sounds": [{"name": "vecmanip/vec_accel", "stream": false}]},
 
   "machine.imag_fusor_work": {"category": "master", "sounds": [{"name": "machine/imag_fusor_work", "stream": true}]},
   "machine.machine_work": {"category": "master", "sounds": [{"name": "machine/machine_work", "stream": true}]}

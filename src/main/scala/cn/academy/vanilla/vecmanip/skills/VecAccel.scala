@@ -2,6 +2,7 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
@@ -65,9 +66,9 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
       addSkillCooldown(lerpf(25, 5, skillExp).toInt)
 
       sendToServer(MSG_PERFORM)
+    } else {
+      terminate()
     }
-
-    terminate()
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
@@ -75,6 +76,14 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
     consume()
     player.fallDistance = 0
     addSkillExp(0.002f)
+
+    sendToClient(MSG_PERFORM)
+    terminate()
+  }
+
+  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  def c_perform() = {
+    ACSounds.playClient(player, "vecmanip.vec_accel", 0.35f)
   }
 
   def initSpeed(partialTicks: Float = 0.0f) = {
