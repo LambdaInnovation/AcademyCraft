@@ -588,6 +588,8 @@ object WirelessPage {
       def confirm() = {
         val password = passBox.component[TextBox].content
         target.connect(password)
+
+        passBox.component[TextBox].setContent("")
       }
 
       instance.getWidget("text_name").component[TextBox].setContent(target.name)
@@ -596,7 +598,6 @@ object WirelessPage {
         passBox.listens[ConfirmInputEvent](() => confirm())
         passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
         passBox.listens[LostFocusEvent](() => {
-          passBox.component[TextBox].setContent("")
           iconKey.component[DrawTexture].color.a = 0.6
         })
       } else {
