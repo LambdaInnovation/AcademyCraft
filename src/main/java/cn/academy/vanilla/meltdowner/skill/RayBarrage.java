@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -161,20 +162,26 @@ public class RayBarrage extends Skill {
                         }
                     }
                 }
-                
+
             } else {
-                Motion3D mo = new Motion3D(player, true).move(DISPLAY_RAY_DIST);
-                tx = mo.px;
-                ty = mo.py;
-                tz = mo.pz;
-                
-                if(!isRemote) {
-                    MovingObjectPosition result = Raytrace.traceLiving(player, RAY_DIST);
+                Pair<Vec3, MovingObjectPosition> pres = Raytrace.getLookingPos(player, RAY_DIST);
+
+                Vec3 pos = pres.getLeft();
+                MovingObjectPosition result = pres.getRight();
+
+                tx = pos.xCoord;
+                ty = pos.yCoord;
+                tz = pos.zCoord;
+
+                if(result != null && result.entityHit != null) {
+                    MDDamageHelper.attack(player, instance, result.entityHit, getPlainDamage(exp));
+                }
+
+                if (!isRemote) {
                     if(result != null && result.entityHit != null) {
                         MDDamageHelper.attack(player, instance, result.entityHit, getPlainDamage(exp));
                     }
                 }
-                
             }
             
             if(isRemote) {
