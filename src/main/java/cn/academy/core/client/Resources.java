@@ -21,6 +21,7 @@ import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.resources.IResourceManager;
@@ -96,7 +97,14 @@ public class Resources {
 
         try {
             BufferedImage buffer = ImageIO.read(RegistryUtils.getResourceStream(ret));
-            Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new ITextureObject() {
+
+            // Note: Here we should actually implement ITextureObject,
+            // but that causes problems when running with SMC because SMC adds an abstract method in the base
+            // interface (getMultiTexID) and we have no way to implement it easily.
+            // However it is automatically implemented in AbstractTexture.
+            // (Go to hell shadersmod!)
+
+            Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new AbstractTexture() {
 
                 final int textureID = glGenTextures();
 
