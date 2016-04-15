@@ -7,7 +7,7 @@ import cn.academy.ability.api.Skill
 import cn.academy.ability.api.data.{AbilityData, CPData}
 import cn.academy.ability.block.TileDeveloper
 import cn.academy.ability.client.AbilityLocalization
-import cn.academy.ability.client.ui.Common.{RebuildEvent, TreeScreen}
+import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
@@ -55,7 +55,7 @@ object DeveloperUI {
       override def keyTyped(ch: Char, key: Int) = {
         if (key == Keyboard.KEY_ESCAPE) {
           Option(gui.getWidget("link_page")) match {
-            case Some(page) => page.dispose()
+            case Some(page) => page.component[Cover].end()
             case None => super.keyTyped(ch, key)
           }
         } else {
@@ -487,7 +487,8 @@ private object Common {
               val cover = blackCover(gui)
               cover :+ wirelessPage
 
-              cover.listens[LeftClickEvent](() => gui.eventBus.postEvent(null, new RebuildEvent))
+              cover.listens[LeftClickEvent](() => cover.component[Cover].end())
+              cover.listens[CloseEvent](() => gui.eventBus.postEvent(null, new RebuildEvent))
 
               gui.addWidget("link_page", cover)
             })
@@ -655,7 +656,7 @@ private object Common {
           drawActionIcon(skill.getHintIcon, progress, glow=progress == 1)
         })
 
-        val skillNameText = skill.getDisplayName + s" (LV${skill.getLevel})"
+        val skillNameText = skill.getDisplayName + s" (LV ${skill.getLevel})"
         textArea.listens[FrameEvent](() => {
           FontBold.draw(skillNameText, 0, 3, foSkillTitle)
           Font.draw(local.get("skill_not_learned"), 0, 15, foSkillUnlearned)
@@ -882,6 +883,8 @@ private object Common {
     area :+ console
   }
 
+  class CloseEvent extends GuiEvent
+
   class Cover extends Component("cover") {
 
     private var lastTransit = GameTimer.getTime
@@ -901,6 +904,7 @@ private object Common {
       HudUtils.colorRect(0, 0, widget.transform.width, widget.transform.height)
 
       if (ended && alpha == 0) {
+        widget.post(new CloseEvent)
         widget.dispose()
       }
 
