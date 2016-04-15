@@ -72,28 +72,31 @@ class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends Local
   setSize(10, 10)
   ignoreFrustumCheck = true
 
-  val initTime = GameTimer.getTime
-
-  var deathDelta: Float = -1
+  var initTime = GameTimer.getTime
+  var alpha = 0.0f
 
   def deltaTime = (GameTimer.getTime - initTime) / 1000.0f
 
-  def alpha = {
-    if (deltaTime < 5) deltaTime / 5f
-    else if (deathDelta != -1) 1 - (deltaTime - deathDelta) / 5f
-    else 1.0f
+  override def onUpdate() = {
+    val terminated = ctx.getStatus == Status.TERMINATED
+    if (terminated && math.abs(alpha) <= 1e-3f) {
+      setDead()
+    }
   }
 
-  override def onUpdate() = {
-    if (ctx.getStatus == Status.TERMINATED) {
-      if (deathDelta == -1) {
-        deathDelta = deltaTime
-      }
+  def updateAlpha(): Unit = {
+    val dt = deltaTime
+    val terminated = ctx.getStatus == Status.TERMINATED
+    val desiredAlpha = if (terminated) 0 else 1
 
-      if (deltaTime - deathDelta > 5f) {
-        setDead()
-      }
-    }
+    alpha = move(alpha, desiredAlpha, dt * (if(terminated) 1f else 0.3f))
+
+    initTime = GameTimer.getTime
+  }
+
+  private def move(from: Float, to: Float, max: Float) = {
+    val delta = to - from
+    from + math.min(math.abs(delta), max) * math.signum(delta)
   }
 
   override def shouldRenderInPass(pass: Int) = pass == 1
@@ -134,6 +137,9 @@ class PlasmaBodyRenderer extends Render {
 
       // update ball location
       val deltaTime = eff.deltaTime
+
+      eff.updateAlpha()
+
       val alpha = math.pow(eff.alpha, 2).toFloat
 
       def updateBalls() = {

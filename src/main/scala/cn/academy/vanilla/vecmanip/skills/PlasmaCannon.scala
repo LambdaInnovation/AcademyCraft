@@ -245,7 +245,7 @@ private class Tornado(val ctx: PlasmaCannonContext)
 
     if (dead) {
       deadTick += 1
-      if (deadTick == 20) {
+      if (deadTick == 30) {
         setDead()
       }
     }
@@ -274,6 +274,7 @@ private object TornadoEntityRenderer extends Render {
       glPushMatrix()
       glTranslated(x, y, z)
 
+      glDisable(GL_ALPHA_TEST)
       TornadoRenderer.doRender(eff.theTornado)
 
       glPopMatrix()
