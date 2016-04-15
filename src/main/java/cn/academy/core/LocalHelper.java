@@ -21,7 +21,7 @@ public class LocalHelper {
     }
 
     public String getFormatted(String id, Object ...args) {
-        return StatCollector.translateToLocalFormatted(id, args);
+        return StatCollector.translateToLocalFormatted(path + id, args);
     }
 
     public LocalHelper subPath(String id) {

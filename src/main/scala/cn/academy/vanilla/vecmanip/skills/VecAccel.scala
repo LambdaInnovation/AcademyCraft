@@ -81,6 +81,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
     terminate()
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   def c_perform() = {
     ACSounds.playClient(player, "vecmanip.vec_accel", 0.35f)
