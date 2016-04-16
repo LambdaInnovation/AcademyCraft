@@ -83,7 +83,7 @@ public class AbilityPipeline {
      * @return Whether the block can be really broken
      */
     public static boolean canBreakBlock(World world, int x, int y, int z) {
-        return MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z));
+        return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z));
     }
 
     /**

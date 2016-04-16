@@ -1,25 +1,26 @@
 package cn.academy.vanilla.vecmanip.client.effect
 
 import cn.academy.ability.api.context.Context.Status
+import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.skills.PlasmaCannonContext
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.shader.{GLSLMesh, ShaderProgram}
-import cn.lambdalib.util.deprecated.{Mesh, SimpleMaterial, MeshUtils}
+import cn.lambdalib.util.deprecated.{Mesh, MeshUtils, SimpleMaterial}
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.key.{KeyHandler, KeyManager}
-import cn.lambdalib.util.mc.{Vec3, Raytrace}
+import cn.lambdalib.util.mc.{Raytrace, Vec3}
 import cpw.mods.fml.client.registry.RenderingRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.entity.{RenderManager, Render}
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.util.{MathHelper, ResourceLocation}
 import net.minecraft.world.World
 import org.lwjgl.BufferUtils
 import org.lwjgl.input.Keyboard
-import org.lwjgl.util.vector.{Vector4f, Vector3f, Matrix4f}
+import org.lwjgl.util.vector.{Matrix4f, Vector3f, Vector4f}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
 import cn.lambdalib.util.mc.MCExtender._
@@ -127,9 +128,6 @@ class PlasmaBodyRenderer extends Render {
       val matrix = new Matrix4f()
       acquireMatrix(GL_MODELVIEW_MATRIX, matrix)
 
-      val invert = new Matrix4f(matrix)
-      invert.invert()
-
       glEnable(GL_BLEND)
       glDisable(GL_ALPHA_TEST)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -166,7 +164,7 @@ class PlasmaBodyRenderer extends Render {
       glUniform1f(pos_alpha, alpha)
       //
 
-      val campos = Vec3(-invert.m30, -invert.m31, -invert.m32)
+      val campos = CameraPosition.getVec3
 
       val delta = Vec3(x, y, z) + campos
       val yp = delta.toLook

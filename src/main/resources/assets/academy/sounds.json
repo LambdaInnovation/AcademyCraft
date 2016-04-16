@@ -40,6 +40,8 @@
   "vecmanip.groundshock": {"category": "master", "sounds": [{"name": "vecmanip/groundshock", "stream": false}]},
   "vecmanip.directed_blast": {"category": "master", "sounds": [{"name": "vecmanip/directed_blast", "stream": false}]},
   "vecmanip.vec_accel": {"category": "master", "sounds": [{"name": "vecmanip/vec_accel", "stream": false}]},
+  "vecmanip.plasma_cannon": {"category": "master", "sounds": [{"name": "vecmanip/plasma_cannon", "stream": false}]},
+  "vecmanip.storm_wing": {"category": "master", "sounds": [{"name": "vecmanip/storm_wing", "stream": false}]},
 
   "machine.imag_fusor_work": {"category": "master", "sounds": [{"name": "machine/imag_fusor_work", "stream": true}]},
   "machine.machine_work": {"category": "master", "sounds": [{"name": "machine/machine_work", "stream": true}]}

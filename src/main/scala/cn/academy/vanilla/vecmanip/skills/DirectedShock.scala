@@ -1,10 +1,11 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientRuntime, Context}
 import cn.academy.core.client.sound.ACSounds
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
+import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.mc._
 import cn.lambdalib.vis.animation.presets.CompTransformAnim
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -51,6 +52,8 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
 
   @SideOnly(Side.CLIENT)
   var anim: CompTransformAnim = _
+
+  var timeProvider: () => Double = null
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
@@ -108,24 +111,20 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
 
+    val init = GameTimer.getTime
+    timeProvider = () => {
+      val dt = GameTimer.getTime - init
+      math.min(2.0, dt / 150.0)
+    }
+
     handEffect = new HandRenderer {
       override def render(partialTicks: Float) = {
+        anim.perform(timeProvider())
         HandRenderer.renderHand(partialTicks, anim.target)
       }
     }
 
     HandRenderInterrupter(player).addInterrupt(handEffect)
-  }
-
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  def l_handEffectTick() = if (isLocal) {
-    if (!punched) {
-      val time = MathUtils.clampd(0, 2.0, ticker.toDouble / 3.0)
-      anim.perform(time)
-    } else {
-      val time = MathUtils.clampd(0, 1.0, punchTicker.toDouble / PUNCH_ANIM_TICKS)
-      anim.perform(time)
-    }
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
@@ -136,6 +135,12 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
   def l_effect() = if (isLocal) {
     punched = true
+
+    val init = GameTimer.getTime
+    timeProvider = () => {
+      val dt = GameTimer.getTime - init
+      dt / 300.0
+    }
 
     anim = createPunchAnim()
     anim.perform(0)

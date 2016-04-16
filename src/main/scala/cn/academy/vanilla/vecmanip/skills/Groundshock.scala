@@ -5,12 +5,15 @@ import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider, IStateProvider}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
+import cn.academy.vanilla.generic.client.effect.SmokeEffect
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n
+import cn.lambdalib.util.deprecated.{LIFMLGameEventDispatcher, LIHandler}
 import cn.lambdalib.util.generic.RandUtils
 import cn.lambdalib.util.mc.{EntitySelectors, Vec3, WorldUtils}
+import cpw.mods.fml.common.gameevent.TickEvent.{ClientTickEvent, Phase}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -60,6 +63,15 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = {
     localTick += 1
+
+    val pitchDelta = localTick match {
+      case t if t < 4 => t / 4.0f
+      case t if t <= 20 => 1.0f
+      case t if t <= 25 => 1.0f - (t - 20) / 5.0f
+      case _ => 0.0f
+    }
+
+    player.rotationPitch -= pitchDelta * 0.2f
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
@@ -81,12 +93,26 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   def c_perform(affectedBlocks: Array[Array[Int]]) = {
     if (isLocal) {
       consume()
+
+      // Starts a coroutine that make player's look direction slash down.
+      LIFMLGameEventDispatcher.INSTANCE.registerClientTick(new LIHandler[ClientTickEvent] {
+        var ticks = 0
+
+        override protected def onEvent(event: ClientTickEvent): Boolean = {
+          ticks += 1
+          player.rotationPitch += 3.4f
+
+          if (ticks >= 4) { setDead() }
+
+          true
+        }
+      })
     }
 
     ACSounds.playClient(player, "vecmanip.groundshock", 2)
 
     affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
-      for (i <- 0 until rangei(1, 4)) {
+      for (i <- 0 until rangei(4, 8)) {
         def randvel() = ranged(-0.2, 0.2)
         val entity = new EntityDiggingFX(
           world,
@@ -96,6 +122,16 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
           ForgeDirection.UP.ordinal())
 
         Minecraft.getMinecraft.effectRenderer.addEffect(entity)
+      }
+
+      if (nextFloat() < 0.5f) {
+        val eff = new SmokeEffect(world)
+        val pos = (pt.x + 0.5 + ranged(-.3, .3), pt.y + 1 + ranged(0, 0.2), pt.z + 0.5 + ranged(-.3, .3))
+        val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
+
+        eff.setPos(pos)
+        eff.setVel(vel)
+        world.spawnEntityInWorld(eff)
       }
     })
   }
@@ -180,7 +216,8 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
                 if (!dejavu_ent.contains(entity)) {
                   dejavu_ent += entity
                   energy -= 1
-                  entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage)
+                  AbilityPipeline.attack(player, Groundshock, entity, damage)
+
                   entity.motionY = ySpeed
                   addSkillExp(0.002f)
                 }
@@ -230,7 +267,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   private def maxIter: Int = lerpf(10, 25, skillExp).toInt
 
   // y speed given to mobs.
-  private def ySpeed: Float = rangef(1.0f, 1.2f) * lerpf(0.8f, 1.3f, skillExp)
+  private def ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, skillExp)
 
   private def consume(): Boolean = cpData.perform(overload, consumption)
 

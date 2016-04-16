@@ -1,7 +1,7 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
@@ -27,12 +27,14 @@ object VecAccelContext {
   final val LN_A = math.log(DAMPING)
 }
 
-class VecAccelContext(p: EntityPlayer) extends Context(p) {
+class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
   import cn.academy.ability.api.AbilityAPIExt._
   import VecAccelContext._
   import cn.lambdalib.util.mc.MCExtender._
   import cn.lambdalib.util.generic.MathUtils._
   import Math._
+
+  override def getConsumptionHint: Float = consumption
 
   private implicit val skill_ = VecAccel
   private implicit val aData_ = aData
@@ -100,11 +102,13 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) {
   }
 
   private def consume() = {
-    val cp = lerpf(200, 160, skillExp)
+    val cp = consumption
     val overload = lerpf(40, 30, skillExp)
 
     cpData.perform(overload, cp)
   }
+
+  private def consumption = lerpf(200, 160, skillExp)
 
   private def updateCanPerform() = canPerform = ignoreGroundChecking || checkGround
 

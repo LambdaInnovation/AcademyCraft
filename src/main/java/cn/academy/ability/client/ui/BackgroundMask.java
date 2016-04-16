@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 @RegAuxGui
 public class BackgroundMask extends AuxGui {
     
-    final ResourceLocation MASK = Resources.getTexture("effects/screen_mask");
+    final ResourceLocation MASK = Resources.preloadMipmapTexture("effects/screen_mask");
     
     final Color CRL_OVERRIDE = new Color().setColor4i(208, 20, 20, 170);
     

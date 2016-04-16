@@ -162,7 +162,7 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-        AcademyCraft.log.info("CM: " + msg);
+        // AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")

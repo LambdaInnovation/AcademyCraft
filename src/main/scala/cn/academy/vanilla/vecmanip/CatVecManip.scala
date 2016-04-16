@@ -8,7 +8,7 @@ import cn.lambdalib.annoreg.core.Registrant
 @Registrant
 object CatVecManip extends Category("vecmanip") {
 
-  colorStyle.setColor4d(.5, .5, .5, .8)
+  colorStyle.fromHexColor(0xff000000)
 
   DirectedShock.setPosition(16, 45)
   Groundshock.setPosition(64, 85)

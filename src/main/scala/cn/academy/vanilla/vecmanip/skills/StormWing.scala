@@ -16,6 +16,9 @@ import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.api.cooldown.CooldownManager
+import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
+import net.minecraft.client.Minecraft
+import net.minecraft.client.particle.{EntityBlockDustFX, EntitySmokeFX}
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -74,6 +77,9 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
 
   @SideOnly(Side.CLIENT)
   private var activateHandler: IActivateHandler = _
+
+  @SideOnly(Side.CLIENT)
+  private var loopSound: FollowEntitySound = _
 
   private var prevAllowFlying: Boolean = _
 
@@ -171,6 +177,22 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def c_tick() = {
     stateTick += 1
+
+    for (i <- 0 until 12) { // Particles that surround the player
+      val theta = ranged(0, math.Pi * 2)
+      val phi = ranged(-math.Pi, math.Pi)
+      val r = ranged(3, 8)
+
+      val rzx = r * math.sin(phi)
+      val (cth, sth) = (math.cos(theta), math.sin(theta))
+      val (dx, dy, dz) = (rzx * cth, r * math.cos(phi), rzx * sth)
+
+      val particle = new EntityBlockDustFX(world,
+        player.posX + dx, player.posY + dy, player.posZ + dz,
+        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.dirt, 0) { particleGravity = 0.02f }
+      particle.multipleParticleScaleBy(0.5f)
+      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
+    }
   }
 
   @SideOnly(Side.CLIENT)
@@ -213,6 +235,15 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def c_makealive() = {
     world.spawnEntityInWorld(new StormWingEffect(this))
+
+    loopSound = new FollowEntitySound(player, "vecmanip.storm_wing").setLoop()
+    ACSounds.playClient(loopSound)
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_terminate() = {
+    loopSound.stop()
   }
 
   private def doConsume() = if (state == STATE_ACTIVE) {
