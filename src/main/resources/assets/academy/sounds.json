@@ -42,6 +42,9 @@
   "vecmanip.vec_accel": {"category": "master", "sounds": [{"name": "vecmanip/vec_accel", "stream": false}]},
   "vecmanip.plasma_cannon": {"category": "master", "sounds": [{"name": "vecmanip/plasma_cannon", "stream": false}]},
   "vecmanip.storm_wing": {"category": "master", "sounds": [{"name": "vecmanip/storm_wing", "stream": false}]},
+  "vecmanip.vec_deviation": {"category": "master", "sounds": [{"name": "vecmanip/vec_deviation", "stream": false}]},
+  "vecmanip.vec_reflection": {"category": "master", "sounds": [{"name": "vecmanip/vec_reflection", "stream": false}]},
+  "vecmanip.plasma_cannon_t": {"category": "master", "sounds": [{"name": "vecmanip/plasma_cannon_t", "stream": false}]},
 
   "machine.imag_fusor_work": {"category": "master", "sounds": [{"name": "machine/imag_fusor_work", "stream": true}]},
   "machine.machine_work": {"category": "master", "sounds": [{"name": "machine/machine_work", "stream": true}]}

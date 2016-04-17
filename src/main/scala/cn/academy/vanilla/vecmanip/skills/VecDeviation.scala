@@ -15,8 +15,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
-
 import VMSkillHelper._
+import cn.academy.core.client.sound.ACSounds
 
 object VecDeviation extends Skill("vec_deviation", 2) {
 
@@ -41,6 +41,7 @@ object VecDeviation extends Skill("vec_deviation", 2) {
 object VecDeviationContext {
 
   final val MSG_STOP_ENTITY = "stop_ent"
+  final val MSG_PLAY = "playsnd"
 
   def shouldStop(e: Entity): Boolean = e match {
     case e: EntityArrow if !e.isInGround => true
@@ -81,11 +82,11 @@ object VecDeviationContext {
 import cn.lambdalib.util.mc.MCExtender._
 import cn.academy.ability.api.AbilityAPIExt._
 import collection.mutable
-import VecDeviationContext._
 import scala.collection.JavaConversions._
 
 class VecDeviationContext(p: EntityPlayer) extends Context(p) {
   import cn.lambdalib.util.generic.MathUtils._
+  import VecDeviationContext._
 
   private implicit val aData_ = aData()
   private implicit val skill_ = VecDeviation
@@ -111,6 +112,8 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
 
     cpData.perform(consumption, acceptedDamage * overloadRatio)
     addSkillExp(0.004f)
+
+    sendToClient(MSG_PLAY, player.position)
 
     dmg - absorbed
   }
@@ -152,6 +155,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
       eff.rotationPitch = player.rotationPitch
 
       world.spawnEntityInWorld(eff)
+      playSound(eff.position)
     }
 
     stop(ent, player)
@@ -161,6 +165,12 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     cpData.perform(
       lerpf(16, 10, skillExp),
       lerpf(150, 100, skillExp))
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_PLAY, side=Array(Side.CLIENT))
+  private def playSound(pos: net.minecraft.util.Vec3) = {
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", 0.5f, 1.0f)
   }
 
 }

@@ -5,6 +5,7 @@ import java.util.function.Predicate
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
 import cn.academy.ability.api.event.ReflectEvent
+import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
@@ -100,11 +101,13 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
     eff.rotationPitch = player.rotationPitch
 
     world.spawnEntityInWorld(eff)
+
+    playSound(point)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
-    val range = 6
+    val range = 4
     val entities = WorldUtils.getEntities(player, range, filter)
     entities.removeAll(visited)
     entities foreach (entity => {
@@ -162,6 +165,11 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
       }
 
     }
+  }
+
+  @SideOnly(Side.CLIENT)
+  private def playSound(pos: net.minecraft.util.Vec3) = {
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", 0.5f, 1.0f)
   }
 
   private def reflectRate = lerpf(0.7f, 1.2f, skillExp) * rangef(0.9f, 1.1f)

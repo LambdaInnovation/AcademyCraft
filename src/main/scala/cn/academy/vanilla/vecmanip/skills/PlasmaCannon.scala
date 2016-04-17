@@ -95,6 +95,10 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     if (state == STATE_CHARGING && localTicker < chargeTime) {
       consume()
     }
+
+    if (state == STATE_CHARGING && localTicker == chargeTime.toInt) {
+      ACSounds.playClient(player, "vecmanip.plasma_cannon_t", 0.5f)
+    }
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
