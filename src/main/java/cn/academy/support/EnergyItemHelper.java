@@ -23,11 +23,15 @@ import java.util.List;
 @Registrant
 public class EnergyItemHelper {
 
-    static List<EnergyItemManager> supported = new ArrayList<>();
+    private static List<EnergyItemManager> supported = new ArrayList<>();
 
     @RegInitCallback
     public static void init() {
-        supported.add(IFItemManager.instance);
+        register(IFItemManager.instance);
+    }
+
+    public static void register(EnergyItemManager man) {
+        supported.add(man);
     }
 
     public static boolean isSupported(ItemStack stack) {

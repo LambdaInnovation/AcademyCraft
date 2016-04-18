@@ -11,11 +11,17 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
+import cn.academy.support.EnergyItemHelper;
+import cn.academy.support.EnergyItemHelper.EnergyItemManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
+import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
+import ic2.api.item.IElectricItem;
+import ic2.api.item.IElectricItemManager;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -46,12 +52,6 @@ public class IC2Support {
         BlockEUInput euInput = new BlockEUInput();
         BlockEUOutput euOutput = new BlockEUOutput();
         
-        try {
-            // ACTutorial.addTutorial("energy_bridge_eu").setCondition(Condition.or(Condition.itemsCrafted(euInput,euOutput)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
         GameRegistry.registerBlock(euInput, BlockConverterBase.Item.class, "eu_input");
         GameRegistry.registerBlock(euOutput, BlockConverterBase.Item.class, "eu_output");
         
@@ -70,6 +70,47 @@ public class IC2Support {
         
         GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
         GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
+
+        EnergyItemHelper.register(new EnergyItemManager() {
+
+            private IElectricItemManager manager() {
+                return Preconditions.checkNotNull(ElectricItem.manager);
+            }
+
+            @Override
+            public boolean isSupported(ItemStack stack) {
+                return stack.getItem() instanceof IElectricItem;
+            }
+
+            @Override
+            public double getEnergy(ItemStack stack) {
+                return manager().getCharge(stack);
+            }
+
+            @Override
+            public void setEnergy(ItemStack stack, double energy) {
+                double current = getEnergy(stack);
+                double delta = energy - current;
+
+                if (delta > 0) {
+                    manager().charge(stack, delta, 10, true, false);
+                } else {
+                    manager().discharge(stack, -delta, 10, true, false, false);
+                }
+            }
+
+            @Override
+            public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
+                double transferred = manager().charge(stack, amt, 10, ignoreBandwidth, false);
+                return amt - transferred;
+            }
+
+            @Override
+            public double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
+                double pulled = manager().discharge(stack, amt, 10, ignoreBandwidth, true, false);
+                return pulled;
+            }
+        });
 
         AcademyCraft.log.info("IC2 API Support has been loaded.");
     }
