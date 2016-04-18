@@ -293,22 +293,26 @@ public abstract class CommandAIMBase extends ACCommand {
             if (aData.hasCategory()) {
                 Category cat = aData.getCategory();
 
-                Skill skill = tryParseSkill(cat, pars[1]);
-                if(skill == null) {
-                    sendChat(ics, getLoc("noskill"));
+                if (pars.length == 1) {
+                    sendChat(ics, this.locInvalid());
                 } else {
-                    if(pars.length == 2) {
-                        sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
-                    } else if(pars.length == 3) {
-                        Float exp = tryParseFloat(pars[2]);
-                        if(exp < 0 || exp > 1) {
-                            sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
-                        } else {
-                            aData.setSkillExp(skill, exp);
-                            sendChat(ics, this.locSuccessful());
-                        }
+                    Skill skill = tryParseSkill(cat, pars[1]);
+                    if(skill == null) {
+                        sendChat(ics, getLoc("noskill"));
                     } else {
-                        sendChat(ics, this.locInvalid());
+                        if(pars.length == 2) {
+                            sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
+                        } else if(pars.length == 3) {
+                            Float exp = tryParseFloat(pars[2]);
+                            if(exp < 0 || exp > 1) {
+                                sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
+                            } else {
+                                aData.setSkillExp(skill, exp);
+                                sendChat(ics, this.locSuccessful());
+                            }
+                        } else {
+                            sendChat(ics, this.locInvalid());
+                        }
                     }
                 }
             } else {
