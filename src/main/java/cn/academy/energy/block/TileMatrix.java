@@ -35,18 +35,6 @@ import net.minecraft.util.AxisAlignedBB;
 @RegTileEntity.HasRender
 public class TileMatrix extends TileInventory implements IWirelessMatrix, IMultiTile {
     
-    public static double 
-        MAX_CAPACITY, 
-        MAX_BANDWIDTH, 
-        MAX_RANGE;
-
-    @RegInitCallback
-    public static void init() {
-        MAX_CAPACITY = getCapacity(3, 3);
-        MAX_BANDWIDTH = getBandwidth(3, 3);
-        MAX_RANGE = getRange(3, 3);
-    }
-    
     @RegTileEntity.Render
     @SideOnly(Side.CLIENT)
     public static RenderMatrix renderer;
@@ -153,18 +141,6 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         return count;
     }
     
-    private static int getCapacity(int N, int L) {
-        return (int) Math.sqrt(N) * L * 6;
-    }
-    
-    private static double getBandwidth(int N, int L) {
-        return N * L * L * 20;
-    }
-    
-    private static double getRange(int N, int L) {
-        return N * 8 * Math.sqrt(L);
-    }
-    
     public int getCoreLevel() {
         ItemStack stack = getStackInSlot(3);
         return stack == null ? 0 : stack.getItemDamage() + 1;
@@ -172,20 +148,22 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     @Override
     public int getCapacity() {
-        int N = getPlateCount(), L = getCoreLevel();
-        return getCapacity(N, L);
+        return isWorking() ? 8 * getCoreLevel() : 0;
     }
 
     @Override
     public double getBandwidth() {
-        int N = getPlateCount(), L = getCoreLevel();
-        return getBandwidth(N, L);
+        int L = getCoreLevel();
+        return isWorking() ? L * L * 60 : 0;
     }
 
     @Override
     public double getRange() {
-        int N = getPlateCount(), L = getCoreLevel();
-        return getRange(N, L);
+        return isWorking() ? 24 * Math.sqrt(getCoreLevel()) : 0;
+    }
+
+    private boolean isWorking() {
+        return getCoreLevel() > 0 && getPlateCount() == 3;
     }
     
     private void sync() {

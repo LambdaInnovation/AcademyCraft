@@ -214,7 +214,7 @@ object TechUI {
     HistElement(localHist.get("liquid"), color, () => amt() / max, () => "%.0f mB".format(amt()))
   }
 
-  def histCapacity(amt: () => Int, max: Int) = {
+  def histCapacity(amt: () => Int, max: => Int) = {
     val color = new Color(0xffff6c00)
     HistElement(localHist.get("capacity"), color, () => amt().toDouble / max, () => s"${amt()}/$max")
   }
