@@ -52,26 +52,6 @@ public class SkillSyncAction extends SyncAction {
      * Add cooldown to a skill if the currently the SyncAction is local.
      */
     public void setCooldown(Controllable c, int time) {
-        if (!isRemote) {
-            CooldownManager.setCooldown(player, c, time);
-        } else {
-            NetworkMessage.sendToServer(
-                    NetworkMessage.staticCaller(SkillSyncAction.class),
-                    "sync_cooldown",
-                    player, c, time
-            );
-            // Force override the client data. This prevents user from executing skill just before cooldown sync.
-            lSetCooldown(c, time);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static void lSetCooldown(Controllable c, int time) {
-        ClientRuntime.instance().setCooldownRawFromServer(CooldownManager.getCtrlId(c), time);
-    }
-
-    @Listener(channel="sync_cooldown", side=Side.SERVER)
-    private static void hSetCooldown(EntityPlayer player,  Controllable c, int time) {
         CooldownManager.setCooldown(player, c, time);
     }
     

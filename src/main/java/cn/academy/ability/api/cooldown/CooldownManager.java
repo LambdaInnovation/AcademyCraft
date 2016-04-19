@@ -20,79 +20,57 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 
+import static cn.lambdalib.template.client.render.block.RenderEmptyBlock.id;
+
 /**
  * Manages cooldown cwd for all players on server.
- * @author EAirPeter
+ * @author EAirPeter, WeAthFolD
  */
 @Registrant
 @NetworkS11nType
 public class CooldownManager {
 
-    private static final String MSG_SYNCSET = "syncset";
+    private static final String MSG_SYNCSET = "syncset", MSG_SETSVR = "setsvr";
 
     @RegEventHandler
     public static final CooldownManager INSTANCE = new CooldownManager();
 
+    private static final Object staticDelegate = NetworkMessage.staticCaller(CooldownManager.class);
+
     private CooldownWorldData cwd = null;
 
-    private CooldownManager() {
+    private CooldownManager() {}
+
+    public static boolean isInCooldown(EntityPlayer player, Controllable ctrl, int idSub) {
+        return INSTANCE.cwd.isInCd(player.getCommandSenderName(), getCtrlId(ctrl, idSub));
     }
 
-    public static void setCooldown(EntityPlayer player, int idCtrl, int idSub,
-        int cd)
-    {
-        INSTANCE.cwd.setCd(player.getCommandSenderName(),
-            getCtrlId(idCtrl, idSub), cd);
-    }
-
-    public static boolean isInCooldown(EntityPlayer player, int idCtrl,
-        int idSub)
-    {
-        return INSTANCE.cwd.isInCd(player.getCommandSenderName(),
-            getCtrlId(idCtrl, idSub));
+    public static boolean isInCooldown(EntityPlayer player, Controllable ctrl) {
+        return INSTANCE.cwd.isInCd(player.getCommandSenderName(), getCtrlId(ctrl));
     }
 
     public static void clearCooldown(EntityPlayer player) {
         INSTANCE.cwd.clearCd(player.getCommandSenderName());
     }
 
-    public static void setCooldown(EntityPlayer player, Controllable ctrl,
-        int idSub, int cd)
-    {
-        INSTANCE.cwd.setCd(player.getCommandSenderName(),
-            getCtrlId(ctrl, idSub), cd);
+    public static void setCooldown(EntityPlayer player, Controllable ctrl, int idSub, int cd) {
+        setCooldownRaw(player, getCtrlId(ctrl, idSub), cd);
     }
 
-    public static boolean isInCooldown(EntityPlayer player, Controllable ctrl,
-        int idSub)
-    {
-        return INSTANCE.cwd.isInCd(player.getCommandSenderName(),
-            getCtrlId(ctrl, idSub));
+    public static void setCooldown(EntityPlayer player, Controllable ctrl, int cd) {
+        setCooldownRaw(player, getCtrlId(ctrl), cd);
     }
 
-    public static void setCooldown(EntityPlayer player, int idCtrl, int cd) {
-        INSTANCE.cwd.setCd(player.getCommandSenderName(),
-            getCtrlId(idCtrl), cd);
-    }
-
-    public static boolean isInCooldown(EntityPlayer player, int idCtrl) {
-        return INSTANCE.cwd.isInCd(player.getCommandSenderName(),
-            getCtrlId(idCtrl));
-    }
-
-    public static void setCooldown(EntityPlayer player, Controllable ctrl,
-        int cd)
-    {
-        INSTANCE.cwd.setCd(player.getCommandSenderName(), getCtrlId(ctrl), cd);
-    }
-
-    public static boolean isInCooldown(EntityPlayer player, Controllable ctrl) {
-        return INSTANCE.cwd.isInCd(player.getCommandSenderName(),
-            getCtrlId(ctrl));
+    private static void setCooldownRaw(EntityPlayer player, int id, int cd) {
+        if (player.worldObj.isRemote) {
+            cIntSetCd(id, cd);
+            NetworkMessage.sendToServer(staticDelegate, MSG_SETSVR, player, id, cd);
+        } else {
+            INSTANCE.cwd.setCd(player.getCommandSenderName(), id, cd);
+        }
     }
 
     public void onServerStarting() {
-        System.out.println("ONSERVERSTARTING");
         Preconditions.checkState(cwd == null);
         cwd = CooldownWorldData.load(FMLCommonHandler.instance().
             getMinecraftServerInstance().getEntityWorld()
@@ -101,7 +79,6 @@ public class CooldownManager {
     }
 
     public void onServerStopping() {
-        System.out.println("ONSERVERSTOPPING");
         Preconditions.checkState(cwd != null);
         cwd = null;
     }
@@ -118,10 +95,7 @@ public class CooldownManager {
     }
 
     static void cNetSetCd(EntityPlayer player, int id, int cd) {
-        NetworkMessage.sendTo(
-                player,
-                NetworkMessage.staticCaller(CooldownManager.class),
-                MSG_SYNCSET, id, cd);
+        NetworkMessage.sendTo(player, staticDelegate, MSG_SYNCSET, id, cd);
     }
 
     @Listener(channel=MSG_SYNCSET, side=Side.CLIENT)
@@ -130,20 +104,25 @@ public class CooldownManager {
         ClientRuntime.instance().setCooldownRawFromServer(id, cd);
     }
 
+    @Listener(channel=MSG_SETSVR, side=Side.SERVER)
+    private static void sIntSetCd(EntityPlayer player, int id, int cd) {
+        setCooldownRaw(player, id, cd);
+    }
+
     public static int getCtrlId(int idCtrl, int idSub) {
         return (idCtrl << 8) | (idSub & 0xff);
     }
 
     public static int getCtrlId(Controllable ctrl, int idSub) {
-        return (ctrl.getControlID() << 8) | (idSub & 0xff);
+        return getCtrlId(ctrl.getControlID(), idSub);
     }
 
     public static int getCtrlId(int idCtrl) {
-        return (idCtrl << 8) | 0xff;
+        return getCtrlId(idCtrl, 0);
     }
 
     public static int getCtrlId(Controllable ctrl) {
-        return (ctrl.getControlID() << 8) | 0xff;
+        return getCtrlId(ctrl, 0);
     }
 
 }

@@ -30,7 +30,7 @@ public class CooldownPlayerData {
     }
 
 
-    public void setCd(int id, int cd) {
+    void setCd(int id, int cd) {
         if (cd == 0)
             map.remove(id);
         else
@@ -39,7 +39,7 @@ public class CooldownPlayerData {
             CooldownManager.cNetSetCd(player, id, cd);
     }
 
-    public boolean isInCd(int id) {
+    boolean isInCd(int id) {
         return map.containsKey(id);
     }
 
