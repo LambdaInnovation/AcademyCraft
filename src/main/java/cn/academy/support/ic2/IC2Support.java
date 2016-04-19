@@ -71,48 +71,49 @@ public class IC2Support {
         GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
         GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
 
-        EnergyItemHelper.register(new EnergyItemManager() {
-
-            private IElectricItemManager manager() {
-                return Preconditions.checkNotNull(ElectricItem.manager);
-            }
-
-            @Override
-            public boolean isSupported(ItemStack stack) {
-                return stack.getItem() instanceof IElectricItem;
-            }
-
-            @Override
-            public double getEnergy(ItemStack stack) {
-                return manager().getCharge(stack);
-            }
-
-            @Override
-            public void setEnergy(ItemStack stack, double energy) {
-                double current = getEnergy(stack);
-                double delta = energy - current;
-
-                if (delta > 0) {
-                    manager().charge(stack, delta, 10, true, false);
-                } else {
-                    manager().discharge(stack, -delta, 10, true, false, false);
-                }
-            }
-
-            @Override
-            public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
-                double transferred = manager().charge(stack, amt, 10, ignoreBandwidth, false);
-                return amt - transferred;
-            }
-
-            @Override
-            public double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
-                double pulled = manager().discharge(stack, amt, 10, ignoreBandwidth, true, false);
-                return pulled;
-            }
-        });
+        EnergyItemHelper.register(new IC2EnergyItemManager());
 
         AcademyCraft.log.info("IC2 API Support has been loaded.");
     }
+}
 
+class IC2EnergyItemManager implements EnergyItemManager {
+
+    private IElectricItemManager manager() {
+        return Preconditions.checkNotNull(ElectricItem.manager);
+    }
+
+    @Override
+    public boolean isSupported(ItemStack stack) {
+        return stack.getItem() instanceof IElectricItem;
+    }
+
+    @Override
+    public double getEnergy(ItemStack stack) {
+        return manager().getCharge(stack);
+    }
+
+    @Override
+    public void setEnergy(ItemStack stack, double energy) {
+        double current = getEnergy(stack);
+        double delta = energy - current;
+
+        if (delta > 0) {
+            manager().charge(stack, delta, 10, true, false);
+        } else {
+            manager().discharge(stack, -delta, 10, true, false, false);
+        }
+    }
+
+    @Override
+    public double charge(ItemStack stack, double amt, boolean ignoreBandwidth) {
+        double transferred = manager().charge(stack, amt, 10, ignoreBandwidth, false);
+        return amt - transferred;
+    }
+
+    @Override
+    public double pull(ItemStack stack, double amt, boolean ignoreBandwidth) {
+        double pulled = manager().discharge(stack, amt, 10, ignoreBandwidth, true, false);
+        return pulled;
+    }
 }
