@@ -196,6 +196,8 @@ public class MagMovement extends Skill {
                 AbilityData aData = AbilityData.get(player);
                 aData.addSkillExp(instance, getExpIncr(traveledDistance));
                 instance.triggerAchievement(player);
+
+                player.fallDistance = 0.0f;
             }
         }
         
