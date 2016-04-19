@@ -3,7 +3,7 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager, KeyDelegate}
+import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
@@ -17,6 +17,8 @@ import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.api.cooldown.CooldownManager
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
+import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.util.generic.RandUtils._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.{EntityBlockDustFX, EntitySmokeFX}
 
@@ -75,40 +77,23 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   private var state: Int = STATE_CHARGE
   private var stateTick: Int = 0
 
-  @SideOnly(Side.CLIENT)
-  private var activateHandler: IActivateHandler = _
-
-  @SideOnly(Side.CLIENT)
-  private var loopSound: FollowEntitySound = _
-
   private var prevAllowFlying: Boolean = _
 
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def l_makeAlive() = if(isLocal) {
-    activateHandler = new IActivateHandler {
-      override def handles(player: EntityPlayer): Boolean = true
-      override def getHint: String = IActivateHandler.ENDSPECIAL
-      override def onKeyDown(player: EntityPlayer): Unit = terminate()
-    }
-    clientRuntime.addActivateHandler(activateHandler)
-  }
-
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
-  def s_makeAlive() = {
+  private def s_makeAlive() = {
     prevAllowFlying = player.capabilities.allowFlying
     player.capabilities.allowFlying = true
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  def l_keyDown(dir: () => Vec3, _keyid: Int) = if (state == STATE_ACTIVE) {
+  private def l_keyDown(dir: () => Vec3, _keyid: Int) = if (state == STATE_ACTIVE) {
     currentDir = Some(dir)
     keyid = _keyid
     l_syncState()
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  def l_keyUp(_keyid: Int) = currentDir match {
+  private def l_keyUp(_keyid: Int) = currentDir match {
     case Some(cur) if keyid == _keyid =>
       currentDir = None
       l_syncState()
@@ -126,7 +111,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   }
 
   @Listener(channel=MSG_UPDSTATE, side=Array(Side.SERVER))
-  def s_update(_applying: Boolean) = {
+  private def s_update(_applying: Boolean) = {
     applying = _applying
     sendToExceptLocal(MSG_UPDSTATE, wrap(applying))
   }
@@ -134,13 +119,12 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   private def wrap(x: Any):AnyRef = x.asInstanceOf[AnyRef]
 
   @Listener(channel=MSG_UPDSTATE, side=Array(Side.CLIENT))
-  def c_update(_applying: Boolean) = {
+  private def c_update(_applying: Boolean) = {
     applying = _applying
   }
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  def l_tick() = if (isLocal) {
+  private def l_tick() = if (isLocal) {
     currentDir match {
       case Some(dir) =>
         val moveDir = MVec3(dir())
@@ -156,7 +140,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
           player.position + MVec3(0, -0.3, 0),
           EntitySelectors.nothing)
         res match {
-          case EmptyResult() => player.motionY += 0.06
+          case EmptyResult() => player.motionY += 0.078
           case _ =>  player.motionY = 0.1 // Keep player floating on the air if near ground
         }
     }
@@ -175,40 +159,17 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
 
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  def c_tick() = {
+  private def c_tick() = {
     stateTick += 1
-
-    for (i <- 0 until 12) { // Particles that surround the player
-      val theta = ranged(0, math.Pi * 2)
-      val phi = ranged(-math.Pi, math.Pi)
-      val r = ranged(3, 8)
-
-      val rzx = r * math.sin(phi)
-      val (cth, sth) = (math.cos(theta), math.sin(theta))
-      val (dx, dy, dz) = (rzx * cth, r * math.cos(phi), rzx * sth)
-
-      val particle = new EntityBlockDustFX(world,
-        player.posX + dx, player.posY + dy, player.posZ + dz,
-        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.dirt, 0) { particleGravity = 0.02f }
-      particle.multipleParticleScaleBy(0.5f)
-      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
-    }
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  def l_terminate() = if(isLocal) {
-    clientRuntime.clearKeys(KEY_GROUP)
-    clientRuntime.removeActiveHandler(activateHandler)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
-  def s_terminate() = {
+  private def s_terminate() = {
     player.capabilities.allowFlying = prevAllowFlying
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
-  def s_tick() = {
+  private def s_tick() = {
     player.fallDistance = 0
 
     // Break blocks nearby player
@@ -231,27 +192,11 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def c_makealive() = {
-    world.spawnEntityInWorld(new StormWingEffect(this))
-
-    loopSound = new FollowEntitySound(player, "vecmanip.storm_wing").setLoop()
-    ACSounds.playClient(loopSound)
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  private def c_terminate() = {
-    loopSound.stop()
-  }
-
   private def doConsume() = if (state == STATE_ACTIVE) {
     aData.addSkillExp(StormWing, expincr)
 
     cpData.perform(overload, consumption)
   } else true
-
 
   @SideOnly(Side.CLIENT)
   private def initKeys() = {
@@ -312,15 +257,15 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
-  def consumption = if (isApplying) lerpf(50, 30, skillExp) else lerpf(9, 6, skillExp)
+  private def consumption = if (isApplying) lerpf(50, 30, skillExp) else lerpf(9, 6, skillExp)
 
-  lazy val overload = lerpf(3, 2, skillExp)
+  private val overload = lerpf(3, 2, skillExp)
 
-  lazy val speed = (if (skillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, skillExp)
+  private val speed = (if (skillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, skillExp)
 
-  val expincr = 0.00005f // per tick
+  private val expincr = 0.00005f // per tick
 
-  lazy val chargeTime = lerpf(70, 30, skillExp)
+  private[vecmanip] val chargeTime = lerpf(70, 30, skillExp)
 
   def getState = state
 
@@ -330,3 +275,60 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
 
 }
 
+@Registrant
+@RegClientContext(classOf[StormWingContext])
+class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
+
+  private var activateHandler: IActivateHandler = _
+
+  private var loopSound: FollowEntitySound = _
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  private def l_makeAlive() = if(isLocal) {
+    activateHandler = new IActivateHandler {
+      override def handles(player: EntityPlayer): Boolean = true
+      override def getHint: String = IActivateHandler.ENDSPECIAL
+      override def onKeyDown(player: EntityPlayer): Unit = terminate()
+    }
+    clientRuntime.addActivateHandler(activateHandler)
+  }
+
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def l_terminate() = if(isLocal) {
+    clientRuntime.clearKeys(KEY_GROUP)
+    clientRuntime.removeActiveHandler(activateHandler)
+  }
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  private def c_makealive() = {
+    world.spawnEntityInWorld(new StormWingEffect(par))
+
+    loopSound = new FollowEntitySound(player, "vecmanip.storm_wing").setLoop()
+    ACSounds.playClient(loopSound)
+  }
+
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_terminate() = {
+    loopSound.stop()
+  }
+
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  private def c_tick() = {
+    for (i <- 0 until 12) { // Particles that surround the player
+    val theta = ranged(0, math.Pi * 2)
+      val phi = ranged(-math.Pi, math.Pi)
+      val r = ranged(3, 8)
+
+      val rzx = r * math.sin(phi)
+      val (cth, sth) = (math.cos(theta), math.sin(theta))
+      val (dx, dy, dz) = (rzx * cth, r * math.cos(phi), rzx * sth)
+
+      val particle = new EntityBlockDustFX(world,
+        player.posX + dx, player.posY + dy, player.posZ + dz,
+        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.dirt, 0) { particleGravity = 0.02f }
+      particle.multipleParticleScaleBy(0.5f)
+      Minecraft.getMinecraft.effectRenderer.addEffect(particle)
+    }
+  }
+
+}

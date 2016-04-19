@@ -2,7 +2,7 @@ package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider, IStateProvider}
+import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
 import cn.academy.vanilla.generic.client.effect.SmokeEffect
@@ -86,54 +86,6 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = {
     terminate()
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
-  def c_perform(affectedBlocks: Array[Array[Int]]) = {
-    if (isLocal) {
-      consume()
-
-      // Starts a coroutine that make player's look direction slash down.
-      LIFMLGameEventDispatcher.INSTANCE.registerClientTick(new LIHandler[ClientTickEvent] {
-        var ticks = 0
-
-        override protected def onEvent(event: ClientTickEvent): Boolean = {
-          ticks += 1
-          player.rotationPitch += 3.4f
-
-          if (ticks >= 4) { setDead() }
-
-          true
-        }
-      })
-    }
-
-    ACSounds.playClient(player, "vecmanip.groundshock", 2)
-
-    affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
-      for (i <- 0 until rangei(4, 8)) {
-        def randvel() = ranged(-0.2, 0.2)
-        val entity = new EntityDiggingFX(
-          world,
-          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
-          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
-          world.getBlock(pt.x, pt.y, pt.z),
-          ForgeDirection.UP.ordinal())
-
-        Minecraft.getMinecraft.effectRenderer.addEffect(entity)
-      }
-
-      if (nextFloat() < 0.5f) {
-        val eff = new SmokeEffect(world)
-        val pos = (pt.x + 0.5 + ranged(-.3, .3), pt.y + 1 + ranged(0, 0.2), pt.z + 0.5 + ranged(-.3, .3))
-        val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
-
-        eff.setPos(pos)
-        eff.setVel(vel)
-        world.spawnEntityInWorld(eff)
-      }
-    })
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
@@ -256,25 +208,78 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
   override def getState = if (localTick < 5) DelegateState.CHARGE else DelegateState.ACTIVE
 
-  private def initEnergy: Double = lerpf(60, 120, skillExp)
+  private val initEnergy: Double = lerpf(60, 120, skillExp)
 
-  private def damage: Float = lerpf(7, 16, skillExp)
+  private val damage: Float = lerpf(7, 16, skillExp)
 
-  private def consumption: Float = lerpf(300, 180, skillExp)
+  private val consumption: Float = lerpf(300, 180, skillExp)
 
-  private def overload: Float = lerpf(135, 100, skillExp)
+  private val overload: Float = lerpf(135, 100, skillExp)
 
-  private def maxIter: Int = lerpf(10, 25, skillExp).toInt
+  private val maxIter: Int = lerpf(10, 25, skillExp).toInt
+
+  private val cooldown: Int = lerpf(45, 20, skillExp).toInt
+
+  private val dropRate = lerpf(0.3f, 1.0f, skillExp)
 
   // y speed given to mobs.
   private def ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, skillExp)
 
-  private def consume(): Boolean = cpData.perform(overload, consumption)
+  private[skills] def consume(): Boolean = cpData.perform(overload, consumption)
 
-  private def groundBreakProb: Double = 0.3
+  private val groundBreakProb: Double = 0.3
+}
 
-  private def cooldown: Int = lerpf(45, 20, skillExp).toInt
+@Registrant
+@RegClientContext(classOf[GroundshockContext])
+class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
 
-  private def dropRate = lerpf(0.3f, 1.0f, skillExp)
+  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  def c_perform(affectedBlocks: Array[Array[Int]]) = {
+    if (isLocal) {
+      par.consume()
+
+      // Starts a coroutine that make player's look direction slash down.
+      LIFMLGameEventDispatcher.INSTANCE.registerClientTick(new LIHandler[ClientTickEvent] {
+        var ticks = 0
+
+        override protected def onEvent(event: ClientTickEvent): Boolean = {
+          ticks += 1
+          player.rotationPitch += 3.4f
+
+          if (ticks >= 4) { setDead() }
+
+          true
+        }
+      })
+    }
+
+    ACSounds.playClient(player, "vecmanip.groundshock", 2)
+
+    affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
+      for (i <- 0 until rangei(4, 8)) {
+        def randvel() = ranged(-0.2, 0.2)
+        val entity = new EntityDiggingFX(
+          world,
+          pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
+          randvel(), 0.1 + nextDouble() * 0.2, randvel(),
+          world.getBlock(pt.x, pt.y, pt.z),
+          ForgeDirection.UP.ordinal())
+
+        Minecraft.getMinecraft.effectRenderer.addEffect(entity)
+      }
+
+      if (nextFloat() < 0.5f) {
+        val eff = new SmokeEffect(world)
+        val pos = (pt.x + 0.5 + ranged(-.3, .3), pt.y + 1 + ranged(0, 0.2), pt.z + 0.5 + ranged(-.3, .3))
+        val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
+
+        eff.setPos(pos)
+        eff.setVel(vel)
+        world.spawnEntityInWorld(eff)
+      }
+    })
+  }
 
 }
+

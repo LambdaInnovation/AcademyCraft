@@ -14,9 +14,11 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import cn.lambdalib.util.mc.MCExtender._
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.Tessellator
 import org.lwjgl.opengl.GL11._
 
+@SideOnly(Side.CLIENT)
 @Registrant
 object SmokeEffect_ {
 
@@ -70,6 +72,7 @@ object SmokeEffect_ {
 /**
   * @author WeAthFolD
   */
+@SideOnly(Side.CLIENT)
 class SmokeEffect(world: World) extends LocalEntity(world) {
 
   setSize(1, 1)

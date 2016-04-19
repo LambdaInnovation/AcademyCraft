@@ -1,8 +1,9 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.GameTimer
@@ -19,41 +20,33 @@ object DirectedShock extends Skill("dir_shock", 1) {
 
 }
 
-
 private object ShockContext {
   final val MSG_PERFORM = "perform"
   final val MSG_GENERATE_EFFECT = "gen_eff"
 }
 
+import cn.academy.ability.api.AbilityAPIExt._
+import ShockContext._
+import MCExtender._
+import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
+import cn.academy.ability.api.AbilityPipeline._
+import MathUtils._
+
 class ShockContext(p: EntityPlayer) extends Context(p) {
-  import cn.academy.ability.api.AbilityAPIExt._
-  import ShockContext._
-  import MCExtender._
-  import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
-  import cn.academy.ability.api.AbilityPipeline._
-  import MathUtils._
 
-  implicit val skill_ = DirectedShock
-  implicit val aData_ = aData
-  implicit val player_ = p
+  private implicit val skill_ = DirectedShock
+  private implicit val aData_ = aData
+  private implicit val player_ = p
 
-  val MIN_TICKS = 6
-  val MAX_ACCEPTED_TICKS = 50
-  val MAX_TOLERANT_TICKS = 200
-  val PUNCH_ANIM_TICKS = 6
+  private val MIN_TICKS = 6
+  private val MAX_ACCEPTED_TICKS = 50
+  private val MAX_TOLERANT_TICKS = 200
+  private val PUNCH_ANIM_TICKS = 6
 
-  var ticker = 0
+  private var ticker = 0
 
-  var punched = false
-  var punchTicker = 0
-
-  @SideOnly(Side.CLIENT)
-  var handEffect: HandRenderer = _
-
-  @SideOnly(Side.CLIENT)
-  var anim: CompTransformAnim = _
-
-  var timeProvider: () => Double = null
+  private var punched = false
+  private var punchTicker = 0
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
@@ -107,6 +100,58 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
     terminate()
   }
 
+  @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
+  def c_effect(ent: Entity) = {
+    knockback(ent)
+    punched = true
+  }
+
+  private def consume() = {
+    val cp = lerpf(50, 100, skillExp)
+    val overload = lerpf(18, 12, skillExp)
+
+    cpData.perform(overload, cp)
+  }
+  private def damage = lerpf(6, 12, skillExp)
+  private def knockback(targ: Entity) = if (skillExp >= 0.25f) {
+    var delta = player.headPosition - targ.headPosition
+    delta = delta.normalize()
+    delta.yCoord = -0.6f
+    delta = delta.normalize()
+
+    targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)
+    targ.setVel(delta * -0.7f)
+  }
+
+}
+
+@Registrant
+@RegClientContext(classOf[ShockContext])
+class ShockContextC(par: ShockContext) extends ClientContext(par) {
+
+  var handEffect: HandRenderer = _
+
+  var anim: CompTransformAnim = _
+
+  var timeProvider: () => Double = null
+
+  @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
+  def l_effect() = if (isLocal) {
+    val init = GameTimer.getTime
+    timeProvider = () => {
+      val dt = GameTimer.getTime - init
+      dt / 300.0
+    }
+
+    anim = createPunchAnim()
+    anim.perform(0)
+  }
+
+  @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
+  def c_effect() = {
+    ACSounds.playClient(player, "vecmanip.directed_shock", 0.5f)
+  }
+
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
@@ -130,44 +175,6 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
     HandRenderInterrupter(player).stopInterrupt(handEffect)
-  }
-
-  @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
-  def l_effect() = if (isLocal) {
-    punched = true
-
-    val init = GameTimer.getTime
-    timeProvider = () => {
-      val dt = GameTimer.getTime - init
-      dt / 300.0
-    }
-
-    anim = createPunchAnim()
-    anim.perform(0)
-  }
-
-  @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
-  def c_effect(ent: Entity) = {
-    knockback(ent)
-
-    ACSounds.playClient(player, "vecmanip.directed_shock", 0.5f)
-  }
-
-  private def consume() = {
-    val cp = lerpf(50, 100, skillExp)
-    val overload = lerpf(18, 12, skillExp)
-
-    cpData.perform(overload, cp)
-  }
-  private def damage = lerpf(6, 12, skillExp)
-  private def knockback(targ: Entity) = if (skillExp >= 0.25f) {
-    var delta = player.headPosition - targ.headPosition
-    delta = delta.normalize()
-    delta.yCoord = -0.6f
-    delta = delta.normalize()
-
-    targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)
-    targ.setVel(delta * -0.7f)
   }
 
 }

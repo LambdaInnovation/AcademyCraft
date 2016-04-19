@@ -3,10 +3,11 @@ package cn.academy.vanilla.vecmanip.skills
 import java.util.function.Predicate
 
 import cn.academy.ability.api.{AbilityPipeline, Skill}
-import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
+import cn.academy.ability.api.context._
 import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.mc.{Raytrace, Vec3, WorldUtils}
@@ -37,7 +38,7 @@ import collection.mutable
 import net.minecraft.util.{Vec3 => MCVec3}
 import VMSkillHelper._
 
-object VecReflectionContext {
+private object VecReflectionContext {
   final val MSG_EFFECT = "effect"
   final val MSG_REFLECT_ENTITY = "reflect_ent"
 
@@ -67,10 +68,10 @@ object VecReflectionContext {
 
 class VecReflectionContext(p: EntityPlayer) extends Context(p) {
 
-  val visited = mutable.Set[Entity]()
+  private val visited = mutable.Set[Entity]()
 
-  implicit val aData_ = aData()
-  implicit val skill_ = VecReflection
+  private implicit val aData_ = aData()
+  private implicit val skill_ = VecReflection
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -90,19 +91,6 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER, Side.CLIENT))
   def g_terminate() = {
     MinecraftForge.EVENT_BUS.unregister(this)
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
-  def reflectEffect(point: MCVec3) = {
-    val eff = new WaveEffect(world, 2, 1.1)
-    eff.setPos(point)
-    eff.rotationYaw = player.rotationYawHead
-    eff.rotationPitch = player.rotationPitch
-
-    world.spawnEntityInWorld(eff)
-
-    playSound(point)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -125,12 +113,6 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def c_tick() = {
     consumeNormal()
-  }
-
-  @Listener(channel=MSG_REFLECT_ENTITY, side=Array(Side.CLIENT))
-  def c_reflectEntity(ent: Entity) = {
-    reflect(ent, player)
-    reflectEffect(ent.headPosition)
   }
 
   @SubscribeEvent
@@ -167,11 +149,6 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
-  @SideOnly(Side.CLIENT)
-  private def playSound(pos: net.minecraft.util.Vec3) = {
-    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", 0.5f, 1.0f)
-  }
-
   private def reflectRate = lerpf(0.7f, 1.2f, skillExp) * rangef(0.9f, 1.1f)
 
   private def consumeEntity() = cpData.perform(lerpf(30, 16, skillExp), lerpf(300, 160, skillExp))
@@ -179,5 +156,33 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
   private def consumeDamage() = cpData.perform(lerpf(30, 10, skillExp), lerpf(300, 200, skillExp))
 
   private def consumeNormal() = cpData.perform(lerpf(2, 1.5f, skillExp), lerpf(20, 16, skillExp))
+
+}
+
+@Registrant
+@RegClientContext(classOf[VecReflectionContext])
+class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par) {
+
+  @Listener(channel=MSG_REFLECT_ENTITY, side=Array(Side.CLIENT))
+  private def c_reflectEntity(ent: Entity) = {
+    reflect(ent, player)
+    reflectEffect(ent.headPosition)
+  }
+
+  @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
+  private def reflectEffect(point: MCVec3) = {
+    val eff = new WaveEffect(world, 2, 1.1)
+    eff.setPos(point)
+    eff.rotationYaw = player.rotationYawHead
+    eff.rotationPitch = player.rotationPitch
+
+    world.spawnEntityInWorld(eff)
+
+    playSound(point)
+  }
+
+  private def playSound(pos: net.minecraft.util.Vec3) = {
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", 0.5f, 1.0f)
+  }
 
 }

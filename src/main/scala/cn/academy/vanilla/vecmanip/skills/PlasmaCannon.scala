@@ -3,10 +3,11 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.{AbilityPipeline, Skill}
-import cn.academy.ability.api.context.{ClientRuntime, Context, IStateProvider}
+import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc._
 import cpw.mods.fml.client.registry.RenderingRegistry
@@ -67,13 +68,6 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
   val chargePosition = player.position + (0.0, 15.0, 0.0)
   var destination: Vec3 = null
 
-  @SideOnly(Side.CLIENT)
-  var sound: FollowEntitySound = _
-
-  @SideOnly(Side.CLIENT)
-  var effect: PlasmaBodyEffect = _
-
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
     if (localTicker >= chargeTime) {
@@ -83,11 +77,9 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     }
   }
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     localTicker += 1
@@ -112,42 +104,19 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     sendToClient(MSG_STATECHG, destination)
   }
 
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def c_begin() = {
-    effect = new PlasmaBodyEffect(world, this)
-    effect.setPos(chargePosition)
-
-    world.spawnEntityInWorld(new Tornado(this))
-    world.spawnEntityInWorld(effect)
-
-    sound = new FollowEntitySound(player, "vecmanip.plasma_cannon")
-    ACSounds.playClient(sound)
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  def c_terminate() = {
-    sound.stop()
-  }
-
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def c_tick() = {
-      if (state == STATE_GO) {
-        tryMove()
-      }
-      effect.setPos(chargePosition)
+    if (state == STATE_GO) {
+      tryMove()
+    }
   }
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_STATECHG, side=Array(Side.CLIENT))
   def c_stateChange(dest: Vec3) = {
     state = STATE_GO
     destination = dest
   }
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_SYNCPOS, side=Array(Side.CLIENT))
   def c_syncPos(pos: Vec3) = {
     chargePosition.set(pos)
@@ -286,6 +255,38 @@ private class Tornado(val ctx: PlasmaCannonContext)
   }
 
   override def shouldRenderInPass(pass: Int) = pass == 1
+
+}
+
+@Registrant
+@RegClientContext(classOf[PlasmaCannonContext])
+class PlasmaCannonContextC(par: PlasmaCannonContext) extends ClientContext(par) {
+
+  private var sound: FollowEntitySound = _
+
+  private var effect: PlasmaBodyEffect = _
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  private def c_begin() = {
+    effect = new PlasmaBodyEffect(world, par)
+    effect.setPos(par.chargePosition)
+
+    world.spawnEntityInWorld(new Tornado(par))
+    world.spawnEntityInWorld(effect)
+
+    sound = new FollowEntitySound(player, "vecmanip.plasma_cannon")
+    ACSounds.playClient(sound)
+  }
+
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_terminate() = {
+    sound.stop()
+  }
+
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  private def c_tick() = {
+    effect.setPos(par.chargePosition)
+  }
 
 }
 

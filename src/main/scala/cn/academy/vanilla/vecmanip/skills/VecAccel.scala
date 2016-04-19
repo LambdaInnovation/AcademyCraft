@@ -1,9 +1,10 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider}
+import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.mc._
@@ -27,12 +28,13 @@ object VecAccelContext {
   final val LN_A = math.log(DAMPING)
 }
 
+import cn.academy.ability.api.AbilityAPIExt._
+import VecAccelContext._
+import cn.lambdalib.util.mc.MCExtender._
+import cn.lambdalib.util.generic.MathUtils._
+import Math._
+
 class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
-  import cn.academy.ability.api.AbilityAPIExt._
-  import VecAccelContext._
-  import cn.lambdalib.util.mc.MCExtender._
-  import cn.lambdalib.util.generic.MathUtils._
-  import Math._
 
   override def getConsumptionHint: Float = consumption
 
@@ -43,11 +45,6 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
   var ticker = 0
 
   var canPerform = true
-
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def l_makeAlive() = {
-    world().spawnEntityInWorld(new ParabolaEffect(this))
-  }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = l_perform()
@@ -81,12 +78,6 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
 
     sendToClient(MSG_PERFORM)
     terminate()
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
-  def c_perform() = {
-    ACSounds.playClient(player, "vecmanip.vec_accel", 0.35f)
   }
 
   def initSpeed(partialTicks: Float = 0.0f) = {
@@ -123,6 +114,22 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
       case BlockResult(_,_) => true
       case _ => false
     }
+  }
+
+}
+
+@Registrant
+@RegClientContext(classOf[VecAccelContext])
+class VecAccelContextC(par: VecAccelContext) extends ClientContext(par) {
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  def l_makeAlive() = {
+    world().spawnEntityInWorld(new ParabolaEffect(par))
+  }
+
+  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  def c_perform() = {
+    ACSounds.playClient(player, "vecmanip.vec_accel", 0.35f)
   }
 
 }

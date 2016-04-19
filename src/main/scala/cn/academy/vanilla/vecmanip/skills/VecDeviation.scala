@@ -3,7 +3,7 @@ package cn.academy.vanilla.vecmanip.skills
 import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context, ContextManager}
+import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
 import VMSkillHelper._
 import cn.academy.core.client.sound.ACSounds
+import cn.lambdalib.annoreg.core.Registrant
 
 object VecDeviation extends Skill("vec_deviation", 2) {
 
@@ -83,26 +84,26 @@ import cn.lambdalib.util.mc.MCExtender._
 import cn.academy.ability.api.AbilityAPIExt._
 import collection.mutable
 import scala.collection.JavaConversions._
+import cn.lambdalib.util.generic.MathUtils._
+import VecDeviationContext._
 
 class VecDeviationContext(p: EntityPlayer) extends Context(p) {
-  import cn.lambdalib.util.generic.MathUtils._
-  import VecDeviationContext._
 
   private implicit val aData_ = aData()
   private implicit val skill_ = VecDeviation
 
-  val visited = mutable.Set[Entity]()
+  private val visited = mutable.Set[Entity]()
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  def l_keyDown() = {}
+  private def l_keyDown() = {}
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  def l_keyUp() = terminate()
+  private def l_keyUp() = terminate()
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  def l_keyAbort() = terminate()
+  private def l_keyAbort() = terminate()
 
-  def reduceDamage(dmg: Float) = {
+  private[skills] def reduceDamage(dmg: Float) = {
     val consumpRatio = 60.0f
     val overloadRatio = 10.0f
 
@@ -118,10 +119,10 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     dmg - absorbed
   }
 
-  def shouldStopEntity(ent: Entity) = shouldStop(ent)
+  private[skills] def shouldStopEntity(ent: Entity) = shouldStop(ent)
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
-  def s_tick() = {
+  private def s_tick() = {
     // Check the entities around player, and stop them by probablity
     val range = 5
     val entities = WorldUtils.getEntities(player, range, stopFilter)
@@ -139,13 +140,23 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
   }
 
   @Listener(channel=MSG_TICK, side={Array(Side.CLIENT, Side.SERVER)})
-  def g_tick() = if (!isRemote || isLocal) {
+  private def g_tick() = if (!isRemote || isLocal) {
     val normConsume = lerpf(5, 2.5f, skillExp)
     val normOverload = lerpf(0.5f, 0.2f, skillExp)
     cpData.perform(normOverload, normConsume)
   }
 
-  @SideOnly(Side.CLIENT)
+  private def consumeStop() = {
+    cpData.perform(
+      lerpf(16, 10, skillExp),
+      lerpf(150, 100, skillExp))
+  }
+}
+
+@Registrant
+@RegClientContext(classOf[VecDeviationContext])
+class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) {
+
   @Listener(channel=MSG_STOP_ENTITY, side=Array(Side.CLIENT))
   def c_stopEntity(ent: Entity) = {
     if (!isMarked(ent)) {
@@ -161,13 +172,6 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     stop(ent, player)
   }
 
-  def consumeStop() = {
-    cpData.perform(
-      lerpf(16, 10, skillExp),
-      lerpf(150, 100, skillExp))
-  }
-
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_PLAY, side=Array(Side.CLIENT))
   private def playSound(pos: net.minecraft.util.Vec3) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", 0.5f, 1.0f)

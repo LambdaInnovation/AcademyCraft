@@ -55,6 +55,7 @@ public class MineRayLuck extends MineRaysBase {
             world.setBlock(x, y, z, Blocks.air);
         }
 
+        @SideOnly(Side.CLIENT)
         @Override
         protected Entity createRay() {
             return new EntityMineRayLuck(player);

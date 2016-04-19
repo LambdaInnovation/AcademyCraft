@@ -10,12 +10,21 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.IMessageDelegate;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * {@link Context} represents an environment that is bound to a specific player. When a context is activated
@@ -30,7 +39,7 @@ import net.minecraft.world.World;
  * @see ContextManager
  * @author WeAthFolD
  */
-public class Context {
+public class Context implements IMessageDelegate {
     public static final String
         MSG_TERMINATED = "i_term",
         MSG_MADEALIVE = "i_alive",
@@ -46,6 +55,8 @@ public class Context {
 
     private final ContextManager mgr = ContextManager.instance;
 
+    List<ClientContext> clientContexts = new ArrayList<>();
+
     public final EntityPlayer player;
 
     Status status = Status.CONSTRUCTED;
@@ -57,6 +68,17 @@ public class Context {
      */
     public Context(EntityPlayer _player) {
         player = _player;
+
+        if (isRemote()) {
+            constructClientContexts();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void constructClientContexts() {
+        for (Function<Context, ClientContext> supplier : clientTypes.get(getClass())) {
+            clientContexts.add(supplier.apply(this));
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -70,14 +92,14 @@ public class Context {
 
     // Lifetime
 
-    public final Status getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     /**
      * @see ContextManager#terminate(Context)
      */
-    public final void terminate() {
+    public void terminate() {
         ContextManager.instance.terminate(this);
     }
 
@@ -160,4 +182,19 @@ public class Context {
     private boolean isLocalClient_() {
         return Minecraft.getMinecraft().thePlayer.equals(player);
     }
+
+    @Override
+    public final void onMessage(String channel, Object... args) {
+        if (isRemote()) {
+            for (ClientContext cctx : clientContexts) {
+                NetworkMessage.sendToSelf(cctx, channel, args);
+            }
+        }
+    }
+
+    // RegClientContext support
+    static final Multimap<Class<? extends Context>, Function<Context, ClientContext>>
+            clientTypes = HashMultimap.create();
+
+
 }

@@ -1,12 +1,14 @@
 package cn.academy.vanilla.vecmanip.skills
 
 import cn.academy.ability.api.{AbilityPipeline, Skill}
-import cn.academy.ability.api.context.{ClientRuntime, Context, IConsumptionProvider}
+import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
+import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util
+import cn.lambdalib.util.generic.RandUtils._
 import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.mc._
 import cn.lambdalib.vis.animation.presets.CompTransformAnim
@@ -27,21 +29,22 @@ object DirectedBlastwave extends Skill("dir_blast", 3) {
 }
 
 private object BlastwaveContext {
+  final val MSG_EFFECT  = "effect"
   final val MSG_PERFORM = "perform"
   final val MSG_ATTACK_ENTITY = "entity"
   final val MSG_GENERATE_EFFECT_BLOCKS = "effect_blocks"
 }
 
-class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
+import cn.academy.ability.api.AbilityAPIExt._
+import BlastwaveContext._
+import MCExtender._
+import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
+import cn.academy.ability.api.AbilityPipeline._
+import MathUtils._
+import cn.lambdalib.util.generic.RandUtils._
+import scala.collection.JavaConversions._
 
-  import cn.academy.ability.api.AbilityAPIExt._
-  import BlastwaveContext._
-  import MCExtender._
-  import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
-  import cn.academy.ability.api.AbilityPipeline._
-  import MathUtils._
-  import cn.lambdalib.util.generic.RandUtils._
-  import scala.collection.JavaConversions._
+class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
 
   implicit val skill_ = DirectedBlastwave
   implicit val aData_ = aData
@@ -56,14 +59,6 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
   var punched = false
   var punchTicker = 0
-
-  @SideOnly(Side.CLIENT)
-  var handEffect: HandRenderer = _
-
-  @SideOnly(Side.CLIENT)
-  var anim: CompTransformAnim = _
-
-  var timeProvider: () => Double = null
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
@@ -147,8 +142,6 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
               }
 
               world.setBlock(i, j, k, Blocks.air)
-
-              // Minecraft.getMinecraft.effectRenderer.addBlockDestroyEffects(i, j, k, block, meta)
             }
           }
         }
@@ -162,48 +155,6 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     }
   }
 
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def l_handEffectStart() = if (isLocal) {
-    anim = createPrepareAnim()
-
-    val init = GameTimer.getTime
-    timeProvider = () => {
-      val dt = GameTimer.getTime - init
-      math.min(2.0, dt / 150.0)
-    }
-
-    handEffect = new HandRenderer {
-      override def render(partialTicks: Float) = {
-        anim.perform(timeProvider())
-        HandRenderer.renderHand(partialTicks, anim.target)
-      }
-    }
-
-    HandRenderInterrupter(player).addInterrupt(handEffect)
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  def l_handEffectTerminate() = if (isLocal) {
-    HandRenderInterrupter(player).stopInterrupt(handEffect)
-  }
-
-  @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
-  def l_effect() = if (isLocal) {
-    punched = true
-
-    val init = GameTimer.getTime
-    timeProvider = () => {
-      val dt = GameTimer.getTime - init
-      dt / 300.0
-    }
-
-    anim = createPunchAnim()
-    anim.perform(0)
-  }
-
   @Listener(channel=MSG_ATTACK_ENTITY, side=Array(Side.CLIENT))
   def c_effect(entities: Array[Entity]) = {
     entities.foreach(knockback)
@@ -211,8 +162,9 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   def c_perform(pos: Vec3) = {
-    ACSounds.playClient(player, "vecmanip.directed_shock", 0.5f)
-    effectAt(util.mc.Vec3(pos.xCoord, pos.yCoord, pos.zCoord))
+    sendToSelf(MSG_EFFECT, util.mc.Vec3(pos.xCoord, pos.yCoord, pos.zCoord))
+
+    punched = true
   }
 
   private def consume() = {
@@ -250,8 +202,22 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     targ.setVel(delta * -1.2f)
   }
 
-  @SideOnly(Side.CLIENT)
+}
+
+@Registrant
+@RegClientContext(classOf[BlastwaveContext])
+class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
+
+  var handEffect: HandRenderer = _
+
+  var anim: CompTransformAnim = _
+
+  var timeProvider: () => Double = null
+
+  @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
   private def effectAt(pos: Vec3) = {
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.directed_blast", 0.5f, 1.0f)
+
     val effect = new WaveEffect(world, rangei(2, 3), 1)
     effect.setPos(util.mc.Vec3.lerp(player.headPosition, pos, 0.7))
     effect.rotationYaw = player.rotationYawHead + rangef(-20, 20)
@@ -259,4 +225,46 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
     world.spawnEntityInWorld(effect)
   }
+
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  def l_handEffectStart() = if (isLocal) {
+    anim = createPrepareAnim()
+
+    val init = GameTimer.getTime
+    timeProvider = () => {
+      val dt = GameTimer.getTime - init
+      math.min(2.0, dt / 150.0)
+    }
+
+    handEffect = new HandRenderer {
+      override def render(partialTicks: Float) = {
+        anim.perform(timeProvider())
+        HandRenderer.renderHand(partialTicks, anim.target)
+      }
+    }
+
+    HandRenderInterrupter(player).addInterrupt(handEffect)
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  def l_handEffectTerminate() = if (isLocal) {
+    HandRenderInterrupter(player).stopInterrupt(handEffect)
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  def l_effect() = if (isLocal) {
+    val init = GameTimer.getTime
+    timeProvider = () => {
+      val dt = GameTimer.getTime - init
+      dt / 300.0
+    }
+
+    anim = createPunchAnim()
+    anim.perform(0)
+  }
+
 }
