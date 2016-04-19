@@ -134,8 +134,10 @@ public class CurrentCharging extends Skill {
                 good = false;
             }
 
-            cpData.perform(0, getConsumption(exp));
             aData.addSkillExp(instance, getExpIncr(good));
+            if (!cpData.perform(0, getConsumption(exp))) {
+                ActionManager.endAction(this);
+            }
             
             if(isRemote) {
                 updateEffects(pos, good);
@@ -237,8 +239,9 @@ public class CurrentCharging extends Skill {
         @Override
         public void onTick() {
             ItemStack stack = player.getCurrentEquippedItem();
-            if(stack != null) {
-                float cp = getConsumption(exp);
+            float cp = getConsumption(exp);
+
+            if(stack != null && cpData.perform(0, cp)) {
                 float amt = getChargingSpeed(exp);
                 
                 boolean good = EnergyItemHelper.isSupported(stack);
@@ -246,7 +249,6 @@ public class CurrentCharging extends Skill {
                     EnergyItemHelper.charge(stack, amt, false);
                 
                 aData.addSkillExp(instance, getExpIncr(good));
-                cpData.perform(0, cp);
             } else {
                 ActionManager.endAction(this);
             }
