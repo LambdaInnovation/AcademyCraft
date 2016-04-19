@@ -106,10 +106,10 @@ public class TerminalData extends DataPart<EntityPlayer> {
 
             installedList.set(id, true);
 
+            sync();
+
             informAppInstall(id);
             NetworkMessage.sendTo(getEntity(), this, "app_inst", id);
-
-            sync();
         }
     }
 

@@ -14,6 +14,7 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
+import cn.academy.terminal.event.AppInstalledEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
 import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
@@ -36,11 +37,14 @@ import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.ControlOverrider;
+import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -95,7 +99,9 @@ public class TerminalUI extends AuxGui {
         gui.addWidget(root = loaded.getWidget("back").copy());
         
         buffX = buffY = mouseX = mouseY = 150;
-        
+
+        MinecraftForge.EVENT_BUS.register(this);
+
         initGui();
     }
     
@@ -226,7 +232,14 @@ public class TerminalUI extends AuxGui {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glCullFace(GL11.GL_BACK);
     }
-    
+
+    @SubscribeEvent
+    public void _onAppInstalled(AppInstalledEvent evt) {
+        if (SideHelper.isClient()) {
+            updateAppList(TerminalData.get(Minecraft.getMinecraft().thePlayer));
+        }
+    }
+
     private double balance(long dt, double from, double to) {
         double d = to - from;
         return from + Math.min(BALANCE_SPEED * dt, Math.abs(d)) * Math.signum(d);
