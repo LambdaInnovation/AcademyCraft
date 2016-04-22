@@ -218,7 +218,7 @@ public class ModuleCrafting {
         mfr.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal, 3), Mode.REFINE);
         mfr.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
 
-        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot));
+        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot,2));
         addOreDictRefineRecipe("oreIron",new ItemStack(Items.iron_ingot,2));
         addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.emerald,2));
         addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.quartz,2));
@@ -242,20 +242,20 @@ public class ModuleCrafting {
 
     private static void addOreDictRefineRecipe(String orename, String outputname)
     {
-        ArrayList<ItemStack> ingotlist = OreDictionary.getOres(outputname);
-        if (ingotlist == null || ingotlist.size() == 0)
+        ArrayList<ItemStack> outputList = OreDictionary.getOres(outputname);
+        if (outputList == null || outputList.size() == 0)
             return;
-        ItemStack output = ingotlist.get(0).copy();
-        List<ItemStack> ores = OreDictionary.getOres(orename);
-        if (ores == null || ores.size() == 0)
+        ItemStack output = outputList.get(0).copy();
+        List<ItemStack> oreList = OreDictionary.getOres(orename);
+        if (oreList == null || oreList.size() == 0)
             return;
-        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(ores.get(0));
+        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(oreList.get(0));
         if (stack == null)
             return;
         int outputsize = stack.stackSize;
         outputsize = outputsize < 32 ? (2 * outputsize) : 64;
         output.stackSize = outputsize;
-        for(ItemStack ore : ores)
+        for(ItemStack ore : oreList)
         {
             MetalFormerRecipes.INSTANCE.add(ore, output, Mode.REFINE);
         }
