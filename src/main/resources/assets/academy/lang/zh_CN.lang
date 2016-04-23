@@ -45,7 +45,7 @@ item.ac_developer_portable.name=便携能力开发机
 item.ac_magnetic_coil.name=高压磁增幅线圈
 item.ac_magnetic_coil.desc=超载开发机以重置个人现实
 item.ac_induction_factor.name=能力诱导因子
-item.ac_tutorial.name=研究记录
+item.ac_tutorial.name=御坂云终端
 
 # 方块名称
 tile.ac_constraint_metal_ore.name=束能金属矿
@@ -503,7 +503,8 @@ ac.cat_engine.linked=连接到了名字为%s的节点喵~
 # 教程项
 ac.gui.crafttype.shaped=有序合成
 ac.gui.crafttype.shapeless=无序合成
-ac.tutorial.update=研究笔记更新
+ac.tutorial.misaka=御坂%d号
+ac.tutorial.update=云终端更新
 
 # 猜硬币
 # 小驼峰邪教

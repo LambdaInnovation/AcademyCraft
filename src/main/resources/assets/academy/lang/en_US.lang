@@ -45,7 +45,7 @@ item.ac_developer_portable.name=Portable Developer
 item.ac_magnetic_coil.name=High Voltage Magnetic Coil
 item.ac_magnetic_coil.desc=Overcharges the developer<br>In order to rewrite personal reality
 item.ac_induction_factor.name=Ability Induction Factor
-item.ac_tutorial.name=Research Note
+item.ac_tutorial.name=MisakaCloud Terminal
 
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
@@ -499,10 +499,10 @@ ac.cat_engine.linked=Linked to the node named %s meow~
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
-ac.tutorial.update=Research note updated
+ac.tutorial.misaka=Misaka No.%d
+ac.tutorial.update=Cloud Terminal updated
 
 # Heads Or Tails
-# camelCase, really?
 ac.headsOrTails.0=The result is TAILS!
 ac.headsOrTails.1=The result is HEADS!
 

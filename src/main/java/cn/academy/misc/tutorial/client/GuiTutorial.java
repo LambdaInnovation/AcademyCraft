@@ -9,7 +9,7 @@ package cn.academy.misc.tutorial.client;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.Resources;
-import cn.academy.core.util.ACMarkdownRenderer;
+import cn.academy.misc.tutorial.client.ACMarkdownRenderer;
 import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.IPreviewHandler;
 import cn.academy.misc.tutorial.TutorialRegistry;

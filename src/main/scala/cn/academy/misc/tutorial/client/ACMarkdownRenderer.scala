@@ -4,11 +4,13 @@
 * https://github.com/LambdaInnovation/AcademyCraft
 * Licensed under GPLv3, see project root for more information.
 */
-package cn.academy.core.util
+package cn.academy.misc.tutorial.client
 
-import cn.academy.core.{ModuleCoreClient, AcademyCraft}
+import cn.academy.core.{AcademyCraft, LocalHelper}
+import cn.academy.misc.tutorial.TutorialData
 import cn.lambdalib.util.key.KeyManager
-import cn.lambdalib.util.markdown.{MarkdownParser, GLMarkdownRenderer}
+import cn.lambdalib.util.markdown.{GLMarkdownRenderer, MarkdownParser}
+import cn.lambdalib.util.mc.SideHelper
 
 import scala.collection.Map
 
@@ -16,6 +18,8 @@ import scala.collection.Map
   * This class renderers markdown with keyid display support.
   */
 class ACMarkdownRenderer extends GLMarkdownRenderer {
+
+  private val tutLocal = LocalHelper.at("ac.tutorial")
 
   override def onTag(name: String, attr: Map[String, String]) = {
     super.onTag(name, attr)
@@ -29,6 +33,12 @@ class ACMarkdownRenderer extends GLMarkdownRenderer {
       } else {
         render("???")
       }
+    }
+
+    if (name == "misakaname") {
+      val name = tutLocal.getFormatted("misaka",
+        TutorialData.get(SideHelper.getThePlayer).getMisakaID.asInstanceOf[AnyRef])
+      onTextContent(name, Set(MarkdownParser.Strong()))
     }
   }
 
