@@ -6,6 +6,7 @@
 */
 package cn.academy.misc.tutorial;
 
+import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.lambdalib.cgui.gui.Widget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,5 +28,7 @@ public interface IPreviewHandler {
     default Widget getDelegateWidget() {
         return null;
     }
+
+    Tag getTag();
 
 }

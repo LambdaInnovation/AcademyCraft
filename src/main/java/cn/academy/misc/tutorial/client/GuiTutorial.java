@@ -41,6 +41,7 @@ import org.lwjgl.util.glu.GLU;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -81,11 +82,11 @@ public class GuiTutorial extends CGuiScreen {
     private Widget showWindow, rightWindow, centerPart;
 
     private Widget logo0, logo1, logo2, logo3;
-    private Widget centerText, briefText;
-    private Widget showArea;
+    private Widget showArea, tagArea;
 
     // Current displayed tutorial
     private TutInfo currentTut = null;
+    private IPreviewHandler currentHandler;
 
     private class CachedRenderInfo {
         final String title, rawBrief, rawContent;
@@ -185,10 +186,8 @@ public class GuiTutorial extends CGuiScreen {
         logo2 = rightPart.getWidget("logo2");
         logo3 = rightPart.getWidget("logo3");
 
-        centerText = centerPart.getWidget("text");
-        briefText = rightPart.getWidget("text");
-
         showArea = showWindow.getWidget("area");
+        tagArea = showWindow.getWidget("tag_area");
 
         showWindow.transform.doesDraw = false;
         rightWindow.transform.doesDraw = false;
@@ -231,10 +230,11 @@ public class GuiTutorial extends CGuiScreen {
             }
         });
 
-        showWindow.getWidget("button_left").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(-1));
-        showWindow.getWidget("button_right").listen(LeftClickEvent.class, (w, e) -> currentTut.cycle(1));
-
         showArea.listen(FrameEvent.class, (w, e) -> {
+            if (currentHandler == null) {
+                return;
+            }
+
             glMatrixMode(GL11.GL_PROJECTION);
             glPushMatrix();
             glLoadIdentity();
@@ -270,7 +270,7 @@ public class GuiTutorial extends CGuiScreen {
 
             glRotated(-20, 1, 0, 0.1);
 
-            currentTut.curHandler().draw();
+            currentHandler.draw();
 
             glPopMatrix();
 
@@ -438,14 +438,55 @@ public class GuiTutorial extends CGuiScreen {
 
     private void setCurrentTut(ACTutorial tut) {
         currentTut = new TutInfo(tut, tut.isActivated(player));
-        boolean cycleable = tut.getPreview().size() > 1;
+
         showArea.removeWidget("delegate");
         VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
-        showWindow.getWidget("button_left").transform.doesDraw
-                = showWindow.getWidget("button_right").transform.doesDraw
-                = cycleable;
+
         centerPart.transform.doesDraw = tut.isActivated(player);
-        currentTut.cycle(0);
+
+        if (tut.getPreview().size() == 0) {
+            setPreviewHandler(null);
+        } else {
+            setPreviewHandler(tut.getPreview().get(0));
+        }
+
+        tagArea.clear();
+
+        {
+            double sz = tagArea.transform.height;
+            double step = sz - 1;
+
+            double x = 0;
+
+            for (IPreviewHandler h : tut.getPreview()) {
+                Widget w = new Widget()
+                        .size(sz, sz)
+                        .pos(x, 0)
+                        .addComponent(new DrawTexture(h.getTag().icon, Color.monoBlend(1, .7)))
+                        .addComponent(new Tint(Color.monoBlend(1, .7), Color.monoBlend(1, 1)).setAffectTexture())
+                        .listen(LeftClickEvent.class, (w_, e) -> {
+                            setPreviewHandler(h);
+                        });
+                tagArea.addWidget(w);
+
+                x += step;
+            }
+        }
+    }
+
+    /**
+     * Sets the current preview handler, Or no handler if null.
+     * @param h The preview handler to set.
+     */
+    private void setPreviewHandler(IPreviewHandler h) {
+        showArea.removeWidget("delegate");
+        currentHandler = h;
+
+        if (h != null) {
+            Widget w = h.getDelegateWidget();
+            if(w != null)
+                showArea.addWidget("delegate", w);
+        }
     }
 
     private class TutInfo {
@@ -457,24 +498,6 @@ public class GuiTutorial extends CGuiScreen {
         TutInfo(ACTutorial _tut, boolean _learned) {
             tut = _tut;
             learned = _learned;
-        }
-
-        void cycle(int delta) {
-            int len = tut.getPreview().size();
-            selection += delta;
-            if(selection >= len) selection = 0;
-            else if(selection < 0) selection = len - 1;
-
-            showArea.removeWidget("delegate");
-            Widget w = curHandler().getDelegateWidget();
-            if(w != null)
-                showArea.addWidget("delegate", w);
-
-            debug(curHandler());
-        }
-
-        IPreviewHandler curHandler() {
-            return tut.getPreview().get(selection);
         }
     }
 

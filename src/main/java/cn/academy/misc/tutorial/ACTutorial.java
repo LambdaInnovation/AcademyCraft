@@ -6,6 +6,7 @@
 */
 package cn.academy.misc.tutorial;
 
+import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.RegistryUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -26,6 +27,13 @@ import java.util.List;
 @Registrant
 public class ACTutorial {
 
+    public enum Tag {
+        CRAFT, SMELT, VIEW;
+
+        public final ResourceLocation icon = Resources.getTexture(
+                "guis/icons/icon_" + this.name().toLowerCase());
+    }
+
     public static final boolean SHOW_ALL = false;
 
     public final String id;
@@ -34,11 +42,6 @@ public class ACTutorial {
     private boolean defaultInstalled = true;
 
     private List<IPreviewHandler> previewHandlers = new ArrayList<>();
-    private boolean previewInit = false;
-
-    {
-        previewHandlers.add(PreviewHandlers.nothing);
-    }
 
     public ACTutorial(String id) {
         this.id=id;
@@ -51,10 +54,6 @@ public class ACTutorial {
     }
 
     public ACTutorial addPreview(IPreviewHandler ...handlers) {
-        if (!previewInit) {
-            previewInit = true;
-            previewHandlers.clear();
-        }
         previewHandlers.addAll(Arrays.asList(handlers));
         return this;
     }

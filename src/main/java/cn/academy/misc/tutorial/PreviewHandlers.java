@@ -7,6 +7,7 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.client.Resources;
+import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.academy.misc.tutorial.client.RecipeHandler;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.cgui.gui.Widget;
@@ -43,7 +44,12 @@ public final class PreviewHandlers {
 
     private static Random random = new Random();
 
-    public static final IPreviewHandler nothing = new IPreviewHandler() {};
+    private static final IPreviewHandler nothing = new IPreviewHandler() {
+        @Override
+        public Tag getTag() {
+            return null;
+        }
+    };
 
     public static IPreviewHandler drawsBlock(Block block) {
         return drawsBlock(block, 0);
@@ -105,6 +111,11 @@ public final class PreviewHandlers {
                 glPopMatrix();
                 glDepthFunc(GL_LEQUAL);
             }
+
+            @Override
+            public Tag getTag() {
+                return Tag.VIEW;
+            }
         };
     }
 
@@ -129,6 +140,11 @@ public final class PreviewHandlers {
                 RenderUtils.loadTexture(res_tex);
                 model.renderAll();
                 glPopMatrix();
+            }
+
+            @Override
+            public Tag getTag() {
+                return Tag.VIEW;
             }
         };
     }
@@ -157,6 +173,11 @@ public final class PreviewHandlers {
                 tes.draw();
                 glCullFace(GL_FRONT);
             }
+
+            @Override
+            public Tag getTag() {
+                return Tag.VIEW;
+            }
         };
     }
 
@@ -175,6 +196,11 @@ public final class PreviewHandlers {
                 RenderUtils.renderItemInventory(stack);
                 glDepthFunc(GL_LEQUAL);
             }
+
+            @Override
+            public Tag getTag() {
+                return Tag.VIEW;
+            }
         };
     }
 
@@ -185,6 +211,11 @@ public final class PreviewHandlers {
             public Widget getDelegateWidget() {
                 return w;
             }
+
+            @Override
+            public Tag getTag() {
+                return Tag.CRAFT;
+            }
         }).collect(Collectors.toList());
     }
 
@@ -194,6 +225,11 @@ public final class PreviewHandlers {
             @Override
             public Widget getDelegateWidget() {
                 return delegate;
+            }
+
+            @Override
+            public Tag getTag() {
+                return Tag.CRAFT;
             }
         };
     }

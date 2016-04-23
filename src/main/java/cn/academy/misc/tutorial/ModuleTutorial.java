@@ -7,6 +7,7 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
+import cn.academy.core.client.Resources;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
@@ -19,11 +20,13 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.vis.model.CompTransform;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.Optional;
 
@@ -72,6 +75,7 @@ public class ModuleTutorial {
 
         // Add app for tutorial
         AppRegistry.register(new App("tutorial") {
+
             @Override
             public AppEnvironment createEnvironment() {
                 return new AppEnvironment() {
@@ -81,6 +85,23 @@ public class ModuleTutorial {
                         Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
                     }
                 };
+            }
+
+            // Random gives icon for more fun >)
+            @Override
+            public ResourceLocation getIcon() {
+                float rand = RandUtils.nextFloat();
+                if (rand < 0.2f) {
+                    return icon(0);
+                } else if (rand < 0.3f) {
+                    return icon(1);
+                } else {
+                    return icon(2);
+                }
+            }
+
+            private ResourceLocation icon(int id) {
+                return Resources.preloadMipmapTexture("guis/apps/tutorial/icon_" + id);
             }
         }.setPreInstalled());
     }
