@@ -74,7 +74,8 @@ public class ModuleAbility {
         @Override
         @SideOnly(Side.CLIENT)
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-            list.add(StatCollector.translateToLocal("item.ac_magnetic_coil.desc"));
+            for(String line : StatCollector.translateToLocal("item.ac_magnetic_coil.desc").split("<br>"))
+            list.add(line);
         }
     };
 

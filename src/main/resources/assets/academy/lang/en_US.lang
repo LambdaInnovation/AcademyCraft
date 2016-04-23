@@ -1,4 +1,4 @@
-# AcademyCraft lang file
+﻿# AcademyCraft lang file
 # The file is majorly divided by content type (except for those that needs to interface with Minecraft).
 
 # Common
@@ -43,7 +43,7 @@ item.ac_apps.name=App Installer
 
 item.ac_developer_portable.name=Portable Developer
 item.ac_magnetic_coil.name=High Voltage Magnetic Coil
-item.ac_magnetic_coil.desc=Overcharges the developer to rewrite personal reality
+item.ac_magnetic_coil.desc=Overcharges the developer<br>In order to rewrite personal reality
 item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=Research Note
 
