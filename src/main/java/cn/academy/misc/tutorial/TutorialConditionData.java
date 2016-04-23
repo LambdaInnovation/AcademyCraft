@@ -37,7 +37,7 @@ import java.util.stream.IntStream;
 @RegDataPart(EntityPlayer.class)
 public class TutorialConditionData extends DataPart<EntityPlayer> {
 
-    public static TutorialConditionData get(EntityPlayer player) {
+    static TutorialConditionData get(EntityPlayer player) {
         return EntityData.get(player).getPart(TutorialConditionData.class);
     }
 
@@ -47,6 +47,7 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
     private BitSet savedConditions = new BitSet();
     @SerializeIncluded
     private HashSet<String> activatedTuts = new HashSet<>();
+
     private final TickScheduler scheduler = new TickScheduler();
     private boolean dirty;
 
@@ -65,8 +66,8 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
                             !tut.isDefaultInstalled()) {
                         activatedTuts.add(tut.id);
 
-                        NetworkMessage.sendToSelf(this, MSG_ACTIVATE, tut.id);
-                        NetworkMessage.sendTo((EntityPlayerMP) getEntity(), this, MSG_ACTIVATE, tut.id);
+                        onTutorialActivate(tut.id);
+                        sendToLocal(MSG_ACTIVATE, tut.id);
                     }
                 });
 
@@ -80,13 +81,15 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
         scheduler.runTick();
     }
 
-    public boolean getActivate(Condition cond) {
-        return savedConditions.get(cond.index);
+    boolean isCondActivate(int index) {
+        return savedConditions.get(index);
     }
 
-    public void setActivate(Condition cond) {
-        if (!savedConditions.get(cond.index)) {
-            savedConditions.set(cond.index);
+    void setCondActivate(int index) {
+        checkSide(Side.SERVER);
+
+        if (!savedConditions.get(index)) {
+            savedConditions.set(index);
             dirty = true;
         }
     }

@@ -30,7 +30,8 @@ public class ACTutorial {
 
     public final String id;
 
-    private Condition condition = Condition.TRUE;
+    private Condition condition = Conditions.alwaysTrue();
+    private boolean defaultInstalled = true;
 
     private List<IPreviewHandler> previewHandlers = new ArrayList<>();
     private boolean previewInit = false;
@@ -44,6 +45,7 @@ public class ACTutorial {
     }
 
     public ACTutorial setCondition(Condition condition) {
+        defaultInstalled = false;
         this.condition=condition;
         return this;
     }
@@ -98,11 +100,11 @@ public class ACTutorial {
     public boolean isActivated(EntityPlayer player) {
         if (SHOW_ALL)
             return true;
-        return this.condition.exam(player);
+        return this.condition.test(player);
     }
 
     public boolean isDefaultInstalled() {
-        return condition == Condition.TRUE;
+        return defaultInstalled;
     }
 
 }
