@@ -6,39 +6,36 @@
 */
 package cn.academy.misc.tutorial;
 
+import cn.academy.misc.ModuleMisc;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.nbt.NBTS11n;
-import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.TickScheduler;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.BitSet;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.IntStream;
 
 /**
  * This class simply stores activate data that trigger-type condition needs.
  */
 @Registrant
 @RegDataPart(EntityPlayer.class)
-public class TutorialConditionData extends DataPart<EntityPlayer> {
+public class TutorialData extends DataPart<EntityPlayer> {
 
-    static TutorialConditionData get(EntityPlayer player) {
-        return EntityData.get(player).getPart(TutorialConditionData.class);
+    public static TutorialData get(EntityPlayer player) {
+        return EntityData.get(player).getPart(TutorialData.class);
     }
 
     private static final String MSG_ACTIVATE = "activate";
@@ -47,17 +44,32 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
     private BitSet savedConditions = new BitSet();
     @SerializeIncluded
     private HashSet<String> activatedTuts = new HashSet<>();
+    @SerializeIncluded
+    private boolean tutorialAcquired = false;
+    @SerializeIncluded
+    private int misakaID = -1;
 
     private final TickScheduler scheduler = new TickScheduler();
     private boolean dirty;
 
-    public TutorialConditionData() {
+    public TutorialData() {
         setTick(true);
         setClientNeedSync();
         setNBTStorage();
 
+        misakaID = RandUtils.rangei(1000, 19000);
+
         scheduler.every(3).atOnly(Side.SERVER).run(() ->
         {
+            if (!tutorialAcquired) {
+                EntityPlayer player = getEntity();
+                player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj,
+                        player.posX, player.posY + 1.0, player.posZ,
+                        new ItemStack(ModuleTutorial.itemTutorial)));
+
+                tutorialAcquired = true;
+            }
+
             if (dirty) {
                 dirty = false;
                 TutorialRegistry.enumeration().forEach(tut -> {
@@ -79,6 +91,10 @@ public class TutorialConditionData extends DataPart<EntityPlayer> {
     @Override
     public void tick() {
         scheduler.runTick();
+    }
+
+    public int getMisakaID() {
+        return misakaID;
     }
 
     boolean isCondActivate(int index) {

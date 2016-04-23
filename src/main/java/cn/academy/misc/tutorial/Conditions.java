@@ -100,7 +100,7 @@ public class Conditions {
 
         @Override
         public boolean test(EntityPlayer entityPlayer) {
-            return TutorialConditionData.get(entityPlayer).isCondActivate(index);
+            return TutorialData.get(entityPlayer).isCondActivate(index);
         }
     }
 
@@ -149,7 +149,7 @@ public class Conditions {
     }
 
     private void trigger(Multimap<Item, ItemInfo> map, ItemStack stack, EntityPlayer player) {
-        TutorialConditionData tdata = TutorialConditionData.get(player);
+        TutorialData tdata = TutorialData.get(player);
         map.get(stack.getItem())
                 .stream()
                 .filter(info -> !info.metaSensitive() || stack.getItemDamage() == info.meta)

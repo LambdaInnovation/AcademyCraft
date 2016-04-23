@@ -10,6 +10,10 @@ import cn.academy.ability.ModuleAbility;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
+import cn.academy.misc.tutorial.client.GuiTutorial;
+import cn.academy.terminal.App;
+import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
@@ -17,6 +21,9 @@ import cn.lambdalib.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.vis.model.CompTransform;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 
 import java.util.Optional;
 
@@ -29,7 +36,7 @@ public class ModuleTutorial {
     
     @RegItem
     @RecipeName("tutorial")
-    public static ItemTutorial item;
+    public static ItemTutorial itemTutorial;
 
     private static ACTutorial defnTut(String name) {
         return TutorialRegistry.addTutorial(name);
@@ -61,5 +68,20 @@ public class ModuleTutorial {
                 .addPreview(recipes(ModuleCrafting.crystalLow))
                 .addPreview(recipes(ModuleCrafting.crystalNormal))
                 .addPreview(recipes(ModuleCrafting.crystalPure));
+
+
+        // Add app for tutorial
+        AppRegistry.register(new App("tutorial") {
+            @Override
+            public AppEnvironment createEnvironment() {
+                return new AppEnvironment() {
+                    @Override
+                    @SideOnly(Side.CLIENT)
+                    public void onStart() {
+                        Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
+                    }
+                };
+            }
+        }.setPreInstalled());
     }
 }
