@@ -982,8 +982,8 @@ private object Common {
     enqueue(slowPrintTask(Help1.format(Minecraft.getMinecraft.thePlayer.getCommandSenderName)))
     pause(400)
 
-    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_.toString).toList :::
-      (64 + RandUtils.nextInt(4)).toString :: "Boot Failed.\n" :: Nil
+    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
+      ((64 + RandUtils.nextInt(4)) + "%") :: "Boot Failed.\n" :: Nil
 
     animSequence(300, numSeq: _*)
     enqueue(slowPrintTask(if (emergency) Help3 else if (hasDeveloper) Help2 else Help4))
