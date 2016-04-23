@@ -28,13 +28,17 @@ object GuiMetalFormer {
     val invWidget = template.copy()
 
     {
+      def updateModeTexture(mode: TileMetalFormer.Mode) = {
+        invWidget.child("icon_mode").component[DrawTexture].texture = mode.texture
+      }
+
+      updateModeTexture(tile.mode)
+
       invWidget.getWidget("progress").listens((w: Widget, evt: FrameEvent) => {
         w.component[ProgressBar].progress = tile.getWorkProgress
       })
 
-      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, -1, Future.create((mode: TileMetalFormer.Mode) => {
-        invWidget.child("icon_mode").component[DrawTexture].texture = mode.texture
-      }))
+      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, -1, Future.create[TileMetalFormer.Mode](updateModeTexture(_)))
 
       invWidget.child("btn_left").listens[LeftClickEvent](handleAlt(-1))
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
