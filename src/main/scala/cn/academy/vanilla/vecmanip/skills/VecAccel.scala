@@ -123,7 +123,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
 class VecAccelContextC(par: VecAccelContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  def l_makeAlive() = {
+  def l_makeAlive() = if (isLocal) {
     world().spawnEntityInWorld(new ParabolaEffect(par))
   }
 
