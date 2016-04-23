@@ -33,7 +33,7 @@ public class CatElectromaster extends Category {
 
     public static final Skill
         arcGen = ArcGen.instance,
-        magManip = MagManip.instance,
+        magManip = MagManip2$.MODULE$,
         mineDetect = MineDetect.instance,
         railgun = Railgun.instance,
         magMovement = MagMovement.instance,

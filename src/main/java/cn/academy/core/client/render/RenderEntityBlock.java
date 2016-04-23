@@ -9,6 +9,7 @@ package cn.academy.core.client.render;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.entity.EntityBlock;
 import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib.util.generic.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
@@ -30,7 +31,7 @@ public class RenderEntityBlock extends Render {
     
     @Override
     public void doRender(Entity e, double x, double y,
-            double z, float a, float b) {
+            double z, float pt, float b) {
         EntityBlock entity = (EntityBlock) e;
         
         if(entity.block != null) {
@@ -54,9 +55,15 @@ public class RenderEntityBlock extends Render {
                     //z += b * entity.motionZ;
                     
                     int ix = (int) entity.posX, iy = (int) entity.posY, iz = (int) entity.posZ;
-                    
+
+                    GL11.glTranslated(x, y, z);
+
+                    GL11.glRotatef(MathUtils.lerpf(entity.lastYaw, entity.yaw, pt), 0, 1, 0);
+                    GL11.glRotatef(MathUtils.lerpf(entity.lastPitch, entity.pitch, pt), 1, 0, 0);
+
+                    GL11.glTranslated(-ix - 0.5, -iy - 0.5, -iz - 0.5);
+
                     tes.startDrawingQuads();
-                    tes.setTranslation(x - 0.5 - ix, y - iy, z - 0.5 - iz);
                     renderBlocks.renderBlockAllFaces(entity.block, ix, iy, iz);
                     tes.setTranslation(0, 0, 0);
                     tes.draw();
@@ -71,7 +78,7 @@ public class RenderEntityBlock extends Render {
             TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance.getSpecialRenderer(entity.tileEntity);
             if(tesr != null) {
                 try {
-                    tesr.renderTileEntityAt(entity.tileEntity, x - 0.5, y, z - 0.5, a);
+                    tesr.renderTileEntityAt(entity.tileEntity, x - 0.5, y, z - 0.5, pt);
                 } catch(Exception ex) {
                     AcademyCraft.log.error("Error handling EntityBlock TE rendering: " + tesr.getClass());
                     ex.printStackTrace();
