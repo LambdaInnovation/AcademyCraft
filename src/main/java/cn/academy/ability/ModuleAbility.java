@@ -34,6 +34,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.ChestGenHooks;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minecraftforge.common.ChestGenHooks.*;
@@ -73,9 +74,9 @@ public class ModuleAbility {
 
         @Override
         @SideOnly(Side.CLIENT)
+        @SuppressWarnings("unchecked")
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-            for(String line : StatCollector.translateToLocal("item.ac_magnetic_coil.desc").split("<br>"))
-            list.add(line);
+            list.addAll(Arrays.asList(StatCollector.translateToLocal("item.ac_magnetic_coil.desc").split("<br>")));
         }
     };
 
