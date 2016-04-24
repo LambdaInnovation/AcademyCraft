@@ -204,8 +204,13 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     
     private void updateWork() {
         // Check the input stack, and abort if item isnt there
+            // Also check whether the amount of Liquid is enough,
+            // and whether the output of currentRecipe can be outputed into outputslot
+            // Added by Shielian
         if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
-                || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK) {
+                || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK || this.getLiquidAmount() < currentRecipe.consumeLiquid
+                || (inventory[SLOT_OUTPUT] != null && inventory[SLOT_OUTPUT].getItem() != currentRecipe.output.getItem())
+                ) {
             abortWorking();
             return;
         }
