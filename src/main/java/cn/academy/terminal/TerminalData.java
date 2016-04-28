@@ -57,22 +57,14 @@ public class TerminalData extends DataPart<EntityPlayer> {
     public TerminalData() {
         setClientNeedSync();
         setNBTStorage();
-
-        for (App app : AppRegistry.enumeration()) {
-            if (app.isPreInstalled())
-                installedList.set(app.appid);
-        }
     }
 
     public List<App> getInstalledApps() {
-        return IntStream.range(0, installedList.size())
-                .filter(idx -> installedList.get(idx))
-                .mapToObj(idx -> AppRegistry.get(idx))
-                .collect(Collectors.toList());
+        return AppRegistry.enumeration().stream().filter(this::isInstalled).collect(Collectors.toList());
     }
 
     public boolean isInstalled(App app) {
-        return installedList.get(app.getID());
+        return app.isPreInstalled() || installedList.get(app.getID());
     }
 
     public boolean isTerminalInstalled() {
