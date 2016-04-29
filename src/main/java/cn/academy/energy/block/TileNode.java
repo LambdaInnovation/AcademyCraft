@@ -12,6 +12,8 @@ import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.block.BlockNode.NodeType;
+import cn.academy.energy.internal.NodeConn;
+import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.networkcall.RegNetworkCall;
@@ -82,6 +84,9 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
             ++updateTicker;
             if(updateTicker == 10) {
                 updateTicker = 0;
+
+                WirelessNet net = WirelessHelper.getWirelessNet(this);
+                enabled = net != null;
 
                 NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 20),
                         this, MSG_SYNC,
