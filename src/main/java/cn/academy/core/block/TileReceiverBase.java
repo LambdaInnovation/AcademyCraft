@@ -57,7 +57,6 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         double req = maxEnergy - energy;
         double give = Math.min(amt, req);
         energy += give;
-        
         return amt - give;
     }
     

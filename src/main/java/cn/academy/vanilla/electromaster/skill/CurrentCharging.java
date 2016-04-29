@@ -116,22 +116,17 @@ public class CurrentCharging extends Skill {
             // Perform raytrace 
             MovingObjectPosition pos = Raytrace.traceLiving(player, DISTANCE);
             
-            boolean good;
+            boolean good = false;
             if(pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
                 TileEntity tile = player.worldObj.getTileEntity(pos.blockX, pos.blockY, pos.blockZ);
                 if(EnergyBlockHelper.isSupported(tile)) {
                     good = true;
-                    
-                    // Very well, charge the block
+
                     if(!isRemote) {
                         float charge = getChargingSpeed(exp);
                         EnergyBlockHelper.charge(tile, charge, true);
                     }
-                } else {
-                    good = false;
                 }
-            } else {
-                good = false;
             }
 
             aData.addSkillExp(instance, getExpIncr(good));

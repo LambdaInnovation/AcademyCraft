@@ -57,14 +57,13 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract,
-            boolean simulate) {
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
         int e = (int) energy;
         if(!simulate) {
             energy -= rf2if(maxExtract);
             if(energy < 0) energy = 0;
         }
-        return (int) Math.min(if2rf(e), maxExtract);
+        return Math.min(if2rf(e), maxExtract);
     }
 
     @Override
