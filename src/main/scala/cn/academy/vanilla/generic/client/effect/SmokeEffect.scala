@@ -30,7 +30,7 @@ object SmokeEffect_ {
       override def doRender(ent : Entity, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = ent match {
         case eff: SmokeEffect =>
           val campos = CameraPosition.getVec3
-          val delta = campos + Vec3(x, y, z)
+          val delta = Vec3(x, y, z) - campos
           val look = delta.toLook
 
           glEnable(GL_BLEND)

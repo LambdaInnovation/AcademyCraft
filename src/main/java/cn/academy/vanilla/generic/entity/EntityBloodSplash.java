@@ -20,6 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import static org.lwjgl.opengl.GL11.glDepthMask;
+
 /**
  * @author WeAthFolD
  */
@@ -84,7 +86,10 @@ public class EntityBloodSplash extends EntityAdvanced {
             EntityBloodSplash splash = (EntityBloodSplash) entity;
             icon = (SPLASH[MathUtils.clampi(0, SPLASH.length - 1, splash.frame)]);
             this.size = splash.getSize();
+
+            glDepthMask(false);
             super.doRender(entity, x, y, z, a, b);
+            glDepthMask(true);
         }
 
     }

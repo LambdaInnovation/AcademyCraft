@@ -104,13 +104,6 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     sendToClient(MSG_STATECHG, destination)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  def c_tick() = {
-    if (state == STATE_GO) {
-      tryMove()
-    }
-  }
-
   @Listener(channel=MSG_STATECHG, side=Array(Side.CLIENT))
   def c_stateChange(dest: Vec3) = {
     state = STATE_GO
@@ -196,7 +189,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
       DelegateState.ACTIVE
   }
 
-  private def tryMove(): Unit = {
+  private[skills] def tryMove(): Unit = {
     val rawDelta = destination - chargePosition
     if (rawDelta.lengthVector() < 1) return
 
@@ -260,7 +253,7 @@ private class Tornado(val ctx: PlasmaCannonContext)
 
 @Registrant
 @RegClientContext(classOf[PlasmaCannonContext])
-class PlasmaCannonContextC(par: PlasmaCannonContext) extends ClientContext(par) {
+class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self) {
 
   private var sound: FollowEntitySound = _
 
@@ -268,10 +261,10 @@ class PlasmaCannonContextC(par: PlasmaCannonContext) extends ClientContext(par) 
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_begin() = {
-    effect = new PlasmaBodyEffect(world, par)
-    effect.setPos(par.chargePosition)
+    effect = new PlasmaBodyEffect(world, self)
+    effect.setPos(self.chargePosition)
 
-    world.spawnEntityInWorld(new Tornado(par))
+    world.spawnEntityInWorld(new Tornado(self))
     world.spawnEntityInWorld(effect)
 
     sound = new FollowEntitySound(player, "vecmanip.plasma_cannon")
@@ -285,7 +278,10 @@ class PlasmaCannonContextC(par: PlasmaCannonContext) extends ClientContext(par) 
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_tick() = {
-    effect.setPos(par.chargePosition)
+    if (self.state == STATE_GO) {
+      self.tryMove()
+    }
+    effect.setPos(self.chargePosition)
   }
 
 }
