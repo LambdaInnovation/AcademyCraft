@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -93,52 +94,56 @@ public class Resources {
      */
     @SideOnly(Side.CLIENT)
     public static ResourceLocation preloadMipmapTexture(String loc) {
+        TextureManager texManager = Minecraft.getMinecraft().getTextureManager();
+
         ResourceLocation ret = getTexture(loc);
 
-        try {
-            BufferedImage buffer = ImageIO.read(RegistryUtils.getResourceStream(ret));
+        ITextureObject loadedTexture = texManager.getTexture(ret);
+        if (loadedTexture == null) {
+            try {
+                BufferedImage buffer = ImageIO.read(RegistryUtils.getResourceStream(ret));
 
-            // Note: Here we should actually implement ITextureObject,
-            // but that causes problems when running with SMC because SMC adds an abstract method in the base
-            // interface (getMultiTexID) and we have no way to implement it easily.
-            // However it is automatically implemented in AbstractTexture.
-            // (Go to hell shadersmod!)
+                // Note: Here we should actually implement ITextureObject,
+                // but that causes problems when running with SMC because SMC adds an abstract method in the base
+                // interface (getMultiTexID) and we have no way to implement it easily.
+                // However it is automatically implemented in AbstractTexture.
 
-            Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new AbstractTexture() {
+                texManager.loadTexture(ret, new AbstractTexture() {
 
-                final int textureID = glGenTextures();
+                    final int textureID = glGenTextures();
 
-                {
-                    int width = buffer.getWidth(), height = buffer.getHeight();
-                    int[] data = new int[width * height];
-                    buffer.getRGB(0, 0, width, height, data, 0, width);
-                    IntBuffer buffer1 = BufferUtils.createIntBuffer(data.length);
-                    buffer1.put(data).flip();
+                    {
+                        int width = buffer.getWidth(), height = buffer.getHeight();
+                        int[] data = new int[width * height];
+                        buffer.getRGB(0, 0, width, height, data, 0, width);
+                        IntBuffer buffer1 = BufferUtils.createIntBuffer(data.length);
+                        buffer1.put(data).flip();
 
-                    glBindTexture(GL_TEXTURE_2D, textureID);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buffer1);
+                        glBindTexture(GL_TEXTURE_2D, textureID);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buffer1);
 
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-                    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+                        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-                    GL30.glGenerateMipmap(GL_TEXTURE_2D);
+                        GL30.glGenerateMipmap(GL_TEXTURE_2D);
 
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                }
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                    }
 
-                @Override
-                public void loadTexture(IResourceManager man) throws IOException {}
+                    @Override
+                    public void loadTexture(IResourceManager man) throws IOException {}
 
-                @Override
-                public int getGlTextureId() {
-                    return textureID;
-                }
-            });
-        } catch (Exception ex) {
-            Throwables.propagate(ex);
+                    @Override
+                    public int getGlTextureId() {
+                        return textureID;
+                    }
+                });
+            } catch (Exception ex) {
+                Throwables.propagate(ex);
+            }
         }
 
         return ret;
@@ -147,7 +152,13 @@ public class Resources {
     @SideOnly(Side.CLIENT)
     public static ResourceLocation preloadTexture(String loc) {
         ResourceLocation ret = getTexture(loc);
-        Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new SimpleTexture(ret));
+
+        TextureManager texManager = Minecraft.getMinecraft().getTextureManager();
+        ITextureObject loadedTexture = texManager.getTexture(ret);
+        if (loadedTexture == null) {
+            Minecraft.getMinecraft().getTextureManager().loadTexture(ret, new SimpleTexture(ret));
+        }
+
         return ret;
     }
     
