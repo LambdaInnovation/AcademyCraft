@@ -16,7 +16,8 @@ import java.util.List;
  */
 public class EnergyBlockHelper {
 
-    private static List<IEnergyBlockManager> handlers = new ArrayList();
+
+    private static List<IEnergyBlockManager> handlers = new ArrayList<>();
 
     public static void register(IEnergyBlockManager handler) {
         handlers.add(handler);
@@ -45,10 +46,11 @@ public class EnergyBlockHelper {
     }
 
     public static double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
-        for (IEnergyBlockManager handler : handlers)
+        for (IEnergyBlockManager handler : handlers){
             if (handler.isSupported(tile)) {
-                return handler.charge(tile, amt, ignoreBandwidth);
+                handler.charge(tile, amt, ignoreBandwidth);
             }
+        }
         return amt;
     }
 
