@@ -368,7 +368,6 @@ public class TerminalUI extends AuxGui {
     }
     
     @RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_LMENU)
-    @RegEventHandler(Bus.Forge)
     public static KeyHandler keyHandler = new KeyHandler() {
         
         @Override
