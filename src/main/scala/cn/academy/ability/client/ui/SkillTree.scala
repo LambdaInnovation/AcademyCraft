@@ -446,6 +446,11 @@ private object Common {
       panel.child("logo_progress").component[ProgressBar].progress = prog
       panel.child("text_level").component[TextBox].setContent(AbilityLocalization.instance.levelDesc(aData.getLevel))
 
+      {
+        val cpData = CPData.get(player)
+        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(cpData.getLevelProgress * 100))
+      }
+
       if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
         val btn = panel.child("btn_upgrade")
         btn.transform.doesDraw = true
@@ -454,10 +459,7 @@ private object Common {
 
           gui.addWidget(cover)
         })
-        panel.child("text_exp").transform.doesDraw = false
-      } else {
-        val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(cpData.getLevelProgress * 100))
+        panel.removeWidget("text_level")
       }
     }
 
