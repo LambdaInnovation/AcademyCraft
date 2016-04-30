@@ -122,10 +122,6 @@ public class Conditions {
 
     }
 
-    static int indexOf(Condition c) {
-        return indexedConditions.indexOf(c);
-    }
-
     @RegInitCallback
     public static void _init() {
         Conditions instance = new Conditions();
@@ -149,13 +145,15 @@ public class Conditions {
     }
 
     private void trigger(Multimap<Item, ItemInfo> map, ItemStack stack, EntityPlayer player) {
-        TutorialData tdata = TutorialData.get(player);
-        map.get(stack.getItem())
-                .stream()
-                .filter(info -> !info.metaSensitive() || stack.getItemDamage() == info.meta)
-                .forEach(info -> {
-                    tdata.setCondActivate(info.cond.index);
-                });
+        if (!player.worldObj.isRemote) {
+            TutorialData tdata = TutorialData.get(player);
+            map.get(stack.getItem())
+                    .stream()
+                    .filter(info -> !info.metaSensitive() || stack.getItemDamage() == info.meta)
+                    .forEach(info -> {
+                        tdata.setCondActivate(info.cond.index);
+                    });
+        }
     }
 
 }
