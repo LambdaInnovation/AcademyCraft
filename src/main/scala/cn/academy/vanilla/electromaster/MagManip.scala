@@ -231,6 +231,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
   def this(player: EntityPlayer, damage: Float) = { this(player.worldObj)
     constructServer(player)
     this.damage = damage
+    this.player2 = player
   }
 
   def setMoveTo(x: Double, y: Double, z: Double) = {
