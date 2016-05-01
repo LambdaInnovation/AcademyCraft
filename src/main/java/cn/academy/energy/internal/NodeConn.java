@@ -18,10 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author WeAthFolD
@@ -29,17 +26,18 @@ import java.util.List;
  */
 public class NodeConn {
 
-    static final int UPDATE_INTERVAL = 40;
+    private static final int UPDATE_INTERVAL = 40;
+
+    private final WiWorldData data;
+    private final VNNode node;
+
+    private boolean disposed = false;
     
-    final WiWorldData data;
-    final VNNode node;
-    
-    boolean disposed = false;
-    boolean active = false;
-    int counter = UPDATE_INTERVAL;
-    
-    List<VNReceiver> receivers = new LinkedList();
-    List<VNGenerator> generators = new LinkedList();
+    private List<VNReceiver> receivers = new LinkedList<>();
+    private List<VNGenerator> generators = new LinkedList<>();
+
+    private List<VNReceiver> toRemoveReceivers = new ArrayList<>();
+    private List<VNGenerator> toRemoveGenerators = new ArrayList<>();
     
     public NodeConn(WiWorldData _data, VNNode _node) {
         data = _data;
@@ -116,8 +114,7 @@ public class NodeConn {
     }
     
     void removeReceiver(VNReceiver receiver) {
-        receivers.remove(receiver);
-        data.nodeLookup.remove(receiver);
+        toRemoveReceivers.add(receiver);
     }
     
     boolean addGenerator(VNGenerator gen) {
@@ -135,10 +132,9 @@ public class NodeConn {
         
         return true;
     }
-    
+
     void removeGenerator(VNGenerator gen) {
-        generators.remove(gen);
-        data.nodeLookup.remove(gen);
+        toRemoveGenerators.add(gen);
     }
     
     void onAdded(WiWorldData data) {
@@ -156,7 +152,7 @@ public class NodeConn {
     boolean validate() {
         World world = getWorld();
         if (!disposed && node.isLoaded(world)) {
-            if (node.get(world) == null) {
+            if (node.get(world) == null || (generators.size() == 0 && receivers.size() == 0)) {
                 disposed = true;
             }
         }
@@ -170,43 +166,12 @@ public class NodeConn {
         return block.distSq(node) <= range * range;
     }
     
-    private void checkIsActive() {
-        World world = getWorld();
-        
-        for(VNGenerator gen : generators) {
-            if(gen.isLoaded(world)) {
-                active = true;
-                return;
-            }
-        }
-        
-        for(VNReceiver rec : receivers) {
-            if(rec.isLoaded(world)) {
-                active = true;
-                return;
-            }
-        }
-        
-        active = false;
-    }
-    
     public void tick() {
         validate();
 
         World world = getWorld();
-        if(!active) {
-            --counter;
-            if(counter == 0) {
-                counter = UPDATE_INTERVAL;
-                checkIsActive();
-                checkAvailability();
-            }
-            return;
-        }
-        
         IWirelessNode iNode = node.get(world);
         if(iNode == null) {
-            checkAvailability();
             return;
         }
         
@@ -221,7 +186,7 @@ public class NodeConn {
                 if(gen.isLoaded(world)) {
                     IWirelessGenerator igen = gen.get(world);
                     if(igen == null) {
-                        iter.remove();
+                        removeGenerator(gen);
                     } else {
                         double cur = iNode.getEnergy();
                         double required = Math.min(transferLeft, 
@@ -251,7 +216,7 @@ public class NodeConn {
                 if(rec.isLoaded(world)) {
                     IWirelessReceiver irec = rec.get(world);
                     if(irec == null) {
-                        iter.remove();
+                        removeReceiver(rec);
                     } else {
                         
                         double cur = iNode.getEnergy();
@@ -266,24 +231,16 @@ public class NodeConn {
                 }
             }
         }
-        
-        // Kill dummy networks
-        if(generators.size() == 0 && receivers.size() == 0) {
-            dispose();
-        }
-    }
-    
-    private void checkAvailability() {
-        World world = getWorld();
-        IWirelessNode iNode = node.get(world);
-        
-        if(iNode == null || (generators.size() == 0 && receivers.size() == 0)) {
-            if(node.isLoaded(world)) {
-                log(node + " destroyed, destroy NodeConn...");
-                dispose();
-            }
-            return;
-        }
+
+        // Remove toRemove receivers/generators
+        data.nodeLookup.keySet().removeAll(toRemoveGenerators);
+        generators.removeAll(toRemoveGenerators);
+
+        data.nodeLookup.keySet().removeAll(toRemoveReceivers);
+        receivers.removeAll(toRemoveReceivers);
+
+        toRemoveGenerators.clear();
+        toRemoveReceivers.clear();
     }
     
     public IWirelessNode getNode() {

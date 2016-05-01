@@ -110,7 +110,7 @@ public class WiWorldData extends WorldSavedData {
             } else {
                 throw new RuntimeException("Invalid TileEntity");
             }
-            if(net != null && net.isInRange(x, y, z)) {
+            if(net != null && net.isInRange(x, y, z) && net.getLoad() < net.getCapacity()) {
                 set.add(net);
                 if(set.size() >= max)
                     return set;
@@ -125,7 +125,7 @@ public class WiWorldData extends WorldSavedData {
     }
     
     public WirelessNet getNetwork(IWirelessNode node) {
-        return privateGetNetwork(new VNNode(node));
+        return privateGetNetwork(new VWNode(node));
     }
 
     private WirelessNet privateGetNetwork(Object key) {
