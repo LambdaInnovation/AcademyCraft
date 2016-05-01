@@ -171,6 +171,17 @@ public class WirelessNet {
         
         return true;
     }
+
+    boolean validate() {
+        if (matrix.isLoaded(world)) {
+            IWirelessMatrix mat = matrix.get(world);
+            if (mat == null) {
+                disposed = true;
+            }
+        }
+
+        return !disposed;
+    }
     
     boolean isInRange(int x, int y, int z) {
         IWirelessMatrix imat = matrix.get(world);
@@ -231,6 +242,7 @@ public class WirelessNet {
     }
     
     void tick() {
+        validate();
         
         // Filter the not-alive nets and update the state lazily
         if(!isAlive()) {

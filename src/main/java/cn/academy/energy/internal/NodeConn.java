@@ -152,7 +152,18 @@ public class NodeConn {
         for(VNReceiver rec : receivers)
             data.nodeLookup.remove(rec);
     }
-    
+
+    boolean validate() {
+        World world = getWorld();
+        if (!disposed && node.isLoaded(world)) {
+            if (node.get(world) == null) {
+                disposed = true;
+            }
+        }
+
+        return !disposed;
+    }
+
     private boolean checkRange(VBlock<?> block) {
         IWirelessNode inode = node.get(getWorld());
         double range = inode == null ? 1000 : inode.getRange();
@@ -180,6 +191,8 @@ public class NodeConn {
     }
     
     public void tick() {
+        validate();
+
         World world = getWorld();
         if(!active) {
             --counter;

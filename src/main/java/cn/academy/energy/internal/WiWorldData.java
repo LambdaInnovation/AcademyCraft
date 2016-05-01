@@ -70,7 +70,7 @@ public class WiWorldData extends WorldSavedData {
         toRemove.clear();
         
         Iterator<WirelessNet> iter = netList.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             WirelessNet net = iter.next();
             if(net.isDisposed()) {
                 toRemove.add(net);
@@ -121,11 +121,20 @@ public class WiWorldData extends WorldSavedData {
     }
     
     public WirelessNet getNetwork(IWirelessMatrix matrix) {
-        return netLookup.get(new VWMatrix(matrix));
+        return privateGetNetwork(new VWMatrix(matrix));
     }
     
     public WirelessNet getNetwork(IWirelessNode node) {
-        return netLookup.get(new VWNode(node));
+        return privateGetNetwork(new VNNode(node));
+    }
+
+    private WirelessNet privateGetNetwork(Object key) {
+        WirelessNet ret = netLookup.get(key);
+        if (ret != null && ret.validate()) {
+            return ret;
+        } else {
+            return null;
+        }
     }
     
     private void doRemoveNetwork(WirelessNet net) {
@@ -167,7 +176,7 @@ public class WiWorldData extends WorldSavedData {
      */
     public NodeConn getNodeConnection(IWirelessNode node) {
         VNNode vnn = new VNNode(node);
-        NodeConn ret = nodeLookup.get(vnn);
+        NodeConn ret = privateGetNodeConn(vnn);
         if(ret == null) {
             doAddNode(ret = new NodeConn(this, vnn));
         }
@@ -176,11 +185,21 @@ public class WiWorldData extends WorldSavedData {
     
     public NodeConn getNodeConnection(IWirelessUser user) {
         if(user instanceof IWirelessGenerator) {
-            return nodeLookup.get(new VNGenerator((IWirelessGenerator) user));
+            return privateGetNodeConn(new VNGenerator((IWirelessGenerator) user));
         } else if(user instanceof IWirelessReceiver) {
-            return nodeLookup.get(new VNReceiver((IWirelessReceiver) user));
-        } else
+            return privateGetNodeConn(new VNReceiver((IWirelessReceiver) user));
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
+    }
+
+    private NodeConn privateGetNodeConn(Object key) {
+        NodeConn ret = nodeLookup.get(key);
+        if (ret != null && ret.validate()) {
+            return ret;
+        } else {
             return null;
+        }
     }
     
     private void tickNode() {
