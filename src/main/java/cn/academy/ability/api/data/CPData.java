@@ -352,7 +352,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
     private float getCPRecoverSpeed() {
         float raw = getFloat("cp_recover_speed") *
-                0.0001f * maxCP *
+                0.0003f * maxCP *
                 MathUtils.lerpf(1, 2, curCP / maxCP);
 
         return CalcEvent.calc(new CPRecoverSpeed(getEntity(), 1)) * raw;
