@@ -168,7 +168,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     private void sync() {
         NetworkMessage.sendToAllAround(
-                TargetPointHelper.convert(this, 15),
+                TargetPointHelper.convert(this, 25),
                 this, "sync", getPlateCount(), placerName);
     }
 

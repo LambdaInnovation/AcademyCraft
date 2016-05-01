@@ -113,7 +113,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
                 if(++updateWait2 == 20) {
                     updateWait2 = 0;
                     NetworkMessage.sendToAllAround(
-                            TargetPointHelper.convert(this, 10),
+                            TargetPointHelper.convert(this, 50),
                             this, "sync", inventory[0]
                     );
                 }
