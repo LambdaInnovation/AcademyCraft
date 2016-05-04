@@ -500,6 +500,8 @@ ac.cat_engine.linked=Linked to the node named %s meow~
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
+
+ac.tutorial.crafting=Crafting: %s
 ac.tutorial.misaka=Misaka No.%d
 ac.tutorial.update=Cloud Terminal updated
 

@@ -506,6 +506,7 @@ ac.gui.crafttype.shaped=有序合成
 ac.gui.crafttype.shapeless=无序合成
 ac.tutorial.misaka=御坂%d号
 ac.tutorial.update=云终端更新
+ac.tutorial.crafting=合成: %s
 
 # 猜硬币
 # 小驼峰邪教

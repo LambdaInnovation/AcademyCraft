@@ -29,7 +29,7 @@ public class ImagFusorRecipes {
 
     public static ImagFusorRecipes INSTANCE = new ImagFusorRecipes();
     
-    private List<IFRecipe> recipeList = new ArrayList();
+    private List<IFRecipe> recipeList = new ArrayList<>();
     
     public void addRecipe(ItemStack consume, int liquid, ItemStack output) {
         addRecipe(new IFRecipe(consume, liquid, output));

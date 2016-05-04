@@ -41,7 +41,7 @@ public class ACTutorial {
     private Condition condition = Conditions.alwaysTrue();
     private boolean defaultInstalled = true;
 
-    private List<IPreviewHandler> previewHandlers = new ArrayList<>();
+    private List<ViewGroup> previewHandlers = new ArrayList<>();
 
     public ACTutorial(String id) {
         this.id=id;
@@ -53,12 +53,12 @@ public class ACTutorial {
         return this;
     }
 
-    public ACTutorial addPreview(IPreviewHandler ...handlers) {
+    public ACTutorial addPreview(ViewGroup...handlers) {
         previewHandlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
-    public List<IPreviewHandler> getPreview() {
+    public List<ViewGroup> getPreview() {
         return previewHandlers;
     }
 

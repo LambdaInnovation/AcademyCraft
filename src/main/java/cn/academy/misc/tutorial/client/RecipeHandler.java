@@ -326,16 +326,18 @@ public enum RecipeHandler {
             }
         }
         { // IF Recipes
-            IFRecipe recipe = ImagFusorRecipes.INSTANCE.getRecipe(stack);
-            if (recipe != null) {
-                ret.add(drawIFRecipe(recipe));
-            }
+            List<Widget> recipes = ImagFusorRecipes.INSTANCE.getAllRecipe().stream()
+                    .filter(recipe -> itemDamageEqual(recipe.output, stack))
+                    .map(instance::drawIFRecipe)
+                    .collect(Collectors.toList());
+            ret.addAll(recipes);
         }
         { // MF Recipes
-            MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
-                    .filter(r -> r.accepts(stack, r.mode))
-                    .findFirst()
-                    .ifPresent(r -> ret.add(drawMFRecipe(r)));
+            List<Widget> recipes = MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
+                    .filter(recipe -> itemDamageEqual(recipe.output, stack))
+                    .map(instance::drawMFRecipe)
+                    .collect(Collectors.toList());
+            ret.addAll(recipes);
         }
         { // Smelting
             Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.smelting().getSmeltingList();
@@ -351,6 +353,12 @@ public enum RecipeHandler {
         }
 
         return ret.toArray(new Widget[ret.size()]);
+    }
+
+    private boolean itemDamageEqual(ItemStack s1, ItemStack s2) {
+        if (s1 == null || s2 == null) { return false; }
+
+        return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
     }
 
 }

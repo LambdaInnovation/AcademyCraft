@@ -7,19 +7,16 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
-import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.client.Resources;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
-import cn.academy.misc.ModuleMisc;
 import cn.academy.misc.tutorial.client.GuiTutorial;
 import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
-import cn.academy.vanilla.ModuleVanilla;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegPostInitCallback;
@@ -32,7 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 import static cn.academy.misc.tutorial.Conditions.*;
-import static cn.academy.misc.tutorial.PreviewHandlers.*;
+import static cn.academy.misc.tutorial.ViewGroups.*;
 
 @Registrant
 @RegACRecipeNames
