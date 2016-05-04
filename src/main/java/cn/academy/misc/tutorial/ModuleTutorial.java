@@ -113,7 +113,7 @@ public class ModuleTutorial {
 
         defnTut("misc");
 
-        defnTut("how_to_develop_ability");
+        defnTut("develop_ability");
 
         defnTut("wireless_network");
 

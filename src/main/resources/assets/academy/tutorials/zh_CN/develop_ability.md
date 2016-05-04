@@ -1,4 +1,4 @@
-![tilte]
+![title]
 如何开发能力
 
 ![brief]
