@@ -90,6 +90,7 @@ public class ModuleTutorial {
                 .setCondition(itemObtained(ModuleCrafting.imagFusor))
                 .addPreview(recipes(ModuleCrafting.imagFusor));
 
+        //TODO add support for app installer
         defnTut("terminal")
                 .setCondition(itemObtained(ModuleTerminal.terminalInstaller))
                 .addPreview(recipes(ModuleTerminal.terminalInstaller));
@@ -102,7 +103,7 @@ public class ModuleTutorial {
                 .addPreview(recipes(ModuleAbility.developerNormal))
                 .addPreview(recipes(ModuleAbility.developerAdvanced));
 
-        //defnTut("ability")
+        defnTut("ability_basis");
 
         defnTut("energy_bridge")
                 .setCondition(itemObtained(RFSupport.rfInput)
@@ -112,9 +113,9 @@ public class ModuleTutorial {
 
         defnTut("misc");
 
-        defnTut("ability_basis");
+        defnTut("how_to_develop_ability");
 
-        defnTut("energy");
+        defnTut("wireless_network");
 
         // Add app for tutorial
         AppRegistry.register(new App("tutorial") {
