@@ -12,8 +12,6 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -58,7 +56,6 @@ public class ItemApp extends ACItem {
         super("apps");
         app = _app;
         setTextureName("academy:app_" + app.getName());
-        //this.setHasSubtypes(true);
     }
     
     @Override
@@ -68,7 +65,7 @@ public class ItemApp extends ACItem {
             if(!terminalData.isTerminalInstalled()) {
                 player.addChatMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
             } else if(terminalData.isInstalled(app)) {
-                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_already_installed", app.getDisplayName()));
+                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
             } else {
                 if(!player.capabilities.isCreativeMode)
                     stack.stackSize--;
