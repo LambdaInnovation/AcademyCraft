@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.lambdalib.template.client.render.block.RenderEmptyBlock.id;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -134,15 +135,24 @@ public class GuiTutorial extends CGuiScreen {
                     i2 = raw.indexOf("![brief]"),
                     i3 = raw.indexOf("![content]");
             if (i1 < i2 && i2 < i3 && i1 != -1) {
-                String title = raw.substring(i1+8, i2),
-                        brief = raw.substring(i2+8, i3),
-                        content = raw.substring(i3+10);
+                String title = trimHead(raw.substring(i1+8, i2)),
+                        brief = trimHead(raw.substring(i2+8, i3)),
+                        content = trimHead(raw.substring(i3+10));
                 cached.put(tut, new CachedRenderInfo(title, brief, content));
             } else {
                 throw new RuntimeException("Malformed tutorial " + tut.id);
             }
         }
         return cached.get(tut);
+    }
+
+    private String trimHead(String str) {
+        int idx = 0;
+        while (idx < str.length() &&
+                (str.charAt(idx) == '\r' || str.charAt(idx) == '\n' || str.charAt(idx) == ' ')) {
+            idx++;
+        }
+        return str.substring(idx);
     }
 
     public GuiTutorial() {
@@ -223,7 +233,7 @@ public class GuiTutorial extends CGuiScreen {
                 font.draw(info.title, 3, 3, fo_descTitle);
 
                 glPushMatrix();
-                glTranslated(3, 18, 0);
+                glTranslated(3, 15, 0);
                 info.getBrief().render();
                 glPopMatrix();
             }
