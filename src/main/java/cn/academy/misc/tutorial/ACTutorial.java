@@ -47,9 +47,13 @@ public class ACTutorial {
         this.id=id;
     }
 
-    public ACTutorial setCondition(Condition condition) {
+    public ACTutorial addCondition(Condition condition) {
         defaultInstalled = false;
-        this.condition=condition;
+        if(this.condition == Conditions.alwaysTrue()) {
+            this.condition = condition;
+        } else {
+            this.condition = this.condition.or(condition);
+        }
         return this;
     }
 

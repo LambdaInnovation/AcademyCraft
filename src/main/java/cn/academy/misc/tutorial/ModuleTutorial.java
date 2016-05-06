@@ -12,11 +12,13 @@ import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.misc.tutorial.client.GuiTutorial;
+import cn.academy.support.BlockConverterBase;
 import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
+import cn.academy.terminal.item.ItemApp;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegPostInitCallback;
@@ -26,6 +28,7 @@ import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 import static cn.academy.misc.tutorial.Conditions.*;
@@ -48,10 +51,10 @@ public class ModuleTutorial {
         defnTut("welcome");
 
         defnTut("ores")
-                .setCondition(itemObtained(ModuleCrafting.oreConstraintMetal)
-                        .or(itemObtained(ModuleCrafting.oreImagSil))
-                        .or(itemObtained(ModuleCrafting.oreImagCrystal))
-                        .or(itemObtained(ModuleCrafting.oreResoCrystal)))
+                .addCondition(itemObtained(ModuleCrafting.oreConstraintMetal))
+                .addCondition(itemObtained(ModuleCrafting.oreImagSil))
+                .addCondition(itemObtained(ModuleCrafting.oreImagCrystal))
+                .addCondition(itemObtained(ModuleCrafting.oreResoCrystal))
                 .addPreview(drawsBlock(ModuleCrafting.oreConstraintMetal))
                 .addPreview(drawsBlock(ModuleCrafting.oreImagSil))
                 .addPreview(drawsBlock(ModuleCrafting.oreImagCrystal))
@@ -65,40 +68,46 @@ public class ModuleTutorial {
                 .addPreview(recipes(ModuleCrafting.silPiece));
 
         defnTut("phase_generator")
-                .setCondition(itemObtained(ModuleEnergy.phaseGen))
+                .addCondition(itemObtained(ModuleEnergy.phaseGen))
                 .addPreview(recipes(ModuleEnergy.phaseGen));
 
         defnTut("solar_generator")
-                .setCondition(itemObtained(ModuleEnergy.solarGen))
+                .addCondition(itemObtained(ModuleEnergy.solarGen))
                 .addPreview(recipes(ModuleEnergy.solarGen));
 
         defnTut("wind_generator")
-                .setCondition(itemObtained(ModuleEnergy.windgenBase)
-                        .or(itemObtained(ModuleEnergy.windgenFan))
-                        .or(itemObtained(ModuleEnergy.windgenMain))
-                        .or(itemObtained(ModuleEnergy.windgenPillar)))
+                .addCondition(itemObtained(ModuleEnergy.windgenBase))
+                .addCondition(itemObtained(ModuleEnergy.windgenFan))
+                .addCondition(itemObtained(ModuleEnergy.windgenMain))
+                .addCondition(itemObtained(ModuleEnergy.windgenPillar))
                 .addPreview(recipes(ModuleEnergy.windgenBase))
                 .addPreview(recipes(ModuleEnergy.windgenPillar))
                 .addPreview(recipes(ModuleEnergy.windgenMain))
                 .addPreview(recipes(ModuleEnergy.windgenFan));
 
         defnTut("metal_former")
-                .setCondition(itemObtained(ModuleCrafting.metalFormer))
+                .addCondition(itemObtained(ModuleCrafting.metalFormer))
                 .addPreview(recipes(ModuleCrafting.metalFormer));
 
         defnTut("imag_fusor")
-                .setCondition(itemObtained(ModuleCrafting.imagFusor))
+                .addCondition(itemObtained(ModuleCrafting.imagFusor))
                 .addPreview(recipes(ModuleCrafting.imagFusor));
 
-        //TODO add support for app installer
-        defnTut("terminal")
-                .setCondition(itemObtained(ModuleTerminal.terminalInstaller))
+        ACTutorial tutorialTerminal = defnTut("terminal")
+                .addCondition(itemObtained(ModuleTerminal.terminalInstaller))
                 .addPreview(recipes(ModuleTerminal.terminalInstaller));
 
+        for(App app : AppRegistry.enumeration()) {
+            if(!app.isPreInstalled()) {
+                tutorialTerminal.addCondition(itemObtained(ItemApp.getItemForApp(app)));
+                tutorialTerminal.addPreview(recipes(ItemApp.getItemForApp(app)));
+            }
+        }
+
         defnTut("ability_developer")
-                .setCondition(itemObtained(ModuleAbility.developerPortable)
-                        .or(itemObtained(ModuleAbility.developerNormal))
-                        .or(itemObtained(ModuleAbility.developerAdvanced)))
+                .addCondition(itemObtained(ModuleAbility.developerPortable))
+                .addCondition(itemObtained(ModuleAbility.developerNormal))
+                .addCondition(itemObtained(ModuleAbility.developerAdvanced))
                 .addPreview(recipes(ModuleAbility.developerPortable))
                 .addPreview(recipes(ModuleAbility.developerNormal))
                 .addPreview(recipes(ModuleAbility.developerAdvanced));
@@ -106,8 +115,8 @@ public class ModuleTutorial {
         defnTut("ability_basis");
 
         defnTut("energy_bridge")
-                .setCondition(itemObtained(RFSupport.rfInput)
-                        .or(itemObtained(RFSupport.rfOutput)))
+                .addCondition(itemObtained(RFSupport.rfInput))
+                .addCondition(itemObtained(RFSupport.rfOutput))
                 .addPreview(recipes(RFSupport.rfInput))
                 .addPreview(recipes(RFSupport.rfOutput));
 
