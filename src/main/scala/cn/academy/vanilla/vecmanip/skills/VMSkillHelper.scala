@@ -5,7 +5,7 @@ import net.minecraft.entity.projectile.EntityArrow
 
 class ExtArrow(val arrow: EntityArrow) extends AnyVal {
 
-  def isInGround: Boolean = RegistryUtils.getFieldInstance(classOf[EntityArrow], arrow, "inGround", "field_70238_i")
+  def isInGround: Boolean = RegistryUtils.getFieldInstance(classOf[EntityArrow], arrow, "inGround", "field_70254_i")
 
 }
 
