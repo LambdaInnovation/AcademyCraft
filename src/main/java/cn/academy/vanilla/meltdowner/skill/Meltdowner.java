@@ -8,8 +8,10 @@ package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.context.ClientContext;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.Context;
+import cn.academy.ability.api.context.RegClientContext;
 import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
@@ -161,6 +163,7 @@ public class Meltdowner extends Skill {
             terminate();
         }
 
+        @SideOnly(Side.CLIENT)
         @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
         void c_perform(int ct, double length) {
             EntityMDRay ray = new EntityMDRay(player, length);
