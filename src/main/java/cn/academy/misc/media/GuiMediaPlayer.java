@@ -20,6 +20,7 @@ import cn.lambdalib.cgui.gui.event.*;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
@@ -56,8 +57,10 @@ public class GuiMediaPlayer extends CGuiScreen {
         {
             Widget area = pageMain.getWidget("area");
             ElementList list = new ElementList();
-            
-            for(ACMedia m : MediaManager.medias()) {
+
+            MediaData data = MediaData.of(Minecraft.getMinecraft().thePlayer);
+
+            for(ACMedia m : MediaManager.medias()) if (data.isInstalled(m) && m.isAvailable()) {
                 list.addWidget(createMedia(m));
             }
             

@@ -1,6 +1,7 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.Resources;
 import com.google.common.base.Throwables;
 import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
@@ -50,12 +51,7 @@ public abstract class ACMedia {
         return AcademyCraft.config;
     }
 
-    public static ACMedia newInternal(String id) {
-        URL url = ACMedia.class.getResource("/assets/academy/media/source/" + id + ".ogg");
-        if (url.getFile().isEmpty()) {
-            throw new IllegalStateException("Can't find internal media with url " + url);
-        }
-
+    public static ACMedia newInternal(String id, URL url) {
         return new ACMedia(id, false, url, ".ogg") {
             @Override
             public String getName() {
@@ -74,6 +70,8 @@ public abstract class ACMedia {
     private final ResourceLocation cover;
     private final String postfix;
     private final boolean external;
+
+
 
     private ACMedia(String _id, boolean _external, URL _source, String _postfix) {
         id = _id;
@@ -99,6 +97,8 @@ public abstract class ACMedia {
     }
 
     public ResourceLocation getCover() {
+
+
         return cover;
     }
 
@@ -106,19 +106,24 @@ public abstract class ACMedia {
         return postfix;
     }
 
+    public final boolean isAvailable() {
+        return getLength() != -1;
+    }
+
+    /**
+     * @return The length of media in seconds, or -1 if not available.
+     */
     @SideOnly(Side.CLIENT)
     public final float getLength() {
-        if (length == -1) try {
-            try (InputStream stream = getSource().openStream()) {
-                VorbisFile vf = new VorbisFile(stream, null, 0);
+        if (length == -1) {
+            try {
+                VorbisFile vf = new VorbisFile(getSource().getFile());
                 length = vf.time_total(-1);
 
                 vf.close();
-            } catch (JOrbisException e) {
-                throw Throwables.propagate(e);
+            } catch (Exception ex) {
+                return -1;
             }
-        } catch (IOException ex) {
-            Throwables.propagate(ex);
         }
 
         return length;

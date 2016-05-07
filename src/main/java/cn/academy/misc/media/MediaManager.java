@@ -7,6 +7,7 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.generic.RegistryUtils;
@@ -14,18 +15,19 @@ import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Throwables;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -40,6 +42,11 @@ public class MediaManager {
     private static Map<String, ACMedia> medias = new LinkedHashMap<>();
     private static List<ACMedia> mediasList = new ArrayList<>();
     private static List<ACMedia> internalMediasList = new ArrayList<>();
+
+    private static final ResourceLocation missingCover = Resources.getTexture("guis/icons/icon_nomedia");
+
+    @SideOnly(Side.CLIENT)
+    private static SimpleTexture missingCoverTexture;
 
     private MediaManager() {}
 
@@ -57,14 +64,28 @@ public class MediaManager {
                 RegistryUtils.getResourceStream(new ResourceLocation("academy:media/default.conf")));
         Config conf = ConfigFactory.parseReader(reader);
 
+        File path = checkPath(new File(folder(), "acmedia/defaultSource"));
+
+        // Temp workaround: Copy the default medias to the file system. Thus, the VorbisFile can read the length.
+        //  this is because java's File doesn't support classpath resources.
         for (String id : conf.getStringList("default_medias")) {
-            register(ACMedia.newInternal(id));
+            try {
+                Path dst = new File(path, id + ".ogg").toPath();
+                Files.copy(RegistryUtils.getResourceStream(new ResourceLocation("academy:media/source/" + id + ".ogg")),
+                        dst, StandardCopyOption.REPLACE_EXISTING);
+
+                register(ACMedia.newInternal(id, dst.toUri().toURL()));
+            } catch (IOException ex) {
+                AcademyCraft.log.error("Can't copy media file " + id + ".");
+            }
         }
     }
 
     @SideOnly(Side.CLIENT)
     private static void parseCustomConfig() {
-        File path = checkPath(new File(Minecraft.getMinecraft().mcDataDir, "acmedia"));
+        missingCoverTexture = new SimpleTexture(missingCover);
+
+        File path = checkPath(new File(folder(), "acmedia"));
 
         // Also copy the readme_template.txt to the folder.
         {
@@ -104,7 +125,7 @@ public class MediaManager {
 
                             Minecraft.getMinecraft().getTextureManager().loadTexture(loc, object);
                         } else {
-                            System.out.println("File " + coverFile + "not exist");
+                            Minecraft.getMinecraft().getTextureManager().loadTexture(loc, missingCoverTexture);
                         }
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -116,6 +137,19 @@ public class MediaManager {
                 Throwables.propagate(ex);
             }
         }
+    }
+
+    private static File folder() {
+        if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+            return new File("/");
+        } else {
+            return folderName_c();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static File folderName_c() {
+        return new File(Minecraft.getMinecraft().mcDataDir, "acmedia");
     }
 
     private static File checkPath(File file) {

@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.BitSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Registrant
 @RegDataPart(EntityPlayer.class)
@@ -43,6 +45,13 @@ public class MediaData extends DataPart<EntityPlayer> {
 
     public boolean isInstalled(ACMedia media) {
         return media.isExternal() || installed.get(index(media));
+    }
+
+    public List<ACMedia> installedList() {
+        return MediaManager.medias().stream()
+                .filter(this::isInstalled)
+                .filter(ACMedia::isAvailable)
+                .collect(Collectors.toList());
     }
 
     private int index(ACMedia media) {

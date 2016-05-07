@@ -16,14 +16,19 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 /**
  * Backend of GuiMediaPlayer.
  * @author WeAthFolD, KSkun
  */
 @Registrant
-//@SideOnly(Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public class MediaPlayer {
     
     public static final MediaPlayer instance = new MediaPlayer();
@@ -79,12 +84,14 @@ public class MediaPlayer {
             return null;
         }
 
+        List<ACMedia> medias = playerMedias();
+
         switch(playPref) {
             case LOOP:
                 int index = MediaManager.indexOf(currentMedia);
-                return MediaManager.get((index + 1) % MediaManager.mediasCount());
+                return medias.get((index + 1) % medias.size());
             case RANDOM:
-                return MediaManager.get(RandUtils.rangei(0, MediaManager.mediasCount()));
+                return medias.get(RandUtils.rangei(0, medias.size()));
             case SINGLE:
                 return null;
             case SINGLE_LOOP:
@@ -96,6 +103,10 @@ public class MediaPlayer {
 
     public ACMedia getCurrentMedia() {
         return currentMedia;
+    }
+
+    private List<ACMedia> playerMedias() {
+        return MediaData.of(Minecraft.getMinecraft().thePlayer).installedList();
     }
 
     @SubscribeEvent
