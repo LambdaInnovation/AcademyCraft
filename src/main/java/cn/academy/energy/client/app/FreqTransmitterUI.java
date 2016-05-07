@@ -175,7 +175,6 @@ public class FreqTransmitterUI extends AuxGui {
         current.handleDraw(width, height);
 
         long dt = current.getDeltaTime();
-        System.out.println(dt + "," + current.timeout);
         if (dt > current.timeout) {
             setState(new StateNotifyAndQuit("st"));
         }

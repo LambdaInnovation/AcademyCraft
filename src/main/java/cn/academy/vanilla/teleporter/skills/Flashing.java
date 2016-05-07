@@ -90,7 +90,8 @@ public class Flashing extends Skill {
         });
     }
 
-    static final Vec3[] dirs = new Vec3[] {
+    private static final Vec3[] dirs = new Vec3[] {
+            null,
             VecUtils.vec(0, 0, -1),
             VecUtils.vec(0, 0, 1),
             VecUtils.vec(1, 0, 0),
@@ -144,11 +145,11 @@ public class Flashing extends Skill {
                 };
                 clientRuntime().addActivateHandler(activateHandler);
 
-                final String[] strs = new String[] { "a", "d", "w", "s"};
-                final int[] keys = new int[] { Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
+                final String[] strs = new String[] { null, "a", "d", "w", "s"};
+                final int[] keys = new int[] { -1, Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
                 for (int i = 0; i < 4; ++i) {
-                    final int localid = i+1;
-                    clientRuntime().addKey(KEY_GROUP, keys[i], new KeyDelegate() {
+                    final int localid = i + 1;
+                    clientRuntime().addKey(KEY_GROUP, keys[localid], new KeyDelegate() {
                         @Override
                         public void onKeyDown() {
                             localStart(localid);

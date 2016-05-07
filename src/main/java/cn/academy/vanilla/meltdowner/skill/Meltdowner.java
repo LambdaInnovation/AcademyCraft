@@ -176,8 +176,6 @@ public class Meltdowner extends Skill {
             double distance = VecUtils.entityHeadPos(player).distanceTo(VecUtils.entityHeadPos(reflector));
             Vec3 spawnPos = VecUtils.add(VecUtils.entityHeadPos(player), VecUtils.multiply(playerLook, distance));
 
-            System.out.println("Reflected distance=" + distance);
-
             Motion3D mo = new Motion3D(reflector, true);
             mo.setPosition(spawnPos.xCoord, spawnPos.yCoord, spawnPos.zCoord);
 

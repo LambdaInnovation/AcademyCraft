@@ -52,17 +52,32 @@ public class MediaManager {
 
     @RegInitCallback
     public static void __init() {
-        parseDefaultConfig();
-
-        if (SideHelper.isClient()) {
+        Side side = FMLCommonHandler.instance().getSide();
+        if (side == Side.CLIENT) {
+            parseDefaultConfig();
             parseCustomConfig();
+        } else {
+            parseDefaultConfig_S();
+        }
+    }
+
+    private static Config getDefaultConfig() {
+        Reader reader = new InputStreamReader(
+                RegistryUtils.getResourceStream(new ResourceLocation("academy:media/default.conf")));
+
+        return ConfigFactory.parseReader(reader);
+    }
+
+    private static void parseDefaultConfig_S() {
+        Config conf = getDefaultConfig();
+
+        for (String id : conf.getStringList("default_medias")) {
+            register(ACMedia.newInternal(id, null));
         }
     }
 
     private static void parseDefaultConfig() {
-        Reader reader = new InputStreamReader(
-                RegistryUtils.getResourceStream(new ResourceLocation("academy:media/default.conf")));
-        Config conf = ConfigFactory.parseReader(reader);
+        Config conf = getDefaultConfig();
 
         File path = checkPath(new File(folder(), "acmedia/defaultSource"));
 

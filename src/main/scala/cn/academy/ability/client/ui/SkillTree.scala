@@ -1023,7 +1023,9 @@ private object Common {
         y += 10
       }
 
-      widget.gainFocus()
+      if (this.widget.getGui.getWidget("link_page") == null) {
+        widget.gainFocus()
+      }
     })
 
     this.listens((evt: KeyEvent) => {

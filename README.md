@@ -1,6 +1,6 @@
-![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo_resized.png)  
+![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo.png)  
 
-[![Build Status](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/badge/icon)](http://ci.sumcraft.net:8080/job/LI-AcademyCraft/)
+[![Build Status](http://jenkins.mcbox.cc/job/LambdaInnovation/job/AcademyCraft/badge/icon)](http://jenkins.mcbox.cc/job/LambdaInnovation/job/AcademyCraft/)
 
 A Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
@@ -22,6 +22,19 @@ Simply use `gradlew build`. If you encounter `Unknown constant: 18` error, `grad
 An IDEA workspace with everything required can be set up using `gradlew idea`. You must have scala plugin installed.
 
 Eclipse workspace is not tested.
+
+Issue Submission
+============
+
+Any issue should be prefixed with the version associated. For example, `[1.0.0] Some unknown bug`.
+
+## Bug
+
+Please provide the following information if you are to submit a bug:
+
+* A brief description of the bug
+* A repeatible way to reproduce the bug, if you can find any
+* Crash report and the latest client/server log
 
 Localization
 ============

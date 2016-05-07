@@ -44,9 +44,5 @@ public abstract class SyncActionInstant extends SkillSyncAction {
      * Execute the action.
      */
     public void execute() {}
-    
-    protected void debug(Object o) {
-        System.out.println("SA: " + o);
-    }
 
 }

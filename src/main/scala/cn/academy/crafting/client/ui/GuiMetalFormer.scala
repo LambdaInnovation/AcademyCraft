@@ -5,6 +5,7 @@ import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
 import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.component.{DrawTexture, ProgressBar}
@@ -71,7 +72,10 @@ object GuiMetalFormer {
 @NetworkS11nType
 private object MFNetDelegate {
 
-  NetworkS11n.addDirectInstance(MFNetDelegate)
+  @RegInitCallback
+  def init() = {
+    NetworkS11n.addDirectInstance(MFNetDelegate)
+  }
 
   final val MSG_ALTERNATE = "alt"
 
