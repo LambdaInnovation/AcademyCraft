@@ -23,7 +23,7 @@ item.ac_constraint_plate.name=束能メタルプレート
 item.ac_imag_silicon_ingot.name=虚能シリコン鋳塊
 item.ac_wafer.name=虚能シリコンウエハー
 #item.ac_imag_silicon_piece.name=硅晶片
-#item.ac_reso_crystal.name=谐振水晶
+#item.ac_reso_crystal.name=共振水晶
 
 item.ac_brain_component.name=脳波分析装置
 item.ac_info_component.name=情報処理装置
@@ -51,7 +51,7 @@ item.ac_maghook.name=磁気フック
 item.ac_terminal_installer.name=データ端末
 item.ac_apps.name=アプリケーションインストーラ
 
-item.ac_developer_portable.name=携行性能力開発機
+item.ac_developer_portable.name=携行式能力開発機
 
 item.ac_tutorial.name=研究記録
 
@@ -61,8 +61,8 @@ ac.converter.desc_template=%sを%sまで転換
 tile.ac_constraint_metal_ore.name=束能金属鉱石
 tile.ac_crystal_ore.name=虚能クリスタル鉱石
 tile.ac_imag_silicon_ore.name=虚能シリコン鉱石
-#tile.ac_reso_crystal_ore.name=谐振水晶矿
-tile.ac_machine_frame.name=機械のフレームワーク
+#tile.ac_reso_crystal_ore.name=共振水晶鉱石
+tile.ac_machine_frame.name=マシーンフレーム
 
 tile.ac_phase_liquid.name=虚相位液体
 
@@ -123,11 +123,11 @@ ac.app.freq_transmitter.s1_0=確認するために「Enter」を押してくだ�
 ac.app.freq_transmitter.s1_1=検証中...
 ac.app.freq_transmitter.s2_0=右のリンクを確立するために、近くの任意の無線ノードをクリックします。終了する場合は任意の他のブロックをクリックします。
 ac.app.freq_transmitter.s3_0=右のリンクを確立するために、近くの任意の無線受信機や発電機をクリックします。終了する場合は任意の他のブロックをクリックします。
-ac.app.freq_transmitter.e0=この無線マトリックス初期化されていません.
+ac.app.freq_transmitter.e0=この無線マトリックスは初期化されていません.
 ac.app.freq_transmitter.e1=認証失敗.
 ac.app.freq_transmitter.e2=接続失敗. おそらくマトリックスが許容範囲外の容量や信号に達しました。
 ac.app.freq_transmitter.e3=接続失敗. おそらくノードが許容範囲外の容量や信号に達しました。
-ac.app.freq_transmitter.e4=操作がキャンセル.
+ac.app.freq_transmitter.e4=操作をキャンセルしました。
 ac.app.freq_transmitter.e5=送信中...
 ac.app.freq_transmitter.e6=接続成功.
 
