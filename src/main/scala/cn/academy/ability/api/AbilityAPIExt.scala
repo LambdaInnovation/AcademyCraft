@@ -1,6 +1,6 @@
 package cn.academy.ability.api
 
-import cn.academy.ability.api.cooldown.CooldownManager
+import cn.academy.ability.api.cooldown.CooldownData
 import cn.academy.ability.api.data.AbilityData
 import net.minecraft.entity.player.EntityPlayer
 
@@ -25,6 +25,6 @@ object AbilityAPIExt {
 
   def addSkillExp(amt: Float)(implicit data: AbilityData, skill: Skill) = data.addSkillExp(skill, amt)
 
-  def addSkillCooldown(time: Int)(implicit player: EntityPlayer, skill: Skill) = CooldownManager.setCooldown(player, skill, time)
+  def addSkillCooldown(time: Int)(implicit player: EntityPlayer, skill: Skill) = CooldownData.of(player).set(skill, time)
 
 }

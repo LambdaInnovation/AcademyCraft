@@ -12,7 +12,7 @@ import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.cooldown.CooldownManager;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.FlushControlEvent;
@@ -78,9 +78,14 @@ public class Flashing extends Skill {
             public ResourceLocation getIcon() {
                 return instance.getHintIcon();
             }
+
             @Override
-            protected int createID() {
-                return CooldownManager.getCtrlId(instance);
+            public int createID() {
+                return 0;
+            }
+
+            public Skill getSkill() {
+                return instance;
             }
         });
     }
@@ -142,7 +147,7 @@ public class Flashing extends Skill {
                 final String[] strs = new String[] { "a", "d", "w", "s"};
                 final int[] keys = new int[] { Keyboard.KEY_A, Keyboard.KEY_D, Keyboard.KEY_W, Keyboard.KEY_S };
                 for (int i = 0; i < 4; ++i) {
-                    final int localid = i;
+                    final int localid = i+1;
                     clientRuntime().addKey(KEY_GROUP, keys[i], new KeyDelegate() {
                         @Override
                         public void onKeyDown() {
@@ -160,9 +165,14 @@ public class Flashing extends Skill {
                         public ResourceLocation getIcon() {
                             return Resources.getTexture("abilities/teleporter/flashing/" + strs[localid]);
                         }
+
                         @Override
-                        protected int createID() {
-                            return CooldownManager.getCtrlId(instance, localid);
+                        public int createID() {
+                            return localid;
+                        }
+
+                        public Skill getSkill() {
+                            return instance;
                         }
                     });
                 }
@@ -227,7 +237,7 @@ public class Flashing extends Skill {
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                CooldownManager.setCooldown(player, Flashing.instance, 5);
+                CooldownData.of(player).setSub(instance, keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }

@@ -7,18 +7,12 @@
 package cn.academy.ability.api.ctrl.action;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.cooldown.CooldownManager;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.ctrl.SyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 /**
@@ -52,7 +46,7 @@ public class SkillSyncAction extends SyncAction {
      * Add cooldown to a skill if the currently the SyncAction is local.
      */
     public void setCooldown(Controllable c, int time) {
-        CooldownManager.setCooldown(player, c, time);
+        CooldownData.of(player).set(c, time);
     }
     
 }

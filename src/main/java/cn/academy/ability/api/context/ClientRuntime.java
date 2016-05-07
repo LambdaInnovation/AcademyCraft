@@ -7,7 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.cooldown.CooldownManager;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
@@ -69,9 +69,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     private final Map<Integer, DelegateNode> delegates = new TreeMap<>(); // Preserve insersion order for rendering
     private final Multimap<String, DelegateNode> delegateGroups = ArrayListMultimap.create();
     private final Map<Integer, KeyState> keyStates = new HashMap<>();
-
-    private final Map<Integer, CooldownData> cooldown = new HashMap<>();
-    private final Set<Integer> cooldownServer = new HashSet<>();
 
     private final LinkedList<IActivateHandler> activateHandlers = new LinkedList<>();
 
@@ -158,48 +155,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             keyStates.put(keyID, ret);
             return ret;
         }
-    }
-
-    public void setCooldownRawFromServer(int id, int cd) {
-        if (cd == 0)
-            cooldownServer.remove(id);
-        else {
-            cooldownServer.add(id);
-            if(isInCooldownRaw(id)) {
-                CooldownData data = cooldown.get(id);
-                if(data.max < cd) data.max = cd;
-                data.current = Math.max(cd, data.current);
-            } else {
-                cooldown.put(id, new CooldownData(cd));
-            }
-        }
-    }
-
-    public boolean isInCooldown(KeyDelegate delegate) {
-        return isInCooldownRaw(delegate.getIdentifier());
-    }
-
-    public CooldownData getCooldown(KeyDelegate delegate) {
-        return getCooldownDataRaw(delegate.getIdentifier());
-    }
-
-    public boolean isInCooldownRaw(int id) {
-        return cooldown.containsKey(id);
-    }
-
-    public CooldownData getCooldownDataRaw(int id) {
-        return cooldown.get(id);
-    }
-
-    public void clearCooldown() {
-        cooldown.clear();
-    }
-
-    /**
-     * @return An immutable map of the raw cooldown data.
-     */
-    public ImmutableMap<Object, CooldownData> getCooldownRawData() {
-        return ImmutableMap.copyOf(cooldown);
     }
 
     /**
@@ -320,13 +275,15 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             if (ClientRuntime.available()) {
                 final ClientRuntime rt = ClientRuntime.instance();
                 final CPData cpData = CPData.get(rt.getEntity());
+                final CooldownData cdData = CooldownData.of(rt.getEntity());
 
                 for (DelegateNode node : rt.delegates.values()) {
                     final KeyState state = rt.getKeyState(node.keyID);
                     final boolean keyDown = KeyManager.getKeyDown(node.keyID);
 
                     boolean shouldAbort =
-                            !ClientUtils.isPlayerInGame() || rt.isInCooldown(node.delegate) ||
+                            !ClientUtils.isPlayerInGame() ||
+                                    cdData.isInCooldown(node.delegate.getSkill(), node.delegate.getIdentifier()) ||
                                     !cpData.canUseAbility() ||
                                     AuxGuiHandler.active().stream().anyMatch(a -> a instanceof TerminalUI);
                     final KeyDelegate delegate = node.delegate;
@@ -359,18 +316,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                             iter.remove();
                         }
                     }
-                }
-
-                // TODO optimize
-                // Update cooldown
-                Iterator<Entry<Integer, CooldownData>> iter = rt.cooldown.entrySet().iterator();
-                while(iter.hasNext()) {
-                    Entry<Integer, CooldownData> entry = iter.next();
-                    CooldownData data = entry.getValue();
-                    if (!rt.cooldownServer.contains(entry.getKey()))
-                        iter.remove();
-                    else if(--data.current < 0)
-                        data.current = 0;
                 }
 
                 // Update override
@@ -431,29 +376,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             }
         }
 
-    }
-
-    public static class CooldownData {
-        private int current;
-        private int max;
-
-        public CooldownData(int time) {
-            current = max = time;
-        }
-
-        /**
-         * @return How many ticks until the cooldown is end
-         */
-        public int getTickLeft() {
-            return current;
-        }
-
-        /**
-         * @return the cooldown time specified at the start of the cooldown progress.
-         */
-        public int getMaxTick() {
-            return max;
-        }
     }
 
     public interface IActivateHandler {

@@ -15,7 +15,6 @@ import net.minecraft.util.{ResourceLocation, Vec3}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.academy.ability.api.cooldown.CooldownManager
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.util.generic.RandUtils._
@@ -42,7 +41,8 @@ object StormWing extends Skill("storm_wing", 3) {
 
       private def currentContext = Option(ContextManager.instance.findLocal(classOf[StormWingContext]).orElse(null))
       override def getIcon: ResourceLocation = StormWing.getHintIcon
-      override def createID: Int = CooldownManager.getCtrlId(StormWing)
+      override def createID: Int = 0
+      override def getSkill: Skill = StormWing
     })
   }
 
@@ -214,14 +214,15 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
         override def onKeyAbort() = onKeyUp()
         override def getIcon: ResourceLocation = StormWing.getHintIcon
         override def getState: DelegateState = if (applying && keyid == key) DelegateState.ACTIVE else DelegateState.IDLE
-        override def createID: Int = CooldownManager.getCtrlId(StormWing, idx)
+        override def createID: Int = idx
+        override def getSkill: Skill = StormWing
       })
     }
 
-    defkey(0, Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
-    defkey(1, Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
-    defkey(2, Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
-    defkey(3, Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
+    defkey(1, Keyboard.KEY_W,      () => worldSpace(0, 0, 1))
+    defkey(2, Keyboard.KEY_S,      () => worldSpace(0, 0, -1))
+    defkey(3, Keyboard.KEY_A,      () => worldSpace(1, 0, 0))
+    defkey(4, Keyboard.KEY_D,      () => worldSpace(-1, 0, 0))
   }
 
   @SideOnly(Side.CLIENT)

@@ -10,6 +10,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
@@ -322,9 +323,7 @@ public abstract class CommandAIMBase extends ACCommand {
         }
 
         case "cd_clear": {
-            NetworkMessage.sendTo(getCommandSenderAsPlayer(ics),
-                    NetworkMessage.staticCaller(CommandAIMBase.class),
-                    MSG_CLEAR_COOLDOWN);
+            CooldownData.of(player).clear();
             sendChat(ics, locSuccessful());
             return;
         }
@@ -363,12 +362,6 @@ public abstract class CommandAIMBase extends ACCommand {
         if(i != null)
             return cat.getSkill(i);
         return cat.getSkill(str);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Listener(channel=MSG_CLEAR_COOLDOWN, side=Side.CLIENT)
-    private static void hClearCooldown() {
-        ClientRuntime.instance().clearCooldown();
     }
 
 }
