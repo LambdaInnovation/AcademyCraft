@@ -10,6 +10,7 @@ import cn.academy.core.block.TileReceiverBase;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.PositionedSound;
+import cn.academy.core.client.sound.TileEntitySound;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
@@ -304,8 +305,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
             sound.stop();
             sound = null;
         } else if(sound == null && play) {
-            sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
-                    "machine.imag_fusor_work").setLoop().setVolume(0.6f);
+            sound = new TileEntitySound(this, "machine.imag_fusor_work").setLoop().setVolume(0.6f);
             ACSounds.playClient(sound);
         }
     }
