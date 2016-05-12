@@ -16,6 +16,7 @@ import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
@@ -27,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class TPSkillHelper {
 
     static final String TPC_ID = "ac_tpcount";
@@ -64,8 +66,8 @@ public class TPSkillHelper {
     }
 
     private static float prob(AbilityData data, int level) {
-        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? -1 : data.getSkillExp(DimFoldingTheorem.instance);
-        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? -1 : data.getSkillExp(SpaceFluctuation.instance);
+        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? data.getSkillExp(DimFoldingTheorem.instance) : -1;
+        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? data.getSkillExp(SpaceFluctuation.instance) : -1;
 
         switch (level) {
         case 0:
