@@ -44,7 +44,7 @@ public class MineRayLuck extends MineRaysBase {
             setSpeed(.5f, 1);
             setConsumption(50, 30);
             setOverload(320, 250);
-            setConsumption(60, 30);
+            setCooldown(60, 30);
             setExpIncr(0.0003f);
         }
 
