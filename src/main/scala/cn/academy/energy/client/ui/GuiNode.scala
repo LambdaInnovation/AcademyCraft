@@ -35,7 +35,7 @@ object GuiNode {
   val animTexture = Resources.getTexture("guis/effect/effect_node")
 
   def apply(container: ContainerNode) = {
-    val tile = container.node
+    val tile = container.tile
     val thePlayer = Minecraft.getMinecraft.thePlayer
 
     var state = STATE_UNLINKED

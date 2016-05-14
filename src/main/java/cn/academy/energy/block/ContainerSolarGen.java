@@ -1,38 +1,26 @@
 package cn.academy.energy.block;
 
+import cn.academy.core.container.TechUIContainer;
+import cn.academy.energy.api.IFItemManager;
 import cn.lambdalib.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerSolarGen extends CleanContainer {
-
-    public final EntityPlayer player;
-    public final TileSolarGen tile;
+public class ContainerSolarGen extends TechUIContainer<TileSolarGen> {
 
     public ContainerSolarGen(EntityPlayer player, TileSolarGen tile) {
-        this.player = player;
-        this.tile = tile;
+        super(player, tile);
 
-        this.addSlotToContainer(new SlotIFItem(tile, TileSolarGen.SLOT_BATTERY, 26, 71));
+        this.addSlotToContainer(new SlotIFItem(tile, TileSolarGen.SLOT_BATTERY, 42, 81));
 
-        InventoryPlayer inv = player.inventory;
-        int STEP = 18;
+        mapPlayerInventory();
 
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
+        SlotGroup gInv = gRange(1, 1+36);
+        SlotGroup gBattergy = gSlots(0);
 
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
+        addTransferRule(gInv, IFItemManager.instance::isSupported, gBattergy);
+        addTransferRule(gBattergy, gInv);
     }
 
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return tile.getDistanceFrom(player.posX, player.posY, player.posZ) < 64;
-    }
 }

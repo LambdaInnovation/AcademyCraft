@@ -27,10 +27,11 @@ import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
-import net.minecraft.inventory.Container
+import net.minecraft.inventory.{Container, Slot}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
 import cn.lambdalib.cgui.ScalaCGUI._
+import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 
@@ -220,6 +221,9 @@ object TechUI {
   }
 
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
+    xSize += 31
+    ySize += 20
+
     class InfoArea extends Widget {
       this :+ new BlendQuad()
 

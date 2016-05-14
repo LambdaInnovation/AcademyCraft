@@ -6,6 +6,7 @@
 */
 package cn.academy.energy.block.wind;
 
+import cn.academy.core.container.TechUIContainer;
 import cn.academy.energy.ModuleEnergy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,69 +14,24 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import static sun.audio.AudioPlayer.player;
+
 /**
  * @author WeAthFolD
  */
-public class ContainerWindGenMain extends Container {
-    
-    public final TileWindGenMain tile;
-    public final EntityPlayer player;
+public class ContainerWindGenMain extends TechUIContainer<TileWindGenMain> {
     
     public ContainerWindGenMain(EntityPlayer _player, TileWindGenMain _tile) {
-        tile = _tile;
-        player = _player;
-        
-        initInventory();
-    }
-    
-    void initInventory() {
-        this.addSlotToContainer(new SlotFan(tile, 0, 62, -1));
-        
-        InventoryPlayer inv = player.inventory;
-        int STEP = 18;
-        
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
-        
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
-    }
-    
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-        ItemStack stack = null;
-        Slot slot = (Slot)this.inventorySlots.get(id);
+        super(_player, _tile);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
-            stack = stack1.copy();
+        this.addSlotToContainer(new SlotFan(tile, 0, 78, 9));
 
-            if (id < 1) { //tileInv->playerInv
-                if (!this.mergeItemStack(stack1, 1, this.inventorySlots.size(), true))
-                    return null;
-            } else if(stack1.getItem() != ModuleEnergy.windgenFan || 
-                !this.mergeItemStack(stack1, 0, 1, false)) { //playerInv->tileInv
-                return null;
-            }
+        mapPlayerInventory();
 
-            if (stack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            } else {
-                slot.onSlotChanged();
-            }
-        }
+        SlotGroup gInv = gRange(1, 1+36), gFan = gSlots(0);
 
-        return stack;
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return true;
+        addTransferRule(gFan, gInv);
+        addTransferRule(gInv, stack -> stack.getItem() == ModuleEnergy.windgenFan, gFan);
     }
 
 }

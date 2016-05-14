@@ -6,6 +6,7 @@
 */
 package cn.academy.energy.block;
 
+import cn.academy.core.container.TechUIContainer;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.block.SlotMatterUnit;
 import cn.academy.energy.api.IFItemManager;
@@ -18,76 +19,29 @@ import net.minecraft.item.ItemStack;
 /**
  * @author WeAthFolD
  */
-public class ContainerPhaseGen extends Container {
+public class ContainerPhaseGen extends TechUIContainer<TilePhaseGen> {
     
     public static final int SLOT_LIQUID_IN = 0, SLOT_LIQUID_OUT = 1, SLOT_OUTPUT = 2;
-    
-    public final TilePhaseGen tile;
-    public final EntityPlayer player;
 
     public ContainerPhaseGen(EntityPlayer _player, TilePhaseGen _tile) {
-        player = _player;
-        tile = _tile;
+        super(_player, _tile);
         
         initInventory();
     }
     
     private void initInventory() {
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 29, 2));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 96, 41));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 26, 70));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_IN, 45, 12));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_LIQUID_OUT, 112, 51));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_OUTPUT, 42, 80));
         
-        InventoryPlayer inv = player.inventory;
-        int STEP = 18;
-        
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
-        
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
-    }
-    
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-        ItemStack stack = null;
-        Slot slot = (Slot)this.inventorySlots.get(id);
+        mapPlayerInventory();
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
-            stack = stack1.copy();
+        SlotGroup gMachine = gRange(0, 3);
+        SlotGroup gInv = gRange(4, 4+36);
 
-            if (id < 3) { //tileInv->playerInv
-                if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
-                    return null;
-            } else { 
-                if(IFItemManager.instance.isSupported(stack1)) {
-                    if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_OUTPUT, TilePhaseGen.SLOT_OUTPUT + 1, false))
-                        return null;
-                } else if(ModuleCrafting.matterUnit.getMaterial(stack1) == ModuleCrafting.imagPhase.mat) {
-                    if(!this.mergeItemStack(stack1, TilePhaseGen.SLOT_LIQUID_IN, TilePhaseGen.SLOT_LIQUID_IN + 1, false))
-                        return null;
-                } else
-                    return null;
-            }
-
-            if (stack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            } else {
-                slot.onSlotChanged();
-            }
-        }
-
-        return stack;
-    }
-    
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return true;
+        addTransferRule(gMachine, gInv);
+        addTransferRule(gInv, IFItemManager.instance::isSupported, gSlots(SLOT_OUTPUT));
+        addTransferRule(gInv, stack -> ModuleCrafting.matterUnit.getMaterial(stack) == ModuleCrafting.imagPhase.mat, gSlots(SLOT_LIQUID_IN));
     }
 
 }

@@ -6,6 +6,7 @@
 */
 package cn.academy.energy.block;
 
+import cn.academy.core.container.TechUIContainer;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.lambdalib.template.container.CleanContainer;
@@ -18,50 +19,29 @@ import net.minecraft.item.ItemStack;
 
 /**
  * @author WeAthFolD
- *
  */
-public class ContainerMatrix extends CleanContainer {
-    
-    public final TileMatrix tile;
-    public final EntityPlayer player;
+public class ContainerMatrix extends TechUIContainer<TileMatrix> {
     
     public ContainerMatrix(TileMatrix _tile, EntityPlayer _player) {
-        tile = _tile;
-        player = _player;
-        
-        initInventory(player.inventory);
+        super(_player, _tile);
+
+        initInventory();
     }
     
-    private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotPlate(tile, 0, 62, 1));
-        this.addSlotToContainer(new SlotPlate(tile, 1, 37, 50));
-        this.addSlotToContainer(new SlotPlate(tile, 2, 88, 50));
+    private void initInventory() {
+        this.addSlotToContainer(new SlotPlate(tile, 0, 78, 11));
+        this.addSlotToContainer(new SlotPlate(tile, 1, 53, 60));
+        this.addSlotToContainer(new SlotPlate(tile, 2, 104, 60));
         
-        this.addSlotToContainer(new SlotCore(tile, 3, 62, 26));
-        
-        int STEP = 18;
-        
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
-        
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
+        this.addSlotToContainer(new SlotCore(tile, 3, 78, 36));
+
+        mapPlayerInventory();
 
         SlotGroup invGroup = gRange(4, 4 + 36);
 
         addTransferRule(invGroup, stack -> stack.getItem() == ModuleCrafting.constPlate, gSlots(0, 1, 2));
         addTransferRule(invGroup, stack -> stack.getItem() == ModuleEnergy.matrixCore, gSlots(3));
         addTransferRule(gRange(0, 4), invGroup);
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return true;
     }
     
     public static class SlotCore extends Slot {

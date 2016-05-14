@@ -6,6 +6,7 @@
 */
 package cn.academy.crafting.block;
 
+import cn.academy.core.container.TechUIContainer;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.item.ItemMatterUnit;
@@ -24,37 +25,22 @@ import static cn.academy.crafting.block.TileImagFusor.*;
  * @author WeAthFolD
  *
  */
-public class ContainerImagFusor extends CleanContainer {
-
-    public final TileImagFusor tile;
-    public final EntityPlayer player;
+public class ContainerImagFusor extends TechUIContainer<TileImagFusor> {
     
     public ContainerImagFusor(TileImagFusor _tile, EntityPlayer _player) {
-        tile = _tile;
-        player = _player;
+        super(_player, _tile);
         
-        initInventory(player.inventory);
+        initInventory();
     }
     
-    private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, -3, 39));
-        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 127, 39));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, -3, 0));
-        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 127, 0));
-        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 26, 70));
+    private void initInventory() {
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_INPUT, 13, 49));
+        this.addSlotToContainer(new SlotCrystal(tile, SLOT_OUTPUT, 143, 49));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_INPUT, 13, 10));
+        this.addSlotToContainer(new SlotMatterUnit(tile, ModuleCrafting.imagPhase.mat, SLOT_IMAG_OUTPUT, 143, 10));
+        this.addSlotToContainer(new SlotIFItem(tile, SLOT_ENERGY_INPUT, 42, 80));
         
-        int STEP = 18;
-        
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
-        
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
+        mapPlayerInventory();
 
         ItemMatterUnit unit = ModuleCrafting.matterUnit;
         SlotGroup inventoryGroup = gRange(4, inventorySlots.size());
@@ -70,11 +56,6 @@ public class ContainerImagFusor extends CleanContainer {
         this.addTransferRule(inventoryGroup, gSlots(0));
 
         this.addTransferRule(gRange(0, 4), inventoryGroup);
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return player.getDistance(tile.xCoord, tile.yCoord, tile.zCoord) < 64;
     }
 
     /**
