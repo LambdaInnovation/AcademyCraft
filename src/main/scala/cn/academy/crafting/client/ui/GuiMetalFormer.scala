@@ -39,7 +39,7 @@ object GuiMetalFormer {
         w.component[ProgressBar].progress = tile.getWorkProgress
       })
 
-      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, -1, Future.create[TileMetalFormer.Mode](updateModeTexture(_)))
+      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, dir, Future.create[TileMetalFormer.Mode](updateModeTexture(_)))
 
       invWidget.child("btn_left").listens[LeftClickEvent](handleAlt(-1))
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
