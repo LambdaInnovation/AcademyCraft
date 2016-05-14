@@ -170,77 +170,79 @@ public class NodeConn {
         validate();
 
         World world = getWorld();
-        IWirelessNode iNode = node.get(world);
-        if(iNode == null) {
-            return;
-        }
-        
-        double transferLeft = iNode.getBandwidth();
-        
-        {
-            Collections.shuffle(generators);
-            
-            Iterator<VNGenerator> iter = generators.iterator();
-            while(transferLeft != 0 && iter.hasNext()) {
-                VNGenerator gen = iter.next();
-                if(gen.isLoaded(world)) {
-                    IWirelessGenerator igen = gen.get(world);
-                    if(igen == null) {
-                        removeGenerator(gen);
-                    } else {
-                        double cur = iNode.getEnergy();
-                        double required = Math.min(transferLeft, 
-                            Math.min(igen.getBandwidth(), iNode.getMaxEnergy() - cur));
-                        double amt = igen.getProvidedEnergy(required);
-                        
-                        if(amt > required) {
-                            AcademyCraft.log.warn("Energy input overflow for generator " + igen);
-                            amt = required;
+        if (node.isLoaded(world)) {
+            IWirelessNode iNode = node.get(world);
+            if(iNode == null) {
+                return;
+            }
+
+            double transferLeft = iNode.getBandwidth();
+
+            {
+                Collections.shuffle(generators);
+
+                Iterator<VNGenerator> iter = generators.iterator();
+                while(transferLeft != 0 && iter.hasNext()) {
+                    VNGenerator gen = iter.next();
+                    if(gen.isLoaded(world)) {
+                        IWirelessGenerator igen = gen.get(world);
+                        if(igen == null) {
+                            removeGenerator(gen);
+                        } else {
+                            double cur = iNode.getEnergy();
+                            double required = Math.min(transferLeft,
+                                    Math.min(igen.getBandwidth(), iNode.getMaxEnergy() - cur));
+                            double amt = igen.getProvidedEnergy(required);
+
+                            if(amt > required) {
+                                AcademyCraft.log.warn("Energy input overflow for generator " + igen);
+                                amt = required;
+                            }
+
+                            cur += amt;
+                            iNode.setEnergy(cur);
+                            transferLeft -= amt;
                         }
-                        
-                        cur += amt;
-                        iNode.setEnergy(cur);
-                        transferLeft -= amt;
                     }
                 }
             }
-        }
-        
-        transferLeft = iNode.getBandwidth();
-        {
-            Collections.shuffle(receivers);
-            
-            Iterator<VNReceiver> iter = receivers.iterator();
-            while(transferLeft != 0 && iter.hasNext()) {
-                VNReceiver rec = iter.next();
-                if(rec.isLoaded(world)) {
-                    IWirelessReceiver irec = rec.get(world);
-                    if(irec == null) {
-                        removeReceiver(rec);
-                    } else {
-                        
-                        double cur = iNode.getEnergy();
-                        double give = Math.min(cur, Math.min(transferLeft, irec.getBandwidth()));
-                        give = Math.min(irec.getRequiredEnergy(), give);
-                        
-                        give = give - irec.injectEnergy(give);
-                        cur -= give;
-                        transferLeft -= give;
-                        iNode.setEnergy(cur);
+
+            transferLeft = iNode.getBandwidth();
+            {
+                Collections.shuffle(receivers);
+
+                Iterator<VNReceiver> iter = receivers.iterator();
+                while(transferLeft != 0 && iter.hasNext()) {
+                    VNReceiver rec = iter.next();
+                    if(rec.isLoaded(world)) {
+                        IWirelessReceiver irec = rec.get(world);
+                        if(irec == null) {
+                            removeReceiver(rec);
+                        } else {
+
+                            double cur = iNode.getEnergy();
+                            double give = Math.min(cur, Math.min(transferLeft, irec.getBandwidth()));
+                            give = Math.min(irec.getRequiredEnergy(), give);
+
+                            give = give - irec.injectEnergy(give);
+                            cur -= give;
+                            transferLeft -= give;
+                            iNode.setEnergy(cur);
+                        }
                     }
                 }
             }
+
+            // Remove toRemove receivers/generators
+            data.nodeLookup.keySet().removeAll(toRemoveGenerators);
+            generators.removeAll(toRemoveGenerators);
+
+            data.nodeLookup.keySet().removeAll(toRemoveReceivers);
+            receivers.removeAll(toRemoveReceivers);
+
+            toRemoveGenerators.clear();
+            toRemoveReceivers.clear();
         }
-
-        // Remove toRemove receivers/generators
-        data.nodeLookup.keySet().removeAll(toRemoveGenerators);
-        generators.removeAll(toRemoveGenerators);
-
-        data.nodeLookup.keySet().removeAll(toRemoveReceivers);
-        receivers.removeAll(toRemoveReceivers);
-
-        toRemoveGenerators.clear();
-        toRemoveReceivers.clear();
     }
     
     public IWirelessNode getNode() {

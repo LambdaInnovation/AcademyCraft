@@ -188,6 +188,8 @@ public class WiWorldData extends WorldSavedData {
             return privateGetNodeConn(new VNGenerator((IWirelessGenerator) user));
         } else if(user instanceof IWirelessReceiver) {
             return privateGetNodeConn(new VNReceiver((IWirelessReceiver) user));
+        } else if (user == null) {
+            return null;
         } else {
             throw new IllegalArgumentException("Invalid user type");
         }
@@ -233,7 +235,7 @@ public class WiWorldData extends WorldSavedData {
     
     private void loadNode(NBTTagCompound tag) {
         NBTTagList list = (NBTTagList) tag.getTag("list");
-        debug("LoadNode " + list + ((list == null) ? "null" : list.tagCount()));
+        debug("LoadNode " + list + (list.tagCount()));
         for(int i = 0; i < list.tagCount(); ++i) {
             doAddNode(new NodeConn(this, list.getCompoundTagAt(i)));
         }
@@ -300,33 +302,6 @@ public class WiWorldData extends WorldSavedData {
     @Override
     public boolean isDirty() {
         return true;
-    }
-    
-    private class ChunkCoord {
-        int cx, cz;
-        
-        public ChunkCoord(int _cx, int _cz) {
-            cx = _cx;
-            cz = _cz;
-        }
-        
-        public boolean isLoaded() {
-            return world.getChunkProvider().chunkExists(cx, cz);
-        }
-        
-        @Override
-        public int hashCode() {
-            return cx ^ cz;
-        }
-        
-        @Override
-        public boolean equals(Object obj) {
-            if(obj instanceof ChunkCoord) {
-                ChunkCoord cc = (ChunkCoord) obj;
-                return cc.cx == cx && cc.cz == cz;
-            }
-            return false;
-        }
     }
     
     private void debug(Object msg) {
