@@ -466,7 +466,7 @@ ac.skill_tree.level_question=Continue?
 ac.skill_tree.req=Req.
 ac.skill_tree.skill_not_learned=Skill not learned.
 ac.skill_tree.skill_exp=Skill Experience:
-ac.skill_tree.uplevel=Upgrade to
+ac.skill_tree.uplevel=Upgrade to %s
 ac.skill_tree.anyskill=Any skill learned for level %d
 ac.skill_tree.level_fail=You must reach level %d first.
 

@@ -571,7 +571,7 @@ private object Common {
         drawActionIcon(icon, progress, glow = progress == 1)
       })
 
-      val lvltext = local.get("uplevel") + " " + AbilityLocalization.instance.levelDesc(data.getLevel+1)
+      val lvltext = local.getFormatted("uplevel", AbilityLocalization.instance.levelDesc(data.getLevel+1))
       val reqtext = local.get("req") + " %.0f".format(estmCons)
       textArea.listens[FrameEvent](() => {
         Font.draw(lvltext, 0, 3, foLevelTitle)

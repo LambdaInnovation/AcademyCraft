@@ -466,7 +466,7 @@ ac.skill_tree.learn_question=是否学习？ (预计消耗：%s IF)
 ac.skill_tree.req=需求
 ac.skill_tree.skill_not_learned=技能未学习。
 ac.skill_tree.skill_exp=技能经验：
-ac.skill_tree.uplevel=升级到
+ac.skill_tree.uplevel=升级到 %s
 ac.skill_tree.anyskill=%d 级的任意技能
 ac.skill_tree.level_fail=必须先达到 %d 级才能学习该技能。
 

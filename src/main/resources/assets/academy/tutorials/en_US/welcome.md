@@ -14,5 +14,5 @@ Middle part is the tutorial, which only shows in items you already finished rese
 
 Right part is item figures and recipes, you could click buttons besides pictures to change them.
 
-Do, Miska said.
+TO, Misaka said.
 
