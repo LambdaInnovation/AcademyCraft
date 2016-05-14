@@ -109,22 +109,23 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
       val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 
-      def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean)(implicit block: Block) = {
+      def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean) = {
+        val block = world.getBlock(x, y, z)
+
         if (AbilityPipeline.canBreakBlock(world, x, y, z)) {
-          var hardnessEnergy = block.getBlockHardness(world, x, y, z)
-          if (hardnessEnergy < 0) {
-            hardnessEnergy = Float.MaxValue
-          }
+          block.getBlockHardness(world, x, y, z) match {
+            case hardnessEnergy if hardnessEnergy >= 0 =>
+              if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
+                energy -= hardnessEnergy
 
-          if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
-            energy -= hardnessEnergy
+                if (drop && RNG.nextFloat() < dropRate) {
+                  block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
+                }
 
-            if (drop && RNG.nextFloat() < dropRate) {
-              block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
-            }
-
-            world.setBlock(x, y, z, Blocks.air)
-            world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+                world.setBlock(x, y, z, Blocks.air)
+                world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+              }
+            case _ =>
           }
         }
       }
@@ -139,7 +140,6 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
           val pt = IVec((x + delta.x).toInt, (y + delta.y).toInt, (z + delta.z).toInt)
           val block: Block = world.getBlock(pt.x, pt.y, pt.z)
-          implicit val block_ = block
 
           if (RNG.nextDouble() < prob) {
             if (block != Blocks.air &&
