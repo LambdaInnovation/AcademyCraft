@@ -14,8 +14,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import static sun.audio.AudioPlayer.player;
-
 /**
  * @author WeAthFolD
  */
