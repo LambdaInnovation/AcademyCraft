@@ -34,6 +34,6 @@ public class TechUIContainer<T extends TileEntity> extends CleanContainer {
 
     @Override
     public final boolean canInteractWith(EntityPlayer player) {
-        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) < 64;
+        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) < 64 && !tile.isInvalid();
     }
 }
