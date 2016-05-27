@@ -1,16 +1,10 @@
 package cn.academy.ability.api;
 
-import cn.academy.ability.SkillDamageSource;
-import cn.academy.ability.api.event.CalcEvent;
-import cn.academy.ability.api.event.CalcEvent.SkillAttack;
-import cn.academy.ability.api.event.ReflectEvent;
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.config.ACConfig;
 import cn.academy.core.event.BlockDestroyEvent;
-import cn.academy.core.event.ConfigModifyEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,11 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Uniform utils handling common actions of skills.
+ * Global uniform utils handling common actions of skills.
+ *
+ * For per-skill actions, consider using {@link AbilityContext} instead
  */
 @Registrant
 public class AbilityPipeline {
@@ -37,13 +32,11 @@ public class AbilityPipeline {
      * @param player The player starts the attack
      * @param skill  The skill used
      * @param damage The amount of damage applied (raw)
+     * @deprecated use {@link AbilityContext} instead
      */
+    @Deprecated
     public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        damage = CalcEvent.calc(new SkillAttack(player, skill, target, damage));
-
-        if (damage > 0 && (canAttackPlayer() || (!(target instanceof EntityPlayer)))) {
-            target.attackEntityFrom(new SkillDamageSource(player, skill), damage);
-        }
+        AbilityContext.of(player, skill).attack(target, damage);
     }
 
     /**
@@ -51,17 +44,15 @@ public class AbilityPipeline {
      *  solely Vector Manipulation). When reflected, the attack will NOT be applied and the reflectCallback will be
      *  invoked.
      * @param reflectCallback Will get called once reflection happens.
+     * @deprecated use {@link AbilityContext} instead
      */
+    @Deprecated
     public static void attackReflect(EntityPlayer           player,
                                      Skill                  skill,
                                      Entity                 target,
                                      float                  damage,
                                      Runnable               reflectCallback) {
-        if (MinecraftForge.EVENT_BUS.post(new ReflectEvent(player, skill, target))) {
-            reflectCallback.run();
-        } else {
-            attack(player, skill, target, damage);
-        }
+        AbilityContext.of(player, skill).attackReflect(target, damage, reflectCallback);
     }
 
     /**
@@ -89,19 +80,20 @@ public class AbilityPipeline {
     /**
      * Apply a range attack on a specific point and range. The damage attenuates linearly.
      * At the center, the damage is [damage], at the edge the damage is 0.
+     * @deprecated use {@link AbilityContext} instead
      */
     public static void applyRangeAttack(
             EntityPlayer player,
             double x, double y, double z, double range,
             float damage, Skill skill,
             Predicate<Entity> entitySelector) {
-        List<Entity> list = WorldUtils.getEntities(player.worldObj, x, y, z, range, entitySelector);
-        for(Entity ent : list) {
-            double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);
-            float factor = 1 - MathUtils.clampf(0, 1, (float) (dist / range));
-            float appliedDamage = MathUtils.lerpf(0, damage, factor);
-            attack(player, skill, ent, appliedDamage);
-        }
+        AbilityContext.of(player, skill).attackRange(x, y, z, range, damage, entitySelector);
+    }
+
+    private static float getDamageScale() {
+        return (float) ACConfig.instance().getDouble(
+                "ac.ability.calc_global.damage_scale"
+        );
     }
 
     // PROPERTIES

@@ -3,6 +3,7 @@
 
 # 常规
 itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] 解析自定义数据配置文件失败。错误:
 
 # 物品名称
 item.ac_crystal_low.name=低纯度虚能水晶

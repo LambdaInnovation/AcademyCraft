@@ -16,8 +16,11 @@ import cn.academy.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
 import cn.academy.core.client.Resources;
+import cn.academy.core.config.ACConfig;
 import cn.academy.misc.achievements.ModuleAchievements;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.typesafe.config.Config;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +62,8 @@ public abstract class Skill extends Controllable {
     private ResourceLocation icon;
     
     private final int level;
+
+    private Config config;
     
     /**
      * The place this skill is at in the Skill Tree UI.
@@ -157,6 +162,53 @@ public abstract class Skill extends Controllable {
      */
     public String getDescription() {
         return getLocalized("desc");
+    }
+
+    /**
+     * @return The configuration object for this skill.
+     */
+    public Config getConfig() {
+        if (config == null) {
+            config = ACConfig.instance()
+                    .getConfig("ac.ability.category")
+                    .getConfig(getCategoryLocation())
+                    .getConfig("skills")
+                    .getConfig(getName());
+
+            Preconditions.checkNotNull(config);
+        }
+
+        return config;
+    }
+
+    public float getDamageScale() {
+        return getOptionalFloat("damage_scale", 1.0f);
+    }
+
+    public boolean isEnabled() {
+        return getOptionalBool("enabled", true);
+    }
+
+    public float getCPConsumeSpeed() {
+        return getOptionalFloat("cp_consume_speed", 1.0f);
+    }
+
+    public float getOverloadConsumeSpeed() {
+        return getOptionalFloat("overload_consume_speed", 1.0f);
+    }
+
+    public float getExpIncrSpeed() {
+        return getOptionalFloat("overload_incr_speed", 1.0f);
+    }
+
+    private float getOptionalFloat(String path, float fallback) {
+        Config cfg = getConfig();
+        return cfg.hasPath(path) ? (float) cfg.getDouble("damage_scale") : fallback;
+    }
+
+    private boolean getOptionalBool(String path, boolean fallback) {
+        Config cfg = getConfig();
+        return cfg.hasPath(path) ? cfg.getBoolean(path) : fallback;
     }
     
     public boolean canControl() {

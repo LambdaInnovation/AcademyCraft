@@ -3,6 +3,7 @@
 
 # Common
 itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] Failed to parse custom config data file. The error:
 
 # Item
 item.ac_crystal_low.name=Low-purity Imag Crystal
