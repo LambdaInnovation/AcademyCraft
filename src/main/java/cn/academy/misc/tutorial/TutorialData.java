@@ -6,8 +6,11 @@
 */
 package cn.academy.misc.tutorial;
 
+import cn.academy.core.AcademyCraft;
 import cn.academy.misc.ModuleMisc;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
@@ -34,6 +37,12 @@ import java.util.HashSet;
 @RegDataPart(EntityPlayer.class)
 public class TutorialData extends DataPart<EntityPlayer> {
 
+    @RegPreInitCallback
+    public static void __init() {
+        // Force the property to load, so it will be refreshed once after startup
+        canAcquireTutorial();
+    }
+
     public static TutorialData get(EntityPlayer player) {
         return EntityData.get(player).getPart(TutorialData.class);
     }
@@ -59,17 +68,7 @@ public class TutorialData extends DataPart<EntityPlayer> {
 
         misakaID = RandUtils.rangei(1000, 19000);
 
-        scheduler.every(3).atOnly(Side.SERVER).run(() ->
-        {
-            if (!tutorialAcquired) {
-                EntityPlayer player = getEntity();
-                player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj,
-                        player.posX, player.posY + 1.0, player.posZ,
-                        new ItemStack(ModuleTutorial.itemTutorial)));
-
-                tutorialAcquired = true;
-            }
-
+        scheduler.every(3).atOnly(Side.SERVER).run(() -> {
             if (dirty) {
                 dirty = false;
                 TutorialRegistry.enumeration().forEach(tut -> {
@@ -86,6 +85,19 @@ public class TutorialData extends DataPart<EntityPlayer> {
                 sync();
             }
         });
+
+        if (canAcquireTutorial()) {
+            scheduler.every(10).atOnly(Side.SERVER).run(() -> {
+                if (!tutorialAcquired) {
+                    EntityPlayer player = getEntity();
+                    player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj,
+                            player.posX, player.posY + 1.0, player.posZ,
+                            new ItemStack(ModuleTutorial.itemTutorial)));
+
+                    tutorialAcquired = true;
+                }
+            });
+        }
     }
 
     @Override
@@ -126,6 +138,11 @@ public class TutorialData extends DataPart<EntityPlayer> {
         Preconditions.checkNotNull(tut);
 
         MinecraftForge.EVENT_BUS.post(new TutorialActivatedEvent(getEntity(), tut));
+    }
+
+    private static boolean canAcquireTutorial() {
+        return AcademyCraft.config.getBoolean("giveCloudTerminal", "generic", true,
+                "Whether the player will be given MisakaCloud Terminal on first spawn.");
     }
 
 }
