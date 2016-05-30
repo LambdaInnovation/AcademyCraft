@@ -26,36 +26,6 @@ public class AbilityPipeline {
     private AbilityPipeline() {}
 
     /**
-     * Make the player fire the attack with the given skill. The damage will be re-calculated according to the damage
-     *  scale specified globally and skill-locally, and influenced by passive skills.
-     * @param target The entity to attack
-     * @param player The player starts the attack
-     * @param skill  The skill used
-     * @param damage The amount of damage applied (raw)
-     * @deprecated use {@link AbilityContext} instead
-     */
-    @Deprecated
-    public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        AbilityContext.of(player, skill).attack(target, damage);
-    }
-
-    /**
-     * Performs a skill attack equivalent to {@link #attack}, but has the chance to be "reflected". (Currently used by
-     *  solely Vector Manipulation). When reflected, the attack will NOT be applied and the reflectCallback will be
-     *  invoked.
-     * @param reflectCallback Will get called once reflection happens.
-     * @deprecated use {@link AbilityContext} instead
-     */
-    @Deprecated
-    public static void attackReflect(EntityPlayer           player,
-                                     Skill                  skill,
-                                     Entity                 target,
-                                     float                  damage,
-                                     Runnable               reflectCallback) {
-        AbilityContext.of(player, skill).attackReflect(target, damage, reflectCallback);
-    }
-
-    /**
      * @return Whether we can break any block at all
      */
     public static boolean canBreakBlock() {

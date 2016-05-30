@@ -66,11 +66,11 @@ public class CurrentCharging extends Skill {
             }
         };
     }
-    
+
     private static float getChargingSpeed(float exp) {
         return lerpf(10, 30, exp);
     }
-    
+
     private static float getExpIncr(boolean effective) {
         if (effective)
             return 0.0001f;
@@ -218,14 +218,14 @@ public class CurrentCharging extends Skill {
         float exp;
 
         public ActionChargeItem() {
-            super(-1);
+            super(instance);
         }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if(isRemote)
                 startEffects();
@@ -236,14 +236,14 @@ public class CurrentCharging extends Skill {
             ItemStack stack = player.getCurrentEquippedItem();
             float cp = getConsumption(exp);
 
-            if(stack != null && cpData.perform(0, cp)) {
+            if(stack != null && ctx().consume(0, cp)) {
                 float amt = getChargingSpeed(exp);
                 
                 boolean good = EnergyItemHelper.isSupported(stack);
                 if(good)
                     EnergyItemHelper.charge(stack, amt, false);
                 
-                aData.addSkillExp(instance, getExpIncr(good));
+                ctx().addSkillExp(getExpIncr(good));
             } else {
                 ActionManager.endAction(this);
             }
@@ -266,7 +266,7 @@ public class CurrentCharging extends Skill {
             ACSounds.playClient(sound = new FollowEntitySound(player, SOUND).setLoop());
             surround = new EntitySurroundArc(player);
             surround.setArcType(ArcType.THIN);
-            world.spawnEntityInWorld(surround);
+            player.worldObj.spawnEntityInWorld(surround);
         }    
         
         @SideOnly(Side.CLIENT)

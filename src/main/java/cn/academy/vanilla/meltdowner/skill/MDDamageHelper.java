@@ -6,8 +6,7 @@
 */
 package cn.academy.vanilla.meltdowner.skill;
 
-import cn.academy.ability.api.AbilityPipeline;
-import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -26,7 +25,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -44,8 +42,10 @@ public class MDDamageHelper {
         MinecraftForge.EVENT_BUS.register(new Events());
     }
     
-    static void attack(EntityPlayer player, Skill skill, Entity target, float dmg) {
-        AbilityPipeline.attack(player, skill, target, dmg);
+    static void attack(AbilityContext ctx, Entity target, float dmg) {
+        EntityPlayer player = ctx.player;
+
+        ctx.attack(target, dmg);
         AbilityData aData = AbilityData.get(player);
         if(aData.isSkillLearned(CatMeltdowner.radIntensify)) {
             int marktick = Math.max(60, getMarkTick(player));
@@ -60,26 +60,26 @@ public class MDDamageHelper {
         }
     }
     
-    static int getMarkTick(Entity player) {
+    private static int getMarkTick(Entity player) {
         if(player.getEntityData().hasKey(MARKID))
             return player.getEntityData().getInteger(MARKID);
         else
             return 0;
     }
-    
-    static float getMarkRate(Entity entity) {
+
+    private static float getMarkRate(Entity entity) {
         if(entity.getEntityData().hasKey(RATEID))
             return entity.getEntityData().getFloat(RATEID);
         else
             return 0;
     }
-    
-    static void setMarkRate(Entity entity, float amt) {
+
+    private static void setMarkRate(Entity entity, float amt) {
         entity.getEntityData().setFloat(RATEID, amt);
     }
 
     @Listener(channel="sync", side=Side.CLIENT)
-    static void setMarkTick(Entity player, int ticks) {
+    private static void setMarkTick(Entity player, int ticks) {
         player.getEntityData().setInteger(MARKID, ticks);
     }
     

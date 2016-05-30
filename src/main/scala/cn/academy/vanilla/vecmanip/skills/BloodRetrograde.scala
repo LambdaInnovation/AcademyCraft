@@ -32,11 +32,7 @@ import cn.lambdalib.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityPipeline._
 import cn.academy.ability.api.AbilityAPIExt._
 
-class BloodRetroContext(p: EntityPlayer) extends Context(p) {
-
-  implicit val aData_ = aData()
-  implicit val skill_ = BloodRetrograde
-  implicit val player_ = p
+class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 
   var tick = 0
 
@@ -54,10 +50,10 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(targ: EntityLivingBase) = {
     if (consume()) {
-      addSkillCooldown(lerpf(90, 40, skillExp).toInt)
+      ctx.setCooldown(lerpf(90, 40, ctx.getSkillExp).toInt)
       sendToClient(MSG_PERFORM, targ)
-      attack(player, BloodRetrograde, targ, damage)
-      addSkillExp(0.002f)
+      ctx.attack(targ, damage)
+      ctx.addSkillExp(0.002f)
     }
 
     terminate()
@@ -80,13 +76,13 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p) {
   }
 
   private def consume() = {
-    val overload = lerpf(55, 40, skillExp)
-    val consumption = lerpf(280, 350, skillExp)
+    val overload = lerpf(55, 40, ctx.getSkillExp)
+    val consumption = lerpf(280, 350, ctx.getSkillExp)
 
-    cpData.perform(overload, consumption)
+    ctx.consume(overload, consumption)
   }
 
-  private val damage = lerpf(30, 60, skillExp)
+  private val damage = lerpf(30, 60, ctx.getSkillExp)
 
 }
 

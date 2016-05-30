@@ -141,7 +141,7 @@ public class MarkTeleport extends Skill {
         float exp;
 
         public MTAction() {
-            super(-1);
+            super(instance);
         }
 
         @Override
@@ -149,7 +149,7 @@ public class MarkTeleport extends Skill {
             // if(true) return;
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if (isRemote) {
                 startEffects();
@@ -185,19 +185,19 @@ public class MarkTeleport extends Skill {
             } else {
 
                 float overload = lerpf(40, 20, exp);
-                cpData.performWithForce(overload, distance * getCPB(exp));
+                ctx().consumeWithForce(overload, distance * getCPB(exp));
 
                 if (!isRemote) {
                     player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
 
                     float expincr = 0.00018f * distance;
-                    aData.addSkillExp(instance, expincr);
+                    ctx().addSkillExp(expincr);
                     player.fallDistance = 0;
                 } else {
                     ACSounds.playClient(player, "tp.tp", .5f);
                 }
 
-                setCooldown(instance, (int) lerpf(50, 20, exp));
+                ctx().setCooldown((int) lerpf(50, 20, exp));
                 TPSkillHelper.incrTPCount(player);
             }
 

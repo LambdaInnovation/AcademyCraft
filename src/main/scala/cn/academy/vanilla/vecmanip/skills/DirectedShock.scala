@@ -32,11 +32,7 @@ import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
 import cn.academy.ability.api.AbilityPipeline._
 import MathUtils._
 
-class ShockContext(p: EntityPlayer) extends Context(p) {
-
-  private implicit val skill_ = DirectedShock
-  private implicit val aData_ = aData
-  private implicit val player_ = p
+class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 
   private val MIN_TICKS = 6
   private val MAX_ACCEPTED_TICKS = 50
@@ -82,18 +78,18 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
       val trace: TraceResult = Raytrace.traceLiving(player, 3, EntitySelectors.living)
       trace match {
         case EntityResult(entity) =>
-          attack(player, DirectedShock, entity, damage)
+          ctx.attack(entity, damage)
           knockback(entity)
 
-          addSkillCooldown(lerpf(60, 20, skillExp).toInt)
+          ctx.setCooldown(lerpf(60, 20, ctx.getSkillExp).toInt)
           sendToClient(MSG_GENERATE_EFFECT, entity)
 
           val delta = (entity.position - player.position).normalize() * 0.24
           entity.setVel(entity.velocity + delta)
 
-          addSkillExp(0.0035f)
+          ctx.addSkillExp(0.0035f)
         case _ =>
-          addSkillExp(0.0010f)
+          ctx.addSkillExp(0.0010f)
       }
     }
 
@@ -107,13 +103,13 @@ class ShockContext(p: EntityPlayer) extends Context(p) {
   }
 
   private def consume() = {
-    val cp = lerpf(50, 100, skillExp)
-    val overload = lerpf(18, 12, skillExp)
+    val cp = lerpf(50, 100, ctx.getSkillExp)
+    val overload = lerpf(18, 12, ctx.getSkillExp)
 
-    cpData.perform(overload, cp)
+    ctx.consume(overload, cp)
   }
-  private def damage = lerpf(6, 12, skillExp)
-  private def knockback(targ: Entity) = if (skillExp >= 0.25f) {
+  private def damage = lerpf(6, 12, ctx.getSkillExp)
+  private def knockback(targ: Entity) = if (ctx.getSkillExp >= 0.25f) {
     var delta = player.headPosition - targ.headPosition
     delta = delta.normalize()
     delta.yCoord = -0.6f

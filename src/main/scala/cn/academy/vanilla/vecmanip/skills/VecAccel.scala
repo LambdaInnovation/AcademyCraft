@@ -34,13 +34,9 @@ import cn.lambdalib.util.mc.MCExtender._
 import cn.lambdalib.util.generic.MathUtils._
 import Math._
 
-class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
+class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsumptionProvider {
 
   override def getConsumptionHint: Float = consumption
-
-  private implicit val skill_ = VecAccel
-  private implicit val aData_ = aData
-  private implicit val player_ = player
 
   var ticker = 0
 
@@ -62,7 +58,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
   def l_perform() = {
     if (canPerform && consume()) {
       player.setVel(initSpeed())
-      addSkillCooldown(lerpf(25, 5, skillExp).toInt)
+      ctx.setCooldown(lerpf(25, 5, ctx.getSkillExp).toInt)
 
       sendToServer(MSG_PERFORM)
     } else {
@@ -74,7 +70,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
   def s_perform() = {
     consume()
     player.fallDistance = 0
-    addSkillExp(0.002f)
+    ctx.addSkillExp(0.002f)
 
     sendToClient(MSG_PERFORM)
     terminate()
@@ -94,16 +90,16 @@ class VecAccelContext(p: EntityPlayer) extends Context(p) with IConsumptionProvi
 
   private def consume() = {
     val cp = consumption
-    val overload = lerpf(40, 30, skillExp)
+    val overload = lerpf(40, 30, ctx.getSkillExp)
 
-    cpData.perform(overload, cp)
+    ctx.consume(overload, cp)
   }
 
-  private def consumption = lerpf(200, 160, skillExp)
+  private def consumption = lerpf(200, 160, ctx.getSkillExp)
 
   private def updateCanPerform() = canPerform = ignoreGroundChecking || checkGround
 
-  private def ignoreGroundChecking = aData.getSkillExp(VecAccel) > 0.5f
+  private def ignoreGroundChecking = ctx.getSkillExp > 0.5f
 
   private def checkGround = {
     val p0 = player.position

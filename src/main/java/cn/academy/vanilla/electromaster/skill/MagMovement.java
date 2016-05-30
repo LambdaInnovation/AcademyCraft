@@ -10,6 +10,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.SyncAction;
+import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.ACRenderingHelper;
@@ -45,19 +46,11 @@ public class MagMovement extends Skill {
     private MagMovement() {
         super("mag_movement", 2);
     }
-    
+
     private static double getMaxDistance(AbilityData data) {
         return 25;
     }
-    
-    private static double getVelocity(AbilityData data) {
-        return 1;
-    }
-    
-    private static float getExpIncr(double distance) {
-        return 0.0011f * (float) distance;
-    }
-    
+
     private static Target toTarget(AbilityData aData, World world, MovingObjectPosition pos) {
         if(pos.typeOfHit == MovingObjectType.BLOCK) {
             Block block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
@@ -91,7 +84,7 @@ public class MagMovement extends Skill {
         return null;
     }
     
-    public static class MovementAction extends SyncAction {
+    public static class MovementAction extends SkillSyncAction<MagMovement> {
         
         double mox, moy, moz;
         
@@ -102,12 +95,8 @@ public class MagMovement extends Skill {
         float overload, cp;
         
         public MovementAction(Target _target) {
-            super(-1);
+            super(instance);
             target = _target;
-        }
-
-        public MovementAction() {
-            super(-1);
         }
         
         @Override
@@ -133,10 +122,9 @@ public class MagMovement extends Skill {
         
         @Override
         public void onStart() {
-            AbilityData aData = AbilityData.get(player);
-            CPData cpData = CPData.get(player);
+            super.onStart();
 
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
 
             cp = lerpf(15, 10, exp);
             overload = lerpf(3, 2, exp);
@@ -152,9 +140,6 @@ public class MagMovement extends Skill {
         
         @Override
         public void onTick() {
-            AbilityData aData = AbilityData.get(player);
-            CPData cpData = CPData.get(player);
-            
             if(isLocal()) {
                 target.tick();
                 
@@ -170,7 +155,7 @@ public class MagMovement extends Skill {
                     moz = player.motionZ;
                 }
                 
-                double mod = Math.sqrt(dx * dx + dy * dy + dz * dz) / getVelocity(aData);
+                double mod = Math.sqrt(dx * dx + dy * dy + dz * dz) / getVelocity();
                 
                 dx /= mod; dy /= mod; dz /= mod;
                 
@@ -183,7 +168,7 @@ public class MagMovement extends Skill {
                 updateEffect();
             } else {
                 if((target != null && !target.alive()) || 
-                    !cpData.perform(overload, cp))
+                    !ctx().consume(overload, cp))
                     ActionManager.abortAction(this);
             }
                     
@@ -193,8 +178,7 @@ public class MagMovement extends Skill {
         public void onEnd() {
             if(!isRemote) {
                 double traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ);
-                AbilityData aData = AbilityData.get(player);
-                aData.addSkillExp(instance, getExpIncr(traveledDistance));
+                ctx().addSkillExp(getExpIncr(traveledDistance));
                 instance.triggerAchievement(player);
 
                 player.fallDistance = 0.0f;
@@ -243,6 +227,14 @@ public class MagMovement extends Skill {
                 return to;
             }
             return d > 0 ? from + ACCEL : from - ACCEL;
+        }
+
+        private static double getVelocity() {
+            return 1;
+        }
+
+        private static float getExpIncr(double distance) {
+            return 0.0011f * (float) distance;
         }
         
     }

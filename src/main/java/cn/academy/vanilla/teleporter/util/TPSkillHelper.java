@@ -6,8 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.util;
 
-import cn.academy.ability.api.AbilityPipeline;
-import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.misc.achievements.ModuleAchievements;
@@ -45,8 +44,10 @@ public class TPSkillHelper {
      * You should use this in SERVER only. the critical hit event will be post
      * at client if a critical hit happened.
      */
-    public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        AbilityData aData = AbilityData.get(player);
+    public static void attack(AbilityContext ctx, Entity target, float damage) {
+        AbilityData aData = ctx.aData;
+        EntityPlayer player = ctx.player;
+
         // Calculate 3 levels of crit hit
         for (int i = 0; i < 3; ++i) {
             float prob = prob(aData, i);
@@ -62,7 +63,7 @@ public class TPSkillHelper {
             }
         }
 
-        AbilityPipeline.attack(player, skill, target, damage);
+        ctx.attack(target, damage);
     }
 
     private static float prob(AbilityData data, int level) {

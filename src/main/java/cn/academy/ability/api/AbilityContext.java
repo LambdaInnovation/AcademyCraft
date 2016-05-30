@@ -1,6 +1,7 @@
 package cn.academy.ability.api;
 
 import cn.academy.ability.SkillDamageSource;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.CalcEvent;
@@ -28,8 +29,9 @@ public class AbilityContext {
     public final EntityPlayer player;
     public final Skill skill;
 
-    private final AbilityData aData;
-    private final CPData cpData;
+    public final AbilityData aData;
+    public final CPData cpData;
+    public final CooldownData cdData;
 
     private AbilityContext(EntityPlayer p, Skill s) {
         player = p;
@@ -37,6 +39,7 @@ public class AbilityContext {
 
         aData = AbilityData.get(player);
         cpData = CPData.get(player);
+        cdData = CooldownData.of(player);
     }
 
 
@@ -73,10 +76,18 @@ public class AbilityContext {
         }
     }
 
+    public boolean canConsumeCP(float cp) {
+        return cpData.canPerform(cp);
+    }
+
     public boolean consume(float overload, float cp) {
         return cpData.perform(
                 getFinalConsO(overload),
                 getFinalConsCP(cp));
+    }
+
+    public void consumeWithForce(float overload, float cp) {
+        cpData.performWithForce(overload, cp);
     }
 
     public float getSkillExp() {
@@ -85,6 +96,14 @@ public class AbilityContext {
 
     public void addSkillExp(float amt) {
         aData.addSkillExp(skill, getFinalExpIncr(amt));
+    }
+
+    public void setCooldown(int ticks) {
+        cdData.set(skill, ticks);
+    }
+
+    public void setCooldownSub(int subID, int ticks) {
+        cdData.setSub(skill, subID, ticks);
     }
 
     private float g_getDamageScale() {

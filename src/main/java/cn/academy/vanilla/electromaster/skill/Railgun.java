@@ -1,11 +1,10 @@
 package cn.academy.vanilla.electromaster.skill;
 
-import cn.academy.ability.api.AbilityPipeline;
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.KeyDelegate;
 import cn.academy.ability.api.cooldown.CooldownData;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.core.util.RangedRayDamage;
@@ -34,12 +33,12 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 public class Railgun extends Skill {
 
@@ -138,7 +137,7 @@ public class Railgun extends Skill {
     private void reflectServer(EntityPlayer player, Entity reflector) {
         MovingObjectPosition result = Raytrace.traceLiving(reflector, REFLECT_DISTANCE);
         if (result != null && result.typeOfHit == MovingObjectType.ENTITY) {
-            AbilityPipeline.attack(player, instance, result.entityHit, 14);
+            AbilityContext.of(player, Railgun.instance).attack(result.entityHit, 14);
         }
 
         NetworkMessage.sendToAllAround(TargetPointHelper.convert(player, 20),
@@ -153,25 +152,21 @@ public class Railgun extends Skill {
     @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
     private void performClient(EntityPlayer player, double length) {
         player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player, length));
-        if (SideHelper.getThePlayer().equals(player)) {
-            float exp = AbilityData.get(player).getSkillExp(instance);
-        }
     }
 
     private void performServer(EntityPlayer player) {
-        AbilityData aData  = AbilityData.get(player);
-        CPData      cpData = CPData.get(player);
+        AbilityContext ctx = AbilityContext.of(player, this);
 
-        final float exp = aData.getSkillExp(instance);
+        final float exp = ctx.getSkillExp();
 
         float cp     = lerpf(340, 455, exp);
         float overload = lerpf(160, 110, exp);
-        if (cpData.perform(overload, cp)) {
+        if (ctx.consume(overload, cp)) {
             float dmg = lerpf(40, 100, exp);
             float energy = lerpf(900, 2000, exp);
 
             double[] length = new double[] { 45 };
-            RangedRayDamage damage = new RangedRayDamage.Reflectible(player, instance, 2, energy, reflector -> {
+            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, reflector -> {
                 reflectServer(player, reflector);
                 length[0] = Math.min(length[0], reflector.getDistanceToEntity(player));
                 NetworkMessage.sendToServer(instance, MSG_REFLECT, player, reflector);

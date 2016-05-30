@@ -61,14 +61,14 @@ public class JetEngine extends Skill {
         float consumption, overload;
 
         public JEAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
             consumption = getConsumption(exp);
             overload = lerpf(66, 42, exp);
             
@@ -81,19 +81,19 @@ public class JetEngine extends Skill {
             if(isRemote)
                 updateEffects();
             
-            if(!cpData.canPerform(getConsumption(exp)))
+            if(!ctx().canConsumeCP(getConsumption(exp)))
                 ActionManager.abortAction(this);
         }
         
         @Override
         public void onEnd() {
-            if(cpData.perform(getConsumption(exp), overload)) {
+            if(ctx().consume(getConsumption(exp), overload)) {
                 if(!isRemote) {
                     startTriggerAction(player, getDest().addVector(0, 1.65, 0));
-                    aData.addSkillExp(instance, .004f);
+                    ctx().addSkillExp(.004f);
                     instance.triggerAchievement(player);
                 }
-                setCooldown(instance, (int) (18 * lerpf(6, 3, exp)));
+                ctx().setCooldown((int) (18 * lerpf(6, 3, exp)));
             }
         }
         
@@ -148,12 +148,12 @@ public class JetEngine extends Skill {
         float exp;
 
         public JETriggerAction(Vec3 _target) {
-            super(-1);
+            super(instance);
             target = _target;
         }
         
         public JETriggerAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
@@ -172,7 +172,7 @@ public class JetEngine extends Skill {
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if(isRemote) {
                 startEffects();
@@ -206,7 +206,7 @@ public class JetEngine extends Skill {
                     EntitySelectors.exclude(player).and(EntitySelectors.living())
                 );
                 if(pos != null && pos.entityHit != null) {
-                    MDDamageHelper.attack(player, instance, pos.entityHit, lerpf(15, 35, exp));
+                    MDDamageHelper.attack(ctx(), pos.entityHit, lerpf(15, 35, exp));
                 }
             }
         }

@@ -61,35 +61,11 @@ public class ArcGen extends Skill {
         return new SkillInstanceInstant().addExecution(new ArcGenAction());
     }
     
-    private static float getDamage(AbilityData data) {
-        return lerpf(9, 15, data.getSkillExp(instance));
-    }
-    
-    private static double getIgniteProb(AbilityData data) {
-        return lerpf(0, 0.6f, data.getSkillExp(instance));
-    }
-    
-    private static float getExpIncr(AbilityData data, boolean effectiveHit) {
-        if (effectiveHit) {
-            return lerpf(0.0048f, 0.0072f, data.getSkillExp(instance));
-        } else {
-            return lerpf(0.0018f, 0.0027f, data.getSkillExp(instance));
+    public static class ArcGenAction extends SyncActionInstant<ArcGen> {
+
+        public ArcGenAction() {
+            super(instance);
         }
-    }
-    
-    private static double getFishProb(AbilityData data) {
-        return data.getSkillExp(instance) > 0.5f ? 0.1 : 0;
-    }
-    
-    private static boolean canStunEnemy(AbilityData data) {
-        return data.getSkillExp(instance) >= 1.0f;
-    }
-    
-    private static float getRange(AbilityData data) {
-        return lerpf(6, 15, data.getSkillExp(instance));
-    }
-    
-    public static class ArcGenAction extends SyncActionInstant {
 
         @Override
         public boolean validate() {
@@ -109,18 +85,18 @@ public class ArcGen extends Skill {
             
             if(!isRemote) {
                 // Perform ray trace
-                MovingObjectPosition result = Raytrace.traceLiving(player, getRange(aData), null, blockFilter);
+                MovingObjectPosition result = Raytrace.traceLiving(player, getRange(), null, blockFilter);
 
                 if(result != null) {
                     float expincr;
                     if(result.typeOfHit == MovingObjectType.ENTITY) {
-                        EMDamageHelper.attack(player, instance, result.entityHit, getDamage(aData));
-                        expincr = getExpIncr(aData, true);
+                        EMDamageHelper.attack(ctx(), result.entityHit, getDamage());
+                        expincr = getExpIncr(true);
                     } else { //BLOCK
                         int hx = result.blockX, hy = result.blockY, hz = result.blockZ;
                         Block block = player.worldObj.getBlock(hx, hy, hz);
                         if(block == Blocks.water) {
-                            if(RandUtils.ranged(0, 1) < getFishProb(aData)) {
+                            if(RandUtils.ranged(0, 1) < getFishProb()) {
                                 world.spawnEntityInWorld(new EntityItem(
                                     world,
                                     result.hitVec.xCoord,
@@ -130,13 +106,13 @@ public class ArcGen extends Skill {
                                 instance.triggerAchievement(player);
                             }
                         } else {
-                            if(RandUtils.ranged(0, 1) < getIgniteProb(aData)) {
+                            if(RandUtils.ranged(0, 1) < getIgniteProb()) {
                                 if(world.getBlock(hx, hy + 1, hz) == Blocks.air) {
                                     world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03);
                                 }
                             }
                         }
-                        expincr = getExpIncr(aData, false);
+                        expincr = getExpIncr(false);
                     }
                     aData.addSkillExp(instance, expincr);
                 }
@@ -144,7 +120,7 @@ public class ArcGen extends Skill {
                 spawnEffects();
             }
             
-            setCooldown(instance, (int) lerpf(40, 15, aData.getSkillExp(instance)));
+            ctx().setCooldown((int) lerpf(40, 15, aData.getSkillExp(instance)));
         }
         
         @SideOnly(Side.CLIENT)
@@ -155,10 +131,39 @@ public class ArcGen extends Skill {
             arc.hideWiggle = 0.4;
             arc.addMotionHandler(new Life(10));
             arc.lengthFixed = false;
-            arc.length = getRange(aData);
+            arc.length = getRange();
             
             player.worldObj.spawnEntityInWorld(arc);
             ACSounds.playClient(player, "em.arc_weak", 0.5f);
+        }
+
+
+        private float getDamage() {
+            return lerpf(9, 15, ctx().getSkillExp());
+        }
+
+        private double getIgniteProb() {
+            return lerpf(0, 0.6f, ctx().getSkillExp());
+        }
+
+        private float getExpIncr(boolean effectiveHit) {
+            if (effectiveHit) {
+                return lerpf(0.0048f, 0.0072f, ctx().getSkillExp());
+            } else {
+                return lerpf(0.0018f, 0.0027f, ctx().getSkillExp());
+            }
+        }
+
+        private double getFishProb() {
+            return ctx().getSkillExp() > 0.5f ? 0.1 : 0;
+        }
+
+        private boolean canStunEnemy() {
+            return ctx().getSkillExp() >= 1.0f;
+        }
+
+        private float getRange() {
+            return lerpf(6, 15, ctx().getSkillExp());
         }
         
     }

@@ -64,55 +64,37 @@ public class BodyIntensify extends Skill {
         return new SkillInstance().addChild(new IntensifyAction());
     }
     
-    // CT: ChargeTime
-    
-    private static double getProbability(int ct) {
-        return (ct - 10.0) / 18.0;
-    }
-    
-    private static int getBuffTime(AbilityData data, int ct) {
-        return (int) (4 * RandUtils.ranged(1, 2) * ct *
-                MathUtils.lerp(1.5, 2.5, data.getSkillExp(instance)));
-    }
-    
-    private static int getHungerBuffTime(int ct) {
-        return (int) (1.25f * ct);
-    }
-    
-    private static int getBuffLevel(AbilityData data, int ct) {
-        return (int) (MathUtils.lerp(0.5, 1, data.getSkillExp(instance)) * (ct / 18.0));
-    }
-    
-    public static class IntensifyAction extends SkillSyncAction {
+    public static class IntensifyAction extends SkillSyncAction<BodyIntensify> {
         
         int tick;
         float exp;
         float consumption;
 
         public IntensifyAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             consumption = lerpf(20, 15, exp);
 
             float overload = lerpf(200, 120, exp);
-            cpData.perform(overload, 0);
+            ctx().consume(overload, 0);
             
-            if(isRemote) 
+            if(isRemote) {
                 startEffect();
+            }
         }
         
         @Override
         public void onTick() {
             tick++;
             if(!isRemote && 
-               ((tick <= MAX_TIME && !cpData.perform(0, consumption)) || 
+               ((tick <= MAX_TIME && !ctx().consume(0, consumption)) ||
                  tick >= MAX_TOLERANT_TIME) ) {
                 ActionManager.endAction(this);
             }
@@ -142,13 +124,13 @@ public class BodyIntensify extends Skill {
                     
                     double p = getProbability(tick);
                     int i = 0;
-                    int time = getBuffTime(aData, tick);
+                    int time = getBuffTime(tick);
                     
                     while(p > 0) {
                         double a = RandUtils.ranged(0, 1);
                         if(a < p) {
                             // Spawn a new buff
-                            int level = getBuffLevel(aData, tick);
+                            int level = getBuffLevel(tick);
                             player.addPotionEffect(createEffect(effects.get(i++), level, time));
                         }
                         
@@ -160,10 +142,10 @@ public class BodyIntensify extends Skill {
                     instance.triggerAchievement(player);
                 }
 
-                aData.addSkillExp(instance, 0.01f);
+                ctx().addSkillExp(0.01f);
 
                 int cooldown = (int) lerpf(45, 30, exp);
-                setCooldown(instance, cooldown);
+                ctx().setCooldown(cooldown);
                 
                 if(isRemote) 
                     endEffect(true);
@@ -215,6 +197,27 @@ public class BodyIntensify extends Skill {
                 ACSounds.playClient(player, ACTIVATE_SOUND, 0.5f);
                 player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player));
             }
+        }
+
+        // DATA
+
+        // CT: ChargeTime
+
+        private double getProbability(int ct) {
+            return (ct - 10.0) / 18.0;
+        }
+
+        private int getBuffTime(int ct) {
+            return (int) (4 * RandUtils.ranged(1, 2) * ct *
+                    MathUtils.lerp(1.5, 2.5, ctx().getSkillExp()));
+        }
+
+        private int getHungerBuffTime(int ct) {
+            return (int) (1.25f * ct);
+        }
+
+        private int getBuffLevel(int ct) {
+            return (int) (MathUtils.lerp(0.5, 1, ctx().getSkillExp()) * (ct / 18.0));
         }
         
     }

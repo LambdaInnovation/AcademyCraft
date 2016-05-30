@@ -2,7 +2,7 @@ package cn.academy.vanilla.electromaster
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.{AbilityContext, AbilityPipeline, Skill}
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.EntityBlock
@@ -50,16 +50,13 @@ import MagManip2._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.lambdalib.util.mc.MCExtender._
 
-private class MagManipContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
-  implicit val skill_ = MagManip2
-  implicit val player_ = player
-  implicit val aData_ = aData()
+private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip2) with IConsumptionProvider {
 
-  private val consumption = MathUtils.lerpf(225, 275, skillExp)
-  private val overload = MathUtils.lerpf(72, 33, skillExp)
-  private val cooldown = MathUtils.lerpf(60, 40, skillExp).toInt
-  private val damage = MathUtils.lerpf(18, 30, skillExp)
-  private val speed = MathUtils.lerpf(0.5f, 1.0f, skillExp)
+  private val consumption = MathUtils.lerpf(225, 275, ctx.getSkillExp)
+  private val overload = MathUtils.lerpf(72, 33, ctx.getSkillExp)
+  private val cooldown = MathUtils.lerpf(60, 40, ctx.getSkillExp).toInt
+  private val damage = MathUtils.lerpf(18, 30, ctx.getSkillExp)
+  private val speed = MathUtils.lerpf(0.5f, 1.0f, ctx.getSkillExp)
 
   var state = StateMoving
 
@@ -137,13 +134,13 @@ private class MagManipContext(p: EntityPlayer) extends Context(p) with IConsumpt
     entity.setPlaceFromServer(true)
 
     val distsq = player.getDistanceSqToEntity(entity)
-    if (distsq < 25 && cpData.perform(overload, consumption)) {
+    if (distsq < 25 && ctx.consume(overload, consumption)) {
       val pos = Raytrace.getLookingPos(player, 20).getLeft
       val delta = pos - entity.position
       entity.setVel(delta.normalize() * speed)
 
-      addSkillCooldown(cooldown)
-      addSkillExp(0.005f)
+      ctx.setCooldown(cooldown)
+      ctx.addSkillExp(0.005f)
 
       sendToClient(MSG_PERFORM)
     }
@@ -262,7 +259,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
     regEventHandler(new CollideHandler {
       override def onEvent(event: CollideEvent): Unit = {
         if (!worldObj.isRemote && event.result != null && event.result.entityHit != null) {
-          AbilityPipeline.attack(player2, MagManip2, event.result.entityHit, damage)
+          AbilityContext.of(player2, MagManip2).attack(event.result.entityHit, damage)
         }
       }
     })

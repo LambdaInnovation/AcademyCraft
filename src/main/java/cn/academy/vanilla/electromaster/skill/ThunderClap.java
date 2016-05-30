@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
+import static codechicken.nei.NEIClientConfig.world;
 
 /**
  * @author WeAthFolD
@@ -62,7 +63,7 @@ public class ThunderClap extends Skill {
         return new SkillInstance().addChild(new ThunderClapAction());
     }
     
-    public static class ThunderClapAction extends SkillSyncAction {
+    public static class ThunderClapAction extends SkillSyncAction<ThunderClap> {
 
         float exp;
         
@@ -70,7 +71,7 @@ public class ThunderClap extends Skill {
         double hitX, hitY, hitZ;
 
         public ThunderClapAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
@@ -79,13 +80,11 @@ public class ThunderClap extends Skill {
             
             if(isRemote)
                 startEffects();
-            
-            aData = AbilityData.get(player);
-            cpData = CPData.get(player);
-            exp = aData.getSkillExp(instance);
+
+            exp = ctx().getSkillExp();
 
             float overload = lerpf(390, 252, exp);
-            cpData.perform(overload, 0);
+            ctx().consume(overload, 0);
         }
         
         @Override
@@ -109,7 +108,7 @@ public class ThunderClap extends Skill {
             ticks++;
 
             float consumption = lerpf(100, 120, exp);
-            if(ticks <= MIN_TICKS && !cpData.perform(0, consumption))
+            if(ticks <= MIN_TICKS && !ctx().consume(0, consumption))
                 ActionManager.abortAction(this);
             if(!isRemote) {
                 if(ticks >= MAX_TICKS) {
@@ -153,8 +152,8 @@ public class ThunderClap extends Skill {
                     instance,EntitySelectors.exclude(player));
             }
             
-            setCooldown(instance, getCooldown(exp, ticks));
-            aData.addSkillExp(instance, 0.003f);
+            ctx().setCooldown(getCooldown(exp, ticks));
+            ctx().addSkillExp(0.003f);
             instance.triggerAchievement(player);
         }
         
@@ -177,7 +176,9 @@ public class ThunderClap extends Skill {
             player.worldObj.spawnEntityInWorld(surroundArc);
             
             if(isLocal()) {
-                world.spawnEntityInWorld(mark = new EntityRippleMark(world));
+                mark = new EntityRippleMark(player.worldObj);
+
+                player.worldObj.spawnEntityInWorld(mark);
                 mark.color.setColor4d(0.8, 0.8, 0.8, 0.7);
                 mark.setPosition(hitX, hitY, hitZ);
             }

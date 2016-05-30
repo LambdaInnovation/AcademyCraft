@@ -66,12 +66,9 @@ private object VecReflectionContext {
   }
 }
 
-class VecReflectionContext(p: EntityPlayer) extends Context(p) {
+class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private val visited = mutable.Set[Entity]()
-
-  private implicit val aData_ = aData()
-  private implicit val skill_ = VecReflection
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -137,7 +134,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
         evt.ammount = applied
 
         if (evt.source.getEntity != null) { // Return the damage to the applier
-          AbilityPipeline.attack(player, skill_, evt.source.getEntity, returned)
+          ctx.attack(evt.source.getEntity, returned)
           sendToClient(MSG_EFFECT, evt.source.getEntity.position)
         }
 
@@ -149,13 +146,13 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
-  private def reflectRate = lerpf(0.7f, 1.2f, skillExp) * rangef(0.9f, 1.1f)
+  private def reflectRate = lerpf(0.7f, 1.2f, ctx.getSkillExp) * rangef(0.9f, 1.1f)
 
-  private def consumeEntity() = cpData.perform(lerpf(30, 16, skillExp), lerpf(300, 160, skillExp))
+  private def consumeEntity() = ctx.consume(lerpf(30, 16, ctx.getSkillExp), lerpf(300, 160, ctx.getSkillExp))
 
-  private def consumeDamage() = cpData.perform(lerpf(30, 10, skillExp), lerpf(300, 200, skillExp))
+  private def consumeDamage() = ctx.consume(lerpf(30, 10, ctx.getSkillExp), lerpf(300, 200, ctx.getSkillExp))
 
-  private def consumeNormal() = cpData.perform(lerpf(2, 1.5f, skillExp), lerpf(20, 16, skillExp))
+  private def consumeNormal() = ctx.consume(lerpf(2, 1.5f, ctx.getSkillExp), lerpf(20, 16, ctx.getSkillExp))
 
 }
 
