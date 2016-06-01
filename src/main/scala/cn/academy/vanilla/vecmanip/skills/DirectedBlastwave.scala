@@ -128,7 +128,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
             val block = world.getBlock(i, j, k)
             val meta = world.getBlockMetadata(i, j, k)
             val hardness = block.getBlockHardness(world, i, j, k)
-            if (0 <= hardness && hardness <= breakHardness && AbilityPipeline.canBreakBlock(world, i, j, k)) {
+            if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
               // This line causes the sound effect unable to be heard.
               // So strange...
               //> world.playSoundEffect(i + 0.5, j + 0.5, k + 0.5, block.stepSound.getBreakSound, .5f, 1f)

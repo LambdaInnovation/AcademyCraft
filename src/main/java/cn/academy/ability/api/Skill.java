@@ -185,8 +185,19 @@ public abstract class Skill extends Controllable {
         return getOptionalFloat("damage_scale", 1.0f);
     }
 
+    /**
+     * @return Whether the skill is enabled. Disabled skill will NOT appear in Skill Tree, and its learning dependency
+     *  will be automatically ignored.
+     */
     public boolean isEnabled() {
         return getOptionalBool("enabled", true);
+    }
+
+    /**
+     * @return Whether this skill is permitted to destroy blocks.
+     */
+    public boolean shouldDestroyBlocks() {
+        return getOptionalBool("destroy_blocks", true);
     }
 
     public float getCPConsumeSpeed() {
@@ -212,7 +223,7 @@ public abstract class Skill extends Controllable {
     }
     
     public boolean canControl() {
-        return canControl;
+        return isEnabled() && canControl;
     }
     
     @Override
@@ -342,8 +353,10 @@ public abstract class Skill extends Controllable {
     public void setParent(Skill skill, float requiredExp) {
         if(parent != null)
             throw new IllegalStateException("You can't set the parent twice!");
-        parent = skill;
-        this.addDevCondition(new DevConditionDep(parent, requiredExp));
+        if (skill.isEnabled()) {
+            parent = skill;
+            this.addDevCondition(new DevConditionDep(parent, requiredExp));
+        }
     }
     
     public Skill getParent() {
@@ -359,7 +372,9 @@ public abstract class Skill extends Controllable {
     }
     
     public void addSkillDep(Skill skill, float exp) {
-        addDevCondition(new DevConditionDep(skill, exp));
+        if (skill.isEnabled()) {
+            addDevCondition(new DevConditionDep(skill, exp));
+        }
     }
     
     /**

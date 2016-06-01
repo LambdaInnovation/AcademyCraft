@@ -113,7 +113,11 @@ public class AbilityContext {
     }
 
     public boolean canBreakBlock(World world, int x, int y, int z) {
-        return AbilityPipeline.canBreakBlock(world, x, y, z);
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, x, y, z);
+    }
+
+    public boolean canBreakBlock() {
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock();
     }
 
     private float getFinalDamage(float damage) {

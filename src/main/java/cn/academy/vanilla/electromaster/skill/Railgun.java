@@ -4,7 +4,6 @@ import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.core.util.RangedRayDamage;
@@ -175,7 +174,7 @@ public class Railgun extends Skill {
             damage.perform();
             instance.triggerAchievement(player);
 
-            CooldownData.of(player).set(instance, (int) lerpf(300, 160, exp));
+            ctx.setCooldown((int) lerpf(300, 160, exp));
             NetworkMessage.sendToAllAround(
                     TargetPointHelper.convert(player, 20),
                     instance, MSG_PERFORM,

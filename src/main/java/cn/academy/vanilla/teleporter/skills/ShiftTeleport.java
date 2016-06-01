@@ -6,7 +6,6 @@
 */
 package cn.academy.vanilla.teleporter.skills;
 
-import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -132,7 +131,7 @@ public class ShiftTeleport extends Skill {
             MovingObjectPosition position = getTracePosition();
 
             if (item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
-                    && AbilityPipeline.canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
+                    && ctx().canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
                     && ctx().consume(getOverload(exp), getConsumption(exp))) {
 
                 item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ,

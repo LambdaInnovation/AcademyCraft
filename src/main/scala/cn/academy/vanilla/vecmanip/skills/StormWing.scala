@@ -177,7 +177,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
         val block = world.getBlock(x, y, z)
         val hardness = block.getBlockHardness(world, x, y, z)
-        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && AbilityPipeline.canBreakBlock(world, x, y, z)) {
+        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && ctx.canBreakBlock(world, x, y, z)) {
           world.setBlock(x, y, z, Blocks.air)
           world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
         }

@@ -260,6 +260,7 @@ private object Common {
       if (aData.hasCategory) {
         val skills = aData.getCategory.getSkillList.toList
           .filter(skill => LearningHelper.canBePotentiallyLearned(aData, skill))
+          .filter(_.isEnabled)
 
         skills.zipWithIndex.foreach { case (skill, idx) =>
           val StateIdle = 0

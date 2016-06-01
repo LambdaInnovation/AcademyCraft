@@ -107,7 +107,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
       def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean) = {
         val block = world.getBlock(x, y, z)
 
-        if (AbilityPipeline.canBreakBlock(world, x, y, z)) {
+        if (ctx.canBreakBlock(world, x, y, z)) {
           block.getBlockHardness(world, x, y, z) match {
             case hardnessEnergy if hardnessEnergy >= 0 =>
               if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {

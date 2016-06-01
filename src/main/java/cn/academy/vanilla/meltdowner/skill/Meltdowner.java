@@ -9,7 +9,6 @@ package cn.academy.vanilla.meltdowner.skill;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.Context;
-import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
@@ -154,7 +153,7 @@ public class Meltdowner extends Skill {
 
             ctx.addSkillExp(getExpIncr(ct));
 
-            CooldownData.of(player).set(instance, getCooldown(ct));
+            ctx.setCooldown(getCooldown(ct));
             sendToClient(MSG_PERFORM, ct, length[0]);
 
             terminate();

@@ -12,7 +12,6 @@ import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.event.FlushControlEvent;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
@@ -232,7 +231,7 @@ public class Flashing extends Skill {
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                CooldownData.of(player).setSub(instance, keyid, 5);
+                ctx.setCooldownSub(keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }

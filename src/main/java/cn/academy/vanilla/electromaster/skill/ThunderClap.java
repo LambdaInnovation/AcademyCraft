@@ -6,13 +6,10 @@
 */
 package cn.academy.vanilla.electromaster.skill;
 
-import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
@@ -29,8 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
-import static codechicken.nei.NEIClientConfig.world;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -147,9 +143,9 @@ public class ThunderClap extends Skill {
                     player.worldObj, hitX, hitY, hitZ);
             player.worldObj.spawnEntityInWorld(lightning);
             if(!isRemote) {
-                AbilityPipeline.applyRangeAttack(player,
-                    hitX, hitY, hitZ, getRange(exp), getDamage(exp, ticks),
-                    instance,EntitySelectors.exclude(player));
+                ctx().attackRange(hitX, hitY, hitZ,
+                        getRange(exp), getDamage(exp, ticks),
+                        EntitySelectors.exclude(player));
             }
             
             ctx().setCooldown(getCooldown(exp, ticks));
