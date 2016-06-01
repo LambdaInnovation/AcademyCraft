@@ -49,28 +49,8 @@ public class ThreateningTeleport extends Skill {
         super("threatening_teleport", 1);
     }
 
-    private static float getRange(float exp) {
-        return lerpf(8, 15, exp);
-    }
-
-    private static float getExpIncr(boolean attacked) {
-        return (attacked ? 1 : 0.2f) * .003f;
-    }
-
-    private static float getDamage(AbilityData data, ItemStack stack) {
-        float dmg = lerpf(6, 9, data.getSkillExp(instance));
-        if (stack.getItem() == ModuleVanilla.needle) {
-            dmg *= 1.5f;
-        }
-        return dmg;
-    }
-
     private static float getConsumption(float exp) {
         return lerpf(129, 149, exp);
-    }
-
-    private static float getOverload(float exp) {
-        return lerpf(26, 11, exp);
     }
 
     @Override
@@ -93,14 +73,14 @@ public class ThreateningTeleport extends Skill {
         boolean attacked;
 
         public ThreateningAction() {
-            super(-1);
+            super(instance);
         }
 
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if (!isRemote && player.getCurrentEquippedItem() == null) {
                 ActionManager.abortAction(this);
@@ -125,7 +105,7 @@ public class ThreateningTeleport extends Skill {
         @Override
         public void onEnd() {
             ItemStack curStack = player.getCurrentEquippedItem();
-            if (curStack != null && cpData.perform(getOverload(exp), getConsumption(exp))) {
+            if (curStack != null && ctx().consume(getOverload(exp), getConsumption(exp))) {
                 attacked = true;
                 TraceResult result = calcDropPos();
 
@@ -135,7 +115,7 @@ public class ThreateningTeleport extends Skill {
 
                     if (result.target != null) {
                         attacked = true;
-                        TPSkillHelper.attack(player, instance, result.target, getDamage(aData, curStack));
+                        TPSkillHelper.attack(ctx(), result.target, getDamage(curStack));
                         instance.triggerAchievement(player);
                         dropProb = 0.3;
                     }
@@ -152,10 +132,10 @@ public class ThreateningTeleport extends Skill {
                         player.worldObj.spawnEntityInWorld(
                                 new EntityItem(player.worldObj, result.x, result.y, result.z, drop));
                     }
-                    aData.addSkillExp(instance, getExpIncr(attacked));
+                    ctx().addSkillExp(getExpIncr(attacked));
                 }
 
-                setCooldown(instance, (int) lerpf(18, 10, exp));
+                ctx().setCooldown((int) lerpf(18, 10, exp));
             }
 
             if (isRemote) {
@@ -234,6 +214,26 @@ public class ThreateningTeleport extends Skill {
                                     RandUtils.ranged(-.02, .02))));
                 }
             }
+        }
+
+        private float getRange(float exp) {
+            return lerpf(8, 15, exp);
+        }
+
+        private float getExpIncr(boolean attacked) {
+            return (attacked ? 1 : 0.2f) * .003f;
+        }
+
+        private float getDamage(ItemStack stack) {
+            float dmg = lerpf(6, 9, ctx().getSkillExp());
+            if (stack.getItem() == ModuleVanilla.needle) {
+                dmg *= 1.5f;
+            }
+            return dmg;
+        }
+
+        private float getOverload(float exp) {
+            return lerpf(26, 11, exp);
         }
 
     }

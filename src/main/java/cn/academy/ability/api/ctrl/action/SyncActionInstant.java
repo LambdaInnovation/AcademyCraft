@@ -6,16 +6,17 @@
 */
 package cn.academy.ability.api.ctrl.action;
 
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 
 /**
  * SyncAction that only does something on creation but needs additional validation in both sides.
  * @author WeAthFolD
  */
-public abstract class SyncActionInstant extends SkillSyncAction {
+public abstract class SyncActionInstant<TSkill extends Skill> extends SkillSyncAction<TSkill> {
 
-    public SyncActionInstant() {
-        super(-1);
+    public SyncActionInstant(TSkill skill) {
+        super(skill);
     }
     
     @Override

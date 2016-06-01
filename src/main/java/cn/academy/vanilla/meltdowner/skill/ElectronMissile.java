@@ -65,12 +65,16 @@ public class ElectronMissile extends Skill {
         float exp;
         float overload, consumption;
         float overload_attacked, consumption_attacked;
+
+        public EMAction() {
+            super(instance);
+        }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
             overload = lerpf(2, 1.5f, exp);
             consumption = lerpf(20, 15, exp);
 
@@ -84,7 +88,7 @@ public class ElectronMissile extends Skill {
         
         @Override
         public void onTick() {
-            if(!cpData.perform(overload, consumption) && !isRemote) {
+            if(!ctx().consume(overload, consumption) && !isRemote) {
                 ActionManager.abortAction(this);
             } else {
                 if(!isRemote) {
@@ -93,7 +97,7 @@ public class ElectronMissile extends Skill {
                         if(ticks % 10 == 0) {
                             if(active.size() < MAX_HOLD) {
                                 EntityMdBall ball = new EntityMdBall(player);
-                                world.spawnEntityInWorld(ball);
+                                player.worldObj.spawnEntityInWorld(ball);
                                 active.add(ball);
                             }
                         }
@@ -102,7 +106,7 @@ public class ElectronMissile extends Skill {
 
                             List<Entity> list = WorldUtils.getEntities(player, range,
                                     EntitySelectors.exclude(player).and(EntitySelectors.living()));
-                            if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
+                            if(!active.isEmpty() && !list.isEmpty() && ctx().consume(
                                     overload_attacked,
                                     consumption_attacked)) {
                                 double min = Double.MAX_VALUE;
@@ -124,7 +128,7 @@ public class ElectronMissile extends Skill {
                                 iter.remove();
 
                                 // client action
-                                spawnRay(player, world,
+                                spawnRay(player, player.worldObj,
                                         VecUtils.entityPos(ball),
                                         VecUtils.add(VecUtils.entityPos(result), VecUtils.vec(0, result.getEyeHeight(), 0)));
 
@@ -132,8 +136,8 @@ public class ElectronMissile extends Skill {
                                 result.hurtResistantTime = -1;
 
                                 float damage = lerpf(14, 27, exp);
-                                MDDamageHelper.attack(player, instance, result, damage);
-                                aData.addSkillExp(instance, 0.001f);
+                                MDDamageHelper.attack(ctx(), result, damage);
+                                ctx().addSkillExp(0.001f);
                                 ball.setDead();
                             }
                         }
@@ -151,7 +155,7 @@ public class ElectronMissile extends Skill {
         @Override
         public void onEnd() {
             int cooldown = MathUtils.clampi(100, 300, ticks);
-            setCooldown(instance, cooldown);
+            ctx().setCooldown(cooldown);
         }
         
         @Override
@@ -171,9 +175,10 @@ public class ElectronMissile extends Skill {
                 double r = ranged(0.5, 1);
                 double theta = ranged(0, Math.PI * 2);
                 double h = ranged(-1.2, 0);
-                Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+                Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ),
+                        VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
                 Vec3 vel = VecUtils.vec(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02));
-                world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
+                player.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(player.worldObj, pos, vel));
             }
         }
         

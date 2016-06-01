@@ -62,13 +62,10 @@ object StormWingContext {
 
 }
 
-class StormWingContext(p: EntityPlayer) extends Context(p) {
+class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   import cn.lambdalib.util.mc.MCExtender._
   import cn.lambdalib.util.generic.RandUtils._
   import scala.collection.JavaConversions._
-
-  private implicit val skill = StormWing
-  private implicit val aData_ = aData
 
   private var currentDir: Option[() => Vec3] = None
   private var applying: Boolean = false
@@ -173,14 +170,14 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     player.fallDistance = 0
 
     // Break blocks nearby player
-    if (skillExp < 0.15f) {
+    if (ctx.getSkillExp < 0.15f) {
       val checkArea = 10
       (0 until 40).foreach(_ => {
         def rval = ranged(-checkArea, checkArea)
         val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
         val block = world.getBlock(x, y, z)
         val hardness = block.getBlockHardness(world, x, y, z)
-        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && AbilityPipeline.canBreakBlock(world, x, y, z)) {
+        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && ctx.canBreakBlock(world, x, y, z)) {
           world.setBlock(x, y, z, Blocks.air)
           world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
         }
@@ -193,9 +190,9 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   }
 
   private def doConsume() = if (state == STATE_ACTIVE) {
-    aData.addSkillExp(StormWing, expincr)
+    ctx.addSkillExp(expincr)
 
-    cpData.perform(overload, consumption)
+    ctx.consume(overload, consumption)
   } else true
 
   @SideOnly(Side.CLIENT)
@@ -238,7 +235,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
   private def syncState() = {
     this.state = STATE_ACTIVE
 
-    if (skillExp == 1.0f) {
+    if (ctx.getSkillExp == 1.0f) {
       WorldUtils.getEntities(player, 6, EntitySelectors.everything)
         .foreach(ent => {
           def modifier = ranged(0.9, 1.2)
@@ -258,15 +255,15 @@ class StormWingContext(p: EntityPlayer) extends Context(p) {
     }
   }
 
-  private def consumption = if (isApplying) lerpf(50, 30, skillExp) else lerpf(9, 6, skillExp)
+  private def consumption = if (isApplying) lerpf(50, 30, ctx.getSkillExp) else lerpf(9, 6, ctx.getSkillExp)
 
-  private val overload = lerpf(3, 2, skillExp)
+  private val overload = lerpf(3, 2, ctx.getSkillExp)
 
-  private val speed = (if (skillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, skillExp)
+  private val speed = (if (ctx.getSkillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, ctx.getSkillExp)
 
   private val expincr = 0.00005f // per tick
 
-  private[vecmanip] val chargeTime = lerpf(70, 30, skillExp)
+  private[vecmanip] val chargeTime = lerpf(70, 30, ctx.getSkillExp)
 
   def getState = state
 

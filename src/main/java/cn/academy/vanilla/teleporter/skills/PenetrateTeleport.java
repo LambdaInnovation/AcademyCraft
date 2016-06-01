@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
@@ -25,7 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -48,35 +47,6 @@ public class PenetrateTeleport extends Skill {
 
     static float getConsumption(float exp) {
         return lerpf(15, 10, exp);
-    }
-
-    static Dest getDest(AbilityData data) {
-        EntityPlayer player = data.getEntity();
-        CPData cpData = CPData.get(player);
-        World world = player.worldObj;
-        double dist = getMaxDistance(data.getSkillExp(instance));
-        double cplim = cpData.getCP() / getConsumption(data.getSkillExp(instance));
-        dist = Math.min(dist, cplim);
-
-        final double STEP = 0.8;
-        int stage = 0;
-        int counter = 0;
-        Motion3D mo = new Motion3D(player, true);
-        for (double totalStep = 0.0; totalStep <= dist; totalStep += STEP, mo.move(STEP)) {
-            boolean b = hasPlace(world, mo.px, mo.py, mo.pz);
-            if (stage == 0) {
-                if (!b)
-                    stage = 1;
-            } else if (stage == 1) {
-                if (b)
-                    stage = 2;
-            } else {
-                if (!b || (++counter > 4))
-                    break;
-            }
-        }
-
-        return new Dest(mo.getPosVec(), stage != 1);
     }
 
     static float getMaxDistance(float exp) {
@@ -110,14 +80,14 @@ public class PenetrateTeleport extends Skill {
         float exp;
 
         public PenetrateAction() {
-            super(-1);
+            super(instance);
         }
 
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if (isRemote)
                 startEffects();
@@ -131,7 +101,7 @@ public class PenetrateTeleport extends Skill {
 
         @Override
         public void writeNBTFinal(NBTTagCompound tag) {
-            dest = getDest(aData);
+            dest = getDest();
             tag.setBoolean("a", dest.available);
             tag.setFloat("x", (float) dest.pos.xCoord);
             tag.setFloat("y", (float) dest.pos.yCoord);
@@ -158,15 +128,15 @@ public class PenetrateTeleport extends Skill {
             if (isRemote) {
                 player.setPosition(x, y, z);
                 ACSounds.playClient(player, "tp.tp", .5f);
-                setCooldown(instance, (int) lerpf(70, 40, exp));
+                ctx().setCooldown((int) lerpf(70, 40, exp));
             } else {
                 float overload = lerpf(80, 50, exp);
-                cpData.performWithForce(overload,
+                ctx().consumeWithForce(overload,
                         (float) (distance * getConsumption(exp)));
 
                 float expincr = 0.00014f * (float) distance;
 
-                aData.addSkillExp(instance, expincr);
+                ctx().addSkillExp(expincr);
                 ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
                 TPSkillHelper.incrTPCount(player);
 
@@ -194,7 +164,7 @@ public class PenetrateTeleport extends Skill {
         @SideOnly(Side.CLIENT)
         private void updateEffects() {
             if (isLocal()) {
-                Dest dest = getDest(aData);
+                Dest dest = getDest();
                 mark.available = dest.available;
                 mark.setPosition(dest.pos.xCoord, dest.pos.yCoord, dest.pos.zCoord);
             }
@@ -205,6 +175,33 @@ public class PenetrateTeleport extends Skill {
             if (mark != null) {
                 mark.setDead();
             }
+        }
+
+        private Dest getDest() {
+            World world = player.worldObj;
+            double dist = getMaxDistance(ctx().getSkillExp());
+            double cplim = ctx().cpData.getCP() / getConsumption(ctx().getSkillExp());
+            dist = Math.min(dist, cplim);
+
+            final double STEP = 0.8;
+            int stage = 0;
+            int counter = 0;
+            Motion3D mo = new Motion3D(player, true);
+            for (double totalStep = 0.0; totalStep <= dist; totalStep += STEP, mo.move(STEP)) {
+                boolean b = hasPlace(world, mo.px, mo.py, mo.pz);
+                if (stage == 0) {
+                    if (!b)
+                        stage = 1;
+                } else if (stage == 1) {
+                    if (b)
+                        stage = 2;
+                } else {
+                    if (!b || (++counter > 4))
+                        break;
+                }
+            }
+
+            return new Dest(mo.getPosVec(), stage != 1);
         }
 
     }

@@ -44,11 +44,7 @@ import MathUtils._
 import cn.lambdalib.util.generic.RandUtils._
 import scala.collection.JavaConversions._
 
-class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider {
-
-  implicit val skill_ = DirectedBlastwave
-  implicit val aData_ = aData
-  implicit val player_ = p
+class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) with IConsumptionProvider {
 
   val MIN_TICKS = 6
   val MAX_ACCEPTED_TICKS = 50
@@ -88,7 +84,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(ticks: Int) = {
-    if (consume()) {
+    if (tryConsume()) {
       val trace: TraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
       val position = trace match {
         case EmptyResult() => player.position + player.lookVector * 4
@@ -96,7 +92,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
         case res if res.hasPosition => res.position
       }
 
-      addSkillCooldown(cooldown)
+      ctx.setCooldown(cooldown)
       sendToClient(MSG_PERFORM, position)
 
       var effective = false
@@ -107,7 +103,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
         3, EntitySelectors.exclude(player)).toList
 
       entities.foreach (entity => {
-        attack(player, DirectedShock, entity, damage)
+        ctx.attack(entity, damage)
         knockback(entity)
 
         val delta = (entity.position - player.position).normalize() * 0.24
@@ -132,7 +128,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
             val block = world.getBlock(i, j, k)
             val meta = world.getBlockMetadata(i, j, k)
             val hardness = block.getBlockHardness(world, i, j, k)
-            if (0 <= hardness && hardness <= breakHardness && AbilityPipeline.canBreakBlock(world, i, j, k)) {
+            if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
               // This line causes the sound effect unable to be heard.
               // So strange...
               //> world.playSoundEffect(i + 0.5, j + 0.5, k + 0.5, block.stepSound.getBreakSound, .5f, 1f)
@@ -149,7 +145,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
 
       sendToClient(MSG_GENERATE_EFFECT_BLOCKS, Vec3.createVectorHelper(position.xCoord, position.yCoord, position.zCoord))
 
-      addSkillExp(if (effective) 0.0025f else 0.0012f)
+      ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
     } else {
       terminate()
     }
@@ -167,30 +163,29 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p) with IConsumptionProv
     punched = true
   }
 
-  private def consume() = {
-    val cp = consumption
-    val overload = lerpf(96, 72, skillExp)
+  private def tryConsume() = {
+    val overload = lerpf(96, 72, ctx.getSkillExp)
 
-    cpData.perform(overload, cp)
+    ctx.consume(overload, consumption)
   }
 
   override def getConsumptionHint = consumption
 
-  private lazy val consumption = lerpf(200, 150, skillExp)
+  private val consumption = lerpf(200, 150, ctx.getSkillExp)
 
-  private lazy val breakProb = lerpf(0.5f, 0.8f, skillExp)
+  private val breakProb = lerpf(0.5f, 0.8f, ctx.getSkillExp)
 
-  private lazy val breakHardness = skillExp match {
+  private val breakHardness = ctx.getSkillExp match {
     case exp if exp < 0.25f => 2.9f
     case exp if exp < 0.5f => 25f
     case _ => 55f
   }
 
-  private lazy val damage = lerpf(10, 18, skillExp)
+  private lazy val damage = lerpf(10, 18, ctx.getSkillExp)
 
-  private lazy val dropRate = lerpf(0.4f, 0.9f, skillExp)
+  private lazy val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
 
-  private lazy val cooldown = lerpf(40, 20, skillExp).toInt
+  private lazy val cooldown = lerpf(40, 20, ctx.getSkillExp).toInt
 
   private def knockback(targ: Entity) = {
     var delta = player.headPosition - targ.headPosition

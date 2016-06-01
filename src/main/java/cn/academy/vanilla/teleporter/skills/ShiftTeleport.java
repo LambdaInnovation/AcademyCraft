@@ -6,7 +6,6 @@
 */
 package cn.academy.vanilla.teleporter.skills;
 
-import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
@@ -27,7 +26,6 @@ import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -41,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -90,14 +88,14 @@ public class ShiftTeleport extends Skill {
         float exp;
 
         public ShiftTPAction() {
-            super(-1);
+            super(instance);
         }
 
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             ItemStack stack = player.getCurrentEquippedItem();
             Block block;
@@ -133,8 +131,8 @@ public class ShiftTeleport extends Skill {
             MovingObjectPosition position = getTracePosition();
 
             if (item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
-                    && AbilityPipeline.canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
-                    && cpData.perform(getOverload(exp), getConsumption(exp))) {
+                    && ctx().canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
+                    && ctx().consume(getOverload(exp), getConsumption(exp))) {
 
                 item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ,
                         position.sideHit, (float) position.hitVec.xCoord, (float) position.hitVec.yCoord,
@@ -147,11 +145,11 @@ public class ShiftTeleport extends Skill {
 
                 List<Entity> list = getTargetsInLine();
                 for (Entity target : list) {
-                    TPSkillHelper.attack(player, instance, target, getDamage(exp));
+                    TPSkillHelper.attack(ctx(), target, getDamage(exp));
                 }
 
                 player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f);
-                aData.addSkillExp(instance, getExpIncr(list.size()));
+                ctx().addSkillExp(getExpIncr(list.size()));
 
                 if (!player.capabilities.isCreativeMode) {
                     if (stack.stackSize-- == 0) {
@@ -159,7 +157,7 @@ public class ShiftTeleport extends Skill {
                     }
                 }
 
-                setCooldown(instance, (int) lerpf(20, 5, exp));
+                ctx().setCooldown((int) lerpf(20, 5, exp));
             }
         }
 

@@ -2,7 +2,6 @@ package cn.academy.ability.api.context;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cn.academy.ability.api.context.Context.Status;
 
 /**
  * {@link ClientContext} is attached to a certain context and receives all its messages.
@@ -17,12 +16,12 @@ public class ClientContext extends Context {
      * This constructor must be kept in subclasses in order for reflection to work.
      */
     public ClientContext(Context _parent) {
-        super(_parent.player);
+        super(_parent.player, _parent.skill);
         parent = _parent;
     }
 
     @Override
-    public Status getStatus() {
+    public Context.Status getStatus() {
         return parent.status;
     }
 

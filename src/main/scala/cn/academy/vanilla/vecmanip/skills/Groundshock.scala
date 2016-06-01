@@ -49,15 +49,10 @@ import cn.lambdalib.util.mc.MCExtender._
 import collection.mutable
 import RandUtils._
 
-class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionProvider with IStateProvider {
+class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with IConsumptionProvider with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
   import scala.collection.JavaConversions._
   import cn.lambdalib.util.generic.MathUtils._
-
-  implicit val skill_ = Groundshock
-  implicit val adata_ = aData()
-  implicit val player_ = p
-
   var localTick = 0
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
@@ -112,7 +107,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
       def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean) = {
         val block = world.getBlock(x, y, z)
 
-        if (AbilityPipeline.canBreakBlock(world, x, y, z)) {
+        if (ctx.canBreakBlock(world, x, y, z)) {
           block.getBlockHardness(world, x, y, z) match {
             case hardnessEnergy if hardnessEnergy >= 0 =>
               if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
@@ -168,10 +163,10 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
                 if (!dejavu_ent.contains(entity)) {
                   dejavu_ent += entity
                   energy -= 1
-                  AbilityPipeline.attack(player, Groundshock, entity, damage)
+                  ctx.attack(entity, damage)
 
                   entity.motionY = ySpeed
-                  addSkillExp(0.002f)
+                  ctx.addSkillExp(0.002f)
                 }
               })
             }
@@ -182,7 +177,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
       }
 
       energy = Double.MaxValue
-      if (skillExp == 1) {
+      if (ctx.getSkillExp == 1) {
         val (x0, y0, z0) = (player.posX.toInt, player.posY.toInt, player.posZ.toInt)
         for {
           x <- x0 - 5 until x0 + 5
@@ -197,8 +192,8 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
         }
       }
 
-      addSkillExp(0.001f)
-      addSkillCooldown(cooldown)
+      ctx.addSkillExp(0.001f)
+      ctx.setCooldown(cooldown)
       sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
     }
     terminate()
@@ -208,24 +203,24 @@ class GroundshockContext(p: EntityPlayer) extends Context(p) with IConsumptionPr
 
   override def getState = if (localTick < 5) DelegateState.CHARGE else DelegateState.ACTIVE
 
-  private val initEnergy: Double = lerpf(60, 120, skillExp)
+  private val initEnergy: Double = lerpf(60, 120, ctx.getSkillExp)
 
-  private val damage: Float = lerpf(7, 16, skillExp)
+  private val damage: Float = lerpf(7, 16, ctx.getSkillExp)
 
-  private val consumption: Float = lerpf(300, 180, skillExp)
+  private val consumption: Float = lerpf(300, 180, ctx.getSkillExp)
 
-  private val overload: Float = lerpf(135, 100, skillExp)
+  private val overload: Float = lerpf(135, 100, ctx.getSkillExp)
 
-  private val maxIter: Int = lerpf(10, 25, skillExp).toInt
+  private val maxIter: Int = lerpf(10, 25, ctx.getSkillExp).toInt
 
-  private val cooldown: Int = lerpf(45, 20, skillExp).toInt
+  private val cooldown: Int = lerpf(45, 20, ctx.getSkillExp).toInt
 
-  private val dropRate = lerpf(0.3f, 1.0f, skillExp)
+  private val dropRate = lerpf(0.3f, 1.0f, ctx.getSkillExp)
 
   // y speed given to mobs.
-  private def ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, skillExp)
+  private def ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
 
-  private[skills] def consume(): Boolean = cpData.perform(overload, consumption)
+  private[skills] def consume(): Boolean = ctx.consume(overload, consumption)
 
   private val groundBreakProb: Double = 0.3
 }

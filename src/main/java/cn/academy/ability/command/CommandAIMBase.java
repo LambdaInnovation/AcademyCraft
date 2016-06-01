@@ -9,27 +9,20 @@ package cn.academy.ability.command;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.datapart.PlayerDataTag;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
-
-import static cn.lambdalib.core.LambdaLib.channel;
 
 /**
  * @author WeAthFolD
@@ -145,7 +138,7 @@ public abstract class CommandAIMBase extends ACCommand {
         "help", "cat", "catlist", 
         "learn", "learn_all", "reset",
         "learned", "skills", "fullcp",
-        "level", "exp", "cd_clear"
+        "level", "exp", "cd_clear", "maxout"
     };
 
     public CommandAIMBase(String name) {
@@ -328,10 +321,9 @@ public abstract class CommandAIMBase extends ACCommand {
             return;
         }
 
-        case "_readylevel": {
+        case "maxout": {
             if (aData.hasCategory()) {
-                CPData cpData = CPData.get(player);
-                cpData.setAddMaxCP(Float.MAX_VALUE);
+                aData.maxOutLevelProgress();
                 sendChat(ics, locSuccessful());
             }
             return;

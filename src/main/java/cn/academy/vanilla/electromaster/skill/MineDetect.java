@@ -61,27 +61,23 @@ public class MineDetect extends Skill {
         super("mine_detect", 3);
     }
     
-    public static float getRange(float exp) {
-        return lerpf(15, 30, exp);
-    }
-    
-    public static boolean isAdvanced(AbilityData data) {
-        return data.getSkillExp(instance) > 0.5f && data.getLevel() >= 4;
-    }
-    
     @Override
     public SkillInstance createSkillInstance(EntityPlayer player) {
         return new SkillInstanceInstant().addExecution(new MDAction());
     }
     
-    public static class MDAction extends SyncActionInstant {
+    public static class MDAction extends SyncActionInstant<MineDetect> {
+
+        public MDAction() {
+            super(instance);
+        }
 
         @Override
         public boolean validate() {
             AbilityData aData = AbilityData.get(player);
             CPData cpData = CPData.get(player);
 
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
 
             float cp = lerpf(1800, 1400, exp);
             float overload = lerpf(200, 180, exp);
@@ -108,11 +104,19 @@ public class MineDetect extends Skill {
             float exp = aData.getSkillExp(instance);
 
             player.worldObj.spawnEntityInWorld(
-                    new HandlerEntity(player, TIME, getRange(exp), isAdvanced(aData)));
+                    new HandlerEntity(player, TIME, getRange(), isAdvanced()));
             ACSounds.playClient(player, "em.minedetect", 0.5f);
 
             int cooldown = (int) lerpf(900, 400, exp);
-            setCooldown(instance, cooldown);
+            ctx().setCooldown(cooldown);
+        }
+
+        private float getRange() {
+            return lerpf(15, 30, ctx().getSkillExp());
+        }
+
+        private boolean isAdvanced() {
+            return ctx().getSkillExp() > 0.5f && ctx().aData.getLevel() >= 4;
         }
         
     }

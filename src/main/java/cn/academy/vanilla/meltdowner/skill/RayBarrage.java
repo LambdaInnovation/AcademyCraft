@@ -11,7 +11,6 @@ import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.vanilla.meltdowner.entity.EntityBarrageRayPre;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRayBarrage;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
@@ -25,7 +24,6 @@ import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +35,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -69,17 +67,18 @@ public class RayBarrage extends Skill {
         return new SkillInstanceInstant().addExecution(new BarrageAction());
     }
     
-    public static class BarrageAction extends SyncActionInstant {
+    public static class BarrageAction extends SyncActionInstant<RayBarrage> {
         
         boolean hit;
         EntitySilbarn silbarn;
 
+        public BarrageAction() {
+            super(instance);
+        }
+
         @Override
         public boolean validate() {
-            CPData cData = CPData.get(player);
-            AbilityData aData = AbilityData.get(player);
-
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
 
             MovingObjectPosition pos = Raytrace.traceLiving(player, DISPLAY_RAY_DIST);
             if(pos != null && pos.entityHit instanceof EntitySilbarn && !((EntitySilbarn)pos.entityHit).isHit()) {
@@ -88,7 +87,7 @@ public class RayBarrage extends Skill {
             }
 
             float cp = lerpf(450, 340, exp), overload = lerpf(375, 160, exp);
-            return cData.perform(overload, cp);
+            return ctx().consume(overload, cp);
         }
         
         @Override
@@ -158,7 +157,7 @@ public class RayBarrage extends Skill {
                         float eyaw = mo.getRotationYaw(), epitch = mo.getRotationPitch();
                         
                         if(MathUtils.angleYawinRange(minYaw, maxYaw, eyaw) && (minPitch <= epitch && epitch <= maxPitch)) {
-                            MDDamageHelper.attack(player, instance, e, getScatteredDamage(exp));
+                            MDDamageHelper.attack(ctx(), e, getScatteredDamage(exp));
                         }
                     }
                 }
@@ -174,12 +173,12 @@ public class RayBarrage extends Skill {
                 tz = pos.zCoord;
 
                 if(result != null && result.entityHit != null) {
-                    MDDamageHelper.attack(player, instance, result.entityHit, getPlainDamage(exp));
+                    MDDamageHelper.attack(ctx(), result.entityHit, getPlainDamage(exp));
                 }
 
                 if (!isRemote) {
                     if(result != null && result.entityHit != null) {
-                        MDDamageHelper.attack(player, instance, result.entityHit, getPlainDamage(exp));
+                        MDDamageHelper.attack(ctx(), result.entityHit, getPlainDamage(exp));
                     }
                 }
             }
@@ -188,7 +187,7 @@ public class RayBarrage extends Skill {
                 spawnPreRay(player.posX, player.posY, player.posZ, tx, ty, tz);
             }
             
-            setCooldown(instance, (int) lerpf(100, 160, exp));
+            ctx().setCooldown((int) lerpf(100, 160, exp));
             aData.addSkillExp(instance, .005f);
         }
         

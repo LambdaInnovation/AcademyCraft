@@ -12,9 +12,6 @@ import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.cooldown.CooldownData;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.FlushControlEvent;
 import cn.academy.core.client.Resources;
 import cn.academy.core.client.sound.ACSounds;
@@ -41,7 +38,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.Optional;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -111,16 +108,12 @@ public class Flashing extends Skill {
         @SideOnly(Side.CLIENT)
         IActivateHandler activateHandler;
 
-        final AbilityData aData;
-        final CPData cpData;
         final float exp, consumption, overload;
 
         public MainContext(EntityPlayer player) {
-            super(player);
+            super(player, instance);
 
-            aData = aData();
-            cpData = cpData();
-            exp = aData.getSkillExp(instance);
+            exp = ctx.getSkillExp();
             consumption = lerpf(100, 70, exp);
             overload = lerpf(90, 70, exp);
         }
@@ -229,16 +222,16 @@ public class Flashing extends Skill {
 
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
-            if (cpData().perform(overload, consumption)) {
+            if (ctx.consume(overload, consumption)) {
                 Vec3 dest = getDest(keyid);
                 player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
                 player.fallDistance = 0.0f;
 
-                aData.addSkillExp(instance, .002f);
+                ctx.addSkillExp(.002f);
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                CooldownData.of(player).setSub(instance, keyid, 5);
+                ctx.setCooldownSub(keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }
@@ -285,7 +278,7 @@ public class Flashing extends Skill {
         }
 
         private boolean consume(boolean simulate) {
-            return simulate ? cpData.canPerform(consumption) : cpData.perform(overload, consumption);
+            return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(overload, consumption);
         }
 
         private Vec3 getDest(int keyid) {

@@ -6,6 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.skills;
 
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
@@ -18,12 +19,8 @@ import cn.academy.vanilla.teleporter.client.LocTeleportUI;
 import cn.academy.vanilla.teleporter.data.LocTeleData.Location;
 import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
@@ -32,7 +29,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -137,10 +133,9 @@ public class LocationTeleport extends Skill {
 
     @Listener(channel=MSG_PERFORM, side=Side.SERVER)
     private static void hPerform(EntityPlayer player, Location dest) {
-        AbilityData aData = AbilityData.get(player);
-        CPData cpData = CPData.get(player);
+        AbilityContext ctx = AbilityContext.of(player, instance);
 
-        if (cpData.perform(getOverload(player), getConsumption(player, dest))) {
+        if (ctx.consume(getOverload(player), getConsumption(player, dest))) {
             List<Entity> entitiesToTeleport = WorldUtils.getEntities(player, 5,
                     basicSelector.and(EntitySelectors.exclude(player)));
             entitiesToTeleport = entitiesToTeleport.subList(0, Math.min(4, entitiesToTeleport.size()));
@@ -162,7 +157,7 @@ public class LocationTeleport extends Skill {
 
             float expincr = dist >= 200 ? 0.08f : 0.05f;
 
-            aData.addSkillExp(instance, expincr);
+            ctx.addSkillExp(expincr);
             ModuleAchievements.trigger(player, "teleporter.ignore_barrier");
             TPSkillHelper.incrTPCount(player);
         }

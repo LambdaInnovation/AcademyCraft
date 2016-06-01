@@ -3,6 +3,7 @@
 
 # Common
 itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] Failed to parse custom config data file. The error:
 
 # Item
 item.ac_crystal_low.name=Low-purity Imag Crystal
@@ -332,6 +333,7 @@ ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
 ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
 ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
 ac.command.aim.outofrange=§cInput out of range: §fMust be a value between %s and %s.
+ac.command.aim.maxout=Set current level's upgrade progress to 100%%.
 
 # Achievements
 achievement.ac_phase_liquid=New Energy

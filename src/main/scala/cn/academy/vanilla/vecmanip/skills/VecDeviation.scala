@@ -87,10 +87,7 @@ import scala.collection.JavaConversions._
 import cn.lambdalib.util.generic.MathUtils._
 import VecDeviationContext._
 
-class VecDeviationContext(p: EntityPlayer) extends Context(p) {
-
-  private implicit val aData_ = aData()
-  private implicit val skill_ = VecDeviation
+class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
   private val visited = mutable.Set[Entity]()
 
@@ -107,12 +104,12 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     val consumpRatio = 60.0f
     val overloadRatio = 10.0f
 
-    val consumption = math.min(cpData.getCP, dmg * consumpRatio)
+    val consumption = math.min(ctx.cpData.getCP, dmg * consumpRatio)
     val acceptedDamage = consumption / consumpRatio
     val absorbed = acceptedDamage * 0.75f
 
-    cpData.perform(consumption, acceptedDamage * overloadRatio)
-    addSkillExp(0.004f)
+    ctx.consume(consumption, acceptedDamage * overloadRatio)
+    ctx.addSkillExp(0.004f)
 
     sendToClient(MSG_PLAY, player.position)
 
@@ -130,7 +127,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
     entities foreach (entity => {
       if (shouldStopEntity(entity) && consumeStop()) {
         stop(entity, player)
-        addSkillExp(0.001f)
+        ctx.addSkillExp(0.001f)
 
         sendToClient(MSG_STOP_ENTITY, entity)
       }
@@ -141,15 +138,15 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p) {
 
   @Listener(channel=MSG_TICK, side={Array(Side.CLIENT, Side.SERVER)})
   private def g_tick() = if (!isRemote || isLocal) {
-    val normConsume = lerpf(5, 2.5f, skillExp)
-    val normOverload = lerpf(0.5f, 0.2f, skillExp)
-    cpData.perform(normOverload, normConsume)
+    val normConsume = lerpf(5, 2.5f, ctx.getSkillExp)
+    val normOverload = lerpf(0.5f, 0.2f, ctx.getSkillExp)
+    ctx.consume(normOverload, normConsume)
   }
 
   private def consumeStop() = {
-    cpData.perform(
-      lerpf(16, 10, skillExp),
-      lerpf(150, 100, skillExp))
+    ctx.consume(
+      lerpf(16, 10, ctx.getSkillExp),
+      lerpf(150, 100, ctx.getSkillExp))
   }
 }
 

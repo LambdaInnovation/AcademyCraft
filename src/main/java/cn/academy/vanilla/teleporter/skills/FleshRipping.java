@@ -54,14 +54,14 @@ public class FleshRipping extends Skill {
         float exp;
 
         public FRAction() {
-            super(-1);
+            super(instance);
         }
 
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             if (isRemote) {
                 startEffects();
@@ -73,7 +73,7 @@ public class FleshRipping extends Skill {
             if (isRemote) {
                 updateEffects();
             } else {
-                if (!cpData.canPerform(getConsumption()))
+                if (!ctx().canConsumeCP(getConsumption()))
                     ActionManager.abortAction(this);
             }
         }
@@ -97,14 +97,14 @@ public class FleshRipping extends Skill {
                 onAbort();
             } else {
                 if (!isRemote) {
-                    cpData.performWithForce(getOverload(), getConsumption());
-                    TPSkillHelper.attack(player, instance, target.target, getDamage());
+                    ctx().consumeWithForce(getOverload(), getConsumption());
+                    TPSkillHelper.attack(ctx(), target.target, getDamage());
                     if (RandUtils.ranged(0, 1) < getDisgustProb()) {
                         player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100));
                     }
 
-                    setCooldown(instance, (int) lerpf(100, 60, exp));
-                    aData.addSkillExp(instance, .005f);
+                    ctx().setCooldown((int) lerpf(100, 60, exp));
+                    ctx().addSkillExp(.005f);
                 }
             }
         }

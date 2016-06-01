@@ -21,7 +21,6 @@ import cn.lambdalib.util.mc.Raytrace;
 import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,20 +65,24 @@ public class ThunderBolt extends Skill {
         return new SkillInstanceInstant().addExecution(new ThunderBoltAction());
     }
     
-    public static class ThunderBoltAction extends SyncActionInstant {
+    public static class ThunderBoltAction extends SyncActionInstant<ThunderBolt> {
+
+        public ThunderBoltAction() {
+            super(instance);
+        }
 
         @Override
         public boolean validate() {
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
             float overload = lerpf(64, 32, exp);
             float cp = (int) lerp(340, 455, exp);
 
-            return cpData.perform(overload, cp);
+            return ctx().consume(overload, cp);
         }
 
         @Override
         public void execute() {
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
 
             if(isRemote) {
                 spawnEffects();
@@ -91,7 +94,7 @@ public class ThunderBolt extends Skill {
                 
                 if(ad.target != null) {
                     effective = true;
-                    EMDamageHelper.attack(player, instance, ad.target,getDamage(exp));
+                    EMDamageHelper.attack(ctx(), ad.target,getDamage(exp));
                     if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
                         ((EntityLivingBase) ad.target)
                             .addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 40, 3));
@@ -100,7 +103,7 @@ public class ThunderBolt extends Skill {
                 
                 for(Entity e : ad.aoes) {
                     effective = true;
-                    EMDamageHelper.attack(player, instance, e, getAOEDamage(exp));
+                    EMDamageHelper.attack(ctx(), e, getAOEDamage(exp));
                     
                     if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target instanceof EntityLivingBase) {
                         ((EntityLivingBase) ad.target)
@@ -108,11 +111,11 @@ public class ThunderBolt extends Skill {
                     }
                 }
                 
-                aData.addSkillExp(instance, getExpIncr(effective));
+                ctx().addSkillExp(getExpIncr(effective));
                 instance.triggerAchievement(player);
             }
             
-            setCooldown(instance, (int) lerpf(80f, 40f, exp));
+            ctx().setCooldown((int) lerpf(80f, 40f, exp));
         }
         
         @SideOnly(Side.CLIENT)

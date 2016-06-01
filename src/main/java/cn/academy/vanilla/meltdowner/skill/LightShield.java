@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
@@ -25,7 +24,6 @@ import cn.lambdalib.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
@@ -35,8 +33,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 import static cn.lambdalib.util.generic.RandUtils.ranged;
-import static cn.lambdalib.util.generic.MathUtils.*;
 
 /**
  * @author WeAthFolD
@@ -51,30 +49,6 @@ public class LightShield extends Skill {
     private LightShield() {
         super("light_shield", 2);
         MinecraftForge.EVENT_BUS.register(this);
-    }
-    
-    static float getAbsorbDamage(float exp) {
-        return lerpf(15, 50, exp);
-    }
-    
-    static float getTouchDamage(float exp) {
-        return lerpf(3, 8, exp);
-    }
-    
-    static float getAbsorbOverload(float exp) {
-        return lerpf(15, 10, exp);
-    }
-    
-    static float getAbsorbConsumption(float exp) {
-        return lerpf(50, 30, exp);
-    }
-    
-    static boolean isEntityReachable(EntityPlayer player, Entity e) {
-        double dx = e.posX - player.posX, 
-                dy = e.posY - player.posY, 
-                dz = e.posZ - player.posZ;
-        double yaw = -MathUtils.toDegrees(Math.atan2(dx, dz));
-        return Math.abs(yaw - player.rotationYaw) % 360 < 60;
     }
     
     @Override
@@ -103,17 +77,17 @@ public class LightShield extends Skill {
         float exp;
         
         public LSAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             float overload = lerpf(198, 132, exp);
-            cpData.perform(overload, 0);
+            ctx().consume(overload, 0);
 
             if(isRemote)
                 startEffects();
@@ -127,18 +101,18 @@ public class LightShield extends Skill {
                 updateEffects();
 
             float cp = lerpf(12, 7, exp);
-            if(!cpData.perform(0, cp) && !isRemote)
+            if(!ctx().consume(0, cp) && !isRemote)
                 ActionManager.endAction(this);
-            aData.addSkillExp(instance, 1e-6f);
+            ctx().addSkillExp(1e-6f);
             
             if(!isRemote) {
                 // Find the entities that are 'colliding' with the shield.
                 List<Entity> candidates = WorldUtils.getEntities(player, 3,
-                        basicSelector.and(entity -> isEntityReachable(player, entity)).and(EntitySelectors.exclude(player)));
+                        basicSelector.and(this::isEntityReachable).and(EntitySelectors.exclude(player)));
                 for(Entity e : candidates) {
-                    if(e.hurtResistantTime <= 0 && cpData.perform(getAbsorbOverload(exp), getAbsorbConsumption(exp))) {
-                        MDDamageHelper.attack(player, instance, e, getTouchDamage(exp));
-                        aData.addSkillExp(instance, .001f);
+                    if(e.hurtResistantTime <= 0 && ctx().consume(getAbsorbOverload(), getAbsorbConsumption())) {
+                        MDDamageHelper.attack(ctx(), e, getTouchDamage());
+                        ctx().addSkillExp(.001f);
                     }
                 }
             }
@@ -146,7 +120,7 @@ public class LightShield extends Skill {
         
         @Override
         public void onEnd() {
-            setCooldown(instance, (int) lerpf(80, 60, exp));
+            ctx().setCooldown((int) lerpf(80, 60, exp));
         }
         
         @Override
@@ -162,7 +136,7 @@ public class LightShield extends Skill {
             Entity entity = src.getSourceOfDamage();
             boolean perform = false;
             if(entity != null) {
-                if(isEntityReachable(player, entity))
+                if(isEntityReachable(entity))
                     perform = true;
             } else {
                 perform = true;
@@ -170,13 +144,13 @@ public class LightShield extends Skill {
             
             if(perform) {
                 lastAbsorb = ticks;
-                if(cpData.perform(getAbsorbConsumption(exp), getAbsorbOverload(exp))) {
-                    float amt = getAbsorbDamage(exp);
+                if(ctx().consume(getAbsorbConsumption(), getAbsorbOverload())) {
+                    float amt = getAbsorbDamage();
                     damage -= Math.min(damage, amt);
                 }
             }
             
-            aData.addSkillExp(instance, .001f);
+            ctx().addSkillExp(.001f);
             return damage;
         }
         
@@ -215,6 +189,30 @@ public class LightShield extends Skill {
         public void endEffects() {
             shield.setDead();
             loopSound.stop();
+        }
+
+        float getAbsorbDamage() {
+            return lerpf(15, 50, exp);
+        }
+
+        float getTouchDamage() {
+            return lerpf(3, 8, exp);
+        }
+
+        float getAbsorbOverload() {
+            return lerpf(15, 10, exp);
+        }
+
+        float getAbsorbConsumption() {
+            return lerpf(50, 30, exp);
+        }
+
+        boolean isEntityReachable(Entity e) {
+            double dx = e.posX - player.posX,
+                    //dy = e.posY - player.posY,
+                    dz = e.posZ - player.posZ;
+            double yaw = -MathUtils.toDegrees(Math.atan2(dx, dz));
+            return Math.abs(yaw - player.rotationYaw) % 360 < 60;
         }
         
     }

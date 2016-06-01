@@ -6,8 +6,8 @@
 */
 package cn.academy.ability.api.context;
 
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.api.AbilityContext;
+import cn.academy.ability.api.Skill;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.IMessageDelegate;
@@ -20,11 +20,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * {@link Context} represents an environment that is bound to a specific player. When a context is activated
@@ -58,6 +56,8 @@ public class Context implements IMessageDelegate {
     List<ClientContext> clientContexts = new ArrayList<>();
 
     public final EntityPlayer player;
+    public final Skill skill;
+    public final AbilityContext ctx;
 
     Status status = Status.CONSTRUCTED;
 
@@ -66,8 +66,11 @@ public class Context implements IMessageDelegate {
     /**
      * Default ctor, must be kept for reflection creation
      */
-    public Context(EntityPlayer _player) {
+    public Context(EntityPlayer _player, Skill _skill) {
         player = _player;
+        skill = _skill;
+
+        ctx = AbilityContext.of(_player, _skill);
 
         if (isRemote()) {
             constructClientContexts();
@@ -82,8 +85,8 @@ public class Context implements IMessageDelegate {
     }
 
     @SideOnly(Side.CLIENT)
-    public Context() {
-        this(Minecraft.getMinecraft().thePlayer);
+    public Context(Skill _skill) {
+        this(Minecraft.getMinecraft().thePlayer, _skill);
     }
 
     EntityPlayer getPlayer() {
@@ -149,23 +152,6 @@ public class Context implements IMessageDelegate {
     @SideOnly(Side.CLIENT)
     protected ClientRuntime clientRuntime() {
         return ClientRuntime.instance();
-    }
-
-    private AbilityData cachedAData;
-    private CPData cachedCPData;
-
-    protected AbilityData aData() {
-        if (cachedAData == null) {
-            cachedAData = AbilityData.get(player);
-        }
-        return cachedAData;
-    }
-
-    protected CPData cpData() {
-        if (cachedCPData == null) {
-            cachedCPData = CPData.get(player);
-        }
-        return cachedCPData;
     }
 
     protected World world() {

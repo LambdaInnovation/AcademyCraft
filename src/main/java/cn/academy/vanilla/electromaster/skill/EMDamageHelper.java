@@ -6,6 +6,7 @@
 */
 package cn.academy.vanilla.electromaster.skill;
 
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.misc.achievements.ModuleAchievements;
@@ -14,18 +15,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class EMDamageHelper {
+class EMDamageHelper {
     
     /**
      * Attack with a change to generate a high-voltage creeper.
      */
-    static void attack(EntityPlayer player, Skill skill, Entity target, float dmg) {
-        AbilityPipeline.attack(player, skill, target, dmg);
+    static void attack(AbilityContext ctx, Entity target, float dmg) {
+        ctx.attack(target, dmg);
         if(target instanceof EntityCreeper) {
             if(RandUtils.nextFloat() < 0.3f) {
                 // Set the creeper to be powered
                 target.getDataWatcher().updateObject(17, (byte) 1);
-                ModuleAchievements.trigger(player, "electromaster.attack_creeper");
+                ModuleAchievements.trigger(ctx.player, "electromaster.attack_creeper");
             }
         }
     }

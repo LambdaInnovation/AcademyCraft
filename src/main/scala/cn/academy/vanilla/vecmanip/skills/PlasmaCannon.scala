@@ -53,12 +53,8 @@ import scala.collection.JavaConversions._
 import cn.lambdalib.util.generic.RandUtils._
 import net.minecraft.util.Vec3
 
-class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvider {
+class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
-
-  private implicit val skill_ = PlasmaCannon
-  private implicit val aData_ = aData()
-  private implicit val player_ = p
 
   var localTicker = 0
   var syncTicker  = 0
@@ -85,7 +81,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     localTicker += 1
 
     if (state == STATE_CHARGING && localTicker < chargeTime) {
-      consume()
+      tryConsume()
     }
 
     if (state == STATE_CHARGING && localTicker == chargeTime.toInt) {
@@ -95,12 +91,12 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform() = {
-    addSkillExp(0.008f)
+    ctx.addSkillExp(0.008f)
 
     destination = Raytrace.getLookingPos(player, 100, EntitySelectors.living).getLeft
     state = STATE_GO
     localTicker = 0
-    addSkillCooldown(lerpf(500, 400, skillExp).toInt)
+    ctx.setCooldown(lerpf(500, 400, ctx.getSkillExp).toInt)
     sendToClient(MSG_STATECHG, destination)
   }
 
@@ -121,7 +117,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
 
     if (state == STATE_CHARGING) {
       if (localTicker < chargeTime) {
-        if (!consume()) {
+        if (!tryConsume()) {
           terminate()
         }
       }
@@ -154,16 +150,16 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
       destination.x, destination.y, destination.z,
       10, EntitySelectors.everything)
           .foreach(entity => {
-            AbilityPipeline.attack(player, skill_, entity, rangef(0.8f, 1.2f) * lerpf(80, 150, skillExp))
+            ctx.attack(entity, rangef(0.8f, 1.2f) * lerpf(80, 150, ctx.getSkillExp))
             entity.hurtResistantTime = -1
           })
 
     val explosion = new Explosion(world, player,
       destination.x, destination.y, destination.z,
-      lerpf(12.0f, 15.0f, skillExp))
+      lerpf(12.0f, 15.0f, ctx.getSkillExp))
     explosion.isSmoking = true
 
-    if (AbilityPipeline.canBreakBlock) {
+    if (ctx.canBreakBlock) {
       explosion.doExplosionA()
     }
     explosion.doExplosionB(true)
@@ -171,16 +167,16 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p) with IStateProvide
     terminate()
   }
 
-  lazy val chargeTime = lerpf(100, 60, skillExp)
+  lazy val chargeTime = lerpf(100, 60, ctx.getSkillExp)
 
-  def consume() = {
-    val cp = lerpf(18, 25, skillExp)
-    val overload = lerpf(500f, 400f, skillExp) / chargeTime
+  def tryConsume() = {
+    val cp = lerpf(18, 25, ctx.getSkillExp)
+    val overload = lerpf(500f, 400f, ctx.getSkillExp) / chargeTime
 
-    cpData.perform(overload, cp)
+    ctx.consume(overload, cp)
   }
 
-  lazy val consumption = lerpf(3500, 2000, skillExp)
+  lazy val consumption = lerpf(3500, 2000, ctx.getSkillExp)
 
   override def getState = {
     if (state == STATE_CHARGING)

@@ -10,6 +10,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.*;
+import cn.academy.core.config.ACConfig;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.nbt.NBTS11n;
@@ -50,6 +51,8 @@ public class AbilityData extends DataPart<EntityPlayer> {
     private float[] skillExps;
     @SerializeIncluded
     private int level;
+    @SerializeIncluded
+    private float expAddedThisLevel;
     
     private int updateTicker = 0;
 
@@ -81,8 +84,9 @@ public class AbilityData extends DataPart<EntityPlayer> {
                 level = 0;
             }
 
-            for(int i = 0; i < skillExps.length; ++i)
+            for(int i = 0; i < skillExps.length; ++i) {
                 skillExps[i] = 0.0f;
+            }
             learnedSkills.set(0, learnedSkills.size(), false);
 
             sync();
@@ -130,9 +134,18 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
         if(level != lv) {
             level = lv;
+            expAddedThisLevel = 0;
             MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));
             sync();
         }
+    }
+
+    /**
+     * For DEBUG/Command only: max out current level.
+     */
+    public void maxOutLevelProgress() {
+        expAddedThisLevel = 100;
+        sync();
     }
     
     /**
@@ -208,11 +221,21 @@ public class AbilityData extends DataPart<EntityPlayer> {
             int id = skill.getID();
             float added = Math.min(1.0f - skillExps[id], amt);
             skillExps[skill.getID()] += added;
+            addLevelProgress(amt);
 
             MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
             MinecraftForge.EVENT_BUS.post(new SkillExpAddedEvent(getEntity(), skill, amt));
             scheduleUpdate(25);
         }
+    }
+
+    public float getLevelProgress() {
+        float threshold = getLevelTotalExp() * (level == 4 ? 1.333f : 0.666f);
+        return threshold == 0 ? 1 : Math.min(1, expAddedThisLevel / threshold);
+    }
+
+    public boolean canLevelUp() {
+        return getLevel() < 5 && getLevelProgress() == 1;
     }
     
     /**
@@ -271,8 +294,26 @@ public class AbilityData extends DataPart<EntityPlayer> {
         Preconditions.checkState(checkSkillSoft(s), "Skill " + s + " not in category #" + catID);
     }
 
+    private float getLevelTotalExp() {
+        if (hasCategory()) {
+            List<Skill> testSkills = getCategory().getSkillList()
+                    .stream()
+                    .filter(skill -> skill.canControl() && skill.getLevel() == getLevel())
+                    .collect(Collectors.toList());
+            return testSkills.size();
+        }
+
+        return 0;
+    }
+
     private boolean checkSkillSoft(Skill s) {
         return s.getCategory().getCategoryID() == catID;
+    }
+
+    private void addLevelProgress(float consumedExp) {
+        float mul0 = getCategory().getProgIncrRate();
+        float mul1 = (float) ACConfig.instance().getDouble("ac.ability.data.prog_incr_rate");
+        expAddedThisLevel += consumedExp * mul0 * mul1;
     }
 
     private void checkLearned() {

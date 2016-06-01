@@ -44,8 +44,34 @@ public abstract class MineRaysBase extends Skill {
         super("mine_ray_" + _postfix, atLevel);
         postfix = _postfix;
     }
-    
-    public static abstract class MRAction extends SkillSyncAction {
+
+    /**
+     * <p>
+     * Note: Currently the MRAction uses getter/setter pattern to set the overload, consumption parameters.
+     * This is error prone and might lead to of misuse.
+     * </p>
+     *
+     * <p>
+     * It can be improved by using the builder pattern, for example:
+     * </p>
+     *
+     * <code>
+     * public SomeSubAction extends MRaction {
+     *
+     *     public SomeSubAction() {
+     *         super(_skill, ParamsBuilder()
+     *          .consumption(10, 20)
+     *          .overload(2, 3)
+     *          .build());
+     *     }
+     *
+     * }
+     * </code> <br>
+     *
+     * The ParamsBuilder can provide additional safety check for parameters.
+     *
+     */
+    public static abstract class MRAction extends SkillSyncAction<MineRaysBase> {
         final MineRaysBase skill;
         
         int x = -1, y = -1, z = -1;
@@ -54,6 +80,7 @@ public abstract class MineRaysBase extends Skill {
         float exp;
         
         public MRAction(MineRaysBase _skill) {
+            super(_skill);
             skill = _skill;
         }
         
@@ -61,16 +88,16 @@ public abstract class MineRaysBase extends Skill {
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(skill);
+            exp = ctx().getSkillExp();
 
-            cpData.perform(lerpf(o_l, o_r, exp), 0);
+            ctx().consume(lerpf(o_l, o_r, exp), 0);
             if(isRemote)
                 startEffects();
         }
         
         @Override
         public void onTick() {
-            if(!cpData.perform(0, lerpf(cp_l, cp_r, exp)) && !isRemote)
+            if(!ctx().consume(0, lerpf(cp_l, cp_r, exp)) && !isRemote)
                 ActionManager.abortAction(this);
             
             MovingObjectPosition result = Raytrace.traceLiving(player, range, EntitySelectors.nothing());
@@ -93,7 +120,7 @@ public abstract class MineRaysBase extends Skill {
                     if(hardnessLeft <= 0) {
                         if(!isRemote) {
                             onBlockBreak(world, x, y, z, world.getBlock(x, y, z));
-                            aData.addSkillExp(skill, expincr);
+                            ctx().addSkillExp(expincr);
                         }
                         x = y = z = -1;
                     }
@@ -112,7 +139,7 @@ public abstract class MineRaysBase extends Skill {
         public void onFinalize() {
             if(isRemote)
                 endEffects();
-            setCooldown(skill, (int) lerpf(cd_l, cd_r, exp));
+            ctx().setCooldown((int) lerpf(cd_l, cd_r, exp));
         }
         
         // CLIENT

@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
@@ -55,41 +54,45 @@ public class ElectronBomb extends Skill {
         return new SkillInstanceInstant().addChild(new EBAction());
     }
     
-    public static class EBAction extends SyncActionInstant {
+    public static class EBAction extends SyncActionInstant<ElectronBomb> {
+
+        public EBAction() {
+            super(instance);
+        }
 
         @Override
         public boolean validate() {
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
             float overload = lerpf(39, 17, exp);
             float cp = lerpf(117, 135, exp);
 
-            return cpData.perform(overload, cp);
+            return ctx().consume(overload, cp);
         }
 
         @Override
         public void execute() {
-            float exp = aData.getSkillExp(instance);
+            float exp = ctx().getSkillExp();
 
             if(!isRemote) {
-                EntityMdBall ball = new EntityMdBall(player, aData.getSkillExp(instance) >= 0.8f ? LIFE_IMPROVED : LIFE, 
+                EntityMdBall ball = new EntityMdBall(player, ctx().getSkillExp() >= 0.8f ? LIFE_IMPROVED : LIFE,
                 new EntityCallback<EntityMdBall>() {
 
                     @Override
                     public void execute(EntityMdBall ball) {
-                        MovingObjectPosition trace = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player),
+                        MovingObjectPosition trace = Raytrace.perform(player.worldObj, VecUtils.vec(ball.posX, ball.posY, ball.posZ), getDest(player),
                                 EntitySelectors.exclude(player).and(EntitySelectors.of(EntityMdBall.class).negate()));
                         if(trace != null && trace.entityHit != null) {
-                            MDDamageHelper.attack(player, instance, trace.entityHit, getDamage(exp));
+                            MDDamageHelper.attack(ctx(), trace.entityHit, getDamage(exp));
                         }
                         actionClient(player, ball);
                     }
                     
                 });
-                world.spawnEntityInWorld(ball);
+                player.worldObj.spawnEntityInWorld(ball);
             }
             
-            aData.addSkillExp(instance, .005f);
-            setCooldown(instance, (int) lerpf(20, 10, exp));
+            ctx().addSkillExp(.005f);
+            ctx().setCooldown((int) lerpf(20, 10, exp));
         }
         
     }
