@@ -333,6 +333,7 @@ ac.command.aim.nonecat=无能力
 ac.command.aim.noskill=该技能不存在。使用 /aim skills 以列出当前能力系的所有技能。
 ac.command.aim.learned.format=已习得技能: %s
 ac.command.aim.curexp=技能 %s的当前经验: %.0f%%.
+ac.command.aim.maxout=/aim maxout: 将当前等级升级进度设置为100%%。
 
 # 成就
 achievement.ac_phase_liquid=新能源

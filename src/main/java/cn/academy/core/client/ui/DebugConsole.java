@@ -8,7 +8,6 @@ package cn.academy.core.client.ui;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.ModuleCoreClient;
@@ -105,6 +104,7 @@ public class DebugConsole extends AuxGui {
                 texts.add(new Text("CPData.activated: " + cpData.isActivated()));
                 texts.add(new Text("CPData.addMaxCP: " + cpData.getAddMaxCP()));
                 texts.add(new Text("CPData.interfering: " + cpData.isInterfering()));
+                texts.add(new Text(String.format(" AData.levelProgress: %.2f%%", aData.getLevelProgress() * 100)));
             }
             break;
         case SHOW_EXP:

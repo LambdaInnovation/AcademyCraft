@@ -366,16 +366,6 @@ public class CPData extends DataPart<EntityPlayer> {
         return CalcEvent.calc(new OverloadRecoverSpeed(getEntity(), 1)) * raw;
     }
     
-    public boolean canLevelUp() {
-        return AbilityData.get(getEntity()).getLevel() < 5 && getLevelProgress() == 1;
-    }
-    
-    public float getLevelProgress() {
-        AbilityData aData = AbilityData.get(getEntity());
-        if (!aData.hasCategory()) return 0;
-        else                      return addMaxCP / getMaxAddCP(AbilityData.get(getEntity()).getLevel());
-    }
-    
     /**
      * Can be called in both sides. Consumes the CP and return whether the action is successful.
      * Will just make a simulation in client side.

@@ -438,7 +438,7 @@ private object Common {
       val panel = ret.child("parent_left/panel_ability")
 
       val (icon, name, prog) = Option(aData.getCategoryNullable) match {
-        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress))
+        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, aData.getLevelProgress))
         case None => (Resources.getTexture("guis/icons/icon_nocategory"), "N/A", 0.0f)
       }
 
@@ -449,7 +449,7 @@ private object Common {
 
       {
         val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(cpData.getLevelProgress * 100))
+        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(aData.getLevelProgress * 100))
       }
 
       if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
