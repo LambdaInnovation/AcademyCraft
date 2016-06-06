@@ -57,7 +57,7 @@ public final class ACConfig {
     }
 
     @RegInitCallback
-    public static void __forceLoadAtInit() {
+    private static void __forceLoadAtInit() {
         instance();
 
         FMLCommonHandler.instance().bus().register(new LoginEvents());

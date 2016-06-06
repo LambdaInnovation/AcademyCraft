@@ -7,12 +7,11 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.misc.tutorial.client.GuiTutorial;
-import cn.academy.support.BlockConverterBase;
 import cn.academy.support.rf.RFSupport;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
@@ -28,7 +27,6 @@ import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 import static cn.academy.misc.tutorial.Conditions.*;

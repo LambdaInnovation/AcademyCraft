@@ -1,19 +1,20 @@
 package cn.academy.vanilla.vecmanip.client.effect
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegEntity}
+import cn.lambdalib.annoreg.mc.{RegEntity, RegInitCallback}
 import cn.lambdalib.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib.util.deprecated.{MeshUtils, SimpleMaterial, Mesh}
+import cn.lambdalib.util.deprecated.{Mesh, MeshUtils, SimpleMaterial}
 import cn.lambdalib.util.generic.{MathUtils, RandUtils}
 import cn.lambdalib.vis.curve.CubicCurve
 import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{SideOnly, Side}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
+
 import scala.collection.mutable
 
 @SideOnly(Side.CLIENT)

@@ -1,19 +1,12 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client;
 
 import cn.academy.core.AcademyCraft;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.util.client.font.Fonts;
 import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.client.font.TrueTypeFont;
 import cn.lambdalib.util.generic.RegistryUtils;
 import com.google.common.base.Throwables;
@@ -45,58 +38,37 @@ import static org.lwjgl.opengl.GL12.GL_BGRA;
 import static org.lwjgl.opengl.GL12.GL_UNSIGNED_INT_8_8_8_8_REV;
 
 /**
- * The core resource utils of AC.
- * @author WeathFolD
+ * A delegation for client resources loading. Should not refer to explicitly.
+ * @see cn.academy.core.Resources
  */
 @Registrant
-@ForcePreloadTexture
-public class Resources {
-    
-    // PUBLICLY USED RESOURCES
-    // TODO Move textures that are not public to their own place
-    
-    public static ResourceLocation
-        TEX_COIN_FRONT = res("textures/items/coin_front.png"),
-        TEX_COIN_BACK = res("textures/items/coin_back.png");
-    
-    public static ResourceLocation
-        TEX_EMPTY = getTexture("null");
+@SideOnly(Side.CLIENT)
+public class ClientResources {
 
-    public static ResourceLocation
-        TEX_GLOW_LINE = getTexture("effects/glow_line");
-    
-    public static ResourceLocation
-        ARC_SMALL[] = getEffectSeq("arcs", 10);
-    
+    private static boolean fontsInit = false;
+    private static TrueTypeFont font, fontBold, fontItalic;
+
     private static Map<String, IModelCustom> cachedModels = new HashMap<>();
-    
-    /**
-     * Get the model instance of the given name. If the name is
-     * first queried, will load that resource from the file system.
-     */
-    public static IModelCustom getModel(String mdlName) {
-        IModelCustom ret = cachedModels.get(mdlName);
-        if(ret != null)
-            return ret;
-        ret = AdvancedModelLoader.loadModel(res("models/" + mdlName + ".obj"));
-        cachedModels.put(mdlName, ret);
-        return ret;
-    }
-    
-    public static ResourceLocation getTexture(String loc) {
-        return res("textures/" + loc + ".png");
+
+    public static IFont font() {
+        checkFontInit();
+        return font;
     }
 
-    /**
-     * Get the resource location for the texture path specified, and preload it in the MC texture manager with generated
-     *  mipmap.
-     * @throws RuntimeException when texture IO failed
-     */
-    @SideOnly(Side.CLIENT)
+    public static IFont fontBold() {
+        checkFontInit();
+        return fontBold;
+    }
+
+    public static IFont fontItalic() {
+        checkFontInit();
+        return fontItalic;
+    }
+
     public static ResourceLocation preloadMipmapTexture(String loc) {
         TextureManager texManager = Minecraft.getMinecraft().getTextureManager();
 
-        ResourceLocation ret = getTexture(loc);
+        ResourceLocation ret = Resources.getTexture(loc);
 
         ITextureObject loadedTexture = texManager.getTexture(ret);
         if (loadedTexture == null) {
@@ -149,9 +121,8 @@ public class Resources {
         return ret;
     }
 
-    @SideOnly(Side.CLIENT)
     public static ResourceLocation preloadTexture(String loc) {
-        ResourceLocation ret = getTexture(loc);
+        ResourceLocation ret = Resources.getTexture(loc);
 
         TextureManager texManager = Minecraft.getMinecraft().getTextureManager();
         ITextureObject loadedTexture = texManager.getTexture(ret);
@@ -161,78 +132,33 @@ public class Resources {
 
         return ret;
     }
-    
-    public static ResourceLocation getShader(String loc) {
-        return res("shaders/" + loc);
-    }
 
-    public static ResourceLocation getGui(String loc) {
-        return res("guis/" + loc + ".xml");
-    }
-
-    public static ResourceLocation[] getTextureSeq(String loc, int n) {
-        ResourceLocation[] ret = new ResourceLocation[n];
-        for(int i = 0; i < n; ++i)
-            ret[i] = getTexture(loc + i);
-        return ret;
-    }
-    
-    public static ResourceLocation[] getEffectSeq(String effectName, int n) {
-        ResourceLocation[] layers = new ResourceLocation[n];
-        String baseName = "academy:textures/effects/" + effectName + "/";
-        for(int i = 0; i < n; ++i) {
-            layers[i] = new ResourceLocation(baseName + i + ".png");
-        }
-        return layers;
-    }
-    
-    public static ResourceLocation[] getRayTextures(String name) {
-        ResourceLocation r1 = new ResourceLocation("academy:textures/effects/" + name + "/blend_in.png");
-        ResourceLocation r2 = new ResourceLocation("academy:textures/effects/" + name + "/tile.png");
-        ResourceLocation r3 = new ResourceLocation("academy:textures/effects/" + name + "/blend_out.png");
-        return new ResourceLocation[] { r1, r2, r3 };
-    }
-
-    private static boolean init = false;
-    private static TrueTypeFont font, fontBold, fontItalic;
-    public static IFont font() {
-        checkFontInit();
-        return font;
-    }
-    public static IFont fontBold() {
-        checkFontInit();
-        return fontBold;
-    }
-    public static IFont fontItalic() {
-        checkFontInit();
-        return fontItalic;
-    }
-
-    /**
-     * @return A text box with AcademyCraft's mod font.
-     */
-    @SideOnly(Side.CLIENT)
     public static TextBox newTextBox() {
         TextBox ret = new TextBox();
         ret.font = font();
         return ret;
     }
 
-    /**
-     * @return A text box with AcademyCraft's mod font.
-     */
-    @SideOnly(Side.CLIENT)
-    public static TextBox newTextBox(FontOption option) {
+    public static TextBox newTextBox(IFont.FontOption option) {
         TextBox ret = new TextBox(option);
         ret.font = font();
         return ret;
     }
 
-    private static void checkFontInit() {
-        if (!init) {
-            init = true;
+    public static IModelCustom getModel(String mdlName) {
+        IModelCustom ret = cachedModels.get(mdlName);
+        if(ret != null)
+            return ret;
+        ret = AdvancedModelLoader.loadModel(Resources.res("models/" + mdlName + ".obj"));
+        cachedModels.put(mdlName, ret);
+        return ret;
+    }
 
-            // TODO: Add this to settings page, though it will require restart to take effect
+    private static void checkFontInit() {
+        if (!fontsInit) {
+            fontsInit = true;
+
+            // TODO: Add this to settings page?
 
             Configuration config = AcademyCraft.config;
             String userSpecified = config.getString("font", "gui", "Microsoft YaHei",
@@ -240,20 +166,19 @@ public class Resources {
 
             font = TrueTypeFont.withFallback2(Font.PLAIN, 24,
                     new String[] {
-                        userSpecified,
-                        "微软雅黑",
-                        "Microsoft YaHei",
-                        "SimHei",
-                        "Adobe Heiti Std R"
+                            userSpecified,
+                            "微软雅黑",
+                            "Microsoft YaHei",
+                            "SimHei",
+                            "Adobe Heiti Std R"
                     });
             fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
             fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @RegPreInitCallback
-    public static void __preInit() {
+    private static void __preInit() {
         checkFontInit();
         // TODO: Disaster if any ui initializes before preInit...
 
@@ -261,9 +186,4 @@ public class Resources {
         Fonts.register("AC_Bold", fontBold());
         Fonts.register("AC_Italic", fontItalic());
     }
-    
-    private static ResourceLocation res(String loc) {
-        return new ResourceLocation("academy:" + loc);
-    }
-    
 }

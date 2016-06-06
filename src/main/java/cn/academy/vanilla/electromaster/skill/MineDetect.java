@@ -12,7 +12,7 @@ import cn.academy.ability.api.ctrl.action.SyncActionInstant;
 import cn.academy.ability.api.ctrl.instance.SkillInstanceInstant;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.lambdalib.annoreg.core.Registrant;

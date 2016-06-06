@@ -38,7 +38,7 @@ public class MDDamageHelper {
     private static final String MARKID = "md_marktick", RATEID = "md_markrate";
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         MinecraftForge.EVENT_BUS.register(new Events());
     }
     

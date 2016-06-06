@@ -7,7 +7,7 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.LocalHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.academy.misc.tutorial.client.RecipeHandler;
 import cn.lambdalib.annoreg.core.Registrant;

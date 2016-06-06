@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.electromaster.client.renderer;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.lambdalib.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;

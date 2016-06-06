@@ -23,8 +23,6 @@ import cn.lambdalib.util.entityx.EntityAdvanced;
 import cn.lambdalib.util.entityx.MotionHandler;
 import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.helper.EntitySyncer.SyncType;
-import cn.lambdalib.util.helper.EntitySyncer.Synchronized;
 import cn.lambdalib.util.mc.PlayerUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -34,11 +32,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
 
 /**
  * 
@@ -212,7 +208,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     @RegEventHandler(Bus.Forge)
     public static class EventListener {
         @RegInitCallback
-        public static void init() {
+        private static void init() {
             PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
                 "generic", false, "Show heads or tails after throwing a coin.");
         }

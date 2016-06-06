@@ -6,7 +6,7 @@
 */
 package cn.academy.misc.media;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.media.MediaRuntime.PlayState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.ClientUtils;

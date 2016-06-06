@@ -22,6 +22,8 @@ import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -31,12 +33,13 @@ import net.minecraft.util.StatCollector;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class LocTeleportUI extends CGuiScreen {
 
     private static WidgetContainer document;
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/loctele.xml"));
     }
 

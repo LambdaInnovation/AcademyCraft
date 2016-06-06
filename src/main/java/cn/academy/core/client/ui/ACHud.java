@@ -13,6 +13,8 @@ import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
 import com.google.common.collect.ImmutableList;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -22,10 +24,10 @@ import java.util.List;
 
 /**
  * AC global HUD drawing dispatcher.
- * TODO: Support position customizing
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class ACHud extends AuxGui {
     
     @RegAuxGui
@@ -35,7 +37,7 @@ public class ACHud extends AuxGui {
     
     private CGui gui = new CGui();
 
-    ACHud() {}
+    private ACHud() {}
 
     @Override
     public boolean isForeground() {

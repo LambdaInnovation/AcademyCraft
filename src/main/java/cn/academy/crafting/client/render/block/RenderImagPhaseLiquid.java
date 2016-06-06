@@ -6,8 +6,7 @@
 */
 package cn.academy.crafting.client.render.block;
 
-import cn.academy.core.client.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
+import cn.academy.core.Resources;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.Minecraft;
@@ -24,16 +23,14 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
- *
  */
-@Registrant
 public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
     
-    public ResourceLocation[] layers;
-    
-    Tessellator t;
-    
-    RenderBlockFluid rbf = RenderBlockFluid.instance;
+    private ResourceLocation[] layers;
+
+    private Tessellator t;
+
+    private RenderBlockFluid rbf = RenderBlockFluid.instance;
     
     public RenderImagPhaseLiquid() {
         t = Tessellator.instance;

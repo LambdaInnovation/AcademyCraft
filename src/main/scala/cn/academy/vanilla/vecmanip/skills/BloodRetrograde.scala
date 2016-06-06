@@ -87,6 +87,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BloodRetroContext])
 class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
 

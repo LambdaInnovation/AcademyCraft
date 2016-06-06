@@ -115,6 +115,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecAccelContext])
 class VecAccelContextC(par: VecAccelContext) extends ClientContext(par) {
 

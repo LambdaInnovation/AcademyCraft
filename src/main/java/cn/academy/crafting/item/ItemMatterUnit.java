@@ -6,7 +6,7 @@
 */
 package cn.academy.crafting.item;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.crafting.api.event.MatterUnitHarvestEvent;
 import cn.academy.crafting.client.render.item.RendererMatterUnit;

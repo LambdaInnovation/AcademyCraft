@@ -6,7 +6,7 @@
 */
 package cn.academy.energy.client.render.block;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.block.TileCatEngine;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.helper.GameTimer;

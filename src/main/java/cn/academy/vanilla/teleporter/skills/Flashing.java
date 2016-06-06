@@ -13,7 +13,7 @@ import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
 import cn.academy.ability.api.context.KeyDelegate;
 import cn.academy.ability.api.event.FlushControlEvent;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;

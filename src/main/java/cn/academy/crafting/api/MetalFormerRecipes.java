@@ -9,13 +9,10 @@ package cn.academy.crafting.api;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -71,7 +68,7 @@ public enum MetalFormerRecipes {
     }
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         NetworkS11n.addDirect(RecipeObject.class, new NetS11nAdaptor<RecipeObject>() {
             @Override
             public void write(ByteBuf buf, RecipeObject obj) {

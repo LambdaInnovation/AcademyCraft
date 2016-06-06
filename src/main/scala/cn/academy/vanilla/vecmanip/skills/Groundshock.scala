@@ -226,6 +226,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[GroundshockContext])
 class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
 

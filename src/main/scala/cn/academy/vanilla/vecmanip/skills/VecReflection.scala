@@ -157,6 +157,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecReflectionContext])
 class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par) {
 

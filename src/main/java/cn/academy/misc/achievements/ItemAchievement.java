@@ -6,7 +6,7 @@
 */
 package cn.academy.misc.achievements;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.achievements.client.RenderItemAchievement;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;

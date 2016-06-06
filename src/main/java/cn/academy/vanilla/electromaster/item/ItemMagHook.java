@@ -7,7 +7,7 @@
 package cn.academy.vanilla.electromaster.item;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.template.client.render.item.RenderModelItem;

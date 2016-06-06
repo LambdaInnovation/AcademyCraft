@@ -8,11 +8,10 @@ package cn.academy.misc.tutorial.client;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
-import cn.academy.misc.tutorial.client.ACMarkdownRenderer;
+import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.ACTutorial;
-import cn.academy.misc.tutorial.ViewGroup;
 import cn.academy.misc.tutorial.TutorialRegistry;
+import cn.academy.misc.tutorial.ViewGroup;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGuiScreen;
@@ -32,6 +31,8 @@ import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.markdown.GLMarkdownRenderer;
 import cn.lambdalib.util.markdown.MarkdownParser;
 import com.google.common.base.Preconditions;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -43,20 +44,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cn.lambdalib.template.client.render.block.RenderEmptyBlock.id;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class GuiTutorial extends CGuiScreen {
 
     private static IFont font, fontBold, fontItalic;
 
     private static WidgetContainer loaded;
+
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
         font = Resources.font();
         fontBold = Resources.fontBold();

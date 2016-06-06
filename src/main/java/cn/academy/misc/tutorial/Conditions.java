@@ -123,7 +123,7 @@ public class Conditions {
     }
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         Conditions instance = new Conditions();
         MinecraftForge.EVENT_BUS.register(instance);
         FMLCommonHandler.instance().bus().register(instance);

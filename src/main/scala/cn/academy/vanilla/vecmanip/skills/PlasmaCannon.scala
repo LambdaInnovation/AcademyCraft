@@ -248,6 +248,7 @@ private class Tornado(val ctx: PlasmaCannonContext)
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[PlasmaCannonContext])
 class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self) {
 

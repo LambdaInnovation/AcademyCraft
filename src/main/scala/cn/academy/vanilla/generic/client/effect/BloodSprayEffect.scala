@@ -1,11 +1,11 @@
 package cn.academy.vanilla.generic.client.effect
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.RenderUtils
-import cn.lambdalib.util.deprecated.{SimpleMaterial, MeshUtils, Mesh}
+import cn.lambdalib.util.deprecated.{Mesh, MeshUtils, SimpleMaterial}
 import cn.lambdalib.util.generic.RandUtils
 import cn.lambdalib.util.mc.{EntityLook, Vec3}
 import cpw.mods.fml.client.registry.RenderingRegistry

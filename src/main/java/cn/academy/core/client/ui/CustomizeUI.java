@@ -19,16 +19,19 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
 import cn.lambdalib.cgui.gui.event.LeftClickEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
 
 @Registrant
+@SideOnly(Side.CLIENT)
 public class CustomizeUI extends CGuiScreen {
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         SettingsUI.addCallback("edit_ui", "misc", () -> {
             Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
         }, false);

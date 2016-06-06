@@ -8,7 +8,7 @@ package cn.academy.energy.client.app;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;

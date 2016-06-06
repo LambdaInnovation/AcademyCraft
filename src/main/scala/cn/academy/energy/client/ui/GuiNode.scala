@@ -1,21 +1,20 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.block.BlockNode.NodeType
-import cn.academy.energy.block.{TileNode, ContainerNode}
-
+import cn.academy.energy.block.{ContainerNode, TileNode}
 import cn.academy.core.client.ui._
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.s11n.network.{Future, NetworkS11n, NetworkMessage}
+import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.client.{RenderUtils, HudUtils}
+import cn.lambdalib.util.client.{HudUtils, RenderUtils}
 import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
@@ -138,7 +137,7 @@ object NodeNetworkProxy {
   final val MSG_QUERY_LINK = "query_link"
 
   @RegInitCallback
-  def __init() = {
+  private def __init() = {
     NetworkS11n.addDirectInstance(NodeNetworkProxy)
   }
 

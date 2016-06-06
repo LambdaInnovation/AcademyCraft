@@ -176,6 +176,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip2) wit
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MagManipContext])
 class MagManipContextC(par: MagManipContext) extends ClientContext(par) {
 

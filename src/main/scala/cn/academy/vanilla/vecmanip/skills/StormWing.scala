@@ -274,6 +274,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[StormWingContext])
 class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
 

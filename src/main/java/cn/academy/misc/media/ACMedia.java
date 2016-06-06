@@ -1,9 +1,6 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.Resources;
-import com.google.common.base.Throwables;
-import com.jcraft.jorbis.JOrbisException;
 import com.jcraft.jorbis.VorbisFile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,8 +9,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 public abstract class ACMedia {

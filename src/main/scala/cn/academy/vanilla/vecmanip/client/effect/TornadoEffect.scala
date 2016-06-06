@@ -2,7 +2,7 @@ package cn.academy.vanilla.vecmanip.client.effect
 
 import javax.vecmath.Vector2d
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.util.client.RenderUtils
 import cn.lambdalib.util.helper.GameTimer
@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import cn.academy.core.util.ImprovedNoise._
 import cn.lambdalib.util.generic.RandUtils._
 import org.lwjgl.opengl.GL11._
+
 import collection.mutable
 
 @SideOnly(Side.CLIENT)

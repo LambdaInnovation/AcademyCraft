@@ -6,10 +6,9 @@
 */
 package cn.academy.ability.client.ui;
 
-import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
@@ -17,6 +16,8 @@ import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.client.auxgui.AuxGuiRegistry.RegAuxGui;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import org.lwjgl.opengl.GL11;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegAuxGui
 public class BackgroundMask extends AuxGui {
     

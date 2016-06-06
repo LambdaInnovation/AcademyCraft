@@ -1,6 +1,6 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
 import cn.academy.energy.block.ContainerSolarGen
 import cn.academy.energy.block.TileSolarGen.SolarStatus

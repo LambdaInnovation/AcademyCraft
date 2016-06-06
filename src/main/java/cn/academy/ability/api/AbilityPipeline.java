@@ -45,7 +45,7 @@ public class AbilityPipeline {
     private static Property propDestroyBlocks;
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         Configuration conf = AcademyCraft.config;
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");

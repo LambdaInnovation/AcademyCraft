@@ -191,7 +191,7 @@ public class ModuleCrafting {
     }
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         GENERATE_ORES = AcademyCraft.config.getBoolean("genOres", "generic", true, "Whether the ores will be generated in overworld.");
         GENERATE_PHASE_LIQUID = AcademyCraft.config.getBoolean("genPhaseLiquid", "generic", true, "Whether phase liquid will be generated in overworld.");
         

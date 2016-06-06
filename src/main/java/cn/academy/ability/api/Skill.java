@@ -15,7 +15,7 @@ import cn.academy.ability.develop.condition.DevConditionDep;
 import cn.academy.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.ability.develop.condition.DevConditionLevel;
 import cn.academy.ability.develop.condition.IDevCondition;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.config.ACConfig;
 import cn.academy.misc.achievements.ModuleAchievements;
 import com.google.common.base.Preconditions;

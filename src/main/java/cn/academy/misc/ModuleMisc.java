@@ -27,7 +27,7 @@ public class ModuleMisc {
     public static ItemMedia itemMedia;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         String[] mediaApperance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
                 DUNGEON_CHEST };
 

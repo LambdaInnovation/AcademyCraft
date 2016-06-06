@@ -7,24 +7,13 @@
 package cn.academy.energy.client.gui;
 
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
-import cn.academy.energy.api.block.IWirelessUser;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.Tint;
-import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.networkcall.Future;
+import cn.academy.core.Resources;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.Extent;
-import cn.lambdalib.util.client.font.IFont.FontAlign;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 

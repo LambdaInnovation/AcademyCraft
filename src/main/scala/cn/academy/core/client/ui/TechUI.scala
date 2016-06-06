@@ -1,7 +1,6 @@
 package cn.academy.core.client.ui
 
-import cn.academy.core.LocalHelper
-import cn.academy.core.client.Resources
+import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
@@ -724,7 +723,7 @@ object WirelessNetDelegate {
   import WirelessPage._
 
   @RegInitCallback
-  def __init() = {
+  private def __init() = {
     NetworkS11n.addDirectInstance(WirelessNetDelegate)
   }
 

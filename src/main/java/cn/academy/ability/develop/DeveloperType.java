@@ -6,7 +6,7 @@
 */
 package cn.academy.ability.develop;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.IFConstants;
 import net.minecraft.util.ResourceLocation;
 

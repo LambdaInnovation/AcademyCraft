@@ -115,7 +115,7 @@ private class InitData {
 private object MatrixNetProxy {
 
   @RegInitCallback
-  def __init() = {
+  private def __init() = {
     NetworkS11n.addDirectInstance(MatrixNetProxy)
   }
 

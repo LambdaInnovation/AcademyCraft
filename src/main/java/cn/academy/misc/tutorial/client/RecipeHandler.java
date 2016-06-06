@@ -7,7 +7,7 @@
 package cn.academy.misc.tutorial.client;
 
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.api.MetalFormerRecipes;

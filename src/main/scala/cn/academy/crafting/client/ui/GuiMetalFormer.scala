@@ -1,6 +1,6 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
@@ -73,7 +73,7 @@ object GuiMetalFormer {
 private object MFNetDelegate {
 
   @RegInitCallback
-  def init() = {
+  private def init() = {
     NetworkS11n.addDirectInstance(MFNetDelegate)
   }
 

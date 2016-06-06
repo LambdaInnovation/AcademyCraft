@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.client;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderSimple;

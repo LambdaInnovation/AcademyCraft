@@ -6,7 +6,7 @@
 */
 package cn.academy.core.client.ui;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.TutorialActivatedEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;

@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;

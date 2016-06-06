@@ -26,7 +26,7 @@ public class EnergyItemHelper {
     private static List<EnergyItemManager> supported = new ArrayList<>();
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         register(IFItemManager.instance);
     }
 

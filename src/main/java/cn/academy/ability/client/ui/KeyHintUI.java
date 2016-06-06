@@ -14,7 +14,7 @@ import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.cooldown.CooldownData.SkillCooldown;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;

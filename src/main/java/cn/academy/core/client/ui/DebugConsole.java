@@ -11,7 +11,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.ModuleCoreClient;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.client.auxgui.AuxGui;
@@ -20,6 +20,8 @@ import cn.lambdalib.util.client.font.IFont;
 import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.key.KeyHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +35,7 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class DebugConsole extends AuxGui {
     
     private static class Text {
@@ -56,7 +59,7 @@ public class DebugConsole extends AuxGui {
     static DebugConsole INSTANCE;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         AuxGuiHandler.register(INSTANCE = new DebugConsole());
         ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
             @Override

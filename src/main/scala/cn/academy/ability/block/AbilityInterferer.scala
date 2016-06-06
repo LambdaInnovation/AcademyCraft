@@ -11,8 +11,8 @@ import java.util.function.Supplier
 
 import cn.academy.ability.api.data.CPData
 import cn.academy.ability.api.data.CPData.IInterfSource
+import cn.academy.core.Resources
 import cn.academy.core.block.ACBlockContainer
-import cn.academy.core.client.Resources
 import cn.academy.core.client.render.block.RenderDynamicBlock
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}

@@ -47,7 +47,7 @@ public class RFSupport {
     }
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());
         

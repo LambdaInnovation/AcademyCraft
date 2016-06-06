@@ -151,6 +151,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecDeviationContext])
 class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) {
 

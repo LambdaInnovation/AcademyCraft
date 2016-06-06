@@ -6,7 +6,6 @@
 */
 package cn.academy.ability.api.data;
 
-import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
@@ -37,7 +36,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -49,7 +47,7 @@ import java.util.stream.IntStream;
 public class PresetData extends DataPart<EntityPlayer> {
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         NBTS11n.addBase(Preset.class, new BaseSerializer<NBTBase, Preset>() {
             @Override
             public NBTBase write(Preset value) {

@@ -6,7 +6,7 @@
 */
 package cn.academy.energy.client.render.block;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.block.TileMatrix;
 import cn.lambdalib.multiblock.RenderBlockMulti;
 import cn.lambdalib.util.client.RenderUtils;

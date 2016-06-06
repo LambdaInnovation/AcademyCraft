@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.meltdowner.entity;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.annoreg.mc.RegInitCallback;

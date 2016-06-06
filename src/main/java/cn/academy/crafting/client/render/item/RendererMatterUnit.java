@@ -6,7 +6,7 @@
 */
 package cn.academy.crafting.client.render.item;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.render.shader.ShaderMask;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;

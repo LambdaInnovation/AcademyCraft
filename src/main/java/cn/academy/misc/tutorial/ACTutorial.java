@@ -6,7 +6,7 @@
 */
 package cn.academy.misc.tutorial;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.RegistryUtils;
 import cpw.mods.fml.relauncher.Side;

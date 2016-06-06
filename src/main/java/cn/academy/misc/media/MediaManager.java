@@ -7,11 +7,10 @@
 package cn.academy.misc.media;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.util.generic.RegistryUtils;
-import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Throwables;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -51,7 +50,7 @@ public class MediaManager {
     private MediaManager() {}
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         Side side = FMLCommonHandler.instance().getSide();
         if (side == Side.CLIENT) {
             parseDefaultConfig();

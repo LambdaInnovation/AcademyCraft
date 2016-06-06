@@ -34,7 +34,7 @@ public final class ModuleAchievements {
     public static ItemAchievement DUMMY_ITEM;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         DispatcherAch.init();
 
         AchievementPage.registerAchievementPage(pageDefault = new PageDefault());

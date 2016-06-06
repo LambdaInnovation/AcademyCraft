@@ -6,7 +6,7 @@
 */
 package cn.academy.ability.api;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.config.ACConfig;
 import cn.lambdalib.util.helper.Color;
 import com.google.common.base.Preconditions;

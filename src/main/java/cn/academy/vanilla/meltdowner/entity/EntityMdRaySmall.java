@@ -16,12 +16,15 @@ import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Motion3D;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.World;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegEntity(clientOnly = true)
 @RegEntity.HasRender
 public class EntityMdRaySmall extends EntityRayBase {

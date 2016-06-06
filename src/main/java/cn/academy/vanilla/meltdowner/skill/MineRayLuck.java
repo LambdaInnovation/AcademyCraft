@@ -7,7 +7,7 @@
 package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayLuck;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

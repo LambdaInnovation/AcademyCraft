@@ -26,7 +26,7 @@ public class MTSupport {
 
     @RegInitCallback
     @Optional.Method(modid=MODID)
-    public static void init() {
+    private static void init() {
         MineTweakerAPI.registerClass(ImagFusorSupport.class);
         MineTweakerAPI.registerClass(MetalFormerSupport.class);
         AcademyCraft.log.info("MineTweaker API support has been loaded.");

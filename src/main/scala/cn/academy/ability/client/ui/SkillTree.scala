@@ -12,8 +12,7 @@ import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.{AcademyCraft, LocalHelper}
-import cn.academy.core.client.Resources
+import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
 import cn.lambdalib.annoreg.core.Registrant

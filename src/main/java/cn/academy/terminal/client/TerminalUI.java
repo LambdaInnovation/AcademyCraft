@@ -7,17 +7,14 @@
 package cn.academy.terminal.client;
 
 import cn.academy.core.ModuleCoreClient;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
-import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.academy.terminal.event.AppInstalledEvent;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
@@ -27,7 +24,6 @@ import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
-import cn.lambdalib.networkcall.Future.FutureCallback;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;
@@ -40,6 +36,8 @@ import cn.lambdalib.util.mc.ControlOverrider;
 import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,6 +54,7 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class TerminalUI extends AuxGui {
 
     private static final String OVERRIDE_GROUP = "AC_Terminal";
@@ -72,7 +71,7 @@ public class TerminalUI extends AuxGui {
     private static WidgetContainer loaded;
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal.xml"));
     }
     

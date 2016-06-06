@@ -6,7 +6,7 @@
 */
 package cn.academy.misc.media;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.media.MediaRuntime.PlayState;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
@@ -20,6 +20,8 @@ import cn.lambdalib.cgui.gui.event.*;
 import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
@@ -29,6 +31,7 @@ import java.util.function.Consumer;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class GuiMediaPlayer extends CGuiScreen {
     
     private static final ResourceLocation
@@ -38,7 +41,7 @@ public class GuiMediaPlayer extends CGuiScreen {
     private static WidgetContainer document;
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/media_player.xml"));
     }
 

@@ -88,7 +88,7 @@ public class ModuleEnergy {
     public static Item windgenFan = new ACItem("windgen_fan").setMaxDamage(100).setMaxStackSize(1);
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000),
                 EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
     }

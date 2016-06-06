@@ -39,7 +39,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
     }
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         NetworkS11n.addDirect(SkillCooldown.class, new NetS11nAdaptor<SkillCooldown>() {
             @Override
             public void write(ByteBuf buf, SkillCooldown obj) {

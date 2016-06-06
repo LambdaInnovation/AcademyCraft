@@ -6,6 +6,7 @@
 */
 package cn.academy.core.client;
 
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.util.client.HudUtils;
