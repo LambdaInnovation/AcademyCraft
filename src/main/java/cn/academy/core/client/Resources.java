@@ -9,7 +9,6 @@ package cn.academy.core.client;
 import cn.academy.core.AcademyCraft;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.util.client.font.Fonts;
@@ -41,8 +40,9 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_BGRA;
+import static org.lwjgl.opengl.GL12.GL_UNSIGNED_INT_8_8_8_8_REV;
 
 /**
  * The core resource utils of AC.
@@ -238,7 +238,7 @@ public class Resources {
             String userSpecified = config.getString("font", "gui", "Microsoft YaHei",
                     "The font to be used. If not found in the system, default fonts will be used.");
 
-            font = TrueTypeFont.withFallback2(Font.PLAIN, 32,
+            font = TrueTypeFont.withFallback2(Font.PLAIN, 24,
                     new String[] {
                         userSpecified,
                         "微软雅黑",
