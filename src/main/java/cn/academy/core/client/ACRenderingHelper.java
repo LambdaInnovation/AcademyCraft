@@ -8,7 +8,6 @@ package cn.academy.core.client;
 
 import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.generic.MathUtils;
@@ -27,7 +26,6 @@ import org.lwjgl.opengl.GL11;
  */
 @Registrant
 @SideOnly(Side.CLIENT)
-@ForcePreloadTexture
 public class ACRenderingHelper {
     
     public static ResourceLocation

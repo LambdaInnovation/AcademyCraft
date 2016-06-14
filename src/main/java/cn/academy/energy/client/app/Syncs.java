@@ -16,7 +16,7 @@ import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.Future;
 import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -24,7 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
-@NetworkS11n.NetworkS11nType
+@NetworkS11nType
 public class Syncs {
 
     private static final String

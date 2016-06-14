@@ -45,7 +45,7 @@ public class ModuleTutorial {
     }
 
     @RegPostInitCallback
-    public static void initConditions() {
+    private static void initConditions() {
         defnTut("welcome");
 
         defnTut("ores")

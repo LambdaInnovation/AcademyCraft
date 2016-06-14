@@ -34,25 +34,20 @@ public class WirelessSystem {
     @RegEventHandler
     public static WirelessSystem INSTANCE = new WirelessSystem();
     
-    private WirelessSystem() {
-        AcademyCraft.log.info("AcademyCraft Wireless Energy System is loading...");
-    }
+    private WirelessSystem() {}
     
     @SubscribeEvent
     public void onServerTick(ServerTickEvent event) {
         if (event.phase == Phase.START)
             return;
-        //System.out.println("{");
+
         for(WorldServer ws : MinecraftServer.getServer().worldServers) {
-            //System.out.println(ws + "/" + ws.provider.dimensionId);
-            //if(ws.getClass() != WorldServer.class) continue;
             WiWorldData data = WiWorldData.getNonCreate(ws);
 
             if(data != null) {
                 data.tick();
             }
         }
-        //System.out.println("}");
     }
     
     @SubscribeEvent
@@ -132,9 +127,5 @@ public class WirelessSystem {
             if(conn != null) conn.removeReceiver(new VNReceiver(rec));
         }
     }
-    
-    private void debug(Object msg) {
-        AcademyCraft.log.info("WirelessSys: " + msg);
-    }
-    
+
 }

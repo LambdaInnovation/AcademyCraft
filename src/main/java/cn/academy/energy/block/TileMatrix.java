@@ -12,12 +12,11 @@ import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -168,7 +167,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     
     private void sync() {
         NetworkMessage.sendToAllAround(
-                TargetPointHelper.convert(this, 25),
+                TargetPoints.convert(this, 25),
                 this, "sync", getPlateCount(), placerName);
     }
 

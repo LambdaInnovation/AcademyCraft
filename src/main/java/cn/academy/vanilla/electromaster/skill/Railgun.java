@@ -11,7 +11,7 @@ import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityRailgunFX;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
-import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.client.renderhook.DummyRenderData;
@@ -89,7 +89,7 @@ public class Railgun extends Skill {
                 informDelegate(evt.coin);
             } else {
                 NetworkMessage.sendToAllAround(
-                        TargetPointHelper.convert(evt.entityPlayer, 30),
+                        TargetPoints.convert(evt.entityPlayer, 30),
                         instance,
                         MSG_CHARGE_EFFECT,
                         evt.entityPlayer
@@ -139,7 +139,7 @@ public class Railgun extends Skill {
             AbilityContext.of(player, Railgun.instance).attack(result.entityHit, 14);
         }
 
-        NetworkMessage.sendToAllAround(TargetPointHelper.convert(player, 20),
+        NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20),
                 instance, MSG_REFLECT, player, reflector);
     }
 
@@ -176,7 +176,7 @@ public class Railgun extends Skill {
 
             ctx.setCooldown((int) lerpf(300, 160, exp));
             NetworkMessage.sendToAllAround(
-                    TargetPointHelper.convert(player, 20),
+                    TargetPoints.convert(player, 20),
                     instance, MSG_PERFORM,
                     player, length[0]);
         }

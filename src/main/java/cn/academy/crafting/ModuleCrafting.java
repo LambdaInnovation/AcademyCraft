@@ -50,7 +50,6 @@ import java.util.List;
  * @author WeAthFolD, Shielian, KS
  */
 @Registrant
-@RegEventHandler(Bus.Forge)
 @RegACRecipeNames
 public class ModuleCrafting {
     
@@ -266,12 +265,16 @@ public class ModuleCrafting {
         addOreDictRefineRecipe("ore"+orename,"ingot"+orename);
     }
 
+    @Registrant
+    public enum EventHandler {
+        @RegEventHandler(Bus.Forge)
+        instance;
 
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void textureHook(TextureStitchEvent.Post event) {
-        fluidImagProj.setIcons(imagPhase.fluidIcon);
+        @SubscribeEvent
+        @SideOnly(Side.CLIENT)
+        public void textureHook(TextureStitchEvent.Post event) {
+            fluidImagProj.setIcons(imagPhase.fluidIcon);
+        }
     }
 
 }

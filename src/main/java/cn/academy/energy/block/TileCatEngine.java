@@ -10,9 +10,10 @@ import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.client.render.block.RenderCatEngine;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.util.helper.TickScheduler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,7 +29,9 @@ public class TileCatEngine extends TileGeneratorBase {
     @SideOnly(Side.CLIENT)
     @RegTileEntity.Render
     public static RenderCatEngine renderer;
-    
+
+    private final TickScheduler scheduler = new TickScheduler();
+
     // Sync
     int syncTicker;
     
@@ -37,6 +40,12 @@ public class TileCatEngine extends TileGeneratorBase {
     public double rotation;
     public long lastRender;
 
+    {
+        scheduler.every(20).atOnly(Side.SERVER).run(() -> {
+            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20), this, "sync_genspeed", thisTickGen);
+        });
+    }
+
     public TileCatEngine() {
         super("infinite_generator", 0, 2000, 200);
     }
@@ -44,23 +53,17 @@ public class TileCatEngine extends TileGeneratorBase {
     @Override
     public void updateEntity() {
         super.updateEntity();
-        
-        if(!getWorldObj().isRemote) {
-            if(++syncTicker == 20) {
-                syncTicker = 0;
-                syncGen(this, thisTickGen);
-            }
-        }
+        scheduler.runTick();
     }
     
     @Override
     public double getGeneration(double required) {
         return (thisTickGen = Math.min(required, 500));
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void syncGen(@RangedTarget(range = 10) TileCatEngine te, @Data Double amt) {
-        te.thisTickGen = amt;
+
+    @Listener(channel="sync_genspeed", side=Side.CLIENT)
+    private void hSync(double genSpeed) {
+        this.thisTickGen = genSpeed;
     }
 
 }

@@ -37,6 +37,7 @@ public abstract class CommandAIMBase extends ACCommand {
      * This is the command used by the client, doesn't specify the player and works on the user.
      * This command will display a warning before you can use it.
      */
+    @Registrant
     @RegCommand
     public static class CommandAIM extends CommandAIMBase {
         
@@ -94,6 +95,7 @@ public abstract class CommandAIMBase extends ACCommand {
     /**
      * This is the command for the OPs and server console. You must specify the player name.
      */
+    @Registrant
     @RegCommand
     public static class CommandAIMP extends CommandAIMBase {
 

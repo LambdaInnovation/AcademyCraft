@@ -543,8 +543,10 @@ public class CPData extends DataPart<EntityPlayer> {
                 new AbilityDeactivateEvent(getEntity()));
     }
     
-    @RegEventHandler(Bus.Forge)
-    public static class Events {
+    @Registrant
+    public enum Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
         
         @SubscribeEvent
         public void changedCategory(CategoryChangeEvent event) {

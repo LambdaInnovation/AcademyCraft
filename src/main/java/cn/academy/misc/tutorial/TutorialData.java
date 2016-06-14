@@ -7,9 +7,7 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.AcademyCraft;
-import cn.academy.misc.ModuleMisc;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.nbt.NBTS11n;
@@ -38,7 +36,7 @@ import java.util.HashSet;
 public class TutorialData extends DataPart<EntityPlayer> {
 
     @RegPreInitCallback
-    public static void __init() {
+    private static void __init() {
         // Force the property to load, so it will be refreshed once after startup
         canAcquireTutorial();
     }

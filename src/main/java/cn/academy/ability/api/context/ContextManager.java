@@ -174,6 +174,7 @@ public enum ContextManager {
         }
     }
 
+    @Registrant
     @NetworkS11nType
     public enum LocalManager {
         instance;
@@ -358,6 +359,7 @@ public enum ContextManager {
         }
     }
 
+    @Registrant
     @NetworkS11nType
     public enum ServerManager {
         instance;
@@ -532,6 +534,7 @@ public enum ContextManager {
         }
     }
 
+    @Registrant
     @NetworkS11nType
     public enum ClientManager {
         instance;

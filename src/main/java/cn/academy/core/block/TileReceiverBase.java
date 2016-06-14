@@ -9,9 +9,9 @@ package cn.academy.core.block;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessReceiver;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -23,7 +23,8 @@ import net.minecraft.nbt.NBTTagCompound;
 @Registrant
 public class TileReceiverBase extends TileInventory implements IWirelessReceiver {
     
-    int UPDATE_WAIT = 20;
+    private static final int UPDATE_WAIT = 20;
+
     int updateTicker = 0;
     
     final double maxEnergy;
@@ -42,7 +43,7 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         if(!getWorldObj().isRemote) {
             if(++updateTicker == UPDATE_WAIT) {
                 updateTicker = 0;
-                syncEnergy(this, energy);
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "sync_energy", energy);
             }
         }
     }
@@ -84,10 +85,10 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void syncEnergy(@RangedTarget(range = 15) TileReceiverBase te, @Data Double e) {
-        te.energy = e;
+
+    @Listener(channel="sync_energy", side=Side.CLIENT)
+    private void hSync(double energy) {
+        this.energy = energy;
     }
 
     @Override

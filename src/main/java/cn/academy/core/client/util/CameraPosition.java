@@ -26,7 +26,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class CameraPosition {
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         MinecraftForge.EVENT_BUS.register(new CameraPosition());
     }
 

@@ -263,8 +263,10 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         }
     }
 
-    @RegEventHandler({Bus.FML, Bus.Forge})
-    public static class Events {
+    @Registrant
+    public enum Events {
+        @RegEventHandler({Bus.FML, Bus.Forge})
+        instance;
 
         boolean requireFlush = false;
 

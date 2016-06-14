@@ -7,6 +7,7 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.core.AcademyCraft;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.util.client.auxgui.OpenAuxGuiEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -40,6 +41,8 @@ public class AMClient implements IActionManager {
     private Map<UUID, SyncAction> map = null;
     //Optimized: abortPlayer
     private Set<UUID> set = null;
+
+    private static final Object AMDelegate = NetworkMessage.staticCaller(ActionManager.class);
     
     @Override
     @SideOnly(Side.CLIENT)
@@ -48,21 +51,20 @@ public class AMClient implements IActionManager {
         action.player = Minecraft.getMinecraft().thePlayer;
         map.put(action.uuid, action);
         NBTTagCompound tag = action.getNBTStart();
-        ActionManager.startAtServer(Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag);
+
+        NetworkMessage.sendToServer(AMDelegate, ActionManager.M_START_SVR, Minecraft.getMinecraft().thePlayer, action.getClass().getName(), tag);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void endAction(SyncAction action) {
-        //System.out.println("AMC#INT_END: " + action.uuid);
-        ActionManager.endAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
+        NetworkMessage.sendToServer(AMDelegate, ActionManager.M_END_SVR, Minecraft.getMinecraft().thePlayer, action.uuid.toString());
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void abortAction(SyncAction action) {
-        //System.out.println("AMC#INT_ABORT: " + action.uuid);
-        ActionManager.abortAtServer(Minecraft.getMinecraft().thePlayer, action.uuid.toString());
+        NetworkMessage.sendToServer(AMDelegate, ActionManager.M_ABORT_SVR, Minecraft.getMinecraft().thePlayer, action.uuid.toString());
     }
     
     @Override
@@ -162,8 +164,9 @@ public class AMClient implements IActionManager {
     private void abortPlayer() {
         //System.out.println("AMC#PRI_APLAYER");
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (player != null && !set.isEmpty())
-            ActionManager.abortPlayerAtServer(player);
+        if (player != null && !set.isEmpty()) {
+            NetworkMessage.sendToServer(AMDelegate, ActionManager.M_ABORT_PLAYER_SVR, player);
+        }
     }
     
     @SubscribeEvent

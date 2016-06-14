@@ -15,11 +15,7 @@ import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.BlockMulti.SubBlockPos;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkMessage.NullablePar;
@@ -29,7 +25,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -113,7 +108,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
                 if(++updateWait2 == 20) {
                     updateWait2 = 0;
                     NetworkMessage.sendToAllAround(
-                            TargetPointHelper.convert(this, 50),
+                            TargetPoints.convert(this, 50),
                             this, "sync", inventory[0]
                     );
                 }

@@ -99,10 +99,6 @@ public class AcademyCraft {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        // Finally we are hit by annoreg's loading order problem ..
-        // Below is a kinda hacking solution to manullay override loading order, but clearly a better
-        //  mechanism is needed
-
         // Load recipes names before loading script
         RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
 
@@ -112,7 +108,7 @@ public class AcademyCraft {
         // PostInit stage, including tutorial init, depends on registered recipes
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 
-        if (DEBUG_MODE) {
+        if (DEBUG_MODE && false) {
             System.out.printf("|-------------------------------------------------------\n");
             System.out.printf("| AC Recipe Name Mappings\n");
             System.out.printf("|--------------------------|----------------------------\n");

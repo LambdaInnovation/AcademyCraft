@@ -57,7 +57,7 @@ public class KeyHintUI extends Widget {
     static final double SCALE = 0.23;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         Widget child = new Widget()
                 .size(128, 193)
                 .addComponent(new DrawTexture()

@@ -15,10 +15,10 @@ import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
 import cn.lambdalib.particle.Particle;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
@@ -36,9 +36,12 @@ import static cn.lambdalib.util.generic.MathUtils.*;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class JetEngine extends Skill {
 
     public static final JetEngine instance = new JetEngine();
+
+    private static final Object delegate = NetworkMessage.staticCaller(JetEngine.class);
 
     private JetEngine() {
         super("jet_engine", 4);
@@ -89,7 +92,8 @@ public class JetEngine extends Skill {
         public void onEnd() {
             if(ctx().consume(getConsumption(exp), overload)) {
                 if(!isRemote) {
-                    startTriggerAction(player, getDest().addVector(0, 1.65, 0));
+                    NetworkMessage.sendTo(player, delegate, "trigger", getDest().addVector(0, 1.65, 0));
+
                     ctx().addSkillExp(.004f);
                     instance.triggerAchievement(player);
                 }
@@ -259,9 +263,9 @@ public class JetEngine extends Skill {
         }
         
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void startTriggerAction(@Target EntityPlayer player, @Data Vec3 vec) {
+
+    @Listener(channel="trigger", side=Side.CLIENT)
+    private static void hTrigger(Vec3 vec) {
         ActionManager.startAction(new JETriggerAction(vec));
     }
 

@@ -46,7 +46,6 @@ import static net.minecraftforge.common.ChestGenHooks.*;
  */
 @Registrant
 @RegACRecipeNames
-@RegEventHandler(Bus.Forge)
 public class ModuleAbility {
 
     @RegItem
@@ -84,16 +83,6 @@ public class ModuleAbility {
     @RecipeName("induction_factor")
     public static ItemInductionFactor inductionFactor;
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-        if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
-            if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
-                    event.target.blockZ) instanceof BlockDeveloper)
-                event.setCanceled(true);
-        }
-    }
-
     @RegInitCallback
     private static void __init() {
         String[] factorAppearance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
@@ -104,6 +93,22 @@ public class ModuleAbility {
             for (Category c : CategoryManager.INSTANCE.getCategories()) {
                 ItemStack stack = inductionFactor.create(c);
                 ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+            }
+        }
+    }
+
+    @Registrant
+    public enum Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+            if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
+                if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
+                        event.target.blockZ) instanceof BlockDeveloper)
+                    event.setCanceled(true);
             }
         }
     }

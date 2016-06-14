@@ -15,25 +15,16 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.TargetPointHelper.TargetPointConverter;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -179,7 +170,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         if (!worldObj.isRemote) {
             if(--syncCooldown <= 0) {
                 syncCooldown = SYNC_INTV;
-                NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 15),
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15),
                         this, "sync",
                         currentRecipe, workProgress, getLiquidAmount());
             }

@@ -14,9 +14,9 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.entityx.EntityCallback;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
@@ -26,7 +26,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 import static cn.lambdalib.util.generic.MathUtils.*;
 
@@ -38,8 +37,10 @@ public class ElectronBomb extends Skill {
     
     public static final ElectronBomb instance = new ElectronBomb();
 
-    static final int LIFE = 20, LIFE_IMPROVED = 5;
-    static final double DISTANCE = 15;
+    private static final Object delegate = NetworkMessage.staticCaller(ElectronBomb.class);
+
+    private static final int LIFE = 20, LIFE_IMPROVED = 5;
+    private static final double DISTANCE = 15;
     
     private ElectronBomb() {
         super("electron_bomb", 1);
@@ -84,7 +85,9 @@ public class ElectronBomb extends Skill {
                         if(trace != null && trace.entityHit != null) {
                             MDDamageHelper.attack(ctx(), trace.entityHit, getDamage(exp));
                         }
-                        actionClient(player, ball);
+
+                        NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20),
+                                delegate, "spawn_ray", player, ball);
                     }
                     
                 });
@@ -96,24 +99,19 @@ public class ElectronBomb extends Skill {
         }
         
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    static void actionClient(@RangedTarget(range = 20) EntityPlayer player, @Instance EntityMdBall ball) {
-        Vec3 dest = getDest(player);
-        spawnRay(player.worldObj, player, ball.posX, ball.posY, ball.posZ,
-            dest.xCoord, dest.yCoord, dest.zCoord);
-    }
-    
+
     @SideOnly(Side.CLIENT)
-    private static void spawnRay(World world, EntityPlayer player, double x0, double y0, double z0, double x1, double y1, double z1) {
-        EntityMdRaySmall raySmall = new EntityMdRaySmall(world);
-        raySmall.setFromTo(x0, y0 + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), z0,
-                x1, y1, z1);
+    @Listener(channel="spawn_ray", side=Side.CLIENT)
+    private void hSpawnRay(EntityPlayer player, EntityMdBall ball) {
+        Vec3 dest = getDest(player);
+        EntityMdRaySmall raySmall = new EntityMdRaySmall(player.worldObj);
+        raySmall.setFromTo(ball.posX, ball.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), ball.posZ,
+                dest.xCoord, dest.yCoord, dest.zCoord);
         raySmall.viewOptimize = false;
-        world.spawnEntityInWorld(raySmall);
+        player.worldObj.spawnEntityInWorld(raySmall);
     }
     
-    static Vec3 getDest(EntityPlayer player) {
+    private static Vec3 getDest(EntityPlayer player) {
         return Raytrace.getLookingPos(player, DISTANCE).getLeft();
     }
 

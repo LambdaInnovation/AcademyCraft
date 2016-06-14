@@ -269,9 +269,11 @@ public class PresetData extends DataPart<EntityPlayer> {
         }
         
     }
-    
-    @RegEventHandler(Bus.Forge)
-    public static class Events {
+
+    @Registrant
+    public static enum Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
         
         @SubscribeEvent
         public void onCategoryChanged(CategoryChangeEvent event) {

@@ -171,8 +171,10 @@ public class CooldownData extends DataPart<EntityPlayer> {
         }
     }
 
-    @RegEventHandler(Bus.Forge)
-    public static class _Events {
+    @Registrant
+    public enum _Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
 
         @SubscribeEvent
         public void onCategoryChange(CategoryChangeEvent evt) {

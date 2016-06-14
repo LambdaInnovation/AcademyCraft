@@ -12,7 +12,7 @@ import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
@@ -53,7 +53,7 @@ public class MDDamageHelper {
             setMarkTick(target, marktick);
             setMarkRate(target, RadiationIntensify.instance.getRate(aData));
             NetworkMessage.sendToAllAround(
-                    TargetPointHelper.convert(player, 20),
+                    TargetPoints.convert(player, 20),
                     NetworkMessage.staticCaller(MDDamageHelper.class),
                     "sync", player, marktick
             );

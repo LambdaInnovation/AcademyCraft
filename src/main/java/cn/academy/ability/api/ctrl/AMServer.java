@@ -7,6 +7,7 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.core.AcademyCraft;
+import cn.lambdalib.s11n.network.NetworkMessage;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
@@ -24,6 +25,8 @@ import java.util.*;
  */
 public class AMServer implements IActionManager {
 
+    private static final Object AMDelegate = NetworkMessage.staticCaller(ActionManager.class);
+
     AMServer() {
         FMLCommonHandler.instance().bus().register(this);
         map.put(dummy, new HashMap<UUID, SyncAction>());
@@ -36,23 +39,17 @@ public class AMServer implements IActionManager {
     
     @Override
     public void startAction(SyncAction action) {
-        //System.out.println("AMS#INT_START");
-        action.uuid = UUID.randomUUID();
-        action.player = null;
-        NBTTagCompound tag = action.getNBTStart();
-        ActionManager.startAtClient(null, action.getClass().getName(), tag);
-        map.get(dummy).put(action.uuid, action);
-        action.start();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void endAction(SyncAction action) {
         //System.out.println("AMS#INT_END");
         SyncAction _action = map.get(playerUUID(action)).get(action.uuid);
-        if (_action == null)
-            ActionManager.endAtClient(action.uuid.toString(), SyncAction.TAG_EMPTY);
-        else
-            ActionManager.endAtClient(_action.uuid.toString(), _action.end());
+
+        NBTTagCompound tag = _action == null ? SyncAction.TAG_EMPTY : _action.end();
+        NetworkMessage.sendToAll(AMDelegate, ActionManager.M_END_CLIENT,
+                (_action == null ? action : _action).uuid.toString(), tag);
     }
 
     @Override
@@ -60,9 +57,9 @@ public class AMServer implements IActionManager {
         //System.out.println("AMS#INT_ABORT");
         SyncAction _action = map.get(playerUUID(action)).get(action.uuid);
         if (_action == null)
-            ActionManager.abortAtClient(action.uuid.toString(), SyncAction.TAG_EMPTY);
+            sendAbortAtClient(action.uuid.toString(), SyncAction.TAG_EMPTY);
         else
-            ActionManager.abortAtClient(_action.uuid.toString(), _action.abort());
+            sendAbortAtClient(_action.uuid.toString(), _action.abort());
     }
     
     @Override
@@ -85,7 +82,7 @@ public class AMServer implements IActionManager {
             action.setNBTStart(tag);
             Map<UUID, SyncAction> sub = map.get(playerUUID(action));
             if (!sub.containsKey(action.uuid)) {
-                ActionManager.startAtClient(player, className, action.getNBTStart());
+                NetworkMessage.sendTo(player, AMDelegate, ActionManager.M_START_CLIENT, player, className, action.getNBTStart());
                 sub.put(action.uuid, action);
                 action.start();
             }
@@ -103,7 +100,7 @@ public class AMServer implements IActionManager {
         //System.out.println("AMS#NET_END");
         SyncAction action = map.get(player.getUniqueID()).get(uuid);
         if (action == null)
-            ActionManager.abortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
+            sendAbortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
         else
             endAction(action);
     }
@@ -112,7 +109,7 @@ public class AMServer implements IActionManager {
         //System.out.println("AMS#NET_ABORT");
         SyncAction action = map.get(player.getUniqueID()).get(uuid);
         if (action == null)
-            ActionManager.abortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
+            sendAbortAtClient(uuid.toString(), SyncAction.TAG_EMPTY);
         else
             abortAction(action);
     }
@@ -123,6 +120,10 @@ public class AMServer implements IActionManager {
         if (_map != null)
             for (SyncAction action : _map.values())
                 abortAction(action);
+    }
+
+    private void sendAbortAtClient(String uuid, NBTTagCompound tag) {
+        NetworkMessage.sendToAll(AMDelegate, ActionManager.M_ABORT_CLIENT, uuid, tag);
     }
 
     private UUID playerUUID(SyncAction action) {
@@ -152,7 +153,7 @@ public class AMServer implements IActionManager {
                     action.onTick();
                     if (action.intv > 0 && curTick - action.lastInformed >= action.intv) {
                         action.lastInformed = curTick;
-                        ActionManager.updateAtClient(action.uuid.toString(), action.getNBTUpdate());
+                        NetworkMessage.sendToAll(AMDelegate, ActionManager.M_UPDATE_CLIENT, action.uuid.toString(), action.getNBTUpdate());
                     }
                     break;
                 case ENDED:

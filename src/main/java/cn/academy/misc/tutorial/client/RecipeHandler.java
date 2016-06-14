@@ -57,7 +57,7 @@ public enum RecipeHandler {
     private ResourceLocation tex = Resources.getTexture("guis/tutorial/crafting_grid");
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         instance.windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
     }
 

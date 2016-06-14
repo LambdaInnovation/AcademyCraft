@@ -205,8 +205,11 @@ public class EntityCoinThrowing extends EntityAdvanced {
         
     }
 
-    @RegEventHandler(Bus.Forge)
-    public static class EventListener {
+    @Registrant
+    public enum EventListener {
+        @RegEventHandler(Bus.Forge)
+        instance;
+
         @RegInitCallback
         private static void init() {
             PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",

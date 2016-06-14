@@ -15,10 +15,10 @@ import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
@@ -41,9 +41,11 @@ import static cn.lambdalib.util.generic.MathUtils.*;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class ElectronMissile extends Skill {
     
     public static final ElectronMissile instance = new ElectronMissile();
+    private static final Object delegate = NetworkMessage.staticCaller(ElectronMissile.class);
     
     static int MAX_HOLD = 5;
 
@@ -128,7 +130,8 @@ public class ElectronMissile extends Skill {
                                 iter.remove();
 
                                 // client action
-                                spawnRay(player, player.worldObj,
+                                NetworkMessage.sendToAllAround(TargetPoints.convert(player, 15), delegate,
+                                        "spawn_ray", player.worldObj,
                                         VecUtils.entityPos(ball),
                                         VecUtils.add(VecUtils.entityPos(result), VecUtils.vec(0, result.getEyeHeight(), 0)));
 
@@ -184,13 +187,9 @@ public class ElectronMissile extends Skill {
         
     }
     
-    @RegNetworkCall(side = Side.CLIENT)
-    static void spawnRay(@RangedTarget(range = 15) EntityPlayer _player, @Instance World world, @Data Vec3 from, @Data Vec3 to) {
-        jobSpawnRay(world, from, to);
-    }
-    
     @SideOnly(Side.CLIENT)
-    static void jobSpawnRay(World world, Vec3 from, Vec3 to) {
+    @Listener(channel="spawn_ray", side=Side.CLIENT)
+    private static void hSpawnRay(World world, Vec3 from, Vec3 to) {
         EntityMdRaySmall ray = new EntityMdRaySmall(world);
         ray.setFromTo(from, to);
         world.spawnEntityInWorld(ray);

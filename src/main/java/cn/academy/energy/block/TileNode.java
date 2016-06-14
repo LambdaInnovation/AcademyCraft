@@ -12,18 +12,12 @@ import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.block.BlockNode.NodeType;
-import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.TargetPointHelper.TargetPointConverter;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,7 +82,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
                 WirelessNet net = WirelessHelper.getWirelessNet(this);
                 enabled = net != null;
 
-                NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 20),
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20),
                         this, MSG_SYNC,
                         enabled, chargingIn, chargingOut, energy, name, password, placerName);
             }

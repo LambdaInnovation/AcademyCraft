@@ -13,10 +13,7 @@ import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderPhaseGen;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cpw.mods.fml.relauncher.Side;
@@ -163,7 +160,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     private void sync() {
-        NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 20),
+        NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20),
                 this, "sync", getLiquidAmount());
     }
 

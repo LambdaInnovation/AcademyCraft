@@ -17,7 +17,7 @@ import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.multiblock.BlockMulti;
 import cn.lambdalib.multiblock.IMultiTile;
 import cn.lambdalib.multiblock.InfoBlockMulti;
-import cn.lambdalib.networkcall.TargetPointHelper;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import com.google.common.base.Preconditions;
@@ -172,7 +172,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         if (getWorldObj().isRemote) {
             NetworkMessage.sendToServer(this, channel, args);
         } else {
-            NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 10), this, channel, args);
+            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 10), this, channel, args);
         }
     }
     

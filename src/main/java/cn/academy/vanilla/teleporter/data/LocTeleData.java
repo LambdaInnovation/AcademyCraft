@@ -7,21 +7,15 @@
 package cn.academy.vanilla.teleporter.data;
 
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.s11n.DataSerializer;
-import cn.lambdalib.networkcall.s11n.RegSerializable;
-import cn.lambdalib.networkcall.s11n.RegSerializable.SerializeField;
 import cn.lambdalib.s11n.SerializeIncluded;
 import cn.lambdalib.s11n.SerializeType;
 import cn.lambdalib.s11n.nbt.NBTS11n;
-import cn.lambdalib.s11n.nbt.NBTS11n.CompoundSerializer;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.datapart.DataPart;
 import cn.lambdalib.util.datapart.EntityData;
 import cn.lambdalib.util.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +73,7 @@ public class LocTeleData extends DataPart<EntityPlayer> {
         NBTS11n.write(tag, this);
     }
 
+    @Registrant
     @SerializeType
     @NetworkS11nType
     public static class Location {

@@ -94,7 +94,6 @@ private object MediaManagerInit {
         }
       })
 
-    println("medias loaded")
   }
 
   def loadServer() = {

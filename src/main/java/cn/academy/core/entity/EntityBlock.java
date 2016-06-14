@@ -10,10 +10,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderEntityBlock;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.entityx.EntityAdvanced;
@@ -31,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -100,7 +96,7 @@ public class EntityBlock extends EntityAdvanced {
         placeWhenCollide = value;
 
         NetworkMessage.sendToAllAround(
-                TargetPointHelper.convert(this, 20),
+                TargetPoints.convert(this, 20),
                 this, "spfs", value
         );
     }
@@ -176,8 +172,9 @@ public class EntityBlock extends EntityAdvanced {
             try {
                 NBTTagCompound tag = new NBTTagCompound();
                 tileEntity.writeToNBT(tag);
-                
-                syncTileEntity(tileEntity.getClass().getName(), tag);
+
+                NetworkMessage.sendToDimension(worldObj.provider.dimensionId, this, "sync_te",
+                        tileEntity.getClass().getName(), tag);
             } catch(Exception e) {
                 AcademyCraft.log.error("Error syncing te", e);
             }
@@ -234,16 +231,16 @@ public class EntityBlock extends EntityAdvanced {
     protected void writeEntityToNBT(NBTTagCompound tag) {
         
     }
-    
-    @RegNetworkCall(side = Side.CLIENT, thisStorage = StorageOption.Option.INSTANCE)
-    private void syncTileEntity(@Data String klassName, @Data NBTTagCompound initTag) {
+
+    @Listener(channel="sync_te", side=Side.CLIENT)
+    private void hSyncTE(String className, NBTTagCompound initTag) {
         try {
-            TileEntity te = (TileEntity) Class.forName(klassName).newInstance();
+            TileEntity te = (TileEntity) Class.forName(className).newInstance();
             te.readFromNBT(initTag);
             te.setWorldObj(worldObj);
             tileEntity = te;
         } catch(Exception e) {
-            AcademyCraft.log.error("Unable to sync tileEntity " + klassName, e);
+            AcademyCraft.log.error("Unable to sync tileEntity " + className, e);
         }
     }
 
