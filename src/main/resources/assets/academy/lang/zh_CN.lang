@@ -476,6 +476,22 @@ ac.skill_tree.type_portable=便携能力开发机
 ac.skill_tree.type_normal=普通能力开发机
 ac.skill_tree.type_advanced=高级能力开发机
 
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \n检测到用户 %s, 系统启动中......
+ac.skill_tree.console.invalid_cat=\n严重错误：无法检测用户的能力信息,启动终止。\n
+ac.skill_tree.console.learn_hint=请使用 `learn` 指令来获得能力。\n
+ac.skill_tree.console.override=\n警告：系统过载！检测到来自外部的注入.....\n\n能力重置：使用 `reset` 指令来进行能力重置。当前能力等级必须至少为3并且携带能力诱导因子。\n
+ac.skill_tree.console.boot_failed=启动失败。\n
+ac.skill_tree.console.invalid_command=无效的命令。\n
+ac.skill_tree.console.progress=进度：%s%%
+ac.skill_tree.console.reset_begin=开始能力重置 ...
+ac.skill_tree.console.reset_succ=个人现实重置成功。\n
+ac.skill_tree.console.reset_fail=个人现实重置失败。\n
+ac.skill_tree.console.reset_fail_dev=无法重置能力——必须使用高级能力开发机。\n
+ac.skill_tree.console.reset_fail_other=无法重置能力——当前能力等级低于3或未检测到能力诱导因子。\n
+ac.skill_tree.console.dev_begin=开始能力开发......\n
+ac.skill_tree.console.dev_succ=开发成功。\n
+ac.skill_tree.console.dev_fail=开发失败。\n
+
 # 虚相位能量发生机
 
 # 虚能融合机

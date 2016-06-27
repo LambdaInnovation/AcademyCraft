@@ -476,6 +476,22 @@ ac.skill_tree.type_portable=Portable Developer
 ac.skill_tree.type_normal=Normal Developer
 ac.skill_tree.type_advanced=Advanced Developer
 
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nUser %s detected, System booting......
+ac.skill_tree.console.invalid_cat=\nFATAL: User's ability category is invalid, booting aborted.\n
+ac.skill_tree.console.learn_hint=Type `learn` to acquire new category.\n
+ac.skill_tree.console.override=\nWARNING: System override! External injection detected.....\n\nABILITY RESET: Use `reset` command to reset player category. Ability level must be at least 3, and an Induction Factor must be in inventory.\n
+ac.skill_tree.console.boot_failed=Boot Failed.\n
+ac.skill_tree.console.invalid_command=Invalid command.\n
+ac.skill_tree.console.progress=Progress: %s%%
+ac.skill_tree.console.reset_begin=Starting resetting ability category...
+ac.skill_tree.console.reset_succ=Personal Reality reset sequence successful.\n
+ac.skill_tree.console.reset_fail=Personal Reality reset sequence failed.\n
+ac.skill_tree.console.reset_fail_dev=Can't reset ability -- Advance Developer must be used.\n
+ac.skill_tree.console.reset_fail_other=Can't reset ability -- either level is lower than 3 or induction factor not detected.\n
+ac.skill_tree.console.dev_begin=Start stimulation......\n
+ac.skill_tree.console.dev_succ=Development successful.\n
+ac.skill_tree.console.dev_fail=Development failed.\n
+
 # Metal Former
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing

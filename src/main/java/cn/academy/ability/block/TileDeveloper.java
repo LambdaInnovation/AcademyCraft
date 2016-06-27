@@ -42,7 +42,8 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         MSG_OPEN_GUI = "gui",
         MSG_UNUSE = "unuse",
         MSG_SYNC  = "sync";
-    
+
+    @Registrant
     @RegTileEntity
     @RegTileEntity.HasRender
     public static class Normal extends TileDeveloper {
@@ -55,7 +56,8 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
         @RegTileEntity.Render
         public static RenderDeveloperNormal renderer;
     }
-    
+
+    @Registrant
     @RegTileEntity
     @RegTileEntity.HasRender
     public static class Advanced extends TileDeveloper {
