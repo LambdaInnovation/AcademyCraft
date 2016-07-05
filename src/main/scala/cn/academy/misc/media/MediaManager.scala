@@ -1,7 +1,7 @@
 package cn.academy.misc.media
 
 import java.io.{File, FileInputStream, IOException, InputStreamReader}
-import java.net.URL
+import java.net.{URL, URLDecoder}
 import java.nio.file.{Files, StandardCopyOption}
 import javax.imageio.ImageIO
 
@@ -112,7 +112,8 @@ private object MediaManagerInit {
 
   def calculateLength(url: URL): Option[Float] = {
     try {
-      val vf = new VorbisFile(url.getFile)
+      val path = URLDecoder.decode(url.getFile, "utf-8")
+      val vf = new VorbisFile(path)
       val ret = vf.time_total(-1)
       vf.close()
 
