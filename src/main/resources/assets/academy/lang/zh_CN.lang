@@ -228,15 +228,8 @@ ac.ability.teleporter.space_fluct.desc=利用空间的波动，将空间跳跃�
 ac.ability.teleporter.flashing.desc=远超标记传送机动性的新传送方式，极高的传送速度与速度的重置能让你实现灵活的空中机动。
 ac.ability.teleporter.crithit=达成%fx暴击！
 
-ac.gui.loctele.tag0=已记录坐标
-ac.gui.loctele.tag1=添加坐标
-ac.gui.loctele.name=名称: 
-ac.gui.loctele.location=坐标: 
-ac.gui.loctele.distance=距离: 
-ac.gui.loctele.dim=维度: #
-ac.gui.loctele.warn0=[CP不足.]
-ac.gui.loctele.warn1=你现在无法记录此坐标。
-ac.gui.loctele.teleport=传送！
+ac.gui.loctele.err_exp=经验不足，无法跨维度传送
+ac.gui.loctele.err_cp=CP不足，无法传送
 
 ## 原子崩坏
 ac.ability.meltdowner.name=原子崩坏

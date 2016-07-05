@@ -11,6 +11,7 @@ import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
+import cn.academy.vanilla.teleporter.skill.LocationTeleport$;
 import cn.academy.vanilla.teleporter.skills.*;
 
 /**
@@ -22,7 +23,7 @@ public class CatTeleporter extends Category {
         dimFolding = DimFoldingTheorem.instance,
         spaceFluct = SpaceFluctuation.instance,
         markTP = MarkTeleport.instance,
-        locTP = LocationTeleport.instance,
+        locTP = LocationTeleport$.MODULE$,
         penetrateTP = PenetrateTeleport.instance,
         threateningTP = ThreateningTeleport.instance,
         shiftTP = ShiftTeleport.instance,

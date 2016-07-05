@@ -228,15 +228,8 @@ ac.ability.teleporter.space_fluct.desc=Strenghen your space-folding ability to c
 ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver in the air.
 ac.ability.teleporter.crithit=%fx critical hit!
 
-ac.gui.loctele.tag0=Recorded Locations
-ac.gui.loctele.tag1=Add Location
-ac.gui.loctele.name=Name: 
-ac.gui.loctele.location=Location: 
-ac.gui.loctele.distance=Distance: 
-ac.gui.loctele.dim=Dimension: #
-ac.gui.loctele.warn0=[CP not enough.]
-ac.gui.loctele.warn1=You can't record this location now.
-ac.gui.loctele.teleport=Teleport!
+ac.gui.loctele.err_exp=Exp too low, can't cross dimension
+ac.gui.loctele.err_cp=CP inadequate, can't teleport
 
 ## Meltdowner
 ac.ability.meltdowner.name=Meltdowner
