@@ -137,7 +137,7 @@ object NodeNetworkProxy {
   final val MSG_QUERY_LINK = "query_link"
 
   @RegInitCallback
-  private def __init() = {
+  def __init() = {
     NetworkS11n.addDirectInstance(NodeNetworkProxy)
   }
 

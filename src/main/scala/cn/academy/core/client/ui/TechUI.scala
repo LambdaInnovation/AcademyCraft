@@ -718,12 +718,11 @@ object WirelessPage {
 }
 
 @Registrant
-@NetworkS11nType
 object WirelessNetDelegate {
   import WirelessPage._
 
   @RegInitCallback
-  private def __init() = {
+  def __init() = {
     NetworkS11n.addDirectInstance(WirelessNetDelegate)
   }
 
