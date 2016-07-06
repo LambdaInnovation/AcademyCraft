@@ -1,10 +1,11 @@
-# AcademyCraft lang file
-#
+# AcademyCraft 日本語言語ファイル
+# このファイルには、主に用途によって分類されています。（マインクラフトの特殊ルルに限るのを除く）
 
-# CreativeTab
+# 一般
 itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] カスタムコンフィグの導入が失敗しました。エラー情報：
 
-# Item
+# アイテム
 item.ac_crystal_low.name=低純度虚能クリスタル
 item.ac_crystal_normal.name=中純度虚能クリスタル
 item.ac_crystal_pure.name=高純度虚能クリスタル
@@ -47,7 +48,7 @@ item.ac_magnetic_coil.name=高压磁気增幅コイル
 item.ac_induction_factor.name=能力誘導因子
 item.ac_tutorial.name=御坂ネット端末
 
-# Block
+# ブロック
 tile.ac_constraint_metal_ore.name=束能メタル鉱石
 tile.ac_crystal_ore.name=虚能クリスタル鉱石
 tile.ac_imag_silicon_ore.name=虚能シリコン鉱石
@@ -76,7 +77,7 @@ tile.ac_developer_normal.name=基本能力開発機
 tile.ac_developer_advanced.name=先進能力開発機
 tile.ac_ability_interferer.name=能力干渉機
 
-# Data Terminal
+# 情報端末
 ac.terminal.notinstalled=データ端末がインストールされていません。
 ac.terminal.alrdy_installed=データ端末が既にインストールされています。
 ac.terminal.key_hint=データ端末が正常にインストールされました。端末を起動／終了する際は「%s」キーを押してください。
@@ -87,7 +88,7 @@ ac.gui.terminal.appcount=%dアプリケーション
 ac.terminal.app_alrdy_installed=アプリ「%s」が既にインストールされています。
 ac.terminal.app_installed=アプリ「%s」が正常にインストールされました。
 
-# Apps
+# アプリ
 ac.app.skill_tree.name=スキルツリー
 ac.app.knowledge_record.name=ライフレコード
 ac.app.settings.name=設定
@@ -110,7 +111,7 @@ ac.app.freq_transmitter.e4=操作をキャンセルしました。
 ac.app.freq_transmitter.e5=送信中…
 ac.app.freq_transmitter.e6=接続に成功しました.
 
-# Settings
+## 設定アプリ
 ac.settings.cat.generic=一般設定
 ac.settings.prop.attackPlayer=PvPを許可
 ac.settings.prop.destroyBlocks=ブロックを破壊する
@@ -130,13 +131,13 @@ ac.settings.prop.debug_console=デバッグ情報の表示／非表示
 ac.settings.cat.misc=Misc
 ac.settings.prop.edit_ui=UIのカスタマイズ
 
-# Media
-
+## メディアアプリ
+## -> ac.app.media.*
 ac.media.acquired=「%s」がインストールされました。
 ac.media.haveone=「%s」が既にインストールされています。
 ac.media.notinstalled=メディアプレイヤーアプリがインストールされていません。
 
-# Media
+### メディア
 ac.media.only_my_railgun.name=only my railgun
 ac.media.only_my_railgun.desc=とある科学の超電磁砲 OP1
 ac.media.level5_judgelight.name=LEVEL5-judgelight-
@@ -144,7 +145,7 @@ ac.media.level5_judgelight.desc=とある科学の超電磁砲 OP2
 ac.media.sisters_noise.name=sister's noise
 ac.media.sisters_noise.desc=とある科学の超電磁砲Ｓ OP1
 
-# Ability Generic
+# 能力
 ac.ability.level0=無能力者
 ac.ability.level1=低能力者
 ac.ability.level2=異能力者
@@ -152,7 +153,7 @@ ac.ability.level3=強能力者
 ac.ability.level4=大能力者
 ac.ability.level5=超能力者
 
-death.attack.ac_skill=%1$s は %2$s に %3$s を使って殺します
+death.attack.ac_skill=%1$s は %2$s に %3$s で殺されました
 
 ac.activate_key.deactivate.desc=能力を削除
 ac.activate_key.endspecial.desc=特殊スキルモードを終了
@@ -163,7 +164,7 @@ ac.gui.preset_edit.tag=プリセット #
 ac.gui.preset_edit.skill_remove=現在のプリセットを削除
 ac.gui.preset_edit.skill_select=スキルを選択
 
-# Generic Skills
+## ジェネリックスキル
 ac.ability.generic.brain_course.name=ブレイン・コース
 ac.ability.generic.brain_course_advanced.name=ブレイン・コース・アドバンスド
 ac.ability.generic.mind_course.name=マインド・コース
@@ -172,10 +173,10 @@ ac.ability.generic.brain_course.desc=脳のための訓練を開始し、スキ�
 ac.ability.generic.brain_course_advanced.desc=さらに深く、効率的に思考能力を開発します。これにより、スキル保持時間と忍耐力を向上させます。
 ac.ability.generic.mind_course.desc=脳をよりリラックスさせる方法を学び、CPの回復速度を向上させます。
 
-# Electromaster
+## 電撃使い
 ac.ability.electromaster.name=電撃使い
 
-## EM Skills
+### 電撃使いスキル
 ac.ability.electromaster.arc_gen.name=アーク・ジェネレーション
 ac.ability.electromaster.mag_manip.name=マグネット・マニピュレーション
 ac.ability.electromaster.mine_detect.name=マイン・ディテクション
@@ -202,10 +203,10 @@ ac.ability.electromaster.body_intensify.desc=自身の生体電気を微調整�
 ac.ability.electromaster.thunder_clap.desc=大気中の磁場を操作して雷雲を作り出し、狙った地点に破壊的な落雷を引き起こします。
 ac.ability.electromaster.thunder_bolt.desc=大量の電気を集め、非常に強力な槍へと圧縮します。解放された電流は命中した敵を中心にその周囲の敵にも伝播し、すべてにダメージを与えます。
 
-# Teleporter
+## 空間移動
 ac.ability.teleporter.name=空間移動
 
-## TP Skills
+### 空間移動スキル
 ac.ability.teleporter.threatening_teleport.name=スレットニング・テレポート
 ac.ability.teleporter.dim_folding_theorem.name=折畳空間概論
 ac.ability.teleporter.penetrate_teleport.name=ペネトレイト・テレポート
@@ -215,7 +216,6 @@ ac.ability.teleporter.location_teleport.name=ロケーション・テレポー�
 ac.ability.teleporter.shift_tp.name=シフト・テレポート
 ac.ability.teleporter.space_fluct.name=スペース・フラクチュエーション
 ac.ability.teleporter.flashing.name=フラッシング
-ac.ability.teleporter.crithit=%fxクリティカルヒット！
 
 ac.ability.teleporter.threatening_teleport.desc=手に持った物を離れた所に転送します。敵に重ねるように転送することで攻撃することもできます。
 ac.ability.teleporter.dim_folding_theorem.desc=テレポートの時は、不安定な空間折り畳み現象が発生します。自分のスキルでランダム空間分割にこの現象を利用して、もっと高いダメージを引き起ができる。
@@ -226,21 +226,15 @@ ac.ability.teleporter.location_teleport.desc=現在地を記録し、その後�
 ac.ability.teleporter.shift_tp.desc=手に持ったブロックを転送し、転送先の座標に設置します。空間折り畳み現象が転送先の存在にダメージを与えます。
 ac.ability.teleporter.space_fluct.desc=空間折り畳み能力を強化し、より深刻で致命的なダメージを引き起こします。
 ac.ability.teleporter.flashing.desc=短い時間にテレポートを繰り返し、空中を移動します。
+ac.ability.teleporter.crithit=%fxクリティカルヒット！
 
-ac.gui.loctele.tag0=座標記録
-ac.gui.loctele.tag1=座標の追加
-ac.gui.loctele.name=名前:
-ac.gui.loctele.location=座標: 
-ac.gui.loctele.distance=距離: 
-ac.gui.loctele.dim=次元: #
-ac.gui.loctele.warn0=[CPが足りません。]
-ac.gui.loctele.warn1=現在座標を記録できません。
-ac.gui.loctele.teleport=テレポート！
+ac.gui.loctele.err_exp=EXPが足りませんので、ディメンションクロスはできません
+ac.gui.loctele.err_cp=CPが足りませんので、テレポートはできません
 
-# Meltdowner
+## 原子崩し
 ac.ability.meltdowner.name=原子崩し
 
-## MD Skills
+## 原子崩しスキル
 ac.ability.meltdowner.electron_bomb.name=エレクトロン・ボム
 ac.ability.meltdowner.rad_intensify.name=βレディエーション・インテンサファイ
 ac.ability.meltdowner.ray_barrage.name=レイ・バラージュ
@@ -265,10 +259,10 @@ ac.ability.meltdowner.mine_ray_expert.desc=電子強度の操作方法をより�
 ac.ability.meltdowner.mine_ray_luck.desc=長い修練を経て、鉱石中の有用な資源をほとんど完璧に集めることができます。
 ac.ability.meltdowner.electron_missile.desc=膨大な電子の雲を集めて保持し、毎回その一部分を使用して攻撃します。
 
-# Vecmanip
+## 矢量操作
 ac.ability.vecmanip.name=矢量操作
 
-## Vecmanip skills
+### 矢量操作スキル
 ac.ability.vecmanip.dir_shock.name=指向衝力
 ac.ability.vecmanip.ground_shock.name=导向踏撃
 ac.ability.vecmanip.vec_accel.name=矢量加速
@@ -289,7 +283,7 @@ ac.ability.vecmanip.storm_wing.desc=空気ベクトルを操作し、小型の�
 ac.ability.vecmanip.blood_retro.desc=敵の血流を操作、大動脈破裂と致命的な損傷を引き起こします。
 ac.ability.vecmanip.plasma_cannon.desc=空気の流れの非常に広い範囲を操作し、それを混合圧縮する。巨大なプラズマ体になる時投げます。
 
-# Command
+# コマンド
 ac.command.invalid=§c無効な入力です。やり直してください。
 ac.command.successful=§2コマンドが正常に実行されました。
 ac.command.notlearned=§6プレーヤーはまだどの能力も習得していません。
@@ -332,6 +326,7 @@ ac.command.aim.curexp=スキル「%s」の熟練度: %.0f%%.
 ac.command.aim.notactive=/aimコマンドは現在無効です。/aim cheats_onや/aim cheats_offを使用して有効無効を切り替えられます。
 ac.command.aim.warning=§c警告: /aimコマンドの使用はゲームバランスを崩壊させ、これからのあなたの経験に甚大な影響を与える恐れがあります！
 ac.command.aim.outofrange=§c範囲外の入力: §f入力する値は%sと%sの間でなければなりません。
+ac.command.aim.maxout=現在のレベルのアップグレード進度を100%%に設定します。
 
 # Achievements
 achievement.ac_phase_liquid=新たなエネルギー
@@ -435,7 +430,7 @@ achievement.ac_teleporter.flashing.desc=下等生物はいまだに自身の足�
 achievement.ac_teleporter.mastery=次元の旅人
 achievement.ac_teleporter.mastery.desc=テレポーターは次元の狭間を旅します
 
-# UI Commons
+# 一般ＵＩ
 ac.gui.common.pg_wireless.not_connected=接続されていません
 ac.gui.common.sep.info=情報
 ac.gui.common.sep.wireless_info=無線ネットワーク情報
@@ -455,7 +450,7 @@ ac.gui.common.prop.ssid=SSID
 ac.gui.common.prop.gen_speed=発電速率
 ac.gui.common.prop.altitude=標高
 
-# Skill Tree
+# スキルトリー
 ac.skill_tree.dev_developing=開発中...
 ac.skill_tree.dev_successful=開発成功。
 ac.skill_tree.dev_failed=開発失敗。
@@ -473,6 +468,22 @@ ac.skill_tree.level_fail=%d レベルまでこのスキルを開発すること�
 ac.skill_tree.type_portable=携行性能力開発機
 ac.skill_tree.type_normal=基本能力開発機
 ac.skill_tree.type_advanced=先進能力開発機
+
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nユーザー %s 検出しました、システム起動中......
+ac.skill_tree.console.invalid_cat=\nFATAL ERROR: ユーザーの能力が検出されません、起動中止します。\n
+ac.skill_tree.console.learn_hint=コマンド`learn`で能力を開発します。\n
+ac.skill_tree.console.override=\nWARNING: システム過負荷! 外部から注入を検出しました。.....\n\n能力リセット: コマンド`reset`で能力をリセットします。能力レベルは３以上または能力誘導因子を持っていることは必要です。\n
+ac.skill_tree.console.boot_failed=起動失敗しました.\n
+ac.skill_tree.console.invalid_command=無効なコマンド.\n
+ac.skill_tree.console.progress=進度: %s%%
+ac.skill_tree.console.reset_begin=能力のリセットは始まります...
+ac.skill_tree.console.reset_succ=個人現実のリセットは成功しました。\n
+ac.skill_tree.console.reset_fail=個人現実のリセットは失敗しました。\n
+ac.skill_tree.console.reset_fail_dev=能力のリセットはできません -- 先進能力開発機は必要です。\n
+ac.skill_tree.console.reset_fail_other=能力のリセットはできません -- 能力レベルは３以上または能力誘導因子を持っていることは必要です。\n
+ac.skill_tree.console.dev_begin=能力開発を始まります......\n
+ac.skill_tree.console.dev_succ=開発成功しました。\n
+ac.skill_tree.console.dev_fail=開発失敗しました。\n
 
 # Phase Generator
 

@@ -1,5 +1,5 @@
-﻿# AcademyCraft lang file
-# The file is majorly divided by content type (except for those that needs to interface with Minecraft).
+﻿# AcademyCraft Enligsh Language file
+# This file is mainly categorized by use (except for those which needs to follow the rules of Minecraft).
 
 # Common
 itemGroup.AcademyCraft=AcademyCraft
@@ -138,11 +138,11 @@ ac.media.haveone=You have already installed media %s
 ac.media.notinstalled=You have not yet installed the Media Player app.
 
 ### Medias
-ac.media.only_my_railgun.name=Only My Railgun
+ac.media.only_my_railgun.name=only my railgun
 ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
-ac.media.level5_judgelight.name=Level5 -Judgelight-
+ac.media.level5_judgelight.name=LEVEL5-judgelight-
 ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
-ac.media.sisters_noise.name=Sister's Noise
+ac.media.sisters_noise.name=sister's noise
 ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
 
 # Ability Generic
@@ -259,10 +259,10 @@ ac.ability.meltdowner.mine_ray_expert.desc=Understanding how to control the inte
 ac.ability.meltdowner.mine_ray_luck.desc=After a long time of practice, you can almost harvest the useful resources in the ore perfectly.
 ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electron cloud and use a small amount of it to attack each time.
 
-# Vector Manipulation
+## Vector Manipulation
 ac.ability.vecmanip.name=Vector Manip
 
-## VM skills
+### VM skills
 ac.ability.vecmanip.dir_shock.name=Directed Shock
 ac.ability.vecmanip.ground_shock.name=Groundshock
 ac.ability.vecmanip.vec_accel.name=Vector Acceleration
@@ -485,6 +485,10 @@ ac.skill_tree.console.dev_begin=Start stimulation......\n
 ac.skill_tree.console.dev_succ=Development successful.\n
 ac.skill_tree.console.dev_fail=Development failed.\n
 
+# Phase Generator
+
+# Imag Fusor
+
 # Metal Former
 ac.gui.metal_former.mode.etch=Etching
 ac.gui.metal_former.mode.plate=Plate Crushing
@@ -522,4 +526,3 @@ ac.headsOrTails.1=The result is HEADS!
 
 # Converter Block
 ac.converter.desc_template=Converts %s to %s
-
