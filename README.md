@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo.png)  
 
-[![Build Status](http://jenkins.mcbox.cc/job/LambdaInnovation/job/AcademyCraft/badge/icon)](http://jenkins.mcbox.cc/job/LambdaInnovation/job/AcademyCraft/)
+[![Build Status](http://jenkins.mcbox.cc/job/AcademyCraft/badge/icon)](http://jenkins.mcbox.cc/job/AcademyCraft/)
 
 A Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
