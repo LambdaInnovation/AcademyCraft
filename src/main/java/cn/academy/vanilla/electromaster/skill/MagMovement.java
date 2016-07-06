@@ -98,6 +98,10 @@ public class MagMovement extends Skill {
             super(instance);
             target = _target;
         }
+
+        public MovementAction() {
+            super(instance);
+        }
         
         @Override
         public void writeNBTStart(NBTTagCompound tag) {

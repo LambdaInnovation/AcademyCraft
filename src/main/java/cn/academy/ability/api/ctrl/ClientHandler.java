@@ -142,6 +142,7 @@ public final class ClientHandler {
 
 
     @Registrant
+    @SideOnly(Side.CLIENT)
     public enum ConfigHandler {
         @RegEventHandler(Bus.Forge)
         instance;

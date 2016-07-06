@@ -264,6 +264,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     @Registrant
+    @SideOnly(Side.CLIENT)
     public enum Events {
         @RegEventHandler({Bus.FML, Bus.Forge})
         instance;

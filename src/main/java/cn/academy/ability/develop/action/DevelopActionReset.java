@@ -31,7 +31,7 @@ public class DevelopActionReset implements IDevelopAction {
     }
 
     static Optional<ItemStack> getFactor(EntityPlayer player) {
-        Category playerCategory = AbilityData.get(player).getCategory();
+        Category playerCategory = AbilityData.get(player).getCategoryNullable();
         return Arrays.stream(player.inventory.mainInventory)
                 .filter(stack -> stack != null && stack.getItem() instanceof ItemInductionFactor)
                 .filter(stack -> ItemInductionFactor.getCategory(stack) != playerCategory)

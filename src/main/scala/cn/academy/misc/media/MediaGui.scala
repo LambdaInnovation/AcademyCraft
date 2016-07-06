@@ -14,6 +14,7 @@ import cn.lambdalib.cgui.gui.{CGuiScreen, Widget, WidgetContainer}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.util.client.auxgui.AuxGui
 import cn.lambdalib.util.helper.{Color, GameTimer}
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 
 private object MediaGuiInit {
@@ -188,6 +189,7 @@ class MediaGui extends CGuiScreen {
   override def doesGuiPauseGame(): Boolean = false
 }
 
+@SideOnly(Side.CLIENT)
 @Registrant
 private object MediaAuxGui {
   import cn.lambdalib.cgui.ScalaCGUI._

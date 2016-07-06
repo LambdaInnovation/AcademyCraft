@@ -111,7 +111,9 @@ private object MediaManagerInit {
   }
 
   def calculateLength(url: URL): Option[Float] = {
-    try {
+    if (url == null) {
+      Some(0)
+    } else try {
       val path = URLDecoder.decode(url.getFile, "utf-8")
       val vf = new VorbisFile(path)
       val ret = vf.time_total(-1)

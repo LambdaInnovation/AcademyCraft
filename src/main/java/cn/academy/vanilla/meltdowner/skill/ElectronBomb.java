@@ -14,6 +14,7 @@ import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
@@ -33,6 +34,7 @@ import static cn.lambdalib.util.generic.MathUtils.*;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class ElectronBomb extends Skill {
     
     public static final ElectronBomb instance = new ElectronBomb();

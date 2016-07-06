@@ -159,7 +159,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       "academy:tp.tp", 0.5f, 1.0f)
 
     val dist = player.getDistance(dest.x, dest.y, dest.z)
-    val expincr = if (dist >= 200) 0.08f else 0.05f
+    val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
 
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")

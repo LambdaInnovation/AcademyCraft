@@ -69,11 +69,10 @@ object GuiMetalFormer {
 }
 
 @Registrant
-@NetworkS11nType
 private object MFNetDelegate {
 
   @RegInitCallback
-  private def init() = {
+  def init() = {
     NetworkS11n.addDirectInstance(MFNetDelegate)
   }
 
