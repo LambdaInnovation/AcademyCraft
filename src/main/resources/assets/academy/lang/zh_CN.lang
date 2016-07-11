@@ -327,6 +327,8 @@ ac.command.aim.noskill=该技能不存在。使用 /aim skills 以列出当前�
 ac.command.aim.learned.format=已习得技能: %s
 ac.command.aim.curexp=技能 %s的当前经验: %.0f%%.
 ac.command.aim.maxout=/aim maxout: 将当前等级升级进度设置为100%%。
+ac.command.aim.nocomm=该指令不存在。使用 /aim help 以列出当前可用的所有指令。
+ac.command.aim.nonecathint=你还未学习能力！
 
 # 成就
 achievement.ac_phase_liquid=新能源

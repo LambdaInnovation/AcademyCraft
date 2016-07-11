@@ -21,6 +21,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -163,7 +164,7 @@ public abstract class CommandAIMBase extends ACCommand {
             if(pars.length == 1) {
                 sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
                         aData.getCategory().getDisplayName() :
-                        getLoc("nonecat"));
+                        StatCollector.translateToLocal(getLoc("nonecat")));
                 return;
             } else if(pars.length == 2) {
                 String catName = pars[1];
@@ -198,7 +199,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     aData.learnSkill(s);
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -213,7 +214,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     aData.setSkillLearnState(s, false);
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -223,7 +224,7 @@ public abstract class CommandAIMBase extends ACCommand {
                 aData.learnAllSkills();
                 sendChat(ics, locSuccessful());
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -254,7 +255,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     sendChat(ics, "#" + s.getID() + " " + s.getName() + ": " + s.getDisplayName());
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -277,10 +278,16 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         case "fullcp": {
-            CPData cpData = CPData.get(player);
-            cpData.setCP(cpData.getMaxCP());
-            cpData.setOverload(0);
-            sendChat(ics, locSuccessful());
+
+            if (aData.hasCategory()) {
+                CPData cpData = CPData.get(player);
+                cpData.setCP(cpData.getMaxCP());
+                cpData.setOverload(0);
+                sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
+            }
             return;
         }
         
@@ -312,22 +319,37 @@ public abstract class CommandAIMBase extends ACCommand {
                     }
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
 
         case "cd_clear": {
-            CooldownData.of(player).clear();
-            sendChat(ics, locSuccessful());
+
+            if (aData.hasCategory()) {
+                CooldownData.of(player).clear();
+                sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
+            }
             return;
         }
 
         case "maxout": {
+
             if (aData.hasCategory()) {
                 aData.maxOutLevelProgress();
                 sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
             }
+            return;
+        }
+
+        default: {
+            sendChat(ics, getLoc("nocomm"));
             return;
         }
         }
