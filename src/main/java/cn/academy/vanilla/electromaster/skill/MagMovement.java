@@ -238,7 +238,7 @@ public class MagMovement extends Skill {
         }
 
         private static float getExpIncr(double distance) {
-            return 0.0011f * (float) distance;
+            return Math.max(0.005f, 0.0011f * (float) distance);
         }
         
     }

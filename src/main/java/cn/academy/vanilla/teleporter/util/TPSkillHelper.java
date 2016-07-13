@@ -10,6 +10,7 @@ import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.misc.achievements.ModuleAchievements;
+import cn.academy.vanilla.teleporter.CatTeleporter;
 import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -55,6 +56,7 @@ public class TPSkillHelper {
                 damage *= rates[i];
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
+                aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
 
                 fireCritAttack(player, target, i);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
