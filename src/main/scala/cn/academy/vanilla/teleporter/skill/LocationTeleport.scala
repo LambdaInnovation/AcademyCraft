@@ -31,7 +31,7 @@ import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.command.IEntitySelector
-import net.minecraft.entity.Entity
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{MathHelper, ResourceLocation, StatCollector}
@@ -140,20 +140,23 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val (o, cp) = getConsumption(player, dest)
     ctx.consumeWithForce(o, cp)
 
-    val entitiesToTeleport: List[Entity] = WorldUtils.getEntities(player, 5,
+    val entitiesToTeleport: List[Entity] = player :: WorldUtils.getEntities(player, 5,
       teleportSelector.and(EntitySelectors.exclude(player))).toList
 
     if (isCrossDim(player, dest)) {
-      player.travelToDimension(dest.dim)
       entitiesToTeleport.foreach(_.travelToDimension(dest.dim))
     }
 
+    val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
-      val (dx, dy, dz) = (e.posX - player.posX, e.posY - player.posY, e.posZ - player.posZ)
-      e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz)
+      val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
+      e match {
+        case p : EntityLivingBase => // Update position record in server to prevent move back
+          p.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
+        case _ =>
+          e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz)
+      }
     })
-
-    player.setPositionAndUpdate(dest.x, dest.y, dest.z)
 
     player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
       "academy:tp.tp", 0.5f, 1.0f)
@@ -169,8 +172,6 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   private def isCrossDim(player: EntityPlayer, dest: Location) = player.worldObj.provider.dimensionId != dest.dim
 
   object Gui {
-    import cn.lambdalib.cgui.ScalaCGUI._
-
     lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
 
     lazy val dimensionNameMap = DimensionManager.getStaticDimensionIDs
