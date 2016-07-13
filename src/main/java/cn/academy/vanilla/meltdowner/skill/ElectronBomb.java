@@ -104,7 +104,7 @@ public class ElectronBomb extends Skill {
 
     @SideOnly(Side.CLIENT)
     @Listener(channel="spawn_ray", side=Side.CLIENT)
-    private void hSpawnRay(EntityPlayer player, EntityMdBall ball) {
+    private static void hSpawnRay(EntityPlayer player, EntityMdBall ball) {
         Vec3 dest = getDest(player);
         EntityMdRaySmall raySmall = new EntityMdRaySmall(player.worldObj);
         raySmall.setFromTo(ball.posX, ball.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), ball.posZ,
