@@ -28,6 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -132,7 +133,8 @@ public class ShiftTeleport extends Skill {
 
             if (item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ)
                     && ctx().canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ)
-                    && ctx().consume(getOverload(exp), getConsumption(exp))) {
+                    && ctx().consume(getOverload(exp), getConsumption(exp))
+                    && player.worldObj.getBlock(position.blockX, position.blockY, position.blockZ) == Blocks.air) {
 
                 item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ,
                         position.sideHit, (float) position.hitVec.xCoord, (float) position.hitVec.yCoord,
