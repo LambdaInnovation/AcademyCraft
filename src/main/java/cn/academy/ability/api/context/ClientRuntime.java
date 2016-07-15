@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.ctrl.ClientHandler;
 import cn.academy.ability.api.data.CPData;
@@ -382,6 +383,26 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     public interface IActivateHandler {
+
+        static IActivateHandler terminatesContext(Context ctx) {
+            return new IActivateHandler() {
+                @Override
+                public boolean handles(EntityPlayer player) {
+                    return ctx.getStatus() == Status.ALIVE;
+                }
+
+                @Override
+                public void onKeyDown(EntityPlayer player) {
+                    ctx.terminate();
+                }
+
+                @Override
+                public String getHint() {
+                    return ENDSPECIAL;
+                }
+            };
+        }
+
         String ENDSPECIAL = "endspecial";
 
         boolean handles(EntityPlayer player);
