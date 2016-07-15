@@ -6,7 +6,6 @@
 */
 package cn.academy.core;
 
-import cn.academy.vanilla.electromaster.CatElectromaster;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -131,7 +130,6 @@ public class AcademyCraft {
         }
 
         recipes = null; // Release and have fun GC
-
         config.save();
     }
     
