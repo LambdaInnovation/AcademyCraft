@@ -12,6 +12,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.academy.vanilla.electromaster.skill.*;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
@@ -121,12 +122,13 @@ public class CatElectromaster extends Category {
 
     private static HashSet<Class<? extends Entity>> metalEntities = new HashSet<>();
 
+    @RegInitCallback
     public static void init() {
 
         String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "iron_door", "activator_rail", "detector_rail",
                 "golden_rail", "sticky_piston", "piston"};
         String[] cfgNBlocks = AcademyCraft.config.getStringList("normalMetalBlocks", "ability", defaultNBlocks,
-                "Supported Normal Metal Blocks of Electro Master. The block name and oreDict name are able to use.");
+                "Supported Normal Metal Blocks of Electro Master. The block name and ore dictonary name can be used.");
         for (String block : cfgNBlocks) {
             if(Block.getBlockFromName(block) != null) {
                 normalMetalBlocks.add(Block.getBlockFromName(block));
@@ -141,7 +143,7 @@ public class CatElectromaster extends Category {
 
         String[] defaultWBlocks = {"dispenser", "hopper", "iron_ore"};
         String[] cfgWBlocks = AcademyCraft.config.getStringList("weakMetalBlocks", "ability", defaultWBlocks,
-                "Supported Weak Metal Blocks of Electro Master. The block name and oreDict name are able to use.");
+                "Supported Weak Metal Blocks of Electro Master. The block name and ore dictonary name can be used.");
         for (String block : cfgWBlocks) {
             if(Block.getBlockFromName(block) != null) {
                 weakMetalBlocks.add(Block.getBlockFromName(block));
@@ -157,7 +159,7 @@ public class CatElectromaster extends Category {
         String[] defaultEntities = {"MinecartRideable", "MinecartChest", "MinecartFurnace", "MinecartTNT", "MinecartHopper",
                 "MinecartSpawner", "MinecartCommandBlock", "academy-craft.ac_Entity_EntityMagHook", "VillagerGolem"};
         String[] cfgEntities = AcademyCraft.config.getStringList("metalEntities", "ability", defaultEntities,
-                "Supported Metal Entities of Electro Master. The entity name are able to use.");
+                "Supported Metal Entities of Electro Master. The entity name can be used.");
         for (String entity : cfgEntities) {
             Class<? extends Entity> c = (Class<? extends Entity>) EntityList.stringToClassMapping.get(entity);
             metalEntities.add(c);

@@ -132,8 +132,6 @@ public class AcademyCraft {
 
         recipes = null; // Release and have fun GC
 
-        CatElectromaster.init();
-
         config.save();
     }
     
