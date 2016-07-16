@@ -35,7 +35,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "academy:textures/guis/nei_fusor.png";
+        return "academy:textures/guis/mini_fusor.png";
     }
     
     @Override
@@ -45,7 +45,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getInputX() {
-        return 30;
+        return 16;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getOutputX() {
-        return 118;
+        return 134;
     }
 
     @Override
@@ -82,16 +82,26 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
             }    
         }
     }
+
+    @Override
+    public void drawBackground(int recipe) {
+        ShaderMono.instance().useProgram();
+        GL11.glColor4f(55f / 255, 55f / 255, 55f / 255, 1);
+        RenderUtils.loadTexture(new ResourceLocation(getGuiTexture()));
+        HudUtils.rect(3, 0, 0, 0, 160, 75, 352, 166);
+        GL20.glUseProgram(0);
+    }
     
     @Override
     public void drawExtras(int recipe) {
         if(tick >= 50) tick = 0;
+        GL11.glEnable(GL11.GL_BLEND);
         Resources.font().draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid),
-                75, 7, new FontOption(13, new Color(3618615)));
+                75, 10, new FontOption(13, new Color(0xFF373737)));
         ShaderMono.instance().useProgram();
         GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
-        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fuser.png"));
-        HudUtils.rect(56, 45, 0, 0, 51d * (tick / 50d), 15, 64d * (tick / 50d), 16);
+        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fusor.png"));
+        HudUtils.rect(54.5f, 42, 0, 0, 57d * (tick / 50d), 14, 126 * (tick / 50d), 30);
         GL20.glUseProgram(0);
     }
     

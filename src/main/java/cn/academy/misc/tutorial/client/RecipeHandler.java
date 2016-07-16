@@ -263,7 +263,7 @@ public enum RecipeHandler {
     }
 
     private Widget drawIFRecipe(IFRecipe recipe) {
-        Widget ret = windows.getWidget("ImagFuser").copy();
+        Widget ret = windows.getWidget("ImagFusor").copy();
         ret.getWidget("slot_in").addWidget(new StackDisplay(recipe.consumeType).centered());
         ret.getWidget("slot_out").addWidget(new StackDisplay(recipe.output).centered());
         TextBox.get(ret.getWidget("amount")).setContent(String.valueOf(recipe.consumeLiquid));

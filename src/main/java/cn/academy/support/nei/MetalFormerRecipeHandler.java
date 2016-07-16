@@ -34,7 +34,7 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "academy:textures/guis/nei_metalformer.png";
+        return "academy:textures/guis/mini_metalformer.png";
     }
 
     @Override
@@ -44,22 +44,22 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getInputX() {
-        return 42;
+        return 18;
     }
 
     @Override
     public int getInputY() {
-        return 38;
+        return 42;
     }
 
     @Override
     public int getOutputX() {
-        return 108;
+        return 133;
     }
 
     @Override
     public int getOutputY() {
-        return 38;
+        return 42;
     }
 
     @Override
@@ -79,16 +79,26 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
             }
         }
     }
+
+    @Override
+    public void drawBackground(int recipe) {
+        ShaderMono.instance().useProgram();
+        GL11.glColor4f(55f / 255, 55f / 255, 55f / 255, 1);
+        RenderUtils.loadTexture(new ResourceLocation(getGuiTexture()));
+        HudUtils.rect(6, 0, 0, 0, 155, 72, 352, 164);
+        GL20.glUseProgram(0);
+    }
     
     @Override
     public void drawExtras(int recipe) {
         if(tick >= 50) tick = 0;
         ShaderMono.instance().useProgram();
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
         RenderUtils.loadTexture(((MFCachedRecipe) arecipes.get(recipe)).mode.texture);
-        HudUtils.rect(76, 14, 0, 0, 14, 14, 24, 24);
-        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_former.png"));
-        HudUtils.rect(68, 43, 0, 0, 30d * (tick / 50d), 6, 30d * (tick / 50d), 6);
+        HudUtils.rect(74.5f, 6, 0, 0, 18, 18, 48, 48);
+        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_metalformer.png"));
+        HudUtils.rect(58.5f, 41, 0, 0, 50d * (tick / 50d), 13, 114d * (tick / 50d), 30);
         GL20.glUseProgram(0);
     }
     
