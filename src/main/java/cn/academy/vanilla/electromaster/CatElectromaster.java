@@ -12,6 +12,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.academy.vanilla.electromaster.skill.*;
+import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
@@ -32,6 +33,7 @@ import java.util.HashSet;
  * @author WeAthFolD
  *
  */
+@Registrant
 public class CatElectromaster extends Category {
 
     public static final Skill
