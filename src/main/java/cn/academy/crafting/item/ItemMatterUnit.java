@@ -165,6 +165,47 @@ public class ItemMatterUnit extends ACItem {
                             break;
                         }
                     }
+                } else {
+                    if (!player.canPlayerEdit(i, j, k, mop.sideHit, stack)) {
+                        return stack;
+                    }
+                    Block b = world.getBlock(i, j, k);
+                    if(b.isReplaceable(world, i, j, k)) {
+                        world.setBlock(i, j, k, getMaterial(stack).block);
+                    } else {
+                        switch(mop.sideHit) {
+                            case 0:
+                                j--;
+                                break;
+                            case 1:
+                                j++;
+                                break;
+                            case 2:
+                                k--;
+                                break;
+                            case 3:
+                                k++;
+                                break;
+                            case 4:
+                                i--;
+                                break;
+                            case 5:
+                                i++;
+                                break;
+                        }
+                        world.setBlock(i, j, k, this.getMaterial(stack).block);
+                    }
+                    ItemStack newStack = new ItemStack(this);
+                    this.setMaterial(newStack, NONE);
+                    int left = PlayerUtils.mergeStackable(player.inventory, newStack);
+                    if(left > 0 && !world.isRemote) {
+                        newStack.stackSize = left;
+                        player.dropPlayerItemWithRandomChoice(newStack, false);
+                    }
+                    if(!player.capabilities.isCreativeMode) {
+                        stack.stackSize--;
+                    }
+                    MinecraftForge.EVENT_BUS.post(new MatterUnitHarvestEvent(player, NONE));
                 }
             }
 
