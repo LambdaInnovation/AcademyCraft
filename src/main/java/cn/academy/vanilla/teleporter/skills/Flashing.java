@@ -8,6 +8,7 @@ package cn.academy.vanilla.teleporter.skills;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.context.ClientRuntime.ActivateHandlers;
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.api.context.Context;
 import cn.academy.ability.api.context.ContextManager;
@@ -122,7 +123,7 @@ public class Flashing extends Skill {
         @Listener(channel=Context.MSG_MADEALIVE, side=Side.CLIENT)
         void localMakeAlive() {
             if (isLocal()) {
-                activateHandler = IActivateHandler.terminatesContext(this);
+                activateHandler = ActivateHandlers.terminatesContext(this);
                 clientRuntime().addActivateHandler(activateHandler);
 
                 final String[] strs = new String[] { null, "a", "d", "w", "s"};

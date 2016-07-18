@@ -382,9 +382,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
     }
 
-    public interface IActivateHandler {
-
-        static IActivateHandler terminatesContext(Context ctx) {
+    public static class ActivateHandlers {
+        public static IActivateHandler terminatesContext(Context ctx) {
             return new IActivateHandler() {
                 @Override
                 public boolean handles(EntityPlayer player) {
@@ -402,6 +401,9 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
                 }
             };
         }
+    }
+
+    public interface IActivateHandler {
 
         String ENDSPECIAL = "endspecial";
 

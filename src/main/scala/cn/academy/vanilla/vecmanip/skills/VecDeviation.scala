@@ -4,7 +4,7 @@ import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
-import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
+import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
@@ -14,11 +14,13 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
-import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
+import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.skills.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
+import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 
 object VecDeviation extends Skill("vec_deviation", 2) {
 
@@ -134,16 +136,19 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) {
 
   private var activateHandler: IActivateHandler = _
+  private val ui = new WaveEffectUI(0.2f, 100, 1.4f)
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_alive() = if (isLocal) {
-    activateHandler = IActivateHandler.terminatesContext(par)
+    activateHandler = ActivateHandlers.terminatesContext(par)
     ClientRuntime.instance.addActivateHandler(activateHandler)
+    MinecraftForge.EVENT_BUS.register(this)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def l_terminate() = if (isLocal) {
     ClientRuntime.instance.removeActiveHandler(activateHandler)
+    MinecraftForge.EVENT_BUS.unregister(this)
   }
 
   @Listener(channel=MSG_STOP_ENTITY, side=Array(Side.CLIENT))
@@ -166,6 +171,14 @@ class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) 
   @Listener(channel=MSG_PLAY, side=Array(Side.CLIENT))
   private def playSound(pos: net.minecraft.util.Vec3) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", 0.5f, 1.0f)
+  }
+
+  @SubscribeEvent
+  def onRenderOverlay(evt: RenderGameOverlayEvent) = {
+    if (evt.`type` == ElementType.CROSSHAIRS) {
+      val r = evt.resolution
+      ui.onFrame(r.getScaledWidth, r.getScaledHeight)
+    }
   }
 
 }
