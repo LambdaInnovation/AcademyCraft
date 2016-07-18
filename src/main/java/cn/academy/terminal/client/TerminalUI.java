@@ -250,9 +250,20 @@ public class TerminalUI extends AuxGui {
         final TerminalData data = TerminalData.get(player);
         
         createTime = GameTimer.getTime();
-        
-        TextBox.get(root.getWidget("text_appcount")).content = 
-                StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
+
+        {
+            Widget widget = root.getWidget("text_appcount");
+            TextBox textBox = widget.getComponent(TextBox.class);
+            widget.listen(FrameEvent.class, (w, e) -> {
+                int currentTime = (int) (player.worldObj.getWorldTime() % 24000);
+                int hour = currentTime / 1000;
+                int minutes = (currentTime % 1000) * 60 / 1000;
+
+                String countText = StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
+                String timeText = wrapTime(hour) + ":" + wrapTime(minutes);
+                textBox.content = countText + ", " + timeText;
+            });
+        }
         
         TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
 
@@ -288,6 +299,11 @@ public class TerminalUI extends AuxGui {
         (w, e) -> {
             TextBox.get(w).option.color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
         });
+    }
+
+    private String wrapTime(int val) {
+        assert val >= 0 && val < 100;
+        return val < 10 ? ("0" + val) : (String.valueOf(val));
     }
     
     private void updateAppList(TerminalData data) {

@@ -43,7 +43,7 @@ import java.util.Map.Entry;
  *
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:LambdaLib@[1.2.1]") // LambdaLib is currently unstable. Supports only one version.
+     dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 @VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
@@ -52,9 +52,9 @@ public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static final boolean DEBUG_MODE = false;
+    public static final String VERSION = "@VERSION@";
 
-    public static final String VERSION = "1.0.2";
+    public static final boolean DEBUG_MODE = VERSION.startsWith("@");
 
     public static final Logger log = LogManager.getLogger("AcademyCraft");
 
