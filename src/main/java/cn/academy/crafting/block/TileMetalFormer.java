@@ -23,6 +23,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.NullablePar;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +34,29 @@ import net.minecraft.world.World;
  */
 @Registrant
 @RegTileEntity
-public class TileMetalFormer extends TileReceiverBase {
+public class TileMetalFormer extends TileReceiverBase implements ISidedInventory {
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        switch(side) {
+            case 0:
+                return new int[]{SLOT_OUT, SLOT_BATTERY};
+            case 1:
+                return new int[]{SLOT_IN};
+            default:
+                return new int[]{SLOT_BATTERY};
+        }
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack item, int side) {
+        return this.isItemValidForSlot(slot, item);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack item, int side) {
+        return side == 0;
+    }
 
     @Registrant
     @NetworkS11nType

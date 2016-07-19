@@ -25,6 +25,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -36,7 +37,7 @@ import net.minecraftforge.fluids.*;
 @Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
+public class TileImagFusor extends TileReceiverBase implements IFluidHandler, ISidedInventory {
     
     static final double WORK_SPEED = 1.0 / 120;
     static final double CONSUME_PER_TICK = 12;
@@ -56,6 +57,10 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         SLOT_IMAG_INPUT = 2,
         SLOT_ENERGY_INPUT = 3,
         SLOT_IMAG_OUTPUT = 4;
+
+    private final int[] slotsTop = {SLOT_INPUT, SLOT_IMAG_INPUT};
+    private final int[] slotsBottom = {SLOT_OUTPUT, SLOT_IMAG_OUTPUT, SLOT_ENERGY_INPUT};
+    private final int[] slotsOther = {SLOT_ENERGY_INPUT};
     
     protected FluidTank tank = new FluidTank(TANK_SIZE);
     
@@ -301,4 +306,25 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         }
     }
 
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        switch(side) {
+            case 0:
+                return slotsBottom;
+            case 1:
+                return slotsTop;
+            default:
+                return slotsOther;
+        }
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack item, int side) {
+        return this.isItemValidForSlot(slot, item);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack item, int side) {
+        return side == 0;
+    }
 }
