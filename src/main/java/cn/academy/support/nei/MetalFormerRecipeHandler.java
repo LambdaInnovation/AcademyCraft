@@ -34,7 +34,7 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public String getGuiTexture() {
-        return "academy:textures/guis/mini_metalformer.png";
+        return "academy:textures/guis/nei_metalformer.png";
     }
 
     @Override
@@ -44,22 +44,22 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getInputX() {
-        return 18;
+        return 41;
     }
 
     @Override
     public int getInputY() {
-        return 42;
+        return 24;
     }
 
     @Override
     public int getOutputX() {
-        return 133;
+        return 107;
     }
 
     @Override
     public int getOutputY() {
-        return 42;
+        return 24;
     }
 
     @Override
@@ -83,9 +83,8 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
     @Override
     public void drawBackground(int recipe) {
         ShaderMono.instance().useProgram();
-        GL11.glColor4f(55f / 255, 55f / 255, 55f / 255, 1);
         RenderUtils.loadTexture(new ResourceLocation(getGuiTexture()));
-        HudUtils.rect(6, 0, 0, 0, 155, 72, 352, 164);
+        HudUtils.rect(35, 0, 0, 0, 94, 57, 94, 57);
         GL20.glUseProgram(0);
     }
     
@@ -96,9 +95,9 @@ public class MetalFormerRecipeHandler extends ACMachineRecipeHandler {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
         RenderUtils.loadTexture(((MFCachedRecipe) arecipes.get(recipe)).mode.texture);
-        HudUtils.rect(74.5f, 6, 0, 0, 18, 18, 48, 48);
+        HudUtils.rect(73, 23, 0, 0, 18, 18, 48, 48);
         RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_metalformer.png"));
-        HudUtils.rect(58.5f, 41, 0, 0, 50d * (tick / 50d), 13, 114d * (tick / 50d), 30);
+        HudUtils.rect(57, 41, 0, 0, 50d * (tick / 50d), 13, 114d * (tick / 50d), 30);
         GL20.glUseProgram(0);
     }
     
