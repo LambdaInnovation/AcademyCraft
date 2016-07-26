@@ -130,7 +130,7 @@ public class CatElectromaster extends Category {
         String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "iron_door", "activator_rail", "detector_rail",
                 "golden_rail", "sticky_piston", "piston"};
         String[] cfgNBlocks = AcademyCraft.config.getStringList("normalMetalBlocks", "ability", defaultNBlocks,
-                "Supported Normal Metal Blocks of Electro Master. The block name and ore dictonary name can be used.");
+                "Supported Normal Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
         for (String block : cfgNBlocks) {
             if(Block.getBlockFromName(block) != null) {
                 normalMetalBlocks.add(Block.getBlockFromName(block));
@@ -145,7 +145,7 @@ public class CatElectromaster extends Category {
 
         String[] defaultWBlocks = {"dispenser", "hopper", "iron_ore"};
         String[] cfgWBlocks = AcademyCraft.config.getStringList("weakMetalBlocks", "ability", defaultWBlocks,
-                "Supported Weak Metal Blocks of Electro Master. The block name and ore dictonary name can be used.");
+                "Supported Weak Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
         for (String block : cfgWBlocks) {
             if(Block.getBlockFromName(block) != null) {
                 weakMetalBlocks.add(Block.getBlockFromName(block));
