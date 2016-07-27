@@ -95,11 +95,11 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
     ctx.consume(overload, cp)
   }
 
-  private def consumption = lerpf(200, 160, ctx.getSkillExp)
+  private val consumption = lerpf(200, 160, ctx.getSkillExp)
 
   private def updateCanPerform() = canPerform = ignoreGroundChecking || checkGround
 
-  private def ignoreGroundChecking = ctx.getSkillExp > 0.5f
+  private val ignoreGroundChecking = ctx.getSkillExp > 0.5f
 
   private def checkGround = {
     val p0 = player.position

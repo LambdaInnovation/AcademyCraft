@@ -218,7 +218,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
   private val dropRate = lerpf(0.3f, 1.0f, ctx.getSkillExp)
 
   // y speed given to mobs.
-  private def ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
+  private val ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
 
   private[skills] def consume(): Boolean = ctx.consume(overload, consumption)
 

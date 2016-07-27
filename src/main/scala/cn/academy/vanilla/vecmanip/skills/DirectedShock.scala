@@ -108,7 +108,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 
     ctx.consume(overload, cp)
   }
-  private def damage = lerpf(6, 12, ctx.getSkillExp)
+  private val damage = lerpf(6, 12, ctx.getSkillExp)
   private def knockback(targ: Entity) = if (ctx.getSkillExp >= 0.25f) {
     var delta = player.headPosition - targ.headPosition
     delta = delta.normalize()

@@ -181,11 +181,11 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     case _ => 55f
   }
 
-  private lazy val damage = lerpf(10, 18, ctx.getSkillExp)
+  private val damage = lerpf(10, 18, ctx.getSkillExp)
 
-  private lazy val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
+  private val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
 
-  private lazy val cooldown = lerpf(40, 20, ctx.getSkillExp).toInt
+  private val cooldown = lerpf(40, 20, ctx.getSkillExp).toInt
 
   private def knockback(targ: Entity) = {
     var delta = player.headPosition - targ.headPosition

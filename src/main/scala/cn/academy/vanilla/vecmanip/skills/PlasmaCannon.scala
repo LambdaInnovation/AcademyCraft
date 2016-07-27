@@ -167,7 +167,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     terminate()
   }
 
-  lazy val chargeTime = lerpf(100, 60, ctx.getSkillExp)
+  private val chargeTime = lerpf(100, 60, ctx.getSkillExp)
 
   def tryConsume() = {
     val cp = lerpf(18, 25, ctx.getSkillExp)
@@ -176,7 +176,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     ctx.consume(overload, cp)
   }
 
-  lazy val consumption = lerpf(3500, 2000, ctx.getSkillExp)
+  private val consumption = lerpf(3500, 2000, ctx.getSkillExp)
 
   override def getState = {
     if (state == STATE_CHARGING)
