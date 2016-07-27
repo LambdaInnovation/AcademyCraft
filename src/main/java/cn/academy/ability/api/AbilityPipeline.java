@@ -25,7 +25,7 @@ public class AbilityPipeline {
      * @return Whether we can break any block at all
      */
     static boolean canBreakBlock(World world) {
-        return !ArrayUtils.contains(propWorldsBannedDestroyingBlocks.getIntList(), world.provider.dimensionId);
+        return propDestroyBlocks.getBoolean() || !ArrayUtils.contains(propWorldsDestroyingBlocks.getIntList(), world.provider.dimensionId);
     }
 
     /**
@@ -45,15 +45,17 @@ public class AbilityPipeline {
 
     // PROPERTIES
     private static Property propAttackPlayer;
-    private static Property propWorldsBannedDestroyingBlocks;
+    private static Property propDestroyBlocks;
+    private static Property propWorldsDestroyingBlocks;
 
     @RegInitCallback
     private static void _init() {
         Configuration conf = AcademyCraft.config;
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");
-        propWorldsBannedDestroyingBlocks = conf.get("generic", "worldsBannedDestroyingBlocks", new int[]{},
-                "The world ids which banned destroying blocks.");
+        propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
+        propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new int[]{},
+                "The world ids which whitelisted destroying blocks.");
 
         MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
     }
