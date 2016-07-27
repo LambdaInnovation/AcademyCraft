@@ -68,7 +68,7 @@ public class AbilityContext {
     }
 
     public boolean canAttack(Entity entity) {
-        return canBreakBlock() || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
+        return canBreakBlock(entity.worldObj) || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
     }
 
     public void attackRange(double x, double y, double z, double range,
@@ -122,8 +122,8 @@ public class AbilityContext {
         return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, x, y, z);
     }
 
-    public boolean canBreakBlock() {
-        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock();
+    public boolean canBreakBlock(World world) {
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world);
     }
 
     private float getFinalDamage(float damage) {

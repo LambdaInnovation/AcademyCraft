@@ -159,7 +159,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
       lerpf(12.0f, 15.0f, ctx.getSkillExp))
     explosion.isSmoking = true
 
-    if (ctx.canBreakBlock) {
+    if (ctx.canBreakBlock(world())) {
       explosion.doExplosionA()
     }
     explosion.doExplosionB(true)

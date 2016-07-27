@@ -121,7 +121,7 @@ public class RangedRayDamage {
             }
         }
 
-        if(ctx.canBreakBlock()) {
+        if(ctx.canBreakBlock(world)) {
             for(double s = -range; s <= range; s += STEP) {
                 for(double t = -range; t <= range; t += STEP) {
                     double rr = range * RandUtils.ranged(0.9, 1.1);

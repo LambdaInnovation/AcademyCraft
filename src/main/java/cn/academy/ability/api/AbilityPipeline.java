@@ -5,10 +5,13 @@ import cn.academy.core.event.BlockDestroyEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * INTERNAL CLASS
@@ -21,8 +24,8 @@ public class AbilityPipeline {
     /**
      * @return Whether we can break any block at all
      */
-    static boolean canBreakBlock() {
-        return propDestroyBlocks.getBoolean();
+    static boolean canBreakBlock(World world) {
+        return !ArrayUtils.contains(propWorldsBannedDestroyingBlocks.getIntList(), world.provider.dimensionId);
     }
 
     /**
@@ -42,21 +45,22 @@ public class AbilityPipeline {
 
     // PROPERTIES
     private static Property propAttackPlayer;
-    private static Property propDestroyBlocks;
+    private static Property propWorldsBannedDestroyingBlocks;
 
     @RegInitCallback
     private static void _init() {
         Configuration conf = AcademyCraft.config;
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");
-        propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
+        propWorldsBannedDestroyingBlocks = conf.get("generic", "worldsBannedDestroyingBlocks", new int[]{},
+                "The world ids which banned destroying blocks.");
 
         MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
     }
 
     @SubscribeEvent
     public void onBlockDestroy(BlockDestroyEvent event) {
-        if(!canBreakBlock())
+        if(!canBreakBlock(event.world))
             event.setCanceled(true);
     }
 
