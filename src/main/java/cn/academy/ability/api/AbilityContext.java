@@ -10,6 +10,8 @@ import cn.academy.core.config.ACConfig;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -52,7 +54,7 @@ public class AbilityContext {
     public void attack(Entity target, float damage) {
         damage = CalcEvent.calc(new CalcEvent.SkillAttack(player, skill, target, damage));
 
-        if (damage > 0 && (AbilityPipeline.canAttackPlayer() || (!(target instanceof EntityPlayer)))) {
+        if (damage > 0 && (AbilityPipeline.canAttackPlayer() || (!(target instanceof EntityPlayer))) && canAttack(target)) {
             target.attackEntityFrom(new SkillDamageSource(player, skill), getFinalDamage(damage));
         }
     }
@@ -63,6 +65,10 @@ public class AbilityContext {
         } else {
             attack(target, damage);
         }
+    }
+
+    public boolean canAttack(Entity entity) {
+        return canBreakBlock() || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
     }
 
     public void attackRange(double x, double y, double z, double range,
