@@ -25,7 +25,7 @@ public class AbilityPipeline {
      * @return Whether we can break any block at all
      */
     static boolean canBreakBlock(World world) {
-        return propDestroyBlocks.getBoolean() || !ArrayUtils.contains(propWorldsDestroyingBlocks.getIntList(), world.provider.dimensionId);
+        return propDestroyBlocks.getBoolean() || ArrayUtils.contains(propWorldsDestroyingBlocks.getIntList(), world.provider.dimensionId);
     }
 
     /**
