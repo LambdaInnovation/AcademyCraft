@@ -109,6 +109,8 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
               EntityAffection.mark(entity)
             } else {
+              world.newExplosion(null, entity.posX, entity.posY, entity.posZ,
+                entity.asInstanceOf[EntityLargeFireball].field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
               entity.setDead()
               ctx.addSkillExp(0.001f * difficulty)
               sendToClient(MSG_STOP_ENTITY, entity)
