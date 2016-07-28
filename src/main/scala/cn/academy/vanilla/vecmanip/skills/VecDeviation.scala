@@ -11,7 +11,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
+import net.minecraft.entity.projectile.{EntityLargeFireball, EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
@@ -61,6 +61,8 @@ import VecDeviationContext._
 class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
   private val visited = mutable.Set[Entity]()
+  private val markedWhitelist = { classOf[EntityLargeFireball] }
+  private var ticker = 0
 
   private[skills] def reduceDamage(dmg: Float) = {
     val consumpRatio = 60.0f
@@ -108,11 +110,31 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
             EntityAffection.mark(entity)
           }
-        case Excluded() =>
+        case Excluded(difficulty) =>
+          if(ticker == 5 && markedWhitelist.getClasses.contains(entity.getClass)) {
+            if (consumeStop(difficulty)) {
+              entity match {
+                case arrow: EntityArrow =>
+                  arrow.setDamage(0)
+                case _ =>
+              }
+
+              entity.motionX = 0
+              entity.motionY = 0
+              entity.motionZ = 0
+
+              ctx.addSkillExp(0.001f * difficulty)
+
+              sendToClient(MSG_STOP_ENTITY, entity)
+
+              EntityAffection.mark(entity)
+            }
+          }
       }
     })
 
     visited ++= entities
+    ticker += 1
   }
 
   @Listener(channel=MSG_TICK, side={Array(Side.CLIENT, Side.SERVER)})

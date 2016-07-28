@@ -65,8 +65,8 @@ private object VecReflectionContext {
 class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private val visited = mutable.Set[Entity]()
-  private val markedWhitelist = { classOf[EntityLargeFireball] };
-  private var ticker = 0;
+  private val markedWhitelist = { classOf[EntityLargeFireball] }
+  private var ticker = 0
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -97,10 +97,12 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
           }
         case Excluded(difficulty) =>
           if(ticker == 5 && markedWhitelist.getClasses.contains(entity.getClass)) {
-            reflect(entity, player)
-            EntityAffection.mark(entity)
-            ctx.addSkillExp(difficulty * 0.0008f)
-            sendToClient(MSG_REFLECT_ENTITY, entity)
+            if (consumeEntity(difficulty)) {
+              reflect(entity, player)
+              EntityAffection.mark(entity)
+              ctx.addSkillExp(difficulty * 0.0008f)
+              sendToClient(MSG_REFLECT_ENTITY, entity)
+            }
           }
       }
     })
@@ -108,7 +110,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     visited ++= entities
 
     consumeNormal()
-    ticker += 1;
+    ticker += 1
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
