@@ -20,6 +20,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
+import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntityLargeFireball, EntityArrow, EntityFireball}
 import net.minecraft.util.DamageSource
@@ -86,7 +87,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     entities.filterNot(EntityAffection.isMarked).foreach (entity => {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) =>
-          if (consumeEntity(difficulty)) {
+          if (!entity.isInstanceOf[EntityXPOrb] && consumeEntity(difficulty)) {
             if(!entity.isInstanceOf[EntityLargeFireball]) {
               reflect(entity, player)
               EntityAffection.mark(entity)

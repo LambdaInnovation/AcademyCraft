@@ -10,6 +10,7 @@ import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
+import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntityLargeFireball, EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
@@ -91,7 +92,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
       val info = EntityAffection.getAffectInfo(entity)
       info match {
         case Affected(difficulty) => // Process not-marked and affected entities
-          if (consumeStop(difficulty)) {
+          if (!entity.isInstanceOf[EntityXPOrb] && consumeStop(difficulty)) {
             if (!entity.isInstanceOf[EntityLargeFireball]) {
               entity match {
                 case arrow: EntityArrow =>
