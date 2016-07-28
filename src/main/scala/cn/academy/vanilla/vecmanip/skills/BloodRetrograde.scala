@@ -3,6 +3,7 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
+import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.lambdalib.annoreg.core.Registrant
@@ -54,6 +55,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
       sendToClient(MSG_PERFORM, targ)
       ctx.attack(targ, damage)
       ctx.addSkillExp(0.002f)
+      if(ctx.getSkillExp == 1f) ModuleAchievements.trigger(ctx.player, "vecmanip.blood_retro")
     }
 
     terminate()

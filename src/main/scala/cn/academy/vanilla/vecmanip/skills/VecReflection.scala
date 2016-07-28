@@ -8,6 +8,7 @@ import cn.academy.ability.api.context._
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
+import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skills.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
@@ -33,6 +34,7 @@ object VecReflection extends Skill("vec_reflection", 4) {
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
+    ModuleAchievements.trigger(rt.getEntity, "vecmanip.vec_reflection")
     rt.addKey(keyid, KeyDelegates.contextActivate(this, new VecReflectionContext(_)))
   }
 

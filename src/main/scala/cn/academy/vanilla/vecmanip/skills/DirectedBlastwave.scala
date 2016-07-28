@@ -3,6 +3,7 @@ package cn.academy.vanilla.vecmanip.skills
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
+import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
@@ -146,6 +147,8 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
       sendToClient(MSG_GENERATE_EFFECT_BLOCKS, Vec3.createVectorHelper(position.xCoord, position.yCoord, position.zCoord))
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
+
+      ModuleAchievements.trigger(ctx.player, "vecmanip.dir_blast")
     } else {
       terminate()
     }

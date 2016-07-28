@@ -5,6 +5,7 @@ import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
+import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.generic.client.effect.SmokeEffect
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
@@ -194,6 +195,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
       ctx.addSkillExp(0.001f)
       ctx.setCooldown(cooldown)
+      ModuleAchievements.trigger(ctx.player, "vecmanip.ground_shock")
       sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
     }
     terminate()

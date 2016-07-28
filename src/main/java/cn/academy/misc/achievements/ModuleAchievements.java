@@ -8,10 +8,7 @@ package cn.academy.misc.achievements;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
-import cn.academy.misc.achievements.pages.PageCtElectromaster;
-import cn.academy.misc.achievements.pages.PageCtMeltdowner;
-import cn.academy.misc.achievements.pages.PageCtTeleporter;
-import cn.academy.misc.achievements.pages.PageDefault;
+import cn.academy.misc.achievements.pages.*;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
@@ -28,6 +25,7 @@ public final class ModuleAchievements {
     private static PageCtElectromaster pageCtElectromaster;
     private static PageCtMeltdowner pageCtMeltdowner;
     private static PageCtTeleporter pageCtTeleporter;
+    private static PageCtVecmanip pageCtVecmanip;
     
     @RegItem
     @RegItem.HasRender
@@ -42,6 +40,7 @@ public final class ModuleAchievements {
         AchievementPage.registerAchievementPage(pageCtElectromaster = new PageCtElectromaster());
         AchievementPage.registerAchievementPage(pageCtMeltdowner = new PageCtMeltdowner());
         AchievementPage.registerAchievementPage(pageCtTeleporter = new PageCtTeleporter());
+        AchievementPage.registerAchievementPage(pageCtVecmanip = new PageCtVecmanip());
     }
     
     /**

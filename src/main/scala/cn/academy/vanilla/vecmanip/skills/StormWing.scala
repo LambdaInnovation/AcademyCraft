@@ -4,6 +4,7 @@ import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
+import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
@@ -193,6 +194,8 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     ctx.addSkillExp(expincr)
 
     ctx.consume(overload, consumption)
+
+    ModuleAchievements.trigger(ctx.player, "vecmanip.storm_wing")
   } else true
 
   @SideOnly(Side.CLIENT)
