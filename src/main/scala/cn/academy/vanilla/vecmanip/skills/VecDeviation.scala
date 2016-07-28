@@ -61,8 +61,6 @@ import VecDeviationContext._
 class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
   private val visited = mutable.Set[Entity]()
-  private val markedWhitelist = { classOf[EntityLargeFireball] }
-  private var ticker = 0
 
   private[skills] def reduceDamage(dmg: Float) = {
     val consumpRatio = 60.0f
@@ -94,25 +92,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
       info match {
         case Affected(difficulty) => // Process not-marked and affected entities
           if (consumeStop(difficulty)) {
-            entity match {
-              case arrow: EntityArrow =>
-                arrow.setDamage(0)
-              case _ =>
-            }
-
-            entity.motionX = 0
-            entity.motionY = 0
-            entity.motionZ = 0
-
-            ctx.addSkillExp(0.001f * difficulty)
-
-            sendToClient(MSG_STOP_ENTITY, entity)
-
-            EntityAffection.mark(entity)
-          }
-        case Excluded(difficulty) =>
-          if(ticker == 5 && markedWhitelist.getClasses.contains(entity.getClass)) {
-            if (consumeStop(difficulty)) {
+            if (!entity.isInstanceOf[EntityLargeFireball]) {
               entity match {
                 case arrow: EntityArrow =>
                   arrow.setDamage(0)
@@ -128,13 +108,17 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
               sendToClient(MSG_STOP_ENTITY, entity)
 
               EntityAffection.mark(entity)
+            } else {
+              entity.setDead()
+              ctx.addSkillExp(0.001f * difficulty)
+              sendToClient(MSG_STOP_ENTITY, entity)
             }
           }
+        case Excluded() =>
       }
     })
 
     visited ++= entities
-    ticker += 1
   }
 
   @Listener(channel=MSG_TICK, side={Array(Side.CLIENT, Side.SERVER)})

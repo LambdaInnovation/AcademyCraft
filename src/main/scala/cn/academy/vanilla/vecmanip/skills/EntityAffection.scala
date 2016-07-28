@@ -9,7 +9,7 @@ import net.minecraft.entity.{Entity, EntityList}
 object EntityAffection {
 
   sealed trait AffectInfo
-  case class Excluded(difficulty: Float) extends AffectInfo
+  case class Excluded() extends AffectInfo
   case class Affected(difficulty: Float) extends AffectInfo
 
   private val (entityData, excluded) = {
@@ -34,9 +34,7 @@ object EntityAffection {
 
   def getAffectInfo(entity: Entity): AffectInfo = {
     if (excluded.exists(_.isInstance(entity))) {
-      entityData.find { case (klass, _) => klass.isInstance(entity) }
-        .map { case (_, difficulty) => Excluded(difficulty) }
-        .getOrElse(Excluded(1))
+      Excluded()
     } else {
       entityData.find { case (klass, _) => klass.isInstance(entity) }
         .map { case (_, difficulty) => Affected(difficulty) }

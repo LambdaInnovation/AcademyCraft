@@ -27,7 +27,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
-import org.apache.commons.lang3.ArrayUtils
 
 object VecReflection extends Skill("vec_reflection", 4) {
 
@@ -65,8 +64,6 @@ private object VecReflectionContext {
 class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private val visited = mutable.Set[Entity]()
-  private val markedWhitelist = { classOf[EntityLargeFireball] }
-  private var ticker = 0
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -90,27 +87,35 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) =>
           if (consumeEntity(difficulty)) {
-            reflect(entity, player)
-            EntityAffection.mark(entity)
-            ctx.addSkillExp(difficulty * 0.0008f)
-            sendToClient(MSG_REFLECT_ENTITY, entity)
-          }
-        case Excluded(difficulty) =>
-          if(ticker == 5 && markedWhitelist.getClasses.contains(entity.getClass)) {
-            if (consumeEntity(difficulty)) {
+            if(!entity.isInstanceOf[EntityLargeFireball]) {
               reflect(entity, player)
               EntityAffection.mark(entity)
               ctx.addSkillExp(difficulty * 0.0008f)
               sendToClient(MSG_REFLECT_ENTITY, entity)
+            } else {
+              entity.setDead()
+              val sourceEntity = entity.asInstanceOf[EntityLargeFireball].shootingEntity
+              val fireball : EntityLargeFireball = new EntityLargeFireball(world(), sourceEntity, sourceEntity.posX,
+                sourceEntity.posY, sourceEntity.posZ)
+              fireball.setPosition(entity.posX, entity.posY, entity.posZ)
+              val lookPos = Raytrace.getLookingPos(player, 20).getLeft
+              val speed = VecUtils.vec(entity.motionX, entity.motionY, entity.motionZ).lengthVector
+              val vel = (lookPos - entity.headPosition).normalize * speed
+              fireball.setVel(vel)
+              fireball.field_92057_e = entity.asInstanceOf[EntityLargeFireball].field_92057_e
+              EntityAffection.mark(fireball)
+              world().spawnEntityInWorld(fireball)
+              ctx.addSkillExp(difficulty * 0.0008f)
+              sendToClient(MSG_REFLECT_ENTITY, entity)
             }
           }
+        case Excluded() =>
       }
     })
 
     visited ++= entities
 
     consumeNormal()
-    ticker += 1
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
