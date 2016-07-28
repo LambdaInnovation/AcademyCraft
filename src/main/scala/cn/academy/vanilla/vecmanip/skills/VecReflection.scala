@@ -21,12 +21,13 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntityArrow, EntityFireball}
+import net.minecraft.entity.projectile.{EntityLargeFireball, EntityArrow, EntityFireball}
 import net.minecraft.util.DamageSource
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
+import org.apache.commons.lang3.ArrayUtils
 
 object VecReflection extends Skill("vec_reflection", 4) {
 
@@ -64,6 +65,8 @@ private object VecReflectionContext {
 class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private val visited = mutable.Set[Entity]()
+  private val markedWhitelist = { classOf[EntityLargeFireball] };
+  private var ticker = 0;
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -92,13 +95,20 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
             ctx.addSkillExp(difficulty * 0.0008f)
             sendToClient(MSG_REFLECT_ENTITY, entity)
           }
-        case Excluded() =>
+        case Excluded(difficulty) =>
+          if(ticker == 5 && markedWhitelist.getClasses.contains(entity.getClass)) {
+            reflect(entity, player)
+            EntityAffection.mark(entity)
+            ctx.addSkillExp(difficulty * 0.0008f)
+            sendToClient(MSG_REFLECT_ENTITY, entity)
+          }
       }
     })
 
     visited ++= entities
 
     consumeNormal()
+    ticker += 1;
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
