@@ -89,33 +89,37 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
     entities.removeAll(visited)
 
     entities.filterNot(EntityAffection.isMarked).foreach(entity =>  {
-      val info = EntityAffection.getAffectInfo(entity)
-      info match {
+      EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) => // Process not-marked and affected entities
-          if (!entity.isInstanceOf[EntityXPOrb] && consumeStop(difficulty)) {
-            if (!entity.isInstanceOf[EntityLargeFireball]) {
-              entity match {
-                case arrow: EntityArrow =>
-                  arrow.setDamage(0)
-                case _ =>
+          entity match {
+            case xporb : EntityXPOrb =>
+            case lfireball : EntityLargeFireball =>
+              if(consumeStop(difficulty)) {
+                entity.setDead()
+                world.newExplosion(null, entity.posX, entity.posY, entity.posZ,
+                  entity.asInstanceOf[EntityLargeFireball].field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
+
+                ctx.addSkillExp(0.001f * difficulty)
+                sendToClient(MSG_STOP_ENTITY, entity)
               }
+            case _ =>
+              if(consumeStop(difficulty)) {
+                entity match {
+                  case arrow: EntityArrow =>
+                    arrow.setDamage(0)
+                  case _ =>
+                }
 
-              entity.motionX = 0
-              entity.motionY = 0
-              entity.motionZ = 0
+                entity.motionX = 0
+                entity.motionY = 0
+                entity.motionZ = 0
 
-              ctx.addSkillExp(0.001f * difficulty)
+                ctx.addSkillExp(0.001f * difficulty)
 
-              sendToClient(MSG_STOP_ENTITY, entity)
+                sendToClient(MSG_STOP_ENTITY, entity)
 
-              EntityAffection.mark(entity)
-            } else {
-              world.newExplosion(null, entity.posX, entity.posY, entity.posZ,
-                entity.asInstanceOf[EntityLargeFireball].field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
-              entity.setDead()
-              ctx.addSkillExp(0.001f * difficulty)
-              sendToClient(MSG_STOP_ENTITY, entity)
-            }
+                EntityAffection.mark(entity)
+              }
           }
         case Excluded() =>
       }
