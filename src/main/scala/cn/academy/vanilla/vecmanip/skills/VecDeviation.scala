@@ -10,9 +10,8 @@ import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
-import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntityLargeFireball, EntityArrow, EntityFireball}
+import net.minecraft.entity.projectile.{EntitySmallFireball, EntityLargeFireball, EntityArrow, EntityFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
@@ -92,15 +91,21 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) => // Process not-marked and affected entities
           entity match {
-            case xporb : EntityXPOrb =>
             case lfireball : EntityLargeFireball =>
               if(consumeStop(difficulty)) {
-                entity.setDead()
-                world.newExplosion(null, entity.posX, entity.posY, entity.posZ,
-                  entity.asInstanceOf[EntityLargeFireball].field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
+                lfireball.setDead()
+                world.newExplosion(null, lfireball.posX, lfireball.posY, lfireball.posZ,
+                  lfireball.field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
 
                 ctx.addSkillExp(0.001f * difficulty)
-                sendToClient(MSG_STOP_ENTITY, entity)
+                sendToClient(MSG_STOP_ENTITY, lfireball)
+              }
+            case sfireball : EntitySmallFireball =>
+              if(consumeStop(difficulty)) {
+                sfireball.setDead()
+
+                ctx.addSkillExp(0.001f * difficulty)
+                sendToClient(MSG_STOP_ENTITY, sfireball)
               }
             case _ =>
               if(consumeStop(difficulty)) {

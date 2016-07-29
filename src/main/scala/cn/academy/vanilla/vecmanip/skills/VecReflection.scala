@@ -20,7 +20,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
-import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile._
 import net.minecraft.util.DamageSource
@@ -88,45 +87,13 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) =>
           entity match {
-            case xporb : EntityXPOrb =>
-            case potion : EntityPotion =>
-            case lfireball : EntityLargeFireball =>
+            case fireball : EntityFireball =>
               if(consumeEntity(difficulty)) {
-                entity.setDead()
-
-                val sourceEntity = entity.asInstanceOf[EntityLargeFireball].shootingEntity
-
-                val fireball: EntityLargeFireball = new EntityLargeFireball(world(), sourceEntity, sourceEntity.posX,
-                  sourceEntity.posY, sourceEntity.posZ)
-                fireball.setPosition(entity.posX, entity.posY, entity.posZ)
-                val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-                val speed = VecUtils.vec(entity.motionX, entity.motionY, entity.motionZ).lengthVector
-                val vel = (lookPos - entity.headPosition).normalize * speed
-                fireball.setVel(vel)
-                fireball.field_92057_e = entity.asInstanceOf[EntityLargeFireball].field_92057_e
-                EntityAffection.mark(fireball)
-                world().spawnEntityInWorld(fireball)
+                createNewFireball(fireball)
 
                 ctx.addSkillExp(difficulty * 0.0008f)
                 sendToClient(MSG_REFLECT_ENTITY, entity)
               }
-/*            case sfireball : EntitySmallFireball =>
-              if(consumeEntity(difficulty)) {
-                sfireball.setDead()
-
-                val fireball: EntitySmallFireball = new EntitySmallFireball(world(), sfireball.posX, sfireball.posY,
-                    sfireball.posZ, sfireball.posX, sfireball.posY, sfireball.posZ)
-                fireball.setPosition(sfireball.posX, sfireball.posY, sfireball.posZ)
-                val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-                val speed = VecUtils.vec(sfireball.motionX, sfireball.motionY, sfireball.motionZ).lengthVector
-                val vel = (lookPos - sfireball.headPosition).normalize * speed
-                fireball.setVel(vel)
-                EntityAffection.mark(fireball)
-                world().spawnEntityInWorld(fireball)
-
-                ctx.addSkillExp(difficulty * 0.0008f)
-                sendToClient(MSG_REFLECT_ENTITY, sfireball)
-              }*/
             case _ =>
               if(consumeEntity(difficulty)) {
                 reflect(entity, player)
@@ -144,6 +111,37 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     visited ++= entities
 
     consumeNormal()
+  }
+
+  private def createNewFireball(source : EntityFireball) = {
+    source.setDead()
+
+    val shootingEntity = source.shootingEntity
+    var fireball : EntityFireball = null
+
+    source match {
+      case l : EntityLargeFireball =>
+        fireball = new EntityLargeFireball(world(), shootingEntity, shootingEntity.posX,
+          shootingEntity.posY, shootingEntity.posZ)
+        fireball.asInstanceOf[EntityLargeFireball].field_92057_e = l.field_92057_e
+      case _ =>
+        source.shootingEntity match {
+          case null =>
+            fireball = new EntitySmallFireball(world(), source.posX, source.posY, source.posZ,
+              source.posX, source.posY, source.posZ)
+          case _ =>
+            fireball = new EntitySmallFireball(world(), shootingEntity, shootingEntity.posX,
+              shootingEntity.posY, shootingEntity.posZ)
+        }
+    }
+
+    fireball.setPosition(source.posX, source.posY, source.posZ)
+    val lookPos = Raytrace.getLookingPos(player, 20).getLeft
+    val speed = VecUtils.vec(source.motionX, source.motionY, source.motionZ).lengthVector
+    val vel = (lookPos - source.headPosition).normalize * speed
+    fireball.setVel(vel)
+    EntityAffection.mark(fireball)
+    world().spawnEntityInWorld(fireball)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
