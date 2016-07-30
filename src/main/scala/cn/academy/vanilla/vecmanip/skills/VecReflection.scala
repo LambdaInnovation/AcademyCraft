@@ -34,7 +34,6 @@ object VecReflection extends Skill("vec_reflection", 4) {
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
-    ModuleAchievements.trigger(rt.getEntity, "vecmanip.vec_reflection")
     rt.addKey(keyid, KeyDelegates.contextActivate(this, new VecReflectionContext(_)))
   }
 
@@ -86,6 +85,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     entities.filterNot(EntityAffection.isMarked).foreach (entity => {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) =>
+          ModuleAchievements.trigger(ctx.player, "vecmanip.vec_reflection")
           entity match {
             case fireball : EntityFireball =>
               if(consumeEntity(difficulty)) {
