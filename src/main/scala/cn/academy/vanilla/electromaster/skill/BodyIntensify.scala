@@ -55,6 +55,7 @@ object BodyIntensify extends Skill("body_intensify", 3) {
 object IntensifyContext {
 
   final val MSG_EFFECT_END = "effect_end"
+  final val MSG_END = "end"
 
 }
 
@@ -89,7 +90,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
     }
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.SERVER))
+  @Listener(channel=MSG_END, side=Array(Side.SERVER))
   private def s_onEnd() = {
     if(tick >= MIN_TIME) {
       if(tick >= MAX_TIME) tick = MAX_TIME
@@ -123,12 +124,6 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
       sendToClient(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
       terminate()
     }
-  }
-
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.SERVER))
-  private def s_onAbort() = {
-    sendToClient(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
-    terminate()
   }
 
 }
@@ -168,6 +163,17 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
       ACSounds.playClient(player, ACTIVATE_SOUND, 0.5f)
       player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player))
     }
+  }
+
+  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  private def c_onAbort() = {
+    sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
+    terminate()
+  }
+
+  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  private def c_onEnd() = {
+    sendToServer(MSG_END)
   }
 
 }
