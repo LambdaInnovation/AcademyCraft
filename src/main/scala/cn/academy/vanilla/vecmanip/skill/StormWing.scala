@@ -195,7 +195,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
 
     ctx.consume(overload, consumption)
 
-    ModuleAchievements.trigger(ctx.player, "vecmanip.storm_wing")
+    StormWing.triggerAchievement(player)
   } else true
 
   @SideOnly(Side.CLIENT)

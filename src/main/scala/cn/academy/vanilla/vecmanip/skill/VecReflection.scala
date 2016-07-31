@@ -85,7 +85,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     entities.filterNot(EntityAffection.isMarked).foreach (entity => {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) =>
-          ModuleAchievements.trigger(ctx.player, "vecmanip.vec_reflection")
+          VecReflection.triggerAchievement(player)
           entity match {
             case fireball : EntityFireball =>
               if(consumeEntity(difficulty)) {

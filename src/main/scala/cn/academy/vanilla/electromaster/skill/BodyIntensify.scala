@@ -112,7 +112,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
 
       // Also give him a hunger buff
       player.addPotionEffect(new PotionEffect(Potion.hunger.id, getHungerBuffTime(tick), 2))
-      ModuleAchievements.trigger(ctx.player, "electromaster.body_intensify")
+      BodyIntensify.triggerAchievement(player)
       ctx.addSkillExp(0.01f)
 
       val cooldown = lerpf(45, 30, ctx.getSkillExp).toInt

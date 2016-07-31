@@ -94,7 +94,7 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
               result.hitVec.yCoord,
               result.hitVec.zCoord,
               new ItemStack(Items.cooked_fished)))
-            ModuleAchievements.trigger(ctx.player, "electromaster.arc_gen")
+            ArcGen.triggerAchievement(player)
           }
         } else {
           if(RandUtils.ranged(0, 1) < igniteProb) {

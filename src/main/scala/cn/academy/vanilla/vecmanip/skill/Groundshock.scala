@@ -195,7 +195,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
       ctx.addSkillExp(0.001f)
       ctx.setCooldown(cooldown)
-      ModuleAchievements.trigger(ctx.player, "vecmanip.ground_shock")
+      Groundshock.triggerAchievement(player)
       sendToClient(MSG_PERFORM, dejavu_blocks.map(v => Array(v.x, v.y, v.z)).toArray)
     }
     terminate()
