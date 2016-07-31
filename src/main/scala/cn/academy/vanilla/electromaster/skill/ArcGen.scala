@@ -41,6 +41,7 @@ object ArcGen extends Skill("arc_gen", 1) {
 private object ArcGenContext {
 
   final val MSG_EFFECT = "effect"
+  final val MSG_PERFORM = "perform"
 
   val blockFilter = new IBlockSelector {
     override def accepts(world: World, x: Int, y: Int, z: Int, block: Block) = {
@@ -68,7 +69,12 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
     ctx.consume(overload, cp)
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  private def c_keydown() = {
+    sendToServer(MSG_PERFORM)
+  }
+
+  @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   private def s_perform() = {
     val world = player.worldObj
     // Perform ray trace
