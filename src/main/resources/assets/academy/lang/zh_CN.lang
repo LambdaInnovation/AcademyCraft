@@ -432,6 +432,28 @@ achievement.ac_teleporter.flashing.desc=靠自身移动的低级生物还想追�
 achievement.ac_teleporter.mastery=维度行者
 achievement.ac_teleporter.mastery.desc=我行走在空间之上
 
+ac.achievementpage.cat_vecmanip=矢量操作
+achievement.ac_vecmanip.lv1=动能偏向
+achievement.ac_vecmanip.lv1.desc=搬走这个石头，不然罚站
+achievement.ac_vecmanip.lv2=动能掌握
+achievement.ac_vecmanip.lv2.desc=要么弹开子弹，要么去死
+achievement.ac_vecmanip.lv3=矢量微调
+achievement.ac_vecmanip.lv3.desc=一切向我的矢量变为向下
+achievement.ac_vecmanip.lv4=矢量偏转
+achievement.ac_vecmanip.lv4.desc=掠夺矢量，然后全打出去
+achievement.ac_vecmanip.lv5=矢量操作
+achievement.ac_vecmanip.lv5.desc=这世界没有我无法操作的
+achievement.ac_vecmanip.ground_shock=
+achievement.ac_vecmanip.ground_shock.desc=和我站在同一个落脚点你是找死
+achievement.ac_vecmanip.dir_blast=
+achievement.ac_vecmanip.dir_blast.desc=冲击变成锥形刺入体内的感觉如何？弱者
+achievement.ac_vecmanip.storm_wing=
+achievement.ac_vecmanip.storm_wing.desc=看我干什么，反正你飞不起来
+achievement.ac_vecmanip.blood_retro=
+achievement.ac_vecmanip.blood_retro.desc=被我的手指触碰到你的皮肤，你就输了
+achievement.ac_vecmanip.vec_reflection=
+achievement.ac_vecmanip.vec_reflection.desc=谁允许你接触我的
+
 # UI通用
 ac.gui.common.pg_wireless.not_connected=未连接
 ac.gui.common.sep.info=信息

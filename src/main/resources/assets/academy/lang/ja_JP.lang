@@ -430,6 +430,28 @@ achievement.ac_teleporter.flashing.desc=下等生物はいまだに自身の足�
 achievement.ac_teleporter.mastery=次元の旅人
 achievement.ac_teleporter.mastery.desc=テレポーターは次元の狭間を旅します
 
+ac.achievementpage.cat_vecmanip=Vector Manip
+achievement.ac_vecmanip.lv1=
+achievement.ac_vecmanip.lv1.desc=
+achievement.ac_vecmanip.lv2=
+achievement.ac_vecmanip.lv2.desc=
+achievement.ac_vecmanip.lv3=
+achievement.ac_vecmanip.lv3.desc=
+achievement.ac_vecmanip.lv4=
+achievement.ac_vecmanip.lv4.desc=
+achievement.ac_vecmanip.lv5=
+achievement.ac_vecmanip.lv5.desc=
+achievement.ac_vecmanip.ground_shock=
+achievement.ac_vecmanip.ground_shock.desc=
+achievement.ac_vecmanip.dir_blast=
+achievement.ac_vecmanip.dir_blast.desc=
+achievement.ac_vecmanip.storm_wing=
+achievement.ac_vecmanip.storm_wing.desc=
+achievement.ac_vecmanip.blood_retro=
+achievement.ac_vecmanip.blood_retro.desc=
+achievement.ac_vecmanip.vec_reflection=
+achievement.ac_vecmanip.vec_reflection.desc=
+
 # 一般ＵＩ
 ac.gui.common.pg_wireless.not_connected=接続されていません
 ac.gui.common.sep.info=情報
