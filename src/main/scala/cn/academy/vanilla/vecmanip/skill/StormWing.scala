@@ -191,11 +191,10 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   }
 
   private def doConsume() = if (state == STATE_ACTIVE) {
-    ctx.addSkillExp(expincr)
-
-    ctx.consume(overload, consumption)
-
     StormWing.triggerAchievement(player)
+
+    ctx.addSkillExp(expincr)
+    ctx.consume(overload, consumption)
   } else true
 
   @SideOnly(Side.CLIENT)
