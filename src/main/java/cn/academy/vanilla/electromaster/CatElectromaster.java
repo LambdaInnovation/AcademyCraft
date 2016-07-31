@@ -32,13 +32,13 @@ import java.util.HashSet;
 public class CatElectromaster extends Category {
 
     public static final Skill
-        arcGen = ArcGen.instance,
+        arcGen = ArcGen$.MODULE$,
         magManip = MagManip2$.MODULE$,
         mineDetect = MineDetect.instance,
         railgun = Railgun.instance,
         magMovement = MagMovement.instance,
         currentCharging = CurrentCharging.instance,
-        bodyIntensify = BodyIntensify.instance,
+        bodyIntensify = BodyIntensify$.MODULE$,
         thunderBolt = ThunderBolt.instance,
         thunderClap = ThunderClap.instance
         /* ironSand = ??? */;
