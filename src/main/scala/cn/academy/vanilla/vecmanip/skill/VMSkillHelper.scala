@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import cn.lambdalib.util.generic.RegistryUtils
 import net.minecraft.entity.projectile.EntityArrow

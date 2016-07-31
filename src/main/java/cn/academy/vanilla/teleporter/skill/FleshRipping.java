@@ -4,7 +4,7 @@
 * https://github.com/LambdaInnovation/AcademyCraft
 * Licensed under GPLv3, see project root for more information.
 */
-package cn.academy.vanilla.teleporter.skills;
+package cn.academy.vanilla.teleporter.skill;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;

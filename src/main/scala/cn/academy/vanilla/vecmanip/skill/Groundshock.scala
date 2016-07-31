@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
@@ -222,7 +222,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
   // y speed given to mobs.
   private val ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
 
-  private[skills] def consume(): Boolean = ctx.consume(overload, consumption)
+  private[skill] def consume(): Boolean = ctx.consume(overload, consumption)
 
   private val groundBreakProb: Double = 0.3
 }

@@ -10,23 +10,18 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.academy.vanilla.electromaster.skill.*;
+import cn.academy.vanilla.electromaster.skill.MagManip2$;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 /**

@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._

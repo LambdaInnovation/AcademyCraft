@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import cn.academy.core.config.ACConfig
 import net.minecraft.entity.{Entity, EntityList}

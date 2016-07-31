@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
@@ -185,7 +185,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
       DelegateState.ACTIVE
   }
 
-  private[skills] def tryMove(): Unit = {
+  private[skill] def tryMove(): Unit = {
     val rawDelta = destination - chargePosition
     if (rawDelta.lengthVector() < 1) return
 

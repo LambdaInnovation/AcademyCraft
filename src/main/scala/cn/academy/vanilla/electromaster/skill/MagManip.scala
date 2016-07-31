@@ -1,11 +1,12 @@
-package cn.academy.vanilla.electromaster
+package cn.academy.vanilla.electromaster.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.{AbilityContext, AbilityPipeline, Skill}
 import cn.academy.ability.api.context._
+import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.EntityBlock
+import cn.academy.vanilla.electromaster.CatElectromaster
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
 import cn.lambdalib.annoreg.core.Registrant
@@ -45,9 +46,9 @@ private object MagManipContext {
   final val MSG_PERFORM = "perform"
 }
 
-import MagManipContext._
-import MagManip2._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.vanilla.electromaster.skill.MagManip2._
+import cn.academy.vanilla.electromaster.skill.MagManipContext._
 import cn.lambdalib.util.mc.MCExtender._
 
 private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip2) with IConsumptionProvider {

@@ -3,7 +3,7 @@ package cn.academy.vanilla.vecmanip.client.effect
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
-import cn.academy.vanilla.vecmanip.skills.VecAccelContext
+import cn.academy.vanilla.vecmanip.skill.VecAccelContext
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.RenderUtils

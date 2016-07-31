@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import java.util.function.Predicate
 
@@ -17,7 +17,7 @@ import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEven
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.vanilla.vecmanip.skills.EntityAffection.{Affected, Excluded}
+import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
@@ -62,7 +62,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
   private val visited = mutable.Set[Entity]()
 
-  private[skills] def reduceDamage(dmg: Float) = {
+  private[skill] def reduceDamage(dmg: Float) = {
     val consumpRatio = 60.0f
     val overloadRatio = 10.0f
 

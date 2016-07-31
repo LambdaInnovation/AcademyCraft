@@ -12,7 +12,7 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.academy.vanilla.teleporter.skill.LocationTeleport$;
-import cn.academy.vanilla.teleporter.skills.*;
+import cn.academy.vanilla.teleporter.skill.*;
 
 /**
  * @author WeAthFolD

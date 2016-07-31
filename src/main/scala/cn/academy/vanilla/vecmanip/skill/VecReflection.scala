@@ -1,4 +1,4 @@
-package cn.academy.vanilla.vecmanip.skills
+package cn.academy.vanilla.vecmanip.skill
 
 import java.util.function.Predicate
 
@@ -10,7 +10,7 @@ import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
-import cn.academy.vanilla.vecmanip.skills.EntityAffection.{Affected, Excluded}
+import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
