@@ -11,11 +11,12 @@ import cn.academy.ability.api.Skill;
 import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.skill.*;
-import cn.academy.vanilla.electromaster.skill.MagManip2$;
+import cn.academy.vanilla.electromaster.skill.MagManip$;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
@@ -32,15 +33,15 @@ import java.util.HashSet;
 public class CatElectromaster extends Category {
 
     public static final Skill
-        arcGen = ArcGen.instance,
-        magManip = MagManip2$.MODULE$,
-        mineDetect = MineDetect.instance,
-        railgun = Railgun.instance,
-        magMovement = MagMovement.instance,
-        currentCharging = CurrentCharging.instance,
-        bodyIntensify = BodyIntensify.instance,
-        thunderBolt = ThunderBolt.instance,
-        thunderClap = ThunderClap.instance
+        arcGen = ArcGen$.MODULE$,
+        magManip = MagManip$.MODULE$,
+        mineDetect = MineDetect$.MODULE$,
+        railgun = Railgun$.MODULE$,
+        magMovement = MagMovement$.MODULE$,
+        currentCharging = CurrentCharging$.MODULE$,
+        bodyIntensify = BodyIntensify$.MODULE$,
+        thunderBolt = ThunderBolt$.MODULE$,
+        thunderClap = ThunderClap$.MODULE$
         /* ironSand = ??? */;
 
     public CatElectromaster() {
@@ -99,7 +100,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isOreBlock(Block block) {
-        if (block instanceof BlockOre) {
+        if (block instanceof BlockOre || block instanceof BlockRedstoneOre) {
             return true;
         }
 
@@ -177,6 +178,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isEntityMetallic(Entity ent) {
+        if(metalEntities.isEmpty()) return false;
         for (Class<? extends Entity> cl : metalEntities) {
             if (cl.isInstance(ent))
                 return true;

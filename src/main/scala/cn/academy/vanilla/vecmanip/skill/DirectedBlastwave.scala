@@ -148,7 +148,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
 
-      ModuleAchievements.trigger(ctx.player, "vecmanip.dir_blast")
+      DirectedBlastwave.triggerAchievement(player)
     } else {
       terminate()
     }

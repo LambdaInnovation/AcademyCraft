@@ -411,7 +411,7 @@ public abstract class Skill extends Controllable {
     /**
      * Trigger the achievement in vanilla achievement page, if any.
      */
-    protected void triggerAchievement(EntityPlayer player) {
+    public void triggerAchievement(EntityPlayer player) {
         ModuleAchievements.trigger(player, getFullName());
     }
 
