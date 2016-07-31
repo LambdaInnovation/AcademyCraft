@@ -37,7 +37,7 @@ public class CatElectromaster extends Category {
         mineDetect = MineDetect.instance,
         railgun = Railgun.instance,
         magMovement = MagMovement.instance,
-        currentCharging = CurrentCharging.instance,
+        currentCharging = CurrentCharging$.MODULE$,
         bodyIntensify = BodyIntensify$.MODULE$,
         thunderBolt = ThunderBolt.instance,
         thunderClap = ThunderClap.instance

@@ -75,13 +75,13 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   private def getBuffLevel(ct: Int): Int = (lerp(0.5, 1, ctx.getSkillExp()) * (ct / 18.0)).toInt
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
-  private def consume() = {
+  private def s_consume() = {
     val overload = lerpf(200, 120, ctx.getSkillExp)
     ctx.consume(overload, 0)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
-  private def onTick() = {
+  private def s_onTick() = {
     tick += 1
     if((tick <= MAX_TIME && !ctx.consume(0, consumption)) || tick >= MAX_TOLERANT_TIME ) {
       sendToClient(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
@@ -90,7 +90,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.SERVER))
-  private def onEnd() = {
+  private def s_onEnd() = {
     if(tick >= MIN_TIME) {
       if(tick >= MAX_TIME) tick = MAX_TIME
       Random.shuffle(effects)
@@ -126,7 +126,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.SERVER))
-  private def onAbort() = {
+  private def s_onAbort() = {
     sendToClient(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
     terminate()
   }
@@ -143,7 +143,7 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
   var hud: CurrentChargingHUD = _
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  private def startEffect() = {
+  private def c_startEffect() = {
     if(isLocal) {
       loopSound = new FollowEntitySound(player, LOOP_SOUND).setLoop()
       hud = new CurrentChargingHUD()
@@ -153,12 +153,12 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  private def updateEffect() = {
+  private def c_updateEffect() = {
     // N/A
   }
 
   @Listener(channel=MSG_EFFECT_END, side=Array(Side.CLIENT))
-  private def endEffect(performed: Boolean) = {
+  private def c_endEffect(performed: Boolean) = {
     if(isLocal) {
       if(loopSound != null) loopSound.stop()
       if(hud != null) hud.startBlend(performed)
