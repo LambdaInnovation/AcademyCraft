@@ -10,7 +10,6 @@ import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
 import cn.lambdalib.annoreg.core.Registrant
