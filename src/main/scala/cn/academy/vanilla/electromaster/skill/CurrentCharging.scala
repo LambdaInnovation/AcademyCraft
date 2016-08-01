@@ -63,7 +63,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
-    ctx.consume(getOverload(exp), 0)
+    if(!ctx.consume(getOverload(exp), 0)) terminate()
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))

@@ -76,7 +76,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_consume() = {
     val overload = lerpf(200, 120, ctx.getSkillExp)
-    ctx.consume(overload, 0)
+    if(!ctx.consume(overload, 0)) terminate()
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))

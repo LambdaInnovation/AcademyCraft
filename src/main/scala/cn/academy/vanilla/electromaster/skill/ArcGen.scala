@@ -75,46 +75,48 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   private def s_perform() = {
-    val world = player.worldObj
-    // Perform ray trace
-    val result = Raytrace.traceLiving(player, range, null, blockFilter)
+    if(consume()) {
+      val world = player.worldObj
+      // Perform ray trace
+      val result = Raytrace.traceLiving(player, range, null, blockFilter)
 
-    sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef])
+      sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef])
 
-    if(result != null) {
-      var expincr = 0f
-      if(result.typeOfHit == MovingObjectType.ENTITY) {
-        EMDamageHelper.attack(ctx, result.entityHit, damage)
-        expincr = getExpIncr(true)
-      } else { //BLOCK
-        val hx = result.blockX
-        val hy = result.blockY
-        val hz = result.blockZ
-        val block = player.worldObj.getBlock(hx, hy, hz)
-        if(block == Blocks.water) {
-          if(RandUtils.ranged(0, 1) < fishProb) {
-            world.spawnEntityInWorld(new EntityItem(
-              world,
-              result.hitVec.xCoord,
-              result.hitVec.yCoord,
-              result.hitVec.zCoord,
-              new ItemStack(Items.cooked_fished)))
-            ArcGen.triggerAchievement(player)
-          }
+      if (result != null) {
+        var expincr = 0f
+        if (result.typeOfHit == MovingObjectType.ENTITY) {
+          EMDamageHelper.attack(ctx, result.entityHit, damage)
+          expincr = getExpIncr(true)
         } else {
-          if(RandUtils.ranged(0, 1) < igniteProb) {
-            if(world.getBlock(hx, hy + 1, hz) == Blocks.air) {
-              world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03)
+          //BLOCK
+          val hx = result.blockX
+          val hy = result.blockY
+          val hz = result.blockZ
+          val block = player.worldObj.getBlock(hx, hy, hz)
+          if (block == Blocks.water) {
+            if (RandUtils.ranged(0, 1) < fishProb) {
+              world.spawnEntityInWorld(new EntityItem(
+                world,
+                result.hitVec.xCoord,
+                result.hitVec.yCoord,
+                result.hitVec.zCoord,
+                new ItemStack(Items.cooked_fished)))
+              ArcGen.triggerAchievement(player)
+            }
+          } else {
+            if (RandUtils.ranged(0, 1) < igniteProb) {
+              if (world.getBlock(hx, hy + 1, hz) == Blocks.air) {
+                world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03)
+              }
             }
           }
+          expincr = getExpIncr(false)
         }
-        expincr = getExpIncr(false)
+        ctx.addSkillExp(expincr)
       }
-      consume()
-      ctx.addSkillExp(expincr)
-    }
 
-    ctx.setCooldown(lerpf(40, 15, ctx.getSkillExp).toInt)
+      ctx.setCooldown(lerpf(40, 15, ctx.getSkillExp).toInt)
+    }
     terminate()
   }
 
