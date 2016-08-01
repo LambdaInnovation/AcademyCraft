@@ -8,9 +8,7 @@ package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
-import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect
 import cn.lambdalib.annoreg.core.Registrant
@@ -126,6 +124,11 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
     }
   }
 
+  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  private def c_onEnd() = {
+    sendToServer(MSG_END)
+  }
+
 }
 
 @Registrant
@@ -169,11 +172,6 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
   private def c_onAbort() = {
     sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
     terminate()
-  }
-
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
-    sendToServer(MSG_END)
   }
 
 }
