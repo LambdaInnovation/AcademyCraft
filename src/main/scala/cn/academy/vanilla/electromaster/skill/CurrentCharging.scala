@@ -208,8 +208,8 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
       if (arc != null) arc.setDead()
       if (sound != null) sound.stop()
     } else {
-      sound.stop()
-      surround.setDead()
+      if (sound != null) sound.stop()
+      if (surround != null) surround.setDead()
     }
   }
 
