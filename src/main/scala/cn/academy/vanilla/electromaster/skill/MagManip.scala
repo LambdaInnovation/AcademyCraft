@@ -27,7 +27,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.World
 
-private[electromaster] object MagManip2 extends Skill("mag_manip", 2) {
+private[electromaster] object MagManip extends Skill("mag_manip", 2) {
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new MagManipContext(p))
@@ -47,11 +47,11 @@ private object MagManipContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.academy.vanilla.electromaster.skill.MagManip2._
+import cn.academy.vanilla.electromaster.skill.MagManip._
 import cn.academy.vanilla.electromaster.skill.MagManipContext._
 import cn.lambdalib.util.mc.MCExtender._
 
-private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip2) with IConsumptionProvider {
+private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with IConsumptionProvider {
 
   private val consumption = MathUtils.lerpf(225, 275, ctx.getSkillExp)
   private val overload = MathUtils.lerpf(72, 33, ctx.getSkillExp)
@@ -100,7 +100,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip2) wit
       case _ =>
         val trace: TraceResult = Raytrace.traceLiving(player, 10, EntitySelectors.nothing(), new IBlockSelector {
           override def accepts(world: World, x: Int, y: Int, z: Int, block: Block): Boolean = {
-            MagManip2.accepts(player, block)
+            MagManip.accepts(player, block)
           }
         })
 
@@ -261,7 +261,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
     regEventHandler(new CollideHandler {
       override def onEvent(event: CollideEvent): Unit = {
         if (!worldObj.isRemote && event.result != null && event.result.entityHit != null) {
-          AbilityContext.of(player2, MagManip2).attack(event.result.entityHit, damage)
+          AbilityContext.of(player2, MagManip).attack(event.result.entityHit, damage)
         }
       }
     })
