@@ -443,15 +443,15 @@ achievement.ac_vecmanip.lv4=矢量偏转
 achievement.ac_vecmanip.lv4.desc=掠夺矢量，然后全打出去
 achievement.ac_vecmanip.lv5=矢量操作
 achievement.ac_vecmanip.lv5.desc=这世界没有我无法操作的
-achievement.ac_vecmanip.ground_shock=
-achievement.ac_vecmanip.ground_shock.desc=和我站在同一个落脚点你是找死
-achievement.ac_vecmanip.dir_blast=
+achievement.ac_vecmanip.ground_shock=地面独裁
+achievement.ac_vecmanip.ground_shock.desc=谁允许你和我站在一样的高度了
+achievement.ac_vecmanip.dir_blast=穿刺钉拳
 achievement.ac_vecmanip.dir_blast.desc=冲击变成锥形刺入体内的感觉如何？弱者
-achievement.ac_vecmanip.storm_wing=
+achievement.ac_vecmanip.storm_wing=飞行专利
 achievement.ac_vecmanip.storm_wing.desc=看我干什么，反正你飞不起来
-achievement.ac_vecmanip.blood_retro=
+achievement.ac_vecmanip.blood_retro=血液喷涌
 achievement.ac_vecmanip.blood_retro.desc=被我的手指触碰到你的皮肤，你就输了
-achievement.ac_vecmanip.vec_reflection=
+achievement.ac_vecmanip.vec_reflection=一方通行
 achievement.ac_vecmanip.vec_reflection.desc=谁允许你接触我的
 
 # UI通用
