@@ -35,7 +35,7 @@ public class CatElectromaster extends Category {
         arcGen = ArcGen$.MODULE$,
         magManip = MagManip$.MODULE$,
         mineDetect = MineDetect$.MODULE$,
-        railgun = Railgun.instance,
+        railgun = Railgun$.MODULE$,
         magMovement = MagMovement$.MODULE$,
         currentCharging = CurrentCharging$.MODULE$,
         bodyIntensify = BodyIntensify$.MODULE$,
