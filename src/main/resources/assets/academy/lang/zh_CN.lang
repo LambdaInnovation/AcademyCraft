@@ -301,9 +301,6 @@ ac.command.knowledge.stat3=知识已发现: %s
 ac.command.knowledge.notfound=名称为  %s 的知识不存在.
 ac.command.knowledge.all=所有知识: 
 ac.command.knowledge.discover=/knowledge discover [知识名称]: 发现指定的知识.
-ac.command.aim.notactive=/aim指令当前未被开启。使用/aim cheats_on或/aim cheats_off来改变开启状态。
-ac.command.aim.warning=§c警告：使用/aim指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
-ac.command.aim.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
 
 ac.command.aim.usage=/aim <command>|<help> [参数...]
 ac.command.aim.help=/aim help: 显示帮助信息。
@@ -326,8 +323,11 @@ ac.command.aim.nonecat=无能力
 ac.command.aim.noskill=该技能不存在。使用 /aim skills 以列出当前能力系的所有技能。
 ac.command.aim.learned.format=已习得技能: %s
 ac.command.aim.curexp=技能 %s的当前经验: %.0f%%.
-ac.command.aim.maxout=/aim maxout: 将当前等级升级进度设置为100%%。
 ac.command.aim.nocomm=该指令不存在。使用 /aim help 以列出当前可用的所有指令。
+ac.command.aim.notactive=/aim指令当前未被开启。使用/aim cheats_on或/aim cheats_off来改变开启状态。
+ac.command.aim.warning=§c警告：使用/aim指令会破坏游戏平衡并且影响你对mod内容的体验。请谨慎使用！
+ac.command.aim.outofrange=§c输入不合法：§f必须是%s和%s之间的一个值。
+ac.command.aim.maxout=/aim maxout: 将当前等级升级进度设置为100%%。
 ac.command.aim.nonecathint=你还未学习能力！
 
 # 成就
