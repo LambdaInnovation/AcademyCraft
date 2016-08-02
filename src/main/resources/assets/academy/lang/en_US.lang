@@ -48,6 +48,8 @@ item.ac_magnetic_coil.desc=Overcharges the developer<br>In order to rewrite pers
 item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=MisakaCloud Terminal
 
+item.ac_powder.name= Powder
+
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
 tile.ac_crystal_ore.name=Imag Crystal Ore
@@ -528,3 +530,24 @@ ac.headsOrTails.1=The result is HEADS!
 
 # Converter Block
 ac.converter.desc_template=Converts %s to %s
+
+# Medicines
+ac.medicine.prop_type.targ=Target
+ac.medicine.prop_type.app=Apply Method
+ac.medicine.prop_type.str=Strength
+
+ac.medicine.props.targ_life=Life
+ac.medicine.props.targ_cp=Calc. Point
+ac.medicine.props.targ_overload=Overload
+ac.medicine.props.targ_jump=Jump
+ac.medicine.props.targ_cooldown=Cooldown
+ac.medicine.props.targ_move_speed=Move Speed
+ac.medicine.props.str_mild=Mild
+ac.medicine.props.str_weak=Weak
+ac.medicine.props.str_normal=Normal
+ac.medicine.props.str_strong=Strong
+ac.medicine.props.app_instant_incr=Instant Increase
+ac.medicine.props.app_instant_decr=Instant Decrease
+ac.medicine.props.app_cont_incr=Continuous Increase
+ac.medicine.props.app_cont_decr=Continuous Decrease
+

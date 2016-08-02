@@ -48,6 +48,8 @@ item.ac_magnetic_coil.desc=超载开发机以重置个人现实
 item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=御坂云终端
 
+item.ac_powder.name=粉末
+
 # 方块名称
 tile.ac_constraint_metal_ore.name=束能金属矿
 tile.ac_crystal_ore.name=虚能水晶矿
@@ -528,3 +530,8 @@ ac.headsOrTails.1=硬币反面朝上
 
 # 转换器方块
 ac.converter.desc_template=转换%s到%s
+
+# 药物系统
+ac.medicine.prop_type.targ=对象
+ac.medicine.prop_type.app=生效方式
+ac.medicine.prop_type.str=强度
