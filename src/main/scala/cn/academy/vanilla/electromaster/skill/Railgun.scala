@@ -52,10 +52,8 @@ object Railgun extends Skill("railgun", 4) {
     val pData = PresetData.get(evt.entityPlayer)
 
     val spawn = cpData.canUseAbility && pData.getCurrentPreset.hasControllable(Railgun)
-    if(spawn) {
-      if(SideHelper.isClient) {
-        ContextManager.instance.activate(new RailgunContext(evt.entityPlayer, evt.coin))
-      }
+    if(spawn && SideHelper.isClient) {
+      ContextManager.instance.activate(new RailgunContext(evt.entityPlayer, evt.coin))
     }
   }
 
@@ -82,7 +80,7 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
   var coin: EntityCoinThrowing = _coin
   var chargeTicks = -1
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=MSG_START, side=Array(Side.SERVER))
   private def s_madeAlive() = {
     if(coin != null) {
       sendToSelf(MSG_EFFECT_START)
@@ -121,10 +119,12 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
       val energy = lerpf(900, 2000, exp)
 
       val length = Array(45d)
-      val damage = new RangedRayDamage.Reflectible(ctx, 2, energy, ((reflector: Entity) => {
-        sendToSelf(MSG_REFLECT, reflector)
-        length.update(0, Math.min(length.apply(0), reflector.getDistanceToEntity(player)))
-      }).asInstanceOf[Consumer[Entity]])
+      val damage = new RangedRayDamage.Reflectible(ctx, 2, energy, new Consumer[Entity] {
+        override def accept(reflector: Entity) = {
+          sendToSelf(MSG_REFLECT, reflector)
+          length.update(0, Math.min(length.apply(0), reflector.getDistanceToEntity(player)))
+        }
+      })
       damage.startDamage = dmg
       damage.perform()
       Railgun.triggerAchievement(player)
@@ -144,10 +144,10 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
     sendToClient(MSG_REFLECT, reflector)
   }
 
-/*  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def c_onKeyDown() = {
     sendToServer(MSG_START)
-  }*/
+  }
 
   @Listener(channel=MSG_KEYTICK, side=Array(Side.CLIENT))
   private def c_onKeyTick() = {
@@ -172,11 +172,6 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
     chargeTicks = -1
     if(coin == null) terminate()
   }
-
-/*  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT, Side.SERVER))
-  private def g_terminated() = {
-    MinecraftForge.EVENT_BUS.unregister(Railgun)
-  }*/
 
 }
 
