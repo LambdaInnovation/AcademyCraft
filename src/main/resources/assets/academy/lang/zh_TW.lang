@@ -548,3 +548,7 @@ ac.headsOrTails.1=硬幣反面朝上
 
 # 轉換器方塊
 ac.converter.desc_template=轉換%s到%s
+# Added by Minecraft Language File Parser
+
+ac.command.aim.nonecathint=你還未學習能力！
+ac.command.aim.nocomm=該指令不存在。使用 /aim help 以列出當前可用的所有指令。
