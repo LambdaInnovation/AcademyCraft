@@ -12,7 +12,7 @@ import cn.academy.core.Resources
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.CatElectromaster
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegEntity
+import cn.lambdalib.annoreg.mc.{RegInitCallback, RegEntity}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.client.RenderUtils
 import cn.lambdalib.util.deprecated.{MeshUtils, SimpleMaterial}
@@ -20,6 +20,7 @@ import cn.lambdalib.util.entityx.EntityAdvanced
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.{BlockPos, Color}
 import cn.lambdalib.util.mc.{WorldUtils, IBlockSelector}
+import cpw.mods.fml.client.registry.RenderingRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.entity.{RenderManager, Render}
@@ -118,11 +119,9 @@ class MineElem(_x: Int, _y: Int, _z: Int, _lv: Int) {
 @Registrant
 @SideOnly(Side.CLIENT)
 @RegEntity(clientOnly = true)
-@RegEntity.HasRender
 class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced: Boolean) extends EntityAdvanced(_target.worldObj) {
 
-  @RegEntity.Render
-  val renderer: HandlerEntity = null
+  val renderer: HandlerRender = new HandlerRender()
 
   final val blockFilter: IBlockSelector = new IBlockSelector {
     override def accepts(world: World, x: Int, y: Int, z: Int, block: Block): Boolean = {
@@ -229,4 +228,12 @@ class HandlerRender extends Render {
   }
 
   override def getEntityTexture(p_110775_1_ : Entity) = null
+}
+
+@Registrant
+object MDInit {
+
+  @RegInitCallback
+  def init() = RenderingRegistry.registerEntityRenderingHandler(classOf[HandlerEntity], new HandlerRender)
+
 }
