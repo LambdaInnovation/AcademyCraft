@@ -443,15 +443,15 @@ achievement.ac_vecmanip.lv4=ベクトル偏向
 achievement.ac_vecmanip.lv4.desc=ベクトルを略奪し、全部打ち上げる
 achievement.ac_vecmanip.lv5=ベクトル変換
 achievement.ac_vecmanip.lv5.desc=この世の中に、俺が変わられないことはない
-achievement.ac_vecmanip.ground_shock=
+achievement.ac_vecmanip.ground_shock=地面独裁
 achievement.ac_vecmanip.ground_shock.desc=同じく地面に立つのは死を招く
-achievement.ac_vecmanip.dir_blast=
+achievement.ac_vecmanip.dir_blast=貫入の拳
 achievement.ac_vecmanip.dir_blast.desc=弱者め、インパクトのコーン貫入はどう？
-achievement.ac_vecmanip.storm_wing=
-achievement.ac_vecmanip.storm_wing.desc=何を見って、どうせ飛ばさないだろう
-achievement.ac_vecmanip.blood_retro=
+achievement.ac_vecmanip.storm_wing=専有飛行
+achievement.ac_vecmanip.storm_wing.desc=何を見って、どうせ飛べないだろう
+achievement.ac_vecmanip.blood_retro=血の爆発
 achievement.ac_vecmanip.blood_retro.desc=この指に触られたら、お前の負けだ
-achievement.ac_vecmanip.vec_reflection=
+achievement.ac_vecmanip.vec_reflection=一方通行
 achievement.ac_vecmanip.vec_reflection.desc=誰が触らせるといった？
 
 # 一般ＵＩ
