@@ -259,24 +259,24 @@ ac.ability.meltdowner.mine_ray_expert.desc=電子強度の操作方法をより�
 ac.ability.meltdowner.mine_ray_luck.desc=長い修練を経て、鉱石中の有用な資源をほとんど完璧に集めることができます。
 ac.ability.meltdowner.electron_missile.desc=膨大な電子の雲を集めて保持し、毎回その一部分を使用して攻撃します。
 
-## 矢量操作
-ac.ability.vecmanip.name=矢量操作
+## 一方通行
+ac.ability.vecmanip.name=一方通行
 
-### 矢量操作スキル
+### 一方通行スキル
 ac.ability.vecmanip.dir_shock.name=指向衝力
 ac.ability.vecmanip.ground_shock.name=导向踏撃
-ac.ability.vecmanip.vec_accel.name=矢量加速
-ac.ability.vecmanip.vec_deviation.name=矢量オフセット
+ac.ability.vecmanip.vec_accel.name=ベクトル加速
+ac.ability.vecmanip.vec_deviation.name=ベクトルオフセット
 ac.ability.vecmanip.dir_blast.name=集束衝撃
 ac.ability.vecmanip.storm_wing.name=風の翼
 ac.ability.vecmanip.blood_retro.name=血源逆行
-ac.ability.vecmanip.vec_reflection.name=矢量反射
+ac.ability.vecmanip.vec_reflection.name=ベクトル反射
 ac.ability.vecmanip.plasma_cannon.name=プラズマ砲
 
 ac.ability.vecmanip.vec_reflection.desc=敵が苦しむように、視線方向のあなたのラインに危険な攻撃は、逆転されます。
 ac.ability.vecmanip.dir_shock.desc=衝撃力に反衝力を追加し、破壊的で拳を作り。
 ac.ability.vecmanip.ground_shock.desc=地面を踏み、地面に発生するエネルギーを収集し、前方に発射します。活動目標を創傷形成することができます。
-ac.ability.vecmanip.vec_accel.desc=矢量演算は、すべての前方に調整し、独自のゲイン大きな加速度を作る地面が発生する力の方向をペダリング作ります。
+ac.ability.vecmanip.vec_accel.desc=ベクトル演算は、すべての前方に調整し、独自のゲイン大きな加速度を作る地面が発生する力の方向をペダリング作ります。
 ac.ability.vecmanip.vec_deviation.desc=あなたに向かって飛んで発射は対気速度を失います。そしていくつかの近接ダメージをオフセットしました。
 ac.ability.vecmanip.dir_blast.desc=衝撃力に二重の反衝力を追加し、強力な破壊的で拳を作り、ブロックは直接破壊することができます。
 ac.ability.vecmanip.storm_wing.desc=空気ベクトルを操作し、小型の竜巻の後ろに4を立ち上げ、それらは高速飛行で推力産生します。
@@ -432,27 +432,27 @@ achievement.ac_teleporter.flashing.desc=下等生物はいまだに自身の足�
 achievement.ac_teleporter.mastery=次元の旅人
 achievement.ac_teleporter.mastery.desc=テレポーターは次元の狭間を旅します
 
-ac.achievementpage.cat_vecmanip=Vector Manip
-achievement.ac_vecmanip.lv1=
-achievement.ac_vecmanip.lv1.desc=
-achievement.ac_vecmanip.lv2=
-achievement.ac_vecmanip.lv2.desc=
-achievement.ac_vecmanip.lv3=
-achievement.ac_vecmanip.lv3.desc=
-achievement.ac_vecmanip.lv4=
-achievement.ac_vecmanip.lv4.desc=
-achievement.ac_vecmanip.lv5=
-achievement.ac_vecmanip.lv5.desc=
+ac.achievementpage.cat_vecmanip=一方通行
+achievement.ac_vecmanip.lv1=運動量変換
+achievement.ac_vecmanip.lv1.desc=この石を運んでなさい
+achievement.ac_vecmanip.lv2=運動量コントロール
+achievement.ac_vecmanip.lv2.desc=弾丸を弾くか死ぬか
+achievement.ac_vecmanip.lv3=ベクトル微調整
+achievement.ac_vecmanip.lv3.desc=精密操作
+achievement.ac_vecmanip.lv4=ベクトル偏向
+achievement.ac_vecmanip.lv4.desc=ベクトルを略奪し、全部打ち上げる
+achievement.ac_vecmanip.lv5=ベクトル変換
+achievement.ac_vecmanip.lv5.desc=この世の中に、俺が変わられないことはない
 achievement.ac_vecmanip.ground_shock=
-achievement.ac_vecmanip.ground_shock.desc=
+achievement.ac_vecmanip.ground_shock.desc=同じく地面に立つのは死を招く
 achievement.ac_vecmanip.dir_blast=
-achievement.ac_vecmanip.dir_blast.desc=
+achievement.ac_vecmanip.dir_blast.desc=弱者め、インパクトのコーン貫入はどう？
 achievement.ac_vecmanip.storm_wing=
-achievement.ac_vecmanip.storm_wing.desc=
+achievement.ac_vecmanip.storm_wing.desc=何を見って、どうせ飛ばさないだろう
 achievement.ac_vecmanip.blood_retro=
-achievement.ac_vecmanip.blood_retro.desc=
+achievement.ac_vecmanip.blood_retro.desc=この指に触られたら、お前の負けだ
 achievement.ac_vecmanip.vec_reflection=
-achievement.ac_vecmanip.vec_reflection.desc=
+achievement.ac_vecmanip.vec_reflection.desc=誰が触らせるといった？
 
 # 一般ＵＩ
 ac.gui.common.pg_wireless.not_connected=接続されていません
