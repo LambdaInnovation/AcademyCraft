@@ -39,7 +39,7 @@ public class CatElectromaster extends Category {
         magMovement = MagMovement$.MODULE$,
         currentCharging = CurrentCharging$.MODULE$,
         bodyIntensify = BodyIntensify$.MODULE$,
-        thunderBolt = ThunderBolt.instance,
+        thunderBolt = ThunderBolt$.MODULE$,
         thunderClap = ThunderClap.instance
         /* ironSand = ??? */;
 
