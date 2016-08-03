@@ -6,8 +6,12 @@
   */
 package cn.academy.vanilla.electromaster.skill
 
+import java.util.Optional
 import java.util.function.Consumer
 
+import cn.academy.ability.api.context.KeyDelegate.DelegateState
+import cn.academy.ability.api.cooldown.CooldownData
+import cn.academy.ability.api.ctrl.ClientHandler
 import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.ability.api.context._
 import cn.academy.ability.api.data.{PresetData, CPData}
@@ -28,8 +32,10 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.util.{ResourceLocation, ChatComponentText}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraftforge.common.MinecraftForge
+import RailgunContext._
 
 /**
   * @author KSkun
@@ -44,16 +50,19 @@ object Railgun extends Skill("railgun", 4) {
   def isAccepted(stack: ItemStack) = stack != null && acceptedItems.contains(stack.getItem)
 
   @SideOnly(Side.CLIENT)
-  override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new RailgunContext(p))
+  override def activate(rt: ClientRuntime, keyid: Int) = rt.addKey(keyid, new RailgunDelegate)
 
   @SubscribeEvent
   def onThrowCoin(evt: CoinThrowEvent) = {
     val cpData = CPData.get(evt.entityPlayer)
     val pData = PresetData.get(evt.entityPlayer)
+    val cdData = CooldownData.of(evt.entityPlayer)
 
     val spawn = cpData.canUseAbility && pData.getCurrentPreset.hasControllable(Railgun)
-    if(spawn && SideHelper.isClient) {
-      ContextManager.instance.activate(new RailgunContext(evt.entityPlayer, evt.coin))
+    if(spawn && SideHelper.isClient && cdData.get(this).getTickLeft == 0) {
+      val context = new RailgunContext(evt.entityPlayer)
+      context.coin = evt.coin
+      ContextManager.instance.activate(context)
     }
   }
 
@@ -65,6 +74,7 @@ object RailgunContext {
   final val MSG_EFFECT_START = "effect_start"
   final val MSG_PERFORM = "perform"
   final val MSG_REFLECT = "reflect"
+  final val MSG_SYNC_COIN = "sync_coin"
 
 }
 
@@ -73,29 +83,30 @@ import cn.lambdalib.util.generic.MathUtils._
 import Railgun._
 import RailgunContext._
 
-class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context(p, Railgun) {
+class RailgunContext(p: EntityPlayer) extends Context(p, Railgun) {
 
-  def this(p: EntityPlayer) = this(p, null)
+  var coin: EntityCoinThrowing = null
 
-  var coin: EntityCoinThrowing = _coin
-  var chargeTicks = -1
+  @Listener(channel=MSG_SYNC_COIN, side=Array(Side.SERVER))
+  private def s_syncCoin(_coin: EntityCoinThrowing) = coin = _coin
 
-  @Listener(channel=MSG_START, side=Array(Side.SERVER))
-  private def s_madeAlive() = {
-    if(coin != null) {
-      sendToSelf(MSG_EFFECT_START)
-      if(coin.getProgress > 0.7) {
-        coin.setDead()
-        sendToServer(MSG_PERFORM)
+  @Listener(channel=MSG_START, side=Array(Side.CLIENT))
+  private def c_start() = {
+    if(isLocal) {
+      if (coin != null) {
+        sendToServer(MSG_SYNC_COIN, coin)
+        if (coin.getProgress > 0.7) {
+          coin.setDead()
+          sendToServer(MSG_PERFORM)
+        } else {
+          terminate()
+        }
+
+        coin = null // Prevent second QTE judgement
       } else {
-        terminate()
-      }
-
-      coin = null // Prevent second QTE judgement
-    } else {
-      if(Railgun.isAccepted(player.getCurrentEquippedItem)) {
-        sendToSelf(MSG_EFFECT_START)
-        chargeTicks = 20
+        if (Railgun.isAccepted(player.getCurrentEquippedItem)) {
+          sendToSelf(MSG_EFFECT_START)
+        } else terminate()
       }
     }
   }
@@ -131,8 +142,8 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
 
       ctx.setCooldown(lerpf(300, 160, exp).asInstanceOf[Int])
       sendToClient(MSG_PERFORM, length.apply(0).asInstanceOf[AnyRef])
-      terminate()
     }
+    terminate()
   }
 
   @Listener(channel=MSG_REFLECT, side=Array(Side.SERVER))
@@ -144,33 +155,9 @@ class RailgunContext(p: EntityPlayer, _coin: EntityCoinThrowing) extends Context
     sendToClient(MSG_REFLECT, reflector)
   }
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_onKeyDown() = {
-    sendToServer(MSG_START)
-  }
-
-  @Listener(channel=MSG_KEYTICK, side=Array(Side.CLIENT))
-  private def c_onKeyTick() = {
-    if(chargeTicks != -1) {
-      chargeTicks -= 1
-      if (chargeTicks == 0) {
-        sendToServer(MSG_PERFORM)
-      }
-    } else if(coin == null) {
-      terminate()
-    }
-  }
-
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onKeyUp() = {
-    chargeTicks = -1
-    if(coin == null) terminate()
-  }
-
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onKeyAbort() = {
-    chargeTicks = -1
-    if(coin == null) terminate()
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  private def c_madeAlive() = {
+    if(coin != null) sendToSelf(MSG_EFFECT_START)
   }
 
 }
@@ -206,3 +193,61 @@ class RailgunContextC(par: RailgunContext) extends ClientContext(par) {
 
 }
 
+class RailgunDelegate extends KeyDelegate {
+
+  var chargeTicks = -1
+  var canTicking = false
+
+  override def onKeyDown(): Unit = {
+    if(!currContext.isPresent) ContextManager.instance.activate(new RailgunContext(getPlayer))
+    else {
+      NetworkMessage.sendToAll(currContext.get(), MSG_START)
+      onKeyUp()
+      return
+    }
+    chargeTicks = 20
+    canTicking = true
+  }
+
+  override def onKeyTick(): Unit = {
+    if(canTicking) {
+      if(chargeTicks <= 19 && !currContext.isPresent) {
+        onKeyAbort()
+        return
+      }
+      if(chargeTicks == 19) NetworkMessage.sendToAll(currContext.get(), MSG_START)
+      if(chargeTicks != -1) {
+        chargeTicks -= 1
+        if(chargeTicks == 0) {
+          NetworkMessage.sendToServer(currContext.get(), MSG_PERFORM)
+        }
+      }
+    }
+  }
+
+  override def onKeyUp() = {
+    chargeTicks = -1
+    canTicking = false
+    if(currContext.isPresent)
+      currContext.get()
+  }
+
+  override def onKeyAbort() = {
+    chargeTicks = -1
+    canTicking = false
+    if(currContext.isPresent)
+      currContext.get()
+  }
+
+  override def getIcon: ResourceLocation = Railgun.getHintIcon
+
+  override def createID(): Int = 0
+
+  override def getSkill: Skill = Railgun
+
+  override def getState = {
+    if(currContext.isPresent) DelegateState.ACTIVE else DelegateState.IDLE
+  }
+
+  private def currContext = ContextManager.instance.find(classOf[RailgunContext])
+}
