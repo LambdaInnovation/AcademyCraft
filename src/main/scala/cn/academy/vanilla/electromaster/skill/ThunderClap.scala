@@ -15,7 +15,7 @@ import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.entityx.EntityCallback
 import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.helper.Motion3D
+import cn.lambdalib.util.helper.{TickScheduler, Motion3D}
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -42,8 +42,8 @@ object ThunderClap extends Skill("thunder_clap", 5) {
 object ThunderClapContext {
 
   final val MSG_START = "start"
+  final val MSG_END = "end"
   final val MSG_EFFECT_START = "effect_start"
-  final val MSG_EFFECT_UPDATE = "effect_update"
   final val MSG_EFFECT_END = "effect_end"
 
 }
@@ -65,7 +65,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
   @Listener(channel=MSG_START, side=Array(Side.SERVER))
   private def s_onStart() = {
-    sendToClient(MSG_EFFECT_START, hitX.asInstanceOf[AnyRef], hitY.asInstanceOf[AnyRef], hitZ.asInstanceOf[AnyRef])
+    sendToClient(MSG_EFFECT_START)
 
     val overload = lerpf(390, 252, exp)
     ctx.consume(overload, 0)
@@ -88,43 +88,42 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
     ticks += 1
 
-    sendToClient(MSG_EFFECT_UPDATE, hitX.asInstanceOf[AnyRef], hitY.asInstanceOf[AnyRef], hitZ.asInstanceOf[AnyRef],
-      ticks.asInstanceOf[AnyRef])
-
     val consumption = lerpf(100, 120, exp)
     if(ticks <= MIN_TICKS && !ctx.consume(0, consumption))
-      terminate()
+      sendToSelf(MSG_END)
     if(ticks >= MAX_TICKS) {
-      terminate()
+      sendToSelf(MSG_END)
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  @Listener(channel=MSG_END, side=Array(Side.SERVER))
   private def s_onEnd(): Unit = {
     if(ticks < MIN_TICKS) {
       sendToClient(MSG_EFFECT_END)
+      terminate()
       return
     }
 
     sendToClient(MSG_EFFECT_END)
 
     val lightning = new EntityLightningBolt(player.worldObj, hitX, hitY, hitZ)
-    player.worldObj.spawnEntityInWorld(lightning)
+    player.worldObj.addWeatherEffect(lightning)
     ctx.attackRange(hitX, hitY, hitZ, ThunderClap.getRange(exp), getDamage(exp, ticks), EntitySelectors.exclude(player))
 
-//    ctx.setCooldown(getCooldown(exp, ticks))
+    ctx.setCooldown(getCooldown(exp, ticks))
     ctx.addSkillExp(0.003f)
     ThunderClap.triggerAchievement(player)
+    terminate()
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def c_onEnd() = {
-    terminate()
+    sendToServer(MSG_END)
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def c_onAbort() = {
-    terminate()
+    sendToServer(MSG_END)
   }
 
 }
@@ -136,9 +135,13 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
 
   var surroundArc: EntitySurroundArc = null
   var mark: EntityRippleMark = null
+  var ticks = 0
+  var hitX, hitY, hitZ = 0d
+  var canTicking = false
 
   @Listener(channel=MSG_EFFECT_START, side=Array(Side.CLIENT))
-  private def c_spawnEffect(hitX: Double, hitY: Double, hitZ: Double) = {
+  private def c_spawnEffect() = {
+    canTicking = true
     surroundArc = new EntitySurroundArc(player).setArcType(ArcType.BOLD)
     player.worldObj.spawnEntityInWorld(surroundArc)
 
@@ -151,18 +154,35 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_EFFECT_UPDATE, side=Array(Side.CLIENT))
-  private def c_updateEffect(hitX: Double, hitY: Double, hitZ: Double, ticks: Int) = {
-    if(isLocal) {
-      val max = 0.1f
-      val min = 0.001f
-      player.capabilities.setPlayerWalkSpeed(Math.max(min, max - (max - min) / 60 * ticks))
-      if(mark != null) mark.setPosition(hitX, hitY, hitZ)
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  private def c_updateEffect() = {
+    if(canTicking) {
+      val DISTANCE = 40.0
+      val pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing())
+      if (pos != null) {
+        hitX = pos.hitVec.xCoord
+        hitY = pos.hitVec.yCoord
+        hitZ = pos.hitVec.zCoord
+      } else {
+        val mo = new Motion3D(player, true).move(DISTANCE)
+        hitX = mo.px
+        hitY = mo.py
+        hitZ = mo.pz
+      }
+
+      ticks += 1
+      if (isLocal) {
+        val max = 0.1f
+        val min = 0.001f
+        player.capabilities.setPlayerWalkSpeed(Math.max(min, max - (max - min) / 60 * ticks))
+        if (mark != null) mark.setPosition(hitX, hitY, hitZ)
+      }
     }
   }
 
   @Listener(channel=MSG_EFFECT_END, side=Array(Side.CLIENT))
   private def c_endEffect() = {
+    canTicking = false
     player.capabilities.setPlayerWalkSpeed(0.1f)
     if(surroundArc != null)
       surroundArc.executeAfter(new EntityCallback[Entity] {
