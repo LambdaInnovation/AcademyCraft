@@ -441,16 +441,15 @@ achievement.ac_vecmanip.lv4=矢量偏轉
 achievement.ac_vecmanip.lv4.desc=掠奪矢量，然後全打出去
 achievement.ac_vecmanip.lv5=矢量操作
 achievement.ac_vecmanip.lv5.desc=這世界沒有我無法操作的
-achievement.ac_vecmanip.ground_shock=
-achievement.ac_vecmanip.ground_shock.desc=和我站在同壹個落腳點妳是找死
-achievement.ac_vecmanip.dir_blast=
+achievement.ac_vecmanip.ground_shock=地面独裁
+achievement.ac_vecmanip.dir_blast=穿刺钉拳
 achievement.ac_vecmanip.dir_blast.desc=沖擊變成錐形刺入體內的感覺如何？弱者
-achievement.ac_vecmanip.storm_wing=
-achievement.ac_vecmanip.storm_wing.desc=看我幹什麽，反正妳飛不起來
-achievement.ac_vecmanip.blood_retro=
-achievement.ac_vecmanip.blood_retro.desc=被我的手指觸碰到妳的皮膚，妳就輸了
-achievement.ac_vecmanip.vec_reflection=
-achievement.ac_vecmanip.vec_reflection.desc=誰允許妳接觸我的
+achievement.ac_vecmanip.storm_wing=飞行专利
+achievement.ac_vecmanip.storm_wing.desc=看我幹什麽，反正你飛不起來
+achievement.ac_vecmanip.blood_retro=血液喷涌
+achievement.ac_vecmanip.blood_retro.desc=被我的手指觸碰到你的皮膚，你就輸了
+achievement.ac_vecmanip.vec_reflection=一方通行
+achievement.ac_vecmanip.vec_reflection.desc=誰允許你接觸我的
 
 # UI通用
 ac.gui.common.pg_wireless.not_connected=未連線
