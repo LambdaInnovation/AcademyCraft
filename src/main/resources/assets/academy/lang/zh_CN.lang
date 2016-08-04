@@ -49,6 +49,7 @@ item.ac_induction_factor.name=能力诱导因子
 item.ac_tutorial.name=御坂云终端
 
 item.ac_powder.name=粉末
+item.ac_medicine_bottle.name=药瓶
 
 # 方块名称
 tile.ac_constraint_metal_ore.name=束能金属矿

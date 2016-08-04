@@ -49,6 +49,7 @@ item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=MisakaCloud Terminal
 
 item.ac_powder.name= Powder
+item.ac_medicine_bottle.name=Medicine Bottle
 
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
@@ -542,6 +543,7 @@ ac.medicine.props.targ_overload=Overload
 ac.medicine.props.targ_jump=Jump
 ac.medicine.props.targ_cooldown=Cooldown
 ac.medicine.props.targ_move_speed=Move Speed
+ac.medicine.props.targ_disposed=INVALID
 ac.medicine.props.str_mild=Mild
 ac.medicine.props.str_weak=Weak
 ac.medicine.props.str_normal=Normal
