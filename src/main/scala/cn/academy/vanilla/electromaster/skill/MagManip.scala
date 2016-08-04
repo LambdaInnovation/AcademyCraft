@@ -22,7 +22,7 @@ import cn.lambdalib.util.helper.EntitySyncer
 import cn.lambdalib.util.helper.EntitySyncer.Synchronized
 import cn.lambdalib.util.mc._
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.Block
+import net.minecraft.block.{BlockDoor, Block}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.world.World
@@ -34,6 +34,7 @@ private[electromaster] object MagManip extends Skill("mag_manip", 2) {
 
   private[electromaster] def accepts(player: EntityPlayer, block: Block) = block match {
     case _: BlockMulti => false // Avoid jerky result for multiblock structure.
+    case _: BlockDoor => false
     case _ => CatElectromaster.isMetalBlock(block)
   }
 

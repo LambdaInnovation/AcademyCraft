@@ -231,6 +231,7 @@ class HandlerRender extends Render {
 }
 
 @Registrant
+@SideOnly(Side.CLIENT)
 object MDInit {
 
   @RegInitCallback

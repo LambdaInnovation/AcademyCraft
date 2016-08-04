@@ -164,10 +164,10 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
         .setArcType(ArcType.NORMAL).setLife(100000)
       player.worldObj.spawnEntityInWorld(surround)
 
-      sound = new FollowEntitySound(player, "em.charge_loop").setLoop()
+      sound = new FollowEntitySound(player, "em.charge_loop").setLoop().setVolume(0.3f)
       ACSounds.playClient(sound)
     } else {
-      sound = new FollowEntitySound(player, "em.charge_loop").setLoop()
+      sound = new FollowEntitySound(player, "em.charge_loop").setLoop().setVolume(0.3f)
       ACSounds.playClient(sound)
       surround = new EntitySurroundArc(player)
       surround.setArcType(ArcType.THIN)
