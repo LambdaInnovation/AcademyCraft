@@ -16,6 +16,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
@@ -99,7 +100,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isOreBlock(Block block) {
-        if (block instanceof BlockOre) {
+        if (block instanceof BlockOre || block instanceof BlockRedstoneOre) {
             return true;
         }
 

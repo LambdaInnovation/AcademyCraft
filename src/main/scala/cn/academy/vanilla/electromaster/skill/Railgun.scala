@@ -38,7 +38,7 @@ import net.minecraftforge.common.MinecraftForge
 import RailgunContext._
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object Railgun extends Skill("railgun", 4) {
 

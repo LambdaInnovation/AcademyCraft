@@ -28,7 +28,7 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.world.World
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object ArcGen extends Skill("arc_gen", 1) {
 

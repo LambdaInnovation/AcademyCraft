@@ -21,7 +21,8 @@ import net.minecraft.potion.{Potion, PotionEffect}
 import scala.util.Random
 
 /**
-  * @author KSkun
+  * Body Intensify
+  * @author WeAthFolD, KSkun
   */
 object BodyIntensify extends Skill("body_intensify", 3) {
 
@@ -129,6 +130,11 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
     sendToServer(MSG_END)
   }
 
+  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  private def c_onAbort() = {
+    sendToServer(MSG_END)
+  }
+
 }
 
 @Registrant
@@ -166,12 +172,6 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
       ACSounds.playClient(player, ACTIVATE_SOUND, 0.5f)
       player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player))
     }
-  }
-
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
-    sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
-    terminate()
   }
 
 }

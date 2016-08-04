@@ -34,7 +34,7 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object MineDetect extends Skill("mine_detect", 3) {
 

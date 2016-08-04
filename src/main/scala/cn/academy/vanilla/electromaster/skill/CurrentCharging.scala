@@ -27,7 +27,7 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.Vec3
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object CurrentCharging extends Skill("charging", 1) {
 
@@ -161,7 +161,7 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
       arc.texWiggle = 0.8
 
       surround = new EntitySurroundArc(player.worldObj, player.posX, player.posY, player.posZ, 1, 1)
-        .setArcType(ArcType.NORMAL)
+        .setArcType(ArcType.NORMAL).setLife(100000)
       player.worldObj.spawnEntityInWorld(surround)
 
       sound = new FollowEntitySound(player, "em.charge_loop").setLoop()
@@ -171,6 +171,7 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
       ACSounds.playClient(sound)
       surround = new EntitySurroundArc(player)
       surround.setArcType(ArcType.THIN)
+      surround.setLife(100000)
       player.worldObj.spawnEntityInWorld(surround)
     }
   }

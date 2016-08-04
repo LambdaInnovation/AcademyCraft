@@ -32,7 +32,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object ThunderBolt extends Skill("thunder_bolt", 4) {
 

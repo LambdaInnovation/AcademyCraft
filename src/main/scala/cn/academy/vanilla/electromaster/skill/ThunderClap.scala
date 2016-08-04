@@ -23,7 +23,7 @@ import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.entity.player.EntityPlayer
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object ThunderClap extends Skill("thunder_clap", 5) {
 
