@@ -68,7 +68,18 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def c_onStart() = {
-    sendToSelf(MSG_EFFECT_START, isItem.asInstanceOf[AnyRef])
+    sendToServer(MSG_EFFECT_START, isItem.asInstanceOf[AnyRef])
+  }
+
+  @Listener(channel=MSG_EFFECT_START, side=Array(Side.SERVER))
+  private def s_onEffectStart(isItem: Boolean) = {
+    sendToClient(MSG_EFFECT_START, isItem.asInstanceOf[AnyRef])
+  }
+
+  @Listener(channel=MSG_EFFECT_END, side=Array(Side.SERVER))
+  private def s_onEffectEnd(isItem: Boolean) = {
+    sendToClient(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
+    terminate()
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -129,14 +140,12 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def c_onEnd() = {
-    sendToSelf(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
-    terminate()
+    sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def c_onAbort() = {
-    sendToSelf(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
-    terminate()
+    sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
 
 }

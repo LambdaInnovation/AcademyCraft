@@ -85,7 +85,9 @@ import RailgunContext._
 
 class RailgunContext(p: EntityPlayer) extends Context(p, Railgun) {
 
-  var coin: EntityCoinThrowing = null
+  var ticking = 0
+
+  var coin: EntityCoinThrowing = _
 
   @Listener(channel=MSG_SYNC_COIN, side=Array(Side.SERVER))
   private def s_syncCoin(_coin: EntityCoinThrowing) = coin = _coin
@@ -193,18 +195,16 @@ class RailgunContextC(par: RailgunContext) extends ClientContext(par) {
 
 }
 
+@SideOnly(Side.CLIENT)
 class RailgunDelegate extends KeyDelegate {
 
   var chargeTicks = -1
   var canTicking = false
 
   override def onKeyDown(): Unit = {
-    if(!currContext.isPresent) ContextManager.instance.activate(new RailgunContext(getPlayer))
-    else {
-      NetworkMessage.sendToAll(currContext.get(), MSG_START)
-      onKeyUp()
-      return
-    }
+    if(!currContext.isPresent) {
+      ContextManager.instance.activate(new RailgunContext(getPlayer))
+    } else if(currContext.get().coin != null) currContext.get().sendToSelf(MSG_START)
     chargeTicks = 20
     canTicking = true
   }
@@ -215,7 +215,9 @@ class RailgunDelegate extends KeyDelegate {
         onKeyAbort()
         return
       }
-      if(chargeTicks == 19) NetworkMessage.sendToAll(currContext.get(), MSG_START)
+      if(chargeTicks == 19) {
+        currContext.get().sendToSelf(MSG_START)
+      }
       if(chargeTicks != -1) {
         chargeTicks -= 1
         if(chargeTicks == 0) {
@@ -228,15 +230,15 @@ class RailgunDelegate extends KeyDelegate {
   override def onKeyUp() = {
     chargeTicks = -1
     canTicking = false
-    if(currContext.isPresent)
-      currContext.get()
+    if(currContext.isPresent && chargeTicks != -1)
+      ContextManager.instance.terminate(currContext.get())
   }
 
   override def onKeyAbort() = {
     chargeTicks = -1
     canTicking = false
-    if(currContext.isPresent)
-      currContext.get()
+    if(currContext.isPresent && chargeTicks != -1)
+      ContextManager.instance.terminate(currContext.get())
   }
 
   override def getIcon: ResourceLocation = Railgun.getHintIcon

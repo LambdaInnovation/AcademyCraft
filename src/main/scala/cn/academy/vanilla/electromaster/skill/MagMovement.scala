@@ -105,15 +105,25 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     }
   }
 
+  @Listener(channel=MSG_EFFECT_START, side=Array(Side.SERVER))
+  private def s_onEffectStart() = {
+    sendToClient(MSG_EFFECT_START)
+  }
+
+  @Listener(channel=MSG_EFFECT_UPDATE, side=Array(Side.SERVER))
+  private def s_onEffectStart(vec3: Vec3) = {
+    sendToClient(MSG_EFFECT_UPDATE, vec3)
+  }
+
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_onTick() = {
     if(canSpawnEffect) {
-      sendToSelf(MSG_EFFECT_START)
+      sendToServer(MSG_EFFECT_START)
       canSpawnEffect = false
     }
-    if(isLocal && target != null) {
+    if(target != null) {
       target.tick()
-      sendToSelf(MSG_EFFECT_UPDATE, Vec3.createVectorHelper(target.x, target.y, target.z))
+      sendToServer(MSG_EFFECT_UPDATE, Vec3.createVectorHelper(target.x, target.y, target.z))
       var dx = target.x - player.posX
       var dy = target.y - player.posY
       var dz = target.z - player.posZ
