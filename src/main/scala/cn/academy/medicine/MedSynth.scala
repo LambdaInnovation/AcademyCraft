@@ -97,10 +97,11 @@ object Properties {
           player.attackEntityFrom(DamageSource.causePlayerDamage(player), amt)
         }
       } else { // Continuous recovery
+        val buffData = BuffData(player)
         if (data.method.incr) {
-          ???
+          buffData.addBuffInfinite(new BuffHeal(5))
         } else {
-          ???
+          // ???
         }
       }
     }

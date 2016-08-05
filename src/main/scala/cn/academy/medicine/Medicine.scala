@@ -39,7 +39,10 @@ class ItemMedicineBase(name: String) extends ACItem(name) {
 
   override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
     val info = getInfo(stack)
-    info.target.apply(player, info)
+
+    if (!world.isRemote) {
+      info.target.apply(player, info)
+    }
 
     if (!player.capabilities.isCreativeMode) {
       stack.stackSize -= 1
