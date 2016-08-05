@@ -92,6 +92,12 @@ class RailgunContext(p: EntityPlayer) extends Context(p, Railgun) {
   @Listener(channel=MSG_SYNC_COIN, side=Array(Side.SERVER))
   private def s_syncCoin(_coin: EntityCoinThrowing) = coin = _coin
 
+  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  private def s_onTick() = {
+    ticking += 1
+    if(ticking >= 130) terminate()
+  }
+
   @Listener(channel=MSG_START, side=Array(Side.CLIENT))
   private def c_start() = {
     if(isLocal) {
@@ -169,9 +175,12 @@ class RailgunContext(p: EntityPlayer) extends Context(p, Railgun) {
 @RegClientContext(classOf[RailgunContext])
 class RailgunContextC(par: RailgunContext) extends ClientContext(par) {
 
+  private var handEffect: RailgunHandEffect = _
+
   @Listener(channel=MSG_EFFECT_START, side=Array(Side.CLIENT))
   private def c_spawnEffect() = {
-    DummyRenderData.get(player).addRenderHook(new RailgunHandEffect())
+    handEffect = new RailgunHandEffect()
+    DummyRenderData.get(player).addRenderHook(handEffect)
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
@@ -193,6 +202,11 @@ class RailgunContextC(par: RailgunContext) extends ClientContext(par) {
     player.worldObj.spawnEntityInWorld(eff)
   }
 
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_endEffect() = {
+    handEffect.dispose()
+  }
+
 }
 
 @SideOnly(Side.CLIENT)
@@ -204,7 +218,7 @@ class RailgunDelegate extends KeyDelegate {
   override def onKeyDown(): Unit = {
     if(!currContext.isPresent) {
       ContextManager.instance.activate(new RailgunContext(getPlayer))
-    } else if(currContext.get().coin != null) currContext.get().sendToSelf(MSG_START)
+    } else if(currContext.get().coin != null && !currContext.get().coin.isDead) currContext.get().sendToSelf(MSG_START)
     chargeTicks = 20
     canTicking = true
   }
@@ -228,17 +242,17 @@ class RailgunDelegate extends KeyDelegate {
   }
 
   override def onKeyUp() = {
-    chargeTicks = -1
-    canTicking = false
     if(currContext.isPresent && chargeTicks != -1)
       ContextManager.instance.terminate(currContext.get())
+    chargeTicks = -1
+    canTicking = false
   }
 
   override def onKeyAbort() = {
-    chargeTicks = -1
-    canTicking = false
     if(currContext.isPresent && chargeTicks != -1)
       ContextManager.instance.terminate(currContext.get())
+    chargeTicks = -1
+    canTicking = false
   }
 
   override def getIcon: ResourceLocation = Railgun.getHintIcon
@@ -251,5 +265,5 @@ class RailgunDelegate extends KeyDelegate {
     if(currContext.isPresent) DelegateState.ACTIVE else DelegateState.IDLE
   }
 
-  private def currContext = ContextManager.instance.find(classOf[RailgunContext])
+  private def currContext = ContextManager.instance.findLocal(classOf[RailgunContext])
 }

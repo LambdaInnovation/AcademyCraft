@@ -178,6 +178,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isEntityMetallic(Entity ent) {
+        if(metalEntities.isEmpty()) return false;
         for (Class<? extends Entity> cl : metalEntities) {
             if (cl.isInstance(ent))
                 return true;
