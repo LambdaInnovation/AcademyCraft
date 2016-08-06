@@ -144,10 +144,6 @@ class BuffData extends DataPart[EntityPlayer] {
     }
   })
 
-  scheduler.every(10).atOnly(Side.SERVER).run(() => {
-    println(activeBuffs.toList)
-  })
-
   def addBuffInfinite(buff: Buff) = addBuff(buff, -1)
 
   def addBuff(buff: Buff, maxTicks: Int) = {

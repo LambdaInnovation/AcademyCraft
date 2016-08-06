@@ -49,7 +49,7 @@ item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=MisakaCloud Terminal
 
 item.ac_powder.name= Powder
-item.ac_medicine_bottle.name=Medicine Bottle
+item.ac_medicine_bottle.name=G Virus
 
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore

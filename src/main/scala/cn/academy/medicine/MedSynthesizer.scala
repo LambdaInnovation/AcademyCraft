@@ -125,7 +125,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
         if (progress_ == 1.0f) {
           doSynth()
           endSynth()
-        } else if (!consEnergy) {
+        } else if (!consEnergy || !canSynth) {
           endSynth()
         }
 
@@ -138,7 +138,7 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
 
   def beginSynth() = {
     require(!getWorldObj.isRemote)
-    if (!synthesizing_) {
+    if (!synthesizing_ && canSynth) {
       progress_ = 0.0f
       synthesizing_ = true
       sync()
@@ -150,14 +150,23 @@ class TileMedSynthesizer extends TileReceiverBase("medicine_synthesizer", 6, 100
       synthesizing_.asInstanceOf[AnyRef], progress_.asInstanceOf[AnyRef])
   }
 
+  private def canSynth = {
+    inventory(bottleSlot) != null && inventory.take(4).exists(_ != null)
+  }
+
   private def doSynth(): Unit = {
     require(!getWorldObj.isRemote)
 
-    val result = synth(inventory.toList.filter(_ != null).map(ItemPowder.getProperty))
+    val result = synth(inventory.take(4).toList.filter(_ != null).map(ItemPowder.getProperty))
     val resultStack = ItemMedicineBottle.create(result)
 
     (0 until 4).map(inputSlot).foreach(inventory.update(_, null))
     setInventorySlotContents(outputSlot, resultStack)
+
+    inventory(bottleSlot).stackSize -= 1
+    if (inventory(bottleSlot).stackSize == 0) {
+      inventory.update(bottleSlot, null)
+    }
   }
 
   def synthProgress = progress_
@@ -187,7 +196,7 @@ class ContainerMedSynthesizer(p: EntityPlayer, t: TileMedSynthesizer) extends
   addSlotToContainer(slotPowder(2, 10, 58))
   addSlotToContainer(slotPowder(3, 35, 78))
 
-  addSlotToContainer(SlotConditional.apply(_ => true, tile, bottleSlot, 50, 45))
+  addSlotToContainer(SlotConditional.apply(_.getItem == ModuleMedicine.emptyBottle, tile, bottleSlot, 50, 45))
   addSlotToContainer(new SlotOutput(tile, outputSlot, 138, 44))
 
   val gInv = gRange(6, 6 + 36)
@@ -196,7 +205,7 @@ class ContainerMedSynthesizer(p: EntityPlayer, t: TileMedSynthesizer) extends
   val gOutput = gSlots(5)
 
   addTransferRule(gInv, p(stack => stack.getItem.isInstanceOf[ItemPowder]), gPowders)
-  // addTransferRule(gInv, p(stack => stack.getItem.is), gBottle)
+  addTransferRule(gInv, p(stack => stack.getItem == ModuleMedicine.emptyBottle), gBottle)
   addTransferRule(gRange(0, 6), gInv)
 
   private def p(fn: ItemStack=>Boolean) = new Predicate[ItemStack] {
