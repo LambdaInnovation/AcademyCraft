@@ -433,26 +433,26 @@ achievement.ac_teleporter.mastery=Dimension Traveler
 achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimensions
 
 ac.achievementpage.cat_vecmanip=Vector Manip
-achievement.ac_vecmanip.lv1=
-achievement.ac_vecmanip.lv1.desc=
-achievement.ac_vecmanip.lv2=
-achievement.ac_vecmanip.lv2.desc=
-achievement.ac_vecmanip.lv3=
-achievement.ac_vecmanip.lv3.desc=
-achievement.ac_vecmanip.lv4=
-achievement.ac_vecmanip.lv4.desc=
-achievement.ac_vecmanip.lv5=
-achievement.ac_vecmanip.lv5.desc=
-achievement.ac_vecmanip.ground_shock=
-achievement.ac_vecmanip.ground_shock.desc=
-achievement.ac_vecmanip.dir_blast=
-achievement.ac_vecmanip.dir_blast.desc=
-achievement.ac_vecmanip.storm_wing=
-achievement.ac_vecmanip.storm_wing.desc=
-achievement.ac_vecmanip.blood_retro=
-achievement.ac_vecmanip.blood_retro.desc=
-achievement.ac_vecmanip.vec_reflection=
-achievement.ac_vecmanip.vec_reflection.desc=
+achievement.ac_vecmanip.lv1=Momentum Deflection
+achievement.ac_vecmanip.lv1.desc=Move this stone, or it will be a shame
+achievement.ac_vecmanip.lv2=Momentum Master
+achievement.ac_vecmanip.lv2.desc=Either bounce those bullets or die
+achievement.ac_vecmanip.lv3=Vector Adjustment
+achievement.ac_vecmanip.lv3.desc=Every vector comes to me will go down.
+achievement.ac_vecmanip.lv4=Vector Deflection
+achievement.ac_vecmanip.lv4.desc=Catch those vectors, then shoot them out
+achievement.ac_vecmanip.lv5=Vector Master
+achievement.ac_vecmanip.lv5.desc=There is nothing I CAN'T Control
+achievement.ac_vecmanip.ground_shock=Ground Shock
+achievement.ac_vecmanip.ground_shock.desc=Who allows you stand on the same altitude as me
+achievement.ac_vecmanip.dir_blast=Dir Blast
+achievement.ac_vecmanip.dir_blast.desc=The weak, what about the blast?
+achievement.ac_vecmanip.storm_wing=Storm Wing
+achievement.ac_vecmanip.storm_wing.desc=Anyway, you CANNOT fly
+achievement.ac_vecmanip.blood_retro=Blood Retro
+achievement.ac_vecmanip.blood_retro.desc=You are died once I touch your skin
+achievement.ac_vecmanip.vec_reflection=Accelerator
+achievement.ac_vecmanip.vec_reflection.desc=Who allows you to get close to me
 
 # UI Commons
 ac.gui.common.pg_wireless.not_connected=Not Connected
@@ -550,3 +550,7 @@ ac.headsOrTails.1=The result is HEADS!
 
 # Converter Block
 ac.converter.desc_template=Converts %s to %s
+# Added by Minecraft Language File Parser
+ac.skill_tree.dev_developing=Developing...
+achievement.ac_electromaster.iron_sand.desc=Don't get close to me, you will be hurt!
+achievement.ac_electromaster.iron_sand=Dancing In Sand
