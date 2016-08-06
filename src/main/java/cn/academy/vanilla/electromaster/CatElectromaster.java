@@ -8,39 +8,40 @@ package cn.academy.vanilla.electromaster;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
+import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.academy.vanilla.electromaster.skill.*;
+import cn.academy.vanilla.electromaster.skill.MagManip$;
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 /**
  * @author WeAthFolD
  *
  */
+@Registrant
 public class CatElectromaster extends Category {
 
     public static final Skill
-        arcGen = ArcGen.instance,
-        magManip = MagManip.instance,
-        mineDetect = MineDetect.instance,
-        railgun = Railgun.instance,
-        magMovement = MagMovement.instance,
-        currentCharging = CurrentCharging.instance,
-        bodyIntensify = BodyIntensify.instance,
-        thunderBolt = ThunderBolt.instance,
-        thunderClap = ThunderClap.instance
+        arcGen = ArcGen$.MODULE$,
+        magManip = MagManip$.MODULE$,
+        mineDetect = MineDetect$.MODULE$,
+        railgun = Railgun$.MODULE$,
+        magMovement = MagMovement$.MODULE$,
+        currentCharging = CurrentCharging$.MODULE$,
+        bodyIntensify = BodyIntensify$.MODULE$,
+        thunderBolt = ThunderBolt$.MODULE$,
+        thunderClap = ThunderClap$.MODULE$
         /* ironSand = ??? */;
 
     public CatElectromaster() {
@@ -99,7 +100,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isOreBlock(Block block) {
-        if (block instanceof BlockOre) {
+        if (block instanceof BlockOre || block instanceof BlockRedstoneOre) {
             return true;
         }
 
@@ -114,31 +115,70 @@ public class CatElectromaster extends Category {
         return false;
     }
 
-    private static HashSet<Block> metalBlocks = new HashSet<>();
-
-    static {
-        metalBlocks.addAll(Arrays.asList(Blocks.rail, Blocks.dispenser, Blocks.hopper, Blocks.iron_bars,
-                Blocks.iron_block, Blocks.iron_door, Blocks.iron_ore, Blocks.activator_rail, Blocks.piston));
-    }
+    private static HashSet<Block> normalMetalBlocks = new HashSet<>();
+    private static HashSet<Block> weakMetalBlocks = new HashSet<>();
 
     private static HashSet<Class<? extends Entity>> metalEntities = new HashSet<>();
 
-    static {
-        metalEntities.add(EntityMinecart.class);
-        metalEntities.add(EntityMagHook.class);
-        metalEntities.add(EntityIronGolem.class);
+    @RegInitCallback
+    public static void init() {
+
+        String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "iron_door", "activator_rail", "detector_rail",
+                "golden_rail", "sticky_piston", "piston"};
+        String[] cfgNBlocks = AcademyCraft.config.getStringList("normalMetalBlocks", "ability", defaultNBlocks,
+                "Supported Normal Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
+        for (String block : cfgNBlocks) {
+            if(Block.getBlockFromName(block) != null) {
+                normalMetalBlocks.add(Block.getBlockFromName(block));
+            } else if(OreDictionary.doesOreNameExist(block)) {
+                for(ItemStack is : OreDictionary.getOres(block)) {
+                    normalMetalBlocks.add(Block.getBlockFromItem(is.getItem()));
+                }
+            } else {
+                AcademyCraft.log.error("The block " + block + "is not found!");
+            }
+        }
+
+        String[] defaultWBlocks = {"dispenser", "hopper", "iron_ore"};
+        String[] cfgWBlocks = AcademyCraft.config.getStringList("weakMetalBlocks", "ability", defaultWBlocks,
+                "Supported Weak Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
+        for (String block : cfgWBlocks) {
+            if(Block.getBlockFromName(block) != null) {
+                weakMetalBlocks.add(Block.getBlockFromName(block));
+            } else if(OreDictionary.doesOreNameExist(block)) {
+                for(ItemStack is : OreDictionary.getOres(block)) {
+                    weakMetalBlocks.add(Block.getBlockFromItem(is.getItem()));
+                }
+            } else {
+                AcademyCraft.log.error("The block " + block + "is not found!");
+            }
+        }
+
+        String[] defaultEntities = {"MinecartRideable", "MinecartChest", "MinecartFurnace", "MinecartTNT", "MinecartHopper",
+                "MinecartSpawner", "MinecartCommandBlock", "academy-craft.ac_Entity_EntityMagHook", "VillagerGolem"};
+        String[] cfgEntities = AcademyCraft.config.getStringList("metalEntities", "ability", defaultEntities,
+                "Supported Metal Entities of Electro Master. The entity name can be used.");
+        for (String entity : cfgEntities) {
+            Class<? extends Entity> c = (Class<? extends Entity>) EntityList.stringToClassMapping.get(entity);
+            metalEntities.add(c);
+        }
+
     }
 
     public static boolean isMetalBlock(Block block) {
-        return metalBlocks.contains(block);
+        return isNormalMetalBlock(block) || isWeakMetalBlock(block);
+    }
+
+    public static boolean isNormalMetalBlock(Block block) {
+        return normalMetalBlocks.contains(block);
     }
 
     public static boolean isWeakMetalBlock(Block block) {
-        Material mat = block.getMaterial();
-        return mat == Material.rock || mat == Material.anvil;
+        return weakMetalBlocks.contains(block);
     }
 
     public static boolean isEntityMetallic(Entity ent) {
+        if(metalEntities.isEmpty()) return false;
         for (Class<? extends Entity> cl : metalEntities) {
             if (cl.isInstance(ent))
                 return true;

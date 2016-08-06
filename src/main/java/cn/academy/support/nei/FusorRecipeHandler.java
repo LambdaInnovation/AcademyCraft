@@ -6,7 +6,7 @@
 */
 package cn.academy.support.nei;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.lambdalib.util.client.HudUtils;
@@ -45,12 +45,12 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getInputX() {
-        return 30;
+        return 31;
     }
 
     @Override
     public int getInputY() {
-        return 44;
+        return 37;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
 
     @Override
     public int getOutputY() {
-        return 44;
+        return 37;
     }
 
     @Override
@@ -82,16 +82,25 @@ public class FusorRecipeHandler extends ACMachineRecipeHandler {
             }    
         }
     }
+
+    @Override
+    public void drawBackground(int recipe) {
+        ShaderMono.instance().useProgram();
+        RenderUtils.loadTexture(new ResourceLocation(getGuiTexture()));
+        HudUtils.rect(24.5f, 0, 0, 0, 115, 66, 115, 66);
+        GL20.glUseProgram(0);
+    }
     
     @Override
     public void drawExtras(int recipe) {
         if(tick >= 50) tick = 0;
+        GL11.glEnable(GL11.GL_BLEND);
         Resources.font().draw(String.valueOf(((IFCachedRecipe) arecipes.get(recipe)).liquid),
-                75, 7, new FontOption(13, new Color(3618615)));
+                75, 11.5f, new FontOption(13, new Color(0xFF373737)));
         ShaderMono.instance().useProgram();
         GL11.glColor4f(55f / 151, 55f / 151, 55f / 151, 1);
-        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fuser.png"));
-        HudUtils.rect(56, 45, 0, 0, 51d * (tick / 50d), 15, 64d * (tick / 50d), 16);
+        RenderUtils.loadTexture(new ResourceLocation("academy:textures/guis/progress/progress_fusor.png"));
+        HudUtils.rect(62, 40.5f, 0, 0, 40d * (tick / 50d), 10, 126 * (tick / 50d), 30);
         GL20.glUseProgram(0);
     }
     

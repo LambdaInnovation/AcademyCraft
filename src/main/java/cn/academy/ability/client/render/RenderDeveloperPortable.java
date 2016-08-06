@@ -6,7 +6,7 @@
 */
 package cn.academy.ability.client.render;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.template.client.render.item.RenderModelItem;
 import cn.lambdalib.util.deprecated.ItemModelCustom;
 import cn.lambdalib.util.generic.VecUtils;

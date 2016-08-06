@@ -6,19 +6,12 @@
 */
 package cn.academy.ability.api.ctrl.action;
 
-import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.cooldown.CooldownManager;
+import cn.academy.ability.api.AbilityContext;
+import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SyncAction;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
+import com.google.common.base.Preconditions;
 import net.minecraft.world.World;
 
 /**
@@ -27,52 +20,28 @@ import net.minecraft.world.World;
  */
 @Registrant
 @NetworkS11nType
-public class SkillSyncAction extends SyncAction {
+public class SkillSyncAction<TSkill extends Skill> extends SyncAction {
     
-    public AbilityData aData;
-    public CPData cpData;
+    private AbilityContext ctx;
+    private final TSkill skill;
     public World world;
 
-    public SkillSyncAction() {
+    public SkillSyncAction(TSkill skill) {
         super(-1);
-    }
-    
-    public SkillSyncAction(int interval) {
-        super(interval);
+        this.skill = skill;
     }
     
     @Override
     public void onStart() {
-        aData = AbilityData.get(player);
-        cpData = CPData.get(player);
+        ctx = AbilityContext.of(player, skill);
         world = player.worldObj;
     }
-    
+
     /**
-     * Add cooldown to a skill if the currently the SyncAction is local.
+     * @return The ability context
      */
-    public void setCooldown(Controllable c, int time) {
-        if (!isRemote) {
-            CooldownManager.setCooldown(player, c, time);
-        } else {
-            NetworkMessage.sendToServer(
-                    NetworkMessage.staticCaller(SkillSyncAction.class),
-                    "sync_cooldown",
-                    player, c, time
-            );
-            // Force override the client data. This prevents user from executing skill just before cooldown sync.
-            lSetCooldown(c, time);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static void lSetCooldown(Controllable c, int time) {
-        ClientRuntime.instance().setCooldownRawFromServer(CooldownManager.getCtrlId(c), time);
-    }
-
-    @Listener(channel="sync_cooldown", side=Side.SERVER)
-    private static void hSetCooldown(EntityPlayer player,  Controllable c, int time) {
-        CooldownManager.setCooldown(player, c, time);
+    protected AbilityContext ctx() {
+        return Preconditions.checkNotNull(ctx);
     }
     
 }

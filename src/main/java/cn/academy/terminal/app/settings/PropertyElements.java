@@ -6,7 +6,7 @@
 */
 package cn.academy.terminal.app.settings;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.Component;

@@ -7,9 +7,8 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +20,19 @@ import java.util.UUID;
  * @author EAirPeter
  */
 @Registrant
+@NetworkS11nType
 public class ActionManager {
+
+    static final String
+            M_START_SVR = "0",
+            M_END_SVR = "1",
+            M_ABORT_SVR = "2",
+            M_ABORT_PLAYER_SVR = "3",
+            M_START_CLIENT = "4",
+            M_UPDATE_CLIENT = "5",
+            M_END_CLIENT = "6",
+            M_ABORT_CLIENT = "7";
+
     
     private static final AMServer AMS = new AMServer();
     private static final AMClient AMC = new AMClient();
@@ -47,43 +58,43 @@ public class ActionManager {
     }
     
     //NETWORK CALLS
-    @RegNetworkCall(side = Side.SERVER)
-    static void startAtServer(@Instance EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
+    @Listener(channel=M_START_SVR, side=Side.SERVER)
+    private static void startAtServer(EntityPlayer player, String className, NBTTagCompound tag) {
         AMS.startFromClient(player, className, tag);
     }
 
-    @RegNetworkCall(side = Side.SERVER)
-    static void endAtServer(@Instance EntityPlayer player, @Data String uuid) {
+    @Listener(channel=M_END_SVR, side=Side.SERVER)
+    private static void endAtServer(EntityPlayer player, String uuid) {
         AMS.endFromClient(player, UUID.fromString(uuid));
     }
-    
-    @RegNetworkCall(side = Side.SERVER)
-    static void abortAtServer(@Instance EntityPlayer player, @Data String uuid) {
+
+    @Listener(channel=M_ABORT_SVR, side=Side.SERVER)
+    private static void abortAtServer(EntityPlayer player, String uuid) {
         AMS.abortFromClient(player, UUID.fromString(uuid));
     }
-    
-    @RegNetworkCall(side = Side.SERVER)
-    static void abortPlayerAtServer(@Instance EntityPlayer player) {
+
+    @Listener(channel=M_ABORT_PLAYER_SVR, side=Side.SERVER)
+    private static void abortPlayerAtServer(EntityPlayer player) {
         AMS.abortPlayer(player);
-    };
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    static void startAtClient(@Instance EntityPlayer player, @Data String className, @Data NBTTagCompound tag) {
+    }
+
+    @Listener(channel=M_START_CLIENT, side=Side.CLIENT)
+    private static void startAtClient(EntityPlayer player, String className, NBTTagCompound tag) {
         AMC.startFromServer(player, className, tag);
     }
 
-    @RegNetworkCall(side = Side.CLIENT)
-    static void updateAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+    @Listener(channel=M_UPDATE_CLIENT, side=Side.CLIENT)
+    private static void updateAtClient(String uuid, NBTTagCompound tag) {
         AMC.updateFromServer(UUID.fromString(uuid), tag);
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    static void endAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+
+    @Listener(channel=M_END_CLIENT, side=Side.CLIENT)
+    private static void endAtClient(String uuid, NBTTagCompound tag) {
         AMC.endFromServer(UUID.fromString(uuid), tag);
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    static void abortAtClient(@Data String uuid, @Data NBTTagCompound tag) {
+
+    @Listener(channel=M_ABORT_CLIENT, side=Side.CLIENT)
+    private static void abortAtClient(String uuid, NBTTagCompound tag) {
         AMC.abortFromServer(UUID.fromString(uuid), tag);
     }
     

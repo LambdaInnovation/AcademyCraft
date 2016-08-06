@@ -1,12 +1,12 @@
 ![title]
 Imag Fusor
-
+ 
 ![brief]
-Imag Fusor purifies Imag Crystal by consuming phase liquid and IF energy.
-
+Imag Fusor could reshape items to produce advanced items
+ 
 ![content]
-Imag Fusor purifies Imag Crystal by consuming phase liquid and IF energy.
+Though the power of Imag Energy almost destroys our old world, it could bring huge profits if carefully used. We happened to find that Imag Energy could refine materials to produce advanced items.
 
-Opening its control panel, you can see a bar chart in top-right corner showing currently stored energy and liquid amount.
+The purity of raw Imag Crystal is low because of its unsteady structure, but you could refine it in Imag Fusor to manufacture Mid-purity Imag Crystal or even High-purity Imag Crystal. 
 
-You can serve the crystal and phase liquids in the left. When the liquid amound is adequate, the process will start and you will see outputs in the right.
+When Imag Fusor works, it consumes Imag Energy and Imag Phase Liquid to clean the crystal. You need 3000mb Imag Phase Liquid to produce each Mid-purity Imag Crystal from Low-purity Imag Crystal, and 8000mb for Mid-purity to High-purity. 

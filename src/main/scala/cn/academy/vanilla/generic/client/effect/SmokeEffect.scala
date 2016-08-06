@@ -1,6 +1,6 @@
 package cn.academy.vanilla.generic.client.effect
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
 import cn.lambdalib.annoreg.core.Registrant
@@ -30,7 +30,7 @@ object SmokeEffect_ {
       override def doRender(ent : Entity, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = ent match {
         case eff: SmokeEffect =>
           val campos = CameraPosition.getVec3
-          val delta = campos + Vec3(x, y, z)
+          val delta = Vec3(x, y, z) - campos
           val look = delta.toLook
 
           glEnable(GL_BLEND)
@@ -72,6 +72,7 @@ object SmokeEffect_ {
 /**
   * @author WeAthFolD
   */
+@SideOnly(Side.CLIENT)
 class SmokeEffect(world: World) extends LocalEntity(world) {
 
   setSize(1, 1)

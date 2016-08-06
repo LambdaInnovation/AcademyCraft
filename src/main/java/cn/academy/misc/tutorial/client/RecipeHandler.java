@@ -7,7 +7,7 @@
 package cn.academy.misc.tutorial.client;
 
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.api.MetalFormerRecipes;
@@ -57,7 +57,7 @@ public enum RecipeHandler {
     private ResourceLocation tex = Resources.getTexture("guis/tutorial/crafting_grid");
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         instance.windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
     }
 
@@ -263,7 +263,7 @@ public enum RecipeHandler {
     }
 
     private Widget drawIFRecipe(IFRecipe recipe) {
-        Widget ret = windows.getWidget("ImagFuser").copy();
+        Widget ret = windows.getWidget("ImagFusor").copy();
         ret.getWidget("slot_in").addWidget(new StackDisplay(recipe.consumeType).centered());
         ret.getWidget("slot_out").addWidget(new StackDisplay(recipe.output).centered());
         TextBox.get(ret.getWidget("amount")).setContent(String.valueOf(recipe.consumeLiquid));
@@ -326,16 +326,18 @@ public enum RecipeHandler {
             }
         }
         { // IF Recipes
-            IFRecipe recipe = ImagFusorRecipes.INSTANCE.getRecipe(stack);
-            if (recipe != null) {
-                ret.add(drawIFRecipe(recipe));
-            }
+            List<Widget> recipes = ImagFusorRecipes.INSTANCE.getAllRecipe().stream()
+                    .filter(recipe -> itemDamageEqual(recipe.output, stack))
+                    .map(instance::drawIFRecipe)
+                    .collect(Collectors.toList());
+            ret.addAll(recipes);
         }
         { // MF Recipes
-            MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
-                    .filter(r -> r.accepts(stack, r.mode))
-                    .findFirst()
-                    .ifPresent(r -> ret.add(drawMFRecipe(r)));
+            List<Widget> recipes = MetalFormerRecipes.INSTANCE.getAllRecipes().stream()
+                    .filter(recipe -> itemDamageEqual(recipe.output, stack))
+                    .map(instance::drawMFRecipe)
+                    .collect(Collectors.toList());
+            ret.addAll(recipes);
         }
         { // Smelting
             Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.smelting().getSmeltingList();
@@ -351,6 +353,12 @@ public enum RecipeHandler {
         }
 
         return ret.toArray(new Widget[ret.size()]);
+    }
+
+    private boolean itemDamageEqual(ItemStack s1, ItemStack s2) {
+        if (s1 == null || s2 == null) { return false; }
+
+        return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage();
     }
 
 }

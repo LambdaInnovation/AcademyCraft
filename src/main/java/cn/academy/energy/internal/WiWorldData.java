@@ -70,7 +70,7 @@ public class WiWorldData extends WorldSavedData {
         toRemove.clear();
         
         Iterator<WirelessNet> iter = netList.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             WirelessNet net = iter.next();
             if(net.isDisposed()) {
                 toRemove.add(net);
@@ -110,7 +110,7 @@ public class WiWorldData extends WorldSavedData {
             } else {
                 throw new RuntimeException("Invalid TileEntity");
             }
-            if(net != null && net.isInRange(x, y, z)) {
+            if(net != null && net.isInRange(x, y, z) && net.getLoad() < net.getCapacity()) {
                 set.add(net);
                 if(set.size() >= max)
                     return set;
@@ -121,11 +121,20 @@ public class WiWorldData extends WorldSavedData {
     }
     
     public WirelessNet getNetwork(IWirelessMatrix matrix) {
-        return netLookup.get(new VWMatrix(matrix));
+        return privateGetNetwork(new VWMatrix(matrix));
     }
     
     public WirelessNet getNetwork(IWirelessNode node) {
-        return netLookup.get(new VWNode(node));
+        return privateGetNetwork(new VWNode(node));
+    }
+
+    private WirelessNet privateGetNetwork(Object key) {
+        WirelessNet ret = netLookup.get(key);
+        if (ret != null && ret.validate()) {
+            return ret;
+        } else {
+            return null;
+        }
     }
     
     private void doRemoveNetwork(WirelessNet net) {
@@ -167,7 +176,7 @@ public class WiWorldData extends WorldSavedData {
      */
     public NodeConn getNodeConnection(IWirelessNode node) {
         VNNode vnn = new VNNode(node);
-        NodeConn ret = nodeLookup.get(vnn);
+        NodeConn ret = privateGetNodeConn(vnn);
         if(ret == null) {
             doAddNode(ret = new NodeConn(this, vnn));
         }
@@ -176,11 +185,23 @@ public class WiWorldData extends WorldSavedData {
     
     public NodeConn getNodeConnection(IWirelessUser user) {
         if(user instanceof IWirelessGenerator) {
-            return nodeLookup.get(new VNGenerator((IWirelessGenerator) user));
+            return privateGetNodeConn(new VNGenerator((IWirelessGenerator) user));
         } else if(user instanceof IWirelessReceiver) {
-            return nodeLookup.get(new VNReceiver((IWirelessReceiver) user));
-        } else
+            return privateGetNodeConn(new VNReceiver((IWirelessReceiver) user));
+        } else if (user == null) {
             return null;
+        } else {
+            throw new IllegalArgumentException("Invalid user type");
+        }
+    }
+
+    private NodeConn privateGetNodeConn(Object key) {
+        NodeConn ret = nodeLookup.get(key);
+        if (ret != null && ret.validate()) {
+            return ret;
+        } else {
+            return null;
+        }
     }
     
     private void tickNode() {
@@ -214,7 +235,7 @@ public class WiWorldData extends WorldSavedData {
     
     private void loadNode(NBTTagCompound tag) {
         NBTTagList list = (NBTTagList) tag.getTag("list");
-        debug("LoadNode " + list + ((list == null) ? "null" : list.tagCount()));
+        debug("LoadNode " + list + (list.tagCount()));
         for(int i = 0; i < list.tagCount(); ++i) {
             doAddNode(new NodeConn(this, list.getCompoundTagAt(i)));
         }
@@ -281,33 +302,6 @@ public class WiWorldData extends WorldSavedData {
     @Override
     public boolean isDirty() {
         return true;
-    }
-    
-    private class ChunkCoord {
-        int cx, cz;
-        
-        public ChunkCoord(int _cx, int _cz) {
-            cx = _cx;
-            cz = _cz;
-        }
-        
-        public boolean isLoaded() {
-            return world.getChunkProvider().chunkExists(cx, cz);
-        }
-        
-        @Override
-        public int hashCode() {
-            return cx ^ cz;
-        }
-        
-        @Override
-        public boolean equals(Object obj) {
-            if(obj instanceof ChunkCoord) {
-                ChunkCoord cc = (ChunkCoord) obj;
-                return cc.cx == cx && cc.cz == cz;
-            }
-            return false;
-        }
     }
     
     private void debug(Object msg) {

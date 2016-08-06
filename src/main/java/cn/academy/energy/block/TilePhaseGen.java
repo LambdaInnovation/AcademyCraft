@@ -13,9 +13,9 @@ import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderPhaseGen;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
@@ -64,7 +64,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
         if(!getWorldObj().isRemote) {
             if(++untilSync == 10) {
                 untilSync = 0;
-                syncLiquid(this, getLiquidAmount());
+                sync();
             }
             
             ItemStack stack;
@@ -158,12 +158,15 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
         super.writeToNBT(tag);
         tank.writeToNBT(tag);
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void syncLiquid(
-            @RangedTarget(range = 12) TilePhaseGen te,
-            @Data Integer liq) {
-        te.tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, liq));
+
+    private void sync() {
+        NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20),
+                this, "sync", getLiquidAmount());
+    }
+
+    @Listener(channel="sync", side=Side.CLIENT)
+    private void hSync(int fluidAmount) {
+        tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
     }
     
     private boolean isPhaseLiquid(ItemStack stack) {

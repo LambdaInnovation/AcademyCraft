@@ -6,6 +6,7 @@
 */
 package cn.academy.misc.tutorial;
 
+import cn.academy.core.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.util.generic.RegistryUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -26,38 +27,42 @@ import java.util.List;
 @Registrant
 public class ACTutorial {
 
+    public enum Tag {
+        CRAFT, SMELT, VIEW;
+
+        public final ResourceLocation icon = Resources.getTexture(
+                "guis/icons/icon_" + this.name().toLowerCase());
+    }
+
     public static final boolean SHOW_ALL = false;
 
     public final String id;
 
-    private Condition condition = Condition.TRUE;
+    private Condition condition = Conditions.alwaysTrue();
+    private boolean defaultInstalled = true;
 
-    private List<IPreviewHandler> previewHandlers = new ArrayList<>();
-    private boolean previewInit = false;
-
-    {
-        previewHandlers.add(PreviewHandlers.nothing);
-    }
+    private List<ViewGroup> previewHandlers = new ArrayList<>();
 
     public ACTutorial(String id) {
         this.id=id;
     }
 
-    public ACTutorial setCondition(Condition condition) {
-        this.condition=condition;
+    public ACTutorial addCondition(Condition condition) {
+        defaultInstalled = false;
+        if(this.condition == Conditions.alwaysTrue()) {
+            this.condition = condition;
+        } else {
+            this.condition = this.condition.or(condition);
+        }
         return this;
     }
 
-    public ACTutorial addPreview(IPreviewHandler ...handlers) {
-        if (!previewInit) {
-            previewInit = true;
-            previewHandlers.clear();
-        }
+    public ACTutorial addPreview(ViewGroup...handlers) {
         previewHandlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
-    public List<IPreviewHandler> getPreview() {
+    public List<ViewGroup> getPreview() {
         return previewHandlers;
     }
 
@@ -98,11 +103,11 @@ public class ACTutorial {
     public boolean isActivated(EntityPlayer player) {
         if (SHOW_ALL)
             return true;
-        return this.condition.exam(player);
+        return this.condition.test(player);
     }
 
     public boolean isDefaultInstalled() {
-        return condition == Condition.TRUE;
+        return defaultInstalled;
     }
 
 }

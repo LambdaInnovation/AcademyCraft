@@ -7,16 +7,14 @@
 package cn.academy.terminal.client;
 
 import cn.academy.core.ModuleCoreClient;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
-import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
+import cn.academy.terminal.event.AppInstalledEvent;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
 import cn.lambdalib.cgui.gui.Widget;
@@ -26,7 +24,6 @@ import cn.lambdalib.cgui.gui.component.DrawTexture;
 import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.event.FrameEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
-import cn.lambdalib.networkcall.Future.FutureCallback;
 import cn.lambdalib.util.client.HudUtils;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.auxgui.AuxGui;
@@ -36,11 +33,16 @@ import cn.lambdalib.util.helper.GameTimer;
 import cn.lambdalib.util.key.KeyHandler;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.ControlOverrider;
+import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -52,6 +54,7 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class TerminalUI extends AuxGui {
 
     private static final String OVERRIDE_GROUP = "AC_Terminal";
@@ -68,7 +71,7 @@ public class TerminalUI extends AuxGui {
     private static WidgetContainer loaded;
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal.xml"));
     }
     
@@ -95,7 +98,9 @@ public class TerminalUI extends AuxGui {
         gui.addWidget(root = loaded.getWidget("back").copy());
         
         buffX = buffY = mouseX = mouseY = 150;
-        
+
+        MinecraftForge.EVENT_BUS.register(this);
+
         initGui();
     }
     
@@ -226,7 +231,14 @@ public class TerminalUI extends AuxGui {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glCullFace(GL11.GL_BACK);
     }
-    
+
+    @SubscribeEvent
+    public void _onAppInstalled(AppInstalledEvent evt) {
+        if (SideHelper.isClient()) {
+            updateAppList(TerminalData.get(Minecraft.getMinecraft().thePlayer));
+        }
+    }
+
     private double balance(long dt, double from, double to) {
         double d = to - from;
         return from + Math.min(BALANCE_SPEED * dt, Math.abs(d)) * Math.signum(d);
@@ -238,9 +250,20 @@ public class TerminalUI extends AuxGui {
         final TerminalData data = TerminalData.get(player);
         
         createTime = GameTimer.getTime();
-        
-        TextBox.get(root.getWidget("text_appcount")).content = 
-                StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
+
+        {
+            Widget widget = root.getWidget("text_appcount");
+            TextBox textBox = widget.getComponent(TextBox.class);
+            widget.listen(FrameEvent.class, (w, e) -> {
+                int currentTime = (int) (player.worldObj.getWorldTime() % 24000);
+                int hour = currentTime / 1000;
+                int minutes = (currentTime % 1000) * 60 / 1000;
+
+                String countText = StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", apps.size());
+                String timeText = wrapTime(hour) + ":" + wrapTime(minutes);
+                textBox.content = countText + ", " + timeText;
+            });
+        }
         
         TextBox.get(root.getWidget("text_username")).content = player.getCommandSenderName();
 
@@ -276,6 +299,11 @@ public class TerminalUI extends AuxGui {
         (w, e) -> {
             TextBox.get(w).option.color.a = 0.1 + 0.45 * (1 + MathHelper.sin(GameTimer.getTime() / 200.0f));
         });
+    }
+
+    private String wrapTime(int val) {
+        assert val >= 0 && val < 100;
+        return val < 10 ? ("0" + val) : (String.valueOf(val));
     }
     
     private void updateAppList(TerminalData data) {
@@ -355,7 +383,6 @@ public class TerminalUI extends AuxGui {
     }
     
     @RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_LMENU)
-    @RegEventHandler(Bus.Forge)
     public static KeyHandler keyHandler = new KeyHandler() {
         
         @Override

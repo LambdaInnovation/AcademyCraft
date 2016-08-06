@@ -6,7 +6,7 @@
 */
 package cn.academy.ability.client.render;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.multiblock.RenderBlockMultiModel;
 import cn.lambdalib.util.deprecated.TileEntityModelCustom;
 import net.minecraft.tileentity.TileEntity;

@@ -6,11 +6,9 @@
 */
 package cn.academy.vanilla.meltdowner.skill;
 
-import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.context.Context;
-import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.FollowEntitySound;
@@ -30,8 +28,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 
-import static cn.lambdalib.util.generic.RandUtils.*;
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
+import static cn.lambdalib.util.generic.RandUtils.ranged;
+import static cn.lambdalib.util.generic.RandUtils.rangei;
 
 /**
  * @author WeAthFolD
@@ -59,14 +58,14 @@ public class Meltdowner extends Skill {
 
         static final int TICKS_MIN = 20, TICKS_MAX = 40, TICKS_TOLE = 100;
 
-        final float exp = aData().getSkillExp(instance);
+        final float exp = ctx.getSkillExp();
         final float tickConsumption = lerpf(15, 27, exp);
 
         @SideOnly(Side.CLIENT)
         FollowEntitySound sound;
 
         public MDContext(EntityPlayer player) {
-            super(player);
+            super(player, instance);
         }
 
         @Listener(channel=Context.MSG_KEYUP, side=Side.CLIENT)
@@ -88,7 +87,7 @@ public class Meltdowner extends Skill {
             ++ticks;
 
             if (!isRemote()) {
-                if (!cpData().perform(0, tickConsumption) || ticks > TICKS_TOLE) {
+                if (!ctx.consume(0, tickConsumption) || ticks > TICKS_TOLE) {
                     terminate();
                 }
             }
@@ -135,13 +134,12 @@ public class Meltdowner extends Skill {
         void s_perform() {
             float overload = lerpf(300, 200, exp);
 
-            cpData().perform(overload, 0);
+            ctx.consume(overload, 0);
             int ct = toChargeTicks();
 
             double length[] = new double[] { 30 }; // for lambda mod
             RangedRayDamage rrd = new RangedRayDamage.Reflectible(
-                    player,
-                    instance,
+                    ctx,
                     lerpf(2, 3, exp),
                     getEnergy(ct),
                     (reflector) -> {
@@ -153,14 +151,15 @@ public class Meltdowner extends Skill {
             rrd.startDamage = getDamage(ct);
             rrd.perform();
 
-            aData().addSkillExp(instance, getExpIncr(ct));
+            ctx.addSkillExp(getExpIncr(ct));
 
-            CooldownManager.setCooldown(player, instance, getCooldown(ct));
+            ctx.setCooldown(getCooldown(ct));
             sendToClient(MSG_PERFORM, ct, length[0]);
 
             terminate();
         }
 
+        @SideOnly(Side.CLIENT)
         @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
         void c_perform(int ct, double length) {
             EntityMDRay ray = new EntityMDRay(player, length);
@@ -175,8 +174,6 @@ public class Meltdowner extends Skill {
             double distance = VecUtils.entityHeadPos(player).distanceTo(VecUtils.entityHeadPos(reflector));
             Vec3 spawnPos = VecUtils.add(VecUtils.entityHeadPos(player), VecUtils.multiply(playerLook, distance));
 
-            System.out.println("Reflected distance=" + distance);
-
             Motion3D mo = new Motion3D(reflector, true);
             mo.setPosition(spawnPos.xCoord, spawnPos.yCoord, spawnPos.zCoord);
 
@@ -189,7 +186,7 @@ public class Meltdowner extends Skill {
             MovingObjectPosition result = Raytrace.traceLiving(reflector, 10);
 
             if (result != null && result.typeOfHit == MovingObjectType.ENTITY) {
-                AbilityPipeline.attack(player, instance, result.entityHit, 0.5f * lerpf(20, 50, exp));
+                ctx.attack(result.entityHit, 0.5f * lerpf(20, 50, exp));
             }
         }
 

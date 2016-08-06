@@ -6,6 +6,8 @@
 */
 package cn.academy.ability.api.ctrl;
 
+import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,6 +22,8 @@ import java.util.UUID;
  * @deprecated Use {@link cn.academy.ability.api.context.Context} instead.
  */
 @Deprecated
+@Registrant
+@NetworkS11nType
 public abstract class SyncAction {
 
     protected UUID uuid;

@@ -7,21 +7,30 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
+import cn.academy.core.Resources;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
+import cn.academy.misc.tutorial.client.GuiTutorial;
+import cn.academy.support.rf.RFSupport;
+import cn.academy.terminal.App;
+import cn.academy.terminal.AppEnvironment;
+import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
+import cn.academy.terminal.item.ItemApp;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
+import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.vis.model.CompTransform;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
-import java.util.Optional;
-
-import static cn.academy.misc.tutorial.Condition.*;
-import static cn.academy.misc.tutorial.PreviewHandlers.*;
+import static cn.academy.misc.tutorial.Conditions.*;
+import static cn.academy.misc.tutorial.ViewGroups.*;
 
 @Registrant
 @RegACRecipeNames
@@ -29,116 +38,122 @@ public class ModuleTutorial {
     
     @RegItem
     @RecipeName("tutorial")
-    public static ItemTutorial item;
+    public static ItemTutorial itemTutorial;
 
     private static ACTutorial defnTut(String name) {
         return TutorialRegistry.addTutorial(name);
     }
 
     @RegPostInitCallback
-    public static void initConditions() {
+    private static void initConditions() {
         defnTut("welcome");
 
-        defnTut("phase_liquid")
-            // .setCondition(harvestLiquid(ModuleCrafting.imagPhase.mat))
-            .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
-                                0, 0, 
-                                1, Color.white()))
-            .addPreview(recipes(ModuleCrafting.matterUnit));
-
-        defnTut("constraint_metal")
-                .setCondition(itemPickup(ModuleCrafting.oreConstraintMetal))
+        defnTut("ores")
+                .addCondition(itemObtained(ModuleCrafting.oreConstraintMetal))
+                .addCondition(itemObtained(ModuleCrafting.oreImagSil))
+                .addCondition(itemObtained(ModuleCrafting.oreImagCrystal))
+                .addCondition(itemObtained(ModuleCrafting.oreResoCrystal))
                 .addPreview(drawsBlock(ModuleCrafting.oreConstraintMetal))
-                .addPreview(drawsItem(ModuleCrafting.ingotConst))
-                .addPreview(drawsItem(ModuleCrafting.constPlate))
-                .addPreview(recipes(ModuleCrafting.ingotConst))
-                .addPreview(recipes(ModuleCrafting.constPlate));
-
-        defnTut("crystal")
-                .setCondition(itemPickup(ModuleCrafting.crystalLow))
-                .addPreview(drawsItem(ModuleCrafting.crystalLow))
-                .addPreview(drawsItem(ModuleCrafting.crystalNormal))
-                .addPreview(drawsItem(ModuleCrafting.crystalPure))
-                .addPreview(recipes(ModuleCrafting.crystalLow))
-                .addPreview(recipes(ModuleCrafting.crystalNormal))
-                .addPreview(recipes(ModuleCrafting.crystalPure));
-
-        defnTut("imag_silicon")
-                .setCondition(itemPickup(ModuleCrafting.oreImagSil))
                 .addPreview(drawsBlock(ModuleCrafting.oreImagSil))
-                .addPreview(drawsItem(ModuleCrafting.ingotImagSil))
-                .addPreview(recipes(ModuleCrafting.oreImagSil));
-
-        defnTut("node").setCondition(or(
-                itemsCrafted(
-                        ModuleEnergy.nodeBasic,
-                        ModuleEnergy.nodeStandard,
-                        ModuleEnergy.nodeAdvanced
-                )
-        )).addPreview(drawsBlock(ModuleEnergy.nodeBasic))
-        .addPreview(recipes(ModuleEnergy.nodeBasic))
-        .addPreview(recipes(ModuleEnergy.nodeStandard))
-        .addPreview(recipes(ModuleEnergy.nodeAdvanced));
-
-        defnTut("matrix")
-                .setCondition(itemCrafted(ModuleEnergy.matrix))
-                .addPreview(displayModel("matrix", "matrix",
-                        new CompTransform()
-                                .setTransform(0, -0.45, 0)
-                                .setScale(0.3)))
-                .addPreview(recipes(ModuleEnergy.matrix));
-
-        defnTut("wireless_network")
-                .setCondition(or(onTutorial("matrix"), onTutorial("node")));
+                .addPreview(drawsBlock(ModuleCrafting.oreImagCrystal))
+                .addPreview(drawsBlock(ModuleCrafting.oreResoCrystal))
+                .addPreview(displayIcon("items/matter_unit/phase_liquid_mat",
+                        0, 0,
+                        1, Color.white()))
+                .addPreview(recipes(ModuleCrafting.constPlate))
+                .addPreview(recipes(ModuleCrafting.ingotImagSil))
+                .addPreview(recipes(ModuleCrafting.wafer))
+                .addPreview(recipes(ModuleCrafting.silPiece));
 
         defnTut("phase_generator")
-                .setCondition(itemCrafted(ModuleEnergy.phaseGen))
-                .addPreview(displayModel("ip_gen", "ip_gen0",
-                        new CompTransform().setScale(0.6).setTransform(0, -0.35, 0)))
+                .addCondition(itemObtained(ModuleEnergy.phaseGen))
                 .addPreview(recipes(ModuleEnergy.phaseGen));
 
-        defnTut("solar_gen")
-                .setCondition(Condition.itemCrafted(ModuleEnergy.solarGen))
-                .addPreview(displayModel("solar",
-                        new CompTransform().setScale(0.01).setTransform(0, -0.28, 0)))
+        defnTut("solar_generator")
+                .addCondition(itemObtained(ModuleEnergy.solarGen))
                 .addPreview(recipes(ModuleEnergy.solarGen));
 
-        defnTut("wind_gen")
-                .setCondition(Condition.itemCrafted(ModuleEnergy.windgenMain))
-                .addPreview(displayModel("windgen_base",
-                        new CompTransform().setScale(0.5).setTransform(0, -0.5, 0)))
-                .addPreview(displayModel("windgen_fan",
-                        new CompTransform().setScale(0.1)));
+        defnTut("wind_generator")
+                .addCondition(itemObtained(ModuleEnergy.windgenBase))
+                .addCondition(itemObtained(ModuleEnergy.windgenFan))
+                .addCondition(itemObtained(ModuleEnergy.windgenMain))
+                .addCondition(itemObtained(ModuleEnergy.windgenPillar))
+                .addPreview(recipes(ModuleEnergy.windgenBase))
+                .addPreview(recipes(ModuleEnergy.windgenPillar))
+                .addPreview(recipes(ModuleEnergy.windgenMain))
+                .addPreview(recipes(ModuleEnergy.windgenFan));
 
         defnTut("metal_former")
-                .setCondition(Condition.itemCrafted(ModuleCrafting.metalFormer))
-                .addPreview(drawsBlock(ModuleCrafting.metalFormer))
+                .addCondition(itemObtained(ModuleCrafting.metalFormer))
                 .addPreview(recipes(ModuleCrafting.metalFormer));
 
         defnTut("imag_fusor")
-                .setCondition(Condition.itemCrafted(ModuleCrafting.imagFusor))
-                .addPreview(drawsBlock(ModuleCrafting.imagFusor))
+                .addCondition(itemObtained(ModuleCrafting.imagFusor))
                 .addPreview(recipes(ModuleCrafting.imagFusor));
 
-        defnTut("data_terminal")
-                .setCondition(Condition.itemCrafted(ModuleTerminal.terminalInstaller))
-                .addPreview(drawsItem(ModuleTerminal.terminalInstaller))
+        ACTutorial tutorialTerminal = defnTut("terminal")
+                .addCondition(itemObtained(ModuleTerminal.terminalInstaller))
                 .addPreview(recipes(ModuleTerminal.terminalInstaller));
 
-        defnTut("ability_developer").setCondition(or(
-                itemsCrafted(
-                        ModuleAbility.developerNormal,
-                        ModuleAbility.developerPortable,
-                        ModuleAbility.developerAdvanced
-                )
-        )).addPreview(drawsItem(ModuleAbility.developerPortable))
-            .addPreview(displayModel("developer_advanced",
-                    new CompTransform().setScale(0.16).setTransform(0, -0.4, -0.3)))
-            .addPreview(recipes(ModuleAbility.developerPortable))
-            .addPreview(recipes(ModuleAbility.developerNormal))
-            .addPreview(recipes(ModuleAbility.developerAdvanced));
+        for(App app : AppRegistry.enumeration()) {
+            if(!app.isPreInstalled()) {
+                tutorialTerminal.addCondition(itemObtained(ItemApp.getItemForApp(app)));
+                tutorialTerminal.addPreview(recipes(ItemApp.getItemForApp(app)));
+            }
+        }
 
-        defnTut("ability")
-                .setCondition(abilityLevel(Optional.empty(), 1));
+        defnTut("ability_developer")
+                .addCondition(itemObtained(ModuleAbility.developerPortable))
+                .addCondition(itemObtained(ModuleAbility.developerNormal))
+                .addCondition(itemObtained(ModuleAbility.developerAdvanced))
+                .addPreview(recipes(ModuleAbility.developerPortable))
+                .addPreview(recipes(ModuleAbility.developerNormal))
+                .addPreview(recipes(ModuleAbility.developerAdvanced));
+
+        defnTut("ability_basis");
+
+        defnTut("energy_bridge")
+                .addCondition(itemObtained(RFSupport.rfInput))
+                .addCondition(itemObtained(RFSupport.rfOutput))
+                .addPreview(recipes(RFSupport.rfInput))
+                .addPreview(recipes(RFSupport.rfOutput));
+
+        defnTut("misc");
+
+        defnTut("develop_ability");
+
+        defnTut("wireless_network");
+
+        // Add app for tutorial
+        AppRegistry.register(new App("tutorial") {
+
+            @Override
+            public AppEnvironment createEnvironment() {
+                return new AppEnvironment() {
+                    @Override
+                    @SideOnly(Side.CLIENT)
+                    public void onStart() {
+                        Minecraft.getMinecraft().displayGuiScreen(new GuiTutorial());
+                    }
+                };
+            }
+
+            // Random gives icon for more fun >)
+            @Override
+            public ResourceLocation getIcon() {
+                float rand = RandUtils.nextFloat();
+                if (rand < 0.2f) {
+                    return icon(0);
+                } else if (rand < 0.3f) {
+                    return icon(1);
+                } else {
+                    return icon(2);
+                }
+            }
+
+            private ResourceLocation icon(int id) {
+                return Resources.preloadMipmapTexture("guis/apps/tutorial/icon_" + id);
+            }
+        }.setPreInstalled());
     }
 }

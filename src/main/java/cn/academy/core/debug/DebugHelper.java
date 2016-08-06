@@ -24,7 +24,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 public class DebugHelper {
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         if(AcademyCraft.DEBUG_MODE) {
             MinecraftForge.EVENT_BUS.register(new DebugHelper());
         }

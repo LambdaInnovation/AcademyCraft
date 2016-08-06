@@ -1,6 +1,6 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.{ContainerUI, HistElement}
 import cn.academy.energy.block.wind.{ContainerWindGenBase, TileWindGenBase}
 import cn.academy.core.client.ui._

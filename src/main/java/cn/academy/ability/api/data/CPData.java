@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * CP but more than CP. CPData stores rather dynamic part of player ability data, 
+ * CP but more than CP. CPData stores rather dynamic part of player ability data,
  *     for example, whether the player is using ability, current CP and overload, etc.
  * @author WeAthFolD
  */
@@ -86,7 +86,7 @@ public class CPData extends DataPart<EntityPlayer> {
     private boolean overloadFine = true;
     @SerializeIncluded
     private boolean interfering = false; // Cached value
-    
+
     /**
      * Tick counter for cp recover.
      */
@@ -97,9 +97,9 @@ public class CPData extends DataPart<EntityPlayer> {
      */
     @SerializeIncluded
     private int untilOverloadRecover;
-    
+
     private boolean dataDirty = false;
-    
+
     private int tickSync;
 
     public CPData() {
@@ -107,7 +107,7 @@ public class CPData extends DataPart<EntityPlayer> {
         setClientNeedSync();
         setNBTStorage();
     }
-    
+
     public static CPData get(EntityPlayer player) {
         return EntityData.get(player).getPart(CPData.class);
     }
@@ -133,10 +133,10 @@ public class CPData extends DataPart<EntityPlayer> {
             } else {
                 untilRecover--;
             }
-            
+
             if(untilOverloadRecover == 0) {
                 float recover = getOverloadRecoverSpeed();
-                
+
                 curOverload -= recover;
                 if(curOverload <= 0) {
                     overloadFine = true;
@@ -163,7 +163,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
                 interfering = newInterf;
             }
-            
+
             // Do the sync.
             if(!remote) {
                 int interval = (activated ? 1 : 3) * (dataDirty ? 4 : 10);
@@ -177,7 +177,7 @@ public class CPData extends DataPart<EntityPlayer> {
             }
         }
     }
-    
+
     public boolean isActivated() {
         // At initialization stage, it's possible that activated become true, but AbilityData isn't
         //  yet synchronized, so additional check is required.
@@ -212,7 +212,7 @@ public class CPData extends DataPart<EntityPlayer> {
             markDirty();
         }
     }
-    
+
     public void setCP(float cp) {
         curCP = MathUtils.clampf(0, maxCP, cp);
 
@@ -230,19 +230,19 @@ public class CPData extends DataPart<EntityPlayer> {
             dataDirty = true;
         }
     }
-    
+
     public float getCP() {
         return curCP;
     }
-    
+
     public float getMaxCP() {
         return maxCP + addMaxCP;
     }
-    
+
     public float getRawMaxCP() {
         return maxCP;
     }
-    
+
     public float getAddMaxCP() {
         return addMaxCP;
     }
@@ -254,67 +254,64 @@ public class CPData extends DataPart<EntityPlayer> {
 
         markDirty();
     }
-    
+
     public float getOverload() {
         return curOverload;
     }
-    
+
     public float getMaxOverload() {
         return maxOverload + addMaxOverload;
     }
-    
+
     public float getRawMaxOverload() {
         return maxOverload;
     }
-    
+
     public float getAddMaxOverload() {
         return addMaxOverload;
     }
-    
+
     /**
-     * Performs a generic ability action. 
+     * Performs a generic ability action.
      * Will fail when either can't overload anymore or can't consume cp.
      * @param overloadToAdd Amount of overload
      * @param cpToAdd Amount of CP
      */
     public boolean perform(float overloadToAdd, float cpToAdd) {
-        Pair<Float, Float> res = performData(overloadToAdd, cpToAdd);
-        overloadToAdd = res.getLeft();
-        cpToAdd = res.getRight();
-
-        if(getEntity().capabilities.isCreativeMode) {
-            addMaxCP(cpToAdd);
-            addMaxOverload(overloadToAdd);
-            return true;
-        }
-        if(curCP - cpToAdd < 0)
-            return false;
-        
-        addOverload(overloadToAdd);
-        consumeCP(cpToAdd);
-        
-        return true;
+        return performInternal(overloadToAdd, cpToAdd, false);
     }
-    
+
     /**
      * Consume the CP and does the overload without any validation. This should be used WITH CAUTION.
      */
     public void performWithForce(float overload, float cp) {
+        performInternal(overload, cp, true);
+    }
+
+    private boolean performInternal(float overload, float cp, boolean force) {
         Pair<Float, Float> res = performData(overload, cp);
         overload = res.getLeft();
         cp = res.getRight();
 
-        if(getEntity().capabilities.isCreativeMode)
-            return;
-        
-        this.curOverload = Math.min(overload, getMaxOverload());
-        this.curCP = Math.max(0, curCP - cp);
-        
-        addMaxCP(cp);
-        addMaxOverload(overload);
-        
-        if(!isClient())
-            dataDirty = true;
+        boolean result;
+
+        // consume CP/Overload
+        if (!getEntity().capabilities.isCreativeMode) {
+            result = consumeCP(cp, force);
+            if (result) {
+                addOverload(overload);
+            }
+        } else {
+            result = true;
+        }
+
+        // Add maxcp/maxoverload
+        if (result) {
+            addMaxCP(cp);
+            addMaxOverload(overload);
+        }
+
+        return result;
     }
 
     private Pair<Float, Float> performData(float overload, float cp) {
@@ -323,7 +320,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
         return Pair.of(evt.overload, evt.cp);
     }
-    
+
     /***
      * A pre test to judge whether the skill can be performed.
      * @return Whether the player can perform the ability with the given consumption currently,
@@ -340,7 +337,7 @@ public class CPData extends DataPart<EntityPlayer> {
     private void addMaxCP(float consumedCP) {
         setAddMaxCP(addMaxCP + consumedCP * getFloat("maxcp_incr_rate"));
     }
-    
+
     private void addMaxOverload(float overload) {
         AbilityData aData = AbilityData.get(getEntity());
         float max = getMaxAddOverload(aData.getLevel());
@@ -352,7 +349,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
     private float getCPRecoverSpeed() {
         float raw = getFloat("cp_recover_speed") *
-                0.0001f * maxCP *
+                0.0003f * maxCP *
                 MathUtils.lerpf(1, 2, curCP / maxCP);
 
         return CalcEvent.calc(new CPRecoverSpeed(getEntity(), 1)) * raw;
@@ -365,44 +362,33 @@ public class CPData extends DataPart<EntityPlayer> {
 
         return CalcEvent.calc(new OverloadRecoverSpeed(getEntity(), 1)) * raw;
     }
-    
-    public boolean canLevelUp() {
-        return AbilityData.get(getEntity()).getLevel() < 5 && getLevelProgress() == 1;
-    }
-    
-    public float getLevelProgress() {
-        AbilityData aData = AbilityData.get(getEntity());
-        if (!aData.hasCategory()) return 0;
-        else                      return addMaxCP / getMaxAddCP(AbilityData.get(getEntity()).getLevel());
-    }
-    
+
     /**
      * Can be called in both sides. Consumes the CP and return whether the action is successful.
      * Will just make a simulation in client side.
      */
-    public boolean consumeCP(float amt) {
-        if(curCP < amt)
+    private boolean consumeCP(float amt, boolean force) {
+        if(!force && curCP < amt)
             return false;
-        curCP -= amt;
+
+        curCP = Math.max(0, curCP - amt);
         untilRecover = getInt("cp_recover_cooldown");
-        
-        addMaxCP(amt);
-        
+
         if(!isClient())
             dataDirty = true;
-        
+
         return true;
     }
-    
+
     /**
      * Add a specific amount of overload.
      */
-    public void addOverload(float amt) {
+    private void addOverload(float amt) {
         if(getEntity().capabilities.isCreativeMode)
             return;
-        
+
         curOverload = Math.min(getMaxOverload(), curOverload + amt);
-        
+
         untilOverloadRecover = getInt("overload_recover_cooldown");
 
         if(curOverload == getMaxOverload()) {
@@ -410,31 +396,29 @@ public class CPData extends DataPart<EntityPlayer> {
             overloadFine = false;
         }
 
-        addMaxOverload(amt);
-        
         if(!isClient())
             dataDirty = true;
     }
-    
+
     public boolean isOverloaded() {
         return !overloadFine && untilOverloadRecover > 0;
     }
-    
+
     /**
      * SERVER ONLY. <br/>
-     * Should be called when player upgrades level. 
-     * Recalc the max overload and max cp based on 
+     * Should be called when player upgrades level.
+     * Recalc the max overload and max cp based on
      * currently learned buff skills and level.
      */
     public void recalcMaxValue() {
         AbilityData data = AbilityData.get(getEntity());
-        
+
         this.maxCP = getInitCP(data.getLevel());
         this.maxOverload = getInitOverload(data.getLevel());
-        
+
         curCP = getMaxCP();
         curOverload = 0;
-        
+
         if(!isClient())
             sync();
     }
@@ -530,7 +514,7 @@ public class CPData extends DataPart<EntityPlayer> {
             sync();
         }
     }
-    
+
     @Override
     public void toNBT(NBTTagCompound tag) {
         NBTS11n.write(tag, this);
@@ -540,7 +524,7 @@ public class CPData extends DataPart<EntityPlayer> {
     public void fromNBT(NBTTagCompound tag) {
         NBTS11n.read(tag, this);
     }
-    
+
     @Listener(channel=MSG_ACTIVATE_SVR, side=Side.SERVER)
     private void activateAtServer(boolean state) {
         setActivateState(state);
@@ -552,38 +536,40 @@ public class CPData extends DataPart<EntityPlayer> {
                 new AbilityActivateEvent(getEntity()) :
                 new AbilityDeactivateEvent(getEntity()));
     }
-    
-    @RegEventHandler(Bus.Forge)
-    public static class Events {
-        
+
+    @Registrant
+    public enum Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
+
         @SubscribeEvent
         public void changedCategory(CategoryChangeEvent event) {
             CPData cpData = CPData.get(event.player);
-            
+
             if(!AbilityData.get(event.player).hasCategory()) {
                 cpData.setActivateState(false);
             }
             cpData.recalcMaxValue();
         }
-        
+
         @SubscribeEvent
         public void learnedSkill(SkillLearnEvent event) {
             CPData.get(event.player).recalcMaxValue();
         }
-        
+
         @SubscribeEvent
         public void changedLevel(LevelChangeEvent event) {
             CPData cpData = CPData.get(event.player);
             cpData.addMaxCP = cpData.addMaxOverload = 0;
             cpData.recalcMaxValue();
         }
-        
+
         @SubscribeEvent
         public void playerWakeup(PlayerWakeUpEvent event) {
             if(!event.wakeImmediatly && !event.updateWorld && event.setSpawn)
                 CPData.get(event.entityPlayer).recoverAll();
         }
-        
+
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void playerDeath(LivingDeathEvent event) {
             if(event.entityLiving instanceof EntityPlayer) {
@@ -594,7 +580,7 @@ public class CPData extends DataPart<EntityPlayer> {
                 cpData.setActivateState(false);
             }
         }
-        
+
     }
 
 }

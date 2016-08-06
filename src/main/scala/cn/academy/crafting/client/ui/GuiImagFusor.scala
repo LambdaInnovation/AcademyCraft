@@ -1,7 +1,6 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.LocalHelper
-import cn.academy.core.client.Resources
+import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.ContainerImagFusor

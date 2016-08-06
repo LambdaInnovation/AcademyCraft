@@ -7,7 +7,7 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;

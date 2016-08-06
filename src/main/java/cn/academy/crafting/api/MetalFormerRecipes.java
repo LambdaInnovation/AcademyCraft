@@ -8,11 +8,12 @@ package cn.academy.crafting.api;
 
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.s11n.InstanceSerializer;
-import cn.lambdalib.networkcall.s11n.RegSerializable;
+import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,7 @@ import java.util.List;
 @Registrant
 public enum MetalFormerRecipes {
     INSTANCE;
-    
-    @RegSerializable(instance = RecipeSerializer.class)
+
     public static class RecipeObject {
         private int id = -1;
         
@@ -47,7 +47,7 @@ public enum MetalFormerRecipes {
         }
     }
     
-    List<RecipeObject> objects = new ArrayList();
+    List<RecipeObject> objects = new ArrayList<>();
     
     public void add(ItemStack in, ItemStack out, Mode mode) {
         RecipeObject add = new RecipeObject(in, out, mode);
@@ -66,19 +66,20 @@ public enum MetalFormerRecipes {
     public List<RecipeObject> getAllRecipes() {
         return objects;
     }
-    
-    public static class RecipeSerializer implements InstanceSerializer<RecipeObject> {
 
-        @Override
-        public RecipeObject readInstance(NBTBase nbt) throws Exception {
-            return INSTANCE.objects.get(((NBTTagInt)nbt).func_150287_d());
-        }
+    @RegInitCallback
+    private static void _init() {
+        NetworkS11n.addDirect(RecipeObject.class, new NetS11nAdaptor<RecipeObject>() {
+            @Override
+            public void write(ByteBuf buf, RecipeObject obj) {
+                buf.writeByte(obj.id);
+            }
 
-        @Override
-        public NBTBase writeInstance(RecipeObject obj) throws Exception {
-            return new NBTTagInt(obj.id);
-        }
-        
+            @Override
+            public RecipeObject read(ByteBuf buf) throws ContextException {
+                return INSTANCE.objects.get(buf.readByte());
+            }
+        });
     }
     
 }

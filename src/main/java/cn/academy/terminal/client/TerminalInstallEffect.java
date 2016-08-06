@@ -21,6 +21,8 @@ import cn.lambdalib.cgui.xml.CGUIDocument;
 import cn.lambdalib.util.client.auxgui.AuxGui;
 import cn.lambdalib.util.key.KeyManager;
 import cn.lambdalib.util.mc.PlayerUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +31,7 @@ import net.minecraft.util.ResourceLocation;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class TerminalInstallEffect extends AuxGui {
     
     private static final long ANIM_LENGTH = 4000L;
@@ -37,7 +40,7 @@ public class TerminalInstallEffect extends AuxGui {
 
     private static WidgetContainer loaded;
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal_installing.xml"));
     }
     

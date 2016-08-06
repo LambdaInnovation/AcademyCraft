@@ -18,10 +18,10 @@ public class SkillDamageSource extends EntityDamageSource {
 
     // Chat display
     @Override
-    public IChatComponent func_151519_b(EntityLivingBase attacker) {
+    public IChatComponent func_151519_b(EntityLivingBase target) {
         return new ChatComponentTranslation("death.attack.ac_skill",
+                target.getCommandSenderName(),
                 this.damageSourceEntity.getCommandSenderName(),
-                attacker.getCommandSenderName(),
                 skill.getDisplayName());
     }
 

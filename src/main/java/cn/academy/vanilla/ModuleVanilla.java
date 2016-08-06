@@ -24,14 +24,11 @@ import cn.academy.vanilla.generic.skill.SkillMindCourse;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.item.ItemSilbarn;
 import cn.academy.vanilla.teleporter.CatTeleporter;
-import cn.academy.vanilla.vecmanip.CatVecManip;
 import cn.academy.vanilla.vecmanip.CatVecManip$;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.annoreg.mc.RegItem;
 import cn.lambdalib.crafting.CustomMappingHelper.RecipeName;
-import cn.lambdalib.s11n.network.NetworkS11n;
-import com.google.common.base.Throwables;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,7 +69,7 @@ public class ModuleVanilla {
     public static final CatVecManip$ vecManip = CatVecManip$.MODULE$;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ModuleCrafting.rfIronPlate), new ItemStack(needle, 6),
                 Mode.INCISE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(needle, 2),

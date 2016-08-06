@@ -10,29 +10,22 @@ import cn.academy.core.block.TileReceiverBase;
 import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.PositionedSound;
+import cn.academy.core.client.sound.TileEntitySound;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.item.ItemMatterUnit;
-import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.TargetPointHelper;
-import cn.lambdalib.networkcall.TargetPointHelper.TargetPointConverter;
-import cn.lambdalib.networkcall.s11n.StorageOption;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.network.TargetPoints;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -44,7 +37,7 @@ import net.minecraftforge.fluids.*;
 @Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
-public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
+public class TileImagFusor extends TileReceiverBase implements IFluidHandler, ISidedInventory {
     
     static final double WORK_SPEED = 1.0 / 120;
     static final double CONSUME_PER_TICK = 12;
@@ -64,6 +57,10 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         SLOT_IMAG_INPUT = 2,
         SLOT_ENERGY_INPUT = 3,
         SLOT_IMAG_OUTPUT = 4;
+
+    private final int[] slotsTop = {SLOT_INPUT, SLOT_IMAG_INPUT};
+    private final int[] slotsBottom = {SLOT_OUTPUT, SLOT_IMAG_OUTPUT, SLOT_ENERGY_INPUT};
+    private final int[] slotsOther = {SLOT_ENERGY_INPUT};
     
     protected FluidTank tank = new FluidTank(TANK_SIZE);
     
@@ -178,7 +175,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
         if (!worldObj.isRemote) {
             if(--syncCooldown <= 0) {
                 syncCooldown = SYNC_INTV;
-                NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 15),
+                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15),
                         this, "sync",
                         currentRecipe, workProgress, getLiquidAmount());
             }
@@ -204,8 +201,13 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
     
     private void updateWork() {
         // Check the input stack, and abort if item isnt there
+            // Also check whether the amount of Liquid is enough,
+            // and whether the output of currentRecipe can be outputed into outputslot
+            // Added by Shielian
         if(inventory[0] == null || currentRecipe.consumeType.getItem() != inventory[0].getItem()
-                || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK) {
+                || this.pullEnergy(CONSUME_PER_TICK) != CONSUME_PER_TICK || this.getLiquidAmount() < currentRecipe.consumeLiquid
+                || (inventory[SLOT_OUTPUT] != null && inventory[SLOT_OUTPUT].getItem() != currentRecipe.output.getItem())
+                ) {
             abortWorking();
             return;
         }
@@ -299,10 +301,30 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler {
             sound.stop();
             sound = null;
         } else if(sound == null && play) {
-            sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
-                    "machine.imag_fusor_work").setLoop().setVolume(0.6f);
+            sound = new TileEntitySound(this, "machine.imag_fusor_work").setLoop().setVolume(0.6f);
             ACSounds.playClient(sound);
         }
     }
 
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        switch(side) {
+            case 0:
+                return slotsBottom;
+            case 1:
+                return slotsTop;
+            default:
+                return slotsOther;
+        }
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack item, int side) {
+        return this.isItemValidForSlot(slot, item);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack item, int side) {
+        return side == 0;
+    }
 }

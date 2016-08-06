@@ -12,8 +12,9 @@ import cn.academy.terminal.client.TerminalInstallEffect;
 import cn.academy.terminal.client.TerminalInstallerRenderer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegItem;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Target;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,6 +27,7 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class ItemTerminalInstaller extends ACItem {
     
     @SideOnly(Side.CLIENT)
@@ -49,18 +51,14 @@ public class ItemTerminalInstaller extends ACItem {
                 if(!player.capabilities.isCreativeMode)
                     stack.stackSize--;
                 tData.install();
-                startInstalling(player);
+                NetworkMessage.sendTo(player, NetworkMessage.staticCaller(ItemTerminalInstaller.class), "install");
             }
         }
         return stack;
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void startInstalling(@Target EntityPlayer player) {
-        install();
-    }
-    
+
     @SideOnly(Side.CLIENT)
+    @Listener(channel="install", side=Side.CLIENT)
     private static void install() {
         AuxGuiHandler.register(new TerminalInstallEffect());
     }

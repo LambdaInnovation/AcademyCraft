@@ -6,6 +6,8 @@
 */
 package cn.academy.energy.block;
 
+import cn.academy.core.container.TechUIContainer;
+import cn.academy.energy.api.IFItemManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -15,13 +17,11 @@ import net.minecraft.item.ItemStack;
 /**
  * @author WeathFolD
  */
-public class ContainerNode extends Container {
-
-    public final TileNode node;
+public class ContainerNode extends TechUIContainer<TileNode> {
 
     public ContainerNode(TileNode _node, EntityPlayer player) {
-        node = _node;
-        initInventory(player.inventory);
+        super(player, _node);
+        initInventory();
     }
     
     @Override
@@ -29,56 +29,17 @@ public class ContainerNode extends Container {
         super.detectAndSendChanges();
     }
     
-    private void initInventory(InventoryPlayer inv) {
-        this.addSlotToContainer(new SlotIFItem(node, 0, 26, 0));
-        this.addSlotToContainer(new SlotIFItem(node, 1, 26, 70));
+    private void initInventory() {
+        this.addSlotToContainer(new SlotIFItem(tile, 0, 42, 10));
+        this.addSlotToContainer(new SlotIFItem(tile, 1, 42, 80));
         
-        int STEP = 18;
-        
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, -10 + i * STEP, 153));
-        }
-        
-        for(int i = 1; i < 4; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                int slot = (4 - i) * 9 + j;
-                addSlotToContainer(new Slot(inv, slot, -10 + j * STEP, 149 - i * STEP));
-            }
-        }
-    }
-    
-    /**
-     * This already become a template...
-     */
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int id) {
-        ItemStack stack = null;
-        Slot slot = (Slot)this.inventorySlots.get(id);
+        mapPlayerInventory();
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack1 = slot.getStack();
-            stack = stack1.copy();
+        SlotGroup gBatteries = gSlots(0, 1);
+        SlotGroup gInv = gRange(2, 2+36);
 
-            if (id < 2) { //tileInv->playerInv
-                if (!this.mergeItemStack(stack1, 2, this.inventorySlots.size(), true))
-                    return null;
-            } else if (!this.mergeItemStack(stack1, 0, 2, false)) { //playerInv->tileInv
-                return null;
-            }
-
-            if (stack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            } else {
-                slot.onSlotChanged();
-            }
-        }
-
-        return stack;
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer var1) {
-        return var1.getDistanceSq(node.xCoord + .5, node.yCoord + .5, node.zCoord + .5) < 64.0;
+        addTransferRule(gBatteries, gInv);
+        addTransferRule(gInv, IFItemManager.instance::isSupported, gBatteries);
     }
 
 }

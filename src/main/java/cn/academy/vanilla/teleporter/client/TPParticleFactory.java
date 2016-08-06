@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.teleporter.client;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
 import cn.lambdalib.util.generic.RandUtils;

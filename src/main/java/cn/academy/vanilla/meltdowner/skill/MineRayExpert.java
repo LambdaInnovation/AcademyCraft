@@ -53,6 +53,7 @@ public class MineRayExpert extends MineRaysBase {
             world.setBlock(x, y, z, Blocks.air);
         }
 
+        @SideOnly(Side.CLIENT)
         @Override
         protected Entity createRay() {
             return new EntityMineRayExpert(player);

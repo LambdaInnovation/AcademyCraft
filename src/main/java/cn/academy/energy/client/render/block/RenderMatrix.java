@@ -6,7 +6,7 @@
 */
 package cn.academy.energy.client.render.block;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.block.TileMatrix;
 import cn.lambdalib.multiblock.RenderBlockMulti;
 import cn.lambdalib.util.client.RenderUtils;
@@ -49,7 +49,8 @@ public class RenderMatrix extends RenderBlockMulti {
     }
     
     private void drawShields(TileMatrix mat) {
-        int plateCount = mat.plateCount;
+        int plateCount = mat.plateCount == 3 ? 3 : 0;
+
         long time = GameTimer.getTime();
         double dtheta = 360.0 / plateCount, phase = (time / 20.0) % 360;
         double htPhaseOff = 40.0;

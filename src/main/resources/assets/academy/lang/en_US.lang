@@ -1,8 +1,9 @@
-# AcademyCraft lang file
-# The file is majorly divided by content type (except for those that needs to interface with Minecraft).
+﻿# AcademyCraft Enligsh Language file
+# This file is mainly categorized by use (except for those which needs to follow the rules of Minecraft).
 
 # Common
 itemGroup.AcademyCraft=AcademyCraft
+ac.data_config_parse_fail=[AcademyCraft] Failed to parse custom config data file. The error:
 
 # Item
 item.ac_crystal_low.name=Low-purity Imag Crystal
@@ -43,9 +44,9 @@ item.ac_apps.name=App Installer
 
 item.ac_developer_portable.name=Portable Developer
 item.ac_magnetic_coil.name=High Voltage Magnetic Coil
-item.ac_magnetic_coil.desc=Overcharges the developer to rewrite personal reality
+item.ac_magnetic_coil.desc=Overcharges the developer<br>In order to rewrite personal reality
 item.ac_induction_factor.name=Ability Induction Factor
-item.ac_tutorial.name=Research Note
+item.ac_tutorial.name=MisakaCloud Terminal
 
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
@@ -82,7 +83,7 @@ ac.terminal.alrdy_installed=You have already installed Data Terminal.
 ac.terminal.key_hint=Successfully installed the data terminal. Use the %s key to open/close the terminal UI.
 
 ac.gui.terminal.installing= Installing...
-ac.gui.terminal.appcount=%d Applications
+ac.gui.terminal.appcount=%d Apps
 
 ac.terminal.app_alrdy_installed=You have already installed app %s.
 ac.terminal.app_installed=You have successfully installed app %s.
@@ -92,6 +93,7 @@ ac.app.skill_tree.name=Skill Tree
 ac.app.knowledge_record.name=Life Record
 ac.app.settings.name=Settings
 ac.app.media_player.name=Media Player
+ac.app.tutorial.name=MisakaCloud
 
 ac.app.freq_transmitter.name=Frequency Transmitter
 ac.app.freq_transmitter.s0_0=Please right-click a wireless matrix or node to start establish link from.
@@ -136,11 +138,11 @@ ac.media.haveone=You have already installed media %s
 ac.media.notinstalled=You have not yet installed the Media Player app.
 
 ### Medias
-ac.media.only_my_railgun.name=Only My Railgun
+ac.media.only_my_railgun.name=only my railgun
 ac.media.only_my_railgun.desc=Toaru Kagaku no Railgun OP1
-ac.media.level5_judgelight.name=Level5 -Judgelight-
+ac.media.level5_judgelight.name=LEVEL5-judgelight-
 ac.media.level5_judgelight.desc=Toaru Kagaku no Railgun OP2
-ac.media.sisters_noise.name=Sister's Noise
+ac.media.sisters_noise.name=sister's noise
 ac.media.sisters_noise.desc=Toaru Kagaku no Railgun S OP1
 
 # Ability Generic
@@ -226,15 +228,8 @@ ac.ability.teleporter.space_fluct.desc=Strenghen your space-folding ability to c
 ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver in the air.
 ac.ability.teleporter.crithit=%fx critical hit!
 
-ac.gui.loctele.tag0=Recorded Locations
-ac.gui.loctele.tag1=Add Location
-ac.gui.loctele.name=Name: 
-ac.gui.loctele.location=Location: 
-ac.gui.loctele.distance=Distance: 
-ac.gui.loctele.dim=Dimension: #
-ac.gui.loctele.warn0=[CP not enough.]
-ac.gui.loctele.warn1=You can't record this location now.
-ac.gui.loctele.teleport=Teleport!
+ac.gui.loctele.err_exp=Exp too low, can't cross dimension
+ac.gui.loctele.err_cp=CP inadequate, can't teleport
 
 ## Meltdowner
 ac.ability.meltdowner.name=Meltdowner
@@ -264,10 +259,10 @@ ac.ability.meltdowner.mine_ray_expert.desc=Understanding how to control the inte
 ac.ability.meltdowner.mine_ray_luck.desc=After a long time of practice, you can almost harvest the useful resources in the ore perfectly.
 ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electron cloud and use a small amount of it to attack each time.
 
-# Vector Manipulation
+## Vector Manipulation
 ac.ability.vecmanip.name=Vector Manip
 
-## VM skills
+### VM skills
 ac.ability.vecmanip.dir_shock.name=Directed Shock
 ac.ability.vecmanip.ground_shock.name=Groundshock
 ac.ability.vecmanip.vec_accel.name=Vector Acceleration
@@ -283,7 +278,7 @@ ac.ability.vecmanip.ground_shock.desc=Apply a powerful shock on the ground and d
 ac.ability.vecmanip.vec_accel.desc=Boost jumping force for an instant to accelerate yourself.
 ac.ability.vecmanip.vec_deviation.desc=Cancel the velocity of projectiles flying towards you, and cancels a portion of combat damage.
 ac.ability.vecmanip.dir_blast.desc=Triple the force of punching into the object, making it extremely destructive. Will break blocks on area it hits.
-ac.ability.vecmanip.storm_wing.desc=Manipulate the velocity of air to form four micro-whirlwinds at your back, and fly in high speed using forces they generate.
+ac.ability.vecmanip.storm_wing.desc=Manipulate the velocity of air to form four micro-whirlwinds at your back, and fly in high speed using forces they generate. Will break blocks nearby if inexperienced.
 ac.ability.vecmanip.blood_retro.desc=Stir the blood flow of organic enemies, making their vessel burst and die in extreme pain.
 ac.ability.vecmanip.vec_reflection.desc=Reflects the dangerous incoming attacks towards your line of sight, and make your opponent bear it.
 ac.ability.vecmanip.plasma_cannon.desc=Manipulate a large area of air flow with extreme precision to form a plasma body. Throw it out to cause a disastrous explosion.
@@ -331,6 +326,9 @@ ac.command.aim.curexp=Skill %s's current exp: %.0f%%.
 ac.command.aim.notactive=The /aim command is currently inactive. Use /aim cheats_on or /aim cheats_off to change the active state.
 ac.command.aim.warning=§cWARNING: Using /aim command will break the game balance and impact your experience about the mod, PROCEED WITH CAUTION!
 ac.command.aim.outofrange=§cInput out of range: §fMust be a value between %s and %s.
+ac.command.aim.maxout=Set current level's upgrade progress to 100%%.
+ac.command.aim.nocomm=No such command was found. Use /aim help to list all commands available.
+ac.command.aim.nonecathint=You haven't learned any ability!
 
 # Achievements
 achievement.ac_phase_liquid=New Energy
@@ -434,6 +432,28 @@ achievement.ac_teleporter.flashing.desc=While low form beings still move on thei
 achievement.ac_teleporter.mastery=Dimension Traveler
 achievement.ac_teleporter.mastery.desc=Teleporters does travel between dimensions
 
+ac.achievementpage.cat_vecmanip=Vector Manip
+achievement.ac_vecmanip.lv1=Momentum Deflection
+achievement.ac_vecmanip.lv1.desc=Move this stone, or it will be a shame
+achievement.ac_vecmanip.lv2=Momentum Master
+achievement.ac_vecmanip.lv2.desc=Either bounce those bullets or die
+achievement.ac_vecmanip.lv3=Vector Adjustment
+achievement.ac_vecmanip.lv3.desc=Every vector comes to me will go down.
+achievement.ac_vecmanip.lv4=Vector Deflection
+achievement.ac_vecmanip.lv4.desc=Catch those vectors, then shoot them out
+achievement.ac_vecmanip.lv5=Vector Master
+achievement.ac_vecmanip.lv5.desc=There is nothing I CAN'T Control
+achievement.ac_vecmanip.ground_shock=Ground Shock
+achievement.ac_vecmanip.ground_shock.desc=Who allows you stand on the same altitude as me
+achievement.ac_vecmanip.dir_blast=Dir Blast
+achievement.ac_vecmanip.dir_blast.desc=The weak, what about the blast?
+achievement.ac_vecmanip.storm_wing=Storm Wing
+achievement.ac_vecmanip.storm_wing.desc=Anyway, you CANNOT fly
+achievement.ac_vecmanip.blood_retro=Blood Retro
+achievement.ac_vecmanip.blood_retro.desc=You are died once I touch your skin
+achievement.ac_vecmanip.vec_reflection=Accelerator
+achievement.ac_vecmanip.vec_reflection.desc=Who allows you to get close to me
+
 # UI Commons
 ac.gui.common.pg_wireless.not_connected=Not Connected
 ac.gui.common.sep.info=Information
@@ -465,13 +485,33 @@ ac.skill_tree.level_question=Continue?
 ac.skill_tree.req=Req.
 ac.skill_tree.skill_not_learned=Skill not learned.
 ac.skill_tree.skill_exp=Skill Experience:
-ac.skill_tree.uplevel=Upgrade to
+ac.skill_tree.uplevel=Upgrade to %s
 ac.skill_tree.anyskill=Any skill learned for level %d
 ac.skill_tree.level_fail=You must reach level %d first.
 
 ac.skill_tree.type_portable=Portable Developer
 ac.skill_tree.type_normal=Normal Developer
 ac.skill_tree.type_advanced=Advanced Developer
+
+ac.skill_tree.console.init=Welcome to Academy OS, Ver 1.0.1\nCopyright (c) Academy Tech. All rights reserved. \nUser %s detected, System booting......
+ac.skill_tree.console.invalid_cat=\nFATAL: User's ability category is invalid, booting aborted.\n
+ac.skill_tree.console.learn_hint=Type `learn` to acquire new category.\n
+ac.skill_tree.console.override=\nWARNING: System override! External injection detected.....\n\nABILITY RESET: Use `reset` command to reset player category. Ability level must be at least 3, and an Induction Factor must be in inventory.\n
+ac.skill_tree.console.boot_failed=Boot Failed.\n
+ac.skill_tree.console.invalid_command=Invalid command.\n
+ac.skill_tree.console.progress=Progress: %s%%
+ac.skill_tree.console.reset_begin=Starting resetting ability category...
+ac.skill_tree.console.reset_succ=Personal Reality reset sequence successful.\n
+ac.skill_tree.console.reset_fail=Personal Reality reset sequence failed.\n
+ac.skill_tree.console.reset_fail_dev=Can't reset ability -- Advance Developer must be used.\n
+ac.skill_tree.console.reset_fail_other=Can't reset ability -- either level is lower than 3 or induction factor not detected.\n
+ac.skill_tree.console.dev_begin=Start stimulation......\n
+ac.skill_tree.console.dev_succ=Development successful.\n
+ac.skill_tree.console.dev_fail=Development failed.\n
+
+# Phase Generator
+
+# Imag Fusor
 
 # Metal Former
 ac.gui.metal_former.mode.etch=Etching
@@ -499,13 +539,18 @@ ac.cat_engine.linked=Linked to the node named %s meow~
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
 ac.gui.crafttype.shapeless=Shapless Crafting
-ac.tutorial.update=Research note updated
+
+ac.tutorial.crafting=Crafting: %s
+ac.tutorial.misaka=Misaka No.%d
+ac.tutorial.update=Cloud Terminal updated
 
 # Heads Or Tails
-# camelCase, really?
 ac.headsOrTails.0=The result is TAILS!
 ac.headsOrTails.1=The result is HEADS!
 
 # Converter Block
 ac.converter.desc_template=Converts %s to %s
-
+# Added by Minecraft Language File Parser
+ac.skill_tree.dev_developing=Developing...
+achievement.ac_electromaster.iron_sand.desc=Don't get close to me, you will be hurt!
+achievement.ac_electromaster.iron_sand=Dancing In Sand

@@ -40,7 +40,6 @@ import org.lwjgl.input.Keyboard;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@RegEventHandler(Bus.Forge)
 public final class ClientHandler {
 
     // Name constants for looking up keys in ACKeyHandler.
@@ -59,7 +58,7 @@ public final class ClientHandler {
     private static final int[] defaultKeys = new int[defaultKeysInit.length];
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         updateAbilityKeys();
         for (int i = 0; i < defaultKeysInit.length; ++i) {
             SettingsUI.addProperty(PropertyElements.KEY, "keys", "ability_" + i, defaultKeysInit[i], false);
@@ -141,9 +140,17 @@ public final class ClientHandler {
         }
     };
 
-    @SubscribeEvent
-    public void onConfigModify(ConfigModifyEvent evt) {
-        updateAbilityKeys();
+
+    @Registrant
+    @SideOnly(Side.CLIENT)
+    public enum ConfigHandler {
+        @RegEventHandler(Bus.Forge)
+        instance;
+
+        @SubscribeEvent
+        public void onConfigModify(ConfigModifyEvent evt) {
+            updateAbilityKeys();
+        }
     }
 
 }

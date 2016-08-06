@@ -6,16 +6,17 @@
 */
 package cn.academy.vanilla.teleporter.util;
 
-import cn.academy.ability.api.AbilityPipeline;
-import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.misc.achievements.ModuleAchievements;
+import cn.academy.vanilla.teleporter.CatTeleporter;
 import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
@@ -27,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class TPSkillHelper {
 
     static final String TPC_ID = "ac_tpcount";
@@ -43,8 +45,10 @@ public class TPSkillHelper {
      * You should use this in SERVER only. the critical hit event will be post
      * at client if a critical hit happened.
      */
-    public static void attack(EntityPlayer player, Skill skill, Entity target, float damage) {
-        AbilityData aData = AbilityData.get(player);
+    public static void attack(AbilityContext ctx, Entity target, float damage) {
+        AbilityData aData = ctx.aData;
+        EntityPlayer player = ctx.player;
+
         // Calculate 3 levels of crit hit
         for (int i = 0; i < 3; ++i) {
             float prob = prob(aData, i);
@@ -52,6 +56,7 @@ public class TPSkillHelper {
                 damage *= rates[i];
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
+                aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
 
                 fireCritAttack(player, target, i);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
@@ -60,12 +65,12 @@ public class TPSkillHelper {
             }
         }
 
-        AbilityPipeline.attack(player, skill, target, damage);
+        ctx.attack(target, damage);
     }
 
     private static float prob(AbilityData data, int level) {
-        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? -1 : data.getSkillExp(DimFoldingTheorem.instance);
-        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? -1 : data.getSkillExp(SpaceFluctuation.instance);
+        float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem.instance) ? data.getSkillExp(DimFoldingTheorem.instance) : -1;
+        float spaceFluctExp = data.isSkillLearned(SpaceFluctuation.instance) ? data.getSkillExp(SpaceFluctuation.instance) : -1;
 
         switch (level) {
         case 0:

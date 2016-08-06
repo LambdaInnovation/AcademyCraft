@@ -17,6 +17,8 @@ import cn.lambdalib.cgui.gui.component.TextBox;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar;
 import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
 import cn.lambdalib.cgui.xml.CGUIDocument;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -31,6 +33,7 @@ import java.util.Map.Entry;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class SettingsUI extends CGuiScreen {
     
     static WidgetContainer document;
@@ -43,7 +46,7 @@ public class SettingsUI extends CGuiScreen {
     }
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
     }
     

@@ -34,6 +34,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.ChestGenHooks;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minecraftforge.common.ChestGenHooks.*;
@@ -45,7 +46,6 @@ import static net.minecraftforge.common.ChestGenHooks.*;
  */
 @Registrant
 @RegACRecipeNames
-@RegEventHandler(Bus.Forge)
 public class ModuleAbility {
 
     @RegItem
@@ -73,8 +73,9 @@ public class ModuleAbility {
 
         @Override
         @SideOnly(Side.CLIENT)
+        @SuppressWarnings("unchecked")
         public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-            list.add(StatCollector.translateToLocal("item.ac_magnetic_coil.desc"));
+            list.addAll(Arrays.asList(StatCollector.translateToLocal("item.ac_magnetic_coil.desc").split("<br>")));
         }
     };
 
@@ -82,18 +83,8 @@ public class ModuleAbility {
     @RecipeName("induction_factor")
     public static ItemInductionFactor inductionFactor;
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-        if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
-            if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
-                    event.target.blockZ) instanceof BlockDeveloper)
-                event.setCanceled(true);
-        }
-    }
-
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         String[] factorAppearance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
                 DUNGEON_CHEST };
 
@@ -102,6 +93,22 @@ public class ModuleAbility {
             for (Category c : CategoryManager.INSTANCE.getCategories()) {
                 ItemStack stack = inductionFactor.create(c);
                 ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+            }
+        }
+    }
+
+    @Registrant
+    public enum Events {
+        @RegEventHandler(Bus.Forge)
+        instance;
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+            if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
+                if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
+                        event.target.blockZ) instanceof BlockDeveloper)
+                    event.setCanceled(true);
             }
         }
     }

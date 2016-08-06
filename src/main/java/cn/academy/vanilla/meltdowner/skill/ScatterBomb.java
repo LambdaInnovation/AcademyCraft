@@ -10,7 +10,6 @@ import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.ActionManager;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.academy.ability.api.ctrl.action.SkillSyncAction;
-import cn.academy.ability.api.data.AbilityData;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
@@ -20,7 +19,6 @@ import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.Raytrace;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static cn.lambdalib.util.generic.MathUtils.*;
+import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -66,16 +64,16 @@ public class ScatterBomb extends Skill {
         float exp;
 
         public SBAction() {
-            super(-1);
+            super(instance);
         }
         
         @Override
         public void onStart() {
             super.onStart();
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
 
             float overload = lerpf(185, 68, exp);
-            cpData.perform(overload, 0);
+            ctx().consume(overload, 0);
         }
         
         @Override
@@ -91,7 +89,7 @@ public class ScatterBomb extends Skill {
                     }
 
                     float cp = lerpf(7, 9, exp);
-                    if(!cpData.perform(0, cp))
+                    if(!ctx().consume(0, cp))
                         ActionManager.endAction(this);
                 }
                 
@@ -133,10 +131,10 @@ public class ScatterBomb extends Skill {
                         basicSelector.and(EntitySelectors.exclude(player)));
                     if(traceResult != null && traceResult.entityHit != null) {
                         traceResult.entityHit.hurtResistantTime = -1;
-                        MDDamageHelper.attack(player, instance, traceResult.entityHit, getDamage(exp));
+                        MDDamageHelper.attack(ctx(), traceResult.entityHit, getDamage(exp));
                     }
                 }
-                aData.addSkillExp(instance, 0.001f * balls.size());
+                ctx().addSkillExp(0.001f * balls.size());
             }
         }
         

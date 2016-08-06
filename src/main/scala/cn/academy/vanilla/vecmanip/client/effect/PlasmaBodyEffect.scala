@@ -3,7 +3,7 @@ package cn.academy.vanilla.vecmanip.client.effect
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
-import cn.academy.vanilla.vecmanip.skills.PlasmaCannonContext
+import cn.academy.vanilla.vecmanip.skill.PlasmaCannonContext
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.shader.{GLSLMesh, ShaderProgram}
@@ -128,6 +128,7 @@ class PlasmaBodyRenderer extends Render {
       val matrix = new Matrix4f()
       acquireMatrix(GL_MODELVIEW_MATRIX, matrix)
 
+      glDepthMask(false)
       glEnable(GL_BLEND)
       glDisable(GL_ALPHA_TEST)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -166,7 +167,7 @@ class PlasmaBodyRenderer extends Render {
 
       val campos = CameraPosition.getVec3
 
-      val delta = Vec3(x, y, z) + campos
+      val delta = Vec3(x, y, z) - campos
       val yp = delta.toLook
 
       glPushMatrix()
@@ -182,6 +183,7 @@ class PlasmaBodyRenderer extends Render {
 
       glUseProgram(0)
       glEnable(GL_ALPHA_TEST)
+      glDepthMask(true)
   }
 
   protected def getEntityTexture(entity: Entity) = null

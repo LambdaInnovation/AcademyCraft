@@ -6,7 +6,6 @@
 */
 package cn.academy.core;
 
-import cn.academy.ability.api.cooldown.CooldownManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -44,7 +43,7 @@ import java.util.Map.Entry;
  *
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:LambdaLib@[1.2.0_a3]") // LambdaLib is currently unstable. Supports only one version.
+     dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
 @VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
@@ -53,9 +52,9 @@ public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static final boolean DEBUG_MODE = true;
+    public static final String VERSION = "@VERSION@";
 
-    public static final String VERSION = "1.0.0_a3";
+    public static final boolean DEBUG_MODE = VERSION.startsWith("@");
 
     public static final Logger log = LogManager.getLogger("AcademyCraft");
 
@@ -100,10 +99,6 @@ public class AcademyCraft {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        // Finally we are hit by annoreg's loading order problem ..
-        // Below is a kinda hacking solution to manullay override loading order, but clearly a better
-        //  mechanism is needed
-
         // Load recipes names before loading script
         RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
 
@@ -113,7 +108,7 @@ public class AcademyCraft {
         // PostInit stage, including tutorial init, depends on registered recipes
         RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 
-        if (DEBUG_MODE) {
+        if (DEBUG_MODE && false) {
             System.out.printf("|-------------------------------------------------------\n");
             System.out.printf("| AC Recipe Name Mappings\n");
             System.out.printf("|--------------------------|----------------------------\n");
@@ -146,12 +141,10 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
-        CooldownManager.INSTANCE.onServerStarting();
     }
 
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
-        CooldownManager.INSTANCE.onServerStopping();
         config.save();
     }
 

@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.generic.client.render;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
 import cn.lambdalib.util.deprecated.Mesh;
 import cn.lambdalib.util.deprecated.SimpleMaterial;

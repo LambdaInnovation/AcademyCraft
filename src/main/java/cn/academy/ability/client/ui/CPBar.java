@@ -16,10 +16,9 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.event.PresetSwitchEvent;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.ForcePreloadTexture;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.Widget;
 import cn.lambdalib.cgui.gui.component.DrawTexture;
@@ -58,7 +57,6 @@ import java.util.Optional;
  */
 @SideOnly(Side.CLIENT)
 @Registrant
-@ForcePreloadTexture
 public class CPBar extends Widget {
 
     public static final CPBar instance = new CPBar();
@@ -73,7 +71,7 @@ public class CPBar extends Widget {
     static IConsumptionHintProvider chProvider;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         ACHud.instance.addElement(instance, () -> true, "cpbar",
                 new Widget().size(WIDTH, HEIGHT)
                         .scale(SCALE)

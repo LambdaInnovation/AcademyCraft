@@ -1,10 +1,10 @@
 ![title]
 Phase Generator
-
+ 
 ![brief]
-Phase Generator converts energy in Phase Liquid into Imag Flux to be used.
-
+Phase Generator could squeeze Imag Energy from Imag Phase Liquid.
+ 
 ![content]
+Imag Phase Liquid contains little Imag Energy, which can be released in Phase Generator. Water would evaporate in this process, so the only thing you get is Imag Energy.
 
-Phase Generator converts energy in Phase Liquid into Imag Flux to be used. You can charge items using it through the OUT slot, or transfer 
-the energy to a Wireless Node by linking to it.
+It is fast but little productivity. So only consider it when you at start.  

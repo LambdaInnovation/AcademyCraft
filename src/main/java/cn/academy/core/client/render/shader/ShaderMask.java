@@ -6,8 +6,7 @@
 */
 package cn.academy.core.client.render.shader;
 
-import cn.academy.core.client.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
+import cn.academy.core.Resources;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderProgram;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +17,6 @@ import org.lwjgl.opengl.GL20;
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class ShaderMask extends ShaderProgram {
     
     public static final ShaderMask instance = new ShaderMask();

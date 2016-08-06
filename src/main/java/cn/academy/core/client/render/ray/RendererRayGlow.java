@@ -6,7 +6,7 @@
 */
 package cn.academy.core.client.render.ray;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.entity.IRay;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderSimple;

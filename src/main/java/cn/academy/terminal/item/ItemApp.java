@@ -13,6 +13,8 @@ import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib.annoreg.mc.RegPostInitCallback;
+import cn.lambdalib.annoreg.mc.RegPreInitCallback;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,7 +37,7 @@ public class ItemApp extends ACItem {
     static Map<App, ItemApp> items = new HashMap<>();
 
     @RegInitCallback
-    public static void registerItems() {
+    private static void init() {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {
                 ItemApp item = new ItemApp(app);
@@ -56,7 +58,6 @@ public class ItemApp extends ACItem {
         super("apps");
         app = _app;
         setTextureName("academy:app_" + app.getName());
-        this.setHasSubtypes(true);
     }
     
     @Override

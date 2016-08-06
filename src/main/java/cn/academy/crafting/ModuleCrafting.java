@@ -50,7 +50,6 @@ import java.util.List;
  * @author WeAthFolD, Shielian, KS
  */
 @Registrant
-@RegEventHandler(Bus.Forge)
 @RegACRecipeNames
 public class ModuleCrafting {
     
@@ -69,22 +68,22 @@ public class ModuleCrafting {
     @RegBlock
     @RegBlock.OreDict("oreConstraintMetal")
     @RecipeName("cons_ore")
-    public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 3.0f, 1);
+    public static BlockGenericOre oreConstraintMetal = new BlockGenericOre("constraint_metal_ore", 4.0f, 1);
 
     @RegBlock
     @RegBlock.OreDict("oreImagCrystal")
     @RecipeName("crystal_ore")
-    public static BlockGenericOre oreImagCrystal = new BlockGenericOre("crystal_ore", 2.0f, 2);
+    public static BlockGenericOre oreImagCrystal = new BlockGenericOre("crystal_ore", 3.0f, 2);
 
     @RegBlock
     @RegBlock.OreDict("oreImagSilicon")
     @RecipeName("imagsil_ore")
-    public static BlockGenericOre oreImagSil = new BlockGenericOre("imag_silicon_ore", 2.75f, 2);
+    public static BlockGenericOre oreImagSil = new BlockGenericOre("imag_silicon_ore", 3.75f, 2);
 
     @RegBlock
     @RegBlock.OreDict("oreResonantCrystal")
     @RecipeName("reso_ore")
-    public static BlockGenericOre oreResoCrystal = new BlockGenericOre("reso_crystal_ore", 2f, 2);
+    public static BlockGenericOre oreResoCrystal = new BlockGenericOre("reso_crystal_ore", 3f, 2);
 
     // CRAFTING MACHINES
     @RegBlock
@@ -191,7 +190,7 @@ public class ModuleCrafting {
     }
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         GENERATE_ORES = AcademyCraft.config.getBoolean("genOres", "generic", true, "Whether the ores will be generated in overworld.");
         GENERATE_PHASE_LIQUID = AcademyCraft.config.getBoolean("genPhaseLiquid", "generic", true, "Whether phase liquid will be generated in overworld.");
         
@@ -203,24 +202,22 @@ public class ModuleCrafting {
 
         machineFrame.setHarvestLevel("pickaxe", 1);
 
-        ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalLow), 3000, new ItemStack(crystalNormal));
-        ImagFusorRecipes.INSTANCE.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
+        ImagFusorRecipes ifr = ImagFusorRecipes.INSTANCE;
+        ifr.addRecipe(new ItemStack(crystalLow), 3000, new ItemStack(crystalNormal));
+        ifr.addRecipe(new ItemStack(crystalNormal), 8000, new ItemStack(crystalPure));
 
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(wafer), new ItemStack(silPiece, 4), Mode.INCISE);
+        MetalFormerRecipes mfr = MetalFormerRecipes.INSTANCE;
+        mfr.add(new ItemStack(ingotImagSil), new ItemStack(wafer, 2), Mode.INCISE);
+        mfr.add(new ItemStack(wafer), new ItemStack(silPiece, 4), Mode.INCISE);
+        mfr.add(new ItemStack(dataChip), new ItemStack(calcChip), Mode.ETCH);
+        mfr.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate), Mode.PLATE);
+        mfr.add(new ItemStack(ingotConst), new ItemStack(ModuleCrafting.constPlate), Mode.PLATE);
+        mfr.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil, 4), Mode.REFINE);
+        mfr.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst, 2), Mode.REFINE);
+        mfr.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal, 3), Mode.REFINE);
+        mfr.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
 
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(dataChip), new ItemStack(calcChip), Mode.ETCH);
-
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(Items.iron_ingot), new ItemStack(rfIronPlate), Mode.PLATE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(ingotConst), new ItemStack(ModuleCrafting.constPlate),
-                Mode.PLATE);
-
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagSil), new ItemStack(ingotImagSil, 4), Mode.REFINE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(oreConstraintMetal), new ItemStack(ingotConst, 2), Mode.REFINE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(oreResoCrystal), new ItemStack(resoCrystal, 3), Mode.REFINE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(oreImagCrystal), new ItemStack(crystalLow, 4), Mode.REFINE);
-
-        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot));
+        addOreDictRefineRecipe("oreGold",new ItemStack(Items.gold_ingot,2));
         addOreDictRefineRecipe("oreIron",new ItemStack(Items.iron_ingot,2));
         addOreDictRefineRecipe("oreEmerald",new ItemStack(Items.emerald,2));
         addOreDictRefineRecipe("oreQuartz",new ItemStack(Items.quartz,2));
@@ -244,20 +241,20 @@ public class ModuleCrafting {
 
     private static void addOreDictRefineRecipe(String orename, String outputname)
     {
-        ArrayList<ItemStack> ingotlist = OreDictionary.getOres(outputname);
-        if (ingotlist == null || ingotlist.size() == 0)
+        ArrayList<ItemStack> outputList = OreDictionary.getOres(outputname);
+        if (outputList == null || outputList.size() == 0)
             return;
-        ItemStack output = ingotlist.get(0).copy();
-        List<ItemStack> ores = OreDictionary.getOres(orename);
-        if (ores == null || ores.size() == 0)
+        ItemStack output = outputList.get(0).copy();
+        List<ItemStack> oreList = OreDictionary.getOres(orename);
+        if (oreList == null || oreList.size() == 0)
             return;
-        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(ores.get(0));
+        ItemStack stack = FurnaceRecipes.smelting().getSmeltingResult(oreList.get(0));
         if (stack == null)
             return;
         int outputsize = stack.stackSize;
         outputsize = outputsize < 32 ? (2 * outputsize) : 64;
         output.stackSize = outputsize;
-        for(ItemStack ore : ores)
+        for(ItemStack ore : oreList)
         {
             MetalFormerRecipes.INSTANCE.add(ore, output, Mode.REFINE);
         }
@@ -268,12 +265,16 @@ public class ModuleCrafting {
         addOreDictRefineRecipe("ore"+orename,"ingot"+orename);
     }
 
+    @Registrant
+    public enum EventHandler {
+        @RegEventHandler(Bus.Forge)
+        instance;
 
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void textureHook(TextureStitchEvent.Post event) {
-        fluidImagProj.setIcons(imagPhase.fluidIcon);
+        @SubscribeEvent
+        @SideOnly(Side.CLIENT)
+        public void textureHook(TextureStitchEvent.Post event) {
+            fluidImagProj.setIcons(imagPhase.fluidIcon);
+        }
     }
 
 }

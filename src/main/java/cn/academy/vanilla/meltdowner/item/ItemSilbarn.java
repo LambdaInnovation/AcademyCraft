@@ -19,7 +19,7 @@
  */
 package cn.academy.vanilla.meltdowner.item;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
 import cn.lambdalib.annoreg.core.Registrant;
@@ -53,7 +53,8 @@ public class ItemSilbarn extends ACItem {
             --stack.stackSize;
         return stack;
     }
-    
+
+    @SideOnly(Side.CLIENT)
     public static class RenderSilbarn extends RenderModelItem {
 
         public RenderSilbarn() {

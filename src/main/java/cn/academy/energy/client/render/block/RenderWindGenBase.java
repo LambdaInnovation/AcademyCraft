@@ -6,7 +6,7 @@
 */
 package cn.academy.energy.client.render.block;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.energy.block.wind.TileWindGenBase;
 import cn.lambdalib.multiblock.RenderBlockMultiModel;
 import cn.lambdalib.util.deprecated.TileEntityModelCustom;

@@ -15,10 +15,10 @@ import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall;
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.mc.EntitySelectors;
@@ -41,9 +41,11 @@ import static cn.lambdalib.util.generic.MathUtils.*;
  * @author WeAthFolD
  */
 @Registrant
+@NetworkS11nType
 public class ElectronMissile extends Skill {
     
     public static final ElectronMissile instance = new ElectronMissile();
+    private static final Object delegate = NetworkMessage.staticCaller(ElectronMissile.class);
     
     static int MAX_HOLD = 5;
 
@@ -65,12 +67,16 @@ public class ElectronMissile extends Skill {
         float exp;
         float overload, consumption;
         float overload_attacked, consumption_attacked;
+
+        public EMAction() {
+            super(instance);
+        }
         
         @Override
         public void onStart() {
             super.onStart();
 
-            exp = aData.getSkillExp(instance);
+            exp = ctx().getSkillExp();
             overload = lerpf(2, 1.5f, exp);
             consumption = lerpf(20, 15, exp);
 
@@ -84,71 +90,75 @@ public class ElectronMissile extends Skill {
         
         @Override
         public void onTick() {
-            if(!cpData.perform(overload, consumption) && !isRemote)
+            if(!ctx().consume(overload, consumption) && !isRemote) {
                 ActionManager.abortAction(this);
-            
-            if(!isRemote) {
-                int timeLimit = (int) lerpf(200, 400, exp);
-                if(ticks > timeLimit)
-                    ActionManager.abortAction(this);
-                
-                if(ticks % 10 == 0) {
-                    if(active.size() < MAX_HOLD) {
-                        EntityMdBall ball = new EntityMdBall(player);
-                        world.spawnEntityInWorld(ball);
-                        active.add(ball);
-                    }
-                }
-                if(ticks != 0 && ticks % 8 == 0) {
-                    float range = lerpf(7, 12, exp);
-
-                    List<Entity> list = WorldUtils.getEntities(player, range,
-                            EntitySelectors.exclude(player).and(EntitySelectors.living()));
-                    if(!active.isEmpty() && !list.isEmpty() && cpData.perform(
-                        overload_attacked,
-                        consumption_attacked)) {
-                        double min = Double.MAX_VALUE;
-                        Entity result = null;
-                        for(Entity e : list) {
-                            double dist = e.getDistanceToEntity(player);
-                            if(dist < min) {
-                                min = dist;
-                                result = e;
+            } else {
+                if(!isRemote) {
+                    int timeLimit = (int) lerpf(200, 400, exp);
+                    if (ticks <= timeLimit) {
+                        if(ticks % 10 == 0) {
+                            if(active.size() < MAX_HOLD) {
+                                EntityMdBall ball = new EntityMdBall(player);
+                                player.worldObj.spawnEntityInWorld(ball);
+                                active.add(ball);
                             }
                         }
-                        
-                        // Find a ramdom ball and destroy it
-                        int index = 1 + nextInt(active.size());
-                        Iterator<EntityMdBall> iter = active.iterator();
-                        EntityMdBall ball = null;
-                        while(index --> 0)
-                            ball = iter.next();
-                        iter.remove();
-                        
-                        // client action
-                        spawnRay(player, world, 
-                            VecUtils.entityPos(ball), 
-                            VecUtils.add(VecUtils.entityPos(result), VecUtils.vec(0, result.getEyeHeight(), 0)));
-                        
-                        // server action
-                        result.hurtResistantTime = -1;
+                        if(ticks != 0 && ticks % 8 == 0) {
+                            float range = lerpf(7, 12, exp);
 
-                        float damage = lerpf(14, 27, exp);
-                        MDDamageHelper.attack(player, instance, result, damage);
-                        aData.addSkillExp(instance, 0.001f);
-                        ball.setDead();
+                            List<Entity> list = WorldUtils.getEntities(player, range,
+                                    EntitySelectors.exclude(player).and(EntitySelectors.living()));
+                            if(!active.isEmpty() && !list.isEmpty() && ctx().consume(
+                                    overload_attacked,
+                                    consumption_attacked)) {
+                                double min = Double.MAX_VALUE;
+                                Entity result = null;
+                                for(Entity e : list) {
+                                    double dist = e.getDistanceToEntity(player);
+                                    if(dist < min) {
+                                        min = dist;
+                                        result = e;
+                                    }
+                                }
+
+                                // Find a random ball and destroy it
+                                int index = 1 + nextInt(active.size());
+                                Iterator<EntityMdBall> iter = active.iterator();
+                                EntityMdBall ball = null;
+                                while(index --> 0)
+                                    ball = iter.next();
+                                iter.remove();
+
+                                // client action
+                                NetworkMessage.sendToAllAround(TargetPoints.convert(player, 15), delegate,
+                                        "spawn_ray", player.worldObj,
+                                        VecUtils.entityPos(ball),
+                                        VecUtils.add(VecUtils.entityPos(result), VecUtils.vec(0, result.getEyeHeight(), 0)));
+
+                                // server action
+                                result.hurtResistantTime = -1;
+
+                                float damage = lerpf(14, 27, exp);
+                                MDDamageHelper.attack(ctx(), result, damage);
+                                ctx().addSkillExp(0.001f);
+                                ball.setDead();
+                            }
+                        }
+                    } else { // ticks > timeLimit
+                        ActionManager.abortAction(this);
                     }
+                } else { // isRemote
+                    updateEffect();
                 }
-            } else
-                updateEffect();
-            
-            ++ticks;
+
+                ++ticks;
+            }
         }
         
         @Override
         public void onEnd() {
             int cooldown = MathUtils.clampi(100, 300, ticks);
-            setCooldown(instance, cooldown);
+            ctx().setCooldown(cooldown);
         }
         
         @Override
@@ -168,21 +178,18 @@ public class ElectronMissile extends Skill {
                 double r = ranged(0.5, 1);
                 double theta = ranged(0, Math.PI * 2);
                 double h = ranged(-1.2, 0);
-                Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
+                Vec3 pos = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ),
+                        VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
                 Vec3 vel = VecUtils.vec(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02));
-                world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel));
+                player.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(player.worldObj, pos, vel));
             }
         }
         
     }
     
-    @RegNetworkCall(side = Side.CLIENT)
-    static void spawnRay(@RangedTarget(range = 15) EntityPlayer _player, @Instance World world, @Data Vec3 from, @Data Vec3 to) {
-        jobSpawnRay(world, from, to);
-    }
-    
     @SideOnly(Side.CLIENT)
-    static void jobSpawnRay(World world, Vec3 from, Vec3 to) {
+    @Listener(channel="spawn_ray", side=Side.CLIENT)
+    private static void hSpawnRay(World world, Vec3 from, Vec3 to) {
         EntityMdRaySmall ray = new EntityMdRaySmall(world);
         ray.setFromTo(from, to);
         world.spawnEntityInWorld(ray);

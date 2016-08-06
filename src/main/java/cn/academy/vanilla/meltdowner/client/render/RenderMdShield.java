@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.meltdowner.client.render;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
 import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.GLSLMesh;

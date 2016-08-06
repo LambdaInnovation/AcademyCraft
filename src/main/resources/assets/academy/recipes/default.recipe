@@ -263,3 +263,9 @@ shapeless(wafer) {
 shapeless(tutorial) {
 	[book, crystal0]
 }
+
+shaped(magnetic_coil) {
+    [cons_plate, reso_crystal, cons_plate]
+    [cons_plate, reso_crystal, cons_plate]
+    [plateIron , diamond     , plateIron ]
+}

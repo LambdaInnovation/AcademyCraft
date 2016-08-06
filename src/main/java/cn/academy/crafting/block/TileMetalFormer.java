@@ -9,19 +9,21 @@ package cn.academy.crafting.block;
 import cn.academy.core.block.TileReceiverBase;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.PositionedSound;
+import cn.academy.core.client.sound.TileEntitySound;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.networkcall.RegNetworkCall;
-import cn.lambdalib.networkcall.s11n.StorageOption.Data;
-import cn.lambdalib.networkcall.s11n.StorageOption.Instance;
-import cn.lambdalib.networkcall.s11n.StorageOption.RangedTarget;
-import cn.lambdalib.s11n.network.NetworkS11n;
+import cn.lambdalib.s11n.network.TargetPoints;
+import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib.s11n.network.NetworkMessage.NullablePar;
+import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -32,9 +34,32 @@ import net.minecraft.world.World;
  */
 @Registrant
 @RegTileEntity
-public class TileMetalFormer extends TileReceiverBase {
+public class TileMetalFormer extends TileReceiverBase implements ISidedInventory {
 
-    @NetworkS11n.NetworkS11nType
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        switch(side) {
+            case 0:
+                return new int[]{SLOT_OUT, SLOT_BATTERY};
+            case 1:
+                return new int[]{SLOT_IN};
+            default:
+                return new int[]{SLOT_BATTERY};
+        }
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack item, int side) {
+        return this.isItemValidForSlot(slot, item);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack item, int side) {
+        return side == 0;
+    }
+
+    @Registrant
+    @NetworkS11nType
     public enum Mode { 
         PLATE, INCISE, ETCH, REFINE; 
         
@@ -134,7 +159,11 @@ public class TileMetalFormer extends TileReceiverBase {
     
     // SERVER only
     private void sync() {
-        syncData(this, workCounter, current, mode);
+        NetworkMessage.sendToAllAround(
+                TargetPoints.convert(this, 12),
+                this, "sync",
+                workCounter, current, mode
+        );
     }
     
     private boolean isActionBlocked() {
@@ -157,26 +186,24 @@ public class TileMetalFormer extends TileReceiverBase {
     public double getWorkProgress() {
         return isWorkInProgress() ? (double) workCounter / WORK_TICKS : 0;
     }
-    
-    @RegNetworkCall(side = Side.CLIENT)
-    private static void syncData(
-            @RangedTarget(range = 12) TileMetalFormer target,
-            @Data Integer counter, 
-            @Instance(nullable = true) RecipeObject recipe,
-            @Instance Mode mode) {
-        target.workCounter = counter;
-        target.current = recipe;
-        target.mode = mode;
+
+    @Listener(channel="sync", side=Side.CLIENT)
+    private void syncData(int counter, @NullablePar RecipeObject recipe, Mode mode) {
+        this.workCounter = counter;
+        this.current = recipe;
+        this.mode = mode;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        nbt.setInteger("mode", mode.ordinal());
+        mode = Mode.values()[nbt.getInteger("mode")];
+        super.readFromNBT(nbt);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
-        mode = Mode.values()[nbt.getInteger("mode")];
+        nbt.setInteger("mode", mode.ordinal());
+        super.writeToNBT(nbt);
     }
     
     // --- CLIENT EFFECTS
@@ -190,8 +217,8 @@ public class TileMetalFormer extends TileReceiverBase {
             sound.stop();
             sound = null;
         } else if(sound == null && isWorkInProgress()) {
-            sound = new PositionedSound(xCoord + .5, yCoord + 5., zCoord + .5, 
-                    "machine.machine_work").setLoop().setVolume(0.6f);
+            sound = new TileEntitySound(this, "machine.machine_work")
+                    .setLoop().setVolume(.6f);
             ACSounds.playClient(sound);
         }
     }

@@ -6,8 +6,8 @@
 */
 package cn.academy.core.util;
 
+import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.AbilityPipeline;
-import cn.academy.ability.api.Skill;
 import cn.academy.core.event.BlockDestroyEvent;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.generic.RandUtils;
@@ -17,12 +17,8 @@ import cn.lambdalib.util.mc.EntitySelectors;
 import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,10 +41,9 @@ public class RangedRayDamage {
     
     static final double STEP = 0.9;
 
-    public final EntityPlayer player;
     public final World world;
     public final Motion3D motion;
-    public final Skill skill;
+    public final AbilityContext ctx;
 
 
     public double range;
@@ -61,15 +56,15 @@ public class RangedRayDamage {
     
     private Vec3 start, slope;
     
-    public RangedRayDamage(EntityPlayer player, Skill skill, double _range, float _energy) {
-        this.player = player;
-        this.motion = new Motion3D(player, true).move(0.1);
-        this.world = player.worldObj;
-        this.skill = skill;
+    public RangedRayDamage(AbilityContext ctx, double _range, float _energy) {
+        this.ctx = ctx;
+
+        this.motion = new Motion3D(ctx.player, true).move(0.1);
+        this.world = ctx.player.worldObj;
         this.range = _range;
         this.totalEnergy = _energy;
 
-        entitySelector = EntitySelectors.exclude(player);
+        entitySelector = EntitySelectors.exclude(ctx.player);
     }
     
     /**
@@ -113,20 +108,20 @@ public class RangedRayDamage {
             };
             List<Entity> targets = WorldUtils.getEntities(world, aabb, entitySelector.and(areaSelector));
             targets.sort((lhs, rhs) -> {
-                double dist1 = player.getDistanceSq(lhs.posX, lhs.posY, lhs.posZ);
-                double dist2 = player.getDistanceSq(rhs.posX, rhs.posY, rhs.posZ);
+                double dist1 = ctx.player.getDistanceSq(lhs.posX, lhs.posY, lhs.posZ);
+                double dist2 = ctx.player.getDistanceSq(rhs.posX, rhs.posY, rhs.posZ);
                 return Double.valueOf(dist1).compareTo(dist2);
             });
 
             for(Entity e : targets) {
                 if (!attackEntity(e)) {
-                    maxDistance = e.getDistanceSqToEntity(player);
+                    maxDistance = e.getDistanceSqToEntity(ctx.player);
                     break;
                 }
             }
         }
 
-        if(AbilityPipeline.canBreakBlock()) {
+        if(ctx.canBreakBlock(world)) {
             for(double s = -range; s <= range; s += STEP) {
                 for(double t = -range; t <= range; t += STEP) {
                     double rr = range * RandUtils.ranged(0.9, 1.1);
@@ -213,7 +208,7 @@ public class RangedRayDamage {
     }
 
     protected boolean applyAttack(Entity target, float damage) {
-        AbilityPipeline.attack(player, skill, target, damage);
+        ctx.attack(target, damage);
         return true;
     }
 
@@ -221,16 +216,16 @@ public class RangedRayDamage {
 
         public final Consumer<Entity> callback;
 
-        public Reflectible(EntityPlayer player, Skill skill,
+        public Reflectible(AbilityContext ctx,
                            double _range, float _energy, Consumer<Entity> callback) {
-            super(player, skill, _range, _energy);
+            super(ctx, _range, _energy);
             this.callback = callback;
         }
 
         @Override
         protected boolean applyAttack(Entity target, float damage) {
             boolean[] result = new boolean[] { true }; // for lambda modification
-            AbilityPipeline.attackReflect(player, skill, target, damage, () -> {
+            ctx.attackReflect(target, damage, () -> {
                 callback.accept(target);
                 result[0] = false;
             });

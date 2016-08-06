@@ -10,8 +10,6 @@ import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.ctrl.SkillInstance;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.networkcall.s11n.InstanceSerializer;
-import cn.lambdalib.networkcall.s11n.RegSerializable;
 import cn.lambdalib.s11n.nbt.NBTS11n;
 import cn.lambdalib.s11n.nbt.NBTS11n.BaseSerializer;
 import cn.lambdalib.s11n.network.NetworkS11n;
@@ -23,7 +21,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -35,7 +32,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class Controllable {
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         NetworkS11n.addDirect(Controllable.class, new NetS11nAdaptor<Controllable>() {
             @Override
             public void write(ByteBuf buf, Controllable obj) {

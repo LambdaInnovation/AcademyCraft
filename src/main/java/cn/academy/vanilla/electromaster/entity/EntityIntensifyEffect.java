@@ -12,12 +12,15 @@ import cn.lambdalib.annoreg.mc.RegEntity;
 import cn.lambdalib.util.entityx.EntityCallback;
 import cn.lambdalib.util.generic.RandUtils;
 import cn.lambdalib.util.generic.VecUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 @RegEntity(clientOnly = true)
 public class EntityIntensifyEffect extends EntitySurroundArc {
 

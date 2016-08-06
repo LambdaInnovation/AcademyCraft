@@ -9,6 +9,7 @@ package cn.academy.energy.internal;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.api.block.IWirelessNode;
+import cn.academy.energy.internal.VBlocks.VNNode;
 import cn.academy.energy.internal.VBlocks.VWMatrix;
 import cn.academy.energy.internal.VBlocks.VWNode;
 import cn.lambdalib.util.generic.MathUtils;
@@ -16,37 +17,35 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author WeAthFolD
  */
 public class WirelessNet {
     
-    static final int UPDATE_INTERVAL = 40;
-    static final double BUFFER_MAX = 2000;
+    private static final int UPDATE_INTERVAL = 40;
+    private static final double BUFFER_MAX = 2000;
 
-    final WiWorldData data;
+    private final WiWorldData data;
     World world;
+
+    private List<VWNode> nodes = new LinkedList<>();
+
+    private List<VWNode> toRemoveNodes = new ArrayList<>();
+
+    private VWMatrix matrix;
+
+    private String ssid;
+    private String password;
+
+    private double buffer;
+
+    private int aliveUpdateCounter = UPDATE_INTERVAL;
+
+    private boolean disposed = false;
     
-    List<VWNode> nodes = new LinkedList<>();
-    
-    VWMatrix matrix;
-    
-    String ssid;
-    String password;
-    
-    double buffer;
-    
-    int aliveUpdateCounter = UPDATE_INTERVAL;
-    
-    boolean alive = false;
-    boolean disposed = false;
-    
-    public WirelessNet(WiWorldData data, VWMatrix matrix, String ssid, String pass) {
+    WirelessNet(WiWorldData data, VWMatrix matrix, String ssid, String pass) {
         this.data = data;
         
         this.matrix = matrix;
@@ -55,7 +54,7 @@ public class WirelessNet {
         this.password = pass;
     }
     
-    public WirelessNet(WiWorldData data, NBTTagCompound tag) {
+    WirelessNet(WiWorldData data, NBTTagCompound tag) {
         this.data = data;
         
         //Load the matrix
@@ -112,13 +111,6 @@ public class WirelessNet {
         return true;
     }
     
-    /**
-     * Get whether this matrix is alive (That is, there are >=1 node loaded and should be ticked normally).
-     */
-    public boolean isAlive() {
-        return alive;
-    }
-    
     public boolean isDisposed() {
         return disposed;
     }
@@ -171,6 +163,17 @@ public class WirelessNet {
         
         return true;
     }
+
+    boolean validate() {
+        if (matrix.isLoaded(world)) {
+            IWirelessMatrix mat = matrix.get(world);
+            if (mat == null) {
+                disposed = true;
+            }
+        }
+
+        return !disposed;
+    }
     
     boolean isInRange(int x, int y, int z) {
         IWirelessMatrix imat = matrix.get(world);
@@ -190,10 +193,8 @@ public class WirelessNet {
     }
     
     void removeNode(VWNode node) {
-        nodes.remove(node);
-        
-        WiWorldData data = getWorldData();
-        data.netLookup.remove(node);
+        debug("Removing " + node + " from " + ssid);
+        toRemoveNodes.add(node);
     }
     
     void onCreate(WiWorldData data) {
@@ -213,90 +214,66 @@ public class WirelessNet {
         return data;
     }
     
-    /**
-     * This is a slightly costy function. You should buffer the result and query through isAlive().
-     * query it infrequently.
-     * @return same as isAlive
-     */
-    private boolean checkIsAlive() {
-        //IF: alive node count > 1
-        for(VWNode node : nodes) {
-            if(node.isLoaded(world) && node.get(world) != null) {
-                alive = true;
-                return true;
-            }
-        }
-        alive = false;
-        return false;
-    }
-    
     void tick() {
+        validate();
         
-        // Filter the not-alive nets and update the state lazily
-        if(!isAlive()) {
-            --aliveUpdateCounter;
-            if(aliveUpdateCounter == 0) {
-                aliveUpdateCounter = UPDATE_INTERVAL;
-                checkIsAlive();
-            }
-            
-            return;
-        }
-        
-        // Check whether the matrix is valid. The matrix is ALWAYS loaded.
-        IWirelessMatrix imat = matrix.get(world);
-        if(imat == null) {
-            debug("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
-            dispose();
-            return;
-        }
-        
-        // Balance.
-        // Shuffle in order to not balance one node all the time
-        // Maybe a bit of slow?
-        Collections.shuffle(nodes);
-        
-        double sum = 0, maxSum = 0;
-        Iterator<VWNode> iter = nodes.iterator();
-        while(iter.hasNext()) {
-            VWNode vn = iter.next();
-            if(vn.isLoaded(world)) {
-                IWirelessNode node = vn.get(world);
-                if(node == null) {
-                    debug("Removing " + vn + " from " + ssid);
-                    iter.remove();
-                } else {
-                    sum += node.getEnergy();
-                    maxSum += node.getMaxEnergy();
+        if (matrix.isLoaded(world)) {
+            // Check whether the matrix is valid. The matrix is ALWAYS loaded.
+            IWirelessMatrix imat = matrix.get(world);
+            if(imat == null) {
+                debug("WirelessNet with SSID " + ssid + " matrix destoryed, removing");
+                dispose();
+            } else {
+                // Balance.
+                // Shuffle in order to not balance one node all the time
+                // Maybe a bit of slow?
+                Collections.shuffle(nodes);
+
+                double sum = 0, maxSum = 0;
+                for (VWNode vn : nodes) {
+                    if (vn.isLoaded(world)) {
+                        IWirelessNode node = vn.get(world);
+                        if (node == null) {
+                            removeNode(vn);
+                        } else {
+                            sum += node.getEnergy();
+                            maxSum += node.getMaxEnergy();
+                        }
+                    }
                 }
-            }
-        }
-        
-        double percent = sum / maxSum;
-        double transferLeft = imat.getBandwidth();
-        // Loop through and calc
-        for(VWNode vn : nodes) {
-            if(vn.isLoaded(world)) {
-                IWirelessNode node = vn.get(world);
-                
-                double cur = node.getEnergy();
-                double targ = node.getMaxEnergy() * percent;
-                
-                double delta = targ - cur;
-                delta = Math.signum(delta) * Math.min(Math.abs(delta), Math.min(transferLeft, node.getBandwidth()));
-                
-                if(buffer + delta > BUFFER_MAX) {
-                    delta = BUFFER_MAX - buffer;
-                } else if(buffer + delta < 0) {
-                    delta = -buffer;
+
+                // Remove nodes
+                data.netLookup.keySet().removeAll(toRemoveNodes);
+                nodes.removeAll(toRemoveNodes);
+                toRemoveNodes.clear();
+
+                double percent = sum / maxSum;
+                double transferLeft = imat.getBandwidth();
+                // Loop through and calc
+                for(VWNode vn : nodes) {
+                    if(vn.isLoaded(world)) {
+                        IWirelessNode node = vn.get(world);
+
+                        double cur = node.getEnergy();
+                        double targ = node.getMaxEnergy() * percent;
+
+                        double delta = targ - cur;
+                        delta = Math.signum(delta) * Math.min(Math.abs(delta), Math.min(transferLeft, node.getBandwidth()));
+
+                        if(buffer + delta > BUFFER_MAX) {
+                            delta = BUFFER_MAX - buffer;
+                        } else if(buffer + delta < 0) {
+                            delta = -buffer;
+                        }
+
+                        transferLeft -= Math.abs(delta);
+                        buffer += delta;
+                        node.setEnergy(cur + delta);
+
+                        if(transferLeft == 0)
+                            break;
+                    }
                 }
-                
-                transferLeft -= Math.abs(delta);
-                buffer += delta;
-                node.setEnergy(cur + delta);
-                
-                if(transferLeft == 0)
-                    break;
             }
         }
     }

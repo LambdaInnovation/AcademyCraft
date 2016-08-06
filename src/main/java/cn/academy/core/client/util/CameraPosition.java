@@ -26,7 +26,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class CameraPosition {
 
     @RegInitCallback
-    public static void _init() {
+    private static void _init() {
         MinecraftForge.EVENT_BUS.register(new CameraPosition());
     }
 
@@ -47,14 +47,10 @@ public class CameraPosition {
         }
     }
 
+    private static final Vec3 zero = Vec3.createVectorHelper(0, 0, 0);
+
     public static Vec3 getVec3() {
-        if (result == null) {
-            Minecraft mc = Minecraft.getMinecraft();
-            EntityPlayer p = mc.thePlayer;
-            return Vec3.createVectorHelper((float) p.posX, (float) p.posY, (float) p.posZ);
-        } else {
-            return Vec3.createVectorHelper(result.x, result.y, result.z);
-        }
+        return zero;
     }
 
     @SubscribeEvent
@@ -71,7 +67,7 @@ public class CameraPosition {
             result = new Vector3f();
         }
 
-        result.set(-matrix.m30, -matrix.m31, -matrix.m32);
+        result.set(matrix.m30, matrix.m31, matrix.m32);
     }
 
 }

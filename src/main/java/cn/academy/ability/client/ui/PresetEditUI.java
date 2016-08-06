@@ -6,14 +6,13 @@
 */
 package cn.academy.ability.client.ui;
 
-import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
+import cn.academy.core.Resources;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
@@ -34,6 +33,8 @@ import cn.lambdalib.util.client.font.IFont.FontOption;
 import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.Color;
 import cn.lambdalib.util.helper.GameTimer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,6 +49,7 @@ import java.util.List;
  * @author WeAthFolD
  */
 @Registrant
+@SideOnly(Side.CLIENT)
 public class PresetEditUI extends GuiScreen {
     
     static final Color 
@@ -86,7 +88,7 @@ public class PresetEditUI extends GuiScreen {
     CGui transitor = new CGui();
 
     @RegInitCallback
-    public static void __init() {
+    private static void __init() {
         loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/preset_edit.xml"));
         template = loaded.getWidget("template");
     }

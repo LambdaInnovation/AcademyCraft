@@ -21,7 +21,7 @@ public class PositionedSound extends MovingSound {
         x = _x;
         y = _y;
         z = _z;
-        update();
+        updatePos();
     }
     
     public PositionedSound setVolume(float volume) {
@@ -40,6 +40,10 @@ public class PositionedSound extends MovingSound {
 
     @Override
     public void update() {
+        updatePos();
+    }
+
+    private void updatePos() {
         this.xPosF = (float) x;
         this.yPosF = (float) y;
         this.zPosF = (float) z;

@@ -7,14 +7,14 @@
 package cn.academy.ability.client.ui;
 
 import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.ClientRuntime.CooldownData;
 import cn.academy.ability.api.context.ClientRuntime.DelegateNode;
 import cn.academy.ability.api.context.KeyDelegate;
 import cn.academy.ability.api.context.KeyDelegate.DelegateState;
+import cn.academy.ability.api.cooldown.CooldownData;
+import cn.academy.ability.api.cooldown.CooldownData.SkillCooldown;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.ability.api.data.PresetData;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.core.client.ui.ACHud;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
@@ -57,7 +57,7 @@ public class KeyHintUI extends Widget {
     static final double SCALE = 0.23;
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         Widget child = new Widget()
                 .size(128, 193)
                 .addComponent(new DrawTexture()
@@ -122,6 +122,7 @@ public class KeyHintUI extends Widget {
 
             if(cpData.isActivated()) {
                 ClientRuntime rt = ClientRuntime.instance();
+                CooldownData cd = CooldownData.of(rt.getEntity());
 
                 Multimap<String, DelegateNode> map = rt.getDelegateRawData();
                 List<String> groups = new ArrayList<>(map.keySet());
@@ -140,7 +141,7 @@ public class KeyHintUI extends Widget {
                         for (DelegateNode node : nodes) {
                             GL11.glPushMatrix();
                             GL11.glTranslated(x, y, 0);
-                            drawSingle(node.keyID, node.delegate, rt.getCooldown(node.delegate));
+                            drawSingle(node.keyID, node.delegate, cd.getSub(node.delegate.getSkill(), node.delegate.getIdentifier()));
                             GL11.glPopMatrix();
                             y += 92;
                         }
@@ -154,7 +155,7 @@ public class KeyHintUI extends Widget {
         });
     }
     
-    private void drawSingle(int keyCode, KeyDelegate c, CooldownData data) {
+    private void drawSingle(int keyCode, KeyDelegate c, SkillCooldown data) {
         ResourceLocation icon = c.getIcon();
         
         // Back
@@ -167,7 +168,7 @@ public class KeyHintUI extends Widget {
         // KeyHint
         {
             double wx = 180, wy = 27;
-            if(!canUseAbility || data != null) {
+            if(!canUseAbility || data.getTickLeft() > 0) {
                 color4d(0.7, 0.7, 0.7, 1);
                 ShaderMono.instance().useProgram();
             }
@@ -204,7 +205,7 @@ public class KeyHintUI extends Widget {
 
 
         DelegateState state = c.getState();
-        float prog = data == null ? 0.0f : ((float) data.getTickLeft() / data.getMaxTick());
+        float prog = (float) data.getTickLeft() / data.getMaxTick();
 
         float thisSinAlpha = (state.sinEffect ? sinAlpha : 1);
 

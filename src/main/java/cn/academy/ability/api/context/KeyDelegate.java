@@ -7,6 +7,7 @@
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.Skill;
 import cn.lambdalib.util.helper.Color;
 import cpw.mods.fml.common.registry.RegistryDelegate.Delegate;
 import cpw.mods.fml.relauncher.Side;
@@ -63,9 +64,14 @@ public abstract class KeyDelegate {
     public abstract ResourceLocation getIcon();
 
     /**
-     * @return The identifier used in cooldown
+     * @return The skill subID used in cooldown
      */
-    protected abstract int createID();
+    public abstract int createID();
+
+    /**
+     * @return The skill that this delegate belongs to
+     */
+    public abstract Skill getSkill();
 
     /**
      * @return The identifier of this KeyDelegate used in cooldown

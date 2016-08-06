@@ -1,14 +1,15 @@
 ![title]
 Ability Developer
-
+ 
 ![brief]
-Ability Developer can be used to develop ability and learn skills.
-
+Learn ability or skills, upgrade ability level and reset ability.
+ 
 ![content]
-There are 3 classes of developer: Portable, Normal and Advanced. They will all apply strong electromagnetic interference to your brain, causing your personal reality to 
-reshape. You will need more advanced types of ability developers when you upgrade to higher levels.
+The Ability Developer is powered by Imag Energy.
 
-Portable ability developer is an item, and can be opened by right-clicking. It can be charged via generators or nodes and supports only ability developing of Level 1 and Level 2.
+There are three kinds of Ability Developer: Portable, Normal and Advanced. As their names indicate, you could open Portable Ability Developer at any time, but other two must be placed on the ground.
 
-Normal and Advanced developer are multi-block structrue, you can open their control panel by right-clicking the block. Normal ability developer supports ability learning
-of level 3 and under, while Advanced developer supports all skills and levels. You will have to link them to wireless network to charge.
+Senior developer consume less Imag Energy when compared to junior developer. Portable Ability Developer only allows you to learn skills in level one or two. Normal Ability Developer has a limitation of level three. Advanced Ability Developer has no limitation and allows you to reset ability. 
+
+When you develop or reset your ability, the prompt will help you.
+

@@ -6,7 +6,7 @@
 */
 package cn.academy.core.client.ui;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.TutorialActivatedEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
@@ -36,7 +36,7 @@ import org.lwjgl.opengl.GL11;
 public class NotifyUI extends Widget {
 
     @RegInitCallback
-    public static void init() {
+    private static void init() {
         final ResourceLocation texture = Resources.getTexture("guis/edit_preview/notify_logo");
         final INotification dummy = new INotification() {
             @Override

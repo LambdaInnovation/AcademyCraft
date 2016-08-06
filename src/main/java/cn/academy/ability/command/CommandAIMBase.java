@@ -9,26 +9,21 @@ package cn.academy.ability.command;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.context.ClientRuntime;
+import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegCommand;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib.util.datapart.PlayerDataTag;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
-
-import static cn.lambdalib.core.LambdaLib.channel;
 
 /**
  * @author WeAthFolD
@@ -43,6 +38,7 @@ public abstract class CommandAIMBase extends ACCommand {
      * This is the command used by the client, doesn't specify the player and works on the user.
      * This command will display a warning before you can use it.
      */
+    @Registrant
     @RegCommand
     public static class CommandAIM extends CommandAIMBase {
         
@@ -100,6 +96,7 @@ public abstract class CommandAIMBase extends ACCommand {
     /**
      * This is the command for the OPs and server console. You must specify the player name.
      */
+    @Registrant
     @RegCommand
     public static class CommandAIMP extends CommandAIMBase {
 
@@ -144,7 +141,7 @@ public abstract class CommandAIMBase extends ACCommand {
         "help", "cat", "catlist", 
         "learn", "learn_all", "reset",
         "learned", "skills", "fullcp",
-        "level", "exp", "cd_clear"
+        "level", "exp", "cd_clear", "maxout"
     };
 
     public CommandAIMBase(String name) {
@@ -167,7 +164,7 @@ public abstract class CommandAIMBase extends ACCommand {
             if(pars.length == 1) {
                 sendChat(ics, getLoc("curcat"), aData.hasCategory() ?
                         aData.getCategory().getDisplayName() :
-                        getLoc("nonecat"));
+                        StatCollector.translateToLocal(getLoc("nonecat")));
                 return;
             } else if(pars.length == 2) {
                 String catName = pars[1];
@@ -202,7 +199,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     aData.learnSkill(s);
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -217,7 +214,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     aData.setSkillLearnState(s, false);
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -227,7 +224,7 @@ public abstract class CommandAIMBase extends ACCommand {
                 aData.learnAllSkills();
                 sendChat(ics, locSuccessful());
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -258,7 +255,7 @@ public abstract class CommandAIMBase extends ACCommand {
                     sendChat(ics, "#" + s.getID() + " " + s.getName() + ": " + s.getDisplayName());
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
@@ -281,10 +278,16 @@ public abstract class CommandAIMBase extends ACCommand {
         }
         
         case "fullcp": {
-            CPData cpData = CPData.get(player);
-            cpData.setCP(cpData.getMaxCP());
-            cpData.setOverload(0);
-            sendChat(ics, locSuccessful());
+
+            if (aData.hasCategory()) {
+                CPData cpData = CPData.get(player);
+                cpData.setCP(cpData.getMaxCP());
+                cpData.setOverload(0);
+                sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
+            }
             return;
         }
         
@@ -293,44 +296,60 @@ public abstract class CommandAIMBase extends ACCommand {
             if (aData.hasCategory()) {
                 Category cat = aData.getCategory();
 
-                Skill skill = tryParseSkill(cat, pars[1]);
-                if(skill == null) {
-                    sendChat(ics, getLoc("noskill"));
+                if (pars.length == 1) {
+                    sendChat(ics, this.locInvalid());
                 } else {
-                    if(pars.length == 2) {
-                        sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
-                    } else if(pars.length == 3) {
-                        Float exp = tryParseFloat(pars[2]);
-                        if(exp < 0 || exp > 1) {
-                            sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
-                        } else {
-                            aData.setSkillExp(skill, exp);
-                            sendChat(ics, this.locSuccessful());
-                        }
+                    Skill skill = tryParseSkill(cat, pars[1]);
+                    if(skill == null) {
+                        sendChat(ics, getLoc("noskill"));
                     } else {
-                        sendChat(ics, this.locInvalid());
+                        if(pars.length == 2) {
+                            sendChat(ics, this.getLoc("curexp"), skill.getDisplayName(), aData.getSkillExp(skill) * 100);
+                        } else if(pars.length == 3) {
+                            Float exp = tryParseFloat(pars[2]);
+                            if(exp < 0 || exp > 1) {
+                                sendChat(ics, this.getLoc("outofrange"), 0.0f, 1.0f);
+                            } else {
+                                aData.setSkillExp(skill, exp);
+                                sendChat(ics, this.locSuccessful());
+                            }
+                        } else {
+                            sendChat(ics, this.locInvalid());
+                        }
                     }
                 }
             } else {
-                sendChat(ics, getLoc("nocat"));
+                sendChat(ics, getLoc("nonecathint"));
             }
             return;
         }
 
         case "cd_clear": {
-            NetworkMessage.sendTo(getCommandSenderAsPlayer(ics),
-                    NetworkMessage.staticCaller(CommandAIMBase.class),
-                    MSG_CLEAR_COOLDOWN);
-            sendChat(ics, locSuccessful());
+
+            if (aData.hasCategory()) {
+                CooldownData.of(player).clear();
+                sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
+            }
             return;
         }
 
-        case "_readylevel": {
+        case "maxout": {
+
             if (aData.hasCategory()) {
-                CPData cpData = CPData.get(player);
-                cpData.setAddMaxCP(Float.MAX_VALUE);
+                aData.maxOutLevelProgress();
                 sendChat(ics, locSuccessful());
+                return;
+            } else {
+                sendChat(ics, getLoc("nonecathint"));
             }
+            return;
+        }
+
+        default: {
+            sendChat(ics, getLoc("nocomm"));
             return;
         }
         }
@@ -359,12 +378,6 @@ public abstract class CommandAIMBase extends ACCommand {
         if(i != null)
             return cat.getSkill(i);
         return cat.getSkill(str);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Listener(channel=MSG_CLEAR_COOLDOWN, side=Side.CLIENT)
-    private static void hClearCooldown() {
-        ClientRuntime.instance().clearCooldown();
     }
 
 }

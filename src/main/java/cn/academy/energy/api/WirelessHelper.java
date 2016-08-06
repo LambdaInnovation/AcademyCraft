@@ -10,6 +10,7 @@ import cn.academy.energy.api.block.*;
 import cn.academy.energy.internal.NodeConn;
 import cn.academy.energy.internal.WiWorldData;
 import cn.academy.energy.internal.WirelessNet;
+import cn.lambdalib.util.generic.MathUtils;
 import cn.lambdalib.util.helper.BlockPos;
 import cn.lambdalib.util.mc.IBlockSelector;
 import cn.lambdalib.util.mc.WorldUtils;
@@ -81,7 +82,7 @@ public class WirelessHelper {
     }
     
     /**
-     * Get a list of IWirelessNode that can reach the given position.
+     * Get a list of IWirelessNode that are linkable and can reach the given position.
      * @return nodes in the area, does not guarantee any order
      */
     public static List<IWirelessNode> getNodesInRange(World world, int x, int y, int z) {
@@ -89,9 +90,19 @@ public class WirelessHelper {
         List<BlockPos> list = WorldUtils.getBlocksWithin(world, x, y, z, range, 100, new IBlockSelector() {
 
             @Override
-            public boolean accepts(World world, int x, int y, int z, Block block) {
-                TileEntity te = world.getTileEntity(x, y, z);
-                return te instanceof IWirelessNode;
+            public boolean accepts(World world, int x2, int y2, int z2, Block block) {
+                TileEntity te = world.getTileEntity(x2, y2, z2);
+                if (te instanceof  IWirelessNode) {
+                    IWirelessNode node = ((IWirelessNode) te);
+                    NodeConn conn = getNodeConn((IWirelessNode) te);
+
+                    double distSq = MathUtils.distanceSq(x, y, z, x2, y2, z2);
+                    double range = node.getRange();
+
+                    return range * range >= distSq && conn.getLoad() < conn.getCapacity();
+                } else {
+                    return false;
+                }
             }
             
         });

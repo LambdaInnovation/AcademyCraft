@@ -11,8 +11,8 @@ import java.util.function.Supplier
 
 import cn.academy.ability.api.data.CPData
 import cn.academy.ability.api.data.CPData.IInterfSource
+import cn.academy.core.Resources
 import cn.academy.core.block.ACBlockContainer
-import cn.academy.core.client.Resources
 import cn.academy.core.client.render.block.RenderDynamicBlock
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
@@ -21,9 +21,8 @@ import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, Tex
 import cn.lambdalib.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
 import cn.lambdalib.cgui.gui.{CGuiScreen, HierarchyDebugger, Widget}
 import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.networkcall.TargetPointHelper
 import cn.lambdalib.s11n.nbt.NBTS11n
-import cn.lambdalib.s11n.network.{Future, NetworkMessage}
+import cn.lambdalib.s11n.network.{Future, NetworkMessage, TargetPoints}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
 import cn.lambdalib.util.helper.TickScheduler
@@ -94,7 +93,7 @@ class TileAbilityInterferer extends TileEntity {
     if (getWorldObj.isRemote) {
       NetworkMessage.sendToServer(this, channel, args2: _*)
     } else {
-      NetworkMessage.sendToAllAround(TargetPointHelper.convert(this, 15), this, channel, args2: _*)
+      NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, channel, args2: _*)
     }
   }
 

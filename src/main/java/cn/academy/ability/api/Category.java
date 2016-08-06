@@ -6,9 +6,12 @@
 */
 package cn.academy.ability.api;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
+import cn.academy.core.config.ACConfig;
 import cn.lambdalib.util.helper.Color;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.typesafe.config.Config;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -22,10 +25,11 @@ import java.util.List;
  */
 public class Category {
 
-    private List<Skill> skillList = new ArrayList<>();
-    private List<Controllable> ctrlList = new ArrayList<>();
+    private final List<Skill> skillList = new ArrayList<>();
+    private final List<Controllable> ctrlList = new ArrayList<>();
     
     private final String name;
+    private final Config config;
     
     int catID = -1;
     
@@ -42,6 +46,8 @@ public class Category {
         icon = initIcon();
         overlay = initOverlayIcon();
         developerIcon = initDeveloperIcon();
+
+        config = Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name));
     }
     
     public Color getColorStyle() {
@@ -89,7 +95,7 @@ public class Category {
     }
     
     public List<Skill> getSkillsOfLevel(int level) {
-        List<Skill> ret = new ArrayList();
+        List<Skill> ret = new ArrayList<>();
         for(Skill s : skillList)
             if(s.getLevel() == level)
                 ret.add(s);
@@ -114,6 +120,10 @@ public class Category {
         if(ctrlList.size() > id)
             return ctrlList.get(id);
         return null;
+    }
+
+    public float getProgIncrRate() {
+        return (float) config.getDouble("common.prog_incr_rate");
     }
     
     /**

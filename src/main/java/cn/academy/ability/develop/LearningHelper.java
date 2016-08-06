@@ -8,7 +8,6 @@ package cn.academy.ability.develop;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.develop.action.IDevelopAction;
 import cn.academy.ability.develop.condition.IDevCondition;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ public class LearningHelper {
      * @return Whether the given player can level up currently
      */
     public static boolean canLevelUp(DeveloperType type, AbilityData aData) {
-        return !aData.hasCategory() || CPData.get(aData.getEntity()).canLevelUp();
+        return !aData.hasCategory() || aData.canLevelUp();
     }
     
     /**

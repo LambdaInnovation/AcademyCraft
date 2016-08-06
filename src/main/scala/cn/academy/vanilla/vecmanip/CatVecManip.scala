@@ -2,7 +2,7 @@ package cn.academy.vanilla.vecmanip
 
 import cn.academy.ability.api.Category
 import cn.academy.vanilla.ModuleVanilla
-import cn.academy.vanilla.vecmanip.skills._
+import cn.academy.vanilla.vecmanip.skill._
 import cn.lambdalib.annoreg.core.Registrant
 
 @Registrant

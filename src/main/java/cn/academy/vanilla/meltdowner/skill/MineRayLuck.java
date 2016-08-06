@@ -7,7 +7,7 @@
 package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayLuck;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,7 +44,7 @@ public class MineRayLuck extends MineRaysBase {
             setSpeed(.5f, 1);
             setConsumption(50, 30);
             setOverload(320, 250);
-            setConsumption(60, 30);
+            setCooldown(60, 30);
             setExpIncr(0.0003f);
         }
 
@@ -55,6 +55,7 @@ public class MineRayLuck extends MineRaysBase {
             world.setBlock(x, y, z, Blocks.air);
         }
 
+        @SideOnly(Side.CLIENT)
         @Override
         protected Entity createRay() {
             return new EntityMineRayLuck(player);

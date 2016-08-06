@@ -42,6 +42,7 @@ public class MineRayBasic extends MineRaysBase {
             setSpeed(0.2f, 0.4f);
             setConsumption(15.0f, 8.0f);
             setOverload(200f, 120f);
+            setCooldown(40f, 20f);
             setExpIncr(0.0005f);
         }
 
@@ -52,6 +53,7 @@ public class MineRayBasic extends MineRaysBase {
             world.setBlock(x, y, z, Blocks.air);
         }
 
+        @SideOnly(Side.CLIENT)
         @Override
         protected Entity createRay() {
             return new EntityMineRayBasic(player);

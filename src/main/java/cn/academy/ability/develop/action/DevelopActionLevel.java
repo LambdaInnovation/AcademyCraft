@@ -9,15 +9,12 @@ package cn.academy.ability.develop.action;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.AbilityLocalization;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.ability.item.ItemInductionFactor;
-import cn.academy.core.client.Resources;
 import cn.lambdalib.util.generic.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Optional;

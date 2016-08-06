@@ -12,8 +12,7 @@ import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.{AcademyCraft, LocalHelper}
-import cn.academy.core.client.Resources
+import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
 import cn.lambdalib.annoreg.core.Registrant
@@ -260,6 +259,7 @@ private object Common {
       if (aData.hasCategory) {
         val skills = aData.getCategory.getSkillList.toList
           .filter(skill => LearningHelper.canBePotentiallyLearned(aData, skill))
+          .filter(_.isEnabled)
 
         skills.zipWithIndex.foreach { case (skill, idx) =>
           val StateIdle = 0
@@ -437,7 +437,7 @@ private object Common {
       val panel = ret.child("parent_left/panel_ability")
 
       val (icon, name, prog) = Option(aData.getCategoryNullable) match {
-        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, CPData.get(player).getLevelProgress))
+        case Some(cat) => (cat.getDeveloperIcon, cat.getDisplayName, math.max(0.02f, aData.getLevelProgress))
         case None => (Resources.getTexture("guis/icons/icon_nocategory"), "N/A", 0.0f)
       }
 
@@ -445,6 +445,11 @@ private object Common {
       panel.child("text_abilityname").component[TextBox].setContent(name)
       panel.child("logo_progress").component[ProgressBar].progress = prog
       panel.child("text_level").component[TextBox].setContent(AbilityLocalization.instance.levelDesc(aData.getLevel))
+
+      {
+        val cpData = CPData.get(player)
+        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(aData.getLevelProgress * 100))
+      }
 
       if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
         val btn = panel.child("btn_upgrade")
@@ -454,10 +459,7 @@ private object Common {
 
           gui.addWidget(cover)
         })
-        panel.child("text_exp").transform.doesDraw = false
-      } else {
-        val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(cpData.getLevelProgress * 100))
+        panel.removeWidget("text_level")
       }
     }
 
@@ -569,7 +571,7 @@ private object Common {
         drawActionIcon(icon, progress, glow = progress == 1)
       })
 
-      val lvltext = local.get("uplevel") + " " + AbilityLocalization.instance.levelDesc(data.getLevel+1)
+      val lvltext = local.getFormatted("uplevel", AbilityLocalization.instance.levelDesc(data.getLevel+1))
       val reqtext = local.get("req") + " %.0f".format(estmCons)
       textArea.listens[FrameEvent](() => {
         Font.draw(lvltext, 0, 3, foLevelTitle)
@@ -808,7 +810,7 @@ private object Common {
     glPopMatrix()
   }
 
-  private def fmt(x: Int) = if (x < 10) "0" + x else x
+  private def fmt(x: Int): String = if (x < 10) "0" + x else x.toString
 
   private def initConsole(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
     implicit val console = new Console(false, developer != null)
@@ -816,8 +818,8 @@ private object Common {
     if (developer != null) {
       console += Command("learn", () => {
 
-        console.enqueue(printTask("Start stimulation......\n"))
-        console.enqueue(printTask("Progress 00%"))
+        console.enqueue(printTask(Console.localized("dev_begin")))
+        console.enqueue(printTask(Console.localized("progress", fmt(0))))
         send(NetDelegate.MSG_START_LEVEL, data, developer)
         data.reset()
 
@@ -829,9 +831,9 @@ private object Common {
           override def finish() = {
             console.outputln()
             if (data.getState == DevState.DONE) {
-              console.output("Develop successful.\n")
+              console.output(Console.localized("dev_succ"))
             } else {
-              console.output("Develop failed." + "\n")
+              console.output(Console.localized("dev_fail"))
             }
 
             console.pause(500)
@@ -849,8 +851,8 @@ private object Common {
 
     console += Command("reset", () => {
       if (DevelopActionReset.canReset(data.getEntity, developer)) {
-        console.enqueue(printTask("Try resetting ability ..."))
-        console.enqueue(printTask("Progress: 00%"))
+        console.enqueue(printTask(Console.localized("reset_begin")))
+        console.enqueue(printTask(Console.localized("progress", fmt(0))))
         send(NetDelegate.MSG_RESET, data, developer)
         data.reset()
 
@@ -862,9 +864,9 @@ private object Common {
           override def finish() = {
             console.outputln()
             if (data.getState == DevState.DONE) {
-              console.output("Reset successful.\n")
+              console.output(Console.localized("reset_succ"))
             } else {
-              console.output("Reset failed.\n")
+              console.output(Console.localized("reset_fail"))
             }
 
             console.pause(500)
@@ -873,9 +875,9 @@ private object Common {
         })
       } else {
         if (developer.getType != DeveloperType.ADVANCED) {
-          console.enqueue(printTask("Can't reset ability -- Advance Developer must be used.\n"))
+          console.enqueue(printTask(Console.localized("reset_fail_dev")))
         } else {
-          console.enqueue(printTask("Can't reset ability -- either level is too low or induction factor not detected.\n"))
+          console.enqueue(printTask(Console.localized("reset_fail_other")))
         }
       }
     })
@@ -929,33 +931,12 @@ private object Common {
   object Console {
     private val MaxLines = 10
     private val FO = new FontOption(8)
-    private val Help1 =
-      """|Welcome to Academy OS, Ver 1.0.0
-         |Copyright (c) Academy Tech. All rights reserved.
-         |User %s detected,
-         |System booting......""".stripMargin
-
-    private val Help2 =
-      """|
-         |FATAL: User's ability category is invalid, booting aborted.
-         |Use `learn` command to acquire new category.
-         |
-         |""".stripMargin
-
-    private val Help3 =
-      """|
-         |WARNING: System override! External injection detected.....
-         |
-         |ABILITY RESET: Use `reset` command to reset player category.
-         |""".stripMargin
-
-    private val Help4 =
-      """|
-         |FATAL: User's ability category is invalid, booting aborted.
-         |
-         |""".stripMargin
 
     private val ConsoleHead = "OS >"
+
+    private val consoleLocal = local.subPath("console")
+
+    def localized(id: String, args: AnyRef*) = consoleLocal.getFormatted(id, args: _*).replace("\\n", "\n")
   }
 
   class Console(val emergency: Boolean, val hasDeveloper: Boolean)
@@ -979,14 +960,22 @@ private object Common {
     private var currentTask: Task = null
     private var input: String = ""
 
-    enqueue(slowPrintTask(Help1.format(Minecraft.getMinecraft.thePlayer.getCommandSenderName)))
+    enqueue(slowPrintTask(localized("init", player.getCommandSenderName)))
     pause(400)
 
-    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_.toString).toList :::
-      (64 + RandUtils.nextInt(4)).toString :: "Boot Failed.\n" :: Nil
+    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
+      ((64 + RandUtils.nextInt(4)) + "%") :: localized("boot_failed") :: Nil
 
     animSequence(300, numSeq: _*)
-    enqueue(slowPrintTask(if (emergency) Help3 else if (hasDeveloper) Help2 else Help4))
+
+    {
+      val startupText: String = (emergency, hasDeveloper) match {
+        case (true, _)  => localized("override")
+        case (_, true)  => localized("invalid_cat") + localized("learn_hint")
+        case (_, false) => localized("invalid_cat")
+      }
+      enqueue(slowPrintTask(startupText))
+    }
 
     this.listens[FrameEvent](() => {
       if (currentTask != null && currentTask.isFinished) {
@@ -1021,7 +1010,9 @@ private object Common {
         y += 10
       }
 
-      widget.gainFocus()
+      if (this.widget.getGui.getWidget("link_page") == null) {
+        widget.gainFocus()
+      }
     })
 
     this.listens((evt: KeyEvent) => {
@@ -1108,7 +1099,7 @@ private object Common {
 
     private def parseCommand(cmd: String) = {
       commands.filter(_.name == cmd).toList match {
-        case Nil => enqueue(printTask("Invalid command.\n"))
+        case Nil => enqueue(printTask(localized("invalid_command")))
         case command :: _ => command.callback()
       }
     }

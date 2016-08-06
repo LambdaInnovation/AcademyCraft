@@ -6,6 +6,8 @@
 */
 package cn.academy.core.client.sound;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
  * A stoppable&repeatable sound that follows an entity.
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class FollowEntitySound extends MovingSound {
     
     public final Entity entity;

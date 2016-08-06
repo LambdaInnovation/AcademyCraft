@@ -79,8 +79,11 @@ public class BlockWindGenBase extends ACBlockMulti {
         ItemStack stack = player.getCurrentEquippedItem();
         if(stack != null && stack.getItem() == Item.getItemFromBlock(ModuleEnergy.windgenPillar))
             return false;
-        if(!world.isRemote && !player.isSneaking()) {
-            guiHandler.openGuiContainer(player, world, x, y, z);
+        
+        if(!player.isSneaking()) {
+            if (!world.isRemote) {
+                guiHandler.openGuiContainer(player, world, x, y, z);
+            }
             return true;
         }
         return false;

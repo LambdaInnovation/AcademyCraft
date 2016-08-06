@@ -1,10 +1,11 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.client.Resources
+import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
 import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.ScalaCGUI._
 import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.gui.component.{DrawTexture, ProgressBar}
@@ -28,13 +29,17 @@ object GuiMetalFormer {
     val invWidget = template.copy()
 
     {
+      def updateModeTexture(mode: TileMetalFormer.Mode) = {
+        invWidget.child("icon_mode").component[DrawTexture].texture = mode.texture
+      }
+
+      updateModeTexture(tile.mode)
+
       invWidget.getWidget("progress").listens((w: Widget, evt: FrameEvent) => {
         w.component[ProgressBar].progress = tile.getWorkProgress
       })
 
-      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, -1, Future.create((mode: TileMetalFormer.Mode) => {
-        invWidget.child("icon_mode").component[DrawTexture].texture = mode.texture
-      }))
+      def handleAlt(dir: Int) = () => send(MSG_ALTERNATE, tile, dir, Future.create[TileMetalFormer.Mode](updateModeTexture(_)))
 
       invWidget.child("btn_left").listens[LeftClickEvent](handleAlt(-1))
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
@@ -64,10 +69,12 @@ object GuiMetalFormer {
 }
 
 @Registrant
-@NetworkS11nType
 private object MFNetDelegate {
 
-  NetworkS11n.addDirectInstance(MFNetDelegate)
+  @RegInitCallback
+  def init() = {
+    NetworkS11n.addDirectInstance(MFNetDelegate)
+  }
 
   final val MSG_ALTERNATE = "alt"
 

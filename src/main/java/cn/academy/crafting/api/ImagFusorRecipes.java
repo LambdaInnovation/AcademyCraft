@@ -7,15 +7,11 @@
 package cn.academy.crafting.api;
 
 import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.networkcall.s11n.InstanceSerializer;
-import cn.lambdalib.networkcall.s11n.RegSerializable;
 import cn.lambdalib.s11n.network.NetworkS11n;
 import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +25,7 @@ public class ImagFusorRecipes {
 
     public static ImagFusorRecipes INSTANCE = new ImagFusorRecipes();
     
-    private List<IFRecipe> recipeList = new ArrayList();
+    private List<IFRecipe> recipeList = new ArrayList<>();
     
     public void addRecipe(ItemStack consume, int liquid, ItemStack output) {
         addRecipe(new IFRecipe(consume, liquid, output));

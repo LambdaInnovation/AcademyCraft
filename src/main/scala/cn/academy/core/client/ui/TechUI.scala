@@ -1,7 +1,6 @@
 package cn.academy.core.client.ui
 
-import cn.academy.core.LocalHelper
-import cn.academy.core.client.Resources
+import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
@@ -27,10 +26,11 @@ import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
-import net.minecraft.inventory.Container
+import net.minecraft.inventory.{Container, Slot}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
 import cn.lambdalib.cgui.ScalaCGUI._
+import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 
@@ -214,12 +214,15 @@ object TechUI {
     HistElement(localHist.get("liquid"), color, () => amt() / max, () => "%.0f mB".format(amt()))
   }
 
-  def histCapacity(amt: () => Int, max: Int) = {
+  def histCapacity(amt: () => Int, max: => Int) = {
     val color = new Color(0xffff6c00)
     HistElement(localHist.get("capacity"), color, () => amt().toDouble / max, () => s"${amt()}/$max")
   }
 
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
+    xSize += 31
+    ySize += 20
+
     class InfoArea extends Widget {
       this :+ new BlendQuad()
 
@@ -715,7 +718,6 @@ object WirelessPage {
 }
 
 @Registrant
-@NetworkS11nType
 object WirelessNetDelegate {
   import WirelessPage._
 

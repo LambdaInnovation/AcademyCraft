@@ -41,7 +41,7 @@ public class RFReceiverManager implements IEnergyBlockManager {
     @Override
     public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
         IEnergyReceiver rec = asReceiver(tile);
-        return rec == null ? 0 : amt - rec.receiveEnergy(DEFAULT_DIR, (int) (amt / RFSupport.CONV_RATE), false) * RFSupport.CONV_RATE;
+        return rec == null ? amt : amt - rec.receiveEnergy(DEFAULT_DIR, (int) amt, false);
     }
 
     @Override

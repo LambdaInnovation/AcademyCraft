@@ -6,7 +6,7 @@
 */
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.academy.core.client.Resources;
+import cn.academy.core.Resources;
 import cn.lambdalib.particle.Particle;
 import cn.lambdalib.particle.ParticleFactory;
 import cn.lambdalib.util.entityx.MotionHandler;
