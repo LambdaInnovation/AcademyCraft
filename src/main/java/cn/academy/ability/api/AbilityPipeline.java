@@ -6,6 +6,7 @@ import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,11 +37,34 @@ public class AbilityPipeline {
     }
 
     /**
-     * Tests if we break the block at the specified coordinates.
-     * @return Whether the block can be really broken
+     * Tests if the block at the specified coordinates can be broken by a
+     * certain player.
+     * @return Whether the block can be really broken.
+     */
+    static boolean canBreakBlock(World world, EntityPlayer player,
+        int x, int y, int z)
+    {
+        return !MinecraftForge.EVENT_BUS.post(
+            new BlockDestroyEvent(world, player, x, y, z));
+    }
+
+    /**
+     * Tests if the block at the specified coordinates can be broken.
+     * @return Whether the block can be really broken.
      */
     static boolean canBreakBlock(World world, int x, int y, int z) {
-        return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z));
+        return !MinecraftForge.EVENT_BUS.post(
+            new BlockDestroyEvent(world, x, y, z));
+    }
+
+    /**
+     * Tests if the block at the specified coordinates can be broken by a
+     * certain player.
+     * @return Whether the block can be really broken.
+     */
+    static boolean canBreakBlock(EntityPlayer player, int x, int y, int z) {
+        return !MinecraftForge.EVENT_BUS.post(
+            new BlockDestroyEvent(player, x, y, z));
     }
 
     // PROPERTIES

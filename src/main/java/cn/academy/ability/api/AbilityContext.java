@@ -119,7 +119,7 @@ public class AbilityContext {
     }
 
     public boolean canBreakBlock(World world, int x, int y, int z) {
-        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, x, y, z);
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, x, y, z);
     }
 
     public boolean canBreakBlock(World world) {

@@ -12,8 +12,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 /**
- * Fired whenever a block is to be destroyed. Canceled if this block shouldn't be.
- * This is listened by AC internal adapters to support residence and block destroy configs.
+ * Fire this event to determine whether a block is permissible to be destroyed
+ * depending on current world and player's permissions.
+ * Cancelled if it shouldn't be.
+ * This event is internally listened by BukkitAdapter.
  * @author EAirPeter
  */
 @Cancelable
@@ -22,20 +24,23 @@ public final class BlockDestroyEvent extends Event {
     public final World world;
     public final EntityPlayer player;
     public final int x, y, z;
-    
-    public BlockDestroyEvent(World pWorld, int pX, int pY, int pZ) {
-        world = pWorld;
-        player = null;
-        x = pX;
-        y = pY;
-        z = pZ;
+
+    public BlockDestroyEvent(World world_, EntityPlayer player_,
+                             int x_, int y_, int z_)
+    {
+        world = world_;
+        player = player_;
+        x = x_;
+        y = y_;
+        z = z_;
+    }
+
+    public BlockDestroyEvent(World world_, int x_, int y_, int z_) {
+        this(world_, null, x_, y_, z_);
     }
     
-    public BlockDestroyEvent(EntityPlayer pPlayer, int pX, int pY, int pZ) {
-        world = pPlayer.worldObj;
-        player = pPlayer;
-        x = pX;
-        y = pY;
-        z = pZ;
+    public BlockDestroyEvent(EntityPlayer player_, int x_, int y_, int z_) {
+        this(player_.worldObj, player_, x_, y_, z_);
     }
+
 }

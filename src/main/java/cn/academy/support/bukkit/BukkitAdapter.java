@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 /**
+ * Provides Bukkit support for AcademyCraft.
+ * See AcademyBukkit.
  * @author EAirPeter
  */
 @SideOnly(Side.SERVER)
