@@ -75,7 +75,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   private val sx = player.posX
   private val sy = player.posY
   private val sz= player.posZ
-  private var target: Target = null
+  private var target: Target = _
 
   private val exp = ctx.getSkillExp
   private val cp = lerpf(15, 10, exp)
@@ -90,7 +90,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   }
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER, Side.CLIENT))
-  private def s_onStart() = {
+  private def g_onStart() = {
     val aData = AbilityData.get(player)
     val result = Raytrace.traceLiving(player, getMaxDistance(aData))
     if(result != null) {
@@ -165,12 +165,12 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     terminate()
   }
 

@@ -3,12 +3,11 @@ package cn.academy.vanilla.vecmanip.skill
 import java.util.function.Predicate
 
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
@@ -18,7 +17,6 @@ import cn.lambdalib.util.generic.VecUtils
 import cn.lambdalib.util.mc.{Raytrace, Vec3, WorldUtils}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile._

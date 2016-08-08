@@ -9,8 +9,10 @@ package cn.academy.vanilla.teleporter;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.teleporter.passiveskills.DimFoldingTheorem;
-import cn.academy.vanilla.teleporter.passiveskills.SpaceFluctuation;
+import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem;
+import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
+import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation;
+import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation$;
 import cn.academy.vanilla.teleporter.skill.LocationTeleport$;
 import cn.academy.vanilla.teleporter.skill.*;
 
@@ -20,14 +22,14 @@ import cn.academy.vanilla.teleporter.skill.*;
 public class CatTeleporter extends Category {
 
     public static final Skill
-        dimFolding = DimFoldingTheorem.instance,
-        spaceFluct = SpaceFluctuation.instance,
-        markTP = MarkTeleport.instance,
+        dimFolding = DimFoldingTheorem$.MODULE$,
+        spaceFluct = SpaceFluctuation$.MODULE$,
+        markTP = MarkTeleport$.MODULE$,
         locTP = LocationTeleport$.MODULE$,
-        penetrateTP = PenetrateTeleport.instance,
-        threateningTP = ThreateningTeleport.instance,
-        shiftTP = ShiftTeleport.instance,
-        fleshRipping = FleshRipping.instance,
+        penetrateTP = PenetrateTeleport$.MODULE$,
+        threateningTP = ThreateningTeleport$.MODULE$,
+        shiftTP = ShiftTeleport$.MODULE$,
+        fleshRipping = FleshRipping$.MODULE$,
         flashing = Flashing.instance;
 
     public CatTeleporter() {

@@ -1,10 +1,9 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
@@ -20,7 +19,7 @@ import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.util.generic.RandUtils._
 import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.{EntityBlockDustFX, EntitySmokeFX}
+import net.minecraft.client.particle.EntityBlockDustFX
 
 object StormWing extends Skill("storm_wing", 3) {
 
