@@ -23,7 +23,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3}
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object RayBarrage extends Skill("ray_barrage", 4) {
 

@@ -22,7 +22,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3}
 
 /**
-  * @author KSkun
+  * @author WeAthFolD, KSkun
   */
 object ScatterBomb extends Skill("scatter_bomb", 2) {
 
