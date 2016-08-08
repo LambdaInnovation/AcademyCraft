@@ -51,7 +51,7 @@ public class MDDamageHelper {
             int marktick = Math.max(60, getMarkTick(player));
 
             setMarkTick(target, marktick);
-            setMarkRate(target, RadiationIntensify.instance.getRate(aData));
+            setMarkRate(target, RadiationIntensify$.MODULE$.getRate(aData));
             NetworkMessage.sendToAllAround(
                     TargetPoints.convert(player, 20),
                     NetworkMessage.staticCaller(MDDamageHelper.class),
