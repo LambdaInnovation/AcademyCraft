@@ -10,6 +10,7 @@ import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
+import cn.academy.vanilla.meltdowner.passiveskill.RadiationIntensify$;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.s11n.network.TargetPoints;

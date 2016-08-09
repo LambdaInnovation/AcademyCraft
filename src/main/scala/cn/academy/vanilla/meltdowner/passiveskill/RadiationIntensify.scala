@@ -4,7 +4,7 @@
   * https://github.com/LambdaInnovation/AcademyCraft
   * Licensed under GPLv3, see project root for more information.
   */
-package cn.academy.vanilla.meltdowner.skill
+package cn.academy.vanilla.meltdowner.passiveskill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.data.{AbilityData, CPData}

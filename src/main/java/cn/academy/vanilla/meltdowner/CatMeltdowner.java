@@ -9,6 +9,7 @@ package cn.academy.vanilla.meltdowner;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.meltdowner.passiveskill.RadiationIntensify$;
 import cn.academy.vanilla.meltdowner.skill.*;
 
 /**
