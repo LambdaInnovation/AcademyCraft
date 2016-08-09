@@ -67,7 +67,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_onStart() = {
+  private def l_onStart() = {
     sendToServer(MSG_EFFECT_START, isItem.asInstanceOf[AnyRef])
   }
 
@@ -139,12 +139,12 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
 
@@ -242,5 +242,5 @@ private class MovingObjectData {
   var entityEyeHeight : Double = 0d
   @SerializeIncluded
   @SerializeNullable
-  var hitVec : Vec3 = null
+  var hitVec : Vec3 = _
 }

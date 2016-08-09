@@ -5,7 +5,7 @@ import java.util.function.Predicate
 
 import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.ability.api.context.{ClientRuntime, KeyDelegate}
-import cn.academy.ability.api.data.{AbilityData, CPData}
+import cn.academy.ability.api.data.AbilityData
 import cn.academy.core.Resources
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
@@ -14,7 +14,7 @@ import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.gui.{CGuiScreen, Widget}
 import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.{SerializeIncluded, SerializeStrategy}
 import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
@@ -30,7 +30,6 @@ import cn.lambdalib.util.helper.{Color, GameTimer}
 import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
-import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound

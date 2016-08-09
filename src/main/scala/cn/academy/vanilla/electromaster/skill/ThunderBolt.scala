@@ -28,9 +28,6 @@ import net.minecraft.potion.{PotionEffect, Potion}
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.Vec3
 
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-
 /**
   * @author WeAthFolD, KSkun
   */
@@ -70,7 +67,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def s_onKeyDown() = {
+  private def l_onKeyDown() = {
     sendToServer(MSG_PERFORM)
   }
 
@@ -108,7 +105,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
     terminate()
   }
 
-  def getAttackData(): AttackData = {
+  def getAttackData: AttackData = {
     val result = Raytrace.traceLiving(player, RANGE)
     var end: Vec3 = null
     if(result == null) {
@@ -172,11 +169,11 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
 @NetworkS11nType
 class AttackData {
   @SerializeIncluded
-  final var aoes: java.util.List[Entity] = null
+  final var aoes: java.util.List[Entity] = _
   @SerializeIncluded
   @SerializeNullable
-  final var target: Entity = null
+  final var target: Entity = _
   @SerializeIncluded
   @SerializeNullable
-  final var point: Vec3 = null
+  final var point: Vec3 = _
 }
