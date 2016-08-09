@@ -11,14 +11,13 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.{NetworkMessage, TargetPoints}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.entityx.EntityCallback
 import cn.lambdalib.util.generic.VecUtils
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{ChatComponentText, MovingObjectPosition, Vec3}
+import net.minecraft.util.{MovingObjectPosition, Vec3}
 
 /**
   * @author WeAthFolD, KSkun
@@ -73,6 +72,7 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
       ctx.addSkillExp(.005f)
       ctx.setCooldown(lerpf(20, 10, exp).toInt)
     }
+    terminate()
   }
 
   private def getDest(player: EntityPlayer): Vec3 = Raytrace.getLookingPos(player, DISTANCE).getLeft

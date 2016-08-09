@@ -15,7 +15,7 @@ import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.entityx.EntityCallback
 import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.helper.{TickScheduler, Motion3D}
+import cn.lambdalib.util.helper.Motion3D
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -59,7 +59,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
   var hitX, hitY, hitZ = 0d
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_onKeyDown() = {
+  private def l_onKeyDown() = {
     sendToServer(MSG_START)
   }
 
@@ -117,13 +117,13 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     sendToSelf(MSG_EFFECT_END)
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     sendToServer(MSG_END)
   }
 
@@ -134,8 +134,8 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 @RegClientContext(classOf[ThunderClapContext])
 class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
 
-  var surroundArc: EntitySurroundArc = null
-  var mark: EntityRippleMark = null
+  var surroundArc: EntitySurroundArc = _
+  var mark: EntityRippleMark = _
   var ticks = 0
   var hitX, hitY, hitZ = 0d
   var canTicking = false

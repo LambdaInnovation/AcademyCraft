@@ -11,9 +11,9 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntitySmallFireball, EntityLargeFireball, EntityArrow, EntityFireball}
+import net.minecraft.entity.projectile.{EntitySmallFireball, EntityLargeFireball, EntityArrow}
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.entity.living.{LivingAttackEvent, LivingHurtEvent}
+import net.minecraftforge.event.entity.living.LivingHurtEvent
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.ACSounds

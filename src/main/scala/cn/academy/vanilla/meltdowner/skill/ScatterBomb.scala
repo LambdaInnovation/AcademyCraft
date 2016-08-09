@@ -54,19 +54,19 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   private val exp: Float = ctx.getSkillExp
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onKeyUp() = {
+  private def l_onKeyUp() = {
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     terminate()
   }
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
     val overload: Float = lerpf(185, 68, exp)
-    ctx.consume(overload, 0)
+    if(!ctx.consume(overload, 0)) terminate()
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -89,9 +89,11 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     }
   }
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_SYNC_BALLS, side=Array(Side.CLIENT))
   private def c_syncBalls(ballToAdd: EntityMdBall) = balls.add(ballToAdd)
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._
@@ -110,6 +112,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
   private def newDest: Vec3 = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
 
+  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_onEnd() = {
     val yoff: Double = if (ACRenderingHelper.isThePlayer(player)) 0 else 1.6

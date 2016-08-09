@@ -60,7 +60,7 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
   private def getScatteredDamage(exp: Float): Float = lerpf(12, 20, exp)
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_onKeyDown() = {
+  private def l_onKeyDown() = {
     sendToServer(MSG_START)
   }
 
@@ -160,6 +160,7 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
 
     ctx.setCooldown(lerpf(100, 160, exp).toInt)
     ctx.addSkillExp(.005f)
+    terminate()
   }
 
 }

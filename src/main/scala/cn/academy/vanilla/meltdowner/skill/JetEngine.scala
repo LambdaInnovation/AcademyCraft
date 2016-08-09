@@ -18,7 +18,7 @@ import cn.lambdalib.util.generic.{RandUtils, VecUtils}
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{ChatComponentText, MovingObjectPosition, Vec3}
+import net.minecraft.util.{MovingObjectPosition, Vec3}
 
 /**
   * @author WeAthFolD, KSkun
@@ -48,13 +48,16 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   private val overload: Float = lerpf(66, 42, exp)
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
-  private def s_onTick() = {
-    if(!ctx.canConsumeCP(consumption))
-      terminate()
-  }
+  private def s_onTick() = if(!ctx.canConsumeCP(consumption)) terminate()
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onKeyUp = sendToServer(MSG_MARK_END)
+  private def l_onKeyUp() = sendToServer(MSG_MARK_END)
+
+  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  private def l_onKeyAbort() = {
+    sendToClient(MSG_MARK_END)
+    terminate()
+  }
 
   @Listener(channel=MSG_MARK_END, side=Array(Side.SERVER))
   private def s_onEnd() = {
@@ -92,11 +95,13 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   @Listener(channel=MSG_TRIGGER, side=Array(Side.CLIENT))
   private def c_triggerStart(_target: Vec3) = {
-    isTriggering = true
-    target = _target
+    if(isLocal) {
+      isTriggering = true
+      target = _target
 
-    start = VecUtils.vec(player.posX, player.posY, player.posZ)
-    velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME)
+      start = VecUtils.vec(player.posX, player.posY, player.posZ)
+      velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME)
+    }
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -111,7 +116,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_triggerTick(): Unit = {
-    if(isTriggering) {
+    if(isLocal && isTriggering) {
       if (ticks >= LIFETIME)
         terminate()
       ticks += 1
@@ -142,7 +147,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   private var ticks: Int = 0
   
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
-  private def c_spawnMark() = {
+  private def l_spawnMark() = {
     if(isLocal) {
       isMarking = true
       mark = new EntityRippleMark(world)
@@ -152,7 +157,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   }
   
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  private def c_updateMark() = {
+  private def l_updateMark() = {
     if(isLocal && isMarking) {
       val dest: Vec3 = getDest
       mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord)
@@ -160,7 +165,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   }
 
   @Listener(channel=MSG_MARK_END, side=Array(Side.CLIENT))
-  private def c_endMark() = {
+  private def l_endMark() = {
     if(isLocal) {
       isMarking = false
       mark.setDead()

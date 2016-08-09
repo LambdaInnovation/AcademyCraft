@@ -10,7 +10,6 @@ import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
-import cn.academy.ability.api.ctrl.ActionManager
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield
@@ -72,19 +71,19 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
   private val exp: Float = ctx.getSkillExp
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     terminate()
   }
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
     val overload: Float = lerpf(198, 132, exp)
-    ctx.consume(overload, 0)
+    if(ctx.consume(overload, 0)) terminate()
   }
   
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))

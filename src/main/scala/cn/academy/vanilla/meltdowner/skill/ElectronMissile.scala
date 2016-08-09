@@ -19,7 +19,7 @@ import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{ChatComponentText, Vec3}
+import net.minecraft.util.Vec3
 
 /**
   * @author WeAthFolD, KSkun
@@ -58,12 +58,12 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
   private val consumption_attacked: Float = lerpf(270, 405, exp)
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     terminate()
   }
 

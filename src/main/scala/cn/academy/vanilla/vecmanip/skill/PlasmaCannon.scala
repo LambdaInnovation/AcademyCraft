@@ -2,7 +2,7 @@ package cn.academy.vanilla.vecmanip.skill
 
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.LocalEntity

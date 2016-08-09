@@ -126,12 +126,12 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     sendToServer(MSG_END)
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
     terminate()
   }
@@ -155,11 +155,6 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
       ACSounds.playClient(loopSound)
       AuxGuiHandler.register(hud)
     }
-  }
-
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  private def c_updateEffect() = {
-    // N/A
   }
 
   @Listener(channel=MSG_EFFECT_END, side=Array(Side.CLIENT))

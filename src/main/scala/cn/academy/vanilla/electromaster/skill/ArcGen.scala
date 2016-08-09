@@ -69,7 +69,7 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_keydown() = {
+  private def l_keydown() = {
     sendToServer(MSG_PERFORM)
   }
 

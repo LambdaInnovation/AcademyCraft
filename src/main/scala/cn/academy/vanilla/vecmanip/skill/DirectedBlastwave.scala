@@ -1,20 +1,17 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util
-import cn.lambdalib.util.generic.RandUtils._
 import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.mc._
 import cn.lambdalib.vis.animation.presets.CompTransformAnim
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks

@@ -8,7 +8,6 @@ package cn.academy.vanilla.meltdowner.skill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, Context}
-import cn.academy.ability.api.ctrl.ActionManager
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.event.BlockDestroyEvent
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
@@ -49,12 +48,12 @@ import MRContext._
 abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(p, _skill) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
+  private def l_onAbort() = {
     terminate()
   }
 
