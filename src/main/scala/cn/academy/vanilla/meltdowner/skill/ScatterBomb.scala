@@ -93,7 +93,6 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   @Listener(channel=MSG_SYNC_BALLS, side=Array(Side.CLIENT))
   private def c_syncBalls(ballToAdd: EntityMdBall) = balls.add(ballToAdd)
 
-  @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._

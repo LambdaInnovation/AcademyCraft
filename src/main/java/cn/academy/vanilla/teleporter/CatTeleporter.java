@@ -30,7 +30,7 @@ public class CatTeleporter extends Category {
         threateningTP = ThreateningTeleport$.MODULE$,
         shiftTP = ShiftTeleport$.MODULE$,
         fleshRipping = FleshRipping$.MODULE$,
-        flashing = Flashing$.MODULE$;
+        flashing = Flashing.instance;
 
     public CatTeleporter() {
         super("teleporter");

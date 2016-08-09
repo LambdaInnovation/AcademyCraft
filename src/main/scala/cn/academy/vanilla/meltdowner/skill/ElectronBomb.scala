@@ -58,21 +58,21 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
     if(consume()) {
       val exp: Float = ctx.getSkillExp
 
-      val ball: EntityMdBall = new EntityMdBall(player, if (ctx.getSkillExp >= 0.8f) LIFE_IMPROVED
-      else LIFE, new EntityCallback[EntityMdBall]() {
-        def execute(ball: EntityMdBall) {
-          val trace: MovingObjectPosition = Raytrace.perform(player.worldObj, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
-            getDest(player), EntitySelectors.exclude(player).and(EntitySelectors.of(classOf[EntityMdBall]).negate))
-          if (trace != null && trace.entityHit != null) MDDamageHelper.attack(ctx, trace.entityHit, getDamage(exp))
-          sendToClient(MSG_EFFECT, ball)
-        }
-      })
+      val ball: EntityMdBall = new EntityMdBall(player, if (ctx.getSkillExp >= 0.8f) LIFE_IMPROVED else LIFE,
+        new EntityCallback[EntityMdBall]() {
+          def execute(ball: EntityMdBall) {
+            val trace: MovingObjectPosition = Raytrace.perform(player.worldObj, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
+              getDest(player), EntitySelectors.exclude(player).and(EntitySelectors.of(classOf[EntityMdBall]).negate))
+            if (trace != null && trace.entityHit != null) MDDamageHelper.attack(ctx, trace.entityHit, getDamage(exp))
+            sendToClient(MSG_EFFECT, ball)
+            terminate()
+          }
+        })
       player.worldObj.spawnEntityInWorld(ball)
 
       ctx.addSkillExp(.005f)
       ctx.setCooldown(lerpf(20, 10, exp).toInt)
     }
-    terminate()
   }
 
   private def getDest(player: EntityPlayer): Vec3 = Raytrace.getLookingPos(player, DISTANCE).getLeft

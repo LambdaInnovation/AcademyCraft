@@ -83,7 +83,7 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
     val overload: Float = lerpf(198, 132, exp)
-    if(ctx.consume(overload, 0)) terminate()
+    if(!ctx.consume(overload, 0)) terminate()
   }
   
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))

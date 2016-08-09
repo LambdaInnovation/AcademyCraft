@@ -173,7 +173,7 @@ class RBContextC(par: RBContext) extends ClientContext(par) {
   @Listener(channel=MSG_EFFECT_PRERAY, side=Array(Side.CLIENT))
   private def c_spawnPreRay(x0: Double, y0: Double, z0: Double, x1: Double, y1: Double, z1: Double, hit: Boolean) = {
     val raySmall: EntityBarrageRayPre = new EntityBarrageRayPre(player.worldObj, hit)
-    raySmall.setFromTo(x0, y0, z0, x1, y1, z1)
+    raySmall.setFromTo(x0, y0 + 1.6, z0, x1, y1, z1)
     player.worldObj.spawnEntityInWorld(raySmall)
   }
   
