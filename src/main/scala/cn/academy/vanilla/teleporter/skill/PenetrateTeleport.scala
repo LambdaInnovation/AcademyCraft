@@ -8,6 +8,7 @@ package cn.academy.vanilla.teleporter.skill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.core.client.sound.ACSounds
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
@@ -154,7 +155,8 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
-  private def l_endMark() = {
+  private def c_endEffect() = {
+    ACSounds.playClient(player, "tp.tp", .5f)
     if(mark != null) mark.setDead()
   }
 

@@ -122,6 +122,11 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
   private val DISABLED_COLOR: Color = new Color().setColor4i(74, 74, 74, 160)
   private val THREATENING_COLOR: Color = new Color().setColor4i(185, 25, 25, 180)
 
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def l_terminated() = {
+    if(marker != null) marker.setDead()
+  }
+
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_startEffect() = {
     if(isLocal) {
