@@ -132,7 +132,8 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def c_onAbort() = {
-    sendToServer(MSG_END)
+    sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
+    terminate()
   }
 
 }

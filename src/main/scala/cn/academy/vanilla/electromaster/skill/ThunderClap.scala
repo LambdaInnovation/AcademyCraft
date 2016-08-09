@@ -118,7 +118,8 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def c_onEnd() = {
-    sendToServer(MSG_END)
+    sendToSelf(MSG_EFFECT_END)
+    terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
