@@ -20,17 +20,13 @@ import cn.lambdalib.util.entityx.handlers.Rigidbody;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -159,22 +155,9 @@ public class EntityBlock extends EntityAdvanced {
                             ty += dir.offsetY;
                             tz += dir.offsetZ;
                         } else {
-                            if(block instanceof BlockDoor) {
-                                ItemStack door = new ItemStack(Items.iron_door);
-                                if(player.canPlayerEdit(tx, ty, tz, event.result.sideHit, door)
-                                        && player.canPlayerEdit(tx, ty + 1, tz, event.result.sideHit, door)
-                                        && block.canPlaceBlockAt(worldObj, tx, ty, tz)) {
-                                    int i1 = MathHelper.floor_double((double) ((player.rotationYaw + 180.0F) * 4.0F / 360.0F)
-                                            - 0.5D) & 3;
-                                    ItemDoor.placeDoorBlock(worldObj, tx, ty, tz, i1, block);
-                                } else {
-                                    dropItem(Items.iron_door, 1);
-                                }
-                            } else {
-                                ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
-                                        new ItemStack(block, 0, metadata), player, worldObj, tx, ty, tz, event.result.sideHit,
-                                        tx, ty, tz, metadata);
-                            }
+                            ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
+                                    new ItemStack(block, 0, metadata), player, worldObj, tx, ty, tz, event.result.sideHit,
+                                    tx, ty, tz, metadata);
                             break;
                         }
                     }

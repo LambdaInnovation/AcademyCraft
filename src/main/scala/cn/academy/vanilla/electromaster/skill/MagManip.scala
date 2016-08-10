@@ -35,7 +35,7 @@ private[electromaster] object MagManip extends Skill("mag_manip", 2) {
 
   private[electromaster] def accepts(player: EntityPlayer, block: Block) = block match {
     case _: BlockMulti => false // Avoid jerky result for multiblock structure.
-//    case _: BlockDoor => false
+    case _: BlockDoor => false
     case _ => CatElectromaster.isMetalBlock(block)
   }
 
