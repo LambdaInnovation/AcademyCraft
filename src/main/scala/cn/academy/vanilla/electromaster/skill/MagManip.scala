@@ -22,9 +22,10 @@ import cn.lambdalib.util.helper.EntitySyncer
 import cn.lambdalib.util.helper.EntitySyncer.Synchronized
 import cn.lambdalib.util.mc._
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.{BlockDoor, Block}
+import net.minecraft.block.{Block, BlockDoor}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.world.World
 
 private[electromaster] object MagManip extends Skill("mag_manip", 2) {
@@ -34,7 +35,7 @@ private[electromaster] object MagManip extends Skill("mag_manip", 2) {
 
   private[electromaster] def accepts(player: EntityPlayer, block: Block) = block match {
     case _: BlockMulti => false // Avoid jerky result for multiblock structure.
-    case _: BlockDoor => false
+//    case _: BlockDoor => false
     case _ => CatElectromaster.isMetalBlock(block)
   }
 
@@ -110,7 +111,14 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
             val block = res.getBlock(world)
 
             val (x, y, z) = res.pos
-            world.setBlockToAir(x, y, z)
+            block match {
+              case door: BlockDoor =>
+                if(world.getBlock(x, y - 1, z) == Blocks.iron_door)
+                  world.setBlockToAir(x, y - 1, z)
+                else world.setBlockToAir(x, y, z)
+              case _ =>
+                world.setBlockToAir(x, y, z)
+            }
 
             entity = new MagManipEntityBlock(player, 10)
             entity.setBlock(block)
