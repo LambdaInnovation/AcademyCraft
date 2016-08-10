@@ -48,7 +48,7 @@ public class EntityMineRayExpert extends EntityRayBase {
         super.onUpdate();
         EntityPlayer player = getPlayer();
         Vec3 end = new Motion3D(player, true).move(15).getPosVec();
-        this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0 : 1.6), player.posZ, end.xCoord, end.yCoord, end.zCoord);
+        this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0.15 : 1.75), player.posZ, end.xCoord, end.yCoord, end.zCoord);
         if(RandUtils.nextDouble() < 0.6) {
             Particle p = MdParticleFactory.INSTANCE.next(worldObj,
                     new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
