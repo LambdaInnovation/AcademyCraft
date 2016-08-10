@@ -53,7 +53,7 @@ public class TileEUOutput extends TileReceiverBase implements IEnergySource {
     @Override
     public void updateEntity() {
         if(!isRegistered && !getWorldObj().isRemote) {
-            isRegistered = !MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            isRegistered = MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
         }
         super.updateEntity();
     }
