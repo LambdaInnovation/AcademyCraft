@@ -123,8 +123,8 @@ public class CatElectromaster extends Category {
     @RegInitCallback
     public static void init() {
 
-        String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "iron_door", "activator_rail", "detector_rail",
-                "golden_rail", "sticky_piston", "piston"};
+        String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "activator_rail", "detector_rail", "golden_rail",
+                "sticky_piston", "piston"};
         String[] cfgNBlocks = AcademyCraft.config.getStringList("normalMetalBlocks", "ability", defaultNBlocks,
                 "Supported Normal Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
         for (String block : cfgNBlocks) {
