@@ -29,6 +29,10 @@ public class AbilityPipeline {
         return propDestroyBlocks.getBoolean() || ArrayUtils.contains(propWorldsDestroyingBlocks.getIntList(), world.provider.dimensionId);
     }
 
+    static boolean isAllWorldDisableBreakBlock() {
+        return !propDestroyBlocks.getBoolean() && propWorldsDestroyingBlocks.getIntList().length == 0;
+    }
+
     /**
      * @return Whether PvP is enabled.
      */

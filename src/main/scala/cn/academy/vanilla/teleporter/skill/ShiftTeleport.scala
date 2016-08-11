@@ -8,8 +8,9 @@ package cn.academy.vanilla.teleporter.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.Skill
+import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.api.data.AbilityData
 import cn.academy.vanilla.teleporter.client.TPParticleFactory
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
@@ -31,8 +32,14 @@ import net.minecraftforge.common.util.ForgeDirection
   */
 object ShiftTeleport extends Skill("shift_tp", 4) {
 
+  expCustomized = true
+
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyID: Int): Unit = activateSingleKey(rt, keyID, p => new STContext(p))
+
+  override def getSkillExp(data: AbilityData): Float = {
+    if(AbilityContext.of(data.getEntity, this).isEntirelyDisableBreakBlock) 1f else data.getSkillExp(this)
+  }
 
 }
 
