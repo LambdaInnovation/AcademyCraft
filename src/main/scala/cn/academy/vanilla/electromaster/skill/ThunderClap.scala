@@ -32,7 +32,7 @@ object ThunderClap extends Skill("thunder_clap", 5) {
 
   def getDamage(exp: Float, ticks: Int) = lerpf(36, 72, exp) * lerpf(1.0f, 1.2f, (ticks - 40.0f) / 60.0f)
   def getRange(exp: Float) = lerpf(15, 30, exp)
-  def getCooldown(exp: Float, ticks: Int) = (ticks * lerpf(10, 6, exp)).asInstanceOf[Int]
+  def getCooldown(exp: Float, ticks: Int) = (ticks * lerpf(10, 6, exp)).toInt
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = activateSingleKey(rt, keyid, p => new ThunderClapContext(p))
@@ -44,7 +44,6 @@ object ThunderClapContext {
   final val MSG_START = "start"
   final val MSG_END = "end"
   final val MSG_EFFECT_START = "effect_start"
-  final val MSG_EFFECT_END = "effect_end"
 
 }
 
@@ -88,23 +87,17 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
     ticks += 1
 
-    val consumption = lerpf(100, 120, exp)
-    if(ticks <= MIN_TICKS && !ctx.consume(0, consumption))
+    val consumption = lerpf(18, 25, exp)
+    if((ticks <= MIN_TICKS && !ctx.consume(0, consumption)) || ticks >= MAX_TICKS)
       sendToSelf(MSG_END)
-    if(ticks >= MAX_TICKS) {
-      sendToSelf(MSG_END)
-    }
   }
 
   @Listener(channel=MSG_END, side=Array(Side.SERVER))
   private def s_onEnd(): Unit = {
     if(ticks < MIN_TICKS) {
-      sendToClient(MSG_EFFECT_END)
       terminate()
       return
     }
-
-    sendToClient(MSG_EFFECT_END)
 
     val lightning = new EntityLightningBolt(player.worldObj, hitX, hitY, hitZ)
     player.worldObj.addWeatherEffect(lightning)
@@ -118,13 +111,12 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
-    sendToSelf(MSG_EFFECT_END)
     terminate()
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
-    sendToServer(MSG_END)
+    terminate()
   }
 
 }
@@ -181,8 +173,8 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_EFFECT_END, side=Array(Side.CLIENT))
-  private def c_endEffect() = {
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_terminated() = {
     canTicking = false
     player.capabilities.setPlayerWalkSpeed(0.1f)
     if(surroundArc != null)

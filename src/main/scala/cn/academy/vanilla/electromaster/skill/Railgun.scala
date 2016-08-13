@@ -132,10 +132,10 @@ object Railgun extends Skill("railgun", 4) {
 
     val exp = ctx.getSkillExp
 
-    val cp = lerpf(340, 455, exp)
-    val overload = lerpf(160, 110, exp)
+    val cp = lerpf(200, 450, exp)
+    val overload = lerpf(180, 120, exp)
     if(ctx.consume(overload, cp)) {
-      val dmg = lerpf(40, 100, exp)
+      val dmg = lerpf(60, 110, exp)
       val energy = lerpf(900, 2000, exp)
 
       val length = Array(45d)
@@ -150,7 +150,7 @@ object Railgun extends Skill("railgun", 4) {
       damage.perform()
       Railgun.triggerAchievement(player)
 
-      ctx.setCooldown(lerpf(300, 160, exp).asInstanceOf[Int])
+      ctx.setCooldown(lerpf(300, 160, exp).toInt)
       NetworkMessage.sendToAllAround(
         TargetPoints.convert(player, 20),
         Railgun, MSG_PERFORM,
