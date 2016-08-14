@@ -39,6 +39,8 @@ object Railgun extends Skill("railgun", 4) {
 
   private final val REFLECT_DISTANCE = 15
 
+  private var hitEntity = false;
+
   private val acceptedItems: java.util.Set[Item] = Set(Items.iron_ingot, Item.getItemFromBlock(Blocks.iron_block))
 
   def isAccepted(stack: ItemStack): Boolean = {
@@ -108,9 +110,12 @@ object Railgun extends Skill("railgun", 4) {
   }
 
   private def reflectServer(player: EntityPlayer, reflector: Entity) = {
+    val ctx = AbilityContext.of(player, this)
+
     val result = Raytrace.traceLiving(reflector, REFLECT_DISTANCE)
     if(result != null && result.typeOfHit == MovingObjectType.ENTITY) {
-      AbilityContext.of(player, Railgun).attack(result.entityHit, 14)
+      ctx.attack(result.entityHit, 14)
+      hitEntity = true
     }
 
     NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20),
@@ -149,6 +154,8 @@ object Railgun extends Skill("railgun", 4) {
       damage.startDamage = dmg
       damage.perform()
       Railgun.triggerAchievement(player)
+
+      if(hitEntity) ctx.addSkillExp(0.01f) else ctx.addSkillExp(0.005f)
 
       ctx.setCooldown(lerpf(300, 160, exp).toInt)
       NetworkMessage.sendToAllAround(

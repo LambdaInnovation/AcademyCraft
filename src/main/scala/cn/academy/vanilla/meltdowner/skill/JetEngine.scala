@@ -193,7 +193,9 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
       if (isLocal) player.capabilities.setPlayerWalkSpeed(0.07f)
       for (i <- 0 to 10) {
         val pos2: Vec3 = VecUtils.lerp(start, target, 3 * ticks / TIME)
-        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ), VecUtils.vec(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))), VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
+        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ),
+          VecUtils.vec(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))),
+          VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
         world.spawnEntityInWorld(p)
       }
     }
@@ -201,6 +203,8 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_tEndEffect() = {
+    if(mark != null) mark.setDead()
+
     if(isTriggering) {
       if (isLocal) player.capabilities.setPlayerWalkSpeed(0.1f)
       entity.setDead()
