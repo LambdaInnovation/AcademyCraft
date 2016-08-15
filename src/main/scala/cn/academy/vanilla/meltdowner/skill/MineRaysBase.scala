@@ -63,11 +63,17 @@ abstract class MRContext(p: EntityPlayer, _skill: MineRaysBase) extends Context(
   protected var hardnessLeft: Float = Float.MaxValue
   protected var exp: Float = ctx.getSkillExp
 
+  private var overloadKeep = 0f
+
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
-  private def s_onStart() = ctx.consume(lerpf(o_l, o_r, exp), 0)
+  private def s_onStart() = {
+    ctx.consume(lerpf(o_l, o_r, exp), 0)
+    overloadKeep = ctx.cpData.getOverload
+  }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     if (!ctx.consume(0, lerpf(cp_l, cp_r, exp)) && !isRemote) terminate()
 
     val result: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.nothing)

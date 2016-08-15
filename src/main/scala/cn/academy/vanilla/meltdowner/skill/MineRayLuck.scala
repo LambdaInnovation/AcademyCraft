@@ -31,8 +31,8 @@ class LuckMRContext(p: EntityPlayer) extends MRContext(p, MineRayLuck) {
   setRange(20)
   setHarvestLevel(5)
   setSpeed(.5f, 1)
-  setConsumption(50, 30)
-  setOverload(320, 250)
+  setConsumption(50, 35)
+  setOverload(350, 300)
   setCooldown(60, 30)
   setExpIncr(0.0003f)
 

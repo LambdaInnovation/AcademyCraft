@@ -45,7 +45,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   private val exp: Float = ctx.getSkillExp
   private val consumption: Float = lerpf(170, 140, exp)
-  private val overload: Float = lerpf(66, 42, exp)
+  private val overload: Float = lerpf(60, 50, exp)
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = if(!ctx.canConsumeCP(consumption)) terminate()
@@ -66,7 +66,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       sendToSelf(MSG_TRIGGER, getDest.addVector(0, 1.65, 0))
       ctx.addSkillExp(.004f)
       JetEngine.triggerAchievement(player)
-      ctx.setCooldown((18 * lerpf(6, 3, exp)).toInt)
+      ctx.setCooldown(lerpf(60, 30, exp).toInt)
     } else {
       sendToClient(MSG_MARK_END)
       terminate()
@@ -110,7 +110,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       val pos: MovingObjectPosition = Raytrace.perform(world,
         VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
         VecUtils.vec(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
-      if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(15, 35, exp))
+      if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(7, 20, exp))
     }
   }
 

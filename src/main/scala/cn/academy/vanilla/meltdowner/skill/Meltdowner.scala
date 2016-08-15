@@ -62,7 +62,16 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
 
   private var ticks: Int = 0
   final private val exp: Float = ctx.getSkillExp
-  final private val tickConsumption: Float = lerpf(15, 27, exp)
+  final private val tickConsumption: Float = lerpf(10, 15, exp)
+
+  private var overloadKeep = 0f
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  private def s_madeAlive() = {
+    val overload = lerpf(200, 170, exp)
+    ctx.consume(overload, 0)
+    overloadKeep = ctx.cpData.getOverload
+  }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_keyUp() {
@@ -78,13 +87,14 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT, Side.SERVER))
   private def g_tick() {
     ticks += 1
-    if(!isRemote) if(!ctx.consume(0, tickConsumption) || ticks > MDContext.TICKS_TOLE) terminate()
+    if(!isRemote) {
+      if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
+      if(!ctx.consume(0, tickConsumption) || ticks > MDContext.TICKS_TOLE) terminate()
+    }
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   private def s_perform() {
-    val overload: Float = lerpf(300, 200, exp)
-    ctx.consume(overload, 0)
     val ct: Int = toChargeTicks
     val length: Array[Double] = Array[Double](30) // for lambda mod
     val rrd: RangedRayDamage = new RangedRayDamage.Reflectible(ctx, lerpf(2, 3, exp), getEnergy(ct), new Consumer[Entity] {
@@ -112,7 +122,7 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
 
   private def getEnergy(ct: Int): Float = timeRate(ct) * MathUtils.lerpf(300, 700, exp)
 
-  private def getDamage(ct: Int): Float = timeRate(ct) * MathUtils.lerpf(20, 50, exp)
+  private def getDamage(ct: Int): Float = timeRate(ct) * MathUtils.lerpf(18, 50, exp)
 
   private def getCooldown(ct: Int): Int = (timeRate(ct) * 20 * MathUtils.lerpf(15, 7, exp)).toInt
 

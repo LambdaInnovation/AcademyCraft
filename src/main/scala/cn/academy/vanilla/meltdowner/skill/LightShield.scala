@@ -23,6 +23,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.DamageSource
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.LivingHurtEvent
@@ -70,6 +71,11 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
   private var lastAbsorb: Int = -1 // The tick last the shield absorbed damage.
   private val exp: Float = ctx.getSkillExp
 
+  private final val MAX_TIME = lerpf(120, 180, exp)
+  private def getCooldown(ct: Int): Int = lerpf(2 * ct, ct, exp).toInt
+
+  private var overloadKeep = 0f
+
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     terminate()
@@ -82,16 +88,19 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
-    val overload: Float = lerpf(198, 132, exp)
-    if(!ctx.consume(overload, 0)) terminate()
+    val overload: Float = lerpf(110, 60, exp)
+    ctx.consume(overload, 0)
+    overloadKeep = ctx.cpData.getOverload
   }
   
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_tick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     ticks += 1
+    if(ticks > MAX_TIME) terminate()
 
-    val cp: Float = lerpf(12, 7, exp)
-    if (!ctx.consume(0, cp) && !isRemote) terminate()
+    val cp: Float = lerpf(9, 4, exp)
+    if (!ctx.consume(0, cp)) terminate()
     ctx.addSkillExp(1e-6f)
 
     // Find the entities that are 'colliding' with the shield.
@@ -108,7 +117,8 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
-    ctx.setCooldown(lerpf(80, 60, exp).toInt)
+    player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 100, 1))
+    ctx.setCooldown(getCooldown(ticks))
   }
 
   def handleAttacked(src: DamageSource, damage: Float): Float = {
@@ -131,9 +141,9 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
 
   private def getAbsorbDamage: Float = lerpf(15, 50, exp)
 
-  private def getTouchDamage: Float = lerpf(3, 8, exp)
+  private def getTouchDamage: Float = lerpf(2, 6, exp)
 
-  private def getAbsorbOverload: Float = lerpf(15, 10, exp)
+  private def getAbsorbOverload: Float = lerpf(5, 3, exp)
 
   private def getAbsorbConsumption: Float = lerpf(50, 30, exp)
 

@@ -43,7 +43,7 @@ import SBContext._
 
 class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
-  private def getDamage(exp: Float) = lerpf(4, 6, exp)
+  private def getDamage(exp: Float) = lerpf(5, 9, exp)
 
   private val balls: java.util.List[EntityMdBall] = new java.util.ArrayList[EntityMdBall]
   private val basicSelector: Predicate[Entity] = EntitySelectors.everything
@@ -52,6 +52,8 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   private val RAY_RANGE: Double = 15
   private var ticks: Int = 0
   private val exp: Float = ctx.getSkillExp
+
+  private var overloadKeep = 0f
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onKeyUp() = {
@@ -65,12 +67,14 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
-    val overload: Float = lerpf(185, 68, exp)
-    if(!ctx.consume(overload, 0)) terminate()
+    val overload: Float = lerpf(80, 60, exp)
+    ctx.consume(overload, 0)
+    overloadKeep = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     ticks += 1
 
     if (ticks <= 80) {
@@ -80,7 +84,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
         balls.add(ball)
         sendToClient(MSG_SYNC_BALLS, ball)
       }
-      val cp: Float = lerpf(7, 9, exp)
+      val cp: Float = lerpf(3, 6, exp)
       if (!ctx.consume(0, cp)) terminate()
     }
     if (ticks == 200) {
