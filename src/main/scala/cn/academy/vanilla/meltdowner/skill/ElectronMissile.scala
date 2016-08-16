@@ -52,11 +52,10 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
 
   private val exp: Float = ctx.getSkillExp
 
-  private val overload: Float = lerpf(2, 1.5f, exp)
-  private val consumption: Float = lerpf(20, 18, exp)
+  private val consumption: Float = lerpf(12, 5, exp)
   private val overload_attacked: Float = lerpf(9, 4, exp)
   private val consumption_attacked: Float = lerpf(60, 25, exp)
-  private val overload_keep = lerpf(200, 120, exp)
+  private val overload_keep = 200
 
   private var overloadKeep = 0f
 
@@ -80,7 +79,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
-    if (!ctx.consume(overload, consumption)) terminate()
+    if (!ctx.consume(0, consumption)) terminate()
     else {
       val timeLimit: Int = lerpf(80, 200, exp).toInt
       if (ticks <= timeLimit) {
@@ -123,8 +122,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
             ball.setDead()
           }
         }
-      }
-      else {
+      } else {
         // ticks > timeLimit
         terminate()
       }
@@ -135,7 +133,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
-    val cooldown: Int = MathUtils.clampi(700, 400, ticks)
+    val cooldown: Int = MathUtils.clampi(700, 400, exp.toInt)
     ctx.setCooldown(cooldown)
 
     for (ball <- active) {
