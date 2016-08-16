@@ -65,6 +65,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     val expincr: Float = 0.00014f * distance.toFloat
     ctx.addSkillExp(expincr)
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
+    ctx.setCooldown(lerpf(50, 30, exp).toInt)
     TPSkillHelper.incrTPCount(player)
     player.setPositionAndUpdate(x, y, z)
     player.fallDistance = 0
@@ -91,7 +92,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     !b1.canCollideCheck(world.getBlockMetadata(ix, iy, iz), false) && !b2.canCollideCheck(world.getBlockMetadata(ix, iy + 1, iz), false)
   }
 
-  private def getConsumption(exp: Float): Float = lerpf(15, 10, exp)
+  private def getConsumption(exp: Float): Float = lerpf(14, 9, exp)
 
   private def getMaxDistance(exp: Float): Float = lerpf(10, 35, exp)
 

@@ -163,6 +163,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val dist = player.getDistance(dest.x, dest.y, dest.z)
     val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
+    ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)

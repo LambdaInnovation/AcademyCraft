@@ -75,7 +75,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       val expincr: Float = 0.00018f * distance
       ctx.addSkillExp(expincr)
       player.fallDistance = 0
-      ctx.setCooldown(lerpf(50, 20, exp).toInt)
+      ctx.setCooldown(lerpf(30, 0, exp).toInt)
       TPSkillHelper.incrTPCount(player)
     }
     terminate()
@@ -90,7 +90,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
   /**
     * @return Consumption per block
     */
-  def getCPB(exp: Float): Float = lerpf(13, 5, exp)
+  def getCPB(exp: Float): Float = lerpf(12, 4, exp)
 
   def getDest(player: EntityPlayer, ticks: Int): Vec3 = {
     val cpData: CPData = CPData.get(player)

@@ -67,9 +67,9 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
     if(target.target == null) sendToSelf(MSG_ABORT)
     else {
       ctx.consumeWithForce(getOverload, getConsumption)
-      TPSkillHelper.attack(ctx, target.target, getDamage)
+      TPSkillHelper.attackIgnoreArmor(ctx, target.target, getDamage)
       if(RandUtils.ranged(0, 1) < getDisgustProb) player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100))
-      ctx.setCooldown(lerpf(100, 60, exp).toInt)
+      ctx.setCooldown(lerpf(90, 40, exp).toInt)
       ctx.addSkillExp(.005f)
     }
     terminate()
@@ -87,13 +87,13 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
   @Listener(channel=MSG_ABORT, side=Array(Side.SERVER))
   private def s_abort = target = null
 
-  private def getDamage: Float = lerpf(9, 15, exp)
+  private def getDamage: Float = lerpf(5, 12, exp)
 
   override def getRange: Double = lerpf(6, 14, exp)
 
   private def getDisgustProb: Float = .05f
 
-  private def getConsumption: Float = lerpf(247, 302, exp)
+  private def getConsumption: Float = lerpf(130, 270, exp)
 
   private def getOverload: Float = lerpf(60, 50, exp)
 
