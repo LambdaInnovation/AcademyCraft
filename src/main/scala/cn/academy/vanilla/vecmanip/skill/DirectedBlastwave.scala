@@ -164,14 +164,14 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   }
 
   private def tryConsume() = {
-    val overload = lerpf(96, 72, ctx.getSkillExp)
+    val overload = lerpf(50, 30, ctx.getSkillExp)
 
     ctx.consume(overload, consumption)
   }
 
   override def getConsumptionHint = consumption
 
-  private val consumption = lerpf(200, 150, ctx.getSkillExp)
+  private val consumption = lerpf(160, 200, ctx.getSkillExp)
 
   private val breakProb = lerpf(0.5f, 0.8f, ctx.getSkillExp)
 
@@ -181,7 +181,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     case _ => 55f
   }
 
-  private val damage = lerpf(10, 18, ctx.getSkillExp)
+  private val damage = lerpf(10, 21, ctx.getSkillExp)
 
   private val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
 

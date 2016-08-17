@@ -89,6 +89,12 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     }
   }
 
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  def s_madeAlive() = {
+    ctx.consume(overloadToKeep, 0)
+    overloadKeep = ctx.cpData.getOverload
+  }
+
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform() = {
     ctx.addSkillExp(0.008f)
@@ -96,7 +102,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     destination = Raytrace.getLookingPos(player, 100, EntitySelectors.living).getLeft
     state = STATE_GO
     localTicker = 0
-    ctx.setCooldown(lerpf(500, 400, ctx.getSkillExp).toInt)
+    ctx.setCooldown(lerpf(1000, 600, ctx.getSkillExp).toInt)
     sendToClient(MSG_STATECHG, destination)
   }
 
@@ -113,6 +119,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     localTicker += 1
 
     if (state == STATE_CHARGING) {
@@ -150,7 +157,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
       destination.x, destination.y, destination.z,
       10, EntitySelectors.everything)
           .foreach(entity => {
-            ctx.attack(entity, rangef(0.8f, 1.2f) * lerpf(80, 150, ctx.getSkillExp))
+            ctx.attack(entity, lerpf(80, 150, ctx.getSkillExp))
             entity.hurtResistantTime = -1
           })
 
@@ -167,16 +174,15 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     terminate()
   }
 
-  private val chargeTime = lerpf(100, 60, ctx.getSkillExp)
+  private val chargeTime = lerpf(60, 30, ctx.getSkillExp)
+  private val overloadToKeep = lerpf(500, 400, ctx.getSkillExp)
+  private var overloadKeep = 0f
 
   def tryConsume() = {
     val cp = lerpf(18, 25, ctx.getSkillExp)
-    val overload = lerpf(500f, 400f, ctx.getSkillExp) / chargeTime
 
-    ctx.consume(overload, cp)
+    ctx.consume(0, cp)
   }
-
-  private val consumption = lerpf(3500, 2000, ctx.getSkillExp)
 
   override def getState = {
     if (state == STATE_CHARGING)
