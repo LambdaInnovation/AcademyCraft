@@ -111,6 +111,7 @@ public class Flashing extends Skill {
 
         final float exp, consumption;
         final float overload_start, consumption_start;
+        final int cooldown_time;
         float overloadKeep;
         final int max_time;
         int ticks = 0;
@@ -122,7 +123,8 @@ public class Flashing extends Skill {
             consumption = lerpf(13, 6, exp);
             overload_start = lerpf(250, 180, exp);
             consumption_start = lerpf(80, 60, exp);
-            max_time = (int) lerpf(900, 400, exp);
+            max_time = (int) lerpf(60, 150, exp);
+            cooldown_time = (int) lerpf(900, 400, exp);
         }
 
         @Listener(channel=Context.MSG_MADEALIVE, side=Side.SERVER)
@@ -239,7 +241,6 @@ public class Flashing extends Skill {
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                ctx.setCooldownSub(keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }
@@ -264,6 +265,11 @@ public class Flashing extends Skill {
                 clientRuntime().clearKeys(KEY_GROUP);
                 endEffects();
             }
+        }
+
+        @Listener(channel=MSG_TERMINATED, side=Side.SERVER)
+        void serverTerminated() {
+            ctx.setCooldown(cooldown_time);
         }
 
         @SideOnly(Side.CLIENT)

@@ -59,6 +59,7 @@ public class TPSkillHelper {
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
+                aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 
                 fireCritAttack(player, target, i);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
@@ -82,6 +83,7 @@ public class TPSkillHelper {
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
+                aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 
                 fireCritAttack(player, target, i);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
