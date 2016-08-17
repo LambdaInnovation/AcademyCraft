@@ -257,7 +257,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     }
   }
 
-  private def consumption = if (isApplying) lerpf(40, 25, ctx.getSkillExp) else lerpf(9, 6, ctx.getSkillExp)
+  private val consumption = lerpf(40, 25, ctx.getSkillExp)
 
   private val overload = lerpf(10, 7, ctx.getSkillExp)
 
