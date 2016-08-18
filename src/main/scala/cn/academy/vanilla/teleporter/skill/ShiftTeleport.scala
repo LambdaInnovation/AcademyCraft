@@ -106,7 +106,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 
   private def getDamage(exp: Float): Float = lerpf(15, 35, exp)
 
-  private def getRange(exp: Float): Float = 20
+  private def getRange(exp: Float): Float = lerpf(25, 35, exp)
 
   private def getConsumption(exp: Float): Float = lerpf(260, 320, exp)
 
