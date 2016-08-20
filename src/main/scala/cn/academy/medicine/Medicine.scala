@@ -65,8 +65,10 @@ object ItemMedicineBottle extends ItemMedicineBase("medicine_bottle") {
     val list = list2.asInstanceOf[util.List[ItemStack]]
 
     // For debug
-    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Normal, 1.0f, Properties.Apply_Instant_Incr)))
-    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Normal, 2.0f, Properties.Apply_Instant_Decr)))
+    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Mild, 1.0f, Properties.Apply_Instant_Incr, 0.5f)))
+    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Weak, 1.0f, Properties.Apply_Instant_Incr, 0.5f)))
+    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Normal, 1.0f, Properties.Apply_Instant_Incr, 0.5f)))
+    list.add(create(MedicineApplyInfo(Properties.Targ_Life, Properties.Str_Strong, 2.0f, Properties.Apply_Instant_Decr, 0.5f)))
   }
 
 

@@ -11,7 +11,7 @@ object MatExtraction {
 
   case class ItemMeta(item: Item, meta: Int) {
     lazy val id = {
-      val itemName = item.getUnlocalizedName.drop(5)
+      val itemName = Item.itemRegistry.getNameForObject(item)
       if (item.getHasSubtypes) itemName + "_" + meta else itemName
     }
   }
@@ -27,7 +27,7 @@ object MatExtraction {
   val allRecipes: List[Recipe] = List(
     ofItem(Items.apple) -> List(Targ_Life, Str_Normal),
     ofItem(Items.potato) -> List(Targ_CP),
-    // ofItem(Items.poisonous_potato) -> List(Targ_)
+    ofItem(Items.poisonous_potato) -> List(Var_Fluct),
     ofItem(Items.wheat) -> List(Apply_Continuous_Incr),
     ofItem(Items.reeds) -> List(Targ_MoveSpeed),
     ofBlock(Blocks.cactus) -> List(Str_Mild),
@@ -36,9 +36,24 @@ object MatExtraction {
     ofItem(Items.melon) -> List(Targ_Life),
     ofBlock(Blocks.cocoa) -> List(Targ_Overload, Apply_Continuous_Decr),
     ofItem(Items.egg) -> List(Apply_Instant_Incr),
-    ofItem(Items.milk_bucket) -> List(Apply_Continuous_Incr),
+    ofItem(Items.milk_bucket) -> List(Apply_Continuous_Incr, Var_Stabilize),
     ofItem(Items.feather) -> List(Targ_Jump),
-    ofItem(Items.spider_eye) -> List(Targ_Cooldown)
+    ofItem(Items.spider_eye) -> List(Targ_Cooldown),
+    ofItem(Items.bone) -> List(Str_Mild),
+    ofItem(Items.rotten_flesh) -> List(Var_Fluct),
+    ofItem(Items.porkchop) -> List(Targ_CP),
+    ofItem(Items.cooked_porkchop) -> List(Targ_CP),
+    ofItem(Items.chicken) -> List(Targ_CP),
+    ofItem(Items.cooked_chicken) -> List(Targ_CP),
+    ofItem(Items.beef) -> List(Targ_CP),
+    ofItem(Items.cooked_beef) -> List(Targ_CP),
+    ofItem(Items.fish) -> List(Apply_Continuous_Incr), // Var_Stablize
+    ofItem(Items.cooked_fished) -> List(Apply_Continuous_Incr),
+    ofItem(Items.ender_pearl) -> List(Targ_CP, Targ_Overload, Var_Fluct),
+    ofItem(Items.blaze_powder) -> List(Targ_Attack, Str_Strong),
+    // ofItem(Items.redstone) -> List(Var_Neturalize),
+    ofItem(Items.glowstone_dust) -> List(Str_Strong, Var_Desens),
+    ofItem(Items.nether_star) -> List(Var_Infinity)
   )
 
   val allCombinations = allRecipes.flatMap { case (metas, props) =>

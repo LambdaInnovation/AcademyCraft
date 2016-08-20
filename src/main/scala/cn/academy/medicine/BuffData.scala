@@ -3,20 +3,24 @@ package cn.academy.medicine
 import java.util
 import java.util.{Collections, Comparator}
 
+import cn.academy.ability.api.data.CPData
 import cn.academy.core.Resources
 import cn.academy.medicine.BuffData.BuffApplyData
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.RegPostInitCallback
 import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
+import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.TickScheduler
 import cpw.mods.fml.common.network.ByteBufUtils
 import cpw.mods.fml.relauncher.Side
-import io.netty.buffer.{ByteBuf, ByteBufUtil}
+import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.ResourceLocation
+import net.minecraft.potion.{Potion, PotionEffect}
+import net.minecraft.util.{DamageSource, ResourceLocation}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.reflect.ClassTag
 
 trait Buff {
 
@@ -34,6 +38,8 @@ trait Buff {
   val id: String
 
   val icon: ResourceLocation = Resources.getTexture("buff/" + id)
+
+  val shouldDisplay: Boolean = true
 
 }
 
@@ -59,6 +65,54 @@ class BuffHeal() extends Buff {
   }
 
   override val id: String = "heal"
+}
+
+@Registrant
+@RegBuff
+class BuffMedSens() extends Buff {
+  private var percentage: Float = 0.0f
+
+  override def onTick(player: EntityPlayer, applyData: BuffApplyData) = {
+    percentage = math.max(0.0f, percentage - 0.0005f)
+    if (percentage == 0) {
+      applyData.setEnd()
+    }
+  }
+
+  def increase(player: EntityPlayer, pct: Float): Unit = {
+    val prev = percentage
+    percentage = MathUtils.clampf(0, 1, pct + percentage)
+
+    def trigger(test: Float) = prev < test && percentage >= test
+    def damage(dmg: Float) = {
+      val realdmg = math.min(player.getHealth - 1, dmg)
+      player.attackEntityFrom(DamageSource.causePlayerDamage(player), realdmg)
+    }
+    def hunger(secs: Int) = {
+      val ticks = secs * 20
+      val effect = new PotionEffect(Potion.hunger.id, ticks, 1)
+      player.addPotionEffect(effect)
+    }
+
+    if (trigger(1f)) {
+      player.hurtResistantTime = -1
+      player.setHealth(0f)
+    } else if (trigger(0.8f)) {
+      val cpData = CPData.get(player)
+
+      damage(10)
+      cpData.perform(cpData.getMaxOverload * 0.6f, 0)
+    } else if (trigger(0.6f)) {
+      damage(5)
+      hunger(15)
+    } else if (trigger(0.4f)) {
+      damage(3)
+      hunger(3)
+    }
+  }
+
+  override val shouldDisplay = false
+  override val id: String = "med_sensitive"
 }
 
 @Registrant
@@ -95,8 +149,18 @@ object BuffRegistry {
 
 object BuffData {
 
-  case class BuffApplyData(var tickLeft: Int, maxTicks: Int) {
-    def isInfinite = maxTicks == -1
+  case class BuffApplyData(var tickLeft: Int, private var maxTicks_ : Int) {
+    def isInfinite = maxTicks_ == -1
+
+    def setEnd() = {
+      if (isInfinite) {
+        maxTicks_ = 10
+      }
+      tickLeft = 0
+    }
+
+    def maxTicks = maxTicks_
+
   }
 
   case class BuffRuntimeData(buff: Buff, applyData: BuffApplyData)
@@ -151,6 +215,10 @@ class BuffData extends DataPart[EntityPlayer] {
     activeBuffs.add(BuffRuntimeData(buff, BuffApplyData(maxTicks, maxTicks)))
 
     sync()
+  }
+
+  def findBuff[T <: Buff](implicit tag: ClassTag[T]): Option[T] = {
+    activeBuffs.find(tag.runtimeClass.isInstance).map(_.asInstanceOf[T])
   }
 
   override def tick(): Unit = {

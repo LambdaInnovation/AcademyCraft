@@ -49,7 +49,8 @@ item.ac_induction_factor.name=Ability Induction Factor
 item.ac_tutorial.name=MisakaCloud Terminal
 
 item.ac_powder.name= Powder
-item.ac_medicine_bottle.name=G Virus
+item.ac_medicine_bottle.name=Medicine Bottle
+item.ac_empty_med_bottle.name=Empty Medicine Bottle
 
 # Block
 tile.ac_constraint_metal_ore.name=Constraint Metal Ore
@@ -536,6 +537,7 @@ ac.converter.desc_template=Converts %s to %s
 ac.medicine.prop_type.targ=Target
 ac.medicine.prop_type.app=Apply Method
 ac.medicine.prop_type.str=Strength
+ac.medicine.prop_type.var=Variation
 
 ac.medicine.props.targ_life=Life
 ac.medicine.props.targ_cp=Calc. Point
@@ -544,10 +546,18 @@ ac.medicine.props.targ_jump=Jump
 ac.medicine.props.targ_cooldown=Cooldown
 ac.medicine.props.targ_move_speed=Move Speed
 ac.medicine.props.targ_disposed=INVALID
+ac.medicine.props.targ_attack=Attack Strengh
 ac.medicine.props.str_mild=Mild
 ac.medicine.props.str_weak=Weak
 ac.medicine.props.str_normal=Normal
 ac.medicine.props.str_strong=Strong
+ac.medicine.props.str_infinity=Infinity
+ac.medicine.props.var_infinity=Infinity
+ac.medicine.props.var_neutralize=Infinity
+ac.medicine.props.var_desens=Sensitivity Decrease
+ac.medicine.props.var_fluct=Fluctuation
+ac.medicine.props.var_stabilize=Stabilize
+
 ac.medicine.props.app_instant_incr=Instant Increase
 ac.medicine.props.app_instant_decr=Instant Decrease
 ac.medicine.props.app_cont_incr=Continuous Increase

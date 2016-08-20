@@ -8,7 +8,7 @@ import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui.{InventoryPage, WirelessPage}
 import cn.academy.core.container.{SlotConditional, SlotOutput, TechUIContainer}
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
-import cn.academy.medicine.Properties.{ApplyMethod, Property, Strength, Target}
+import cn.academy.medicine.Properties._
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase
@@ -18,6 +18,7 @@ import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.s11n.network.{NetworkMessage, NetworkS11n, TargetPoints}
 import cn.lambdalib.template.container.CleanContainer
+import cn.lambdalib.util.generic.RandUtils
 import cn.lambdalib.util.helper.TickScheduler
 import cn.lambdalib.util.mc.SideHelper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -65,7 +66,8 @@ object MedSynthesizer {
     synthDirect(mats) match {
       case Some(info) => info
       case _ =>
-        MedicineApplyInfo(Properties.Targ_Disposed, Properties.Str_Strong, 1.5f, Properties.Apply_Instant_Decr)
+        MedicineApplyInfo(Properties.Targ_Disposed, Properties.Str_Strong, 1.5f, Properties.Apply_Instant_Decr,
+          Properties.Targ_Disposed.medSensitiveRatio * RandUtils.rangef(0.8f, 1.2f))
     }
   }
 
@@ -78,10 +80,44 @@ object MedSynthesizer {
     val targets = findOne[Target]
     val strengths = findOne[Strength]
     val methods = findOne[ApplyMethod]
+    val vars = findOne[Variation]
 
     (targets, strengths, methods) match {
       case (Some(targ), Some(str), Some(method)) =>
-        Some(MedicineApplyInfo(targ, str, 1.0f, method))
+        var variationRange = (0.8f, 1.2f)
+        var strValue = str.baseValue
+        var medSensValue = targ.medSensitiveRatio
+        var rStrength = str
+        var rMethod = method
+
+        def randomRatio = RandUtils.rangef(variationRange._1, variationRange._2)
+
+        // Process variation
+        vars match {
+          case Some(Properties.Var_Infinity) =>
+            strValue = 10000
+            medSensValue = 0.99f
+            rStrength = Properties.Str_Infinity
+
+          case Some(Properties.Var_Desens) =>
+            medSensValue = -1.2f * medSensValue
+
+            val incr = RandUtils.nextFloat() < 0.05f
+            rMethod = Properties.findApplyMethod(method.instant, incr)
+
+          case Some(Properties.Var_Fluct) =>
+            variationRange = (0.6f, 1.5f)
+
+          case Some(Properties.Var_Stabilize) =>
+            variationRange = (0.9f, 1.1f)
+
+          case Some(Properties.Var_Neutralize) =>
+            // TODO
+
+          case _ =>
+        }
+
+        Some(MedicineApplyInfo(targ, rStrength, strValue * randomRatio, rMethod, medSensValue * randomRatio))
       case _ => None
     }
   }

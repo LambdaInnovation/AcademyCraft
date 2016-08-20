@@ -35,7 +35,7 @@ class ItemPowder(val source: ItemMeta, val prop: Property) extends ACItem("powde
 
   setTextureName("academy:powder/" + internalID)
 
-  def internalID = source.id + "_" + prop.internalID
+  def internalID = source.id.dropWhile(_ != ':').drop(1) + "_" + prop.internalID
 
   override def getItemStackDisplayName(stack: ItemStack): String = {
     source.item.getItemStackDisplayName(dummyStack) + " " + super.getItemStackDisplayName(stack)

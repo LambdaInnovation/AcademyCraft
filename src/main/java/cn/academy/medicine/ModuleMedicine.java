@@ -63,7 +63,7 @@ public class ModuleMedicine {
     @RegInitCallback
     private static void initClient() {
         MinecraftForgeClient.registerItemRenderer(medicineBottle,
-                RenderMedicineBottle.apply(itemStack -> new Color(0xffe35fff)));
+                RenderMedicineBottle.apply(itemStack -> medicineBottle.getInfo(itemStack).displayColor()));
 
         MinecraftForgeClient.registerItemRenderer(emptyBottle,
                 RenderMedicineBottle.apply(itemStack -> new Color(0x000000)));
