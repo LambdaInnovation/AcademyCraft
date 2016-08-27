@@ -105,7 +105,7 @@ public abstract class MineRaysBase extends Skill {
                 int tx = result.blockX, ty = result.blockY, tz = result.blockZ;
                 if(tx != x || ty != y || tz != z) {
                     Block block = world.getBlock(tx, ty, tz);
-                    if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player.worldObj, tx, ty, tz)) && 
+                    if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, tx, ty, tz)) &&
                             block.getHarvestLevel(world.getBlockMetadata(x, y, z)) <= harvestLevel) {
                         x = tx; y = ty; z = tz;
                         hardnessLeft = block.getBlockHardness(world, tx, ty, tz);

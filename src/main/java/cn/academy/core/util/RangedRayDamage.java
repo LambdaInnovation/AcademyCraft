@@ -18,6 +18,7 @@ import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -41,6 +42,7 @@ public class RangedRayDamage {
     
     static final double STEP = 0.9;
 
+    public final EntityPlayer player;
     public final World world;
     public final Motion3D motion;
     public final AbilityContext ctx;
@@ -60,6 +62,7 @@ public class RangedRayDamage {
         this.ctx = ctx;
 
         this.motion = new Motion3D(ctx.player, true).move(0.1);
+        this.player = ctx.player;
         this.world = ctx.player.worldObj;
         this.range = _range;
         this.totalEnergy = _energy;
@@ -121,7 +124,7 @@ public class RangedRayDamage {
             }
         }
 
-        if(ctx.canBreakBlock()) {
+        if(ctx.canBreakBlock(world)) {
             for(double s = -range; s <= range; s += STEP) {
                 for(double t = -range; t <= range; t += STEP) {
                     double rr = range * RandUtils.ranged(0.9, 1.1);
@@ -180,7 +183,7 @@ public class RangedRayDamage {
         float hardness = block.getBlockHardness(world, x, y, z);
         if(hardness < 0)
             hardness = 233333;
-        if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, x, y, z)) && energy >= hardness) {
+        if(!MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(player, x, y, z)) && energy >= hardness) {
             if(block.getMaterial() != Material.air) {
                 block.dropBlockAsItemWithChance(world, x, y, z, 
                     world.getBlockMetadata(x, y, z), dropProb, 0);

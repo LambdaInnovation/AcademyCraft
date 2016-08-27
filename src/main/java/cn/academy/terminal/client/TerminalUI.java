@@ -259,7 +259,7 @@ public class TerminalUI extends AuxGui {
                 int hour = currentTime / 1000;
                 int minutes = (currentTime % 1000) * 60 / 1000;
 
-                String countText = StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", 0);
+                String countText = StatCollector.translateToLocalFormatted("ac.gui.terminal.appcount", apps.size());
                 String timeText = wrapTime(hour) + ":" + wrapTime(minutes);
                 textBox.content = countText + ", " + timeText;
             });
