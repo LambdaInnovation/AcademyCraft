@@ -1,5 +1,6 @@
 package cn.academy.medicine
 
+import cn.academy.ability.api.data.CPData
 import cn.academy.core.LocalHelper
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
 import cn.lambdalib.util.generic.RandUtils
@@ -9,6 +10,7 @@ import com.google.common.base.Preconditions
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.{DamageSource, EnumChatFormatting}
 
 /**
@@ -137,21 +139,22 @@ object Properties {
 
   val Targ_Life = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
+      val amt = if (data.method.incr) 10 * data.strengthModifier else -5 * data.strengthModifier
+
       if (data.method.instant) {
         if (data.method.incr) {
-          val amt = 10 * data.strengthModifier
           player.heal(amt)
         } else {
-          val amt = 5 * data.strengthModifier
           player.attackEntityFrom(DamageSource.causePlayerDamage(player), amt)
         }
       } else { // Continuous recovery
         val buffData = BuffData(player)
-        if (data.method.incr) {
-          buffData.addBuffInfinite(new BuffHeal(0.25f * data.strengthModifier))
-        } else {
-          // ???
-        }
+        val time = 20
+        val perTick = amt / time
+
+        val buff = new BuffHeal(perTick)
+
+        buffData.addBuff(buff, time)
       }
     }
 
@@ -162,7 +165,14 @@ object Properties {
 
   val Targ_CP = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
+      val cpData = CPData.get(player)
 
+      if (data.method.instant) {
+        val amt = (if (data.method.incr) 2 else -1) * cpData.getMaxCP * 0.1f * data.strengthModifier
+        cpData.setCP(cpData.getCP + amt)
+      } else {
+
+      }
     }
 
     def id = "cp"
@@ -172,6 +182,14 @@ object Properties {
 
   val Targ_Overload = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
+      val cpData = CPData.get(player)
+
+      if (data.method.instant) {
+        val amt = (if (data.method.incr) 2 else -1) * cpData.getMaxCP * 0.1f * data.strengthModifier
+        cpData.setOverload(cpData.getOverload + amt)
+      } else {
+
+      }
 
     }
 
@@ -182,7 +200,9 @@ object Properties {
 
   val Targ_Jump = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
+      require(!data.method.instant)
 
+      val time = 100
     }
 
     def id: String = "jump"
@@ -202,7 +222,11 @@ object Properties {
 
   val Targ_MoveSpeed = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
+      require(!data.method.instant)
 
+      val time = 100
+      val potion = if (data.method.incr) Potion.moveSpeed else Potion.moveSlowdown
+      player.addPotionEffect(new PotionEffect(potion.id, time, 1))
     }
 
     override def id: String = "move_speed"
@@ -235,7 +259,12 @@ object Properties {
 
   val Targ_Attack = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
-      // TODO
+      require(!data.method.instant)
+
+      val time = 100
+      val boostRatio = 1 + (0.2f * data.strengthModifier)
+
+      BuffData(player).addBuff(new BuffAttackBoost(boostRatio, player.getCommandSenderName), time)
     }
 
     override def id: String = "attack"
@@ -365,6 +394,8 @@ object Properties {
 
   def writeVariation(m: Variation): Int = serialize(allVariations, m)
   def readVariation(i: Int) = deserialize(allVariations, i)
+
+  def find(name: String): Option[Property] = allProperties.find(_.internalID == name)
 
   private def serialize[T](seq: Seq[T], value: T): Int = {
     val idx = seq.indexOf(value)

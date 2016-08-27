@@ -334,6 +334,12 @@ ac.command.aim.maxout=Set current level's upgrade progress to 100%%.
 ac.command.aim.nocomm=No such command was found. Use /aim help to list all commands available.
 ac.command.aim.nonecathint=You haven't learned any ability!
 
+ac.command.med.usage=/med <command>|<help> [parameters...]
+ac.command.med.props=Show all available medicine properties.
+ac.command.med.synth=Synthesize a medicine from given list of properties.
+ac.command.med.synth_syringe=Same as /med synth, but gives a syringe.
+ac.command.med.no_prop=Some properties weren't found.
+
 # Achievements
 achievement.ac_phase_liquid=New Energy
 achievement.ac_phase_liquid.desc=Acquire Imag Phase Liquid

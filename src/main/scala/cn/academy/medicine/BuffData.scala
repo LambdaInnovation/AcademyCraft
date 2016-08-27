@@ -45,30 +45,6 @@ trait Buff {
 
 @Registrant
 @RegBuff
-class BuffHeal() extends Buff {
-  private var perTick: Float = _
-
-  def this(healPerTick: Float) = { this
-    perTick = healPerTick
-  }
-
-  override def onTick(player: EntityPlayer, applyData: BuffApplyData): Unit = {
-    player.heal(perTick)
-  }
-
-  override def load(tag: NBTTagCompound): Unit = {
-    perTick = tag.getFloat("amt")
-  }
-
-  override def store(tag: NBTTagCompound): Unit = {
-    tag.setFloat("amt", perTick)
-  }
-
-  override val id: String = "heal"
-}
-
-@Registrant
-@RegBuff
 class BuffMedSens() extends Buff {
   private var percentage: Float = 0.0f
 

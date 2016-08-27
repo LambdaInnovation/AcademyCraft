@@ -214,14 +214,12 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     public void setCP(float cp) {
-        curCP = MathUtils.clampf(0, maxCP, cp);
-
+        curCP = MathUtils.clampf(0, getMaxCP(), cp);
         markDirty();
     }
 
     public void setOverload(float newOverload) {
         curOverload = MathUtils.clampf(0, getMaxOverload(), newOverload);
-
         markDirty();
     }
 
