@@ -174,9 +174,9 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   object Gui {
     lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
 
-    lazy val dimensionNameMap = DimensionManager.getStaticDimensionIDs
-      .map(id => id -> DimensionManager.createProviderFor(id).getDimensionName)
-      .toMap
+    def dimensionNameMap(dimID: Int) = {
+      DimensionManager.createProviderFor(dimID).getDimensionName
+    }
 
     val ElemTimeStep = 0.06
 
