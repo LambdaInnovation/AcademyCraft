@@ -335,10 +335,11 @@ ac.command.aim.nocomm=No such command was found. Use /aim help to list all comma
 ac.command.aim.nonecathint=You haven't learned any ability!
 
 ac.command.med.usage=/med <command>|<help> [parameters...]
-ac.command.med.props=Show all available medicine properties.
-ac.command.med.synth=Synthesize a medicine from given list of properties.
+ac.command.med.help=/med help: Show help.
+ac.command.med.props=/med props: Show all available medicine properties.
+ac.command.med.synth=/med synth [prop1 [prop2...]]: Synthesize a medicine from given list of properties.
 ac.command.med.synth_syringe=Same as /med synth, but gives a syringe.
-ac.command.med.no_prop=Some properties weren't found.
+ac.command.med.no_prop=Some properties weren't found in this synthesization.
 
 # Achievements
 achievement.ac_phase_liquid=New Energy

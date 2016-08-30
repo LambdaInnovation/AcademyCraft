@@ -85,7 +85,7 @@ object MedSynthesizer {
     (targets, strengths, methods) match {
       case (Some(targ), Some(str), Some(method)) =>
         var variationRange = (0.8f, 1.2f)
-        var strValue = str.baseValue
+        var strValue = str.baseValue * method.strength
         var medSensValue = targ.medSensitiveRatio
         var rStrength = str
         var rMethod = method

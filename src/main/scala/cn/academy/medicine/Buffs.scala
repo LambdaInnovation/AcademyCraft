@@ -1,5 +1,9 @@
 package cn.academy.medicine
 
+import java.util
+
+import cn.academy.ability.api.cooldown.CooldownData
+import cn.academy.ability.api.cooldown.CooldownData.SkillCooldown
 import cn.academy.ability.api.data.CPData
 import cn.academy.medicine.BuffData.BuffApplyData
 import cn.lambdalib.annoreg.core.Registrant
@@ -113,4 +117,35 @@ class BuffAttackBoost extends Buff {
   }
 
   override val id = "attack_boost"
+}
+
+@Registrant
+@RegBuff
+class BuffCooldownRecovery extends BuffPerTick {
+
+  def this(percentPerTick: Float) { this
+    this.perTick = percentPerTick
+  }
+
+  private val accumMap = new util.HashMap[SkillCooldown, Float]()
+
+  override def onTick(player: EntityPlayer, applyData: BuffApplyData): Unit = {
+    val cdData = CooldownData.of(player)
+
+    val itr = cdData.rawData.entrySet.iterator
+    while (itr.hasNext) {
+      val cd = itr.next.getValue
+
+      if (!accumMap.containsKey(cd)) {
+        accumMap.put(cd, 0)
+      }
+
+      val next = accumMap.get(cd) + math.abs(perTick) * cd.getMaxTick
+      cd.setTickLeft(cd.getTickLeft - next.toInt)
+
+      accumMap.put(cd, next % 1)
+    }
+  }
+
+  override val id: String = "cd_recovery"
 }

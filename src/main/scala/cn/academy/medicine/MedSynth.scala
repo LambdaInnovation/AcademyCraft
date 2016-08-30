@@ -1,5 +1,6 @@
 package cn.academy.medicine
 
+import cn.academy.ability.api.cooldown.CooldownData
 import cn.academy.ability.api.data.CPData
 import cn.academy.core.LocalHelper
 import cn.academy.medicine.MedSynth.MedicineApplyInfo
@@ -16,9 +17,7 @@ import net.minecraft.util.{DamageSource, EnumChatFormatting}
 /**
   * Handles medicine synthesizing logic.
   *
-  * TODO Design a command that generates medicine
   * TODO Debug display for medicine data
-  * TODO Fill up all buff effect implementations
   *
   */
 object MedSynth {
@@ -123,6 +122,7 @@ object Properties {
   trait ApplyMethod extends Property {
     val instant: Boolean
     val incr: Boolean
+    val strength: Float
 
     def id: String
     override def stackDisplayHint = formatItemDesc("app", EnumChatFormatting.AQUA, displayDesc)
@@ -136,11 +136,11 @@ object Properties {
   }
 
   // --- impls
+  val ContApplyTime = 15 * 20
 
   val Targ_Life = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
-      val amt = if (data.method.incr) 10 * data.strengthModifier else -5 * data.strengthModifier
-
+      val amt = 5 * data.strengthModifier
       if (data.method.instant) {
         if (data.method.incr) {
           player.heal(amt)
@@ -149,10 +149,9 @@ object Properties {
         }
       } else { // Continuous recovery
         val buffData = BuffData(player)
-        val time = 20
-        val perTick = amt / time
+        val time = ContApplyTime
 
-        val buff = new BuffHeal(perTick)
+        val buff = new BuffHeal(amt)
 
         buffData.addBuff(buff, time)
       }
@@ -166,12 +165,15 @@ object Properties {
   val Targ_CP = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
       val cpData = CPData.get(player)
+      val baseValue = cpData.getMaxCP * 0.1f * data.strengthModifier
 
       if (data.method.instant) {
-        val amt = (if (data.method.incr) 2 else -1) * cpData.getMaxCP * 0.1f * data.strengthModifier
-        cpData.setCP(cpData.getCP + amt)
+        cpData.setCP(cpData.getCP + baseValue)
       } else {
-
+        val buffData = BuffData(player)
+        val time = ContApplyTime
+        val perTick = baseValue
+        buffData.addBuff(new BuffCPRecovery(perTick), time)
       }
     }
 
@@ -183,14 +185,13 @@ object Properties {
   val Targ_Overload = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
       val cpData = CPData.get(player)
+      val amt = cpData.getMaxOverload * 0.1f * data.strengthModifier
 
       if (data.method.instant) {
-        val amt = (if (data.method.incr) 2 else -1) * cpData.getMaxCP * 0.1f * data.strengthModifier
-        cpData.setOverload(cpData.getOverload + amt)
+        cpData.setOverload(cpData.getOverload - amt)
       } else {
-
+        BuffData(player).addBuff(new BuffOverloadRecovery(amt), ContApplyTime)
       }
-
     }
 
     def id = "overload"
@@ -200,9 +201,11 @@ object Properties {
 
   val Targ_Jump = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
-      require(!data.method.instant)
+      require(data.method == Apply_Continuous_Incr)
 
-      val time = 100
+      val time = ContApplyTime
+      val eff = new PotionEffect(Potion.jump.id, time, strenghToLevel(data.strengthType))
+      player.addPotionEffect(eff)
     }
 
     def id: String = "jump"
@@ -212,7 +215,15 @@ object Properties {
 
   val Targ_Cooldown = new Target {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
-
+      val baseValue = 0.2f * data.strengthModifier
+      if (data.method.instant) {
+        import scala.collection.JavaConversions._
+        for (cd <- CooldownData.of(player).rawData.values) {
+          cd.setTickLeft((cd.getTickLeft - baseValue * cd.getMaxTick).toInt)
+        }
+      } else {
+        BuffData(player).addBuff(new BuffCooldownRecovery(baseValue), ContApplyTime)
+      }
     }
 
     override def id: String = "cooldown"
@@ -224,9 +235,9 @@ object Properties {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
       require(!data.method.instant)
 
-      val time = 100
+      val time = ContApplyTime
       val potion = if (data.method.incr) Potion.moveSpeed else Potion.moveSlowdown
-      player.addPotionEffect(new PotionEffect(potion.id, time, 1))
+      player.addPotionEffect(new PotionEffect(potion.id, time, strenghToLevel(data.strengthType)))
     }
 
     override def id: String = "move_speed"
@@ -261,7 +272,7 @@ object Properties {
     override def apply(player: EntityPlayer, data: MedicineApplyInfo): Unit = {
       require(!data.method.instant)
 
-      val time = 100
+      val time = ContApplyTime
       val boostRatio = 1 + (0.2f * data.strengthModifier)
 
       BuffData(player).addBuff(new BuffAttackBoost(boostRatio, player.getCommandSenderName), time)
@@ -309,6 +320,7 @@ object Properties {
   val Apply_Instant_Incr = new ApplyMethod {
     val incr = true
     val instant = true
+    val strength = 2f
 
     override def id: String = "instant_incr"
   }
@@ -316,6 +328,7 @@ object Properties {
   val Apply_Instant_Decr = new ApplyMethod {
     val incr = false
     val instant = true
+    val strength = -1f
 
     override def id: String = "instant_decr"
   }
@@ -323,6 +336,7 @@ object Properties {
   val Apply_Continuous_Incr = new ApplyMethod {
     val incr = true
     val instant = false
+    val strength = 0.01f
 
     override def id: String = "cont_incr"
   }
@@ -330,6 +344,7 @@ object Properties {
   val Apply_Continuous_Decr = new ApplyMethod {
     val incr = false
     val instant = false
+    val strength = -0.005f
 
     override def id: String = "cont_decr"
   }
@@ -367,6 +382,14 @@ object Properties {
 
   def findApplyMethod(instant: Boolean, incr: Boolean) = applyMethodMapping((instant, incr))
 
+  def strenghToLevel(strength: Strength) = strength match {
+    case Str_Mild => 0
+    case Str_Weak => 1
+    case Str_Normal => 2
+    case Str_Strong => 3
+    case Str_Infinity => 4
+  }
+
   private def formatItemDesc(propType: String, color: EnumChatFormatting, name: String) = {
     color + localTypes.get(propType) + ": " + EnumChatFormatting.RESET + name
   }
@@ -376,7 +399,7 @@ object Properties {
 
   // For cross-version compatibility, only append new properties at the end of lists.
 
-  private val allTargets = Vector(Targ_Life, Targ_CP, Targ_Overload, Targ_Jump, Targ_Disposed, Targ_Attack)
+  private val allTargets = Vector(Targ_Life, Targ_CP, Targ_Overload, Targ_Jump, Targ_Disposed, Targ_Attack, Targ_Cooldown)
   private val allStrengths = Vector(Str_Mild, Str_Weak, Str_Normal, Str_Strong, Str_Infinity)
   private val allMethods = Vector(Apply_Instant_Incr, Apply_Instant_Decr, Apply_Continuous_Decr, Apply_Continuous_Incr)
   private val allVariations = Vector(Var_Infinity, Var_Neutralize, Var_Desens, Var_Stabilize, Var_Fluct)

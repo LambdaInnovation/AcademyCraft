@@ -1,6 +1,7 @@
 package cn.academy.ability.api.cooldown;
 
 import cn.academy.ability.api.Controllable;
+import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
@@ -129,6 +130,10 @@ public class CooldownData extends DataPart<EntityPlayer> {
         cooldownMap.clear();
     }
 
+    public Map<Integer, SkillCooldown> rawData() {
+        return cooldownMap;
+    }
+
     private void doSet(Controllable ctrl, int id, int cd) {
         SkillCooldown data = getSub(ctrl, id);
         if (data == EMPTY_COOLDOWN) {
@@ -168,6 +173,10 @@ public class CooldownData extends DataPart<EntityPlayer> {
 
         public int getMaxTick() {
             return maxTick;
+        }
+
+        public void setTickLeft(int newLeft) {
+            tickLeft = Math.min(maxTick, Math.max(0, newLeft));
         }
     }
 
