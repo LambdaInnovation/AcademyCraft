@@ -63,7 +63,6 @@ public abstract class Skill extends Controllable {
     
     private final int level;
 
-    private Config config;
     
     /**
      * The place this skill is at in the Skill Tree UI.
@@ -168,16 +167,13 @@ public abstract class Skill extends Controllable {
      * @return The configuration object for this skill.
      */
     public Config getConfig() {
-        if (config == null) {
-            config = ACConfig.instance()
+           Config config = ACConfig.instance()
                     .getConfig("ac.ability.category")
                     .getConfig(getCategoryLocation())
                     .getConfig("skills")
                     .getConfig(getName());
 
             Preconditions.checkNotNull(config);
-        }
-
         return config;
     }
 
