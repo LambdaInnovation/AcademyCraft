@@ -29,7 +29,6 @@ public class Category {
     private final List<Controllable> ctrlList = new ArrayList<>();
     
     private final String name;
-    private final Config config;
     
     int catID = -1;
     
@@ -47,9 +46,8 @@ public class Category {
         overlay = initOverlayIcon();
         developerIcon = initDeveloperIcon();
 
-        config = Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name));
     }
-    
+
     public Color getColorStyle() {
         return colorStyle;
     }
@@ -123,7 +121,7 @@ public class Category {
     }
 
     public float getProgIncrRate() {
-        return (float) config.getDouble("common.prog_incr_rate");
+        return (float) Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name)).getDouble("common.prog_incr_rate");
     }
     
     /**

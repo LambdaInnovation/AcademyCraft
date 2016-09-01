@@ -6,6 +6,8 @@
 */
 package cn.academy.core;
 
+import cn.academy.core.config.ACConfig;
+import cn.academy.core.network.NetworkManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.core.RegistrationManager;
 import cn.lambdalib.annoreg.core.RegistrationMod;
@@ -86,7 +88,7 @@ public class AcademyCraft {
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());
-
+        NetworkManager.init(event);
         RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
 
@@ -95,6 +97,7 @@ public class AcademyCraft {
         RegistrationManager.INSTANCE.registerAll(this, "Init");
 
         FMLCommonHandler.instance().bus().register(this);
+
     }
 
     @EventHandler
@@ -141,6 +144,7 @@ public class AcademyCraft {
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         RegistrationManager.INSTANCE.registerAll(this, "StartServer");
+        ACConfig.updateConfig(null);
     }
 
     @EventHandler
