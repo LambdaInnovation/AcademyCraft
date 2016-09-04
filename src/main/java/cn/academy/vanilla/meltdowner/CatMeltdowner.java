@@ -9,6 +9,7 @@ package cn.academy.vanilla.meltdowner;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
+import cn.academy.vanilla.meltdowner.passiveskill.RadiationIntensify$;
 import cn.academy.vanilla.meltdowner.skill.*;
 
 /**
@@ -17,17 +18,17 @@ import cn.academy.vanilla.meltdowner.skill.*;
 public class CatMeltdowner extends Category {
 
     public static final Skill
-        electronBomb = ElectronBomb.instance,
-        radIntensify = RadiationIntensify.instance,
-        rayBarrage = RayBarrage.instance,
-        scatterBomb = ScatterBomb.instance,
-        lightShield = LightShield.instance,
-        meltdowner = Meltdowner.instance,
-        jetEngine = JetEngine.instance,
-        mineRayBasic = MineRayBasic.instance,
-        mineRayExpert = MineRayExpert.instance,
-        mineRayLuck = MineRayLuck.instance,
-        electronMissile = ElectronMissile.instance;
+        electronBomb = ElectronBomb$.MODULE$,
+        radIntensify = RadiationIntensify$.MODULE$,
+        rayBarrage = RayBarrage$.MODULE$,
+        scatterBomb = ScatterBomb$.MODULE$,
+        lightShield = LightShield$.MODULE$,
+        meltdowner = Meltdowner$.MODULE$,
+        jetEngine = JetEngine$.MODULE$,
+        mineRayBasic = MineRayBasic$.MODULE$,
+        mineRayExpert = MineRayExpert$.MODULE$,
+        mineRayLuck = MineRayLuck$.MODULE$,
+        electronMissile = ElectronMissile$.MODULE$;
 
     public CatMeltdowner() {
         super("meltdowner");

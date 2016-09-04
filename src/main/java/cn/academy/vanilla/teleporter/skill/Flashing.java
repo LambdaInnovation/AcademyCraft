@@ -1,9 +1,9 @@
 /**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
+ * Copyright (c) Lambda Innovation, 2013-2016
+ * This file is part of the AcademyCraft mod.
+ * https://github.com/LambdaInnovation/AcademyCraft
+ * Licensed under GPLv3, see project root for more information.
+ */
 package cn.academy.vanilla.teleporter.skill;
 
 import cn.academy.ability.api.Skill;
@@ -49,8 +49,8 @@ public class Flashing extends Skill {
     public static final Flashing instance = new Flashing();
 
     private static final String
-        MSG_PERFORM = "perform",
-        KEY_GROUP = "TP_Flashing";
+            MSG_PERFORM = "perform",
+            KEY_GROUP = "TP_Flashing";
 
     private Flashing() {
         super("flashing", 5);
@@ -293,28 +293,28 @@ public class Flashing extends Skill {
 
                 if (mop.typeOfHit == MovingObjectType.BLOCK) {
                     switch (mop.sideHit) {
-                    case 0:
-                        y -= 1.0;
-                        break;
-                    case 1:
-                        y += 1.8;
-                        break;
-                    case 2:
-                        z -= .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 3:
-                        z += .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 4:
-                        x -= .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 5:
-                        x += .6;
-                        y = mop.blockY + 1.7;
-                        break;
+                        case 0:
+                            y -= 1.0;
+                            break;
+                        case 1:
+                            y += 1.8;
+                            break;
+                        case 2:
+                            z -= .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 3:
+                            z += .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 4:
+                            x -= .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 5:
+                            x += .6;
+                            y = mop.blockY + 1.7;
+                            break;
                     }
                     // check head
                     if (mop.sideHit > 1) {

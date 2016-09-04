@@ -101,7 +101,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
         if(!world.isRemote) {
             if(current != null) {
                 // Process recipe
-                if(this.pullEnergy(CONSUME_PER_TICK) == CONSUME_PER_TICK && !isActionBlocked()) {
+                if(!isActionBlocked() && this.pullEnergy(CONSUME_PER_TICK) == CONSUME_PER_TICK) {
                     ++workCounter;
                     if(workCounter == WORK_TICKS) { // Finish the job.
                         ItemStack inputSlot = this.getStackInSlot(SLOT_IN);
@@ -180,7 +180,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
     
     public boolean isWorkInProgress() {
-        return current != null;
+        return current != null && !isActionBlocked();
     }
     
     public double getWorkProgress() {
