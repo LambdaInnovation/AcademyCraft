@@ -55,9 +55,9 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
   private var hit: Boolean = false
   private var silbarn: EntitySilbarn = _
 
-  private def getPlainDamage(exp: Float): Float = lerpf(25, 40, exp)
+  private def getPlainDamage(exp: Float): Float = lerpf(25, 60, exp)
 
-  private def getScatteredDamage(exp: Float): Float = lerpf(12, 20, exp)
+  private def getScatteredDamage(exp: Float): Float = lerpf(10, 18, exp)
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onKeyDown() = {
@@ -81,8 +81,8 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
 
     sendToClient(MSG_SYNC_SILBARN, silbarn)
 
-    val cp: Float = lerpf(450, 340, exp)
-    val overload: Float = lerpf(375, 160, exp)
+    val cp: Float = lerpf(450, 380, exp)
+    val overload: Float = lerpf(300, 140, exp)
     if(!ctx.consume(overload, cp)) terminate()
     sendToSelf(MSG_EXECUTE)
   }
@@ -158,7 +158,7 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
       player.posZ.asInstanceOf[AnyRef], tx.asInstanceOf[AnyRef], ty.asInstanceOf[AnyRef], tz.asInstanceOf[AnyRef],
       hit.asInstanceOf[AnyRef])
 
-    ctx.setCooldown(lerpf(100, 160, exp).toInt)
+    ctx.setCooldown(lerpf(100, 40, exp).toInt)
     ctx.addSkillExp(.005f)
     terminate()
   }

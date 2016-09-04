@@ -63,23 +63,26 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
   private val visited = mutable.Set[Entity]()
 
   private[skill] def reduceDamage(dmg: Float) = {
-    val consumpRatio = 60.0f
-    val overloadRatio = 10.0f
+    val consumption = math.min(ctx.cpData.getCP, lerpf(15, 12, ctx.getSkillExp))
 
-    val consumption = math.min(ctx.cpData.getCP, dmg * consumpRatio)
-    val acceptedDamage = consumption / consumpRatio
-    val absorbed = acceptedDamage * 0.75f
-
-    ctx.consume(consumption, acceptedDamage * overloadRatio)
+    ctx.consume(0, consumption)
     ctx.addSkillExp(dmg * 0.0006f)
 
     sendToClient(MSG_PLAY, player.position)
 
-    dmg - absorbed
+    dmg * (1 - lerpf(0.4f, 0.9f, ctx.getSkillExp))
+  }
+
+  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  private def s_madeAlive() = {
+    ctx.consume(overloadToKeep, 0)
+    overloadKeep = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_tick() = {
+    if(!ctx.consume(0, tickConsumption)) terminate()
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     // Check the entities around player, and stop them by probablity
     val range = 5
 
@@ -90,41 +93,36 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
     entities.filterNot(EntityAffection.isMarked).foreach(entity =>  {
       EntityAffection.getAffectInfo(entity) match {
         case Affected(difficulty) => // Process not-marked and affected entities
+          ctx.consumeWithForce(0, comsumption)
           entity match {
             case lfireball : EntityLargeFireball =>
-              if(consumeStop(difficulty)) {
-                lfireball.setDead()
-                world.newExplosion(null, lfireball.posX, lfireball.posY, lfireball.posZ,
-                  lfireball.field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
+              lfireball.setDead()
+              world.newExplosion(null, lfireball.posX, lfireball.posY, lfireball.posZ,
+                lfireball.field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
 
-                ctx.addSkillExp(0.001f * difficulty)
-                sendToClient(MSG_STOP_ENTITY, lfireball)
-              }
+              ctx.addSkillExp(0.001f * difficulty)
+              sendToClient(MSG_STOP_ENTITY, lfireball)
             case sfireball : EntitySmallFireball =>
-              if(consumeStop(difficulty)) {
-                sfireball.setDead()
+              sfireball.setDead()
 
-                ctx.addSkillExp(0.001f * difficulty)
-                sendToClient(MSG_STOP_ENTITY, sfireball)
-              }
+              ctx.addSkillExp(0.001f * difficulty)
+              sendToClient(MSG_STOP_ENTITY, sfireball)
             case _ =>
-              if(consumeStop(difficulty)) {
-                entity match {
-                  case arrow: EntityArrow =>
-                    arrow.setDamage(0)
-                  case _ =>
-                }
-
-                entity.motionX = 0
-                entity.motionY = 0
-                entity.motionZ = 0
-
-                ctx.addSkillExp(0.001f * difficulty)
-
-                sendToClient(MSG_STOP_ENTITY, entity)
-
-                EntityAffection.mark(entity)
+              entity match {
+                case arrow: EntityArrow =>
+                  arrow.setDamage(0)
+                case _ =>
               }
+
+              entity.motionX = 0
+              entity.motionY = 0
+              entity.motionZ = 0
+
+              ctx.addSkillExp(0.001f * difficulty)
+
+              sendToClient(MSG_STOP_ENTITY, entity)
+
+              EntityAffection.mark(entity)
           }
         case Excluded() =>
       }
@@ -140,11 +138,10 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
     ctx.consume(normOverload, normConsume)
   }
 
-  private def consumeStop(difficulty: Float) = {
-    ctx.consume(
-      difficulty * lerpf(16, 10, ctx.getSkillExp),
-      difficulty * lerpf(150, 100, ctx.getSkillExp))
-  }
+  private val tickConsumption = lerpf(13, 5, ctx.getSkillExp)
+  private val comsumption = lerpf(15, 12, ctx.getSkillExp)
+  private val overloadToKeep = lerpf(80, 50, ctx.getSkillExp)
+  private var overloadKeep = 0f
 
 }
 

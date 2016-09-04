@@ -31,11 +31,6 @@ import net.minecraft.util.Vec3
   */
 object CurrentCharging extends Skill("charging", 1) {
 
-  def getChargingSpeed(exp: Float): Float = lerpf(10, 30, exp)
-  def getExpIncr(effective: Boolean): Float = if(effective) 0.0001f else 0.00003f
-  def getConsumption(exp: Float): Float = lerpf(6, 14, exp)
-  def getOverload(exp: Float): Float = lerpf(65, 48, exp)
-
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
     activateSingleKey(rt, keyid, p => new ChargingContext(p))
@@ -46,24 +41,30 @@ object CurrentCharging extends Skill("charging", 1) {
 object ChargingBlockContext {
 
   final val MSG_EFFECT_START = "effect_start"
-  final val MSG_EFFECT_UPDATE = "effect_update"
   final val MSG_EFFECT_END = "effect_end"
 
 }
 
-import CurrentCharging._
 import ChargingBlockContext._
 import cn.academy.ability.api.AbilityAPIExt._
 
 class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
-  private val distance = 15.0d
+  def getChargingSpeed(exp: Float): Float = lerpf(15, 35, exp)
+  def getExpIncr(effective: Boolean): Float = if(effective) 0.0001f else 0.00003f
+  def getConsumption(exp: Float): Float = lerpf(3, 7, exp)
+  def getOverload(exp: Float): Float = lerpf(65, 48, exp)
+
+  private var overload = 0f
+
+  val distance = 15.0d
   private val exp = ctx.getSkillExp
   private val isItem = ctx.player.getCurrentEquippedItem != null
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
-    if(!ctx.consume(getOverload(exp), 0)) terminate()
+    ctx.consume(getOverload(exp), 0)
+    overload = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
@@ -84,6 +85,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
+    if(ctx.cpData.getOverload < overload) ctx.cpData.setOverload(overload)
     if(!isItem) {
       // Perform raytrace
       val pos = Raytrace.traceLiving(player, distance)
@@ -117,8 +119,6 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
       } else {
         mod.isNull = true
       }
-
-      sendToClient(MSG_EFFECT_UPDATE, mod, good.asInstanceOf[AnyRef], distance.asInstanceOf[AnyRef])
     } else {
       val stack = player.getCurrentEquippedItem
       val cp = getConsumption(exp)
@@ -185,29 +185,55 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_EFFECT_UPDATE, side=Array(Side.CLIENT))
-  private def c_updateEffects(res: MovingObjectData, isGood: Boolean, distance: Double) = {
+  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  private def c_updateEffects() = {
+    // Perform raytrace
+    val pos = Raytrace.traceLiving(player, par.distance)
+
+    var good = false
+    if (pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
+      val tile = player.worldObj.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
+      if (EnergyBlockHelper.isSupported(tile)) {
+        good = true
+      }
+    }
+
+    val mod: MovingObjectData = new MovingObjectData
+    if (pos != null) {
+      mod.blockX = pos.blockX
+      mod.blockY = pos.blockY
+      mod.blockZ = pos.blockZ
+      mod.hitVec = pos.hitVec
+      mod.isEntity = pos.typeOfHit == MovingObjectType.ENTITY
+      if (mod.isEntity)
+        mod.entityEyeHeight = pos.entityHit.getEyeHeight
+    } else {
+      mod.isNull = true
+    }
+
     var x, y, z = 0d
-    if (!res.isNull) {
-      x = res.hitVec.xCoord
-      y = res.hitVec.yCoord
-      z = res.hitVec.zCoord
-      if (res.isEntity) {
-        y += res.entityEyeHeight
+    if (!mod.isNull) {
+      x = mod.hitVec.xCoord
+      y = mod.hitVec.yCoord
+      z = mod.hitVec.zCoord
+      if (mod.isEntity) {
+        y += mod.entityEyeHeight
       }
     } else {
-      val mo = new Motion3D(player, true).move(distance)
+      val mo = new Motion3D(player, true).move(par.distance)
       x = mo.px
       y = mo.py
       z = mo.pz
     }
-    arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, x, y, z)
+    if(arc != null) arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, x, y, z)
 
-    if (isGood) {
-      surround.updatePos(res.blockX + 0.5, res.blockY, res.blockZ + 0.5)
-      surround.draw = true
-    } else {
-      surround.draw = false
+    if(surround != null) {
+      if(good) {
+        surround.updatePos(mod.blockX + 0.5, mod.blockY, mod.blockZ + 0.5)
+        surround.draw = true
+      } else {
+        surround.draw = false
+      }
     }
   }
 

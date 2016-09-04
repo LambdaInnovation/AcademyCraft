@@ -31,8 +31,8 @@ class BasicMRContext(p: EntityPlayer) extends MRContext(p, MineRayBasic) {
   setRange(10)
   setHarvestLevel(2)
   setSpeed(0.2f, 0.4f)
-  setConsumption(15.0f, 8.0f)
-  setOverload(200f, 120f)
+  setConsumption(12.0f, 7.0f)
+  setOverload(200f, 150f)
   setCooldown(40f, 20f)
   setExpIncr(0.0005f)
 

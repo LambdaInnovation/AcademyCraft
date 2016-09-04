@@ -56,13 +56,13 @@ import scala.collection.JavaConversions._
 class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
 
   private val exp = ctx.getSkillExp
-  private val aoeDamage = lerpf(9.6f, 17.4f, exp)
-  private val damage = lerpf(16f, 29f, exp)
+  private val aoeDamage = lerpf(6, 15, exp)
+  private val damage = lerpf(10, 25, exp)
   private def getExpIncr(effective: Boolean) = if(effective) 0.005f else 0.003f
 
   private def consume() = {
-    val overload = lerpf(64, 32, exp)
-    val cp = lerp(340, 455, exp).asInstanceOf[Int]
+    val overload = lerpf(50, 27, exp)
+    val cp = lerp(280, 420, exp).asInstanceOf[Int]
     ctx.consume(overload, cp)
   }
 
@@ -100,7 +100,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
       ctx.addSkillExp(getExpIncr(effective))
       ThunderBolt.triggerAchievement(player)
 
-      ctx.setCooldown(lerpf(80f, 40f, exp).asInstanceOf[Int])
+      ctx.setCooldown(lerpf(120, 50, exp).toInt)
     }
     terminate()
   }

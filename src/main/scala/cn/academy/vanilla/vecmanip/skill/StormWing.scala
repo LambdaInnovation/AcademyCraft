@@ -163,6 +163,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_terminate() = {
     player.capabilities.allowFlying = prevAllowFlying
+    ctx.setCooldown(lerpf(30, 10, ctx.getSkillExp).toInt)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -256,11 +257,11 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     }
   }
 
-  private def consumption = if (isApplying) lerpf(50, 30, ctx.getSkillExp) else lerpf(9, 6, ctx.getSkillExp)
+  private val consumption = lerpf(40, 25, ctx.getSkillExp)
 
-  private val overload = lerpf(3, 2, ctx.getSkillExp)
+  private val overload = lerpf(10, 7, ctx.getSkillExp)
 
-  private val speed = (if (ctx.getSkillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, ctx.getSkillExp)
+  private val speed = (if (ctx.getSkillExp < 0.45f) 0.7f else 1.2f) * lerpf(2, 3, ctx.getSkillExp)
 
   private val expincr = 0.00005f // per tick
 

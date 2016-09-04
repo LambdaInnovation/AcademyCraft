@@ -74,12 +74,14 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   private var mox, moy, moz: Double = 0d
   private val sx = player.posX
   private val sy = player.posY
-  private val sz= player.posZ
+  private val sz = player.posZ
   private var target: Target = _
 
   private val exp = ctx.getSkillExp
-  private val cp = lerpf(15, 10, exp)
-  private val overload = lerpf(3, 2, exp)
+  private val cp = lerpf(15, 8, exp)
+  private val overload = lerpf(60, 30, exp)
+
+  private var overloadKeep = 0f
 
   private val velocity = 1d
   private def getExpIncr(distance: Double) = Math.max(0.005f, 0.0011f * distance.asInstanceOf[Float])
@@ -91,6 +93,8 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER, Side.CLIENT))
   private def g_onStart() = {
+    ctx.consume(overload, 0)
+    overloadKeep = ctx.cpData.getOverload
     val aData = AbilityData.get(player)
     val result = Raytrace.traceLiving(player, getMaxDistance(aData))
     if(result != null) {
@@ -117,6 +121,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def c_onTick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     if(canSpawnEffect) {
       sendToServer(MSG_EFFECT_START)
       canSpawnEffect = false
@@ -152,7 +157,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
-    if((target != null && !target.alive()) || !ctx.consume(overload, cp)) terminate()
+    if((target != null && !target.alive()) || !ctx.consume(0, cp)) terminate()
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))

@@ -81,39 +81,39 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       var attacked_ = false
       if(result.target != null) {
         attacked_ = true
-        TPSkillHelper.attack(ctx, result.target, getDamage(curStack))
+        TPSkillHelper.attackIgnoreArmor(ctx, result.target, getDamage(curStack))
         ThreateningTeleport.triggerAchievement(player)
         dropProb = 0.3
       }
-      if(!player.capabilities.isCreativeMode) if( {
-        curStack.stackSize -= 1; curStack.stackSize
-      } <= 0) player.setCurrentItemOrArmor(0, null)
+      if(!player.capabilities.isCreativeMode) {
+        if({curStack.stackSize -= 1; curStack.stackSize} <= 0) player.setCurrentItemOrArmor(0, null)
+      }
       if(RandUtils.ranged(0, 1) < dropProb) {
         val drop: ItemStack = curStack.copy
         drop.stackSize = 1
         player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, result.x, result.y, result.z, drop))
       }
       ctx.addSkillExp(getExpIncr(attacked_))
-      ctx.setCooldown(lerpf(18, 10, exp).toInt)
+      ctx.setCooldown(lerpf(30, 15, exp).toInt)
     }
 
     sendToClient(MSG_EXECUTE, attacked.asInstanceOf[AnyRef])
     terminate()
   }
 
-  private def getConsumption(exp: Float): Float = lerpf(129, 149, exp)
+  private def getConsumption(exp: Float): Float = lerpf(35, 100, exp)
 
   private def getRange(exp: Float): Float = lerpf(8, 15, exp)
 
   private def getExpIncr(attacked: Boolean): Float = (if(attacked) 1 else 0.2f) * .003f
 
   private def getDamage(stack: ItemStack): Float = {
-    var dmg: Float = lerpf(6, 9, ctx.getSkillExp)
+    var dmg: Float = lerpf(3, 6, ctx.getSkillExp)
     if(stack.getItem eq ModuleVanilla.needle) dmg *= 1.5f
     dmg
   }
 
-  private def getOverload(exp: Float): Float = lerpf(26, 11, exp)
+  private def getOverload(exp: Float): Float = lerpf(18, 10, exp)
 
   def calcDropPos: TraceResult = {
     val range: Double = getRange(exp)

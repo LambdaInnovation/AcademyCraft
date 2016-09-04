@@ -104,20 +104,20 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
       ctx.addSkillExp(getExpIncr(list.size))
       if(!player.capabilities.isCreativeMode)
         if({stack.stackSize -= 1; stack.stackSize + 1} == 0) player.setCurrentItemOrArmor(0, null)
-      ctx.setCooldown(lerpf(20, 5, exp).toInt)
+      ctx.setCooldown(lerpf(100, 60, exp).toInt)
     }
     terminate()
   }
 
   private def getExpIncr(attackEntities: Int): Float = (1 + attackEntities) * 0.002f
 
-  private def getDamage(exp: Float): Float = lerpf(16, 27, exp)
+  private def getDamage(exp: Float): Float = lerpf(15, 35, exp)
 
   private def getRange(exp: Float): Float = lerpf(25, 35, exp)
 
-  private def getConsumption(exp: Float): Float = lerpf(374, 500, exp)
+  private def getConsumption(exp: Float): Float = lerpf(260, 320, exp)
 
-  private def getOverload(exp: Float): Float = lerpf(38, 27, exp)
+  private def getOverload(exp: Float): Float = lerpf(40, 30, exp)
 
   // TODO: Some boilerplate... Clean this up in case you aren't busy
   def getTraceDest: Array[Int] = {

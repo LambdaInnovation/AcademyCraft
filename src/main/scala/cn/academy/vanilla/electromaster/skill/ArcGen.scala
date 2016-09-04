@@ -55,15 +55,15 @@ import ArcGenContext._
 
 class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
 
-  private val damage = lerpf(9, 15, ctx.getSkillExp)
+  private val damage = lerpf(5, 9, ctx.getSkillExp)
   private val igniteProb = lerpf(0, 0.6f, ctx.getSkillExp)
   private val fishProb = if(ctx.getSkillExp > 0.5f) 0.1 else 0
   private val canStunEnemy = ctx.getSkillExp >= 1.0f
   private val range = lerpf(6, 15, ctx.getSkillExp)
+  private val cp = lerpf(30, 70, ctx.getSkillExp)
 
   private def consume() = {
-    val overload = lerpf(36, 16, ctx.getSkillExp)
-    val cp = lerpf(117, 135, ctx.getSkillExp)
+    val overload = lerpf(18, 11, ctx.getSkillExp)
 
     ctx.consume(overload, cp)
   }
@@ -115,7 +115,7 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
         ctx.addSkillExp(expincr)
       }
 
-      ctx.setCooldown(lerpf(40, 15, ctx.getSkillExp).toInt)
+      ctx.setCooldown(lerpf(15, 5, ctx.getSkillExp).toInt)
     }
     terminate()
   }

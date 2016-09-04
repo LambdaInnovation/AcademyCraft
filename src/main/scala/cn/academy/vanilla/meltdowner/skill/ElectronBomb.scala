@@ -47,8 +47,8 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
 
   private def consume() = {
     val exp: Float = ctx.getSkillExp
-    val overload: Float = lerpf(39, 17, exp)
-    val cp: Float = lerpf(117, 135, exp)
+    val overload: Float = lerpf(16, 13, exp)
+    val cp: Float = lerpf(35, 80, exp)
 
     ctx.consume(overload, cp)
   }
@@ -77,7 +77,7 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
 
   private def getDest(player: EntityPlayer): Vec3 = Raytrace.getLookingPos(player, DISTANCE).getLeft
 
-  private def getDamage(exp: Float): Float = lerpf(12, 20, exp)
+  private def getDamage(exp: Float): Float = lerpf(6, 12, exp)
 
 }
 

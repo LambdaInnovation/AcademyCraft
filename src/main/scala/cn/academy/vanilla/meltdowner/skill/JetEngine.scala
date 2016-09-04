@@ -45,7 +45,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
 
   private val exp: Float = ctx.getSkillExp
   private val consumption: Float = lerpf(170, 140, exp)
-  private val overload: Float = lerpf(66, 42, exp)
+  private val overload: Float = lerpf(60, 50, exp)
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = if(!ctx.canConsumeCP(consumption)) terminate()
@@ -66,7 +66,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       sendToSelf(MSG_TRIGGER, getDest.addVector(0, 1.65, 0))
       ctx.addSkillExp(.004f)
       JetEngine.triggerAchievement(player)
-      ctx.setCooldown((18 * lerpf(6, 3, exp)).toInt)
+      ctx.setCooldown(lerpf(60, 30, exp).toInt)
     } else {
       sendToClient(MSG_MARK_END)
       terminate()
@@ -110,7 +110,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       val pos: MovingObjectPosition = Raytrace.perform(world,
         VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
         VecUtils.vec(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
-      if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(15, 35, exp))
+      if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(7, 20, exp))
     }
   }
 
@@ -193,7 +193,9 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
       if (isLocal) player.capabilities.setPlayerWalkSpeed(0.07f)
       for (i <- 0 to 10) {
         val pos2: Vec3 = VecUtils.lerp(start, target, 3 * ticks / TIME)
-        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ), VecUtils.vec(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))), VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
+        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ),
+          VecUtils.vec(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))),
+          VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
         world.spawnEntityInWorld(p)
       }
     }
@@ -201,6 +203,8 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_tEndEffect() = {
+    if(mark != null) mark.setDead()
+
     if(isTriggering) {
       if (isLocal) player.capabilities.setPlayerWalkSpeed(0.1f)
       entity.setDead()

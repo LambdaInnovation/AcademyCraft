@@ -31,8 +31,8 @@ class ExpertMRContext(p: EntityPlayer) extends MRContext(p, MineRayExpert) {
   setRange(20)
   setHarvestLevel(5)
   setSpeed(0.5f, 1f)
-  setConsumption(25f, 14f)
-  setOverload(270f, 170f)
+  setConsumption(25f, 15f)
+  setOverload(300f, 200f)
   setCooldown(60f, 30f)
   setExpIncr(0.0003f)
 

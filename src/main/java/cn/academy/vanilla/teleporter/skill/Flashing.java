@@ -109,14 +109,29 @@ public class Flashing extends Skill {
         @SideOnly(Side.CLIENT)
         IActivateHandler activateHandler;
 
-        final float exp, consumption, overload;
+        final float exp, consumption;
+        final float overload_start, consumption_start;
+        final int cooldown_time;
+        float overloadKeep;
+        final int max_time;
+        int ticks = 0;
 
         public MainContext(EntityPlayer player) {
             super(player, instance);
 
             exp = ctx.getSkillExp();
-            consumption = lerpf(100, 70, exp);
-            overload = lerpf(90, 70, exp);
+            consumption = lerpf(13, 6, exp);
+            overload_start = lerpf(250, 180, exp);
+            consumption_start = lerpf(80, 60, exp);
+            max_time = (int) lerpf(60, 150, exp);
+            cooldown_time = (int) lerpf(900, 400, exp);
+        }
+
+        @Listener(channel=Context.MSG_MADEALIVE, side=Side.SERVER)
+        void serverMadeAlive() {
+            if(!ctx.consume(overload_start, consumption_start)) terminate(); else {
+                overloadKeep = ctx.cpData.getOverload();
+            }
         }
 
         @SideOnly(Side.CLIENT)
@@ -208,9 +223,16 @@ public class Flashing extends Skill {
             }
         }
 
+        @Listener(channel=MSG_TICK, side=Side.SERVER)
+        void serverTick() {
+            if(ctx.cpData.getOverload() < overloadKeep) ctx.cpData.setOverload(overloadKeep);
+            if(ticks > max_time) terminate();
+            ticks++;
+        }
+
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
-            if (ctx.consume(overload, consumption)) {
+            if (ctx.consume(0, consumption)) {
                 Vec3 dest = getDest(keyid);
                 player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
                 player.fallDistance = 0.0f;
@@ -219,7 +241,6 @@ public class Flashing extends Skill {
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                ctx.setCooldownSub(keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }
@@ -246,6 +267,11 @@ public class Flashing extends Skill {
             }
         }
 
+        @Listener(channel=MSG_TERMINATED, side=Side.SERVER)
+        void serverTerminated() {
+            ctx.setCooldown(cooldown_time);
+        }
+
         @SideOnly(Side.CLIENT)
         private void startEffects() {
             endEffects();
@@ -266,13 +292,13 @@ public class Flashing extends Skill {
         }
 
         private boolean consume(boolean simulate) {
-            return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(overload, consumption);
+            return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(0, consumption);
         }
 
         private Vec3 getDest(int keyid) {
             Preconditions.checkState(keyid != -1);
 
-            double dist = lerpf(8, 15, exp);
+            double dist = lerpf(12, 18, exp);
 
             Vec3 dir = VecUtils.copy(dirs[keyid]);
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);

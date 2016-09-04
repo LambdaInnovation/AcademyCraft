@@ -204,15 +204,15 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
   private val initEnergy: Double = lerpf(60, 120, ctx.getSkillExp)
 
-  private val damage: Float = lerpf(7, 16, ctx.getSkillExp)
+  private val damage: Float = lerpf(4, 6, ctx.getSkillExp)
 
-  private val consumption: Float = lerpf(300, 180, ctx.getSkillExp)
+  private val consumption: Float = lerpf(80, 150, ctx.getSkillExp)
 
-  private val overload: Float = lerpf(135, 100, ctx.getSkillExp)
+  private val overload: Float = lerpf(15, 10, ctx.getSkillExp)
 
   private val maxIter: Int = lerpf(10, 25, ctx.getSkillExp).toInt
 
-  private val cooldown: Int = lerpf(45, 20, ctx.getSkillExp).toInt
+  private val cooldown: Int = lerpf(80, 40, ctx.getSkillExp).toInt
 
   private val dropRate = lerpf(0.3f, 1.0f, ctx.getSkillExp)
 

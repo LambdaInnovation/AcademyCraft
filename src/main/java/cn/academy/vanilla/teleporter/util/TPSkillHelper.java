@@ -59,6 +59,7 @@ public class TPSkillHelper {
                 player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
+                aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 
                 fireCritAttack(player, target, i);
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
@@ -69,6 +70,31 @@ public class TPSkillHelper {
 
         ctx.attack(target, damage);
     }
+
+    public static void attackIgnoreArmor(AbilityContext ctx, Entity target, float damage) {
+        AbilityData aData = ctx.aData;
+        EntityPlayer player = ctx.player;
+
+        // Calculate 3 levels of crit hit
+        for (int i = 0; i < 3; ++i) {
+            float prob = prob(aData, i);
+            if (RandUtils.nextFloat() < prob) {
+                damage *= rates[i];
+                player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
+                ModuleAchievements.trigger(player, "teleporter.critical_attack");
+                aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
+                aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
+
+                fireCritAttack(player, target, i);
+                NetworkMessage.sendTo(player, NetworkMessage.staticCaller(TPSkillHelper.class),
+                        "fire", player, target, i);
+                break;
+            }
+        }
+
+        ctx.attackIgnoreArmor(target, damage);
+    }
+
 
     private static float prob(AbilityData data, int level) {
         float dimFoldingExp = data.isSkillLearned(DimFoldingTheorem$.MODULE$) ? data.getSkillExp(DimFoldingTheorem$.MODULE$) : -1;

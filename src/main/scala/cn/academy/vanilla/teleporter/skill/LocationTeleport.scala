@@ -163,6 +163,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val dist = player.getDistance(dest.x, dest.y, dest.z)
     val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
+    ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
@@ -173,9 +174,9 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   object Gui {
     lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
 
-    lazy val dimensionNameMap = DimensionManager.getStaticDimensionIDs
-      .map(id => id -> DimensionManager.createProviderFor(id).getDimensionName)
-      .toMap
+    def dimensionNameMap(dimID: Int) = {
+      DimensionManager.createProviderFor(dimID).getDimensionName
+    }
 
     val ElemTimeStep = 0.06
 
