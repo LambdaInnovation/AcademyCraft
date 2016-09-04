@@ -448,7 +448,7 @@ private object Common {
 
       {
         val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + float2Float(aData.getLevelProgress * 100).intValue()+"%")
+        panel.child("text_exp").component[TextBox].setContent("EXP " + (aData.getLevelProgress * 100).toInt+"%")
 
       }
 
