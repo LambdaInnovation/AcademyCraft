@@ -448,7 +448,8 @@ private object Common {
 
       {
         val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + "%.0f%%".format(aData.getLevelProgress * 100))
+        panel.child("text_exp").component[TextBox].setContent("EXP " + (aData.getLevelProgress * 100).toInt+"%")
+
       }
 
       if (developer != null && aData.hasCategory && LearningHelper.canLevelUp(developer.getType, aData)) {
