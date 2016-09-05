@@ -95,8 +95,6 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
       }
       player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f)
       ctx.addSkillExp(getExpIncr(list.size))
-      if(!player.capabilities.isCreativeMode)
-        if({stack.stackSize -= 1; stack.stackSize + 1} == 0) player.setCurrentItemOrArmor(0, null)
       ctx.setCooldown(lerpf(100, 60, exp).toInt)
     }
     terminate()
