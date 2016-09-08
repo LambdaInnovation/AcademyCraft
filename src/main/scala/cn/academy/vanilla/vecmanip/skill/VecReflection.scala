@@ -210,7 +210,10 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private def consumeDamage(damage: Float) = ctx.consumeWithForce(0, lerpf(20, 15, ctx.getSkillExp) * damage)
 
-  private def consumeNormal() = ctx.consume(0, lerpf(15, 11, ctx.getSkillExp))
+  private def consumeNormal() = {
+    if(!ctx.consume(0,  lerpf(15, 11, ctx.getSkillExp))) terminate
+
+  }
 
   private val overloadToKeep = lerpf(350, 250, ctx.getSkillExp)
   private var overloadKeep = 0f
