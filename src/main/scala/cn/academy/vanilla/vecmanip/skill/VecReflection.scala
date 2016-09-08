@@ -111,7 +111,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
     visited ++= entities
 
-    consumeNormal()
+    if(!consumeNormal)
+      terminate
   }
 
   private def createNewFireball(source : EntityFireball) = {
@@ -147,7 +148,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def c_tick() = {
-    consumeNormal()
+    if(!consumeNormal)
+      terminate
   }
 
   @SubscribeEvent
@@ -210,9 +212,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private def consumeDamage(damage: Float) = ctx.consumeWithForce(0, lerpf(20, 15, ctx.getSkillExp) * damage)
 
-  private def consumeNormal() = {
-    if(!ctx.consume(0,  lerpf(15, 11, ctx.getSkillExp))) terminate
-
+  private def consumeNormal():(Boolean) = {
+    ctx.consume(0,  lerpf(15, 11, ctx.getSkillExp))
   }
 
   private val overloadToKeep = lerpf(350, 250, ctx.getSkillExp)
