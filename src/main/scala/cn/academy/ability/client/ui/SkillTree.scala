@@ -648,7 +648,7 @@ private object Common {
         })
         textArea.listens[FrameEvent](() => {
           FontBold.draw(skill.getDisplayName, 0, 3, foSkillTitle)
-          Font.draw(local.get("skill_exp") + " %.0f%%".format(data.getSkillExp(skill) * 100), 0, 15, foSkillProg)
+          Font.draw(local.get("skill_exp") + (data.getSkillExp(skill) * 100).toInt + "%", 0, 15, foSkillProg)
           Font.drawSeperated(skill.getDescription, 0, 24, 200, foSkillDesc)
         })
       } else {
