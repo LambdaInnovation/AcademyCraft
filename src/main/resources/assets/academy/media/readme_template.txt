@@ -1,13 +1,13 @@
 ========================================================================================================================
 
-This readme will introduce how to customize media in AcademyCraft, and is located in .minecraft/acmedia/. This folder
-serves as the root folder for customization media contents.
+This readme will show you how to add customize media in AcademyCraft. 
+The media file shoud be located in .minecraft/acmedia/ .
 
-You can add customized medias as follows:
+You can add customized media following these steps:
 
-1. Add a music file (.ogg only is supported for now) into the /acmedia/source folder.
-2. Add a cover file (must be .png and is square) with same name into the /acmedia/cover folder.
-3. Start the game, in the Media Player app you should see the new media. You can edit its name and its description.
+1. Add a music file (.ogg is the only supported format by now) into the .minecraft/acmedia/source folder.
+2. Add a cover file with same name (must be .png format and should be a square image) into the .minecraft/acmedia/cover folder.
+3. Start the game, then you should see the new media in your Media Player app . You can edit the name and description directly in the game.
 
 ========================================================================================================================
 
