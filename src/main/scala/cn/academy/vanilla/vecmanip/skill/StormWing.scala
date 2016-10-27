@@ -127,6 +127,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         val moveDir = MVec3(dir())
 
         val expectedVel = moveDir * speed
+        if(player.ridingEntity!=null)player.mountEntity(null);
         player.setVelocity(
           move(player.motionX, expectedVel.x, ACCEL),
           move(player.motionY, expectedVel.y, ACCEL),

@@ -110,6 +110,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       val pos: MovingObjectPosition = Raytrace.perform(world,
         VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
         VecUtils.vec(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
+      if(player.ridingEntity!=null)player.mountEntity(null);
       if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(7, 20, exp))
     }
   }

@@ -67,7 +67,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
     ctx.setCooldown(lerpf(50, 30, exp).toInt)
     TPSkillHelper.incrTPCount(player)
-    player.setPositionAndUpdate(x, y, z)
+    TPSkillHelper.setEntityLivingPosition(player,x,y,z)
     player.fallDistance = 0
 
     terminate()

@@ -234,7 +234,7 @@ public class Flashing extends Skill {
         void serverPerform(int keyid) {
             if (ctx.consume(0, consumption)) {
                 Vec3 dest = getDest(keyid);
-                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+                TPSkillHelper.setEntityLivingPosition(player,dest.xCoord, dest.yCoord, dest.zCoord);
                 player.fallDistance = 0.0f;
 
                 ctx.addSkillExp(.002f);

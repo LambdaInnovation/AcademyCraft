@@ -58,6 +58,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
   def l_perform() = {
     if (canPerform && consume()) {
       player.setVel(initSpeed())
+      if(player.ridingEntity!=null)player.mountEntity(null);
       ctx.setCooldown(lerpf(80, 50, ctx.getSkillExp).toInt)
 
       sendToServer(MSG_PERFORM)
