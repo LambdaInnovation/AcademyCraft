@@ -1,20 +1,17 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.generic.client.effect.SmokeEffect
 import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n
 import cn.lambdalib.util.deprecated.{LIFMLGameEventDispatcher, LIHandler}
 import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.mc.{EntitySelectors, Vec3, WorldUtils}
-import cpw.mods.fml.common.gameevent.TickEvent.{ClientTickEvent, Phase}
+import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -22,7 +19,7 @@ import net.minecraft.client.particle.EntityDiggingFX
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{AxisAlignedBB, DamageSource, MathHelper, Vec3}
+import net.minecraft.util.{AxisAlignedBB, Vec3}
 import net.minecraftforge.common.util.ForgeDirection
 
 @Registrant
@@ -207,15 +204,15 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
   private val initEnergy: Double = lerpf(60, 120, ctx.getSkillExp)
 
-  private val damage: Float = lerpf(7, 16, ctx.getSkillExp)
+  private val damage: Float = lerpf(4, 6, ctx.getSkillExp)
 
-  private val consumption: Float = lerpf(300, 180, ctx.getSkillExp)
+  private val consumption: Float = lerpf(80, 150, ctx.getSkillExp)
 
-  private val overload: Float = lerpf(135, 100, ctx.getSkillExp)
+  private val overload: Float = lerpf(15, 10, ctx.getSkillExp)
 
   private val maxIter: Int = lerpf(10, 25, ctx.getSkillExp).toInt
 
-  private val cooldown: Int = lerpf(45, 20, ctx.getSkillExp).toInt
+  private val cooldown: Int = lerpf(80, 40, ctx.getSkillExp).toInt
 
   private val dropRate = lerpf(0.3f, 1.0f, ctx.getSkillExp)
 

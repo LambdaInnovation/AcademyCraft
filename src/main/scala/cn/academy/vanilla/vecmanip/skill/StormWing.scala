@@ -1,10 +1,9 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
@@ -20,7 +19,7 @@ import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.util.generic.RandUtils._
 import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.{EntityBlockDustFX, EntitySmokeFX}
+import net.minecraft.client.particle.EntityBlockDustFX
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -128,6 +127,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         val moveDir = MVec3(dir())
 
         val expectedVel = moveDir * speed
+        if(player.ridingEntity!=null)player.mountEntity(null);
         player.setVelocity(
           move(player.motionX, expectedVel.x, ACCEL),
           move(player.motionY, expectedVel.y, ACCEL),
@@ -164,6 +164,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_terminate() = {
     player.capabilities.allowFlying = prevAllowFlying
+    ctx.setCooldown(lerpf(30, 10, ctx.getSkillExp).toInt)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -257,11 +258,11 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     }
   }
 
-  private def consumption = if (isApplying) lerpf(50, 30, ctx.getSkillExp) else lerpf(9, 6, ctx.getSkillExp)
+  private val consumption = lerpf(40, 25, ctx.getSkillExp)
 
-  private val overload = lerpf(3, 2, ctx.getSkillExp)
+  private val overload = lerpf(10, 7, ctx.getSkillExp)
 
-  private val speed = (if (ctx.getSkillExp < 0.45f) 0.7f else 1.2f) * lerpf(0.7f, 1.1f, ctx.getSkillExp)
+  private val speed = (if (ctx.getSkillExp < 0.45f) 0.7f else 1.2f) * lerpf(2, 3, ctx.getSkillExp)
 
   private val expincr = 0.00005f // per tick
 

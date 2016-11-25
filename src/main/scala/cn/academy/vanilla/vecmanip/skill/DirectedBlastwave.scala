@@ -1,20 +1,17 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util
-import cn.lambdalib.util.generic.RandUtils._
 import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.mc._
 import cn.lambdalib.vis.animation.presets.CompTransformAnim
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -167,14 +164,14 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   }
 
   private def tryConsume() = {
-    val overload = lerpf(96, 72, ctx.getSkillExp)
+    val overload = lerpf(50, 30, ctx.getSkillExp)
 
     ctx.consume(overload, consumption)
   }
 
   override def getConsumptionHint = consumption
 
-  private val consumption = lerpf(200, 150, ctx.getSkillExp)
+  private val consumption = lerpf(160, 200, ctx.getSkillExp)
 
   private val breakProb = lerpf(0.5f, 0.8f, ctx.getSkillExp)
 
@@ -184,11 +181,11 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     case _ => 55f
   }
 
-  private val damage = lerpf(10, 18, ctx.getSkillExp)
+  private val damage = lerpf(10, 25, ctx.getSkillExp)
 
   private val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
 
-  private val cooldown = lerpf(40, 20, ctx.getSkillExp).toInt
+  private val cooldown = lerpf(80, 50, ctx.getSkillExp).toInt
 
   private def knockback(targ: Entity) = {
     var delta = player.headPosition - targ.headPosition

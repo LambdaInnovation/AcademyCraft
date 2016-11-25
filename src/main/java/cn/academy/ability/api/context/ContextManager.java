@@ -354,6 +354,9 @@ public enum ContextManager {
 
         @SubscribeEvent
         public void __onDisconnect(ClientDisconnectionFromServerEvent evt) {
+            for(ContextData data:alive){
+                NetworkMessage.sendToSelf(data.ctx, Context.MSG_TERMINATED);
+            }
             alive.clear();
             suspended.clear();
         }

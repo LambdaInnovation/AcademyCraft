@@ -69,19 +69,23 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   private val consumption = lerpf(20, 15, ctx.getSkillExp)
 
   private def getProbability(ct: Int): Double = (ct - 10.0) / 18.0
-  private def getBuffTime(ct: Int): Int = (4 * RandUtils.ranged(1, 2) * ct *
+  private def getBuffTime(ct: Int): Int = (RandUtils.ranged(1, 2) * ct *
     lerp(1.5, 2.5, ctx.getSkillExp())).toInt
   private def getHungerBuffTime(ct: Int): Int = (1.25f * ct).toInt
-  private def getBuffLevel(ct: Int): Int = (lerp(0.5, 1, ctx.getSkillExp()) * (ct / 18.0)).toInt
+  private def getBuffLevel(ct: Int): Int = Math.floor(getProbability(ct)).toInt
+
+  private var overload = 0f
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_consume() = {
     val overload = lerpf(200, 120, ctx.getSkillExp)
-    if(!ctx.consume(overload, 0)) terminate()
+    ctx.consume(overload, 0)
+    this.overload = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
+    if(ctx.cpData.getOverload < overload) ctx.cpData.setOverload(overload)
     tick += 1
     if((tick <= MAX_TIME && !ctx.consume(0, consumption)) || tick >= MAX_TOLERANT_TIME ) {
       sendToClient(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
@@ -115,7 +119,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
       BodyIntensify.triggerAchievement(player)
       ctx.addSkillExp(0.01f)
 
-      val cooldown = lerpf(45, 30, ctx.getSkillExp).toInt
+      val cooldown = lerpf(900, 600, ctx.getSkillExp).toInt
       ctx.setCooldown(cooldown)
       sendToClient(MSG_EFFECT_END, true.asInstanceOf[AnyRef])
       terminate()
@@ -126,13 +130,14 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
   }
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
-  private def c_onEnd() = {
+  private def l_onEnd() = {
     sendToServer(MSG_END)
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def c_onAbort() = {
-    sendToServer(MSG_END)
+  private def l_onAbort() = {
+    sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
+    terminate()
   }
 
 }
@@ -154,11 +159,6 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
       ACSounds.playClient(loopSound)
       AuxGuiHandler.register(hud)
     }
-  }
-
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
-  private def c_updateEffect() = {
-    // N/A
   }
 
   @Listener(channel=MSG_EFFECT_END, side=Array(Side.CLIENT))

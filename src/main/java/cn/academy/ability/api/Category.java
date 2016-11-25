@@ -11,7 +11,6 @@ import cn.academy.core.config.ACConfig;
 import cn.lambdalib.util.helper.Color;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.typesafe.config.Config;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -29,7 +28,6 @@ public class Category {
     private final List<Controllable> ctrlList = new ArrayList<>();
     
     private final String name;
-    private final Config config;
     
     int catID = -1;
     
@@ -47,7 +45,6 @@ public class Category {
         overlay = initOverlayIcon();
         developerIcon = initDeveloperIcon();
 
-        config = Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name));
     }
     
     public Color getColorStyle() {
@@ -123,7 +120,7 @@ public class Category {
     }
 
     public float getProgIncrRate() {
-        return (float) config.getDouble("common.prog_incr_rate");
+        return (float) Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name)).getDouble("common.prog_incr_rate");
     }
     
     /**

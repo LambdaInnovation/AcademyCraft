@@ -5,7 +5,7 @@ import java.util.function.Predicate
 
 import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.ability.api.context.{ClientRuntime, KeyDelegate}
-import cn.academy.ability.api.data.{AbilityData, CPData}
+import cn.academy.ability.api.data.AbilityData
 import cn.academy.core.Resources
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
@@ -14,7 +14,7 @@ import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.cgui.gui.{CGuiScreen, Widget}
 import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.{SerializeIncluded, SerializeStrategy}
 import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
@@ -30,7 +30,6 @@ import cn.lambdalib.util.helper.{Color, GameTimer}
 import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
-import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -150,12 +149,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
-      e match {
-        case p : EntityLivingBase => // Update position record in server to prevent move back
-          p.setPositionAndUpdate(dest.x + dx, dest.y + dy, dest.z + dz)
-        case _ =>
-          e.setPosition(dest.x + dx, dest.y + dy, dest.z + dz)
-      }
+      TPSkillHelper.setEntityLivingPosition(e,dest.x + dx, dest.y + dy, dest.z + dz)
     })
 
     player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
@@ -164,6 +158,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val dist = player.getDistance(dest.x, dest.y, dest.z)
     val expincr = if (dist >= 200) 0.03f else 0.015f
     ctx.addSkillExp(expincr)
+    ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
@@ -174,9 +169,9 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   object Gui {
     lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
 
-    lazy val dimensionNameMap = DimensionManager.getStaticDimensionIDs
-      .map(id => id -> DimensionManager.createProviderFor(id).getDimensionName)
-      .toMap
+    def dimensionNameMap(dimID: Int) = {
+      DimensionManager.createProviderFor(dimID).getDimensionName
+    }
 
     val ElemTimeStep = 0.06
 

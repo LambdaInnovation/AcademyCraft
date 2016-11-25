@@ -3,12 +3,11 @@ package cn.academy.vanilla.vecmanip.skill
 import java.util.function.Predicate
 
 import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
-import cn.academy.ability.api.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib.annoreg.core.Registrant
@@ -18,7 +17,6 @@ import cn.lambdalib.util.generic.VecUtils
 import cn.lambdalib.util.mc.{Raytrace, Vec3, WorldUtils}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.command.IEntitySelector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile._
@@ -67,6 +65,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
     MinecraftForge.EVENT_BUS.register(this)
+    ctx.consume(overloadToKeep, 0)
+    overloadKeep = ctx.cpData.getOverload
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER, Side.CLIENT))
@@ -76,6 +76,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
+    if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     val range = 4
     val entities = WorldUtils.getEntities(player, range, new Predicate[Entity] {
       override def test(t: Entity): Boolean = true
@@ -110,7 +111,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
     visited ++= entities
 
-    consumeNormal()
+    if(!consumeNormal)
+      terminate
   }
 
   private def createNewFireball(source : EntityFireball) = {
@@ -146,7 +148,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   def c_tick() = {
-    consumeNormal()
+    if(!consumeNormal)
+      terminate
   }
 
   @SubscribeEvent
@@ -186,41 +189,35 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     * @return (Whether action had been really performed, processed damage)
     */
   private def handleAttack(dmgSource: DamageSource, dmg: Float, passby: Boolean): (Boolean, Float) = {
-    val consumpRatio = 110.0f
-    val overloadRatio = 15.0f
-    val returnRatio = reflectRate
-
-    val consumption = math.min(ctx.cpData.getCP, dmg * consumpRatio)
-    val acceptedDamage = consumption / consumpRatio
-    val absorbed = acceptedDamage
-
-    val absorbedAll = absorbed == dmg
-
-    if (absorbedAll || !passby) { // Perform the action.
-      ctx.consumeWithForce(acceptedDamage * overloadRatio, consumption)
+    val reflectDamage = lerpf(0.6f, 1.2f, ctx.getSkillExp) * dmg
+    if (!passby) { // Perform the action.
+      consumeDamage(dmg)
       ctx.addSkillExp(dmg * 0.0004f)
 
       val sourceEntity = dmgSource.getSourceOfDamage
       if (sourceEntity != null && sourceEntity != player) {
-        ctx.attack(sourceEntity, absorbed * returnRatio)
+        ctx.attack(sourceEntity, reflectDamage)
         sendToClient(MSG_EFFECT, sourceEntity.position)
       }
 
-      (true, dmg - absorbed)
+      (true, dmg - reflectDamage)
     } else {
-      (false, dmg - absorbed)
+      (false, dmg - reflectDamage)
     }
   }
 
-  private val reflectRate = lerpf(0.7f, 1.2f, ctx.getSkillExp) * rangef(0.9f, 1.1f)
-
   private def consumeEntity(difficulty: Float) = {
-    ctx.consume(difficulty * lerpf(30, 16, ctx.getSkillExp), difficulty * lerpf(300, 160, ctx.getSkillExp))
+    ctx.consume(0, difficulty * lerpf(300, 160, ctx.getSkillExp))
   }
 
-  private def consumeDamage() = ctx.consume(lerpf(30, 10, ctx.getSkillExp), lerpf(300, 200, ctx.getSkillExp))
+  private def consumeDamage(damage: Float) = ctx.consumeWithForce(0, lerpf(20, 15, ctx.getSkillExp) * damage)
 
-  private def consumeNormal() = ctx.consume(lerpf(2, 1.5f, ctx.getSkillExp), lerpf(20, 16, ctx.getSkillExp))
+  private def consumeNormal():(Boolean) = {
+    ctx.consume(0,  lerpf(15, 11, ctx.getSkillExp))
+  }
+
+  private val overloadToKeep = lerpf(350, 250, ctx.getSkillExp)
+  private var overloadKeep = 0f
 
 }
 

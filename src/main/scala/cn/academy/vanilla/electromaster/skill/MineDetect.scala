@@ -65,14 +65,14 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
   private def consume() = {
     val exp = ctx.getSkillExp
 
-    val cp = lerpf(1800, 1400, exp)
+    val cp = lerpf(1500, 1000, exp)
     val overload = lerpf(200, 180, exp)
 
     ctx.consume(overload, cp)
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def c_onKeyDown() = {
+  private def l_onKeyDown() = {
     sendToServer(MSG_EXECUTE)
   }
 
@@ -85,7 +85,7 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
       sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef], isAdvanced.asInstanceOf[AnyRef])
 
       val exp = ctx.getSkillExp
-      val cooldown = lerpf(900, 400, exp).asInstanceOf[Int]
+      val cooldown = lerpf(900, 400, exp).toInt
       ctx.setCooldown(cooldown)
     }
     terminate()

@@ -54,10 +54,10 @@ import cn.lambdalib.util.mc.MCExtender._
 
 private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with IConsumptionProvider {
 
-  private val consumption = MathUtils.lerpf(225, 275, ctx.getSkillExp)
-  private val overload = MathUtils.lerpf(72, 33, ctx.getSkillExp)
+  private val consumption = MathUtils.lerpf(140, 270, ctx.getSkillExp)
+  private val overload = MathUtils.lerpf(35, 20, ctx.getSkillExp)
   private val cooldown = MathUtils.lerpf(60, 40, ctx.getSkillExp).toInt
-  private val damage = MathUtils.lerpf(18, 30, ctx.getSkillExp)
+  private val damage = MathUtils.lerpf(8, 15, ctx.getSkillExp)
   private val speed = MathUtils.lerpf(0.5f, 1.0f, ctx.getSkillExp)
 
   var state = StateMoving

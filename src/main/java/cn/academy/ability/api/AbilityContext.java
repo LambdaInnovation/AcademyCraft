@@ -59,6 +59,14 @@ public class AbilityContext {
         }
     }
 
+    public void attackIgnoreArmor(Entity target, float damage) {
+        damage = CalcEvent.calc(new CalcEvent.SkillAttack(player, skill, target, damage));
+
+        if (damage > 0 && (AbilityPipeline.canAttackPlayer() || (!(target instanceof EntityPlayer))) && canAttack(target)) {
+            target.attackEntityFrom(new SkillDamageSource(player, skill).setDamageBypassesArmor(), getFinalDamage(damage));
+        }
+    }
+
     public void attackReflect(Entity target, float damage, Runnable reflectCallback) {
         if (MinecraftForge.EVENT_BUS.post(new ReflectEvent(player, skill, target))) {
             reflectCallback.run();
@@ -119,7 +127,7 @@ public class AbilityContext {
     }
 
     public boolean canBreakBlock(World world, int x, int y, int z) {
-        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, x, y, z);
+        return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, x, y, z);
     }
 
     public boolean canBreakBlock(World world) {

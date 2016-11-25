@@ -1,9 +1,9 @@
 /**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
+ * Copyright (c) Lambda Innovation, 2013-2016
+ * This file is part of the AcademyCraft mod.
+ * https://github.com/LambdaInnovation/AcademyCraft
+ * Licensed under GPLv3, see project root for more information.
+ */
 package cn.academy.vanilla.teleporter.skill;
 
 import cn.academy.ability.api.Skill;
@@ -49,8 +49,8 @@ public class Flashing extends Skill {
     public static final Flashing instance = new Flashing();
 
     private static final String
-        MSG_PERFORM = "perform",
-        KEY_GROUP = "TP_Flashing";
+            MSG_PERFORM = "perform",
+            KEY_GROUP = "TP_Flashing";
 
     private Flashing() {
         super("flashing", 5);
@@ -109,14 +109,29 @@ public class Flashing extends Skill {
         @SideOnly(Side.CLIENT)
         IActivateHandler activateHandler;
 
-        final float exp, consumption, overload;
+        final float exp, consumption;
+        final float overload_start, consumption_start;
+        final int cooldown_time;
+        float overloadKeep;
+        final int max_time;
+        int ticks = 0;
 
         public MainContext(EntityPlayer player) {
             super(player, instance);
 
             exp = ctx.getSkillExp();
-            consumption = lerpf(100, 70, exp);
-            overload = lerpf(90, 70, exp);
+            consumption = lerpf(13, 6, exp);
+            overload_start = lerpf(250, 180, exp);
+            consumption_start = lerpf(80, 60, exp);
+            max_time = (int) lerpf(60, 150, exp);
+            cooldown_time = (int) lerpf(900, 400, exp);
+        }
+
+        @Listener(channel=Context.MSG_MADEALIVE, side=Side.SERVER)
+        void serverMadeAlive() {
+            if(!ctx.consume(overload_start, consumption_start)) terminate(); else {
+                overloadKeep = ctx.cpData.getOverload();
+            }
         }
 
         @SideOnly(Side.CLIENT)
@@ -208,18 +223,24 @@ public class Flashing extends Skill {
             }
         }
 
+        @Listener(channel=MSG_TICK, side=Side.SERVER)
+        void serverTick() {
+            if(ctx.cpData.getOverload() < overloadKeep) ctx.cpData.setOverload(overloadKeep);
+            if(ticks > max_time) terminate();
+            ticks++;
+        }
+
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
-            if (ctx.consume(overload, consumption)) {
+            if (ctx.consume(0, consumption)) {
                 Vec3 dest = getDest(keyid);
-                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+                TPSkillHelper.setEntityLivingPosition(player,dest.xCoord, dest.yCoord, dest.zCoord);
                 player.fallDistance = 0.0f;
 
                 ctx.addSkillExp(.002f);
                 instance.triggerAchievement(player);
                 TPSkillHelper.incrTPCount(player);
 
-                ctx.setCooldownSub(keyid, 5);
                 sendToClient(MSG_PERFORM);
             }
         }
@@ -246,6 +267,11 @@ public class Flashing extends Skill {
             }
         }
 
+        @Listener(channel=MSG_TERMINATED, side=Side.SERVER)
+        void serverTerminated() {
+            ctx.setCooldown(cooldown_time);
+        }
+
         @SideOnly(Side.CLIENT)
         private void startEffects() {
             endEffects();
@@ -266,13 +292,13 @@ public class Flashing extends Skill {
         }
 
         private boolean consume(boolean simulate) {
-            return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(overload, consumption);
+            return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(0, consumption);
         }
 
         private Vec3 getDest(int keyid) {
             Preconditions.checkState(keyid != -1);
 
-            double dist = lerpf(8, 15, exp);
+            double dist = lerpf(12, 18, exp);
 
             Vec3 dir = VecUtils.copy(dirs[keyid]);
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
@@ -293,28 +319,28 @@ public class Flashing extends Skill {
 
                 if (mop.typeOfHit == MovingObjectType.BLOCK) {
                     switch (mop.sideHit) {
-                    case 0:
-                        y -= 1.0;
-                        break;
-                    case 1:
-                        y += 1.8;
-                        break;
-                    case 2:
-                        z -= .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 3:
-                        z += .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 4:
-                        x -= .6;
-                        y = mop.blockY + 1.7;
-                        break;
-                    case 5:
-                        x += .6;
-                        y = mop.blockY + 1.7;
-                        break;
+                        case 0:
+                            y -= 1.0;
+                            break;
+                        case 1:
+                            y += 1.8;
+                            break;
+                        case 2:
+                            z -= .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 3:
+                            z += .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 4:
+                            x -= .6;
+                            y = mop.blockY + 1.7;
+                            break;
+                        case 5:
+                            x += .6;
+                            y = mop.blockY + 1.7;
+                            break;
                     }
                     // check head
                     if (mop.sideHit > 1) {

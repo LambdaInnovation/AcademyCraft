@@ -58,7 +58,8 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
   def l_perform() = {
     if (canPerform && consume()) {
       player.setVel(initSpeed())
-      ctx.setCooldown(lerpf(25, 5, ctx.getSkillExp).toInt)
+      if(player.ridingEntity!=null)player.mountEntity(null);
+      ctx.setCooldown(lerpf(80, 50, ctx.getSkillExp).toInt)
 
       sendToServer(MSG_PERFORM)
     } else {
@@ -90,12 +91,12 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 
   private def consume() = {
     val cp = consumption
-    val overload = lerpf(40, 30, ctx.getSkillExp)
+    val overload = lerpf(30, 15, ctx.getSkillExp)
 
     ctx.consume(overload, cp)
   }
 
-  private val consumption = lerpf(200, 160, ctx.getSkillExp)
+  private val consumption = lerpf(120, 80, ctx.getSkillExp)
 
   private def updateCanPerform() = canPerform = ignoreGroundChecking || checkGround
 
