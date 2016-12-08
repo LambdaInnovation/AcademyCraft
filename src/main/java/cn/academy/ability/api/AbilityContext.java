@@ -134,6 +134,10 @@ public class AbilityContext {
         return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world);
     }
 
+    public boolean isEntirelyDisableBreakBlock() {
+        return AbilityPipeline.isAllWorldDisableBreakBlock();
+    }
+
     private float getFinalDamage(float damage) {
         return g_getDamageScale() * skill.getDamageScale() * damage;
     }

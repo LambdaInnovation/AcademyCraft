@@ -37,6 +37,8 @@ public class IC2Support {
     public static final double CONV_RATE = 1;
 
     private static final String MODID = "IC2";
+
+    private static IC2SkillHelper helper;
     
     public static double eu2if(double euEnergy) {
         return euEnergy / CONV_RATE;
@@ -49,6 +51,9 @@ public class IC2Support {
     @Optional.Method(modid=MODID)
     @RegInitCallback
     public static void init() {
+        helper = new IC2SkillHelper();
+        helper.init();
+
         BlockEUInput euInput = new BlockEUInput();
         BlockEUOutput euOutput = new BlockEUOutput();
         
@@ -75,6 +80,11 @@ public class IC2Support {
 
         AcademyCraft.log.info("IC2 API Support has been loaded.");
     }
+
+    public static IC2SkillHelper getHelper() {
+        return helper;
+    }
+
 }
 
 class IC2EnergyItemManager implements EnergyItemManager {
