@@ -149,7 +149,8 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
-      TPSkillHelper.setEntityLivingPosition(e,dest.x + dx, dest.y + dy, dest.z + dz)
+      if(e.isRiding())e.mountEntity(null)
+      e.setPositionAndRotation(dest.x + dx, dest.y + dy, dest.z + dz, e.rotationYaw, e.rotationPitch);
     })
 
     player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,

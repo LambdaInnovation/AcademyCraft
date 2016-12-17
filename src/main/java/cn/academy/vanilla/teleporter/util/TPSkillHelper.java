@@ -124,22 +124,6 @@ public class TPSkillHelper {
     }
 
     /**
-     * a special method which can move entity with boat, minecart etc.
-     * @param living
-     * @param xPos
-     * @param yPos
-     * @param zPos
-     */
-    public static void setEntityLivingPosition(Entity living, double xPos,double yPos,double zPos){
-        if  (living.ridingEntity!=null)
-        {
-            living.ridingEntity.setPosition(xPos,yPos+1,zPos);
-        }
-        living.setPosition(xPos,yPos+1,zPos);
-
-    }
-
-    /**
      * Fired both client and server when player emits an critical hit.
      */
     public static class TPCritHitEvent extends AbilityEvent {
