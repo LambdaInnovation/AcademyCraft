@@ -71,7 +71,9 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       sendToClient(MSG_SOUND)
       val overload: Float = lerpf(40, 20, exp)
       ctx.consumeWithForce(overload, distance * getCPB(exp))
-      TPSkillHelper.setEntityLivingPosition(player,dest.xCoord, dest.yCoord, dest.zCoord)
+      if(player.isRiding())
+        player.mountEntity(null);
+      player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord)
       val expincr: Float = 0.00018f * distance
       ctx.addSkillExp(expincr)
       player.fallDistance = 0
