@@ -10,16 +10,17 @@ import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.core.AcademyCraft
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.VecUtils
 import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.Entity
+import net.minecraft.entity.{Entity, EntityLiving}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3}
+import net.minecraft.util.{DamageSource, MathHelper, MovingObjectPosition, Vec3}
 
 /**
   * @author WeAthFolD, KSkun
@@ -93,17 +94,43 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     }
   }
 
+  private def newDest: Vec3 = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
+
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_SYNC_BALLS, side=Array(Side.CLIENT))
   private def c_syncBalls(ballToAdd: EntityMdBall) = balls.add(ballToAdd)
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER,Side.CLIENT))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._
+    val yoff: Double = if (ACRenderingHelper.isThePlayer(player)) 0 else 1.6
+    var autoCount=if (exp>0.5) (balls.size().toFloat *exp).toInt else 0
+    AcademyCraft.log.info("number"+autoCount.toString)
+    val autoTarget=WorldUtils.getEntities(player,15,EntitySelectors.exclude(player).and(new Predicate[Entity] {
+      override def test(t: Entity): Boolean = t.isInstanceOf[EntityLiving]
+    }))
     for (ball <- balls) {
-      val dest: Vec3 = newDest
+
+      val raySmall: EntityMdRaySmall = new EntityMdRaySmall(world)
+      //------------------------copy from client side--------------------
+      raySmall.viewOptimize = false
+      var dest = newDest
+      if(autoCount>0 && !autoTarget.isEmpty()) {
+        val target=autoTarget.get((Math.random()*autoTarget.size()).toInt)
+        dest = VecUtils.vec(target.posX,target.posY,target.posZ)
+        autoCount-=1
+      }
+      raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ, dest.xCoord, dest.yCoord, dest.zCoord)
+      if(ctx.player.worldObj.isRemote)
+        world.spawnEntityInWorld(raySmall)
+
+      //------------------------------
+
       val traceResult: MovingObjectPosition = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
-        dest, basicSelector.and(EntitySelectors.exclude(player)))
+        dest,EntitySelectors.exclude(player).and(new Predicate[Entity] {
+          override def test(t: Entity): Boolean = t.isInstanceOf[EntityLiving]
+        }))
       if (traceResult != null && traceResult.entityHit != null) {
         traceResult.entityHit.hurtResistantTime = -1
         MDDamageHelper.attack(ctx, traceResult.entityHit, getDamage(exp))
@@ -113,21 +140,35 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     ctx.addSkillExp(0.001f * balls.size)
   }
 
-  private def newDest: Vec3 = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
 
+/*
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_onEnd() = {
     val yoff: Double = if (ACRenderingHelper.isThePlayer(player)) 0 else 1.6
     import scala.collection.JavaConversions._
+    var autoCount=if (exp>0.5) (balls.size().toFloat *exp).toInt else 0
+    AcademyCraft.log.info(autoCount)
+    val autoTarget=WorldUtils.getEntities(player,5,EntitySelectors.exclude(player).and(new Predicate[Entity] {
+      override def test(t: Entity): Boolean = t.isInstanceOf[EntityLiving]
+    }))
     for (ball <- balls) {
       // Spawn a ray for the ball
       val raySmall: EntityMdRaySmall = new EntityMdRaySmall(world)
+
       raySmall.viewOptimize = false
-      val dest: Vec3 = newDest
+      var dest = newDest
+      if(autoCount>0 && !autoTarget.isEmpty())
+      {
+        val target=autoTarget.get(0)
+        autoTarget.remove(0)
+        AcademyCraft.log.info(target)
+        dest= VecUtils.vec(target.posX,target.posY,target.posZ)
+        autoCount-=1
+      }
       raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ, dest.xCoord, dest.yCoord, dest.zCoord)
       world.spawnEntityInWorld(raySmall)
     }
   }
-
+*/
 }
