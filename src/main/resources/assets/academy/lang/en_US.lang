@@ -116,6 +116,8 @@ ac.settings.cat.generic=Generic
 ac.settings.prop.attackPlayer=Enable PvP
 ac.settings.prop.destroyBlocks=Destroy blocks
 ac.settings.prop.headsOrTails=Play Heads or Tails
+ac.settings.prop.useMouseWheel=Mouse wheel adjust tp distance
+#Use mouse wheel to adjust Penetrate Teleport distance
 
 ac.settings.cat.keys=Keys
 ac.settings.prop.ability_activation=Activate Ability

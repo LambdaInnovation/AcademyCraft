@@ -48,6 +48,10 @@ public class AbilityPipeline {
             new BlockDestroyEvent(world, player, x, y, z));
     }
 
+    public static boolean canUseMouseWheel(){
+        return propUseMouseWheel.getBoolean();
+    }
+
     /**
      * Tests if the block at the specified coordinates can be broken.
      * @return Whether the block can be really broken.
@@ -71,6 +75,7 @@ public class AbilityPipeline {
     private static Property propAttackPlayer;
     private static Property propDestroyBlocks;
     private static Property propWorldsDestroyingBlocks;
+    private static Property propUseMouseWheel;
 
     @RegInitCallback
     private static void _init() {
@@ -80,7 +85,7 @@ public class AbilityPipeline {
         propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
         propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new int[]{},
                 "The world ids which whitelisted destroying blocks.");
-
+        propUseMouseWheel = conf.get("generic","useMouseWheel",false,"Whether teleporter can use mouse wheel to control the destination.");
         MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
     }
 
