@@ -137,7 +137,8 @@ public class RangedRayDamage {
                             VecUtils.multiply(vp0, s),
                             VecUtils.multiply(vp1, t)));
                     
-                    int[] coords = { (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord };
+                    //int[] coords = { (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord };
+                    int[] coords = { (int)Math.floor( pos.xCoord), (int)Math.floor( pos.yCoord), (int)Math.floor( pos.zCoord)};
                     if(processed.contains(coords))
                         continue;
                     

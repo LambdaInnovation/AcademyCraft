@@ -117,7 +117,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
       // Destroy blocks around
       {
         def ran(x: Int) = (x - 3) until (x + 3)
-        val (x, y, z) = (math.round(position.x).toInt, math.round(position.y).toInt, math.round(position.z).toInt)
+        val (x, y, z) = (math.round(position.x).floor.toInt, math.round(position.y).floor.toInt, math.round(position.z).floor.toInt)
 
         for {i <- ran(x)
              j <- ran(y)

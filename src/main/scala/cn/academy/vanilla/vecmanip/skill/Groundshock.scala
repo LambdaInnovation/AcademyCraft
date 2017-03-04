@@ -131,7 +131,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
         deltas.foreach { case (delta, prob) => {
 
-          val pt = IVec((x + delta.x).toInt, (y + delta.y).toInt, (z + delta.z).toInt)
+          val pt = IVec((x + delta.x).floor.toInt, (y + delta.y).floor.toInt, (z + delta.z).floor.toInt)
           val block: Block = world.getBlock(pt.x, pt.y, pt.z)
 
           if (RNG.nextDouble() < prob) {
