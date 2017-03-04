@@ -178,7 +178,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   @SubscribeEvent
   def onLivingHurt(evt: LivingHurtEvent) = {
-    if (evt.entityLiving.equals(player)) {
+    if (evt.entityLiving.equals(player)  && evt.ammount <=9999) {
       val (_, dmg) = handleAttack(evt.source, evt.ammount, passby = false)
       evt.ammount = dmg
     }
