@@ -7,6 +7,7 @@
 package cn.academy.energy.block;
 
 import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.core.network.MessageMachineInfoSync;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
@@ -160,15 +161,10 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     private void sync() {
-        NetworkMessage.sendToAllAround(TargetPoints.convert(this, 20),
-                this, "sync", getLiquidAmount());
+        cn.academy.core.network.NetworkManager.instance.sendToAllAround(new MessageMachineInfoSync(this), TargetPoints.convert(this, 15));
+
     }
 
-    @Listener(channel="sync", side=Side.CLIENT)
-    private void hSync(int fluidAmount) {
-        tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
-    }
-    
     private boolean isPhaseLiquid(ItemStack stack) {
         return stack.getItem() == ModuleCrafting.matterUnit && 
                 ModuleCrafting.matterUnit.getMaterial(stack) == ModuleCrafting.imagPhase.mat;

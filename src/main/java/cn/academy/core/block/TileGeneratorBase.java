@@ -15,6 +15,7 @@ import cn.lambdalib.s11n.network.NetworkMessage;
 import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * @author WeAthFolD
@@ -98,6 +99,18 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
             double ret = IFItemManager.instance.charge(stack, cangive);
             energy -= (cangive - ret);
         }
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        energy = tag.getDouble("energy");
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setDouble("energy", energy);
     }
     
     /**

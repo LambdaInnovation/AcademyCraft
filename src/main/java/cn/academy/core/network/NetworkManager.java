@@ -28,6 +28,7 @@ public class NetworkManager
     {
         registerMessage(MessageConfig.Handler.class, MessageConfig.class, Side.CLIENT);
         registerMessage(MessageSBEffect.Handler.class, MessageSBEffect.class, Side.CLIENT);
+        registerMessage(MessageMachineInfoSync.Handler.class, MessageMachineInfoSync.class, Side.CLIENT);
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(

@@ -11,6 +11,7 @@ import cn.academy.core.client.render.block.RenderDynamicBlock;
 import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.client.sound.PositionedSound;
 import cn.academy.core.client.sound.TileEntitySound;
+import cn.academy.core.network.MessageMachineInfoSync;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
@@ -20,8 +21,6 @@ import cn.academy.support.EnergyItemHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegTileEntity;
 import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -175,9 +174,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         if (!worldObj.isRemote) {
             if(--syncCooldown <= 0) {
                 syncCooldown = SYNC_INTV;
-                NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15),
-                        this, "sync",
-                        currentRecipe, workProgress, getLiquidAmount());
+                cn.academy.core.network.NetworkManager.instance.sendToAllAround(new MessageMachineInfoSync(this), TargetPoints.convert(this, 15));
             }
         }
 
@@ -281,12 +278,6 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         tank.writeToNBT(tag);
     }
 
-    @Listener(channel="sync", side=Side.CLIENT)
-    private void hSync(IFRecipe recipe, double progress, int fluidAmount) {
-        tank.setFluid(new FluidStack(ModuleCrafting.fluidImagProj, fluidAmount));
-        workProgress = progress;
-        currentRecipe = recipe;
-    }
     
     // --- CLIENT EFFECTS
     
