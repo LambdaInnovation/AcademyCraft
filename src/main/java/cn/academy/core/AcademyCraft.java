@@ -48,7 +48,7 @@ import java.util.Map.Entry;
      dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
-@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
+//@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
 public class AcademyCraft {
 
     @Instance("academy-craft")
