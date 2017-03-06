@@ -174,4 +174,11 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
     }
   }
 
+  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  private def c_end() = {
+    {
+      if (loopSound != null) loopSound.stop()
+      if (hud != null) hud.startBlend(false)
+    }
+  }
 }
