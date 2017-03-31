@@ -8,13 +8,13 @@ package cn.academy.ability;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
-import cn.academy.ability.block.AbilityInterferer;
 import cn.academy.ability.block.BlockDeveloper;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.item.ItemDeveloper;
 import cn.academy.ability.item.ItemInductionFactor;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
+import cn.academy.crafting.block.BlockAbilityInterferer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegBlock;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
@@ -62,7 +62,8 @@ public class ModuleAbility {
     public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
 
     @RegBlock
-    public static AbilityInterferer abilityInterferer;
+    @RecipeName("ability_interf")
+    public static BlockAbilityInterferer abilityInterferer;
 
     @RegItem
     @RecipeName("magnetic_coil")

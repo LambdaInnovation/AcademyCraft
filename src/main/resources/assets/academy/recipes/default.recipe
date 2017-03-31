@@ -256,6 +256,12 @@ shaped(dev_advanced) {
     [node1,      crystal2,   reso_crystal]
 }
 
+shaped(ability_interf) {
+    [nil, conv_comp, nil]
+    [brain_comp,  frame, noteblock]
+    [nil,      calc_chip,   nil]
+}
+
 shapeless(wafer) {
     [imagsil_ingot]
 }

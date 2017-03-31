@@ -12,33 +12,31 @@ import java.util.function.Supplier
 import cn.academy.ability.api.data.CPData
 import cn.academy.ability.api.data.CPData.IInterfSource
 import cn.academy.core.Resources
-import cn.academy.core.block.ACBlockContainer
+import cn.academy.core.block.TileReceiverBase
 import cn.academy.core.client.render.block.RenderDynamicBlock
+import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
+import cn.academy.crafting.block.ContainAbilityInterferer
+import cn.academy.energy.IFConstants
+import cn.academy.support.EnergyItemHelper
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
 import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.gui.{CGuiScreen, HierarchyDebugger, Widget}
+import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib.cgui.gui.Widget
 import cn.lambdalib.cgui.xml.CGUIDocument
 import cn.lambdalib.s11n.nbt.NBTS11n
 import cn.lambdalib.s11n.network.{Future, NetworkMessage, TargetPoints}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
+import cn.lambdalib.util.generic.{MathUtils, VecUtils}
 import cn.lambdalib.util.helper.TickScheduler
-import cn.lambdalib.util.mc.{EntitySelectors, PlayerUtils, WorldUtils}
+import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.material.Material
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{IIcon, ResourceLocation}
-import net.minecraft.world.{IBlockAccess, World}
 
 import scala.collection.JavaConversions._
 import scala.collection.SortedSet
@@ -52,6 +50,7 @@ object AbilityInterf {
   final val MSG_UPDATE_RANGE = "set_range"
   final val MSG_UPDATE_WHITELIST = "set_whitelist"
   final val MSG_UPDATE_ENABLED = "set_enabled"
+  val SLOT_BATTERY = 0
 
   @SideOnly(Side.CLIENT)
   @RegInitCallback
@@ -60,7 +59,7 @@ object AbilityInterf {
 
 @Registrant
 @RegTileEntity
-class TileAbilityInterferer extends TileEntity {
+class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,10000, IFConstants.LATENCY_MK1) with ISidedInventory {
   import AbilityInterf._
 
   val scheduler = new TickScheduler
@@ -97,6 +96,13 @@ class TileAbilityInterferer extends TileEntity {
     }
   }
 
+  private def cost():Boolean= {
+    if( {energy-= range_ *range_;energy>0}) {
+      return true
+    }
+    energy=0
+    false
+  }
   private def sync() = {
     assert(!getWorldObj.isRemote)
 
@@ -107,24 +113,38 @@ class TileAbilityInterferer extends TileEntity {
   scheduler.every(10).atOnly(Side.SERVER).condition(new Supplier[lang.Boolean] {
     override def get(): lang.Boolean = enabled
   }).run(() => {
-    val boundingBox = testBB
-    val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
-    players foreach {
-      case player: EntityPlayer =>
-        CPData.get(player).addInterf(sourceName, new IInterfSource {
-          override def interfering(): Boolean =
-            boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
-              !TileAbilityInterferer.this.isInvalid &&
-              !player.capabilities.isCreativeMode &&
-              enabled
-        })
+    if(cost()){
+      val boundingBox = testBB
+      val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
+      players foreach {
+        case player: EntityPlayer =>
+          CPData.get(player).addInterf(sourceName, new IInterfSource {
+            override def interfering(): Boolean =
+              boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
+                !TileAbilityInterferer.this.isInvalid &&
+                !player.capabilities.isCreativeMode &&
+                enabled
+          })
+      }
     }
+    else
+      enabled_ = false
   })
 
   // Sync data to client
   scheduler.every(20).atOnly(Side.SERVER).run(() => sync())
 
-  override def updateEntity() = scheduler.runTick()
+  override def updateEntity(){
+    super.updateEntity()
+    scheduler.runTick()
+    if(!worldObj.isRemote){
+      val stack = this.getStackInSlot(SLOT_BATTERY)
+      if (stack != null && EnergyItemHelper.isSupported(stack)) {
+        val gain = EnergyItemHelper.pull(stack, Math.min(getMaxEnergy - getEnergy, getBandwidth), false)
+        this.injectEnergy(gain)
+      }
+    }
+  }
 
   @Listener(channel=MSG_SYNC, side=Array(Side.CLIENT))
   private def hSync(range2: Double, enabled2: Boolean, whitelist2 : Array[String]) = {
@@ -174,66 +194,12 @@ class TileAbilityInterferer extends TileEntity {
     tag.setFloat("range_", range_.toFloat)
   }
 
-}
+  def getAccessibleSlotsFromSide(side: Int): Array[Int] =
+      Array[Int](SLOT_BATTERY)
 
-class AbilityInterferer extends ACBlockContainer("ability_interferer", Material.rock) {
+  def canInsertItem(slot: Int, item: ItemStack, side: Int): Boolean = this.isItemValidForSlot(slot, item)
 
-  var iconOn: IIcon = null
-  var iconOff: IIcon = null
-
-  override def createNewTileEntity(world: World, meta: Int) = new TileAbilityInterferer
-
-  override def registerBlockIcons(ir: IIconRegister) = {
-    iconOn = ricon(ir, "ability_interf_on")
-    iconOff = ricon(ir, "ability_interf_off")
-  }
-
-  override def onBlockPlacedBy(world : World, x : Int, y : Int, z : Int,
-                               placer : EntityLivingBase, stack : ItemStack) =
-    (placer, world.getTileEntity(x, y, z)) match {
-      case (player: EntityPlayer, interf: TileAbilityInterferer) =>
-        interf.setPlacer(player)
-      case _ =>
-    }
-
-
-  override def getIcon(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = {
-    world.getTileEntity(x, y, z) match {
-      case tile: TileAbilityInterferer => if (tile.enabled) iconOn else iconOff
-      case _ => iconOn
-    }
-  }
-
-  override def getIcon(side: Int, meta: Int) = iconOff
-
-  @SideOnly(Side.CLIENT)
-  override def getRenderBlockPass = -1
-
-  override def isOpaqueCube = false
-
-  override def onBlockActivated(world: World, x: Int, y: Int, z: Int,
-                                player: EntityPlayer, side: Int,
-                                tx: Float, ty: Float, tz: Float) =
-    world.getTileEntity(x, y, z) match {
-      case tile: TileAbilityInterferer =>
-        // Client side verification might be dangerous, but its really OK in here.
-        if (world.isRemote) {
-          handleClient(player, tile)
-        }
-        true
-      case _ => false
-    }
-
-  @SideOnly(Side.CLIENT)
-  private def handleClient(player: EntityPlayer, tile: TileAbilityInterferer) = {
-    if (player.capabilities.isCreativeMode ||
-      Option(player.getCommandSenderName) == tile.placer) {
-      Minecraft.getMinecraft.displayGuiScreen(GuiAbilityInterferer(tile))
-    } else {
-      PlayerUtils.sendChat(player, "ac.ability_interf.cantuse")
-    }
-  }
-
+  def canExtractItem(slot: Int, item: ItemStack, side: Int): Boolean = false
 }
 
 @SideOnly(Side.CLIENT)
@@ -248,8 +214,9 @@ object GuiAbilityInterferer {
   val buttonOn  = Resources.getTexture("guis/button/button_switch_on")
   val buttonOff = Resources.getTexture("guis/button/button_switch_off")
 
-  def apply(tile: TileAbilityInterferer) = {
+  def apply(container: ContainAbilityInterferer) = {
     val window = template.copy()
+    val tile=container.tile
 
     {
       case class Element(playerName: String) extends Component("Element")
@@ -346,6 +313,7 @@ object GuiAbilityInterferer {
       button.listens[LeftClickEvent](() => {
         tile.setEnabledClient(!state, () => setState(!state))
       })
+      button.listens[FrameEvent](()=>setState(tile.enabled))
     }
 
     {
@@ -363,15 +331,22 @@ object GuiAbilityInterferer {
       elemRange.child("element_btn_right").listens[LeftClickEvent](handle(10))
     }
 
-    val ret = new CGuiScreen() {
-      override def doesGuiPauseGame = false
-    }
+//    val ret = new CGuiScreen() {
+//      override def doesGuiPauseGame = false
+//    }
 
+//    val invPage = InventoryPage(invWidget)
+//    val wirelessPage = WirelessPage.userPage(tile)
+//
+//    val ret = new ContainerUI(container, invPage, wirelessPage)
+//
+//    ret.infoPage.histogram(TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy))
+//
+//    ret
     val invPage = InventoryPage(window)
-
-    val root = TechUI(invPage)
-    ret.gui.addWidget(root)
-    
+    val wirelessPage:Page = WirelessPage.userPage(tile)
+    val ret = new ContainerUI(container, invPage, wirelessPage)
+    ret.infoPage.histogram(TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy))
     ret
   }
 
