@@ -77,7 +77,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       val expincr: Float = 0.00018f * distance
       ctx.addSkillExp(expincr)
       player.fallDistance = 0
-      ctx.setCooldown(lerpf(30, 0, exp).toInt)
+      ctx.setCooldown(lerpf(30, 1, exp).toInt)
       TPSkillHelper.incrTPCount(player)
     }
     terminate()
