@@ -1,8 +1,8 @@
 package cn.academy.crafting.block;
 
-import cn.academy.ability.block.GuiAbilityInterferer;
 import cn.academy.ability.block.TileAbilityInterferer;
 import cn.academy.core.block.ACBlockContainer;
+import cn.academy.crafting.client.ui.GuiAbilityInterferer;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib.annoreg.mc.gui.RegGuiHandler;
@@ -60,6 +60,7 @@ public class BlockAbilityInterferer extends ACBlockContainer
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir){
         iconOn = ricon(ir, "ability_interf_on");
         iconOff = ricon(ir, "ability_interf_off");
@@ -77,6 +78,7 @@ public class BlockAbilityInterferer extends ACBlockContainer
 
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
         TileEntity tile = world.getTileEntity(x, y, z);
