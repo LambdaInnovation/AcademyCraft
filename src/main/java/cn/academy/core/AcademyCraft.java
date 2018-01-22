@@ -84,7 +84,7 @@ public class AcademyCraft {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         log.info("Starting AcademyCraft");
-        log.info("Copyright (c) Lambda Innovation, 2013-2016");
+        log.info("Copyright (c) Lambda Innovation, 2013-2018");
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());
