@@ -19,11 +19,10 @@ import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
 import cn.lambdalib.util.helper.{Color, Motion3D}
 import cn.lambdalib.util.mc.{BlockSelectors, EntitySelectors, Raytrace}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemPotion, ItemStack}
-import net.minecraft.potion.PotionEffect
+import net.minecraft.item.ItemStack
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 
@@ -82,27 +81,9 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       var attacked_ = false
       if(result.target != null) {
         attacked_ = true
-        if (curStack.getItem().isInstanceOf[ItemPotion]  && result.target.isInstanceOf[EntityLivingBase]){
-          if (!player.getEntityWorld.isRemote) {
-            val list = curStack.getItem().asInstanceOf[ItemPotion].getEffects(curStack)
-            if (list != null) {
-              val iterator = list.iterator
-              while (iterator.hasNext) {
-                {
-                  val potioneffect: PotionEffect = iterator.next.asInstanceOf[PotionEffect]
-                  result.target.asInstanceOf[EntityLivingBase].addPotionEffect(new PotionEffect(potioneffect))
-                }
-              }
-            }
-          }
-          dropProb = 0
-        }
-        else{
-          TPSkillHelper.attackIgnoreArmor(ctx, result.target, getDamage(curStack))
-          ThreateningTeleport.triggerAchievement(player)
-          dropProb = 0.3
-        }
-
+        TPSkillHelper.attackIgnoreArmor(ctx, result.target, getDamage(curStack))
+        ThreateningTeleport.triggerAchievement(player)
+        dropProb = 0.3
       }
       if(!player.capabilities.isCreativeMode) {
         if({curStack.stackSize -= 1; curStack.stackSize} <= 0) player.setCurrentItemOrArmor(0, null)
