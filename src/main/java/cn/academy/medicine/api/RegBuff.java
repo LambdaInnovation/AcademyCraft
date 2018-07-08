@@ -1,4 +1,4 @@
-package cn.academy.medicine;
+package cn.academy.medicine.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

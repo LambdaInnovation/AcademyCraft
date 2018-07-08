@@ -80,6 +80,8 @@ tile.ac_rf_input.name=Energy Bridge (CoFH RF In)
 tile.ac_developer_normal.name=Normal Ability Developer
 tile.ac_developer_advanced.name=Advanced Ability Developer
 tile.ac_ability_interferer.name=Ability Interferer
+tile.ac_mat_extractor.name=
+tile.ac_medicine_synthesizer.name=
 
 # Data Terminal
 ac.terminal.notinstalled=You have not yet installed Data Terminal.

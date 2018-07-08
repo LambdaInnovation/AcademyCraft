@@ -1,4 +1,4 @@
-package cn.academy.medicine;
+package cn.academy.medicine.api;
 
 import cn.lambdalib.annoreg.core.AnnotationData;
 import cn.lambdalib.annoreg.core.LoadStage;
