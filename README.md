@@ -1,7 +1,5 @@
 ![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/logo.png)  
 
-[![Build Status](http://jenkins.mcbox.cc/job/AcademyCraft/badge/icon)](http://jenkins.mcbox.cc/job/AcademyCraft/)
-
 A Minecraft mod about superability, including its aquiring, upgrading and using. The inspiration of AcademyCraft comes from [A Certain Scientific Railgun (とある科学の超電磁砲)](https://en.wikipedia.org/wiki/A_Certain_Scientific_Railgun) but the mod content is not limited of the background.
 
 Visit [AcademyCraft's Website](http://ac.li-dev.cn/) to get the latest release and 
@@ -46,6 +44,21 @@ credits for the translator will be given in the next version's release. Note tha
 Misc
 ====
 
+## Donation
+
+You can support developement of AcademyCraft by donating. This will secure us more time to make the mod more intriguing! 
+
+You would also be able to be in our donator list, both on website and in-game :beer:
+
+### Continuous
+
+* [Patreon][patreon]
+* [摩点云养计划][modian]
+
+### One-Time
+
+Alipay: ![](https://raw.githubusercontent.com/LambdaInnovation/AcademyCraft/master/blob/qr.jpg)
+
 ## License
 
 All versions of AcademyCraft are licensed under [GPLv3](http://www.gnu.org/licenses/gpl.html).   
@@ -76,3 +89,5 @@ that's really everything.
 [langdir]: src/main/resources/assets/academy/lang
 [tutdir]: src/main/resources/assets/academy/tutorials
 [lambdalib]: https://github.com/LambdaInnovation/LambdaLib
+[patreon]: https://www.patreon.com/WeAthFolD
+[modian]: https://t.modian.com/project/25058.html
