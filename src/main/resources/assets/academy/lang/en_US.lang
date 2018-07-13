@@ -78,8 +78,8 @@ tile.ac_developer_advanced.name=Advanced Ability Developer
 tile.ac_ability_interferer.name=Ability Interferer
 
 # Data Terminal
-ac.terminal.notinstalled=You have not yet installed Data Terminal.
-ac.terminal.alrdy_installed=You have already installed Data Terminal.
+ac.terminal.notinstalled=You have not yet installed the Data Terminal.
+ac.terminal.alrdy_installed=You have already installed the Data Terminal.
 ac.terminal.key_hint=Successfully installed the data terminal. Use the %s key to open/close the terminal UI.
 
 ac.gui.terminal.installing= Installing...
@@ -105,8 +105,8 @@ ac.app.freq_transmitter.st=Action Timeout.
 
 ac.app.freq_transmitter.e0=The wireless matrix is not initialized.
 ac.app.freq_transmitter.e1=Authorization failed.
-ac.app.freq_transmitter.e2=Link failed. Possibly the matrix reached its capacity or signal out of range.
-ac.app.freq_transmitter.e3=Link failed. Possibly the node reached its capacity or signal out of range.
+ac.app.freq_transmitter.e2=Link failed. Perhaps the matrix has reached its capacity or the signal is out of range.
+ac.app.freq_transmitter.e3=Link failed. Perhaps the node has reached its capacity or the signal is out of range.
 ac.app.freq_transmitter.e4=Action aborted.
 ac.app.freq_transmitter.e5=Transmitting...
 ac.app.freq_transmitter.e6=Link successful.
@@ -171,8 +171,8 @@ ac.ability.generic.brain_course.name=Brain Course
 ac.ability.generic.brain_course_advanced.name=Brain Course Advanced
 ac.ability.generic.mind_course.name=Mind Course
 
-ac.ability.generic.brain_course.desc=Get a practice for your brain. Adds Max CP by 1000.
-ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Adds Max CP by 1000 and adds Max Overload by 100.
+ac.ability.generic.brain_course.desc=Undergo training for your brain. Increases Max CP by 1000.
+ac.ability.generic.brain_course_advanced.desc=Develop the thinking ability of your brain deeply. Increases Max CP by 1000 and Max Overload by 100.
 ac.ability.generic.mind_course.desc=Learn how to relax your brain better. Speed up CP recovery by 20%.
 
 ## Electromaster
@@ -194,16 +194,16 @@ ac.ability.electromaster.body_intensify.name=Body Intensify
 ac.ability.electromaster.thunder_clap.name=Thunderclap
 ac.ability.electromaster.thunder_bolt.name=Thunder Bolt
 
-ac.ability.electromaster.arc_gen.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, there is a chance of igniting it.
+ac.ability.electromaster.arc_gen.desc=Arouse a weak electrical arc, which causes slight damage on the area it hits. If it directly hits a flammable block, it will have a chance to ignite it.
 ac.ability.electromaster.mag_manip.desc=Manipulate and move magnetizable things with the magnetic force, even throw them out to damage enemies.
-ac.ability.electromaster.mine_detect.desc=Close your eyes and feel the flowing of magnetic line, and you will be able to see a hint of precious mineral resources around you.
-ac.ability.electromaster.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage on the place it hits.
+ac.ability.electromaster.mine_detect.desc=Close your eyes and feel the flow of magnetism, allowing you to see a hint of precious mineral resources around you.
+ac.ability.electromaster.railgun.desc=Shoot the coin out at a high speed with electromagnetic induction. Cause destructive damage where it impacts.
 ac.ability.electromaster.mag_movement.desc=Generate a strong magenetic field and pull yourself towards some magnetic target. Extremely useful when moving or escaping.
-ac.ability.electromaster.iron_sand.desc=Separate and manipulate the iron sand to creative a changeable and dangerous attack effect.
-ac.ability.electromaster.charging.desc=Generate electric currents to charge the thing in your hand or electric blocks in the world.
-ac.ability.electromaster.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability in a short duration.
-ac.ability.electromaster.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating lightning.
-ac.ability.electromaster.thunder_bolt.desc=Holds together a enormous amount of electricy and compress them into a highly powerful lance. The huge currents will burst out and hurt everything around.
+ac.ability.electromaster.iron_sand.desc=Separate and manipulate the iron in sand to create a changeable and dangerous attack effect.
+ac.ability.electromaster.charging.desc=Generate electric current to charge the thing in your hand or electric blocks in the world.
+ac.ability.electromaster.body_intensify.desc=Fine-tune your bioelectricity to improve your physical ability for a short duration.
+ac.ability.electromaster.thunder_clap.desc=Manipulate the magnetic field in the atmosphere to create thunderclouds, and guide the electricity down to cause a devastating strike of lightning.
+ac.ability.electromaster.thunder_bolt.desc=Compresses an enormous amount of electricity into a powerful bolt, bursting out and damaging anything in it's area.
 
 ## Teleporter
 ac.ability.teleporter.name=Teleporter
@@ -219,15 +219,15 @@ ac.ability.teleporter.shift_tp.name=Shift Teleport
 ac.ability.teleporter.space_fluct.name=Space Fluctuation
 ac.ability.teleporter.flashing.name=Flashing
 
-ac.ability.teleporter.threatening_teleport.desc=Teleport small things to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
-ac.ability.teleporter.dim_folding_theorem.desc=Boost your damage towards enemies by generating a tiny space folding phonemonon.
-ac.ability.teleporter.penetrate_teleport.desc=Derive the obstacle thickness in front of you, and straightly teleport through it.
-ac.ability.teleporter.mark_teleport.desc=Mark where your eye is looking at as your destination and teleport to there.
-ac.ability.teleporter.flesh_ripping.desc=Rip apart your enemy’s inside and cause deadly damage. But the over-bloody effect may make you feel uncomfortable. 
-ac.ability.teleporter.location_teleport.desc=Memorize the current location and teleport back from anywhere far away afterwards.
-ac.ability.teleporter.shift_tp.desc=Teleport a block with the means of coordinate teleport. The space folding phonemonon will hurt any entity on the teleportation path. 
-ac.ability.teleporter.space_fluct.desc=Strenghen your space-folding ability to cause more dangerous critical damage.
-ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver in the air.
+ac.ability.teleporter.threatening_teleport.desc=Teleport items to somewhere around you. Sometimes just a small fragment is able to kill an enemy.
+ac.ability.teleporter.dim_folding_theorem.desc=Boost your damage against enemies by generating a tiny space folding phonemonon.
+ac.ability.teleporter.penetrate_teleport.desc=Derive the thickness of an obstacle in front of you, and teleport straight through it.
+ac.ability.teleporter.mark_teleport.desc=Marks where you are looking at as the destination, and teleports you there.
+ac.ability.teleporter.flesh_ripping.desc=Rip apart your enemy’s inside and inflict gory damage. The over-bloody effect may make you feel uncomfortable. 
+ac.ability.teleporter.location_teleport.desc=Memorize your current location and teleport back from anywhere far away afterwards.
+ac.ability.teleporter.shift_tp.desc=Teleport a block about the means of the coordinate plane. The space-folding phonemonon will hurt any entity on the teleportation path. 
+ac.ability.teleporter.space_fluct.desc=Strengthen your space-folding ability to cause more dangerous critical damage.
+ac.ability.teleporter.flashing.desc=Use multiple teleportations in a short time to maneuver through the air.
 ac.ability.teleporter.crithit=%fx critical hit!
 
 ac.gui.loctele.err_exp=Exp too low, can't cross dimension
@@ -249,17 +249,17 @@ ac.ability.meltdowner.mine_ray_expert.name=Expert Mining Ray
 ac.ability.meltdowner.mine_ray_luck.name=Luck Mining Ray
 ac.ability.meltdowner.electron_missile.name=Electron Missile
 
-ac.ability.meltdowner.electron_bomb.desc=Make together small amount of electrons to generate a threatening beam. 
-ac.ability.meltdowner.rad_intensify.desc=Because of the high-intensity radiation, the target hit by beam is doubly vunlunerable in a few seconds. 
-ac.ability.meltdowner.ray_barrage.desc=Use your high-energy ray with the Silicon Barn to create a ray barrage that destroys everything in front of you. 
+ac.ability.meltdowner.electron_bomb.desc=Pull together a small amount of electrons to generate a threatening beam. 
+ac.ability.meltdowner.rad_intensify.desc=Because of the high-intensity radiation, the target hit by beam is doubly vulnerable to attacks for a few seconds. 
+ac.ability.meltdowner.ray_barrage.desc=Shoot your high-energy ray at a Silicon Barn to scatter it into a ray barrage that destroys everything in front of you. 
 ac.ability.meltdowner.scatter_bomb.desc=Manipulate more than one electronics group to attack. As a result, you can't control the impact point accurately. 
 ac.ability.meltdowner.meltdowner.desc=Extreme high-energy electron beam that melts down walls and metals. 
-ac.ability.meltdowner.light_shield.desc=Turn many electronics into a shield. High-speed moving electronics will destroy all things attack you, and damage all things touch you closely.    
+ac.ability.meltdowner.light_shield.desc=Forms electrons into a shield. High-speed moving electrons will destroy anything that attack you, and damage anything touch you closely.    
 ac.ability.meltdowner.jet_engine.desc=Use the propulsive force of electrons launch yourself into the air. Will generate a light-shield to protect yourself in the flight. 
-ac.ability.meltdowner.mine_ray_basic.desc=After a long time practice, you can make your electronic stream suitably to collect minerals without destroy them.
-ac.ability.meltdowner.mine_ray_expert.desc=Understanding how to control the intensity of electrons better, You can now harvest mineral resources more efficiently.
+ac.ability.meltdowner.mine_ray_basic.desc=After a long time of practice, you can make your electron beam suitable for harvesting minerals without destroying them.
+ac.ability.meltdowner.mine_ray_expert.desc=With understanding of how to control the intensity of electrons better, you can now harvest mineral resources more efficiently.
 ac.ability.meltdowner.mine_ray_luck.desc=After a long time of practice, you can almost harvest the useful resources in the ore perfectly.
-ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electron cloud and use a small amount of it to attack each time.
+ac.ability.meltdowner.electron_missile.desc=Hold together a HUGE amount of electrons in a cloud and use some of it to attack each time.
 
 ## Vector Manipulation
 ac.ability.vecmanip.name=Vector Manip
@@ -308,7 +308,7 @@ ac.command.aim.usage=/aim <command>|<help> [parameters...]
 ac.command.aim.help=/aim help: Display the help message.
 ac.command.aim.cat=/aim cat [catName]: Change the specified player's categories or display the current category.
 ac.command.aim.catlist=/aim catlist: List all available categories' names.
-ac.command.aim.learn=/aim learn <id>|<skillName>: Learn the specified skill. Regardless of its learning condition requirements.
+ac.command.aim.learn=/aim learn <id>|<skillName>: Learn the specified skill, regardless of its learning condition requirements.
 ac.command.aim.unlearn=/aim unlearn <id>|<skillName>: Unlearn the specified skill.
 ac.command.aim.learn_all=/aim learn_all: Learn all the skills.
 ac.command.aim.reset=/aim reset: Clear your ability information.
@@ -336,11 +336,11 @@ ac.command.aim.nonecathint=You haven't learned any ability!
 achievement.ac_phase_liquid=New Energy
 achievement.ac_phase_liquid.desc=Acquire Imag Phase Liquid
 achievement.ac_matrix1=The Start of WEN
-achievement.ac_matrix1.desc=Craft a matrix
+achievement.ac_matrix1.desc=Craft a Matrix
 achievement.ac_matrix2=Abandon Wires
-achievement.ac_matrix2.desc=Craft a matrix core
+achievement.ac_matrix2.desc=Craft a Matrix Core
 achievement.ac_node=New Conductor
-achievement.ac_node.desc=Craft a node
+achievement.ac_node.desc=Craft a Node
 achievement.ac_developer1=Let's Start
 achievement.ac_developer1.desc=Craft a Portable Developer
 achievement.ac_developer2=Standard Equipment
@@ -354,7 +354,7 @@ achievement.ac_solargen.desc=Craft a Solar Generator
 achievement.ac_windgen=The Clean Energy
 achievement.ac_windgen.desc=Craft a Wind Generator
 achievement.ac_crystal=Crystal!
-achievement.ac_crystal.desc=Acquire Imag Crystal
+achievement.ac_crystal.desc=Acquire an Imag Crystal
 achievement.ac_terminal=Kidney Free
 achievement.ac_terminal.desc=Craft a Data Terminal
 
@@ -477,11 +477,11 @@ ac.gui.common.prop.gen_speed=Gen. speed
 ac.gui.common.prop.altitude=Altitude
 
 # Skill Tree
-ac.skill_tree.dev_successful=Develop Successful.
-ac.skill_tree.dev_failed=Develop Failed.
+ac.skill_tree.dev_successful=Development Successful.
+ac.skill_tree.dev_failed=Development Failed.
 ac.skill_tree.progress=Progress
 ac.skill_tree.noenergy=Not enough energy.
-ac.skill_tree.condition_fail=Develop condition not satisfied.
+ac.skill_tree.condition_fail=Development condition not satisfied.
 ac.skill_tree.learn_question=Learn? (Estm. Consumption：%s IF)
 ac.skill_tree.level_question=Continue?
 ac.skill_tree.req=Req.
@@ -540,7 +540,7 @@ ac.cat_engine.linked=Linked to the node named %s meow~
 
 # Tutorials
 ac.gui.crafttype.shaped=Shaped Crafting
-ac.gui.crafttype.shapeless=Shapless Crafting
+ac.gui.crafttype.shapeless=Shapeless Crafting
 
 ac.tutorial.crafting=Crafting: %s
 ac.tutorial.misaka=Misaka No.%d
