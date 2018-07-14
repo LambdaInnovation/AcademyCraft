@@ -102,18 +102,19 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._
-    val  auto= exp >= 0.8
+    var autoCount = if (exp > 0.5) (balls.size().toFloat * exp).toInt else 0
     val autoTarget = if (exp > 0.5)
       WorldUtils.getEntities(player,5, EntitySelectors.exclude(player).and(new Predicate[Entity] {
-        override def test(t: Entity): Boolean = t.isInstanceOf[EntityLivingBase]
+        override def test(t: Entity): Boolean = t.isInstanceOf[EntityLiving]
       }))
     else new util.ArrayList[Entity]()
 
     for (ball <- balls) {
       var dest = newDest
-      if (auto) {
+      if (autoCount > 0 && !autoTarget.isEmpty) {
         val target = autoTarget.get(RandUtils.nextInt(autoTarget.size()))
         dest = VecUtils.vec(target.posX, target.posY+target.getEyeHeight, target.posZ)
+        autoCount -= 1
       }
 
       val traceResult: MovingObjectPosition = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
