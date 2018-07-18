@@ -1,42 +1,33 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.ui;
 
 import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.TutorialActivatedEvent;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.helper.GameTimer;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.event.FrameEvent;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.util.client.font.IFont;
+import cn.lambdalib2.util.client.font.IFont.FontOption;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
 public class NotifyUI extends Widget {
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         final ResourceLocation texture = Resources.getTexture("guis/edit_preview/notify_logo");
         final INotification dummy = new INotification() {
             @Override
@@ -65,7 +56,7 @@ public class NotifyUI extends Widget {
     static final double KEEP_TIME = 6000;
     static final double BLEND_IN_TIME = 500, SCAN_TIME = 500, BLEND_OUT_TIME = 300;
     static final ResourceLocation texture = Resources.getTexture("guis/notification/back");
-    static final Vec3
+    static final Vec3d
         start = VecUtils.vec(420, 42, 0),
         end = VecUtils.vec(34, 42, 0);
     
@@ -148,7 +139,7 @@ public class NotifyUI extends Widget {
         HudUtils.rect(517, 170);
     }
     
-    private static void drawIcon(INotification notf, Vec3 p, double alpha) {
+    private static void drawIcon(INotification notf, Vec3d p, double alpha) {
         GL11.glColor4d(1, 1, 1, alpha);
         GL11.glPushMatrix();
         RenderUtils.glTranslate(p);
@@ -173,7 +164,7 @@ public class NotifyUI extends Widget {
 
             @Override
             public String getTitle() {
-                return StatCollector.translateToLocal("ac.tutorial.update");
+                return I18n.translateToLocal("ac.tutorial.update");
             }
 
             @Override

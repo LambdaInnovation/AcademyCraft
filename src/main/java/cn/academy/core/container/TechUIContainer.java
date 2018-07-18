@@ -1,6 +1,5 @@
 package cn.academy.core.container;
 
-import cn.lambdalib.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -34,6 +33,6 @@ public class TechUIContainer<T extends TileEntity> extends CleanContainer {
 
     @Override
     public final boolean canInteractWith(EntityPlayer player) {
-        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) < 64 && !tile.isInvalid();
+        return player.getDistanceSq(tile.x, tile.y, tile.z) < 64 && !tile.isInvalid();
     }
 }

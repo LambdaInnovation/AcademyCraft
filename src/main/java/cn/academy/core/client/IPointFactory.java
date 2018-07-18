@@ -6,13 +6,14 @@
 */
 package cn.academy.core.client;
 
-import net.minecraft.util.Vec3;
+
+import net.minecraft.util.math.Vec3d;
 
 /**
  * @author WeathFolD
  */
 public interface IPointFactory {
     
-    public Vec3 next();
+    public Vec3d next();
     
 }

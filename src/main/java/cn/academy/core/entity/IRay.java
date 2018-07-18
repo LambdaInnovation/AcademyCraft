@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.entity;
 
-import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * States used in RenderRay classes.
@@ -18,7 +11,7 @@ public interface IRay extends IAssociatePlayer {
     
     void onRenderTick();
     
-    Vec3 getPosition();
+    Vec3d getPosition();
     
     /**
      * @return If this ray is spawned at player's hand and need to be treated differently for 1st and 3rd person

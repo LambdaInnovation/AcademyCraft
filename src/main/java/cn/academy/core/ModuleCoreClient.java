@@ -1,28 +1,18 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core;
 
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.terminal.app.settings.PropertyElements;
 import cn.academy.terminal.app.settings.SettingsUI;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.key.KeyHandler;
-import cn.lambdalib.util.key.KeyManager;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
 public class ModuleCoreClient {
 
     public static KeyManager keyManager = new ACKeyManager();

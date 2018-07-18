@@ -1,37 +1,20 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.util;
 
 import cn.academy.ability.api.AbilityContext;
-import cn.academy.ability.api.AbilityPipeline;
 import cn.academy.core.event.BlockDestroyEvent;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.EntitySelectors;
-import cn.lambdalib.util.mc.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import static cn.lambdalib.util.generic.VecUtils.*;
 
 /**
  * A super boomy ranged ray damage. it starts out a ranged ray in the given position and direction,
@@ -56,7 +39,7 @@ public class RangedRayDamage {
     public Predicate<Entity> entitySelector = EntitySelectors.everything();
     public float startDamage = 10.0f; // ATTN: LINEAR 1.0*startDamage at dist 0; 0.2 * startDamage at maxIncrement
     
-    private Vec3 start, slope;
+    private Vec3d start, slope;
     
     public RangedRayDamage(AbilityContext ctx, double _range, float _energy) {
         this.ctx = ctx;

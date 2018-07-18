@@ -1,30 +1,21 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client;
 
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.Color;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * Some drawing utils.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class ACRenderingHelper {
     
@@ -43,7 +34,7 @@ public class ACRenderingHelper {
         
         final double s = size;
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        Tessellator t = Tessellator.instance;
+//        Tessellator t = Tessellator.instance;
         gdraw(GLOW_L,  x - s,       y,           s,      height);
         gdraw(GLOW_R,  x + width, y,           s,      height);
         gdraw(GLOW_U,  x,             y - s,       width, s);
@@ -107,7 +98,7 @@ public class ACRenderingHelper {
     }
 
     public static void lineSegmentGlow(double x0, double y0, double x1, double y1, float width) {
-        RenderUtils.loadTexture(Resources.TEX_GLOW_LINE);
+        HudUtils.loadTexture(Resources.TEX_GLOW_LINE);
         dirQuad(x0, y0, x1, y1, width);
     }
     
@@ -139,7 +130,7 @@ public class ACRenderingHelper {
     }
 
     private static void gdraw(ResourceLocation tex, double x, double y, double width, double height) {
-        RenderUtils.loadTexture(tex);
+        HudUtils.loadTexture(tex);
         HudUtils.rect(x, y, width, height);
     }
     

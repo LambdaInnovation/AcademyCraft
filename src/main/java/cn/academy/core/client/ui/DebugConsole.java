@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.ui;
 
 import cn.academy.ability.api.Category;
@@ -12,20 +6,17 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.util.client.auxgui.AuxGui;
-import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import cn.lambdalib.util.helper.Color;
-import cn.lambdalib.util.key.KeyHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.client.font.IFont;
+import cn.lambdalib2.util.client.font.IFont.FontOption;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +25,6 @@ import java.util.List;
  * The overall debug console. Use BACKSPACE to switch between states.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class DebugConsole extends AuxGui {
     
@@ -58,8 +48,8 @@ public class DebugConsole extends AuxGui {
     
     static DebugConsole INSTANCE;
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         AuxGuiHandler.register(INSTANCE = new DebugConsole());
         ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
             @Override
@@ -88,7 +78,7 @@ public class DebugConsole extends AuxGui {
         
         List<Text> texts = new ArrayList<>();
         texts.add(new Text("AcademyCraft developer info"));
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
@@ -138,16 +128,15 @@ public class DebugConsole extends AuxGui {
         IFont font = Resources.font();
         for(Text text : texts) {
             Color crl = text.option.color;
-            double pr = crl.r, pg = crl.g, pb = crl.b;
-            crl.r *= lumMul;
-            crl.g *= lumMul;
-            crl.b *= lumMul;
+            Color prev = new Color(crl);
+
+            crl.setRed((int) (crl.getRed() * lumMul));
+            crl.setGreen((int) (crl.getGreen() * lumMul));
+            crl.setBlue((int) (crl.getBlue() * lumMul));
 
             font.draw(text.text, x, y, text.option);
 
-            crl.r = pr;
-            crl.g = pg;
-            crl.b = pb;
+            crl.setColor(prev);
 
             y += text.option.fontSize;
         }

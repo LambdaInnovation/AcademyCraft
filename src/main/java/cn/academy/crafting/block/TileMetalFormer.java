@@ -201,9 +201,10 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setInteger("mode", mode.ordinal());
         super.writeToNBT(nbt);
+        return nbt;
     }
     
     // --- CLIENT EFFECTS

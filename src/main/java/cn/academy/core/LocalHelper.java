@@ -1,6 +1,6 @@
 package cn.academy.core;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 /**
  * This class wraps around Minecraft locallization with namespace helper support.
@@ -17,11 +17,11 @@ public class LocalHelper {
     private final String path;
 
     public String get(String id) {
-        return StatCollector.translateToLocal(path + id);
+        return I18n.translateToLocal(path + id);
     }
 
     public String getFormatted(String id, Object ...args) {
-        return StatCollector.translateToLocalFormatted(path + id, args);
+        return I18n.translateToLocalFormatted(path + id, args);
     }
 
     public LocalHelper subPath(String id) {

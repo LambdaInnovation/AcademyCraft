@@ -1,26 +1,15 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.block;
 
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * BaseClass that should be used on all energy receivers.
  * This class will automatically sync its energy field to client side.
  * @author WeAthFolD
  */
-@Registrant
 public class TileReceiverBase extends TileInventory implements IWirelessReceiver {
     
     private static final int UPDATE_WAIT = 20;
@@ -40,7 +29,7 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
     
     @Override
     public void updateEntity() {
-        if(!getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             if(++updateTicker == UPDATE_WAIT) {
                 updateTicker = 0;
                 NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, "sync_energy", energy);
@@ -81,9 +70,10 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
+        return tag;
     }
 
     @Listener(channel="sync_energy", side=Side.CLIENT)

@@ -1,42 +1,34 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.ui;
 
 import cn.academy.terminal.app.settings.SettingsUI;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.CGuiScreen;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.Outline;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
-import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.CGuiScreen;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.WidgetContainer;
+import cn.lambdalib2.cgui.component.DrawTexture;
+import cn.lambdalib2.cgui.component.ElementList;
+import cn.lambdalib2.cgui.component.Outline;
+import cn.lambdalib2.cgui.component.TextBox;
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent;
+import cn.lambdalib2.cgui.event.LeftClickEvent;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.function.Consumer;
 
-@Registrant
 @SideOnly(Side.CLIENT)
 public class CustomizeUI extends CGuiScreen {
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         SettingsUI.addCallback("edit_ui", "misc", () -> {
             Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
         }, false);
 
-        doc = CGUIDocument.panicRead(new ResourceLocation("academy:guis/ui_edit.xml"));
+        doc = CGuiDocument.read(new ResourceLocation("academy:guis/ui_edit.xml"));
     }
 
     private static WidgetContainer doc;

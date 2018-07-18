@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.render;
 
 import cn.academy.core.client.IPointFactory;
-import cn.lambdalib.util.generic.VecUtils;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Random;
 
@@ -62,7 +55,7 @@ public class CubePointFactory implements IPointFactory {
     }
 
     @Override
-    public Vec3 next() {
+    public Vec3d next() {
         int face = randFace();
         double a, b;
         double xOffset = 0, zOffset = 0;

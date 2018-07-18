@@ -1,26 +1,15 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.block;
 
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.block.IWirelessGenerator;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 public abstract class TileGeneratorBase extends TileInventory implements IWirelessGenerator {
     
     public final double bufferSize;
@@ -41,7 +30,7 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
     
     @Override
     public void updateEntity() {
-        if(!getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             double required = bufferSize - energy;
             energy += getGeneration(required);
             if (energy > bufferSize)
@@ -108,9 +97,10 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("energy", energy);
+        return tag;
     }
     
     /**

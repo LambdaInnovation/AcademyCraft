@@ -1,19 +1,15 @@
 package cn.academy.core.network;
 
-import cn.lambdalib.util.mc.EntitySelectors;
-import cn.lambdalib.util.mc.WorldUtils;
 import com.typesafe.config.Config;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
 
@@ -32,7 +28,7 @@ public class NetworkManager
     }
 
     private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(
-            Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side)
+        Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side)
     {
         instance.registerMessage(messageHandler, requestMessageType, nextID++, side);
     }

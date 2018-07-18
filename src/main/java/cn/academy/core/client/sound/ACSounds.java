@@ -1,17 +1,14 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.sound;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Generic sound playing utils.
@@ -25,8 +22,12 @@ public class ACSounds {
     }
     
     @SideOnly(Side.CLIENT)
-    public static void playClient(World world, double x, double y, double z, String name, float vol, float pitch) {
-        world.playSound(x, y, z, "academy:" + name, vol, pitch, false);
+    public static void playClient(World world, double x, double y, double z, String name, SoundCategory category, float vol, float pitch) {
+        world.playSound(x, y, z,
+            new SoundEvent(new ResourceLocation("academy:", name)),
+            category,
+            vol, pitch, false
+        );
     }
     
     @SideOnly(Side.CLIENT)

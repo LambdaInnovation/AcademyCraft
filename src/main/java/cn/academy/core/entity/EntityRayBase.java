@@ -1,22 +1,13 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.entity;
 
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.EntityCallback;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.helper.GameTimer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -52,7 +43,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
      * This just link the ray to a player. You still have to setup the view direction based on the ray type.
      */
     public EntityRayBase(EntityPlayer player) {
-        this(player.worldObj);
+        this(player.world);
         spawner = player;
     }
 
@@ -62,7 +53,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
         ignoreFrustumCheck = true;
     }
     
-    public void setFromTo(Vec3 from, Vec3 to) {
+    public void setFromTo(Vec3d from, Vec3d to) {
         setFromTo(from.xCoord, from.yCoord, from.zCoord, to.xCoord, to.yCoord, to.zCoord);
     }
     
@@ -92,8 +83,8 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
     }
     
     @Override
-    public Vec3 getPosition() {
-        return Vec3.createVectorHelper(posX, posY, posZ);
+    public Vec3d getPosition() {
+        return new Vec3d(posX, posY, posZ);
     }
 
     @Override

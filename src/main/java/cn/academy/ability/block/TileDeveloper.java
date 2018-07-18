@@ -222,9 +222,10 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         info.save(nbt);
+        return nbt;
     }
     
     @SideOnly(Side.CLIENT)

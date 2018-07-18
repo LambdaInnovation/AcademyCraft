@@ -273,9 +273,10 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tank.writeToNBT(tag);
+        return tag;
     }
 
     

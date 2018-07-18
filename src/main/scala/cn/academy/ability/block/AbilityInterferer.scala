@@ -187,7 +187,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
     range_ = tag.getFloat("range_")
   }
 
-  override def writeToNBT(tag: NBTTagCompound) = {
+  override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     tag.setBoolean("enabled_", enabled_)
     tag.setTag("whitelist_", NBTS11n.writeBase(whitelist.toArray))

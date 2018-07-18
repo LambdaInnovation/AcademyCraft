@@ -1,38 +1,30 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core;
 
 import cn.academy.core.config.ACConfig;
 import cn.academy.core.network.NetworkManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.core.RegistrationManager;
-import cn.lambdalib.annoreg.core.RegistrationMod;
-import cn.lambdalib.annoreg.mc.RegItem;
-import cn.lambdalib.annoreg.mc.RegMessageHandler;
-import cn.lambdalib.crafting.CustomMappingHelper;
-import cn.lambdalib.crafting.RecipeRegistry;
-import cn.lambdalib.util.version.VersionUpdateUrl;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.crafting.CustomMappingHelper;
+import cn.lambdalib2.crafting.RecipeRegistry;
+import cn.lambdalib2.registry.RegistryMod;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,8 +38,7 @@ import java.util.Map.Entry;
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
      dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
-@RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
-@Registrant
+@RegistryMod(rootPackage = "cn.academy.")
 //@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
 public class AcademyCraft {
 
@@ -67,19 +58,22 @@ public class AcademyCraft {
 
     public static RecipeRegistry recipes = new RecipeRegistry();
 
-    @RegMessageHandler.WrapperInstance
     public static SimpleNetworkWrapper netHandler = NetworkRegistry.INSTANCE.newSimpleChannel("academy-network");
 
-    @RegItem
-    @RegItem.UTName("logo")
     public static Item logo;
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
+        final ItemStack iconStack = new ItemStack(logo);
+
         @Override
-        public Item getTabIconItem() {
-            return logo;
+        public ItemStack getTabIconItem() {
+            return iconStack;
         }
     };
+
+    private static void registerItems(Register<Item> registry) {
+        registry.getRegistry().register(logo);
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -90,26 +84,21 @@ public class AcademyCraft {
         config = new Configuration(event.getSuggestedConfigurationFile());
 
         NetworkManager.init(event);
-        RegistrationManager.INSTANCE.registerAll(this, "PreInit");
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        RegistrationManager.INSTANCE.registerAll(this, "Init");
-
         FMLCommonHandler.instance().bus().register(this);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         // Load recipes names before loading script
-        RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
+        // FIXME
+//        RegistrationManager.INSTANCE.registerAll(this, "AC_RecipeNames");
 
         // Load script, where names now are available
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
-
-        // PostInit stage, including tutorial init, depends on registered recipes
-        RegistrationManager.INSTANCE.registerAll(this, "PostInit");
 
         if (DEBUG_MODE && false) {
             System.out.printf("|-------------------------------------------------------\n");
@@ -121,9 +110,9 @@ public class AcademyCraft {
                 Object obj = entry.getValue();
                 String str1 = entry.getKey(), str2;
                 if (obj instanceof Item) {
-                    str2 = StatCollector.translateToLocal(((Item) obj).getUnlocalizedName() + ".name");
+                    str2 = I18n.translateToLocal(((Item) obj).getUnlocalizedName() + ".name");
                 } else if (obj instanceof Block) {
-                    str2 = StatCollector.translateToLocal(((Block) obj).getUnlocalizedName() + ".name");
+                    str2 = I18n.translateToLocal(((Block) obj).getUnlocalizedName() + ".name");
                 } else {
                     str2 = obj.toString();
                 }
@@ -143,7 +132,6 @@ public class AcademyCraft {
 
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        RegistrationManager.INSTANCE.registerAll(this, "StartServer");
         ACConfig.updateConfig(null);
     }
 

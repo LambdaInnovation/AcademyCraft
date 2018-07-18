@@ -123,9 +123,10 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         info.save(tag);
+        return tag;
     }
 
     @Override
