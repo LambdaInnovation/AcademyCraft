@@ -1,46 +1,48 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots"
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-	}
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
+apply plugin: 'scala'
+apply plugin: 'idea'
 
 ext.configFile = file "build.properties"
-
 configFile.withReader {
 	def prop = new Properties()
 	prop.load(it)
 	project.ext.config = new ConfigSlurper().parse prop
 }
 
-configurations {
-	deployerJars
+version = config.mod_ver
+group = config.mod_group 
+archivesBaseName = config.mod_name
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
 }
 
-apply plugin: 'scala'
-apply plugin: 'forge'
-apply plugin: 'idea'
-
-version				= config.mod_ver
-group				= config.mod_group
-archivesBaseName	= config.mod_name
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+compileJava.options.encoding = "UTF-8"
+compileScala.options.encoding = "UTF-8"
 
 minecraft {
-	version = "${config.mc_ver}-${config.forge_ver}"
-	runDir = "eclipse"
+    version = "1.12.2-14.23.4.2705"
+    runDir = "run"
+
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = "snapshot_20171003"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // Replacing stuff in the source
 	replace "@VERSION@", config.mod_ver
@@ -49,77 +51,45 @@ minecraft {
 }
 
 repositories {
-	mavenCentral()
-	mavenLocal()
-	maven {
-		name = "chickenbones"
-		url = "http://chickenbones.net/maven"
-	}
-	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to"
-	}
+    mavenCentral()
+    mavenLocal()
+    maven {
+        name = "private"
+            url = "http://139.199.206.70:8081/nexus/content/groups/public"
+    }
 }
 
+// configurations {
+//     provided
+// }
 
-configurations {
-    provided
-}
+// sourceSets.main.compileClasspath += [configurations.provided]
+
+// idea {
+//   module{
+//     scopes.PROVIDED.plus += [configurations.provided]
+//   }
+// }
 
 dependencies {
-	compile "cn.lambdalib:LambdaLib:${config.lambdalib_ver}:dev"
-	
-	provided "net.industrial-craft:industrialcraft-2:2.2.717-experimental:dev"
-	
-	compile "codechicken:CodeChickenLib:1.7.10-${config.ccl_ver}:dev"
-  compile "codechicken:CodeChickenCore:1.7.10-${config.ccc_ver}:dev"
-  compile "codechicken:NotEnoughItems:1.7.10-${config.nei_ver}:dev"
-	
-	deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
-}
-
-
-sourceSets.main.compileClasspath += [configurations.provided]
-
-idea {
-  module{
-    scopes.PROVIDED.plus += [configurations.provided]
-  }
-}
-
-sourceSets.main {
-    java.srcDirs = []
-    scala.srcDirs =  ['src/main/java', 'src/main/scala']
+    compile 'cn.lambdalib2:LambdaLib2:0.1:dev'
 }
 
 processResources {
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
-	}
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-	}
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
-
-compileJava.options.encoding = "UTF-8"
-compileScala.options.encoding = "UTF-8"
-
-task deobfJar(type: Jar, dependsOn: 'jar') {
-	classifier 'dev'
-	from sourceSets.main.output
-}
-
-artifacts {
-	archives deobfJar
-}
-
-task getLibs << {
-	ant.mkdir(dir: 'libs')
-	ant.get(src: 'http://minetweaker.powerofbytes.com/download/MineTweaker3-Dev-1.7.10-3.0.9C.jar', dest: 'libs/MineTweaker3-Dev-1.7.10-3.0.9C.jar', skipexisting: 'true')
-}
-
-sourceMainJava.dependsOn getLibs
-install.dependsOn build
-
