@@ -6,23 +6,25 @@
   */
 package cn.academy.vanilla.meltdowner.skill
 
+import java.util
 import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientRuntime, Context}
 import cn.academy.core.client.ACRenderingHelper
-import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
+import cn.academy.core.network.NetworkManager
+import cn.academy.vanilla.meltdowner.entity.EntityMdBall
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.VecUtils
+import cn.lambdalib.util.generic.{RandUtils, VecUtils}
 import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.Entity
+import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3}
 
 /**
-  * @author WeAthFolD, KSkun
+  * @author WeAthFolD, KSkun, Paindar
   */
 object ScatterBomb extends Skill("scatter_bomb", 2) {
 
@@ -100,14 +102,29 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._
+    var autoCount = if (exp > 0.5) (balls.size().toFloat * exp).toInt else 0
+    val autoTarget = if (exp > 0.5)
+      WorldUtils.getEntities(player,5, EntitySelectors.exclude(player).and(new Predicate[Entity] {
+        override def test(t: Entity): Boolean = t.isInstanceOf[EntityLiving]
+      }))
+    else new util.ArrayList[Entity]()
+
     for (ball <- balls) {
-      val dest: Vec3 = newDest
+      var dest = newDest
+      if (autoCount > 0 && !autoTarget.isEmpty) {
+        val target = autoTarget.get(RandUtils.nextInt(autoTarget.size()))
+        dest = VecUtils.vec(target.posX, target.posY+target.getEyeHeight, target.posZ)
+        autoCount -= 1
+      }
+
       val traceResult: MovingObjectPosition = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
         dest, basicSelector.and(EntitySelectors.exclude(player)))
       if (traceResult != null && traceResult.entityHit != null) {
         traceResult.entityHit.hurtResistantTime = -1
         MDDamageHelper.attack(ctx, traceResult.entityHit, getDamage(exp))
       }
+      NetworkManager.sendSBEffectToClient(player,Vec3.createVectorHelper(ball.posX, ball.posY, ball.posZ)
+        ,Vec3.createVectorHelper(dest.xCoord,dest.yCoord,dest.zCoord))
       ball.setDead()
     }
     ctx.addSkillExp(0.001f * balls.size)
@@ -118,15 +135,9 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_onEnd() = {
-    val yoff: Double = if (ACRenderingHelper.isThePlayer(player)) 0 else 1.6
     import scala.collection.JavaConversions._
     for (ball <- balls) {
-      // Spawn a ray for the ball
-      val raySmall: EntityMdRaySmall = new EntityMdRaySmall(world)
-      raySmall.viewOptimize = false
-      val dest: Vec3 = newDest
-      raySmall.setFromTo(ball.posX, ball.posY + yoff, ball.posZ, dest.xCoord, dest.yCoord, dest.zCoord)
-      world.spawnEntityInWorld(raySmall)
+        ball.setDead()
     }
   }
 

@@ -157,7 +157,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
         }
 
         private SkillCooldown(int maxTick, int tickLeft) {
-            checkArgument(maxTick > 0);
+            checkArgument(maxTick >= 0);
             this.maxTick = maxTick;
             this.tickLeft = tickLeft;
         }

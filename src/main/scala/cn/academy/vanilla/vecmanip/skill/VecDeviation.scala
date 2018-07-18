@@ -35,7 +35,7 @@ object VecDeviation extends Skill("vec_deviation", 2) {
   def onLivingHurt(evt: LivingHurtEvent) = evt.entityLiving match {
     case player: EntityPlayer =>
       val ctx = ContextManager.instance.find(classOf[VecDeviationContext])
-      if (ctx.isPresent) {
+      if (ctx.isPresent && evt.ammount<=9999) {
         val reduce = ctx.get.reduceDamage(evt.ammount)
         evt.ammount = reduce
       }

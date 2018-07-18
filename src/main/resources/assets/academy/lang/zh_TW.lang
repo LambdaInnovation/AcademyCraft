@@ -116,6 +116,7 @@ ac.settings.cat.generic=常規
 ac.settings.prop.attackPlayer=開啓PvP (玩家傷害)
 ac.settings.prop.destroyBlocks=開啓方塊破壞
 ac.settings.prop.headsOrTails=開啓猜硬幣
+ac.settings.prop.useMouseWheel=使用滾輪調整傳送距離
 
 ac.settings.cat.keys=鍵位
 ac.settings.prop.ability_activation=激活能力

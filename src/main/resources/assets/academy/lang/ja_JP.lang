@@ -1,9 +1,9 @@
 # AcademyCraft 日本語言語ファイル
-# このファイルには、主に用途によって分類されています。（マインクラフトの特殊ルルに限るのを除く）
+# このファイルには、主に用途によって分類されています（マインクラフトの特殊ルルに限るのを除いて）。
 
 # 一般
 itemGroup.AcademyCraft=AcademyCraft
-ac.data_config_parse_fail=[AcademyCraft] カスタムコンフィグの導入が失敗しました。エラー情報：
+ac.data_config_parse_fail=[AcademyCraft] カスタム設定ファイルの読み込みに失敗しました。エラー情報：
 
 # アイテム
 item.ac_crystal_low.name=低純度虚能クリスタル
@@ -69,18 +69,18 @@ tile.ac_phase_generator.name=虚相位発電機
 tile.ac_windgen_base.name=風力発電機 - スタンド台座
 tile.ac_windgen_pillar.name=風力発電機 - スタンド
 tile.ac_windgen_main.name=風力発電機 - ホストコンピューター
-tile.ac_eu_output.name=エネルギー変換器 (IC2 EU出力) 
-tile.ac_eu_input.name=エネルギー変換器 (IC2 EU入力) 
+tile.ac_eu_output.name=エネルギー変換器 (IC2 EU出力)
+tile.ac_eu_input.name=エネルギー変換器 (IC2 EU入力)
 tile.ac_rf_output.name=エネルギー変換器 (CoFH RF出力)
 tile.ac_rf_input.name=エネルギー変換器 (CoFH RF入力)
 tile.ac_developer_normal.name=基本能力開発機
 tile.ac_developer_advanced.name=先進能力開発機
 tile.ac_ability_interferer.name=能力干渉機
 
-# 情報端末
+# データ端末
 ac.terminal.notinstalled=データ端末がインストールされていません。
 ac.terminal.alrdy_installed=データ端末が既にインストールされています。
-ac.terminal.key_hint=データ端末が正常にインストールされました。端末を起動／終了する際は「%s」キーを押してください。
+ac.terminal.key_hint=データ端末がインストールされました。端末を起動／終了する際は「%s」キーを押してください。
 
 ac.gui.terminal.installing=インストール中…
 ac.gui.terminal.appcount=%dアプリケーション
@@ -116,6 +116,7 @@ ac.settings.cat.generic=一般設定
 ac.settings.prop.attackPlayer=PvPを許可
 ac.settings.prop.destroyBlocks=ブロックを破壊する
 ac.settings.prop.headsOrTails=コイン推測をオポンする。
+ac.settings.prop.useMouseWheel=スクロールでテレポートの距離を調節する
 
 ac.settings.cat.keys=キー
 ac.settings.prop.ability_activation=能力の起動

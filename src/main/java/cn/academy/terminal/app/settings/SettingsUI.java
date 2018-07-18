@@ -43,6 +43,7 @@ public class SettingsUI extends CGuiScreen {
         addProperty(PropertyElements.CHECKBOX, "generic", "attackPlayer", true, true);
         addProperty(PropertyElements.CHECKBOX, "generic", "destroyBlocks", true, true);
         addProperty(PropertyElements.CHECKBOX, "generic", "headsOrTails", false, false);
+        addProperty(PropertyElements.CHECKBOX, "generic", "useMouseWheel", false, false);
     }
 
     @RegInitCallback

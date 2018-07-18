@@ -48,7 +48,7 @@ import java.util.Map.Entry;
      dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
 @RegistrationMod(pkg = "cn.academy.", res = "academy", prefix = "ac_")
 @Registrant
-@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
+//@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
 public class AcademyCraft {
 
     @Instance("academy-craft")
@@ -84,7 +84,7 @@ public class AcademyCraft {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         log.info("Starting AcademyCraft");
-        log.info("Copyright (c) Lambda Innovation, 2013-2016");
+        log.info("Copyright (c) Lambda Innovation, 2013-2018");
         log.info("http://ac.li-dev.cn/");
 
         config = new Configuration(event.getSuggestedConfigurationFile());

@@ -13,8 +13,10 @@ import cn.lambdalib.util.mc._
 import cn.lambdalib.vis.animation.presets.CompTransformAnim
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Vec3
 
 object DirectedBlastwave extends Skill("dir_blast", 3) {
@@ -115,7 +117,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
       // Destroy blocks around
       {
         def ran(x: Int) = (x - 3) until (x + 3)
-        val (x, y, z) = (math.round(position.x).toInt, math.round(position.y).toInt, math.round(position.z).toInt)
+        val (x, y, z) = (math.round(position.x).floor.toInt, math.round(position.y).floor.toInt, math.round(position.z).floor.toInt)
 
         for {i <- ran(x)
              j <- ran(y)
@@ -126,7 +128,13 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
             val block = world.getBlock(i, j, k)
             val meta = world.getBlockMetadata(i, j, k)
             val hardness = block.getBlockHardness(world, i, j, k)
-            if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
+            if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f)
+            {
+              val itemStack=new ItemStack(block)
+              world.spawnEntityInWorld(new EntityItem(world,i,j,k,itemStack));
+              world.setBlock(i, j, k, Blocks.air)
+            }
+            else if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
               // This line causes the sound effect unable to be heard.
               // So strange...
               //> world.playSoundEffect(i + 0.5, j + 0.5, k + 0.5, block.stepSound.getBreakSound, .5f, 1f)

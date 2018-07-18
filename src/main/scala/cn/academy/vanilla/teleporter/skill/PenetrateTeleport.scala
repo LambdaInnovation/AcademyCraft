@@ -6,7 +6,7 @@
   */
 package cn.academy.vanilla.teleporter.skill
 
-import cn.academy.ability.api.Skill
+import cn.academy.ability.api.{AbilityPipeline, Skill}
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.misc.achievements.ModuleAchievements
@@ -15,11 +15,15 @@ import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.helper.Motion3D
+import cpw.mods.fml.common.FMLCommonHandler
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.common.gameevent.InputEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.Vec3
 import net.minecraft.world.World
+import org.lwjgl.input.Mouse
 
 import scala.util.control.Breaks
 
@@ -48,9 +52,15 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
   // Final calculated dest
   private var dest: Dest = _
   private val exp: Float = ctx.getSkillExp
+  private val minDist = 0.5
+  private val maxDist = getMaxDistance(ctx.getSkillExp)
+  private var curDist:Float = maxDist
+
+
 
   @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
-  private def s_execute() = {
+  private def s_execute(dist:Float) = {
+    curDist = dist
     dest = getDest
     if(!dest.available) {
       terminate()
@@ -77,7 +87,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onKeyUp() = {
-    sendToServer(MSG_EXECUTE)
+    sendToServer(MSG_EXECUTE,curDist.asInstanceOf[AnyRef])
   }
 
   @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
@@ -100,7 +110,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
 
   def getDest: Dest = {
     val world: World = player.worldObj
-    var dist: Double = getMaxDistance(ctx.getSkillExp)
+    var dist: Double = curDist.toDouble
     val cplim: Double = ctx.cpData.getCP / getConsumption(ctx.getSkillExp)
     dist = Math.min(dist, cplim)
     val STEP: Double = 0.8
@@ -131,6 +141,15 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     new Dest(mo.getPosVec, stage != 1)
   }
 
+  def updateDistance(dist:Float) = {
+    //AcademyCraft.log.info("current distance = "+curDist.toFloat+" max distance = "+maxDist + " offset = "+dist)
+    if(dist+curDist>=minDist && dist+curDist<=maxDist){
+      curDist+=dist
+
+    }
+  }
+
+
 }
 
 @Registrant
@@ -140,11 +159,22 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
 
   private var mark: EntityTPMarking = _
 
+  private val mwSpd=1
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_spawnMark() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
       player.worldObj.spawnEntityInWorld(mark)
+      FMLCommonHandler.instance.bus.register(this)
+    }
+  }
+
+  @SubscribeEvent
+  def onPlayerUseWheel(inputEvent: InputEvent.MouseInputEvent)
+  {
+    if(AbilityPipeline.canUseMouseWheel) {
+      val offset: Float=(Mouse.getEventDWheel / 120) * mwSpd
+      par.updateDistance(offset)
     }
   }
 
@@ -160,6 +190,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_endEffect() = {
     ACSounds.playClient(player, "tp.tp", .5f)
+    FMLCommonHandler.instance.bus.unregister(this)
     if(mark != null) mark.setDead()
   }
 
