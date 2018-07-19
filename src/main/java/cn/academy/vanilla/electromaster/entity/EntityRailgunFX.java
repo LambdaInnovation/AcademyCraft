@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
@@ -11,35 +5,23 @@ import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.deprecated.ViewOptimize;
-import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  *
  */
-@Registrant
-@RegEntity(clientOnly = true)
+@RegEntity
 @SideOnly(Side.CLIENT)
-@RegEntity.HasRender
 public class EntityRailgunFX extends EntityRayBase {
     
     static final int ARC_SIZE = 15;
-    
-    @RegEntity.Render
+
     public static RailgunRender renderer;
     
     static Arc[] templates;
@@ -94,7 +76,7 @@ public class EntityRailgunFX extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        worldObj.playSound(posX, posY, posZ, "academy:em.railgun", 0.5f, 1.0f, false);
+        getEntityWorld().playSound(posX, posY, posZ, "academy:em.railgun", 0.5f, 1.0f, false);
     }
     
     @Override

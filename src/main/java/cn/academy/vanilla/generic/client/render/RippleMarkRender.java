@@ -1,17 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.generic.client.render;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
-import cn.lambdalib.util.deprecated.Mesh;
-import cn.lambdalib.util.deprecated.SimpleMaterial;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

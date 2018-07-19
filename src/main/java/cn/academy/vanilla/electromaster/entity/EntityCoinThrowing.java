@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.core.AcademyCraft;
@@ -11,51 +5,39 @@ import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.item.ItemCoin;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.annoreg.mc.RegEventHandler;
-import cn.lambdalib.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.s11n.network.NetworkS11n;
-import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
-import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.MotionHandler;
-import cn.lambdalib.util.entityx.handlers.Rigidbody;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.mc.PlayerUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.s11n.network.NetworkS11n;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * 
  * @author KSkun
  */
-@Registrant
 @RegEntity
-@RegEntity.HasRender
 public class EntityCoinThrowing extends EntityAdvanced {
 
     public static boolean PLAY_HEADS_OR_TAILS;
 
     static {
-        NetworkS11n.addDirect(EntityCoinThrowing.class, new NetS11nAdaptor<EntityCoinThrowing>() {
+        NetworkS11n.addDirect(EntityCoinThrowing.class, new NetworkS11n.NetS11nAdaptor<EntityCoinThrowing>() {
             @Override
             public void write(ByteBuf buf, EntityCoinThrowing obj) {
                 NetworkS11n.serializeWithHint(buf, obj.player, EntityPlayer.class);
             }
 
             @Override
-            public EntityCoinThrowing read(ByteBuf buf) throws ContextException {
+            public EntityCoinThrowing read(ByteBuf buf){
                 return ItemCoin.getPlayerCoin(NetworkS11n.deserializeWithHint(buf, EntityPlayer.class));
             }
         });
@@ -91,7 +73,6 @@ public class EntityCoinThrowing extends EntityAdvanced {
     }
     
     @SideOnly(Side.CLIENT)
-    @RegEntity.Render
     public static RendererCoinThrowing renderer;
     
     private static final int MAXLIFE = 120;
@@ -117,7 +98,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     }
     
     public EntityCoinThrowing(EntityPlayer player, ItemStack is) {
-        super(player.worldObj);
+        super(player.getEntityWorld());
         this.stack = is;
         this.player = player;
         this.initHt = (float) player.posY;
@@ -129,7 +110,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     
     @Override
     public void onUpdate() {
-        if (worldObj.isRemote && isSync)
+        if (getEntityWorld().isRemote && isSync)
             setDead();
         //if(!worldObj.isRemote || isSync)
             //syncer.update();
@@ -149,7 +130,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     
     void finishThrowing() {
         //try merge
-        if(!worldObj.isRemote && !player.capabilities.isCreativeMode) {
+        if(!getEntityWorld().isRemote && !player.capabilities.isCreativeMode) {
             ItemStack equipped = player.getCurrentEquippedItem();
             if(equipped == null) {
                 player.setCurrentItemOrArmor(0, new ItemStack(ModuleVanilla.coin));
@@ -165,7 +146,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
                     + yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
             }
         }
-        if (worldObj.isRemote && PLAY_HEADS_OR_TAILS) {
+        if (getEntityWorld().isRemote && PLAY_HEADS_OR_TAILS) {
             player.addChatComponentMessage(new ChatComponentTranslation(
                 "ac.headsOrTails." + RandUtils.nextInt(2)));
         }
@@ -191,7 +172,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         setDead();
-        worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(
+        getEntityWorld().spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(
                 ModuleVanilla.coin)));
     }
 
@@ -205,15 +186,14 @@ public class EntityCoinThrowing extends EntityAdvanced {
         
     }
 
-    @Registrant
     public enum EventListener {
-        @RegEventHandler(Bus.Forge)
         instance;
 
-        @RegInitCallback
-        private static void init() {
+        @StateEventCallback
+        private static void init(FMLInitializationEvent event) {
             PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
                 "generic", false, "Show heads or tails after throwing a coin.");
+            MinecraftForge.EVENT_BUS.register(instance);
         }
 
         @SubscribeEvent

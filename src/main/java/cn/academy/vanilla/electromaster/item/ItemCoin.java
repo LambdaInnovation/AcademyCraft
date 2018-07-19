@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.item;
 
 import cn.academy.core.item.ACItem;
@@ -31,7 +25,6 @@ import java.util.Map;
  * 
  * @author KSkun
  */
-@Registrant
 public class ItemCoin extends ACItem {
     
     @RegItem.Render

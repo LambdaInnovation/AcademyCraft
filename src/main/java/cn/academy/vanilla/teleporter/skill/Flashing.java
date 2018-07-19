@@ -1,9 +1,3 @@
-/**
- * Copyright (c) Lambda Innovation, 2013-2016
- * This file is part of the AcademyCraft mod.
- * https://github.com/LambdaInnovation/AcademyCraft
- * Licensed under GPLv3, see project root for more information.
- */
 package cn.academy.vanilla.teleporter.skill;
 
 import cn.academy.ability.api.Skill;
@@ -19,27 +13,22 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPSkillHelper;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.util.deprecated.LIFMLGameEventDispatcher;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.EntitySelectors;
-import cn.lambdalib.util.mc.Raytrace;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import com.google.common.base.Preconditions;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.sun.javafx.geom.Vec3f;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Optional;
 
-import static cn.lambdalib.util.generic.MathUtils.lerpf;
 
 /**
  * @author WeAthFolD
@@ -88,7 +77,7 @@ public class Flashing extends Skill {
         });
     }
 
-    private static final Vec3[] dirs = new Vec3[] {
+    private static final Vec3i[] dirs = new Vec3i[] {
             null,
             VecUtils.vec(0, 0, -1),
             VecUtils.vec(0, 0, 1),
@@ -213,8 +202,8 @@ public class Flashing extends Skill {
                     endEffects();
                 } else {
                     if (marking != null) {
-                        Vec3 dest = getDest(performingKey);
-                        marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+                        Vec3f dest = getDest(performingKey);
+                        marking.setPosition(dest.x, dest.y, dest.z);
                     }
                 }
 
@@ -233,10 +222,10 @@ public class Flashing extends Skill {
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
             if (ctx.consume(0, consumption)) {
-                Vec3 dest = getDest(keyid);
+                Vec3f dest = getDest(keyid);
                 if(player.isRiding())
                     player.ridingEntity=null;
-                player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord);
+                player.setPositionAndUpdate(dest.x, dest.y, dest.z);
                 player.fallDistance = 0.0f;
 
                 ctx.addSkillExp(.002f);
@@ -279,8 +268,8 @@ public class Flashing extends Skill {
             endEffects();
 
             marking = new EntityTPMarking(player);
-            Vec3 dest = getDest(performingKey);
-            marking.setPosition(dest.xCoord, dest.yCoord, dest.zCoord);
+            Vec3f dest = getDest(performingKey);
+            marking.setPosition(dest.x, dest.y, dest.z);
 
             world().spawnEntityInWorld(marking);
         }
@@ -297,57 +286,57 @@ public class Flashing extends Skill {
             return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(0, consumption);
         }
 
-        private Vec3 getDest(int keyid) {
+        private Vec3f getDest(int keyid) {
             Preconditions.checkState(keyid != -1);
 
             double dist = lerpf(12, 18, exp);
 
-            Vec3 dir = VecUtils.copy(dirs[keyid]);
+            Vec3f dir = VecUtils.copy(dirs[keyid]);
             dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
             dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
             Motion3D mo = new Motion3D(player, true);
             mo.setMotion(dir.xCoord, dir.yCoord, dir.zCoord);
 
-            MovingObjectPosition mop = Raytrace.perform(player.worldObj, mo.getPosVec(), mo.move(dist).getPosVec(),
+            RayTraceResult mop = Raytrace.perform(player.getEntityWorld(), mo.getPosVec(), mo.move(dist).getPosVec(),
                     EntitySelectors.living().and(EntitySelectors.exclude(player)));
 
             double x, y, z;
 
             if (mop != null) {
-                x = mop.hitVec.xCoord;
-                y = mop.hitVec.yCoord;
-                z = mop.hitVec.zCoord;
+                x = mop.hitVec.x;
+                y = mop.hitVec.y;
+                z = mop.hitVec.z;
 
-                if (mop.typeOfHit == MovingObjectType.BLOCK) {
+                if (mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                     switch (mop.sideHit) {
-                        case 0:
+                        case DOWN:
                             y -= 1.0;
                             break;
-                        case 1:
+                        case UP:
                             y += 1.8;
                             break;
-                        case 2:
+                        case NORTH:
                             z -= .6;
-                            y = mop.blockY + 1.7;
+                            y = mop.hitVec.y + 1.7;
                             break;
-                        case 3:
+                        case SOUTH:
                             z += .6;
-                            y = mop.blockY + 1.7;
+                            y = mop.hitVec.y + 1.7;
                             break;
-                        case 4:
+                        case WEST:
                             x -= .6;
-                            y = mop.blockY + 1.7;
+                            y = mop.hitVec.y + 1.7;
                             break;
-                        case 5:
+                        case EAST:
                             x += .6;
-                            y = mop.blockY + 1.7;
+                            y = mop.hitVec.y + 1.7;
                             break;
                     }
                     // check head
-                    if (mop.sideHit > 1) {
+                    if (mop.sideHit.getIndex() > 1) {
                         int hx = (int) x, hy = (int) (y + 1), hz = (int) z;
-                        if (!player.worldObj.isAirBlock(hx, hy, hz)) {
+                        if (!player.getEntityWorld().isAirBlock(new BlockPos(hx, hy, hz))) {
                             y -= 1.25;
                         }
                     }

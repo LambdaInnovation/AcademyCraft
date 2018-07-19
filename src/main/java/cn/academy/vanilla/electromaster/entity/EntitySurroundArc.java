@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.core.client.IPointFactory;
@@ -11,11 +5,7 @@ import cn.academy.core.client.render.CubePointFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -24,16 +14,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * Spawn a surround arc effect around the specific entity or block.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
-@RegEntity(clientOnly = true)
-@RegEntity.HasRender
+@RegEntity
 public class EntitySurroundArc extends EntityAdvanced {
     
     static final int TEMPLATES = 15;
@@ -88,7 +78,7 @@ public class EntitySurroundArc extends EntityAdvanced {
     }
     
     public EntitySurroundArc(Entity follow, double sizeMultiplyer) {
-        super(follow.worldObj);
+        super(follow.getEntityWorld());
         pos = new EntityPos(follow);
         pointFactory = new CubePointFactory(
             follow.width * sizeMultiplyer, 
@@ -221,7 +211,7 @@ public class EntitySurroundArc extends EntityAdvanced {
         
         public EntityPos(Entity e) {
             entity = e;
-            isPlayer = e instanceof EntityPlayer && e.equals(Minecraft.getMinecraft().thePlayer);
+            isPlayer = e instanceof EntityPlayer && e.equals(Minecraft.getMinecraft().player);
         }
         
         @Override

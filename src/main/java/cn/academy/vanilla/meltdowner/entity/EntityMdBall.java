@@ -1,45 +1,26 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.template.client.render.entity.RenderIcon;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.client.shader.ShaderSimple;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.EntityCallback;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.helper.GameTimer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegEntity
-@RegEntity.HasRender
 public class EntityMdBall extends EntityAdvanced {
 
     @SideOnly(Side.CLIENT)
-    @RegEntity.Render
     public static R renderer;
     
     static final int MAX_TETXURES = 5;
@@ -73,7 +54,7 @@ public class EntityMdBall extends EntityAdvanced {
     }
     
     public EntityMdBall(EntityPlayer player, int life, final EntityCallback<EntityMdBall> callback) {
-        super(player.worldObj);
+        super(player.getEntityWorld());
         this.spawner = player;
         
         // Calc the sub-offset

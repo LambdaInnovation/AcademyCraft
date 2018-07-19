@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.teleporter.util;
 
 import cn.academy.ability.api.AbilityContext;
@@ -11,25 +5,19 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.event.AbilityEvent;
 import cn.academy.misc.achievements.ModuleAchievements;
 import cn.academy.vanilla.teleporter.CatTeleporter;
-import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
-import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation;
 import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation$;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
-import cn.lambdalib.util.generic.RandUtils;
-import cpw.mods.fml.relauncher.Side;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.s11n.network.NetworkS11nType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public class TPSkillHelper {
 
@@ -80,7 +68,7 @@ public class TPSkillHelper {
             float prob = prob(aData, i);
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
-                player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
+                player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);

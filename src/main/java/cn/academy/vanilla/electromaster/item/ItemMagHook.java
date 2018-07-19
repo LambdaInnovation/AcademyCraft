@@ -1,23 +1,17 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.item;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.lambdalib.annoreg.mc.RegItem;
-import cn.lambdalib.template.client.render.item.RenderModelItem;
-import cn.lambdalib.util.deprecated.ItemModelCustom;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.annoreg.mc.RegItem;
+import cn.lambdalib2.template.client.render.item.RenderModelItem;
+import cn.lambdalib2.util.deprecated.ItemModelCustom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Elec Move Support Hook
@@ -26,13 +20,11 @@ import net.minecraft.world.World;
 public class ItemMagHook extends Item {
     
     @SideOnly(Side.CLIENT)
-    @RegItem.Render
     public static HookRender render;
 
     public ItemMagHook() {
         setCreativeTab(AcademyCraft.cct);
         setUnlocalizedName("ac_maghook");
-        setTextureName("academy:maghook");
     }
     
     @Override

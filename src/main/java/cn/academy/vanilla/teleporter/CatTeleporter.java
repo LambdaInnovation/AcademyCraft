@@ -1,17 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.teleporter;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.vanilla.ModuleVanilla;
-import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem;
 import cn.academy.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
-import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation;
 import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation$;
 import cn.academy.vanilla.teleporter.skill.LocationTeleport$;
 import cn.academy.vanilla.teleporter.skill.*;
