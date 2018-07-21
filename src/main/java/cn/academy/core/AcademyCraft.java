@@ -5,6 +5,7 @@ import cn.academy.core.network.NetworkManager;
 import cn.lambdalib2.crafting.CustomMappingHelper;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
+import cn.lambdalib2.util.Debug;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +38,7 @@ import java.util.Map.Entry;
  */
 @Mod(modid = "academy-craft", name = "AcademyCraft", version = AcademyCraft.VERSION,
      dependencies = "required-after:LambdaLib@@LL_VERSION@") // LambdaLib is currently unstable. Supports only one version.
-@RegistryMod(rootPackage = "cn.academy.")
+@RegistryMod(rootPackage = "cn.academy.", resourceDomain = "academy")
 //@VersionUpdateUrl(repoUrl="github.com/LambdaInnovation/AcademyCraft")
 public class AcademyCraft {
 
@@ -100,13 +100,13 @@ public class AcademyCraft {
         // Load script, where names now are available
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
-        if (DEBUG_MODE && false) {
-            System.out.printf("|-------------------------------------------------------\n");
-            System.out.printf("| AC Recipe Name Mappings\n");
-            System.out.printf("|--------------------------|----------------------------\n");
-            System.out.printf(String.format("| %-25s| Object Name\n", "Recipe Name"));
-            System.out.printf("|--------------------------|----------------------------\n");
-            for (Entry<String, Object> entry : recipes.nameMapping.entrySet()) {
+        if (DEBUG_MODE) {
+            Debug.log("|-------------------------------------------------------\n");
+            Debug.log("| AC Recipe Name Mappings\n");
+            Debug.log("|--------------------------|----------------------------\n");
+            Debug.log(String.format("| %-25s| Object Name\n", "Recipe Name"));
+            Debug.log("|--------------------------|----------------------------\n");
+            for (Entry<String, Object> entry : recipes.getNameMappingForDebug().entrySet()) {
                 Object obj = entry.getValue();
                 String str1 = entry.getKey(), str2;
                 if (obj instanceof Item) {
@@ -116,9 +116,9 @@ public class AcademyCraft {
                 } else {
                     str2 = obj.toString();
                 }
-                System.out.printf(String.format("| %-25s| %s\n", str1, str2));
+                Debug.log(String.format("| %-25s| %s\n", str1, str2));
             }
-            System.out.printf("|-------------------------------------------------------\n");
+            Debug.log("|-------------------------------------------------------\n");
         }
 
         recipes = null; // Release and have fun GC

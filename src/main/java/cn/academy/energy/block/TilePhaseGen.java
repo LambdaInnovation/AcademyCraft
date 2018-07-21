@@ -59,8 +59,8 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         
         if(!getWorldObj().isRemote) {
             if(++untilSync == 10) {

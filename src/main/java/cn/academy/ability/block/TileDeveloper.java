@@ -88,13 +88,13 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if(info != null) {
             info.update();
             if(info.getSubID() != 0)
                 return;
             
-            super.updateEntity();
+            super.update();
             
             if(++syncCD == 20) {
                 syncCD = 0;

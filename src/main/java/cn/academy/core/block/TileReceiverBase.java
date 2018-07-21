@@ -2,6 +2,9 @@ package cn.academy.core.block;
 
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.block.IWirelessReceiver;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -27,8 +30,7 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         bandwidth = bwidth;
     }
     
-    @Override
-    public void updateEntity() {
+    public void update() {
         if(!getWorld().isRemote) {
             if(++updateTicker == UPDATE_WAIT) {
                 updateTicker = 0;

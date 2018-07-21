@@ -1,16 +1,12 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.sound;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A stoppable&repeatable sound that follows an entity.
@@ -21,8 +17,8 @@ public class FollowEntitySound extends MovingSound {
     
     public final Entity entity;
 
-    public FollowEntitySound(Entity _entity, String name) {
-        super(new ResourceLocation("academy:" + name));
+    public FollowEntitySound(Entity _entity, String name, SoundCategory category) {
+        super(new SoundEvent(new ResourceLocation("academy:", name)), category);
         entity = _entity;
         
         update();

@@ -28,7 +28,7 @@ public class DebugHelper {
         if(event.getSource().getImmediateSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getSource().getImmediateSource();
             player.sendMessage(new TextComponentTranslation(
-                String.format("%s: %.1f | %.1f/%.1f", event.getEntity().getClass().getSimpleName(), event.ammount,
+                String.format("%s: %.1f | %.1f/%.1f", event.getEntity().getClass().getSimpleName(), event.getAmount(),
                     event.getEntityLiving().getHealth(), event.getEntityLiving().getMaxHealth())));
         }
     }

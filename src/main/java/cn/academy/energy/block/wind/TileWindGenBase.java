@@ -93,8 +93,8 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     private InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         info.update();
         scheduler.runTick();
         updateChargeOut();

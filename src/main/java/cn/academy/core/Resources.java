@@ -2,8 +2,8 @@ package cn.academy.core;
 
 import cn.academy.core.client.ClientResources;
 import cn.lambdalib2.cgui.component.TextBox;
-import cn.lambdalib2.util.client.font.IFont;
-import cn.lambdalib2.util.client.font.IFont.FontOption;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.FontOption;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -126,5 +126,5 @@ public class Resources {
     public static TextBox newTextBox(FontOption option) {
         return ClientResources.newTextBox(option);
     }
-    
+
 }

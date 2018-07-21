@@ -94,8 +94,8 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     }
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         
         World world = getWorldObj();
         if(!world.isRemote) {

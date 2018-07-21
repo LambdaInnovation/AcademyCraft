@@ -1,17 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.render;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.entity.EntityBlock;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;

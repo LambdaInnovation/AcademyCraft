@@ -6,9 +6,13 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.ModuleCoreClient;
 import cn.academy.core.Resources;
+import cn.lambdalib2.auxgui.AuxGui;
+import cn.lambdalib2.auxgui.AuxGuiHandler;
+import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.util.client.font.IFont;
-import cn.lambdalib2.util.client.font.IFont.FontOption;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.util.Colors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +38,7 @@ public class DebugConsole extends AuxGui {
         
         public Text(String _text, float _size, int _color) {
             text = _text;
-            option = new FontOption(_size, new Color(_color));
+            option = new FontOption(_size, Colors.fromRGBA32(_color));
         }
         
         public Text(String _text, float _size) {
@@ -64,13 +68,10 @@ public class DebugConsole extends AuxGui {
 
     State state = State.NONE;
     
-    private DebugConsole() {}
-    
-    @Override
-    public boolean isForeground() {
-        return false;
+    private DebugConsole() {
+        foreground = false;
     }
-
+    
     @Override
     public void draw(ScaledResolution sr) {
         if(state == State.NONE)
@@ -120,11 +121,11 @@ public class DebugConsole extends AuxGui {
             break;
         }
         
-        iter(texts, 10.5, 10.5, 0.2);
+        iter(texts, 10.5f, 10.5f, 0.2);
         iter(texts, 10, 10, 1);
     }
 
-    private void iter(List<Text> texts, double x, double y, double lumMul) {
+    private void iter(List<Text> texts, float x, float y, double lumMul) {
         IFont font = Resources.font();
         for(Text text : texts) {
             Color crl = text.option.color;
