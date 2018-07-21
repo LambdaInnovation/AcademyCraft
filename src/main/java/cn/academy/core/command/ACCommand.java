@@ -1,11 +1,12 @@
 package cn.academy.core.command;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
 /**
  * @author WeAthFolD
  */
-public abstract class ACCommand extends LICommandBase {
+public abstract class ACCommand extends CommandBase  {
     
     final String commandName;
     protected String localName;
@@ -31,12 +32,12 @@ public abstract class ACCommand extends LICommandBase {
     }
     
     @Override
-    public String getCommandName() {
+    public String getName() {
         return commandName;
     }
 
     @Override
-    public String getCommandUsage(ICommandSender ics) {
+    public String getUsage(ICommandSender ics) {
         return getLoc("usage");
     }
     

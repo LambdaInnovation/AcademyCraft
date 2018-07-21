@@ -68,17 +68,17 @@ public class CubePointFactory implements IPointFactory {
         case 1:
             a = RNG.nextDouble() * w;
             b = RNG.nextDouble() * l;
-            return VecUtils.vec(a + xOffset, face == 0 ? 0 : h, b + zOffset);
+            return new Vec3d(a + xOffset, face == 0 ? 0 : h, b + zOffset);
         case 2:
         case 3:
             a = RNG.nextDouble() * h;
             b = RNG.nextDouble() * w;
-            return VecUtils.vec(b + xOffset, a, (face == 2 ? 0 : l) + zOffset);
+            return new Vec3d(b + xOffset, a, (face == 2 ? 0 : l) + zOffset);
         case 4:
         case 5:
             a = RNG.nextDouble() * h;
             b = RNG.nextDouble() * l;
-            return VecUtils.vec((face == 4 ? 0 : w) + xOffset, a, b + zOffset);
+            return new Vec3d((face == 4 ? 0 : w) + xOffset, a, b + zOffset);
         }
         return null; //Not supposed to happen
     }

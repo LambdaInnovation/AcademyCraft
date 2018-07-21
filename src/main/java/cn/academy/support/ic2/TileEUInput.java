@@ -55,11 +55,11 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     }
     
     @Override
-    public void updateEntity() {
+    public void update() {
         if(!isRegistered && !getWorldObj().isRemote) {
             isRegistered = MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
         }
-        super.updateEntity();
+        super.update();
     }
     
     @Override

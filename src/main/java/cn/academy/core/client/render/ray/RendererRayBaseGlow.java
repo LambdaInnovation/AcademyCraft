@@ -1,6 +1,8 @@
 package cn.academy.core.client.render.ray;
 
 import cn.academy.core.entity.IRay;
+import cn.lambdalib2.util.VecUtils;
+import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;

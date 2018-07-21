@@ -17,8 +17,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ACSounds {
     
     @SideOnly(Side.CLIENT)
-    public static void playClient(Entity target, String name, float volume) {
-        playClient(new FollowEntitySound(target, name).setVolume(volume));
+    public static void playClient(Entity target, String name, SoundCategory category, float volume) {
+        playClient(new FollowEntitySound(target, name, category).setVolume(volume));
     }
     
     @SideOnly(Side.CLIENT)

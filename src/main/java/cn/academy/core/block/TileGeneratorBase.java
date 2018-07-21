@@ -3,6 +3,9 @@ package cn.academy.core.block;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.block.IWirelessGenerator;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,8 +31,7 @@ public abstract class TileGeneratorBase extends TileInventory implements IWirele
         bandwidth = _bandwidth;
     }
     
-    @Override
-    public void updateEntity() {
+    public void update() {
         if(!getWorld().isRemote) {
             double required = bufferSize - energy;
             energy += getGeneration(required);

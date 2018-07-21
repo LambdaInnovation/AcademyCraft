@@ -29,8 +29,8 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
     }
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         World world = getWorldObj();
         if(!world.isRemote) {
             for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {

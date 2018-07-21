@@ -118,8 +118,8 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     }
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (!isWorking()) {
             // Match the work in server

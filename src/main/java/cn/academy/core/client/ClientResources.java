@@ -4,10 +4,10 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.Resources;
 import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.render.font.Fonts;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.TrueTypeFont;
 import cn.lambdalib2.util.ResourceUtils;
-import cn.lambdalib2.util.client.font.Fonts;
-import cn.lambdalib2.util.client.font.IFont;
-import cn.lambdalib2.util.client.font.TrueTypeFont;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
@@ -155,29 +155,25 @@ public class ClientResources {
         if (!fontsInit) {
             fontsInit = true;
 
-            // TODO: Add this to settings page?
-
             Configuration config = AcademyCraft.config;
             String userSpecified = config.getString("font", "gui", "Microsoft YaHei",
                     "The font to be used. If not found in the system, default fonts will be used.");
 
-            font = TrueTypeFont.withFallback(Font.PLAIN, 24,
-                    new String[] {
-                            userSpecified,
-                            "微软雅黑",
-                            "Microsoft YaHei",
-                            "SimHei",
-                            "Adobe Heiti Std R"
-                    });
-            fontBold = new TrueTypeFont(font.font().deriveFont(Font.BOLD));
-            fontItalic = new TrueTypeFont(font.font().deriveFont(Font.ITALIC));
+            font = TrueTypeFont.withFallback(
+                Font.PLAIN, 24, userSpecified,
+                "微软雅黑",
+                "Microsoft YaHei",
+                "SimHei",
+                "Adobe Heiti Std R"
+            );
+            fontBold = new TrueTypeFont(font.font.deriveFont(Font.BOLD));
+            fontItalic = new TrueTypeFont(font.font.deriveFont(Font.ITALIC));
         }
     }
 
     @StateEventCallback
     private static void __preInit(FMLPreInitializationEvent event) {
         checkFontInit();
-        // TODO: Disaster if any ui initializes before preInit...
 
         Fonts.register("AC_Normal", font());
         Fonts.register("AC_Bold", fontBold());

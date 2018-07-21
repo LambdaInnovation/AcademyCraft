@@ -19,10 +19,6 @@ public class Glow extends Component {
     public double glowSize = 10.0;
     public double zLevel = 0.0;
     public boolean writeDepth = true;
-    
-    public static Glow get(Widget w) {
-        return w.getComponent("Glow");
-    }
 
     public Glow() {
         super("Glow");

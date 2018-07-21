@@ -3,7 +3,8 @@ package cn.academy.core;
 import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.terminal.app.settings.PropertyElements;
 import cn.academy.terminal.app.settings.SettingsUI;
-import net.minecraftforge.common.MinecraftForge;
+import cn.lambdalib2.input.KeyHandler;
+import cn.lambdalib2.input.KeyManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,9 +21,6 @@ public class ModuleCoreClient {
     public static KeyManager dynKeyManager = new KeyManager();
 
     public static class ACKeyManager extends KeyManager {
-        {
-            MinecraftForge.EVENT_BUS.register(this);
-        }
 
         @Override
         protected Configuration getConfig() {

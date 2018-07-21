@@ -2,6 +2,8 @@ package cn.academy.core.entity;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderEntityBlock;
+import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.s11n.network.NetworkMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * An entity that renders block.
  * @author WeAthFolD
  */
-@Registrant
 @RegEntity
 @RegEntity.HasRender
 public class EntityBlock extends EntityAdvanced {
@@ -186,7 +187,7 @@ public class EntityBlock extends EntityAdvanced {
         setBlock(block, meta);
         if(block instanceof ITileEntityProvider) {
             TileEntity te = ((ITileEntityProvider)block)
-                    .createNewTileEntity(worldObj, meta);
+                    .createNewTileEntity(getWorld(), meta);
             setTileEntity(te);
         }
     }
