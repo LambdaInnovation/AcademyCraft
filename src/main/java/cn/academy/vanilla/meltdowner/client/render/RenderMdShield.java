@@ -1,19 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.client.render;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.client.shader.GLSLMesh;
-import cn.lambdalib.util.client.shader.ShaderSimple;
-import cn.lambdalib.util.deprecated.MeshUtils;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.GameTimer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

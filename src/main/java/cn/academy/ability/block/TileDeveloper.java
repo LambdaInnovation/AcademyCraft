@@ -88,13 +88,13 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if(info != null) {
             info.update();
             if(info.getSubID() != 0)
                 return;
             
-            super.updateEntity();
+            super.update();
             
             if(++syncCD == 20) {
                 syncCD = 0;
@@ -222,9 +222,10 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         info.save(nbt);
+        return nbt;
     }
     
     @SideOnly(Side.CLIENT)

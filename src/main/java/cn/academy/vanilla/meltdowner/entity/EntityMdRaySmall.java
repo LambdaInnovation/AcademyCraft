@@ -1,35 +1,22 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
+import cn.academy.vanilla.ModuleSoundEvent;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.particle.Particle;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
-@RegEntity(clientOnly = true)
-@RegEntity.HasRender
+@RegEntity
 public class EntityMdRaySmall extends EntityRayBase {
-    
-    @RegEntity.Render
+
     public static SmallMdRayRender renderer;
 
     public EntityMdRaySmall(World world) {
@@ -43,7 +30,7 @@ public class EntityMdRaySmall extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        worldObj.playSound(posX, posY, posZ, "academy:md.ray_small", 0.5f, 1.0f, false);
+        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
     }
     
     @Override

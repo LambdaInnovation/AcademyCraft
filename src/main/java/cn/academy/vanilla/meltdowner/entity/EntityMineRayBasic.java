@@ -1,36 +1,21 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.particle.Particle;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
-@RegEntity(clientOnly = true)
-@RegEntity.HasRender
+@RegEntity
 public class EntityMineRayBasic extends EntityRayBase {
-    
-    @RegEntity.Render
+
     public static BasicMineRayRender renderer;
     
     public EntityMineRayBasic(EntityPlayer _player) {
@@ -52,7 +37,7 @@ public class EntityMineRayBasic extends EntityRayBase {
             Particle p = MdParticleFactory.INSTANCE.next(worldObj,
                     new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
                     VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
-            worldObj.spawnEntityInWorld(p);
+            worldObj.spawnEntity(p);
         }
     }
     

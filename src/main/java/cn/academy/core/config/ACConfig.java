@@ -2,17 +2,17 @@ package cn.academy.core.config;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.network.NetworkManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.util.generic.RegistryUtils;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.ResourceUtils;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
 
-@Registrant
 public final class ACConfig {
 
     private ACConfig() {}
@@ -35,14 +34,14 @@ public final class ACConfig {
 
         ResourceLocation defaultRes = new ResourceLocation("academy:config/default.conf");
 
-        Reader reader = new InputStreamReader(RegistryUtils.getResourceStream(defaultRes));
+        Reader reader = new InputStreamReader(ResourceUtils.getResourceStream(defaultRes));
 
         config = ConfigFactory.parseReader(reader);
 
         File customFile = new File("config/academy-craft-data.conf");
         if (!customFile.isFile()) {
             try {
-                Files.copy(RegistryUtils.getResourceStream(defaultRes), customFile.toPath());
+                Files.copy(ResourceUtils.getResourceStream(defaultRes), customFile.toPath());
             } catch (IOException ex) {
                 log.error("Error when copying config template to config folder", ex);
             }
@@ -67,8 +66,8 @@ public final class ACConfig {
     }
 
 
-    @RegInitCallback
-    private static void __forceLoadAtInit() {
+    @StateEventCallback
+    private static void __onInit(FMLInitializationEvent event) {
         instance();
 
         FMLCommonHandler.instance().bus().register(new LoginEvents());
@@ -99,10 +98,10 @@ public final class ACConfig {
             String err = fetchLastError();
 
             if (err != null) {
-                evt.player.addChatMessage(new ChatComponentTranslation("ac.data_config_parse_fail"));
-                evt.player.addChatMessage(new ChatComponentTranslation(err));
+                evt.player.sendMessage(new TextComponentTranslation("ac.data_config_parse_fail"));
+                evt.player.sendMessage(new TextComponentTranslation(err));
             }
-            if(!evt.player.worldObj.isRemote)
+            if(!evt.player.world.isRemote)
                 NetworkManager.sendTo(config, (EntityPlayerMP) evt.player);
         }
     }

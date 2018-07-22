@@ -1,16 +1,10 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
-import cn.lambdalib.util.client.shader.ShaderNotex;
-import cn.lambdalib.util.helper.GameTimer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -22,7 +16,7 @@ import org.lwjgl.opengl.GL20;
  */
 public class RenderMarker extends Render {
 
-    static final Tessellator t = Tessellator.instance;
+    static final Tessellator t = Tessellator.getInstance();
     final double[][] mulArray = { { 0, 0, 0 }, { 1, 0, 0 }, { 1, 0, 1 }, { 0, 0, 1 }, { 0, 1, 0 }, { 1, 1, 0 },
             { 1, 1, 1 }, { 0, 1, 1 }, };
     final double[] rotArray = { 0, -90, -180, -270, 0, -90, -180, -270 };
@@ -72,14 +66,16 @@ public class RenderMarker extends Render {
             GL11.glTranslated(sx, sy, sz);
             GL11.glRotated(rotArray[i], 0, 1, 0);
             GL11.glLineWidth(3f);
-            t.startDrawing(GL11.GL_LINES);
-            t.setBrightness(15728880);
-            t.addVertex(0, 0, 0);
-            t.addVertex(0, rev ? len : -len, 0);
-            t.addVertex(0, 0, 0);
-            t.addVertex(len, 0, 0);
-            t.addVertex(0, 0, 0);
-            t.addVertex(0, 0, len);
+            BufferBuilder bb = t.getBuffer();
+            bb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
+
+            //TODO bb.setBrightness(15728880);
+            bb.pos(0, 0, 0);
+            bb.pos(0, rev ? len : -len, 0);
+            bb.pos(0, 0, 0);
+            bb.pos(len, 0, 0);
+            bb.pos(0, 0, 0);
+            bb.pos(0, 0, len);
             t.draw();
 
             GL11.glPopMatrix();

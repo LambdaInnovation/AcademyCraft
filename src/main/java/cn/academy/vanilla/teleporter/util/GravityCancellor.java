@@ -1,16 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.teleporter.util;
 
-import cn.lambdalib.util.client.ClientUtils;
-import cn.lambdalib.util.deprecated.LIHandler;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 /**
  * @author WeAthFolD
@@ -28,7 +20,7 @@ public class GravityCancellor extends LIHandler<ClientTickEvent> {
 
     @Override
     protected boolean onEvent(ClientTickEvent event) {
-        if (event.phase == Phase.START && ClientUtils.isPlayerPlaying()) {
+        if (event.phase == TickEvent.Phase.START && ClientUtils.isPlayerPlaying()) {
             if (p.isDead || (++ticker == ticks)) {
                 this.setDead();
             } else {

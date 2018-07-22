@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 /**
  * You better directly extend this class rather than delegating it. Too much interfaces could be a burden.
  * <br/> P.S.Notch的脑子绝！对！秀！逗！了！
+ * FIXME Add new methods
  * @author WeAthFolD
  */
 public class TileInventory extends TileEntity implements IInventory {
@@ -47,13 +42,13 @@ public class TileInventory extends TileEntity implements IInventory {
         if (inventory[slot] != null) {
             ItemStack itemstack;
 
-            if (inventory[slot].stackSize <= count) {
+            if (inventory[slot].getCount() <= count) {
                 itemstack = inventory[slot];
                 inventory[slot] = null;
             } else {
                 itemstack = inventory[slot].splitStack(count);
 
-                if (inventory[slot].stackSize == 0) {
+                if (inventory[slot].getCount() == 0) {
                     inventory[slot] = null;
                 }
             }
@@ -65,7 +60,7 @@ public class TileInventory extends TileEntity implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
         if (inventory[slot] != null) {
             ItemStack itemstack = inventory[slot];
             inventory[slot] = null;
@@ -79,8 +74,8 @@ public class TileInventory extends TileEntity implements IInventory {
     public void setInventorySlotContents(int slot, ItemStack stack) {
         inventory[slot] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
         }
 
         this.markDirty();
@@ -93,13 +88,13 @@ public class TileInventory extends TileEntity implements IInventory {
         for(int i = 0; i < inventory.length; ++i) {
             String name = "" + i;
             if(tag.hasKey(name)) {
-                inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(name));
+                inventory[i] = new ItemStack(tag.getCompoundTag(name));
             }
         }
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         NBTTagCompound tag = new NBTTagCompound();
         for(int i = 0; i < inventory.length; ++i) {
@@ -111,16 +106,7 @@ public class TileInventory extends TileEntity implements IInventory {
         }
         
         nbt.setTag("inventory", tag);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return invName;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
+        return tag;
     }
 
     @Override
@@ -129,19 +115,51 @@ public class TileInventory extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
     @Override
-    public void openInventory() {}
+    public void openInventory(EntityPlayer player) {}
 
     @Override
-    public void closeInventory() {}
+    public void closeInventory(EntityPlayer player) {}
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return true;
     }
 
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return invName;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
 }

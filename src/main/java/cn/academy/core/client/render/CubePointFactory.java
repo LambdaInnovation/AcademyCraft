@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.render;
 
 import cn.academy.core.client.IPointFactory;
-import cn.lambdalib.util.generic.VecUtils;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Random;
 
@@ -62,7 +55,7 @@ public class CubePointFactory implements IPointFactory {
     }
 
     @Override
-    public Vec3 next() {
+    public Vec3d next() {
         int face = randFace();
         double a, b;
         double xOffset = 0, zOffset = 0;
@@ -75,17 +68,17 @@ public class CubePointFactory implements IPointFactory {
         case 1:
             a = RNG.nextDouble() * w;
             b = RNG.nextDouble() * l;
-            return VecUtils.vec(a + xOffset, face == 0 ? 0 : h, b + zOffset);
+            return new Vec3d(a + xOffset, face == 0 ? 0 : h, b + zOffset);
         case 2:
         case 3:
             a = RNG.nextDouble() * h;
             b = RNG.nextDouble() * w;
-            return VecUtils.vec(b + xOffset, a, (face == 2 ? 0 : l) + zOffset);
+            return new Vec3d(b + xOffset, a, (face == 2 ? 0 : l) + zOffset);
         case 4:
         case 5:
             a = RNG.nextDouble() * h;
             b = RNG.nextDouble() * l;
-            return VecUtils.vec((face == 4 ? 0 : w) + xOffset, a, b + zOffset);
+            return new Vec3d((face == 4 ? 0 : w) + xOffset, a, b + zOffset);
         }
         return null; //Not supposed to happen
     }

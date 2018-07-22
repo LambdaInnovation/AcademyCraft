@@ -1,22 +1,13 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.render.ray;
 
 import cn.academy.core.entity.IRay;
-import cn.lambdalib.util.deprecated.ViewOptimize;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.Motion3D;
+import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import static cn.lambdalib.util.generic.VecUtils.*;
 
 /**
  * @author WeAthFolD
@@ -38,7 +29,7 @@ public abstract class RendererRayBaseSimple extends Render {
         double length = ray.getLength();
         double fix = ray.getStartFix();
         
-        Vec3 vo;
+        Vec3d vo;
         if(ray.needsViewOptimize())
             vo = ViewOptimize.getFixVector(ray);
         else
@@ -46,7 +37,7 @@ public abstract class RendererRayBaseSimple extends Render {
         // Rotate fix vector to world coordinate
         vo.rotateAroundY(MathUtils.toRadians(270 - ent.rotationYaw));
         
-        Vec3 start = vec(0, 0, 0),
+        Vec3d start = vec(0, 0, 0),
             end = add(start, multiply(new Motion3D(ent, true).getMotionVec(), length));
         start = add(start, vo);
         
@@ -54,7 +45,7 @@ public abstract class RendererRayBaseSimple extends Render {
         y += start.yCoord;
         z += start.zCoord;
         
-        Vec3 delta = subtract(end, start);
+        Vec3d delta = subtract(end, start);
         double dxzsq = delta.xCoord * delta.xCoord + delta.zCoord * delta.zCoord;
         double npitch = MathUtils.toDegrees(Math.atan2(delta.yCoord, Math.sqrt(dxzsq)));
         double nyaw = MathUtils.toDegrees(Math.atan2(delta.xCoord, delta.zCoord));

@@ -1,24 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.entity;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.render.RenderEntityBlock;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.event.CollideEvent;
-import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
-import cn.lambdalib.util.entityx.handlers.Rigidbody;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.s11n.network.NetworkMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,15 +12,14 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * An entity that renders block.
  * @author WeAthFolD
  */
-@Registrant
 @RegEntity
 @RegEntity.HasRender
 public class EntityBlock extends EntityAdvanced {
@@ -203,7 +187,7 @@ public class EntityBlock extends EntityAdvanced {
         setBlock(block, meta);
         if(block instanceof ITileEntityProvider) {
             TileEntity te = ((ITileEntityProvider)block)
-                    .createNewTileEntity(worldObj, meta);
+                    .createNewTileEntity(getWorld(), meta);
             setTileEntity(te);
         }
     }

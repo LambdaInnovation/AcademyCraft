@@ -6,10 +6,10 @@
 */
 package cn.academy.core.event;
 
-import cpw.mods.fml.common.eventhandler.Cancelable;
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * Fire this event to determine whether a block is permissible to be destroyed
@@ -40,7 +40,7 @@ public final class BlockDestroyEvent extends Event {
     }
     
     public BlockDestroyEvent(EntityPlayer player_, int x_, int y_, int z_) {
-        this(player_.worldObj, player_, x_, y_, z_);
+        this(player_.world, player_, x_, y_, z_);
     }
 
 }

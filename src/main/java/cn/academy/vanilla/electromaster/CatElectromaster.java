@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster;
 
 import cn.academy.ability.api.Category;
@@ -12,8 +6,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.skill.*;
 import cn.academy.vanilla.electromaster.skill.MagManip$;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockRedstoneOre;
@@ -21,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
@@ -29,7 +23,6 @@ import java.util.HashSet;
  * @author WeAthFolD
  *
  */
-@Registrant
 public class CatElectromaster extends Category {
 
     public static final Skill
@@ -120,11 +113,11 @@ public class CatElectromaster extends Category {
 
     private static HashSet<Class<? extends Entity>> metalEntities = new HashSet<>();
 
-    @RegInitCallback
-    public static void init() {
+    @StateEventCallback
+    public static void init(FMLInitializationEvent event) {
 
-        String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "iron_door", "activator_rail", "detector_rail",
-                "golden_rail", "sticky_piston", "piston"};
+        String[] defaultNBlocks = {"rail", "iron_bars", "iron_block", "activator_rail", "detector_rail", "golden_rail",
+                "sticky_piston", "piston"};
         String[] cfgNBlocks = AcademyCraft.config.getStringList("normalMetalBlocks", "ability", defaultNBlocks,
                 "Supported Normal Metal Blocks of Electro Master. The block name and ore dictionary name can be used.");
         for (String block : cfgNBlocks) {
@@ -159,7 +152,7 @@ public class CatElectromaster extends Category {
         String[] cfgEntities = AcademyCraft.config.getStringList("metalEntities", "ability", defaultEntities,
                 "Supported Metal Entities of Electro Master. The entity name can be used.");
         for (String entity : cfgEntities) {
-            Class<? extends Entity> c = (Class<? extends Entity>) EntityList.stringToClassMapping.get(entity);
+            Class<? extends Entity> c = (Class<? extends Entity>) EntityList.getClassFromName(entity);
             metalEntities.add(c);
         }
 

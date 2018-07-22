@@ -1,41 +1,23 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererMagHook;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.MotionHandler;
-import cn.lambdalib.util.entityx.event.CollideEvent;
-import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
-import cn.lambdalib.util.entityx.handlers.Rigidbody;
-import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.EntitySelectors;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
  *
  */
-@Registrant
 @RegEntity
-@RegEntity.HasRender
 public class EntityMagHook extends EntityAdvanced {
     
     {
@@ -46,7 +28,6 @@ public class EntityMagHook extends EntityAdvanced {
     }
     
     @SideOnly(Side.CLIENT)
-    @RegEntity.Render
     public static RendererMagHook renderer;
     
     public boolean isHit;
@@ -56,7 +37,7 @@ public class EntityMagHook extends EntityAdvanced {
     boolean doesSetStill;
     
     public EntityMagHook(final EntityPlayer player) {
-        super(player.worldObj);
+        super(player.getEntityWorld());
         new Motion3D(player, true).multiplyMotionBy(2).applyToEntity(this);
         
         Rigidbody rb = this.getMotionHandler(Rigidbody.class);
@@ -122,7 +103,7 @@ public class EntityMagHook extends EntityAdvanced {
     
     private void sync() {
         //System.out.println("sync " + posX + " " + posY + " " + posZ + " " + worldObj.isRemote + " " + isHit + " " + this);
-        if(worldObj.isRemote) {
+        if(getEntityWorld().isRemote) {
             boolean lastHit = isHit;
             byte b1 = dataWatcher.getWatchableObjectByte(10);
             isHit = (b1 & 1) != 0;
@@ -144,7 +125,7 @@ public class EntityMagHook extends EntityAdvanced {
     
     @Override
     public boolean attackEntityFrom(DamageSource ds, float dmg) {
-        if(isHit && !worldObj.isRemote && ds.getEntity() instanceof EntityPlayer) {
+        if(isHit && !getEntityWorld().isRemote && ds.getEntity() instanceof EntityPlayer) {
             dropAsItem();
         }
         return true;
@@ -156,7 +137,7 @@ public class EntityMagHook extends EntityAdvanced {
     }
     
     private void dropAsItem() {
-        worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(ModuleVanilla.magHook)));
+        getEntityWorld().spawnEntityInWorld(new EntityItem(getEntityWorld(), posX, posY, posZ, new ItemStack(ModuleVanilla.magHook)));
         setDead();
     }
     
@@ -166,7 +147,7 @@ public class EntityMagHook extends EntityAdvanced {
     
     private void realSetStill() {    
         motionX = motionY = motionZ = 0;
-        if(worldObj != null) {
+        if(getEntityWorld() != null) {
             //worldObj.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
         }
         this.setSize(1f, 1f);
@@ -179,9 +160,9 @@ public class EntityMagHook extends EntityAdvanced {
             @Override
             public void onUpdate() {
                 preRender();
-                if(!worldObj.isRemote) {
+                if(!getEntityWorld().isRemote) {
                     //Check block consistency
-                    if(worldObj.isAirBlock(hookX, hookY, hookZ)) {
+                    if(getEntityWorld().isAirBlock(hookX, hookY, hookZ)) {
                         dropAsItem();
                     }
                 }
@@ -235,7 +216,7 @@ public class EntityMagHook extends EntityAdvanced {
             case 5:
                 rotationYaw = 90; rotationPitch = 0; break;
             }
-            ForgeDirection fd = ForgeDirection.getOrientation(hitSide);
+            EnumFacing fd = EnumFacing.getFront(hitSide);
             setPosition(hookX + 0.5 + fd.offsetX * 0.51, 
                     hookY + 0.5 + fd.offsetY * 0.51, 
                     hookZ + 0.5 + fd.offsetZ * 0.51);

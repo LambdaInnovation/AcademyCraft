@@ -1,42 +1,36 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.ui;
 
 import cn.academy.terminal.app.settings.SettingsUI;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.CGuiScreen;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.gui.component.DrawTexture;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.Outline;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent;
-import cn.lambdalib.cgui.gui.event.LeftClickEvent;
-import cn.lambdalib.cgui.xml.CGUIDocument;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.CGuiScreen;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.WidgetContainer;
+import cn.lambdalib2.cgui.component.DrawTexture;
+import cn.lambdalib2.cgui.component.ElementList;
+import cn.lambdalib2.cgui.component.Outline;
+import cn.lambdalib2.cgui.component.TextBox;
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent;
+import cn.lambdalib2.cgui.event.LeftClickEvent;
+import cn.lambdalib2.cgui.loader.CGUIDocument;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.function.Consumer;
 
-@Registrant
 @SideOnly(Side.CLIENT)
 public class CustomizeUI extends CGuiScreen {
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         SettingsUI.addCallback("edit_ui", "misc", () -> {
             Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
         }, false);
 
-        doc = CGUIDocument.panicRead(new ResourceLocation("academy:guis/ui_edit.xml"));
+        doc = CGUIDocument.read(new ResourceLocation("academy:guis/ui_edit.xml"));
     }
 
     private static WidgetContainer doc;
@@ -51,13 +45,13 @@ public class CustomizeUI extends CGuiScreen {
         ElementList list = new ElementList();
         for (ACHud.Node n : ACHud.instance.getNodes()) {
             double[] pos = n.getPosition();
-            n.preview.pos(pos[0], pos[1]);
+            n.preview.pos((float) pos[0], (float) pos[1]);
             gui.addWidget(n.preview);
             n.preview.removeComponent("Outline");
 
             Widget elem = body.getWidget("template").copy();
             elem.transform.doesDraw = true;
-            TextBox textBox = TextBox.get(elem);
+            TextBox textBox = elem.getComponent(TextBox.class);
             textBox.localized = true;
             textBox.setContent("ac.gui.uiedit.elm." + n.name);
             elem.listen(LeftClickEvent.class, (w, evt) -> {
@@ -89,16 +83,18 @@ public class CustomizeUI extends CGuiScreen {
 
         edit = doc.getWidget("editbox").copy();
         double[] prevPos = node.getPosition();
-        wrapEdit(edit.getWidget("edit_x"), (value) -> {
+        wrapEdit(edit.getWidget("edit_x"), (value_) -> {
             double[] pos = node.getPosition();
-            node.setPosition(value, pos[1]);
-            node.preview.pos(value, pos[1]);
+            float value = (float) (double) value_;
+            node.setPosition(value, (float) pos[1]);
+            node.preview.pos(value, ((float) pos[1]));
             node.preview.dirty = true;
         }, prevPos[0]);
-        wrapEdit(edit.getWidget("edit_y"), (value) -> {
+        wrapEdit(edit.getWidget("edit_y"), (value_) -> {
             double[] pos = node.getPosition();
-            node.setPosition(pos[0], value);
-            node.preview.pos(pos[0], value);
+            float value = (float) (double) value_;
+            node.setPosition((float) pos[0], value);
+            node.preview.pos((float) pos[0], value);
             node.preview.dirty = true;
         }, prevPos[1]);
 
@@ -109,8 +105,8 @@ public class CustomizeUI extends CGuiScreen {
     }
 
     private void wrapEdit(Widget w, Consumer<Double> action, double defaultValue) {
-        TextBox box = TextBox.get(w);
-        DrawTexture tex = DrawTexture.get(w);
+        TextBox box = w.getComponent(TextBox.class);
+        DrawTexture tex = w.getComponent(DrawTexture.class);
         box.content = String.valueOf(defaultValue);
         w.listen(ConfirmInputEvent.class, (w2, evt) -> {
             try {
@@ -118,9 +114,9 @@ public class CustomizeUI extends CGuiScreen {
                 checkCoord(x);
 
                 action.accept(x);
-                tex.color.fromHexColor(0xff333333);
+                tex.color = Colors.fromRGBA32(0x333333ff);
             } catch (NumberFormatException e) {
-                tex.color.fromHexColor(0xffbb3333);
+                tex.color = Colors.fromRGBA32(0xbb3333ff);
             }
         });
     }

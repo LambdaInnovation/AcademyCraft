@@ -93,8 +93,8 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     private InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         info.update();
         scheduler.runTick();
         updateChargeOut();
@@ -123,9 +123,10 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         info.save(tag);
+        return tag;
     }
 
     @Override

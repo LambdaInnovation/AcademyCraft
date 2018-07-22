@@ -13,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
+import scala.math.Ordering;
 
 /**
  * INTERNAL CLASS
@@ -26,7 +27,14 @@ public class AbilityPipeline {
      * @return Whether we can break any block at all
      */
     static boolean canBreakBlock(World world) {
-        return propDestroyBlocks.getBoolean() || ArrayUtils.contains(propWorldsDestroyingBlocks.getIntList(), world.provider.dimensionId);
+        return propDestroyBlocks.getBoolean() ||
+                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), String.valueOf(world.provider.dimensionId)) ||
+                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getSaveFolder()) ||
+                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getDimensionName());
+    }
+
+    static boolean isAllWorldDisableBreakBlock() {
+        return !propDestroyBlocks.getBoolean() && propWorldsDestroyingBlocks.getIntList().length == 0;
     }
 
     /**
@@ -83,9 +91,15 @@ public class AbilityPipeline {
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");
         propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
+<<<<<<< HEAD
         propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new int[]{},
                 "The world ids which whitelisted destroying blocks.");
         propUseMouseWheel = conf.get("generic","useMouseWheel",false,"Whether teleporter can use mouse wheel to control the destination.");
+=======
+        propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new String[]{},
+                "The worlds which whitelisted destroying blocks. World IDs, sub folder names and world names are all supported.");
+
+>>>>>>> bugfix
         MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
     }
 

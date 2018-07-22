@@ -73,8 +73,8 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     InfoBlockMulti info = new InfoBlockMulti(this);
     
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         info.update();
 
         ItemStack battery = getStackInSlot(SLOT_BATTERY);
@@ -90,9 +90,10 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         info.save(tag);
+        return tag;
     }
 
     @Override

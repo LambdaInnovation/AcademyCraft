@@ -104,11 +104,12 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     }
     
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         info.save(nbt);
 
         nbt.setString("placer", placerName);
+        return nbt;
     }
     
     @Override

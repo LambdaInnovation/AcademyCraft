@@ -1,37 +1,30 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.deprecated.ViewOptimize;
-import cn.lambdalib.util.deprecated.ViewOptimize.IAssociatePlayer;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegEntity;
+import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.deprecated.ViewOptimize;
+import cn.lambdalib2.util.deprecated.ViewOptimize.IAssociatePlayer;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.generic.MathUtils;
+import cn.lambdalib2.util.helper.Motion3D;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  *
  */
-@Registrant
-@RegEntity(clientOnly = true)
+@RegEntity()
 @SideOnly(Side.CLIENT)
-@RegEntity.HasRender
 public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
     
     static final int GEN = 20;
@@ -46,7 +39,6 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
     }
     
     @SideOnly(Side.CLIENT)
-    @RegEntity.Render
     public static Renderer render;
     
     final Arc[] patterns;
@@ -71,7 +63,7 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
     final EntityPlayer player;
 
     public EntityArc(EntityPlayer _player, Arc[]_patterns) {
-        super(_player.worldObj);
+        super(_player.getEntityWorld());
         this.player = _player;
         
         new Motion3D(player, true).applyToEntity(this);

@@ -59,8 +59,8 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         
         if(!getWorldObj().isRemote) {
             if(++untilSync == 10) {
@@ -155,9 +155,10 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tank.writeToNBT(tag);
+        return tag;
     }
 
     private void sync() {

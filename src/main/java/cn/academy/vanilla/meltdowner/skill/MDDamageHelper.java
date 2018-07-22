@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.skill;
 
 import cn.academy.ability.api.AbilityContext;
@@ -11,35 +5,31 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.academy.vanilla.meltdowner.passiveskill.RadiationIntensify$;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.s11n.network.NetworkS11nType;
+import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public class MDDamageHelper {
     
     private static final String MARKID = "md_marktick", RATEID = "md_markrate";
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new Events());
     }
     
@@ -79,7 +69,7 @@ public class MDDamageHelper {
         entity.getEntityData().setFloat(RATEID, amt);
     }
 
-    @Listener(channel="sync", side=Side.CLIENT)
+    @Listener(channel="sync", side= Side.CLIENT)
     private static void setMarkTick(Entity player, int ticks) {
         player.getEntityData().setInteger(MARKID, ticks);
     }
@@ -88,16 +78,16 @@ public class MDDamageHelper {
         
         @SubscribeEvent
         public void onLivingUpdate(LivingUpdateEvent event) {
-            int tick = getMarkTick(event.entity);
+            int tick = getMarkTick(event.getEntity());
             if(tick > 0)
-                setMarkTick(event.entity, tick - 1);
+                setMarkTick(event.getEntity(), tick - 1);
         }
         
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public void onUpdateClient(LivingUpdateEvent event) {
-            Entity e = event.entity;
-            if(e.worldObj.isRemote) {
+            Entity e = event.getEntity();
+            if(e.getEntityWorld().isRemote) {
                 if(getMarkTick(e) > 0) {
                     int times = RandUtils.rangei(0, 3);
                     while(times --> 0) {
@@ -108,7 +98,7 @@ public class MDDamageHelper {
                         Vec3 pos = VecUtils.add(VecUtils.vec(e.posX, e.posY, e.posZ), 
                             VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)));
                         Vec3 vel = VecUtils.multiply(VecUtils.random(), 0.02);
-                        e.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.worldObj, pos, vel));
+                        e.getEntityWorld().spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.getEntityWorld(), pos, vel));
                     }
                 }
             }
@@ -116,8 +106,8 @@ public class MDDamageHelper {
         
         @SubscribeEvent
         public void onLivingAttack(LivingHurtEvent event) {
-            if(getMarkTick(event.entityLiving) > 0) {
-                event.ammount *= getMarkRate(event.entityLiving);
+            if(getMarkTick(event.getEntityLiving()) > 0) {
+                event.ammount *= getMarkRate(event.getEntityLiving());
             }
         }
         

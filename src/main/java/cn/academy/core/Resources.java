@@ -1,26 +1,17 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core;
 
 import cn.academy.core.client.ClientResources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.util.client.font.IFont;
-import cn.lambdalib.util.client.font.IFont.FontOption;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.component.TextBox;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.FontOption;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Resources dispatcher.
  * @author WeathFolD
  */
-@Registrant
 public class Resources {
     
     // PUBLICLY USED RESOURCES
@@ -49,6 +40,7 @@ public class Resources {
     /**
      * Get the model instance of the given name. If the name is
      * first queried, will load that resource from the file system.
+     * TODO need a new method for loading obj models
      */
     public static IModelCustom getModel(String mdlName) {
         return ClientResources.getModel(mdlName);
@@ -134,5 +126,5 @@ public class Resources {
     public static TextBox newTextBox(FontOption option) {
         return ClientResources.newTextBox(option);
     }
-    
+
 }

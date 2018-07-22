@@ -1,32 +1,23 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.entity.EntityRayBase;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.generic.RandUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.academy.vanilla.ModuleSoundEvent;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class uses some little hacks. By rendering all the barrage rays within a 
  * single render we avoid a fair amount of perfomance overheads.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
-@RegEntity(clientOnly = true)
-@RegEntity.HasRender
+@RegEntity
 public class EntityMdRayBarrage extends EntityRayBase {
-    
-    @RegEntity.Render
+
     public static BarrageRenderer renderer;
     
     private SubRay[] subrays;
@@ -52,7 +43,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        worldObj.playSound(posX, posY, posZ, "academy:md.ray_small", 0.5f, 1.0f, false);
+        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
     }
     
     @Override

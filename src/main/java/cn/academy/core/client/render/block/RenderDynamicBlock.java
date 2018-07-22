@@ -1,23 +1,14 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.render.block;
 
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.client.RenderUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -25,7 +16,6 @@ import org.lwjgl.opengl.GL11;
  * that renders dynamically and wants to use the original IIcon approach, use this on your TileEntity.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class RenderDynamicBlock extends TileEntitySpecialRenderer {
     

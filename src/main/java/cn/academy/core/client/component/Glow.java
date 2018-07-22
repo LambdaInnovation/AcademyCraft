@@ -1,36 +1,24 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client.component;
 
 import cn.academy.core.client.ACRenderingHelper;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.component.Component;
-import cn.lambdalib.cgui.gui.event.FrameEvent;
-import cn.lambdalib.util.helper.Color;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.component.Component;
+import cn.lambdalib2.cgui.event.FrameEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
 public class Glow extends Component {
     
     public Color color = new Color();
     public double glowSize = 10.0;
     public double zLevel = 0.0;
     public boolean writeDepth = true;
-    
-    public static Glow get(Widget w) {
-        return w.getComponent("Glow");
-    }
 
     public Glow() {
         super("Glow");

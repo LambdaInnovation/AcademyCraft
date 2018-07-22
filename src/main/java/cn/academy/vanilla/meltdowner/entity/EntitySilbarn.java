@@ -1,61 +1,36 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.particle.Particle;
-import cn.lambdalib.particle.ParticleFactory;
-import cn.lambdalib.particle.decorators.ParticleDecorator;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.entityx.EntityCallback;
-import cn.lambdalib.util.entityx.MotionHandler;
-import cn.lambdalib.util.entityx.event.CollideEvent;
-import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler;
-import cn.lambdalib.util.entityx.handlers.Rigidbody;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.helper.GameTimer;
-import cn.lambdalib.util.helper.Motion3D;
-import cn.lambdalib.util.mc.EntitySelectors;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.academy.vanilla.ModuleSoundEvent;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeathFolD
  */
-@Registrant
 @RegEntity
-@RegEntity.HasRender
 public class EntitySilbarn extends EntityAdvanced {
     
     @SideOnly(Side.CLIENT)
-    @RegEntity.Render
     public static RenderSibarn render;
 
     @SideOnly(Side.CLIENT)
     static ParticleFactory particles;
 
     @SideOnly(Side.CLIENT)
-    @RegInitCallback
-    public static void init() {
+    @StateEventCallback
+    public static void init(FMLInitializationEvent event) {
         Particle p = new Particle();
         p.texture = Resources.getTexture("entities/silbarn_frag");
         p.size = 0.1f;
@@ -127,9 +102,10 @@ public class EntitySilbarn extends EntityAdvanced {
                 if(!hit) {
                     hit = true;
                     if(event.result.entityHit instanceof EntitySilbarn)
-                        playSound("academy:entity.silbarn_heavy", .5f, 1f);
+                        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_heavy, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
                     else
-                        playSound("academy:entity.silbarn_light", .5f, 1f);
+                        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_light, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+
                     executeAfter(new EntityCallback() {
                         @Override
                         public void execute(Entity ent) {

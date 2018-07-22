@@ -1,17 +1,16 @@
 package cn.academy.core.network;
 
 import cn.academy.vanilla.meltdowner.entity.EntityMdRaySmall;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by Paindar on 2017/2/16.
@@ -26,18 +25,18 @@ public class MessageSBEffect implements IMessage
         {
             if (ctx.side == Side.CLIENT)
             {
-                EntityPlayer player=Minecraft.getMinecraft().thePlayer;
-                EntityMdRaySmall raySmall  = new EntityMdRaySmall(player.worldObj);
+                EntityPlayer player=Minecraft.getMinecraft().player;
+                EntityMdRaySmall raySmall  = new EntityMdRaySmall(player.world);
                 raySmall.setFromTo(msg.strX, msg.strY,msg.strZ, msg.endX, msg.endY, msg.endZ);
                 raySmall.viewOptimize = false;
-                player.worldObj.spawnEntityInWorld(raySmall);
+                player.world.spawnEntity(raySmall);
             }
 
             return null;
         }
     }
 
-    Vec3 str,end;
+    Vec3d str,end;
     NBTTagCompound nbt;
 
     public MessageSBEffect(){}
@@ -45,13 +44,13 @@ public class MessageSBEffect implements IMessage
     public double strX,strY,strZ;
     public double endX,endY,endZ;
 
-    public MessageSBEffect(Vec3 str,Vec3 end) {
-        strX=str.xCoord;
-        strY=str.yCoord;
-        strZ=str.zCoord;
-        endX=end.xCoord;
-        endY=end.yCoord;
-        endZ=end.zCoord;
+    public MessageSBEffect(Vec3d str, Vec3d end) {
+        strX=str.x;
+        strY=str.y;
+        strZ=str.z;
+        endX=end.x;
+        endY=end.y;
+        endZ=end.z;
     }
 
     /**

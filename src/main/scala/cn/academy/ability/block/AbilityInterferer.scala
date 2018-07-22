@@ -134,8 +134,8 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   // Sync data to client
   scheduler.every(20).atOnly(Side.SERVER).run(() => sync())
 
-  override def updateEntity(){
-    super.updateEntity()
+  override def update(){
+    super.update()
     scheduler.runTick()
     if(!worldObj.isRemote){
       val stack = this.getStackInSlot(SLOT_BATTERY)
@@ -187,7 +187,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
     range_ = tag.getFloat("range_")
   }
 
-  override def writeToNBT(tag: NBTTagCompound) = {
+  override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     tag.setBoolean("enabled_", enabled_)
     tag.setTag("whitelist_", NBTS11n.writeBase(whitelist.toArray))

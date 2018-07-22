@@ -1,30 +1,23 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.core.client;
 
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.generic.MathUtils;
-import cn.lambdalib.util.helper.Color;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.Colors;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * Some drawing utils.
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class ACRenderingHelper {
     
@@ -39,11 +32,10 @@ public class ACRenderingHelper {
         GLOW_LD = glowtex("ld");
 
     public static void drawGlow(double x, double y, double width, double height, double size, Color glowColor) {
-        glowColor.bind();
-        
+        Colors.bindToGL(glowColor);
+
         final double s = size;
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        Tessellator t = Tessellator.instance;
         gdraw(GLOW_L,  x - s,       y,           s,      height);
         gdraw(GLOW_R,  x + width, y,           s,      height);
         gdraw(GLOW_U,  x,             y - s,       width, s);
@@ -55,7 +47,7 @@ public class ACRenderingHelper {
     }
     
     public static boolean isThePlayer(EntityPlayer p) {
-        return p.equals(Minecraft.getMinecraft().thePlayer);
+        return p.equals(Minecraft.getMinecraft().player);
     }
     
     public static double getHeightFix(EntityPlayer p) {
@@ -71,8 +63,6 @@ public class ACRenderingHelper {
         if(progress > 360)
             progress %= 360;
         
-        Tessellator t = Tessellator.instance;
-        
         GL11.glPushMatrix();
         RenderUtils.loadTexture(texture);
         for(int i = 0; i < 4; ++i) {
@@ -80,7 +70,7 @@ public class ACRenderingHelper {
             if(angle <= 0)
                 break;
             double u1, v1;
-            t.startDrawing(GL11.GL_TRIANGLES);
+            GL11.glBegin(GL11.GL_TRIANGLES);
             
             if(angle <= 45) {
                 u1 = Math.tan(MathUtils.toRadians(angle));
@@ -90,16 +80,17 @@ public class ACRenderingHelper {
                 v1 = 0;
                 
                 double x = Math.tan(MathUtils.toRadians(90 - angle));
-                t.addVertexWithUV(1, -1, 0, 1, 0);
-                t.addVertexWithUV(0, 0, 0, 0, 1);
-                t.addVertexWithUV(1, -x, 0, 1, 1 - x);
+                RenderUtils.glVertexAndUV(1, -1, 0, 1, 0);
+                RenderUtils.glVertexAndUV(0, 0, 0, 0, 1);
+                RenderUtils.glVertexAndUV(1, -x, 0, 1, 1 - x);
             }
             
-            t.addVertexWithUV(0, -1, 0, 0, 0);
-            t.addVertexWithUV(0, 0, 0, 0, 1);
-            t.addVertexWithUV(u1,  -1 -v1, 0, u1, v1);
-            t.draw();
-            
+            RenderUtils.glVertexAndUV(0, -1, 0, 0, 0);
+            RenderUtils.glVertexAndUV(0, 0, 0, 0, 1);
+            RenderUtils.glVertexAndUV(u1,  -1 -v1, 0, u1, v1);
+
+            GL11.glEnd();
+
             GL11.glRotated(90, 0, 0, 1);
         }
         GL11.glPopMatrix();
@@ -107,7 +98,7 @@ public class ACRenderingHelper {
     }
 
     public static void lineSegmentGlow(double x0, double y0, double x1, double y1, float width) {
-        RenderUtils.loadTexture(Resources.TEX_GLOW_LINE);
+        HudUtils.loadTexture(Resources.TEX_GLOW_LINE);
         dirQuad(x0, y0, x1, y1, width);
     }
     
@@ -122,24 +113,23 @@ public class ACRenderingHelper {
 
     private static void dirQuad(double x0, double y0, double x1, double y1, float width) {
         float hw = width / 2;
-        Tessellator t = Tessellator.instance;
         double dy = y1 - y0, dx = x1 - x0, len = Math.sqrt(dy * dy + dx * dx);
         double theta = MathUtils.toDegrees(Math.atan2(dy, dx));
 
         GL11.glPushMatrix();
         GL11.glTranslated(x0, y0, 0);
         GL11.glRotated(theta, 0, 0, 1);
-        t.startDrawingQuads();
-        t.addVertexWithUV(0, -hw, 0, 0, 0);
-        t.addVertexWithUV(0, hw, 0, 0, 1);
-        t.addVertexWithUV(len, hw, 0, 1, 1);
-        t.addVertexWithUV(len, -hw, 0, 1, 0);
-        t.draw();
+        GL11.glBegin(GL11.GL_QUADS);
+        RenderUtils.glVertexAndUV(0, -hw, 0, 0, 0);
+        RenderUtils.glVertexAndUV(0, hw, 0, 0, 1);
+        RenderUtils.glVertexAndUV(len, hw, 0, 1, 1);
+        RenderUtils.glVertexAndUV(len, -hw, 0, 1, 0);
+        GL11.glEnd();
         GL11.glPopMatrix();
     }
 
     private static void gdraw(ResourceLocation tex, double x, double y, double width, double height) {
-        RenderUtils.loadTexture(tex);
+        HudUtils.loadTexture(tex);
         HudUtils.rect(x, y, width, height);
     }
     

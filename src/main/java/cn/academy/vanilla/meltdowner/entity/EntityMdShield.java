@@ -1,31 +1,19 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.vanilla.meltdowner.client.render.RenderMdShield;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.util.entityx.EntityAdvanced;
-import cn.lambdalib.util.helper.Motion3D;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.registry.mc.RegEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@Registrant
-@RegEntity(clientOnly = true)
-@RegEntity.HasRender
+@RegEntity
 public class EntityMdShield extends EntityAdvanced {
-    
-    @RegEntity.Render
+
     public static RenderMdShield renderer;
     
     public static final float SIZE = 1.8f;
@@ -37,7 +25,7 @@ public class EntityMdShield extends EntityAdvanced {
     final EntityPlayer player;
 
     public EntityMdShield(EntityPlayer _player) {
-        super(_player.worldObj);
+        super(_player.getEntityWorld());
         player = _player;
         this.setSize(SIZE, SIZE);
     }
