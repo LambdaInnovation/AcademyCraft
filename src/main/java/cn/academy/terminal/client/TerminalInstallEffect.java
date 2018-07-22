@@ -6,7 +6,7 @@
 */
 package cn.academy.terminal.client;
 
-import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.ACKeyManager;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegInitCallback;
 import cn.lambdalib.cgui.gui.CGui;
@@ -54,7 +54,7 @@ public class TerminalInstallEffect extends AuxGui {
                 dispose();
                 TerminalUI.keyHandler.onKeyUp();
                 PlayerUtils.sendChat(Minecraft.getMinecraft().thePlayer, "ac.terminal.key_hint",
-                        KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(TerminalUI.keyHandler)));
+                        KeyManager.getKeyName(ACKeyManager.instance.getKeyID(TerminalUI.keyHandler)));
             }
 
             if(prog > 1.0) {

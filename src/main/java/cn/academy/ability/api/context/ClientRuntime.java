@@ -14,8 +14,8 @@ import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.ability.api.event.*;
+import cn.academy.core.ACKeyManager;
 import cn.academy.core.AcademyCraft;
-import cn.academy.core.ModuleCoreClient;
 import cn.academy.terminal.client.TerminalUI;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEventHandler;
@@ -30,7 +30,6 @@ import cn.lambdalib.util.mc.ControlOverrider;
 import cn.lambdalib.util.mc.SideHelper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -412,7 +411,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         String getHint();
 
         default Optional<String> getHintTranslated() {
-            String kname = KeyManager.getKeyName(ModuleCoreClient.keyManager.getKeyID(ClientHandler.keyActivate));
+            String kname = KeyManager.getKeyName(ACKeyManager.instance.getKeyID(ClientHandler.keyActivate));
             String hint = ClientRuntime.instance().getActivateHandler().getHint();
             return hint == null ? Optional.empty() : Optional.of("[" + kname + "]: " + StatCollector.translateToLocal(
                     "ac.activate_key." + hint + ".desc"));

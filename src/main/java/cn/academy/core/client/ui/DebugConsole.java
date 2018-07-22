@@ -4,7 +4,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
-import cn.academy.core.ModuleCoreClient;
+import cn.academy.core.ACKeyManager;
 import cn.academy.core.Resources;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
@@ -55,7 +55,7 @@ public class DebugConsole extends AuxGui {
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
         AuxGuiHandler.register(INSTANCE = new DebugConsole());
-        ModuleCoreClient.keyManager.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
+        ACKeyManager.instance.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
             @Override
             public void onKeyDown() {
                 State[] states = State.values();

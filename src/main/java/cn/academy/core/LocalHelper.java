@@ -3,7 +3,7 @@ package cn.academy.core;
 import net.minecraft.util.text.translation.I18n;
 
 /**
- * This class wraps around Minecraft locallization with namespace helper support.
+ * This class wraps around Minecraft localization with namespace helper support.
  * All localization codes should not reference MC code and use this.
  */
 public class LocalHelper {
