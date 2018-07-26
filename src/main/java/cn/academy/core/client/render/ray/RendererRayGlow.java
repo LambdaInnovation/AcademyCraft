@@ -12,7 +12,7 @@ import cn.lambdalib.util.client.RenderUtils;
 import cn.lambdalib.util.client.shader.ShaderSimple;
 import cn.lambdalib.util.generic.VecUtils;
 import cn.lambdalib.util.helper.Color;
-import net.minecraft.client.renderer.Tessellator;
+import cn.academy.core.client.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL20;

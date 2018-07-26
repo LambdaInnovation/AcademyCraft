@@ -45,8 +45,6 @@ public class ClientResources {
     private static boolean fontsInit = false;
     private static TrueTypeFont font, fontBold, fontItalic;
 
-    private static Map<String, IModelCustom> cachedModels = new HashMap<>();
-
     public static IFont font() {
         checkFontInit();
         return font;
@@ -142,14 +140,15 @@ public class ClientResources {
         return ret;
     }
 
-    public static IModelCustom getModel(String mdlName) {
-        IModelCustom ret = cachedModels.get(mdlName);
-        if(ret != null)
-            return ret;
-        ret = AdvancedModelLoader.loadModel(Resources.res("models/" + mdlName + ".obj"));
-        cachedModels.put(mdlName, ret);
-        return ret;
-    }
+    // TODO new obj model impl
+//    public static IModelCustom getModel(String mdlName) {
+//        IModelCustom ret = cachedModels.get(mdlName);
+//        if(ret != null)
+//            return ret;
+//        ret = AdvancedModelLoader.loadModel(Resources.res("models/" + mdlName + ".obj"));
+//        cachedModels.put(mdlName, ret);
+//        return ret;
+//    }
 
     private static void checkFontInit() {
         if (!fontsInit) {
