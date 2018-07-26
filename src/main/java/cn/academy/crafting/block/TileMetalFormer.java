@@ -8,7 +8,6 @@ import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

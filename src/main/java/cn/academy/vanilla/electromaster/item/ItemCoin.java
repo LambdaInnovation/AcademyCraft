@@ -4,7 +4,6 @@ import cn.academy.core.item.ACItem;
 import cn.academy.vanilla.electromaster.client.renderer.RendererCoinThrowing;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent;
-import cn.lambdalib2.annoreg.mc.RegItem;
 import cn.lambdalib2.util.mc.StackUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

@@ -2,8 +2,6 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.ui.GuiPhaseGen;
-import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
-import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -15,7 +15,6 @@ import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, Learn
 import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
-import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.{CGui, CGuiScreen, Widget}
 import cn.lambdalib2.cgui.xml.CGUIDocument
 import net.minecraft.client.Minecraft

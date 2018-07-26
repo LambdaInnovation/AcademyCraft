@@ -3,7 +3,6 @@ package cn.academy.energy.block;
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderSolarGen;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;

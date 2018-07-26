@@ -1,6 +1,5 @@
 package cn.academy.crafting;
 
-import cn.lambdalib2.annoreg.mc.RegWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;

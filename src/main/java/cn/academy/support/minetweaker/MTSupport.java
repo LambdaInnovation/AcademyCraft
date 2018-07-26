@@ -1,7 +1,6 @@
 package cn.academy.support.minetweaker;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.Optional;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;

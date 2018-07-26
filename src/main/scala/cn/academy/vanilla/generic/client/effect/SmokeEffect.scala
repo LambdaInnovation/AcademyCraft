@@ -3,7 +3,6 @@ package cn.academy.vanilla.generic.client.effect
 import cn.academy.core.Resources
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
-import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.util.client.RenderUtils
 import cn.lambdalib2.util.helper.GameTimer
 import cn.lambdalib2.util.mc.Vec3

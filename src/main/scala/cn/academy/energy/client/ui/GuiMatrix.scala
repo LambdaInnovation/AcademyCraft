@@ -6,7 +6,6 @@ import cn.academy.energy.api.event.wen.{ChangePassEvent, CreateNetworkEvent}
 import cn.academy.energy.block.{TileMatrix, ContainerMatrix}
 
 import cn.academy.core.client.ui._
-import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.Widget
 import cn.lambdalib2.cgui.gui.component.TextBox
 import cn.lambdalib2.s11n.{SerializeNullable, SerializeStrategy}

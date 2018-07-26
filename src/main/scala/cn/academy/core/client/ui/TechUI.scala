@@ -7,7 +7,6 @@ import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTil
 import cn.academy.energy.api.event.node.{LinkUserEvent, UnlinkUserEvent}
 import cn.academy.energy.api.event.wen.{LinkNodeEvent, UnlinkNodeEvent}
 import cn.academy.energy.internal.{NodeConn, WirelessNet}
-import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
 import cn.lambdalib2.cgui.gui.{CGuiScreenContainer, Widget}
 import cn.lambdalib2.cgui.gui.component.ProgressBar.Direction

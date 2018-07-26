@@ -11,8 +11,6 @@ import cn.academy.ability.api.event.*;
 import cn.academy.core.ACKeyManager;
 import cn.academy.core.AcademyCraft;
 import cn.academy.terminal.client.TerminalUI;
-import cn.lambdalib2.annoreg.mc.RegEventHandler;
-import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.util.client.ClientUtils;
 import cn.lambdalib2.util.client.auxgui.AuxGuiHandler;
 import cn.lambdalib2.util.datapart.DataPart;

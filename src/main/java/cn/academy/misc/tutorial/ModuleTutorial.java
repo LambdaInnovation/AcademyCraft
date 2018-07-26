@@ -12,8 +12,6 @@ import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.terminal.item.ItemApp;
-import cn.lambdalib2.annoreg.mc.RegItem;
-import cn.lambdalib2.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib2.util.generic.RandUtils;
 import cn.lambdalib2.util.helper.Color;

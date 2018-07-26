@@ -7,7 +7,6 @@ import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.block.BlockNode.NodeType;
 import cn.academy.energy.internal.WirelessNet;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

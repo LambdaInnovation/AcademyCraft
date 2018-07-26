@@ -3,7 +3,6 @@ package cn.academy.energy.block.wind;
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.BlockMulti.SubBlockPos;
 import cn.lambdalib2.multiblock.IMultiTile;

@@ -13,8 +13,6 @@ import cn.academy.crafting.block.BlockMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.world.ACWorldGen;
-import cn.lambdalib2.annoreg.mc.*;
-import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;

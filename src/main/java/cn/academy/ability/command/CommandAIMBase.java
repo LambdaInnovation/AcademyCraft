@@ -7,7 +7,6 @@ import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
-import cn.lambdalib2.annoreg.mc.RegCommand;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib2.util.datapart.PlayerDataTag;
 import net.minecraft.command.CommandBase;

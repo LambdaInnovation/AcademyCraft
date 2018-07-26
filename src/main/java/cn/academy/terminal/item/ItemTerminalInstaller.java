@@ -4,7 +4,6 @@ import cn.academy.core.item.ACItem;
 import cn.academy.terminal.TerminalData;
 import cn.academy.terminal.client.TerminalInstallEffect;
 import cn.academy.terminal.client.TerminalInstallerRenderer;
-import cn.lambdalib2.annoreg.mc.RegItem;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;

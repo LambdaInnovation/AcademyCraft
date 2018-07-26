@@ -5,7 +5,6 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.block.IWirelessMatrix;
 import cn.academy.energy.client.render.block.RenderMatrix;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;

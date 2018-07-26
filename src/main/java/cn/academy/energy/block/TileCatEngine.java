@@ -2,7 +2,6 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.client.render.block.RenderCatEngine;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

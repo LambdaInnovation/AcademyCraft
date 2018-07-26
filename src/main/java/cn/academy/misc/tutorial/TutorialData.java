@@ -1,7 +1,6 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

@@ -2,8 +2,6 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.client.ui.GuiMatrix2;
-import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
-import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;

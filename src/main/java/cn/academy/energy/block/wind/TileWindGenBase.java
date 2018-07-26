@@ -5,7 +5,6 @@ import cn.academy.energy.IFConstants;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.client.render.block.RenderWindGenBase;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;

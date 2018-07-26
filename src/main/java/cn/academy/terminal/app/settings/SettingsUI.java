@@ -1,7 +1,6 @@
 package cn.academy.terminal.app.settings;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGuiScreen;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.WidgetContainer;

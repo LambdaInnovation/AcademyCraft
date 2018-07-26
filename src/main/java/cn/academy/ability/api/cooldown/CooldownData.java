@@ -2,9 +2,6 @@ package cn.academy.ability.api.cooldown;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
-import cn.lambdalib2.annoreg.mc.RegEventHandler;
-import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;

@@ -6,7 +6,6 @@ import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.core.block.TileReceiverBase;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;

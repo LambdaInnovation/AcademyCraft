@@ -10,7 +10,6 @@ import cn.academy.energy.api.event.wen.*;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;

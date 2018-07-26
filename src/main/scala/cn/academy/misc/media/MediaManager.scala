@@ -6,7 +6,6 @@ import java.nio.file.{Files, StandardCopyOption}
 import javax.imageio.ImageIO
 
 import cn.academy.core.{AcademyCraft, Resources}
-import cn.lambdalib2.annoreg.mc.{RegInitCallback, RegPreInitCallback}
 import cn.lambdalib2.util.generic.RegistryUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory
@@ -198,4 +197,3 @@ abstract class Media(val external: Boolean,
   def displayLength: String = MediaBackend.getDisplayTime(lengthSecs)
 
 }
-

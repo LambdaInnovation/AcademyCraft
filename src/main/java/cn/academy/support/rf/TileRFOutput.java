@@ -1,8 +1,6 @@
 package cn.academy.support.rf;
 
 import cn.academy.core.block.TileReceiverBase;
-import cn.lambdalib2.annoreg.core.RegWithName;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;

@@ -6,7 +6,6 @@ import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.WidgetContainer;
 import cn.lambdalib2.cgui.gui.component.DrawTexture;

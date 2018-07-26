@@ -12,7 +12,6 @@ import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.academy.crafting.block.ContainAbilityInterferer
 import cn.academy.energy.IFConstants
 import cn.academy.support.EnergyItemHelper
-import cn.lambdalib2.annoreg.mc.{RegInitCallback, RegTileEntity}
 import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}

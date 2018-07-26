@@ -3,8 +3,6 @@ package cn.academy.crafting.block;
 import cn.academy.ability.block.TileAbilityInterferer;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.ui.GuiAbilityInterferer;
-import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
-import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;

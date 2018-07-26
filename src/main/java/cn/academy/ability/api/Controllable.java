@@ -2,7 +2,6 @@ package cn.academy.ability.api;
 
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
 import cn.lambdalib2.s11n.network.NetworkS11n;

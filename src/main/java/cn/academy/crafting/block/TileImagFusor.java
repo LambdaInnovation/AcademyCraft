@@ -12,7 +12,6 @@ import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
-import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.util.mc.StackUtils;
 import cpw.mods.fml.relauncher.Side;

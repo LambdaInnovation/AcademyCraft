@@ -7,7 +7,6 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.Resources;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGui;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.WidgetContainer;

@@ -4,7 +4,6 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
-import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.gui.Widget
 import cn.lambdalib2.cgui.gui.component.{DrawTexture, ProgressBar}

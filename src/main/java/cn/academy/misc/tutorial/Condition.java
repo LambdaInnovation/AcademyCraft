@@ -50,4 +50,3 @@ public interface Condition extends Predicate<EntityPlayer> {
     }
 
 }
-

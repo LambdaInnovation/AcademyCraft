@@ -3,8 +3,6 @@ package cn.academy.misc.achievements;
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.pages.*;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
-import cn.lambdalib2.annoreg.mc.RegItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.AchievementPage;
 

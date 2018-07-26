@@ -3,8 +3,6 @@ package cn.academy.energy.block.wind;
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.ui.GuiWindGenBase;
-import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
-import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

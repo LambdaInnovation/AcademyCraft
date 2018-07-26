@@ -3,7 +3,6 @@ package cn.academy.vanilla.electromaster.item;
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.lambdalib2.annoreg.mc.RegItem;
 import cn.lambdalib2.template.client.render.item.RenderModelItem;
 import cn.lambdalib2.util.deprecated.ItemModelCustom;
 import net.minecraft.entity.player.EntityPlayer;

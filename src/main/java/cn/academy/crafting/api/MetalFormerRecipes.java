@@ -1,7 +1,6 @@
 package cn.academy.crafting.api;
 
 import cn.academy.crafting.block.TileMetalFormer.Mode;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;

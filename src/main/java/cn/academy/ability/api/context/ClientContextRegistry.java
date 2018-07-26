@@ -1,9 +1,5 @@
 package cn.academy.ability.api.context;
 
-import cn.lambdalib2.annoreg.core.AnnotationData;
-import cn.lambdalib2.annoreg.core.LoadStage;
-import cn.lambdalib2.annoreg.core.RegistryType;
-import cn.lambdalib2.annoreg.core.RegistryTypeDecl;
 import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

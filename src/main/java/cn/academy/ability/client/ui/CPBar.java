@@ -12,7 +12,6 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.Resources;
 import cn.academy.core.client.ui.ACHud;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.component.DrawTexture;
 import cn.lambdalib2.cgui.gui.component.Transform.WidthAlign;

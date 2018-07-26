@@ -6,7 +6,6 @@ import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.academy.misc.tutorial.ViewGroup;
-import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGuiScreen;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.WidgetContainer;
