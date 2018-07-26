@@ -37,14 +37,14 @@ public class Resources {
         return new ResourceLocation("academy:" + loc);
     }
     
-    /**
-     * Get the model instance of the given name. If the name is
-     * first queried, will load that resource from the file system.
-     * TODO need a new method for loading obj models
-     */
-    public static IModelCustom getModel(String mdlName) {
-        return ClientResources.getModel(mdlName);
-    }
+//    /**
+//     * Get the model instance of the given name. If the name is
+//     * first queried, will load that resource from the file system.
+//     * TODO need a new method for loading obj models
+//     */
+//    public static IModelCustom getModel(String mdlName) {
+//        return ClientResources.getModel(mdlName);
+//    }
     
     public static ResourceLocation getTexture(String loc) {
         return res("textures/" + loc + ".png");

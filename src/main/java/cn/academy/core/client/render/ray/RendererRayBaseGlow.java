@@ -5,7 +5,7 @@ import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
+import cn.academy.core.client.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;

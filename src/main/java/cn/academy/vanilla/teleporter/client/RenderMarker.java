@@ -2,7 +2,7 @@ package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
+import cn.academy.core.client.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;

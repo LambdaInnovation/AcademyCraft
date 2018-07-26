@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import cn.lambdalib.util.mc.MCExtender._
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.Tessellator
+import cn.academy.core.client.Tessellator
 import org.lwjgl.opengl.GL11._
 
 @SideOnly(Side.CLIENT)
