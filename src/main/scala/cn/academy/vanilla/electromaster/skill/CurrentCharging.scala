@@ -10,22 +10,15 @@ import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
-import cn.academy.support.{EnergyItemHelper, EnergyBlockHelper}
+import cn.academy.support.{EnergyBlockHelper, EnergyItemHelper}
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
-import cn.academy.vanilla.electromaster.entity.{EntitySurroundArc, EntityArc}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.{SerializeNullable, SerializeIncluded}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.Raytrace
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.academy.vanilla.electromaster.entity.{EntityArc, EntitySurroundArc}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.Vec3
-
+import net.minecraft.util.SoundCategory
 /**
   * @author WeAthFolD, KSkun
   */
@@ -59,7 +52,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
   val distance = 15.0d
   private val exp = ctx.getSkillExp
-  private val isItem = ctx.player.getCurrentEquippedItem != null
+  private val isItem = ctx.player.getHeldEquipment != null
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
@@ -92,7 +85,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
       var good = false
       if (pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
-        val tile = player.worldObj.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
+        val tile = player.getEntityWorld.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
         if (EnergyBlockHelper.isSupported(tile)) {
           good = true
 
@@ -120,7 +113,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
         mod.isNull = true
       }
     } else {
-      val stack = player.getCurrentEquippedItem
+      val stack = player.getHeldEquipment
       val cp = getConsumption(exp)
 
       if(stack != null && ctx.consume(0, cp)) {
@@ -150,7 +143,6 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ChargingContext])
 class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
@@ -163,25 +155,25 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
   private def c_startEffects(isItem: Boolean) = {
     if(!isItem) {
       arc = new EntityArc(player, ArcPatterns.chargingArc)
-      player.worldObj.spawnEntityInWorld(arc)
+      player.getEntityWorld.spawnEntityInWorld(arc)
       arc.lengthFixed = false
       arc.hideWiggle = 0.8
       arc.showWiggle = 0.2
       arc.texWiggle = 0.8
 
-      surround = new EntitySurroundArc(player.worldObj, player.posX, player.posY, player.posZ, 1, 1)
+      surround = new EntitySurroundArc(player.getEntityWorld, player.posX, player.posY, player.posZ, 1, 1)
         .setArcType(ArcType.NORMAL).setLife(100000)
-      player.worldObj.spawnEntityInWorld(surround)
+      player.getEntityWorld.spawnEntity(surround)
 
-      sound = new FollowEntitySound(player, "em.charge_loop").setLoop().setVolume(0.3f)
+      sound = new FollowEntitySound(player, "em.charge_loop",SoundCategory.AMBIENT).setLoop().setVolume(0.3f)
       ACSounds.playClient(sound)
     } else {
-      sound = new FollowEntitySound(player, "em.charge_loop").setLoop().setVolume(0.3f)
+      sound = new FollowEntitySound(player, "em.charge_loop",SoundCategory.AMBIENT).setLoop().setVolume(0.3f)
       ACSounds.playClient(sound)
       surround = new EntitySurroundArc(player)
       surround.setArcType(ArcType.THIN)
       surround.setLife(100000)
-      player.worldObj.spawnEntityInWorld(surround)
+      player.getEntityWorld.spawnEntity(surround)
     }
   }
 
@@ -192,7 +184,7 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
 
     var good = false
     if (pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
-      val tile = player.worldObj.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
+      val tile = player.getEntityWorld.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
       if (EnergyBlockHelper.isSupported(tile)) {
         good = true
       }
@@ -251,7 +243,6 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
 
 }
 
-@Registrant
 @NetworkS11nType
 private class MovingObjectData {
   @SerializeIncluded

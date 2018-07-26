@@ -12,20 +12,15 @@ import cn.academy.core.util.RangedRayDamage
 import cn.academy.vanilla.electromaster.client.effect.RailgunHandEffect
 import cn.academy.vanilla.electromaster.entity.{EntityCoinThrowing, EntityRailgunFX}
 import cn.academy.vanilla.electromaster.event.CoinThrowEvent
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.{NetworkMessage, TargetPoints}
-import cn.lambdalib.util.client.renderhook.DummyRenderData
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{Raytrace, SideHelper}
-import cn.lambdalib.util.generic.MathUtils._
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{NetworkMessage, TargetPoints}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object Railgun extends Skill("railgun", 4) {
 
@@ -41,7 +36,7 @@ object Railgun extends Skill("railgun", 4) {
 
   private var hitEntity = false;
 
-  private val acceptedItems: java.util.Set[Item] = Set(Items.iron_ingot, Item.getItemFromBlock(Blocks.iron_block))
+  private val acceptedItems: java.util.Set[Item] = Set(Items.IRON_INGOT, Item.getItemFromBlock(Blocks.IRON_BLOCK))
 
   def isAccepted(stack: ItemStack): Boolean = {
     stack != null && acceptedItems.contains(stack.getItem)
@@ -54,8 +49,8 @@ object Railgun extends Skill("railgun", 4) {
 
   @SubscribeEvent
   def onThrowCoin(evt: CoinThrowEvent) = {
-    val cpData = CPData.get(evt.entityPlayer)
-    val pData = PresetData.get(evt.entityPlayer)
+    val cpData = CPData.get(evt.getEntityPlayer)
+    val pData = PresetData.get(evt.getEntityPlayer)
 
     val spawn = cpData.canUseAbility && pData.getCurrentPreset.hasControllable(this)
 
@@ -64,10 +59,10 @@ object Railgun extends Skill("railgun", 4) {
         informDelegate(evt.coin)
       } else {
         NetworkMessage.sendToAllAround(
-          TargetPoints.convert(evt.entityPlayer, 30),
+          TargetPoints.convert(evt.getEntityPlayer, 30),
           this,
           MSG_CHARGE_EFFECT,
-          evt.entityPlayer
+          evt.getEntityPlayer
         )
       }
     }
@@ -99,14 +94,14 @@ object Railgun extends Skill("railgun", 4) {
   private def hReflectClient(player: EntityPlayer, reflector: Entity) = {
     val eff = new EntityRailgunFX(player, REFLECT_DISTANCE)
 
-    val dist = player.getDistanceToEntity(reflector)
+    val dist = player.getDistance(reflector)
     val mo = new Motion3D(player, true).move(dist)
 
     eff.setPosition(mo.px, mo.py, mo.pz)
     eff.rotationYaw = reflector.getRotationYawHead
     eff.rotationPitch = reflector.rotationPitch
 
-    player.worldObj.spawnEntityInWorld(eff)
+    player.getEntityWorld.spawnEntityInWorld(eff)
   }
 
   private def reflectServer(player: EntityPlayer, reflector: Entity) = {
@@ -129,7 +124,7 @@ object Railgun extends Skill("railgun", 4) {
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   private def performClient(player: EntityPlayer, length: Double) = {
-    player.worldObj.spawnEntityInWorld(new EntityRailgunFX(player, length))
+    player.getEntityWorld.spawnEntityInWorld(new EntityRailgunFX(player, length))
   }
 
   private def performServer(player: EntityPlayer) = {
@@ -147,7 +142,7 @@ object Railgun extends Skill("railgun", 4) {
       val damage = new RangedRayDamage.Reflectible(ctx, 2, energy, new Consumer[Entity] {
         override def accept(reflector: Entity): Unit = {
           reflectServer(player, reflector)
-          length.update(0, Math.min(length.apply(0), reflector.getDistanceToEntity(player)))
+          length.update(0, Math.min(length.apply(0), reflector.getDistance(player)))
           NetworkMessage.sendToServer(Railgun, MSG_REFLECT, player, reflector)
         }
       })
@@ -173,7 +168,7 @@ object Railgun extends Skill("railgun", 4) {
 
   @Listener(channel=MSG_ITEM_PERFORM, side=Array(Side.SERVER))
   private def consumeItemAtServer(player: EntityPlayer) = {
-    val equipped = player.getCurrentEquippedItem
+    val equipped = player.getHeldEquipment
     if(isAccepted(equipped)) {
       if(!player.capabilities.isCreativeMode) {
         equipped.stackSize -= 1
@@ -201,7 +196,7 @@ object Railgun extends Skill("railgun", 4) {
 
     override def onKeyDown() = {
       if(coin == null) {
-        if(Railgun.isAccepted(getPlayer.getCurrentEquippedItem)) {
+        if(Railgun.isAccepted(getPlayer.getHeldEquipment)) {
           Railgun.spawnClientEffect(getPlayer)
           chargeTicks = 20
         }

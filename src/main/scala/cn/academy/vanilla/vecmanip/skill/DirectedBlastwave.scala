@@ -4,20 +4,15 @@ import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.WaveEffect
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util
-import cn.lambdalib.util.helper.GameTimer
-import cn.lambdalib.util.mc._
-import cn.lambdalib.vis.animation.presets.CompTransformAnim
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import jdk.nashorn.internal.ir.BlockStatement
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Vec3
+import net.minecraft.util.math.{BlockPos, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object DirectedBlastwave extends Skill("dir_blast", 3) {
 
@@ -125,14 +120,16 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
           val (dx, dy, dz) = (i - x, j - y, k - z)
           val distSq = dx * dx + dy * dy + dz * dz
           if ((distSq <= 6) && (distSq == 0 || RNG.nextFloat() < breakProb)) {
-            val block = world.getBlock(i, j, k)
-            val meta = world.getBlockMetadata(i, j, k)
-            val hardness = block.getBlockHardness(world, i, j, k)
+            val bPos = new BlockPos(i, j, k)
+            val state = world.getBlockState(bPos)
+            val block = state.getBlock
+            val meta = block.getMetaFromState(state)
+            val hardness = block.getBlockHardness(state, world, null)
             if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f)
             {
               val itemStack=new ItemStack(block)
-              world.spawnEntityInWorld(new EntityItem(world,i,j,k,itemStack));
-              world.setBlock(i, j, k, Blocks.air)
+              world.spawnEntity(new EntityItem(world,i,j,k,itemStack))
+              world.setBlockToAir(bPos)
             }
             else if (0 <= hardness && hardness <= breakHardness && ctx.canBreakBlock(world, i, j, k)) {
               // This line causes the sound effect unable to be heard.
@@ -143,13 +140,13 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
                 block.dropBlockAsItemWithChance(world, i, j, k, world.getBlockMetadata(i, j, k), 1.0f, 0)
               }
 
-              world.setBlock(i, j, k, Blocks.air)
+              world.setBlockToAir(bPos)
             }
           }
         }
       }
 
-      sendToClient(MSG_GENERATE_EFFECT_BLOCKS, Vec3.createVectorHelper(position.xCoord, position.yCoord, position.zCoord))
+      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d()(position.xCoord, position.yCoord, position.zCoord))
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
 
@@ -165,8 +162,8 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   }
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
-  def c_perform(pos: Vec3) = {
-    sendToSelf(MSG_EFFECT, util.mc.Vec3(pos.xCoord, pos.yCoord, pos.zCoord))
+  def c_perform(pos: Vec3d) = {
+    sendToSelf(MSG_EFFECT, new Vec3d(pos.x, pos.y, pos.z))
 
     punched = true
   }
@@ -198,7 +195,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   private def knockback(targ: Entity) = {
     var delta = player.headPosition - targ.headPosition
     delta = delta.normalize()
-    delta.yCoord = -0.4f
+    delta.y = -0.4f
     delta = delta.normalize()
 
     targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)

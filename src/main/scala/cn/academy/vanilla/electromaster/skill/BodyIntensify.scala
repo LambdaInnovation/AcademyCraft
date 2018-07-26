@@ -7,17 +7,16 @@
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.client.auxgui.AuxGuiHandler
-import cn.lambdalib.util.generic.RandUtils
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.potion.{Potion, PotionEffect}
+import net.minecraft.util.SoundCategory
+
 import scala.util.Random
 
 /**
@@ -58,7 +57,6 @@ object IntensifyContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import BodyIntensify._
 import IntensifyContext._
@@ -142,7 +140,6 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[IntensifyContext])
 class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
@@ -169,8 +166,8 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
     }
 
     if(performed) {
-      ACSounds.playClient(player, ACTIVATE_SOUND, 0.5f)
-      player.worldObj.spawnEntityInWorld(new EntityIntensifyEffect(player))
+      ACSounds.playClient(player, ACTIVATE_SOUND,SoundCategory.AMBIENT, 0.5f)
+      player.getEntityWorld.spawnEntityInWorld(new EntityIntensifyEffect(player))
     }
   }
 

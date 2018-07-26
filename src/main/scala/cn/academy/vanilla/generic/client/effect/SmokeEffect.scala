@@ -8,22 +8,23 @@ import cn.lambdalib.annoreg.mc.RegInitCallback
 import cn.lambdalib.util.client.RenderUtils
 import cn.lambdalib.util.helper.GameTimer
 import cn.lambdalib.util.mc.Vec3
-import cpw.mods.fml.client.registry.RenderingRegistry
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
 import cn.lambdalib.util.mc.MCExtender._
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.Tessellator
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11._
 
 @SideOnly(Side.CLIENT)
-@Registrant
 object SmokeEffect_ {
 
-  @RegInitCallback
-  def _init() = {
+  @StateEventCallback
+  def _init(fMLInitializationEvent: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[SmokeEffect], new Render {
       val texture = Resources.preloadTexture("effects/smokes")
 

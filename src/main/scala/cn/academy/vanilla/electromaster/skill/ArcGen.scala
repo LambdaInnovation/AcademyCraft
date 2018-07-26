@@ -8,24 +8,18 @@ package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.handlers.Life
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.mc.{BlockSelectors, IBlockSelector, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.{Items, Blocks}
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * @author WeAthFolD, KSkun

@@ -9,34 +9,18 @@ import cn.academy.ability.api.data.AbilityData
 import cn.academy.core.Resources
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.{CGuiScreen, Widget}
-import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.{SerializeIncluded, SerializeStrategy}
-import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib.s11n.nbt.NBTS11n
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.client.HudUtils
-import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.{Color, GameTimer}
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{NetworkMessage, NetworkS11n}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{MathHelper, ResourceLocation, StatCollector}
 import net.minecraftforge.common.DimensionManager
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
-@Registrant
 private object LTNetDelegate {
   final val MSG_ADD = "add"
   final val MSG_REMOVE = "remove"
@@ -45,8 +29,8 @@ private object LTNetDelegate {
 
   import scala.collection.JavaConversions._
 
-  @RegInitCallback
-  def _init() = {
+  @StateEventCallback
+  def _init(fMLInitializationEvent: FMLInitializationEvent) = {
     NetworkS11n.register(classOf[util.ArrayList[_]])
     NetworkS11n.addDirectInstance(LTNetDelegate)
   }

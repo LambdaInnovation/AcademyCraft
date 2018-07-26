@@ -20,7 +20,7 @@ import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
 import cn.lambdalib.util.generic.{RandUtils, VecUtils}
 import cn.lambdalib.util.helper.{Color, Motion3D}
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound

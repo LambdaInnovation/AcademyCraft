@@ -4,13 +4,6 @@ import java.util
 import java.util.Random
 
 import cn.academy.core.Resources
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.pipeline.api.Material.{LayoutMapping, LayoutType, MeshType}
-import cn.lambdalib.pipeline.api.{GraphicPipeline, Material, ShaderProgram}
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.helper.GameTimer
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge

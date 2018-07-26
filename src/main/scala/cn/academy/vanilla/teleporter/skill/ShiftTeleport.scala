@@ -19,7 +19,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
 import cn.lambdalib.util.helper.{Color, Motion3D}
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

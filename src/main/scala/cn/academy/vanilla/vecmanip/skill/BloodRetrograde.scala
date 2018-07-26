@@ -3,15 +3,15 @@ package cn.academy.vanilla.vecmanip.skill
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
+import cn.academy.vanilla.ModuleSoundEvent
 import cn.academy.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.RandUtils._
-import cn.lambdalib.util.mc._
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.academy.vanilla.teleporter.skill.TraceResult
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.{EntitySelectors, SoundCategory}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object BloodRetrograde extends Skill("blood_retro", 4) {
 
@@ -36,7 +36,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
-    val trace: TraceResult = Raytrace.traceLiving(player, 2, EntitySelectors.living)
+    val trace: TraceResult = p.rayTrace(2, EntitySelectors.IS_ALIVE)
     trace match {
       case EntityResult(ent) =>
         sendToServer(MSG_PERFORM, ent)
@@ -85,7 +85,6 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BloodRetroContext])
 class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
@@ -119,7 +118,8 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
         case _ =>
       }
 
-    ACSounds.playClient(player, "vecmanip.blood_retro", 1f)
+    world.playSound(player, player.posX,player.posY,player.posZ,
+      ModuleSoundEvent.blood_retro, SoundCategory.AMBIENT, 1F, 1F)
   }
 
 }

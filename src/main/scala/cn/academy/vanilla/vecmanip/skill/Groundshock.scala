@@ -6,23 +6,16 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.core.util.Plotter
 import cn.academy.vanilla.generic.client.effect.SmokeEffect
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.deprecated.{LIFMLGameEventDispatcher, LIHandler}
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.EntityDiggingFX
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.util.{AxisAlignedBB, Vec3}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.init.{Blocks, SoundEvents}
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.BlockPos
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-@Registrant
 object Groundshock extends Skill("ground_shock", 1) {
 
   @SideOnly(Side.CLIENT)
@@ -43,9 +36,7 @@ private object GroundshockContext {
 }
 
 import GroundshockContext._
-import cn.lambdalib.util.mc.MCExtender._
 import collection.mutable
-import RandUtils._
 
 class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with IConsumptionProvider with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
@@ -103,20 +94,23 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
       val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 
       def breakWithForce(x: Int, y: Int, z: Int, drop: Boolean) = {
-        val block = world.getBlock(x, y, z)
+        val blockPos = new BlockPos(x,y,z)
+        val state = world.getBlockState(blockPos)
+        val block = state.getBlock
 
         if (ctx.canBreakBlock(world, x, y, z)) {
-          block.getBlockHardness(world, x, y, z) match {
+          block.getBlockHardness(state,world,blockPos) match {
             case hardnessEnergy if hardnessEnergy >= 0 =>
-              if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial.isLiquid) {
+              if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial(state).isLiquid) {
                 energy -= hardnessEnergy
 
                 if (drop && RNG.nextFloat() < dropRate) {
-                  block.dropBlockAsItemWithChance(world, x, y, z, world.getBlockMetadata(x, y, z), 1.0f, 0)
+                  block.dropBlockAsItemWithChance(world, blockPos, state, 1.0f, 0)
                 }
 
-                world.setBlock(x, y, z, Blocks.air)
-                world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+                world.setBlockToAir(blockPos)
+                world.playSound(x + 0.5, y + 0.5, z + 0.5, SoundEvents.BLOCK_ANVIL_DESTROY, SoundCategory.AMBIENT, .5f, 1f,false)
+                //TODO This method seems to be empty.
               }
             case _ =>
           }

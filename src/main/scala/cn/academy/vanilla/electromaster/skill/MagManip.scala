@@ -9,23 +9,15 @@ import cn.academy.core.entity.EntityBlock
 import cn.academy.vanilla.electromaster.CatElectromaster
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegEntity
-import cn.lambdalib.multiblock.BlockMulti
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.MotionHandler
-import cn.lambdalib.util.entityx.event.CollideEvent
-import cn.lambdalib.util.entityx.event.CollideEvent.CollideHandler
-import cn.lambdalib.util.entityx.handlers.Rigidbody
-import cn.lambdalib.util.generic.{MathUtils, RandUtils}
-import cn.lambdalib.util.helper.EntitySyncer
-import cn.lambdalib.util.helper.EntitySyncer.Synchronized
-import cn.lambdalib.util.mc._
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.mc.RegEntity
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.{Block, BlockDoor}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
+import net.minecraft.util.{EnumHand, SoundCategory}
 import net.minecraft.world.World
 
 private[electromaster] object MagManip extends Skill("mag_manip", 2) {
@@ -51,7 +43,6 @@ private object MagManipContext {
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.vanilla.electromaster.skill.MagManip._
 import cn.academy.vanilla.electromaster.skill.MagManipContext._
-import cn.lambdalib.util.mc.MCExtender._
 
 private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with IConsumptionProvider {
 
@@ -80,14 +71,14 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
     // Find the block to use.
-    val stack = player.getCurrentEquippedItem
+    val stack = player.getHeldEquipment
     Option(stack)
       .flatMap(s => Option(Block.getBlockFromItem(s.getItem))) match {
       case Some(block) if accepts(player, block) =>
         if (!player.capabilities.isCreativeMode) {
           stack.stackSize -= 1
           if (stack.stackSize == 0) {
-            player.setCurrentItemOrArmor(0, null)
+            player.setHeldItem(EnumHand.MAIN_HAND, null)//TODO May cause exception.
           }
         }
 
@@ -124,7 +115,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
             entity.setBlock(block)
             entity.setPosition(x + .5, y + .5, z + .5)
 
-            world.spawnEntityInWorld(entity)
+            world.spawnEntity(entity)
 
             updateMoveTo()
           case _ => terminate()
@@ -143,7 +134,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
     entity.actionType = entity.ActNothing
     entity.setPlaceFromServer(true)
 
-    val distsq = player.getDistanceSqToEntity(entity)
+    val distsq = player.getDistanceSq(entity)
     if (distsq < 25 && ctx.consume(overload, consumption)) {
       val pos = Raytrace.getLookingPos(player, 20).getLeft
       val delta = pos - entity.position
@@ -185,12 +176,11 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   override def getConsumptionHint: Float = consumption
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MagManipContext])
 class MagManipContextC(par: MagManipContext) extends ClientContext(par) {
 
-  val loopSound = new FollowEntitySound(par.player, "em.lf_loop").setLoop()
+  val loopSound = new FollowEntitySound(par.player, "em.lf_loop", SoundCategory.AMBIENT).setLoop()
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   def c_makeAlive() = {
@@ -204,13 +194,12 @@ class MagManipContextC(par: MagManipContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   def c_perform() = {
-    ACSounds.playClient(player, "em.mag_manip", 1.0f)
+    ACSounds.playClient(player, "em.mag_manip",  SoundCategory.AMBIENT, 1.0f)
   }
 
 
 }
 
-@Registrant
 @RegEntity(freq = 10)
 class MagManipEntityBlock(world: World) extends EntityBlock(world) {
 
@@ -269,7 +258,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
 
     regEventHandler(new CollideHandler {
       override def onEvent(event: CollideEvent): Unit = {
-        if (!worldObj.isRemote && event.result != null && event.result.entityHit != null) {
+        if (!getEntityWorld.isRemote && event.result != null && event.result.entityHit != null) {
           AbilityContext.of(player2, MagManip).attack(event.result.entityHit, damage)
         }
       }

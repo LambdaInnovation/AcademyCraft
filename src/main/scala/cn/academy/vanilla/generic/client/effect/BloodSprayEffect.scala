@@ -2,27 +2,23 @@ package cn.academy.vanilla.generic.client.effect
 
 import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.util.client.RenderUtils
-import cn.lambdalib.util.deprecated.{Mesh, MeshUtils, SimpleMaterial}
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.mc.{EntityLook, Vec3}
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.render.Mesh
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 @SideOnly(Side.CLIENT)
-@Registrant
 object BloodSprayEffect_ {
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(fMLInitializationEvent: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[BloodSprayEffect], new Render {
       import org.lwjgl.opengl.GL11._
 
@@ -67,7 +63,6 @@ object BloodSprayEffect_ {
 }
 
 class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends LocalEntity(world) {
-  import cn.lambdalib.util.mc.MCExtender._
 
   val dir = ForgeDirection.values()(side)
   val textureID = RandUtils.rangei(0, 10)
@@ -81,7 +76,7 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
   setSize(1.5f, 2.2f)
 
   {
-    val block = world.getBlock(x, y, z)
+    val block = world.getBlockState(new BlockPos(x, y, z)).getBlock
     def m(x: Double, y: Double) = (x + y) / 2
 
     block.setBlockBoundsBasedOnState(world, x, y, z)

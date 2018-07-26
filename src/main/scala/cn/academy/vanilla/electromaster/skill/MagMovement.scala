@@ -7,22 +7,18 @@
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.ability.api.data.AbilityData
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.electromaster.CatElectromaster
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.mc.Raytrace
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{Vec3, MovingObjectPosition}
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -38,7 +34,7 @@ object MagMovement extends Skill("mag_movement", 2) {
 
   def toTarget(aData: AbilityData, world: World, pos: MovingObjectPosition): Target = {
     if(pos.typeOfHit == MovingObjectType.BLOCK) {
-      val block = world.getBlock(pos.blockX, pos.blockY, pos.blockZ)
+      val block = world.getBlockState(new BlockPos(pos.blockX, pos.blockY, pos.blockZ)).getBlock
       if(aData.getSkillExp(this) < 0.6f && !CatElectromaster.isMetalBlock(block)) { return null }
       if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block)) { return null }
       new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord)
@@ -181,7 +177,6 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MovementContext])
 class MovementContextC(par: MovementContext) extends ClientContext(par) {
@@ -197,7 +192,7 @@ class MovementContextC(par: MovementContext) extends ClientContext(par) {
     arc.showWiggle = 0.1
     arc.hideWiggle = 0.6
 
-    player.worldObj.spawnEntityInWorld(arc)
+    player.getEntityWorld.spawnEntityInWorld(arc)
 
     sound = new FollowEntitySound(player, SOUND).setLoop()
     ACSounds.playClient(sound)

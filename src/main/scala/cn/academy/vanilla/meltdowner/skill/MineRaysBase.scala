@@ -17,7 +17,7 @@ import cn.lambdalib.util.entityx.handlers.Rigidbody
 import cn.lambdalib.util.generic.{RandUtils, VecUtils}
 import cn.lambdalib.util.generic.RandUtils._
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

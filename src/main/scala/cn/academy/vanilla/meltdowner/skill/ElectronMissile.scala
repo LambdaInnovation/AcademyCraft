@@ -16,7 +16,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.{MathUtils, VecUtils}
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.Vec3

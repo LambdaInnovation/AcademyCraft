@@ -3,15 +3,11 @@ package cn.academy.vanilla.vecmanip.skill
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.GameTimer
-import cn.lambdalib.util.mc._
-import cn.lambdalib.vis.animation.presets.CompTransformAnim
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.SoundCategory
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object DirectedShock extends Skill("dir_shock", 1) {
 
@@ -146,7 +142,7 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_GENERATE_EFFECT, side=Array(Side.CLIENT))
   def c_effect() = {
-    ACSounds.playClient(player, "vecmanip.directed_shock", 0.5f)
+    ACSounds.playClient(player, "vecmanip.directed_shock", SoundCategory.AMBIENT, 0.5f)
   }
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
