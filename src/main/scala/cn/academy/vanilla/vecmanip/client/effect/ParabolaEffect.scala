@@ -4,30 +4,25 @@ import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.skill.VecAccelContext
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.util.client.RenderUtils
-import cn.lambdalib.util.client.shader.ShaderSimple
-import cn.lambdalib.util.generic.{MathUtils, VecUtils}
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
-import cn.lambdalib.util.mc.MCExtender._
-import cn.lambdalib.util.mc.Vec3
 import net.minecraft.client.Minecraft
+import net.minecraft.util.math.Vec3d
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
 
 import scala.collection.mutable.ArrayBuffer
 
 @SideOnly(Side.CLIENT)
-@Registrant
 object ParabolaEffect_ {
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(event: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(
       classOf[ParabolaEffect],
       ParabolaRenderer
@@ -37,14 +32,14 @@ object ParabolaEffect_ {
 }
 
 @SideOnly(Side.CLIENT)
-class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.worldObj) {
+class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.getEntityWorld) {
 
   ignoreFrustumCheck = true
 
   var canPerform = false
 
   override def onUpdate() = {
-    this.setPos(ctx.player.position)
+    this.setPos(ctx.player.getPosition)
     canPerform = ctx.canPerform
     if (ctx.getStatus == Status.TERMINATED) {
       setDead()
@@ -60,7 +55,7 @@ object ParabolaRenderer extends Render {
 
   val texture = Resources.getTexture("effects/glow_line")
 
-  val vertices = ArrayBuffer[net.minecraft.util.Vec3]()
+  val vertices = ArrayBuffer[Vec3d]()
 
   override def doRender(entity : Entity, x : Double, y : Double, z : Double,
                         partialTicks : Float, wtf : Float): Unit = {

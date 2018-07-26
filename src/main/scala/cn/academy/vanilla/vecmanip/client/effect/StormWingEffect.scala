@@ -3,24 +3,21 @@ package cn.academy.vanilla.vecmanip.client.effect
 import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.skill.StormWingContext
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.vis.model.CompTransform
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.client.entity.AbstractClientPlayer
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
-import cn.lambdalib.util.mc.MCExtender._
 
 @SideOnly(Side.CLIENT)
-@Registrant
 object StormWingEffect_ {
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(fMLInitializationEvent: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[StormWingEffect], new Render {
 
       override def doRender(entity: Entity, x: Double, y: Double, z: Double, pt: Float, v4: Float) = entity match {

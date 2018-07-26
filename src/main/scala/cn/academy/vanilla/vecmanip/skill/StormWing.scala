@@ -8,7 +8,7 @@ import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils._
 import cn.lambdalib.util.mc.{Vec3 => MVec3, _}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.util.{ResourceLocation, Vec3}

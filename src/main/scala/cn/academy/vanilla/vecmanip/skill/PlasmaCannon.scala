@@ -11,7 +11,7 @@ import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc._
 import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

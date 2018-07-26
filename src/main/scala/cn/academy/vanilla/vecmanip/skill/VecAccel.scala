@@ -8,7 +8,7 @@ import cn.lambdalib.annoreg.core.Registrant
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.mc._
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 
 object VecAccel extends Skill("vec_accel", 2) {

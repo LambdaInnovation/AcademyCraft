@@ -9,24 +9,19 @@ package cn.academy.vanilla.electromaster.skill
 import java.util.function.Predicate
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.{SerializeNullable, SerializeIncluded}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.entityx.handlers.Life
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{WorldUtils, EntitySelectors, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.{EntityLivingBase, Entity}
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.potion.{PotionEffect, Potion}
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.Vec3
+import net.minecraft.potion.{Potion, PotionEffect}
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.Vec3d
 
 /**
   * @author WeAthFolD, KSkun
@@ -121,7 +116,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
     val exclusion: Predicate[Entity] = if(!hitEntity) EntitySelectors.exclude(player) else EntitySelectors.exclude(player, result.entityHit)
     val target = if(hitEntity) result.entityHit else null
     val aoes: java.util.List[Entity] = WorldUtils.getEntities(
-      player.worldObj, end.xCoord, end.yCoord, end.zCoord,
+      player.getEntityWorld, end.xCoord, end.yCoord, end.zCoord,
       AOE_RANGE, EntitySelectors.living().and(exclusion))
 
     val ad = new AttackData()
@@ -135,7 +130,6 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
 
 import ThunderBoltContext._
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ThunderBoltContext])
 class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
@@ -147,7 +141,7 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
     for(i <- 0 to 2) {
       val mainArc = new EntityArc(player, ArcPatterns.strongArc)
       mainArc.length = RANGE
-      player.worldObj.spawnEntityInWorld(mainArc)
+      player.getEntityWorld.spawnEntityInWorld(mainArc)
       mainArc.addMotionHandler(new Life(20))
     }
 
@@ -160,12 +154,11 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
       player.worldObj.spawnEntityInWorld(aoeArc)
     })
 
-    ACSounds.playClient(player, "em.arc_strong", 0.6f)
+    ACSounds.playClient(player, "em.arc_strong", SoundCategory.AMBIENT, 0.6f)
   }
 
 }
 
-@Registrant
 @NetworkS11nType
 class AttackData {
   @SerializeIncluded
@@ -175,5 +168,5 @@ class AttackData {
   final var target: Entity = _
   @SerializeIncluded
   @SerializeNullable
-  final var point: Vec3 = _
+  final var point: Vec3d = _
 }

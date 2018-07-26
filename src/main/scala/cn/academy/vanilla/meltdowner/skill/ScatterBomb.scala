@@ -18,7 +18,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.generic.{RandUtils, VecUtils}
 import cn.lambdalib.util.helper.Motion3D
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3}

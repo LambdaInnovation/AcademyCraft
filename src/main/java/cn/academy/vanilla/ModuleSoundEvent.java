@@ -15,9 +15,10 @@ public class ModuleSoundEvent
     public static SoundEvent md_ray_small = new SoundEvent(new ResourceLocation( "academy","md.ray_small"));
     public static SoundEvent silbarn_light = new SoundEvent(new ResourceLocation( "academy","entity.silbarn_light"));
     public static SoundEvent silbarn_heavy = new SoundEvent(new ResourceLocation( "academy","entity.silbarn_heavy"));
+    public static SoundEvent blood_retro = new SoundEvent(new ResourceLocation("academy","vecmanip.blood_retro"));
 
     @SubscribeEvent
     public void onRegisterSound(RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().registerAll(silbarn_sound, md_ray_small);
+        event.getRegistry().registerAll(silbarn_sound, md_ray_small, silbarn_heavy,silbarn_light,blood_retro);
     }
 }

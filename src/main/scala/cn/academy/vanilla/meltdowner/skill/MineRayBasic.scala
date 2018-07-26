@@ -9,7 +9,7 @@ package cn.academy.vanilla.meltdowner.skill
 import cn.academy.ability.api.context.{ClientRuntime, RegClientContext}
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic
 import cn.lambdalib.annoreg.core.Registrant
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

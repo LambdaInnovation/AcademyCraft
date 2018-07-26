@@ -17,7 +17,7 @@ import cn.lambdalib.util.entityx.event.CollideEvent
 import cn.lambdalib.util.generic.MathUtils
 import cn.lambdalib.util.helper.Motion3D
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3}

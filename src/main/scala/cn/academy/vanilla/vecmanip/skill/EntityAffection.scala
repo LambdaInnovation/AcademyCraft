@@ -18,18 +18,17 @@ object EntityAffection {
     val cfg = ACConfig.instance.getConfig(
       "ac.ability.category.vecmanip.common.affected_entities")
 
-    val nameMapping = EntityList.stringToClassMapping.asInstanceOf[java.util.Map[String, Class[_<:Entity]]].toMap
 
     val entityData = {
       cfg.getConfigList("difficulties")
         .map(elem => (elem.getString("name"), elem.getDouble("difficulty").toFloat))
-        .flatMap { case (name, difficulty) => nameMapping.get(name).map((_, difficulty)) }
+        .flatMap { case (name, difficulty) => EntityList.getClassFromName(name).map((_, difficulty)) }
         .toList
     }
 
     val excluded = cfg.getStringList("excluded")
 
-    (entityData, excluded.toSet.flatMap(nameMapping.get))
+    (entityData, excluded.toSet.flatMap(EntityList.getClassFromName))
   }
 
   def getAffectInfo(entity: Entity): AffectInfo = {

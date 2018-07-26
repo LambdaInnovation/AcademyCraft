@@ -8,7 +8,7 @@ import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntitySmallFireball, EntityLargeFireball, EntityArrow}

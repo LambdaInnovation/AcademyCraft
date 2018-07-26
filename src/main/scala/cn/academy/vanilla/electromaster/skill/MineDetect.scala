@@ -7,29 +7,23 @@
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.{AbilityAPIExt, Skill}
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.Resources
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.CatElectromaster
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegEntity}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.client.RenderUtils
-import cn.lambdalib.util.deprecated.{MeshUtils, SimpleMaterial}
-import cn.lambdalib.util.entityx.EntityAdvanced
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.{BlockPos, Color}
-import cn.lambdalib.util.mc.{WorldUtils, IBlockSelector}
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.mc.RegEntity
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.entity.{RenderManager, Render}
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.potion.{PotionEffect, Potion}
+import net.minecraft.potion.{Potion, PotionEffect}
+import net.minecraft.util.SoundCategory
 import net.minecraft.world.World
 import org.lwjgl.opengl.GL11
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 
@@ -93,7 +87,6 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MDContext])
 class MDContextC(par: MDContext) extends ClientContext(par) {
@@ -101,9 +94,9 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
   private def c_spawnEffects(range: Float, advanced: Boolean) = {
     if(isLocal) {
-      player.worldObj.spawnEntityInWorld(
+      player.getEntityWorld.spawnEntityInWorld(
         new HandlerEntity(player, TIME, range, advanced))
-      ACSounds.playClient(player, "em.minedetect", 0.5f)
+      ACSounds.playClient(player, "em.minedetect", SoundCategory.AMBIENT 0.5f)
     }
   }
 
@@ -116,9 +109,8 @@ class MineElem(_x: Int, _y: Int, _z: Int, _lv: Int) {
   val level = _lv
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
-@RegEntity(clientOnly = true)
+@RegEntity
 class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced: Boolean) extends EntityAdvanced(_target.worldObj) {
 
   val renderer: HandlerRender = new HandlerRender()

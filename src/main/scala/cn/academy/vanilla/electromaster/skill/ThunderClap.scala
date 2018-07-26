@@ -7,20 +7,15 @@
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{RegClientContext, ClientContext, Context, ClientRuntime}
+import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
 import cn.academy.vanilla.generic.entity.EntityRippleMark
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.EntityCallback
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.entity.Entity
 import net.minecraft.entity.effect.EntityLightningBolt
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * @author WeAthFolD, KSkun
@@ -100,7 +95,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
     }
 
     val lightning = new EntityLightningBolt(player.worldObj, hitX, hitY, hitZ)
-    player.worldObj.addWeatherEffect(lightning)
+    player.getEntityWorld.addWeatherEffect(lightning)
     ctx.attackRange(hitX, hitY, hitZ, ThunderClap.getRange(exp), getDamage(exp, ticks), EntitySelectors.exclude(player))
 
     ctx.setCooldown(getCooldown(exp, ticks))
@@ -121,7 +116,6 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ThunderClapContext])
 class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
@@ -136,12 +130,12 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
   private def c_spawnEffect() = {
     canTicking = true
     surroundArc = new EntitySurroundArc(player).setArcType(ArcType.BOLD)
-    player.worldObj.spawnEntityInWorld(surroundArc)
+    player.getEntityWorld.spawnEntityInWorld(surroundArc)
 
     if(isLocal) {
       mark = new EntityRippleMark(player.worldObj)
 
-      player.worldObj.spawnEntityInWorld(mark)
+      player.getEntityWorld.spawnEntityInWorld(mark)
       mark.color.setColor4d(0.8, 0.8, 0.8, 0.7)
       mark.setPosition(hitX, hitY, hitZ)
     }

@@ -4,33 +4,25 @@ import cn.academy.ability.api.context.Context.Status
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.skill.PlasmaCannonContext
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.util.client.shader.{GLSLMesh, ShaderProgram}
-import cn.lambdalib.util.deprecated.{Mesh, MeshUtils, SimpleMaterial}
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.GameTimer
-import cn.lambdalib.util.key.{KeyHandler, KeyManager}
-import cn.lambdalib.util.mc.{Raytrace, Vec3}
-import cpw.mods.fml.client.registry.RenderingRegistry
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.entity.Entity
-import net.minecraft.util.{MathHelper, ResourceLocation}
+import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.BufferUtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.util.vector.{Matrix4f, Vector3f, Vector4f}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
-import cn.lambdalib.util.mc.MCExtender._
 
-@Registrant
 @SideOnly(Side.CLIENT)
 object PlasmaBodyEffect_ {
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(fMLInitializationEvent: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[PlasmaBodyEffect], new PlasmaBodyRenderer)
   }
 

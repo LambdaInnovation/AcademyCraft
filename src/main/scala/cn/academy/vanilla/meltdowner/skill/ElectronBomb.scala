@@ -15,7 +15,7 @@ import cn.lambdalib.s11n.network.NetworkMessage.Listener
 import cn.lambdalib.util.entityx.EntityCallback
 import cn.lambdalib.util.generic.VecUtils
 import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{MovingObjectPosition, Vec3}
 
