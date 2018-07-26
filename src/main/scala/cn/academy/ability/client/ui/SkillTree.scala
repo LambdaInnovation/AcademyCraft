@@ -164,7 +164,7 @@ object SkillPosEditorUI {
 
 private object Common {
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_developer")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_developer")).getWidget("main")
 
   private val texAreaBack = Resources.preloadTexture("guis/effect/effect_developer_background")
   private val texSkillBack = Resources.preloadMipmapTexture("guis/developer/skill_back")

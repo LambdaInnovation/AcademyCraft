@@ -32,7 +32,7 @@ public class TerminalInstallEffect extends AuxGui {
     private static WidgetContainer loaded;
     @RegInitCallback
     private static void __init() {
-        loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/terminal_installing.xml"));
+        loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal_installing.xml"));
     }
     
     CGui gui = new CGui();

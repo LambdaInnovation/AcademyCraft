@@ -152,7 +152,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   private def isCrossDim(player: EntityPlayer, dest: Location) = player.world.provider.dimensionId != dest.dim
 
   object Gui {
-    lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
+    lazy val template = CGUIDocument.read(Resources.getGui("loctele_new"))
 
     def dimensionNameMap(dimID: Int) = {
       DimensionManager.createProviderFor(dimID).getDimensionName

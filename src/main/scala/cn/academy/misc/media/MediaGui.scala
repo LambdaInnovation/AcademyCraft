@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft
 
 private object MediaGuiInit {
 
-  lazy val document: WidgetContainer = CGUIDocument.panicRead(Resources.getGui("media_player"))
+  lazy val document: WidgetContainer = CGUIDocument.read(Resources.getGui("media_player"))
 
 }
 
@@ -193,7 +193,7 @@ private object MediaAuxGui {
 
   @RegInitCallback
   def init() = {
-    val base = CGUIDocument.panicRead(Resources.getGui("media_player_aux")).getWidget("base")
+    val base = CGUIDocument.read(Resources.getGui("media_player_aux")).getWidget("base")
 
     ACHud.instance.addElement(base, new Condition {
       override def shows(): Boolean = MediaBackend().currentPlaying.isDefined

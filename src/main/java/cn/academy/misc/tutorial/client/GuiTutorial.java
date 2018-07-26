@@ -50,7 +50,7 @@ public class GuiTutorial extends CGuiScreen {
 
     @RegInitCallback
     private static void __init() {
-        loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial.xml"));
+        loaded = CGUIDocument.read(new ResourceLocation("academy:guis/tutorial.xml"));
         font = Resources.font();
         fontBold = Resources.fontBold();
         fontItalic = Resources.fontItalic();

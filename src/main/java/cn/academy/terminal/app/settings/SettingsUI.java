@@ -39,7 +39,7 @@ public class SettingsUI extends CGuiScreen {
 
     @RegInitCallback
     private static void __init() {
-        document = CGUIDocument.panicRead(new ResourceLocation("academy:guis/settings.xml"));
+        document = CGUIDocument.read(new ResourceLocation("academy:guis/settings.xml"));
     }
     
     public static void addProperty(IPropertyElement elem, String cat, String id, Object defValue, boolean singlePlayer) {

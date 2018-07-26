@@ -80,7 +80,7 @@ public class PresetEditUI extends GuiScreen {
 
     @RegInitCallback
     private static void __init() {
-        loaded = CGUIDocument.panicRead(new ResourceLocation("academy:guis/preset_edit.xml"));
+        loaded = CGUIDocument.read(new ResourceLocation("academy:guis/preset_edit.xml"));
         template = loaded.getWidget("template");
     }
     

@@ -49,7 +49,7 @@ public enum RecipeHandler {
 
     @RegInitCallback
     private static void __init() {
-        instance.windows = CGUIDocument.panicRead(new ResourceLocation("academy:guis/tutorial_windows.xml"));
+        instance.windows = CGUIDocument.read(new ResourceLocation("academy:guis/tutorial_windows.xml"));
     }
 
     private Field _$ShapedOreRecipe$fieldWidth;

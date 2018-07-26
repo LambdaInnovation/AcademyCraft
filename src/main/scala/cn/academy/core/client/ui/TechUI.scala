@@ -38,7 +38,7 @@ import org.lwjgl.opengl.GL11._
 import collection.mutable
 
 private object Generic_ {
-  def readxml(loc: String) = CGUIDocument.panicRead(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
+  def readxml(loc: String) = CGUIDocument.read(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
 }
 
 import Generic_._

@@ -13,7 +13,7 @@ object GuiSolarGen {
   import cn.academy.core.client.ui.TechUI._
   import cn.lambdalib2.cgui.ScalaCGUI._
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_solar")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_solar")).getWidget("main")
   private val texture = Resources.getTexture("guis/effect/effect_solar")
 
   def apply(container: ContainerSolarGen): GuiContainer = {

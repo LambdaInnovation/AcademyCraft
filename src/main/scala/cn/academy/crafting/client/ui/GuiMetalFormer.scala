@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side
 object GuiMetalFormer {
   import MFNetDelegate._
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_metalformer")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_metalformer")).getWidget("main")
 
   def apply(container: ContainerMetalFormer) = {
     val tile = container.tile

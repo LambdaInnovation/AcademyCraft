@@ -12,7 +12,7 @@ import cn.lambdalib2.util.Color
 
 object GuiImagFusor {
 
-  private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_imagfusor")).getWidget("main")
+  private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_imagfusor")).getWidget("main")
   private val local = LocalHelper.at("ac.imag_fusor")
 
   def apply(container: ContainerImagFusor) = {
