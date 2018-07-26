@@ -18,19 +18,19 @@ import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.academy.crafting.block.ContainAbilityInterferer
 import cn.academy.energy.IFConstants
 import cn.academy.support.EnergyItemHelper
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegTileEntity}
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.nbt.NBTS11n
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, TargetPoints}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{MathUtils, VecUtils}
-import cn.lambdalib.util.helper.TickScheduler
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.{RegInitCallback, RegTileEntity}
+import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.gui.Widget
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.s11n.nbt.NBTS11n
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, TargetPoints}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.{MathUtils, VecUtils}
+import cn.lambdalib2.util.helper.TickScheduler
+import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer

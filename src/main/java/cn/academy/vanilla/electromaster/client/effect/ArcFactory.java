@@ -1,9 +1,9 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.client.shader.ShaderSimple;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.generic.VecUtils;
+import cn.lambdalib2.util.client.RenderUtils;
+import cn.lambdalib2.util.client.shader.ShaderSimple;
+import cn.lambdalib2.util.generic.RandUtils;
+import cn.lambdalib2.util.generic.VecUtils;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;

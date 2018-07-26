@@ -25,8 +25,8 @@ private object BloodRetroContext {
 }
 
 import BloodRetroContext._
-import cn.lambdalib.util.mc.MCExtender._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.mc.MCExtender._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityPipeline._
 import cn.academy.ability.api.AbilityAPIExt._
 

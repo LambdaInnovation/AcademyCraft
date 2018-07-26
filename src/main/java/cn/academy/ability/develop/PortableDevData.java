@@ -8,10 +8,10 @@ package cn.academy.ability.develop;
 
 import cn.academy.ability.ModuleAbility;
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.EntityData;
-import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.util.datapart.DataPart;
+import cn.lambdalib2.util.datapart.EntityData;
+import cn.lambdalib2.util.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

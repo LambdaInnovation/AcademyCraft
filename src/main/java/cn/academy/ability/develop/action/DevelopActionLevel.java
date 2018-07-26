@@ -12,7 +12,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.ability.item.ItemInductionFactor;
-import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib2.util.generic.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

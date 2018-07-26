@@ -13,10 +13,10 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.internal.WirelessNet;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.Future;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.s11n.network.Future;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 

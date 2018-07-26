@@ -7,7 +7,7 @@
 package cn.academy.terminal.app.settings;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib2.cgui.gui.Widget;
 import net.minecraftforge.common.config.Configuration;
 
 /**

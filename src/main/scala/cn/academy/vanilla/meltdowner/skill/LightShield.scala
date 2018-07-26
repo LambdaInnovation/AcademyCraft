@@ -13,12 +13,12 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.particle.Particle
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{MathUtils, RandUtils, VecUtils}
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.particle.Particle
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.{MathUtils, RandUtils, VecUtils}
+import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -60,7 +60,7 @@ object LSContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import scala.collection.JavaConversions._
 import LightShield._

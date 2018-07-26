@@ -5,8 +5,8 @@ import java.util.function.Predicate
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.mc.WorldUtils
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.mc.WorldUtils
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -18,7 +18,7 @@ import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivate
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
-import cn.lambdalib.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.core.Registrant
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 
@@ -51,11 +51,11 @@ object VecDeviationContext {
 
 }
 
-import cn.lambdalib.util.mc.MCExtender._
+import cn.lambdalib2.util.mc.MCExtender._
 import cn.academy.ability.api.AbilityAPIExt._
 import collection.mutable
 import scala.collection.JavaConversions._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import VecDeviationContext._
 
 class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {

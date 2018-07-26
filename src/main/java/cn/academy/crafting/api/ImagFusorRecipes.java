@@ -6,10 +6,10 @@
 */
 package cn.academy.crafting.api;
 
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.NetworkS11n;
-import cn.lambdalib.s11n.network.NetworkS11n.ContextException;
-import cn.lambdalib.s11n.network.NetworkS11n.NetS11nAdaptor;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.s11n.network.NetworkS11n;
+import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
+import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 

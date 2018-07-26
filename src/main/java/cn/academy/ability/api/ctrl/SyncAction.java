@@ -6,8 +6,8 @@
 */
 package cn.academy.ability.api.ctrl;
 
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

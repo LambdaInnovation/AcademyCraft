@@ -4,19 +4,19 @@ import cn.academy.ability.block.AbilityInterf
 import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.academy.crafting.block.ContainAbilityInterferer
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.generic.MathUtils
+import cn.lambdalib2.cgui.gui.Widget
+import cn.lambdalib2.cgui.gui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.util.generic.MathUtils
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 
 
 @SideOnly(Side.CLIENT)
 object GuiAbilityInterferer {
 
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
   import cn.academy.core.client.ui._
   import AbilityInterf._
 

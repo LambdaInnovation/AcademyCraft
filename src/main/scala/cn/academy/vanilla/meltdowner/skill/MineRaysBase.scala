@@ -11,12 +11,12 @@ import cn.academy.ability.api.context.{ClientContext, Context}
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.event.BlockDestroyEvent
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
-import cn.lambdalib.particle.Particle
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.handlers.Rigidbody
-import cn.lambdalib.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib.util.generic.RandUtils._
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.particle.Particle
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.entityx.handlers.Rigidbody
+import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
+import cn.lambdalib2.util.generic.RandUtils._
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -41,7 +41,7 @@ object MRContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import MRContext._
 

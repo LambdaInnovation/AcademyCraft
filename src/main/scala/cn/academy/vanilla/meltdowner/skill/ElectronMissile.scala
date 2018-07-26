@@ -11,11 +11,11 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{MathUtils, VecUtils}
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.mc.{EntitySelectors, WorldUtils}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.{MathUtils, VecUtils}
+import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -39,7 +39,7 @@ object EMContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib.util.generic.RandUtils._
+import cn.lambdalib2.util.generic.RandUtils._
 import scala.collection.JavaConversions._
 import EMContext._
 

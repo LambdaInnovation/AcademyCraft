@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import cn.lambdalib.util.generic.MathUtils;
-//import cn.lambdalib.util.helper.BlockPos;
-//import cn.lambdalib.util.mc.IBlockSelector;
-//import cn.lambdalib.util.mc.WorldUtils;
+//import cn.lambdalib2.util.generic.MathUtils;
+//import cn.lambdalib2.util.helper.BlockPos;
+//import cn.lambdalib2.util.mc.IBlockSelector;
+//import cn.lambdalib2.util.mc.WorldUtils;
 
 /**
  * All kinds of funcs about wireless system.

@@ -2,10 +2,10 @@ package cn.academy.misc.media
 
 import cn.academy.core.AcademyCraft
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.util.datapart.{DataPart, EntityData, RegDataPart}
-import cn.lambdalib.util.generic.RegistryUtils
-import cn.lambdalib.util.helper.TickScheduler
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.util.datapart.{DataPart, EntityData, RegDataPart}
+import cn.lambdalib2.util.generic.RegistryUtils
+import cn.lambdalib2.util.helper.TickScheduler
 import com.google.common.base.Preconditions
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft

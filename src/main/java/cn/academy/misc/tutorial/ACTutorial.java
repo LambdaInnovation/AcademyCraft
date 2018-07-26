@@ -7,8 +7,8 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.Resources;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.generic.RegistryUtils;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.util.generic.RegistryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

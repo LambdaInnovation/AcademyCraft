@@ -1,6 +1,6 @@
 package cn.academy.vanilla.vecmanip.skill
 
-import cn.lambdalib.util.generic.RegistryUtils
+import cn.lambdalib2.util.generic.RegistryUtils
 import net.minecraft.entity.projectile.EntityArrow
 
 class ExtArrow(val arrow: EntityArrow) extends AnyVal {

@@ -4,13 +4,13 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.{ContainerUI, HistElement}
 import cn.academy.energy.block.wind.{ContainerWindGenBase, TileWindGenBase}
 import cn.academy.core.client.ui._
-import cn.lambdalib.cgui.gui.component.{DrawTexture, TextBox}
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.helper.Color
+import cn.lambdalib2.cgui.gui.component.{DrawTexture, TextBox}
+import cn.lambdalib2.cgui.gui.event.FrameEvent
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.util.helper.Color
 
 object GuiWindGenBase {
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_windbase")).getWidget("main")
 

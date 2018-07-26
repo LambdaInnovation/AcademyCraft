@@ -8,9 +8,9 @@ package cn.academy.misc.tutorial.client
 
 import cn.academy.core.{AcademyCraft, LocalHelper}
 import cn.academy.misc.tutorial.TutorialData
-import cn.lambdalib.util.key.KeyManager
-import cn.lambdalib.util.markdown.{GLMarkdownRenderer, MarkdownParser}
-import cn.lambdalib.util.mc.SideHelper
+import cn.lambdalib2.util.key.KeyManager
+import cn.lambdalib2.util.markdown.{GLMarkdownRenderer, MarkdownParser}
+import cn.lambdalib2.util.mc.SideHelper
 
 import scala.collection.Map
 

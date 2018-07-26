@@ -8,8 +8,8 @@ package cn.academy.energy.client.render.block;
 
 import cn.academy.core.Resources;
 import cn.academy.energy.block.TilePhaseGen;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib2.util.client.RenderUtils;
+import cn.lambdalib2.util.generic.MathUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;

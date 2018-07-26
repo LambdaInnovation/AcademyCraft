@@ -223,7 +223,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
 
   class Gui extends CGuiScreen {
     import Gui._
-    import cn.lambdalib.cgui.ScalaCGUI._
+    import cn.lambdalib2.cgui.ScalaCGUI._
     import LTNetDelegate._
 
     val root = template.getWidget("root").copy

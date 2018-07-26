@@ -2,7 +2,7 @@ package cn.academy.vanilla.electromaster.client.renderer;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
-import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib2.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;

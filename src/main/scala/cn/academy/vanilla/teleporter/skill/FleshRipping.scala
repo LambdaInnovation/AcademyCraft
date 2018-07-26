@@ -13,13 +13,13 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.{SerializeIncluded, SerializeNullable}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib.util.helper.{Color, Motion3D}
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
+import cn.lambdalib2.util.helper.{Color, Motion3D}
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -46,7 +46,7 @@ object FRContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import FRContext._
 
 class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {

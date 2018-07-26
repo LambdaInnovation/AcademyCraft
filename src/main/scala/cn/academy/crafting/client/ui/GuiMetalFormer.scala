@@ -4,18 +4,18 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.component.{DrawTexture, ProgressBar}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib.util.helper.Color
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.gui.Widget
+import cn.lambdalib2.cgui.gui.component.{DrawTexture, ProgressBar}
+import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent}
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.util.client.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.helper.Color
 import cpw.mods.fml.relauncher.Side
 
 object GuiMetalFormer {

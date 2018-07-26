@@ -1,6 +1,6 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib2.util.generic.RandUtils;
 import net.minecraft.util.Vec3;
 
 import java.util.Random;

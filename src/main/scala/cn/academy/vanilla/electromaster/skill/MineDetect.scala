@@ -48,7 +48,7 @@ object MDContext {
 
 import MineDetect._
 import AbilityAPIExt._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import MDContext._
 
 class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
@@ -96,7 +96,7 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
     if(isLocal) {
       player.getEntityWorld.spawnEntityInWorld(
         new HandlerEntity(player, TIME, range, advanced))
-      ACSounds.playClient(player, "em.minedetect", SoundCategory.AMBIENT 0.5f)
+      ACSounds.playClient(player, "em.minedetect", SoundCategory.AMBIENT, 0.5f)
     }
   }
 

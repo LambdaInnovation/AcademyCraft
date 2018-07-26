@@ -7,7 +7,7 @@
 package cn.academy.energy.item;
 
 import cn.academy.core.item.ACItem;
-import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.core.Registrant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;

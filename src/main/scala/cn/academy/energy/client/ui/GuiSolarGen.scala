@@ -4,14 +4,14 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
 import cn.academy.energy.block.ContainerSolarGen
 import cn.academy.energy.block.TileSolarGen.SolarStatus
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.client.{HudUtils, RenderUtils}
+import cn.lambdalib2.cgui.gui.event.FrameEvent
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
 import net.minecraft.client.gui.inventory.GuiContainer
 
 object GuiSolarGen {
   import cn.academy.core.client.ui.TechUI._
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   private lazy val template = CGUIDocument.panicRead(Resources.getGui("rework/page_solar")).getWidget("main")
   private val texture = Resources.getTexture("guis/effect/effect_solar")

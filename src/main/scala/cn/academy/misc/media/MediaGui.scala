@@ -4,16 +4,16 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.ACHud
 import cn.academy.core.client.ui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent
-import cn.lambdalib.cgui.gui.component._
-import cn.lambdalib.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.gui.{CGuiScreen, Widget, WidgetContainer}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.client.auxgui.AuxGui
-import cn.lambdalib.util.helper.{Color, GameTimer}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.gui.component.VerticalDragBar.DraggedEvent
+import cn.lambdalib2.cgui.gui.component._
+import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.gui.{CGuiScreen, Widget, WidgetContainer}
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.util.client.auxgui.AuxGui
+import cn.lambdalib2.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 
@@ -28,7 +28,7 @@ private object MediaGuiInit {
   */
 class MediaGui extends CGuiScreen {
   import MediaGuiInit._
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   val backend = MediaBackend(thePlayer)
 
@@ -192,7 +192,7 @@ class MediaGui extends CGuiScreen {
 @SideOnly(Side.CLIENT)
 @Registrant
 private object MediaAuxGui {
-  import cn.lambdalib.cgui.ScalaCGUI._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   @RegInitCallback
   def init() = {

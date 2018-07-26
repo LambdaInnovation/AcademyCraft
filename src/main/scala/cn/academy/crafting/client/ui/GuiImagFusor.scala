@@ -4,11 +4,11 @@ import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.ContainerImagFusor
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.component.{ProgressBar, TextBox}
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.util.helper.Color
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.gui.component.{ProgressBar, TextBox}
+import cn.lambdalib2.cgui.gui.event.FrameEvent
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.util.helper.Color
 
 object GuiImagFusor {
 

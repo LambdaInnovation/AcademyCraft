@@ -15,26 +15,26 @@ import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, Learn
 import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.{CGui, CGuiScreen, Widget}
-import cn.lambdalib.cgui.xml.CGUIDocument
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.cgui.gui.{CGui, CGuiScreen, Widget}
+import cn.lambdalib2.cgui.xml.CGUIDocument
 import net.minecraft.client.Minecraft
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
-import cn.lambdalib.cgui.gui.component._
-import cn.lambdalib.cgui.gui.event._
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib.util.client.shader.{ShaderMono, ShaderProgram}
-import cn.lambdalib.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib.util.key.{KeyHandler, KeyManager}
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
+import cn.lambdalib2.cgui.gui.component._
+import cn.lambdalib2.cgui.gui.event._
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.util.client.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.client.shader.{ShaderMono, ShaderProgram}
+import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
+import cn.lambdalib2.util.key.{KeyHandler, KeyManager}
 import org.lwjgl.input.Keyboard
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.generic.RandUtils
-import cn.lambdalib.util.helper.{Color, GameTimer}
+import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.RandUtils
+import cn.lambdalib2.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.util.{ChatAllowedCharacters, ResourceLocation}
 import org.lwjgl.opengl.GL11._

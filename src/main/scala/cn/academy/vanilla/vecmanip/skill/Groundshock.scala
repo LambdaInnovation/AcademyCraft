@@ -41,7 +41,7 @@ import collection.mutable
 class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with IConsumptionProvider with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
   import scala.collection.JavaConversions._
-  import cn.lambdalib.util.generic.MathUtils._
+  import cn.lambdalib2.util.generic.MathUtils._
   var localTick = 0
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))

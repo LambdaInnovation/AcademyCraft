@@ -11,12 +11,12 @@ import java.util.function.Predicate
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.vanilla.meltdowner.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.event.CollideEvent
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.entityx.event.CollideEvent
+import cn.lambdalib2.util.generic.MathUtils
+import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -43,7 +43,7 @@ object RBContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import RBContext._
 

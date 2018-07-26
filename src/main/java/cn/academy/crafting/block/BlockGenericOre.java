@@ -8,7 +8,7 @@ package cn.academy.crafting.block;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlock;
-import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib2.util.generic.RandUtils;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;

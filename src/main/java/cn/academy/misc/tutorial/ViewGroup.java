@@ -8,7 +8,7 @@ package cn.academy.misc.tutorial;
 
 import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.academy.misc.tutorial.client.ViewRenderEvent;
-import cn.lambdalib.cgui.gui.Widget;
+import cn.lambdalib2.cgui.gui.Widget;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

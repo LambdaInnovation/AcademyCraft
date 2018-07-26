@@ -9,9 +9,9 @@ package cn.academy.ability.api.registry;
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
-import cn.lambdalib.annoreg.base.RegistrationFieldSimple;
-import cn.lambdalib.annoreg.core.LoadStage;
-import cn.lambdalib.annoreg.core.RegistryTypeDecl;
+import cn.lambdalib2.annoreg.base.RegistrationFieldSimple;
+import cn.lambdalib2.annoreg.core.LoadStage;
+import cn.lambdalib2.annoreg.core.RegistryTypeDecl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -5,9 +5,9 @@ import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.api.context.KeyDelegate.DelegateState
 import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.mc.{Vec3 => MVec3, _}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.mc.{Vec3 => MVec3, _}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
@@ -16,8 +16,8 @@ import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.util.generic.RandUtils._
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.util.generic.RandUtils._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.EntityBlockDustFX
 
@@ -63,8 +63,8 @@ object StormWingContext {
 }
 
 class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
-  import cn.lambdalib.util.mc.MCExtender._
-  import cn.lambdalib.util.generic.RandUtils._
+  import cn.lambdalib2.util.mc.MCExtender._
+  import cn.lambdalib2.util.generic.RandUtils._
   import scala.collection.JavaConversions._
 
   private var currentDir: Option[() => Vec3] = None

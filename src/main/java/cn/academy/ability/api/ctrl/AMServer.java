@@ -7,7 +7,7 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;

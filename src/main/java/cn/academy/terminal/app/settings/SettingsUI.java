@@ -7,16 +7,16 @@
 package cn.academy.terminal.app.settings;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
-import cn.lambdalib.cgui.gui.CGuiScreen;
-import cn.lambdalib.cgui.gui.Widget;
-import cn.lambdalib.cgui.gui.WidgetContainer;
-import cn.lambdalib.cgui.gui.component.ElementList;
-import cn.lambdalib.cgui.gui.component.TextBox;
-import cn.lambdalib.cgui.gui.component.VerticalDragBar;
-import cn.lambdalib.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.lambdalib.cgui.xml.CGUIDocument;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.cgui.gui.CGuiScreen;
+import cn.lambdalib2.cgui.gui.Widget;
+import cn.lambdalib2.cgui.gui.WidgetContainer;
+import cn.lambdalib2.cgui.gui.component.ElementList;
+import cn.lambdalib2.cgui.gui.component.TextBox;
+import cn.lambdalib2.cgui.gui.component.VerticalDragBar;
+import cn.lambdalib2.cgui.gui.component.VerticalDragBar.DraggedEvent;
+import cn.lambdalib2.cgui.xml.CGUIDocument;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

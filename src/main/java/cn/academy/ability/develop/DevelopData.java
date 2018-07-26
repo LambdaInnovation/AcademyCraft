@@ -7,13 +7,13 @@
 package cn.academy.ability.develop;
 
 import cn.academy.ability.develop.action.IDevelopAction;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.s11n.SerializeDynamic;
-import cn.lambdalib.s11n.SerializeIncluded;
-import cn.lambdalib.s11n.SerializeNullable;
-import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.EntityData;
-import cn.lambdalib.util.datapart.RegDataPart;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.s11n.SerializeDynamic;
+import cn.lambdalib2.s11n.SerializeIncluded;
+import cn.lambdalib2.s11n.SerializeNullable;
+import cn.lambdalib2.util.datapart.DataPart;
+import cn.lambdalib2.util.datapart.EntityData;
+import cn.lambdalib2.util.datapart.RegDataPart;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 

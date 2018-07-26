@@ -8,12 +8,12 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.TileGeneratorBase;
 import cn.academy.energy.client.render.block.RenderCatEngine;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegTileEntity;
-import cn.lambdalib.s11n.network.TargetPoints;
-import cn.lambdalib.s11n.network.NetworkMessage;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.util.helper.TickScheduler;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegTileEntity;
+import cn.lambdalib2.s11n.network.TargetPoints;
+import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.util.helper.TickScheduler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

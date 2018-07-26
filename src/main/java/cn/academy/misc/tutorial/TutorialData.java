@@ -7,16 +7,16 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegPreInitCallback;
-import cn.lambdalib.s11n.SerializeIncluded;
-import cn.lambdalib.s11n.nbt.NBTS11n;
-import cn.lambdalib.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib.util.datapart.DataPart;
-import cn.lambdalib.util.datapart.EntityData;
-import cn.lambdalib.util.datapart.RegDataPart;
-import cn.lambdalib.util.generic.RandUtils;
-import cn.lambdalib.util.helper.TickScheduler;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegPreInitCallback;
+import cn.lambdalib2.s11n.SerializeIncluded;
+import cn.lambdalib2.s11n.nbt.NBTS11n;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.util.datapart.DataPart;
+import cn.lambdalib2.util.datapart.EntityData;
+import cn.lambdalib2.util.datapart.RegDataPart;
+import cn.lambdalib2.util.generic.RandUtils;
+import cn.lambdalib2.util.helper.TickScheduler;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.item.EntityItem;

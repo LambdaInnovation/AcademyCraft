@@ -6,9 +6,9 @@ import java.nio.file.{Files, StandardCopyOption}
 import javax.imageio.ImageIO
 
 import cn.academy.core.{AcademyCraft, Resources}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.{RegInitCallback, RegPreInitCallback}
-import cn.lambdalib.util.generic.RegistryUtils
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.{RegInitCallback, RegPreInitCallback}
+import cn.lambdalib2.util.generic.RegistryUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory
 import cpw.mods.fml.common.FMLCommonHandler

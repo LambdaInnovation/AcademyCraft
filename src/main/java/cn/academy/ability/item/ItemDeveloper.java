@@ -11,7 +11,7 @@ import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.PortableDevData;
 import cn.academy.energy.template.ItemEnergyBase;
-import cn.lambdalib.annoreg.mc.RegItem;
+import cn.lambdalib2.annoreg.mc.RegItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

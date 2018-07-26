@@ -10,8 +10,8 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.client.TerminalUI;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.util.client.auxgui.AuxGuiHandler;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.util.client.auxgui.AuxGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

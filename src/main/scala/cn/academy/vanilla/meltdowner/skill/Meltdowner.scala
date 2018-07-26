@@ -16,12 +16,12 @@ import cn.academy.core.client.sound.FollowEntitySound
 import cn.academy.core.util.RangedRayDamage
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.generic.VecUtils
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.Raytrace
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.MathUtils
+import cn.lambdalib2.util.generic.VecUtils
+import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.mc.Raytrace
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import net.minecraft.entity.Entity
@@ -29,9 +29,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.Vec3
-import cn.lambdalib.util.generic.MathUtils.lerpf
-import cn.lambdalib.util.generic.RandUtils.ranged
-import cn.lambdalib.util.generic.RandUtils.rangei
+import cn.lambdalib2.util.generic.MathUtils.lerpf
+import cn.lambdalib2.util.generic.RandUtils.ranged
+import cn.lambdalib2.util.generic.RandUtils.rangei
 
 /**
   * @author WeAthFolD

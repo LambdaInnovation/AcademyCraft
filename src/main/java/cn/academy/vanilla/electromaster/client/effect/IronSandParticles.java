@@ -1,10 +1,10 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.core.Resources;
-import cn.lambdalib.particle.Particle;
-import cn.lambdalib.particle.ParticleFactory;
-import cn.lambdalib.util.entityx.MotionHandler;
-import cn.lambdalib.util.generic.RandUtils;
+import cn.lambdalib2.particle.Particle;
+import cn.lambdalib2.particle.ParticleFactory;
+import cn.lambdalib2.util.entityx.MotionHandler;
+import cn.lambdalib2.util.generic.RandUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

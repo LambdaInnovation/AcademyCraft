@@ -6,8 +6,8 @@
 */
 package cn.academy.crafting;
 
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegWorldGen;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;

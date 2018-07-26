@@ -1,7 +1,7 @@
 package cn.academy.misc.tutorial;
 
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.FMLCommonHandler;

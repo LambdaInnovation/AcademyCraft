@@ -14,10 +14,10 @@ import cn.academy.ability.api.context.{ClientRuntime, Context}
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.core.network.NetworkManager
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib.util.helper.Motion3D
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace, WorldUtils}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
+import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
@@ -39,7 +39,7 @@ object SBContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import SBContext._
 

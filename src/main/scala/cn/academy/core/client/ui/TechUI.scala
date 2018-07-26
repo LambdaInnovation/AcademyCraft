@@ -7,29 +7,29 @@ import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTil
 import cn.academy.energy.api.event.node.{LinkUserEvent, UnlinkUserEvent}
 import cn.academy.energy.api.event.wen.{LinkNodeEvent, UnlinkNodeEvent}
 import cn.academy.energy.internal.{NodeConn, WirelessNet}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
-import cn.lambdalib.cgui.gui.{CGuiScreenContainer, Widget}
-import cn.lambdalib.cgui.gui.component.ProgressBar.Direction
-import cn.lambdalib.cgui.gui.component._
-import cn.lambdalib.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
-import cn.lambdalib.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib.cgui.xml.CGUIDocument
-import cn.lambdalib.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib.util.generic.MathUtils
-import cn.lambdalib.util.helper.{Color, GameTimer}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
+import cn.lambdalib2.cgui.gui.{CGuiScreenContainer, Widget}
+import cn.lambdalib2.cgui.gui.component.ProgressBar.Direction
+import cn.lambdalib2.cgui.gui.component._
+import cn.lambdalib2.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
+import cn.lambdalib2.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
+import cn.lambdalib2.util.client.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.generic.MathUtils
+import cn.lambdalib2.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.inventory.{Container, Slot}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
-import cn.lambdalib.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.ScalaCGUI._
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge

@@ -3,17 +3,17 @@ package cn.academy.vanilla.generic.client.effect
 import cn.academy.core.Resources
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.util.client.RenderUtils
-import cn.lambdalib.util.helper.GameTimer
-import cn.lambdalib.util.mc.Vec3
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.util.client.RenderUtils
+import cn.lambdalib2.util.helper.GameTimer
+import cn.lambdalib2.util.mc.Vec3
 import cpw.mods.fml.client.registry.RenderingRegistry
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.World
-import cn.lambdalib.util.mc.MCExtender._
+import cn.lambdalib2.util.mc.MCExtender._
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import cn.academy.core.client.Tessellator
 import org.lwjgl.opengl.GL11._

@@ -10,11 +10,11 @@ import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.entityx.EntityCallback
-import cn.lambdalib.util.generic.VecUtils
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.entityx.EntityCallback
+import cn.lambdalib2.util.generic.VecUtils
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{MovingObjectPosition, Vec3}
@@ -35,7 +35,7 @@ object EBContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import EBContext._
 

@@ -11,11 +11,11 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.vanilla.generic.entity.EntityRippleMark
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.particle.Particle
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib.util.mc.{EntitySelectors, Raytrace}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.particle.Particle
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
+import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{MovingObjectPosition, Vec3}
@@ -38,7 +38,7 @@ object JEContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import JEContext._
 
 class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {

@@ -7,8 +7,8 @@
 package cn.academy.support;
 
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.annoreg.core.Registrant;
-import cn.lambdalib.annoreg.mc.RegInitCallback;
+import cn.lambdalib2.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

@@ -8,7 +8,7 @@ package cn.academy.support.bukkit;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.BlockDestroyEvent;
-import cn.lambdalib.annoreg.core.Registrant;
+import cn.lambdalib2.annoreg.core.Registrant;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -42,7 +42,7 @@ object ThunderBoltContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import ThunderBolt._
 import ThunderBoltContext._

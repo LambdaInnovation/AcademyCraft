@@ -8,9 +8,9 @@ package cn.academy.support.ic2;
 
 import cn.academy.ability.api.event.AbilityActivateEvent;
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
-import cn.lambdalib.util.helper.BlockPos;
-import cn.lambdalib.util.mc.IBlockSelector;
-import cn.lambdalib.util.mc.WorldUtils;
+import cn.lambdalib2.util.helper.BlockPos;
+import cn.lambdalib2.util.mc.IBlockSelector;
+import cn.lambdalib2.util.mc.WorldUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

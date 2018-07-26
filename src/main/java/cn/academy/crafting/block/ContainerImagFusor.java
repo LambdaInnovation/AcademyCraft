@@ -12,7 +12,7 @@ import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.block.SlotIFItem;
-import cn.lambdalib.template.container.CleanContainer;
+import cn.lambdalib2.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;

@@ -7,9 +7,9 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.mc._
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.mc._
 import cpw.mods.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
@@ -47,10 +47,10 @@ object PlasmaCannonContext {
 
 import PlasmaCannonContext._
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib.util.mc.MCExtender._
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.mc.MCExtender._
+import cn.lambdalib2.util.generic.MathUtils._
 import scala.collection.JavaConversions._
-import cn.lambdalib.util.generic.RandUtils._
+import cn.lambdalib2.util.generic.RandUtils._
 import net.minecraft.util.Vec3
 
 class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with IStateProvider {

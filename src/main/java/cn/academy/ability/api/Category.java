@@ -8,7 +8,7 @@ package cn.academy.ability.api;
 
 import cn.academy.core.Resources;
 import cn.academy.core.config.ACConfig;
-import cn.lambdalib.util.helper.Color;
+import cn.lambdalib2.util.helper.Color;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;

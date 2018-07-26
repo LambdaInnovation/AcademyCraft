@@ -2,7 +2,7 @@ package cn.academy.energy.block;
 
 import cn.academy.core.container.TechUIContainer;
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib.template.container.CleanContainer;
+import cn.lambdalib2.template.container.CleanContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;

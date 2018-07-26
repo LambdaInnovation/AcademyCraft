@@ -12,9 +12,9 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.helper.Motion3D
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.helper.Motion3D
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.common.gameevent.InputEvent
@@ -43,7 +43,7 @@ object PTContext {
 
 }
 
-import cn.lambdalib.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import PTContext._
 

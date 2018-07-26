@@ -10,11 +10,11 @@ import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.util.generic.MathUtils._
-import cn.lambdalib.util.generic.VecUtils
-import cn.lambdalib.util.mc.{Raytrace, Vec3, WorldUtils}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.generic.VecUtils
+import cn.lambdalib2.util.mc.{Raytrace, Vec3, WorldUtils}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -38,9 +38,9 @@ object VecReflection extends Skill("vec_reflection", 4) {
 }
 
 import VecReflectionContext._
-import cn.lambdalib.util.generic.RandUtils._
+import cn.lambdalib2.util.generic.RandUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib.util.mc.MCExtender._
+import cn.lambdalib2.util.mc.MCExtender._
 import scala.collection.JavaConversions._
 import collection.mutable
 import net.minecraft.util.{Vec3 => MCVec3}

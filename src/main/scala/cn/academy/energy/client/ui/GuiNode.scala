@@ -6,16 +6,16 @@ import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.block.BlockNode.NodeType
 import cn.academy.energy.block.{ContainerNode, TileNode}
 import cn.academy.core.client.ui._
-import cn.lambdalib.annoreg.core.Registrant
-import cn.lambdalib.annoreg.mc.RegInitCallback
-import cn.lambdalib.cgui.ScalaCGUI._
-import cn.lambdalib.cgui.gui.Widget
-import cn.lambdalib.cgui.gui.event.FrameEvent
-import cn.lambdalib.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib.s11n.network.NetworkMessage.Listener
-import cn.lambdalib.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib.util.helper.{Color, GameTimer}
+import cn.lambdalib2.annoreg.core.Registrant
+import cn.lambdalib2.annoreg.mc.RegInitCallback
+import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.cgui.gui.Widget
+import cn.lambdalib2.cgui.gui.event.FrameEvent
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
+import cn.lambdalib2.util.helper.{Color, GameTimer}
 import cpw.mods.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer

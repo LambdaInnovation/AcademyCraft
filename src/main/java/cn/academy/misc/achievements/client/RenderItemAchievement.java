@@ -7,8 +7,8 @@
 package cn.academy.misc.achievements.client;
 
 import cn.academy.misc.achievements.ItemAchievement;
-import cn.lambdalib.util.client.HudUtils;
-import cn.lambdalib.util.client.RenderUtils;
+import cn.lambdalib2.util.client.HudUtils;
+import cn.lambdalib2.util.client.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
