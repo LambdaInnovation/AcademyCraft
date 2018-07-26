@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.app.settings;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGuiScreen;
 import cn.lambdalib2.cgui.gui.Widget;
@@ -32,7 +25,6 @@ import java.util.Map.Entry;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class SettingsUI extends CGuiScreen {
     

@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import java.util.function.Predicate
@@ -11,7 +5,6 @@ import java.util.function.Predicate
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.vanilla.meltdowner.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.event.CollideEvent
 import cn.lambdalib2.util.generic.MathUtils
@@ -165,7 +158,6 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[RBContext])
 class RBContextC(par: RBContext) extends ClientContext(par) {

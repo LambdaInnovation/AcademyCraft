@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.crafting.block;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.ui.GuiImagFusor;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cn.lambdalib2.util.helper.GameTimer;
@@ -28,7 +21,6 @@ import net.minecraft.world.World;
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class BlockImagFusor extends ACBlockContainer {
     
     IIcon bottom, top, mside, side_idle;

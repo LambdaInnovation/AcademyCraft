@@ -1,6 +1,5 @@
 package cn.academy.misc.tutorial;
 
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -21,7 +20,6 @@ import java.util.List;
 /**
  * Factory of various kinds of conditions. Condition can be only created from this class.
  */
-@Registrant
 public class Conditions {
 
     private Conditions() {}

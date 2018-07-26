@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegPreInitCallback;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
@@ -31,7 +24,6 @@ import java.util.HashSet;
 /**
  * This class simply stores activate data that trigger-type condition needs.
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class TutorialData extends DataPart<EntityPlayer> {
 

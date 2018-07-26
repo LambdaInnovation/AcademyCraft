@@ -7,7 +7,6 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.mc._
 import cpw.mods.fml.client.registry.RenderingRegistry
@@ -253,7 +252,6 @@ private class Tornado(val ctx: PlasmaCannonContext)
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[PlasmaCannonContext])
 class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self) {

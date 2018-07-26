@@ -1,16 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.LocalHelper;
 import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.academy.misc.tutorial.client.RecipeHandler;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.util.client.HudUtils;
 import cn.lambdalib2.util.client.RenderUtils;
@@ -35,7 +28,6 @@ import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@Registrant
 public final class ViewGroups {
 
     // This class used a SideOnly hack to make user be able to specify display on init without considering side only issue.

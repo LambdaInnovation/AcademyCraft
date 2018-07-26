@@ -18,7 +18,6 @@ import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivate
 import cn.academy.ability.api.ctrl.KeyDelegates
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
-import cn.lambdalib2.annoreg.core.Registrant
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 
@@ -145,7 +144,6 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecDeviationContext])
 class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) {

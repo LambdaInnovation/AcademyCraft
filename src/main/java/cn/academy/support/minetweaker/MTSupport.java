@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.minetweaker;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.Optional;
 import minetweaker.MineTweakerAPI;
@@ -19,7 +12,6 @@ import net.minecraft.item.ItemStack;
  * 
  * @author 3TUSK
  */
-@Registrant
 public class MTSupport {
 
     private static final String MODID = "MineTweaker3";

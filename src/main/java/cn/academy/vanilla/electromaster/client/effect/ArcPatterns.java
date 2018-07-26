@@ -1,7 +1,6 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -9,7 +8,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author WeAthFolD
  *
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class ArcPatterns {
     

@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.client.app;
 
 import cn.academy.energy.api.WirelessHelper;
@@ -13,7 +7,6 @@ import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.energy.api.event.node.LinkUserEvent;
 import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.internal.WirelessNet;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
@@ -23,7 +16,6 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public class Syncs {
 

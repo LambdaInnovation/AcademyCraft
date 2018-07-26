@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.ability.api.context.ClientRuntime;
@@ -19,7 +13,6 @@ import cn.academy.core.event.ConfigModifyEvent;
 import cn.academy.core.registry.RegACKeyHandler;
 import cn.academy.terminal.app.settings.PropertyElements;
 import cn.academy.terminal.app.settings.SettingsUI;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
@@ -39,7 +32,6 @@ import org.lwjgl.input.Keyboard;
  * Misc key event listener for skill events.
  */
 @SideOnly(Side.CLIENT)
-@Registrant
 public final class ClientHandler {
 
     // Name constants for looking up keys in ACKeyHandler.

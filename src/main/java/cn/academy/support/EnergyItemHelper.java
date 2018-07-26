@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support;
 
 import cn.academy.energy.api.IFItemManager;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +13,6 @@ import java.util.List;
  * 
  * @author WeAthFolD
  */
-@Registrant
 public class EnergyItemHelper {
 
     private static List<EnergyItemManager> supported = new ArrayList<>();

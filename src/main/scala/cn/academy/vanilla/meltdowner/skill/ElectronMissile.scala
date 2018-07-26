@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import cn.academy.ability.api.Skill
@@ -11,7 +5,6 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.{MathUtils, VecUtils}
 import cn.lambdalib2.util.generic.MathUtils._
@@ -143,7 +136,6 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
   
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[EMContext])
 class EMContextC(par: EMContext) extends ClientContext(par) {

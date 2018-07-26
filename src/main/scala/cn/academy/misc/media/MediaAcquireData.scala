@@ -2,7 +2,6 @@ package cn.academy.misc.media
 
 import java.util
 
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.SerializeIncluded
 import cn.lambdalib2.util.datapart.{DataPart, EntityData, RegDataPart}
 import cpw.mods.fml.relauncher.Side
@@ -14,7 +13,6 @@ object MediaAcquireData {
 }
 
 
-@Registrant
 @RegDataPart(value=classOf[EntityPlayer])
 class MediaAcquireData extends DataPart[EntityPlayer] {
 

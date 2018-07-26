@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.block.wind;
 
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.ui.GuiWindGenBase;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -25,7 +18,6 @@ import net.minecraft.world.World;
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class BlockWindGenBase extends ACBlockMulti {
     
     @RegGuiHandler

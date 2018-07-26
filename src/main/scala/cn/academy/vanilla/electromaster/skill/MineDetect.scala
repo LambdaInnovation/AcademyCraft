@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.{AbilityAPIExt, Skill}
@@ -222,7 +216,6 @@ class HandlerRender extends Render {
   override def getEntityTexture(p_110775_1_ : Entity) = null
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 object MDInit {
 

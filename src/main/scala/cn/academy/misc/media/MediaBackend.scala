@@ -2,7 +2,6 @@ package cn.academy.misc.media
 
 import cn.academy.core.AcademyCraft
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.util.datapart.{DataPart, EntityData, RegDataPart}
 import cn.lambdalib2.util.generic.RegistryUtils
 import cn.lambdalib2.util.helper.TickScheduler
@@ -80,7 +79,6 @@ private object MediaBackendHelper {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegDataPart(value=classOf[EntityPlayer], side=Array(Side.CLIENT))
 class MediaBackend extends DataPart[EntityPlayer] {

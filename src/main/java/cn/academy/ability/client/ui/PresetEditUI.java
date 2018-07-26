@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.client.ui;
 
 import cn.academy.ability.api.Controllable;
@@ -13,7 +7,6 @@ import cn.academy.ability.api.data.PresetData;
 import cn.academy.ability.api.data.PresetData.Preset;
 import cn.academy.core.Resources;
 import cn.academy.core.client.ACRenderingHelper;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGui;
 import cn.lambdalib2.cgui.gui.Widget;
@@ -48,7 +41,6 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class PresetEditUI extends GuiScreen {
     

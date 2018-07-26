@@ -6,7 +6,6 @@ import java.nio.file.{Files, StandardCopyOption}
 import javax.imageio.ImageIO
 
 import cn.academy.core.{AcademyCraft, Resources}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.{RegInitCallback, RegPreInitCallback}
 import cn.lambdalib2.util.generic.RegistryUtils
 import com.jcraft.jorbis.VorbisFile
@@ -18,7 +17,6 @@ import net.minecraft.client.renderer.texture.{DynamicTexture, SimpleTexture}
 import net.minecraft.util.{ResourceLocation, StatCollector}
 import net.minecraftforge.common.config.Property
 
-@Registrant
 private object MediaManagerInit {
   import scala.collection.JavaConversions._
 
@@ -200,5 +198,4 @@ abstract class Media(val external: Boolean,
   def displayLength: String = MediaBackend.getDisplayTime(lengthSecs)
 
 }
-
 

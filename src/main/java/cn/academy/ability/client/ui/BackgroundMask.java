@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.client.ui;
 
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.Resources;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.util.client.HudUtils;
 import cn.lambdalib2.util.client.RenderUtils;
 import cn.lambdalib2.util.client.auxgui.AuxGui;
@@ -27,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegAuxGui
 public class BackgroundMask extends AuxGui {

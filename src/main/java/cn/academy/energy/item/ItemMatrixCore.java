@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.item;
 
 import cn.academy.core.item.ACItem;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -21,7 +14,6 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class ItemMatrixCore extends ACItem {
     
     int LEVELS = 3;

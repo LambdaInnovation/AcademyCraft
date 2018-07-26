@@ -1,16 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.OverloadEvent;
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.*;
 import cn.lambdalib2.s11n.network.NetworkS11n;
@@ -44,7 +37,6 @@ import java.util.stream.Stream;
 /**
  * Global manager of {@link Context}. Connections are handled through it.
  */
-@Registrant
 public enum ContextManager {
     instance;
 
@@ -664,4 +656,3 @@ public enum ContextManager {
     }
 
 }
-

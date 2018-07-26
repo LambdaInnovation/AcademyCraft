@@ -1,12 +1,5 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.ctrl;
 
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -19,7 +12,6 @@ import java.util.UUID;
 /**
  * @author EAirPeter
  */
-@Registrant
 @NetworkS11nType
 public class ActionManager {
 

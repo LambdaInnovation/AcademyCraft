@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.block.wind;
 
 import cn.academy.core.block.TileGeneratorBase;
@@ -11,7 +5,6 @@ import cn.academy.energy.IFConstants;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.client.render.block.RenderWindGenBase;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
@@ -29,7 +22,6 @@ import net.minecraft.util.AxisAlignedBB;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {

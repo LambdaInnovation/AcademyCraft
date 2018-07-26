@@ -218,7 +218,6 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
   private val groundBreakProb: Double = 0.3
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[GroundshockContext])
 class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
@@ -271,4 +270,3 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
   }
 
 }
-

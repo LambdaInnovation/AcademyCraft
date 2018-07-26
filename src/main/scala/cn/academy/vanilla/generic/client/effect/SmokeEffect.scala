@@ -3,7 +3,6 @@ package cn.academy.vanilla.generic.client.effect
 import cn.academy.core.Resources
 import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.util.client.RenderUtils
 import cn.lambdalib2.util.helper.GameTimer
@@ -19,7 +18,6 @@ import cn.academy.core.client.Tessellator
 import org.lwjgl.opengl.GL11._
 
 @SideOnly(Side.CLIENT)
-@Registrant
 object SmokeEffect_ {
 
   @RegInitCallback

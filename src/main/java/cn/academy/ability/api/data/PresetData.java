@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.PresetUpdateEvent;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
@@ -42,7 +35,6 @@ import java.util.stream.IntStream;
  * Handles preset.
  * @author WeAthFolD
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class PresetData extends DataPart<EntityPlayer> {
 

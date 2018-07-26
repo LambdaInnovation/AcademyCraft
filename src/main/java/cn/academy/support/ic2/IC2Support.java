@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.ic2;
 
 import cn.academy.core.AcademyCraft;
@@ -13,7 +7,6 @@ import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
 import cn.academy.support.EnergyItemHelper;
 import cn.academy.support.EnergyItemHelper.EnergyItemManager;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.Optional;
@@ -28,7 +21,6 @@ import net.minecraft.item.ItemStack;
  * 
  * @author KSkun
  */
-@Registrant
 public class IC2Support {
     
     /**

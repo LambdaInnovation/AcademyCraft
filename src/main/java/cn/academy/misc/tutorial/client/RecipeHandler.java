@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial.client;
 
 
@@ -12,7 +6,6 @@ import cn.academy.crafting.api.ImagFusorRecipes;
 import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
 import cn.academy.crafting.api.MetalFormerRecipes;
 import cn.academy.energy.client.gui.EnergyUIHelper;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.Widget;
 import cn.lambdalib2.cgui.gui.WidgetContainer;
@@ -49,7 +42,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 // TODO Add ImagFusor and MetalFormer handlers
 @SideOnly(Side.CLIENT)
-@Registrant
 public enum RecipeHandler {
     instance;
 

@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy;
 
 import cn.academy.core.item.ACItem;
@@ -17,7 +11,6 @@ import cn.academy.energy.block.wind.BlockWindGenPillar;
 import cn.academy.energy.item.ItemMatrixCore;
 import cn.academy.energy.template.ItemEnergyBase;
 import cn.academy.support.EnergyItemHelper;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegBlock;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.annoreg.mc.RegItem;
@@ -30,7 +23,6 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegACRecipeNames
 public class ModuleEnergy {
 

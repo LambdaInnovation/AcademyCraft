@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import java.util.function.Predicate
@@ -13,7 +7,6 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.{MathUtils, RandUtils, VecUtils}
@@ -159,7 +152,6 @@ class LSContext(p: EntityPlayer) extends Context(p, LightShield) {
 
 import RandUtils._
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[LSContext])
 class LSContextC(par: LSContext) extends ClientContext(par) {

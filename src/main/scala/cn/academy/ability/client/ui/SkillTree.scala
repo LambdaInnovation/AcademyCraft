@@ -15,7 +15,6 @@ import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, Learn
 import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.{CGui, CGuiScreen, Widget}
 import cn.lambdalib2.cgui.xml.CGUIDocument
@@ -92,7 +91,6 @@ object SkillTreeAppUI {
   }
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 object SkillPosEditorUI {
 
@@ -1165,7 +1163,6 @@ private object Common {
 
 }
 
-@Registrant
 private object NetDelegate {
 
   final val MSG_START_SKILL = "start_skill"

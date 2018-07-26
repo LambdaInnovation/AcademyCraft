@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api;
 
 import cn.academy.ability.api.context.ClientRuntime;
 import cn.academy.ability.api.ctrl.SkillInstance;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
@@ -28,7 +21,6 @@ import net.minecraft.util.ResourceLocation;
  * a specific ability key. Used in Skill for indexing.
  * @author WeAthFolD
  */
-@Registrant
 public abstract class Controllable {
 
     @RegInitCallback

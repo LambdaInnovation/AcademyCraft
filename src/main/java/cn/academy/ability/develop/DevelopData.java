@@ -1,13 +1,6 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.develop;
 
 import cn.academy.ability.develop.action.IDevelopAction;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.SerializeDynamic;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.SerializeNullable;
@@ -17,7 +10,6 @@ import cn.lambdalib2.util.datapart.RegDataPart;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class DevelopData extends DataPart<EntityPlayer> {
 

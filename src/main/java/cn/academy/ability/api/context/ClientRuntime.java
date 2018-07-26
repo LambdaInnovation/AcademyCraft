@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
@@ -17,7 +11,6 @@ import cn.academy.ability.api.event.*;
 import cn.academy.core.ACKeyManager;
 import cn.academy.core.AcademyCraft;
 import cn.academy.terminal.client.TerminalUI;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.util.client.ClientUtils;
@@ -48,7 +41,6 @@ import java.util.stream.Collectors;
  * Handles objects in client that is player-local and dynamic - Ability keys, cooldown and stuff.
  * @author EAirPeter, WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegDataPart(value=EntityPlayer.class, side=Side.CLIENT)
 public class ClientRuntime extends DataPart<EntityPlayer> {

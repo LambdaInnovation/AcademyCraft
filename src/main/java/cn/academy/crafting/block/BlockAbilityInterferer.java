@@ -3,7 +3,6 @@ package cn.academy.crafting.block;
 import cn.academy.ability.block.TileAbilityInterferer;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.ui.GuiAbilityInterferer;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -21,7 +20,6 @@ import net.minecraft.world.World;
 /**
  * Created by Paindar on 2017/3/31.
  */
-@Registrant
 public class BlockAbilityInterferer extends ACBlockContainer
 {
     @RegGuiHandler

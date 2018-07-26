@@ -151,4 +151,3 @@ object GuiAbilityInterferer {
 
   }
 }
-

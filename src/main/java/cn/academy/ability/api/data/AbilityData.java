@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.Category;
@@ -11,7 +5,6 @@ import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.*;
 import cn.academy.core.config.ACConfig;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -33,7 +26,6 @@ import java.util.stream.Collectors;
 /**
  * This DataPart handles player category, player learned skills and respective skill exps.
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class AbilityData extends DataPart<EntityPlayer> {
 

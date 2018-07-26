@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,5 +50,4 @@ public interface Condition extends Predicate<EntityPlayer> {
     }
 
 }
-
 

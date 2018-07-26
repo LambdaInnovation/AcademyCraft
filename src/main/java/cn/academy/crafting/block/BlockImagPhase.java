@@ -1,16 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.crafting.block;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.item.ItemMatterUnit.MatterMaterial;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +25,6 @@ import net.minecraftforge.fluids.BlockFluidClassic;
  * TODO Implement particle and fog effect
  * @author WeAthFolD
  */
-@Registrant
 public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProvider {
     
     public static class ItemPhaseLiq extends ItemBlock {

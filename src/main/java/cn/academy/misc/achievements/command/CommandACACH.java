@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.achievements.command;
 
 import cn.academy.core.command.ACCommand;
 import cn.academy.misc.achievements.ModuleAchievements;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegCommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 /**
  * @author EAirPeter
  */
-@Registrant
 @RegCommand
 public class CommandACACH extends ACCommand {
 

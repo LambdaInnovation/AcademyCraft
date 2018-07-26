@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.block.wind;
 
 import cn.academy.core.tile.TileInventory;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.energy.client.render.block.RenderWindGenMain;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.BlockMulti.SubBlockPos;
@@ -35,7 +28,6 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TileWindGenMain extends TileInventory implements IMultiTile {

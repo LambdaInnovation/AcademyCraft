@@ -1,16 +1,9 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.EntityCallback
 import cn.lambdalib2.util.generic.VecUtils
@@ -81,7 +74,6 @@ class EBContext(p: EntityPlayer) extends Context(p, ElectronBomb) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[EBContext])
 class EBContextC(par: EBContext) extends ClientContext(par) {

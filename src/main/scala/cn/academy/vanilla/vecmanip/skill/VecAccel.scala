@@ -4,7 +4,6 @@ import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.MathUtils
 import cn.lambdalib2.util.mc._
@@ -115,7 +114,6 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecAccelContext])
 class VecAccelContextC(par: VecAccelContext) extends ClientContext(par) {

@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.block;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.energy.client.ui.GuiNode;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.annoreg.mc.gui.RegGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -28,7 +21,6 @@ import net.minecraft.world.World;
  * Wireless Node block.
  * @author WeathFolD
  */
-@Registrant
 public class BlockNode extends ACBlockContainer {
 
     public enum NodeType {

@@ -464,7 +464,6 @@ object LocTeleportData {
 
 }
 
-@Registrant
 @NetworkS11nType
 @SerializeStrategy(strategy=ExposeStrategy.ALL)
 class Location {
@@ -487,7 +486,6 @@ class Location {
   }
 }
 
-@Registrant
 @RegDataPart(value=classOf[EntityPlayer])
 class LocTeleportData extends DataPart[EntityPlayer] {
 

@@ -1,16 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.data;
 
 import cn.academy.ability.api.event.*;
 import cn.academy.ability.api.event.CalcEvent.CPRecoverSpeed;
 import cn.academy.ability.api.event.CalcEvent.OverloadRecoverSpeed;
 import cn.academy.core.config.ACConfig;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.s11n.SerializeIncluded;
@@ -43,7 +36,6 @@ import java.util.Map.Entry;
  *     for example, whether the player is using ability, current CP and overload, etc.
  * @author WeAthFolD
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class CPData extends DataPart<EntityPlayer> {
 

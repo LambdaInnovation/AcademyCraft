@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.crafting;
 
 import cn.academy.core.AcademyCraft;
@@ -19,7 +13,6 @@ import cn.academy.crafting.block.BlockMetalFormer;
 import cn.academy.crafting.block.TileMetalFormer.Mode;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.crafting.world.ACWorldGen;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.*;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
@@ -49,7 +42,6 @@ import java.util.List;
  * 
  * @author WeAthFolD, Shielian, KS
  */
-@Registrant
 @RegACRecipeNames
 public class ModuleCrafting {
     

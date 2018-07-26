@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.teleporter.skill
 
 import java.util.function.Predicate
@@ -14,7 +8,6 @@ import cn.academy.ability.api.data.AbilityData
 import cn.academy.vanilla.teleporter.client.TPParticleFactory
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.{MathUtils, RandUtils, VecUtils}
 import cn.lambdalib2.util.helper.{Color, Motion3D}
@@ -162,7 +155,6 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[STContext])
 class STContextC(par: STContext) extends ClientContext(par) {

@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.block;
 
 import cn.academy.ability.client.render.RenderDeveloperAdvanced;
@@ -12,7 +6,6 @@ import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.core.block.TileReceiverBase;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.IMultiTile;
@@ -34,7 +27,6 @@ import net.minecraft.util.AxisAlignedBB;
  * @author WeAthFolD
  *
  */
-@Registrant
 @RegTileEntity
 public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
 

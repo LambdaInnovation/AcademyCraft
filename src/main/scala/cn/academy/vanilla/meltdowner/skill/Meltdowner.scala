@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import java.util.function.Consumer
@@ -16,7 +10,6 @@ import cn.academy.core.client.sound.FollowEntitySound
 import cn.academy.core.util.RangedRayDamage
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.MathUtils
 import cn.lambdalib2.util.generic.VecUtils
@@ -132,7 +125,6 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MDContext])
 class MDContextC(par: MDContext) extends ClientContext(par) {

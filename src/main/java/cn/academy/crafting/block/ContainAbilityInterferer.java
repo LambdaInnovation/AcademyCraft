@@ -55,4 +55,3 @@ public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterfe
     }
 
 }
-

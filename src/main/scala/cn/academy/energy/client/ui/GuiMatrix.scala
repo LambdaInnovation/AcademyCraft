@@ -6,7 +6,6 @@ import cn.academy.energy.api.event.wen.{ChangePassEvent, CreateNetworkEvent}
 import cn.academy.energy.block.{TileMatrix, ContainerMatrix}
 
 import cn.academy.core.client.ui._
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.Widget
 import cn.lambdalib2.cgui.gui.component.TextBox
@@ -97,7 +96,6 @@ object GuiMatrix2 {
 
 }
 
-@Registrant
 @NetworkS11nType
 @SerializeStrategy(strategy=ExposeStrategy.ALL)
 private class InitData {
@@ -110,7 +108,6 @@ private class InitData {
   def init = ssid != null
 }
 
-@Registrant
 @NetworkS11nType
 private object MatrixNetProxy {
 

@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.electromaster.skill
 
 import cn.academy.ability.api.AbilityAPIExt._
@@ -124,7 +118,6 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ArcGenContext])
 class ArcGenContextC(par: ArcGenContext) extends ClientContext(par) {

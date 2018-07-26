@@ -2,7 +2,6 @@ package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEntity;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.deprecated.ViewOptimize;

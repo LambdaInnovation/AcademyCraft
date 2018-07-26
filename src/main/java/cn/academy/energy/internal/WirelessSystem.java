@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.internal;
 
 import cn.academy.core.AcademyCraft;
@@ -16,7 +10,6 @@ import cn.academy.energy.api.event.wen.*;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWNode;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -28,7 +21,6 @@ import net.minecraft.world.WorldServer;
  * @author WeAthFolD
  *
  */
-@Registrant
 public class WirelessSystem {
     
     @RegEventHandler

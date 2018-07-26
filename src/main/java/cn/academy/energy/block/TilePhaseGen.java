@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.energy.block;
 
 import cn.academy.core.block.TileGeneratorBase;
@@ -12,7 +6,6 @@ import cn.academy.crafting.ModuleCrafting;
 import cn.academy.crafting.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.energy.client.render.block.RenderPhaseGen;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -27,7 +20,6 @@ import net.minecraftforge.fluids.*;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegTileEntity
 @RegTileEntity.HasRender
 public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {

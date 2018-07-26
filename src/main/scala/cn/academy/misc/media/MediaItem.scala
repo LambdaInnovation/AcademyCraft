@@ -4,7 +4,6 @@ import java.util
 
 import cn.academy.core.item.ACItem
 import cn.academy.terminal.TerminalData
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegPreInitCallback
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -16,7 +15,6 @@ import net.minecraft.util.{ChatComponentTranslation, IIcon, WeightedRandomChestC
 import net.minecraft.world.World
 import net.minecraftforge.common.ChestGenHooks
 
-@Registrant
 private object MediaItemInit {
   import net.minecraftforge.common.ChestGenHooks._
 

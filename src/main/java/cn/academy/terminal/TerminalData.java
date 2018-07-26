@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal;
 
 import cn.academy.terminal.event.AppInstalledEvent;
 import cn.academy.terminal.event.TerminalInstalledEvent;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -28,7 +21,6 @@ import java.util.stream.Collectors;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class TerminalData extends DataPart<EntityPlayer> {
 

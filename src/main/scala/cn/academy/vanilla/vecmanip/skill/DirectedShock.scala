@@ -117,7 +117,6 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ShockContext])
 class ShockContextC(par: ShockContext) extends ClientContext(par) {

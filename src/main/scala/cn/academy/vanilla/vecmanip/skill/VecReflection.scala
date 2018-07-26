@@ -10,7 +10,6 @@ import cn.academy.ability.api.event.ReflectEvent
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.MathUtils._
 import cn.lambdalib2.util.generic.VecUtils
@@ -221,7 +220,6 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[VecReflectionContext])
 class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par) {

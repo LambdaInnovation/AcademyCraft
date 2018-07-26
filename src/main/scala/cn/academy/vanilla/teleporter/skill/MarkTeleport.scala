@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.teleporter.skill
 
 import cn.academy.ability.api.Skill
@@ -12,7 +6,6 @@ import cn.academy.ability.api.data.CPData
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.generic.VecUtils
 import cn.lambdalib2.util.helper.Motion3D
@@ -143,7 +136,6 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[MTContext])
 class MTContextC(par: MTContext) extends ClientContext(par) {

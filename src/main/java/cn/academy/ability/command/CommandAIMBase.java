@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.command;
 
 import cn.academy.ability.api.Category;
@@ -13,7 +7,6 @@ import cn.academy.ability.api.cooldown.CooldownData;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.command.ACCommand;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegCommand;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cn.lambdalib2.util.datapart.PlayerDataTag;
@@ -28,7 +21,6 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public abstract class CommandAIMBase extends ACCommand {
 

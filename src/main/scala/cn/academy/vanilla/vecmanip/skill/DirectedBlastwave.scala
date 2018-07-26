@@ -204,7 +204,6 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BlastwaveContext])
 class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {

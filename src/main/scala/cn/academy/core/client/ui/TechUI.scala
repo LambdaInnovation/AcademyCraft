@@ -7,7 +7,6 @@ import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTil
 import cn.academy.energy.api.event.node.{LinkUserEvent, UnlinkUserEvent}
 import cn.academy.energy.api.event.wen.{LinkNodeEvent, UnlinkNodeEvent}
 import cn.academy.energy.internal.{NodeConn, WirelessNet}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
 import cn.lambdalib2.cgui.gui.{CGuiScreenContainer, Widget}
@@ -470,7 +469,6 @@ object TechUI {
 
 }
 
-@Registrant
 @NetworkS11nType
 private class UserResult {
   @SerializeIncluded
@@ -480,7 +478,6 @@ private class UserResult {
   var avail: Array[NodeData] = null
 }
 
-@Registrant
 @NetworkS11nType
 private class NodeResult {
   @SerializeIncluded
@@ -490,7 +487,6 @@ private class NodeResult {
   var avail: Array[MatrixData] = null
 }
 
-@Registrant
 @NetworkS11nType
 @SerializeStrategy(strategy=ExposeStrategy.ALL)
 private class MatrixData {
@@ -506,7 +502,6 @@ private class MatrixData {
   }
 }
 
-@Registrant
 @NetworkS11nType
 @SerializeStrategy(strategy=ExposeStrategy.ALL)
 private class NodeData {
@@ -717,7 +712,6 @@ object WirelessPage {
 
 }
 
-@Registrant
 object WirelessNetDelegate {
   import WirelessPage._
 

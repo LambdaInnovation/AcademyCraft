@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial;
 
 import cn.academy.ability.ModuleAbility;
@@ -18,7 +12,6 @@ import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.terminal.item.ItemApp;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegItem;
 import cn.lambdalib2.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
@@ -32,7 +25,6 @@ import net.minecraft.util.ResourceLocation;
 import static cn.academy.misc.tutorial.Conditions.*;
 import static cn.academy.misc.tutorial.ViewGroups.*;
 
-@Registrant
 @RegACRecipeNames
 public class ModuleTutorial {
     

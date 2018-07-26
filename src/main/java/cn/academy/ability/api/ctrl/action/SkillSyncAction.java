@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.ctrl.action;
 
 import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SyncAction;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import com.google.common.base.Preconditions;
 import net.minecraft.world.World;
@@ -18,7 +11,6 @@ import net.minecraft.world.World;
  * A simple wrapper that setup the commonly used data and sandbox methods for Skill SyncActions.
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public class SkillSyncAction<TSkill extends Skill> extends SyncAction {
     

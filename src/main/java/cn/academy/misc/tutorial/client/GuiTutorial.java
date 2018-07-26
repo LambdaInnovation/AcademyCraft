@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.tutorial.client;
 
 import cn.academy.core.AcademyCraft;
@@ -12,7 +6,6 @@ import cn.academy.core.Resources;
 import cn.academy.misc.tutorial.ACTutorial;
 import cn.academy.misc.tutorial.TutorialRegistry;
 import cn.academy.misc.tutorial.ViewGroup;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.cgui.gui.CGuiScreen;
 import cn.lambdalib2.cgui.gui.Widget;
@@ -49,7 +42,6 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @SideOnly(Side.CLIENT)
 public class GuiTutorial extends CGuiScreen {
 

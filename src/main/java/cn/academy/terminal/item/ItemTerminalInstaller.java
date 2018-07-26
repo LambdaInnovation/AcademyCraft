@@ -1,16 +1,9 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.item;
 
 import cn.academy.core.item.ACItem;
 import cn.academy.terminal.TerminalData;
 import cn.academy.terminal.client.TerminalInstallEffect;
 import cn.academy.terminal.client.TerminalInstallerRenderer;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegItem;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
@@ -26,7 +19,6 @@ import net.minecraft.world.World;
 /**
  * @author WeAthFolD
  */
-@Registrant
 @NetworkS11nType
 public class ItemTerminalInstaller extends ACItem {
     

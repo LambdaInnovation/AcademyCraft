@@ -6,7 +6,6 @@ import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.block.BlockNode.NodeType
 import cn.academy.energy.block.{ContainerNode, TileNode}
 import cn.academy.core.client.ui._
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.gui.Widget
@@ -128,7 +127,6 @@ object GuiNode {
 
 }
 
-@Registrant
 @NetworkS11nType
 object NodeNetworkProxy {
   final val MSG_RENAME = "rename"

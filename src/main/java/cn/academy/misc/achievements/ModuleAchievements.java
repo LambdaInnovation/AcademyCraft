@@ -1,15 +1,8 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.misc.achievements;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.misc.achievements.aches.ACAchievement;
 import cn.academy.misc.achievements.pages.*;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.annoreg.mc.RegItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +11,6 @@ import net.minecraftforge.common.AchievementPage;
 /**
  * @author EAirPeter
  */
-@Registrant
 public final class ModuleAchievements {
 
     private static PageDefault pageDefault;

@@ -4,7 +4,6 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.ACHud
 import cn.academy.core.client.ui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.annoreg.mc.RegInitCallback
 import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.gui.component.VerticalDragBar.DraggedEvent
@@ -190,7 +189,6 @@ class MediaGui extends CGuiScreen {
 }
 
 @SideOnly(Side.CLIENT)
-@Registrant
 private object MediaAuxGui {
   import cn.lambdalib2.cgui.ScalaCGUI._
 

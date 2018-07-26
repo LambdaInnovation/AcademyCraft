@@ -1,12 +1,5 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.crafting;
 
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
@@ -17,7 +10,6 @@ import java.util.Random;
 /**
  * @author WeAthFolD
  */
-@Registrant
 public class PhaseLiquidGenerator implements IWorldGenerator {
 
     @RegWorldGen(1)

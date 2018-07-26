@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.support.rf;
 
 import cn.academy.crafting.ModuleCrafting;
@@ -11,14 +5,12 @@ import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
 import cn.lambdalib2.annoreg.core.RegWithName;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegBlock;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-@Registrant
 public class RFSupport {
     
     /** The convert rate (1IF = <CONV_RATE> RF) */

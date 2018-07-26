@@ -1,14 +1,7 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, RegClientContext}
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayExpert
-import cn.lambdalib2.annoreg.core.Registrant
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -44,7 +37,6 @@ class ExpertMRContext(p: EntityPlayer) extends MRContext(p, MineRayExpert) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ExpertMRContext])
 class ExpertMRContextC(par: ExpertMRContext) extends MRContextC(par) {

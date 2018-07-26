@@ -1,14 +1,7 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.block;
 
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.core.block.ACBlockMulti;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,7 +14,6 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  *
  */
-@Registrant
 public class BlockDeveloper extends ACBlockMulti {
     
     public final DeveloperType type;

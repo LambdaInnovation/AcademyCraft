@@ -2,7 +2,6 @@ package cn.academy.ability.api;
 
 import cn.academy.core.AcademyCraft;
 import cn.academy.core.event.BlockDestroyEvent;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,6 @@ import scala.math.Ordering;
 /**
  * INTERNAL CLASS
  */
-@Registrant
 public class AbilityPipeline {
 
     private AbilityPipeline() {}

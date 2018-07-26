@@ -1,12 +1,5 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability.api.ctrl;
 
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -22,7 +15,6 @@ import java.util.UUID;
  * @deprecated Use {@link cn.academy.ability.api.context.Context} instead.
  */
 @Deprecated
-@Registrant
 @NetworkS11nType
 public abstract class SyncAction {
 

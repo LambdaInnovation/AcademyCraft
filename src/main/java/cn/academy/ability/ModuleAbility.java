@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.ability;
 
 import cn.academy.ability.api.Category;
@@ -15,7 +9,6 @@ import cn.academy.ability.item.ItemInductionFactor;
 import cn.academy.core.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.crafting.block.BlockAbilityInterferer;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegBlock;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
@@ -44,7 +37,6 @@ import static net.minecraftforge.common.ChestGenHooks.*;
  * 
  * @author WeAthFolD
  */
-@Registrant
 @RegACRecipeNames
 public class ModuleAbility {
 

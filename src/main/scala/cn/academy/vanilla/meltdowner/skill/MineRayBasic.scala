@@ -1,14 +1,7 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.meltdowner.skill
 
 import cn.academy.ability.api.context.{ClientRuntime, RegClientContext}
 import cn.academy.vanilla.meltdowner.entity.EntityMineRayBasic
-import cn.lambdalib2.annoreg.core.Registrant
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
@@ -44,7 +37,6 @@ class BasicMRContext(p: EntityPlayer) extends MRContext(p, MineRayBasic) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[BasicMRContext])
 class BasicMRContextC(par: BasicMRContext) extends MRContextC(par) {

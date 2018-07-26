@@ -1,9 +1,3 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.terminal.item;
 
 import cn.academy.core.AcademyCraft;
@@ -11,7 +5,6 @@ import cn.academy.core.item.ACItem;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
 import cn.lambdalib2.annoreg.mc.RegPostInitCallback;
 import cn.lambdalib2.annoreg.mc.RegPreInitCallback;
@@ -31,7 +24,6 @@ import java.util.Map;
  * ItemInstaller app
  * @author WeAthFolD
  */
-@Registrant
 public class ItemApp extends ACItem {
     
     static Map<App, ItemApp> items = new HashMap<>();

@@ -1,12 +1,5 @@
-/**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of the AcademyCraft mod.
-* https://github.com/LambdaInnovation/AcademyCraft
-* Licensed under GPLv3, see project root for more information.
-*/
 package cn.academy.crafting.api;
 
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
@@ -20,7 +13,6 @@ import java.util.List;
  * Recipe holder of ImagFusor.
  * @author WeAthFolD
  */
-@Registrant
 public class ImagFusorRecipes {
 
     public static ImagFusorRecipes INSTANCE = new ImagFusorRecipes();

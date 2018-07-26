@@ -1,9 +1,3 @@
-/**
-  * Copyright (c) Lambda Innovation, 2013-2016
-  * This file is part of the AcademyCraft mod.
-  * https://github.com/LambdaInnovation/AcademyCraft
-  * Licensed under GPLv3, see project root for more information.
-  */
 package cn.academy.vanilla.teleporter.skill
 
 import cn.academy.ability.api.Skill
@@ -13,7 +7,6 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
@@ -112,7 +105,6 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[FRContext])
 class FRContextC(par: FRContext) extends ClientContext(par) {
@@ -179,7 +171,6 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
 
 }
 
-@Registrant
 @NetworkS11nType
 class AttackTarget() {
 

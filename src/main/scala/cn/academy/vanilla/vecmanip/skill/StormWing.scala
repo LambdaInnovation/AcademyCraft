@@ -16,7 +16,6 @@ import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
-import cn.lambdalib2.annoreg.core.Registrant
 import cn.lambdalib2.util.generic.RandUtils._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.EntityBlockDustFX
@@ -276,7 +275,6 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
 
 }
 
-@Registrant
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[StormWingContext])
 class StormWingContextC(par: StormWingContext) extends ClientContext(par) {

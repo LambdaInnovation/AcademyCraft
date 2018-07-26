@@ -2,7 +2,6 @@ package cn.academy.ability.api.cooldown;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.event.CategoryChangeEvent;
-import cn.lambdalib2.annoreg.core.Registrant;
 import cn.lambdalib2.annoreg.mc.RegEventHandler;
 import cn.lambdalib2.annoreg.mc.RegEventHandler.Bus;
 import cn.lambdalib2.annoreg.mc.RegInitCallback;
@@ -30,7 +29,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Handles player cooldown data and update.
  */
-@Registrant
 @RegDataPart(EntityPlayer.class)
 public class CooldownData extends DataPart<EntityPlayer> {
 
