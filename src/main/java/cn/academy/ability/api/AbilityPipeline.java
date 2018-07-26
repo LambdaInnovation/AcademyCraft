@@ -88,15 +88,9 @@ public class AbilityPipeline {
 
         propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");
         propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
-<<<<<<< HEAD
-        propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new int[]{},
-                "The world ids which whitelisted destroying blocks.");
-        propUseMouseWheel = conf.get("generic","useMouseWheel",false,"Whether teleporter can use mouse wheel to control the destination.");
-=======
         propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new String[]{},
                 "The worlds which whitelisted destroying blocks. World IDs, sub folder names and world names are all supported.");
-
->>>>>>> bugfix
+        propUseMouseWheel = conf.get("generic","useMouseWheel",false,"Whether teleporter can use mouse wheel to control the destination.");
         MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
     }
 
