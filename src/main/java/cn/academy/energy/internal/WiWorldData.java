@@ -9,15 +9,16 @@ package cn.academy.energy.internal;
 import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.*;
 import cn.academy.energy.internal.VBlocks.*;
-import cn.lambdalib.util.helper.BlockPos;
-import cn.lambdalib.util.mc.IBlockSelector;
-import cn.lambdalib.util.mc.WorldUtils;
+import cn.lambdalib2.util.BlockPos;
+import cn.lambdalib2.util.IBlockSelector;
+import cn.lambdalib2.util.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedData;
+//import net.minecraft.world.WorldSavedData;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class WiWorldData extends WorldSavedData {
     public static final String ID = "AC_WEN_";
     
     static String getID(World world) {
-        return ID + world.provider.dimensionId;
+        return ID + world.provider.getDimension();
     }
     
     //Set by get method, which should be the ONLY way to access WiWorldData
@@ -46,7 +47,7 @@ public class WiWorldData extends WorldSavedData {
 
         @Override
         public boolean accepts(World world, int x, int y, int z, Block block) {
-            TileEntity te = world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z));
             return te instanceof IWirelessMatrix || te instanceof IWirelessNode;
         }
         

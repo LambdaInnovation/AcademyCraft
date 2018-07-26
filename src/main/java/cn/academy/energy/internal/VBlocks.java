@@ -7,9 +7,10 @@
 package cn.academy.energy.internal;
 
 import cn.academy.energy.api.block.*;
-import cn.lambdalib.util.generic.MathUtils;
+import cn.lambdalib2.util.MathUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -23,9 +24,9 @@ public class VBlocks {
         protected final boolean ignoreChunk;
         
         public VBlock(TileEntity te, boolean _ignoreChunk) {
-            x = te.xCoord;
-            y = te.yCoord;
-            z = te.zCoord;
+            x = te.getPos().getX();
+            y = te.getPos().getY();
+            z = te.getPos().getZ();
             ignoreChunk = _ignoreChunk;
         }
         
@@ -41,7 +42,8 @@ public class VBlocks {
         }
         
         public boolean isLoaded(World world) {
-            return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
+//            return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
+            return world.isChunkGeneratedAt(x >> 4, z >> 4);
         }
         
         public T get(World world) {
@@ -49,10 +51,10 @@ public class VBlocks {
                 return null;
             if(world == null)
                 return null;
-            
+
             world.getChunkProvider().loadChunk(x >> 4, z >> 4);
             
-            TileEntity te = world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
             if(te == null || !isAcceptable(te)) {
                 return null;
             }
