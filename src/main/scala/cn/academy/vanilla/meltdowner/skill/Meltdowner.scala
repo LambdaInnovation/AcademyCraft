@@ -11,20 +11,20 @@ import cn.academy.core.util.RangedRayDamage
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMDRay
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.MathUtils
-import cn.lambdalib2.util.generic.VecUtils
-import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.MathUtils
+import cn.lambdalib2.util.VecUtils
+import cn.lambdalib2.util.Motion3D
 import cn.lambdalib2.util.mc.Raytrace
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
 import net.minecraft.util.Vec3
-import cn.lambdalib2.util.generic.MathUtils.lerpf
-import cn.lambdalib2.util.generic.RandUtils.ranged
-import cn.lambdalib2.util.generic.RandUtils.rangei
+import cn.lambdalib2.util.MathUtils.lerpf
+import cn.lambdalib2.util.RandUtils.ranged
+import cn.lambdalib2.util.RandUtils.rangei
 
 /**
   * @author WeAthFolD

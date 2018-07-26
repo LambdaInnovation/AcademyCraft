@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-//import cn.lambdalib2.util.generic.MathUtils;
+//import cn.lambdalib2.util.MathUtils;
 
 /**
  * @author WeAthFolD

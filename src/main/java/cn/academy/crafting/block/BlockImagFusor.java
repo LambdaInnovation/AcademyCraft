@@ -2,9 +2,9 @@ package cn.academy.crafting.block;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.academy.crafting.client.ui.GuiImagFusor;
-import cn.lambdalib2.util.helper.GameTimer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.GameTimer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;

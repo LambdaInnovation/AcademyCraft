@@ -51,7 +51,7 @@ class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEn
 @SideOnly(Side.CLIENT)
 class WaveEffectRenderer extends Render {
   import org.lwjgl.opengl.GL11._
-  import cn.lambdalib2.util.generic.MathUtils._
+  import cn.lambdalib2.util.MathUtils._
 
   val alphaCurve = new CubicCurve()
   alphaCurve.addPoint(0, 0)

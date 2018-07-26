@@ -4,10 +4,10 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.{ContainerUI, HistElement}
 import cn.academy.energy.block.wind.{ContainerWindGenBase, TileWindGenBase}
 import cn.academy.core.client.ui._
-import cn.lambdalib2.cgui.gui.component.{DrawTexture, TextBox}
-import cn.lambdalib2.cgui.gui.event.FrameEvent
-import cn.lambdalib2.cgui.xml.CGUIDocument
-import cn.lambdalib2.util.helper.Color
+import cn.lambdalib2.cgui.component.{DrawTexture, TextBox}
+import cn.lambdalib2.cgui.event.FrameEvent
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.util.Color
 
 object GuiWindGenBase {
   import cn.lambdalib2.cgui.ScalaCGUI._

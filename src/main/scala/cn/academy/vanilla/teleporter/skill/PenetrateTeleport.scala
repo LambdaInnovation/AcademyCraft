@@ -7,10 +7,10 @@ import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.helper.Motion3D
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.InputEvent
+import cn.lambdalib2.util.Motion3D
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
@@ -36,7 +36,7 @@ object PTContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import PTContext._
 

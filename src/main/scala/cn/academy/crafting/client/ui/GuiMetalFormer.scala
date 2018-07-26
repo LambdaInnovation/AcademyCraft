@@ -5,16 +5,16 @@ import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
 import cn.lambdalib2.cgui.ScalaCGUI._
-import cn.lambdalib2.cgui.gui.Widget
-import cn.lambdalib2.cgui.gui.component.{DrawTexture, ProgressBar}
-import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent}
-import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.component.{DrawTexture, ProgressBar}
+import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent}
+import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib2.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.helper.Color
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.Color
+import net.minecraftforge.fml.relauncher.Side
 
 object GuiMetalFormer {
   import MFNetDelegate._

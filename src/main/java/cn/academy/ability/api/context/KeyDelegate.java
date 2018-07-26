@@ -2,10 +2,10 @@ package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
-import cn.lambdalib2.util.helper.Color;
-import cpw.mods.fml.common.registry.RegistryDelegate.Delegate;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.Color;
+import net.minecraftforge.fml.common.registry.RegistryDelegate.Delegate;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;

@@ -9,8 +9,8 @@ import cn.academy.core.client.ACRenderingHelper
 import cn.academy.core.network.NetworkManager
 import cn.academy.vanilla.meltdowner.entity.EntityMdBall
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.{RandUtils, VecUtils}
+import cn.lambdalib2.util.Motion3D
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
@@ -33,7 +33,7 @@ object SBContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import SBContext._
 

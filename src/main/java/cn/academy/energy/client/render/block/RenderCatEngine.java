@@ -2,8 +2,8 @@ package cn.academy.energy.client.render.block;
 
 import cn.academy.core.Resources;
 import cn.academy.energy.block.TileCatEngine;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.helper.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.GameTimer;
 import cn.academy.core.client.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

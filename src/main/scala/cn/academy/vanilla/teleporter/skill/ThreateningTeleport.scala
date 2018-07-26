@@ -8,8 +8,8 @@ import cn.academy.vanilla.teleporter.client.TPParticleFactory
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.{MathUtils, RandUtils, VecUtils}
-import cn.lambdalib2.util.helper.{Color, Motion3D}
+import cn.lambdalib2.util.{MathUtils, RandUtils, VecUtils}
+import cn.lambdalib2.util.{Color, Motion3D}
 import cn.lambdalib2.util.mc.{BlockSelectors, EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -35,7 +35,7 @@ object TTContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import TTContext._
 

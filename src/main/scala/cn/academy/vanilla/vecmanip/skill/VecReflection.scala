@@ -11,10 +11,10 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.MathUtils._
-import cn.lambdalib2.util.generic.VecUtils
+import cn.lambdalib2.util.MathUtils._
+import cn.lambdalib2.util.VecUtils
 import cn.lambdalib2.util.mc.{Raytrace, Vec3, WorldUtils}
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -37,7 +37,7 @@ object VecReflection extends Skill("vec_reflection", 4) {
 }
 
 import VecReflectionContext._
-import cn.lambdalib2.util.generic.RandUtils._
+import cn.lambdalib2.util.RandUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.lambdalib2.util.mc.MCExtender._
 import scala.collection.JavaConversions._

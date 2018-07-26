@@ -3,7 +3,7 @@ package cn.academy.ability.api.ctrl.action;
 import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.ctrl.SyncAction;
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
+import cn.lambdalib2.s11n.network.NetworkS11nType;
 import com.google.common.base.Preconditions;
 import net.minecraft.world.World;
 

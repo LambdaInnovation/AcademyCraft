@@ -1,8 +1,8 @@
 package cn.academy.crafting.block;
 
 import cn.academy.crafting.client.render.block.RenderImagPhaseLiquid;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
 
 @RegTileEntity

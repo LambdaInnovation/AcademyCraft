@@ -1,10 +1,10 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.core.Resources;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.client.renderhook.PlayerRenderHook;
-import cn.lambdalib2.util.client.shader.GLSLMesh;
-import cn.lambdalib2.util.client.shader.ShaderSimple;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.renderhook.PlayerRenderHook;
+import cn.lambdalib2.util.shader.GLSLMesh;
+import cn.lambdalib2.util.shader.ShaderSimple;
 import cn.lambdalib2.util.deprecated.MeshUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

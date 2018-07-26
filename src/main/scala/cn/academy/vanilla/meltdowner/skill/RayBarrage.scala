@@ -7,8 +7,8 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.vanilla.meltdowner.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.event.CollideEvent
-import cn.lambdalib2.util.generic.MathUtils
-import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.MathUtils
+import cn.lambdalib2.util.Motion3D
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -36,7 +36,7 @@ object RBContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import RBContext._
 

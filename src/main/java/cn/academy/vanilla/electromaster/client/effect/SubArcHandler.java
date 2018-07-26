@@ -1,7 +1,7 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
-import cn.lambdalib2.util.client.RenderUtils;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 

@@ -2,10 +2,10 @@ package cn.academy.core.client.render.ray;
 
 import cn.academy.core.Resources;
 import cn.academy.core.entity.IRay;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.client.shader.ShaderSimple;
-import cn.lambdalib2.util.generic.VecUtils;
-import cn.lambdalib2.util.helper.Color;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.shader.ShaderSimple;
+import cn.lambdalib2.util.VecUtils;
+import cn.lambdalib2.util.Color;
 import cn.academy.core.client.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;

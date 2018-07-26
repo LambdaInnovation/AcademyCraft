@@ -7,23 +7,23 @@ import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTil
 import cn.academy.energy.api.event.node.{LinkUserEvent, UnlinkUserEvent}
 import cn.academy.energy.api.event.wen.{LinkNodeEvent, UnlinkNodeEvent}
 import cn.academy.energy.internal.{NodeConn, WirelessNet}
-import cn.lambdalib2.cgui.gui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
-import cn.lambdalib2.cgui.gui.{CGuiScreenContainer, Widget}
-import cn.lambdalib2.cgui.gui.component.ProgressBar.Direction
-import cn.lambdalib2.cgui.gui.component._
-import cn.lambdalib2.cgui.gui.component.Transform.{HeightAlign, WidthAlign}
-import cn.lambdalib2.cgui.gui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib2.cgui.xml.CGUIDocument
+import cn.lambdalib2.cgui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
+import cn.lambdalib2.cgui.{CGuiScreenContainer, Widget}
+import cn.lambdalib2.cgui.component.ProgressBar.Direction
+import cn.lambdalib2.cgui.component._
+import cn.lambdalib2.cgui.component.Transform.{HeightAlign, WidthAlign}
+import cn.lambdalib2.cgui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
+import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib2.util.client.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.generic.MathUtils
-import cn.lambdalib2.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.util.{HudUtils, RenderUtils}
+import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.util.MathUtils
+import cn.lambdalib2.util.{Color, GameTimer}
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.inventory.{Container, Slot}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation

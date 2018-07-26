@@ -2,11 +2,11 @@ package cn.academy.misc.media
 
 import cn.academy.core.AcademyCraft
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib2.util.datapart.{DataPart, EntityData, RegDataPart}
-import cn.lambdalib2.util.generic.RegistryUtils
-import cn.lambdalib2.util.helper.TickScheduler
+import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
+import cn.lambdalib2.util.ReflectionUtils
+import cn.lambdalib2.util.TickScheduler
 import com.google.common.base.Preconditions
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.audio.{ISound, MusicTicker, SoundHandler, SoundManager}
 import net.minecraft.entity.player.EntityPlayer
@@ -49,10 +49,10 @@ private object MediaBackendHelper {
     if (!init) {
       volumeProperty_ = AcademyCraft.config.get("media_player", "volume", 1.0, "Media Player's volume")
 
-      val fSndManager = RegistryUtils.getObfField(classOf[SoundHandler], "sndManager", "field_147694_f")
+      val fSndManager = ReflectionUtils.getObfField(classOf[SoundHandler], "sndManager", "field_147694_f")
       val sndMgr = fSndManager.get(Minecraft.getMinecraft.getSoundHandler)
 
-      val fSndSystem = RegistryUtils.getObfField(classOf[SoundManager], "sndSystem", "field_148620_e")
+      val fSndSystem = ReflectionUtils.getObfField(classOf[SoundManager], "sndSystem", "field_148620_e")
       fSndSystem.setAccessible(true)
       sndSystem_ = fSndSystem.get(sndMgr).asInstanceOf[SoundSystem]
 
@@ -69,9 +69,9 @@ private object MediaBackendHelper {
   def sndSystem = { checkInit(); sndSystem_ }
 
   def stopVanillaSound() = {
-    val musicTicker: MusicTicker = RegistryUtils.getFieldInstance(classOf[Minecraft],
+    val musicTicker: MusicTicker = ReflectionUtils.getFieldInstance(classOf[Minecraft],
       Minecraft.getMinecraft, "mcMusicTicker", "field_147126_aw")
-    val playing: ISound = RegistryUtils.getFieldInstance(classOf[MusicTicker], musicTicker, "field_147678_c")
+    val playing: ISound = ReflectionUtils.getFieldInstance(classOf[MusicTicker], musicTicker, "field_147678_c")
     if (playing != null) {
       Minecraft.getMinecraft.getSoundHandler.stopSound(playing)
     }

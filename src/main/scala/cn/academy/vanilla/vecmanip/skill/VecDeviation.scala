@@ -7,7 +7,7 @@ import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.mc.WorldUtils
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -54,7 +54,7 @@ import cn.lambdalib2.util.mc.MCExtender._
 import cn.academy.ability.api.AbilityAPIExt._
 import collection.mutable
 import scala.collection.JavaConversions._
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import VecDeviationContext._
 
 class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {

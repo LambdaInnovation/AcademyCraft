@@ -4,9 +4,9 @@ import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.client.TerminalUI;
 import cn.academy.terminal.registry.AppRegistration.RegApp;
-import cn.lambdalib2.util.client.auxgui.AuxGuiHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.auxgui.AuxGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD

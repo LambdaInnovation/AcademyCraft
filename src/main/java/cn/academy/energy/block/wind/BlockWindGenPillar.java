@@ -2,8 +2,8 @@ package cn.academy.energy.block.wind;
 
 import cn.academy.core.block.ACBlockContainer;
 import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

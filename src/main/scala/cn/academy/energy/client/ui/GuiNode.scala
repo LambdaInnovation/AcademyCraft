@@ -7,14 +7,14 @@ import cn.academy.energy.block.BlockNode.NodeType
 import cn.academy.energy.block.{ContainerNode, TileNode}
 import cn.academy.core.client.ui._
 import cn.lambdalib2.cgui.ScalaCGUI._
-import cn.lambdalib2.cgui.gui.Widget
-import cn.lambdalib2.cgui.gui.event.FrameEvent
+import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.event.FrameEvent
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
-import cn.lambdalib2.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.Side
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.util.{HudUtils, RenderUtils}
+import cn.lambdalib2.util.{Color, GameTimer}
+import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import org.lwjgl.opengl.GL11

@@ -1,16 +1,16 @@
 package cn.academy.terminal.app.settings;
 
 import cn.academy.core.AcademyCraft;
-import cn.lambdalib2.cgui.gui.CGuiScreen;
-import cn.lambdalib2.cgui.gui.Widget;
-import cn.lambdalib2.cgui.gui.WidgetContainer;
-import cn.lambdalib2.cgui.gui.component.ElementList;
-import cn.lambdalib2.cgui.gui.component.TextBox;
-import cn.lambdalib2.cgui.gui.component.VerticalDragBar;
-import cn.lambdalib2.cgui.gui.component.VerticalDragBar.DraggedEvent;
-import cn.lambdalib2.cgui.xml.CGUIDocument;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.CGuiScreen;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.WidgetContainer;
+import cn.lambdalib2.cgui.component.ElementList;
+import cn.lambdalib2.cgui.component.TextBox;
+import cn.lambdalib2.cgui.component.VerticalDragBar;
+import cn.lambdalib2.cgui.component.VerticalDragBar.DraggedEvent;
+import cn.lambdalib2.cgui.loader.CGUIDocument;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;

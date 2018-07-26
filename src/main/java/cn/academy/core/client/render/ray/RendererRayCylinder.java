@@ -1,10 +1,10 @@
 package cn.academy.core.client.render.ray;
 
 import cn.academy.core.entity.IRay;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.client.shader.GLSLMesh;
-import cn.lambdalib2.util.client.shader.ShaderNotex;
-import cn.lambdalib2.util.helper.Color;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.shader.GLSLMesh;
+import cn.lambdalib2.util.shader.ShaderNotex;
+import cn.lambdalib2.util.Color;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 

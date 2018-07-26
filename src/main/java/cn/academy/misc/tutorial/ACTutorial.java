@@ -1,9 +1,9 @@
 package cn.academy.misc.tutorial;
 
 import cn.academy.core.Resources;
-import cn.lambdalib2.util.generic.RegistryUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.ResourceUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -63,9 +63,9 @@ public class ACTutorial {
         final String unknown = "![title]\nUNKNOWN \n![brief]\n![content]\n ";
         try {
             String lang = Minecraft.getMinecraft().gameSettings.language;
-            InputStream stream = RegistryUtils.getResourceStream(location(lang));
+            InputStream stream = ResourceUtils.getResourceStream(location(lang));
             if (stream == null) { // Make en_US the default fallback
-                stream = RegistryUtils.getResourceStream(location("en_US"));
+                stream = ResourceUtils.getResourceStream(location("en_US"));
             }
             if (stream == null) {
                 return unknown;

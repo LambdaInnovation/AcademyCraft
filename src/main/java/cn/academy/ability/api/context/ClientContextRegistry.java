@@ -1,8 +1,8 @@
 package cn.academy.ability.api.context;
 
 import com.google.common.base.Throwables;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Constructor;
 

@@ -2,7 +2,7 @@ package cn.academy.misc.tutorial.client
 
 import cn.academy.core.{AcademyCraft, LocalHelper}
 import cn.academy.misc.tutorial.TutorialData
-import cn.lambdalib2.util.key.KeyManager
+import cn.lambdalib2.input.KeyManager
 import cn.lambdalib2.util.markdown.{GLMarkdownRenderer, MarkdownParser}
 import cn.lambdalib2.util.mc.SideHelper
 

@@ -5,7 +5,7 @@ import cn.academy.ability.api.context._
 import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.vecmanip.client.effect.ParabolaEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.MathUtils
+import cn.lambdalib2.util.MathUtils
 import cn.lambdalib2.util.mc._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
@@ -30,7 +30,7 @@ object VecAccelContext {
 import cn.academy.ability.api.AbilityAPIExt._
 import VecAccelContext._
 import cn.lambdalib2.util.mc.MCExtender._
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import Math._
 
 class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsumptionProvider {

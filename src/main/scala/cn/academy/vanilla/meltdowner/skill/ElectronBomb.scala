@@ -6,7 +6,7 @@ import cn.academy.core.client.ACRenderingHelper
 import cn.academy.vanilla.meltdowner.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.entityx.EntityCallback
-import cn.lambdalib2.util.generic.VecUtils
+import cn.lambdalib2.util.VecUtils
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
@@ -28,7 +28,7 @@ object EBContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import EBContext._
 

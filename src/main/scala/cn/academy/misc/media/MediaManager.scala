@@ -6,11 +6,11 @@ import java.nio.file.{Files, StandardCopyOption}
 import javax.imageio.ImageIO
 
 import cn.academy.core.{AcademyCraft, Resources}
-import cn.lambdalib2.util.generic.RegistryUtils
+import cn.lambdalib2.util.ResourceUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.{DynamicTexture, SimpleTexture}
 import net.minecraft.util.{ResourceLocation, StatCollector}
@@ -40,7 +40,7 @@ private object MediaManagerInit {
     {
       val dest = new File(path, "README.txt").toPath
       try {
-        Files.copy(RegistryUtils.getResourceStream(
+        Files.copy(ResourceUtils.getResourceStream(
           Resources.res("media/readme_template.txt")),
           dest, StandardCopyOption.REPLACE_EXISTING)
       } catch {
@@ -51,7 +51,7 @@ private object MediaManagerInit {
     // Parse default medias.
     for (id <- conf.getStringList("default_medias")) try {
         val dst = new File(path, id + ".ogg").toPath
-        Files.copy(RegistryUtils.getResourceStream(
+        Files.copy(ResourceUtils.getResourceStream(
           Resources.res("media/source/" + id + ".ogg")),
           dst, StandardCopyOption.REPLACE_EXISTING)
 
@@ -142,7 +142,7 @@ private object MediaManagerInit {
   }
 
   def readDefaultConfig() = {
-    val rdr = new InputStreamReader(RegistryUtils.getResourceStream(Resources.res("media/default.conf")))
+    val rdr = new InputStreamReader(ResourceUtils.getResourceStream(Resources.res("media/default.conf")))
     ConfigFactory.parseReader(rdr)
   }
 

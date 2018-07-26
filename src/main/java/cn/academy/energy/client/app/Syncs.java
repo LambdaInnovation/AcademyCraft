@@ -9,8 +9,8 @@ import cn.academy.energy.api.event.wen.LinkNodeEvent;
 import cn.academy.energy.internal.WirelessNet;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType;
-import cpw.mods.fml.relauncher.Side;
+import cn.lambdalib2.s11n.network.NetworkS11nType;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 /**

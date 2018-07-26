@@ -4,15 +4,15 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.ACHud
 import cn.academy.core.client.ui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib2.cgui.gui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib2.cgui.gui.component.VerticalDragBar.DraggedEvent
-import cn.lambdalib2.cgui.gui.component._
-import cn.lambdalib2.cgui.gui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib2.cgui.gui.{CGuiScreen, Widget, WidgetContainer}
-import cn.lambdalib2.cgui.xml.CGUIDocument
-import cn.lambdalib2.util.client.auxgui.AuxGui
-import cn.lambdalib2.util.helper.{Color, GameTimer}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.component.VerticalDragBar.DraggedEvent
+import cn.lambdalib2.cgui.component._
+import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
+import cn.lambdalib2.cgui.{CGuiScreen, Widget, WidgetContainer}
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.util.auxgui.AuxGui
+import cn.lambdalib2.util.{Color, GameTimer}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 
 private object MediaGuiInit {

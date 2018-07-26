@@ -2,9 +2,9 @@ package cn.academy.misc.tutorial;
 
 import cn.academy.misc.tutorial.ACTutorial.Tag;
 import cn.academy.misc.tutorial.client.ViewRenderEvent;
-import cn.lambdalib2.cgui.gui.Widget;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.cgui.Widget;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A view group for tutorial. Provides a tag to be clicked on and a group of sub views.

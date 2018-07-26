@@ -1,11 +1,11 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.core.Resources;
-import cn.lambdalib2.util.client.HudUtils;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.client.auxgui.AuxGui;
-import cn.lambdalib2.util.generic.RandUtils;
-import cn.lambdalib2.util.helper.GameTimer;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.auxgui.AuxGui;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;

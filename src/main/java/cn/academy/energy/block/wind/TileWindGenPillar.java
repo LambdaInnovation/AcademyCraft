@@ -1,8 +1,8 @@
 package cn.academy.energy.block.wind;
 
 import cn.academy.energy.client.render.block.RenderWindGenPillar;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntity;
 
 /**

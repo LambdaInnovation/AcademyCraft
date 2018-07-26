@@ -1,8 +1,8 @@
 package cn.academy.crafting.client.render.block;
 
 import cn.academy.core.Resources;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.helper.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;

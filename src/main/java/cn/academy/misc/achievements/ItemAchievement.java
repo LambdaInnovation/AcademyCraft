@@ -2,8 +2,8 @@ package cn.academy.misc.achievements;
 
 import cn.academy.core.Resources;
 import cn.academy.misc.achievements.client.RenderItemAchievement;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

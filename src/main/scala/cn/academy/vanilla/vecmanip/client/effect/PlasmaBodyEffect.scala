@@ -30,7 +30,7 @@ object PlasmaBodyEffect_ {
 
 class PlasmaBodyEffect(world: World, val ctx: PlasmaCannonContext) extends LocalEntity(world) {
   import collection.mutable
-  import cn.lambdalib2.util.generic.RandUtils._
+  import cn.lambdalib2.util.RandUtils._
 
   case class TrigPar(amp: Float, speed: Float, dphase: Float) {
     def phase(time: Float) = speed * time - dphase

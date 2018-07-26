@@ -3,7 +3,7 @@ package cn.academy.terminal.client;
 import cn.academy.core.Resources;
 import cn.lambdalib2.template.client.render.item.RenderModelItem;
 import cn.lambdalib2.util.deprecated.ItemModelCustom;
-import cn.lambdalib2.util.generic.VecUtils;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 

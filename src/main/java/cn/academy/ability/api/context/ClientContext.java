@@ -1,7 +1,7 @@
 package cn.academy.ability.api.context;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * {@link ClientContext} is attached to a certain context and receives all its messages.

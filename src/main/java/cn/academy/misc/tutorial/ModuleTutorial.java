@@ -13,10 +13,10 @@ import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.ModuleTerminal;
 import cn.academy.terminal.item.ItemApp;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
-import cn.lambdalib2.util.generic.RandUtils;
-import cn.lambdalib2.util.helper.Color;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.Color;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

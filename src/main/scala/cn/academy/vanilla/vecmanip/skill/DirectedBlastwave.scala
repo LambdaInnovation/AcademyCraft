@@ -36,7 +36,7 @@ import MCExtender._
 import cn.academy.vanilla.vecmanip.client.effect.AnimPresets._
 import cn.academy.ability.api.AbilityPipeline._
 import MathUtils._
-import cn.lambdalib2.util.generic.RandUtils._
+import cn.lambdalib2.util.RandUtils._
 import scala.collection.JavaConversions._
 
 class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) with IConsumptionProvider {

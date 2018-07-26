@@ -3,8 +3,8 @@ package cn.academy.ability.api.ctrl;
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.client.ui.CPBar;
 import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 

@@ -4,10 +4,10 @@ import cn.academy.ability.develop.action.IDevelopAction;
 import cn.lambdalib2.s11n.SerializeDynamic;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.SerializeNullable;
-import cn.lambdalib2.util.datapart.DataPart;
-import cn.lambdalib2.util.datapart.EntityData;
-import cn.lambdalib2.util.datapart.RegDataPart;
-import cpw.mods.fml.relauncher.Side;
+import cn.lambdalib2.datapart.DataPart;
+import cn.lambdalib2.datapart.EntityData;
+import cn.lambdalib2.datapart.RegDataPart;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 
 @RegDataPart(EntityPlayer.class)

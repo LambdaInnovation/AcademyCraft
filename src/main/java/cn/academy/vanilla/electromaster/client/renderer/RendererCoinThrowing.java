@@ -2,8 +2,8 @@ package cn.academy.vanilla.electromaster.client.renderer;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityCoinThrowing;
-import cn.lambdalib2.util.client.RenderUtils;
-import cn.lambdalib2.util.helper.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

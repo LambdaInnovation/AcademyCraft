@@ -1,7 +1,7 @@
 package cn.academy.misc.achievements.aches;
 
 import cn.academy.misc.achievements.conds.CondItemCrafted;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

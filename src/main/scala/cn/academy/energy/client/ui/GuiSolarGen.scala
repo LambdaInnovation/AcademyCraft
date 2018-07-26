@@ -4,9 +4,9 @@ import cn.academy.core.Resources
 import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
 import cn.academy.energy.block.ContainerSolarGen
 import cn.academy.energy.block.TileSolarGen.SolarStatus
-import cn.lambdalib2.cgui.gui.event.FrameEvent
-import cn.lambdalib2.cgui.xml.CGUIDocument
-import cn.lambdalib2.util.client.{HudUtils, RenderUtils}
+import cn.lambdalib2.cgui.event.FrameEvent
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.util.{HudUtils, RenderUtils}
 import net.minecraft.client.gui.inventory.GuiContainer
 
 object GuiSolarGen {

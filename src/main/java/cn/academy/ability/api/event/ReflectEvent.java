@@ -1,7 +1,7 @@
 package cn.academy.ability.api.event;
 
 import cn.academy.ability.api.Skill;
-import cpw.mods.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 

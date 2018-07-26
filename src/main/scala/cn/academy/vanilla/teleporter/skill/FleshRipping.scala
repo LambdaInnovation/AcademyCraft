@@ -9,9 +9,9 @@ import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.NetworkS11n.NetworkS11nType
-import cn.lambdalib2.util.generic.{RandUtils, VecUtils}
-import cn.lambdalib2.util.helper.{Color, Motion3D}
+import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.util.{RandUtils, VecUtils}
+import cn.lambdalib2.util.{Color, Motion3D}
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -39,7 +39,7 @@ object FRContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import FRContext._
 
 class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {

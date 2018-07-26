@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import cn.lambdalib2.util.generic.MathUtils;
-//import cn.lambdalib2.util.helper.BlockPos;
+//import cn.lambdalib2.util.MathUtils;
+//import cn.lambdalib2.util.BlockPos;
 //import cn.lambdalib2.util.mc.IBlockSelector;
 //import cn.lambdalib2.util.mc.WorldUtils;
 

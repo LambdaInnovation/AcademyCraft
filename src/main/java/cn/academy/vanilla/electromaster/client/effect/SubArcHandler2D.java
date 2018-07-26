@@ -1,7 +1,7 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.lambdalib2.util.client.HudUtils;
-import cn.lambdalib2.util.client.RenderUtils;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 

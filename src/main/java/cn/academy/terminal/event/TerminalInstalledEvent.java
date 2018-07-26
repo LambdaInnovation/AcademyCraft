@@ -1,6 +1,6 @@
 package cn.academy.terminal.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**

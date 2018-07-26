@@ -9,10 +9,10 @@ import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory
 import cn.academy.vanilla.meltdowner.entity.EntityMdShield
 import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.generic.{MathUtils, RandUtils, VecUtils}
-import cn.lambdalib2.util.helper.Motion3D
+import cn.lambdalib2.util.{MathUtils, RandUtils, VecUtils}
+import cn.lambdalib2.util.Motion3D
 import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -53,7 +53,7 @@ object LSContext {
 
 }
 
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
 import scala.collection.JavaConversions._
 import LightShield._

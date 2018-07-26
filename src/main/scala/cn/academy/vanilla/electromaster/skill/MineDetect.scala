@@ -42,7 +42,7 @@ object MDContext {
 
 import MineDetect._
 import AbilityAPIExt._
-import cn.lambdalib2.util.generic.MathUtils._
+import cn.lambdalib2.util.MathUtils._
 import MDContext._
 
 class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {

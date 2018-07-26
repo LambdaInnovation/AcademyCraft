@@ -2,11 +2,11 @@ package cn.academy.energy.client.gui;
 
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.Resources;
-import cn.lambdalib2.util.client.HudUtils;
-import cn.lambdalib2.util.client.font.IFont;
-import cn.lambdalib2.util.client.font.IFont.Extent;
-import cn.lambdalib2.util.client.font.IFont.FontOption;
-import cn.lambdalib2.util.helper.Color;
+import cn.lambdalib2.util.HudUtils;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.Extent;
+import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.util.Color;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 

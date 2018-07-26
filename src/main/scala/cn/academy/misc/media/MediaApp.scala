@@ -1,7 +1,7 @@
 package cn.academy.misc.media
 
 import cn.academy.terminal.{App, AppEnvironment, AppRegistry}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 
 private object MediaAppInit {
