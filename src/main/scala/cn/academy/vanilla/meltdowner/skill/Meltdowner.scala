@@ -21,7 +21,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MovingObjectPosition
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.Vec3
+import net.minecraft.util.math.Vec3d
 import cn.lambdalib2.util.MathUtils.lerpf
 import cn.lambdalib2.util.RandUtils.ranged
 import cn.lambdalib2.util.RandUtils.rangei
@@ -142,11 +142,11 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_REFLECTED, side=Array(Side.CLIENT))
   private def c_reflected(reflector: Entity) {
-    val playerLook: Vec3 = ctx.player.getLookVec.normalize
+    val playerLook: Vec3d = ctx.player.getLookVec.normalize
     val distance: Double = VecUtils.entityHeadPos(ctx.player).distanceTo(VecUtils.entityHeadPos(reflector))
-    val spawnPos: Vec3 = VecUtils.add(VecUtils.entityHeadPos(ctx.player), VecUtils.multiply(playerLook, distance))
+    val spawnPos: Vec3d = VecUtils.add(VecUtils.entityHeadPos(ctx.player), VecUtils.multiply(playerLook, distance))
     val mo: Motion3D = new Motion3D(reflector, true)
-    mo.setPosition(spawnPos.xCoord, spawnPos.yCoord, spawnPos.zCoord)
+    mo.setPosition(spawnPos.x, spawnPos.y, spawnPos.z)
     val ray: EntityMDRay = new EntityMDRay(ctx.player, mo, 10)
     world.spawnEntityInWorld(ray)
   }
@@ -172,9 +172,9 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
       val r: Double = ranged(0.7, 1)
       val theta: Double = ranged(0, Math.PI * 2)
       val h: Double = ranged(-1.2, 0)
-      val pos: Vec3 = VecUtils.add(VecUtils.vec(ctx.player.posX, ctx.player.posY + (if(ACRenderingHelper.isThePlayer(ctx.player)) 0
-      else 1.6), ctx.player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)))
-      val vel: Vec3 = VecUtils.vec(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03))
+      val pos: Vec3d = VecUtils.add(new Vec3d(ctx.player.posX, ctx.player.posY + (if(ACRenderingHelper.isThePlayer(ctx.player)) 0
+      else 1.6), ctx.player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)))
+      val vel: Vec3d = new Vec3d(ranged(-.03, .03), ranged(.01, .05), ranged(-.03, .03))
       world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(world, pos, vel))
     }
   }

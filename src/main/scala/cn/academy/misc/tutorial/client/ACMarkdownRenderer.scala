@@ -4,7 +4,7 @@ import cn.academy.core.{AcademyCraft, LocalHelper}
 import cn.academy.misc.tutorial.TutorialData
 import cn.lambdalib2.input.KeyManager
 import cn.lambdalib2.util.markdown.{GLMarkdownRenderer, MarkdownParser}
-import cn.lambdalib2.util.mc.SideHelper
+import cn.lambdalib2.util.mc.SideUtils
 
 import scala.collection.Map
 
@@ -31,7 +31,7 @@ class ACMarkdownRenderer extends GLMarkdownRenderer {
 
     if (name == "misakaname") {
       val name = tutLocal.getFormatted("misaka",
-        TutorialData.get(SideHelper.getThePlayer).getMisakaID.asInstanceOf[AnyRef])
+        TutorialData.get(SideUtils.getThePlayer).getMisakaID.asInstanceOf[AnyRef])
       onTextContent(name, Set(MarkdownParser.Strong()))
     }
   }

@@ -55,7 +55,7 @@ public class RendererCoinThrowing extends Render {
             float scale = 0.3F;
             GL11.glScalef(scale, scale, scale);
             GL11.glTranslated(0.5, 0.5, 0);
-            GL11.glRotated((dt * 360.0 / 300.0), etc.axis.xCoord, etc.axis.yCoord, etc.axis.zCoord);
+            GL11.glRotated((dt * 360.0 / 300.0), etc.axis.x, etc.axis.y, etc.axis.z);
             GL11.glTranslated(-0.5, -0.5, 0);
             RenderUtils.drawEquippedItem(0.0625, Resources.TEX_COIN_FRONT, Resources.TEX_COIN_BACK);
         } GL11.glPopMatrix();

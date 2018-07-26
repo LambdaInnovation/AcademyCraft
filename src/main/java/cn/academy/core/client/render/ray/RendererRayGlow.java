@@ -8,7 +8,7 @@ import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.Color;
 import cn.academy.core.client.Tessellator;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL20;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -42,7 +42,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
     }
 
     @Override
-    protected void draw(T ray, Vec3 start, Vec3 end, Vec3 dir) {
+    protected void draw(T ray, Vec3d start, Vec3d end, Vec3d dir) {
         if(RenderUtils.isInShadowPass()) {
             return;
         }
@@ -54,13 +54,13 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
 
         Tessellator t = Tessellator.instance;
         
-        Vec3 look = VecUtils.subtract(end, start).normalize();
+        Vec3d look = VecUtils.subtract(end, start).normalize();
         
         end = VecUtils.add(end, VecUtils.multiply(look, endFix));
         start = VecUtils.add(start, VecUtils.multiply(look, startFix));
         
-        Vec3 mid1 = VecUtils.add(start, VecUtils.multiply(look, width));
-        Vec3 mid2 = VecUtils.add(end, VecUtils.multiply(look, -width));
+        Vec3d mid1 = VecUtils.add(start, VecUtils.multiply(look, width));
+        Vec3d mid2 = VecUtils.add(end, VecUtils.multiply(look, -width));
         
         double preA = color.a;
         color.a = preA * ray.getAlpha() * ray.getGlowAlpha();

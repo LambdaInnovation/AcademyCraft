@@ -54,7 +54,7 @@ public class EntityRayBase extends EntityAdvanced implements IRay {
     }
     
     public void setFromTo(Vec3d from, Vec3d to) {
-        setFromTo(from.xCoord, from.yCoord, from.zCoord, to.xCoord, to.yCoord, to.zCoord);
+        setFromTo(from.x, from.y, from.z, to.x, to.y, to.z);
     }
     
     public void setFromTo(double x0, double y0, double z0, double x1, double y1, double z1) {

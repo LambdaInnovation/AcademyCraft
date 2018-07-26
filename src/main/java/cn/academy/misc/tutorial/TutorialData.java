@@ -79,7 +79,7 @@ public class TutorialData extends DataPart<EntityPlayer> {
             scheduler.every(10).atOnly(Side.SERVER).run(() -> {
                 if (!tutorialAcquired) {
                     EntityPlayer player = getEntity();
-                    player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj,
+                    player.world.spawnEntityInWorld(new EntityItem(player.world,
                             player.posX, player.posY + 1.0, player.posZ,
                             new ItemStack(ModuleTutorial.itemTutorial)));
 

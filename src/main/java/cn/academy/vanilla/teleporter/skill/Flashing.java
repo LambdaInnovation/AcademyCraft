@@ -79,10 +79,10 @@ public class Flashing extends Skill {
 
     private static final Vec3i[] dirs = new Vec3i[] {
             null,
-            VecUtils.vec(0, 0, -1),
-            VecUtils.vec(0, 0, 1),
-            VecUtils.vec(1, 0, 0),
-            VecUtils.vec(-1, 0, 0)
+            new Vec3d(0, 0, -1),
+            new Vec3d(0, 0, 1),
+            new Vec3d(1, 0, 0),
+            new Vec3d(-1, 0, 0)
     };
 
     public static class MainContext extends Context {
@@ -296,7 +296,7 @@ public class Flashing extends Skill {
             dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
             Motion3D mo = new Motion3D(player, true);
-            mo.setMotion(dir.xCoord, dir.yCoord, dir.zCoord);
+            mo.setMotion(dir.x, dir.y, dir.z);
 
             RayTraceResult mop = Raytrace.perform(player.getEntityWorld(), mo.getPosVec(), mo.move(dist).getPosVec(),
                     EntitySelectors.living().and(EntitySelectors.exclude(player)));
@@ -349,7 +349,7 @@ public class Flashing extends Skill {
                 z = mo.pz;
             }
 
-            return VecUtils.vec(x, y, z);
+            return new Vec3d(x, y, z);
         }
 
     }

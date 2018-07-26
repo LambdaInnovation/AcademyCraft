@@ -176,8 +176,8 @@ class LSContextC(par: LSContext) extends ClientContext(par) {
       mo.px += ranged(-s, s)
       mo.py += ranged(-s, s)
       mo.pz += ranged(-s, s)
-      val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.vec(mo.px, mo.py, mo.pz),
-        VecUtils.vec(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)))
+      val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(mo.px, mo.py, mo.pz),
+        new Vec3d(ranged(-.02, .02), ranged(-.01, .05), ranged(-.02, .02)))
       world.spawnEntityInWorld(p)
     }
   }

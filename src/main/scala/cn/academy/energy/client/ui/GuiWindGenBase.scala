@@ -51,7 +51,7 @@ object GuiWindGenBase {
         TechUI.histBuffer(() => tile.getEnergy, tile.bufferSize)
       )
       .seplineInfo()
-      .property("altitude", tile.yCoord)
+      .property("altitude", tile.y)
 
     ret
   }

@@ -13,7 +13,7 @@ import cn.academy.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
 import cn.lambdalib2.util.VecUtils
-import cn.lambdalib2.util.mc.{Raytrace, Vec3, WorldUtils}
+import cn.lambdalib2.util.mc.{Raytrace, Vec3d, WorldUtils}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -42,7 +42,7 @@ import cn.academy.ability.api.AbilityAPIExt._
 import cn.lambdalib2.util.mc.MCExtender._
 import scala.collection.JavaConversions._
 import collection.mutable
-import net.minecraft.util.{Vec3 => MCVec3}
+import net.minecraft.util.{Vec3d => MCVec3}
 import VMSkillHelper._
 
 private object VecReflectionContext {
@@ -51,7 +51,7 @@ private object VecReflectionContext {
 
   def reflect(entity: Entity, player: EntityPlayer): Unit = {
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-    val speed = VecUtils.vec(entity.motionX, entity.motionY, entity.motionZ).lengthVector
+    val speed = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).lengthVector
     val vel = (lookPos - entity.headPosition).normalize * speed
     entity.setVel(vel)
   }
@@ -138,7 +138,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
     fireball.setPosition(source.posX, source.posY, source.posZ)
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
-    val speed = VecUtils.vec(source.motionX, source.motionY, source.motionZ).lengthVector
+    val speed = new Vec3d(source.motionX, source.motionY, source.motionZ).lengthVector
     val vel = (lookPos - source.headPosition).normalize * speed
     fireball.setVel(vel)
     EntityAffection.mark(fireball)
@@ -157,7 +157,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       evt.setCanceled(true)
 
       val dpos = evt.player.headPosition - player.headPosition
-      sendToClient(MSG_EFFECT, player.position + Vec3(0, ranged(0.4, 1.3), 0) + dpos.normalize() * 0.5)
+      sendToClient(MSG_EFFECT, player.position + Vec3d(0, ranged(0.4, 1.3), 0) + dpos.normalize() * 0.5)
     }
   }
 
@@ -258,7 +258,7 @@ class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par
     playSound(point)
   }
 
-  private def playSound(pos: net.minecraft.util.Vec3) = {
+  private def playSound(pos: net.minecraft.util.math.Vec3d) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", 0.5f, 1.0f)
   }
 

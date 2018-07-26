@@ -91,7 +91,7 @@ public class FreqTransmitterUI extends AuxGui {
     
     public FreqTransmitterUI() {
         player = Minecraft.getMinecraft().thePlayer;
-        world = player.worldObj;
+        world = player.world;
         
         LIFMLGameEventDispatcher.INSTANCE.registerKeyInput(keyDispatcher = new KeyEventDispatcher());
         LIFMLGameEventDispatcher.INSTANCE.registerMouseInput(keyDispatcher);

@@ -30,16 +30,16 @@ public class EntityMdRaySmall extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
     }
     
     @Override
     public void onUpdate() {
         super.onUpdate();
-        Particle p = MdParticleFactory.INSTANCE.next(worldObj,
+        Particle p = MdParticleFactory.INSTANCE.next(world,
             new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
-            VecUtils.vec(RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015)));
-        worldObj.spawnEntityInWorld(p);
+            new Vec3d(RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015)));
+        world.spawnEntityInWorld(p);
     }
     
     @Override

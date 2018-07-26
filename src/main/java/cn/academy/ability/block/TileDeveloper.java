@@ -102,7 +102,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
      * SERVER only. Start let the player use the developer, if currently no user is using it.
      */
     public boolean use(EntityPlayer player) {
-        Preconditions.checkState(!player.worldObj.isRemote);
+        Preconditions.checkState(!player.world.isRemote);
 
         if(info.getSubID() != 0) {
             TileDeveloper te = getOrigin();
@@ -135,7 +135,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
                 te.unuse(p);
             }
         } else {
-            if(getWorldObj().isRemote) {
+            if(getWorld().isRemote) {
                 send(MSG_UNUSE, p);
             } else {
                 if(user != null && user.equals(p))
@@ -162,7 +162,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     }
 
     private void send(String channel, Object ...args) {
-        if (getWorldObj().isRemote) {
+        if (getWorld().isRemote) {
             NetworkMessage.sendToServer(this, channel, args);
         } else {
             NetworkMessage.sendToAllAround(TargetPoints.convert(this, 10), this, channel, args);
@@ -224,7 +224,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

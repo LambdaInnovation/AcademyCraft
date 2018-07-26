@@ -182,7 +182,7 @@ class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) 
   }
 
   @Listener(channel=MSG_PLAY, side=Array(Side.CLIENT))
-  private def playSound(pos: net.minecraft.util.Vec3) = {
+  private def playSound(pos: net.minecraft.util.math.Vec3d) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", 0.5f, 1.0f)
   }
 

@@ -13,7 +13,7 @@ import cn.lambdalib2.util.mc.Raytrace
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.{MovingObjectPosition, Vec3}
+import net.minecraft.util.{MovingObjectPosition, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -56,8 +56,8 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
 
   @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
   private def s_execute() = {
-    val dest: Vec3 = getDest(player, ticks)
-    val distance: Float = dest.distanceTo(VecUtils.vec(player.posX, player.posY, player.posZ)).toFloat
+    val dest: Vec3d = getDest(player, ticks)
+    val distance: Float = dest.distanceTo(new Vec3d(player.posX, player.posY, player.posZ)).toFloat
     if(distance < MINIMUM_VALID_DISTANCE) {
       // TODO: Play abort sound
     } else {
@@ -66,7 +66,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       ctx.consumeWithForce(overload, distance * getCPB(exp))
       if(player.isRiding())
         player.mountEntity(null);
-      player.setPositionAndUpdate(dest.xCoord, dest.yCoord, dest.zCoord)
+      player.setPositionAndUpdate(dest.x, dest.y, dest.z)
       val expincr: Float = 0.00018f * distance
       ctx.addSkillExp(expincr)
       player.fallDistance = 0
@@ -87,7 +87,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
     */
   def getCPB(exp: Float): Float = lerpf(12, 4, exp)
 
-  def getDest(player: EntityPlayer, ticks: Int): Vec3 = {
+  def getDest(player: EntityPlayer, ticks: Int): Vec3d = {
     val cpData: CPData = CPData.get(player)
     val dist: Double = getMaxDist(ctx.getSkillExp, cpData.getCP, ticks)
     val mop: MovingObjectPosition = Raytrace.traceLiving(player, dist)
@@ -95,9 +95,9 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
     var y: Double = .0
     var z: Double = .0
     if(mop != null) {
-      x = mop.hitVec.xCoord
-      y = mop.hitVec.yCoord
-      z = mop.hitVec.zCoord
+      x = mop.hitVec.x
+      y = mop.hitVec.y
+      z = mop.hitVec.z
       if(mop.typeOfHit == MovingObjectType.BLOCK) {
         mop.sideHit match {
           case 0 =>
@@ -122,7 +122,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
           val hx: Int = x.toInt
           val hy: Int = (y + 1).toInt
           val hz: Int = z.toInt
-          if(!player.worldObj.isAirBlock(hx, hy, hz)) y -= 1.25
+          if(!player.world.isAirBlock(hx, hy, hz)) y -= 1.25
         }
       } else y += mop.entityHit.getEyeHeight
     } else {
@@ -131,7 +131,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       y = mo.py
       z = mo.pz
     }
-    VecUtils.vec(x, y, z)
+    new Vec3d(x, y, z)
   }
 
 }
@@ -147,7 +147,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
   private def l_start() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
-      player.worldObj.spawnEntityInWorld(mark)
+      player.world.spawnEntityInWorld(mark)
     }
   }
 
@@ -157,7 +157,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
 
     ticks += 1
     val dest = par.getDest(player, ticks)
-    if(isLocal) mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord)
+    if(isLocal) mark.setPosition(dest.x, dest.y, dest.z)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))

@@ -64,7 +64,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     // TODO: Improve the fomula?
     public double getSimulatedGeneration() {
         if(shouldGenerate()) {
-            int y = mainTile.yCoord;
+            int y = mainTile.y;
             double heightFactor = MathUtils.lerp(0.5, 1, 
                 MathUtils.clampd(0, 1, (y - 70.0) / 90.0));
             return heightFactor * MAX_GENERATION_SPEED;
@@ -135,7 +135,7 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }
@@ -147,9 +147,9 @@ public class TileWindGenBase extends TileGeneratorBase implements IMultiTile {
         TileWindGenMain mainTile;
         Completeness comp;
         
-        for(int y = yCoord + 2; ; ++y) {
-            TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
-            Block block = worldObj.getBlock(xCoord, y, zCoord);
+        for(int y = y + 2; ; ++y) {
+            TileEntity te = world.getTileEntity(x, y, z);
+            Block block = world.getBlock(x, y, z);
 
             if(block == ModuleEnergy.windgenPillar) {
                 ++pillars;

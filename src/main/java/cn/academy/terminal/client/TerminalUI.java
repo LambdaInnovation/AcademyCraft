@@ -224,7 +224,7 @@ public class TerminalUI extends AuxGui {
 
     @SubscribeEvent
     public void _onAppInstalled(AppInstalledEvent evt) {
-        if (SideHelper.isClient()) {
+        if (SideUtils.isClient()) {
             updateAppList(TerminalData.get(Minecraft.getMinecraft().thePlayer));
         }
     }

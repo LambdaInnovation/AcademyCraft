@@ -173,7 +173,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
 
         @SubscribeEvent
         public void onCategoryChange(CategoryChangeEvent evt) {
-            if (!evt.player.worldObj.isRemote) {
+            if (!evt.player.world.isRemote) {
                 CooldownData.of(evt.player).clear();
             }
         }

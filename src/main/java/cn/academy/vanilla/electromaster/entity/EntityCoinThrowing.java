@@ -88,7 +88,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public EntityPlayer player;
     
     public ItemStack stack;
-    public Vec3 axis;
+    public Vec3d axis;
     public boolean isSync = false;
     
     public EntityCoinThrowing(World world) {
@@ -112,9 +112,9 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public void onUpdate() {
         if (getEntityWorld().isRemote && isSync)
             setDead();
-        //if(!worldObj.isRemote || isSync)
+        //if(!world.isRemote || isSync)
             //syncer.update();
-        //System.out.println(initHt + " " + player + " " + worldObj.isRemote);
+        //System.out.println(initHt + " " + player + " " + world.isRemote);
         super.onUpdate();
     }
     
@@ -124,7 +124,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
         this.addMotionHandler(rb);
         this.addMotionHandler(new KeepPosition());
         this.motionY += INITVEL;
-        axis = Vec3.createVectorHelper(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
+        axis = new Vec3d(.1 + rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
         this.setSize(0.2F, 0.2F);
     }
     
@@ -142,7 +142,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
                 ;
             } else {
                 //if fail...
-                worldObj.spawnEntityInWorld(new EntityItem(worldObj, player.posX, player.posY
+                world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY
                     + yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
             }
         }
@@ -172,7 +172,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         setDead();
-        getEntityWorld().spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(
+        getEntityWorld().spawnEntityInWorld(new EntityItem(world, posX, posY, posZ, new ItemStack(
                 ModuleVanilla.coin)));
     }
 

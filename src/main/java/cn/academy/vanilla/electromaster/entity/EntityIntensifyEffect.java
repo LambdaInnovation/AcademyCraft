@@ -47,7 +47,7 @@ public class EntityIntensifyEffect extends EntitySurroundArc {
                     double phi = RandUtils.ranged(0.5, 0.6);
                     double theta = RandUtils.ranged(0, Math.PI * 2);
                     SubArc arc = arcHandler.generateAt(
-                        VecUtils.vec(phi * Math.sin(theta), ht, phi * Math.cos(theta)));
+                        new Vec3d(phi * Math.sin(theta), ht, phi * Math.cos(theta)));
                     arc.life = 3;
                 }
             }

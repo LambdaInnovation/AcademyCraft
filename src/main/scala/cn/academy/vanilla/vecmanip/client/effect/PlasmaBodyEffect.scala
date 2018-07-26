@@ -159,7 +159,7 @@ class PlasmaBodyRenderer extends Render {
 
       val campos = CameraPosition.getVec3
 
-      val delta = Vec3(x, y, z) - campos
+      val delta = Vec3d(x, y, z) - campos
       val yp = delta.toLook
 
       glPushMatrix()

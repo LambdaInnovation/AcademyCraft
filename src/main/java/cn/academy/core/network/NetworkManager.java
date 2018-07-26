@@ -44,7 +44,7 @@ public class NetworkManager
         }
     }
 
-    public static void sendSBEffectToClient(EntityPlayer speller, Vec3 str, Vec3 end)
+    public static void sendSBEffectToClient(EntityPlayer speller, Vec3d str, Vec3d end)
     {
         List<Entity> list= WorldUtils.getEntities(speller, 25, EntitySelectors.player());
         for(Entity e:list)

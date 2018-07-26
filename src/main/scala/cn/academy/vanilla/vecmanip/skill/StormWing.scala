@@ -7,11 +7,11 @@ import cn.academy.ability.api.context._
 import cn.academy.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.mc.{Vec3 => MVec3, _}
+import cn.lambdalib2.util.mc.{Vec3d => MVec3, _}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{ResourceLocation, Vec3}
+import net.minecraft.util.{ResourceLocation, Vec3d}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.api.AbilityAPIExt._
@@ -66,7 +66,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   import cn.lambdalib2.util.RandUtils._
   import scala.collection.JavaConversions._
 
-  private var currentDir: Option[() => Vec3] = None
+  private var currentDir: Option[() => Vec3d] = None
   private var applying: Boolean = false
   private var keyid: Int = -1
 
@@ -82,7 +82,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   }
 
   @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
-  private def l_keyDown(dir: () => Vec3, _keyid: Int) = if (state == STATE_ACTIVE) {
+  private def l_keyDown(dir: () => Vec3d, _keyid: Int) = if (state == STATE_ACTIVE) {
     currentDir = Some(dir)
     keyid = _keyid
     l_syncState()
@@ -202,7 +202,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     val rt = clientRuntime()
 
     @SideOnly(Side.CLIENT)
-    def defkey(idx: Int, key: Int, dirFactory: () => Vec3) = {
+    def defkey(idx: Int, key: Int, dirFactory: () => Vec3d) = {
       rt.addKey(KEY_GROUP, key, new KeyDelegate {
         override def onKeyDown() = {
           sendToSelf(MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
@@ -243,9 +243,9 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
           def modifier = ranged(0.9, 1.2)
 
           val delta = ent.headPosition - player.position
-          delta.xCoord *= modifier
-          delta.yCoord *= modifier
-          delta.zCoord *= modifier
+          delta.x *= modifier
+          delta.y *= modifier
+          delta.z *= modifier
 
           val move = delta.normalize() * ranged(0.5f, 1.0f)
           ent.setVel(move)

@@ -52,7 +52,7 @@ object StormWingEffect_ {
 
 }
 
-class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.worldObj) {
+class StormWingEffect(val ctx: StormWingContext) extends LocalEntity(ctx.player.world) {
 
   case class SubEffect(eff: TornadoEffect, trans: CompTransform)
   val tornadoList = (0 until 4).map(_ => SubEffect(new TornadoEffect(2, 0.16, dscale=2.0), new CompTransform)).toVector

@@ -41,14 +41,14 @@ public abstract class RendererRayBaseSimple extends Render {
             end = add(start, multiply(new Motion3D(ent, true).getMotionVec(), length));
         start = add(start, vo);
         
-        x += start.xCoord;
-        y += start.yCoord;
-        z += start.zCoord;
+        x += start.x;
+        y += start.y;
+        z += start.z;
         
         Vec3d delta = subtract(end, start);
-        double dxzsq = delta.xCoord * delta.xCoord + delta.zCoord * delta.zCoord;
-        double npitch = MathUtils.toDegrees(Math.atan2(delta.yCoord, Math.sqrt(dxzsq)));
-        double nyaw = MathUtils.toDegrees(Math.atan2(delta.xCoord, delta.zCoord));
+        double dxzsq = delta.x * delta.x + delta.z * delta.z;
+        double npitch = MathUtils.toDegrees(Math.atan2(delta.y, Math.sqrt(dxzsq)));
+        double nyaw = MathUtils.toDegrees(Math.atan2(delta.x, delta.z));
         
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-90 + nyaw, 0, 1, 0);

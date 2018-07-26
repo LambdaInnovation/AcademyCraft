@@ -149,7 +149,7 @@ public class Context implements IMessageDelegate {
     }
 
     protected World world() {
-        return player.worldObj;
+        return player.world;
     }
 
     protected void debug(Object message) {

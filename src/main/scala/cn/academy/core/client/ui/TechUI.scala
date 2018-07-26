@@ -612,7 +612,7 @@ object WirelessPage {
   def nodePage(node: TileNode): Page = {
     val ret = WirelessPage()
 
-    val world = node.getWorldObj
+    val world = node.getWorld
 
     def rebuild(): Unit = {
       def newFuture() = Future.create((_: Boolean) => rebuild())
@@ -651,7 +651,7 @@ object WirelessPage {
   def userPage(user: TileUser): Page = {
     val ret = WirelessPage()
 
-    val world = user.getWorldObj
+    val world = user.getWorld
 
     def rebuild(): Unit = {
       def newFuture() = Future.create((result: Boolean) => rebuild())
@@ -724,17 +724,17 @@ object WirelessNetDelegate {
     def cvt(conn: NodeConn) = {
       val tile = conn.getNode.asInstanceOf[TileNode]
       val ret = new NodeData
-      ret.x = tile.xCoord
-      ret.y = tile.yCoord
-      ret.z = tile.zCoord
+      ret.x = tile.x
+      ret.y = tile.y
+      ret.z = tile.z
       ret.encrypted = !tile.getPassword.isEmpty
       ret
     }
 
     val linked = Option(WirelessHelper.getNodeConn(user))
 
-    val nodes = WirelessHelper.getNodesInRange(user.getWorldObj,
-      user.xCoord, user.yCoord, user.zCoord)
+    val nodes = WirelessHelper.getNodesInRange(user.getWorld,
+      user.x, user.y, user.z)
       .map(WirelessHelper.getNodeConn)
       .filter(!linked.contains(_))
 
@@ -754,17 +754,17 @@ object WirelessNetDelegate {
       val mat = net.getMatrix.asInstanceOf[TileEntity]
       val ret = new MatrixData()
 
-      ret.x = mat.xCoord
-      ret.y = mat.yCoord
-      ret.z = mat.zCoord
+      ret.x = mat.x
+      ret.y = mat.y
+      ret.z = mat.z
       ret.ssid = net.getSSID
       ret.encrypted = !net.getPassword.isEmpty
 
       ret
     }
 
-    val networks = WirelessHelper.getNetInRange(node.getWorldObj,
-      node.xCoord, node.yCoord, node.zCoord,
+    val networks = WirelessHelper.getNetInRange(node.getWorld,
+      node.x, node.y, node.z,
       node.getRange, 20)
       .filter(!linked.contains(_))
 

@@ -58,7 +58,7 @@ public class EntityBlock extends EntityAdvanced {
      * Server ctor. We use a player parameter to forge the ItemBlock#placeBlockAt function's parameter.
      */
     public EntityBlock(EntityPlayer _player) {
-        this(_player.worldObj);
+        this(_player.world);
         player = _player;
     }
 
@@ -105,7 +105,7 @@ public class EntityBlock extends EntityAdvanced {
         lastYaw = yaw;
         lastPitch = pitch;
 
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             block = Block.getBlockById(dataWatcher.getWatchableObjectShort(BLOCKID));
             metadata = dataWatcher.getWatchableObjectByte(META);
         } else {
@@ -125,22 +125,22 @@ public class EntityBlock extends EntityAdvanced {
 
             @Override
             public void onEvent(CollideEvent event) {
-                if(placeWhenCollide && !worldObj.isRemote && event.result.typeOfHit == MovingObjectType.BLOCK) {
+                if(placeWhenCollide && !world.isRemote && event.result.typeOfHit == MovingObjectType.BLOCK) {
                     int tx = event.result.blockX,
                             ty = event.result.blockY,
                             tz = event.result.blockZ;
 
                     int iter = 10;
                     while (iter --> 0) {
-                        Block hitblock = worldObj.getBlock(tx, ty, tz);
-                        if(!hitblock.isReplaceable(worldObj, tx, ty, tz)) {
+                        Block hitblock = world.getBlock(tx, ty, tz);
+                        if(!hitblock.isReplaceable(world, tx, ty, tz)) {
                             ForgeDirection dir = ForgeDirection.values()[event.result.sideHit];
                             tx += dir.offsetX;
                             ty += dir.offsetY;
                             tz += dir.offsetZ;
                         } else {
                             ((ItemBlock) Item.getItemFromBlock(block)).placeBlockAt(
-                                    new ItemStack(block, 0, metadata), player, worldObj, tx, ty, tz, event.result.sideHit,
+                                    new ItemStack(block, 0, metadata), player, world, tx, ty, tz, event.result.sideHit,
                                     tx, ty, tz, metadata);
                             break;
                         }
@@ -152,12 +152,12 @@ public class EntityBlock extends EntityAdvanced {
 
         });
         
-        if(!worldObj.isRemote && tileEntity != null) {
+        if(!world.isRemote && tileEntity != null) {
             try {
                 NBTTagCompound tag = new NBTTagCompound();
                 tileEntity.writeToNBT(tag);
 
-                NetworkMessage.sendToDimension(worldObj.provider.dimensionId, this, "sync_te",
+                NetworkMessage.sendToDimension(world.provider.dimensionId, this, "sync_te",
                         tileEntity.getClass().getName(), tag);
             } catch(Exception e) {
                 AcademyCraft.log.error("Error syncing te", e);
@@ -221,7 +221,7 @@ public class EntityBlock extends EntityAdvanced {
         try {
             TileEntity te = (TileEntity) Class.forName(className).newInstance();
             te.readFromNBT(initTag);
-            te.setWorldObj(worldObj);
+            te.setWorldObj(world);
             tileEntity = te;
         } catch(Exception e) {
             AcademyCraft.log.error("Unable to sync tileEntity " + className, e);

@@ -69,7 +69,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
         info.update();
 
         if(info.getSubID() == 0) {
-            if(!getWorldObj().isRemote && ++updateTicker == 15) {
+            if(!getWorld().isRemote && ++updateTicker == 15) {
                 updateTicker = 0;
                 this.sync();
             }
@@ -113,7 +113,7 @@ public class TileMatrix extends TileInventory implements IWirelessMatrix, IMulti
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

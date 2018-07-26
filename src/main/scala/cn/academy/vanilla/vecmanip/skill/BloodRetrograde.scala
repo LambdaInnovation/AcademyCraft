@@ -96,14 +96,14 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
       splash.setSize(rangef(1.4f, 1.8f))
 
       splash.setPos(targ.position +
-        Vec3(ranged(-1, 1) * targ.width, ranged(0, 1) * targ.height, ranged(-1, 1) * targ.width) +
+        Vec3d(ranged(-1, 1) * targ.width, ranged(0, 1) * targ.height, ranged(-1, 1) * targ.width) +
         player.lookVector * 0.2)
 
       world.spawnEntityInWorld(splash)
     })
 
     val headPos = targ.position
-    headPos.yCoord += targ.height * 0.6
+    headPos.y += targ.height * 0.6
 
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
       .map(angle => new EntityLook(player.rotationYawHead + rangef(-20, 20), angle).toVec3)

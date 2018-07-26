@@ -103,7 +103,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 
   private def checkGround = {
     val p0 = player.position
-    val p1 = p0 - Vec3(0, 2, 0)
+    val p1 = p0 - Vec3d(0, 2, 0)
 
     val traceResult: TraceResult = Raytrace.perform(world, p0, p1, EntitySelectors.nothing, BlockSelectors.filNothing)
     traceResult match {

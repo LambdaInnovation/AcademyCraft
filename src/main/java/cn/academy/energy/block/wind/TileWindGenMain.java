@@ -95,7 +95,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
                 noObstacle = complete && isNoObstacle();
             }
             
-            if(!getWorldObj().isRemote) {
+            if(!getWorld().isRemote) {
                 if(++updateWait2 == 20) {
                     updateWait2 = 0;
                     NetworkMessage.sendToAllAround(
@@ -151,7 +151,7 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
         int pillars = 0;
         
         for(; state < 2; --y) {
-            Block block = worldObj.getBlock(x, y, z);
+            Block block = world.getBlock(x, y, z);
             if(state == 1) {
                 if(block == ModuleEnergy.windgenPillar) {
                     ++pillars;
@@ -168,9 +168,9 @@ public class TileWindGenMain extends TileInventory implements IMultiTile {
     }
     
     public boolean isNoObstacle() {
-        int x = xCoord, y = yCoord, z = zCoord;
+        int x = x, y = y, z = z;
         InfoBlockMulti info = getBlockInfo();
-        World world = getWorldObj();
+        World world = getWorld();
         List<SubBlockPos> arr = checkAreas[info.getDir().ordinal()];
         for(SubBlockPos sbp : arr) {
             if(world.getBlock(x + sbp.dx, y + sbp.dy, z + sbp.dz).getMaterial() != Material.air)

@@ -1,7 +1,7 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.lambdalib2.util.RandUtils;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class SubArc {
     
     final int templateCount;
     
-    Vec3 pos;
+    Vec3d pos;
     int texID;
     double rotX, rotY, rotZ;
     
@@ -29,7 +29,7 @@ public class SubArc {
     
     public int life = 30;
     
-    public SubArc(Vec3 v, int _templateCount) {
+    public SubArc(Vec3d v, int _templateCount) {
         pos = v;
         templateCount = _templateCount;
         

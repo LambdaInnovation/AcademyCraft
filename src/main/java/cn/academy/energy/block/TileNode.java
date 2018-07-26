@@ -65,7 +65,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     
     @Override
     public void updateEntity() {
-        if(!getWorldObj().isRemote) {
+        if(!getWorld().isRemote) {
             ++updateTicker;
             if(updateTicker == 10) {
                 updateTicker = 0;

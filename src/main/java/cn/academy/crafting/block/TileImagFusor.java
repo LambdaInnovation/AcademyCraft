@@ -115,7 +115,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
 
         if (!isWorking()) {
             // Match the work in server
-            if(!worldObj.isRemote) {
+            if(!world.isRemote) {
                 if(--checkCooldown <= 0) {
                     checkCooldown = 10;
                     if(inventory[SLOT_INPUT] != null) {
@@ -163,14 +163,14 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
         }
         
         // Synchronization
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if(--syncCooldown <= 0) {
                 syncCooldown = SYNC_INTV;
                 cn.academy.core.network.NetworkManager.instance.sendToAllAround(new MessageMachineInfoSync(this), TargetPoints.convert(this, 15));
             }
         }
 
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             updateSounds();
         }
     }
@@ -212,7 +212,7 @@ public class TileImagFusor extends TileReceiverBase implements IFluidHandler, IS
     private void endWorking() {
         if(isWorking()) {
             int drained = tank.drain(currentRecipe.consumeLiquid, true).amount;
-            if(!worldObj.isRemote) {
+            if(!world.isRemote) {
                 inventory[0].stackSize -= currentRecipe.consumeType.stackSize;
                 if(inventory[0].stackSize <= 0)
                     inventory[0] = null;

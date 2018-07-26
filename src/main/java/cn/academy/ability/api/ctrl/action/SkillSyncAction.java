@@ -26,7 +26,7 @@ public class SkillSyncAction<TSkill extends Skill> extends SyncAction {
     @Override
     public void onStart() {
         ctx = AbilityContext.of(player, skill);
-        world = player.worldObj;
+        world = player.world;
     }
 
     /**

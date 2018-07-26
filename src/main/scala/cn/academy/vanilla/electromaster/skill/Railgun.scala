@@ -55,7 +55,7 @@ object Railgun extends Skill("railgun", 4) {
     val spawn = cpData.canUseAbility && pData.getCurrentPreset.hasControllable(this)
 
     if(spawn) {
-      if(SideHelper.isClient) {
+      if(SideUtils.isClient) {
         informDelegate(evt.coin)
       } else {
         NetworkMessage.sendToAllAround(

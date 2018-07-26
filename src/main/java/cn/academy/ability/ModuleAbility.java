@@ -94,7 +94,7 @@ public class ModuleAbility {
         @SubscribeEvent
         public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
             if (event.target != null && event.target.typeOfHit == MovingObjectType.BLOCK) {
-                if (event.player.worldObj.getBlock(event.target.blockX, event.target.blockY,
+                if (event.player.world.getBlock(event.target.blockX, event.target.blockY,
                         event.target.blockZ) instanceof BlockDeveloper)
                     event.setCanceled(true);
             }

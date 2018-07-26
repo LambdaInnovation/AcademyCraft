@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.Vec3
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import org.lwjgl.input.Mouse
 
@@ -59,9 +59,9 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
       terminate()
     }
 
-    val x: Double = dest.pos.xCoord
-    val y: Double = dest.pos.yCoord
-    val z: Double = dest.pos.zCoord
+    val x: Double = dest.pos.x
+    val y: Double = dest.pos.y
+    val z: Double = dest.pos.z
     val distance: Double = player.getDistance(x, y, z)
     val overload: Float = lerpf(80, 50, exp)
     ctx.consumeWithForce(overload, (distance * getConsumption(exp)).toFloat)
@@ -102,7 +102,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
   private def getMaxDistance(exp: Float): Float = lerpf(10, 35, exp)
 
   def getDest: Dest = {
-    val world: World = player.worldObj
+    val world: World = player.world
     var dist: Double = curDist.toDouble
     val cplim: Double = ctx.cpData.getCP / getConsumption(ctx.getSkillExp)
     dist = Math.min(dist, cplim)
@@ -156,7 +156,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
   private def l_spawnMark() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
-      player.worldObj.spawnEntityInWorld(mark)
+      player.world.spawnEntityInWorld(mark)
       FMLCommonHandler.instance.bus.register(this)
     }
   }
@@ -175,7 +175,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
     if(isLocal) {
       val dest: Dest = par.getDest
       mark.available = dest.available
-      mark.setPosition(dest.pos.xCoord, dest.pos.yCoord, dest.pos.zCoord)
+      mark.setPosition(dest.pos.x, dest.pos.y, dest.pos.z)
     }
   }
 
@@ -190,10 +190,10 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
 
 class Dest() {
 
-  var pos: Vec3 = _
+  var pos: Vec3d = _
   var available: Boolean = false
 
-  def this(_pos: Vec3, _available: Boolean) {
+  def this(_pos: Vec3d, _available: Boolean) {
     this()
     pos = _pos
     available = _available

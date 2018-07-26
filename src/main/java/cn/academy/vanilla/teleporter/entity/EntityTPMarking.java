@@ -48,7 +48,7 @@ public class EntityTPMarking extends EntityAdvanced {
             particleFac.setVelocity(RandUtils.ranged(-.03, .03), RandUtils.ranged(0, 0.05),
                     RandUtils.ranged(-.03, .03));
 
-            worldObj.spawnEntityInWorld(particleFac.next(worldObj));
+            world.spawnEntityInWorld(particleFac.next(world));
         }
     }
 

@@ -32,7 +32,7 @@ public class RenderEntityBlock extends Render {
                 Tessellator tes = Tessellator.instance;
                 tes.setColorOpaque_F(1.0F, 1.0F, 1.0F);
                 
-                renderBlocks.blockAccess = e.worldObj;
+                renderBlocks.blockAccess = e.world;
                 {
                     if (Minecraft.isAmbientOcclusionEnabled()) {
                         GL11.glShadeModel(GL11.GL_SMOOTH);

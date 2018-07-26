@@ -88,7 +88,7 @@ public class TileMetalFormer extends TileReceiverBase implements ISidedInventory
     public void update() {
         super.update();
         
-        World world = getWorldObj();
+        World world = getWorld();
         if(!world.isRemote) {
             if(current != null) {
                 // Process recipe

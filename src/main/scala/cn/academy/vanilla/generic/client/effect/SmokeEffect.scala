@@ -5,7 +5,7 @@ import cn.academy.core.client.util.CameraPosition
 import cn.academy.core.entity.LocalEntity
 import cn.lambdalib2.util.RenderUtils
 import cn.lambdalib2.util.GameTimer
-import cn.lambdalib2.util.mc.Vec3
+import cn.lambdalib2.util.mc.Vec3d
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
@@ -27,7 +27,7 @@ object SmokeEffect_ {
       override def doRender(ent : Entity, x : Double, y : Double, z : Double, pt : Float, wtf : Float): Unit = ent match {
         case eff: SmokeEffect =>
           val campos = CameraPosition.getVec3
-          val delta = Vec3(x, y, z) - campos
+          val delta = Vec3d(x, y, z) - campos
           val look = delta.toLook
 
           glEnable(GL_BLEND)

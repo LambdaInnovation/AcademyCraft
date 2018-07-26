@@ -46,7 +46,7 @@ public class RangedRayDamage {
 
         this.motion = new Motion3D(ctx.player, true).move(0.1);
         this.player = ctx.player;
-        this.world = ctx.player.worldObj;
+        this.world = ctx.player.world;
         this.range = _range;
         this.totalEnergy = _energy;
 
@@ -66,18 +66,18 @@ public class RangedRayDamage {
         start = motion.getPosVec();
         slope = motion.getMotionVec();
         
-        Vec3 vp0 = VecUtils.vec(0, 0, 1);
+        Vec3d vp0 = new Vec3d(0, 0, 1);
         vp0.rotateAroundZ(pitch);
         vp0.rotateAroundY(yaw);
         
-        Vec3 vp1 = VecUtils.vec(0, 1, 0);
+        Vec3d vp1 = new Vec3d(0, 1, 0);
         vp1.rotateAroundZ(pitch);
         vp1.rotateAroundY(yaw);
 
         double maxDistance = Double.MAX_VALUE;
         
         /* Apply Entity Damage */ {
-            Vec3 v0 = add(start, add(multiply(vp0, -range), multiply(vp1, -range))),
+            Vec3d v0 = add(start, add(multiply(vp0, -range), multiply(vp1, -range))),
                     v1 = add(start, add(multiply(vp0, range), multiply(vp1, -range))),
                     v2 = add(start, add(multiply(vp0, range), multiply(vp1, range))),
                     v3 = add(start, add(multiply(vp0, -range), multiply(vp1, range))),
@@ -88,8 +88,8 @@ public class RangedRayDamage {
             AxisAlignedBB aabb = WorldUtils.minimumBounds(v0, v1, v2, v3, v4, v5, v6, v7);
 
             Predicate<Entity> areaSelector = target -> {
-                Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
-                Vec3 proj = dv.crossProduct(slope);
+                Vec3d dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+                Vec3d proj = dv.crossProduct(slope);
                 return proj.lengthVector() < range * 1.2;
             };
             List<Entity> targets = WorldUtils.getEntities(world, aabb, entitySelector.and(areaSelector));
@@ -115,13 +115,13 @@ public class RangedRayDamage {
                     if(s * s + t * t > rr * rr)
                         continue;
                     
-                    Vec3 pos = VecUtils.add(start, 
+                    Vec3d pos = VecUtils.add(start, 
                         VecUtils.add(
                             VecUtils.multiply(vp0, s),
                             VecUtils.multiply(vp1, t)));
                     
-                    //int[] coords = { (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord };
-                    int[] coords = { (int)Math.floor( pos.xCoord), (int)Math.floor( pos.yCoord), (int)Math.floor( pos.zCoord)};
+                    //int[] coords = { (int) pos.x, (int) pos.y, (int) pos.z };
+                    int[] coords = { (int)Math.floor( pos.x), (int)Math.floor( pos.y), (int)Math.floor( pos.z)};
                     if(processed.contains(coords))
                         continue;
                     
@@ -139,8 +139,8 @@ public class RangedRayDamage {
 
     }
     
-    private void processLine(int x0, int y0, int z0, Vec3 slope, float energy, double maxDistSq) {
-        Plotter plotter = new Plotter(x0, y0, z0, slope.xCoord, slope.yCoord, slope.zCoord);
+    private void processLine(int x0, int y0, int z0, Vec3d slope, float energy, double maxDistSq) {
+        Plotter plotter = new Plotter(x0, y0, z0, slope.x, slope.y, slope.z);
         int incrs = 0;
         for(int i = 0; i <= maxIncrement && energy > 0; ++i) {
             ++incrs;
@@ -187,7 +187,7 @@ public class RangedRayDamage {
     }
 
     protected boolean attackEntity(Entity target) {
-        Vec3 dv = subtract(vec(target.posX, target.posY, target.posZ), start);
+        Vec3d dv = subtract(vec(target.posX, target.posY, target.posZ), start);
         float dist = Math.min(maxIncrement, (float) dv.crossProduct(slope).lengthVector());
         
         float realDmg = this.startDamage * MathUtils.lerpf(1, 0.2f, dist / maxIncrement);

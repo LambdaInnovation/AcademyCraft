@@ -13,7 +13,7 @@ import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.util.ClientUtils;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.mc.EntitySelectors;
-import cn.lambdalib2.util.mc.SideHelper;
+import cn.lambdalib2.util.mc.SideUtils;
 import cn.lambdalib2.util.mc.WorldUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
@@ -79,7 +79,7 @@ public enum ContextManager {
      * Finds a context of given type that is alive.
      */
     public <T> Optional<T> find(Class<T> type) {
-        if (SideHelper.isClient()) {
+        if (SideUtils.isClient()) {
             Optional<T> test1 = findLocal(type);
             if (test1.isPresent()) return test1;
             return findIn(ClientManager.instance.alive.stream().map(d -> d.ctx), type);
@@ -503,7 +503,7 @@ public enum ContextManager {
 
         @SubscribeEvent
         public void __onCategoryChange(CategoryChangeEvent evt) {
-            if (!evt.player.worldObj.isRemote) {
+            if (!evt.player.world.isRemote) {
                 disposePlayer(evt.player);
             }
         }
@@ -638,7 +638,7 @@ public enum ContextManager {
             @Override
             public Context read(ByteBuf buf) throws ContextException {
                 int serverID = buf.readInt();
-                if (!SideHelper.isClient()) {
+                if (!SideUtils.isClient()) {
                     ServerManager.ContextData data = ServerManager.instance.findOrNull(serverID);
                     if (data != null) return data.ctx;
                     else throw new ContextException("Can't find server context");

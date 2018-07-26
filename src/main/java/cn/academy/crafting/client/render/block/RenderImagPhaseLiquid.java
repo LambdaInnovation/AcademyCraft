@@ -39,7 +39,7 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
             return;
         
         BlockFluidClassic liq = (BlockFluidClassic) te.getBlockType();
-        double distSq = Minecraft.getMinecraft().thePlayer.getDistanceSq(te.xCoord + .5, te.yCoord + .5, te.zCoord + .5);
+        double distSq = Minecraft.getMinecraft().thePlayer.getDistanceSq(te.x + .5, te.y + .5, te.z + .5);
         double alpha = 1 / (1 + 0.2 * Math.pow(distSq, 0.5));
         
         if(alpha < 1E-1)
@@ -59,8 +59,8 @@ public class RenderImagPhaseLiquid extends TileEntitySpecialRenderer {
         
         RenderHelper.disableStandardItemLighting();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.defaultTexUnit, 240f, 240f);
-        double ht = 1.2 * Math.sqrt(rbf.getFluidHeightForRender(te.getWorldObj(), 
-                te.xCoord, te.yCoord, te.zCoord,
+        double ht = 1.2 * Math.sqrt(rbf.getFluidHeightForRender(te.getWorld(), 
+                te.x, te.y, te.z,
                 (BlockFluidBase) te.getBlockType()));
         
         

@@ -2,7 +2,7 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.lambdalib2.util.RenderUtils;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
@@ -26,7 +26,7 @@ public class SubArcHandler {
         arcs = _arcs;
     }
     
-    public SubArc generateAt(Vec3 pos) {
+    public SubArc generateAt(Vec3d pos) {
         SubArc sa = new SubArc(pos, arcs.length);
         sa.frameRate = frameRate;
         sa.switchRate = switchRate;

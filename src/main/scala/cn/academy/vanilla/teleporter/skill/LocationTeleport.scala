@@ -42,7 +42,7 @@ private object LTNetDelegate {
   @Listener(channel=MSG_ADD, side=Array(Side.SERVER))
   private def hAdd(player: EntityPlayer, name: String, future: Future[util.List[Location]]) = {
     val data = LocTeleportData(player)
-    data.add(name, player.worldObj.provider.dimensionId,
+    data.add(name, player.world.provider.dimensionId,
       (player.posX.toFloat, player.posY.toFloat, player.posZ.toFloat))
     future.sendResult(new util.ArrayList(data.locations))
   }
@@ -137,7 +137,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       e.setPositionAndRotation(dest.x + dx, dest.y + dy, dest.z + dz, e.rotationYaw, e.rotationPitch);
     })
 
-    player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
+    player.world.playSoundEffect(player.posX, player.posY, player.posZ,
       "academy:tp.tp", 0.5f, 1.0f)
 
     val dist = player.getDistance(dest.x, dest.y, dest.z)
@@ -149,7 +149,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     TPSkillHelper.incrTPCount(player)
   }
 
-  private def isCrossDim(player: EntityPlayer, dest: Location) = player.worldObj.provider.dimensionId != dest.dim
+  private def isCrossDim(player: EntityPlayer, dest: Location) = player.world.provider.dimensionId != dest.dim
 
   object Gui {
     lazy val template = CGUIDocument.panicRead(Resources.getGui("loctele_new"))
@@ -399,7 +399,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val ret = list.child("add_template").copy
 
       val message = {
-        val dimID = player.worldObj.provider.dimensionId
+        val dimID = player.world.provider.dimensionId
         val name = dimensionNameMap(dimID)
 
         List(name + s" (#$dimID)", "(%.0f, %.0f, %.0f)".format(player.posX, player.posY, player.posZ))

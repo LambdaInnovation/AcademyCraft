@@ -24,7 +24,7 @@ public class EntityMDRay extends EntityRayBase {
     public EntityMDRay(EntityPlayer spawner, Motion3D mo, double length) {
         super(spawner);
 
-        Vec3 start = mo.getPosVec(), end = mo.move(length).getPosVec();
+        Vec3d start = mo.getPosVec(), end = mo.move(length).getPosVec();
         this.setFromTo(start, end);
         this.blendInTime = 200;
         this.blendOutTime = 700;
@@ -36,10 +36,10 @@ public class EntityMDRay extends EntityRayBase {
     public void onUpdate() {
         super.onUpdate();
         if(RandUtils.nextDouble() < 0.8) {
-            Particle p = MdParticleFactory.INSTANCE.next(worldObj,
+            Particle p = MdParticleFactory.INSTANCE.next(world,
                     new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
-                    VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
-            worldObj.spawnEntityInWorld(p);
+                    new Vec3d(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
+            world.spawnEntityInWorld(p);
         }
     }
     

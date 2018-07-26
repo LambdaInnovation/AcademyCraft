@@ -6,7 +6,7 @@ import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
@@ -37,7 +37,7 @@ public class ArcFactory {
     public double maxOffset = 1.5;
     public double branchFactor = 0.4;
     public double widthShrink = 0.7;
-    public Vec3 normal = vec(0, 0, 1);
+    public Vec3d normal = vec(0, 0, 1);
     
     //States only used when generating
     List< List<Segment> > listAll = new ArrayList();
@@ -56,8 +56,8 @@ public class ArcFactory {
             float theta = (float) (rand.nextFloat() * Math.PI * 2); //Rand dir across YZ plane
             double sin = MathHelper.sin(theta), cos = MathHelper.cos(theta);
             double off = rand.nextFloat() * offset;
-            ave.pt.yCoord += off * sin;
-            ave.pt.zCoord += off * cos;
+            ave.pt.y += off * sin;
+            ave.pt.z += off * cos;
             
             Segment s1 = s, s2 = new Segment(ave, s.end, s.alpha);
             s1.end = ave;
@@ -68,7 +68,7 @@ public class ArcFactory {
             if(rand.nextDouble() < branchFactor) {
                 matrix.setIdentity();
                 Vector3f v3f;
-                Vec3 dir = multiply(subtract(ave.pt, s.start.pt), lengthShrink);
+                Vec3d dir = multiply(subtract(ave.pt, s.start.pt), lengthShrink);
                 dir = randomRotate(10, dir);
                 //matrix.rotate(GenericUtils.randIntv(-50, 50) / 180 * (float)Math.PI, asV3f(random()));
                 //dir = applyMatrix(matrix, dir);
@@ -98,7 +98,7 @@ public class ArcFactory {
         listAll.clear();
         bufferAll.clear();
         
-        Vec3 v0 = vec(0, 0, 0), v1 = vec(length, 0, 0);
+        Vec3d v0 = vec(0, 0, 0), v1 = vec(length, 0, 0);
         List<Segment> init = new ArrayList();
         init.add(new Segment(
             new Point(v0, width),
@@ -128,9 +128,9 @@ public class ArcFactory {
         return new Arc(flip ? bufferAll : listAll, normal, length);
     }
     
-    static private Vec3 randomRotate(float range, Vec3 dir) {
+    static private Vec3d randomRotate(float range, Vec3d dir) {
         float a = (float) (RandUtils.rangef(-range, range) / 180 * Math.PI);
-        Vec3 ret = VecUtils.copy(dir);
+        Vec3d ret = VecUtils.copy(dir);
         ret.rotateAroundX(RandUtils.rangef(-a, a));
         ret.rotateAroundY(RandUtils.rangef(-a, a));
         ret.rotateAroundZ(RandUtils.rangef(-a, a));
@@ -138,17 +138,17 @@ public class ArcFactory {
     }
     
     class Point {
-        Vec3 pt;
+        Vec3d pt;
         double width;
         
-        public Point(Vec3 _pt, double _w) {
+        public Point(Vec3d _pt, double _w) {
             pt = _pt;
             width = _w;
         }
     }
     
     private Point average(Point pa, Point pb) {
-        Vec3 v = VecUtils.lerp(pa.pt, pb.pt, 0.5);
+        Vec3d v = VecUtils.lerp(pa.pt, pb.pt, 0.5);
         return new Point(v, (pa.width + pb.width) / 2);
     }
     
@@ -167,11 +167,11 @@ public class ArcFactory {
         int listId;
         
         private final List< List<Segment> > segmentList;
-        private final Vec3 normal;
+        private final Vec3d normal;
         
         public final double length;
         
-        public Arc(List< List<Segment> > list, Vec3 _normal, double len) {
+        public Arc(List< List<Segment> > list, Vec3d _normal, double len) {
             segmentList = new ArrayList(list);
             normal = _normal;
             
@@ -221,16 +221,16 @@ public class ArcFactory {
             GL11.glEndList();
         }
         
-        private void handleSegment(List<Segment> list, Vec3 normal, double len) {
-            Vec3 lastDir = null;
+        private void handleSegment(List<Segment> list, Vec3d normal, double len) {
+            Vec3d lastDir = null;
             for(Segment s : list) {
-                if(s.start.pt.xCoord > len)
+                if(s.start.pt.x > len)
                     break;
                 
-                Vec3 dir = randomRotate(15, crossProduct(subtract(s.end.pt, s.start.pt), normal)).normalize();
+                Vec3d dir = randomRotate(15, crossProduct(subtract(s.end.pt, s.start.pt), normal)).normalize();
                 if(lastDir == null) lastDir = dir;
                 
-                Vec3 p1 = add(s.start.pt, multiply(lastDir, s.start.width)),
+                Vec3d p1 = add(s.start.pt, multiply(lastDir, s.start.width)),
                     p2 = add(s.start.pt, multiply(lastDir, -s.start.width)),
                     p3 = add(s.end.pt, multiply(dir, s.end.width)),
                     p4 = add(s.end.pt, multiply(dir, -s.end.width));
@@ -256,9 +256,9 @@ public class ArcFactory {
         
         private void doPostWork() {}
         
-        private void addVert(Vec3 vec, double u, double v) {
+        private void addVert(Vec3d vec, double u, double v) {
             GL11.glTexCoord2d(u, v);
-            GL11.glVertex3d(vec.xCoord, vec.yCoord, vec.zCoord);
+            GL11.glVertex3d(vec.x, vec.y, vec.z);
         }
     }
     

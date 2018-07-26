@@ -19,18 +19,18 @@ public class TerminalInstallerRenderer extends RenderModelItem {
         renderInventory = false;
         
         this.scale = 4.0;
-        this.equipOffset = VecUtils.vec(0.5, 0.16, -0.24);
-        this.thirdPersonOffset = VecUtils.vec(0.2, -0.15, 0.25);
+        this.equipOffset = new Vec3d(0.5, 0.16, -0.24);
+        this.thirdPersonOffset = new Vec3d(0.2, -0.15, 0.25);
         this.thirdPersonScale = 0.73;
-        this.stdRotation.xCoord = 90;
-        this.stdRotation.zCoord = 5;
-        this.stdOffset.yCoord = 0.0;
+        this.stdRotation.x = 90;
+        this.stdRotation.z = 5;
+        this.stdOffset.y = 0.0;
         this.entityItemScale = 1.1; 
-        this.entityItemOffset.xCoord = -0.1;
-        this.entityItemRotation.yCoord = 180;
-        this.equipRotation.xCoord = 0;
-        this.equipRotation.yCoord = -15;
-        this.equipRotation.zCoord = 90;
+        this.entityItemOffset.x = -0.1;
+        this.entityItemRotation.y = 180;
+        this.equipRotation.x = 0;
+        this.equipRotation.y = -15;
+        this.equipRotation.z = 90;
         this.equipScale = 0.8;
     }
     

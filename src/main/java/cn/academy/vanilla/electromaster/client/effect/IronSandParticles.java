@@ -84,7 +84,7 @@ public class IronSandParticles {
     public void tick() {
         int n = RandUtils.rangei(2, 3);
         for(int i = 0; i < n; ++i) {
-            player.worldObj.spawnEntityInWorld(factory.next(player.worldObj));
+            player.world.spawnEntityInWorld(factory.next(player.world));
         }
     }
 }

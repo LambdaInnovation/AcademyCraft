@@ -96,13 +96,13 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
 
   def getAttackData: AttackData = {
     val result = Raytrace.traceLiving(player, RANGE)
-    var end: Vec3 = null
+    var end: Vec3d = null
     if(result == null) {
       end = new Motion3D(player).move(RANGE).getPosVec
     } else {
       end = result.hitVec
       if(result.typeOfHit == MovingObjectType.ENTITY) {
-        end.yCoord += result.entityHit.getEyeHeight
+        end.y += result.entityHit.getEyeHeight
       }
     }
 
@@ -110,7 +110,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
     val exclusion: Predicate[Entity] = if(!hitEntity) EntitySelectors.exclude(player) else EntitySelectors.exclude(player, result.entityHit)
     val target = if(hitEntity) result.entityHit else null
     val aoes: java.util.List[Entity] = WorldUtils.getEntities(
-      player.getEntityWorld, end.xCoord, end.yCoord, end.zCoord,
+      player.getEntityWorld, end.x, end.y, end.z,
       AOE_RANGE, EntitySelectors.living().and(exclusion))
 
     val ad = new AttackData()
@@ -142,10 +142,10 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
     ad.aoes.foreach((e: Entity) => {
       val aoeArc = new EntityArc(player, ArcPatterns.aoeArc)
       aoeArc.lengthFixed = false
-      aoeArc.setFromTo(ad.point.xCoord, ad.point.yCoord, ad.point.zCoord,
+      aoeArc.setFromTo(ad.point.x, ad.point.y, ad.point.z,
         e.posX, e.posY + e.getEyeHeight, e.posZ)
       aoeArc.addMotionHandler(new Life(RandUtils.rangei(15, 25)))
-      player.worldObj.spawnEntityInWorld(aoeArc)
+      player.world.spawnEntityInWorld(aoeArc)
     })
 
     ACSounds.playClient(player, "em.arc_strong", SoundCategory.AMBIENT, 0.6f)

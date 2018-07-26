@@ -30,7 +30,7 @@ public class ItemDeveloper extends ItemEnergyBase {
     
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        if(player.worldObj.isRemote) {
+        if(player.world.isRemote) {
             displayGui(player);
         }
         

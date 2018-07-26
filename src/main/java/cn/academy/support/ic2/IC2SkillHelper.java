@@ -45,7 +45,7 @@ public class IC2SkillHelper {
     @SideOnly(Side.CLIENT)
     public void spawnArc(EntityPlayer player) {
         List<BlockPos> blockList = WorldUtils.getBlocksWithin(player, 5, 100, blockSelector);
-        World world = player.worldObj;
+        World world = player.world;
         for(BlockPos bp : blockList) {
             world.spawnEntityInWorld(new EntitySurroundArc(world, bp.x, bp.y, bp.z, 1, 1));
         }

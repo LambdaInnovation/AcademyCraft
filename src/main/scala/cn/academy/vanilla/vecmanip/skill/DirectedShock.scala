@@ -108,7 +108,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
   private def knockback(targ: Entity) = if (ctx.getSkillExp >= 0.25f) {
     var delta = player.headPosition - targ.headPosition
     delta = delta.normalize()
-    delta.yCoord = -0.6f
+    delta.y = -0.6f
     delta = delta.normalize()
 
     targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)

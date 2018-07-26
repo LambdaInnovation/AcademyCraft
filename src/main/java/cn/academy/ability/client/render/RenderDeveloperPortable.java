@@ -15,12 +15,12 @@ public class RenderDeveloperPortable extends RenderModelItem {
             Resources.getTexture("models/developer_portable"));
         renderInventory = false;
         this.scale = 6;
-        this.equipRotation = VecUtils.vec(0, -10, -5);
-        this.equipOffset = VecUtils.vec(0.6, 0, -.2);
-        this.entityItemOffset.zCoord = 0.2;
-        this.entityItemRotation.xCoord = 15;
+        this.equipRotation = new Vec3d(0, -10, -5);
+        this.equipOffset = new Vec3d(0.6, 0, -.2);
+        this.entityItemOffset.z = 0.2;
+        this.entityItemRotation.x = 15;
         this.thirdPersonScale = 0.6;
-        this.thirdPersonOffset = VecUtils.vec(0.1, 0.05, 0.2);
+        this.thirdPersonOffset = new Vec3d(0.1, 0.05, 0.2);
     }
 
 }

@@ -10,7 +10,7 @@ public class TileEntitySound extends PositionedSound {
     private final TileEntity te;
 
     public TileEntitySound(TileEntity _te, String name) {
-        super(_te.xCoord +.5, _te.yCoord + .5, _te.zCoord + .5, name);
+        super(_te.x +.5, _te.y + .5, _te.z + .5, name);
         te = _te;
     }
 

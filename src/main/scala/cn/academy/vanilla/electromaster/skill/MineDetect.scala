@@ -105,7 +105,7 @@ class MineElem(_x: Int, _y: Int, _z: Int, _lv: Int) {
 
 @SideOnly(Side.CLIENT)
 @RegEntity
-class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced: Boolean) extends EntityAdvanced(_target.worldObj) {
+class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced: Boolean) extends EntityAdvanced(_target.world) {
 
   val renderer: HandlerRender = new HandlerRender()
 

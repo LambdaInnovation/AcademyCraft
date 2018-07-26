@@ -54,10 +54,10 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
 
   val scheduler = new TickScheduler
 
-  lazy val sourceName = s"interferer@${getWorldObj.provider.dimensionId}($xCoord,$yCoord,$zCoord)"
+  lazy val sourceName = s"interferer@${getWorld.provider.dimensionId}($x,$y,$z)"
   def testBB = WorldUtils.minimumBounds(
-    VecUtils.vec(xCoord + 0.5 - range_, yCoord + 0.5 - range_, zCoord + 0.5 - range_),
-    VecUtils.vec(xCoord + 0.5 + range_, yCoord + 0.5 + range_, zCoord + 0.5 + range_))
+    new Vec3d(x + 0.5 - range_, y + 0.5 - range_, z + 0.5 - range_),
+    new Vec3d(x + 0.5 + range_, y + 0.5 + range_, z + 0.5 + range_))
 
   private var enabled_ = false
   private var placer_ : Option[String] = None
@@ -79,7 +79,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
 
   private def send(channel: String, args: Any*) = {
     val args2 = args.map(_.asInstanceOf[AnyRef])
-    if (getWorldObj.isRemote) {
+    if (getWorld.isRemote) {
       NetworkMessage.sendToServer(this, channel, args2: _*)
     } else {
       NetworkMessage.sendToAllAround(TargetPoints.convert(this, 15), this, channel, args2: _*)
@@ -94,7 +94,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
     false
   }
   private def sync() = {
-    assert(!getWorldObj.isRemote)
+    assert(!getWorld.isRemote)
 
     send(MSG_SYNC, range, enabled, whitelist.toArray)
   }
@@ -105,12 +105,12 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   }).run(() => {
     if(cost()){
       val boundingBox = testBB
-      val players = WorldUtils.getEntities(getWorldObj, boundingBox, EntitySelectors.survivalPlayer)
+      val players = WorldUtils.getEntities(getWorld, boundingBox, EntitySelectors.survivalPlayer)
       players foreach {
         case player: EntityPlayer =>
           CPData.get(player).addInterf(sourceName, new IInterfSource {
             override def interfering(): Boolean =
-              boundingBox.isVecInside(VecUtils.vec(player.posX, player.posY, player.posZ)) &&
+              boundingBox.isVecInside(new Vec3d(player.posX, player.posY, player.posZ)) &&
                 !TileAbilityInterferer.this.isInvalid &&
                 !player.capabilities.isCreativeMode &&
                 enabled
@@ -127,7 +127,7 @@ class TileAbilityInterferer extends TileReceiverBase("ability_interferer",1,1000
   override def update(){
     super.update()
     scheduler.runTick()
-    if(!worldObj.isRemote){
+    if(!world.isRemote){
       val stack = this.getStackInSlot(SLOT_BATTERY)
       if (stack != null && EnergyItemHelper.isSupported(stack)) {
         val gain = EnergyItemHelper.pull(stack, Math.min(getMaxEnergy - getEnergy, getBandwidth), false)

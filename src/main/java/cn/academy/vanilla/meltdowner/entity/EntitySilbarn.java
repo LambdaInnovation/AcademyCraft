@@ -75,7 +75,7 @@ public class EntitySilbarn extends EntityAdvanced {
     
     long createTime;
     
-    Vec3 axis = Vec3.createVectorHelper(rand.nextInt(), rand.nextInt(), rand.nextInt());
+    Vec3d axis = new Vec3d(rand.nextInt(), rand.nextInt(), rand.nextInt());
     
     {
         final Rigidbody rigidbody = new Rigidbody();
@@ -94,7 +94,7 @@ public class EntitySilbarn extends EntityAdvanced {
     }
 
     public EntitySilbarn(EntityPlayer player) {
-        super(player.worldObj);
+        super(player.world);
         this.regEventHandler(new CollideHandler() {
             
             @Override
@@ -102,9 +102,9 @@ public class EntitySilbarn extends EntityAdvanced {
                 if(!hit) {
                     hit = true;
                     if(event.result.entityHit instanceof EntitySilbarn)
-                        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_heavy, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+                        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_heavy, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
                     else
-                        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_light, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+                        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_light, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
 
                     executeAfter(new EntityCallback() {
                         @Override
@@ -137,9 +137,9 @@ public class EntitySilbarn extends EntityAdvanced {
                     MovingObjectPosition res = event.result;
                     ForgeDirection dir = ForgeDirection.getOrientation(res.sideHit);
                     final double mul = 0.1;
-                    double tx = res.hitVec.xCoord + dir.offsetX * mul, 
-                        ty = res.hitVec.yCoord + dir.offsetY * mul, 
-                        tz = res.hitVec.zCoord + dir.offsetZ * mul;
+                    double tx = res.hitVec.x + dir.offsetX * mul, 
+                        ty = res.hitVec.y + dir.offsetY * mul, 
+                        tz = res.hitVec.z + dir.offsetZ * mul;
                     spawnEffects(tx, ty, tz);
                     setDead();
                 }
@@ -167,7 +167,7 @@ public class EntitySilbarn extends EntityAdvanced {
     }
     
     private void sync() {
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             boolean b = dataWatcher.getWatchableObjectByte(10) != 0;
             if(!hit && b) {
                 spawnEffects(posX, posY, posZ);
@@ -200,7 +200,7 @@ public class EntitySilbarn extends EntityAdvanced {
             
             particles.setPosition(posX, posY, posZ);
             particles.setVelocity(vx, vy, vz);
-            worldObj.spawnEntityInWorld(particles.next(worldObj));
+            world.spawnEntityInWorld(particles.next(world));
         }
         //TileMatrix
     }
@@ -223,7 +223,7 @@ public class EntitySilbarn extends EntityAdvanced {
             double scale = .05;
             GL11.glScaled(scale, scale, scale);
             GL11.glRotated(0.03 * (GameTimer.getTime() - sibarn.createTime), 
-                    sibarn.axis.xCoord, sibarn.axis.yCoord, sibarn.axis.zCoord);
+                    sibarn.axis.x, sibarn.axis.y, sibarn.axis.z);
             GL11.glRotated(-var1.rotationYaw, 0, 1, 0);
             GL11.glRotated(90, 1, 0, 0);
             model.renderAll();

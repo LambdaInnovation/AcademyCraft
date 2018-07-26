@@ -29,7 +29,7 @@ public class RenderDynamicBlock extends TileEntitySpecialRenderer {
         Tessellator tes = Tessellator.instance;
         tes.setColorOpaque_F(1.0F, 1.0F, 1.0F);
         
-        renderBlocks.blockAccess = t.getWorldObj();
+        renderBlocks.blockAccess = t.getWorld();
         
         {
             if (Minecraft.isAmbientOcclusionEnabled()) {
@@ -42,9 +42,9 @@ public class RenderDynamicBlock extends TileEntitySpecialRenderer {
             RenderUtils.loadTexture(TextureMap.locationBlocksTexture);
             
             tes.startDrawingQuads();
-            tes.setTranslation(x - t.xCoord, y - t.yCoord, z - t.zCoord);
+            tes.setTranslation(x - t.x, y - t.y, z - t.z);
             
-            renderBlocks.renderBlockAllFaces(blockType, t.xCoord, t.yCoord, t.zCoord);
+            renderBlocks.renderBlockAllFaces(blockType, t.x, t.y, t.z);
             tes.setTranslation(0, 0, 0);
             tes.draw();
             

@@ -18,7 +18,7 @@ import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.input.KeyManager;
 import cn.lambdalib2.util.mc.ControlOverrider;
-import cn.lambdalib2.util.mc.SideHelper;
+import cn.lambdalib2.util.mc.SideUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -330,21 +330,21 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         @SubscribeEvent
         public void presetEdit(PresetUpdateEvent evt) {
-            if (SideHelper.isClient()) {
+            if (SideUtils.isClient()) {
                 updateDefaultGroup();
             }
         }
 
         @SubscribeEvent
         public void activateAbility(AbilityActivateEvent evt) {
-            if (SideHelper.isClient()) {
+            if (SideUtils.isClient()) {
                 updateDefaultGroup();
             }
         }
 
         @SubscribeEvent
         public void deactivateAbility(AbilityDeactivateEvent evt) {
-            if (SideHelper.isClient()) {
+            if (SideUtils.isClient()) {
                 ClientRuntime.instance().clearAllKeys();
             }
         }

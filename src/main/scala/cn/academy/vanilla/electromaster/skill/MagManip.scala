@@ -158,11 +158,11 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   }
 
   private def updateMoveTo() = {
-    val origin = player.headPosition - Vec3(0, 0.1, 0)
+    val origin = player.headPosition - Vec3d(0, 0.1, 0)
     val look = player.lookVector
 
-    var look2 = Vec3(look)
-    look2.yCoord = 0
+    var look2 = Vec3d(look)
+    look2.y = 0
     look2 = look2.normalize()
     look2.rotateAroundY(90)
 
@@ -225,7 +225,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
 
   placeWhenCollide = false
 
-  def this(player: EntityPlayer, damage: Float) = { this(player.worldObj)
+  def this(player: EntityPlayer, damage: Float) = { this(player.world)
     constructServer(player)
     this.damage = damage
     this.player2 = player
@@ -264,7 +264,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
       }
     })
 
-    if (worldObj.isRemote) {
+    if (world.isRemote) {
       startClient()
     }
   }
@@ -280,7 +280,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
     actionType match {
       case ActMoveTo =>
         val dist = this.getDistanceSq(tx, ty, tz)
-        val delta = Vec3(tx - posX, ty - posY, tz - posZ).normalize()
+        val delta = Vec3d(tx - posX, ty - posY, tz - posZ).normalize()
         val mo = delta * 0.2 * (dist match {
           case d if d < 4 => d / 4
           case _ => 1.0
@@ -313,6 +313,6 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
       override def onStart(): Unit = {}
     })
     surrounder.setArcType(ArcType.THIN)
-    worldObj.spawnEntityInWorld(surrounder)
+    world.spawnEntityInWorld(surrounder)
   }
 }

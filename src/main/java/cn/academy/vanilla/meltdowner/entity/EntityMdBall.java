@@ -101,7 +101,7 @@ public class EntityMdBall extends EntityAdvanced {
     
     @Override
     public void onFirstUpdate() {
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             dataWatcher.updateObject(3, Integer.valueOf(spawner.getEntityId()));
             dataWatcher.updateObject(4, Float.valueOf(subX));
             dataWatcher.updateObject(5, Float.valueOf(subY));
@@ -114,11 +114,11 @@ public class EntityMdBall extends EntityAdvanced {
     public void onUpdate() {
         super.onUpdate();
         
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             
             if(getSpawner() == null) {
                 int eid = dataWatcher.getWatchableObjectInt(3);
-                Entity e = worldObj.getEntityByID(eid);
+                Entity e = world.getEntityByID(eid);
                 if(e instanceof EntityPlayer) {
                     spawner = (EntityPlayer) e;
                 }
@@ -228,7 +228,7 @@ public class EntityMdBall extends EntityAdvanced {
     
     private void updatePosition() {
         posX = spawner.posX + subX;
-        posY = spawner.posY + subY + (worldObj.isRemote ? 0 : 1.6); //Fix for different sides
+        posY = spawner.posY + subY + (world.isRemote ? 0 : 1.6); //Fix for different sides
         posZ = spawner.posZ + subZ;
     }
     

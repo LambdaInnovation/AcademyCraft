@@ -12,7 +12,7 @@ import cn.lambdalib2.util.mc.{EntitySelectors, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.Vec3
+import net.minecraft.util.math.Vec3d
 
 /**
   * @author WeAthFolD, KSkun
@@ -78,7 +78,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
       if (ticks <= timeLimit) {
         if (ticks % 10 == 0) if (active.size < MAX_HOLD) {
           val ball: EntityMdBall = new EntityMdBall(player)
-          player.worldObj.spawnEntityInWorld(ball)
+          player.world.spawnEntityInWorld(ball)
           active.add(ball)
         }
         if (ticks != 0 && ticks % 8 == 0) {
@@ -106,7 +106,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
             iter.remove()
             // client action
             sendToClient(MSG_EFFECT_SPAWN, VecUtils.entityPos(ball), VecUtils.add(VecUtils.entityPos(result),
-              VecUtils.vec(0, result.getEyeHeight, 0)))
+              new Vec3d(0, result.getEyeHeight, 0)))
             // server action
             result.hurtResistantTime = -1
             val damage: Float = lerpf(10, 18, exp)
@@ -149,15 +149,15 @@ class EMContextC(par: EMContext) extends ClientContext(par) {
       val r: Double = ranged(0.5, 1)
       val theta: Double = ranged(0, Math.PI * 2)
       val h: Double = ranged(-1.2, 0)
-      val pos: Vec3 = VecUtils.add(VecUtils.vec(player.posX, player.posY + ACRenderingHelper.getHeightFix(player),
-        player.posZ), VecUtils.vec(r * Math.sin(theta), h, r * Math.cos(theta)))
-      val vel: Vec3 = VecUtils.vec(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02))
-      player.worldObj.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(player.worldObj, pos, vel))
+      val pos: Vec3d = VecUtils.add(new Vec3d(player.posX, player.posY + ACRenderingHelper.getHeightFix(player),
+        player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)))
+      val vel: Vec3d = new Vec3d(ranged(-.02, .02), ranged(.01, .05), ranged(-.02, .02))
+      player.world.spawnEntityInWorld(MdParticleFactory.INSTANCE.next(player.world, pos, vel))
     }
   }
 
   @Listener(channel=MSG_EFFECT_SPAWN, side=Array(Side.CLIENT))
-  private def c_spawnRay(from: Vec3, to: Vec3) = {
+  private def c_spawnRay(from: Vec3d, to: Vec3d) = {
     val ray: EntityMdRaySmall = new EntityMdRaySmall(world)
     ray.setFromTo(from, to)
     world.spawnEntityInWorld(ray)

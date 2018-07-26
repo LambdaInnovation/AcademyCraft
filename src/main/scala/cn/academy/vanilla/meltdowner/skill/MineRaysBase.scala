@@ -192,7 +192,7 @@ abstract class MRContextC(par: MRContext) extends ClientContext(par) {
       val _x: Double = x + ranged(-.2, 1.2)
       val _y: Double = y + ranged(-.2, 1.2)
       val _z: Double = z + ranged(-.2, 1.2)
-      val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.vec(_x, _y, _z), VecUtils.vec(ranged(-.06, .06),
+      val p: Particle = MdParticleFactory.INSTANCE.next(world, new Vec3d(_x, _y, _z), new Vec3d(ranged(-.06, .06),
         ranged(-.06, .06), ranged(-.06, .06)))
       if (skill.asInstanceOf[MineRaysBase].particleTexture != null) p.texture = skill.asInstanceOf[MineRaysBase].particleTexture
       p.needRigidbody = false

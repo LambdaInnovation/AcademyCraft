@@ -37,7 +37,7 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         
         Vec3d position = ray.getPosition();
         Vec3d relativePosition = VecUtils.subtract(position,
-                VecUtils.vec(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
+                new Vec3d(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ));
         glTranslated(x, y, z);
         
         //Calculate the most appropriate 'billboard-up' direction.
@@ -50,10 +50,10 @@ public abstract class RendererRayBaseGlow<T extends IRay> extends Render {
         Vec3d upDir;
         boolean firstPerson = ViewOptimize.isFirstPerson(ray);
         if(firstPerson) {
-            upDir = VecUtils.vec(0, 1, -0.5);
+            upDir = new Vec3d(0, 1, -0.5);
         } else {
             //Get closest point for view judging.
-            Vec3d pt = VecUtils.vec(0, 0, 0);
+            Vec3d pt = new Vec3d(0, 0, 0);
             
             //The player viewing direction towards pt.
             Vec3d perpViewDir = VecUtils.add(pt, relativePosition);

@@ -32,13 +32,13 @@ public class EntityMineRayExpert extends EntityRayBase {
     public void onUpdate() {
         super.onUpdate();
         EntityPlayer player = getPlayer();
-        Vec3 end = new Motion3D(player, true).move(15).getPosVec();
-        this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0.15 : 1.75), player.posZ, end.xCoord, end.yCoord, end.zCoord);
+        Vec3d end = new Motion3D(player, true).move(15).getPosVec();
+        this.setFromTo(player.posX, player.posY + (ACRenderingHelper.isThePlayer(player) ? 0.15 : 1.75), player.posZ, end.x, end.y, end.z);
         if(RandUtils.nextDouble() < 0.6) {
-            Particle p = MdParticleFactory.INSTANCE.next(worldObj,
+            Particle p = MdParticleFactory.INSTANCE.next(world,
                     new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
-                    VecUtils.vec(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
-            worldObj.spawnEntityInWorld(p);
+                    new Vec3d(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
+            world.spawnEntityInWorld(p);
         }
     }
     

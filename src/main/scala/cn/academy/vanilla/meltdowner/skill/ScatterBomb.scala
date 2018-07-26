@@ -15,7 +15,7 @@ import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3}
+import net.minecraft.util.{DamageSource, MovingObjectPosition, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun, Paindar
@@ -107,24 +107,24 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
       var dest = newDest
       if (autoCount > 0 && !autoTarget.isEmpty) {
         val target = autoTarget.get(RandUtils.nextInt(autoTarget.size()))
-        dest = VecUtils.vec(target.posX, target.posY+target.getEyeHeight, target.posZ)
+        dest = new Vec3d(target.posX, target.posY+target.getEyeHeight, target.posZ)
         autoCount -= 1
       }
 
-      val traceResult: MovingObjectPosition = Raytrace.perform(world, VecUtils.vec(ball.posX, ball.posY, ball.posZ),
+      val traceResult: MovingObjectPosition = Raytrace.perform(world, new Vec3d(ball.posX, ball.posY, ball.posZ),
         dest, basicSelector.and(EntitySelectors.exclude(player)))
       if (traceResult != null && traceResult.entityHit != null) {
         traceResult.entityHit.hurtResistantTime = -1
         MDDamageHelper.attack(ctx, traceResult.entityHit, getDamage(exp))
       }
-      NetworkManager.sendSBEffectToClient(player,Vec3.createVectorHelper(ball.posX, ball.posY, ball.posZ)
-        ,Vec3.createVectorHelper(dest.xCoord,dest.yCoord,dest.zCoord))
+      NetworkManager.sendSBEffectToClient(player,new Vec3d(ball.posX, ball.posY, ball.posZ)
+        ,new Vec3d(dest.x,dest.y,dest.z))
       ball.setDead()
     }
     ctx.addSkillExp(0.001f * balls.size)
   }
 
-  private def newDest: Vec3 = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
+  private def newDest: Vec3d = new Motion3D(player, 5, true).move(RAY_RANGE).getPosVec
 
   @SideOnly(Side.CLIENT)
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))

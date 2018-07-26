@@ -21,12 +21,12 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
     @Override
     public void update() {
         super.update();
-        World world = getWorldObj();
+        World world = getWorld();
         if(!world.isRemote) {
             for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                int x = xCoord + dir.offsetX,
-                    y = yCoord + dir.offsetY,
-                    z = zCoord + dir.offsetZ;
+                int x = x + dir.offsetX,
+                    y = y + dir.offsetY,
+                    z = z + dir.offsetZ;
                 TileEntity te = world.getTileEntity(x, y, z);
                 if(te instanceof IEnergyReceiver && energy > 0) {
                     IEnergyReceiver receiver = (IEnergyReceiver) te;

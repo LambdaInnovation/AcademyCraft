@@ -64,9 +64,9 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
     val DISTANCE = 40.0
     val pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing())
     if(pos != null) {
-      hitX = pos.hitVec.xCoord
-      hitY = pos.hitVec.yCoord
-      hitZ = pos.hitVec.zCoord
+      hitX = pos.hitVec.x
+      hitY = pos.hitVec.y
+      hitZ = pos.hitVec.z
     } else {
       val mo = new Motion3D(player, true).move(DISTANCE)
       hitX = mo.px
@@ -88,7 +88,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
       return
     }
 
-    val lightning = new EntityLightningBolt(player.worldObj, hitX, hitY, hitZ)
+    val lightning = new EntityLightningBolt(player.world, hitX, hitY, hitZ)
     player.getEntityWorld.addWeatherEffect(lightning)
     ctx.attackRange(hitX, hitY, hitZ, ThunderClap.getRange(exp), getDamage(exp, ticks), EntitySelectors.exclude(player))
 
@@ -127,7 +127,7 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
     player.getEntityWorld.spawnEntityInWorld(surroundArc)
 
     if(isLocal) {
-      mark = new EntityRippleMark(player.worldObj)
+      mark = new EntityRippleMark(player.world)
 
       player.getEntityWorld.spawnEntityInWorld(mark)
       mark.color.setColor4d(0.8, 0.8, 0.8, 0.7)
@@ -141,9 +141,9 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
       val DISTANCE = 40.0
       val pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing())
       if (pos != null) {
-        hitX = pos.hitVec.xCoord
-        hitY = pos.hitVec.yCoord
-        hitZ = pos.hitVec.zCoord
+        hitX = pos.hitVec.x
+        hitY = pos.hitVec.y
+        hitZ = pos.hitVec.z
       } else {
         val mo = new Motion3D(player, true).move(DISTANCE)
         hitX = mo.px

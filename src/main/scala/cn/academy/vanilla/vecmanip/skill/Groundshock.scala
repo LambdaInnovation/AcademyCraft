@@ -89,7 +89,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
       val rot = planeLook.copy()
       rot.rotateAroundY(90)
 
-      val deltas = List((implicitly[Vec3]((0.0, 0.0, 0.0)), 1.0), (rot, 0.7), (-rot, 0.7), (rot * 2, 0.3), (rot * -2, 0.3))
+      val deltas = List((implicitly[Vec3d]((0.0, 0.0, 0.0)), 1.0), (rot, 0.7), (-rot, 0.7), (rot * 2, 0.3), (rot * -2, 0.3))
 
       val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 

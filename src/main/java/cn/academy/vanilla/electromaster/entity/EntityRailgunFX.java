@@ -63,7 +63,7 @@ public class EntityRailgunFX extends EntityRayBase {
             while(cur <= len) {
                 float theta = RandUtils.rangef(0, MathUtils.PI_F * 2);
                 double r = RandUtils.ranged(0.1, 0.25);
-                Vec3 vec = VecUtils.vec(cur, r * MathHelper.sin(theta), r * MathHelper.cos(theta));
+                Vec3d vec = new Vec3d(cur, r * MathHelper.sin(theta), r * MathHelper.cos(theta));
                 vec.rotateAroundZ(rotationPitch * MathUtils.PI_F / 180);
                 vec.rotateAroundY((270 - rotationYaw) * MathUtils.PI_F / 180);
                 arcHandler.generateAt(vec);

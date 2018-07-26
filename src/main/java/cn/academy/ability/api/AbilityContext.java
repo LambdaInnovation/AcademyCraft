@@ -76,12 +76,12 @@ public class AbilityContext {
     }
 
     public boolean canAttack(Entity entity) {
-        return canBreakBlock(entity.worldObj) || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
+        return canBreakBlock(entity.world) || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
     }
 
     public void attackRange(double x, double y, double z, double range,
                             float damage, Predicate<Entity> entitySelector) {
-        List<Entity> list = WorldUtils.getEntities(player.worldObj, x, y, z, range, entitySelector);
+        List<Entity> list = WorldUtils.getEntities(player.world, x, y, z, range, entitySelector);
         for(Entity ent : list) {
             double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);
             float factor = 1 - MathUtils.clampf(0, 1, (float) (dist / range));

@@ -31,7 +31,7 @@ object MagMovement extends Skill("mag_movement", 2) {
       val block = world.getBlockState(new BlockPos(pos.blockX, pos.blockY, pos.blockZ)).getBlock
       if(aData.getSkillExp(this) < 0.6f && !CatElectromaster.isMetalBlock(block)) { return null }
       if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block)) { return null }
-      new PointTarget(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord)
+      new PointTarget(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
     } else {
       if(CatElectromaster.isEntityMetallic(pos.entityHit)) {
         return new EntityTarget(pos.entityHit)
@@ -88,7 +88,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     val aData = AbilityData.get(player)
     val result = Raytrace.traceLiving(player, getMaxDistance(aData))
     if(result != null) {
-      target = toTarget(aData, player.worldObj, result)
+      target = toTarget(aData, player.world, result)
       if(target == null) {
         terminate()
       } else {
@@ -105,8 +105,8 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
   }
 
   @Listener(channel=MSG_EFFECT_UPDATE, side=Array(Side.SERVER))
-  private def s_onEffectStart(vec3: Vec3) = {
-    sendToClient(MSG_EFFECT_UPDATE, vec3)
+  private def s_onEffectStart(Vec3d: Vec3d) = {
+    sendToClient(MSG_EFFECT_UPDATE, Vec3d)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
@@ -118,7 +118,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     }
     if(target != null) {
       target.tick()
-      sendToServer(MSG_EFFECT_UPDATE, Vec3.createVectorHelper(target.x, target.y, target.z))
+      sendToServer(MSG_EFFECT_UPDATE, new Vec3d(target.x, target.y, target.z))
       var dx = target.x - player.posX
       var dy = target.y - player.posY
       var dz = target.z - player.posZ
@@ -193,9 +193,9 @@ class MovementContextC(par: MovementContext) extends ClientContext(par) {
   }
 
   @Listener(channel=MSG_EFFECT_UPDATE, side=Array(Side.CLIENT))
-  private def c_updateEffect(target: Vec3) = {
-    arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, target.xCoord,
-      target.yCoord, target.zCoord)
+  private def c_updateEffect(target: Vec3d) = {
+    arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, target.x,
+      target.y, target.z)
   }
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))

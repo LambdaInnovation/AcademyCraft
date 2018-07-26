@@ -94,7 +94,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
 
       // Hurt entities around
       val entities = WorldUtils.getEntities(world,
-        position.xCoord, position.yCoord, position.zCoord,
+        position.x, position.y, position.z,
         3, EntitySelectors.exclude(player)).toList
 
       entities.foreach (entity => {
@@ -146,7 +146,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         }
       }
 
-      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d()(position.xCoord, position.yCoord, position.zCoord))
+      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d()(position.x, position.y, position.z))
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
 
@@ -215,11 +215,11 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
   var timeProvider: () => Double = null
 
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
-  private def effectAt(pos: Vec3) = {
+  private def effectAt(pos: Vec3d) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.directed_blast", 0.5f, 1.0f)
 
     val effect = new WaveEffect(world, rangei(2, 3), 1)
-    effect.setPos(util.mc.Vec3.lerp(player.headPosition, pos, 0.7))
+    effect.setPos(util.mc.Vec3d.lerp(player.headPosition, pos, 0.7))
     effect.rotationYaw = player.rotationYawHead + rangef(-20, 20)
     effect.rotationPitch = player.rotationPitch + rangef(-10, 10)
 

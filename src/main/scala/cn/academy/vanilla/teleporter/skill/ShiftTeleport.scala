@@ -17,7 +17,7 @@ import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3}
+import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3d}
 import net.minecraftforge.common.util.ForgeDirection
 
 /**
@@ -83,8 +83,8 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
     val item: ItemBlock = stack.getItem.asInstanceOf[ItemBlock]
     val position: MovingObjectPosition = getTracePosition
 
-    if(item.field_150939_a.canPlaceBlockAt(player.worldObj, position.blockX, position.blockY, position.blockZ) && ctx.canBreakBlock(player.worldObj, position.blockX, position.blockY, position.blockZ) && ctx.consume(getOverload(exp), getConsumption(exp))) {
-      item.placeBlockAt(stack, player, player.worldObj, position.blockX, position.blockY, position.blockZ, position.sideHit, position.hitVec.xCoord.toFloat, position.hitVec.yCoord.toFloat, position.hitVec.zCoord.toFloat, stack.getItemDamage)
+    if(item.field_150939_a.canPlaceBlockAt(player.world, position.blockX, position.blockY, position.blockZ) && ctx.canBreakBlock(player.world, position.blockX, position.blockY, position.blockZ) && ctx.consume(getOverload(exp), getConsumption(exp))) {
+      item.placeBlockAt(stack, player, player.world, position.blockX, position.blockY, position.blockZ, position.sideHit, position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, stack.getItemDamage)
       if(!player.capabilities.isCreativeMode) if( {
         stack.stackSize -= 1; stack.stackSize
       } <= 0) player.setCurrentItemOrArmor(0, null)
@@ -93,7 +93,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
       for(target <- list) {
         TPSkillHelper.attack(ctx, target, getDamage(exp))
       }
-      player.worldObj.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f)
+      player.world.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f)
       ctx.addSkillExp(getExpIncr(list.size))
       ctx.setCooldown(lerpf(100, 60, exp).toInt)
     }
@@ -133,24 +133,24 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
       return result
     }
     val mo: Motion3D = new Motion3D(player, true).move(range)
-    new MovingObjectPosition(mo.px.toInt, mo.py.toInt, mo.pz.toInt, 0, VecUtils.vec(mo.px, mo.py, mo.pz))
+    new MovingObjectPosition(mo.px.toInt, mo.py.toInt, mo.pz.toInt, 0, new Vec3d(mo.px, mo.py, mo.pz))
   }
 
   def getTargetsInLine: java.util.List[Entity] = {
     val dest: Array[Int] = getTraceDest
-    val v0: Vec3 = VecUtils.vec(player.posX, player.posY, player.posZ)
-    val v1: Vec3 = VecUtils.vec(dest(0) + .5, dest(1) + .5, dest(2) + .5)
+    val v0: Vec3d = new Vec3d(player.posX, player.posY, player.posZ)
+    val v1: Vec3d = new Vec3d(dest(0) + .5, dest(1) + .5, dest(2) + .5)
     val area: AxisAlignedBB = WorldUtils.minimumBounds(v0, v1)
     val pred: Predicate[Entity] = EntitySelectors.living.and(EntitySelectors.exclude(player)).and(new Predicate[Entity] {
 
       override def test(entity: Entity): Boolean = {
         val hw = entity.width / 2
-        VecUtils.checkLineBox(VecUtils.vec(entity.posX - hw, entity.posY, entity.posZ - hw),
-          VecUtils.vec(entity.posX + hw, entity.posY + entity.height, entity.posZ + hw), v0, v1) != null
+        VecUtils.checkLineBox(new Vec3d(entity.posX - hw, entity.posY, entity.posZ - hw),
+          new Vec3d(entity.posX + hw, entity.posY + entity.height, entity.posZ + hw), v0, v1) != null
       }
 
     })
-    WorldUtils.getEntities(player.worldObj, area, pred)
+    WorldUtils.getEntities(player.world, area, pred)
   }
 
 }
@@ -170,13 +170,13 @@ class STContextC(par: STContext) extends ClientContext(par) {
   private def l_start() = {
     targetMarkers = new java.util.ArrayList[EntityMarker]
     if(isLocal) {
-      blockMarker = new EntityMarker(player.worldObj)
+      blockMarker = new EntityMarker(player.world)
       blockMarker.ignoreDepth = true
       blockMarker.height = 1.2f
       blockMarker.width = 1.2f
       blockMarker.color = CRL_BLOCK_MARKER
       blockMarker.setPosition(player.posX, player.posY, player.posZ)
-      player.worldObj.spawnEntityInWorld(blockMarker)
+      player.world.spawnEntityInWorld(blockMarker)
     }
   }
 
@@ -196,7 +196,7 @@ class STContextC(par: STContext) extends ClientContext(par) {
           val em: EntityMarker = new EntityMarker(e)
           em.color = CRL_ENTITY_MARKER
           em.ignoreDepth = true
-          player.worldObj.spawnEntityInWorld(em)
+          player.world.spawnEntityInWorld(em)
           targetMarkers.add(em)
         }
       }
@@ -235,7 +235,7 @@ class STContextC(par: STContext) extends ClientContext(par) {
       while(x <= dist) {
         {
           mo.move(move)
-          player.worldObj.spawnEntityInWorld(TPParticleFactory.instance.next(player.worldObj, mo.getPosVec, VecUtils.vec(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
+          player.world.spawnEntityInWorld(TPParticleFactory.instance.next(player.world, mo.getPosVec, new Vec3d(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
         }
         move = RandUtils.ranged(0.6, 1)
         x += move

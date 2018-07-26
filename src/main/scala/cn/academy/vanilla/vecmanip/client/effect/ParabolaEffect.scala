@@ -72,10 +72,10 @@ object ParabolaRenderer extends Render {
 
           val lookFix = VecUtils.toDirVector(yawLerp, pitchLerp)
           var lookRot = lookFix.copy()
-          lookRot.yCoord = 0
+          lookRot.y = 0
           lookRot.rotateAroundY(90)
           lookRot = lookRot.normalize() * -0.08
-          lookRot.yCoord = -0.04
+          lookRot.y = -0.04
 
           val pos = lookRot.copy() - lookFix * 0.12
 
@@ -87,7 +87,7 @@ object ParabolaRenderer extends Render {
             vertices += pos.copy()
             speed *= 0.98
             pos += speed * dt
-            speed.yCoord -= 1.9 * dt
+            speed.y -= 1.9 * dt
           })
 
           glEnable(GL_BLEND)

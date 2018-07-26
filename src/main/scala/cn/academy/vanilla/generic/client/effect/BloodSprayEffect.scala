@@ -90,7 +90,7 @@ class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends 
       m(block.getBlockBoundsMinY, block.getBlockBoundsMaxY),
       m(block.getBlockBoundsMinZ, block.getBlockBoundsMaxZ))
 
-    this.setPos(Vec3(
+    this.setPos(Vec3d(
       x + xm + dir.offsetX * 0.51 * dx,
       y + ym + dir.offsetY * 0.51 * dy,
       z + zm + dir.offsetZ * 0.51 * dz

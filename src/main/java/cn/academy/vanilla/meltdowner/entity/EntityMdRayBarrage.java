@@ -43,7 +43,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        worldObj.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
     }
     
     @Override

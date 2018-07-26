@@ -45,7 +45,7 @@ public class ItemCoin extends ACItem {
         EntityCoinThrowing etc = getPlayerCoin(player);
         if(etc != null) {
             if(etc.isDead || 
-                etc.worldObj.provider.dimensionId != player.worldObj.provider.dimensionId) {
+                etc.world.provider.dimensionId != player.world.provider.dimensionId) {
                 map.remove(player.getCommandSenderName());
             }
         }
@@ -84,7 +84,7 @@ public class ItemCoin extends ACItem {
     }
     
     private static Map<String, EntityCoinThrowing> getMap(EntityPlayer player) {
-        return player.worldObj.isRemote ? client : server;
+        return player.world.isRemote ? client : server;
     }
 
 }

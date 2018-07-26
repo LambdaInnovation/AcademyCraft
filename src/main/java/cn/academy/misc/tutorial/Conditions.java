@@ -142,7 +142,7 @@ public class Conditions {
     }
 
     private void trigger(Multimap<Item, ItemInfo> map, ItemStack stack, EntityPlayer player) {
-        if (!player.worldObj.isRemote) {
+        if (!player.world.isRemote) {
             TutorialData tdata = TutorialData.get(player);
             map.get(stack.getItem())
                     .stream()

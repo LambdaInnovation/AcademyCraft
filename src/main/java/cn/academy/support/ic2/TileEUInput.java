@@ -50,7 +50,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     @Override
     public void update() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!isRegistered && !getWorld().isRemote) {
             isRegistered = MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
         }
         super.update();
@@ -58,7 +58,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     @Override
     public void onChunkUnload() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!isRegistered && !getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.onChunkUnload();
@@ -66,7 +66,7 @@ public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     
     @Override
     public void invalidate() {
-        if(!isRegistered && !getWorldObj().isRemote) {
+        if(!isRegistered && !getWorld().isRemote) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
         super.invalidate();

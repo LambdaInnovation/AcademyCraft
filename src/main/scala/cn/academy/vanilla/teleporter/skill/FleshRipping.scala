@@ -18,7 +18,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
-import net.minecraft.util.{MovingObjectPosition, Vec3}
+import net.minecraft.util.{MovingObjectPosition, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -94,7 +94,7 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
     val range: Double = getRange
     val trace: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.living)
     var target: Entity = null
-    var dest: Vec3 = null
+    var dest: Vec3d = null
     if (trace != null) {
       target = trace.entityHit
       dest = trace.hitVec
@@ -122,10 +122,10 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_startEffect() = {
     if(isLocal) {
-      marker = new EntityMarker(player.worldObj)
+      marker = new EntityMarker(player.world)
       marker.setPosition(player.posX, player.posY, player.posZ)
       marker.color = DISABLED_COLOR
-      player.worldObj.spawnEntityInWorld(marker)
+      player.world.spawnEntityInWorld(marker)
     }
   }
 
@@ -133,7 +133,7 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
   private def l_updateEffect() = {
     if(isLocal) {
       val at: AttackTarget = par.getAttackTarget
-      marker.setPosition(at.dest.xCoord, at.dest.yCoord, at.dest.zCoord)
+      marker.setPosition(at.dest.x, at.dest.y, at.dest.z)
       if (at.target == null) {
         marker.color = DISABLED_COLOR
         marker.width = 1.0f
@@ -162,9 +162,9 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
         }
         val theta: Double = RandUtils.ranged(0, Math.PI * 2)
         val r: Double = 0.5 * RandUtils.ranged(0.8 * e.width, e.width)
-        val splash: EntityBloodSplash = new EntityBloodSplash(player.worldObj)
+        val splash: EntityBloodSplash = new EntityBloodSplash(player.world)
         splash.setPosition(e.posX + r * Math.sin(theta), y, e.posZ + r * Math.cos(theta))
-        player.worldObj.spawnEntityInWorld(splash)
+        player.world.spawnEntityInWorld(splash)
       }
     }
   }
@@ -175,14 +175,14 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
 class AttackTarget() {
 
   @SerializeIncluded
-  var dest: Vec3 = _
+  var dest: Vec3d = _
   @SerializeIncluded
   @SerializeNullable
   var target: Entity = _
   @SerializeIncluded
   var player: EntityPlayer = _
 
-  def this(_dest: Vec3, _target: Entity, _player: EntityPlayer) {
+  def this(_dest: Vec3d, _target: Entity, _player: EntityPlayer) {
     this()
     dest = _dest
     target = _target
@@ -190,15 +190,15 @@ class AttackTarget() {
   }
 
   def this(tag: NBTTagCompound, _player: EntityPlayer) {
-    this(VecUtils.vec(tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z")),
-      _player.worldObj.getEntityByID(tag.getInteger("i")), _player)
+    this(new Vec3d(tag.getFloat("x"), tag.getFloat("y"), tag.getFloat("z")),
+      _player.world.getEntityByID(tag.getInteger("i")), _player)
   }
 
   private def toNBT: NBTTagCompound = {
     val ret: NBTTagCompound = new NBTTagCompound
-    ret.setFloat("x", dest.xCoord.toFloat)
-    ret.setFloat("y", dest.yCoord.toFloat)
-    ret.setFloat("z", dest.zCoord.toFloat)
+    ret.setFloat("x", dest.x.toFloat)
+    ret.setFloat("y", dest.y.toFloat)
+    ret.setFloat("z", dest.z.toFloat)
     ret.setInteger("i", if(target == null) 0 else target.getEntityId)
     ret
   }

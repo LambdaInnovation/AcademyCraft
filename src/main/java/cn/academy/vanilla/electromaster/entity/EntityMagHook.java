@@ -97,12 +97,12 @@ public class EntityMagHook extends EntityAdvanced {
     
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
-//        if(!worldObj.isRemote && ticksExisted > 20)
+//        if(!world.isRemote && ticksExisted > 20)
 //            this.dropAsItem();
     }
     
     private void sync() {
-        //System.out.println("sync " + posX + " " + posY + " " + posZ + " " + worldObj.isRemote + " " + isHit + " " + this);
+        //System.out.println("sync " + posX + " " + posY + " " + posZ + " " + world.isRemote + " " + isHit + " " + this);
         if(getEntityWorld().isRemote) {
             boolean lastHit = isHit;
             byte b1 = dataWatcher.getWatchableObjectByte(10);
@@ -148,7 +148,7 @@ public class EntityMagHook extends EntityAdvanced {
     private void realSetStill() {    
         motionX = motionY = motionZ = 0;
         if(getEntityWorld() != null) {
-            //worldObj.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
+            //world.playSoundAtEntity(this, "academy:maghook_land", .8f, 1.0f);
         }
         this.setSize(1f, 1f);
         this.removeMotionHandlers();

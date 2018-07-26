@@ -199,9 +199,9 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
 
     var x, y, z = 0d
     if (!mod.isNull) {
-      x = mod.hitVec.xCoord
-      y = mod.hitVec.yCoord
-      z = mod.hitVec.zCoord
+      x = mod.hitVec.x
+      y = mod.hitVec.y
+      z = mod.hitVec.z
       if (mod.isEntity) {
         y += mod.entityEyeHeight
       }
@@ -253,5 +253,5 @@ private class MovingObjectData {
   var entityEyeHeight : Double = 0d
   @SerializeIncluded
   @SerializeNullable
-  var hitVec : Vec3 = _
+  var hitVec : Vec3d = _
 }

@@ -37,7 +37,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
 
     @Override
     public double getGeneration(double required) {
-        World world = this.getWorldObj();
+        World world = this.getWorld();
         double brightLev =  canGenerate() ? 1.0 : 0.0;
         brightLev *= world.isRaining() ? 0.2 : 1.0;
 
@@ -45,7 +45,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     }
 
     public SolarStatus getStatus() {
-        World world = getWorldObj();
+        World world = getWorld();
         if (canGenerate()) {
             return world.isRaining() ? SolarStatus.WEAK : SolarStatus.STRONG;
         } else {
@@ -54,10 +54,10 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     }
 
     private boolean canGenerate() {
-        World world = getWorldObj();
+        World world = getWorld();
         long time = world.getWorldTime() % 24000;
         boolean isDay = time >= 0 && time <= 12500;
-        return isDay && world.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
+        return isDay && world.canBlockSeeTheSky(x, y + 1, z);
     }
     
     // InfoBlockMulti delegates
@@ -102,7 +102,7 @@ public class TileSolarGen extends TileGeneratorBase implements IMultiTile {
     public AxisAlignedBB getRenderBoundingBox() {
         Block block = getBlockType();
         if(block instanceof BlockMulti) {
-            return ((BlockMulti) block).getRenderBB(xCoord, yCoord, zCoord, info.getDir());
+            return ((BlockMulti) block).getRenderBB(x, y, z, info.getDir());
         } else {
             return super.getRenderBoundingBox();
         }

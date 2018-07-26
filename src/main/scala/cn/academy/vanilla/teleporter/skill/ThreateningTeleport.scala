@@ -84,7 +84,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       if(RandUtils.ranged(0, 1) < dropProb) {
         val drop: ItemStack = curStack.copy
         drop.stackSize = 1
-        player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, result.x, result.y, result.z, drop))
+        player.world.spawnEntityInWorld(new EntityItem(player.world, result.x, result.y, result.z, drop))
       }
       ctx.addSkillExp(getExpIncr(attacked_))
       ctx.setCooldown(lerpf(30, 15, exp).toInt)
@@ -117,7 +117,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       val mo: Motion3D = new Motion3D(player, true).move(range)
       ret.setPos(mo.px, mo.py, mo.pz)
     }
-    else if(pos.typeOfHit eq MovingObjectType.BLOCK) ret.setPos(pos.hitVec.xCoord, pos.hitVec.yCoord, pos.hitVec.zCoord)
+    else if(pos.typeOfHit eq MovingObjectType.BLOCK) ret.setPos(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
     else {
       val ent: Entity = pos.entityHit
       ret.setPos(ent.posX, ent.posY + ent.height, ent.posZ)
@@ -145,8 +145,8 @@ class TTContextC(par: TTContext) extends ClientContext(par) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_start() = {
     if(isLocal) {
-      marker = new EntityMarker(player.worldObj)
-      player.worldObj.spawnEntityInWorld(marker)
+      marker = new EntityMarker(player.world)
+      player.world.spawnEntityInWorld(marker)
       marker.setPosition(player.posX, player.posY, player.posZ)
       marker.width = 0.5f
       marker.height = 0.5f
@@ -181,8 +181,8 @@ class TTContextC(par: TTContext) extends ClientContext(par) {
       while(x <= dist) {
         {
           mo.move(move)
-          player.worldObj.spawnEntityInWorld(TPParticleFactory.instance.next(player.worldObj, mo.getPosVec,
-            VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.02, .02))))
+          player.world.spawnEntityInWorld(TPParticleFactory.instance.next(player.world, mo.getPosVec,
+            new Vec3d(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.02, .02))))
         }
         move = RandUtils.ranged(1, 2)
         x += move

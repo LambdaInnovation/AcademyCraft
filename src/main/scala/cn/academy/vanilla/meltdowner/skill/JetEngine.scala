@@ -11,7 +11,7 @@ import cn.lambdalib2.util.{RandUtils, VecUtils}
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{MovingObjectPosition, Vec3}
+import net.minecraft.util.{MovingObjectPosition, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -66,20 +66,20 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
     }
   }
 
-  private def getDest: Vec3 = Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft
+  private def getDest: Vec3d = Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft
 
   //TRIGGER
   private val TIME: Float = 8
   private val LIFETIME: Float = 15
-  private var target: Vec3 = _
+  private var target: Vec3d = _
   private var ticks: Int = 0
   private var isTriggering = false
 
-  private var start: Vec3 = _
-  private var velocity: Vec3 = _
+  private var start: Vec3d = _
+  private var velocity: Vec3d = _
 
   @Listener(channel=MSG_TRIGGER, side=Array(Side.SERVER))
-  private def s_triggerStart(_target: Vec3) = {
+  private def s_triggerStart(_target: Vec3d) = {
     target = _target
     isTriggering = true
 
@@ -87,12 +87,12 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   }
 
   @Listener(channel=MSG_TRIGGER, side=Array(Side.CLIENT))
-  private def c_triggerStart(_target: Vec3) = {
+  private def c_triggerStart(_target: Vec3d) = {
     if(isLocal) {
       isTriggering = true
       target = _target
 
-      start = VecUtils.vec(player.posX, player.posY, player.posZ)
+      start = new Vec3d(player.posX, player.posY, player.posZ)
       velocity = VecUtils.multiply(VecUtils.subtract(target, start), 1.0 / TIME)
     }
   }
@@ -101,8 +101,8 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   private def s_triggerTick() = {
     if(isTriggering) {
       val pos: MovingObjectPosition = Raytrace.perform(world,
-        VecUtils.vec(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
-        VecUtils.vec(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
+        new Vec3d(player.lastTickPosX, player.lastTickPosY, player.lastTickPosZ),
+        new Vec3d(player.posX, player.posY, player.posZ), EntitySelectors.exclude(player).and(EntitySelectors.living))
       if(player.ridingEntity!=null)player.mountEntity(null);
       if (pos != null && pos.entityHit != null) MDDamageHelper.attack(ctx, pos.entityHit, lerpf(7, 20, exp))
     }
@@ -114,11 +114,11 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
       if (ticks >= LIFETIME)
         terminate()
       ticks += 1
-      val pos: Vec3 = VecUtils.lerp(start, target, ticks / TIME)
-      player.setPosition(pos.xCoord, pos.yCoord, pos.zCoord)
-      player.motionX = velocity.xCoord
-      player.motionY = velocity.yCoord
-      player.motionZ = velocity.zCoord
+      val pos: Vec3d = VecUtils.lerp(start, target, ticks / TIME)
+      player.setPosition(pos.x, pos.y, pos.z)
+      player.motionX = velocity.x
+      player.motionY = velocity.y
+      player.motionZ = velocity.z
       player.fallDistance = 0.0f
     }
   }
@@ -133,8 +133,8 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   
   private var mark: EntityRippleMark = _
 
-  private var target: Vec3 = _
-  private val start: Vec3 = VecUtils.vec(player.posX, player.posY, player.posZ)
+  private var target: Vec3d = _
+  private val start: Vec3d = new Vec3d(player.posX, player.posY, player.posZ)
   
   private var isMarking = false
   private var ticks: Int = 0
@@ -152,8 +152,8 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
   private def l_updateMark() = {
     if(isLocal && isMarking) {
-      val dest: Vec3 = getDest
-      mark.setPosition(dest.xCoord, dest.yCoord, dest.zCoord)
+      val dest: Vec3d = getDest
+      mark.setPosition(dest.x, dest.y, dest.z)
     }
   }
 
@@ -165,14 +165,14 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     }
   }
   
-  private def getDest: Vec3 = Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft
+  private def getDest: Vec3d = Raytrace.getLookingPos(player, 12, EntitySelectors.nothing).getLeft
 
   //TRIGGER
   private var entity: EntityDiamondShield = _
   private var isTriggering = false
 
   @Listener(channel=MSG_TRIGGER, side=Array(Side.CLIENT))
-  private def c_tStartEffect(_target: Vec3) = {
+  private def c_tStartEffect(_target: Vec3d) = {
     target = _target
     isTriggering = true
     entity = new EntityDiamondShield(player)
@@ -185,10 +185,10 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
       ticks += 1
       if (isLocal) player.capabilities.setPlayerWalkSpeed(0.07f)
       for (i <- 0 to 10) {
-        val pos2: Vec3 = VecUtils.lerp(start, target, 3 * ticks / TIME)
-        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(VecUtils.vec(player.posX, player.posY, player.posZ),
-          VecUtils.vec(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))),
-          VecUtils.vec(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
+        val pos2: Vec3d = VecUtils.lerp(start, target, 3 * ticks / TIME)
+        val p: Particle = MdParticleFactory.INSTANCE.next(world, VecUtils.add(new Vec3d(player.posX, player.posY, player.posZ),
+          new Vec3d(RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3), RandUtils.ranged(-.3, .3))),
+          new Vec3d(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .02)))
         world.spawnEntityInWorld(p)
       }
     }

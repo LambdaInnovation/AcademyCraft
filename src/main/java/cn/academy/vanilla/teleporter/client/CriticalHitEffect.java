@@ -32,7 +32,7 @@ public class CriticalHitEffect {
                 double h = RandUtils.ranged(0, 1) * event.target.height;
 
                 world.spawnEntityInWorld(FormulaParticleFactory.instance.next(world,
-                        VecUtils.vec(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
+                        new Vec3d(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
                         VecUtils.multiply(VecUtils.random(), 0.03)));
             }
         }

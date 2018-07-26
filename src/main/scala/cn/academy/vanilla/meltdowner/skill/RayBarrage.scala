@@ -13,7 +13,7 @@ import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3}
+import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -111,14 +111,14 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
       
       val mo: Motion3D = new Motion3D(player.posX, player.posY, player.posZ)
       
-      val v0: Vec3 = mo.getPosVec
-      val v1: Vec3 = mo.clone.fromRotation(minYaw, minPitch).move(RAY_DIST).getPosVec
-      val v2: Vec3 = mo.clone.fromRotation(minYaw, maxPitch).move(RAY_DIST).getPosVec
-      val v3: Vec3 = mo.clone.fromRotation(maxYaw, maxPitch).move(RAY_DIST).getPosVec
-      val v4: Vec3 = mo.clone.fromRotation(maxYaw, minPitch).move(RAY_DIST).getPosVec
+      val v0: Vec3d = mo.getPosVec
+      val v1: Vec3d = mo.clone.fromRotation(minYaw, minPitch).move(RAY_DIST).getPosVec
+      val v2: Vec3d = mo.clone.fromRotation(minYaw, maxPitch).move(RAY_DIST).getPosVec
+      val v3: Vec3d = mo.clone.fromRotation(maxYaw, maxPitch).move(RAY_DIST).getPosVec
+      val v4: Vec3d = mo.clone.fromRotation(maxYaw, minPitch).move(RAY_DIST).getPosVec
       
       val aabb: AxisAlignedBB = WorldUtils.minimumBounds(v0, v1, v2, v3, v4)
-      val list: java.util.List[Entity] = WorldUtils.getEntities(player.worldObj, aabb, selector)
+      val list: java.util.List[Entity] = WorldUtils.getEntities(player.world, aabb, selector)
       
       import scala.collection.JavaConversions._
       
@@ -135,13 +135,13 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
           MDDamageHelper.attack(ctx, e, getScatteredDamage(exp))
       }
     } else {
-      val pres: org.apache.commons.lang3.tuple.Pair[Vec3, MovingObjectPosition] = Raytrace.getLookingPos(player, RAY_DIST)
-      val pos: Vec3 = pres.getLeft
+      val pres: org.apache.commons.lang3.tuple.Pair[Vec3d, MovingObjectPosition] = Raytrace.getLookingPos(player, RAY_DIST)
+      val pos: Vec3d = pres.getLeft
       val result: MovingObjectPosition = pres.getRight
       
-      tx = pos.xCoord
-      ty = pos.yCoord
-      tz = pos.zCoord
+      tx = pos.x
+      ty = pos.y
+      tz = pos.z
       
       if(result != null && result.entityHit != null)
         MDDamageHelper.attack(ctx, result.entityHit, getPlainDamage(exp))
@@ -164,13 +164,13 @@ class RBContextC(par: RBContext) extends ClientContext(par) {
   
   @Listener(channel=MSG_EFFECT_PRERAY, side=Array(Side.CLIENT))
   private def c_spawnPreRay(x0: Double, y0: Double, z0: Double, x1: Double, y1: Double, z1: Double, hit: Boolean) = {
-    val raySmall: EntityBarrageRayPre = new EntityBarrageRayPre(player.worldObj, hit)
+    val raySmall: EntityBarrageRayPre = new EntityBarrageRayPre(player.world, hit)
     raySmall.setFromTo(x0, y0 + 1.6, z0, x1, y1, z1)
-    player.worldObj.spawnEntityInWorld(raySmall)
+    player.world.spawnEntityInWorld(raySmall)
   }
   
   @Listener(channel=MSG_EFFECT_BARRAGE, side=Array(Side.CLIENT))
-  private def c_spawnBarrage(silbarn: EntitySilbarn) = player.worldObj.spawnEntityInWorld(new EntityMdRayBarrage(player.worldObj, 
+  private def c_spawnBarrage(silbarn: EntitySilbarn) = player.world.spawnEntityInWorld(new EntityMdRayBarrage(player.world, 
     silbarn.posX, silbarn.posY, silbarn.posZ, player.rotationYaw, player.rotationPitch))
   
 }

@@ -64,7 +64,7 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   private def s_perform() = {
     if(consume()) {
-      val world = player.worldObj
+      val world = player.world
       // Perform ray trace
       val result = Raytrace.traceLiving(player, range, null, blockFilter)
 
@@ -80,14 +80,14 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
           val hx = result.blockX
           val hy = result.blockY
           val hz = result.blockZ
-          val block = player.worldObj.getBlock(hx, hy, hz)
+          val block = player.world.getBlock(hx, hy, hz)
           if (block == Blocks.water) {
             if (RandUtils.ranged(0, 1) < fishProb) {
               world.spawnEntityInWorld(new EntityItem(
                 world,
-                result.hitVec.xCoord,
-                result.hitVec.yCoord,
-                result.hitVec.zCoord,
+                result.hitVec.x,
+                result.hitVec.y,
+                result.hitVec.z,
                 new ItemStack(Items.cooked_fished)))
               ArcGen.triggerAchievement(player)
             }
@@ -132,7 +132,7 @@ class ArcGenContextC(par: ArcGenContext) extends ClientContext(par) {
     arc.lengthFixed = false
     arc.length = range
 
-    player.worldObj.spawnEntityInWorld(arc)
+    player.world.spawnEntityInWorld(arc)
     ACSounds.playClient(player, "em.arc_weak", 0.5f)
   }
 
