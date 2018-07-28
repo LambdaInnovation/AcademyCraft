@@ -11,7 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
+import org.jetbrains.annotations.NotNull;
 //import net.minecraft.world.WorldSavedData;
 
 import java.util.*;
@@ -264,8 +266,9 @@ public class WiWorldData extends WorldSavedData {
             loadNode(tag1);
     }
 
+    @NotNull
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound tag) {
         NBTTagCompound tag1 = new NBTTagCompound();
         saveNetwork(tag1);
         tag.setTag("net", tag1);
@@ -273,23 +276,27 @@ public class WiWorldData extends WorldSavedData {
         tag1 = new NBTTagCompound();
         saveNode(tag1);
         tag.setTag("node", tag1);
+        return tag;
     }
     
     public static WiWorldData get(World world) {
         if(world.isRemote) {
             throw new RuntimeException("Not allowed to create WiWorldData in client");
         }
+//        MapStorage storage = IS_GLOBAL ? world.getMapStorage() : world.getPerWorldStorage();
+        MapStorage storage = world.getPerWorldStorage();
         String id = getID(world);
-        WiWorldData ret = (WiWorldData) world.loadItemData(WiWorldData.class, id);
+        WiWorldData ret = (WiWorldData) storage.getOrLoadData(WiWorldData.class, id);
         if(ret == null) {
-            world.setItemData(id, ret = new WiWorldData(id));
+            storage.setData(id, ret = new WiWorldData(id));
         }
         ret.world = world;
         return ret;
     }
     
     public static WiWorldData getNonCreate(World world) {
-        WiWorldData data = (WiWorldData) world.loadItemData(WiWorldData.class, getID(world));
+        MapStorage storage = world.getPerWorldStorage();
+        WiWorldData data = (WiWorldData) storage.getOrLoadData(WiWorldData.class, getID(world));
         if(data != null) data.world = world;
         return data;
     }

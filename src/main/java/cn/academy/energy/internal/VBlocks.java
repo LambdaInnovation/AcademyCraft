@@ -37,7 +37,7 @@ public class VBlocks {
         
         public boolean isLoaded(World world) {
 //            return world.getChunkProvider().chunkExists(x >> 4, z >> 4);
-            return world.isChunkGeneratedAt(x >> 4, z >> 4);
+            return world.isChunkGeneratedAt(x, z);
         }
         
         public T get(World world) {
@@ -46,7 +46,8 @@ public class VBlocks {
             if(world == null)
                 return null;
 
-            world.getChunkProvider().loadChunk(x >> 4, z >> 4);
+//            no need right now
+//            world.getChunkProvider().loadChunk(x >> 4, z >> 4);
             
             TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
             if(te == null || !isAcceptable(te)) {
