@@ -1,6 +1,7 @@
 package cn.academy.vanilla.meltdowner.client.render;
 
 import cn.academy.core.Resources;
+import cn.lambdalib2.util.RandUtils;
 
 /**
  * @author WeAthFolD

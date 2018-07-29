@@ -3,7 +3,7 @@ package cn.academy.vanilla.electromaster.client.effect;
 import cn.academy.core.Resources;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.auxgui.AuxGui;
+import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ public class CurrentChargingHUD extends AuxGui {
         this.requireTicking = true;
     }
 
-    private long blendTime = -1;
+    private double blendTime = -1;
     
     public void startBlend(boolean regen) {
         blendTime = GameTimer.getTime();
@@ -65,9 +65,9 @@ public class CurrentChargingHUD extends AuxGui {
     private boolean isBlendingOut() {
         return blendTime != -1;
     }
-    
+
     @Override
-    public void tick() {
+    public void onTick() {
         arcHandler.tick();
     }
 
@@ -109,11 +109,6 @@ public class CurrentChargingHUD extends AuxGui {
         
         if(isBlendingOut() && GameTimer.getTime() - blendTime > 1000)
             dispose();
-    }
-
-    @Override
-    public boolean isForeground() {
-        return false;
     }
     
 }

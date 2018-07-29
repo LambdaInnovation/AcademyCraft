@@ -4,6 +4,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.vanilla.teleporter.client.MarkRender;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;

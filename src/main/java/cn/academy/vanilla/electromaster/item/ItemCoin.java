@@ -59,20 +59,20 @@ public class ItemCoin extends ACItem {
 
         //Spawn at both side, not syncing for render effect purpose
         EntityCoinThrowing etc = new EntityCoinThrowing(player, stack);
-        world.spawnEntityInWorld(etc);
+        world.spawnEntity(etc);
         
         player.playSound("academy:entity.flipcoin", 0.5F, 1.0F);
         setPlayerCoin(player, etc);
         
         MinecraftForge.EVENT_BUS.post(new CoinThrowEvent(player, etc));
         if(!player.capabilities.isCreativeMode) {
-            --stack.stackSize;
+            stack.setCount(stack.getCount()-1);
         }
         return stack;
     }
     
     public static EntityCoinThrowing getPlayerCoin(EntityPlayer player) {
-        EntityCoinThrowing etc = getMap(player).get(player.getCommandSenderName());
+        EntityCoinThrowing etc = getMap(player).get(player.getName());
         if(etc != null && !etc.isDead)
             return etc;
         return null;
@@ -80,7 +80,7 @@ public class ItemCoin extends ACItem {
     
     public static void setPlayerCoin(EntityPlayer player, EntityCoinThrowing etc) {
         Map<String, EntityCoinThrowing> map = getMap(player);
-        map.put(player.getCommandSenderName(), etc);
+        map.put(player.getName(), etc);
     }
     
     private static Map<String, EntityCoinThrowing> getMap(EntityPlayer player) {

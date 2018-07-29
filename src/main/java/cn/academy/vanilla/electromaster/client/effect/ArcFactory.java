@@ -1,11 +1,11 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
-import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.shader.ShaderSimple;
+import cn.academy.vanilla.utils.Vec;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static cn.lambdalib.util.generic.VecUtils.*;
+import static cn.lambdalib2.util.VecUtils.*;
 
 /**
  * Used the concept of L-system and recursion to generate a lightning pattern.
@@ -37,7 +37,7 @@ public class ArcFactory {
     public double maxOffset = 1.5;
     public double branchFactor = 0.4;
     public double widthShrink = 0.7;
-    public Vec3d normal = vec(0, 0, 1);
+    public Vec3d normal = new Vec3d(0, 0, 1);
     
     //States only used when generating
     List< List<Segment> > listAll = new ArrayList();
@@ -56,8 +56,9 @@ public class ArcFactory {
             float theta = (float) (rand.nextFloat() * Math.PI * 2); //Rand dir across YZ plane
             double sin = MathHelper.sin(theta), cos = MathHelper.cos(theta);
             double off = rand.nextFloat() * offset;
-            ave.pt.y += off * sin;
-            ave.pt.z += off * cos;
+            double x=ave.pt.x,y=ave.pt.y,z=ave.pt.z;
+            y += off * sin; z += off * cos;
+            ave.pt = new Vec3d(x,y,z);
             
             Segment s1 = s, s2 = new Segment(ave, s.end, s.alpha);
             s1.end = ave;
@@ -98,7 +99,7 @@ public class ArcFactory {
         listAll.clear();
         bufferAll.clear();
         
-        Vec3d v0 = vec(0, 0, 0), v1 = vec(length, 0, 0);
+        Vec3d v0 = new Vec3d(0, 0, 0), v1 = new Vec3d(length, 0, 0);
         List<Segment> init = new ArrayList();
         init.add(new Segment(
             new Point(v0, width),
@@ -131,9 +132,9 @@ public class ArcFactory {
     static private Vec3d randomRotate(float range, Vec3d dir) {
         float a = (float) (RandUtils.rangef(-range, range) / 180 * Math.PI);
         Vec3d ret = VecUtils.copy(dir);
-        ret.rotateAroundX(RandUtils.rangef(-a, a));
-        ret.rotateAroundY(RandUtils.rangef(-a, a));
-        ret.rotateAroundZ(RandUtils.rangef(-a, a));
+        ret = ret.rotatePitch(RandUtils.rangef(-a, a));
+        ret = ret.rotateYaw(RandUtils.rangef(-a, a));
+        ret = Vec.rotateAroundZ(ret, RandUtils.rangef(-a, a));
         return ret;
     }
     

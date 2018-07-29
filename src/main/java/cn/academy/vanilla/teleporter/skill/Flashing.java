@@ -13,14 +13,17 @@ import cn.academy.core.client.sound.ACSounds;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
 import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPSkillHelper;
+import cn.academy.vanilla.utils.Vec;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.VecUtils;
 import com.google.common.base.Preconditions;
-import com.sun.javafx.geom.Vec3f;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,6 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Optional;
+
+import static cn.lambdalib2.util.MathUtils.lerpf;
 
 
 /**
@@ -77,7 +82,7 @@ public class Flashing extends Skill {
         });
     }
 
-    private static final Vec3i[] dirs = new Vec3i[] {
+    private static final Vec3d[] dirs = new Vec3d[] {
             null,
             new Vec3d(0, 0, -1),
             new Vec3d(0, 0, 1),
@@ -202,7 +207,7 @@ public class Flashing extends Skill {
                     endEffects();
                 } else {
                     if (marking != null) {
-                        Vec3f dest = getDest(performingKey);
+                        Vec3d dest = getDest(performingKey);
                         marking.setPosition(dest.x, dest.y, dest.z);
                     }
                 }
@@ -222,9 +227,9 @@ public class Flashing extends Skill {
         @Listener(channel=MSG_PERFORM, side=Side.SERVER)
         void serverPerform(int keyid) {
             if (ctx.consume(0, consumption)) {
-                Vec3f dest = getDest(keyid);
+                Vec3d dest = getDest(keyid);
                 if(player.isRiding())
-                    player.ridingEntity=null;
+                    player.dismountRidingEntity();
                 player.setPositionAndUpdate(dest.x, dest.y, dest.z);
                 player.fallDistance = 0.0f;
 
@@ -238,7 +243,7 @@ public class Flashing extends Skill {
 
         @Listener(channel=MSG_PERFORM, side=Side.CLIENT)
         void clientPerform() {
-            ACSounds.playClient(player, "tp.tp_flashing", 1.0f);
+            ACSounds.playClient(player, "tp.tp_flashing", SoundCategory.AMBIENT, 1.0f);
             if (isLocal()) {
                 if (cancellor != null) {
                     cancellor.setDead();
@@ -268,10 +273,10 @@ public class Flashing extends Skill {
             endEffects();
 
             marking = new EntityTPMarking(player);
-            Vec3f dest = getDest(performingKey);
+            Vec3d dest = getDest(performingKey);
             marking.setPosition(dest.x, dest.y, dest.z);
 
-            world().spawnEntityInWorld(marking);
+            world().spawnEntity(marking);
         }
 
         @SideOnly(Side.CLIENT)
@@ -286,14 +291,14 @@ public class Flashing extends Skill {
             return simulate ? ctx.canConsumeCP(consumption) : ctx.consume(0, consumption);
         }
 
-        private Vec3f getDest(int keyid) {
+        private Vec3d getDest(int keyid) {
             Preconditions.checkState(keyid != -1);
 
             double dist = lerpf(12, 18, exp);
 
-            Vec3f dir = VecUtils.copy(dirs[keyid]);
-            dir.rotateAroundZ(player.rotationPitch * MathUtils.PI_F / 180);
-            dir.rotateAroundY((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
+            Vec3d dir = VecUtils.copy(dirs[keyid]);
+            Vec.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180);
+            dir.ro((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
             Motion3D mo = new Motion3D(player, true);
             mo.setMotion(dir.x, dir.y, dir.z);

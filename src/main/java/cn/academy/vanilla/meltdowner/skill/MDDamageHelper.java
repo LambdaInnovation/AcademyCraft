@@ -10,8 +10,11 @@ import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.s11n.network.TargetPoints;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -95,10 +98,10 @@ public class MDDamageHelper {
                         double theta = RandUtils.nextDouble() * 2 * Math.PI;
                         double h = RandUtils.ranged(0, e.height);
                         
-                        Vec3d pos = VecUtils.add(new Vec3d(e.posX, e.posY, e.posZ), 
+                        Vec3d pos = VecUtils.add(new Vec3d(e.posX, e.posY, e.posZ),
                             new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)));
                         Vec3d vel = VecUtils.multiply(VecUtils.random(), 0.02);
-                        e.getEntityWorld().spawnEntityInWorld(MdParticleFactory.INSTANCE.next(e.getEntityWorld(), pos, vel));
+                        e.getEntityWorld().spawnEntity(MdParticleFactory.INSTANCE.next(e.getEntityWorld(), pos, vel));
                     }
                 }
             }

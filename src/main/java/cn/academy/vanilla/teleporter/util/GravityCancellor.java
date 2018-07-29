@@ -1,5 +1,6 @@
 package cn.academy.vanilla.teleporter.util;
 
+import cn.lambdalib2.util.ClientUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;

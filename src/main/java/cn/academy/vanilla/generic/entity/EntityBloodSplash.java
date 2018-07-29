@@ -2,6 +2,7 @@ package cn.academy.vanilla.generic.entity;
 
 import cn.academy.core.Resources;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;

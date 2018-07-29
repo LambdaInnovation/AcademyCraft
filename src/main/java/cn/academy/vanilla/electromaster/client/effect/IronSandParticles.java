@@ -1,9 +1,6 @@
 package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.core.Resources;
-import cn.lambdalib2.particle.Particle;
-import cn.lambdalib2.particle.ParticleFactory;
-import cn.lambdalib2.util.entityx.MotionHandler;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -84,7 +81,7 @@ public class IronSandParticles {
     public void tick() {
         int n = RandUtils.rangei(2, 3);
         for(int i = 0; i < n; ++i) {
-            player.world.spawnEntityInWorld(factory.next(player.world));
+            player.world.spawnEntity(factory.next(player.world));
         }
     }
 }

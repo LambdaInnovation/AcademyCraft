@@ -2,6 +2,7 @@ package cn.academy.vanilla.meltdowner.client.render;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.meltdowner.entity.EntityDiamondShield;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

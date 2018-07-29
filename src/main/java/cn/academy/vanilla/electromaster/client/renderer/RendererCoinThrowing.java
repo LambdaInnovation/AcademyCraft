@@ -11,7 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
+//import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -27,7 +27,7 @@ public class RendererCoinThrowing extends Render {
             float var8, float var9) {
         EntityCoinThrowing etc = (EntityCoinThrowing) var1;
         EntityPlayer player = etc.player;
-        boolean fp = player == Minecraft.getMinecraft().thePlayer 
+        boolean fp = player == Minecraft.getMinecraft().player
                 && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0;
         
         double dt = GameTimer.getTime() % 150;
@@ -35,7 +35,7 @@ public class RendererCoinThrowing extends Render {
         if(etc.player == null)
             return;
         //If syncedSingle and in client computer, do not render
-        if(etc.isSync && player == Minecraft.getMinecraft().thePlayer)
+        if(etc.isSync && player == Minecraft.getMinecraft().player)
             return;
         if(etc.posY < player.posY)
             return;
@@ -43,7 +43,7 @@ public class RendererCoinThrowing extends Render {
             //x = player.posX - RenderManager.renderPosX;
             //y = etc.posY - RenderManager.renderPosY;
             //z = player.posZ - RenderManager.renderPosZ;
-            if(player == Minecraft.getMinecraft().thePlayer) {
+            if(player == Minecraft.getMinecraft().player) {
                 x = z = 0;
             }
             

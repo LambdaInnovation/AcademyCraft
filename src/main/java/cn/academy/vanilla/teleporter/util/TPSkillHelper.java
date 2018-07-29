@@ -10,10 +10,12 @@ import cn.academy.vanilla.teleporter.passiveskill.SpaceFluctuation$;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author WeAthFolD
@@ -44,7 +46,7 @@ public class TPSkillHelper {
             float prob = prob(aData, i);
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
-                player.addChatComponentMessage(new ChatComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
+                player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
                 ModuleAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
@@ -106,7 +108,7 @@ public class TPSkillHelper {
         return a + l * (b - a);
     }
 
-    @Listener(channel="fire", side=Side.CLIENT)
+    @Listener(channel="fire", side= Side.CLIENT)
     private static void fireCritAttack(EntityPlayer player, Entity target, int level) {
         MinecraftForge.EVENT_BUS.post(new TPCritHitEvent(player, target, level));
     }

@@ -2,6 +2,7 @@ package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

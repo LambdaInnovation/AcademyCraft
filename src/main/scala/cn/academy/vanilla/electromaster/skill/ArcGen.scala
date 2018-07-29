@@ -7,6 +7,7 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{IBlockSelector, RandUtils}
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -14,6 +15,8 @@ import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.util.MathUtils.lerpf
+import net.minecraft.util.SoundCategory;
 
 /**
   * @author WeAthFolD, KSkun
@@ -32,7 +35,7 @@ private object ArcGenContext {
 
   val blockFilter = new IBlockSelector {
     override def accepts(world: World, x: Int, y: Int, z: Int, block: Block) = {
-      block == Blocks.water || block == Blocks.flowing_water ||
+      block == Blocks.WATER || block == Blocks.FLOWING_WATER ||
         BlockSelectors.filNormal.accepts(world, x, y, z, block)
     }
   }
@@ -132,8 +135,8 @@ class ArcGenContextC(par: ArcGenContext) extends ClientContext(par) {
     arc.lengthFixed = false
     arc.length = range
 
-    player.world.spawnEntityInWorld(arc)
-    ACSounds.playClient(player, "em.arc_weak", 0.5f)
+    player.world.spawnEntity(arc)
+    ACSounds.playClient(player, "em.arc_weak",SoundCategory.AMBIENT, 0.5f)
   }
 
 }

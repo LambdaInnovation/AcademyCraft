@@ -3,6 +3,7 @@ package cn.academy.vanilla.electromaster.entity;
 import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererMagHook;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.EntitySelectors;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,6 +39,7 @@ public class EntityMagHook extends EntityAdvanced {
     
     public EntityMagHook(final EntityPlayer player) {
         super(player.getEntityWorld());
+        //TODO Motion3D.apply
         new Motion3D(player, true).multiplyMotionBy(2).applyToEntity(this);
         
         Rigidbody rb = this.getMotionHandler(Rigidbody.class);

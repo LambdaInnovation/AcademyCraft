@@ -2,10 +2,11 @@ package cn.academy.vanilla.electromaster.client.effect;
 
 import cn.academy.core.Resources;
 import cn.lambdalib2.util.RenderUtils;
+/*
 import cn.lambdalib2.util.renderhook.PlayerRenderHook;
 import cn.lambdalib2.util.shader.GLSLMesh;
 import cn.lambdalib2.util.shader.ShaderSimple;
-import cn.lambdalib2.util.deprecated.MeshUtils;
+import cn.lambdalib2.util.deprecated.MeshUtils;*/
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -51,7 +52,7 @@ public class RailgunHandEffect extends PlayerRenderHook {
             glTranslated(.26, -.12, -.24);
             glScalef(.4f, .4f, 1f);
         } else {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
             glTranslated(0, 0.2, -1);
             glRotated(-player.rotationPitch, 1, 0, 0);
         }

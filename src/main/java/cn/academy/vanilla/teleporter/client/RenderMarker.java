@@ -1,6 +1,7 @@
 package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.vanilla.teleporter.entity.EntityMarker;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.renderer.BufferBuilder;
 import cn.academy.core.client.Tessellator;
 import net.minecraft.client.renderer.entity.Render;

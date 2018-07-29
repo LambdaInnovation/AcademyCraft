@@ -5,9 +5,15 @@ import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
+import cn.academy.vanilla.utils.Vec;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -64,8 +70,8 @@ public class EntityRailgunFX extends EntityRayBase {
                 float theta = RandUtils.rangef(0, MathUtils.PI_F * 2);
                 double r = RandUtils.ranged(0.1, 0.25);
                 Vec3d vec = new Vec3d(cur, r * MathHelper.sin(theta), r * MathHelper.cos(theta));
-                vec.rotateAroundZ(rotationPitch * MathUtils.PI_F / 180);
-                vec.rotateAroundY((270 - rotationYaw) * MathUtils.PI_F / 180);
+                Vec.rotateAroundZ(vec, rotationPitch * MathUtils.PI_F / 180);
+                vec.rotateYaw((270 - rotationYaw) * MathUtils.PI_F / 180);
                 arcHandler.generateAt(vec);
                 
                 cur += RandUtils.ranged(1, 2);
@@ -123,7 +129,7 @@ public class EntityRailgunFX extends EntityRayBase {
                 double y, double z, float a, float b) {
             GL11.glPushMatrix();
             GL11.glTranslated(x, y, z);
-            ViewOptimize.fix((IAssociatePlayer) ent);
+            ViewOptimize.fix((ViewOptimize.IAssociatePlayer) ent);
             
             EntityRailgunFX railgun = (EntityRailgunFX) ent;
             

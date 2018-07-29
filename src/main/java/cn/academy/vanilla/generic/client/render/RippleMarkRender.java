@@ -2,6 +2,8 @@ package cn.academy.vanilla.generic.client.render;
 
 import cn.academy.core.Resources;
 import cn.academy.vanilla.generic.entity.EntityRippleMark;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +41,7 @@ public class RippleMarkRender extends Render {
     @Override
     public void doRender(Entity entity, double x, double y, double z, float a, float b) {
         EntityRippleMark mark = (EntityRippleMark) entity;
-        long dt = GameTimer.getTime() - mark.creationTime;
+        double dt = GameTimer.getTime() - mark.creationTime;
         
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -52,7 +54,7 @@ public class RippleMarkRender extends Render {
         for(int i = 0; i < timeOffsets.length; ++i) {
             GL11.glPushMatrix();
             
-            long mod = (dt - timeOffsets[i]) % CYCLE;
+            double mod = (dt - timeOffsets[i]) % CYCLE;
             float size = getSize(mod);
             
             GL11.glTranslatef(0, getHeight(mod), 0);
@@ -85,7 +87,7 @@ public class RippleMarkRender extends Render {
         return 1.0f;
     }
     
-    private float getSize(long mod) {
+    private float getSize(double mod) {
         return MathUtils.lerpf(1.9f, 1.4f, (float) mod / CYCLE);
     }
 

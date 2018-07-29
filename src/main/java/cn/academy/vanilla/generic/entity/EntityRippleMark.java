@@ -2,6 +2,7 @@ package cn.academy.vanilla.generic.entity;
 
 import cn.academy.vanilla.generic.client.render.RippleMarkRender;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.GameTimer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

@@ -1,7 +1,10 @@
 package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.vanilla.teleporter.util.TPSkillHelper.TPCritHitEvent;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,7 +34,7 @@ public class CriticalHitEffect {
                 double r = RandUtils.ranged(t.width * .5, t.width * .7);
                 double h = RandUtils.ranged(0, 1) * event.target.height;
 
-                world.spawnEntityInWorld(FormulaParticleFactory.instance.next(world,
+                world.spawnEntity(FormulaParticleFactory.instance.next(world,
                         new Vec3d(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
                         VecUtils.multiply(VecUtils.random(), 0.03)));
             }

@@ -4,7 +4,7 @@ import cn.academy.core.AcademyCraft;
 import cn.academy.core.Resources;
 import cn.academy.vanilla.electromaster.entity.EntityMagHook;
 import cn.lambdalib2.template.client.render.item.RenderModelItem;
-import cn.lambdalib2.util.deprecated.ItemModelCustom;
+import cn.lambdalib2.util.ItemModelCustom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +30,7 @@ public class ItemMagHook extends Item {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if(!world.isRemote) {
             world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-            world.spawnEntityInWorld(new EntityMagHook(player));
+            world.spawnEntity(new EntityMagHook(player));
             if(!player.capabilities.isCreativeMode)
                 --stack.stackSize;
         }

@@ -3,11 +3,13 @@ package cn.academy.vanilla.electromaster.entity;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.lambdalib2.registry.mc.RegEntity;
+/*
 import cn.lambdalib2.util.deprecated.ViewOptimize;
 import cn.lambdalib2.util.deprecated.ViewOptimize.IAssociatePlayer;
-import cn.lambdalib2.util.entityx.EntityAdvanced;
-import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.Motion3D;
+import cn.lambdalib2.util.entityx.EntityAdvanced;*/
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +25,8 @@ import org.lwjgl.opengl.GL11;
  */
 @RegEntity()
 @SideOnly(Side.CLIENT)
-public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
+public class EntityArc extends EntityAdvanced implements ViewOptimize.IAssociatePlayer
+{
     
     static final int GEN = 20;
     
@@ -63,8 +66,8 @@ public class EntityArc extends EntityAdvanced implements IAssociatePlayer {
     public EntityArc(EntityPlayer _player, Arc[]_patterns) {
         super(_player.getEntityWorld());
         this.player = _player;
-        
-        new Motion3D(player, true).applyToEntity(this);
+        this.setPosition(player.posX, player.posY, player.posZ);
+        //TODO Motion3D.apply
         ignoreFrustumCheck = true;
         iid = new int[n];
         
