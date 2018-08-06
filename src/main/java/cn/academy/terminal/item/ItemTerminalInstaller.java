@@ -7,7 +7,7 @@ import cn.academy.terminal.client.TerminalInstallerRenderer;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
-import cn.lambdalib2.util.auxgui.AuxGuiHandler;
+import cn.lambdalib2.auxgui.AuxGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

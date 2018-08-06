@@ -10,7 +10,7 @@ import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.auxgui.AuxGui;
+import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.Extent;
 import cn.lambdalib2.render.font.IFont.FontOption;
@@ -92,6 +92,7 @@ public class FreqTransmitterUI extends AuxGui {
     public FreqTransmitterUI() {
         player = Minecraft.getMinecraft().thePlayer;
         world = player.world;
+        consistent = false;
         
         LIFMLGameEventDispatcher.INSTANCE.registerKeyInput(keyDispatcher = new KeyEventDispatcher());
         LIFMLGameEventDispatcher.INSTANCE.registerMouseInput(keyDispatcher);
@@ -99,11 +100,6 @@ public class FreqTransmitterUI extends AuxGui {
         setState(new StateStart());
 
         ControlOverrider.override(OVERRIDE_GROUP, KeyManager.MOUSE_LEFT, KeyManager.MOUSE_RIGHT);
-    }
-    
-    @Override
-    public boolean isConsistent() {
-        return false;
     }
     
     private void setState(State next) {
@@ -133,11 +129,6 @@ public class FreqTransmitterUI extends AuxGui {
         keyDispatcher.setDead();
 
         ControlOverrider.endOverride(OVERRIDE_GROUP);
-    }
-
-    @Override
-    public boolean isForeground() {
-        return false;
     }
 
     @Override

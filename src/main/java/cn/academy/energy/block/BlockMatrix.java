@@ -2,6 +2,9 @@ package cn.academy.energy.block;
 
 import cn.academy.core.block.ACBlockMulti;
 import cn.academy.energy.client.ui.GuiMatrix2;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -85,7 +88,7 @@ public class BlockMatrix extends ACBlockMulti {
         }
         
         private TileMatrix check(World world, int x, int y, int z) {
-            TileEntity te = world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
             return (TileMatrix) (te instanceof TileMatrix ? te : null);
         }
     };

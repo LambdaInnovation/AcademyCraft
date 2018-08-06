@@ -18,13 +18,11 @@ import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.IGuiEventHandler;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
-import cn.lambdalib2.util.HudUtils;
-import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.*;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
-import cn.lambdalib2.util.MathUtils;
-import cn.lambdalib2.util.Color;
-import cn.lambdalib2.util.GameTimer;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -33,6 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,18 +42,18 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class PresetEditUI extends GuiScreen {
     
-    static final Color 
-        CRL_BACK = new Color().setColor4i(49, 49, 49, 200),
-        CRL_WHITE = new Color(1, 1, 1, 0.6),
-        CRL_GLOW = new Color(1, 1, 1, 0.2);
+    static final Color
+        CRL_BACK = new Color(49, 49, 49, 200),
+        CRL_WHITE = Colors.fromFloat(1, 1, 1, 0.6f),
+        CRL_GLOW = Colors.fromFloat(1, 1, 1, 0.2f);
     
     static WidgetContainer loaded;
     static Widget template;
     
-    static final double STEP = 125;
-    static final long TRANSIT_TIME = 350;
-    static final double MAX_ALPHA = 1, MIN_ALPHA = 0.3;
-    static final double MAX_SCALE = 1, MIN_SCALE = 0.8;
+    static final float STEP = 125;
+    static final double TRANSIT_TIME = 0.35;
+    static final int MAX_ALPHA = Colors.f2i(1f), MIN_ALPHA = Colors.f2i(0.3f);
+    static final float MAX_SCALE = 1, MIN_SCALE = 0.8f;
     
     static class SelectionProvider {
         public final int id;
@@ -78,8 +77,8 @@ public class PresetEditUI extends GuiScreen {
      */
     CGui transitor = new CGui();
 
-    @RegInitCallback
-    private static void __init() {
+    @StateEventCallback
+    private static void __init(FMLInitializationEvent ev) {
         loaded = CGUIDocument.read(new ResourceLocation("academy:guis/preset_edit.xml"));
         template = loaded.getWidget("template");
     }
@@ -94,14 +93,14 @@ public class PresetEditUI extends GuiScreen {
     int lastActive, active;
     
     boolean transiting;
-    long transitStartTime;
-    long deltaTime; //Time that has passed since last transition
+    double transitStartTime;
+    double deltaTime; //Time that has passed since last transition
     double transitProgress;
     
     Widget selector;
     
     public PresetEditUI() {
-        player = Minecraft.getMinecraft().thePlayer;
+        player = Minecraft.getMinecraft().player;
         data = PresetData.get(player);
         aData = AbilityData.get(player);
         
@@ -154,7 +153,7 @@ public class PresetEditUI extends GuiScreen {
         Widget ret = template.copy();
         for(Widget w : ret.getDrawList()) {
             for(Widget w2 : w.getDrawList())
-                w2.listen(FrameEvent.class, new AlphaAssign(), -1);
+                w2.listen(FrameEvent.class, -1, new AlphaAssign());
         }
         return ret;
     }
@@ -183,14 +182,14 @@ public class PresetEditUI extends GuiScreen {
         }
     }
     
-    private double getXFor(int i, int active) {
+    private float getXFor(int i, int active) {
         if(i == active) {
             return 0;
         }
         return STEP * (i - active);
     }
     
-    private double getXFor(int i) {
+    private float getXFor(int i) {
         return getXFor(i, active);
     }
     
@@ -231,7 +230,7 @@ public class PresetEditUI extends GuiScreen {
     private void updateTransit() {
         deltaTime = GameTimer.getAbsTime() - transitStartTime;
         
-        transitProgress = (double)deltaTime / TRANSIT_TIME;
+        transitProgress = deltaTime / TRANSIT_TIME;
         if(transitProgress > 1) {
             transitProgress = 1;
         }
@@ -267,7 +266,7 @@ public class PresetEditUI extends GuiScreen {
         /**
          * Master alpha visited by all sub widgets
          */
-        protected double alpha;
+        protected int alpha;
         
         final int id;
         
@@ -291,14 +290,14 @@ public class PresetEditUI extends GuiScreen {
             
             alpha = id == active ? MAX_ALPHA : MIN_ALPHA;
             widget.transform.scale = id == active ? MAX_SCALE : MIN_SCALE;
-            DrawTexture.get(widget).color.a = alpha;
+            DrawTexture.get(widget).color.setAlpha(alpha);
         }
         
         
     }
     
     static Page getPage(Widget w) {
-        return w.getComponent("Page");
+        return w.getComponent(Page.class);
     }
     
     private class HintHandler extends Component {
@@ -314,7 +313,7 @@ public class PresetEditUI extends GuiScreen {
                 Page page = getPage(w.getWidgetParent());
                 DrawTexture dt = DrawTexture.get(w);
                 dt.enabled = page.id == active && event.hovering;
-                dt.color.a = page.alpha;
+                dt.color.setAlpha(page.alpha);
             });
             
             listen(LeftClickEvent.class, (w, e) -> {
@@ -325,7 +324,7 @@ public class PresetEditUI extends GuiScreen {
                 } else if(page.id == active) {
                     // Open the selector
                     selector = new Selector(keyid);
-                    selector.transform.setPos(foreground.mouseX, foreground.mouseY);
+                    selector.transform.setPos(foreground.getMouseX(), foreground.getMouseY());
                     foreground.addWidget(selector);
                 } else {
                     startTransit(page.id);
@@ -350,22 +349,22 @@ public class PresetEditUI extends GuiScreen {
             
             listen(FrameEvent.class, (w, e) -> 
             {
-                DrawTexture.get(w).color.a = alpha;
+                DrawTexture.get(w).color.setAlpha(alpha);
             });
         }
         
         @Override
         public void updatePosition() {
             double x0 = getXFor(id, lastActive), x1 = getXFor(id, active);
-            double dx = MathUtils.lerp(x0, x1, transitProgress);
-            double scale;
+            float dx = (float) MathUtils.lerp(x0, x1, transitProgress);
+            float scale;
             
             if(isFrom()) {
-                alpha = MathUtils.lerp(MAX_ALPHA, MIN_ALPHA, transitProgress);
-                scale = MathUtils.lerp(MAX_SCALE, MIN_SCALE, transitProgress);
+                alpha = (int)MathUtils.lerp(MAX_ALPHA, MIN_ALPHA, transitProgress);
+                scale = (float)MathUtils.lerp(MAX_SCALE, MIN_SCALE, transitProgress);
             } else if(isTo()) {
-                alpha = MathUtils.lerp(MIN_ALPHA, MAX_ALPHA, transitProgress);
-                scale = MathUtils.lerp(MIN_SCALE, MAX_SCALE, transitProgress);
+                alpha = (int)MathUtils.lerp(MIN_ALPHA, MAX_ALPHA, transitProgress);
+                scale = (float)MathUtils.lerp(MIN_SCALE, MAX_SCALE, transitProgress);
             } else {
                 alpha = MIN_ALPHA;
                 scale = MIN_SCALE;
@@ -374,7 +373,7 @@ public class PresetEditUI extends GuiScreen {
             widget.transform.x = dx;
             widget.transform.scale = scale;
             
-            DrawTexture.get(widget).color.a = alpha;
+            DrawTexture.get(widget).color.setAlpha(alpha);
             widget.dirty = true;
         }
         
@@ -392,12 +391,12 @@ public class PresetEditUI extends GuiScreen {
 
         @Override
         public void handleEvent(Widget w, FrameEvent event) {
-            double masterAlpha = getPage(w.getWidgetParent().getWidgetParent()).alpha;
+            int masterAlpha = getPage(w.getWidgetParent().getWidgetParent()).alpha;
             DrawTexture dt = DrawTexture.get(w);
             if(dt != null) {
-                dt.color.a = masterAlpha;
+                dt.color.setAlpha(masterAlpha);
             } else {
-                TextBox.get(w).option.color.a = masterAlpha;
+                TextBox.get(w).option.color.setAlpha(masterAlpha);
             }
         }
         
@@ -405,12 +404,12 @@ public class PresetEditUI extends GuiScreen {
     
     private class Selector extends Widget {
         final int MAX_PER_ROW = 4;
-        final double MARGIN = 2.5, SIZE = 15, STEP = SIZE + 3;
+        final float MARGIN = 2.5f, SIZE = 15, STEP = SIZE + 3;
         
         List<Skill> available = new ArrayList();
         final int keyid;
         
-        double width, height;
+        float width, height;
         
         public Selector(int _keyid) {
             keyid = _keyid;
@@ -438,10 +437,10 @@ public class PresetEditUI extends GuiScreen {
             
             // Build the window and the widget
             listen(FrameEvent.class, (w, e) -> {
-                CRL_WHITE.bind();
+                Colors.bindToGL(CRL_WHITE);
                 ACRenderingHelper.drawGlow(0, 0, width, height, 1, CRL_WHITE);
                 
-                CRL_BACK.bind();
+                Colors.bindToGL(CRL_BACK);
                 HudUtils.colorRect(0, 0, width, height);
                 
                 String str; 
@@ -453,10 +452,10 @@ public class PresetEditUI extends GuiScreen {
                     str = local("skill_select");
                 }
 
-                FontOption opt = new FontOption(9, new Color(0xffbbbbbb));
+                FontOption opt = new FontOption(9, Colors.fromHexColor(0xffbbbbbb));
                 double     len = font.getTextWidth(str, opt);
 
-                CRL_BACK.bind();
+                Colors.bindToGL(CRL_BACK);
                 HudUtils.colorRect(0, -13.5, len + 6, 11.5);
 
                 ACRenderingHelper.drawGlow(0, -13.5, len + 6, 11.5, 1, CRL_GLOW);
@@ -476,7 +475,7 @@ public class PresetEditUI extends GuiScreen {
                 
                 DrawTexture tex = new DrawTexture().setTex(selection.texture);
                 single.addComponent(tex);
-                single.addComponent(new Tint(Color.monoBlend(1, 0), Color.monoBlend(1, 0.2), false));
+                single.addComponent(new Tint(Colors.monoBlend(1, 0), Colors.monoBlend(1, 0.2f), false));
                 single.addComponent(new SelHandler(selection));
                 addWidget("_sel" + i, single);
             }

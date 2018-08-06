@@ -2,13 +2,14 @@ package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.Controllable;
 import cn.academy.ability.api.Skill;
-import cn.lambdalib2.util.Color;
-import net.minecraftforge.fml.common.registry.RegistryDelegate.Delegate;
+import cn.lambdalib2.util.Colors;
+//import net.minecraftforge.fml.common.registry.RegistryDelegate.Delegate;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.util.Color;
 
 /**
  * {@link KeyDelegate} is provided by a skill and handles key delegation of ONE key.
@@ -27,7 +28,7 @@ public abstract class KeyDelegate {
 
         DelegateState(float _alpha, int _glowColor, boolean _sinEffect) {
             alpha = _alpha;
-            glowColor = new Color(_glowColor);
+            glowColor = Colors.fromHexColor(_glowColor);
             sinEffect = _sinEffect;
         }
     }
@@ -49,7 +50,7 @@ public abstract class KeyDelegate {
 
     @SideOnly(Side.CLIENT)
     protected final EntityPlayer getPlayer() {
-        return getMC().thePlayer;
+        return getMC().player;
     }
 
     /**

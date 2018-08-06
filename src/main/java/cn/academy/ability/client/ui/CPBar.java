@@ -16,17 +16,15 @@ import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.Transform.WidthAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
-import cn.lambdalib2.util.HudUtils;
-import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.*;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.shader.ShaderProgram;
-import cn.lambdalib2.util.MathUtils;
-import cn.lambdalib2.util.RandUtils;
-import cn.lambdalib2.util.Color;
-import cn.lambdalib2.util.GameTimer;
+//import cn.lambdalib2.util.Color;
 import cn.lambdalib2.vis.curve.CubicCurve;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,6 +36,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.Color;
 
 import javax.vecmath.Vector2d;
 import java.util.ArrayList;
@@ -52,8 +51,8 @@ public class CPBar extends Widget {
 
     public static final CPBar instance = new CPBar();
 
-    static final double WIDTH = 964, HEIGHT = 147;
-    static final double SCALE = 0.2;
+    static final float WIDTH = 964, HEIGHT = 147;
+    static final float SCALE = 0.2f;
 
     static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
     
@@ -61,8 +60,8 @@ public class CPBar extends Widget {
     
     static IConsumptionHintProvider chProvider;
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent ev) {
         ACHud.instance.addElement(instance, () -> true, "cpbar",
                 new Widget().size(WIDTH, HEIGHT)
                         .scale(SCALE)
@@ -153,7 +152,7 @@ public class CPBar extends Widget {
     }
 
     OffsetKeyframe int_get() {
-        long timeInput = GameTimer.getAbsTime() % maxtime;
+        long timeInput = ((long) (GameTimer.getAbsTime() * 1000)) % maxtime;
         return frames.stream()
                 .filter(f -> f.time > timeInput)
                 .findFirst().get();
@@ -178,13 +177,13 @@ public class CPBar extends Widget {
         
         initEvents();
         
-        cpColors.add(new ProgColor(0.0, new Color(0xfff06767)));
-        cpColors.add(new ProgColor(0.35, new Color(0xffffae44)));
-        cpColors.add(new ProgColor(1.0, new Color(0xffffffff)));
+        cpColors.add(new ProgColor(0.0, Colors.fromHexColor(0xfff06767)));
+        cpColors.add(new ProgColor(0.35, Colors.fromHexColor(0xffffae44)));
+        cpColors.add(new ProgColor(1.0, Colors.fromHexColor(0xffffffff)));
         
-        overrideColors.add(new ProgColor(0.0, new Color(0x0Adfdfdf)));
-        overrideColors.add(new ProgColor(0.55, new Color(0x23f0d49d)));
-        overrideColors.add(new ProgColor(1.0, new Color(0x50f56464)));
+        overrideColors.add(new ProgColor(0.0, Colors.fromHexColor(0x0Adfdfdf)));
+        overrideColors.add(new ProgColor(0.55, Colors.fromHexColor(0x23f0d49d)));
+        overrideColors.add(new ProgColor(1.0, Colors.fromHexColor(0x50f56464)));
         
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -192,17 +191,17 @@ public class CPBar extends Widget {
     @SubscribeEvent
     public void onSwitchPreset(PresetSwitchEvent event) {
         lastPresetTime = presetChangeTime;
-        presetChangeTime = GameTimer.getTime();
+        presetChangeTime = (long) (GameTimer.getTime() * 1000);
     }
 
     public void startDisplayNumbers() {
         showingNumbers = true;
-        lastShowValueChange = GameTimer.getTime();
+        lastShowValueChange = (long) (GameTimer.getTime() * 1000);
     }
 
     public void stopDisplayNumbers() {
         showingNumbers = false;
-        long time = GameTimer.getTime();
+        long time = (long) (GameTimer.getTime() * 1000);
         if (time - lastShowValueChange > 400) {
             lastShowValueChange = time;
         } else lastShowValueChange = 0;
@@ -211,7 +210,7 @@ public class CPBar extends Widget {
     private void initEvents() {
         listen(FrameEvent.class, (w, e) -> 
         {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
             CPData cpData = CPData.get(player);
             AbilityData aData = AbilityData.get(player);
             if (!aData.hasCategory()) return;
@@ -222,7 +221,7 @@ public class CPBar extends Widget {
             boolean active = cpData.isActivated();
             
             // Calculate alpha
-            long time = GameTimer.getTime();
+            long time = (long) (GameTimer.getTime() * 1000);
             if(!lastFrameActive && active) {
                 showTime = time;
             }
@@ -240,7 +239,7 @@ public class CPBar extends Widget {
             if (interf) {
                 OffsetKeyframe frame = int_get();
                 GL11.glTranslated(frame.direction.x, frame.direction.y, 0);
-                long timeInput = GameTimer.getAbsTime() % maxtime;
+                long timeInput = (long) (GameTimer.getAbsTime() * 1000) % maxtime;
                 timeInput = (timeInput / 10) * 10; // Lower the precision to produce 'jagged' effect
                 mAlpha *= alphaCurve.valueAt(timeInput);
             }
@@ -306,11 +305,11 @@ public class CPBar extends Widget {
                     }
 
                     if (alpha > 0) {
-                        final double x0 = 110;
+                        final float x0 = 110;
 
                         IFont font = Resources.font();
                         FontOption option = new FontOption(40);
-                        option.color.a = 0.6f * mAlpha * alpha;
+                        option.color.setAlpha(Colors.f2i(0.6f * mAlpha * alpha));
 
                         String str10 = "CP ";
                         String str11 = String.format("%.0f", cpData.getCP());
@@ -320,13 +319,13 @@ public class CPBar extends Widget {
                         String str21 = String.format("%.0f", cpData.getOverload());
                         String str22 = String.format("/%.0f", cpData.getMaxOverload());
 
-                        double len10 = font.getTextWidth(str10, option),
+                        float len10 = font.getTextWidth(str10, option),
                                 len11 = font.getTextWidth(str11, option),
                                 len20 = font.getTextWidth(str20, option),
                                 len21 = font.getTextWidth(str21, option);
 
-                        double len0 = Math.max(len10, len20);
-                        double len1 = len0 + Math.max(len11, len21);
+                        float len0 = Math.max(len10, len20);
+                        float len1 = len0 + Math.max(len11, len21);
 
                         font.draw(str10, x0, 55, option);
                         font.draw(str12, x0+len1, 55, option);
@@ -364,7 +363,7 @@ public class CPBar extends Widget {
         
         if(shaderLoaded) {
             shaderOverloaded.useProgram();
-            shaderOverloaded.updateTexOffset((GameTimer.getTime() % 10000L) / 10000.0f);
+            shaderOverloaded.updateTexOffset(((float) GameTimer.getTime() % 10L) / 10000.0f);
         }
         
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 4);
@@ -457,8 +456,8 @@ public class CPBar extends Widget {
         mAlpha = pre_mAlpha;
     }
     
-    final Color CRL_P_BACK = new Color().setColor4i(48, 48, 48, 160),
-            CRL_P_FORE = new Color().setColor4i(255, 255, 255, 200);
+    final Color CRL_P_BACK = new Color(48, 48, 48, 160),
+            CRL_P_FORE = new Color(255, 255, 255, 200);
     final Color temp = new Color();
 
     FontOption fo_PresetHint = new FontOption(46, FontAlign.CENTER);
@@ -470,7 +469,7 @@ public class CPBar extends Widget {
         double x = x0, y = y0;
         
         int cur = PresetData.get(
-            Minecraft.getMinecraft().thePlayer).getCurrentID();
+            Minecraft.getMinecraft().player).getCurrentID();
         
         double alpha;
         if(untilLast > 3000 && progress < 0.2) {
@@ -483,16 +482,16 @@ public class CPBar extends Widget {
         alpha *= 0.75;
         
         for(int i = 0; i < 4; ++i) {
-            CRL_P_BACK.a = alpha;
-            CRL_P_BACK.bind();
+            CRL_P_BACK.setAlpha(Colors.f2i((float) alpha));
+            Colors.bindToGL(CRL_P_BACK);
             HudUtils.colorRect(x, y, size, size);
             
-            temp.a = Math.max(0.05, alpha * 0.8);
+            temp.setAlpha(Colors.f2i((float) Math.max(0.05, alpha * 0.8)));
 
             fo_PresetHint.color = temp;
-            Resources.fontBold().draw(String.valueOf(i + 1), x + size / 2, y + 5, fo_PresetHint);
+            Resources.fontBold().draw(String.valueOf(i + 1), (float) (x + size / 2), (float) (y + 5), fo_PresetHint);
             
-            temp.bind();
+            Colors.bindToGL(temp);
             if(i == cur) {
                 ACRenderingHelper.drawGlow(x, y, size, size, 5, CRL_P_FORE);
             }
@@ -503,10 +502,10 @@ public class CPBar extends Widget {
     }
     
     static final Color 
-        CRL_KH_BACK = new Color().setColor4i(65, 65, 65, 70), 
-        CRL_KH_GLOW = new Color().setColor4i(255, 255, 255, 40);
+        CRL_KH_BACK = new Color(65, 65, 65, 70),
+        CRL_KH_GLOW = new Color(255, 255, 255, 40);
 
-    FontOption fo_ActivateHint = new FontOption(44, FontAlign.RIGHT, new Color(0xa0ffffff));
+    FontOption fo_ActivateHint = new FontOption(44, FontAlign.RIGHT, Colors.fromHexColor(0xa0ffffff));
 
     private void drawActivateKeyHint() {
         Optional<String> hint = ClientRuntime.instance().getActivateHandler().getHintTranslated();
@@ -514,8 +513,8 @@ public class CPBar extends Widget {
         if(hint.isPresent()) {
             String str = hint.get();
 
-            final double x0 = 500, y0 = 140, MARGIN = 8;
-            CRL_KH_BACK.bind();
+            final float x0 = 500, y0 = 140, MARGIN = 8;
+            Colors.bindToGL(CRL_KH_BACK);
 
             IFont font = Resources.font();
             double len = font.getTextWidth(str, fo_ActivateHint);
@@ -546,7 +545,7 @@ public class CPBar extends Widget {
     }
     
     private void lerpBindColor(Color a, Color b, double factor) {
-        color4d(lerp(a.r, b.r, factor), lerp(a.g, b.g, factor), lerp(a.b, b.b, factor), lerp(a.a, b.a, factor));
+        color4d(lerp(Colors.i2f(a.getRed()), Colors.i2f(b.getRed()), factor), lerp(Colors.i2f(a.getGreen()), Colors.i2f(b.getGreen()), factor), lerp(Colors.i2f(a.getBlue()), Colors.i2f(b.getBlue()), factor), lerp(Colors.i2f(a.getAlpha()), Colors.i2f(b.getAlpha()), factor));
     }
     
     private void autoLerp(List<ProgColor> list, double prog) {
@@ -554,7 +553,7 @@ public class CPBar extends Widget {
             ProgColor cur = list.get(i);
             if(cur.prog >= prog) {
                 if(i == 0) {
-                    list.get(i).color.bind();
+                    Colors.bindToGL(list.get(i).color);
                 } else {
                     ProgColor last = list.get(i - 1);
                     lerpBindColor(last.color, cur.color, (prog - last.prog) / (cur.prog - last.prog));

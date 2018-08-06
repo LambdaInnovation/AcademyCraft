@@ -12,12 +12,14 @@ import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.RandUtils;
-import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.GameTimer;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -47,8 +49,8 @@ public enum RecipeHandler {
     private WidgetContainer windows;
     private ResourceLocation tex = Resources.getTexture("guis/tutorial/crafting_grid");
 
-    @RegInitCallback
-    private static void __init() {
+    @StateEventCallback
+    private static void __init(FMLInitializationEvent ev) {
         instance.windows = CGUIDocument.read(new ResourceLocation("academy:guis/tutorial_windows.xml"));
     }
 
@@ -75,7 +77,7 @@ public enum RecipeHandler {
      */
     static class CraftingGridDisplay extends Widget {
 
-        static final FontOption option = new FontOption(24, FontAlign.CENTER, Color.white());
+        static final FontOption option = new FontOption(24, FontAlign.CENTER, Colors.white());
 
         static final int STEP = 43;
 
@@ -88,7 +90,7 @@ public enum RecipeHandler {
             output = _output;
             description = desc;
 
-            size(196, 128).centered().scale(0.6);
+            size(196, 128).centered().scale(0.6f);
 
             for(int i = 0; i < stacks.length; ++i) {
                 int col = i % 3, row = i / 3;
@@ -125,23 +127,23 @@ public enum RecipeHandler {
 
         private static Minecraft mc = Minecraft.getMinecraft();
         private static RenderItem itemRender = RenderItem.getInstance();
-        static final long ALTERNATE_TIME = 2000;
+        static final double ALTERNATE_TIME = 2;
 
         private final ItemStack[] stacks;
-        long lastAlternate;
+        double lastAlternate;
 
         private int current = 0;
 
         public StackDisplay(ItemStack... _stacks) {
             stacks = _stacks;
             transform.setPos(0, 0).setSize(32, 34);
-            lastAlternate = GameTimer.getAbsTime() + RandUtils.rangei(-1000, 1000);
+            lastAlternate = GameTimer.getAbsTime() + RandUtils.ranged(-1, 1);
 
             if(stacks.length != 0) { // Don't draw anything for empty stack
                 listen(FrameEvent.class, (w, e) ->
                 {
-                    long time = GameTimer.getAbsTime();
-                    long dt = time - lastAlternate;
+                    double time = GameTimer.getAbsTime();
+                    double dt = time - lastAlternate;
                     if(dt > ALTERNATE_TIME) {
                         current = (current + 1) % stacks.length;
                         lastAlternate = time;

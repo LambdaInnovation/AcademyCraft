@@ -10,9 +10,12 @@ import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.IGuiEventHandler;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
-import cn.lambdalib2.util.auxgui.AuxGui;
+import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.util.mc.PlayerUtils;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
+import cn.lambdalib2.util.PlayerUtils;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -30,8 +33,8 @@ public class TerminalInstallEffect extends AuxGui {
     private static final long BLEND_IN = 200L, BLEND_OUT = 200L;
 
     private static WidgetContainer loaded;
-    @RegInitCallback
-    private static void __init() {
+    @StateEventCallback
+    private static void __init(FMLInitializationEvent ev) {
         loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal_installing.xml"));
     }
     
@@ -44,7 +47,7 @@ public class TerminalInstallEffect extends AuxGui {
             if(this.getTimeActive() >= ANIM_LENGTH + WAIT) {
                 dispose();
                 TerminalUI.keyHandler.onKeyUp();
-                PlayerUtils.sendChat(Minecraft.getMinecraft().thePlayer, "ac.terminal.key_hint",
+                PlayerUtils.sendChat(Minecraft.getMinecraft().player, "ac.terminal.key_hint",
                         KeyManager.getKeyName(ACKeyManager.instance.getKeyID(TerminalUI.keyHandler)));
             }
 
@@ -61,33 +64,28 @@ public class TerminalInstallEffect extends AuxGui {
     }
 
     @Override
-    public boolean isForeground() {
-        return false;
-    }
-
-    @Override
     public void draw(ScaledResolution sr) {
-        gui.resize(sr.getScaledWidth_double(), sr.getScaledHeight_double());
+        gui.resize((float) sr.getScaledWidth_double(), (float) sr.getScaledHeight_double());
         gui.draw();
     }
-    
+
     private void initBlender(Widget w) {
         w.listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
             DrawTexture tex = DrawTexture.get(w);
             TextBox text = TextBox.get(w);
             ProgressBar bar = ProgressBar.get(w);
             
-            double texA, textA, barA;
+            int texA, textA, barA;
             {
-                if(tex != null) texA = tex.color.a;
-                if(text != null) textA = text.option.color.a;
-                if(bar != null) barA = bar.color.a;
+                if(tex != null) texA = tex.color.getAlpha();
+                if(text != null) textA = text.option.color.getAlpha();
+                if(bar != null) barA = bar.color.getAlpha();
             }
 
             @Override
             public void handleEvent(Widget w, FrameEvent event) {
                 double alpha;
-                long dt = getTimeActive();
+                long dt = (long) (getTimeActive() * 1000);
                 if(dt < BLEND_IN) {
                     alpha = (double) (dt) / BLEND_IN;
                 } else if(dt > ANIM_LENGTH) {
@@ -99,9 +97,9 @@ public class TerminalInstallEffect extends AuxGui {
                 DrawTexture tex = DrawTexture.get(w);
                 TextBox text = TextBox.get(w);
                 ProgressBar bar = ProgressBar.get(w);
-                if(tex != null) tex.color.a = texA * alpha;
-                if(text != null) text.option.color.a = 0.1 + 0.9 * textA * alpha;
-                if(bar != null) bar.color.a = barA * alpha;
+                if(tex != null) tex.color.setAlpha((int)(texA * alpha));
+                if(text != null) text.option.color.setAlpha((int)(Colors.f2i(0.1f) + 0.9 * textA * alpha));
+                if(bar != null) bar.color.setAlpha((int)(barA * alpha));
             }
         });
     }

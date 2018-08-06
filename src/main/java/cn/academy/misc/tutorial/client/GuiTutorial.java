@@ -14,15 +14,18 @@ import cn.lambdalib2.cgui.component.Transform.HeightAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.MathUtils;
-import cn.lambdalib2.util.Color;
+//import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.markdown.GLMarkdownRenderer;
 import cn.lambdalib2.util.markdown.MarkdownParser;
 import com.google.common.base.Preconditions;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -30,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 import org.lwjgl.util.glu.GLU;
 
 import java.util.HashMap;
@@ -48,8 +52,8 @@ public class GuiTutorial extends CGuiScreen {
 
     private static WidgetContainer loaded;
 
-    @RegInitCallback
-    private static void __init() {
+    @StateEventCallback
+    private static void __init(FMLInitializationEvent ev) {
         loaded = CGUIDocument.read(new ResourceLocation("academy:guis/tutorial.xml"));
         font = Resources.font();
         fontBold = Resources.fontBold();
@@ -58,7 +62,7 @@ public class GuiTutorial extends CGuiScreen {
 
     private static final double REF_WIDTH = 480;
 
-    private final Color GLOW_COLOR = Color.white();
+    private final Color GLOW_COLOR = Colors.white();
     private final FontOption fo_descTitle = new FontOption(10);
 
     private double cachedWidth = -1;
@@ -149,7 +153,7 @@ public class GuiTutorial extends CGuiScreen {
     }
 
     public GuiTutorial() {
-        player = Minecraft.getMinecraft().thePlayer;
+        player = Minecraft.getMinecraft().player;
         Pair<List<ACTutorial>, List<ACTutorial>> p = TutorialRegistry.groupByLearned(player);
         learned = p.getLeft();
         unlearned = p.getRight();
@@ -165,7 +169,7 @@ public class GuiTutorial extends CGuiScreen {
     public void drawScreen(int mx, int my, float w) {
         // Make the whole screen scale with width, for better display effect
         if(cachedWidth != width) {
-            frame.transform.scale = width / REF_WIDTH;
+            frame.transform.scale = (float) (width / REF_WIDTH);
             frame.dirty = true;
         }
         cachedWidth = width;
@@ -347,7 +351,7 @@ public class GuiTutorial extends CGuiScreen {
                 blend(logo3, 0.1, 0.3);
                 blendy(logo3, 0.7, 0.4, 63, -36);
 
-                long startTime = GameTimer.getAbsTime();
+                double startTime = GameTimer.getAbsTime();
                 logo1.listen(FrameEvent.class, (__, e) -> {
                     final double
                             b1 = 0.3, // Blend stage 1
@@ -355,7 +359,7 @@ public class GuiTutorial extends CGuiScreen {
 
                     glPushMatrix();
                     glTranslated(logo1.transform.width / 2, logo1.transform.height / 2 + 15, 0);
-                    double dt = (GameTimer.getAbsTime() - startTime) / 1000.0 - 0.4;
+                    double dt = GameTimer.getAbsTime() - startTime - 0.4;
                     if(dt < 0) dt = 0;
                     if(dt < b1) {
                         if(dt > 0) {
@@ -390,9 +394,9 @@ public class GuiTutorial extends CGuiScreen {
         for(ACTutorial t : list) {
             Widget w = new Widget();
             w.transform.setSize(72, 12);
-            w.addComponent(new Tint(Color.whiteBlend(0.0), Color.whiteBlend(0.3)));
+            w.addComponent(new Tint(Colors.whiteBlend(0.0f), Colors.whiteBlend(0.3f)));
 
-            TextBox box = Resources.newTextBox(new FontOption(10, learned ? Color.white() : Color.mono(0.6)));
+            TextBox box = Resources.newTextBox(new FontOption(10, learned ? Colors.white() : Colors.fromFloatMono(0.6f)));
             box.xOffset = 3;
             box.content = renderInfo(t).title;
             box.localized = true;
@@ -441,52 +445,52 @@ public class GuiTutorial extends CGuiScreen {
 
     private void blend(Widget w, double start, double tin, boolean reverse) {
         DrawTexture dt = DrawTexture.get(w);
-        long startTime = GameTimer.getAbsTime();
-        double startAlpha = dt.color.a;
-        dt.color.a = reverse ? startAlpha : 0;
+        double startTime = GameTimer.getAbsTime();
+        int startAlpha = dt.color.getAlpha();
+        dt.color.setAlpha(reverse ? startAlpha : 0);
 
         w.listen(FrameEvent.class, (__, e) ->
         {
-            double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
-            double alpha = startAlpha *
-                    MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
+            double delta = (GameTimer.getAbsTime() - startTime);
+            float alpha = Colors.i2f(startAlpha) *
+                    (float)MathUtils.clampd(0, 1, delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1));
             if(reverse) {
                 alpha = 1 - alpha;
                 if(alpha == 0) {
                     w.dispose();
                 }
             }
-            dt.color.a = alpha;
+            dt.color.setAlpha(Colors.f2i(alpha));
         });
     }
 
     private void blendy(Widget w, double start, double tin, double y0, double y1) {
-        long startTime = GameTimer.getAbsTime();
-        w.transform.y = y0;
+        double startTime = GameTimer.getAbsTime();
+        w.transform.y = (float) y0;
         w.dirty = true;
 
         w.listen(FrameEvent.class, (__, e) ->
         {
-            double delta = (GameTimer.getAbsTime() - startTime) / 1000.0;
+            double delta = (GameTimer.getAbsTime() - startTime);
             double lambda = delta < start ? 0 : (delta - start < tin ? (delta - start ) / tin : 1);
-            w.transform.y = MathUtils.lerp(y0, y1, lambda);
+            w.transform.y = (float) MathUtils.lerp(y0, y1, lambda);
             w.dirty = true;
         });
     }
 
     private void updateTutorial(ACTutorial tut) {
         currentTut = new TutInfo(tut, tut.isActivated(player));
-        VerticalDragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0);
+        DragBar.get(centerPart.getWidget("scroll_2")).setProgress(0.0f);
 
         centerPart.transform.doesDraw = tut.isActivated(player);
 
         tagArea.clear();
 
         {
-            double sz = tagArea.transform.height;
+            float sz = tagArea.transform.height;
             double step = sz - 1;
 
-            double x = 0;
+            float x = 0;
 
             for (int i = 0; i < currentTut.previews.length; ++i) {
                 final int i2 = i;
@@ -495,8 +499,8 @@ public class GuiTutorial extends CGuiScreen {
                         .size(sz, sz)
                         .pos(x, 0)
                         .addComponent(new ViewGroupButton(h))
-                        .addComponent(new DrawTexture(h.getTag().icon, Color.monoBlend(1, .7)))
-                        .addComponent(new Tint(Color.monoBlend(1, .7), Color.monoBlend(1, 1)).setAffectTexture())
+                        .addComponent(new DrawTexture(h.getTag().icon, Colors.monoBlend(1, .7f)))
+                        .addComponent(new Tint(Colors.monoBlend(1, .7f), Colors.monoBlend(1, 1)).setAffectTexture())
                         .listen(LeftClickEvent.class, (w_, e) -> {
                             currentTut.previewIndex = i2;
                             updatePreview();

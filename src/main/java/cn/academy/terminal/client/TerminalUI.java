@@ -89,13 +89,15 @@ public class TerminalUI extends AuxGui {
         
         buffX = buffY = mouseX = mouseY = 150;
 
+        consistent = false;
+
         MinecraftForge.EVENT_BUS.register(this);
 
         initGui();
     }
 
     @Override
-    public void onAdded() {
+    public void onEnable() {
         Minecraft mc = Minecraft.getMinecraft();
         oldHelper = mc.mouseHelper;
         mc.mouseHelper = helper = new TerminalMouseHelper();
@@ -111,16 +113,6 @@ public class TerminalUI extends AuxGui {
         
         KeyManager.dynamic.removeKeyHandler("terminal_click");
         ControlOverrider.endOverride(OVERRIDE_GROUP);
-    }
-
-    @Override
-    public boolean isForeground() {
-        return false;
-    }
-    
-    @Override
-    public boolean isConsistent() {
-        return false;
     }
 
     @Override
@@ -225,7 +217,7 @@ public class TerminalUI extends AuxGui {
     @SubscribeEvent
     public void _onAppInstalled(AppInstalledEvent evt) {
         if (SideUtils.isClient()) {
-            updateAppList(TerminalData.get(Minecraft.getMinecraft().thePlayer));
+            updateAppList(TerminalData.get(Minecraft.getMinecraft().player));
         }
     }
 
@@ -235,7 +227,7 @@ public class TerminalUI extends AuxGui {
     }
     
     private void initGui() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         
         final TerminalData data = TerminalData.get(player);
         
@@ -425,23 +417,25 @@ public class TerminalUI extends AuxGui {
                 
                 if(selected) {
                     if(!lastSelected) {
-                        ACSounds.playClient(Minecraft.getMinecraft().player, "terminal.select", 0.2f);
+                        ACSounds.playClient(Minecraft.getMinecraft().player, "terminal.select", SoundCategory.MASTER,0.2f);
                     }
                     drawer.texture = APP_BACK_HDR;
+
+                    icon.zLevel = 40;
+                    drawer.zLevel = text.zLevel = (float) icon.zLevel;
                     
-                    drawer.zLevel = text.zLevel = icon.zLevel = 40;
-                    
-                    drawer.color.a = mAlpha;
-                    icon.color.a = 0.8 * mAlpha;
-                    text.option.color.a = 0.1 + 0.72 * mAlpha;
+                    drawer.color.setAlpha(Colors.f2i(mAlpha));
+                    icon.color.setAlpha(Colors.f2i(0.8f * mAlpha));
+                    text.option.color.setAlpha(Colors.f2i(0.1f + 0.72f * mAlpha));
                 } else {
                     drawer.texture = APP_BACK;
+
+                    icon.zLevel = 10;
+                    drawer.zLevel = text.zLevel = (float) icon.zLevel;
                     
-                    drawer.zLevel = text.zLevel = icon.zLevel = 10;
-                    
-                    drawer.color.a = mAlpha;
-                    icon.color.a = 0.6 * mAlpha;
-                    text.option.color.a = 0.10 + 0.1 * mAlpha;
+                    drawer.color.setAlpha(Colors.f2i(mAlpha));
+                    icon.color.setAlpha(Colors.f2i(0.6f * mAlpha));
+                    text.option.color.setAlpha(Colors.f2i(0.10f + 0.1f * mAlpha));
                 }
                 
                 lastSelected = selected;
@@ -456,13 +450,14 @@ public class TerminalUI extends AuxGui {
             drawer = DrawTexture.get(widget);
             text = TextBox.get(widget.getWidget("text"));
             icon = DrawTexture.get(widget.getWidget("icon"));
-            drawer.color.a = icon.color.a = 0;
-            text.option.color.a = 0.1;
+            icon.color.setAlpha(0);
+            drawer.color.setAlpha(0);
+            text.option.color.setAlpha(Colors.f2i(0.1f));
         }
     }
     
     static AppHandler getHandler(Widget w) {
-        return w.getComponent("AppHandler");
+        return w.getComponent(AppHandler.class);
     }
     
     private class LeftClickHandler extends KeyHandler {

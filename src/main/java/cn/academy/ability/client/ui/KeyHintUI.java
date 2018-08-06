@@ -15,21 +15,23 @@ import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.Transform.HeightAlign;
 import cn.lambdalib2.cgui.component.Transform.WidthAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
+import cn.lambdalib2.registry.StateEventCallback;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.shader.ShaderMono;
-import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.input.KeyManager;
 import com.google.common.collect.Multimap;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -45,10 +47,10 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class KeyHintUI extends Widget {
 
-    static final double SCALE = 0.23;
+    static final float SCALE = 0.23f;
 
-    @RegInitCallback
-    private static void init() {
+    @StateEventCallback
+    private static void init(FMLInitializationEvent ev) {
         Widget child = new Widget()
                 .size(128, 193)
                 .addComponent(new DrawTexture()
@@ -61,7 +63,7 @@ public class KeyHintUI extends Widget {
         display.addWidget(child);
 
         ACHud.instance.addElement(new KeyHintUI(), 
-            () -> CPData.get(Minecraft.getMinecraft().thePlayer).isActivated(), "keyhint", display);
+            () -> CPData.get(Minecraft.getMinecraft().player).isActivated(), "keyhint", display);
     }
     
     ResourceLocation 
@@ -73,12 +75,12 @@ public class KeyHintUI extends Widget {
         TEX_MOUSE_R = tex("mouse_right"), 
         TEX_MOUSE_GENERIC = tex("mouse_generic");
     
-    long lastFrameTime, showTime;
+    double lastFrameTime, showTime;
     double mAlpha;
     float sinAlpha; // Used when rendering active delegates
     boolean canUseAbility;
 
-    final FontOption option = new FontOption(32, FontAlign.CENTER, new Color(0xff194246));
+    final FontOption option = new FontOption(32, FontAlign.CENTER, Colors.fromHexColor(0xff194246));
     
     private KeyHintUI() {
         walign(WidthAlign.RIGHT);
@@ -92,24 +94,24 @@ public class KeyHintUI extends Widget {
     
     private void addDrawing() {
         listen(FrameEvent.class, (w, e) -> {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer player = Minecraft.getMinecraft().player;
 
             CPData cpData = CPData.get(player);
             
             canUseAbility = cpData.canUseAbility();
             
-            long time = GameTimer.getTime();
-            if(time - lastFrameTime > 300L) {
+            double time = GameTimer.getTime();
+            if(time - lastFrameTime > 0.3) {
                 showTime = time;
             }
             
-            if((time - showTime) < 300L) {
-                mAlpha = (time - showTime) / 300.0;
+            if((time - showTime) < 0.3) {
+                mAlpha = (time - showTime) / 0.3;
             } else {
                 mAlpha = 1.0;
             }
 
-            sinAlpha = 0.6f + (1 + MathHelper.sin((time % 100000) / 50.0f)) * 0.2f;
+            sinAlpha = 0.6f + (1 + MathHelper.sin(((float) time % 100) / 50.0f)) * 0.2f;
 
             if(cpData.isActivated()) {
                 ClientRuntime rt = ClientRuntime.instance();
@@ -158,7 +160,7 @@ public class KeyHintUI extends Widget {
         
         // KeyHint
         {
-            double wx = 180, wy = 27;
+            float wx = 180, wy = 27;
             if(!canUseAbility || data.getTickLeft() > 0) {
                 color4d(0.7, 0.7, 0.7, 1);
                 ShaderMono.instance().useProgram();
@@ -212,10 +214,10 @@ public class KeyHintUI extends Widget {
         RenderUtils.loadTexture(icon);
         HudUtils.rect(221, 10, ICON_SIZE, ICON_SIZE);
 
-        double prevA = state.glowColor.a;
-        state.glowColor.a *= thisSinAlpha;
+        int prevA = state.glowColor.getAlpha();
+        state.glowColor.setAlpha((int) (state.glowColor.getAlpha() * thisSinAlpha));
         ACRenderingHelper.drawGlow(221, 10, ICON_SIZE, ICON_SIZE, 5, state.glowColor);
-        state.glowColor.a = prevA;
+        state.glowColor.setAlpha(prevA);
         
         GL20.glUseProgram(0);
         

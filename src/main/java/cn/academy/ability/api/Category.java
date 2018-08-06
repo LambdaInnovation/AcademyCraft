@@ -2,11 +2,13 @@ package cn.academy.ability.api;
 
 import cn.academy.core.Resources;
 import cn.academy.core.config.ACConfig;
-import cn.lambdalib2.util.Color;
+//import cn.lambdalib2.util.Color;
+import cn.lambdalib2.util.Colors;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class Category {
     /**
      * The color style of this category. Used in many various places for rendering, like screen overlay.
      */
-    protected Color colorStyle = Color.white();
+    protected Color colorStyle = Colors.white();
     
     public Category(String _name) {
         name = _name;

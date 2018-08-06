@@ -3,11 +3,14 @@ package cn.academy.ability.client.ui;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.core.Resources;
+import cn.lambdalib2.auxgui.AuxGui;
+import cn.lambdalib2.registry.mc.gui.RegAuxGui;
+import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
-import cn.lambdalib2.util.auxgui.AuxGui;
-import cn.lambdalib2.util.auxgui.AuxGuiRegistry.RegAuxGui;
-import cn.lambdalib2.util.Color;
+//import cn.lambdalib2.util.auxgui.AuxGui;
+//import cn.lambdalib2.util.auxgui.AuxGuiRegistry.RegAuxGui;
+//import cn.lambdalib2.util.Color;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,6 +19,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
@@ -26,7 +30,7 @@ public class BackgroundMask extends AuxGui {
     
     final ResourceLocation MASK = Resources.preloadMipmapTexture("effects/screen_mask");
     
-    final Color CRL_OVERRIDE = new Color().setColor4i(208, 20, 20, 170);
+    final Color CRL_OVERRIDE = new Color(208, 20, 20, 170);
     
     static final double CHANGE_PER_SEC = 1;
     
@@ -35,15 +39,10 @@ public class BackgroundMask extends AuxGui {
     long lastFrame;
 
     @Override
-    public boolean isForeground() {
-        return false;
-    }
-
-    @Override
     public void draw(ScaledResolution sr) {
-        long time = GameTimer.getTime();
+        double time = GameTimer.getTime();
         
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
         
@@ -62,14 +61,14 @@ public class BackgroundMask extends AuxGui {
             cb = b;
             ca = 0;
         } else {
-            cr = color.r;
-            cg = color.g;
-            cb = color.b;
-            ca = color.a;
+            cr = Colors.i2f(color.getRed());
+            cg = Colors.i2f(color.getGreen());
+            cb = Colors.i2f(color.getBlue());
+            ca = Colors.i2f(color.getAlpha());
         }
         
         if(ca != 0 || a != 0) {
-            long dt = lastFrame == 0 ? 0 : time - lastFrame;
+            long dt = lastFrame == 0 ? 0 : (long) (time * 1000) - lastFrame;
             r = balanceTo(r, cr, dt);
             g = balanceTo(g, cg, dt);
             b = balanceTo(b, cb, dt);
@@ -87,7 +86,7 @@ public class BackgroundMask extends AuxGui {
             b = cb;
         }
         
-        lastFrame = time;
+        lastFrame = (long) (time * 1000);
     }
 
     private double balanceTo(double from, double to, long dt) {
