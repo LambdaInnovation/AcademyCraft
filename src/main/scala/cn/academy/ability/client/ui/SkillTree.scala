@@ -26,13 +26,14 @@ import cn.lambdalib2.cgui.event._
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.shader.{ShaderMono, ShaderProgram}
+import net.minecraft.util.EnumHand
+//import cn.lambdalib2.util.shader.{ShaderMono, ShaderProgram}
 import cn.lambdalib2.util.{HudUtils, RenderUtils}
 import cn.lambdalib2.input.{KeyHandler, KeyManager}
 import org.lwjgl.input.Keyboard
 import cn.lambdalib2.util.MathUtils._
 import cn.lambdalib2.util.RandUtils
-import cn.lambdalib2.util.{Color, GameTimer}
+import cn.lambdalib2.util.{Colors, GameTimer}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.util.{ChatAllowedCharacters, ResourceLocation}
 import org.lwjgl.opengl.GL11._
@@ -60,7 +61,7 @@ object DeveloperUI {
         }
       }
     }
-    implicit val gui = ret.gui()
+    implicit val gui = ret.getGui
 
     def build() = {
       ret.getGui.clear()
@@ -82,7 +83,7 @@ object DeveloperUI {
 object SkillTreeAppUI {
   def apply(): CGuiScreen = {
     val ret = Common.newScreen()
-    implicit val gui = ret.gui()
+    implicit val gui = ret.getGui
 
     ret.getGui.addWidget(Common.initialize())
 
@@ -106,7 +107,7 @@ object SkillPosEditorUI {
 
   def apply(): CGuiScreen = {
     val ret = Common.newScreen()
-    implicit val gui = ret.gui()
+    implicit val gui = ret.getGui
 
     def build() = {
       gui.clear()
@@ -117,7 +118,7 @@ object SkillPosEditorUI {
 
       main.removeWidget("parent_left")
 
-      val aData = AbilityData.get(Minecraft.getMinecraft.thePlayer)
+      val aData = AbilityData.get(Minecraft.getMinecraft.player)
       if (aData.hasCategory) aData.getCategory.getSkillList.zipWithIndex foreach { case (skill, idx) =>
         val y = 5 + idx * 12
         val box0 = new Widget().size(40, 10).pos(20, y)
@@ -179,12 +180,12 @@ private object Common {
 
   private val foSkillTitle = new FontOption(12, FontAlign.CENTER)
   private val foSkillDesc = new FontOption(9, FontAlign.CENTER)
-  private val foSkillProg = new FontOption(8, FontAlign.CENTER, new Color(0xffa1e1ff))
-  private val foSkillUnlearned = new FontOption(10, FontAlign.CENTER, new Color(0xffff5555))
-  private val foSkillUnlearned2 = new FontOption(10, FontAlign.CENTER, new Color(0xaaffffff))
-  private val foSkillReq = new FontOption(9, FontAlign.RIGHT, new Color(0xaaffffff))
-  private val foSkillReqDetail = new FontOption(9, FontAlign.LEFT, new Color(0xeeffffff))
-  private val foSkillReqDetail2 = new FontOption(9, FontAlign.LEFT, new Color(0xffee5858))
+  private val foSkillProg = new FontOption(8, FontAlign.CENTER, Colors.fromHexColor(0xffa1e1ff))
+  private val foSkillUnlearned = new FontOption(10, FontAlign.CENTER, Colors.fromHexColor(0xffff5555))
+  private val foSkillUnlearned2 = new FontOption(10, FontAlign.CENTER, Colors.fromHexColor(0xaaffffff))
+  private val foSkillReq = new FontOption(9, FontAlign.RIGHT, Colors.fromHexColor(0xaaffffff))
+  private val foSkillReqDetail = new FontOption(9, FontAlign.LEFT, Colors.fromHexColor(0xeeffffff))
+  private val foSkillReqDetail2 = new FontOption(9, FontAlign.LEFT, Colors.fromHexColor(0xffee5858))
   private val foLevelTitle = new FontOption(12, FontAlign.CENTER)
   private val foLevelReq = new FontOption(9, FontAlign.CENTER)
 
@@ -214,7 +215,7 @@ private object Common {
   // This event is posted on global GuiEventBus to query for widget reload. Each gui instance must by itself respond to it.
   class RebuildEvent extends GuiEvent
 
-  def player = Minecraft.getMinecraft.thePlayer
+  def player = Minecraft.getMinecraft.player
 
   def initialize(developer: IDeveloper = null)(implicit gui: CGui): Widget = {
     val ret = template.copy()
@@ -227,7 +228,7 @@ private object Common {
 
     if (!aData.hasCategory) {
       initConsole(area)
-    } else if (Option(player.getCurrentEquippedItem).exists(_.getItem == ModuleAbility.magneticCoil)) {
+    } else if (Option(player.getHeldItem(EnumHand.MAIN_HAND)).exists(_.getItem == ModuleAbility.magneticCoil)) {
       initReset(area)
     } else { // Initialize skill area
       val back_scale = 1.01
@@ -243,8 +244,8 @@ private object Common {
         // Update delta
         def scale(x: Double) = (x - 0.5) * back_scale_inv + 0.5
 
-        dx = clampd(0, 1, gui.mouseX / gui.getWidth) - 0.5
-        dy = clampd(0, 1, gui.mouseY / gui.getHeight) - 0.5
+        dx = clampd(0, 1, gui.getMouseX / gui.getWidth) - 0.5
+        dy = clampd(0, 1, gui.getMouseY / gui.getHeight) - 0.5
 
         // Draw background
         RenderUtils.loadTexture(texAreaBack)
