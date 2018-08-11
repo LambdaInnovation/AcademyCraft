@@ -10,15 +10,15 @@ import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
-import cn.lambdalib2.util.{RandUtils, VecUtils}
-import cn.lambdalib2.util.{Color, Motion3D}
+import cn.lambdalib2.util._
 import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
-import net.minecraft.util.{MovingObjectPosition, Vec3d}
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraft.util.{MovingObjectPosition, SoundCategory, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -61,7 +61,7 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
     else {
       ctx.consumeWithForce(getOverload, getConsumption)
       TPSkillHelper.attackIgnoreArmor(ctx, target.target, getDamage)
-      if(RandUtils.ranged(0, 1) < getDisgustProb) player.addPotionEffect(new PotionEffect(Potion.confusion.id, 100))
+      if(RandUtils.ranged(0, 1) < getDisgustProb) player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("nausea"), 100))
       ctx.setCooldown(lerpf(90, 40, exp).toInt)
       ctx.addSkillExp(.005f)
     }
@@ -92,14 +92,14 @@ class FRContext(p: EntityPlayer) extends Context(p, FleshRipping) {
 
   def getAttackTarget: AttackTarget = {
     val range: Double = getRange
-    val trace: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.living)
+    val trace: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.living)
     var target: Entity = null
     var dest: Vec3d = null
     if (trace != null) {
       target = trace.entityHit
       dest = trace.hitVec
     }
-    else dest = new Motion3D(player, true).move(range).getPosVec
+    else dest = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, range))
     new AttackTarget(dest, target, player)
   }
 
@@ -125,7 +125,7 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
       marker = new EntityMarker(player.world)
       marker.setPosition(player.posX, player.posY, player.posZ)
       marker.color = DISABLED_COLOR
-      player.world.spawnEntityInWorld(marker)
+      player.world.spawnEntity(marker)
     }
   }
 
@@ -152,7 +152,7 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
     if(isLocal) marker.setDead()
 
     if(target != null && target.target != null) {
-      ACSounds.playClient(player, "tp.guts", 0.6f)
+      ACSounds.playClient(player, "tp.guts",SoundCategory.AMBIENT, 0.6f)
       val e: Entity = target.target
       for(i <- 0 to RandUtils.rangei(4, 6)) {
         var y: Double = e.posY + RandUtils.ranged(0, 1) * e.height
@@ -164,7 +164,7 @@ class FRContextC(par: FRContext) extends ClientContext(par) {
         val r: Double = 0.5 * RandUtils.ranged(0.8 * e.width, e.width)
         val splash: EntityBloodSplash = new EntityBloodSplash(player.world)
         splash.setPosition(e.posX + r * Math.sin(theta), y, e.posZ + r * Math.cos(theta))
-        player.world.spawnEntityInWorld(splash)
+        player.world.spawnEntity(splash)
       }
     }
   }

@@ -45,8 +45,8 @@ public class ItemCoin extends ACItem {
         EntityCoinThrowing etc = getPlayerCoin(player);
         if(etc != null) {
             if(etc.isDead || 
-                etc.world.provider.dimensionId != player.world.provider.dimensionId) {
-                map.remove(player.getCommandSenderName());
+                etc.world.provider.getDimension() != player.world.provider.getDimension()) {
+                map.remove(player.getName());
             }
         }
     }

@@ -14,13 +14,15 @@ import net.minecraft.world.World
 import cn.lambdalib2.util.mc.MCExtender._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import cn.academy.core.client.Tessellator
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11._
 
 @SideOnly(Side.CLIENT)
 object SmokeEffect_ {
 
-  @RegInitCallback
-  def _init() = {
+  @StateEventCallback
+  def _init(fMLInitializationEvent: FMLInitializationEvent) = {
     RenderingRegistry.registerEntityRenderingHandler(classOf[SmokeEffect], new Render {
       val texture = Resources.preloadTexture("effects/smokes")
 

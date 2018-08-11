@@ -3,11 +3,11 @@ package cn.academy.vanilla.vecmanip.skill
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.core.client.sound.ACSounds
-import cn.academy.vanilla.ModuleSoundEvent
 import cn.academy.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.vanilla.generic.entity.EntityBloodSplash
 import cn.academy.vanilla.teleporter.skill.TraceResult
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{BlockSelectors, Raytrace}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{EntitySelectors, SoundCategory}
@@ -99,10 +99,10 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
         Vec3d(ranged(-1, 1) * targ.width, ranged(0, 1) * targ.height, ranged(-1, 1) * targ.width) +
         player.lookVector * 0.2)
 
-      world.spawnEntityInWorld(splash)
+      world.spawnEntity(splash)
     })
 
-    val headPos = targ.position
+    val headPos = targ.getPositionVector
     headPos.y += targ.height * 0.6
 
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
@@ -113,13 +113,11 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
         case BlockResult((x, y, z), side) =>
           (0 until rangei(2, 3)).foreach(_ => {
             val spray = new BloodSprayEffect(world, x, y, z, side)
-            world.spawnEntityInWorld(spray)
+            world.spawnEntity(spray)
           })
         case _ =>
       }
-
-    world.playSound(player, player.posX,player.posY,player.posZ,
-      ModuleSoundEvent.blood_retro, SoundCategory.AMBIENT, 1F, 1F)
+    ACSounds.playClient(player, "vecmanip.blood_retro", SoundCategory.AMBIENT,1F)
   }
 
 }

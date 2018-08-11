@@ -2,8 +2,11 @@ package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.vanilla.meltdowner.client.render.RenderDiamondShield;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.VecUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -12,7 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @RegEntity
-public class EntityDiamondShield extends EntityAdvanced {
+public class EntityDiamondShield extends EntityAdvanced
+{
 
     public static RenderDiamondShield renderer;
     
@@ -29,11 +33,13 @@ public class EntityDiamondShield extends EntityAdvanced {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        
-        Motion3D mo = new Motion3D(player, true).move(1);
-        mo.py -= 0.5;
-        setPosition(mo.px, mo.py, mo.pz);
-        
+
+        Vec3d pos = VecUtils.subtract(VecUtils.add(
+                player.getPositionVector(), VecUtils.multiply(player.getLookVec(),1)),
+                new Vec3d(0,0.5,0));
+        this.posX = pos.x;
+        this.posY = pos.y;
+        this.posZ = pos.z;
         this.rotationYaw = player.rotationYawHead;
         this.rotationPitch = player.rotationPitch;
     }

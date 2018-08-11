@@ -1,15 +1,28 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.Resources;
-import cn.academy.vanilla.ModuleSoundEvent;
+import cn.academy.core.client.sound.ACSounds;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.EntityCallback;
+import cn.lambdalib2.util.entityx.event.CollideEvent;
+import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,8 +33,11 @@ import org.lwjgl.opengl.GL11;
  * @author WeathFolD
  */
 @RegEntity
-public class EntitySilbarn extends EntityAdvanced {
-    
+public class EntitySilbarn extends EntityAdvanced
+{
+    private static final DataParameter<Byte> HIT_SYNC = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.BYTE);
+
+
     @SideOnly(Side.CLIENT)
     public static RenderSibarn render;
 
@@ -84,41 +100,34 @@ public class EntitySilbarn extends EntityAdvanced {
         
         this.addMotionHandler(rigidbody);
         //this.addDaemonHandler(new GravityApply(this, 0.05));
-        executeAfter(new EntityCallback<EntitySilbarn>() {
-            @Override
-            public void execute(EntitySilbarn ent) {
-                rigidbody.gravity = 0.12;
-            }
-        }, 50);
+        executeAfter((EntityCallback<EntitySilbarn>) ent -> rigidbody.gravity = 0.12, 50);
         setSize(.4f, .4f);
     }
 
     public EntitySilbarn(EntityPlayer player) {
         super(player.world);
-        this.regEventHandler(new CollideHandler() {
+        this.regEventHandler(new CollideEvent.CollideHandler() {
             
             @Override
             public void onEvent(CollideEvent event) {
                 if(!hit) {
                     hit = true;
                     if(event.result.entityHit instanceof EntitySilbarn)
-                        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_heavy, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+                        ACSounds.playClient(world, posX, posY, posZ, "entity.silbarn_heavy", SoundCategory.AMBIENT,
+                                0.5f, 1.0f);
                     else
-                        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.silbarn_light, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
-
-                    executeAfter(new EntityCallback() {
-                        @Override
-                        public void execute(Entity ent) {
-                            ent.setDead();
-                        }
-                    }, 10);
+                        ACSounds.playClient(world, posX, posY, posZ, "entity.silbarn_light", SoundCategory.AMBIENT,
+                                0.5f, 1.0f);
+                    executeAfter(Entity::setDead, 10);
                 }
             }
             
         });
-        
-        Motion3D mo = new Motion3D(player, true);
-        mo.applyToEntity(this);
+
+        setPosition(player.posX, player.posY, player.posZ);
+        motionX = player.motionX;
+        motionY = player.motionY;
+        motionZ = player.motionZ;
         
         this.rotationYaw = player.rotationYawHead;
         this.isAirBorne = true;
@@ -130,16 +139,16 @@ public class EntitySilbarn extends EntityAdvanced {
         super(world);
         this.createTime = GameTimer.getTime();
         
-        this.regEventHandler(new CollideHandler() {
+        this.regEventHandler(new CollideEvent.CollideHandler() {
             @Override
             public void onEvent(CollideEvent event) {
                 if(!hit) {
-                    MovingObjectPosition res = event.result;
-                    ForgeDirection dir = ForgeDirection.getOrientation(res.sideHit);
+                    RayTraceResult res = event.result;
+                    EnumFacing dir = res.sideHit;
                     final double mul = 0.1;
-                    double tx = res.hitVec.x + dir.offsetX * mul, 
-                        ty = res.hitVec.y + dir.offsetY * mul, 
-                        tz = res.hitVec.z + dir.offsetZ * mul;
+                    double tx = res.hitVec.x + dir.getFrontOffsetX() * mul,
+                        ty = res.hitVec.y + dir.getFrontOffsetY() * mul,
+                        tz = res.hitVec.z + dir.getFrontOffsetZ() * mul;
                     spawnEffects(tx, ty, tz);
                     setDead();
                 }
@@ -153,7 +162,7 @@ public class EntitySilbarn extends EntityAdvanced {
     
     @Override
     public void entityInit() {
-        dataWatcher.addObject(10, Byte.valueOf((byte) 0));
+        this.dataManager.register(HIT_SYNC, (byte) 0);
     }
     
     public boolean isHit() {
@@ -168,13 +177,13 @@ public class EntitySilbarn extends EntityAdvanced {
     
     private void sync() {
         if(world.isRemote) {
-            boolean b = dataWatcher.getWatchableObjectByte(10) != 0;
+            boolean b = dataManager.get(HIT_SYNC) != 0;
             if(!hit && b) {
                 spawnEffects(posX, posY, posZ);
             }
             hit = b;
         } else {
-            dataWatcher.updateObject(10, Byte.valueOf((byte) (hit ? 1 : 0)));
+            dataManager.set(HIT_SYNC, (byte) (hit ? 1 : 0));
         }
     }
     
@@ -200,7 +209,7 @@ public class EntitySilbarn extends EntityAdvanced {
             
             particles.setPosition(posX, posY, posZ);
             particles.setVelocity(vx, vy, vz);
-            world.spawnEntityInWorld(particles.next(world));
+            world.spawnEntity(particles.next(world));
         }
         //TileMatrix
     }

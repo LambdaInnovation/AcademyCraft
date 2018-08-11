@@ -7,7 +7,7 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{IBlockSelector, RandUtils}
+import cn.lambdalib2.util.{BlockSelectors, IBlockSelector, RandUtils, Raytrace}
 import net.minecraft.block.Block
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -16,7 +16,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import cn.lambdalib2.util.MathUtils.lerpf
-import net.minecraft.util.SoundCategory;
+import cn.lambdalib2.util.entityx.handlers.Life
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{BlockPos, RayTraceResult}
 
 /**
   * @author WeAthFolD, KSkun
@@ -75,29 +77,33 @@ class ArcGenContext(p: EntityPlayer) extends Context(p, ArcGen) {
 
       if (result != null) {
         var expincr = 0f
-        if (result.typeOfHit == MovingObjectType.ENTITY) {
+        if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
           EMDamageHelper.attack(ctx, result.entityHit, damage)
           expincr = getExpIncr(true)
         } else {
           //BLOCK
-          val hx = result.blockX
-          val hy = result.blockY
-          val hz = result.blockZ
-          val block = player.world.getBlock(hx, hy, hz)
-          if (block == Blocks.water) {
+          val hx = result.hitVec.x
+          val hy = result.hitVec.y
+          val hz = result.hitVec.z
+          val pos = new BlockPos(hx, hy, hz)
+          val block = player.world.getBlockState(pos).getBlock()
+          if (block == Blocks.WATER) {
             if (RandUtils.ranged(0, 1) < fishProb) {
-              world.spawnEntityInWorld(new EntityItem(
+              world.spawnEntity(new EntityItem(
                 world,
                 result.hitVec.x,
                 result.hitVec.y,
                 result.hitVec.z,
-                new ItemStack(Items.cooked_fished)))
+                new ItemStack(Items.COOKED_FISH)))
               ArcGen.triggerAchievement(player)
             }
           } else {
             if (RandUtils.ranged(0, 1) < igniteProb) {
-              if (world.getBlock(hx, hy + 1, hz) == Blocks.air) {
-                world.setBlock(hx, hy + 1, hz, Blocks.fire, 0, 0x03)
+              val pos = new BlockPos(hx, hy + 1, hz)
+              val state = world.getBlockState(pos)
+              if (state.getBlock == Blocks.AIR) {
+
+                world.setBlockState(pos, Blocks.FIRE.getDefaultState)
               }
             }
           }

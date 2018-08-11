@@ -6,6 +6,7 @@ import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
 import cn.academy.vanilla.electromaster.client.effect.SubArcHandler;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

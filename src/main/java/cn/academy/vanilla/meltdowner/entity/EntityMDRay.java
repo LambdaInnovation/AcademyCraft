@@ -4,7 +4,10 @@ import cn.academy.core.client.render.ray.RendererRayComposite;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,15 +19,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityMDRay extends EntityRayBase {
 
     public static MDRayRender renderer;
-    
-    public EntityMDRay(EntityPlayer _player, double length) {
-        this(_player, new Motion3D(_player, true), length);
-    }
 
-    public EntityMDRay(EntityPlayer spawner, Motion3D mo, double length) {
+
+    public EntityMDRay(EntityPlayer spawner, double length) {
         super(spawner);
 
-        Vec3d start = mo.getPosVec(), end = mo.move(length).getPosVec();
+        Vec3d start = spawner.getPositionVector(),
+                end = VecUtils.add(spawner.getPositionVector(), VecUtils.multiply(spawner.getLookVec(),length));
         this.setFromTo(start, end);
         this.blendInTime = 200;
         this.blendOutTime = 700;
@@ -39,7 +40,7 @@ public class EntityMDRay extends EntityRayBase {
             Particle p = MdParticleFactory.INSTANCE.next(world,
                     new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
                     new Vec3d(RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03), RandUtils.ranged(-.03, .03)));
-            world.spawnEntityInWorld(p);
+            world.spawnEntity(p);
         }
     }
     

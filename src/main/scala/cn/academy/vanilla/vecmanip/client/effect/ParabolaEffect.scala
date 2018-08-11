@@ -5,6 +5,7 @@ import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
 import cn.academy.vanilla.vecmanip.skill.VecAccelContext
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.util.{MathUtils, RenderUtils, VecUtils}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.util.ResourceLocation

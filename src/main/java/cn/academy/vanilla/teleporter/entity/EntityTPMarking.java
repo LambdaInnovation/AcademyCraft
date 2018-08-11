@@ -5,6 +5,7 @@ import cn.academy.vanilla.teleporter.client.MarkRender;
 import cn.academy.vanilla.teleporter.client.TPParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +50,7 @@ public class EntityTPMarking extends EntityAdvanced {
             particleFac.setVelocity(RandUtils.ranged(-.03, .03), RandUtils.ranged(0, 0.05),
                     RandUtils.ranged(-.03, .03));
 
-            world.spawnEntityInWorld(particleFac.next(world));
+            world.spawnEntity(particleFac.next(world));
         }
     }
 
@@ -59,7 +60,7 @@ public class EntityTPMarking extends EntityAdvanced {
     }
 
     public double getDist() {
-        return this.getDistanceToEntity(player);
+        return this.getDistanceSq(player);
     }
 
     @Override

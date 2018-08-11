@@ -8,11 +8,14 @@ import cn.academy.support.{EnergyBlockHelper, EnergyItemHelper}
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
 import cn.academy.vanilla.electromaster.entity.{EntityArc, EntitySurroundArc}
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.util.{Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 /**
   * @author WeAthFolD, KSkun
   */
@@ -34,6 +37,7 @@ object ChargingBlockContext {
 
 import ChargingBlockContext._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.lambdalib2.util.MathUtils._
 
 class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
@@ -78,8 +82,8 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
       val pos = Raytrace.traceLiving(player, distance)
 
       var good = false
-      if (pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
-        val tile = player.getEntityWorld.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
+      if (pos != null && pos.typeOfHit == RayTraceResult.Type.BLOCK) {
+        val tile = player.getEntityWorld.getTileEntity(pos.getBlockPos)
         if (EnergyBlockHelper.isSupported(tile)) {
           good = true
 
@@ -96,18 +100,18 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
 
       val mod: MovingObjectData = new MovingObjectData
       if (pos != null) {
-        mod.blockX = pos.blockX
-        mod.blockY = pos.blockY
-        mod.blockZ = pos.blockZ
+        mod.blockX = pos.getBlockPos.getX
+        mod.blockY = pos.getBlockPos.getY
+        mod.blockZ = pos.getBlockPos.getZ
         mod.hitVec = pos.hitVec
-        mod.isEntity = pos.typeOfHit == MovingObjectType.ENTITY
+        mod.isEntity = pos.typeOfHit == RayTraceResult.Type.ENTITY
         if (mod.isEntity)
           mod.entityEyeHeight = pos.entityHit.getEyeHeight
       } else {
         mod.isNull = true
       }
     } else {
-      val stack = player.getHeldEquipment
+      val stack = player.getHeldItemMainhand
       val cp = getConsumption(exp)
 
       if(stack != null && ctx.consume(0, cp)) {
@@ -149,7 +153,7 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
   private def c_startEffects(isItem: Boolean) = {
     if(!isItem) {
       arc = new EntityArc(player, ArcPatterns.chargingArc)
-      player.getEntityWorld.spawnEntityInWorld(arc)
+      player.getEntityWorld.spawnEntity(arc)
       arc.lengthFixed = false
       arc.hideWiggle = 0.8
       arc.showWiggle = 0.2
@@ -177,8 +181,8 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
     val pos = Raytrace.traceLiving(player, par.distance)
 
     var good = false
-    if (pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
-      val tile = player.getEntityWorld.getTileEntity(pos.blockX, pos.blockY, pos.blockZ)
+    if (pos != null && pos.typeOfHit == RayTraceResult.Type.BLOCK) {
+      val tile = player.getEntityWorld.getTileEntity(pos.getBlockPos)
       if (EnergyBlockHelper.isSupported(tile)) {
         good = true
       }
@@ -186,11 +190,11 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
 
     val mod: MovingObjectData = new MovingObjectData
     if (pos != null) {
-      mod.blockX = pos.blockX
-      mod.blockY = pos.blockY
-      mod.blockZ = pos.blockZ
+      mod.blockX = pos.getBlockPos.getX
+      mod.blockY = pos.getBlockPos.getY
+      mod.blockZ = pos.getBlockPos.getZ
       mod.hitVec = pos.hitVec
-      mod.isEntity = pos.typeOfHit == MovingObjectType.ENTITY
+      mod.isEntity = pos.typeOfHit == RayTraceResult.Type.ENTITY
       if (mod.isEntity)
         mod.entityEyeHeight = pos.entityHit.getEyeHeight
     } else {
@@ -206,10 +210,10 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
         y += mod.entityEyeHeight
       }
     } else {
-      val mo = new Motion3D(player, true).move(par.distance)
-      x = mo.px
-      y = mo.py
-      z = mo.pz
+      val mo = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, par.distance))
+      x = mo.x
+      y = mo.y
+      z = mo.z
     }
     if(arc != null) arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, x, y, z)
 

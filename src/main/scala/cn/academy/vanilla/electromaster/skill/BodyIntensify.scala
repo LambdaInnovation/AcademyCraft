@@ -5,7 +5,9 @@ import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, Re
 import cn.academy.core.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.vanilla.electromaster.client.effect.CurrentChargingHUD
 import cn.academy.vanilla.electromaster.entity.EntityIntensifyEffect
+import cn.lambdalib2.auxgui.AuxGuiHandler
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.RandUtils
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.potion.{Potion, PotionEffect}
@@ -54,6 +56,7 @@ object IntensifyContext {
 import cn.academy.ability.api.AbilityAPIExt._
 import BodyIntensify._
 import IntensifyContext._
+import cn.lambdalib2.util.MathUtils._
 
 class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
 
@@ -161,7 +164,7 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
 
     if(performed) {
       ACSounds.playClient(player, ACTIVATE_SOUND,SoundCategory.AMBIENT, 0.5f)
-      player.getEntityWorld.spawnEntityInWorld(new EntityIntensifyEffect(player))
+      player.getEntityWorld.spawnEntity(new EntityIntensifyEffect(player))
     }
   }
 

@@ -7,14 +7,14 @@ import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.Motion3D
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.math.Vec3d
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{BlockPos, Vec3d}
 import net.minecraft.world.World
 import org.lwjgl.input.Mouse
 
@@ -70,8 +70,8 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
     ctx.setCooldown(lerpf(50, 30, exp).toInt)
     TPSkillHelper.incrTPCount(player)
-    if(player.isRiding())
-      player.mountEntity(null);
+    if(player.isRiding)
+      player.dismountRidingEntity
     player.setPositionAndUpdate(x,y,z)
     player.fallDistance = 0
 
@@ -92,9 +92,13 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     val ix: Int = x.toInt
     val iy: Int = y.toInt
     val iz: Int = z.toInt
-    val b1: Block = world.getBlock(ix, iy, iz)
-    val b2: Block = world.getBlock(ix, iy + 1, iz)
-    !b1.canCollideCheck(world.getBlockMetadata(ix, iy, iz), false) && !b2.canCollideCheck(world.getBlockMetadata(ix, iy + 1, iz), false)
+    val pos1 = new BlockPos( ix,iy,iz)
+    val pos2 = new BlockPos(ix,iy+1,iz)
+    val state1 = world.getBlockState(pos1)
+    val state2 = world.getBlockState(pos2)
+    val b1: Block = state1.getBlock
+    val b2: Block = state2.getBlock
+    !b1.canCollideCheck(state1, false) && !b2.canCollideCheck(state2, false)
   }
 
   private def getConsumption(exp: Float): Float = lerpf(14, 9, exp)
@@ -109,14 +113,17 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     val STEP: Double = 0.8
     var stage: Int = 0
     var counter: Int = 0
-    val mo: Motion3D = new Motion3D(player, true)
+    var x = player.posX
+    var y = player.posY
+    var z = player.posZ
+    val dir = player.getLookVec.normalize()
 
     val loop = new Breaks
     var totalStep: Double = 0.0
     loop.breakable {
       while(totalStep <= dist) {
         {
-          val b: Boolean = hasPlace(world, mo.px, mo.py, mo.pz)
+          val b: Boolean = hasPlace(world, x,y, z)
           if(stage == 0) {
             if(!b) stage = 1
           } else if(stage == 1) {
@@ -128,10 +135,12 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
           }
         }
         totalStep += STEP
-        mo.move(STEP)
+        x += STEP*dir.x
+        y += STEP*dir.y
+        z += STEP*dir.z
       }
     }
-    new Dest(mo.getPosVec, stage != 1)
+    new Dest(new Vec3d(x,y,z), stage != 1)
   }
 
   def updateDistance(dist:Float) = {
@@ -156,7 +165,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
   private def l_spawnMark() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
-      player.world.spawnEntityInWorld(mark)
+      player.world.spawnEntity(mark)
       FMLCommonHandler.instance.bus.register(this)
     }
   }
@@ -181,7 +190,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_endEffect() = {
-    ACSounds.playClient(player, "tp.tp", .5f)
+    ACSounds.playClient(player, "tp.tp", SoundCategory.AMBIENT, .5f)
     FMLCommonHandler.instance.bus.unregister(this)
     if(mark != null) mark.setDead()
   }

@@ -2,6 +2,7 @@ package cn.academy.vanilla.teleporter.entity;
 
 import cn.academy.vanilla.teleporter.client.RenderMarker;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -13,7 +14,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @RegEntity
-public class EntityMarker extends EntityAdvanced {
+public class EntityMarker extends EntityAdvanced
+{
 
     public static RenderMarker renderer;
 

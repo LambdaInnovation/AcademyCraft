@@ -1,11 +1,14 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.entity.EntityRayBase;
-import cn.academy.vanilla.ModuleSoundEvent;
 import cn.academy.vanilla.meltdowner.client.render.MdParticleFactory;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,7 +33,7 @@ public class EntityMdRaySmall extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+        ACSounds.playClient(world,posX, posY, posZ, "md.ray_small",SoundCategory.AMBIENT, 0.8f,1.0f);
     }
     
     @Override
@@ -39,7 +42,7 @@ public class EntityMdRaySmall extends EntityRayBase {
         Particle p = MdParticleFactory.INSTANCE.next(world,
             new Motion3D(this, true).move(RandUtils.ranged(0, 10)).getPosVec(),
             new Vec3d(RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015), RandUtils.ranged(-.015, .015)));
-        world.spawnEntityInWorld(p);
+        world.spawnEntity(p);
     }
     
     @Override

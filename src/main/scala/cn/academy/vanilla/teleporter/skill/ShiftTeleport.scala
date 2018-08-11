@@ -9,16 +9,14 @@ import cn.academy.vanilla.teleporter.client.TPParticleFactory
 import cn.academy.vanilla.teleporter.entity.EntityMarker
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{MathUtils, RandUtils, VecUtils}
-import cn.lambdalib2.util.{Color, Motion3D}
-import cn.lambdalib2.util.mc.{EntitySelectors, Raytrace, WorldUtils}
+import cn.lambdalib2.util._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.util.{AxisAlignedBB, MovingObjectPosition, Vec3d}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -52,7 +50,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
-    val stack: ItemStack = player.getCurrentEquippedItem
+    val stack: ItemStack = player.getHeldItemMainhand
     val block: Block = null
     if(!(stack != null && stack.getItem.isInstanceOf[ItemBlock] && Block.getBlockFromItem(stack.getItem) != null))
       terminate()
@@ -73,7 +71,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 
   @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
   private def s_execute(): Unit = {
-    val stack: ItemStack = player.getCurrentEquippedItem
+    val stack: ItemStack = player.getHeldItemMainhand
     val block: Block = Block.getBlockFromItem(stack.getItem)
     attacked = stack != null && stack.getItem.isInstanceOf[ItemBlock] && block != null
     if(!attacked) return
@@ -81,10 +79,13 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
     sendToClient(MSG_EXECUTE, attacked.asInstanceOf[AnyRef])
 
     val item: ItemBlock = stack.getItem.asInstanceOf[ItemBlock]
-    val position: MovingObjectPosition = getTracePosition
+    val position: RayTraceResult = getTracePosition
 
-    if(item.field_150939_a.canPlaceBlockAt(player.world, position.blockX, position.blockY, position.blockZ) && ctx.canBreakBlock(player.world, position.blockX, position.blockY, position.blockZ) && ctx.consume(getOverload(exp), getConsumption(exp))) {
-      item.placeBlockAt(stack, player, player.world, position.blockX, position.blockY, position.blockZ, position.sideHit, position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, stack.getItemDamage)
+    if(item.getBlock.canPlaceBlockAt(player.world, position.getBlockPos) &&
+      ctx.canBreakBlock(player.world, position.getBlockPos.getX,position.getBlockPos.getY,position.getBlockPos.getZ) &&
+      ctx.consume(getOverload(exp), getConsumption(exp))) {
+      item.placeBlockAt(stack, player, player.world, position.getBlockPos, position.sideHit,
+        position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, stack.getItemDamage)
       if(!player.capabilities.isCreativeMode) if( {
         stack.stackSize -= 1; stack.stackSize
       } <= 0) player.setCurrentItemOrArmor(0, null)
@@ -113,27 +114,29 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
   // TODO: Some boilerplate... Clean this up in case you aren't busy
   def getTraceDest: Array[Int] = {
     val range: Double = getRange(exp)
-    val result: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
+    val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if(result != null) {
-      val dir: ForgeDirection = ForgeDirection.values().apply(result.sideHit)
-      return Array[Int](result.blockX + dir.offsetX, result.blockY + dir.offsetY, result.blockZ + dir.offsetZ)
+      val dir: EnumFacing =result.sideHit
+      return Array[Int](result.getBlockPos.getX + dir.getFrontOffsetX,
+        result.getBlockPos.getY + dir.getFrontOffsetY,
+        result.getBlockPos.getZ + dir.getFrontOffsetZ)
     }
     val mo: Motion3D = new Motion3D(player, true).move(range)
     Array[Int](mo.px.toInt, mo.py.toInt, mo.pz.toInt)
   }
 
-  def getTracePosition: MovingObjectPosition = {
+  def getTracePosition: RayTraceResult = {
     val range: Double = getRange(exp)
-    val result: MovingObjectPosition = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
+    val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if(result != null) {
-      val dir: ForgeDirection = ForgeDirection.values().apply(result.sideHit)
-      result.blockX += dir.offsetX
-      result.blockY += dir.offsetY
-      result.blockZ += dir.offsetZ
+      val dir: EnumFacing = result.sideHit
+      result.blockX += dir.getFrontOffsetX
+      result.blockY += dir.getFrontOffsetY
+      result.blockZ += dir.getFrontOffsetZ
       return result
     }
     val mo: Motion3D = new Motion3D(player, true).move(range)
-    new MovingObjectPosition(mo.px.toInt, mo.py.toInt, mo.pz.toInt, 0, new Vec3d(mo.px, mo.py, mo.pz))
+    new RayTraceResult(mo.px.toInt, mo.py.toInt, mo.pz.toInt, 0, new Vec3d(mo.px, mo.py, mo.pz))
   }
 
   def getTargetsInLine: java.util.List[Entity] = {
@@ -176,7 +179,7 @@ class STContextC(par: STContext) extends ClientContext(par) {
       blockMarker.width = 1.2f
       blockMarker.color = CRL_BLOCK_MARKER
       blockMarker.setPosition(player.posX, player.posY, player.posZ)
-      player.world.spawnEntityInWorld(blockMarker)
+      player.world.spawnEntity(blockMarker)
     }
   }
 
@@ -196,7 +199,7 @@ class STContextC(par: STContext) extends ClientContext(par) {
           val em: EntityMarker = new EntityMarker(e)
           em.color = CRL_ENTITY_MARKER
           em.ignoreDepth = true
-          player.world.spawnEntityInWorld(em)
+          player.world.spawnEntity(em)
           targetMarkers.add(em)
         }
       }
@@ -235,7 +238,7 @@ class STContextC(par: STContext) extends ClientContext(par) {
       while(x <= dist) {
         {
           mo.move(move)
-          player.world.spawnEntityInWorld(TPParticleFactory.instance.next(player.world, mo.getPosVec, new Vec3d(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
+          player.world.spawnEntity(TPParticleFactory.instance.next(player.world, mo.getPosVec, new Vec3d(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
         }
         move = RandUtils.ranged(0.6, 1)
         x += move

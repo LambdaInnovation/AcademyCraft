@@ -11,12 +11,19 @@ import cn.academy.vanilla.electromaster.entity.EntitySurroundArc
 import cn.academy.vanilla.electromaster.entity.EntitySurroundArc.ArcType
 import cn.lambdalib2.registry.mc.RegEntity
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util._
+import cn.lambdalib2.util.entityx.MotionHandler
+import cn.lambdalib2.util.entityx.event.CollideEvent
+import cn.lambdalib2.util.entityx.event.CollideEvent.CollideHandler
+import cn.lambdalib2.util.entityx.handlers.Rigidbody
+import kotlin.jvm.Synchronized
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.{Block, BlockDoor}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
+import net.minecraft.util.math.{BlockPos, MathHelper, RayTraceResult, Vec3d}
 import net.minecraft.util.{EnumHand, SoundCategory}
 import net.minecraft.world.World
 
@@ -43,6 +50,7 @@ private object MagManipContext {
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.vanilla.electromaster.skill.MagManip._
 import cn.academy.vanilla.electromaster.skill.MagManipContext._
+import cn.lambdalib2.util.VecUtils._
 
 private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with IConsumptionProvider {
 
@@ -71,27 +79,27 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
     // Find the block to use.
-    val stack = player.getHeldEquipment
+    val stack = player.getHeldItemMainhand()
     Option(stack)
       .flatMap(s => Option(Block.getBlockFromItem(s.getItem))) match {
       case Some(block) if accepts(player, block) =>
         if (!player.capabilities.isCreativeMode) {
-          stack.stackSize -= 1
-          if (stack.stackSize == 0) {
+          stack.setCount(stack.getCount-1)
+          if (stack.getCount == 0) {
             player.setHeldItem(EnumHand.MAIN_HAND, null)//TODO May cause exception.
           }
         }
 
         entity = new MagManipEntityBlock(player, 10)
         entity.setBlock(block)
-        entity.setPos(player.headPosition)
+        entity.setPosition(player.headPosition)
 
-        world.spawnEntityInWorld(entity)
+        world.spawnEntity(entity)
 
         updateMoveTo()
 
       case _ =>
-        val trace: TraceResult = Raytrace.traceLiving(player, 10, EntitySelectors.nothing(), new IBlockSelector {
+        val trace: RayTraceResult = Raytrace.traceLiving(player, 10, EntitySelectors.nothing(), new IBlockSelector {
           override def accepts(world: World, x: Int, y: Int, z: Int, block: Block): Boolean = {
             MagManip.accepts(player, block)
           }
@@ -113,7 +121,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
 
             entity = new MagManipEntityBlock(player, 10)
             entity.setBlock(block)
-            entity.setPosition(x + .5, y + .5, z + .5)
+            entity.setPosition(new BlockPos(x + .5, y + .5, z + .5))
 
             world.spawnEntity(entity)
 
@@ -158,15 +166,13 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   }
 
   private def updateMoveTo() = {
-    val origin = player.headPosition - Vec3d(0, 0.1, 0)
-    val look = player.lookVector
+    val origin = player.headPosition - new Vec3d(0, 0.1, 0)
+    val look = player.getLookVec
 
-    var look2 = Vec3d(look)
-    look2.y = 0
-    look2 = look2.normalize()
-    look2.rotateAroundY(90)
+    var look2 = new Vec3d(look.x, 0, look.z)
+    look2 = look2.normalize().rotateYaw( Math.PI.asInstanceOf[Float]/2)
 
-    val pos = origin + player.lookVector * 2.0
+    val pos = add(origin, multiply(player.getLookVec,2.0))
 
     entity.setMoveTo(pos.x, pos.y, pos.z)
   }
@@ -280,7 +286,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
     actionType match {
       case ActMoveTo =>
         val dist = this.getDistanceSq(tx, ty, tz)
-        val delta = Vec3d(tx - posX, ty - posY, tz - posZ).normalize()
+        val delta = new Vec3d(tx - posX, ty - posY, tz - posZ).normalize()
         val mo = delta * 0.2 * (dist match {
           case d if d < 4 => d / 4
           case _ => 1.0
@@ -313,6 +319,6 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
       override def onStart(): Unit = {}
     })
     surrounder.setArcType(ArcType.THIN)
-    world.spawnEntityInWorld(surrounder)
+    world.spawnEntity(surrounder)
   }
 }

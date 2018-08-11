@@ -4,12 +4,18 @@ import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.electromaster.client.renderer.RendererMagHook;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.MotionHandler;
+import cn.lambdalib2.util.entityx.event.CollideEvent;
+import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,7 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  */
 @RegEntity
-public class EntityMagHook extends EntityAdvanced {
+public class EntityMagHook extends EntityAdvanced
+{
     
     {
         Rigidbody rb = new Rigidbody();
@@ -32,7 +39,7 @@ public class EntityMagHook extends EntityAdvanced {
     public static RendererMagHook renderer;
     
     public boolean isHit;
-    public int hitSide;
+    public EnumFacing hitSide;
     public int hookX, hookY, hookZ;
     
     boolean doesSetStill;
@@ -40,17 +47,20 @@ public class EntityMagHook extends EntityAdvanced {
     public EntityMagHook(final EntityPlayer player) {
         super(player.getEntityWorld());
         //TODO Motion3D.apply
-        new Motion3D(player, true).multiplyMotionBy(2).applyToEntity(this);
+        setPosition(player.posX, player.posY, player.posZ);
+        motionX = player.motionX * 2;
+        motionY = player.motionY * 2;
+        motionZ = player.motionZ * 2;
         
         Rigidbody rb = this.getMotionHandler(Rigidbody.class);
         rb.entitySel = EntitySelectors.exclude(player);
         
-        this.regEventHandler(new CollideHandler() {
+        this.regEventHandler(new CollideEvent.CollideHandler() {
 
             @Override
             public void onEvent(CollideEvent event) {
-                MovingObjectPosition res = event.result;
-                if(res.typeOfHit == MovingObjectType.ENTITY) {
+                RayTraceResult res = event.result;
+                if(res.typeOfHit == RayTraceResult.Type.ENTITY) {
                     if(!(res.entityHit instanceof EntityMagHook) || ((EntityMagHook)res.entityHit).isHit) {
                         if(!(res.entityHit instanceof EntityMagHook))
                             res.entityHit.attackEntityFrom(DamageSource.causePlayerDamage(player), 4);
@@ -59,9 +69,9 @@ public class EntityMagHook extends EntityAdvanced {
                 } else {
                     isHit = true;
                     hitSide = res.sideHit;
-                    hookX = res.blockX;
-                    hookY = res.blockY;
-                    hookZ = res.blockZ;
+                    hookX = res.getBlockPos().getX();
+                    hookY = res.getBlockPos().getX();
+                    hookZ = res.getBlockPos().getX();
                     setStill();
                 }
             }
@@ -139,7 +149,7 @@ public class EntityMagHook extends EntityAdvanced {
     }
     
     private void dropAsItem() {
-        getEntityWorld().spawnEntityInWorld(new EntityItem(getEntityWorld(), posX, posY, posZ, new ItemStack(ModuleVanilla.magHook)));
+        getEntityWorld().spawnEntity(new EntityItem(getEntityWorld(), posX, posY, posZ, new ItemStack(ModuleVanilla.magHook)));
         setDead();
     }
     
@@ -164,7 +174,7 @@ public class EntityMagHook extends EntityAdvanced {
                 preRender();
                 if(!getEntityWorld().isRemote) {
                     //Check block consistency
-                    if(getEntityWorld().isAirBlock(hookX, hookY, hookZ)) {
+                    if(getEntityWorld().isAirBlock(new BlockPos(hookX, hookY, hookZ))) {
                         dropAsItem();
                     }
                 }
@@ -183,7 +193,7 @@ public class EntityMagHook extends EntityAdvanced {
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         tag.setBoolean("isHit", isHit);
-        tag.setInteger("hitSide", hitSide);
+        tag.setInteger("hitSide", hitSide.getIndex());
         tag.setInteger("hookX", hookX);
         tag.setInteger("hookY", hookY);
         tag.setInteger("hookZ", hookZ);
@@ -192,7 +202,7 @@ public class EntityMagHook extends EntityAdvanced {
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         isHit = tag.getBoolean("isHit");
-        hitSide = tag.getInteger("hitSide");
+        hitSide = EnumFacing.getFront(tag.getInteger("hitSide"));
         hookX = tag.getInteger("hookX");
         hookY = tag.getInteger("hookY");
         hookZ = tag.getInteger("hookZ");

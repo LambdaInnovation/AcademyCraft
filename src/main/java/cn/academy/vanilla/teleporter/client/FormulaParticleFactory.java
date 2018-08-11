@@ -1,6 +1,7 @@
 package cn.academy.vanilla.teleporter.client;
 
 import cn.academy.core.Resources;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.util.ResourceLocation;
 
 /**

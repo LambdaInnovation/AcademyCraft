@@ -7,13 +7,11 @@ import cn.academy.core.client.sound.ACSounds
 import cn.academy.vanilla.teleporter.entity.EntityTPMarking
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.VecUtils
-import cn.lambdalib2.util.Motion3D
-import cn.lambdalib2.util.mc.Raytrace
+import cn.lambdalib2.util.{ Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.MovingObjectPosition.MovingObjectType
-import net.minecraft.util.{MovingObjectPosition, Vec3d}
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
+import net.minecraft.util.{EnumFacing, SoundCategory}
 
 /**
   * @author WeAthFolD, KSkun
@@ -64,8 +62,8 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       sendToClient(MSG_SOUND)
       val overload: Float = lerpf(40, 20, exp)
       ctx.consumeWithForce(overload, distance * getCPB(exp))
-      if(player.isRiding())
-        player.mountEntity(null);
+      if(player.isRiding)
+        player.dismountRidingEntity()
       player.setPositionAndUpdate(dest.x, dest.y, dest.z)
       val expincr: Float = 0.00018f * distance
       ctx.addSkillExp(expincr)
@@ -90,7 +88,7 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
   def getDest(player: EntityPlayer, ticks: Int): Vec3d = {
     val cpData: CPData = CPData.get(player)
     val dist: Double = getMaxDist(ctx.getSkillExp, cpData.getCP, ticks)
-    val mop: MovingObjectPosition = Raytrace.traceLiving(player, dist)
+    val mop: RayTraceResult = Raytrace.traceLiving(player, dist)
     var x: Double = .0
     var y: Double = .0
     var z: Double = .0
@@ -98,38 +96,38 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
       x = mop.hitVec.x
       y = mop.hitVec.y
       z = mop.hitVec.z
-      if(mop.typeOfHit == MovingObjectType.BLOCK) {
+      if(mop.typeOfHit == RayTraceResult.Type.BLOCK) {
         mop.sideHit match {
-          case 0 =>
+          case EnumFacing.DOWN =>
             y -= 1.0
-          case 1 =>
+          case EnumFacing.UP =>
             y += 1.8
-          case 2 =>
+          case EnumFacing.NORTH =>
             z -= .6
-            y = mop.blockY + 1.7
-          case 3 =>
+            y = mop.getBlockPos.getY + 1.7
+          case EnumFacing.SOUTH =>
             z += .6
-            y = mop.blockY + 1.7
-          case 4 =>
+            y = mop.getBlockPos.getY + 1.7
+          case EnumFacing.WEST =>
             x -= .6
-            y = mop.blockY + 1.7
-          case 5 =>
+            y = mop.getBlockPos.getY + 1.7
+          case EnumFacing.EAST =>
             x += .6
-            y = mop.blockY + 1.7
+            y = mop.getBlockPos.getY + 1.7
         }
         // check head
-        if(mop.sideHit > 1) {
+        if(mop.sideHit.getIndex > 1) {
           val hx: Int = x.toInt
           val hy: Int = (y + 1).toInt
           val hz: Int = z.toInt
-          if(!player.world.isAirBlock(hx, hy, hz)) y -= 1.25
+          if(!player.world.isAirBlock(new BlockPos(hx, hy, hz))) y -= 1.25
         }
       } else y += mop.entityHit.getEyeHeight
     } else {
-      val mo: Motion3D = new Motion3D(player, true).move(dist)
-      x = mo.px
-      y = mo.py
-      z = mo.pz
+      val mo = VecUtils.add(player.getPositionVector, VecUtils.multiply(player.getLookVec, dist))
+      x = mo.x
+      y = mo.y
+      z = mo.z
     }
     new Vec3d(x, y, z)
   }
@@ -147,7 +145,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
   private def l_start() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
-      player.world.spawnEntityInWorld(mark)
+      player.world.spawnEntity(mark)
     }
   }
 
@@ -167,7 +165,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_SOUND, side=Array(Side.CLIENT))
   private def c_sound() = {
-    ACSounds.playClient(player, "tp.tp", .5f)
+    ACSounds.playClient(player, "tp.tp",SoundCategory.AMBIENT, .5f)
   }
 
 }

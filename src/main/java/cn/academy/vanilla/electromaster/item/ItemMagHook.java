@@ -32,7 +32,7 @@ public class ItemMagHook extends Item {
             world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
             world.spawnEntity(new EntityMagHook(player));
             if(!player.capabilities.isCreativeMode)
-                --stack.stackSize;
+                stack.setCount(stack.getCount()-1);
         }
         return stack;
     }

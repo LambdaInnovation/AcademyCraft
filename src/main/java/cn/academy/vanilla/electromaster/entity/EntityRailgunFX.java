@@ -1,6 +1,7 @@
 package cn.academy.vanilla.electromaster.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.entity.EntityRayBase;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory;
 import cn.academy.vanilla.electromaster.client.effect.ArcFactory.Arc;
@@ -12,6 +13,7 @@ import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +51,9 @@ public class EntityRailgunFX extends EntityRayBase {
     
     public EntityRailgunFX(EntityPlayer player, double length) {
         super(player);
-        new Motion3D(player, true).applyToEntity(this);
+        posX=player.posX;
+        posY=player.posY;
+        posZ=player.posZ;
         
         this.life = 50;
         this.blendInTime = 150;
@@ -82,7 +86,7 @@ public class EntityRailgunFX extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        getEntityWorld().playSound(posX, posY, posZ, "academy:em.railgun", 0.5f, 1.0f, false);
+        ACSounds.playClient(world, posX, posY, posZ, "academy:em.railgun", SoundCategory.AMBIENT, 0.5f, 1.0f);
     }
     
     @Override

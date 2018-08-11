@@ -3,6 +3,7 @@ package cn.academy.vanilla.generic.entity;
 import cn.academy.vanilla.generic.client.render.RippleMarkRender;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,13 +14,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 @RegEntity
-public class EntityRippleMark extends EntityAdvanced {
+public class EntityRippleMark extends EntityAdvanced
+{
     
     @RegEntity.Render
     public static RippleMarkRender renderer;
     
     public final Color color = Color.white();
-    public final long creationTime = GameTimer.getTime();
+    public final double creationTime = GameTimer.getTime();
 
     public EntityRippleMark(World world) {
         super(world);

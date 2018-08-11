@@ -3,11 +3,20 @@ package cn.academy.vanilla.meltdowner.entity;
 import cn.academy.core.client.ACRenderingHelper;
 import cn.academy.core.Resources;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +27,13 @@ import org.lwjgl.opengl.GL20;
  * @author WeAthFolD
  */
 @RegEntity
-public class EntityMdBall extends EntityAdvanced {
+public class EntityMdBall extends EntityAdvanced
+{
+    private static final DataParameter<Integer> SPAWNER_ID = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> SUB_X = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> SUB_Y = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> SUB_Z = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> LIFE = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.VARINT);
 
     @SideOnly(Side.CLIENT)
     public static R renderer;
@@ -37,8 +52,8 @@ public class EntityMdBall extends EntityAdvanced {
     //Client-side data
     int texID;
     
-    long spawnTime;
-    long lastTime;
+    double spawnTime;
+    double lastTime;
     long burstTime = 400;
     double alphaWiggle = 0.8;
     double accel;
@@ -58,7 +73,7 @@ public class EntityMdBall extends EntityAdvanced {
         this.spawner = player;
         
         // Calc the sub-offset
-        float theta = -player.rotationYaw / 180 * MathUtils.PI_F + 
+        float theta = -player.rotationYaw / 180 * MathUtils.PI_F +
             RandUtils.rangef(-MathUtils.PI_F * 0.45f, MathUtils.PI_F * 0.45f);
         
         float range = RandUtils.rangef(RANGE_FROM, RANGE_TO);
@@ -72,14 +87,7 @@ public class EntityMdBall extends EntityAdvanced {
         
         this.life = life;
 
-        this.executeAfter(new EntityCallback<EntityMdBall>() {
-
-            @Override
-            public void execute(EntityMdBall target) {
-                target.setDead();
-            }
-            
-        }, life);
+        this.executeAfter((EntityCallback<EntityMdBall>) Entity::setDead, life);
         if(callback != null)
             this.executeAfter(callback, life - 2);
     }
@@ -92,21 +100,22 @@ public class EntityMdBall extends EntityAdvanced {
     
     @Override
     public void entityInit() {
-        dataWatcher.addObject(3, Integer.valueOf(0));
-        dataWatcher.addObject(4, Float.valueOf(0));
-        dataWatcher.addObject(5, Float.valueOf(0));
-        dataWatcher.addObject(6, Float.valueOf(0));
-        dataWatcher.addObject(7, Integer.valueOf(0));
+        super.entityInit();
+        this.dataManager.register(SPAWNER_ID,0);
+        this.dataManager.register(SUB_X,0F);
+        this.dataManager.register(SUB_Y,0F);
+        this.dataManager.register(SUB_Z,0F);
+        this.dataManager.register(LIFE,0);
     }
     
     @Override
     public void onFirstUpdate() {
         if(!world.isRemote) {
-            dataWatcher.updateObject(3, Integer.valueOf(spawner.getEntityId()));
-            dataWatcher.updateObject(4, Float.valueOf(subX));
-            dataWatcher.updateObject(5, Float.valueOf(subY));
-            dataWatcher.updateObject(6, Float.valueOf(subZ));
-            dataWatcher.updateObject(7, Integer.valueOf(life));
+            this.dataManager.set(SPAWNER_ID, spawner.getEntityId());
+            this.dataManager.set(SUB_X, subX);
+            this.dataManager.set(SUB_Y, subY);
+            this.dataManager.set(SUB_Z, subZ);
+            this.dataManager.set(LIFE, life);
         }
     }
     
@@ -117,7 +126,7 @@ public class EntityMdBall extends EntityAdvanced {
         if(world.isRemote) {
             
             if(getSpawner() == null) {
-                int eid = dataWatcher.getWatchableObjectInt(3);
+                int eid = this.dataManager.get(SPAWNER_ID);
                 Entity e = world.getEntityByID(eid);
                 if(e instanceof EntityPlayer) {
                     spawner = (EntityPlayer) e;
@@ -125,10 +134,10 @@ public class EntityMdBall extends EntityAdvanced {
                 
             } else {
                 if(subX == 0 && subY == 0 && subZ == 0) {
-                    subX = dataWatcher.getWatchableObjectFloat(4);
-                    subY = dataWatcher.getWatchableObjectFloat(5);
-                    subZ = dataWatcher.getWatchableObjectFloat(6);
-                    life = dataWatcher.getWatchableObjectInt(7);
+                    subX = this.dataManager.get(SUB_X);
+                    subY = this.dataManager.get(SUB_Y);
+                    subZ = this.dataManager.get(SUB_Z);
+                    life = this.dataManager.get(LIFE);
                 } else {
                     updatePosition();
                 }
@@ -165,12 +174,12 @@ public class EntityMdBall extends EntityAdvanced {
             return false;
         
         final double maxAccel = 4;
-        long time = GameTimer.getTime();
-        long life = time - spawnTime;
+        double time = GameTimer.getTime();
+        double life = time - spawnTime;
         
         //Alpha wiggling
         if(lastTime != 0) {
-            long dt = time - lastTime;
+            double dt = time - lastTime;
             if(rand.nextInt(8) < 3) {
                 accel = RandUtils.ranged(-maxAccel, maxAccel);
                 //System.out.println("AccelChange=>" + accel);
@@ -189,7 +198,7 @@ public class EntityMdBall extends EntityAdvanced {
         }
         
         //Surrounding
-        float phase = life / 300.0f;
+        float phase = (float) (life / 300.0f);
         offsetX = 0.03 * MathHelper.sin(phase);
         offsetZ = 0.03 * MathHelper.cos(phase);
         offsetY = 0.04 * MathHelper.cos((float) (phase * 1.4 + Math.PI / 3.5));
@@ -201,8 +210,8 @@ public class EntityMdBall extends EntityAdvanced {
     
     private double getAlpha() {
         int lifeMS = life * 50;
-        long time = GameTimer.getTime();
-        long dt = time - spawnTime;
+        double time = GameTimer.getTime();
+        double dt = time - spawnTime;
         
         final int blendTime = 150;
         if(dt > lifeMS - blendTime)
@@ -216,8 +225,8 @@ public class EntityMdBall extends EntityAdvanced {
     
     private float getSize() {
         int lifeMS = life * 50;
-        long time = GameTimer.getTime();
-        long dt = time - spawnTime;
+        double time = GameTimer.getTime();
+        double dt = time - spawnTime;
         
         if(dt > lifeMS - 100)
             return Math.max(0, MathUtils.lerpf(1.5f, 0, (float) (dt - (lifeMS - 100)) / 100));
@@ -257,7 +266,7 @@ public class EntityMdBall extends EntityAdvanced {
             if(!ent.updateRenderTick())
                 return;
             
-            EntityPlayer clientPlayer = Minecraft.getMinecraft().thePlayer;
+            EntityPlayer clientPlayer = Minecraft.getMinecraft().player;
             
             //HACK: Force set the render pos to prevent glitches
             {

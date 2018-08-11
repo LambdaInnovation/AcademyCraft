@@ -2,12 +2,12 @@ package cn.academy.vanilla.meltdowner.item;
 
 import cn.academy.core.Resources;
 import cn.academy.core.item.ACItem;
-import cn.academy.vanilla.ModuleSoundEvent;
-import cn.academy.vanilla.ModuleVanilla;
 import cn.academy.vanilla.meltdowner.entity.EntitySilbarn;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +25,8 @@ public class ItemSilbarn extends ACItem {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if(!world.isRemote) {
             world.playSound(player, player.posX,player.posY,player.posZ,
-                    ModuleSoundEvent.silbarn_sound, SoundCategory.AMBIENT, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+                    new SoundEvent(new ResourceLocation( "random.bow"))
+                    , SoundCategory.AMBIENT, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
             world.spawnEntity(new EntitySilbarn(player));
         }
         if(!player.capabilities.isCreativeMode)

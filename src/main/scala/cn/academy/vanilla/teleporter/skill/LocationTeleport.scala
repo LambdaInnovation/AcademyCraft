@@ -7,19 +7,34 @@ import cn.academy.ability.api.{AbilityContext, Skill}
 import cn.academy.ability.api.context.{ClientRuntime, KeyDelegate}
 import cn.academy.ability.api.data.AbilityData
 import cn.academy.core.Resources
+import cn.academy.core.client.sound.ACSounds
 import cn.academy.misc.achievements.ModuleAchievements
 import cn.academy.vanilla.teleporter.util.TPSkillHelper
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.{CGuiScreen, Widget}
+import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
+import cn.lambdalib2.cgui.event.{FrameEvent, IGuiEventHandler, LeftClickEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
 import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeStrategy}
+import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
+import cn.lambdalib2.s11n.nbt.NBTS11n
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.{NetworkMessage, NetworkS11n}
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n, NetworkS11nType}
+import cn.lambdalib2.util.{EntitySelectors, GameTimer, MathUtils, WorldUtils}
 import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.I18n
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{MathHelper, ResourceLocation, StatCollector}
+import net.minecraft.util.{ResourceLocation, SoundCategory}
+import net.minecraft.util.math.MathHelper
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.Side
+import org.lwjgl.util.Color
 
 private object LTNetDelegate {
   final val MSG_ADD = "add"
@@ -42,7 +57,7 @@ private object LTNetDelegate {
   @Listener(channel=MSG_ADD, side=Array(Side.SERVER))
   private def hAdd(player: EntityPlayer, name: String, future: Future[util.List[Location]]) = {
     val data = LocTeleportData(player)
-    data.add(name, player.world.provider.dimensionId,
+    data.add(name, player.world.provider.getDimension,
       (player.posX.toFloat, player.posY.toFloat, player.posZ.toFloat))
     future.sendResult(new util.ArrayList(data.locations))
   }
@@ -93,14 +108,14 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     val dimPenalty = if (isCrossDim(player, dest)) 2 else 1
 
     (240, MathUtils.lerpf(200, 150, data.getSkillExp(this)) * dimPenalty *
-      math.max(8.0f, MathHelper.sqrt_float(math.min(800, distance))))
+      math.max(8.0f, MathHelper.sqrt(math.min(800, distance))))
   }
 
   /**
     * @return `None` if can perform. `Some(reason)` if can't.
     */
   def getPerformStat(player: EntityPlayer, dest: Location): Option[String] = {
-    def fail(id: String) = Some(StatCollector.translateToLocal("ac.gui.loctele." + id))
+    def fail(id: String) = Some(I18n.format("ac.gui.loctele." + id))
 
     if (isCrossDim(player, dest) && !canCrossDimension(player)) {
       fail("err_exp")
@@ -127,18 +142,18 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       teleportSelector.and(EntitySelectors.exclude(player))).toList
 
     if (isCrossDim(player, dest)) {
-      entitiesToTeleport.foreach(_.travelToDimension(dest.dim))
+      entitiesToTeleport.foreach(_.changeDimension(dest.dim))
     }
 
     val (px, py, pz) = (player.posX, player.posY, player.posZ)
     entitiesToTeleport.foreach(e => {
       val (dx, dy, dz) = (e.posX - px, e.posY - py, e.posZ - pz)
-      if(e.isRiding())e.mountEntity(null)
+      if(e.isRiding())e.dismountRidingEntity
       e.setPositionAndRotation(dest.x + dx, dest.y + dy, dest.z + dz, e.rotationYaw, e.rotationPitch);
     })
 
-    player.world.playSoundEffect(player.posX, player.posY, player.posZ,
-      "academy:tp.tp", 0.5f, 1.0f)
+    ACSounds.playClient(player.getEntityWorld, player.posX, player.posY, player.posZ,"academy:tp.tp", SoundCategory.AMBIENT, 0.5f, 1.0f)
+
 
     val dist = player.getDistance(dest.x, dest.y, dest.z)
     val expincr = if (dist >= 200) 0.03f else 0.015f
@@ -149,13 +164,13 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     TPSkillHelper.incrTPCount(player)
   }
 
-  private def isCrossDim(player: EntityPlayer, dest: Location) = player.world.provider.dimensionId != dest.dim
+  private def isCrossDim(player: EntityPlayer, dest: Location) = player.world.provider.getDimension != dest.dim
 
   object Gui {
     lazy val template = CGUIDocument.read(Resources.getGui("loctele_new"))
 
     def dimensionNameMap(dimID: Int) = {
-      DimensionManager.createProviderFor(dimID).getDimensionName
+      DimensionManager.createProviderFor(dimID).getDimension
     }
 
     val ElemTimeStep = 0.06
@@ -179,7 +194,14 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val TextHighlight = c(0xff2e3b41)
       val TextDisabled = c(0xffa2a2a2)
 
-      private def c(hex: Int): Color = new Color(hex)
+      private def c(hex: Int): Color = {
+        val a = (hex & 0xff000000)>>6
+        val r = (hex & 0x00ff0000)>>4
+        val g = (hex & 0x0000ff00)>>2
+        val b = (hex & 0x000000ff)>>0
+        new Color(r,g,b,a)
+
+      }
     }
 
     class MessageTab extends Component("MessageTab") {
@@ -223,35 +245,35 @@ object LocationTeleport extends Skill("location_teleport", 3) {
 
   class Gui extends CGuiScreen {
     import Gui._
-    import cn.lambdalib2.cgui.ScalaCGUI._
     import LTNetDelegate._
 
     val root = template.getWidget("root").copy
-    val info = root.child("info")
-    val list = root.child("menu/list")
+    val info = root.getWidget("info")
+    val list = root.getWidget("menu/list")
 
-    val player = Minecraft.getMinecraft.thePlayer
+    val player = Minecraft.getMinecraft.player
     val data = LocTeleportData(player)
 
     var currentMessage: Option[HintMessage] = None
 
     { // hide templates
-      val elem_template = list.child("elem_template")
-      val add_template = list.child("add_template")
+      val elem_template = list.getWidget("elem_template")
+      val add_template = list.getWidget("add_template")
 
       elem_template.transform.doesDraw = false
       add_template.transform.doesDraw = false
     }
 
     { // blend in menu
-      val menu = root.child("menu")
+      val menu = root.getWidget("menu")
       val blend = new Blend(0, 0.4)
       val maxHeight = menu.transform.height
       menu.transform.height = 0
-      menu.listens[FrameEvent](() => {
-        menu.transform.height = blend.alpha * maxHeight
-      })
-    }
+      menu.listen(classOf[FrameEvent], new Runnable {
+        override def run(): Unit = {
+          menu.transform.height = blend.alpha * maxHeight
+        }
+    })
 
     { // Initialize info area
       info :+ new MessageTab
@@ -399,7 +421,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val ret = list.child("add_template").copy
 
       val message = {
-        val dimID = player.world.provider.dimensionId
+        val dimID = player.getEntityWorld.provider.getDimension
         val name = dimensionNameMap(dimID)
 
         List(name + s" (#$dimID)", "(%.0f, %.0f, %.0f)".format(player.posX, player.posY, player.posZ))

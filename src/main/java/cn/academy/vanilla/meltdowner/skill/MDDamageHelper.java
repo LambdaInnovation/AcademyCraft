@@ -110,7 +110,7 @@ public class MDDamageHelper {
         @SubscribeEvent
         public void onLivingAttack(LivingHurtEvent event) {
             if(getMarkTick(event.getEntityLiving()) > 0) {
-                event.ammount *= getMarkRate(event.getEntityLiving());
+                event.setAmount(event.getAmount() * getMarkRate(event.getEntityLiving()));
             }
         }
         

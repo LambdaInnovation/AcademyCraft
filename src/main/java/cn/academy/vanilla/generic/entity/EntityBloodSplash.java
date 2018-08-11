@@ -2,7 +2,9 @@ package cn.academy.vanilla.generic.entity;
 
 import cn.academy.core.Resources;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +19,8 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
  */
 @SideOnly(Side.CLIENT)
 @RegEntity
-public class EntityBloodSplash extends EntityAdvanced {
+public class EntityBloodSplash extends EntityAdvanced
+{
 
     static ResourceLocation[] SPLASH = Resources.getEffectSeq("blood_splash", 10);
 

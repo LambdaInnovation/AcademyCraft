@@ -15,7 +15,9 @@ import cn.academy.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.vanilla.teleporter.util.TPSkillHelper;
 import cn.academy.vanilla.utils.Vec;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.Raytrace;
 import cn.lambdalib2.util.VecUtils;
 import com.google.common.base.Preconditions;
 import net.minecraft.entity.player.EntityPlayer;
@@ -298,12 +300,11 @@ public class Flashing extends Skill {
 
             Vec3d dir = VecUtils.copy(dirs[keyid]);
             Vec.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180);
-            dir.ro((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
+            dir.rotateYaw((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
-            Motion3D mo = new Motion3D(player, true);
-            mo.setMotion(dir.x, dir.y, dir.z);
 
-            RayTraceResult mop = Raytrace.perform(player.getEntityWorld(), mo.getPosVec(), mo.move(dist).getPosVec(),
+            RayTraceResult mop = Raytrace.perform(player.getEntityWorld(), player.getPositionVector(),
+                    VecUtils.add(player.getPositionVector(),VecUtils.multiply(dir, dist)),
                     EntitySelectors.living().and(EntitySelectors.exclude(player)));
 
             double x, y, z;
@@ -349,9 +350,9 @@ public class Flashing extends Skill {
                     y += mop.entityHit.getEyeHeight();
                 }
             } else {
-                x = mo.px;
-                y = mo.py;
-                z = mo.pz;
+                x = player.posX;
+                y = player.posY;
+                z = player.posZ;
             }
 
             return new Vec3d(x, y, z);

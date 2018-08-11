@@ -1,8 +1,9 @@
 package cn.academy.vanilla.meltdowner.entity;
 
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.entity.EntityRayBase;
-import cn.academy.vanilla.ModuleSoundEvent;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -43,7 +44,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.5f, 1.0f, false);
+        ACSounds.playClient(world,posX, posY, posZ, "md.ray_small",SoundCategory.AMBIENT, 0.5f,1.0f);
     }
     
     @Override

@@ -10,6 +10,7 @@ import cn.lambdalib2.util.Motion3D;
 import cn.lambdalib2.util.entityx.EntityAdvanced;*/
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ViewOptimize;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

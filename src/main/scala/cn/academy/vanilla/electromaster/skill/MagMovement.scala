@@ -9,10 +9,11 @@ import cn.academy.vanilla.electromaster.CatElectromaster
 import cn.academy.vanilla.electromaster.client.effect.ArcPatterns
 import cn.academy.vanilla.electromaster.entity.EntityArc
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{MathUtils, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.world.World
 
 /**
@@ -26,9 +27,9 @@ object MagMovement extends Skill("mag_movement", 2) {
 
   def getMaxDistance(data: AbilityData) = 25
 
-  def toTarget(aData: AbilityData, world: World, pos: MovingObjectPosition): Target = {
-    if(pos.typeOfHit == MovingObjectType.BLOCK) {
-      val block = world.getBlockState(new BlockPos(pos.blockX, pos.blockY, pos.blockZ)).getBlock
+  def toTarget(aData: AbilityData, world: World, pos: RayTraceResult): Target = {
+    if(pos.typeOfHit == RayTraceResult.Type.BLOCK) {
+      val block = world.getBlockState(new BlockPos(pos.getBlockPos.x, pos.getBlockPos.y, pos.getBlockPos.z)).getBlock
       if(aData.getSkillExp(this) < 0.6f && !CatElectromaster.isMetalBlock(block)) { return null }
       if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block)) { return null }
       new PointTarget(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
@@ -186,7 +187,7 @@ class MovementContextC(par: MovementContext) extends ClientContext(par) {
     arc.showWiggle = 0.1
     arc.hideWiggle = 0.6
 
-    player.getEntityWorld.spawnEntityInWorld(arc)
+    player.getEntityWorld.spawnEntity(arc)
 
     sound = new FollowEntitySound(player, SOUND).setLoop()
     ACSounds.playClient(sound)

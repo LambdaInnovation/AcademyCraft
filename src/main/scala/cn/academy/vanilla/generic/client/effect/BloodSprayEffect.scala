@@ -4,11 +4,12 @@ import cn.academy.core.Resources
 import cn.academy.core.entity.LocalEntity
 import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.render.Mesh
+import cn.lambdalib2.util.RandUtils
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.init.Blocks
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.client.registry.RenderingRegistry
@@ -64,7 +65,7 @@ object BloodSprayEffect_ {
 
 class BloodSprayEffect(world: World, x: Int, y: Int, z: Int, side: Int) extends LocalEntity(world) {
 
-  val dir = ForgeDirection.values()(side)
+  val dir = EnumFacing.values()(side)
   val textureID = RandUtils.rangei(0, 10)
 
   val size = RandUtils.ranged(1.1, 1.4) * (if (side == 0 || side == 1) 1.0 else 0.8)

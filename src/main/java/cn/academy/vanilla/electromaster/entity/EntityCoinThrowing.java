@@ -8,12 +8,18 @@ import cn.academy.vanilla.electromaster.item.ItemCoin;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.s11n.network.NetworkS11n;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityAdvanced;
+import cn.lambdalib2.util.entityx.MotionHandler;
+import cn.lambdalib2.util.entityx.handlers.Rigidbody;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,7 +32,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author KSkun
  */
 @RegEntity
-public class EntityCoinThrowing extends EntityAdvanced {
+public class EntityCoinThrowing extends EntityAdvanced
+{
 
     public static boolean PLAY_HEADS_OR_TAILS;
 
@@ -46,7 +53,8 @@ public class EntityCoinThrowing extends EntityAdvanced {
 
     double yOffset = 0.6;
     
-    private class KeepPosition extends MotionHandler<EntityCoinThrowing> {
+    private class KeepPosition extends MotionHandler<EntityCoinThrowing>
+    {
 
         public KeepPosition() {}
 
@@ -132,23 +140,23 @@ public class EntityCoinThrowing extends EntityAdvanced {
     void finishThrowing() {
         //try merge
         if(!getEntityWorld().isRemote && !player.capabilities.isCreativeMode) {
-            ItemStack equipped = player.getCurrentEquippedItem();
+            ItemStack equipped = player.getHeldItemMainhand();
             if(equipped == null) {
-                player.setCurrentItemOrArmor(0, new ItemStack(ModuleVanilla.coin));
-            } else if(equipped.getItem() == ModuleVanilla.coin && equipped.stackSize < equipped.getMaxStackSize()) {
-                ++equipped.stackSize;
+                player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModuleVanilla.coin));
+            } else if(equipped.getItem() == ModuleVanilla.coin && equipped.getCount() < equipped.getMaxStackSize()) {
+                equipped.setCount(equipped.getCount()+1);
                 player.inventory.inventoryChanged = true;
             } else if(PlayerUtils.mergeStackable(player.inventory, new ItemStack(
                     ModuleVanilla.coin)) == 0) {
                 ;
             } else {
                 //if fail...
-                world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY
+                world.spawnEntity(new EntityItem(world, player.posX, player.posY
                     + yOffset, player.posZ, new ItemStack(ModuleVanilla.coin)));
             }
         }
         if (getEntityWorld().isRemote && PLAY_HEADS_OR_TAILS) {
-            player.addChatComponentMessage(new ChatComponentTranslation(
+            player.sendMessage(new TextComponentTranslation(
                 "ac.headsOrTails." + RandUtils.nextInt(2)));
         }
         setDead();
@@ -173,7 +181,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         setDead();
-        getEntityWorld().spawnEntityInWorld(new EntityItem(world, posX, posY, posZ, new ItemStack(
+        getEntityWorld().spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(
                 ModuleVanilla.coin)));
     }
 

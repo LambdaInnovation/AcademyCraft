@@ -3,6 +3,7 @@ package cn.academy.vanilla.electromaster.entity;
 import cn.academy.vanilla.electromaster.client.effect.SubArc;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.entityx.EntityCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,21 +40,16 @@ public class EntityIntensifyEffect extends EntitySurroundArc {
     protected void doGenerate() {}
     
     private void genAtHt(double ht, int after) {
-        this.executeAfter(new EntityCallback<EntityIntensifyEffect>() {
-
-            @Override
-            public void execute(EntityIntensifyEffect target) {
-                //arcHandler.clear();
-                int gen = RandUtils.rangei(3, 4);
-                while(gen-- > 0) {
-                    double phi = RandUtils.ranged(0.5, 0.6);
-                    double theta = RandUtils.ranged(0, Math.PI * 2);
-                    SubArc arc = arcHandler.generateAt(
-                        new Vec3d(phi * Math.sin(theta), ht, phi * Math.cos(theta)));
-                    arc.life = 3;
-                }
+        this.executeAfter((EntityCallback<EntityIntensifyEffect>) target -> {
+            //arcHandler.clear();
+            int gen = RandUtils.rangei(3, 4);
+            while(gen-- > 0) {
+                double phi = RandUtils.ranged(0.5, 0.6);
+                double theta = RandUtils.ranged(0, Math.PI * 2);
+                SubArc arc = arcHandler.generateAt(
+                    new Vec3d(phi * Math.sin(theta), ht, phi * Math.cos(theta)));
+                arc.life = 3;
             }
-            
         }, after);
     }
 

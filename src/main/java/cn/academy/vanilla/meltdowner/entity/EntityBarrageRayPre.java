@@ -1,9 +1,10 @@
 package cn.academy.vanilla.meltdowner.entity;
 
 import cn.academy.core.client.render.ray.RendererRayComposite;
+import cn.academy.core.client.sound.ACSounds;
 import cn.academy.core.entity.EntityRayBase;
-import cn.academy.vanilla.ModuleSoundEvent;
 import cn.lambdalib2.registry.mc.RegEntity;
+import cn.lambdalib2.util.MathUtils;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,16 +32,16 @@ public class EntityBarrageRayPre extends EntityRayBase {
     @Override
     protected void onFirstUpdate() {
         super.onFirstUpdate();
-        world.playSound(player, posX, posY, posZ, ModuleSoundEvent.md_ray_small, SoundCategory.AMBIENT, 0.8f, 1.0f, false);
+        ACSounds.playClient(world,posX, posY, posZ, "md.ray_small",SoundCategory.AMBIENT, 0.8f,1.0f);
     }
     
     @Override
     public double getWidth() {
-        long dt = getDeltaTime();
+        double dt = getDeltaTime();
         int blendTime = 500;
 
         if(dt > this.life * 50 - blendTime) {
-            return 1 - MathUtils.clampd(1, 0, (double) (dt - (this.life * 50 - blendTime)) / blendTime);
+            return 1 - MathUtils.clampd(1, 0, (dt - (this.life * 50 - blendTime)) / blendTime);
         }
         
         return 1.0;
