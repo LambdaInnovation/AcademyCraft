@@ -251,7 +251,7 @@ public class Flashing extends Skill {
                     cancellor = null;
                 }
                 cancellor = new GravityCancellor(player, 40);
-                LIFMLGameEventDispatcher.INSTANCE.registerClientTick(cancellor);
+                MinecraftForge.EVENT_BUS.register(cancellor);
             }
         }
 

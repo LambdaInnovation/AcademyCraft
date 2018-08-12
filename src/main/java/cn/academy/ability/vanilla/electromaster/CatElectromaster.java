@@ -40,7 +40,7 @@ public class CatElectromaster extends Category {
     public CatElectromaster() {
         super("electromaster");
 
-        colorStyle.setColor4i(20, 113, 208, 100);
+        colorStyle.set(20, 113, 208, 100);
 
         arcGen.setPosition(24, 46);
         currentCharging.setPosition(55, 18);
