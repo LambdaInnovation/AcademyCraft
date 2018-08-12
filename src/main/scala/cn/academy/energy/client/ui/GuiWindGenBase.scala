@@ -1,8 +1,9 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
+import cn.academy.block.container.ContainerWindGenBase
+import cn.academy.block.tileentity.TileWindGenBase
 import cn.academy.core.client.ui.TechUI.{ContainerUI, HistElement}
-import cn.academy.energy.block.wind.{ContainerWindGenBase, TileWindGenBase}
 import cn.academy.core.client.ui._
 import cn.lambdalib2.cgui.component.{DrawTexture, TextBox}
 import cn.lambdalib2.cgui.event.FrameEvent

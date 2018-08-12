@@ -1,6 +1,6 @@
 package cn.academy.support.ic2;
 
-import cn.academy.core.block.TileReceiverBase;
+import cn.academy.block.tileentity.TileReceiverBase;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;

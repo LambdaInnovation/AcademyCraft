@@ -1,6 +1,6 @@
 package cn.academy.terminal;
 
-import cn.academy.terminal.client.TerminalUI;
+import cn.academy.client.auxgui.TerminalUI;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

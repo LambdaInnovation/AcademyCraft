@@ -3,7 +3,6 @@ package cn.academy.ability.api.context;
 import cn.academy.ability.api.context.Context.Status;
 import cn.academy.ability.api.event.CategoryChangeEvent;
 import cn.academy.ability.api.event.OverloadEvent;
-import cn.academy.core.AcademyCraft;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.*;
 import cn.lambdalib2.s11n.network.NetworkS11n;

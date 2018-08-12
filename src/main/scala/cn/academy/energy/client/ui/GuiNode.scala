@@ -1,10 +1,11 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.block.BlockNode.NodeType
-import cn.academy.energy.block.{ContainerNode, TileNode}
+import cn.academy.block.block.BlockNode.NodeType
+import cn.academy.block.container.ContainerNode
+import cn.academy.block.tileentity.TileNode
 import cn.academy.core.client.ui._
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.Widget

@@ -1,8 +1,8 @@
 package cn.academy.support.nei;
 
-import cn.academy.core.Resources;
-import cn.academy.crafting.api.ImagFusorRecipes;
-import cn.academy.crafting.api.ImagFusorRecipes.IFRecipe;
+import cn.academy.Resources;
+import cn.academy.crafting.ImagFusorRecipes;
+import cn.academy.crafting.ImagFusorRecipes.IFRecipe;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.render.font.IFont.FontOption;

@@ -2,7 +2,7 @@ package cn.academy.ability.api.context;
 
 import cn.academy.ability.api.AbilityContext;
 import cn.academy.ability.api.Skill;
-import cn.academy.core.AcademyCraft;
+import cn.academy.AcademyCraft;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.IMessageDelegate;
 import com.google.common.collect.HashMultimap;

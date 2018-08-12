@@ -5,7 +5,7 @@ import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
-import cn.academy.ability.item.ItemInductionFactor;
+import cn.academy.item.ItemInductionFactor;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

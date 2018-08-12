@@ -2,7 +2,7 @@ package cn.academy.misc.media
 
 import java.util
 
-import cn.academy.core.item.ACItem
+import cn.academy.item.ACItem
 import cn.academy.terminal.TerminalData
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

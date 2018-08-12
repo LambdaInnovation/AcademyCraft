@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import static cn.academy.crafting.api.ImagFusorRecipes.INSTANCE;
+import static cn.academy.crafting.ImagFusorRecipes.INSTANCE;
 import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 

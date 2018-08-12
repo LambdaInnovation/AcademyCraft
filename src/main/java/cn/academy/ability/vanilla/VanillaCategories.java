@@ -1,0 +1,74 @@
+package cn.academy.ability.vanilla;
+
+import cn.academy.ability.api.Category;
+import cn.academy.ability.api.Skill;
+import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
+import cn.academy.ability.develop.condition.DevConditionAnySkillOfLevel;
+import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
+import cn.academy.worldgen.WorldGenInit;
+import cn.academy.crafting.MetalFormerRecipes;
+import cn.academy.block.tileentity.TileMetalFormer.Mode;
+import cn.academy.ability.vanilla.electromaster.CatElectromaster;
+import cn.academy.ability.vanilla.generic.skill.SkillBrainCourse;
+import cn.academy.ability.vanilla.generic.skill.SkillBrainCourseAdvanced;
+import cn.academy.ability.vanilla.generic.skill.SkillMindCourse;
+import cn.academy.ability.vanilla.meltdowner.CatMeltdowner;
+import cn.academy.ability.vanilla.teleporter.CatTeleporter;
+import cn.academy.ability.vanilla.vecmanip.CatVecManip;
+import cn.academy.ability.vanilla.vecmanip.CatVecManip$;
+import cn.lambdalib2.registry.StateEventCallback;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+
+@ObjectHolder("academy")
+@RegACRecipeNames
+public class VanillaCategories {
+
+    @RegCategory
+    public static final CatElectromaster electromaster = new CatElectromaster();
+
+    @RegCategory
+    public static final CatMeltdowner meltdowner = new CatMeltdowner();
+
+    @RegCategory
+    public static final CatTeleporter teleporter = new CatTeleporter();
+
+    @RegCategory
+    public static final CatVecManip vecManip = new CatVecManip();
+
+    @StateEventCallback
+    private static void init(FMLInitializationEvent event) {
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate), new ItemStack(needle, 6),
+                Mode.INCISE);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(Block.getBlockFromName("rail")), new ItemStack(needle, 2),
+                Mode.INCISE);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.rfIronPlate, 2), new ItemStack(coin, 3),
+                Mode.PLATE);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(WorldGenInit.wafer), new ItemStack(silbarn), Mode.ETCH);
+    }
+
+    public static void addGenericSkills(Category category) {
+        Skill bc = new SkillBrainCourse(),
+                bca = new SkillBrainCourseAdvanced(),
+                mc = new SkillMindCourse();
+
+        bc.setPosition(30, 110);
+        bca.setPosition(115, 110);
+        mc.setPosition(205, 110);
+
+        category.addSkill(bc);
+        category.addSkill(bca);
+        category.addSkill(mc);
+
+        bc.addDevCondition(new DevConditionAnySkillOfLevel(3));
+
+        bca.setParent(bc);
+        bca.addDevCondition(new DevConditionAnySkillOfLevel(4));
+
+        mc.setParent(bca);
+        mc.addDevCondition(new DevConditionAnySkillOfLevel(5));
+    }
+
+}

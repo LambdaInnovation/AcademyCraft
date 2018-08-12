@@ -1,7 +1,7 @@
 package cn.academy.support.bukkit;
 
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.event.BlockDestroyEvent;
+import cn.academy.AcademyCraft;
+import cn.academy.event.BlockDestroyEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

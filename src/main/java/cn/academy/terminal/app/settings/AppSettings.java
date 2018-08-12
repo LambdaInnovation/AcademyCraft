@@ -2,7 +2,7 @@ package cn.academy.terminal.app.settings;
 
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
-import cn.academy.terminal.registry.AppRegistration.RegApp;
+import cn.academy.terminal.RegApp;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

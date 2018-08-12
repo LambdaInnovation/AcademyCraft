@@ -1,6 +1,6 @@
 package cn.academy.terminal;
 
-import cn.academy.core.Resources;
+import cn.academy.Resources;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 

@@ -3,7 +3,7 @@ package cn.academy.ability.develop.condition;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
-import cn.academy.core.Resources;
+import cn.academy.Resources;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 

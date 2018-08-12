@@ -1,11 +1,10 @@
 package cn.academy.support.nei;
 
-import cn.academy.core.AcademyCraft;
+import cn.academy.AcademyCraft;
 import cn.academy.core.client.ui.TechUI.ContainerUI;
 import codechicken.nei.VisiblityData;
 import codechicken.nei.api.*;
 import codechicken.nei.recipe.IRecipeHandler;
-import com.google.common.collect.Lists;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 

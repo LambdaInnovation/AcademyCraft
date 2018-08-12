@@ -1,9 +1,10 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
+import cn.academy.block.container.ContainerMetalFormer
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
-import cn.academy.crafting.block.{ContainerMetalFormer, TileMetalFormer}
+import cn.academy.block.tileentity.TileMetalFormer
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.Widget
 import cn.lambdalib2.cgui.component.{DrawTexture, ProgressBar}

@@ -4,7 +4,7 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.event.*;
-import cn.academy.core.config.ACConfig;
+import cn.academy.ACConfig;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

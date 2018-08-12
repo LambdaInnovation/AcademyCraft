@@ -1,6 +1,6 @@
 package cn.academy.misc.media
 
-import cn.academy.core.AcademyCraft
+import cn.academy.AcademyCraft
 import cn.academy.misc.media.MediaBackend.PlayInfo
 import cn.lambdalib2.datapart.{DataPart, EntityData, RegDataPart}
 import cn.lambdalib2.util.ReflectionUtils

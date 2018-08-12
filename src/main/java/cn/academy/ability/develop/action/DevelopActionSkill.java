@@ -2,11 +2,9 @@ package cn.academy.ability.develop.action;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.AbilityLocalization;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Learn a specific kind of skill.

@@ -1,7 +1,7 @@
 package cn.academy.terminal;
 
-import cn.academy.terminal.event.AppInstalledEvent;
-import cn.academy.terminal.event.TerminalInstalledEvent;
+import cn.academy.event.AppInstalledEvent;
+import cn.academy.event.TerminalInstalledEvent;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;

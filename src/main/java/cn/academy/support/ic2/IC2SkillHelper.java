@@ -1,7 +1,7 @@
 package cn.academy.support.ic2;
 
 import cn.academy.ability.api.event.AbilityActivateEvent;
-import cn.academy.vanilla.electromaster.entity.EntitySurroundArc;
+import cn.academy.entity.EntitySurroundArc;
 import cn.lambdalib2.util.BlockPos;
 import cn.lambdalib2.util.mc.IBlockSelector;
 import cn.lambdalib2.util.mc.WorldUtils;

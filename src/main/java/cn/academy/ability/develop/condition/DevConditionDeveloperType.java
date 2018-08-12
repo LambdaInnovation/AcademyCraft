@@ -2,7 +2,7 @@ package cn.academy.ability.develop.condition;
 
 import cn.academy.ability.api.Skill;
 import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.client.AbilityLocalization;
+import cn.academy.ability.AbilityLocalization;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
 import net.minecraft.util.ResourceLocation;

@@ -6,7 +6,7 @@ import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.api.data.CPData;
 import cn.academy.ability.api.event.CalcEvent;
 import cn.academy.ability.api.event.ReflectEvent;
-import cn.academy.core.config.ACConfig;
+import cn.academy.ACConfig;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.mc.WorldUtils;
 import net.minecraft.entity.Entity;

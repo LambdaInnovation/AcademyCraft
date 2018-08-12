@@ -1,7 +1,7 @@
 package cn.academy.misc.media
 
-import cn.academy.core.Resources
-import cn.academy.core.client.ui.ACHud
+import cn.academy.Resources
+import cn.academy.client.auxgui.ACHud
 import cn.academy.core.client.ui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent

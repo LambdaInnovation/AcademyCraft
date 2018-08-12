@@ -1,13 +1,12 @@
 package cn.academy.support.nei;
 
-import cn.academy.crafting.api.MetalFormerRecipes;
-import cn.academy.crafting.api.MetalFormerRecipes.RecipeObject;
-import cn.academy.crafting.block.TileMetalFormer.Mode;
+import cn.academy.crafting.MetalFormerRecipes;
+import cn.academy.crafting.MetalFormerRecipes.RecipeObject;
+import cn.academy.block.tileentity.TileMetalFormer.Mode;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.shader.ShaderMono;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;

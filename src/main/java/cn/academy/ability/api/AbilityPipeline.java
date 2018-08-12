@@ -1,17 +1,14 @@
 package cn.academy.ability.api;
 
-import cn.academy.core.AcademyCraft;
-import cn.academy.core.event.BlockDestroyEvent;
+import cn.academy.AcademyCraft;
+import cn.academy.event.BlockDestroyEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
-import scala.math.Ordering;
 
 /**
  * INTERNAL CLASS

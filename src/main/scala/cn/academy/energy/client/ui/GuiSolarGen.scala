@@ -1,9 +1,9 @@
 package cn.academy.energy.client.ui
 
-import cn.academy.core.Resources
+import cn.academy.Resources
+import cn.academy.block.container.ContainerSolarGen
 import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
-import cn.academy.energy.block.ContainerSolarGen
-import cn.academy.energy.block.TileSolarGen.SolarStatus
+import cn.academy.block.tileentity.TileSolarGen.SolarStatus
 import cn.lambdalib2.cgui.event.FrameEvent
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.util.{HudUtils, RenderUtils}

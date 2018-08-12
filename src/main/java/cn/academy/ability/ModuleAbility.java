@@ -2,13 +2,13 @@ package cn.academy.ability;
 
 import cn.academy.ability.api.Category;
 import cn.academy.ability.api.CategoryManager;
-import cn.academy.ability.block.BlockDeveloper;
+import cn.academy.block.block.BlockDeveloper;
 import cn.academy.ability.develop.DeveloperType;
-import cn.academy.ability.item.ItemDeveloper;
-import cn.academy.ability.item.ItemInductionFactor;
-import cn.academy.core.item.ACItem;
+import cn.academy.item.ItemDeveloper;
+import cn.academy.item.ItemInductionFactor;
+import cn.academy.item.ACItem;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
-import cn.academy.crafting.block.BlockAbilityInterferer;
+import cn.academy.block.block.BlockAbilityInterferer;
 import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
 import cn.lambdalib2.multiblock.ItemBlockMulti;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

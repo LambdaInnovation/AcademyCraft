@@ -1,12 +1,11 @@
 package cn.academy.energy.internal;
 
-import cn.academy.core.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessReceiver;
-import cn.academy.energy.api.event.WirelessUserEvent.UserType;
-import cn.academy.energy.api.event.node.LinkUserEvent;
-import cn.academy.energy.api.event.node.UnlinkUserEvent;
-import cn.academy.energy.api.event.wen.*;
+import cn.academy.event.WirelessUserEvent.UserType;
+import cn.academy.event.energy.LinkUserEvent;
+import cn.academy.event.energy.UnlinkUserEvent;
+import cn.academy.event.energy.*;
 import cn.academy.energy.internal.VBlocks.VNGenerator;
 import cn.academy.energy.internal.VBlocks.VNReceiver;
 import cn.academy.energy.internal.VBlocks.VWNode;

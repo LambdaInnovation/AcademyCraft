@@ -1,7 +1,6 @@
 package cn.academy.support;
 
-import cn.academy.core.block.ACBlockContainer;
-import cn.academy.core.client.ui.TechUI;
+import cn.academy.block.block.ACBlockContainer;
 import cn.academy.core.client.ui.WirelessPage;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.lambdalib2.cgui.CGuiScreen;

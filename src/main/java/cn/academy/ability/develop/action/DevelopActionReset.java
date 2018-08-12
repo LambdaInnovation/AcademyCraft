@@ -5,11 +5,9 @@ import cn.academy.ability.api.Category;
 import cn.academy.ability.api.data.AbilityData;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.IDeveloper;
-import cn.academy.ability.item.ItemInductionFactor;
-import com.google.common.base.Objects;
+import cn.academy.item.ItemInductionFactor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import java.util.Arrays;

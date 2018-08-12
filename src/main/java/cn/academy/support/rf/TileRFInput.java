@@ -1,6 +1,6 @@
 package cn.academy.support.rf;
 
-import cn.academy.core.block.TileGeneratorBase;
+import cn.academy.block.tileentity.TileGeneratorBase;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraftforge.common.util.ForgeDirection;
 

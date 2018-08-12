@@ -3,9 +3,10 @@ package cn.academy.misc.media
 import java.io.{File, FileInputStream, IOException, InputStreamReader}
 import java.net.{URL, URLDecoder}
 import java.nio.file.{Files, StandardCopyOption}
-import javax.imageio.ImageIO
 
-import cn.academy.core.{AcademyCraft, Resources}
+import cn.academy.{AcademyCraft, Resources}
+import javax.imageio.ImageIO
+import cn.academy.core.Resources
 import cn.lambdalib2.util.ResourceUtils
 import com.jcraft.jorbis.VorbisFile
 import com.typesafe.config.ConfigFactory

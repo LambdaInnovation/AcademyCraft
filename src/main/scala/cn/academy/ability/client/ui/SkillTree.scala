@@ -2,19 +2,19 @@ package cn.academy.ability.client.ui
 
 import java.util
 
-import cn.academy.ability.ModuleAbility
+import cn.academy.{AcademyCraft, LocalHelper, Resources}
+import cn.academy.ability.{AbilityLocalization, ModuleAbility}
 import cn.academy.ability.api.Skill
 import cn.academy.ability.api.data.{AbilityData, CPData}
-import cn.academy.ability.block.TileDeveloper
-import cn.academy.ability.client.AbilityLocalization
 import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.{AcademyCraft, LocalHelper, Resources}
+import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
+import cn.academy.block.tileentity.TileDeveloper
 import cn.lambdalib2.cgui.{CGui, CGuiScreen, Widget}
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import net.minecraft.client.Minecraft

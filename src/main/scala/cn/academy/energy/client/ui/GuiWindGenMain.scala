@@ -1,8 +1,7 @@
 package cn.academy.energy.client.ui
 
+import cn.academy.block.container.ContainerWindGenMain
 import cn.academy.core.client.ui.TechUI.ContainerUI
-import cn.academy.energy.block.wind.ContainerWindGenMain
-
 import cn.academy.core.client.ui._
 
 object GuiWindGenMain {

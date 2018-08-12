@@ -1,6 +1,6 @@
 package cn.academy.support.minetweaker;
 
-import cn.academy.crafting.block.TileMetalFormer.Mode;
+import cn.academy.block.tileentity.TileMetalFormer.Mode;
 import minetweaker.MineTweakerAPI;
 import minetweaker.OneWayAction;
 import minetweaker.api.item.IItemStack;
@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import static cn.academy.crafting.api.MetalFormerRecipes.INSTANCE;
+import static cn.academy.crafting.MetalFormerRecipes.INSTANCE;
 import static cn.academy.support.minetweaker.MTSupport.toStack;
 /**
  * 

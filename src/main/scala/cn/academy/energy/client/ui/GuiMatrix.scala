@@ -1,16 +1,16 @@
 package cn.academy.energy.client.ui
 
+import cn.academy.block.container.ContainerMatrix
+import cn.academy.block.tileentity.TileMatrix
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.energy.api.WirelessHelper
-import cn.academy.energy.api.event.wen.{ChangePassEvent, CreateNetworkEvent}
-import cn.academy.energy.block.{TileMatrix, ContainerMatrix}
-
+import cn.academy.event.energy.{ChangePassEvent, CreateNetworkEvent}
 import cn.academy.core.client.ui._
 import cn.lambdalib2.cgui.Widget
 import cn.lambdalib2.cgui.component.TextBox
 import cn.lambdalib2.s11n.{SerializeNullable, SerializeStrategy}
 import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib2.s11n.network.{NetworkS11n, NetworkMessage, Future}
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.util.Color

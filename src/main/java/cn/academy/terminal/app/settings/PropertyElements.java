@@ -1,7 +1,7 @@
 package cn.academy.terminal.app.settings;
 
-import cn.academy.core.Resources;
-import cn.academy.core.event.ConfigModifyEvent;
+import cn.academy.Resources;
+import cn.academy.event.ConfigModifyEvent;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.Component;
 import cn.lambdalib2.cgui.component.DrawTexture;

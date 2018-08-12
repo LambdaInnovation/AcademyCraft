@@ -1,9 +1,9 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.ability.block.AbilityInterf
-import cn.academy.core.Resources
+import cn.academy.Resources
+import cn.academy.block.AbilityInterf
+import cn.academy.block.container.ContainAbilityInterferer
 import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
-import cn.academy.crafting.block.ContainAbilityInterferer
 import cn.lambdalib2.cgui.Widget
 import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent

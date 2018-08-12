@@ -1,8 +1,8 @@
 package cn.academy.ability.api.ctrl;
 
 import cn.academy.ability.api.Controllable;
-import cn.academy.ability.client.ui.CPBar;
-import cn.academy.ability.client.ui.CPBar.IConsumptionHintProvider;
+import cn.academy.client.auxgui.CPBar;
+import cn.academy.client.auxgui.CPBar.IConsumptionHintProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

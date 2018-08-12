@@ -1,6 +1,6 @@
 package cn.academy.support.rf;
 
-import cn.academy.crafting.ModuleCrafting;
+import cn.academy.worldgen.WorldGenInit;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
@@ -41,12 +41,12 @@ public class RFSupport {
         EnergyBlockHelper.register(new RFReceiverManager());
         
         GameRegistry.addRecipe(new ItemStack(rfInput), "abc", " d ",
-                'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-                'c', ModuleCrafting.constPlate, 'd', ModuleCrafting.convComp);
+                'a', ModuleEnergy.energyUnit, 'b', WorldGenInit.machineFrame,
+                'c', WorldGenInit.constPlate, 'd', WorldGenInit.convComp);
         
         GameRegistry.addRecipe(new ItemStack(rfOutput), "abc", " d ",
-                'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-                'c', ModuleCrafting.resoCrystal, 'd', ModuleCrafting.convComp);
+                'a', ModuleEnergy.energyUnit, 'b', WorldGenInit.machineFrame,
+                'c', WorldGenInit.resoCrystal, 'd', WorldGenInit.convComp);
         
         GameRegistry.addRecipe(new ItemStack(rfInput), "X",'X',new ItemStack(rfOutput));
         GameRegistry.addRecipe(new ItemStack(rfOutput), "X",'X',new ItemStack(rfInput));

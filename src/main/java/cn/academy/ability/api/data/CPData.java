@@ -3,7 +3,7 @@ package cn.academy.ability.api.data;
 import cn.academy.ability.api.event.*;
 import cn.academy.ability.api.event.CalcEvent.CPRecoverSpeed;
 import cn.academy.ability.api.event.CalcEvent.OverloadRecoverSpeed;
-import cn.academy.core.config.ACConfig;
+import cn.academy.ACConfig;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;

@@ -1,6 +1,6 @@
 package cn.academy.support.rf;
 
-import cn.academy.core.block.TileReceiverBase;
+import cn.academy.block.tileentity.TileReceiverBase;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;

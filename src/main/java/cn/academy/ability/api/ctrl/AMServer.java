@@ -1,6 +1,6 @@
 package cn.academy.ability.api.ctrl;
 
-import cn.academy.core.AcademyCraft;
+import cn.academy.AcademyCraft;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

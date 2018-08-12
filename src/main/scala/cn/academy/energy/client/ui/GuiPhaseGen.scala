@@ -1,7 +1,7 @@
 package cn.academy.energy.client.ui
 
+import cn.academy.block.container.ContainerPhaseGen
 import cn.academy.core.client.ui.TechUI.ContainerUI
-import cn.academy.energy.block.ContainerPhaseGen
 import cn.academy.core.client.ui._
 import cn.lambdalib2.util.Color
 

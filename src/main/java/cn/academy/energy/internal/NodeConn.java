@@ -1,6 +1,6 @@
 package cn.academy.energy.internal;
 
-import cn.academy.core.AcademyCraft;
+import cn.academy.AcademyCraft;
 import cn.academy.energy.api.block.IWirelessGenerator;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessReceiver;

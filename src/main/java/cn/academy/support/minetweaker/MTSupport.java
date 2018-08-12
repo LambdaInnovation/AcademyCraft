@@ -1,6 +1,6 @@
 package cn.academy.support.minetweaker;
 
-import cn.academy.core.AcademyCraft;
+import cn.academy.AcademyCraft;
 import net.minecraftforge.fml.common.Optional;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;

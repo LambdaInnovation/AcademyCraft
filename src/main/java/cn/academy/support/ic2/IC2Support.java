@@ -1,7 +1,7 @@
 package cn.academy.support.ic2;
 
-import cn.academy.core.AcademyCraft;
-import cn.academy.crafting.ModuleCrafting;
+import cn.academy.AcademyCraft;
+import cn.academy.worldgen.WorldGenInit;
 import cn.academy.energy.ModuleEnergy;
 import cn.academy.support.BlockConverterBase;
 import cn.academy.support.EnergyBlockHelper;
@@ -58,11 +58,11 @@ public class IC2Support {
         EnergyBlockHelper.register(new EUSourceManager());
         
         GameRegistry.addRecipe(new ItemStack(euInput), "abc", " d ",
-                'a', ModuleEnergy.energyUnit, 'b', ModuleCrafting.machineFrame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
+                'a', ModuleEnergy.energyUnit, 'b', WorldGenInit.machineFrame,
+                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', WorldGenInit.convComp);
         GameRegistry.addRecipe(new ItemStack(euOutput), "abc", " d ",
-                'a', IC2Items.getItem("batBox"), 'b', ModuleCrafting.machineFrame,
-                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', ModuleCrafting.convComp);
+                'a', IC2Items.getItem("batBox"), 'b', WorldGenInit.machineFrame,
+                'c', IC2Items.getItem("insulatedCopperCableItem"), 'd', WorldGenInit.convComp);
         
         GameRegistry.addRecipe(new ItemStack(euInput),"X",'X',new ItemStack(euOutput));
         GameRegistry.addRecipe(new ItemStack(euOutput),"X",'X',new ItemStack(euInput));
