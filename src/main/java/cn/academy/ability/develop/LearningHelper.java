@@ -1,7 +1,7 @@
 package cn.academy.ability.develop;
 
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.action.IDevelopAction;
 import cn.academy.ability.develop.condition.IDevCondition;
 import net.minecraft.entity.player.EntityPlayer;

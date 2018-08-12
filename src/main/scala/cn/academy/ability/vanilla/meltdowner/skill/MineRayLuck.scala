@@ -1,6 +1,6 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
-import cn.academy.ability.api.context.{ClientRuntime, RegClientContext}
+import cn.academy.ability.context.{ClientRuntime, RegClientContext}
 import cn.academy.entity.EntityMineRayLuck
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block

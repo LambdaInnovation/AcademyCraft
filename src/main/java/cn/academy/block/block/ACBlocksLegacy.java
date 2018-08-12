@@ -77,6 +77,18 @@ public class ACBlocksLegacy {
     @RecipeName("metal_former")
     public static BlockMetalFormer metalFormer;
 
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("dev_normal")
+    public static BlockDeveloper developerNormal = new BlockDeveloper(DeveloperType.NORMAL);
+
+    @RegBlock(item = ItemBlockMulti.class)
+    @RecipeName("dev_advanced")
+    public static BlockDeveloper developerAdvanced = new BlockDeveloper(DeveloperType.ADVANCED);
+
+    @RegBlock
+    @RecipeName("ability_interf")
+    public static BlockAbilityInterferer abilityInterferer;
+
     private static void init() {
         oreImagCrystal.setDropData(crystalLow, 1, 3);
         oreResoCrystal.setDropData(resoCrystal, 1, 2);

@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context._
+import cn.academy.ability.Skill
+import cn.academy.ability.context._
 import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.{EntityArc, EntitySurroundArc}

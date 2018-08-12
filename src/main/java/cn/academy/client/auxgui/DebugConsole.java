@@ -1,10 +1,10 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
-import cn.academy.ACKeyManager;
+import cn.academy.ability.Category;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
+import cn.academy.datapart.CPData;
+import cn.academy.util.ACKeyManager;
 import cn.academy.Resources;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.auxgui.AuxGuiHandler;

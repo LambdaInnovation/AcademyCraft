@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityBloodSplash
 import cn.academy.ability.vanilla.generic.client.effect.BloodSprayEffect
@@ -27,7 +27,7 @@ private object BloodRetroContext {
 import BloodRetroContext._
 import cn.lambdalib2.util.mc.MCExtender._
 import cn.lambdalib2.util.MathUtils._
-import cn.academy.ability.api.AbilityPipeline._
+import cn.academy.ability.AbilityPipeline._
 import cn.academy.ability.api.AbilityAPIExt._
 
 class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {

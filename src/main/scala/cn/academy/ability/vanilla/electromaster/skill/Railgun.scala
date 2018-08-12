@@ -2,17 +2,19 @@ package cn.academy.ability.vanilla.electromaster.skill
 
 import java.util.function.Consumer
 
-import cn.academy.ability.api.context.KeyDelegate.DelegateState
+import cn.academy.ability.{AbilityContext, Skill}
+import cn.academy.ability.context.KeyDelegate.DelegateState
 
 import scala.collection.JavaConversions._
-import cn.academy.ability.api.{AbilityContext, Skill}
-import cn.academy.ability.api.context.{ClientRuntime, KeyDelegate}
-import cn.academy.ability.api.data.{CPData, PresetData}
+import cn.academy.ability.api.Skill
+import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
+import cn.academy.ability.api.data.PresetData
 import cn.academy.client.render.misc.RailgunHandEffect
 import cn.academy.entity.{EntityCoinThrowing, EntityRailgunFX}
 import cn.academy.event.CoinThrowEvent
 import cn.academy.util.RangedRayDamage
 import cn.academy.ability.vanilla.electromaster.entity.EntityRailgunFX
+import cn.academy.datapart.{CPData, PresetData}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{NetworkMessage, TargetPoints}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

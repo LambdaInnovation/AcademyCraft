@@ -1,9 +1,9 @@
 package cn.academy.energy.api;
 
 import cn.academy.energy.api.block.*;
-import cn.academy.energy.internal.NodeConn;
-import cn.academy.energy.internal.WiWorldData;
-import cn.academy.energy.internal.WirelessNet;
+import cn.academy.energy.impl.NodeConn;
+import cn.academy.energy.impl.WiWorldData;
+import cn.academy.energy.impl.WirelessNet;
 import cn.lambdalib2.util.BlockPos;
 import cn.lambdalib2.util.IBlockSelector;
 import cn.lambdalib2.util.MathUtils;

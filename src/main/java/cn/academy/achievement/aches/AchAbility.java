@@ -1,8 +1,8 @@
 package cn.academy.achievement.aches;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Skill;
-import cn.academy.achievement.ItemAchievement;
+import cn.academy.ability.Category;
+import cn.academy.ability.Skill;
+import cn.academy.item.ItemAchievement;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

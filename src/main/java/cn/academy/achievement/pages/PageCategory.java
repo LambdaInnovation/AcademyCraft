@@ -1,6 +1,6 @@
 package cn.academy.achievement.pages;
 
-import cn.academy.ability.api.Category;
+import cn.academy.ability.Category;
 
 /**
  * @author EAirPeter

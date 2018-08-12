@@ -1,13 +1,13 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.ContextManager;
-import cn.academy.ability.api.context.IConsumptionProvider;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
-import cn.academy.ability.api.data.PresetData;
-import cn.academy.ability.api.event.PresetSwitchEvent;
+import cn.academy.ability.Category;
+import cn.academy.ability.context.ClientRuntime;
+import cn.academy.ability.context.ContextManager;
+import cn.academy.ability.context.IConsumptionProvider;
+import cn.academy.datapart.AbilityData;
+import cn.academy.datapart.CPData;
+import cn.academy.datapart.PresetData;
+import cn.academy.event.ability.PresetSwitchEvent;
 import cn.academy.AcademyCraft;
 import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.Resources;
@@ -69,7 +69,7 @@ public class CPBar extends Widget {
     }
 
     /**
-     * Please use IConsumptionProvider with {@link cn.academy.ability.api.context.Context} instead.
+     * Please use IConsumptionProvider with {@link cn.academy.ability.context.Context} instead.
      */
     @Deprecated
     public static void setHintProvider(IConsumptionHintProvider provider) {

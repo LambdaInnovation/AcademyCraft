@@ -1,9 +1,8 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.ClientRuntime.IActivateHandler
-import cn.academy.ability.api.context.KeyDelegate.DelegateState
-import cn.academy.ability.api.context._
+import cn.academy.ability.context.ClientRuntime.IActivateHandler
+import cn.academy.ability.context.KeyDelegate.DelegateState
+import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
@@ -14,6 +13,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.util.{ResourceLocation, Vec3d}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
+import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.util.RandUtils._

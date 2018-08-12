@@ -1,13 +1,14 @@
 package cn.academy.core.client.ui
 
-import cn.academy.{LocalHelper, Resources}
+import cn.academy.Resources
 import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
 import cn.academy.event.node.UnlinkUserEvent
 import cn.academy.event.energy.{LinkNodeEvent, LinkUserEvent, UnlinkNodeEvent, UnlinkUserEvent}
-import cn.academy.energy.internal.{NodeConn, WirelessNet}
+import cn.academy.energy.impl.{NodeConn, WirelessNet}
+import cn.academy.util.LocalHelper
 import cn.lambdalib2.cgui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
 import cn.lambdalib2.cgui.{CGuiScreenContainer, Widget}
 import cn.lambdalib2.cgui.component.ProgressBar.Direction

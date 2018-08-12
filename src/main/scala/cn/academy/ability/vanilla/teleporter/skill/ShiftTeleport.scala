@@ -2,12 +2,13 @@ package cn.academy.ability.vanilla.teleporter.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.{AbilityContext, Skill}
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.ability.api.data.AbilityData
+import cn.academy.ability.{AbilityContext, Skill}
+import cn.academy.ability.api.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.misc.TPParticleFactory
 import cn.academy.entity.EntityMarker
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.datapart.AbilityData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

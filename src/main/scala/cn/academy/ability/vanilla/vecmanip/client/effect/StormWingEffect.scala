@@ -1,6 +1,6 @@
 package cn.academy.ability.vanilla.vecmanip.client.effect
 
-import cn.academy.ability.api.context.Context.Status
+import cn.academy.ability.context.Context.Status
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.StormWingContext
 import cn.lambdalib2.registry.StateEventCallback

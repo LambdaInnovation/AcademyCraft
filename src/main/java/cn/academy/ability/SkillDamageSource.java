@@ -1,6 +1,5 @@
 package cn.academy.ability;
 
-import cn.academy.ability.api.Skill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;

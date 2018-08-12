@@ -4,12 +4,13 @@ import java.util
 import java.util.function.Predicate
 
 import cn.academy.Resources
-import cn.academy.ability.api.{AbilityContext, Skill}
-import cn.academy.ability.api.context.{ClientRuntime, KeyDelegate}
-import cn.academy.ability.api.data.AbilityData
-import cn.academy.achievement.ModuleAchievements
+import cn.academy.ability.{AbilityContext, Skill}
+import cn.academy.ability.api.Skill
+import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.achievement.ACAchievements
+import cn.academy.datapart.AbilityData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.{CGuiScreen, Widget}
 import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
@@ -160,7 +161,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     ctx.addSkillExp(expincr)
     ctx.setCooldown(MathUtils.lerpf(30, 20, ctx.getSkillExp).toInt)
 
-    ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
+    ACAchievements.trigger(player, "teleporter.ignore_barrier")
     TPSkillHelper.incrTPCount(player)
   }
 

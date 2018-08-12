@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.entity.{EntityRippleMark, EntitySurroundArc}
 import cn.academy.ability.vanilla.electromaster.entity.EntitySurroundArc.ArcType
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener

@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraft.entity.Entity
@@ -25,7 +25,7 @@ import cn.academy.ability.api.AbilityAPIExt._
 import ShockContext._
 import MCExtender._
 import cn.academy.client.render.util.AnimPresets._
-import cn.academy.ability.api.AbilityPipeline._
+import cn.academy.ability.AbilityPipeline._
 import MathUtils._
 
 class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {

@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.academy.ability.vanilla.meltdowner.entity.EntityMdRaySmall

@@ -2,8 +2,8 @@ package cn.academy.ability.vanilla.meltdowner.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
 import cn.academy.ability.vanilla.meltdowner.entity.{EntityMdRayBarrage, EntitySilbarn}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener

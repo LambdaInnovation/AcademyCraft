@@ -1,7 +1,8 @@
 package cn.academy.ability.vanilla.meltdowner.passiveskill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.data.{AbilityData, CPData}
+import cn.academy.ability.Skill
+import cn.academy.ability.api.data.CPData
+import cn.academy.datapart.{AbilityData, CPData}
 
 /**
   * @author WeAthFolD, KSkun

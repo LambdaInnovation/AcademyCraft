@@ -1,11 +1,11 @@
 package cn.academy.command;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.cooldown.CooldownData;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.Category;
+import cn.academy.ability.CategoryManager;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.CooldownData;
+import cn.academy.datapart.AbilityData;
+import cn.academy.datapart.CPData;
 import cn.academy.util.ACCommand;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.datapart.PlayerDataTag;

@@ -1,8 +1,8 @@
 package cn.academy.achievement.aches;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.event.LevelChangeEvent;
+import cn.academy.ability.Category;
+import cn.academy.ability.Skill;
+import cn.academy.event.ability.LevelChangeEvent;
 import cn.academy.achievement.DispatcherAch;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

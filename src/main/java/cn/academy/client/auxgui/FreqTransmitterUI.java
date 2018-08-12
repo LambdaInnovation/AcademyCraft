@@ -9,7 +9,7 @@ import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.academy.event.energy.LinkUserEvent;
 import cn.academy.event.energy.LinkNodeEvent;
-import cn.academy.energy.internal.WirelessNet;
+import cn.academy.energy.impl.WirelessNet;
 import cn.academy.terminal.app.AppFreqTransmitter;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.s11n.network.Future;

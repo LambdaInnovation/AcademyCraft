@@ -1,8 +1,8 @@
 package cn.academy.ability.vanilla;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.registry.CategoryRegistration.RegCategory;
+import cn.academy.ability.Category;
+import cn.academy.ability.Skill;
+import cn.academy.ability.RegCategory;
 import cn.academy.ability.develop.condition.DevConditionAnySkillOfLevel;
 import cn.academy.core.registry.ACRecipeNamesRegistration.RegACRecipeNames;
 import cn.academy.worldgen.WorldGenInit;

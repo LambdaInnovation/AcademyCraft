@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context._
+import cn.academy.ability.Skill
+import cn.academy.ability.context._
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.ParabolaEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener

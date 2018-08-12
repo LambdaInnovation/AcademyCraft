@@ -1,6 +1,6 @@
 package cn.academy.ability.vanilla.vecmanip;
 
-import cn.academy.ability.api.Category;
+import cn.academy.ability.Category;
 import cn.academy.ability.vanilla.VanillaCategories;
 import cn.academy.ability.vanilla.vecmanip.skill.*;
 

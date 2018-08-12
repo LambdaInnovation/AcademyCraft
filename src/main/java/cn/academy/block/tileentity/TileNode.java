@@ -1,12 +1,11 @@
 package cn.academy.block.tileentity;
 
 import cn.academy.client.render.block.RenderDynamicBlock;
-import cn.academy.block.tileentity.TileInventory;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
 import cn.academy.block.block.BlockNode.NodeType;
-import cn.academy.energy.internal.WirelessNet;
+import cn.academy.energy.impl.WirelessNet;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

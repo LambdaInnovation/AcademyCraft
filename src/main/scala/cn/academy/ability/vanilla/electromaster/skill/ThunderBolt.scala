@@ -2,8 +2,8 @@ package cn.academy.ability.vanilla.electromaster.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.util.ArcPatterns
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityArc

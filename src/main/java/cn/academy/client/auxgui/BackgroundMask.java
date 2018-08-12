@@ -1,7 +1,7 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.CPData;
+import cn.academy.datapart.AbilityData;
+import cn.academy.datapart.CPData;
 import cn.academy.Resources;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.registry.mc.gui.RegAuxGui;

@@ -1,6 +1,6 @@
 package cn.academy.tutorial;
 
-import cn.academy.LocalHelper;
+import cn.academy.util.LocalHelper;
 import cn.academy.Resources;
 import cn.academy.tutorial.ACTutorial.Tag;
 import cn.academy.tutorial.client.RecipeHandler;

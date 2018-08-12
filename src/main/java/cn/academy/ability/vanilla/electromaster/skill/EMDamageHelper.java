@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill;
 
-import cn.academy.ability.api.AbilityContext;
-import cn.academy.achievement.ModuleAchievements;
+import cn.academy.ability.AbilityContext;
+import cn.academy.achievement.ACAchievements;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -32,7 +32,7 @@ class EMDamageHelper {
                 }
                 // Set the creeper to be powered
                 target.getDataManager().set(CREEPER_PWOERED, true);
-                ModuleAchievements.trigger(ctx.player, "electromaster.attack_creeper");
+                ACAchievements.trigger(ctx.player, "electromaster.attack_creeper");
             }
         }
     }

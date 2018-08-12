@@ -1,8 +1,8 @@
 package cn.academy.ability.develop.action;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
-import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.Category;
+import cn.academy.ability.CategoryManager;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.develop.IDeveloper;
 import cn.academy.ability.develop.LearningHelper;
 import cn.academy.item.ItemInductionFactor;

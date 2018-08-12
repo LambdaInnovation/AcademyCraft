@@ -2,8 +2,8 @@ package cn.academy.ability.vanilla.meltdowner.skill
 
 import java.util.function.Consumer
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.client.sound.ACSounds

@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.client.effect
 
 import cn.academy.Resources
-import cn.academy.ability.api.context.Context.Status
+import cn.academy.ability.context.Context.Status
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.VecAccelContext
 import cn.lambdalib2.registry.StateEventCallback

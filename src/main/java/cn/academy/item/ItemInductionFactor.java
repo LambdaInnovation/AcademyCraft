@@ -1,7 +1,7 @@
 package cn.academy.item;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.CategoryManager;
+import cn.academy.ability.Category;
+import cn.academy.ability.CategoryManager;
 import com.google.common.base.Preconditions;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

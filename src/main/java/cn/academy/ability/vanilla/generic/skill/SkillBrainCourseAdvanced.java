@@ -1,8 +1,8 @@
 package cn.academy.ability.vanilla.generic.skill;
 
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.event.CalcEvent;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
+import cn.academy.event.ability.CalcEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

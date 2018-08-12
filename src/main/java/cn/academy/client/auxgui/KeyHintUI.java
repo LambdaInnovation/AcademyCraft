@@ -1,12 +1,12 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.ClientRuntime.DelegateNode;
-import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.context.KeyDelegate.DelegateState;
-import cn.academy.ability.api.cooldown.CooldownData;
-import cn.academy.ability.api.cooldown.CooldownData.SkillCooldown;
-import cn.academy.ability.api.data.CPData;
+import cn.academy.ability.context.ClientRuntime;
+import cn.academy.ability.context.ClientRuntime.DelegateNode;
+import cn.academy.ability.context.KeyDelegate;
+import cn.academy.ability.context.KeyDelegate.DelegateState;
+import cn.academy.datapart.CooldownData;
+import cn.academy.datapart.CooldownData.SkillCooldown;
+import cn.academy.datapart.CPData;
 import cn.academy.client.render.util.ACRenderingHelper;
 import cn.academy.Resources;
 import cn.lambdalib2.cgui.Widget;

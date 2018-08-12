@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.meltdowner.skill;
 
-import cn.academy.ability.api.AbilityContext;
-import cn.academy.ability.api.data.AbilityData;
+import cn.academy.ability.AbilityContext;
+import cn.academy.datapart.AbilityData;
 import cn.academy.ability.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.client.render.particle.MdParticleFactory;
 import cn.academy.ability.vanilla.meltdowner.passiveskill.RadiationIntensify$;

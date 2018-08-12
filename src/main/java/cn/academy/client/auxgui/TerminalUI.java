@@ -2,7 +2,7 @@ package cn.academy.client.auxgui;
 
 import cn.academy.Resources;
 import cn.academy.client.sound.ACSounds;
-import cn.academy.RegACKeyHandler;
+import cn.academy.util.RegACKeyHandler;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.TerminalData;

@@ -1,6 +1,6 @@
 package cn.academy.support.ic2;
 
-import cn.academy.ability.api.event.AbilityActivateEvent;
+import cn.academy.event.ability.AbilityActivateEvent;
 import cn.academy.entity.EntitySurroundArc;
 import cn.lambdalib2.util.BlockPos;
 import cn.lambdalib2.util.mc.IBlockSelector;

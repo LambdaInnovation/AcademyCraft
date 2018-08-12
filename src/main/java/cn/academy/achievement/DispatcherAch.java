@@ -1,10 +1,10 @@
 package cn.academy.achievement;
 
-import cn.academy.ability.api.Category;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.event.LevelChangeEvent;
-import cn.academy.ability.api.event.SkillLearnEvent;
+import cn.academy.ability.Category;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
+import cn.academy.event.ability.LevelChangeEvent;
+import cn.academy.event.ability.SkillLearnEvent;
 import cn.academy.achievement.aches.*;
 import cn.academy.event.MatterUnitHarvestEvent;
 import cn.academy.misc.achievement.aches.*;
@@ -60,7 +60,7 @@ public final class DispatcherAch {
     }
     
     
-    //cn.academy.ability.api.event.LevelChangeEvent
+    //cn.academy.event.ability.LevelChangeEvent
     
     private final HashMap<Category, AchEvLevelChange[]> hcLevelChange = new HashMap<>();
     
@@ -112,7 +112,7 @@ public final class DispatcherAch {
     }
     
     
-    //cn.academy.ability.api.event.SkillLearnEvent
+    //cn.academy.event.ability.SkillLearnEvent
     
     private final HashMap<Skill, AchEvSkillLearn> hcSkillLearn = new HashMap<Skill, AchEvSkillLearn>();
     

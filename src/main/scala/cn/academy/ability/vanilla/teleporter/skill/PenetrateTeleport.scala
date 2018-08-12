@@ -1,11 +1,12 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
-import cn.academy.ability.api.{AbilityPipeline, Skill}
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.achievement.ModuleAchievements
+import cn.academy.ability.{AbilityPipeline, Skill}
+import cn.academy.ability.api.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityTPMarking
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.achievement.ACAchievements
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -67,7 +68,7 @@ class PTContext(p: EntityPlayer) extends Context(p, PenetrateTeleport) {
     ctx.consumeWithForce(overload, (distance * getConsumption(exp)).toFloat)
     val expincr: Float = 0.00014f * distance.toFloat
     ctx.addSkillExp(expincr)
-    ModuleAchievements.trigger(player, "teleporter.ignore_barrier")
+    ACAchievements.trigger(player, "teleporter.ignore_barrier")
     ctx.setCooldown(lerpf(50, 30, exp).toInt)
     TPSkillHelper.incrTPCount(player)
     if(player.isRiding)

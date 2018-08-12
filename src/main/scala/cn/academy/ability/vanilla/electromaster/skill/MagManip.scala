@@ -2,8 +2,9 @@ package cn.academy.ability.vanilla.electromaster.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.context._
-import cn.academy.ability.api.{AbilityContext, Skill}
+import cn.academy.ability.{AbilityContext, Skill}
+import cn.academy.ability.context._
+import cn.academy.ability.api.Skill
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.{EntityBlock, EntitySurroundArc}
 import cn.academy.ability.vanilla.electromaster.CatElectromaster

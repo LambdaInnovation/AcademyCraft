@@ -4,7 +4,6 @@ import java.lang
 import java.util.function.Supplier
 
 import cn.academy.Resources
-import cn.academy.ability.api.data.CPData
 import cn.academy.ability.api.data.CPData.IInterfSource
 import cn.academy.client.render.block.RenderDynamicBlock
 import cn.academy.block.container.ContainAbilityInterferer
@@ -12,6 +11,7 @@ import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.academy.energy.IFConstants
 import cn.academy.support.EnergyItemHelper
 import cn.academy.block.tileentity.TileReceiverBase
+import cn.academy.datapart.CPData
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}

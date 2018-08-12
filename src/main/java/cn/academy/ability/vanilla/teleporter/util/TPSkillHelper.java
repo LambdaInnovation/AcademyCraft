@@ -1,9 +1,9 @@
 package cn.academy.ability.vanilla.teleporter.util;
 
-import cn.academy.ability.api.AbilityContext;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.event.AbilityEvent;
-import cn.academy.achievement.ModuleAchievements;
+import cn.academy.ability.AbilityContext;
+import cn.academy.datapart.AbilityData;
+import cn.academy.event.ability.AbilityEvent;
+import cn.academy.achievement.ACAchievements;
 import cn.academy.ability.vanilla.teleporter.CatTeleporter;
 import cn.academy.ability.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
 import cn.academy.ability.vanilla.teleporter.passiveskill.SpaceFluctuation$;
@@ -28,7 +28,7 @@ public class TPSkillHelper {
     public static void incrTPCount(EntityPlayer player) {
         int i = player.getEntityData().getInteger(TPC_ID) + 1;
         if (i >= 400) {
-            ModuleAchievements.trigger(player, "teleporter.mastery");
+            ACAchievements.trigger(player, "teleporter.mastery");
         }
         player.getEntityData().setInteger(TPC_ID, i);
     }
@@ -47,7 +47,7 @@ public class TPSkillHelper {
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
                 player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
-                ModuleAchievements.trigger(player, "teleporter.critical_attack");
+                ACAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 
@@ -71,7 +71,7 @@ public class TPSkillHelper {
             if (RandUtils.nextFloat() < prob) {
                 damage *= rates[i];
                 player.sendMessage(new TextComponentTranslation("ac.ability.teleporter.crithit", rates[i]));
-                ModuleAchievements.trigger(player, "teleporter.critical_attack");
+                ACAchievements.trigger(player, "teleporter.critical_attack");
                 aData.addSkillExp(CatTeleporter.dimFolding, (i + 1) * 0.005f);
                 aData.addSkillExp(CatTeleporter.spaceFluct, 0.0001f);
 

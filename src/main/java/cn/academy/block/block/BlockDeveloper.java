@@ -2,7 +2,13 @@ package cn.academy.block.block;
 
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.block.tileentity.TileDeveloper;
+import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -74,6 +80,24 @@ public class BlockDeveloper extends ACBlockMulti {
     @Override
     public double[] getRotCenter() {
         return new double[] { 0.5, 0, 0.5 };
+    }
+
+    private enum EventHandler {
+        @RegEventHandler
+        instance;
+
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+            RayTraceResult res = event.getTarget();
+            if (res != null && res.typeOfHit == Type.BLOCK) {
+                IBlockState blockState = event.getPlayer().world.getBlockState(
+                    res.getBlockPos()
+                );
+                if (blockState.getBlock() instanceof BlockDeveloper)
+                    event.setCanceled(true);
+            }
+        }
     }
 
 }

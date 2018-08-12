@@ -1,6 +1,6 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ACKeyManager;
+import cn.academy.util.ACKeyManager;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.WidgetContainer;

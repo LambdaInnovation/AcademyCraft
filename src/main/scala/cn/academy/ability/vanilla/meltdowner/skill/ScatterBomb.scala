@@ -3,8 +3,8 @@ package cn.academy.ability.vanilla.meltdowner.skill
 import java.util
 import java.util.function.Predicate
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientRuntime, Context}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientRuntime, Context}
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.EntityMdBall
 import cn.academy.network.NetworkManager

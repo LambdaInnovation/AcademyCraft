@@ -1,6 +1,6 @@
 package cn.academy.achievement.pages;
 
-import cn.academy.achievement.ItemAchievement;
+import cn.academy.item.ItemAchievement;
 import cn.academy.achievement.aches.ACAchievement;
 import cn.academy.achievement.aches.AchAbility;
 import cn.academy.achievement.aches.AchEvLevelChange;

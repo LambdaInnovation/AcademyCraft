@@ -2,8 +2,8 @@ package cn.academy.ability.vanilla.vecmanip.skill
 
 import java.util.function.Predicate
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context._
+import cn.academy.ability.Skill
+import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.mc.WorldUtils
@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntitySmallFireball, EntityLargeFireball, EntityArrow}
+import net.minecraft.entity.projectile.{EntityArrow, EntityLargeFireball, EntitySmallFireball}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.living.LivingHurtEvent
-import cn.academy.ability.api.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
-import cn.academy.ability.api.ctrl.KeyDelegates
+import cn.academy.ability.context.ClientRuntime.{ActivateHandlers, IActivateHandler}
+import cn.academy.ability.ctrl.KeyDelegates
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
 import net.minecraftforge.client.event.RenderGameOverlayEvent

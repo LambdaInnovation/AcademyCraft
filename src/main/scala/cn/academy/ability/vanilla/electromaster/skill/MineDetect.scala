@@ -1,8 +1,9 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
 import cn.academy.Resources
-import cn.academy.ability.api.{AbilityAPIExt, Skill}
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.lambdalib2.registry.mc.RegEntity

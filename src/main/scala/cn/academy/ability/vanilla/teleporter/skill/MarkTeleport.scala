@@ -1,11 +1,11 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.ability.api.data.CPData
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityTPMarking
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.datapart.CPData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{Raytrace, VecUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

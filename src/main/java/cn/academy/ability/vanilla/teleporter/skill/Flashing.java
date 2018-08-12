@@ -1,13 +1,13 @@
 package cn.academy.ability.vanilla.teleporter.skill;
 
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.context.ClientRuntime;
-import cn.academy.ability.api.context.ClientRuntime.ActivateHandlers;
-import cn.academy.ability.api.context.ClientRuntime.IActivateHandler;
-import cn.academy.ability.api.context.Context;
-import cn.academy.ability.api.context.ContextManager;
-import cn.academy.ability.api.context.KeyDelegate;
-import cn.academy.ability.api.event.FlushControlEvent;
+import cn.academy.ability.Skill;
+import cn.academy.ability.context.ClientRuntime;
+import cn.academy.ability.context.ClientRuntime.ActivateHandlers;
+import cn.academy.ability.context.ClientRuntime.IActivateHandler;
+import cn.academy.ability.context.Context;
+import cn.academy.ability.context.ContextManager;
+import cn.academy.ability.context.KeyDelegate;
+import cn.academy.event.ability.FlushControlEvent;
 import cn.academy.Resources;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.entity.EntityTPMarking;

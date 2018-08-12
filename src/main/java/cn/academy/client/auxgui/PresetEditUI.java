@@ -1,10 +1,10 @@
 package cn.academy.client.auxgui;
 
-import cn.academy.ability.api.Controllable;
-import cn.academy.ability.api.Skill;
-import cn.academy.ability.api.data.AbilityData;
-import cn.academy.ability.api.data.PresetData;
-import cn.academy.ability.api.data.PresetData.Preset;
+import cn.academy.ability.Controllable;
+import cn.academy.ability.Skill;
+import cn.academy.datapart.AbilityData;
+import cn.academy.datapart.PresetData;
+import cn.academy.datapart.PresetData.Preset;
 import cn.academy.Resources;
 import cn.academy.client.render.util.ACRenderingHelper;
 import cn.lambdalib2.cgui.CGui;

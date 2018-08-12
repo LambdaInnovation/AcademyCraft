@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context.{ClientContext, Context}
+import cn.academy.ability.Skill
+import cn.academy.ability.context.{ClientContext, Context}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.event.BlockDestroyEvent

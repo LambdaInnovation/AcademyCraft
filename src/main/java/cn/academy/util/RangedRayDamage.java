@@ -1,6 +1,6 @@
 package cn.academy.util;
 
-import cn.academy.ability.api.AbilityContext;
+import cn.academy.ability.AbilityContext;
 import cn.academy.event.BlockDestroyEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

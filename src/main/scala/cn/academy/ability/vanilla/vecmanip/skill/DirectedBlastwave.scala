@@ -1,7 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
-import cn.academy.ability.api.Skill
-import cn.academy.ability.api.context._
+import cn.academy.ability.Skill
+import cn.academy.ability.context._
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
@@ -34,7 +34,7 @@ import cn.academy.ability.api.AbilityAPIExt._
 import BlastwaveContext._
 import MCExtender._
 import cn.academy.client.render.util.AnimPresets._
-import cn.academy.ability.api.AbilityPipeline._
+import cn.academy.ability.AbilityPipeline._
 import MathUtils._
 import cn.lambdalib2.util.RandUtils._
 import scala.collection.JavaConversions._

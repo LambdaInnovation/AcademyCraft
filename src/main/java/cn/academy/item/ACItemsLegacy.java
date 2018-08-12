@@ -1,5 +1,9 @@
 package cn.academy.item;
 
+import cn.lambdalib2.crafting.CustomMappingHelper.RecipeName;
+
+import java.util.Arrays;
+
 public class ACItemsLegacy {
     //@RegItem.HasRender
     @RecipeName("coin")
@@ -121,6 +125,30 @@ public class ACItemsLegacy {
     @RecipeName("crystal1")
     public static Item crystalNormal = new ACItem("crystal_normal");
 
+    @RegItem
+    @RegItem.HasRender
+    @RecipeName("dev_portable")
+    public static ItemDeveloper developerPortable;
+
+    @RegItem
+    @RecipeName("magnetic_coil")
+    public static ACItem magneticCoil = new ACItem("magnetic_coil") {
+        {
+            setMaxStackSize(1);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        @SuppressWarnings("unchecked")
+        public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
+            list.addAll(Arrays.asList(StatCollector.translateToLocal("item.ac_magnetic_coil.desc").split("<br>")));
+        }
+    };
+
+    @RegItem
+    @RecipeName("induction_factor")
+    public static ItemInductionFactor inductionFactor;
+
     @StateEventCallback
     public static void preInit(FMLPreInitializationEvent event){
         ModelLoader.setCustomMeshDefinition(coin, ItemCoin.renderCoin);
@@ -132,5 +160,16 @@ public class ACItemsLegacy {
     private static void init() {
         FluidContainerRegistry.registerFluidContainer(new FluidStack(ModuleCrafting.fluidImagProj, 1000),
             EnergyItemHelper.createFullItem(energyUnit), EnergyItemHelper.createEmptyItem(energyUnit));
+
+        String[] factorAppearance = { MINESHAFT_CORRIDOR, PYRAMID_DESERT_CHEST, PYRAMID_JUNGLE_CHEST, STRONGHOLD_LIBRARY,
+            DUNGEON_CHEST };
+
+        // TODO test generation density
+        for (String s : factorAppearance) {
+            for (Category c : CategoryManager.INSTANCE.getCategories()) {
+                ItemStack stack = inductionFactor.create(c);
+                ChestGenHooks.addItem(s, new WeightedRandomChestContent(stack, 1, 1, 4));
+            }
+        }
     }
 }
