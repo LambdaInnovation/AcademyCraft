@@ -15,12 +15,10 @@ public class BlockGenericOre extends BlockOre {
     int rangeFrom = 1, rangeTo = 2;
     Item itemDropped;
 
-    public BlockGenericOre(String name, float hardness, int harvestLevel) {
+    public BlockGenericOre(float hardness, int harvestLevel) {
         setHardness(hardness);
         setHarvestLevel("pickaxe", harvestLevel);
         setCreativeTab(AcademyCraft.cct);
-        setBlockTextureName("academy:" + name);
-        setBlockName("ac_" + name);
     }
     
     public BlockGenericOre setDropData(Item item) {

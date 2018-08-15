@@ -1,0 +1,10 @@
+{
+    "srcDir": "src/main/java",
+    "resourcesDir": "src/main/resources",
+    "domain": "academy",
+    "locPrefix": "ac_",
+    "itemsDataDir": "src/main/raw/items",
+    "itemsClassPath": "cn.academy.ACItems",
+    "blocksDataDir": "src/main/raw/blocks",
+    "blocksClassPath": "cn.academy.ACBlocks"
+  }

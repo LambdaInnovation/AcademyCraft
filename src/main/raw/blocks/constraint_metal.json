@@ -1,0 +1,4 @@
+{
+    "baseClass": "cn.academy.block.block.BlockGenericOre",
+    "ctorArgs": "4.0f, 1"
+}
