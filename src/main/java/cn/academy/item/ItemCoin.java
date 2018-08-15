@@ -1,9 +1,12 @@
 package cn.academy.item;
 
+import cn.academy.Resources;
 import cn.academy.client.render.entity.RendererCoinThrowing;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
 import cn.lambdalib2.util.mc.StackUtils;
+import net.minecraft.item.Item;
+import net.minecraft.util.*;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -21,18 +24,16 @@ import java.util.Map;
  * 
  * @author KSkun
  */
-public class ItemCoin extends ACItem {
+public class ItemCoin extends Item {
     
     @RegItem.Render
     @SideOnly(Side.CLIENT)
     public static RendererCoinThrowing.ItemRender renderCoin;
     
     // Key: PlayerName
-    static Map<String, EntityCoinThrowing> client = new HashMap(), server = new HashMap();
+    private static Map<String, EntityCoinThrowing> client = new HashMap<>(), server = new HashMap<>();
     
     public ItemCoin() {
-        super("coin");
-        setTextureName("academy:coin_front");
         FMLCommonHandler.instance().bus().register(this);
     }
     
@@ -50,23 +51,24 @@ public class ItemCoin extends ACItem {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if(getPlayerCoin(player) != null) {
-            return stack;
+            return new ActionResult<>(EnumActionResult.PASS, stack);
         }
 
         //Spawn at both side, not syncing for render effect purpose
         EntityCoinThrowing etc = new EntityCoinThrowing(player, stack);
         world.spawnEntity(etc);
-        
-        player.playSound("academy:entity.flipcoin", 0.5F, 1.0F);
+
+        player.playSound(Resources.sound("entity.flipcoin"), 0.5f, 1.0f);
         setPlayerCoin(player, etc);
         
         MinecraftForge.EVENT_BUS.post(new CoinThrowEvent(player, etc));
         if(!player.capabilities.isCreativeMode) {
-            stack.setCount(stack.getCount()-1);
+            stack.setCount(stack.getCount() - 1);
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
     
     public static EntityCoinThrowing getPlayerCoin(EntityPlayer player) {

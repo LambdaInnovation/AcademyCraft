@@ -7,6 +7,11 @@ import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
+import net.minecraft.item.Item;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,33 +23,33 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 @NetworkS11nType
-public class ItemTerminalInstaller extends ACItem {
+public class ItemTerminalInstaller extends Item  {
     
     @SideOnly(Side.CLIENT)
     @RegItem.Render
     public static TerminalInstallerRenderer renderer;
 
     public ItemTerminalInstaller() {
-        super("terminal_installer");
         this.bFull3D = true;
         this.maxStackSize = 1;
     }
     
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         TerminalData tData = TerminalData.get(player);
         if(tData.isTerminalInstalled()) {
             if(!world.isRemote)
-                player.addChatMessage(new ChatComponentTranslation("ac.terminal.alrdy_installed"));
+                player.sendMessage(new TextComponentTranslation("ac.terminal.alrdy_installed"));
         } else {
             if(!world.isRemote) {
                 if(!player.capabilities.isCreativeMode)
-                    stack.stackSize--;
+                    stack.setCount(stack.getCount() - 1);
                 tData.install();
                 NetworkMessage.sendTo(player, NetworkMessage.staticCaller(ItemTerminalInstaller.class), "install");
             }
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @SideOnly(Side.CLIENT)

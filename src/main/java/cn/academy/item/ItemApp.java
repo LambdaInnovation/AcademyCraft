@@ -4,12 +4,19 @@ import cn.academy.AcademyCraft;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppRegistry;
 import cn.academy.terminal.TerminalData;
+import cn.lambdalib2.registry.RegistryCallback;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -18,18 +25,22 @@ import java.util.Map;
 
 /**
  * ItemInstaller app
+ * TODO: Automate json stuff for this item?
  * @author WeAthFolD
  */
-public class ItemApp extends ACItem {
+public class ItemApp extends Item {
     
-    static Map<App, ItemApp> items = new HashMap<>();
+    private static Map<App, ItemApp> items = new HashMap<>();
 
-    @RegInitCallback
-    private static void init() {
+    @RegistryCallback
+    private static void regItem(RegistryEvent.Register<Item> event) {
         for(App app : AppRegistry.enumeration()) {
             if(!app.isPreInstalled()) {
                 ItemApp item = new ItemApp(app);
-                GameRegistry.registerItem(item, "ac_app_" + app.getName());
+                item.setUnlocalizedName("ac_app_" + app.getName());
+                item.setRegistryName("academy:app_" + app.getName());
+
+                event.getRegistry().register(item);
                 AcademyCraft.recipes.map("app_" + app.getName(), item);
                 items.put(app, item);
             }
@@ -43,32 +54,31 @@ public class ItemApp extends ACItem {
     public final App app;
 
     private ItemApp(App _app) {
-        super("apps");
         app = _app;
-        setTextureName("academy:app_" + app.getName());
     }
     
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if(!world.isRemote) {
             TerminalData terminalData = TerminalData.get(player);
             if(!terminalData.isTerminalInstalled()) {
-                player.addChatMessage(new ChatComponentTranslation("ac.terminal.notinstalled"));
+                player.sendMessage(new TextComponentTranslation("ac.terminal.notinstalled"));
             } else if(terminalData.isInstalled(app)) {
-                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
+                player.sendMessage(new TextComponentTranslation("ac.terminal.app_alrdy_installed", app.getDisplayName()));
             } else {
                 if(!player.capabilities.isCreativeMode)
-                    stack.stackSize--;
+                    stack.setCount(stack.getCount()-1);
                 terminalData.installApp(app);
-                player.addChatMessage(new ChatComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
+                player.sendMessage(new TextComponentTranslation("ac.terminal.app_installed", app.getDisplayName()));
             }
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
+    public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
         list.add(app.getDisplayName());
     }
     

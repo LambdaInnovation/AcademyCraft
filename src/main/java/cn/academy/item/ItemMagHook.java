@@ -23,7 +23,6 @@ public class ItemMagHook extends Item {
 
     public ItemMagHook() {
         setCreativeTab(AcademyCraft.cct);
-        setUnlocalizedName("ac_maghook");
     }
     
     @Override

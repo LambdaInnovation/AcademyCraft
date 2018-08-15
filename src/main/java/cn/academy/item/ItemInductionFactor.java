@@ -3,6 +3,9 @@ package cn.academy.item;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import com.google.common.base.Preconditions;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -12,9 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemInductionFactor extends ACItem {
+public class ItemInductionFactor extends Item {
 
     public static Category getCategory(ItemStack stack) {
         checkStack(stack);
@@ -33,7 +37,6 @@ public class ItemInductionFactor extends ACItem {
     private IIcon[] icons;
 
     public ItemInductionFactor() {
-        super("induction_factor");
         setMaxStackSize(1);
     }
 
@@ -61,16 +64,16 @@ public class ItemInductionFactor extends ACItem {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         for (Category c : CategoryManager.INSTANCE.getCategories()) {
-            list.add(create(c));
+            items.add(create(c));
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean wtf) {
-        list.add(getCategory(stack).getDisplayName());
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(getCategory(stack).getDisplayName());
     }
 
 }

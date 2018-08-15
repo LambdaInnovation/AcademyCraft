@@ -4,12 +4,10 @@ import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.item.ImagEnergyItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ import java.util.List;
  * @author WeAthFolD
  *
  */
-public class ItemEnergyBase extends ACItem implements ImagEnergyItem {
+public class ItemEnergyBase extends Item implements ImagEnergyItem {
     
     protected static IFItemManager itemManager = IFItemManager.instance;
     

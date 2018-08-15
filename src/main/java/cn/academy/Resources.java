@@ -5,6 +5,7 @@ import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,6 +36,10 @@ public class Resources {
      */
     public static ResourceLocation res(String loc) {
         return new ResourceLocation("academy:" + loc);
+    }
+
+    public static SoundEvent sound(String loc) {
+        return new SoundEvent(res(loc));
     }
     
 //    /**

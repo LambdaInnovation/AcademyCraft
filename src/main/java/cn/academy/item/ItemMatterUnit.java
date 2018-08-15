@@ -25,7 +25,7 @@ import java.util.List;
  * The matter unit class. Have a simple material system for registration.
  * @author WeAthFolD
  */
-public class ItemMatterUnit extends ACItem {
+public class ItemMatterUnit extends Item {
     
     @RegItem.Render
     @SideOnly(Side.CLIENT)
