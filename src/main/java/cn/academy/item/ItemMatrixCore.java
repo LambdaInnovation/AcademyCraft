@@ -13,14 +13,13 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-public class ItemMatrixCore extends ACItem {
+public class ItemMatrixCore extends Item {
     
     int LEVELS = 3;
     
     IIcon icons[] = new IIcon[LEVELS];
 
     public ItemMatrixCore() {
-        super("matrix_core");
         this.setHasSubtypes(true);
     }
     

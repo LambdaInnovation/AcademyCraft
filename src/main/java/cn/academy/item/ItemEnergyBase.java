@@ -19,17 +19,13 @@ public class ItemEnergyBase extends Item implements ImagEnergyItem {
     
     protected static IFItemManager itemManager = IFItemManager.instance;
     
-    public final String name;
-    
     public final double maxEnergy;
     public final double bandwidth;
     
     IIcon iconEmpty, iconHalf, iconFull;
     public boolean useMultipleIcon = true;
     
-    public ItemEnergyBase(String _name, double _maxEnergy, double _bandwidth) {
-        super(_name);
-        name = _name;
+    public ItemEnergyBase(double _maxEnergy, double _bandwidth) {
         maxEnergy = _maxEnergy;
         bandwidth = _bandwidth;
         

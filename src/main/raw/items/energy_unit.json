@@ -1,0 +1,4 @@
+{
+  "baseClass": "cn.academy.item.ItemEnergyBase",
+  "ctorArgs": "10000, 20"
+}
