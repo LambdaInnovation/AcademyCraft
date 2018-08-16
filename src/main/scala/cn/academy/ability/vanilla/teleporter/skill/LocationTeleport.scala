@@ -5,7 +5,6 @@ import java.util.function.Predicate
 
 import cn.academy.Resources
 import cn.academy.ability.{AbilityContext, Skill}
-import cn.academy.ability.api.Skill
 import cn.academy.ability.context.{ClientRuntime, KeyDelegate}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
@@ -24,7 +23,7 @@ import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
 import cn.lambdalib2.s11n.nbt.NBTS11n
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n, NetworkS11nType}
-import cn.lambdalib2.util.{EntitySelectors, GameTimer, MathUtils, WorldUtils}
+import cn.lambdalib2.util._
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.{Entity, EntityLivingBase}
@@ -44,6 +43,7 @@ private object LTNetDelegate {
   final val MSG_PERFORM = "perform"
 
   import scala.collection.JavaConversions._
+  import LocationTeleport._
 
   @StateEventCallback
   def _init(fMLInitializationEvent: FMLInitializationEvent) = {
@@ -247,6 +247,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
   class Gui extends CGuiScreen {
     import Gui._
     import LTNetDelegate._
+    import cn.lambdalib2.cgui.ScalaCGUI._
 
     val root = template.getWidget("root").copy
     val info = root.getWidget("info")
@@ -272,9 +273,10 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       menu.transform.height = 0
       menu.listen(classOf[FrameEvent], new Runnable {
         override def run(): Unit = {
-          menu.transform.height = blend.alpha * maxHeight
+          menu.transform.height = (blend.alpha * maxHeight).toFloat
         }
-    })
+      })
+    }
 
     { // Initialize info area
       info :+ new MessageTab
@@ -301,7 +303,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       ret.listens[FrameEvent](() => {
         val hovering = {
           val gui = ret.getGui
-          ret.isPointWithin(gui.mouseX, gui.mouseY)
+          ret.isPointWithin(gui.getMouseX, gui.getMouseY)
         }
 
         if (!lastHovering && hovering) {
@@ -314,7 +316,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
         }
 
         val alpha0 = blend.alpha * (if (hovering) Colors.AlphaHighlight else Colors.AlphaNormal)
-        Color.whiteBlend(alpha0).bind()
+        Color.whiteBlend(alpha0).bind()//TODO need support
         HudUtils.colorRect(0, 0, ret.transform.width, ret.transform.height)
 
         lastHovering = hovering
@@ -322,14 +324,14 @@ object LocationTeleport extends Skill("location_teleport", 3) {
     }
 
     def wrapButton(target: Widget, n: Int, offset: Double, clickCallback: () => Any) = {
-      val color = Colors.TextNormal.copy
-      color.a = 0
+      val color = new Color(Colors.TextNormal)
+      color.setAlpha(0)
 
       target.component[DrawTexture].color = color
       val blend = new Blend(n * ElemTimeStep + offset, 0.1)
       target.listens((evt: FrameEvent) => {
         val a0 = if (evt.hovering) 1.0 else 0.7
-        color.a = a0 * blend.alpha
+        color.setAlpha((a0 * blend.alpha*256).toInt)
       })
       target.listens[LeftClickEvent](() => clickCallback())
     }
@@ -341,7 +343,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       }
 
       currentMessage = value
-      gui.moveWidgetToAbsPos(info, info.x, ypos)
+      gui.moveWidgetToAbsPos(info, info.x, ypos.toFloat)
       info.component[MessageTab].updateText(texts)
       gui.updateWidget(info)
     }
@@ -391,7 +393,7 @@ object LocationTeleport extends Skill("location_teleport", 3) {
           })
       } else {
         ret.removeWidget("btn_teleport")
-        ret.child("text").component[TextBox].option.color.fromHexColor(0xa2a2a2)
+        ret.child("text").component[TextBox].option.color.set(0xa2, 0xa2, 0xa2)
       }
 
       wrapButton(ret.child("btn_remove"), count, 0.05, () => {
@@ -404,11 +406,11 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       {
         val wid = ret.child("text")
         val text = wid.component[TextBox]
-        text.option.color.a = 0
+        text.option.color.setAlpha((0*256).toInt)
 
         val blend = new Blend(count * ElemTimeStep + 0.1, 0.1)
         wid.listens[FrameEvent](() => {
-          text.option.color.a = blend.alpha
+          text.option.color.setAlpha((blend.alpha*256).toInt)
         })
       }
 
@@ -433,10 +435,10 @@ object LocationTeleport extends Skill("location_teleport", 3) {
       val blend = new Blend(count * ElemTimeStep, 0.2)
       val inputText = ret.child("input_text")
       val textBox = inputText.component[TextBox]
-      textBox.option.color.a = 0
+      textBox.option.color.setAlpha((0*256).toInt)
 
       inputText.listens[FrameEvent](() => {
-        textBox.option.color.a = blend.alpha * (if (inputText.isFocused) 0.8 else 0.4)
+        textBox.option.color.setAlpha((blend.alpha * (if (inputText.isFocused) 0.8 else 0.4)*256).toInt)
       })
 
       ret.listens[LeftClickEvent](() => if (!inputText.isFocused) {

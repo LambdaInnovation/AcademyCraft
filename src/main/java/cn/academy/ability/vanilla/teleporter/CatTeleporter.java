@@ -3,9 +3,7 @@ package cn.academy.ability.vanilla.teleporter;
 import cn.academy.ability.Category;
 import cn.academy.ability.Skill;
 import cn.academy.ability.vanilla.VanillaCategories;
-import cn.academy.ability.vanilla.teleporter.passiveskill.DimFoldingTheorem$;
-import cn.academy.ability.vanilla.teleporter.passiveskill.SpaceFluctuation$;
-import cn.academy.ability.vanilla.teleporter.skill.LocationTeleport$;
+import cn.academy.ability.vanilla.teleporter.passiveskill.*;
 import cn.academy.ability.vanilla.teleporter.skill.*;
 
 /**
@@ -14,14 +12,14 @@ import cn.academy.ability.vanilla.teleporter.skill.*;
 public class CatTeleporter extends Category {
 
     public static final Skill
-        dimFolding = DimFoldingTheorem$.MODULE$,
-        spaceFluct = SpaceFluctuation$.MODULE$,
+        dimFolding = DimFoldingTheorem.instance,
+        spaceFluct = SpaceFluctuation.instance,
         markTP = MarkTeleport$.MODULE$,
         locTP = LocationTeleport$.MODULE$,
         penetrateTP = PenetrateTeleport$.MODULE$,
         threateningTP = ThreateningTeleport$.MODULE$,
         shiftTP = ShiftTeleport$.MODULE$,
-        fleshRipping = FleshRipping$.MODULE$,
+        fleshRipping = FleshRipping.instance,
         flashing = Flashing.instance;
 
     public CatTeleporter() {

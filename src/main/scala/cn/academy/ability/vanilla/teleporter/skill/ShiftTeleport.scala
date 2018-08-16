@@ -3,21 +3,22 @@ package cn.academy.ability.vanilla.teleporter.skill
 import java.util.function.Predicate
 
 import cn.academy.ability.{AbilityContext, Skill}
-import cn.academy.ability.api.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.misc.TPParticleFactory
 import cn.academy.entity.EntityMarker
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
 import cn.academy.datapart.AbilityData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util._
+import cn.lambdalib2.util.VecUtils.lookingPos
+import cn.lambdalib2.util.{EntitySelectors => _, _}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
+import net.minecraft.util._
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos, RayTraceResult, Vec3d}
+import org.lwjgl.util.Color
 
 /**
   * @author WeAthFolD, KSkun
@@ -88,14 +89,15 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
       item.placeBlockAt(stack, player, player.world, position.getBlockPos, position.sideHit,
         position.hitVec.x.toFloat, position.hitVec.y.toFloat, position.hitVec.z.toFloat, stack.getItemDamage)
       if(!player.capabilities.isCreativeMode) if( {
-        stack.stackSize -= 1; stack.stackSize
-      } <= 0) player.setCurrentItemOrArmor(0, null)
+        stack.setCount(stack.getCount-1); stack.getCount
+      } <= 0) player.setHeldItem(EnumHand.MAIN_HAND, null)
       val list: java.util.List[Entity] = getTargetsInLine
       import scala.collection.JavaConversions._
       for(target <- list) {
         TPSkillHelper.attack(ctx, target, getDamage(exp))
       }
-      player.world.playSoundAtEntity(player, "academy:tp.tp_shift", 0.5f, 1f)
+      player.world.playSound(player, player.getPosition,
+        new SoundEvent(new ResourceLocation("academy:tp.tp_shift")),SoundCategory.AMBIENT, 0.5f, 1f)
       ctx.addSkillExp(getExpIncr(list.size))
       ctx.setCooldown(lerpf(100, 60, exp).toInt)
     }
@@ -114,6 +116,7 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 
   // TODO: Some boilerplate... Clean this up in case you aren't busy
   def getTraceDest: Array[Int] = {
+    import cn.lambdalib2.util.VecUtils._
     val range: Double = getRange(exp)
     val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if(result != null) {
@@ -122,8 +125,8 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
         result.getBlockPos.getY + dir.getFrontOffsetY,
         result.getBlockPos.getZ + dir.getFrontOffsetZ)
     }
-    val mo: Motion3D = new Motion3D(player, true).move(range)
-    Array[Int](mo.px.toInt, mo.py.toInt, mo.pz.toInt)
+    val mo = lookingPos(player, range)
+    Array[Int](mo.x.toInt, mo.y.toInt, mo.z.toInt)
   }
 
   def getTracePosition: RayTraceResult = {
@@ -131,13 +134,14 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
     val result: RayTraceResult = Raytrace.traceLiving(player, range, EntitySelectors.nothing)
     if(result != null) {
       val dir: EnumFacing = result.sideHit
-      result.blockX += dir.getFrontOffsetX
-      result.blockY += dir.getFrontOffsetY
-      result.blockZ += dir.getFrontOffsetZ
+      result.hitVec.x += dir.getFrontOffsetX
+      result.hitVec.y += dir.getFrontOffsetY
+      result.hitVec.z += dir.getFrontOffsetZ
       return result
     }
-    val mo: Motion3D = new Motion3D(player, true).move(range)
-    new RayTraceResult(mo.px.toInt, mo.py.toInt, mo.pz.toInt, 0, new Vec3d(mo.px, mo.py, mo.pz))
+    val mo = lookingPos(player, range)
+    new RayTraceResult(RayTraceResult.Type.ENTITY, mo,
+      EnumFacing.DOWN, new BlockPos(mo.x.toInt, mo.y.toInt, mo.z.toInt))
   }
 
   def getTargetsInLine: java.util.List[Entity] = {
@@ -163,8 +167,8 @@ class STContext(p: EntityPlayer) extends Context(p, ShiftTeleport) {
 @RegClientContext(classOf[STContext])
 class STContextC(par: STContext) extends ClientContext(par) {
 
-  private val CRL_BLOCK_MARKER: Color = new Color().setColor4i(139, 139, 139, 180)
-  private val CRL_ENTITY_MARKER: Color = new Color().setColor4i(235, 81, 81, 180)
+  private val CRL_BLOCK_MARKER: Color = new Color(139, 139, 139, 180)
+  private val CRL_ENTITY_MARKER: Color = new Color(235, 81, 81, 180)
 
   private var blockMarker: EntityMarker = _
   private var targetMarkers: java.util.List[EntityMarker] = _
@@ -232,14 +236,19 @@ class STContextC(par: STContext) extends ClientContext(par) {
       val dy: Double = dest(1) + .5 - (player.posY - 0.5)
       val dz: Double = dest(2) + .5 - player.posZ
       val dist: Double = MathUtils.length(dx, dy, dz)
-      val mo: Motion3D = new Motion3D(player.posX, player.posY - 0.5, player.posZ, dx, dy, dz)
-      mo.normalize
+      var posX = player.posX
+      var posY = player.posY - 0.5
+      var posZ = player.posZ
+      val dv = new Vec3d(dx, dy, dz).normalize()
       var move: Double = 1
       var x: Double = move
       while(x <= dist) {
         {
-          mo.move(move)
-          player.world.spawnEntity(TPParticleFactory.instance.next(player.world, mo.getPosVec, new Vec3d(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
+          posX += dv.x * move
+          posY += dv.y * move
+          posZ += dv.z * move
+          player.world.spawnEntity(TPParticleFactory.instance.next(player.world, new Vec3d(posX, posY, posZ),
+            new Vec3d(RandUtils.ranged(-.05, .05), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.05, .05))))
         }
         move = RandUtils.ranged(0.6, 1)
         x += move

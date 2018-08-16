@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.{EnumHand, SoundCategory}
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import org.lwjgl.util.Color
 
 /**
   * @author WeAthFolD, KSkun
@@ -115,7 +116,7 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
       val mo = VecUtils.add(player.getPositionVector, multiply(player.getLookVec, range))
       ret.setPos(mo.x, mo.y, mo.z)
     }
-    else if(pos.typeOfHit eq MovingObjectType.BLOCK) ret.setPos(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
+    else if(pos.typeOfHit eq RayTraceResult.Type.BLOCK) ret.setPos(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
     else {
       val ent: Entity = pos.entityHit
       ret.setPos(ent.posX, ent.posY + ent.height, ent.posZ)
@@ -130,8 +131,8 @@ class TTContext(p: EntityPlayer) extends Context(p, ThreateningTeleport) {
 @RegClientContext(classOf[TTContext])
 class TTContextC(par: TTContext) extends ClientContext(par) {
 
-  private val COLOR_NORMAL: Color = new Color().fromHexColor(0xbabababa)
-  private val COLOR_THREATENING: Color = new Color().fromHexColor(0xbab2232a)
+  private val COLOR_NORMAL: Color = new Color(0xba,0xba,0xba,0xba)
+  private val COLOR_THREATENING: Color = new Color(0xba,0xb2,0x23,0x2a)
 
   private var marker: EntityMarker = _
 
@@ -144,7 +145,7 @@ class TTContextC(par: TTContext) extends ClientContext(par) {
   private def l_start() = {
     if(isLocal) {
       marker = new EntityMarker(player.world)
-      player.world.spawnEntityInWorld(marker)
+      player.world.spawnEntity(marker)
       marker.setPosition(player.posX, player.posY, player.posZ)
       marker.width = 0.5f
       marker.height = 0.5f
@@ -172,14 +173,19 @@ class TTContextC(par: TTContext) extends ClientContext(par) {
       val dy: Double = dropPos.y + .5 - (player.posY - 0.5)
       val dz: Double = dropPos.z + .5 - player.posZ
       val dist: Double = MathUtils.length(dx, dy, dz)
-      val mo: Motion3D = new Motion3D(player.posX, player.posY - 0.5, player.posZ, dx, dy, dz)
-      mo.normalize
+      var posX = player.posX
+      var posY = player.posY - 0.5
+      var posZ = player.posZ
+      val lookingVec = new Vec3d(dx, dy, dz).normalize()
+
       var move: Double = 1
       var x: Double = move
       while(x <= dist) {
         {
-          mo.move(move)
-          player.world.spawnEntity(TPParticleFactory.instance.next(player.world, mo.getPosVec,
+          posX += move*lookingVec.x
+          posY += move*lookingVec.y
+          posZ += move*lookingVec.z
+          player.world.spawnEntity(TPParticleFactory.instance.next(player.world, new Vec3d(posX, posY, posZ),
             new Vec3d(RandUtils.ranged(-.02, .02), RandUtils.ranged(-.02, .05), RandUtils.ranged(-.02, .02))))
         }
         move = RandUtils.ranged(1, 2)
