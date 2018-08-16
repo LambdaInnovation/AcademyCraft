@@ -3,6 +3,7 @@ package cn.academy.block.block;
 import cn.academy.AcademyCraft;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
 import java.util.Random;
@@ -12,8 +13,8 @@ import java.util.Random;
  */
 public class BlockGenericOre extends BlockOre {
     
-    int rangeFrom = 1, rangeTo = 2;
-    Item itemDropped;
+    private int rangeFrom = 1, rangeTo = 2;
+    private Item itemDropped;
 
     public BlockGenericOre(float hardness, int harvestLevel) {
         setHardness(hardness);
@@ -41,7 +42,7 @@ public class BlockGenericOre extends BlockOre {
     }
     
     @Override
-    public Item getItemDropped(int a, Random b, int c) {
+    public Item getItemDropped(IBlockState blockState, Random b, int c) {
         if(itemDropped == null)
             itemDropped = Item.getItemFromBlock(this);
         return itemDropped;

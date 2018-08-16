@@ -6,5 +6,17 @@
     "itemsDataFile": "src/main/raw/items.conf",
     "itemsClassPath": "cn.academy.ACItems",
     "blocksDataFile": "src/main/raw/blocks.conf",
-    "blocksClassPath": "cn.academy.ACBlocks"
+    "blocksClassPath": "cn.academy.ACBlocks",
+    "additionalImports": {
+      "all": [
+        "cn.academy.block.block.*",
+        "cn.academy.item.*"
+      ],
+      "item": [
+      ],
+      "block": [
+        "cn.academy.block.block.BlockNode.NodeType",
+        "cn.academy.ability.develop.DeveloperType"
+      ]
+    }
   }
