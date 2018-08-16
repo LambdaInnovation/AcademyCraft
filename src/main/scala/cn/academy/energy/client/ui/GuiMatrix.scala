@@ -13,20 +13,21 @@ import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
-import cn.lambdalib2.util.Color
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.MinecraftForge
 import cn.lambdalib2.cgui.ScalaCGUI._
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
 object GuiMatrix2 {
   import MatrixNetProxy._
 
   def apply(container: ContainerMatrix) = {
     val tile = container.tile
-    val thePlayer = Minecraft.getMinecraft.thePlayer
-    val isPlacer = tile.getPlacerName == thePlayer.getCommandSenderName
+    val thePlayer = Minecraft.getMinecraft.player
+    val isPlacer = tile.getPlacerName == thePlayer.getName
 
     val invPage = InventoryPage("matrix")
 
@@ -110,8 +111,8 @@ private class InitData {
 @NetworkS11nType
 private object MatrixNetProxy {
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(MatrixNetProxy)
   }
 
@@ -144,14 +145,14 @@ private object MatrixNetProxy {
 
   @Listener(channel=MSG_CHANGE_PASSWORD, side=Array(Side.SERVER))
   def changePassword(matrix: TileMatrix, player: EntityPlayer, pwd: String) = {
-    if (matrix.getPlacerName == player.getCommandSenderName) {
+    if (matrix.getPlacerName == player.getName) {
       MinecraftForge.EVENT_BUS.post(new ChangePassEvent(matrix, pwd))
     }
   }
 
   @Listener(channel=MSG_CHANGE_SSID, side=Array(Side.SERVER))
   def changeSSID(matrix: TileMatrix, player: EntityPlayer, newSSID: String) = {
-    if (matrix.getPlacerName == player.getCommandSenderName) {
+    if (matrix.getPlacerName == player.getName) {
       Option(WirelessHelper.getWirelessNet(matrix)) match {
         case Some(net) =>
           net.setSSID(newSSID)

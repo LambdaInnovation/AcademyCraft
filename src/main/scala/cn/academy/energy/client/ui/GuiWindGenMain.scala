@@ -13,7 +13,7 @@ object GuiWindGenMain {
 
     val ret = new ContainerUI(container, invPage)
 
-    ret.infoPage.property("altitude", tile.y)
+    ret.infoPage.property("altitude", tile.getPos.getY)
 
     ret
   }

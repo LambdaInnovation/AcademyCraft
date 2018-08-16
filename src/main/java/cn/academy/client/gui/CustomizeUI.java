@@ -46,15 +46,15 @@ public class CustomizeUI extends CGuiScreen {
         ElementList list = new ElementList();
         for (ACHud.Node n : ACHud.instance.getNodes()) {
             double[] pos = n.getPosition();
-            n.preview.pos((float) pos[0], (float) pos[1]);
-            gui.addWidget(n.preview);
-            n.preview.removeComponent("Outline");
+            n.getPreview().pos((float) pos[0], (float) pos[1]);
+            gui.addWidget(n.getPreview());
+            n.getPreview().removeComponent("Outline");
 
             Widget elem = body.getWidget("template").copy();
             elem.transform.doesDraw = true;
             TextBox textBox = elem.getComponent(TextBox.class);
             textBox.localized = true;
-            textBox.setContent("ac.gui.uiedit.elm." + n.name);
+            textBox.setContent("ac.gui.uiedit.elm." + n.getName());
             elem.listen(LeftClickEvent.class, (w, evt) -> {
                 changeEditFocus(w, n);
             });
@@ -75,12 +75,12 @@ public class CustomizeUI extends CGuiScreen {
         }
 
         if (prevFocus != null) {
-            prevFocus.preview.removeComponent("Outline");
+            prevFocus.getPreview().removeComponent("Outline");
             edit.dispose();
         }
 
         prevFocus = node;
-        node.preview.addComponent(new Outline());
+        node.getPreview().addComponent(new Outline());
 
         edit = doc.getWidget("editbox").copy();
         double[] prevPos = node.getPosition();
@@ -88,15 +88,15 @@ public class CustomizeUI extends CGuiScreen {
             double[] pos = node.getPosition();
             float value = (float) (double) value_;
             node.setPosition(value, (float) pos[1]);
-            node.preview.pos(value, ((float) pos[1]));
-            node.preview.dirty = true;
+            node.getPreview().pos(value, ((float) pos[1]));
+            node.getPreview().dirty = true;
         }, prevPos[0]);
         wrapEdit(edit.getWidget("edit_y"), (value_) -> {
             double[] pos = node.getPosition();
             float value = (float) (double) value_;
             node.setPosition((float) pos[0], value);
-            node.preview.pos((float) pos[0], value);
-            node.preview.dirty = true;
+            node.getPreview().pos((float) pos[0], value);
+            node.getPreview().dirty = true;
         }, prevPos[1]);
 
         edit.pos(button.x + button.transform.width*button.scale + 5,

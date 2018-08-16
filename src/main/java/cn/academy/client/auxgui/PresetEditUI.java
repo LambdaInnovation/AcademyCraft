@@ -446,7 +446,7 @@ public class PresetEditUI extends GuiScreen {
                 String str; 
                 Widget hovering = foreground.getHoveringWidget();
                 if(hovering != null && hovering.getName().contains("_sel")) {
-                    SelHandler sh = hovering.getComponent("_sel");
+                    SelHandler sh = hovering.getComponent(SelHandler.class);
                     str = sh.selection.hint;
                 } else {
                     str = local("skill_select");
