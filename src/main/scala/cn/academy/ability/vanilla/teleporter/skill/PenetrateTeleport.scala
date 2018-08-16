@@ -1,7 +1,6 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
 import cn.academy.ability.{AbilityPipeline, Skill}
-import cn.academy.ability.api.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityTPMarking
