@@ -216,7 +216,7 @@ public class GuiTutorial extends CGuiScreen {
                 glColorMask(true, true, true, true);
 
                 double ht = Math.max(0, renderer.getMaxHeight() - w.transform.height + 10);
-                double delta = VerticalDragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
+                double delta = DragBar.get(centerPart.getWidget("scroll_2")).getProgress() * ht;
                 glTranslated(3, 3 - delta, 0);
                 glDepthFunc(GL_EQUAL);
                 renderer.render();

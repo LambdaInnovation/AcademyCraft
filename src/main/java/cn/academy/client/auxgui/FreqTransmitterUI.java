@@ -12,23 +12,23 @@ import cn.academy.event.energy.LinkNodeEvent;
 import cn.academy.energy.impl.WirelessNet;
 import cn.academy.terminal.app.AppFreqTransmitter;
 import cn.lambdalib2.multiblock.BlockMulti;
+import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
-import cn.lambdalib2.util.HudUtils;
-import cn.lambdalib2.util.RenderUtils;
+import cn.lambdalib2.util.*;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.Extent;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.deprecated.LIFMLGameEventDispatcher;
 import cn.lambdalib2.util.deprecated.LIHandler;
-import cn.lambdalib2.util.Color;
-import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.util.mc.ControlOverrider;
-import cn.lambdalib2.util.mc.EntitySelectors;
-import cn.lambdalib2.util.mc.Raytrace;
+//import cn.lambdalib2.util.mc.ControlOverrider;
+//import cn.lambdalib2.util.mc.EntitySelectors;
+//import cn.lambdalib2.util.mc.Raytrace;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
@@ -38,7 +38,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.MovingObjectPosition;
+//import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -46,6 +46,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
@@ -126,7 +127,7 @@ public class FreqTransmitterUI extends AuxGui {
     private abstract class State {
         
         boolean handlesKey;
-        final long createTime;
+        final double createTime;
         long timeout = 20000;
         
         public State(boolean _handlesKey) {
@@ -138,13 +139,13 @@ public class FreqTransmitterUI extends AuxGui {
             return handlesKey;
         }
         
-        abstract void handleDraw(double w, double h);
-        abstract void handleClicking(MovingObjectPosition result);
+        abstract void handleDraw(float w, float h);
+        abstract void handleClicking(RayTraceResult result);
         
         void handleKeyInput(char ch, int kid) {}
         
         final long getDeltaTime() {
-            return GameTimer.getTime() - createTime;
+            return (long) ((GameTimer.getTime() - createTime) * 1000);
         }
 
         final void startTransmitting() {
@@ -153,8 +154,8 @@ public class FreqTransmitterUI extends AuxGui {
     }
     
     private static final Color
-        BG_COLOR = new Color(0x77272727),
-        GLOW_COLOR = new Color(0xaaffffff);
+        BG_COLOR = Colors.fromHexColor(0x77272727),
+        GLOW_COLOR = Colors.fromHexColor(0xaaffffff);
     
     private static final double GLOW_SIZE = 1;
 
@@ -168,7 +169,7 @@ public class FreqTransmitterUI extends AuxGui {
     KeyEventDispatcher keyDispatcher;
     
     public FreqTransmitterUI() {
-        player = Minecraft.getMinecraft().thePlayer;
+        player = Minecraft.getMinecraft().player;
         world = player.world;
         consistent = false;
         
@@ -211,7 +212,7 @@ public class FreqTransmitterUI extends AuxGui {
 
     @Override
     public void draw(ScaledResolution sr) {
-        double width = sr.getScaledWidth_double(), height = sr.getScaledHeight_double();
+        float width = (float) sr.getScaledWidth_double(), height = (float) sr.getScaledHeight_double();
         
         AppFreqTransmitter app = AppFreqTransmitter.instance;
         GL11.glPushMatrix(); {
@@ -246,17 +247,17 @@ public class FreqTransmitterUI extends AuxGui {
     }
     
     private static void drawBox(double x, double y, double width, double height) {
-        BG_COLOR.bind();
+        Colors.bindToGL(BG_COLOR);
         HudUtils.colorRect(x, y, width, height);
         
         ACRenderingHelper.drawGlow(x, y, width, height, GLOW_SIZE, GLOW_COLOR);
     }
      
-    private void drawTextBox(String str, double x, double y) {
-        final double trimLength = 120;
+    private void drawTextBox(String str, float x, float y) {
+        final float trimLength = 120;
         final FontOption option = new FontOption(10);
         Extent extent = font.drawSeperated_Sim(str, trimLength, option);
-        final double X0 = x, Y0 = y, MARGIN = 5;
+        final float X0 = x, Y0 = y, MARGIN = 5;
         
         drawBox(X0, Y0, MARGIN * 2 + extent.width + 25, MARGIN * 2 + extent.height);
         font.drawSeperated(str, X0 + MARGIN, Y0 + MARGIN, trimLength, option);
@@ -264,7 +265,7 @@ public class FreqTransmitterUI extends AuxGui {
     
     private class KeyEventDispatcher extends LIHandler<InputEvent> {
 
-        @Override
+        @StateEventCallback
         protected boolean onEvent(InputEvent event) {
             if(current != null) {
                 if(event instanceof MouseInputEvent) {
@@ -299,12 +300,12 @@ public class FreqTransmitterUI extends AuxGui {
         }
         
         @Override
-        public void handleDraw(double w, double h) {
+        public void handleDraw(float w, float h) {
             drawTextBox(local(key), w / 2 + 10, h / 2 + 10);
         }
 
         @Override
-        void handleClicking(MovingObjectPosition result) {}
+        void handleClicking(RayTraceResult result) {}
         
     }
     
@@ -315,7 +316,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
         
         @Override
-        public void handleDraw(double w, double h) {
+        public void handleDraw(float w, float h) {
             super.handleDraw(w, h);
             if(this.getDeltaTime() > 1000L) {
                 dispose();
@@ -333,7 +334,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
         
         @Override
-        public void handleDraw(double w, double h) {
+        public void handleDraw(float w, float h) {
             super.handleDraw(w, h);
             if(this.getDeltaTime() > 700L) {
                 setState(toSwitch);
@@ -351,22 +352,22 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        public void handleDraw(double w, double h) {
+        public void handleDraw(float w, float h) {
             drawTextBox(local("s0_0"), w / 2 + 10, h / 2 + 10);
         }
 
         @Override
-        public void handleClicking(MovingObjectPosition result) {
+        public void handleClicking(RayTraceResult result) {
             if(result == null) {
                 setState(null);
                 return;
             }
             if(started)
                 return;
-            int hx = result.blockX,
-                    hy = result.blockY,
-                    hz = result.blockZ;
-            TileEntity te = world.getTileEntity(hx, hy, hz);
+//            int hx = result.blockX,
+//                    hy = result.blockY,
+//                    hz = result.blockZ;
+            TileEntity te = world.getTileEntity(result.getBlockPos());
             if(te instanceof IWirelessNode) {
                 
                 setState(new StateAuthorizeNode((IWirelessNode) te));
@@ -376,7 +377,7 @@ public class FreqTransmitterUI extends AuxGui {
                 started = true;
                 IWirelessMatrix mat = (IWirelessMatrix) te;
                 // Hard coded BlockMulti processing
-                Block block = world.getBlock(hx, hy, hz);
+                Block block = world.getBlockState(result.getBlockPos()).getBlock();
                 if(block instanceof BlockMulti) {
                     mat = (IWirelessMatrix) ((BlockMulti)block).getOriginTile(te);
                     if(mat == null) {
@@ -417,7 +418,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleDraw(double w, double h) {
+        void handleDraw(float w, float h) {
             GL11.glPushMatrix();
             GL11.glTranslated(w / 2 + 10, h / 2 - 10, 0);
             
@@ -434,7 +435,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleClicking(MovingObjectPosition result) {
+        void handleClicking(RayTraceResult result) {
             // NO-OP
         }
         
@@ -476,7 +477,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleDraw(double w, double h) {
+        void handleDraw(float w, float h) {
             GL11.glPushMatrix();
             GL11.glTranslated(w / 2 + 10, h / 2 - 10, 0);
 
@@ -493,7 +494,7 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleClicking(MovingObjectPosition result) {
+        void handleClicking(RayTraceResult result) {
             // NO-OP
         }
 
@@ -535,16 +536,16 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleDraw(double w, double h) {
+        void handleDraw(float w, float h) {
             drawTextBox(local("s2_0"), w / 2 + 10, h / 2 + 10);
         }
 
         @Override
-        void handleClicking(MovingObjectPosition result) {
+        void handleClicking(RayTraceResult result) {
             TileEntity tile;
             
             if(result == null || 
-                !((tile = world.getTileEntity(result.blockX, result.blockY, result.blockZ)) instanceof IWirelessNode)) {
+                !((tile = world.getTileEntity(result.getBlockPos())) instanceof IWirelessNode)) {
                 setState(new StateNotifyAndQuit("e4"));
             } else {
                 IWirelessNode node = (IWirelessNode) tile;
@@ -578,12 +579,12 @@ public class FreqTransmitterUI extends AuxGui {
         }
 
         @Override
-        void handleDraw(double w, double h) {
+        void handleDraw(float w, float h) {
             drawTextBox(local("s3_0"), w / 2 + 10, h / 2 + 10);
         }
 
         @Override
-        void handleClicking(MovingObjectPosition r) {
+        void handleClicking(RayTraceResult r) {
             TileEntity tile;
             if(r == null || (tile = world.getTileEntity(r.blockX, r.blockY, r.blockZ)) == null) {
                 setState(new StateNotifyAndQuit("e4"));

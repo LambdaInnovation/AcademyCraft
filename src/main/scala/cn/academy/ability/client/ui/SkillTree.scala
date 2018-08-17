@@ -3,14 +3,17 @@ package cn.academy.ability.client.ui
 import java.util
 
 import cn.academy.{AcademyCraft, Resources}
-import cn.academy.ability.{AbilityLocalization, ModuleAbility, Skill}
-import cn.academy.ability.api.data.CPData
+import cn.academy.ability.{AbilityLocalization, Skill}
+import cn.academy.item.ACItemsLegacy
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+//import cn.academy.ability.api.data.CPData
 import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.{LocalHelper, Resources}
+//import cn.academy.core.{LocalHelper, Resources}
 import cn.academy.core.client.ui.{TechUI, WirelessPage}
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.block.tileentity.TileDeveloper
@@ -69,7 +72,7 @@ object DeveloperUI {
       ret.getGui.addWidget("main", Common.initialize(tile))
     }
 
-    gui.eventBus.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
+    gui.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
       override def handleEvent(w: Widget, event: RebuildEvent): Unit = build()
     })
 
@@ -95,15 +98,13 @@ object SkillTreeAppUI {
 @SideOnly(Side.CLIENT)
 object SkillPosEditorUI {
 
-  @RegInitCallback
-  def __init() = {
-    if (AcademyCraft.DEBUG_MODE) {
-      KeyManager.dynamic.addKeyHandler("skill_tree_pos_editor", Keyboard.KEY_RMENU, new KeyHandler {
-        override def onKeyDown() = {
-          Minecraft.getMinecraft.displayGuiScreen(SkillPosEditorUI())
-        }
-      })
-    }
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
+    if (AcademyCraft.DEBUG_MODE) KeyManager.dynamic.addKeyHandler("skill_tree_pos_editor", Keyboard.KEY_RMENU, new KeyHandler {
+      override def onKeyDown() = {
+        Minecraft.getMinecraft.displayGuiScreen(SkillPosEditorUI())
+      }
+    })
   }
 
   def apply(): CGuiScreen = {
@@ -130,13 +131,13 @@ object SkillPosEditorUI {
           text.allowEdit()
 
           val ret = new Widget().size(20, 10)
-            .addComponent(new DrawTexture().setTex(null).setColor4d(.3, .3, .3, .3))
+            .addComponent(new DrawTexture().setTex(null).setColor(Colors.fromFloat(.3f, .3f, .3f, .3f)))
             .addComponent(text)
             .listens((evt: ConfirmInputEvent) => {
               try {
                 val num = text.content.toDouble
                 callback(num)
-                gui.eventBus.postEvent(null, new RebuildEvent)
+                gui.postEvent(new RebuildEvent)
               } catch {
                 case _: NumberFormatException =>
               }
@@ -155,7 +156,7 @@ object SkillPosEditorUI {
     }
 
     build()
-    gui.eventBus.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
+    gui.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
       override def handleEvent(w: Widget, event: RebuildEvent): Unit = build()
     })
 
@@ -229,7 +230,7 @@ private object Common {
 
     if (!aData.hasCategory) {
       initConsole(area)
-    } else if (Option(player.getHeldItem(EnumHand.MAIN_HAND)).exists(_.getItem == ModuleAbility.magneticCoil)) {
+    } else if (Option(player.getHeldItem(EnumHand.MAIN_HAND)).exists(_.getItem == ACItemsLegacy.magneticCoil)) {
       initReset(area)
     } else { // Initialize skill area
       val back_scale = 1.01
@@ -237,7 +238,7 @@ private object Common {
       val max_du = back_scale - 1
       val max_du_skills = 10
 
-      var (dx, dy) = (0.0, 0.0)
+      var (dx, dy) = (0.0f, 0.0f)
 
       area.listens((evt: FrameEvent) => {
         val gui = area.getGui
@@ -245,8 +246,8 @@ private object Common {
         // Update delta
         def scale(x: Double) = (x - 0.5) * back_scale_inv + 0.5
 
-        dx = clampd(0, 1, gui.getMouseX / gui.getWidth) - 0.5
-        dy = clampd(0, 1, gui.getMouseY / gui.getHeight) - 0.5
+        dx = clampf(0, 1, gui.getMouseX / gui.getWidth) - 0.5f
+        dy = clampf(0, 1, gui.getMouseY / gui.getHeight) - 0.5f
 
         // Draw background
         RenderUtils.loadTexture(texAreaBack)
@@ -265,10 +266,10 @@ private object Common {
           val StateHover = 1
           val TransitTime = 100.0
 
-          val WidgetSize = 16.0
-          val ProgSize = 31.0
-          val TotalSize = 23.0
-          val IconSize = 14.0
+          val WidgetSize = 16.0f
+          val ProgSize = 31.0f
+          val TotalSize = 23.0f
+          val IconSize = 14.0f
           val ProgAlign = (TotalSize - ProgSize) / 2
           val Align = (TotalSize - IconSize) / 2
           val DrawAlign = (WidgetSize - TotalSize) / 2
@@ -490,7 +491,7 @@ private object Common {
               cover :+ wirelessPage
 
               cover.listens[LeftClickEvent](() => cover.component[Cover].end())
-              cover.listens[CloseEvent](() => gui.eventBus.postEvent(null, new RebuildEvent))
+              cover.listens[CloseEvent](() => gui.postEvent(new RebuildEvent))
 
               gui.addWidget("link_page", cover)
             })
@@ -616,7 +617,7 @@ private object Common {
       ret.listens[LeftClickEvent](() => {
         if (canClose) {
           if (shouldRebuild) {
-            gui.eventBus.postEvent(null, new RebuildEvent)
+            gui.postEvent(new RebuildEvent)
           } else {
             ret.component[Cover].end()
           }
@@ -764,7 +765,7 @@ private object Common {
 
       ret.listens[LeftClickEvent](() => if (canClose) {
         if (shouldRebuild) {
-          gui.eventBus.postEvent(null, new RebuildEvent)
+          gui.postEvent(new RebuildEvent)
         } else {
           ret.component[Cover].end()
         }
@@ -775,9 +776,9 @@ private object Common {
   }
 
   private def newButton() = new Widget()
-    .size(64, 32).scale(.5)
+    .size(64, 32).scale(.5f)
     .addComponent(new DrawTexture(texButton))
-    .addComponent(new Tint(Color.monoBlend(1, .6), Color.monoBlend(1, 1), true))
+    .addComponent(new Tint(Colors.monoBlend(1, .6f), Colors.monoBlend(1, 1), true))
 
   private def drawActionIcon(icon: ResourceLocation, progress: Double, glow: Boolean) = {
     val BackSize = 50
@@ -960,7 +961,7 @@ private object Common {
     private var currentTask: Task = null
     private var input: String = ""
 
-    enqueue(slowPrintTask(localized("init", player.getCommandSenderName)))
+    enqueue(slowPrintTask(localized("init", player.getName)))
     pause(400)
 
     val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
@@ -1090,7 +1091,7 @@ private object Common {
 
     def enqueueRebuild() = enqueue(new Task {
       override def isFinished: Boolean = true
-      override def begin(): Unit = widget.getGui.eventBus.postEvent(null, new RebuildEvent)
+      override def begin(): Unit = widget.getGui.postEvent(new RebuildEvent)
     })
 
     def += (command: Command) = {
@@ -1117,13 +1118,13 @@ private object Common {
   trait TimedTask extends Task {
     def life: Long
 
-    private var creationTime: Long = -1
+    private var creationTime: Double = -1
 
     def getCreationTime = creationTime
 
     override def begin() = creationTime = GameTimer.getTime
 
-    override def isFinished = GameTimer.getTime - creationTime >= life
+    override def isFinished = ((GameTimer.getTime - creationTime) * 1000) >= life
   }
 
   def printTask(str: String)(implicit console: Console): Task = new Task {
@@ -1134,10 +1135,10 @@ private object Common {
   }
 
   def slowPrintTask(str: String)(implicit console: Console): Task = new Task {
-    val PerCharTime = 20
+    val PerCharTime = 0.002
 
     private var idx = 0
-    private var last = -1L
+    private var last :Double = -1
 
     override def finish(): Unit = {}
 
@@ -1147,7 +1148,7 @@ private object Common {
 
     override def update(): Unit = {
       val time = GameTimer.getTime
-      val n = (time - last).toInt / PerCharTime
+      val n = ((time - last) / PerCharTime).toInt
       if (n > 0) {
         val end = math.min(str.length, idx + n)
         console.output(str.substring(idx, end))
@@ -1171,8 +1172,8 @@ private object NetDelegate {
   final val MSG_RESET = "reset"
   final val MSG_START_LEVEL = "start_level"
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(NetDelegate)
   }
 

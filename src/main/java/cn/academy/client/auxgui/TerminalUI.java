@@ -35,6 +35,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -372,7 +373,7 @@ public class TerminalUI extends AuxGui {
         AuxGuiHandler.register(current);
     }
     
-    @RegACKeyHandler(name = "open_data_terminal", defaultKey = Keyboard.KEY_LMENU)
+    @RegACKeyHandler(name = "open_data_terminal", keyID = Keyboard.KEY_LMENU)
     public static KeyHandler keyHandler = new KeyHandler() {
         
         @Override

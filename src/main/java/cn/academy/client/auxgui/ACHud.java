@@ -64,7 +64,7 @@ public class ACHud extends AuxGui {
         boolean shows();
     }
     
-    class Node {
+    public class Node {
         final Widget w;
         final Condition cond;
         final String name;
@@ -80,9 +80,13 @@ public class ACHud extends AuxGui {
             preview = _preview;
         }
 
-        double[] getPosition() {
+        public double[] getPosition() {
             return prop().getDoubleList();
         }
+
+        public Widget getPreview() { return preview; }
+
+        public String getName() { return name; }
 
         void updatePosition() {
             double[] pos = getPosition();
@@ -90,7 +94,7 @@ public class ACHud extends AuxGui {
             w.dirty = true;
         }
 
-        void setPosition(float newX, float newY) {
+        public void setPosition(float newX, float newY) {
             Property prop = prop();
             prop.set(new double[] { newX, newY });
             updatePosition();

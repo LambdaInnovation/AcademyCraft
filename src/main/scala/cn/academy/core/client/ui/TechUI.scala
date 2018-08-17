@@ -1,11 +1,14 @@
 package cn.academy.core.client.ui
 
 import cn.academy.Resources
-import cn.academy.core.Resources
+import cn.lambdalib2.registry.StateEventCallback
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import org.lwjgl.util.Color
+//import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
-import cn.academy.event.node.UnlinkUserEvent
+//import cn.academy.event.node.UnlinkUserEvent
 import cn.academy.event.energy.{LinkNodeEvent, LinkUserEvent, UnlinkNodeEvent, UnlinkUserEvent}
 import cn.academy.energy.impl.{NodeConn, WirelessNet}
 import cn.academy.util.LocalHelper
@@ -21,10 +24,8 @@ import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable, SerializeStrate
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{HudUtils, RenderUtils}
+import cn.lambdalib2.util._
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.MathUtils
-import cn.lambdalib2.util.{Color, GameTimer}
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.inventory.{Container, Slot}
 import net.minecraft.tileentity.TileEntity
@@ -62,11 +63,11 @@ object TechUI {
 
   class BlendQuad(var margin: Double = 4) extends Component("BlendQuad") {
 
-    val color = Color.monoBlend(0.0, 0.5)
+    val color = Colors.monoBlend(0.0f, 0.5f)
 
     this.listens[FrameEvent](() => {
       RenderUtils.loadTexture(blendQuadTex)
-      color.bind()
+      Colors.bindToGL(color)
 
       def quad(col: Int, row: Int, x0: Double, y0: Double, x1: Double, y1: Double) = {
         val u = col / 3.0
@@ -110,8 +111,8 @@ object TechUI {
   }
 
   def drawTextBox(content: String, option: FontOption,
-                  x: Double, y: Double,
-                  limit: Double = Double.MaxValue) = {
+                  x: Float, y: Float,
+                  limit: Float = Float.MaxValue) = {
     val wmargin = 5
     val hmargin = 2
 
@@ -140,7 +141,7 @@ object TechUI {
     Option(widget.getComponent(classOf[DrawTexture])) match {
       case Some(tex) =>
         widget.listens[FrameEvent](() => {
-          tex.color.a = breatheAlpha
+          tex.color.setAlpha(Colors.f2i(breatheAlpha))
         })
       case _ =>
     }
@@ -153,7 +154,7 @@ object TechUI {
     val time = GameTimer.getTime
     val sin = (1 + math.sin(time / 800.0)) * 0.5
 
-    0.675 + sin * 0.175
+    (0.675 + sin * 0.175).toFloat
   }
 
   class TechUIWidget(pages: Page*) extends Widget {
@@ -169,7 +170,7 @@ object TechUI {
 
       val buttonTex = button.getComponent(classOf[DrawTexture])
       buttonTex.setTex(Resources.getTexture("guis/icons/icon_" + page.id))
-      button.scale(0.7)
+      button.scale(0.7f)
       button.pos(-20, idx * 22)
       button.listens[LeftClickEvent](() => {
         pages.foreach(_.window.transform.doesDraw = false)
@@ -177,12 +178,12 @@ object TechUI {
         currentPage_ = page
       })
       button.listens((evt: FrameEvent) => {
-        val a1 = if (evt.hovering || currentPage_ == page) 1.0 else 0.8
-        val a2 = if (currentPage_ == page) 1.0 else 0.8
-        buttonTex.color.a = a1
-        buttonTex.color.r = a2
-        buttonTex.color.g = a2
-        buttonTex.color.b = a2
+        val a1 = if (evt.hovering || currentPage_ == page) 1.0f else 0.8f
+        val a2 = if (currentPage_ == page) 1.0f else 0.8f
+        buttonTex.color.setAlpha(Colors.f2i(a1))
+        buttonTex.color.setRed(Colors.f2i(a2))
+        buttonTex.color.setGreen(Colors.f2i(a2))
+        buttonTex.color.setBlue(Colors.f2i(a2))
       })
 
       page.window.transform.doesDraw = false
@@ -200,22 +201,22 @@ object TechUI {
                          value: () => Double, desc: () => String)
 
   def histEnergy(energy: () => Double, max: Double) = {
-    val color = new Color(0xff25c4ff)
+    val color = Colors.fromHexColor(0xff25c4ff)
     HistElement(localHist.get("energy"), color, () => energy() / max, () => "%.0f IF".format(energy()))
   }
 
   def histBuffer(energy: () => Double, max: Double) = {
-    val color = new Color(0xff25f7ff)
+    val color = Colors.fromHexColor(0xff25f7ff)
     HistElement(localHist.get("buffer"), color, () => energy() / max, () => "%.0f IF".format(energy()))
   }
 
   def histPhaseLiquid(amt: () => Double, max: Double) = {
-    val color = new Color(0xff7680de)
+    val color = Colors.fromHexColor(0xff7680de)
     HistElement(localHist.get("liquid"), color, () => amt() / max, () => "%.0f mB".format(amt()))
   }
 
   def histCapacity(amt: () => Int, max: => Int) = {
-    val color = new Color(0xffff6c00)
+    val color = Colors.fromHexColor(0xffff6c00)
     HistElement(localHist.get("capacity"), color, () => amt().toDouble / max, () => s"${amt()}/$max")
   }
 
@@ -228,8 +229,8 @@ object TechUI {
 
       private val keyLength = 40
 
-      private val expectWidth = 100.0
-      private var expectHeight = 50.0
+      private val expectWidth = 100.0f
+      private var expectHeight = 50.0f
 
       this.size(expectWidth, 0)
 
@@ -238,7 +239,7 @@ object TechUI {
 
       this.listens[FrameEvent](() => {
         val dt = math.min(GameTimer.getTime - lastFrameTime, 500) / 1000.0
-        def move(fr: Double, to: Double): Double = {
+        def move(fr: Float, to: Float): Float = {
           val max = dt * 500
           val delta = to - fr
           fr + math.min(max, math.abs(delta)) * math.signum(delta)
@@ -252,11 +253,11 @@ object TechUI {
         lastFrameTime = GameTimer.getTime
       })
 
-      private var elemY: Double = 10
+      private var elemY: Float = 10
       private val elements = mutable.ArrayBuffer[Widget]()
 
       def histogram(elems: HistElement*) = {
-        val widget = new Widget().size(210, 210).scale(0.4)
+        val widget = new Widget().size(210, 210).scale(0.4f)
             .addComponent(blend(new DrawTexture(histogramTex)))
 
         elems.zipWithIndex.foreach { case (elem, idx) => {
@@ -283,7 +284,7 @@ object TechUI {
 
       def sepline(id: String) = {
         val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
-        widget :+ blend(newTextBox(new FontOption(6, Color.monoBlend(1, 0.6)))).setContent(localSep.get(id))
+        widget :+ blend(newTextBox(new FontOption(6, Colors.monoBlend(1, 0.6f)))).setContent(localSep.get(id))
 
         blank(3)
         element(widget)
@@ -299,11 +300,11 @@ object TechUI {
 
         val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
         widget.listens((evt: FrameEvent) => {
-          val lum = if (evt.hovering) 1.0 else 0.8
+          val lum = if (evt.hovering) 1.0f else 0.8f
           val color = textBox.option.color
-          color.r = lum
-          color.g = lum
-          color.b = lum
+          color.setRed(Colors.f2i(lum))
+          color.setGreen(Colors.f2i(lum))
+          color.setBlue(Colors.f2i(lum))
         })
         widget.listens[LeftClickEvent](callback)
         widget :+ blend(textBox)
@@ -316,23 +317,23 @@ object TechUI {
                       password: Boolean = false,
                       colorChange: Boolean = true,
                       contentCell: Array[TextBox] = null) = { // Content cell is a temp hack to get the text component
-        val (idleColor, editColor) = (new Color(0xffffffff), new Color(0xff2180d8))
+        val (idleColor, editColor) = (Colors.fromHexColor(0xffffffff), Colors.fromHexColor(0xff2180d8))
 
         val textBox = blend(newTextBox(new FontOption(8))).setContent(value.toString)
         val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
 
         if (editCallback != null) {
           textBox.allowEdit = true
-          textBox.option.color.from(idleColor)
+          textBox.option.color.setColor(idleColor)
           valueArea.listens[ConfirmInputEvent](() => {
             if (colorChange) {
-              textBox.option.color.from(idleColor)
+              textBox.option.color.setColor(idleColor)
             }
             editCallback(textBox.content)
           })
           valueArea.listens[ChangeContentEvent](() => {
             if (colorChange) {
-              textBox.option.color.from(editColor)
+              textBox.option.color.setColor(editColor)
             }
           })
 
@@ -373,7 +374,7 @@ object TechUI {
         val keyArea = new Widget().pos(4, 0).size(32, 8).halign(HeightAlign.CENTER)
           .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.id))
         val icon = new Widget().size(6, 6)
-          .halign(HeightAlign.CENTER).pos(-3, .5)
+          .halign(HeightAlign.CENTER).pos(-3, .5f)
           .addComponents(blend(new DrawTexture(null).setColor(elem.color)))
         val valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(HeightAlign.CENTER)
           .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.desc()))
@@ -406,7 +407,7 @@ object TechUI {
         elemY += elem.transform.height * elem.transform.scale
 
         elements += elem
-        expectHeight = math.max(50.0, elemY + 8)
+        expectHeight = math.max(50.0f, elemY + 8)
         this :+ elem
 
         this
@@ -432,17 +433,17 @@ object TechUI {
 
         def add(obj: T) = us += obj
         def clear() = us.clear()
-        def apply(alpha: Double): Unit = us foreach (x => apply(x, alpha))
-        def apply(obj: T, alpha: Double): Unit
+        def apply(alpha: Float): Unit = us foreach (x => apply(x, alpha))
+        def apply(obj: T, alpha: Float): Unit
       }
       private implicit object DrawTexUpdater extends Updater[DrawTexture] {
-        override def apply(obj: DrawTexture, alpha: Double) = obj.color.a = alpha
+        override def apply(obj: DrawTexture, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
       }
       private implicit object TextBoxUpdater extends Updater[TextBox] {
-        override def apply(obj: TextBox, alpha: Double) = obj.option.color.a = alpha
+        override def apply(obj: TextBox, alpha: Float) = obj.option.color.setAlpha(Colors.f2i(alpha))
       }
       private implicit object ProgressBarUpdater extends Updater[ProgressBar] {
-        override def apply(obj: ProgressBar, alpha: Double) = obj.color.a = alpha
+        override def apply(obj: ProgressBar, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
       }
       private val uas = List(DrawTexUpdater, TextBoxUpdater, ProgressBarUpdater)
 
@@ -565,14 +566,14 @@ object WirelessPage {
       val connectElem = window.getWidget("panel_wireless/elem_connected")
 
       val (icon, name, alpha, tintEnabled) = linked match {
-        case Some(target) => (connectedIcon, target.name, 1.0, true)
-        case None => (unconnectedIcon, local.get("not_connected"), 0.6, false)
+        case Some(target) => (connectedIcon, target.name, 1.0f, true)
+        case None => (unconnectedIcon, local.get("not_connected"), 0.6f, false)
       }
 
       connectElem.child("icon_connect").component[DrawTexture].texture = icon
-      connectElem.child("icon_connect").component[DrawTexture].color.a = alpha
+      connectElem.child("icon_connect").component[DrawTexture].color.setAlpha(Colors.f2i(alpha))
       connectElem.child("icon_connect").component[Tint].enabled = tintEnabled
-      connectElem.child("icon_logo").component[DrawTexture].color.a = alpha
+      connectElem.child("icon_logo").component[DrawTexture].color.setAlpha(Colors.f2i(alpha))
       connectElem.child("text_name").component[TextBox].setContent(name)
 
       connectElem.child("icon_connect").component[LinkedInfo].target = linked
@@ -595,9 +596,9 @@ object WirelessPage {
 
       if (target.encrypted) {
         passBox.listens[ConfirmInputEvent](() => confirm())
-        passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.a = 1.0)
+        passBox.listens[GainFocusEvent](() => iconKey.component[DrawTexture].color.setAlpha(Colors.f2i(1.0f)))
         passBox.listens[LostFocusEvent](() => {
-          iconKey.component[DrawTexture].color.a = 0.6
+          iconKey.component[DrawTexture].color.setAlpha(Colors.f2i(0.6f))
         })
       } else {
         Array(passBox, iconKey).foreach(_.transform.doesDraw = false)
@@ -716,8 +717,8 @@ object WirelessPage {
 object WirelessNetDelegate {
   import WirelessPage._
 
-  @RegInitCallback
-  def __init() = {
+  @StateEventCallback
+  def __init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(WirelessNetDelegate)
   }
 
@@ -726,9 +727,9 @@ object WirelessNetDelegate {
     def cvt(conn: NodeConn) = {
       val tile = conn.getNode.asInstanceOf[TileNode]
       val ret = new NodeData
-      ret.x = tile.x
-      ret.y = tile.y
-      ret.z = tile.z
+      ret.x = tile.getPos.getX
+      ret.y = tile.getPos.getY
+      ret.z = tile.getPos.getZ
       ret.encrypted = !tile.getPassword.isEmpty
       ret
     }
@@ -736,7 +737,7 @@ object WirelessNetDelegate {
     val linked = Option(WirelessHelper.getNodeConn(user))
 
     val nodes = WirelessHelper.getNodesInRange(user.getWorld,
-      user.x, user.y, user.z)
+      user.getPos.getX, user.getPos.getY, user.getPos.getZ)
       .map(WirelessHelper.getNodeConn)
       .filter(!linked.contains(_))
 
@@ -756,9 +757,9 @@ object WirelessNetDelegate {
       val mat = net.getMatrix.asInstanceOf[TileEntity]
       val ret = new MatrixData()
 
-      ret.x = mat.x
-      ret.y = mat.y
-      ret.z = mat.z
+      ret.x = mat.getPos.getX
+      ret.y = mat.getPos.getY
+      ret.z = mat.getPos.getZ
       ret.ssid = net.getSSID
       ret.encrypted = !net.getPassword.isEmpty
 
@@ -766,7 +767,7 @@ object WirelessNetDelegate {
     }
 
     val networks = WirelessHelper.getNetInRange(node.getWorld,
-      node.x, node.y, node.z,
+      node.getPos.getX, node.getPos.getY, node.getPos.getZ,
       node.getRange, 20)
       .filter(!linked.contains(_))
 

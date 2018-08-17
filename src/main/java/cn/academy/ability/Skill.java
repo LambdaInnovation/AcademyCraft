@@ -61,7 +61,7 @@ public abstract class Skill extends Controllable {
     /**
      * The place this skill is at in the Skill Tree UI.
      */
-    public double guiX, guiY;
+    public float guiX, guiY;
     
     /**
      * Whether this skill has customized experience definition.
@@ -105,7 +105,7 @@ public abstract class Skill extends Controllable {
         initSkill();
     }
 
-    public void setPosition(double x, double y) {
+    public void setPosition(float x, float y) {
         guiX = x;
         guiY = y;
     }

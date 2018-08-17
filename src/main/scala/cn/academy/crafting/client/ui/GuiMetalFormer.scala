@@ -10,11 +10,13 @@ import cn.lambdalib2.cgui.Widget
 import cn.lambdalib2.cgui.component.{DrawTexture, ProgressBar}
 import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import cn.lambdalib2.util.Color
+import cn.lambdalib2.util.{Color, Colors}
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.Side
 
 object GuiMetalFormer {
@@ -44,7 +46,7 @@ object GuiMetalFormer {
       invWidget.child("btn_right").listens[LeftClickEvent](handleAlt(1))
 
       {
-        val option = new FontOption(10, FontAlign.CENTER, new Color(0xaaffffff))
+        val option = new FontOption(10, FontAlign.CENTER, Colors.fromHexColor(0xaaffffff))
         invWidget.child("icon_mode").listens((w: Widget, evt: FrameEvent) => if (evt.hovering) {
           TechUI.drawTextBox(tile.mode.toString, option, 6, -10)
         })
@@ -69,8 +71,8 @@ object GuiMetalFormer {
 
 private object MFNetDelegate {
 
-  @RegInitCallback
-  def init() = {
+  @StateEventCallback
+  def init(ev: FMLInitializationEvent) = {
     NetworkS11n.addDirectInstance(MFNetDelegate)
   }
 
