@@ -13,7 +13,6 @@ import cn.academy.client.sound.ACSounds;
 import cn.academy.entity.EntityTPMarking;
 import cn.academy.ability.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.ability.vanilla.util.Vec;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.MathUtils;
@@ -298,7 +297,7 @@ public class Flashing extends Skill {
             double dist = lerpf(12, 18, exp);
 
             Vec3d dir = VecUtils.copy(dirs[keyid]);
-            Vec.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180);
+            VecUtils.rotateAroundZ(dir, player.rotationPitch * MathUtils.PI_F / 180);
             dir.rotateYaw((-90 - player.rotationYaw) * MathUtils.PI_F / 180);
 
 

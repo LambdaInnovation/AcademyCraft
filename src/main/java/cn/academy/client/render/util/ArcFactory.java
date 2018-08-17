@@ -1,6 +1,5 @@
 package cn.academy.client.render.util;
 
-import cn.academy.ability.vanilla.util.Vec;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;
@@ -134,7 +133,7 @@ public class ArcFactory {
         Vec3d ret = VecUtils.copy(dir);
         ret = ret.rotatePitch(RandUtils.rangef(-a, a));
         ret = ret.rotateYaw(RandUtils.rangef(-a, a));
-        ret = Vec.rotateAroundZ(ret, RandUtils.rangef(-a, a));
+        ret = VecUtils.rotateAroundZ(ret, RandUtils.rangef(-a, a));
         return ret;
     }
     

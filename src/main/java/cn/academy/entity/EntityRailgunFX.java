@@ -5,10 +5,10 @@ import cn.academy.client.sound.ACSounds;
 import cn.academy.client.render.util.ArcFactory;
 import cn.academy.client.render.util.ArcFactory.Arc;
 import cn.academy.client.render.util.SubArcHandler;
-import cn.academy.ability.vanilla.util.Vec;
 import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,7 +73,7 @@ public class EntityRailgunFX extends EntityRayBase {
                 float theta = RandUtils.rangef(0, MathUtils.PI_F * 2);
                 double r = RandUtils.ranged(0.1, 0.25);
                 Vec3d vec = new Vec3d(cur, r * MathHelper.sin(theta), r * MathHelper.cos(theta));
-                Vec.rotateAroundZ(vec, rotationPitch * MathUtils.PI_F / 180);
+                VecUtils.rotateAroundZ(vec, rotationPitch * MathUtils.PI_F / 180);
                 vec.rotateYaw((270 - rotationYaw) * MathUtils.PI_F / 180);
                 arcHandler.generateAt(vec);
                 
