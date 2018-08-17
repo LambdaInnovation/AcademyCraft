@@ -8,14 +8,14 @@ import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.SideUtils
-import cn.lambdalib2.util.mc._
+import cn.lambdalib2.util.{EntitySelectors, Raytrace, SideUtils, WorldUtils}
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.entity.Render
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.RayTraceResult
+import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.world.Explosion
 
 object PlasmaCannon extends Skill("plasma_cannon", 5) {
@@ -47,21 +47,20 @@ object PlasmaCannonContext {
 
 import PlasmaCannonContext._
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib2.util.mc.MCExtender._
 import cn.lambdalib2.util.MathUtils._
 import scala.collection.JavaConversions._
-import cn.lambdalib2.util.RandUtils._
 import net.minecraft.util.math.Vec3d
 
 class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
+  import cn.lambdalib2.util.VecUtils._
 
   var localTicker = 0
   var syncTicker  = 0
 
   var state = STATE_CHARGING
 
-  val chargePosition = player.position + (0.0, 15.0, 0.0)
+  var chargePosition = add(player.getPositionVector, new Vec3d(0.0, 15.0, 0.0))
   var destination: Vec3d = null
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
@@ -85,7 +84,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     }
 
     if (state == STATE_CHARGING && localTicker == chargeTime.toInt) {
-      ACSounds.playClient(player, "vecmanip.plasma_cannon_t", 0.5f)
+      ACSounds.playClient(player, "vecmanip.plasma_cannon_t", SoundCategory.AMBIENT, 0.5f)
     }
   }
 
@@ -114,7 +113,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
 
   @Listener(channel=MSG_SYNCPOS, side=Array(Side.CLIENT))
   def c_syncPos(pos: Vec3d) = {
-    chargePosition.set(pos)
+    chargePosition=pos
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
@@ -129,14 +128,13 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
         }
       }
     } else if (state == STATE_GO) {
-      val lastPos: Vec3d = (0.0, 0.0, 0.0)
-      lastPos.set(chargePosition)
+      var lastPos: Vec3d = new Vec3d(0.0, 0.0, 0.0)
+      lastPos=chargePosition
 
       tryMove()
 
-      implicitly[TraceResult](Raytrace.perform(world, lastPos, chargePosition)) match {
-        case EmptyResult() =>
-        case _ => explode()
+      if(implicitly[RayTraceResult](Raytrace.perform(world, lastPos, chargePosition)).typeOfHit!=RayTraceResult.Type.MISS){
+        explode()
       }
 
       if (localTicker >= 240 || chargePosition.distanceTo(destination) < 1.5) {
@@ -163,8 +161,8 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
 
     val explosion = new Explosion(world, player,
       destination.x, destination.y, destination.z,
-      lerpf(12.0f, 15.0f, ctx.getSkillExp))
-    explosion.isSmoking = true
+      lerpf(12.0f, 15.0f, ctx.getSkillExp), false, true)
+    //explosion.isSmoking = true
 
     if (ctx.canBreakBlock(world())) {
       explosion.doExplosionA()
@@ -192,17 +190,18 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
   }
 
   private[skill] def tryMove(): Unit = {
-    val rawDelta = destination - chargePosition
+    val rawDelta = subtract(destination, chargePosition)
     if (rawDelta.lengthVector() < 1) return
 
-    val delta = rawDelta.normalize() * MOVING_SPEED
-    chargePosition += delta
+    val delta = multiply(rawDelta.normalize(), MOVING_SPEED)
+    chargePosition = add(chargePosition, delta)
   }
 
 }
 
 private class Tornado(val ctx: PlasmaCannonContext)
   extends LocalEntity(ctx.player.world) {
+  import cn.lambdalib2.util.VecUtils._
 
   val theTornado = new TornadoEffect(12, 8, 1, 0.3)
 
@@ -213,15 +212,15 @@ private class Tornado(val ctx: PlasmaCannonContext)
 
   {
     var initPos: Vec3d = null
-    val p0 = ctx.chargePosition.copy()
-    val p1 = p0 + (0.0, -20.0, 0.0)
-    val result: TraceResult = Raytrace.perform(player.world, p0, p1, EntitySelectors.nothing)
-    if (result.hasPosition) {
-      initPos = result.position
+    val p0 = copy(ctx.chargePosition)
+    val p1 = new Vec3d(p0.x, p0.y-20.0, p0.z)
+    val result: RayTraceResult = Raytrace.perform(player.world, p0, p1, EntitySelectors.nothing)
+    if (result.typeOfHit!=RayTraceResult.Type.MISS) {
+      initPos = result.hitVec
     } else {
       initPos = p1
     }
-    this.setPos(initPos)
+    this.setPosition(initPos.x, initPos.y, initPos.z)
   }
 
   ignoreFrustumCheck = true
@@ -264,12 +263,12 @@ class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_begin() = {
     effect = new PlasmaBodyEffect(world, self)
-    effect.setPos(self.chargePosition)
+    effect.setPosition(self.chargePosition.x, self.chargePosition.y, self.chargePosition.z)
 
-    world.spawnEntityInWorld(new Tornado(self))
-    world.spawnEntityInWorld(effect)
+    world.spawnEntity(new Tornado(self))
+    world.spawnEntity(effect)
 
-    sound = new FollowEntitySound(player, "vecmanip.plasma_cannon")
+    sound = new FollowEntitySound(player, "vecmanip.plasma_cannon", SoundCategory.AMBIENT)
     ACSounds.playClient(sound)
   }
 
@@ -283,7 +282,7 @@ class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self
     if (self.state == STATE_GO) {
       self.tryMove()
     }
-    effect.setPos(self.chargePosition)
+    effect.setPosition(self.chargePosition.x, self.chargePosition.y, self.chargePosition.z)
   }
 
 }

@@ -12,14 +12,13 @@ import cn.academy.ability.vanilla.vecmanip.skill.EntityAffection.{Affected, Excl
 import cn.academy.event.ability.ReflectEvent
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.VecUtils
-import cn.lambdalib2.util.mc.{Raytrace, Vec3d, WorldUtils}
+import cn.lambdalib2.util.{Raytrace, WorldUtils}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile._
-import net.minecraft.util.DamageSource
+import net.minecraft.util.{DamageSource, SoundCategory}
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
@@ -39,10 +38,9 @@ object VecReflection extends Skill("vec_reflection", 4) {
 import VecReflectionContext._
 import cn.lambdalib2.util.RandUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import cn.lambdalib2.util.mc.MCExtender._
-import scala.collection.JavaConversions._
 import collection.mutable
-import net.minecraft.util.{Vec3d => MCVec3}
+import net.minecraft.util.math.Vec3d
+import cn.lambdalib2.util.VecUtils._
 import VMSkillHelper._
 
 private object VecReflectionContext {
@@ -52,14 +50,17 @@ private object VecReflectionContext {
   def reflect(entity: Entity, player: EntityPlayer): Unit = {
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
     val speed = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).lengthVector
-    val vel = (lookPos - entity.headPosition).normalize * speed
-    entity.setVel(vel)
+    val vel = multiply(subtract(lookPos, entityHeadPos(entity)).normalize, speed)
+    entity.motionX = vel.x
+    entity.motionY = vel.y
+    entity.motionZ = vel.z
   }
 }
 
 class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   private val visited = mutable.Set[Entity]()
+  import scala.collection.JavaConversions._
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_makeAlive() = {
@@ -124,7 +125,7 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       case l : EntityLargeFireball =>
         fireball = new EntityLargeFireball(world(), shootingEntity, shootingEntity.posX,
           shootingEntity.posY, shootingEntity.posZ)
-        fireball.asInstanceOf[EntityLargeFireball].field_92057_e = l.field_92057_e
+        fireball.asInstanceOf[EntityLargeFireball].explosionPower = l.explosionPower
       case _ =>
         source.shootingEntity match {
           case null =>
@@ -139,10 +140,10 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     fireball.setPosition(source.posX, source.posY, source.posZ)
     val lookPos = Raytrace.getLookingPos(player, 20).getLeft
     val speed = new Vec3d(source.motionX, source.motionY, source.motionZ).lengthVector
-    val vel = (lookPos - source.headPosition).normalize * speed
-    fireball.setVel(vel)
+    val vel = multiply(subtract(lookPos, entityHeadPos(source)).normalize, speed)
+    setMotion(fireball, vel)
     EntityAffection.mark(fireball)
-    world().spawnEntityInWorld(fireball)
+    world().spawnEntity(fireball)
   }
 
   @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
@@ -156,8 +157,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     if (evt.target.equals(player)) {
       evt.setCanceled(true)
 
-      val dpos = evt.player.headPosition - player.headPosition
-      sendToClient(MSG_EFFECT, player.position + Vec3d(0, ranged(0.4, 1.3), 0) + dpos.normalize() * 0.5)
+      val dpos = subtract(entityHeadPos(evt.player), entityHeadPos(player))
+      sendToClient(MSG_EFFECT, add(add(player.getPositionVector, new Vec3d(0, ranged(0.4, 1.3), 0)), multiply(dpos.normalize(), 0.5)))
     }
   }
 
@@ -167,8 +168,8 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
     */
   @SubscribeEvent
   def onLivingAttack(evt: LivingAttackEvent) = {
-    if (evt.entityLiving.equals(player)) {
-      val (performed, _) = handleAttack(evt.source, evt.ammount, passby = true)
+    if (evt.getEntityLiving.equals(player)) {
+      val (performed, _) = handleAttack(evt.getSource, evt.getAmount, passby = true)
       if (performed) {
         evt.setCanceled(true)
       }
@@ -177,9 +178,9 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
 
   @SubscribeEvent
   def onLivingHurt(evt: LivingHurtEvent) = {
-    if (evt.entityLiving.equals(player)  && evt.ammount <=9999) {
-      val (_, dmg) = handleAttack(evt.source, evt.ammount, passby = false)
-      evt.ammount = dmg
+    if (evt.getEntityLiving.equals(player)  && evt.getAmount <=9999) {
+      val (_, dmg) = handleAttack(evt.getSource, evt.getAmount, passby = false)
+      evt.setAmount(dmg)
     }
   }
 
@@ -193,10 +194,10 @@ class VecReflectionContext(p: EntityPlayer) extends Context(p, VecReflection) {
       consumeDamage(dmg)
       ctx.addSkillExp(dmg * 0.0004f)
 
-      val sourceEntity = dmgSource.getSourceOfDamage
+      val sourceEntity = dmgSource.getImmediateSource
       if (sourceEntity != null && sourceEntity != player) {
         ctx.attack(sourceEntity, reflectDamage)
-        sendToClient(MSG_EFFECT, sourceEntity.position)
+        sendToClient(MSG_EFFECT, sourceEntity.getPositionVector)
       }
 
       (true, dmg - reflectDamage)
@@ -243,29 +244,29 @@ class VecReflectionContextC(par: VecReflectionContext) extends ClientContext(par
   @Listener(channel=MSG_REFLECT_ENTITY, side=Array(Side.CLIENT))
   private def c_reflectEntity(ent: Entity) = {
     reflect(ent, player)
-    reflectEffect(ent.headPosition)
+    reflectEffect(entityHeadPos(ent))
   }
 
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
-  private def reflectEffect(point: MCVec3) = {
+  private def reflectEffect(point: Vec3d) = {
     val eff = new WaveEffect(world, 2, 1.1)
-    eff.setPos(point)
+    eff.setPosition(point.x, point.y, point.z)
     eff.rotationYaw = player.rotationYawHead
     eff.rotationPitch = player.rotationPitch
 
-    world.spawnEntityInWorld(eff)
+    world.spawnEntity(eff)
 
     playSound(point)
   }
 
   private def playSound(pos: net.minecraft.util.math.Vec3d) = {
-    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", 0.5f, 1.0f)
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_reflection", SoundCategory.AMBIENT, 0.5f, 1.0f)
   }
 
   @SubscribeEvent
   def onRenderOverlay(evt: RenderGameOverlayEvent) = {
-    if (evt.`type` == ElementType.CROSSHAIRS) {
-      val r = evt.resolution
+    if (evt.getType == ElementType.CROSSHAIRS) {
+      val r = evt.getResolution
       ui.onFrame(r.getScaledWidth, r.getScaledHeight)
     }
   }

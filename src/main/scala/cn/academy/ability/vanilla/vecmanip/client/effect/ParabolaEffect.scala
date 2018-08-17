@@ -40,7 +40,7 @@ class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.ge
   var canPerform = false
 
   override def onUpdate() = {
-    this.setPos(ctx.player.getPosition)
+    this.setPosition(ctx.player.posX, ctx.player.posY, ctx.player.posZ)
     canPerform = ctx.canPerform
     if (ctx.getStatus == Status.TERMINATED) {
       setDead()

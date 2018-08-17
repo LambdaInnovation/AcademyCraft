@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{BlockPos, Vec3d}
 import net.minecraft.world.World
+import net.minecraftforge.common.MinecraftForge
 import org.lwjgl.input.Mouse
 
 import scala.util.control.Breaks
@@ -166,7 +167,7 @@ class PTContextC(par: PTContext) extends ClientContext(par) {
     if(isLocal) {
       mark = new EntityTPMarking(player)
       player.world.spawnEntity(mark)
-      FMLCommonHandler.instance.bus.register(this)
+      MinecraftForge.EVENT_BUS.register(this)
     }
   }
 

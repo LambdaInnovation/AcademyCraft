@@ -7,10 +7,11 @@ import cn.academy.entity.EntityBloodSplash
 import cn.academy.ability.vanilla.generic.client.effect.BloodSprayEffect
 import cn.academy.ability.vanilla.teleporter.skill.TraceResult
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{BlockSelectors, Raytrace}
+import cn.lambdalib2.util.{BlockSelectors, EntitySelectors, Raytrace}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EntitySelectors, SoundCategory}
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraft.util.SoundCategory
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object BloodRetrograde extends Skill("blood_retro", 4) {
@@ -25,7 +26,6 @@ private object BloodRetroContext {
 }
 
 import BloodRetroContext._
-import cn.lambdalib2.util.mc.MCExtender._
 import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.AbilityPipeline._
 import cn.academy.ability.api.AbilityAPIExt._
@@ -36,10 +36,10 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 
   @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
-    val trace: TraceResult = p.rayTrace(2, EntitySelectors.IS_ALIVE)
-    trace match {
-      case EntityResult(ent) =>
-        sendToServer(MSG_PERFORM, ent)
+    val trace: RayTraceResult = Raytrace.traceLiving(p, 2)
+    trace.typeOfHit match {
+      case RayTraceResult.Type.ENTITY =>
+        sendToServer(MSG_PERFORM, trace.entityHit.asInstanceOf[EntityLivingBase])
       case _ =>
         terminate()
     }
@@ -89,15 +89,16 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 @RegClientContext(classOf[BloodRetroContext])
 class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
 
+  import cn.lambdalib2.util.RandUtils._
   @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
   private def c_perform(targ: EntityLivingBase) = {
     (0 until rangei(6, 10)).foreach(_ => {
       val splash = new EntityBloodSplash(world)
       splash.setSize(rangef(1.4f, 1.8f))
-
-      splash.setPos(targ.position +
-        Vec3d(ranged(-1, 1) * targ.width, ranged(0, 1) * targ.height, ranged(-1, 1) * targ.width) +
-        player.lookVector * 0.2)
+      val dv = new Vec3d(ranged(-1, 1) * targ.width, ranged(0, 1) * targ.height, ranged(-1, 1) * targ.width)
+      splash.setPosition(targ.posX + dv.x + player.getLookVec.x * 0.2,
+        targ.posY + dv.y + player.getLookVec.y * 0.2,
+        targ.posZ + dv.z + player.getLookVec.z * 0.2)
 
       world.spawnEntity(splash)
     })
@@ -106,17 +107,19 @@ class BloodRetroContextC(par: BloodRetroContext) extends ClientContext(par) {
     headPos.y += targ.height * 0.6
 
     List(0, 30, 45, 60, 80, -30, -45, -60, -80)
-      .map(angle => new EntityLook(player.rotationYawHead + rangef(-20, 20), angle).toVec3)
-      .map(look => implicitly[TraceResult](Raytrace.perform(world, headPos - look * 0.5, headPos + look * 5,
-        EntitySelectors.nothing, BlockSelectors.filNormal)))
-      .foreach {
-        case BlockResult((x, y, z), side) =>
+      .map(angle => Vec3d.fromPitchYaw(player.rotationYawHead + rangef(-20, 20), angle))
+      .map(look => Raytrace.perform(world,
+        new Vec3d(headPos.x - look.x * 0.5, headPos.y - look.y * 0.5, headPos.z - look.z * 0.5),
+        new Vec3d(headPos.x + look.x * 0.5, headPos.y + look.y * 0.5, headPos.z + look.z * 0.5),
+        EntitySelectors.nothing, BlockSelectors.filNormal))
+      .foreach(r=> {
+        if(r.typeOfHit==RayTraceResult.Type.BLOCK){
           (0 until rangei(2, 3)).foreach(_ => {
-            val spray = new BloodSprayEffect(world, x, y, z, side)
+            val spray = new BloodSprayEffect(world, r.hitVec.x.toInt, r.hitVec.y.toInt, r.hitVec.z.toInt, r.sideHit.getIndex)
             world.spawnEntity(spray)
           })
-        case _ =>
-      }
+        }
+      })
     ACSounds.playClient(player, "vecmanip.blood_retro", SoundCategory.AMBIENT,1F)
   }
 

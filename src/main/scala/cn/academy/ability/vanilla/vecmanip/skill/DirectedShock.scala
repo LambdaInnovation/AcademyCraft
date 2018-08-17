@@ -4,9 +4,11 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{EntitySelectors, GameTimer, Raytrace}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object DirectedShock extends Skill("dir_shock", 1) {
@@ -23,12 +25,11 @@ private object ShockContext {
 
 import cn.academy.ability.api.AbilityAPIExt._
 import ShockContext._
-import MCExtender._
 import cn.academy.client.render.util.AnimPresets._
-import cn.academy.ability.AbilityPipeline._
-import MathUtils._
 
 class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
+  import cn.lambdalib2.util.MathUtils._
+  import cn.lambdalib2.util.VecUtils._
 
   private val MIN_TICKS = 6
   private val MAX_ACCEPTED_TICKS = 50
@@ -68,25 +69,28 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(ticks: Int) = {
+    import cn.lambdalib2.util.MathUtils._
+    import cn.lambdalib2.util.VecUtils._
     sendToClient(MSG_PERFORM, ticks.asInstanceOf[AnyRef])
 
     if (consume()) {
-      val trace: TraceResult = Raytrace.traceLiving(player, 3, EntitySelectors.living)
-      trace match {
-        case EntityResult(entity) =>
-          ctx.attack(entity, damage)
-          knockback(entity)
+      val trace: RayTraceResult = Raytrace.traceLiving(player, 3, EntitySelectors.living)
+      if(trace.typeOfHit == RayTraceResult.Type.ENTITY){
+        val entity = trace.entityHit
+        ctx.attack(entity, damage)
+        knockback(entity)
+        ctx.setCooldown(lerpf(60, 20, ctx.getSkillExp).toInt)
+        sendToClient(MSG_GENERATE_EFFECT, entity)
 
-          ctx.setCooldown(lerpf(60, 20, ctx.getSkillExp).toInt)
-          sendToClient(MSG_GENERATE_EFFECT, entity)
+        val delta = multiply(subtract(entity.getPositionVector, player.getPositionVector).normalize(), 0.24)
+        entity.motionX += delta.x
+        entity.motionY += delta.y
+        entity.motionZ += delta.z
 
-          val delta = (entity.position - player.position).normalize() * 0.24
-          entity.setVel(entity.velocity + delta)
-
-          ctx.addSkillExp(0.0035f)
-        case _ =>
+        ctx.addSkillExp(0.0035f)
+      }else {
           ctx.addSkillExp(0.0010f)
-      }
+        }
     }
 
     terminate()
@@ -106,13 +110,14 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
   }
   private val damage = lerpf(7, 15, ctx.getSkillExp)
   private def knockback(targ: Entity) = if (ctx.getSkillExp >= 0.25f) {
-    var delta = player.headPosition - targ.headPosition
+    var delta = subtract(entityHeadPos(player), entityHeadPos(targ))
     delta = delta.normalize()
-    delta.y = -0.6f
-    delta = delta.normalize()
+    delta = new Vec3d(delta.x, delta.y-0.6f, delta.z).normalize()
 
     targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)
-    targ.setVel(delta * -0.7f)
+    targ.motionX = delta.x * -0.7f
+    targ.motionY = delta.y * -0.7f
+    targ.motionZ = delta.y * -0.7f
   }
 
 }

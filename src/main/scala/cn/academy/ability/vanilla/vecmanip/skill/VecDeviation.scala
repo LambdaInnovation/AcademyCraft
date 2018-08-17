@@ -6,7 +6,6 @@ import cn.academy.ability.Skill
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.{WaveEffect, WaveEffectUI}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.mc.WorldUtils
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
@@ -18,6 +17,8 @@ import cn.academy.ability.context.ClientRuntime.{ActivateHandlers, IActivateHand
 import cn.academy.ability.ctrl.KeyDelegates
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.skill.EntityAffection.{Affected, Excluded}
+import cn.lambdalib2.util.{VecUtils, WorldUtils}
+import net.minecraft.util.SoundCategory
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 
@@ -31,12 +32,12 @@ object VecDeviation extends Skill("vec_deviation", 2) {
   }
 
   @SubscribeEvent
-  def onLivingHurt(evt: LivingHurtEvent) = evt.entityLiving match {
+  def onLivingHurt(evt: LivingHurtEvent) = evt.getEntity match {
     case player: EntityPlayer =>
       val ctx = ContextManager.instance.find(classOf[VecDeviationContext])
-      if (ctx.isPresent && evt.ammount<=9999) {
-        val reduce = ctx.get.reduceDamage(evt.ammount)
-        evt.ammount = reduce
+      if (ctx.isPresent && evt.getAmount<=9999) {
+        val reduce = ctx.get.reduceDamage(evt.getAmount)
+        evt.setAmount(reduce)
       }
     case _ =>
   }
@@ -50,7 +51,6 @@ object VecDeviationContext {
 
 }
 
-import cn.lambdalib2.util.mc.MCExtender._
 import cn.academy.ability.api.AbilityAPIExt._
 import collection.mutable
 import scala.collection.JavaConversions._
@@ -67,7 +67,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
     ctx.consume(0, consumption)
     ctx.addSkillExp(dmg * 0.0006f)
 
-    sendToClient(MSG_PLAY, player.position)
+    sendToClient(MSG_PLAY, player.getPositionVector)
 
     dmg * (1 - lerpf(0.4f, 0.9f, ctx.getSkillExp))
   }
@@ -97,7 +97,7 @@ class VecDeviationContext(p: EntityPlayer) extends Context(p, VecDeviation) {
             case lfireball : EntityLargeFireball =>
               lfireball.setDead()
               world.newExplosion(null, lfireball.posX, lfireball.posY, lfireball.posZ,
-                lfireball.field_92057_e, true, world.getGameRules.getGameRuleBooleanValue("mobGriefing"))
+                lfireball.explosionPower, true, world.getGameRules.getBoolean("mobGriefing"))
 
               ctx.addSkillExp(0.001f * difficulty)
               sendToClient(MSG_STOP_ENTITY, lfireball)
@@ -168,12 +168,13 @@ class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) 
   def c_stopEntity(ent: Entity) = {
     if (EntityAffection.isMarked(ent)) {
       val eff = new WaveEffect(world, 1, 0.6)
-      eff.setPos(ent.headPosition)
+      val pos = VecUtils.entityHeadPos(ent)
+      eff.setPosition(pos.x, pos.y, pos.z)
       eff.rotationYaw = player.rotationYaw
       eff.rotationPitch = player.rotationPitch
 
-      world.spawnEntityInWorld(eff)
-      playSound(eff.position)
+      world.spawnEntity(eff)
+      playSound(eff.getPositionVector)
     }
 
     ent.motionX = 0
@@ -183,13 +184,13 @@ class VecDeviationContextC(par: VecDeviationContext) extends ClientContext(par) 
 
   @Listener(channel=MSG_PLAY, side=Array(Side.CLIENT))
   private def playSound(pos: net.minecraft.util.math.Vec3d) = {
-    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", 0.5f, 1.0f)
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.vec_deviation", SoundCategory.AMBIENT, 0.5f, 1.0f)
   }
 
   @SubscribeEvent
   def onRenderOverlay(evt: RenderGameOverlayEvent) = {
-    if (evt.`type` == ElementType.CROSSHAIRS) {
-      val r = evt.resolution
+    if (evt.getType == ElementType.CROSSHAIRS) {
+      val r = evt.getResolution
       ui.onFrame(r.getScaledWidth, r.getScaledHeight)
     }
   }

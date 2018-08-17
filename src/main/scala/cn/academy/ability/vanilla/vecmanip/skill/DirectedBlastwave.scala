@@ -5,13 +5,15 @@ import cn.academy.ability.context._
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util._
 import jdk.nashorn.internal.ir.BlockStatement
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
-import net.minecraft.util.math.{BlockPos, Vec3d}
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object DirectedBlastwave extends Skill("dir_blast", 3) {
@@ -32,14 +34,13 @@ private object BlastwaveContext {
 
 import cn.academy.ability.api.AbilityAPIExt._
 import BlastwaveContext._
-import MCExtender._
 import cn.academy.client.render.util.AnimPresets._
 import cn.academy.ability.AbilityPipeline._
-import MathUtils._
 import cn.lambdalib2.util.RandUtils._
 import scala.collection.JavaConversions._
 
 class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) with IConsumptionProvider {
+  import cn.lambdalib2.util.VecUtils._
 
   val MIN_TICKS = 6
   val MAX_ACCEPTED_TICKS = 50
@@ -80,11 +81,11 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform(ticks: Int) = {
     if (tryConsume()) {
-      val trace: TraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
-      val position = trace match {
-        case EmptyResult() => player.position + player.lookVector * 4
-        case EntityResult(ent) => ent.headPosition
-        case res if res.hasPosition => res.position
+      val trace: RayTraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
+      val position = trace.typeOfHit match {
+        case RayTraceResult.Type.BLOCK => add(player.getPositionVector, multiply(player.getLookVec, 4))
+        case RayTraceResult.Type.ENTITY => entityHeadPos(trace.entityHit)
+        case _ => trace.hitVec
       }
 
       ctx.setCooldown(cooldown)
@@ -101,9 +102,8 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         ctx.attack(entity, damage)
         knockback(entity)
 
-        val delta = (entity.position - player.position).normalize() * 0.24
-        entity.setVel(entity.velocity + delta)
-
+        val delta = multiply(subtract(entity.getPositionVector, player.getPositionVector).normalize(), 0.24)
+        setMotion(entity, delta)
         effective = true
       })
 
@@ -137,7 +137,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
               //> world.playSoundEffect(i + 0.5, j + 0.5, k + 0.5, block.stepSound.getBreakSound, .5f, 1f)
 
               if (RNG.nextFloat() < dropRate) {
-                block.dropBlockAsItemWithChance(world, i, j, k, world.getBlockMetadata(i, j, k), 1.0f, 0)
+                block.dropBlockAsItemWithChance(world, bPos, world.getBlockState(bPos), 1.0f, 0)
               }
 
               world.setBlockToAir(bPos)
@@ -146,7 +146,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         }
       }
 
-      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d()(position.x, position.y, position.z))
+      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d(position.x, position.y, position.z))
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
 
@@ -169,16 +169,16 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   }
 
   private def tryConsume() = {
-    val overload = lerpf(50, 30, ctx.getSkillExp)
+    val overload = MathUtils.lerpf(50, 30, ctx.getSkillExp)
 
     ctx.consume(overload, consumption)
   }
 
   override def getConsumptionHint = consumption
 
-  private val consumption = lerpf(160, 200, ctx.getSkillExp)
+  private val consumption = MathUtils.lerpf(160, 200, ctx.getSkillExp)
 
-  private val breakProb = lerpf(0.5f, 0.8f, ctx.getSkillExp)
+  private val breakProb = MathUtils.lerpf(0.5f, 0.8f, ctx.getSkillExp)
 
   private val breakHardness = ctx.getSkillExp match {
     case exp if exp < 0.25f => 2.9f
@@ -186,20 +186,20 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     case _ => 55f
   }
 
-  private val damage = lerpf(10, 25, ctx.getSkillExp)
+  private val damage = MathUtils.lerpf(10, 25, ctx.getSkillExp)
 
-  private val dropRate = lerpf(0.4f, 0.9f, ctx.getSkillExp)
+  private val dropRate = MathUtils.lerpf(0.4f, 0.9f, ctx.getSkillExp)
 
-  private val cooldown = lerpf(80, 50, ctx.getSkillExp).toInt
+  private val cooldown = MathUtils.lerpf(80, 50, ctx.getSkillExp).toInt
 
   private def knockback(targ: Entity) = {
-    var delta = player.headPosition - targ.headPosition
+    var delta = subtract(entityHeadPos(player), entityHeadPos(targ))
     delta = delta.normalize()
-    delta.y = -0.4f
+    delta = new Vec3d(delta.x, delta.y -0.4f, delta.z)
     delta = delta.normalize()
 
     targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)
-    targ.setVel(delta * -1.2f)
+    setMotion(targ, multiply(delta, -1.2f))
   }
 
 }
@@ -216,14 +216,19 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
   private def effectAt(pos: Vec3d) = {
-    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.directed_blast", 0.5f, 1.0f)
+    ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.directed_blast", SoundCategory.AMBIENT, 0.5f, 1.0f)
 
     val effect = new WaveEffect(world, rangei(2, 3), 1)
-    effect.setPos(util.mc.Vec3d.lerp(player.headPosition, pos, 0.7))
+    val headPosition = VecUtils.entityHeadPos(player)
+    effect.setPosition(
+      MathUtils.lerp(headPosition.x, pos.x, 0.7),
+      MathUtils.lerp(headPosition.y, pos.y, 0.7),
+      MathUtils.lerp(headPosition.z, pos.z, 0.7)
+    )
     effect.rotationYaw = player.rotationYawHead + rangef(-20, 20)
     effect.rotationPitch = player.rotationPitch + rangef(-10, 10)
 
-    world.spawnEntityInWorld(effect)
+    world.spawnEntity(effect)
   }
 
 

@@ -6,19 +6,19 @@ import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.mc.{Vec3d => MVec3, _}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.util.{ResourceLocation, Vec3d}
+import net.minecraft.util.{ResourceLocation, SoundCategory}
 import org.lwjgl.input.Keyboard
 import StormWingContext._
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.util.RandUtils._
+import cn.lambdalib2.util.{EntitySelectors, Raytrace, VecUtils, WorldUtils}
 import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.EntityBlockDustFX
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -62,7 +62,6 @@ object StormWingContext {
 }
 
 class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
-  import cn.lambdalib2.util.mc.MCExtender._
   import cn.lambdalib2.util.RandUtils._
   import scala.collection.JavaConversions._
 
@@ -123,22 +122,25 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   private def l_tick() = if (isLocal) {
     currentDir match {
       case Some(dir) =>
-        val moveDir = MVec3(dir())
+        val moveDir = VecUtils.copy(dir())
 
-        val expectedVel = moveDir * speed
-        if(player.ridingEntity!=null)player.mountEntity(null);
+        val expectedVel = VecUtils.multiply(moveDir, speed)
+        if(player.getRidingEntity!=null)
+          player.dismountRidingEntity()
         player.setVelocity(
           move(player.motionX, expectedVel.x, ACCEL),
           move(player.motionY, expectedVel.y, ACCEL),
           move(player.motionZ, expectedVel.z, ACCEL)
         )
       case None =>
-        val res: TraceResult = Raytrace.perform(world, player.position + MVec3(0, 0.5, 0),
-          player.position + MVec3(0, -0.3, 0),
+        val res: RayTraceResult = Raytrace.perform(world, VecUtils.add(player.getPositionVector, new Vec3d(0, 0.5, 0)),
+          VecUtils.add(player.getPositionVector, new Vec3d(0, -0.3, 0)),
           EntitySelectors.nothing)
-        res match {
-          case EmptyResult() => player.motionY += 0.078
-          case _ =>  player.motionY = 0.1 // Keep player floating on the air if near ground
+        if(res.typeOfHit==RayTraceResult.Type.MISS){
+          player.motionY += 0.078
+        }
+        else{
+          player.motionY = 0.1 // Keep player floating on the air if near ground
         }
     }
 
@@ -175,12 +177,13 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
       val checkArea = 10
       (0 until 40).foreach(_ => {
         def rval = ranged(-checkArea, checkArea)
-        val (x, y, z) = ((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
-        val block = world.getBlock(x, y, z)
-        val hardness = block.getBlockHardness(world, x, y, z)
-        if (block != Blocks.air && 0 <= hardness && hardness <= 0.3f && ctx.canBreakBlock(world, x, y, z)) {
-          world.setBlock(x, y, z, Blocks.air)
-          world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, block.stepSound.getBreakSound, .5f, 1f)
+        val pos = new BlockPos((player.posX + rval).toInt, (player.posY + rval).toInt, (player.posZ + rval).toInt)
+        val is = world.getBlockState(pos)
+        val block = is.getBlock
+        val hardness = is.getBlockHardness(world, pos)
+        if (block != Blocks.AIR && 0 <= hardness && hardness <= 0.3f && ctx.canBreakBlock(world, pos.getX, pos.getY, pos.getZ)) {
+          world.setBlockState(pos, Blocks.AIR.getDefaultState)
+          world.playSound(pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, block.stepSound.getBreakSound, .5f, 1f)
         }
       })
     }
@@ -226,15 +229,16 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
 
   @SideOnly(Side.CLIENT)
   private def worldSpace(x: Double, y: Double, z: Double) = {
-    val moveDir = MVec3(x, y, z)
+    val moveDir = new Vec3d(x, y, z)
     val (yaw, pitch) = (toRadians(player.rotationYawHead), toRadians(player.rotationPitch))
-    moveDir.rotateAroundX(-pitch)
-    moveDir.rotateAroundY(-yaw)
+    moveDir.rotatePitch(-pitch)
+    moveDir.rotateYaw(-yaw)
     moveDir
   }
 
   @Listener(channel=MSG_SYNC_STATE, side=Array(Side.CLIENT, Side.SERVER))
   private def syncState() = {
+    import cn.lambdalib2.util.VecUtils._
     this.state = STATE_ACTIVE
 
     if (ctx.getSkillExp == 1.0f) {
@@ -242,13 +246,15 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
         .foreach(ent => {
           def modifier = ranged(0.9, 1.2)
 
-          val delta = ent.headPosition - player.position
+          val delta = subtract(entityHeadPos(ent), player.getPositionVector)
           delta.x *= modifier
           delta.y *= modifier
           delta.z *= modifier
 
-          val move = delta.normalize() * ranged(0.5f, 1.0f)
-          ent.setVel(move)
+          val move = multiply(delta.normalize(), ranged(0.5f, 1.0f))
+          ent.motionX = move.x
+          ent.motionY = move.y
+          ent.motionZ = move.z
         })
     }
 
@@ -301,9 +307,9 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
 
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_makealive() = {
-    world.spawnEntityInWorld(new StormWingEffect(par))
+    world.spawnEntity(new StormWingEffect(par))
 
-    loopSound = new FollowEntitySound(player, "vecmanip.storm_wing").setLoop()
+    loopSound = new FollowEntitySound(player, "vecmanip.storm_wing", SoundCategory.AMBIENT).setLoop()
     ACSounds.playClient(loopSound)
   }
 
@@ -325,7 +331,7 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
 
       val particle = new EntityBlockDustFX(world,
         player.posX + dx, player.posY + dy, player.posZ + dz,
-        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.dirt, 0) { particleGravity = 0.02f }
+        sth * 0.7f, ranged(-0.01f, 0.05f), -cth * 0.7f, Blocks.DIRT, 0) { particleGravity = 0.02f }
       particle.multipleParticleScaleBy(0.5f)
       Minecraft.getMinecraft.effectRenderer.addEffect(particle)
     }

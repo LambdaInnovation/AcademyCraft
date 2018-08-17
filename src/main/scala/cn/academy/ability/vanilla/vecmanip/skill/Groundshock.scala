@@ -3,17 +3,20 @@ package cn.academy.ability.vanilla.vecmanip.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.context.KeyDelegate.DelegateState
 import cn.academy.ability.context._
+import cn.academy.ability.vanilla.generic.client.effect.SmokeEffect
+import cn.academy.ability.vanilla.util.HandlerLifePeroidEvent
 import cn.academy.client.sound.ACSounds
 import cn.academy.util.Plotter
-import cn.academy.ability.vanilla.generic.client.effect.SmokeEffect
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{EntitySelectors, RandUtils, VecUtils, WorldUtils}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, SoundEvents}
-import net.minecraft.util.SoundCategory
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumFacing, SoundCategory}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos, Vec3d}
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object Groundshock extends Skill("ground_shock", 1) {
@@ -74,6 +77,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
 
   @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
   def s_perform() = {
+    import cn.lambdalib2.util.VecUtils._
     if (player.onGround && consume()) {
       val planeLook = player.getLookVec.normalize()
       
@@ -86,10 +90,11 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
       val dejavu_blocks = mutable.Set[IVec]()
       val dejavu_ent    = mutable.Set[Entity]()
 
-      val rot = planeLook.copy()
-      rot.rotateAroundY(90)
+      val rot = copy(planeLook)
+      rot.rotateYaw(90)
 
-      val deltas = List((implicitly[Vec3d]((0.0, 0.0, 0.0)), 1.0), (rot, 0.7), (-rot, 0.7), (rot * 2, 0.3), (rot * -2, 0.3))
+      val deltas = List((implicitly[Vec3d](new Vec3d(0.0, 0.0, 0.0)), 1.0),
+        (rot, 0.7), (multiply(rot, -1), 0.7), (multiply(rot, 2), 0.3), (multiply(rot, -2), 0.3))
 
       val selector = EntitySelectors.living().and(EntitySelectors.exclude(player))
 
@@ -101,10 +106,10 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
         if (ctx.canBreakBlock(world, x, y, z)) {
           block.getBlockHardness(state,world,blockPos) match {
             case hardnessEnergy if hardnessEnergy >= 0 =>
-              if (energy >= hardnessEnergy && block != Blocks.farmland && !block.getMaterial(state).isLiquid) {
+              if (energy >= hardnessEnergy && block != Blocks.FARMLAND && !block.getMaterial(state).isLiquid) {
                 energy -= hardnessEnergy
 
-                if (drop && RNG.nextFloat() < dropRate) {
+                if (drop && RandUtils.nextFloat() < dropRate) {
                   block.dropBlockAsItemWithChance(world, blockPos, state, 1.0f, 0)
                 }
 
@@ -126,30 +131,32 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
         deltas.foreach { case (delta, prob) => {
 
           val pt = IVec((x + delta.x).floor.toInt, (y + delta.y).floor.toInt, (z + delta.z).floor.toInt)
-          val block: Block = world.getBlock(pt.x, pt.y, pt.z)
+          val pos = new BlockPos(pt.x,pt.y, pt.z)
+          val is = world.getBlockState(pos)
+          val block: Block = is.getBlock
 
-          if (RNG.nextDouble() < prob) {
-            if (block != Blocks.air &&
+          if (RandUtils.nextDouble() < prob) {
+            if (block != Blocks.AIR &&
               !dejavu_blocks.contains(pt)) {
               dejavu_blocks += pt
 
               block match {
-                case Blocks.stone =>
-                  world.setBlock(pt.x, pt.y, pt.z, Blocks.cobblestone)
+                case Blocks.STONE =>
+                  world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState)
                   energy -= 0.4
-                case Blocks.grass =>
-                  world.setBlock(pt.x, pt.y, pt.z, Blocks.dirt)
+                case Blocks.GRASS =>
+                  world.setBlockState(pos, Blocks.DIRT.getDefaultState)
                   energy -= 0.2
-                case Blocks.farmland =>
+                case Blocks.FARMLAND =>
                   energy -= 0.1
                 case _ => energy -= 0.5
               }
 
-              if (RNG.nextDouble() < groundBreakProb) {
-                breakWithForce(x, y, z, false)
+              if (RandUtils.nextDouble() < groundBreakProb) {
+                breakWithForce(x, y, z, drop = false)
               }
 
-              val aabb = AxisAlignedBB.getBoundingBox(pt.x-0.2, pt.y-0.2, pt.z-0.2, pt.x+1.4, pt.y+2.2, pt.z+1.4)
+              val aabb = new AxisAlignedBB(pt.x-0.2, pt.y-0.2, pt.z-0.2, pt.x+1.4, pt.y+2.2, pt.z+1.4)
               val entities = WorldUtils.getEntities(world, aabb, selector)
               entities.foreach(entity => {
                 if (!dejavu_ent.contains(entity)) {
@@ -176,8 +183,10 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
           y <- y0 - 1 until y0 + 1
           z <- z0 - 5 until z0 + 5
         } {
-          implicit val block = world().getBlock(x, y, z)
-          val hardness = block.getBlockHardness(world, x, y, z)
+          val pos = new BlockPos(x, y, z)
+          val is = world.getBlockState(pos)
+          implicit val block = is.getBlock
+          val hardness = is.getBlockHardness(world, pos)
           if (hardness <= 0.6) {
             breakWithForce(x, y, z, true)
           }
@@ -211,7 +220,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
   private val dropRate = lerpf(0.3f, 1.0f, ctx.getSkillExp)
 
   // y speed given to mobs.
-  private val ySpeed: Float = rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
+  private val ySpeed: Float = RandUtils.rangef(0.6f, 0.9f) * lerpf(0.8f, 1.3f, ctx.getSkillExp)
 
   private[skill] def consume(): Boolean = ctx.consume(overload, consumption)
 
@@ -228,31 +237,33 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
       par.consume()
 
       // Starts a coroutine that make player's look direction slash down.
-      LIFMLGameEventDispatcher.INSTANCE.registerClientTick(new LIHandler[ClientTickEvent] {
-        var ticks = 0
-
-        override protected def onEvent(event: ClientTickEvent): Boolean = {
-          ticks += 1
+      MinecraftForge.EVENT_BUS.register(new HandlerLifePeroidEvent(4){
+        override def onTick() = {
           player.rotationPitch += 3.4f
-
-          if (ticks >= 4) { setDead() }
-
           true
+        }
+
+        override def onDeath() = {
+          MinecraftForge.EVENT_BUS.unregister(this)
         }
       })
     }
 
-    ACSounds.playClient(player, "vecmanip.groundshock", 2)
+    ACSounds.playClient(player, "vecmanip.groundshock", SoundCategory.AMBIENT, 2)
 
     affectedBlocks.map(arr => IVec(arr)).foreach(pt => {
+      import cn.lambdalib2.util.RandUtils._
       for (i <- 0 until rangei(4, 8)) {
         def randvel() = ranged(-0.2, 0.2)
+        val pos = new BlockPos(pt.x, pt.y, pt.z)
+        val is = world.getBlockState(pos)
+
         val entity = new EntityDiggingFX(
           world,
           pt.x + nextDouble(), pt.y + 1 + nextDouble() * 0.5 + 0.2, pt.z + nextDouble(),
           randvel(), 0.1 + nextDouble() * 0.2, randvel(),
-          world.getBlock(pt.x, pt.y, pt.z),
-          ForgeDirection.UP.ordinal())
+          is.getBlock,
+          EnumFacing.UP.ordinal())
 
         Minecraft.getMinecraft.effectRenderer.addEffect(entity)
       }
@@ -262,9 +273,11 @@ class GroundshockContextC(par: GroundshockContext) extends ClientContext(par) {
         val pos = (pt.x + 0.5 + ranged(-.3, .3), pt.y + 1 + ranged(0, 0.2), pt.z + 0.5 + ranged(-.3, .3))
         val vel = (ranged(-.03, .03), ranged(.03, .06), ranged(-.03, .03))
 
-        eff.setPos(pos)
-        eff.setVel(vel)
-        world.spawnEntityInWorld(eff)
+        eff.setPosition(pos._1, pos._2, pos._3)
+        eff.motionX = vel._1
+        eff.motionY = vel._2
+        eff.motionZ = vel._3
+        world.spawnEntity(eff)
       }
     })
   }
