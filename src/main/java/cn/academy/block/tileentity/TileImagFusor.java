@@ -12,6 +12,7 @@ import cn.academy.crafting.ImagFusorRecipes.IFRecipe;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.energy.IFConstants;
 import cn.academy.support.EnergyItemHelper;
+import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.util.mc.StackUtils;
 import net.minecraftforge.fluids.capability.IFluidHandler;

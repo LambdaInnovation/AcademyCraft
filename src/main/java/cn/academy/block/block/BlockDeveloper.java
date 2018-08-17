@@ -3,8 +3,10 @@ package cn.academy.block.block;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.block.tileentity.TileDeveloper;
 import cn.lambdalib2.registry.mc.RegEventHandler;
-import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -25,15 +27,11 @@ public class BlockDeveloper extends ACBlockMulti {
     public final DeveloperType type;
 
     public BlockDeveloper(DeveloperType _type) {
-        super("developer", Material.rock);
+        super(Material.ROCK);
         type = _type;
         setHardness(4.0f);
         setHarvestLevel("pickaxe", 2);
-        
-        String tmp = type.toString().toLowerCase();
-        setBlockName("ac_developer_" + tmp);
-        setBlockTextureName("academy:developer_" + tmp);
-        
+
         this.addSubBlock(0, 1, 0);
         this.addSubBlock(0, 0, 1);
         this.addSubBlock(0, 1, 1);
@@ -45,21 +43,11 @@ public class BlockDeveloper extends ACBlockMulti {
         finishInit();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public int getRenderType() {
-        return RenderEmptyBlock.id;
-    }
-    
-    @Override
-    public boolean isOpaqueCube() {
-        return false;
-    }
-    
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float tx, float ty, float tz) {
-        TileEntity te = world.getTileEntity(x, y, z);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
+                                    EnumHand hand, EnumFacing facing,
+                                    float hitX, float hitY, float hitZ) {
+        TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileDeveloper && !player.isSneaking()) {
             if(!world.isRemote) {
                 TileDeveloper td = (TileDeveloper) te;

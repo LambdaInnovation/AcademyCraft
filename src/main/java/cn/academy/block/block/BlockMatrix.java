@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class BlockMatrix extends ACBlockMulti {
     
     public BlockMatrix() {
-        super("matrix", Material.rock);
+        super(Material.ROCK);
         setHardness(3.0f);
         setLightLevel(1f);
         

@@ -10,6 +10,7 @@ import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -79,6 +80,10 @@ public class WirelessHelper {
 
     public static boolean isGeneratorLinked(IWirelessGenerator gen) {
         return getNodeConn(gen) != null;
+    }
+
+    public static List<IWirelessNode> getNodesInRange(World world, BlockPos pos) {
+        return getNodesInRange(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**

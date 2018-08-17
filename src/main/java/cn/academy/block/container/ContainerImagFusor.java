@@ -1,5 +1,6 @@
 package cn.academy.block.container;
 
+import cn.academy.block.tileentity.TileImagFusor;
 import cn.academy.worldgen.WorldGenInit;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.academy.item.ItemMatterUnit;

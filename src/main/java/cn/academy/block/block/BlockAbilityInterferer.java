@@ -3,16 +3,18 @@ package cn.academy.block.block;
 import cn.academy.block.TileAbilityInterferer;
 import cn.academy.block.container.ContainAbilityInterferer;
 import cn.academy.crafting.client.ui.GuiAbilityInterferer;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -33,19 +35,18 @@ public class BlockAbilityInterferer extends ACBlockContainer
 
         @Override
         protected Object getServerContainer(EntityPlayer player,World world,int x,int y,int z){
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
             if(tile instanceof TileAbilityInterferer)
                 return new ContainAbilityInterferer((TileAbilityInterferer)tile, player);
             return null;
         }
     };
 
-    private IIcon iconOn;
-    private IIcon iconOff;
+//    private IIcon iconOn;
+//    private IIcon iconOff;
 
-    public BlockAbilityInterferer()
-    {
-        super("ability_interferer", Material.rock, guiHandler);
+    public BlockAbilityInterferer() {
+        super(Material.ROCK, guiHandler);
     }
 
 
@@ -55,46 +56,46 @@ public class BlockAbilityInterferer extends ACBlockContainer
         return new TileAbilityInterferer();
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister ir){
-        iconOn = ricon(ir, "ability_interf_on");
-        iconOff = ricon(ir, "ability_interf_off");
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister ir){
+//        iconOn = ricon(ir, "ability_interf_on");
+//        iconOff = ricon(ir, "ability_interf_off");
+//    }
 
     @Override
-    public void onBlockPlacedBy(World world,int x,int y,int z,EntityLivingBase placer,ItemStack stack)
-    {
-        TileEntity tile = world.getTileEntity(x,y,z);
-        if(placer instanceof EntityPlayer && tile instanceof  TileAbilityInterferer)
-        {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(placer instanceof EntityPlayer && tile instanceof  TileAbilityInterferer) {
             ((TileAbilityInterferer)tile).setPlacer((EntityPlayer)placer);
         }
     }
 
 
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+//    {
+//        TileEntity tile = world.getTileEntity(x, y, z);
+//        if (tile instanceof TileAbilityInterferer)
+//        {
+//            if (((TileAbilityInterferer) tile).enabled())
+//                return iconOn;
+//            else
+//                return iconOff;
+//        }
+//        return iconOn;
+//    }
+//
+//    @Override
+//    public IIcon getIcon(int side,int meta){return iconOff;}
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-    {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileAbilityInterferer)
-        {
-            if (((TileAbilityInterferer) tile).enabled())
-                return iconOn;
-            else
-                return iconOff;
-        }
-        return iconOn;
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
-    public IIcon getIcon(int side,int meta){return iconOff;}
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getRenderBlockPass(){return -1;}
-
-    @Override
-    public boolean isOpaqueCube(){return false;}
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
+    }
 }
