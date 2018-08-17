@@ -3,7 +3,11 @@ package cn.academy.block.block;
 import cn.academy.block.container.ContainerPhaseGen;
 import cn.academy.block.tileentity.TilePhaseGen;
 import cn.academy.energy.client.ui.GuiPhaseGen;
-import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -27,26 +31,25 @@ public class BlockPhaseGen extends ACBlockContainer {
         
         @Override
         protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-            TileEntity te = world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
             return te instanceof TilePhaseGen ? new ContainerPhaseGen(player, (TilePhaseGen) te) : null;
         }
     };
 
     public BlockPhaseGen() {
-        super("phase_generator", Material.rock, guiHandler);
+        super(Material.ROCK, guiHandler);
         setHardness(2.5f);
         setHarvestLevel("pickaxe", 1);
     }
-    
+
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public int getRenderType() {
-        return RenderEmptyBlock.id;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override

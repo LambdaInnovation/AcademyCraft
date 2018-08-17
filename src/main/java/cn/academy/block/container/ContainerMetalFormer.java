@@ -1,5 +1,6 @@
 package cn.academy.block.container;
 
+import cn.academy.block.tileentity.TileMetalFormer;
 import cn.academy.support.EnergyItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 

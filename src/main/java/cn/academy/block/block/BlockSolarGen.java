@@ -3,7 +3,13 @@ package cn.academy.block.block;
 import cn.academy.block.container.ContainerSolarGen;
 import cn.academy.block.tileentity.TileSolarGen;
 import cn.academy.energy.client.ui.GuiSolarGen;
-import cn.lambdalib2.template.client.render.block.RenderEmptyBlock;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -27,7 +33,7 @@ public class BlockSolarGen extends ACBlockMulti {
 
         @Override
         protected Object getServerContainer(EntityPlayer player, World world, int x, int y, int z) {
-            TileEntity te = world.getTileEntity(x, y, z);
+            TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
             if (te instanceof TileSolarGen) {
                 return new ContainerSolarGen(player, ((TileSolarGen) te));
             } else {
@@ -37,23 +43,12 @@ public class BlockSolarGen extends ACBlockMulti {
     };
 
     public BlockSolarGen() {
-        super("solar_gen", Material.rock);
-        setBlockBounds(0, 0, 0, 1, 0.5f, 1);
+        super(Material.ROCK);
+//        setBlockBounds(0, 0, 0, 1, 0.5f, 1);
         this.finishInit();
         
         setHardness(1.5f);
         setHarvestLevel("pickaxe", 1);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getRenderType() {
-        return RenderEmptyBlock.id;
-    }
-    
-    @Override
-    public boolean isOpaqueCube() {
-        return false;
     }
 
     @Override
@@ -67,14 +62,25 @@ public class BlockSolarGen extends ACBlockMulti {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float hx, float hy, float hz) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
+                                    EnumHand hand, EnumFacing facing,
+                                    float hitX, float hitY, float hitZ) {
         if(handler != null && !player.isSneaking()) {
             if(!world.isRemote)
-                handler.openGuiContainer(player, world, x, y, z);
+                handler.openGuiContainer(player, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
 }

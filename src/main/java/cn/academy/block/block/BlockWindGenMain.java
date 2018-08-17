@@ -1,9 +1,15 @@
 package cn.academy.block.block;
 
+import cn.academy.ACBlocks;
 import cn.academy.block.container.ContainerWindGenMain;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.block.tileentity.TileWindGenMain;
 import cn.academy.energy.client.ui.GuiWindGenMain;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -33,16 +39,17 @@ public class BlockWindGenMain extends ACBlockMulti {
         }
         
         TileWindGenMain locate(World world, int x, int y, int z) {
-            Block block = world.getBlock(x, y, z);
-            if(block != ModuleEnergy.windgenMain)
+            BlockPos pos = new BlockPos(x, y, z);
+            Block block = world.getBlockState(pos).getBlock();
+            if(block != ACBlocks.windgen_main)
                 return null;
-            TileEntity te = ModuleEnergy.windgenMain.getOriginTile(world, x, y, z);
+            TileEntity te = ACBlocks.windgen_main.getOriginTile(world, pos);
             return (TileWindGenMain) ((te instanceof TileWindGenMain) ? te : null);
         }
     };
 
     public BlockWindGenMain() {
-        super("windgen_main", Material.rock);
+        super(Material.ROCK);
         setHardness(4.0f);
         setHarvestLevel("pickaxe", 2);
         this.addSubBlock(new int[][] {
@@ -63,10 +70,12 @@ public class BlockWindGenMain extends ACBlockMulti {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float tx, float ty, float tz) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state,
+                                    EntityPlayer player,
+                                    EnumHand hand, EnumFacing facing,
+                                    float hitX, float hitY, float hitZ) {
         if(!player.isSneaking()) {
-            guiHandler.openGuiContainer(player, world, x, y, z);
+            guiHandler.openGuiContainer(player, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;

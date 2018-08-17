@@ -1,9 +1,15 @@
 package cn.academy.block.block;
 
+import cn.academy.ACBlocks;
 import cn.academy.block.container.ContainerWindGenBase;
-import cn.academy.energy.ModuleEnergy;
 import cn.academy.block.tileentity.TileWindGenBase;
 import cn.academy.energy.client.ui.GuiWindGenBase;
+import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -35,17 +41,18 @@ public class BlockWindGenBase extends ACBlockMulti {
         }
         
         private TileWindGenBase locate(World world, int x, int y, int z) {
-            Block b = world.getBlock(x, y, z);
-            if(!(b == ModuleEnergy.windgenBase))
+            BlockPos pos = new BlockPos(x, y, z);
+            Block b = world.getBlockState(pos).getBlock();
+            if(b != ACBlocks.windgen_base)
                 return null;
             
-            TileEntity te = ModuleEnergy.windgenBase.getOriginTile(world, x, y, z);
+            TileEntity te = ACBlocks.windgen_base.getOriginTile(world, pos);
             return te instanceof TileWindGenBase ? (TileWindGenBase) te : null;
         }
     };
 
     public BlockWindGenBase() {
-        super("windgen_base", Material.rock);
+        super(Material.ROCK);
         setHardness(4.0f);
         setHarvestLevel("pickaxe", 2);
         addSubBlock(new int[][] {
@@ -65,15 +72,14 @@ public class BlockWindGenBase extends ACBlockMulti {
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float tx, float ty, float tz) {
-        ItemStack stack = player.getCurrentEquippedItem();
-        if(stack != null && stack.getItem() == Item.getItemFromBlock(ModuleEnergy.windgenPillar))
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if(stack.getItem() == ACBlocks.item_windgen_pillar)
             return false;
-        
+
         if(!player.isSneaking()) {
             if (!world.isRemote) {
-                guiHandler.openGuiContainer(player, world, x, y, z);
+                guiHandler.openGuiContainer(player, world, pos.getX(), pos.getY(), pos.getZ());
             }
             return true;
         }

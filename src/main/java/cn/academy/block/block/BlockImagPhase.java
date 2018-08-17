@@ -1,24 +1,25 @@
 package cn.academy.block.block;
 
+import cn.academy.ACItems;
 import cn.academy.AcademyCraft;
+import cn.academy.block.tileentity.TileImagPhase;
 import cn.academy.worldgen.WorldGenInit;
 import cn.academy.item.ItemMatterUnit;
 import cn.academy.item.ItemMatterUnit.MatterMaterial;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidClassic;
 
 /**
@@ -27,37 +28,35 @@ import net.minecraftforge.fluids.BlockFluidClassic;
  */
 public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProvider {
     
-    public static class ItemPhaseLiq extends ItemBlock {
+    public static class ItemImpl extends ItemBlock {
         
-        IIcon icon;
+//        IIcon icon;
 
-        public ItemPhaseLiq(Block block) {
+        public ItemImpl(Block block) {
             super(block);
         }
         
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void registerIcons(IIconRegister ir) {
-            icon = ir.registerIcon("academy:phase_liquid");
-        }
-        
-        @Override
-        @SideOnly(Side.CLIENT)
-        public IIcon getIconFromDamage(int meta) {
-            return icon;
-        }
+//        @Override
+//        @SideOnly(Side.CLIENT)
+//        public void registerIcons(IIconRegister ir) {
+//            icon = ir.registerIcon("academy:phase_liquid");
+//        }
+//
+//        @Override
+//        @SideOnly(Side.CLIENT)
+//        public IIcon getIconFromDamage(int meta) {
+//            return icon;
+//        }
         
     }
     
     public final MatterMaterial mat;
-    public IIcon fluidIcon;
+//    public IIcon fluidIcon;
     
     public BlockImagPhase() {
-        super(WorldGenInit.fluidImagProj, Material.water);
+        super(ACFluids.fluidImagProj, Material.WATER);
         setCreativeTab(AcademyCraft.cct);
-        setBlockName("ac_phase_liquid");
-        setBlockTextureName("academy:black");
-        
+
         this.setQuantaPerBlock(3);
         
         mat = new MatterMaterial("phase_liquid", this);
@@ -66,23 +65,21 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
         MinecraftForge.EVENT_BUS.register(this);
     }
     
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public void registerBlockIcons(IIconRegister ir) {
+//        super.registerBlockIcons(ir);
+//        fluidIcon = ir.registerIcon("academy:phase_liquid");
+//    }
+//
     @Override
-    public void registerBlockIcons(IIconRegister ir) {
-        super.registerBlockIcons(ir);
-        fluidIcon = ir.registerIcon("academy:phase_liquid");
-    }
-    
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getRenderBlockPass() {
-        return 1;
-    }
-    
-    @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
@@ -91,13 +88,11 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
     }
 
     @SubscribeEvent
-    public void onInteract(PlayerInteractEvent event) {
-        if(event.action == Action.RIGHT_CLICK_BLOCK) {
-            Block b = event.world.getBlock(event.x, event.y, event.z);
-            ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-            if(b == this && stack != null && stack.getItem() == WorldGenInit.matterUnit) {
-                WorldGenInit.matterUnit.setMaterial(stack, mat);
-            }
+    public void onInteract(PlayerInteractEvent.RightClickBlock event) {
+        Block b = event.getWorld().getBlockState(event.getPos()).getBlock();
+        ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
+        if(b == this && stack != null && stack.getItem() == ACItems.matter_unit) {
+            ACItems.matter_unit.setMaterial(stack, mat);
         }
     }
     

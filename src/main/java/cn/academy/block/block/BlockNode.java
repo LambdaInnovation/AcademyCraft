@@ -6,16 +6,19 @@ import cn.academy.block.tileentity.TileNode;
 import cn.academy.energy.client.ui.GuiNode;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -25,7 +28,9 @@ import net.minecraft.world.World;
  */
 public class BlockNode extends ACBlockContainer {
 
-    public enum NodeType {
+    public static PropertyEnum<NodeType> VARIANT = PropertyEnum.create("type", NodeType.class);
+
+    public enum NodeType implements IStringSerializable {
         BASIC("basic", 15000, 150, 9, 5),
         STANDARD("standard", 50000, 300, 12, 10), 
         ADVANCED("advanced", 200000, 900, 19, 20);
@@ -39,87 +44,90 @@ public class BlockNode extends ACBlockContainer {
             range = _range;
             capacity = _capacity;
         }
+
+        @Override
+        public String getName() {
+            return name;
+        }
     }
     
     final NodeType type;
-    IIcon iconTop_disabled, iconTop_enabled;
-    IIcon sideIcon[];
-    
+//    IIcon iconTop_disabled, iconTop_enabled;
+//    IIcon sideIcon[];
+
     public BlockNode(NodeType _type) {
-        super("node", Material.rock, guiHandler);
+        super(Material.ROCK, guiHandler);
         setCreativeTab(AcademyCraft.cct);
-        setBlockName("ac_node_" + _type.name);
         setHardness(2.5f);
         setHarvestLevel("pickaxe", 1);
         
         type = _type;
     }
-    
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister ir) {
-        iconTop_disabled = ir.registerIcon("academy:node_top_0");
-        iconTop_enabled = ir.registerIcon("academy:node_top_1");
-        sideIcon = new IIcon[5];
-        for(int i = 0; i < 5; ++i) {
-            sideIcon[i] = ir.registerIcon("academy:node_" + type.name + "_side_" + i);
-        }
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getRenderBlockPass() {
-        return -1;
-    }
-    
-    @Override
-    public boolean isOpaqueCube() {
-        return false;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        boolean enabled;
-        int pct;
-        if(te instanceof TileNode) {
-            TileNode node = (TileNode) te;
-            enabled = node.enabled;
-            pct = (int) Math.min(4, Math.round((4 * node.getEnergy() / node.getMaxEnergy())));
-        } else {
-            enabled = false;
-            pct = 0;
-        }
-        if(side == 0 || side == 1) {
-            return enabled ? iconTop_enabled : iconTop_disabled;
-        }
-        
-        
-        return sideIcon[pct];
-    }
-    
-    @Override
-    public int onBlockPlaced(World world, int x, int y, int z, int side, 
-            float tx, float ty, float tz, int meta) {
-        return type.ordinal();
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        world.setBlockState(pos, state.withProperty(VARIANT, type));
         if (placer instanceof EntityPlayer) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileNode) {
                 ((TileNode) tile).setPlacer((EntityPlayer) placer);
             }
         }
     }
+
+    //    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister ir) {
+//        iconTop_disabled = ir.registerIcon("academy:node_top_0");
+//        iconTop_enabled = ir.registerIcon("academy:node_top_1");
+//        sideIcon = new IIcon[5];
+//        for(int i = 0; i < 5; ++i) {
+//            sideIcon[i] = ir.registerIcon("academy:node_" + type.name + "_side_" + i);
+//        }
+//    }
+    
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public IIcon getIcon(int side, int meta) {
+//        return (side == 0 || side == 1) ? iconTop_enabled : sideIcon[1];
+//    }
+//
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
+    }
+
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+//        TileEntity te = world.getTileEntity(x, y, z);
+//        boolean enabled;
+//        int pct;
+//        if(te instanceof TileNode) {
+//            TileNode node = (TileNode) te;
+//            enabled = node.enabled;
+//            pct = (int) Math.min(4, Math.round((4 * node.getEnergy() / node.getMaxEnergy())));
+//        } else {
+//            enabled = false;
+//            pct = 0;
+//        }
+//        if(side == 0 || side == 1) {
+//            return enabled ? iconTop_enabled : iconTop_disabled;
+//        }
+//
+//
+//        return sideIcon[pct];
+//    }
 
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {

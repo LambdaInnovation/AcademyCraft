@@ -5,6 +5,9 @@ import cn.academy.block.tileentity.TileMatrix;
 import cn.academy.energy.client.ui.GuiMatrix2;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,28 +52,26 @@ public class BlockMatrix extends ACBlockMulti {
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, 
-            float tx, float ty, float tz) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!player.isSneaking()) {
-            int[] center = this.getOrigin(world, x, y, z);
-            if(center != null) {
-                guiHandler.openGuiContainer(player, world, center[0], center[1], center[2]);
-            }
+            BlockPos center = this.getOrigin(world, pos);
+            guiHandler.openGuiContainer(player, world, center.getX(), center.getY(), center.getZ());
             return true;
         }
         return false;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (placer instanceof EntityPlayer) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileMatrix) {
                 ((TileMatrix) tile).setPlacer(((EntityPlayer) placer));
             }
         }
 
-        super.onBlockPlacedBy(world, x, y, z, placer, stack);
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
     
     @RegGuiHandler
