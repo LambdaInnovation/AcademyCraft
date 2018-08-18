@@ -10,12 +10,14 @@ import cn.academy.entity.EntityArc
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.util._
+import cn.lambdalib2.util.entityx.handlers.Life
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.SoundCategory
-import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 
 /**
   * @author WeAthFolD, KSkun
@@ -73,7 +75,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
         effective = true
         EMDamageHelper.attack(ctx, ad.target, damage)
         if(exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target.isInstanceOf[EntityLivingBase]) {
-          ad.target.asInstanceOf[EntityLivingBase].addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 40, 3))
+          ad.target.asInstanceOf[EntityLivingBase].addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 40, 3))
         }
       }
 
@@ -82,7 +84,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
         EMDamageHelper.attack(ctx, e, aoeDamage)
 
         if (exp > 0.2 && RandUtils.ranged(0, 1) < 0.8 && ad.target.isInstanceOf[EntityLivingBase]) {
-          ad.target.asInstanceOf[EntityLivingBase].addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 20, 3))
+          ad.target.asInstanceOf[EntityLivingBase].addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 20, 3))
         }
       })
 
@@ -98,10 +100,10 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
     val result = Raytrace.traceLiving(player, RANGE)
     var end: Vec3d = null
     if(result == null) {
-      end = new Motion3D(player).move(RANGE).getPosVec
+      end = VecUtils.lookingPos(player, RANGE)
     } else {
       end = result.hitVec
-      if(result.typeOfHit == MovingObjectType.ENTITY) {
+      if(result.typeOfHit == RayTraceResult.Type.ENTITY) {
         end.y += result.entityHit.getEyeHeight
       }
     }
@@ -135,7 +137,7 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
     for(i <- 0 to 2) {
       val mainArc = new EntityArc(player, ArcPatterns.strongArc)
       mainArc.length = RANGE
-      player.getEntityWorld.spawnEntityInWorld(mainArc)
+      player.getEntityWorld.spawnEntity(mainArc)
       mainArc.addMotionHandler(new Life(20))
     }
 
@@ -145,7 +147,7 @@ class ThunderBoltContextC(par: ThunderBoltContext) extends ClientContext(par) {
       aoeArc.setFromTo(ad.point.x, ad.point.y, ad.point.z,
         e.posX, e.posY + e.getEyeHeight, e.posZ)
       aoeArc.addMotionHandler(new Life(RandUtils.rangei(15, 25)))
-      player.world.spawnEntityInWorld(aoeArc)
+      player.world.spawnEntity(aoeArc)
     })
 
     ACSounds.playClient(player, "em.arc_strong", SoundCategory.AMBIENT, 0.6f)

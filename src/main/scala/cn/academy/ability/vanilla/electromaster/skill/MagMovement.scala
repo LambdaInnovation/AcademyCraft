@@ -12,6 +12,7 @@ import cn.lambdalib2.util.{MathUtils, Raytrace}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.world.World
 
@@ -28,7 +29,7 @@ object MagMovement extends Skill("mag_movement", 2) {
 
   def toTarget(aData: AbilityData, world: World, pos: RayTraceResult): Target = {
     if(pos.typeOfHit == RayTraceResult.Type.BLOCK) {
-      val block = world.getBlockState(new BlockPos(pos.getBlockPos.x, pos.getBlockPos.y, pos.getBlockPos.z)).getBlock
+      val block = world.getBlockState(pos.getBlockPos).getBlock
       if(aData.getSkillExp(this) < 0.6f && !CatElectromaster.isMetalBlock(block)) { return null }
       if(!CatElectromaster.isWeakMetalBlock(block) && !CatElectromaster.isMetalBlock(block)) { return null }
       new PointTarget(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z)
@@ -188,7 +189,7 @@ class MovementContextC(par: MovementContext) extends ClientContext(par) {
 
     player.getEntityWorld.spawnEntity(arc)
 
-    sound = new FollowEntitySound(player, SOUND).setLoop()
+    sound = new FollowEntitySound(player, SOUND, SoundCategory.AMBIENT).setLoop()
     ACSounds.playClient(sound)
   }
 

@@ -4,11 +4,11 @@ import java.util.function.Predicate
 
 import cn.academy.ability.{AbilityContext, Skill}
 import cn.academy.ability.context._
-import cn.academy.ability.api.Skill
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.{EntityBlock, EntitySurroundArc}
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
-import cn.academy.ability.vanilla.electromaster.entity.EntitySurroundArc.ArcType
+import cn.academy.entity.EntitySurroundArc.ArcType
+import cn.lambdalib2.multiblock.BlockMulti
 import cn.lambdalib2.registry.mc.RegEntity
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
@@ -16,7 +16,6 @@ import cn.lambdalib2.util.entityx.MotionHandler
 import cn.lambdalib2.util.entityx.event.CollideEvent
 import cn.lambdalib2.util.entityx.event.CollideEvent.CollideHandler
 import cn.lambdalib2.util.entityx.handlers.Rigidbody
-import kotlin.jvm.Synchronized
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.{Block, BlockDoor}
 import net.minecraft.entity.Entity
@@ -92,7 +91,8 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
 
         entity = new MagManipEntityBlock(player, 10)
         entity.setBlock(block)
-        entity.setPosition(player.headPosition)
+        val hPos = entityHeadPos(player)
+        entity.setPosition(hPos.x, hPos.y, hPos.z)
 
         world.spawnEntity(entity)
 
@@ -104,29 +104,32 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
             MagManip.accepts(player, block)
           }
         })
+        if(trace.typeOfHit==RayTraceResult.Type.BLOCK){
+          val pos = trace.getBlockPos
+          val is = world.getBlockState(pos)
+          val block = is.getBlock
 
-        trace match {
-          case res: BlockResult =>
-            val block = res.getBlock(world)
+          val (x, y, z) = (pos.getX, pos.getY, pos.getZ)
+          block match {
+            case door: BlockDoor =>
+              val bPos = new BlockPos(x, y - 1, z)
+              if(world.getBlockState(bPos).getBlock == Blocks.IRON_DOOR)
+                world.setBlockToAir(bPos)
+              else world.setBlockToAir(pos)
+            case _ =>
+              world.setBlockToAir(pos)
+          }
 
-            val (x, y, z) = res.pos
-            block match {
-              case door: BlockDoor =>
-                if(world.getBlock(x, y - 1, z) == Blocks.iron_door)
-                  world.setBlockToAir(x, y - 1, z)
-                else world.setBlockToAir(x, y, z)
-              case _ =>
-                world.setBlockToAir(x, y, z)
-            }
+          entity = new MagManipEntityBlock(player, 10)
+          entity.setBlock(block)
+          entity.setPosition(x + .5, y + .5, z + .5)
 
-            entity = new MagManipEntityBlock(player, 10)
-            entity.setBlock(block)
-            entity.setPosition(new BlockPos(x + .5, y + .5, z + .5))
+          world.spawnEntity(entity)
 
-            world.spawnEntity(entity)
-
-            updateMoveTo()
-          case _ => terminate()
+          updateMoveTo()
+        }
+        else {
+          terminate()
         }
     }
   }
@@ -145,8 +148,8 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
     val distsq = player.getDistanceSq(entity)
     if (distsq < 25 && ctx.consume(overload, consumption)) {
       val pos = Raytrace.getLookingPos(player, 20).getLeft
-      val delta = pos - entity.position
-      entity.setVel(delta.normalize() * speed)
+      val delta = subtract(pos, entity.getPosition)
+      setMotion(entity, multiply(delta.normalize(), speed))
 
       ctx.setCooldown(cooldown)
       ctx.addSkillExp(0.005f)
@@ -166,7 +169,7 @@ private class MagManipContext(p: EntityPlayer) extends Context(p, MagManip) with
   }
 
   private def updateMoveTo() = {
-    val origin = player.headPosition - new Vec3d(0, 0.1, 0)
+    val origin = subtract(entityHeadPos(player), new Vec3d(0, 0.1, 0))
     val look = player.getLookVec
 
     var look2 = new Vec3d(look.x, 0, look.z)
@@ -291,8 +294,7 @@ class MagManipEntityBlock(world: World) extends EntityBlock(world) {
           case d if d < 4 => d / 4
           case _ => 1.0
         })
-
-        this.setVel(mo)
+        setMotion(this, mo)
 
       case ActNothing =>
         motionY -= 0.04

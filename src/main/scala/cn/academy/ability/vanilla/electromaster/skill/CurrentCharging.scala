@@ -7,7 +7,6 @@ import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.{EntityArc, EntitySurroundArc}
 import cn.academy.support.{EnergyBlockHelper, EnergyItemHelper}
 import cn.academy.entity.EntitySurroundArc.ArcType
-import cn.academy.ability.vanilla.electromaster.entity.EntitySurroundArc
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType

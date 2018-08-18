@@ -6,8 +6,11 @@ import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
+import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.registry.mc.RegEntity
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.util.{IBlockSelector, MathUtils, WorldUtils}
+import cn.lambdalib2.util.entityx.EntityAdvanced
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
@@ -16,7 +19,10 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraftforge.fml.client.registry.RenderingRegistry
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.opengl.GL11
 
 import scala.collection.JavaConversions._
@@ -68,7 +74,7 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
   @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
   private def s_execute() = {
     if(consume()) {
-      player.addPotionEffect(new PotionEffect(Potion.blindness.id, TIME))
+      player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("blindness"), TIME))
       ctx.addSkillExp(0.008f)
       MineDetect.triggerAchievement(player)
       sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef], isAdvanced.asInstanceOf[AnyRef])
@@ -89,7 +95,7 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
   @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
   private def c_spawnEffects(range: Float, advanced: Boolean) = {
     if(isLocal) {
-      player.getEntityWorld.spawnEntityInWorld(
+      player.getEntityWorld.spawnEntity(
         new HandlerEntity(player, TIME, range, advanced))
       ACSounds.playClient(player, "em.minedetect", SoundCategory.AMBIENT, 0.5f)
     }
@@ -151,7 +157,8 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   private def updateBlocks() = {
     val set: mutable.Buffer[BlockPos] = WorldUtils.getBlocksWithin(this, range, 1000, blockFilter)
 
-    set.foreach(bp => aliveSims.add(new MineElem(bp.x, bp.y, bp.z, if(isAdvanced) Math.min(3, bp.getBlock.getHarvestLevel(0) + 1) else 0)))
+    set.foreach(bp => aliveSims.add(new MineElem(bp.getX, bp.getY, bp.getZ,
+      if(isAdvanced) Math.min(3, world.getBlockState(bp).getBlock.getHarvestLevel(world.getBlockState(bp)) + 1) else 0)))
 
     lastX = posX
     lastY = posY
@@ -220,7 +227,7 @@ class HandlerRender extends Render {
 @SideOnly(Side.CLIENT)
 object MDInit {
 
-  @RegInitCallback
-  def init() = RenderingRegistry.registerEntityRenderingHandler(classOf[HandlerEntity], new HandlerRender)
+  @StateEventCallback
+  def init(fMLInitializationEvent: FMLInitializationEvent) = RenderingRegistry.registerEntityRenderingHandler(classOf[HandlerEntity], new HandlerRender)
 
 }

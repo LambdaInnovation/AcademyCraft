@@ -28,16 +28,14 @@ object BodyIntensify extends Skill("body_intensify", 3) {
   final val ACTIVATE_SOUND = "em.intensify_activate"
 
   final val effects = Vector(
-    new PotionEffect(Potion.moveSpeed.id, 0, 3),
-    new PotionEffect(Potion.jump.id, 0, 1),
-    new PotionEffect(Potion.regeneration.id, 0, 1),
-    new PotionEffect(Potion.damageBoost.id, 0, 1),
-    new PotionEffect(Potion.resistance.id, 0, 1)
+    new PotionEffect(Potion.getPotionFromResourceLocation("speed"), 0, 3),
+    new PotionEffect(Potion.getPotionFromResourceLocation("jump_boost"), 0, 1),
+    new PotionEffect(Potion.getPotionFromResourceLocation("regeneration"), 0, 1),
+    new PotionEffect(Potion.getPotionFromResourceLocation("strength"), 0, 1),
+    new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 0, 1)
   )
 
-  def createEffect(effect: PotionEffect, level: Int, duration: Int) = {
-    new PotionEffect(effect.getPotionID, duration, Math.min(level, effect.getAmplifier), effect.getIsAmbient)
-  }
+  def createEffect(effect: PotionEffect, level: Int, duration: Int) = new PotionEffect(effect.getPotion, duration, Math.min(level, effect.getAmplifier), effect.getIsAmbient, true)
 
   @SideOnly(Side.CLIENT)
   override def activate(rt: ClientRuntime, keyid: Int) = {
@@ -110,7 +108,7 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
       }
 
       // Also give him a hunger buff
-      player.addPotionEffect(new PotionEffect(Potion.hunger.id, getHungerBuffTime(tick), 2))
+      player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("hunger"), getHungerBuffTime(tick), 2))
       BodyIntensify.triggerAchievement(player)
       ctx.addSkillExp(0.01f)
 
@@ -148,7 +146,7 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
   @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_startEffect() = {
     if(isLocal) {
-      loopSound = new FollowEntitySound(player, LOOP_SOUND).setLoop()
+      loopSound = new FollowEntitySound(player, LOOP_SOUND, SoundCategory.AMBIENT).setLoop()
       hud = new CurrentChargingHUD()
       ACSounds.playClient(loopSound)
       AuxGuiHandler.register(hud)
